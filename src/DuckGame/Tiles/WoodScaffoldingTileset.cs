@@ -13,13 +13,13 @@ namespace DuckGame
         public WoodScaffoldingTileset(float x, float y)
           : base(x, y, "woodScaffolding")
         {
-            this._editorName = "Scaffold (Wood)";
-            this.physicsMaterial = PhysicsMaterial.Default;
-            this.verticalWidth = 14f;
-            this.verticalWidthThick = 15f;
-            this.horizontalHeight = 8f;
-            this._hasNubs = false;
-            this._collideBottom = true;
+            _editorName = "Scaffold (Wood)";
+            physicsMaterial = PhysicsMaterial.Default;
+            verticalWidth = 14f;
+            verticalWidthThick = 15f;
+            horizontalHeight = 8f;
+            _hasNubs = false;
+            _collideBottom = true;
         }
     }
 }

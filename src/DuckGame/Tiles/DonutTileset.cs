@@ -14,11 +14,11 @@ namespace DuckGame
         public DonutTileset(float x, float y)
           : base(x, y, "donutTileset")
         {
-            this._editorName = "Donut";
-            this.physicsMaterial = PhysicsMaterial.Crust;
-            this.verticalWidthThick = 15f;
-            this.verticalWidth = 12f;
-            this.horizontalHeight = 15f;
+            _editorName = "Donut";
+            physicsMaterial = PhysicsMaterial.Crust;
+            verticalWidthThick = 15f;
+            verticalWidth = 12f;
+            horizontalHeight = 15f;
         }
     }
 }

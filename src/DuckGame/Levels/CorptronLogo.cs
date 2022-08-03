@@ -14,18 +14,18 @@ namespace DuckGame
         private float _wait = 1f;
         private bool _fading;
 
-        public CorptronLogo() => this._centeredView = true;
+        public CorptronLogo() => _centeredView = true;
 
         public override void Initialize()
         {
-            this._font = new BitmapFont("biosFont", 8);
-            this._logo = new Sprite("corptron");
+            _font = new BitmapFont("biosFont", 8);
+            _logo = new Sprite("corptron");
             Graphics.fade = 0f;
         }
 
         public override void Update()
         {
-            if (!this._fading)
+            if (!_fading)
             {
                 if (Graphics.fade < 1f)
                     Graphics.fade += 0.013f;
@@ -41,18 +41,18 @@ namespace DuckGame
                 Graphics.fade = 0f;
                 Level.current = new AdultSwimLogo();
             }
-            this._wait -= 3f / 500f;
+            _wait -= 3f / 500f;
             if (_wait >= 0f && !Input.Pressed("START") && !Input.Pressed("SELECT"))
                 return;
-            this._fading = true;
+            _fading = true;
         }
 
         public override void PostDrawLayer(Layer layer)
         {
             if (layer != Layer.Game)
                 return;
-            Graphics.Draw(this._logo, 32f, 70f);
-            this._font.Draw("PRESENTED BY", 50f, 60f, Color.White);
+            Graphics.Draw(_logo, 32f, 70f);
+            _font.Draw("PRESENTED BY", 50f, 60f, Color.White);
         }
     }
 }

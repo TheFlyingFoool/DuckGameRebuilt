@@ -15,43 +15,43 @@ namespace DuckGame
         private List<Block> _blocks = new List<Block>();
         private bool _wreck;
 
-        public List<Block> blocks => this._blocks;
+        public List<Block> blocks => _blocks;
 
         public override void SetTranslation(Vec2 translation)
         {
-            foreach (Thing block in this._blocks)
+            foreach (Thing block in _blocks)
                 block.SetTranslation(translation);
             base.SetTranslation(translation);
         }
 
         public void Add(Block b)
         {
-            this._blocks.Add(b);
+            _blocks.Add(b);
             b.group = this;
-            this._impactThreshold = Math.Min(this._impactThreshold, b.impactThreshold);
-            this.willHeat = this.willHeat || b.willHeat;
+            _impactThreshold = Math.Min(_impactThreshold, b.impactThreshold);
+            willHeat = willHeat || b.willHeat;
             if (!(b is AutoBlock))
                 return;
-            this._tileset = (b as AutoBlock)._tileset;
+            _tileset = (b as AutoBlock)._tileset;
         }
 
         public void Remove(Block b)
         {
-            this._blocks.Remove(b);
-            this._wreck = true;
+            _blocks.Remove(b);
+            _wreck = true;
         }
 
         public BlockGroup()
           : base(0f, 0f, "")
         {
-            this._isStatic = true;
+            _isStatic = true;
         }
 
         public void CalculateSize()
         {
             Vec2 vec2_1 = new Vec2(99999f, 99999f);
             Vec2 vec2_2 = new Vec2(-99999f, -99999f);
-            foreach (Block block in this._blocks)
+            foreach (Block block in _blocks)
             {
                 if (block.left < vec2_1.x)
                     vec2_1.x = block.left;
@@ -61,56 +61,56 @@ namespace DuckGame
                     vec2_1.y = block.top;
                 if (block.bottom > vec2_2.y)
                     vec2_2.y = block.bottom;
-                this.physicsMaterial = block.physicsMaterial;
-                this.thickness = block.thickness;
+                physicsMaterial = block.physicsMaterial;
+                thickness = block.thickness;
             }
-            this.position = (vec2_1 + vec2_2) / 2f;
-            this.collisionOffset = vec2_1 - this.position;
-            this.collisionSize = vec2_2 - vec2_1;
+            position = (vec2_1 + vec2_2) / 2f;
+            collisionOffset = vec2_1 - position;
+            collisionSize = vec2_2 - vec2_1;
         }
 
         public void Wreck()
         {
-            foreach (Thing block in this._blocks)
+            foreach (Thing block in _blocks)
                 Level.Add(block);
             Level.Remove(this);
         }
 
         public override void Update()
         {
-            if (this._wreck)
+            if (_wreck)
             {
-                foreach (Thing block in this._blocks)
+                foreach (Thing block in _blocks)
                     Level.Add(block);
                 Level.Remove(this);
-                this._wreck = false;
+                _wreck = false;
             }
-            if (this.needsRefresh)
+            if (needsRefresh)
             {
-                foreach (Block block in this._blocks)
+                foreach (Block block in _blocks)
                 {
                     if (block is AutoBlock)
                         (block as AutoBlock).PlaceBlock();
                 }
-                this.needsRefresh = false;
+                needsRefresh = false;
             }
             base.Update();
         }
 
-        public override List<BlockCorner> GetGroupCorners() => this._blocks.Count > 0 ? this._blocks[0].GetGroupCorners() : base.GetGroupCorners();
+        public override List<BlockCorner> GetGroupCorners() => _blocks.Count > 0 ? _blocks[0].GetGroupCorners() : base.GetGroupCorners();
 
         public override void Draw()
         {
-            foreach (Thing block in this._blocks)
+            foreach (Thing block in _blocks)
                 block.Draw();
             if (!DevConsole.showCollision)
                 return;
-            Graphics.DrawRect(this.topLeft + new Vec2(-0.5f, 0.5f), this.bottomRight + new Vec2(0.5f, -0.5f), Color.Green * 0.5f, (Depth)1f);
+            Graphics.DrawRect(topLeft + new Vec2(-0.5f, 0.5f), bottomRight + new Vec2(0.5f, -0.5f), Color.Green * 0.5f, (Depth)1f);
         }
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            foreach (Block block in this._blocks)
+            foreach (Block block in _blocks)
             {
                 if (Collision.Rect(block.topLeft, block.bottomRight, with))
                     block.OnSolidImpact(with, from);
@@ -119,9 +119,9 @@ namespace DuckGame
 
         public override void HeatUp(Vec2 location)
         {
-            if (this.willHeat)
+            if (willHeat)
             {
-                foreach (Block block in this._blocks)
+                foreach (Block block in _blocks)
                 {
                     if (Collision.Circle(location, 3f, block))
                         block.HeatUp(location);
@@ -132,7 +132,7 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            foreach (Block block in this._blocks)
+            foreach (Block block in _blocks)
             {
                 block.groupedWithNeighbors = false;
                 block.Terminate();

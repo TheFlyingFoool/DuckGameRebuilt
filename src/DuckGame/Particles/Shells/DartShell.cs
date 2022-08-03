@@ -16,26 +16,26 @@ namespace DuckGame
         public DartShell(float xpos, float ypos, float rotSpeed, bool flip)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("dart", 16, 16)
+            _sprite = new SpriteMap("dart", 16, 16)
             {
                 flipH = flip
             };
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this._bounceSound = "";
-            this._rotSpeed = rotSpeed;
-            this.depth = (Depth)0.3f;
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            _bounceSound = "";
+            _rotSpeed = rotSpeed;
+            depth = (Depth)0.3f;
         }
 
         public override void Update()
         {
             base.Update();
-            this.angle += this._rotSpeed;
-            if (this.vSpeed < 0.0 || this._grounded)
-                this._die = true;
-            if (this._die)
-                this.alpha -= 0.05f;
-            if (this.alpha > 0.0)
+            angle += _rotSpeed;
+            if (vSpeed < 0.0 || _grounded)
+                _die = true;
+            if (_die)
+                alpha -= 0.05f;
+            if (alpha > 0.0)
                 return;
             Level.Remove(this);
         }

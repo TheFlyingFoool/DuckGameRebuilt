@@ -15,15 +15,15 @@ namespace DuckGame
         public EightPlayer(float x, float y)
           : base(x, y)
         {
-            this._editorName = "Eight Player";
-            this.graphic = new Sprite("eight_player");
-            this.center = new Vec2(8f, 8f);
-            this.depth = (Depth)0.55f;
-            this._visibleInGame = false;
-            this.editorTooltip = "Place in a level to make it an 8 Player map!";
-            this.eightPlayerOnly._tooltip = "If true, this map will not appear when less than 5 players are present in the game.";
-            this.solid = false;
-            this._collisionSize = new Vec2(0f, 0f);
+            _editorName = "Eight Player";
+            graphic = new Sprite("eight_player");
+            center = new Vec2(8f, 8f);
+            depth = (Depth)0.55f;
+            _visibleInGame = false;
+            editorTooltip = "Place in a level to make it an 8 Player map!";
+            eightPlayerOnly._tooltip = "If true, this map will not appear when less than 5 players are present in the game.";
+            solid = false;
+            _collisionSize = new Vec2(0f, 0f);
         }
     }
 }

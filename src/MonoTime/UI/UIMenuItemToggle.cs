@@ -19,10 +19,10 @@ namespace DuckGame
 
         public void SetFieldBinding(FieldBinding f)
         {
-            this._field = f;
-            if (this._multiToggleElement == null)
+            _field = f;
+            if (_multiToggleElement == null)
                 return;
-            this._multiToggleElement.SetFieldBinding(f);
+            _multiToggleElement.SetFieldBinding(f);
         }
 
         public UIMenuItemToggle(
@@ -52,7 +52,7 @@ namespace DuckGame
             }
             if (multi != null)
             {
-                this._multiToggleElement = new UIMultiToggle(-1f, -1f, field, multi, compressedMulti)
+                _multiToggleElement = new UIMultiToggle(-1f, -1f, field, multi, compressedMulti)
                 {
                     align = compressedMulti ? UIAlign.Right : UIAlign.Right
                 };
@@ -63,12 +63,12 @@ namespace DuckGame
                 else
                 {
                     component1.leftSection.Add(_multiToggleElement, true);
-                    this._multiToggleElement.align = UIAlign.Left;
+                    _multiToggleElement.align = UIAlign.Left;
                 }
                 if (tiny)
-                    this._multiToggleElement.SetFont(f);
-                this._multiToggle = multi;
-                this._compressed = compressedMulti;
+                    _multiToggleElement.SetFont(f);
+                _multiToggle = multi;
+                _compressed = compressedMulti;
             }
             else
             {
@@ -78,32 +78,32 @@ namespace DuckGame
                 component3.align = UIAlign.Right;
                 component1.rightSection.Add(component3, true);
             }
-            this.rightSection.Add(component1, true);
+            rightSection.Add(component1, true);
             if (tiny)
-                this._arrow = new UIImage("littleContextArrowRight");
+                _arrow = new UIImage("littleContextArrowRight");
             else
-                this._arrow = new UIImage("contextArrowRight");
-            this._arrow.align = UIAlign.Right;
-            this._arrow.visible = false;
-            this.leftSection.Add(_arrow, true);
-            this._field = field;
-            this._filterBinding = filterBinding;
-            this.controlString = "@CANCEL@BACK @WASD@ADJUST";
+                _arrow = new UIImage("contextArrowRight");
+            _arrow.align = UIAlign.Right;
+            _arrow.visible = false;
+            leftSection.Add(_arrow, true);
+            _field = field;
+            _filterBinding = filterBinding;
+            controlString = "@CANCEL@BACK @WASD@ADJUST";
         }
 
         public override void Activate(string trigger)
         {
             int num1 = 1;
-            int num2 = this._filterBinding != null ? -1 : 0;
+            int num2 = _filterBinding != null ? -1 : 0;
             int num3;
-            if (this._multiToggle != null)
+            if (_multiToggle != null)
             {
-                num1 = this._multiToggle.Count - 1;
-                num3 = (int)this._field.value;
+                num1 = _multiToggle.Count - 1;
+                num3 = (int)_field.value;
             }
             else
-                num3 = (bool)this._field.value ? 1 : 0;
-            if (this._filterBinding != null && !(bool)this._filterBinding.value)
+                num3 = (bool)_field.value ? 1 : 0;
+            if (_filterBinding != null && !(bool)_filterBinding.value)
                 num3 = -1;
             bool flag = false;
             if (trigger == "SELECT" || trigger == "MENURIGHT")
@@ -122,20 +122,20 @@ namespace DuckGame
                 num3 = num2;
             if (num3 == -1)
             {
-                this._filterBinding.value = false;
+                _filterBinding.value = false;
             }
             else
             {
-                if (this._filterBinding != null)
-                    this._filterBinding.value = true;
-                this._field.value = this._multiToggle == null ? num3 != 0 : num3;
+                if (_filterBinding != null)
+                    _filterBinding.value = true;
+                _field.value = _multiToggle == null ? num3 != 0 : num3;
             }
             if (!flag)
                 return;
             SFX.Play("textLetter", 0.7f);
-            if (this._action == null)
+            if (_action == null)
                 return;
-            this._action.Activate();
+            _action.Activate();
         }
     }
 }

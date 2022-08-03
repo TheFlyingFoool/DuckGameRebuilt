@@ -15,12 +15,12 @@ namespace DuckGame
         public RandomLevel()
           : base("RANDOM")
         {
-            this._level = LevelGenerator.MakeLevel();
+            _level = LevelGenerator.MakeLevel();
         }
 
         public override void Initialize()
         {
-            this._level.LoadParts(0f, 0f, this);
+            _level.LoadParts(0f, 0f, this);
             OfficeBackground officeBackground = new OfficeBackground(0f, 0f)
             {
                 visible = false

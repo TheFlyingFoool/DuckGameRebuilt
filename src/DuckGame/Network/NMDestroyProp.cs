@@ -14,8 +14,8 @@ namespace DuckGame
 
         public NMDestroyProp(Thing t)
         {
-            this.priority = NetMessagePriority.UnreliableUnordered;
-            this.prop = t;
+            priority = NetMessagePriority.UnreliableUnordered;
+            prop = t;
         }
 
         public NMDestroyProp()
@@ -32,13 +32,13 @@ namespace DuckGame
         protected override void OnSerialize()
         {
             base.OnSerialize();
-            this._serializedData.Write(DuckNetwork.levelIndex);
+            _serializedData.Write(DuckNetwork.levelIndex);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
             base.OnDeserialize(d);
-            this._levelIndex = d.ReadByte();
+            _levelIndex = d.ReadByte();
         }
     }
 }

@@ -31,12 +31,12 @@ namespace DuckGame
             if (NCPacketBreakdown._dataTypes == null)
                 NCPacketBreakdown._dataTypes = Enum.GetValues(typeof(NCPacketDataType)).Cast<NCPacketDataType>();
             foreach (NCPacketDataType dataType in NCPacketBreakdown._dataTypes)
-                this._bitsPerType[dataType] = 0;
+                _bitsPerType[dataType] = 0;
         }
 
-        public void Add(NCPacketDataType type, int bits) => this._bitsPerType[type] += bits;
+        public void Add(NCPacketDataType type, int bits) => _bitsPerType[type] += bits;
 
-        public int Get(NCPacketDataType type) => this._bitsPerType[type];
+        public int Get(NCPacketDataType type) => _bitsPerType[type];
 
         public static Color GetTypeColor(NCPacketDataType type)
         {

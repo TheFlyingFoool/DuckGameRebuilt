@@ -14,15 +14,15 @@ namespace DuckGame
 
         public NCError(string s, NCErrorType tp)
         {
-            this.text = s;
-            this.type = tp;
+            text = s;
+            type = tp;
         }
 
         public Color color
         {
             get
             {
-                switch (this.type)
+                switch (type)
                 {
                     case NCErrorType.Success:
                         return Color.Lime;

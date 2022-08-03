@@ -15,20 +15,20 @@ namespace DuckGame
         private HashSet<Unlockable> _unlocks;
         private UIUnlockBox _unlockBox;
 
-        public UnlockableScreen() => this._centeredView = true;
+        public UnlockableScreen() => _centeredView = true;
 
         public override void Initialize()
         {
             base.Initialize();
             Unlockables.HasPendingUnlocks();
-            this._unlocks = Unlockables.GetPendingUnlocks();
+            _unlocks = Unlockables.GetPendingUnlocks();
         }
 
         public override void Update()
         {
-            if (this._unlockBox == null)
+            if (_unlockBox == null)
             {
-                this._unlockBox = new UIUnlockBox(this._unlocks.ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+                _unlockBox = new UIUnlockBox(_unlocks.ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
                 MonoMain.pauseMenu = _unlockBox;
             }
             base.Update();

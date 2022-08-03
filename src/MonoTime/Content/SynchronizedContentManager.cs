@@ -46,7 +46,7 @@ namespace DuckGame
             {
                 try
                 {
-                    return Texture2D.FromStream(((IGraphicsDeviceService)this.ServiceProvider.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice, stream);
+                    return Texture2D.FromStream(((IGraphicsDeviceService)ServiceProvider.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice, stream);
                 }
                 catch (Exception ex)
                 {

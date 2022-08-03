@@ -23,15 +23,15 @@ namespace DuckGame
         public HostTable(float pX, float pY)
           : base(pX, pY, new Sprite("hostTable"))
         {
-            this.layer = Layer.HUD;
-            this.graphic.CenterOrigin();
-            this.center = new Vec2(this.graphic.w / 2, 0f);
-            this._chair = new Sprite("hostChair");
-            this._beverage = new SpriteMap("beverages", 16, 18);
-            this._chair.CenterOrigin();
-            this._crown = new Sprite("hostCrown");
-            this._crown.CenterOrigin();
-            this._fakeLevelCore = new LevelCore
+            layer = Layer.HUD;
+            graphic.CenterOrigin();
+            center = new Vec2(graphic.w / 2, 0f);
+            _chair = new Sprite("hostChair");
+            _beverage = new SpriteMap("beverages", 16, 18);
+            _chair.CenterOrigin();
+            _crown = new Sprite("hostCrown");
+            _crown.CenterOrigin();
+            _fakeLevelCore = new LevelCore
             {
                 currentLevel = new Level()
             };
@@ -44,21 +44,21 @@ namespace DuckGame
             bool networkActive = Network.activeNetwork._networkActive;
             Network.activeNetwork._networkActive = false;
             LevelCore core = Level.core;
-            Level.core = this._fakeLevelCore;
+            Level.core = _fakeLevelCore;
             foreach (Profile profile in DuckNetwork.profiles)
             {
-                if (profile.slotType == SlotType.Spectator && profile.connection != null && !this.spectators.Contains(profile) && profile.team != null)
-                    this.spectators.Add(profile);
+                if (profile.slotType == SlotType.Spectator && profile.connection != null && !spectators.Contains(profile) && profile.team != null)
+                    spectators.Add(profile);
             }
-            foreach (Profile spectator in this.spectators)
+            foreach (Profile spectator in spectators)
             {
                 if (spectator.connection == null || spectator.slotType != SlotType.Spectator || spectator.team == null)
                 {
-                    this.remove.Add(spectator);
+                    remove.Add(spectator);
                 }
                 else
                 {
-                    HostTable.MemberData data = this.GetData(spectator);
+                    HostTable.MemberData data = GetData(spectator);
                     if (data.duck == null)
                     {
                         InputProfile inputProfile = spectator.inputProfile;
@@ -69,7 +69,7 @@ namespace DuckGame
                         Level.Add(data.duck);
                         data.duck.mindControl = data.ai = new DuckAI();
                         data.duck.derpMindControl = false;
-                        data.duck.depth = this.depth - 20;
+                        data.duck.depth = depth - 20;
                         data.ai.virtualDevice = new VirtualInput(0);
                         data.ai.virtualQuack = true;
                         data.duck.connection = spectator.connection;
@@ -94,19 +94,19 @@ namespace DuckGame
                     data.quack = flag;
                 }
             }
-            foreach (Profile profile in this.remove)
+            foreach (Profile profile in remove)
             {
-                HostTable.MemberData data = this.GetData(profile);
+                HostTable.MemberData data = GetData(profile);
                 if (data.duck != null)
                 {
                     if (data.duck.hat != null)
                         Level.Remove(data.duck.hat);
                     Level.Remove(data.duck);
-                    this._data.Remove(profile);
+                    _data.Remove(profile);
                 }
-                this.spectators.Remove(profile);
+                spectators.Remove(profile);
             }
-            this.remove.Clear();
+            remove.Clear();
             Level.current.things.RefreshState();
             Level.current.UpdateThings();
             Level.core = core;
@@ -118,8 +118,8 @@ namespace DuckGame
         private HostTable.MemberData GetData(Profile pProfile)
         {
             MemberData data;
-            if (!this._data.TryGetValue(pProfile, out data))
-                this._data[pProfile] = data = new HostTable.MemberData();
+            if (!_data.TryGetValue(pProfile, out data))
+                _data[pProfile] = data = new HostTable.MemberData();
             return data;
         }
 
@@ -128,7 +128,7 @@ namespace DuckGame
             bool networkActive = Network.activeNetwork._networkActive;
             Network.activeNetwork._networkActive = false;
             LevelCore core = Level.core;
-            Level.core = this._fakeLevelCore;
+            Level.core = _fakeLevelCore;
             foreach (Thing thing in Level.current.things)
             {
                 if (thing is Duck)
@@ -138,12 +138,12 @@ namespace DuckGame
                 }
                 thing.DoDraw();
             }
-            float num1 = this.spectators.Count * 22;
+            float num1 = spectators.Count * 22;
             float x = (float)(this.x - num1 / 2.0 + 10.0);
             int num2 = 0;
-            foreach (Profile spectator in this.spectators)
+            foreach (Profile spectator in spectators)
             {
-                HostTable.MemberData data = this.GetData(spectator);
+                HostTable.MemberData data = GetData(spectator);
                 sbyte num3 = spectator.netData.Get<sbyte>("spectatorBeverage", -1);
                 if (data.beverage != num3)
                 {
@@ -157,21 +157,21 @@ namespace DuckGame
                     if (data.beverageLerp < 0.05f)
                         data.beverageLerp = 0f;
                 }
-                bool flag = num2 >= this.spectators.Count / 2;
+                bool flag = num2 >= spectators.Count / 2;
                 if (spectator.netData.Get<bool>("spectatorFlip", false))
                     flag = !flag;
                 if (data.beverage != -1)
                 {
-                    this._beverage.frame = data.beverage;
+                    _beverage.frame = data.beverage;
                     float num4 = (num2 * num2 * 5.4041653f % 1f * 7f);
                     int num5 = 1;
                     if (num2 == 1 || num2 == 2)
                         num5 = 0;
-                    Graphics.Draw(_beverage, (x - num4 + (num2 >= this.spectators.Count / 2 ? 5f : -16f)), (this.y - 15f + 16f * data.beverageLerp) + num5, data.beverageLerp < 0.05f ? this.depth + 1 : this.depth - 1);
+                    Graphics.Draw(_beverage, (x - num4 + (num2 >= spectators.Count / 2 ? 5f : -16f)), (y - 15f + 16f * data.beverageLerp) + num5, data.beverageLerp < 0.05f ? depth + 1 : depth - 1);
                 }
                 if (spectator == DuckNetwork.hostProfile)
-                    Graphics.Draw(this._crown, x, this.y + 2f, this.depth + 2);
-                Vec2 vec2_1 = new Vec2(x, this.y - 2f);
+                    Graphics.Draw(_crown, x, y + 2f, depth + 2);
+                Vec2 vec2_1 = new Vec2(x, y - 2f);
                 vec2_1 += new Vec2(data.tilt.x, (-data.tilt.y * 0.25f)) * 4f;
                 Vec2 vec2_2 = vec2_1;
                 Vec2 bob = data.bob;
@@ -186,14 +186,14 @@ namespace DuckGame
                     data.duck.position = vec2_3 + new Vec2(0f, -5f);
                     data.duck.offDir = flag ? (sbyte)-1 : (sbyte)1;
                 }
-                this._chair.flipH = flag;
-                Graphics.Draw(this._chair, vec2_1.x - (flag ? -4f : 4f), vec2_1.y - 4f, this.depth - 40);
+                _chair.flipH = flag;
+                Graphics.Draw(_chair, vec2_1.x - (flag ? -4f : 4f), vec2_1.y - 4f, depth - 40);
                 x += num1 / spectators.Count;
                 ++num2;
             }
             Level.core = core;
             Network.activeNetwork._networkActive = networkActive;
-            if (this.spectators.Count <= 0)
+            if (spectators.Count <= 0)
                 return;
             base.Draw();
         }

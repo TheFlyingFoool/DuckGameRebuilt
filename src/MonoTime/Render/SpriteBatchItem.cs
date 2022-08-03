@@ -23,10 +23,10 @@ namespace DuckGame
 
         public MTSpriteBatchItem()
         {
-            this.vertexTL = new VertexPositionColorTexture();
-            this.vertexTR = new VertexPositionColorTexture();
-            this.vertexBL = new VertexPositionColorTexture();
-            this.vertexBR = new VertexPositionColorTexture();
+            vertexTL = new VertexPositionColorTexture();
+            vertexTR = new VertexPositionColorTexture();
+            vertexBL = new VertexPositionColorTexture();
+            vertexBR = new VertexPositionColorTexture();
         }
 
         public void Set(
@@ -38,30 +38,30 @@ namespace DuckGame
           Vec2 texCoordTL,
           Vec2 texCoordBR)
         {
-            this.vertexTL.Position.X = x;
-            this.vertexTL.Position.Y = y;
-            this.vertexTL.Position.Z = this.Depth;
-            this.vertexTL.Color = (Microsoft.Xna.Framework.Color)color;
-            this.vertexTL.TextureCoordinate.X = texCoordTL.x;
-            this.vertexTL.TextureCoordinate.Y = texCoordTL.y;
-            this.vertexTR.Position.X = x + w;
-            this.vertexTR.Position.Y = y;
-            this.vertexTR.Position.Z = this.Depth;
-            this.vertexTR.Color = (Microsoft.Xna.Framework.Color)color;
-            this.vertexTR.TextureCoordinate.X = texCoordBR.x;
-            this.vertexTR.TextureCoordinate.Y = texCoordTL.y;
-            this.vertexBL.Position.X = x;
-            this.vertexBL.Position.Y = y + h;
-            this.vertexBL.Position.Z = this.Depth;
-            this.vertexBL.Color = (Microsoft.Xna.Framework.Color)color;
-            this.vertexBL.TextureCoordinate.X = texCoordTL.x;
-            this.vertexBL.TextureCoordinate.Y = texCoordBR.y;
-            this.vertexBR.Position.X = x + w;
-            this.vertexBR.Position.Y = y + h;
-            this.vertexBR.Position.Z = this.Depth;
-            this.vertexBR.Color = (Microsoft.Xna.Framework.Color)color;
-            this.vertexBR.TextureCoordinate.X = texCoordBR.x;
-            this.vertexBR.TextureCoordinate.Y = texCoordBR.y;
+            vertexTL.Position.X = x;
+            vertexTL.Position.Y = y;
+            vertexTL.Position.Z = Depth;
+            vertexTL.Color = (Microsoft.Xna.Framework.Color)color;
+            vertexTL.TextureCoordinate.X = texCoordTL.x;
+            vertexTL.TextureCoordinate.Y = texCoordTL.y;
+            vertexTR.Position.X = x + w;
+            vertexTR.Position.Y = y;
+            vertexTR.Position.Z = Depth;
+            vertexTR.Color = (Microsoft.Xna.Framework.Color)color;
+            vertexTR.TextureCoordinate.X = texCoordBR.x;
+            vertexTR.TextureCoordinate.Y = texCoordTL.y;
+            vertexBL.Position.X = x;
+            vertexBL.Position.Y = y + h;
+            vertexBL.Position.Z = Depth;
+            vertexBL.Color = (Microsoft.Xna.Framework.Color)color;
+            vertexBL.TextureCoordinate.X = texCoordTL.x;
+            vertexBL.TextureCoordinate.Y = texCoordBR.y;
+            vertexBR.Position.X = x + w;
+            vertexBR.Position.Y = y + h;
+            vertexBR.Position.Z = Depth;
+            vertexBR.Color = (Microsoft.Xna.Framework.Color)color;
+            vertexBR.TextureCoordinate.X = texCoordBR.x;
+            vertexBR.TextureCoordinate.Y = texCoordBR.y;
         }
 
         public void Set(
@@ -75,30 +75,30 @@ namespace DuckGame
           Vec2 t4,
           Color c)
         {
-            this.vertexTL.Position.X = p1.x;
-            this.vertexTL.Position.Y = p1.y;
-            this.vertexTL.Position.Z = this.Depth;
-            this.vertexTL.Color = (Microsoft.Xna.Framework.Color)c;
-            this.vertexTL.TextureCoordinate.X = t1.x;
-            this.vertexTL.TextureCoordinate.Y = t1.y;
-            this.vertexTR.Position.X = p2.x;
-            this.vertexTR.Position.Y = p2.y;
-            this.vertexTR.Position.Z = this.Depth;
-            this.vertexTR.Color = (Microsoft.Xna.Framework.Color)c;
-            this.vertexTR.TextureCoordinate.X = t2.x;
-            this.vertexTR.TextureCoordinate.Y = t2.y;
-            this.vertexBL.Position.X = p3.x;
-            this.vertexBL.Position.Y = p3.y;
-            this.vertexBL.Position.Z = this.Depth;
-            this.vertexBL.Color = (Microsoft.Xna.Framework.Color)c;
-            this.vertexBL.TextureCoordinate.X = t3.x;
-            this.vertexBL.TextureCoordinate.Y = t3.y;
-            this.vertexBR.Position.X = p4.x;
-            this.vertexBR.Position.Y = p4.y;
-            this.vertexBR.Position.Z = this.Depth;
-            this.vertexBR.Color = (Microsoft.Xna.Framework.Color)c;
-            this.vertexBR.TextureCoordinate.X = t4.x;
-            this.vertexBR.TextureCoordinate.Y = t4.y;
+            vertexTL.Position.X = p1.x;
+            vertexTL.Position.Y = p1.y;
+            vertexTL.Position.Z = Depth;
+            vertexTL.Color = (Microsoft.Xna.Framework.Color)c;
+            vertexTL.TextureCoordinate.X = t1.x;
+            vertexTL.TextureCoordinate.Y = t1.y;
+            vertexTR.Position.X = p2.x;
+            vertexTR.Position.Y = p2.y;
+            vertexTR.Position.Z = Depth;
+            vertexTR.Color = (Microsoft.Xna.Framework.Color)c;
+            vertexTR.TextureCoordinate.X = t2.x;
+            vertexTR.TextureCoordinate.Y = t2.y;
+            vertexBL.Position.X = p3.x;
+            vertexBL.Position.Y = p3.y;
+            vertexBL.Position.Z = Depth;
+            vertexBL.Color = (Microsoft.Xna.Framework.Color)c;
+            vertexBL.TextureCoordinate.X = t3.x;
+            vertexBL.TextureCoordinate.Y = t3.y;
+            vertexBR.Position.X = p4.x;
+            vertexBR.Position.Y = p4.y;
+            vertexBR.Position.Z = Depth;
+            vertexBR.Color = (Microsoft.Xna.Framework.Color)c;
+            vertexBR.TextureCoordinate.X = t4.x;
+            vertexBR.TextureCoordinate.Y = t4.y;
         }
 
         public void Set(
@@ -114,30 +114,30 @@ namespace DuckGame
           Vec2 texCoordTL,
           Vec2 texCoordBR)
         {
-            this.vertexTL.Position.X = (float)(x + dx * cos - dy * sin);
-            this.vertexTL.Position.Y = (float)(y + dx * sin + dy * cos);
-            this.vertexTL.Position.Z = this.Depth;
-            this.vertexTL.Color = (Microsoft.Xna.Framework.Color)color;
-            this.vertexTL.TextureCoordinate.X = texCoordTL.x;
-            this.vertexTL.TextureCoordinate.Y = texCoordTL.y;
-            this.vertexTR.Position.X = (float)(x + (dx + w) * cos - dy * sin);
-            this.vertexTR.Position.Y = (float)(y + (dx + w) * sin + dy * cos);
-            this.vertexTR.Position.Z = this.Depth;
-            this.vertexTR.Color = (Microsoft.Xna.Framework.Color)color;
-            this.vertexTR.TextureCoordinate.X = texCoordBR.x;
-            this.vertexTR.TextureCoordinate.Y = texCoordTL.y;
-            this.vertexBL.Position.X = (float)(x + dx * cos - (dy + h) * sin);
-            this.vertexBL.Position.Y = (float)(y + dx * sin + (dy + h) * cos);
-            this.vertexBL.Position.Z = this.Depth;
-            this.vertexBL.Color = (Microsoft.Xna.Framework.Color)color;
-            this.vertexBL.TextureCoordinate.X = texCoordTL.x;
-            this.vertexBL.TextureCoordinate.Y = texCoordBR.y;
-            this.vertexBR.Position.X = (float)(x + (dx + w) * cos - (dy + h) * sin);
-            this.vertexBR.Position.Y = (float)(y + (dx + w) * sin + (dy + h) * cos);
-            this.vertexBR.Position.Z = this.Depth;
-            this.vertexBR.Color = (Microsoft.Xna.Framework.Color)color;
-            this.vertexBR.TextureCoordinate.X = texCoordBR.x;
-            this.vertexBR.TextureCoordinate.Y = texCoordBR.y;
+            vertexTL.Position.X = (float)(x + dx * cos - dy * sin);
+            vertexTL.Position.Y = (float)(y + dx * sin + dy * cos);
+            vertexTL.Position.Z = Depth;
+            vertexTL.Color = (Microsoft.Xna.Framework.Color)color;
+            vertexTL.TextureCoordinate.X = texCoordTL.x;
+            vertexTL.TextureCoordinate.Y = texCoordTL.y;
+            vertexTR.Position.X = (float)(x + (dx + w) * cos - dy * sin);
+            vertexTR.Position.Y = (float)(y + (dx + w) * sin + dy * cos);
+            vertexTR.Position.Z = Depth;
+            vertexTR.Color = (Microsoft.Xna.Framework.Color)color;
+            vertexTR.TextureCoordinate.X = texCoordBR.x;
+            vertexTR.TextureCoordinate.Y = texCoordTL.y;
+            vertexBL.Position.X = (float)(x + dx * cos - (dy + h) * sin);
+            vertexBL.Position.Y = (float)(y + dx * sin + (dy + h) * cos);
+            vertexBL.Position.Z = Depth;
+            vertexBL.Color = (Microsoft.Xna.Framework.Color)color;
+            vertexBL.TextureCoordinate.X = texCoordTL.x;
+            vertexBL.TextureCoordinate.Y = texCoordBR.y;
+            vertexBR.Position.X = (float)(x + (dx + w) * cos - (dy + h) * sin);
+            vertexBR.Position.Y = (float)(y + (dx + w) * sin + (dy + h) * cos);
+            vertexBR.Position.Z = Depth;
+            vertexBR.Color = (Microsoft.Xna.Framework.Color)color;
+            vertexBR.TextureCoordinate.X = texCoordBR.x;
+            vertexBR.TextureCoordinate.Y = texCoordBR.y;
         }
     }
 }

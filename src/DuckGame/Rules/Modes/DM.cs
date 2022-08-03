@@ -48,19 +48,19 @@ namespace DuckGame
             }
             if (teamList.Count <= 1)
             {
-                this.EndMatch();
+                EndMatch();
             }
             else
             {
-                this._matchOver = false;
-                this._roundEndWait = 1f;
+                _matchOver = false;
+                _roundEndWait = 1f;
             }
             base.Update();
         }
 
         protected override List<Duck> AssignSpawns() => Spawn.SpawnPlayers().OrderBy<Duck, float>(sp => sp.x).ToList<Duck>();
 
-        protected override Level GetNextLevel() => this._editorTestMode ? new GameLevel((Level.current as GameLevel).levelInputString, editorTestMode: true) : (Level)new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
+        protected override Level GetNextLevel() => _editorTestMode ? new GameLevel((Level.current as GameLevel).levelInputString, editorTestMode: true) : (Level)new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
 
         protected override List<Profile> AddPoints()
         {
@@ -113,7 +113,7 @@ namespace DuckGame
                             GameMode.lastWinners.Add(activeProfile);
                             if (p != null)
                             {
-                                PlusOne plusOne = new PlusOne(0f, 0f, p, testMode: this._editorTestMode)
+                                PlusOne plusOne = new PlusOne(0f, 0f, p, testMode: _editorTestMode)
                                 {
                                     anchor = (Anchor)activeProfile.duck
                                 };

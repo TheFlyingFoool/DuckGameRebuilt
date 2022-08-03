@@ -57,18 +57,18 @@ namespace DuckGame
 
         protected void ChangeState(UIMatchmakerMark2.State pState)
         {
-            if (this._directConnectLobby != null && (pState == UIMatchmakerMark2.State.TryJoiningLobbies || pState == UIMatchmakerMark2.State.SearchForLobbies))
+            if (_directConnectLobby != null && (pState == UIMatchmakerMark2.State.TryJoiningLobbies || pState == UIMatchmakerMark2.State.SearchForLobbies))
                 pState = UIMatchmakerMark2.State.Failed;
-            if (pState == UIMatchmakerMark2.State.Failed && this._previousState != UIMatchmakerMark2.State.Failed)
+            if (pState == UIMatchmakerMark2.State.Failed && _previousState != UIMatchmakerMark2.State.Failed)
             {
                 HUD.CloseAllCorners();
                 HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@RETURN");
-                this.messages.Add("|DGRED|Unable to connect to server.");
+                messages.Add("|DGRED|Unable to connect to server.");
             }
-            this._previousState = this._state;
-            this._state = pState;
-            this._timeInState = 0;
-            this.Wait();
+            _previousState = _state;
+            _state = pState;
+            _timeInState = 0;
+            Wait();
         }
 
         public static UIMatchmakerMark2 Platform_GetMatchkmaker(
@@ -81,50 +81,50 @@ namespace DuckGame
         protected UIMatchmakerMark2(UIServerBrowser.LobbyData joinLobby, UIMenu openOnClose)
           : this(openOnClose)
         {
-            this._directConnectLobby = joinLobby;
+            _directConnectLobby = joinLobby;
         }
 
         protected UIMatchmakerMark2(UIMenu openOnClose)
           : base("", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f)
         {
-            this._openOnClose = openOnClose;
+            _openOnClose = openOnClose;
             Graphics.fade = 1f;
-            this._window = new Sprite("online/matchmaking_mk2");
-            this._window.CenterOrigin();
-            this._font = new BitmapFont("biosFontUI", 8, 7);
-            this._fancyFont = new FancyBitmapFont("smallFont");
-            this._matchmakingSignal = new SpriteMap("online/matchmakingSignal", 4, 9);
-            this._matchmakingSignal.CenterOrigin();
+            _window = new Sprite("online/matchmaking_mk2");
+            _window.CenterOrigin();
+            _font = new BitmapFont("biosFontUI", 8, 7);
+            _fancyFont = new FancyBitmapFont("smallFont");
+            _matchmakingSignal = new SpriteMap("online/matchmakingSignal", 4, 9);
+            _matchmakingSignal.CenterOrigin();
             SpriteMap spriteMap1 = new SpriteMap("online/matchmakingStar", 7, 7);
             spriteMap1.AddAnimation("flicker", 0.08f, true, 0, 1, 2, 1);
             spriteMap1.SetAnimation("flicker");
             spriteMap1.CenterOrigin();
-            this._signalCrossLocal = new SpriteMap("online/signalCross", 5, 5);
-            this._signalCrossLocal.AddAnimation("idle", 0.12f, true, new int[1]);
-            this._signalCrossLocal.AddAnimation("flicker", 0.12f, false, 1, 2, 3);
-            this._signalCrossLocal.SetAnimation("idle");
-            this._signalCrossLocal.CenterOrigin();
-            this._signalCrossNetwork = new SpriteMap("online/signalCross", 5, 5);
-            this._signalCrossNetwork.AddAnimation("idle", 0.12f, true, new int[1]);
-            this._signalCrossNetwork.AddAnimation("flicker", 0.12f, false, 1, 2, 3);
-            this._signalCrossNetwork.SetAnimation("idle");
-            this._signalCrossNetwork.CenterOrigin();
-            this._matchmakingStars.Add(spriteMap1);
+            _signalCrossLocal = new SpriteMap("online/signalCross", 5, 5);
+            _signalCrossLocal.AddAnimation("idle", 0.12f, true, new int[1]);
+            _signalCrossLocal.AddAnimation("flicker", 0.12f, false, 1, 2, 3);
+            _signalCrossLocal.SetAnimation("idle");
+            _signalCrossLocal.CenterOrigin();
+            _signalCrossNetwork = new SpriteMap("online/signalCross", 5, 5);
+            _signalCrossNetwork.AddAnimation("idle", 0.12f, true, new int[1]);
+            _signalCrossNetwork.AddAnimation("flicker", 0.12f, false, 1, 2, 3);
+            _signalCrossNetwork.SetAnimation("idle");
+            _signalCrossNetwork.CenterOrigin();
+            _matchmakingStars.Add(spriteMap1);
             SpriteMap spriteMap2 = new SpriteMap("online/matchmakingStar", 7, 7);
             spriteMap2.AddAnimation("flicker", 0.11f, true, 0, 1, 2, 1);
             spriteMap2.SetAnimation("flicker");
             spriteMap2.CenterOrigin();
-            this._matchmakingStars.Add(spriteMap2);
+            _matchmakingStars.Add(spriteMap2);
             SpriteMap spriteMap3 = new SpriteMap("online/matchmakingStar", 7, 7);
             spriteMap3.AddAnimation("flicker", 0.03f, true, 0, 1, 2, 1);
             spriteMap3.SetAnimation("flicker");
             spriteMap3.CenterOrigin();
-            this._matchmakingStars.Add(spriteMap3);
+            _matchmakingStars.Add(spriteMap3);
             SpriteMap spriteMap4 = new SpriteMap("online/matchmakingStar", 7, 7);
             spriteMap4.AddAnimation("flicker", 0.03f, true, 0, 1, 2, 1);
             spriteMap4.SetAnimation("flicker");
             spriteMap4.CenterOrigin();
-            this._matchmakingStars.Add(spriteMap4);
+            _matchmakingStars.Add(spriteMap4);
         }
 
         protected virtual void Platform_Open()
@@ -133,23 +133,23 @@ namespace DuckGame
 
         public override void Open()
         {
-            this._state = UIMatchmakerMark2.State.InitializeMatchmaking;
-            this.Platform_Open();
-            this._timeOpen = 0;
+            _state = UIMatchmakerMark2.State.InitializeMatchmaking;
+            Platform_Open();
+            _timeOpen = 0;
             UIMatchmakerMark2._currentLevel = Level.current;
             UIMatchmakerMark2.instance = this;
-            this._processing = null;
-            this.messages.Clear();
-            if (this._directConnectLobby != null)
-                this._state = UIMatchmakerMark2.State.TryJoiningLobbies;
+            _processing = null;
+            messages.Clear();
+            if (_directConnectLobby != null)
+                _state = UIMatchmakerMark2.State.TryJoiningLobbies;
             else
-                this.messages.Add("|DGYELLOW|Connecting to servers on the Moon...");
-            this._totalLobbies = -1;
-            this._joinableLobbies = -1;
-            this.attempted.Clear();
-            this.blacklist.Clear();
+                messages.Add("|DGYELLOW|Connecting to servers on the Moon...");
+            _totalLobbies = -1;
+            _joinableLobbies = -1;
+            attempted.Clear();
+            blacklist.Clear();
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@ABORT");
-            if (this.playMusic && this._directConnectLobby == null)
+            if (playMusic && _directConnectLobby == null)
                 Music.Play("jazzroom");
             base.Open();
         }
@@ -158,7 +158,7 @@ namespace DuckGame
         {
             if (UIMatchmakerMark2.instance == this)
                 UIMatchmakerMark2.instance = null;
-            this._state = UIMatchmakerMark2.State.Idle;
+            _state = UIMatchmakerMark2.State.Idle;
             base.Close();
         }
 
@@ -170,12 +170,12 @@ namespace DuckGame
                 Level.UpdateLevelChange();
             }
             HUD.CloseAllCorners();
-            this.Close();
+            Close();
             if (Network.isActive)
                 return;
-            if (this._openOnClose is UIServerBrowser)
+            if (_openOnClose is UIServerBrowser)
             {
-                this._openOnClose.Open();
+                _openOnClose.Open();
                 MonoMain.pauseMenu = _openOnClose;
             }
             else
@@ -187,25 +187,25 @@ namespace DuckGame
 
         public void Hook_OnSessionEnded(DuckNetErrorInfo error)
         {
-            this._resetting = false;
-            this._framesSinceReset = 0;
-            if (this._state != UIMatchmakerMark2.State.Aborting)
+            _resetting = false;
+            _framesSinceReset = 0;
+            if (_state != UIMatchmakerMark2.State.Aborting)
             {
-                if (this._hostedLobby == null)
+                if (_hostedLobby == null)
                 {
                     if (error == null || error.error != DuckNetError.HostIsABlockedUser)
                     {
-                        this.messages.Add("|PURPLE|LOBBY    |DGRED|Connection to lobby failed:");
-                        this.OnConnectionError(error);
-                        if (this._directConnectLobby == null)
-                            this.messages.Add("|PURPLE|LOBBY    |WHITE|Looking for more lobbies to try...");
+                        messages.Add("|PURPLE|LOBBY    |DGRED|Connection to lobby failed:");
+                        OnConnectionError(error);
+                        if (_directConnectLobby == null)
+                            messages.Add("|PURPLE|LOBBY    |WHITE|Looking for more lobbies to try...");
                     }
-                    this._wait += 60;
+                    _wait += 60;
                 }
-                this.ChangeState(UIMatchmakerMark2.State.TryJoiningLobbies);
+                ChangeState(UIMatchmakerMark2.State.TryJoiningLobbies);
             }
-            this._processing = null;
-            this._hostedLobby = null;
+            _processing = null;
+            _hostedLobby = null;
         }
 
         public virtual void Hook_OnLobbyProcessed(object pLobby)
@@ -219,45 +219,45 @@ namespace DuckGame
                 if (error.error == DuckNetError.YourVersionTooNew || error.error == DuckNetError.YourVersionTooOld)
                 {
                     if (error.error == DuckNetError.YourVersionTooNew)
-                        this.messages.Add("|DGRED|Their version was older.");
+                        messages.Add("|DGRED|Their version was older.");
                     else
-                        this.messages.Add("|DGRED|Their version was newer.");
-                    if (this._processing == null)
+                        messages.Add("|DGRED|Their version was newer.");
+                    if (_processing == null)
                         return;
-                    this.blacklist.Add(this._processing.id);
+                    blacklist.Add(_processing.id);
                 }
                 else if (error.error == DuckNetError.FullServer)
-                    this.messages.Add("|DGRED|Failed (FULL SERVER)");
+                    messages.Add("|DGRED|Failed (FULL SERVER)");
                 else if (error.error == DuckNetError.ConnectionTimeout)
-                    this.messages.Add("|DGRED|Failed (TIMEOUT)");
+                    messages.Add("|DGRED|Failed (TIMEOUT)");
                 else if (error.error == DuckNetError.GameInProgress)
-                    this.messages.Add("|DGRED|Failed (IN PROGRESS)");
+                    messages.Add("|DGRED|Failed (IN PROGRESS)");
                 else if (error.error == DuckNetError.GameNotFoundOrClosed)
-                    this.messages.Add("|DGRED|Failed (NO LONGER AVAILABLE)");
+                    messages.Add("|DGRED|Failed (NO LONGER AVAILABLE)");
                 else if (error.error == DuckNetError.ClientDisconnected)
-                    this.messages.Add("|DGYELLOW|Disconnected");
+                    messages.Add("|DGYELLOW|Disconnected");
                 else if (error.error == DuckNetError.InvalidPassword)
-                    this.messages.Add("|DGRED|Password was incorrect!");
+                    messages.Add("|DGRED|Password was incorrect!");
                 else if (error.error == DuckNetError.ModsIncompatible)
                 {
-                    this.messages.Add("|DGRED|Host had different mods enabled!");
+                    messages.Add("|DGRED|Host had different mods enabled!");
                 }
                 else
                 {
                     if (error.error == DuckNetError.HostIsABlockedUser)
                         return;
-                    this.messages.Add("|DGRED|Unknown connection error.");
-                    if (this._processing == null)
+                    messages.Add("|DGRED|Unknown connection error.");
+                    if (_processing == null)
                         return;
-                    this.blacklist.Add(this._processing.id);
+                    blacklist.Add(_processing.id);
                 }
             }
             else
             {
-                this.messages.Add("|DGRED|Connection timeout.");
-                if (this._processing == null)
+                messages.Add("|DGRED|Connection timeout.");
+                if (_processing == null)
                     return;
-                this.blacklist.Add(this._processing.id);
+                blacklist.Add(_processing.id);
             }
         }
 
@@ -270,24 +270,24 @@ namespace DuckGame
                 Level.current = new TeamSelect2();
                 Level.current.suppressLevelMessage = true;
             }
-            this.Close();
+            Close();
             DevConsole.Log("|PURPLE|LOBBY    |DGGREEN|Finished! (HOST).", Color.White);
         }
 
-        private void Wait() => this._wait += 60;
+        private void Wait() => _wait += 60;
 
         protected bool HostLobby()
         {
-            if (this._hostedLobby == null && this.Reset())
+            if (_hostedLobby == null && Reset())
             {
-                this.messages.Add("|DGYELLOW|Having trouble finding an open lobby...");
-                this.messages.Add("|DGGREEN|Creating a lobby of our very own...");
+                messages.Add("|DGYELLOW|Having trouble finding an open lobby...");
+                messages.Add("|DGGREEN|Creating a lobby of our very own...");
                 DuckNetwork.Host(TeamSelect2.GetSettingInt("maxplayers"), NetworkLobbyType.Public);
-                this._hostedLobby = Network.activeNetwork.core.lobby;
+                _hostedLobby = Network.activeNetwork.core.lobby;
                 DevConsole.Log("|PURPLE|LOBBY    |DGYELLOW|Opened lobby while searching.", Color.White);
-                this._wait = 280 + Rando.Int(120);
+                _wait = 280 + Rando.Int(120);
             }
-            return this._hostedLobby != null;
+            return _hostedLobby != null;
         }
 
         protected virtual void Platform_ResetLogic()
@@ -298,11 +298,11 @@ namespace DuckGame
         {
             if (Network.isActive)
             {
-                this.Platform_ResetLogic();
-                this._resetNetwork = true;
+                Platform_ResetLogic();
+                _resetNetwork = true;
                 Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.ControlledDisconnect, "Matchmaking disconnect."));
-                this._resetting = true;
-                this._framesSinceReset = 0;
+                _resetting = true;
+                _framesSinceReset = 0;
             }
             return !Network.isActive;
         }
@@ -328,90 +328,90 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (!this.open)
+            if (!open)
                 return;
-            ++this._timeInState;
+            ++_timeInState;
             if (UIMatchmakerMark2.instance == null)
-                this.FinishAndClose();
-            else if (this._resetNetwork && Network.isActive)
+                FinishAndClose();
+            else if (_resetNetwork && Network.isActive)
             {
-                this.Reset();
+                Reset();
             }
             else
             {
-                this._resetNetwork = false;
+                _resetNetwork = false;
                 if (Input.Pressed("CANCEL"))
                 {
-                    this.Reset();
-                    this.messages.Add("|DGRED|Aborting...");
-                    this.ChangeState(UIMatchmakerMark2.State.Aborting);
+                    Reset();
+                    messages.Add("|DGRED|Aborting...");
+                    ChangeState(UIMatchmakerMark2.State.Aborting);
                 }
-                if (this._resetting)
+                if (_resetting)
                 {
-                    ++this._framesSinceReset;
-                    if (this._framesSinceReset <= 120)
+                    ++_framesSinceReset;
+                    if (_framesSinceReset <= 120)
                         return;
                     Network.Terminate();
-                    if (this._state != UIMatchmakerMark2.State.Aborting)
-                        this.ChangeState(UIMatchmakerMark2.State.TryJoiningLobbies);
-                    this._processing = null;
-                    this._hostedLobby = null;
+                    if (_state != UIMatchmakerMark2.State.Aborting)
+                        ChangeState(UIMatchmakerMark2.State.TryJoiningLobbies);
+                    _processing = null;
+                    _hostedLobby = null;
                 }
                 else
                 {
-                    ++this._timeOpen;
-                    if (this._timeOpen > 7200)
-                        this.attempted.Clear();
-                    this.Platform_Update();
-                    if (this._wait > 0 && this._state != UIMatchmakerMark2.State.Aborting && this._state != UIMatchmakerMark2.State.JoinLobby)
-                        --this._wait;
+                    ++_timeOpen;
+                    if (_timeOpen > 7200)
+                        attempted.Clear();
+                    Platform_Update();
+                    if (_wait > 0 && _state != UIMatchmakerMark2.State.Aborting && _state != UIMatchmakerMark2.State.JoinLobby)
+                        --_wait;
                     else
-                        this.Platform_MatchmakerLogic();
+                        Platform_MatchmakerLogic();
                 }
             }
         }
 
-        public void SetPasswordAttempt(string pPassword) => this._passwordAttempt = pPassword;
+        public void SetPasswordAttempt(string pPassword) => _passwordAttempt = pPassword;
 
         public override void Draw()
         {
-            if (!this.open)
+            if (!open)
                 return;
-            this._window.depth = this.depth;
-            Graphics.Draw(this._window, this.x, this.y);
-            this._scroll += 0.06f;
+            _window.depth = depth;
+            Graphics.Draw(_window, x, y);
+            _scroll += 0.06f;
             if (_scroll > 9.0)
-                this._scroll = 0f;
-            this._dots += 0.01f;
+                _scroll = 0f;
+            _dots += 0.01f;
             if (_dots > 1.0)
-                this._dots = 0f;
-            if (this._state == UIMatchmakerMark2.State.Idle || this._state == UIMatchmakerMark2.State.Failed)
+                _dots = 0f;
+            if (_state == UIMatchmakerMark2.State.Idle || _state == UIMatchmakerMark2.State.Failed)
             {
-                this._signalCrossLocal.SetAnimation("idle");
+                _signalCrossLocal.SetAnimation("idle");
                 UIMatchmakerMark2.pulseLocal = false;
             }
-            else if (this._signalCrossLocal.currentAnimation == "idle")
+            else if (_signalCrossLocal.currentAnimation == "idle")
             {
                 if (UIMatchmakerMark2.pulseLocal)
                 {
-                    this._signalCrossLocal.SetAnimation("flicker");
+                    _signalCrossLocal.SetAnimation("flicker");
                     UIMatchmakerMark2.pulseLocal = false;
                 }
             }
-            else if (this._signalCrossLocal.finished)
-                this._signalCrossLocal.SetAnimation("idle");
-            if (this._signalCrossNetwork.currentAnimation == "idle")
+            else if (_signalCrossLocal.finished)
+                _signalCrossLocal.SetAnimation("idle");
+            if (_signalCrossNetwork.currentAnimation == "idle")
             {
                 if (UIMatchmakerMark2.pulseNetwork)
                 {
-                    this._signalCrossNetwork.SetAnimation("flicker");
+                    _signalCrossNetwork.SetAnimation("flicker");
                     UIMatchmakerMark2.pulseNetwork = false;
                 }
             }
-            else if (this._signalCrossNetwork.finished)
-                this._signalCrossNetwork.SetAnimation("idle");
-            float num1 = this.y - 10f;
-            if (this._state != UIMatchmakerMark2.State.Failed)
+            else if (_signalCrossNetwork.finished)
+                _signalCrossNetwork.SetAnimation("idle");
+            float num1 = y - 10f;
+            if (_state != UIMatchmakerMark2.State.Failed)
             {
                 for (int index = 0; index < 7; ++index)
                 {
@@ -419,42 +419,42 @@ namespace DuckGame
                     float x = num2 + index * 9 + (float)Math.Round(_scroll);
                     float num3 = num2 + 63f;
                     double num4 = (x - num2) / (num3 - num2);
-                    this._matchmakingSignal.depth = this.depth + 4;
+                    _matchmakingSignal.depth = depth + 4;
                     if (num4 > -0.100000001490116)
-                        this._matchmakingSignal.frame = 0;
+                        _matchmakingSignal.frame = 0;
                     if (num4 > 0.0500000007450581)
-                        this._matchmakingSignal.frame = 1;
+                        _matchmakingSignal.frame = 1;
                     if (num4 > 0.100000001490116)
-                        this._matchmakingSignal.frame = 2;
+                        _matchmakingSignal.frame = 2;
                     if (num4 > 0.899999976158142)
-                        this._matchmakingSignal.frame = 1;
+                        _matchmakingSignal.frame = 1;
                     if (num4 > 0.949999988079071)
-                        this._matchmakingSignal.frame = 0;
+                        _matchmakingSignal.frame = 0;
                     Graphics.Draw(_matchmakingSignal, x, num1 - 21f);
                 }
             }
-            this._matchmakingStars[0].depth = this.depth + 2;
-            Graphics.Draw(this._matchmakingStars[0], this.x - 9f, num1 - 18f);
-            this._matchmakingStars[1].depth = this.depth + 2;
-            Graphics.Draw(this._matchmakingStars[1], this.x + 31f, num1 - 22f);
-            this._matchmakingStars[2].depth = this.depth + 2;
-            Graphics.Draw(this._matchmakingStars[2], this.x + 12f, num1 - 20f);
-            this._matchmakingStars[3].depth = this.depth + 2;
-            Graphics.Draw(this._matchmakingStars[3], this.x - 23f, num1 - 21f);
-            this._signalCrossLocal.depth = this.depth + 2;
-            Graphics.Draw(_signalCrossLocal, this.x - 45f, num1 - 19f);
-            this._signalCrossNetwork.depth = this.depth + 2;
-            Graphics.Draw(_signalCrossNetwork, this.x + 55f, num1 - 23f);
-            this._font.DrawOutline(this._caption, this.position + new Vec2((float)-(this._font.GetWidth(this._caption) / 2.0), -52f), Color.White, Color.Black, this.depth + 2);
-            this._fancyFont.scale = new Vec2(0.5f);
+            _matchmakingStars[0].depth = depth + 2;
+            Graphics.Draw(_matchmakingStars[0], x - 9f, num1 - 18f);
+            _matchmakingStars[1].depth = depth + 2;
+            Graphics.Draw(_matchmakingStars[1], x + 31f, num1 - 22f);
+            _matchmakingStars[2].depth = depth + 2;
+            Graphics.Draw(_matchmakingStars[2], x + 12f, num1 - 20f);
+            _matchmakingStars[3].depth = depth + 2;
+            Graphics.Draw(_matchmakingStars[3], x - 23f, num1 - 21f);
+            _signalCrossLocal.depth = depth + 2;
+            Graphics.Draw(_signalCrossLocal, x - 45f, num1 - 19f);
+            _signalCrossNetwork.depth = depth + 2;
+            Graphics.Draw(_signalCrossNetwork, x + 55f, num1 - 23f);
+            _font.DrawOutline(_caption, position + new Vec2((float)-(_font.GetWidth(_caption) / 2.0), -52f), Color.White, Color.Black, depth + 2);
+            _fancyFont.scale = new Vec2(0.5f);
             int num5 = 0;
-            while (this.messages.Count > 10)
-                this.messages.RemoveAt(0);
+            while (messages.Count > 10)
+                messages.RemoveAt(0);
             int num6 = 0;
-            foreach (string message in this.messages)
+            foreach (string message in messages)
             {
                 string text = message;
-                if (num6 == this.messages.Count - 1)
+                if (num6 == messages.Count - 1)
                 {
                     string str1 = "";
                     if (message.EndsWith("..."))
@@ -474,21 +474,21 @@ namespace DuckGame
                         text = source + str1;
                     }
                 }
-                this._fancyFont.Draw(text, new Vec2(this.x - 64f, this.y - 18f + num5 * 6), Color.White, this.depth + 2);
+                _fancyFont.Draw(text, new Vec2(x - 64f, y - 18f + num5 * 6), Color.White, depth + 2);
                 ++num5;
                 ++num6;
             }
-            if (this._directConnectLobby != null)
+            if (_directConnectLobby != null)
                 return;
-            if (this._totalLobbies >= 0)
+            if (_totalLobbies >= 0)
             {
-                if (this._totalLobbies > 1)
-                    this._fancyFont.Draw("Found " + this._totalLobbies.ToString() + " games already in progress.", this.position + new Vec2(-65f, 49f), Color.Black, this.depth + 2);
+                if (_totalLobbies > 1)
+                    _fancyFont.Draw("Found " + _totalLobbies.ToString() + " games already in progress.", position + new Vec2(-65f, 49f), Color.Black, depth + 2);
                 else
-                    this._fancyFont.Draw("Found " + this._totalLobbies.ToString() + " game already in progress.", this.position + new Vec2(-65f, 49f), Color.Black, this.depth + 2);
+                    _fancyFont.Draw("Found " + _totalLobbies.ToString() + " game already in progress.", position + new Vec2(-65f, 49f), Color.Black, depth + 2);
             }
             else
-                this._fancyFont.Draw("Querying moon...", this.position + new Vec2(-65f, 49f), Color.Black, this.depth + 2);
+                _fancyFont.Draw("Querying moon...", position + new Vec2(-65f, 49f), Color.Black, depth + 2);
         }
 
         public class Core

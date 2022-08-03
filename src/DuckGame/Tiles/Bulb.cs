@@ -19,23 +19,23 @@ namespace DuckGame
         public Bulb(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("bulb");
-            this.center = new Vec2(8f, 4f);
-            this._collisionSize = new Vec2(4f, 6f);
-            this._collisionOffset = new Vec2(-2f, -4f);
-            this.depth = (Depth)0.9f;
-            this.hugWalls = WallHug.Ceiling;
-            this.layer = Layer.Game;
+            graphic = new Sprite("bulb");
+            center = new Vec2(8f, 4f);
+            _collisionSize = new Vec2(4f, 6f);
+            _collisionOffset = new Vec2(-2f, -4f);
+            depth = (Depth)0.9f;
+            hugWalls = WallHug.Ceiling;
+            layer = Layer.Game;
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            Level.Add(new PointLight(this.x, this.y, new Color(155, 125, 100), 80f, this._occluders));
-            this._shade = new SpriteThing(this.x, this.y, new Sprite("bulb"))
+            Level.Add(new PointLight(x, y, new Color(155, 125, 100), 80f, _occluders));
+            _shade = new SpriteThing(x, y, new Sprite("bulb"))
             {
-                center = this.center,
+                center = center,
                 layer = Layer.Foreground
             };
             Level.Add(_shade);

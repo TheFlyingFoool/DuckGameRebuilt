@@ -18,9 +18,9 @@ namespace DuckGame
 
         public NoteworthyEvent(string tag, Profile owner, float q)
         {
-            this.eventTag = tag;
-            this.who = owner;
-            this.quality = q;
+            eventTag = tag;
+            who = owner;
+            quality = q;
         }
     }
 }

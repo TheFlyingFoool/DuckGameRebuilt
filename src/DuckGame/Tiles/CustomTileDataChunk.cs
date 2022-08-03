@@ -21,16 +21,16 @@ namespace DuckGame
         public CustomTileData GetTileData()
         {
             CustomTileData tileData = new CustomTileData();
-            if (this.textureData == null)
+            if (textureData == null)
                 return tileData;
-            tileData.path = this.path;
-            tileData.texture = Editor.StringToTexture(this.textureData);
-            tileData.verticalWidthThick = this.verticalWidthThick;
-            tileData.verticalWidth = this.verticalWidth;
-            tileData.horizontalHeight = this.horizontalHeight;
-            tileData.leftNubber = this.leftNubber;
-            tileData.rightNubber = this.rightNubber;
-            tileData.checksum = this.textureChecksum;
+            tileData.path = path;
+            tileData.texture = Editor.StringToTexture(textureData);
+            tileData.verticalWidthThick = verticalWidthThick;
+            tileData.verticalWidth = verticalWidth;
+            tileData.horizontalHeight = horizontalHeight;
+            tileData.leftNubber = leftNubber;
+            tileData.rightNubber = rightNubber;
+            tileData.checksum = textureChecksum;
             return tileData;
         }
     }

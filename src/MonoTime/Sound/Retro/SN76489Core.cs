@@ -101,26 +101,26 @@ namespace DuckGame
 
         public SN76489Core()
         {
-            this.clock(3500000f);
-            this.reset();
+            clock(3500000f);
+            reset();
         }
 
-        public void clock(float f) => this.ticksPerSample = (float)(f / 16.0 / 44100.0);
+        public void clock(float f) => ticksPerSample = (float)(f / 16.0 / 44100.0);
 
         public void reset()
         {
-            this.volA = 15U;
-            this.volB = 15U;
-            this.volC = 15U;
-            this.volD = 15U;
-            this.outA = 0f;
-            this.outB = 0f;
-            this.outC = 0f;
-            this.outD = 0f;
-            this.latchedChan = 0U;
-            this.latchedVolume = false;
-            this.noiseLFSR = 32768U;
-            this.ticksCount = this.ticksPerSample;
+            volA = 15U;
+            volB = 15U;
+            volC = 15U;
+            volD = 15U;
+            outA = 0f;
+            outB = 0f;
+            outC = 0f;
+            outD = 0f;
+            latchedChan = 0U;
+            latchedVolume = false;
+            noiseLFSR = 32768U;
+            ticksCount = ticksPerSample;
         }
 
         public uint getDivByNumber(uint chan)
@@ -128,13 +128,13 @@ namespace DuckGame
             switch (chan)
             {
                 case 0:
-                    return (uint)this.divA;
+                    return (uint)divA;
                 case 1:
-                    return (uint)this.divB;
+                    return (uint)divB;
                 case 2:
-                    return (uint)this.divC;
+                    return (uint)divC;
                 case 3:
-                    return (uint)this.divD;
+                    return (uint)divD;
                 default:
                     return 0;
             }
@@ -145,16 +145,16 @@ namespace DuckGame
             switch (chan)
             {
                 case 0:
-                    this.divA = (int)div;
+                    divA = (int)div;
                     break;
                 case 1:
-                    this.divB = (int)div;
+                    divB = (int)div;
                     break;
                 case 2:
-                    this.divC = (int)div;
+                    divC = (int)div;
                     break;
                 case 3:
-                    this.divD = (int)div;
+                    divD = (int)div;
                     break;
             }
         }
@@ -164,13 +164,13 @@ namespace DuckGame
             switch (chan)
             {
                 case 0:
-                    return this.volA;
+                    return volA;
                 case 1:
-                    return this.volB;
+                    return volB;
                 case 2:
-                    return this.volC;
+                    return volC;
                 case 3:
-                    return this.volD;
+                    return volD;
                 default:
                     return 0;
             }
@@ -181,16 +181,16 @@ namespace DuckGame
             switch (chan)
             {
                 case 0:
-                    this.volA = vol;
+                    volA = vol;
                     break;
                 case 1:
-                    this.volB = vol;
+                    volB = vol;
                     break;
                 case 2:
-                    this.volC = vol;
+                    volC = vol;
                     break;
                 case 3:
-                    this.volD = vol;
+                    volD = vol;
                     break;
             }
         }
@@ -202,26 +202,26 @@ namespace DuckGame
             if ((val & 128) != 0)
             {
                 chan = val >> 5 & 3;
-                div = (int)this.getDivByNumber((uint)chan) & 65520 | val & 15;
-                this.latchedChan = (uint)chan;
-                this.latchedVolume = (val & 16) != 0;
+                div = (int)getDivByNumber((uint)chan) & 65520 | val & 15;
+                latchedChan = (uint)chan;
+                latchedVolume = (val & 16) != 0;
             }
             else
             {
-                chan = (int)this.latchedChan;
-                div = (int)this.getDivByNumber((uint)chan) & 15 | (val & 63) << 4;
+                chan = (int)latchedChan;
+                div = (int)getDivByNumber((uint)chan) & 15 | (val & 63) << 4;
             }
-            if (this.latchedVolume)
+            if (latchedVolume)
             {
-                this.setVolByNumber((uint)chan, (uint)((int)this.getVolByNumber((uint)chan) & 16 | val & 15));
+                setVolByNumber((uint)chan, (uint)((int)getVolByNumber((uint)chan) & 16 | val & 15));
             }
             else
             {
-                this.setDivByNumber((uint)chan, (uint)div);
+                setDivByNumber((uint)chan, (uint)div);
                 if (chan != 3)
                     return;
-                this.noiseTap = (div >> 2 & 1) != 0 ? 9U : 1U;
-                this.noiseLFSR = 32768U;
+                noiseTap = (div >> 2 & 1) != 0 ? 9U : 1U;
+                noiseLFSR = 32768U;
             }
         }
 
@@ -229,61 +229,61 @@ namespace DuckGame
         {
             if (0U >= 1U)
                 return 0f;
-            for (; ticksCount > 0.0; --this.ticksCount)
+            for (; ticksCount > 0.0; --ticksCount)
             {
-                --this.cntA;
-                if (this.cntA < 0)
+                --cntA;
+                if (cntA < 0)
                 {
-                    if (this.divA > 1)
+                    if (divA > 1)
                     {
-                        this.volA ^= 16U;
-                        this.outA = SN76489Core.volumeTable[(int)this.volA];
+                        volA ^= 16U;
+                        outA = SN76489Core.volumeTable[(int)volA];
                     }
-                    this.cntA = this.divA;
+                    cntA = divA;
                 }
-                --this.cntB;
-                if (this.cntB < 0)
+                --cntB;
+                if (cntB < 0)
                 {
-                    if (this.divB > 1)
+                    if (divB > 1)
                     {
-                        this.volB ^= 16U;
-                        this.outB = SN76489Core.volumeTable[(int)this.volB];
+                        volB ^= 16U;
+                        outB = SN76489Core.volumeTable[(int)volB];
                     }
-                    this.cntB = this.divB;
+                    cntB = divB;
                 }
-                --this.cntC;
-                if (this.cntC < 0)
+                --cntC;
+                if (cntC < 0)
                 {
-                    if (this.divC > 1)
+                    if (divC > 1)
                     {
-                        this.volC ^= 16U;
-                        this.outC = SN76489Core.volumeTable[(int)this.volC];
+                        volC ^= 16U;
+                        outC = SN76489Core.volumeTable[(int)volC];
                     }
-                    this.cntC = this.divC;
+                    cntC = divC;
                 }
-                --this.cntD;
-                if (this.cntD < 0)
+                --cntD;
+                if (cntD < 0)
                 {
-                    uint num1 = (uint)(this.divD & 3);
-                    this.cntD = num1 >= 3U ? this.divC << 1 : 16 << (int)num1;
+                    uint num1 = (uint)(divD & 3);
+                    cntD = num1 >= 3U ? divC << 1 : 16 << (int)num1;
                     uint num2;
-                    if (this.noiseTap == 9U)
+                    if (noiseTap == 9U)
                     {
-                        uint num3 = this.noiseLFSR & this.noiseTap;
+                        uint num3 = noiseLFSR & noiseTap;
                         uint num4 = num3 ^ num3 >> 8;
                         uint num5 = num4 ^ num4 >> 4;
                         uint num6 = num5 ^ num5 >> 2;
                         num2 = (num6 ^ num6 >> 1) & 1U;
                     }
                     else
-                        num2 = this.noiseLFSR & 1U;
-                    this.noiseLFSR = this.noiseLFSR >> 1 | num2 << 15;
-                    this.volD = (uint)((int)this.volD & 15 | ((int)this.noiseLFSR & 1 ^ 1) << 4);
-                    this.outD = SN76489Core.volumeTable[(int)this.volD];
+                        num2 = noiseLFSR & 1U;
+                    noiseLFSR = noiseLFSR >> 1 | num2 << 15;
+                    volD = (uint)((int)volD & 15 | ((int)noiseLFSR & 1 ^ 1) << 4);
+                    outD = SN76489Core.volumeTable[(int)volD];
                 }
             }
-            this.ticksCount += this.ticksPerSample;
-            return this.outA + this.outB + this.outC + this.outD;
+            ticksCount += ticksPerSample;
+            return outA + outB + outC + outD;
         }
     }
 }

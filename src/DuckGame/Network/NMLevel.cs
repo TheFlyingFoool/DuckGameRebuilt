@@ -22,62 +22,62 @@ namespace DuckGame
         private Level _level;
         private bool _connectionFailure;
 
-        public NMLevel() => this.manager = BelongsToManager.EventManager;
+        public NMLevel() => manager = BelongsToManager.EventManager;
 
         public NMLevel(Level pLevel)
         {
-            this.manager = BelongsToManager.EventManager;
-            this._level = pLevel;
-            this.level = pLevel.networkIdentifier;
-            this.levelIndex = pLevel.networkIndex = DuckNetwork.levelIndex;
+            manager = BelongsToManager.EventManager;
+            _level = pLevel;
+            level = pLevel.networkIdentifier;
+            levelIndex = pLevel.networkIndex = DuckNetwork.levelIndex;
             if (pLevel is GameLevel)
             {
                 GameLevel gameLevel = pLevel as GameLevel;
                 if (gameLevel.clientLevel)
                 {
-                    this.needsChecksum = true;
-                    this.checksum = 0U;
+                    needsChecksum = true;
+                    checksum = 0U;
                     pLevel.waitingOnNewData = true;
                 }
                 else if (gameLevel.customLevel)
                 {
-                    this.needsChecksum = true;
-                    this.checksum = gameLevel.checksum;
+                    needsChecksum = true;
+                    checksum = gameLevel.checksum;
                     DuckNetwork.compressedLevelData = new MemoryStream(gameLevel.compressedData, 0, gameLevel.compressedData.Length, false, true);
                     DuckNetwork.compressedLevelName = gameLevel.displayName;
                 }
             }
             if (pLevel is XMLLevel)
-                this.seed = (pLevel as XMLLevel).seed;
-            this._level.levelMessages.Add(this);
+                seed = (pLevel as XMLLevel).seed;
+            _level.levelMessages.Add(this);
         }
 
         public override void CopyTo(NetMessage pMessage)
         {
-            this._level.levelMessages.Add(pMessage as NMLevel);
-            (pMessage as NMLevel).levelIndex = this.levelIndex;
-            (pMessage as NMLevel).level = this.level;
-            (pMessage as NMLevel)._level = this._level;
-            (pMessage as NMLevel).needsChecksum = this.needsChecksum;
-            (pMessage as NMLevel).seed = this.seed;
+            _level.levelMessages.Add(pMessage as NMLevel);
+            (pMessage as NMLevel).levelIndex = levelIndex;
+            (pMessage as NMLevel).level = level;
+            (pMessage as NMLevel)._level = _level;
+            (pMessage as NMLevel).needsChecksum = needsChecksum;
+            (pMessage as NMLevel).seed = seed;
             base.CopyTo(pMessage);
         }
 
         public override bool MessageIsCompleted()
         {
-            if (this._connectionFailure || !this._level.initialized && DuckNetwork.levelIndex == levelIndex)
+            if (_connectionFailure || !_level.initialized && DuckNetwork.levelIndex == levelIndex)
                 return false;
-            DevConsole.Log(DCSection.DuckNet, "|DGORANGE|Loading new level.. (" + this.levelIndex.ToString() + ").");
+            DevConsole.Log(DCSection.DuckNet, "|DGORANGE|Loading new level.. (" + levelIndex.ToString() + ").");
             return true;
         }
 
         public bool ChecksumsFinished()
         {
-            if (!this.needsChecksum)
+            if (!needsChecksum)
                 return true;
             foreach (Profile profile in DuckNetwork.profiles)
             {
-                if (profile.connection != null && profile.connection != DuckNetwork.localConnection && !this._level.HasChecksumReply(profile.connection))
+                if (profile.connection != null && profile.connection != DuckNetwork.localConnection && !_level.HasChecksumReply(profile.connection))
                     return false;
             }
             return true;
@@ -85,16 +85,16 @@ namespace DuckGame
 
         public bool OnLevelLoaded()
         {
-            if (DuckNetwork.levelIndex != levelIndex || !this.ChecksumsFinished())
+            if (DuckNetwork.levelIndex != levelIndex || !ChecksumsFinished())
                 return false;
             Level.current.things.RefreshState();
             GhostManager.context.RefreshGhosts();
-            if (this.connection != null)
+            if (connection != null)
             {
-                Send.Message(new NMLevelDataBegin(this._level.networkIndex), this.connection);
-                GhostManager.context.UpdateGhostSync(this.connection, false, true, NetMessagePriority.ReliableOrdered);
-                Send.Message(new NMLevelData(this._level), this.connection);
-                this._level.SendLevelData(this.connection);
+                Send.Message(new NMLevelDataBegin(_level.networkIndex), connection);
+                GhostManager.context.UpdateGhostSync(connection, false, true, NetMessagePriority.ReliableOrdered);
+                Send.Message(new NMLevelData(_level), connection);
+                _level.SendLevelData(connection);
             }
             return true;
         }
@@ -103,41 +103,41 @@ namespace DuckGame
         {
             if (DuckNetwork.status != DuckNetStatus.Connected)
             {
-                if (this._connectionFailure)
+                if (_connectionFailure)
                     return;
                 Network.DisconnectClient(DuckNetwork.localConnection, new DuckNetErrorInfo(DuckNetError.ConnectionTimeout, "Game started during connection."));
-                this._connectionFailure = true;
+                _connectionFailure = true;
             }
             else
             {
-                Network.ContextSwitch(this.levelIndex);
-                if (this.level == "@TEAMSELECT")
-                    this._level = new TeamSelect2(true);
-                else if (this.level == "@ROCKINTRO")
+                Network.ContextSwitch(levelIndex);
+                if (level == "@TEAMSELECT")
+                    _level = new TeamSelect2(true);
+                else if (level == "@ROCKINTRO")
                 {
                     GameMode.numMatchesPlayed = 0;
-                    this._level = new RockIntro(null);
+                    _level = new RockIntro(null);
                 }
-                else if (this.level == "@ROCKTHROW|SHOWSCORE")
-                    this._level = new RockScoreboard();
-                else if (this.level == "@ROCKTHROW|SHOWWINNER")
-                    this._level = new RockScoreboard(mode: ScoreBoardMode.ShowWinner);
-                else if (this.level == "@ROCKTHROW|SHOWEND")
+                else if (level == "@ROCKTHROW|SHOWSCORE")
+                    _level = new RockScoreboard();
+                else if (level == "@ROCKTHROW|SHOWWINNER")
+                    _level = new RockScoreboard(mode: ScoreBoardMode.ShowWinner);
+                else if (level == "@ROCKTHROW|SHOWEND")
                 {
                     Graphics.fade = 0f;
-                    this._level = new RockScoreboard(mode: ScoreBoardMode.ShowWinner, afterHighlights: true);
+                    _level = new RockScoreboard(mode: ScoreBoardMode.ShowWinner, afterHighlights: true);
                 }
                 else
                 {
-                    if (this.needsChecksum)
+                    if (needsChecksum)
                     {
-                        GameLevel gameLevel = new GameLevel(this.level, this.seed);
-                        if (this.level.EndsWith(".client"))
+                        GameLevel gameLevel = new GameLevel(level, seed);
+                        if (level.EndsWith(".client"))
                         {
                             int num = 0;
                             try
                             {
-                                num = Convert.ToInt32(this.level[0].ToString() ?? "");
+                                num = Convert.ToInt32(level[0].ToString() ?? "");
                             }
                             catch (Exception)
                             {
@@ -153,7 +153,7 @@ namespace DuckGame
                                     uint checksum = level.GetChecksum();
                                     byte[] compressedLevelData = XMLLevel.GetCompressedLevelData(level, str2);
                                     DuckNetwork.compressedLevelData = new MemoryStream(compressedLevelData, 0, compressedLevelData.Length, true, true);
-                                    DuckNetwork.levelIndex = this.levelIndex;
+                                    DuckNetwork.levelIndex = levelIndex;
                                     Send.Message(new NMRequestLevelChecksum(str2, checksum, levelIndex));
                                     gameLevel.data = level;
                                     gameLevel.waitingOnNewData = false;
@@ -163,17 +163,17 @@ namespace DuckGame
                             else
                             {
                                 gameLevel.waitingOnNewData = true;
-                                gameLevel.networkIndex = this.levelIndex;
+                                gameLevel.networkIndex = levelIndex;
                             }
-                            this._level = gameLevel;
+                            _level = gameLevel;
                         }
                         else
                         {
-                            List<LevelData> allLevels = Content.GetAllLevels(this.level);
+                            List<LevelData> allLevels = Content.GetAllLevels(level);
                             LevelData levelData1 = null;
                             foreach (LevelData levelData2 in allLevels)
                             {
-                                if ((int)levelData2.GetChecksum() == (int)this.checksum)
+                                if ((int)levelData2.GetChecksum() == (int)checksum)
                                 {
                                     levelData1 = levelData2;
                                     break;
@@ -185,36 +185,36 @@ namespace DuckGame
                                 DuckNetwork.core.compressedLevelData = null;
                                 DuckNetwork.core.levelTransferSize = 0;
                                 DuckNetwork.core.levelTransferProgress = 0;
-                                Send.Message(new NMClientNeedsLevelData(this.levelIndex, DuckNetwork.core.levelTransferSession), this.connection);
+                                Send.Message(new NMClientNeedsLevelData(levelIndex, DuckNetwork.core.levelTransferSession), connection);
                                 gameLevel.waitingOnNewData = true;
-                                gameLevel.networkIndex = this.levelIndex;
+                                gameLevel.networkIndex = levelIndex;
                             }
                             else
                             {
                                 gameLevel.data = levelData1;
-                                Send.Message(new NMLevelFileReady(this.levelIndex), this.connection);
+                                Send.Message(new NMLevelFileReady(levelIndex), connection);
                             }
-                            this._level = gameLevel;
+                            _level = gameLevel;
                         }
                     }
                     else
-                        this._level = new GameLevel(this.level, this.seed);
-                    if (this._level != null && this._level is XMLLevel)
-                        (this._level as XMLLevel).seed = this.seed;
+                        _level = new GameLevel(level, seed);
+                    if (_level != null && _level is XMLLevel)
+                        (_level as XMLLevel).seed = seed;
                 }
-                if (Network.InLobby() || Level.current is RockScoreboard && !(this._level is RockScoreboard))
+                if (Network.InLobby() || Level.current is RockScoreboard && !(_level is RockScoreboard))
                     Music.Stop();
-                Level.current = this._level;
-                this._level.transferCompleteCalled = false;
-                this._level.networkIndex = this.levelIndex;
+                Level.current = _level;
+                _level.transferCompleteCalled = false;
+                _level.networkIndex = levelIndex;
             }
         }
 
         public override string ToString()
         {
             string str = base.ToString();
-            if (this.level != null)
-                str = str + "(" + this.level + ", " + this.seed.ToString() + ")";
+            if (level != null)
+                str = str + "(" + level + ", " + seed.ToString() + ")";
             return str;
         }
     }

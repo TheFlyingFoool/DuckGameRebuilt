@@ -86,37 +86,37 @@ namespace DuckGame
         public static int packetsEvery = 1;
         public static float ghostLerpDivisor = 0f;
 
-        public int authorityPower => this.profile != null ? GameLevel.NumberOfDucks - (profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks + 1 : 1;
+        public int authorityPower => profile != null ? GameLevel.NumberOfDucks - (profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks + 1 : 1;
 
         public override string ToString()
         {
             string str1 = "|WHITE|(";
-            if (this.profile != null && this.profile.persona != null)
-                str1 = str1 + this.profile.persona.colorUsable.ToDGColorString() + "(" + this.profile.networkIndex.ToString() + ")";
-            if (this.isHost)
+            if (profile != null && profile.persona != null)
+                str1 = str1 + profile.persona.colorUsable.ToDGColorString() + "(" + profile.networkIndex.ToString() + ")";
+            if (isHost)
                 str1 += "(H)";
             string str2 = null;
-            if (!this.hasRealName || this.data == null)
-                str2 = !(this.data is User) ? (Steam.user == null ? "LAN USER" : Steam.user.id.ToString()) : (this.data as User).id.ToString();
+            if (!hasRealName || data == null)
+                str2 = !(data is User) ? (Steam.user == null ? "LAN USER" : Steam.user.id.ToString()) : (data as User).id.ToString();
             else if (Network.activeNetwork.core is NCSteam)
-                str2 = this.name + "," + (this.data as User).id.ToString();
+                str2 = name + "," + (data as User).id.ToString();
             else if (Network.activeNetwork.core is NCBasic)
-                str2 = this.name + "," + (this.data as IPEndPoint).ToString();
+                str2 = name + "," + (data as IPEndPoint).ToString();
             str2.Replace("|", "(");
             str2.Replace("@", "$");
             string str3 = str1 + str2;
-            if (this.profile != null && this.profile.networkStatus != DuckNetStatus.Connected)
-                str3 = str3 + "," + this.profile.networkStatus.ToString();
-            return str3 + "|WHITE|)" + "(" + this._connectionID.ToString() + ")";
+            if (profile != null && profile.networkStatus != DuckNetStatus.Connected)
+                str3 = str3 + "," + profile.networkStatus.ToString();
+            return str3 + "|WHITE|)" + "(" + _connectionID.ToString() + ")";
         }
 
         public int debuggerIndex
         {
             get
             {
-                if (!NetworkDebugger.enabled || this._identifier == null)
+                if (!NetworkDebugger.enabled || _identifier == null)
                     return -1;
-                return Convert.ToInt32(this._identifier.Split(':')[1]) - 1330;
+                return Convert.ToInt32(_identifier.Split(':')[1]) - 1330;
             }
         }
 
@@ -130,207 +130,207 @@ namespace DuckGame
         {
             get
             {
-                if (this._debuggerContext == null)
-                    this._debuggerContext = new DataLayerDebug.BadConnection(this);
-                return this._debuggerContext;
+                if (_debuggerContext == null)
+                    _debuggerContext = new DataLayerDebug.BadConnection(this);
+                return _debuggerContext;
             }
         }
 
-        public void SetDebuggerContext(DataLayerDebug.BadConnection pContext) => this._debuggerContext = pContext;
+        public void SetDebuggerContext(DataLayerDebug.BadConnection pContext) => _debuggerContext = pContext;
 
         public Profile profile
         {
-            get => this._profile;
-            set => this._profile = value;
+            get => _profile;
+            set => _profile = value;
         }
 
-        public uint sessionID => this._sessionID;
+        public uint sessionID => _sessionID;
 
-        public object data => this._data;
+        public object data => _data;
 
-        public string identifier => this._identifier;
+        public string identifier => _identifier;
 
-        public bool hasRealName => this._realName != null;
+        public bool hasRealName => _realName != null;
 
         public string name
         {
             get
             {
-                if (this._realName != null)
-                    return this._realName;
+                if (_realName != null)
+                    return _realName;
                 string str = "NULL";
-                if (this._data != null)
-                    str = Network.activeNetwork.core.GetConnectionName(this._data);
-                return str == null || str == "" || str == "no info" ? this._identifier : str;
+                if (_data != null)
+                    str = Network.activeNetwork.core.GetConnectionName(_data);
+                return str == null || str == "" || str == "no info" ? _identifier : str;
             }
-            set => this._realName = value;
+            set => _realName = value;
         }
 
-        public StreamManager manager => this._manager;
+        public StreamManager manager => _manager;
 
         public byte levelIndex
         {
-            get => this._loadingStatus;
-            set => this._loadingStatus = value;
+            get => _loadingStatus;
+            set => _loadingStatus = value;
         }
 
         protected ConnectionStatus _status
         {
-            get => this._internalStatus;
+            get => _internalStatus;
             set
             {
-                if (this._internalStatus != value && Network.activeNetwork != null && Network.activeNetwork.core != null)
+                if (_internalStatus != value && Network.activeNetwork != null && Network.activeNetwork.core != null)
                     Network.activeNetwork.core._connectionsDirty = true;
-                this._internalStatus = value;
+                _internalStatus = value;
             }
         }
 
-        public ConnectionStatus status => this._status;
+        public ConnectionStatus status => _status;
 
-        public void BeginConnection() => this.ChangeStatus(this._data == null ? ConnectionStatus.Connected : ConnectionStatus.Connecting);
+        public void BeginConnection() => ChangeStatus(_data == null ? ConnectionStatus.Connected : ConnectionStatus.Connecting);
 
-        public void LeaveLobby() => this.ChangeStatus(ConnectionStatus.Disconnected);
+        public void LeaveLobby() => ChangeStatus(ConnectionStatus.Disconnected);
 
         private void ChangeStatus(ConnectionStatus s)
         {
-            if (s != ConnectionStatus.Disconnecting && s != ConnectionStatus.Disconnected && this.banned)
+            if (s != ConnectionStatus.Disconnecting && s != ConnectionStatus.Disconnected && banned)
                 return;
-            int num = this._status != s ? 1 : 0;
-            this._status = s;
+            int num = _status != s ? 1 : 0;
+            _status = s;
             if (num == 0)
                 return;
             DevConsole.Log(DCSection.Connection, "|DGORANGE|Connection Status Changed (" + s.ToString() + ")", this);
-            if (this._status != ConnectionStatus.Disconnected)
+            if (_status != ConnectionStatus.Disconnected)
                 return;
-            Network.activeNetwork.core.DisconnectClient(this, this._connectionError);
+            Network.activeNetwork.core.DisconnectClient(this, _connectionError);
         }
 
         public bool isHost
         {
-            get => this._isHost;
-            set => this._isHost = value;
+            get => _isHost;
+            set => _isHost = value;
         }
 
         public bool sentThisFrame
         {
-            get => this._sentThisFrame;
-            set => this._sentThisFrame = value;
+            get => _sentThisFrame;
+            set => _sentThisFrame = value;
         }
 
         public uint lastTickReceived
         {
-            get => this._lastTickReceived;
+            get => _lastTickReceived;
             set
             {
-                this._lastTickReceived = value;
-                this._estimatedClientTick = this._lastTickReceived;
+                _lastTickReceived = value;
+                _estimatedClientTick = _lastTickReceived;
             }
         }
 
         public uint estimatedClientTick
         {
-            get => (uint)(_estimatedClientTick + (ulong)(int)(this.manager.ping / 2.0 * 60.0));
-            set => this._estimatedClientTick = value;
+            get => (uint)(_estimatedClientTick + (ulong)(int)(manager.ping / 2.0 * 60.0));
+            set => _estimatedClientTick = value;
         }
 
         public void SetData(object d)
         {
-            this._data = d;
-            if (this._data != null)
-                this._identifier = Network.activeNetwork.core.GetConnectionIdentifier(this._data);
-            this.Reset("Connection _data changed");
+            _data = d;
+            if (_data != null)
+                _identifier = Network.activeNetwork.core.GetConnectionIdentifier(_data);
+            Reset("Connection _data changed");
         }
 
-        public int connectionID => this._connectionID;
+        public int connectionID => _connectionID;
 
         public NetworkConnection(object dat, string id = null)
         {
-            this._connectionID = NetworkConnection.kconnectionIDInc++;
-            this._identifier = dat == null ? "local" : Network.activeNetwork.core.GetConnectionIdentifier(dat);
+            _connectionID = NetworkConnection.kconnectionIDInc++;
+            _identifier = dat == null ? "local" : Network.activeNetwork.core.GetConnectionIdentifier(dat);
             if (id != null)
-                this._identifier = id;
-            this.Reset("NetworkConnection constructor");
-            this._data = dat;
-            this.kAckOffsets = new ushort[16];
+                _identifier = id;
+            Reset("NetworkConnection constructor");
+            _data = dat;
+            kAckOffsets = new ushort[16];
             for (int index = 0; index < 16; ++index)
-                this.kAckOffsets[index] = (ushort)(1 << index);
+                kAckOffsets[index] = (ushort)(1 << index);
         }
 
         public void Reset(string reason)
         {
-            this._manager = new StreamManager(this);
-            this.acksReceived = new HashSet<ushort>();
-            this._isHost = false;
-            this.ChangeStatus(ConnectionStatus.Disconnected);
-            this.levelIndex = byte.MaxValue;
-            this._sentThisFrame = false;
-            this._lastReceivedTime = 0U;
-            this._lastSentTime = 0U;
-            this._personalTick = 0U;
-            this._connectsReceived = 0;
-            this.sentFilterMessage = false;
-            this._numErrorLogs = 0;
-            this._lastTickReceived = 0U;
-            this._estimatedClientTick = 0U;
-            this._currentSessionTicks = 0;
-            this._ticksTillDisconnectAttempt = 0;
-            this._disconnectsSent = 0;
-            this.wantsGhostData = -1;
-            this._lastReceivedPacketOrder = 0;
-            this._packetHistory = new NetworkPacket[33];
-            this._packetHistoryIndex = 0;
-            this._theirVersion = "";
+            _manager = new StreamManager(this);
+            acksReceived = new HashSet<ushort>();
+            _isHost = false;
+            ChangeStatus(ConnectionStatus.Disconnected);
+            levelIndex = byte.MaxValue;
+            _sentThisFrame = false;
+            _lastReceivedTime = 0U;
+            _lastSentTime = 0U;
+            _personalTick = 0U;
+            _connectsReceived = 0;
+            sentFilterMessage = false;
+            _numErrorLogs = 0;
+            _lastTickReceived = 0U;
+            _estimatedClientTick = 0U;
+            _currentSessionTicks = 0;
+            _ticksTillDisconnectAttempt = 0;
+            _disconnectsSent = 0;
+            wantsGhostData = -1;
+            _lastReceivedPacketOrder = 0;
+            _packetHistory = new NetworkPacket[33];
+            _packetHistoryIndex = 0;
+            _theirVersion = "";
             //this._connectionTimeout = false;
-            this.synchronizedInputDevices.Clear();
-            this.lastSynchronizedDeviceType = byte.MaxValue;
-            this.pingWait = 0;
-            this._realName = null;
-            this._pingsSent = 0;
-            this.kicking = false;
-            this.recentlyReceivedPackets.Clear();
-            this.recentlyReceivedPacketsArray = new ushort[NetworkConnection.kMaxRecentlyReceivedPackets];
-            this.failureNotificationCooldown = 0;
-            if (this._data != null && GhostManager.context != null)
+            synchronizedInputDevices.Clear();
+            lastSynchronizedDeviceType = byte.MaxValue;
+            pingWait = 0;
+            _realName = null;
+            _pingsSent = 0;
+            kicking = false;
+            recentlyReceivedPackets.Clear();
+            recentlyReceivedPacketsArray = new ushort[NetworkConnection.kMaxRecentlyReceivedPackets];
+            failureNotificationCooldown = 0;
+            if (_data != null && GhostManager.context != null)
                 GhostManager.context.Clear(this);
             if (NetworkDebugger.enabled)
-                this.debuggerContext.Reset();
-            DevConsole.Log(DCSection.Connection, "@disconnect Reset called on " + this.identifier + "(" + (Steam.user != null ? Steam.user.id.ToString() : "local") + ", " + reason + ")");
+                debuggerContext.Reset();
+            DevConsole.Log(DCSection.Connection, "@disconnect Reset called on " + identifier + "(" + (Steam.user != null ? Steam.user.id.ToString() : "local") + ", " + reason + ")");
         }
 
         public void StartNewSession()
         {
-            this._sessionID = Rando.UInt();
-            this._currentSessionTicks = 0;
+            _sessionID = Rando.UInt();
+            _currentSessionTicks = 0;
         }
 
         public void SynchronizeSession(uint pWith)
         {
-            if ((int)pWith == (int)this._sessionID + 1)
+            if ((int)pWith == (int)_sessionID + 1)
             {
-                this._sessionID = pWith;
-                this.BecomeConnected(pWith);
+                _sessionID = pWith;
+                BecomeConnected(pWith);
             }
             else
             {
-                this._sessionID = pWith + 1U;
-                DevConsole.Log(DCSection.Connection, "|DGGREEN|Synchronizing Session (" + this._sessionID.ToString() + ")", this);
+                _sessionID = pWith + 1U;
+                DevConsole.Log(DCSection.Connection, "|DGGREEN|Synchronizing Session (" + _sessionID.ToString() + ")", this);
             }
         }
 
-        public ushort GetAck() => this._lastReceivedPacketOrder;
+        public ushort GetAck() => _lastReceivedPacketOrder;
 
         public ushort GetAckBitfield()
         {
             ushort ackBitfield = 0;
             for (int index = 0; index < 17; ++index)
             {
-                if (this._packetHistory[index] != null)
+                if (_packetHistory[index] != null)
                 {
                     int num = _lastReceivedPacketOrder - _packetHistory[index].order;
                     if (num < 0)
                         num += ushort.MaxValue;
                     if (num > 0 && num < 17)
-                        ackBitfield |= this.kAckOffsets[num - 1];
+                        ackBitfield |= kAckOffsets[num - 1];
                 }
             }
             return ackBitfield;
@@ -338,11 +338,11 @@ namespace DuckGame
 
         public void PacketReceived(NetworkPacket packet)
         {
-            this._lastReceivedTime = this._personalTick;
-            if (NetworkConnection.PacketOrderGreater(packet.order, this._lastReceivedPacketOrder))
-                this._lastReceivedPacketOrder = packet.order;
-            this._packetHistory[this._packetHistoryIndex % 17] = packet;
-            ++this._packetHistoryIndex;
+            _lastReceivedTime = _personalTick;
+            if (NetworkConnection.PacketOrderGreater(packet.order, _lastReceivedPacketOrder))
+                _lastReceivedPacketOrder = packet.order;
+            _packetHistory[_packetHistoryIndex % 17] = packet;
+            ++_packetHistoryIndex;
         }
 
         private static bool PacketOrderGreater(ushort s1, ushort s2)
@@ -354,7 +354,7 @@ namespace DuckGame
 
         public void PacketSent()
         {
-            this._lastSentTime = this._personalTick;
+            _lastSentTime = _personalTick;
         }
         public void OnNonConnectionMessage(NetMessage message)
         {
@@ -363,21 +363,21 @@ namespace DuckGame
         public void HardTerminate()
         {
             Network.activeNetwork.core.DisconnectClient(this, new DuckNetErrorInfo(DuckNetError.ControlledDisconnect, "Hard Terminate."));
-            this.ChangeStatus(ConnectionStatus.Disconnected);
+            ChangeStatus(ConnectionStatus.Disconnected);
         }
 
         public void Disconnect()
         {
             Network.activeNetwork.core.DisconnectClient(this, new DuckNetErrorInfo(DuckNetError.ControlledDisconnect, "Hard Terminate."));
-            this.ChangeStatus(ConnectionStatus.Disconnected);
+            ChangeStatus(ConnectionStatus.Disconnected);
         }
 
         public void BecomeConnected(uint pSession)
         {
-            if (this.status != ConnectionStatus.Connecting)
+            if (status != ConnectionStatus.Connecting)
                 return;
-            DevConsole.Log(DCSection.NetCore, this.ToString() + " BecomeConnected on session index " + pSession.ToString());
-            this.ChangeStatus(ConnectionStatus.Connected);
+            DevConsole.Log(DCSection.NetCore, ToString() + " BecomeConnected on session index " + pSession.ToString());
+            ChangeStatus(ConnectionStatus.Connected);
             Network.activeNetwork.core.OnConnection(this);
         }
 
@@ -403,18 +403,18 @@ namespace DuckGame
 
         public void OnAnyMessage(NetMessage pMessage)
         {
-            if ((int)pMessage.session == (int)this.sessionID)
-                this.BecomeConnected(this.sessionID);
-            this._lastReceivedTime = this._personalTick;
+            if ((int)pMessage.session == (int)sessionID)
+                BecomeConnected(sessionID);
+            _lastReceivedTime = _personalTick;
             if (pMessage is NMNetworkCoreMessage)
-                this.OnMessage(pMessage as NMNetworkCoreMessage);
+                OnMessage(pMessage as NMNetworkCoreMessage);
             else
-                this.OnNonConnectionMessage(pMessage);
+                OnNonConnectionMessage(pMessage);
         }
 
         public void OnMessage(NMNetworkCoreMessage message)
         {
-            if (this._data == null)
+            if (_data == null)
             {
                 DevConsole.Log(DCSection.Connection, "|RED|Null Connection Data, cannot receive message!");
             }
@@ -425,7 +425,7 @@ namespace DuckGame
                     DevConsole.Log(DCSection.DuckNet, "@received Received |WHITE|" + message.ToString(), message.connection);
                     Network.DisconnectClient(this, (message as NMDisconnect).GetError());
                 }
-                else if (this.status == ConnectionStatus.Disconnecting)
+                else if (status == ConnectionStatus.Disconnecting)
                 {
                     DevConsole.Log(DCSection.Connection, "|RED|Received connection message during disconnect...");
                     return;
@@ -436,27 +436,27 @@ namespace DuckGame
                     NMConnect nmConnect = message as NMConnect;
                     if (DG.version != nmConnect.version)
                     {
-                        this._theirVersion = nmConnect.version;
+                        _theirVersion = nmConnect.version;
                         Send.Message(new NMWrongVersion(DG.version), NetMessagePriority.UnreliableUnordered, this);
-                        this.Disconnect_DifferentVersion(this._theirVersion);
+                        Disconnect_DifferentVersion(_theirVersion);
                         return;
                     }
                     if (ModLoader.modHash != nmConnect.modHash)
                     {
                         Send.Message(new NMModIncompatibility(), NetMessagePriority.UnreliableUnordered, this);
-                        this.Disconnect_IncompatibleMods();
+                        Disconnect_IncompatibleMods();
                         return;
                     }
-                    if (nmConnect.session > this.sessionID)
-                        this.SynchronizeSession(nmConnect.session);
+                    if (nmConnect.session > sessionID)
+                        SynchronizeSession(nmConnect.session);
                 }
                 if (message is NMNewPing)
                 {
-                    if (!this._pongedThisFrame)
+                    if (!_pongedThisFrame)
                     {
                         Send.Message(new NMNewPong((message as NMNewPing).index), NetMessagePriority.UnreliableUnordered, this);
-                        this.sendPacketsNow = true;
-                        this._pongedThisFrame = true;
+                        sendPacketsNow = true;
+                        _pongedThisFrame = true;
                     }
                     if (!(message is NMNewPingHost))
                         return;
@@ -465,44 +465,44 @@ namespace DuckGame
                 else if (message is NMNewPong)
                 {
                     NMNewPing nmNewPing;
-                    if (!this._pings.TryGetValue((message as NMNewPong).index, out nmNewPing))
+                    if (!_pings.TryGetValue((message as NMNewPong).index, out nmNewPing))
                         return;
-                    this.manager.LogPing(nmNewPing.GetTotalSeconds() - 0.032f);
+                    manager.LogPing(nmNewPing.GetTotalSeconds() - 0.032f);
                 }
                 else if (message is NMWrongVersion)
                 {
-                    this._theirVersion = (message as NMWrongVersion).version;
-                    this.Disconnect_DifferentVersion(this._theirVersion);
+                    _theirVersion = (message as NMWrongVersion).version;
+                    Disconnect_DifferentVersion(_theirVersion);
                 }
                 else
                 {
                     if (!(message is NMModIncompatibility))
                         return;
-                    this.Disconnect_IncompatibleMods();
+                    Disconnect_IncompatibleMods();
                 }
             }
         }
 
-        public void TerminateConnection() => this.ChangeStatus(ConnectionStatus.Disconnected);
+        public void TerminateConnection() => ChangeStatus(ConnectionStatus.Disconnected);
 
         public void BeginDisconnecting(DuckNetErrorInfo error)
         {
-            if (this._status == ConnectionStatus.Disconnecting)
+            if (_status == ConnectionStatus.Disconnecting)
                 return;
-            this.ChangeStatus(ConnectionStatus.Disconnecting);
-            this._disconnectsSent = 0;
-            this._ticksTillDisconnectAttempt = 0;
-            this._connectionError = error;
-            Send.ImmediateUnreliableMessage(new NMDisconnect(this._connectionError != null ? this._connectionError.error : DuckNetError.UnknownError), this);
-            Send.ImmediateUnreliableMessage(new NMDisconnect(this._connectionError != null ? this._connectionError.error : DuckNetError.UnknownError), this);
-            Send.ImmediateUnreliableMessage(new NMDisconnect(this._connectionError != null ? this._connectionError.error : DuckNetError.UnknownError), this);
+            ChangeStatus(ConnectionStatus.Disconnecting);
+            _disconnectsSent = 0;
+            _ticksTillDisconnectAttempt = 0;
+            _connectionError = error;
+            Send.ImmediateUnreliableMessage(new NMDisconnect(_connectionError != null ? _connectionError.error : DuckNetError.UnknownError), this);
+            Send.ImmediateUnreliableMessage(new NMDisconnect(_connectionError != null ? _connectionError.error : DuckNetError.UnknownError), this);
+            Send.ImmediateUnreliableMessage(new NMDisconnect(_connectionError != null ? _connectionError.error : DuckNetError.UnknownError), this);
         }
 
         private int timeBetweenPings
         {
             get
             {
-                if (this._pingsSent < 45)
+                if (_pingsSent < 45)
                     return 2;
                 return MonoMain.pauseMenu != null || Keyboard.Down(Keys.F1) ? 4 : 10;
             }
@@ -510,135 +510,135 @@ namespace DuckGame
 
         public void Update()
         {
-            if (this.failureNotificationCooldown > 0)
-                --this.failureNotificationCooldown;
-            this._pongedThisFrame = false;
-            if (this._debuggerContext != null)
-                this._debuggerContext.Update(Network.activeNetwork.core);
-            if (this._status == ConnectionStatus.Disconnected)
+            if (failureNotificationCooldown > 0)
+                --failureNotificationCooldown;
+            _pongedThisFrame = false;
+            if (_debuggerContext != null)
+                _debuggerContext.Update(Network.activeNetwork.core);
+            if (_status == ConnectionStatus.Disconnected)
                 return;
-            if (this._status == ConnectionStatus.Disconnecting)
+            if (_status == ConnectionStatus.Disconnecting)
             {
-                if (this._data == null || this._disconnectsSent > 10)
+                if (_data == null || _disconnectsSent > 10)
                 {
-                    this.ChangeStatus(ConnectionStatus.Disconnected);
-                    this._connectionError = null;
+                    ChangeStatus(ConnectionStatus.Disconnected);
+                    _connectionError = null;
                 }
                 else
                 {
-                    --this._ticksTillDisconnectAttempt;
-                    if (this._ticksTillDisconnectAttempt > 0)
+                    --_ticksTillDisconnectAttempt;
+                    if (_ticksTillDisconnectAttempt > 0)
                         return;
-                    if (!this.kicking)
+                    if (!kicking)
                     {
-                        Send.Message(new NMDisconnect(this._connectionError != null ? this._connectionError.error : DuckNetError.UnknownError), NetMessagePriority.UnreliableUnordered, this);
-                        DevConsole.Log(DCSection.Connection, "Disconnect send    (" + this.sessionID.ToString() + ")", this);
+                        Send.Message(new NMDisconnect(_connectionError != null ? _connectionError.error : DuckNetError.UnknownError), NetMessagePriority.UnreliableUnordered, this);
+                        DevConsole.Log(DCSection.Connection, "Disconnect send    (" + sessionID.ToString() + ")", this);
                     }
-                    ++this._disconnectsSent;
-                    this._ticksTillDisconnectAttempt = 4;
+                    ++_disconnectsSent;
+                    _ticksTillDisconnectAttempt = 4;
                 }
             }
             else
             {
-                ++this._currentSessionTicks;
-                if (this._status == ConnectionStatus.Connecting)
+                ++_currentSessionTicks;
+                if (_status == ConnectionStatus.Connecting)
                 {
-                    if (Maths.TicksToSeconds(this._currentSessionTicks) > 0.0 && this._numErrorLogs == 0)
+                    if (Maths.TicksToSeconds(_currentSessionTicks) > 0.0 && _numErrorLogs == 0)
                     {
-                        ++this._numErrorLogs;
-                        this.LogSessionDetails();
+                        ++_numErrorLogs;
+                        LogSessionDetails();
                     }
-                    if (Maths.TicksToSeconds(this._currentSessionTicks) > 5.0 && this._numErrorLogs == 1)
+                    if (Maths.TicksToSeconds(_currentSessionTicks) > 5.0 && _numErrorLogs == 1)
                     {
-                        ++this._numErrorLogs;
-                        this.LogSessionDetails();
+                        ++_numErrorLogs;
+                        LogSessionDetails();
                     }
-                    if (Maths.TicksToSeconds(this._currentSessionTicks) > 8.0 && this._numErrorLogs == 2)
+                    if (Maths.TicksToSeconds(_currentSessionTicks) > 8.0 && _numErrorLogs == 2)
                     {
-                        ++this._numErrorLogs;
-                        this.LogSessionDetails();
+                        ++_numErrorLogs;
+                        LogSessionDetails();
                     }
-                    if (Maths.TicksToSeconds(this._currentSessionTicks) > 10.0 && this._numErrorLogs == 3)
+                    if (Maths.TicksToSeconds(_currentSessionTicks) > 10.0 && _numErrorLogs == 3)
                     {
-                        ++this._numErrorLogs;
-                        this.LogSessionDetails();
+                        ++_numErrorLogs;
+                        LogSessionDetails();
                     }
-                    if (Maths.TicksToSeconds(this._currentSessionTicks) > 15.0 && this._numErrorLogs == 4)
+                    if (Maths.TicksToSeconds(_currentSessionTicks) > 15.0 && _numErrorLogs == 4)
                     {
-                        ++this._numErrorLogs;
-                        this.LogSessionDetails();
+                        ++_numErrorLogs;
+                        LogSessionDetails();
                     }
                     float num = 18f;
                     if (NetworkDebugger.enabled)
                         num = 8f;
-                    if (Maths.TicksToSeconds(this._currentSessionTicks) > num && !MonoMain.noConnectionTimeout)
-                        this.Disconnect_ConnectionTimeout();
+                    if (Maths.TicksToSeconds(_currentSessionTicks) > num && !MonoMain.noConnectionTimeout)
+                        Disconnect_ConnectionTimeout();
                 }
-                if (this._data == null)
+                if (_data == null)
                     return;
-                lock (this.acksReceived)
-                    this._manager.DoAcks(this.acksReceived);
-                this._manager.Update();
-                if (this.status == ConnectionStatus.Connecting)
+                lock (acksReceived)
+                    _manager.DoAcks(acksReceived);
+                _manager.Update();
+                if (status == ConnectionStatus.Connecting)
                 {
-                    if (this.pingWait <= 0)
+                    if (pingWait <= 0)
                     {
-                        Send.Message(new NMConnect(this._connectsReceived, (NetIndex4)0, DG.version, ModLoader.modHash), NetMessagePriority.UnreliableUnordered, this);
-                        DevConsole.Log(DCSection.Connection, "Connect send    (" + this.sessionID.ToString() + ")", this);
-                        this.pingWait = 20;
+                        Send.Message(new NMConnect(_connectsReceived, (NetIndex4)0, DG.version, ModLoader.modHash), NetMessagePriority.UnreliableUnordered, this);
+                        DevConsole.Log(DCSection.Connection, "Connect send    (" + sessionID.ToString() + ")", this);
+                        pingWait = 20;
                     }
-                    --this.pingWait;
+                    --pingWait;
                 }
                 else
                 {
-                    if (this.pingWait > this.timeBetweenPings)
+                    if (pingWait > timeBetweenPings)
                     {
-                        this.restartPingTimer = true;
-                        NMNewPing msg = !Network.isServer ? new NMNewPing(this.pingIndex) : new NMNewPingHost(this.pingIndex);
-                        ++this._pingsSent;
-                        this._pings[this.pingIndex] = msg;
-                        this.pingIndex = (byte)((pingIndex + 1) % 10);
+                        restartPingTimer = true;
+                        NMNewPing msg = !Network.isServer ? new NMNewPing(pingIndex) : new NMNewPingHost(pingIndex);
+                        ++_pingsSent;
+                        _pings[pingIndex] = msg;
+                        pingIndex = (byte)((pingIndex + 1) % 10);
                         Send.Message(msg, NetMessagePriority.UnreliableUnordered, this);
-                        this.pingWait = 0;
-                        this.sendPacketsNow = true;
+                        pingWait = 0;
+                        sendPacketsNow = true;
                     }
-                    ++this.pingWait;
+                    ++pingWait;
                 }
-                ++this._personalTick;
-                ++this._estimatedClientTick;
-                if (this._status == ConnectionStatus.Connecting || this._status == ConnectionStatus.Disconnecting)
+                ++_personalTick;
+                ++_estimatedClientTick;
+                if (_status == ConnectionStatus.Connecting || _status == ConnectionStatus.Disconnecting)
                     return;
-                if (this._status == ConnectionStatus.Connected && this.receiveGap > 960U)
+                if (_status == ConnectionStatus.Connected && receiveGap > 960U)
                 {
-                    DevConsole.Log(DCSection.Connection, "|DGRED|Connection timeout with " + this.ToString());
+                    DevConsole.Log(DCSection.Connection, "|DGRED|Connection timeout with " + ToString());
                     Network.activeNetwork.core.DisconnectClient(this, new DuckNetErrorInfo(DuckNetError.ConnectionLost, "Connection was lost."));
                 }
-                this._previousReceiveGap = this.receiveGap;
+                _previousReceiveGap = receiveGap;
             }
         }
 
         private void LogSessionDetails()
         {
-            if (!(this.data is User))
+            if (!(data is User))
                 return;
-            SessionState sessionState = Steam.GetSessionState(this.data as User);
-            DevConsole.Log("Information for " + this.ToString() + ":", Colors.DGBlue);
+            SessionState sessionState = Steam.GetSessionState(data as User);
+            DevConsole.Log("Information for " + ToString() + ":", Colors.DGBlue);
             foreach (FieldInfo field in sessionState.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
                 DevConsole.Log(field.Name + ": " + field.GetValue(sessionState).ToString(), Colors.DGBlue);
             DevConsole.Log("", Colors.DGBlue);
         }
 
-        public uint receiveGap => this._personalTick - this._lastReceivedTime;
+        public uint receiveGap => _personalTick - _lastReceivedTime;
 
-        public bool isExperiencingConnectionTrouble => this.receiveGap > 100U;
+        public bool isExperiencingConnectionTrouble => receiveGap > 100U;
 
         public void PostUpdate(int frameCounter)
         {
             NetworkConnection.ghostLerpDivisor = 1f / packetsEvery;
-            if (this._status == ConnectionStatus.Disconnected)
+            if (_status == ConnectionStatus.Disconnected)
                 return;
             bool flag = (frameCounter + NetworkConnection.connectionLoopIndex) % NetworkConnection.packetsEvery == 0;
-            if (DuckNetwork.levelIndex == levelIndex && this.levelIndex != byte.MaxValue && this.status == ConnectionStatus.Connected)
+            if (DuckNetwork.levelIndex == levelIndex && levelIndex != byte.MaxValue && status == ConnectionStatus.Connected)
             {
                 foreach (Profile profile in DuckNetwork.profiles)
                 {
@@ -651,10 +651,10 @@ namespace DuckGame
                 GhostManager.context.Update(this, flag);
             }
             NetSoundEffect.Update();
-            this._manager.Flush(flag);
-            if (flag && !this._sentThisFrame)
+            _manager.Flush(flag);
+            if (flag && !_sentThisFrame)
                 Network.activeNetwork.core.SendPacket(null, this);
-            this._sentThisFrame = false;
+            _sentThisFrame = false;
         }
 
         public class FailedGhost

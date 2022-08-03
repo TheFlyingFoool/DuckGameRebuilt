@@ -48,34 +48,34 @@ namespace DuckGame
 
         public RandomLevelData Flipped()
         {
-            if (this.isMirrored)
+            if (isMirrored)
                 return this;
             return new RandomLevelData()
             {
-                data = this.data,
-                alternateData = this.alternateData,
-                flip = !this.flip,
-                left = this.right,
-                right = this.left,
-                up = this.up,
-                down = this.down,
-                chance = this.chance,
-                max = this.max,
-                file = this.file,
-                canMirror = this.canMirror,
-                isMirrored = this.isMirrored,
-                numWeapons = this.numWeapons,
-                numSuperWeapons = this.numSuperWeapons,
-                numFatalWeapons = this.numFatalWeapons,
-                numPermanentWeapons = this.numPermanentWeapons,
-                numPermanentSuperWeapons = this.numPermanentSuperWeapons,
-                numPermanentFatalWeapons = this.numPermanentFatalWeapons,
-                numArmor = this.numArmor,
-                numEquipment = this.numEquipment,
-                numSpawns = this.numSpawns,
-                numTeamSpawns = this.numTeamSpawns,
-                numLockedDoors = this.numLockedDoors,
-                numKeys = this.numKeys
+                data = data,
+                alternateData = alternateData,
+                flip = !flip,
+                left = right,
+                right = left,
+                up = up,
+                down = down,
+                chance = chance,
+                max = max,
+                file = file,
+                canMirror = canMirror,
+                isMirrored = isMirrored,
+                numWeapons = numWeapons,
+                numSuperWeapons = numSuperWeapons,
+                numFatalWeapons = numFatalWeapons,
+                numPermanentWeapons = numPermanentWeapons,
+                numPermanentSuperWeapons = numPermanentSuperWeapons,
+                numPermanentFatalWeapons = numPermanentFatalWeapons,
+                numArmor = numArmor,
+                numEquipment = numEquipment,
+                numSpawns = numSpawns,
+                numTeamSpawns = numTeamSpawns,
+                numLockedDoors = numLockedDoors,
+                numKeys = numKeys
             };
         }
 
@@ -83,42 +83,42 @@ namespace DuckGame
         {
             RandomLevelData randomLevelData = new RandomLevelData()
             {
-                data = this.data,
-                alternateData = this.alternateData,
-                flip = this.flip,
-                up = this.up,
-                down = this.down,
+                data = data,
+                alternateData = alternateData,
+                flip = flip,
+                up = up,
+                down = down,
                 symmetry = true,
-                file = this.file,
+                file = file,
                 canMirror = true,
                 isMirrored = true
             };
             randomLevelData.right = randomLevelData.left;
-            randomLevelData.chance = this.chance;
-            if (!this.isMirrored)
+            randomLevelData.chance = chance;
+            if (!isMirrored)
                 randomLevelData.chance *= 0.75f;
-            randomLevelData.max = this.max;
-            randomLevelData.numWeapons = this.numWeapons;
-            randomLevelData.numSuperWeapons = this.numSuperWeapons;
-            randomLevelData.numFatalWeapons = this.numFatalWeapons;
-            randomLevelData.numPermanentWeapons = this.numPermanentWeapons;
-            randomLevelData.numPermanentSuperWeapons = this.numPermanentSuperWeapons;
-            randomLevelData.numPermanentFatalWeapons = this.numPermanentFatalWeapons;
-            randomLevelData.numArmor = this.numArmor;
-            randomLevelData.numEquipment = this.numEquipment;
+            randomLevelData.max = max;
+            randomLevelData.numWeapons = numWeapons;
+            randomLevelData.numSuperWeapons = numSuperWeapons;
+            randomLevelData.numFatalWeapons = numFatalWeapons;
+            randomLevelData.numPermanentWeapons = numPermanentWeapons;
+            randomLevelData.numPermanentSuperWeapons = numPermanentSuperWeapons;
+            randomLevelData.numPermanentFatalWeapons = numPermanentFatalWeapons;
+            randomLevelData.numArmor = numArmor;
+            randomLevelData.numEquipment = numEquipment;
             randomLevelData.numSpawns = 0;
             randomLevelData.numTeamSpawns = 0;
-            randomLevelData.numLockedDoors = this.numLockedDoors;
-            randomLevelData.numKeys = this.numKeys;
+            randomLevelData.numLockedDoors = numLockedDoors;
+            randomLevelData.numKeys = numKeys;
             return randomLevelData;
         }
 
         public void ApplyWeaponData(string data)
         {
-            this.weapons.Clear();
-            this.numWeapons = 0;
-            this.numSuperWeapons = 0;
-            this.numFatalWeapons = 0;
+            weapons.Clear();
+            numWeapons = 0;
+            numSuperWeapons = 0;
+            numFatalWeapons = 0;
             string str = data;
             char[] chArray = new char[1] { '|' };
             foreach (string name in str.Split(chArray))
@@ -128,15 +128,15 @@ namespace DuckGame
                     try
                     {
                         System.Type type = Editor.GetType(name);
-                        if (!this.weapons.ContainsKey(type))
-                            this.weapons[type] = 0;
-                        this.weapons[type]++;
-                        ++this.numWeapons;
+                        if (!weapons.ContainsKey(type))
+                            weapons[type] = 0;
+                        weapons[type]++;
+                        ++numWeapons;
                         IReadOnlyPropertyBag bag = ContentProperties.GetBag(type);
                         if (bag.GetOrDefault("isSuperWeapon", false))
-                            ++this.numSuperWeapons;
+                            ++numSuperWeapons;
                         if (bag.GetOrDefault("isFatal", true))
-                            ++this.numFatalWeapons;
+                            ++numFatalWeapons;
                     }
                     catch
                     {
@@ -147,10 +147,10 @@ namespace DuckGame
 
         public void ApplySpawnerData(string data)
         {
-            this.spawners.Clear();
-            this.numPermanentWeapons = 0;
-            this.numPermanentSuperWeapons = 0;
-            this.numPermanentFatalWeapons = 0;
+            spawners.Clear();
+            numPermanentWeapons = 0;
+            numPermanentSuperWeapons = 0;
+            numPermanentFatalWeapons = 0;
             string str = data;
             char[] chArray = new char[1] { '|' };
             foreach (string name in str.Split(chArray))
@@ -160,15 +160,15 @@ namespace DuckGame
                     try
                     {
                         System.Type type = Editor.GetType(name);
-                        if (!this.spawners.ContainsKey(type))
-                            this.spawners[type] = 0;
-                        this.spawners[type]++;
-                        ++this.numPermanentWeapons;
+                        if (!spawners.ContainsKey(type))
+                            spawners[type] = 0;
+                        spawners[type]++;
+                        ++numPermanentWeapons;
                         IReadOnlyPropertyBag bag = ContentProperties.GetBag(type);
                         if (bag.GetOrDefault("isSuperWeapon", false))
-                            ++this.numPermanentSuperWeapons;
+                            ++numPermanentSuperWeapons;
                         if (bag.GetOrDefault("isFatal", true))
-                            ++this.numPermanentFatalWeapons;
+                            ++numPermanentFatalWeapons;
                     }
                     catch
                     {
@@ -186,22 +186,22 @@ namespace DuckGame
                 switch (num)
                 {
                     case 0:
-                        this.numArmor = Convert.ToInt32(str);
+                        numArmor = Convert.ToInt32(str);
                         break;
                     case 1:
-                        this.numEquipment = Convert.ToInt32(str);
+                        numEquipment = Convert.ToInt32(str);
                         break;
                     case 2:
-                        this.numSpawns = Convert.ToInt32(str);
+                        numSpawns = Convert.ToInt32(str);
                         break;
                     case 3:
-                        this.numTeamSpawns = Convert.ToInt32(str);
+                        numTeamSpawns = Convert.ToInt32(str);
                         break;
                     case 4:
-                        this.numLockedDoors = Convert.ToInt32(str);
+                        numLockedDoors = Convert.ToInt32(str);
                         break;
                     case 5:
-                        this.numKeys = Convert.ToInt32(str);
+                        numKeys = Convert.ToInt32(str);
                         break;
                 }
                 ++num;
@@ -212,7 +212,7 @@ namespace DuckGame
         {
             RandomLevelData randomLevelData = new RandomLevelData();
             BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-            foreach (FieldInfo field in this.GetType().GetFields(bindingAttr))
+            foreach (FieldInfo field in GetType().GetFields(bindingAttr))
             {
                 if (field.FieldType == typeof(int))
                     field.SetValue(randomLevelData, (int)field.GetValue(this) + (int)field.GetValue(dat));
@@ -244,13 +244,13 @@ namespace DuckGame
             get
             {
                 int numLinkDirections = 0;
-                if (this.up)
+                if (up)
                     ++numLinkDirections;
-                if (this.down)
+                if (down)
                     ++numLinkDirections;
-                if (this.left)
+                if (left)
                     ++numLinkDirections;
-                if (this.right)
+                if (right)
                     ++numLinkDirections;
                 return numLinkDirections;
             }
@@ -266,12 +266,12 @@ namespace DuckGame
         {
             if (!t.visibleInGame)
                 t.visible = false;
-            bool flag = this.flip;
+            bool flag = flip;
             if (Level.symmetry)
                 flag = false;
             if (Level.loadingOppositeSymmetry)
                 flag = !flag;
-            if (this.mainLoad && Level.symmetry && !(t is ThingContainer))
+            if (mainLoad && Level.symmetry && !(t is ThingContainer))
             {
                 if (Level.leftSymmetry && t.x > 88.0)
                     return null;
@@ -311,9 +311,9 @@ namespace DuckGame
                 t.flipHorizontal = true;
             if (t is BackgroundTile && !(t as BackgroundTile).oppositeSymmetry)
             {
-                int num = this.flip ? 1 : 0;
+                int num = flip ? 1 : 0;
             }
-            this.posBeforeTranslate = t.position;
+            posBeforeTranslate = t.position;
             if (!(t is BackgroundTile))
                 t.SetTranslation(new Vec2(x, y));
             return t;
@@ -324,25 +324,25 @@ namespace DuckGame
           float x,
           float y)
         {
-            if (symmetric && this.isMirrored)
+            if (symmetric && isMirrored)
                 symmetric = false;
-            if (!symmetric && this.flip)
+            if (!symmetric && flip)
                 Level.flipH = true;
-            if (this.symmetry | symmetric)
+            if (symmetry | symmetric)
                 Level.symmetry = true;
             List<RandomLevelData.PreparedThing> preparedThingList = new List<RandomLevelData.PreparedThing>();
-            List<BinaryClassChunk> binaryClassChunkList = LevelGenerator.openAirMode ? this.alternateData : this.data;
+            List<BinaryClassChunk> binaryClassChunkList = LevelGenerator.openAirMode ? alternateData : data;
             if (binaryClassChunkList == null || binaryClassChunkList.Count == 0)
-                binaryClassChunkList = this.data;
+                binaryClassChunkList = data;
             foreach (BinaryClassChunk node in binaryClassChunkList)
             {
                 Thing t1 = Thing.LoadThing(node);
                 if (t1 != null)
                 {
-                    this.mainLoad = true;
+                    mainLoad = true;
                     Level.leftSymmetry = true;
                     Level.loadingOppositeSymmetry = false;
-                    Thing thing1 = this.ProcessThing(t1, x, y);
+                    Thing thing1 = ProcessThing(t1, x, y);
                     if (thing1 != null)
                     {
                         if (!(thing1 is ThingContainer) && Level.symmetry && (posBeforeTranslate.x - 8.0 < 80.0 || posBeforeTranslate.x - 8.0 > 96.0))
@@ -350,10 +350,10 @@ namespace DuckGame
                             Thing t2 = Thing.LoadThing(node, false);
                             if (t2 != null)
                             {
-                                this.mainLoad = false;
+                                mainLoad = false;
                                 Level.leftSymmetry = false;
                                 Level.loadingOppositeSymmetry = true;
-                                Thing thing2 = this.ProcessThing(t2, x, y);
+                                Thing thing2 = ProcessThing(t2, x, y);
                                 if (thing2 != null)
                                     preparedThingList.Add(new RandomLevelData.PreparedThing()
                                     {
@@ -381,13 +381,13 @@ namespace DuckGame
           bool symmetric,
           List<RandomLevelData.PreparedThing> pPreparedThings)
         {
-            if (symmetric && this.isMirrored)
+            if (symmetric && isMirrored)
                 symmetric = false;
-            if (!symmetric && this.flip)
+            if (!symmetric && flip)
                 Level.flipH = true;
-            if (this.symmetry | symmetric)
+            if (symmetry | symmetric)
                 Level.symmetry = true;
-            if (this.data != null)
+            if (data != null)
             {
                 foreach (RandomLevelData.PreparedThing pPreparedThing in pPreparedThings)
                 {
@@ -396,9 +396,9 @@ namespace DuckGame
                     {
                         Level.leftSymmetry = true;
                         Level.loadingOppositeSymmetry = false;
-                        this.mainLoad = true;
-                        Thing thing2 = this.AddThing(thing1, level);
-                        this.mainLoad = false;
+                        mainLoad = true;
+                        Thing thing2 = AddThing(thing1, level);
+                        mainLoad = false;
                         if (Network.isActive && thing2.isStateObject)
                         {
                             GhostManager.context.MakeGhost(thing2, initLevel: true);
@@ -411,10 +411,10 @@ namespace DuckGame
                             {
                                 if (thing3 is BackgroundTile || thing3 is ForegroundTile)
                                 {
-                                    Thing thing4 = this.ProcessThing(thing3, x, y);
+                                    Thing thing4 = ProcessThing(thing3, x, y);
                                     if (thing4 != null)
                                     {
-                                        this.AddThing(thing1, level);
+                                        AddThing(thing1, level);
                                         if (Network.isActive && thing4.isStateObject)
                                         {
                                             GhostManager.context.MakeGhost(thing4, initLevel: true);

@@ -11,15 +11,15 @@ namespace DuckGame
     {
         public ATPewPew()
         {
-            this.accuracy = 0.8f;
-            this.range = 600f;
-            this.penetration = 1f;
-            this.bulletSpeed = 10f;
-            this.bulletLength = 40f;
-            this.bulletThickness = 0.3f;
-            this.rangeVariation = 50f;
-            this.bulletType = typeof(LaserBullet);
-            this.angleShot = false;
+            accuracy = 0.8f;
+            range = 600f;
+            penetration = 1f;
+            bulletSpeed = 10f;
+            bulletLength = 40f;
+            bulletThickness = 0.3f;
+            rangeVariation = 50f;
+            bulletType = typeof(LaserBullet);
+            angleShot = false;
         }
     }
 }

@@ -31,37 +31,37 @@ namespace DuckGame
         private float prevAngle;
         public Duck duckWhoThrew;
 
-        public bool pin => this._pin;
+        public bool pin => _pin;
 
         public Mine(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 1;
-            this._ammoType = new ATShrapnel();
-            this._type = "gun";
-            this._sprite = new SpriteMap("mine", 18, 16);
-            this._sprite.AddAnimation("pickup", 1f, true, new int[1]);
-            this._sprite.AddAnimation("idle", 0.05f, true, 1, 2);
-            this._sprite.SetAnimation("pickup");
-            this.graphic = _sprite;
-            this.center = new Vec2(9f, 8f);
-            this.collisionOffset = new Vec2(-5f, -5f);
-            this.collisionSize = new Vec2(10f, 9f);
-            this._mineFlash = new Sprite("mineFlash");
-            this._mineFlash.CenterOrigin();
-            this._mineFlash.alpha = 0f;
-            this.bouncy = 0f;
-            this.friction = 0.2f;
-            this.editorTooltip = "Once placed in position, explodes if any curious Ducks walk by.";
+            ammo = 1;
+            _ammoType = new ATShrapnel();
+            _type = "gun";
+            _sprite = new SpriteMap("mine", 18, 16);
+            _sprite.AddAnimation("pickup", 1f, true, new int[1]);
+            _sprite.AddAnimation("idle", 0.05f, true, 1, 2);
+            _sprite.SetAnimation("pickup");
+            graphic = _sprite;
+            center = new Vec2(9f, 8f);
+            collisionOffset = new Vec2(-5f, -5f);
+            collisionSize = new Vec2(10f, 9f);
+            _mineFlash = new Sprite("mineFlash");
+            _mineFlash.CenterOrigin();
+            _mineFlash.alpha = 0f;
+            bouncy = 0f;
+            friction = 0.2f;
+            editorTooltip = "Once placed in position, explodes if any curious Ducks walk by.";
         }
 
         public void Arm()
         {
-            if (this._armed)
+            if (_armed)
                 return;
-            this._holdingWeight = 0f;
-            this._armed = true;
-            if (!this.isServerForObject)
+            _holdingWeight = 0f;
+            _armed = true;
+            if (!isServerForObject)
                 return;
             if (Network.isActive)
                 NetSoundEffect.Play("minePullPin");
@@ -71,81 +71,81 @@ namespace DuckGame
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (this._pin)
+            if (_pin)
                 return false;
-            this.BlowUp();
+            BlowUp();
             return true;
         }
 
         public void UpdatePinState()
         {
-            if (!this._pin)
+            if (!_pin)
             {
-                this.canPickUp = false;
-                this._sprite.SetAnimation("idle");
-                this.collisionOffset = new Vec2(-6f, -2f);
-                this.collisionSize = new Vec2(12f, 3f);
-                this.depth = (Depth)0.8f;
-                this._hasOldDepth = false;
-                this.thickness = 1f;
-                this.center = new Vec2(9f, 14f);
+                canPickUp = false;
+                _sprite.SetAnimation("idle");
+                collisionOffset = new Vec2(-6f, -2f);
+                collisionSize = new Vec2(12f, 3f);
+                depth = (Depth)0.8f;
+                _hasOldDepth = false;
+                thickness = 1f;
+                center = new Vec2(9f, 14f);
             }
             else
             {
-                this.canPickUp = true;
-                this._sprite.SetAnimation("pickup");
-                this.collisionOffset = new Vec2(-5f, -4f);
-                this.collisionSize = new Vec2(10f, 8f);
-                this.thickness = -1f;
+                canPickUp = true;
+                _sprite.SetAnimation("pickup");
+                collisionOffset = new Vec2(-5f, -4f);
+                collisionSize = new Vec2(10f, 8f);
+                thickness = -1f;
             }
         }
 
-        public Dictionary<Duck, float> ducksOnMine => this._ducksOnMine;
+        public Dictionary<Duck, float> ducksOnMine => _ducksOnMine;
 
         public override void Update()
         {
-            if (!this.pin)
+            if (!pin)
             {
-                this.collisionOffset = new Vec2(-6f, -2f);
-                this.collisionSize = new Vec2(12f, 3f);
+                collisionOffset = new Vec2(-6f, -2f);
+                collisionSize = new Vec2(12f, 3f);
             }
             base.Update();
-            if (!this.pin && Math.Abs(this.prevAngle - this.angle) > 0.1f)
+            if (!pin && Math.Abs(prevAngle - angle) > 0.1f)
             {
                 Vec2 vec2_1 = new Vec2(14f, 3f);
                 Vec2 vec2_2 = new Vec2(-7f, -2f);
                 Vec2 vec2_3 = new Vec2(4f, 14f);
                 Vec2 vec2_4 = new Vec2(-2f, -7f);
-                float num = (float)Math.Abs(Math.Sin(this.angle));
-                this.collisionSize = vec2_1 * (1f - num) + vec2_3 * num;
-                this.collisionOffset = vec2_2 * (1f - num) + vec2_4 * num;
-                this.prevAngle = this.angle;
+                float num = (float)Math.Abs(Math.Sin(angle));
+                collisionSize = vec2_1 * (1f - num) + vec2_3 * num;
+                collisionOffset = vec2_2 * (1f - num) + vec2_4 * num;
+                prevAngle = angle;
             }
-            this.UpdatePinState();
-            if (this._sprite.imageIndex == 2)
-                this._mineFlash.alpha = Lerp.Float(this._mineFlash.alpha, 0.4f, 0.08f);
+            UpdatePinState();
+            if (_sprite.imageIndex == 2)
+                _mineFlash.alpha = Lerp.Float(_mineFlash.alpha, 0.4f, 0.08f);
             else
-                this._mineFlash.alpha = Lerp.Float(this._mineFlash.alpha, 0f, 0.08f);
-            if (this._armed)
-                this._sprite.speed = 2f;
-            if (this._thrown && this.owner == null)
+                _mineFlash.alpha = Lerp.Float(_mineFlash.alpha, 0f, 0.08f);
+            if (_armed)
+                _sprite.speed = 2f;
+            if (_thrown && owner == null)
             {
-                this._thrown = false;
-                if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 0.4f)
-                    this.angleDegrees = 180f;
+                _thrown = false;
+                if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 0.4f)
+                    angleDegrees = 180f;
             }
-            if (this._armed)
-                ++this._framesSinceArm;
-            if (!this._pin && this._grounded && (!this._armed || this._framesSinceArm > 4))
+            if (_armed)
+                ++_framesSinceArm;
+            if (!_pin && _grounded && (!_armed || _framesSinceArm > 4))
             {
-                this.canPickUp = false;
+                canPickUp = false;
                 float addWeight = this.addWeight;
-                IEnumerable<PhysicsObject> physicsObjects = Level.CheckLineAll<PhysicsObject>(new Vec2(this.x - 6f, this.y - 3f), new Vec2(this.x + 6f, this.y - 3f));
+                IEnumerable<PhysicsObject> physicsObjects = Level.CheckLineAll<PhysicsObject>(new Vec2(x - 6f, y - 3f), new Vec2(x + 6f, y - 3f));
                 List<Duck> duckList1 = new List<Duck>();
                 Duck duck = null;
                 bool flag1 = false;
                 bool flag2 = false;
-                foreach (PhysicsObject previousThing in this.previousThings)
+                foreach (PhysicsObject previousThing in previousThings)
                 {
                     if (previousThing.isServerForObject)
                         flag1 = true;
@@ -161,14 +161,14 @@ namespace DuckGame
                     if (!flag3 && previousThing.isServerForObject)
                         flag2 = true;
                 }
-                this.previousThings.Clear();
+                previousThings.Clear();
                 foreach (PhysicsObject physicsObject in physicsObjects)
                 {
-                    if (physicsObject != this && physicsObject.owner == null && (!(physicsObject is Holdable) || (physicsObject as Holdable).canPickUp && (physicsObject as Holdable).hoverSpawner == null) && Math.Abs(physicsObject.bottom - this.bottom) <= 6.0)
+                    if (physicsObject != this && physicsObject.owner == null && (!(physicsObject is Holdable) || (physicsObject as Holdable).canPickUp && (physicsObject as Holdable).hoverSpawner == null) && Math.Abs(physicsObject.bottom - bottom) <= 6.0)
                     {
                         if (physicsObject.isServerForObject)
                             flag1 = true;
-                        this.previousThings.Add(physicsObject);
+                        previousThings.Add(physicsObject);
                         switch (physicsObject)
                         {
                             case Duck _:
@@ -183,9 +183,9 @@ namespace DuckGame
                                 if (key != null)
                                 {
                                     duck = key;
-                                    if (!this._ducksOnMine.ContainsKey(key))
-                                        this._ducksOnMine[key] = 0f;
-                                    this._ducksOnMine[key] += Maths.IncFrameTimer();
+                                    if (!_ducksOnMine.ContainsKey(key))
+                                        _ducksOnMine[key] = 0f;
+                                    _ducksOnMine[key] += Maths.IncFrameTimer();
                                     duckList1.Add(key);
                                     break;
                                 }
@@ -194,12 +194,12 @@ namespace DuckGame
                                 addWeight += physicsObject.weight;
                                 break;
                         }
-                        foreach (PhysicsObject previousThing in this.previousThings)
+                        foreach (PhysicsObject previousThing in previousThings)
                             ;
                     }
                 }
                 List<Duck> duckList2 = new List<Duck>();
-                foreach (KeyValuePair<Duck, float> keyValuePair in this._ducksOnMine)
+                foreach (KeyValuePair<Duck, float> keyValuePair in _ducksOnMine)
                 {
                     if (!duckList1.Contains(keyValuePair.Key))
                         duckList2.Add(keyValuePair.Key);
@@ -207,56 +207,56 @@ namespace DuckGame
                         keyValuePair.Key.profile.stats.timeSpentOnMines += Maths.IncFrameTimer();
                 }
                 foreach (Duck key in duckList2)
-                    this._ducksOnMine.Remove(key);
+                    _ducksOnMine.Remove(key);
                 if (addWeight < _holdingWeight & flag1 && flag2)
                 {
                     Thing.Fondle(this, DuckNetwork.localConnection);
-                    if (!this._armed)
-                        this.Arm();
+                    if (!_armed)
+                        Arm();
                     else
-                        this._timer = -1f;
+                        _timer = -1f;
                 }
-                if (this._armed && addWeight > _holdingWeight)
+                if (_armed && addWeight > _holdingWeight)
                 {
-                    if (!this._clicked && duck != null)
+                    if (!_clicked && duck != null)
                         ++duck.profile.stats.minesSteppedOn;
-                    this._clicked = true;
+                    _clicked = true;
                     SFX.Play("doubleBeep");
                 }
-                this._holdingWeight = addWeight;
+                _holdingWeight = addWeight;
             }
-            if (_timer < 0.0 && this.isServerForObject)
+            if (_timer < 0.0 && isServerForObject)
             {
-                this._timer = 1f;
-                this.BlowUp();
+                _timer = 1f;
+                BlowUp();
             }
-            this.addWeight = 0f;
+            addWeight = 0f;
         }
 
         public void BlowUp()
         {
-            if (this.blownUp)
+            if (blownUp)
                 return;
-            this.MakeBlowUpHappen(this.position);
-            this.blownUp = true;
-            if (!this.isServerForObject)
+            MakeBlowUpHappen(position);
+            blownUp = true;
+            if (!isServerForObject)
                 return;
-            foreach (PhysicsObject t in Level.CheckCircleAll<PhysicsObject>(this.position, 22f))
+            foreach (PhysicsObject t in Level.CheckCircleAll<PhysicsObject>(position, 22f))
             {
                 if (t != this)
                 {
-                    Vec2 vec2 = t.position - this.position;
+                    Vec2 vec2 = t.position - position;
                     float num1 = (float)(1.0 - Math.Min(vec2.length, 22f) / 22.0);
                     float num2 = num1 * 4f;
                     vec2.Normalize();
                     t.hSpeed += num2 * vec2.x;
                     t.vSpeed += -5f * num1;
                     t.sleeping = false;
-                    this.Fondle(t);
+                    Fondle(t);
                 }
             }
-            float x = this.position.x;
-            float y = this.position.y;
+            float x = position.x;
+            float y = position.y;
             for (int index = 0; index < 20; ++index)
             {
                 float ang = (float)(index * 18.0 - 5.0) + Rando.Float(10f);
@@ -268,14 +268,14 @@ namespace DuckGame
                 {
                     firedFrom = this
                 };
-                this.firedBullets.Add(bullet);
+                firedBullets.Add(bullet);
                 Level.Add(bullet);
             }
-            this.bulletFireIndex += 20;
-            if (Network.isActive && this.isServerForObject)
+            bulletFireIndex += 20;
+            if (Network.isActive && isServerForObject)
             {
-                Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
-                this.firedBullets.Clear();
+                Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
+                firedBullets.Clear();
             }
             if (Recorder.currentRecording != null)
                 Recorder.currentRecording.LogBonus();
@@ -284,9 +284,9 @@ namespace DuckGame
 
         public void MakeBlowUpHappen(Vec2 pos)
         {
-            if (this.blownUp)
+            if (blownUp)
                 return;
-            this.blownUp = true;
+            blownUp = true;
             SFX.Play("explode");
             RumbleManager.AddRumbleEvent(pos, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
             Graphics.FlashScreen();
@@ -306,16 +306,16 @@ namespace DuckGame
 
         public override void OnNetworkBulletsFired(Vec2 pos)
         {
-            this.MakeBlowUpHappen(pos);
+            MakeBlowUpHappen(pos);
             base.OnNetworkBulletsFired(pos);
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (bullet.isLocal && this.owner == null && !this.canPickUp && _timer > 0.0)
+            if (bullet.isLocal && owner == null && !canPickUp && _timer > 0.0)
             {
                 Thing.Fondle(this, DuckNetwork.localConnection);
-                this.BlowUp();
+                BlowUp();
             }
             return false;
         }
@@ -324,36 +324,36 @@ namespace DuckGame
         {
             Material material = Graphics.material;
             Graphics.material = null;
-            if (this._mineFlash.alpha > 0.01f)
-                Graphics.Draw(this._mineFlash, this.x, this.y - 3f);
+            if (_mineFlash.alpha > 0.01f)
+                Graphics.Draw(_mineFlash, x, y - 3f);
             Graphics.material = material;
             base.Draw();
         }
 
         public override void OnPressAction()
         {
-            if (!this.isServerForObject)
+            if (!isServerForObject)
                 return;
             if (this.owner == null)
             {
-                this._pin = false;
+                _pin = false;
                 if (heat > 0.5)
-                    this.BlowUp();
+                    BlowUp();
             }
-            if (!this._pin)
+            if (!_pin)
                 return;
-            this._pin = false;
-            this.UpdatePinState();
+            _pin = false;
+            UpdatePinState();
             if (this.owner is Duck owner)
             {
-                this.duckWhoThrew = owner;
-                this._holdingWeight = 5f;
+                duckWhoThrew = owner;
+                _holdingWeight = 5f;
                 owner.doThrow = true;
-                this._responsibleProfile = owner.profile;
+                _responsibleProfile = owner.profile;
             }
             else
-                this.Arm();
-            this._thrown = true;
+                Arm();
+            _thrown = true;
         }
     }
 }

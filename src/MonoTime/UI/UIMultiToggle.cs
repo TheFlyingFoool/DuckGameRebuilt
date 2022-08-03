@@ -15,7 +15,7 @@ namespace DuckGame
         private List<string> _captions;
         private bool _compressed;
 
-        public void SetFieldBinding(FieldBinding f) => this._field = f;
+        public void SetFieldBinding(FieldBinding f) => _field = f;
 
         public UIMultiToggle(
           float wide,
@@ -25,25 +25,25 @@ namespace DuckGame
           bool compressed = false)
           : base("AAAAAAAAA", Color.White)
         {
-            this._field = field;
-            this._captions = captions;
-            this._compressed = compressed;
+            _field = field;
+            _captions = captions;
+            _compressed = compressed;
         }
 
         public override void Draw()
         {
-            this._font.scale = this.scale;
-            this._font.alpha = this.alpha;
-            int index = (int)this._field.value;
+            _font.scale = this.scale;
+            _font.alpha = alpha;
+            int index = (int)_field.value;
             string text = "";
-            if (this._compressed && index < this._captions.Count)
+            if (_compressed && index < _captions.Count)
             {
-                text = this._captions[index];
+                text = _captions[index];
             }
             else
             {
                 int num = 0;
-                foreach (string caption in this._captions)
+                foreach (string caption in _captions)
                 {
                     if (num != 0)
                         text += " ";
@@ -52,14 +52,14 @@ namespace DuckGame
                     ++num;
                 }
             }
-            Vec2 scale = this._font.scale;
+            Vec2 scale = _font.scale;
             if (specialScale != 0.0)
-                this._font.scale = new Vec2(this.specialScale);
-            float width = this._font.GetWidth(text);
-            float num1 = (this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-width / 2.0) : this.width / 2f - width) : (float)-(this.width / 2.0);
-            float num2 = (this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-(this.height / 2.0);
-            this._font.Draw(text, this.x + num1, this.y + num2, Color.White, this.depth);
-            this._font.scale = scale;
+                _font.scale = new Vec2(specialScale);
+            float width = _font.GetWidth(text);
+            float num1 = (align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-width / 2.0) : this.width / 2f - width) : (float)-(this.width / 2.0);
+            float num2 = (align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2.0) : height / 2f - _font.height) : (float)-(height / 2.0);
+            _font.Draw(text, x + num1, y + num2, Color.White, depth);
+            _font.scale = scale;
         }
     }
 }

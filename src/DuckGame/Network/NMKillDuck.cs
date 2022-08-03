@@ -18,18 +18,18 @@ namespace DuckGame
 
         public NMKillDuck(byte idx, bool wasCrush, bool wasCook, bool wasFall, byte pLifeChange)
         {
-            this.index = idx;
-            this.crush = wasCrush;
-            this.cook = wasCook;
-            this.fall = wasFall;
-            this.lifeChange = pLifeChange;
+            index = idx;
+            crush = wasCrush;
+            cook = wasCook;
+            fall = wasFall;
+            lifeChange = pLifeChange;
         }
 
         public NMKillDuck(byte idx, bool wasCrush, bool wasCook)
         {
-            this.index = idx;
-            this.crush = wasCrush;
-            this.cook = wasCook;
+            index = idx;
+            crush = wasCrush;
+            cook = wasCook;
         }
 
         public NMKillDuck()
@@ -41,21 +41,21 @@ namespace DuckGame
             if (DuckNetwork.levelIndex != _levelIndex || index >= DuckNetwork.profiles.Count)
                 return;
             Profile profile = DuckNetwork.profiles[index];
-            if (profile.duck == null || !profile.duck.WillAcceptLifeChange(this.lifeChange))
+            if (profile.duck == null || !profile.duck.WillAcceptLifeChange(lifeChange))
                 return;
-            DestroyType type = !this.crush ? (!this.fall ? new DTImpact(null) : new DTFall()) : new DTCrush(null);
+            DestroyType type = !crush ? (!this.fall ? new DTImpact(null) : new DTFall()) : new DTCrush(null);
             profile.duck.isKillMessage = true;
             if (profile.duck.Kill(type))
             {
-                if (!this.cook)
+                if (!cook)
                     profile.duck.GoRagdoll();
-                Thing.Fondle(profile.duck, this.connection);
+                Thing.Fondle(profile.duck, connection);
                 if (profile.duck._ragdollInstance != null)
-                    Thing.Fondle(profile.duck._ragdollInstance, this.connection);
+                    Thing.Fondle(profile.duck._ragdollInstance, connection);
                 if (profile.duck._trappedInstance != null)
-                    Thing.Fondle(profile.duck._trappedInstance, this.connection);
+                    Thing.Fondle(profile.duck._trappedInstance, connection);
                 if (profile.duck._cookedInstance != null)
-                    Thing.Fondle(profile.duck._cookedInstance, this.connection);
+                    Thing.Fondle(profile.duck._cookedInstance, connection);
             }
             profile.duck.isKillMessage = false;
         }
@@ -63,13 +63,13 @@ namespace DuckGame
         protected override void OnSerialize()
         {
             base.OnSerialize();
-            this._serializedData.Write(DuckNetwork.levelIndex);
+            _serializedData.Write(DuckNetwork.levelIndex);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
             base.OnDeserialize(d);
-            this._levelIndex = d.ReadByte();
+            _levelIndex = d.ReadByte();
         }
     }
 }

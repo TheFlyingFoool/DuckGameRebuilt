@@ -32,17 +32,17 @@ namespace DuckGame
         public bool initialized;
         private static int numExperienceProfiles;
 
-        public IEnumerable<Profile> all => DuckNetwork.active ? DuckNetwork.profiles : (IEnumerable<Profile>)this._profiles;
+        public IEnumerable<Profile> all => DuckNetwork.active ? DuckNetwork.profiles : (IEnumerable<Profile>)_profiles;
 
         public List<Profile> allCustomProfiles
         {
             get
             {
                 List<Profile> allCustomProfiles = new List<Profile>();
-                for (int index = 8; index < this._profiles.Count; ++index)
+                for (int index = 8; index < _profiles.Count; ++index)
                 {
-                    if (this._profiles[index].steamID == 0UL || this._profiles[index] == Profiles.experienceProfile)
-                        allCustomProfiles.Add(this._profiles[index]);
+                    if (_profiles[index].steamID == 0UL || _profiles[index] == Profiles.experienceProfile)
+                        allCustomProfiles.Add(_profiles[index]);
                 }
                 return allCustomProfiles;
             }
@@ -58,27 +58,27 @@ namespace DuckGame
             }
         }
 
-        public Profile DefaultExperienceProfile => this._experienceProfile;
+        public Profile DefaultExperienceProfile => _experienceProfile;
 
-        public Profile DefaultPlayer1 => !Network.isActive ? Profile.defaultProfileMappings[0] : this.all.ElementAt<Profile>(0);
+        public Profile DefaultPlayer1 => !Network.isActive ? Profile.defaultProfileMappings[0] : all.ElementAt<Profile>(0);
 
-        public Profile DefaultPlayer2 => !Network.isActive ? Profile.defaultProfileMappings[1] : this.all.ElementAt<Profile>(1);
+        public Profile DefaultPlayer2 => !Network.isActive ? Profile.defaultProfileMappings[1] : all.ElementAt<Profile>(1);
 
-        public Profile DefaultPlayer3 => !Network.isActive ? Profile.defaultProfileMappings[2] : this.all.ElementAt<Profile>(2);
+        public Profile DefaultPlayer3 => !Network.isActive ? Profile.defaultProfileMappings[2] : all.ElementAt<Profile>(2);
 
-        public Profile DefaultPlayer4 => !Network.isActive ? Profile.defaultProfileMappings[3] : this.all.ElementAt<Profile>(3);
+        public Profile DefaultPlayer4 => !Network.isActive ? Profile.defaultProfileMappings[3] : all.ElementAt<Profile>(3);
 
-        public Profile DefaultPlayer5 => !Network.isActive ? Profile.defaultProfileMappings[4] : this.all.ElementAt<Profile>(4);
+        public Profile DefaultPlayer5 => !Network.isActive ? Profile.defaultProfileMappings[4] : all.ElementAt<Profile>(4);
 
-        public Profile DefaultPlayer6 => !Network.isActive ? Profile.defaultProfileMappings[5] : this.all.ElementAt<Profile>(5);
+        public Profile DefaultPlayer6 => !Network.isActive ? Profile.defaultProfileMappings[5] : all.ElementAt<Profile>(5);
 
-        public Profile DefaultPlayer7 => !Network.isActive ? Profile.defaultProfileMappings[6] : this.all.ElementAt<Profile>(6);
+        public Profile DefaultPlayer7 => !Network.isActive ? Profile.defaultProfileMappings[6] : all.ElementAt<Profile>(6);
 
-        public Profile DefaultPlayer8 => !Network.isActive ? Profile.defaultProfileMappings[7] : this.all.ElementAt<Profile>(7);
+        public Profile DefaultPlayer8 => !Network.isActive ? Profile.defaultProfileMappings[7] : all.ElementAt<Profile>(7);
 
-        public ProfilesCore() => this.EnvironmentProfile = new Profile("Environment", InputProfile.Get("Blank"), this.EnvironmentTeam, Persona.Duck1);
+        public ProfilesCore() => EnvironmentProfile = new Profile("Environment", InputProfile.Get("Blank"), EnvironmentTeam, Persona.Duck1);
 
-        public int DefaultProfileNumber(Profile p) => this._profiles.IndexOf(p);
+        public int DefaultProfileNumber(Profile p) => _profiles.IndexOf(p);
 
         public List<Profile> active
         {
@@ -110,7 +110,7 @@ namespace DuckGame
 
         public void Initialize()
         {
-            this._profiles = new List<Profile>()
+            _profiles = new List<Profile>()
       {
         new Profile("Player1", InputProfile.Get("MPPlayer1"), Teams.Player1, Persona.Duck1, false, "PLAYER1", true),
         new Profile("Player2", InputProfile.Get("MPPlayer2"), Teams.Player2, Persona.Duck2, false, "PLAYER2", true),
@@ -121,14 +121,14 @@ namespace DuckGame
         new Profile("Player7", InputProfile.Get("MPPlayer7"), Teams.Player7, Persona.Duck7, false, "PLAYER7", true),
         new Profile("Player8", InputProfile.Get("MPPlayer8"), Teams.Player8, Persona.Duck8, false, "PLAYER8", true)
       };
-            Profile.defaultProfileMappings[0] = this._profiles[0];
-            Profile.defaultProfileMappings[1] = this._profiles[1];
-            Profile.defaultProfileMappings[2] = this._profiles[2];
-            Profile.defaultProfileMappings[3] = this._profiles[3];
-            Profile.defaultProfileMappings[4] = this._profiles[4];
-            Profile.defaultProfileMappings[5] = this._profiles[5];
-            Profile.defaultProfileMappings[6] = this._profiles[6];
-            Profile.defaultProfileMappings[7] = this._profiles[7];
+            Profile.defaultProfileMappings[0] = _profiles[0];
+            Profile.defaultProfileMappings[1] = _profiles[1];
+            Profile.defaultProfileMappings[2] = _profiles[2];
+            Profile.defaultProfileMappings[3] = _profiles[3];
+            Profile.defaultProfileMappings[4] = _profiles[4];
+            Profile.defaultProfileMappings[5] = _profiles[5];
+            Profile.defaultProfileMappings[6] = _profiles[6];
+            Profile.defaultProfileMappings[7] = _profiles[7];
             Profile.loading = true;
             DevConsole.Log(DCSection.General, "Loading profiles from (" + DuckFile.profileDirectory + ")");
             string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, ".pro"); // added ".pro" so it doesnt just loop over all files
@@ -167,7 +167,7 @@ namespace DuckGame
                         {
                         }
                         bool flag = false;
-                        Profile p = this._profiles.FirstOrDefault<Profile>(pro => pro.name == name);
+                        Profile p = _profiles.FirstOrDefault<Profile>(pro => pro.name == name);
                         if (p == null || !Profiles.IsDefault(p))
                         {
                             p = new Profile("")
@@ -318,7 +318,7 @@ namespace DuckGame
                             }
                         }
                         if (flag)
-                            this._profiles.Add(p);
+                            _profiles.Add(p);
                     }
                 }
             }
@@ -352,7 +352,7 @@ namespace DuckGame
             {
                 if (num1 != 0UL)
                 {
-                    Profile profile = this._profiles.FirstOrDefault<Profile>(x => x.name == "experience_profile" && x.id == "replace_with_steam");
+                    Profile profile = _profiles.FirstOrDefault<Profile>(x => x.name == "experience_profile" && x.id == "replace_with_steam");
                     if (profile != null)
                     {
                         foreach (KeyValuePair<string, ChallengeSaveData> keyValuePair in profile.challengeData)
@@ -376,17 +376,17 @@ namespace DuckGame
                     p1 = new Profile("experience_profile", varID: "replace_with_steam");
                 if (!Profiles.all.Contains<Profile>(p1))
                     Profiles.Add(p1);
-                this.Save(p1);
+                Save(p1);
                 if (file != null)
                     DuckFile.Delete(file);
             }
-            this._experienceProfile = p1;
-            this._experienceProfile.defaultTeam = Teams.Player1;
-            Profile.defaultProfileMappings[0] = this._experienceProfile;
+            _experienceProfile = p1;
+            _experienceProfile.defaultTeam = Teams.Player1;
+            Profile.defaultProfileMappings[0] = _experienceProfile;
             if (Options.legacyPreferredColor > 0)
-                this._experienceProfile.preferredColor = Options.legacyPreferredColor;
+                _experienceProfile.preferredColor = Options.legacyPreferredColor;
             byte localFlippers = Profile.CalculateLocalFlippers();
-            foreach (Profile profile in this._profiles)
+            foreach (Profile profile in _profiles)
             {
                 profile.flippers = localFlippers;
                 profile.ticketCount = Challenges.GetTicketCount(profile);
@@ -394,7 +394,7 @@ namespace DuckGame
                     profile.ticketCount = 0;
             }
             Profile.loading = false;
-            this.initialized = true;
+            initialized = true;
         }
 
         public static int CouldAutomerge()
@@ -437,7 +437,7 @@ namespace DuckGame
         public List<ProfileStatRank> GetEndOfRoundStatRankings(StatInfo stat)
         {
             List<ProfileStatRank> roundStatRankings = new List<ProfileStatRank>();
-            foreach (Profile pro in this.active)
+            foreach (Profile pro in active)
             {
                 float statCalculation = pro.endOfRoundStats.GetStatCalculation(stat);
                 bool flag = false;
@@ -467,10 +467,10 @@ namespace DuckGame
             if (p == null)
                 return false;
             if (p.linkedProfile != null)
-                return this.IsDefault(p.linkedProfile);
+                return IsDefault(p.linkedProfile);
             for (int index = 0; index < DG.MaxPlayers; ++index)
             {
-                if (this._profiles[index] == p)
+                if (_profiles[index] == p)
                     return true;
             }
             return false;
@@ -480,14 +480,14 @@ namespace DuckGame
         {
             if (p == null)
                 return false;
-            return p.linkedProfile != null ? this.IsExperience(p.linkedProfile) : p == Profiles.experienceProfile;
+            return p.linkedProfile != null ? IsExperience(p.linkedProfile) : p == Profiles.experienceProfile;
         }
 
         public bool IsDefaultName(string p)
         {
             for (int index = 0; index < DG.MaxPlayers; ++index)
             {
-                if (this._profiles[index].name == p)
+                if (_profiles[index].name == p)
                     return true;
             }
             return false;
@@ -495,24 +495,24 @@ namespace DuckGame
 
         public void Add(Profile p)
         {
-            this._profiles.Add(p);
-            this.Save(p);
+            _profiles.Add(p);
+            Save(p);
         }
 
-        public void Remove(Profile p) => this._profiles.Remove(p);
+        public void Remove(Profile p) => _profiles.Remove(p);
 
         public void Delete(Profile p)
         {
-            this._profiles.Remove(p);
-            DuckFile.Delete(this.GetFileName(p));
+            _profiles.Remove(p);
+            DuckFile.Delete(GetFileName(p));
         }
 
         public string GetFileName(Profile p)
         {
-            if (p == this.EnvironmentProfile)
+            if (p == EnvironmentProfile)
                 return null;
             if (p.linkedProfile != null)
-                return this.GetFileName(p.linkedProfile);
+                return GetFileName(p.linkedProfile);
             if (p.isNetworkProfile)
                 return null;
             if (p.fileName != null)
@@ -529,13 +529,13 @@ namespace DuckGame
 
         public void Save(Profile p, string pPrepend = null)
         {
-            if (NetworkDebugger.enabled || p == this.EnvironmentProfile)
+            if (NetworkDebugger.enabled || p == EnvironmentProfile)
                 return;
             if (p.linkedProfile != null)
             {
                 if (MonoMain.logFileOperations)
                     DevConsole.Log(DCSection.General, "Profile.Save() saving linkedProfile");
-                this.Save(p.linkedProfile, pPrepend);
+                Save(p.linkedProfile, pPrepend);
             }
             else
             {

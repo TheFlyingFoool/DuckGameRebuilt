@@ -17,36 +17,36 @@ namespace DuckGame
         public PointBoard(Thing rock, Team t)
           : base(rock.x + 24f, rock.y)
         {
-            this._scoreCard = new Sprite("rockThrow/scoreCard");
-            this._font = new BitmapFont("biosFont", 8);
-            this._team = t;
-            this._scoreCard.CenterOrigin();
-            this.collisionOffset = new Vec2(-8f, -6f);
-            this.collisionSize = new Vec2(16f, 13f);
-            this.center = new Vec2(this._scoreCard.w / 2, this._scoreCard.h / 2);
-            this._stick = rock;
-            this.depth = -0.1f;
+            _scoreCard = new Sprite("rockThrow/scoreCard");
+            _font = new BitmapFont("biosFont", 8);
+            _team = t;
+            _scoreCard.CenterOrigin();
+            collisionOffset = new Vec2(-8f, -6f);
+            collisionSize = new Vec2(16f, 13f);
+            center = new Vec2(_scoreCard.w / 2, _scoreCard.h / 2);
+            _stick = rock;
+            depth = -0.1f;
         }
 
         public override void Update()
         {
-            this.x = this._stick.x + 24f;
-            this.y = this._stick.y;
+            x = _stick.x + 24f;
+            y = _stick.y;
         }
 
         public override void Draw()
         {
-            this._scoreCard.depth = this.depth;
-            Graphics.Draw(this._scoreCard, this.x, this.y);
-            if (this._team == null)
+            _scoreCard.depth = depth;
+            Graphics.Draw(_scoreCard, x, y);
+            if (_team == null)
             {
                 string text = "X";
-                this._font.Draw(text, this.x - this._font.GetWidth(text) / 2f, this.y - 2f, Color.DarkSlateGray, this._scoreCard.depth + 1);
+                _font.Draw(text, x - _font.GetWidth(text) / 2f, y - 2f, Color.DarkSlateGray, _scoreCard.depth + 1);
             }
             else
             {
                 string text = Change.ToString(_team.score);
-                this._font.Draw(text, this.x - this._font.GetWidth(text) / 2f, this.y - 2f, Color.DarkSlateGray, this._scoreCard.depth + 1);
+                _font.Draw(text, x - _font.GetWidth(text) / 2f, y - 2f, Color.DarkSlateGray, _scoreCard.depth + 1);
             }
         }
     }

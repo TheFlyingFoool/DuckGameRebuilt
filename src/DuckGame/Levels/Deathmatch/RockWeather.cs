@@ -532,45 +532,45 @@ namespace DuckGame
             {
                 case Weather.Sunny:
                     num1 = 1f / timeOfDayColorMultMap.Count;
-                    index = (int)(_timeOfDay * this.timeOfDayColorMultMap.Count);
-                    if (index >= this.timeOfDayColorMultMap.Count)
-                        index = this.timeOfDayColorMultMap.Count - 1;
-                    rockWeatherState1 = this.timeOfDayColorMultMap[index];
-                    rockWeatherState2 = index + 1 <= this.timeOfDayColorMultMap.Count - 1 ? this.timeOfDayColorMultMap[index + 1] : this.timeOfDayColorMultMap[0];
+                    index = (int)(_timeOfDay * timeOfDayColorMultMap.Count);
+                    if (index >= timeOfDayColorMultMap.Count)
+                        index = timeOfDayColorMultMap.Count - 1;
+                    rockWeatherState1 = timeOfDayColorMultMap[index];
+                    rockWeatherState2 = index + 1 <= timeOfDayColorMultMap.Count - 1 ? timeOfDayColorMultMap[index + 1] : timeOfDayColorMultMap[0];
                     break;
                 case Weather.Snowing:
                     num1 = 1f / timeOfDayColorMultMapWinter.Count;
-                    index = (int)(_timeOfDay * this.timeOfDayColorMultMapWinter.Count);
-                    if (index >= this.timeOfDayColorMultMapWinter.Count)
-                        index = this.timeOfDayColorMultMapWinter.Count - 1;
-                    rockWeatherState1 = this.timeOfDayColorMultMapWinter[index];
-                    rockWeatherState2 = index + 1 <= this.timeOfDayColorMultMapWinter.Count - 1 ? this.timeOfDayColorMultMapWinter[index + 1] : this.timeOfDayColorMultMapWinter[0];
+                    index = (int)(_timeOfDay * timeOfDayColorMultMapWinter.Count);
+                    if (index >= timeOfDayColorMultMapWinter.Count)
+                        index = timeOfDayColorMultMapWinter.Count - 1;
+                    rockWeatherState1 = timeOfDayColorMultMapWinter[index];
+                    rockWeatherState2 = index + 1 <= timeOfDayColorMultMapWinter.Count - 1 ? timeOfDayColorMultMapWinter[index + 1] : timeOfDayColorMultMapWinter[0];
                     break;
                 case Weather.Raining:
                     num1 = 1f / timeOfDayColorMultMapRaining.Count;
-                    index = (int)(_timeOfDay * this.timeOfDayColorMultMapRaining.Count);
-                    if (index >= this.timeOfDayColorMultMapRaining.Count)
-                        index = this.timeOfDayColorMultMapRaining.Count - 1;
-                    rockWeatherState1 = this.timeOfDayColorMultMapRaining[index];
-                    rockWeatherState2 = index + 1 <= this.timeOfDayColorMultMapRaining.Count - 1 ? this.timeOfDayColorMultMapRaining[index + 1] : this.timeOfDayColorMultMapRaining[0];
+                    index = (int)(_timeOfDay * timeOfDayColorMultMapRaining.Count);
+                    if (index >= timeOfDayColorMultMapRaining.Count)
+                        index = timeOfDayColorMultMapRaining.Count - 1;
+                    rockWeatherState1 = timeOfDayColorMultMapRaining[index];
+                    rockWeatherState2 = index + 1 <= timeOfDayColorMultMapRaining.Count - 1 ? timeOfDayColorMultMapRaining[index + 1] : timeOfDayColorMultMapRaining[0];
                     break;
             }
             float num2 = Maths.NormalizeSection(RockWeather._timeOfDay, num1 * index, num1 * (index + 1));
             RockWeatherState weatherState = new RockWeatherState();
-            if (this._lastAppliedState == null)
-                this._lastAppliedState = rockWeatherState1.Copy();
+            if (_lastAppliedState == null)
+                _lastAppliedState = rockWeatherState1.Copy();
             if (lerp)
             {
                 float amount = 1f / 1000f;
-                weatherState.add = Lerp.Vec3(this._lastAppliedState.add, rockWeatherState1.add + (rockWeatherState2.add - rockWeatherState1.add) * num2, amount);
-                weatherState.multiply = Lerp.Vec3(this._lastAppliedState.multiply, rockWeatherState1.multiply + (rockWeatherState2.multiply - rockWeatherState1.multiply) * num2, amount);
-                weatherState.sky = Lerp.Vec3(this._lastAppliedState.sky, rockWeatherState1.sky + (rockWeatherState2.sky - rockWeatherState1.sky) * num2, amount);
-                weatherState.lightOpacity = Lerp.Float(this._lastAppliedState.lightOpacity, rockWeatherState1.lightOpacity + (rockWeatherState2.lightOpacity - rockWeatherState1.lightOpacity) * num2, amount);
-                weatherState.sunPos = Lerp.Vec2(this._lastAppliedState.sunPos, rockWeatherState1.sunPos + (rockWeatherState2.sunPos - rockWeatherState1.sunPos) * num2, amount);
-                weatherState.sunGlow = Lerp.Float(this._lastAppliedState.sunGlow, rockWeatherState1.sunGlow + (rockWeatherState2.sunGlow - rockWeatherState1.sunGlow) * num2, amount);
-                weatherState.sunOpacity = Lerp.Float(this._lastAppliedState.sunOpacity, rockWeatherState1.sunOpacity + (rockWeatherState2.sunOpacity - rockWeatherState1.sunOpacity) * num2, amount);
-                weatherState.rainbowLight = Lerp.Float(this._lastAppliedState.rainbowLight, rockWeatherState1.rainbowLight + (rockWeatherState2.rainbowLight - rockWeatherState1.rainbowLight) * num2, amount);
-                weatherState.rainbowLight2 = Lerp.Float(this._lastAppliedState.rainbowLight2, rockWeatherState1.rainbowLight2 + (rockWeatherState2.rainbowLight2 - rockWeatherState1.rainbowLight2) * num2, amount);
+                weatherState.add = Lerp.Vec3(_lastAppliedState.add, rockWeatherState1.add + (rockWeatherState2.add - rockWeatherState1.add) * num2, amount);
+                weatherState.multiply = Lerp.Vec3(_lastAppliedState.multiply, rockWeatherState1.multiply + (rockWeatherState2.multiply - rockWeatherState1.multiply) * num2, amount);
+                weatherState.sky = Lerp.Vec3(_lastAppliedState.sky, rockWeatherState1.sky + (rockWeatherState2.sky - rockWeatherState1.sky) * num2, amount);
+                weatherState.lightOpacity = Lerp.Float(_lastAppliedState.lightOpacity, rockWeatherState1.lightOpacity + (rockWeatherState2.lightOpacity - rockWeatherState1.lightOpacity) * num2, amount);
+                weatherState.sunPos = Lerp.Vec2(_lastAppliedState.sunPos, rockWeatherState1.sunPos + (rockWeatherState2.sunPos - rockWeatherState1.sunPos) * num2, amount);
+                weatherState.sunGlow = Lerp.Float(_lastAppliedState.sunGlow, rockWeatherState1.sunGlow + (rockWeatherState2.sunGlow - rockWeatherState1.sunGlow) * num2, amount);
+                weatherState.sunOpacity = Lerp.Float(_lastAppliedState.sunOpacity, rockWeatherState1.sunOpacity + (rockWeatherState2.sunOpacity - rockWeatherState1.sunOpacity) * num2, amount);
+                weatherState.rainbowLight = Lerp.Float(_lastAppliedState.rainbowLight, rockWeatherState1.rainbowLight + (rockWeatherState2.rainbowLight - rockWeatherState1.rainbowLight) * num2, amount);
+                weatherState.rainbowLight2 = Lerp.Float(_lastAppliedState.rainbowLight2, rockWeatherState1.rainbowLight2 + (rockWeatherState2.rainbowLight2 - rockWeatherState1.rainbowLight2) * num2, amount);
             }
             else
             {
@@ -584,7 +584,7 @@ namespace DuckGame
                 weatherState.rainbowLight = rockWeatherState1.rainbowLight + (rockWeatherState2.rainbowLight - rockWeatherState1.rainbowLight) * num2;
                 weatherState.rainbowLight2 = rockWeatherState1.rainbowLight2 + (rockWeatherState2.rainbowLight2 - rockWeatherState1.rainbowLight2) * num2;
             }
-            this._lastAppliedState = weatherState;
+            _lastAppliedState = weatherState;
             return weatherState;
         }
 
@@ -592,37 +592,37 @@ namespace DuckGame
         {
             Layer.Game.colorMul = state.multiply * Layer.Game.fade;
             Layer.Background.colorMul = state.multiply * Layer.Background.fade;
-            this._board.fieldMulColor = state.multiply * Layer.Game.fade;
+            _board.fieldMulColor = state.multiply * Layer.Game.fade;
             Layer.Game.colorAdd = state.add * Layer.Game.fade;
             Layer.Background.colorAdd = state.add * Layer.Background.fade;
-            this._board.fieldAddColor = state.add * Layer.Game.fade;
+            _board.fieldAddColor = state.add * Layer.Game.fade;
             Level.current.backgroundColor = new Color(state.sky.x, state.sky.y, state.sky.z) * Layer.Game.fade;
             RockWeather.lightOpacity = state.lightOpacity;
             RockWeather.sunPos = state.sunPos;
             RockWeather.sunGlow = state.sunGlow;
             RockWeather.sunOpacity = state.sunOpacity;
-            this._lastAppliedState = state;
+            _lastAppliedState = state;
         }
 
         public RockWeather(RockScoreboard board)
           : base()
         {
-            this.layer = Layer.Foreground;
-            this._board = board;
+            layer = Layer.Foreground;
+            _board = board;
             if (RockWeather._weather == Weather.Snowing)
             {
-                this._skyColor = this.skyColor;
-                this._enviroColor = this.winterColor;
+                _skyColor = skyColor;
+                _enviroColor = winterColor;
             }
             else
             {
-                this._skyColor = this.skyColor;
-                this._enviroColor = this.summerColor;
+                _skyColor = skyColor;
+                _enviroColor = summerColor;
             }
             RainParticle.splash = new SpriteMap("rainSplash", 8, 8);
         }
 
-        public void Start() => this.ApplyWeatherState(this.GetWeatherState(RockWeather._timeOfDay, false));
+        public void Start() => ApplyWeatherState(GetWeatherState(RockWeather._timeOfDay, false));
 
         public BitBuffer NetSerialize()
         {
@@ -779,17 +779,17 @@ namespace DuckGame
                 RockWeather.rainbowTime = 0f;
             if (RockWeather.neverRainbow)
                 RockWeather.rainbowFade = 0f;
-            RockWeatherState weatherState = this.GetWeatherState(RockWeather._timeOfDay);
-            this.rainbowLight = weatherState.rainbowLight * RockWeather.rainbowFade;
-            this.rainbowLight2 = weatherState.rainbowLight2 * RockWeather.rainbowFade;
-            this.ApplyWeatherState(weatherState);
+            RockWeatherState weatherState = GetWeatherState(RockWeather._timeOfDay);
+            rainbowLight = weatherState.rainbowLight * RockWeather.rainbowFade;
+            rainbowLight2 = weatherState.rainbowLight2 * RockWeather.rainbowFade;
+            ApplyWeatherState(weatherState);
             RockWeather._prevWeatherLerp = Lerp.Float(RockWeather._prevWeatherLerp, 0f, 0.05f);
             if (Network.isServer)
             {
-                this.wait += 3f / 1000f;
+                wait += 3f / 1000f;
                 if (wait > 1.0)
                 {
-                    this.wait = 0f;
+                    wait = 0f;
                     if (_weatherTime > 0.100000001490116)
                     {
                         if (snowChance > 0.0 && RockWeather._weather != Weather.Snowing && Rando.Float(1f) > 1.0 - snowChance)
@@ -840,26 +840,26 @@ namespace DuckGame
                 case Weather.Snowing:
                     while (_particleWait <= 0.0)
                     {
-                        ++this._particleWait;
+                        ++_particleWait;
                         SnowParticle snowParticle = new SnowParticle(new Vec2(Rando.Float(-100f, 400f), Rando.Float(-500f, -550f)))
                         {
                             z = Rando.Float(0f, 200f)
                         };
-                        this._particles.Add(snowParticle);
+                        _particles.Add(snowParticle);
                     }
-                    this._particleWait -= 0.5f;
+                    _particleWait -= 0.5f;
                     break;
                 case Weather.Raining:
                     while (_particleWait <= 0.0)
                     {
-                        ++this._particleWait;
+                        ++_particleWait;
                         RainParticle rainParticle = new RainParticle(new Vec2(Rando.Float(-100f, 900f), Rando.Float(-500f, -550f)))
                         {
                             z = Rando.Float(0f, 200f)
                         };
-                        this._particles.Add(rainParticle);
+                        _particles.Add(rainParticle);
                     }
-                    --this._particleWait;
+                    --_particleWait;
                     break;
                 default:
                     if (sunshowers <= 0.0)
@@ -867,7 +867,7 @@ namespace DuckGame
                     goto case Weather.Raining;
             }
             List<WeatherParticle> weatherParticleList = new List<WeatherParticle>();
-            foreach (WeatherParticle particle in this._particles)
+            foreach (WeatherParticle particle in _particles)
             {
                 particle.Update();
                 if (particle.position.y > 0.0)
@@ -891,14 +891,14 @@ namespace DuckGame
                     weatherParticleList.Add(particle);
             }
             foreach (WeatherParticle weatherParticle in weatherParticleList)
-                this._particles.Remove(weatherParticle);
+                _particles.Remove(weatherParticle);
         }
 
         public override void Draw()
         {
             if (RockScoreboard.drawingLighting)
                 return;
-            foreach (WeatherParticle particle in this._particles)
+            foreach (WeatherParticle particle in _particles)
                 particle.Draw();
         }
     }

@@ -129,7 +129,7 @@ namespace DuckGame
             }
         }
 
-        public void Initialize() => this.hasIngameMusic = DuckFile.GetFiles(this.contentPath + "/Audio/Music/InGame").Length != 0;
+        public void Initialize() => hasIngameMusic = DuckFile.GetFiles(contentPath + "/Audio/Music/InGame").Length != 0;
 
         public static T LoadAsset<T>(string pName, bool pMusic = false)
         {
@@ -149,41 +149,41 @@ namespace DuckGame
                 return default(T);
             if (typeof(T) == typeof(string[]))
             {
-                if (System.IO.File.Exists(this.contentPath + "/" + name))
-                    return (T)(object)System.IO.File.ReadAllLines(this.contentPath + "/" + name);
+                if (System.IO.File.Exists(contentPath + "/" + name))
+                    return (T)(object)System.IO.File.ReadAllLines(contentPath + "/" + name);
             }
             else
             {
                 if (typeof(T) == typeof(Texture2D) || typeof(T) == typeof(Tex2D))
                 {
                     Texture2D texture2D1;
-                    if (this._textures.TryGetValue(name, out texture2D1))
+                    if (_textures.TryGetValue(name, out texture2D1))
                         return (T)(object)texture2D1;
-                    Texture2D texture2D2 = ContentPack.LoadTexture2D(this.contentPath + "/" + name, this._modConfig == null || this._modConfig.processPinkTransparency);
-                    this._textures[name] = texture2D2;
+                    Texture2D texture2D2 = ContentPack.LoadTexture2D(contentPath + "/" + name, _modConfig == null || _modConfig.processPinkTransparency);
+                    _textures[name] = texture2D2;
                     return (T)(object)texture2D2;
                 }
                 if (typeof(T) == typeof(SoundEffect))
                 {
                     SoundEffect soundEffect1;
-                    if (!ReskinPack._loadingMusic && this._sounds.TryGetValue(name, out soundEffect1))
+                    if (!ReskinPack._loadingMusic && _sounds.TryGetValue(name, out soundEffect1))
                         return (T)(object)soundEffect1;
-                    if (ReskinPack._loadingMusic && this._currentMusic != null)
-                        this._currentMusic.Dispose();
-                    SoundEffect soundEffect2 = this.LoadSoundEffect(this.contentPath + "/" + name);
+                    if (ReskinPack._loadingMusic && _currentMusic != null)
+                        _currentMusic.Dispose();
+                    SoundEffect soundEffect2 = LoadSoundEffect(contentPath + "/" + name);
                     if (ReskinPack._loadingMusic)
-                        this._currentMusic = soundEffect2;
+                        _currentMusic = soundEffect2;
                     else
-                        this._sounds[name] = soundEffect2;
+                        _sounds[name] = soundEffect2;
                     return (T)(object)soundEffect2;
                 }
                 if (typeof(T) == typeof(Song))
                 {
                     Song song1;
-                    if (this._songs.TryGetValue(name, out song1))
+                    if (_songs.TryGetValue(name, out song1))
                         return (T)(object)song1;
-                    Song song2 = this.LoadSong(this.contentPath + "/" + name);
-                    this._songs[name] = song2;
+                    Song song2 = LoadSong(contentPath + "/" + name);
+                    _songs[name] = song2;
                     return (T)(object)song2;
                 }
             }

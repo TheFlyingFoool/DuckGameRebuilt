@@ -276,7 +276,7 @@ namespace DuckGame
         {
             get
             {
-                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in this._mappings)
+                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in _mappings)
                 {
                     if (pair.Key is GenericController)
                     {
@@ -289,32 +289,32 @@ namespace DuckGame
 
         protected virtual void UpdateStickPress()
         {
-            this.StickPress(PadButton.DPadLeft, this.leftStick.x < -0.6f);
-            this.StickPress(PadButton.DPadRight, this.leftStick.x > 0.6f);
-            this.StickPress(PadButton.DPadUp, this.leftStick.y > 0.6f);
-            this.StickPress(PadButton.DPadDown, this.leftStick.y < -0.6f);
+            StickPress(PadButton.DPadLeft, leftStick.x < -0.6f);
+            StickPress(PadButton.DPadRight, leftStick.x > 0.6f);
+            StickPress(PadButton.DPadUp, leftStick.y > 0.6f);
+            StickPress(PadButton.DPadDown, leftStick.y < -0.6f);
         }
 
         protected void StickPress(PadButton b, bool press)
         {
             if (press)
             {
-                if (this._leftStickStates[b] == InputState.None)
+                if (_leftStickStates[b] == InputState.None)
                 {
-                    this._leftStickStates[b] = InputState.Pressed;
+                    _leftStickStates[b] = InputState.Pressed;
                     return;
                 }
-                this._leftStickStates[b] = InputState.Down;
+                _leftStickStates[b] = InputState.Down;
                 return;
             }
             else
             {
-                if (this._leftStickStates[b] == InputState.Down || this._leftStickStates[PadButton.DPadLeft] == InputState.Pressed)
+                if (_leftStickStates[b] == InputState.Down || _leftStickStates[PadButton.DPadLeft] == InputState.Pressed)
                 {
-                    this._leftStickStates[b] = InputState.Released;
+                    _leftStickStates[b] = InputState.Released;
                     return;
                 }
-                this._leftStickStates[b] = InputState.None;
+                _leftStickStates[b] = InputState.None;
                 return;
             }
         }
@@ -347,12 +347,12 @@ namespace DuckGame
             [CompilerGenerated]
             get
             {
-                return this.kBackingField;
+                return kBackingField;
             }
             [CompilerGenerated]
             set
             {
-                this.kBackingField = value;
+                kBackingField = value;
             }
         }
 
@@ -360,43 +360,43 @@ namespace DuckGame
         {
             get
             {
-                if (this.lastActiveOverride != null)
+                if (lastActiveOverride != null)
                 {
-                    return this.lastActiveOverride;
+                    return lastActiveOverride;
                 }
                 if (!MonoMain.started)
                 {
                     return new InputDevice(0);
                 }
-                if (this._lastActiveDevice == null)
+                if (_lastActiveDevice == null)
                 {
-                    foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in this._mappings)
+                    foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in _mappings)
                     {
-                        if (this._lastActiveDevice == null && pair.Key is Keyboard)
+                        if (_lastActiveDevice == null && pair.Key is Keyboard)
                         {
-                            this._lastActiveDevice = pair.Key;
+                            _lastActiveDevice = pair.Key;
                         }
                         else if (pair.Key is GenericController && (pair.Key as GenericController).device is XInputPad)
                         {
-                            this._lastActiveDevice = pair.Key;
+                            _lastActiveDevice = pair.Key;
                         }
                     }
-                    if (this._lastActiveDevice == null)
+                    if (_lastActiveDevice == null)
                     {
-                        return this._defaultLastActiveDevice;
+                        return _defaultLastActiveDevice;
                     }
                 }
-                return this._lastActiveDevice;
+                return _lastActiveDevice;
             }
             set
             {
-                this._lastActiveDevice = value;
+                _lastActiveDevice = value;
             }
         }
 
         public bool HasAnyConnectedDevice()
         {
-            using (Dictionary<InputDevice, MultiMap<string, int>>.KeyCollection.Enumerator enumerator = this._mappings.Keys.GetEnumerator())
+            using (Dictionary<InputDevice, MultiMap<string, int>>.KeyCollection.Enumerator enumerator = _mappings.Keys.GetEnumerator())
             {
                 while (enumerator.MoveNext())
                 {
@@ -413,22 +413,22 @@ namespace DuckGame
         {
             get
             {
-                return this._name;
+                return _name;
             }
             set
             {
-                this._name = value;
+                _name = value;
             }
         }
 
         public void ClearMappings()
         {
-            this._mappings.Clear();
+            _mappings.Clear();
         }
 
         public MultiMap<string, int> GetMappings(Type t)
         {
-            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in this._mappings)
+            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in _mappings)
             {
                 if (pair.Key.GetType() == t)
                 {
@@ -440,7 +440,7 @@ namespace DuckGame
 
         public InputDevice GetDevice(Type t)
         {
-            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in this._mappings)
+            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in _mappings)
             {
                 if (pair.Key.GetType() == t)
                 {
@@ -452,7 +452,7 @@ namespace DuckGame
 
         public int GetMapping(Type t, string trigger)
         {
-            MultiMap<string, int> map = this.GetMappings(t);
+            MultiMap<string, int> map = GetMappings(t);
             if (map == null)
             {
                 return -1;
@@ -468,12 +468,12 @@ namespace DuckGame
 
         public string GetMappingString(Type t, string trigger)
         {
-            int mapping = this.GetMapping(t, trigger);
+            int mapping = GetMapping(t, trigger);
             if (mapping == -1)
             {
                 return "";
             }
-            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in this._mappings)
+            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in _mappings)
             {
                 if (pair.Key.GetType() == t)
                 {
@@ -494,11 +494,11 @@ namespace DuckGame
 
         public virtual Sprite GetTriggerImage(string trigger)
         {
-            InputDevice last_device = this.lastActiveDevice;
+            InputDevice last_device = lastActiveDevice;
             int mapping = 9999;
             if (trigger != "DPAD" && trigger != "WASD")
             {
-                mapping = this.GetMapping(last_device.GetType(), trigger);
+                mapping = GetMapping(last_device.GetType(), trigger);
             }
             else if (trigger == "WASD")
             {
@@ -506,9 +506,9 @@ namespace DuckGame
             }
             if (mapping == -1)
             {
-                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in this._mappings)
+                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in _mappings)
                 {
-                    mapping = this.GetMapping(pair.Key.GetType(), trigger);
+                    mapping = GetMapping(pair.Key.GetType(), trigger);
                     if (mapping != -1)
                     {
                         return pair.Key.DoGetMapImage(mapping, false);
@@ -521,11 +521,11 @@ namespace DuckGame
 
         public InputProfile(string profile = "")
         {
-            this._name = profile;
-            this._leftStickStates[PadButton.DPadLeft] = InputState.None;
-            this._leftStickStates[PadButton.DPadRight] = InputState.None;
-            this._leftStickStates[PadButton.DPadUp] = InputState.None;
-            this._leftStickStates[PadButton.DPadDown] = InputState.None;
+            _name = profile;
+            _leftStickStates[PadButton.DPadLeft] = InputState.None;
+            _leftStickStates[PadButton.DPadRight] = InputState.None;
+            _leftStickStates[PadButton.DPadUp] = InputState.None;
+            _leftStickStates[PadButton.DPadDown] = InputState.None;
         }
 
         public static InputProfile GetVirtualInput(int index)
@@ -537,61 +537,61 @@ namespace DuckGame
         {
             get
             {
-                if (!this._virtualInputInitialized)
+                if (!_virtualInputInitialized)
                 {
-                    foreach (KeyValuePair<InputDevice, MultiMap<string, int>> kvp in this._mappings)
+                    foreach (KeyValuePair<InputDevice, MultiMap<string, int>> kvp in _mappings)
                     {
                         if (kvp.Key is VirtualInput)
                         {
-                            this._virtualInput = (kvp.Key as VirtualInput);
+                            _virtualInput = (kvp.Key as VirtualInput);
                             break;
                         }
                     }
-                    this._virtualInputInitialized = true;
+                    _virtualInputInitialized = true;
                 }
-                return this._virtualInput;
+                return _virtualInput;
             }
             set
             {
-                this._virtualInput = value;
+                _virtualInput = value;
             }
         }
 
         public virtual void Map(InputDevice device, string trigger, int mapping, bool clearExisting = false)
         {
-            if (!this._mappings.ContainsKey(device))
+            if (!_mappings.ContainsKey(device))
             {
-                this._mappings[device] = new MultiMap<string, int>();
+                _mappings[device] = new MultiMap<string, int>();
             }
-            if (clearExisting && this._mappings[device].ContainsKey(trigger))
+            if (clearExisting && _mappings[device].ContainsKey(trigger))
             {
-                this._mappings[device][trigger].Clear();
+                _mappings[device][trigger].Clear();
             }
-            this._mappings[device].Add(trigger, mapping);
+            _mappings[device].Add(trigger, mapping);
         }
 
         public MultiMap<string, int> GetControllerMap<T>() where T : InputDevice
         {
             MultiMap<string, int> controls = null;
             InputDevice d = Input.GetDevice<T>(0);
-            if (d != null && this._mappings.ContainsKey(d))
+            if (d != null && _mappings.ContainsKey(d))
             {
-                controls = this._mappings[d];
+                controls = _mappings[d];
             }
             d = Input.GetDevice<T>(1);
-            if (d != null && this._mappings.ContainsKey(d))
+            if (d != null && _mappings.ContainsKey(d))
             {
-                controls = this._mappings[d];
+                controls = _mappings[d];
             }
             d = Input.GetDevice<T>(2);
-            if (d != null && this._mappings.ContainsKey(d))
+            if (d != null && _mappings.ContainsKey(d))
             {
-                controls = this._mappings[d];
+                controls = _mappings[d];
             }
             d = Input.GetDevice<T>(3);
-            if (d != null && this._mappings.ContainsKey(d))
+            if (d != null && _mappings.ContainsKey(d))
             {
-                controls = this._mappings[d];
+                controls = _mappings[d];
             }
             return controls;
         }
@@ -599,28 +599,28 @@ namespace DuckGame
         public void SetGenericControllerMapIndex<T>(int i, MultiMap<string, int> controls) where T : InputDevice
         {
             InputDevice d = Input.GetDevice<T>(0);
-            if (d != null && this._mappings.ContainsKey(d))
+            if (d != null && _mappings.ContainsKey(d))
             {
-                this._mappings.Remove(d);
+                _mappings.Remove(d);
             }
             d = Input.GetDevice<T>(1);
-            if (d != null && this._mappings.ContainsKey(d))
+            if (d != null && _mappings.ContainsKey(d))
             {
-                this._mappings.Remove(d);
+                _mappings.Remove(d);
             }
             d = Input.GetDevice<T>(2);
-            if (d != null && this._mappings.ContainsKey(d))
+            if (d != null && _mappings.ContainsKey(d))
             {
-                this._mappings.Remove(d);
+                _mappings.Remove(d);
             }
             d = Input.GetDevice<T>(3);
-            if (d != null && this._mappings.ContainsKey(d))
+            if (d != null && _mappings.ContainsKey(d))
             {
-                this._mappings.Remove(d);
+                _mappings.Remove(d);
             }
             if (controls != null)
             {
-                this._mappings[Input.GetDevice<T>(i)] = controls;
+                _mappings[Input.GetDevice<T>(i)] = controls;
             }
         }
 
@@ -628,13 +628,13 @@ namespace DuckGame
         {
             InputProfile clone = new InputProfile("")
             {
-                _name = this.name,
-                _state = this._state,
-                _prevState = this._prevState,
-                dindex = this.dindex,
-                swapBack = this.swapBack
+                _name = name,
+                _state = _state,
+                _prevState = _prevState,
+                dindex = dindex,
+                swapBack = swapBack
             };
-            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> kvp in this._mappings)
+            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> kvp in _mappings)
             {
                 clone._mappings[kvp.Key] = new MultiMap<string, int>();
                 foreach (KeyValuePair<string, List<int>> pair in kvp.Value)
@@ -656,12 +656,12 @@ namespace DuckGame
 
         public bool JoinGamePressed()
         {
-            return this.Pressed("START", false);
+            return Pressed("START", false);
         }
 
         public virtual bool Pressed(string trigger, bool any = false)
         {
-            if (Input.ignoreInput && this._virtualInput == null)
+            if (Input.ignoreInput && _virtualInput == null)
             {
                 return false;
             }
@@ -669,21 +669,21 @@ namespace DuckGame
             {
                 any = true;
             }
-            if (this._repeatList.Contains(trigger))
+            if (_repeatList.Contains(trigger))
             {
                 return true;
             }
-            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
+            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in _mappings)
             {
                 InputDevice mapped_device = map.Key;
-                if ((!(mapped_device is Keyboard) || !InputProfile.ignoreKeyboard) && (this._virtualInput == null || mapped_device is VirtualInput))
+                if ((!(mapped_device is Keyboard) || !InputProfile.ignoreKeyboard) && (_virtualInput == null || mapped_device is VirtualInput))
                 {
                     List<int> vals;
                     if (any)
                     {
                         if (mapped_device.MapPressed(-1, true))
                         {
-                            this.lastPressFrame = Graphics.frame;
+                            lastPressFrame = Graphics.frame;
                             return true;
                         }
                     }
@@ -691,13 +691,13 @@ namespace DuckGame
                     {
                         foreach (int val in vals)
                         {
-                            if ((mapped_device is AnalogGamePad || mapped_device is GenericController) && this._leftStickStates.ContainsKey((PadButton)val) && this._leftStickStates[(PadButton)val] == InputState.Pressed)
+                            if ((mapped_device is AnalogGamePad || mapped_device is GenericController) && _leftStickStates.ContainsKey((PadButton)val) && _leftStickStates[(PadButton)val] == InputState.Pressed)
                             {
                                 return true;
                             }
                             if (mapped_device.MapPressed(val, any))
                             {
-                                this.lastPressFrame = Graphics.frame;
+                                lastPressFrame = Graphics.frame;
                                 return true;
                             }
                         }
@@ -709,26 +709,26 @@ namespace DuckGame
 
         public virtual bool Released(string trigger)
         {
-            if (Input.ignoreInput && this._virtualInput == null)
+            if (Input.ignoreInput && _virtualInput == null)
             {
                 return false;
             }
-            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
+            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in _mappings)
             {
                 InputDevice mapped_device = map.Key;
                 List<int> vals;
-                if ((this._virtualInput == null || mapped_device is VirtualInput) && map.Value.TryGetValue(trigger, out vals))
+                if ((_virtualInput == null || mapped_device is VirtualInput) && map.Value.TryGetValue(trigger, out vals))
                 {
                     foreach (int val in vals)
                     {
-                        if ((mapped_device is AnalogGamePad || mapped_device is GenericController) && this._leftStickStates.ContainsKey((PadButton)val) && this._leftStickStates[(PadButton)val] == InputState.Released)
+                        if ((mapped_device is AnalogGamePad || mapped_device is GenericController) && _leftStickStates.ContainsKey((PadButton)val) && _leftStickStates[(PadButton)val] == InputState.Released)
                         {
-                            this.lastPressFrame = Graphics.frame;
+                            lastPressFrame = Graphics.frame;
                             return true;
                         }
                         if (mapped_device.MapReleased(val))
                         {
-                            this.lastPressFrame = Graphics.frame;
+                            lastPressFrame = Graphics.frame;
                             return true;
                         }
                     }
@@ -739,31 +739,31 @@ namespace DuckGame
 
         public virtual bool Down(string trigger)
         {
-            if (Input.ignoreInput && this._virtualInput == null)
+            if (Input.ignoreInput && _virtualInput == null)
             {
                 return false;
             }
-            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
+            foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in _mappings)
             {
                 InputDevice mapped_device = map.Key;
                 List<int> vals;
-                if ((this._virtualInput == null || mapped_device is VirtualInput) && map.Value.TryGetValue(trigger, out vals))
+                if ((_virtualInput == null || mapped_device is VirtualInput) && map.Value.TryGetValue(trigger, out vals))
                 {
                     foreach (int val in vals)
                     {
-                        if ((mapped_device is AnalogGamePad || mapped_device is GenericController) && this._leftStickStates.ContainsKey((PadButton)val) && (this._leftStickStates[(PadButton)val] == InputState.Down || this._leftStickStates[(PadButton)val] == InputState.Pressed))
+                        if ((mapped_device is AnalogGamePad || mapped_device is GenericController) && _leftStickStates.ContainsKey((PadButton)val) && (_leftStickStates[(PadButton)val] == InputState.Down || _leftStickStates[(PadButton)val] == InputState.Pressed))
                         {
-                            this.lastPressFrame = Graphics.frame;
+                            lastPressFrame = Graphics.frame;
                             return true;
                         }
                         if (mapped_device.MapDown(val, false))
                         {
                             if ((!(mapped_device is Keyboard) || !DuckNetwork.core.enteringText) && !(mapped_device is VirtualInput))
                             {
-                                this._lastActiveDevice = map.Key;
+                                _lastActiveDevice = map.Key;
                                 Input.lastActiveProfile = this;
                             }
-                            this.lastPressFrame = Graphics.frame;
+                            lastPressFrame = Graphics.frame;
                             return true;
                         }
                     }
@@ -776,17 +776,17 @@ namespace DuckGame
         {
             get
             {
-                if (this._virtualInput != null)
+                if (_virtualInput != null)
                 {
-                    return this._virtualInput.leftTrigger;
+                    return _virtualInput.leftTrigger;
                 }
                 if (Input.ignoreInput)
                 {
                     return 0f;
                 }
-                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
+                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in _mappings)
                 {
-                    if (this._virtualInput == null || map.Key is VirtualInput)
+                    if (_virtualInput == null || map.Key is VirtualInput)
                     {
                         AnalogGamePad pad = map.Key as AnalogGamePad;
                         if (pad == null && map.Key is GenericController)
@@ -820,17 +820,17 @@ namespace DuckGame
         {
             get
             {
-                if (this._virtualInput != null)
+                if (_virtualInput != null)
                 {
-                    return this._virtualInput.rightTrigger;
+                    return _virtualInput.rightTrigger;
                 }
                 if (Input.ignoreInput)
                 {
                     return 0f;
                 }
-                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
+                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in _mappings)
                 {
-                    if (this._virtualInput == null || map.Key is VirtualInput)
+                    if (_virtualInput == null || map.Key is VirtualInput)
                     {
                         AnalogGamePad pad = map.Key as AnalogGamePad;
                         if (pad == null && map.Key is GenericController)
@@ -864,17 +864,17 @@ namespace DuckGame
         {
             get
             {
-                if (this._virtualInput != null)
+                if (_virtualInput != null)
                 {
-                    return this._virtualInput.leftStick;
+                    return _virtualInput.leftStick;
                 }
                 if (Input.ignoreInput)
                 {
                     return Vec2.Zero;
                 }
-                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
+                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in _mappings)
                 {
-                    if (this._virtualInput == null || map.Key is VirtualInput)
+                    if (_virtualInput == null || map.Key is VirtualInput)
                     {
                         AnalogGamePad pad = map.Key as AnalogGamePad;
                         if (pad == null && map.Key is GenericController)
@@ -908,23 +908,23 @@ namespace DuckGame
         {
             get
             {
-                if (this._virtualInput != null)
+                if (_virtualInput != null)
                 {
-                    return this._virtualInput.rightStick;
+                    return _virtualInput.rightStick;
                 }
                 if (Input.ignoreInput)
                 {
                     return Vec2.Zero;
                 }
-                if (Mouse.left == InputState.Pressed || this._mouseAnchor == Vec2.Zero)
+                if (Mouse.left == InputState.Pressed || _mouseAnchor == Vec2.Zero)
                 {
-                    this._mouseAnchor = Mouse.position;
+                    _mouseAnchor = Mouse.position;
                 }
                 else
                 {
                     if (Mouse.left == InputState.Down)
                     {
-                        Vec2 dif = (Mouse.position - this._mouseAnchor) / 16f;
+                        Vec2 dif = (Mouse.position - _mouseAnchor) / 16f;
                         dif.y *= -1f;
                         float len = dif.length;
                         if (len > 1f)
@@ -935,12 +935,12 @@ namespace DuckGame
                     }
                     if (Mouse.left == InputState.None)
                     {
-                        this._mouseAnchor = Vec2.Zero;
+                        _mouseAnchor = Vec2.Zero;
                     }
                 }
-                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
+                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in _mappings)
                 {
-                    if (this._virtualInput == null || map.Key is VirtualInput)
+                    if (_virtualInput == null || map.Key is VirtualInput)
                     {
                         AnalogGamePad pad = map.Key as AnalogGamePad;
                         if (pad == null && map.Key is GenericController)
@@ -978,9 +978,9 @@ namespace DuckGame
                 {
                     return false;
                 }
-                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
+                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in _mappings)
                 {
-                    if (this._virtualInput == null || map.Key is VirtualInput)
+                    if (_virtualInput == null || map.Key is VirtualInput)
                     {
                         AnalogGamePad pad = map.Key as AnalogGamePad;
                         if (pad == null && map.Key is GenericController)
@@ -1005,9 +1005,9 @@ namespace DuckGame
                 {
                     return 0f;
                 }
-                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in this._mappings)
+                foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in _mappings)
                 {
-                    if (this._virtualInput == null || map.Key is VirtualInput)
+                    if (_virtualInput == null || map.Key is VirtualInput)
                     {
                         AnalogGamePad pad = map.Key as AnalogGamePad;
                         if (pad == null && map.Key is GenericController)
@@ -1028,7 +1028,7 @@ namespace DuckGame
         {
             get
             {
-                return this._state;
+                return _state;
             }
         }
 
@@ -1036,7 +1036,7 @@ namespace DuckGame
         {
             get
             {
-                return this._prevState;
+                return _prevState;
             }
         }
 
@@ -1054,79 +1054,79 @@ namespace DuckGame
 
         public void UpdateTriggerStates()
         {
-            this._repeatList.Clear();
+            _repeatList.Clear();
             if (InputProfile._repeat)
             {
-                if (this.Pressed("MENULEFT", false) || this.Pressed("MENURIGHT", false) || this.Pressed("MENUUP", false) || this.Pressed("MENUDOWN", false))
+                if (Pressed("MENULEFT", false) || Pressed("MENURIGHT", false) || Pressed("MENUUP", false) || Pressed("MENUDOWN", false))
                 {
-                    if (!this._repeating)
+                    if (!_repeating)
                     {
-                        this._repeatTime = 1.8f;
-                        this._repeating = true;
+                        _repeatTime = 1.8f;
+                        _repeating = true;
                     }
                     else
                     {
-                        this._repeatTime = 0.5f;
+                        _repeatTime = 0.5f;
                     }
                 }
-                if (this._repeatTime > 0f)
+                if (_repeatTime > 0f)
                 {
-                    this._repeatTime -= 0.1f;
+                    _repeatTime -= 0.1f;
                     bool down = false;
-                    if (this.Down("MENULEFT"))
+                    if (Down("MENULEFT"))
                     {
-                        if (this._repeatTime <= 0f)
+                        if (_repeatTime <= 0f)
                         {
-                            this._repeatList.Add("MENULEFT");
+                            _repeatList.Add("MENULEFT");
                         }
                         down = true;
                     }
-                    if (this.Down("MENURIGHT"))
+                    if (Down("MENURIGHT"))
                     {
-                        if (this._repeatTime <= 0f)
+                        if (_repeatTime <= 0f)
                         {
-                            this._repeatList.Add("MENURIGHT");
+                            _repeatList.Add("MENURIGHT");
                         }
                         down = true;
                     }
-                    if (this.Down("MENUUP"))
+                    if (Down("MENUUP"))
                     {
-                        if (this._repeatTime <= 0f)
+                        if (_repeatTime <= 0f)
                         {
-                            this._repeatList.Add("MENUUP");
+                            _repeatList.Add("MENUUP");
                         }
                         down = true;
                     }
-                    if (this.Down("MENUDOWN"))
+                    if (Down("MENUDOWN"))
                     {
-                        if (this._repeatTime <= 0f)
+                        if (_repeatTime <= 0f)
                         {
-                            this._repeatList.Add("MENUDOWN");
+                            _repeatList.Add("MENUDOWN");
                         }
                         down = true;
                     }
-                    if (this._repeatTime <= 0f && down)
+                    if (_repeatTime <= 0f && down)
                     {
-                        this._repeatTime = 0.3f;
+                        _repeatTime = 0.3f;
                     }
                     if (!down)
                     {
-                        this._repeating = false;
-                        this._repeatTime = 0f;
+                        _repeating = false;
+                        _repeatTime = 0f;
                     }
                 }
                 else
                 {
-                    this._repeatTime = 0f;
+                    _repeatTime = 0f;
                 }
             }
-            this.UpdateStickPress();
-            this._prevState = this._state;
-            this._state = 0;
+            UpdateStickPress();
+            _prevState = _state;
+            _state = 0;
             foreach (string t in Network.synchronizedTriggers)
             {
-                this._state |= (this.Down(t) ? (ushort)1 : (ushort)0);
-                this._state = (ushort)(this._state << 1);
+                _state |= (Down(t) ? (ushort)1 : (ushort)0);
+                _state = (ushort)(_state << 1);
             }
         }
 

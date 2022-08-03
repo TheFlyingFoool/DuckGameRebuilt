@@ -16,29 +16,29 @@ namespace DuckGame
         public Ember(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.vSpeed = -(0.2f + Rando.Float(0.7f));
-            this.hSpeed = Rando.Float(0.4f) - 0.2f;
-            this._col = Rando.Float(1f) >= 0.4f ? (Rando.Float(1f) >= 0.4f ? Color.Gray : Color.Orange) : Color.Yellow;
+            vSpeed = -(0.2f + Rando.Float(0.7f));
+            hSpeed = Rando.Float(0.4f) - 0.2f;
+            _col = Rando.Float(1f) >= 0.4f ? (Rando.Float(1f) >= 0.4f ? Color.Gray : Color.Orange) : Color.Yellow;
             if (Rando.Float(1f) < 0.2f)
-                this._initialLife += Rando.Float(10f);
-            this.alpha = 0.7f;
+                _initialLife += Rando.Float(10f);
+            alpha = 0.7f;
         }
 
         public override void Update()
         {
-            this._wave.Update();
-            this.position.x += this._wave.value * 0.2f;
-            this.position.x += this.hSpeed;
-            this.position.y += this.vSpeed;
-            this._initialLife -= 0.1f;
+            _wave.Update();
+            position.x += _wave.value * 0.2f;
+            position.x += hSpeed;
+            position.y += vSpeed;
+            _initialLife -= 0.1f;
             if (_initialLife >= 0f)
                 return;
-            this.alpha -= 0.025f;
-            if (this.alpha >= 0f)
+            alpha -= 0.025f;
+            if (alpha >= 0f)
                 return;
             Level.Remove(this);
         }
 
-        public override void Draw() => Graphics.DrawRect(this.position, this.position + new Vec2(1f, 1f), this._col * this.alpha, this.depth);
+        public override void Draw() => Graphics.DrawRect(position, position + new Vec2(1f, 1f), _col * alpha, depth);
     }
 }

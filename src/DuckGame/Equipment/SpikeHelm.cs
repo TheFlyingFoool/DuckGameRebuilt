@@ -28,75 +28,75 @@ namespace DuckGame
         public SpikeHelm(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._pickupSprite = new SpriteMap("spikehelm", 17, 22, 0);
-            this._sprite = new SpriteMap("spikehelmWorn", 17, 22);
-            this.graphic = this._pickupSprite;
-            this.center = new Vec2(9f, 10f);
-            this._hasUnequippedCenter = true;
-            this.collisionOffset = new Vec2(-6f, -4f);
-            this.collisionSize = new Vec2(11f, 10f);
-            this._equippedCollisionOffset = new Vec2(-4f, -2f);
-            this._equippedCollisionSize = new Vec2(11f, 12f);
-            this._hasEquippedCollision = true;
-            this.strappedOn = true;
-            this._sprite.center = new Vec2(8f, 10f);
-            this.depth = (Depth)0.0001f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this._isArmor = true;
-            this._equippedThickness = 3f;
-            this._pokables.Add(typeof(Crate));
-            this._pokables.Add(typeof(YellowBarrel));
-            this._pokables.Add(typeof(BlueBarrel));
-            this._pokables.Add(typeof(ExplosiveBarrel));
-            this._pokables.Add(typeof(LavaBarrel));
-            this._pokables.Add(typeof(CookedDuck));
-            this._pokables.Add(typeof(ECrate));
-            this._pokables.Add(typeof(TV));
-            this._pokables.Add(typeof(RagdollPart));
-            this._pokables.Add(typeof(Present));
-            this._pokables.Add(typeof(IceBlock));
-            this._pokables.Add(typeof(Desk));
-            this._pokables.Add(typeof(DeathCrate));
-            this.SetEditorName("Pokeyhead");
-            this.editorTooltip = "Looks sharp!";
+            _pickupSprite = new SpriteMap("spikehelm", 17, 22, 0);
+            _sprite = new SpriteMap("spikehelmWorn", 17, 22);
+            graphic = _pickupSprite;
+            center = new Vec2(9f, 10f);
+            _hasUnequippedCenter = true;
+            collisionOffset = new Vec2(-6f, -4f);
+            collisionSize = new Vec2(11f, 10f);
+            _equippedCollisionOffset = new Vec2(-4f, -2f);
+            _equippedCollisionSize = new Vec2(11f, 12f);
+            _hasEquippedCollision = true;
+            strappedOn = true;
+            _sprite.center = new Vec2(8f, 10f);
+            depth = (Depth)0.0001f;
+            physicsMaterial = PhysicsMaterial.Metal;
+            _isArmor = true;
+            _equippedThickness = 3f;
+            _pokables.Add(typeof(Crate));
+            _pokables.Add(typeof(YellowBarrel));
+            _pokables.Add(typeof(BlueBarrel));
+            _pokables.Add(typeof(ExplosiveBarrel));
+            _pokables.Add(typeof(LavaBarrel));
+            _pokables.Add(typeof(CookedDuck));
+            _pokables.Add(typeof(ECrate));
+            _pokables.Add(typeof(TV));
+            _pokables.Add(typeof(RagdollPart));
+            _pokables.Add(typeof(Present));
+            _pokables.Add(typeof(IceBlock));
+            _pokables.Add(typeof(Desk));
+            _pokables.Add(typeof(DeathCrate));
+            SetEditorName("Pokeyhead");
+            editorTooltip = "Looks sharp!";
         }
 
         public override void Crush(Thing pWith)
         {
-            if (this.poked != null || this._pokables.Contains(pWith.GetType()))
+            if (poked != null || _pokables.Contains(pWith.GetType()))
                 return;
-            this.crushed = true;
+            crushed = true;
         }
 
-        private Vec2 spikePoint => this.Offset(new Vec2(0f, -8f));
+        private Vec2 spikePoint => Offset(new Vec2(0f, -8f));
 
-        private Vec2 spikeDir => this.OffsetLocal(new Vec2(0f, -8f)).normalized;
+        private Vec2 spikeDir => OffsetLocal(new Vec2(0f, -8f)).normalized;
 
-        public override bool action => this.poked == null && this._owner != null && this._owner.action;
+        public override bool action => poked == null && _owner != null && _owner.action;
 
         public override void Update()
         {
-            if (this.isServerForObject && this.equippedDuck != null && this.poked == null && !this.crushed)
+            if (isServerForObject && equippedDuck != null && poked == null && !crushed)
             {
-                if (this.throwCooldown > 0)
-                    --this.throwCooldown;
-                if (this.equippedDuck.GetHeldByDuck() == null && this._prevDuckOwner != null)
+                if (throwCooldown > 0)
+                    --throwCooldown;
+                if (equippedDuck.GetHeldByDuck() == null && _prevDuckOwner != null)
                 {
-                    this.throwCooldown = 20;
-                    this._filteredDuck = this._prevDuckOwner;
+                    throwCooldown = 20;
+                    _filteredDuck = _prevDuckOwner;
                 }
-                this._prevDuckOwner = this.equippedDuck.GetHeldByDuck();
-                IEnumerable<MaterialThing> materialThings = Level.CheckRectAll<MaterialThing>(this.spikePoint + new Vec2(-2f, -2f), this.spikePoint + new Vec2(2f, 2f));
+                _prevDuckOwner = equippedDuck.GetHeldByDuck();
+                IEnumerable<MaterialThing> materialThings = Level.CheckRectAll<MaterialThing>(spikePoint + new Vec2(-2f, -2f), spikePoint + new Vec2(2f, 2f));
                 Vec2 spikeDir = this.spikeDir;
-                Vec2 velocity = this.equippedDuck.velocity;
-                if (this.equippedDuck.ragdoll != null && this.equippedDuck.ragdoll.part1 != null)
-                    velocity = this.equippedDuck.ragdoll.part1.velocity;
-                else if (this.equippedDuck._trapped != null)
-                    velocity = this.equippedDuck._trapped.velocity;
+                Vec2 velocity = equippedDuck.velocity;
+                if (equippedDuck.ragdoll != null && equippedDuck.ragdoll.part1 != null)
+                    velocity = equippedDuck.ragdoll.part1.velocity;
+                else if (equippedDuck._trapped != null)
+                    velocity = equippedDuck._trapped.velocity;
                 foreach (MaterialThing materialThing1 in materialThings)
                 {
                     Vec2 vec2 = velocity - materialThing1.velocity;
-                    if (materialThing1 != this && materialThing1 != this.equippedDuck && materialThing1 != this.oldPoke && (materialThing1.velocity.length >= 0.5 || materialThing1 is IAmADuck) && Vec2.Dot(vec2.normalized, spikeDir) >= 0.649999976158142 && vec2.length >= 1.5 && this._equippedDuck != null)
+                    if (materialThing1 != this && materialThing1 != equippedDuck && materialThing1 != oldPoke && (materialThing1.velocity.length >= 0.5 || materialThing1 is IAmADuck) && Vec2.Dot(vec2.normalized, spikeDir) >= 0.649999976158142 && vec2.length >= 1.5 && _equippedDuck != null)
                     {
                         if (materialThing1 is IAmADuck)
                         {
@@ -105,13 +105,13 @@ namespace DuckGame
                                 RagdollPart ragdollPart = materialThing1 as RagdollPart;
                                 if (ragdollPart.doll != null && ragdollPart.doll.part1 != null && ragdollPart.doll.part2 != null && ragdollPart.doll.part3 != null)
                                 {
-                                    ragdollPart.doll.part2.hSpeed += this.equippedDuck.hSpeed * 0.75f;
-                                    ragdollPart.doll.part2.vSpeed += this.equippedDuck.vSpeed * 0.75f;
-                                    ragdollPart.doll.part1.hSpeed += this.equippedDuck.hSpeed * 0.75f;
-                                    ragdollPart.doll.part1.vSpeed += this.equippedDuck.vSpeed * 0.75f;
-                                    this.equippedDuck.clip.Add(ragdollPart.doll.part1);
-                                    this.equippedDuck.clip.Add(ragdollPart.doll.part2);
-                                    this.equippedDuck.clip.Add(ragdollPart.doll.part3);
+                                    ragdollPart.doll.part2.hSpeed += equippedDuck.hSpeed * 0.75f;
+                                    ragdollPart.doll.part2.vSpeed += equippedDuck.vSpeed * 0.75f;
+                                    ragdollPart.doll.part1.hSpeed += equippedDuck.hSpeed * 0.75f;
+                                    ragdollPart.doll.part1.vSpeed += equippedDuck.vSpeed * 0.75f;
+                                    equippedDuck.clip.Add(ragdollPart.doll.part1);
+                                    equippedDuck.clip.Add(ragdollPart.doll.part2);
+                                    equippedDuck.clip.Add(ragdollPart.doll.part3);
                                 }
                             }
                             MaterialThing materialThing2 = materialThing1;
@@ -120,7 +120,7 @@ namespace DuckGame
                                 if (!(materialThing1 is Duck) || !(materialThing1 as Duck).HasEquipment(typeof(Boots)) || (materialThing1 as Duck).sliding || spikeDir.y >= 0.5 || Math.Abs(spikeDir.x) >= 0.200000002980232)
                                 {
                                     Duck associatedDuck = Duck.GetAssociatedDuck(materialThing2);
-                                    if ((associatedDuck == null || associatedDuck != this._equippedDuck && (this._equippedDuck == null || !this._equippedDuck.IsOwnedBy(associatedDuck))) && (associatedDuck != this._filteredDuck || this.throwCooldown <= 0))
+                                    if ((associatedDuck == null || associatedDuck != _equippedDuck && (_equippedDuck == null || !_equippedDuck.IsOwnedBy(associatedDuck))) && (associatedDuck != _filteredDuck || throwCooldown <= 0))
                                     {
                                         Thing.Fondle(materialThing2, DuckNetwork.localConnection);
                                         materialThing2.Destroy(new DTImpale(this));
@@ -131,103 +131,103 @@ namespace DuckGame
                                 continue;
                             }
                         }
-                        if (this._pokables.Contains(materialThing1.GetType()) && materialThing1 is PhysicsObject && materialThing1.owner == null)
+                        if (_pokables.Contains(materialThing1.GetType()) && materialThing1 is PhysicsObject && materialThing1.owner == null)
                         {
                             materialThing1.owner = this;
-                            this.poked = materialThing1 as PhysicsObject;
-                            this.poked.enablePhysics = false;
-                            this._pokedOldDepth = this.poked.depth;
-                            if (this.poked is Holdable)
+                            poked = materialThing1 as PhysicsObject;
+                            poked.enablePhysics = false;
+                            _pokedOldDepth = poked.depth;
+                            if (poked is Holdable)
                             {
-                                (this.poked as Holdable)._hasOldDepth = true;
-                                (this.poked as Holdable)._oldDepth = this.poked.depth;
+                                (poked as Holdable)._hasOldDepth = true;
+                                (poked as Holdable)._oldDepth = poked.depth;
                             }
                             if (materialThing1 is YellowBarrel)
-                                (materialThing1 as YellowBarrel).MakeHole(this.spikePoint, spikeDir);
+                                (materialThing1 as YellowBarrel).MakeHole(spikePoint, spikeDir);
                             materialThing1.PlayCollideSound(ImpactedFrom.Top);
-                            this.Fondle(poked);
-                            this.prevRagdoll = this.equippedDuck.ragdoll;
+                            Fondle(poked);
+                            prevRagdoll = equippedDuck.ragdoll;
                             break;
                         }
                     }
                 }
             }
-            this.prevPoke = this.spikePoint;
-            if (this._equippedDuck == null)
+            prevPoke = spikePoint;
+            if (_equippedDuck == null)
             {
-                this.center = new Vec2(9f, 10f);
-                this.depth = (Depth)0.0001f;
-                this.collisionOffset = new Vec2(-6f, -4f);
-                this.collisionSize = new Vec2(11f, 10f);
+                center = new Vec2(9f, 10f);
+                depth = (Depth)0.0001f;
+                collisionOffset = new Vec2(-6f, -4f);
+                collisionSize = new Vec2(11f, 10f);
             }
             base.Update();
             if (oldPokeCooldown > 0.0)
             {
-                this.oldPokeCooldown -= Maths.IncFrameTimer();
+                oldPokeCooldown -= Maths.IncFrameTimer();
                 if (oldPokeCooldown <= 0.0)
-                    this.oldPoke = null;
+                    oldPoke = null;
             }
-            if (this.poked == null || !this.isServerForObject)
+            if (poked == null || !isServerForObject)
                 return;
-            if (!this.poked.isServerForObject)
-                this.Fondle(poked);
-            this.poked.position = this.Offset(new Vec2(1f, -9f));
-            this.poked.lastGrounded = DateTime.Now;
-            this.poked.visible = false;
-            this.poked.solid = false;
-            this.poked.grounded = true;
-            if (this.poked.removeFromLevel || this.poked.y < level.topLeft.y - 2000.0 || !this.poked.active)
+            if (!poked.isServerForObject)
+                Fondle(poked);
+            poked.position = Offset(new Vec2(1f, -9f));
+            poked.lastGrounded = DateTime.Now;
+            poked.visible = false;
+            poked.solid = false;
+            poked.grounded = true;
+            if (poked.removeFromLevel || poked.y < level.topLeft.y - 2000.0 || !poked.active)
             {
-                this.ReleasePokedObject();
+                ReleasePokedObject();
             }
             else
             {
-                if (this.equippedDuck == null)
+                if (equippedDuck == null)
                     return;
-                this.poked.hSpeed = this.duck.hSpeed;
-                this.poked.vSpeed = this.duck.vSpeed;
-                if (this.equippedDuck.ragdoll == null)
-                    this.poked.solid = this.equippedDuck.velocity.length < 0.0500000007450581;
-                if (this.equippedDuck.ragdoll != null && this.prevRagdoll == null)
-                    this.ReleasePokedObject();
-                this.prevRagdoll = this.equippedDuck.ragdoll;
+                poked.hSpeed = duck.hSpeed;
+                poked.vSpeed = duck.vSpeed;
+                if (equippedDuck.ragdoll == null)
+                    poked.solid = equippedDuck.velocity.length < 0.0500000007450581;
+                if (equippedDuck.ragdoll != null && prevRagdoll == null)
+                    ReleasePokedObject();
+                prevRagdoll = equippedDuck.ragdoll;
             }
         }
 
         private void ReleasePokedObject()
         {
-            if (this.poked != null)
+            if (poked != null)
             {
-                this.poked.hSpeed = 0f;
-                this.poked.vSpeed = -2f;
-                this.poked.y += 8f;
-                this.poked.owner = null;
-                this.poked.enablePhysics = true;
-                this.poked.depth = this._pokedOldDepth;
-                this.poked.visible = true;
-                this.poked.solid = true;
-                this.poked.grounded = false;
-                this.poked.angle = 0f;
-                this.oldPoke = this.poked;
-                this.oldPokeCooldown = 0.5f;
+                poked.hSpeed = 0f;
+                poked.vSpeed = -2f;
+                poked.y += 8f;
+                poked.owner = null;
+                poked.enablePhysics = true;
+                poked.depth = _pokedOldDepth;
+                poked.visible = true;
+                poked.solid = true;
+                poked.grounded = false;
+                poked.angle = 0f;
+                oldPoke = poked;
+                oldPokeCooldown = 0.5f;
             }
-            this.poked = null;
+            poked = null;
         }
 
         public override void Draw()
         {
-            int frame = this._sprite.frame;
-            this._sprite.frame = this.crushed ? 1 : 0;
-            (this._pickupSprite as SpriteMap).frame = this._sprite.frame;
+            int frame = _sprite.frame;
+            _sprite.frame = crushed ? 1 : 0;
+            (_pickupSprite as SpriteMap).frame = _sprite.frame;
             base.Draw();
-            this._sprite.frame = frame;
-            (this._pickupSprite as SpriteMap).frame = frame;
-            if (this.poked == null)
+            _sprite.frame = frame;
+            (_pickupSprite as SpriteMap).frame = frame;
+            if (poked == null)
                 return;
-            this.poked.position = this.Offset(new Vec2(1f, -9f));
-            this.poked.depth = this.depth + 2;
-            this.poked.angle = this._sprite.angle;
-            this.poked.Draw();
+            poked.position = Offset(new Vec2(1f, -9f));
+            poked.depth = depth + 2;
+            poked.angle = _sprite.angle;
+            poked.Draw();
         }
     }
 }

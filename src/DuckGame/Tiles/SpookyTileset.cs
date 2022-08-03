@@ -13,11 +13,11 @@ namespace DuckGame
         public SpookyTileset(float x, float y)
           : base(x, y, "spookyTileset")
         {
-            this._editorName = "Spooky";
-            this.physicsMaterial = PhysicsMaterial.Wood;
-            this.verticalWidth = 10f;
-            this.verticalWidthThick = 15f;
-            this.horizontalHeight = 14f;
+            _editorName = "Spooky";
+            physicsMaterial = PhysicsMaterial.Wood;
+            verticalWidth = 10f;
+            verticalWidthThick = 15f;
+            horizontalHeight = 14f;
         }
 
         public override void Draw() => base.Draw();

@@ -31,51 +31,51 @@ namespace DuckGame
 
         public ChallengeGroup activeChallengeGroup
         {
-            get => this._activeChallengeGroup;
+            get => _activeChallengeGroup;
             set
             {
-                this._activeChallengeGroup = value;
-                this._cards.Clear();
-                foreach (string challenge in this._activeChallengeGroup.challenges)
+                _activeChallengeGroup = value;
+                _cards.Clear();
+                foreach (string challenge in _activeChallengeGroup.challenges)
                 {
                     ChallengeCard challengeCard = new ChallengeCard(0f, 0f, Challenges.GetChallenge(challenge));
                     if (Level.current is ArcadeLevel && (Level.current as ArcadeLevel).customMachine != null)
                         challengeCard.testing = true;
-                    this._cards.Add(challengeCard);
+                    _cards.Add(challengeCard);
                 }
-                this.UnlockChallenges();
-                this._cards[0].hover = true;
-                this._selected = 0;
+                UnlockChallenges();
+                _cards[0].hover = true;
+                _selected = 0;
             }
         }
 
         public ChallengeCard selected
         {
-            get => this._viewing;
-            set => this._viewing = value;
+            get => _viewing;
+            set => _viewing = value;
         }
 
         public void FinishChallenge()
         {
-            this._afterChallengeWait = 0f;
-            this._lastPlayed = null;
-            this._afterChallenge = false;
+            _afterChallengeWait = 0f;
+            _lastPlayed = null;
+            _afterChallenge = false;
         }
 
         public static float alphaVal => ArcadeHUD._curAlpha;
 
         public override bool visible
         {
-            get => this.alpha >= 0.01f && base.visible;
+            get => alpha >= 0.01f && base.visible;
             set => base.visible = value;
         }
 
         public ArcadeHUD()
           : base()
         {
-            this._font = new BitmapFont("biosFont", 8);
-            this.layer = Layer.HUD;
-            this._titleWing = new Sprite("arcade/titleWing");
+            _font = new BitmapFont("biosFont", 8);
+            layer = Layer.HUD;
+            _titleWing = new Sprite("arcade/titleWing");
         }
 
         public override void Initialize()
@@ -84,7 +84,7 @@ namespace DuckGame
 
         public void MakeActive()
         {
-            if (!this._afterChallenge)
+            if (!_afterChallenge)
             {
                 HUD.CloseAllCorners();
                 HUD.AddCornerCounter(HUDCorner.BottomMiddle, "@TICKET@ ", new FieldBinding(Profiles.active[0], "ticketCount"), animateCount: true);
@@ -109,7 +109,7 @@ namespace DuckGame
         {
             bool flag1 = true;
             bool flag2 = false;
-            foreach (ChallengeCard card in this._cards)
+            foreach (ChallengeCard card in _cards)
             {
                 if (flag1)
                     card.unlocked = true;
@@ -128,7 +128,7 @@ namespace DuckGame
         {
             bool flag1 = true;
             bool flag2 = false;
-            foreach (ChallengeCard card in this._cards)
+            foreach (ChallengeCard card in _cards)
             {
                 if (flag1 && !card.unlocked || flag2 && !card.unlocked)
                     return true;
@@ -140,34 +140,34 @@ namespace DuckGame
 
         public override void Update()
         {
-            ArcadeHUD._curAlpha = this.alpha;
-            if (this.launchChallenge)
+            ArcadeHUD._curAlpha = alpha;
+            if (launchChallenge)
             {
-                this._afterChallenge = true;
-                this._afterChallengeWait = 1f;
+                _afterChallenge = true;
+                _afterChallengeWait = 1f;
             }
             else
             {
-                ArcadeHUD.open = this.alpha > 0.95f;
-                if (this.alpha <= 0.01f)
+                ArcadeHUD.open = alpha > 0.95f;
+                if (alpha <= 0.01f)
                     return;
-                if (!this._afterChallenge && !this._goBack)
+                if (!_afterChallenge && !_goBack)
                 {
-                    if (this._viewing == null)
+                    if (_viewing == null)
                     {
                         if (Input.Pressed("MENUDOWN"))
                         {
-                            ++this._selected;
-                            if (this._selected >= this._cards.Count)
-                                this._selected = this._cards.Count - 1;
+                            ++_selected;
+                            if (_selected >= _cards.Count)
+                                _selected = _cards.Count - 1;
                             else
                                 SFX.Play("menuBlip01");
                         }
                         else if (Input.Pressed("MENUUP"))
                         {
-                            --this._selected;
-                            if (this._selected < 0)
-                                this._selected = 0;
+                            --_selected;
+                            if (_selected < 0)
+                                _selected = 0;
                             else
                                 SFX.Play("menuBlip01");
                         }
@@ -175,9 +175,9 @@ namespace DuckGame
                         {
                             int num1 = 0;
                             bool flag = false;
-                            foreach (ChallengeCard card in this._cards)
+                            foreach (ChallengeCard card in _cards)
                             {
-                                if (num1 == this._selected)
+                                if (num1 == _selected)
                                 {
                                     if (card.unlocked)
                                     {
@@ -191,15 +191,15 @@ namespace DuckGame
                             int num2 = 0;
                             if (flag)
                             {
-                                foreach (ChallengeCard card in this._cards)
+                                foreach (ChallengeCard card in _cards)
                                 {
-                                    if (num2 == this._selected)
+                                    if (num2 == _selected)
                                     {
                                         card.expand = true;
                                         card.contract = false;
-                                        this._lerpOffset = card.y;
-                                        this._viewing = card;
-                                        this._oldLerpOffset = card.y;
+                                        _lerpOffset = card.y;
+                                        _viewing = card;
+                                        _oldLerpOffset = card.y;
                                         SFX.Play("menu_select");
                                     }
                                     else
@@ -216,92 +216,92 @@ namespace DuckGame
                         else if (Input.Pressed("CANCEL"))
                         {
                             SFX.Play("menu_back");
-                            this.quitOut = true;
+                            quitOut = true;
                         }
                     }
                     else if (Input.Pressed("CANCEL"))
                     {
                         SFX.Play("menu_back");
-                        foreach (ChallengeCard card in this._cards)
+                        foreach (ChallengeCard card in _cards)
                         {
                             card.contract = false;
                             card.expand = false;
                         }
-                        this._goBack = true;
+                        _goBack = true;
                     }
                     else if (Input.Pressed("SELECT"))
                     {
-                        if (!this.selected.unlocked)
+                        if (!selected.unlocked)
                         {
                             SFX.Play("scanFail");
                         }
                         else
                         {
                             SFX.Play("selectItem");
-                            this.launchChallenge = true;
+                            launchChallenge = true;
                         }
                     }
                 }
-                if (this._afterChallenge)
+                if (_afterChallenge)
                 {
                     if (_afterChallengeWait > 0.0)
-                        this._afterChallengeWait -= 0.03f;
-                    else if (this._lastPlayed == null)
+                        _afterChallengeWait -= 0.03f;
+                    else if (_lastPlayed == null)
                     {
-                        this._lastPlayed = this.selected;
-                        foreach (ChallengeCard card in this._cards)
+                        _lastPlayed = selected;
+                        foreach (ChallengeCard card in _cards)
                         {
                             card.contract = false;
                             card.expand = false;
-                            this._goBack = true;
+                            _goBack = true;
                         }
-                        this._afterChallengeWait = 1f;
+                        _afterChallengeWait = 1f;
                         SFX.Play("menu_back");
                     }
-                    else if (this._lastPlayed.HasNewBest() || this._lastPlayed.HasNewTrophy())
+                    else if (_lastPlayed.HasNewBest() || _lastPlayed.HasNewTrophy())
                     {
-                        this._lastPlayed.GiveTime();
-                        this._giveTickets = this._lastPlayed.GiveTrophy();
-                        this._afterChallengeWait = 1f;
-                        this.MakeConfetti();
+                        _lastPlayed.GiveTime();
+                        _giveTickets = _lastPlayed.GiveTrophy();
+                        _afterChallengeWait = 1f;
+                        MakeConfetti();
                     }
-                    else if (this._giveTickets != 0)
+                    else if (_giveTickets != 0)
                     {
-                        Profiles.active[0].ticketCount += this._giveTickets;
-                        this._afterChallengeWait = 2f;
-                        this._giveTickets = 0;
+                        Profiles.active[0].ticketCount += _giveTickets;
+                        _afterChallengeWait = 2f;
+                        _giveTickets = 0;
                         SFX.Play("ching");
                     }
-                    else if (this.CanUnlockChallenges())
+                    else if (CanUnlockChallenges())
                     {
-                        this.UnlockChallenges(true);
-                        this._afterChallengeWait = 1f;
+                        UnlockChallenges(true);
+                        _afterChallengeWait = 1f;
                     }
                     else
                     {
-                        this._afterChallengeWait = 0f;
-                        this._lastPlayed = null;
-                        this._afterChallenge = false;
+                        _afterChallengeWait = 0f;
+                        _lastPlayed = null;
+                        _afterChallenge = false;
                         HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@BACK");
                         HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@SELECT");
                         Profiles.Save(Profiles.active[0]);
                     }
                 }
-                if (this._goBack)
+                if (_goBack)
                 {
-                    this._lerpOffset = Lerp.Float(this._lerpOffset, this._oldLerpOffset, 8f);
-                    if (_lerpOffset == this._oldLerpOffset)
+                    _lerpOffset = Lerp.Float(_lerpOffset, _oldLerpOffset, 8f);
+                    if (_lerpOffset == _oldLerpOffset)
                     {
-                        this._goBack = false;
-                        this._viewing = null;
+                        _goBack = false;
+                        _viewing = null;
                     }
                 }
-                else if (this._viewing != null)
-                    this._lerpOffset = Lerp.Float(this._lerpOffset, 28f, 8f);
+                else if (_viewing != null)
+                    _lerpOffset = Lerp.Float(_lerpOffset, 28f, 8f);
                 int num = 0;
-                foreach (ChallengeCard card in this._cards)
+                foreach (ChallengeCard card in _cards)
                 {
-                    card.hover = num == this._selected;
+                    card.hover = num == _selected;
                     card.Update();
                     ++num;
                 }
@@ -310,28 +310,28 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this.alpha <= 0.01f || this._activeChallengeGroup == null)
+            if (alpha <= 0.01f || _activeChallengeGroup == null)
                 return;
             float ypos = 16f;
-            string nameForDisplay = this._activeChallengeGroup.GetNameForDisplay();
-            this._font.alpha = this.alpha;
-            float width = this._font.GetWidth(nameForDisplay);
-            this._font.Draw(nameForDisplay, (160f - width / 2f), ypos, Color.White);
-            this._titleWing.alpha = this.alpha;
-            this._titleWing.flipH = false;
-            this._titleWing.x = (160f - width / 2f) - (this._titleWing.width + 1);
-            this._titleWing.y = ypos;
-            this._titleWing.Draw();
-            this._titleWing.flipH = true;
-            this._titleWing.x = (160f + width / 2f) + _titleWing.width;
-            this._titleWing.y = ypos;
-            this._titleWing.Draw();
+            string nameForDisplay = _activeChallengeGroup.GetNameForDisplay();
+            _font.alpha = alpha;
+            float width = _font.GetWidth(nameForDisplay);
+            _font.Draw(nameForDisplay, (160f - width / 2f), ypos, Color.White);
+            _titleWing.alpha = alpha;
+            _titleWing.flipH = false;
+            _titleWing.x = (160f - width / 2f) - (_titleWing.width + 1);
+            _titleWing.y = ypos;
+            _titleWing.Draw();
+            _titleWing.flipH = true;
+            _titleWing.x = (160f + width / 2f) + _titleWing.width;
+            _titleWing.y = ypos;
+            _titleWing.Draw();
             int num = 0;
-            foreach (ChallengeCard card in this._cards)
+            foreach (ChallengeCard card in _cards)
             {
-                card.alpha = this.alpha;
-                if (num == this._selected && card == this._viewing)
-                    card.position = new Vec2(31f, this._lerpOffset);
+                card.alpha = alpha;
+                if (num == _selected && card == _viewing)
+                    card.position = new Vec2(31f, _lerpOffset);
                 else
                     card.position = new Vec2(31f, ypos + 12f + num * 44);
                 card.Draw();

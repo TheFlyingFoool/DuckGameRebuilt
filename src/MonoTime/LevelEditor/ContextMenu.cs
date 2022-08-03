@@ -73,37 +73,37 @@ namespace DuckGame
 
         public string text
         {
-            get => this._text;
-            set => this._text = value;
+            get => _text;
+            set => _text = value;
         }
 
         public string data
         {
-            get => this._data;
-            set => this._data = value;
+            get => _data;
+            set => _data = value;
         }
 
         public int selectedIndex
         {
-            get => this._selectedIndex;
-            set => this._selectedIndex = value;
+            get => _selectedIndex;
+            set => _selectedIndex = value;
         }
 
         public bool dontPush
         {
-            get => this._dontPush;
+            get => _dontPush;
             set
             {
                 if (value)
                 {
-                    if (!this.pinned)
-                        this.pinOpened = true;
-                    this._dontPush = true;
+                    if (!pinned)
+                        pinOpened = true;
+                    _dontPush = true;
                 }
                 else
                 {
-                    this._dontPush = false;
-                    this.pinOpened = false;
+                    _dontPush = false;
+                    pinOpened = false;
                 }
             }
         }
@@ -114,34 +114,34 @@ namespace DuckGame
 
         public bool opened
         {
-            get => this._opened;
+            get => _opened;
             set
             {
-                if (!this._opened && value)
+                if (!_opened && value)
                 {
-                    this._lastDrawPos = Vec2.Zero;
-                    this.pinOpened = false;
-                    foreach (ContextMenu contextMenu in this._items)
+                    _lastDrawPos = Vec2.Zero;
+                    pinOpened = false;
+                    foreach (ContextMenu contextMenu in _items)
                     {
                         contextMenu._lastDrawPos = Vec2.Zero;
                         contextMenu.opened = false;
                         contextMenu._hover = false;
                         if (contextMenu.pinned && !Editor.ignorePinning)
-                            this.pinOpened = true;
+                            pinOpened = true;
                     }
-                    this._openedOffset = 0f;
-                    this.PositionItems();
-                    this._selectedIndex = 0;
-                    if (this._items.Count > 0)
+                    _openedOffset = 0f;
+                    PositionItems();
+                    _selectedIndex = 0;
+                    if (_items.Count > 0)
                     {
-                        while (this._selectedIndex < this._items.Count<ContextMenu>() - 1 && this._items[this._selectedIndex].greyOut)
-                            ++this._selectedIndex;
-                        if (!this._items[this._selectedIndex].greyOut)
-                            this._opening = true;
+                        while (_selectedIndex < _items.Count<ContextMenu>() - 1 && _items[_selectedIndex].greyOut)
+                            ++_selectedIndex;
+                        if (!_items[_selectedIndex].greyOut)
+                            _opening = true;
                     }
                     else
-                        this._opening = true;
-                    foreach (ContextMenu contextMenu in this._items)
+                        _opening = true;
+                    foreach (ContextMenu contextMenu in _items)
                     {
                         contextMenu.dontPush = false;
                         if (contextMenu.pinned && !Editor.ignorePinning)
@@ -150,45 +150,45 @@ namespace DuckGame
                             contextMenu.opened = true;
                         }
                     }
-                    this.PushLeft();
+                    PushLeft();
                 }
-                if (this._opened && !value)
+                if (_opened && !value)
                 {
-                    foreach (ContextMenu contextMenu in this._items)
+                    foreach (ContextMenu contextMenu in _items)
                     {
                         contextMenu.opened = false;
                         contextMenu._hover = false;
                         contextMenu.OnClose();
                     }
-                    this.Closed();
-                    if (this._root)
+                    Closed();
+                    if (_root)
                         Editor.ignorePinning = false;
                 }
                 if (!value)
                 {
-                    foreach (ContextMenu contextMenu in this._items)
+                    foreach (ContextMenu contextMenu in _items)
                         contextMenu.ParentCloseAction();
                 }
                 if (value)
                 {
-                    if (this._autoSelectItem >= 0)
-                        this._selectedIndex = this._autoSelectItem;
-                    this._autoSelectItem = -1;
+                    if (_autoSelectItem >= 0)
+                        _selectedIndex = _autoSelectItem;
+                    _autoSelectItem = -1;
                 }
-                this._opened = value;
+                _opened = value;
             }
         }
 
         public bool hover
         {
-            get => this._hover;
-            set => this._hover = value;
+            get => _hover;
+            set => _hover = value;
         }
 
         public bool root
         {
-            get => this._root;
-            set => this._root = value;
+            get => _root;
+            set => _root = value;
         }
 
         public virtual void ParentCloseAction()
@@ -197,45 +197,45 @@ namespace DuckGame
 
         public Sprite image
         {
-            get => this._image;
-            set => this._image = value;
+            get => _image;
+            set => _image = value;
         }
 
         public bool pinned
         {
             get
             {
-                if (this._pinned && Editor.pretendPinned == null || Editor.pretendPinned == this)
+                if (_pinned && Editor.pretendPinned == null || Editor.pretendPinned == this)
                     return true;
-                foreach (ContextMenu contextMenu in this._items)
+                foreach (ContextMenu contextMenu in _items)
                 {
                     if (contextMenu.pinned)
                         return true;
                 }
                 return false;
             }
-            set => this._pinned = value;
+            set => _pinned = value;
         }
 
         public ContextMenu(IContextListener owner, SpriteMap img = null, bool hasToproot = false, Vec2 topRoot = default(Vec2))
           : base()
         {
-            this._owner = owner;
+            _owner = owner;
             if (Level.current is Editor)
-                this.layer = Editor.objectMenuLayer;
+                layer = Editor.objectMenuLayer;
             else
-                this.layer = Layer.HUD;
-            this._contextArrow = new Sprite("contextArrowRight");
-            this.itemSize.x = 100f;
-            this.itemSize.y = 16f;
-            this._root = owner == null;
-            this._image = img;
-            this.depth = (Depth)0.8f;
-            this._arrow.CenterOrigin();
-            this._pin.CenterOrigin();
-            this._pinPinned.CenterOrigin();
-            this._toprootPosition = topRoot;
-            this._hasToproot = hasToproot;
+                layer = Layer.HUD;
+            _contextArrow = new Sprite("contextArrowRight");
+            itemSize.x = 100f;
+            itemSize.y = 16f;
+            _root = owner == null;
+            _image = img;
+            depth = (Depth)0.8f;
+            _arrow.CenterOrigin();
+            _pin.CenterOrigin();
+            _pinPinned.CenterOrigin();
+            _toprootPosition = topRoot;
+            _hasToproot = hasToproot;
         }
 
         public override void Initialize()
@@ -244,7 +244,7 @@ namespace DuckGame
 
         public virtual bool HasOpen()
         {
-            foreach (ContextMenu contextMenu in this._items)
+            foreach (ContextMenu contextMenu in _items)
             {
                 if (contextMenu.opened)
                     return true;
@@ -254,18 +254,18 @@ namespace DuckGame
 
         public virtual void Toggle(ContextMenu item)
         {
-            if (this._owner == null)
+            if (_owner == null)
                 return;
-            this.isToggle = true;
-            this._owner.Selected(item);
-            this.isToggle = false;
+            isToggle = true;
+            _owner.Selected(item);
+            isToggle = false;
         }
 
         public bool IsPartOf(Thing menu)
         {
             if (menu == null || this == menu)
                 return true;
-            return this._owner != null && this._owner is ContextMenu owner && owner.IsPartOf(menu);
+            return _owner != null && _owner is ContextMenu owner && owner.IsPartOf(menu);
         }
 
         public override void DoUpdate()
@@ -278,7 +278,7 @@ namespace DuckGame
         public void PushLeft()
         {
             ContextMenu contextMenu1 = null;
-            foreach (ContextMenu contextMenu2 in this._items)
+            foreach (ContextMenu contextMenu2 in _items)
             {
                 if (contextMenu2.opened)
                 {
@@ -288,44 +288,44 @@ namespace DuckGame
             }
             if (Keyboard.Down(Keys.Y))
                 return;
-            Vec2 vec2_1 = new Vec2(this.x, this.y);
+            Vec2 vec2_1 = new Vec2(x, y);
             Vec2 vec2_2 = new Vec2(0f, 0f);
-            if (!this._root && !this.dontPush)
-                vec2_2 = new Vec2(this.itemSize.x + 4f, -2f);
+            if (!_root && !dontPush)
+                vec2_2 = new Vec2(itemSize.x + 4f, -2f);
             Vec2 vec2_3 = vec2_1 + vec2_2;
             bool flag = false;
-            if (_lastDrawPos.x + this.menuSize.x + 4f > this.layer.camera.width)
+            if (_lastDrawPos.x + menuSize.x + 4f > layer.camera.width)
             {
                 if (Editor.bigInterfaceMode)
-                    vec2_3.x -= this.menuSize.x;
+                    vec2_3.x -= menuSize.x;
                 else
-                    vec2_3.x = (this.layer.camera.width - menuSize.x - 4f);
+                    vec2_3.x = (layer.camera.width - menuSize.x - 4f);
                 flag = true;
             }
-            if (contextMenu1 != null && contextMenu1.x != vec2_3.x && !this.pinOpened)
+            if (contextMenu1 != null && contextMenu1.x != vec2_3.x && !pinOpened)
             {
-                vec2_3.x = !this._root ? (this._pinned || Editor.pretendPinned == this ? contextMenu1.x - 4f : contextMenu1.x - 2f) : contextMenu1.x;
+                vec2_3.x = !_root ? (_pinned || Editor.pretendPinned == this ? contextMenu1.x - 4f : contextMenu1.x - 2f) : contextMenu1.x;
                 flag = true;
             }
-            this.position = vec2_3 - vec2_2;
+            position = vec2_3 - vec2_2;
             if (!flag)
                 return;
-            this.PositionItems();
+            PositionItems();
         }
 
         private void PinChanged(ContextMenu c)
         {
-            if (this._owner != null && this._owner is ContextMenu)
-                (this._owner as ContextMenu).PinChanged(c);
+            if (_owner != null && _owner is ContextMenu)
+                (_owner as ContextMenu).PinChanged(c);
             else
-                this.PinChangedDrillDown(c);
+                PinChangedDrillDown(c);
         }
 
         private void PinChangedDrillDown(ContextMenu c)
         {
             if (c != this)
-                this.pinned = false;
-            foreach (ContextMenu contextMenu in this._items)
+                pinned = false;
+            foreach (ContextMenu contextMenu in _items)
                 contextMenu.PinChangedDrillDown(c);
         }
 
@@ -338,11 +338,11 @@ namespace DuckGame
                 flag = false;
             }
             int num = 0;
-            foreach (ContextMenu contextMenu1 in this._items)
+            foreach (ContextMenu contextMenu1 in _items)
             {
                 if (contextMenu1 == t || contextMenu1 is ContextObject && (contextMenu1 as ContextObject).thing.GetType() == t.GetType())
                 {
-                    this._autoSelectItem = num;
+                    _autoSelectItem = num;
                     return true;
                 }
                 if (contextMenu1 is EditorGroupMenu && contextMenu1.OpenInto(t, pRecurseStack))
@@ -369,10 +369,10 @@ namespace DuckGame
 
         private void CloseChildren()
         {
-            if (!this.HasOpen() || !this._canExpand)
+            if (!HasOpen() || !_canExpand)
                 return;
             bool flag = false;
-            foreach (ContextMenu contextMenu in this._items)
+            foreach (ContextMenu contextMenu in _items)
             {
                 if (contextMenu.HasOpen())
                 {
@@ -383,7 +383,7 @@ namespace DuckGame
             if (flag)
                 return;
             Editor.tookInput = true;
-            this.Selected(null);
+            Selected(null);
         }
 
         public virtual void Disappear()
@@ -392,23 +392,23 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (!this.visible || this.disabled || this._opening)
+            if (!visible || disabled || _opening)
             {
-                this._opening = false;
+                _opening = false;
             }
             else
             {
-                if (!this.IsPartOf(Editor.lockInput))
+                if (!IsPartOf(Editor.lockInput))
                     return;
-                Vec2 lastDrawPos = this._lastDrawPos;
-                if (this.opened)
+                Vec2 lastDrawPos = _lastDrawPos;
+                if (opened)
                 {
-                    if (Editor.inputMode == EditorInput.Touch && TouchScreen.GetTap().Check(new Rectangle(this._lastDrawPos.x, this._lastDrawPos.y, this._lastDrawPos.x + this.menuSize.x, this._lastDrawPos.y + this.menuSize.y), this.layer.camera) && !this.pinOpened)
+                    if (Editor.inputMode == EditorInput.Touch && TouchScreen.GetTap().Check(new Rectangle(_lastDrawPos.x, _lastDrawPos.y, _lastDrawPos.x + menuSize.x, _lastDrawPos.y + menuSize.y), layer.camera) && !pinOpened)
                         Editor.clickedContextBackground = true;
-                    if (!this.pinOpened)
+                    if (!pinOpened)
                     {
-                        Vec2 vec2_1 = new Vec2((float)(lastDrawPos.x + this.menuSize.x - 5f), lastDrawPos.y - 4f);
-                        this._hoverPin = false;
+                        Vec2 vec2_1 = new Vec2((float)(lastDrawPos.x + menuSize.x - 5f), lastDrawPos.y - 4f);
+                        _hoverPin = false;
                         Vec2 vec2_2 = Vec2.Zero;
                         bool flag1 = false;
                         switch (Editor.inputMode)
@@ -418,70 +418,70 @@ namespace DuckGame
                                 flag1 = Mouse.left == InputState.Pressed;
                                 break;
                             case EditorInput.Touch:
-                                vec2_2 = TouchScreen.GetTap().Transform(this.layer.camera);
+                                vec2_2 = TouchScreen.GetTap().Transform(layer.camera);
                                 flag1 = TouchScreen.GetTap() != Touch.None;
                                 break;
                         }
                         if (vec2_2.x > vec2_1.x - 5.0 && vec2_2.x < vec2_1.x + 3.0 && vec2_2.y > vec2_1.y - 4.0 && vec2_2.y < vec2_1.y + 4.0)
                         {
-                            this._hoverPin = true;
-                            if (flag1 && (!this._root || this.pinned))
+                            _hoverPin = true;
+                            if (flag1 && (!_root || pinned))
                             {
-                                if (this._root && this.pinned)
+                                if (_root && pinned)
                                 {
-                                    this._pinned = false;
-                                    this.PinChanged(this);
-                                    Editor.openPosition = this._lastDrawPos;
+                                    _pinned = false;
+                                    PinChanged(this);
+                                    Editor.openPosition = _lastDrawPos;
                                     Editor.reopenContextMenu = true;
                                     Editor.ignorePinning = false;
                                     Editor.clickedMenu = true;
-                                    this._autoSelectItem = this._selectedIndex;
+                                    _autoSelectItem = _selectedIndex;
                                 }
                                 else
                                 {
                                     bool pinned = this.pinned;
-                                    this._pinned = !this._pinned;
-                                    if (this._owner != null && this._owner is ContextMenu)
-                                        (this._owner as ContextMenu).PinChanged(this);
-                                    if (this._pinned != pinned && Editor.pretendPinned != this)
+                                    _pinned = !_pinned;
+                                    if (_owner != null && _owner is ContextMenu)
+                                        (_owner as ContextMenu).PinChanged(this);
+                                    if (_pinned != pinned && Editor.pretendPinned != this)
                                     {
-                                        Editor.openPosition = this._lastDrawPos;
+                                        Editor.openPosition = _lastDrawPos;
                                         Editor.reopenContextMenu = true;
                                         Editor.ignorePinning = false;
                                     }
                                     Editor.clickedMenu = true;
-                                    this._autoSelectItem = this._selectedIndex;
+                                    _autoSelectItem = _selectedIndex;
                                 }
                             }
                         }
-                        if (!this.waitInputFrame && Editor.inputMode == EditorInput.Gamepad && this.drawControls)
+                        if (!waitInputFrame && Editor.inputMode == EditorInput.Gamepad && drawControls)
                         {
                             if (Input.Pressed("MENU1"))
                             {
-                                if (this.isPinnable && this._root && this.pinned)
+                                if (isPinnable && _root && pinned)
                                 {
-                                    this._pinned = false;
-                                    this.PinChanged(this);
-                                    Editor.openPosition = this._lastDrawPos;
+                                    _pinned = false;
+                                    PinChanged(this);
+                                    Editor.openPosition = _lastDrawPos;
                                     Editor.reopenContextMenu = true;
                                     Editor.ignorePinning = false;
-                                    this._autoSelectItem = this._selectedIndex;
+                                    _autoSelectItem = _selectedIndex;
                                 }
-                                else if (this.isPinnable && this.owner != null)
+                                else if (isPinnable && owner != null)
                                 {
-                                    this._pinned = !this._pinned;
-                                    if (this._owner != null && this._owner is ContextMenu)
-                                        (this._owner as ContextMenu).PinChanged(this);
-                                    Editor.openPosition = this._lastDrawPos;
+                                    _pinned = !_pinned;
+                                    if (_owner != null && _owner is ContextMenu)
+                                        (_owner as ContextMenu).PinChanged(this);
+                                    Editor.openPosition = _lastDrawPos;
                                     Editor.reopenContextMenu = true;
                                     Editor.ignorePinning = false;
-                                    this._autoSelectItem = this._selectedIndex;
+                                    _autoSelectItem = _selectedIndex;
                                 }
                             }
-                            else if (this.pinned && this._owner != null && this._owner is ContextMenu && (this._owner as ContextMenu).pinOpened && Input.Pressed("MENULEFT"))
+                            else if (pinned && _owner != null && _owner is ContextMenu && (_owner as ContextMenu).pinOpened && Input.Pressed("MENULEFT"))
                             {
                                 bool flag2 = false;
-                                foreach (ContextMenu contextMenu in this._items)
+                                foreach (ContextMenu contextMenu in _items)
                                 {
                                     if (contextMenu.opened)
                                     {
@@ -491,7 +491,7 @@ namespace DuckGame
                                 }
                                 if (!flag2)
                                 {
-                                    if (!Editor.bigInterfaceMode || !this.IsEditorPlacementMenu())
+                                    if (!Editor.bigInterfaceMode || !IsEditorPlacementMenu())
                                     {
                                         Editor.ignorePinning = true;
                                         Editor.reopenContextMenu = true;
@@ -501,8 +501,8 @@ namespace DuckGame
                                         Editor.reopenContextMenu = true;
                                         Editor.clickedMenu = true;
                                         Editor.tookInput = true;
-                                        Editor.openContextThing = (this.owner as ContextMenu)._items[0];
-                                        Editor.pretendPinned = this.owner;
+                                        Editor.openContextThing = (owner as ContextMenu)._items[0];
+                                        Editor.pretendPinned = owner;
                                     }
                                 }
                             }
@@ -512,10 +512,10 @@ namespace DuckGame
                             vec2_3 = new Vec2(24f, 24f);
                         Vec2 vec2_4 = lastDrawPos + new Vec2(-(vec2_3.x + 2f), 0f);
                         Vec2 vec2_5 = lastDrawPos + new Vec2(-2f, vec2_3.y);
-                        this._hoverBackArrow = false;
+                        _hoverBackArrow = false;
                         if (vec2_2.x > vec2_4.x && vec2_2.x < vec2_5.x && vec2_2.y > vec2_4.y && vec2_2.y < vec2_5.y)
                         {
-                            this._hoverBackArrow = true;
+                            _hoverBackArrow = true;
                             if (flag1)
                             {
                                 Editor.reopenContextMenu = true;
@@ -523,64 +523,64 @@ namespace DuckGame
                                 Editor.tookInput = true;
                                 if (Editor.inputMode == EditorInput.Touch)
                                 {
-                                    Editor.openContextThing = (this.owner as ContextMenu)._items[0];
-                                    Editor.pretendPinned = this.owner;
+                                    Editor.openContextThing = (owner as ContextMenu)._items[0];
+                                    Editor.pretendPinned = owner;
                                 }
                                 else
                                     Editor.ignorePinning = true;
                             }
                         }
                     }
-                    this.PushLeft();
-                    int count = this._items.Count;
+                    PushLeft();
+                    int count = _items.Count;
                     for (int index = 0; index < count; ++index)
                     {
-                        if (!this.pinOpened || this._items[index].pinned)
+                        if (!pinOpened || _items[index].pinned)
                         {
-                            if (this._alwaysDrawLast)
+                            if (_alwaysDrawLast)
                             {
-                                if (index == this._items.Count - 1 || index >= this._drawIndex && index < this._drawIndex + this._maxNumToDraw && (index == this._items.Count - 1 || index != this._drawIndex + this._maxNumToDraw - 1))
-                                    this._items[index].DoUpdate();
+                                if (index == _items.Count - 1 || index >= _drawIndex && index < _drawIndex + _maxNumToDraw && (index == _items.Count - 1 || index != _drawIndex + _maxNumToDraw - 1))
+                                    _items[index].DoUpdate();
                             }
-                            else if (index >= this._drawIndex && index < this._drawIndex + this._maxNumToDraw)
-                                this._items[index].DoUpdate();
-                            if (this._collectionChanged)
+                            else if (index >= _drawIndex && index < _drawIndex + _maxNumToDraw)
+                                _items[index].DoUpdate();
+                            if (_collectionChanged)
                             {
-                                this._collectionChanged = false;
+                                _collectionChanged = false;
                                 return;
                             }
                         }
                     }
                 }
-                this.waitInputFrame = false;
-                if (this.pinOpened)
+                waitInputFrame = false;
+                if (pinOpened)
                     return;
-                if (this._items.Count > 0)
-                    this._canExpand = true;
+                if (_items.Count > 0)
+                    _canExpand = true;
                 bool flag3 = false;
                 if (!Editor.HasFocus())
                 {
-                    if (this._hover && this._dragMode && Editor.inputMode == EditorInput.Mouse && (!this._sliding && Mouse.left == InputState.Pressed || this._sliding && Mouse.left == InputState.Down))
+                    if (_hover && _dragMode && Editor.inputMode == EditorInput.Mouse && (!_sliding && Mouse.left == InputState.Pressed || _sliding && Mouse.left == InputState.Down))
                         flag3 = true;
-                    if (Editor.inputMode == EditorInput.Mouse && Mouse.right == InputState.Pressed && this.closeOnRight)
+                    if (Editor.inputMode == EditorInput.Mouse && Mouse.right == InputState.Pressed && closeOnRight)
                     {
-                        this.Disappear();
-                        this._owner.Selected(null);
-                        this.opened = false;
+                        Disappear();
+                        _owner.Selected(null);
+                        opened = false;
                         return;
                     }
                 }
-                if (this._hover && this.tooltip != null)
-                    Editor.tooltip = this.tooltip;
+                if (_hover && tooltip != null)
+                    Editor.tooltip = tooltip;
                 if (!Editor.HasFocus())
                 {
-                    if ((Editor.lockInput == null || this.IsPartOf(Editor.lockInput)) && !Editor.tookInput && Editor.inputMode == EditorInput.Gamepad)
+                    if ((Editor.lockInput == null || IsPartOf(Editor.lockInput)) && !Editor.tookInput && Editor.inputMode == EditorInput.Gamepad)
                     {
-                        bool flag4 = this.HasOpen();
-                        if (flag4 && Input.Pressed("MENULEFT") && this._canExpand)
+                        bool flag4 = HasOpen();
+                        if (flag4 && Input.Pressed("MENULEFT") && _canExpand)
                         {
                             bool flag5 = false;
-                            foreach (ContextMenu contextMenu in this._items)
+                            foreach (ContextMenu contextMenu in _items)
                             {
                                 if (contextMenu.HasOpen())
                                 {
@@ -591,46 +591,46 @@ namespace DuckGame
                             if (!flag5)
                             {
                                 Editor.tookInput = true;
-                                this.Selected(null);
+                                Selected(null);
                             }
                         }
-                        this._takingInput = false;
+                        _takingInput = false;
                         if (!flag4)
                         {
-                            if (this.opened && this._items.Count > 0)
+                            if (opened && _items.Count > 0)
                             {
-                                this._takingInput = true;
+                                _takingInput = true;
                                 bool flag6 = false;
                                 if (Input.Pressed("MENUUP"))
                                 {
                                     flag6 = true;
-                                    if (this._selectedIndex == this._items.Count - 1 && this._alwaysDrawLast)
+                                    if (_selectedIndex == _items.Count - 1 && _alwaysDrawLast)
                                     {
-                                        this._selectedIndex = this._drawIndex + this._maxNumToDraw >= this._items.Count ? this._drawIndex + this._maxNumToDraw - 1 : this._drawIndex + this._maxNumToDraw - 2;
-                                        if (this._selectedIndex > this._items.Count - 1)
-                                            this._selectedIndex = this._items.Count - 1;
+                                        _selectedIndex = _drawIndex + _maxNumToDraw >= _items.Count ? _drawIndex + _maxNumToDraw - 1 : _drawIndex + _maxNumToDraw - 2;
+                                        if (_selectedIndex > _items.Count - 1)
+                                            _selectedIndex = _items.Count - 1;
                                     }
-                                    --this._selectedIndex;
-                                    for (int index = 0; index < this._items.Count; ++index)
+                                    --_selectedIndex;
+                                    for (int index = 0; index < _items.Count; ++index)
                                     {
-                                        if (this._selectedIndex < 0)
+                                        if (_selectedIndex < 0)
                                         {
-                                            this._selectedIndex = this._items.Count - 1;
-                                            if (this._alwaysDrawLast)
+                                            _selectedIndex = _items.Count - 1;
+                                            if (_alwaysDrawLast)
                                             {
-                                                this._drawIndex = 0;
+                                                _drawIndex = 0;
                                             }
                                             else
                                             {
-                                                this._drawIndex = this._selectedIndex - this._maxNumToDraw + 1;
-                                                if (this._drawIndex < 0)
-                                                    this._drawIndex = 0;
+                                                _drawIndex = _selectedIndex - _maxNumToDraw + 1;
+                                                if (_drawIndex < 0)
+                                                    _drawIndex = 0;
                                             }
                                         }
-                                        if (this._items[this._selectedIndex].greyOut)
+                                        if (_items[_selectedIndex].greyOut)
                                         {
-                                            --this._selectedIndex;
-                                            this._drawIndex = this._selectedIndex;
+                                            --_selectedIndex;
+                                            _drawIndex = _selectedIndex;
                                         }
                                         else
                                             break;
@@ -639,29 +639,29 @@ namespace DuckGame
                                 else if (Input.Pressed("MENUDOWN"))
                                 {
                                     flag6 = true;
-                                    ++this._selectedIndex;
-                                    for (int index = 0; index < this._items.Count; ++index)
+                                    ++_selectedIndex;
+                                    for (int index = 0; index < _items.Count; ++index)
                                     {
-                                        if (this._selectedIndex > this._items.Count - 1)
+                                        if (_selectedIndex > _items.Count - 1)
                                         {
-                                            this._selectedIndex = 0;
-                                            this._drawIndex = this._selectedIndex;
+                                            _selectedIndex = 0;
+                                            _drawIndex = _selectedIndex;
                                         }
-                                        if (this._items[this._selectedIndex].greyOut)
+                                        if (_items[_selectedIndex].greyOut)
                                         {
-                                            ++this._selectedIndex;
-                                            this._drawIndex = this._selectedIndex;
+                                            ++_selectedIndex;
+                                            _drawIndex = _selectedIndex;
                                         }
                                         else
                                             break;
                                     }
                                 }
                                 if (flag6)
-                                    this.PositionItems();
+                                    PositionItems();
                                 int num = 0;
-                                foreach (ContextMenu contextMenu in this._items)
+                                foreach (ContextMenu contextMenu in _items)
                                 {
-                                    if (num == this._selectedIndex)
+                                    if (num == _selectedIndex)
                                     {
                                         contextMenu._hover = true;
                                         contextMenu.Hover();
@@ -671,15 +671,15 @@ namespace DuckGame
                                     ++num;
                                 }
                             }
-                            Rectangle rectangle = new Rectangle(this.x, this.y, this.itemSize.x, this.itemSize.y);
-                            if (this._hover && (Input.Pressed("SELECT") || this._canExpand && Input.Pressed("MENURIGHT") || this.scrollButtonDirection != 0))
+                            Rectangle rectangle = new Rectangle(x, y, itemSize.x, itemSize.y);
+                            if (_hover && (Input.Pressed("SELECT") || _canExpand && Input.Pressed("MENURIGHT") || scrollButtonDirection != 0))
                             {
                                 if (this.owner is ContextMenu owner)
                                 {
                                     foreach (ContextMenu contextMenu in owner._items)
                                         contextMenu._hover = false;
                                 }
-                                this._hover = true;
+                                _hover = true;
                                 flag3 = true;
                             }
                         }
@@ -690,17 +690,17 @@ namespace DuckGame
                         {
                             case EditorInput.Mouse:
                                 bool flag7 = false;
-                                if (Editor.inputMode == EditorInput.Mouse && Mouse.x >= this.x && Mouse.x <= this.x + itemSize.x && Mouse.y >= this.y + 1f && Mouse.y <= this.y + itemSize.y - 1f)
+                                if (Editor.inputMode == EditorInput.Mouse && Mouse.x >= x && Mouse.x <= x + itemSize.x && Mouse.y >= y + 1f && Mouse.y <= y + itemSize.y - 1f)
                                 {
                                     if (Mouse.left == InputState.Pressed)
                                         flag3 = true;
                                     Editor.hoverUI = true;
-                                    this._hover = true;
+                                    _hover = true;
                                     flag7 = true;
                                 }
                                 if (flag7)
                                 {
-                                    if (this.owner is ContextMenu owner1)
+                                    if (owner is ContextMenu owner1)
                                     {
                                         int num = 0;
                                         using (List<ContextMenu>.Enumerator enumerator = owner1._items.GetEnumerator())
@@ -722,25 +722,25 @@ namespace DuckGame
                                 }
                                 else
                                 {
-                                    if (!this._dragMode || Mouse.left != InputState.Down || TouchScreen.IsTouchScreenActive() && !TouchScreen.IsScreenTouched())
+                                    if (!_dragMode || Mouse.left != InputState.Down || TouchScreen.IsTouchScreenActive() && !TouchScreen.IsScreenTouched())
                                     {
-                                        this._hover = false;
+                                        _hover = false;
                                         break;
                                     }
                                     break;
                                 }
                             case EditorInput.Touch:
-                                Rectangle pRect = new Rectangle(this.x, this.y, this.itemSize.x, this.itemSize.y);
-                                if (TouchScreen.GetTap().Check(pRect, this.layer.camera))
+                                Rectangle pRect = new Rectangle(x, y, itemSize.x, itemSize.y);
+                                if (TouchScreen.GetTap().Check(pRect, layer.camera))
                                 {
                                     flag3 = true;
-                                    if (!this._hover)
+                                    if (!_hover)
                                     {
-                                        this._canEditSlide = false;
-                                        this._enteringSlideMode = true;
+                                        _canEditSlide = false;
+                                        _enteringSlideMode = true;
                                     }
-                                    this._hover = true;
-                                    if (this.owner is ContextMenu owner2)
+                                    _hover = true;
+                                    if (owner is ContextMenu owner2)
                                     {
                                         int num = 0;
                                         using (List<ContextMenu>.Enumerator enumerator = owner2._items.GetEnumerator())
@@ -764,29 +764,29 @@ namespace DuckGame
                                     break;
                         }
                     }
-                    if (Editor.inputMode == EditorInput.Mouse && Mouse.x > lastDrawPos.x && Mouse.x < lastDrawPos.x + this.menuSize.x && Mouse.y > lastDrawPos.y && Mouse.y < lastDrawPos.y + this.menuSize.y)
+                    if (Editor.inputMode == EditorInput.Mouse && Mouse.x > lastDrawPos.x && Mouse.x < lastDrawPos.x + menuSize.x && Mouse.y > lastDrawPos.y && Mouse.y < lastDrawPos.y + menuSize.y)
                     {
                         if (Mouse.scroll != 0f && !ContextMenu._didContextScroll)
                         {
-                            this._drawIndex += Mouse.scroll > 0f ? 1 : -1;
-                            this._drawIndex = Maths.Clamp(this._drawIndex, 0, this._items.Count - this._maxNumToDraw);
+                            _drawIndex += Mouse.scroll > 0f ? 1 : -1;
+                            _drawIndex = Maths.Clamp(_drawIndex, 0, _items.Count - _maxNumToDraw);
                             SFX.Play("highClick", 0.3f, 0.2f);
-                            foreach (ContextMenu contextMenu in this._items)
+                            foreach (ContextMenu contextMenu in _items)
                             {
                                 contextMenu.opened = false;
                                 contextMenu._hover = false;
                             }
-                            this.PositionItems();
+                            PositionItems();
                         }
                         ContextMenu._didContextScroll = false;
                     }
                 }
-                if (!Editor.HasFocus() && this._hover && this._dragMode && Editor.inputMode == EditorInput.Touch && TouchScreen.GetTouch() != Touch.None && TouchScreen.GetTouch().Check(new Rectangle(this.x, this.y, this.itemSize.x, this.itemSize.y), this.layer.camera))
+                if (!Editor.HasFocus() && _hover && _dragMode && Editor.inputMode == EditorInput.Touch && TouchScreen.GetTouch() != Touch.None && TouchScreen.GetTouch().Check(new Rectangle(x, y, itemSize.x, itemSize.y), layer.camera))
                     flag3 = true;
                 if (!flag3)
                     return;
                 Editor.clickedMenu = true;
-                this.Selected();
+                Selected();
             }
         }
 
@@ -796,8 +796,8 @@ namespace DuckGame
 
         public void ClearItems()
         {
-            this._collectionChanged = true;
-            this._items.Clear();
+            _collectionChanged = true;
+            _items.Clear();
         }
 
         public virtual void Hover()
@@ -807,74 +807,74 @@ namespace DuckGame
         private void UpdatePositioning()
         {
             bool flag = false;
-            if (this.y + _openedOffset + menuSize.y + 16f > this.layer.height)
+            if (y + _openedOffset + menuSize.y + 16f > layer.height)
             {
-                this._openedOffset = (this.layer.height - menuSize.y - this.y - 16f);
+                _openedOffset = (layer.height - menuSize.y - y - 16f);
                 flag = true;
             }
-            if (this.y + _openedOffset < 0f)
+            if (y + _openedOffset < 0f)
             {
-                this._openedOffset = -this.y;
+                _openedOffset = -y;
                 flag = true;
             }
             if (!flag)
                 return;
-            this.PositionItems();
+            PositionItems();
         }
 
         public override void Draw()
         {
-            this.position += this.offset;
-            if (!this._root && !this.pinOpened && !this.dontPush)
+            position += offset;
+            if (!_root && !pinOpened && !dontPush)
             {
                 float num1 = 1f;
-                if (this.greyOut)
+                if (greyOut)
                     num1 = 0.3f;
-                float num2 = num1 * this.alpha;
-                if (this._hover && !this.greyOut)
-                    Graphics.DrawRect(this.position, this.position + this.itemSize, new Color(70, 70, 70) * this.alpha, this.depth);
-                if (this.scrollButtonDirection != 0)
+                float num2 = num1 * alpha;
+                if (_hover && !greyOut)
+                    Graphics.DrawRect(position, position + itemSize, new Color(70, 70, 70) * alpha, depth);
+                if (scrollButtonDirection != 0)
                 {
-                    this._arrow.depth = this.depth + 1;
-                    if (this.scrollButtonDirection > 0)
+                    _arrow.depth = depth + 1;
+                    if (scrollButtonDirection > 0)
                     {
-                        this._arrow.flipV = true;
-                        Graphics.Draw(this._arrow, this.position.x + (this._owner as ContextMenu).menuSize.x / 2f, this.position.y + 8f);
+                        _arrow.flipV = true;
+                        Graphics.Draw(_arrow, position.x + (_owner as ContextMenu).menuSize.x / 2f, position.y + 8f);
                     }
                     else
                     {
-                        this._arrow.flipV = false;
-                        Graphics.Draw(this._arrow, this.position.x + (this._owner as ContextMenu).menuSize.x / 2f, this.position.y + 8f);
+                        _arrow.flipV = false;
+                        Graphics.Draw(_arrow, position.x + (_owner as ContextMenu).menuSize.x / 2f, position.y + 8f);
                     }
                 }
                 else
                 {
-                    if (this._image != null)
+                    if (_image != null)
                     {
-                        this._image.depth = this.depth + 3;
-                        this._image.x = this.x + 1f;
-                        this._image.y = this.y;
-                        this._image.color = Color.White * num2;
-                        this._image.Draw();
-                        Graphics.DrawString(this._text, this.position + new Vec2(20f, 4f), Color.White * num2, this.depth + 1);
+                        _image.depth = depth + 3;
+                        _image.x = x + 1f;
+                        _image.y = y;
+                        _image.color = Color.White * num2;
+                        _image.Draw();
+                        Graphics.DrawString(_text, position + new Vec2(20f, 4f), Color.White * num2, depth + 1);
                     }
-                    else if (this._text == "custom")
-                        Graphics.DrawString(this._text, this.position + new Vec2(2f, 4f), Colors.DGBlue * num2, this.depth + 1);
-                    else if (this.fancy)
+                    else if (_text == "custom")
+                        Graphics.DrawString(_text, position + new Vec2(2f, 4f), Colors.DGBlue * num2, depth + 1);
+                    else if (fancy)
                     {
                         float num3 = 0f;
-                        if (this.customIcon != null)
+                        if (customIcon != null)
                         {
-                            Vec2 vec2 = this.position + new Vec2(2f, 4f);
-                            Graphics.Draw(this.customIcon.texture, vec2.x, vec2.y, depth: (this.depth + 1));
+                            Vec2 vec2 = position + new Vec2(2f, 4f);
+                            Graphics.Draw(customIcon.texture, vec2.x, vec2.y, depth: (depth + 1));
                             num3 += 8f;
                         }
-                        Graphics.DrawFancyString(this._text, this.position + new Vec2(2f + num3, 4f), Color.White * num2, this.depth + 1);
-                        Vec2 vec2_1 = this.position + new Vec2(this.itemSize.x - 24f, 0f);
+                        Graphics.DrawFancyString(_text, position + new Vec2(2f + num3, 4f), Color.White * num2, depth + 1);
+                        Vec2 vec2_1 = position + new Vec2(itemSize.x - 24f, 0f);
                         int num4 = 0;
                         for (int index1 = 0; index1 < 3 && num4 != 4; ++index1)
                         {
-                            using (List<ContextMenu>.Enumerator enumerator = this._items.GetEnumerator())
+                            using (List<ContextMenu>.Enumerator enumerator = _items.GetEnumerator())
                             {
                             label_31:
                                 while (enumerator.MoveNext())
@@ -897,7 +897,7 @@ namespace DuckGame
                                                 Sprite image = contextMenu._image;
                                                 if (image != null)
                                                 {
-                                                    image.depth = this.depth + 3;
+                                                    image.depth = depth + 3;
                                                     image.x = vec2_1.x + 1f;
                                                     image.y = vec2_1.y;
                                                     image.scale = new Vec2(0.5f);
@@ -926,37 +926,37 @@ namespace DuckGame
                         }
                     }
                     else
-                        Graphics.DrawString(this._text, this.position + new Vec2(2f, 4f), Color.White * num2, this.depth + 1);
-                    if (this._items.Count > 0)
+                        Graphics.DrawString(_text, position + new Vec2(2f, 4f), Color.White * num2, depth + 1);
+                    if (_items.Count > 0)
                     {
-                        this._contextArrow.color = Color.White * num2;
-                        Graphics.Draw(this._contextArrow, (this.x + itemSize.x - 8f), this.y + 4f, this.depth + 1);
-                        this._contextArrow.color = Color.White;
+                        _contextArrow.color = Color.White * num2;
+                        Graphics.Draw(_contextArrow, (x + itemSize.x - 8f), y + 4f, depth + 1);
+                        _contextArrow.color = Color.White;
                     }
                 }
             }
-            if (this.opened)
+            if (opened)
             {
-                if (!this.pinOpened)
+                if (!pinOpened)
                 {
-                    this.UpdatePositioning();
-                    float x = this.menuSize.x;
-                    float y = this.menuSize.y;
-                    Vec2 p1_1 = new Vec2(this.x + this._openedOffsetX, this.y + this._openedOffset) + new Vec2(-2f, -2f);
-                    if (!this._root && !this.dontPush)
-                        p1_1.x += this.itemSize.x + 6f;
-                    if (this._showBackground)
+                    UpdatePositioning();
+                    float x = menuSize.x;
+                    float y = menuSize.y;
+                    Vec2 p1_1 = new Vec2(this.x + _openedOffsetX, this.y + _openedOffset) + new Vec2(-2f, -2f);
+                    if (!_root && !dontPush)
+                        p1_1.x += itemSize.x + 6f;
+                    if (_showBackground)
                     {
-                        Graphics.DrawRect(p1_1, p1_1 + new Vec2(x, y), new Color(70, 70, 70) * this.alpha, this.depth);
-                        Graphics.DrawRect(p1_1 + new Vec2(1f, 1f), p1_1 + new Vec2(x - 1f, y - 1f), new Color(30, 30, 30) * this.alpha, this.depth + 1);
-                        this._lastDrawPos = p1_1;
-                        if (this._items.Count > 0 && this.isPinnable && (!this._root || this.pinned))
+                        Graphics.DrawRect(p1_1, p1_1 + new Vec2(x, y), new Color(70, 70, 70) * alpha, depth);
+                        Graphics.DrawRect(p1_1 + new Vec2(1f, 1f), p1_1 + new Vec2(x - 1f, y - 1f), new Color(30, 30, 30) * alpha, depth + 1);
+                        _lastDrawPos = p1_1;
+                        if (_items.Count > 0 && isPinnable && (!_root || pinned))
                         {
-                            Sprite g = this._pin;
-                            if (this.pinned && Editor.pretendPinned != this || this._pinned)
-                                g = this._pinPinned;
-                            g.depth = this.depth + 2;
-                            if (this._hoverPin)
+                            Sprite g = _pin;
+                            if (pinned && Editor.pretendPinned != this || _pinned)
+                                g = _pinPinned;
+                            g.depth = depth + 2;
+                            if (_hoverPin)
                                 g.alpha = 1f;
                             else
                                 g.alpha = 0.5f;
@@ -964,36 +964,36 @@ namespace DuckGame
                             Graphics.Draw(g, vec2_2.x, vec2_2.y);
                             Vec2 p1_2 = vec2_2 + new Vec2(-6f, -6f);
                             Vec2 p2_1 = p1_2 + new Vec2(11f, 11f);
-                            if (Editor.inputMode == EditorInput.Gamepad && this._takingInput)
+                            if (Editor.inputMode == EditorInput.Gamepad && _takingInput)
                                 p1_2.x -= 10f;
-                            Graphics.DrawRect(p1_2, p2_1, new Color(70, 70, 70) * this.alpha, this.depth);
-                            Graphics.DrawRect(p1_2 + new Vec2(1f, 1f), p2_1 + new Vec2(-1f, 0f), new Color(30, 30, 30) * this.alpha, this.depth + 1);
-                            if (this._owner != null && this._owner is ContextMenu && (this._owner as ContextMenu).pinOpened)
+                            Graphics.DrawRect(p1_2, p2_1, new Color(70, 70, 70) * alpha, depth);
+                            Graphics.DrawRect(p1_2 + new Vec2(1f, 1f), p2_1 + new Vec2(-1f, 0f), new Color(30, 30, 30) * alpha, depth + 1);
+                            if (_owner != null && _owner is ContextMenu && (_owner as ContextMenu).pinOpened)
                             {
                                 Vec2 vec2_3 = new Vec2(12f, 12f);
                                 if (Editor.bigInterfaceMode)
                                     vec2_3 = new Vec2(24f, 24f);
                                 Vec2 p1_3 = p1_1 + new Vec2((float)-(vec2_3.x + 2.0), 0f);
                                 Vec2 p2_2 = p1_1 + new Vec2(-2f, vec2_3.y);
-                                Graphics.DrawRect(p1_3, p2_2, new Color(70, 70, 70) * this.alpha, this.depth);
-                                Graphics.DrawRect(p1_3 + new Vec2(1f, 1f), p2_2 + new Vec2(-1f, -1f), new Color(30, 30, 30) * this.alpha, this.depth + 1);
-                                this._contextArrow.flipH = true;
-                                this._contextArrow.depth = this.depth + 2;
-                                if (this._hoverBackArrow)
-                                    this._contextArrow.alpha = 1f;
+                                Graphics.DrawRect(p1_3, p2_2, new Color(70, 70, 70) * alpha, depth);
+                                Graphics.DrawRect(p1_3 + new Vec2(1f, 1f), p2_2 + new Vec2(-1f, -1f), new Color(30, 30, 30) * alpha, depth + 1);
+                                _contextArrow.flipH = true;
+                                _contextArrow.depth = depth + 2;
+                                if (_hoverBackArrow)
+                                    _contextArrow.alpha = 1f;
                                 else
-                                    this._contextArrow.alpha = 0.5f;
-                                this._contextArrow.alpha = 1f;
-                                Graphics.Draw(this._contextArrow, p1_3.x + vec2_3.x / 2f + this._contextArrow.width / 2, p1_3.y + vec2_3.y / 2f - this._contextArrow.height / 2);
-                                this._contextArrow.flipH = false;
+                                    _contextArrow.alpha = 0.5f;
+                                _contextArrow.alpha = 1f;
+                                Graphics.Draw(_contextArrow, p1_3.x + vec2_3.x / 2f + _contextArrow.width / 2, p1_3.y + vec2_3.y / 2f - _contextArrow.height / 2);
+                                _contextArrow.flipH = false;
                             }
                         }
                     }
-                    if (Editor.inputMode == EditorInput.Gamepad && this.drawControls && this._takingInput)
+                    if (Editor.inputMode == EditorInput.Gamepad && drawControls && _takingInput)
                     {
                         string text = "";
                         bool flag = false;
-                        foreach (ContextMenu contextMenu in this._items)
+                        foreach (ContextMenu contextMenu in _items)
                         {
                             if (contextMenu.hover)
                             {
@@ -1028,81 +1028,81 @@ namespace DuckGame
                                 }
                             }
                         }
-                        if (!this._root && !flag)
+                        if (!_root && !flag)
                             text += "  @LEFT@BACK";
-                        Graphics.DrawRect(p1_1 + new Vec2(0f, y), p1_1 + new Vec2(x, y + 15f), Color.Black * this.alpha, this.depth);
-                        Graphics.DrawString(text, p1_1 + new Vec2(0f, y + 4f), Color.White * this.alpha, this.depth + 1);
-                        if (this.isPinnable && (!this._root || this.pinned))
+                        Graphics.DrawRect(p1_1 + new Vec2(0f, y), p1_1 + new Vec2(x, y + 15f), Color.Black * alpha, depth);
+                        Graphics.DrawString(text, p1_1 + new Vec2(0f, y + 4f), Color.White * alpha, depth + 1);
+                        if (isPinnable && (!_root || pinned))
                         {
                             Graphics._biosFont.spriteScale = new Vec2(0.75f);
-                            Graphics.DrawString("@MENU1@", p1_1 + new Vec2(this.menuSize.x - 20f, -7f), Color.White * this.alpha, this.depth + 4, scale: 0.5f);
+                            Graphics.DrawString("@MENU1@", p1_1 + new Vec2(menuSize.x - 20f, -7f), Color.White * alpha, depth + 4, scale: 0.5f);
                             Graphics._biosFont.spriteScale = new Vec2(1f);
                         }
                     }
-                    if (this._hasToproot && !this.dontPush)
-                        Graphics.DrawRect(this._toprootPosition, this._toprootPosition + new Vec2(16f, 32f), new Color(70, 70, 70) * this.alpha, this.depth - 4);
+                    if (_hasToproot && !dontPush)
+                        Graphics.DrawRect(_toprootPosition, _toprootPosition + new Vec2(16f, 32f), new Color(70, 70, 70) * alpha, depth - 4);
                 }
                 int num = 0;
-                foreach (ContextMenu contextMenu in this._items)
+                foreach (ContextMenu contextMenu in _items)
                 {
-                    if (!this.pinOpened || contextMenu.opened)
+                    if (!pinOpened || contextMenu.opened)
                     {
                         contextMenu.scrollButtonDirection = 0;
-                        if (num == this._drawIndex && this._drawIndex > 0)
+                        if (num == _drawIndex && _drawIndex > 0)
                             contextMenu.scrollButtonDirection = -1;
-                        else if ((num - this._drawIndex == this._maxNumToDraw - 1 || this._alwaysDrawLast && num - this._drawIndex == this._maxNumToDraw - 2) && this._items.Count - (this._alwaysDrawLast ? 2 : 1) > num)
+                        else if ((num - _drawIndex == _maxNumToDraw - 1 || _alwaysDrawLast && num - _drawIndex == _maxNumToDraw - 2) && _items.Count - (_alwaysDrawLast ? 2 : 1) > num)
                             contextMenu.scrollButtonDirection = 1;
-                        if (this._alwaysDrawLast)
+                        if (_alwaysDrawLast)
                         {
-                            if (num == this._items.Count - 1)
+                            if (num == _items.Count - 1)
                                 contextMenu.scrollButtonDirection = 0;
-                            if ((num == this._items.Count - 1 || num >= this._drawIndex && num < this._drawIndex + this._maxNumToDraw && (num == this._items.Count - 1 || num != this._drawIndex + this._maxNumToDraw - 1)) && contextMenu.visible)
+                            if ((num == _items.Count - 1 || num >= _drawIndex && num < _drawIndex + _maxNumToDraw && (num == _items.Count - 1 || num != _drawIndex + _maxNumToDraw - 1)) && contextMenu.visible)
                                 contextMenu.DoDraw();
                         }
-                        else if (num >= this._drawIndex && num - this._drawIndex < this._maxNumToDraw && contextMenu.visible)
+                        else if (num >= _drawIndex && num - _drawIndex < _maxNumToDraw && contextMenu.visible)
                             contextMenu.DoDraw();
                     }
                     ++num;
                 }
             }
-            this.position -= this.offset;
+            position -= offset;
         }
 
         public virtual void Selected()
         {
-            if (this.greyOut || this._owner == null)
+            if (greyOut || _owner == null)
                 return;
-            this._owner.Selected(this);
+            _owner.Selected(this);
         }
 
         public bool IsEditorPlacementMenu() => true;
 
         public virtual void Selected(ContextMenu item)
         {
-            if (this.greyOut)
+            if (greyOut)
                 return;
             if (item != null && item.scrollButtonDirection != 0)
             {
-                this._drawIndex += item.scrollButtonDirection;
-                this._drawIndex = Maths.Clamp(this._drawIndex, 0, this._items.Count - this._maxNumToDraw);
+                _drawIndex += item.scrollButtonDirection;
+                _drawIndex = Maths.Clamp(_drawIndex, 0, _items.Count - _maxNumToDraw);
                 SFX.Play("highClick", 0.3f, 0.2f);
-                foreach (ContextMenu contextMenu in this._items)
+                foreach (ContextMenu contextMenu in _items)
                 {
                     contextMenu.opened = false;
                     contextMenu._hover = false;
                 }
-                this.PositionItems();
+                PositionItems();
             }
             else
             {
-                foreach (ContextMenu contextMenu in this._items)
+                foreach (ContextMenu contextMenu in _items)
                 {
                     if (contextMenu != item)
                         contextMenu.opened = false;
                 }
                 if (item != null)
                 {
-                    if (this.IsEditorPlacementMenu() && Editor.bigInterfaceMode && item is EditorGroupMenu || item.text == "More...")
+                    if (IsEditorPlacementMenu() && Editor.bigInterfaceMode && item is EditorGroupMenu || item.text == "More...")
                     {
                         if (!item.opened)
                         {
@@ -1123,28 +1123,28 @@ namespace DuckGame
                         SFX.Play("highClick", 0.3f, 0.2f);
                     }
                 }
-                this.waitInputFrame = true;
+                waitInputFrame = true;
             }
         }
 
-        public void AddItem(ContextMenu item) => this.AddItem(item, -1);
+        public void AddItem(ContextMenu item) => AddItem(item, -1);
 
         public void AddItem(ContextMenu item, int index)
         {
             item.Initialize();
             if (index >= 0)
-                this._items.Insert(index, item);
+                _items.Insert(index, item);
             else
-                this._items.Add(item);
+                _items.Add(item);
             item.owner = this;
-            this.PositionItems();
+            PositionItems();
         }
 
         public Thing GetPlacementType(System.Type pType)
         {
             if (this is ContextObject && (this as ContextObject).thing.GetType() == pType)
                 return (this as ContextObject).thing;
-            foreach (ContextMenu contextMenu in this._items)
+            foreach (ContextMenu contextMenu in _items)
             {
                 Thing placementType = contextMenu.GetPlacementType(pType);
                 if (placementType != null)
@@ -1163,7 +1163,7 @@ namespace DuckGame
         {
             if (source == null || target == null || source.Length == 0 || target.Length == 0)
                 return 0f;
-            return source == target ? 1f : 1f - this.ComputeLevenshteinDistance(source, target) / Math.Max(source.Length, target.Length);
+            return source == target ? 1f : 1f - ComputeLevenshteinDistance(source, target) / Math.Max(source.Length, target.Length);
         }
 
         /// <summary>
@@ -1200,7 +1200,7 @@ namespace DuckGame
             return numArray[length1, length2];
         }
 
-        public List<ContextMenu.SearchPair> Search(string pTerm) => this.Search(pTerm.ToLowerInvariant(), new List<ContextMenu.SearchPair>()).OrderBy<ContextMenu.SearchPair, double>(x => -x.relevance).ToList<ContextMenu.SearchPair>();
+        public List<ContextMenu.SearchPair> Search(string pTerm) => Search(pTerm.ToLowerInvariant(), new List<ContextMenu.SearchPair>()).OrderBy<ContextMenu.SearchPair, double>(x => -x.relevance).ToList<ContextMenu.SearchPair>();
 
         private List<ContextMenu.SearchPair> Search(
           string pTerm,
@@ -1208,8 +1208,8 @@ namespace DuckGame
         {
             if (this is ContextObject)
             {
-                string lowerInvariant = this._text.ToLowerInvariant();
-                double similarity = this.CalculateSimilarity(pTerm, lowerInvariant);
+                string lowerInvariant = _text.ToLowerInvariant();
+                double similarity = CalculateSimilarity(pTerm, lowerInvariant);
                 float num = 1f;
                 for (int index = 0; index < pTerm.Length && index < lowerInvariant.Length; ++index)
                 {
@@ -1230,7 +1230,7 @@ namespace DuckGame
                         thing = this as ContextObject
                     });
             }
-            foreach (ContextMenu contextMenu in this._items)
+            foreach (ContextMenu contextMenu in _items)
                 contextMenu.Search(pTerm, pCurrentTerms);
             return pCurrentTerms;
         }
@@ -1238,62 +1238,62 @@ namespace DuckGame
         public void PositionItems()
         {
             float num1 = 0f;
-            float num2 = this.y + this._openedOffset;
-            this._openedOffsetX = 0f;
-            if (Editor.inputMode != EditorInput.Mouse && !this._root)
+            float num2 = y + _openedOffset;
+            _openedOffsetX = 0f;
+            if (Editor.inputMode != EditorInput.Mouse && !_root)
             {
                 num2 = 16f;
-                this._openedOffset = (-this.y + 16f);
+                _openedOffset = (-y + 16f);
             }
-            for (int index = 0; index < this._items.Count; ++index)
+            for (int index = 0; index < _items.Count; ++index)
             {
-                ContextMenu contextMenu = this._items[index];
+                ContextMenu contextMenu = _items[index];
                 if (!contextMenu.opened || contextMenu is ContextToolbarItem && (contextMenu as ContextToolbarItem).isPushingUp)
                 {
-                    if (!this._root && !this.dontPush)
-                        contextMenu.x = (this.x + 3f + itemSize.x + 3f);
+                    if (!_root && !dontPush)
+                        contextMenu.x = (x + 3f + itemSize.x + 3f);
                     else
-                        contextMenu.x = this.x;
-                    if ((this._pinned || Editor.pretendPinned == this) && !this._root)
+                        contextMenu.x = x;
+                    if ((_pinned || Editor.pretendPinned == this) && !_root)
                     {
                         if (Editor.bigInterfaceMode)
                         {
                             contextMenu.x += 14f;
-                            this._openedOffsetX = 14f;
+                            _openedOffsetX = 14f;
                         }
                         else
                         {
                             contextMenu.x += 4f;
-                            this._openedOffsetX = 4f;
+                            _openedOffsetX = 4f;
                         }
                     }
                     contextMenu.y = num2;
                 }
-                if (index >= this._drawIndex && !this.pinOpened && (this._alwaysDrawLast && (index == this._items.Count - 1 || index != this._drawIndex + this._maxNumToDraw - 1 && index < this._drawIndex + this._maxNumToDraw) || !this._alwaysDrawLast))
+                if (index >= _drawIndex && !pinOpened && (_alwaysDrawLast && (index == _items.Count - 1 || index != _drawIndex + _maxNumToDraw - 1 && index < _drawIndex + _maxNumToDraw) || !_alwaysDrawLast))
                     num2 += contextMenu.itemSize.y + 1f;
                 if (contextMenu.itemSize.x < 107f)
                     contextMenu.itemSize.x = 107f;
                 if (contextMenu.itemSize.x + 4.0 > menuSize.x)
-                    this.menuSize.x = contextMenu.itemSize.x + 4f;
-                contextMenu.depth = this.depth + 2;
+                    menuSize.x = contextMenu.itemSize.x + 4f;
+                contextMenu.depth = depth + 2;
                 if (contextMenu.itemSize.x > num1)
                     num1 = contextMenu.itemSize.x;
             }
             int num3 = 0;
             float num4 = 0f;
-            foreach (ContextMenu contextMenu in this._items)
+            foreach (ContextMenu contextMenu in _items)
             {
-                if (num3 < this._maxNumToDraw)
+                if (num3 < _maxNumToDraw)
                     num4 += contextMenu.itemSize.y + 1f;
                 contextMenu.itemSize.x = num1;
                 ++num3;
             }
-            this.menuSize.y = num4 + 3f;
+            menuSize.y = num4 + 3f;
         }
 
         public void CloseMenus()
         {
-            foreach (ContextMenu contextMenu in this._items)
+            foreach (ContextMenu contextMenu in _items)
                 contextMenu.opened = false;
         }
 

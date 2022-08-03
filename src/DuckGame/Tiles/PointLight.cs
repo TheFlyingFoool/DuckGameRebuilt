@@ -36,13 +36,13 @@ namespace DuckGame
           bool strangeFalloff = false)
           : base(xpos, ypos)
         {
-            this.layer = Layer.Lighting;
-            this._occluders = occluders;
-            this._lightColor = c;
-            if (this._occluders == null)
-                this._occluders = new List<LightOccluder>();
-            this._range = range;
-            this._strangeFalloff = strangeFalloff;
+            layer = Layer.Lighting;
+            _occluders = occluders;
+            _lightColor = c;
+            if (_occluders == null)
+                _occluders = new List<LightOccluder>();
+            _range = range;
+            _strangeFalloff = strangeFalloff;
         }
 
         public override void Initialize()
@@ -57,68 +57,68 @@ namespace DuckGame
             if (NetworkDebugger.enabled)
                 return;
             Layer.lighting = true;
-            if (!this._initialized)
+            if (!_initialized)
             {
-                this.DrawLightNew();
-                foreach (Door door in Level.CheckCircleAll<Door>(this.position, this._range * 0.8f))
+                DrawLightNew();
+                foreach (Door door in Level.CheckCircleAll<Door>(position, _range * 0.8f))
                 {
-                    if (Level.CheckLine<Block>(this.position, door.position, door) == null || Level.CheckLine<Block>(this.position, door.topLeft, door) == null || Level.CheckLine<Block>(this.position, door.bottomRight, door) == null)
+                    if (Level.CheckLine<Block>(position, door.position, door) == null || Level.CheckLine<Block>(position, door.topLeft, door) == null || Level.CheckLine<Block>(position, door.bottomRight, door) == null)
                     {
-                        this._doors[door] = false;
-                        this._doorList.Add(door);
+                        _doors[door] = false;
+                        _doorList.Add(door);
                     }
                 }
-                foreach (VerticalDoor verticalDoor in Level.CheckCircleAll<VerticalDoor>(this.position, this._range * 0.8f))
+                foreach (VerticalDoor verticalDoor in Level.CheckCircleAll<VerticalDoor>(position, _range * 0.8f))
                 {
-                    if (Level.CheckLine<Block>(this.position, verticalDoor.position, verticalDoor) == null || Level.CheckLine<Block>(this.position, verticalDoor.topLeft, verticalDoor) == null || Level.CheckLine<Block>(this.position, verticalDoor.bottomRight, verticalDoor) == null)
+                    if (Level.CheckLine<Block>(position, verticalDoor.position, verticalDoor) == null || Level.CheckLine<Block>(position, verticalDoor.topLeft, verticalDoor) == null || Level.CheckLine<Block>(position, verticalDoor.bottomRight, verticalDoor) == null)
                     {
-                        this._verticalDoors[verticalDoor] = false;
-                        this._verticalDoorList.Add(verticalDoor);
+                        _verticalDoors[verticalDoor] = false;
+                        _verticalDoorList.Add(verticalDoor);
                     }
                 }
-                this._initialized = true;
+                _initialized = true;
             }
             bool flag = false;
-            foreach (Door door in this._doorList)
+            foreach (Door door in _doorList)
             {
-                if (!this._doors[door] && Math.Abs(door._open) > 0.800000011920929)
+                if (!_doors[door] && Math.Abs(door._open) > 0.800000011920929)
                 {
-                    this._doors[door] = true;
+                    _doors[door] = true;
                     flag = true;
                 }
-                else if (this._doors[door] && Math.Abs(door._open) < 0.200000002980232)
+                else if (_doors[door] && Math.Abs(door._open) < 0.200000002980232)
                 {
-                    this._doors[door] = false;
+                    _doors[door] = false;
                     flag = true;
                 }
             }
-            foreach (VerticalDoor verticalDoor in this._verticalDoorList)
+            foreach (VerticalDoor verticalDoor in _verticalDoorList)
             {
-                if (!this._verticalDoors[verticalDoor] && Math.Abs(verticalDoor._open) > 0.800000011920929)
+                if (!_verticalDoors[verticalDoor] && Math.Abs(verticalDoor._open) > 0.800000011920929)
                 {
-                    this._verticalDoors[verticalDoor] = true;
+                    _verticalDoors[verticalDoor] = true;
                     flag = true;
                 }
-                else if (this._verticalDoors[verticalDoor] && Math.Abs(verticalDoor._open) < 0.200000002980232)
+                else if (_verticalDoors[verticalDoor] && Math.Abs(verticalDoor._open) < 0.200000002980232)
                 {
-                    this._verticalDoors[verticalDoor] = false;
+                    _verticalDoors[verticalDoor] = false;
                     flag = true;
                 }
             }
-            if (this.fullRefreshCountdown > 0)
+            if (fullRefreshCountdown > 0)
             {
-                if (this.fullRefreshCountdown == 1)
+                if (fullRefreshCountdown == 1)
                 {
-                    this._objectsInRange = null;
-                    this.DrawLightNew();
+                    _objectsInRange = null;
+                    DrawLightNew();
                 }
-                --this.fullRefreshCountdown;
+                --fullRefreshCountdown;
             }
             else
             {
-                if (!flag && this._geo != null)
+                if (!flag && _geo != null)
                     return;
-                this.DrawLightNew();
+                DrawLightNew();
             }
         }
 
@@ -126,21 +126,21 @@ namespace DuckGame
         {
             if (NetworkDebugger.enabled)
                 return;
-            this._geo = MTSpriteBatch.CreateGeometryItem();
+            _geo = MTSpriteBatch.CreateGeometryItem();
             Vec2 vec2_1 = Vec2.Zero;
             Color c3 = Color.White;
             bool flag1 = false;
-            if (this._objectsInRange == null)
-                this._objectsInRange = Level.CheckCircleAll<Block>(this.position, this._range).ToList<Block>();
+            if (_objectsInRange == null)
+                _objectsInRange = Level.CheckCircleAll<Block>(position, _range).ToList<Block>();
             int num1 = 64;
             for (int index1 = 0; index1 <= num1; ++index1)
             {
                 float deg = (float)(index1 / num1 * 360.0);
                 Vec2 vec2_2 = new Vec2((float)Math.Cos(Maths.DegToRad(deg)), -(float)Math.Sin(Maths.DegToRad(deg)));
                 Vec2 vec2_3 = Vec2.Zero;
-                Vec2 point2 = this.position + vec2_2 * this._range;
+                Vec2 point2 = position + vec2_2 * _range;
                 Vec2 vec2_4;
-                if (this._strangeFalloff)
+                if (_strangeFalloff)
                 {
                     vec2_3 = point2;
                 }
@@ -148,14 +148,14 @@ namespace DuckGame
                 {
                     vec2_3 = new Vec2(999999f, 999999f);
                     float num2 = 9999999f;
-                    for (int index2 = 0; index2 < this._objectsInRange.Count; ++index2)
+                    for (int index2 = 0; index2 < _objectsInRange.Count; ++index2)
                     {
-                        if (!(this._objectsInRange[index2] is Window) && this._objectsInRange[index2].solid && Collision.Line(this.position, point2, this._objectsInRange[index2]))
+                        if (!(_objectsInRange[index2] is Window) && _objectsInRange[index2].solid && Collision.Line(position, point2, _objectsInRange[index2]))
                         {
-                            Vec2 vec2_5 = Collision.LinePoint(this.position, point2, this._objectsInRange[index2]);
+                            Vec2 vec2_5 = Collision.LinePoint(position, point2, _objectsInRange[index2]);
                             if (vec2_5 != Vec2.Zero)
                             {
-                                vec2_4 = vec2_5 - this.position;
+                                vec2_4 = vec2_5 - position;
                                 float lengthSq = vec2_4.lengthSq;
                                 if (lengthSq < num2)
                                 {
@@ -168,24 +168,24 @@ namespace DuckGame
                     if (num2 > 99999.0)
                         vec2_3 = point2;
                 }
-                Color c = this._lightColor;
-                vec2_4 = vec2_3 - this.position;
+                Color c = _lightColor;
+                vec2_4 = vec2_3 - position;
                 float length = vec2_4.length;
-                if (this._strangeFalloff)
+                if (_strangeFalloff)
                     length += 30f;
                 float num3;
-                if (this._strangeFalloff)
+                if (_strangeFalloff)
                 {
-                    float num4 = 1f - Math.Max(length - 30f, 0f) / this._range;
+                    float num4 = 1f - Math.Max(length - 30f, 0f) / _range;
                     num3 = num4 * num4;
                 }
                 else
                     num3 = (float)(1.0 - length / _range);
                 bool flag2 = false;
                 Color color = Color.White;
-                foreach (LightOccluder occluder in this._occluders)
+                foreach (LightOccluder occluder in _occluders)
                 {
-                    if (Collision.LineIntersect(occluder.p1, occluder.p2, this.position, vec2_3) && (!flag1 || Collision.LineIntersect(occluder.p1, occluder.p2, this.position, vec2_1)))
+                    if (Collision.LineIntersect(occluder.p1, occluder.p2, position, vec2_3) && (!flag1 || Collision.LineIntersect(occluder.p1, occluder.p2, position, vec2_1)))
                     {
                         Vec3 vector3 = (c * 0.5f).ToVector3();
                         color = occluder.color;
@@ -194,7 +194,7 @@ namespace DuckGame
                         break;
                     }
                 }
-                Color c2 = this._lightColor * num3;
+                Color c2 = _lightColor * num3;
                 if (flag2)
                     c2 = new Color((c2 * 0.5f).ToVector3() * color.ToVector3());
                 c2.a = 0;
@@ -206,7 +206,7 @@ namespace DuckGame
                         vec2_3.x = (float)Math.Round(vec2_3.x);
                         vec2_3.y = (float)Math.Round(vec2_3.y);
                     }
-                    this._geo.AddTriangle(this.position, vec2_3, vec2_1, c, c2, c3);
+                    _geo.AddTriangle(position, vec2_3, vec2_1, c, c2, c3);
                 }
                 flag1 = true;
                 vec2_1 = vec2_3;
@@ -216,11 +216,11 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._geo == null)
+            if (_geo == null)
                 return;
-            Graphics.screen.SubmitGeometry(this._geo);
+            Graphics.screen.SubmitGeometry(_geo);
         }
 
-        public void Refresh() => this.fullRefreshCountdown = 3;
+        public void Refresh() => fullRefreshCountdown = 3;
     }
 }

@@ -11,11 +11,11 @@ namespace DuckGame
     {
         public ATShotgun()
         {
-            this.accuracy = 0.6f;
-            this.range = 115f;
-            this.penetration = 1f;
-            this.rangeVariation = 10f;
-            this.combustable = true;
+            accuracy = 0.6f;
+            range = 115f;
+            penetration = 1f;
+            rangeVariation = 10f;
+            combustable = true;
         }
 
         public override void PopShell(float x, float y, int dir)

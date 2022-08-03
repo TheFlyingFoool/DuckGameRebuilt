@@ -18,56 +18,56 @@ namespace DuckGame
         public int size = 512;
         public Material material;
 
-        public GeometryItem() => this.vertices = new VertexPositionColor[this.size];
+        public GeometryItem() => vertices = new VertexPositionColor[size];
 
-        public void Clear() => this.length = 0;
+        public void Clear() => length = 0;
 
         public void AddTriangle(Vec2 p1, Vec2 p2, Vec2 p3, Color c)
         {
-            if (this.length + 3 >= this.size)
+            if (length + 3 >= size)
             {
-                VertexPositionColor[] vertexPositionColorArray = new VertexPositionColor[this.size * 2];
-                this.vertices.CopyTo(vertexPositionColorArray, 0);
-                this.vertices = vertexPositionColorArray;
-                this.size *= 2;
+                VertexPositionColor[] vertexPositionColorArray = new VertexPositionColor[size * 2];
+                vertices.CopyTo(vertexPositionColorArray, 0);
+                vertices = vertexPositionColorArray;
+                size *= 2;
             }
-            this.vertices[this.length].Position.X = p1.x;
-            this.vertices[this.length].Position.Y = p1.y;
-            this.vertices[this.length].Position.Z = this.depth;
-            this.vertices[this.length].Color = (Microsoft.Xna.Framework.Color)c;
-            this.vertices[this.length + 1].Position.X = p2.x;
-            this.vertices[this.length + 1].Position.Y = p2.y;
-            this.vertices[this.length + 1].Position.Z = this.depth;
-            this.vertices[this.length + 1].Color = (Microsoft.Xna.Framework.Color)c;
-            this.vertices[this.length + 2].Position.X = p3.x;
-            this.vertices[this.length + 2].Position.Y = p3.y;
-            this.vertices[this.length + 2].Position.Z = this.depth;
-            this.vertices[this.length + 2].Color = (Microsoft.Xna.Framework.Color)c;
-            this.length += 3;
+            vertices[length].Position.X = p1.x;
+            vertices[length].Position.Y = p1.y;
+            vertices[length].Position.Z = depth;
+            vertices[length].Color = (Microsoft.Xna.Framework.Color)c;
+            vertices[length + 1].Position.X = p2.x;
+            vertices[length + 1].Position.Y = p2.y;
+            vertices[length + 1].Position.Z = depth;
+            vertices[length + 1].Color = (Microsoft.Xna.Framework.Color)c;
+            vertices[length + 2].Position.X = p3.x;
+            vertices[length + 2].Position.Y = p3.y;
+            vertices[length + 2].Position.Z = depth;
+            vertices[length + 2].Color = (Microsoft.Xna.Framework.Color)c;
+            length += 3;
         }
 
         public void AddTriangle(Vec2 p1, Vec2 p2, Vec2 p3, Color c, Color c2, Color c3)
         {
-            if (this.length + 3 >= this.size)
+            if (length + 3 >= size)
             {
-                VertexPositionColor[] vertexPositionColorArray = new VertexPositionColor[this.size * 2];
-                this.vertices.CopyTo(vertexPositionColorArray, 0);
-                this.vertices = vertexPositionColorArray;
-                this.size *= 2;
+                VertexPositionColor[] vertexPositionColorArray = new VertexPositionColor[size * 2];
+                vertices.CopyTo(vertexPositionColorArray, 0);
+                vertices = vertexPositionColorArray;
+                size *= 2;
             }
-            this.vertices[this.length].Position.X = p1.x;
-            this.vertices[this.length].Position.Y = p1.y;
-            this.vertices[this.length].Position.Z = this.depth;
-            this.vertices[this.length].Color = (Microsoft.Xna.Framework.Color)c;
-            this.vertices[this.length + 1].Position.X = p2.x;
-            this.vertices[this.length + 1].Position.Y = p2.y;
-            this.vertices[this.length + 1].Position.Z = this.depth;
-            this.vertices[this.length + 1].Color = (Microsoft.Xna.Framework.Color)c2;
-            this.vertices[this.length + 2].Position.X = p3.x;
-            this.vertices[this.length + 2].Position.Y = p3.y;
-            this.vertices[this.length + 2].Position.Z = this.depth;
-            this.vertices[this.length + 2].Color = (Microsoft.Xna.Framework.Color)c3;
-            this.length += 3;
+            vertices[length].Position.X = p1.x;
+            vertices[length].Position.Y = p1.y;
+            vertices[length].Position.Z = depth;
+            vertices[length].Color = (Microsoft.Xna.Framework.Color)c;
+            vertices[length + 1].Position.X = p2.x;
+            vertices[length + 1].Position.Y = p2.y;
+            vertices[length + 1].Position.Z = depth;
+            vertices[length + 1].Color = (Microsoft.Xna.Framework.Color)c2;
+            vertices[length + 2].Position.X = p3.x;
+            vertices[length + 2].Position.Y = p3.y;
+            vertices[length + 2].Position.Z = depth;
+            vertices[length + 2].Color = (Microsoft.Xna.Framework.Color)c3;
+            length += 3;
         }
     }
 }

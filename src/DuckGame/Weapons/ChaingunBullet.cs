@@ -25,9 +25,9 @@ namespace DuckGame
         public ChaingunBullet(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("chainBullet");
-            this.center = new Vec2(4f, 3f);
-            this.depth = (Depth)0.8f;
+            graphic = new Sprite("chainBullet");
+            center = new Vec2(4f, 3f);
+            depth = (Depth)0.8f;
         }
 
         public ChaingunBullet(float xpos, float ypos, bool dart)
@@ -35,61 +35,61 @@ namespace DuckGame
         {
             if (dart)
             {
-                this.graphic = new SpriteMap(nameof(dart), 16, 16);
-                this.center = new Vec2(7f, 7f);
+                graphic = new SpriteMap(nameof(dart), 16, 16);
+                center = new Vec2(7f, 7f);
             }
             else
             {
-                this.graphic = new Sprite("chainBullet");
-                this.center = new Vec2(4f, 3f);
+                graphic = new Sprite("chainBullet");
+                center = new Vec2(4f, 3f);
             }
-            this.depth = (Depth)0.8f;
+            depth = (Depth)0.8f;
         }
 
         public override void Update()
         {
-            this.wave += 0.1f + this.waveSpeed;
-            if (this.childThing == null)
+            wave += 0.1f + waveSpeed;
+            if (childThing == null)
                 return;
-            this.childThing.Update();
+            childThing.Update();
         }
 
         public override void Draw()
         {
-            if (this.parentThing != null)
+            if (parentThing != null)
             {
-                this.position = this.parentThing.position + this.chainOffset + new Vec2(0f, 2f);
-                this.graphic.flipH = this.parentThing.graphic.flipH;
-                this.desiredSway = 0f;
-                this.desiredSway = !(this.parentThing is Gun parentThing1) || parentThing1.owner == null ? -this.parentThing.hSpeed : -parentThing1.owner.hSpeed;
-                this.shake += Math.Abs(this.lastDesiredSway - this.desiredSway) * 0.3f;
+                position = parentThing.position + chainOffset + new Vec2(0f, 2f);
+                graphic.flipH = parentThing.graphic.flipH;
+                desiredSway = 0f;
+                desiredSway = !(parentThing is Gun parentThing1) || parentThing1.owner == null ? -parentThing.hSpeed : -parentThing1.owner.hSpeed;
+                shake += Math.Abs(lastDesiredSway - desiredSway) * 0.3f;
                 if (shake > 0.0)
-                    this.shake -= 0.01f;
+                    shake -= 0.01f;
                 else
-                    this.shake = 0f;
+                    shake = 0f;
                 if (shake > 1.5)
                 {
-                    this.shake = 1.5f;
-                    this.waveSpeed += 0.02f;
+                    shake = 1.5f;
+                    waveSpeed += 0.02f;
                 }
                 if (waveSpeed > 0.1f)
-                    this.waveSpeed = 0.1f;
+                    waveSpeed = 0.1f;
                 if (waveSpeed > 0f)
-                    this.waveSpeed -= 0.01f;
+                    waveSpeed -= 0.01f;
                 else
-                    this.waveSpeed = 0f;
-                this.lastDesiredSway = this.desiredSway;
-                if (this.parentThing is ChaingunBullet parentThing2)
-                    this.desiredSway += parentThing2.sway * 0.7f;
-                this.desiredSway += (float)Math.Sin(wave + this.waveAdd) * this.shake;
-                this.sway = MathHelper.Lerp(this.sway, this.desiredSway, 1f);
-                this.position.x += this.sway;
+                    waveSpeed = 0f;
+                lastDesiredSway = desiredSway;
+                if (parentThing is ChaingunBullet parentThing2)
+                    desiredSway += parentThing2.sway * 0.7f;
+                desiredSway += (float)Math.Sin(wave + waveAdd) * shake;
+                sway = MathHelper.Lerp(sway, desiredSway, 1f);
+                position.x += sway;
             }
             base.Draw();
-            if (this.childThing == null)
+            if (childThing == null)
                 return;
-            this.childThing.depth = this.depth - 1;
-            this.childThing.Draw();
+            childThing.depth = depth - 1;
+            childThing.Draw();
         }
     }
 }

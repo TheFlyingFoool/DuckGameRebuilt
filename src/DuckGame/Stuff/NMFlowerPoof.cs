@@ -15,11 +15,11 @@ namespace DuckGame
         {
         }
 
-        public NMFlowerPoof(Vec2 pPosition) => this.position = pPosition;
+        public NMFlowerPoof(Vec2 pPosition) => position = pPosition;
 
         public override void Activate()
         {
-            Flower.PoofEffect(this.position);
+            Flower.PoofEffect(position);
             base.Activate();
         }
     }

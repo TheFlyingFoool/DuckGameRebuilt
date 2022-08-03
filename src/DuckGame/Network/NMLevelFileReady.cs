@@ -15,6 +15,6 @@ namespace DuckGame
         {
         }
 
-        public NMLevelFileReady(byte pLevelIndex) => this.levelIndex = pLevelIndex;
+        public NMLevelFileReady(byte pLevelIndex) => levelIndex = pLevelIndex;
     }
 }

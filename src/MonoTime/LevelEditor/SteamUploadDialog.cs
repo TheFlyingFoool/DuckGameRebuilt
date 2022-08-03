@@ -74,86 +74,86 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this.layer = Layer.HUD;
-            this.depth = (Depth)0.9f;
-            this._showBackground = false;
-            this.itemSize = new Vec2(386f, 16f);
-            this._root = true;
-            this.drawControls = false;
-            this._descriptionBox = new Textbox(this.x + 5f, this.y + 225f, 316f, 40f, 0.5f, 9, "<ENTER DESCRIPTION>");
-            this._nameBox = new Textbox(this.x + 5f, this.y + byte.MaxValue, 316f, 12f, maxLines: 1, emptyText: "<ENTER NAME>");
-            this._font = new FancyBitmapFont("smallFont");
-            this._confirm = new MessageDialogue();
+            layer = Layer.HUD;
+            depth = (Depth)0.9f;
+            _showBackground = false;
+            itemSize = new Vec2(386f, 16f);
+            _root = true;
+            drawControls = false;
+            _descriptionBox = new Textbox(x + 5f, y + 225f, 316f, 40f, 0.5f, 9, "<ENTER DESCRIPTION>");
+            _nameBox = new Textbox(x + 5f, y + byte.MaxValue, 316f, 12f, maxLines: 1, emptyText: "<ENTER NAME>");
+            _font = new FancyBitmapFont("smallFont");
+            _confirm = new MessageDialogue();
             Level.Add(_confirm);
-            this._upload = new UploadDialogue();
+            _upload = new UploadDialogue();
             Level.Add(_upload);
-            this._notify = new NotifyDialogue();
+            _notify = new NotifyDialogue();
             Level.Add(_notify);
-            this._deathmatchTest = new DeathmatchTestDialogue();
+            _deathmatchTest = new DeathmatchTestDialogue();
             Level.Add(_deathmatchTest);
-            this._testSuccess = new TestSuccessDialogue();
+            _testSuccess = new TestSuccessDialogue();
             Level.Add(_testSuccess);
-            this._arcadeTest = new ArcadeTestDialogue();
+            _arcadeTest = new ArcadeTestDialogue();
             Level.Add(_arcadeTest);
         }
 
         public void Open(LevelData pData)
         {
             SteamUploadDialog._editingMod = false;
-            this._publishItem = null;
+            _publishItem = null;
             Editor.lockInput = this;
             SFX.Play("openClick", 0.4f);
-            this.opened = true;
-            this._publishItem = new EditorWorkshopItem(pData);
-            this._previewTarget = new Sprite(this._publishItem.preview);
-            this._nameBox.text = pData.workshopData.name;
-            this._descriptionBox.text = pData.workshopData.description;
-            this._workshopTag = new SpriteMap("workshopTag", 4, 8);
-            this._workshopTagMiddle = new Sprite("workshopTagMiddle");
-            this._tagPlus = new Sprite("tagPlus");
-            this._levelData = pData;
-            this._arcadeTestIndex = 0;
+            opened = true;
+            _publishItem = new EditorWorkshopItem(pData);
+            _previewTarget = new Sprite(_publishItem.preview);
+            _nameBox.text = pData.workshopData.name;
+            _descriptionBox.text = pData.workshopData.description;
+            _workshopTag = new SpriteMap("workshopTag", 4, 8);
+            _workshopTagMiddle = new Sprite("workshopTagMiddle");
+            _tagPlus = new Sprite("tagPlus");
+            _levelData = pData;
+            _arcadeTestIndex = 0;
         }
 
         public void Open(Mod pData)
         {
             SteamUploadDialog._editingMod = true;
-            this._publishItem = null;
+            _publishItem = null;
             Editor.lockInput = this;
             SFX.Play("openClick", 0.4f);
-            this.opened = true;
-            this._publishItem = new EditorWorkshopItem(pData);
-            this._previewTarget = new Sprite(this._publishItem.preview);
-            this._nameBox.text = pData.workshopData.name;
-            this._descriptionBox.text = pData.workshopData.description;
-            this._workshopTag = new SpriteMap("workshopTag", 4, 8);
-            this._workshopTagMiddle = new Sprite("workshopTagMiddle");
-            this._tagPlus = new Sprite("tagPlus");
-            this._mod = pData;
-            this._arcadeTestIndex = 0;
+            opened = true;
+            _publishItem = new EditorWorkshopItem(pData);
+            _previewTarget = new Sprite(_publishItem.preview);
+            _nameBox.text = pData.workshopData.name;
+            _descriptionBox.text = pData.workshopData.description;
+            _workshopTag = new SpriteMap("workshopTag", 4, 8);
+            _workshopTagMiddle = new Sprite("workshopTagMiddle");
+            _tagPlus = new Sprite("tagPlus");
+            _mod = pData;
+            _arcadeTestIndex = 0;
         }
 
         public void Close()
         {
             Editor.lockInput = null;
-            this.opened = false;
-            this._descriptionBox.LoseFocus();
-            this._nameBox.LoseFocus();
-            this._publishItem = null;
-            this.ClearItems();
+            opened = false;
+            _descriptionBox.LoseFocus();
+            _nameBox.LoseFocus();
+            _publishItem = null;
+            ClearItems();
         }
 
         public override void Selected(ContextMenu item)
         {
             SFX.Play("highClick", 0.3f, 0.2f);
             if (item != null && item.text != "")
-                this._publishItem.AddTag(item.text);
-            if (this._tagMenu == null)
+                _publishItem.AddTag(item.text);
+            if (_tagMenu == null)
                 return;
-            this._tagMenu.opened = false;
+            _tagMenu.opened = false;
             Level.Remove(_tagMenu);
-            this._tagMenu = null;
-            if (Editor.PeekFocus() != this._tagMenu)
+            _tagMenu = null;
+            if (Editor.PeekFocus() != _tagMenu)
                 return;
             Editor.PopFocus();
         }
@@ -166,133 +166,133 @@ namespace DuckGame
 
         private void Publish()
         {
-            this._publishItem.name = this._nameBox.text;
-            this._publishItem.description = this._descriptionBox.text;
-            if (this._publishItem.PrepareItem() != SteamResult.OK)
+            _publishItem.name = _nameBox.text;
+            _publishItem.description = _descriptionBox.text;
+            if (_publishItem.PrepareItem() != SteamResult.OK)
             {
-                this._notify.Open("Failed with code " + ((int)this._publishItem.result).ToString() + " (" + this._publishItem.result.ToString() + ")");
+                _notify.Open("Failed with code " + ((int)_publishItem.result).ToString() + " (" + _publishItem.result.ToString() + ")");
             }
             else
             {
-                this._publishStack.Clear();
-                this._publishStack.Push(this._publishItem);
-                foreach (EditorWorkshopItem subItem in this._publishItem.subItems)
-                    this._publishStack.Push(subItem);
-                this.UploadNext();
+                _publishStack.Clear();
+                _publishStack.Push(_publishItem);
+                foreach (EditorWorkshopItem subItem in _publishItem.subItems)
+                    _publishStack.Push(subItem);
+                UploadNext();
             }
         }
 
         public bool UploadNext()
         {
-            if (this._publishStack.Count == 0)
+            if (_publishStack.Count == 0)
                 return false;
-            EditorWorkshopItem editorWorkshopItem = this._publishStack.Peek();
+            EditorWorkshopItem editorWorkshopItem = _publishStack.Peek();
             editorWorkshopItem.Upload();
             if (editorWorkshopItem.subIndex == -1)
-                this._upload.Open("Uploading...", editorWorkshopItem.item);
+                _upload.Open("Uploading...", editorWorkshopItem.item);
             else
-                this._upload.Open("Uploading Sub Item(" + editorWorkshopItem.subIndex.ToString() + ")...", editorWorkshopItem.item);
+                _upload.Open("Uploading Sub Item(" + editorWorkshopItem.subIndex.ToString() + ")...", editorWorkshopItem.item);
             return true;
         }
 
         public override void Update()
         {
-            if (this._publishStack.Count > 0)
+            if (_publishStack.Count > 0)
             {
-                if (!this._publishStack.Peek().finishedProcessing)
+                if (!_publishStack.Peek().finishedProcessing)
                     return;
-                this._publishStack.Peek().FinishUpload();
-                this._upload.Close();
-                if (this._publishStack.Peek().result == SteamResult.OK)
+                _publishStack.Peek().FinishUpload();
+                _upload.Close();
+                if (_publishStack.Peek().result == SteamResult.OK)
                 {
-                    EditorWorkshopItem editorWorkshopItem = this._publishStack.Peek();
-                    this._publishStack.Pop();
-                    if (this.UploadNext())
+                    EditorWorkshopItem editorWorkshopItem = _publishStack.Peek();
+                    _publishStack.Pop();
+                    if (UploadNext())
                         return;
-                    this._upload.Close();
-                    this._notify.Open("Item published!");
+                    _upload.Close();
+                    _notify.Open("Item published!");
                     Steam.ShowWorkshopLegalAgreement(editorWorkshopItem.item.id.ToString());
                 }
                 else
                 {
-                    this._notify.Open("Failed with code " + ((int)this._publishStack.Peek().result).ToString() + " (" + this._publishStack.Peek().result.ToString() + ")");
-                    this._publishStack.Clear();
+                    _notify.Open("Failed with code " + ((int)_publishStack.Peek().result).ToString() + " (" + _publishStack.Peek().result.ToString() + ")");
+                    _publishStack.Clear();
                 }
             }
-            else if (!this.opened || this._opening || this._confirm.opened || this._upload.opened || this._deathmatchTest.opened || this._arcadeTest.opened || this._testSuccess.opened)
+            else if (!opened || _opening || _confirm.opened || _upload.opened || _deathmatchTest.opened || _arcadeTest.opened || _testSuccess.opened)
             {
-                if (this.opened)
+                if (opened)
                     Keyboard.keyString = "";
-                if (this.opened)
+                if (opened)
                     Editor.lockInput = this;
-                this._opening = false;
-                foreach (ContextMenu contextMenu in this._items)
+                _opening = false;
+                foreach (ContextMenu contextMenu in _items)
                     contextMenu.disabled = true;
             }
-            else if (this._confirm.result)
+            else if (_confirm.result)
             {
-                if (this._publishItem.levelType == LevelType.Arcade_Machine)
-                    this._arcadeTest.Open("This machine can automatically show up in generated arcades, if you pass this validity test. You need to get the Platinum trophy on all 3 challenges (oh boy)!");
+                if (_publishItem.levelType == LevelType.Arcade_Machine)
+                    _arcadeTest.Open("This machine can automatically show up in generated arcades, if you pass this validity test. You need to get the Platinum trophy on all 3 challenges (oh boy)!");
                 else
-                    this._deathmatchTest.Open("In order to upload this map as a deathmatch level, all ducks need to be able to be eliminated. Do you want to launch the map and show that the map is functional? You don't have to do this, but the map won't show up with the DEATHMATCH tag without completing this test. If this is a challenge map, then don't worry about it!");
-                this._confirm.result = false;
+                    _deathmatchTest.Open("In order to upload this map as a deathmatch level, all ducks need to be able to be eliminated. Do you want to launch the map and show that the map is functional? You don't have to do this, but the map won't show up with the DEATHMATCH tag without completing this test. If this is a challenge map, then don't worry about it!");
+                _confirm.result = false;
             }
-            else if (this._testing)
+            else if (_testing)
             {
                 Keyboard.keyString = "";
                 if (DeathmatchTestDialogue.success)
                 {
-                    this._testSuccess.Open("Test success! The level can now be published as a deathmatch level!");
-                    this._publishItem.deathmatchTestSuccess = true;
+                    _testSuccess.Open("Test success! The level can now be published as a deathmatch level!");
+                    _publishItem.deathmatchTestSuccess = true;
                 }
                 else if (ArcadeTestDialogue.success)
                 {
-                    if (this._arcadeTestIndex > 0 && this._arcadeTestIndex < 3)
-                        this._publishItem.subItems.ElementAt<EditorWorkshopItem>(this._arcadeTestIndex).challengeTestSuccess = true;
+                    if (_arcadeTestIndex > 0 && _arcadeTestIndex < 3)
+                        _publishItem.subItems.ElementAt<EditorWorkshopItem>(_arcadeTestIndex).challengeTestSuccess = true;
                     do
                     {
-                        ++this._arcadeTestIndex;
+                        ++_arcadeTestIndex;
                     }
-                    while (this._arcadeTestIndex <= 2 && this._publishItem.subItems.ElementAt<EditorWorkshopItem>(this._arcadeTestIndex).challengeTestSuccess);
-                    this._arcadeTestIndex = 3;
-                    if (this._arcadeTestIndex != 3)
+                    while (_arcadeTestIndex <= 2 && _publishItem.subItems.ElementAt<EditorWorkshopItem>(_arcadeTestIndex).challengeTestSuccess);
+                    _arcadeTestIndex = 3;
+                    if (_arcadeTestIndex != 3)
                     {
                         ArcadeTestDialogue.success = false;
                         ArcadeTestDialogue.currentEditor = Level.current as Editor;
-                        if (this._arcadeTestIndex == 0)
+                        if (_arcadeTestIndex == 0)
                             Level.current = new ChallengeLevel((ArcadeTestDialogue.currentEditor.levelThings[0] as ArcadeMachine).challenge01Data, true);
-                        else if (this._arcadeTestIndex == 1)
+                        else if (_arcadeTestIndex == 1)
                             Level.current = new ChallengeLevel((ArcadeTestDialogue.currentEditor.levelThings[0] as ArcadeMachine).challenge02Data, true);
-                        else if (this._arcadeTestIndex == 2)
+                        else if (_arcadeTestIndex == 2)
                             Level.current = new ChallengeLevel((ArcadeTestDialogue.currentEditor.levelThings[0] as ArcadeMachine).challenge03Data, true);
-                        this._testing = true;
+                        _testing = true;
                         return;
                     }
-                    this._testSuccess.Open("Test success! The arcade machine can now be published to the workshop!");
+                    _testSuccess.Open("Test success! The arcade machine can now be published to the workshop!");
                 }
                 else if (DeathmatchTestDialogue.tooSlow)
                 {
-                    this._notify.Open("Framerate too low!");
+                    _notify.Open("Framerate too low!");
                 }
                 else
                 {
-                    this._notify.Open("Testing failed.");
-                    this._arcadeTestIndex = -1;
+                    _notify.Open("Testing failed.");
+                    _arcadeTestIndex = -1;
                 }
                 DeathmatchTestDialogue.success = false;
                 ArcadeTestDialogue.success = false;
-                this._testing = false;
+                _testing = false;
             }
-            else if (this._testSuccess.result)
+            else if (_testSuccess.result)
             {
-                this.Publish();
-                this._testSuccess.result = false;
+                Publish();
+                _testSuccess.result = false;
             }
-            else if (this._deathmatchTest.result != -1)
+            else if (_deathmatchTest.result != -1)
             {
-                if (this._deathmatchTest.result == 1)
-                    this.Publish();
-                else if (this._deathmatchTest.result == 0)
+                if (_deathmatchTest.result == 1)
+                    Publish();
+                else if (_deathmatchTest.result == 0)
                 {
                     DeathmatchTestDialogue.success = false;
                     DeathmatchTestDialogue.currentEditor = Level.current as Editor;
@@ -306,38 +306,38 @@ namespace DuckGame
                         Profiles.defaultProfiles[index].UpdatePersona();
                         Input.ApplyDefaultMapping(Profiles.defaultProfiles[index].inputProfile, Profiles.defaultProfiles[index]);
                     }
-                    Level.current = new GameLevel(this._levelData.GetPath(), validityTest: true);
-                    this._testing = true;
+                    Level.current = new GameLevel(_levelData.GetPath(), validityTest: true);
+                    _testing = true;
                 }
-                this._deathmatchTest.result = -1;
+                _deathmatchTest.result = -1;
             }
-            else if (this._arcadeTest.result != -1)
+            else if (_arcadeTest.result != -1)
             {
-                if (this._arcadeTest.result == 1)
-                    this.Publish();
-                else if (this._arcadeTest.result == 0)
+                if (_arcadeTest.result == 1)
+                    Publish();
+                else if (_arcadeTest.result == 0)
                 {
                     ArcadeTestDialogue.success = true;
-                    this._testing = true;
-                    this._arcadeTest.result = -1;
+                    _testing = true;
+                    _arcadeTest.result = -1;
                     return;
                 }
-                this._arcadeTest.result = -1;
+                _arcadeTest.result = -1;
             }
             else
             {
-                if (this._tagMenu != null)
+                if (_tagMenu != null)
                     return;
-                Vec2 vec2 = new Vec2((float)(this.layer.width / 2.0 - this.width / 2.0) + this.hOffset, (float)(this.layer.height / 2.0 - this.height / 2.0 - 15.0)) + new Vec2(7f, 276f);
-                foreach (KeyValuePair<string, Vec2> tagPosition in this.tagPositions)
+                Vec2 vec2 = new Vec2((float)(layer.width / 2.0 - width / 2.0) + hOffset, (float)(layer.height / 2.0 - height / 2.0 - 15.0)) + new Vec2(7f, 276f);
+                foreach (KeyValuePair<string, Vec2> tagPosition in tagPositions)
                 {
                     if (Mouse.x > tagPosition.Value.x && Mouse.x < tagPosition.Value.x + 8.0 && Mouse.y > tagPosition.Value.y && Mouse.y < tagPosition.Value.y + 8.0 && Mouse.left == InputState.Pressed)
                     {
-                        this._publishItem.RemoveTag(tagPosition.Key);
+                        _publishItem.RemoveTag(tagPosition.Key);
                         return;
                     }
                 }
-                if (this.tagPositions.Count != SteamUploadDialog.possibleTags.Count)
+                if (tagPositions.Count != SteamUploadDialog.possibleTags.Count)
                 {
                     bool flag = false;
                     if (Mouse.x > _plusPosition.x && Mouse.x < _plusPosition.x + 8.0 && Mouse.y > _plusPosition.y && Mouse.y < _plusPosition.y + 8.0)
@@ -346,15 +346,15 @@ namespace DuckGame
                     {
                         ContextMenu contextMenu = new ContextMenu(this)
                         {
-                            x = this._plusPosition.x,
-                            y = this._plusPosition.y,
+                            x = _plusPosition.x,
+                            y = _plusPosition.y,
                             root = true,
-                            depth = this.depth + 20
+                            depth = depth + 20
                         };
                         int num = 0;
                         foreach (string possibleTag in SteamUploadDialog.possibleTags)
                         {
-                            if (!this._publishItem.tags.Contains<string>(possibleTag))
+                            if (!_publishItem.tags.Contains<string>(possibleTag))
                             {
                                 contextMenu.AddItem(new ContextMenu(this)
                                 {
@@ -370,70 +370,70 @@ namespace DuckGame
                         Level.Add(contextMenu);
                         contextMenu.opened = true;
                         contextMenu.closeOnRight = true;
-                        this._tagMenu = contextMenu;
+                        _tagMenu = contextMenu;
                         Editor.PopFocus();
                         return;
                     }
                 }
                 Editor.lockInput = this;
-                this._descriptionBox.Update();
-                this._nameBox.Update();
-                this._acceptHover = false;
-                this._cancelHover = false;
-                if (Mouse.x > _acceptPos.x && Mouse.x < _acceptPos.x + this._acceptSize.x && Mouse.y > _acceptPos.y && Mouse.y < _acceptPos.y + this._acceptSize.y)
-                    this._acceptHover = true;
-                if (Mouse.x > _cancelPos.x && Mouse.x < _cancelPos.x + this._cancelSize.x && Mouse.y > _cancelPos.y && Mouse.y < _cancelPos.y + this._cancelSize.y)
-                    this._cancelHover = true;
-                if (this._acceptHover && Mouse.left == InputState.Pressed)
+                _descriptionBox.Update();
+                _nameBox.Update();
+                _acceptHover = false;
+                _cancelHover = false;
+                if (Mouse.x > _acceptPos.x && Mouse.x < _acceptPos.x + _acceptSize.x && Mouse.y > _acceptPos.y && Mouse.y < _acceptPos.y + _acceptSize.y)
+                    _acceptHover = true;
+                if (Mouse.x > _cancelPos.x && Mouse.x < _cancelPos.x + _cancelSize.x && Mouse.y > _cancelPos.y && Mouse.y < _cancelPos.y + _cancelSize.y)
+                    _cancelHover = true;
+                if (_acceptHover && Mouse.left == InputState.Pressed)
                 {
-                    if (this._nameBox.text == "")
-                        this._notify.Open("Please enter a name :(");
+                    if (_nameBox.text == "")
+                        _notify.Open("Please enter a name :(");
                     else
-                        this._confirm.Open("Upload to workshop?");
+                        _confirm.Open("Upload to workshop?");
                 }
-                if (this._cancelHover && Mouse.left == InputState.Pressed)
-                    this.Close();
+                if (_cancelHover && Mouse.left == InputState.Pressed)
+                    Close();
                 base.Update();
             }
         }
 
         public override void Draw()
         {
-            this.menuSize.y = this._fdHeight;
-            if (!this.opened)
+            menuSize.y = _fdHeight;
+            if (!opened)
                 return;
             base.Draw();
             float num1 = 328f;
-            float num2 = this._fdHeight + 22f;
-            Vec2 p1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0) + this.hOffset, (float)(this.layer.height / 2.0 - num2 / 2.0 - 15.0));
-            Vec2 p2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0) + this.hOffset, (float)(this.layer.height / 2.0 + num2 / 2.0 - 12.0));
-            Graphics.DrawRect(p1, p2, new Color(70, 70, 70), this.depth, false);
-            Graphics.DrawRect(p1, p2, new Color(30, 30, 30), this.depth - 8);
-            Graphics.DrawRect(p1 + new Vec2(4f, 23f), p2 + new Vec2(-4f, -160f), new Color(10, 10, 10), this.depth - 4);
-            Graphics.DrawRect(p1 + new Vec2(4f, 206f), p2 + new Vec2(-4f, -66f), new Color(10, 10, 10), this.depth - 4);
-            Graphics.DrawRect(p1 + new Vec2(4f, 224f), p2 + new Vec2(-4f, -14f), new Color(10, 10, 10), this.depth - 4);
-            Graphics.DrawRect(p1 + new Vec2(3f, 3f), new Vec2(p2.x - 3f, p1.y + 19f), new Color(70, 70, 70), this.depth - 4);
-            if (this._mod != null)
-                Graphics.DrawString("Upload Mod to Workshop", p1 + new Vec2(5f, 7f), Color.White, this.depth + 8);
+            float num2 = _fdHeight + 22f;
+            Vec2 p1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0) + hOffset, (float)(layer.height / 2.0 - num2 / 2.0 - 15.0));
+            Vec2 p2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0) + hOffset, (float)(layer.height / 2.0 + num2 / 2.0 - 12.0));
+            Graphics.DrawRect(p1, p2, new Color(70, 70, 70), depth, false);
+            Graphics.DrawRect(p1, p2, new Color(30, 30, 30), depth - 8);
+            Graphics.DrawRect(p1 + new Vec2(4f, 23f), p2 + new Vec2(-4f, -160f), new Color(10, 10, 10), depth - 4);
+            Graphics.DrawRect(p1 + new Vec2(4f, 206f), p2 + new Vec2(-4f, -66f), new Color(10, 10, 10), depth - 4);
+            Graphics.DrawRect(p1 + new Vec2(4f, 224f), p2 + new Vec2(-4f, -14f), new Color(10, 10, 10), depth - 4);
+            Graphics.DrawRect(p1 + new Vec2(3f, 3f), new Vec2(p2.x - 3f, p1.y + 19f), new Color(70, 70, 70), depth - 4);
+            if (_mod != null)
+                Graphics.DrawString("Upload Mod to Workshop", p1 + new Vec2(5f, 7f), Color.White, depth + 8);
             else if (Editor.arcadeMachineMode)
-                Graphics.DrawString("Upload " + this._publishItem.levelType.ToString() + " to Workshop", p1 + new Vec2(5f, 7f), Color.White, this.depth + 8);
+                Graphics.DrawString("Upload " + _publishItem.levelType.ToString() + " to Workshop", p1 + new Vec2(5f, 7f), Color.White, depth + 8);
             else
-                Graphics.DrawString("Upload " + this._publishItem.levelSize.ToString() + " " + this._publishItem.levelType.ToString() + " to Workshop", p1 + new Vec2(5f, 7f), Color.White, this.depth + 8);
-            this._descriptionBox.position = p1 + new Vec2(6f, 226f);
-            this._descriptionBox.depth = this.depth + 2;
-            this._descriptionBox.Draw();
-            this._nameBox.position = p1 + new Vec2(6f, 208f);
-            this._nameBox.depth = this.depth + 2;
-            this._nameBox.Draw();
+                Graphics.DrawString("Upload " + _publishItem.levelSize.ToString() + " " + _publishItem.levelType.ToString() + " to Workshop", p1 + new Vec2(5f, 7f), Color.White, depth + 8);
+            _descriptionBox.position = p1 + new Vec2(6f, 226f);
+            _descriptionBox.depth = depth + 2;
+            _descriptionBox.Draw();
+            _nameBox.position = p1 + new Vec2(6f, 208f);
+            _nameBox.depth = depth + 2;
+            _nameBox.Draw();
             int num3 = 0;
             Vec2 vec2 = p1 + new Vec2(7f, 276f);
             int num4 = 0;
-            this.tagPositions.Clear();
-            foreach (string tag in this._publishItem.tags)
+            tagPositions.Clear();
+            foreach (string tag in _publishItem.tags)
             {
                 int num5 = SteamUploadDialog.possibleTags.Contains(tag) ? 1 : 0;
-                this._workshopTag.depth = this.depth + 8;
-                this._workshopTag.frame = 0;
+                _workshopTag.depth = depth + 8;
+                _workshopTag.frame = 0;
                 Graphics.Draw(_workshopTag, vec2.x, vec2.y);
                 float stringWidth = Graphics.GetStringWidth(tag, scale: 0.5f);
                 float num6 = 4f;
@@ -441,45 +441,45 @@ namespace DuckGame
                     num6 = 0f;
                 else
                     ++num4;
-                Graphics.DrawTexturedLine(this._workshopTagMiddle.texture, vec2 + new Vec2(4f, 4f), vec2 + new Vec2(4f + stringWidth + num6, 4f), Color.White, depth: (this.depth + 10));
-                Graphics.DrawString(tag, vec2 + new Vec2(4f, 2f), Color.Black, this.depth + 14, scale: 0.5f);
+                Graphics.DrawTexturedLine(_workshopTagMiddle.texture, vec2 + new Vec2(4f, 4f), vec2 + new Vec2(4f + stringWidth + num6, 4f), Color.White, depth: (depth + 10));
+                Graphics.DrawString(tag, vec2 + new Vec2(4f, 2f), Color.Black, depth + 14, scale: 0.5f);
                 if (num5 != 0)
                 {
                     Vec2 position = vec2 + new Vec2(stringWidth + 6f, 2f);
-                    this.tagPositions[tag] = position;
-                    Graphics.DrawString("x", position, Color.Red, this.depth + 14, scale: 0.5f);
+                    tagPositions[tag] = position;
+                    Graphics.DrawString("x", position, Color.Red, depth + 14, scale: 0.5f);
                 }
-                this._workshopTag.frame = 1;
+                _workshopTag.frame = 1;
                 Graphics.Draw(_workshopTag, (float)(vec2.x + num6 + 4.0) + stringWidth, vec2.y);
                 vec2.x += stringWidth + 11f + num6;
                 ++num3;
             }
             if (num4 < SteamUploadDialog.possibleTags.Count)
             {
-                this._tagPlus.depth = this.depth + 8;
+                _tagPlus.depth = depth + 8;
                 vec2.x += 2f;
-                Graphics.Draw(this._tagPlus, vec2.x, vec2.y);
-                this._plusPosition = vec2;
+                Graphics.Draw(_tagPlus, vec2.x, vec2.y);
+                _plusPosition = vec2;
             }
-            this._acceptPos = p2 + new Vec2(-78f, -12f);
-            this._acceptSize = new Vec2(34f, 8f);
-            Graphics.DrawRect(this._acceptPos, this._acceptPos + this._acceptSize, this._acceptHover ? new Color(180, 180, 180) : new Color(110, 110, 110), this.depth - 4);
-            Graphics.DrawString("PUBLISH!", this._acceptPos + new Vec2(2f, 2f), Color.White, this.depth + 8, scale: 0.5f);
-            this._cancelPos = p2 + new Vec2(-36f, -12f);
-            this._cancelSize = new Vec2(32f, 8f);
-            Graphics.DrawRect(this._cancelPos, this._cancelPos + this._cancelSize, this._cancelHover ? new Color(180, 180, 180) : new Color(110, 110, 110), this.depth - 4);
-            Graphics.DrawString("CANCEL!", this._cancelPos + new Vec2(2f, 2f), Color.White, this.depth + 8, scale: 0.5f);
-            if (this._previewTarget.width < 300)
+            _acceptPos = p2 + new Vec2(-78f, -12f);
+            _acceptSize = new Vec2(34f, 8f);
+            Graphics.DrawRect(_acceptPos, _acceptPos + _acceptSize, _acceptHover ? new Color(180, 180, 180) : new Color(110, 110, 110), depth - 4);
+            Graphics.DrawString("PUBLISH!", _acceptPos + new Vec2(2f, 2f), Color.White, depth + 8, scale: 0.5f);
+            _cancelPos = p2 + new Vec2(-36f, -12f);
+            _cancelSize = new Vec2(32f, 8f);
+            Graphics.DrawRect(_cancelPos, _cancelPos + _cancelSize, _cancelHover ? new Color(180, 180, 180) : new Color(110, 110, 110), depth - 4);
+            Graphics.DrawString("CANCEL!", _cancelPos + new Vec2(2f, 2f), Color.White, depth + 8, scale: 0.5f);
+            if (_previewTarget.width < 300)
             {
-                this._previewTarget.depth = this.depth + 10;
-                this._previewTarget.scale = new Vec2(0.5f, 0.5f);
-                Graphics.Draw(this._previewTarget, (float)(p1.x + (p2.x - p1.x) / 2.0 - _previewTarget.width * this._previewTarget.scale.x / 2.0), (float)(p1.y + (p2.y - p1.y) / 2.0 - _previewTarget.height * this._previewTarget.scale.y / 2.0 - 20.0));
+                _previewTarget.depth = depth + 10;
+                _previewTarget.scale = new Vec2(0.5f, 0.5f);
+                Graphics.Draw(_previewTarget, (float)(p1.x + (p2.x - p1.x) / 2.0 - _previewTarget.width * _previewTarget.scale.x / 2.0), (float)(p1.y + (p2.y - p1.y) / 2.0 - _previewTarget.height * _previewTarget.scale.y / 2.0 - 20.0));
             }
             else
             {
-                this._previewTarget.depth = this.depth + 10;
-                this._previewTarget.scale = new Vec2(0.25f, 0.25f);
-                Graphics.Draw(this._previewTarget, p1.x + 4f, p1.y + 23f);
+                _previewTarget.depth = depth + 10;
+                _previewTarget.scale = new Vec2(0.25f, 0.25f);
+                Graphics.Draw(_previewTarget, p1.x + 4f, p1.y + 23f);
             }
         }
     }

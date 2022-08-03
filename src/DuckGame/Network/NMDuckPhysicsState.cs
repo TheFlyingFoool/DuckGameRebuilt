@@ -25,8 +25,8 @@ namespace DuckGame
           ushort Holding)
           : base(Position, Velocity, ObjectID, ClientFrame)
         {
-            this.inputState = InputState;
-            this.holding = Holding;
+            inputState = InputState;
+            holding = Holding;
         }
     }
 }

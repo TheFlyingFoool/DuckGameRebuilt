@@ -51,49 +51,49 @@ namespace DuckGame
 
         public HighlightLevel(bool endOfHighlights = false, bool testMode = false)
         {
-            this._centeredView = true;
-            this._endOfHighlights = endOfHighlights;
-            this._testMode = testMode;
+            _centeredView = true;
+            _endOfHighlights = endOfHighlights;
+            _testMode = testMode;
         }
 
         public void OnHotnessImage(DuckStory story)
         {
-            story.OnStoryBegin -= new DuckStory.OnStoryBeginDelegate(this.OnHotnessImage);
+            story.OnStoryBegin -= new DuckStory.OnStoryBeginDelegate(OnHotnessImage);
             HighlightLevel._image = new Sprite("newscast/hotnessImage");
         }
 
         public void OnInterviewImage(DuckStory story)
         {
-            story.OnStoryBegin -= new DuckStory.OnStoryBeginDelegate(this.OnInterviewImage);
+            story.OnStoryBegin -= new DuckStory.OnStoryBeginDelegate(OnInterviewImage);
             HighlightLevel._image = new SpriteMap("interviewBox", 63, 47);
         }
 
         public void OnHotnessStory(DuckStory story)
         {
-            story.OnStoryBegin -= new DuckStory.OnStoryBeginDelegate(this.OnHotnessStory);
-            this._desiredState = TVState.ShowHotness;
-            this._talker.Pause();
+            story.OnStoryBegin -= new DuckStory.OnStoryBeginDelegate(OnHotnessStory);
+            _desiredState = TVState.ShowHotness;
+            _talker.Pause();
         }
 
         public void OnHotnessEnd(DuckStory story)
         {
-            story.OnStoryBegin -= new DuckStory.OnStoryBeginDelegate(this.OnHotnessEnd);
-            this._desiredState = TVState.ShowNewscaster;
+            story.OnStoryBegin -= new DuckStory.OnStoryBeginDelegate(OnHotnessEnd);
+            _desiredState = TVState.ShowNewscaster;
             HighlightLevel._image = null;
         }
 
         public void OnInterview(DuckStory story)
         {
-            story.OnStoryBegin -= new DuckStory.OnStoryBeginDelegate(this.OnHotnessStory);
-            this._desiredState = TVState.ShowInterview;
-            this._talker.Pause();
+            story.OnStoryBegin -= new DuckStory.OnStoryBeginDelegate(OnHotnessStory);
+            _desiredState = TVState.ShowInterview;
+            _talker.Pause();
         }
 
         public override void Initialize()
         {
-            if (this._testMode)
+            if (_testMode)
             {
-                this._endOfHighlights = true;
+                _endOfHighlights = true;
                 Options.Data.sfxVolume = 0f;
                 DuckStory duckStory = new DuckStory
                 {
@@ -104,33 +104,33 @@ namespace DuckGame
                     HighlightLevel._stories.Add(duckStory);
             }
             HighlightLevel._cancelSkip = false;
-            this._tv = new Sprite("bigTV");
-            this._duck = new SpriteMap("newsDuck", 140, 100);
-            this._duckBeak = new SpriteMap("newsDuckBeak", 140, 100);
-            this._tie = new SpriteMap("ties", 12, 21);
-            this._pumpkin = new Sprite("pump");
-            this._pumpkin.CenterOrigin();
-            this._newsTable = new Sprite("newsTable");
-            this._logo = new Sprite("duckGameTitle");
-            this._logo.CenterOrigin();
-            this._background = new Sprite("duckChannelBackground");
-            this._blurLayer = new Layer("BLUR", Layer.HUD.depth + 5, Layer.HUD.camera);
-            Layer.Add(this._blurLayer);
-            this._blurLayer.effect = (Effect)Content.Load<MTEffect>("Shaders/blur");
-            this._transition = new DuckChannelLogo();
+            _tv = new Sprite("bigTV");
+            _duck = new SpriteMap("newsDuck", 140, 100);
+            _duckBeak = new SpriteMap("newsDuckBeak", 140, 100);
+            _tie = new SpriteMap("ties", 12, 21);
+            _pumpkin = new Sprite("pump");
+            _pumpkin.CenterOrigin();
+            _newsTable = new Sprite("newsTable");
+            _logo = new Sprite("duckGameTitle");
+            _logo.CenterOrigin();
+            _background = new Sprite("duckChannelBackground");
+            _blurLayer = new Layer("BLUR", Layer.HUD.depth + 5, Layer.HUD.camera);
+            Layer.Add(_blurLayer);
+            _blurLayer.effect = (Effect)Content.Load<MTEffect>("Shaders/blur");
+            _transition = new DuckChannelLogo();
             Level.Add(_transition);
             //this._tl = new Vec2(30f, 32f);
             //this._size = new Vec2(207f, 141f);
-            this._rockImage2 = new Sprite(RockScoreboard.finalImage, 0f, 0f);
-            this._talker = new Teleprompter(0f, 0f, this._duck);
-            this._talker.active = this._talker.visible = false;
+            _rockImage2 = new Sprite(RockScoreboard.finalImage, 0f, 0f);
+            _talker = new Teleprompter(0f, 0f, _duck);
+            _talker.active = _talker.visible = false;
             Level.Add(_talker);
             if (HighlightLevel.didSkip)
-                this._skip = true;
-            if (this._endOfHighlights)
+                _skip = true;
+            if (_endOfHighlights)
             {
-                this._state = TVState.ShowNewscaster;
-                this._desiredState = this._state;
+                _state = TVState.ShowNewscaster;
+                _desiredState = _state;
             }
             else
             {
@@ -139,26 +139,26 @@ namespace DuckGame
                 Music.Play("SportsCap");
                 HighlightLevel._stories = DuckNews.CalculateStories();
             }
-            this._hotness = new HotnessAnimation();
-            this._tie.frame = HighlightLevel.currentTie;
+            _hotness = new HotnessAnimation();
+            _tie.frame = HighlightLevel.currentTie;
             for (int index = 0; index < HighlightLevel._stories.Count; index = index - 1 + 1)
             {
                 int num = HighlightLevel._stories[index].text == "%CUEHIGHLIGHTS%" ? 1 : 0;
                 if (HighlightLevel._stories[index].text == "CUE%HOTNESSIMAGE%")
-                    HighlightLevel._stories[index].OnStoryBegin += new DuckStory.OnStoryBeginDelegate(this.OnHotnessImage);
+                    HighlightLevel._stories[index].OnStoryBegin += new DuckStory.OnStoryBeginDelegate(OnHotnessImage);
                 if (HighlightLevel._stories[index].text == "CUE%CUEHOTNESS%")
-                    HighlightLevel._stories[index].OnStoryBegin += new DuckStory.OnStoryBeginDelegate(this.OnHotnessStory);
+                    HighlightLevel._stories[index].OnStoryBegin += new DuckStory.OnStoryBeginDelegate(OnHotnessStory);
                 if (HighlightLevel._stories[index].text == "CUE%ENDHOTNESS%")
-                    HighlightLevel._stories[index].OnStoryBegin += new DuckStory.OnStoryBeginDelegate(this.OnHotnessEnd);
+                    HighlightLevel._stories[index].OnStoryBegin += new DuckStory.OnStoryBeginDelegate(OnHotnessEnd);
                 if (HighlightLevel._stories[index].text == "CUE%INTERVIEWIMAGE%")
-                    HighlightLevel._stories[index].OnStoryBegin += new DuckStory.OnStoryBeginDelegate(this.OnInterviewImage);
+                    HighlightLevel._stories[index].OnStoryBegin += new DuckStory.OnStoryBeginDelegate(OnInterviewImage);
                 if (HighlightLevel._stories[index].text == "CUE%CUEINTERVIEW%")
                 {
-                    this._interviewIndex = index;
-                    HighlightLevel._stories[index].OnStoryBegin += new DuckStory.OnStoryBeginDelegate(this.OnInterview);
+                    _interviewIndex = index;
+                    HighlightLevel._stories[index].OnStoryBegin += new DuckStory.OnStoryBeginDelegate(OnInterview);
                 }
                 if (num == 0)
-                    this._talker.ReadLine(HighlightLevel._stories[index]);
+                    _talker.ReadLine(HighlightLevel._stories[index]);
                 HighlightLevel._stories.RemoveAt(index);
                 if (num != 0)
                     break;
@@ -179,33 +179,33 @@ namespace DuckGame
 
         public void DoSkip()
         {
-            if (!this._endOfHighlights)
+            if (!_endOfHighlights)
             {
-                this._talker.ClearLines();
+                _talker.ClearLines();
                 for (int index = 0; index < HighlightLevel._stories.Count; index = index - 1 + 1)
                 {
                     int num = HighlightLevel._stories[index].text == "%CUEHIGHLIGHTS%" ? 1 : 0;
                     if (num == 0)
-                        this._talker.ReadLine(HighlightLevel._stories[index]);
+                        _talker.ReadLine(HighlightLevel._stories[index]);
                     HighlightLevel._stories.RemoveAt(index);
                     if (num != 0)
                         break;
                 }
             }
-            this._talker.SkipToClose();
+            _talker.SkipToClose();
         }
 
         public override void Update()
         {
-            if (this._testMode)
+            if (_testMode)
             {
-                this._wait += Maths.IncFrameTimer();
+                _wait += Maths.IncFrameTimer();
                 if (Keyboard.Pressed(Keys.F5) || _wait > 0.1f)
                 {
-                    this._wait = 0f;
+                    _wait = 0f;
                     try
                     {
-                        this._tie = new SpriteMap((Tex2D)ContentPack.LoadTexture2D("tieTest.png"), 64, 64)
+                        _tie = new SpriteMap((Tex2D)ContentPack.LoadTexture2D("tieTest.png"), 64, 64)
                         {
                             center = new Vec2(26f, 27f)
                         };
@@ -223,14 +223,14 @@ namespace DuckGame
             //    HUD.CloseAllCorners();
             //    this.DoSkip();
             //}
-            if (Graphics.fade > 0.99f && !this._skip && Vote.Passed(VoteType.Skip))
-                this._skip = true;
-            if (this._talker.finished || !HighlightLevel._cancelSkip && this._skip)// && !Main.isDemo
-                this._done -= 0.04f;
+            if (Graphics.fade > 0.99f && !_skip && Vote.Passed(VoteType.Skip))
+                _skip = true;
+            if (_talker.finished || !HighlightLevel._cancelSkip && _skip)// && !Main.isDemo
+                _done -= 0.04f;
             Graphics.fade = Lerp.Float(Graphics.fade, _done < 0f ? 0f : 1f, 0.02f);
-            if (Graphics.fade < 0.01f && (this._talker.finished || this._skip))
+            if (Graphics.fade < 0.01f && (_talker.finished || _skip))
             {
-                if (this._endOfHighlights || this._skip)
+                if (_endOfHighlights || _skip)
                 {
                     Vote.CloseVoting();
                     Level.current = new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true);
@@ -238,36 +238,36 @@ namespace DuckGame
                 else
                     Level.current = new HighlightPlayback(4);
             }
-            if (this._state == TVState.ShowPedestals)
+            if (_state == TVState.ShowPedestals)
             {
-                this._waitZoom -= 0.008f;
+                _waitZoom -= 0.008f;
                 if (_waitZoom < 0.01f)
                 {
-                    this._waitZoom = 0f;
-                    this._desiredState = TVState.ShowNewscaster;
+                    _waitZoom = 0f;
+                    _desiredState = TVState.ShowNewscaster;
                 }
             }
-            if (this._state == TVState.ShowHotness && this._hotness.ready)
-                this._talker.Resume();
-            if (this._state == TVState.ShowInterview)
+            if (_state == TVState.ShowHotness && _hotness.ready)
+                _talker.Resume();
+            if (_state == TVState.ShowInterview)
             {
-                this._interviewWait -= 0.02f;
-                if (_interviewWait < 0f && !this._askedQuestion)
+                _interviewWait -= 0.02f;
+                if (_interviewWait < 0f && !_askedQuestion)
                 {
-                    this._talker.InsertLine(Script.winner() + "! To what do you attribute your success?", this._interviewIndex);
-                    this._talker.Resume();
-                    this._askedQuestion = true;
+                    _talker.InsertLine(Script.winner() + "! To what do you attribute your success?", _interviewIndex);
+                    _talker.Resume();
+                    _askedQuestion = true;
                 }
             }
-            this._cameraOffset.x = Lerp.Float(this._cameraOffset.x, HighlightLevel._image != null ? 20f : 0f, 2f);
-            this._talker.active = this._talker.visible = this._state != 0;
-            if (this._state == this._desiredState)
+            _cameraOffset.x = Lerp.Float(_cameraOffset.x, HighlightLevel._image != null ? 20f : 0f, 2f);
+            _talker.active = _talker.visible = _state != 0;
+            if (_state == _desiredState)
                 return;
-            this._talker.active = false;
-            this._transition.PlaySwipe();
-            if (!this._transition.doTransition)
+            _talker.active = false;
+            _transition.PlaySwipe();
+            if (!_transition.doTransition)
                 return;
-            this._state = this._desiredState;
+            _state = _desiredState;
         }
 
         public override void PostDrawLayer(Layer layer)
@@ -276,57 +276,57 @@ namespace DuckGame
             float y = -5f;
             if (layer == Layer.Game)
                 DuckGame.Graphics.Clear(Color.Black);
-            if (layer == this._blurLayer)
+            if (layer == _blurLayer)
             {
-                if (this._state != TVState.ShowPedestals)
+                if (_state != TVState.ShowPedestals)
                     ;
             }
             else if (layer == Layer.HUD)
             {
-                if (this._state == TVState.ShowPedestals)
+                if (_state == TVState.ShowPedestals)
                 {
-                    if (this._rockImage2.texture != null)
+                    if (_rockImage2.texture != null)
                     {
                         float num2 = (Layer.HUD.camera.width - 0f) / _rockImage2.texture.width;
-                        this._rockImage2.color = new Color(this._tvFade, this._tvFade, this._tvFade);
-                        this._rockImage2.scale = new Vec2(num2, num2);
-                        DuckGame.Graphics.Draw(this._rockImage2, num1 - 10f, y, (Depth)0.8f);
+                        _rockImage2.color = new Color(_tvFade, _tvFade, _tvFade);
+                        _rockImage2.scale = new Vec2(num2, num2);
+                        DuckGame.Graphics.Draw(_rockImage2, num1 - 10f, y, (Depth)0.8f);
                     }
                 }
-                else if (this._state == TVState.ShowNewscaster)
+                else if (_state == TVState.ShowNewscaster)
                 {
-                    this._background.color = new Color(this._tvFade, this._tvFade, this._tvFade);
-                    this._duck.color = new Color(this._tvFade, this._tvFade, this._tvFade);
-                    this._tie.color = new Color(this._tvFade, this._tvFade, this._tvFade);
-                    this._newsTable.color = new Color(this._tvFade, this._tvFade, this._tvFade);
-                    DuckGame.Graphics.Draw(this._background, 0f + this._cameraOffset.x, 3f + this._cameraOffset.y, (Depth)0.5f);
-                    DuckGame.Graphics.Draw(this._newsTable, 0f + this._cameraOffset.x, 116f + this._cameraOffset.y, (Depth)0.6f);
-                    this._duck.depth = (Depth)0.8f;
-                    Vec2 vec2 = new Vec2(63f + this._cameraOffset.x, 35f + this._cameraOffset.y);
+                    _background.color = new Color(_tvFade, _tvFade, _tvFade);
+                    _duck.color = new Color(_tvFade, _tvFade, _tvFade);
+                    _tie.color = new Color(_tvFade, _tvFade, _tvFade);
+                    _newsTable.color = new Color(_tvFade, _tvFade, _tvFade);
+                    DuckGame.Graphics.Draw(_background, 0f + _cameraOffset.x, 3f + _cameraOffset.y, (Depth)0.5f);
+                    DuckGame.Graphics.Draw(_newsTable, 0f + _cameraOffset.x, 116f + _cameraOffset.y, (Depth)0.6f);
+                    _duck.depth = (Depth)0.8f;
+                    Vec2 vec2 = new Vec2(63f + _cameraOffset.x, 35f + _cameraOffset.y);
                     DuckGame.Graphics.Draw(_duck, vec2.x, vec2.y);
-                    if (this._duck.frame == 6)
+                    if (_duck.frame == 6)
                         vec2.x -= 3f;
-                    else if (this._duck.frame == 7)
+                    else if (_duck.frame == 7)
                         vec2.x += 3f;
-                    else if (this._duck.frame == 8)
+                    else if (_duck.frame == 8)
                         ++vec2.x;
                     if (DG.isHalloween)
                     {
-                        this._pumpkin.depth = (Depth)0.81f;
-                        DuckGame.Graphics.Draw(this._pumpkin, vec2.x + 69f, vec2.y + 22f);
+                        _pumpkin.depth = (Depth)0.81f;
+                        DuckGame.Graphics.Draw(_pumpkin, vec2.x + 69f, vec2.y + 22f);
                     }
-                    this._tie.depth = (Depth)0.805f;
+                    _tie.depth = (Depth)0.805f;
                     float num3 = 0f;
-                    if (this._duck.frame == 7)
+                    if (_duck.frame == 7)
                         num3 += 2f;
-                    else if (this._duck.frame == 8)
+                    else if (_duck.frame == 8)
                         ++num3;
-                    Graphics.Draw(_tie, 130f + this._cameraOffset.x + num3, 96f + this._cameraOffset.y);
+                    Graphics.Draw(_tie, 130f + _cameraOffset.x + num3, 96f + _cameraOffset.y);
                     if (!DG.isHalloween)
                     {
-                        this._duckBeak.depth = (Depth)0.81f;
-                        this._duckBeak.frame = this._duck.frame;
-                        Graphics.Draw(_duckBeak, 63f + this._cameraOffset.x, 35f + this._cameraOffset.y);
+                        _duckBeak.depth = (Depth)0.81f;
+                        _duckBeak.frame = _duck.frame;
+                        Graphics.Draw(_duckBeak, 63f + _cameraOffset.x, 35f + _cameraOffset.y);
                     }
                     if (HighlightLevel._image != null)
                     {
@@ -335,14 +335,14 @@ namespace DuckGame
                             Graphics.Draw(HighlightLevel._image, 50f, 40f);
                     }
                 }
-                else if (this._state == TVState.ShowHotness)
-                    this._hotness.Draw();
-                else if (this._state == TVState.ShowInterview)
+                else if (_state == TVState.ShowHotness)
+                    _hotness.Draw();
+                else if (_state == TVState.ShowInterview)
                 {
                     HighlightLevel._image.scale = new Vec2(2f);
                     Graphics.Draw(HighlightLevel._image, 40f, 30f);
                 }
-                Graphics.Draw(this._tv, 0f, -10f, (Depth)0.9f);
+                Graphics.Draw(_tv, 0f, -10f, (Depth)0.9f);
             }
             base.PostDrawLayer(layer);
         }

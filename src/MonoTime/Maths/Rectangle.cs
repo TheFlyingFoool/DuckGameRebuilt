@@ -19,47 +19,47 @@ namespace DuckGame
 
         public float Top
         {
-            get => this.y;
-            set => this.y = value;
+            get => y;
+            set => y = value;
         }
 
         public float Bottom
         {
-            get => this.y + this.height;
-            set => this.y = value - this.height;
+            get => y + height;
+            set => y = value - height;
         }
 
         public float Left
         {
-            get => this.x;
-            set => this.x = value;
+            get => x;
+            set => x = value;
         }
 
         public float Right
         {
-            get => this.x + this.width;
-            set => this.x = value - this.width;
+            get => x + width;
+            set => x = value - width;
         }
 
-        public Vec2 tl => new Vec2(this.x, this.y);
+        public Vec2 tl => new Vec2(x, y);
 
-        public Vec2 tr => new Vec2(this.x + this.width, this.y);
+        public Vec2 tr => new Vec2(x + width, y);
 
-        public Vec2 bl => new Vec2(this.x, this.y + this.height);
+        public Vec2 bl => new Vec2(x, y + height);
 
-        public Vec2 br => new Vec2(this.x + this.width, this.y + this.height);
+        public Vec2 br => new Vec2(x + width, y + height);
 
         public Vec2 Center
         {
-            get => new Vec2(this.x + this.width / 2f, this.y + this.height / 2f);
+            get => new Vec2(x + width / 2f, y + height / 2f);
             set
             {
-                this.x = value.x - this.width / 2f;
-                this.y = value.y - this.height / 2f;
+                x = value.x - width / 2f;
+                y = value.y - height / 2f;
             }
         }
 
-        public float aspect => this.width / this.height;
+        public float aspect => width / height;
 
         public Rectangle(float x, float y, float width, float height)
         {
@@ -83,30 +83,30 @@ namespace DuckGame
                 br.y = tl.y;
                 tl.y = y;
             }
-            this.x = tl.x;
-            this.y = tl.y;
-            this.width = br.x - tl.x;
-            this.height = br.y - tl.y;
+            x = tl.x;
+            y = tl.y;
+            width = br.x - tl.x;
+            height = br.y - tl.y;
         }
 
         public static implicit operator Microsoft.Xna.Framework.Rectangle(Rectangle r) => new Microsoft.Xna.Framework.Rectangle((int)r.x, (int)r.y, (int)r.width, (int)r.height);
 
         public static implicit operator Rectangle(Microsoft.Xna.Framework.Rectangle r) => new Rectangle(r.X, r.Y, r.Width, r.Height);
 
-        public bool Contains(Vec2 position) => position.x >= this.x && position.y >= this.y && position.x <= x + this.width && position.y <= y + this.height;
+        public bool Contains(Vec2 position) => position.x >= x && position.y >= y && position.x <= x + width && position.y <= y + height;
 
         public Rectangle GetQuadrant(int pQuadrantStartingWithTLClockwise)
         {
             switch (pQuadrantStartingWithTLClockwise)
             {
                 case 0:
-                    return new Rectangle(this.x, this.y, this.width / 2f, this.height / 2f);
+                    return new Rectangle(x, y, width / 2f, height / 2f);
                 case 1:
-                    return new Rectangle(this.x + this.width / 2f, this.y, this.width / 2f, this.height / 2f);
+                    return new Rectangle(x + width / 2f, y, width / 2f, height / 2f);
                 case 2:
-                    return new Rectangle(this.x + this.width / 2f, this.y + this.height / 2f, this.width / 2f, this.height / 2f);
+                    return new Rectangle(x + width / 2f, y + height / 2f, width / 2f, height / 2f);
                 default:
-                    return new Rectangle(this.x, this.y + this.height / 2f, this.width / 2f, this.height / 2f);
+                    return new Rectangle(x, y + height / 2f, width / 2f, height / 2f);
             }
         }
     }

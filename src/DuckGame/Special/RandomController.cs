@@ -26,61 +26,61 @@ namespace DuckGame
         public RandomController()
           : base()
         {
-            this.graphic = new Sprite("swirl");
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this._canFlip = false;
-            this._visibleInGame = false;
+            graphic = new Sprite("swirl");
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
+            _canFlip = false;
+            _visibleInGame = false;
         }
 
         public override void Update()
         {
             if (!Level.current.simulatePhysics)
                 return;
-            if (!this._started)
+            if (!_started)
             {
-                this.PopUpItems();
-                this._started = true;
+                PopUpItems();
+                _started = true;
             }
-            if (this._up.Count > 0)
+            if (_up.Count > 0)
             {
-                for (int index = 0; index < this._up.Count; ++index)
+                for (int index = 0; index < _up.Count; ++index)
                 {
-                    if (this._up[index].finished)
+                    if (_up[index].finished)
                     {
-                        this._lastUp = this._up[index];
-                        this._up[index].Reset();
-                        this._up.Remove(this._up[index]);
+                        _lastUp = _up[index];
+                        _up[index].Reset();
+                        _up.Remove(_up[index]);
                         --index;
                     }
                 }
             }
-            if (this._up.Count >= (int)this.max_up)
+            if (_up.Count >= (int)max_up)
                 return;
-            if (this._up.Count == 0)
+            if (_up.Count == 0)
             {
-                this.PopUpItems();
-                this._waitCount = 0f;
+                PopUpItems();
+                _waitCount = 0f;
             }
             else
             {
-                this._waitCount += Maths.IncFrameTimer();
-                if (_waitCount < this.wait.value)
+                _waitCount += Maths.IncFrameTimer();
+                if (_waitCount < wait.value)
                     return;
-                this._waitCount = 0f;
-                this.PopUpItems();
+                _waitCount = 0f;
+                PopUpItems();
             }
         }
 
         private void PopUpItems()
         {
             bool flag1 = false;
-            while (this._up.Count < this.max_up.value)
+            while (_up.Count < max_up.value)
             {
                 List<Thing> list = Level.current.things[typeof(ISequenceItem)].ToList<Thing>();
                 list.RemoveAll(v => !v.sequence.isValid);
-                if (this._up.Count >= list.Count)
+                if (_up.Count >= list.Count)
                     break;
                 int num1 = 0;
                 List<SequenceItem> sequenceItemList = new List<SequenceItem>();
@@ -93,7 +93,7 @@ namespace DuckGame
                     if ((!sequence.activated || sequence.finished) && sequence.isValid)
                     {
                         flag2 = true;
-                        if (sequence != this._lastUp || flag1)
+                        if (sequence != _lastUp || flag1)
                         {
                             ++sequence.likelyhood;
                             num1 += sequence.likelyhood;
@@ -118,8 +118,8 @@ namespace DuckGame
                         RandomController.isRand = true;
                         sequenceItem.Activate();
                         RandomController.isRand = false;
-                        ++this._totalUp;
-                        this._up.Add(sequenceItem);
+                        ++_totalUp;
+                        _up.Add(sequenceItem);
                         break;
                     }
                     num3 += num4;

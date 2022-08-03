@@ -211,7 +211,7 @@ namespace DuckGame
             get
             {
                 object finalResult = null;
-                ScriptStatement leftStatement = this.leftObject as ScriptStatement;
+                ScriptStatement leftStatement = leftObject as ScriptStatement;
                 object leftResult;
                 if (leftStatement != null)
                 {
@@ -219,13 +219,13 @@ namespace DuckGame
                 }
                 else
                 {
-                    leftResult = this.leftObject;
+                    leftResult = leftObject;
                 }
-                ScriptStatement rightStatement = this.rightObject as ScriptStatement;
+                ScriptStatement rightStatement = rightObject as ScriptStatement;
                 object rightResult;
                 if (rightStatement != null)
                 {
-                    if (leftResult is bool || this.op <= ScriptOperator.IsNotEqual)
+                    if (leftResult is bool || op <= ScriptOperator.IsNotEqual)
                     {
                         rightResult = rightStatement.result;
                     }
@@ -236,7 +236,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    rightResult = this.rightObject;
+                    rightResult = rightObject;
                 }
                 if (leftResult != null)
                 {
@@ -248,35 +248,35 @@ namespace DuckGame
                             {
                                 float left = Change.ToSingle(leftResult);
                                 float right = Change.ToSingle(rightResult);
-                                if (this.op == ScriptOperator.Plus)
+                                if (op == ScriptOperator.Plus)
                                 {
                                     finalResult = left + right;
                                 }
-                                else if (this.op == ScriptOperator.Minus)
+                                else if (op == ScriptOperator.Minus)
                                 {
                                     finalResult = left - right;
                                 }
-                                else if (this.op == ScriptOperator.Multiply)
+                                else if (op == ScriptOperator.Multiply)
                                 {
                                     finalResult = left * right;
                                 }
-                                else if (this.op == ScriptOperator.Divide)
+                                else if (op == ScriptOperator.Divide)
                                 {
                                     finalResult = ((right != 0f) ? (left / right) : 0f);
                                 }
-                                else if (this.op == ScriptOperator.IsEqual)
+                                else if (op == ScriptOperator.IsEqual)
                                 {
                                     finalResult = (left == right);
                                 }
-                                else if (this.op == ScriptOperator.IsNotEqual)
+                                else if (op == ScriptOperator.IsNotEqual)
                                 {
                                     finalResult = (left != right);
                                 }
-                                else if (this.op == ScriptOperator.GreaterThan)
+                                else if (op == ScriptOperator.GreaterThan)
                                 {
                                     finalResult = (left > right);
                                 }
-                                else if (this.op == ScriptOperator.LessThan)
+                                else if (op == ScriptOperator.LessThan)
                                 {
                                     finalResult = (left < right);
                                 }
@@ -285,35 +285,35 @@ namespace DuckGame
                             {
                                 int left2 = (int)leftResult;
                                 int right2 = (int)rightResult;
-                                if (this.op == ScriptOperator.Plus)
+                                if (op == ScriptOperator.Plus)
                                 {
                                     finalResult = left2 + right2;
                                 }
-                                else if (this.op == ScriptOperator.Minus)
+                                else if (op == ScriptOperator.Minus)
                                 {
                                     finalResult = left2 - right2;
                                 }
-                                else if (this.op == ScriptOperator.Multiply)
+                                else if (op == ScriptOperator.Multiply)
                                 {
                                     finalResult = left2 * right2;
                                 }
-                                else if (this.op == ScriptOperator.Divide)
+                                else if (op == ScriptOperator.Divide)
                                 {
                                     finalResult = ((right2 != 0) ? (left2 / right2) : 0);
                                 }
-                                else if (this.op == ScriptOperator.IsEqual)
+                                else if (op == ScriptOperator.IsEqual)
                                 {
                                     finalResult = (left2 == right2);
                                 }
-                                else if (this.op == ScriptOperator.IsNotEqual)
+                                else if (op == ScriptOperator.IsNotEqual)
                                 {
                                     finalResult = (left2 != right2);
                                 }
-                                else if (this.op == ScriptOperator.GreaterThan)
+                                else if (op == ScriptOperator.GreaterThan)
                                 {
                                     finalResult = (left2 > right2);
                                 }
-                                else if (this.op == ScriptOperator.LessThan)
+                                else if (op == ScriptOperator.LessThan)
                                 {
                                     finalResult = (left2 < right2);
                                 }
@@ -323,15 +323,15 @@ namespace DuckGame
                         {
                             string left3 = (string)leftResult;
                             string right3 = (string)rightResult;
-                            if (this.op == ScriptOperator.Plus)
+                            if (op == ScriptOperator.Plus)
                             {
                                 finalResult = left3 + right3;
                             }
-                            else if (this.op == ScriptOperator.IsEqual)
+                            else if (op == ScriptOperator.IsEqual)
                             {
                                 finalResult = (left3 == right3);
                             }
-                            else if (this.op == ScriptOperator.IsNotEqual)
+                            else if (op == ScriptOperator.IsNotEqual)
                             {
                                 finalResult = (left3 != right3);
                             }
@@ -340,19 +340,19 @@ namespace DuckGame
                         {
                             bool left4 = (bool)leftResult;
                             bool right4 = (bool)rightResult;
-                            if (this.op == ScriptOperator.IsEqual)
+                            if (op == ScriptOperator.IsEqual)
                             {
                                 finalResult = (left4 == right4);
                             }
-                            else if (this.op == ScriptOperator.IsNotEqual)
+                            else if (op == ScriptOperator.IsNotEqual)
                             {
                                 finalResult = (left4 != right4);
                             }
-                            else if (this.op == ScriptOperator.And)
+                            else if (op == ScriptOperator.And)
                             {
                                 finalResult = (left4 && right4);
                             }
-                            else if (this.op == ScriptOperator.Or)
+                            else if (op == ScriptOperator.Or)
                             {
                                 finalResult = (left4 || right4);
                             }
@@ -367,24 +367,24 @@ namespace DuckGame
                 {
                     finalResult = rightResult;
                 }
-                if (this.functionName != null)
+                if (functionName != null)
                 {
                     object res;
                     if (finalResult is string)
                     {
-                        res = Script.CallMethod(this.functionName, finalResult as string);
+                        res = Script.CallMethod(functionName, finalResult as string);
                     }
                     else if (finalResult is int)
                     {
-                        res = Script.CallMethod(this.functionName, (int)finalResult);
+                        res = Script.CallMethod(functionName, (int)finalResult);
                     }
                     else if (finalResult is float)
                     {
-                        res = Script.CallMethod(this.functionName, (float)finalResult);
+                        res = Script.CallMethod(functionName, (float)finalResult);
                     }
                     else
                     {
-                        res = Script.CallMethod(this.functionName, null);
+                        res = Script.CallMethod(functionName, null);
                     }
                     ScriptObject obj = res as ScriptObject;
                     if (obj != null)

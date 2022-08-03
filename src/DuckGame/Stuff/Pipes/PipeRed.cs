@@ -17,24 +17,24 @@ namespace DuckGame
         public PipeRed(float x, float y)
           : base(x, y, "travelPipes")
         {
-            this._editorName = "Red Pipe";
-            this.editorTooltip = "Ducks who travel through Red pipes are said to have good hearts.";
-            this.pipeDepth = 0.93f;
+            _editorName = "Red Pipe";
+            editorTooltip = "Ducks who travel through Red pipes are said to have good hearts.";
+            pipeDepth = 0.93f;
         }
 
         protected override Dictionary<PipeTileset.Direction, PipeTileset> GetNeighbors()
         {
             Dictionary<PipeTileset.Direction, PipeTileset> neighbors = new Dictionary<PipeTileset.Direction, PipeTileset>();
-            PipeTileset pipeTileset1 = Level.CheckPointAll<PipeRed>(this.x, this.y - 16f).Where<PipeRed>(x => x.group == this.group).FirstOrDefault<PipeRed>();
+            PipeTileset pipeTileset1 = Level.CheckPointAll<PipeRed>(x, y - 16f).Where<PipeRed>(x => x.group == group).FirstOrDefault<PipeRed>();
             if (pipeTileset1 != null)
                 neighbors[PipeTileset.Direction.Up] = pipeTileset1;
-            PipeTileset pipeTileset2 = Level.CheckPointAll<PipeRed>(this.x, this.y + 16f).Where<PipeRed>(x => x.group == this.group).FirstOrDefault<PipeRed>();
+            PipeTileset pipeTileset2 = Level.CheckPointAll<PipeRed>(x, y + 16f).Where<PipeRed>(x => x.group == group).FirstOrDefault<PipeRed>();
             if (pipeTileset2 != null)
                 neighbors[PipeTileset.Direction.Down] = pipeTileset2;
-            PipeTileset pipeTileset3 = Level.CheckPointAll<PipeRed>(this.x - 16f, this.y).Where<PipeRed>(x => x.group == this.group).FirstOrDefault<PipeRed>();
+            PipeTileset pipeTileset3 = Level.CheckPointAll<PipeRed>(x - 16f, y).Where<PipeRed>(x => x.group == group).FirstOrDefault<PipeRed>();
             if (pipeTileset3 != null)
                 neighbors[PipeTileset.Direction.Left] = pipeTileset3;
-            PipeTileset pipeTileset4 = Level.CheckPointAll<PipeRed>(this.x + 16f, this.y).Where<PipeRed>(x => x.group == this.group).FirstOrDefault<PipeRed>();
+            PipeTileset pipeTileset4 = Level.CheckPointAll<PipeRed>(x + 16f, y).Where<PipeRed>(x => x.group == group).FirstOrDefault<PipeRed>();
             if (pipeTileset4 != null)
                 neighbors[PipeTileset.Direction.Right] = pipeTileset4;
             return neighbors;

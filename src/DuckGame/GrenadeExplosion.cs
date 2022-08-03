@@ -21,10 +21,10 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this._explodeFrames < 0)
+            if (_explodeFrames < 0)
             {
                 float x = this.x;
-                float ypos = this.y - 2f;
+                float ypos = y - 2f;
                 Level.Add(new ExplosionPart(x, ypos));
                 int num1 = 6;
                 if (Graphics.effectsLevel < 2)
@@ -35,15 +35,15 @@ namespace DuckGame
                     float num2 = Rando.Float(12f, 20f);
                     Level.Add(new ExplosionPart(x + (float)Math.Cos(Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin(Maths.DegToRad(deg)) * num2));
                 }
-                this._explodeFrames = 4;
+                _explodeFrames = 4;
             }
             else
             {
-                --this._explodeFrames;
-                if (this._explodeFrames != 0)
+                --_explodeFrames;
+                if (_explodeFrames != 0)
                     return;
                 float x = this.x;
-                float num3 = this.y - 2f;
+                float num3 = y - 2f;
                 List<Bullet> varBullets = new List<Bullet>();
                 for (int index = 0; index < 20; ++index)
                 {
@@ -69,9 +69,9 @@ namespace DuckGame
                     Graphics.flashAdd = 1.3f;
                     Layer.Game.darken = 1.3f;
                 }
-                foreach (Window ignore in Level.CheckCircleAll<Window>(this.position, 40f))
+                foreach (Window ignore in Level.CheckCircleAll<Window>(position, 40f))
                 {
-                    if (Level.CheckLine<Block>(this.position, ignore.position, ignore) == null)
+                    if (Level.CheckLine<Block>(position, ignore.position, ignore) == null)
                         ignore.Destroy(new DTImpact(this));
                 }
                 SFX.Play("explode");

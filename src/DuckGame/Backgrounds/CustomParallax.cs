@@ -15,37 +15,37 @@ namespace DuckGame
         public CustomParallax(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
+            graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 6
             };
-            this.center = new Vec2(8f, 8f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = (Depth)0.9f;
-            this.layer = Layer.Foreground;
-            this._visibleInGame = false;
-            this._editorName = "Custom Parallax";
+            center = new Vec2(8f, 8f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            depth = (Depth)0.9f;
+            layer = Layer.Foreground;
+            _visibleInGame = false;
+            _editorName = "Custom Parallax";
         }
 
         public override void Initialize()
         {
-            this.didInit = true;
+            didInit = true;
             if (Level.current is Editor)
                 return;
-            this.backgroundColor = new Color(25, 38, 41);
-            Level.current.backgroundColor = this.backgroundColor;
+            backgroundColor = new Color(25, 38, 41);
+            Level.current.backgroundColor = backgroundColor;
             CustomTileData data = Custom.GetData(0, CustomType.Parallax);
             if (data != null && data.texture != null)
             {
-                this._parallax = new ParallaxBackground(data.texture);
+                _parallax = new ParallaxBackground(data.texture);
                 for (int yPos = 0; yPos < 40; ++yPos)
-                    this._parallax.AddZone(yPos, 0f, 0f, true);
+                    _parallax.AddZone(yPos, 0f, 0f, true);
                 Level.Add(_parallax);
             }
             else
             {
-                this._parallax = new ParallaxBackground("background/office", 0f, 0f, 3);
+                _parallax = new ParallaxBackground("background/office", 0f, 0f, 3);
                 Level.Add(_parallax);
             }
         }

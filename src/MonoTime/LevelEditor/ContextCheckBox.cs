@@ -25,31 +25,31 @@ namespace DuckGame
           string valTooltip)
           : base(owner)
         {
-            this.itemSize.x = 150f;
-            this.itemSize.y = 16f;
-            this._text = text;
-            this._field = field;
-            this._checkBox = new SpriteMap("Editor/checkBox", 16, 16);
-            this.depth = (Depth)0.8f;
-            this._myType = myType;
+            itemSize.x = 150f;
+            itemSize.y = 16f;
+            _text = text;
+            _field = field;
+            _checkBox = new SpriteMap("Editor/checkBox", 16, 16);
+            depth = (Depth)0.8f;
+            _myType = myType;
             if (field == null)
-                this._field = new FieldBinding(this, nameof(isChecked));
-            this.tooltip = valTooltip;
+                _field = new FieldBinding(this, nameof(isChecked));
+            tooltip = valTooltip;
         }
 
         public ContextCheckBox(string text, IContextListener owner, FieldBinding field = null, System.Type myType = null)
           : base(owner)
         {
-            this.itemSize.x = 150f;
-            this.itemSize.y = 16f;
-            this._text = text;
-            this._field = field;
-            this._checkBox = new SpriteMap("Editor/checkBox", 16, 16);
-            this.depth = (Depth)0.8f;
-            this._myType = myType;
+            itemSize.x = 150f;
+            itemSize.y = 16f;
+            _text = text;
+            _field = field;
+            _checkBox = new SpriteMap("Editor/checkBox", 16, 16);
+            depth = (Depth)0.8f;
+            _myType = myType;
             if (field != null)
                 return;
-            this._field = new FieldBinding(this, nameof(isChecked));
+            _field = new FieldBinding(this, nameof(isChecked));
         }
 
         public override void Selected()
@@ -57,11 +57,11 @@ namespace DuckGame
             SFX.Play("highClick", 0.3f, 0.2f);
             if (Level.current is Editor)
             {
-                if (this._field == null)
+                if (_field == null)
                     return;
-                if (this._field.value is IList)
+                if (_field.value is IList)
                 {
-                    IList list = this._field.value as IList;
+                    IList list = _field.value as IList;
                     if (list.Contains(_myType))
                         list.Remove(_myType);
                     else
@@ -69,15 +69,15 @@ namespace DuckGame
                 }
                 else
                 {
-                    this._field.value = !(bool)this._field.value;
+                    _field.value = !(bool)_field.value;
                     Editor.hasUnsavedChanges = true;
                 }
             }
             else
             {
-                if (this._owner == null)
+                if (_owner == null)
                     return;
-                this._owner.Selected(this);
+                _owner.Selected(this);
             }
         }
 
@@ -85,15 +85,15 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._hover)
-                Graphics.DrawRect(this.position, this.position + this.itemSize, new Color(70, 70, 70), (Depth)0.82f);
-            Graphics.DrawString(this._text, this.position + new Vec2(2f, 5f), Color.White, (Depth)0.85f);
-            bool flag = !(this._field.value is IList) ? (bool)this._field.value : (this._field.value as IList).Contains(_myType);
-            this._checkBox.depth = (Depth)0.9f;
-            this._checkBox.x = (this.x + itemSize.x - 16f);
-            this._checkBox.y = this.y;
-            this._checkBox.frame = flag ? 1 : 0;
-            this._checkBox.Draw();
+            if (_hover)
+                Graphics.DrawRect(position, position + itemSize, new Color(70, 70, 70), (Depth)0.82f);
+            Graphics.DrawString(_text, position + new Vec2(2f, 5f), Color.White, (Depth)0.85f);
+            bool flag = !(_field.value is IList) ? (bool)_field.value : (_field.value as IList).Contains(_myType);
+            _checkBox.depth = (Depth)0.9f;
+            _checkBox.x = (x + itemSize.x - 16f);
+            _checkBox.y = y;
+            _checkBox.frame = flag ? 1 : 0;
+            _checkBox.Draw();
         }
     }
 }

@@ -23,60 +23,60 @@ namespace DuckGame
 
         public string name
         {
-            get => this._name;
-            set => this._name = value;
+            get => _name;
+            set => _name = value;
         }
 
         public string description
         {
-            get => this._description;
-            set => this._description = value;
+            get => _description;
+            set => _description = value;
         }
 
         public Tex2D image
         {
-            get => this._image;
+            get => _image;
             set
             {
-                this._image = value;
-                this._sprite = new Sprite(this._image);
+                _image = value;
+                _sprite = new Sprite(_image);
             }
         }
 
         public bool large
         {
-            get => this._large;
-            set => this._large = value;
+            get => _large;
+            set => _large = value;
         }
 
-        public override float width => !this._large ? 71f : 96f;
+        public override float width => !_large ? 71f : 96f;
 
-        public override float height => !this._large ? 48f : 62f;
+        public override float height => !_large ? 48f : 62f;
 
         public LevelInfo(bool large = true, string text = null)
         {
-            this._large = large;
-            this._specialText = text;
+            _large = large;
+            _specialText = text;
         }
 
         public override void Draw(Vec2 position, bool selected, float alpha)
         {
-            Graphics.DrawRect(position, position + new Vec2(this.width, this.height), new Color(25, 38, 41) * alpha, (Depth)0.9f);
+            Graphics.DrawRect(position, position + new Vec2(width, height), new Color(25, 38, 41) * alpha, (Depth)0.9f);
             if (selected)
-                Graphics.DrawRect(position + new Vec2(-1f, 0f), position + new Vec2(this.width + 1f, this.height), Color.White * alpha, (Depth)0.97f, false);
-            if (this._specialText != null)
+                Graphics.DrawRect(position + new Vec2(-1f, 0f), position + new Vec2(width + 1f, height), Color.White * alpha, (Depth)0.97f, false);
+            if (_specialText != null)
             {
                 LevelInfo._font.scale = new Vec2(0.5f, 0.5f);
-                LevelInfo._font.Draw(this._specialText, (float)(position.x + this.width / 2.0 - LevelInfo._font.GetWidth(this._specialText) / 2.0), (float)(position.y + this.height / 2.0 - 3.0), Color.White * alpha, (Depth)0.95f);
+                LevelInfo._font.Draw(_specialText, (float)(position.x + width / 2.0 - LevelInfo._font.GetWidth(_specialText) / 2.0), (float)(position.y + height / 2.0 - 3.0), Color.White * alpha, (Depth)0.95f);
             }
             else
             {
                 LevelInfo._font.scale = new Vec2(0.5f, 0.5f);
-                LevelInfo._font.Draw(this._name, position.x + 3f, (float)(position.y + this.height - 6.0), Color.White * alpha, (Depth)0.95f);
-                this._sprite.xscale = this._sprite.yscale = this.width / _sprite.width;
-                this._sprite.depth = (Depth)0.95f;
-                this._sprite.alpha = alpha;
-                Graphics.Draw(this._sprite, position.x, position.y);
+                LevelInfo._font.Draw(_name, position.x + 3f, (float)(position.y + height - 6.0), Color.White * alpha, (Depth)0.95f);
+                _sprite.xscale = _sprite.yscale = width / _sprite.width;
+                _sprite.depth = (Depth)0.95f;
+                _sprite.alpha = alpha;
+                Graphics.Draw(_sprite, position.x, position.y);
             }
         }
     }

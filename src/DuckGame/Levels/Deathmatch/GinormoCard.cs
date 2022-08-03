@@ -38,77 +38,77 @@ namespace DuckGame
           bool smallMode)
           : base()
         {
-            this._smallMode = smallMode;
-            this.layer = GinormoBoard.boardLayer;
-            this._start = start;
-            this._end = end;
-            this._slideWait = slideWait;
-            this.position = this._start;
-            this._team = team;
-            this.depth = (Depth)0.98f;
-            this.index = idx;
-            this._font = new BitmapFont("biosFont", 8);
-            this._smallFont = new BitmapFont("smallBiosFont", 7, 6);
-            this._mode = mode;
-            this._faceTarget = !this._smallMode ? new RenderTarget2D(104, 24) : new RenderTarget2D(104, 12);
-            this._targetSprite = new Sprite(this._faceTarget, 0f, 0f);
-            this._gradient = new Sprite("rockThrow/headGradient2");
-            if (this._smallMode)
+            _smallMode = smallMode;
+            layer = GinormoBoard.boardLayer;
+            _start = start;
+            _end = end;
+            _slideWait = slideWait;
+            position = _start;
+            _team = team;
+            depth = (Depth)0.98f;
+            index = idx;
+            _font = new BitmapFont("biosFont", 8);
+            _smallFont = new BitmapFont("smallBiosFont", 7, 6);
+            _mode = mode;
+            _faceTarget = !_smallMode ? new RenderTarget2D(104, 24) : new RenderTarget2D(104, 12);
+            _targetSprite = new Sprite(_faceTarget, 0f, 0f);
+            _gradient = new Sprite("rockThrow/headGradient2");
+            if (_smallMode)
             {
-                this._edgeOverlay = new Sprite("rockThrow/edgeOverlayShort");
-                this._trophy = new Sprite("tinyTrophy");
+                _edgeOverlay = new Sprite("rockThrow/edgeOverlayShort");
+                _trophy = new Sprite("tinyTrophy");
             }
             else
             {
-                this._edgeOverlay = new Sprite("rockThrow/edgeOverlay");
-                this._trophy = new Sprite("littleTrophy");
+                _edgeOverlay = new Sprite("rockThrow/edgeOverlay");
+                _trophy = new Sprite("littleTrophy");
             }
-            this._trophy.CenterOrigin();
+            _trophy.CenterOrigin();
         }
 
         public override void Update()
         {
             if (_slideWait < 0.0)
-                this.position = Vec2.Lerp(this.position, this._end, 0.15f);
-            this._slideWait -= 0.4f;
-            DuckGame.Graphics.SetRenderTarget(this._faceTarget);
+                position = Vec2.Lerp(position, _end, 0.15f);
+            _slideWait -= 0.4f;
+            DuckGame.Graphics.SetRenderTarget(_faceTarget);
             DuckGame.Graphics.Clear(Color.Transparent);
             DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, Matrix.Identity);
-            this._gradient.depth = -0.6f;
-            this._gradient.alpha = 0.5f;
-            if (this._team.activeProfiles.Count == 1)
+            _gradient.depth = -0.6f;
+            _gradient.alpha = 0.5f;
+            if (_team.activeProfiles.Count == 1)
             {
-                this._gradient.color = this._team.activeProfiles[0].persona.colorUsable;
+                _gradient.color = _team.activeProfiles[0].persona.colorUsable;
             }
             else
             {
-                switch (Teams.CurrentGameTeamIndex(this._team))
+                switch (Teams.CurrentGameTeamIndex(_team))
                 {
                     case 0:
-                        this._gradient.color = Color.Red;
+                        _gradient.color = Color.Red;
                         break;
                     case 1:
-                        this._gradient.color = Color.Blue;
+                        _gradient.color = Color.Blue;
                         break;
                     case 2:
-                        this._gradient.color = Color.LimeGreen;
+                        _gradient.color = Color.LimeGreen;
                         break;
                 }
             }
-            if (this._smallMode)
-                this._gradient.yscale = 0.5f;
-            DuckGame.Graphics.Draw(this._gradient, 0f, 0f);
-            this._edgeOverlay.depth = (Depth)0.9f;
-            this._edgeOverlay.alpha = 0.5f;
-            DuckGame.Graphics.Draw(this._edgeOverlay, 0f, 0f);
+            if (_smallMode)
+                _gradient.yscale = 0.5f;
+            DuckGame.Graphics.Draw(_gradient, 0f, 0f);
+            _edgeOverlay.depth = (Depth)0.9f;
+            _edgeOverlay.alpha = 0.5f;
+            DuckGame.Graphics.Draw(_edgeOverlay, 0f, 0f);
             int num = 0;
-            foreach (Profile activeProfile in this._team.activeProfiles)
+            foreach (Profile activeProfile in _team.activeProfiles)
             {
                 float x = (num * 8 + 8) * 2;
                 float y = 16f;
                 activeProfile.persona.quackSprite.depth = (Depth)0.7f;
                 activeProfile.persona.quackSprite.scale = new Vec2(2f, 2f);
-                if (this._smallMode)
+                if (_smallMode)
                     DuckGame.Graphics.Draw(activeProfile.persona.quackSprite, 0, x - 8f, y - 8f);
                 else
                     DuckGame.Graphics.Draw(activeProfile.persona.quackSprite, 0, x, y, 2f, 2f);
@@ -121,7 +121,7 @@ namespace DuckGame
                 hat.scale = new Vec2(2f, 2f);
                 if (hat.texture.width > 16.0)
                     hat.frame = 1;
-                if (this._smallMode)
+                if (_smallMode)
                     DuckGame.Graphics.Draw(hat, hat.frame, (float)(x + hatPoint.x - 8.0), (float)(y + hatPoint.y - 8.0));
                 else
                     DuckGame.Graphics.Draw(hat, hat.frame, x + hatPoint.x * 2f, y + hatPoint.y * 2f, 2f, 2f);
@@ -137,52 +137,52 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this._font.scale = new Vec2(1f, 1f);
-            string str = this._team.currentDisplayName;
+            _font.scale = new Vec2(1f, 1f);
+            string str = _team.currentDisplayName;
             float num1 = 0f;
             float num2 = 0f;
             if (str.Length > 16)
                 str = str.Substring(0, 16);
             string text1 = "@ICONGRADIENT@" + str;
-            if (this._team != null && this._team.activeProfiles != null && this._team.activeProfiles.Count > 0)
+            if (_team != null && _team.activeProfiles != null && _team.activeProfiles.Count > 0)
             {
-                BitmapFont bitmapFont = this._team.activeProfiles.Count <= 1 ? this._team.activeProfiles[0].font : Profiles.EnvironmentProfile.font;
+                BitmapFont bitmapFont = _team.activeProfiles.Count <= 1 ? _team.activeProfiles[0].font : Profiles.EnvironmentProfile.font;
                 bitmapFont.scale = new Vec2(1f, 1f);
-                bitmapFont.Draw(text1, this.x + 182f + num1 - bitmapFont.GetWidth(text1), this.y + 2f + num2, Color.White, this.depth);
+                bitmapFont.Draw(text1, x + 182f + num1 - bitmapFont.GetWidth(text1), y + 2f + num2, Color.White, depth);
             }
-            this._font.scale = new Vec2(1f, 1f);
-            this._targetSprite.scale = new Vec2(1f, 1f);
-            DuckGame.Graphics.Draw(this._targetSprite, this.x, this.y);
-            if (this._mode == BoardMode.Points)
+            _font.scale = new Vec2(1f, 1f);
+            _targetSprite.scale = new Vec2(1f, 1f);
+            DuckGame.Graphics.Draw(_targetSprite, x, y);
+            if (_mode == BoardMode.Points)
             {
                 string text2 = Change.ToString(_team.score);
-                if (this._smallMode)
+                if (_smallMode)
                 {
-                    this._smallFont.scale = new Vec2(1f, 1f);
-                    this._smallFont.Draw(text2, this.x + 32f - this._smallFont.GetWidth(text2), this.y + 2f, Color.White, this.depth);
+                    _smallFont.scale = new Vec2(1f, 1f);
+                    _smallFont.Draw(text2, x + 32f - _smallFont.GetWidth(text2), y + 2f, Color.White, depth);
                 }
                 else
                 {
-                    this._smallFont.scale = new Vec2(2f, 2f);
-                    this._smallFont.Draw(text2, this.x + 183f - this._smallFont.GetWidth(text2), this.y + 10f, Color.White, this.depth);
+                    _smallFont.scale = new Vec2(2f, 2f);
+                    _smallFont.Draw(text2, x + 183f - _smallFont.GetWidth(text2), y + 10f, Color.White, depth);
                 }
             }
             else
             {
-                int wins = this._team.wins;
-                if (this._team.activeProfiles.Count == 1)
-                    wins = this._team.activeProfiles[0].wins;
+                int wins = _team.wins;
+                if (_team.activeProfiles.Count == 1)
+                    wins = _team.activeProfiles[0].wins;
                 for (int index = 0; index < wins; ++index)
                 {
-                    if (this._smallMode)
+                    if (_smallMode)
                     {
-                        this._trophy.depth = (Depth)(0.8f + index * 0.01f);
-                        DuckGame.Graphics.Draw(this._trophy, this.x + 24f + index * 6, this.y + 6f);
+                        _trophy.depth = (Depth)(0.8f + index * 0.01f);
+                        DuckGame.Graphics.Draw(_trophy, x + 24f + index * 6, y + 6f);
                     }
                     else
                     {
-                        this._trophy.depth = (Depth)(0.8f - index * 0.01f);
-                        DuckGame.Graphics.Draw(this._trophy, this.x + 175f - index * 8, this.y + 18f);
+                        _trophy.depth = (Depth)(0.8f - index * 0.01f);
+                        DuckGame.Graphics.Draw(_trophy, x + 175f - index * 8, y + 18f);
                     }
                 }
             }

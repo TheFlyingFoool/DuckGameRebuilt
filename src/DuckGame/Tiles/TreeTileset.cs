@@ -14,15 +14,15 @@ namespace DuckGame
         public TreeTileset(float x, float y)
           : base(x, y, "treeTileset")
         {
-            this._editorName = "Tree";
-            this.physicsMaterial = PhysicsMaterial.Default;
-            this.verticalWidth = 6f;
-            this.verticalWidthThick = 15f;
-            this.horizontalHeight = 8f;
-            this._hasNubs = false;
-            this.depth = -0.15f;
-            this.placementLayerOverride = Layer.Blocks;
-            this.treeLike = true;
+            _editorName = "Tree";
+            physicsMaterial = PhysicsMaterial.Default;
+            verticalWidth = 6f;
+            verticalWidthThick = 15f;
+            horizontalHeight = 8f;
+            _hasNubs = false;
+            depth = -0.15f;
+            placementLayerOverride = Layer.Blocks;
+            treeLike = true;
         }
     }
 }

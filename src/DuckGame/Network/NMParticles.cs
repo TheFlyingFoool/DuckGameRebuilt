@@ -21,28 +21,28 @@ namespace DuckGame
         {
             byte netTypeIndex = PhysicsParticle.TypeToNetTypeIndex(pParticle.GetType());
             List<PhysicsParticle> physicsParticleList;
-            if (!this.particles.TryGetValue(netTypeIndex, out physicsParticleList))
-                physicsParticleList = this.particles[netTypeIndex] = new List<PhysicsParticle>();
+            if (!particles.TryGetValue(netTypeIndex, out physicsParticleList))
+                physicsParticleList = particles[netTypeIndex] = new List<PhysicsParticle>();
             physicsParticleList.Add(pParticle);
         }
 
         public NMParticles()
         {
-            this.manager = BelongsToManager.GhostManager;
-            this.levelIndex = DuckNetwork.levelIndex;
+            manager = BelongsToManager.GhostManager;
+            levelIndex = DuckNetwork.levelIndex;
         }
 
         public override void CopyTo(NetMessage pMessage)
         {
-            (pMessage as NMParticles).particles = this.particles;
+            (pMessage as NMParticles).particles = particles;
             base.CopyTo(pMessage);
         }
 
         protected override void OnSerialize()
         {
             BitBuffer bitBuffer = new BitBuffer();
-            bitBuffer.Write(this.levelIndex);
-            foreach (KeyValuePair<byte, List<PhysicsParticle>> particle in this.particles)
+            bitBuffer.Write(levelIndex);
+            foreach (KeyValuePair<byte, List<PhysicsParticle>> particle in particles)
             {
                 bitBuffer.Write(particle.Key);
                 bitBuffer.Write((byte)particle.Value.Count);
@@ -53,13 +53,13 @@ namespace DuckGame
                 }
             }
             bitBuffer.Write(byte.MaxValue);
-            this._serializedData.Write(bitBuffer, true);
+            _serializedData.Write(bitBuffer, true);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
-            this.data = d.ReadBitBuffer();
-            this.levelIndex = this.data.ReadByte();
+            data = d.ReadBitBuffer();
+            levelIndex = data.ReadByte();
         }
     }
 }

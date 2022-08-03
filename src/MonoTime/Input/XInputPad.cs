@@ -198,7 +198,7 @@ namespace DuckGame
     };
         private bool _connectedState;
 
-        public override bool isConnected => this._connectedState;
+        public override bool isConnected => _connectedState;
 
         public override bool allowStartRemap => true;
 
@@ -209,21 +209,21 @@ namespace DuckGame
         public XInputPad(int idx)
           : base(idx)
         {
-            this._name = "xbox" + idx.ToString();
-            this._productName = "XBOX GAMEPAD";
-            this._productGUID = "";
+            _name = "xbox" + idx.ToString();
+            _productName = "XBOX GAMEPAD";
+            _productGUID = "";
         }
 
-        public override Dictionary<int, string> GetTriggerNames() => this._triggerNames;
+        public override Dictionary<int, string> GetTriggerNames() => _triggerNames;
 
         public override Sprite GetMapImage(int map)
         {
             Sprite mapImage;
-            this._triggerImages.TryGetValue(map, out mapImage);
+            _triggerImages.TryGetValue(map, out mapImage);
             return mapImage;
         }
 
-        public void InitializeState() => this.GetState(this.index);
+        public void InitializeState() => GetState(index);
 
         protected override PadState GetState(int index)
         {
@@ -244,7 +244,7 @@ namespace DuckGame
             local2.right = right;
             state2.triggers.left = state1.Triggers.Left;
             state2.triggers.right = state1.Triggers.Right;
-            this._connectedState = state1.IsConnected;
+            _connectedState = state1.IsConnected;
             return state2;
         }
     }

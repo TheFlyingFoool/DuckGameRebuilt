@@ -20,23 +20,23 @@ namespace DuckGame
 
         public NMPeerInformation(IPAddress vaddress, int vport)
         {
-            this.address = vaddress;
-            this.port = vport;
+            address = vaddress;
+            port = vport;
         }
 
         protected override void OnSerialize()
         {
-            byte[] addressBytes = this.address.GetAddressBytes();
+            byte[] addressBytes = address.GetAddressBytes();
             BitBuffer val = new BitBuffer();
             val.Write(addressBytes, 0, -1);
-            this._serializedData.Write(val, true);
-            this._serializedData.Write(this.port);
+            _serializedData.Write(val, true);
+            _serializedData.Write(port);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
-            this.address = new IPAddress(d.ReadBitBuffer().buffer);
-            this.port = d.ReadInt();
+            address = new IPAddress(d.ReadBitBuffer().buffer);
+            port = d.ReadInt();
         }
     }
 }

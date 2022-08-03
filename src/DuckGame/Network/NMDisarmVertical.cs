@@ -14,8 +14,8 @@ namespace DuckGame
 
         public NMDisarmVertical(Duck pTarget, float pBumpSpeed)
         {
-            this.target = pTarget;
-            this.bump = pBumpSpeed;
+            target = pTarget;
+            bump = pBumpSpeed;
         }
 
         public NMDisarmVertical()
@@ -24,12 +24,12 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (Level.current == null || this.target == null || !this.target.isServerForObject || this.target.profile == null || target.disarmIndex != target.profile.networkIndex)
+            if (Level.current == null || target == null || !target.isServerForObject || target.profile == null || target.disarmIndex != target.profile.networkIndex)
                 return;
-            if (this.target._disarmWait == 0 && this.target._disarmDisable <= 0)
-                this.target.Disarm(null);
-            this.target.vSpeed = this.bump;
-            RumbleManager.AddRumbleEvent(this.target.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Short, RumbleFalloff.None));
+            if (target._disarmWait == 0 && target._disarmDisable <= 0)
+                target.Disarm(null);
+            target.vSpeed = bump;
+            RumbleManager.AddRumbleEvent(target.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Short, RumbleFalloff.None));
         }
     }
 }

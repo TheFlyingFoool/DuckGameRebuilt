@@ -11,12 +11,12 @@ namespace DuckGame
     {
         private PhysicsObject _thing;
 
-        public PhysicsObject thing => this._thing;
+        public PhysicsObject thing => _thing;
 
         public DTCrush(PhysicsObject t)
           : base(t)
         {
-            this._thing = t;
+            _thing = t;
         }
     }
 }

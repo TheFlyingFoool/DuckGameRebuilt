@@ -13,41 +13,41 @@ namespace DuckGame
         public SuicidePistol(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 6;
-            this._ammoType = new AT9mm();
-            this._ammoType.barrelAngleDegrees = 180f;
-            this._ammoType.immediatelyDeadly = true;
-            this._type = "gun";
-            this.graphic = new Sprite("suicidePistol");
-            this.center = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -5f);
-            this.collisionSize = new Vec2(16f, 10f);
-            this._barrelOffsetTL = new Vec2(8f, 13f);
-            this._fireSound = "magnum";
-            this._kickForce = -3.5f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this.handOffset = new Vec2(6f, 0f);
-            this._holdOffset = new Vec2(6f, 0f);
-            this.loseAccuracy = 0.1f;
-            this.maxAccuracyLost = 0.6f;
-            this.editorTooltip = "There's something odd about this gun but I can't quite put my finger on it.";
+            ammo = 6;
+            _ammoType = new AT9mm();
+            _ammoType.barrelAngleDegrees = 180f;
+            _ammoType.immediatelyDeadly = true;
+            _type = "gun";
+            graphic = new Sprite("suicidePistol");
+            center = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -5f);
+            collisionSize = new Vec2(16f, 10f);
+            _barrelOffsetTL = new Vec2(8f, 13f);
+            _fireSound = "magnum";
+            _kickForce = -3.5f;
+            _fireRumble = RumbleIntensity.Kick;
+            handOffset = new Vec2(6f, 0f);
+            _holdOffset = new Vec2(6f, 0f);
+            loseAccuracy = 0.1f;
+            maxAccuracyLost = 0.6f;
+            editorTooltip = "There's something odd about this gun but I can't quite put my finger on it.";
         }
 
         public override void Update()
         {
-            if (this._raised)
+            if (_raised)
             {
-                this.handOffset = new Vec2(0f, 0f);
-                this._holdOffset = new Vec2(0f, 0f);
-                this.collisionOffset = new Vec2(-8f, -5f);
-                this.collisionSize = new Vec2(16f, 10f);
+                handOffset = new Vec2(0f, 0f);
+                _holdOffset = new Vec2(0f, 0f);
+                collisionOffset = new Vec2(-8f, -5f);
+                collisionSize = new Vec2(16f, 10f);
             }
             else
             {
-                this.handOffset = new Vec2(7f, 0f);
-                this._holdOffset = new Vec2(4f, -1f);
-                this.collisionOffset = new Vec2(-8f, -5f);
-                this.collisionSize = new Vec2(8f, 10f);
+                handOffset = new Vec2(7f, 0f);
+                _holdOffset = new Vec2(4f, -1f);
+                collisionOffset = new Vec2(-8f, -5f);
+                collisionSize = new Vec2(8f, 10f);
             }
             base.Update();
         }

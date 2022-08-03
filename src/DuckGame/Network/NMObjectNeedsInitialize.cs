@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public Thing thing;
 
-        public NMObjectNeedsInitialize(Thing t) => this.thing = t;
+        public NMObjectNeedsInitialize(Thing t) => thing = t;
 
         public NMObjectNeedsInitialize()
         {
@@ -19,13 +19,13 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (this.thing == null || this.thing.ghostObject == null)
+            if (thing == null || thing.ghostObject == null)
                 return;
-            if (this.thing.connection == this.connection)
-                Thing.Fondle(this.thing, DuckNetwork.localConnection);
-            if (!this.thing.isServerForObject)
+            if (thing.connection == connection)
+                Thing.Fondle(thing, DuckNetwork.localConnection);
+            if (!thing.isServerForObject)
                 return;
-            this.thing.ghostObject.DirtyStateMask(long.MaxValue, this.connection);
+            thing.ghostObject.DirtyStateMask(long.MaxValue, connection);
         }
     }
 }

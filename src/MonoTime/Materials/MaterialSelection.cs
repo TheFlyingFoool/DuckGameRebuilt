@@ -13,12 +13,12 @@ namespace DuckGame
     {
         public float fade = 1f;
 
-        public MaterialSelection() => this._effect = Content.Load<MTEffect>("Shaders/selection");
+        public MaterialSelection() => _effect = Content.Load<MTEffect>("Shaders/selection");
 
         public override void Apply()
         {
-            this.SetValue("fade", this.fade);
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            SetValue("fade", fade);
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

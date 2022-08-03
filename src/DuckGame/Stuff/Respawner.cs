@@ -19,16 +19,16 @@ namespace DuckGame
         public Respawner(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("respawner", 18, 10);
-            this.graphic = _sprite;
-            this.center = new Vec2(9f, 5f);
-            this.collisionOffset = new Vec2(-8f, -4f);
-            this.collisionSize = new Vec2(16f, 4f);
-            this.hugWalls = WallHug.Floor;
-            this.layer = Layer.Blocks;
-            this.depth = (Depth)0.8f;
-            this._animate = Rando.Float(100f);
-            this.editorTooltip = "";
+            _sprite = new SpriteMap("respawner", 18, 10);
+            graphic = _sprite;
+            center = new Vec2(9f, 5f);
+            collisionOffset = new Vec2(-8f, -4f);
+            collisionSize = new Vec2(16f, 4f);
+            hugWalls = WallHug.Floor;
+            layer = Layer.Blocks;
+            depth = (Depth)0.8f;
+            _animate = Rando.Float(100f);
+            editorTooltip = "";
         }
 
         public override void Update() => base.Update();
@@ -37,24 +37,24 @@ namespace DuckGame
         {
             if (pLayer != Layer.Game)
                 return;
-            this._animate += 0.05f;
+            _animate += 0.05f;
             double y = this.y;
             int num1 = 6;
             for (int index = 0; index < num1; ++index)
             {
-                Vec2 p1 = new Vec2(this.x - 6f, (float)(this.y - index * 4.0 - _animate % 1.0 * 4.0));
+                Vec2 p1 = new Vec2(x - 6f, (float)(this.y - index * 4.0 - _animate % 1.0 * 4.0));
                 float num2 = (float)(1.0 - (this.y - p1.y) / 24.0);
                 float width = num2 * 3f;
                 p1.y += width / 2f;
                 Graphics.DrawLine(p1, p1 + new Vec2(12f, 0f), Colors.DGBlue * (num2 * 0.8f), width, -0.75f);
             }
             Vec2 vec2_1 = new Vec2(7f, 8f);
-            Vec2 vec2_2 = this.position + new Vec2(-7f, -24f);
+            Vec2 vec2_2 = position + new Vec2(-7f, -24f);
             for (int index = 0; index < vec2_1.x * vec2_1.y; ++index)
             {
                 Vec2 vec2_3 = new Vec2((int)(index % vec2_1.x), (int)(index / vec2_1.y));
                 float num3 = (float)((Noise.Generate(vec2_3.x * 32f, 0f) + 1.0) / 2.0 * 1.5 + 0.100000001490116);
-                float num4 = this._animate * 0.1f - (int)(_animate * num3 / 1.0);
+                float num4 = _animate * 0.1f - (int)(_animate * num3 / 1.0);
                 float num5 = Noise.Generate(vec2_3.x + 100f, (float)((vec2_3.y + 100.0 - num4) * 0.5));
                 if (num5 > 0.25)
                 {

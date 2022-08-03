@@ -25,6 +25,6 @@ namespace DuckGame
         public string weaponConfig;
         public string spawnerConfig;
 
-        public LevelObjects openAirAlternateObjects => this.GetChunk<LevelObjects>(nameof(openAirAlternateObjects));
+        public LevelObjects openAirAlternateObjects => GetChunk<LevelObjects>(nameof(openAirAlternateObjects));
     }
 }

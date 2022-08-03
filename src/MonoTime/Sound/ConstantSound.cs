@@ -19,87 +19,87 @@ namespace DuckGame
 
         public float volume
         {
-            get => this._effect == null ? 1f : this._effect.Volume;
+            get => _effect == null ? 1f : _effect.Volume;
             set
             {
-                if (this._effect != null)
-                    this._effect.Volume = value;
-                this._lerpVolume = value;
+                if (_effect != null)
+                    _effect.Volume = value;
+                _lerpVolume = value;
             }
         }
 
         public float lerpVolume
         {
-            get => this._lerpVolume;
-            set => this._lerpVolume = value;
+            get => _lerpVolume;
+            set => _lerpVolume = value;
         }
 
         public float lerpSpeed
         {
-            get => this._lerpSpeed;
-            set => this._lerpSpeed = value;
+            get => _lerpSpeed;
+            set => _lerpSpeed = value;
         }
 
         public float pitch
         {
-            get => this._effect == null ? 0f : this._effect.Pitch;
+            get => _effect == null ? 0f : _effect.Pitch;
             set
             {
-                if (this._effect == null)
+                if (_effect == null)
                     return;
-                this._effect.Pitch = value;
+                _effect.Pitch = value;
             }
         }
 
         public ConstantSound(string sound, float startVolume = 0f, float startPitch = 0f, string multiSound = null)
         {
             AutoUpdatables.Add(this);
-            this._effect = startVolume <= 0f ? (multiSound == null ? SFX.Get(sound, startVolume * SFX.volume, startPitch, looped: true) : SFX.GetMultiSound(sound, multiSound)) : SFX.Play(sound, startVolume * SFX.volume, startPitch, looped: true);
-            if (this._effect != null)
+            _effect = startVolume <= 0f ? (multiSound == null ? SFX.Get(sound, startVolume * SFX.volume, startPitch, looped: true) : SFX.GetMultiSound(sound, multiSound)) : SFX.Play(sound, startVolume * SFX.volume, startPitch, looped: true);
+            if (_effect != null)
                 return;
             DevConsole.Log("ConstantSound not found! (" + sound + ")");
-            this._effect = new InvalidSound(sound, startVolume, startPitch, 0f, true);
+            _effect = new InvalidSound(sound, startVolume, startPitch, 0f, true);
         }
 
         ~ConstantSound()
         {
-            this._lerpSpeed = 0f;
-            this._lerpVolume = 0f;
+            _lerpSpeed = 0f;
+            _lerpVolume = 0f;
         }
 
-        public void Kill() => this._killSound = true;
+        public void Kill() => _killSound = true;
 
         public void Mute()
         {
-            if (this._effect == null || this._effect.IsDisposed)
+            if (_effect == null || _effect.IsDisposed)
                 return;
-            this._effect.Volume = 0f;
+            _effect.Volume = 0f;
         }
 
         public void Update()
         {
-            if (this._effect != null && this._effect.IsDisposed)
-                this._effect = null;
-            else if (this._effect == null || this._startLevel != null && Level.current != this._startLevel)
+            if (_effect != null && _effect.IsDisposed)
+                _effect = null;
+            else if (_effect == null || _startLevel != null && Level.current != _startLevel)
             {
-                if (this._effect == null)
+                if (_effect == null)
                     return;
-                this._effect.Kill();
+                _effect.Kill();
             }
-            else if (this._killSound)
+            else if (_killSound)
             {
-                this._effect.Stop();
+                _effect.Stop();
             }
             else
             {
-                if (this._effect.Volume > 0.01f && this._effect.State != SoundState.Playing)
+                if (_effect.Volume > 0.01f && _effect.State != SoundState.Playing)
                 {
-                    this._effect.Play();
-                    this._startLevel = Level.current;
+                    _effect.Play();
+                    _startLevel = Level.current;
                 }
-                else if (this._effect.Volume < 0.01f && this._effect.State == SoundState.Playing)
-                    this._effect.Stop();
-                this._effect.Volume = Maths.LerpTowards(this._effect.Volume, this._lerpVolume, this._lerpSpeed);
+                else if (_effect.Volume < 0.01f && _effect.State == SoundState.Playing)
+                    _effect.Stop();
+                _effect.Volume = Maths.LerpTowards(_effect.Volume, _lerpVolume, _lerpSpeed);
             }
         }
     }

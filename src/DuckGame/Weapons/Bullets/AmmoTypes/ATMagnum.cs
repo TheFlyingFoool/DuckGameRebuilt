@@ -13,11 +13,11 @@ namespace DuckGame
 
         public ATMagnum()
         {
-            this.accuracy = 1f;
-            this.range = 300f;
-            this.penetration = 2f;
-            this.bulletSpeed = 36f;
-            this.combustable = true;
+            accuracy = 1f;
+            range = 300f;
+            penetration = 2f;
+            bulletSpeed = 36f;
+            combustable = true;
         }
 
         public override void PopShell(float x, float y, int dir)

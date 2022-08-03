@@ -22,19 +22,19 @@ namespace DuckGame
 
         public CameraFixed()
         {
-            this._contextMenuFilter.Add("wide");
-            this._editorName = "Camera Fixed";
-            this.editorTooltip = "A fixed Camera that stays in one place.";
-            this.Size._tooltip = "The size of the camera view (In pixels).";
-            this.graphic = new Sprite("cameraIcon");
-            this.collisionSize = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-4f, -4f);
-            this._visibleInGame = false;
+            _contextMenuFilter.Add("wide");
+            _editorName = "Camera Fixed";
+            editorTooltip = "A fixed Camera that stays in one place.";
+            Size._tooltip = "The size of the camera view (In pixels).";
+            graphic = new Sprite("cameraIcon");
+            collisionSize = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-4f, -4f);
+            _visibleInGame = false;
         }
 
         public override void Initialize()
         {
-            this.wide.value = this.Size.value;
+            wide.value = Size.value;
             base.Initialize();
         }
 
@@ -42,25 +42,25 @@ namespace DuckGame
         {
             if (!(Level.current is GameLevel) || GameMode.started)
             {
-                if (this.MoveDelay.value > 0f)
+                if (MoveDelay.value > 0f)
                 {
-                    this.MoveDelay.value -= Maths.IncFrameTimer();
+                    MoveDelay.value -= Maths.IncFrameTimer();
                 }
                 else
                 {
-                    Level.current.camera.x += this.MoveX.value;
-                    Level.current.camera.y += this.MoveY.value;
-                    this.position = Level.current.camera.center;
-                    if (this.MoveX.value != 0f || this.MoveY.value != 0f)
+                    Level.current.camera.x += MoveX.value;
+                    Level.current.camera.y += MoveY.value;
+                    position = Level.current.camera.center;
+                    if (MoveX.value != 0f || MoveY.value != 0f)
                     {
-                        CameraMover cameraMover = Level.CheckLine<CameraMover>(this.position, this.position + new Vec2(this.MoveX.value, this.MoveY.value));
-                        if (cameraMover != null && cameraMover != this.curMover && ((cameraMover.position - this.position).length < 0.5f || this.MoveX.value != 0f && Math.Sign(cameraMover.position.x - this.position.x) != Math.Sign(this.MoveX.value) || this.MoveY.value != 0f && Math.Sign(cameraMover.position.y - this.position.y) != Math.Sign(this.MoveY.value)))
+                        CameraMover cameraMover = Level.CheckLine<CameraMover>(position, position + new Vec2(MoveX.value, MoveY.value));
+                        if (cameraMover != null && cameraMover != curMover && ((cameraMover.position - position).length < 0.5f || MoveX.value != 0f && Math.Sign(cameraMover.position.x - position.x) != Math.Sign(MoveX.value) || MoveY.value != 0f && Math.Sign(cameraMover.position.y - position.y) != Math.Sign(MoveY.value)))
                         {
-                            this.position = cameraMover.position;
-                            this.MoveX.value = cameraMover.SpeedX.value;
-                            this.MoveY.value = cameraMover.SpeedY.value;
-                            this.MoveDelay.value = cameraMover.MoveDelay.value;
-                            this.curMover = cameraMover;
+                            position = cameraMover.position;
+                            MoveX.value = cameraMover.SpeedX.value;
+                            MoveY.value = cameraMover.SpeedY.value;
+                            MoveDelay.value = cameraMover.MoveDelay.value;
+                            curMover = cameraMover;
                         }
                     }
                 }
@@ -70,7 +70,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.wide.value = this.Size.value;
+            wide.value = Size.value;
             base.Draw();
         }
     }

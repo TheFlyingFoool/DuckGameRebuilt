@@ -29,29 +29,29 @@ namespace DuckGame
         public int icon;
         private bool _updating;
 
-        public List<ChallengeTrophy> trophies => this._trophies;
+        public List<ChallengeTrophy> trophies => _trophies;
 
         public string fileName
         {
-            get => this._fileName;
-            set => this._fileName = value;
+            get => _fileName;
+            set => _fileName = value;
         }
 
         public string levelID
         {
-            get => this._levelID;
-            set => this._levelID = value;
+            get => _levelID;
+            set => _levelID = value;
         }
 
         public bool hasTimeRequirements
         {
             get
             {
-                if (this._trophies[0].goodies > 0 || this._trophies[0].targets > 0)
+                if (_trophies[0].goodies > 0 || _trophies[0].targets > 0)
                     return true;
-                for (int index = 1; index < this._trophies.Count; ++index)
+                for (int index = 1; index < _trophies.Count; ++index)
                 {
-                    if (this._trophies[index].timeRequirement > 0)
+                    if (_trophies[index].timeRequirement > 0)
                         return true;
                 }
                 return false;
@@ -62,9 +62,9 @@ namespace DuckGame
         {
         }
 
-        public string GetNameForDisplay() => this.name.ToUpperInvariant();
+        public string GetNameForDisplay() => name.ToUpperInvariant();
 
-        public bool CheckRequirement(Profile p) => ChallengeData.CheckRequirement(p, this.requirement);
+        public bool CheckRequirement(Profile p) => ChallengeData.CheckRequirement(p, requirement);
 
         public static bool CheckRequirement(Profile p, string req)
         {
@@ -105,21 +105,21 @@ namespace DuckGame
         public int GetRequirementValue()
         {
             TrophyType trophyType = TrophyType.Baseline;
-            if (this.requirement.Length <= 1)
+            if (requirement.Length <= 1)
                 return 0;
-            if (this.requirement[0] == 'B')
+            if (requirement[0] == 'B')
                 trophyType = TrophyType.Bronze;
-            if (this.requirement[0] == 'S')
+            if (requirement[0] == 'S')
                 trophyType = TrophyType.Silver;
-            if (this.requirement[0] == 'G')
+            if (requirement[0] == 'G')
                 trophyType = TrophyType.Gold;
-            if (this.requirement[0] == 'P')
+            if (requirement[0] == 'P')
                 trophyType = TrophyType.Platinum;
-            if (this.requirement[0] == 'D')
+            if (requirement[0] == 'D')
                 trophyType = TrophyType.Developer;
             if (trophyType == TrophyType.Baseline)
                 return 0;
-            string str = this.requirement.Substring(1, this.requirement.Length - 1);
+            string str = requirement.Substring(1, requirement.Length - 1);
             int int32;
             try
             {
@@ -134,7 +134,7 @@ namespace DuckGame
             return int32 * (int)trophyType;
         }
 
-        public ChallengeData() => this._trophies = new List<ChallengeTrophy>()
+        public ChallengeData() => _trophies = new List<ChallengeTrophy>()
     {
       new ChallengeTrophy(this) { type = TrophyType.Baseline },
       new ChallengeTrophy(this) { type = TrophyType.Bronze },
@@ -146,49 +146,49 @@ namespace DuckGame
 
         public void Update()
         {
-            if (this._updating)
+            if (_updating)
                 return;
-            this._updating = true;
-            this._updating = false;
+            _updating = true;
+            _updating = false;
         }
 
         public BinaryClassChunk Serialize()
         {
             BinaryClassChunk element = new BinaryClassChunk();
-            this.SerializeField(element, "name");
-            this.SerializeField(element, "description");
-            this.SerializeField(element, "goal");
-            this.SerializeField(element, "reward");
-            this.SerializeField(element, "requirement");
-            this.SerializeField(element, "icon");
-            this.SerializeField(element, "countGoodies");
-            this.SerializeField(element, "countTargets");
-            this.SerializeField(element, "prefix");
-            this.SerializeField(element, "prevchal");
-            foreach (ChallengeTrophy trophy in this._trophies)
+            SerializeField(element, "name");
+            SerializeField(element, "description");
+            SerializeField(element, "goal");
+            SerializeField(element, "reward");
+            SerializeField(element, "requirement");
+            SerializeField(element, "icon");
+            SerializeField(element, "countGoodies");
+            SerializeField(element, "countTargets");
+            SerializeField(element, "prefix");
+            SerializeField(element, "prevchal");
+            foreach (ChallengeTrophy trophy in _trophies)
                 element.AddProperty("trophy", trophy.Serialize());
             return element;
         }
 
         public bool Deserialize(BinaryClassChunk node)
         {
-            this.DeserializeField(node, "name");
-            this.DeserializeField(node, "description");
-            this.DeserializeField(node, "goal");
-            this.DeserializeField(node, "reward");
-            this.DeserializeField(node, "requirement");
-            this.DeserializeField(node, "icon");
-            this.DeserializeField(node, "countGoodies");
-            this.DeserializeField(node, "countTargets");
-            this.DeserializeField(node, "prefix");
-            this.DeserializeField(node, "prevchal");
+            DeserializeField(node, "name");
+            DeserializeField(node, "description");
+            DeserializeField(node, "goal");
+            DeserializeField(node, "reward");
+            DeserializeField(node, "requirement");
+            DeserializeField(node, "icon");
+            DeserializeField(node, "countGoodies");
+            DeserializeField(node, "countTargets");
+            DeserializeField(node, "prefix");
+            DeserializeField(node, "prevchal");
             List<BinaryClassChunk> properties = node.GetProperties<BinaryClassChunk>("trophy");
             int index = 0;
             foreach (BinaryClassChunk node1 in properties)
             {
                 ChallengeTrophy challengeTrophy = new ChallengeTrophy(this);
                 challengeTrophy.Deserialize(node1);
-                this._trophies[index] = challengeTrophy;
+                _trophies[index] = challengeTrophy;
                 ++index;
             }
             return true;
@@ -197,42 +197,42 @@ namespace DuckGame
         public DXMLNode LegacySerialize()
         {
             DXMLNode element = new DXMLNode("challengeData");
-            this.LegacySerializeField(element, "name");
-            this.LegacySerializeField(element, "description");
-            this.LegacySerializeField(element, "goal");
-            this.LegacySerializeField(element, "reward");
-            this.LegacySerializeField(element, "requirement");
-            this.LegacySerializeField(element, "icon");
-            this.LegacySerializeField(element, "countGoodies");
-            this.LegacySerializeField(element, "countTargets");
-            this.LegacySerializeField(element, "prefix");
-            this.LegacySerializeField(element, "prevchal");
-            foreach (ChallengeTrophy trophy in this._trophies)
+            LegacySerializeField(element, "name");
+            LegacySerializeField(element, "description");
+            LegacySerializeField(element, "goal");
+            LegacySerializeField(element, "reward");
+            LegacySerializeField(element, "requirement");
+            LegacySerializeField(element, "icon");
+            LegacySerializeField(element, "countGoodies");
+            LegacySerializeField(element, "countTargets");
+            LegacySerializeField(element, "prefix");
+            LegacySerializeField(element, "prevchal");
+            foreach (ChallengeTrophy trophy in _trophies)
                 element.Add(trophy.LegacySerialize());
             return element;
         }
 
         public bool LegacyDeserialize(DXMLNode node)
         {
-            this.LegacyDeserializeField(node, "name");
-            this.LegacyDeserializeField(node, "description");
-            this.LegacyDeserializeField(node, "goal");
-            this.LegacyDeserializeField(node, "reward");
-            this.LegacyDeserializeField(node, "requirement");
-            this.LegacyDeserializeField(node, "icon");
-            this.LegacyDeserializeField(node, "countGoodies");
-            this.LegacyDeserializeField(node, "countTargets");
-            this.LegacyDeserializeField(node, "prefix");
-            this.LegacyDeserializeField(node, "prevchal");
-            LevelData levelData = DuckFile.LoadLevel(Content.path + "levels/" + this.prevchal + ".lev");
+            LegacyDeserializeField(node, "name");
+            LegacyDeserializeField(node, "description");
+            LegacyDeserializeField(node, "goal");
+            LegacyDeserializeField(node, "reward");
+            LegacyDeserializeField(node, "requirement");
+            LegacyDeserializeField(node, "icon");
+            LegacyDeserializeField(node, "countGoodies");
+            LegacyDeserializeField(node, "countTargets");
+            LegacyDeserializeField(node, "prefix");
+            LegacyDeserializeField(node, "prevchal");
+            LevelData levelData = DuckFile.LoadLevel(Content.path + "levels/" + prevchal + ".lev");
             if (levelData != null)
-                this.prevchal = levelData.metaData.guid;
+                prevchal = levelData.metaData.guid;
             int index = 0;
             foreach (DXMLNode element in node.Elements("challengeTrophy"))
             {
                 ChallengeTrophy challengeTrophy = new ChallengeTrophy(this);
                 challengeTrophy.LegacyDeserialize(element);
-                this._trophies[index] = challengeTrophy;
+                _trophies[index] = challengeTrophy;
                 ++index;
             }
             return true;

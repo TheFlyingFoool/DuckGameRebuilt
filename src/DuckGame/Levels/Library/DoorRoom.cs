@@ -26,38 +26,38 @@ namespace DuckGame
 
         public DoorRoom(Profile p = null)
         {
-            this._centeredView = true;
+            _centeredView = true;
             if (p != null)
             {
-                this._profiles = Profiles.allCustomProfiles;
-                for (int index = 0; index < this._profiles.Count; ++index)
+                _profiles = Profiles.allCustomProfiles;
+                for (int index = 0; index < _profiles.Count; ++index)
                 {
-                    if (this._profiles[index] == p)
+                    if (_profiles[index] == p)
                     {
-                        this._selectorPosition = index;
+                        _selectorPosition = index;
                         break;
                     }
                 }
-                this._desiredSelectorPosition = this._selectorPosition;
+                _desiredSelectorPosition = _selectorPosition;
             }
-            this._profile = p;
+            _profile = p;
         }
 
         public override void Initialize()
         {
             if (Music.currentSong != "RaceDay")
                 Music.Play("RaceDay");
-            this._door = new Sprite("litDoor");
-            this._door.CenterOrigin();
-            this._unlitDoor = new Sprite("unlitDoor");
-            this._unlitDoor.CenterOrigin();
-            this._profiles = Profiles.allCustomProfiles;
-            this._profile = this._profiles.Count != 0 ? this._profiles[this._selectorPosition] : Profiles.DefaultPlayer1;
-            if (this._profiles.Count > 0)
+            _door = new Sprite("litDoor");
+            _door.CenterOrigin();
+            _unlitDoor = new Sprite("unlitDoor");
+            _unlitDoor.CenterOrigin();
+            _profiles = Profiles.allCustomProfiles;
+            _profile = _profiles.Count != 0 ? _profiles[_selectorPosition] : Profiles.DefaultPlayer1;
+            if (_profiles.Count > 0)
                 HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@STATS");
             HUD.AddCornerMessage(HUDCorner.BottomMiddle, "@MENU2@ALBUM");
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@BACK");
-            this.backgroundColor = Color.Black;
+            backgroundColor = Color.Black;
             base.Initialize();
         }
 
@@ -67,23 +67,23 @@ namespace DuckGame
                 Global.data.onlineMatches.value = 100;
             if (Input.CheckCode((InputCode)"UP|UP|UP|SHOOT|DOWN|DOWN|DOWN|SHOOT|LEFT|RIGHT|SHOOT"))
                 Global.data.winsAsHair.value = 100;
-            if (this._desiredTransition != this._transition)
+            if (_desiredTransition != _transition)
             {
-                this._fade = Lerp.Float(this._fade, 0f, 0.06f);
+                _fade = Lerp.Float(_fade, 0f, 0.06f);
                 if (_fade <= 0.0)
                 {
-                    this._transition = this._desiredTransition;
-                    if (this._transition == DoorTransition.Profile)
+                    _transition = _desiredTransition;
+                    if (_transition == DoorTransition.Profile)
                     {
                         Graphics.fade = 0f;
-                        Level.current = new LockerRoom(this._profile);
+                        Level.current = new LockerRoom(_profile);
                     }
-                    else if (this._transition == DoorTransition.Exit)
+                    else if (_transition == DoorTransition.Exit)
                     {
                         Graphics.fade = 0f;
                         Level.current = new TitleScreen();
                     }
-                    else if (this._transition == DoorTransition.Album)
+                    else if (_transition == DoorTransition.Album)
                     {
                         Graphics.fade = 0f;
                         Level.current = new Album();
@@ -92,39 +92,39 @@ namespace DuckGame
             }
             else
             {
-                this._fade = Lerp.Float(this._fade, 1f, 0.06f);
-                if (this._selectorPosition == this._desiredSelectorPosition)
+                _fade = Lerp.Float(_fade, 1f, 0.06f);
+                if (_selectorPosition == _desiredSelectorPosition)
                 {
                     if (InputProfile.active.Down("MENULEFT"))
-                        this.SelectUp();
+                        SelectUp();
                     if (InputProfile.active.Down("MENURIGHT"))
-                        this.SelectDown();
-                    if (InputProfile.active.Pressed("SELECT") && this._profile != null)
+                        SelectDown();
+                    if (InputProfile.active.Pressed("SELECT") && _profile != null)
                     {
-                        this._desiredTransition = DoorTransition.Profile;
+                        _desiredTransition = DoorTransition.Profile;
                         HUD.CloseAllCorners();
                     }
                 }
                 if (InputProfile.active.Pressed("CANCEL"))
                 {
-                    this._desiredTransition = DoorTransition.Exit;
+                    _desiredTransition = DoorTransition.Exit;
                     HUD.CloseAllCorners();
                 }
                 if (InputProfile.active.Pressed("MENU2"))
                 {
-                    this._desiredTransition = DoorTransition.Album;
+                    _desiredTransition = DoorTransition.Album;
                     HUD.CloseAllCorners();
                 }
-                if (_slideTo != 0.0 && _slide != this._slideTo)
-                    this._slide = Lerp.Float(this._slide, this._slideTo, 0.05f);
-                else if (_slideTo != 0.0 && _slide == this._slideTo)
+                if (_slideTo != 0.0 && _slide != _slideTo)
+                    _slide = Lerp.Float(_slide, _slideTo, 0.05f);
+                else if (_slideTo != 0.0 && _slide == _slideTo)
                 {
-                    this._slide = 0f;
-                    this._slideTo = 0f;
+                    _slide = 0f;
+                    _slideTo = 0f;
                     SFX.Play("textLetter", 0.7f);
-                    this._selectorPosition = this._desiredSelectorPosition;
-                    if (this._profiles.Count > 0)
-                        this._profile = this._profiles[this._selectorPosition];
+                    _selectorPosition = _desiredSelectorPosition;
+                    if (_profiles.Count > 0)
+                        _profile = _profiles[_selectorPosition];
                 }
             }
             base.Update();
@@ -132,31 +132,31 @@ namespace DuckGame
 
         public void SelectDown()
         {
-            if (this._desiredSelectorPosition >= this._profiles.Count - 1)
-                this._desiredSelectorPosition = 0;
+            if (_desiredSelectorPosition >= _profiles.Count - 1)
+                _desiredSelectorPosition = 0;
             else
-                ++this._desiredSelectorPosition;
-            this._slideTo = 1f;
+                ++_desiredSelectorPosition;
+            _slideTo = 1f;
         }
 
         public void SelectUp()
         {
-            if (this._desiredSelectorPosition <= 0)
-                this._desiredSelectorPosition = this._profiles.Count - 1;
+            if (_desiredSelectorPosition <= 0)
+                _desiredSelectorPosition = _profiles.Count - 1;
             else
-                --this._desiredSelectorPosition;
-            this._slideTo = -1f;
+                --_desiredSelectorPosition;
+            _slideTo = -1f;
         }
 
         private int ProfileIndexAdd(int index, int plus)
         {
-            if (this._profiles.Count == 0)
+            if (_profiles.Count == 0)
                 return -1;
             int num = index + plus;
-            while (num >= this._profiles.Count)
-                num -= this._profiles.Count;
+            while (num >= _profiles.Count)
+                num -= _profiles.Count;
             while (num < 0)
-                num += this._profiles.Count;
+                num += _profiles.Count;
             return num;
         }
 
@@ -169,23 +169,23 @@ namespace DuckGame
                 float num2 = 140f;
                 for (int index1 = 0; index1 < 7; ++index1)
                 {
-                    int index2 = this.ProfileIndexAdd(this._selectorPosition, index1 - 3);
+                    int index2 = ProfileIndexAdd(_selectorPosition, index1 - 3);
                     string str = "NO PROFILE";
                     if (index2 != -1)
-                        str = this._profiles[index2].name;
+                        str = _profiles[index2].name;
                     float num3 = (float)(vec2_1.x + num1 + 3.0 * num2);
-                    float x = (float)(vec2_1.x + num1 + index1 * num2 + -this._slide * num2);
+                    float x = (float)(vec2_1.x + num1 + index1 * num2 + -_slide * num2);
                     double num4 = Maths.Clamp((float)((100.0 - Math.Abs(x - num3)) / 100.0), 0f, 1f);
                     float num5 = (float)num4 * Maths.NormalizeSection((float)num4, 0f, 0.9f);
-                    this._door.color = Color.White * num5 * this._fade;
-                    this._door.depth = (Depth)(num5 * 0.8f);
+                    _door.color = Color.White * num5 * _fade;
+                    _door.depth = (Depth)(num5 * 0.8f);
                     if (num5 < 1.0)
                     {
-                        this._unlitDoor.alpha = (float)((1.0 - num5) * 0.5) * this._fade;
-                        Graphics.Draw(this._unlitDoor, x, 90f);
+                        _unlitDoor.alpha = (float)((1.0 - num5) * 0.5) * _fade;
+                        Graphics.Draw(_unlitDoor, x, 90f);
                     }
                     if (num5 > 0.0)
-                        Graphics.Draw(this._door, x, 90f);
+                        Graphics.Draw(_door, x, 90f);
                     string text = str;
                     float num6 = (float)((num5 + 1.0) * 0.5);
                     float num7 = 0f;
@@ -203,10 +203,10 @@ namespace DuckGame
                         num7 = 2f;
                         num8 = 1f;
                     }
-                    Graphics.DrawString(text, new Vec2(x - Graphics.GetStringWidth(text, scale: vec2_2.x) / 2f + num8, 35f + num7), new Color((byte)Math.Round(165.0 * num6), (byte)Math.Round(100.0 * num6), (byte)Math.Round(34.0 * num6)) * this._fade, (Depth)0.9f, scale: vec2_2.x);
+                    Graphics.DrawString(text, new Vec2(x - Graphics.GetStringWidth(text, scale: vec2_2.x) / 2f + num8, 35f + num7), new Color((byte)Math.Round(165.0 * num6), (byte)Math.Round(100.0 * num6), (byte)Math.Round(34.0 * num6)) * _fade, (Depth)0.9f, scale: vec2_2.x);
                 }
-                this._door.scale = new Vec2(1f, 1f);
-                this._door.depth = (Depth)0.4f;
+                _door.scale = new Vec2(1f, 1f);
+                _door.depth = (Depth)0.4f;
             }
             base.PostDrawLayer(layer);
         }

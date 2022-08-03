@@ -30,142 +30,142 @@ namespace DuckGame
 
         public override float angle
         {
-            get => base.angle - Math.Max(this._aimAngle, -0.2f) * offDir;
+            get => base.angle - Math.Max(_aimAngle, -0.2f) * offDir;
             set => base.angle = value;
         }
 
         public PelletGun(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 2;
-            this._ammoType = new ATPellet();
-            this._type = "gun";
-            this._sprite = new SpriteMap("pelletGun", 31, 7);
-            this.graphic = _sprite;
-            this.center = new Vec2(15f, 2f);
-            this.collisionOffset = new Vec2(-8f, -2f);
-            this.collisionSize = new Vec2(16f, 5f);
-            this._spring = new Sprite("dandiSpring");
-            this._barrelOffsetTL = new Vec2(30f, 2f);
-            this._fireSound = "pelletgun";
-            this._kickForce = 0f;
-            this._manualLoad = true;
-            this._holdOffset = new Vec2(-2f, -1f);
-            this.editorTooltip = "Careful with that thing, you'll lose an eye!";
-            this._editorName = "Dandylion";
+            ammo = 2;
+            _ammoType = new ATPellet();
+            _type = "gun";
+            _sprite = new SpriteMap("pelletGun", 31, 7);
+            graphic = _sprite;
+            center = new Vec2(15f, 2f);
+            collisionOffset = new Vec2(-8f, -2f);
+            collisionSize = new Vec2(16f, 5f);
+            _spring = new Sprite("dandiSpring");
+            _barrelOffsetTL = new Vec2(30f, 2f);
+            _fireSound = "pelletgun";
+            _kickForce = 0f;
+            _manualLoad = true;
+            _holdOffset = new Vec2(-2f, -1f);
+            editorTooltip = "Careful with that thing, you'll lose an eye!";
+            _editorName = "Dandylion";
         }
 
-        public override Vec2 Offset(Vec2 pos) => this.position + this._posOffset + this.OffsetLocal(pos);
+        public override Vec2 Offset(Vec2 pos) => position + _posOffset + OffsetLocal(pos);
 
         public override void Update()
         {
-            if ((bool)this.infinite)
-                this.firesTillFail = 100;
-            if (this.firesTillFail == 1)
-                this._fireSound = "pelletgunFail";
-            if (this.firesTillFail <= 0)
+            if ((bool)infinite)
+                firesTillFail = 100;
+            if (firesTillFail == 1)
+                _fireSound = "pelletgunFail";
+            if (firesTillFail <= 0)
             {
-                this._fireSound = "pelletgunBad";
-                if (!(this.ammoType is ATFailedPellet))
-                    this._ammoType = new ATFailedPellet();
-                this.springVel += (this.Offset(new Vec2(0f, -8f)) - this.springPos) * 0.15f;
-                this.springVel *= 0.9f;
-                this.springPos += this.springVel;
+                _fireSound = "pelletgunBad";
+                if (!(ammoType is ATFailedPellet))
+                    _ammoType = new ATFailedPellet();
+                springVel += (Offset(new Vec2(0f, -8f)) - springPos) * 0.15f;
+                springVel *= 0.9f;
+                springPos += springVel;
             }
             else
-                this.springPos = this.position;
-            ++this._aimWait;
-            if (this._aimWait > 0)
+                springPos = position;
+            ++_aimWait;
+            if (_aimWait > 0)
             {
-                this._aimAngle = Lerp.Float(this._aimAngle, this._rising ? 0.4f : 0f, 0.05f);
-                this._aimWait = 0;
+                _aimAngle = Lerp.Float(_aimAngle, _rising ? 0.4f : 0f, 0.05f);
+                _aimWait = 0;
             }
-            if (this._rising && _aimAngle > 0.345f)
-                this.OnReleaseAction();
-            if (this.held)
-                this.center = new Vec2(11f, 2f);
+            if (_rising && _aimAngle > 0.345f)
+                OnReleaseAction();
+            if (held)
+                center = new Vec2(11f, 2f);
             else
-                this.center = new Vec2(15f, 2f);
-            if (this._loadState > -1)
+                center = new Vec2(15f, 2f);
+            if (_loadState > -1)
             {
-                if (this.owner == null)
+                if (owner == null)
                 {
-                    if (this._loadState == 3)
-                        this.loaded = true;
-                    this._loadState = -1;
-                    this._angleOffset = 0f;
-                    this._posOffset = Vec2.Zero;
-                    this.handOffset = Vec2.Zero;
-                    this._aimAngle = 0f;
-                    this._angleOffset2 = 0f;
+                    if (_loadState == 3)
+                        loaded = true;
+                    _loadState = -1;
+                    _angleOffset = 0f;
+                    _posOffset = Vec2.Zero;
+                    handOffset = Vec2.Zero;
+                    _aimAngle = 0f;
+                    _angleOffset2 = 0f;
                 }
-                this._posOffset = this._loadState <= 0 || this._loadState >= 4 ? Lerp.Vec2(this._posOffset, new Vec2(0f, 0f), 0.24f) : Lerp.Vec2(this._posOffset, new Vec2(2f, 2f), 0.2f);
-                this._angleOffset2 = this._loadState < 2 || this._loadState >= 3 ? Lerp.Float(this._angleOffset2, 0f, 0.02f) : Lerp.Float(this._angleOffset2, -0.17f, 0.04f);
-                if (this._loadState == 0)
+                _posOffset = _loadState <= 0 || _loadState >= 4 ? Lerp.Vec2(_posOffset, new Vec2(0f, 0f), 0.24f) : Lerp.Vec2(_posOffset, new Vec2(2f, 2f), 0.2f);
+                _angleOffset2 = _loadState < 2 || _loadState >= 3 ? Lerp.Float(_angleOffset2, 0f, 0.02f) : Lerp.Float(_angleOffset2, -0.17f, 0.04f);
+                if (_loadState == 0)
                 {
                     if (Network.isActive)
                     {
-                        if (this.isServerForObject)
+                        if (isServerForObject)
                             NetSoundEffect.Play("pelletGunSwipe");
                     }
                     else
                         SFX.Play("swipe", 0.4f, 0.3f);
-                    ++this._loadState;
+                    ++_loadState;
                 }
-                else if (this._loadState == 1)
+                else if (_loadState == 1)
                 {
                     if (_angleOffset < 0.16f)
-                        this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.2f, 0.11f);
+                        _angleOffset = MathHelper.Lerp(_angleOffset, 0.2f, 0.11f);
                     else
-                        ++this._loadState;
+                        ++_loadState;
                 }
-                else if (this._loadState == 2)
+                else if (_loadState == 2)
                 {
-                    this.handOffset.x += 0.31f;
+                    handOffset.x += 0.31f;
                     if (handOffset.x > 4.0)
                     {
-                        ++this._loadState;
-                        this.ammo = 2;
-                        this.loaded = false;
+                        ++_loadState;
+                        ammo = 2;
+                        loaded = false;
                         if (Network.isActive)
                         {
-                            if (this.isServerForObject)
+                            if (isServerForObject)
                                 NetSoundEffect.Play("pelletGunLoad");
                         }
                         else
                             SFX.Play("loadLow", 0.7f, Rando.Float(-0.05f, 0.05f));
                     }
                 }
-                else if (this._loadState == 3)
+                else if (_loadState == 3)
                 {
-                    this.handOffset.x -= 0.2f;
+                    handOffset.x -= 0.2f;
                     if (handOffset.x <= 0.0)
                     {
-                        ++this._loadState;
-                        this.handOffset.x = 0f;
+                        ++_loadState;
+                        handOffset.x = 0f;
                         if (Network.isActive)
                         {
-                            if (this.isServerForObject)
+                            if (isServerForObject)
                                 NetSoundEffect.Play("pelletGunSwipe2");
                         }
                         else
                             SFX.Play("swipe", 0.5f, 0.4f);
                     }
                 }
-                else if (this._loadState == 4)
+                else if (_loadState == 4)
                 {
                     if (_angleOffset > 0.03f)
                     {
-                        this._angleOffset = MathHelper.Lerp(this._angleOffset, 0f, 0.09f);
+                        _angleOffset = MathHelper.Lerp(_angleOffset, 0f, 0.09f);
                     }
                     else
                     {
-                        this._loadState = -1;
-                        this.loaded = true;
-                        this._angleOffset = 0f;
+                        _loadState = -1;
+                        loaded = true;
+                        _angleOffset = 0f;
                         if (Network.isActive)
                         {
-                            if (this.isServerForObject)
+                            if (isServerForObject)
                                 NetSoundEffect.Play("pelletGunClick");
                         }
                         else
@@ -178,19 +178,19 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if (this.isServerForObject)
+            if (isServerForObject)
             {
-                if (this.loaded && this.ammo > 1)
+                if (loaded && ammo > 1)
                 {
-                    this._rising = true;
-                    this._aimAngle = -0.3f;
-                    this._aimWait = 0;
+                    _rising = true;
+                    _aimAngle = -0.3f;
+                    _aimWait = 0;
                 }
                 else
                 {
-                    if (this._loadState != -1)
+                    if (_loadState != -1)
                         return;
-                    this._loadState = 0;
+                    _loadState = 0;
                 }
             }
             else
@@ -201,66 +201,66 @@ namespace DuckGame
         {
             base.OnPressAction();
             for (int index = 0; index < 4; ++index)
-                Level.Add(SmallSmoke.New(this.barrelPosition.x + offDir * 4f, this.barrelPosition.y));
-            Level.Add(SmallSmoke.New(this.position.x, this.position.y));
+                Level.Add(SmallSmoke.New(barrelPosition.x + offDir * 4f, barrelPosition.y));
+            Level.Add(SmallSmoke.New(position.x, position.y));
         }
 
         public override void OnReleaseAction()
         {
-            if (this.receivingPress)
+            if (receivingPress)
             {
-                this.RunFireCode();
+                RunFireCode();
             }
             else
             {
-                if (!this._rising)
+                if (!_rising)
                     return;
-                if (this.loaded && this.ammo > 1)
+                if (loaded && ammo > 1)
                 {
-                    this.RunFireCode();
-                    --this.firesTillFail;
-                    this.ammo = 1;
+                    RunFireCode();
+                    --firesTillFail;
+                    ammo = 1;
                 }
-                this._rising = false;
+                _rising = false;
             }
         }
 
         public override void Draw()
         {
-            this._sprite.center = this.center;
-            this._sprite.depth = this.depth;
-            this._sprite.angle = this.angle;
-            this._sprite.frame = 0;
-            this._sprite.alpha = this.alpha;
-            if (this.owner != null && this.owner.graphic != null && (this.duck == null || !(this.duck.holdObject is TapedGun)))
-                this._sprite.flipH = this.owner.graphic.flipH;
+            _sprite.center = center;
+            _sprite.depth = depth;
+            _sprite.angle = angle;
+            _sprite.frame = 0;
+            _sprite.alpha = alpha;
+            if (owner != null && owner.graphic != null && (duck == null || !(duck.holdObject is TapedGun)))
+                _sprite.flipH = owner.graphic.flipH;
             else
-                this._sprite.flipH = this.offDir <= 0;
-            if (this.offDir > 0)
-                this._sprite.angle = this.angle - this._angleOffset - this._angleOffset2;
+                _sprite.flipH = offDir <= 0;
+            if (offDir > 0)
+                _sprite.angle = angle - _angleOffset - _angleOffset2;
             else
-                this._sprite.angle = this.angle + this._angleOffset + this._angleOffset2;
-            Vec2 vec2 = this.Offset(this._posOffset);
+                _sprite.angle = angle + _angleOffset + _angleOffset2;
+            Vec2 vec2 = Offset(_posOffset);
             Graphics.Draw(_sprite, vec2.x, vec2.y);
-            this._sprite.frame = 1;
-            if (this.offDir > 0)
-                this._sprite.angle = this.angle + this._angleOffset * 3f - this._angleOffset2;
+            _sprite.frame = 1;
+            if (offDir > 0)
+                _sprite.angle = angle + _angleOffset * 3f - _angleOffset2;
             else
-                this._sprite.angle = this.angle - this._angleOffset * 3f + this._angleOffset2;
+                _sprite.angle = angle - _angleOffset * 3f + _angleOffset2;
             Graphics.Draw(_sprite, vec2.x, vec2.y);
-            if (this.firesTillFail > 0)
+            if (firesTillFail > 0)
                 return;
-            this._spring.depth = this.depth - 5;
-            this._spring.center = new Vec2(4f, 7f);
-            this._spring.angleDegrees = Maths.PointDirection(this.position + this._posOffset, this.springPos) - 90f;
-            this._spring.yscale = (float)((position.y + this._posOffset.y - springPos.y) / 8.0);
-            this._spring.flipH = this.offDir < 0;
-            if (this._spring.yscale > 1.20000004768372)
-                this._spring.yscale = 1.2f;
-            if (this._spring.yscale < -1.20000004768372)
-                this._spring.yscale = -1.2f;
-            this._spring.alpha = this.alpha;
-            Graphics.Draw(this._spring, vec2.x, vec2.y);
+            _spring.depth = depth - 5;
+            _spring.center = new Vec2(4f, 7f);
+            _spring.angleDegrees = Maths.PointDirection(position + _posOffset, springPos) - 90f;
+            _spring.yscale = (float)((position.y + _posOffset.y - springPos.y) / 8.0);
+            _spring.flipH = offDir < 0;
+            if (_spring.yscale > 1.20000004768372)
+                _spring.yscale = 1.2f;
+            if (_spring.yscale < -1.20000004768372)
+                _spring.yscale = -1.2f;
+            _spring.alpha = alpha;
+            Graphics.Draw(_spring, vec2.x, vec2.y);
         }
     }
 }

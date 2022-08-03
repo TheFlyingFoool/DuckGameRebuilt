@@ -31,80 +31,80 @@ namespace DuckGame
           : base("", xpos, ypos, wide, high)
         {
             Graphics.fade = 1f;
-            this._frame = new Sprite("unlockFrame");
-            this._frame.CenterOrigin();
-            this._wrappedFrame = new Sprite("unlockFrameWrapped");
-            this._wrappedFrame.CenterOrigin();
-            this._font = new BitmapFont("biosFontUI", 8, 7);
-            this._fancyFont = new FancyBitmapFont("smallFont");
-            this._unlocks = unlocks;
-            this._unlock = this._unlocks.First<Unlockable>();
+            _frame = new Sprite("unlockFrame");
+            _frame.CenterOrigin();
+            _wrappedFrame = new Sprite("unlockFrameWrapped");
+            _wrappedFrame.CenterOrigin();
+            _font = new BitmapFont("biosFontUI", 8, 7);
+            _fancyFont = new FancyBitmapFont("smallFont");
+            _unlocks = unlocks;
+            _unlock = _unlocks.First<Unlockable>();
         }
 
         public override void Open() => base.Open();
 
         public override void Update()
         {
-            this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0f, 0.3f, 1.1f);
-            if (this.down)
+            yOffset = Lerp.FloatSmooth(yOffset, down ? 150f : 0f, 0.3f, 1.1f);
+            if (down)
             {
-                if (this._unlocks.Count == 0)
+                if (_unlocks.Count == 0)
                 {
-                    if (!this.finished)
+                    if (!finished)
                     {
-                        this.finished = true;
-                        this.Close();
+                        finished = true;
+                        Close();
                     }
                 }
                 else
                 {
-                    this._downWait -= 0.06f;
+                    _downWait -= 0.06f;
                     if (_downWait <= 0.0)
                     {
-                        this._openWait = 1f;
-                        this._wrapped = true;
-                        this._downWait = 1f;
-                        this._unlock = this._unlocks.First<Unlockable>();
-                        this._unlocks.RemoveAt(0);
-                        this.down = false;
+                        _openWait = 1f;
+                        _wrapped = true;
+                        _downWait = 1f;
+                        _unlock = _unlocks.First<Unlockable>();
+                        _unlocks.RemoveAt(0);
+                        down = false;
                         SFX.Play("pause", 0.6f);
                     }
                 }
             }
             else
             {
-                this._openWait -= 0.06f;
-                if (_openWait <= 0.0 && this._wrapped && !this._flash)
-                    this._flash = true;
-                if (this._flash)
+                _openWait -= 0.06f;
+                if (_openWait <= 0.0 && _wrapped && !_flash)
+                    _flash = true;
+                if (_flash)
                 {
                     Graphics.flashAdd = Lerp.Float(Graphics.flashAdd, 1f, 0.2f);
                     if (Graphics.flashAdd > 0.990000009536743)
                     {
-                        this._wrapped = !this._wrapped;
-                        if (!this._wrapped)
+                        _wrapped = !_wrapped;
+                        if (!_wrapped)
                         {
-                            if (this._unlock != null && this._unlock.name == "UR THE BEST")
+                            if (_unlock != null && _unlock.name == "UR THE BEST")
                             {
-                                this._oldSong = Music.currentSong;
+                                _oldSong = Music.currentSong;
                                 Music.Play("jollyjingle");
                             }
                             SFX.Play("harp");
                             HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
-                            this._unlock.DoUnlock();
+                            _unlock.DoUnlock();
                         }
-                        this._flash = false;
+                        _flash = false;
                     }
                 }
                 else
                     Graphics.flashAdd = Lerp.Float(Graphics.flashAdd, 0f, 0.2f);
-                if (!this._wrapped && Input.Pressed("SELECT"))
+                if (!_wrapped && Input.Pressed("SELECT"))
                 {
                     HUD.CloseAllCorners();
                     SFX.Play("resume", 0.6f);
-                    if (this._oldSong != null && this._unlock != null && this._unlock.name == "UR THE BEST")
-                        Music.Play(this._oldSong);
-                    this.down = true;
+                    if (_oldSong != null && _unlock != null && _unlock.name == "UR THE BEST")
+                        Music.Play(_oldSong);
+                    down = true;
                 }
             }
             base.Update();
@@ -112,32 +112,32 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.y += this.yOffset;
-            if (this._wrapped)
+            y += yOffset;
+            if (_wrapped)
             {
-                this._wrappedFrame.depth = this.depth;
-                Graphics.Draw(this._wrappedFrame, this.x, this.y);
+                _wrappedFrame.depth = depth;
+                Graphics.Draw(_wrappedFrame, x, y);
             }
             else
             {
-                this._frame.depth = -0.9f;
-                Graphics.Draw(this._frame, this.x, this.y);
+                _frame.depth = -0.9f;
+                Graphics.Draw(_frame, x, y);
                 string text1 = "@LWING@UNLOCK@RWING@";
-                if (this._unlock.name == "UR THE BEST")
+                if (_unlock.name == "UR THE BEST")
                     text1 = "@LWING@WOAH!@RWING@";
-                Vec2 vec2_1 = new Vec2((float)-(this._font.GetWidth(text1) / 2.0), -42f);
-                this._font.DrawOutline(text1, this.position + vec2_1, Color.White, Color.Black, this.depth + 2);
-                string text2 = "} " + this._unlock.name + " }";
-                this._fancyFont.scale = new Vec2(1f, 1f);
-                Vec2 vec2_2 = new Vec2((float)-(this._fancyFont.GetWidth(text2) / 2.0), -25f);
-                this._fancyFont.DrawOutline(text2, this.position + vec2_2, Colors.DGYellow, Color.Black, this.depth + 2);
-                this._fancyFont.scale = new Vec2(0.5f, 0.5f);
-                string description = this._unlock.description;
-                Vec2 vec2_3 = new Vec2((float)-(this._fancyFont.GetWidth(description) / 2.0), 38f);
-                this._fancyFont.DrawOutline(description, this.position + vec2_3, Colors.DGGreen, Color.Black, this.depth + 2, 0.5f);
-                this._unlock.Draw(this.x, this.y + 10f, this.depth + 4);
+                Vec2 vec2_1 = new Vec2((float)-(_font.GetWidth(text1) / 2.0), -42f);
+                _font.DrawOutline(text1, position + vec2_1, Color.White, Color.Black, depth + 2);
+                string text2 = "} " + _unlock.name + " }";
+                _fancyFont.scale = new Vec2(1f, 1f);
+                Vec2 vec2_2 = new Vec2((float)-(_fancyFont.GetWidth(text2) / 2.0), -25f);
+                _fancyFont.DrawOutline(text2, position + vec2_2, Colors.DGYellow, Color.Black, depth + 2);
+                _fancyFont.scale = new Vec2(0.5f, 0.5f);
+                string description = _unlock.description;
+                Vec2 vec2_3 = new Vec2((float)-(_fancyFont.GetWidth(description) / 2.0), 38f);
+                _fancyFont.DrawOutline(description, position + vec2_3, Colors.DGGreen, Color.Black, depth + 2, 0.5f);
+                _unlock.Draw(x, y + 10f, depth + 4);
             }
-            this.y -= this.yOffset;
+            y -= yOffset;
         }
     }
 }

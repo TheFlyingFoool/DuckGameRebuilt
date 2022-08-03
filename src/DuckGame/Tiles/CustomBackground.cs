@@ -27,34 +27,34 @@ namespace DuckGame
         public CustomBackground(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.customIndex = 0;
-            this.graphic = new SpriteMap("arcadeBackground", 16, 16, true);
-            this._opacityFromGraphic = true;
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this._editorName = "01";
-            this.UpdateCurrentTileset();
+            customIndex = 0;
+            graphic = new SpriteMap("arcadeBackground", 16, 16, true);
+            _opacityFromGraphic = true;
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
+            _editorName = "01";
+            UpdateCurrentTileset();
         }
 
         public void UpdateCurrentTileset()
         {
-            CustomTileData data = Custom.GetData(this.customIndex, CustomBackground._customType);
+            CustomTileData data = Custom.GetData(customIndex, CustomBackground._customType);
             int num = 0;
-            if (this.graphic is SpriteMap)
-                num = this._frame;
+            if (graphic is SpriteMap)
+                num = _frame;
             if (data != null && data.texture != null)
-                this.graphic = new SpriteMap((Tex2D)data.texture, 16, 16);
+                graphic = new SpriteMap((Tex2D)data.texture, 16, 16);
             else
-                this.graphic = new SpriteMap("blueprintTileset", 16, 16);
-            (this.graphic as SpriteMap).frame = num;
-            this._currentTileset = Custom.data[CustomBackground._customType][this.customIndex];
+                graphic = new SpriteMap("blueprintTileset", 16, 16);
+            (graphic as SpriteMap).frame = num;
+            _currentTileset = Custom.data[CustomBackground._customType][customIndex];
         }
 
         public override void Draw()
         {
-            if (Level.current is Editor && this._currentTileset != Custom.data[CustomBackground._customType][this.customIndex])
-                this.UpdateCurrentTileset();
+            if (Level.current is Editor && _currentTileset != Custom.data[CustomBackground._customType][customIndex])
+                UpdateCurrentTileset();
             base.Draw();
         }
     }

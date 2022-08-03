@@ -15,8 +15,8 @@ namespace DuckGame
 
         public DuckNetConnectionTroubleInfo(DuckNetError e, string msg)
         {
-            this.message = msg;
-            this.error = e;
+            message = msg;
+            error = e;
         }
     }
 }

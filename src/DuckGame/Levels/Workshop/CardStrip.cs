@@ -27,17 +27,17 @@ namespace DuckGame
         private bool _selected;
         private static BitmapFont _font = new BitmapFont("biosFont", 8);
 
-        public Card cardSelected => this._cardSelected;
+        public Card cardSelected => _cardSelected;
 
         public bool selected
         {
-            get => this._selected;
+            get => _selected;
             set
             {
-                if (this._selected == value)
+                if (_selected == value)
                     return;
-                this._selected = value;
-                this._selectedCardIndex = this._levelIndex;
+                _selected = value;
+                _selectedCardIndex = _levelIndex;
             }
         }
 
@@ -51,13 +51,13 @@ namespace DuckGame
           string heading = null)
           : base(xpos, ypos)
         {
-            if (cards.Count > this._maxCardsPerStrip)
+            if (cards.Count > _maxCardsPerStrip)
             {
-                this._cards = cards.GetRange(0, 5);
+                _cards = cards.GetRange(0, 5);
                 if (cards[0] is LevelInfo)
                 {
-                    LevelInfo card = this._cards[0] as LevelInfo;
-                    List<Card> cards1 = this._cards;
+                    LevelInfo card = _cards[0] as LevelInfo;
+                    List<Card> cards1 = _cards;
                     LevelInfo levelInfo = new LevelInfo
                     {
                         specialText = "VIEW ALL",
@@ -67,125 +67,125 @@ namespace DuckGame
                 }
             }
             else
-                this._cards = cards;
-            this._listener = listener;
-            this._large = largeCard;
-            this._numCardsPerScreen = cardsPerScreen;
-            this._heading = heading;
+                _cards = cards;
+            _listener = listener;
+            _large = largeCard;
+            _numCardsPerScreen = cardsPerScreen;
+            _heading = heading;
             if (cards == null || cards.Count <= 0)
                 return;
             float height = cards[0].height;
             if (heading != null && heading != "")
                 height += 10f;
-            this.collisionSize = new Vec2(_numCardsPerScreen * (cards[0].width + 4f), height);
+            collisionSize = new Vec2(_numCardsPerScreen * (cards[0].width + 4f), height);
         }
 
         public override void Initialize()
         {
-            this.layer = Layer.HUD;
-            this._arrow = new Sprite("levelBrowserArrow");
-            this._arrow.CenterOrigin();
+            layer = Layer.HUD;
+            _arrow = new Sprite("levelBrowserArrow");
+            _arrow.CenterOrigin();
         }
 
         public override void Update()
         {
-            if (this._selected)
+            if (_selected)
             {
                 if (InputProfile.active.Pressed("MENULEFT"))
-                    --this._selectedCardIndex;
+                    --_selectedCardIndex;
                 else if (InputProfile.active.Pressed("MENURIGHT"))
-                    ++this._selectedCardIndex;
+                    ++_selectedCardIndex;
                 else if (InputProfile.active.Pressed("SELECT"))
-                    this._listener.CardSelected(this._cards[this._selectedCardIndex]);
+                    _listener.CardSelected(_cards[_selectedCardIndex]);
             }
-            if (this._selectedCardIndex >= this._cards.Count<Card>())
-                this._selectedCardIndex = this._cards.Count<Card>() - 1;
-            else if (this._selectedCardIndex < 0)
-                this._selectedCardIndex = 0;
-            if (this._levelIndex + (this._numCardsPerScreen - 1) < this._selectedCardIndex)
+            if (_selectedCardIndex >= _cards.Count<Card>())
+                _selectedCardIndex = _cards.Count<Card>() - 1;
+            else if (_selectedCardIndex < 0)
+                _selectedCardIndex = 0;
+            if (_levelIndex + (_numCardsPerScreen - 1) < _selectedCardIndex)
             {
                 if (_indexSlide > -1.0)
-                    this._indexSlide = Lerp.FloatSmooth(this._indexSlide, -1.2f, 0.2f);
+                    _indexSlide = Lerp.FloatSmooth(_indexSlide, -1.2f, 0.2f);
                 if (_indexSlide <= -1.0)
                 {
-                    ++this._levelIndex;
-                    this._indexSlide = 0f;
+                    ++_levelIndex;
+                    _indexSlide = 0f;
                 }
             }
-            if (this._levelIndex <= this._selectedCardIndex)
+            if (_levelIndex <= _selectedCardIndex)
                 return;
             if (_indexSlide < 1.0)
-                this._indexSlide = Lerp.FloatSmooth(this._indexSlide, 1.2f, 0.2f);
+                _indexSlide = Lerp.FloatSmooth(_indexSlide, 1.2f, 0.2f);
             if (_indexSlide < 1.0)
                 return;
-            --this._levelIndex;
-            this._indexSlide = 0f;
+            --_levelIndex;
+            _indexSlide = 0f;
         }
 
         public override void Draw()
         {
             float y = this.y;
-            if (this._heading != null && this._heading != "")
+            if (_heading != null && _heading != "")
             {
                 CardStrip._font.scale = new Vec2(0.75f, 0.75f);
-                CardStrip._font.Draw(this._heading, this.x + 4f, this.y, Color.White, (Depth)0.95f);
+                CardStrip._font.Draw(_heading, x + 4f, this.y, Color.White, (Depth)0.95f);
                 y += 10f;
             }
             Vec2 vec2_1 = Vec2.Zero;
             Vec2 vec2_2 = Vec2.Zero;
-            if (this._cards.Count > 0)
+            if (_cards.Count > 0)
             {
-                vec2_2 = new Vec2(this._cards[0].width, this._cards[0].height);
-                vec2_1 = new Vec2((this.x - (vec2_2.x + 4f) + _indexSlide * (vec2_2.x + 4f)), y);
+                vec2_2 = new Vec2(_cards[0].width, _cards[0].height);
+                vec2_1 = new Vec2((x - (vec2_2.x + 4f) + _indexSlide * (vec2_2.x + 4f)), y);
             }
             int num1 = 0;
-            for (int index = this._levelIndex - 1; index < this._levelIndex + (this._numCardsPerScreen + 1); ++index)
+            for (int index = _levelIndex - 1; index < _levelIndex + (_numCardsPerScreen + 1); ++index)
             {
-                if (index >= 0 && index < this._cards.Count)
+                if (index >= 0 && index < _cards.Count)
                 {
-                    Card card = this._cards[index];
+                    Card card = _cards[index];
                     float num2 = 1f;
-                    if (num1 == this._numCardsPerScreen + 1)
-                        num2 = Math.Abs(this._indexSlide);
-                    else if (num1 == this._numCardsPerScreen && _indexSlide > 0f)
+                    if (num1 == _numCardsPerScreen + 1)
+                        num2 = Math.Abs(_indexSlide);
+                    else if (num1 == _numCardsPerScreen && _indexSlide > 0f)
                     {
-                        num2 = 1f - Math.Abs(this._indexSlide);
+                        num2 = 1f - Math.Abs(_indexSlide);
                     }
                     else
                     {
                         switch (num1)
                         {
                             case 0:
-                                num2 = Math.Abs(this._indexSlide);
+                                num2 = Math.Abs(_indexSlide);
                                 break;
                             case 1:
                                 if (_indexSlide < 0f)
                                 {
-                                    num2 = 1f - Math.Abs(this._indexSlide);
+                                    num2 = 1f - Math.Abs(_indexSlide);
                                     break;
                                 }
                                 break;
                         }
                     }
                     Vec2 position = vec2_1;
-                    int num3 = !this._selected ? 0 : (index == this._selectedCardIndex ? 1 : 0);
+                    int num3 = !_selected ? 0 : (index == _selectedCardIndex ? 1 : 0);
                     double alpha = num2;
                     card.Draw(position, num3 != 0, (float)alpha);
                 }
                 vec2_1.x += vec2_2.x + 4f;
                 ++num1;
             }
-            this._arrow.xscale = this._arrow.yscale = 0.25f;
-            this._arrow.depth = (Depth)0.98f;
-            if (this._levelIndex + this._numCardsPerScreen < this._cards.Count)
+            _arrow.xscale = _arrow.yscale = 0.25f;
+            _arrow.depth = (Depth)0.98f;
+            if (_levelIndex + _numCardsPerScreen < _cards.Count)
             {
-                this._arrow.flipH = false;
-                Graphics.Draw(this._arrow, 312f, y + vec2_2.y / 2f);
+                _arrow.flipH = false;
+                Graphics.Draw(_arrow, 312f, y + vec2_2.y / 2f);
             }
-            if (this._levelIndex <= 0)
+            if (_levelIndex <= 0)
                 return;
-            this._arrow.flipH = true;
-            Graphics.Draw(this._arrow, 8f, y + vec2_2.y / 2f);
+            _arrow.flipH = true;
+            Graphics.Draw(_arrow, 8f, y + vec2_2.y / 2f);
         }
     }
 }

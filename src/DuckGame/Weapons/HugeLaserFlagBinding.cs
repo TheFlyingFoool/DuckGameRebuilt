@@ -13,20 +13,20 @@ namespace DuckGame
         {
             get
             {
-                this._value = 0;
-                HugeLaser thing = this._thing as HugeLaser;
+                _value = 0;
+                HugeLaser thing = _thing as HugeLaser;
                 if (thing._charging)
-                    this._value |= 4;
+                    _value |= 4;
                 if (thing._fired)
-                    this._value |= 2;
+                    _value |= 2;
                 if (thing.doBlast)
-                    this._value |= 1;
-                return this._value;
+                    _value |= 1;
+                return _value;
             }
             set
             {
-                this._value = value;
-                HugeLaser thing = this._thing as HugeLaser;
+                _value = value;
+                HugeLaser thing = _thing as HugeLaser;
                 thing._charging = (_value & 4U) > 0U;
                 thing._fired = (_value & 2U) > 0U;
                 thing.doBlast = (_value & 1U) > 0U;

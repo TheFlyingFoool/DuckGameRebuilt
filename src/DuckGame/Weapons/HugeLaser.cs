@@ -38,80 +38,80 @@ namespace DuckGame
 
         public byte netAnimationIndex
         {
-            get => this._chargeAnim == null ? (byte)0 : (byte)this._chargeAnim.animationIndex;
+            get => _chargeAnim == null ? (byte)0 : (byte)_chargeAnim.animationIndex;
             set
             {
-                if (this._chargeAnim == null || this._chargeAnim.animationIndex == value)
+                if (_chargeAnim == null || _chargeAnim.animationIndex == value)
                     return;
-                this._chargeAnim.animationIndex = value;
+                _chargeAnim.animationIndex = value;
             }
         }
 
         public byte spriteFrame
         {
-            get => this._chargeAnim == null ? (byte)0 : (byte)this._chargeAnim._frame;
+            get => _chargeAnim == null ? (byte)0 : (byte)_chargeAnim._frame;
             set
             {
-                if (this._chargeAnim == null)
+                if (_chargeAnim == null)
                     return;
-                this._chargeAnim._frame = value;
+                _chargeAnim._frame = value;
             }
         }
 
         public HugeLaser(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 30;
-            this._type = "gun";
-            this.graphic = new Sprite("hugeLaser");
-            this.center = new Vec2(32f, 32f);
-            this.collisionOffset = new Vec2(-16f, -8f);
-            this.collisionSize = new Vec2(32f, 15f);
-            this._barrelOffsetTL = new Vec2(47f, 30f);
-            this._fireSound = "";
-            this._fullAuto = false;
-            this._fireWait = 1f;
-            this._kickForce = 1f;
-            this._fireRumble = RumbleIntensity.Light;
-            this._editorName = "Death Laser";
-            this._tip = new Sprite("bigLaserTip");
-            this._tip.CenterOrigin();
-            this._chargeAnim = new SpriteMap("laserCharge", 32, 16);
-            this._chargeAnim.AddAnimation("idle", 1f, true, new int[1]);
-            this._chargeAnim.AddAnimation("load", 0.05f, false, 0, 1, 2, 3, 4);
-            this._chargeAnim.AddAnimation("loaded", 1f, true, 5);
-            this._chargeAnim.AddAnimation("charge", 0.38f, false, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 28);
-            this._chargeAnim.AddAnimation("uncharge", 1.2f, false, 28, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6);
-            this._chargeAnim.AddAnimation("drain", 2f, false, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40);
-            this._chargeAnim.SetAnimation("loaded");
-            this._chargeAnim.center = new Vec2(16f, 10f);
-            this._editorName = "Death Ray";
-            this.editorTooltip = "Hold the trigger to charge a beam of pure death and destruction. You know, for kids!";
-            this._bio = "Invented by Dr.Death for scanning items at your local super market. Also has some military application.";
+            ammo = 30;
+            _type = "gun";
+            graphic = new Sprite("hugeLaser");
+            center = new Vec2(32f, 32f);
+            collisionOffset = new Vec2(-16f, -8f);
+            collisionSize = new Vec2(32f, 15f);
+            _barrelOffsetTL = new Vec2(47f, 30f);
+            _fireSound = "";
+            _fullAuto = false;
+            _fireWait = 1f;
+            _kickForce = 1f;
+            _fireRumble = RumbleIntensity.Light;
+            _editorName = "Death Laser";
+            _tip = new Sprite("bigLaserTip");
+            _tip.CenterOrigin();
+            _chargeAnim = new SpriteMap("laserCharge", 32, 16);
+            _chargeAnim.AddAnimation("idle", 1f, true, new int[1]);
+            _chargeAnim.AddAnimation("load", 0.05f, false, 0, 1, 2, 3, 4);
+            _chargeAnim.AddAnimation("loaded", 1f, true, 5);
+            _chargeAnim.AddAnimation("charge", 0.38f, false, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 28);
+            _chargeAnim.AddAnimation("uncharge", 1.2f, false, 28, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6);
+            _chargeAnim.AddAnimation("drain", 2f, false, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40);
+            _chargeAnim.SetAnimation("loaded");
+            _chargeAnim.center = new Vec2(16f, 10f);
+            _editorName = "Death Ray";
+            editorTooltip = "Hold the trigger to charge a beam of pure death and destruction. You know, for kids!";
+            _bio = "Invented by Dr.Death for scanning items at your local super market. Also has some military application.";
         }
 
         public override void Initialize()
         {
-            this._chargeSound = SFX.Get("laserCharge", 0f);
-            this._chargeSoundShort = SFX.Get("laserChargeShort", 0f);
-            this._unchargeSound = SFX.Get("laserUncharge", 0f);
-            this._unchargeSoundShort = SFX.Get("laserUnchargeShort", 0f);
+            _chargeSound = SFX.Get("laserCharge", 0f);
+            _chargeSoundShort = SFX.Get("laserChargeShort", 0f);
+            _unchargeSound = SFX.Get("laserUncharge", 0f);
+            _unchargeSoundShort = SFX.Get("laserUnchargeShort", 0f);
         }
 
         public void PostFireLogic()
         {
-            if (this.isServerForObject)
+            if (isServerForObject)
             {
-                this._unchargeSound.Stop();
-                this._unchargeSound.Volume = 0f;
-                this._unchargeSoundShort.Stop();
-                this._unchargeSoundShort.Volume = 0f;
-                this._chargeSound.Stop();
-                this._chargeSound.Volume = 0f;
-                this._chargeSoundShort.Stop();
-                this._chargeSoundShort.Volume = 0f;
+                _unchargeSound.Stop();
+                _unchargeSound.Volume = 0f;
+                _unchargeSoundShort.Stop();
+                _unchargeSoundShort.Volume = 0f;
+                _chargeSound.Stop();
+                _chargeSound.Volume = 0f;
+                _chargeSoundShort.Stop();
+                _chargeSoundShort.Volume = 0f;
             }
-            this._chargeAnim.SetAnimation("drain");
+            _chargeAnim.SetAnimation("drain");
             SFX.Play("laserBlast");
         }
 
@@ -119,53 +119,53 @@ namespace DuckGame
         {
             if (Network.isActive)
             {
-                if (this.isServerForObject)
+                if (isServerForObject)
                 {
-                    this._chargeVolume = this._chargeSound.State == SoundState.Playing ? this._chargeSound.Volume : 0f;
-                    this._chargeVolumeShort = this._chargeSoundShort.State == SoundState.Playing ? this._chargeSoundShort.Volume : 0f;
-                    this._unchargeVolume = this._unchargeSound.State == SoundState.Playing ? this._unchargeSound.Volume : 0f;
-                    this._unchargeVolumeShort = this._unchargeSoundShort.State == SoundState.Playing ? this._unchargeSoundShort.Volume : 0f;
+                    _chargeVolume = _chargeSound.State == SoundState.Playing ? _chargeSound.Volume : 0f;
+                    _chargeVolumeShort = _chargeSoundShort.State == SoundState.Playing ? _chargeSoundShort.Volume : 0f;
+                    _unchargeVolume = _unchargeSound.State == SoundState.Playing ? _unchargeSound.Volume : 0f;
+                    _unchargeVolumeShort = _unchargeSoundShort.State == SoundState.Playing ? _unchargeSoundShort.Volume : 0f;
                 }
                 else
                 {
-                    this._chargeSound.Volume = this._chargeVolume;
-                    this._chargeSoundShort.Volume = this._chargeVolumeShort;
-                    this._unchargeSound.Volume = this._unchargeVolume;
-                    this._unchargeSoundShort.Volume = this._unchargeVolumeShort;
-                    if (_chargeVolume > 0.0 && this._chargeSound.State != SoundState.Playing)
-                        this._chargeSound.Play();
+                    _chargeSound.Volume = _chargeVolume;
+                    _chargeSoundShort.Volume = _chargeVolumeShort;
+                    _unchargeSound.Volume = _unchargeVolume;
+                    _unchargeSoundShort.Volume = _unchargeVolumeShort;
+                    if (_chargeVolume > 0.0 && _chargeSound.State != SoundState.Playing)
+                        _chargeSound.Play();
                     else if (_chargeVolume <= 0.0)
-                        this._chargeSound.Stop();
-                    if (_chargeVolumeShort > 0.0 && this._chargeSoundShort.State != SoundState.Playing)
-                        this._chargeSoundShort.Play();
+                        _chargeSound.Stop();
+                    if (_chargeVolumeShort > 0.0 && _chargeSoundShort.State != SoundState.Playing)
+                        _chargeSoundShort.Play();
                     else if (_chargeVolumeShort <= 0.0)
-                        this._chargeSoundShort.Stop();
-                    if (_unchargeVolume > 0.0 && this._unchargeSound.State != SoundState.Playing)
-                        this._unchargeSound.Play();
+                        _chargeSoundShort.Stop();
+                    if (_unchargeVolume > 0.0 && _unchargeSound.State != SoundState.Playing)
+                        _unchargeSound.Play();
                     else if (_unchargeVolume <= 0.0)
-                        this._unchargeSound.Stop();
-                    if (_unchargeVolumeShort > 0.0 && this._unchargeSoundShort.State != SoundState.Playing)
-                        this._unchargeSoundShort.Play();
+                        _unchargeSound.Stop();
+                    if (_unchargeVolumeShort > 0.0 && _unchargeSoundShort.State != SoundState.Playing)
+                        _unchargeSoundShort.Play();
                     else if (_unchargeVolumeShort <= 0.0)
-                        this._unchargeSoundShort.Stop();
+                        _unchargeSoundShort.Stop();
                 }
             }
             base.Update();
             if (_charge > 0.0)
-                this._charge -= 0.1f;
+                _charge -= 0.1f;
             else
-                this._charge = 0f;
-            if (this._chargeAnim.currentAnimation == "uncharge" && this._chargeAnim.finished)
-                this._chargeAnim.SetAnimation("loaded");
-            if (this._chargeAnim.currentAnimation == "charge" && this._chargeAnim.finished && this.isServerForObject)
+                _charge = 0f;
+            if (_chargeAnim.currentAnimation == "uncharge" && _chargeAnim.finished)
+                _chargeAnim.SetAnimation("loaded");
+            if (_chargeAnim.currentAnimation == "charge" && _chargeAnim.finished && isServerForObject)
             {
-                this.PostFireLogic();
+                PostFireLogic();
                 if (this.owner is Duck owner)
                 {
                     RumbleManager.AddRumbleEvent(owner.profile, new RumbleEvent(RumbleIntensity.Medium, RumbleDuration.Pulse, RumbleFalloff.Short));
                     owner.sliding = true;
                     owner.crouch = true;
-                    Vec2 vec2 = this.barrelVector * 9f;
+                    Vec2 vec2 = barrelVector * 9f;
                     if (owner.ragdoll != null && owner.ragdoll.part2 != null && owner.ragdoll.part1 != null && owner.ragdoll.part3 != null)
                     {
                         owner.ragdoll.part2.hSpeed -= vec2.x;
@@ -185,34 +185,34 @@ namespace DuckGame
                 else
                 {
                     Vec2 barrelVector = this.barrelVector;
-                    this.hSpeed -= barrelVector.x * 9f;
-                    this.vSpeed -= (float)(barrelVector.y * 9.0 + 3.0);
+                    hSpeed -= barrelVector.x * 9f;
+                    vSpeed -= (float)(barrelVector.y * 9.0 + 3.0);
                 }
-                Vec2 vec2_1 = this.Offset(this.barrelOffset);
-                Vec2 vec2_2 = this.Offset(this.barrelOffset + new Vec2(1200f, 0f)) - vec2_1;
-                if (this.isServerForObject)
+                Vec2 vec2_1 = Offset(barrelOffset);
+                Vec2 vec2_2 = Offset(barrelOffset + new Vec2(1200f, 0f)) - vec2_1;
+                if (isServerForObject)
                     ++Global.data.laserBulletsFired.valueInt;
                 if (Network.isActive)
                     Send.Message(new NMDeathBeam(this, vec2_1, vec2_2));
                 DeathBeam deathBeam = new DeathBeam(vec2_1, vec2_2, this.owner)
                 {
-                    isLocal = this.isServerForObject
+                    isLocal = isServerForObject
                 };
                 Level.Add(deathBeam);
-                this.doBlast = true;
+                doBlast = true;
             }
-            if (this.doBlast && this.isServerForObject)
+            if (doBlast && isServerForObject)
             {
-                ++this._framesSinceBlast;
-                if (this._framesSinceBlast > 10)
+                ++_framesSinceBlast;
+                if (_framesSinceBlast > 10)
                 {
-                    this._framesSinceBlast = 0;
-                    this.doBlast = false;
+                    _framesSinceBlast = 0;
+                    doBlast = false;
                 }
             }
-            if (this._chargeAnim.currentAnimation == "drain" && this._chargeAnim.finished)
-                this._chargeAnim.SetAnimation("loaded");
-            this._lastDoBlast = this.doBlast;
+            if (_chargeAnim.currentAnimation == "drain" && _chargeAnim.finished)
+                _chargeAnim.SetAnimation("loaded");
+            _lastDoBlast = doBlast;
         }
 
         public override void Draw()
@@ -220,77 +220,77 @@ namespace DuckGame
             base.Draw();
             Material material = Graphics.material;
             Graphics.material = this.material;
-            this._tip.depth = this.depth + 1;
-            this._tip.alpha = this._charge;
-            if (this._chargeAnim.currentAnimation == "charge")
-                this._tip.alpha = _chargeAnim.frame / 24f;
-            else if (this._chargeAnim.currentAnimation == "uncharge")
-                this._tip.alpha = (24 - this._chargeAnim.frame) / 24f;
+            _tip.depth = depth + 1;
+            _tip.alpha = _charge;
+            if (_chargeAnim.currentAnimation == "charge")
+                _tip.alpha = _chargeAnim.frame / 24f;
+            else if (_chargeAnim.currentAnimation == "uncharge")
+                _tip.alpha = (24 - _chargeAnim.frame) / 24f;
             else
-                this._tip.alpha = 0f;
-            Graphics.Draw(this._tip, this.barrelPosition.x, this.barrelPosition.y);
-            this._chargeAnim.flipH = this.graphic.flipH;
-            this._chargeAnim.depth = this.depth + 1;
-            this._chargeAnim.angle = this.angle;
-            this._chargeAnim.alpha = this.alpha;
-            Graphics.Draw(_chargeAnim, this.x, this.y);
+                _tip.alpha = 0f;
+            Graphics.Draw(_tip, barrelPosition.x, barrelPosition.y);
+            _chargeAnim.flipH = graphic.flipH;
+            _chargeAnim.depth = depth + 1;
+            _chargeAnim.angle = angle;
+            _chargeAnim.alpha = alpha;
+            Graphics.Draw(_chargeAnim, x, y);
             Graphics.material = material;
-            float num1 = Maths.NormalizeSection(this._tip.alpha, 0f, 0.7f);
-            float num2 = Maths.NormalizeSection(this._tip.alpha, 0.6f, 1f);
-            float num3 = Maths.NormalizeSection(this._tip.alpha, 0.75f, 1f);
-            float num4 = Maths.NormalizeSection(this._tip.alpha, 0.9f, 1f);
-            float num5 = Maths.NormalizeSection(this._tip.alpha, 0.8f, 1f) * 0.5f;
+            float num1 = Maths.NormalizeSection(_tip.alpha, 0f, 0.7f);
+            float num2 = Maths.NormalizeSection(_tip.alpha, 0.6f, 1f);
+            float num3 = Maths.NormalizeSection(_tip.alpha, 0.75f, 1f);
+            float num4 = Maths.NormalizeSection(_tip.alpha, 0.9f, 1f);
+            float num5 = Maths.NormalizeSection(_tip.alpha, 0.8f, 1f) * 0.5f;
             if (num1 <= 0.0)
                 return;
-            Vec2 p1 = this.Offset(this.barrelOffset);
-            Vec2 p2 = this.Offset(this.barrelOffset + new Vec2(num1 * 1200f, 0f));
-            Graphics.DrawLine(p1, p2, new Color((this._tip.alpha * 0.7f + 0.3f), this._tip.alpha, this._tip.alpha) * (0.3f + num5), (1f + num2 * 12f));
+            Vec2 p1 = Offset(barrelOffset);
+            Vec2 p2 = Offset(barrelOffset + new Vec2(num1 * 1200f, 0f));
+            Graphics.DrawLine(p1, p2, new Color((_tip.alpha * 0.7f + 0.3f), _tip.alpha, _tip.alpha) * (0.3f + num5), (1f + num2 * 12f));
             Graphics.DrawLine(p1, p2, Color.Red * (0.2f + num5), (1f + num3 * 28f));
             Graphics.DrawLine(p1, p2, Color.Red * (0.1f + num5), (0.2f + num4 * 40f));
         }
 
         public override void OnPressAction()
         {
-            if (this._chargeAnim == null || this._chargeSound == null)
+            if (_chargeAnim == null || _chargeSound == null)
                 return;
-            if (this._chargeAnim.currentAnimation == "loaded")
+            if (_chargeAnim.currentAnimation == "loaded")
             {
-                this._chargeAnim.SetAnimation("charge");
-                if (!this.isServerForObject)
+                _chargeAnim.SetAnimation("charge");
+                if (!isServerForObject)
                     return;
-                this._chargeSound.Volume = 1f;
-                this._chargeSound.Play();
-                this._unchargeSound.Stop();
-                this._unchargeSound.Volume = 0f;
-                this._unchargeSoundShort.Stop();
-                this._unchargeSoundShort.Volume = 0f;
+                _chargeSound.Volume = 1f;
+                _chargeSound.Play();
+                _unchargeSound.Stop();
+                _unchargeSound.Volume = 0f;
+                _unchargeSoundShort.Stop();
+                _unchargeSoundShort.Volume = 0f;
             }
             else
             {
-                if (!(this._chargeAnim.currentAnimation == "uncharge"))
+                if (!(_chargeAnim.currentAnimation == "uncharge"))
                     return;
-                if (this.isServerForObject)
+                if (isServerForObject)
                 {
-                    if (this._chargeAnim.frame > 18)
+                    if (_chargeAnim.frame > 18)
                     {
-                        this._chargeSound.Volume = 1f;
-                        this._chargeSound.Play();
+                        _chargeSound.Volume = 1f;
+                        _chargeSound.Play();
                     }
                     else
                     {
-                        this._chargeSoundShort.Volume = 1f;
-                        this._chargeSoundShort.Play();
+                        _chargeSoundShort.Volume = 1f;
+                        _chargeSoundShort.Play();
                     }
                 }
-                int frame = this._chargeAnim.frame;
-                this._chargeAnim.SetAnimation("charge");
-                this._chargeAnim.frame = 22 - frame;
-                if (!this.isServerForObject)
+                int frame = _chargeAnim.frame;
+                _chargeAnim.SetAnimation("charge");
+                _chargeAnim.frame = 22 - frame;
+                if (!isServerForObject)
                     return;
-                this._unchargeSound.Stop();
-                this._unchargeSound.Volume = 0f;
-                this._unchargeSoundShort.Stop();
-                this._unchargeSoundShort.Volume = 0f;
+                _unchargeSound.Stop();
+                _unchargeSound.Volume = 0f;
+                _unchargeSoundShort.Stop();
+                _unchargeSoundShort.Volume = 0f;
             }
         }
 
@@ -300,32 +300,32 @@ namespace DuckGame
 
         public override void OnReleaseAction()
         {
-            if (!(this._chargeAnim.currentAnimation == "charge"))
+            if (!(_chargeAnim.currentAnimation == "charge"))
                 return;
-            if (this.isServerForObject)
+            if (isServerForObject)
             {
-                if (this._chargeAnim.frame > 20)
+                if (_chargeAnim.frame > 20)
                 {
-                    this._unchargeSound.Stop();
-                    this._unchargeSound.Volume = 1f;
-                    this._unchargeSound.Play();
+                    _unchargeSound.Stop();
+                    _unchargeSound.Volume = 1f;
+                    _unchargeSound.Play();
                 }
                 else
                 {
-                    this._unchargeSoundShort.Stop();
-                    this._unchargeSoundShort.Volume = 1f;
-                    this._unchargeSoundShort.Play();
+                    _unchargeSoundShort.Stop();
+                    _unchargeSoundShort.Volume = 1f;
+                    _unchargeSoundShort.Play();
                 }
             }
-            int frame = this._chargeAnim.frame;
-            this._chargeAnim.SetAnimation("uncharge");
-            this._chargeAnim.frame = 22 - frame;
-            if (!this.isServerForObject)
+            int frame = _chargeAnim.frame;
+            _chargeAnim.SetAnimation("uncharge");
+            _chargeAnim.frame = 22 - frame;
+            if (!isServerForObject)
                 return;
-            this._chargeSound.Stop();
-            this._chargeSound.Volume = 0f;
-            this._chargeSoundShort.Stop();
-            this._chargeSoundShort.Volume = 0f;
+            _chargeSound.Stop();
+            _chargeSound.Volume = 0f;
+            _chargeSoundShort.Stop();
+            _chargeSoundShort.Volume = 0f;
         }
     }
 }

@@ -11,11 +11,11 @@ namespace DuckGame
 {
     public class MaterialGhost : Material
     {
-        public MaterialGhost() => this._effect = Content.Load<MTEffect>("Shaders/ghost");
+        public MaterialGhost() => _effect = Content.Load<MTEffect>("Shaders/ghost");
 
         public override void Apply()
         {
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

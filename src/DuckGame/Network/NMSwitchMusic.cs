@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public string song;
 
-        public NMSwitchMusic(string s) => this.song = s;
+        public NMSwitchMusic(string s) => song = s;
 
         public NMSwitchMusic()
         {
@@ -19,7 +19,7 @@ namespace DuckGame
 
         public override void Activate()
         {
-            Music.LoadAlternateSong(this.song);
+            Music.LoadAlternateSong(song);
             Music.CancelLooping();
         }
     }

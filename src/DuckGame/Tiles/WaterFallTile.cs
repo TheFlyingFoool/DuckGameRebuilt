@@ -13,19 +13,19 @@ namespace DuckGame
         public WaterFallTile(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("waterFallTile", 16, 16);
-            this.center = new Vec2(8f, 8f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.layer = Layer.Foreground;
-            this.depth = (Depth)0.9f;
-            this.alpha = 0.8f;
+            graphic = new SpriteMap("waterFallTile", 16, 16);
+            center = new Vec2(8f, 8f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            layer = Layer.Foreground;
+            depth = (Depth)0.9f;
+            alpha = 0.8f;
         }
 
         public override void Draw()
         {
-            (this.graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
-            this.graphic.flipH = this.offDir <= 0;
+            (graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
+            graphic.flipH = offDir <= 0;
             base.Draw();
         }
     }

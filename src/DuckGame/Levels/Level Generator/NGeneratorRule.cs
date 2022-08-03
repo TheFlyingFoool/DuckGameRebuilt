@@ -14,7 +14,7 @@ namespace DuckGame
     {
         private Func<bool> _check;
 
-        public NGeneratorRule(Func<bool> pCheck) => this._check = pCheck;
+        public NGeneratorRule(Func<bool> pCheck) => _check = pCheck;
 
         public static int Count(HashSet<Thing> pThings, Func<Thing, bool> pCheck)
         {
@@ -27,6 +27,6 @@ namespace DuckGame
             return num;
         }
 
-        public virtual bool Check() => this._check();
+        public virtual bool Check() => _check();
     }
 }

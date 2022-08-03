@@ -14,12 +14,12 @@ namespace DuckGame
         public ScaffoldingTileset(float x, float y)
           : base(x, y, "scaffolding")
         {
-            this._editorName = "Scaffold";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidth = 14f;
-            this.verticalWidthThick = 15f;
-            this.horizontalHeight = 8f;
-            this._collideBottom = true;
+            _editorName = "Scaffold";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidth = 14f;
+            verticalWidthThick = 15f;
+            horizontalHeight = 8f;
+            _collideBottom = true;
         }
     }
 }

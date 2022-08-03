@@ -51,55 +51,55 @@ namespace DuckGame
 
         public RandomLevelNode(int pX, int pY)
         {
-            this.gridX = pX;
-            this.gridY = pY;
+            gridX = pX;
+            gridY = pY;
         }
 
         public List<RandomLevelNode> nodes => new List<RandomLevelNode>()
     {
-      this.up,
-      this.down,
-      this.left,
-      this.right
+      up,
+      down,
+      left,
+      right
     };
 
         public RandomLevelData totalData
         {
             get
             {
-                this._combinedData = this.Combine();
-                this.ClearFlags();
-                return this._combinedData;
+                _combinedData = Combine();
+                ClearFlags();
+                return _combinedData;
             }
         }
 
         private RandomLevelData Combine()
         {
-            this.visited = true;
+            visited = true;
             RandomLevelData dat = new RandomLevelData();
-            if (this.left != null && this.left.data != null && !this.left.visited)
-                dat = this.left.data.Combine(dat);
-            if (this.right != null && this.right.data != null && !this.right.visited)
-                dat = this.right.data.Combine(dat);
-            if (this.up != null && this.up.data != null && !this.up.visited)
-                dat = this.up.data.Combine(dat);
-            if (this.down != null && this.down.data != null && !this.down.visited)
-                dat = this.down.data.Combine(dat);
-            return dat.Combine(this.data);
+            if (left != null && left.data != null && !left.visited)
+                dat = left.data.Combine(dat);
+            if (right != null && right.data != null && !right.visited)
+                dat = right.data.Combine(dat);
+            if (up != null && up.data != null && !up.visited)
+                dat = up.data.Combine(dat);
+            if (down != null && down.data != null && !down.visited)
+                dat = down.data.Combine(dat);
+            return dat.Combine(data);
         }
 
         public void ClearFlags()
         {
-            this.visited = false;
-            if (this.up != null && this.up.visited)
-                this.up.ClearFlags();
-            if (this.down != null && this.down.visited)
-                this.down.ClearFlags();
-            if (this.left != null && this.left.visited)
-                this.left.ClearFlags();
-            if (this.right == null || !this.right.visited)
+            visited = false;
+            if (up != null && up.visited)
+                up.ClearFlags();
+            if (down != null && down.visited)
+                down.ClearFlags();
+            if (left != null && left.visited)
+                left.ClearFlags();
+            if (right == null || !right.visited)
                 return;
-            this.right.ClearFlags();
+            right.ClearFlags();
         }
 
         public bool LoadParts(float x, float y, Level level, int seed = 0)
@@ -109,11 +109,11 @@ namespace DuckGame
                 Rando.generator = new Random(seed);
             Level.InitChanceGroups();
             RandomLevelNode.processing = true;
-            RandomLevelNode.topLeft = new Vec2(-this.gridX * 192, -this.gridY * 144);
+            RandomLevelNode.topLeft = new Vec2(-gridX * 192, -gridY * 144);
             RandomLevelNode._allPreparedThings = new HashSet<Thing>();
-            this.PreparePartsRecurse(x, y, level);
+            PreparePartsRecurse(x, y, level);
             RandomLevelNode.processing = false;
-            this.ClearFlags();
+            ClearFlags();
             if (null == null)
             {
                 List<NGeneratorRule> ngeneratorRuleList = new List<NGeneratorRule>()
@@ -162,18 +162,18 @@ namespace DuckGame
           new NGeneratorRule( () => NGeneratorRule.Count(RandomLevelNode._allPreparedThings,  thing => thing is Warpgun) > 0)
         };
             }
-            this.LoadPartsRecurse(x, y, level);
-            this.ClearFlags();
+            LoadPartsRecurse(x, y, level);
+            ClearFlags();
             Rando.generator = generator;
             if (!LevelGenerator.openAirMode)
             {
-                for (int index1 = -1; index1 < this.tilesWide + 1; ++index1)
+                for (int index1 = -1; index1 < tilesWide + 1; ++index1)
                 {
-                    for (int index2 = -1; index2 < this.tilesHigh + 1; ++index2)
+                    for (int index2 = -1; index2 < tilesHigh + 1; ++index2)
                     {
                         RandomLevelNode randomLevelNode = null;
-                        if (index1 >= 0 && index1 < this.tilesWide && index2 >= 0 && index2 < this.tilesHigh)
-                            randomLevelNode = this.tiles[index1, index2];
+                        if (index1 >= 0 && index1 < tilesWide && index2 >= 0 && index2 < tilesHigh)
+                            randomLevelNode = tiles[index1, index2];
                         if (randomLevelNode == null || randomLevelNode.data == null)
                         {
                             Vec2 vec2 = new Vec2(index1 * 192 - 8, index2 * 144 - 8) + RandomLevelNode.topLeft;
@@ -183,13 +183,13 @@ namespace DuckGame
                 }
             }
             level.things.RefreshState();
-            for (int index3 = 0; index3 < this.tilesWide; ++index3)
+            for (int index3 = 0; index3 < tilesWide; ++index3)
             {
-                for (int index4 = 0; index4 < this.tilesHigh; ++index4)
+                for (int index4 = 0; index4 < tilesHigh; ++index4)
                 {
                     RandomLevelNode randomLevelNode = null;
-                    if (index3 >= 0 && index3 < this.tilesWide && index4 >= 0 && index4 < this.tilesHigh)
-                        randomLevelNode = this.tiles[index3, index4];
+                    if (index3 >= 0 && index3 < tilesWide && index4 >= 0 && index4 < tilesHigh)
+                        randomLevelNode = tiles[index3, index4];
                     if (randomLevelNode != null && randomLevelNode.data != null)
                     {
                         Vec2 vec2 = new Vec2(index3 * 192 + 96, index4 * 144 + 72) + RandomLevelNode.topLeft;
@@ -291,52 +291,52 @@ namespace DuckGame
 
         private void PreparePartsRecurse(float x, float y, Level level)
         {
-            this.visited = true;
-            if (this.data != null)
+            visited = true;
+            if (data != null)
             {
-                this._preparedThings = this.data.PrepareThings(this.mirror, x, y);
-                foreach (RandomLevelData.PreparedThing preparedThing in this._preparedThings)
+                _preparedThings = data.PrepareThings(mirror, x, y);
+                foreach (RandomLevelData.PreparedThing preparedThing in _preparedThings)
                     RandomLevelNode._allPreparedThings.Add(preparedThing.thing);
             }
-            if (this.up != null && !this.up.visited)
-                this.up.PreparePartsRecurse(x, y - 144f, level);
-            if (this.down != null && !this.down.visited)
-                this.down.PreparePartsRecurse(x, y + 144f, level);
-            if (this.left != null && !this.left.visited)
-                this.left.PreparePartsRecurse(x - 192f, y, level);
-            if (this.right == null || this.right.visited)
+            if (up != null && !up.visited)
+                up.PreparePartsRecurse(x, y - 144f, level);
+            if (down != null && !down.visited)
+                down.PreparePartsRecurse(x, y + 144f, level);
+            if (left != null && !left.visited)
+                left.PreparePartsRecurse(x - 192f, y, level);
+            if (right == null || right.visited)
                 return;
-            this.right.PreparePartsRecurse(x + 192f, y, level);
+            right.PreparePartsRecurse(x + 192f, y, level);
         }
 
         private void LoadPartsRecurse(float x, float y, Level level)
         {
-            this.visited = true;
-            if (this.data != null)
-                this.data.Load(x, y, level, this.mirror, this._preparedThings);
-            if (this.up != null && !this.up.visited)
-                this.up.LoadPartsRecurse(x, y - 144f, level);
-            if (this.down != null && !this.down.visited)
-                this.down.LoadPartsRecurse(x, y + 144f, level);
-            if (this.left != null && !this.left.visited)
-                this.left.LoadPartsRecurse(x - 192f, y, level);
-            if (this.right == null || this.right.visited)
+            visited = true;
+            if (data != null)
+                data.Load(x, y, level, mirror, _preparedThings);
+            if (up != null && !up.visited)
+                up.LoadPartsRecurse(x, y - 144f, level);
+            if (down != null && !down.visited)
+                down.LoadPartsRecurse(x, y + 144f, level);
+            if (left != null && !left.visited)
+                left.LoadPartsRecurse(x - 192f, y, level);
+            if (right == null || right.visited)
                 return;
-            this.right.LoadPartsRecurse(x + 192f, y, level);
+            right.LoadPartsRecurse(x + 192f, y, level);
         }
 
         public void GenerateTiles(RandomLevelData tile = null, LevGenType type = LevGenType.Any, bool symmetricVal = false)
         {
             RandomLevelNode.firstGetRequiresMultiplePaths = false;
             TileConnection requirement = TileConnection.None;
-            if (symmetricVal && this.tilesWide == 3 && this.gridX == 1)
+            if (symmetricVal && tilesWide == 3 && gridX == 1)
                 requirement = TileConnection.Left | TileConnection.Right;
-            if (symmetricVal && this.tilesWide == 2 && this.gridX == 0)
+            if (symmetricVal && tilesWide == 2 && gridX == 0)
                 requirement = TileConnection.Right;
-            else if (symmetricVal && this.tilesWide == 2 && this.gridX == 1)
+            else if (symmetricVal && tilesWide == 2 && gridX == 1)
                 requirement = TileConnection.Left;
             if (tile == null)
-                tile = LevelGenerator.GetTile(requirement, tile, false, type, filter: this.GetFilter(), requiresSpawns: true);
+                tile = LevelGenerator.GetTile(requirement, tile, false, type, filter: GetFilter(), requiresSpawns: true);
             if (tile == null)
             {
                 DevConsole.Log("|DGRED|RandomLevel.GenerateTiles had a null tile! This should never happen!");
@@ -363,25 +363,25 @@ namespace DuckGame
                         symmetricVal = false;
                     else if (num == 1 && Rando.Float(1f) < 0.800000011920929)
                         symmetricVal = false;
-                    else if (num == 1 && tile.right && (this.right == null || this.right.right == null))
+                    else if (num == 1 && tile.right && (right == null || right.right == null))
                         symmetricVal = false;
-                    else if (num == 1 && tile.left && (this.left == null || this.left.left == null))
+                    else if (num == 1 && tile.left && (left == null || left.left == null))
                         symmetricVal = false;
                 }
-                this.symmetric = symmetricVal;
-                this.GenerateTilesRecurse(tile, type);
-                this.ClearFlags();
+                symmetric = symmetricVal;
+                GenerateTilesRecurse(tile, type);
+                ClearFlags();
             }
         }
 
         private TileConnection GetFilter()
         {
             TileConnection filter = TileConnection.None;
-            if (this.left == null)
+            if (left == null)
                 filter |= TileConnection.Left;
-            if (this.right == null)
+            if (right == null)
                 filter |= TileConnection.Right;
-            if (this.up == null)
+            if (up == null)
                 filter |= TileConnection.Up;
             return filter;
         }
@@ -391,62 +391,62 @@ namespace DuckGame
             ++RandomLevel.currentComplexityDepth;
             if (LevelGenerator.complexity > 0 && RandomLevel.currentComplexityDepth >= LevelGenerator.complexity)
                 return;
-            this.visited = true;
+            visited = true;
             if (tile == null)
                 return;
-            this.data = tile;
-            this.connectionUp = this.data.up;
-            this.connectionDown = this.data.down;
-            this.connectionLeft = this.data.left;
-            this.connectionRight = this.data.right;
-            if (this.symmetric)
+            data = tile;
+            connectionUp = data.up;
+            connectionDown = data.down;
+            connectionLeft = data.left;
+            connectionRight = data.right;
+            if (symmetric)
             {
-                if (this.kingTile)
+                if (kingTile)
                 {
-                    if (this.connectionLeft && this.connectionRight || !this.connectionLeft && !this.connectionRight)
+                    if (connectionLeft && connectionRight || !connectionLeft && !connectionRight)
                     {
-                        this.mirror = true;
+                        mirror = true;
                     }
                     else
                     {
-                        if (!this.connectionLeft)
+                        if (!connectionLeft)
                         {
-                            if (this.up != null)
+                            if (up != null)
                             {
-                                this.up.left = null;
-                                this.up.removeRight = true;
+                                up.left = null;
+                                up.removeRight = true;
                             }
-                            if (this.down != null)
+                            if (down != null)
                             {
-                                this.down.left = null;
-                                this.down.removeRight = true;
+                                down.left = null;
+                                down.removeRight = true;
                             }
-                            this.removeRight = true;
-                            this.left = null;
+                            removeRight = true;
+                            left = null;
                         }
-                        if (!this.connectionRight)
+                        if (!connectionRight)
                         {
-                            if (this.up != null)
+                            if (up != null)
                             {
-                                this.up.right = null;
-                                this.up.removeLeft = true;
+                                up.right = null;
+                                up.removeLeft = true;
                             }
-                            if (this.down != null)
+                            if (down != null)
                             {
-                                this.down.right = null;
-                                this.down.removeLeft = true;
+                                down.right = null;
+                                down.removeLeft = true;
                             }
-                            this.removeLeft = true;
-                            this.right = null;
+                            removeLeft = true;
+                            right = null;
                         }
                     }
                 }
-                if (this.mirror)
-                    this.connectionRight = this.data.left;
-                if (this.up != null)
-                    this.up.mirror = this.mirror;
-                if (this.down != null)
-                    this.down.mirror = this.mirror;
+                if (mirror)
+                    connectionRight = data.left;
+                if (up != null)
+                    up.mirror = mirror;
+                if (down != null)
+                    down.mirror = mirror;
             }
             List<TileConnection> list = new List<TileConnection>()
       {
@@ -455,83 +455,83 @@ namespace DuckGame
         TileConnection.Up,
         TileConnection.Down
       };
-            if (this.removeLeft)
+            if (removeLeft)
                 list.Remove(TileConnection.Left);
-            if (this.removeRight)
+            if (removeRight)
                 list.Remove(TileConnection.Right);
             foreach (TileConnection tileConnection in Utils.Shuffle<TileConnection>(list))
             {
                 switch (tileConnection)
                 {
                     case TileConnection.Left:
-                        if (this.connectionLeft && this.left != null && this.left.data == null && (!this.mirror || !this.symmetric || !this.rightSymmetric))
+                        if (connectionLeft && left != null && left.data == null && (!mirror || !symmetric || !rightSymmetric))
                         {
-                            if (this.mirror && this.symmetric)
+                            if (mirror && symmetric)
                             {
-                                this.leftSymmetric = true;
-                                if (this.down != null)
+                                leftSymmetric = true;
+                                if (down != null)
                                 {
-                                    this.down.leftSymmetric = this.leftSymmetric;
-                                    if (this.down.down != null)
-                                        this.down.down.leftSymmetric = this.leftSymmetric;
+                                    down.leftSymmetric = leftSymmetric;
+                                    if (down.down != null)
+                                        down.down.leftSymmetric = leftSymmetric;
                                 }
-                                if (this.up != null)
+                                if (up != null)
                                 {
-                                    this.up.leftSymmetric = this.leftSymmetric;
-                                    if (this.up.up != null)
-                                        this.up.up.leftSymmetric = this.leftSymmetric;
+                                    up.leftSymmetric = leftSymmetric;
+                                    if (up.up != null)
+                                        up.up.leftSymmetric = leftSymmetric;
                                 }
                             }
-                            this.left.leftSymmetric = this.leftSymmetric;
-                            this.left.rightSymmetric = this.rightSymmetric;
-                            this.left.symmetric = this.symmetric;
-                            this.left.GenerateTilesRecurse(LevelGenerator.GetTile(TileConnection.Right, tile, type: type, filter: this.left.GetFilter(), mirror: this.left.mirror), type);
+                            left.leftSymmetric = leftSymmetric;
+                            left.rightSymmetric = rightSymmetric;
+                            left.symmetric = symmetric;
+                            left.GenerateTilesRecurse(LevelGenerator.GetTile(TileConnection.Right, tile, type: type, filter: left.GetFilter(), mirror: left.mirror), type);
                             continue;
                         }
                         continue;
                     case TileConnection.Right:
-                        if (this.connectionRight && this.right != null && this.right.data == null && (!this.mirror || !this.symmetric || !this.leftSymmetric))
+                        if (connectionRight && right != null && right.data == null && (!mirror || !symmetric || !leftSymmetric))
                         {
-                            if (this.mirror && this.symmetric)
+                            if (mirror && symmetric)
                             {
-                                this.rightSymmetric = true;
-                                if (this.down != null)
+                                rightSymmetric = true;
+                                if (down != null)
                                 {
-                                    this.down.rightSymmetric = this.rightSymmetric;
-                                    if (this.down.down != null)
-                                        this.down.down.rightSymmetric = this.rightSymmetric;
+                                    down.rightSymmetric = rightSymmetric;
+                                    if (down.down != null)
+                                        down.down.rightSymmetric = rightSymmetric;
                                 }
-                                if (this.up != null)
+                                if (up != null)
                                 {
-                                    this.up.rightSymmetric = this.rightSymmetric;
-                                    if (this.up.up != null)
-                                        this.up.up.rightSymmetric = this.rightSymmetric;
+                                    up.rightSymmetric = rightSymmetric;
+                                    if (up.up != null)
+                                        up.up.rightSymmetric = rightSymmetric;
                                 }
                             }
-                            this.right.leftSymmetric = this.leftSymmetric;
-                            this.right.rightSymmetric = this.rightSymmetric;
-                            this.right.symmetric = this.symmetric;
-                            this.right.GenerateTilesRecurse(LevelGenerator.GetTile(TileConnection.Left, tile, type: type, filter: this.right.GetFilter(), mirror: this.right.mirror), type);
+                            right.leftSymmetric = leftSymmetric;
+                            right.rightSymmetric = rightSymmetric;
+                            right.symmetric = symmetric;
+                            right.GenerateTilesRecurse(LevelGenerator.GetTile(TileConnection.Left, tile, type: type, filter: right.GetFilter(), mirror: right.mirror), type);
                             continue;
                         }
                         continue;
                     case TileConnection.Up:
-                        if (this.connectionUp && this.up != null && this.up.data == null)
+                        if (connectionUp && up != null && up.data == null)
                         {
-                            this.up.leftSymmetric = this.leftSymmetric;
-                            this.up.rightSymmetric = this.rightSymmetric;
-                            this.up.symmetric = this.symmetric;
-                            this.up.GenerateTilesRecurse(LevelGenerator.GetTile(TileConnection.Down, tile, type: type, filter: this.up.GetFilter(), mirror: this.mirror), type);
+                            up.leftSymmetric = leftSymmetric;
+                            up.rightSymmetric = rightSymmetric;
+                            up.symmetric = symmetric;
+                            up.GenerateTilesRecurse(LevelGenerator.GetTile(TileConnection.Down, tile, type: type, filter: up.GetFilter(), mirror: mirror), type);
                             continue;
                         }
                         continue;
                     case TileConnection.Down:
-                        if (this.connectionDown && this.down != null && this.down.data == null)
+                        if (connectionDown && down != null && down.data == null)
                         {
-                            this.down.leftSymmetric = this.leftSymmetric;
-                            this.down.rightSymmetric = this.rightSymmetric;
-                            this.down.symmetric = this.symmetric;
-                            this.down.GenerateTilesRecurse(LevelGenerator.GetTile(TileConnection.Up, tile, type: type, filter: this.down.GetFilter(), mirror: this.mirror), type);
+                            down.leftSymmetric = leftSymmetric;
+                            down.rightSymmetric = rightSymmetric;
+                            down.symmetric = symmetric;
+                            down.GenerateTilesRecurse(LevelGenerator.GetTile(TileConnection.Up, tile, type: type, filter: down.GetFilter(), mirror: mirror), type);
                             continue;
                         }
                         continue;
@@ -539,54 +539,54 @@ namespace DuckGame
                         continue;
                 }
             }
-            if (!this.kingTile || !this.symmetric)
+            if (!kingTile || !symmetric)
                 return;
-            this.SolveSymmetry();
-            if (this.up != null)
-                this.up.SolveSymmetry();
-            if (this.down == null)
+            SolveSymmetry();
+            if (up != null)
+                up.SolveSymmetry();
+            if (down == null)
                 return;
-            this.down.SolveSymmetry();
+            down.SolveSymmetry();
         }
 
         public void SolveSymmetry()
         {
-            if (this.mirror)
+            if (mirror)
             {
-                if (this.leftSymmetric)
+                if (leftSymmetric)
                 {
-                    if (this.left == null || this.left.data == null || this.right == null)
+                    if (left == null || left.data == null || right == null)
                         return;
-                    this.right.data = !this.left.data.isMirrored ? this.left.data.Flipped() : this.left.data;
-                    this.right.symmetricalPartner = this.left;
-                    this.left.symmetricalPartner = this.right;
-                    this.right.mirror = this.left.mirror;
+                    right.data = !left.data.isMirrored ? left.data.Flipped() : left.data;
+                    right.symmetricalPartner = left;
+                    left.symmetricalPartner = right;
+                    right.mirror = left.mirror;
                 }
                 else
                 {
-                    if (this.right == null || this.right.data == null || this.left == null)
+                    if (right == null || right.data == null || left == null)
                         return;
-                    this.left.data = !this.right.data.isMirrored ? this.right.data.Flipped() : this.right.data;
-                    this.right.symmetricalPartner = this.left;
-                    this.left.symmetricalPartner = this.right;
-                    this.left.mirror = this.right.mirror;
+                    left.data = !right.data.isMirrored ? right.data.Flipped() : right.data;
+                    right.symmetricalPartner = left;
+                    left.symmetricalPartner = right;
+                    left.mirror = right.mirror;
                 }
             }
             else
             {
-                if (this.data == null)
+                if (data == null)
                     return;
-                if (this.removeRight && this.right != null)
+                if (removeRight && right != null)
                 {
-                    this.right.data = this.data.Flipped();
-                    this.right.symmetricalPartner = this;
-                    this.symmetricalPartner = this.right;
+                    right.data = data.Flipped();
+                    right.symmetricalPartner = this;
+                    symmetricalPartner = right;
                 }
-                if (!this.removeLeft || this.left == null)
+                if (!removeLeft || left == null)
                     return;
-                this.left.data = this.data.Flipped();
-                this.left.symmetricalPartner = this;
-                this.symmetricalPartner = this.left;
+                left.data = data.Flipped();
+                left.symmetricalPartner = this;
+                symmetricalPartner = left;
             }
         }
     }

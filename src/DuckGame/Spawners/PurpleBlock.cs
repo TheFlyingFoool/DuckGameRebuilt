@@ -44,36 +44,36 @@ namespace DuckGame
         public PurpleBlock(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("purpleBlock")
+            graphic = new Sprite("purpleBlock")
             {
                 center = new Vec2(8f, 8f)
             };
-            this._scanner = new Sprite("purpleScanner")
+            _scanner = new Sprite("purpleScanner")
             {
                 center = new Vec2(4f, 1f),
                 alpha = 0.7f,
                 depth = (Depth)0.9f
             };
-            this._projector = new Sprite("purpleProjector")
+            _projector = new Sprite("purpleProjector")
             {
                 center = new Vec2(8f, 16f),
                 alpha = 0.7f,
                 depth = (Depth)0.9f
             };
-            this._none = new Sprite("none")
+            _none = new Sprite("none")
             {
                 center = new Vec2(8f, 8f),
                 alpha = 0.7f
             };
-            this._projectorGlitch = new Sprite("projectorGlitch")
+            _projectorGlitch = new Sprite("projectorGlitch")
             {
                 center = new Vec2(8f, 8f),
                 alpha = 0.7f,
                 depth = (Depth)0.91f
             };
-            this.impactThreshold = 0.2f;
-            this._placementCost += 4;
-            this.editorTooltip = "Makes a copy of a Duck's weapon when used. Spawns a new copy when used again.";
+            impactThreshold = 0.2f;
+            _placementCost += 4;
+            editorTooltip = "Makes a copy of a Duck's weapon when used. Spawns a new copy when used again.";
         }
 
         public override void Initialize()
@@ -119,128 +119,128 @@ namespace DuckGame
 
         private void BreakHoverBond()
         {
-            this._hoverItem.gravMultiplier = 1f;
-            this._hoverItem = null;
+            _hoverItem.gravMultiplier = 1f;
+            _hoverItem = null;
         }
 
         public override void Update()
         {
             if (hitWait > 0f)
-                this.hitWait -= 0.1f;
+                hitWait -= 0.1f;
             else
-                this.hitWait = 0f;
-            this._alternate = !this._alternate;
-            this._scanner.alpha = (float)(0.4f + this._wave.normalized * 0.6f);
-            this._projector.alpha = (float)(0.4f + this._wave.normalized * 0.6f) * this._projectorAlpha;
-            this._double = Maths.CountDown(this._double, 0.15f);
-            this._glitch = Maths.CountDown(this._glitch, 0.1f);
+                hitWait = 0f;
+            _alternate = !_alternate;
+            _scanner.alpha = (float)(0.4f + _wave.normalized * 0.6f);
+            _projector.alpha = (float)(0.4f + _wave.normalized * 0.6f) * _projectorAlpha;
+            _double = Maths.CountDown(_double, 0.15f);
+            _glitch = Maths.CountDown(_glitch, 0.1f);
             if (Rando.Float(1f) < 0.01f)
             {
-                this._glitch = 0.3f;
-                this._projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
-                this._projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
-                this._projectorGlitch.flipH = Rando.Float(1f) > 0.5f;
+                _glitch = 0.3f;
+                _projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
+                _projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
+                _projectorGlitch.flipH = Rando.Float(1f) > 0.5f;
             }
             if (Rando.Float(1f) < 0.005f)
             {
-                this._glitch = 0.3f;
-                this._projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
-                this._projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
-                this._projectorGlitch.flipH = Rando.Float(1f) > 0.5f;
-                this._useWave = !this._useWave;
+                _glitch = 0.3f;
+                _projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
+                _projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
+                _projectorGlitch.flipH = Rando.Float(1f) > 0.5f;
+                _useWave = !_useWave;
             }
             if (Rando.Float(1f) < 0.008f)
             {
-                this._glitch = 0.3f;
-                this._projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
-                this._projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
-                this._projectorGlitch.flipH = Rando.Float(1f) > 0.5f;
-                this._useWave = !this._useWave;
-                this._double = 0.6f + Rando.Float(0.6f);
+                _glitch = 0.3f;
+                _projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
+                _projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
+                _projectorGlitch.flipH = Rando.Float(1f) > 0.5f;
+                _useWave = !_useWave;
+                _double = 0.6f + Rando.Float(0.6f);
             }
-            this._close.Clear();
-            if (this._hoverItem != null && this._hoverItem.owner != null)
-                this.BreakHoverBond();
+            _close.Clear();
+            if (_hoverItem != null && _hoverItem.owner != null)
+                BreakHoverBond();
             Vec2 vec2;
-            if (this._hoverItem == null)
+            if (_hoverItem == null)
             {
-                Holdable holdable = Level.Nearest<Holdable>(this.x, this.y);
-                if (holdable != null && holdable.owner == null && holdable != null && holdable.canPickUp && holdable.bottom <= this.top && Math.Abs(holdable.hSpeed) + Math.Abs(holdable.vSpeed) < 2.0)
+                Holdable holdable = Level.Nearest<Holdable>(x, y);
+                if (holdable != null && holdable.owner == null && holdable != null && holdable.canPickUp && holdable.bottom <= top && Math.Abs(holdable.hSpeed) + Math.Abs(holdable.vSpeed) < 2.0)
                 {
                     float num = 999f;
                     if (holdable != null)
                     {
-                        vec2 = this.position - holdable.position;
+                        vec2 = position - holdable.position;
                         num = vec2.length;
                     }
                     if (num < 24f)
-                        this._hoverItem = holdable;
+                        _hoverItem = holdable;
                 }
             }
-            else if (Math.Abs(this._hoverItem.hSpeed) + Math.Abs(this._hoverItem.vSpeed) > 2f || (this._hoverItem.position - this.position).length > 25f)
+            else if (Math.Abs(_hoverItem.hSpeed) + Math.Abs(_hoverItem.vSpeed) > 2f || (_hoverItem.position - position).length > 25f)
             {
-                this.BreakHoverBond();
+                BreakHoverBond();
             }
             else
             {
-                this._hoverItem.position = Lerp.Vec2Smooth(this._hoverItem.position, this.position + new Vec2(0f, (float)(-12f - _hoverItem.collisionSize.y / 2f + (float)this._projectionWave * 2f)), 0.2f);
-                this._hoverItem.vSpeed = 0f;
-                this._hoverItem.gravMultiplier = 0f;
+                _hoverItem.position = Lerp.Vec2Smooth(_hoverItem.position, position + new Vec2(0f, (float)(-12f - _hoverItem.collisionSize.y / 2f + (float)_projectionWave * 2f)), 0.2f);
+                _hoverItem.vSpeed = 0f;
+                _hoverItem.gravMultiplier = 0f;
             }
-            foreach (Duck duck in this._level.things[typeof(Duck)])
+            foreach (Duck duck in _level.things[typeof(Duck)])
             {
                 if (!duck.dead)
                 {
-                    vec2 = duck.position - this.position;
+                    vec2 = duck.position - position;
                     if (vec2.length < 64f)
                     {
-                        this._close.Add(duck.profile);
-                        this._closeGlitch = false;
+                        _close.Add(duck.profile);
+                        _closeGlitch = false;
                     }
                 }
             }
-            this._closeWait = Maths.CountDown(this._closeWait, 0.05f);
-            for (int index = 0; index < this._close.Count; ++index)
+            _closeWait = Maths.CountDown(_closeWait, 0.05f);
+            for (int index = 0; index < _close.Count; ++index)
             {
-                if (this._close.Count == 1)
-                    this._closeIndex = 0;
-                else if (this._close.Count > 1 && index == this._closeIndex && _closeWait <= 0f)
+                if (_close.Count == 1)
+                    _closeIndex = 0;
+                else if (_close.Count > 1 && index == _closeIndex && _closeWait <= 0f)
                 {
-                    this._closeIndex = (this._closeIndex + 1) % this._close.Count;
-                    this._closeWait = 1f;
-                    this._glitch = 0.3f;
-                    this._projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
-                    this._projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
-                    this._projectorGlitch.flipH = Rando.Float(1f) > 0.5f;
-                    this._useWave = !this._useWave;
-                    this._double = 0.6f + Rando.Float(0.6f);
+                    _closeIndex = (_closeIndex + 1) % _close.Count;
+                    _closeWait = 1f;
+                    _glitch = 0.3f;
+                    _projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
+                    _projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
+                    _projectorGlitch.flipH = Rando.Float(1f) > 0.5f;
+                    _useWave = !_useWave;
+                    _double = 0.6f + Rando.Float(0.6f);
                     break;
                 }
             }
-            if (this._closeIndex >= this._close.Count)
-                this._closeIndex = 0;
-            if (this._close.Count == 0)
+            if (_closeIndex >= _close.Count)
+                _closeIndex = 0;
+            if (_close.Count == 0)
             {
-                if (!this._closeGlitch)
+                if (!_closeGlitch)
                 {
-                    this._closeWait = 1f;
-                    this._glitch = 0.3f;
-                    this._projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
-                    this._projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
-                    this._projectorGlitch.flipH = Rando.Float(1f) > 0.5f;
-                    this._useWave = !this._useWave;
-                    this._double = 0.6f + Rando.Float(0.6f);
-                    this._closeGlitch = true;
+                    _closeWait = 1f;
+                    _glitch = 0.3f;
+                    _projectorGlitch.xscale = 0.8f + Rando.Float(0.7f);
+                    _projectorGlitch.yscale = 0.6f + Rando.Float(0.5f);
+                    _projectorGlitch.flipH = Rando.Float(1f) > 0.5f;
+                    _useWave = !_useWave;
+                    _double = 0.6f + Rando.Float(0.6f);
+                    _closeGlitch = true;
                 }
-                this._projectorAlpha = Maths.CountDown(this._projectorAlpha, 0.1f);
-                this._currentProjection = null;
+                _projectorAlpha = Maths.CountDown(_projectorAlpha, 0.1f);
+                _currentProjection = null;
             }
             else
             {
-                this._currentProjection = PurpleBlock.GetStoredItem(this._close[this._closeIndex]).thing;
-                this._projectorAlpha = Maths.CountUp(this._projectorAlpha, 0.1f);
+                _currentProjection = PurpleBlock.GetStoredItem(_close[_closeIndex]).thing;
+                _projectorAlpha = Maths.CountUp(_projectorAlpha, 0.1f);
             }
-            this._projectorGlitch.alpha = this._glitch * this._projectorAlpha;
+            _projectorGlitch.alpha = _glitch * _projectorAlpha;
             base.Update();
         }
 
@@ -250,66 +250,66 @@ namespace DuckGame
         {
             if (pLayer != Layer.Background)
                 return;
-            if (this._alternate)
-                Graphics.Draw(this._scanner, this.x, this.y + 9f);
-            if (!this._alternate)
-                Graphics.Draw(this._projector, this.x, this.y - 8f);
-            float num = (float)(this._useWave ? this._projectionWave : this._projectionWave2);
+            if (_alternate)
+                Graphics.Draw(_scanner, x, y + 9f);
+            if (!_alternate)
+                Graphics.Draw(_projector, x, y - 8f);
+            float num = (float)(_useWave ? _projectionWave : _projectionWave2);
             if (_double > 0.0)
             {
-                if (this._currentProjection != null)
+                if (_currentProjection != null)
                 {
                     Duck.renderingIcon = true;
                     Material material = Graphics.material;
                     Graphics.material = PurpleBlock._grayscale;
-                    this._currentProjection.depth = this.depth - 5;
-                    this._currentProjection.x = this.x - this._double * 2f;
-                    this._currentProjection.y = this.y - 16f - num;
-                    this._currentProjection.Draw();
-                    this._currentProjection.x = this.x + this._double * 2f;
-                    this._currentProjection.y = this.y - 16f - num;
-                    this._currentProjection.Draw();
+                    _currentProjection.depth = depth - 5;
+                    _currentProjection.x = x - _double * 2f;
+                    _currentProjection.y = y - 16f - num;
+                    _currentProjection.Draw();
+                    _currentProjection.x = x + _double * 2f;
+                    _currentProjection.y = y - 16f - num;
+                    _currentProjection.Draw();
                     Graphics.material = material;
                     Duck.renderingIcon = false;
                 }
                 else
                 {
-                    this._none.alpha = (0.2f + this._projectionFlashWave.normalized * 0.2f + _glitch * 1f) * this._projectorAlpha;
-                    Graphics.Draw(this._none, this.x - this._double * 2f, this.y - 16f - num);
-                    Graphics.Draw(this._none, this.x + this._double * 2f, this.y - 16f - num);
+                    _none.alpha = (0.2f + _projectionFlashWave.normalized * 0.2f + _glitch * 1f) * _projectorAlpha;
+                    Graphics.Draw(_none, x - _double * 2f, y - 16f - num);
+                    Graphics.Draw(_none, x + _double * 2f, y - 16f - num);
                 }
             }
-            else if (this._currentProjection != null)
+            else if (_currentProjection != null)
             {
                 Duck.renderingIcon = true;
                 Material material = Graphics.material;
                 Graphics.material = PurpleBlock._grayscale;
-                this._currentProjection.depth = this.depth - 5;
-                this._currentProjection.x = this.x;
-                this._currentProjection.y = this.y - 16f - num;
-                this._currentProjection.Draw();
+                _currentProjection.depth = depth - 5;
+                _currentProjection.x = x;
+                _currentProjection.y = y - 16f - num;
+                _currentProjection.Draw();
                 Graphics.material = material;
                 Duck.renderingIcon = false;
             }
             else
-                Graphics.Draw(this._none, this.x, this.y - 16f - num);
-            if (this._currentProjection != null && this._served.Contains(this._close[this._closeIndex]))
+                Graphics.Draw(_none, x, y - 16f - num);
+            if (_currentProjection != null && _served.Contains(_close[_closeIndex]))
             {
-                this._none.alpha = (float)(0.2f + this._projectionFlashWave.normalized * 0.2f + _glitch * 1f) * this._projectorAlpha;
-                Graphics.Draw(this._none, this.x, this.y - 16f - num, this.depth + 5);
+                _none.alpha = (float)(0.2f + _projectionFlashWave.normalized * 0.2f + _glitch * 1f) * _projectorAlpha;
+                Graphics.Draw(_none, x, y - 16f - num, depth + 5);
             }
             if (_glitch <= 0f)
                 return;
-            Graphics.Draw(this._projectorGlitch, this.x, this.y - 16f);
+            Graphics.Draw(_projectorGlitch, x, y - 16f);
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
             if (from == ImpactedFrom.Bottom && hitWait == 0f && with.isServerForObject)
                 with.Fondle(this);
-            if (!this.isServerForObject || !with.isServerForObject || from != ImpactedFrom.Bottom || hitWait != 0f)
+            if (!isServerForObject || !with.isServerForObject || from != ImpactedFrom.Bottom || hitWait != 0f)
                 return;
-            this.hitWait = 1f;
+            hitWait = 1f;
             switch (with)
             {
                 case Holdable holdable when holdable.lastThrownBy != null || holdable is RagdollPart && !Network.isActive:
@@ -318,26 +318,26 @@ namespace DuckGame
                         break;
                     if (lastThrownBy != null)
                         PurpleBlock.StoreItem(lastThrownBy.profile, with);
-                    this.Bounce();
+                    Bounce();
                     break;
                 case Duck pDuck:
                     RumbleManager.AddRumbleEvent(pDuck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));
                     StoredItem storedItem = PurpleBlock.GetStoredItem(pDuck.profile);
-                    if (storedItem.thing != null && !this._served.Contains(pDuck.profile))
+                    if (storedItem.thing != null && !_served.Contains(pDuck.profile))
                     {
-                        this.containContext = storedItem.thing as PhysicsObject;
+                        containContext = storedItem.thing as PhysicsObject;
                         storedItem.thing = Thing.LoadThing(storedItem.serializedData);
-                        this._hit = false;
-                        this.Pop();
-                        this._served.Add(pDuck.profile);
+                        _hit = false;
+                        Pop();
+                        _served.Add(pDuck.profile);
                         if (Network.isActive && pDuck.isServerForObject)
                             Send.Message(new NMPurpleBoxServed(pDuck, this));
                     }
                     else
                     {
-                        if (this._served.Contains(pDuck.profile))
+                        if (_served.Contains(pDuck.profile))
                             SFX.PlaySynchronized("scanFail");
-                        this.Bounce();
+                        Bounce();
                     }
                     if (pDuck.holdObject == null)
                         break;

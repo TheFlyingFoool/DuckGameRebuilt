@@ -13,12 +13,12 @@ namespace DuckGame
         public BackgroundBathroom(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("bathroom", 16, 16);
-            this._opacityFromGraphic = true;
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this._editorName = "Bathroom";
+            graphic = new SpriteMap("bathroom", 16, 16);
+            _opacityFromGraphic = true;
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
+            _editorName = "Bathroom";
         }
     }
 }

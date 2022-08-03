@@ -13,16 +13,16 @@ namespace DuckGame
         public TinfoilHat(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._pickupSprite = new Sprite("tinfoilHatPickup");
-            this._sprite = new SpriteMap("tinfoilHat", 32, 32);
-            this.graphic = this._pickupSprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-6f, -4f);
-            this.collisionSize = new Vec2(12f, 8f);
-            this._sprite.CenterOrigin();
-            this.thickness = 0.1f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.editorTooltip = "Protects against the effects of mind control, spy satellites, and awkward social situations.";
+            _pickupSprite = new Sprite("tinfoilHatPickup");
+            _sprite = new SpriteMap("tinfoilHat", 32, 32);
+            graphic = _pickupSprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-6f, -4f);
+            collisionSize = new Vec2(12f, 8f);
+            _sprite.CenterOrigin();
+            thickness = 0.1f;
+            physicsMaterial = PhysicsMaterial.Metal;
+            editorTooltip = "Protects against the effects of mind control, spy satellites, and awkward social situations.";
         }
 
         public override void Update() => base.Update();

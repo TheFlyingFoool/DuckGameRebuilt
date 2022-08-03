@@ -62,56 +62,56 @@ namespace DuckGame
         //private float _moodVal = 0.5f;
         private Material grayscale = new Material("Shaders/greyscale");
 
-        public float fade => this._fade;
+        public float fade => _fade;
 
-        public bool open => this._open;
+        public bool open => _open;
 
         public RoomEditor(float xpos, float ypos, ProfileBox2 box, HatSelector sel)
           : base(xpos, ypos)
         {
-            this._font = new BitmapFont("biosFontUI", 8, 7)
+            _font = new BitmapFont("biosFontUI", 8, 7)
             {
                 scale = new Vec2(0.5f, 0.5f)
             };
-            this._collisionSize = new Vec2(141f, 89f);
-            this._cantPlace = new Sprite("cantPlace");
-            this._cantPlace.CenterOrigin();
-            this._cantPlaceLarge = new Sprite("cantPlaceLarge");
-            this._cantPlaceLarge.CenterOrigin();
-            this._box = box;
-            this._selector = sel;
+            _collisionSize = new Vec2(141f, 89f);
+            _cantPlace = new Sprite("cantPlace");
+            _cantPlace.CenterOrigin();
+            _cantPlaceLarge = new Sprite("cantPlaceLarge");
+            _cantPlaceLarge.CenterOrigin();
+            _box = box;
+            _selector = sel;
             //this._moveArrow = new Sprite("moveArrow")
             //{
             //    center = new Vec2(0f, 4f)
             //};
-            this._scren = new Sprite("furni/scren");
-            this._scren.CenterOrigin();
-            this._bigScren = new Sprite("furni/bigScren");
-            this._bigScren.CenterOrigin();
-            this._whiteCircle = new Sprite("furni/whiteCircle");
-            this._whiteCircle.CenterOrigin();
+            _scren = new Sprite("furni/scren");
+            _scren.CenterOrigin();
+            _bigScren = new Sprite("furni/bigScren");
+            _bigScren.CenterOrigin();
+            _whiteCircle = new Sprite("furni/whiteCircle");
+            _whiteCircle.CenterOrigin();
             //this._smallFont = new BitmapFont("smallBiosFont", 7, 6)
             //{
             //    scale = new Vec2(0.5f, 0.5f)
             //};
-            this._furni = new Sprite("furni/stone");
-            this._furni.center = new Vec2(this._furni.width / 2, _furni.height);
-            this._furnitureCursor = new Sprite("arcade/furnCursor");
-            this._furnitureCursor.CenterOrigin();
+            _furni = new Sprite("furni/stone");
+            _furni.center = new Vec2(_furni.width / 2, _furni.height);
+            _furnitureCursor = new Sprite("arcade/furnCursor");
+            _furnitureCursor.CenterOrigin();
         }
 
         public override void Initialize() => base.Initialize();
 
         public void Reset()
         {
-            this._open = false;
-            this._selector.fade = 1f;
-            this._fade = 0f;
-            this._desiredFurniSelection = 0;
-            this._furniSelection = 0;
-            this._mode = REMode.Main;
-            this._desiredMode = this._mode;
-            this._selector.screen.DoFlashTransition();
+            _open = false;
+            _selector.fade = 1f;
+            _fade = 0f;
+            _desiredFurniSelection = 0;
+            _furniSelection = 0;
+            _mode = REMode.Main;
+            _desiredMode = _mode;
+            _selector.screen.DoFlashTransition();
         }
 
         public static Furniture GetFurniture(int id)
@@ -411,164 +411,164 @@ namespace DuckGame
                 return null;
             List<Furniture> availableFurnis = Profiles.experienceProfile.GetAvailableFurnis();
             if (_desiredFurniSelection > availableFurnis.Count)
-                this._desiredFurniSelection = 0;
+                _desiredFurniSelection = 0;
             return availableFurnis[_desiredFurniSelection];
         }
 
         public override void Update()
         {
-            if (this._selector.screen.transitioning)
+            if (_selector.screen.transitioning)
                 return;
-            this._takenFlash = Lerp.Float(this._takenFlash, 0f, 0.02f);
-            if (!this._open)
+            _takenFlash = Lerp.Float(_takenFlash, 0f, 0.02f);
+            if (!_open)
             {
-                if (_fade >= 0.00999999977648258 || !this._closing)
+                if (_fade >= 0.00999999977648258 || !_closing)
                     return;
-                this._closing = false;
+                _closing = false;
             }
             else
             {
-                if (this._mode != this._desiredMode)
-                    this._mode = this._desiredMode;
+                if (_mode != _desiredMode)
+                    _mode = _desiredMode;
                 if (_fade > 0.899999976158142)
                 {
                     int furniSelection = _furniSelection;
-                    if (_slideTo != 0.0 && _slide != this._slideTo)
-                        this._slide = Lerp.Float(this._slide, this._slideTo, 0.1f);
-                    else if (_slideTo != 0.0 && _slide == this._slideTo)
+                    if (_slideTo != 0.0 && _slide != _slideTo)
+                        _slide = Lerp.Float(_slide, _slideTo, 0.1f);
+                    else if (_slideTo != 0.0 && _slide == _slideTo)
                     {
-                        this._slide = 0f;
-                        this._slideTo = 0f;
-                        this._furniSelection = this._desiredFurniSelection;
+                        _slide = 0f;
+                        _slideTo = 0f;
+                        _furniSelection = _desiredFurniSelection;
                     }
-                    if (_upSlideTo != 0.0 && _upSlide != this._upSlideTo)
-                        this._upSlide = Lerp.Float(this._upSlide, this._upSlideTo, 0.1f);
-                    else if (_upSlideTo != 0.0 && _upSlide == this._upSlideTo)
+                    if (_upSlideTo != 0.0 && _upSlide != _upSlideTo)
+                        _upSlide = Lerp.Float(_upSlide, _upSlideTo, 0.1f);
+                    else if (_upSlideTo != 0.0 && _upSlide == _upSlideTo)
                     {
-                        this._upSlide = 0f;
-                        this._upSlideTo = 0f;
-                        this._furniSelection = this._desiredFurniSelection;
+                        _upSlide = 0f;
+                        _upSlideTo = 0f;
+                        _furniSelection = _desiredFurniSelection;
                     }
-                    if (_desiredFurniSelection == _furniSelection && _slideTo == 0.0 && _upSlideTo == 0.0 && this._mode == REMode.Main)
+                    if (_desiredFurniSelection == _furniSelection && _slideTo == 0.0 && _upSlideTo == 0.0 && _mode == REMode.Main)
                     {
-                        if (this._selector.inputProfile.Down("MENULEFT"))
+                        if (_selector.inputProfile.Down("MENULEFT"))
                         {
-                            this._desiredFurniSelection = (short)this.FurniIndexAdd(_desiredFurniSelection, -1);
-                            this._slideTo = -1f;
+                            _desiredFurniSelection = (short)FurniIndexAdd(_desiredFurniSelection, -1);
+                            _slideTo = -1f;
                             SFX.Play("consoleTick");
                         }
-                        if (this._selector.inputProfile.Down("MENURIGHT"))
+                        if (_selector.inputProfile.Down("MENURIGHT"))
                         {
-                            this._desiredFurniSelection = (short)this.FurniIndexAdd(_desiredFurniSelection, 1);
-                            this._slideTo = 1f;
-                            if (this._desiredFurniSelection >= 0)
+                            _desiredFurniSelection = (short)FurniIndexAdd(_desiredFurniSelection, 1);
+                            _slideTo = 1f;
+                            if (_desiredFurniSelection >= 0)
                             {
                                 int desiredFurniSelection = _desiredFurniSelection;
                                 int count = Profiles.experienceProfile.GetAvailableFurnis().Count;
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (this._selector.inputProfile.Down("MENUUP"))
+                        if (_selector.inputProfile.Down("MENUUP"))
                         {
-                            this._desiredFurniSelection = (short)this.FurniIndexAdd(_desiredFurniSelection, -5);
-                            this._upSlideTo = -1f;
-                            if (this._desiredFurniSelection >= 0)
+                            _desiredFurniSelection = (short)FurniIndexAdd(_desiredFurniSelection, -5);
+                            _upSlideTo = -1f;
+                            if (_desiredFurniSelection >= 0)
                             {
                                 int desiredFurniSelection = _desiredFurniSelection;
                                 int count = Profiles.experienceProfile.GetAvailableFurnis().Count;
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (this._selector.inputProfile.Down("MENUDOWN"))
+                        if (_selector.inputProfile.Down("MENUDOWN"))
                         {
-                            this._desiredFurniSelection = (short)this.FurniIndexAdd(_desiredFurniSelection, 5);
-                            this._upSlideTo = 1f;
-                            if (this._desiredFurniSelection >= 0)
+                            _desiredFurniSelection = (short)FurniIndexAdd(_desiredFurniSelection, 5);
+                            _upSlideTo = 1f;
+                            if (_desiredFurniSelection >= 0)
                             {
                                 int desiredFurniSelection = _desiredFurniSelection;
                                 int count = Profiles.experienceProfile.GetAvailableFurnis().Count;
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (this._selector.inputProfile.Pressed("SELECT"))
+                        if (_selector.inputProfile.Pressed("SELECT"))
                         {
-                            this._placementVariation = 0;
+                            _placementVariation = 0;
                             SFX.Play("consoleSelect", 0.4f);
-                            this._desiredMode = REMode.Place;
+                            _desiredMode = REMode.Place;
                         }
-                        if (this._selector.inputProfile.Pressed("CANCEL"))
+                        if (_selector.inputProfile.Pressed("CANCEL"))
                         {
-                            this._desiredFurniSelection = 0;
-                            this._furniSelection = this._desiredFurniSelection;
-                            this._open = false;
-                            this._selector.fade = 1f;
-                            this._fade = 0f;
-                            this._selector.screen.DoFlashTransition();
-                            Profiles.Save(this._selector.profile);
-                            if (Network.isActive && this._box.duck != null)
-                                Send.Message(new NMRoomData(this._box.duck.profile, this._box.duck.profile.furniturePositionData));
-                            this._selector._editingRoom = false;
+                            _desiredFurniSelection = 0;
+                            _furniSelection = _desiredFurniSelection;
+                            _open = false;
+                            _selector.fade = 1f;
+                            _fade = 0f;
+                            _selector.screen.DoFlashTransition();
+                            Profiles.Save(_selector.profile);
+                            if (Network.isActive && _box.duck != null)
+                                Send.Message(new NMRoomData(_box.duck.profile, _box.duck.profile.furniturePositionData));
+                            _selector._editingRoom = false;
                             SFX.Play("consoleCancel", 0.4f);
                         }
                     }
-                    else if (this._mode == REMode.Place)
+                    else if (_mode == REMode.Place)
                     {
-                        this.position = this._box.position;
+                        position = _box.position;
                         if (_furniCursor.x < 0.0)
-                            this._furniCursor = this.position + new Vec2(30f, 30f);
-                        if (this._selector.inputProfile.Down("RAGDOLL"))
+                            _furniCursor = position + new Vec2(30f, 30f);
+                        if (_selector.inputProfile.Down("RAGDOLL"))
                         {
-                            if (this._selector.inputProfile.Pressed("MENULEFT"))
-                                --this._furniCursor.x;
-                            if (this._selector.inputProfile.Pressed("MENURIGHT"))
-                                ++this._furniCursor.x;
-                            if (this._selector.inputProfile.Pressed("MENUUP"))
-                                --this._furniCursor.y;
-                            if (this._selector.inputProfile.Pressed("MENUDOWN"))
-                                ++this._furniCursor.y;
+                            if (_selector.inputProfile.Pressed("MENULEFT"))
+                                --_furniCursor.x;
+                            if (_selector.inputProfile.Pressed("MENURIGHT"))
+                                ++_furniCursor.x;
+                            if (_selector.inputProfile.Pressed("MENUUP"))
+                                --_furniCursor.y;
+                            if (_selector.inputProfile.Pressed("MENUDOWN"))
+                                ++_furniCursor.y;
                         }
                         else
                         {
-                            if (this._selector.inputProfile.Down("MENULEFT"))
-                                --this._furniCursor.x;
-                            if (this._selector.inputProfile.Down("MENURIGHT"))
-                                ++this._furniCursor.x;
-                            if (this._selector.inputProfile.Down("MENUUP"))
-                                --this._furniCursor.y;
-                            if (this._selector.inputProfile.Down("MENUDOWN"))
-                                ++this._furniCursor.y;
+                            if (_selector.inputProfile.Down("MENULEFT"))
+                                --_furniCursor.x;
+                            if (_selector.inputProfile.Down("MENURIGHT"))
+                                ++_furniCursor.x;
+                            if (_selector.inputProfile.Down("MENUUP"))
+                                --_furniCursor.y;
+                            if (_selector.inputProfile.Down("MENUDOWN"))
+                                ++_furniCursor.y;
                         }
-                        Vec2 vec2_1 = new Vec2(this.x + 6f, this.y);
-                        Vec2 vec2_2 = new Vec2(this.x + roomSize, this.y + 70f);
+                        Vec2 vec2_1 = new Vec2(x + 6f, y);
+                        Vec2 vec2_2 = new Vec2(x + roomSize, y + 70f);
                         Furniture availableFurni = Profiles.experienceProfile.GetAvailableFurnis()[_desiredFurniSelection];
                         if (availableFurni.type == FurnitureType.Prop)
                         {
                             if (_furniCursor.x - (availableFurni.sprite.width / 2) < vec2_1.x)
-                                this._furniCursor.x = vec2_1.x + availableFurni.sprite.width / 2;
+                                _furniCursor.x = vec2_1.x + availableFurni.sprite.width / 2;
                             if (_furniCursor.x + (availableFurni.sprite.width / 2) > vec2_2.x)
-                                this._furniCursor.x = vec2_2.x - availableFurni.sprite.width / 2;
+                                _furniCursor.x = vec2_2.x - availableFurni.sprite.width / 2;
                             if (_furniCursor.y > vec2_2.y)
-                                this._furniCursor.y = vec2_2.y;
+                                _furniCursor.y = vec2_2.y;
                             if (_furniCursor.y < vec2_1.y)
-                                this._furniCursor.y = vec2_1.y;
+                                _furniCursor.y = vec2_1.y;
                         }
                         if (availableFurni.type == FurnitureType.Prop)
                         {
                             List<Rectangle> rectangleList = new List<Rectangle>();
-                            foreach (FurniturePosition furniturePosition in this._selector.profile.furniturePositions)
+                            foreach (FurniturePosition furniturePosition in _selector.profile.furniturePositions)
                             {
                                 Furniture furniture = RoomEditor.GetFurniture(furniturePosition.id);
                                 if (furniture != null && furniture.isSurface)
                                 {
                                     Vec2 vec2_3 = new Vec2(furniturePosition.x, furniturePosition.y);
-                                    if (this._selector.box.rightRoom)
+                                    if (_selector.box.rightRoom)
                                         vec2_3.x = roomSize - vec2_3.x;
-                                    vec2_3 += this._selector.box.position;
+                                    vec2_3 += _selector.box.position;
                                     rectangleList.Add(new Rectangle(vec2_3.x - furniture.sprite.width / 2, (float)(vec2_3.y - Math.Ceiling(furniture.sprite.height / 2.0) + 1.0) + furniture.topOffset, furniture.sprite.width, furniture.sprite.height - furniture.topOffset));
                                 }
                             }
-                            this._furniPos.x = this._furniCursor.x;
-                            this._furniPos.y = this._furniCursor.y;
+                            _furniPos.x = _furniCursor.x;
+                            _furniPos.y = _furniCursor.y;
                             float num1 = (float)Math.Floor(availableFurni.sprite.height / 2.0);
                             if (availableFurni.stickToFloor)
                             {
@@ -577,97 +577,97 @@ namespace DuckGame
                                 float num2 = 999f;
                                 foreach (Rectangle rect in rectangleList)
                                 {
-                                    if (rect.Top >= y - 2.0 && rect.Top - num1 < num2 && Collision.Line(new Vec2(this._furniCursor.x, y), new Vec2(this._furniCursor.x, y + 100f), rect))
+                                    if (rect.Top >= y - 2.0 && rect.Top - num1 < num2 && Collision.Line(new Vec2(_furniCursor.x, y), new Vec2(_furniCursor.x, y + 100f), rect))
                                         num2 = rect.Top - num1;
                                 }
-                                if (Level.CheckRay<IPlatform>(new Vec2(this._furniCursor.x, y), new Vec2(this._furniCursor.x, y + 100f), out hitPos) is Thing thing)
-                                    this._furniPos.y = thing.top - num1;
+                                if (Level.CheckRay<IPlatform>(new Vec2(_furniCursor.x, y), new Vec2(_furniCursor.x, y + 100f), out hitPos) is Thing thing)
+                                    _furniPos.y = thing.top - num1;
                                 if (_furniPos.y > num2)
-                                    this._furniPos.y = num2;
+                                    _furniPos.y = num2;
                             }
                             else if (availableFurni.stickToRoof)
                             {
                                 float y = (float)(_furniPos.y - num1 + 2.0);
-                                Vec2 furniCursor = this._furniCursor;
+                                Vec2 furniCursor = _furniCursor;
                                 int num3 = availableFurni.sprite.height / 2;
                                 Vec2 hitPos = Vec2.Zero;
-                                if (Level.CheckRay<IPlatform>(new Vec2(this._furniCursor.x, y), new Vec2(this._furniCursor.x, y - 100f), out hitPos) is Thing thing)
+                                if (Level.CheckRay<IPlatform>(new Vec2(_furniCursor.x, y), new Vec2(_furniCursor.x, y - 100f), out hitPos) is Thing thing)
                                 {
-                                    this._furniPos.y = (float)(thing.bottom + availableFurni.sprite.height / 2 - 2.0);
-                                    if (this._box.rightRoom)
+                                    _furniPos.y = (float)(thing.bottom + availableFurni.sprite.height / 2 - 2.0);
+                                    if (_box.rightRoom)
                                     {
                                         if (thing is Block && _furniPos.x < 226.0)
-                                            this._furniPos.y += 11f;
+                                            _furniPos.y += 11f;
                                     }
                                     else if (thing is Block && _furniPos.x > 93.0 && _furniPos.x < 160.0)
-                                        this._furniPos.y += 11f;
+                                        _furniPos.y += 11f;
                                 }
                             }
                         }
-                        this._hover = null;
+                        _hover = null;
                         if (availableFurni.type == FurnitureType.Prop)
                         {
-                            foreach (FurniturePosition furniturePosition in this._selector.profile.furniturePositions)
+                            foreach (FurniturePosition furniturePosition in _selector.profile.furniturePositions)
                             {
                                 Furniture furniture = RoomEditor.GetFurniture(furniturePosition.id);
                                 if (furniture != null && furniture.type == FurnitureType.Prop)
                                 {
                                     Vec2 vec2_4 = new Vec2(furniturePosition.x, furniturePosition.y);
-                                    if (this._selector.box.rightRoom)
+                                    if (_selector.box.rightRoom)
                                         vec2_4.x = roomSize - vec2_4.x;
-                                    vec2_4 += this.position;
-                                    if ((this._furniCursor - vec2_4).length < 4.0)
-                                        this._hover = furniturePosition;
+                                    vec2_4 += position;
+                                    if ((_furniCursor - vec2_4).length < 4.0)
+                                        _hover = furniturePosition;
                                 }
                             }
                         }
-                        if (this._selector.inputProfile.Pressed("MENU2"))
+                        if (_selector.inputProfile.Pressed("MENU2"))
                         {
-                            if (this._hover == null)
+                            if (_hover == null)
                             {
                                 if (availableFurni.name == "PHOTO" || availableFurni.name == "EGG" || availableFurni.name == "EASEL")
                                 {
-                                    ++this._placementVariation;
-                                    if (Profiles.experienceProfile != null && this._placementVariation > Profiles.experienceProfile.numLittleMen)
-                                        this._placementVariation = 0;
+                                    ++_placementVariation;
+                                    if (Profiles.experienceProfile != null && _placementVariation > Profiles.experienceProfile.numLittleMen)
+                                        _placementVariation = 0;
                                 }
                                 else if (availableFurni.sprite != null)
                                 {
-                                    ++this._placementVariation;
-                                    if (this._placementVariation > availableFurni.sprite.texture.width / availableFurni.sprite.width - 1 + (availableFurni.sprite.texture.height / availableFurni.sprite.height - 1))
+                                    ++_placementVariation;
+                                    if (_placementVariation > availableFurni.sprite.texture.width / availableFurni.sprite.width - 1 + (availableFurni.sprite.texture.height / availableFurni.sprite.height - 1))
                                     {
                                         if (availableFurni.canFlip)
-                                            this._placementFlip = !this._placementFlip;
-                                        this._placementVariation = 0;
+                                            _placementFlip = !_placementFlip;
+                                        _placementVariation = 0;
                                     }
                                 }
                             }
                             else
                             {
-                                this._selector.profile.furniturePositions.Remove(this._hover);
-                                this._desiredFurniSelection = this._furniSelection = (short)Profiles.experienceProfile.GetAvailableFurnis().IndexOf(RoomEditor.GetFurniture(_hover.id));
-                                this._placementFlip = this._hover.flip;
-                                this._placementVariation = _hover.variation;
-                                this._hover = null;
+                                _selector.profile.furniturePositions.Remove(_hover);
+                                _desiredFurniSelection = _furniSelection = (short)Profiles.experienceProfile.GetAvailableFurnis().IndexOf(RoomEditor.GetFurniture(_hover.id));
+                                _placementFlip = _hover.flip;
+                                _placementVariation = _hover.variation;
+                                _hover = null;
                             }
                         }
-                        this.invalidPlacement = false;
+                        invalidPlacement = false;
                         bool flag1 = false;
-                        if (_furniPos.y < this.y || _furniPos.y > this.y + 70.0 || _furniPos.x < this.x || _furniPos.x > this.x + roomSize)
+                        if (_furniPos.y < y || _furniPos.y > y + 70.0 || _furniPos.x < x || _furniPos.x > x + roomSize)
                         {
-                            this.invalidPlacement = true;
+                            invalidPlacement = true;
                             flag1 = true;
                         }
-                        if (this._selector.inputProfile.Pressed("MENU2") && availableFurni.name == "CLEAR ROOM")
+                        if (_selector.inputProfile.Pressed("MENU2") && availableFurni.name == "CLEAR ROOM")
                         {
                             foreach (FurniturePosition furniturePosition in new List<FurniturePosition>(_selector.profile.furniturePositions))
                             {
-                                this._selector.profile.furniturePositions.Remove(furniturePosition);
+                                _selector.profile.furniturePositions.Remove(furniturePosition);
                                 SmallSmoke.shortlife = true;
                                 for (int index = 0; index < 5; ++index)
                                 {
                                     float scaleMul = Rando.Float(0.9f, 1.2f);
-                                    SmallSmoke smallSmoke = SmallSmoke.New(this.position.x + furniturePosition.x + Rando.Float(-2f, 2f), this.position.y + furniturePosition.y + Rando.Float(-4f, 4f), scaleMul: scaleMul);
+                                    SmallSmoke smallSmoke = SmallSmoke.New(position.x + furniturePosition.x + Rando.Float(-2f, 2f), position.y + furniturePosition.y + Rando.Float(-4f, 4f), scaleMul: scaleMul);
                                     smallSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
                                     smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
                                     Level.Add(smallSmoke);
@@ -675,62 +675,62 @@ namespace DuckGame
                                 SmallSmoke.shortlife = false;
                             }
                         }
-                        if (this._selector.inputProfile.Pressed("SELECT") && availableFurni.name != "CLEAR ROOM")
+                        if (_selector.inputProfile.Pressed("SELECT") && availableFurni.name != "CLEAR ROOM")
                         {
-                            if (availableFurni.type == FurnitureType.Prop && this._hover != null)
+                            if (availableFurni.type == FurnitureType.Prop && _hover != null)
                             {
-                                this._selector.profile.furniturePositions.Remove(this._hover);
+                                _selector.profile.furniturePositions.Remove(_hover);
                             }
                             else
                             {
                                 int num4 = Profiles.experienceProfile.GetNumFurnitures(availableFurni.index);
-                                int furnituresPlaced = this._selector.profile.GetNumFurnituresPlaced(availableFurni.index);
+                                int furnituresPlaced = _selector.profile.GetNumFurnituresPlaced(availableFurni.index);
                                 bool flag2 = false;
-                                if (this._selector.profile.GetTotalFurnituresPlaced() >= RoomEditor.maxFurnitures && availableFurni.type == FurnitureType.Prop)
+                                if (_selector.profile.GetTotalFurnituresPlaced() >= RoomEditor.maxFurnitures && availableFurni.type == FurnitureType.Prop)
                                 {
                                     num4 = 0;
                                     flag2 = true;
                                 }
                                 int num5 = num4;
-                                if (furnituresPlaced < num5 && (!this.invalidPlacement || (availableFurni.type == FurnitureType.Theme || availableFurni.type == FurnitureType.Font) && flag1))
+                                if (furnituresPlaced < num5 && (!invalidPlacement || (availableFurni.type == FurnitureType.Theme || availableFurni.type == FurnitureType.Font) && flag1))
                                 {
                                     if (availableFurni.type == FurnitureType.Theme)
                                     {
-                                        this._selector.profile.furniturePositions.RemoveAll(sx => RoomEditor.GetFurniture(sx.id) != null && RoomEditor.GetFurniture(sx.id).type == FurnitureType.Theme);
+                                        _selector.profile.furniturePositions.RemoveAll(sx => RoomEditor.GetFurniture(sx.id) != null && RoomEditor.GetFurniture(sx.id).type == FurnitureType.Theme);
                                         SFX.Play("consoleSelect", 0.4f);
-                                        this._desiredMode = REMode.Main;
+                                        _desiredMode = REMode.Main;
                                     }
                                     else if (availableFurni.type == FurnitureType.Font)
                                     {
-                                        this._selector.profile.furniturePositions.RemoveAll(sx => RoomEditor.GetFurniture(sx.id) != null && RoomEditor.GetFurniture(sx.id).type == FurnitureType.Font);
+                                        _selector.profile.furniturePositions.RemoveAll(sx => RoomEditor.GetFurniture(sx.id) != null && RoomEditor.GetFurniture(sx.id).type == FurnitureType.Font);
                                         SFX.Play("consoleSelect", 0.4f);
-                                        this._desiredMode = REMode.Main;
+                                        _desiredMode = REMode.Main;
                                     }
                                     if (availableFurni.group != Furniture.Default || availableFurni.type == FurnitureType.Prop)
                                     {
                                         FurniturePosition furniturePosition = new FurniturePosition
                                         {
-                                            x = (byte)(_furniPos.x - this.position.x),
-                                            y = (byte)(_furniPos.y - this.position.y),
-                                            flip = this._placementFlip
+                                            x = (byte)(_furniPos.x - position.x),
+                                            y = (byte)(_furniPos.y - position.y),
+                                            flip = _placementFlip
                                         };
                                         if (availableFurni.group == Furniture.Characters)
-                                            furniturePosition.flip = this._selector.box.rightRoom;
-                                        if (this._selector.box.rightRoom)
+                                            furniturePosition.flip = _selector.box.rightRoom;
+                                        if (_selector.box.rightRoom)
                                         {
                                             furniturePosition.x = (byte)((uint)RoomEditor.roomSize - furniturePosition.x);
                                             --furniturePosition.x;
                                         }
                                         furniturePosition.id = (ushort)availableFurni.index;
-                                        furniturePosition.variation = (byte)this._placementVariation;
-                                        this._selector.profile.furniturePositions.Add(furniturePosition);
+                                        furniturePosition.variation = (byte)_placementVariation;
+                                        _selector.profile.furniturePositions.Add(furniturePosition);
                                         if (availableFurni.type == FurnitureType.Prop)
                                         {
                                             SmallSmoke.shortlife = true;
                                             for (int index = 0; index < 5; ++index)
                                             {
                                                 float scaleMul = Rando.Float(0.9f, 1.2f);
-                                                SmallSmoke smallSmoke = SmallSmoke.New(this._furniPos.x - (availableFurni.sprite.width - 4) / 2 + index * ((availableFurni.sprite.width - 4) / 4) + Rando.Float(-2f, 2f), this._furniPos.y + availableFurni.sprite.height / 4 + Rando.Float(-4f, 4f), scaleMul: scaleMul);
+                                                SmallSmoke smallSmoke = SmallSmoke.New(_furniPos.x - (availableFurni.sprite.width - 4) / 2 + index * ((availableFurni.sprite.width - 4) / 4) + Rando.Float(-2f, 2f), _furniPos.y + availableFurni.sprite.height / 4 + Rando.Float(-4f, 4f), scaleMul: scaleMul);
                                                 smallSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
                                                 smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
                                                 Level.Add(smallSmoke);
@@ -738,7 +738,7 @@ namespace DuckGame
                                             for (int index = 0; index < 5; ++index)
                                             {
                                                 float scaleMul = Rando.Float(0.9f, 1.2f);
-                                                SmallSmoke smallSmoke = SmallSmoke.New(this._furniPos.x - (availableFurni.sprite.width - 4) / 2 + index * ((availableFurni.sprite.width - 4) / 4) + Rando.Float(-2f, 2f), this._furniPos.y - availableFurni.sprite.height / 4 + Rando.Float(-4f, 4f), scaleMul: scaleMul);
+                                                SmallSmoke smallSmoke = SmallSmoke.New(_furniPos.x - (availableFurni.sprite.width - 4) / 2 + index * ((availableFurni.sprite.width - 4) / 4) + Rando.Float(-2f, 2f), _furniPos.y - availableFurni.sprite.height / 4 + Rando.Float(-4f, 4f), scaleMul: scaleMul);
                                                 smallSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
                                                 smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
                                                 Level.Add(smallSmoke);
@@ -747,32 +747,32 @@ namespace DuckGame
                                         }
                                     }
                                 }
-                                else if (!this.invalidPlacement)
+                                else if (!invalidPlacement)
                                 {
                                     if (flag2)
-                                        this._box._tooManyPulse = 1f;
+                                        _box._tooManyPulse = 1f;
                                     else
-                                        this._box._noMorePulse = 1f;
+                                        _box._noMorePulse = 1f;
                                 }
                             }
                         }
-                        if (this._selector.inputProfile.Pressed("CANCEL"))
+                        if (_selector.inputProfile.Pressed("CANCEL"))
                         {
-                            this._placementFlip = false;
+                            _placementFlip = false;
                             SFX.Play("consoleSelect", 0.4f);
-                            this._desiredMode = REMode.Main;
+                            _desiredMode = REMode.Main;
                         }
                     }
                 }
-                this._font.alpha = this._fade;
-                this._font.depth = (Depth)0.96f;
-                this._font.scale = new Vec2(1f, 1f);
-                if (this._mode == REMode.Main)
+                _font.alpha = _fade;
+                _font.depth = (Depth)0.96f;
+                _font.scale = new Vec2(1f, 1f);
+                if (_mode == REMode.Main)
                 {
-                    this._pendingMaps.Clear();
+                    _pendingMaps.Clear();
                     Vec2 position = this.position;
                     this.position = Vec2.Zero;
-                    this._selector.screen.BeginDraw();
+                    _selector.screen.BeginDraw();
                     if (_desiredFurniSelection >= Profiles.experienceProfile.GetAvailableFurnis().Count)
                         return;
                     Furniture sel = Profiles.experienceProfile.GetAvailableFurnis()[_desiredFurniSelection];
@@ -784,13 +784,13 @@ namespace DuckGame
                     {
                         font.scale = new Vec2(1f);
                         font.characterYOffset = 1;
-                        font.Draw(text1, Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._font.GetWidth(text1) / 2.0), (float)(this.y + 7.0 - 2.0))), Color.White, (Depth)0.95f);
+                        font.Draw(text1, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text1) / 2.0), (float)(y + 7.0 - 2.0))), Color.White, (Depth)0.95f);
                         font.characterYOffset = 0;
                     }
                     else
-                        this._font.Draw(text1, Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._font.GetWidth(text1) / 2.0), (float)(this.y + 8.0 - 2.0))), Color.White, (Depth)0.95f);
-                    Graphics.DrawRect(new Vec2(this.x, this.y), new Vec2(this.x + 400f, this.y + 14f), Color.Black, (Depth)0.94f);
-                    Graphics.DrawRect(new Vec2(this.x, this.y + 74f), new Vec2(this.x + 400f, this.y + 90f), Color.Black, (Depth)0.98f);
+                        _font.Draw(text1, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text1) / 2.0), (float)(y + 8.0 - 2.0))), Color.White, (Depth)0.95f);
+                    Graphics.DrawRect(new Vec2(x, y), new Vec2(x + 400f, y + 14f), Color.Black, (Depth)0.94f);
+                    Graphics.DrawRect(new Vec2(x, y + 74f), new Vec2(x + 400f, y + 90f), Color.Black, (Depth)0.98f);
                     float num6 = -18f;
                     int count = Profiles.experienceProfile.GetAvailableFurnis().Count;
                     int num7 = RoomEditor._furniGroupMap[sel.group].IndexOf(sel);
@@ -800,23 +800,23 @@ namespace DuckGame
                         for (int index2 = 0; index2 < 11; ++index2)
                         {
                             int plus = index2 - 5 + (index1 - 2) * 5;
-                            float x1 = (float)(this.x + 2.0 + index2 * 22 + -this._slide * 20.0);
-                            float num9 = (float)(this.y + 37.0 + -this._upSlide * 20.0);
-                            int index3 = this.FurniIndexAdd(_furniSelection, plus);
+                            float x1 = (float)(x + 2.0 + index2 * 22 + -_slide * 20.0);
+                            float num9 = (float)(y + 37.0 + -_upSlide * 20.0);
+                            int index3 = FurniIndexAdd(_furniSelection, plus);
                             Furniture availableFurni = Profiles.experienceProfile.GetAvailableFurnis()[index3];
-                            float x2 = (float)(this.x + (this.x + 2.0 + 242.0 - (this.x + 2f)) / 2.0 - 9.0);
+                            float x2 = (float)(x + (x + 2.0 + 242.0 - (x + 2f)) / 2.0 - 9.0);
                             double num10 = Maths.Clamp((float)((50.0 - Math.Abs(x1 - x2)) / 50.0), 0f, 1f);
-                            DuckRig.GetHatPoint(this._profile.persona.sprite.imageIndex);
+                            DuckRig.GetHatPoint(_profile.persona.sprite.imageIndex);
                             SpriteMap g = availableFurni.sprite;
                             if (availableFurni.icon != null)
                                 g = availableFurni.icon;
                             if (availableFurni.type == FurnitureType.Theme && index2 == 5 && index1 == 2)
                                 g = availableFurni.sprite;
                             Vec2 zero = Vec2.Zero;
-                            g.alpha = this._profile.persona.sprite.alpha;
+                            g.alpha = _profile.persona.sprite.alpha;
                             Vec2 pos1 = Vec2.Zero;
                             pos1 = new Vec2(x1, (float)(num9 + num6 + index1 * 20 - 14.0));
-                            float num11 = 1f - Math.Min((float)(((pos1 - new Vec2(x2, (float)(this.y + 35.0 + 10.0))).length + 10.0) / 40.0), 1f);
+                            float num11 = 1f - Math.Min((float)(((pos1 - new Vec2(x2, (float)(y + 35.0 + 10.0))).length + 10.0) / 40.0), 1f);
                             g.scale = new Vec2(Math.Min((float)(0.5 + Math.Max(num11 - 0.5f, 0f) * 2.0), 1f));
                             pos1.x -= 44f;
                             pos1.y -= 6f;
@@ -835,12 +835,12 @@ namespace DuckGame
                                 }
                                 pos1 = Maths.RoundToPixel(pos1);
                                 int numFurnitures = Profiles.experienceProfile.GetNumFurnitures(availableFurni.index);
-                                if (this._selector.profile.GetNumFurnituresPlaced(availableFurni.index) >= numFurnitures)
+                                if (_selector.profile.GetNumFurnituresPlaced(availableFurni.index) >= numFurnitures)
                                 {
-                                    this._cantPlaceLarge.depth = g.depth + 5;
-                                    this._cantPlaceLarge.scale = new Vec2(0.25f);
-                                    this._cantPlaceLarge.alpha = 0.7f;
-                                    Graphics.Draw(this._cantPlaceLarge, pos1.x, pos1.y);
+                                    _cantPlaceLarge.depth = g.depth + 5;
+                                    _cantPlaceLarge.scale = new Vec2(0.25f);
+                                    _cantPlaceLarge.alpha = 0.7f;
+                                    Graphics.Draw(_cantPlaceLarge, pos1.x, pos1.y);
                                 }
                                 Vec2 scale = g.scale;
                                 if (availableFurni.font != null && availableFurni.sprite == null)
@@ -851,10 +851,10 @@ namespace DuckGame
                                 }
                                 else if (availableFurni.type == FurnitureType.Theme && index2 == 5 && index1 == 2)
                                 {
-                                    this._bigScren.depth = g.depth - 10;
-                                    this._bigScren.scale = g.scale * 4f;
-                                    this._bigScren.color = g.color;
-                                    Graphics.Draw(this._bigScren, pos1.x - 0.5f, pos1.y);
+                                    _bigScren.depth = g.depth - 10;
+                                    _bigScren.scale = g.scale * 4f;
+                                    _bigScren.color = g.color;
+                                    Graphics.Draw(_bigScren, pos1.x - 0.5f, pos1.y);
                                     availableFurni.background.depth = g.depth - 5;
                                     availableFurni.background.scale = g.scale;
                                     availableFurni.background.color = g.color;
@@ -864,20 +864,20 @@ namespace DuckGame
                                 else
                                     availableFurni.Draw(pos1 + new Vec2(0f, 0f), g.depth);
                                 g.scale = scale;
-                                this._whiteCircle.color = availableFurni.group.color;
+                                _whiteCircle.color = availableFurni.group.color;
                                 if (index2 == 5 && index1 == 2)
                                 {
-                                    this._whiteCircle.depth = (Depth)0.8f;
+                                    _whiteCircle.depth = (Depth)0.8f;
                                     if (availableFurni.group == sel.group)
-                                        this._whiteCircle.depth = new Depth(g.depth.value - 0.025f, g.depth.span);
-                                    this._whiteCircle.scale = new Vec2(g.xscale * 0.5f);
-                                    Graphics.Draw(this._whiteCircle, pos1.x, pos1.y);
-                                    this._whiteCircle.scale = new Vec2(g.xscale * 0.52f);
-                                    this._whiteCircle.color = new Color((byte)(availableFurni.group.color.r * 0.75), (byte)(availableFurni.group.color.g * 0.75), (byte)(availableFurni.group.color.b * 0.75));
-                                    Sprite whiteCircle = this._whiteCircle;
+                                        _whiteCircle.depth = new Depth(g.depth.value - 0.025f, g.depth.span);
+                                    _whiteCircle.scale = new Vec2(g.xscale * 0.5f);
+                                    Graphics.Draw(_whiteCircle, pos1.x, pos1.y);
+                                    _whiteCircle.scale = new Vec2(g.xscale * 0.52f);
+                                    _whiteCircle.color = new Color((byte)(availableFurni.group.color.r * 0.75), (byte)(availableFurni.group.color.g * 0.75), (byte)(availableFurni.group.color.b * 0.75));
+                                    Sprite whiteCircle = _whiteCircle;
                                     whiteCircle.depth -= 30;
-                                    Graphics.Draw(this._whiteCircle, pos1.x, pos1.y);
-                                    this._whiteCircle.color = availableFurni.group.color;
+                                    Graphics.Draw(_whiteCircle, pos1.x, pos1.y);
+                                    _whiteCircle.color = availableFurni.group.color;
                                     string str = availableFurni.group.name.Substring(0, 1).ToUpper() + availableFurni.group.name.Substring(1) + " Collection ";
                                     string text2;
                                     if (num8 == RoomEditor._furniGroupMap[availableFurni.group].Count)
@@ -903,112 +903,112 @@ namespace DuckGame
                                         strArray[5] = ")";
                                         text2 = string.Concat(strArray);
                                     }
-                                    this._fancyFont.depth = (Depth)0.99f;
-                                    this._fancyFont.scale = new Vec2(0.25f);
+                                    _fancyFont.depth = (Depth)0.99f;
+                                    _fancyFont.scale = new Vec2(0.25f);
                                     if (_desiredFurniSelection == _furniSelection)
                                     {
-                                        float num13 = (float)Math.Floor(this._fancyFont.GetWidth(text2));
-                                        float num14 = (float)Math.Floor(this._fancyFont.GetWidth(text2) / 2.0);
+                                        float num13 = (float)Math.Floor(_fancyFont.GetWidth(text2));
+                                        float num14 = (float)Math.Floor(_fancyFont.GetWidth(text2) / 2.0);
                                         Vec2 pos2 = new Vec2(pos1.x - num14, pos1.y + 18f);
-                                        this._fancyFont.Draw(text2, pos2, new Color((byte)(availableFurni.group.color.r * 0.5), (byte)(availableFurni.group.color.g * 0.5), (byte)(availableFurni.group.color.b * 0.5)), (Depth)0.99f);
-                                        this._whiteCircle.scale = new Vec2(0.06f);
-                                        this._whiteCircle.depth = (Depth)0.98f;
-                                        Graphics.Draw(this._whiteCircle, pos2.x - 1f, pos2.y + 1f);
-                                        Graphics.Draw(this._whiteCircle, (float)(pos2.x + num13 + 1.0), pos2.y + 1f);
-                                        this._whiteCircle.scale = new Vec2(0.075f);
-                                        this._whiteCircle.depth = (Depth)0.94f;
-                                        this._whiteCircle.color = new Color((byte)(availableFurni.group.color.r * 0.75), (byte)(availableFurni.group.color.g * 0.75), (byte)(availableFurni.group.color.b * 0.75));
-                                        Graphics.Draw(this._whiteCircle, pos2.x - 1f, pos2.y + 1f);
-                                        Graphics.Draw(this._whiteCircle, (float)(pos2.x + num13 + 1.0), pos2.y + 1f);
+                                        _fancyFont.Draw(text2, pos2, new Color((byte)(availableFurni.group.color.r * 0.5), (byte)(availableFurni.group.color.g * 0.5), (byte)(availableFurni.group.color.b * 0.5)), (Depth)0.99f);
+                                        _whiteCircle.scale = new Vec2(0.06f);
+                                        _whiteCircle.depth = (Depth)0.98f;
+                                        Graphics.Draw(_whiteCircle, pos2.x - 1f, pos2.y + 1f);
+                                        Graphics.Draw(_whiteCircle, (float)(pos2.x + num13 + 1.0), pos2.y + 1f);
+                                        _whiteCircle.scale = new Vec2(0.075f);
+                                        _whiteCircle.depth = (Depth)0.94f;
+                                        _whiteCircle.color = new Color((byte)(availableFurni.group.color.r * 0.75), (byte)(availableFurni.group.color.g * 0.75), (byte)(availableFurni.group.color.b * 0.75));
+                                        Graphics.Draw(_whiteCircle, pos2.x - 1f, pos2.y + 1f);
+                                        Graphics.Draw(_whiteCircle, (float)(pos2.x + num13 + 1.0), pos2.y + 1f);
                                         Graphics.DrawRect(pos2 + new Vec2(-1f, -1f), pos2 + new Vec2(num13 + 1f, 3f), availableFurni.group.color, (Depth)0.98f);
                                         Graphics.DrawRect(pos2 + new Vec2(-1.5f, -1.5f), pos2 + new Vec2(num13 + 1.5f, 3.5f), new Color((byte)(availableFurni.group.color.r * 0.75), (byte)(availableFurni.group.color.g * 0.75), (byte)(availableFurni.group.color.b * 0.75)), (Depth)0.94f);
-                                        this._whiteCircle.color = availableFurni.group.color;
-                                        this._whiteCircle.depth = (Depth)0.8f;
-                                        this._whiteCircle.scale = new Vec2(g.xscale * 0.5f);
+                                        _whiteCircle.color = availableFurni.group.color;
+                                        _whiteCircle.depth = (Depth)0.8f;
+                                        _whiteCircle.scale = new Vec2(g.xscale * 0.5f);
                                     }
                                 }
                                 else
                                 {
-                                    this._whiteCircle.depth = (Depth)0.7f;
-                                    this._whiteCircle.scale = new Vec2(g.xscale * 0.5f);
-                                    Graphics.Draw(this._whiteCircle, pos1.x, pos1.y);
+                                    _whiteCircle.depth = (Depth)0.7f;
+                                    _whiteCircle.scale = new Vec2(g.xscale * 0.5f);
+                                    Graphics.Draw(_whiteCircle, pos1.x, pos1.y);
                                 }
-                                if (Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, 5)].group == availableFurni.group)
+                                if (Profiles.experienceProfile.GetAvailableFurnis()[FurniIndexAdd(index3, 5)].group == availableFurni.group)
                                 {
-                                    if (Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, 6)].group == availableFurni.group && Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, 1)].group == availableFurni.group)
-                                        Graphics.DrawRect(pos1 + new Vec2(-8f, 0f), pos1 + new Vec2(14f, 22f), this._whiteCircle.color, (Depth)0.7f);
+                                    if (Profiles.experienceProfile.GetAvailableFurnis()[FurniIndexAdd(index3, 6)].group == availableFurni.group && Profiles.experienceProfile.GetAvailableFurnis()[FurniIndexAdd(index3, 1)].group == availableFurni.group)
+                                        Graphics.DrawRect(pos1 + new Vec2(-8f, 0f), pos1 + new Vec2(14f, 22f), _whiteCircle.color, (Depth)0.7f);
                                     else
-                                        Graphics.DrawRect(pos1 + new Vec2(-8f, 0f), pos1 + new Vec2(8f, 22f), this._whiteCircle.color, (Depth)0.7f);
+                                        Graphics.DrawRect(pos1 + new Vec2(-8f, 0f), pos1 + new Vec2(8f, 22f), _whiteCircle.color, (Depth)0.7f);
                                 }
-                                if (Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, -5)].group == availableFurni.group)
+                                if (Profiles.experienceProfile.GetAvailableFurnis()[FurniIndexAdd(index3, -5)].group == availableFurni.group)
                                 {
-                                    if (Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, -6)].group == availableFurni.group && Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, -1)].group == availableFurni.group)
-                                        Graphics.DrawRect(pos1 + new Vec2(-14f, -22f), pos1 + new Vec2(8f, 0f), this._whiteCircle.color, (Depth)0.7f);
+                                    if (Profiles.experienceProfile.GetAvailableFurnis()[FurniIndexAdd(index3, -6)].group == availableFurni.group && Profiles.experienceProfile.GetAvailableFurnis()[FurniIndexAdd(index3, -1)].group == availableFurni.group)
+                                        Graphics.DrawRect(pos1 + new Vec2(-14f, -22f), pos1 + new Vec2(8f, 0f), _whiteCircle.color, (Depth)0.7f);
                                     else
-                                        Graphics.DrawRect(pos1 + new Vec2(-8f, -22f), pos1 + new Vec2(8f, 0f), this._whiteCircle.color, (Depth)0.7f);
+                                        Graphics.DrawRect(pos1 + new Vec2(-8f, -22f), pos1 + new Vec2(8f, 0f), _whiteCircle.color, (Depth)0.7f);
                                 }
-                                if (Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, 1)].group == availableFurni.group)
-                                    Graphics.DrawRect(pos1 + new Vec2(0f, -8f), pos1 + new Vec2(22f, 8f), this._whiteCircle.color, (Depth)0.7f);
-                                if (Profiles.experienceProfile.GetAvailableFurnis()[this.FurniIndexAdd(index3, -1)].group == availableFurni.group)
-                                    Graphics.DrawRect(pos1 + new Vec2(-22f, 8f), pos1 + new Vec2(0f, -8f), this._whiteCircle.color, (Depth)0.7f);
+                                if (Profiles.experienceProfile.GetAvailableFurnis()[FurniIndexAdd(index3, 1)].group == availableFurni.group)
+                                    Graphics.DrawRect(pos1 + new Vec2(0f, -8f), pos1 + new Vec2(22f, 8f), _whiteCircle.color, (Depth)0.7f);
+                                if (Profiles.experienceProfile.GetAvailableFurnis()[FurniIndexAdd(index3, -1)].group == availableFurni.group)
+                                    Graphics.DrawRect(pos1 + new Vec2(-22f, 8f), pos1 + new Vec2(0f, -8f), _whiteCircle.color, (Depth)0.7f);
                             }
-                            this._profile.persona.sprite.color = Color.White;
+                            _profile.persona.sprite.color = Color.White;
                             g.color = Color.White;
-                            this._profile.persona.sprite.scale = new Vec2(1f, 1f);
+                            _profile.persona.sprite.scale = new Vec2(1f, 1f);
                             g.scale = new Vec2(1f, 1f);
                         }
                     }
-                    this._font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.99f, this._profile.inputProfile);
-                    this._font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.99f, this._profile.inputProfile);
+                    _font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.99f, _profile.inputProfile);
+                    _font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.99f, _profile.inputProfile);
                     this.position = position;
-                    this._selector.screen.EndDraw();
+                    _selector.screen.EndDraw();
                 }
                 else
                 {
-                    this._selector.screen.BeginDraw();
-                    this._selector.screen.EndDraw();
+                    _selector.screen.BeginDraw();
+                    _selector.screen.EndDraw();
                 }
             }
         }
 
         public void Open(Profile p)
         {
-            if (this._box == null && Network.InLobby())
-                this._box = (Level.current as TeamSelect2).GetBox(p.networkIndex);
-            if (this._box == null)
+            if (_box == null && Network.InLobby())
+                _box = (Level.current as TeamSelect2).GetBox(p.networkIndex);
+            if (_box == null)
                 return;
             //this._inputProfile = p.inputProfile;
-            this._profile = p; //this._starterProfile = p -> p;
-            this._open = true;
-            this._fade = 1f;
+            _profile = p; //this._starterProfile = p -> p;
+            _open = true;
+            _fade = 1f;
         }
 
         public override void Draw()
         {
             if (_fade < 0.00999999977648258)
                 return;
-            if (this._mode == REMode.Main)
+            if (_mode == REMode.Main)
             {
-                this._selector.firstWord = "ADD";
-                this._selector.secondWord = "BACK";
+                _selector.firstWord = "ADD";
+                _selector.secondWord = "BACK";
             }
             else
             {
-                if (this._mode != REMode.Place)
+                if (_mode != REMode.Place)
                     return;
                 Furniture availableFurni = Profiles.experienceProfile.GetAvailableFurnis()[_desiredFurniSelection];
                 if (!(availableFurni.name != "CLEAR ROOM"))
                     return;
-                Graphics.DrawRect(this.position, this.position + new Vec2(140f, 80f), Color.Black * 0.5f, (Depth)0.08f);
-                if (this._hover != null)
+                Graphics.DrawRect(position, position + new Vec2(140f, 80f), Color.Black * 0.5f, (Depth)0.08f);
+                if (_hover != null)
                 {
                     Furniture furniture = RoomEditor.GetFurniture(_hover.id);
                     if (furniture == null)
                         return;
                     Vec2 vec2 = new Vec2(_hover.x, _hover.y);
-                    if (this._selector.box.rightRoom)
+                    if (_selector.box.rightRoom)
                         vec2.x = roomSize - vec2.x;
-                    Vec2 pos = vec2 + this.position;
+                    Vec2 pos = vec2 + position;
                     Vec2 p1_1 = new Vec2(pos.x - furniture.sprite.width / 2, pos.y - furniture.sprite.height / 2) + new Vec2(-2f, -2f);
                     Vec2 p1_2 = new Vec2(pos.x + furniture.sprite.width / 2, pos.y + furniture.sprite.height / 2) + new Vec2(2f, 2f);
                     Graphics.DrawLine(p1_1, p1_1 + new Vec2(2f, 0f), Color.White, depth: ((Depth)1f));
@@ -1021,8 +1021,8 @@ namespace DuckGame
                     Graphics.DrawLine(new Vec2(p1_2.x, p1_1.y), new Vec2(p1_2.x, p1_1.y) + new Vec2(0f, 2f), Color.White, depth: ((Depth)1f));
                     if (furniture.sprite == null)
                         return;
-                    furniture.sprite.flipH = this._hover.flip;
-                    if (this._selector.box.rightRoom)
+                    furniture.sprite.flipH = _hover.flip;
+                    if (_selector.box.rightRoom)
                         furniture.sprite.flipH = !furniture.sprite.flipH;
                     furniture.Draw(pos, (Depth)0.09f, _hover.variation);
                 }
@@ -1031,26 +1031,26 @@ namespace DuckGame
                     if (availableFurni.type != FurnitureType.Prop)
                         return;
                     int num = Profiles.experienceProfile.GetNumFurnitures(availableFurni.index);
-                    if (this._selector.profile.GetTotalFurnituresPlaced() >= RoomEditor.maxFurnitures)
+                    if (_selector.profile.GetTotalFurnituresPlaced() >= RoomEditor.maxFurnitures)
                         num = 0;
-                    int furnituresPlaced = this._selector.profile.GetNumFurnituresPlaced(availableFurni.index);
+                    int furnituresPlaced = _selector.profile.GetNumFurnituresPlaced(availableFurni.index);
                     availableFurni.sprite.depth = (Depth)0.09f;
-                    Vec2 furniPos = this._furniPos;
-                    availableFurni.sprite.frame = this._placementVariation;
-                    availableFurni.sprite.flipH = this._placementFlip;
-                    if (this._selector.box.rightRoom)
+                    Vec2 furniPos = _furniPos;
+                    availableFurni.sprite.frame = _placementVariation;
+                    availableFurni.sprite.flipH = _placementFlip;
+                    if (_selector.box.rightRoom)
                         availableFurni.sprite.flipH = !availableFurni.sprite.flipH;
                     availableFurni.sprite.alpha = 1f;
-                    if (furnituresPlaced >= num || this.invalidPlacement)
-                        Graphics.material = this.grayscale;
-                    availableFurni.Draw(furniPos, availableFurni.sprite.depth, this._placementVariation);
+                    if (furnituresPlaced >= num || invalidPlacement)
+                        Graphics.material = grayscale;
+                    availableFurni.Draw(furniPos, availableFurni.sprite.depth, _placementVariation);
                     Graphics.material = null;
-                    this._furnitureCursor.depth = (Depth)0.1f;
-                    this._cantPlace.depth = (Depth)0.1f;
-                    if (furnituresPlaced >= num || this.invalidPlacement)
-                        Graphics.Draw(this._cantPlace, this._furniCursor.x, this._furniCursor.y);
+                    _furnitureCursor.depth = (Depth)0.1f;
+                    _cantPlace.depth = (Depth)0.1f;
+                    if (furnituresPlaced >= num || invalidPlacement)
+                        Graphics.Draw(_cantPlace, _furniCursor.x, _furniCursor.y);
                     else
-                        Graphics.Draw(this._furnitureCursor, this._furniCursor.x, this._furniCursor.y);
+                        Graphics.Draw(_furnitureCursor, _furniCursor.x, _furniCursor.y);
                     availableFurni.sprite.frame = 0;
                     availableFurni.sprite.flipH = false;
                     availableFurni.sprite.alpha = 1f;

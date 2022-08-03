@@ -16,9 +16,9 @@ namespace DuckGame
 
         public MaterialGold(Thing t)
         {
-            this._effect = Content.Load<MTEffect>("Shaders/gold");
-            this._goldTexture = Content.Load<Tex2D>("bigGold");
-            this._thing = t;
+            _effect = Content.Load<MTEffect>("Shaders/gold");
+            _goldTexture = Content.Load<Tex2D>("bigGold");
+            _thing = t;
         }
 
         public override void Apply()
@@ -26,14 +26,14 @@ namespace DuckGame
             if (DuckGame.Graphics.device.Textures[0] != null)
             {
                 Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-                this.SetValue("width", texture.frameWidth / texture.width);
-                this.SetValue("height", texture.frameHeight / texture.height);
-                this.SetValue("xpos", this._thing.x);
-                this.SetValue("ypos", this._thing.y);
+                SetValue("width", texture.frameWidth / texture.width);
+                SetValue("height", texture.frameHeight / texture.height);
+                SetValue("xpos", _thing.x);
+                SetValue("ypos", _thing.y);
             }
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._goldTexture;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)_goldTexture;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

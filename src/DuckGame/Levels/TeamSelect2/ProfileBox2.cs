@@ -67,36 +67,36 @@ namespace DuckGame
         public float _noMorePulse;
         private float _prevDoorX;
 
-        public bool playerActive => this._playerActive;
+        public bool playerActive => _playerActive;
 
-        public bool ready => this._ready;
+        public bool ready => _ready;
 
         public bool doorIsOpen => _doorX > 82.0;
 
-        public Profile profile => this._playerProfile;
+        public Profile profile => _playerProfile;
 
         public void SetProfile(Profile p)
         {
             if (p == null)
             {
-                this.SetProfile(Profiles.all.ElementAt<Profile>(this.controllerIndex));
+                SetProfile(Profiles.all.ElementAt<Profile>(controllerIndex));
             }
             else
             {
-                this._playerProfile = p;
-                if (this._duck != null)
-                    this._duck.profile = p;
-                if (this._projector != null)
-                    this._projector.SetProfile(p);
-                if (this._hatSelector == null)
+                _playerProfile = p;
+                if (_duck != null)
+                    _duck.profile = p;
+                if (_projector != null)
+                    _projector.SetProfile(p);
+                if (_hatSelector == null)
                     return;
-                this._hatSelector.SetProfile(p);
+                _hatSelector.SetProfile(p);
             }
         }
 
-        public void SetHatSelector(HatSelector s) => this._hatSelector = s;
+        public void SetHatSelector(HatSelector s) => _hatSelector = s;
 
-        public int controllerIndex => this._controllerIndex;
+        public int controllerIndex => _controllerIndex;
 
         public ProfileBox2(
           float xpos,
@@ -107,66 +107,66 @@ namespace DuckGame
           int pIndex)
           : base(xpos, ypos)
         {
-            this._hostCrown = new Sprite("hostCrown");
-            this._hostCrown.CenterOrigin();
-            this._lightBar = new SpriteMap("lightBar", 2, 1)
+            _hostCrown = new Sprite("hostCrown");
+            _hostCrown.CenterOrigin();
+            _lightBar = new SpriteMap("lightBar", 2, 1)
             {
                 frame = 0
             };
-            this._roomSwitch = new SpriteMap("roomSwitch", 7, 5)
+            _roomSwitch = new SpriteMap("roomSwitch", 7, 5)
             {
                 frame = 0
             };
-            this._controllerIndex = pIndex;
-            this._font = new BitmapFont("biosFont", 8);
-            this._fontSmall = new BitmapFont("smallBiosFont", 7, 6);
-            this.layer = Layer.Game;
-            this._collisionSize = new Vec2(150f, 87f);
+            _controllerIndex = pIndex;
+            _font = new BitmapFont("biosFont", 8);
+            _fontSmall = new BitmapFont("smallBiosFont", 7, 6);
+            layer = Layer.Game;
+            _collisionSize = new Vec2(150f, 87f);
             //this._plaque = new Sprite("plaque")
             //{
             //    center = new Vec2(16f, 16f)
             //};
-            this._inputProfile = pProfile;
-            this._playerProfile = pDefaultProfile;
-            this._teamSelection = this.ControllerNumber();
-            this._doorLeft = new Sprite("selectDoorLeftPC")
+            _inputProfile = pProfile;
+            _playerProfile = pDefaultProfile;
+            _teamSelection = ControllerNumber();
+            _doorLeft = new Sprite("selectDoorLeftPC")
             {
                 depth = (Depth)0.905f
             };
-            this._doorRight = new Sprite("selectDoorRight")
+            _doorRight = new Sprite("selectDoorRight")
             {
                 depth = (Depth)0.9f
             };
-            this._doorLeftBlank = new Sprite("selectDoorLeftBlank")
+            _doorLeftBlank = new Sprite("selectDoorLeftBlank")
             {
                 depth = (Depth)0.905f
             };
-            this._doorRightBlank = new Sprite("selectDoorRightBlank")
+            _doorRightBlank = new Sprite("selectDoorRightBlank")
             {
                 depth = (Depth)0.9f
             };
-            this._doorSpinner = new SpriteMap("doorSpinner", 25, 25);
-            this._doorSpinner.AddAnimation("spin", 0.2f, true, 0, 1, 2, 3, 4, 5, 6, 7);
-            this._doorSpinner.SetAnimation("spin");
-            this._doorIcon = new SpriteMap("doorSpinner", 25, 25);
-            this._onlineIcon = new Sprite("gameServerOnline");
+            _doorSpinner = new SpriteMap("doorSpinner", 25, 25);
+            _doorSpinner.AddAnimation("spin", 0.2f, true, 0, 1, 2, 3, 4, 5, 6, 7);
+            _doorSpinner.SetAnimation("spin");
+            _doorIcon = new SpriteMap("doorSpinner", 25, 25);
+            _onlineIcon = new Sprite("gameServerOnline");
             //this._wirelessIcon = new Sprite("gameServerWireless");
-            this._teamSelect = pTeamSelect;
-            this._defaultProfile = pDefaultProfile;
-            if (this.rightRoom)
+            _teamSelect = pTeamSelect;
+            _defaultProfile = pDefaultProfile;
+            if (rightRoom)
             {
-                this._roomSwitch = new SpriteMap("roomSwitchRight", 7, 5)
+                _roomSwitch = new SpriteMap("roomSwitchRight", 7, 5)
                 {
                     frame = 0
                 };
-                this._roomLeftBackground = new Sprite("rightRoomBackground");
-                this._roomLeftForeground = new Sprite("rightRoomForeground");
-                Level.Add(new InvisibleBlock((float)(this.x - 2.0 + 142.0 - 138.0), this.y + 69f, 138f, 16f, PhysicsMaterial.Metal));
-                Level.Add(new InvisibleBlock((float)(this.x - 2.0 + 142.0 - 138.0), this.y - 11f, 138f, 12f, PhysicsMaterial.Metal));
-                Level.Add(new InvisibleBlock((float)(this.x + 142.0 - 98.0 - 46.0), this.y + 56f, 50f, 16f, PhysicsMaterial.Metal));
-                Level.Add(new InvisibleBlock((float)(this.x + 142.0 + 2.0 - 8.0), this.y, 8f, 100f, PhysicsMaterial.Metal));
-                Level.Add(new InvisibleBlock((float)(this.x + 142.0 - 136.0 - 9.0), this.y, 8f, 25f, PhysicsMaterial.Metal));
-                ScaffoldingTileset scaffoldingTileset = new ScaffoldingTileset(this.x + 126f, this.y + 63f)
+                _roomLeftBackground = new Sprite("rightRoomBackground");
+                _roomLeftForeground = new Sprite("rightRoomForeground");
+                Level.Add(new InvisibleBlock((float)(x - 2.0 + 142.0 - 138.0), y + 69f, 138f, 16f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)(x - 2.0 + 142.0 - 138.0), y - 11f, 138f, 12f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)(x + 142.0 - 98.0 - 46.0), y + 56f, 50f, 16f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)(x + 142.0 + 2.0 - 8.0), y, 8f, 100f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)(x + 142.0 - 136.0 - 9.0), y, 8f, 25f, PhysicsMaterial.Metal));
+                ScaffoldingTileset scaffoldingTileset = new ScaffoldingTileset(x + 126f, y + 63f)
                 {
                     neverCheap = true
                 };
@@ -174,19 +174,19 @@ namespace DuckGame
                 scaffoldingTileset.depth = -0.5f;
                 scaffoldingTileset.PlaceBlock();
                 scaffoldingTileset.UpdateNubbers();
-                Level.Add(new Platform(this.x + 49f, this.y + 56f, 3f, 5f));
-                this._readySign = new Sprite("readyLeft");
+                Level.Add(new Platform(x + 49f, y + 56f, 3f, 5f));
+                _readySign = new Sprite("readyLeft");
             }
             else
             {
-                this._roomLeftBackground = new Sprite("leftRoomBackground");
-                this._roomLeftForeground = new Sprite("leftRoomForeground");
-                Level.Add(new InvisibleBlock(this.x + 2f, this.y + 69f, 138f, 16f, PhysicsMaterial.Metal));
-                Level.Add(new InvisibleBlock(this.x + 2f, this.y - 11f, 138f, 12f, PhysicsMaterial.Metal));
-                Level.Add(new InvisibleBlock(this.x + 92f, this.y + 56f, 50f, 16f, PhysicsMaterial.Metal));
-                Level.Add(new InvisibleBlock(this.x - 4f, this.y, 8f, 100f, PhysicsMaterial.Metal));
-                Level.Add(new InvisibleBlock(this.x + 135f, this.y, 8f, 25f, PhysicsMaterial.Metal));
-                ScaffoldingTileset scaffoldingTileset = new ScaffoldingTileset(this.x + 14f, this.y + 63f)
+                _roomLeftBackground = new Sprite("leftRoomBackground");
+                _roomLeftForeground = new Sprite("leftRoomForeground");
+                Level.Add(new InvisibleBlock(x + 2f, y + 69f, 138f, 16f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock(x + 2f, y - 11f, 138f, 12f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock(x + 92f, y + 56f, 50f, 16f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock(x - 4f, y, 8f, 100f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock(x + 135f, y, 8f, 25f, PhysicsMaterial.Metal));
+                ScaffoldingTileset scaffoldingTileset = new ScaffoldingTileset(x + 14f, y + 63f)
                 {
                     neverCheap = true
                 };
@@ -194,74 +194,74 @@ namespace DuckGame
                 scaffoldingTileset.depth = -0.5f;
                 scaffoldingTileset.PlaceBlock();
                 scaffoldingTileset.UpdateNubbers();
-                Level.Add(new Platform(this.x + 89f, this.y + 56f, 3f, 5f));
-                this._readySign = new Sprite("readyRight");
+                Level.Add(new Platform(x + 89f, y + 56f, 3f, 5f));
+                _readySign = new Sprite("readyRight");
             }
-            this._gunSpawnPoint = !this.rightRoom ? new Vec2(this.x + 113f, this.y + 50f) : new Vec2((float)(this.x + 142.0 - 118.0), this.y + 50f);
-            this._readySign.depth = (Depth)0.2f;
-            this._roomLeftBackground.depth = -0.85f;
-            this._roomLeftForeground.depth = (Depth)0.1f;
-            this._tutorialMessages = new SpriteMap("tutorialScreensPC", 53, 30);
-            this._aButton = new Sprite("aButton");
-            this._tutorialTV = new Sprite("tutorialTV");
-            this._consoleHighlight = new Sprite("consoleHighlight");
-            this._consoleFlash = new Sprite("consoleFlash");
-            this._consoleFlash.CenterOrigin();
-            this._selectConsole = new SpriteMap("selectConsole", 20, 19);
-            this._selectConsole.AddAnimation("idle", 1f, true, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-            this._selectConsole.SetAnimation("idle");
+            _gunSpawnPoint = !rightRoom ? new Vec2(x + 113f, y + 50f) : new Vec2((float)(x + 142.0 - 118.0), y + 50f);
+            _readySign.depth = (Depth)0.2f;
+            _roomLeftBackground.depth = -0.85f;
+            _roomLeftForeground.depth = (Depth)0.1f;
+            _tutorialMessages = new SpriteMap("tutorialScreensPC", 53, 30);
+            _aButton = new Sprite("aButton");
+            _tutorialTV = new Sprite("tutorialTV");
+            _consoleHighlight = new Sprite("consoleHighlight");
+            _consoleFlash = new Sprite("consoleFlash");
+            _consoleFlash.CenterOrigin();
+            _selectConsole = new SpriteMap("selectConsole", 20, 19);
+            _selectConsole.AddAnimation("idle", 1f, true, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            _selectConsole.SetAnimation("idle");
             if (Network.isServer)
             {
-                this._hatSelector = new HatSelector(this.x, this.y, this._playerProfile, this)
+                _hatSelector = new HatSelector(x, y, _playerProfile, this)
                 {
                     profileBoxNumber = (sbyte)pIndex
                 };
                 Level.Add(_hatSelector);
             }
-            if (this.rightRoom)
+            if (rightRoom)
             {
-                this._projector = new TeamProjector(this.x + 80f, this.y + 68f, this._playerProfile);
-                Level.Add(new ItemSpawner(this.x + 26f, this.y + 54f));
+                _projector = new TeamProjector(x + 80f, y + 68f, _playerProfile);
+                Level.Add(new ItemSpawner(x + 26f, y + 54f));
             }
             else
             {
-                this._projector = new TeamProjector(this.x + 59f, this.y + 68f, this._playerProfile);
-                Level.Add(new ItemSpawner(this.x + 112f, this.y + 54f));
+                _projector = new TeamProjector(x + 59f, y + 68f, _playerProfile);
+                Level.Add(new ItemSpawner(x + 112f, y + 54f));
             }
             Level.Add(_projector);
         }
 
         public override void Initialize()
         {
-            if (Network.isServer && this._playerProfile != null && this._playerProfile.connection != null && Network.isActive)
-                this.Spawn();
+            if (Network.isServer && _playerProfile != null && _playerProfile.connection != null && Network.isActive)
+                Spawn();
             base.Initialize();
         }
 
         public void ReturnControl()
         {
-            if (this._duck == null)
+            if (_duck == null)
                 return;
-            this._duck.immobilized = false;
+            _duck.immobilized = false;
         }
 
-        public bool rightRoom => this.ControllerNumber() == 1 || this.ControllerNumber() == 3 || this.ControllerNumber() == 4 || this.ControllerNumber() == 5 || this.ControllerNumber() == 7;
+        public bool rightRoom => ControllerNumber() == 1 || ControllerNumber() == 3 || ControllerNumber() == 4 || ControllerNumber() == 5 || ControllerNumber() == 7;
 
-        private int ControllerNumber() => this._controllerIndex;
+        private int ControllerNumber() => _controllerIndex;
 
         private void SelectTeam()
         {
-            Teams.all[this._teamSelection].Join(this._playerProfile);
-            if (this._playerProfile.inputProfile != null)
+            Teams.all[_teamSelection].Join(_playerProfile);
+            if (_playerProfile.inputProfile != null)
                 return;
-            this._playerProfile.inputProfile = this._inputProfile;
+            _playerProfile.inputProfile = _inputProfile;
         }
 
         public void ChangeProfile(Profile p)
         {
             if (p == null)
-                p = this._defaultProfile;
-            if (p != this._playerProfile)
+                p = _defaultProfile;
+            if (p != _playerProfile)
             {
                 if (!Network.isActive && !p.isNetworkProfile)
                 {
@@ -270,44 +270,44 @@ namespace DuckGame
                         if (Profile.defaultProfileMappings[index] == p)
                             Profile.defaultProfileMappings[index] = Profiles.universalProfileList.ElementAt<Profile>(index);
                     }
-                    Profile.defaultProfileMappings[this._controllerIndex] = p;
-                    if (this._teamSelect != null)
+                    Profile.defaultProfileMappings[_controllerIndex] = p;
+                    if (_teamSelect != null)
                     {
-                        foreach (ProfileBox2 profile in this._teamSelect._profiles)
+                        foreach (ProfileBox2 profile in _teamSelect._profiles)
                         {
                             if (profile != this && profile.profile == p)
                                 profile.SetProfile(Profile.defaultProfileMappings[profile._controllerIndex]);
                         }
                     }
                 }
-                Team team1 = this._playerProfile.team;
+                Team team1 = _playerProfile.team;
                 if (team1 != null)
                 {
-                    this._playerProfile.team.Leave(this._playerProfile);
+                    _playerProfile.team.Leave(_playerProfile);
                     team1.Join(p);
                 }
                 if (!Network.isActive)
-                    p.inputProfile = this._playerProfile.inputProfile;
+                    p.inputProfile = _playerProfile.inputProfile;
                 p.UpdatePersona();
                 if (!Network.isActive)
-                    this._playerProfile.inputProfile = null;
-                this._playerProfile = p;
-                if (this._duck != null)
+                    _playerProfile.inputProfile = null;
+                _playerProfile = p;
+                if (_duck != null)
                 {
-                    if (this._duck.profile.team != null)
+                    if (_duck.profile.team != null)
                     {
-                        Team team2 = this._duck.profile.team;
-                        team2.Leave(this._duck.profile);
-                        team2.Join(this._playerProfile);
+                        Team team2 = _duck.profile.team;
+                        team2.Leave(_duck.profile);
+                        team2.Join(_playerProfile);
                     }
-                    this._duck.profile = this._playerProfile;
-                    if (Network.isActive && DuckNetwork.IndexOf(this._playerProfile) >= 0)
-                        this._duck.netProfileIndex = (byte)DuckNetwork.IndexOf(this._playerProfile);
+                    _duck.profile = _playerProfile;
+                    if (Network.isActive && DuckNetwork.IndexOf(_playerProfile) >= 0)
+                        _duck.netProfileIndex = (byte)DuckNetwork.IndexOf(_playerProfile);
                 }
-                this._projector.SetProfile(p);
-                this._hatSelector.SetProfile(p);
+                _projector.SetProfile(p);
+                _hatSelector.SetProfile(p);
             }
-            this.OpenCorners();
+            OpenCorners();
         }
 
         public void OpenCorners()
@@ -316,7 +316,7 @@ namespace DuckGame
                 return;
             HUD.CloseAllCorners();
             HUD.AddCornerCounter(HUDCorner.BottomRight, "@TICKET@ ", new FieldBinding(_playerProfile, "ticketCount"), animateCount: true);
-            List<ChallengeSaveData> allSaveData = Challenges.GetAllSaveData(this._playerProfile);
+            List<ChallengeSaveData> allSaveData = Challenges.GetAllSaveData(_playerProfile);
             Dictionary<TrophyType, int> dictionary = new Dictionary<TrophyType, int>()
       {
         {
@@ -387,30 +387,30 @@ namespace DuckGame
 
         public Duck duck
         {
-            get => this._duck;
-            set => this._duck = value;
+            get => _duck;
+            set => _duck = value;
         }
 
         public VirtualShotgun gun
         {
-            get => this._gun;
-            set => this._gun = value;
+            get => _gun;
+            set => _gun = value;
         }
 
         public RoomDefenceTurret turret
         {
-            get => this._turret;
-            set => this._turret = value;
+            get => _turret;
+            set => _turret = value;
         }
 
         public void CloseDoor()
         {
-            if (this._duck != null)
-                this._duck.immobilized = true;
-            this._playerActive = false;
+            if (_duck != null)
+                _duck.immobilized = true;
+            _playerActive = false;
             if (_doorX != 0.0)
                 return;
-            this.OnDoorClosed();
+            OnDoorClosed();
         }
 
         public void OnDoorClosed()
@@ -418,49 +418,49 @@ namespace DuckGame
             //this._doorClosing = true;
             if (Network.isServer)
             {
-                if (this._playerProfile.team != null)
-                    this._playerProfile.team.Leave(this._playerProfile);
-                this._playerProfile = Profiles.defaultProfiles[this.ControllerNumber()];
-                this._teamSelection = this.ControllerNumber();
-                this.SelectTeam();
-                this._playerProfile.team.Leave(this._playerProfile);
-                if (this._duck != null)
+                if (_playerProfile.team != null)
+                    _playerProfile.team.Leave(_playerProfile);
+                _playerProfile = Profiles.defaultProfiles[ControllerNumber()];
+                _teamSelection = ControllerNumber();
+                SelectTeam();
+                _playerProfile.team.Leave(_playerProfile);
+                if (_duck != null)
                 {
-                    this._duck.profile = this._playerProfile;
-                    if (this._duck.GetEquipment(typeof(Hat)) is Hat equipment)
+                    _duck.profile = _playerProfile;
+                    if (_duck.GetEquipment(typeof(Hat)) is Hat equipment)
                     {
-                        this._duck.Unequip(equipment);
+                        _duck.Unequip(equipment);
                         Level.Remove(equipment);
                     }
                 }
-                foreach (Thing thing in Level.CheckRectAll<RoomDefenceTurret>(this.topLeft, this.bottomRight))
+                foreach (Thing thing in Level.CheckRectAll<RoomDefenceTurret>(topLeft, bottomRight))
                     Level.Remove(thing);
-                this._turret = null;
+                _turret = null;
             }
-            this.Despawn();
+            Despawn();
             //this._doorClosing = false;
         }
 
         public void Spawn()
         {
-            this.profile.UpdatePersona();
-            if (this._duck != null)
+            profile.UpdatePersona();
+            if (_duck != null)
             {
-                this._teamSelection = this.ControllerNumber();
-                this.SelectTeam();
-                this.ReturnControl();
+                _teamSelection = ControllerNumber();
+                SelectTeam();
+                ReturnControl();
             }
             else
             {
-                this._gun = new VirtualShotgun(this._gunSpawnPoint.x, this._gunSpawnPoint.y)
+                _gun = new VirtualShotgun(_gunSpawnPoint.x, _gunSpawnPoint.y)
                 {
-                    roomIndex = (byte)this._controllerIndex
+                    roomIndex = (byte)_controllerIndex
                 };
                 Level.Add(_gun);
-                if (this.rightRoom)
+                if (rightRoom)
                 {
-                    this._duck = new Duck((float)(this.x + 142.0 - 48.0), this.y + 40f, this._playerProfile);
-                    this._window = new Window((float)(this.x + 142.0 - 141.0), this.y + 49f)
+                    _duck = new Duck((float)(x + 142.0 - 48.0), y + 40f, _playerProfile);
+                    _window = new Window((float)(x + 142.0 - 141.0), y + 49f)
                     {
                         noframe = true
                     };
@@ -468,20 +468,20 @@ namespace DuckGame
                 }
                 else
                 {
-                    this._duck = new Duck(this.x + 48f, this.y + 40f, this._playerProfile);
-                    this._window = new Window(this.x + 139f, this.y + 49f)
+                    _duck = new Duck(x + 48f, y + 40f, _playerProfile);
+                    _window = new Window(x + 139f, y + 49f)
                     {
                         noframe = true
                     };
                     Level.Add(_window);
                 }
-                foreach (Thing thing in Level.CheckRectAll<RoomDefenceTurret>(this.topLeft, this.bottomRight))
+                foreach (Thing thing in Level.CheckRectAll<RoomDefenceTurret>(topLeft, bottomRight))
                     Level.Remove(thing);
-                this._turret = null;
+                _turret = null;
                 Level.Add(_duck);
-                if (this._duck == null || !this._duck.HasEquipment(typeof(TeamHat)))
+                if (_duck == null || !_duck.HasEquipment(typeof(TeamHat)))
                     return;
-                this._hatSelector.hat = this._duck.GetEquipment(typeof(TeamHat)) as TeamHat;
+                _hatSelector.hat = _duck.GetEquipment(typeof(TeamHat)) as TeamHat;
             }
         }
 
@@ -489,36 +489,36 @@ namespace DuckGame
         {
             if (!Network.isServer)
                 return;
-            if (this._duck != null)
+            if (_duck != null)
             {
                 Thing.Fondle(_duck, DuckNetwork.localConnection);
                 Level.Remove(_duck);
-                if (!Network.isActive && this._duck.ragdoll != null)
+                if (!Network.isActive && _duck.ragdoll != null)
                     Level.Remove(_duck.ragdoll);
             }
-            if (this._gun != null)
+            if (_gun != null)
             {
                 Thing.Fondle(_gun, DuckNetwork.localConnection);
                 Level.Remove(_gun);
             }
-            foreach (Window t in Level.CheckRectAll<Window>(this.topLeft, this.bottomRight))
+            foreach (Window t in Level.CheckRectAll<Window>(topLeft, bottomRight))
             {
                 t.lobbyRemoving = true;
                 Thing.Fondle(t, DuckNetwork.localConnection);
                 Level.Remove(t);
             }
-            this._window = null;
-            this._duck = null;
-            this._gun = null;
+            _window = null;
+            _duck = null;
+            _gun = null;
         }
 
         public void OpenDoor()
         {
-            this._playerActive = true;
-            this.SelectTeam();
-            if (this._duck == null)
+            _playerActive = true;
+            SelectTeam();
+            if (_duck == null)
                 return;
-            this._duck.immobilized = false;
+            _duck.immobilized = false;
         }
 
         public void PrepareDoor()
@@ -526,34 +526,34 @@ namespace DuckGame
             DevConsole.Log(DCSection.DuckNet, "|DGGREEN|Preparing Door..");
             if (!Network.isServer)
                 return;
-            if (this._duck == null)
+            if (_duck == null)
             {
                 DevConsole.Log(DCSection.DuckNet, "|DGGREEN|Duckspawn!");
-                this.Spawn();
+                Spawn();
             }
             else
                 DevConsole.Log(DCSection.DuckNet, "|DGRED|Duck was not NULL!");
         }
 
-        public void OpenDoor(Duck d) => this._duck = d;
+        public void OpenDoor(Duck d) => _duck = d;
 
         public override void Update()
         {
-            if (Network.isActive && Network.isServer && this._duck != null && this.profile.connection == null)
-                this.Despawn();
-            if (Network.isServer && Network.isActive && this._hatSelector != null && this._hatSelector.isServerForObject)
-                this._hatSelector.profileBoxNumber = (sbyte)this._controllerIndex;
-            if (this.hostFrames > 0)
+            if (Network.isActive && Network.isServer && _duck != null && profile.connection == null)
+                Despawn();
+            if (Network.isServer && Network.isActive && _hatSelector != null && _hatSelector.isServerForObject)
+                _hatSelector.profileBoxNumber = (sbyte)_controllerIndex;
+            if (hostFrames > 0)
             {
-                --this.hostFrames;
-                if (this.hostFrames == 0)
+                --hostFrames;
+                if (hostFrames == 0)
                 {
                     TeamSelect2.FillMatchmakingProfiles();
                     if (NetworkDebugger.CurrentServerIndex() < 0)
                     {
                         Network.lanMode = true;
                         DuckNetwork.Host(4, NetworkLobbyType.LAN);
-                        (this.level as TeamSelect2).NetworkDebuggerPrepare();
+                        (level as TeamSelect2).NetworkDebuggerPrepare();
                     }
                     else
                     {
@@ -565,153 +565,153 @@ namespace DuckGame
             }
             if (Network.isActive)
             {
-                if (!Network.isServer && this.profile.networkStatus != DuckNetStatus.Disconnected)
+                if (!Network.isServer && profile.networkStatus != DuckNetStatus.Disconnected)
                 {
-                    this._duck = null;
+                    _duck = null;
                     foreach (Duck duck in Level.current.things[typeof(Duck)])
                     {
-                        if (duck.netProfileIndex == this._controllerIndex)
-                            this._duck = duck;
+                        if (duck.netProfileIndex == _controllerIndex)
+                            _duck = duck;
                     }
                 }
-                this._playerActive = this.profile.networkStatus == DuckNetStatus.Connected;
+                _playerActive = profile.networkStatus == DuckNetStatus.Connected;
             }
-            if (this._duck != null && this._duck.inputProfile != null)
-                this._inputProfile = this._duck.inputProfile;
-            if (this._hatSelector == null)
+            if (_duck != null && _duck.inputProfile != null)
+                _inputProfile = _duck.inputProfile;
+            if (_hatSelector == null)
                 return;
-            if (this._hatSelector.open && this.profile.team == null)
-                this._hatSelector.Reset();
+            if (_hatSelector.open && profile.team == null)
+                _hatSelector.Reset();
             foreach (VirtualShotgun virtualShotgun in Level.current.things[typeof(VirtualShotgun)])
             {
-                if (virtualShotgun.roomIndex == this._controllerIndex && virtualShotgun.isServerForObject && virtualShotgun.alpha <= 0.0)
+                if (virtualShotgun.roomIndex == _controllerIndex && virtualShotgun.isServerForObject && virtualShotgun.alpha <= 0.0)
                 {
-                    virtualShotgun.position = this._gunSpawnPoint;
+                    virtualShotgun.position = _gunSpawnPoint;
                     virtualShotgun.alpha = 1f;
                     virtualShotgun.vSpeed = -1f;
                 }
             }
             bool flag1 = false;
-            if (this._teamSelect != null && (!Network.isActive || this._hatSelector.connection == DuckNetwork.localConnection) && !Network.isActive && this._inputProfile.JoinGamePressed() && !this._hatSelector.open && (!NetworkDebugger.enabled || NetworkDebugger._instances[NetworkDebugger.currentIndex].hover && (Input.Down("SHOOT") || Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift)) || NetworkDebugger.letJoin))
+            if (_teamSelect != null && (!Network.isActive || _hatSelector.connection == DuckNetwork.localConnection) && !Network.isActive && _inputProfile.JoinGamePressed() && !_hatSelector.open && (!NetworkDebugger.enabled || NetworkDebugger._instances[NetworkDebugger.currentIndex].hover && (Input.Down("SHOOT") || Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift)) || NetworkDebugger.letJoin))
             {
-                if (!this._playerActive)
+                if (!_playerActive)
                 {
-                    this.OpenDoor();
+                    OpenDoor();
                     flag1 = true;
                 }
                 if (NetworkDebugger.letJoin && !Input.Down("SHOOT") && !Keyboard.Down(Keys.LeftShift) && !Keyboard.Down(Keys.RightShift))
                 {
                     NetworkDebugger.letJoin = false;
-                    this.hostFrames = 2;
+                    hostFrames = 2;
                 }
             }
-            if (this._teamSelect != null && !this.ready && !Network.isActive && this._inputProfile.Pressed("START") && !flag1)
-                this._teamSelect.OpenPauseMenu(this);
-            if (!Network.isActive && this._duck != null && !this._duck.immobilized)
-                this._playerActive = true;
-            if (Network.isServer && this._duck == null && this._playerProfile.team != null && (!Network.isActive || this._playerProfile.connection != null))
+            if (_teamSelect != null && !ready && !Network.isActive && _inputProfile.Pressed("START") && !flag1)
+                _teamSelect.OpenPauseMenu(this);
+            if (!Network.isActive && _duck != null && !_duck.immobilized)
+                _playerActive = true;
+            if (Network.isServer && _duck == null && _playerProfile.team != null && (!Network.isActive || _playerProfile.connection != null))
             {
                 int num = 0;
                 foreach (Team team in Teams.all)
                 {
-                    if (!(team.name == this._playerProfile.team.name))
+                    if (!(team.name == _playerProfile.team.name))
                         ++num;
                     else
                         break;
                 }
-                this._teamSelection = Teams.all.IndexOf(this._playerProfile.team);
-                this._playerActive = true;
-                this.SelectTeam();
-                this.Spawn();
+                _teamSelection = Teams.all.IndexOf(_playerProfile.team);
+                _playerActive = true;
+                SelectTeam();
+                Spawn();
             }
-            this._ready = this.doorIsOpen && this._duck != null && (this._duck.dead || this._duck.beammode || _duck.cameraPosition.y < -100.0 || _duck.cameraPosition.y > 400.0);
-            if (this._duck != null)
+            _ready = doorIsOpen && _duck != null && (_duck.dead || _duck.beammode || _duck.cameraPosition.y < -100.0 || _duck.cameraPosition.y > 400.0);
+            if (_duck != null)
             {
-                this._currentMessage = 0;
-                Vec2 vec2 = this._duck.position - this._consolePos;
+                _currentMessage = 0;
+                Vec2 vec2 = _duck.position - _consolePos;
                 bool flag2 = vec2.length < 20.0;
-                this._consoleFade = Lerp.Float(this._consoleFade, flag2 ? 1f : 0f, 0.1f);
-                if (this._teamSelect != null & flag2)
+                _consoleFade = Lerp.Float(_consoleFade, flag2 ? 1f : 0f, 0.1f);
+                if (_teamSelect != null & flag2)
                 {
-                    this._currentMessage = 4;
-                    this._duck.canFire = false;
-                    if (this._duck.isServerForObject && this.doorIsOpen && this._inputProfile.Pressed("SHOOT") && !this._hatSelector.open && this._hatSelector.fade < 0.01f)
+                    _currentMessage = 4;
+                    _duck.canFire = false;
+                    if (_duck.isServerForObject && doorIsOpen && _inputProfile.Pressed("SHOOT") && !_hatSelector.open && _hatSelector.fade < 0.01f)
                     {
-                        this._duck.immobilized = true;
-                        this._hatSelector.Open(this._playerProfile);
-                        this._duck.Fondle(_hatSelector);
+                        _duck.immobilized = true;
+                        _hatSelector.Open(_playerProfile);
+                        _duck.Fondle(_hatSelector);
                         SFX.Play("consoleOpen", 0.5f);
                     }
                 }
                 else
-                    this._duck.canFire = true;
-                if (this._hatSelector.hat != null && this._hatSelector.hat.alpha < 0.01f && !this._duck.HasEquipment(_hatSelector.hat))
+                    _duck.canFire = true;
+                if (_hatSelector.hat != null && _hatSelector.hat.alpha < 0.01f && !_duck.HasEquipment(_hatSelector.hat))
                 {
-                    this._hatSelector.hat.alpha = 1f;
-                    this._duck.Equip(_hatSelector.hat, false);
+                    _hatSelector.hat.alpha = 1f;
+                    _duck.Equip(_hatSelector.hat, false);
                 }
-                if (this.ready)
+                if (ready)
                 {
-                    this._currentMessage = 3;
-                    this._readySign.color = Lerp.Color(this._readySign.color, Color.LimeGreen, 0.1f);
-                    if (this._hatSelector.hat != null && !this._duck.HasEquipment(_hatSelector.hat))
+                    _currentMessage = 3;
+                    _readySign.color = Lerp.Color(_readySign.color, Color.LimeGreen, 0.1f);
+                    if (_hatSelector.hat != null && !_duck.HasEquipment(_hatSelector.hat))
                     {
-                        this._hatSelector.hat.alpha = 1f;
-                        this._duck.Equip(_hatSelector.hat, false);
+                        _hatSelector.hat.alpha = 1f;
+                        _duck.Equip(_hatSelector.hat, false);
                     }
                 }
                 else
                 {
-                    this._readySign.color = Lerp.Color(this._readySign.color, Color.Red, 0.1f);
-                    if (this._gun != null)
+                    _readySign.color = Lerp.Color(_readySign.color, Color.Red, 0.1f);
+                    if (_gun != null)
                     {
-                        vec2 = this._gun.position - this._duck.position;
+                        vec2 = _gun.position - _duck.position;
                         if (vec2.length < 30.0)
                         {
-                            if (this._duck.holdObject != null)
+                            if (_duck.holdObject != null)
                             {
-                                this._currentMessage = 2;
+                                _currentMessage = 2;
                                 if (flag2)
-                                    this._currentMessage = 5;
+                                    _currentMessage = 5;
                             }
                             else
-                                this._currentMessage = 1;
+                                _currentMessage = 1;
                         }
                     }
                 }
             }
-            this._prevDoorX = this._doorX;
-            bool flag3 = this._playerActive && (this._playerProfile.team != null || Network.isActive && Network.connections.Count == 0);
-            if (this._playerProfile.connection != null && _playerProfile.connection.levelIndex != DuckNetwork.levelIndex)
+            _prevDoorX = _doorX;
+            bool flag3 = _playerActive && (_playerProfile.team != null || Network.isActive && Network.connections.Count == 0);
+            if (_playerProfile.connection != null && _playerProfile.connection.levelIndex != DuckNetwork.levelIndex)
                 flag3 = false;
-            if (flag3 && this._hatSelector != null && this._hatSelector.isServerForObject)
+            if (flag3 && _hatSelector != null && _hatSelector.isServerForObject)
             {
-                if (this.profile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("PERIMETER DEFENCE").index) > 0)
+                if (profile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("PERIMETER DEFENCE").index) > 0)
                 {
-                    if (this._turret == null)
+                    if (_turret == null)
                     {
-                        foreach (FurniturePosition furniturePosition in this.profile.furniturePositions)
+                        foreach (FurniturePosition furniturePosition in profile.furniturePositions)
                         {
                             if (RoomEditor.GetFurniture(furniturePosition.id).name == "PERIMETER DEFENCE")
                             {
                                 Vec2 vec2 = new Vec2(furniturePosition.x - 2, furniturePosition.y + 2);
-                                if (this.rightRoom)
+                                if (rightRoom)
                                 {
                                     vec2.x = RoomEditor.roomSize - vec2.x;
                                     vec2.x += 2f;
                                 }
-                                Vec2 pPosition = vec2 + this.position;
-                                if (pPosition.x > this.x)
+                                Vec2 pPosition = vec2 + position;
+                                if (pPosition.x > x)
                                 {
-                                    if (pPosition.y > this.y)
+                                    if (pPosition.y > y)
                                     {
-                                        if (pPosition.x < this.x + RoomEditor.roomSize)
+                                        if (pPosition.x < x + RoomEditor.roomSize)
                                         {
-                                            if (pPosition.y < this.y + RoomEditor.roomSize)
+                                            if (pPosition.y < y + RoomEditor.roomSize)
                                             {
-                                                this._turret = new RoomDefenceTurret(pPosition, this.duck)
+                                                _turret = new RoomDefenceTurret(pPosition, duck)
                                                 {
-                                                    offDir = this.rightRoom ? (sbyte)-1 : (sbyte)1
+                                                    offDir = rightRoom ? (sbyte)-1 : (sbyte)1
                                                 };
                                                 Level.Add(_turret);
                                                 break;
@@ -727,64 +727,64 @@ namespace DuckGame
                         }
                     }
                 }
-                else if (this._turret != null)
+                else if (_turret != null)
                 {
                     Level.Remove(_turret);
-                    this._turret = null;
+                    _turret = null;
                 }
             }
-            if (this._turret != null)
-                this._turret._friendly = this.duck;
-            this._doorX = Maths.LerpTowards(this._doorX, flag3 ? 83f : 0f, 4f);
-            if (Network.isActive && (this.profile.networkStatus == DuckNetStatus.Disconnected && this._prevStatus != DuckNetStatus.Disconnected || this.profile.slotType == SlotType.Spectator) || _doorX == 0.0 && _prevDoorX != 0.0)
-                this.OnDoorClosed();
-            if (this._playerActive && this.controllerIndex > 3 && !(Level.current.camera is FollowCam))
+            if (_turret != null)
+                _turret._friendly = duck;
+            _doorX = Maths.LerpTowards(_doorX, flag3 ? 83f : 0f, 4f);
+            if (Network.isActive && (profile.networkStatus == DuckNetStatus.Disconnected && _prevStatus != DuckNetStatus.Disconnected || profile.slotType == SlotType.Spectator) || _doorX == 0.0 && _prevDoorX != 0.0)
+                OnDoorClosed();
+            if (_playerActive && controllerIndex > 3 && !(Level.current.camera is FollowCam))
                 TeamSelect2.growCamera = true;
-            if (this._currentMessage != this._tutorialMessages.frame)
+            if (_currentMessage != _tutorialMessages.frame)
             {
-                this._screenFade = Maths.LerpTowards(this._screenFade, 0f, 0.15f);
+                _screenFade = Maths.LerpTowards(_screenFade, 0f, 0.15f);
                 if (_screenFade < 0.01f)
-                    this._tutorialMessages.frame = this._currentMessage;
+                    _tutorialMessages.frame = _currentMessage;
             }
             else
-                this._screenFade = Maths.LerpTowards(this._screenFade, 1f, 0.15f);
-            this._prevStatus = this.profile.networkStatus;
+                _screenFade = Maths.LerpTowards(_screenFade, 1f, 0.15f);
+            _prevStatus = profile.networkStatus;
         }
 
         public override void Draw()
         {
-            if (this._hatSelector != null && this._hatSelector.fadeVal > 0.9f && this._hatSelector._roomEditor._mode != REMode.Place)
+            if (_hatSelector != null && _hatSelector.fadeVal > 0.9f && _hatSelector._roomEditor._mode != REMode.Place)
             {
-                this._projector.visible = false;
-                if (this._duck == null)
+                _projector.visible = false;
+                if (_duck == null)
                     return;
-                this._duck.mindControl = new InputProfile();
+                _duck.mindControl = new InputProfile();
             }
             else
             {
-                if (this._duck != null)
-                    this._duck.mindControl = null;
-                this._projector.visible = true;
+                if (_duck != null)
+                    _duck.mindControl = null;
+                _projector.visible = true;
                 if (_tooManyPulse > 0.01f)
-                    Graphics.DrawStringOutline("ROOM FULL", this.position + new Vec2(0f, 36f), Color.Red * this._tooManyPulse, Color.Black * this._tooManyPulse, (Depth)0.95f, scale: 2f);
+                    Graphics.DrawStringOutline("ROOM FULL", position + new Vec2(0f, 36f), Color.Red * _tooManyPulse, Color.Black * _tooManyPulse, (Depth)0.95f, scale: 2f);
                 if (_noMorePulse > 0.01f)
-                    Graphics.DrawStringOutline(" NO MORE ", this.position + new Vec2(0f, 36f), Color.Red * this._noMorePulse, Color.Black * this._noMorePulse, (Depth)0.95f, scale: 2f);
-                this._tooManyPulse = Lerp.Float(this._tooManyPulse, 0f, 0.05f);
-                this._noMorePulse = Lerp.Float(this._noMorePulse, 0f, 0.05f);
-                bool flag1 = this.profile.networkStatus != 0;
+                    Graphics.DrawStringOutline(" NO MORE ", position + new Vec2(0f, 36f), Color.Red * _noMorePulse, Color.Black * _noMorePulse, (Depth)0.95f, scale: 2f);
+                _tooManyPulse = Lerp.Float(_tooManyPulse, 0f, 0.05f);
+                _noMorePulse = Lerp.Float(_noMorePulse, 0f, 0.05f);
+                bool flag1 = profile.networkStatus != 0;
                 if (_doorX < 82f)
                 {
-                    Sprite sprite1 = this._doorLeft;
-                    Sprite sprite2 = this._doorRight;
-                    bool flag2 = this.profile.slotType == SlotType.Closed;
-                    bool flag3 = this.profile.slotType == SlotType.Friend;
-                    bool flag4 = this.profile.slotType == SlotType.Invite;
-                    bool flag5 = this.profile.slotType == SlotType.Reserved;
-                    bool flag6 = this.profile.slotType == SlotType.Local;
+                    Sprite sprite1 = _doorLeft;
+                    Sprite sprite2 = _doorRight;
+                    bool flag2 = profile.slotType == SlotType.Closed;
+                    bool flag3 = profile.slotType == SlotType.Friend;
+                    bool flag4 = profile.slotType == SlotType.Invite;
+                    bool flag5 = profile.slotType == SlotType.Reserved;
+                    bool flag6 = profile.slotType == SlotType.Local;
                     if (Network.isActive)
                     {
-                        sprite1 = this._doorLeftBlank;
-                        sprite2 = this._doorRightBlank;
+                        sprite1 = _doorLeftBlank;
+                        sprite2 = _doorRightBlank;
                     }
                     else
                     {
@@ -794,189 +794,189 @@ namespace DuckGame
                         flag5 = false;
                         flag1 = false;
                     }
-                    Sprite doorLeftBlank = this._doorLeftBlank;
-                    Sprite doorRightBlank = this._doorRightBlank;
-                    if (this.rightRoom)
+                    Sprite doorLeftBlank = _doorLeftBlank;
+                    Sprite doorRightBlank = _doorRightBlank;
+                    if (rightRoom)
                     {
-                        Rectangle sourceRectangle1 = new Rectangle((int)this._doorX, 0f, doorLeftBlank.width, _doorLeft.height);
-                        Graphics.Draw(doorLeftBlank, this.x - 1f, this.y, sourceRectangle1);
-                        Rectangle sourceRectangle2 = new Rectangle((int)-this._doorX, 0f, _doorRight.width, _doorRight.height);
-                        Graphics.Draw(doorRightBlank, (float)(this.x - 1f + 68f), this.y, sourceRectangle2);
+                        Rectangle sourceRectangle1 = new Rectangle((int)_doorX, 0f, doorLeftBlank.width, _doorLeft.height);
+                        Graphics.Draw(doorLeftBlank, x - 1f, y, sourceRectangle1);
+                        Rectangle sourceRectangle2 = new Rectangle((int)-_doorX, 0f, _doorRight.width, _doorRight.height);
+                        Graphics.Draw(doorRightBlank, (float)(x - 1f + 68f), y, sourceRectangle2);
                         if (_doorX == 0.0)
                         {
-                            this._fontSmall.depth = doorLeftBlank.depth + 10;
+                            _fontSmall.depth = doorLeftBlank.depth + 10;
                             if (!Network.isActive || flag6 && Network.isServer)
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 10;
-                                Graphics.Draw(_doorIcon, (int)this.x + 57, this.y + 31f);
-                                this._fontSmall.DrawOutline("PRESS", new Vec2(this.x + 19f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                this._fontSmall.DrawOutline("START", new Vec2(this.x + 85f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 10;
+                                Graphics.Draw(_doorIcon, (int)x + 57, y + 31f);
+                                _fontSmall.DrawOutline("PRESS", new Vec2(x + 19f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                _fontSmall.DrawOutline("START", new Vec2(x + 85f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
                             else if (flag2)
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 8;
-                                Graphics.Draw(_doorIcon, (int)this.x + 57, this.y + 31f);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 8;
+                                Graphics.Draw(_doorIcon, (int)x + 57, y + 31f);
                             }
                             else if (flag1)
                             {
-                                this._doorSpinner.depth = doorLeftBlank.depth + 10;
-                                Graphics.Draw(_doorSpinner, (int)this.x + 57, this.y + 31f);
+                                _doorSpinner.depth = doorLeftBlank.depth + 10;
+                                Graphics.Draw(_doorSpinner, (int)x + 57, y + 31f);
                             }
                             else if (flag3)
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 11;
-                                Graphics.Draw(_doorIcon, (int)this.x + 57, this.y + 31f);
-                                this._fontSmall.DrawOutline("PALS", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                this._fontSmall.DrawOutline("ONLY", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 11;
+                                Graphics.Draw(_doorIcon, (int)x + 57, y + 31f);
+                                _fontSmall.DrawOutline("PALS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
                             else if (flag4)
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 12;
-                                Graphics.Draw(_doorIcon, (int)this.x + 57, this.y + 31f);
-                                this._fontSmall.DrawOutline("VIPS", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                this._fontSmall.DrawOutline("ONLY", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 12;
+                                Graphics.Draw(_doorIcon, (int)x + 57, y + 31f);
+                                _fontSmall.DrawOutline("VIPS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
-                            else if (flag5 && this.profile.reservedUser != null)
+                            else if (flag5 && profile.reservedUser != null)
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 12;
-                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 12;
+                                Graphics.Draw(_doorIcon, (int)this.x + 58, y + 31f);
                                 float num = 120f;
                                 float x = this.x + 10f;
-                                Graphics.DrawRect(new Vec2(x, this.y + 35f), new Vec2(x + num, this.y + 52f), Color.Black, doorLeftBlank.depth + 20);
+                                Graphics.DrawRect(new Vec2(x, y + 35f), new Vec2(x + num, y + 52f), Color.Black, doorLeftBlank.depth + 20);
                                 string text1 = "WAITING FOR";
-                                this._fontSmall.Draw(text1, new Vec2((x + num / 2f - this._fontSmall.GetWidth(text1) / 2f), this.y + 36f), Color.White, doorLeftBlank.depth + 30);
-                                string text2 = this.profile.nameUI;
+                                _fontSmall.Draw(text1, new Vec2((x + num / 2f - _fontSmall.GetWidth(text1) / 2f), y + 36f), Color.White, doorLeftBlank.depth + 30);
+                                string text2 = profile.nameUI;
                                 if (text2.Length > 16)
                                     text2 = text2.Substring(0, 16);
-                                this._fontSmall.Draw(text2, new Vec2((x + num / 2f - this._fontSmall.GetWidth(text2) / 2f), this.y + 44f), Color.White, doorLeftBlank.depth + 30);
+                                _fontSmall.Draw(text2, new Vec2((x + num / 2f - _fontSmall.GetWidth(text2) / 2f), y + 44f), Color.White, doorLeftBlank.depth + 30);
                             }
                             else if (flag6)
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 13;
-                                Graphics.Draw(_doorIcon, (int)this.x + 57, this.y + 31f);
-                                this._fontSmall.DrawOutline("HOST", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                this._fontSmall.DrawOutline("SLOT", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 13;
+                                Graphics.Draw(_doorIcon, (int)x + 57, y + 31f);
+                                _fontSmall.DrawOutline("HOST", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
                             else
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 9;
-                                Graphics.Draw(_doorIcon, (int)this.x + 57, this.y + 31f);
-                                this._fontSmall.DrawOutline("OPEN", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                this._fontSmall.DrawOutline("SLOT", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 9;
+                                Graphics.Draw(_doorIcon, (int)x + 57, y + 31f);
+                                _fontSmall.DrawOutline("OPEN", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
                         }
                     }
                     else
                     {
-                        Rectangle sourceRectangle3 = new Rectangle((int)this._doorX, 0f, _doorLeft.width, _doorLeft.height);
-                        Graphics.Draw(doorLeftBlank, this.x, this.y, sourceRectangle3);
-                        Rectangle sourceRectangle4 = new Rectangle((int)-this._doorX, 0f, _doorRight.width, _doorRight.height);
-                        Graphics.Draw(doorRightBlank, this.x + 68f, this.y, sourceRectangle4);
+                        Rectangle sourceRectangle3 = new Rectangle((int)_doorX, 0f, _doorLeft.width, _doorLeft.height);
+                        Graphics.Draw(doorLeftBlank, x, y, sourceRectangle3);
+                        Rectangle sourceRectangle4 = new Rectangle((int)-_doorX, 0f, _doorRight.width, _doorRight.height);
+                        Graphics.Draw(doorRightBlank, x + 68f, y, sourceRectangle4);
                         if (_doorX == 0.0)
                         {
-                            this._fontSmall.depth = doorLeftBlank.depth + 10;
+                            _fontSmall.depth = doorLeftBlank.depth + 10;
                             if (!Network.isActive || flag6 && Network.isServer)
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 10;
-                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
-                                this._fontSmall.DrawOutline("PRESS", new Vec2(this.x + 20f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                this._fontSmall.DrawOutline("START", new Vec2(this.x + 86f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 10;
+                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                _fontSmall.DrawOutline("PRESS", new Vec2(x + 20f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                _fontSmall.DrawOutline("START", new Vec2(x + 86f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
                             else if (flag2)
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 8;
-                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 8;
+                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
                             }
                             else if (flag1)
                             {
-                                this._doorSpinner.depth = doorLeftBlank.depth + 10;
-                                Graphics.Draw(_doorSpinner, (int)this.x + 58, this.y + 31f);
+                                _doorSpinner.depth = doorLeftBlank.depth + 10;
+                                Graphics.Draw(_doorSpinner, (int)x + 58, y + 31f);
                             }
                             else if (flag3)
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 11;
-                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
-                                this._fontSmall.DrawOutline("PALS", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                this._fontSmall.DrawOutline("ONLY", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 11;
+                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                _fontSmall.DrawOutline("PALS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
                             else if (flag4)
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 12;
-                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
-                                this._fontSmall.DrawOutline("VIPS", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                this._fontSmall.DrawOutline("ONLY", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 12;
+                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                _fontSmall.DrawOutline("VIPS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
-                            else if (flag5 && this.profile.reservedUser != null)
+                            else if (flag5 && profile.reservedUser != null)
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 12;
-                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 12;
+                                Graphics.Draw(_doorIcon, (int)this.x + 58, y + 31f);
                                 float num = 120f;
                                 float x = this.x + 10f;
-                                Graphics.DrawRect(new Vec2(x, this.y + 35f), new Vec2(x + num, this.y + 52f), Color.Black, doorLeftBlank.depth + 20);
+                                Graphics.DrawRect(new Vec2(x, y + 35f), new Vec2(x + num, y + 52f), Color.Black, doorLeftBlank.depth + 20);
                                 string text3 = "WAITING FOR";
-                                this._fontSmall.Draw(text3, new Vec2((float)(x + num / 2.0 - this._fontSmall.GetWidth(text3) / 2.0), this.y + 36f), Color.White, doorLeftBlank.depth + 30);
-                                string text4 = this.profile.nameUI;
+                                _fontSmall.Draw(text3, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text3) / 2.0), y + 36f), Color.White, doorLeftBlank.depth + 30);
+                                string text4 = profile.nameUI;
                                 if (text4.Length > 16)
                                     text4 = text4.Substring(0, 16);
-                                this._fontSmall.Draw(text4, new Vec2((float)(x + num / 2.0 - this._fontSmall.GetWidth(text4) / 2.0), this.y + 44f), Color.White, doorLeftBlank.depth + 30);
+                                _fontSmall.Draw(text4, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text4) / 2.0), y + 44f), Color.White, doorLeftBlank.depth + 30);
                             }
                             else if (flag6)
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 13;
-                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
-                                this._fontSmall.DrawOutline("HOST", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                this._fontSmall.DrawOutline("SLOT", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 13;
+                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                _fontSmall.DrawOutline("HOST", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
                             else
                             {
-                                this._doorIcon.depth = doorLeftBlank.depth + 10;
-                                this._doorIcon.frame = 9;
-                                Graphics.Draw(_doorIcon, (int)this.x + 58, this.y + 31f);
-                                this._fontSmall.DrawOutline("OPEN", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                this._fontSmall.DrawOutline("SLOT", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 9;
+                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                _fontSmall.DrawOutline("OPEN", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
                         }
                     }
                 }
-                if (this._playerProfile.team == null || _doorX <= 0.0)
+                if (_playerProfile.team == null || _doorX <= 0.0)
                     return;
                 Furniture furniture1 = null;
                 if (Profiles.experienceProfile != null)
                 {
                     bool flag7 = true;
-                    if (Network.isActive && this.profile.connection != DuckNetwork.localConnection && (this.profile.ParentalControlsActive || this.profile.muteRoom)) // || ParentalControls.AreParentalControlsActive() || 
+                    if (Network.isActive && profile.connection != DuckNetwork.localConnection && (profile.ParentalControlsActive || profile.muteRoom)) // || ParentalControls.AreParentalControlsActive() || 
                         flag7 = false;
                     if (flag7)
                     {
                         List<FurniturePosition> furniturePositionList = new List<FurniturePosition>();
                         List<FurniturePosition> source1 = new List<FurniturePosition>();
-                        foreach (FurniturePosition furniturePosition in this.profile.furniturePositions)
+                        foreach (FurniturePosition furniturePosition in profile.furniturePositions)
                         {
                             Furniture furniture2 = RoomEditor.GetFurniture(furniturePosition.id);
                             if (furniture2 != null)
                             {
                                 if (furniture2.group == Furniture.Characters)
                                 {
-                                    if (!furniturePosition.flip && this.rightRoom)
+                                    if (!furniturePosition.flip && rightRoom)
                                     {
                                         furniturePosition.furniMapping = furniture2;
                                         source1.Add(furniturePosition);
                                         continue;
                                     }
-                                    if (furniturePosition.flip && !this.rightRoom)
+                                    if (furniturePosition.flip && !rightRoom)
                                     {
                                         furniturePosition.furniMapping = furniture2;
                                         furniturePositionList.Add(furniturePosition);
@@ -991,15 +991,15 @@ namespace DuckGame
                                     furniture2.sprite.frame = furniturePosition.variation;
                                     Vec2 pos = new Vec2(furniturePosition.x, furniturePosition.y);
                                     furniture2.sprite.flipH = furniturePosition.flip;
-                                    if (this.rightRoom)
+                                    if (rightRoom)
                                     {
                                         pos.x = RoomEditor.roomSize - pos.x;
                                         furniture2.sprite.flipH = !furniture2.sprite.flipH;
                                         --pos.x;
                                     }
-                                    pos += this.position;
+                                    pos += position;
                                     if (furniture2.visible)
-                                        furniture2.Draw(pos, furniture2.sprite.depth, furniturePosition.variation, this.profile);
+                                        furniture2.Draw(pos, furniture2.sprite.depth, furniturePosition.variation, profile);
                                     furniture2.sprite.frame = 0;
                                     furniture2.sprite.flipH = false;
                                 }
@@ -1020,15 +1020,15 @@ namespace DuckGame
                                 furniMapping1.sprite.frame = furniturePosition1.variation;
                                 Vec2 pos = new Vec2(furniturePosition2.x, furniturePosition2.y);
                                 furniMapping1.sprite.flipH = furniturePosition1.flip;
-                                if (this.rightRoom)
+                                if (rightRoom)
                                 {
                                     pos.x = RoomEditor.roomSize - pos.x;
                                     furniMapping1.sprite.flipH = !furniMapping1.sprite.flipH;
                                     --pos.x;
                                 }
-                                pos += this.position;
+                                pos += position;
                                 if (furniMapping1.visible)
-                                    furniMapping1.Draw(pos, furniMapping1.sprite.depth, furniMapping1.sprite.frame, this.profile);
+                                    furniMapping1.Draw(pos, furniMapping1.sprite.depth, furniMapping1.sprite.frame, profile);
                                 furniMapping1.sprite.frame = 0;
                                 furniMapping1.sprite.flipH = false;
                                 ++index1;
@@ -1049,75 +1049,75 @@ namespace DuckGame
                                 furniMapping3.sprite.frame = furniturePosition4.variation;
                                 Vec2 pos = new Vec2(furniturePosition3.x, furniturePosition3.y);
                                 furniMapping3.sprite.flipH = furniturePosition3.flip;
-                                if (this.rightRoom)
+                                if (rightRoom)
                                 {
                                     pos.x = RoomEditor.roomSize - pos.x;
                                     furniMapping3.sprite.flipH = !furniMapping3.sprite.flipH;
                                     --pos.x;
                                 }
-                                pos += this.position;
+                                pos += position;
                                 if (furniMapping3.visible)
-                                    furniMapping3.Draw(pos, furniMapping3.sprite.depth, furniMapping3.sprite.frame, this.profile);
+                                    furniMapping3.Draw(pos, furniMapping3.sprite.depth, furniMapping3.sprite.frame, profile);
                                 furniMapping3.sprite.frame = 0;
                                 furniMapping3.sprite.flipH = false;
                                 ++index3;
                             }
                         }
                     }
-                    if (this._hatSelector._roomEditor._mode == REMode.Place && this._hatSelector._roomEditor.CurFurni().type == FurnitureType.Theme)
-                        furniture1 = this._hatSelector._roomEditor.CurFurni();
+                    if (_hatSelector._roomEditor._mode == REMode.Place && _hatSelector._roomEditor.CurFurni().type == FurnitureType.Theme)
+                        furniture1 = _hatSelector._roomEditor.CurFurni();
                 }
-                if (this.rightRoom)
+                if (rightRoom)
                 {
                     if (furniture1 == null)
                     {
                         for (int index = 0; index < 4; ++index)
                         {
-                            if (this.profile.GetLightStatus(index))
+                            if (profile.GetLightStatus(index))
                             {
-                                this._lightBar.depth = this._tutorialTV.depth;
-                                this._lightBar.frame = index;
-                                Graphics.Draw(_lightBar, this.x + 38f + index * 3, this.y + 49f);
+                                _lightBar.depth = _tutorialTV.depth;
+                                _lightBar.frame = index;
+                                Graphics.Draw(_lightBar, x + 38f + index * 3, y + 49f);
                             }
                         }
-                        this._roomSwitch.depth = this._tutorialTV.depth;
-                        this._roomSwitch.frame = this.profile.switchStatus ? 1 : 0;
-                        Graphics.Draw(_roomSwitch, this.x + 52f, this.y + 47f);
+                        _roomSwitch.depth = _tutorialTV.depth;
+                        _roomSwitch.frame = profile.switchStatus ? 1 : 0;
+                        Graphics.Draw(_roomSwitch, x + 52f, y + 47f);
                     }
                     if (furniture1 != null)
                     {
                         Furniture furniture3 = furniture1;
                         furniture3.sprite.flipH = true;
-                        furniture3.sprite.depth = this._roomLeftForeground.depth;
-                        furniture3.background.depth = this._roomLeftBackground.depth;
+                        furniture3.sprite.depth = _roomLeftForeground.depth;
+                        furniture3.background.depth = _roomLeftBackground.depth;
                         furniture3.sprite.scale = new Vec2(1f);
                         furniture3.background.scale = new Vec2(1f);
-                        Graphics.Draw(furniture3.sprite, this.x + 70f, this.y + 44f, new Rectangle(0f, 0f, 4f, 87f));
-                        Graphics.Draw(furniture3.sprite, this.x + 70f, (float)(this.y + 44.0 + 68.0), new Rectangle(0f, 68f, 141f, 19f));
-                        Graphics.Draw(furniture3.sprite, this.x + 70f, this.y + 44f, new Rectangle(0f, 0f, 141f, 16f));
-                        Graphics.Draw(furniture3.sprite, this.x + 21f, this.y + 44f, new Rectangle(49f, 0f, 92f, 68f));
-                        furniture3.sprite.depth = this._selectConsole.depth - 20;
-                        Graphics.Draw(furniture3.sprite, (float)(this.x + 70.0 - 4.0), this.y + 44f, new Rectangle(4f, 0f, 44f, 54f));
+                        Graphics.Draw(furniture3.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 4f, 87f));
+                        Graphics.Draw(furniture3.sprite, x + 70f, (float)(y + 44.0 + 68.0), new Rectangle(0f, 68f, 141f, 19f));
+                        Graphics.Draw(furniture3.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 141f, 16f));
+                        Graphics.Draw(furniture3.sprite, x + 21f, y + 44f, new Rectangle(49f, 0f, 92f, 68f));
+                        furniture3.sprite.depth = _selectConsole.depth - 20;
+                        Graphics.Draw(furniture3.sprite, (float)(x + 70.0 - 4.0), y + 44f, new Rectangle(4f, 0f, 44f, 54f));
                         furniture3.sprite.depth = (Depth)0.31f;
-                        Graphics.Draw(furniture3.sprite, (float)(this.x + 70.0 - 4.0), (float)(this.y + 44.0 + 54.0), new Rectangle(4f, 54f, 44f, 14f));
+                        Graphics.Draw(furniture3.sprite, (float)(x + 70.0 - 4.0), (float)(y + 44.0 + 54.0), new Rectangle(4f, 54f, 44f, 14f));
                         furniture3.sprite.flipH = false;
                         furniture3.background.flipH = true;
-                        Graphics.Draw(furniture3.background, this.x + 70f, this.y + 45f);
+                        Graphics.Draw(furniture3.background, x + 70f, y + 45f);
                         furniture3.background.flipH = false;
                     }
                     else
                     {
-                        Graphics.Draw(this._roomLeftBackground, this.x - 1f, this.y + 1f);
-                        Graphics.Draw(this._roomLeftForeground, this.x - 1f, this.y + 1f, new Rectangle(0f, 0f, 49f, 16f));
-                        Graphics.Draw(this._roomLeftForeground, this.x - 1f, (float)(this.y + 1.0 + 16.0), new Rectangle(0f, 16f, 6f, 8f));
-                        Graphics.Draw(this._roomLeftForeground, this.x - 1f, (float)(this.y + 1.0 + 55.0), new Rectangle(0f, 55f, 53f, 13f));
-                        Graphics.Draw(this._roomLeftForeground, this.x - 1f, (float)(this.y + 1.0 + 68.0), new Rectangle(0f, 68f, 141f, 19f));
-                        Graphics.Draw(this._roomLeftForeground, (float)(this.x - 1.0 + 137.0), this.y + 1f, new Rectangle(137f, 0f, 4f, 87f));
+                        Graphics.Draw(_roomLeftBackground, x - 1f, y + 1f);
+                        Graphics.Draw(_roomLeftForeground, x - 1f, y + 1f, new Rectangle(0f, 0f, 49f, 16f));
+                        Graphics.Draw(_roomLeftForeground, x - 1f, (float)(y + 1.0 + 16.0), new Rectangle(0f, 16f, 6f, 8f));
+                        Graphics.Draw(_roomLeftForeground, x - 1f, (float)(y + 1.0 + 55.0), new Rectangle(0f, 55f, 53f, 13f));
+                        Graphics.Draw(_roomLeftForeground, x - 1f, (float)(y + 1.0 + 68.0), new Rectangle(0f, 68f, 141f, 19f));
+                        Graphics.Draw(_roomLeftForeground, (float)(x - 1.0 + 137.0), y + 1f, new Rectangle(137f, 0f, 4f, 87f));
                     }
-                    if (Network.isActive && (Network.isServer && this.profile.connection == DuckNetwork.localConnection || this.profile.connection == Network.host))
+                    if (Network.isActive && (Network.isServer && profile.connection == DuckNetwork.localConnection || profile.connection == Network.host))
                     {
-                        this._hostCrown.depth = -0.5f;
-                        Graphics.Draw(this._hostCrown, this.x + 126f, this.y + 23f);
+                        _hostCrown.depth = -0.5f;
+                        Graphics.Draw(_hostCrown, x + 126f, y + 23f);
                     }
                 }
                 else
@@ -1126,126 +1126,126 @@ namespace DuckGame
                     {
                         for (int index = 0; index < 4; ++index)
                         {
-                            if (this.profile.GetLightStatus(index))
+                            if (profile.GetLightStatus(index))
                             {
-                                this._lightBar.depth = this._tutorialTV.depth;
-                                this._lightBar.frame = index;
-                                Graphics.Draw(_lightBar, this.x + 91f + index * 3, this.y + 49f);
+                                _lightBar.depth = _tutorialTV.depth;
+                                _lightBar.frame = index;
+                                Graphics.Draw(_lightBar, x + 91f + index * 3, y + 49f);
                             }
                         }
-                        this._roomSwitch.depth = this._tutorialTV.depth;
-                        this._roomSwitch.frame = this.profile.switchStatus ? 1 : 0;
-                        Graphics.Draw(_roomSwitch, this.x + 81f, this.y + 47f);
+                        _roomSwitch.depth = _tutorialTV.depth;
+                        _roomSwitch.frame = profile.switchStatus ? 1 : 0;
+                        Graphics.Draw(_roomSwitch, x + 81f, y + 47f);
                     }
                     if (furniture1 != null)
                     {
                         Furniture furniture4 = furniture1;
-                        furniture4.sprite.depth = this._roomLeftForeground.depth;
-                        furniture4.background.depth = this._roomLeftBackground.depth;
+                        furniture4.sprite.depth = _roomLeftForeground.depth;
+                        furniture4.background.depth = _roomLeftBackground.depth;
                         furniture4.sprite.scale = new Vec2(1f);
                         furniture4.background.scale = new Vec2(1f);
-                        Graphics.Draw(furniture4.sprite, this.x + 70f, this.y + 44f, new Rectangle(0f, 0f, 4f, 87f));
-                        Graphics.Draw(furniture4.sprite, this.x + 70f, (float)(this.y + 44.0 + 68.0), new Rectangle(0f, 68f, 141f, 19f));
-                        Graphics.Draw(furniture4.sprite, this.x + 70f, this.y + 44f, new Rectangle(0f, 0f, 141f, 16f));
-                        Graphics.Draw(furniture4.sprite, (float)(this.x + 70.0 + 49.0), this.y + 44f, new Rectangle(49f, 0f, 92f, 68f));
-                        furniture4.sprite.depth = this._selectConsole.depth - 20;
-                        Graphics.Draw(furniture4.sprite, (float)(this.x + 70.0 + 4.0), this.y + 44f, new Rectangle(4f, 0f, 44f, 54f));
+                        Graphics.Draw(furniture4.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 4f, 87f));
+                        Graphics.Draw(furniture4.sprite, x + 70f, (float)(y + 44.0 + 68.0), new Rectangle(0f, 68f, 141f, 19f));
+                        Graphics.Draw(furniture4.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 141f, 16f));
+                        Graphics.Draw(furniture4.sprite, (float)(x + 70.0 + 49.0), y + 44f, new Rectangle(49f, 0f, 92f, 68f));
+                        furniture4.sprite.depth = _selectConsole.depth - 20;
+                        Graphics.Draw(furniture4.sprite, (float)(x + 70.0 + 4.0), y + 44f, new Rectangle(4f, 0f, 44f, 54f));
                         furniture4.sprite.depth = (Depth)0.31f;
-                        Graphics.Draw(furniture4.sprite, (float)(this.x + 70.0 + 4.0), (float)(this.y + 44.0 + 54.0), new Rectangle(4f, 54f, 44f, 14f));
-                        Graphics.Draw(furniture4.background, this.x + 70f, this.y + 45f);
+                        Graphics.Draw(furniture4.sprite, (float)(x + 70.0 + 4.0), (float)(y + 44.0 + 54.0), new Rectangle(4f, 54f, 44f, 14f));
+                        Graphics.Draw(furniture4.background, x + 70f, y + 45f);
                     }
                     else
                     {
-                        Graphics.Draw(this._roomLeftBackground, this.x + 4f, this.y + 1f);
-                        Graphics.Draw(this._roomLeftForeground, this.x, this.y + 1f, new Rectangle(0f, 0f, 4f, 87f));
-                        Graphics.Draw(this._roomLeftForeground, this.x + 4f, (float)(this.y + 1.0 + 68.0), new Rectangle(4f, 68f, 137f, 19f));
-                        Graphics.Draw(this._roomLeftForeground, this.x + 92f, this.y + 1f, new Rectangle(92f, 0f, 49f, 16f));
-                        Graphics.Draw(this._roomLeftForeground, this.x + 135f, (float)(this.y + 1.0 + 16.0), new Rectangle(135f, 16f, 6f, 8f));
-                        Graphics.Draw(this._roomLeftForeground, this.x + 89f, (float)(this.y + 1.0 + 55.0), new Rectangle(89f, 55f, 52f, 13f));
+                        Graphics.Draw(_roomLeftBackground, x + 4f, y + 1f);
+                        Graphics.Draw(_roomLeftForeground, x, y + 1f, new Rectangle(0f, 0f, 4f, 87f));
+                        Graphics.Draw(_roomLeftForeground, x + 4f, (float)(y + 1.0 + 68.0), new Rectangle(4f, 68f, 137f, 19f));
+                        Graphics.Draw(_roomLeftForeground, x + 92f, y + 1f, new Rectangle(92f, 0f, 49f, 16f));
+                        Graphics.Draw(_roomLeftForeground, x + 135f, (float)(y + 1.0 + 16.0), new Rectangle(135f, 16f, 6f, 8f));
+                        Graphics.Draw(_roomLeftForeground, x + 89f, (float)(y + 1.0 + 55.0), new Rectangle(89f, 55f, 52f, 13f));
                     }
-                    if (Network.isActive && (Network.isServer && this.profile.connection == DuckNetwork.localConnection || this.profile.connection == Network.host))
+                    if (Network.isActive && (Network.isServer && profile.connection == DuckNetwork.localConnection || profile.connection == Network.host))
                     {
-                        this._hostCrown.depth = -0.5f;
-                        Graphics.Draw(this._hostCrown, this.x + 14f, this.y + 23f);
+                        _hostCrown.depth = -0.5f;
+                        Graphics.Draw(_hostCrown, x + 14f, y + 23f);
                     }
                 }
-                this._tutorialTV.depth = -0.58f;
-                this._tutorialMessages.depth = -0.5f;
-                this._tutorialMessages.alpha = this._screenFade;
-                this._font.alpha = 1f;
-                this._font.depth = (Depth)0.6f;
+                _tutorialTV.depth = -0.58f;
+                _tutorialMessages.depth = -0.5f;
+                _tutorialMessages.alpha = _screenFade;
+                _font.alpha = 1f;
+                _font.depth = (Depth)0.6f;
                 if (furniture1 != null)
                 {
-                    this._tutorialTV.depth = -0.8f;
-                    this._tutorialMessages.depth = -0.8f;
+                    _tutorialTV.depth = -0.8f;
+                    _tutorialMessages.depth = -0.8f;
                 }
-                string currentDisplayName = this._playerProfile.team.currentDisplayName;
-                this._selectConsole.depth = -0.5f;
-                this._consoleHighlight.depth = -0.49f;
+                string currentDisplayName = _playerProfile.team.currentDisplayName;
+                _selectConsole.depth = -0.5f;
+                _consoleHighlight.depth = -0.49f;
                 float num1 = 8f;
-                if (this.rightRoom)
+                if (rightRoom)
                 {
-                    this._consolePos = new Vec2(this.x + 116f, this.y + 30f);
-                    this._consoleFlash.scale = new Vec2(0.75f, 0.75f);
-                    if (this._selectConsole.imageIndex == 0)
-                        this._consoleFlash.alpha = 0.3f;
-                    else if (this._selectConsole.imageIndex == 1)
-                        this._consoleFlash.alpha = 0.1f;
-                    else if (this._selectConsole.imageIndex == 2)
-                        this._consoleFlash.alpha = 0f;
-                    Graphics.Draw(this._consoleFlash, this._consolePos.x + 9f, this._consolePos.y + 7f);
-                    Graphics.Draw(_selectConsole, this._consolePos.x, this._consolePos.y);
+                    _consolePos = new Vec2(x + 116f, y + 30f);
+                    _consoleFlash.scale = new Vec2(0.75f, 0.75f);
+                    if (_selectConsole.imageIndex == 0)
+                        _consoleFlash.alpha = 0.3f;
+                    else if (_selectConsole.imageIndex == 1)
+                        _consoleFlash.alpha = 0.1f;
+                    else if (_selectConsole.imageIndex == 2)
+                        _consoleFlash.alpha = 0f;
+                    Graphics.Draw(_consoleFlash, _consolePos.x + 9f, _consolePos.y + 7f);
+                    Graphics.Draw(_selectConsole, _consolePos.x, _consolePos.y);
                     if (_consoleFade > 0.01f)
                     {
-                        this._consoleHighlight.alpha = this._consoleFade;
-                        Graphics.Draw(this._consoleHighlight, this._consolePos.x, this._consolePos.y);
+                        _consoleHighlight.alpha = _consoleFade;
+                        Graphics.Draw(_consoleHighlight, _consolePos.x, _consolePos.y);
                     }
-                    Graphics.Draw(this._readySign, this.x + 1f, this.y + 3f);
+                    Graphics.Draw(_readySign, x + 1f, y + 3f);
                     float num2 = -0.57f;
                     if (furniture1 != null)
                         num2 = -0.8f;
                     bool flag8 = true;
                     if (furniture1 == null)
                     {
-                        Graphics.Draw(this._tutorialTV, this.x + 57f - num1, this.y + 8f);
+                        Graphics.Draw(_tutorialTV, x + 57f - num1, y + 8f);
                         float num3 = 27f;
                         if (flag8)
                         {
-                            if (this._tutorialMessages.frame == 0)
+                            if (_tutorialMessages.frame == 0)
                             {
-                                this._font.Draw("@DPAD@MOVE", new Vec2(this.x + 28f + num3, this.y + 16f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
-                                this._font.Draw("@JUMP@JUMP", new Vec2(this.x + 28f + num3, this.y + 30f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
+                                _font.Draw("@DPAD@MOVE", new Vec2(x + 28f + num3, y + 16f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw("@JUMP@JUMP", new Vec2(x + 28f + num3, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
-                            else if (this._tutorialMessages.frame == 1)
+                            else if (_tutorialMessages.frame == 1)
                             {
-                                this._font.Draw("@GRAB@", new Vec2(this.x + 45f + num3, this.y + 17f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
-                                this._font.Draw("PICKUP", new Vec2(this.x + 29f + num3, this.y + 30f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
+                                _font.Draw("@GRAB@", new Vec2(x + 45f + num3, y + 17f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw("PICKUP", new Vec2(x + 29f + num3, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
-                            else if (this._tutorialMessages.frame == 2)
+                            else if (_tutorialMessages.frame == 2)
                             {
-                                this._font.Draw("@GRAB@TOSS", new Vec2(this.x + 28f + num3, this.y + 16f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
-                                this._font.Draw("@SHOOT@FIRE", new Vec2(this.x + 28f + num3, this.y + 30f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
+                                _font.Draw("@GRAB@TOSS", new Vec2(x + 28f + num3, y + 16f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw("@SHOOT@FIRE", new Vec2(x + 28f + num3, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
-                            else if (this._tutorialMessages.frame == 3)
+                            else if (_tutorialMessages.frame == 3)
                             {
-                                this._font.Draw("@CANCEL@", new Vec2(this.x + 45f + num3, this.y + 17f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
-                                this._font.Draw("CANCEL", new Vec2(this.x + 29f + num3, this.y + 30f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
+                                _font.Draw("@CANCEL@", new Vec2(x + 45f + num3, y + 17f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw("CANCEL", new Vec2(x + 29f + num3, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
-                            else if (this._tutorialMessages.frame == 4)
+                            else if (_tutorialMessages.frame == 4)
                             {
-                                this._font.Draw("@DPAD@MOVE", new Vec2(this.x + 28f + num3, this.y + 16f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
-                                this._font.Draw("@SHOOT@TEAM", new Vec2(this.x + 28f + num3, this.y + 30f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
+                                _font.Draw("@DPAD@MOVE", new Vec2(x + 28f + num3, y + 16f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw("@SHOOT@TEAM", new Vec2(x + 28f + num3, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
-                            else if (this._tutorialMessages.frame == 5)
+                            else if (_tutorialMessages.frame == 5)
                             {
-                                this._font.Draw("@GRAB@TOSS", new Vec2(this.x + 28f + num3, this.y + 16f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
-                                this._font.Draw("@SHOOT@TEAM", new Vec2(this.x + 28f + num3, this.y + 30f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
+                                _font.Draw("@GRAB@TOSS", new Vec2(x + 28f + num3, y + 16f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw("@SHOOT@TEAM", new Vec2(x + 28f + num3, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
                         }
                         else
-                            Graphics.Draw(this._onlineIcon, (int)this.x + 72, this.y + 19f, (Depth)num2);
+                            Graphics.Draw(_onlineIcon, (int)x + 72, y + 19f, (Depth)num2);
                     }
-                    this._font.depth = (Depth)0.6f;
+                    _font.depth = (Depth)0.6f;
                     float num4 = 0f;
                     float num5 = 0f;
                     Vec2 vec2 = new Vec2(1f, 1f);
@@ -1261,126 +1261,126 @@ namespace DuckGame
                         num4 = 2f;
                         num5 = 1f;
                     }
-                    this._font.scale = vec2;
-                    if (this._hatSelector._roomEditor._mode == REMode.Place)
+                    _font.scale = vec2;
+                    if (_hatSelector._roomEditor._mode == REMode.Place)
                     {
                         float num6 = 0f;
                         float num7 = 0f;
                         string text = "PLAYER 1";
                         float num8 = 47f;
-                        this.x += num8;
-                        Furniture furniture5 = this._hatSelector._roomEditor.CurFurni();
+                        x += num8;
+                        Furniture furniture5 = _hatSelector._roomEditor.CurFurni();
                         if (furniture5.type == FurnitureType.Font)
                         {
                             furniture5.font.scale = new Vec2(0.5f, 0.5f);
                             furniture5.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            furniture5.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(this.x + 24.0 - furniture5.font.GetWidth(text) / 2.0) - num6, this.y + 75f + num7, Color.White, (Depth)0.7f, this.profile.inputProfile);
+                            furniture5.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(x + 24.0 - furniture5.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
                             furniture5.font.scale = new Vec2(1f, 1f);
                         }
                         else if (furniture5.type == FurnitureType.Theme)
                         {
-                            this.profile.font.scale = new Vec2(0.5f, 0.5f);
-                            this.profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            this.profile.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(this.x + 24.0 - this.profile.font.GetWidth(text) / 2.0) - num6, this.y + 75f + num7, Color.White, (Depth)0.7f, this.profile.inputProfile);
+                            profile.font.scale = new Vec2(0.5f, 0.5f);
+                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
+                            profile.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
                         }
                         else if (furniture5.name == "CLEAR ROOM")
                         {
-                            this.profile.font.scale = new Vec2(0.5f, 0.5f);
-                            this.profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            this.profile.font.Draw("@MENU2@CLEAR @CANCEL@BACK", (float)(this.x + 24.0 - this.profile.font.GetWidth(text) / 2.0) - num6, this.y + 75f + num7, Color.White, (Depth)0.7f, this.profile.inputProfile);
+                            profile.font.scale = new Vec2(0.5f, 0.5f);
+                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
+                            profile.font.Draw("@MENU2@CLEAR @CANCEL@BACK", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
                         }
                         else
                         {
-                            this.profile.font.scale = new Vec2(0.5f, 0.5f);
-                            this.profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            if (this._hatSelector._roomEditor._hover != null)
-                                this.profile.font.Draw("@SELECT@DEL @MENU2@GRAB @CANCEL@DONE", (float)(this.x + 24.0 - this.profile.font.GetWidth(text) / 2.0) - num6, this.y + 75f + num7, Color.White, (Depth)0.7f, this.profile.inputProfile);
+                            profile.font.scale = new Vec2(0.5f, 0.5f);
+                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
+                            if (_hatSelector._roomEditor._hover != null)
+                                profile.font.Draw("@SELECT@DEL @MENU2@GRAB @CANCEL@DONE", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
                             else
-                                this.profile.font.Draw("@SELECT@ADD @MENU2@MOD @CANCEL@DONE", (float)(this.x + 24.0 - this.profile.font.GetWidth(text) / 2.0) - num6, this.y + 75f + num7, Color.White, (Depth)0.7f, this.profile.inputProfile);
-                            this.profile.font.scale = new Vec2(0.25f, 0.25f);
-                            int num9 = Profiles.experienceProfile.GetNumFurnitures(furniture5.index) - this.profile.GetNumFurnituresPlaced(furniture5.index);
-                            this.profile.font.Draw(furniture5.name + (num9 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num9.ToString(), (float)(this.x + 17.0 - this.profile.font.GetWidth(text) / 2.0) - num6, (float)(this.y + 75.0 + 6.5) + num7, Color.White, (Depth)0.7f);
-                            int furnituresPlaced = this.profile.GetTotalFurnituresPlaced();
+                                profile.font.Draw("@SELECT@ADD @MENU2@MOD @CANCEL@DONE", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.scale = new Vec2(0.25f, 0.25f);
+                            int num9 = Profiles.experienceProfile.GetNumFurnitures(furniture5.index) - profile.GetNumFurnituresPlaced(furniture5.index);
+                            profile.font.Draw(furniture5.name + (num9 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num9.ToString(), (float)(x + 17.0 - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.5) + num7, Color.White, (Depth)0.7f);
+                            int furnituresPlaced = profile.GetTotalFurnituresPlaced();
                             float num10 = furnituresPlaced / (float)RoomEditor.maxFurnitures;
-                            this.profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(this.x + 68.0 - this.profile.font.GetWidth(text) / 2.0) - num6, (float)(this.y + 75.0 + 6.5) + num7, Color.Black, (Depth)0.7f);
-                            Vec2 p1 = new Vec2((float)(this.x + 56.0 - this.profile.font.GetWidth(text) / 2.0) - num6, (float)(this.y + 75.0 + 6.0) + num7);
+                            profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 68.0 - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.5) + num7, Color.Black, (Depth)0.7f);
+                            Vec2 p1 = new Vec2((float)(x + 56.0 - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.0) + num7);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f, 3f), Colors.BlueGray, (Depth)0.66f, borderWidth: 0.5f);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f * num10, 3f), num10 < 0.400000005960464 ? Colors.DGGreen : (num10 < 0.800000011920929 ? Colors.DGYellow : Colors.DGRed), (Depth)0.68f, borderWidth: 0.5f);
                         }
-                        this.profile.font.spriteScale = new Vec2(1f, 1f);
-                        this.profile.font.scale = new Vec2(1f, 1f);
-                        this.x -= num8;
+                        profile.font.spriteScale = new Vec2(1f, 1f);
+                        profile.font.scale = new Vec2(1f, 1f);
+                        x -= num8;
                     }
                     else
                     {
-                        this._playerProfile.font.scale = vec2;
-                        this._playerProfile.font.Draw(currentDisplayName, (this.x + 94f - this._playerProfile.font.GetWidth(currentDisplayName) / 2f) - num5, this.y + 75f + num4, Color.White, (Depth)0.7f);
-                        this._font.scale = new Vec2(1f, 1f);
+                        _playerProfile.font.scale = vec2;
+                        _playerProfile.font.Draw(currentDisplayName, (x + 94f - _playerProfile.font.GetWidth(currentDisplayName) / 2f) - num5, y + 75f + num4, Color.White, (Depth)0.7f);
+                        _font.scale = new Vec2(1f, 1f);
                     }
                 }
                 else
                 {
-                    this._consolePos = new Vec2(this.x + 4f, this.y + 30f);
-                    this._consoleFlash.scale = new Vec2(0.75f, 0.75f);
-                    if (this._selectConsole.imageIndex == 0)
-                        this._consoleFlash.alpha = 0.3f;
-                    else if (this._selectConsole.imageIndex == 1)
-                        this._consoleFlash.alpha = 0.1f;
-                    else if (this._selectConsole.imageIndex == 2)
-                        this._consoleFlash.alpha = 0f;
-                    Graphics.Draw(this._consoleFlash, this._consolePos.x + 9f, this._consolePos.y + 7f);
-                    Graphics.Draw(_selectConsole, this._consolePos.x, this._consolePos.y);
+                    _consolePos = new Vec2(x + 4f, y + 30f);
+                    _consoleFlash.scale = new Vec2(0.75f, 0.75f);
+                    if (_selectConsole.imageIndex == 0)
+                        _consoleFlash.alpha = 0.3f;
+                    else if (_selectConsole.imageIndex == 1)
+                        _consoleFlash.alpha = 0.1f;
+                    else if (_selectConsole.imageIndex == 2)
+                        _consoleFlash.alpha = 0f;
+                    Graphics.Draw(_consoleFlash, _consolePos.x + 9f, _consolePos.y + 7f);
+                    Graphics.Draw(_selectConsole, _consolePos.x, _consolePos.y);
                     if (_consoleFade > 0.01f)
                     {
-                        this._consoleHighlight.alpha = this._consoleFade;
-                        Graphics.Draw(this._consoleHighlight, this._consolePos.x, this._consolePos.y);
+                        _consoleHighlight.alpha = _consoleFade;
+                        Graphics.Draw(_consoleHighlight, _consolePos.x, _consolePos.y);
                     }
-                    Graphics.Draw(this._readySign, this.x + 96f, this.y + 3f);
+                    Graphics.Draw(_readySign, x + 96f, y + 3f);
                     float num11 = -0.57f;
                     if (furniture1 != null)
                         num11 = -0.8f;
                     bool flag9 = true;
                     if (furniture1 == null)
                     {
-                        Graphics.Draw(this._tutorialTV, this.x + 22f + num1, this.y + 8f);
+                        Graphics.Draw(_tutorialTV, x + 22f + num1, y + 8f);
                         if (flag9)
                         {
-                            if (this._tutorialMessages.frame == 0)
+                            if (_tutorialMessages.frame == 0)
                             {
-                                this._font.Draw("@WASD@MOVE", new Vec2(this.x + 28f + num1, this.y + 16f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
-                                this._font.Draw("@JUMP@JUMP", new Vec2(this.x + 28f + num1, this.y + 30f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
+                                _font.Draw("@WASD@MOVE", new Vec2(x + 28f + num1, y + 16f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw("@JUMP@JUMP", new Vec2(x + 28f + num1, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
-                            else if (this._tutorialMessages.frame == 1)
+                            else if (_tutorialMessages.frame == 1)
                             {
-                                this._font.Draw("@GRAB@", new Vec2(this.x + 45f + num1, this.y + 17f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
-                                this._font.Draw("PICKUP", new Vec2(this.x + 29f + num1, this.y + 30f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
+                                _font.Draw("@GRAB@", new Vec2(x + 45f + num1, y + 17f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw("PICKUP", new Vec2(x + 29f + num1, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
-                            else if (this._tutorialMessages.frame == 2)
+                            else if (_tutorialMessages.frame == 2)
                             {
-                                this._font.Draw("@GRAB@TOSS", new Vec2(this.x + 28f + num1, this.y + 16f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
-                                this._font.Draw("@SHOOT@FIRE", new Vec2(this.x + 28f + num1, this.y + 30f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
+                                _font.Draw("@GRAB@TOSS", new Vec2(x + 28f + num1, y + 16f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw("@SHOOT@FIRE", new Vec2(x + 28f + num1, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
-                            else if (this._tutorialMessages.frame == 3)
+                            else if (_tutorialMessages.frame == 3)
                             {
-                                this._font.Draw("@CANCEL@", new Vec2(this.x + 45f + num1, this.y + 17f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
-                                this._font.Draw("CANCEL", new Vec2(this.x + 29f + num1, this.y + 30f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
+                                _font.Draw("@CANCEL@", new Vec2(x + 45f + num1, y + 17f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw("CANCEL", new Vec2(x + 29f + num1, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
-                            else if (this._tutorialMessages.frame == 4)
+                            else if (_tutorialMessages.frame == 4)
                             {
-                                this._font.Draw("@WASD@MOVE", new Vec2(this.x + 28f + num1, this.y + 16f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
-                                this._font.Draw("@SHOOT@TEAM", new Vec2(this.x + 28f + num1, this.y + 30f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
+                                _font.Draw("@WASD@MOVE", new Vec2(x + 28f + num1, y + 16f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw("@SHOOT@TEAM", new Vec2(x + 28f + num1, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
-                            else if (this._tutorialMessages.frame == 5)
+                            else if (_tutorialMessages.frame == 5)
                             {
-                                this._font.Draw("@GRAB@TOSS", new Vec2(this.x + 28f + num1, this.y + 16f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
-                                this._font.Draw("@SHOOT@TEAM", new Vec2(this.x + 28f + num1, this.y + 30f), Color.White * this._screenFade, this._tutorialTV.depth + 20, this._inputProfile);
+                                _font.Draw("@GRAB@TOSS", new Vec2(x + 28f + num1, y + 16f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw("@SHOOT@TEAM", new Vec2(x + 28f + num1, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
                         }
                         else
-                            Graphics.Draw(this._onlineIcon, (int)this.x + 53, this.y + 19f, (Depth)num11);
+                            Graphics.Draw(_onlineIcon, (int)x + 53, y + 19f, (Depth)num11);
                     }
-                    this._font.depth = (Depth)0.6f;
-                    this._aButton.position = new Vec2(this.x + 39f, this.y + 71f);
+                    _font.depth = (Depth)0.6f;
+                    _aButton.position = new Vec2(x + 39f, y + 71f);
                     float num12 = 0f;
                     float num13 = 0f;
                     Vec2 vec2 = new Vec2(1f, 1f);
@@ -1396,57 +1396,57 @@ namespace DuckGame
                         num12 = 2f;
                         num13 = 1f;
                     }
-                    if (this._hatSelector._roomEditor._mode == REMode.Place && Profiles.experienceProfile != null)
+                    if (_hatSelector._roomEditor._mode == REMode.Place && Profiles.experienceProfile != null)
                     {
                         string text = "PLAYER 1";
                         float num14 = 0f;
                         float num15 = 0f;
-                        Furniture furniture6 = this._hatSelector._roomEditor.CurFurni();
+                        Furniture furniture6 = _hatSelector._roomEditor.CurFurni();
                         if (furniture6.type == FurnitureType.Font)
                         {
                             furniture6.font.scale = new Vec2(0.5f, 0.5f);
                             furniture6.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            furniture6.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(this.x + 24.0 - furniture6.font.GetWidth(text) / 2.0) - num14, this.y + 75f + num15, Color.White, (Depth)0.7f, this.profile.inputProfile);
+                            furniture6.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(x + 24.0 - furniture6.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
                             furniture6.font.scale = new Vec2(1f, 1f);
                         }
                         else if (furniture6.type == FurnitureType.Theme)
                         {
-                            this.profile.font.scale = new Vec2(0.5f, 0.5f);
-                            this.profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            this.profile.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(this.x + 24.0 - this.profile.font.GetWidth(text) / 2.0) - num14, this.y + 75f + num15, Color.White, (Depth)0.7f, this.profile.inputProfile);
+                            profile.font.scale = new Vec2(0.5f, 0.5f);
+                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
+                            profile.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
                         }
                         else if (furniture6.name == "CLEAR ROOM")
                         {
-                            this.profile.font.scale = new Vec2(0.5f, 0.5f);
-                            this.profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            this.profile.font.Draw("@MENU2@CLEAR @CANCEL@BACK", (float)(this.x + 24.0 - this.profile.font.GetWidth(text) / 2.0) - num14, this.y + 75f + num15, Color.White, (Depth)0.7f, this.profile.inputProfile);
+                            profile.font.scale = new Vec2(0.5f, 0.5f);
+                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
+                            profile.font.Draw("@MENU2@CLEAR @CANCEL@BACK", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
                         }
                         else
                         {
-                            this.profile.font.scale = new Vec2(0.5f, 0.5f);
-                            this.profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            if (this._hatSelector._roomEditor._hover != null)
-                                this.profile.font.Draw("@SELECT@DEL @MENU2@GRAB @CANCEL@DONE", (float)(this.x + 24.0 - this.profile.font.GetWidth(text) / 2.0) - num14, this.y + 75f + num15, Color.White, (Depth)0.7f, this.profile.inputProfile);
+                            profile.font.scale = new Vec2(0.5f, 0.5f);
+                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
+                            if (_hatSelector._roomEditor._hover != null)
+                                profile.font.Draw("@SELECT@DEL @MENU2@GRAB @CANCEL@DONE", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
                             else
-                                this.profile.font.Draw("@SELECT@ADD @MENU2@MOD @CANCEL@DONE", (float)(this.x + 24.0 - this.profile.font.GetWidth(text) / 2.0) - num14, this.y + 75f + num15, Color.White, (Depth)0.7f, this.profile.inputProfile);
-                            this.profile.font.scale = new Vec2(0.25f, 0.25f);
-                            int num16 = Profiles.experienceProfile.GetNumFurnitures(furniture6.index) - this.profile.GetNumFurnituresPlaced(furniture6.index);
-                            this.profile.font.Draw(furniture6.name + (num16 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num16.ToString(), (float)(this.x + 17.0 - this.profile.font.GetWidth(text) / 2.0) - num14, (float)(this.y + 75.0 + 6.5) + num15, Color.White, (Depth)0.7f);
-                            int furnituresPlaced = this.profile.GetTotalFurnituresPlaced();
+                                profile.font.Draw("@SELECT@ADD @MENU2@MOD @CANCEL@DONE", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.scale = new Vec2(0.25f, 0.25f);
+                            int num16 = Profiles.experienceProfile.GetNumFurnitures(furniture6.index) - profile.GetNumFurnituresPlaced(furniture6.index);
+                            profile.font.Draw(furniture6.name + (num16 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num16.ToString(), (float)(x + 17.0 - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.5) + num15, Color.White, (Depth)0.7f);
+                            int furnituresPlaced = profile.GetTotalFurnituresPlaced();
                             float num17 = furnituresPlaced / (float)RoomEditor.maxFurnitures;
-                            this.profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(this.x + 68.0 - this.profile.font.GetWidth(text) / 2.0) - num14, (float)(this.y + 75.0 + 6.5) + num15, Color.Black, (Depth)0.7f);
-                            Vec2 p1 = new Vec2((float)(this.x + 56.0 - this.profile.font.GetWidth(text) / 2.0) - num14, (float)(this.y + 75.0 + 6.0) + num15);
+                            profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 68.0 - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.5) + num15, Color.Black, (Depth)0.7f);
+                            Vec2 p1 = new Vec2((float)(x + 56.0 - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.0) + num15);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f, 3f), Colors.BlueGray, (Depth)0.66f, borderWidth: 0.5f);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f * num17, 3f), num17 < 0.400000005960464 ? Colors.DGGreen : (num17 < 0.800000011920929 ? Colors.DGYellow : Colors.DGRed), (Depth)0.68f, borderWidth: 0.5f);
                         }
-                        this.profile.font.spriteScale = new Vec2(1f, 1f);
-                        this.profile.font.scale = new Vec2(1f, 1f);
+                        profile.font.spriteScale = new Vec2(1f, 1f);
+                        profile.font.scale = new Vec2(1f, 1f);
                     }
                     else
                     {
-                        this._playerProfile.font.scale = vec2;
-                        this._playerProfile.font.Draw(currentDisplayName, (float)(this.x + 48.0 - this._playerProfile.font.GetWidth(currentDisplayName) / 2.0) - num13, this.y + 75f + num12, Color.White, (Depth)0.7f);
-                        this._font.scale = new Vec2(1f, 1f);
+                        _playerProfile.font.scale = vec2;
+                        _playerProfile.font.Draw(currentDisplayName, (float)(x + 48.0 - _playerProfile.font.GetWidth(currentDisplayName) / 2.0) - num13, y + 75f + num12, Color.White, (Depth)0.7f);
+                        _font.scale = new Vec2(1f, 1f);
                     }
                 }
             }

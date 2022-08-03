@@ -17,12 +17,12 @@ namespace DuckGame
         private Layer _fakeLayer = new Layer("FAKE");
         private HashSet<PortalDrawTransformer> _inPortal = new HashSet<PortalDrawTransformer>();
 
-        public PortalGun gun => this._gun;
+        public PortalGun gun => _gun;
 
         public Portal(PortalGun Gun)
           : base()
         {
-            this._gun = Gun;
+            _gun = Gun;
         }
 
         public IEnumerable<MaterialThing> CheckRectAll(
@@ -30,7 +30,7 @@ namespace DuckGame
           Vec2 BottomRight)
         {
             List<MaterialThing> source = new List<MaterialThing>();
-            foreach (PortalDoor door in this._doors)
+            foreach (PortalDoor door in _doors)
             {
                 if (Collision.Rect(TopLeft, BottomRight, door.rect))
                 {
@@ -44,24 +44,24 @@ namespace DuckGame
             return source.AsEnumerable<MaterialThing>();
         }
 
-        public List<PortalDoor> GetDoors() => this._doors;
+        public List<PortalDoor> GetDoors() => _doors;
 
-        public PortalDoor GetOtherDoor(PortalDoor door) => door == this._doors[0] ? this._doors[1] : this._doors[0];
+        public PortalDoor GetOtherDoor(PortalDoor door) => door == _doors[0] ? _doors[1] : _doors[0];
 
         public void AddPortalDoor(PortalDoor door)
         {
-            if (this._doors.Count > 1)
+            if (_doors.Count > 1)
             {
-                PortalDoor door1 = this._doors[0];
+                PortalDoor door1 = _doors[0];
                 door1.point1 = door.point1;
                 door1.point2 = door.point2;
                 door1.center = door.center;
                 door1.horizontal = door.horizontal;
                 door = door1;
-                this._doors.Reverse();
+                _doors.Reverse();
             }
             else
-                this._doors.Add(door);
+                _doors.Add(door);
             door.collision.Clear();
             if (door.horizontal)
                 return;
@@ -105,61 +105,61 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            foreach (PortalDoor door in this._doors)
+            foreach (PortalDoor door in _doors)
                 Layer.Remove(door.layer);
         }
 
         public override void Update()
         {
-            if (this._doors.Count != 2)
+            if (_doors.Count != 2)
                 return;
             IEnumerable<ITeleport> teleports = null;
-            foreach (PortalDoor door in this._doors)
+            foreach (PortalDoor door in _doors)
             {
                 IEnumerable<ITeleport> second = door.horizontal ? Level.CheckRectAll<ITeleport>(door.point1 + new Vec2(0f, -8f), door.point2 + new Vec2(0f, 8f)) : Level.CheckRectAll<ITeleport>(door.point1 + new Vec2(-8f, 0f), door.point2 + new Vec2(8f, 0f));
                 teleports = teleports != null ? teleports.Concat<ITeleport>(second) : second;
             }
             List<PortalDrawTransformer> portalDrawTransformerList = new List<PortalDrawTransformer>();
-            foreach (PortalDrawTransformer portalDrawTransformer in this._inPortal)
+            foreach (PortalDrawTransformer portalDrawTransformer in _inPortal)
             {
                 if (!teleports.Contains<ITeleport>(portalDrawTransformer.thing as ITeleport))
                     portalDrawTransformerList.Add(portalDrawTransformer);
             }
             foreach (PortalDrawTransformer portalDrawTransformer in portalDrawTransformerList)
             {
-                this._inPortal.Remove(portalDrawTransformer);
+                _inPortal.Remove(portalDrawTransformer);
                 portalDrawTransformer.thing.portal = null;
                 portalDrawTransformer.thing.layer = Layer.Game;
-                foreach (PortalDoor door in this._doors)
+                foreach (PortalDoor door in _doors)
                     door.layer.Remove(portalDrawTransformer);
             }
             foreach (ITeleport teleport in teleports)
             {
                 ITeleport t = teleport;
-                if (this._inPortal.FirstOrDefault<PortalDrawTransformer>(v => v.thing == t) == null)
+                if (_inPortal.FirstOrDefault<PortalDrawTransformer>(v => v.thing == t) == null)
                 {
                     PortalDrawTransformer portalDrawTransformer = new PortalDrawTransformer(t as Thing, this);
-                    this._inPortal.Add(portalDrawTransformer);
+                    _inPortal.Add(portalDrawTransformer);
                     (t as Thing).portal = this;
-                    (t as Thing).layer = this._fakeLayer;
-                    foreach (PortalDoor door in this._doors)
+                    (t as Thing).layer = _fakeLayer;
+                    foreach (PortalDoor door in _doors)
                         door.layer.Add(portalDrawTransformer);
                 }
             }
-            foreach (PortalDoor door in this._doors)
+            foreach (PortalDoor door in _doors)
             {
                 door.Update();
-                foreach (PortalDrawTransformer portalDrawTransformer in this._inPortal)
+                foreach (PortalDrawTransformer portalDrawTransformer in _inPortal)
                 {
                     if (door.isLeft && portalDrawTransformer.thing.x < door.center.x)
                     {
                         Thing thing = portalDrawTransformer.thing;
-                        thing.position += (this.GetOtherDoor(door).center - door.center);
+                        thing.position += (GetOtherDoor(door).center - door.center);
                     }
                     else if (!door.isLeft && portalDrawTransformer.thing.x > door.center.x)
                     {
                         Thing thing = portalDrawTransformer.thing;
-                        thing.position += (this.GetOtherDoor(door).center - door.center);
+                        thing.position += (GetOtherDoor(door).center - door.center);
                     }
                 }
             }
@@ -167,7 +167,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            foreach (PortalDoor door in this._doors)
+            foreach (PortalDoor door in _doors)
                 door.Draw();
         }
     }

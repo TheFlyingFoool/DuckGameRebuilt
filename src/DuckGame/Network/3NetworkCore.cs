@@ -21,10 +21,10 @@ namespace DuckGame
 
         public NMConnect(byte received, NetIndex4 s, string v, string mH)
         {
-            this.version = v;
-            this.connectsReceived = (NetIndex4)received;
-            this.remoteSession = s;
-            this.modHash = mH;
+            version = v;
+            connectsReceived = (NetIndex4)received;
+            remoteSession = s;
+            modHash = mH;
         }
     }
 }

@@ -18,18 +18,18 @@ namespace DuckGame
         public CryoPlug(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("survival/cryoPlug", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this._collisionSize = new Vec2(12f, 12f);
-            this._collisionOffset = new Vec2(-6f, -6f);
-            this._sprite.frame = 0;
-            this.depth = (Depth)0.9f;
+            _sprite = new SpriteMap("survival/cryoPlug", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            _collisionSize = new Vec2(12f, 12f);
+            _collisionOffset = new Vec2(-6f, -6f);
+            _sprite.frame = 0;
+            depth = (Depth)0.9f;
         }
 
         public void AttachTo(Thing t)
         {
-            this._rope = new Rope(this.x, this.y, t, this);
+            _rope = new Rope(x, y, t, this);
             Level.Add(_rope);
         }
 
@@ -37,25 +37,25 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this.owner == null && this._sprite.frame == 0)
+            if (owner == null && _sprite.frame == 0)
             {
                 foreach (PowerSocket powerSocket in Level.current.things[typeof(PowerSocket)])
                 {
-                    if ((powerSocket.position - this.position).length < 8.0)
+                    if ((powerSocket.position - position).length < 8.0)
                     {
                         SFX.Play("equip");
-                        this._sprite.frame = 1;
-                        this._enablePhysics = false;
-                        this.position = powerSocket.position;
-                        this.depth = -0.8f;
+                        _sprite.frame = 1;
+                        _enablePhysics = false;
+                        position = powerSocket.position;
+                        depth = -0.8f;
                         return;
                     }
                 }
             }
-            else if (this.owner != null && this._sprite.frame == 1)
+            else if (owner != null && _sprite.frame == 1)
             {
-                this._sprite.frame = 0;
-                this._enablePhysics = true;
+                _sprite.frame = 0;
+                _enablePhysics = true;
                 SFX.Play("equip");
             }
             base.Update();

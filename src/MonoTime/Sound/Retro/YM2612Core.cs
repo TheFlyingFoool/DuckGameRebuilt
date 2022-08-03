@@ -1227,13 +1227,13 @@ namespace DuckGame
         public YM2612Core()
         {
             for (int index = 0; index < 8; ++index)
-                this.out_fm[index] = new LongPointer();
+                out_fm[index] = new LongPointer();
         }
 
         private void FM_KEYON(YM2612Core.FM_CH CH, int s)
         {
             YM2612Core.FM_SLOT fmSlot = CH.SLOT[s];
-            if (fmSlot.key == 0 && this.ym2612.OPN.SL3.key_csm == 0)
+            if (fmSlot.key == 0 && ym2612.OPN.SL3.key_csm == 0)
             {
                 fmSlot.phase = 0U;
                 fmSlot.ssgn = 0;
@@ -1254,7 +1254,7 @@ namespace DuckGame
         private void FM_KEYOFF(YM2612Core.FM_CH CH, int s)
         {
             YM2612Core.FM_SLOT fmSlot = CH.SLOT[s];
-            if (fmSlot.key > 0 && this.ym2612.OPN.SL3.key_csm == 0 && fmSlot.state > 1)
+            if (fmSlot.key > 0 && ym2612.OPN.SL3.key_csm == 0 && fmSlot.state > 1)
             {
                 fmSlot.state = 1;
                 if ((fmSlot.ssg & 8) > 0)
@@ -1275,7 +1275,7 @@ namespace DuckGame
         private void FM_KEYON_CSM(YM2612Core.FM_CH CH, int s)
         {
             YM2612Core.FM_SLOT fmSlot = CH.SLOT[s];
-            if (fmSlot.key != 0 || this.ym2612.OPN.SL3.key_csm != 0)
+            if (fmSlot.key != 0 || ym2612.OPN.SL3.key_csm != 0)
                 return;
             fmSlot.phase = 0U;
             fmSlot.ssgn = 0;
@@ -1314,114 +1314,114 @@ namespace DuckGame
 
         private void CSMKeyControll(YM2612Core.FM_CH CH)
         {
-            this.FM_KEYON_CSM(CH, 0);
-            this.FM_KEYON_CSM(CH, 2);
-            this.FM_KEYON_CSM(CH, 1);
-            this.FM_KEYON_CSM(CH, 3);
-            this.ym2612.OPN.SL3.key_csm = 1;
+            FM_KEYON_CSM(CH, 0);
+            FM_KEYON_CSM(CH, 2);
+            FM_KEYON_CSM(CH, 1);
+            FM_KEYON_CSM(CH, 3);
+            ym2612.OPN.SL3.key_csm = 1;
         }
 
         private void INTERNAL_TIMER_A()
         {
-            if (((int)this.ym2612.OPN.ST.mode & 1) == 0 || (this.ym2612.OPN.ST.TAC -= this.ym2612.OPN.ST.TimerBase) > 0L)
+            if (((int)ym2612.OPN.ST.mode & 1) == 0 || (ym2612.OPN.ST.TAC -= ym2612.OPN.ST.TimerBase) > 0L)
                 return;
-            if (((int)this.ym2612.OPN.ST.mode & 4) != 0)
-                this.ym2612.OPN.ST.status |= 1;
-            if (this.ym2612.OPN.ST.TAL != 0L)
-                this.ym2612.OPN.ST.TAC += this.ym2612.OPN.ST.TAL;
+            if (((int)ym2612.OPN.ST.mode & 4) != 0)
+                ym2612.OPN.ST.status |= 1;
+            if (ym2612.OPN.ST.TAL != 0L)
+                ym2612.OPN.ST.TAC += ym2612.OPN.ST.TAL;
             else
-                this.ym2612.OPN.ST.TAC = this.ym2612.OPN.ST.TAL;
-            if (((int)this.ym2612.OPN.ST.mode & 192) != 128)
+                ym2612.OPN.ST.TAC = ym2612.OPN.ST.TAL;
+            if (((int)ym2612.OPN.ST.mode & 192) != 128)
                 return;
-            this.CSMKeyControll(this.ym2612.CH[2]);
+            CSMKeyControll(ym2612.CH[2]);
         }
 
         private void INTERNAL_TIMER_B(int step)
         {
-            if (((int)this.ym2612.OPN.ST.mode & 2) == 0 || (this.ym2612.OPN.ST.TBC -= this.ym2612.OPN.ST.TimerBase * step) > 0L)
+            if (((int)ym2612.OPN.ST.mode & 2) == 0 || (ym2612.OPN.ST.TBC -= ym2612.OPN.ST.TimerBase * step) > 0L)
                 return;
-            if (((int)this.ym2612.OPN.ST.mode & 8) != 0)
-                this.ym2612.OPN.ST.status |= 2;
-            if (this.ym2612.OPN.ST.TBL != 0L)
-                this.ym2612.OPN.ST.TBC += this.ym2612.OPN.ST.TBL;
+            if (((int)ym2612.OPN.ST.mode & 8) != 0)
+                ym2612.OPN.ST.status |= 2;
+            if (ym2612.OPN.ST.TBL != 0L)
+                ym2612.OPN.ST.TBC += ym2612.OPN.ST.TBL;
             else
-                this.ym2612.OPN.ST.TBC = this.ym2612.OPN.ST.TBL;
+                ym2612.OPN.ST.TBC = ym2612.OPN.ST.TBL;
         }
 
         private void set_timers(int v)
         {
             if (((ym2612.OPN.ST.mode ^ v) & 192L) != 0L)
             {
-                this.ym2612.CH[2].SLOT[0].Incr = -1L;
-                if ((v & 192) != 128 && this.ym2612.OPN.SL3.key_csm != 0)
+                ym2612.CH[2].SLOT[0].Incr = -1L;
+                if ((v & 192) != 128 && ym2612.OPN.SL3.key_csm != 0)
                 {
-                    this.FM_KEYOFF_CSM(this.ym2612.CH[2], 0);
-                    this.FM_KEYOFF_CSM(this.ym2612.CH[2], 2);
-                    this.FM_KEYOFF_CSM(this.ym2612.CH[2], 1);
-                    this.FM_KEYOFF_CSM(this.ym2612.CH[2], 3);
-                    this.ym2612.OPN.SL3.key_csm = 0;
+                    FM_KEYOFF_CSM(ym2612.CH[2], 0);
+                    FM_KEYOFF_CSM(ym2612.CH[2], 2);
+                    FM_KEYOFF_CSM(ym2612.CH[2], 1);
+                    FM_KEYOFF_CSM(ym2612.CH[2], 3);
+                    ym2612.OPN.SL3.key_csm = 0;
                 }
             }
-            if ((v & 1) != 0 && ((int)this.ym2612.OPN.ST.mode & 1) == 0)
-                this.ym2612.OPN.ST.TAC = this.ym2612.OPN.ST.TAL;
-            if ((v & 2) != 0 && ((int)this.ym2612.OPN.ST.mode & 2) == 0)
-                this.ym2612.OPN.ST.TBC = this.ym2612.OPN.ST.TBL;
-            this.ym2612.OPN.ST.status &= (byte)(~v >> 4);
-            this.ym2612.OPN.ST.mode = (uint)v;
+            if ((v & 1) != 0 && ((int)ym2612.OPN.ST.mode & 1) == 0)
+                ym2612.OPN.ST.TAC = ym2612.OPN.ST.TAL;
+            if ((v & 2) != 0 && ((int)ym2612.OPN.ST.mode & 2) == 0)
+                ym2612.OPN.ST.TBC = ym2612.OPN.ST.TBL;
+            ym2612.OPN.ST.status &= (byte)(~v >> 4);
+            ym2612.OPN.ST.mode = (uint)v;
         }
 
         private void setup_connection(YM2612Core.FM_CH CH, int ch)
         {
-            LongPointer longPointer = this.out_fm[ch];
+            LongPointer longPointer = out_fm[ch];
             switch (CH.ALGO)
             {
                 case 0:
-                    CH.connect1 = this.c1;
-                    CH.connect2 = this.mem;
-                    CH.connect3 = this.c2;
-                    CH.mem_connect = this.m2;
+                    CH.connect1 = c1;
+                    CH.connect2 = mem;
+                    CH.connect3 = c2;
+                    CH.mem_connect = m2;
                     break;
                 case 1:
-                    CH.connect1 = this.mem;
-                    CH.connect2 = this.mem;
-                    CH.connect3 = this.c2;
-                    CH.mem_connect = this.m2;
+                    CH.connect1 = mem;
+                    CH.connect2 = mem;
+                    CH.connect3 = c2;
+                    CH.mem_connect = m2;
                     break;
                 case 2:
-                    CH.connect1 = this.c2;
-                    CH.connect2 = this.mem;
-                    CH.connect3 = this.c2;
-                    CH.mem_connect = this.m2;
+                    CH.connect1 = c2;
+                    CH.connect2 = mem;
+                    CH.connect3 = c2;
+                    CH.mem_connect = m2;
                     break;
                 case 3:
-                    CH.connect1 = this.c1;
-                    CH.connect2 = this.mem;
-                    CH.connect3 = this.c2;
-                    CH.mem_connect = this.c2;
+                    CH.connect1 = c1;
+                    CH.connect2 = mem;
+                    CH.connect3 = c2;
+                    CH.mem_connect = c2;
                     break;
                 case 4:
-                    CH.connect1 = this.c1;
+                    CH.connect1 = c1;
                     CH.connect2 = longPointer;
-                    CH.connect3 = this.c2;
-                    CH.mem_connect = this.mem;
+                    CH.connect3 = c2;
+                    CH.mem_connect = mem;
                     break;
                 case 5:
                     CH.connect1 = null;
                     CH.connect2 = longPointer;
                     CH.connect3 = longPointer;
-                    CH.mem_connect = this.m2;
+                    CH.mem_connect = m2;
                     break;
                 case 6:
-                    CH.connect1 = this.c1;
+                    CH.connect1 = c1;
                     CH.connect2 = longPointer;
                     CH.connect3 = longPointer;
-                    CH.mem_connect = this.mem;
+                    CH.mem_connect = mem;
                     break;
                 case 7:
                     CH.connect1 = longPointer;
                     CH.connect2 = longPointer;
                     CH.connect3 = longPointer;
-                    CH.mem_connect = this.mem;
+                    CH.mem_connect = mem;
                     break;
             }
             CH.connect4 = longPointer;
@@ -1430,7 +1430,7 @@ namespace DuckGame
         private void set_det_mul(YM2612Core.FM_CH CH, YM2612Core.FM_SLOT SLOT, int v)
         {
             SLOT.mul = (v & 15) != 0 ? (uint)((v & 15) * 2) : 1U;
-            SLOT.DT = this.ym2612.OPN.ST.dt_tab[v >> 4 & 7];
+            SLOT.DT = ym2612.OPN.ST.dt_tab[v >> 4 & 7];
             CH.SLOT[0].Incr = -1L;
         }
 
@@ -1488,26 +1488,26 @@ namespace DuckGame
 
         private void advance_lfo()
         {
-            if (this.ym2612.OPN.lfo_timer_overflow == 0U)
+            if (ym2612.OPN.lfo_timer_overflow == 0U)
                 return;
-            this.ym2612.OPN.lfo_timer += this.ym2612.OPN.lfo_timer_add;
-            while (this.ym2612.OPN.lfo_timer >= this.ym2612.OPN.lfo_timer_overflow)
+            ym2612.OPN.lfo_timer += ym2612.OPN.lfo_timer_add;
+            while (ym2612.OPN.lfo_timer >= ym2612.OPN.lfo_timer_overflow)
             {
-                this.ym2612.OPN.lfo_timer -= this.ym2612.OPN.lfo_timer_overflow;
-                this.ym2612.OPN.lfo_cnt = (byte)(ym2612.OPN.lfo_cnt + 1 & sbyte.MaxValue);
-                this.ym2612.OPN.LFO_AM = this.ym2612.OPN.lfo_cnt >= 64 ? (uint)(126 - (ym2612.OPN.lfo_cnt & 63) * 2) : ym2612.OPN.lfo_cnt * 2U;
-                this.ym2612.OPN.LFO_PM = (uint)this.ym2612.OPN.lfo_cnt >> 2;
+                ym2612.OPN.lfo_timer -= ym2612.OPN.lfo_timer_overflow;
+                ym2612.OPN.lfo_cnt = (byte)(ym2612.OPN.lfo_cnt + 1 & sbyte.MaxValue);
+                ym2612.OPN.LFO_AM = ym2612.OPN.lfo_cnt >= 64 ? (uint)(126 - (ym2612.OPN.lfo_cnt & 63) * 2) : ym2612.OPN.lfo_cnt * 2U;
+                ym2612.OPN.LFO_PM = (uint)ym2612.OPN.lfo_cnt >> 2;
             }
         }
 
         private void advance_eg_channels()
         {
-            uint egCnt = this.ym2612.OPN.eg_cnt;
+            uint egCnt = ym2612.OPN.eg_cnt;
             uint index1 = 0;
             do
             {
                 int index2 = 0;
-                YM2612Core.FM_SLOT fmSlot = this.ym2612.CH[(int)index1].SLOT[index2];
+                YM2612Core.FM_SLOT fmSlot = ym2612.CH[(int)index1].SLOT[index2];
                 uint num = 4;
                 do
                 {
@@ -1599,7 +1599,7 @@ namespace DuckGame
                     }
                     ++index2;
                     if (index2 < ym2612.CH[(int)index1].SLOT.Count<YM2612Core.FM_SLOT>())
-                        fmSlot = this.ym2612.CH[(int)index1].SLOT[index2];
+                        fmSlot = ym2612.CH[(int)index1].SLOT[index2];
                     --num;
                 }
                 while (num != 0U);
@@ -1655,16 +1655,16 @@ namespace DuckGame
 
         private void update_phase_lfo_slot(YM2612Core.FM_SLOT SLOT, long pms, uint block_fnum)
         {
-            long num1 = this.lfo_pm_table[((block_fnum & 2032U) >> 4 << 8) + pms + ym2612.OPN.LFO_PM];
+            long num1 = lfo_pm_table[((block_fnum & 2032U) >> 4 << 8) + pms + ym2612.OPN.LFO_PM];
             if (num1 != 0L)
             {
                 block_fnum = (uint)(block_fnum * 2U + (ulong)num1);
                 byte num2 = (byte)((block_fnum & 28672U) >> 12);
                 block_fnum &= 4095U;
                 int index = num2 << 2 | YM2612Core.opn_fktable[(int)(block_fnum >> 8)];
-                int num3 = (int)((this.ym2612.OPN.fn_table[(int)block_fnum] >> 7 - num2) + SLOT.DT.value[index]);
+                int num3 = (int)((ym2612.OPN.fn_table[(int)block_fnum] >> 7 - num2) + SLOT.DT.value[index]);
                 if (num3 < 0)
-                    num3 += (int)this.ym2612.OPN.fn_max;
+                    num3 += (int)ym2612.OPN.fn_max;
                 SLOT.phase += (uint)(num3 * SLOT.mul >> 1);
             }
             else
@@ -1674,7 +1674,7 @@ namespace DuckGame
         private void update_phase_lfo_channel(YM2612Core.FM_CH CH)
         {
             uint blockFnum = CH.block_fnum;
-            long num1 = this.lfo_pm_table[((blockFnum & 2032U) >> 4 << 8) + CH.pms + ym2612.OPN.LFO_PM];
+            long num1 = lfo_pm_table[((blockFnum & 2032U) >> 4 << 8) + CH.pms + ym2612.OPN.LFO_PM];
             if (num1 != 0L)
             {
                 uint num2 = (uint)(blockFnum * 2U + (ulong)num1);
@@ -1682,21 +1682,21 @@ namespace DuckGame
                 uint index1 = num2 & 4095U;
                 int index2 = num3 << 2 | YM2612Core.opn_fktable[(int)(index1 >> 8)];
                 int num4;
-                int num5 = (int)((num4 = (int)(this.ym2612.OPN.fn_table[(int)index1] >> 7 - num3)) + CH.SLOT[0].DT.value[index2]);
+                int num5 = (int)((num4 = (int)(ym2612.OPN.fn_table[(int)index1] >> 7 - num3)) + CH.SLOT[0].DT.value[index2]);
                 if (num5 < 0)
-                    num5 += (int)this.ym2612.OPN.fn_max;
+                    num5 += (int)ym2612.OPN.fn_max;
                 CH.SLOT[0].phase += (uint)(num5 * CH.SLOT[0].mul >> 1);
                 int num6 = (int)(num4 + CH.SLOT[2].DT.value[index2]);
                 if (num6 < 0)
-                    num6 += (int)this.ym2612.OPN.fn_max;
+                    num6 += (int)ym2612.OPN.fn_max;
                 CH.SLOT[2].phase += (uint)(num6 * CH.SLOT[2].mul >> 1);
                 int num7 = (int)(num4 + CH.SLOT[1].DT.value[index2]);
                 if (num7 < 0)
-                    num7 += (int)this.ym2612.OPN.fn_max;
+                    num7 += (int)ym2612.OPN.fn_max;
                 CH.SLOT[1].phase += (uint)(num7 * CH.SLOT[1].mul >> 1);
                 int num8 = (int)(num4 + CH.SLOT[3].DT.value[index2]);
                 if (num8 < 0)
-                    num8 += (int)this.ym2612.OPN.fn_max;
+                    num8 += (int)ym2612.OPN.fn_max;
                 CH.SLOT[3].phase += (uint)(num8 * CH.SLOT[3].mul >> 1);
             }
             else
@@ -1712,7 +1712,7 @@ namespace DuckGame
         {
             fc += (int)SLOT.DT.value[kc];
             if (fc < 0)
-                fc += (int)this.ym2612.OPN.fn_max;
+                fc += (int)ym2612.OPN.fn_max;
             SLOT.Incr = fc * SLOT.mul >> 1;
             kc >>= SLOT.KSR;
             if (SLOT.ksr == kc)
@@ -1742,36 +1742,36 @@ namespace DuckGame
                 return;
             int fc = (int)CH.fc;
             int kcode = CH.kcode;
-            this.refresh_fc_eg_slot(CH.SLOT[0], fc, kcode);
-            this.refresh_fc_eg_slot(CH.SLOT[2], fc, kcode);
-            this.refresh_fc_eg_slot(CH.SLOT[1], fc, kcode);
-            this.refresh_fc_eg_slot(CH.SLOT[3], fc, kcode);
+            refresh_fc_eg_slot(CH.SLOT[0], fc, kcode);
+            refresh_fc_eg_slot(CH.SLOT[2], fc, kcode);
+            refresh_fc_eg_slot(CH.SLOT[1], fc, kcode);
+            refresh_fc_eg_slot(CH.SLOT[3], fc, kcode);
         }
 
         private uint volume_calc(YM2612Core.FM_SLOT slot, uint AM) => slot.vol_out + (AM & slot.AMmask);
 
         private int op_calc(uint phase, uint env, int pm)
         {
-            uint index = (env << 3) + this.sin_tab[(int)((phase & -65536L) + (pm << 15)) >> 16 & 1023];
-            return index >= 6656U ? 0 : this.tl_tab[(int)index];
+            uint index = (env << 3) + sin_tab[(int)((phase & -65536L) + (pm << 15)) >> 16 & 1023];
+            return index >= 6656U ? 0 : tl_tab[(int)index];
         }
 
         private int op_calc1(uint phase, uint env, int pm)
         {
-            uint index = (env << 3) + this.sin_tab[(int)((phase & -65536L) + pm) >> 16 & 1023];
-            return index >= 6656U ? 0 : this.tl_tab[(int)index];
+            uint index = (env << 3) + sin_tab[(int)((phase & -65536L) + pm) >> 16 & 1023];
+            return index >= 6656U ? 0 : tl_tab[(int)index];
         }
 
         private void chan_calc(YM2612Core.FM_CH CH)
         {
-            uint AM = this.ym2612.OPN.LFO_AM >> CH.ams;
-            uint env1 = this.volume_calc(CH.SLOT[0], AM);
-            this.m2.value = this.c1.value = this.c2.value = this.mem.value = 0L;
+            uint AM = ym2612.OPN.LFO_AM >> CH.ams;
+            uint env1 = volume_calc(CH.SLOT[0], AM);
+            m2.value = c1.value = c2.value = mem.value = 0L;
             CH.mem_connect.value = CH.mem_value;
             long num = CH.op1_out[0] + CH.op1_out[1];
             CH.op1_out[0] = CH.op1_out[1];
             if (CH.connect1 == null)
-                this.mem.value = this.c1.value = this.c2.value = CH.op1_out[0];
+                mem.value = c1.value = c2.value = CH.op1_out[0];
             else
                 CH.connect1.value += CH.op1_out[0];
             CH.op1_out[1] = 0L;
@@ -1779,29 +1779,29 @@ namespace DuckGame
             {
                 if (CH.FB == 0)
                     num = 0L;
-                CH.op1_out[1] = this.op_calc1(CH.SLOT[0].phase, env1, (int)(num << CH.FB));
+                CH.op1_out[1] = op_calc1(CH.SLOT[0].phase, env1, (int)(num << CH.FB));
             }
-            uint env2 = this.volume_calc(CH.SLOT[1], AM);
+            uint env2 = volume_calc(CH.SLOT[1], AM);
             if (env2 < 832U)
-                CH.connect3.value += this.op_calc(CH.SLOT[1].phase, env2, (int)this.m2.value);
-            uint env3 = this.volume_calc(CH.SLOT[2], AM);
+                CH.connect3.value += op_calc(CH.SLOT[1].phase, env2, (int)m2.value);
+            uint env3 = volume_calc(CH.SLOT[2], AM);
             if (env3 < 832U)
-                CH.connect2.value += this.op_calc(CH.SLOT[2].phase, env3, (int)this.c1.value);
-            uint env4 = this.volume_calc(CH.SLOT[3], AM);
+                CH.connect2.value += op_calc(CH.SLOT[2].phase, env3, (int)c1.value);
+            uint env4 = volume_calc(CH.SLOT[3], AM);
             if (env4 < 832U)
-                CH.connect4.value += this.op_calc(CH.SLOT[3].phase, env4, (int)this.c2.value);
-            CH.mem_value = this.mem.value;
+                CH.connect4.value += op_calc(CH.SLOT[3].phase, env4, (int)c2.value);
+            CH.mem_value = mem.value;
             if (CH.pms != 0L)
             {
-                if ((this.ym2612.OPN.ST.mode & 192U) > 0U && CH == this.ym2612.CH[2])
+                if ((ym2612.OPN.ST.mode & 192U) > 0U && CH == ym2612.CH[2])
                 {
-                    this.update_phase_lfo_slot(CH.SLOT[0], CH.pms, this.ym2612.OPN.SL3.block_fnum[1]);
-                    this.update_phase_lfo_slot(CH.SLOT[2], CH.pms, this.ym2612.OPN.SL3.block_fnum[2]);
-                    this.update_phase_lfo_slot(CH.SLOT[1], CH.pms, this.ym2612.OPN.SL3.block_fnum[0]);
-                    this.update_phase_lfo_slot(CH.SLOT[3], CH.pms, CH.block_fnum);
+                    update_phase_lfo_slot(CH.SLOT[0], CH.pms, ym2612.OPN.SL3.block_fnum[1]);
+                    update_phase_lfo_slot(CH.SLOT[2], CH.pms, ym2612.OPN.SL3.block_fnum[2]);
+                    update_phase_lfo_slot(CH.SLOT[1], CH.pms, ym2612.OPN.SL3.block_fnum[0]);
+                    update_phase_lfo_slot(CH.SLOT[3], CH.pms, CH.block_fnum);
                 }
                 else
-                    this.update_phase_lfo_channel(CH);
+                    update_phase_lfo_channel(CH);
             }
             else
             {
@@ -1819,32 +1819,32 @@ namespace DuckGame
                 case 34:
                     if ((v & 8) != 0)
                     {
-                        if (this.ym2612.OPN.lfo_timer_overflow == 0U)
+                        if (ym2612.OPN.lfo_timer_overflow == 0U)
                         {
-                            this.ym2612.OPN.lfo_cnt = 0;
-                            this.ym2612.OPN.lfo_timer = 0U;
-                            this.ym2612.OPN.LFO_AM = 0U;
-                            this.ym2612.OPN.LFO_PM = 0U;
+                            ym2612.OPN.lfo_cnt = 0;
+                            ym2612.OPN.lfo_timer = 0U;
+                            ym2612.OPN.LFO_AM = 0U;
+                            ym2612.OPN.LFO_PM = 0U;
                         }
-                        this.ym2612.OPN.lfo_timer_overflow = YM2612Core.lfo_samples_per_step[v & 7] << 24;
+                        ym2612.OPN.lfo_timer_overflow = YM2612Core.lfo_samples_per_step[v & 7] << 24;
                         break;
                     }
-                    this.ym2612.OPN.lfo_timer_overflow = 0U;
+                    ym2612.OPN.lfo_timer_overflow = 0U;
                     break;
                 case 36:
-                    this.ym2612.OPN.ST.TA = this.ym2612.OPN.ST.TA & 3L | (long)v << 2;
-                    this.ym2612.OPN.ST.TAL = 1024L - this.ym2612.OPN.ST.TA << 16;
+                    ym2612.OPN.ST.TA = ym2612.OPN.ST.TA & 3L | (long)v << 2;
+                    ym2612.OPN.ST.TAL = 1024L - ym2612.OPN.ST.TA << 16;
                     break;
                 case 37:
-                    this.ym2612.OPN.ST.TA = this.ym2612.OPN.ST.TA & 1020L | v & 3L;
-                    this.ym2612.OPN.ST.TAL = 1024L - this.ym2612.OPN.ST.TA << 16;
+                    ym2612.OPN.ST.TA = ym2612.OPN.ST.TA & 1020L | v & 3L;
+                    ym2612.OPN.ST.TAL = 1024L - ym2612.OPN.ST.TA << 16;
                     break;
                 case 38:
-                    this.ym2612.OPN.ST.TB = v;
-                    this.ym2612.OPN.ST.TBL = 256L - this.ym2612.OPN.ST.TB << 20;
+                    ym2612.OPN.ST.TB = v;
+                    ym2612.OPN.ST.TBL = 256L - ym2612.OPN.ST.TB << 20;
                     break;
                 case 39:
-                    this.set_timers(v);
+                    set_timers(v);
                     break;
                 case 40:
                     byte index = (byte)(v & 3);
@@ -1852,25 +1852,25 @@ namespace DuckGame
                         break;
                     if ((v & 4) != 0)
                         index += 3;
-                    YM2612Core.FM_CH CH = this.ym2612.CH[index];
+                    YM2612Core.FM_CH CH = ym2612.CH[index];
                     if ((v & 16) != 0)
-                        this.FM_KEYON(CH, 0);
+                        FM_KEYON(CH, 0);
                     else
-                        this.FM_KEYOFF(CH, 0);
+                        FM_KEYOFF(CH, 0);
                     if ((v & 32) != 0)
-                        this.FM_KEYON(CH, 2);
+                        FM_KEYON(CH, 2);
                     else
-                        this.FM_KEYOFF(CH, 2);
+                        FM_KEYOFF(CH, 2);
                     if ((v & 64) != 0)
-                        this.FM_KEYON(CH, 1);
+                        FM_KEYON(CH, 1);
                     else
-                        this.FM_KEYOFF(CH, 1);
+                        FM_KEYOFF(CH, 1);
                     if ((v & 128) != 0)
                     {
-                        this.FM_KEYON(CH, 3);
+                        FM_KEYON(CH, 3);
                         break;
                     }
-                    this.FM_KEYOFF(CH, 3);
+                    FM_KEYOFF(CH, 3);
                     break;
             }
         }
@@ -1881,33 +1881,33 @@ namespace DuckGame
 
         private void OPNWriteReg(int r, int v)
         {
-            byte ch = this.OPN_CHAN(r);
+            byte ch = OPN_CHAN(r);
             if (ch == 3)
                 return;
             if (r >= 256)
                 ch += 3;
-            YM2612Core.FM_CH CH = this.ym2612.CH[ch];
-            YM2612Core.FM_SLOT SLOT = CH.SLOT[this.OPN_SLOT(r)];
+            YM2612Core.FM_CH CH = ym2612.CH[ch];
+            YM2612Core.FM_SLOT SLOT = CH.SLOT[OPN_SLOT(r)];
             switch (r & 240)
             {
                 case 48:
-                    this.set_det_mul(CH, SLOT, v);
+                    set_det_mul(CH, SLOT, v);
                     break;
                 case 64:
-                    this.set_tl(SLOT, v);
+                    set_tl(SLOT, v);
                     break;
                 case 80:
-                    this.set_ar_ksr(CH, SLOT, v);
+                    set_ar_ksr(CH, SLOT, v);
                     break;
                 case 96:
-                    this.set_dr(SLOT, v);
+                    set_dr(SLOT, v);
                     SLOT.AMmask = (v & 128) != 0 ? uint.MaxValue : 0U;
                     break;
                 case 112:
-                    this.set_sr(SLOT, v);
+                    set_sr(SLOT, v);
                     break;
                 case 128:
-                    this.set_sl_rr(SLOT, v);
+                    set_sl_rr(SLOT, v);
                     break;
                 case 144:
                     SLOT.ssg = (byte)(v & 15);
@@ -1921,51 +1921,51 @@ namespace DuckGame
                     SLOT.vol_out = (uint)SLOT.volume + SLOT.tl;
                     break;
                 case 160:
-                    switch (this.OPN_SLOT(r))
+                    switch (OPN_SLOT(r))
                     {
                         case 0:
                             uint num1 = (uint)((uint)((ym2612.OPN.ST.fn_h & 7) << 8) + (ulong)v);
-                            byte num2 = (byte)((uint)this.ym2612.OPN.ST.fn_h >> 3);
+                            byte num2 = (byte)((uint)ym2612.OPN.ST.fn_h >> 3);
                             CH.kcode = (byte)((uint)num2 << 2 | YM2612Core.opn_fktable[(int)(num1 >> 7)]);
-                            CH.fc = this.ym2612.OPN.fn_table[(int)num1 * 2] >> 7 - num2;
+                            CH.fc = ym2612.OPN.fn_table[(int)num1 * 2] >> 7 - num2;
                             CH.block_fnum = (uint)num2 << 11 | num1;
                             CH.SLOT[0].Incr = -1L;
                             return;
                         case 1:
-                            this.ym2612.OPN.ST.fn_h = (byte)(v & 63);
+                            ym2612.OPN.ST.fn_h = (byte)(v & 63);
                             return;
                         case 2:
                             if (r >= 256)
                                 return;
                             uint num3 = (uint)((uint)((ym2612.OPN.SL3.fn_h & 7) << 8) + (ulong)v);
-                            byte num4 = (byte)((uint)this.ym2612.OPN.SL3.fn_h >> 3);
-                            this.ym2612.OPN.SL3.kcode[ch] = (byte)((uint)num4 << 2 | YM2612Core.opn_fktable[(int)(num3 >> 7)]);
-                            this.ym2612.OPN.SL3.fc[ch] = this.ym2612.OPN.fn_table[(int)num3 * 2] >> 7 - num4;
-                            this.ym2612.OPN.SL3.block_fnum[ch] = (uint)num4 << 11 | num3;
-                            this.ym2612.CH[2].SLOT[0].Incr = -1L;
+                            byte num4 = (byte)((uint)ym2612.OPN.SL3.fn_h >> 3);
+                            ym2612.OPN.SL3.kcode[ch] = (byte)((uint)num4 << 2 | YM2612Core.opn_fktable[(int)(num3 >> 7)]);
+                            ym2612.OPN.SL3.fc[ch] = ym2612.OPN.fn_table[(int)num3 * 2] >> 7 - num4;
+                            ym2612.OPN.SL3.block_fnum[ch] = (uint)num4 << 11 | num3;
+                            ym2612.CH[2].SLOT[0].Incr = -1L;
                             return;
                         case 3:
                             if (r >= 256)
                                 return;
-                            this.ym2612.OPN.SL3.fn_h = (byte)(v & 63);
+                            ym2612.OPN.SL3.fn_h = (byte)(v & 63);
                             return;
                         default:
                             return;
                     }
                 case 176:
-                    switch (this.OPN_SLOT(r))
+                    switch (OPN_SLOT(r))
                     {
                         case 0:
                             int num5 = v >> 3 & 7;
                             CH.ALGO = (byte)(v & 7);
                             CH.FB = num5 != 0 ? (byte)(num5 + 6) : (byte)0;
-                            this.setup_connection(CH, ch);
+                            setup_connection(CH, ch);
                             return;
                         case 1:
                             CH.pms = (v & 7) * 32;
                             CH.ams = YM2612Core.lfo_ams_depth_shift[v >> 4 & 3];
-                            this.ym2612.OPN.pan[ch * 2] = (v & 128) != 0 ? uint.MaxValue : 0U;
-                            this.ym2612.OPN.pan[ch * 2 + 1] = (v & 64) != 0 ? uint.MaxValue : 0U;
+                            ym2612.OPN.pan[ch * 2] = (v & 128) != 0 ? uint.MaxValue : 0U;
+                            ym2612.OPN.pan[ch * 2 + 1] = (v & 64) != 0 ? uint.MaxValue : 0U;
                             return;
                         default:
                             return;
@@ -1980,25 +1980,25 @@ namespace DuckGame
                 for (int index2 = 0; index2 <= 31; ++index2)
                 {
                     double num = YM2612Core.dt_tab[index1 * 32 + index2] * freqbase * 64.0;
-                    this.ym2612.OPN.ST.dt_tab[index1].value[index2] = (int)num;
-                    this.ym2612.OPN.ST.dt_tab[index1 + 4].value[index2] = -this.ym2612.OPN.ST.dt_tab[index1].value[index2];
+                    ym2612.OPN.ST.dt_tab[index1].value[index2] = (int)num;
+                    ym2612.OPN.ST.dt_tab[index1 + 4].value[index2] = -ym2612.OPN.ST.dt_tab[index1].value[index2];
                 }
             }
             for (int index = 0; index < 4096; ++index)
-                this.ym2612.OPN.fn_table[index] = (uint)(index * 32.0 * freqbase * 64.0);
-            this.ym2612.OPN.fn_max = (uint)(131072.0 * freqbase * 64.0);
+                ym2612.OPN.fn_table[index] = (uint)(index * 32.0 * freqbase * 64.0);
+            ym2612.OPN.fn_max = (uint)(131072.0 * freqbase * 64.0);
         }
 
         private void OPNSetPres(int pres)
         {
-            double freqbase = this.ym2612.OPN.ST.clock / ym2612.OPN.ST.rate / pres;
-            if (this.config.hq_fm != 0)
+            double freqbase = ym2612.OPN.ST.clock / ym2612.OPN.ST.rate / pres;
+            if (config.hq_fm != 0)
                 freqbase = 1.0;
-            this.ym2612.OPN.eg_timer_add = (uint)(65536.0 * freqbase);
-            this.ym2612.OPN.eg_timer_overflow = 196608U;
-            this.ym2612.OPN.lfo_timer_add = (uint)(16777216.0 * freqbase);
-            this.ym2612.OPN.ST.TimerBase = (int)(65536.0 * freqbase);
-            this.init_timetables(freqbase);
+            ym2612.OPN.eg_timer_add = (uint)(65536.0 * freqbase);
+            ym2612.OPN.eg_timer_overflow = 196608U;
+            ym2612.OPN.lfo_timer_add = (uint)(16777216.0 * freqbase);
+            ym2612.OPN.ST.TimerBase = (int)(65536.0 * freqbase);
+            init_timetables(freqbase);
         }
 
         private void reset_channels(YM2612Core.FM_CH[] CH, int num)
@@ -2028,12 +2028,12 @@ namespace DuckGame
             {
                 int num2 = (int)Math.Floor(65536.0 / Math.Pow(2.0, (index1 + 1) * (1.0 / 32.0) / 8.0)) >> 4;
                 int num3 = ((num2 & 1) == 0 ? num2 >> 1 : (num2 >> 1) + 1) << 2;
-                this.tl_tab[index1 * 2] = (int)(num3 & num1);
-                this.tl_tab[index1 * 2 + 1] = (int)(-this.tl_tab[index1 * 2] & num1);
+                tl_tab[index1 * 2] = (int)(num3 & num1);
+                tl_tab[index1 * 2 + 1] = (int)(-tl_tab[index1 * 2] & num1);
                 for (int index2 = 1; index2 < 13; ++index2)
                 {
-                    this.tl_tab[index1 * 2 + index2 * 2 * 256] = (int)(this.tl_tab[index1 * 2] >> index2 & num1);
-                    this.tl_tab[index1 * 2 + 1 + index2 * 2 * 256] = (int)(-this.tl_tab[index1 * 2 + index2 * 2 * 256] & num1);
+                    tl_tab[index1 * 2 + index2 * 2 * 256] = (int)(tl_tab[index1 * 2] >> index2 & num1);
+                    tl_tab[index1 * 2 + 1 + index2 * 2 * 256] = (int)(-tl_tab[index1 * 2 + index2 * 2 * 256] & num1);
                 }
             }
             for (int index = 0; index < 1024; ++index)
@@ -2041,7 +2041,7 @@ namespace DuckGame
                 double num4 = Math.Sin((index * 2 + 1) * Math.PI / 1024.0);
                 int num5 = (int)(2.0 * ((num4 <= 0.0 ? 8.0 * Math.Log(-1.0 / num4) / Math.Log(2.0) : 8.0 * Math.Log(1.0 / num4) / Math.Log(2.0)) / (1.0 / 32.0)));
                 int num6 = (num5 & 1) == 0 ? num5 >> 1 : (num5 >> 1) + 1;
-                this.sin_tab[index] = (uint)(num6 * 2 + (num4 >= 0.0 ? 0 : 1));
+                sin_tab[index] = (uint)(num6 * 2 + (num4 >= 0.0 ? 0 : 1));
             }
             for (int index3 = 0; index3 < 8; ++index3)
             {
@@ -2059,10 +2059,10 @@ namespace DuckGame
                                 num8 += YM2612Core.lfo_pm_output[(int)num9 + (int)num7, index5];
                             }
                         }
-                        this.lfo_pm_table[index4 * 32 * 8 + index3 * 32 + index5] = num8;
-                        this.lfo_pm_table[index4 * 32 * 8 + index3 * 32 + (index5 ^ 7) + 8] = num8;
-                        this.lfo_pm_table[index4 * 32 * 8 + index3 * 32 + index5 + 16] = -num8;
-                        this.lfo_pm_table[index4 * 32 * 8 + index3 * 32 + (index5 ^ 7) + 24] = -num8;
+                        lfo_pm_table[index4 * 32 * 8 + index3 * 32 + index5] = num8;
+                        lfo_pm_table[index4 * 32 * 8 + index3 * 32 + (index5 ^ 7) + 8] = num8;
+                        lfo_pm_table[index4 * 32 * 8 + index3 * 32 + index5 + 16] = -num8;
+                        lfo_pm_table[index4 * 32 * 8 + index3 * 32 + (index5 ^ 7) + 24] = -num8;
                     }
                 }
             }
@@ -2070,89 +2070,89 @@ namespace DuckGame
 
         public void YM2612Init(double clock, int rate)
         {
-            this.config.psg_preamp = 150;
-            this.config.fm_preamp = 100;
-            this.config.hq_fm = 0;
-            this.config.psgBoostNoise = 0;
-            this.config.filter = 0;
-            this.config.lp_range = 50;
-            this.config.low_freq = 880;
-            this.config.high_freq = 5000;
-            this.config.lg = 1;
-            this.config.mg = 1;
-            this.config.hg = 1;
-            this.config.rolloff = 0.99f;
-            this.config.dac_bits = 14;
-            this.config.ym2413 = 2;
-            this.config.system = 0;
-            this.config.region_detect = 0;
-            this.config.vdp_mode = 0;
-            this.config.master_clock = 0;
-            this.config.force_dtack = 0;
-            this.config.addr_error = 1;
-            this.config.bios = 0;
-            this.config.lock_on = 0;
-            this.config.hot_swap = 0;
-            this.config.xshift = 0;
-            this.config.yshift = 0;
-            this.config.xscale = 0;
-            this.config.yscale = 0;
-            this.config.aspect = 1;
-            this.config.overscan = 3;
-            this.config.ntsc = 0;
-            this.config.vsync = 1;
-            this.config.render = 0;
-            this.config.bilinear = 0;
-            this.config.tv_mode = 1;
-            this.config.gun_cursor[0] = 1;
-            this.config.gun_cursor[1] = 1;
-            this.config.invert_mouse = 0;
-            this.config.autoload = 0;
-            this.config.autocheat = 0;
-            this.config.s_auto = 0;
-            this.config.s_default = 1;
-            this.config.s_device = 0;
-            this.config.l_device = 0;
-            this.config.bg_overlay = 0;
-            this.config.screen_w = 658;
-            this.config.bgm_volume = 100f;
-            this.config.sfx_volume = 100f;
-            this.config.hot_swap &= 1;
-            this.init_tables();
-            this.ym2612.OPN.ST.clock = clock;
-            this.ym2612.OPN.ST.rate = (uint)rate;
-            this.OPNSetPres(144);
+            config.psg_preamp = 150;
+            config.fm_preamp = 100;
+            config.hq_fm = 0;
+            config.psgBoostNoise = 0;
+            config.filter = 0;
+            config.lp_range = 50;
+            config.low_freq = 880;
+            config.high_freq = 5000;
+            config.lg = 1;
+            config.mg = 1;
+            config.hg = 1;
+            config.rolloff = 0.99f;
+            config.dac_bits = 14;
+            config.ym2413 = 2;
+            config.system = 0;
+            config.region_detect = 0;
+            config.vdp_mode = 0;
+            config.master_clock = 0;
+            config.force_dtack = 0;
+            config.addr_error = 1;
+            config.bios = 0;
+            config.lock_on = 0;
+            config.hot_swap = 0;
+            config.xshift = 0;
+            config.yshift = 0;
+            config.xscale = 0;
+            config.yscale = 0;
+            config.aspect = 1;
+            config.overscan = 3;
+            config.ntsc = 0;
+            config.vsync = 1;
+            config.render = 0;
+            config.bilinear = 0;
+            config.tv_mode = 1;
+            config.gun_cursor[0] = 1;
+            config.gun_cursor[1] = 1;
+            config.invert_mouse = 0;
+            config.autoload = 0;
+            config.autocheat = 0;
+            config.s_auto = 0;
+            config.s_default = 1;
+            config.s_device = 0;
+            config.l_device = 0;
+            config.bg_overlay = 0;
+            config.screen_w = 658;
+            config.bgm_volume = 100f;
+            config.sfx_volume = 100f;
+            config.hot_swap &= 1;
+            init_tables();
+            ym2612.OPN.ST.clock = clock;
+            ym2612.OPN.ST.rate = (uint)rate;
+            OPNSetPres(144);
         }
 
         public void YM2612ResetChip()
         {
-            this.ym2612.OPN.eg_timer = 0U;
-            this.ym2612.OPN.eg_cnt = 0U;
-            this.ym2612.OPN.lfo_timer_overflow = 0U;
-            this.ym2612.OPN.lfo_timer = 0U;
-            this.ym2612.OPN.lfo_cnt = 0;
-            this.ym2612.OPN.LFO_AM = 0U;
-            this.ym2612.OPN.LFO_PM = 0U;
-            this.ym2612.OPN.ST.TAC = 0L;
-            this.ym2612.OPN.ST.TBC = 0L;
-            this.ym2612.OPN.SL3.key_csm = 0;
-            this.ym2612.dacen = 0;
-            this.ym2612.dacout = 0L;
-            this.set_timers(48);
-            this.ym2612.OPN.ST.TB = 0L;
-            this.ym2612.OPN.ST.TBL = 268435456L;
-            this.ym2612.OPN.ST.TA = 0L;
-            this.ym2612.OPN.ST.TAL = 67108864L;
-            this.reset_channels(this.ym2612.CH, 6);
+            ym2612.OPN.eg_timer = 0U;
+            ym2612.OPN.eg_cnt = 0U;
+            ym2612.OPN.lfo_timer_overflow = 0U;
+            ym2612.OPN.lfo_timer = 0U;
+            ym2612.OPN.lfo_cnt = 0;
+            ym2612.OPN.LFO_AM = 0U;
+            ym2612.OPN.LFO_PM = 0U;
+            ym2612.OPN.ST.TAC = 0L;
+            ym2612.OPN.ST.TBC = 0L;
+            ym2612.OPN.SL3.key_csm = 0;
+            ym2612.dacen = 0;
+            ym2612.dacout = 0L;
+            set_timers(48);
+            ym2612.OPN.ST.TB = 0L;
+            ym2612.OPN.ST.TBL = 268435456L;
+            ym2612.OPN.ST.TA = 0L;
+            ym2612.OPN.ST.TAL = 67108864L;
+            reset_channels(ym2612.CH, 6);
             for (int r = 182; r >= 180; --r)
             {
-                this.OPNWriteReg(r, 192);
-                this.OPNWriteReg(r | 256, 192);
+                OPNWriteReg(r, 192);
+                OPNWriteReg(r | 256, 192);
             }
             for (int r = 178; r >= 48; --r)
             {
-                this.OPNWriteReg(r, 0);
-                this.OPNWriteReg(r | 256, 0);
+                OPNWriteReg(r, 0);
+                OPNWriteReg(r | 256, 0);
             }
         }
 
@@ -2163,7 +2163,7 @@ namespace DuckGame
             {
                 if (a == 2U)
                 {
-                    this.ym2612.OPN.ST.address = (ushort)(v | 256U);
+                    ym2612.OPN.ST.address = (ushort)(v | 256U);
                 }
                 else
                 {
@@ -2173,123 +2173,123 @@ namespace DuckGame
                         if (address != 42)
                         {
                             if (address == 43)
-                                this.ym2612.dacen = (byte)(v & 128U);
+                                ym2612.dacen = (byte)(v & 128U);
                             else
-                                this.OPNWriteMode(address, (int)v);
+                                OPNWriteMode(address, (int)v);
                         }
                         else
-                            this.ym2612.dacout = (int)v - 128 << 6;
+                            ym2612.dacout = (int)v - 128 << 6;
                     }
                     else
-                        this.OPNWriteReg(address, (int)v);
+                        OPNWriteReg(address, (int)v);
                 }
             }
             else
-                this.ym2612.OPN.ST.address = (ushort)v;
+                ym2612.OPN.ST.address = (ushort)v;
         }
 
         public uint YM2612Read() => ym2612.OPN.ST.status & (uint)byte.MaxValue;
 
         public void YM2612Update(int[] buffer, int length)
         {
-            this.refresh_fc_eg_chan(this.ym2612.CH[0]);
-            this.refresh_fc_eg_chan(this.ym2612.CH[1]);
-            if (((int)this.ym2612.OPN.ST.mode & 192) == 0)
-                this.refresh_fc_eg_chan(this.ym2612.CH[2]);
-            else if (this.ym2612.CH[2].SLOT[0].Incr == -1L)
+            refresh_fc_eg_chan(ym2612.CH[0]);
+            refresh_fc_eg_chan(ym2612.CH[1]);
+            if (((int)ym2612.OPN.ST.mode & 192) == 0)
+                refresh_fc_eg_chan(ym2612.CH[2]);
+            else if (ym2612.CH[2].SLOT[0].Incr == -1L)
             {
-                this.refresh_fc_eg_slot(this.ym2612.CH[2].SLOT[0], (int)this.ym2612.OPN.SL3.fc[1], this.ym2612.OPN.SL3.kcode[1]);
-                this.refresh_fc_eg_slot(this.ym2612.CH[2].SLOT[2], (int)this.ym2612.OPN.SL3.fc[2], this.ym2612.OPN.SL3.kcode[2]);
-                this.refresh_fc_eg_slot(this.ym2612.CH[2].SLOT[1], (int)this.ym2612.OPN.SL3.fc[0], this.ym2612.OPN.SL3.kcode[0]);
-                this.refresh_fc_eg_slot(this.ym2612.CH[2].SLOT[3], (int)this.ym2612.CH[2].fc, ym2612.CH[2].kcode);
+                refresh_fc_eg_slot(ym2612.CH[2].SLOT[0], (int)ym2612.OPN.SL3.fc[1], ym2612.OPN.SL3.kcode[1]);
+                refresh_fc_eg_slot(ym2612.CH[2].SLOT[2], (int)ym2612.OPN.SL3.fc[2], ym2612.OPN.SL3.kcode[2]);
+                refresh_fc_eg_slot(ym2612.CH[2].SLOT[1], (int)ym2612.OPN.SL3.fc[0], ym2612.OPN.SL3.kcode[0]);
+                refresh_fc_eg_slot(ym2612.CH[2].SLOT[3], (int)ym2612.CH[2].fc, ym2612.CH[2].kcode);
             }
-            this.refresh_fc_eg_chan(this.ym2612.CH[3]);
-            this.refresh_fc_eg_chan(this.ym2612.CH[4]);
-            this.refresh_fc_eg_chan(this.ym2612.CH[5]);
+            refresh_fc_eg_chan(ym2612.CH[3]);
+            refresh_fc_eg_chan(ym2612.CH[4]);
+            refresh_fc_eg_chan(ym2612.CH[5]);
             int index1 = 0;
             for (int index2 = 0; index2 < length; ++index2)
             {
-                this.out_fm[0].value = 0L;
-                this.out_fm[1].value = 0L;
-                this.out_fm[2].value = 0L;
-                this.out_fm[3].value = 0L;
-                this.out_fm[4].value = 0L;
-                this.out_fm[5].value = 0L;
-                this.update_ssg_eg_channel(this.ym2612.CH[0].SLOT);
-                this.update_ssg_eg_channel(this.ym2612.CH[1].SLOT);
-                this.update_ssg_eg_channel(this.ym2612.CH[2].SLOT);
-                this.update_ssg_eg_channel(this.ym2612.CH[3].SLOT);
-                this.update_ssg_eg_channel(this.ym2612.CH[4].SLOT);
-                this.update_ssg_eg_channel(this.ym2612.CH[5].SLOT);
-                this.chan_calc(this.ym2612.CH[0]);
-                this.chan_calc(this.ym2612.CH[1]);
-                this.chan_calc(this.ym2612.CH[2]);
-                this.chan_calc(this.ym2612.CH[3]);
-                this.chan_calc(this.ym2612.CH[4]);
-                if (this.ym2612.dacen == 0)
-                    this.chan_calc(this.ym2612.CH[5]);
+                out_fm[0].value = 0L;
+                out_fm[1].value = 0L;
+                out_fm[2].value = 0L;
+                out_fm[3].value = 0L;
+                out_fm[4].value = 0L;
+                out_fm[5].value = 0L;
+                update_ssg_eg_channel(ym2612.CH[0].SLOT);
+                update_ssg_eg_channel(ym2612.CH[1].SLOT);
+                update_ssg_eg_channel(ym2612.CH[2].SLOT);
+                update_ssg_eg_channel(ym2612.CH[3].SLOT);
+                update_ssg_eg_channel(ym2612.CH[4].SLOT);
+                update_ssg_eg_channel(ym2612.CH[5].SLOT);
+                chan_calc(ym2612.CH[0]);
+                chan_calc(ym2612.CH[1]);
+                chan_calc(ym2612.CH[2]);
+                chan_calc(ym2612.CH[3]);
+                chan_calc(ym2612.CH[4]);
+                if (ym2612.dacen == 0)
+                    chan_calc(ym2612.CH[5]);
                 else
-                    this.out_fm[5].value = this.ym2612.dacout;
-                this.advance_lfo();
-                this.ym2612.OPN.eg_timer += this.ym2612.OPN.eg_timer_add;
-                while (this.ym2612.OPN.eg_timer >= this.ym2612.OPN.eg_timer_overflow)
+                    out_fm[5].value = ym2612.dacout;
+                advance_lfo();
+                ym2612.OPN.eg_timer += ym2612.OPN.eg_timer_add;
+                while (ym2612.OPN.eg_timer >= ym2612.OPN.eg_timer_overflow)
                 {
-                    this.ym2612.OPN.eg_timer -= this.ym2612.OPN.eg_timer_overflow;
-                    ++this.ym2612.OPN.eg_cnt;
-                    this.advance_eg_channels();
+                    ym2612.OPN.eg_timer -= ym2612.OPN.eg_timer_overflow;
+                    ++ym2612.OPN.eg_cnt;
+                    advance_eg_channels();
                 }
-                if (this.out_fm[0].value > 8192L)
-                    this.out_fm[0].value = 8192L;
-                else if (this.out_fm[0].value < -8192L)
-                    this.out_fm[0].value = -8192L;
-                if (this.out_fm[1].value > 8192L)
-                    this.out_fm[1].value = 8192L;
-                else if (this.out_fm[1].value < -8192L)
-                    this.out_fm[1].value = -8192L;
-                if (this.out_fm[2].value > 8192L)
-                    this.out_fm[2].value = 8192L;
-                else if (this.out_fm[2].value < -8192L)
-                    this.out_fm[2].value = -8192L;
-                if (this.out_fm[3].value > 8192L)
-                    this.out_fm[3].value = 8192L;
-                else if (this.out_fm[3].value < -8192L)
-                    this.out_fm[3].value = -8192L;
-                if (this.out_fm[4].value > 8192L)
-                    this.out_fm[4].value = 8192L;
-                else if (this.out_fm[4].value < -8192L)
-                    this.out_fm[4].value = -8192L;
-                if (this.out_fm[5].value > 8192L)
-                    this.out_fm[5].value = 8192L;
-                else if (this.out_fm[5].value < -8192L)
-                    this.out_fm[5].value = -8192L;
-                int num1 = (int)(this.out_fm[0].value & this.ym2612.OPN.pan[0]);
-                int num2 = (int)(this.out_fm[0].value & this.ym2612.OPN.pan[1]);
-                int num3 = num1 + (int)(this.out_fm[1].value & this.ym2612.OPN.pan[2]);
-                int num4 = num2 + (int)(this.out_fm[1].value & this.ym2612.OPN.pan[3]);
-                int num5 = num3 + (int)(this.out_fm[2].value & this.ym2612.OPN.pan[4]);
-                int num6 = num4 + (int)(this.out_fm[2].value & this.ym2612.OPN.pan[5]);
-                int num7 = num5 + (int)(this.out_fm[3].value & this.ym2612.OPN.pan[6]);
-                int num8 = num6 + (int)(this.out_fm[3].value & this.ym2612.OPN.pan[7]);
-                int num9 = num7 + (int)(this.out_fm[4].value & this.ym2612.OPN.pan[8]);
-                int num10 = num8 + (int)(this.out_fm[4].value & this.ym2612.OPN.pan[9]);
-                int num11 = num9 + (int)(this.out_fm[5].value & this.ym2612.OPN.pan[10]);
-                int num12 = num10 + (int)(this.out_fm[5].value & this.ym2612.OPN.pan[11]);
+                if (out_fm[0].value > 8192L)
+                    out_fm[0].value = 8192L;
+                else if (out_fm[0].value < -8192L)
+                    out_fm[0].value = -8192L;
+                if (out_fm[1].value > 8192L)
+                    out_fm[1].value = 8192L;
+                else if (out_fm[1].value < -8192L)
+                    out_fm[1].value = -8192L;
+                if (out_fm[2].value > 8192L)
+                    out_fm[2].value = 8192L;
+                else if (out_fm[2].value < -8192L)
+                    out_fm[2].value = -8192L;
+                if (out_fm[3].value > 8192L)
+                    out_fm[3].value = 8192L;
+                else if (out_fm[3].value < -8192L)
+                    out_fm[3].value = -8192L;
+                if (out_fm[4].value > 8192L)
+                    out_fm[4].value = 8192L;
+                else if (out_fm[4].value < -8192L)
+                    out_fm[4].value = -8192L;
+                if (out_fm[5].value > 8192L)
+                    out_fm[5].value = 8192L;
+                else if (out_fm[5].value < -8192L)
+                    out_fm[5].value = -8192L;
+                int num1 = (int)(out_fm[0].value & ym2612.OPN.pan[0]);
+                int num2 = (int)(out_fm[0].value & ym2612.OPN.pan[1]);
+                int num3 = num1 + (int)(out_fm[1].value & ym2612.OPN.pan[2]);
+                int num4 = num2 + (int)(out_fm[1].value & ym2612.OPN.pan[3]);
+                int num5 = num3 + (int)(out_fm[2].value & ym2612.OPN.pan[4]);
+                int num6 = num4 + (int)(out_fm[2].value & ym2612.OPN.pan[5]);
+                int num7 = num5 + (int)(out_fm[3].value & ym2612.OPN.pan[6]);
+                int num8 = num6 + (int)(out_fm[3].value & ym2612.OPN.pan[7]);
+                int num9 = num7 + (int)(out_fm[4].value & ym2612.OPN.pan[8]);
+                int num10 = num8 + (int)(out_fm[4].value & ym2612.OPN.pan[9]);
+                int num11 = num9 + (int)(out_fm[5].value & ym2612.OPN.pan[10]);
+                int num12 = num10 + (int)(out_fm[5].value & ym2612.OPN.pan[11]);
                 buffer[index1] = num11;
                 int index3 = index1 + 1;
                 buffer[index3] = num12;
                 index1 = index3 + 1;
-                this.ym2612.OPN.SL3.key_csm <<= 1;
-                this.INTERNAL_TIMER_A();
+                ym2612.OPN.SL3.key_csm <<= 1;
+                INTERNAL_TIMER_A();
                 if ((ym2612.OPN.SL3.key_csm & 2) != 0)
                 {
-                    this.FM_KEYOFF_CSM(this.ym2612.CH[2], 0);
-                    this.FM_KEYOFF_CSM(this.ym2612.CH[2], 2);
-                    this.FM_KEYOFF_CSM(this.ym2612.CH[2], 1);
-                    this.FM_KEYOFF_CSM(this.ym2612.CH[2], 3);
-                    this.ym2612.OPN.SL3.key_csm = 0;
+                    FM_KEYOFF_CSM(ym2612.CH[2], 0);
+                    FM_KEYOFF_CSM(ym2612.CH[2], 2);
+                    FM_KEYOFF_CSM(ym2612.CH[2], 1);
+                    FM_KEYOFF_CSM(ym2612.CH[2], 3);
+                    ym2612.OPN.SL3.key_csm = 0;
                 }
             }
-            this.INTERNAL_TIMER_B(length);
+            INTERNAL_TIMER_B(length);
         }
 
         public class FM_SLOT
@@ -2343,10 +2343,10 @@ namespace DuckGame
 
             public FM_CH()
             {
-                this.SLOT[0] = new YM2612Core.FM_SLOT();
-                this.SLOT[1] = new YM2612Core.FM_SLOT();
-                this.SLOT[2] = new YM2612Core.FM_SLOT();
-                this.SLOT[3] = new YM2612Core.FM_SLOT();
+                SLOT[0] = new YM2612Core.FM_SLOT();
+                SLOT[1] = new YM2612Core.FM_SLOT();
+                SLOT[2] = new YM2612Core.FM_SLOT();
+                SLOT[3] = new YM2612Core.FM_SLOT();
             }
         }
 
@@ -2370,7 +2370,7 @@ namespace DuckGame
             public FM_ST()
             {
                 for (int index = 0; index < 8; ++index)
-                    this.dt_tab[index] = new LongPointerArray32();
+                    dt_tab[index] = new LongPointerArray32();
             }
         }
 
@@ -2412,7 +2412,7 @@ namespace DuckGame
             public _YM2612_data()
             {
                 for (int index = 0; index < 6; ++index)
-                    this.CH[index] = new YM2612Core.FM_CH();
+                    CH[index] = new YM2612Core.FM_CH();
             }
         }
     }

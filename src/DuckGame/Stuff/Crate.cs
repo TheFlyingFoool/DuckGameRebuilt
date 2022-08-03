@@ -24,27 +24,27 @@ namespace DuckGame
         public Crate(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._maxHealth = 15f;
-            this._hitPoints = 15f;
-            this._sprite = new SpriteMap("crate", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.depth = -0.5f;
-            this._editorName = nameof(Crate);
-            this.thickness = 2f;
-            this.weight = 5f;
-            this.buoyancy = 1f;
-            this._holdOffset = new Vec2(2f, 0f);
-            this.flammable = 0.3f;
-            this.collideSounds.Add("crateHit");
-            this.editorTooltip = "It's made of wood. That's...pretty much it.";
+            _maxHealth = 15f;
+            _hitPoints = 15f;
+            _sprite = new SpriteMap("crate", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -8f);
+            collisionSize = new Vec2(16f, 16f);
+            depth = -0.5f;
+            _editorName = nameof(Crate);
+            thickness = 2f;
+            weight = 5f;
+            buoyancy = 1f;
+            _holdOffset = new Vec2(2f, 0f);
+            flammable = 0.3f;
+            collideSounds.Add("crateHit");
+            editorTooltip = "It's made of wood. That's...pretty much it.";
         }
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            this._hitPoints = 0f;
+            _hitPoints = 0f;
             Level.Remove(this);
             SFX.Play("crateDestroy");
             Vec2 vec2 = Vec2.Zero;
@@ -52,14 +52,14 @@ namespace DuckGame
                 vec2 = (type as DTShot).bullet.travelDirNormalized;
             for (int index = 0; index < 6; ++index)
             {
-                WoodDebris woodDebris = WoodDebris.New(this.x - 8f + Rando.Float(16f), this.y - 8f + Rando.Float(16f));
+                WoodDebris woodDebris = WoodDebris.New(x - 8f + Rando.Float(16f), y - 8f + Rando.Float(16f));
                 woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
                 woodDebris.vSpeed = -Rando.Float(1f);
                 Level.Add(woodDebris);
             }
             for (int index = 0; index < 5; ++index)
             {
-                SmallSmoke smallSmoke = SmallSmoke.New(this.x + Rando.Float(-6f, 6f), this.y + Rando.Float(-6f, 6f));
+                SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-6f, 6f), y + Rando.Float(-6f, 6f));
                 smallSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
                 smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
                 Level.Add(smallSmoke);
@@ -80,16 +80,16 @@ namespace DuckGame
 
         public override void SolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this.CheckForPhysicalBullet(with))
-                this.Destroy(new DTShot((with as PhysicalBullet).bullet));
+            if (CheckForPhysicalBullet(with))
+                Destroy(new DTShot((with as PhysicalBullet).bullet));
             else
                 base.SolidImpact(with, from);
         }
 
         public override void Impact(MaterialThing with, ImpactedFrom from, bool solidImpact)
         {
-            if (this.CheckForPhysicalBullet(with))
-                this.Destroy(new DTShot((with as PhysicalBullet).bullet));
+            if (CheckForPhysicalBullet(with))
+                Destroy(new DTShot((with as PhysicalBullet).bullet));
             else
                 base.Impact(with, from, solidImpact);
         }
@@ -98,7 +98,7 @@ namespace DuckGame
         {
             if (_hitPoints <= 0.0)
                 return base.Hit(bullet, hitPos);
-            if (bullet.isLocal && this.owner == null)
+            if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
             for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
             {
@@ -108,21 +108,21 @@ namespace DuckGame
                 Level.Add(woodDebris);
             }
             SFX.Play("woodHit");
-            if (this.isServerForObject && TeamSelect2.Enabled("EXPLODEYCRATES"))
+            if (isServerForObject && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
                 Thing.Fondle(this, DuckNetwork.localConnection);
-                if (this.duck != null)
-                    this.duck.ThrowItem();
-                this.Destroy(new DTShot(bullet));
-                Level.Add(new GrenadeExplosion(this.x, this.y));
+                if (duck != null)
+                    duck.ThrowItem();
+                Destroy(new DTShot(bullet));
+                Level.Add(new GrenadeExplosion(x, y));
             }
-            this._hitPoints -= this.damageMultiplier;
-            this.damageMultiplier += 2f;
+            _hitPoints -= damageMultiplier;
+            damageMultiplier += 2f;
             if (_hitPoints <= 0.0)
             {
                 if (bullet.isLocal)
                     Thing.SuperFondle(this, DuckNetwork.localConnection);
-                this.Destroy(new DTShot(bullet));
+                Destroy(new DTShot(bullet));
             }
             return base.Hit(bullet, hitPos);
         }
@@ -142,18 +142,18 @@ namespace DuckGame
         {
             base.Update();
             if (damageMultiplier > 1f)
-                this.damageMultiplier -= 0.2f;
+                damageMultiplier -= 0.2f;
             else
-                this.damageMultiplier = 1f;
-            this._sprite.frame = (int)Math.Floor((1f - _hitPoints / this._maxHealth) * 4f);
-            if (_hitPoints <= 0f && !this._destroyed)
-                this.Destroy(new DTImpact(this));
-            if (!this._onFire || _burnt >= 0.9f)
+                damageMultiplier = 1f;
+            _sprite.frame = (int)Math.Floor((1f - _hitPoints / _maxHealth) * 4f);
+            if (_hitPoints <= 0f && !_destroyed)
+                Destroy(new DTImpact(this));
+            if (!_onFire || _burnt >= 0.9f)
                 return;
-            float num = 1f - this.burnt;
+            float num = 1f - burnt;
             if (_hitPoints > num * _maxHealth)
-                this._hitPoints = num * this._maxHealth;
-            this._sprite.color = new Color(num, num, num);
+                _hitPoints = num * _maxHealth;
+            _sprite.color = new Color(num, num, num);
         }
     }
 }

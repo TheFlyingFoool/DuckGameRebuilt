@@ -35,107 +35,107 @@ namespace DuckGame
 
         public new int globalIndex
         {
-            get => this._globalIndex;
-            set => this._globalIndex = value;
+            get => _globalIndex;
+            set => _globalIndex = value;
         }
 
-        public override int width => this._width;
+        public override int width => _width;
 
-        public override int height => this._height;
+        public override int height => _height;
 
         public float speed
         {
-            get => this._speed;
-            set => this._speed = value;
+            get => _speed;
+            set => _speed = value;
         }
 
         public bool finished
         {
-            get => this._finished;
-            set => this._finished = value;
+            get => _finished;
+            set => _finished = value;
         }
 
         public int frame
         {
-            get => this._frame;
+            get => _frame;
             set
             {
-                this.SetFrameWithoutReset(value);
-                this._frameInc = 0f;
-                this._finished = false;
+                SetFrameWithoutReset(value);
+                _frameInc = 0f;
+                _finished = false;
             }
         }
 
         public int imageIndex
         {
-            get => this._imageIndex;
-            set => this._imageIndex = value;
+            get => _imageIndex;
+            set => _imageIndex = value;
         }
 
         public int animationIndex
         {
-            get => this._currentAnimation.HasValue && this._currentAnimation.HasValue && this._animations.Contains(this._currentAnimation.Value) ? this._animations.IndexOf(this._currentAnimation.Value) : 0;
+            get => _currentAnimation.HasValue && _currentAnimation.HasValue && _animations.Contains(_currentAnimation.Value) ? _animations.IndexOf(_currentAnimation.Value) : 0;
             set
             {
-                if (this._animations == null)
+                if (_animations == null)
                     return;
-                this.SetAnimation(this._animations[value].name);
+                SetAnimation(_animations[value].name);
             }
         }
 
-        private bool valid => this._texture != null && this._texture.w > 0 && this.w > 0;
+        private bool valid => _texture != null && _texture.w > 0 && w > 0;
 
         public void SetFrameWithoutReset(int frame)
         {
-            this._frame = frame;
-            if (this._currentAnimation.HasValue && this.valid)
+            _frame = frame;
+            if (_currentAnimation.HasValue && valid)
             {
-                if (this._frame >= this._currentAnimation.Value.frames.Length)
-                    this._frame = this._currentAnimation.Value.frames.Length - 1;
-                if (this._frame < 0)
-                    this._frame = 0;
-                this._imageIndex = this._currentAnimation.Value.frames[this._frame];
+                if (_frame >= _currentAnimation.Value.frames.Length)
+                    _frame = _currentAnimation.Value.frames.Length - 1;
+                if (_frame < 0)
+                    _frame = 0;
+                _imageIndex = _currentAnimation.Value.frames[_frame];
             }
             else
-                this._imageIndex = this._frame;
+                _imageIndex = _frame;
         }
 
         public string currentAnimation
         {
-            get => !this._currentAnimation.HasValue ? "" : this._currentAnimation.Value.name;
-            set => this.SetAnimation(value);
+            get => !_currentAnimation.HasValue ? "" : _currentAnimation.Value.name;
+            set => SetAnimation(value);
         }
 
         public SpriteMap(Tex2D tex, int frameWidth, int frameHeight)
         {
-            this._texture = tex;
-            frameWidth = Math.Min(this._texture.width, frameWidth);
-            frameHeight = Math.Min(this._texture.height, frameHeight);
+            _texture = tex;
+            frameWidth = Math.Min(_texture.width, frameWidth);
+            frameHeight = Math.Min(_texture.height, frameHeight);
             tex.frameWidth = frameWidth;
             tex.frameHeight = frameHeight;
-            this.position = new Vec2(this.x, this.y);
-            this._width = frameWidth;
-            this._height = frameHeight;
-            this.AddDefaultAnimation();
+            position = new Vec2(x, y);
+            _width = frameWidth;
+            _height = frameHeight;
+            AddDefaultAnimation();
         }
 
         public SpriteMap(string tex, int frameWidth, int frameHeight, int pFrame)
           : this(tex, frameWidth, frameHeight)
         {
-            this.frame = pFrame;
+            frame = pFrame;
         }
 
         public SpriteMap(string tex, int frameWidth, int frameHeight, bool calculateTransparency = false)
         {
-            this._texture = Content.Load<Tex2D>(tex);
-            frameWidth = Math.Min(this._texture.width, frameWidth);
-            frameHeight = Math.Min(this._texture.height, frameHeight);
-            this._texture.frameWidth = frameWidth;
-            this._texture.frameHeight = frameHeight;
-            this.position = new Vec2(this.x, this.y);
-            this._width = frameWidth;
-            this._height = frameHeight;
-            this.AddDefaultAnimation();
+            _texture = Content.Load<Tex2D>(tex);
+            frameWidth = Math.Min(_texture.width, frameWidth);
+            frameHeight = Math.Min(_texture.height, frameHeight);
+            _texture.frameWidth = frameWidth;
+            _texture.frameHeight = frameHeight;
+            position = new Vec2(x, y);
+            _width = frameWidth;
+            _height = frameHeight;
+            AddDefaultAnimation();
             int num = calculateTransparency ? 1 : 0;
         }
 
@@ -144,219 +144,219 @@ namespace DuckGame
         private void AddDefaultAnimation()
         {
             int length = 1;
-            if (this._width > 0)
-                length = this._texture.width / this._width * (this._texture.height / this._height);
+            if (_width > 0)
+                length = _texture.width / _width * (_texture.height / _height);
             int[] framesVal = new int[length];
             for (int index = 0; index < length; ++index)
                 framesVal[index] = index;
-            this._animations.Add(new Animation("default", 1f, true, framesVal));
-            this.SetAnimation("default");
-            this._speed = 0f;
+            _animations.Add(new Animation("default", 1f, true, framesVal));
+            SetAnimation("default");
+            _speed = 0f;
         }
 
         public void AddAnimation(string name, float speed, bool looping, params int[] frames)
         {
-            if (!this._hasAnimation)
+            if (!_hasAnimation)
             {
-                this.ClearAnimations();
-                this._speed = 1f;
+                ClearAnimations();
+                _speed = 1f;
             }
-            this._hasAnimation = true;
-            this._animations.Add(new Animation(name, speed, looping, frames));
+            _hasAnimation = true;
+            _animations.Add(new Animation(name, speed, looping, frames));
         }
 
         public void SetAnimation(string name)
         {
-            if (this._currentAnimation.HasValue && this._currentAnimation.Value.name == name)
+            if (_currentAnimation.HasValue && _currentAnimation.Value.name == name)
                 return;
-            this._finished = false;
-            foreach (Animation animation in this._animations)
+            _finished = false;
+            foreach (Animation animation in _animations)
             {
                 if (animation.name == name)
                 {
-                    this._currentAnimation = new Animation?(animation);
-                    this._frameInc = 0f;
-                    this.frame = 0;
+                    _currentAnimation = new Animation?(animation);
+                    _frameInc = 0f;
+                    frame = 0;
                     return;
                 }
             }
-            this._currentAnimation = new Animation?();
+            _currentAnimation = new Animation?();
         }
 
         public void ClearAnimations()
         {
-            this._animations.Clear();
-            this._currentAnimation = new Animation?();
+            _animations.Clear();
+            _currentAnimation = new Animation?();
         }
 
         public void CloneAnimations(SpriteMap into) => into._animations = new List<Animation>(_animations);
 
         public void UpdateSpriteBox()
         {
-            if (!this.valid)
+            if (!valid)
                 return;
-            int num1 = this._texture.width / this.w;
-            int num2 = this._imageIndex / num1;
-            this._spriteBox = new Rectangle((this._imageIndex - num2 * num1) * this.w, num2 * this.h, this.w - this.cutWidth, h);
-            this._lastImageIndex = this._imageIndex;
+            int num1 = _texture.width / w;
+            int num2 = _imageIndex / num1;
+            _spriteBox = new Rectangle((_imageIndex - num2 * num1) * w, num2 * h, w - cutWidth, h);
+            _lastImageIndex = _imageIndex;
         }
 
         public bool UpdateFrame(bool ignoreFlipFlop = false)
         {
-            if (!this.valid)
+            if (!valid)
                 return false;
-            if (this._currentAnimation.HasValue && (ignoreFlipFlop || this._flipFlop != DuckGame.Graphics.frameFlipFlop) && !VirtualTransition.doingVirtualTransition)
+            if (_currentAnimation.HasValue && (ignoreFlipFlop || _flipFlop != DuckGame.Graphics.frameFlipFlop) && !VirtualTransition.doingVirtualTransition)
             {
-                this._frameInc += this._currentAnimation.Value.speed * this._speed;
+                _frameInc += _currentAnimation.Value.speed * _speed;
                 if (_frameInc >= 1.0)
                 {
-                    this._frameInc = 0f;
-                    ++this._frame;
+                    _frameInc = 0f;
+                    ++_frame;
                 }
-                if (this._lastFrame != this._frame)
+                if (_lastFrame != _frame)
                 {
-                    if (this._frame >= this._currentAnimation.Value.frames.Length)
+                    if (_frame >= _currentAnimation.Value.frames.Length)
                     {
-                        if (this._currentAnimation.Value.looping)
+                        if (_currentAnimation.Value.looping)
                         {
-                            this.frame = 0;
+                            frame = 0;
                         }
                         else
                         {
-                            this.frame = this._currentAnimation.Value.frames.Length - 1;
-                            this.finished = true;
+                            frame = _currentAnimation.Value.frames.Length - 1;
+                            finished = true;
                         }
                     }
-                    this._imageIndex = this._currentAnimation.Value.frames[this._frame];
-                    this._lastFrame = this._frame;
+                    _imageIndex = _currentAnimation.Value.frames[_frame];
+                    _lastFrame = _frame;
                 }
-                this._flipFlop = !this._flipFlop;
+                _flipFlop = !_flipFlop;
             }
-            if (this._lastImageIndex != this._imageIndex)
-                this.UpdateSpriteBox();
+            if (_lastImageIndex != _imageIndex)
+                UpdateSpriteBox();
             return true;
         }
 
         public void UpdateFrameSpecial()
         {
-            if (!this.valid)
+            if (!valid)
                 return;
-            if (this._currentAnimation.HasValue && !VirtualTransition.doingVirtualTransition)
+            if (_currentAnimation.HasValue && !VirtualTransition.doingVirtualTransition)
             {
-                this._frameInc += this._currentAnimation.Value.speed * this._speed;
+                _frameInc += _currentAnimation.Value.speed * _speed;
                 if (_frameInc >= 1.0)
                 {
-                    this._frameInc = 0f;
-                    ++this._frame;
+                    _frameInc = 0f;
+                    ++_frame;
                 }
-                if (this._frame >= this._currentAnimation.Value.frames.Length)
+                if (_frame >= _currentAnimation.Value.frames.Length)
                 {
-                    if (this._currentAnimation.Value.looping)
+                    if (_currentAnimation.Value.looping)
                     {
-                        this.frame = 0;
+                        frame = 0;
                     }
                     else
                     {
-                        this.frame = this._currentAnimation.Value.frames.Length - 1;
-                        this.finished = true;
+                        frame = _currentAnimation.Value.frames.Length - 1;
+                        finished = true;
                     }
                 }
-                this._imageIndex = this._currentAnimation.Value.frames[this._frame];
+                _imageIndex = _currentAnimation.Value.frames[_frame];
             }
-            this.UpdateSpriteBox();
+            UpdateSpriteBox();
         }
 
         public int cutWidth
         {
-            get => this._cutWidth;
+            get => _cutWidth;
             set
             {
-                this._cutWidth = value;
-                this.UpdateSpriteBox();
+                _cutWidth = value;
+                UpdateSpriteBox();
             }
         }
 
         public override void Draw()
         {
-            if (!this.UpdateFrame())
+            if (!UpdateFrame())
                 return;
-            this._texture.currentObjectIndex = this._globalIndex;
-            if (this.w <= 0)
+            _texture.currentObjectIndex = _globalIndex;
+            if (w <= 0)
                 return;
-            DuckGame.Graphics.Draw(this._texture, this.position, new Rectangle?(this._spriteBox), this._color * this.alpha, this.angle, this.center, this.scale, this.flipH ? SpriteEffects.FlipHorizontally : (this.flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), this.depth);
+            DuckGame.Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color * alpha, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public override void Draw(Rectangle r)
         {
-            if (!this.UpdateFrame())
+            if (!UpdateFrame())
                 return;
-            r.x += this._spriteBox.x;
-            r.y += this._spriteBox.y;
-            this._texture.currentObjectIndex = this._globalIndex;
-            DuckGame.Graphics.Draw(this._texture, this.position, new Rectangle?(r), this._color * this.alpha, this.angle, this.center, this.scale, this._flipH ? SpriteEffects.FlipHorizontally : (this._flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), this.depth);
+            r.x += _spriteBox.x;
+            r.y += _spriteBox.y;
+            _texture.currentObjectIndex = _globalIndex;
+            DuckGame.Graphics.Draw(_texture, position, new Rectangle?(r), _color * alpha, angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public void DrawWithoutUpdate()
         {
-            if (!this.valid)
+            if (!valid)
                 return;
-            this._texture.currentObjectIndex = this._globalIndex;
-            if (this.w <= 0)
+            _texture.currentObjectIndex = _globalIndex;
+            if (w <= 0)
                 return;
-            DuckGame.Graphics.Draw(this._texture, this.position, new Rectangle?(this._spriteBox), this._color * this.alpha, this.angle, this.center, this.scale, this.flipH ? SpriteEffects.FlipHorizontally : (this.flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), this.depth);
+            DuckGame.Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color * alpha, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public override void CheapDraw(bool flipH = false)
         {
-            if (!this.valid)
+            if (!valid)
                 return;
-            this._texture.currentObjectIndex = this._globalIndex;
-            DuckGame.Graphics.Draw(this._texture, this.position, new Rectangle?(this._spriteBox), this._color, this.angle, this.center, this.scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, this.depth);
+            _texture.currentObjectIndex = _globalIndex;
+            DuckGame.Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
         }
 
-        public void ClearCache() => this._batchItem = null;
+        public void ClearCache() => _batchItem = null;
 
         public override void UltraCheapStaticDraw(bool flipH = false)
         {
-            if (this._batchItem == null)
+            if (_batchItem == null)
             {
-                if (!this.valid)
+                if (!valid)
                     return;
-                this.UpdateFrame();
+                UpdateFrame();
                 DuckGame.Graphics.recordMetadata = true;
-                this._texture.currentObjectIndex = this._globalIndex;
-                DuckGame.Graphics.Draw(this._texture, this.position, new Rectangle?(this._spriteBox), this._color, this.angle, this.center, this.scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, this.depth);
-                if (this._waitFrames == 1)
+                _texture.currentObjectIndex = _globalIndex;
+                DuckGame.Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
+                if (_waitFrames == 1)
                 {
-                    this._batchItem = DuckGame.Graphics.screen.StealLastSpriteBatchItem();
-                    if (this._batchItem.MetaData == null)
-                        this._batchItem = null;
+                    _batchItem = DuckGame.Graphics.screen.StealLastSpriteBatchItem();
+                    if (_batchItem.MetaData == null)
+                        _batchItem = null;
                 }
-                ++this._waitFrames;
+                ++_waitFrames;
                 DuckGame.Graphics.recordMetadata = false;
             }
             else
             {
-                this._texture.currentObjectIndex = this._globalIndex;
-                DuckGame.Graphics.Draw(this._batchItem);
+                _texture.currentObjectIndex = _globalIndex;
+                DuckGame.Graphics.Draw(_batchItem);
             }
         }
 
         public override Sprite Clone()
         {
-            SpriteMap into = new SpriteMap(this._texture, this._width, this._height);
-            this.CloneAnimations(into);
-            into.center = this.center;
-            into.imageIndex = this.imageIndex;
-            into.frame = this.frame;
-            into._globalIndex = this._globalIndex;
+            SpriteMap into = new SpriteMap(_texture, _width, _height);
+            CloneAnimations(into);
+            into.center = center;
+            into.imageIndex = imageIndex;
+            into.frame = frame;
+            into._globalIndex = _globalIndex;
             return into;
         }
 
-        public SpriteMap CloneMap() => (SpriteMap)this.Clone();
+        public SpriteMap CloneMap() => (SpriteMap)Clone();
 
-        SpriteMap ICloneable<SpriteMap>.Clone() => (SpriteMap)this.Clone();
+        SpriteMap ICloneable<SpriteMap>.Clone() => (SpriteMap)Clone();
 
-        object ICloneable.Clone() => this.Clone();
+        object ICloneable.Clone() => Clone();
     }
 }

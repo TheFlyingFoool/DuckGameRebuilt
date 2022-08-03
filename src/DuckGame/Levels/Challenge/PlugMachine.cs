@@ -21,83 +21,83 @@ namespace DuckGame
         private Thing _lighting;
         private DustSparkleEffect _dust;
 
-        public override Vec2 cameraPosition => this.position + new Vec2(-16f, 0f);
+        public override Vec2 cameraPosition => position + new Vec2(-16f, 0f);
 
         public PlugMachine(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("arcade/plug_machine", 38, 36);
-            this._sprite.AddAnimation("idle", 0.5f, true, 0, 1, 2, 3);
-            this._sprite.SetAnimation("idle");
-            this._screen = new SpriteMap("arcade/plug_machine_monitor", 11, 8);
-            this._screen.AddAnimation("idle", 0.2f, true, 0, 1, 2);
-            this._screen.SetAnimation("idle");
-            this.graphic = _sprite;
-            this.depth = -0.5f;
-            this.center = new Vec2(this._sprite.width / 2, this._sprite.h / 2);
-            this._collisionSize = new Vec2(16f, 15f);
-            this._collisionOffset = new Vec2(-8f, 2f);
-            this._hoverSprite = new Sprite("arcade/plug_hover");
-            this._duckSprite = new Sprite("arcade/plug_duck");
-            this._ledStrip = new SpriteMap("arcade/led_strip", 14, 1);
-            this._ledStrip.AddAnimation("idle", 0.3f, true, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13);
-            this._ledStrip.SetAnimation("idle");
-            this.hugWalls = WallHug.Floor;
+            _sprite = new SpriteMap("arcade/plug_machine", 38, 36);
+            _sprite.AddAnimation("idle", 0.5f, true, 0, 1, 2, 3);
+            _sprite.SetAnimation("idle");
+            _screen = new SpriteMap("arcade/plug_machine_monitor", 11, 8);
+            _screen.AddAnimation("idle", 0.2f, true, 0, 1, 2);
+            _screen.SetAnimation("idle");
+            graphic = _sprite;
+            depth = -0.5f;
+            center = new Vec2(_sprite.width / 2, _sprite.h / 2);
+            _collisionSize = new Vec2(16f, 15f);
+            _collisionOffset = new Vec2(-8f, 2f);
+            _hoverSprite = new Sprite("arcade/plug_hover");
+            _duckSprite = new Sprite("arcade/plug_duck");
+            _ledStrip = new SpriteMap("arcade/led_strip", 14, 1);
+            _ledStrip.AddAnimation("idle", 0.3f, true, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13);
+            _ledStrip.SetAnimation("idle");
+            hugWalls = WallHug.Floor;
         }
 
         public override void Initialize()
         {
-            if (Level.current is Editor || this.level == null || this.level.bareInitialize)
+            if (Level.current is Editor || level == null || level.bareInitialize)
                 return;
-            this._dust = new DustSparkleEffect(this.x - 34f, this.y - 40f, false, false);
+            _dust = new DustSparkleEffect(x - 34f, y - 40f, false, false);
             Level.Add(_dust);
-            this._dust.depth = this.depth - 2;
-            this._lighting = new ArcadeScreen(this.x, this.y);
-            Level.Add(this._lighting);
+            _dust.depth = depth - 2;
+            _lighting = new ArcadeScreen(x, y);
+            Level.Add(_lighting);
         }
 
         public override void Update()
         {
-            Vec2 p = this.position + new Vec2(-20f, 0f);
+            Vec2 p = position + new Vec2(-20f, 0f);
             Duck duck = Level.Nearest<Duck>(p);
             if (duck != null)
             {
                 if (duck.grounded && (duck.position - p).length < 16f)
                 {
-                    this._hoverFade = Lerp.Float(this._hoverFade, 1f, 0.2f);
-                    this.hover = true;
+                    _hoverFade = Lerp.Float(_hoverFade, 1f, 0.2f);
+                    hover = true;
                 }
                 else
                 {
-                    this._hoverFade = Lerp.Float(this._hoverFade, 0f, 0.2f);
-                    this.hover = false;
+                    _hoverFade = Lerp.Float(_hoverFade, 0f, 0.2f);
+                    hover = false;
                 }
             }
-            this._dust.fade = 0.7f;
-            this._dust.visible = this._lighting.visible = this.visible;
+            _dust.fade = 0.7f;
+            _dust.visible = _lighting.visible = visible;
         }
 
         public override void Draw()
         {
-            this.graphic.color = Color.White;
+            graphic.color = Color.White;
             if (!(Level.current is Editor))
             {
                 Vec2 vec2 = new Vec2(-24f, -8f);
-                this._duckSprite.depth = this.depth + 16;
-                Graphics.Draw(this._duckSprite, this.x + vec2.x, this.y + vec2.y);
-                this._ledStrip.alpha = 1f;
-                this._ledStrip.depth = this.depth + 10;
-                Graphics.Draw(_ledStrip, this.x - 16f, this.y + 9f);
-                this._ledStrip.alpha = 0.25f;
-                this._ledStrip.depth = this.depth + 10;
-                Graphics.Draw(_ledStrip, this.x - 16f, this.y + 10f);
-                this._screen.depth = this.depth + 5;
-                Graphics.Draw(_screen, this.x - 9f, this.y - 7f);
-                this._hoverSprite.alpha = Lerp.Float(this._hoverSprite.alpha, this._hoverFade, 0.05f);
-                if (this._hoverSprite.alpha > 0.01f)
+                _duckSprite.depth = depth + 16;
+                Graphics.Draw(_duckSprite, x + vec2.x, y + vec2.y);
+                _ledStrip.alpha = 1f;
+                _ledStrip.depth = depth + 10;
+                Graphics.Draw(_ledStrip, x - 16f, y + 9f);
+                _ledStrip.alpha = 0.25f;
+                _ledStrip.depth = depth + 10;
+                Graphics.Draw(_ledStrip, x - 16f, y + 10f);
+                _screen.depth = depth + 5;
+                Graphics.Draw(_screen, x - 9f, y - 7f);
+                _hoverSprite.alpha = Lerp.Float(_hoverSprite.alpha, _hoverFade, 0.05f);
+                if (_hoverSprite.alpha > 0.01f)
                 {
-                    this._hoverSprite.depth = this.depth + 6;
-                    Graphics.Draw(this._hoverSprite, (this.x + vec2.x - 1f), (this.y + vec2.y - 1f));
+                    _hoverSprite.depth = depth + 6;
+                    Graphics.Draw(_hoverSprite, (x + vec2.x - 1f), (y + vec2.y - 1f));
                 }
             }
             base.Draw();

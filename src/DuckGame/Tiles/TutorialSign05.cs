@@ -18,11 +18,11 @@ namespace DuckGame
         public override void Draw()
         {
             Color color = new Color(sbyte.MaxValue, sbyte.MaxValue, sbyte.MaxValue);
-            Graphics.DrawString("@JUMP@", new Vec2(this.x - 26f, this.y + 32f), Color.White * 0.5f);
-            Graphics.DrawString("@JUMP@", new Vec2(this.x - 5f, this.y - 16f), Color.White * 0.5f);
-            Graphics.DrawString("@JUMP@", new Vec2(this.x + 15f, this.y - 8f), Color.White * 0.5f);
-            this.depth = (Depth)0.99f;
-            this.graphic.color = color;
+            Graphics.DrawString("@JUMP@", new Vec2(x - 26f, y + 32f), Color.White * 0.5f);
+            Graphics.DrawString("@JUMP@", new Vec2(x - 5f, y - 16f), Color.White * 0.5f);
+            Graphics.DrawString("@JUMP@", new Vec2(x + 15f, y - 8f), Color.White * 0.5f);
+            depth = (Depth)0.99f;
+            graphic.color = color;
             base.Draw();
         }
     }

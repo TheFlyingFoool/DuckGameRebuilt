@@ -16,12 +16,12 @@ namespace DuckGame
         private List<NetDebugElement> _elements = new List<NetDebugElement>();
         private bool _tookInput;
 
-        public bool visible => this._visible;
+        public bool visible => _visible;
 
         public NetDebugInterface(NetworkInstance pInstance)
         {
             NetDebugInterface netDebugInterface = this;
-            this._instance = pInstance;
+            _instance = pInstance;
             NetDebugDropdown netDebugDropdown = new NetDebugDropdown(this, "Connection: ", () =>
            {
                List<NetDebugDropdown.Element> elementList = new List<NetDebugDropdown.Element>();
@@ -61,7 +61,7 @@ namespace DuckGame
                 leading = 4f
             };
             NetDebugDropdown connectionDropdown = netDebugDropdown;
-            this._elements.Add(connectionDropdown);
+            _elements.Add(connectionDropdown);
             connectionDropdown.right = new NetDebugButton(this, "Lag Out", null, () =>
          {
              if (!(connectionDropdown.selected.value is NetworkConnection networkConnection2))
@@ -75,7 +75,7 @@ namespace DuckGame
              netDebugInterface._instance = NetworkDebugger.Reboot(netDebugInterface._instance);
          });
             connectionDropdown.right.right.right = new NetDebugButton(this, "Reboot", null, () => netDebugInterface._instance = NetworkDebugger.Reboot(netDebugInterface._instance));
-            List<NetDebugElement> elements1 = this._elements;
+            List<NetDebugElement> elements1 = _elements;
             NetDebugSlider netDebugSlider1 = new NetDebugSlider(this, "Latency: ", () =>
            {
                NetDebugDropdown.Element selected = connectionDropdown.selected;
@@ -113,7 +113,7 @@ namespace DuckGame
                 indent = 16f
             };
             elements1.Add(netDebugSlider1);
-            List<NetDebugElement> elements2 = this._elements;
+            List<NetDebugElement> elements2 = _elements;
             NetDebugSlider netDebugSlider2 = new NetDebugSlider(this, "Jitter: ", () =>
            {
                NetDebugDropdown.Element selected = connectionDropdown.selected;
@@ -130,7 +130,7 @@ namespace DuckGame
                 indent = 16f
             };
             elements2.Add(netDebugSlider2);
-            List<NetDebugElement> elements3 = this._elements;
+            List<NetDebugElement> elements3 = _elements;
             NetDebugSlider netDebugSlider3 = new NetDebugSlider(this, "Loss: ", () =>
            {
                NetDebugDropdown.Element selected = connectionDropdown.selected;
@@ -166,7 +166,7 @@ namespace DuckGame
                 indent = 16f
             };
             elements3.Add(netDebugSlider3);
-            List<NetDebugElement> elements4 = this._elements;
+            List<NetDebugElement> elements4 = _elements;
             NetDebugSlider netDebugSlider4 = new NetDebugSlider(this, "Duplicate: ", () =>
            {
                NetDebugDropdown.Element selected = connectionDropdown.selected;
@@ -191,10 +191,10 @@ namespace DuckGame
 
         public void Draw()
         {
-            Rectangle consoleSize = this._instance.consoleSize;
+            Rectangle consoleSize = _instance.consoleSize;
             if (consoleSize.Contains(Mouse.positionConsole) && Mouse.right == InputState.Pressed)
-                this._visible = !this._visible;
-            if (!this._visible)
+                _visible = !_visible;
+            if (!_visible)
                 return;
             consoleSize.x += 8f;
             consoleSize.width -= 18f;
@@ -202,15 +202,15 @@ namespace DuckGame
             consoleSize.height = 120f;
             float num = 0.8f;
             Vec2 position = consoleSize.tl + new Vec2(8f, 8f);
-            foreach (NetDebugElement element in this._elements)
+            foreach (NetDebugElement element in _elements)
             {
                 element.depth = (Depth)num;
-                this._tookInput |= element.DoDraw(position, !this._tookInput);
+                _tookInput |= element.DoDraw(position, !_tookInput);
                 position.y += 10f + element.leading;
                 num -= 0.01f;
             }
             if (Mouse.left == InputState.Released)
-                this._tookInput = false;
+                _tookInput = false;
             Graphics.DrawRect(consoleSize, Color.Black * 0.5f, (Depth)0f);
         }
     }

@@ -15,42 +15,42 @@ namespace DuckGame
         public Goody(float xpos, float ypos, Sprite sprite)
           : base(xpos, ypos)
         {
-            this.graphic = sprite;
-            this.center = new Vec2(sprite.w / 2, sprite.h / 2);
-            this._collisionSize = new Vec2(10f, 10f);
-            this.collisionOffset = new Vec2(-5f, -5f);
-            this.sequence = new SequenceItem(this)
+            graphic = sprite;
+            center = new Vec2(sprite.w / 2, sprite.h / 2);
+            _collisionSize = new Vec2(10f, 10f);
+            collisionOffset = new Vec2(-5f, -5f);
+            sequence = new SequenceItem(this)
             {
                 type = SequenceItemType.Goody
             };
-            this.enablePhysics = false;
-            this._impactThreshold = 1E-06f;
+            enablePhysics = false;
+            _impactThreshold = 1E-06f;
         }
 
         public override void Initialize()
         {
-            if (!(Level.current is Editor) && this.sequence.waitTillOrder && this.sequence.order != 0)
+            if (!(Level.current is Editor) && sequence.waitTillOrder && sequence.order != 0)
             {
-                this.visible = false;
-                this.hidden = true;
+                visible = false;
+                hidden = true;
             }
             base.Initialize();
         }
 
         public override void OnSequenceActivate()
         {
-            if (this.sequence.waitTillOrder)
+            if (sequence.waitTillOrder)
             {
-                if (this._visibleInGame)
-                    this.visible = true;
-                this.hidden = false;
+                if (_visibleInGame)
+                    visible = true;
+                hidden = false;
             }
             base.OnSequenceActivate();
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this.hidden)
+            if (hidden)
                 return;
             switch (with)
             {
@@ -59,11 +59,11 @@ namespace DuckGame
                 case TrappedDuck _:
                     if (with.destroyed)
                         break;
-                    this.visible = false;
-                    this.hidden = true;
-                    if (this.collectSound != null && this.collectSound != "")
-                        SFX.Play(this.collectSound, 0.8f);
-                    if (this._visibleInGame)
+                    visible = false;
+                    hidden = true;
+                    if (collectSound != null && collectSound != "")
+                        SFX.Play(collectSound, 0.8f);
+                    if (_visibleInGame)
                     {
                         Profile profileToRumble = null;
                         switch (with)
@@ -87,8 +87,8 @@ namespace DuckGame
                     }
                     if (Level.current is Editor)
                         break;
-                    this._sequence.Finished();
-                    if (!ChallengeLevel.running || !this.sequence.isValid)
+                    _sequence.Finished();
+                    if (!ChallengeLevel.running || !sequence.isValid)
                         break;
                     ++ChallengeLevel.goodiesGot;
                     break;

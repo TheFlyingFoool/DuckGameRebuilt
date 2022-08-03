@@ -26,65 +26,65 @@ namespace DuckGame
 
         public void PlaySwipe()
         {
-            if (this._playSwipe)
+            if (_playSwipe)
                 return;
-            this._playSwipe = true;
-            this._duckLerp = 0f;
-            this._channelLerp = 0f;
-            this._slideOutWait = 0f;
-            this._fiveLerp = 0f;
-            this._doTransition = false;
-            this._transitionWait = 0f;
+            _playSwipe = true;
+            _duckLerp = 0f;
+            _channelLerp = 0f;
+            _slideOutWait = 0f;
+            _fiveLerp = 0f;
+            _doTransition = false;
+            _transitionWait = 0f;
             for (int index = 0; index < 10; ++index)
             {
-                this._swipeLines[index] = Rando.Float(0.1f);
-                this._swipeSpeeds[index] = Rando.Float(0.01f, 0.012f);
+                _swipeLines[index] = Rando.Float(0.1f);
+                _swipeSpeeds[index] = Rando.Float(0.01f, 0.012f);
             }
         }
 
-        public bool doTransition => this._doTransition;
+        public bool doTransition => _doTransition;
 
         public DuckChannelLogo()
           : base()
         {
-            this._duck = new Sprite("newsTitleDuck");
-            this._channel = new Sprite("newsTitleChannel");
-            this._five = new Sprite("newsTitle5");
-            this.layer = Layer.HUD;
+            _duck = new Sprite("newsTitleDuck");
+            _channel = new Sprite("newsTitleChannel");
+            _five = new Sprite("newsTitle5");
+            layer = Layer.HUD;
             for (int index = 0; index < 10; ++index)
             {
-                this._swipeLines.Add(Rando.Float(0.1f));
-                this._swipeSpeeds.Add(Rando.Float(0.01f, 0.012f));
+                _swipeLines.Add(Rando.Float(0.1f));
+                _swipeSpeeds.Add(Rando.Float(0.01f, 0.012f));
             }
         }
 
         public override void Update()
         {
-            if (this._playSwipe)
+            if (_playSwipe)
             {
-                this._transitionWait += 0.02f;
+                _transitionWait += 0.02f;
                 if (_transitionWait > 1.0)
-                    this._doTransition = true;
+                    _doTransition = true;
                 if (_slideOutWait < 1.0)
                 {
-                    this._duckLerp = Lerp.FloatSmooth(this._duckLerp, 1f, 0.1f, 1.1f);
-                    this._channelLerp = Lerp.FloatSmooth(this._channelLerp, 1f, 0.1f, 1.1f);
-                    this._fiveLerp = Lerp.FloatSmooth(this._fiveLerp, 1f, 0.1f, 1.1f);
-                    this._slideOutWait += 0.012f;
+                    _duckLerp = Lerp.FloatSmooth(_duckLerp, 1f, 0.1f, 1.1f);
+                    _channelLerp = Lerp.FloatSmooth(_channelLerp, 1f, 0.1f, 1.1f);
+                    _fiveLerp = Lerp.FloatSmooth(_fiveLerp, 1f, 0.1f, 1.1f);
+                    _slideOutWait += 0.012f;
                 }
                 else
                 {
-                    this._duckLerp = Lerp.FloatSmooth(this._duckLerp, 0f, 0.1f, 1.1f);
-                    this._channelLerp = Lerp.FloatSmooth(this._channelLerp, 0f, 0.1f, 1.1f);
-                    this._fiveLerp = Lerp.FloatSmooth(this._fiveLerp, 0f, 0.1f, 1.1f);
+                    _duckLerp = Lerp.FloatSmooth(_duckLerp, 0f, 0.1f, 1.1f);
+                    _channelLerp = Lerp.FloatSmooth(_channelLerp, 0f, 0.1f, 1.1f);
+                    _fiveLerp = Lerp.FloatSmooth(_fiveLerp, 0f, 0.1f, 1.1f);
                     if (_duckLerp < 0.01f)
-                        this._playSwipe = false;
+                        _playSwipe = false;
                 }
-                for (int index = 0; index < this._swipeLines.Count; ++index)
-                    this._swipeLines[index] = Lerp.Float(this._swipeLines[index], 1f, this._swipeSpeeds[index]);
+                for (int index = 0; index < _swipeLines.Count; ++index)
+                    _swipeLines[index] = Lerp.Float(_swipeLines[index], 1f, _swipeSpeeds[index]);
             }
             else
-                this._doTransition = false;
+                _doTransition = false;
         }
 
         public override void Draw()
@@ -93,19 +93,19 @@ namespace DuckGame
             Vec2 vec2_2 = new Vec2((-200f * (1f - _duckLerp)), 0f);
             Vec2 vec2_3 = new Vec2((200f * (1f - _channelLerp)), 0f);
             Vec2 vec2_4 = new Vec2((300f * (1f - _channelLerp)), 0f);
-            this._duck.depth = (Depth)0.85f;
-            Graphics.Draw(this._duck, vec2_1.x + 80f + vec2_2.x, vec2_1.y + 60f + vec2_2.y);
-            this._channel.depth = (Depth)0.86f;
-            Graphics.Draw(this._channel, vec2_1.x + 64f + vec2_3.x, vec2_1.y + 74f + vec2_3.y);
-            this._five.depth = (Depth)0.85f;
-            Graphics.Draw(this._five, vec2_1.x + 144f + vec2_4.x, vec2_1.y + 64f + vec2_4.y);
+            _duck.depth = (Depth)0.85f;
+            Graphics.Draw(_duck, vec2_1.x + 80f + vec2_2.x, vec2_1.y + 60f + vec2_2.y);
+            _channel.depth = (Depth)0.86f;
+            Graphics.Draw(_channel, vec2_1.x + 64f + vec2_3.x, vec2_1.y + 74f + vec2_3.y);
+            _five.depth = (Depth)0.85f;
+            Graphics.Draw(_five, vec2_1.x + 144f + vec2_4.x, vec2_1.y + 64f + vec2_4.y);
             Vec2 vec2_5 = new Vec2(30f, 20f);
             float num1 = 500f;
             float num2 = 16f;
             float num3 = 600f;
-            for (int index = 0; index < this._swipeLines.Count; ++index)
+            for (int index = 0; index < _swipeLines.Count; ++index)
             {
-                float num4 = this._swipeLines[index] * -1200f;
+                float num4 = _swipeLines[index] * -1200f;
                 Graphics.DrawRect(new Vec2(vec2_5.x + num3 + num4, vec2_5.y + index * num2), new Vec2(vec2_5.x + num1 + num3 + num4, vec2_5.y + index * num2 + num2), Color.Black, (Depth)0.83f);
             }
         }

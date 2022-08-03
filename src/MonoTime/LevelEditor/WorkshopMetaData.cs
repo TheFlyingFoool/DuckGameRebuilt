@@ -21,18 +21,18 @@ namespace DuckGame
         public WorkshopMetaData()
         {
             if (Steam.user != null)
-                this.author = Steam.user.name;
-            this.Reset();
+                author = Steam.user.name;
+            Reset();
         }
 
         public void Reset()
         {
-            this.name = "";
-            this.description = "";
-            this.author = "";
-            this.visibility = RemoteStoragePublishedFileVisibility.Public;
-            this.tags = new List<string>();
-            this.dependencies = new List<ulong>();
+            name = "";
+            description = "";
+            author = "";
+            visibility = RemoteStoragePublishedFileVisibility.Public;
+            tags = new List<string>();
+            dependencies = new List<ulong>();
         }
     }
 }

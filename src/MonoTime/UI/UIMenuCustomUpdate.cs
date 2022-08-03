@@ -25,13 +25,13 @@ namespace DuckGame.src.MonoTime.UI
           bool tiny = false)
           : base(title, xpos, ypos, wide, high, conString, conProfile, tiny)
         {
-            this._customUpdate = customUpdate;
+            _customUpdate = customUpdate;
         }
 
         public override void Update()
         {
-            if (this._customUpdate != null)
-                this._customUpdate();
+            if (_customUpdate != null)
+                _customUpdate();
             base.Update();
         }
     }

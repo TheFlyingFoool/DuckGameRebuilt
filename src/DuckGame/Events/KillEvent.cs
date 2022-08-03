@@ -11,12 +11,12 @@ namespace DuckGame
     {
         private System.Type _weapon;
 
-        public System.Type weapon => this._weapon;
+        public System.Type weapon => _weapon;
 
         public KillEvent(Profile killerVal, Profile killedVal, System.Type weapon)
           : base(killerVal, killedVal)
         {
-            this._weapon = weapon;
+            _weapon = weapon;
         }
     }
 }

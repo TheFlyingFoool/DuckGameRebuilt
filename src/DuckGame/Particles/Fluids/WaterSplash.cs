@@ -14,18 +14,18 @@ namespace DuckGame
         public WaterSplash(float xpos, float ypos, FluidData fluid)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("whiteSplash", 16, 16);
-            this._sprite.AddAnimation("splash", 0.42f, false, 0, 1, 2, 3);
-            this._sprite.SetAnimation("splash");
-            this._sprite.color = new Color(fluid.color);
-            this.center = new Vec2(8f, 16f);
-            this.graphic = _sprite;
-            this.depth = (Depth)0.7f;
+            _sprite = new SpriteMap("whiteSplash", 16, 16);
+            _sprite.AddAnimation("splash", 0.42f, false, 0, 1, 2, 3);
+            _sprite.SetAnimation("splash");
+            _sprite.color = new Color(fluid.color);
+            center = new Vec2(8f, 16f);
+            graphic = _sprite;
+            depth = (Depth)0.7f;
         }
 
         public override void Update()
         {
-            if (!this._sprite.finished)
+            if (!_sprite.finished)
                 return;
             Level.Remove(this);
         }

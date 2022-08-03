@@ -40,12 +40,12 @@ namespace DuckGame
             }
         }
 
-        public Thing thing => this._thing;
+        public Thing thing => _thing;
 
-        public System.Type killThingType => this._thing == null ? null : this._thing.killThingType;
+        public System.Type killThingType => _thing == null ? null : _thing.killThingType;
 
-        public Profile responsibleProfile => this._thing == null ? null : this._thing.responsibleProfile;
+        public Profile responsibleProfile => _thing == null ? null : _thing.responsibleProfile;
 
-        public DestroyType(Thing t = null) => this._thing = t;
+        public DestroyType(Thing t = null) => _thing = t;
     }
 }

@@ -18,32 +18,32 @@ namespace DuckGame
         public MainOptions(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.layer = Layer.HUD;
-            this._font.scale = new Vec2(4f, 4f);
-            this._options = new List<string>()
+            layer = Layer.HUD;
+            _font.scale = new Vec2(4f, 4f);
+            _options = new List<string>()
       {
         "MULTIPLAYER",
         "OPTIONS",
         "QUIT"
       };
             float num = 0f;
-            foreach (string option in this._options)
+            foreach (string option in _options)
             {
-                float width = this._font.GetWidth(option);
+                float width = _font.GetWidth(option);
                 if (width > num)
                     num = width;
             }
-            this._menuWidth = num + 80f;
+            _menuWidth = num + 80f;
         }
 
         public override void Draw()
         {
-            Graphics.DrawRect(new Vec2((float)(Graphics.width / 2.0 - _menuWidth / 2.0), this.y), new Vec2((float)(Graphics.width / 2.0 + _menuWidth / 2.0), this.y + 250f), Color.Black, (Depth)0.9f);
+            Graphics.DrawRect(new Vec2((float)(Graphics.width / 2.0 - _menuWidth / 2.0), y), new Vec2((float)(Graphics.width / 2.0 + _menuWidth / 2.0), y + 250f), Color.Black, (Depth)0.9f);
             int num = 0;
-            foreach (string option in this._options)
+            foreach (string option in _options)
             {
-                float width = this._font.GetWidth(option);
-                this._font.Draw(option, (float)(Graphics.width / 2.0 - width / 2.0), this.y + 30f + num * 60, Color.White);
+                float width = _font.GetWidth(option);
+                _font.Draw(option, (float)(Graphics.width / 2.0 - width / 2.0), y + 30f + num * 60, Color.White);
                 ++num;
             }
         }

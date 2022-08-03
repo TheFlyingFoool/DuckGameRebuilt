@@ -9,6 +9,6 @@ namespace DuckGame
 {
     public class NMLevelInitializeBlock : NetMessage
     {
-        public NMLevelInitializeBlock() => this.manager = BelongsToManager.DatablockManager;
+        public NMLevelInitializeBlock() => manager = BelongsToManager.DatablockManager;
     }
 }

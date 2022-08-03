@@ -11,24 +11,24 @@ namespace DuckGame
     {
         public ATPellet()
         {
-            this.accuracy = 1f;
-            this.range = 4000f;
-            this.penetration = 0.4f;
-            this.bulletSpeed = 18f;
-            this.gravityMultiplier = 2f;
-            this.affectedByGravity = true;
-            this.speedVariation = 0f;
-            this.rebound = true;
-            this.softRebound = true;
-            this.weight = 5f;
-            this.bulletThickness = 1f;
-            this.bulletColor = Color.White;
-            this.sprite = new Sprite("pellet")
+            accuracy = 1f;
+            range = 4000f;
+            penetration = 0.4f;
+            bulletSpeed = 18f;
+            gravityMultiplier = 2f;
+            affectedByGravity = true;
+            speedVariation = 0f;
+            rebound = true;
+            softRebound = true;
+            weight = 5f;
+            bulletThickness = 1f;
+            bulletColor = Color.White;
+            sprite = new Sprite("pellet")
             {
                 center = new Vec2(1f, 1f)
             };
-            this.bulletType = typeof(PelletBullet);
-            this.flawlessPipeTravel = true;
+            bulletType = typeof(PelletBullet);
+            flawlessPipeTravel = true;
         }
     }
 }

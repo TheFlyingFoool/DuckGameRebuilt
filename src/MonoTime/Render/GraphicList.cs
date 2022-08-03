@@ -19,7 +19,7 @@ namespace DuckGame
             {
                 float num1 = 0f;
                 float num2 = 0f;
-                foreach (Sprite sprite in this._objects)
+                foreach (Sprite sprite in _objects)
                 {
                     if (sprite.x - sprite.centerx < num1)
                         num1 = sprite.x - sprite.centerx;
@@ -30,7 +30,7 @@ namespace DuckGame
             }
         }
 
-        public override int w => this.width;
+        public override int w => width;
 
         public override int height
         {
@@ -38,7 +38,7 @@ namespace DuckGame
             {
                 float num1 = 0f;
                 float num2 = 0f;
-                foreach (Sprite sprite in this._objects)
+                foreach (Sprite sprite in _objects)
                 {
                     if (sprite.y - sprite.centery < num1)
                         num1 = sprite.x - sprite.centery;
@@ -49,32 +49,32 @@ namespace DuckGame
             }
         }
 
-        public override int h => this.height;
+        public override int h => height;
 
-        public GraphicList(List<Sprite> list) => this._objects = list;
+        public GraphicList(List<Sprite> list) => _objects = list;
 
-        public GraphicList() => this._objects = new List<Sprite>();
+        public GraphicList() => _objects = new List<Sprite>();
 
-        public void Add(Sprite graphic) => this._objects.Add(graphic);
+        public void Add(Sprite graphic) => _objects.Add(graphic);
 
-        public void Remove(Sprite graphic) => this._objects.Remove(graphic);
+        public void Remove(Sprite graphic) => _objects.Remove(graphic);
 
         public override void Draw()
         {
-            foreach (Sprite sprite1 in this._objects)
+            foreach (Sprite sprite1 in _objects)
             {
                 Vec2 vec2_1 = new Vec2(sprite1.position);
                 Sprite sprite2 = sprite1;
-                sprite2.position -= this.center;
-                sprite1.position.x *= this.xscale;
-                sprite1.position.y *= this.yscale;
+                sprite2.position -= center;
+                sprite1.position.x *= xscale;
+                sprite1.position.y *= yscale;
                 Sprite sprite3 = sprite1;
-                sprite3.position += this.position;
+                sprite3.position += position;
                 float alpha = sprite1.alpha;
                 sprite1.alpha *= this.alpha;
                 Vec2 vec2_2 = new Vec2(sprite1.scale);
-                sprite1.xscale *= this.xscale;
-                sprite1.yscale *= this.yscale;
+                sprite1.xscale *= xscale;
+                sprite1.yscale *= yscale;
                 float angle = sprite1.angle;
                 sprite1.angle *= this.angle;
                 bool flipH = sprite1.flipH;

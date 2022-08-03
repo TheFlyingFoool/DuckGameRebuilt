@@ -14,11 +14,11 @@ namespace DuckGame
         public IndustrialTileset(float x, float y)
           : base(x, y, "industrialTileset")
         {
-            this._editorName = "Industrial";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidth = 14f;
-            this.verticalWidthThick = 15f;
-            this.horizontalHeight = 15f;
+            _editorName = "Industrial";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidth = 14f;
+            verticalWidthThick = 15f;
+            horizontalHeight = 15f;
         }
 
         public override void Draw() => base.Draw();

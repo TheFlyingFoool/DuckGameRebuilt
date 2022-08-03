@@ -20,8 +20,8 @@ namespace DuckGame
 
         public override void Execute()
         {
-            this.Result = (T)this._delegate.Method.Invoke(this._delegate.Target, null);
-            this.Finished = true;
+            Result = (T)_delegate.Method.Invoke(_delegate.Target, null);
+            Finished = true;
         }
     }
 }

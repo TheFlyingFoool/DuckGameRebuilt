@@ -20,29 +20,29 @@ namespace DuckGame
         public Color backgroundColor;
         protected bool _skipMovement;
 
-        public ParallaxBackground parallax => this._parallax;
+        public ParallaxBackground parallax => _parallax;
 
         public bool update
         {
-            get => this._update;
-            set => this._update = value;
+            get => _update;
+            set => _update = value;
         }
 
         public void SetVisible(bool vis)
         {
-            this._parallax.scissor = this.scissor;
-            this._parallax.visible = vis;
+            _parallax.scissor = scissor;
+            _parallax.visible = vis;
             if (scissor.width == 0.0)
                 return;
-            this._parallax.layer.scissor = this.scissor;
+            _parallax.layer.scissor = scissor;
         }
 
         public BackgroundUpdater(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._isStatic = true;
-            this._opaque = true;
-            this.editorTooltip = "Adds a parallaxing background visual to the level (limit 1 per level)";
+            _isStatic = true;
+            _opaque = true;
+            editorTooltip = "Adds a parallaxing background visual to the level (limit 1 per level)";
         }
 
         public static Vec2 GetWallScissor()
@@ -70,31 +70,31 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (!this.overrideBaseScissorCall)
+            if (!overrideBaseScissorCall)
             {
                 Vec2 wallScissor = BackgroundUpdater.GetWallScissor();
                 if (wallScissor != Vec2.Zero)
-                    this.scissor = new Rectangle((int)wallScissor.x, 0f, (int)wallScissor.y, Resolution.current.y);
+                    scissor = new Rectangle((int)wallScissor.x, 0f, (int)wallScissor.y, Resolution.current.y);
             }
-            if (!this._update)
+            if (!_update)
                 return;
-            if (!this._skipMovement)
+            if (!_skipMovement)
             {
                 float num = Level.current.camera.width * 4f / Graphics.width;
-                if (this._yParallax)
+                if (_yParallax)
                 {
-                    this._parallax.y = (float)(-(Level.current.camera.centerY / 12f) - 5f) + this._yOffset;
+                    _parallax.y = (float)(-(Level.current.camera.centerY / 12f) - 5f) + _yOffset;
                 }
                 else
                 {
                     Layer.Parallax.camera = Level.current.camera;
-                    this._parallax.y = this._extraYOffset - 108f;
+                    _parallax.y = _extraYOffset - 108f;
                 }
-                this._parallax.xmove = (this._lastCameraX - Level.current.camera.centerX) / num;
+                _parallax.xmove = (_lastCameraX - Level.current.camera.centerX) / num;
             }
-            this._lastCameraX = Level.current.camera.centerX;
+            _lastCameraX = Level.current.camera.centerX;
             if (scissor.width != 0.0)
-                this._parallax.scissor = this.scissor;
+                _parallax.scissor = scissor;
             base.Update();
         }
 

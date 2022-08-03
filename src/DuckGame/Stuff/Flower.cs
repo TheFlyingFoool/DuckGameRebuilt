@@ -22,17 +22,17 @@ namespace DuckGame
         public Flower(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("flower");
-            this._burnt = new Sprite("flower_burned");
-            this.center = new Vec2(8f, 12f);
-            this.collisionOffset = new Vec2(-3f, -12f);
-            this.collisionSize = new Vec2(6f, 14f);
-            this._holdOffset = new Vec2(-2f, 2f);
-            this.depth = -0.5f;
-            this.weight = 1f;
-            this.flammable = 0.3f;
-            this.hugWalls = WallHug.Floor;
-            this.editorTooltip = "It's beautiful.";
+            graphic = new Sprite("flower");
+            _burnt = new Sprite("flower_burned");
+            center = new Vec2(8f, 12f);
+            collisionOffset = new Vec2(-3f, -12f);
+            collisionSize = new Vec2(6f, 14f);
+            _holdOffset = new Vec2(-2f, 2f);
+            depth = -0.5f;
+            weight = 1f;
+            flammable = 0.3f;
+            hugWalls = WallHug.Floor;
+            editorTooltip = "It's beautiful.";
         }
 
         protected override bool OnDestroy(DestroyType type = null) => false;
@@ -59,86 +59,86 @@ namespace DuckGame
         {
             if (burnt >= 1.0)
             {
-                if (this.graphic != this._burnt)
+                if (graphic != _burnt)
                 {
                     SFX.Play("flameExplode");
-                    Level.Add(SmallFire.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f), Rando.Float(2f) - 1f, Rando.Float(2f) - 1f, firedFrom: this));
-                    Level.Add(SmallFire.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f), Rando.Float(2f) - 1f, Rando.Float(2f) - 1f, firedFrom: this));
+                    Level.Add(SmallFire.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f), Rando.Float(2f) - 1f, Rando.Float(2f) - 1f, firedFrom: this));
+                    Level.Add(SmallFire.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f), Rando.Float(2f) - 1f, Rando.Float(2f) - 1f, firedFrom: this));
                     for (int index = 0; index < 3; ++index)
-                        Level.Add(SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
+                        Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
                 }
-                this.graphic = this._burnt;
+                graphic = _burnt;
             }
-            if (this._stuck != null)
+            if (_stuck != null)
             {
-                if (this.held || this.graphic == this._burnt)
+                if (held || graphic == _burnt)
                 {
-                    this._stuck.plugged = false;
-                    this._stuck = null;
+                    _stuck.plugged = false;
+                    _stuck = null;
                 }
                 else
                 {
-                    this._stuck.plugged = true;
-                    if (Network.isActive && this._stuck.isServerForObject)
-                        this._stuck.Fondle(this);
-                    if (this._stuck.removeFromLevel && this.isServerForObject)
+                    _stuck.plugged = true;
+                    if (Network.isActive && _stuck.isServerForObject)
+                        _stuck.Fondle(this);
+                    if (_stuck.removeFromLevel && isServerForObject)
                     {
-                        if (this._stuck is DuelingPistol)
-                            this.vSpeed -= 2f;
-                        this._stuck = null;
+                        if (_stuck is DuelingPistol)
+                            vSpeed -= 2f;
+                        _stuck = null;
                     }
                     else
                     {
-                        this.position = this._stuck.Offset(this._stuck.barrelOffset + this._stuck.barrelInsertOffset + new Vec2(1f, 1f));
-                        this.offDir = this._stuck.offDir;
-                        this.angleDegrees = this._stuck.angleDegrees + 90 * offDir;
-                        this.depth = this._stuck.depth - 4;
-                        this.velocity = Vec2.Zero;
-                        if (_stuck._barrelHeat < this._prevBarrelHeat)
-                            this._prevBarrelHeat = this._stuck._barrelHeat;
-                        if (!this.isServerForObject || _stuck._barrelHeat <= _prevBarrelHeat + 0.01f)
+                        position = _stuck.Offset(_stuck.barrelOffset + _stuck.barrelInsertOffset + new Vec2(1f, 1f));
+                        offDir = _stuck.offDir;
+                        angleDegrees = _stuck.angleDegrees + 90 * offDir;
+                        depth = _stuck.depth - 4;
+                        velocity = Vec2.Zero;
+                        if (_stuck._barrelHeat < _prevBarrelHeat)
+                            _prevBarrelHeat = _stuck._barrelHeat;
+                        if (!isServerForObject || _stuck._barrelHeat <= _prevBarrelHeat + 0.01f)
                             return;
-                        Flower.PoofEffect(this.position);
+                        Flower.PoofEffect(position);
                         if (Network.isActive)
-                            Send.Message(new NMFlowerPoof(this.position));
+                            Send.Message(new NMFlowerPoof(position));
                         Level.Remove(this);
                         return;
                     }
                 }
             }
-            if (Math.Abs(this.hSpeed) > 0.2f || !this._picked && this.owner != null)
-                this._picked = true;
-            if (this._picked)
+            if (Math.Abs(hSpeed) > 0.2f || !_picked && owner != null)
+                _picked = true;
+            if (_picked)
             {
-                if (this.owner != null)
+                if (owner != null)
                 {
-                    this.framesSinceThrown = 0;
-                    this.center = new Vec2(8f, 12f);
-                    this.collisionOffset = new Vec2(-3f, -12f);
-                    this.collisionSize = new Vec2(6f, 14f);
-                    this.angleDegrees = 0f;
-                    this.graphic.flipH = this.offDir < 0;
+                    framesSinceThrown = 0;
+                    center = new Vec2(8f, 12f);
+                    collisionOffset = new Vec2(-3f, -12f);
+                    collisionSize = new Vec2(6f, 14f);
+                    angleDegrees = 0f;
+                    graphic.flipH = offDir < 0;
                 }
                 else
                 {
-                    this.depth = -0.5f;
-                    if (this.framesSinceThrown < 15)
+                    depth = -0.5f;
+                    if (framesSinceThrown < 15)
                     {
-                        Gun gun = Level.current.NearestThing<Gun>(this.position);
-                        if (gun != null && (gun.barrelPosition - this.position).length < 4.0 && gun.held && gun.wideBarrel && (gun.offDir > 0 && this.hSpeed < 0.0 || gun.offDir < 0 && this.hSpeed > 0.0))
+                        Gun gun = Level.current.NearestThing<Gun>(position);
+                        if (gun != null && (gun.barrelPosition - position).length < 4.0 && gun.held && gun.wideBarrel && (gun.offDir > 0 && hSpeed < 0.0 || gun.offDir < 0 && hSpeed > 0.0))
                         {
-                            this._stuck = gun;
-                            this._prevBarrelHeat = this._stuck._barrelHeat;
+                            _stuck = gun;
+                            _prevBarrelHeat = _stuck._barrelHeat;
                             SFX.PlaySynchronized("pipeOut", pitch: 0.2f);
                         }
                     }
-                    ++this.framesSinceThrown;
-                    this.center = new Vec2(8f, 8f);
-                    this.collisionOffset = new Vec2(-7f, -5f);
-                    this.collisionSize = new Vec2(14f, 6f);
-                    this.angleDegrees = 90f;
-                    this.graphic.flipH = true;
-                    this.depth = (Depth)0.4f;
+                    ++framesSinceThrown;
+                    center = new Vec2(8f, 8f);
+                    collisionOffset = new Vec2(-7f, -5f);
+                    collisionSize = new Vec2(14f, 6f);
+                    angleDegrees = 90f;
+                    graphic.flipH = true;
+                    depth = (Depth)0.4f;
                 }
             }
             base.Update();
@@ -146,44 +146,44 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if (this.graphic == this._burnt)
+            if (graphic == _burnt)
                 return;
             if (Network.isActive)
             {
-                if (this.isServerForObject)
+                if (isServerForObject)
                     NetSoundEffect.Play("flowerHappyQuack");
             }
             else
                 SFX.Play("happyQuack01", pitch: Rando.Float(-0.1f, 0.1f));
-            if (this.duck != null)
+            if (duck != null)
             {
-                this.duck.quack = 20;
+                duck.quack = 20;
             }
             else
             {
                 Level.Remove(this);
                 SFX.Play("flameExplode");
                 for (int index = 0; index < 8; ++index)
-                    Level.Add(SmallFire.New(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-8f, 8f), Rando.Float(6f) - 3f, Rando.Float(6f) - 3f, firedFrom: this));
+                    Level.Add(SmallFire.New(x + Rando.Float(-8f, 8f), y + Rando.Float(-8f, 8f), Rando.Float(6f) - 3f, Rando.Float(6f) - 3f, firedFrom: this));
             }
         }
 
         public override void OnReleaseAction()
         {
-            if (this.duck == null || this.graphic == this._burnt)
+            if (duck == null || graphic == _burnt)
                 return;
-            this.duck.quack = 0;
+            duck.quack = 0;
         }
 
         public override void Draw()
         {
-            if (this._stuck != null)
+            if (_stuck != null)
             {
-                this.position = this._stuck.Offset(this._stuck.barrelOffset + this._stuck.barrelInsertOffset + new Vec2(1f, 1f));
-                this.offDir = this._stuck.offDir;
-                this.angleDegrees = this._stuck.angleDegrees + 90 * offDir;
-                this.depth = this._stuck.depth - 4;
-                this.velocity = Vec2.Zero;
+                position = _stuck.Offset(_stuck.barrelOffset + _stuck.barrelInsertOffset + new Vec2(1f, 1f));
+                offDir = _stuck.offDir;
+                angleDegrees = _stuck.angleDegrees + 90 * offDir;
+                depth = _stuck.depth - 4;
+                velocity = Vec2.Zero;
             }
             base.Draw();
         }

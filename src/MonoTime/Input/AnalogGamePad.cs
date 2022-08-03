@@ -38,116 +38,116 @@ namespace DuckGame
 
         public bool startWasPressed { get; set; }
 
-        public virtual float leftTrigger => Maths.NormalizeSection(this._state.triggers.left, 0.1f, 1f);
+        public virtual float leftTrigger => Maths.NormalizeSection(_state.triggers.left, 0.1f, 1f);
 
-        public virtual float rightTrigger => Maths.NormalizeSection(this._state.triggers.right, 0.1f, 1f);
+        public virtual float rightTrigger => Maths.NormalizeSection(_state.triggers.right, 0.1f, 1f);
 
-        public virtual Vec2 leftStick => new Vec2(this._state.sticks.left.x, this._state.sticks.left.y);
+        public virtual Vec2 leftStick => new Vec2(_state.sticks.left.x, _state.sticks.left.y);
 
-        public virtual Vec2 rightStick => new Vec2(this._state.sticks.right.x, this._state.sticks.right.y);
+        public virtual Vec2 rightStick => new Vec2(_state.sticks.right.x, _state.sticks.right.y);
 
         public AnalogGamePad(int idx)
           : base(idx)
         {
-            this.delayIndex = idx;
+            delayIndex = idx;
         }
 
         protected virtual PadState GetState(int index) => new PadState();
 
         public override void Rumble(float leftIntensity = 0f, float rightIntensity = 0f)
         {
-            if (!this.isConnected)
+            if (!isConnected)
                 return;
-            if (this._rumble == Vec2.Zero && (leftIntensity != 0f || rightIntensity != 0f))
+            if (_rumble == Vec2.Zero && (leftIntensity != 0f || rightIntensity != 0f))
             {
-                this.RumbleNow(leftIntensity, rightIntensity);
+                RumbleNow(leftIntensity, rightIntensity);
             }
             else
             {
-                this._rumble = new Vec2(leftIntensity, rightIntensity);
-                if (_rumble.x > this._highestRumble.x)
-                    this._highestRumble.x = this._rumble.x;
-                if (_rumble.y <= this._highestRumble.y)
+                _rumble = new Vec2(leftIntensity, rightIntensity);
+                if (_rumble.x > _highestRumble.x)
+                    _highestRumble.x = _rumble.x;
+                if (_rumble.y <= _highestRumble.y)
                     return;
-                this._highestRumble.y = this._rumble.y;
+                _highestRumble.y = _rumble.y;
             }
         }
 
         private void RumbleNow(float pLeft, float pRight)
         {
-            GamePad.SetVibration((PlayerIndex)this.index, pLeft, pRight);
-            this._prevRumble = new Vec2(pLeft, pRight);
-            this._rumble = this._prevRumble;
-            this._highestRumble = Vec2.Zero;
+            GamePad.SetVibration((PlayerIndex)index, pLeft, pRight);
+            _prevRumble = new Vec2(pLeft, pRight);
+            _rumble = _prevRumble;
+            _highestRumble = Vec2.Zero;
         }
 
         public override void Update()
         {
             base.Update();
-            if (this.isConnected)
+            if (isConnected)
             {
-                --this._rumbleWait;
-                if (this._rumbleWait <= 0)
+                --_rumbleWait;
+                if (_rumbleWait <= 0)
                 {
-                    this._rumbleWait = 4;
-                    if (this._rumble != this._prevRumble || _highestRumble.x > this._rumble.x || _highestRumble.y > this._rumble.y)
-                        this.RumbleNow(this._highestRumble.x, this._highestRumble.y);
+                    _rumbleWait = 4;
+                    if (_rumble != _prevRumble || _highestRumble.x > _rumble.x || _highestRumble.y > _rumble.y)
+                        RumbleNow(_highestRumble.x, _highestRumble.y);
                 }
             }
-            if (this.delay)
+            if (delay)
             {
-                this._states[this._curState] = this.GetState(this.delayIndex);
-                this._curState = (this._curState + 1) % 256;
-                ++this._numState;
-                if (this._numState == 15)
-                    this._realState = this._curState - 15;
-                if (this._numState < 15)
+                _states[_curState] = GetState(delayIndex);
+                _curState = (_curState + 1) % 256;
+                ++_numState;
+                if (_numState == 15)
+                    _realState = _curState - 15;
+                if (_numState < 15)
                     return;
-                this._statePrev = this._state;
-                this._state = this._states[this._realState];
-                this._realState = (this._realState + 1) % 256;
-                if (Rando.Float(1f) <= 0.5f || this._behind)
+                _statePrev = _state;
+                _state = _states[_realState];
+                _realState = (_realState + 1) % 256;
+                if (Rando.Float(1f) <= 0.5f || _behind)
                     return;
-                if (!this._ahead)
+                if (!_ahead)
                 {
-                    this._realState = (this._realState + 1) % 256;
-                    this._ahead = true;
+                    _realState = (_realState + 1) % 256;
+                    _ahead = true;
                 }
                 else
                 {
-                    this._realState = (this._realState - 1) % 256;
-                    if (this._realState < 0)
-                        this._realState += 256;
-                    this._ahead = false;
+                    _realState = (_realState - 1) % 256;
+                    if (_realState < 0)
+                        _realState += 256;
+                    _ahead = false;
                 }
             }
             else
             {
-                this.startWasPressed = this._startPressed;
-                this._startPressed = false;
-                this._statePrev = this._state;
-                this._state = this.GetState(this.index);
+                startWasPressed = _startPressed;
+                _startPressed = false;
+                _statePrev = _state;
+                _state = GetState(index);
             }
         }
 
         public void StartPressed()
         {
-            this._state = this._statePrev;
-            this._startPressed = true;
+            _state = _statePrev;
+            _startPressed = true;
         }
 
         public override bool MapPressed(int mapping, bool any = false)
         {
             PadButton butt = (PadButton)mapping;
-            if (butt == PadButton.Start && this._startPressed)
+            if (butt == PadButton.Start && _startPressed)
                 return true;
-            return any ? (this._state.buttons & ~this._statePrev.buttons) != 0 : this._state.IsButtonDown(butt) && !this._statePrev.IsButtonDown(butt);
+            return any ? (_state.buttons & ~_statePrev.buttons) != 0 : _state.IsButtonDown(butt) && !_statePrev.IsButtonDown(butt);
         }
 
         public override bool MapReleased(int mapping)
         {
             PadButton butt = (PadButton)mapping;
-            return !this._state.IsButtonDown(butt) && this._statePrev.IsButtonDown(butt);
+            return !_state.IsButtonDown(butt) && _statePrev.IsButtonDown(butt);
         }
 
         public override bool MapDown(int mapping, bool any = false)
@@ -156,12 +156,12 @@ namespace DuckGame
             {
                 foreach (PadButton xboxButton in AnalogGamePad._xboxButtons)
                 {
-                    if (this._state.IsButtonDown(xboxButton))
+                    if (_state.IsButtonDown(xboxButton))
                         return true;
                 }
                 return false;
             }
-            return this._state.IsButtonDown((PadButton)mapping);
+            return _state.IsButtonDown((PadButton)mapping);
         }
     }
 }

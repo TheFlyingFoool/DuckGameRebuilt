@@ -11,14 +11,14 @@ namespace DuckGame
     {
         public ATReboundLaser()
         {
-            this.accuracy = 0.8f;
-            this.range = 220f;
-            this.penetration = 1f;
-            this.bulletSpeed = 20f;
-            this.bulletThickness = 0.3f;
-            this.rebound = true;
-            this.bulletType = typeof(LaserBullet);
-            this.angleShot = true;
+            accuracy = 0.8f;
+            range = 220f;
+            penetration = 1f;
+            bulletSpeed = 20f;
+            bulletThickness = 0.3f;
+            rebound = true;
+            bulletType = typeof(LaserBullet);
+            angleShot = true;
         }
     }
 }

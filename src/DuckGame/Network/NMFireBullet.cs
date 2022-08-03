@@ -20,20 +20,20 @@ namespace DuckGame
 
         public NMFireBullet(float varRange, float varSpeed, float varAngle)
         {
-            this.range = varRange;
-            this.speed = varSpeed;
-            this.angle = varAngle;
+            range = varRange;
+            speed = varSpeed;
+            angle = varAngle;
         }
 
         public void DoActivate(Vec2 position, Profile owner)
         {
-            this.typeInstance.rangeVariation = 0f;
-            this.typeInstance.accuracy = 1f;
-            this.typeInstance.bulletSpeed = this.speed;
-            this.typeInstance.speedVariation = 0f;
-            Bullet bullet = this.typeInstance.GetBullet(position.x, position.y, owner?.duck, -this.angle, distance: this.range, network: false);
+            typeInstance.rangeVariation = 0f;
+            typeInstance.accuracy = 1f;
+            typeInstance.bulletSpeed = speed;
+            typeInstance.speedVariation = 0f;
+            Bullet bullet = typeInstance.GetBullet(position.x, position.y, owner?.duck, -angle, distance: range, network: false);
             bullet.isLocal = false;
-            bullet.connection = this.connection;
+            bullet.connection = connection;
             Level.current.AddThing(bullet);
         }
     }

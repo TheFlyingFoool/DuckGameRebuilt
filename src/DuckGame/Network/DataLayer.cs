@@ -11,9 +11,9 @@ namespace DuckGame
     {
         protected NCNetworkImplementation _impl;
 
-        public DataLayer(NCNetworkImplementation pImpl) => this._impl = pImpl;
+        public DataLayer(NCNetworkImplementation pImpl) => _impl = pImpl;
 
-        public virtual NCError SendPacket(BitBuffer sendData, NetworkConnection connection) => this._impl.OnSendPacket(sendData.buffer, sendData.lengthInBytes, connection.data);
+        public virtual NCError SendPacket(BitBuffer sendData, NetworkConnection connection) => _impl.OnSendPacket(sendData.buffer, sendData.lengthInBytes, connection.data);
 
         public virtual void Update()
         {

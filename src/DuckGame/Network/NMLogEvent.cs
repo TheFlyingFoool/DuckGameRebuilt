@@ -11,12 +11,12 @@ namespace DuckGame
     {
         public string description;
 
-        public NMLogEvent(string pDescription) => this.description = pDescription;
+        public NMLogEvent(string pDescription) => description = pDescription;
 
         public NMLogEvent()
         {
         }
 
-        public override void Activate() => DevConsole.LogEvent(this.description, this.connection);
+        public override void Activate() => DevConsole.LogEvent(description, connection);
     }
 }

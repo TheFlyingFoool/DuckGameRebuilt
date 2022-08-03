@@ -17,21 +17,21 @@ namespace DuckGame
         public BigTitleShrink(float vx, float vy, float vscale, Color vfade)
           : base()
         {
-            this.alpha = vfade.a / (float)byte.MaxValue;
+            alpha = vfade.a / (float)byte.MaxValue;
             vfade.a = byte.MaxValue;
-            this._sprite = new Sprite("duckGameTitleOutline");
-            this.graphic = this._sprite;
-            this.x = vx;
-            this.y = vy;
-            this.scale = new Vec2(vscale, vscale);
-            this.depth = (Depth)BigTitleShrink._dept;
-            this.layer = Layer.HUD;
-            this.centerx = this._sprite.w / 2;
-            this.centery = _sprite.h;
-            this.graphic.color = vfade;
-            this._black = vfade == Color.Black;
+            _sprite = new Sprite("duckGameTitleOutline");
+            graphic = _sprite;
+            x = vx;
+            y = vy;
+            scale = new Vec2(vscale, vscale);
+            depth = (Depth)BigTitleShrink._dept;
+            layer = Layer.HUD;
+            centerx = _sprite.w / 2;
+            centery = _sprite.h;
+            graphic.color = vfade;
+            _black = vfade == Color.Black;
             BigTitleShrink._dept -= 0.0001f;
-            this._size = vscale;
+            _size = vscale;
         }
 
         public override void Initialize()
@@ -40,14 +40,14 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._size += (0.98f - _size) * 0.078f;
-            this.xscale = this._size;
-            this.yscale = this._size;
-            if (this.xscale < 1.1f)
-                this.alpha *= 0.8f;
-            if (this.xscale < 1.05f && this._black)
+            _size += (0.98f - _size) * 0.078f;
+            xscale = _size;
+            yscale = _size;
+            if (xscale < 1.1f)
+                alpha *= 0.8f;
+            if (xscale < 1.05f && _black)
                 Level.Remove(this);
-            if (this.alpha > 0f)
+            if (alpha > 0f)
                 return;
             Level.Remove(this);
         }

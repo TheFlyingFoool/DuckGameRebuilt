@@ -16,7 +16,7 @@ namespace DuckGame
         public LevelSelectCompanionMenu(float xpos, float ypos, UIMenu returnMenu)
           : base("", xpos, ypos)
         {
-            this._returnMenu = returnMenu;
+            _returnMenu = returnMenu;
         }
 
         public override void Initialize() => base.Initialize();
@@ -25,42 +25,42 @@ namespace DuckGame
         {
             if (!LevelSelect._skipCompanionOpening)
             {
-                this._levelSelector = new LevelSelect(returnMenu: this);
-                this._levelSelector.Initialize();
+                _levelSelector = new LevelSelect(returnMenu: this);
+                _levelSelector.Initialize();
                 Editor.selectingLevel = true;
-                this._justOpened = true;
+                _justOpened = true;
             }
             else
-                this._levelSelector.HUDRefresh();
+                _levelSelector.HUDRefresh();
             LevelSelect._skipCompanionOpening = false;
             base.Open();
         }
 
         public override void Update()
         {
-            if (this.open)
+            if (open)
             {
-                if (!this._justOpened)
+                if (!_justOpened)
                 {
-                    this._levelSelector.Update();
-                    if (this._levelSelector.isClosed)
+                    _levelSelector.Update();
+                    if (_levelSelector.isClosed)
                     {
                         Editor.selectingLevel = false;
-                        this._levelSelector.Terminate();
+                        _levelSelector.Terminate();
                         new UIMenuActionOpenMenu(this, _returnMenu).Activate();
                         return;
                     }
                 }
-                this._justOpened = false;
+                _justOpened = false;
             }
             base.Update();
         }
 
         public override void Draw()
         {
-            if (!this.open)
+            if (!open)
                 return;
-            this._levelSelector.DrawThings(true);
+            _levelSelector.DrawThings(true);
         }
     }
 }

@@ -23,33 +23,33 @@ namespace DuckGame
           MatchSetting setting = null)
           : base("0", Color.White)
         {
-            this._setting = setting;
-            this._field = field;
-            this._append = append;
-            this._filterField = filterField;
+            _setting = setting;
+            _field = field;
+            _append = append;
+            _filterField = filterField;
         }
 
         public override void Draw()
         {
-            if (this._field != null)
+            if (_field != null)
             {
                 string str = "";
-                if (this._setting != null && this._filterField != null)
+                if (_setting != null && _filterField != null)
                 {
-                    if (this._setting.filterMode == FilterMode.GreaterThan)
+                    if (_setting.filterMode == FilterMode.GreaterThan)
                         str = ">=";
-                    else if (this._setting.filterMode == FilterMode.LessThan)
+                    else if (_setting.filterMode == FilterMode.LessThan)
                         str = "<=";
                 }
-                if (this._setting != null && this._field.value is int && (int)this._field.value == this._setting.min && this._setting.minString != null)
+                if (_setting != null && _field.value is int && (int)_field.value == _setting.min && _setting.minString != null)
                 {
-                    this._text = this._setting.minString;
+                    _text = _setting.minString;
                 }
                 else
                 {
-                    this._text = str + Change.ToString((int)this._field.value) + this._append;
-                    if (this._filterField != null && !(bool)this._filterField.value)
-                        this._text = "ANY";
+                    _text = str + Change.ToString((int)_field.value) + _append;
+                    if (_filterField != null && !(bool)_filterField.value)
+                        _text = "ANY";
                 }
             }
             base.Draw();

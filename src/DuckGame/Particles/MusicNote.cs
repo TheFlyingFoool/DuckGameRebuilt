@@ -19,42 +19,42 @@ namespace DuckGame
         public MusicNote(float xpos, float ypos, Vec2 dir)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("notes", 8, 8)
+            _sprite = new SpriteMap("notes", 8, 8)
             {
                 frame = Rando.Int(1)
             };
-            this._sprite.CenterOrigin();
+            _sprite.CenterOrigin();
             int num1 = Rando.ChooseInt(0, 1, 2, 3);
             if (num1 == 0)
-                this._color = Color.Violet;
+                _color = Color.Violet;
             if (num1 == 1)
-                this._color = Color.SkyBlue;
+                _color = Color.SkyBlue;
             if (num1 == 2)
-                this._color = Color.Wheat;
+                _color = Color.Wheat;
             if (num1 == 4)
-                this._color = Color.GreenYellow;
-            this._dir = dir;
+                _color = Color.GreenYellow;
+            _dir = dir;
             float num2 = 1f;
             if (Rando.Float(1f) <= 0.5f)
                 num2 = -1f;
-            this._sin = new SinWaveManualUpdate(0.03f + Rando.Float(0.1f), num2 * 6.283185f);
-            this._size = 3f + Rando.Float(6f);
-            this._speed = 0.8f + Rando.Float(1.4f);
-            this.depth = (Depth)0.95f;
-            this.scale = new Vec2(0.1f, 0.1f);
+            _sin = new SinWaveManualUpdate(0.03f + Rando.Float(0.1f), num2 * 6.283185f);
+            _size = 3f + Rando.Float(6f);
+            _speed = 0.8f + Rando.Float(1.4f);
+            depth = (Depth)0.95f;
+            scale = new Vec2(0.1f, 0.1f);
         }
 
         public override void Update()
         {
-            this._sin.Update();
-            this.x += this._dir.x;
+            _sin.Update();
+            x += _dir.x;
             Vec2 scale = this.scale;
             scale.x = scale.y = Lerp.Float(scale.x, 1f, 0.05f);
             this.scale = scale;
             if (this.scale.x <= 0.9f)
                 return;
-            this.alpha -= 0.01f;
-            if (this.alpha > 0f)
+            alpha -= 0.01f;
+            if (alpha > 0f)
                 return;
             Level.Remove(this);
         }
@@ -62,9 +62,9 @@ namespace DuckGame
         public override void Draw()
         {
             Vec2 position = this.position;
-            position.y += this._sin.value * this._size;
-            this._sprite.alpha = this.alpha;
-            this._sprite.scale = this.scale;
+            position.y += _sin.value * _size;
+            _sprite.alpha = alpha;
+            _sprite.scale = scale;
             Graphics.Draw(_sprite, position.x, position.y);
         }
     }

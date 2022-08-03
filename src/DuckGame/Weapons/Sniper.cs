@@ -24,115 +24,115 @@ namespace DuckGame
         public Sniper(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 3;
-            this._ammoType = new ATSniper();
-            this._type = "gun";
-            this.graphic = new Sprite("sniper");
-            this.center = new Vec2(16f, 4f);
-            this.collisionOffset = new Vec2(-8f, -4f);
-            this.collisionSize = new Vec2(16f, 8f);
-            this._barrelOffsetTL = new Vec2(30f, 3f);
-            this._fireSound = "sniper";
-            this._kickForce = 2f;
-            this._fireRumble = RumbleIntensity.Light;
-            this.laserSight = true;
-            this._laserOffsetTL = new Vec2(32f, 3.5f);
-            this._manualLoad = true;
-            this.editorTooltip = "Long range rifle - equipped with a laser sight so you look real cool.";
+            ammo = 3;
+            _ammoType = new ATSniper();
+            _type = "gun";
+            graphic = new Sprite("sniper");
+            center = new Vec2(16f, 4f);
+            collisionOffset = new Vec2(-8f, -4f);
+            collisionSize = new Vec2(16f, 8f);
+            _barrelOffsetTL = new Vec2(30f, 3f);
+            _fireSound = "sniper";
+            _kickForce = 2f;
+            _fireRumble = RumbleIntensity.Light;
+            laserSight = true;
+            _laserOffsetTL = new Vec2(32f, 3.5f);
+            _manualLoad = true;
+            editorTooltip = "Long range rifle - equipped with a laser sight so you look real cool.";
         }
 
         public override void Update()
         {
             base.Update();
-            if (this._loadState > -1)
+            if (_loadState > -1)
             {
-                if (this.owner == null)
+                if (owner == null)
                 {
-                    if (this._loadState == 3)
-                        this.loaded = true;
-                    this._loadState = -1;
-                    this._angleOffset = 0f;
-                    this.handOffset = Vec2.Zero;
+                    if (_loadState == 3)
+                        loaded = true;
+                    _loadState = -1;
+                    _angleOffset = 0f;
+                    handOffset = Vec2.Zero;
                 }
-                if (this._loadState == 0)
+                if (_loadState == 0)
                 {
                     if (Network.isActive)
                     {
-                        if (this.isServerForObject)
-                            this._netLoad.Play();
+                        if (isServerForObject)
+                            _netLoad.Play();
                     }
                     else
                         SFX.Play("loadSniper");
-                    ++this._loadState;
+                    ++_loadState;
                 }
-                else if (this._loadState == 1)
+                else if (_loadState == 1)
                 {
                     if (_angleOffset < 0.159999996423721)
-                        this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.2f, 0.15f);
+                        _angleOffset = MathHelper.Lerp(_angleOffset, 0.2f, 0.15f);
                     else
-                        ++this._loadState;
+                        ++_loadState;
                 }
-                else if (this._loadState == 2)
+                else if (_loadState == 2)
                 {
-                    this.handOffset.x += 0.4f;
+                    handOffset.x += 0.4f;
                     if (handOffset.x > 4.0)
                     {
-                        ++this._loadState;
-                        this.Reload();
-                        this.loaded = false;
+                        ++_loadState;
+                        Reload();
+                        loaded = false;
                     }
                 }
-                else if (this._loadState == 3)
+                else if (_loadState == 3)
                 {
-                    this.handOffset.x -= 0.4f;
+                    handOffset.x -= 0.4f;
                     if (handOffset.x <= 0.0)
                     {
-                        ++this._loadState;
-                        this.handOffset.x = 0f;
+                        ++_loadState;
+                        handOffset.x = 0f;
                     }
                 }
-                else if (this._loadState == 4)
+                else if (_loadState == 4)
                 {
                     if (_angleOffset > 0.0399999991059303)
                     {
-                        this._angleOffset = MathHelper.Lerp(this._angleOffset, 0f, 0.15f);
+                        _angleOffset = MathHelper.Lerp(_angleOffset, 0f, 0.15f);
                     }
                     else
                     {
-                        this._loadState = -1;
-                        this.loaded = true;
-                        this._angleOffset = 0f;
+                        _loadState = -1;
+                        loaded = true;
+                        _angleOffset = 0f;
                     }
                 }
             }
-            if (this.loaded && this.owner != null && this._loadState == -1)
-                this.laserSight = true;
+            if (loaded && owner != null && _loadState == -1)
+                laserSight = true;
             else
-                this.laserSight = false;
+                laserSight = false;
         }
 
         public override void OnPressAction()
         {
-            if (this.loaded)
+            if (loaded)
             {
                 base.OnPressAction();
             }
             else
             {
-                if (this.ammo <= 0 || this._loadState != -1)
+                if (ammo <= 0 || _loadState != -1)
                     return;
-                this._loadState = 0;
-                this._loadAnimation = 0;
+                _loadState = 0;
+                _loadAnimation = 0;
             }
         }
 
         public override void Draw()
         {
             float angle = this.angle;
-            if (this.offDir > 0)
-                this.angle -= this._angleOffset;
+            if (offDir > 0)
+                this.angle -= _angleOffset;
             else
-                this.angle += this._angleOffset;
+                this.angle += _angleOffset;
             base.Draw();
             this.angle = angle;
         }

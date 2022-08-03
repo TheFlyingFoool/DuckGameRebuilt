@@ -26,39 +26,39 @@ namespace DuckGame
 
         public WdlResamplingSampleProvider(ISampleProvider source, int pSampleRate)
         {
-            this.resampler = new WdlResampler();
-            this.resampler.SetMode(true, 0, false);
-            this.resampler.SetFilterParms();
-            this.resampler.SetFeedMode(false);
-            this.channels = source.WaveFormat.Channels;
+            resampler = new WdlResampler();
+            resampler.SetMode(true, 0, false);
+            resampler.SetFilterParms();
+            resampler.SetFeedMode(false);
+            channels = source.WaveFormat.Channels;
             this.source = source;
-            this.sampleRate = pSampleRate;
+            sampleRate = pSampleRate;
         }
 
         public int sampleRate
         {
-            get => this.outFormat.SampleRate;
+            get => outFormat.SampleRate;
             set
             {
-                if (this.outFormat != null && this.outFormat.SampleRate == value)
+                if (outFormat != null && outFormat.SampleRate == value)
                     return;
-                this.outFormat = WaveFormat.CreateIeeeFloatWaveFormat(value, this.channels);
-                this.resampler.SetRates(source.WaveFormat.SampleRate, outFormat.SampleRate);
+                outFormat = WaveFormat.CreateIeeeFloatWaveFormat(value, channels);
+                resampler.SetRates(source.WaveFormat.SampleRate, outFormat.SampleRate);
             }
         }
 
         /// <summary>Reads from this sample provider</summary>
         public int Read(float[] buffer, int offset, int count)
         {
-            int num1 = count / this.channels;
+            int num1 = count / channels;
             float[] inbuffer;
             int inbufferOffset;
-            int num2 = this.resampler.ResamplePrepare(num1, this.outFormat.Channels, out inbuffer, out inbufferOffset);
-            int nsamples_in = this.source.Read(inbuffer, inbufferOffset, num2 * this.channels) / this.channels;
-            return this.resampler.ResampleOut(buffer, offset, nsamples_in, num1, this.channels) * this.channels;
+            int num2 = resampler.ResamplePrepare(num1, outFormat.Channels, out inbuffer, out inbufferOffset);
+            int nsamples_in = source.Read(inbuffer, inbufferOffset, num2 * channels) / channels;
+            return resampler.ResampleOut(buffer, offset, nsamples_in, num1, channels) * channels;
         }
 
         /// <summary>Output WaveFormat</summary>
-        public WaveFormat WaveFormat => this.outFormat;
+        public WaveFormat WaveFormat => outFormat;
     }
 }

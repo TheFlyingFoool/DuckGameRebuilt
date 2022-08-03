@@ -74,17 +74,17 @@ namespace DuckGame
         private static Dictionary<ulong, Tex2D> _previewMap = new Dictionary<ulong, Tex2D>();
         private static Dictionary<object, ulong> _clientMap = new Dictionary<object, ulong>();
 
-        public UIServerBrowser.SearchMode mode => this._modeQueue.Count > 0 ? this._modeQueue.Peek() : UIServerBrowser.SearchMode.None;
+        public UIServerBrowser.SearchMode mode => _modeQueue.Count > 0 ? _modeQueue.Peek() : UIServerBrowser.SearchMode.None;
 
         public override void Close()
         {
-            if (!this.fixView)
+            if (!fixView)
             {
-                this._showingMenu = false;
-                this._editModMenu.Close();
+                _showingMenu = false;
+                _editModMenu.Close();
                 Layer.HUD.camera.width /= 2f;
                 Layer.HUD.camera.height /= 2f;
-                this.fixView = true;
+                fixView = true;
                 DevConsole.RestoreDevConsole();
             }
             base.Close();
@@ -163,103 +163,103 @@ namespace DuckGame
           InputProfile conProfile = null)
           : base(title, xpos, ypos, wide, high, "@WASD@@SELECT@JOIN @MENU1@REFRESH @CANCEL@BACK", conProfile)
         {
-            this.defaultImage = Content.Load<Tex2D>("server_default");
-            this.defaultImageLan = Content.Load<Tex2D>("server_default_lan");
-            this._splitter.topSection.components[0].align = UIAlign.Left;
-            this._openOnClose = openOnClose;
-            this._moreArrow = new Sprite("moreArrow");
-            this._moreArrow.CenterOrigin();
-            this._steamIcon = new Sprite("steamIconSmall")
+            defaultImage = Content.Load<Tex2D>("server_default");
+            defaultImageLan = Content.Load<Tex2D>("server_default_lan");
+            _splitter.topSection.components[0].align = UIAlign.Left;
+            _openOnClose = openOnClose;
+            _moreArrow = new Sprite("moreArrow");
+            _moreArrow.CenterOrigin();
+            _steamIcon = new Sprite("steamIconSmall")
             {
                 scale = new Vec2(1f) / 2f
             };
-            this._lanIcon = new Sprite("lanIconSmall")
+            _lanIcon = new Sprite("lanIconSmall")
             {
                 scale = new Vec2(1f) / 2f
             };
-            this._lockedServer = new Sprite("lockedServer");
-            this._globeIcon = new Sprite("smallEarth");
-            this._namedServer = new Sprite("namedServer");
-            this._localIcon = new SpriteMap("iconSheet", 16, 16)
+            _lockedServer = new Sprite("lockedServer");
+            _globeIcon = new Sprite("smallEarth");
+            _namedServer = new Sprite("namedServer");
+            _localIcon = new SpriteMap("iconSheet", 16, 16)
             {
                 scale = new Vec2(1f) / 2f
             };
-            this._localIcon.SetFrameWithoutReset(1);
-            this._newIcon = new SpriteMap("presents", 16, 16)
+            _localIcon.SetFrameWithoutReset(1);
+            _newIcon = new SpriteMap("presents", 16, 16)
             {
                 scale = new Vec2(2f)
             };
-            this._newIcon.SetFrameWithoutReset(0);
-            this._noImage = new Sprite("notexture")
+            _newIcon.SetFrameWithoutReset(0);
+            _noImage = new Sprite("notexture")
             {
                 scale = new Vec2(2f)
             };
-            this._cursor = new SpriteMap("cursors", 16, 16);
-            this._maxLobbiesToShow = 8;
-            this._box = new UIBox(0f, 0f, high: this._maxLobbiesToShow * 36, isVisible: false);
-            this.Add(_box, true);
-            this._fancyFont = new FancyBitmapFont("smallFont")
+            _cursor = new SpriteMap("cursors", 16, 16);
+            _maxLobbiesToShow = 8;
+            _box = new UIBox(0f, 0f, high: _maxLobbiesToShow * 36, isVisible: false);
+            Add(_box, true);
+            _fancyFont = new FancyBitmapFont("smallFont")
             {
-                maxWidth = (int)this.width - 100,
+                maxWidth = (int)width - 100,
                 maxRows = 2
             };
-            this.scrollBarOffset = 0;
-            this._editModMenu = new UIMenu("<mod name>", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@SELECT@SELECT");
-            this._editModMenu.Add(new UIText(" ", Color.White), true);
-            this._editModMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_editModMenu, this)), true);
-            this._editModMenu.Close();
-            this._yesNoMenu = new UIMenu("ARE YOU SURE?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@SELECT@SELECT");
-            this._yesNoMenu.Add(new UIMenuItem("YES"), true);
-            this._yesNoMenu.Add(new UIMenuItem("NO"), true);
-            this._yesNoMenu.Close();
+            scrollBarOffset = 0;
+            _editModMenu = new UIMenu("<mod name>", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@SELECT@SELECT");
+            _editModMenu.Add(new UIText(" ", Color.White), true);
+            _editModMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_editModMenu, this)), true);
+            _editModMenu.Close();
+            _yesNoMenu = new UIMenu("ARE YOU SURE?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@SELECT@SELECT");
+            _yesNoMenu.Add(new UIMenuItem("YES"), true);
+            _yesNoMenu.Add(new UIMenuItem("NO"), true);
+            _yesNoMenu.Close();
             //this._updateTextBox = new Textbox(0f, 0f, 0f, 0f)
             //{
             //    depth = (Depth)0.9f,
             //    maxLength = 5000
             //};
-            this._downloadModsMenu = new UIMenu("MODS REQUIRED!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 290f, conString: "@SELECT@SELECT");
-            this._downloadModsMenu.Add(new UIText("You're missing the mods required", Colors.DGBlue), true);
-            this._downloadModsMenu.Add(new UIText("to join this game. Would you", Colors.DGBlue), true);
-            this._downloadModsMenu.Add(new UIText("like to automatically subscribe to", Colors.DGBlue), true);
-            this._downloadModsMenu.Add(new UIText("all required mods, restart and", Colors.DGBlue), true);
-            this._downloadModsMenu.Add(new UIText("join the game?", Colors.DGBlue), true);
-            this._downloadModsMenu.Add(new UIText("", Colors.DGBlue), true);
-            this._downloadModsMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_downloadModsMenu, this)), true);
-            this._downloadModsMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, new UIMenuActionCloseMenuCallFunction.Function(UIServerBrowser.SubscribeAndRestart))), true);
-            this._downloadModsMenu.Close();
+            _downloadModsMenu = new UIMenu("MODS REQUIRED!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 290f, conString: "@SELECT@SELECT");
+            _downloadModsMenu.Add(new UIText("You're missing the mods required", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("to join this game. Would you", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("like to automatically subscribe to", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("all required mods, restart and", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("join the game?", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_downloadModsMenu, this)), true);
+            _downloadModsMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, new UIMenuActionCloseMenuCallFunction.Function(UIServerBrowser.SubscribeAndRestart))), true);
+            _downloadModsMenu.Close();
             if (!Network.available)
-                this._controlString = "@WASD@@SELECT@JOIN @MENU1@REFRESH @CANCEL@BACK";
+                _controlString = "@WASD@@SELECT@JOIN @MENU1@REFRESH @CANCEL@BACK";
             else
-                this._controlString = "@WASD@@SELECT@JOIN @MENU1@REFRESH @CANCEL@BACK @MENU2@REFRESH LAN";
-            this._passwordEntryMenu = new UIStringEntryMenu(false, "ENTER PASSWORD", new FieldBinding(this, nameof(enteredPassword)));
-            this._portEntryMenu = new UIStringEntryMenu(false, "ENTER PORT", new FieldBinding(this, nameof(enteredPort)), 6, true, 1337, 55535);
-            this._portEntryMenu.SetBackFunction(new UIMenuActionOpenMenu(_portEntryMenu, this));
-            this._portEntryMenu.Close();
-            this._passwordEntryMenu.SetBackFunction(new UIMenuActionOpenMenu(_passwordEntryMenu, this));
-            this._passwordEntryMenu.Close();
+                _controlString = "@WASD@@SELECT@JOIN @MENU1@REFRESH @CANCEL@BACK @MENU2@REFRESH LAN";
+            _passwordEntryMenu = new UIStringEntryMenu(false, "ENTER PASSWORD", new FieldBinding(this, nameof(enteredPassword)));
+            _portEntryMenu = new UIStringEntryMenu(false, "ENTER PORT", new FieldBinding(this, nameof(enteredPort)), 6, true, 1337, 55535);
+            _portEntryMenu.SetBackFunction(new UIMenuActionOpenMenu(_portEntryMenu, this));
+            _portEntryMenu.Close();
+            _passwordEntryMenu.SetBackFunction(new UIMenuActionOpenMenu(_passwordEntryMenu, this));
+            _passwordEntryMenu.Close();
         }
 
         public override void Open()
         {
             UIServerBrowser._selectedLobby = null;
-            this._pressWait = 30;
+            _pressWait = 30;
             base.Open();
             DevConsole.SuppressDevConsole();
-            this._oldPos = Mouse.positionScreen;
-            this._hoverIndex = -1;
-            if (!this._enteringPort)
-                this.RefreshLobbySearch(UIServerBrowser.SearchMode.Near, UIServerBrowser.SearchMode.Global, UIServerBrowser.SearchMode.LAN);
-            this._enteringPort = false;
+            _oldPos = Mouse.positionScreen;
+            _hoverIndex = -1;
+            if (!_enteringPort)
+                RefreshLobbySearch(UIServerBrowser.SearchMode.Near, UIServerBrowser.SearchMode.Global, UIServerBrowser.SearchMode.LAN);
+            _enteringPort = false;
         }
 
-        public void RefreshLobbySearch() => this.RefreshLobbySearch(UIServerBrowser.SearchMode.Near, UIServerBrowser.SearchMode.Global, UIServerBrowser.SearchMode.LAN);
+        public void RefreshLobbySearch() => RefreshLobbySearch(UIServerBrowser.SearchMode.Near, UIServerBrowser.SearchMode.Global, UIServerBrowser.SearchMode.LAN);
 
         public void RefreshLobbySearch(params UIServerBrowser.SearchMode[] pParts)
         {
-            this._modeQueue.Clear();
+            _modeQueue.Clear();
             foreach (UIServerBrowser.SearchMode pPart in pParts)
-                this._modeQueue.Enqueue(pPart);
-            this._lobbies.Clear();
+                _modeQueue.Enqueue(pPart);
+            _lobbies.Clear();
             UIServerBrowser._selectedLobby = null;
         }
 
@@ -268,51 +268,51 @@ namespace DuckGame
             UIServerBrowser._joiningLobby = pLobby;
             if (ModLoader.modHash == UIServerBrowser._joiningLobby.modHash)
             {
-                this.Close();
-                this._attemptConnection = UIMatchmakerMark2.Platform_GetMatchkmaker(pLobby, this);
-                this._attemptConnection.SetPasswordAttempt(this.enteredPassword);
-                this.enteredPassword = "";
+                Close();
+                _attemptConnection = UIMatchmakerMark2.Platform_GetMatchkmaker(pLobby, this);
+                _attemptConnection.SetPasswordAttempt(enteredPassword);
+                enteredPassword = "";
                 Level.Add(_attemptConnection);
-                this._attemptConnection.Open();
+                _attemptConnection.Open();
                 MonoMain.pauseMenu = _attemptConnection;
             }
             else
             {
-                MonoMain.lobbyPassword = this.enteredPassword;
+                MonoMain.lobbyPassword = enteredPassword;
                 new UIMenuActionOpenMenu(this, _downloadModsMenu).Activate();
-                this.enteredPassword = "";
+                enteredPassword = "";
             }
         }
 
         private void UpdateLobbySearch()
         {
-            if (!this._searching && this.mode != UIServerBrowser.SearchMode.None && DuckGame.Graphics.frame >= this._lobbySearchCooldownNextAvailable)
+            if (!_searching && mode != UIServerBrowser.SearchMode.None && DuckGame.Graphics.frame >= _lobbySearchCooldownNextAvailable)
             {
-                this._lobbySearchCooldownNextAvailable = DuckGame.Graphics.frame;
-                Network.lanMode = this.mode == UIServerBrowser.SearchMode.LAN;
-                NCBasic.lobbySearchPort = this.lanSearchPort;
-                if (this.mode == UIServerBrowser.SearchMode.Global)
+                _lobbySearchCooldownNextAvailable = DuckGame.Graphics.frame;
+                Network.lanMode = mode == UIServerBrowser.SearchMode.LAN;
+                NCBasic.lobbySearchPort = lanSearchPort;
+                if (mode == UIServerBrowser.SearchMode.Global)
                     NCSteam.globalSearch = true;
                 UIServerBrowser._selectedLobby = null;
                 Network.activeNetwork.core.SearchForLobby();
-                this._searching = true;
+                _searching = true;
             }
-            if (!this._searching || this.mode == UIServerBrowser.SearchMode.None || !Network.activeNetwork.core.IsLobbySearchComplete())
+            if (!_searching || mode == UIServerBrowser.SearchMode.None || !Network.activeNetwork.core.IsLobbySearchComplete())
                 return;
-            this._searching = false;
+            _searching = false;
             int num1 = Network.activeNetwork.core.NumLobbiesFound();
             List<WorkshopItem> items = new List<WorkshopItem>();
             if (Network.lanMode)
             {
                 foreach (UIServerBrowser.LobbyData foundLobby in (Network.activeNetwork.core as NCBasic)._foundLobbies)
-                    this._lobbies.Add(foundLobby);
+                    _lobbies.Add(foundLobby);
             }
             else
             {
                 for (int i = 0; i < num1; ++i)
                 {
                     Lobby lobby = Network.activeNetwork.core.GetSearchLobbyAtIndex(i);
-                    if (this._lobbies.FirstOrDefault<UIServerBrowser.LobbyData>(x => x.lobby != null && (long)x.lobby.id == (long)lobby.id) == null)
+                    if (_lobbies.FirstOrDefault<UIServerBrowser.LobbyData>(x => x.lobby != null && (long)x.lobby.id == (long)lobby.id) == null)
                     {
                         string lobbyData1 = lobby.GetLobbyData("name");
                         if (!string.IsNullOrEmpty(lobbyData1))
@@ -352,7 +352,7 @@ namespace DuckGame
                             catch (Exception)
                             {
                             }
-                            lobbyData2.isGlobalLobby = this.mode == UIServerBrowser.SearchMode.Global;
+                            lobbyData2.isGlobalLobby = mode == UIServerBrowser.SearchMode.Global;
                             lobbyData2.hasFriends = false;
                             foreach (User user in lobby.users)
                             {
@@ -402,93 +402,93 @@ namespace DuckGame
                             {
                                 lobbyData2.maxPlayers = 0;
                             }
-                            this._lobbies.Add(lobbyData2);
+                            _lobbies.Add(lobbyData2);
                         }
                     }
                 }
             }
             if (items.Count > 0)
                 Steam.RequestWorkshopInfo(items);
-            int num2 = (int)this._modeQueue.Dequeue();
+            int num2 = (int)_modeQueue.Dequeue();
         }
 
         public override void Update()
         {
-            if (this.open)
+            if (open)
             {
-                if (this._passwordLobby != null && this._passwordLobby.hasPassword && this.enteredPassword != "")
+                if (_passwordLobby != null && _passwordLobby.hasPassword && enteredPassword != "")
                 {
-                    this.TryJoiningLobby(this._passwordLobby);
-                    this._passwordLobby = null;
+                    TryJoiningLobby(_passwordLobby);
+                    _passwordLobby = null;
                     return;
                 }
-                this.UpdateLobbySearch();
+                UpdateLobbySearch();
             }
-            if (this._pressWait > 0)
-                --this._pressWait;
-            if (this._downloadModsMenu.open)
+            if (_pressWait > 0)
+                --_pressWait;
+            if (_downloadModsMenu.open)
             {
-                this._downloadModsMenu.DoUpdate();
+                _downloadModsMenu.DoUpdate();
                 if (!UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
                 {
-                    this._downloadModsMenu.Close();
-                    this.Open();
+                    _downloadModsMenu.Close();
+                    Open();
                     return;
                 }
             }
-            else if (this.open)
+            else if (open)
             {
                 MonoMain.lobbyPassword = null;
-                if (this._gamepadMode)
+                if (_gamepadMode)
                 {
-                    if (this._hoverIndex < 0)
-                        this._hoverIndex = 0;
+                    if (_hoverIndex < 0)
+                        _hoverIndex = 0;
                 }
                 else
                 {
-                    this._hoverIndex = -1;
-                    for (int index = 0; index < this._maxLobbiesToShow && this._scrollItemOffset + index < this._lobbies.Count; ++index)
+                    _hoverIndex = -1;
+                    for (int index = 0; index < _maxLobbiesToShow && _scrollItemOffset + index < _lobbies.Count; ++index)
                     {
-                        if (new Rectangle((int)(this._box.x - this._box.halfWidth), (int)(this._box.y - this._box.halfHeight + 36 * index), (int)this._box.width - 14, 36f).Contains(Mouse.position))
+                        if (new Rectangle((int)(_box.x - _box.halfWidth), (int)(_box.y - _box.halfHeight + 36 * index), (int)_box.width - 14, 36f).Contains(Mouse.position))
                         {
-                            this._hoverIndex = this._scrollItemOffset + index;
+                            _hoverIndex = _scrollItemOffset + index;
                             break;
                         }
                     }
                 }
-                if (this._hoverIndex != -1)
+                if (_hoverIndex != -1)
                 {
                     if (Input.Pressed("MENU1"))
                     {
-                        this.RefreshLobbySearch(UIServerBrowser.SearchMode.Near, UIServerBrowser.SearchMode.Global, UIServerBrowser.SearchMode.LAN);
+                        RefreshLobbySearch(UIServerBrowser.SearchMode.Near, UIServerBrowser.SearchMode.Global, UIServerBrowser.SearchMode.LAN);
                         SFX.Play("rockHitGround", 0.8f);
                     }
-                    else if (Input.Pressed("MENU2") || this.enteredPort != "")
+                    else if (Input.Pressed("MENU2") || enteredPort != "")
                     {
-                        if (this.enteredPort == "")
+                        if (enteredPort == "")
                         {
-                            this._enteringPort = true;
-                            this._portEntryMenu.SetValue(this.lanSearchPort.ToString());
+                            _enteringPort = true;
+                            _portEntryMenu.SetValue(lanSearchPort.ToString());
                             new UIMenuActionOpenMenu(this, _portEntryMenu).Activate();
                         }
                         else
                         {
                             try
                             {
-                                this.lanSearchPort = Convert.ToInt32(this.enteredPort);
+                                lanSearchPort = Convert.ToInt32(enteredPort);
                             }
                             catch (Exception)
                             {
                             }
-                            this.enteredPort = "";
-                            this.RefreshLobbySearch(UIServerBrowser.SearchMode.LAN);
+                            enteredPort = "";
+                            RefreshLobbySearch(UIServerBrowser.SearchMode.LAN);
                             SFX.Play("rockHitGround", 0.8f);
                         }
                     }
-                    if (this._lobbies.Count > 0 && this._hoverIndex < this._lobbies.Count)
+                    if (_lobbies.Count > 0 && _hoverIndex < _lobbies.Count)
                     {
-                        UIServerBrowser._selectedLobby = this._lobbies[this._hoverIndex];
-                        if (Input.Pressed("SELECT") && this._pressWait == 0 && this._gamepadMode || !this._gamepadMode && Mouse.left == InputState.Pressed || this.enteredPassword != "")
+                        UIServerBrowser._selectedLobby = _lobbies[_hoverIndex];
+                        if (Input.Pressed("SELECT") && _pressWait == 0 && _gamepadMode || !_gamepadMode && Mouse.left == InputState.Pressed || enteredPassword != "")
                         {
                             if (!UIServerBrowser._selectedLobby.canJoin)
                             {
@@ -497,14 +497,14 @@ namespace DuckGame
                             else
                             {
                                 SFX.Play("consoleSelect");
-                                if (UIServerBrowser._selectedLobby.hasPassword && this.enteredPassword == "")
+                                if (UIServerBrowser._selectedLobby.hasPassword && enteredPassword == "")
                                 {
-                                    this._passwordLobby = UIServerBrowser._selectedLobby;
+                                    _passwordLobby = UIServerBrowser._selectedLobby;
                                     new UIMenuActionOpenMenu(this, _passwordEntryMenu).Activate();
                                 }
                                 else
                                 {
-                                    this.TryJoiningLobby(UIServerBrowser._selectedLobby);
+                                    TryJoiningLobby(UIServerBrowser._selectedLobby);
                                     return;
                                 }
                             }
@@ -513,91 +513,91 @@ namespace DuckGame
                 }
                 else
                     UIServerBrowser._selectedLobby = null;
-                if (this._gamepadMode)
+                if (_gamepadMode)
                 {
-                    this._draggingScrollbar = false;
+                    _draggingScrollbar = false;
                     if (Input.Pressed("MENUDOWN"))
-                        ++this._hoverIndex;
+                        ++_hoverIndex;
                     else if (Input.Pressed("MENUUP"))
-                        --this._hoverIndex;
+                        --_hoverIndex;
                     if (Input.Pressed("STRAFE"))
-                        this._hoverIndex -= 10;
+                        _hoverIndex -= 10;
                     else if (Input.Pressed("RAGDOLL"))
-                        this._hoverIndex += 10;
-                    if (this._hoverIndex < 0)
-                        this._hoverIndex = 0;
-                    if ((this._oldPos - Mouse.positionScreen).lengthSq > 200.0)
-                        this._gamepadMode = false;
+                        _hoverIndex += 10;
+                    if (_hoverIndex < 0)
+                        _hoverIndex = 0;
+                    if ((_oldPos - Mouse.positionScreen).lengthSq > 200.0)
+                        _gamepadMode = false;
                 }
                 else
                 {
-                    if (!this._draggingScrollbar)
+                    if (!_draggingScrollbar)
                     {
-                        if (Mouse.left == InputState.Pressed && this.ScrollBarBox().Contains(Mouse.position))
+                        if (Mouse.left == InputState.Pressed && ScrollBarBox().Contains(Mouse.position))
                         {
-                            this._draggingScrollbar = true;
-                            this._oldPos = Mouse.position;
+                            _draggingScrollbar = true;
+                            _oldPos = Mouse.position;
                         }
                         if (Mouse.scroll > 0.0)
                         {
-                            this._scrollItemOffset += 5;
-                            this._hoverIndex += 5;
+                            _scrollItemOffset += 5;
+                            _hoverIndex += 5;
                         }
                         else if (Mouse.scroll < 0.0)
                         {
-                            this._scrollItemOffset -= 5;
-                            this._hoverIndex -= 5;
-                            if (this._hoverIndex < 0)
-                                this._hoverIndex = 0;
+                            _scrollItemOffset -= 5;
+                            _hoverIndex -= 5;
+                            if (_hoverIndex < 0)
+                                _hoverIndex = 0;
                         }
                     }
                     else if (Mouse.left != InputState.Down)
                     {
-                        this._draggingScrollbar = false;
+                        _draggingScrollbar = false;
                     }
                     else
                     {
-                        Vec2 vec2 = Mouse.position - this._oldPos;
-                        this._oldPos = Mouse.position;
-                        this.scrollBarOffset += (int)vec2.y;
-                        if (this.scrollBarOffset > this.scrollBarScrollableHeight)
-                            this.scrollBarOffset = this.scrollBarScrollableHeight;
-                        else if (this.scrollBarOffset < 0)
-                            this.scrollBarOffset = 0;
-                        this._scrollItemOffset = (int)((this._lobbies.Count - this._maxLobbiesToShow) * (scrollBarOffset / (float)this.scrollBarScrollableHeight));
+                        Vec2 vec2 = Mouse.position - _oldPos;
+                        _oldPos = Mouse.position;
+                        scrollBarOffset += (int)vec2.y;
+                        if (scrollBarOffset > scrollBarScrollableHeight)
+                            scrollBarOffset = scrollBarScrollableHeight;
+                        else if (scrollBarOffset < 0)
+                            scrollBarOffset = 0;
+                        _scrollItemOffset = (int)((_lobbies.Count - _maxLobbiesToShow) * (scrollBarOffset / (float)scrollBarScrollableHeight));
                     }
                     if (Input.Pressed("ANY"))
                     {
-                        this._gamepadMode = true;
-                        this._oldPos = Mouse.positionScreen;
+                        _gamepadMode = true;
+                        _oldPos = Mouse.positionScreen;
                     }
                 }
-                if (this._scrollItemOffset < 0)
-                    this._scrollItemOffset = 0;
-                else if (this._scrollItemOffset > Math.Max(0, this._lobbies.Count - this._maxLobbiesToShow))
-                    this._scrollItemOffset = Math.Max(0, this._lobbies.Count - this._maxLobbiesToShow);
-                if (this._hoverIndex >= this._lobbies.Count)
-                    this._hoverIndex = this._lobbies.Count - 1;
-                else if (this._hoverIndex >= this._scrollItemOffset + this._maxLobbiesToShow)
-                    this._scrollItemOffset += this._hoverIndex - (this._scrollItemOffset + this._maxLobbiesToShow) + 1;
-                else if (this._hoverIndex >= 0 && this._hoverIndex < this._scrollItemOffset)
-                    this._scrollItemOffset -= this._scrollItemOffset - this._hoverIndex;
-                this.scrollBarOffset = this._scrollItemOffset == 0 ? 0 : (int)Lerp.FloatSmooth(0f, scrollBarScrollableHeight, _scrollItemOffset / (float)(this._lobbies.Count - this._maxLobbiesToShow));
+                if (_scrollItemOffset < 0)
+                    _scrollItemOffset = 0;
+                else if (_scrollItemOffset > Math.Max(0, _lobbies.Count - _maxLobbiesToShow))
+                    _scrollItemOffset = Math.Max(0, _lobbies.Count - _maxLobbiesToShow);
+                if (_hoverIndex >= _lobbies.Count)
+                    _hoverIndex = _lobbies.Count - 1;
+                else if (_hoverIndex >= _scrollItemOffset + _maxLobbiesToShow)
+                    _scrollItemOffset += _hoverIndex - (_scrollItemOffset + _maxLobbiesToShow) + 1;
+                else if (_hoverIndex >= 0 && _hoverIndex < _scrollItemOffset)
+                    _scrollItemOffset -= _scrollItemOffset - _hoverIndex;
+                scrollBarOffset = _scrollItemOffset == 0 ? 0 : (int)Lerp.FloatSmooth(0f, scrollBarScrollableHeight, _scrollItemOffset / (float)(_lobbies.Count - _maxLobbiesToShow));
                 if (!Editor.hoverTextBox && !UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
                 {
                     new UIMenuActionOpenMenu(this, _openOnClose).Activate();
                     return;
                 }
             }
-            if (this._showingMenu)
+            if (_showingMenu)
             {
                 HUD.CloseAllCorners();
-                this._showingMenu = false;
+                _showingMenu = false;
             }
             base.Update();
         }
 
-        private Rectangle ScrollBarBox() => new Rectangle((float)(this._box.x + this._box.halfWidth - 12.0 + 1.0), (float)(this._box.y - this._box.halfHeight + 1.0) + scrollBarOffset, 10f, 32f);
+        private Rectangle ScrollBarBox() => new Rectangle((float)(_box.x + _box.halfWidth - 12.0 + 1.0), (float)(_box.y - _box.halfHeight + 1.0) + scrollBarOffset, 10f, 32f);
 
         private void Completed(object sender, AsyncCompletedEventArgs e)
         {
@@ -620,66 +620,66 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._downloadModsMenu.open)
-                this._downloadModsMenu.DoDraw();
-            if (this.open)
+            if (_downloadModsMenu.open)
+                _downloadModsMenu.DoDraw();
+            if (open)
             {
-                this.scrollBarTop = (int)(this._box.y - this._box.halfHeight + 1.0 + 16.0);
-                this.scrollBarBottom = (int)(this._box.y + this._box.halfHeight - 1.0 - 16.0);
-                this.scrollBarScrollableHeight = this.scrollBarBottom - this.scrollBarTop;
-                if (this.fixView)
+                scrollBarTop = (int)(_box.y - _box.halfHeight + 1.0 + 16.0);
+                scrollBarBottom = (int)(_box.y + _box.halfHeight - 1.0 - 16.0);
+                scrollBarScrollableHeight = scrollBarBottom - scrollBarTop;
+                if (fixView)
                 {
                     Layer.HUD.camera.width *= 2f;
                     Layer.HUD.camera.height *= 2f;
-                    this.fixView = false;
+                    fixView = false;
                 }
-                DuckGame.Graphics.DrawRect(new Vec2(this._box.x - this._box.halfWidth, this._box.y - this._box.halfHeight), new Vec2((float)(this._box.x + this._box.halfWidth - 12.0 - 2.0), this._box.y + this._box.halfHeight), Color.Black, (Depth)0.4f);
-                DuckGame.Graphics.DrawRect(new Vec2((float)(this._box.x + this._box.halfWidth - 12.0), this._box.y - this._box.halfHeight), new Vec2(this._box.x + this._box.halfWidth, this._box.y + this._box.halfHeight), Color.Black, (Depth)0.4f);
-                Rectangle r = this.ScrollBarBox();
-                DuckGame.Graphics.DrawRect(r, this._draggingScrollbar || r.Contains(Mouse.position) ? Color.LightGray : Color.Gray, (Depth)0.5f);
-                if (this._lobbies.Count == 0)
+                DuckGame.Graphics.DrawRect(new Vec2(_box.x - _box.halfWidth, _box.y - _box.halfHeight), new Vec2((float)(_box.x + _box.halfWidth - 12.0 - 2.0), _box.y + _box.halfHeight), Color.Black, (Depth)0.4f);
+                DuckGame.Graphics.DrawRect(new Vec2((float)(_box.x + _box.halfWidth - 12.0), _box.y - _box.halfHeight), new Vec2(_box.x + _box.halfWidth, _box.y + _box.halfHeight), Color.Black, (Depth)0.4f);
+                Rectangle r = ScrollBarBox();
+                DuckGame.Graphics.DrawRect(r, _draggingScrollbar || r.Contains(Mouse.position) ? Color.LightGray : Color.Gray, (Depth)0.5f);
+                if (_lobbies.Count == 0)
                 {
-                    float num1 = this._box.x - this._box.halfWidth;
-                    float num2 = this._box.y - this._box.halfHeight;
-                    if (this.mode == UIServerBrowser.SearchMode.None)
-                        this._fancyFont.Draw("No games found!", new Vec2(num1 + 10f, num2 + 2f), Color.Yellow, (Depth)0.5f);
+                    float num1 = _box.x - _box.halfWidth;
+                    float num2 = _box.y - _box.halfHeight;
+                    if (mode == UIServerBrowser.SearchMode.None)
+                        _fancyFont.Draw("No games found!", new Vec2(num1 + 10f, num2 + 2f), Color.Yellow, (Depth)0.5f);
                     else
-                        this._fancyFont.Draw("Waiting for game list.", new Vec2(num1 + 10f, num2 + 2f), Colors.DGGreen, (Depth)0.5f);
+                        _fancyFont.Draw("Waiting for game list.", new Vec2(num1 + 10f, num2 + 2f), Colors.DGGreen, (Depth)0.5f);
                 }
-                if (this.mode != UIServerBrowser.SearchMode.None)
+                if (mode != UIServerBrowser.SearchMode.None)
                 {
-                    float x = (float)(this._box.x - this._box.halfWidth + 116.0);
-                    float y = this._splitter.topSection.y - 5f;
-                    this._refreshingDots += 0.01f;
+                    float x = (float)(_box.x - _box.halfWidth + 116.0);
+                    float y = _splitter.topSection.y - 5f;
+                    _refreshingDots += 0.01f;
                     if (_refreshingDots > 1.0)
-                        this._refreshingDots = 0f;
+                        _refreshingDots = 0f;
                     string str = "(REFRESHING";
                     for (int index = 0; index < 3; ++index)
                     {
                         if (_refreshingDots * 4.0 > index + 1)
                             str += ".";
                     }
-                    this._fancyFont.Draw(str + ")", new Vec2(x, y), Colors.DGGreen, (Depth)0.5f);
+                    _fancyFont.Draw(str + ")", new Vec2(x, y), Colors.DGGreen, (Depth)0.5f);
                 }
-                this._lobbies.Sort();
-                for (int index1 = 0; index1 < this._maxLobbiesToShow; ++index1)
+                _lobbies.Sort();
+                for (int index1 = 0; index1 < _maxLobbiesToShow; ++index1)
                 {
-                    int index2 = this._scrollItemOffset + index1;
-                    if (index2 < this._lobbies.Count)
+                    int index2 = _scrollItemOffset + index1;
+                    if (index2 < _lobbies.Count)
                     {
-                        float x1 = this._box.x - this._box.halfWidth;
-                        float y = this._box.y - this._box.halfHeight + 36 * index1;
-                        if (this._hoverIndex == index2)
-                            DuckGame.Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)(x1 + this._box.width - 14.0), y + 36f), Color.White * 0.6f, (Depth)0.4f);
+                        float x1 = _box.x - _box.halfWidth;
+                        float y = _box.y - _box.halfHeight + 36 * index1;
+                        if (_hoverIndex == index2)
+                            DuckGame.Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)(x1 + _box.width - 14.0), y + 36f), Color.White * 0.6f, (Depth)0.4f);
                         else if ((index2 & 1) != 0)
-                            DuckGame.Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)(x1 + this._box.width - 14.0), y + 36f), Color.White * 0.1f, (Depth)0.4f);
-                        UIServerBrowser.LobbyData lobby = this._lobbies[index2];
+                            DuckGame.Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)(x1 + _box.width - 14.0), y + 36f), Color.White * 0.1f, (Depth)0.4f);
+                        UIServerBrowser.LobbyData lobby = _lobbies[index2];
                         if (lobby != null)
                         {
-                            this._noImage.texture = this.defaultImage;
+                            _noImage.texture = defaultImage;
                             if (lobby.lobby == null)
-                                this._noImage.texture = this.defaultImageLan;
-                            this._noImage.scale = new Vec2(1f, 1f);
+                                _noImage.texture = defaultImageLan;
+                            _noImage.scale = new Vec2(1f, 1f);
                             List<Tex2D> tex2DList = new List<Tex2D>();
                             string titleString = lobby.name;
                             if (lobby.lobby == null)
@@ -733,7 +733,7 @@ namespace DuckGame
                                                     if (System.IO.File.Exists(str4))
                                                         DuckFile.Delete(str4);
                                                     key.DownloadFileAsync(new Uri(workshopItem1.data.previewPath), str4);
-                                                    key.DownloadFileCompleted += new AsyncCompletedEventHandler(this.Completed);
+                                                    key.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
                                                     UIServerBrowser._clientMap[key] = workshopItem1.id;
                                                 }
                                                 catch (Exception)
@@ -769,23 +769,23 @@ namespace DuckGame
                                 {
                                     if (index3 < tex2DList.Count)
                                     {
-                                        this._noImage.texture = tex2DList[index3];
+                                        _noImage.texture = tex2DList[index3];
                                         if (tex2DList.Count > 1)
-                                            this._noImage.scale = new Vec2(16f / _noImage.texture.width);
+                                            _noImage.scale = new Vec2(16f / _noImage.texture.width);
                                         else
-                                            this._noImage.scale = new Vec2(32f / _noImage.texture.width);
-                                        if (this._noImage.texture.width != this._noImage.texture.height)
+                                            _noImage.scale = new Vec2(32f / _noImage.texture.width);
+                                        if (_noImage.texture.width != _noImage.texture.height)
                                         {
-                                            if (this._noImage.texture.width > this._noImage.texture.height)
+                                            if (_noImage.texture.width > _noImage.texture.height)
                                             {
-                                                this._noImage.scale = new Vec2(32f / _noImage.texture.height);
-                                                DuckGame.Graphics.Draw(this._noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(this._noImage.texture.width / 2 - this._noImage.texture.height / 2, 0f, _noImage.texture.height, _noImage.texture.height), (Depth)0.5f);
+                                                _noImage.scale = new Vec2(32f / _noImage.texture.height);
+                                                DuckGame.Graphics.Draw(_noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(_noImage.texture.width / 2 - _noImage.texture.height / 2, 0f, _noImage.texture.height, _noImage.texture.height), (Depth)0.5f);
                                             }
                                             else
-                                                DuckGame.Graphics.Draw(this._noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(0f, 0f, _noImage.texture.width, _noImage.texture.width), (Depth)0.5f);
+                                                DuckGame.Graphics.Draw(_noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(0f, 0f, _noImage.texture.width, _noImage.texture.width), (Depth)0.5f);
                                         }
                                         else
-                                            DuckGame.Graphics.Draw(this._noImage, x1 + 2f + zero.x, y + 2f + zero.y, (Depth)0.5f);
+                                            DuckGame.Graphics.Draw(_noImage, x1 + 2f + zero.x, y + 2f + zero.y, (Depth)0.5f);
                                         zero.x += 16f;
                                         if (zero.x >= 32.0)
                                         {
@@ -796,7 +796,7 @@ namespace DuckGame
                                 }
                             }
                             else
-                                DuckGame.Graphics.Draw(this._noImage, x1 + 2f, y + 2f, (Depth)0.5f);
+                                DuckGame.Graphics.Draw(_noImage, x1 + 2f, y + 2f, (Depth)0.5f);
                             titleString += " (" + Math.Min(lobby.userCount - (lobby.dedicated ? 1 : 0), 8).ToString() + "/" + Math.Min(lobby.numSlots, 8).ToString() + ")";
                             if (lobby.hasFriends)
                                 titleString += " |DGGREEN|FRIEND";
@@ -848,31 +848,31 @@ namespace DuckGame
                                     }
                                 } //removed  ParentalControls.AreParentalControlsActive and unpacked
                                 titleString += ")";
-                                DuckGame.Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)(x1 + this._box.width - 14.0), y + 36f), Color.Black * 0.5f, (Depth)0.99f);
+                                DuckGame.Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)(x1 + _box.width - 14.0), y + 36f), Color.Black * 0.5f, (Depth)0.99f);
                             }
-                            this._fancyFont.maxWidth = 1000;
+                            _fancyFont.maxWidth = 1000;
                             float num = 0f;
                             if (lobby.hasPassword)
                             {
-                                DuckGame.Graphics.Draw(this._lockedServer, (float)(x1 + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
+                                DuckGame.Graphics.Draw(_lockedServer, (float)(x1 + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
                                 num += 10f;
                             }
                             if (lobby.hasCustomName)
                             {
-                                DuckGame.Graphics.Draw(this._namedServer, (float)(x1 + num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
+                                DuckGame.Graphics.Draw(_namedServer, (float)(x1 + num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
                                 num += 10f;
                             }
                             if (lobby.isGlobalLobby)
                             {
-                                DuckGame.Graphics.Draw(this._globeIcon, (float)(x1 + num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
+                                DuckGame.Graphics.Draw(_globeIcon, (float)(x1 + num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
                                 num += 10f;
                             }
-                            this._fancyFont.Draw(titleString, new Vec2((float)(x1 + 36.0 + num + 10.0), y + 2f), Color.Yellow, (Depth)0.5f);
+                            _fancyFont.Draw(titleString, new Vec2((float)(x1 + 36.0 + num + 10.0), y + 2f), Color.Yellow, (Depth)0.5f);
                             if (lobby.version == DG.version)
-                                this._fancyFont.Draw(lobby.version, new Vec2((float)(x1 + 430.0 + 10.0), y + 2f), Colors.DGGreen * 0.45f, (Depth)0.5f);
+                                _fancyFont.Draw(lobby.version, new Vec2((float)(x1 + 430.0 + 10.0), y + 2f), Colors.DGGreen * 0.45f, (Depth)0.5f);
                             else
-                                this._fancyFont.Draw(lobby.version, new Vec2((float)(x1 + 430.0 + 10.0), y + 2f), Colors.DGRed * 0.45f, (Depth)0.5f);
-                            this._fancyFont.Draw("|WHITE|Ping:", new Vec2(x1 + 440f, y + 26f), Color.White * 0.45f, (Depth)0.5f);
+                                _fancyFont.Draw(lobby.version, new Vec2((float)(x1 + 430.0 + 10.0), y + 2f), Colors.DGRed * 0.45f, (Depth)0.5f);
+                            _fancyFont.Draw("|WHITE|Ping:", new Vec2(x1 + 440f, y + 26f), Color.White * 0.45f, (Depth)0.5f);
                             if (lobby.pingRefreshTimeout <= 0)
                             {
                                 lobby.pingRefreshTimeout = 60;
@@ -886,33 +886,33 @@ namespace DuckGame
                                     color = Colors.DGYellow;
                                 if (lobby.estimatedPing > 250)
                                     color = Colors.DGRed;
-                                this._fancyFont.Draw(lobby.estimatedPing.ToString() + "ms", new Vec2(x1 + 470f, y + 26f), color * 0.45f, (Depth)0.5f);
+                                _fancyFont.Draw(lobby.estimatedPing.ToString() + "ms", new Vec2(x1 + 470f, y + 26f), color * 0.45f, (Depth)0.5f);
                             }
                             else
-                                this._fancyFont.Draw("????ms", new Vec2(x1 + 470f, y + 26f), Colors.DGRed * 0.45f, (Depth)0.5f);
+                                _fancyFont.Draw("????ms", new Vec2(x1 + 470f, y + 26f), Colors.DGRed * 0.45f, (Depth)0.5f);
                             if (lobby.lobby != null)
-                                DuckGame.Graphics.Draw(this._steamIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
+                                DuckGame.Graphics.Draw(_steamIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
                             else
-                                DuckGame.Graphics.Draw(this._lanIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
-                            this._fancyFont.Draw(text1, new Vec2(x1 + 36f, y + 6f + _fancyFont.characterHeight), Color.LightGray, (Depth)0.5f);
+                                DuckGame.Graphics.Draw(_lanIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
+                            _fancyFont.Draw(text1, new Vec2(x1 + 36f, y + 6f + _fancyFont.characterHeight), Color.LightGray, (Depth)0.5f);
                         }
                     }
                     else
                         break;
                 }
-                if (Mouse.available && !this._gamepadMode)
+                if (Mouse.available && !_gamepadMode)
                 {
-                    this._cursor.depth = (Depth)1f;
-                    this._cursor.scale = new Vec2(1f, 1f);
-                    this._cursor.position = Mouse.position;
-                    this._cursor.frame = 0;
+                    _cursor.depth = (Depth)1f;
+                    _cursor.scale = new Vec2(1f, 1f);
+                    _cursor.position = Mouse.position;
+                    _cursor.frame = 0;
                     if (Editor.hoverTextBox)
                     {
-                        this._cursor.frame = 5;
-                        this._cursor.position.y -= 4f;
-                        this._cursor.scale = new Vec2(0.5f, 1f);
+                        _cursor.frame = 5;
+                        _cursor.position.y -= 4f;
+                        _cursor.scale = new Vec2(0.5f, 1f);
                     }
-                    this._cursor.Draw();
+                    _cursor.Draw();
                 }
             }
             base.Draw();
@@ -963,42 +963,42 @@ namespace DuckGame
             {
                 get // removed AreParentalControlsActive
                 {
-                    return DG.version == this.version && (Network.gameDataHash == this.datahash || ModLoader.modHash != this.modHash) && this.started == "false" &&
-                        (!this.hasLocalMods || ModLoader.modHash == this.modHash) && this.userCount < this.numSlots && (this.type == "2" || this.lobby == null);
+                    return DG.version == version && (Network.gameDataHash == datahash || ModLoader.modHash != modHash) && started == "false" &&
+                        (!hasLocalMods || ModLoader.modHash == modHash) && userCount < numSlots && (type == "2" || lobby == null);
                 }
             }
 
-            public int userCount => this.lobby != null ? this.lobby.users.Count : this._userCount;
+            public int userCount => lobby != null ? lobby.users.Count : _userCount;
 
             public int CompareTo(UIServerBrowser.LobbyData other)
             {
-                if (this.isGlobalLobby && !other.isGlobalLobby)
+                if (isGlobalLobby && !other.isGlobalLobby)
                     return 10000;
-                if (!this.isGlobalLobby && other.isGlobalLobby)
+                if (!isGlobalLobby && other.isGlobalLobby)
                     return -10000;
-                if (this.canJoin && !other.canJoin)
+                if (canJoin && !other.canJoin)
                     return -500;
-                if (!this.canJoin && other.canJoin)
+                if (!canJoin && other.canJoin)
                     return 500;
-                if (this.hasFriends && !other.hasFriends)
+                if (hasFriends && !other.hasFriends)
                     return -100;
-                if (!this.hasFriends && other.hasFriends)
+                if (!hasFriends && other.hasFriends)
                     return 100;
-                if (!this.hasPassword && other.hasPassword)
+                if (!hasPassword && other.hasPassword)
                     return -10;
-                if (this.hasPassword && !other.hasPassword)
+                if (hasPassword && !other.hasPassword)
                     return 10;
-                if (this.lobby == null && other.lobby != null)
+                if (lobby == null && other.lobby != null)
                     return -1000;
-                if (this.lobby != null && other.lobby == null)
+                if (lobby != null && other.lobby == null)
                     return 1000;
-                if (this.dedicated && !other.dedicated)
+                if (dedicated && !other.dedicated)
                     return 1;
-                if (!this.dedicated && other.dedicated)
+                if (!dedicated && other.dedicated)
                     return -1;
-                if (this.estimatedPing < other.estimatedPing)
+                if (estimatedPing < other.estimatedPing)
                     return -2;
-                return this.estimatedPing > other.estimatedPing ? 2 : this.name.CompareTo(other.name);
+                return estimatedPing > other.estimatedPing ? 2 : name.CompareTo(other.name);
             }
         }
     }

@@ -72,7 +72,7 @@ namespace DuckGame
         private Sprite _burnGlowWideLeft;
         private Sprite _burnGlowWideRight;
 
-        public string level => this._level;
+        public string level => _level;
 
         public static LevelCore core
         {
@@ -97,8 +97,8 @@ namespace DuckGame
 
         public bool simulatePhysics
         {
-            get => this._simulatePhysics;
-            set => this._simulatePhysics = value;
+            get => _simulatePhysics;
+            set => _simulatePhysics = value;
         }
 
         public static bool sendCustomLevels
@@ -121,8 +121,8 @@ namespace DuckGame
 
         public Color backgroundColor
         {
-            get => this._backgroundColor;
-            set => this._backgroundColor = value;
+            get => _backgroundColor;
+            set => _backgroundColor = value;
         }
 
         public static void Add(Thing thing)
@@ -168,63 +168,63 @@ namespace DuckGame
 
         public T FirstOfType<T>()
         {
-            IEnumerable<Thing> thing = this.things[typeof(T)];
+            IEnumerable<Thing> thing = things[typeof(T)];
             return thing.Count<Thing>() > 0 ? (T)(object)thing.First<Thing>() : default(T);
         }
 
-        public QuadTreeObjectList things => this._things;
+        public QuadTreeObjectList things => _things;
 
-        public string id => this._id;
+        public string id => _id;
 
         public Camera camera
         {
-            get => this._camera;
-            set => this._camera = value;
+            get => _camera;
+            set => _camera = value;
         }
 
-        public NetLevelStatus networkStatus => this._networkStatus;
+        public NetLevelStatus networkStatus => _networkStatus;
 
-        public bool initialized => this._initialized;
+        public bool initialized => _initialized;
 
-        public bool initializeFunctionHasBeenRun => this._initialized && !this._initializeLater;
+        public bool initializeFunctionHasBeenRun => _initialized && !_initializeLater;
 
         public bool waitingOnNewData
         {
-            get => this._waitingOnNewData;
-            set => this._waitingOnNewData = value;
+            get => _waitingOnNewData;
+            set => _waitingOnNewData = value;
         }
 
         public virtual void DoInitialize()
         {
-            if (this.waitingOnNewData)
+            if (waitingOnNewData)
             {
-                this._initializeLater = true;
-                this._initialized = true;
+                _initializeLater = true;
+                _initialized = true;
             }
-            else if (!this._initialized)
+            else if (!_initialized)
             {
                 GhostManager.context.TransferPendingGhosts();
                 Random generator = Rando.generator;
-                Rando.generator = new Random(this.seed + 2500);
+                Rando.generator = new Random(seed + 2500);
                 Level.InitChanceGroups();
                 Rando.generator = generator;
-                this.Initialize();
+                Initialize();
                 if (!Network.isActive || Network.InLobby())
-                    this.DoStart();
-                this._things.RefreshState();
-                this.CalculateBounds();
-                this._initialized = true;
-                if (this._centeredView)
-                    this.camera.centerY -= (float)(((DuckGame.Graphics.aspect * this.camera.width) - (9f / 16f * this.camera.width)) / 2.0);
+                    DoStart();
+                _things.RefreshState();
+                CalculateBounds();
+                _initialized = true;
+                if (_centeredView)
+                    camera.centerY -= (float)(((DuckGame.Graphics.aspect * camera.width) - (9f / 16f * camera.width)) / 2.0);
                 if (!VirtualTransition.active)
                     StaticRenderer.Update();
                 if (!Network.isActive)
                     return;
-                this.ClientReady(DuckNetwork.localConnection);
+                ClientReady(DuckNetwork.localConnection);
             }
             else
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                     thing.AddToLayer();
             }
         }
@@ -235,25 +235,25 @@ namespace DuckGame
 
         public virtual void Initialize()
         {
-            this._levelStart = true;
+            _levelStart = true;
             Vote.ClearVotes();
         }
 
         private void DoStart()
         {
-            if (this._startCalled)
+            if (_startCalled)
                 return;
-            this.Start();
-            this._startCalled = true;
+            Start();
+            _startCalled = true;
         }
 
-        public void SkipStart() => this._startCalled = true;
+        public void SkipStart() => _startCalled = true;
 
         public virtual void Start()
         {
         }
 
-        public virtual void Terminate() => this.Clear();
+        public virtual void Terminate() => Clear();
 
         public virtual void AddThing(Thing t)
         {
@@ -267,22 +267,22 @@ namespace DuckGame
                     foreach (Thing thing in thingContainer.things)
                     {
                         if (!Thing.CheckForBozoData(thing))
-                            this.AddThing(thing);
+                            AddThing(thing);
                     }
                 }
                 else
                 {
                     foreach (Thing thing in thingContainer.things)
-                        this.AddThing(thing);
+                        AddThing(thing);
                 }
             }
             else
             {
                 if (t.level != this)
                 {
-                    this._things.Add(t);
+                    _things.Add(t);
                     if (!Level.skipInitialize)
-                        t.Added(this, !this.bareInitialize, false);
+                        t.Added(this, !bareInitialize, false);
                 }
                 if (!Network.isActive || t.connection != null)
                     return;
@@ -296,7 +296,7 @@ namespace DuckGame
                 return;
             t.DoTerminate();
             t.Removed();
-            this._things.Remove(t);
+            _things.Remove(t);
             if (t.ghostObject == null || !t.isServerForObject)
                 return;
             GhostManager.context.RemoveLater(t.ghostObject);
@@ -304,15 +304,15 @@ namespace DuckGame
 
         public void Clear()
         {
-            foreach (Thing thing in this._things)
+            foreach (Thing thing in _things)
                 thing.Removed();
             Layer.ClearLayers();
-            this._things.Clear();
+            _things.Clear();
         }
 
-        public Vec2 topLeft => this._topLeft;
+        public Vec2 topLeft => _topLeft;
 
-        public Vec2 bottomRight => this._bottomRight;
+        public Vec2 bottomRight => _bottomRight;
 
         public static void InitChanceGroups()
         {
@@ -322,7 +322,7 @@ namespace DuckGame
                 Level._core._chanceGroups2[index] = Rando.Float(1f);
         }
 
-        public virtual string LevelNameData() => this.GetType().Name;
+        public virtual string LevelNameData() => GetType().Name;
 
         public virtual string networkIdentifier => "";
 
@@ -483,7 +483,7 @@ namespace DuckGame
 
         public virtual void ClientReady(NetworkConnection c)
         {
-            if (!this.initializeFunctionHasBeenRun)
+            if (!initializeFunctionHasBeenRun)
                 return;
             bool flag = true;
             foreach (Profile profile in DuckNetwork.profiles)
@@ -500,28 +500,28 @@ namespace DuckGame
             Send.Message(new NMAllClientsReady());
         }
 
-        public bool calledAllClientsReady => this._calledAllClientsReady;
+        public bool calledAllClientsReady => _calledAllClientsReady;
 
         public virtual void DoAllClientsReady()
         {
-            if (this._calledAllClientsReady)
+            if (_calledAllClientsReady)
                 return;
-            this._calledAllClientsReady = true;
-            this.OnAllClientsReady();
+            _calledAllClientsReady = true;
+            OnAllClientsReady();
         }
 
         protected virtual void OnAllClientsReady()
         {
-            this._networkStatus = NetLevelStatus.Ready;
+            _networkStatus = NetLevelStatus.Ready;
             Level.current._readyForTransition = true;
-            this.DoStart();
+            DoStart();
         }
 
         public void TransferComplete(NetworkConnection c)
         {
-            this.transferCompleteCalled = true;
-            this._networkStatus = NetLevelStatus.WaitingForTransition;
-            this.OnTransferComplete(c);
+            transferCompleteCalled = true;
+            _networkStatus = NetLevelStatus.WaitingForTransition;
+            OnTransferComplete(c);
         }
 
         protected virtual void OnTransferComplete(NetworkConnection c)
@@ -534,137 +534,137 @@ namespace DuckGame
 
         public void IgnoreLowestPoint()
         {
-            this._lowestPointInitialized = true;
-            this.lowestPoint = 999999f;
-            this._topLeft = new Vec2(-99999f, -99999f);
-            this._bottomRight = new Vec2(99999f, 99999f);
+            _lowestPointInitialized = true;
+            lowestPoint = 999999f;
+            _topLeft = new Vec2(-99999f, -99999f);
+            _bottomRight = new Vec2(99999f, 99999f);
         }
 
         public void CalculateBounds()
         {
-            this._lowestPointInitialized = true;
-            CameraBounds cameraBounds = this.FirstOfType<CameraBounds>();
+            _lowestPointInitialized = true;
+            CameraBounds cameraBounds = FirstOfType<CameraBounds>();
             if (cameraBounds != null)
             {
-                this._topLeft = new Vec2(cameraBounds.x - (int)cameraBounds.wide / 2, cameraBounds.y - (int)cameraBounds.high / 2);
-                this._bottomRight = new Vec2(cameraBounds.x + (int)cameraBounds.wide / 2, cameraBounds.y + (int)cameraBounds.high / 2);
-                this.lowestPoint = this._bottomRight.y;
-                this.highestPoint = this._topLeft.y;
+                _topLeft = new Vec2(cameraBounds.x - (int)cameraBounds.wide / 2, cameraBounds.y - (int)cameraBounds.high / 2);
+                _bottomRight = new Vec2(cameraBounds.x + (int)cameraBounds.wide / 2, cameraBounds.y + (int)cameraBounds.high / 2);
+                lowestPoint = _bottomRight.y;
+                highestPoint = _topLeft.y;
             }
             else
             {
-                this._topLeft = new Vec2(99999f, 99999f);
-                this._bottomRight = new Vec2(-99999f, -99999f);
-                foreach (Block block in this._things[typeof(Block)])
+                _topLeft = new Vec2(99999f, 99999f);
+                _bottomRight = new Vec2(-99999f, -99999f);
+                foreach (Block block in _things[typeof(Block)])
                 {
                     if (!(block is RockWall) && block.y <= 7500.0)
                     {
                         if (block.right > _bottomRight.x)
-                            this._bottomRight.x = block.right;
+                            _bottomRight.x = block.right;
                         if (block.left < _topLeft.x)
-                            this._topLeft.x = block.left;
+                            _topLeft.x = block.left;
                         if (block.bottom > _bottomRight.y)
-                            this._bottomRight.y = block.bottom;
+                            _bottomRight.y = block.bottom;
                         if (block.top < _topLeft.y)
-                            this._topLeft.y = block.top;
+                            _topLeft.y = block.top;
                     }
                 }
-                foreach (AutoPlatform autoPlatform in this._things[typeof(AutoPlatform)])
+                foreach (AutoPlatform autoPlatform in _things[typeof(AutoPlatform)])
                 {
                     if (autoPlatform.y <= 7500.0)
                     {
                         if (autoPlatform.right > _bottomRight.x)
-                            this._bottomRight.x = autoPlatform.right;
+                            _bottomRight.x = autoPlatform.right;
                         if (autoPlatform.left < _topLeft.x)
-                            this._topLeft.x = autoPlatform.left;
+                            _topLeft.x = autoPlatform.left;
                         if (autoPlatform.bottom > _bottomRight.y)
-                            this._bottomRight.y = autoPlatform.bottom;
+                            _bottomRight.y = autoPlatform.bottom;
                         if (autoPlatform.top < _topLeft.y)
-                            this._topLeft.y = autoPlatform.top;
+                            _topLeft.y = autoPlatform.top;
                     }
                 }
-                this.lowestPoint = this._bottomRight.y;
-                this.highestPoint = this.topLeft.y;
+                lowestPoint = _bottomRight.y;
+                highestPoint = topLeft.y;
             }
         }
 
         public bool HasChecksumReply(NetworkConnection pConnection)
         {
             bool flag;
-            this.checksumReplies.TryGetValue(pConnection, out flag);
+            checksumReplies.TryGetValue(pConnection, out flag);
             return flag;
         }
 
-        public void ChecksumReplied(NetworkConnection pConnection) => this.checksumReplies[pConnection] = true;
+        public void ChecksumReplied(NetworkConnection pConnection) => checksumReplies[pConnection] = true;
 
-        public bool levelIsUpdating => Level._core.nextLevel == null && (!Network.isActive || this._startCalled) && !this._waitingOnTransition && this.transferCompleteCalled;
+        public bool levelIsUpdating => Level._core.nextLevel == null && (!Network.isActive || _startCalled) && !_waitingOnTransition && transferCompleteCalled;
 
         public virtual void DoUpdate()
         {
-            if (this._updateWaitFrames > 0)
+            if (_updateWaitFrames > 0)
             {
-                if (!this._refreshState)
+                if (!_refreshState)
                 {
-                    this._things.RefreshState();
+                    _things.RefreshState();
                     VirtualTransition.Update();
-                    this._refreshState = true;
+                    _refreshState = true;
                 }
-                --this._updateWaitFrames;
-                if (this._lowestPointInitialized)
+                --_updateWaitFrames;
+                if (_lowestPointInitialized)
                     return;
-                this.CalculateBounds();
+                CalculateBounds();
             }
             else
             {
                 Level currentLevel = Level._core.currentLevel;
                 Level._core.currentLevel = this;
                 if (DuckGame.Graphics.flashAdd > 0.0)
-                    DuckGame.Graphics.flashAdd -= this.flashDissipationSpeed;
+                    DuckGame.Graphics.flashAdd -= flashDissipationSpeed;
                 else
                     DuckGame.Graphics.flashAdd = 0f;
-                if (this._levelStart)
+                if (_levelStart)
                 {
                     DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 1f, 0.05f);
                     if (DuckGame.Graphics.fade == 1.0)
-                        this._levelStart = false;
+                        _levelStart = false;
                 }
-                if (Level._core.nextLevel == null && this.initializeFunctionHasBeenRun && this.levelMessages.Count > 0)
+                if (Level._core.nextLevel == null && initializeFunctionHasBeenRun && levelMessages.Count > 0)
                 {
-                    for (int index = 0; index < this.levelMessages.Count; ++index)
+                    for (int index = 0; index < levelMessages.Count; ++index)
                     {
                         Level.doingOnLoadedMessage = true;
-                        if (this.levelMessages[index].OnLevelLoaded())
+                        if (levelMessages[index].OnLevelLoaded())
                         {
-                            this.levelMessages.RemoveAt(index);
+                            levelMessages.RemoveAt(index);
                             --index;
                         }
                         Level.doingOnLoadedMessage = false;
                     }
                 }
-                if (this.levelIsUpdating)
+                if (levelIsUpdating)
                 {
-                    if (this._camera != null)
-                        this._camera.DoUpdate();
-                    this.Update();
+                    if (_camera != null)
+                        _camera.DoUpdate();
+                    Update();
                     Layer.UpdateLayers();
-                    this.UpdateThings();
-                    this.PostUpdate();
-                    this._things.RefreshState();
+                    UpdateThings();
+                    PostUpdate();
+                    _things.RefreshState();
                     Vote.Update();
                     HUD.Update();
                 }
                 else
-                    this._things.RefreshState();
-                if (!this._notifiedReady && this._initialized && !this.waitingOnNewData)
+                    _things.RefreshState();
+                if (!_notifiedReady && _initialized && !waitingOnNewData)
                 {
                     DevConsole.Log(DCSection.GhostMan, "Initializing level (" + DuckNetwork.levelIndex.ToString() + ")");
-                    if (this._initializeLater)
+                    if (_initializeLater)
                     {
-                        this._initialized = false;
-                        this._initializeLater = false;
-                        this.DoInitialize();
+                        _initialized = false;
+                        _initializeLater = false;
+                        DoInitialize();
                     }
-                    this._notifiedReady = true;
+                    _notifiedReady = true;
                 }
                 VirtualTransition.Update();
                 ConnectionStatusUI.Update();
@@ -673,7 +673,7 @@ namespace DuckGame
                 //    AI.InitializeLevelPaths();
                 //    this._aiInitialized = true;
                 //}
-                if (this.skipCurrentLevelReset)
+                if (skipCurrentLevelReset)
                     return;
                 Level._core.currentLevel = currentLevel;
             }
@@ -690,7 +690,7 @@ namespace DuckGame
         public virtual void UpdateThings()
         {
             Network.PostDraw();
-            IEnumerable<Thing> thing1 = this.things[typeof(IComplexUpdate)];
+            IEnumerable<Thing> thing1 = things[typeof(IComplexUpdate)];
             if (Network.isActive)
             {
                 foreach (Thing thing2 in thing1)
@@ -698,7 +698,7 @@ namespace DuckGame
                     if (thing2.shouldRunUpdateLocally)
                         (thing2 as IComplexUpdate).OnPreUpdate();
                 }
-                foreach (Thing update in this._things.updateList)
+                foreach (Thing update in _things.updateList)
                 {
                     if (update.active)
                     {
@@ -720,7 +720,7 @@ namespace DuckGame
             {
                 foreach (Thing thing4 in thing1)
                     (thing4 as IComplexUpdate).OnPreUpdate();
-                foreach (Thing update in this._things.updateList)
+                foreach (Thing update in _things.updateList)
                 {
                     if (update.active && update.level != null)
                         update.DoUpdate();
@@ -738,8 +738,8 @@ namespace DuckGame
 
         public bool clearScreen
         {
-            get => this._clearScreen;
-            set => this._clearScreen = value;
+            get => _clearScreen;
+            set => _clearScreen = value;
         }
 
         public virtual void StartDrawing()
@@ -748,20 +748,20 @@ namespace DuckGame
 
         public virtual void DoDraw()
         {
-            this.StartDrawing();
-            foreach (IDrawToDifferentLayers toDifferentLayers in this.things[typeof(IDrawToDifferentLayers)])
+            StartDrawing();
+            foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
                 toDifferentLayers.OnDrawLayer(Layer.PreDrawLayer);
             Layer.DrawTargetLayers();
-            Vec3 vec = this.backgroundColor.ToVector3() * DuckGame.Graphics.fade;
+            Vec3 vec = backgroundColor.ToVector3() * DuckGame.Graphics.fade;
             vec.x += DuckGame.Graphics.flashAddRenderValue;
             vec.y += DuckGame.Graphics.flashAddRenderValue;
             vec.z += DuckGame.Graphics.flashAddRenderValue;
             vec = new Vec3(vec.x + DuckGame.Graphics.fadeAddRenderValue, vec.y + DuckGame.Graphics.fadeAddRenderValue, vec.z + DuckGame.Graphics.fadeAddRenderValue);
             Color color = new Color(vec)
             {
-                a = this.backgroundColor.a
+                a = backgroundColor.a
             };
-            if (this.clearScreen)
+            if (clearScreen)
             {
                 if (!Options.Data.fillBackground)
                 {
@@ -781,11 +781,11 @@ namespace DuckGame
                 }
             }
             if (Recorder.currentRecording != null)
-                Recorder.currentRecording.LogBackgroundColor(this.backgroundColor);
-            this.BeforeDraw();
-            DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, this.camera.getMatrix());
-            this.Draw();
-            this.things.Draw();
+                Recorder.currentRecording.LogBackgroundColor(backgroundColor);
+            BeforeDraw();
+            DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
+            Draw();
+            things.Draw();
             DuckGame.Graphics.screen.End();
             if (DevConsole.splitScreen && this is GameLevel)
                 SplitScreen.Draw();
@@ -797,12 +797,12 @@ namespace DuckGame
                 RhythmMode.Draw();
                 DuckGame.Graphics.screen.End();
             }
-            this.AfterDrawLayers();
+            AfterDrawLayers();
         }
 
         public virtual void InitializeDraw(Layer l)
         {
-            if (l != Layer.HUD || !this._centeredView)
+            if (l != Layer.HUD || !_centeredView)
                 return;
             float num = (float)(Resolution.size.x * DuckGame.Graphics.aspect - Resolution.size.x * (9.0 / 16.0));
             if (num <= 0.0)
@@ -833,7 +833,7 @@ namespace DuckGame
         {
             foreach (IEngineUpdatable engineUpdatable in MonoMain.core.engineUpdatables)
                 engineUpdatable.OnDrawLayer(layer);
-            foreach (IDrawToDifferentLayers toDifferentLayers in this.things[typeof(IDrawToDifferentLayers)])
+            foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
                 toDifferentLayers.OnDrawLayer(layer);
             if (layer == Layer.Console)
             {
@@ -862,21 +862,21 @@ namespace DuckGame
                     return;
                 if (layer == Layer.Glow && Options.Data.fireGlow)
                 {
-                    foreach (MaterialThing materialThing in this.things[typeof(MaterialThing)])
+                    foreach (MaterialThing materialThing in things[typeof(MaterialThing)])
                     {
                         switch (materialThing)
                         {
                             case Holdable _ when materialThing.heat > 0.3f && materialThing.physicsMaterial == PhysicsMaterial.Metal:
-                                if (this._burnGlow == null)
+                                if (_burnGlow == null)
                                 {
-                                    this._burnGlow = new Sprite("redHotGlow");
-                                    this._burnGlow.CenterOrigin();
+                                    _burnGlow = new Sprite("redHotGlow");
+                                    _burnGlow.CenterOrigin();
                                 }
-                                this._burnGlow.alpha = (Math.Min(materialThing.heat, 1f) / 1f - 0.2f);
-                                this._burnGlow.scale = new Vec2((materialThing.width + 22f) / _burnGlow.width, (materialThing.height + 22f) / _burnGlow.height);
+                                _burnGlow.alpha = (Math.Min(materialThing.heat, 1f) / 1f - 0.2f);
+                                _burnGlow.scale = new Vec2((materialThing.width + 22f) / _burnGlow.width, (materialThing.height + 22f) / _burnGlow.height);
                                 Vec2 center = materialThing.rectangle.Center;
-                                DuckGame.Graphics.Draw(this._burnGlow, center.x, center.y);
-                                DuckGame.Graphics.Draw(this._burnGlow, center.x, center.y);
+                                DuckGame.Graphics.Draw(_burnGlow, center.x, center.y);
+                                DuckGame.Graphics.Draw(_burnGlow, center.x, center.y);
                                 break;
                             case FluidPuddle _:
                                 FluidPuddle fluidPuddle = materialThing as FluidPuddle;
@@ -885,40 +885,40 @@ namespace DuckGame
                                     double num1 = fluidPuddle.right - fluidPuddle.left;
                                     float num2 = 16f;
                                     Math.Sin(fluidPuddle.fluidWave);
-                                    if (this._burnGlowWide == null)
+                                    if (_burnGlowWide == null)
                                     {
-                                        this._burnGlowWide = new Sprite("redGlowWideSharp");
-                                        this._burnGlowWide.CenterOrigin();
-                                        this._burnGlowWide.alpha = 0.75f;
-                                        this._burnGlowWideLeft = new Sprite("redGlowWideLeft");
-                                        this._burnGlowWideLeft.center = new Vec2(_burnGlowWideLeft.width, this._burnGlowWideLeft.height / 2);
-                                        this._burnGlowWideLeft.alpha = 0.75f;
-                                        this._burnGlowWideRight = new Sprite("redGlowWideRight");
-                                        this._burnGlowWideRight.center = new Vec2(0f, this._burnGlowWideRight.height / 2);
-                                        this._burnGlowWideRight.alpha = 0.75f;
+                                        _burnGlowWide = new Sprite("redGlowWideSharp");
+                                        _burnGlowWide.CenterOrigin();
+                                        _burnGlowWide.alpha = 0.75f;
+                                        _burnGlowWideLeft = new Sprite("redGlowWideLeft");
+                                        _burnGlowWideLeft.center = new Vec2(_burnGlowWideLeft.width, _burnGlowWideLeft.height / 2);
+                                        _burnGlowWideLeft.alpha = 0.75f;
+                                        _burnGlowWideRight = new Sprite("redGlowWideRight");
+                                        _burnGlowWideRight.center = new Vec2(0f, _burnGlowWideRight.height / 2);
+                                        _burnGlowWideRight.alpha = 0.75f;
                                     }
                                     double num3 = num2;
                                     int num4 = (int)Math.Floor(num1 / num3);
                                     if (fluidPuddle.collisionSize.y > 8f)
                                     {
-                                        this._burnGlowWide.xscale = 16f;
+                                        _burnGlowWide.xscale = 16f;
                                         for (int index = 0; index < num4; ++index)
                                         {
                                             float x = (fluidPuddle.bottomLeft.x + index * num2 + 11f - 8f);
                                             float y = fluidPuddle.top - 1f + (float)Math.Sin(fluidPuddle.fluidWave + index * 0.7f);
-                                            DuckGame.Graphics.Draw(this._burnGlowWide, x, y);
+                                            DuckGame.Graphics.Draw(_burnGlowWide, x, y);
                                             if (index == 0)
-                                                DuckGame.Graphics.Draw(this._burnGlowWideLeft, x, y);
+                                                DuckGame.Graphics.Draw(_burnGlowWideLeft, x, y);
                                             else if (index == num4 - 1)
-                                                DuckGame.Graphics.Draw(this._burnGlowWideRight, x + 16f, y);
+                                                DuckGame.Graphics.Draw(_burnGlowWideRight, x + 16f, y);
                                         }
                                         break;
                                     }
                                     Graphics.doSnap = false;
-                                    this._burnGlowWide.xscale = fluidPuddle.collisionSize.x;
-                                    Graphics.Draw(this._burnGlowWide, fluidPuddle.left, fluidPuddle.bottom - 2f);
-                                    Graphics.Draw(this._burnGlowWideLeft, fluidPuddle.left, fluidPuddle.bottom - 2f);
-                                    Graphics.Draw(this._burnGlowWideRight, fluidPuddle.right, fluidPuddle.bottom - 2f);
+                                    _burnGlowWide.xscale = fluidPuddle.collisionSize.x;
+                                    Graphics.Draw(_burnGlowWide, fluidPuddle.left, fluidPuddle.bottom - 2f);
+                                    Graphics.Draw(_burnGlowWideLeft, fluidPuddle.left, fluidPuddle.bottom - 2f);
+                                    Graphics.Draw(_burnGlowWideRight, fluidPuddle.right, fluidPuddle.bottom - 2f);
                                     Graphics.doSnap = true;
                                     break;
                                 }
@@ -926,15 +926,15 @@ namespace DuckGame
                         }
                         materialThing.DrawGlow();
                     }
-                    foreach (SmallFire smallFire in this.things[typeof(SmallFire)])
+                    foreach (SmallFire smallFire in things[typeof(SmallFire)])
                     {
-                        if (this._burnGlow == null)
+                        if (_burnGlow == null)
                         {
-                            this._burnGlow = new Sprite("redGlow");
-                            this._burnGlow.CenterOrigin();
+                            _burnGlow = new Sprite("redGlow");
+                            _burnGlow.CenterOrigin();
                         }
-                        this._burnGlow.alpha = 0.65f * smallFire.alpha;
-                        DuckGame.Graphics.Draw(this._burnGlow, smallFire.x, smallFire.y - 4f);
+                        _burnGlow.alpha = 0.65f * smallFire.alpha;
+                        DuckGame.Graphics.Draw(_burnGlow, smallFire.x, smallFire.y - 4f);
                     }
                 }
                 else if (layer == Layer.Virtual)
@@ -972,9 +972,9 @@ namespace DuckGame
 
         public static IEnumerable<T> CheckCircleAll<T>(Vec2 p1, float radius) => Level.current.CollisionCircleAll<T>(p1, radius);
 
-        public T CollisionCircle<T>(float p1x, float p1y, float radius, Thing ignore) => this.CollisionCircle<T>(new Vec2(p1x, p1y), radius, ignore);
+        public T CollisionCircle<T>(float p1x, float p1y, float radius, Thing ignore) => CollisionCircle<T>(new Vec2(p1x, p1y), radius, ignore);
 
-        public T CollisionCircle<T>(float p1x, float p1y, float radius) => this.CollisionCircle<T>(new Vec2(p1x, p1y), radius);
+        public T CollisionCircle<T>(float p1x, float p1y, float radius) => CollisionCircle<T>(new Vec2(p1x, p1y), radius);
 
         public static T CheckRect<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => Level.current.CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
 
@@ -990,9 +990,9 @@ namespace DuckGame
 
         public static IEnumerable<T> CheckRectAll<T>(Vec2 p1, Vec2 p2) => Level.current.CollisionRectAll<T>(p1, p2, null);
 
-        public T CollisionRect<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => this.CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
+        public T CollisionRect<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
 
-        public T CollisionRect<T>(float p1x, float p1y, float p2x, float p2y) => this.CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
+        public T CollisionRect<T>(float p1x, float p1y, float p2x, float p2y) => CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
 
         public static T CheckLine<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => Level.current.CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
 
@@ -1019,13 +1019,13 @@ namespace DuckGame
 
         public static T CheckLine<T>(Vec2 p1, Vec2 p2, out Vec2 position) => Level.current.CollisionLine<T>(p1, p2, out position);
 
-        public T CollisionLine<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => this.CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
+        public T CollisionLine<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
 
-        public T CollisionLine<T>(float p1x, float p1y, float p2x, float p2y) => this.CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
+        public T CollisionLine<T>(float p1x, float p1y, float p2x, float p2y) => CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
 
         public static IEnumerable<T> CheckLineAll<T>(Vec2 p1, Vec2 p2) => Level.current.CollisionLineAll<T>(p1, p2);
 
-        public IEnumerable<T> CheckLineAll<T>(float p1x, float p1y, float p2x, float p2y) => this.CollisionLineAll<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
+        public IEnumerable<T> CheckLineAll<T>(float p1x, float p1y, float p2x, float p2y) => CollisionLineAll<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
 
         public static T CheckPoint<T>(float x, float y, Thing ignore, Layer layer) => Level.current.CollisionPoint<T>(new Vec2(x, y), ignore, layer);
 
@@ -1053,11 +1053,11 @@ namespace DuckGame
 
         public static IEnumerable<T> CheckPointAll<T>(Vec2 point) => Level.current.CollisionPointAll<T>(point);
 
-        public T CollisionPoint<T>(float x, float y, Thing ignore, Layer layer) => this.CollisionPoint<T>(new Vec2(x, y), ignore, layer);
+        public T CollisionPoint<T>(float x, float y, Thing ignore, Layer layer) => CollisionPoint<T>(new Vec2(x, y), ignore, layer);
 
-        public T CollisionPoint<T>(float x, float y, Thing ignore) => this.CollisionPoint<T>(new Vec2(x, y), ignore);
+        public T CollisionPoint<T>(float x, float y, Thing ignore) => CollisionPoint<T>(new Vec2(x, y), ignore);
 
-        public T CollisionPoint<T>(float x, float y) => this.CollisionPoint<T>(new Vec2(x, y));
+        public T CollisionPoint<T>(float x, float y) => CollisionPoint<T>(new Vec2(x, y));
 
         public Thing nearest_single(
           Vec2 point,
@@ -1232,21 +1232,21 @@ namespace DuckGame
         public T NearestThing<T>(Vec2 point, Thing ignore, Layer layer)
         {
             System.Type key = typeof(T);
-            Thing thing = !(key == typeof(Thing)) ? this.nearest_single(point, this._things[key], ignore, layer) : this.nearest_single(point, this._things[typeof(Thing)], ignore, layer);
+            Thing thing = !(key == typeof(Thing)) ? nearest_single(point, _things[key], ignore, layer) : nearest_single(point, _things[typeof(Thing)], ignore, layer);
             return thing == null ? default(T) : (T)(object)thing;
         }
 
         public T NearestThing<T>(Vec2 point, Thing ignore)
         {
             System.Type key = typeof(T);
-            Thing thing = !(key == typeof(Thing)) ? this.nearest_single(point, this._things[key], ignore) : this.nearest_single(point, this._things[typeof(Thing)], ignore);
+            Thing thing = !(key == typeof(Thing)) ? nearest_single(point, _things[key], ignore) : nearest_single(point, _things[typeof(Thing)], ignore);
             return thing == null ? default(T) : (T)(object)thing;
         }
 
         public T NearestThing<T>(Vec2 point)
         {
             System.Type key = typeof(T);
-            Thing thing = !(key == typeof(Thing)) ? this.nearest_single(point, this._things[key]) : this.nearest_single(point, this._things[typeof(Thing)]);
+            Thing thing = !(key == typeof(Thing)) ? nearest_single(point, _things[key]) : nearest_single(point, _things[typeof(Thing)]);
             return thing == null ? default(T) : (T)(object)thing;
         }
 
@@ -1255,11 +1255,11 @@ namespace DuckGame
             System.Type key = typeof(T);
             if (key == typeof(Thing))
             {
-                List<KeyValuePair<float, Thing>> keyValuePairList = this.nearest(point, this._things[typeof(Thing)], ignore, layer);
+                List<KeyValuePair<float, Thing>> keyValuePairList = nearest(point, _things[typeof(Thing)], ignore, layer);
                 if (keyValuePairList.Count > nearIndex)
                     return (T)(object)keyValuePairList[nearIndex].Value;
             }
-            List<KeyValuePair<float, Thing>> keyValuePairList1 = this.nearest(point, this._things[key], ignore, layer);
+            List<KeyValuePair<float, Thing>> keyValuePairList1 = nearest(point, _things[key], ignore, layer);
             return keyValuePairList1.Count > nearIndex ? (T)(object)keyValuePairList1[nearIndex].Value : default(T);
         }
 
@@ -1268,11 +1268,11 @@ namespace DuckGame
             System.Type key = typeof(T);
             if (key == typeof(Thing))
             {
-                List<KeyValuePair<float, Thing>> keyValuePairList = this.nearest(point, this._things[typeof(Thing)], ignore);
+                List<KeyValuePair<float, Thing>> keyValuePairList = nearest(point, _things[typeof(Thing)], ignore);
                 if (keyValuePairList.Count > nearIndex)
                     return (T)(object)keyValuePairList[nearIndex].Value;
             }
-            List<KeyValuePair<float, Thing>> keyValuePairList1 = this.nearest(point, this._things[key], ignore);
+            List<KeyValuePair<float, Thing>> keyValuePairList1 = nearest(point, _things[key], ignore);
             return keyValuePairList1.Count > nearIndex ? (T)(object)keyValuePairList1[nearIndex].Value : default(T);
         }
 
@@ -1280,7 +1280,7 @@ namespace DuckGame
         {
             Thing thing1 = null;
             float num = float.MaxValue;
-            foreach (Thing thing2 in this.things[typeof(T)])
+            foreach (Thing thing2 in things[typeof(T)])
             {
                 if (!thing2.removeFromLevel)
                 {
@@ -1300,7 +1300,7 @@ namespace DuckGame
             maxDistance *= maxDistance;
             Thing thing1 = null;
             float num = float.MaxValue;
-            foreach (Thing thing2 in this.things[typeof(T)])
+            foreach (Thing thing2 in things[typeof(T)])
             {
                 if (!thing2.removeFromLevel)
                 {
@@ -1318,113 +1318,113 @@ namespace DuckGame
         public T CollisionCircle<T>(Vec2 p1, float radius, Thing ignore)
         {
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Circle(p1, radius, dynamicObject))
                     return (T)(object)dynamicObject;
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckCircle<T>(p1, radius, ignore) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckCircle<T>(p1, radius, ignore) : default(T);
         }
 
         public T CollisionCircle<T>(Vec2 p1, float radius)
         {
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Circle(p1, radius, dynamicObject))
                     return (T)(object)dynamicObject;
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckCircle<T>(p1, radius) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckCircle<T>(p1, radius) : default(T);
         }
 
         public IEnumerable<T> CollisionCircleAll<T>(Vec2 p1, float radius)
         {
             List<object> nextCollisionList = Level.GetNextCollisionList();
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Circle(p1, radius, dynamicObject))
                     nextCollisionList.Add(dynamicObject);
             }
-            if (this._things.HasStaticObjects(key))
-                this._things.quadTree.CheckCircleAll<T>(p1, radius, nextCollisionList);
+            if (_things.HasStaticObjects(key))
+                _things.quadTree.CheckCircleAll<T>(p1, radius, nextCollisionList);
             return nextCollisionList.AsEnumerable<object>().Cast<T>();
         }
 
         public T CollisionRectFilter<T>(Vec2 p1, Vec2 p2, Predicate<T> filter)
         {
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Rect(p1, p2, dynamicObject) && filter((T)(object)dynamicObject))
                     return (T)(object)dynamicObject;
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckRectangleFilter<T>(p1, p2, filter) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckRectangleFilter<T>(p1, p2, filter) : default(T);
         }
 
         public T CollisionRect<T>(Vec2 p1, Vec2 p2, Thing ignore)
         {
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Rect(p1, p2, dynamicObject))
                     return (T)(object)dynamicObject;
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckRectangle<T>(p1, p2, ignore) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckRectangle<T>(p1, p2, ignore) : default(T);
         }
 
         public T CollisionRect<T>(Vec2 p1, Vec2 p2)
         {
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Rect(p1, p2, dynamicObject))
                     return (T)(object)dynamicObject;
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckRectangle<T>(p1, p2) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckRectangle<T>(p1, p2) : default(T);
         }
 
         public List<T> CollisionRectAll<T>(Vec2 p1, Vec2 p2, List<T> outList)
         {
             List<T> outList1 = outList == null ? new List<T>() : outList;
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Rect(p1, p2, dynamicObject))
                     outList1.Add((T)(object)dynamicObject);
             }
-            if (this._things.HasStaticObjects(key))
-                this._things.quadTree.CheckRectangleAll<T>(p1, p2, outList1);
+            if (_things.HasStaticObjects(key))
+                _things.quadTree.CheckRectangleAll<T>(p1, p2, outList1);
             return outList1;
         }
 
         public T CollisionLine<T>(Vec2 p1, Vec2 p2, Thing ignore)
         {
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Line(p1, p2, dynamicObject))
                     return (T)(object)dynamicObject;
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckLine<T>(p1, p2, ignore) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckLine<T>(p1, p2, ignore) : default(T);
         }
 
         public T CollisionLine<T>(Vec2 p1, Vec2 p2)
         {
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Line(p1, p2, dynamicObject))
                     return (T)(object)dynamicObject;
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckLine<T>(p1, p2) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckLine<T>(p1, p2) : default(T);
         }
 
         public T CollisionLine<T>(Vec2 p1, Vec2 p2, out Vec2 position, Thing ignore)
         {
             position = new Vec2(0f, 0f);
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && dynamicObject != ignore)
                 {
@@ -1436,14 +1436,14 @@ namespace DuckGame
                     }
                 }
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckLinePoint<T>(p1, p2, out position, ignore) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckLinePoint<T>(p1, p2, out position, ignore) : default(T);
         }
 
         public T CollisionLine<T>(Vec2 p1, Vec2 p2, out Vec2 position)
         {
             position = new Vec2(0f, 0f);
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel)
                 {
@@ -1455,21 +1455,21 @@ namespace DuckGame
                     }
                 }
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckLinePoint<T>(p1, p2, out position) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckLinePoint<T>(p1, p2, out position) : default(T);
         }
 
         public IEnumerable<T> CollisionLineAll<T>(Vec2 p1, Vec2 p2)
         {
             List<object> nextCollisionList = Level.GetNextCollisionList();
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Line(p1, p2, dynamicObject))
                     nextCollisionList.Add(dynamicObject);
             }
-            if (this._things.HasStaticObjects(key))
+            if (_things.HasStaticObjects(key))
             {
-                List<T> source = this._things.quadTree.CheckLineAll<T>(p1, p2);
+                List<T> source = _things.quadTree.CheckLineAll<T>(p1, p2);
                 nextCollisionList.AddRange(source.Cast<object>());
             }
             return nextCollisionList.AsEnumerable<object>().Cast<T>();
@@ -1480,18 +1480,18 @@ namespace DuckGame
             System.Type key = typeof(T);
             if (key == typeof(Thing))
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     if (!thing.removeFromLevel && thing != ignore && Collision.Point(point, thing) && (layer == null || layer == thing.layer))
                         return (T)(object)thing;
                 }
             }
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Point(point, dynamicObject) && (layer == null || layer == dynamicObject.layer))
                     return (T)(object)dynamicObject;
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckPoint<T>(point, ignore, layer) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckPoint<T>(point, ignore, layer) : default(T);
         }
 
         public T CollisionPoint<T>(Vec2 point, Thing ignore)
@@ -1499,36 +1499,36 @@ namespace DuckGame
             System.Type key = typeof(T);
             if (key == typeof(Thing))
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     if (!thing.removeFromLevel && thing != ignore && Collision.Point(point, thing))
                         return (T)(object)thing;
                 }
             }
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Point(point, dynamicObject))
                     return (T)(object)dynamicObject;
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckPoint<T>(point, ignore) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckPoint<T>(point, ignore) : default(T);
         }
 
         public Thing CollisionPoint(System.Type pType, Vec2 point, Thing ignore)
         {
             if (pType == typeof(Thing))
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     if (!thing.removeFromLevel && thing != ignore && Collision.Point(point, thing))
                         return thing;
                 }
             }
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(pType))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(pType))
             {
                 if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Point(point, dynamicObject))
                     return dynamicObject;
             }
-            return this._things.HasStaticObjects(pType) ? this._things.quadTree.CheckPoint(pType, point, ignore) : null;
+            return _things.HasStaticObjects(pType) ? _things.quadTree.CheckPoint(pType, point, ignore) : null;
         }
 
         public T CollisionPoint<T>(Vec2 point)
@@ -1536,74 +1536,74 @@ namespace DuckGame
             System.Type key = typeof(T);
             if (key == typeof(Thing))
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     if (!thing.removeFromLevel && Collision.Point(point, thing))
                         return (T)(object)thing;
                 }
             }
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Point(point, dynamicObject))
                     return (T)(object)dynamicObject;
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckPoint<T>(point) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckPoint<T>(point) : default(T);
         }
 
-        public T QuadTreePointFilter<T>(Vec2 point, Func<Thing, bool> pFilter) => this._things.HasStaticObjects(typeof(T)) ? this._things.quadTree.CheckPointFilter<T>(point, pFilter) : default(T);
+        public T QuadTreePointFilter<T>(Vec2 point, Func<Thing, bool> pFilter) => _things.HasStaticObjects(typeof(T)) ? _things.quadTree.CheckPointFilter<T>(point, pFilter) : default(T);
 
         public Thing CollisionPoint(Vec2 point, System.Type t, Thing ignore, Layer layer)
         {
             if (t == typeof(Thing))
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     if (!thing.removeFromLevel && thing != ignore && Collision.Point(point, thing) && (layer == null || layer == thing.layer))
                         return thing;
                 }
             }
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(t))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(t))
             {
                 if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Point(point, dynamicObject) && (layer == null || layer == dynamicObject.layer))
                     return dynamicObject;
             }
-            return this._things.HasStaticObjects(t) ? this._things.quadTree.CheckPoint(point, t, ignore, layer) : null;
+            return _things.HasStaticObjects(t) ? _things.quadTree.CheckPoint(point, t, ignore, layer) : null;
         }
 
         public Thing CollisionPoint(Vec2 point, System.Type t, Thing ignore)
         {
             if (t == typeof(Thing))
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     if (!thing.removeFromLevel && thing != ignore && Collision.Point(point, thing))
                         return thing;
                 }
             }
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(t))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(t))
             {
                 if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Point(point, dynamicObject))
                     return dynamicObject;
             }
-            return this._things.HasStaticObjects(t) ? this._things.quadTree.CheckPoint(point, t, ignore) : null;
+            return _things.HasStaticObjects(t) ? _things.quadTree.CheckPoint(point, t, ignore) : null;
         }
 
         public Thing CollisionPoint(Vec2 point, System.Type t)
         {
             if (t == typeof(Thing))
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     if (!thing.removeFromLevel && Collision.Point(point, thing))
                         return thing;
                 }
             }
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(t))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(t))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Point(point, dynamicObject))
                     return dynamicObject;
             }
-            return this._things.HasStaticObjects(t) ? this._things.quadTree.CheckPoint(point, t) : null;
+            return _things.HasStaticObjects(t) ? _things.quadTree.CheckPoint(point, t) : null;
         }
 
         public T CollisionPointPlacementLayer<T>(Vec2 point, Thing ignore = null, Layer layer = null)
@@ -1611,18 +1611,18 @@ namespace DuckGame
             System.Type key = typeof(T);
             if (key == typeof(Thing))
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     if (!thing.removeFromLevel && thing != ignore && Collision.Point(point, thing) && (layer == null || layer == thing.placementLayer))
                         return (T)(object)thing;
                 }
             }
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Point(point, dynamicObject) && (layer == null || layer == dynamicObject.placementLayer))
                     return (T)(object)dynamicObject;
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckPointPlacementLayer<T>(point, ignore, layer) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckPointPlacementLayer<T>(point, ignore, layer) : default(T);
         }
 
         public T CollisionPointFilter<T>(Vec2 point, Predicate<Thing> filter)
@@ -1630,32 +1630,32 @@ namespace DuckGame
             System.Type key = typeof(T);
             if (key == typeof(Thing))
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     if (!thing.removeFromLevel && filter(thing) && Collision.Point(point, thing))
                         return (T)(object)thing;
                 }
             }
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && filter(dynamicObject) && Collision.Point(point, dynamicObject))
                     return (T)(object)dynamicObject;
             }
-            return this._things.HasStaticObjects(key) ? this._things.quadTree.CheckPointFilter<T>(point, filter) : default(T);
+            return _things.HasStaticObjects(key) ? _things.quadTree.CheckPointFilter<T>(point, filter) : default(T);
         }
 
         public IEnumerable<T> CollisionPointAll<T>(Vec2 point, Layer layer)
         {
             List<object> nextCollisionList = Level.GetNextCollisionList();
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Point(point, dynamicObject) && (layer == null || layer == dynamicObject.layer))
                     nextCollisionList.Add(dynamicObject);
             }
-            if (this._things.HasStaticObjects(key))
+            if (_things.HasStaticObjects(key))
             {
-                T obj = this._things.quadTree.CheckPoint<T>(point, null, layer);
+                T obj = _things.quadTree.CheckPoint<T>(point, null, layer);
                 if (obj != null)
                     nextCollisionList.Add(obj);
             }
@@ -1666,14 +1666,14 @@ namespace DuckGame
         {
             List<object> nextCollisionList = Level.GetNextCollisionList();
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Point(point, dynamicObject))
                     nextCollisionList.Add(dynamicObject);
             }
-            if (this._things.HasStaticObjects(key))
+            if (_things.HasStaticObjects(key))
             {
-                T obj = this._things.quadTree.CheckPoint<T>(point);
+                T obj = _things.quadTree.CheckPoint<T>(point);
                 if (obj != null)
                     nextCollisionList.Add(obj);
             }
@@ -1683,14 +1683,14 @@ namespace DuckGame
         public void CollisionBullet(Vec2 point, List<MaterialThing> output)
         {
             System.Type key = typeof(MaterialThing);
-            foreach (Thing dynamicObject in this._things.GetDynamicObjects(key))
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Point(point, dynamicObject))
                     output.Add(dynamicObject as MaterialThing);
             }
-            if (!this._things.HasStaticObjects(key))
+            if (!_things.HasStaticObjects(key))
                 return;
-            MaterialThing materialThing = this._things.quadTree.CheckPoint<MaterialThing>(point);
+            MaterialThing materialThing = _things.quadTree.CheckPoint<MaterialThing>(point);
             if (materialThing == null)
                 return;
             output.Add(materialThing);
@@ -1719,7 +1719,7 @@ namespace DuckGame
                 {
                     if (travelInfo.length < 8.0)
                     {
-                        T obj = this.Raycast<T>(travelInfo.p1, dir, travelInfo.length, out hitPos);
+                        T obj = Raycast<T>(travelInfo.p1, dir, travelInfo.length, out hitPos);
                         if (obj != null)
                             return obj;
                     }
@@ -1751,7 +1751,7 @@ namespace DuckGame
                 {
                     if (travelInfo.length < 8.0)
                     {
-                        T obj = this.Raycast<T>(travelInfo.p1, dir, ignore, travelInfo.length, out hitPos);
+                        T obj = Raycast<T>(travelInfo.p1, dir, ignore, travelInfo.length, out hitPos);
                         if (obj != null)
                             return obj;
                     }

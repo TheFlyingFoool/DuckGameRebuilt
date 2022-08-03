@@ -16,9 +16,9 @@ namespace DuckGame
 
         public DustSparkle(Vec2 pos, Vec2 vel)
         {
-            this.position = pos;
-            this.velocity = vel;
-            this.sin = Rando.Float(6f);
+            position = pos;
+            velocity = vel;
+            sin = Rando.Float(6f);
         }
     }
 }

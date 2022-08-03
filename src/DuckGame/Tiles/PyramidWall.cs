@@ -20,24 +20,24 @@ namespace DuckGame
         public PyramidWall(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("pyramidEdge");
-            this.collisionSize = new Vec2(200f, 153f);
-            this.collisionOffset = new Vec2(-4f, -4f);
-            this._corner = new Sprite("pyWallCorner");
-            this._corner2 = new Sprite("pyWallCorner2");
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.depth = -0.9f;
+            graphic = new Sprite("pyramidEdge");
+            collisionSize = new Vec2(200f, 153f);
+            collisionOffset = new Vec2(-4f, -4f);
+            _corner = new Sprite("pyWallCorner");
+            _corner2 = new Sprite("pyWallCorner2");
+            physicsMaterial = PhysicsMaterial.Metal;
+            depth = -0.9f;
         }
 
         public override void Initialize() => base.Initialize();
 
         public void AddExtraWalls()
         {
-            if (this.hasUp)
+            if (hasUp)
             {
                 for (int index = -1; index < 13; ++index)
                 {
-                    Vec2 point = new Vec2((float)(this.left + index * 16 + 12.0), this.top - 4f);
+                    Vec2 point = new Vec2((float)(left + index * 16 + 12.0), top - 4f);
                     switch (Level.current.CollisionPoint<Thing>(point, this))
                     {
                         case null:
@@ -48,11 +48,11 @@ namespace DuckGame
                     }
                 }
             }
-            if (this.hasDown)
+            if (hasDown)
             {
                 for (int index = -1; index < 13; ++index)
                 {
-                    Vec2 point = new Vec2((float)(this.left + index * 16 + 12.0), this.bottom + 4f);
+                    Vec2 point = new Vec2((float)(left + index * 16 + 12.0), bottom + 4f);
                     switch (Level.current.CollisionPoint<Thing>(point, this))
                     {
                         case null:
@@ -63,11 +63,11 @@ namespace DuckGame
                     }
                 }
             }
-            if (this.hasLeft)
+            if (hasLeft)
             {
                 for (int index = 0; index < 9; ++index)
                 {
-                    Vec2 point = new Vec2(this.left - 4f, (float)(this.top + index * 16 + 12.0));
+                    Vec2 point = new Vec2(left - 4f, (float)(top + index * 16 + 12.0));
                     switch (Level.current.CollisionPoint<Thing>(point, this))
                     {
                         case null:
@@ -78,11 +78,11 @@ namespace DuckGame
                     }
                 }
             }
-            if (!this.hasRight)
+            if (!hasRight)
                 return;
             for (int index = 0; index < 9; ++index)
             {
-                Vec2 point = new Vec2(this.right + 4f, (float)(this.top + index * 16 + 12.0));
+                Vec2 point = new Vec2(right + 4f, (float)(top + index * 16 + 12.0));
                 switch (Level.current.CollisionPoint<Thing>(point, this))
                 {
                     case null:
@@ -96,51 +96,51 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.graphic.depth = -0.8f;
-            Graphics.Draw(this.graphic, this.x - 8f, this.y - 8f, new Rectangle(0f, 0f, 208f, 8f));
-            this.graphic.depth = -0.85f;
-            Graphics.Draw(this.graphic, this.x, this.y + 144f, new Rectangle(8f, 152f, 192f, 8f));
-            this.graphic.depth = -0.86f;
-            Graphics.Draw(this.graphic, this.x + 192f, this.y, new Rectangle(200f, 8f, 8f, 144f));
-            Graphics.Draw(this.graphic, this.x - 8f, this.y - 8f, new Rectangle(0f, 0f, 8f, 152f));
-            this._corner.depth = -0.9f;
-            Graphics.Draw(this._corner, this.x - 8f, this.y + 144f);
-            this._corner2.depth = -0.9f;
-            Graphics.Draw(this._corner2, this.x + 192f, this.y + 144f);
-            this.graphic.depth = -0.7f;
-            Graphics.Draw(this.graphic, this.x, this.y, new Rectangle(8f, 8f, 192f, 144f));
+            graphic.depth = -0.8f;
+            Graphics.Draw(graphic, x - 8f, y - 8f, new Rectangle(0f, 0f, 208f, 8f));
+            graphic.depth = -0.85f;
+            Graphics.Draw(graphic, x, y + 144f, new Rectangle(8f, 152f, 192f, 8f));
+            graphic.depth = -0.86f;
+            Graphics.Draw(graphic, x + 192f, y, new Rectangle(200f, 8f, 8f, 144f));
+            Graphics.Draw(graphic, x - 8f, y - 8f, new Rectangle(0f, 0f, 8f, 152f));
+            _corner.depth = -0.9f;
+            Graphics.Draw(_corner, x - 8f, y + 144f);
+            _corner2.depth = -0.9f;
+            Graphics.Draw(_corner2, x + 192f, y + 144f);
+            graphic.depth = -0.7f;
+            Graphics.Draw(graphic, x, y, new Rectangle(8f, 8f, 192f, 144f));
             if (!DevConsole.showCollision)
                 return;
-            Graphics.DrawRect(this.rectangle, Color.Red, (Depth)1f, false);
-            if (this.hasUp)
+            Graphics.DrawRect(rectangle, Color.Red, (Depth)1f, false);
+            if (hasUp)
             {
                 for (int index = 0; index < 12; ++index)
                 {
-                    Vec2 vec2 = new Vec2((float)(this.left + index * 16 + 12.0), this.top - 2f);
+                    Vec2 vec2 = new Vec2((float)(left + index * 16 + 12.0), top - 2f);
                     Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(2f, 2f), Color.Orange, (Depth)1f);
                 }
             }
-            if (this.hasDown)
+            if (hasDown)
             {
                 for (int index = -1; index < 13; ++index)
                 {
-                    Vec2 vec2 = new Vec2((float)(this.left + index * 16 + 12.0), this.bottom + 2f);
+                    Vec2 vec2 = new Vec2((float)(left + index * 16 + 12.0), bottom + 2f);
                     Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(2f, 2f), Color.Orange, (Depth)1f);
                 }
             }
-            if (this.hasLeft)
+            if (hasLeft)
             {
                 for (int index = 0; index < 9; ++index)
                 {
-                    Vec2 vec2 = new Vec2(this.left - 2f, (float)(this.top + index * 16 + 12.0));
+                    Vec2 vec2 = new Vec2(left - 2f, (float)(top + index * 16 + 12.0));
                     Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(2f, 2f), Color.Orange, (Depth)1f);
                 }
             }
-            if (!this.hasRight)
+            if (!hasRight)
                 return;
             for (int index = 0; index < 9; ++index)
             {
-                Vec2 vec2 = new Vec2(this.right + 2f, (float)(this.top + index * 16 + 12.0));
+                Vec2 vec2 = new Vec2(right + 2f, (float)(top + index * 16 + 12.0));
                 Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(2f, 2f), Color.Orange, (Depth)1f);
             }
         }

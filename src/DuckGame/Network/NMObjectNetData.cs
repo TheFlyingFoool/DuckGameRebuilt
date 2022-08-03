@@ -19,29 +19,29 @@ namespace DuckGame
         public BitBuffer _netData;
         public new byte levelIndex;
 
-        public NMObjectNetData() => this.manager = BelongsToManager.GhostManager;
+        public NMObjectNetData() => manager = BelongsToManager.GhostManager;
 
         public NMObjectNetData(Thing pThing, NetworkConnection pConnection)
           : this()
         {
-            this.thing = pThing;
-            this._connection = pConnection;
+            thing = pThing;
+            _connection = pConnection;
         }
 
         protected override void OnSerialize()
         {
-            this._serializedData.Write(thing);
-            this._serializedData.Write((object)this.thing.authority);
-            BitBuffer val = this.thing._netData.Serialize(this._connection, this._hashes);
-            this.syncIndex = this.thing._netData.GetSyncIndex(this._connection);
-            this._serializedData.Write(val, true);
+            _serializedData.Write(thing);
+            _serializedData.Write((object)thing.authority);
+            BitBuffer val = thing._netData.Serialize(_connection, _hashes);
+            syncIndex = thing._netData.GetSyncIndex(_connection);
+            _serializedData.Write(val, true);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
-            this.thing = d.Read<Thing>();
-            this.authority = (NetIndex8)d.ReadByte();
-            this._netData = d.ReadBitBuffer();
+            thing = d.Read<Thing>();
+            authority = (NetIndex8)d.ReadByte();
+            _netData = d.ReadBitBuffer();
         }
     }
 }

@@ -25,60 +25,60 @@ namespace DuckGame
 
         public ChallengeSaveData saveData
         {
-            get => this._saveData;
+            get => _saveData;
             set
             {
-                if (this._saveData != null && this._saveData != value)
+                if (_saveData != null && _saveData != value)
                 {
-                    this._saveData.frameID = "";
-                    this._saveData.frameImage = "";
+                    _saveData.frameID = "";
+                    _saveData.frameImage = "";
                 }
-                this._saveData = value;
-                if (this._saveData == null)
+                _saveData = value;
+                if (_saveData == null)
                     return;
-                Texture2D texture = Editor.StringToTexture(this._saveData.frameImage);
+                Texture2D texture = Editor.StringToTexture(_saveData.frameImage);
                 if (texture != null)
-                    this._image = new Sprite((Tex2D)texture);
-                this._saveData.frameID = this._identifier;
+                    _image = new Sprite((Tex2D)texture);
+                _saveData.frameID = _identifier;
             }
         }
 
         public ArcadeFrame(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._frame = new SpriteMap("arcadeFrame01", 48, 48)
+            _frame = new SpriteMap("arcadeFrame01", 48, 48)
             {
                 imageIndex = 0
             };
-            this.graphic = _frame;
-            this.center = new Vec2(this.graphic.width / 2, this.graphic.height / 2);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this._screen = new Sprite("shot01");
-            this.depth = -0.9f;
+            graphic = _frame;
+            center = new Vec2(graphic.width / 2, graphic.height / 2);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            _screen = new Sprite("shot01");
+            depth = -0.9f;
         }
 
         public Vec2 GetRenderTargetSize()
         {
-            if ((int)this.style == 0)
+            if ((int)style == 0)
                 return new Vec2(38f, 28f);
-            if ((int)this.style == 1)
+            if ((int)style == 1)
                 return new Vec2(28f, 38f);
-            if ((int)this.style == 2)
+            if ((int)style == 2)
                 return new Vec2(28f, 20f);
-            if ((int)this.style == 3)
+            if ((int)style == 3)
                 return new Vec2(20f, 28f);
-            if ((int)this.style == 4)
+            if ((int)style == 4)
                 return new Vec2(18f, 12f);
-            return (int)this.style == 5 ? new Vec2(12f, 16f) : new Vec2(32f, 32f);
+            return (int)style == 5 ? new Vec2(12f, 16f) : new Vec2(32f, 32f);
         }
 
         public float GetRenderTargetZoom() => 1f;
 
         public override void Initialize()
         {
-            if (this._identifier == null)
-                this._identifier = Guid.NewGuid().ToString();
+            if (_identifier == null)
+                _identifier = Guid.NewGuid().ToString();
             base.Initialize();
         }
 
@@ -94,7 +94,7 @@ namespace DuckGame
 
         public override bool Deserialize(BinaryClassChunk node)
         {
-            this._identifier = node.GetProperty<string>("FrameID");
+            _identifier = node.GetProperty<string>("FrameID");
             return base.Deserialize(node);
         }
 
@@ -112,27 +112,27 @@ namespace DuckGame
         {
             DXMLNode dxmlNode = node.Element("FrameID");
             if (dxmlNode != null)
-                this._identifier = dxmlNode.Value;
+                _identifier = dxmlNode.Value;
             return base.LegacyDeserialize(node);
         }
 
         public override void Update()
         {
-            this.visible = this.saveData != null && this._image != null;
-            int num = this.visible ? 1 : 0;
+            visible = saveData != null && _image != null;
+            int num = visible ? 1 : 0;
             base.Update();
         }
 
         public override void Draw()
         {
-            this._frame.frame = this.style.value;
-            if (this._image != null)
+            _frame.frame = style.value;
+            if (_image != null)
             {
-                Vec2 renderTargetSize = this.GetRenderTargetSize();
-                this._image.depth = this.depth + 10;
-                this._image.scale = new Vec2(0.1666667f);
+                Vec2 renderTargetSize = GetRenderTargetSize();
+                _image.depth = depth + 10;
+                _image.scale = new Vec2(0.1666667f);
                 DuckGame.Graphics.doSnap = false;
-                DuckGame.Graphics.Draw(this._image, this.x - renderTargetSize.x / 2f, this.y - renderTargetSize.y / 2f);
+                DuckGame.Graphics.Draw(_image, x - renderTargetSize.x / 2f, y - renderTargetSize.y / 2f);
                 DuckGame.Graphics.doSnap = true;
             }
             base.Draw();

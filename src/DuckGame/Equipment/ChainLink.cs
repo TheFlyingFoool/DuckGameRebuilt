@@ -11,13 +11,13 @@ namespace DuckGame
     {
         public ChainLink(float xpos, float ypos)
         {
-            this.graphic = new Sprite("chainLink");
-            this.center = new Vec2(3f, 2f);
-            this._collisionOffset = new Vec2(-2f, -2f);
-            this._collisionSize = new Vec2(4f, 4f);
-            this._skipPlatforms = true;
-            this.weight = 0.1f;
-            this._impactThreshold = 999f;
+            graphic = new Sprite("chainLink");
+            center = new Vec2(3f, 2f);
+            _collisionOffset = new Vec2(-2f, -2f);
+            _collisionSize = new Vec2(4f, 4f);
+            _skipPlatforms = true;
+            weight = 0.1f;
+            _impactThreshold = 999f;
         }
     }
 }

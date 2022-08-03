@@ -17,8 +17,8 @@ namespace DuckGame
 
         public EventManager(NetworkConnection connection, StreamManager streamManager)
         {
-            this._connection = connection;
-            this._manager = streamManager;
+            _connection = connection;
+            _manager = streamManager;
         }
 
         public void OnMessage(NetMessage m)

@@ -14,22 +14,22 @@ namespace DuckGame
         public ColorStar(float xpos, float ypos, Vec2 dir, Color pColor)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("colorStar");
-            this.graphic.CenterOrigin();
-            this.center = new Vec2(this.graphic.width / 2, this.graphic.height / 2);
-            this.xscale = this.yscale = 0.9f;
-            this.hSpeed = dir.x;
-            this.vSpeed = dir.y;
-            this.maxSize = 0.1f;
-            this.graphic.color = pColor;
-            this._gravMult = 3f;
+            graphic = new Sprite("colorStar");
+            graphic.CenterOrigin();
+            center = new Vec2(graphic.width / 2, graphic.height / 2);
+            xscale = yscale = 0.9f;
+            hSpeed = dir.x;
+            vSpeed = dir.y;
+            maxSize = 0.1f;
+            graphic.color = pColor;
+            _gravMult = 3f;
         }
 
         public override void Update()
         {
-            this.xscale = Lerp.Float(this.xscale, this.maxSize, 0.04f);
-            this.yscale = this.xscale;
-            if (this.xscale <= maxSize)
+            xscale = Lerp.Float(xscale, maxSize, 0.04f);
+            yscale = xscale;
+            if (xscale <= maxSize)
                 Level.Remove(this);
             base.Update();
         }

@@ -20,57 +20,57 @@ namespace DuckGame
         public Dart(float xpos, float ypos, Duck owner, float fireAngle)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("dart", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-4f, -2f);
-            this.collisionSize = new Vec2(9f, 4f);
-            this.depth = -0.5f;
-            this.thickness = 1f;
-            this.weight = 3f;
-            this._owner = owner;
-            this.breakForce = 1f;
-            this._stickTime = 2f + Rando.Float(0.8f);
+            _sprite = new SpriteMap("dart", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-4f, -2f);
+            collisionSize = new Vec2(9f, 4f);
+            depth = -0.5f;
+            thickness = 1f;
+            weight = 3f;
+            _owner = owner;
+            breakForce = 1f;
+            _stickTime = 2f + Rando.Float(0.8f);
             if (Rando.Float(1f) > 0.949999988079071)
-                this._stickTime += Rando.Float(15f);
-            this.angle = fireAngle;
+                _stickTime += Rando.Float(15f);
+            angle = fireAngle;
             if (owner == null)
                 return;
             owner.clip.Add(this);
-            this.clip.Add(owner);
+            clip.Add(owner);
         }
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (this._stuck && _stickTime > 0.980000019073486)
+            if (_stuck && _stickTime > 0.980000019073486)
                 return false;
             if (type is DTFade)
             {
-                DartShell dartShell = new DartShell(this.x, this.y, Rando.Float(0.1f) * -this._sprite.flipMultH, this._sprite.flipH)
+                DartShell dartShell = new DartShell(x, y, Rando.Float(0.1f) * -_sprite.flipMultH, _sprite.flipH)
                 {
-                    angle = this.angle
+                    angle = angle
                 };
                 Level.Add(dartShell);
-                dartShell.hSpeed = (float)((0.5 + Rando.Float(0.3f)) * -this._sprite.flipMultH);
+                dartShell.hSpeed = (float)((0.5 + Rando.Float(0.3f)) * -_sprite.flipMultH);
                 Level.Remove(this);
                 return true;
             }
-            if (this._stuck && _stickTime > 0.4f)
-                this._stickTime = 0.4f;
+            if (_stuck && _stickTime > 0.4f)
+                _stickTime = 0.4f;
             return false;
         }
 
         public override void OnImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this._stuck || with is Gun || (with.weight < 5f && !(with is Dart) && !(with is RagdollPart)) || with is FeatherVolume || with is Teleporter || base.removeFromLevel || with is Spring || with is SpringUpLeft || with is SpringUpRight)
+            if (_stuck || with is Gun || (with.weight < 5f && !(with is Dart) && !(with is RagdollPart)) || with is FeatherVolume || with is Teleporter || base.removeFromLevel || with is Spring || with is SpringUpLeft || with is SpringUpRight)
             {
                 if (with is EnergyBlocker && with.solid)
                 {
-                    this.LightOnFire();
+                    LightOnFire();
                 }
                 return;
             }
-            if (!this.destroyed && !this._stuck)
+            if (!destroyed && !_stuck)
             {
                 if (with is PhysicsObject)
                 {
@@ -79,7 +79,7 @@ namespace DuckGame
                     {
                         if (duck.isServerForObject)
                         {
-                            duck.hSpeed += this.hSpeed * 0.7f;
+                            duck.hSpeed += hSpeed * 0.7f;
                             duck.vSpeed -= 1.5f;
                             Event.Log(new DartHitEvent(base.responsibleProfile, duck.profile));
                             if (duck.holdObject is Grenade)
@@ -94,7 +94,7 @@ namespace DuckGame
                         }
                         else
                         {
-                            Send.Message(new NMDartSmack(new Vec2(this.hSpeed * 0.7f, -1.5f), duck), duck.connection);
+                            Send.Message(new NMDartSmack(new Vec2(hSpeed * 0.7f, -1.5f), duck), duck.connection);
                         }
                     }
                     RagdollPart r = with as RagdollPart;
@@ -103,7 +103,7 @@ namespace DuckGame
                         Duck d = r.doll.captureDuck;
                         if (r.isServerForObject)
                         {
-                            r.hSpeed += this.hSpeed * 0.7f;
+                            r.hSpeed += hSpeed * 0.7f;
                             r.vSpeed -= 1.5f;
                             if (d.holdObject is Grenade)
                             {
@@ -117,19 +117,19 @@ namespace DuckGame
                         }
                         else
                         {
-                            Send.Message(new NMDartSmack(new Vec2(this.hSpeed * 0.7f, -1.5f), r), r.connection);
+                            Send.Message(new NMDartSmack(new Vec2(hSpeed * 0.7f, -1.5f), r), r.connection);
                         }
                     }
                     if (with is IPlatform || duck != null || r != null)
                     {
-                        DartShell dartShell = new DartShell(base.x, base.y, -this._sprite.flipMultH * Rando.Float(0.6f), this._sprite.flipH);
+                        DartShell dartShell = new DartShell(base.x, base.y, -_sprite.flipMultH * Rando.Float(0.6f), _sprite.flipH);
                         Level.Add(dartShell);
-                        dartShell.hSpeed = -this.hSpeed / 3f * (0.3f + Rando.Float(0.8f));
+                        dartShell.hSpeed = -hSpeed / 3f * (0.3f + Rando.Float(0.8f));
                         dartShell.vSpeed = -2f + Rando.Float(4f);
                         Level.Remove(this);
-                        if (this.burning)
+                        if (burning)
                         {
-                            with.Burn(this.position, this);
+                            with.Burn(position, this);
                         }
                         return;
                     }
@@ -162,23 +162,23 @@ namespace DuckGame
                 }
                 if (stick)
                 {
-                    this._stuck = true;
+                    _stuck = true;
                     SFX.Play("dartStick", 0.8f, -0.1f + Rando.Float(0.2f), 0f, false);
-                    this.vSpeed = 0f;
-                    this.gravMultiplier = 0f;
+                    vSpeed = 0f;
+                    gravMultiplier = 0f;
                     base.grounded = true;
-                    this._sprite.frame = 1;
-                    this._stickTime = 1f;
+                    _sprite.frame = 1;
+                    _stickTime = 1f;
                 }
             }
         }
 
         public void LightOnFire()
         {
-            if (this.burning)
+            if (burning)
                 return;
-            this.burning = true;
-            this.onFire = true;
+            burning = true;
+            onFire = true;
             Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: this, firedFrom: this));
             SFX.Play("ignite", Rando.Float(0.9f, 1f), Rando.Float(-0.2f, 0.2f));
         }
@@ -186,25 +186,25 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            if (!this.destroyed && !this._stuck)
+            if (!destroyed && !_stuck)
             {
-                if (!this.burning && Level.CheckCircle<SmallFire>(this.position, 8f) != null)
-                    this.LightOnFire();
-                this._sprite.frame = 0;
-                this.angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(this.hSpeed, this.vSpeed));
+                if (!burning && Level.CheckCircle<SmallFire>(position, 8f) != null)
+                    LightOnFire();
+                _sprite.frame = 0;
+                angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(hSpeed, vSpeed));
             }
-            if (this._stuck)
+            if (_stuck)
             {
-                this.vSpeed = 0f;
-                this.hSpeed = 0f;
-                this.grounded = true;
-                this._sprite.frame = 1;
-                this._stickTime -= 0.005f;
-                this.gravMultiplier = 0f;
+                vSpeed = 0f;
+                hSpeed = 0f;
+                grounded = true;
+                _sprite.frame = 1;
+                _stickTime -= 0.005f;
+                gravMultiplier = 0f;
             }
-            if (_stickTime > 0.0 || this.destroyed)
+            if (_stickTime > 0.0 || destroyed)
                 return;
-            this.Destroy(new DTFade());
+            Destroy(new DTFade());
         }
     }
 }

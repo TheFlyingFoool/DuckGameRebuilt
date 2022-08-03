@@ -19,8 +19,8 @@ namespace DuckGame
 
         public NMLegacyConnect(byte received, NetIndex4 s)
         {
-            this.connectsReceived = received;
-            this.remoteSession = s;
+            connectsReceived = received;
+            remoteSession = s;
         }
     }
 }

@@ -20,16 +20,16 @@ namespace DuckGame
             get
             {
                 lock (this)
-                    return this._finished;
+                    return _finished;
             }
             protected set
             {
                 lock (this)
-                    this._finished = value;
+                    _finished = value;
             }
         }
 
-        protected Promise(Delegate d) => this._delegate = d;
+        protected Promise(Delegate d) => _delegate = d;
 
         public Promise(Action action)
           : this((Delegate)action)
@@ -38,13 +38,13 @@ namespace DuckGame
 
         public virtual void Execute()
         {
-            this._delegate.Method.Invoke(this._delegate.Target, null);
-            this.Finished = true;
+            _delegate.Method.Invoke(_delegate.Target, null);
+            Finished = true;
         }
 
         public void WaitForComplete(uint waitMs = 13, uint maxAttempts = 0)
         {
-            while (!this.Finished)
+            while (!Finished)
             {
                 Thread.Sleep((int)waitMs);
                 if (maxAttempts != 0U && --maxAttempts == 0U)

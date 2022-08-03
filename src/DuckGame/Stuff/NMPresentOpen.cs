@@ -18,13 +18,13 @@ namespace DuckGame
 
         public NMPresentOpen(Vec2 pPosition, byte pFrame)
         {
-            this.position = pPosition;
-            this.frame = pFrame;
+            position = pPosition;
+            frame = pFrame;
         }
 
         public override void Activate()
         {
-            Present.OpenEffect(this.position, frame, true);
+            Present.OpenEffect(position, frame, true);
             base.Activate();
         }
     }

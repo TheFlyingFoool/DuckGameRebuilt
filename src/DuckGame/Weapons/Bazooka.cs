@@ -14,59 +14,59 @@ namespace DuckGame
         public Bazooka(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 99;
-            this._ammoType = new ATMissile();
-            this._type = "gun";
-            this.graphic = new Sprite("bazooka");
-            this.center = new Vec2(15f, 5f);
-            this.collisionOffset = new Vec2(-15f, -4f);
-            this.collisionSize = new Vec2(30f, 10f);
-            this._barrelOffsetTL = new Vec2(29f, 4f);
-            this._fireSound = "missile";
-            this._kickForce = 4f;
-            this._fireRumble = RumbleIntensity.Light;
-            this._holdOffset = new Vec2(-2f, -2f);
-            this.loseAccuracy = 0.1f;
-            this.maxAccuracyLost = 0.6f;
-            this._bio = "Old faithful, the 9MM pistol.";
-            this._editorName = nameof(Bazooka);
-            this.editorTooltip = "Funny name, serious firepower. Launches an explosive missile that can destroy terrain.";
-            this.physicsMaterial = PhysicsMaterial.Metal;
+            ammo = 99;
+            _ammoType = new ATMissile();
+            _type = "gun";
+            graphic = new Sprite("bazooka");
+            center = new Vec2(15f, 5f);
+            collisionOffset = new Vec2(-15f, -4f);
+            collisionSize = new Vec2(30f, 10f);
+            _barrelOffsetTL = new Vec2(29f, 4f);
+            _fireSound = "missile";
+            _kickForce = 4f;
+            _fireRumble = RumbleIntensity.Light;
+            _holdOffset = new Vec2(-2f, -2f);
+            loseAccuracy = 0.1f;
+            maxAccuracyLost = 0.6f;
+            _bio = "Old faithful, the 9MM pistol.";
+            _editorName = nameof(Bazooka);
+            editorTooltip = "Funny name, serious firepower. Launches an explosive missile that can destroy terrain.";
+            physicsMaterial = PhysicsMaterial.Metal;
         }
 
         public override void OnPressAction()
         {
-            if (this._tamped)
+            if (_tamped)
             {
                 base.OnPressAction();
                 int num = 0;
                 for (int index = 0; index < 14; ++index)
                 {
-                    MusketSmoke musketSmoke = new MusketSmoke(this.barrelPosition.x - 16f + Rando.Float(32f), this.barrelPosition.y - 16f + Rando.Float(32f))
+                    MusketSmoke musketSmoke = new MusketSmoke(barrelPosition.x - 16f + Rando.Float(32f), barrelPosition.y - 16f + Rando.Float(32f))
                     {
                         depth = (Depth)(float)(0.9f + index * (1f / 1000f))
                     };
                     if (num < 6)
-                        musketSmoke.move -= this.barrelVector * Rando.Float(0.1f);
+                        musketSmoke.move -= barrelVector * Rando.Float(0.1f);
                     if (num > 5 && num < 10)
-                        musketSmoke.fly += this.barrelVector * (2f + Rando.Float(7.8f));
+                        musketSmoke.fly += barrelVector * (2f + Rando.Float(7.8f));
                     Level.Add(musketSmoke);
                     ++num;
                 }
-                this._tampInc = 0f;
-                if (this.infinite.value)
-                    this._tampTime = 0.8f;
+                _tampInc = 0f;
+                if (infinite.value)
+                    _tampTime = 0.8f;
                 else
-                    this._tampTime = 0.5f;
-                this._tamped = false;
+                    _tampTime = 0.5f;
+                _tamped = false;
             }
             else
             {
-                if (this._raised || !(this.owner is Duck owner) || !owner.grounded)
+                if (_raised || !(this.owner is Duck owner) || !owner.grounded)
                     return;
                 owner.immobilized = true;
                 owner.sliding = false;
-                this._rotating = true;
+                _rotating = true;
             }
         }
     }

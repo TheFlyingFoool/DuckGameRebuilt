@@ -23,15 +23,15 @@ namespace DuckGame
 
         public Event(Profile dealerVal, Profile victimVal)
         {
-            this._victim = victimVal;
-            this._dealer = dealerVal;
-            this._timestamp = DateTime.Now;
+            _victim = victimVal;
+            _dealer = dealerVal;
+            _timestamp = DateTime.Now;
         }
 
-        public DateTime timestamp => this._timestamp;
+        public DateTime timestamp => _timestamp;
 
-        public Profile victim => this._victim;
+        public Profile victim => _victim;
 
-        public Profile dealer => this._dealer;
+        public Profile dealer => _dealer;
     }
 }

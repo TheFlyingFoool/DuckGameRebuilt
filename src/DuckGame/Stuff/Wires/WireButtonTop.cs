@@ -16,25 +16,25 @@ namespace DuckGame
         public WireButtonTop(float xpos, float ypos, WireButton b, int orientation)
           : base(xpos, ypos)
         {
-            this._button = b;
-            this._orientation = orientation;
+            _button = b;
+            _orientation = orientation;
             switch (orientation)
             {
                 case 0:
-                    this.collisionSize = new Vec2(12f, 4f);
-                    this.collisionOffset = new Vec2(-6f, -2f);
+                    collisionSize = new Vec2(12f, 4f);
+                    collisionOffset = new Vec2(-6f, -2f);
                     break;
                 case 1:
-                    this.collisionSize = new Vec2(4f, 12f);
-                    this.collisionOffset = new Vec2(-2f, -6f);
+                    collisionSize = new Vec2(4f, 12f);
+                    collisionOffset = new Vec2(-2f, -6f);
                     break;
                 case 2:
-                    this.collisionSize = new Vec2(12f, 4f);
-                    this.collisionOffset = new Vec2(-6f, -2f);
+                    collisionSize = new Vec2(12f, 4f);
+                    collisionOffset = new Vec2(-6f, -2f);
                     break;
                 case 3:
-                    this.collisionSize = new Vec2(4f, 12f);
-                    this.collisionOffset = new Vec2(-2f, -6f);
+                    collisionSize = new Vec2(4f, 12f);
+                    collisionOffset = new Vec2(-2f, -6f);
                     break;
             }
         }
@@ -43,14 +43,14 @@ namespace DuckGame
         {
             if (with is PhysicsObject && !(with is TeamHat))
             {
-                if (this._orientation == 0 && with.vSpeed > -0.100000001490116)
-                    this._button.ButtonPressed(with as PhysicsObject);
-                else if (this._orientation == 1 && with.hSpeed < 0.100000001490116)
-                    this._button.ButtonPressed(with as PhysicsObject);
-                else if (this._orientation == 2 && with.vSpeed < 0.100000001490116)
-                    this._button.ButtonPressed(with as PhysicsObject);
-                else if (this._orientation == 3 && with.hSpeed > -0.100000001490116)
-                    this._button.ButtonPressed(with as PhysicsObject);
+                if (_orientation == 0 && with.vSpeed > -0.100000001490116)
+                    _button.ButtonPressed(with as PhysicsObject);
+                else if (_orientation == 1 && with.hSpeed < 0.100000001490116)
+                    _button.ButtonPressed(with as PhysicsObject);
+                else if (_orientation == 2 && with.vSpeed < 0.100000001490116)
+                    _button.ButtonPressed(with as PhysicsObject);
+                else if (_orientation == 3 && with.hSpeed > -0.100000001490116)
+                    _button.ButtonPressed(with as PhysicsObject);
             }
             base.OnSoftImpact(with, from);
         }

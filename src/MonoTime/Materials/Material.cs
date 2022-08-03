@@ -14,27 +14,27 @@ namespace DuckGame
     {
         protected MTEffect _effect;
 
-        public MTEffect effect => this._effect;
+        public MTEffect effect => _effect;
 
         public Material()
         {
         }
 
-        public Material(string mat) => this._effect = Content.Load<MTEffect>(mat);
+        public Material(string mat) => _effect = Content.Load<MTEffect>(mat);
 
-        public Material(Effect e) => this._effect = (MTEffect)e;
+        public Material(Effect e) => _effect = (MTEffect)e;
 
-        public virtual void SetValue(string name, float value) => this._effect.effect.Parameters[name]?.SetValue(value);
+        public virtual void SetValue(string name, float value) => _effect.effect.Parameters[name]?.SetValue(value);
 
-        public virtual void SetValue(string name, Vec2 value) => this._effect.effect.Parameters[name]?.SetValue((Vector2)value);
+        public virtual void SetValue(string name, Vec2 value) => _effect.effect.Parameters[name]?.SetValue((Vector2)value);
 
-        public virtual void SetValue(string name, Vec3 value) => this._effect.effect.Parameters[name]?.SetValue((Vector3)value);
+        public virtual void SetValue(string name, Vec3 value) => _effect.effect.Parameters[name]?.SetValue((Vector3)value);
 
-        public virtual void SetValue(string name, Color value) => this._effect.effect.Parameters[name]?.SetValue((Vector4)value.ToVector4());
+        public virtual void SetValue(string name, Color value) => _effect.effect.Parameters[name]?.SetValue((Vector4)value.ToVector4());
 
-        public virtual void SetValue(string name, Matrix value) => this._effect.effect.Parameters[name]?.SetValue((Microsoft.Xna.Framework.Matrix)value);
+        public virtual void SetValue(string name, Matrix value) => _effect.effect.Parameters[name]?.SetValue((Microsoft.Xna.Framework.Matrix)value);
 
-        public virtual void SetValue(string name, Texture2D value) => this._effect.effect.Parameters[name]?.SetValue(value);
+        public virtual void SetValue(string name, Texture2D value) => _effect.effect.Parameters[name]?.SetValue(value);
 
         public virtual void Update()
         {
@@ -42,7 +42,7 @@ namespace DuckGame
 
         public virtual void Apply()
         {
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
 

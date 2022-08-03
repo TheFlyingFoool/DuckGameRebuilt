@@ -51,136 +51,136 @@ namespace DuckGame
 
         public Duck controlling1
         {
-            get => this.controlling[0];
-            set => this.controlling[0] = value;
+            get => controlling[0];
+            set => controlling[0] = value;
         }
 
         public Duck controlling2
         {
-            get => this.controlling[1];
-            set => this.controlling[1] = value;
+            get => controlling[1];
+            set => controlling[1] = value;
         }
 
         public Duck controlling3
         {
-            get => this.controlling[2];
-            set => this.controlling[2] = value;
+            get => controlling[2];
+            set => controlling[2] = value;
         }
 
         public Duck controlling4
         {
-            get => this.controlling[3];
-            set => this.controlling[3] = value;
+            get => controlling[3];
+            set => controlling[3] = value;
         }
 
         public Duck controlling5
         {
-            get => this.controlling[4];
-            set => this.controlling[4] = value;
+            get => controlling[4];
+            set => controlling[4] = value;
         }
 
         public Duck controlling6
         {
-            get => this.controlling[5];
-            set => this.controlling[5] = value;
+            get => controlling[5];
+            set => controlling[5] = value;
         }
 
         public Duck controlling7
         {
-            get => this.controlling[6];
-            set => this.controlling[6] = value;
+            get => controlling[6];
+            set => controlling[6] = value;
         }
 
         public Duck controlling8
         {
-            get => this.controlling[7];
-            set => this.controlling[7] = value;
+            get => controlling[7];
+            set => controlling[7] = value;
         }
 
         public Duck prevControlling1
         {
-            get => this.prevControlling[0];
-            set => this.prevControlling[0] = value;
+            get => prevControlling[0];
+            set => prevControlling[0] = value;
         }
 
         public Duck prevControlling2
         {
-            get => this.prevControlling[1];
-            set => this.prevControlling[1] = value;
+            get => prevControlling[1];
+            set => prevControlling[1] = value;
         }
 
         public Duck prevControlling3
         {
-            get => this.prevControlling[2];
-            set => this.prevControlling[2] = value;
+            get => prevControlling[2];
+            set => prevControlling[2] = value;
         }
 
         public Duck prevControlling4
         {
-            get => this.prevControlling[3];
-            set => this.prevControlling[3] = value;
+            get => prevControlling[3];
+            set => prevControlling[3] = value;
         }
 
         public Duck prevControlling5
         {
-            get => this.prevControlling[4];
-            set => this.prevControlling[4] = value;
+            get => prevControlling[4];
+            set => prevControlling[4] = value;
         }
 
         public Duck prevControlling6
         {
-            get => this.prevControlling[5];
-            set => this.prevControlling[5] = value;
+            get => prevControlling[5];
+            set => prevControlling[5] = value;
         }
 
         public Duck prevControlling7
         {
-            get => this.prevControlling[6];
-            set => this.prevControlling[6] = value;
+            get => prevControlling[6];
+            set => prevControlling[6] = value;
         }
 
         public Duck prevControlling8
         {
-            get => this.prevControlling[7];
-            set => this.prevControlling[7] = value;
+            get => prevControlling[7];
+            set => prevControlling[7] = value;
         }
 
         public GoodBook(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 1;
-            this._ammoType = new ATShrapnel();
-            this._ammoType.penetration = 0.4f;
-            this._ammoType.range = 40f;
-            this._type = "gun";
-            this._sprite = new SpriteMap("goodBook", 17, 12);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 6f);
-            this.collisionOffset = new Vec2(-5f, -4f);
-            this.collisionSize = new Vec2(10f, 8f);
-            this._halo = new Sprite("halo");
-            this._halo.CenterOrigin();
-            this._holdOffset = new Vec2(3f, 4f);
-            this.handOffset = new Vec2(1f, 1f);
-            this._hasTrigger = false;
-            this.bouncy = 0.4f;
-            this.friction = 0.05f;
-            this.flammable = 1f;
-            this._editorName = "Good Book";
-            this.editorTooltip = "Converts enemies to your side. Don't spoil the ending.";
-            this._bio = "A collection of words, maybe other ducks should hear them?";
-            this.physicsMaterial = PhysicsMaterial.Wood;
-            this._netPreach.function = new NetSoundEffect.Function(this.DoPreach);
-            this.controlling = new Duck[8]
+            ammo = 1;
+            _ammoType = new ATShrapnel();
+            _ammoType.penetration = 0.4f;
+            _ammoType.range = 40f;
+            _type = "gun";
+            _sprite = new SpriteMap("goodBook", 17, 12);
+            graphic = _sprite;
+            center = new Vec2(8f, 6f);
+            collisionOffset = new Vec2(-5f, -4f);
+            collisionSize = new Vec2(10f, 8f);
+            _halo = new Sprite("halo");
+            _halo.CenterOrigin();
+            _holdOffset = new Vec2(3f, 4f);
+            handOffset = new Vec2(1f, 1f);
+            _hasTrigger = false;
+            bouncy = 0.4f;
+            friction = 0.05f;
+            flammable = 1f;
+            _editorName = "Good Book";
+            editorTooltip = "Converts enemies to your side. Don't spoil the ending.";
+            _bio = "A collection of words, maybe other ducks should hear them?";
+            physicsMaterial = PhysicsMaterial.Wood;
+            _netPreach.function = new NetSoundEffect.Function(DoPreach);
+            controlling = new Duck[8]
             {
-        this.controlling1,
-        this.controlling2,
-        this.controlling3,
-        this.controlling4,
-        this.controlling5,
-        this.controlling6,
-        this.controlling7,
-        this.controlling8
+        controlling1,
+        controlling2,
+        controlling3,
+        controlling4,
+        controlling5,
+        controlling6,
+        controlling7,
+        controlling8
             };
         }
 
@@ -193,8 +193,8 @@ namespace DuckGame
             get => base.connection;
             set
             {
-                if (this.connection == DuckNetwork.localConnection && value != this.connection)
-                    this.LoseControl();
+                if (connection == DuckNetwork.localConnection && value != connection)
+                    LoseControl();
                 base.connection = value;
             }
         }
@@ -203,12 +203,12 @@ namespace DuckGame
         {
             for (int index = 0; index < 8; ++index)
             {
-                Duck duck = this.controlling[index];
+                Duck duck = controlling[index];
                 if (duck != null)
                 {
                     duck.listenTime = 0;
                     duck.listening = false;
-                    this.controlling[index] = null;
+                    controlling[index] = null;
                 }
             }
         }
@@ -216,33 +216,33 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            this._sprite.frame = this._owner == null || this._raised ? 0 : 1;
-            this._raiseArm = Lerp.Float(this._raiseArm, 0f, 0.05f);
-            this._preachWait = Lerp.Float(this._preachWait, 0f, 0.06f);
-            this._ringPulse = Lerp.Float(this._ringPulse, 0f, 0.05f);
+            _sprite.frame = _owner == null || _raised ? 0 : 1;
+            _raiseArm = Lerp.Float(_raiseArm, 0f, 0.05f);
+            _preachWait = Lerp.Float(_preachWait, 0f, 0.06f);
+            _ringPulse = Lerp.Float(_ringPulse, 0f, 0.05f);
             if (Network.isActive)
             {
-                if (this.isServerForObject)
+                if (isServerForObject)
                 {
                     for (int index = 0; index < 8; ++index)
                     {
-                        Duck t1 = this.controlling[index];
+                        Duck t1 = controlling[index];
                         if (t1 != null)
                         {
                             if (t1.listenTime <= 0)
                             {
-                                this.controlling[index] = null;
+                                controlling[index] = null;
                                 t1.listening = false;
                             }
                             else
                             {
-                                this.Fondle(t1);
-                                this.Fondle(t1.holdObject);
+                                Fondle(t1);
+                                Fondle(t1.holdObject);
                                 foreach (Thing t2 in t1._equipment)
-                                    this.Fondle(t2);
-                                this.Fondle(t1._ragdollInstance);
-                                this.Fondle(t1._trappedInstance);
-                                this.Fondle(t1._cookedInstance);
+                                    Fondle(t2);
+                                Fondle(t1._ragdollInstance);
+                                Fondle(t1._trappedInstance);
+                                Fondle(t1._cookedInstance);
                             }
                         }
                     }
@@ -251,7 +251,7 @@ namespace DuckGame
                 {
                     for (int index = 0; index < 8; ++index)
                     {
-                        Duck duck = this.controlling[index];
+                        Duck duck = controlling[index];
                         if (duck != null)
                         {
                             duck.listening = true;
@@ -263,40 +263,40 @@ namespace DuckGame
                             duck.Fondle(duck._trappedInstance);
                             duck.Fondle(duck._cookedInstance);
                         }
-                        else if (this.prevControlling[index] != null)
+                        else if (prevControlling[index] != null)
                         {
-                            this.prevControlling[index].listening = false;
-                            this.prevControlling[index].listenTime = 0;
+                            prevControlling[index].listening = false;
+                            prevControlling[index].listenTime = 0;
                         }
                     }
                 }
             }
-            if (this._triggerHeld && this.isServerForObject && this.duck != null && _preachWait <= 0.0 & this.duck.quack < 1 && this.duck.grounded)
+            if (_triggerHeld && isServerForObject && duck != null && _preachWait <= 0.0 & duck.quack < 1 && duck.grounded)
             {
                 if (Network.isActive)
-                    this._netPreach.Play();
+                    _netPreach.Play();
                 else
                     SFX.Play("preach" + Rando.Int(5).ToString(), Rando.Float(0.8f, 1f), Rando.Float(-0.2f, -0.3f));
-                this.duck.quack = (byte)Rando.Int(12, 30);
-                this.duck.profile.stats.timePreaching += duck.quack / 0.1f * Maths.IncFrameTimer();
-                this._preachWait = Rando.Float(1.8f, 2.5f);
-                this._ringPulse = 1f;
+                duck.quack = (byte)Rando.Int(12, 30);
+                duck.profile.stats.timePreaching += duck.quack / 0.1f * Maths.IncFrameTimer();
+                _preachWait = Rando.Float(1.8f, 2.5f);
+                _ringPulse = 1f;
                 if (Rando.Int(1) == 0)
-                    this._raiseArm = Rando.Float(1.2f, 2f);
-                Ragdoll t3 = Level.Nearest<Ragdoll>(this.x, this.y, this);
+                    _raiseArm = Rando.Float(1.2f, 2f);
+                Ragdoll t3 = Level.Nearest<Ragdoll>(x, y, this);
                 Vec2 vec2;
-                if (t3 != null && t3.captureDuck != null && t3.captureDuck.dead && Level.CheckLine<Block>(this.duck.position, t3.position) == null)
+                if (t3 != null && t3.captureDuck != null && t3.captureDuck.dead && Level.CheckLine<Block>(duck.position, t3.position) == null)
                 {
-                    vec2 = t3.position - this.duck.position;
+                    vec2 = t3.position - duck.position;
                     if (vec2.length < _ammoType.range)
                     {
                         if (Network.isActive)
                         {
-                            this.Fondle(t3.captureDuck);
-                            this.Fondle(t3);
+                            Fondle(t3.captureDuck);
+                            Fondle(t3);
                             Send.Message(new NMLayToRest(t3.captureDuck));
                         }
-                        t3.captureDuck.LayToRest(this.duck.profile);
+                        t3.captureDuck.LayToRest(duck.profile);
                     }
                 }
                 foreach (Duck duck1 in Level.current.things[typeof(Duck)])
@@ -319,34 +319,34 @@ namespace DuckGame
                         Level.Add(tombstone);
                         Level.Remove(duck1);
                     }
-                    if (duck1 != this.duck && duck1.grounded && !(duck1.holdObject is GoodBook) && Level.CheckLine<Block>(this.duck.position, duck1.position) == null)
+                    if (duck1 != duck && duck1.grounded && !(duck1.holdObject is GoodBook) && Level.CheckLine<Block>(duck.position, duck1.position) == null)
                     {
-                        vec2 = duck1.position - this.duck.position;
+                        vec2 = duck1.position - duck.position;
                         if (vec2.length < _ammoType.range)
                         {
                             if (duck1.dead)
                             {
-                                this.Fondle(duck1);
-                                duck1.LayToRest(this.duck.profile);
+                                Fondle(duck1);
+                                duck1.LayToRest(duck.profile);
                             }
                             else
                             {
-                                Duck duck2 = this.duck.converted != null ? this.duck.converted : this.duck;
+                                Duck duck2 = duck.converted != null ? duck.converted : duck;
                                 Duck duck3 = duck1.converted != null ? duck1.converted : duck1;
                                 if (duck2 != duck3 && duck2.profile.team != duck3.profile.team)
                                 {
                                     if (Network.isActive && duck1.profile.networkIndex >= 0 && duck1.profile.networkIndex < 8)
-                                        this.controlling[duck1.profile.networkIndex] = duck1;
+                                        controlling[duck1.profile.networkIndex] = duck1;
                                     duck1.listening = true;
-                                    this.Fondle(duck1);
-                                    this.Fondle(duck1.holdObject);
+                                    Fondle(duck1);
+                                    Fondle(duck1.holdObject);
                                     foreach (Thing t4 in duck1._equipment)
-                                        this.Fondle(t4);
-                                    this.Fondle(duck1._ragdollInstance);
-                                    this.Fondle(duck1._trappedInstance);
-                                    this.Fondle(duck1._cookedInstance);
+                                        Fondle(t4);
+                                    Fondle(duck1._ragdollInstance);
+                                    Fondle(duck1._trappedInstance);
+                                    Fondle(duck1._cookedInstance);
                                     duck1.listenTime = 80;
-                                    if (this.owner.x < duck1.x)
+                                    if (owner.x < duck1.x)
                                         duck1.offDir = -1;
                                     else
                                         duck1.offDir = 1;
@@ -358,7 +358,7 @@ namespace DuckGame
                                         if (Network.isActive)
                                         {
                                             Send.Message(new NMConversion(duck1, duck2));
-                                            this.controlling[duck1.profile.networkIndex] = null;
+                                            controlling[duck1.profile.networkIndex] = null;
                                         }
                                         duck1.conversionResistance = 50;
                                     }
@@ -368,9 +368,9 @@ namespace DuckGame
                     }
                 }
             }
-            this._haloAlpha = Lerp.Float(this._haloAlpha, !this._triggerHeld || this.duck == null || !this.duck.grounded ? 0f : 1f, 0.05f);
+            _haloAlpha = Lerp.Float(_haloAlpha, !_triggerHeld || duck == null || !duck.grounded ? 0f : 1f, 0.05f);
             for (int index = 0; index < 8; ++index)
-                this.prevControlling[index] = this.controlling[index];
+                prevControlling[index] = controlling[index];
         }
 
         public override void OnPressAction()
@@ -379,27 +379,27 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this.duck != null && !this._raised && _raiseArm > 0.0)
+            if (duck != null && !_raised && _raiseArm > 0.0)
             {
-                SpriteMap spriteArms = this.duck._spriteArms;
+                SpriteMap spriteArms = duck._spriteArms;
                 bool flipH = spriteArms.flipH;
                 float angle = spriteArms.angle;
                 spriteArms.flipH = offDir * -1 < 0;
                 spriteArms.angle = 0.7f * offDir;
-                Graphics.Draw(spriteArms, this.owner.x - 5 * offDir, (float)(this.owner.y + 3f + (this.duck.crouch ? 3f : 0f) + (this.duck.sliding ? 3f : 0f)));
+                Graphics.Draw(spriteArms, owner.x - 5 * offDir, (float)(owner.y + 3f + (duck.crouch ? 3f : 0f) + (duck.sliding ? 3f : 0f)));
                 spriteArms.angle = angle;
                 spriteArms.flipH = flipH;
-                this.handOffset = new Vec2(9999f, 9999f);
+                handOffset = new Vec2(9999f, 9999f);
             }
             else
-                this.handOffset = new Vec2(1f, 1f);
-            if (this.owner != null && _haloAlpha > 0.01f)
+                handOffset = new Vec2(1f, 1f);
+            if (owner != null && _haloAlpha > 0.01f)
             {
-                this._halo.alpha = (float)(_haloAlpha * 0.4f + (float)this._haloWave * 0.1f);
-                this._halo.depth = -0.2f;
-                this._halo.xscale = this._halo.yscale = (float)(0.95f + (float)this._haloWave * 0.05f);
-                this._halo.angle += 0.01f;
-                Graphics.Draw(this._halo, this.owner.x, this.owner.y);
+                _halo.alpha = (float)(_haloAlpha * 0.4f + (float)_haloWave * 0.1f);
+                _halo.depth = -0.2f;
+                _halo.xscale = _halo.yscale = (float)(0.95f + (float)_haloWave * 0.05f);
+                _halo.angle += 0.01f;
+                Graphics.Draw(_halo, owner.x, owner.y);
                 if (_ringPulse > 0f)
                 {
                     int num1 = 16;
@@ -410,7 +410,7 @@ namespace DuckGame
                         float rad = Maths.DegToRad(360 / (num1 - 1) * index);
                         Vec2 vec2_2 = new Vec2((float)Math.Cos(rad) * num2, (float)-Math.Sin(rad) * num2);
                         if (index > 0)
-                            Graphics.DrawLine(this.owner.position + vec2_2, this.owner.position + vec2_1, Color.White * (this._ringPulse * 0.6f), this._ringPulse * 10f);
+                            Graphics.DrawLine(owner.position + vec2_2, owner.position + vec2_1, Color.White * (_ringPulse * 0.6f), _ringPulse * 10f);
                         vec2_1 = vec2_2;
                     }
                 }

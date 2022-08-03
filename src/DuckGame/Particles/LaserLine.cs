@@ -26,23 +26,23 @@ namespace DuckGame
           float f = 0.06f)
           : base(pos.x, pos.y)
         {
-            this._moveSpeed = moveSpeed;
-            this._color = color;
-            this._thickness = thickness;
-            this._move = moveVector;
-            this._target = target;
-            this.fade = f;
+            _moveSpeed = moveSpeed;
+            _color = color;
+            _thickness = thickness;
+            _move = moveVector;
+            _target = target;
+            fade = f;
         }
 
         public override void Update()
         {
-            this.alpha -= this.fade;
-            if (this.alpha < 0.0)
+            alpha -= fade;
+            if (alpha < 0.0)
                 Level.Remove(this);
-            this.x += this._move.x * this._moveSpeed;
-            this.y += this._move.y * this._moveSpeed;
+            x += _move.x * _moveSpeed;
+            y += _move.y * _moveSpeed;
         }
 
-        public override void Draw() => Graphics.DrawLine(this.position, this.position + this._target, this._color * this.alpha, this._thickness, (Depth)0.9f);
+        public override void Draw() => Graphics.DrawLine(position, position + _target, _color * alpha, _thickness, (Depth)0.9f);
     }
 }

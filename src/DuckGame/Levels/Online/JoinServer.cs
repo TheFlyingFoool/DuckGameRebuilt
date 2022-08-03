@@ -19,30 +19,30 @@ namespace DuckGame
 
         public JoinServer(ulong lobbyAddress)
         {
-            this._lobbyID = lobbyAddress;
-            this._centeredView = true;
-            this._teamSelect = Level.current is TeamSelect2;
+            _lobbyID = lobbyAddress;
+            _centeredView = true;
+            _teamSelect = Level.current is TeamSelect2;
         }
 
         public JoinServer(ulong lobbyAddress, string pPassword)
           : this(lobbyAddress)
         {
-            this.password = pPassword;
+            password = pPassword;
         }
 
         public override void Initialize()
         {
             if (Network.isActive)
             {
-                Level.current = new DisconnectFromGame(this._lobbyID);
+                Level.current = new DisconnectFromGame(_lobbyID);
             }
             else
             {
                 DuckNetwork.ClosePauseMenu();
                 ConnectionStatusUI.Hide();
-                this.SkipStart();
+                SkipStart();
                 DevConsole.Log(DCSection.NetCore, "!~----------------JoinServer Level Begins----------------~!");
-                if (Profiles.active.Count == 0 || !this._teamSelect)
+                if (Profiles.active.Count == 0 || !_teamSelect)
                 {
                     foreach (Profile prof in Profiles.active)
                         prof.team.Leave(prof);
@@ -58,34 +58,34 @@ namespace DuckGame
                     }
                 }
                 TeamSelect2.FillMatchmakingProfiles();
-                if (this._lobbyID == 0UL || NetworkDebugger.enabled)
+                if (_lobbyID == 0UL || NetworkDebugger.enabled)
                 {
-                    DuckNetwork.joinPort = (int)this._lobbyID;
+                    DuckNetwork.joinPort = (int)_lobbyID;
                     DuckNetwork.Join("joinTest");
                 }
                 else
-                    DuckNetwork.Join(this._lobbyID.ToString(), "localhost", this.password);
+                    DuckNetwork.Join(_lobbyID.ToString(), "localhost", password);
                 //this._attemptedConnection = true;
-                this._startedJoining = true;
-                this._timeout = 0UL;
+                _startedJoining = true;
+                _timeout = 0UL;
                 base.Initialize();
             }
         }
 
         public override void Update()
         {
-            if (this._timeout++ > 1200UL)
+            if (_timeout++ > 1200UL)
             {
                 Network.DisconnectClient(DuckNetwork.localConnection, new DuckNetErrorInfo(DuckNetError.ConnectionTimeout, "Connection timeout!"));
                 Level.current = new ConnectionError("|RED|CONNECTION FAILED!");
-                this._timeout = 0UL;
+                _timeout = 0UL;
             }
             base.Update();
         }
 
         public override void OnSessionEnded(DuckNetErrorInfo error)
         {
-            if (!this._startedJoining)
+            if (!_startedJoining)
                 return;
             if (error != null)
                 Level.current = new ConnectionError(error.message);
@@ -95,9 +95,9 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this._dots += 0.01f;
+            _dots += 0.01f;
             if (_dots > 1.0)
-                this._dots = 0f;
+                _dots = 0f;
             string str = "";
             for (int index = 0; index < 3; ++index)
             {

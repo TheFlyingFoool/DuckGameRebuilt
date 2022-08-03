@@ -20,7 +20,7 @@ namespace DuckGame
         public TokenSerializer()
         {
             if (TokenSerializer.instance != null)
-                this._prevInstance = TokenSerializer.instance;
+                _prevInstance = TokenSerializer.instance;
             TokenSerializer.instance = this;
         }
 
@@ -28,16 +28,16 @@ namespace DuckGame
         {
             if (TokenSerializer.instance != this)
                 return;
-            TokenSerializer.instance = this._prevInstance;
+            TokenSerializer.instance = _prevInstance;
         }
 
         public int Token(string pString)
         {
-            int num = this._tokens.IndexOf(pString);
+            int num = _tokens.IndexOf(pString);
             if (num == -1)
             {
-                this._tokens.Add(pString);
-                num = this._tokens.Count - 1;
+                _tokens.Add(pString);
+                num = _tokens.Count - 1;
             }
             return num;
         }
@@ -46,10 +46,10 @@ namespace DuckGame
         {
             BitBuffer bitBuffer = new BitBuffer();
             bitBuffer.Write(13826924961947138L);
-            bitBuffer.Write(this._tokens.Count);
+            bitBuffer.Write(_tokens.Count);
             TokenSerializer.instance = null;
-            for (int index = 0; index < this._tokens.Count; ++index)
-                bitBuffer.Write(this._tokens[index]);
+            for (int index = 0; index < _tokens.Count; ++index)
+                bitBuffer.Write(_tokens[index]);
             bitBuffer.Write(pBuffer, true);
             TokenSerializer.instance = this;
             return bitBuffer;

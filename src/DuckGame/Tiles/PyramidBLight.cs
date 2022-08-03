@@ -20,24 +20,24 @@ namespace DuckGame
         public PyramidBLight(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("pyramidBackgroundLight", 14, 12);
-            this._sprite.AddAnimation("go", 0.2f, true, 0, 1, 2, 3, 4);
-            this._sprite.SetAnimation("go");
-            this.graphic = _sprite;
-            this.center = new Vec2(7f, 8f);
-            this._collisionSize = new Vec2(8f, 8f);
-            this._collisionOffset = new Vec2(-4f, -4f);
-            this.depth = -0.9f;
-            this.alpha = 0.7f;
-            this.layer = Layer.Game;
-            this.placementLayerOverride = Layer.Blocks;
+            _sprite = new SpriteMap("pyramidBackgroundLight", 14, 12);
+            _sprite.AddAnimation("go", 0.2f, true, 0, 1, 2, 3, 4);
+            _sprite.SetAnimation("go");
+            graphic = _sprite;
+            center = new Vec2(7f, 8f);
+            _collisionSize = new Vec2(8f, 8f);
+            _collisionOffset = new Vec2(-4f, -4f);
+            depth = -0.9f;
+            alpha = 0.7f;
+            layer = Layer.Game;
+            placementLayerOverride = Layer.Blocks;
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            Level.Add(new PointLight(this.x, this.y - 1f, PyramidWallLight.lightColor, 120f, strangeFalloff: true));
+            Level.Add(new PointLight(x, y - 1f, PyramidWallLight.lightColor, 120f, strangeFalloff: true));
         }
     }
 }

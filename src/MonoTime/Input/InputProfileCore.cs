@@ -18,58 +18,58 @@ namespace DuckGame
         {
             InputProfile inputProfile1 = new InputProfile(name);
             InputProfile inputProfile2;
-            if (this._profiles.TryGetValue(name, out inputProfile2))
+            if (_profiles.TryGetValue(name, out inputProfile2))
                 return inputProfile2;
-            this._profiles[name] = inputProfile1;
+            _profiles[name] = inputProfile1;
             return inputProfile1;
         }
 
-        public InputProfile DefaultPlayer1 => this.Get(InputProfile.MPPlayer1);
+        public InputProfile DefaultPlayer1 => Get(InputProfile.MPPlayer1);
 
-        public InputProfile DefaultPlayer2 => this.Get(InputProfile.MPPlayer2);
+        public InputProfile DefaultPlayer2 => Get(InputProfile.MPPlayer2);
 
-        public InputProfile DefaultPlayer3 => this.Get(InputProfile.MPPlayer3);
+        public InputProfile DefaultPlayer3 => Get(InputProfile.MPPlayer3);
 
-        public InputProfile DefaultPlayer4 => this.Get(InputProfile.MPPlayer4);
+        public InputProfile DefaultPlayer4 => Get(InputProfile.MPPlayer4);
 
-        public InputProfile DefaultPlayer5 => this.Get(InputProfile.MPPlayer5);
+        public InputProfile DefaultPlayer5 => Get(InputProfile.MPPlayer5);
 
-        public InputProfile DefaultPlayer6 => this.Get(InputProfile.MPPlayer6);
+        public InputProfile DefaultPlayer6 => Get(InputProfile.MPPlayer6);
 
-        public InputProfile DefaultPlayer7 => this.Get(InputProfile.MPPlayer7);
+        public InputProfile DefaultPlayer7 => Get(InputProfile.MPPlayer7);
 
-        public InputProfile DefaultPlayer8 => this.Get(InputProfile.MPPlayer8);
+        public InputProfile DefaultPlayer8 => Get(InputProfile.MPPlayer8);
 
         public List<InputProfile> defaultProfiles => new List<InputProfile>()
     {
-      this.DefaultPlayer1,
-      this.DefaultPlayer2,
-      this.DefaultPlayer3,
-      this.DefaultPlayer4,
-      this.DefaultPlayer5,
-      this.DefaultPlayer6,
-      this.DefaultPlayer7,
-      this.DefaultPlayer8
+      DefaultPlayer1,
+      DefaultPlayer2,
+      DefaultPlayer3,
+      DefaultPlayer4,
+      DefaultPlayer5,
+      DefaultPlayer6,
+      DefaultPlayer7,
+      DefaultPlayer8
     };
 
         public InputProfile Get(string name)
         {
             InputProfile inputProfile;
-            return this._profiles.TryGetValue(name, out inputProfile) ? inputProfile : null;
+            return _profiles.TryGetValue(name, out inputProfile) ? inputProfile : null;
         }
 
         public void Update()
         {
-            foreach (KeyValuePair<string, InputProfile> profile in this._profiles)
+            foreach (KeyValuePair<string, InputProfile> profile in _profiles)
                 profile.Value.UpdateTriggerStates();
         }
 
         public InputProfile GetVirtualInput(int index)
         {
             InputProfile virtualInput1;
-            if (this._virtualProfiles.TryGetValue(index, out virtualInput1))
+            if (_virtualProfiles.TryGetValue(index, out virtualInput1))
                 return virtualInput1;
-            InputProfile virtualInput2 = this.Add("virtual" + index.ToString());
+            InputProfile virtualInput2 = Add("virtual" + index.ToString());
             virtualInput2.dindex = NetworkDebugger.currentIndex;
             VirtualInput device = new VirtualInput(index)
             {
@@ -78,7 +78,7 @@ namespace DuckGame
             for (int index1 = 0; index1 < Network.synchronizedTriggers.Count; ++index1)
                 virtualInput2.Map(device, Network.synchronizedTriggers[index1], index1);
             device.availableTriggers = Network.synchronizedTriggers;
-            this._virtualProfiles[index] = virtualInput2;
+            _virtualProfiles[index] = virtualInput2;
             return virtualInput2;
         }
     }

@@ -12,17 +12,17 @@ namespace DuckGame
         private Editor _editor;
         protected bool _quitTesting;
 
-        public Editor editor => this._editor;
+        public Editor editor => _editor;
 
         public EditorTestLevel(Editor editor)
           : base()
         {
-            this._editor = editor;
+            _editor = editor;
         }
 
         public override void Update()
         {
-            if (!this._quitTesting || Level.current is ChallengeLevel)
+            if (!_quitTesting || Level.current is ChallengeLevel)
                 return;
             Level.current = _editor;
         }

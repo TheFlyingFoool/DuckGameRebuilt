@@ -18,16 +18,16 @@ namespace DuckGame
         public CameraMover(float xPos, float yPos)
           : base(xPos, yPos)
         {
-            this.graphic = new Sprite("cameraMover");
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-4f, -4f);
+            graphic = new Sprite("cameraMover");
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-4f, -4f);
         }
 
         public override void Initialize()
         {
             if (!(Level.current is Editor))
-                this.alpha = 0f;
+                alpha = 0f;
             base.Initialize();
         }
     }

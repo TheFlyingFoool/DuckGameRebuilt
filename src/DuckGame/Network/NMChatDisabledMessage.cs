@@ -15,11 +15,11 @@ namespace DuckGame
 
         public NMChatDisabledMessage(Profile pProfile, string t, ushort idx)
         {
-            this.profile = pProfile;
-            this.text = t;
-            this.index = idx;
+            profile = pProfile;
+            text = t;
+            index = idx;
         }
 
-        public override string ToString() => "NMChatDisabledMessage(\"" + this.text + "\")";
+        public override string ToString() => "NMChatDisabledMessage(\"" + text + "\")";
     }
 }

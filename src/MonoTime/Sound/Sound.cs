@@ -21,99 +21,99 @@ namespace DuckGame
 
         public virtual void Kill()
         {
-            this.Stop();
-            this._killed = true;
+            Stop();
+            _killed = true;
         }
 
         public bool cannotBeCancelled
         {
-            get => this._cannotBeCancelled;
-            set => this._cannotBeCancelled = value;
+            get => _cannotBeCancelled;
+            set => _cannotBeCancelled = value;
         }
 
-        public virtual bool IsDisposed => this._instance == null || this._instance.IsDisposed;
+        public virtual bool IsDisposed => _instance == null || _instance.IsDisposed;
 
         public virtual float Pitch
         {
-            get => this._instance.Pitch;
-            set => this._instance.Pitch = value;
+            get => _instance.Pitch;
+            set => _instance.Pitch = value;
         }
 
         public virtual float Pan
         {
-            get => this._instance.Pan;
-            set => this._instance.Pan = value;
+            get => _instance.Pan;
+            set => _instance.Pan = value;
         }
 
         public virtual bool IsLooped
         {
-            get => this._instance.IsLooped;
-            set => this._instance.IsLooped = value;
+            get => _instance.IsLooped;
+            set => _instance.IsLooped = value;
         }
 
-        public virtual SoundState State => this._instance != null && !this._instance.IsDisposed ? this._instance.State : SoundState.Stopped;
+        public virtual SoundState State => _instance != null && !_instance.IsDisposed ? _instance.State : SoundState.Stopped;
 
-        public string name => this._name;
+        public string name => _name;
 
         public virtual float Volume
         {
-            get => Math.Min(1f, Math.Max(0f, this._volume));
+            get => Math.Min(1f, Math.Max(0f, _volume));
             set
             {
-                this._volume = value;
-                if (this._instance == null)
-                    this._instance = SFX.GetInstance(this._name, this._volume * SFX.volume);
-                this._instance.Volume = Math.Min(1f, Math.Max(0f, value * SFX.volume));
+                _volume = value;
+                if (_instance == null)
+                    _instance = SFX.GetInstance(_name, _volume * SFX.volume);
+                _instance.Volume = Math.Min(1f, Math.Max(0f, value * SFX.volume));
             }
         }
 
         public virtual void Play()
         {
-            if (this._killed || !SFX.PoolSound(this))
+            if (_killed || !SFX.PoolSound(this))
                 return;
             if (Recorder.currentRecording != null)
-                Recorder.currentRecording.LogSound(this.name, this._volume, this.Pitch, this.Pan);
-            this._instance.Volume = Math.Min(1f, Math.Max(0f, this._volume * SFX.volume));
-            this._instance.Play();
-            this._pooled = true;
+                Recorder.currentRecording.LogSound(name, _volume, Pitch, Pan);
+            _instance.Volume = Math.Min(1f, Math.Max(0f, _volume * SFX.volume));
+            _instance.Play();
+            _pooled = true;
         }
 
         public virtual void Stop()
         {
-            if (this._killed)
+            if (_killed)
                 return;
-            this._instance._position = 0;
-            if (this.State == SoundState.Playing && !this._instance.IsDisposed)
-                this._instance.Stop();
-            this._pooled = false;
+            _instance._position = 0;
+            if (State == SoundState.Playing && !_instance.IsDisposed)
+                _instance.Stop();
+            _pooled = false;
             SFX.UnpoolSound(this);
         }
 
         public virtual void Unpooled()
         {
-            if (this.State != SoundState.Stopped && !this._instance.IsDisposed)
+            if (State != SoundState.Stopped && !_instance.IsDisposed)
             {
-                this._instance.Volume = 0f;
-                this._instance.Stop();
+                _instance.Volume = 0f;
+                _instance.Stop();
             }
-            this._pooled = false;
+            _pooled = false;
         }
 
         public virtual void Pause()
         {
-            if (this._killed)
+            if (_killed)
                 return;
-            this._instance.Volume = 0f;
-            this._instance.Pause();
-            this._pooled = false;
+            _instance.Volume = 0f;
+            _instance.Pause();
+            _pooled = false;
             SFX.UnpoolSound(this);
         }
 
         public Sound(string sound, float vol, float pitch, float pan, bool looped)
         {
-            this._name = sound;
-            this._volume = vol;
-            this._instance = SFX.GetInstance(sound, this._volume * SFX.volume, pitch, pan, looped);
+            _name = sound;
+            _volume = vol;
+            _instance = SFX.GetInstance(sound, _volume * SFX.volume, pitch, pan, looped);
         }
 
         public Sound()

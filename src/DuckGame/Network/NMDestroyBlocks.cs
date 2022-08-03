@@ -15,7 +15,7 @@ namespace DuckGame
         public HashSet<ushort> blocks = new HashSet<ushort>();
         private byte _levelIndex;
 
-        public NMDestroyBlocks(HashSet<ushort> varBlocks) => this.blocks = varBlocks;
+        public NMDestroyBlocks(HashSet<ushort> varBlocks) => blocks = varBlocks;
 
         public NMDestroyBlocks()
         {
@@ -28,7 +28,7 @@ namespace DuckGame
             foreach (BlockGroup blockGroup in Level.current.things[typeof(BlockGroup)])
             {
                 bool flag = false;
-                foreach (ushort block1 in this.blocks)
+                foreach (ushort block1 in blocks)
                 {
                     ushort u = block1;
                     Block block2 = blockGroup.blocks.FirstOrDefault<Block>(x => x is AutoBlock && (x as AutoBlock).blockIndex == u);
@@ -43,9 +43,9 @@ namespace DuckGame
             }
             foreach (AutoBlock autoBlock in Level.current.things[typeof(AutoBlock)])
             {
-                if (this.blocks.Contains(autoBlock.blockIndex))
+                if (blocks.Contains(autoBlock.blockIndex))
                 {
-                    this.blocks.Remove(autoBlock.blockIndex);
+                    blocks.Remove(autoBlock.blockIndex);
                     autoBlock.shouldWreck = true;
                     autoBlock.skipWreck = true;
                 }
@@ -55,19 +55,19 @@ namespace DuckGame
         protected override void OnSerialize()
         {
             base.OnSerialize();
-            this._serializedData.Write(DuckNetwork.levelIndex);
-            this._serializedData.Write((byte)this.blocks.Count);
-            foreach (ushort block in this.blocks)
-                this._serializedData.Write(block);
+            _serializedData.Write(DuckNetwork.levelIndex);
+            _serializedData.Write((byte)blocks.Count);
+            foreach (ushort block in blocks)
+                _serializedData.Write(block);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
             base.OnDeserialize(d);
-            this._levelIndex = d.ReadByte();
+            _levelIndex = d.ReadByte();
             byte num = d.ReadByte();
             for (int index = 0; index < num; ++index)
-                this.blocks.Add(d.ReadUShort());
+                blocks.Add(d.ReadUShort());
         }
     }
 }

@@ -14,8 +14,8 @@ namespace DuckGame
         public ForegroundTile(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.layer = Layer.Foreground;
-            this._isStatic = true;
+            layer = Layer.Foreground;
+            _isStatic = true;
         }
 
         public override BinaryClassChunk Serialize()
@@ -28,7 +28,7 @@ namespace DuckGame
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            (this.graphic as SpriteMap).frame = node.GetProperty<int>("frame");
+            (graphic as SpriteMap).frame = node.GetProperty<int>("frame");
             return true;
         }
 
@@ -44,7 +44,7 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode = node.Element("frame");
             if (dxmlNode != null)
-                (this.graphic as SpriteMap).frame = Convert.ToInt32(dxmlNode.Value);
+                (graphic as SpriteMap).frame = Convert.ToInt32(dxmlNode.Value);
             return true;
         }
 

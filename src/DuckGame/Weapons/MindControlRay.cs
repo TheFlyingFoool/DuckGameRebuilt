@@ -22,35 +22,35 @@ namespace DuckGame
         private int _boltWait;
         private LoopingSound _beamSound;
 
-        public Duck controlledDuck => this._controlledDuck;
+        public Duck controlledDuck => _controlledDuck;
 
         public MindControlRay(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 99;
-            this._ammoType = new ATLaser();
-            this._ammoType.range = 170f;
-            this._ammoType.accuracy = 0.8f;
-            this._type = "gun";
-            this._sprite = new SpriteMap("mindControlGun", 16, 16)
+            ammo = 99;
+            _ammoType = new ATLaser();
+            _ammoType.range = 170f;
+            _ammoType.accuracy = 0.8f;
+            _type = "gun";
+            _sprite = new SpriteMap("mindControlGun", 16, 16)
             {
                 frame = 2
             };
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-7f, -4f);
-            this.collisionSize = new Vec2(14f, 10f);
-            this._hat = new SpriteMap("mindControlHelmet", 32, 32)
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-7f, -4f);
+            collisionSize = new Vec2(14f, 10f);
+            _hat = new SpriteMap("mindControlHelmet", 32, 32)
             {
                 center = new Vec2(16f, 16f)
             };
-            this._barrelOffsetTL = new Vec2(18f, 8f);
-            this._fireSound = "smg";
-            this._fullAuto = true;
-            this._fireWait = 1f;
-            this._kickForce = 1f;
-            this.flammable = 0.8f;
-            this.editorTooltip = "Best friend of Mind Control Steve. Takes control of enemy Ducks.";
+            _barrelOffsetTL = new Vec2(18f, 8f);
+            _fireSound = "smg";
+            _fullAuto = true;
+            _fireWait = 1f;
+            _kickForce = 1f;
+            flammable = 0.8f;
+            editorTooltip = "Best friend of Mind Control Steve. Takes control of enemy Ducks.";
         }
         public override void Initialize()
         {
@@ -59,7 +59,7 @@ namespace DuckGame
         }
         public override void Terminate()
         {
-            this._beamSound.Kill();
+            _beamSound.Kill();
             base.Terminate();
         }
 
@@ -68,46 +68,46 @@ namespace DuckGame
             get => base.connection;
             set
             {
-                if (this.connection == DuckNetwork.localConnection && value != this.connection)
-                    this.LoseControl();
+                if (connection == DuckNetwork.localConnection && value != connection)
+                    LoseControl();
                 base.connection = value;
             }
         }
 
         public override void Update()
         {
-            this._sprite.frame = this.owner == null ? 1 : 0;
-            this.immobilizeOwner = this._controlledDuck != null;
-            if (this.isServerForObject)
+            _sprite.frame = owner == null ? 1 : 0;
+            immobilizeOwner = _controlledDuck != null;
+            if (isServerForObject)
             {
                 if (_beamTime > 1.0 || this.owner == null)
                 {
-                    this._beamTime = 0f;
-                    this._triggerHeld = false;
-                    this.LoseControl();
+                    _beamTime = 0f;
+                    _triggerHeld = false;
+                    LoseControl();
                 }
-                if (this._controlledDuck != null && this.owner is Duck owner)
+                if (_controlledDuck != null && this.owner is Duck owner)
                 {
                     if (Network.isActive)
                     {
-                        this._controlledDuck.mindControl = owner.inputProfile;
+                        _controlledDuck.mindControl = owner.inputProfile;
                         owner.Fondle(_controlledDuck);
                         owner.Fondle(_controlledDuck.holdObject);
-                        foreach (Equipment t in this._controlledDuck._equipment)
+                        foreach (Equipment t in _controlledDuck._equipment)
                             owner.Fondle(t);
                         owner.Fondle(_controlledDuck._ragdollInstance);
                         owner.Fondle(_controlledDuck._trappedInstance);
                         owner.Fondle(_controlledDuck._cookedInstance);
                     }
-                    if (owner.inputProfile.Pressed("QUACK") || this._controlledDuck.dead || this._controlledDuck.HasEquipment(typeof(TinfoilHat)))
+                    if (owner.inputProfile.Pressed("QUACK") || _controlledDuck.dead || _controlledDuck.HasEquipment(typeof(TinfoilHat)))
                     {
-                        this._beamTime = 0f;
-                        this._triggerHeld = false;
-                        this.LoseControl();
+                        _beamTime = 0f;
+                        _triggerHeld = false;
+                        LoseControl();
                         return;
                     }
-                    this._triggerHeld = true;
-                    if (this._controlledDuck.x < owner.x)
+                    _triggerHeld = true;
+                    if (_controlledDuck.x < owner.x)
                         owner.offDir = -1;
                     else
                         owner.offDir = 1;
@@ -116,55 +116,55 @@ namespace DuckGame
             else
             {
                 Duck owner = this.owner as Duck;
-                if (this._controlledDuck != null && owner != null)
+                if (_controlledDuck != null && owner != null)
                 {
-                    this._controlledDuck.mindControl = owner.inputProfile;
+                    _controlledDuck.mindControl = owner.inputProfile;
                     owner.Fondle(_controlledDuck.holdObject);
-                    foreach (Equipment t in this._controlledDuck._equipment)
+                    foreach (Equipment t in _controlledDuck._equipment)
                         owner.Fondle(t);
                     owner.Fondle(_controlledDuck._ragdollInstance);
                     owner.Fondle(_controlledDuck._trappedInstance);
                     owner.Fondle(_controlledDuck._cookedInstance);
                 }
-                if (this._controlledDuck == null && this._prevControlDuck != null)
-                    this._prevControlDuck.mindControl = null;
-                this._prevControlDuck = this._controlledDuck;
+                if (_controlledDuck == null && _prevControlDuck != null)
+                    _prevControlDuck.mindControl = null;
+                _prevControlDuck = _controlledDuck;
             }
-            if (this._triggerHeld && this._controlledDuck != null)
+            if (_triggerHeld && _controlledDuck != null)
             {
-                this._beamTime += 0.005f;
-                this._beamSound.pitch = Maths.NormalizeSection(this._beamTime, 0.5f, 1f) * 0.6f;
+                _beamTime += 0.005f;
+                _beamSound.pitch = Maths.NormalizeSection(_beamTime, 0.5f, 1f) * 0.6f;
             }
             else
-                this._beamSound.pitch = 0f;
+                _beamSound.pitch = 0f;
             base.Update();
-            if (this._triggerHeld && this._beamTimer.hit)
+            if (_triggerHeld && _beamTimer.hit)
             {
-                Vec2 vec2 = this.Offset(this.barrelOffset);
-                Level.Add(new ControlWave(vec2.x, vec2.y, this.barrelAngle, this, this.isServerForObject));
-                if (this._controlledDuck != null)
+                Vec2 vec2 = Offset(barrelOffset);
+                Level.Add(new ControlWave(vec2.x, vec2.y, barrelAngle, this, isServerForObject));
+                if (_controlledDuck != null)
                 {
-                    ++this._boltWait;
-                    if (this._boltWait > 2)
+                    ++_boltWait;
+                    if (_boltWait > 2)
                     {
-                        Level.Add(new MindControlBolt(vec2.x, vec2.y, this._controlledDuck));
-                        this._boltWait = 0;
+                        Level.Add(new MindControlBolt(vec2.x, vec2.y, _controlledDuck));
+                        _boltWait = 0;
                     }
                 }
                 else
-                    this._boltWait = 0;
+                    _boltWait = 0;
             }
-            this._beamSound.lerpVolume = this._triggerHeld ? 0.55f : 0f;
-            this._beamSound.Update();
+            _beamSound.lerpVolume = _triggerHeld ? 0.55f : 0f;
+            _beamSound.Update();
             if (_canConvert > 0.0)
-                this._canConvert -= 0.02f;
+                _canConvert -= 0.02f;
             else
-                this._canConvert = 0f;
+                _canConvert = 0f;
         }
 
         protected override bool OnBurn(Vec2 firePosition, Thing litBy)
         {
-            this.onFire = true;
+            onFire = true;
             return true;
         }
 
@@ -173,13 +173,13 @@ namespace DuckGame
             base.Draw();
             if (this.owner == null || !(this.owner is Duck owner) || owner.HasEquipment(typeof(Hat)))
                 return;
-            this._hat.alpha = owner._sprite.alpha;
-            this._hat.flipH = owner._sprite.flipH;
-            this._hat.depth = owner.depth + 1;
+            _hat.alpha = owner._sprite.alpha;
+            _hat.flipH = owner._sprite.flipH;
+            _hat.depth = owner.depth + 1;
             if (owner._sprite.imageIndex > 11 && owner._sprite.imageIndex < 14)
-                this._hat.angleDegrees = owner._sprite.flipH ? 90f : -90f;
+                _hat.angleDegrees = owner._sprite.flipH ? 90f : -90f;
             else
-                this._hat.angleDegrees = 0f;
+                _hat.angleDegrees = 0f;
             Vec2 hatPoint = DuckRig.GetHatPoint(owner._sprite.imageIndex);
             Graphics.Draw(_hat, owner.x + hatPoint.x * owner._sprite.flipMultH, owner.y + hatPoint.y * owner._sprite.flipMultV);
         }
@@ -188,28 +188,28 @@ namespace DuckGame
         {
             if (d == null || _canConvert > 0.01f || d.dead)
                 return;
-            this.LoseControl();
+            LoseControl();
             if (!(this.owner is Duck owner) || owner == d)
                 return;
             owner.resetAction = true;
             ++d.profile.stats.timesMindControlled;
-            this._controlledDuck = d;
+            _controlledDuck = d;
             if (Network.isActive)
             {
                 owner.Fondle(d);
                 owner.Fondle(_controlledDuck.holdObject);
-                foreach (Equipment t in this._controlledDuck._equipment)
+                foreach (Equipment t in _controlledDuck._equipment)
                     owner.Fondle(t);
                 owner.Fondle(_controlledDuck._ragdollInstance);
                 owner.Fondle(_controlledDuck._trappedInstance);
                 owner.Fondle(_controlledDuck._cookedInstance);
             }
-            this._controlledDuck.resetAction = true;
-            this._controlledDuck.mindControl = owner.inputProfile;
-            this._controlledDuck.controlledBy = owner;
-            this.immobilizeOwner = true;
+            _controlledDuck.resetAction = true;
+            _controlledDuck.mindControl = owner.inputProfile;
+            _controlledDuck.controlledBy = owner;
+            immobilizeOwner = true;
             SFX.Play("radioNoise", 0.8f);
-            Event.Log(new MindControlEvent(this.responsibleProfile, d.profile));
+            Event.Log(new MindControlEvent(responsibleProfile, d.profile));
             if (Recorder.currentRecording == null)
                 return;
             Recorder.currentRecording.LogBonus();
@@ -217,25 +217,25 @@ namespace DuckGame
 
         public void LoseControl()
         {
-            if (this._controlledDuck == null)
+            if (_controlledDuck == null)
                 return;
-            if (!(this.owner is Duck duck))
-                duck = this.prevOwner as Duck;
+            if (!(owner is Duck duck))
+                duck = prevOwner as Duck;
             if (duck != null)
                 duck.immobilized = false;
-            if (this._controlledDuck != null)
+            if (_controlledDuck != null)
             {
-                this._controlledDuck.mindControl = null;
-                this._controlledDuck.controlledBy = null;
+                _controlledDuck.mindControl = null;
+                _controlledDuck.controlledBy = null;
             }
-            this._controlledDuck = null;
-            this._canConvert = 1f;
+            _controlledDuck = null;
+            _canConvert = 1f;
         }
 
         public override void OnPressAction()
         {
-            this._beamTime = 0f;
-            this._beamTimer.SetToEnd();
+            _beamTime = 0f;
+            _beamTimer.SetToEnd();
         }
 
         public override void OnHoldAction()

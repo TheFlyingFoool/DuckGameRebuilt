@@ -15,19 +15,19 @@ namespace DuckGame
 
         public NMSoundEffect()
         {
-            this.manager = BelongsToManager.EventManager;
-            this.priority = NetMessagePriority.UnreliableUnordered;
+            manager = BelongsToManager.EventManager;
+            priority = NetMessagePriority.UnreliableUnordered;
         }
 
         public NMSoundEffect(string pSound, float pVolume, float pPitch)
         {
-            this.manager = BelongsToManager.EventManager;
-            this.priority = NetMessagePriority.UnreliableUnordered;
-            this.soundHash = SFX.SoundHash(pSound);
-            this.volume = pVolume;
-            this.pitch = pPitch;
+            manager = BelongsToManager.EventManager;
+            priority = NetMessagePriority.UnreliableUnordered;
+            soundHash = SFX.SoundHash(pSound);
+            volume = pVolume;
+            pitch = pPitch;
         }
 
-        public override void Activate() => SFX.Play(this.soundHash, this.volume, this.pitch);
+        public override void Activate() => SFX.Play(soundHash, volume, pitch);
     }
 }

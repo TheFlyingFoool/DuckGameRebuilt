@@ -16,49 +16,49 @@ namespace DuckGame
         public new byte levelIndex;
         protected GhostManager _manager;
 
-        public NMRemoveGhosts() => this.manager = BelongsToManager.GhostManager;
+        public NMRemoveGhosts() => manager = BelongsToManager.GhostManager;
 
         public NMRemoveGhosts(GhostManager pManager)
         {
-            this.levelIndex = DuckNetwork.levelIndex;
-            this.manager = BelongsToManager.GhostManager;
-            this._manager = pManager;
+            levelIndex = DuckNetwork.levelIndex;
+            manager = BelongsToManager.GhostManager;
+            _manager = pManager;
         }
 
         public override void CopyTo(NetMessage pMessage)
         {
-            (pMessage as NMRemoveGhosts).remove = this.remove;
-            (pMessage as NMRemoveGhosts).levelIndex = this.levelIndex;
+            (pMessage as NMRemoveGhosts).remove = remove;
+            (pMessage as NMRemoveGhosts).levelIndex = levelIndex;
             base.CopyTo(pMessage);
         }
 
         protected override void OnSerialize()
         {
-            byte val = (byte)Math.Min(32, this._manager._destroyedGhosts.Count + this._manager._destroyResends.Count);
-            this._serializedData.Write(this.levelIndex);
-            this._serializedData.Write(val);
-            for (int index = 0; index < this._manager._destroyResends.Count && val != 0; index = index - 1 + 1)
+            byte val = (byte)Math.Min(32, _manager._destroyedGhosts.Count + _manager._destroyResends.Count);
+            _serializedData.Write(levelIndex);
+            _serializedData.Write(val);
+            for (int index = 0; index < _manager._destroyResends.Count && val != 0; index = index - 1 + 1)
             {
-                this._serializedData.Write((ushort)(int)this._manager._destroyResends[index]);
-                this.remove.Add(this._manager._destroyResends[index]);
-                this._manager._destroyResends.RemoveAt(index);
+                _serializedData.Write((ushort)(int)_manager._destroyResends[index]);
+                remove.Add(_manager._destroyResends[index]);
+                _manager._destroyResends.RemoveAt(index);
                 --val;
             }
-            for (int index = 0; index < this._manager._destroyedGhosts.Count && val != 0; index = index - 1 + 1)
+            for (int index = 0; index < _manager._destroyedGhosts.Count && val != 0; index = index - 1 + 1)
             {
-                this._serializedData.Write((ushort)(int)this._manager._destroyedGhosts[index].ghostObjectIndex);
-                this.remove.Add(this._manager._destroyedGhosts[index].ghostObjectIndex);
-                this._manager._destroyedGhosts.RemoveAt(index);
+                _serializedData.Write((ushort)(int)_manager._destroyedGhosts[index].ghostObjectIndex);
+                remove.Add(_manager._destroyedGhosts[index].ghostObjectIndex);
+                _manager._destroyedGhosts.RemoveAt(index);
                 --val;
             }
         }
 
         public override void OnDeserialize(BitBuffer pData)
         {
-            this.levelIndex = pData.ReadByte();
+            levelIndex = pData.ReadByte();
             ushort num = pData.ReadByte();
             for (int index = 0; index < num; ++index)
-                this.remove.Add((NetIndex16)pData.ReadUShort());
+                remove.Add((NetIndex16)pData.ReadUShort());
         }
     }
 }

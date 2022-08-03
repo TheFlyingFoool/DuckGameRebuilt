@@ -14,19 +14,19 @@ namespace DuckGame
         public HiHat(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("drumset/hat");
-            this.center = new Vec2(this.graphic.w / 2, this.graphic.h / 2);
-            this._stand = new Sprite("drumset/hatStand");
-            this._stand.center = new Vec2(this._stand.w / 2, 0f);
-            this._sound = "hatClosed";
-            this._alternateSound = "hatOpen";
+            graphic = new Sprite("drumset/hat");
+            center = new Vec2(graphic.w / 2, graphic.h / 2);
+            _stand = new Sprite("drumset/hatStand");
+            _stand.center = new Vec2(_stand.w / 2, 0f);
+            _sound = "hatClosed";
+            _alternateSound = "hatOpen";
         }
 
         public override void Draw()
         {
             base.Draw();
-            this._stand.depth = this.depth - 1;
-            Graphics.Draw(this._stand, this.x, this.y - 4f);
+            _stand.depth = depth - 1;
+            Graphics.Draw(_stand, x, y - 4f);
         }
     }
 }

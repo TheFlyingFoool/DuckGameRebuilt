@@ -18,9 +18,9 @@ namespace DuckGame
         public NetDebugButton(NetDebugInterface pInterface, string pName, Action pPress, Action pHold)
           : base(pInterface)
         {
-            this._name = pName;
-            this._pressAction = pPress;
-            this._holdAction = pHold;
+            _name = pName;
+            _pressAction = pPress;
+            _holdAction = pHold;
         }
 
         protected override bool Draw(Vec2 position, bool allowInput)
@@ -28,35 +28,35 @@ namespace DuckGame
             bool flag = !allowInput;
             position.y -= 2f;
             Vec2 vec2 = new Vec2(100f, 12f);
-            this.width = 100f;
+            width = 100f;
             Rectangle rectangle = new Rectangle(position.x, position.y, vec2.x, vec2.y);
-            if (!flag && rectangle.Contains(Mouse.positionConsole) || this.pressing)
+            if (!flag && rectangle.Contains(Mouse.positionConsole) || pressing)
             {
-                Graphics.DrawRect(position, position + vec2, Color.White, this.depth + 2, false);
-                Graphics.DrawRect(position, position + vec2, Color.White * 0.3f, this.depth + 1);
-                Graphics.DrawString(this._name, position + new Vec2((float)(vec2.x / 2.0 - Graphics.GetStringWidth(this._name) / 2.0), 2f), Color.White * 1f, this.depth + 10);
+                Graphics.DrawRect(position, position + vec2, Color.White, depth + 2, false);
+                Graphics.DrawRect(position, position + vec2, Color.White * 0.3f, depth + 1);
+                Graphics.DrawString(_name, position + new Vec2((float)(vec2.x / 2.0 - Graphics.GetStringWidth(_name) / 2.0), 2f), Color.White * 1f, depth + 10);
                 if (Mouse.left == InputState.Pressed)
                 {
-                    if (this._pressAction != null)
-                        this._pressAction();
-                    this.pressing = true;
+                    if (_pressAction != null)
+                        _pressAction();
+                    pressing = true;
                     flag = true;
                 }
-                else if (this.pressing)
+                else if (pressing)
                 {
-                    if (this._holdAction != null)
-                        this._holdAction();
+                    if (_holdAction != null)
+                        _holdAction();
                     flag = true;
                 }
             }
             else
             {
-                Graphics.DrawRect(position, position + vec2, Color.White, this.depth + 2, false);
-                Graphics.DrawRect(position, position + vec2, Color.Black * 0.8f, this.depth + 1);
-                Graphics.DrawString(this._name, position + new Vec2((float)(vec2.x / 2.0 - Graphics.GetStringWidth(this._name) / 2.0), 2f), Color.White * 0.8f, this.depth + 10);
+                Graphics.DrawRect(position, position + vec2, Color.White, depth + 2, false);
+                Graphics.DrawRect(position, position + vec2, Color.Black * 0.8f, depth + 1);
+                Graphics.DrawString(_name, position + new Vec2((float)(vec2.x / 2.0 - Graphics.GetStringWidth(_name) / 2.0), 2f), Color.White * 0.8f, depth + 10);
             }
             if (Mouse.left == InputState.Released)
-                this.pressing = false;
+                pressing = false;
             return flag;
         }
     }

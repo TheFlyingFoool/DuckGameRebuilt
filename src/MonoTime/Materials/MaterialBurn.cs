@@ -16,25 +16,25 @@ namespace DuckGame
 
         public float burnVal
         {
-            get => this._burnVal;
-            set => this._burnVal = value;
+            get => _burnVal;
+            set => _burnVal = value;
         }
 
         public MaterialBurn(float burnVal = 0f)
         {
-            this._effect = Content.Load<MTEffect>("Shaders/burn");
-            this._burnTexture = Content.Load<Tex2D>("burn");
-            this._burnVal = burnVal;
+            _effect = Content.Load<MTEffect>("Shaders/burn");
+            _burnTexture = Content.Load<Tex2D>("burn");
+            _burnVal = burnVal;
         }
 
         public override void Apply()
         {
             Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._burnTexture;
-            this.SetValue("width", texture.frameWidth / texture.width);
-            this.SetValue("height", texture.frameHeight / texture.height);
-            this.SetValue("burn", this._burnVal);
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)_burnTexture;
+            SetValue("width", texture.frameWidth / texture.width);
+            SetValue("height", texture.frameHeight / texture.height);
+            SetValue("burn", _burnVal);
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

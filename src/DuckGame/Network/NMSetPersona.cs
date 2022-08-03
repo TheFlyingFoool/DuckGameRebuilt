@@ -20,15 +20,15 @@ namespace DuckGame
 
         public NMSetPersona(Profile pProfile, DuckPersona pPersona)
         {
-            this.profile = pProfile;
-            this.persona = (byte)pPersona.index;
+            profile = pProfile;
+            persona = (byte)pPersona.index;
         }
 
         public override void Activate()
         {
-            if (this.profile == null || this.persona < 0 || persona >= Persona.all.Count<DuckPersona>())
+            if (profile == null || persona < 0 || persona >= Persona.all.Count<DuckPersona>())
                 return;
-            this.profile.persona = Persona.all.ElementAt<DuckPersona>(persona);
+            profile.persona = Persona.all.ElementAt<DuckPersona>(persona);
         }
     }
 }

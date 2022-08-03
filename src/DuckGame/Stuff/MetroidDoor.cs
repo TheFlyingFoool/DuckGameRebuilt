@@ -20,22 +20,22 @@ namespace DuckGame
         public MetroidDoor(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._editorName = "Arcadeexit Door";
+            _editorName = "Arcadeexit Door";
         }
 
         public override void Update()
         {
-            if (!this._transitioning)
+            if (!_transitioning)
             {
-                IEnumerable<Thing> thing = this.level.things[typeof(Duck)];
+                IEnumerable<Thing> thing = level.things[typeof(Duck)];
                 if (thing.Count<Thing>() > 0)
                 {
                     Duck duck = thing.First<Thing>() as Duck;
-                    if (duck.x < this.x - 5.0)
+                    if (duck.x < x - 5.0)
                     {
                         duck.x -= 10f;
                         MonoMain.transitionDirection = TransitionDirection.Left;
-                        MonoMain.transitionLevel = new TitleScreen(true, this._arcadeProfile);
+                        MonoMain.transitionLevel = new TitleScreen(true, _arcadeProfile);
                     }
                 }
             }

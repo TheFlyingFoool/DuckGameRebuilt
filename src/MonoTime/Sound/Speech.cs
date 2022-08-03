@@ -18,36 +18,36 @@ namespace DuckGame
 
         public void Initialize()
         {
-            if (this._speech != null)
+            if (_speech != null)
                 return;
-            this._speech = new SpeechSynthesizer();
-            (this._speech as SpeechSynthesizer).SetOutputToDefaultAudioDevice();
-            this.ApplyTTSSettings();
+            _speech = new SpeechSynthesizer();
+            (_speech as SpeechSynthesizer).SetOutputToDefaultAudioDevice();
+            ApplyTTSSettings();
         }
 
-        public object speech => this._speech;
+        public object speech => _speech;
 
         public void Say(string pString)
         {
-            if (this._speech == null)
+            if (_speech == null)
                 return;
-            (this.speech as SpeechSynthesizer).SpeakAsync(pString);
+            (speech as SpeechSynthesizer).SpeakAsync(pString);
         }
 
         public void StopSaying()
         {
-            if (this._speech == null)
+            if (_speech == null)
                 return;
-            (this.speech as SpeechSynthesizer).SpeakAsyncCancelAll();
+            (speech as SpeechSynthesizer).SpeakAsyncCancelAll();
         }
 
         public void SetSayVoice(string pName)
         {
-            if (this._speech == null)
+            if (_speech == null)
                 return;
             try
             {
-                (this.speech as SpeechSynthesizer).SelectVoice(pName);
+                (speech as SpeechSynthesizer).SelectVoice(pName);
             }
             catch (Exception ex)
             {
@@ -57,12 +57,12 @@ namespace DuckGame
 
         public List<string> GetSayVoices()
         {
-            if (this._speech == null)
+            if (_speech == null)
                 return new List<string>();
             List<string> sayVoices = new List<string>();
             try
             {
-                foreach (InstalledVoice installedVoice in (this.speech as SpeechSynthesizer).GetInstalledVoices().ToList<InstalledVoice>())
+                foreach (InstalledVoice installedVoice in (speech as SpeechSynthesizer).GetInstalledVoices().ToList<InstalledVoice>())
                     sayVoices.Add(installedVoice.VoiceInfo.Name);
             }
             catch (Exception ex)
@@ -74,18 +74,18 @@ namespace DuckGame
 
         public void ApplyTTSSettings()
         {
-            if (this._speech == null)
+            if (_speech == null)
                 return;
             try
             {
                 if (Program.isLinux || !Options.Data.textToSpeech)
                     return;
-                (this.speech as SpeechSynthesizer).SpeakAsyncCancelAll();
-                List<InstalledVoice> list = (this.speech as SpeechSynthesizer).GetInstalledVoices().ToList<InstalledVoice>();
+                (speech as SpeechSynthesizer).SpeakAsyncCancelAll();
+                List<InstalledVoice> list = (speech as SpeechSynthesizer).GetInstalledVoices().ToList<InstalledVoice>();
                 if (Options.Data.textToSpeechVoice >= 0 && Options.Data.textToSpeechVoice < list.Count)
-                    (this.speech as SpeechSynthesizer).SelectVoice(list[Options.Data.textToSpeechVoice].VoiceInfo.Name);
-                (this.speech as SpeechSynthesizer).Volume = Maths.Clamp((int)(Options.Data.textToSpeechVolume * 100.0), 0, 100);
-                (this.speech as SpeechSynthesizer).Rate = Maths.Clamp((int)Math.Round((Options.Data.textToSpeechRate - 0.5) * 20.0), -10, 10);
+                    (speech as SpeechSynthesizer).SelectVoice(list[Options.Data.textToSpeechVoice].VoiceInfo.Name);
+                (speech as SpeechSynthesizer).Volume = Maths.Clamp((int)(Options.Data.textToSpeechVolume * 100.0), 0, 100);
+                (speech as SpeechSynthesizer).Rate = Maths.Clamp((int)Math.Round((Options.Data.textToSpeechRate - 0.5) * 20.0), -10, 10);
             }
             catch (Exception ex)
             {
@@ -93,6 +93,6 @@ namespace DuckGame
             }
         }
 
-        public void SetOutputToDefaultAudioDevice() => (this._speech as SpeechSynthesizer).SetOutputToDefaultAudioDevice();
+        public void SetOutputToDefaultAudioDevice() => (_speech as SpeechSynthesizer).SetOutputToDefaultAudioDevice();
     }
 }

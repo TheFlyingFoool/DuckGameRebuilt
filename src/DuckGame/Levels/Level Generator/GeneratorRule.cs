@@ -24,11 +24,11 @@ namespace DuckGame
           bool varMandatory = false,
           SpecialRule varSpecial = SpecialRule.None)
         {
-            this.problem = varProblem;
-            this.solution = varSolution;
-            this.chance = varChance;
-            this.mandatory = varMandatory;
-            this.special = varSpecial;
+            problem = varProblem;
+            solution = varSolution;
+            chance = varChance;
+            mandatory = varMandatory;
+            special = varSpecial;
         }
     }
 }

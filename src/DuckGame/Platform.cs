@@ -12,15 +12,15 @@ namespace DuckGame
         public Platform(float x, float y)
           : base(x, y)
         {
-            this.collisionSize = new Vec2(16f, 16f);
-            this.thickness = 10f;
+            collisionSize = new Vec2(16f, 16f);
+            thickness = 10f;
         }
 
         public Platform(float x, float y, float wid, float hi)
           : base(x, y)
         {
-            this.collisionSize = new Vec2(wid, hi);
-            this.thickness = 10f;
+            collisionSize = new Vec2(wid, hi);
+            thickness = 10f;
         }
     }
 }

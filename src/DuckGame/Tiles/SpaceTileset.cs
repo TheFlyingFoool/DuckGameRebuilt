@@ -14,11 +14,11 @@ namespace DuckGame
         public SpaceTileset(float x, float y)
           : base(x, y, "spaceTileset")
         {
-            this._editorName = "Space";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidth = 10f;
-            this.verticalWidthThick = 15f;
-            this.horizontalHeight = 15f;
+            _editorName = "Space";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidth = 10f;
+            verticalWidthThick = 15f;
+            horizontalHeight = 15f;
         }
     }
 }

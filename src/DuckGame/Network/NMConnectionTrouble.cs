@@ -15,11 +15,11 @@ namespace DuckGame
         {
         }
 
-        public NMConnectionTrouble(byte pProfile) => this.profileIndex = pProfile;
+        public NMConnectionTrouble(byte pProfile) => profileIndex = pProfile;
 
         public override void Activate()
         {
-            if (this.profileIndex < 0 || profileIndex >= DuckNetwork.profiles.Count)
+            if (profileIndex < 0 || profileIndex >= DuckNetwork.profiles.Count)
                 return;
             Profile profile = DuckNetwork.profiles[profileIndex];
         }

@@ -16,19 +16,19 @@ namespace DuckGame
         private List<AccessorInfo> _accessors = new List<AccessorInfo>();
         private ushort _value;
 
-        public override string ToString() => this.GetDebugString(null);
+        public override string ToString() => GetDebugString(null);
 
         public override string GetDebugString(object with)
         {
             string debugString = "";
             int index = 0;
             byte num = 1;
-            foreach (string field in this._fields)
+            foreach (string field in _fields)
             {
                 if (with == null)
-                    debugString = debugString + field + ": " + Convert.ToString((bool)this._accessors[index].getAccessor(this._thing) ? 1 : 0) + " | ";
+                    debugString = debugString + field + ": " + Convert.ToString((bool)_accessors[index].getAccessor(_thing) ? 1 : 0) + " | ";
                 else
-                    debugString = debugString + field + ": " + Convert.ToString(((ushort)with & 1L << this._bits - num) != 0L ? 1 : 0) + " | ";
+                    debugString = debugString + field + ": " + Convert.ToString(((ushort)with & 1L << _bits - num) != 0L ? 1 : 0) + " | ";
                 ++index;
                 ++num;
             }
@@ -41,24 +41,24 @@ namespace DuckGame
         {
             get
             {
-                this._value = 0;
+                _value = 0;
                 bool flag = true;
-                foreach (AccessorInfo accessor in this._accessors)
+                foreach (AccessorInfo accessor in _accessors)
                 {
                     if (!flag)
-                        this._value <<= 1;
-                    this._value |= (bool)accessor.getAccessor(this._thing) ? (ushort)1 : (ushort)0;
+                        _value <<= 1;
+                    _value |= (bool)accessor.getAccessor(_thing) ? (ushort)1 : (ushort)0;
                     flag = false;
                 }
                 return _value;
             }
             set
             {
-                this._value = (ushort)value;
+                _value = (ushort)value;
                 byte num = 1;
-                foreach (AccessorInfo accessor in this._accessors)
+                foreach (AccessorInfo accessor in _accessors)
                 {
-                    accessor.setAccessor(this._thing, (_value & (ulong)(1L << this._bits - num)) > 0UL);
+                    accessor.setAccessor(_thing, (_value & (ulong)(1L << _bits - num)) > 0UL);
                     ++num;
                 }
             }
@@ -66,7 +66,7 @@ namespace DuckGame
 
         public bool Contains(string pKey)
         {
-            foreach (string field in this._fields)
+            foreach (string field in _fields)
             {
                 if (field == pKey)
                     return true;
@@ -77,10 +77,10 @@ namespace DuckGame
         public bool Value(string pKey, ushort pValue)
         {
             byte num = 1;
-            foreach (string field in this._fields)
+            foreach (string field in _fields)
             {
                 if (field == pKey)
-                    return (pValue & (ulong)(1L << this._bits - num)) > 0UL;
+                    return (pValue & (ulong)(1L << _bits - num)) > 0UL;
                 ++num;
             }
             return false;
@@ -89,27 +89,27 @@ namespace DuckGame
         public StateFlagBinding(params string[] fields)
           : base("multiple")
         {
-            this._fields = fields;
-            this._priority = GhostPriority.Normal;
+            _fields = fields;
+            _priority = GhostPriority.Normal;
         }
 
         public StateFlagBinding(GhostPriority p, params string[] fields)
           : base("multiple")
         {
-            this._fields = fields;
-            this._priority = p;
+            _fields = fields;
+            _priority = p;
         }
 
         public override void Connect(Thing t)
         {
-            this._bits = 0;
-            this._thing = t;
+            _bits = 0;
+            _thing = t;
             System.Type type = t.GetType();
-            this._accessors.Clear();
-            foreach (string field in this._fields)
+            _accessors.Clear();
+            foreach (string field in _fields)
             {
-                this._accessors.Add(Editor.GetAccessorInfo(type, field));
-                ++this._bits;
+                _accessors.Add(Editor.GetAccessorInfo(type, field));
+                ++_bits;
             }
         }
     }

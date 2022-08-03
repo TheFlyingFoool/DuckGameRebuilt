@@ -15,8 +15,8 @@ namespace DuckGame
         {
         }
 
-        public NMCurrentLevel(byte idx) => this.levelIndex = idx;
+        public NMCurrentLevel(byte idx) => levelIndex = idx;
 
-        public override string ToString() => base.ToString() + "(index = " + this.levelIndex.ToString() + ")";
+        public override string ToString() => base.ToString() + "(index = " + levelIndex.ToString() + ")";
     }
 }

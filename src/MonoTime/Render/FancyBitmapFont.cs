@@ -363,8 +363,8 @@ namespace DuckGame
 
         public virtual Sprite _texture
         {
-            get => this._textureInternal;
-            set => this._textureInternal = value;
+            get => _textureInternal;
+            set => _textureInternal = value;
         }
 
         public static void InitializeKanjis()
@@ -378,18 +378,18 @@ namespace DuckGame
                 FancyBitmapFont._kanjiMap[str[index]] = (ushort)index;
         }
 
-        public float height => _texture.height * this.scale.y;
+        public float height => _texture.height * scale.y;
 
         public InputProfile inputProfile
         {
-            get => this._inputProfile;
-            set => this._inputProfile = value;
+            get => _inputProfile;
+            set => _inputProfile = value;
         }
 
         public int maxWidth
         {
-            get => this._maxWidth;
-            set => this._maxWidth = value;
+            get => _maxWidth;
+            set => _maxWidth = value;
         }
 
         public int maxRows { get; set; }
@@ -398,46 +398,46 @@ namespace DuckGame
         {
         }
 
-        public int characterHeight => this._charHeight;
+        public int characterHeight => _charHeight;
 
-        public FancyBitmapFont(string image) => this.Construct(image);
+        public FancyBitmapFont(string image) => Construct(image);
 
         protected void Construct(string image)
         {
             FancyBitmapFont.InitializeKanjis();
-            this._texture = new Sprite(image);
-            if (!FancyBitmapFont.widthMap.TryGetValue(image, out this._widths))
+            _texture = new Sprite(image);
+            if (!FancyBitmapFont.widthMap.TryGetValue(image, out _widths))
             {
-                this._widths = new List<Rectangle>();
-                Color[] data = this._texture.texture.GetData();
+                _widths = new List<Rectangle>();
+                Color[] data = _texture.texture.GetData();
                 bool flag = false;
                 int x = -1;
-                for (int y = 1; y < this._texture.height; y += this._charHeight + 1)
+                for (int y = 1; y < _texture.height; y += _charHeight + 1)
                 {
-                    for (int index1 = 0; index1 < this._texture.width; ++index1)
+                    for (int index1 = 0; index1 < _texture.width; ++index1)
                     {
-                        if (data[index1 + y * this._texture.width].r == 0 && data[index1 + y * this._texture.width].g == 0 && data[index1 + y * this._texture.width].b == 0 && data[index1 + y * this._texture.width].a == 0)
+                        if (data[index1 + y * _texture.width].r == 0 && data[index1 + y * _texture.width].g == 0 && data[index1 + y * _texture.width].b == 0 && data[index1 + y * _texture.width].a == 0)
                         {
                             if (x == -1)
                                 x = index1;
                         }
                         else if (x != -1)
                         {
-                            if (this._charHeight == 0)
+                            if (_charHeight == 0)
                             {
-                                this._firstYPixel = y;
+                                _firstYPixel = y;
                                 int num = index1 - 1;
-                                for (int index2 = y + 1; index2 < this._texture.height; ++index2)
+                                for (int index2 = y + 1; index2 < _texture.height; ++index2)
                                 {
-                                    if (data[num + index2 * this._texture.width].r != 0 || data[num + index2 * this._texture.width].g != 0 || data[num + index2 * this._texture.width].b != 0 || data[num + index2 * this._texture.width].a != 0)
+                                    if (data[num + index2 * _texture.width].r != 0 || data[num + index2 * _texture.width].g != 0 || data[num + index2 * _texture.width].b != 0 || data[num + index2 * _texture.width].a != 0)
                                     {
-                                        this._charHeight = index2 - y;
+                                        _charHeight = index2 - y;
                                         break;
                                     }
                                 }
                                 index1 = num + 1;
                             }
-                            this._widths.Add(new Rectangle(x, y, index1 - x, _charHeight));
+                            _widths.Add(new Rectangle(x, y, index1 - x, _charHeight));
                             x = -1;
                         }
                     }
@@ -445,9 +445,9 @@ namespace DuckGame
                         break;
                 }
             }
-            FancyBitmapFont.widthMap[image] = this._widths;
-            if (this._widths.Count > 0)
-                this._charHeight = (int)this._widths[0].height;
+            FancyBitmapFont.widthMap[image] = _widths;
+            if (_widths.Count > 0)
+                _charHeight = (int)_widths[0].height;
             if (FancyBitmapFont._mapInitialized)
                 return;
             for (int index3 = 0; index3 < ushort.MaxValue; ++index3)
@@ -470,24 +470,24 @@ namespace DuckGame
         {
             if (text.StartsWith("_!"))
                 return null;
-            ++this._letterIndex;
+            ++_letterIndex;
             string str = "";
             bool flag = false;
-            for (; this._letterIndex != text.Length; ++this._letterIndex)
+            for (; _letterIndex != text.Length; ++_letterIndex)
             {
-                if (text[this._letterIndex] == '@' || this.chatFont && text[this._letterIndex] == ':')
+                if (text[_letterIndex] == '@' || chatFont && text[_letterIndex] == ':')
                 {
                     flag = true;
                     break;
                 }
-                if (text[this._letterIndex] == ' ' || text[this._letterIndex] == '\n')
+                if (text[_letterIndex] == ' ' || text[_letterIndex] == '\n')
                 {
-                    --this._letterIndex;
+                    --_letterIndex;
                     break;
                 }
-                str += text[this._letterIndex].ToString();
+                str += text[_letterIndex].ToString();
             }
-            if (this.chatFont && !flag)
+            if (chatFont && !flag)
                 return null;
             Sprite sprite = null;
             if (input != null)
@@ -496,7 +496,7 @@ namespace DuckGame
                 sprite = Input.GetTriggerSprite(str);
             if (sprite == null && Options.Data.mojiFilter != 0)
             {
-                sprite = DuckFile.GetMoji(str, this._currentConnection);
+                sprite = DuckFile.GetMoji(str, _currentConnection);
                 if (sprite == null && str.Contains("!"))
                     return Input.GetTriggerSprite("blankface");
             }
@@ -505,17 +505,17 @@ namespace DuckGame
 
         public Color ParseColor(string text)
         {
-            ++this._letterIndex;
+            ++_letterIndex;
             string color = "";
-            for (; this._letterIndex != text.Length && text[this._letterIndex] != ' ' && text[this._letterIndex] != '|'; ++this._letterIndex)
-                color += text[this._letterIndex].ToString();
-            return color == "PREV" ? new Color(this._previousColor.r, this._previousColor.g, this._previousColor.b) : Colors.ParseColor(color);
+            for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != '|'; ++_letterIndex)
+                color += text[_letterIndex].ToString();
+            return color == "PREV" ? new Color(_previousColor.r, _previousColor.g, _previousColor.b) : Colors.ParseColor(color);
         }
 
         public InputProfile GetInputProfile(InputProfile input)
         {
             if (input == null)
-                input = this._inputProfile != null ? this._inputProfile : InputProfile.FirstProfileWithDevice;
+                input = _inputProfile != null ? _inputProfile : InputProfile.FirstProfileWithDevice;
             return input;
         }
 
@@ -524,34 +524,34 @@ namespace DuckGame
             float num1 = 0f;
             float num2 = 0f;
             char[] charArray = pText.ToCharArray();
-            for (this._letterIndex = 0; this._letterIndex < charArray.Length; ++this._letterIndex)
+            for (_letterIndex = 0; _letterIndex < charArray.Length; ++_letterIndex)
             {
                 bool flag = false;
-                if (charArray[this._letterIndex] == ' ' && num1 > maxWidth)
-                    charArray[this._letterIndex] = '\n';
-                if (charArray[this._letterIndex] == '@' || this.chatFont && charArray[this._letterIndex] == ':')
+                if (charArray[_letterIndex] == ' ' && num1 > maxWidth)
+                    charArray[_letterIndex] = '\n';
+                if (charArray[_letterIndex] == '@' || chatFont && charArray[_letterIndex] == ':')
                 {
                     pText = new string(charArray);
-                    int letterIndex = this._letterIndex;
-                    Sprite sprite = this.ParseSprite(pText, null);
+                    int letterIndex = _letterIndex;
+                    Sprite sprite = ParseSprite(pText, null);
                     if (sprite != null)
                     {
                         num1 += thinButtons ? 6f : (float)(sprite.width * sprite.scale.x + 1.0);
                         flag = true;
                     }
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                else if (charArray[this._letterIndex] == '|')
+                else if (charArray[_letterIndex] == '|')
                 {
                     pText = new string(charArray);
-                    int letterIndex = this._letterIndex;
-                    if (this.ParseColor(pText) != Colors.Transparent)
+                    int letterIndex = _letterIndex;
+                    if (ParseColor(pText) != Colors.Transparent)
                         flag = true;
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                else if (charArray[this._letterIndex] == '\n')
+                else if (charArray[_letterIndex] == '\n')
                 {
                     if (num1 > num2)
                         num2 = num1;
@@ -559,23 +559,23 @@ namespace DuckGame
                 }
                 if (!flag)
                 {
-                    char index = charArray[this._letterIndex];
+                    char index = charArray[_letterIndex];
                     if (index >= 'ぁ')
                     {
-                        num1 += 8f * this.scale.x;
+                        num1 += 8f * scale.x;
                     }
                     else
                     {
                         int character = FancyBitmapFont._characterMap[index];
-                        if (this._characterInfos != null)
+                        if (_characterInfos != null)
                         {
-                            if (character < this._characterInfos.Count)
-                                num1 += (this._characterInfos[character].width + this._characterInfos[character].trailing + this._characterInfos[character].leading) * this.scale.x;
+                            if (character < _characterInfos.Count)
+                                num1 += (_characterInfos[character].width + _characterInfos[character].trailing + _characterInfos[character].leading) * scale.x;
                         }
-                        else if (character < this._widths.Count)
+                        else if (character < _widths.Count)
                         {
-                            Rectangle width = this._widths[character];
-                            num1 += (width.width - 1f) * this.scale.x;
+                            Rectangle width = _widths[character];
+                            num1 += (width.width - 1f) * scale.x;
                         }
                     }
                 }
@@ -589,16 +589,16 @@ namespace DuckGame
         {
             float num1 = 0f;
             float width1 = 0f;
-            for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
+            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
             {
                 bool flag = false;
-                if (text[this._letterIndex] == '@' || this.chatFont && text[this._letterIndex] == ':')
+                if (text[_letterIndex] == '@' || chatFont && text[_letterIndex] == ':')
                 {
-                    int letterIndex = this._letterIndex;
-                    Sprite sprite1 = this.ParseSprite(text, null);
+                    int letterIndex = _letterIndex;
+                    Sprite sprite1 = ParseSprite(text, null);
                     if (sprite1 != null)
                     {
-                        if (this.chatFont)
+                        if (chatFont)
                         {
                             Vec2 scale = sprite1.scale;
                             Sprite sprite2 = sprite1;
@@ -618,17 +618,17 @@ namespace DuckGame
                         flag = true;
                     }
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                else if (text[this._letterIndex] == '|')
+                else if (text[_letterIndex] == '|')
                 {
-                    int letterIndex = this._letterIndex;
-                    if (this.ParseColor(text) != Colors.Transparent)
+                    int letterIndex = _letterIndex;
+                    if (ParseColor(text) != Colors.Transparent)
                         flag = true;
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                else if (text[this._letterIndex] == '\n')
+                else if (text[_letterIndex] == '\n')
                 {
                     if (num1 > width1)
                         width1 = num1;
@@ -637,27 +637,27 @@ namespace DuckGame
                 }
                 if (!flag)
                 {
-                    char index1 = text[this._letterIndex];
+                    char index1 = text[_letterIndex];
                     if (index1 >= 'ぁ')
                     {
-                        num1 += 8f * this.scale.x;
+                        num1 += 8f * scale.x;
                     }
                     else
                     {
                         int index2 = FancyBitmapFont._characterMap[index1];
-                        if (index2 >= this._widths.Count)
-                            index2 = this._widths.Count - 1;
+                        if (index2 >= _widths.Count)
+                            index2 = _widths.Count - 1;
                         if (index2 < 0)
                             return width1;
-                        if (this._characterInfos != null)
+                        if (_characterInfos != null)
                         {
-                            if (index2 < this._characterInfos.Count)
-                                num1 += (this._characterInfos[index2].width + this._characterInfos[index2].trailing + this._characterInfos[index2].leading) * this.scale.x;
+                            if (index2 < _characterInfos.Count)
+                                num1 += (_characterInfos[index2].width + _characterInfos[index2].trailing + _characterInfos[index2].leading) * scale.x;
                         }
                         else
                         {
-                            Rectangle width2 = this._widths[index2];
-                            num1 += (width2.width - 1f) * this.scale.x;
+                            Rectangle width2 = _widths[index2];
+                            num1 += (width2.width - 1f) * scale.x;
                         }
                     }
                 }
@@ -678,134 +678,134 @@ namespace DuckGame
             float num2 = 0f;
             int num3 = 0;
             float num4 = 0f;
-            for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
+            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
             {
-                if (num1 >= xPosition && yPosition < num2 + _charHeight * this.scale.y || num3 >= maxRows)
-                    return this._letterIndex - 1;
+                if (num1 >= xPosition && yPosition < num2 + _charHeight * scale.y || num3 >= maxRows)
+                    return _letterIndex - 1;
                 bool flag1 = false;
-                if (text[this._letterIndex] == '@' || this.chatFont && text[this._letterIndex] == ':')
+                if (text[_letterIndex] == '@' || chatFont && text[_letterIndex] == ':')
                 {
-                    int letterIndex = this._letterIndex;
-                    Sprite sprite = this.ParseSprite(text, null);
+                    int letterIndex = _letterIndex;
+                    Sprite sprite = ParseSprite(text, null);
                     if (sprite != null)
                     {
                         num1 += thinButtons ? 6f : (float)(sprite.width * sprite.scale.x + 1.0);
                         flag1 = true;
                     }
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                else if (text[this._letterIndex] == '|')
+                else if (text[_letterIndex] == '|')
                 {
-                    int letterIndex = this._letterIndex;
-                    if (this.ParseColor(text) != Colors.Transparent)
+                    int letterIndex = _letterIndex;
+                    if (ParseColor(text) != Colors.Transparent)
                         flag1 = true;
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                else if (text[this._letterIndex] == '\n')
+                else if (text[_letterIndex] == '\n')
                 {
                     if (num1 > num4)
                         num4 = num1;
                     num1 = 0f;
                     ++num3;
-                    num2 += _charHeight * this.scale.y;
+                    num2 += _charHeight * scale.y;
                     flag1 = true;
                     if (num3 >= maxRows)
-                        return this._letterIndex;
+                        return _letterIndex;
                 }
                 if (!flag1)
                 {
                     bool flag2 = false;
-                    if (this.maxWidth > 0)
+                    if (maxWidth > 0)
                     {
-                        if (text[this._letterIndex] == ' ' || text[this._letterIndex] == '|' || text[this._letterIndex] == '@')
+                        if (text[_letterIndex] == ' ' || text[_letterIndex] == '|' || text[_letterIndex] == '@')
                         {
-                            int index1 = this._letterIndex + 1;
+                            int index1 = _letterIndex + 1;
                             float num5 = 0f;
                             for (; index1 < text.Count<char>() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                             {
                                 char index2 = (char)Maths.Clamp(text[index1], 0, FancyBitmapFont._characterMap.Length - 1);
                                 int character = FancyBitmapFont._characterMap[index2];
-                                if (this._characterInfos != null)
+                                if (_characterInfos != null)
                                 {
-                                    num5 += (this._characterInfos[character].width + this._characterInfos[character].trailing + this._characterInfos[character].leading) * this.scale.x;
+                                    num5 += (_characterInfos[character].width + _characterInfos[character].trailing + _characterInfos[character].leading) * scale.x;
                                 }
                                 else
                                 {
-                                    Rectangle width = this._widths[character];
-                                    num5 += (width.width - 1f) * this.scale.x;
+                                    Rectangle width = _widths[character];
+                                    num5 += (width.width - 1f) * scale.x;
                                 }
                             }
                             if (num1 + num5 > maxWidth)
                             {
                                 ++num3;
-                                num2 += _charHeight * this.scale.y;
+                                num2 += _charHeight * scale.y;
                                 num1 = 0f;
                                 flag2 = true;
                                 if (num3 >= maxRows)
-                                    return this._letterIndex;
+                                    return _letterIndex;
                             }
                         }
                         else
                         {
-                            char index = (char)Maths.Clamp(text[this._letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
+                            char index = (char)Maths.Clamp(text[_letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
                             int character = FancyBitmapFont._characterMap[index];
-                            if (this._characterInfos != null)
+                            if (_characterInfos != null)
                             {
-                                float num6 = (this._characterInfos[character].width + this._characterInfos[character].trailing + this._characterInfos[character].leading) * this.scale.x;
+                                float num6 = (_characterInfos[character].width + _characterInfos[character].trailing + _characterInfos[character].leading) * scale.x;
                                 if (num1 + num6 * scale.x > maxWidth)
                                 {
                                     ++num3;
-                                    num2 += _charHeight * this.scale.y;
+                                    num2 += _charHeight * scale.y;
                                     num1 = 0f;
                                     if (num3 >= maxRows)
-                                        return this._letterIndex;
+                                        return _letterIndex;
                                 }
                             }
                             else
                             {
-                                Rectangle width = this._widths[character];
-                                if (num1 + width.width * this.scale.x > maxWidth)
+                                Rectangle width = _widths[character];
+                                if (num1 + width.width * scale.x > maxWidth)
                                 {
                                     ++num3;
-                                    num2 += _charHeight * this.scale.y;
+                                    num2 += _charHeight * scale.y;
                                     num1 = 0f;
                                     if (num3 >= maxRows)
-                                        return this._letterIndex;
+                                        return _letterIndex;
                                 }
                             }
                         }
                     }
                     if (!flag2)
                     {
-                        if (text[this._letterIndex] >= 'ぁ')
+                        if (text[_letterIndex] >= 'ぁ')
                         {
-                            num1 += 8f * this.scale.x;
+                            num1 += 8f * scale.x;
                         }
                         else
                         {
-                            char index = (char)Maths.Clamp(text[this._letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
+                            char index = (char)Maths.Clamp(text[_letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
                             int character = FancyBitmapFont._characterMap[index];
-                            if (this._characterInfos != null)
+                            if (_characterInfos != null)
                             {
-                                if (character < this._characterInfos.Count)
-                                    num1 += (this._characterInfos[character].width + this._characterInfos[character].trailing + this._characterInfos[character].leading) * this.scale.x;
+                                if (character < _characterInfos.Count)
+                                    num1 += (_characterInfos[character].width + _characterInfos[character].trailing + _characterInfos[character].leading) * scale.x;
                                 else
                                     continue;
                             }
                             else
                             {
-                                Rectangle width = this._widths[character];
-                                num1 += (width.width - 1f) * this.scale.x;
+                                Rectangle width = _widths[character];
+                                num1 += (width.width - 1f) * scale.x;
                             }
                         }
                     }
                 }
                 if (num2 > yPosition)
-                    return this._letterIndex;
+                    return _letterIndex;
             }
-            return this._letterIndex;
+            return _letterIndex;
         }
 
         public Vec2 GetCharacterPosition(string text, int index, bool thinButtons = false)
@@ -813,99 +813,99 @@ namespace DuckGame
             float x = 0f;
             float y = 0f;
             float num1 = 0f;
-            for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
+            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
             {
-                if (this._letterIndex >= index)
+                if (_letterIndex >= index)
                     return new Vec2(x, y);
                 bool flag1 = false;
-                if (text[this._letterIndex] == '@' || this.chatFont && text[this._letterIndex] == ':')
+                if (text[_letterIndex] == '@' || chatFont && text[_letterIndex] == ':')
                 {
-                    int letterIndex = this._letterIndex;
-                    Sprite sprite = this.ParseSprite(text, null);
+                    int letterIndex = _letterIndex;
+                    Sprite sprite = ParseSprite(text, null);
                     if (sprite != null)
                     {
                         x += thinButtons ? 6f : (float)(sprite.width * sprite.scale.x + 1.0);
                         flag1 = true;
                     }
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                else if (text[this._letterIndex] == '|')
+                else if (text[_letterIndex] == '|')
                 {
-                    int letterIndex = this._letterIndex;
-                    if (this.ParseColor(text) != Colors.Transparent)
+                    int letterIndex = _letterIndex;
+                    if (ParseColor(text) != Colors.Transparent)
                         flag1 = true;
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                else if (text[this._letterIndex] == '\n')
+                else if (text[_letterIndex] == '\n')
                 {
                     if (x > num1)
                         num1 = x;
                     x = 0f;
-                    y += _charHeight * this.scale.y;
+                    y += _charHeight * scale.y;
                     flag1 = true;
                 }
                 if (!flag1)
                 {
                     bool flag2 = false;
-                    if (this.maxWidth > 0)
+                    if (maxWidth > 0)
                     {
-                        if (text[this._letterIndex] == ' ' || text[this._letterIndex] == '|' || text[this._letterIndex] == '@')
+                        if (text[_letterIndex] == ' ' || text[_letterIndex] == '|' || text[_letterIndex] == '@')
                         {
-                            int index1 = this._letterIndex + 1;
+                            int index1 = _letterIndex + 1;
                             float num2 = 0f;
                             for (; index1 < text.Count<char>() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                             {
                                 char index2 = (char)Maths.Clamp(text[index1], 0, FancyBitmapFont._characterMap.Length - 1);
                                 int character = FancyBitmapFont._characterMap[index2];
-                                if (this._characterInfos != null)
+                                if (_characterInfos != null)
                                 {
-                                    num2 += (this._characterInfos[character].width + this._characterInfos[character].trailing + this._characterInfos[character].leading) * this.scale.x;
+                                    num2 += (_characterInfos[character].width + _characterInfos[character].trailing + _characterInfos[character].leading) * scale.x;
                                 }
                                 else
                                 {
-                                    Rectangle width = this._widths[character];
-                                    num2 += (width.width - 1f) * this.scale.x;
+                                    Rectangle width = _widths[character];
+                                    num2 += (width.width - 1f) * scale.x;
                                 }
                             }
                             if (x + num2 > maxWidth)
                             {
-                                y += _charHeight * this.scale.y;
+                                y += _charHeight * scale.y;
                                 x = 0f;
                                 flag2 = true;
                             }
                         }
                         else
                         {
-                            char index3 = (char)Maths.Clamp(text[this._letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
-                            Rectangle width = this._widths[FancyBitmapFont._characterMap[index3]];
-                            if (x + width.width * this.scale.x > maxWidth)
+                            char index3 = (char)Maths.Clamp(text[_letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
+                            Rectangle width = _widths[FancyBitmapFont._characterMap[index3]];
+                            if (x + width.width * scale.x > maxWidth)
                             {
-                                y += _charHeight * this.scale.y;
+                                y += _charHeight * scale.y;
                                 x = 0f;
                             }
                         }
                     }
                     if (!flag2)
                     {
-                        if (text[this._letterIndex] >= 'ぁ')
+                        if (text[_letterIndex] >= 'ぁ')
                         {
-                            x += 8f * this.scale.x;
+                            x += 8f * scale.x;
                         }
                         else
                         {
-                            char index4 = (char)Maths.Clamp(text[this._letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
+                            char index4 = (char)Maths.Clamp(text[_letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
                             int character = FancyBitmapFont._characterMap[index4];
-                            if (this._characterInfos != null)
+                            if (_characterInfos != null)
                             {
-                                if (character < this._characterInfos.Count)
-                                    x += (this._characterInfos[character].width + this._characterInfos[character].trailing + this._characterInfos[character].leading) * this.scale.x;
+                                if (character < _characterInfos.Count)
+                                    x += (_characterInfos[character].width + _characterInfos[character].trailing + _characterInfos[character].leading) * scale.x;
                             }
                             else
                             {
-                                Rectangle width = this._widths[character];
-                                x += (width.width - 1f) * this.scale.x;
+                                Rectangle width = _widths[character];
+                                x += (width.width - 1f) * scale.x;
                             }
                         }
                     }
@@ -922,20 +922,20 @@ namespace DuckGame
           Depth deep = default(Depth),
           float outlineThickness = 1f)
         {
-            this._drawingOutline = true;
-            this.Draw(text, pos + new Vec2(-outlineThickness, 0f), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(outlineThickness, 0f), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(0f, -outlineThickness), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(0f, outlineThickness), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(-outlineThickness, -outlineThickness), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(outlineThickness, -outlineThickness), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(-outlineThickness, outlineThickness), outline, deep + 2, true);
-            this.Draw(text, pos + new Vec2(outlineThickness, outlineThickness), outline, deep + 2, true);
-            this._drawingOutline = false;
-            this.Draw(text, pos, c, deep + 5);
+            _drawingOutline = true;
+            Draw(text, pos + new Vec2(-outlineThickness, 0f), outline, deep + 2, true);
+            Draw(text, pos + new Vec2(outlineThickness, 0f), outline, deep + 2, true);
+            Draw(text, pos + new Vec2(0f, -outlineThickness), outline, deep + 2, true);
+            Draw(text, pos + new Vec2(0f, outlineThickness), outline, deep + 2, true);
+            Draw(text, pos + new Vec2(-outlineThickness, -outlineThickness), outline, deep + 2, true);
+            Draw(text, pos + new Vec2(outlineThickness, -outlineThickness), outline, deep + 2, true);
+            Draw(text, pos + new Vec2(-outlineThickness, outlineThickness), outline, deep + 2, true);
+            Draw(text, pos + new Vec2(outlineThickness, outlineThickness), outline, deep + 2, true);
+            _drawingOutline = false;
+            Draw(text, pos, c, deep + 5);
         }
 
-        public void Draw(string text, Vec2 pos, Color c, Depth deep = default(Depth), bool colorSymbols = false) => this.Draw(text, pos.x, pos.y, c, deep, colorSymbols);
+        public void Draw(string text, Vec2 pos, Color c, Depth deep = default(Depth), bool colorSymbols = false) => Draw(text, pos.x, pos.y, c, deep, colorSymbols);
 
         public void Draw(
           string text,
@@ -945,30 +945,30 @@ namespace DuckGame
           Depth deep = default(Depth),
           bool colorSymbols = false)
         {
-            this._previousColor = c;
+            _previousColor = c;
             if (string.IsNullOrWhiteSpace(text))
                 return;
             Color color1 = new Color(byte.MaxValue - c.r, byte.MaxValue - c.g, byte.MaxValue - c.b);
             float num1 = 0f;
             float num2 = 0f;
             int num3 = 0;
-            for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
+            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
             {
                 bool flag1 = false;
-                if (text[this._letterIndex] == '@' || this.chatFont && text[this._letterIndex] == ':')
+                if (text[_letterIndex] == '@' || chatFont && text[_letterIndex] == ':')
                 {
-                    int letterIndex = this._letterIndex;
-                    Sprite sprite1 = this.ParseSprite(text, null);
+                    int letterIndex = _letterIndex;
+                    Sprite sprite1 = ParseSprite(text, null);
                     if (sprite1 != null)
                     {
                         float alpha = sprite1.alpha;
                         sprite1.alpha = this.alpha * c.ToVector4().w;
                         if (sprite1 != null)
                         {
-                            float num4 = this.characterHeight / 2 - sprite1.height / 2 + this.symbolYOffset;
+                            float num4 = characterHeight / 2 - sprite1.height / 2 + symbolYOffset;
                             if (colorSymbols)
                                 sprite1.color = c;
-                            if (this.chatFont)
+                            if (chatFont)
                             {
                                 Vec2 scale = sprite1.scale;
                                 Sprite sprite2 = sprite1;
@@ -985,10 +985,10 @@ namespace DuckGame
                                 num2 += (float)(sprite1.width * sprite1.scale.x + 1.0);
                                 sprite1.scale = scale;
                             }
-                            else if (this._rasterData != null)
+                            else if (_rasterData != null)
                             {
                                 Vec2 scale = sprite1.scale;
-                                float num7 = this._rasterData.fontHeight / 24f;
+                                float num7 = _rasterData.fontHeight / 24f;
                                 Sprite sprite4 = sprite1;
                                 sprite4.scale *= num7;
                                 Graphics.Draw(sprite1, xpos + num2, (float)(ypos + num1 + 1.0 * num7), deep);
@@ -1006,16 +1006,16 @@ namespace DuckGame
                         flag1 = true;
                     }
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                else if (text[this._letterIndex] == '|')
+                else if (text[_letterIndex] == '|')
                 {
-                    int letterIndex = this._letterIndex;
-                    Color color2 = this.ParseColor(text);
+                    int letterIndex = _letterIndex;
+                    Color color2 = ParseColor(text);
                     if (color2 != Colors.Transparent)
                     {
-                        this._previousColor = c;
-                        if (!this._drawingOutline)
+                        _previousColor = c;
+                        if (!_drawingOutline)
                         {
                             float w = c.ToVector4().w;
                             c = color2;
@@ -1024,104 +1024,104 @@ namespace DuckGame
                         flag1 = true;
                     }
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
                 if (!flag1)
                 {
                     bool flag2 = false;
-                    if (this.maxWidth > 0)
+                    if (maxWidth > 0)
                     {
-                        if (text[this._letterIndex] == ' ' || text[this._letterIndex] == '|' || text[this._letterIndex] == '@')
+                        if (text[_letterIndex] == ' ' || text[_letterIndex] == '|' || text[_letterIndex] == '@')
                         {
-                            int index1 = this._letterIndex + 1;
-                            if (this.enforceWidthByWord)
+                            int index1 = _letterIndex + 1;
+                            if (enforceWidthByWord)
                             {
                                 char index2 = ' ';
-                                float width1 = this._widths[FancyBitmapFont._characterMap[(byte)index2]].width;
+                                float width1 = _widths[FancyBitmapFont._characterMap[(byte)index2]].width;
                                 for (; index1 < text.Count<char>() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                                 {
                                     byte index3 = (byte)Maths.Clamp(text[index1], 0, 254);
-                                    Rectangle width2 = this._widths[FancyBitmapFont._characterMap[index3]];
-                                    width1 += (width2.width - 1f) * this.scale.x;
+                                    Rectangle width2 = _widths[FancyBitmapFont._characterMap[index3]];
+                                    width1 += (width2.width - 1f) * scale.x;
                                 }
                                 if (num2 + width1 > maxWidth)
                                 {
-                                    num1 += _charHeight * this.scale.y;
+                                    num1 += _charHeight * scale.y;
                                     num2 = 0f;
                                     ++num3;
                                     flag2 = true;
-                                    if (this.singleLine)
+                                    if (singleLine)
                                         break;
                                 }
                             }
                         }
                         else
                         {
-                            byte index = (byte)Maths.Clamp(text[this._letterIndex], 0, 254);
-                            Rectangle width = this._widths[FancyBitmapFont._characterMap[index]];
-                            if (num2 + width.width * this.scale.x > maxWidth)
+                            byte index = (byte)Maths.Clamp(text[_letterIndex], 0, 254);
+                            Rectangle width = _widths[FancyBitmapFont._characterMap[index]];
+                            if (num2 + width.width * scale.x > maxWidth)
                             {
-                                num1 += _charHeight * this.scale.y;
+                                num1 += _charHeight * scale.y;
                                 num2 = 0f;
                                 ++num3;
-                                if (this.singleLine)
+                                if (singleLine)
                                     break;
                             }
                         }
                     }
-                    if (this.maxRows != 0 && num3 >= this.maxRows)
+                    if (maxRows != 0 && num3 >= maxRows)
                         break;
                     if (!flag2)
                     {
-                        if (text[this._letterIndex] == '\n')
+                        if (text[_letterIndex] == '\n')
                         {
-                            num1 += (_charHeight + this.lineGap) * this.scale.y;
+                            num1 += (_charHeight + lineGap) * scale.y;
                             num2 = 0f;
                             ++num3;
                         }
                         else
                         {
-                            char index4 = text[this._letterIndex];
+                            char index4 = text[_letterIndex];
                             if (index4 >= 'ぁ')
                             {
                                 int kanji = FancyBitmapFont._kanjiMap[index4];
                                 FancyBitmapFont._kanjiSprite.frame = kanji;
-                                FancyBitmapFont._kanjiSprite.scale = this.scale;
+                                FancyBitmapFont._kanjiSprite.scale = scale;
                                 FancyBitmapFont._kanjiSprite.color = c;
-                                FancyBitmapFont._kanjiSprite.alpha = this.alpha;
+                                FancyBitmapFont._kanjiSprite.alpha = alpha;
                                 Graphics.Draw(_kanjiSprite, (float)(xpos + num2 + 1.0), (float)(ypos + num1 + 1.0), deep);
-                                num2 += 8f * this.scale.x;
+                                num2 += 8f * scale.x;
                             }
                             else
                             {
                                 int index5 = FancyBitmapFont._characterMap[index4];
-                                if (index5 >= this._widths.Count)
-                                    index5 = this._widths.Count - 1;
+                                if (index5 >= _widths.Count)
+                                    index5 = _widths.Count - 1;
                                 if (index5 < 0)
                                     break;
-                                Rectangle width = this._widths[index5];
-                                this._texture.scale = this.scale;
-                                if (this._highlightStart != -1 && this._highlightStart != this._highlightEnd && (this._highlightStart < this._highlightEnd && this._letterIndex >= this._highlightStart && this._letterIndex < this._highlightEnd || this._letterIndex < this._highlightStart && this._letterIndex >= this._highlightEnd))
+                                Rectangle width = _widths[index5];
+                                _texture.scale = scale;
+                                if (_highlightStart != -1 && _highlightStart != _highlightEnd && (_highlightStart < _highlightEnd && _letterIndex >= _highlightStart && _letterIndex < _highlightEnd || _letterIndex < _highlightStart && _letterIndex >= _highlightEnd))
                                 {
-                                    Graphics.DrawRect(new Vec2(xpos + num2, ypos + num1), new Vec2(xpos + num2, ypos + num1) + new Vec2(width.width * this.scale.x, _charHeight * this.scale.y), c, deep - 5);
-                                    this._texture.color = color1;
+                                    Graphics.DrawRect(new Vec2(xpos + num2, ypos + num1), new Vec2(xpos + num2, ypos + num1) + new Vec2(width.width * scale.x, _charHeight * scale.y), c, deep - 5);
+                                    _texture.color = color1;
                                 }
                                 else
-                                    this._texture.color = c;
-                                this._texture.alpha = this.alpha;
-                                if (this._characterInfos != null)
+                                    _texture.color = c;
+                                _texture.alpha = alpha;
+                                if (_characterInfos != null)
                                 {
-                                    if (index5 < this._characterInfos.Count)
+                                    if (index5 < _characterInfos.Count)
                                     {
-                                        float num8 = num2 + this._characterInfos[index5].leading * this.scale.x;
-                                        Graphics.Draw(this._texture, xpos + num8, ypos + num1, width, deep);
-                                        num2 = num8 + this._characterInfos[index5].trailing * this.scale.x + this._characterInfos[index5].width * this.scale.x;
+                                        float num8 = num2 + _characterInfos[index5].leading * scale.x;
+                                        Graphics.Draw(_texture, xpos + num8, ypos + num1, width, deep);
+                                        num2 = num8 + _characterInfos[index5].trailing * scale.x + _characterInfos[index5].width * scale.x;
                                     }
                                 }
                                 else
                                 {
-                                    Graphics.Draw(this._texture, xpos + num2, ypos + num1, width, deep);
-                                    num2 += (width.width - 1f) * this.scale.x;
+                                    Graphics.Draw(_texture, xpos + num2, ypos + num1, width, deep);
+                                    num2 += (width.width - 1f) * scale.x;
                                 }
                             }
                         }
@@ -1136,16 +1136,16 @@ namespace DuckGame
             Color color1 = Color.Black;
             string text1 = "";
             richTextBox.SelectionColor = System.Drawing.Color.Black;
-            for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
+            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
             {
                 bool flag = false;
-                if (text[this._letterIndex] == '|')
+                if (text[_letterIndex] == '|')
                 {
-                    int letterIndex = this._letterIndex;
-                    Color color2 = this.ParseColor(text);
+                    int letterIndex = _letterIndex;
+                    Color color2 = ParseColor(text);
                     if (color2 != Colors.Transparent)
                     {
-                        this._previousColor = color1;
+                        _previousColor = color1;
                         color1 = color2;
                         if (color2 == Color.White)
                             color2 = Color.Black;
@@ -1155,16 +1155,16 @@ namespace DuckGame
                         flag = true;
                     }
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                if (text[this._letterIndex] == '\n')
+                if (text[_letterIndex] == '\n')
                 {
                     richTextBox.AppendText(text1);
                     text1 = "";
                     richTextBox.SelectionColor = System.Drawing.Color.Black;
                 }
                 if (!flag)
-                    text1 += text[this._letterIndex].ToString();
+                    text1 += text[_letterIndex].ToString();
             }
             richTextBox.AppendText(text1);
             return richTextBox;

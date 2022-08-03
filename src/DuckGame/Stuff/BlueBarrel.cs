@@ -14,14 +14,14 @@ namespace DuckGame
         public BlueBarrel(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("blueBarrel");
-            this.center = new Vec2(7f, 8f);
-            this._melting = new Sprite("blueBarrelMelting");
-            this._editorName = "Barrel";
-            this.editorTooltip = "Your standard water barrel - for carrying delicious, refreshing water. Choose water!";
-            this.flammable = 0.3f;
-            this._fluid = Fluid.Water;
-            this._toreUp = new SpriteMap("blueBarrelToreUp", 14, 17)
+            graphic = new Sprite("blueBarrel");
+            center = new Vec2(7f, 8f);
+            _melting = new Sprite("blueBarrelMelting");
+            _editorName = "Barrel";
+            editorTooltip = "Your standard water barrel - for carrying delicious, refreshing water. Choose water!";
+            flammable = 0.3f;
+            _fluid = Fluid.Water;
+            _toreUp = new SpriteMap("blueBarrelToreUp", 14, 17)
             {
                 frame = 1,
                 center = new Vec2(0f, -6f)

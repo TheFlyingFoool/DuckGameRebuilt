@@ -20,31 +20,31 @@ namespace DuckGame
 
         public MaterialGrid(Thing t)
         {
-            this._effect = Content.Load<MTEffect>("Shaders/wireframeTexOuya");
-            this._thing = t;
+            _effect = Content.Load<MTEffect>("Shaders/wireframeTexOuya");
+            _thing = t;
         }
 
         public override void Update()
         {
-            this.transWave -= 0.12f;
-            if (Math.Sin(transWave) < -0.7f && !this.secondScan)
+            transWave -= 0.12f;
+            if (Math.Sin(transWave) < -0.7f && !secondScan)
             {
-                this.secondScan = true;
-                this.transWave -= 2f;
+                secondScan = true;
+                transWave -= 2f;
             }
-            else if (Math.Sin(transWave) > 0.9f && this.secondScan)
-                this.finished = true;
+            else if (Math.Sin(transWave) > 0.9f && secondScan)
+                finished = true;
             base.Update();
         }
 
         public override void Apply()
         {
             Matrix fullMatrix = Layer.Game.fullMatrix;
-            Vec3 vec3_1 = Vec3.Transform(new Vec3(this._thing.x - 28f, this._thing.y, 0f), fullMatrix);
-            Vec3 vec3_2 = Vec3.Transform(new Vec3(this._thing.x + 28f, this._thing.y, 0f), fullMatrix);
-            this.SetValue("scan", vec3_1.x + (float)((Math.Sin(transWave) + 1f) / 2f * (vec3_2.x - vec3_1.x)));
-            this.SetValue("secondScan", this.secondScan ? 1f : 0f);
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            Vec3 vec3_1 = Vec3.Transform(new Vec3(_thing.x - 28f, _thing.y, 0f), fullMatrix);
+            Vec3 vec3_2 = Vec3.Transform(new Vec3(_thing.x + 28f, _thing.y, 0f), fullMatrix);
+            SetValue("scan", vec3_1.x + (float)((Math.Sin(transWave) + 1f) / 2f * (vec3_2.x - vec3_1.x)));
+            SetValue("secondScan", secondScan ? 1f : 0f);
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

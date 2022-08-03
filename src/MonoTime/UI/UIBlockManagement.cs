@@ -22,11 +22,11 @@ namespace DuckGame
         public UIBlockManagement(UIMenu openOnClose)
           : base("BLOCKED USERS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 260f, 160f)
         {
-            this.Add(new UIBox(0f, 0f, 100f, 130f, isVisible: false), true);
-            this._littleFont = new BitmapFont("smallBiosFont", 7, 6);
-            this._downArrow = new Sprite("cloudDown");
-            this._downArrow.CenterOrigin();
-            this._openOnClose = openOnClose;
+            Add(new UIBox(0f, 0f, 100f, 130f, isVisible: false), true);
+            _littleFont = new BitmapFont("smallBiosFont", 7, 6);
+            _downArrow = new Sprite("cloudDown");
+            _downArrow.CenterOrigin();
+            _openOnClose = openOnClose;
         }
 
         //private void UnblockUsers()
@@ -36,20 +36,20 @@ namespace DuckGame
         public override void Open()
         {
             HUD.CloseAllCorners();
-            this._opening = true;
-            this.RebuildItemList();
+            _opening = true;
+            RebuildItemList();
             base.Open();
         }
 
         public void RebuildItemList()
         {
-            this._selection = 0;
-            this._topOffset = 0;
-            this.items.Clear();
+            _selection = 0;
+            _topOffset = 0;
+            items.Clear();
             foreach (ulong blockedPlayer in Options.Data.blockedPlayers)
-                this.items.Add(new KeyValuePair<ulong, bool>(blockedPlayer, true));
+                items.Add(new KeyValuePair<ulong, bool>(blockedPlayer, true));
             foreach (ulong unblockedPlayer in Options.Data.unblockedPlayers)
-                this.items.Add(new KeyValuePair<ulong, bool>(unblockedPlayer, false));
+                items.Add(new KeyValuePair<ulong, bool>(unblockedPlayer, false));
             bool flag = false;
             foreach (ulong recentPlayer in Options.Data.recentPlayers)
             {
@@ -58,9 +58,9 @@ namespace DuckGame
                     if (!flag)
                     {
                         flag = true;
-                        this.items.Add(new KeyValuePair<ulong, bool>(0UL, false));
+                        items.Add(new KeyValuePair<ulong, bool>(0UL, false));
                     }
-                    this.items.Add(new KeyValuePair<ulong, bool>(recentPlayer, Options.Data.blockedPlayers.Contains(recentPlayer)));
+                    items.Add(new KeyValuePair<ulong, bool>(recentPlayer, Options.Data.blockedPlayers.Contains(recentPlayer)));
                 }
             }
         }
@@ -73,29 +73,29 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this.open && !this._opening)
+            if (open && !_opening)
             {
-                if (Input.Pressed("MENUUP") && this._selection > 0)
+                if (Input.Pressed("MENUUP") && _selection > 0)
                 {
-                    --this._selection;
-                    if (this.items[this._selection].Key == 0UL)
-                        --this._selection;
-                    if (this._selection < this._topOffset)
-                        this._topOffset = this._selection;
+                    --_selection;
+                    if (items[_selection].Key == 0UL)
+                        --_selection;
+                    if (_selection < _topOffset)
+                        _topOffset = _selection;
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (Input.Pressed("MENUDOWN") && this._selection < this.items.Count - 1)
+                if (Input.Pressed("MENUDOWN") && _selection < items.Count - 1)
                 {
-                    ++this._selection;
-                    if (this.items[this._selection].Key == 0UL)
-                        ++this._selection;
-                    if (this._selection > this._topOffset + this.kMaxInView)
-                        ++this._topOffset;
+                    ++_selection;
+                    if (items[_selection].Key == 0UL)
+                        ++_selection;
+                    if (_selection > _topOffset + kMaxInView)
+                        ++_topOffset;
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (this._selection >= 0 && this._selection < this.items.Count && Input.Pressed("MENU1"))
+                if (_selection >= 0 && _selection < items.Count && Input.Pressed("MENU1"))
                 {
-                    KeyValuePair<ulong, bool> keyValuePair = this.items[this._selection];
+                    KeyValuePair<ulong, bool> keyValuePair = items[_selection];
                     if (!keyValuePair.Value)
                     {
                         if (!Options.Data.blockedPlayers.Contains(keyValuePair.Key))
@@ -103,7 +103,7 @@ namespace DuckGame
                         Options.Data.unblockedPlayers.Remove(keyValuePair.Key);
                         Options.Data.muteSettings[keyValuePair.Key] = "CHR";
                         SFX.Play("textLetter", 0.7f);
-                        this.MakeDirty();
+                        MakeDirty();
                     }
                     else if (keyValuePair.Value)
                     {
@@ -112,20 +112,20 @@ namespace DuckGame
                             Options.Data.unblockedPlayers.Add(keyValuePair.Key);
                         Options.Data.muteSettings[keyValuePair.Key] = "";
                         SFX.Play("textLetter", 0.7f);
-                        this.MakeDirty();
+                        MakeDirty();
                     }
                 }
                 if (Input.Pressed("SELECT"))
-                    Steam.OverlayOpenURL("http://steamcommunity.com/profiles/" + this.items[this._selection].Key.ToString());
+                    Steam.OverlayOpenURL("http://steamcommunity.com/profiles/" + items[_selection].Key.ToString());
                 if (Input.Pressed("CANCEL"))
                 {
-                    if (this._openOnClose != null)
+                    if (_openOnClose != null)
                         new UIMenuActionOpenMenu(this, _openOnClose).Activate();
                     else
                         new UIMenuActionCloseMenu(this).Activate();
                 }
             }
-            this._opening = false;
+            _opening = false;
             base.Update();
         }
 
@@ -133,39 +133,39 @@ namespace DuckGame
         {
             foreach (Profile profile in Profiles.all)
                 profile._blockStatusDirty = true;
-            this.RebuildItemList();
-            if (this._selection < this.items.Count)
+            RebuildItemList();
+            if (_selection < items.Count)
                 return;
-            this._selection = this.items.Count;
+            _selection = items.Count;
         }
 
         public override void Draw()
         {
-            if (this.open)
+            if (open)
             {
-                Vec2 vec2 = new Vec2(this.x - 124f, this.y - 56f);
+                Vec2 vec2 = new Vec2(x - 124f, this.y - 56f);
                 float y = 0f;
                 int num1 = 0;
                 int num2 = 0;
-                if (this.items.Count == 0)
-                    this._littleFont.Draw("No blocked users! Happy day!", vec2 + new Vec2(8f, y), Color.White, (Depth)0.5f);
-                foreach (KeyValuePair<ulong, bool> keyValuePair in this.items)
+                if (items.Count == 0)
+                    _littleFont.Draw("No blocked users! Happy day!", vec2 + new Vec2(8f, y), Color.White, (Depth)0.5f);
+                foreach (KeyValuePair<ulong, bool> keyValuePair in items)
                 {
-                    if (num1 < this._topOffset)
+                    if (num1 < _topOffset)
                     {
                         ++num1;
                     }
                     else
                     {
-                        if (this._topOffset > 0)
+                        if (_topOffset > 0)
                         {
-                            this._downArrow.flipV = true;
-                            Graphics.Draw(this._downArrow, this.x, vec2.y - 2f, (Depth)0.5f);
+                            _downArrow.flipV = true;
+                            Graphics.Draw(_downArrow, x, vec2.y - 2f, (Depth)0.5f);
                         }
-                        if (num2 > this.kMaxInView)
+                        if (num2 > kMaxInView)
                         {
-                            this._downArrow.flipV = false;
-                            Graphics.Draw(this._downArrow, this.x, vec2.y + y, (Depth)0.5f);
+                            _downArrow.flipV = false;
+                            Graphics.Draw(_downArrow, x, vec2.y + y, (Depth)0.5f);
                             break;
                         }
                         string str1 = keyValuePair.Key.ToString();
@@ -182,20 +182,20 @@ namespace DuckGame
                             if (str1.Length > 31)
                                 str1 = str1.Substring(0, 30) + "..";
                             string str2 = (keyValuePair.Value ? "@DELETEFLAG_ON@" : "@DELETEFLAG_OFF@") + str1;
-                            text = num1 != this._selection ? " " + str2 : "@SELECTICON@" + str2;
+                            text = num1 != _selection ? " " + str2 : "@SELECTICON@" + str2;
                         }
                         if (keyValuePair.Value)
                             text = "|DGRED|" + text;
-                        this._littleFont.Draw(text, vec2 + new Vec2(0f, y), Color.White, (Depth)0.5f);
+                        _littleFont.Draw(text, vec2 + new Vec2(0f, y), Color.White, (Depth)0.5f);
                         y += 8f;
                         ++num1;
                         ++num2;
                     }
                 }
                 string text1 = "@CANCEL@BACK";
-                if (this.items.Count > 0 && this._selection >= 0 && this._selection < this.items.Count)
-                    text1 = (!this.items[this._selection].Value ? text1 + " @MENU1@BLOCK" : text1 + " @MENU1@UN-BLOCK") + " @SELECT@@STEAMICON@";
-                this._littleFont.Draw(text1, new Vec2(this.x - this._littleFont.GetWidth(text1) / 2f, this.y + 64f), Color.White, (Depth)0.5f);
+                if (items.Count > 0 && _selection >= 0 && _selection < items.Count)
+                    text1 = (!items[_selection].Value ? text1 + " @MENU1@BLOCK" : text1 + " @MENU1@UN-BLOCK") + " @SELECT@@STEAMICON@";
+                _littleFont.Draw(text1, new Vec2(x - _littleFont.GetWidth(text1) / 2f, this.y + 64f), Color.White, (Depth)0.5f);
             }
             base.Draw();
         }

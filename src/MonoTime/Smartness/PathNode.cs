@@ -25,52 +25,52 @@ namespace DuckGame
         public bool specialNode;
         private bool _fallInit;
 
-        public Thing thing => this._thing;
+        public Thing thing => _thing;
 
         public PathNode parent
         {
-            get => this._parent;
-            set => this._parent = value;
+            get => _parent;
+            set => _parent = value;
         }
 
-        public List<PathNodeLink> links => this._links;
+        public List<PathNodeLink> links => _links;
 
         public PathNode(float xpos = 0f, float ypos = 0f, Thing t = null)
           : base(xpos, ypos)
         {
-            this._thing = t;
-            this.graphic = new Sprite("ball");
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.scale = new Vec2(0.5f, 0.5f);
-            this.editorOffset = new Vec2(0f, -8f);
+            _thing = t;
+            graphic = new Sprite("ball");
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -8f);
+            collisionSize = new Vec2(16f, 16f);
+            scale = new Vec2(0.5f, 0.5f);
+            editorOffset = new Vec2(0f, -8f);
         }
 
         public override void Update()
         {
-            if (!this._fallInit)
+            if (!_fallInit)
             {
-                this.InitializeLinks();
-                this._fallInit = true;
+                InitializeLinks();
+                _fallInit = true;
             }
             else
             {
-                if (this._initialized)
+                if (_initialized)
                     return;
-                this.InitializePaths();
-                this._initialized = true;
+                InitializePaths();
+                _initialized = true;
             }
         }
 
-        public AIPath GetPath(PathNode to) => this._paths.ContainsKey(to) ? this._paths[to] : null;
+        public AIPath GetPath(PathNode to) => _paths.ContainsKey(to) ? _paths[to] : null;
 
-        public PathNodeLink GetLink(PathNode with) => this._links.FirstOrDefault<PathNodeLink>(node => node.link == with);
+        public PathNodeLink GetLink(PathNode with) => _links.FirstOrDefault<PathNodeLink>(node => node.link == with);
 
         public void UninitializeLinks()
         {
-            this._initialized = false;
-            this._links.Clear();
+            _initialized = false;
+            _links.Clear();
         }
 
         public static bool LineIsClear(Vec2 from, Vec2 to, Thing ignore = null)
@@ -137,7 +137,7 @@ namespace DuckGame
 
         public bool PathBlocked(PathNode to)
         {
-            IEnumerable<IPathNodeBlocker> pathNodeBlockers = Level.current.CollisionLineAll<IPathNodeBlocker>(this.position, to.position);
+            IEnumerable<IPathNodeBlocker> pathNodeBlockers = Level.current.CollisionLineAll<IPathNodeBlocker>(position, to.position);
             bool flag = false;
             foreach (IPathNodeBlocker pathNodeBlocker in pathNodeBlockers)
             {
@@ -147,7 +147,7 @@ namespace DuckGame
                     switch (thing)
                     {
                         case IPlatform _:
-                            if ((!(thing is AutoPlatform) || !(thing as AutoPlatform).HasNoCollision()) && thing.y > this.y)
+                            if ((!(thing is AutoPlatform) || !(thing as AutoPlatform).HasNoCollision()) && thing.y > y)
                             {
                                 flag = true;
                                 goto label_11;
@@ -197,17 +197,17 @@ namespace DuckGame
         {
             foreach (PathNode to in Level.current.things[typeof(PathNode)])
             {
-                if (to != this && PathNode.CheckTraversalLimits(this.position, to.position) && !this.PathBlocked(to))
+                if (to != this && PathNode.CheckTraversalLimits(position, to.position) && !PathBlocked(to))
                 {
                     PathNodeLink pathNodeLink = new PathNodeLink
                     {
                         owner = this,
                         link = to,
-                        distance = (to.position - this.position).length
+                        distance = (to.position - position).length
                     };
-                    if (Math.Abs(this.y - to.y) < 8.0)
+                    if (Math.Abs(y - to.y) < 8.0)
                     {
-                        Vec2 p1 = (this.position + to.position) / 2f;
+                        Vec2 p1 = (position + to.position) / 2f;
                         if (Level.CheckLine<IPathNodeBlocker>(p1, p1 + new Vec2(0f, 18f)) == null)
                             pathNodeLink.gap = true;
                     }
@@ -219,16 +219,16 @@ namespace DuckGame
                     }
                     else
                         pathNodeLink.oneWay = true;
-                    this._links.Add(pathNodeLink);
+                    _links.Add(pathNodeLink);
                 }
             }
         }
 
         public void Reset()
         {
-            this.cost = 0f;
-            this.heuristic = 0f;
-            this._parent = null;
+            cost = 0f;
+            heuristic = 0f;
+            _parent = null;
         }
 
         public static float CalculateCost(PathNode who, PathNode parent)
@@ -251,7 +251,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            foreach (PathNodeLink link in this._links)
+            foreach (PathNodeLink link in _links)
             {
                 Color color = Color.LimeGreen;
                 if (link.oneWay)
@@ -260,16 +260,16 @@ namespace DuckGame
                     color = Color.Blue;
                 if (link.oneWay && link.gap)
                     color = Color.LightBlue;
-                Graphics.DrawLine(this.position, link.link.position, color * 0.2f, depth: ((Depth)0.9f));
-                Vec2 vec2_1 = link.link.position - this.position;
+                Graphics.DrawLine(position, link.link.position, color * 0.2f, depth: ((Depth)0.9f));
+                Vec2 vec2_1 = link.link.position - position;
                 float length = vec2_1.length;
-                vec2_1 = link.link.position - this.position;
+                vec2_1 = link.link.position - position;
                 Vec2 normalized = vec2_1.normalized;
                 Vec2 vec2_2 = normalized;
                 Vec2 vec2_3 = normalized;
                 Vec2 vec2_4 = -vec2_2.Rotate(1f, Vec2.Zero);
                 Vec2 vec2_5 = -vec2_3.Rotate(-1f, Vec2.Zero);
-                Vec2 p1 = this.position + normalized * (length / 1.5f);
+                Vec2 p1 = position + normalized * (length / 1.5f);
                 Graphics.DrawLine(p1, p1 + vec2_4 * 4f, color * 0.2f, depth: ((Depth)0.9f));
                 Graphics.DrawLine(p1, p1 + vec2_5 * 4f, color * 0.2f, depth: ((Depth)0.9f));
             }

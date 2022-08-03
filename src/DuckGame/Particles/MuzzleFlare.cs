@@ -14,15 +14,15 @@ namespace DuckGame
         public MuzzleFlare(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("smallFlare", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(0f, 8f);
+            _sprite = new SpriteMap("smallFlare", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(0f, 8f);
         }
 
         public override void Update()
         {
-            this.alpha -= 0.1f;
-            if (this.alpha >= 0.0)
+            alpha -= 0.1f;
+            if (alpha >= 0.0)
                 return;
             Level.Remove(this);
         }

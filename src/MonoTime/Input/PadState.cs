@@ -14,9 +14,9 @@ namespace DuckGame
         public PadState.TriggerStates triggers;
         public PadState.StickStates sticks;
 
-        public bool IsButtonDown(PadButton butt) => (this.buttons & butt) != 0;
+        public bool IsButtonDown(PadButton butt) => (buttons & butt) != 0;
 
-        public bool IsButtonUp(PadButton butt) => (this.buttons & butt) == 0;
+        public bool IsButtonUp(PadButton butt) => (buttons & butt) == 0;
 
         public struct TriggerStates
         {

@@ -16,9 +16,9 @@ namespace DuckGame
 
         public void DoCallback()
         {
-            if (this.OnStoryBegin == null)
+            if (OnStoryBegin == null)
                 return;
-            this.OnStoryBegin(this);
+            OnStoryBegin(this);
         }
 
         public delegate void OnStoryBeginDelegate(DuckStory story);

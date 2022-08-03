@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public byte index;
 
-        public NMSpawnDuck(byte idx) => this.index = idx;
+        public NMSpawnDuck(byte idx) => index = idx;
 
         public NMSpawnDuck()
         {
@@ -19,7 +19,7 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (this.index < 0 || index >= DuckNetwork.profiles.Count)
+            if (index < 0 || index >= DuckNetwork.profiles.Count)
                 return;
             Profile profile = DuckNetwork.profiles[index];
             if (profile == null || profile.duck == null || profile.persona == null)

@@ -11,28 +11,28 @@ namespace DuckGame
     {
         private YM2612Core _chip;
 
-        public YM2612() => this._chip = new YM2612Core();
+        public YM2612() => _chip = new YM2612Core();
 
         public void Initialize(double clock, int soundRate)
         {
-            this._chip.YM2612Init(clock, soundRate);
-            this._chip.YM2612ResetChip();
+            _chip.YM2612Init(clock, soundRate);
+            _chip.YM2612ResetChip();
         }
 
-        public void Update(int[] buffer, int length) => this._chip.YM2612Update(buffer, length);
+        public void Update(int[] buffer, int length) => _chip.YM2612Update(buffer, length);
 
-        public void Write(int address, int value) => this._chip.YM2612Write((uint)address, (uint)value);
+        public void Write(int address, int value) => _chip.YM2612Write((uint)address, (uint)value);
 
         public void WritePort0(int register, int value)
         {
-            this._chip.YM2612Write(0U, (uint)register);
-            this._chip.YM2612Write(1U, (uint)value);
+            _chip.YM2612Write(0U, (uint)register);
+            _chip.YM2612Write(1U, (uint)value);
         }
 
         public void WritePort1(int register, int value)
         {
-            this._chip.YM2612Write(2U, (uint)register);
-            this._chip.YM2612Write(3U, (uint)value);
+            _chip.YM2612Write(2U, (uint)register);
+            _chip.YM2612Write(3U, (uint)value);
         }
     }
 }

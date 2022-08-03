@@ -16,23 +16,23 @@ namespace DuckGame
         public TreeTopDead(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("treeTopDead");
-            this._treeInside = new Sprite("treeTopInsideDead")
+            graphic = new Sprite("treeTopDead");
+            _treeInside = new Sprite("treeTopInsideDead")
             {
                 center = new Vec2(24f, 24f),
                 alpha = 0.8f,
                 depth = (Depth)0.9f
             };
-            this.center = new Vec2(24f, 24f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = (Depth)0.9f;
-            this.hugWalls = WallHug.Left | WallHug.Right | WallHug.Ceiling | WallHug.Floor;
+            center = new Vec2(24f, 24f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            depth = (Depth)0.9f;
+            hugWalls = WallHug.Left | WallHug.Right | WallHug.Ceiling | WallHug.Floor;
         }
 
         public override void Draw()
         {
-            this.graphic.flipH = this.offDir <= 0;
+            graphic.flipH = offDir <= 0;
             base.Draw();
         }
     }

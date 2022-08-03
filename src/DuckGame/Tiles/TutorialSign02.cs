@@ -17,7 +17,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.graphic.color = Color.White * 0.5f;
+            graphic.color = Color.White * 0.5f;
             base.Draw();
         }
     }

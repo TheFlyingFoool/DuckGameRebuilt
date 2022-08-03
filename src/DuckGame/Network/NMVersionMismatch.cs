@@ -12,7 +12,7 @@ namespace DuckGame
         public byte byteCode;
         public string serverVersion;
 
-        public NMVersionMismatch.Type GetCode() => (NMVersionMismatch.Type)this.byteCode;
+        public NMVersionMismatch.Type GetCode() => (NMVersionMismatch.Type)byteCode;
 
         public NMVersionMismatch()
         {
@@ -20,8 +20,8 @@ namespace DuckGame
 
         public NMVersionMismatch(NMVersionMismatch.Type code, string ver)
         {
-            this.byteCode = (byte)code;
-            this.serverVersion = ver;
+            byteCode = (byte)code;
+            serverVersion = ver;
         }
 
         public enum Type

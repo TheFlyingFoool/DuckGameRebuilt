@@ -39,34 +39,34 @@ namespace DuckGame
         public Warpgun(float xval, float yval)
           : base(xval, yval)
         {
-            this._fireWait = 0.3f;
-            this.ammo = 9999;
-            this._ammoType = new ATWagnus();
-            this.angleMul = -1f;
-            this._type = "gun";
-            this._sprite = new SpriteMap("warpgun", 19, 17)
+            _fireWait = 0.3f;
+            ammo = 9999;
+            _ammoType = new ATWagnus();
+            angleMul = -1f;
+            _type = "gun";
+            _sprite = new SpriteMap("warpgun", 19, 17)
             {
                 speed = 0f
             };
-            this.graphic = _sprite;
-            this.center = new Vec2(11f, 8f);
-            this.collisionOffset = new Vec2(-6f, -7f);
-            this.collisionSize = new Vec2(12f, 14f);
-            this._barrelOffsetTL = new Vec2(14f, 4f);
-            this._fireSound = "warpgun";
-            this._kickForce = 0.3f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(-1f, -2f);
-            this._editorName = "WAGNUS";
-            this.editorTooltip = "Science can be horrifying *and* FUN!";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this._warpLine = new Sprite("warpLine2");
-            this._sightHit = new Sprite("laserSightHit");
-            this._sightHit.CenterOrigin();
-            this._laserTex = Content.Load<Tex2D>("pointerLaser");
+            graphic = _sprite;
+            center = new Vec2(11f, 8f);
+            collisionOffset = new Vec2(-6f, -7f);
+            collisionSize = new Vec2(12f, 14f);
+            _barrelOffsetTL = new Vec2(14f, 4f);
+            _fireSound = "warpgun";
+            _kickForce = 0.3f;
+            _fireRumble = RumbleIntensity.Kick;
+            _holdOffset = new Vec2(-1f, -2f);
+            _editorName = "WAGNUS";
+            editorTooltip = "Science can be horrifying *and* FUN!";
+            physicsMaterial = PhysicsMaterial.Metal;
+            _warpLine = new Sprite("warpLine2");
+            _sightHit = new Sprite("laserSightHit");
+            _sightHit.CenterOrigin();
+            _laserTex = Content.Load<Tex2D>("pointerLaser");
         }
 
-        protected override void PlayFireSound() => this.PlaySFX(this._fireSound, pitch: (0.6f + Rando.Float(0.2f)));
+        protected override void PlayFireSound() => PlaySFX(_fireSound, pitch: (0.6f + Rando.Float(0.2f)));
 
         public override void CheckIfHoldObstructed()
         {
@@ -74,62 +74,62 @@ namespace DuckGame
                 return;
             if (owner is TargetDuck)
             {
-                Block block = Level.CheckLine<Block>(this.position + new Vec2(this.offDir > 0 ? -16f : 16f, 0f), owner.position + new Vec2(this.offDir > 0 ? -16f : 16f, 8f));
+                Block block = Level.CheckLine<Block>(position + new Vec2(offDir > 0 ? -16f : 16f, 0f), owner.position + new Vec2(offDir > 0 ? -16f : 16f, 8f));
                 owner.holdObstructed = block != null;
             }
             else
             {
-                Block block = Level.CheckLine<Block>(owner.position + new Vec2(this.offDir > 0 ? -10f : 10f, 0f), owner.position + new Vec2(this.offDir > 0 ? -10f : 10f, 10f));
+                Block block = Level.CheckLine<Block>(owner.position + new Vec2(offDir > 0 ? -10f : 10f, 0f), owner.position + new Vec2(offDir > 0 ? -10f : 10f, 10f));
                 owner.holdObstructed = block != null;
             }
         }
 
         public override void UpdateAction()
         {
-            if (!this.isServerForObject || this.onUpdate)
+            if (!isServerForObject || onUpdate)
                 return;
-            this.onUpdate = true;
-            if (this.duck != null && this.tape == null)
+            onUpdate = true;
+            if (duck != null && tape == null)
             {
-                this.offDir = this.duck.offDir;
-                this.CheckIfHoldObstructed();
-                if (!this.duck._hovering && this.duck.holdObject != null && (!this.duck.HasEquipment(typeof(Holster)) || !this.duck.inputProfile.Down("UP")))
+                offDir = duck.offDir;
+                CheckIfHoldObstructed();
+                if (!duck._hovering && duck.holdObject != null && (!duck.HasEquipment(typeof(Holster)) || !duck.inputProfile.Down("UP")))
                 {
-                    this.duck.UpdateHoldLerp(true, true);
-                    this.duck.UpdateHoldPosition();
+                    duck.UpdateHoldLerp(true, true);
+                    duck.UpdateHoldPosition();
                 }
             }
             base.UpdateAction();
-            this.onUpdate = false;
+            onUpdate = false;
         }
 
         public override void Update()
         {
-            this.ammo = 9999;
-            if (this.isServerForObject && !this._triggerHeld)
-                this.gravMultTime = 0f;
-            IPlatform platform = Level.Nearest<IPlatform>(this.x, this.y);
+            ammo = 9999;
+            if (isServerForObject && !_triggerHeld)
+                gravMultTime = 0f;
+            IPlatform platform = Level.Nearest<IPlatform>(x, y);
             bool flag = false;
-            if (platform != null && ((platform as Thing).position - this.position).length < 32.0)
+            if (platform != null && ((platform as Thing).position - position).length < 32.0)
                 flag = true;
             if (!flag)
             {
-                platform = Level.CheckCircle<IPlatform>(this.position, 18f);
+                platform = Level.CheckCircle<IPlatform>(position, 18f);
                 if (platform != null)
                     flag = true;
             }
-            if (platform != null & flag && this.shotsSinceGrounded > 0 && this.framesSinceShot > 2)
+            if (platform != null & flag && shotsSinceGrounded > 0 && framesSinceShot > 2)
             {
-                if (this.shotsSinceGrounded > 1)
+                if (shotsSinceGrounded > 1)
                     SFX.PlaySynchronized("laserChargeTeeny", 0.8f, 0.3f);
-                this.shotsSinceGrounded = 0;
+                shotsSinceGrounded = 0;
                 for (int index1 = 0; index1 < 8; ++index1)
                 {
                     float deg = (float)(index1 * 45.0 - 5.0) + Rando.Float(20f);
                     Vec2 position;
                     if (Level.CheckLine<IPlatform>(this.position, this.position + new Vec2((float)Math.Cos(Maths.DegToRad(deg)), (float)Math.Sin(Maths.DegToRad(deg))) * 32f, out position) != null)
                     {
-                        this.blockGlows.Add(new Warpgun.BlockGlow()
+                        blockGlows.Add(new Warpgun.BlockGlow()
                         {
                             pos = position
                         });
@@ -138,115 +138,115 @@ namespace DuckGame
                     }
                 }
             }
-            this.ammoType.range = 128f;
-            if (this.tape != null && this.tape.gun1 is Warpgun && this.tape.gun2 is Warpgun)
+            ammoType.range = 128f;
+            if (tape != null && tape.gun1 is Warpgun && tape.gun2 is Warpgun)
             {
-                if (this == this.tape.gun2)
-                    this.heat = (this.tape.gun1 as Warpgun).heat;
-                this.ammoType.range *= 2f;
+                if (this == tape.gun2)
+                    heat = (tape.gun1 as Warpgun).heat;
+                ammoType.range *= 2f;
             }
-            if (this.isServerForObject && heat > 1.0)
+            if (isServerForObject && heat > 1.0)
             {
-                this.explode = true;
-                this.PressAction();
+                explode = true;
+                PressAction();
             }
-            if (this.duck != null)
+            if (duck != null)
             {
-                if (this.isServerForObject)
+                if (isServerForObject)
                 {
-                    if (this.duck.grounded)
+                    if (duck.grounded)
                     {
-                        this.shotsSinceDuckWasGrounded = 0;
+                        shotsSinceDuckWasGrounded = 0;
                         if (heat > 0.0)
-                            this.heat -= 0.05f;
+                            heat -= 0.05f;
                     }
-                    if (!(bool)this.infinite)
+                    if (!(bool)infinite)
                     {
-                        if (this.shotsSinceDuckWasGrounded >= 16)
-                            this.heat = 1f;
-                        else if (!(bool)this.infinite)
+                        if (shotsSinceDuckWasGrounded >= 16)
+                            heat = 1f;
+                        else if (!(bool)infinite)
                         {
                             float num = Math.Min(shotsSinceDuckWasGrounded / 38f, 1f);
                             if (heat < num)
-                                this.heat = num;
+                                heat = num;
                         }
                     }
                 }
-                if (this.isServerForObject)
+                if (isServerForObject)
                 {
-                    if (gravMultTime > 0.0 && !this.duck.inPipe)
+                    if (gravMultTime > 0.0 && !duck.inPipe)
                     {
-                        this.heat += 0.005f;
-                        if (this.warped)
+                        heat += 0.005f;
+                        if (warped)
                         {
-                            this.duck.blendColor = Lerp.Color(Color.White, Color.Purple, this.gravMultTime);
-                            this.duck.position = this.warpPos;
-                            this.duck.vSpeed = -0.3f;
-                            this.duck.hSpeed = -0.3f;
+                            duck.blendColor = Lerp.Color(Color.White, Color.Purple, gravMultTime);
+                            duck.position = warpPos;
+                            duck.vSpeed = -0.3f;
+                            duck.hSpeed = -0.3f;
                         }
                     }
                     else
                     {
-                        if (this.warped)
+                        if (warped)
                         {
-                            this.duck.gravMultiplier = 1f;
-                            this.duck.blendColor = Color.White;
+                            duck.gravMultiplier = 1f;
+                            duck.blendColor = Color.White;
                         }
-                        this.gravMultTime = 0f;
+                        gravMultTime = 0f;
                     }
                 }
-                this.lastDuck = this.duck;
+                lastDuck = duck;
             }
-            else if (this.lastDuck != null)
+            else if (lastDuck != null)
             {
-                this.lastDuck.blendColor = Color.White;
-                this.lastDuck.gravMultiplier = 1f;
-                this.gravMultTime = 0f;
-                this.warped = false;
-                this.lastDuck = null;
+                lastDuck.blendColor = Color.White;
+                lastDuck.gravMultiplier = 1f;
+                gravMultTime = 0f;
+                warped = false;
+                lastDuck = null;
             }
-            if (this.shotsSinceGrounded == 0 || (bool)this.infinite)
-                this._sprite.frame = 0;
-            else if (this.shotsSinceGrounded == 1)
+            if (shotsSinceGrounded == 0 || (bool)infinite)
+                _sprite.frame = 0;
+            else if (shotsSinceGrounded == 1)
             {
-                this._sprite.frame = 1;
+                _sprite.frame = 1;
             }
             else
             {
-                this.lerpShut += 0.2f;
-                this._sprite.frame = lerpShut >= 0.400000005960464 ? (lerpShut >= 0.800000011920929 ? 4 : 3) : 2;
+                lerpShut += 0.2f;
+                _sprite.frame = lerpShut >= 0.400000005960464 ? (lerpShut >= 0.800000011920929 ? 4 : 3) : 2;
             }
-            ++this.framesSinceShot;
+            ++framesSinceShot;
             base.Update();
         }
 
         public override void OnPressAction()
         {
-            if (!this.isServerForObject)
+            if (!isServerForObject)
                 return;
             Vec2 position = this.position;
             bool flag = false;
-            if (this.duck != null)
+            if (duck != null)
             {
-                if (this.duck.holdObject is TapedGun)
-                    (this.duck.holdObject as TapedGun).UpdatePositioning();
-                position = this.duck.position;
-                if (this.duck.sliding)
+                if (duck.holdObject is TapedGun)
+                    (duck.holdObject as TapedGun).UpdatePositioning();
+                position = duck.position;
+                if (duck.sliding)
                 {
                     position.y += 4f;
                     flag = true;
                 }
-                else if (this.duck.crouch)
+                else if (duck.crouch)
                 {
                     position.y += 4f;
                     flag = true;
                 }
             }
-            if (this.shotsSinceGrounded >= this.maxUngroundedShots && !(bool)this.infinite)
+            if (shotsSinceGrounded >= maxUngroundedShots && !(bool)infinite)
                 return;
-            this.lerpShut = 0f;
-            float num1 = -this.angle;
-            if (this.offDir < 0)
+            lerpShut = 0f;
+            float num1 = -angle;
+            if (offDir < 0)
                 num1 += 3.141593f;
             Vec2 vec2_1 = Vec2.Zero;
             float num2 = 999999f;
@@ -257,14 +257,14 @@ namespace DuckGame
             if (flag)
                 num4 = 5f;
             float num5 = 8f;
-            if (this.angleDegrees != 0.0 && Math.Abs(this.angleDegrees) != 90.0 && Math.Abs(this.angleDegrees) != 180.0)
+            if (angleDegrees != 0.0 && Math.Abs(angleDegrees) != 90.0 && Math.Abs(angleDegrees) != 180.0)
                 num5 = 24f;
             int num6 = 6;
-            if (Math.Abs((int)this.angleDegrees) < 70.0 && Math.Abs((int)this.angleDegrees) > 65.0)
+            if (Math.Abs((int)angleDegrees) < 70.0 && Math.Abs((int)angleDegrees) > 65.0)
                 num6 = 12;
-            if (Math.Abs((int)this.angleDegrees) > -70.0)
+            if (Math.Abs((int)angleDegrees) > -70.0)
             {
-                double num7 = Math.Abs((int)this.angleDegrees);
+                double num7 = Math.Abs((int)angleDegrees);
             }
             for (int index = 0; index < 3; ++index)
             {
@@ -307,134 +307,134 @@ namespace DuckGame
             }
             if (num3 < 99999.0 && num5 > 9.0 && Math.Abs(num3 - num2) < num5)
                 num2 = num3;
-            this.warpLines.Add(new WarpLine()
+            warpLines.Add(new WarpLine()
             {
                 start = position,
                 end = position + vec2_2 * num2,
                 lerp = 0.6f,
-                wide = this.duck == null || !this.duck.sliding ? 24f : 14f
+                wide = duck == null || !duck.sliding ? 24f : 14f
             });
-            if (this.isServerForObject)
+            if (isServerForObject)
             {
-                this._ammoType.range = num2 - 8f;
-                this._barrelOffsetTL = new Vec2(8f, 3f);
-                this.Fire();
+                _ammoType.range = num2 - 8f;
+                _barrelOffsetTL = new Vec2(8f, 3f);
+                Fire();
                 if (Network.isActive)
                 {
-                    Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, true, this.duck != null ? this.duck.netProfileIndex : (byte)4), NetMessagePriority.Urgent);
-                    this.firedBullets.Clear();
+                    Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, true, duck != null ? duck.netProfileIndex : (byte)4), NetMessagePriority.Urgent);
+                    firedBullets.Clear();
                 }
-                this._wait = 0f;
-                this._barrelOffsetTL = new Vec2(8f, 15f);
-                this.Fire();
+                _wait = 0f;
+                _barrelOffsetTL = new Vec2(8f, 15f);
+                Fire();
                 if (Network.isActive)
                 {
-                    Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, true, this.duck != null ? this.duck.netProfileIndex : (byte)4), NetMessagePriority.Urgent);
-                    this.firedBullets.Clear();
+                    Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, true, duck != null ? duck.netProfileIndex : (byte)4), NetMessagePriority.Urgent);
+                    firedBullets.Clear();
                 }
-                this._wait = 0f;
-                this._barrelOffsetTL = new Vec2(8f, 9f);
-                this.Fire();
+                _wait = 0f;
+                _barrelOffsetTL = new Vec2(8f, 9f);
+                Fire();
                 if (Network.isActive)
                 {
-                    Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, true, this.duck != null ? this.duck.netProfileIndex : (byte)4), NetMessagePriority.Urgent);
-                    this.firedBullets.Clear();
+                    Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, true, duck != null ? duck.netProfileIndex : (byte)4), NetMessagePriority.Urgent);
+                    firedBullets.Clear();
                 }
-                this._wait = 0f;
-                this._barrelOffsetTL = new Vec2(8f, 4f);
-                if (this.duck != null)
+                _wait = 0f;
+                _barrelOffsetTL = new Vec2(8f, 4f);
+                if (duck != null)
                 {
-                    if (vec2_1.y < this.duck.y - 16.0 && Math.Abs(vec2_1.x - this.duck.x) < 16.0)
+                    if (vec2_1.y < duck.y - 16.0 && Math.Abs(vec2_1.x - duck.x) < 16.0)
                         num2 -= 2f;
-                    this.duck.position = this.duck.position + vec2_2 * num2;
-                    this.duck.sleeping = false;
-                    this.duck._disarmDisable = 10;
-                    this.duck.gravMultiplier = 0f;
-                    this.duck.OnTeleport();
-                    this.duck.blendColor = Color.Purple;
-                    this.warped = true;
-                    this.gravMultTime = 1f;
-                    Block block = Level.CheckLine<Block>(new Vec2(this.duck.position.x, this.duck.bottom - 5f), new Vec2(this.duck.position.x, this.duck.bottom - 2f));
+                    duck.position = duck.position + vec2_2 * num2;
+                    duck.sleeping = false;
+                    duck._disarmDisable = 10;
+                    duck.gravMultiplier = 0f;
+                    duck.OnTeleport();
+                    duck.blendColor = Color.Purple;
+                    warped = true;
+                    gravMultTime = 1f;
+                    Block block = Level.CheckLine<Block>(new Vec2(duck.position.x, duck.bottom - 5f), new Vec2(duck.position.x, duck.bottom - 2f));
                     if (block != null)
-                        this.duck.bottom = block.top;
-                    IPlatform platform = Level.CheckLine<IPlatform>(new Vec2(this.duck.position.x, this.duck.bottom - 2f), new Vec2(this.duck.position.x, this.duck.bottom + 1f), ignore);
+                        duck.bottom = block.top;
+                    IPlatform platform = Level.CheckLine<IPlatform>(new Vec2(duck.position.x, duck.bottom - 2f), new Vec2(duck.position.x, duck.bottom + 1f), ignore);
                     if (platform != null && (platform as Thing).solid && (ignore == null || ignore.top < (platform as Thing).top - 0.5))
-                        this.duck.bottom = (platform as Thing).top;
-                    this.warpPos = this.duck.position;
+                        duck.bottom = (platform as Thing).top;
+                    warpPos = duck.position;
                 }
-                else if (this.owner == null)
+                else if (owner == null)
                 {
                     this.position = position + vec2_2 * num2;
-                    this.sleeping = false;
+                    sleeping = false;
                 }
-                if (this.owner != null)
+                if (owner != null)
                 {
-                    this.owner.hSpeed = this.owner.vSpeed = -0.01f;
-                    if (this.owner is MaterialThing)
+                    owner.hSpeed = owner.vSpeed = -0.01f;
+                    if (owner is MaterialThing)
                     {
-                        foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(this.owner.topLeft, this.owner.bottomRight))
+                        foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(owner.topLeft, owner.bottomRight))
                         {
-                            materialThing.OnSoftImpact(this.owner as MaterialThing, ImpactedFrom.Top);
-                            if (this.owner != null)
-                                materialThing.Touch(this.owner as MaterialThing);
+                            materialThing.OnSoftImpact(owner as MaterialThing, ImpactedFrom.Top);
+                            if (owner != null)
+                                materialThing.Touch(owner as MaterialThing);
                         }
                     }
                 }
             }
-            this.framesSinceShot = 0;
-            ++this.shotsSinceGrounded;
-            ++this.shotsSinceDuckWasGrounded;
+            framesSinceShot = 0;
+            ++shotsSinceGrounded;
+            ++shotsSinceDuckWasGrounded;
             if (heat > 0.800000011920929)
             {
-                this.explode = true;
-                this.PressAction();
+                explode = true;
+                PressAction();
             }
-            if (this.level != null && this.y < level.topLeft.y - 256.0)
+            if (level != null && y < level.topLeft.y - 256.0)
             {
-                this.shotsSinceDuckWasGrounded = 16;
-                this.heat = 1f;
+                shotsSinceDuckWasGrounded = 16;
+                heat = 1f;
             }
-            if (this.shotsSinceDuckWasGrounded == 15 && !(bool)this.infinite)
+            if (shotsSinceDuckWasGrounded == 15 && !(bool)infinite)
                 SFX.PlaySynchronized("wagnusAlert", 0.8f);
-            if (this.shotsSinceGrounded != this.maxUngroundedShots || (bool)this.infinite)
+            if (shotsSinceGrounded != maxUngroundedShots || (bool)infinite)
                 return;
             SFX.PlaySynchronized("laserUnchargeShortLoud", pitch: 0.7f);
         }
 
         public override void Draw() => base.Draw();
 
-        public new Vec2 laserOffset => this.Offset(new Vec2(16f, 9f) - this.center + new Vec2(-15f, 1f));
+        public new Vec2 laserOffset => Offset(new Vec2(16f, 9f) - center + new Vec2(-15f, 1f));
 
         public override void DrawGlow()
         {
-            foreach (Warpgun.BlockGlow blockGlow in this.blockGlows)
+            foreach (Warpgun.BlockGlow blockGlow in blockGlows)
             {
-                Graphics.DrawTexturedLine(this._warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0f, -4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
-                Graphics.DrawTexturedLine(this._warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0f, 4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
+                Graphics.DrawTexturedLine(_warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0f, -4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
+                Graphics.DrawTexturedLine(_warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0f, 4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
                 blockGlow.glow -= 0.05f;
             }
-            this.blockGlows.RemoveAll(x => x.glow < 0.00999999977648258);
+            blockGlows.RemoveAll(x => x.glow < 0.00999999977648258);
             Color purple = Color.Purple;
-            foreach (WarpLine warpLine in this.warpLines)
+            foreach (WarpLine warpLine in warpLines)
             {
                 Vec2 vec2_1 = warpLine.start - warpLine.end;
                 Vec2 vec2_2 = warpLine.end - warpLine.start;
-                Graphics.DrawTexturedLine(this._warpLine.texture, warpLine.end + vec2_1 * (1f - warpLine.lerp), warpLine.end, purple * 0.8f, warpLine.wide / 32f, (Depth)0.9f);
-                Graphics.DrawTexturedLine(this._warpLine.texture, warpLine.start + vec2_2 * warpLine.lerp, warpLine.start, purple * 0.8f, warpLine.wide / 32f, (Depth)0.9f);
+                Graphics.DrawTexturedLine(_warpLine.texture, warpLine.end + vec2_1 * (1f - warpLine.lerp), warpLine.end, purple * 0.8f, warpLine.wide / 32f, (Depth)0.9f);
+                Graphics.DrawTexturedLine(_warpLine.texture, warpLine.start + vec2_2 * warpLine.lerp, warpLine.start, purple * 0.8f, warpLine.wide / 32f, (Depth)0.9f);
                 warpLine.lerp += 0.1f;
             }
-            this.warpLines.RemoveAll(v => v.lerp >= 1.0);
-            if (this.duck != null && this.visible)
+            warpLines.RemoveAll(v => v.lerp >= 1.0);
+            if (duck != null && visible)
             {
                 if (gravMultTime > 0.0)
                 {
-                    Graphics.DrawTexturedLine(this._warpLine.texture, new Vec2(this.duck.x, this.duck.y), new Vec2(this.duck.x, this.duck.top - 8f), purple * (this.gravMultTime + 0.2f), 0.7f, (Depth)0.9f);
-                    Graphics.DrawTexturedLine(this._warpLine.texture, new Vec2(this.duck.x, this.duck.y), new Vec2(this.duck.x, this.duck.bottom + 8f), purple * (this.gravMultTime + 0.2f), 0.7f, (Depth)0.9f);
+                    Graphics.DrawTexturedLine(_warpLine.texture, new Vec2(duck.x, duck.y), new Vec2(duck.x, duck.top - 8f), purple * (gravMultTime + 0.2f), 0.7f, (Depth)0.9f);
+                    Graphics.DrawTexturedLine(_warpLine.texture, new Vec2(duck.x, duck.y), new Vec2(duck.x, duck.bottom + 8f), purple * (gravMultTime + 0.2f), 0.7f, (Depth)0.9f);
                 }
-                if (this.shotsSinceGrounded < this.maxUngroundedShots || (bool)this.infinite)
+                if (shotsSinceGrounded < maxUngroundedShots || (bool)infinite)
                 {
-                    float num = -this.angle;
-                    if (this.offDir < 0)
+                    float num = -angle;
+                    if (offDir < 0)
                         num += 3.141593f;
                     Vec2 laserOffset = this.laserOffset;
                     Vec2 p2 = laserOffset - new Vec2((float)Math.Cos(num) * 122f, (float)-Math.Sin(num) * 122f);
@@ -442,16 +442,16 @@ namespace DuckGame
                     Vec2 hitPos = Vec2.Zero;
                     if (Level.CheckRay<Block>(laserOffset, p2 + new Vec2(0.2f, 0.2f), out hitPos) != null)
                     {
-                        this._warpPoint = hitPos + vec2 * -9f;
+                        _warpPoint = hitPos + vec2 * -9f;
                         p2 = hitPos;
                     }
                     else
-                        this._warpPoint = p2 + new Vec2(-5f, 0f);
-                    Graphics.DrawTexturedLine(this._laserTex, laserOffset, p2, Color.Red, 0.5f, this.depth - 1);
-                    if (this._sightHit != null)
+                        _warpPoint = p2 + new Vec2(-5f, 0f);
+                    Graphics.DrawTexturedLine(_laserTex, laserOffset, p2, Color.Red, 0.5f, depth - 1);
+                    if (_sightHit != null)
                     {
-                        this._sightHit.color = Color.Red;
-                        Graphics.Draw(this._sightHit, p2.x, p2.y);
+                        _sightHit.color = Color.Red;
+                        Graphics.Draw(_sightHit, p2.x, p2.y);
                     }
                 }
             }

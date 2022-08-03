@@ -12,9 +12,9 @@ namespace DuckGame
         public BassDrum(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("drumset/bassDrum");
-            this.center = new Vec2(this.graphic.w / 2, this.graphic.h / 2);
-            this._sound = "kick";
+            graphic = new Sprite("drumset/bassDrum");
+            center = new Vec2(graphic.w / 2, graphic.h / 2);
+            _sound = "kick";
         }
     }
 }

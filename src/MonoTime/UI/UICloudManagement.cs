@@ -32,29 +32,29 @@ namespace DuckGame
         public UICloudManagement(UIMenu openOnClose)
           : base("MANAGE CLOUD", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 260f, 180f)
         {
-            this.Add(new UIBox(0f, 0f, 100f, 150f, isVisible: false), true);
-            this._littleFont = new BitmapFont("smallBiosFont", 7, 6);
-            this._downArrow = new Sprite("cloudDown");
-            this._downArrow.CenterOrigin();
-            this._deleteMenu = new UIMenu("ARE YOU SURE?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 280f, conString: "@WASD@ADJUST @CANCEL@EXIT");
-            this._deleteMenu.Add(new UIText("The selected files will be", Colors.DGBlue), true);
-            this._deleteMenu.Add(new UIText("|DGRED|permenantly deleted|DGBLUE| from", Colors.DGBlue), true);
-            this._deleteMenu.Add(new UIText("everywhere, |DGRED|forever!", Colors.DGBlue), true);
-            this._deleteMenu.Add(new UIText(" ", Colors.DGBlue), true);
-            this._deleteMenu.Add(new UIMenuItem("|DGRED|DELETE", new UIMenuActionCallFunctionOpenMenu(_deleteMenu, this, new UIMenuActionCallFunctionOpenMenu.Function(this.DeleteFiles)), backButton: true), true);
-            this._deleteMenu.Add(new UIMenuItem("|DGGREEN|CANCEL", new UIMenuActionOpenMenu(_deleteMenu, this), backButton: true), true);
-            this._deleteMenu._defaultSelection = 1;
-            this._deleteMenu.SetBackFunction(new UIMenuActionOpenMenu(_deleteMenu, this));
-            this._deleteMenu.Close();
-            this._openOnClose = openOnClose;
+            Add(new UIBox(0f, 0f, 100f, 150f, isVisible: false), true);
+            _littleFont = new BitmapFont("smallBiosFont", 7, 6);
+            _downArrow = new Sprite("cloudDown");
+            _downArrow.CenterOrigin();
+            _deleteMenu = new UIMenu("ARE YOU SURE?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 280f, conString: "@WASD@ADJUST @CANCEL@EXIT");
+            _deleteMenu.Add(new UIText("The selected files will be", Colors.DGBlue), true);
+            _deleteMenu.Add(new UIText("|DGRED|permenantly deleted|DGBLUE| from", Colors.DGBlue), true);
+            _deleteMenu.Add(new UIText("everywhere, |DGRED|forever!", Colors.DGBlue), true);
+            _deleteMenu.Add(new UIText(" ", Colors.DGBlue), true);
+            _deleteMenu.Add(new UIMenuItem("|DGRED|DELETE", new UIMenuActionCallFunctionOpenMenu(_deleteMenu, this, new UIMenuActionCallFunctionOpenMenu.Function(DeleteFiles)), backButton: true), true);
+            _deleteMenu.Add(new UIMenuItem("|DGGREEN|CANCEL", new UIMenuActionOpenMenu(_deleteMenu, this), backButton: true), true);
+            _deleteMenu._defaultSelection = 1;
+            _deleteMenu.SetBackFunction(new UIMenuActionOpenMenu(_deleteMenu, this));
+            _deleteMenu.Close();
+            _openOnClose = openOnClose;
         }
 
         private void DeleteFiles()
         {
-            foreach (UICloudManagement.File pFolder in this._flagged)
+            foreach (UICloudManagement.File pFolder in _flagged)
             {
                 if (pFolder.files != null)
-                    this.DeleteFolder(pFolder);
+                    DeleteFolder(pFolder);
                 else
                     DuckFile.Delete(pFolder.fullPath);
             }
@@ -65,7 +65,7 @@ namespace DuckGame
             foreach (UICloudManagement.File file in pFolder.files)
             {
                 if (file.files != null)
-                    this.DeleteFolder(file);
+                    DeleteFolder(file);
                 else
                     DuckFile.Delete(file.fullPath);
             }
@@ -73,20 +73,20 @@ namespace DuckGame
 
         private UICloudManagement.File GetFolder(string pPath, string pCloudPath)
         {
-            UICloudManagement.File folder = this.root;
+            UICloudManagement.File folder = root;
             if (pCloudPath.StartsWith("nq500000_"))
             {
-                if (this.profileRoot == null)
+                if (profileRoot == null)
                 {
-                    this.profileRoot = new UICloudManagement.File()
+                    profileRoot = new UICloudManagement.File()
                     {
-                        parent = this.root,
+                        parent = root,
                         name = Steam.user.id.ToString(),
                         files = new List<UICloudManagement.File>()
                     };
-                    this.root.files.Add(this.profileRoot);
+                    root.files.Add(profileRoot);
                 }
-                folder = this.profileRoot;
+                folder = profileRoot;
             }
             string str1 = pPath;
             char[] chArray = new char[1] { '/' };
@@ -135,19 +135,19 @@ namespace DuckGame
                 return;
             pRoot.files = pRoot.files.OrderBy<UICloudManagement.File, bool>(x => x.name != "..").ThenBy<UICloudManagement.File, bool>(x => x.files == null).ThenBy<UICloudManagement.File, string>(x => x.name).ToList<UICloudManagement.File>();
             foreach (UICloudManagement.File file in pRoot.files)
-                this.SortFiles(file);
+                SortFiles(file);
         }
 
         public override void Open()
         {
             HUD.CloseAllCorners();
-            this._opening = true;
-            this._flagged.Clear();
-            this.root = new UICloudManagement.File()
+            _opening = true;
+            _flagged.Clear();
+            root = new UICloudManagement.File()
             {
                 files = new List<UICloudManagement.File>()
             };
-            this.profileRoot = null;
+            profileRoot = null;
             int count = Steam.FileGetCount();
             for (int file = 0; file < count; ++file)
             {
@@ -155,15 +155,15 @@ namespace DuckGame
                 if (cloudFile != null)
                 {
                     string path = cloudFile.cloudPath.Substring(9, cloudFile.cloudPath.Length - 9);
-                    this.GetFolder(Path.GetDirectoryName(path).Replace('\\', '/'), cloudFile.cloudPath).files.Add(new UICloudManagement.File()
+                    GetFolder(Path.GetDirectoryName(path).Replace('\\', '/'), cloudFile.cloudPath).files.Add(new UICloudManagement.File()
                     {
                         name = Path.GetFileName(path),
                         fullPath = cloudFile.localPath
                     });
                 }
             }
-            this.SortFiles(this.root);
-            this.currentFolder = this.root;
+            SortFiles(root);
+            currentFolder = root;
             base.Open();
         }
 
@@ -175,111 +175,111 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this.open && !this._opening)
+            if (open && !_opening)
             {
-                if (Input.Pressed("MENUUP") && this._selection > 0)
+                if (Input.Pressed("MENUUP") && _selection > 0)
                 {
-                    --this._selection;
-                    if (this._selection < this._topOffset)
-                        --this._topOffset;
+                    --_selection;
+                    if (_selection < _topOffset)
+                        --_topOffset;
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (Input.Pressed("MENUDOWN") && this._selection < this.currentFolder.files.Count - 1)
+                if (Input.Pressed("MENUDOWN") && _selection < currentFolder.files.Count - 1)
                 {
-                    ++this._selection;
-                    if (this._selection > this._topOffset + this.kMaxInView)
-                        ++this._topOffset;
+                    ++_selection;
+                    if (_selection > _topOffset + kMaxInView)
+                        ++_topOffset;
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (Input.Pressed("SELECT") && this.currentFolder.files.Count > 0)
+                if (Input.Pressed("SELECT") && currentFolder.files.Count > 0)
                 {
-                    if (this.currentFolder.files[this._selection].name == "..")
-                        this.SelectFolder(this.currentFolder.parent);
-                    else if (this.currentFolder.files[this._selection].files != null)
-                        this.SelectFolder(this.currentFolder.files[this._selection]);
+                    if (currentFolder.files[_selection].name == "..")
+                        SelectFolder(currentFolder.parent);
+                    else if (currentFolder.files[_selection].files != null)
+                        SelectFolder(currentFolder.files[_selection]);
                 }
-                if (Input.Pressed("MENU1") && this.currentFolder.files.Count > 0)
+                if (Input.Pressed("MENU1") && currentFolder.files.Count > 0)
                 {
-                    if (this._flagged.Contains(this.currentFolder.files[this._selection]))
-                        this._flagged.Remove(this.currentFolder.files[this._selection]);
+                    if (_flagged.Contains(currentFolder.files[_selection]))
+                        _flagged.Remove(currentFolder.files[_selection]);
                     else
-                        this._flagged.Add(this.currentFolder.files[this._selection]);
+                        _flagged.Add(currentFolder.files[_selection]);
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (Input.Pressed("MENU2") && this._flagged.Count > 0)
+                if (Input.Pressed("MENU2") && _flagged.Count > 0)
                 {
-                    this._deleteMenu.dirty = true;
+                    _deleteMenu.dirty = true;
                     new UIMenuActionOpenMenu(this, _deleteMenu).Activate();
                 }
                 if (Input.Pressed("CANCEL"))
                 {
-                    if (this.currentFolder.parent != null)
-                        this.SelectFolder(this.currentFolder.parent);
-                    else if (this._openOnClose != null)
+                    if (currentFolder.parent != null)
+                        SelectFolder(currentFolder.parent);
+                    else if (_openOnClose != null)
                         new UIMenuActionOpenMenu(this, _openOnClose).Activate();
                     else
                         new UIMenuActionCloseMenu(this).Activate();
                 }
             }
-            this._opening = false;
+            _opening = false;
             base.Update();
         }
 
         private void SelectFolder(UICloudManagement.File pFolder)
         {
-            this.currentFolder = pFolder;
-            this._selection = 0;
-            this._topOffset = 0;
+            currentFolder = pFolder;
+            _selection = 0;
+            _topOffset = 0;
             SFX.Play("textLetter", 0.7f);
         }
 
         public override void Draw()
         {
-            if (this.open && this.currentFolder != null)
+            if (open && currentFolder != null)
             {
-                Vec2 vec2 = new Vec2(this.x - 124f, this.y - 66f);
+                Vec2 vec2 = new Vec2(x - 124f, this.y - 66f);
                 float y = 0f;
                 int num1 = 0;
                 int num2 = 0;
-                foreach (UICloudManagement.File file in this.currentFolder.files)
+                foreach (UICloudManagement.File file in currentFolder.files)
                 {
-                    if (num1 < this._topOffset)
+                    if (num1 < _topOffset)
                     {
                         ++num1;
                     }
                     else
                     {
-                        if (this._topOffset > 0)
+                        if (_topOffset > 0)
                         {
-                            this._downArrow.flipV = true;
-                            Graphics.Draw(this._downArrow, this.x, vec2.y - 2f, (Depth)0.5f);
+                            _downArrow.flipV = true;
+                            Graphics.Draw(_downArrow, x, vec2.y - 2f, (Depth)0.5f);
                         }
-                        if (num2 > this.kMaxInView)
+                        if (num2 > kMaxInView)
                         {
-                            this._downArrow.flipV = false;
-                            Graphics.Draw(this._downArrow, this.x, vec2.y + y, (Depth)0.5f);
+                            _downArrow.flipV = false;
+                            Graphics.Draw(_downArrow, x, vec2.y + y, (Depth)0.5f);
                             break;
                         }
                         string str1 = file.name;
                         if (str1.Length > 31)
                             str1 = str1.Substring(0, 30) + "..";
-                        string str2 = file.files == null ? (this._flagged.Contains(file) ? "@DELETEFLAG_ON@" : "@DELETEFLAG_OFF@") + str1 : (this._flagged.Contains(file) ? "@FOLDERDELETEICON@" : "@FOLDERICON@") + str1;
-                        this._littleFont.Draw(num1 != this._selection ? " " + str2 : "@SELECTICON@" + str2, vec2 + new Vec2(0f, y), Color.White, (Depth)0.5f);
+                        string str2 = file.files == null ? (_flagged.Contains(file) ? "@DELETEFLAG_ON@" : "@DELETEFLAG_OFF@") + str1 : (_flagged.Contains(file) ? "@FOLDERDELETEICON@" : "@FOLDERICON@") + str1;
+                        _littleFont.Draw(num1 != _selection ? " " + str2 : "@SELECTICON@" + str2, vec2 + new Vec2(0f, y), Color.White, (Depth)0.5f);
                         y += 8f;
                         ++num1;
                         ++num2;
                     }
                 }
                 string text = "@CANCEL@BACK";
-                if (this.currentFolder.files.Count > 0)
+                if (currentFolder.files.Count > 0)
                 {
-                    if (this.currentFolder.files[this._selection].files != null)
+                    if (currentFolder.files[_selection].files != null)
                         text += " @SELECT@OPEN";
-                    text = !this._flagged.Contains(this.currentFolder.files[this._selection]) ? text + " @MENU1@FLAG" : text + " @MENU1@UNFLAG";
+                    text = !_flagged.Contains(currentFolder.files[_selection]) ? text + " @MENU1@FLAG" : text + " @MENU1@UNFLAG";
                 }
-                if (this._flagged.Count > 0)
+                if (_flagged.Count > 0)
                     text += " @MENU2@DELETE";
-                this._littleFont.Draw(text, new Vec2(this.x - this._littleFont.GetWidth(text) / 2f, this.y + 74f), Color.White, (Depth)0.5f);
+                _littleFont.Draw(text, new Vec2(x - _littleFont.GetWidth(text) / 2f, this.y + 74f), Color.White, (Depth)0.5f);
             }
             base.Draw();
         }

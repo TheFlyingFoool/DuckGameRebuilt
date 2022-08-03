@@ -31,136 +31,136 @@ namespace DuckGame
 
         public bool enabled
         {
-            get => this._enabled;
+            get => _enabled;
             set
             {
-                if (this._enabled == value)
+                if (_enabled == value)
                     return;
-                this._prevEnabled = this._enabled;
-                this._enabled = value;
+                _prevEnabled = _enabled;
+                _enabled = value;
             }
         }
 
         public bool prevEnabled
         {
-            get => this._prevEnabled;
-            set => this._prevEnabled = value;
+            get => _prevEnabled;
+            set => _prevEnabled = value;
         }
 
         public bool filtered
         {
-            get => this._filtered;
-            set => this._filtered = value;
+            get => _filtered;
+            set => _filtered = value;
         }
 
         public bool onlineEnabled
         {
-            get => this._onlineEnabled;
-            set => this._onlineEnabled = value;
+            get => _onlineEnabled;
+            set => _onlineEnabled = value;
         }
 
         public string name
         {
-            get => this._name;
-            set => this._name = value;
+            get => _name;
+            set => _name = value;
         }
 
         public string shortName
         {
-            get => this._shortName != null ? this._shortName : this.name;
-            set => this._shortName = value;
+            get => _shortName != null ? _shortName : name;
+            set => _shortName = value;
         }
 
         public string id
         {
-            get => this._id;
-            set => this._id = value;
+            get => _id;
+            set => _id = value;
         }
 
         public int icon
         {
-            get => this._icon;
-            set => this._icon = value;
+            get => _icon;
+            set => _icon = value;
         }
 
         public int cost
         {
-            get => this._cost;
-            set => this._cost = value;
+            get => _cost;
+            set => _cost = value;
         }
 
         public string description
         {
-            get => this._description;
-            set => this._description = value;
+            get => _description;
+            set => _description = value;
         }
 
         public string longDescription
         {
-            get => this._longDescription;
-            set => this._longDescription = value;
+            get => _longDescription;
+            set => _longDescription = value;
         }
 
         public UnlockType type
         {
-            get => this._type;
-            set => this._type = value;
+            get => _type;
+            set => _type = value;
         }
 
         public UnlockPrice priceTier
         {
-            get => this._priceTier;
-            set => this._priceTier = value;
+            get => _priceTier;
+            set => _priceTier = value;
         }
 
-        public string GetNameForDisplay() => this.name.ToUpperInvariant();
+        public string GetNameForDisplay() => name.ToUpperInvariant();
 
-        public string GetShortNameForDisplay() => this.shortName.ToUpperInvariant();
+        public string GetShortNameForDisplay() => shortName.ToUpperInvariant();
 
         public bool unlocked
         {
             get
             {
-                if (this._unlocked)
+                if (_unlocked)
                     return true;
                 foreach (Profile universalProfile in Profiles.universalProfileList)
                 {
-                    if (universalProfile.unlocks.Contains(this._id))
+                    if (universalProfile.unlocks.Contains(_id))
                         return true;
                 }
                 return false;
             }
-            set => this._unlocked = value;
+            set => _unlocked = value;
         }
 
-        public bool ProfileUnlocked(Profile p) => p.unlocks.Contains(this._id);
+        public bool ProfileUnlocked(Profile p) => p.unlocks.Contains(_id);
 
-        public List<UnlockData> children => this._children;
+        public List<UnlockData> children => _children;
 
         public UnlockData parent
         {
-            get => this._parent;
-            set => this._parent = value;
+            get => _parent;
+            set => _parent = value;
         }
 
         public int layer
         {
-            get => this._layer;
-            set => this._layer = value;
+            get => _layer;
+            set => _layer = value;
         }
 
         public void AddChild(UnlockData child)
         {
-            this.children.Add(child);
+            children.Add(child);
             child.parent = this;
-            child.layer = this.layer + 1;
+            child.layer = layer + 1;
         }
 
         public bool AllParentsUnlocked(Profile who)
         {
-            if (this.parent == null)
+            if (parent == null)
                 return true;
-            foreach (UnlockData unlockData in Unlocks.GetTreeLayer(this.parent.layer))
+            foreach (UnlockData unlockData in Unlocks.GetTreeLayer(parent.layer))
             {
                 if (unlockData.children.Contains(this) && !unlockData.ProfileUnlocked(who))
                     return false;

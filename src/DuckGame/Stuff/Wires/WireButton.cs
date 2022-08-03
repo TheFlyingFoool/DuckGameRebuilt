@@ -27,54 +27,54 @@ namespace DuckGame
         public WireButton(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("wireButton", 16, 19);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 11f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.depth = -0.5f;
-            this._editorName = "Wire Button";
-            this.editorTooltip = "Stepping on a Button triggers the behavior of connected objects.";
-            this.offSignal.name = "Hold Signal";
-            this.offSignal._tooltip = "If true, the button continuously send a signal through the wire while pressed.";
-            this.holdTime.name = "Hold Time";
-            this.holdTime._tooltip = "How long the signal will be held after releasing the button.";
-            this.releaseOnly.name = "Release";
-            this.releaseOnly._tooltip = "If true, the button will send a signal only when released.";
-            this.invert._tooltip = "If true, the button will send signals as long as it's not pressed.";
-            this.thickness = 4f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.layer = Layer.Foreground;
+            _sprite = new SpriteMap("wireButton", 16, 19);
+            graphic = _sprite;
+            center = new Vec2(8f, 11f);
+            collisionOffset = new Vec2(-8f, -8f);
+            collisionSize = new Vec2(16f, 16f);
+            depth = -0.5f;
+            _editorName = "Wire Button";
+            editorTooltip = "Stepping on a Button triggers the behavior of connected objects.";
+            offSignal.name = "Hold Signal";
+            offSignal._tooltip = "If true, the button continuously send a signal through the wire while pressed.";
+            holdTime.name = "Hold Time";
+            holdTime._tooltip = "How long the signal will be held after releasing the button.";
+            releaseOnly.name = "Release";
+            releaseOnly._tooltip = "If true, the button will send a signal only when released.";
+            invert._tooltip = "If true, the button will send signals as long as it's not pressed.";
+            thickness = 4f;
+            physicsMaterial = PhysicsMaterial.Metal;
+            layer = Layer.Foreground;
         }
 
         public override void TabRotate()
         {
-            this.orientation = (EditorProperty<int>)((int)this.orientation + 1);
-            if ((int)this.orientation <= 3)
+            orientation = (EditorProperty<int>)((int)orientation + 1);
+            if ((int)orientation <= 3)
                 return;
-            this.orientation = (EditorProperty<int>)0;
+            orientation = (EditorProperty<int>)0;
         }
 
         public override void Initialize()
         {
-            if (this.flipHorizontal)
+            if (flipHorizontal)
             {
-                if (this.orientation.value == 1)
-                    this.orientation.value = 3;
-                else if (this.orientation.value == 3)
-                    this.orientation.value = 1;
+                if (orientation.value == 1)
+                    orientation.value = 3;
+                else if (orientation.value == 3)
+                    orientation.value = 1;
             }
-            this.angleDegrees = orientation.value * 90f;
+            angleDegrees = orientation.value * 90f;
             if (!(Level.current is Editor))
             {
-                if (this.orientation.value == 0)
-                    this._top = new WireButtonTop(this.x, this.y - 9f, this, this.orientation.value);
-                else if (this.orientation.value == 1)
-                    this._top = new WireButtonTop(this.x + 9f, this.y, this, this.orientation.value);
-                else if (this.orientation.value == 2)
-                    this._top = new WireButtonTop(this.x, this.y + 9f, this, this.orientation.value);
-                else if (this.orientation.value == 3)
-                    this._top = new WireButtonTop(this.x - 9f, this.y, this, this.orientation.value);
+                if (orientation.value == 0)
+                    _top = new WireButtonTop(x, y - 9f, this, orientation.value);
+                else if (orientation.value == 1)
+                    _top = new WireButtonTop(x + 9f, y, this, orientation.value);
+                else if (orientation.value == 2)
+                    _top = new WireButtonTop(x, y + 9f, this, orientation.value);
+                else if (orientation.value == 3)
+                    _top = new WireButtonTop(x - 9f, y, this, orientation.value);
                 Level.Add(_top);
             }
             base.Initialize();
@@ -92,62 +92,62 @@ namespace DuckGame
 
         public void ButtonPressed(PhysicsObject t)
         {
-            if (this._sprite.frame == 0)
+            if (_sprite.frame == 0)
             {
                 SFX.Play("click");
-                this._sprite.frame = 1;
-                if (this.invert.value)
+                _sprite.frame = 1;
+                if (invert.value)
                 {
-                    if (!this.releaseOnly.value && t.isServerForObject)
-                        Level.CheckRect<WireTileset>(this.topLeft + new Vec2(2f, 2f), this.bottomRight + new Vec2(-2f, -2f))?.Emit(type: (this.offSignal.value ? 2 : 3));
+                    if (!releaseOnly.value && t.isServerForObject)
+                        Level.CheckRect<WireTileset>(topLeft + new Vec2(2f, 2f), bottomRight + new Vec2(-2f, -2f))?.Emit(type: (offSignal.value ? 2 : 3));
                 }
-                else if (!this.releaseOnly.value && t.isServerForObject)
-                    Level.CheckRect<WireTileset>(this.topLeft + new Vec2(2f, 2f), this.bottomRight + new Vec2(-2f, -2f))?.Emit(type: (this.offSignal.value ? 1 : 0));
+                else if (!releaseOnly.value && t.isServerForObject)
+                    Level.CheckRect<WireTileset>(topLeft + new Vec2(2f, 2f), bottomRight + new Vec2(-2f, -2f))?.Emit(type: (offSignal.value ? 1 : 0));
             }
-            this.prevO = t;
+            prevO = t;
         }
 
         public override void Update()
         {
-            if (!this._initializedFrame)
+            if (!_initializedFrame)
             {
-                if (Level.CheckRectAll<PhysicsObject>(this._top.topLeft, this._top.bottomRight).FirstOrDefault<PhysicsObject>(x => !(x is TeamHat)) != null)
-                    this._sprite.frame = 1;
-                this._initializedFrame = true;
+                if (Level.CheckRectAll<PhysicsObject>(_top.topLeft, _top.bottomRight).FirstOrDefault<PhysicsObject>(x => !(x is TeamHat)) != null)
+                    _sprite.frame = 1;
+                _initializedFrame = true;
             }
-            if (this.invert.value)
+            if (invert.value)
             {
-                if (this._sprite.frame == 0)
-                    Level.CheckRect<WireTileset>(this.topLeft + new Vec2(2f, 2f), this.bottomRight + new Vec2(-2f, -2f))?.Emit(type: 1);
-                if (this._sprite.frame == 1)
+                if (_sprite.frame == 0)
+                    Level.CheckRect<WireTileset>(topLeft + new Vec2(2f, 2f), bottomRight + new Vec2(-2f, -2f))?.Emit(type: 1);
+                if (_sprite.frame == 1)
                 {
-                    PhysicsObject physicsObject = Level.CheckRectAll<PhysicsObject>(this._top.topLeft, this._top.bottomRight).FirstOrDefault<PhysicsObject>(x => !(x is TeamHat));
+                    PhysicsObject physicsObject = Level.CheckRectAll<PhysicsObject>(_top.topLeft, _top.bottomRight).FirstOrDefault<PhysicsObject>(x => !(x is TeamHat));
                     if (physicsObject == null)
                     {
                         SFX.Play("click");
-                        this._sprite.frame = 0;
+                        _sprite.frame = 0;
                     }
-                    this.prevO = physicsObject;
+                    prevO = physicsObject;
                 }
             }
-            else if (this._sprite.frame == 1)
+            else if (_sprite.frame == 1)
             {
-                PhysicsObject physicsObject = Level.CheckRectAll<PhysicsObject>(this._top.topLeft, this._top.bottomRight).FirstOrDefault<PhysicsObject>(x => !(x is TeamHat));
+                PhysicsObject physicsObject = Level.CheckRectAll<PhysicsObject>(_top.topLeft, _top.bottomRight).FirstOrDefault<PhysicsObject>(x => !(x is TeamHat));
                 if (physicsObject == null)
                 {
-                    this.releaseHold += Maths.IncFrameTimer();
-                    if (releaseHold > this.holdTime.value)
+                    releaseHold += Maths.IncFrameTimer();
+                    if (releaseHold > holdTime.value)
                     {
                         SFX.Play("click");
-                        this._sprite.frame = 0;
-                        if ((this.offSignal.value || this.releaseOnly.value) && (this.prevO == null || this.prevO.isServerForObject))
-                            Level.CheckRect<WireTileset>(this.topLeft + new Vec2(2f, 2f), this.bottomRight + new Vec2(-2f, -2f))?.Emit(type: (this.releaseOnly.value ? 0 : 2));
+                        _sprite.frame = 0;
+                        if ((offSignal.value || releaseOnly.value) && (prevO == null || prevO.isServerForObject))
+                            Level.CheckRect<WireTileset>(topLeft + new Vec2(2f, 2f), bottomRight + new Vec2(-2f, -2f))?.Emit(type: (releaseOnly.value ? 0 : 2));
                     }
                 }
-                this.prevO = physicsObject;
+                prevO = physicsObject;
             }
             else
-                this.releaseHold = 0f;
+                releaseHold = 0f;
             base.Update();
         }
 
@@ -155,12 +155,12 @@ namespace DuckGame
         {
             if (Level.current is Editor)
             {
-                this.angleDegrees = orientation.value * 90f;
-                if (this.flipHorizontal)
-                    this.angleDegrees -= 180f;
+                angleDegrees = orientation.value * 90f;
+                if (flipHorizontal)
+                    angleDegrees -= 180f;
             }
             else
-                this.angleDegrees = orientation.value * 90f;
+                angleDegrees = orientation.value * 90f;
             base.Draw();
         }
     }

@@ -32,11 +32,11 @@ namespace DuckGame
 
         public NetworkConnection connection
         {
-            get => this._connection;
-            set => this._connection = value;
+            get => _connection;
+            set => _connection = value;
         }
 
-        public override string ToString() => this.GetType().Name;
+        public override string ToString() => GetType().Name;
 
         public virtual void CopyTo(NetMessage pMessage)
         {
@@ -44,23 +44,23 @@ namespace DuckGame
 
         public NetworkPacket packet
         {
-            get => this._packet;
-            set => this._packet = value;
+            get => _packet;
+            set => _packet = value;
         }
 
         public virtual bool MessageIsCompleted() => true;
 
-        public BitBuffer serializedData => this._serializedData;
+        public BitBuffer serializedData => _serializedData;
 
-        public void SetSerializedData(BitBuffer data) => this._serializedData = data;
+        public void SetSerializedData(BitBuffer data) => _serializedData = data;
 
-        public void ClearSerializedData() => this._serializedData = null;
+        public void ClearSerializedData() => _serializedData = null;
 
-        public void Deserialize(BitBuffer msg) => this.OnDeserialize(msg);
+        public void Deserialize(BitBuffer msg) => OnDeserialize(msg);
 
         private FieldInfo[] getFields()
         {
-            System.Type type = this.GetType();
+            System.Type type = GetType();
             FieldInfo[] fields1;
             if (NetMessage._messageFields.TryGetValue(type, out fields1))
                 return fields1;
@@ -78,7 +78,7 @@ namespace DuckGame
 
         public virtual void OnDeserialize(BitBuffer msg)
         {
-            foreach (FieldInfo field in this.getFields())
+            foreach (FieldInfo field in getFields())
             {
                 if (field.FieldType == typeof(string))
                     field.SetValue(this, msg.ReadString());
@@ -129,79 +129,79 @@ namespace DuckGame
 
         public BitBuffer Serialize()
         {
-            if (this._serializedData != null)
-                return this._serializedData;
-            this._serializedData = new BitBuffer();
-            this._serializedData.Write(Network.allMessageTypesToID[this.GetType()]);
-            this.OnSerialize();
-            return this._serializedData;
+            if (_serializedData != null)
+                return _serializedData;
+            _serializedData = new BitBuffer();
+            _serializedData.Write(Network.allMessageTypesToID[GetType()]);
+            OnSerialize();
+            return _serializedData;
         }
 
         public void SerializePacketData()
         {
-            this._serializedData = null;
-            this.OnSerialize();
+            _serializedData = null;
+            OnSerialize();
         }
 
         public BitBuffer SerializeToBitBuffer()
         {
-            this._serializedData = new BitBuffer();
-            this.OnSerialize();
-            return this._serializedData;
+            _serializedData = new BitBuffer();
+            OnSerialize();
+            return _serializedData;
         }
 
         protected virtual void OnSerialize()
         {
-            if (this._serializedData == null)
-                this._serializedData = new BitBuffer();
-            foreach (FieldInfo field in this.getFields())
+            if (_serializedData == null)
+                _serializedData = new BitBuffer();
+            foreach (FieldInfo field in getFields())
             {
                 if (field.FieldType == typeof(string))
-                    this._serializedData.Write(field.GetValue(this) as string);
+                    _serializedData.Write(field.GetValue(this) as string);
                 else if (field.FieldType == typeof(float))
-                    this._serializedData.Write((float)field.GetValue(this));
+                    _serializedData.Write((float)field.GetValue(this));
                 else if (field.FieldType == typeof(bool))
-                    this._serializedData.Write((bool)field.GetValue(this));
+                    _serializedData.Write((bool)field.GetValue(this));
                 else if (field.FieldType == typeof(byte))
-                    this._serializedData.Write((byte)field.GetValue(this));
+                    _serializedData.Write((byte)field.GetValue(this));
                 else if (field.FieldType == typeof(sbyte))
-                    this._serializedData.Write((sbyte)field.GetValue(this));
+                    _serializedData.Write((sbyte)field.GetValue(this));
                 else if (field.FieldType == typeof(double))
-                    this._serializedData.Write((double)field.GetValue(this));
+                    _serializedData.Write((double)field.GetValue(this));
                 else if (field.FieldType == typeof(int))
-                    this._serializedData.Write((int)field.GetValue(this));
+                    _serializedData.Write((int)field.GetValue(this));
                 else if (field.FieldType == typeof(ulong))
-                    this._serializedData.Write((ulong)field.GetValue(this));
+                    _serializedData.Write((ulong)field.GetValue(this));
                 else if (field.FieldType == typeof(uint))
-                    this._serializedData.Write((uint)field.GetValue(this));
+                    _serializedData.Write((uint)field.GetValue(this));
                 else if (field.FieldType == typeof(ushort))
-                    this._serializedData.Write((ushort)field.GetValue(this));
+                    _serializedData.Write((ushort)field.GetValue(this));
                 else if (field.FieldType == typeof(short))
-                    this._serializedData.Write((short)field.GetValue(this));
+                    _serializedData.Write((short)field.GetValue(this));
                 else if (field.FieldType == typeof(NetIndex4))
-                    this._serializedData.WritePacked((int)(NetIndex4)field.GetValue(this), 4);
+                    _serializedData.WritePacked((int)(NetIndex4)field.GetValue(this), 4);
                 else if (field.FieldType == typeof(NetIndex16))
-                    this._serializedData.WritePacked((int)(NetIndex16)field.GetValue(this), 16);
+                    _serializedData.WritePacked((int)(NetIndex16)field.GetValue(this), 16);
                 else if (field.FieldType == typeof(Vec2))
                 {
                     Vec2 vec2 = (Vec2)field.GetValue(this);
-                    this._serializedData.Write(vec2.x);
-                    this._serializedData.Write(vec2.y);
+                    _serializedData.Write(vec2.x);
+                    _serializedData.Write(vec2.y);
                 }
                 else if (field.FieldType == typeof(Profile))
-                    this._serializedData.WriteProfile((Profile)field.GetValue(this));
+                    _serializedData.WriteProfile((Profile)field.GetValue(this));
                 else if (field.FieldType == typeof(Team))
-                    this._serializedData.WriteTeam((Team)field.GetValue(this));
+                    _serializedData.WriteTeam((Team)field.GetValue(this));
                 else if (typeof(Thing).IsAssignableFrom(field.FieldType))
-                    this._serializedData.Write(field.GetValue(this) as Thing);
+                    _serializedData.Write(field.GetValue(this) as Thing);
             }
         }
 
         public virtual void DoMessageWasReceived()
         {
-            if (!this._wasReceived)
-                this.MessageWasReceived();
-            this._wasReceived = true;
+            if (!_wasReceived)
+                MessageWasReceived();
+            _wasReceived = true;
         }
 
         public virtual void MessageWasReceived()

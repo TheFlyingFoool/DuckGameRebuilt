@@ -13,15 +13,15 @@ namespace DuckGame
         public FlimsyDoor(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._editorName = "Flimsy Door";
+            _editorName = "Flimsy Door";
         }
 
         public override void Initialize()
         {
-            this.secondaryFrame = true;
-            this._sprite = new SpriteMap("flimsyDoor", 32, 32);
-            this.graphic = _sprite;
-            this.colWide = 4f;
+            secondaryFrame = true;
+            _sprite = new SpriteMap("flimsyDoor", 32, 32);
+            graphic = _sprite;
+            colWide = 4f;
             base.Initialize();
         }
     }

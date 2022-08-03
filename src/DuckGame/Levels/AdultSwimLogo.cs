@@ -16,14 +16,14 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._font = new BitmapFont("biosFont", 8);
-            this._logo = new Sprite("aslogo");
+            _font = new BitmapFont("biosFont", 8);
+            _logo = new Sprite("aslogo");
             Graphics.fade = 0f;
         }
 
         public override void Update()
         {
-            if (!this._fading)
+            if (!_fading)
             {
                 if (Graphics.fade < 1f)
                     Graphics.fade += 0.013f;
@@ -39,18 +39,18 @@ namespace DuckGame
                 Graphics.fade = 0f;
                 Level.current = !MonoMain.startInEditor ? new TitleScreen() : Main.editor;
             }
-            this._wait -= 3f / 500f;
+            _wait -= 3f / 500f;
             if (_wait >= 0f && !Input.Pressed("START") && !Input.Pressed("SELECT"))
                 return;
-            this._fading = true;
+            _fading = true;
         }
 
         public override void PostDrawLayer(Layer layer)
         {
             if (layer != Layer.Game)
                 return;
-            this._logo.scale = new Vec2(0.25f, 0.25f);
-            Graphics.Draw(this._logo, 110f, 38f);
+            _logo.scale = new Vec2(0.25f, 0.25f);
+            Graphics.Draw(_logo, 110f, 38f);
         }
     }
 }

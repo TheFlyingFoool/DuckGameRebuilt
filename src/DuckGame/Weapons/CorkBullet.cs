@@ -24,7 +24,7 @@ namespace DuckGame
           bool network = false)
           : base(xval, yval, type, ang, owner, rbound, distance, tracer, network)
         {
-            this._cork = new Sprite("cork")
+            _cork = new Sprite("cork")
             {
                 center = new Vec2(3f, 2.5f)
             };
@@ -33,18 +33,18 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            if (!this.doneTravelling || this._corkObject != null)
+            if (!doneTravelling || _corkObject != null)
                 return;
-            this._corkObject = new CorkObject(this.drawEnd.x - this.travelDirNormalized.x * 4f, this.drawEnd.y - this.travelDirNormalized.y * 4f, this.firedFrom);
-            if (this.firedFrom != null && this.firedFrom is CorkGun)
-                (this.firedFrom as CorkGun).corkObject = this._corkObject;
+            _corkObject = new CorkObject(drawEnd.x - travelDirNormalized.x * 4f, drawEnd.y - travelDirNormalized.y * 4f, firedFrom);
+            if (firedFrom != null && firedFrom is CorkGun)
+                (firedFrom as CorkGun).corkObject = _corkObject;
             Level.Add(_corkObject);
             Level.Remove(this);
         }
 
         public override void Draw()
         {
-            Graphics.Draw(this._cork, this.drawEnd.x, this.drawEnd.y);
+            Graphics.Draw(_cork, drawEnd.x, drawEnd.y);
             base.Draw();
         }
     }

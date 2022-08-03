@@ -20,9 +20,9 @@ namespace DuckGame
         public NMPhysicsState(Vec2 Position, Vec2 Velocity, ushort ObjectID, int ClientFrame)
           : base(ObjectID)
         {
-            this.position = Position;
-            this.velocity = Velocity;
-            this.clientFrame = ClientFrame;
+            position = Position;
+            velocity = Velocity;
+            clientFrame = ClientFrame;
         }
     }
 }

@@ -18,26 +18,26 @@ namespace DuckGame
 
         public NMOldAngles(Profile pProfile, bool pEnabled)
         {
-            this.enabled = pEnabled;
-            this.profile = pProfile;
+            enabled = pEnabled;
+            profile = pProfile;
         }
 
         protected override void OnSerialize()
         {
-            this._serializedData.WriteProfile(this.profile);
-            this._serializedData.Write(this.enabled);
+            _serializedData.WriteProfile(profile);
+            _serializedData.Write(enabled);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
-            this.profile = d.ReadProfile();
-            this.enabled = d.ReadBool();
+            profile = d.ReadProfile();
+            enabled = d.ReadBool();
         }
 
         public override void Activate()
         {
-            if (this.profile != null && this.profile.inputProfile != null)
-                this.profile.inputProfile.oldAngles = this.enabled;
+            if (profile != null && profile.inputProfile != null)
+                profile.inputProfile.oldAngles = enabled;
             base.Activate();
         }
     }

@@ -29,64 +29,64 @@ namespace DuckGame
         private Exception _exception;
         public static bool fullDeserializeMode;
 
-        public BinaryClassChunk GetExtraHeaderInfo() => this._extraHeaderInfo;
+        public BinaryClassChunk GetExtraHeaderInfo() => _extraHeaderInfo;
 
-        public void SetExtraHeaderInfo(BinaryClassChunk pValue) => this._extraHeaderInfo = pValue;
+        public void SetExtraHeaderInfo(BinaryClassChunk pValue) => _extraHeaderInfo = pValue;
 
-        public T Header<T>() => (T)(object)this._extraHeaderInfo;
+        public T Header<T>() => (T)(object)_extraHeaderInfo;
 
-        public ushort GetVersion() => this._version;
+        public ushort GetVersion() => _version;
 
         public BitBuffer GetData()
         {
-            if (this._data == null && this._serializedData == null)
-                this._serializedData = this.Serialize();
-            return this._serializedData == null ? this._data : this._serializedData;
+            if (_data == null && _serializedData == null)
+                _serializedData = Serialize();
+            return _serializedData == null ? _data : _serializedData;
         }
 
-        public Exception GetException() => this._exception;
+        public Exception GetException() => _exception;
 
-        public DeserializeResult GetResult() => this._result;
+        public DeserializeResult GetResult() => _result;
 
         public uint GetChecksum()
         {
-            if (this._data == null && this._serializedData == null)
-                this._serializedData = this.Serialize();
-            if (this._checksum == 0U)
-                this._checksum = Editor.Checksum(this.GetData().buffer, (int)this._offset, (int)this._size);
-            return this._checksum;
+            if (_data == null && _serializedData == null)
+                _serializedData = Serialize();
+            if (_checksum == 0U)
+                _checksum = Editor.Checksum(GetData().buffer, (int)_offset, (int)_size);
+            return _checksum;
         }
 
         public void AddProperty(string id, object value)
         {
-            if (this._extraProperties == null)
-                this._extraProperties = new MultiMap<string, object>();
-            this._extraProperties.Add(id, value);
+            if (_extraProperties == null)
+                _extraProperties = new MultiMap<string, object>();
+            _extraProperties.Add(id, value);
         }
 
         public T GetProperty<T>(string id)
         {
-            object property = this.GetProperty(id);
+            object property = GetProperty(id);
             return property == null ? default(T) : (T)property;
         }
 
         public List<T> GetProperties<T>(string id)
         {
-            List<object> property = this.GetProperty(id, true) as List<object>;
+            List<object> property = GetProperty(id, true) as List<object>;
             List<T> properties = new List<T>();
             foreach (object obj in property)
                 properties.Add((T)obj);
             return properties;
         }
 
-        public bool HasProperty(string id) => this._extraProperties != null && this._extraProperties.ContainsKey(id);
+        public bool HasProperty(string id) => _extraProperties != null && _extraProperties.ContainsKey(id);
 
         public object GetProperty(string id, bool multiple = false)
         {
-            if (this._extraProperties == null)
+            if (_extraProperties == null)
                 return null;
             List<object> list;
-            this._extraProperties.TryGetValue(id, out list);
+            _extraProperties.TryGetValue(id, out list);
             if (list != null)
             {
                 foreach (object property in list)
@@ -108,21 +108,21 @@ namespace DuckGame
 
         public T GetPrimitive<T>(string id)
         {
-            if (this._extraProperties == null)
+            if (_extraProperties == null)
                 return default(T);
             List<object> list;
-            this._extraProperties.TryGetValue(id, out list);
+            _extraProperties.TryGetValue(id, out list);
             return list != null ? (T)list.First<object>() : default(T);
         }
 
-        public void SetData(BitBuffer data) => this.SetData(data, false);
+        public void SetData(BitBuffer data) => SetData(data, false);
 
         public bool SetData(BitBuffer data, bool pHeaderOnly)
         {
-            BinaryClassChunk.DeserializeHeader(this.GetType(), data, this);
-            if (!pHeaderOnly && this._result == DeserializeResult.HeaderDeserialized)
-                this.Deserialize();
-            return this._result == DeserializeResult.HeaderDeserialized;
+            BinaryClassChunk.DeserializeHeader(GetType(), data, this);
+            if (!pHeaderOnly && _result == DeserializeResult.HeaderDeserialized)
+                Deserialize();
+            return _result == DeserializeResult.HeaderDeserialized;
         }
 
         public static T FromData<T>(BitBuffer data) where T : BinaryClassChunk => BinaryClassChunk.FromData<T>(data, false);
@@ -136,22 +136,22 @@ namespace DuckGame
 
         private Array DeserializeArray(System.Type type, System.Type arrayType, BitBuffer data)
         {
-            int length = this._data.ReadInt();
+            int length = _data.ReadInt();
             Array instance = Array.CreateInstance(arrayType, length);
             for (int index = 0; index < length; ++index)
             {
-                int num = this._data.ReadBool() ? 1 : 0;
+                int num = _data.ReadBool() ? 1 : 0;
                 object obj = null;
                 if (num != 0)
                 {
                     if (typeof(BinaryClassChunk).IsAssignableFrom(arrayType))
                     {
-                        BinaryClassChunk binaryClassChunk = BinaryClassChunk.DeserializeHeader(arrayType, this._data, root: false, skipData: true);
+                        BinaryClassChunk binaryClassChunk = BinaryClassChunk.DeserializeHeader(arrayType, _data, root: false, skipData: true);
                         binaryClassChunk?.Deserialize();
                         obj = binaryClassChunk;
                     }
                     else
-                        obj = this._data.Read(arrayType);
+                        obj = _data.Read(arrayType);
                 }
                 instance.SetValue(obj, index);
             }
@@ -160,29 +160,29 @@ namespace DuckGame
 
         public bool Deserialize()
         {
-            if (this._data == null)
+            if (_data == null)
             {
-                this._result = DeserializeResult.NoData;
+                _result = DeserializeResult.NoData;
                 return false;
             }
-            if (this._result == DeserializeResult.Success)
+            if (_result == DeserializeResult.Success)
                 return true;
             try
             {
-                this._data.position = (int)this._offset;
-                ushort num1 = this._data.ReadUShort();
-                System.Type type = this.GetType();
+                _data.position = (int)_offset;
+                ushort num1 = _data.ReadUShort();
+                System.Type type = GetType();
                 for (int index = 0; index < num1; ++index)
                 {
-                    string str = this._data.ReadString();
+                    string str = _data.ReadString();
                     System.Type key = null;
                     ClassMember classMember = null;
                     byte num2 = 0;
                     if (str.StartsWith("@"))
                     {
-                        if (this._extraProperties == null)
-                            this._extraProperties = new MultiMap<string, object>();
-                        num2 = this._data.ReadByte();
+                        if (_extraProperties == null)
+                            _extraProperties = new MultiMap<string, object>();
+                        num2 = _data.ReadByte();
                         if (num2 != byte.MaxValue)
                         {
                             if ((num2 & 1) != 0)
@@ -191,7 +191,7 @@ namespace DuckGame
                                 BinaryClassMember.typeMap.TryGetKey(num2, out key);
                             }
                             else
-                                key = Editor.GetType(this._data.ReadString());
+                                key = Editor.GetType(_data.ReadString());
                             str = str.Substring(1, str.Length - 1);
                         }
                     }
@@ -215,76 +215,76 @@ namespace DuckGame
                             else if (classMember.property != null)
                                 classMember.property.GetType();
                         }
-                        uint num3 = this._data.ReadUInt();
+                        uint num3 = _data.ReadUInt();
                         if (num3 != 0U)
                         {
                             if (key != null)
                             {
-                                int position = this._data.position;
+                                int position = _data.position;
                                 if (typeof(BinaryClassChunk).IsAssignableFrom(key))
                                 {
-                                    BinaryClassChunk element = BinaryClassChunk.DeserializeHeader(key, this._data, root: false);
+                                    BinaryClassChunk element = BinaryClassChunk.DeserializeHeader(key, _data, root: false);
                                     if (BinaryClassChunk.fullDeserializeMode && element._result == DeserializeResult.HeaderDeserialized)
                                         element.Deserialize();
                                     if (classMember == null)
-                                        this._extraProperties.Add(str, element);
+                                        _extraProperties.Add(str, element);
                                     else
-                                        this._headerDictionary[str] = element;
-                                    this._data.position = position + (int)num3;
+                                        _headerDictionary[str] = element;
+                                    _data.position = position + (int)num3;
                                 }
                                 else if (key.IsArray)
                                 {
-                                    Array element = this.DeserializeArray(key, key.GetElementType(), this._data);
+                                    Array element = DeserializeArray(key, key.GetElementType(), _data);
                                     if (classMember == null)
-                                        this._extraProperties.Add(str, element);
+                                        _extraProperties.Add(str, element);
                                     else
                                         classMember.SetValue(this, element);
                                 }
                                 else if (key.IsGenericType && key.GetGenericTypeDefinition() == typeof(List<>))
                                 {
-                                    Array array = this.DeserializeArray(typeof(object[]), key.GetGenericArguments()[0], this._data);
+                                    Array array = DeserializeArray(typeof(object[]), key.GetGenericArguments()[0], _data);
                                     IList instance = Activator.CreateInstance(key) as IList;
                                     foreach (object obj in array)
                                         instance.Add(obj);
                                     if (classMember == null)
-                                        this._extraProperties.Add(str, instance);
+                                        _extraProperties.Add(str, instance);
                                     else
                                         classMember.SetValue(this, instance);
                                 }
                                 else if (key.IsGenericType && key.GetGenericTypeDefinition() == typeof(HashSet<>))
                                 {
-                                    Array array = this.DeserializeArray(typeof(object[]), key.GetGenericArguments()[0], this._data);
+                                    Array array = DeserializeArray(typeof(object[]), key.GetGenericArguments()[0], _data);
                                     IList instance1 = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(key.GetGenericArguments()[0]));
                                     foreach (object obj in array)
                                         instance1.Add(obj);
                                     object instance2 = Activator.CreateInstance(key, instance1);
                                     if (classMember == null)
-                                        this._extraProperties.Add(str, instance2);
+                                        _extraProperties.Add(str, instance2);
                                     else
                                         classMember.SetValue(this, instance2);
                                 }
                                 else
                                 {
-                                    object element = !key.IsEnum ? this._data.Read(key, false) : this._data.ReadInt();
+                                    object element = !key.IsEnum ? _data.Read(key, false) : _data.ReadInt();
                                     if (classMember == null)
-                                        this._extraProperties.Add(str, element);
+                                        _extraProperties.Add(str, element);
                                     else
                                         classMember.SetValue(this, element);
                                 }
                             }
                             else
-                                this._data.position += (int)num3;
+                                _data.position += (int)num3;
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                this._exception = ex;
-                this._result = DeserializeResult.ExceptionThrown;
+                _exception = ex;
+                _result = DeserializeResult.ExceptionThrown;
                 return false;
             }
-            this._result = DeserializeResult.Success;
+            _result = DeserializeResult.Success;
             return true;
         }
 
@@ -353,20 +353,20 @@ namespace DuckGame
             }
         }
 
-        public T GetChunk<T>(string name) => this.GetChunk<T>(name, false);
+        public T GetChunk<T>(string name) => GetChunk<T>(name, false);
 
-        public T GetChunk<T>(string name, bool pPartialDeserialize) => this.GetChunk<T>(name, pPartialDeserialize, false);
+        public T GetChunk<T>(string name, bool pPartialDeserialize) => GetChunk<T>(name, pPartialDeserialize, false);
 
         public T GetChunk<T>(string name, bool pPartialDeserialize, bool pForceCreation)
         {
-            if (this._result == DeserializeResult.HeaderDeserialized)
-                this.Deserialize();
+            if (_result == DeserializeResult.HeaderDeserialized)
+                Deserialize();
             BinaryClassChunk chunk;
-            if (!this._headerDictionary.TryGetValue(name, out chunk))
+            if (!_headerDictionary.TryGetValue(name, out chunk))
             {
                 chunk = Activator.CreateInstance(typeof(T), null) as BinaryClassChunk;
                 chunk._result = DeserializeResult.Success;
-                this._headerDictionary[name] = chunk;
+                _headerDictionary[name] = chunk;
             }
             if (chunk == null)
                 return default(T);
@@ -396,10 +396,10 @@ namespace DuckGame
         {
             if (data == null)
                 data = new BitBuffer(false);
-            this._serializedData = data;
+            _serializedData = data;
             if (data.allowPacking)
                 throw new Exception("This class does not support serialization with a packed bit buffer. Construct the buffer with allowPacking set to false.");
-            System.Type type1 = this.GetType();
+            System.Type type1 = GetType();
             List<ClassMember> members = Editor.GetMembers(type1);
             List<BinaryClassMember> binaryClassMemberList = new List<BinaryClassMember>();
             foreach (ClassMember classMember in members)
@@ -420,9 +420,9 @@ namespace DuckGame
                     }
                 }
             }
-            if (this._extraProperties != null)
+            if (_extraProperties != null)
             {
-                foreach (KeyValuePair<string, List<object>> extraProperty in (MultiMap<string, object, List<object>>)this._extraProperties)
+                foreach (KeyValuePair<string, List<object>> extraProperty in (MultiMap<string, object, List<object>>)_extraProperties)
                 {
                     if (extraProperty.Value != null)
                     {
@@ -451,11 +451,11 @@ namespace DuckGame
             data.Write(BinaryClassChunk.ChunkVersion(type1));
             if (BinaryClassChunk.ChunkVersion(type1) == 2)
             {
-                if (this.GetExtraHeaderInfo() != null)
+                if (GetExtraHeaderInfo() != null)
                 {
                     data.Write(true);
-                    data.Write(ModLoader.SmallTypeName(this.GetExtraHeaderInfo().GetType()));
-                    this.GetExtraHeaderInfo().Serialize(data, false);
+                    data.Write(ModLoader.SmallTypeName(GetExtraHeaderInfo().GetType()));
+                    GetExtraHeaderInfo().Serialize(data, false);
                 }
                 else
                     data.Write(false);
@@ -496,13 +496,13 @@ namespace DuckGame
                             continue;
                     }
                     else if (binaryClassMember.data is Array)
-                        this.SerializeArray(binaryClassMember.data as Array, binaryClassMember.data.GetType().GetElementType(), data);
+                        SerializeArray(binaryClassMember.data as Array, binaryClassMember.data.GetType().GetElementType(), data);
                     else if (binaryClassMember.data.GetType().IsGenericType && binaryClassMember.data.GetType().GetGenericTypeDefinition() == typeof(List<>))
                     {
                         IList data1 = binaryClassMember.data as IList;
                         Array array = new object[data1.Count];
                         data1.CopyTo(array, 0);
-                        this.SerializeArray(array, binaryClassMember.data.GetType().GetGenericArguments()[0], data);
+                        SerializeArray(array, binaryClassMember.data.GetType().GetGenericArguments()[0], data);
                     }
                     else if (binaryClassMember.data.GetType().IsGenericType && binaryClassMember.data.GetType().GetGenericTypeDefinition() == typeof(HashSet<>))
                     {
@@ -512,7 +512,7 @@ namespace DuckGame
                             objectList.Add(obj);
                         object[] array = new object[objectList.Count];
                         objectList.CopyTo(array, 0);
-                        this.SerializeArray(array, binaryClassMember.data.GetType().GetGenericArguments()[0], data);
+                        SerializeArray(array, binaryClassMember.data.GetType().GetGenericArguments()[0], data);
                     }
                     else
                         data.Write(binaryClassMember.data);
@@ -527,9 +527,9 @@ namespace DuckGame
             data.Write((uint)(position4 - position1 - 4));
             if (root)
             {
-                this._checksum = Editor.Checksum(data.buffer);
+                _checksum = Editor.Checksum(data.buffer);
                 data.position = 8;
-                data.Write(this._checksum);
+                data.Write(_checksum);
             }
             data.position = position4;
             return data;

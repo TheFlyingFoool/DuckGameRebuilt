@@ -19,8 +19,8 @@ namespace DuckGame
 
         public Mood mood
         {
-            get => this._mood;
-            set => this._newMood = value;
+            get => _mood;
+            set => _newMood = value;
         }
     }
 }

@@ -24,40 +24,40 @@ namespace DuckGame
         private float _reloadAdd;
         //private float _targetLerpOut = 1f;
 
-        public override bool action => this._holdAction;
+        public override bool action => _holdAction;
 
         public TargetDuckNew(float pX, float pY, TargetStance pStance)
           : base(pX, pY, pStance)
         {
-            this.Order._tooltip = "All Targets/Goodies with smaller Order numbers must be destroyed/collected before this target appears.";
-            this.AutoFire._tooltip = "How long the target waits (in frames) before auto firing it's weapon.";
-            this.FireSpeed._tooltip = "How long the target waits (in frames) before firing it's weapon once it sees a target.";
-            this.ReloadSpeed._tooltip = "How long the target waits (in frames) firing again once it's already fired.";
-            this._editorName = "Target Duck";
-            this._contextMenuFilter.Add("autofire");
-            this._contextMenuFilter.Add("time");
-            this._contextMenuFilter.Add("random");
-            this._contextMenuFilter.Add("maxrandom");
-            this._contextMenuFilter.Add("dropgun");
-            this._contextMenuFilter.Add("speediness");
-            this._contextMenuFilter.Add("Sequence");
-            this.sequence._resetLikelyhood = false;
+            Order._tooltip = "All Targets/Goodies with smaller Order numbers must be destroyed/collected before this target appears.";
+            AutoFire._tooltip = "How long the target waits (in frames) before auto firing it's weapon.";
+            FireSpeed._tooltip = "How long the target waits (in frames) before firing it's weapon once it sees a target.";
+            ReloadSpeed._tooltip = "How long the target waits (in frames) firing again once it's already fired.";
+            _editorName = "Target Duck";
+            _contextMenuFilter.Add("autofire");
+            _contextMenuFilter.Add("time");
+            _contextMenuFilter.Add("random");
+            _contextMenuFilter.Add("maxrandom");
+            _contextMenuFilter.Add("dropgun");
+            _contextMenuFilter.Add("speediness");
+            _contextMenuFilter.Add("Sequence");
+            sequence._resetLikelyhood = false;
         }
 
         public override void OnSequenceActivate()
         {
-            this._popup = true;
-            this._waitFire = this.autofire.value;
-            this._reloadAdd = 0f;
-            this._holdAction = false;
+            _popup = true;
+            _waitFire = autofire.value;
+            _reloadAdd = 0f;
+            _holdAction = false;
         }
 
         public override void Initialize()
         {
-            this.sequence.order = this.Order.value;
+            sequence.order = Order.value;
             base.Initialize();
-            this.autofire = (EditorProperty<float>)(AutoFire.value * Maths.IncFrameTimer());
-            this.speediness = (EditorProperty<float>)(FireSpeed.value * Maths.IncFrameTimer());
+            autofire = (EditorProperty<float>)(AutoFire.value * Maths.IncFrameTimer());
+            speediness = (EditorProperty<float>)(FireSpeed.value * Maths.IncFrameTimer());
         }
 
         public override void UpdateFire()
@@ -87,36 +87,36 @@ namespace DuckGame
                         }
                         if (!flag)
                         {
-                            this._waitFire = Math.Max((float)this.speediness + this._reloadAdd, 0f);
+                            _waitFire = Math.Max((float)speediness + _reloadAdd, 0f);
                             break;
                         }
                         break;
                     }
                 }
             }
-            this._holdAction = false;
+            _holdAction = false;
             if (_waitFire < 0.0)
                 return;
-            this._waitFire -= Maths.IncFrameTimer();
+            _waitFire -= Maths.IncFrameTimer();
             if (_waitFire > 0.0)
                 return;
             holdObject.PressAction();
-            this._holdAction = true;
-            this._reloadAdd = ReloadSpeed.value * Maths.IncFrameTimer();
+            _holdAction = true;
+            _reloadAdd = ReloadSpeed.value * Maths.IncFrameTimer();
         }
 
         public override void Draw()
         {
-            if (this.holdObject is Gun && (this.holdObject as Gun).ammoType != null && _waitFire < 1.0 && _waitFire > 0.0)
+            if (holdObject is Gun && (holdObject as Gun).ammoType != null && _waitFire < 1.0 && _waitFire > 0.0)
             {
-                float num = this._waitFire * this._waitFire;
-                Vec2 barrelPosition = (this.holdObject as Gun).barrelPosition;
+                float num = _waitFire * _waitFire;
+                Vec2 barrelPosition = (holdObject as Gun).barrelPosition;
                 Vec2 p1_1 = barrelPosition + new Vec2(0f, (float)(-num * 64.0));
                 Vec2 p1_2 = barrelPosition + new Vec2(0f, num * 64f);
-                float amount = (float)(1.0 - Math.Min(this._waitFire, 0.08f) / 0.0799999982118607);
+                float amount = (float)(1.0 - Math.Min(_waitFire, 0.08f) / 0.0799999982118607);
                 Color color = Lerp.ColorSmooth(Color.White, Color.Red, amount);
-                Graphics.DrawLine(p1_1, p1_1 + new Vec2((this.holdObject as Gun).ammoType.range * offDir, 0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0f), 1f + amount, (Depth)0.99f);
-                Graphics.DrawLine(p1_2, p1_2 + new Vec2((this.holdObject as Gun).ammoType.range * offDir, 0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0f), 1f + amount, (Depth)0.99f);
+                Graphics.DrawLine(p1_1, p1_1 + new Vec2((holdObject as Gun).ammoType.range * offDir, 0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0f), 1f + amount, (Depth)0.99f);
+                Graphics.DrawLine(p1_2, p1_2 + new Vec2((holdObject as Gun).ammoType.range * offDir, 0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0f), 1f + amount, (Depth)0.99f);
             }
             base.Draw();
         }

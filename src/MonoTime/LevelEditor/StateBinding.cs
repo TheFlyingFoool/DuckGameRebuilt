@@ -30,89 +30,89 @@ namespace DuckGame
         public bool skipLerp;
         protected AccessorInfo _accessor = new AccessorInfo();
 
-        public GhostPriority priority => this._priority;
+        public GhostPriority priority => _priority;
 
-        public override string ToString() => this.GetDebugString(null);
+        public override string ToString() => GetDebugString(null);
 
         public virtual string GetDebugString(object with)
         {
             if (with != null)
-                return this.name + " = " + Convert.ToString(with);
-            return this.classValue == null ? this.name + " = null" : this.name + " = " + Convert.ToString(this.classValue);
+                return name + " = " + Convert.ToString(with);
+            return classValue == null ? name + " = null" : name + " = " + Convert.ToString(classValue);
         }
 
-        public virtual string GetDebugStringSpecial(object with) => with == null ? this.name + " = null" : this.name + " = " + Convert.ToString(with);
+        public virtual string GetDebugStringSpecial(object with) => with == null ? name + " = null" : name + " = " + Convert.ToString(with);
 
-        public bool lerp => this._lerp;
+        public bool lerp => _lerp;
 
         public bool initialized
         {
-            get => this._initialized;
-            set => this._initialized = value;
+            get => _initialized;
+            set => _initialized = value;
         }
 
-        public string name => this._fieldName;
+        public string name => _fieldName;
 
-        public object owner => this._thing;
+        public object owner => _thing;
 
         public virtual object classValue
         {
-            get => this._accessor.getAccessor == null ? null : this._accessor.getAccessor(this._thing);
+            get => _accessor.getAccessor == null ? null : _accessor.getAccessor(_thing);
             set
             {
-                if (this._accessor.setAccessor == null)
+                if (_accessor.setAccessor == null)
                     return;
-                this._accessor.setAccessor(this._thing, value);
+                _accessor.setAccessor(_thing, value);
             }
         }
 
-        public virtual T getTyped<T>() => this._accessor.type == typeof(T) ? this._accessor.Get<T>(this._thing) : (T)classValue;
+        public virtual T getTyped<T>() => _accessor.type == typeof(T) ? _accessor.Get<T>(_thing) : (T)classValue;
 
         public virtual void setTyped<T>(T value)
         {
-            if (this._accessor.type == typeof(T))
-                this._accessor.Set<T>(this._thing, value);
+            if (_accessor.type == typeof(T))
+                _accessor.Set<T>(_thing, value);
             else
-                this.classValue = value;
+                classValue = value;
         }
 
         public virtual byte byteValue
         {
-            get => this._accessor.type == typeof(byte) ? this._accessor.Get<byte>(this._thing) : (byte)this.classValue;
+            get => _accessor.type == typeof(byte) ? _accessor.Get<byte>(_thing) : (byte)classValue;
             set
             {
-                if (this._accessor.type == typeof(byte))
-                    this._accessor.Set<byte>(this._thing, value);
+                if (_accessor.type == typeof(byte))
+                    _accessor.Set<byte>(_thing, value);
                 else
-                    this.classValue = value;
+                    classValue = value;
             }
         }
 
         public virtual ushort ushortValue
         {
-            get => this._accessor.type == typeof(ushort) ? this._accessor.Get<ushort>(this._thing) : (ushort)this.classValue;
+            get => _accessor.type == typeof(ushort) ? _accessor.Get<ushort>(_thing) : (ushort)classValue;
             set
             {
-                if (this._accessor.type == typeof(ushort))
-                    this._accessor.Set<ushort>(this._thing, value);
+                if (_accessor.type == typeof(ushort))
+                    _accessor.Set<ushort>(_thing, value);
                 else
-                    this.classValue = value;
+                    classValue = value;
             }
         }
 
         public virtual int intValue
         {
-            get => this._accessor.type == typeof(int) ? this._accessor.Get<int>(this._thing) : (int)this.classValue;
+            get => _accessor.type == typeof(int) ? _accessor.Get<int>(_thing) : (int)classValue;
             set
             {
-                if (this._accessor.type == typeof(int))
-                    this._accessor.Set<int>(this._thing, value);
+                if (_accessor.type == typeof(int))
+                    _accessor.Set<int>(_thing, value);
                 else
-                    this.classValue = value;
+                    classValue = value;
             }
         }
 
-        public virtual System.Type type => this._accessor.type;
+        public virtual System.Type type => _accessor.type;
 
         public static bool CompareBase(object o1, object o2)
         {
@@ -136,34 +136,34 @@ namespace DuckGame
             return StateBinding.CompareBase(f, newVal);
         }
 
-        public virtual int bits => this._bits;
+        public virtual int bits => _bits;
 
-        public bool trueOnly => this._trueOnly;
+        public bool trueOnly => _trueOnly;
 
-        public bool isRotation => this._isRotation;
+        public bool isRotation => _isRotation;
 
-        public bool isVelocity => this._isVelocity;
+        public bool isVelocity => _isVelocity;
 
         public StateBinding(string field, int bits = -1, bool rot = false, bool vel = false)
         {
-            this._fieldName = field;
-            this._previousValue = null;
-            this._bits = bits;
-            this._isRotation = rot;
-            this._isVelocity = vel;
+            _fieldName = field;
+            _previousValue = null;
+            _bits = bits;
+            _isRotation = rot;
+            _isVelocity = vel;
         }
 
         public StateBinding(bool doLerp, string field, int bits = -1, bool rot = false, bool vel = false)
         {
-            this._fieldName = field;
-            this._previousValue = null;
-            this._bits = bits;
-            this._isRotation = rot;
-            this._isVelocity = vel;
-            this._lerp = doLerp;
-            if (!this._lerp)
+            _fieldName = field;
+            _previousValue = null;
+            _bits = bits;
+            _isRotation = rot;
+            _isVelocity = vel;
+            _lerp = doLerp;
+            if (!_lerp)
                 return;
-            this._priority = GhostPriority.Normal;
+            _priority = GhostPriority.Normal;
         }
 
         public StateBinding(
@@ -174,37 +174,37 @@ namespace DuckGame
           bool vel = false,
           bool doLerp = false)
         {
-            this._fieldName = field;
-            this._previousValue = null;
-            this._bits = bits;
-            this._isRotation = rot;
-            this._isVelocity = vel;
-            this._priority = p;
-            this._lerp = doLerp;
+            _fieldName = field;
+            _previousValue = null;
+            _bits = bits;
+            _isRotation = rot;
+            _isVelocity = vel;
+            _priority = p;
+            _lerp = doLerp;
         }
 
         public StateBinding(string field, int bits, bool rot)
         {
-            this._fieldName = field;
-            this._previousValue = null;
-            this._bits = bits;
-            this._isRotation = rot;
-            this._isVelocity = false;
+            _fieldName = field;
+            _previousValue = null;
+            _bits = bits;
+            _isRotation = rot;
+            _isVelocity = false;
         }
 
-        public virtual object GetNetValue() => this.classValue;
+        public virtual object GetNetValue() => classValue;
 
         public virtual object ReadNetValue(object val) => val;
 
-        public virtual object ReadNetValue(BitBuffer pData) => pData.ReadBits(this.type, this.bits);
+        public virtual object ReadNetValue(BitBuffer pData) => pData.ReadBits(type, bits);
 
-        public bool connected => this._accessor != null;
+        public bool connected => _accessor != null;
 
         public virtual void Connect(Thing t)
         {
-            this._thing = t;
-            this._accessor = Editor.GetAccessorInfo(t.GetType(), this._fieldName);
-            if (this._accessor == null)
+            _thing = t;
+            _accessor = Editor.GetAccessorInfo(t.GetType(), _fieldName);
+            if (_accessor == null)
                 throw new Exception("Could not find accessor for binding.");
         }
     }

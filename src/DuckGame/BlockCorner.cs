@@ -18,11 +18,11 @@ namespace DuckGame
 
         public BlockCorner(Vec2 c, Block b, bool wall = false)
         {
-            this.corner = c;
-            this.block = b;
-            this.wallCorner = wall;
+            corner = c;
+            block = b;
+            wallCorner = wall;
         }
 
-        public BlockCorner Copy() => new BlockCorner(this.corner, this.block, this.wallCorner);
+        public BlockCorner Copy() => new BlockCorner(corner, block, wallCorner);
     }
 }

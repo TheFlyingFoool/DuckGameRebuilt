@@ -33,38 +33,38 @@ namespace DuckGame
         private float _fireRise;
         private int bubbleWait;
 
-        public float fireID => this._fireID;
+        public float fireID => _fireID;
 
         public FluidPuddle(float xpos, float ypos, Block b)
           : base(xpos, ypos)
         {
-            this._collisionOffset.y = -4f;
-            this._collisionSize.y = 1f;
-            this._block = b;
-            this.depth = (Depth)0.3f;
-            this.flammable = 0.9f;
-            this.alpha = 0f;
+            _collisionOffset.y = -4f;
+            _collisionSize.y = 1f;
+            _block = b;
+            depth = (Depth)0.3f;
+            flammable = 0.9f;
+            alpha = 0f;
             List<BlockCorner> groupCorners = b.GetGroupCorners();
-            this._coll = new List<PhysicsObject>();
-            this._leftCorner = null;
-            this._rightCorner = null;
+            _coll = new List<PhysicsObject>();
+            _leftCorner = null;
+            _rightCorner = null;
             foreach (BlockCorner blockCorner in groupCorners)
             {
                 if (Math.Abs(ypos - blockCorner.corner.y) < 4.0)
                 {
                     if (blockCorner.corner.x > xpos)
                     {
-                        if (this._rightCorner == null)
-                            this._rightCorner = blockCorner;
-                        else if (blockCorner.corner.x < this._rightCorner.corner.x)
-                            this._rightCorner = blockCorner;
+                        if (_rightCorner == null)
+                            _rightCorner = blockCorner;
+                        else if (blockCorner.corner.x < _rightCorner.corner.x)
+                            _rightCorner = blockCorner;
                     }
                     else if (blockCorner.corner.x < xpos)
                     {
-                        if (this._leftCorner == null)
-                            this._leftCorner = blockCorner;
-                        else if (blockCorner.corner.x > this._leftCorner.corner.x)
-                            this._leftCorner = blockCorner;
+                        if (_leftCorner == null)
+                            _leftCorner = blockCorner;
+                        else if (blockCorner.corner.x > _leftCorner.corner.x)
+                            _leftCorner = blockCorner;
                     }
                 }
             }
@@ -72,12 +72,12 @@ namespace DuckGame
 
         protected override bool OnBurn(Vec2 firePosition, Thing litBy)
         {
-            if (!this._onFire && data.flammable > 0.5)
+            if (!_onFire && data.flammable > 0.5)
             {
-                this._fireID = FireManager.GetFireID();
+                _fireID = FireManager.GetFireID();
                 SFX.Play("ignite", pitch: (Rando.Float(0.3f) - 0.3f));
-                this._onFire = true;
-                this.alpha = 1f;
+                _onFire = true;
+                alpha = 1f;
             }
             return true;
         }
@@ -89,57 +89,57 @@ namespace DuckGame
             spriteMap.SetAnimation("idle");
             spriteMap.center = new Vec2(8f, 10f);
             spriteMap.frame = Rando.Int(3);
-            this._surfaceFire.Add(spriteMap);
+            _surfaceFire.Add(spriteMap);
         }
 
         public override void Initialize()
         {
-            if (this._leftCorner == null || this._rightCorner == null)
+            if (_leftCorner == null || _rightCorner == null)
                 Level.Remove(this);
             else
-                this.y = this._leftCorner.corner.y;
+                y = _leftCorner.corner.y;
         }
 
         public void Feed(FluidData dat)
         {
-            if (this._lava == null && dat.sprite != "" && dat.sprite != null)
+            if (_lava == null && dat.sprite != "" && dat.sprite != null)
             {
-                if (this.data.sprite == null)
-                    this.data.sprite = dat.sprite;
-                this._lava = new SpriteMap(dat.sprite, 16, 16);
-                this._lava.AddAnimation("idle", 0.1f, true, 0, 1, 2, 3);
-                this._lava.SetAnimation("idle");
-                this._lava.center = new Vec2(8f, 10f);
-                this._lavaAlternate = new SpriteMap(dat.sprite, 16, 16);
-                this._lavaAlternate.AddAnimation("idle", 0.1f, true, 2, 3, 0, 1);
-                this._lavaAlternate.SetAnimation("idle");
-                this._lavaAlternate.center = new Vec2(8f, 10f);
+                if (data.sprite == null)
+                    data.sprite = dat.sprite;
+                _lava = new SpriteMap(dat.sprite, 16, 16);
+                _lava.AddAnimation("idle", 0.1f, true, 0, 1, 2, 3);
+                _lava.SetAnimation("idle");
+                _lava.center = new Vec2(8f, 10f);
+                _lavaAlternate = new SpriteMap(dat.sprite, 16, 16);
+                _lavaAlternate.AddAnimation("idle", 0.1f, true, 2, 3, 0, 1);
+                _lavaAlternate.SetAnimation("idle");
+                _lavaAlternate.center = new Vec2(8f, 10f);
             }
-            if (this._lightRect == null && Layer.lighting)
+            if (_lightRect == null && Layer.lighting)
             {
-                this._lightRect = new WhiteRectangle(this.x, this.y, this.width, this.height, dat.heat <= 0.0);
+                _lightRect = new WhiteRectangle(x, y, width, height, dat.heat <= 0.0);
                 Level.Add(_lightRect);
             }
             if (dat.amount > 0.0)
-                this._framesSinceFeed = 0;
-            this.data.Mix(dat);
-            this.data.amount = Maths.Clamp(this.data.amount, 0f, this.MaxFluidFill());
-            this._wide = this.FeedAmountToDistance(this.data.amount);
-            float num1 = this._wide + 4f;
-            this._collisionOffset.x = (float)-(num1 / 2.0);
-            this._collisionSize.x = num1;
-            this.FeedEdges();
-            if (this._leftCorner != null && this._rightCorner != null && _wide > _rightCorner.corner.x - this._leftCorner.corner.x)
+                _framesSinceFeed = 0;
+            data.Mix(dat);
+            data.amount = Maths.Clamp(data.amount, 0f, MaxFluidFill());
+            _wide = FeedAmountToDistance(data.amount);
+            float num1 = _wide + 4f;
+            _collisionOffset.x = (float)-(num1 / 2.0);
+            _collisionSize.x = num1;
+            FeedEdges();
+            if (_leftCorner != null && _rightCorner != null && _wide > _rightCorner.corner.x - _leftCorner.corner.x)
             {
-                this._wide = this._rightCorner.corner.x - this._leftCorner.corner.x;
-                this.x = this._leftCorner.corner.x + (float)((_rightCorner.corner.x - this._leftCorner.corner.x) / 2.0);
+                _wide = _rightCorner.corner.x - _leftCorner.corner.x;
+                x = _leftCorner.corner.x + (float)((_rightCorner.corner.x - _leftCorner.corner.x) / 2.0);
             }
-            float num2 = this._wide + 4f;
-            this._collisionOffset.x = (float)-(num2 / 2.0);
-            this._collisionSize.x = num2;
-            if (!(this.data.sprite == "water") || this._leftCorner == null)
+            float num2 = _wide + 4f;
+            _collisionOffset.x = (float)-(num2 / 2.0);
+            _collisionSize.x = num2;
+            if (!(data.sprite == "water") || _leftCorner == null)
                 return;
-            Block block = this._leftCorner.block;
+            Block block = _leftCorner.block;
             while (true)
             {
                 switch (block)
@@ -147,14 +147,14 @@ namespace DuckGame
                     case null:
                         goto label_19;
                     case SnowTileset _:
-                        if (block.left + 2.0 > this.left && block.right - 2.0 < this.right)
+                        if (block.left + 2.0 > left && block.right - 2.0 < right)
                         {
                             (block as SnowTileset).Freeze();
                             break;
                         }
                         break;
                     case SnowIceTileset _:
-                        if (block.left + 2.0 > this.left && block.right - 2.0 < this.right)
+                        if (block.left + 2.0 > left && block.right - 2.0 < right)
                         {
                             (block as SnowIceTileset).Freeze();
                             break;
@@ -172,55 +172,55 @@ namespace DuckGame
 
         public float MaxFluidFill()
         {
-            if (this._topLeftCorner == null || this._topRightCorner == null)
+            if (_topLeftCorner == null || _topRightCorner == null)
                 return 999999f;
-            float num = this._topLeftCorner.corner.y + 8f;
+            float num = _topLeftCorner.corner.y + 8f;
             if (_topRightCorner.corner.y > num)
-                num = this._topRightCorner.corner.y + 8f;
-            return this.DistanceToFeedAmount((this._leftCorner.corner.y - num) * this._collisionSize.x);
+                num = _topRightCorner.corner.y + 8f;
+            return DistanceToFeedAmount((_leftCorner.corner.y - num) * _collisionSize.x);
         }
 
         public void FeedEdges()
         {
-            if (this._rightCorner != null && this.right > _rightCorner.corner.x && this._rightCorner.wallCorner)
-                this.x -= this.right - this._rightCorner.corner.x;
-            if (this._leftCorner != null && this.left < _leftCorner.corner.x && this._leftCorner.wallCorner)
-                this.x += this._leftCorner.corner.x - this.left;
-            if (this._rightCorner != null && this.right > _rightCorner.corner.x && !this._rightCorner.wallCorner)
+            if (_rightCorner != null && right > _rightCorner.corner.x && _rightCorner.wallCorner)
+                x -= right - _rightCorner.corner.x;
+            if (_leftCorner != null && left < _leftCorner.corner.x && _leftCorner.wallCorner)
+                x += _leftCorner.corner.x - left;
+            if (_rightCorner != null && right > _rightCorner.corner.x && !_rightCorner.wallCorner)
             {
-                float feedAmount = this.DistanceToFeedAmount(this.right - this._rightCorner.corner.x);
-                this.x -= ((this.right - _rightCorner.corner.x) / 2f);
-                if (this._rightStream == null)
-                    this._rightStream = new FluidStream(this._rightCorner.corner.x - 2f, this.y, new Vec2(1f, 0f), 1f);
-                this._rightStream.position.y = this.y - this._collisionOffset.y;
-                this._rightStream.position.x = this._rightCorner.corner.x + 2f;
-                this._rightStream.Feed(this.data.Take(feedAmount));
+                float feedAmount = DistanceToFeedAmount(right - _rightCorner.corner.x);
+                x -= ((right - _rightCorner.corner.x) / 2f);
+                if (_rightStream == null)
+                    _rightStream = new FluidStream(_rightCorner.corner.x - 2f, y, new Vec2(1f, 0f), 1f);
+                _rightStream.position.y = y - _collisionOffset.y;
+                _rightStream.position.x = _rightCorner.corner.x + 2f;
+                _rightStream.Feed(data.Take(feedAmount));
             }
-            this._wide = this.FeedAmountToDistance(this.data.amount);
-            float num1 = this._wide + 4f;
-            this._collisionOffset.x = -(num1 / 2f);
-            this._collisionSize.x = num1;
-            if (this._leftCorner != null && this.left < _leftCorner.corner.x && !this._leftCorner.wallCorner)
+            _wide = FeedAmountToDistance(data.amount);
+            float num1 = _wide + 4f;
+            _collisionOffset.x = -(num1 / 2f);
+            _collisionSize.x = num1;
+            if (_leftCorner != null && left < _leftCorner.corner.x && !_leftCorner.wallCorner)
             {
-                float feedAmount = this.DistanceToFeedAmount(this._leftCorner.corner.x - this.left);
-                this.x += ((_leftCorner.corner.x - this.left) / 2f);
-                if (this._leftStream == null)
-                    this._leftStream = new FluidStream(this._leftCorner.corner.x - 2f, this.y, new Vec2(-1f, 0f), 1f);
-                this._leftStream.position.y = this.y - this._collisionOffset.y;
-                this._leftStream.position.x = this._leftCorner.corner.x - 2f;
-                this._leftStream.Feed(this.data.Take(feedAmount));
+                float feedAmount = DistanceToFeedAmount(_leftCorner.corner.x - left);
+                x += ((_leftCorner.corner.x - left) / 2f);
+                if (_leftStream == null)
+                    _leftStream = new FluidStream(_leftCorner.corner.x - 2f, y, new Vec2(-1f, 0f), 1f);
+                _leftStream.position.y = y - _collisionOffset.y;
+                _leftStream.position.x = _leftCorner.corner.x - 2f;
+                _leftStream.Feed(data.Take(feedAmount));
             }
-            this._wide = this.FeedAmountToDistance(this.data.amount);
-            float num2 = this._wide + 4f;
-            this._collisionOffset.x = (float)-(num2 / 2f);
-            this._collisionSize.x = num2;
+            _wide = FeedAmountToDistance(data.amount);
+            float num2 = _wide + 4f;
+            _collisionOffset.x = (float)-(num2 / 2f);
+            _collisionSize.x = num2;
         }
 
         public float CalculateDepth()
         {
-            double distance = this.FeedAmountToDistance(this.data.amount);
+            double distance = FeedAmountToDistance(data.amount);
             if (_wide == 0f)
-                this._wide = 1f / 1000f;
+                _wide = 1f / 1000f;
             double wide = _wide;
             return Maths.Clamp((float)(distance / wide), 1f, 99999f);
         }
@@ -229,73 +229,73 @@ namespace DuckGame
         {
             if (collisionSize.y <= 10f)
                 return;
-            foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(this.topLeft + new Vec2(0f, -8f), this.topRight + new Vec2(0f, -8f)))
+            foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(topLeft + new Vec2(0f, -8f), topRight + new Vec2(0f, -8f)))
             {
-                physicsObject.position.y = this.top;
+                physicsObject.position.y = top;
                 physicsObject.DoFloat();
             }
         }
 
         public override void Update()
         {
-            ++this._framesSinceFeed;
-            this.fluidWave += 0.1f;
+            ++_framesSinceFeed;
+            fluidWave += 0.1f;
             if (data.amount < 0.0001f)
                 Level.Remove(this);
             if (collisionSize.y > 10f)
             {
-                ++this.bubbleWait;
-                if (this.bubbleWait > Rando.Int(15, 25))
+                ++bubbleWait;
+                if (bubbleWait > Rando.Int(15, 25))
                 {
                     for (int index = 0; index < (int)Math.Floor(collisionSize.x / 16f); ++index)
                     {
                         if (Rando.Float(1f) > 0.85f)
-                            Level.Add(new TinyBubble(this.left + index * 16 + Rando.Float(-4f, 4f), this.bottom + Rando.Float(-4f), 0f, this.top + 10f));
+                            Level.Add(new TinyBubble(left + index * 16 + Rando.Float(-4f, 4f), bottom + Rando.Float(-4f), 0f, top + 10f));
                     }
-                    this.bubbleWait = 0;
+                    bubbleWait = 0;
                 }
-                this._coll.Clear();
-                Level.CheckRectAll<PhysicsObject>(this.topLeft, this.bottomRight, this._coll);
-                foreach (PhysicsObject physicsObject in this._coll)
+                _coll.Clear();
+                Level.CheckRectAll<PhysicsObject>(topLeft, bottomRight, _coll);
+                foreach (PhysicsObject physicsObject in _coll)
                     physicsObject.sleeping = false;
             }
-            FluidPuddle fluidPuddle = Level.CheckLine<FluidPuddle>(new Vec2(this.left, this.y), new Vec2(this.right, this.y), this);
-            if (fluidPuddle != null && fluidPuddle.data.amount < this.data.amount)
+            FluidPuddle fluidPuddle = Level.CheckLine<FluidPuddle>(new Vec2(left, y), new Vec2(right, y), this);
+            if (fluidPuddle != null && fluidPuddle.data.amount < data.amount)
             {
                 fluidPuddle.active = false;
-                float num1 = Math.Min(fluidPuddle.left, this.left);
-                float num2 = Math.Max(fluidPuddle.right, this.right);
-                this.x = num1 + ((num2 - num1) / 2f);
-                this.Feed(fluidPuddle.data);
+                float num1 = Math.Min(fluidPuddle.left, left);
+                float num2 = Math.Max(fluidPuddle.right, right);
+                x = num1 + ((num2 - num1) / 2f);
+                Feed(fluidPuddle.data);
                 Level.Remove(fluidPuddle);
             }
-            if (this._leftStream != null)
+            if (_leftStream != null)
             {
-                this._leftStream.Update();
-                this._leftStream.onFire = this.onFire;
+                _leftStream.Update();
+                _leftStream.onFire = onFire;
             }
-            if (this._rightStream != null)
+            if (_rightStream != null)
             {
-                this._rightStream.Update();
-                this._rightStream.onFire = this.onFire;
+                _rightStream.Update();
+                _rightStream.onFire = onFire;
             }
-            double distance = this.FeedAmountToDistance(this.data.amount);
+            double distance = FeedAmountToDistance(data.amount);
             if (_wide == 0f)
-                this._wide = 1f / 1000f;
+                _wide = 1f / 1000f;
             double wide = _wide;
             float num = Maths.Clamp((float)(distance / wide), 1f, 99999f);
-            if (this.onFire)
+            if (onFire)
             {
-                this._fireRise = Lerp.FloatSmooth(this._fireRise, 1f, 0.1f, 1.2f);
-                if (this._framesSinceFeed > 10)
+                _fireRise = Lerp.FloatSmooth(_fireRise, 1f, 0.1f, 1.2f);
+                if (_framesSinceFeed > 10)
                 {
                     // this.Feed(this.data with { amount = -1f / 1000f });
-                    FluidData dat = this.data;
+                    FluidData dat = data;
                     dat.amount = -0.001f;
-                    this.Feed(dat);
-                    if (this.data.amount <= 0f)
+                    Feed(dat);
+                    if (data.amount <= 0f)
                     {
-                        this.data.amount = 0f;
+                        data.amount = 0f;
                         base.alpha = Lerp.Float(base.alpha, 0f, 0.04f);
                     }
                     else
@@ -310,97 +310,97 @@ namespace DuckGame
             }
             else
             {
-                this.alpha = Lerp.Float(this.alpha, 1f, 0.04f);
+                alpha = Lerp.Float(alpha, 1f, 0.04f);
                 if (num < 3.0)
                 {
-                    FluidData dat2 = this.data;
+                    FluidData dat2 = data;
                     dat2.amount = -0.0001f;
-                    this.Feed(dat2);
+                    Feed(dat2);
                 }
                 //  this.Feed(this.data with { amount = -0.0001f });
 
 
             }
-            float depth = this.CalculateDepth();
-            if (depth > 4.0 && !this._initializedUpperCorners)
+            float depth = CalculateDepth();
+            if (depth > 4.0 && !_initializedUpperCorners)
             {
-                this._initializedUpperCorners = true;
-                foreach (BlockCorner groupCorner in this._block.GetGroupCorners())
+                _initializedUpperCorners = true;
+                foreach (BlockCorner groupCorner in _block.GetGroupCorners())
                 {
-                    if (this._leftCorner != null && groupCorner.corner.x == this._leftCorner.corner.x && groupCorner.corner.y < this._leftCorner.corner.y)
+                    if (_leftCorner != null && groupCorner.corner.x == _leftCorner.corner.x && groupCorner.corner.y < _leftCorner.corner.y)
                     {
-                        if (this._topLeftCorner == null)
-                            this._topLeftCorner = groupCorner;
-                        else if (groupCorner.corner.y > this._topLeftCorner.corner.y)
-                            this._topLeftCorner = groupCorner;
+                        if (_topLeftCorner == null)
+                            _topLeftCorner = groupCorner;
+                        else if (groupCorner.corner.y > _topLeftCorner.corner.y)
+                            _topLeftCorner = groupCorner;
                     }
-                    else if (this._rightCorner != null && groupCorner.corner.x == this._rightCorner.corner.x && groupCorner.corner.y < this._rightCorner.corner.y)
+                    else if (_rightCorner != null && groupCorner.corner.x == _rightCorner.corner.x && groupCorner.corner.y < _rightCorner.corner.y)
                     {
-                        if (this._topRightCorner == null)
-                            this._topRightCorner = groupCorner;
-                        else if (groupCorner.corner.y > this._topRightCorner.corner.y)
-                            this._topRightCorner = groupCorner;
+                        if (_topRightCorner == null)
+                            _topRightCorner = groupCorner;
+                        else if (groupCorner.corner.y > _topRightCorner.corner.y)
+                            _topRightCorner = groupCorner;
                     }
                 }
             }
-            if (this._leftStream != null)
-                this._leftStream.position.y = this.y - this._collisionOffset.y;
-            if (this._rightStream != null)
-                this._rightStream.position.y = this.y - this._collisionOffset.y;
-            this._collisionOffset.y = (float)(-depth - 1.0);
-            this._collisionSize.y = depth;
+            if (_leftStream != null)
+                _leftStream.position.y = y - _collisionOffset.y;
+            if (_rightStream != null)
+                _rightStream.position.y = y - _collisionOffset.y;
+            _collisionOffset.y = (float)(-depth - 1.0);
+            _collisionSize.y = depth;
         }
 
         public override void Draw()
         {
-            Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (collisionOffset.y / 2f + 0.5f)), this.position + new Vec2(this._collisionOffset.x, (collisionOffset.y / 2f + 0.5f)), new Color(this.data.color) * this.data.transparent, this._collisionSize.y, (Depth)0.9f);
-            Graphics.DrawLine(this.position + new Vec2(-this._collisionOffset.x, (collisionOffset.y / 2f + 0.5f)), this.position + new Vec2(this._collisionOffset.x, (collisionOffset.y / 2f + 0.5f)), new Color(this.data.color), this._collisionSize.y, -0.99f);
-            if (this._lightRect != null)
+            Graphics.DrawLine(position + new Vec2(-_collisionOffset.x, (collisionOffset.y / 2f + 0.5f)), position + new Vec2(_collisionOffset.x, (collisionOffset.y / 2f + 0.5f)), new Color(data.color) * data.transparent, _collisionSize.y, (Depth)0.9f);
+            Graphics.DrawLine(position + new Vec2(-_collisionOffset.x, (collisionOffset.y / 2f + 0.5f)), position + new Vec2(_collisionOffset.x, (collisionOffset.y / 2f + 0.5f)), new Color(data.color), _collisionSize.y, -0.99f);
+            if (_lightRect != null)
             {
-                this._lightRect.position = this.topLeft;
-                this._lightRect.size = new Vec2(this.width, this.height);
+                _lightRect.position = topLeft;
+                _lightRect.size = new Vec2(width, height);
             }
             int num1 = (int)Math.Ceiling(_collisionSize.x / 16f);
-            float num2 = this._collisionSize.x / num1;
-            if (this._onFire)
+            float num2 = _collisionSize.x / num1;
+            if (_onFire)
             {
-                while (this._surfaceFire.Count < num1)
-                    this.AddFire();
+                while (_surfaceFire.Count < num1)
+                    AddFire();
                 float num3 = 0f;
                 if (_collisionSize.y > 2f)
                     num3 = 2f;
                 for (int index = 0; index < num1; ++index)
                 {
-                    this._surfaceFire[index].alpha = this.alpha;
-                    this._surfaceFire[index].yscale = this._fireRise;
-                    this._surfaceFire[index].depth = this.depth + 1;
-                    Graphics.Draw(this._surfaceFire[index], (this.left + 8f + index * num2), (this.y + _collisionOffset.y + 1f) - num3);
+                    _surfaceFire[index].alpha = alpha;
+                    _surfaceFire[index].yscale = _fireRise;
+                    _surfaceFire[index].depth = depth + 1;
+                    Graphics.Draw(_surfaceFire[index], (left + 8f + index * num2), (y + _collisionOffset.y + 1f) - num3);
                 }
             }
-            if (this._lava != null && collisionSize.y > 2f)
+            if (_lava != null && collisionSize.y > 2f)
             {
                 bool flag = false;
                 for (int index = 0; index < num1; ++index)
                 {
-                    SpriteMap g = this._lava;
+                    SpriteMap g = _lava;
                     if (flag)
-                        g = this._lavaAlternate;
+                        g = _lavaAlternate;
                     g.depth = -0.7f;
                     SpriteMap spriteMap = g;
                     spriteMap.depth += index;
                     g.alpha = 1f;
-                    Graphics.DrawWithoutUpdate(g, (float)Math.Round(this.left + 8f + index * num2), (this.y + _collisionOffset.y - 4.5f));
+                    Graphics.DrawWithoutUpdate(g, (float)Math.Round(left + 8f + index * num2), (y + _collisionOffset.y - 4.5f));
                     flag = !flag;
                 }
-                this._lava.UpdateFrame();
-                this._lavaAlternate.UpdateFrame();
+                _lava.UpdateFrame();
+                _lavaAlternate.UpdateFrame();
             }
             base.Draw();
         }
 
         public override void Terminate()
         {
-            if (this._lightRect != null)
+            if (_lightRect != null)
                 Level.Remove(_lightRect);
             base.Terminate();
         }

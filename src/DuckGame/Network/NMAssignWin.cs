@@ -17,8 +17,8 @@ namespace DuckGame
 
         public NMAssignWin(List<Profile> pProfiles, Profile pTheRealWinnerHere)
         {
-            this.profiles = pProfiles;
-            this.theRealWinnerHere = pTheRealWinnerHere;
+            profiles = pProfiles;
+            theRealWinnerHere = pTheRealWinnerHere;
         }
 
         public NMAssignWin()
@@ -28,9 +28,9 @@ namespace DuckGame
         protected override void OnSerialize()
         {
             base.OnSerialize();
-            this._serializedData.Write((byte)this.profiles.Count);
-            foreach (Profile profile in this.profiles)
-                this._serializedData.WriteProfile(profile);
+            _serializedData.Write((byte)profiles.Count);
+            foreach (Profile profile in profiles)
+                _serializedData.WriteProfile(profile);
         }
 
         public override void OnDeserialize(BitBuffer d)
@@ -38,16 +38,16 @@ namespace DuckGame
             base.OnDeserialize(d);
             byte num = d.ReadByte();
             for (int index = 0; index < num; ++index)
-                this.profiles.Add(d.ReadProfile());
+                profiles.Add(d.ReadProfile());
         }
 
         public override void Activate()
         {
-            SFX.Play(this._sound, 0.8f);
-            foreach (Profile profile in this.profiles)
+            SFX.Play(_sound, 0.8f);
+            foreach (Profile profile in profiles)
             {
                 GameMode.lastWinners.Add(profile);
-                Profile p = this.theRealWinnerHere != null ? this.theRealWinnerHere : profile;
+                Profile p = theRealWinnerHere != null ? theRealWinnerHere : profile;
                 if (profile.duck != null)
                 {
                     PlusOne plusOne = new PlusOne(0f, 0f, p, testMode: true)

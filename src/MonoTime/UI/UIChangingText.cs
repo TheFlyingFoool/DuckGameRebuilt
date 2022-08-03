@@ -16,35 +16,35 @@ namespace DuckGame
         public UIChangingText(float wide, float high, FieldBinding field, FieldBinding filterBinding)
           : base("ON OFF  ", Color.White)
         {
-            this._field = field;
-            this._filterBinding = filterBinding;
+            _field = field;
+            _filterBinding = filterBinding;
         }
 
         public override string text
         {
-            get => this._text;
+            get => _text;
             set
             {
-                this._text = value;
-                if (this.minLength <= 0)
+                _text = value;
+                if (minLength <= 0)
                     return;
-                while (this._text.Length < this.minLength)
-                    this._text = " " + this._text;
+                while (_text.Length < minLength)
+                    _text = " " + _text;
             }
         }
 
         public override void Draw()
         {
-            this._font.scale = this.scale;
-            this._font.alpha = this.alpha;
-            float width = this._font.GetWidth(this.defaultSizeString);
-            float num1 = (this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-width / 2.0) : this.width / 2f - width) : (float)-(this.width / 2.0);
-            float num2 = (this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-(this.height / 2.0);
+            _font.scale = scale;
+            _font.alpha = alpha;
+            float width = _font.GetWidth(defaultSizeString);
+            float num1 = (align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-width / 2.0) : this.width / 2f - width) : (float)-(this.width / 2.0);
+            float num2 = (align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2.0) : height / 2f - _font.height) : (float)-(height / 2.0);
             string text = this.text;
             while (text.Length < 8)
                 text = " " + text;
-            this._font.colorOverride = UIMenu.disabledDraw ? Colors.BlueGray : new Color();
-            this._font.Draw(text, this.x + num1, this.y + num2, Color.White, this.depth);
+            _font.colorOverride = UIMenu.disabledDraw ? Colors.BlueGray : new Color();
+            _font.Draw(text, x + num1, y + num2, Color.White, depth);
         }
     }
 }

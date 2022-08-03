@@ -26,48 +26,48 @@ namespace DuckGame
         public WaterFlow(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("waterFlow", 16, 16);
-            this.center = new Vec2(8f, 14f);
-            this._collisionSize = new Vec2(16f, 4f);
-            this._collisionOffset = new Vec2(-8f, -2f);
-            this.layer = Layer.Blocks;
-            this.depth = (Depth)0.3f;
-            this.alpha = 0.8f;
-            this.hugWalls = WallHug.Floor;
+            graphic = new SpriteMap("waterFlow", 16, 16);
+            center = new Vec2(8f, 14f);
+            _collisionSize = new Vec2(16f, 4f);
+            _collisionOffset = new Vec2(-8f, -2f);
+            layer = Layer.Blocks;
+            depth = (Depth)0.3f;
+            alpha = 0.8f;
+            hugWalls = WallHug.Floor;
         }
 
         public Rectangle ProcessGroupRect(Rectangle rect)
         {
-            if (this.processed)
+            if (processed)
                 return rect;
-            if (this.left < rect.x)
+            if (left < rect.x)
             {
-                rect.width += (int)(rect.x - this.left);
-                rect.x = (int)this.left;
+                rect.width += (int)(rect.x - left);
+                rect.x = (int)left;
             }
-            if (this.right > rect.x + rect.width)
-                rect.width += (int)(this.right - (rect.x + rect.width));
-            this.processed = true;
-            if (!this._wallLeft)
+            if (right > rect.x + rect.width)
+                rect.width += (int)(right - (rect.x + rect.width));
+            processed = true;
+            if (!_wallLeft)
             {
-                WaterFlow waterFlow1 = Level.CheckPoint<WaterFlow>(new Vec2(this.x - 16f, this.y));
-                if (waterFlow1 != null && waterFlow1 != this && waterFlow1.flipHorizontal == this.flipHorizontal)
+                WaterFlow waterFlow1 = Level.CheckPoint<WaterFlow>(new Vec2(x - 16f, y));
+                if (waterFlow1 != null && waterFlow1 != this && waterFlow1.flipHorizontal == flipHorizontal)
                 {
                     rect = waterFlow1.ProcessGroupRect(rect);
-                    this._extraWater.Add(waterFlow1);
+                    _extraWater.Add(waterFlow1);
                     foreach (WaterFlow waterFlow2 in waterFlow1._extraWater)
-                        this._extraWater.Add(waterFlow2);
+                        _extraWater.Add(waterFlow2);
                 }
             }
-            if (!this._wallRight)
+            if (!_wallRight)
             {
-                WaterFlow waterFlow3 = Level.CheckPoint<WaterFlow>(new Vec2(this.x + 16f, this.y));
-                if (waterFlow3 != null && waterFlow3 != this && waterFlow3.flipHorizontal == this.flipHorizontal)
+                WaterFlow waterFlow3 = Level.CheckPoint<WaterFlow>(new Vec2(x + 16f, y));
+                if (waterFlow3 != null && waterFlow3 != this && waterFlow3.flipHorizontal == flipHorizontal)
                 {
                     rect = waterFlow3.ProcessGroupRect(rect);
-                    this._extraWater.Add(waterFlow3);
+                    _extraWater.Add(waterFlow3);
                     foreach (WaterFlow waterFlow4 in waterFlow3._extraWater)
-                        this._extraWater.Add(waterFlow4);
+                        _extraWater.Add(waterFlow4);
                 }
             }
             return rect;
@@ -75,32 +75,32 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (!this._initialized)
+            if (!_initialized)
             {
-                this._initialized = true;
-                if (Level.CheckPoint<Block>(new Vec2(this.x - 16f, this.y)) != null)
-                    this._wallLeft = true;
-                else if (Level.CheckPoint<Block>(new Vec2(this.x + 16f, this.y)) != null)
-                    this._wallRight = true;
-                if (!this.processed)
+                _initialized = true;
+                if (Level.CheckPoint<Block>(new Vec2(x - 16f, y)) != null)
+                    _wallLeft = true;
+                else if (Level.CheckPoint<Block>(new Vec2(x + 16f, y)) != null)
+                    _wallRight = true;
+                if (!processed)
                 {
-                    Rectangle rectangle = this.ProcessGroupRect(this.rectangle);
-                    if (this._extraWater.Count > 0)
+                    Rectangle rectangle = ProcessGroupRect(this.rectangle);
+                    if (_extraWater.Count > 0)
                     {
-                        this._extraWater.Remove(this);
-                        foreach (WaterFlow waterFlow in this._extraWater)
+                        _extraWater.Remove(this);
+                        foreach (WaterFlow waterFlow in _extraWater)
                         {
                             Level.Remove(waterFlow);
                             waterFlow._extraWater.Clear();
                         }
-                        this._collisionSize = new Vec2(rectangle.width, rectangle.height);
-                        this._collisionOffset = new Vec2(rectangle.x - this.x, this._collisionOffset.y);
+                        _collisionSize = new Vec2(rectangle.width, rectangle.height);
+                        _collisionOffset = new Vec2(rectangle.x - x, _collisionOffset.y);
                     }
                 }
             }
             bool flipHorizontal = this.flipHorizontal;
             this.flipHorizontal = false;
-            IEnumerable<PhysicsObject> source = Level.CheckRectAll<PhysicsObject>(this.topLeft, this.bottomRight);
+            IEnumerable<PhysicsObject> source = Level.CheckRectAll<PhysicsObject>(topLeft, bottomRight);
             foreach (PhysicsObject physicsObject in source)
             {
                 if (flipHorizontal && physicsObject.hSpeed > -2.0)
@@ -109,10 +109,10 @@ namespace DuckGame
                     physicsObject.hSpeed += 0.3f;
                 physicsObject.sleeping = false;
                 physicsObject.frictionMult = 0.3f;
-                this._held.Add(physicsObject);
+                _held.Add(physicsObject);
             }
             List<PhysicsObject> physicsObjectList = new List<PhysicsObject>();
-            foreach (PhysicsObject physicsObject in this._held)
+            foreach (PhysicsObject physicsObject in _held)
             {
                 if (!source.Contains<PhysicsObject>(physicsObject))
                 {
@@ -121,33 +121,33 @@ namespace DuckGame
                 }
             }
             foreach (PhysicsObject physicsObject in physicsObjectList)
-                this._held.Remove(physicsObject);
+                _held.Remove(physicsObject);
             this.flipHorizontal = flipHorizontal;
             base.Update();
         }
 
         public override void Draw()
         {
-            (this.graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
-            foreach (Thing thing in this._extraWater)
+            (graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
+            foreach (Thing thing in _extraWater)
                 (thing.graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
-            this.graphic.flipH = this.offDir <= 0;
+            graphic.flipH = offDir <= 0;
             base.Draw();
-            if (!this.flipHorizontal)
+            if (!flipHorizontal)
             {
-                if (this._wallLeft)
-                    Graphics.Draw(this.graphic, this.x - 4f, this.y, new Rectangle(this.graphic.w - 4, 0f, 4f, graphic.h));
-                if (this._wallRight)
-                    Graphics.Draw(this.graphic, this.x + 16f, this.y, new Rectangle(0f, 0f, 4f, graphic.h));
+                if (_wallLeft)
+                    Graphics.Draw(graphic, x - 4f, y, new Rectangle(graphic.w - 4, 0f, 4f, graphic.h));
+                if (_wallRight)
+                    Graphics.Draw(graphic, x + 16f, y, new Rectangle(0f, 0f, 4f, graphic.h));
             }
             else
             {
-                if (this._wallRight)
-                    Graphics.Draw(this.graphic, this.x + 4f, this.y, new Rectangle(this.graphic.w - 4, 0f, 4f, graphic.h));
-                if (this._wallLeft)
-                    Graphics.Draw(this.graphic, this.x - 16f, this.y, new Rectangle(0f, 0f, 4f, graphic.h));
+                if (_wallRight)
+                    Graphics.Draw(graphic, x + 4f, y, new Rectangle(graphic.w - 4, 0f, 4f, graphic.h));
+                if (_wallLeft)
+                    Graphics.Draw(graphic, x - 16f, y, new Rectangle(0f, 0f, 4f, graphic.h));
             }
-            foreach (WaterFlow waterFlow in this._extraWater)
+            foreach (WaterFlow waterFlow in _extraWater)
             {
                 if (waterFlow != this && waterFlow._extraWater.Count == 0)
                     waterFlow.Draw();

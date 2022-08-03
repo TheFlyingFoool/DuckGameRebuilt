@@ -20,88 +20,88 @@ namespace DuckGame
         private bool _fade;
         private bool _splatted;
 
-        public bool pin => this._pin;
+        public bool pin => _pin;
 
         public override float angle
         {
             get
             {
-                if (this.owner == null)
+                if (owner == null)
                     return base.angle;
-                return this.offDir > 0 ? base.angle + 1.570796f : base.angle - 1.570796f;
+                return offDir > 0 ? base.angle + 1.570796f : base.angle - 1.570796f;
             }
-            set => this._angle = value;
+            set => _angle = value;
         }
 
         public Banana(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 1;
-            this._ammoType = new ATShrapnel();
-            this._type = "gun";
-            this._sprite = new SpriteMap("banana", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 13f);
-            this.collisionOffset = new Vec2(-6f, -3f);
-            this.collisionSize = new Vec2(12f, 5f);
-            this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(-1f, 2f);
-            this.bouncy = 0.4f;
-            this.friction = 0.05f;
-            this.physicsMaterial = PhysicsMaterial.Rubber;
-            this.editorTooltip = "A tactically placed banana peel can cause major injuries.";
-            this.isFatal = false;
+            ammo = 1;
+            _ammoType = new ATShrapnel();
+            _type = "gun";
+            _sprite = new SpriteMap("banana", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 13f);
+            collisionOffset = new Vec2(-6f, -3f);
+            collisionSize = new Vec2(12f, 5f);
+            _fireRumble = RumbleIntensity.Kick;
+            _holdOffset = new Vec2(-1f, 2f);
+            bouncy = 0.4f;
+            friction = 0.05f;
+            physicsMaterial = PhysicsMaterial.Rubber;
+            editorTooltip = "A tactically placed banana peel can cause major injuries.";
+            isFatal = false;
         }
 
         public override void Update()
         {
             base.Update();
-            if (this._thrown && this.owner == null)
+            if (_thrown && owner == null)
             {
-                this._thrown = false;
-                if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 0.4f)
-                    this.angleDegrees = 180f;
+                _thrown = false;
+                if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 0.4f)
+                    angleDegrees = 180f;
             }
-            if (!this._pin && this.owner == null && !this._fade)
+            if (!_pin && owner == null && !_fade)
             {
-                this._sprite.frame = 2;
-                this.weight = 0.1f;
+                _sprite.frame = 2;
+                weight = 0.1f;
             }
-            if (this._fade)
+            if (_fade)
             {
-                this.alpha -= 0.1f;
-                if (this.alpha <= 0f)
+                alpha -= 0.1f;
+                if (alpha <= 0f)
                 {
                     Level.Remove(this);
-                    this.alpha = 0f;
+                    alpha = 0f;
                 }
             }
-            if (!this._pin && this.owner == null)
-                this.canPickUp = false;
-            if (!this._pin && this._grounded && !this._fade)
+            if (!_pin && owner == null)
+                canPickUp = false;
+            if (!_pin && _grounded && !_fade)
             {
-                if (!this._splatted)
+                if (!_splatted)
                 {
-                    this._splatted = true;
+                    _splatted = true;
                     if (Network.isActive)
                     {
-                        if (this.isServerForObject)
+                        if (isServerForObject)
                             NetSoundEffect.Play("bananaSplat");
                     }
                     else
                         SFX.Play("smallSplat", pitch: Rando.Float(-0.2f, 0.2f));
                 }
-                this.angleDegrees = 0f;
-                this.canPickUp = false;
-                foreach (Duck duck in Level.CheckLineAll<Duck>(new Vec2(this.x - 5f, this.y + 2f), new Vec2(this.x + 5f, this.y + 2f)))
+                angleDegrees = 0f;
+                canPickUp = false;
+                foreach (Duck duck in Level.CheckLineAll<Duck>(new Vec2(x - 5f, y + 2f), new Vec2(x + 5f, y + 2f)))
                 {
-                    if (duck.grounded && !duck.crouch && !duck.sliding && duck.bottom <= this.bottom + 2f && duck.isServerForObject && Math.Abs(duck.hSpeed) > 2.5f)
+                    if (duck.grounded && !duck.crouch && !duck.sliding && duck.bottom <= bottom + 2f && duck.isServerForObject && Math.Abs(duck.hSpeed) > 2.5f)
                     {
                         RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));
                         duck.Fondle(this);
                         if (Network.isActive)
                         {
-                            if (this.isServerForObject)
+                            if (isServerForObject)
                                 NetSoundEffect.Play("bananaSlip");
                             if (Teams.active.Count > 1 && Rando.Int(100) == 1 && duck.connection == DuckNetwork.localConnection)
                                 DuckNetwork.GiveXP("Banana Man", 0, 5, firstCap: 20, secondCap: 30, finalCap: 40);
@@ -113,9 +113,9 @@ namespace DuckGame
                         else
                             duck.hSpeed += 1.5f;
                         duck.vSpeed -= 2.5f;
-                        this.hSpeed = -duck.hSpeed * 0.4f;
-                        this.friction = 0.05f;
-                        this.weight = 0.01f;
+                        hSpeed = -duck.hSpeed * 0.4f;
+                        friction = 0.05f;
+                        weight = 0.01f;
                         duck.crippleTimer = 1.5f;
                         PhysicsObject holdObject = duck.holdObject;
                         if (holdObject != null)
@@ -141,35 +141,35 @@ namespace DuckGame
                             duck.ragdoll.part1.hSpeed *= 0.5f;
                             duck.ragdoll.part3.hSpeed *= 1.5f;
                         }
-                        this._sprite.frame = 3;
-                        this._fade = true;
-                        Level.Add(new BananaSlip(this.x, this.y + 2f, duck.offDir > 0));
+                        _sprite.frame = 3;
+                        _fade = true;
+                        Level.Add(new BananaSlip(x, y + 2f, duck.offDir > 0));
                     }
                 }
             }
-            if (this._triggerHeld)
+            if (_triggerHeld)
             {
-                if (this.duck == null)
+                if (duck == null)
                     return;
-                this.duck.quack = 20;
-                if (this.offDir > 0)
+                duck.quack = 20;
+                if (offDir > 0)
                 {
-                    this.handAngle = -1.099557f;
-                    this.handOffset = new Vec2(8f, -1f);
-                    this._holdOffset = new Vec2(-1f, 10f);
+                    handAngle = -1.099557f;
+                    handOffset = new Vec2(8f, -1f);
+                    _holdOffset = new Vec2(-1f, 10f);
                 }
                 else
                 {
-                    this.handAngle = 1.099557f;
-                    this.handOffset = new Vec2(8f, -1f);
-                    this._holdOffset = new Vec2(-1f, 10f);
+                    handAngle = 1.099557f;
+                    handOffset = new Vec2(8f, -1f);
+                    _holdOffset = new Vec2(-1f, 10f);
                 }
             }
             else
             {
-                this.handAngle = 0f;
-                this.handOffset = new Vec2(0f, 0f);
-                this._holdOffset = new Vec2(-1f, 2f);
+                handAngle = 0f;
+                handOffset = new Vec2(0f, 0f);
+                _holdOffset = new Vec2(-1f, 2f);
             }
         }
 
@@ -179,30 +179,30 @@ namespace DuckGame
 
         public void EatBanana()
         {
-            this._sprite.frame = 1;
-            this._pin = false;
-            this._holdOffset = new Vec2(-2f, 3f);
-            this.collisionOffset = new Vec2(-4f, -2f);
-            this.collisionSize = new Vec2(8f, 4f);
-            this.weight = 0.01f;
-            if (this.duck != null)
-                RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(this._fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
+            _sprite.frame = 1;
+            _pin = false;
+            _holdOffset = new Vec2(-2f, 3f);
+            collisionOffset = new Vec2(-4f, -2f);
+            collisionSize = new Vec2(8f, 4f);
+            weight = 0.01f;
+            if (duck != null)
+                RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
             if (Network.isActive)
             {
-                if (this.isServerForObject)
+                if (isServerForObject)
                     NetSoundEffect.Play("bananaEat");
             }
             else
                 SFX.Play("smallSplat", pitch: Rando.Float(-0.6f, 0.6f));
-            this.bouncy = 0f;
-            this.friction = 0.3f;
+            bouncy = 0f;
+            friction = 0.3f;
         }
 
         public override void OnPressAction()
         {
-            if (!this.pin)
+            if (!pin)
                 return;
-            this.EatBanana();
+            EatBanana();
         }
 
         public override void OnHoldAction()

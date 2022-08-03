@@ -13,16 +13,16 @@ namespace DuckGame
         public BuildingFramework(float x, float y)
           : base(x, y, "buildingFrame")
         {
-            this._editorName = "Framework";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidth = 10f;
-            this.verticalWidthThick = 13f;
-            this.horizontalHeight = 10f;
-            this._hasNubs = false;
-            this.indestructable = true;
-            this.layer = Layer.Blocks;
-            this.depth = -0.5f;
-            this.placementLayerOverride = Layer.Game;
+            _editorName = "Framework";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidth = 10f;
+            verticalWidthThick = 13f;
+            horizontalHeight = 10f;
+            _hasNubs = false;
+            indestructable = true;
+            layer = Layer.Blocks;
+            depth = -0.5f;
+            placementLayerOverride = Layer.Game;
         }
 
         public override void Draw() => base.Draw();

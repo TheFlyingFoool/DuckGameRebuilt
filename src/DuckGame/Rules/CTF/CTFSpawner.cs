@@ -16,31 +16,31 @@ namespace DuckGame
         public CTFSpawner(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("ctf/spawner", 16, 4);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 2f);
-            this.collisionOffset = new Vec2(-8f, -2f);
-            this.collisionSize = new Vec2(16f, 4f);
-            this.randomSpawn = true;
+            _sprite = new SpriteMap("ctf/spawner", 16, 4);
+            graphic = _sprite;
+            center = new Vec2(8f, 2f);
+            collisionOffset = new Vec2(-8f, -2f);
+            collisionSize = new Vec2(16f, 4f);
+            randomSpawn = true;
         }
 
         public override void SetHoverItem(Holdable hover)
         {
-            if (hover != this._present || this._hoverItem == hover)
+            if (hover != _present || _hoverItem == hover)
                 return;
             base.SetHoverItem(hover);
         }
 
         public override void Update()
         {
-            this.spawnTime = 4f;
-            if (this._present != null && this._present.removeFromLevel)
-                this._present = null;
+            spawnTime = 4f;
+            if (_present != null && _present.removeFromLevel)
+                _present = null;
             CTFPresent ctfPresent1 = null;
             CTFPresent ctfPresent2 = null;
-            foreach (CTFPresent ctfPresent3 in Level.CheckCircleAll<CTFPresent>(this.position, 16f))
+            foreach (CTFPresent ctfPresent3 in Level.CheckCircleAll<CTFPresent>(position, 16f))
             {
-                if (ctfPresent3 != this._present)
+                if (ctfPresent3 != _present)
                     ctfPresent2 = ctfPresent3;
                 else
                     ctfPresent1 = ctfPresent3;
@@ -51,7 +51,7 @@ namespace DuckGame
                     ctfPresent2.duck.ThrowItem();
                 Level.Remove(ctfPresent2);
                 Level.Add(SmallSmoke.New(ctfPresent2.x, ctfPresent2.y));
-                CTF.CaptureFlag((bool)this.team);
+                CTF.CaptureFlag((bool)team);
                 SFX.Play("equip");
             }
             base.Update();
@@ -59,25 +59,25 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this._sprite.frame = (bool)this.team ? 0 : 1;
+            _sprite.frame = (bool)team ? 0 : 1;
             base.Draw();
         }
 
         public override void SpawnItem()
         {
-            if (this._present != null)
+            if (_present != null)
                 return;
-            this._spawnWait = 0f;
-            this._present = new CTFPresent(this.x, this.y, (bool)this.team)
+            _spawnWait = 0f;
+            _present = new CTFPresent(x, y, (bool)team)
             {
-                x = this.x
+                x = x
             };
-            this._present.y = (float)(this.top + (this._present.y - this._present.bottom) - 6.0);
-            this._present.vSpeed = -2f;
+            _present.y = (float)(top + (_present.y - _present.bottom) - 6.0);
+            _present.vSpeed = -2f;
             Level.Add(_present);
-            if (!this._seated)
+            if (!_seated)
                 return;
-            this.SetHoverItem(_present);
+            SetHoverItem(_present);
         }
     }
 }

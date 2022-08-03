@@ -13,11 +13,11 @@ namespace DuckGame
         public CloudTileset(float x, float y)
           : base(x, y, "cloudTileset")
         {
-            this._editorName = "Kingdom";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidth = 12f;
-            this.verticalWidthThick = 14f;
-            this.horizontalHeight = 13f;
+            _editorName = "Kingdom";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidth = 12f;
+            verticalWidthThick = 14f;
+            horizontalHeight = 13f;
         }
 
         public override void Draw() => base.Draw();

@@ -15,21 +15,21 @@ namespace DuckGame
         public ushort customTeamIndex;
         public bool filtered;
 
-        public byte[] GetData() => this._data;
+        public byte[] GetData() => _data;
 
         public NMSpecialHat(Team pTeam, Profile pProfile, bool pFiltered)
         {
-            this._team = pTeam;
-            this.profile = pProfile;
-            this.customTeamIndex = (ushort)Teams.core.extraTeams.IndexOf(pTeam);
-            this.filtered = pFiltered;
+            _team = pTeam;
+            profile = pProfile;
+            customTeamIndex = (ushort)Teams.core.extraTeams.IndexOf(pTeam);
+            filtered = pFiltered;
         }
 
         public NMSpecialHat(Team pTeam, Profile pProfile)
         {
-            this._team = pTeam;
-            this.profile = pProfile;
-            this.customTeamIndex = (ushort)Teams.core.extraTeams.IndexOf(pTeam);
+            _team = pTeam;
+            profile = pProfile;
+            customTeamIndex = (ushort)Teams.core.extraTeams.IndexOf(pTeam);
         }
 
         public NMSpecialHat()
@@ -38,28 +38,28 @@ namespace DuckGame
 
         protected override void OnSerialize()
         {
-            if (this._team != null)
+            if (_team != null)
             {
-                this.serializedData.Write(true);
-                this.serializedData.Write(this.customTeamIndex);
-                this.serializedData.Write(this.filtered ? (byte)1 : (byte)0);
-                if (this.filtered)
+                serializedData.Write(true);
+                serializedData.Write(customTeamIndex);
+                serializedData.Write(filtered ? (byte)1 : (byte)0);
+                if (filtered)
                     return;
-                this.serializedData.Write(new BitBuffer(this._team.customData), true);
+                serializedData.Write(new BitBuffer(_team.customData), true);
             }
             else
-                this.serializedData.Write(false);
+                serializedData.Write(false);
         }
 
         public override void OnDeserialize(BitBuffer data)
         {
             if (!data.ReadBool())
                 return;
-            this.customTeamIndex = data.ReadUShort();
-            this.filtered = data.ReadByte() == 1;
-            if (this.filtered)
+            customTeamIndex = data.ReadUShort();
+            filtered = data.ReadByte() == 1;
+            if (filtered)
                 return;
-            this._data = data.ReadBitBuffer().GetBytes();
+            _data = data.ReadBitBuffer().GetBytes();
         }
     }
 }

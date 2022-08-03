@@ -42,22 +42,22 @@ namespace DuckGame
 
         public string name
         {
-            get => this._name;
-            set => this._name = value;
+            get => _name;
+            set => _name = value;
         }
 
-        public int index => this._index;
+        public int index => _index;
 
         public virtual string productName
         {
-            get => this._productName;
-            set => this._productName = value;
+            get => _productName;
+            set => _productName = value;
         }
 
         public virtual string productGUID
         {
-            get => this._productGUID;
-            set => this._productGUID = value;
+            get => _productGUID;
+            set => _productGUID = value;
         }
 
         public virtual bool hasMotionAxis => false;
@@ -74,36 +74,36 @@ namespace DuckGame
 
         public GenericController genericController
         {
-            get => this._genericController;
-            set => this._genericController = value;
+            get => _genericController;
+            set => _genericController = value;
         }
 
         public virtual bool isConnected => true;
 
-        public InputDevice(int idx = 0) => this._index = idx;
+        public InputDevice(int idx = 0) => _index = idx;
 
         public virtual Dictionary<int, string> GetTriggerNames() => null;
 
         public virtual Sprite DoGetMapImage(int map, bool skipStyleCheck = false)
         {
             if (skipStyleCheck)
-                return this.GetMapImage(map);
-            DeviceInputMapping deviceInputMapping = this.overrideMap;
-            if (this.overrideMap == null)
-                deviceInputMapping = Input.GetDefaultMapping(this.productName, this.productGUID, makeClone: false);
+                return GetMapImage(map);
+            DeviceInputMapping deviceInputMapping = overrideMap;
+            if (overrideMap == null)
+                deviceInputMapping = Input.GetDefaultMapping(productName, productGUID, makeClone: false);
             Sprite sprite = deviceInputMapping.GetSprite(map);
             if (sprite != null)
                 return sprite;
             if (map == 9999 || map == 9998)
                 map = !deviceInputMapping.map.ContainsKey("LEFT") || deviceInputMapping.map["LEFT"] != 37 ? 9998 : 9999;
-            return this.GetMapImage(map);
+            return GetMapImage(map);
         }
 
         public float RumbleIntensityModifier()
         {
             if (rumbleIntensity > 0.3)
-                this._rumbleThisFrame = true;
-            return this._framesRumbled > 120 ? 0f : Options.Data.rumbleIntensity;
+                _rumbleThisFrame = true;
+            return _framesRumbled > 120 ? 0f : Options.Data.rumbleIntensity;
         }
 
         public virtual void Rumble(float leftIntensity = 0f, float rightIntensity = 0f)
@@ -114,11 +114,11 @@ namespace DuckGame
 
         public virtual void Update()
         {
-            if (this._rumbleThisFrame)
-                ++this._framesRumbled;
+            if (_rumbleThisFrame)
+                ++_framesRumbled;
             else
-                this._framesRumbled = 0;
-            this._rumbleThisFrame = false;
+                _framesRumbled = 0;
+            _rumbleThisFrame = false;
         }
 
         public virtual bool MapPressed(int mapping, bool any = false) => false;

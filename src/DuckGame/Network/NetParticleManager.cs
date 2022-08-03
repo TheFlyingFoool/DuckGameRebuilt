@@ -26,20 +26,20 @@ namespace DuckGame
 
         public ushort GetParticleIndex()
         {
-            ++this._nextParticleIndex;
-            if (this._nextParticleIndex > 4000)
-                this.ResetParticleIndex();
-            return this._nextParticleIndex;
+            ++_nextParticleIndex;
+            if (_nextParticleIndex > 4000)
+                ResetParticleIndex();
+            return _nextParticleIndex;
         }
 
-        public void ResetParticleIndex() => this._nextParticleIndex = 1;
+        public void ResetParticleIndex() => _nextParticleIndex = 1;
 
         private void ClearParticle(PhysicsParticle pParticle)
         {
-            this._particles.Remove(pParticle.netIndex);
+            _particles.Remove(pParticle.netIndex);
             pParticle.netRemove = true;
             Level.Remove(pParticle);
-            this.removedParticleIndexes.Add(pParticle.netIndex);
+            removedParticleIndexes.Add(pParticle.netIndex);
         }
 
         public void OnMessage(NetMessage m)
@@ -53,15 +53,15 @@ namespace DuckGame
                         {
                             ushort current = enumerator.Current;
                             PhysicsParticle pParticle;
-                            if (this._particles.TryGetValue(current, out pParticle))
-                                this.ClearParticle(pParticle);
+                            if (_particles.TryGetValue(current, out pParticle))
+                                ClearParticle(pParticle);
                         }
                         break;
                     }
                 case NMParticles _:
                     ushort num1;
-                    this._lastPacketNumbers.TryGetValue(m.packet.connection, out num1);
-                    this._lastPacketNumbers[m.packet.connection] = m.packet.order;
+                    _lastPacketNumbers.TryGetValue(m.packet.connection, out num1);
+                    _lastPacketNumbers[m.packet.connection] = m.packet.order;
                     bool flag = Math.Abs(num1 - m.packet.order) < 1000 && m.packet.order < num1;
                     NMParticles nmParticles = m as NMParticles;
                     if (nmParticles.levelIndex != DuckNetwork.levelIndex)
@@ -76,7 +76,7 @@ namespace DuckGame
                     {
                         ushort key = nmParticles.data.ReadUShort();
                         PhysicsParticle physicsParticle;
-                        if (!this._particles.TryGetValue(key, out physicsParticle) | flag && typeIndex != null)
+                        if (!_particles.TryGetValue(key, out physicsParticle) | flag && typeIndex != null)
                         {
                             if (typeIndex == typeof(SmallFire))
                                 physicsParticle = SmallFire.New(Vec2.NetMin.x, Vec2.NetMin.y, 0f, 0f, canMultiply: false, network: true);
@@ -88,23 +88,23 @@ namespace DuckGame
                             {
                                 physicsParticle.netIndex = key;
                                 physicsParticle.isLocal = false;
-                                if (this.removedParticleIndexes.Count > 3000)
+                                if (removedParticleIndexes.Count > 3000)
                                 {
                                     for (int index2 = 0; index2 < 10; ++index2)
                                     {
-                                        if (this.removedParticleIndexes.Contains((ushort)(key - (uint)index2)))
-                                            this.removedParticleIndexes.Remove((ushort)(key - (uint)index2));
+                                        if (removedParticleIndexes.Contains((ushort)(key - (uint)index2)))
+                                            removedParticleIndexes.Remove((ushort)(key - (uint)index2));
                                     }
                                 }
-                                if (!this.removedParticleIndexes.Contains(key))
+                                if (!removedParticleIndexes.Contains(key))
                                 {
-                                    if (this._particles.Count > 200)
+                                    if (_particles.Count > 200)
                                     {
                                         PhysicsParticle pParticle;
-                                        if (this._particles.TryGetValue((ushort)(key - 100U), out pParticle))
-                                            this.ClearParticle(pParticle);
+                                        if (_particles.TryGetValue((ushort)(key - 100U), out pParticle))
+                                            ClearParticle(pParticle);
                                     }
-                                    this._particles[key] = physicsParticle;
+                                    _particles[key] = physicsParticle;
                                     Level.Add(physicsParticle);
                                 }
                             }
@@ -120,35 +120,35 @@ namespace DuckGame
             if (DuckNetwork.localProfile == null)
                 return;
             p.connection = DuckNetwork.localConnection;
-            p.netIndex = (ushort)(this.GetParticleIndex() + DuckNetwork.localProfile.networkIndex * 4000U);
-            this._particles[p.netIndex] = p;
-            if (this._particles.Count <= 200)
+            p.netIndex = (ushort)(GetParticleIndex() + DuckNetwork.localProfile.networkIndex * 4000U);
+            _particles[p.netIndex] = p;
+            if (_particles.Count <= 200)
                 return;
             PhysicsParticle p1;
-            if (!this._particles.TryGetValue((ushort)(p.netIndex - 100U), out p1))
+            if (!_particles.TryGetValue((ushort)(p.netIndex - 100U), out p1))
                 return;
-            this.RemoveParticle(p1);
+            RemoveParticle(p1);
             Level.Remove(p1);
         }
 
         public void Clear()
         {
-            this._particles.Clear();
-            this._inProgressParticleLists.Clear();
-            this._pendingParticles.Clear();
-            this.removedParticleIndexes.Clear();
-            this.ResetParticleIndex();
-            this.updateOrder = 0;
+            _particles.Clear();
+            _inProgressParticleLists.Clear();
+            _pendingParticles.Clear();
+            removedParticleIndexes.Clear();
+            ResetParticleIndex();
+            updateOrder = 0;
         }
 
         public List<PhysicsParticle> GetParticleList(System.Type t)
         {
             List<PhysicsParticle> particleList;
-            if (!this._inProgressParticleLists.TryGetValue(t, out particleList) || particleList.Count >= 20)
+            if (!_inProgressParticleLists.TryGetValue(t, out particleList) || particleList.Count >= 20)
             {
                 particleList = new List<PhysicsParticle>();
-                this._inProgressParticleLists[t] = particleList;
-                this._pendingParticles.Enqueue(particleList);
+                _inProgressParticleLists[t] = particleList;
+                _pendingParticles.Enqueue(particleList);
             }
             return particleList;
         }
@@ -173,7 +173,7 @@ namespace DuckGame
             {
                 int num2 = num1;
                 int num3 = 0;
-                foreach (KeyValuePair<ushort, PhysicsParticle> particle in this._particles)
+                foreach (KeyValuePair<ushort, PhysicsParticle> particle in _particles)
                 {
                     PhysicsParticle pParticle = particle.Value;
                     if (pParticle.isLocal)
@@ -182,7 +182,7 @@ namespace DuckGame
                         {
                             if (physicsParticleList == null)
                                 physicsParticleList = new List<PhysicsParticle>();
-                            this.removedParticleIndexes.Add(pParticle.netIndex);
+                            removedParticleIndexes.Add(pParticle.netIndex);
                             physicsParticleList.Add(pParticle);
                         }
                         else
@@ -190,8 +190,8 @@ namespace DuckGame
                             ++num3;
                             if (pParticle.updateOrder != updateOrder)
                             {
-                                pParticle.updateOrder = this.updateOrder;
-                                this.currentParticleList.Add(pParticle);
+                                pParticle.updateOrder = updateOrder;
+                                currentParticleList.Add(pParticle);
                                 ++num1;
                             }
                         }
@@ -200,7 +200,7 @@ namespace DuckGame
                     {
                         if (physicsParticleList == null)
                             physicsParticleList = new List<PhysicsParticle>();
-                        this.removedParticleIndexes.Add(pParticle.netIndex);
+                        removedParticleIndexes.Add(pParticle.netIndex);
                         physicsParticleList.Add(pParticle);
                         Level.Remove(pParticle);
                     }
@@ -208,34 +208,34 @@ namespace DuckGame
                         break;
                 }
                 if (num1 == num2 && num3 > 0)
-                    ++this.updateOrder;
+                    ++updateOrder;
                 else
                     break;
             }
-            if (this.currentParticleList.particles.Count > 0)
+            if (currentParticleList.particles.Count > 0)
             {
                 Send.Message(currentParticleList, NetMessagePriority.Volatile);
-                this.currentParticleList = new NMParticles();
+                currentParticleList = new NMParticles();
             }
             if (physicsParticleList != null)
             {
                 NMParticlesRemoved particlesRemoved = new NMParticlesRemoved();
-                this._particleRemoveMessages.Enqueue(particlesRemoved);
+                _particleRemoveMessages.Enqueue(particlesRemoved);
                 foreach (PhysicsParticle physicsParticle in physicsParticleList)
                 {
                     if (particlesRemoved.removeParticles.Count >= 32)
                     {
                         particlesRemoved = new NMParticlesRemoved();
-                        this._particleRemoveMessages.Enqueue(particlesRemoved);
+                        _particleRemoveMessages.Enqueue(particlesRemoved);
                     }
                     particlesRemoved.removeParticles.Add(physicsParticle.netIndex);
-                    this._particles.Remove(physicsParticle.netIndex);
+                    _particles.Remove(physicsParticle.netIndex);
                 }
                 physicsParticleList.Clear();
             }
-            if (this._particleRemoveMessages.Count <= 0)
+            if (_particleRemoveMessages.Count <= 0)
                 return;
-            Send.Message(this._particleRemoveMessages.Dequeue(), NetMessagePriority.Volatile);
+            Send.Message(_particleRemoveMessages.Dequeue(), NetMessagePriority.Volatile);
         }
     }
 }

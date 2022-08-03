@@ -11,29 +11,29 @@ namespace DuckGame
     {
         public ATPhaser()
         {
-            this.accuracy = 0.8f;
-            this.range = 600f;
-            this.penetration = 1f;
-            this.bulletSpeed = 10f;
-            this.bulletThickness = 0.3f;
-            this.bulletLength = 40f;
-            this.rangeVariation = 50f;
-            this.bulletType = typeof(LaserBullet);
-            this.angleShot = false;
+            accuracy = 0.8f;
+            range = 600f;
+            penetration = 1f;
+            bulletSpeed = 10f;
+            bulletThickness = 0.3f;
+            bulletLength = 40f;
+            rangeVariation = 50f;
+            bulletType = typeof(LaserBullet);
+            angleShot = false;
         }
 
         public override void WriteAdditionalData(BitBuffer b)
         {
             base.WriteAdditionalData(b);
-            b.Write(this.bulletThickness);
-            b.Write(this.penetration);
+            b.Write(bulletThickness);
+            b.Write(penetration);
         }
 
         public override void ReadAdditionalData(BitBuffer b)
         {
             base.ReadAdditionalData(b);
-            this.bulletThickness = b.ReadFloat();
-            this.penetration = b.ReadFloat();
+            bulletThickness = b.ReadFloat();
+            penetration = b.ReadFloat();
         }
     }
 }

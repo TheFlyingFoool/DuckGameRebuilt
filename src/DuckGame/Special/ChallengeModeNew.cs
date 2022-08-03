@@ -19,26 +19,26 @@ namespace DuckGame
 
         public ChallengeModeNew()
         {
-            this._contextMenuFilter.Add("random");
-            this._contextMenuFilter.Add("music");
-            this._editorName = "Challenge Settings";
-            this.editorTooltip = "Place this in your level to make it a challenge, and set trophies!";
-            this.Music._tooltip = "The music to play during this challenge, should be the name of a song in the Duck Game folder.";
-            this.TargetReticles._tooltip = "If enabled, off screen targets will show a reticle at the edge of the screen.";
+            _contextMenuFilter.Add("random");
+            _contextMenuFilter.Add("music");
+            _editorName = "Challenge Settings";
+            editorTooltip = "Place this in your level to make it a challenge, and set trophies!";
+            Music._tooltip = "The music to play during this challenge, should be the name of a song in the Duck Game folder.";
+            TargetReticles._tooltip = "If enabled, off screen targets will show a reticle at the edge of the screen.";
         }
 
         public override void Initialize()
         {
-            this.music.value = this.Music.value;
+            music.value = Music.value;
             base.Initialize();
-            ChallengeMode.showReticles = this.TargetReticles.value;
+            ChallengeMode.showReticles = TargetReticles.value;
         }
 
         public override void PrepareCounts()
         {
             base.PrepareCounts();
-            this._challenge.countGoodies = Level.current.things[typeof(Goody)].Count<Thing>() > 0;
-            this._challenge.countTargets = Level.current.things[typeof(TargetDuckNew)].Count<Thing>() > 0 || Level.current.things[typeof(GoalType)].Count<Thing>() > 0;
+            _challenge.countGoodies = Level.current.things[typeof(Goody)].Count<Thing>() > 0;
+            _challenge.countTargets = Level.current.things[typeof(TargetDuckNew)].Count<Thing>() > 0 || Level.current.things[typeof(GoalType)].Count<Thing>() > 0;
         }
     }
 }

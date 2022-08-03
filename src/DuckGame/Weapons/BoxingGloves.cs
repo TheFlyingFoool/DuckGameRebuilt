@@ -15,30 +15,30 @@ namespace DuckGame
 
         public override float angle
         {
-            get => base.angle + (this._swing + this._hold) * offDir;
-            set => this._angle = value;
+            get => base.angle + (_swing + _hold) * offDir;
+            set => _angle = value;
         }
 
         public BoxingGloves(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 4;
-            this._ammoType = new ATLaser();
-            this._ammoType.range = 170f;
-            this._ammoType.accuracy = 0.8f;
-            this._type = "gun";
-            this.graphic = new Sprite("boxingGlove");
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-4f, -4f);
-            this.collisionSize = new Vec2(8f, 8f);
-            this._barrelOffsetTL = new Vec2(16f, 7f);
-            this._fireSound = "smg";
-            this._fullAuto = true;
-            this._fireWait = 1f;
-            this._kickForce = 3f;
-            this._holdOffset = new Vec2(-4f, 4f);
-            this.weight = 0.9f;
-            this.physicsMaterial = PhysicsMaterial.Paper;
+            ammo = 4;
+            _ammoType = new ATLaser();
+            _ammoType.range = 170f;
+            _ammoType.accuracy = 0.8f;
+            _type = "gun";
+            graphic = new Sprite("boxingGlove");
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-4f, -4f);
+            collisionSize = new Vec2(8f, 8f);
+            _barrelOffsetTL = new Vec2(16f, 7f);
+            _fireSound = "smg";
+            _fullAuto = true;
+            _fireWait = 1f;
+            _kickForce = 3f;
+            _holdOffset = new Vec2(-4f, 4f);
+            weight = 0.9f;
+            physicsMaterial = PhysicsMaterial.Paper;
         }
 
         public override void Initialize() => base.Initialize();

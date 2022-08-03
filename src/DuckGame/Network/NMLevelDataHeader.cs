@@ -15,15 +15,15 @@ namespace DuckGame
 
         public NMLevelDataHeader(ushort tSession, int dataLength, string pName)
         {
-            this.transferSession = tSession;
-            this.length = dataLength;
-            this.levelName = pName;
+            transferSession = tSession;
+            length = dataLength;
+            levelName = pName;
         }
 
         public NMLevelDataHeader()
         {
         }
 
-        public override void MessageWasReceived() => this.connection.dataTransferSize = this.length;
+        public override void MessageWasReceived() => connection.dataTransferSize = length;
     }
 }

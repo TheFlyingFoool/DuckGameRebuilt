@@ -52,41 +52,41 @@ namespace DuckGame
         public OldEnergyScimi(float pX, float pY)
           : base(pX, pY)
         {
-            this.graphic = new Sprite("energyScimiHilt");
-            this.center = new Vec2(6f, 26f);
-            this.collisionOffset = new Vec2(-2f, -24f);
-            this.collisionSize = new Vec2(4f, 28f);
-            this._blade = new Sprite("energyScimiBlade");
-            this._bladeTrail = new Sprite("energyScimiBladeTrail");
-            this._whiteGlow = new Sprite("whiteGlow")
+            graphic = new Sprite("energyScimiHilt");
+            center = new Vec2(6f, 26f);
+            collisionOffset = new Vec2(-2f, -24f);
+            collisionSize = new Vec2(4f, 28f);
+            _blade = new Sprite("energyScimiBlade");
+            _bladeTrail = new Sprite("energyScimiBladeTrail");
+            _whiteGlow = new Sprite("whiteGlow")
             {
                 center = new Vec2(16f, 28f),
                 xscale = 0.8f,
                 yscale = 1.4f
             };
-            this.thickness = 0.01f;
-            this._impactThreshold = 0.5f;
-            this.centerHeld = new Vec2(6f, 29f);
-            this.centerUnheld = new Vec2(6f, 16f);
-            this._bladeMaterial = new MaterialEnergyBlade(this);
-            this.additionalHoldOffset = new Vec2(0f, -3f);
-            this._swingSound = null;
-            this._enforceJabSwing = false;
-            this._allowJabMotion = false;
-            this._clashWithWalls = false;
-            this.swordColor = this.properColor;
-            this._warpLine = new Sprite("warpLine2");
+            thickness = 0.01f;
+            _impactThreshold = 0.5f;
+            centerHeld = new Vec2(6f, 29f);
+            centerUnheld = new Vec2(6f, 16f);
+            _bladeMaterial = new MaterialEnergyBlade(this);
+            additionalHoldOffset = new Vec2(0f, -3f);
+            _swingSound = null;
+            _enforceJabSwing = false;
+            _allowJabMotion = false;
+            _clashWithWalls = false;
+            swordColor = properColor;
+            _warpLine = new Sprite("warpLine2");
         }
 
         public override Vec2 barrelStartPos
         {
             get
             {
-                if (this._stuck)
-                    return this.position - (this.Offset(this.barrelOffset) - this.position).normalized * -5f;
-                if (this.owner == null)
-                    return this.position - (this.Offset(this.barrelOffset) - this.position).normalized * 6f;
-                return this._slamStance ? this.position + (this.Offset(this.barrelOffset) - this.position).normalized * 12f : this.position + (this.Offset(this.barrelOffset) - this.position).normalized * 2f;
+                if (_stuck)
+                    return position - (Offset(barrelOffset) - position).normalized * -5f;
+                if (owner == null)
+                    return position - (Offset(barrelOffset) - position).normalized * 6f;
+                return _slamStance ? position + (Offset(barrelOffset) - position).normalized * 12f : position + (Offset(barrelOffset) - position).normalized * 2f;
             }
         }
 
@@ -100,10 +100,10 @@ namespace DuckGame
                     center = new Vec2(3f, 3f),
                     collisionOffset = new Vec2(-3f, -3f)
                 };
-                this._walls.Add(energyBlocker);
+                _walls.Add(energyBlocker);
                 Level.Add(energyBlocker);
             }
-            this._platform = new Platform(0f, 0f, 20f, 8f)
+            _platform = new Platform(0f, 0f, 20f, 8f)
             {
                 solid = false,
                 enablePhysics = false,
@@ -112,7 +112,7 @@ namespace DuckGame
                 thickness = 0.01f
             };
             Level.Add(_platform);
-            this._hum = new ConstantSound("scimiHum")
+            _hum = new ConstantSound("scimiHum")
             {
                 volume = 0f,
                 lerpSpeed = 1f
@@ -124,10 +124,10 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            foreach (Thing wall in this._walls)
+            foreach (Thing wall in _walls)
                 Level.Remove(wall);
-            this._walls.Clear();
-            if (this._platform != null)
+            _walls.Clear();
+            if (_platform != null)
                 Level.Remove(_platform);
             base.Terminate();
         }
@@ -136,205 +136,205 @@ namespace DuckGame
         {
             if (_timeTillPulse >= 0.0)
                 return;
-            this._timeTillPulse = 0.2f;
+            _timeTillPulse = 0.2f;
             SFX.Play("scimiSurge", 0.8f, Rando.Float(-0.2f, 0.2f));
-            this._glow = 12f;
+            _glow = 12f;
         }
 
         public override void RestoreCollisionSize(bool pHeld = false)
         {
             if (pHeld)
             {
-                this.collisionOffset = new Vec2(-4f, 0f);
-                this.collisionSize = new Vec2(4f, 4f);
-                if (!this._crouchStance || this._jabStance)
+                collisionOffset = new Vec2(-4f, 0f);
+                collisionSize = new Vec2(4f, 4f);
+                if (!_crouchStance || _jabStance)
                     return;
-                this.collisionOffset = new Vec2(-2f, -19f);
-                this.collisionSize = new Vec2(4f, 16f);
-                this.thickness = 3f;
+                collisionOffset = new Vec2(-2f, -19f);
+                collisionSize = new Vec2(4f, 16f);
+                thickness = 3f;
             }
             else
             {
-                this.collisionOffset = new Vec2(-2f, -24f);
-                this.collisionSize = new Vec2(4f, 28f);
-                if (!this._wasLifted)
+                collisionOffset = new Vec2(-2f, -24f);
+                collisionSize = new Vec2(4f, 28f);
+                if (!_wasLifted)
                     return;
-                this.collisionOffset = new Vec2(-4f, -2f);
-                this.collisionSize = new Vec2(8f, 4f);
+                collisionOffset = new Vec2(-4f, -2f);
+                collisionSize = new Vec2(8f, 4f);
             }
         }
 
-        public override DestroyType destroyType => this._airFly ? new DTImpale(this) : new DTIncinerate(this);
+        public override DestroyType destroyType => _airFly ? new DTImpale(this) : new DTIncinerate(this);
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (!this._wasLifted || this.owner != null)
+            if (!_wasLifted || owner != null)
                 return;
-            if (with is Block || with is IPlatform && from == ImpactedFrom.Bottom && this.vSpeed > 0.0)
+            if (with is Block || with is IPlatform && from == ImpactedFrom.Bottom && vSpeed > 0.0)
             {
-                this.Shing();
-                if (this._framesSinceThrown <= 5)
+                Shing();
+                if (_framesSinceThrown <= 5)
                     return;
-                this._framesSinceThrown = 25;
+                _framesSinceThrown = 25;
             }
             else
             {
-                if (!this._airFly || !(with is RagdollPart) || this._drag.FirstOrDefault<OldEnergyScimi.RagdollDrag>(x => x.part == with) != null)
+                if (!_airFly || !(with is RagdollPart) || _drag.FirstOrDefault<OldEnergyScimi.RagdollDrag>(x => x.part == with) != null)
                     return;
                 RagdollPart ragdollPart = with as RagdollPart;
                 if (ragdollPart.doll == null)
                     return;
                 if (ragdollPart.doll.part1 != null)
-                    this._drag.Add(new OldEnergyScimi.RagdollDrag()
+                    _drag.Add(new OldEnergyScimi.RagdollDrag()
                     {
                         part = ragdollPart.doll.part1,
-                        offset = this.position - ragdollPart.doll.part1.position
+                        offset = position - ragdollPart.doll.part1.position
                     });
                 if (ragdollPart.doll.part2 != null)
-                    this._drag.Add(new OldEnergyScimi.RagdollDrag()
+                    _drag.Add(new OldEnergyScimi.RagdollDrag()
                     {
                         part = ragdollPart.doll.part2,
-                        offset = this.position - ragdollPart.doll.part2.position
+                        offset = position - ragdollPart.doll.part2.position
                     });
                 if (ragdollPart.doll.part3 == null)
                     return;
-                this._drag.Add(new OldEnergyScimi.RagdollDrag()
+                _drag.Add(new OldEnergyScimi.RagdollDrag()
                 {
                     part = ragdollPart.doll.part3,
-                    offset = this.position - ragdollPart.doll.part3.position
+                    offset = position - ragdollPart.doll.part3.position
                 });
             }
         }
 
         protected override void PerformAirSpin()
         {
-            if (!this.enablePhysics)
+            if (!enablePhysics)
                 return;
-            if (this._canAirFly && !this._airFly && this._framesSinceThrown < 15)
+            if (_canAirFly && !_airFly && _framesSinceThrown < 15)
             {
-                this._upFlyTime = 0f;
-                if (Math.Abs(this.hSpeed) > 2.0)
+                _upFlyTime = 0f;
+                if (Math.Abs(hSpeed) > 2.0)
                 {
-                    if (Level.CheckLine<Block>(this.position + new Vec2(-16f, 0f), this.position + new Vec2(16f, 0f)) == null)
+                    if (Level.CheckLine<Block>(position + new Vec2(-16f, 0f), position + new Vec2(16f, 0f)) == null)
                     {
-                        this._airFly = true;
-                        this._airFlyDir = Math.Sign(this.hSpeed);
+                        _airFly = true;
+                        _airFlyDir = Math.Sign(hSpeed);
                     }
                     else
-                        this._canAirFly = false;
-                    this._airFlyVertical = false;
+                        _canAirFly = false;
+                    _airFlyVertical = false;
                 }
-                else if (Math.Abs(this.vSpeed) > 2.0)
+                else if (Math.Abs(vSpeed) > 2.0)
                 {
-                    if (Level.CheckLine<Block>(this.position + new Vec2(0f, -16f), this.position + new Vec2(0f, 16f)) == null)
+                    if (Level.CheckLine<Block>(position + new Vec2(0f, -16f), position + new Vec2(0f, 16f)) == null)
                     {
-                        this._airFly = true;
-                        this._airFlyDir = Math.Sign(this.vSpeed);
+                        _airFly = true;
+                        _airFlyDir = Math.Sign(vSpeed);
                     }
                     else
-                        this._canAirFly = false;
-                    this._airFlyVertical = true;
+                        _canAirFly = false;
+                    _airFlyVertical = true;
                 }
             }
-            if (this._airFly)
+            if (_airFly)
             {
-                this.hMax = 18f;
-                if (this._airFlyVertical)
+                hMax = 18f;
+                if (_airFlyVertical)
                 {
-                    this._upFlyTime += Maths.IncFrameTimer();
+                    _upFlyTime += Maths.IncFrameTimer();
                     if (_upFlyTime > 2.0 && _airFlyDir < 0.0)
-                        this._airFlyDir = 1f;
+                        _airFlyDir = 1f;
                     if (_airFlyDir > 0.0)
-                        this._throwSpin = 90f;
+                        _throwSpin = 90f;
                     else if (_airFlyDir < 0.0)
-                        this._throwSpin = 270f;
-                    this.vSpeed = this._airFlyDir * 18f;
-                    this.hSpeed = 0f;
+                        _throwSpin = 270f;
+                    vSpeed = _airFlyDir * 18f;
+                    hSpeed = 0f;
                 }
                 else
                 {
                     if (_airFlyDir > 0.0)
-                        this._throwSpin = 0f;
+                        _throwSpin = 0f;
                     else if (_airFlyDir < 0.0)
-                        this._throwSpin = 180f;
-                    this.vSpeed = 0f;
-                    this.hSpeed = this._airFlyDir * 18f;
+                        _throwSpin = 180f;
+                    vSpeed = 0f;
+                    hSpeed = _airFlyDir * 18f;
                 }
-                this.angleDegrees = 90f + this._throwSpin;
-                this.gravMultiplier = 0f;
+                angleDegrees = 90f + _throwSpin;
+                gravMultiplier = 0f;
             }
             else
             {
-                this.hMax = 12f;
-                this.vMax = 8f;
+                hMax = 12f;
+                vMax = 8f;
                 base.PerformAirSpin();
             }
         }
 
         public override void Shing()
         {
-            this.gravMultiplier = 1f;
-            this.ClearDrag();
-            this.Pulse();
-            if (this._airFly)
+            gravMultiplier = 1f;
+            ClearDrag();
+            Pulse();
+            if (_airFly)
             {
                 bool flag = false;
-                if (this._airFlyVertical)
+                if (_airFlyVertical)
                 {
-                    Block block = Level.CheckLine<Block>(this.position, this.position + new Vec2(0f, this.vSpeed));
+                    Block block = Level.CheckLine<Block>(position, position + new Vec2(0f, vSpeed));
                     if (block != null)
                     {
                         flag = true;
-                        this.clip.Add(block);
-                        if (this.vSpeed > 0.0)
+                        clip.Add(block);
+                        if (vSpeed > 0.0)
                         {
-                            this.y = block.top - 18f;
-                            this._throwSpin = 90f;
+                            y = block.top - 18f;
+                            _throwSpin = 90f;
                         }
                         else
                         {
-                            this.y = block.bottom + 18f;
-                            this._throwSpin = 270f;
+                            y = block.bottom + 18f;
+                            _throwSpin = 270f;
                         }
                     }
                 }
                 else
                 {
-                    Block block = Level.CheckLine<Block>(this.position, this.position + new Vec2(this.hSpeed, 0f));
+                    Block block = Level.CheckLine<Block>(position, position + new Vec2(hSpeed, 0f));
                     if (block != null)
                     {
                         flag = true;
-                        this.clip.Add(block);
-                        if (this.hSpeed > 0.0)
+                        clip.Add(block);
+                        if (hSpeed > 0.0)
                         {
-                            this.x = block.left - 18f;
-                            this._throwSpin = 0f;
+                            x = block.left - 18f;
+                            _throwSpin = 0f;
                         }
                         else
                         {
-                            this.x = block.right + 18f;
-                            this._throwSpin = 180f;
+                            x = block.right + 18f;
+                            _throwSpin = 180f;
                         }
                     }
                 }
                 if (flag)
                 {
-                    this._longCharge = true;
-                    this._stuck = true;
-                    this.enablePhysics = false;
-                    this.hSpeed = 0f;
-                    this.vSpeed = 0f;
+                    _longCharge = true;
+                    _stuck = true;
+                    enablePhysics = false;
+                    hSpeed = 0f;
+                    vSpeed = 0f;
                 }
             }
-            this._airFly = false;
+            _airFly = false;
             base.Shing();
         }
 
         protected override void QuadLaserHit(QuadLaserBullet pBullet)
         {
-            if (!this.isServerForObject)
+            if (!isServerForObject)
                 return;
-            this.Fondle(pBullet);
+            Fondle(pBullet);
             EnergyScimitarBlast energyScimitarBlast = new EnergyScimitarBlast(pBullet.position, new Vec2(offDir * 2000, 0f));
             Level.Add(energyScimitarBlast);
             Level.Remove(pBullet);
@@ -345,72 +345,72 @@ namespace DuckGame
 
         protected override void UpdateCrouchStance()
         {
-            if (!this._crouchStance)
+            if (!_crouchStance)
             {
-                this._hold = -0.3f;
-                this.handOffset = new Vec2(this._addOffsetX + 4f, this._addOffsetY);
-                this._holdOffset = new Vec2(2f + this._addOffsetX, 6f + this._addOffsetY) + this.additionalHoldOffset;
+                _hold = -0.3f;
+                handOffset = new Vec2(_addOffsetX + 4f, _addOffsetY);
+                _holdOffset = new Vec2(2f + _addOffsetX, 6f + _addOffsetY) + additionalHoldOffset;
             }
-            else if (this.duck != null && this.duck.sliding)
+            else if (duck != null && duck.sliding)
             {
-                this._hold = 2.24159f;
-                if (this.handFlip)
-                    this._holdOffset = new Vec2(this._addOffsetX - 4f, this._addOffsetY - 3f) + this.additionalHoldOffset;
+                _hold = 2.24159f;
+                if (handFlip)
+                    _holdOffset = new Vec2(_addOffsetX - 4f, _addOffsetY - 3f) + additionalHoldOffset;
                 else
-                    this._holdOffset = new Vec2(2f + this._addOffsetX, this._addOffsetY - 3f) + this.additionalHoldOffset;
-                this.handOffset = new Vec2(3f + this._addOffsetX, this._addOffsetY - 6f);
+                    _holdOffset = new Vec2(2f + _addOffsetX, _addOffsetY - 3f) + additionalHoldOffset;
+                handOffset = new Vec2(3f + _addOffsetX, _addOffsetY - 6f);
             }
             else
             {
-                this._hold = 2.54159f;
-                if (this.handFlip)
-                    this._holdOffset = new Vec2(this._addOffsetX - 4f, this._addOffsetY - 7f) + this.additionalHoldOffset;
+                _hold = 2.54159f;
+                if (handFlip)
+                    _holdOffset = new Vec2(_addOffsetX - 4f, _addOffsetY - 7f) + additionalHoldOffset;
                 else
-                    this._holdOffset = new Vec2(2f + this._addOffsetX, this._addOffsetY - 7f) + this.additionalHoldOffset;
-                this.handOffset = new Vec2(3f + this._addOffsetX, this._addOffsetY - 10f);
+                    _holdOffset = new Vec2(2f + _addOffsetX, _addOffsetY - 7f) + additionalHoldOffset;
+                handOffset = new Vec2(3f + _addOffsetX, _addOffsetY - 10f);
             }
         }
 
         protected override void UpdateJabPullback()
         {
-            this.handFlip = true;
-            if (this.duck != null && this.duck.sliding)
-                this._swing = MathHelper.Lerp(this._swing, -4.2f, 0.36f);
+            handFlip = true;
+            if (duck != null && duck.sliding)
+                _swing = MathHelper.Lerp(_swing, -4.2f, 0.36f);
             else
-                this._swing = MathHelper.Lerp(this._swing, -4.8f, 0.36f);
-            this._addOffsetX = MathHelper.Lerp(this._addOffsetX, -2f, 0.45f);
+                _swing = MathHelper.Lerp(_swing, -4.8f, 0.36f);
+            _addOffsetX = MathHelper.Lerp(_addOffsetX, -2f, 0.45f);
             if (_addOffsetX >= -12.0)
                 return;
-            this._addOffsetX = -12f;
+            _addOffsetX = -12f;
         }
 
         protected override void UpdateSlamPullback()
         {
-            this._swing = MathHelper.Lerp(this._swing, 0.8f, 0.8f);
-            this._addOffsetX = MathHelper.Lerp(this._addOffsetX, -5f, 0.45f);
+            _swing = MathHelper.Lerp(_swing, 0.8f, 0.8f);
+            _addOffsetX = MathHelper.Lerp(_addOffsetX, -5f, 0.45f);
             if (_addOffsetX < -4.59999990463257)
-                this._addOffsetX = -5f;
-            this._addOffsetY = MathHelper.Lerp(this._addOffsetY, 6f, 0.35f);
+                _addOffsetX = -5f;
+            _addOffsetY = MathHelper.Lerp(_addOffsetY, 6f, 0.35f);
             if (_addOffsetX >= -5.5)
                 return;
-            this._addOffsetY = -6f;
+            _addOffsetY = -6f;
         }
 
-        public float angleWhoom => this._angleWhoom;
+        public float angleWhoom => _angleWhoom;
 
         public void ClearDrag()
         {
             int num = 1;
-            foreach (OldEnergyScimi.RagdollDrag ragdollDrag in this._drag)
+            foreach (OldEnergyScimi.RagdollDrag ragdollDrag in _drag)
             {
                 if (ragdollDrag.part.doll != null && ragdollDrag.part.doll.captureDuck != null && ragdollDrag.part.doll.captureDuck._cooked == null)
                 {
-                    if (!this._airFlyVertical)
-                        ragdollDrag.part.position = this.Offset(new Vec2(-10f, 10f));
+                    if (!_airFlyVertical)
+                        ragdollDrag.part.position = Offset(new Vec2(-10f, 10f));
                     else if (_airFlyDir < 0.0)
-                        ragdollDrag.part.position = this.Offset(new Vec2(0f, 0f));
+                        ragdollDrag.part.position = Offset(new Vec2(0f, 0f));
                     else
-                        ragdollDrag.part.position = this.Offset(new Vec2(0f, 20f));
+                        ragdollDrag.part.position = Offset(new Vec2(0f, 20f));
                     ragdollDrag.part.doll.position = ragdollDrag.part.position;
                     ragdollDrag.part.doll.captureDuck.position = ragdollDrag.part.position;
                     ragdollDrag.part.doll.captureDuck.OnKill(new DTIncinerate(ragdollDrag.part.doll.captureDuck));
@@ -419,24 +419,24 @@ namespace DuckGame
                     ++num;
                 }
             }
-            this._drag.Clear();
+            _drag.Clear();
         }
 
         public override void Thrown()
         {
-            if (this.isServerForObject && this.duck != null)
+            if (isServerForObject && duck != null)
             {
-                if (this.duck.inputProfile.Down("DOWN"))
+                if (duck.inputProfile.Down("DOWN"))
                 {
-                    this.x = this.duck.x;
-                    this._thrownDown = true;
-                    if (!this.duck.grounded)
-                        this.duck.vSpeed -= 8f;
+                    x = duck.x;
+                    _thrownDown = true;
+                    if (!duck.grounded)
+                        duck.vSpeed -= 8f;
                 }
-                else if (this.duck.inputProfile.Down("UP"))
+                else if (duck.inputProfile.Down("UP"))
                 {
-                    this.x = this.duck.x;
-                    this._thrownUp = true;
+                    x = duck.x;
+                    _thrownUp = true;
                 }
             }
             base.Thrown();
@@ -444,225 +444,225 @@ namespace DuckGame
 
         protected override void OnSwing()
         {
-            if (this.duck == null || !this.isServerForObject)
+            if (duck == null || !isServerForObject)
                 return;
-            if (this.duck._hovering)
+            if (duck._hovering)
             {
-                this._revertVMaxDuck = this.duck;
-                this._vmaxReversion = this.duck.vMax;
-                this.duck.vMax = 13f;
-                this.duck.vSpeed = -13f;
-                this._slowV = true;
-                this.warpLines.Add(new WarpLine()
+                _revertVMaxDuck = duck;
+                _vmaxReversion = duck.vMax;
+                duck.vMax = 13f;
+                duck.vSpeed = -13f;
+                _slowV = true;
+                warpLines.Add(new WarpLine()
                 {
-                    start = this.duck.position,
-                    end = this.duck.position + new Vec2(0f, -80f),
+                    start = duck.position,
+                    end = duck.position + new Vec2(0f, -80f),
                     lerp = 0f,
                     wide = 24f
                 });
             }
             else
             {
-                this.duck.hSpeed = offDir * 11.25f;
-                this.duck.vSpeed = -1f;
-                this._slowV = false;
-                this.warpLines.Add(new WarpLine()
+                duck.hSpeed = offDir * 11.25f;
+                duck.vSpeed = -1f;
+                _slowV = false;
+                warpLines.Add(new WarpLine()
                 {
-                    start = this.duck.position + new Vec2(-this.offDir * 16, 4f),
-                    end = this.duck.position + new Vec2(offDir * 62, 4f),
+                    start = duck.position + new Vec2(-offDir * 16, 4f),
+                    end = duck.position + new Vec2(offDir * 62, 4f),
                     lerp = 0f,
                     wide = 20f
                 });
             }
-            this.slowWait = 0.085f;
+            slowWait = 0.085f;
         }
 
         protected override void ResetTrailHistory()
         {
-            this._lastAngleHum = this.angle;
+            _lastAngleHum = angle;
             base.ResetTrailHistory();
         }
 
         public override void Update()
         {
-            float num1 = Math.Min(this._angleWhoom, 0.5f) * 38f;
-            if (this.isServerForObject)
+            float num1 = Math.Min(_angleWhoom, 0.5f) * 38f;
+            if (isServerForObject)
             {
-                this._stickWait -= Maths.IncFrameTimer();
-                if (this._thrownDown)
+                _stickWait -= Maths.IncFrameTimer();
+                if (_thrownDown)
                 {
-                    this.vSpeed = 4f;
-                    this.y += 10f;
-                    this._thrownDown = false;
+                    vSpeed = 4f;
+                    y += 10f;
+                    _thrownDown = false;
                 }
-                if (this._thrownUp)
+                if (_thrownUp)
                 {
-                    this.vSpeed = -4f;
-                    this.y -= 6f;
-                    this._thrownUp = false;
+                    vSpeed = -4f;
+                    y -= 6f;
+                    _thrownUp = false;
                 }
-                if (this.duck != null && slowWait > 0.0)
+                if (duck != null && slowWait > 0.0)
                 {
-                    this.slowWait -= Maths.IncFrameTimer();
+                    slowWait -= Maths.IncFrameTimer();
                     if (slowWait <= 0.0)
                     {
-                        if (this._revertVMaxDuck != null)
+                        if (_revertVMaxDuck != null)
                         {
-                            this._revertVMaxDuck.vMax = this._vmaxReversion;
-                            this._revertVMaxDuck = null;
+                            _revertVMaxDuck.vMax = _vmaxReversion;
+                            _revertVMaxDuck = null;
                         }
-                        if (this._slowV)
-                            this.duck.vSpeed *= 0.25f;
+                        if (_slowV)
+                            duck.vSpeed *= 0.25f;
                         else
-                            this.duck.hSpeed *= 0.25f;
+                            duck.hSpeed *= 0.25f;
                     }
                 }
-                this.handFlip = false;
-                foreach (OldEnergyScimi.RagdollDrag ragdollDrag in this._drag)
+                handFlip = false;
+                foreach (OldEnergyScimi.RagdollDrag ragdollDrag in _drag)
                 {
-                    ragdollDrag.part.position = this.position - ragdollDrag.offset;
+                    ragdollDrag.part.position = position - ragdollDrag.offset;
                     ragdollDrag.part.hSpeed = 0f;
                     ragdollDrag.part.vSpeed = 0f;
                 }
-                this._timeSincePickedUp += Maths.IncFrameTimer();
-                if (this.grounded)
-                    this._canAirFly = true;
-                this._timeTillPulse -= Maths.IncFrameTimer();
-                if (this.owner != null)
+                _timeSincePickedUp += Maths.IncFrameTimer();
+                if (grounded)
+                    _canAirFly = true;
+                _timeTillPulse -= Maths.IncFrameTimer();
+                if (owner != null)
                 {
-                    this._canAirFly = true;
-                    this.ClearDrag();
-                    if (this.prevOwner == null && !this._didOwnerSwitchLogic)
+                    _canAirFly = true;
+                    ClearDrag();
+                    if (prevOwner == null && !_didOwnerSwitchLogic)
                     {
-                        this._didOwnerSwitchLogic = true;
-                        this._timeSincePickedUp = 0f;
-                        foreach (PhysicsObject physicsObject in Level.CheckCircleAll<PhysicsObject>(this.position, 16f))
+                        _didOwnerSwitchLogic = true;
+                        _timeSincePickedUp = 0f;
+                        foreach (PhysicsObject physicsObject in Level.CheckCircleAll<PhysicsObject>(position, 16f))
                             physicsObject.sleeping = false;
                     }
                     float num2 = 20f + num1;
-                    Vec2 vec2 = this.position + this.OffsetLocal(new Vec2(0f, -2f));
-                    foreach (EnergyBlocker wall in this._walls)
+                    Vec2 vec2 = position + OffsetLocal(new Vec2(0f, -2f));
+                    foreach (EnergyBlocker wall in _walls)
                     {
-                        vec2 += this.OffsetLocal(new Vec2(0f, -num2 / _walls.Count));
+                        vec2 += OffsetLocal(new Vec2(0f, -num2 / _walls.Count));
                         wall.position = vec2;
                         wall.solid = _glow > 0.5;
                     }
                 }
                 else
                 {
-                    this._didOwnerSwitchLogic = false;
-                    Vec2 vec2 = this.position + this.OffsetLocal(new Vec2(0f, this._stuck ? -25f : -14f));
-                    foreach (EnergyBlocker wall in this._walls)
+                    _didOwnerSwitchLogic = false;
+                    Vec2 vec2 = position + OffsetLocal(new Vec2(0f, _stuck ? -25f : -14f));
+                    foreach (EnergyBlocker wall in _walls)
                     {
-                        vec2 += this.OffsetLocal(new Vec2(0f, 18f / _walls.Count));
+                        vec2 += OffsetLocal(new Vec2(0f, 18f / _walls.Count));
                         wall.position = vec2;
                         wall.solid = _glow > 0.5;
                     }
                 }
-                if (this.duck != null && _timeSincePickedUp > 0.400000005960464 && this.held && this._swinging && Level.CheckLine<Block>(this.position, this.position + new Vec2(offDir * 16, 0f)) != null)
+                if (duck != null && _timeSincePickedUp > 0.400000005960464 && held && _swinging && Level.CheckLine<Block>(position, position + new Vec2(offDir * 16, 0f)) != null)
                 {
-                    this.duck.Swear();
+                    duck.Swear();
                     double angle = this.angle;
-                    this.duck.ThrowItem();
-                    this._airFly = true;
-                    this._airFlyDir = offDir;
-                    this.hSpeed = offDir * 16;
-                    this.Shing();
-                    this.angleDegrees = this._throwSpin + 90f;
-                    this.ResetTrailHistory();
+                    duck.ThrowItem();
+                    _airFly = true;
+                    _airFlyDir = offDir;
+                    hSpeed = offDir * 16;
+                    Shing();
+                    angleDegrees = _throwSpin + 90f;
+                    ResetTrailHistory();
                 }
             }
-            float num3 = Math.Min(this._glow, 1f);
-            float to1 = Math.Min(Math.Abs(this._lastAngleHum - this.angle), 1f);
-            this._angleWhoom = Lerp.FloatSmooth(this._angleWhoom, to1, 0.2f);
-            this._hum.volume = Lerp.FloatSmooth(this._hum.volume, Math.Min((float)(Math.Min(Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed), 5f) / 10.0 + to1 * 2.0 + 0.150000005960464 + num3 * 0.100000001490116) * this._glow, 0.75f), 0.2f);
-            if (this.level != null)
+            float num3 = Math.Min(_glow, 1f);
+            float to1 = Math.Min(Math.Abs(_lastAngleHum - angle), 1f);
+            _angleWhoom = Lerp.FloatSmooth(_angleWhoom, to1, 0.2f);
+            _hum.volume = Lerp.FloatSmooth(_hum.volume, Math.Min((float)(Math.Min(Math.Abs(hSpeed) + Math.Abs(vSpeed), 5f) / 10.0 + to1 * 2.0 + 0.150000005960464 + num3 * 0.100000001490116) * _glow, 0.75f), 0.2f);
+            if (level != null)
             {
                 float val2_1 = 800f;
                 float val2_2 = 400f;
-                this._hum.volume *= (float)(1.0 - Math.Min(Math.Max((this.level.camera.position - this.position).length, val2_2) - val2_2, val2_1) / val2_1);
-                if (this.isServerForObject && (this.x < level.topLeft.x - 1000.0 || this.x > level.bottomRight.x + 1000.0))
+                _hum.volume *= (float)(1.0 - Math.Min(Math.Max((level.camera.position - position).length, val2_2) - val2_2, val2_1) / val2_1);
+                if (isServerForObject && (x < level.topLeft.x - 1000.0 || x > level.bottomRight.x + 1000.0))
                     Level.Remove(this);
             }
-            this._extraOffset = new Vec2(0f, -num1);
-            this._barrelOffsetTL = new Vec2(4f, 3f - num1);
-            this._lastAngleHum = this.angle;
+            _extraOffset = new Vec2(0f, -num1);
+            _barrelOffsetTL = new Vec2(4f, 3f - num1);
+            _lastAngleHum = angle;
             if (_glow > 1.0)
-                this._glow *= 0.85f;
-            if (this.held || this._airFly)
+                _glow *= 0.85f;
+            if (held || _airFly)
             {
-                this._stuck = false;
-                this._unchargeWait = !this._longCharge ? 0.1f : 0.5f;
-                this._longCharge = false;
-                if (!this._playedChargeUp && this.owner != null)
+                _stuck = false;
+                _unchargeWait = !_longCharge ? 0.1f : 0.5f;
+                _longCharge = false;
+                if (!_playedChargeUp && owner != null)
                 {
-                    this._playedChargeUp = true;
+                    _playedChargeUp = true;
                     SFX.Play("laserChargeShort", pitch: Rando.Float(-0.1f, 0.1f));
                 }
                 float to2 = 1f;
-                if (this.duck != null && !this._swinging && !this._crouchStance)
+                if (duck != null && !_swinging && !_crouchStance)
                     to2 = 0f;
-                this._glow = Lerp.Float(this._glow, to2, 0.1f);
+                _glow = Lerp.Float(_glow, to2, 0.1f);
             }
             else
             {
-                this._unchargeWait -= Maths.IncFrameTimer();
+                _unchargeWait -= Maths.IncFrameTimer();
                 if (_unchargeWait < 0.0)
                 {
-                    if (this._playedChargeUp && this.owner == null)
+                    if (_playedChargeUp && owner == null)
                     {
-                        this._playedChargeUp = false;
+                        _playedChargeUp = false;
                         SFX.Play("laserUnchargeShort", pitch: Rando.Float(-0.1f, 0.1f));
                     }
-                    this._glow = Lerp.Float(this._glow, 0f, 0.2f);
+                    _glow = Lerp.Float(_glow, 0f, 0.2f);
                 }
             }
             if (_glow > 0.100000001490116)
             {
-                this._stayVolatile = true;
-                this._volatile = true;
-                this.heat += 3f / 500f;
+                _stayVolatile = true;
+                _volatile = true;
+                heat += 3f / 500f;
             }
             else
             {
-                this._stayVolatile = false;
-                this._volatile = false;
+                _stayVolatile = false;
+                _volatile = false;
                 if (heat > 0.0)
-                    this.heat -= 0.01f;
+                    heat -= 0.01f;
             }
             base.Update();
-            this._platform.solid = false;
-            this._platform.enablePhysics = false;
-            this._platform.position = new Vec2(-99999f, -99999f);
-            if (!this._stuck)
+            _platform.solid = false;
+            _platform.enablePhysics = false;
+            _platform.position = new Vec2(-99999f, -99999f);
+            if (!_stuck)
                 return;
-            if (Math.Abs(this.barrelStartPos.y - this.barrelPosition.y) < 6.0)
+            if (Math.Abs(barrelStartPos.y - barrelPosition.y) < 6.0)
             {
-                this._platform.solid = true;
-                this._platform.enablePhysics = true;
-                this._platform.position = this.Offset(new Vec2(0f, -10f));
+                _platform.solid = true;
+                _platform.enablePhysics = true;
+                _platform.position = Offset(new Vec2(0f, -10f));
             }
-            this.center = new Vec2(6f, 29f);
+            center = new Vec2(6f, 29f);
         }
 
         public override void DrawGlow()
         {
-            this._whiteGlow.angle = this.angle;
-            this._whiteGlow.color = this.swordColor;
-            this._whiteGlow.alpha = this._glow * 0.5f;
-            Graphics.Draw(this._whiteGlow, this.x, this.y, this.depth - 2);
+            _whiteGlow.angle = angle;
+            _whiteGlow.color = this.swordColor;
+            _whiteGlow.alpha = _glow * 0.5f;
+            Graphics.Draw(_whiteGlow, x, y, depth - 2);
             Color swordColor = this.swordColor;
-            foreach (WarpLine warpLine in this.warpLines)
+            foreach (WarpLine warpLine in warpLines)
             {
                 Vec2 vec2_1 = warpLine.start - warpLine.end;
                 Vec2 vec2_2 = warpLine.end - warpLine.start;
                 float num1 = Math.Min(warpLine.lerp, 0.5f) / 0.5f;
                 float num2 = Math.Max((float)((warpLine.lerp - 0.5) * 2.0), 0f);
-                Graphics.DrawTexturedLine(this._warpLine.texture, warpLine.start - vec2_1 * (num1 * 0.5f), warpLine.start, swordColor * (1f - num2), warpLine.wide / 32f, (Depth)0.9f);
-                Graphics.DrawTexturedLine(this._warpLine.texture, warpLine.start - vec2_1 * (num1 * 0.5f), warpLine.start - vec2_1 * (num1 * 1f), swordColor * (1f - num2), warpLine.wide / 32f, (Depth)0.9f);
+                Graphics.DrawTexturedLine(_warpLine.texture, warpLine.start - vec2_1 * (num1 * 0.5f), warpLine.start, swordColor * (1f - num2), warpLine.wide / 32f, (Depth)0.9f);
+                Graphics.DrawTexturedLine(_warpLine.texture, warpLine.start - vec2_1 * (num1 * 0.5f), warpLine.start - vec2_1 * (num1 * 1f), swordColor * (1f - num2), warpLine.wide / 32f, (Depth)0.9f);
                 warpLine.lerp += 0.13f;
             }
-            this.warpLines.RemoveAll(v => v.lerp >= 1.0);
+            warpLines.RemoveAll(v => v.lerp >= 1.0);
             base.DrawGlow();
         }
 
@@ -671,51 +671,51 @@ namespace DuckGame
             base.Draw();
             Sword._playedShing = true;
             int num1 = DevConsole.showCollision ? 1 : 0;
-            float num2 = Math.Min(this._angleWhoom, 0.5f) * 1.5f;
+            float num2 = Math.Min(_angleWhoom, 0.5f) * 1.5f;
             Graphics.material = _bladeMaterial;
-            this._bladeMaterial.glow = (float)(0.25 + _glow * 0.75);
-            this._blade.center = this.center;
-            this._bladeTrail.center = this.center;
-            this._blade.angle = this.graphic.angle;
-            this._blade.flipH = this.graphic.flipH;
-            this._bladeTrail.flipH = this._blade.flipH;
-            this._blade.color = Color.Lerp(Color.White, Color.Red, this.heat);
-            this.swordColor = Color.Lerp(this.properColor, Color.Red, this.heat);
+            _bladeMaterial.glow = (float)(0.25 + _glow * 0.75);
+            _blade.center = center;
+            _bladeTrail.center = center;
+            _blade.angle = graphic.angle;
+            _blade.flipH = graphic.flipH;
+            _bladeTrail.flipH = _blade.flipH;
+            _blade.color = Color.Lerp(Color.White, Color.Red, heat);
+            swordColor = Color.Lerp(properColor, Color.Red, heat);
             if (_glow > 1.0)
-                this._blade.scale = new Vec2((float)(1.0 + (_glow - 1.0) * 0.0299999993294477), 1f);
+                _blade.scale = new Vec2((float)(1.0 + (_glow - 1.0) * 0.0299999993294477), 1f);
             else
-                this._blade.scale = new Vec2(1f);
-            this._bladeTrail.yscale = this._blade.yscale + num2;
-            Graphics.Draw(this._blade, this.x, this.y, this.depth - 1);
+                _blade.scale = new Vec2(1f);
+            _bladeTrail.yscale = _blade.yscale + num2;
+            Graphics.Draw(_blade, x, y, this.depth - 1);
             Graphics.material = null;
-            this.alpha = 1f;
+            alpha = 1f;
             Depth depth = this.depth;
-            this._bladeTrail.color = this.swordColor;
-            this.graphic.color = Color.White;
+            _bladeTrail.color = swordColor;
+            graphic.color = Color.White;
             if (_glow <= 0.5)
                 return;
-            float num3 = this.angle;
+            float num3 = angle;
             float num4 = 1f;
-            Vec2 vec2 = this.position;
+            Vec2 vec2 = position;
             for (int idx = 0; idx < 8; ++idx)
             {
                 Vec2 current1 = Vec2.Zero;
                 float current2 = 0f;
-                for (int index1 = 0; index1 < 4 && this._lastSize > idx; ++index1)
+                for (int index1 = 0; index1 < 4 && _lastSize > idx; ++index1)
                 {
-                    int index2 = this.historyIndex(idx);
+                    int index2 = historyIndex(idx);
                     if (index1 == 0)
                     {
                         current1 = vec2;
                         current2 = num3;
                     }
-                    num3 = Lerp.FloatSmooth(current2, this._lastAngles[index2], 0.25f * index1);
-                    vec2 = Lerp.Vec2Smooth(current1, this._lastPositions[index2], 0.25f * index1);
-                    if (this.owner != null)
-                        vec2 += this.owner.velocity * 0.5f;
-                    this._bladeTrail.angle = num3;
-                    this._bladeTrail.alpha = Math.Min(Math.Max((float)((this._hum.volume - 0.100000001490116) * 4.0), 0f), 1f) * 0.7f;
-                    Graphics.Draw(this._bladeTrail, vec2.x, vec2.y, this.depth - 2);
+                    num3 = Lerp.FloatSmooth(current2, _lastAngles[index2], 0.25f * index1);
+                    vec2 = Lerp.Vec2Smooth(current1, _lastPositions[index2], 0.25f * index1);
+                    if (owner != null)
+                        vec2 += owner.velocity * 0.5f;
+                    _bladeTrail.angle = num3;
+                    _bladeTrail.alpha = Math.Min(Math.Max((float)((_hum.volume - 0.100000001490116) * 4.0), 0f), 1f) * 0.7f;
+                    Graphics.Draw(_bladeTrail, vec2.x, vec2.y, this.depth - 2);
                 }
                 num4 -= 0.15f;
             }

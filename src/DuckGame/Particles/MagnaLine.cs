@@ -22,11 +22,11 @@ namespace DuckGame
         public MagnaLine(float xpos, float ypos, Gun attach, float length, float percent)
           : base(xpos, ypos)
         {
-            this._attach = attach;
-            this._length = length;
-            this._startLength = length;
-            this._move = 1.570796f * percent;
-            this.alpha = 0f;
+            _attach = attach;
+            _length = length;
+            _startLength = length;
+            _move = 1.570796f * percent;
+            alpha = 0f;
         }
 
         public override void Update()
@@ -35,19 +35,19 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this._move = Lerp.Float(this._move, 0f, 0.04f);
+            _move = Lerp.Float(_move, 0f, 0.04f);
             if (_move <= 0.01f)
-                this._move += 1.570796f;
-            if (_length > this.dist)
-                this.show = false;
-            this._alphaFade = Lerp.Float(this._alphaFade, this.show ? 1f : 0f, 0.1f);
-            this._length = this._startLength * (float)Math.Sin(_move);
-            this.alpha = (1f - _length / this._startLength) * this._alphaFade;
-            if (this.alpha < 0.01f)
+                _move += 1.570796f;
+            if (_length > dist)
+                show = false;
+            _alphaFade = Lerp.Float(_alphaFade, show ? 1f : 0f, 0.1f);
+            _length = _startLength * (float)Math.Sin(_move);
+            alpha = (1f - _length / _startLength) * _alphaFade;
+            if (alpha < 0.01f)
                 return;
-            this.position = this._attach.barrelPosition + this._attach.barrelVector * this._length;
-            Vec2 vec2 = this._attach.barrelVector.Rotate(Maths.DegToRad(90f), Vec2.Zero);
-            Graphics.DrawLine(this.position + vec2 * 7f, this.position - vec2 * 7f, Color.Blue * this.alpha, (1f + (1f - _length / this._startLength) * 4f), (Depth)0.9f);
+            position = _attach.barrelPosition + _attach.barrelVector * _length;
+            Vec2 vec2 = _attach.barrelVector.Rotate(Maths.DegToRad(90f), Vec2.Zero);
+            Graphics.DrawLine(position + vec2 * 7f, position - vec2 * 7f, Color.Blue * alpha, (1f + (1f - _length / _startLength) * 4f), (Depth)0.9f);
         }
     }
 }

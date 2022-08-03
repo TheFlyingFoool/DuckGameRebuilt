@@ -9,7 +9,7 @@ namespace DuckGame
 {
     public class NMEvent : NetMessage
     {
-        public NMEvent() => this.manager = BelongsToManager.EventManager;
+        public NMEvent() => manager = BelongsToManager.EventManager;
 
         public virtual void Activate()
         {

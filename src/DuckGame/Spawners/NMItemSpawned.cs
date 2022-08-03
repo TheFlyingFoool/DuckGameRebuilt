@@ -15,13 +15,13 @@ namespace DuckGame
         {
         }
 
-        public NMItemSpawned(ItemSpawner pSpawner) => this._spawner = pSpawner;
+        public NMItemSpawned(ItemSpawner pSpawner) => _spawner = pSpawner;
 
         public override void Activate()
         {
-            if (this._spawner == null)
+            if (_spawner == null)
                 return;
-            this._spawner._spawnWait = 0f;
+            _spawner._spawnWait = 0f;
         }
     }
 }

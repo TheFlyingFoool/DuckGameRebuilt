@@ -16,58 +16,58 @@ namespace DuckGame
         public void UpdateCustomTileset()
         {
             int num = 0;
-            if (this._sprite != null)
-                num = this._sprite.frame;
-            if (this.tileset == "CUSTOM01")
+            if (_sprite != null)
+                num = _sprite.frame;
+            if (tileset == "CUSTOM01")
             {
                 CustomTileData data = Custom.GetData(0, CustomType.Block);
-                this._sprite = data == null || data.texture == null ? new SpriteMap("blueprintTileset", 16, 16) : new SpriteMap((Tex2D)data.texture, 16, 16);
+                _sprite = data == null || data.texture == null ? new SpriteMap("blueprintTileset", 16, 16) : new SpriteMap((Tex2D)data.texture, 16, 16);
             }
-            else if (this.tileset == "CUSTOM02")
+            else if (tileset == "CUSTOM02")
             {
                 CustomTileData data = Custom.GetData(1, CustomType.Block);
-                this._sprite = data == null || data.texture == null ? new SpriteMap("blueprintTileset", 16, 16) : new SpriteMap((Tex2D)data.texture, 16, 16);
+                _sprite = data == null || data.texture == null ? new SpriteMap("blueprintTileset", 16, 16) : new SpriteMap((Tex2D)data.texture, 16, 16);
             }
-            else if (this.tileset == "CUSTOM03")
+            else if (tileset == "CUSTOM03")
             {
                 CustomTileData data = Custom.GetData(2, CustomType.Block);
-                this._sprite = data == null || data.texture == null ? new SpriteMap("blueprintTileset", 16, 16) : new SpriteMap((Tex2D)data.texture, 16, 16);
+                _sprite = data == null || data.texture == null ? new SpriteMap("blueprintTileset", 16, 16) : new SpriteMap((Tex2D)data.texture, 16, 16);
             }
-            else if (this.tileset == "CUSTOMPLAT01")
+            else if (tileset == "CUSTOMPLAT01")
             {
                 CustomTileData data = Custom.GetData(0, CustomType.Platform);
-                this._sprite = data == null || data.texture == null ? new SpriteMap("scaffolding", 16, 16) : new SpriteMap((Tex2D)data.texture, 16, 16);
+                _sprite = data == null || data.texture == null ? new SpriteMap("scaffolding", 16, 16) : new SpriteMap((Tex2D)data.texture, 16, 16);
             }
-            else if (this.tileset == "CUSTOMPLAT02")
+            else if (tileset == "CUSTOMPLAT02")
             {
                 CustomTileData data = Custom.GetData(1, CustomType.Platform);
-                this._sprite = data == null || data.texture == null ? new SpriteMap("scaffolding", 16, 16) : new SpriteMap((Tex2D)data.texture, 16, 16);
+                _sprite = data == null || data.texture == null ? new SpriteMap("scaffolding", 16, 16) : new SpriteMap((Tex2D)data.texture, 16, 16);
             }
-            else if (this.tileset == "CUSTOMPLAT03")
+            else if (tileset == "CUSTOMPLAT03")
             {
                 CustomTileData data = Custom.GetData(2, CustomType.Platform);
-                this._sprite = data == null || data.texture == null ? new SpriteMap("scaffolding", 16, 16) : new SpriteMap((Tex2D)data.texture, 16, 16);
+                _sprite = data == null || data.texture == null ? new SpriteMap("scaffolding", 16, 16) : new SpriteMap((Tex2D)data.texture, 16, 16);
             }
-            if (this._sprite == null)
-                this._sprite = new SpriteMap(this.tileset, 16, 16);
-            this.graphic = _sprite;
-            this._sprite.frame = num;
+            if (_sprite == null)
+                _sprite = new SpriteMap(tileset, 16, 16);
+            graphic = _sprite;
+            _sprite.frame = num;
         }
 
         public Nubber(float x, float y, bool left, string tset)
           : base(x, y)
         {
-            this.tileset = tset;
-            this.UpdateCustomTileset();
-            this.graphic = _sprite;
-            this.collisionSize = new Vec2(8f, 5f);
-            this._sprite.frame = left ? 62 : 63;
+            tileset = tset;
+            UpdateCustomTileset();
+            graphic = _sprite;
+            collisionSize = new Vec2(8f, 5f);
+            _sprite.frame = left ? 62 : 63;
             if (left)
-                this.collisionOffset = new Vec2(13f, 0f);
+                collisionOffset = new Vec2(13f, 0f);
             else
-                this.collisionOffset = new Vec2(-5f, 0f);
-            this._editorCanModify = false;
-            this.UpdateCustomTileset();
+                collisionOffset = new Vec2(-5f, 0f);
+            _editorCanModify = false;
+            UpdateCustomTileset();
         }
 
         public override void Terminate()
@@ -76,22 +76,22 @@ namespace DuckGame
 
         public virtual void DoPositioning()
         {
-            if (Level.current is Editor || this.graphic == null)
+            if (Level.current is Editor || graphic == null)
                 return;
-            this.graphic.position = this.position;
-            this.graphic.scale = this.scale;
-            this.graphic.center = this.center;
-            this.graphic.depth = this.depth;
-            this.graphic.alpha = this.alpha;
-            this.graphic.angle = this.angle;
-            (this.graphic as SpriteMap).ClearCache();
-            (this.graphic as SpriteMap).UpdateFrame();
+            graphic.position = position;
+            graphic.scale = scale;
+            graphic.center = center;
+            graphic.depth = depth;
+            graphic.alpha = alpha;
+            graphic.angle = angle;
+            (graphic as SpriteMap).ClearCache();
+            (graphic as SpriteMap).UpdateFrame();
         }
 
         public override void Draw()
         {
-            if (this.cheap)
-                this.graphic.UltraCheapStaticDraw(this.flipHorizontal);
+            if (cheap)
+                graphic.UltraCheapStaticDraw(flipHorizontal);
             else
                 base.Draw();
         }

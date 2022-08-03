@@ -16,23 +16,23 @@ namespace DuckGame
         public DuctTape(float xval, float yval)
           : base(xval, yval)
         {
-            this._type = "gun";
-            this.graphic = new Sprite("tape");
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-5f, -5f);
-            this.collisionSize = new Vec2(10f, 10f);
-            this.wearable = false;
-            this._editorName = "Tape";
-            this.editorTooltip = "Taping things together is always a good time!";
+            _type = "gun";
+            graphic = new Sprite("tape");
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-5f, -5f);
+            collisionSize = new Vec2(10f, 10f);
+            wearable = false;
+            _editorName = "Tape";
+            editorTooltip = "Taping things together is always a good time!";
         }
 
         public override void PressAction()
         {
             try
             {
-                if (!this.isServerForObject)
+                if (!isServerForObject)
                     return;
-                Holdable holdable = Level.current.NearestThingFilter<Holdable>(this.position, t =>
+                Holdable holdable = Level.current.NearestThingFilter<Holdable>(position, t =>
                {
                    if (t.owner == null && t != this)
                    {
@@ -48,20 +48,20 @@ namespace DuckGame
                    }
                    return false;
                });
-                if (this.Distance(holdable) >= 16.0)
+                if (Distance(holdable) >= 16.0)
                     return;
-                Level.Add(SmallSmoke.New(this.position.x, this.position.y));
-                Level.Add(SmallSmoke.New(this.position.x, this.position.y));
+                Level.Add(SmallSmoke.New(position.x, position.y));
+                Level.Add(SmallSmoke.New(position.x, position.y));
                 SFX.PlaySynchronized("equip", 0.8f);
                 TapedGun h = new TapedGun(0f, 0f);
-                Thing.ExtraFondle(holdable, this.connection);
+                Thing.ExtraFondle(holdable, connection);
                 h.gun1 = holdable;
                 holdable.owner = duck;
                 Level.Add(h);
-                if (this.duck != null && this.held)
+                if (duck != null && held)
                 {
-                    this.duck.resetAction = true;
-                    this.duck.GiveHoldable(h);
+                    duck.resetAction = true;
+                    duck.GiveHoldable(h);
                 }
                 Level.Remove(this);
             }

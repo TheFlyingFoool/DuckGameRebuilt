@@ -28,13 +28,13 @@ namespace DuckGame
           : base("", xpos, ypos, wide, high)
         {
             Graphics.fade = 1f;
-            this._frame = new Sprite("deathFrame");
-            this._frame.CenterOrigin();
-            this._link = link;
-            this._font = new BitmapFont("biosFontUI", 8, 7);
-            this._fancyFont = new FancyBitmapFont("smallFont");
-            this._portraitFrame = new Sprite("funeralPic");
-            this._portraitSprite = new SpriteMap("littleMan", 16, 16)
+            _frame = new Sprite("deathFrame");
+            _frame.CenterOrigin();
+            _link = link;
+            _font = new BitmapFont("biosFontUI", 8, 7);
+            _fancyFont = new FancyBitmapFont("smallFont");
+            _portraitFrame = new Sprite("funeralPic");
+            _portraitSprite = new SpriteMap("littleMan", 16, 16)
             {
                 frame = UILevelBox.LittleManFrame(Profiles.experienceProfile.numLittleMen - 9, -1)
             };
@@ -44,7 +44,7 @@ namespace DuckGame
         {
             base.OnClose();
             Profiles.Save(Profiles.experienceProfile);
-            if (this._link == null)
+            if (_link == null)
                 return;
             MonoMain.pauseMenu = _link;
         }
@@ -53,45 +53,45 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this.finished)
+            if (finished)
             {
-                this._animating = false;
+                _animating = false;
             }
             else
             {
-                this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0f, 0.3f, 1.1f);
-                if (this.down)
+                yOffset = Lerp.FloatSmooth(yOffset, down ? 150f : 0f, 0.3f, 1.1f);
+                if (down)
                 {
-                    this._downWait -= 0.06f;
+                    _downWait -= 0.06f;
                     if (_downWait <= 0.0)
                     {
-                        if (this._doneDown)
+                        if (_doneDown)
                         {
-                            this.finished = true;
-                            this.Close();
+                            finished = true;
+                            Close();
                             return;
                         }
                         //this._openWait = 1f;
-                        this._downWait = 1f;
-                        this.down = false;
+                        _downWait = 1f;
+                        down = false;
                         SFX.Play("pause", 0.6f);
                     }
                 }
                 else
                 {
-                    if (!this._shown)
+                    if (!_shown)
                     {
                         UIFuneral.oldSong = Music.currentSong;
                         Music.Play("littlesad", false);
                         HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
-                        this._shown = true;
+                        _shown = true;
                     }
                     if (Input.Pressed("SELECT"))
                     {
                         HUD.CloseAllCorners();
                         SFX.Play("resume", 0.6f);
-                        this.down = true;
-                        this._doneDown = true;
+                        down = true;
+                        _doneDown = true;
                     }
                 }
                 base.Update();
@@ -100,23 +100,23 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.y += this.yOffset;
-            this._frame.depth = this.depth;
-            Graphics.Draw(this._frame, this.x, this.y);
+            y += yOffset;
+            _frame.depth = depth;
+            Graphics.Draw(_frame, x, y);
             string text1 = "FAREWELL";
-            Vec2 vec2_1 = new Vec2((float)-(this._font.GetWidth(text1) / 2.0), -34f);
-            this._font.DrawOutline(text1, this.position + vec2_1, Color.White, Color.Black, this.depth + 2);
+            Vec2 vec2_1 = new Vec2((float)-(_font.GetWidth(text1) / 2.0), -34f);
+            _font.DrawOutline(text1, position + vec2_1, Color.White, Color.Black, depth + 2);
             string text2 = "Little man who's come to pass,\nRest in peace beneath the grass.\nHeavy souls weigh on this day,\nwe send a little man on his way.\n\n\nMay Angles Lead You In.";
             Vec2 vec2_2 = new Vec2(-33f, -15f);
-            this._fancyFont.scale = new Vec2(0.5f, 0.5f);
-            this._fancyFont.Draw(text2, this.position + vec2_2, new Color(27, 38, 50), this.depth + 2);
+            _fancyFont.scale = new Vec2(0.5f, 0.5f);
+            _fancyFont.Draw(text2, position + vec2_2, new Color(27, 38, 50), depth + 2);
             Vec2 vec2_3 = new Vec2(-53f, -4f);
-            this._portraitSprite.depth = this.depth + 2;
-            this._portraitFrame.depth = this.depth + 4;
+            _portraitSprite.depth = depth + 2;
+            _portraitFrame.depth = depth + 4;
             Graphics.Draw(_portraitSprite, (float)(position.x + vec2_3.x + 1.0), (float)(position.y + vec2_3.y + 1.0), new Rectangle(2f, 0f, 12f, 10f));
-            Graphics.Draw(this._portraitFrame, (float)(position.x + vec2_3.x - 2.0), (float)(position.y + vec2_3.y - 2.0));
-            Graphics.DrawRect(this.position + vec2_3, this.position + vec2_3 + new Vec2(13f, 13f), Colors.DGBlue, this.depth + 1);
-            this.y -= this.yOffset;
+            Graphics.Draw(_portraitFrame, (float)(position.x + vec2_3.x - 2.0), (float)(position.y + vec2_3.y - 2.0));
+            Graphics.DrawRect(position + vec2_3, position + vec2_3 + new Vec2(13f, 13f), Colors.DGBlue, depth + 1);
+            y -= yOffset;
         }
     }
 }

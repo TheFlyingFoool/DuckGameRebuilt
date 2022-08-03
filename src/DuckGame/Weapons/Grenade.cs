@@ -28,48 +28,48 @@ namespace DuckGame
         public int gr;
         public int _explodeFrames = -1;
 
-        public Duck cookThrower => this._cookThrower;
+        public Duck cookThrower => _cookThrower;
 
-        public float cookTimeOnThrow => this._cookTimeOnThrow;
+        public float cookTimeOnThrow => _cookTimeOnThrow;
 
         public Grenade(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 1;
-            this._ammoType = new ATShrapnel();
-            this._ammoType.penetration = 0.4f;
-            this._type = "gun";
-            this._sprite = new SpriteMap(nameof(grenade), 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(7f, 8f);
-            this.collisionOffset = new Vec2(-4f, -5f);
-            this.collisionSize = new Vec2(8f, 10f);
-            this.bouncy = 0.4f;
-            this.friction = 0.05f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this._editorName = nameof(Grenade);
-            this.editorTooltip = "#1 Pull pin. #2 Throw grenade. Order of operations is important here.";
-            this._bio = "To cook grenade, pull pin and hold until feelings of terror run down your spine. Serves as many ducks as you can fit into a 3 meter radius.";
+            ammo = 1;
+            _ammoType = new ATShrapnel();
+            _ammoType.penetration = 0.4f;
+            _type = "gun";
+            _sprite = new SpriteMap(nameof(grenade), 16, 16);
+            graphic = _sprite;
+            center = new Vec2(7f, 8f);
+            collisionOffset = new Vec2(-4f, -5f);
+            collisionSize = new Vec2(8f, 10f);
+            bouncy = 0.4f;
+            friction = 0.05f;
+            _fireRumble = RumbleIntensity.Kick;
+            _editorName = nameof(Grenade);
+            editorTooltip = "#1 Pull pin. #2 Throw grenade. Order of operations is important here.";
+            _bio = "To cook grenade, pull pin and hold until feelings of terror run down your spine. Serves as many ducks as you can fit into a 3 meter radius.";
         }
 
         public override void Initialize()
         {
-            this.gr = Grenade.grenade;
+            gr = Grenade.grenade;
             ++Grenade.grenade;
         }
 
         public override void OnNetworkBulletsFired(Vec2 pos)
         {
-            this._pin = false;
-            this._localDidExplode = true;
-            if (!this._explosionCreated)
+            _pin = false;
+            _localDidExplode = true;
+            if (!_explosionCreated)
                 Graphics.FlashScreen();
-            this.CreateExplosion(pos);
+            CreateExplosion(pos);
         }
 
         public void CreateExplosion(Vec2 pos)
         {
-            if (this._explosionCreated)
+            if (_explosionCreated)
                 return;
             float x = pos.x;
             float ypos = pos.y - 2f;
@@ -83,7 +83,7 @@ namespace DuckGame
                 float num2 = Rando.Float(12f, 20f);
                 Level.Add(new ExplosionPart(x + (float)Math.Cos(Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin(Maths.DegToRad(deg)) * num2));
             }
-            this._explosionCreated = true;
+            _explosionCreated = true;
             SFX.Play("explode");
             RumbleManager.AddRumbleEvent(pos, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
         }
@@ -91,33 +91,33 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            if (!this._pin)
+            if (!_pin)
             {
-                this._timer -= 0.01f;
-                this.holsterable = false;
+                _timer -= 0.01f;
+                holsterable = false;
             }
-            if (_timer < 0.5 && this.owner == null && !this._didBonus)
+            if (_timer < 0.5 && owner == null && !_didBonus)
             {
-                this._didBonus = true;
+                _didBonus = true;
                 if (Recorder.currentRecording != null)
                     Recorder.currentRecording.LogBonus();
             }
-            if (!this._localDidExplode && _timer < 0.0)
+            if (!_localDidExplode && _timer < 0.0)
             {
-                if (this._explodeFrames < 0)
+                if (_explodeFrames < 0)
                 {
-                    this.CreateExplosion(this.position);
-                    this._explodeFrames = 4;
+                    CreateExplosion(position);
+                    _explodeFrames = 4;
                 }
                 else
                 {
-                    --this._explodeFrames;
-                    if (this._explodeFrames == 0)
+                    --_explodeFrames;
+                    if (_explodeFrames == 0)
                     {
                         float x = this.x;
-                        float num1 = this.y - 2f;
+                        float num1 = y - 2f;
                         Graphics.FlashScreen();
-                        if (this.isServerForObject)
+                        if (isServerForObject)
                         {
                             for (int index = 0; index < 20; ++index)
                             {
@@ -130,55 +130,55 @@ namespace DuckGame
                                 {
                                     firedFrom = this
                                 };
-                                this.firedBullets.Add(bullet);
+                                firedBullets.Add(bullet);
                                 Level.Add(bullet);
                             }
-                            foreach (Window ignore in Level.CheckCircleAll<Window>(this.position, 40f))
+                            foreach (Window ignore in Level.CheckCircleAll<Window>(position, 40f))
                             {
-                                if (Level.CheckLine<Block>(this.position, ignore.position, ignore) == null)
+                                if (Level.CheckLine<Block>(position, ignore.position, ignore) == null)
                                     ignore.Destroy(new DTImpact(this));
                             }
-                            this.bulletFireIndex += 20;
+                            bulletFireIndex += 20;
                             if (Network.isActive)
                             {
-                                Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
-                                this.firedBullets.Clear();
+                                Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
+                                firedBullets.Clear();
                             }
                         }
                         Level.Remove(this);
-                        this._destroyed = true;
-                        this._explodeFrames = -1;
+                        _destroyed = true;
+                        _explodeFrames = -1;
                     }
                 }
             }
-            if (this.prevOwner != null && this._cookThrower == null)
+            if (prevOwner != null && _cookThrower == null)
             {
-                this._cookThrower = this.prevOwner as Duck;
-                this._cookTimeOnThrow = this._timer;
+                _cookThrower = prevOwner as Duck;
+                _cookTimeOnThrow = _timer;
             }
-            this._sprite.frame = this._pin ? 0 : 1;
+            _sprite.frame = _pin ? 0 : 1;
         }
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this.pullOnImpact)
-                this.OnPressAction();
+            if (pullOnImpact)
+                OnPressAction();
             base.OnSolidImpact(with, from);
         }
 
         public override void OnPressAction()
         {
-            if (!this._pin)
+            if (!_pin)
                 return;
-            this._pin = false;
-            GrenadePin grenadePin = new GrenadePin(this.x, this.y)
+            _pin = false;
+            GrenadePin grenadePin = new GrenadePin(x, y)
             {
-                hSpeed = -this.offDir * (1.5f + Rando.Float(0.5f)),
+                hSpeed = -offDir * (1.5f + Rando.Float(0.5f)),
                 vSpeed = -2f
             };
             Level.Add(grenadePin);
-            if (this.duck != null)
-                RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(this._fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
+            if (duck != null)
+                RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
             SFX.Play("pullPin");
         }
     }

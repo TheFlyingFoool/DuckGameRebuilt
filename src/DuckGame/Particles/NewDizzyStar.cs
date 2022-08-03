@@ -14,22 +14,22 @@ namespace DuckGame
         public NewDizzyStar(float xpos, float ypos, Vec2 dir, Color pColor)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("colorStarLarge");
-            this.graphic.CenterOrigin();
-            this.center = new Vec2(this.graphic.width / 2, this.graphic.height / 2);
-            this.xscale = this.yscale = 0.7f;
-            this.hSpeed = dir.x;
-            this.vSpeed = dir.y;
-            this.maxSize = 0.05f;
-            this.graphic.color = pColor;
-            this._gravMult = 1.5f;
+            graphic = new Sprite("colorStarLarge");
+            graphic.CenterOrigin();
+            center = new Vec2(graphic.width / 2, graphic.height / 2);
+            xscale = yscale = 0.7f;
+            hSpeed = dir.x;
+            vSpeed = dir.y;
+            maxSize = 0.05f;
+            graphic.color = pColor;
+            _gravMult = 1.5f;
         }
 
         public override void Update()
         {
-            this.xscale = Lerp.Float(this.xscale, this.maxSize, 0.025f);
-            this.yscale = this.xscale;
-            if (this.xscale <= maxSize)
+            xscale = Lerp.Float(xscale, maxSize, 0.025f);
+            yscale = xscale;
+            if (xscale <= maxSize)
                 Level.Remove(this);
             base.Update();
         }

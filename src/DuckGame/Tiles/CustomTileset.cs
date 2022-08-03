@@ -28,58 +28,58 @@ namespace DuckGame
         public CustomTileset(float x, float y, string tset = "CUSTOM01")
           : base(x, y, "")
         {
-            this._tileset = tset;
-            this.customIndex = 0;
-            this._editorName = "Custom Block 01";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidthThick = 16f;
-            this.verticalWidth = 14f;
-            this.horizontalHeight = 16f;
-            this.UpdateCurrentTileset();
+            _tileset = tset;
+            customIndex = 0;
+            _editorName = "Custom Block 01";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidthThick = 16f;
+            verticalWidth = 14f;
+            horizontalHeight = 16f;
+            UpdateCurrentTileset();
         }
 
         public void UpdateCurrentTileset()
         {
-            CustomTileData data = Custom.GetData(this.customIndex, CustomTileset._customType);
+            CustomTileData data = Custom.GetData(customIndex, CustomTileset._customType);
             int num = 0;
-            if (this._sprite != null)
-                num = this._sprite.frame;
+            if (_sprite != null)
+                num = _sprite.frame;
             if (data != null && data.texture != null)
             {
-                this._sprite = new SpriteMap((Tex2D)data.texture, 16, 16);
-                this.horizontalHeight = data.horizontalHeight;
-                this.verticalWidth = data.verticalWidth;
-                this.verticalWidthThick = data.verticalWidthThick;
-                this._hasLeftNub = data.leftNubber;
-                this._hasRightNub = data.rightNubber;
+                _sprite = new SpriteMap((Tex2D)data.texture, 16, 16);
+                horizontalHeight = data.horizontalHeight;
+                verticalWidth = data.verticalWidth;
+                verticalWidthThick = data.verticalWidthThick;
+                _hasLeftNub = data.leftNubber;
+                _hasRightNub = data.rightNubber;
             }
             else
             {
-                this._sprite = new SpriteMap("blueprintTileset", 16, 16);
-                this.verticalWidthThick = 16f;
-                this.verticalWidth = 14f;
-                this.horizontalHeight = 16f;
+                _sprite = new SpriteMap("blueprintTileset", 16, 16);
+                verticalWidthThick = 16f;
+                verticalWidth = 14f;
+                horizontalHeight = 16f;
             }
             if (horizontalHeight == 0.0)
-                this.horizontalHeight = 16f;
+                horizontalHeight = 16f;
             if (verticalWidth == 0.0)
-                this.verticalWidth = 14f;
+                verticalWidth = 14f;
             if (verticalWidthThick == 0.0)
-                this.verticalWidthThick = 16f;
-            this._sprite.frame = num;
-            this._tileset = "CUSTOM0" + (this.customIndex + 1).ToString();
-            this._currentTileset = Custom.data[CustomTileset._customType][this.customIndex];
-            this.graphic = _sprite;
-            this.UpdateNubbers();
+                verticalWidthThick = 16f;
+            _sprite.frame = num;
+            _tileset = "CUSTOM0" + (customIndex + 1).ToString();
+            _currentTileset = Custom.data[CustomTileset._customType][customIndex];
+            graphic = _sprite;
+            UpdateNubbers();
         }
 
         public override void Update() => base.Update();
 
         public override void EditorUpdate()
         {
-            if (!(Level.current is Editor) || !(this._currentTileset != Custom.data[CustomTileset._customType][this.customIndex]))
+            if (!(Level.current is Editor) || !(_currentTileset != Custom.data[CustomTileset._customType][customIndex]))
                 return;
-            this.UpdateCurrentTileset();
+            UpdateCurrentTileset();
         }
 
         public override void Draw() => base.Draw();
@@ -87,7 +87,7 @@ namespace DuckGame
         public override ContextMenu GetContextMenu()
         {
             EditorGroupMenu contextMenu = new EditorGroupMenu(null, true);
-            contextMenu.AddItem(new ContextFile("style", null, new FieldBinding(this, "customTileset0" + (this.customIndex + 1).ToString()), ContextFileType.Block));
+            contextMenu.AddItem(new ContextFile("style", null, new FieldBinding(this, "customTileset0" + (customIndex + 1).ToString()), ContextFileType.Block));
             return contextMenu;
         }
     }

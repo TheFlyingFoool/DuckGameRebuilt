@@ -15,12 +15,12 @@ namespace DuckGame
         {
         }
 
-        public NMChangeWeather(byte weatherVal) => this.weather = weatherVal;
+        public NMChangeWeather(byte weatherVal) => weather = weatherVal;
 
         public override void Activate()
         {
             if (Level.current is RockScoreboard)
-                (Level.current as RockScoreboard).SetWeather((Weather)this.weather);
+                (Level.current as RockScoreboard).SetWeather((Weather)weather);
             base.Activate();
         }
     }

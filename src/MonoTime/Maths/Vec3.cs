@@ -60,15 +60,15 @@ namespace DuckGame
 
         public Vec3(float value)
         {
-            this.x = value;
-            this.y = value;
-            this.z = value;
+            x = value;
+            y = value;
+            z = value;
         }
 
         public Vec3(Vec2 value, float z)
         {
-            this.x = value.x;
-            this.y = value.y;
+            x = value.x;
+            y = value.y;
             this.z = z;
         }
 
@@ -197,7 +197,7 @@ namespace DuckGame
 
         public bool Equals(Vec3 other) => this == other;
 
-        public override int GetHashCode() => (int)(x + this.y + z);
+        public override int GetHashCode() => (int)(x + y + z);
 
         public static Vec3 Hermite(
           Vec3 value1,
@@ -225,9 +225,9 @@ namespace DuckGame
             result.z = MathHelper.Hermite(value1.z, tangent1.z, value2.z, tangent2.z, amount);
         }
 
-        public float Length() => (float)Math.Sqrt(x * this.x + y * this.y + z * this.z);
+        public float Length() => (float)Math.Sqrt(x * x + y * y + z * z);
 
-        public float LengthSquared() => (float)(x * this.x + y * this.y + z * this.z);
+        public float LengthSquared() => (float)(x * x + y * y + z * z);
 
         public static Vec3 Lerp(Vec3 value1, Vec3 value2, float amount) => new Vec3(MathHelper.Lerp(value1.x, value2.x, amount), MathHelper.Lerp(value1.y, value2.y, amount), MathHelper.Lerp(value1.z, value2.z, amount));
 
@@ -288,10 +288,10 @@ namespace DuckGame
 
         public void Normalize()
         {
-            float num = 1f / (float)Math.Sqrt(x * this.x + y * this.y + z * this.z);
-            this.x *= num;
-            this.y *= num;
-            this.z *= num;
+            float num = 1f / (float)Math.Sqrt(x * x + y * y + z * z);
+            x *= num;
+            y *= num;
+            z *= num;
         }
 
         public static Vec3 Normalize(Vec3 value)
@@ -351,11 +351,11 @@ namespace DuckGame
         {
             StringBuilder stringBuilder = new StringBuilder(32);
             stringBuilder.Append("{X:");
-            stringBuilder.Append(this.x);
+            stringBuilder.Append(x);
             stringBuilder.Append(" Y:");
-            stringBuilder.Append(this.y);
+            stringBuilder.Append(y);
             stringBuilder.Append(" Z:");
-            stringBuilder.Append(this.z);
+            stringBuilder.Append(z);
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }
@@ -498,7 +498,7 @@ namespace DuckGame
             return value;
         }
 
-        public Color ToColor() => new Color((int)this.x, (int)this.y, (int)this.z);
+        public Color ToColor() => new Color((int)x, (int)y, (int)z);
 
         public static implicit operator Vector3(Vec3 vec) => new Vector3(vec.x, vec.y, vec.z);
 

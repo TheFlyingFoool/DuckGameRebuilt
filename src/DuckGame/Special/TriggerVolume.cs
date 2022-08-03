@@ -26,38 +26,38 @@ namespace DuckGame
         {
             if (Level.current is Editor)
                 return;
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2((int)this.Wide, (int)this.High);
-            this.collisionOffset = new Vec2(-((int)this.Wide / 2), -((int)this.High / 2));
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2((int)Wide, (int)High);
+            collisionOffset = new Vec2(-((int)Wide / 2), -((int)High / 2));
         }
 
         public TriggerVolume(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.sequence = new SequenceItem(this)
+            sequence = new SequenceItem(this)
             {
                 type = SequenceItemType.Goody
             };
-            this.enablePhysics = false;
-            this._impactThreshold = 1E-06f;
-            this.graphic = new SpriteMap("challenge/goody", 16, 16);
-            this.center = new Vec2(8f, 8f);
-            (this.graphic as SpriteMap).frame = 3;
-            this.collisionOffset = new Vec2(-4f, -4f);
-            this.collisionSize = new Vec2(8f, 8f);
-            this._contextMenuFilter.Add("Sequence");
-            this._editorName = "Trigger Volume";
-            this.editorTooltip = "Pretty much an invisible Goody that you can resize.";
-            this.Untouch._tooltip = "If enabled, the volume only triggers when a Duck leaves it.";
-            this.Ducks_Only._tooltip = "If enabled, only Ducks trigger this volume. Otherwise all physics objects do.";
-            this.Is_Goody._tooltip = "If enabled, this volume will count as a collected Goody when triggered.";
+            enablePhysics = false;
+            _impactThreshold = 1E-06f;
+            graphic = new SpriteMap("challenge/goody", 16, 16);
+            center = new Vec2(8f, 8f);
+            (graphic as SpriteMap).frame = 3;
+            collisionOffset = new Vec2(-4f, -4f);
+            collisionSize = new Vec2(8f, 8f);
+            _contextMenuFilter.Add("Sequence");
+            _editorName = "Trigger Volume";
+            editorTooltip = "Pretty much an invisible Goody that you can resize.";
+            Untouch._tooltip = "If enabled, the volume only triggers when a Duck leaves it.";
+            Ducks_Only._tooltip = "If enabled, only Ducks trigger this volume. Otherwise all physics objects do.";
+            Is_Goody._tooltip = "If enabled, this volume will count as a collected Goody when triggered.";
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this._hidden || !(with is PhysicsObject))
+            if (_hidden || !(with is PhysicsObject))
                 return;
-            if (this.Ducks_Only.value)
+            if (Ducks_Only.value)
             {
                 switch (with)
                 {
@@ -71,39 +71,39 @@ namespace DuckGame
             }
             if (with.destroyed || Level.current is Editor)
                 return;
-            if (this.Untouch.value)
+            if (Untouch.value)
             {
-                this._touching.Add(with as PhysicsObject);
+                _touching.Add(with as PhysicsObject);
             }
             else
             {
-                if (this._touching.Contains(with as PhysicsObject))
+                if (_touching.Contains(with as PhysicsObject))
                     return;
-                this._sequence.Finished();
-                if (ChallengeLevel.running && this.Is_Goody.value)
+                _sequence.Finished();
+                if (ChallengeLevel.running && Is_Goody.value)
                     ++ChallengeLevel.goodiesGot;
-                this._touching.Add(with as PhysicsObject);
+                _touching.Add(with as PhysicsObject);
             }
         }
 
         public override void Update()
         {
             bool flag = false;
-            foreach (Thing thing in this._touching)
+            foreach (Thing thing in _touching)
             {
-                if (!Collision.Rect(this.rectangle, thing.rectangle))
+                if (!Collision.Rect(rectangle, thing.rectangle))
                 {
-                    if (this.Untouch.value)
+                    if (Untouch.value)
                     {
-                        this._sequence.Finished();
-                        if (ChallengeLevel.running && this.Is_Goody.value)
+                        _sequence.Finished();
+                        if (ChallengeLevel.running && Is_Goody.value)
                             ++ChallengeLevel.goodiesGot;
                     }
                     flag = true;
                 }
             }
             if (flag)
-                this._touching.Clear();
+                _touching.Clear();
             base.Update();
         }
 
@@ -111,28 +111,28 @@ namespace DuckGame
         {
             if (!(Level.current is Editor))
             {
-                this.sequence.order = this.Order.value;
-                if (this.sequence.order == -1)
-                    this.sequence.order = Rando.Int(256);
-                this.sequence.waitTillOrder = true;
-                this.center = new Vec2(8f, 8f);
-                this.collisionSize = new Vec2((int)this.Wide, (int)this.High);
-                this.collisionOffset = new Vec2(-((int)this.Wide / 2), -((int)this.High / 2));
+                sequence.order = Order.value;
+                if (sequence.order == -1)
+                    sequence.order = Rando.Int(256);
+                sequence.waitTillOrder = true;
+                center = new Vec2(8f, 8f);
+                collisionSize = new Vec2((int)Wide, (int)High);
+                collisionOffset = new Vec2(-((int)Wide / 2), -((int)High / 2));
             }
-            if (!(Level.current is Editor) && this.sequence.waitTillOrder && this.sequence.order != 0)
+            if (!(Level.current is Editor) && sequence.waitTillOrder && sequence.order != 0)
             {
-                this.visible = false;
-                this._hidden = true;
+                visible = false;
+                _hidden = true;
             }
             base.Initialize();
         }
 
         public override void OnSequenceActivate()
         {
-            if (this.sequence.waitTillOrder)
+            if (sequence.waitTillOrder)
             {
-                this.visible = true;
-                this._hidden = false;
+                visible = true;
+                _hidden = false;
             }
             base.OnSequenceActivate();
         }
@@ -146,7 +146,7 @@ namespace DuckGame
                 return;
             float num1 = Wide.value;
             float num2 = High.value;
-            Graphics.DrawRect(this.position + new Vec2((float)(-num1 / 2.0), (float)(-num2 / 2.0)), this.position + new Vec2(num1 / 2f, num2 / 2f), Colors.DGGreen * 0.5f, (Depth)1f, false);
+            Graphics.DrawRect(position + new Vec2((float)(-num1 / 2.0), (float)(-num2 / 2.0)), position + new Vec2(num1 / 2f, num2 / 2f), Colors.DGGreen * 0.5f, (Depth)1f, false);
         }
     }
 }

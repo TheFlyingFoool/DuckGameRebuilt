@@ -17,13 +17,13 @@ namespace DuckGame
         {
             get
             {
-                return new Vec3(this.M31, this.M32, this.M33);
+                return new Vec3(M31, M32, M33);
             }
             set
             {
-                this.M31 = value.x;
-                this.M32 = value.y;
-                this.M33 = value.z;
+                M31 = value.x;
+                M32 = value.y;
+                M33 = value.z;
             }
         }
 
@@ -31,13 +31,13 @@ namespace DuckGame
         {
             get
             {
-                return new Vec3(-this.M21, -this.M22, -this.M23);
+                return new Vec3(-M21, -M22, -M23);
             }
             set
             {
-                this.M21 = -value.x;
-                this.M22 = -value.y;
-                this.M23 = -value.z;
+                M21 = -value.x;
+                M22 = -value.y;
+                M23 = -value.z;
             }
         }
 
@@ -45,13 +45,13 @@ namespace DuckGame
         {
             get
             {
-                return new Vec3(-this.M31, -this.M32, -this.M33);
+                return new Vec3(-M31, -M32, -M33);
             }
             set
             {
-                this.M31 = -value.x;
-                this.M32 = -value.y;
-                this.M33 = -value.z;
+                M31 = -value.x;
+                M32 = -value.y;
+                M33 = -value.z;
             }
         }
 
@@ -59,13 +59,13 @@ namespace DuckGame
         {
             get
             {
-                return new Vec3(-this.M11, -this.M12, -this.M13);
+                return new Vec3(-M11, -M12, -M13);
             }
             set
             {
-                this.M11 = -value.x;
-                this.M12 = -value.y;
-                this.M13 = -value.z;
+                M11 = -value.x;
+                M12 = -value.y;
+                M13 = -value.z;
             }
         }
 
@@ -73,13 +73,13 @@ namespace DuckGame
         {
             get
             {
-                return new Vec3(this.M11, this.M12, this.M13);
+                return new Vec3(M11, M12, M13);
             }
             set
             {
-                this.M11 = value.x;
-                this.M12 = value.y;
-                this.M13 = value.z;
+                M11 = value.x;
+                M12 = value.y;
+                M13 = value.z;
             }
         }
 
@@ -87,13 +87,13 @@ namespace DuckGame
         {
             get
             {
-                return new Vec3(this.M41, this.M42, this.M43);
+                return new Vec3(M41, M42, M43);
             }
             set
             {
-                this.M41 = value.x;
-                this.M42 = value.y;
-                this.M43 = value.z;
+                M41 = value.x;
+                M42 = value.y;
+                M43 = value.z;
             }
         }
 
@@ -101,13 +101,13 @@ namespace DuckGame
         {
             get
             {
-                return new Vec3(this.M21, this.M22, this.M23);
+                return new Vec3(M21, M22, M23);
             }
             set
             {
-                this.M21 = value.x;
-                this.M22 = value.y;
-                this.M23 = value.z;
+                M21 = value.x;
+                M22 = value.y;
+                M23 = value.z;
             }
         }
 
@@ -164,22 +164,22 @@ namespace DuckGame
         /// </param>
         public Matrix(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24, float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44)
         {
-            this.M11 = m11;
-            this.M12 = m12;
-            this.M13 = m13;
-            this.M14 = m14;
-            this.M21 = m21;
-            this.M22 = m22;
-            this.M23 = m23;
-            this.M24 = m24;
-            this.M31 = m31;
-            this.M32 = m32;
-            this.M33 = m33;
-            this.M34 = m34;
-            this.M41 = m41;
-            this.M42 = m42;
-            this.M43 = m43;
-            this.M44 = m44;
+            M11 = m11;
+            M12 = m12;
+            M13 = m13;
+            M14 = m14;
+            M21 = m21;
+            M22 = m22;
+            M23 = m23;
+            M24 = m24;
+            M31 = m31;
+            M32 = m32;
+            M33 = m33;
+            M34 = m34;
+            M41 = m41;
+            M42 = m42;
+            M43 = m43;
+            M44 = m44;
         }
 
         public static Matrix CreateWorld(Vec3 position, Vec3 forward, Vec3 up)
@@ -295,11 +295,11 @@ namespace DuckGame
 
         public bool Decompose(out Vec3 scale, out Quaternion rotation, out Vec3 translation)
         {
-            translation.x = this.M41;
-            translation.y = this.M42;
-            translation.z = this.M43;
+            translation.x = M41;
+            translation.y = M42;
+            translation.z = M43;
             float xs;
-            if (Math.Sign(this.M11 * this.M12 * this.M13 * this.M14) < 0)
+            if (Math.Sign(M11 * M12 * M13 * M14) < 0)
             {
                 xs = -1f;
             }
@@ -308,7 +308,7 @@ namespace DuckGame
                 xs = 1f;
             }
             float ys;
-            if (Math.Sign(this.M21 * this.M22 * this.M23 * this.M24) < 0)
+            if (Math.Sign(M21 * M22 * M23 * M24) < 0)
             {
                 ys = -1f;
             }
@@ -317,7 +317,7 @@ namespace DuckGame
                 ys = 1f;
             }
             float zs;
-            if (Math.Sign(this.M31 * this.M32 * this.M33 * this.M34) < 0)
+            if (Math.Sign(M31 * M32 * M33 * M34) < 0)
             {
                 zs = -1f;
             }
@@ -325,15 +325,15 @@ namespace DuckGame
             {
                 zs = 1f;
             }
-            scale.x = xs * (float)Math.Sqrt((this.M11 * this.M11 + this.M12 * this.M12 + this.M13 * this.M13));
-            scale.y = ys * (float)Math.Sqrt((this.M21 * this.M21 + this.M22 * this.M22 + this.M23 * this.M23));
-            scale.z = zs * (float)Math.Sqrt((this.M31 * this.M31 + this.M32 * this.M32 + this.M33 * this.M33));
+            scale.x = xs * (float)Math.Sqrt((M11 * M11 + M12 * M12 + M13 * M13));
+            scale.y = ys * (float)Math.Sqrt((M21 * M21 + M22 * M22 + M23 * M23));
+            scale.z = zs * (float)Math.Sqrt((M31 * M31 + M32 * M32 + M33 * M33));
             if (scale.x == 0.0 || scale.y == 0.0 || scale.z == 0.0)
             {
                 rotation = Quaternion.Identity;
                 return false;
             }
-            Matrix m = new Matrix(this.M11 / scale.x, this.M12 / scale.x, this.M13 / scale.x, 0f, this.M21 / scale.y, this.M22 / scale.y, this.M23 / scale.y, 0f, this.M31 / scale.z, this.M32 / scale.z, this.M33 / scale.z, 0f, 0f, 0f, 0f, 1f);
+            Matrix m = new Matrix(M11 / scale.x, M12 / scale.x, M13 / scale.x, 0f, M21 / scale.y, M22 / scale.y, M23 / scale.y, 0f, M31 / scale.z, M32 / scale.z, M33 / scale.z, 0f, 0f, 0f, 0f, 1f);
             rotation = Quaternion.CreateFromRotationMatrix(m);
             return true;
         }
@@ -1094,18 +1094,18 @@ namespace DuckGame
 
         public float Determinant()
         {
-            float minor = this.M31 * this.M42 - this.M32 * this.M41;
-            float minor2 = this.M31 * this.M43 - this.M33 * this.M41;
-            float minor3 = this.M31 * this.M44 - this.M34 * this.M41;
-            float minor4 = this.M32 * this.M43 - this.M33 * this.M42;
-            float minor5 = this.M32 * this.M44 - this.M34 * this.M42;
-            float minor6 = this.M33 * this.M44 - this.M34 * this.M43;
-            return this.M11 * (this.M22 * minor6 - this.M23 * minor5 + this.M24 * minor4) - this.M12 * (this.M21 * minor6 - this.M23 * minor3 + this.M24 * minor2) + this.M13 * (this.M21 * minor5 - this.M22 * minor3 + this.M24 * minor) - this.M14 * (this.M21 * minor4 - this.M22 * minor2 + this.M23 * minor);
+            float minor = M31 * M42 - M32 * M41;
+            float minor2 = M31 * M43 - M33 * M41;
+            float minor3 = M31 * M44 - M34 * M41;
+            float minor4 = M32 * M43 - M33 * M42;
+            float minor5 = M32 * M44 - M34 * M42;
+            float minor6 = M33 * M44 - M34 * M43;
+            return M11 * (M22 * minor6 - M23 * minor5 + M24 * minor4) - M12 * (M21 * minor6 - M23 * minor3 + M24 * minor2) + M13 * (M21 * minor5 - M22 * minor3 + M24 * minor) - M14 * (M21 * minor4 - M22 * minor2 + M23 * minor);
         }
 
         public bool Equals(Matrix other)
         {
-            return this.M11 == other.M11 && this.M12 == other.M12 && this.M13 == other.M13 && this.M14 == other.M14 && this.M21 == other.M21 && this.M22 == other.M22 && this.M23 == other.M23 && this.M24 == other.M24 && this.M31 == other.M31 && this.M32 == other.M32 && this.M33 == other.M33 && this.M34 == other.M34 && this.M41 == other.M41 && this.M42 == other.M42 && this.M43 == other.M43 && this.M44 == other.M44;
+            return M11 == other.M11 && M12 == other.M12 && M13 == other.M13 && M14 == other.M14 && M21 == other.M21 && M22 == other.M22 && M23 == other.M23 && M24 == other.M24 && M31 == other.M31 && M32 == other.M32 && M33 == other.M33 && M34 == other.M34 && M41 == other.M41 && M42 == other.M42 && M43 == other.M43 && M44 == other.M44;
         }
 
         public static Matrix operator +(Matrix matrix1, Matrix matrix2)
@@ -1305,37 +1305,37 @@ namespace DuckGame
             return string.Concat(new string[]
             {
                 "{ {M11:",
-                this.M11.ToString(),
+                M11.ToString(),
                 " M12:",
-                this.M12.ToString(),
+                M12.ToString(),
                 " M13:",
-                this.M13.ToString(),
+                M13.ToString(),
                 " M14:",
-                this.M14.ToString(),
+                M14.ToString(),
                 "} {M21:",
-                this.M21.ToString(),
+                M21.ToString(),
                 " M22:",
-                this.M22.ToString(),
+                M22.ToString(),
                 " M23:",
-                this.M23.ToString(),
+                M23.ToString(),
                 " M24:",
-                this.M24.ToString(),
+                M24.ToString(),
                 "} {M31:",
-                this.M31.ToString(),
+                M31.ToString(),
                 " M32:",
-                this.M32.ToString(),
+                M32.ToString(),
                 " M33:",
-                this.M33.ToString(),
+                M33.ToString(),
                 " M34:",
-                this.M34.ToString(),
+                M34.ToString(),
                 "} {M41:",
-                this.M41.ToString(),
+                M41.ToString(),
                 " M42:",
-                this.M42.ToString(),
+                M42.ToString(),
                 " M43:",
-                this.M43.ToString(),
+                M43.ToString(),
                 " M44:",
-                this.M44.ToString(),
+                M44.ToString(),
                 "} }"
             });
         }

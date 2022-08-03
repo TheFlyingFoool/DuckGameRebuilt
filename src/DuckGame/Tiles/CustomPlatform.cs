@@ -28,64 +28,64 @@ namespace DuckGame
         public CustomPlatform(float x, float y, string t = "CUSTOMPLAT01")
           : base(x, y, "")
         {
-            this._tileset = t;
-            this.customIndex = 0;
-            this._editorName = "Custom Platform 01";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidth = 14f;
-            this.verticalWidthThick = 15f;
-            this.horizontalHeight = 8f;
-            this.UpdateCurrentTileset();
+            _tileset = t;
+            customIndex = 0;
+            _editorName = "Custom Platform 01";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidth = 14f;
+            verticalWidthThick = 15f;
+            horizontalHeight = 8f;
+            UpdateCurrentTileset();
         }
 
         public void UpdateCurrentTileset()
         {
-            CustomTileData data = Custom.GetData(this.customIndex, CustomPlatform._customType);
+            CustomTileData data = Custom.GetData(customIndex, CustomPlatform._customType);
             int num = 0;
-            if (this._sprite != null)
-                num = this._sprite.frame;
+            if (_sprite != null)
+                num = _sprite.frame;
             if (data != null && data.texture != null)
             {
-                this._sprite = new SpriteMap((Tex2D)data.texture, 16, 16);
-                this.horizontalHeight = data.horizontalHeight;
-                this.verticalWidth = data.verticalWidth;
-                this.verticalWidthThick = data.verticalWidthThick;
-                this._hasLeftNub = data.leftNubber;
-                this._hasRightNub = data.rightNubber;
+                _sprite = new SpriteMap((Tex2D)data.texture, 16, 16);
+                horizontalHeight = data.horizontalHeight;
+                verticalWidth = data.verticalWidth;
+                verticalWidthThick = data.verticalWidthThick;
+                _hasLeftNub = data.leftNubber;
+                _hasRightNub = data.rightNubber;
             }
             else
             {
-                this._sprite = new SpriteMap("scaffolding", 16, 16);
-                this.verticalWidth = 14f;
-                this.verticalWidthThick = 15f;
-                this.horizontalHeight = 8f;
+                _sprite = new SpriteMap("scaffolding", 16, 16);
+                verticalWidth = 14f;
+                verticalWidthThick = 15f;
+                horizontalHeight = 8f;
             }
             if (horizontalHeight == 0.0)
-                this.horizontalHeight = 8f;
+                horizontalHeight = 8f;
             if (verticalWidth == 0.0)
-                this.verticalWidth = 14f;
+                verticalWidth = 14f;
             if (verticalWidthThick == 0.0)
-                this.verticalWidthThick = 15f;
-            this._sprite.frame = num;
-            this._tileset = "CUSTOMPLAT0" + (this.customIndex + 1).ToString();
-            this._currentTileset = Custom.data[CustomPlatform._customType][this.customIndex];
-            this.graphic = _sprite;
-            this.UpdateNubbers();
+                verticalWidthThick = 15f;
+            _sprite.frame = num;
+            _tileset = "CUSTOMPLAT0" + (customIndex + 1).ToString();
+            _currentTileset = Custom.data[CustomPlatform._customType][customIndex];
+            graphic = _sprite;
+            UpdateNubbers();
         }
 
         public override void Update() => base.Update();
 
         public override void EditorUpdate()
         {
-            if (!(Level.current is Editor) || !(this._currentTileset != Custom.data[CustomPlatform._customType][this.customIndex]))
+            if (!(Level.current is Editor) || !(_currentTileset != Custom.data[CustomPlatform._customType][customIndex]))
                 return;
-            this.UpdateCurrentTileset();
+            UpdateCurrentTileset();
         }
 
         public override ContextMenu GetContextMenu()
         {
             EditorGroupMenu contextMenu = new EditorGroupMenu(null, true);
-            contextMenu.AddItem(new ContextFile("style", null, new FieldBinding(this, "customPlatform0" + (this.customIndex + 1).ToString()), ContextFileType.Platform));
+            contextMenu.AddItem(new ContextFile("style", null, new FieldBinding(this, "customPlatform0" + (customIndex + 1).ToString()), ContextFileType.Platform));
             return contextMenu;
         }
     }

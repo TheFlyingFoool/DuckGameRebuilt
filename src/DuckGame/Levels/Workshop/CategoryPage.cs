@@ -21,32 +21,32 @@ namespace DuckGame
 
         public CategoryPage(List<Card> cards, bool grid)
         {
-            this._grid = grid;
-            this._cards = cards;
+            _grid = grid;
+            _cards = cards;
         }
 
         public void CardSelected(Card card)
         {
-            this._state = CategoryState.OpenPage;
-            this._pageToOpen = card;
+            _state = CategoryState.OpenPage;
+            _pageToOpen = card;
         }
 
         public override void Initialize()
         {
             Layer.HUD.camera.x = CategoryPage.camOffset;
-            this.backgroundColor = new Color(8, 12, 13);
-            this._font = new BitmapFont("biosFont", 8);
+            backgroundColor = new Color(8, 12, 13);
+            _font = new BitmapFont("biosFont", 8);
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@SELECT@SELECT");
             HUD.AddCornerControl(HUDCorner.BottomRight, "@CANCEL@BACK");
-            if (this._grid)
+            if (_grid)
             {
-                this._strip = new CategoryGrid(12f, 31f, this._cards, this);
-                Level.Add(this._strip);
+                _strip = new CategoryGrid(12f, 31f, _cards, this);
+                Level.Add(_strip);
             }
             else
             {
-                this._strip = new CardStrip(12f, 31f, this._cards, this, false, 4);
-                Level.Add(this._strip);
+                _strip = new CardStrip(12f, 31f, _cards, this, false, 4);
+                Level.Add(_strip);
             }
             base.Initialize();
         }
@@ -54,22 +54,22 @@ namespace DuckGame
         public override void Update()
         {
             Layer.HUD.camera.x = CategoryPage.camOffset;
-            if (this._state == CategoryState.OpenPage)
+            if (_state == CategoryState.OpenPage)
             {
-                this._strip.active = false;
+                _strip.active = false;
                 CategoryPage.camOffset = Lerp.FloatSmooth(CategoryPage.camOffset, 360f, 0.1f);
-                if (camOffset <= 330.0 || !(this._pageToOpen.specialText == "VIEW ALL"))
+                if (camOffset <= 330.0 || !(_pageToOpen.specialText == "VIEW ALL"))
                     return;
-                Level.current = new CategoryPage(this._cards, true);
+                Level.current = new CategoryPage(_cards, true);
             }
             else
             {
-                if (this._state != CategoryState.Idle)
+                if (_state != CategoryState.Idle)
                     return;
                 CategoryPage.camOffset = Lerp.FloatSmooth(CategoryPage.camOffset, -40f, 0.1f);
                 if (camOffset < 0.0)
                     CategoryPage.camOffset = 0f;
-                this._strip.active = camOffset == 0.0;
+                _strip.active = camOffset == 0.0;
             }
         }
 
@@ -77,10 +77,10 @@ namespace DuckGame
         {
             if (layer != Layer.HUD)
                 return;
-            this._font.xscale = this._font.yscale = 1f;
-            this._font.Draw("CUSTOM LEVELS", 8f, 8f, Color.White, (Depth)0.95f);
-            this._font.xscale = this._font.yscale = 0.75f;
-            this._font.Draw("BEST NEW LEVELS", 14f, 22f, Color.White, (Depth)0.95f);
+            _font.xscale = _font.yscale = 1f;
+            _font.Draw("CUSTOM LEVELS", 8f, 8f, Color.White, (Depth)0.95f);
+            _font.xscale = _font.yscale = 0.75f;
+            _font.Draw("BEST NEW LEVELS", 14f, 22f, Color.White, (Depth)0.95f);
         }
     }
 }

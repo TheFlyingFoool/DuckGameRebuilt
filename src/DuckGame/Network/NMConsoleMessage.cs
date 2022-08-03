@@ -15,6 +15,6 @@ namespace DuckGame
         {
         }
 
-        public NMConsoleMessage(string msg) => this.message = msg;
+        public NMConsoleMessage(string msg) => message = msg;
     }
 }

@@ -16,10 +16,10 @@ namespace DuckGame
 
         public void Clear()
         {
-            this.timesResent = 0;
-            this.timesDropped = 0;
-            this.framesSinceSent = 0;
-            this.tickOnSend = 0U;
+            timesResent = 0;
+            timesDropped = 0;
+            framesSinceSent = 0;
+            tickOnSend = 0U;
         }
     }
 }

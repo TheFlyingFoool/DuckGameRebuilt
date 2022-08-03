@@ -24,7 +24,7 @@ namespace DuckGame
         /// <summary>Check if a property is in this bag.</summary>
         /// <param name="property">The property key.</param>
         /// <returns>true if the property is in this bag; false if not</returns>
-        public bool Contains(string property) => this._dictionary.ContainsKey(property);
+        public bool Contains(string property) => _dictionary.ContainsKey(property);
 
         /// <summary>Get an untyped property value from the bag.</summary>
         /// <param name="property">The property name.</param>
@@ -33,7 +33,7 @@ namespace DuckGame
         public object Get(string property)
         {
             object obj;
-            if (!this._dictionary.TryGetValue(property, out obj))
+            if (!_dictionary.TryGetValue(property, out obj))
                 throw new PropertyNotFoundException("key " + property + " not found in bag");
             return obj;
         }
@@ -45,7 +45,7 @@ namespace DuckGame
         /// The object casted to T if it is in the bag and can be converted to the requested type
         /// </returns>
         /// <exception cref="T:DuckGame.PropertyNotFoundException">The property key is not in this property bag.</exception>
-        public T Get<T>(string property) => (T)this.Get(property);
+        public T Get<T>(string property) => (T)Get(property);
 
         /// <summary>
         /// Check if a property in this bag is of, or assignable to, a certain type.
@@ -58,7 +58,7 @@ namespace DuckGame
         public bool? IsOfType<T>(string property)
         {
             object obj;
-            return !this._dictionary.TryGetValue(property, out obj) || obj == null ? new bool?() : new bool?(obj.GetType().IsAssignableFrom(typeof(T)));
+            return !_dictionary.TryGetValue(property, out obj) || obj == null ? new bool?() : new bool?(obj.GetType().IsAssignableFrom(typeof(T)));
         }
 
         /// <summary>Get the type of a property contained in the bag.</summary>
@@ -67,25 +67,25 @@ namespace DuckGame
         public System.Type TypeOf(string property)
         {
             object obj;
-            return !this._dictionary.TryGetValue(property, out obj) || obj == null ? null : obj.GetType();
+            return !_dictionary.TryGetValue(property, out obj) || obj == null ? null : obj.GetType();
         }
 
         /// <summary>Set a property's value in the bag</summary>
         /// <typeparam name="T">The type of value to set.</typeparam>
         /// <param name="property">The property key</param>
         /// <param name="value">The value</param>
-        public void Set<T>(string property, T value) => this._dictionary[property] = value;
+        public void Set<T>(string property, T value) => _dictionary[property] = value;
 
         /// <summary>Remove a property value from the bag.</summary>
         /// <param name="property">The value to remove.</param>
-        public void Remove(string property) => this._dictionary.Remove(property);
+        public void Remove(string property) => _dictionary.Remove(property);
 
         /// <summary>Set multiple property values in the bag at once.</summary>
         /// <param name="properties">Enumerable set of properties</param>
         public void Set(IDictionary<string, object> properties)
         {
             foreach (KeyValuePair<string, object> property in (IEnumerable<KeyValuePair<string, object>>)properties)
-                this.Set<object>(property.Key, property.Value);
+                Set<object>(property.Key, property.Value);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace DuckGame
         public T? TryGet<T>(string property) where T : struct
         {
             object obj;
-            return !this._dictionary.TryGetValue(property, out obj) ? new T?() : new T?((T)obj);
+            return !_dictionary.TryGetValue(property, out obj) ? new T?() : new T?((T)obj);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace DuckGame
         public bool TryGet<T>(string property, out T value)
         {
             object obj;
-            if (!this._dictionary.TryGetValue(property, out obj))
+            if (!_dictionary.TryGetValue(property, out obj))
             {
                 value = default(T);
                 return false;
@@ -129,13 +129,13 @@ namespace DuckGame
         public T GetOrDefault<T>(string property, T defaultValue)
         {
             object obj;
-            return !this._dictionary.TryGetValue(property, out obj) ? defaultValue : (T)obj;
+            return !_dictionary.TryGetValue(property, out obj) ? defaultValue : (T)obj;
         }
 
         public bool GetOrDefault(string property, bool defaultValue)
         {
             object obj;
-            return !this._dictionary.TryGetValue(property, out obj) ? defaultValue : (bool)obj;
+            return !_dictionary.TryGetValue(property, out obj) ? defaultValue : (bool)obj;
         }
     }
 }

@@ -40,14 +40,14 @@ namespace DuckGame
         public Random rando;
         public bool active = true;
 
-        public bool hover => this.rect.Contains(Mouse.mousePos);
+        public bool hover => rect.Contains(Mouse.mousePos);
 
         public Rectangle consoleSize
         {
             get
             {
-                float num = (float)(rect.width / this.layerCore._console.camera.width * 0.5);
-                return new Rectangle(this.rect.x * num, this.rect.y * num, this.rect.width * num, this.rect.height * num);
+                float num = (float)(rect.width / layerCore._console.camera.width * 0.5);
+                return new Rectangle(rect.x * num, rect.y * num, rect.width * num, rect.height * num);
             }
         }
 
@@ -60,14 +60,14 @@ namespace DuckGame
 
             public void Lock()
             {
-                this.member.SetValue(null, this.instance);
-                if (this.firstLockAction == null)
+                member.SetValue(null, instance);
+                if (firstLockAction == null)
                     return;
-                this.firstLockAction();
-                this.firstLockAction = null;
+                firstLockAction();
+                firstLockAction = null;
             }
 
-            public void Unlock() => this.member.SetValue(null, this.originalInstance);
+            public void Unlock() => member.SetValue(null, originalInstance);
         }
     }
 }

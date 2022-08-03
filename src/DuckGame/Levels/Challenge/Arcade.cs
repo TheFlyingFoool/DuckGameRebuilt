@@ -36,29 +36,29 @@ namespace DuckGame
         private MenuBoolean _quit = new MenuBoolean();
         private bool _afterChallenge;
 
-        public FollowCam followCam => this._followCam;
+        public FollowCam followCam => _followCam;
 
         public Arcade()
         {
-            this._followCam = new FollowCam
+            _followCam = new FollowCam
             {
                 lerpMult = 2f
             };
-            this.camera = _followCam;
+            camera = _followCam;
             DeathmatchLevel.started = true;
         }
 
         public override void Initialize()
         {
-            this._background = new SpriteThing(313f, -40f, new Sprite("arcade/arcadeOuya"))
+            _background = new SpriteThing(313f, -40f, new Sprite("arcade/arcadeOuya"))
             {
                 center = new Vec2(0f, 0f),
                 layer = Layer.Background
             };
-            this._duck = new Duck(730f, 100f, Profiles.active[0]);
+            _duck = new Duck(730f, 100f, Profiles.active[0]);
             Level.Add(_background);
             Level.Add(_duck);
-            this._followCam.Add(_duck);
+            _followCam.Add(_duck);
             Chancy.Add("SUP MOTHARFUCKAR :P");
             Level.Add(new Block(0f, 187f, 295f, 53f));
             Level.Add(new Block(289f, 195f, 14f, 45f));
@@ -88,8 +88,8 @@ namespace DuckGame
             vec2List.Add(new Vec2(565f, 74f));
             vec2List.Add(new Vec2(375f, 58f));
             vec2List.Add(new Vec2(455f, 58f));
-            Vec2 vec2_1 = vec2List[this._challenges.Count];
-            Vec2 vec2_2 = vec2List[this._challenges.Count];
+            Vec2 vec2_1 = vec2List[_challenges.Count];
+            Vec2 vec2_2 = vec2List[_challenges.Count];
             ArcadeMachine arcadeMachine1 = new ArcadeMachine(vec2_2.x, vec2_2.y, new ChallengeGroup()
             {
                 name = "TARGETS",
@@ -105,8 +105,8 @@ namespace DuckGame
                 unlocked = true
             };
             Level.Add(arcadeMachine1);
-            this._challenges.Add(arcadeMachine1);
-            Vec2 vec2_3 = vec2List[this._challenges.Count];
+            _challenges.Add(arcadeMachine1);
+            Vec2 vec2_3 = vec2List[_challenges.Count];
             ArcadeMachine arcadeMachine2 = new ArcadeMachine(vec2_3.x, vec2_3.y, new ChallengeGroup()
             {
                 name = "VARIETY ZONE",
@@ -121,8 +121,8 @@ namespace DuckGame
                 lightColor = 1
             };
             Level.Add(arcadeMachine2);
-            this._challenges.Add(arcadeMachine2);
-            Vec2 vec2_4 = vec2List[this._challenges.Count];
+            _challenges.Add(arcadeMachine2);
+            Vec2 vec2_4 = vec2List[_challenges.Count];
             ArcadeMachine arcadeMachine3 = new ArcadeMachine(vec2_4.x, vec2_4.y, new ChallengeGroup()
             {
                 name = "TELEPORTER",
@@ -137,8 +137,8 @@ namespace DuckGame
                 lightColor = 1
             };
             Level.Add(arcadeMachine3);
-            this._challenges.Add(arcadeMachine3);
-            Vec2 vec2_5 = vec2List[this._challenges.Count];
+            _challenges.Add(arcadeMachine3);
+            Vec2 vec2_5 = vec2List[_challenges.Count];
             ArcadeMachine arcadeMachine4 = new ArcadeMachine(vec2_5.x, vec2_5.y, new ChallengeGroup()
             {
                 name = "WEAPON TRAINING",
@@ -153,8 +153,8 @@ namespace DuckGame
                 lightColor = 2
             };
             Level.Add(arcadeMachine4);
-            this._challenges.Add(arcadeMachine4);
-            Vec2 vec2_6 = vec2List[this._challenges.Count];
+            _challenges.Add(arcadeMachine4);
+            Vec2 vec2_6 = vec2List[_challenges.Count];
             ArcadeMachine arcadeMachine5 = new ArcadeMachine(vec2_6.x, vec2_6.y, new ChallengeGroup()
             {
                 name = "VARIETY ZONE 2",
@@ -169,37 +169,37 @@ namespace DuckGame
                 lightColor = 1
             };
             Level.Add(arcadeMachine5);
-            this._challenges.Add(arcadeMachine5);
-            this._prizeTable = new PrizeTable(730f, 124f);
+            _challenges.Add(arcadeMachine5);
+            _prizeTable = new PrizeTable(730f, 124f);
             Level.Add(_prizeTable);
-            this._hud = new ArcadeHUD
+            _hud = new ArcadeHUD
             {
                 alpha = 0f
             };
-            this._unlockScreen = new UnlockScreen
+            _unlockScreen = new UnlockScreen
             {
                 alpha = 0f
             };
             Level.Add(_unlockScreen);
-            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
-            this._pauseMenu = new UIMenu("@LWING@ARCADE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE  @SELECT@SELECT");
-            this._confirmMenu = new UIMenu("EXIT ARCADE?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
+            _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
+            _pauseMenu = new UIMenu("@LWING@ARCADE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE  @SELECT@SELECT");
+            _confirmMenu = new UIMenu("EXIT ARCADE?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
             UIDivider component = new UIDivider(true, 0.8f);
-            component.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(this._pauseGroup), UIAlign.Left), true);
+            component.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup), UIAlign.Left), true);
             component.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
             component.leftSection.Add(new UIMenuItem("EXIT ARCADE", new UIMenuActionOpenMenu(_pauseMenu, _confirmMenu), UIAlign.Left), true);
             component.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
-            this._pauseMenu.Add(component, true);
-            this._pauseMenu.Close();
-            this._pauseGroup.Add(_pauseMenu, false);
-            Options.AddMenus(this._pauseGroup);
-            Options.openOnClose = this._pauseMenu;
-            this._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
-            this._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
-            this._confirmMenu.Close();
-            this._pauseGroup.Add(_confirmMenu, false);
-            this._pauseGroup.Close();
-            this._pauseGroup.isPauseMenu = true;
+            _pauseMenu.Add(component, true);
+            _pauseMenu.Close();
+            _pauseGroup.Add(_pauseMenu, false);
+            Options.AddMenus(_pauseGroup);
+            Options.openOnClose = _pauseMenu;
+            _confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
+            _confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit)), true);
+            _confirmMenu.Close();
+            _pauseGroup.Add(_confirmMenu, false);
+            _pauseGroup.Close();
+            _pauseGroup.isPauseMenu = true;
             Level.Add(_pauseGroup);
             Music.Play(nameof(Arcade));
             base.Initialize();
@@ -211,53 +211,53 @@ namespace DuckGame
 
         public override void Update()
         {
-            this.backgroundColor = Color.Black;
+            backgroundColor = Color.Black;
             if (UnlockScreen.open || ArcadeHUD.open)
             {
-                this._background.visible = false;
-                foreach (Thing challenge in this._challenges)
+                _background.visible = false;
+                foreach (Thing challenge in _challenges)
                     challenge.visible = false;
-                this._prizeTable.visible = false;
+                _prizeTable.visible = false;
             }
             else
             {
-                this._background.visible = true;
-                foreach (Thing challenge in this._challenges)
+                _background.visible = true;
+                foreach (Thing challenge in _challenges)
                     challenge.visible = true;
-                this._prizeTable.visible = true;
+                _prizeTable.visible = true;
             }
-            if (this._state == this._desiredState && this._state != ArcadeState.UnlockMachine && this._state != ArcadeState.LaunchChallenge)
+            if (_state == _desiredState && _state != ArcadeState.UnlockMachine && _state != ArcadeState.LaunchChallenge)
             {
-                if (!this._quitting)
+                if (!_quitting)
                 {
                     if (Input.Pressed("START"))
                     {
-                        this._pauseGroup.Open();
-                        this._pauseMenu.Open();
-                        MonoMain.pauseMenu = this._pauseGroup;
-                        if (!this._paused)
+                        _pauseGroup.Open();
+                        _pauseMenu.Open();
+                        MonoMain.pauseMenu = _pauseGroup;
+                        if (!_paused)
                         {
                             Music.Pause();
                             SFX.Play("pause", 0.6f);
-                            this._paused = true;
-                            this._duck.immobilized = true;
+                            _paused = true;
+                            _duck.immobilized = true;
                         }
-                        this.simulatePhysics = false;
+                        simulatePhysics = false;
                         return;
                     }
-                    if (this._paused && MonoMain.pauseMenu == null)
+                    if (_paused && MonoMain.pauseMenu == null)
                     {
-                        this._paused = false;
+                        _paused = false;
                         SFX.Play("resume", 0.6f);
-                        if (this._quit.value)
+                        if (_quit.value)
                         {
-                            this._quitting = true;
+                            _quitting = true;
                         }
                         else
                         {
                             Music.Resume();
-                            this._duck.immobilized = false;
-                            this.simulatePhysics = true;
+                            _duck.immobilized = false;
+                            simulatePhysics = true;
                         }
                     }
                 }
@@ -268,223 +268,223 @@ namespace DuckGame
                         Level.current = new TitleScreen();
                 }
             }
-            if (this._paused)
+            if (_paused)
                 return;
-            this._hud.Update();
-            if (this._hud.launchChallenge)
-                this._desiredState = ArcadeState.LaunchChallenge;
-            if (this._desiredState != this._state)
+            _hud.Update();
+            if (_hud.launchChallenge)
+                _desiredState = ArcadeState.LaunchChallenge;
+            if (_desiredState != _state)
             {
-                this._duck.active = false;
+                _duck.active = false;
                 bool flag = false;
-                if (this._desiredState == ArcadeState.ViewChallenge)
+                if (_desiredState == ArcadeState.ViewChallenge)
                 {
-                    this._duck.alpha = Lerp.FloatSmooth(this._duck.alpha, 0f, 0.1f);
-                    this._followCam.manualViewSize = Lerp.FloatSmooth(this._followCam.manualViewSize, 2f, 0.16f);
+                    _duck.alpha = Lerp.FloatSmooth(_duck.alpha, 0f, 0.1f);
+                    _followCam.manualViewSize = Lerp.FloatSmooth(_followCam.manualViewSize, 2f, 0.16f);
                     if (_followCam.manualViewSize < 30f)
                     {
                         Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
                         Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
-                        this._hud.alpha = Lerp.Float(this._hud.alpha, 1f, 0.08f);
-                        if (_followCam.manualViewSize < 3f && this._hud.alpha == 1f && Layer.Game.fade == 0f)
+                        _hud.alpha = Lerp.Float(_hud.alpha, 1f, 0.08f);
+                        if (_followCam.manualViewSize < 3f && _hud.alpha == 1f && Layer.Game.fade == 0f)
                             flag = true;
                     }
                 }
-                else if (this._desiredState == ArcadeState.Normal)
+                else if (_desiredState == ArcadeState.Normal)
                 {
-                    if (!this._flipState)
+                    if (!_flipState)
                     {
-                        this._followCam.Clear();
-                        this._followCam.Add(_duck);
+                        _followCam.Clear();
+                        _followCam.Add(_duck);
                         HUD.CloseAllCorners();
                     }
-                    this._duck.alpha = Lerp.FloatSmooth(this._duck.alpha, 1f, 0.1f, 1.1f);
-                    if (this._state == ArcadeState.ViewChallenge || this._state == ArcadeState.UnlockScreen)
-                        this._followCam.manualViewSize = Lerp.FloatSmooth(this._followCam.manualViewSize, this._followCam.viewSize, 0.14f, 1.05f);
+                    _duck.alpha = Lerp.FloatSmooth(_duck.alpha, 1f, 0.1f, 1.1f);
+                    if (_state == ArcadeState.ViewChallenge || _state == ArcadeState.UnlockScreen)
+                        _followCam.manualViewSize = Lerp.FloatSmooth(_followCam.manualViewSize, _followCam.viewSize, 0.14f, 1.05f);
                     Layer.Game.fade = Lerp.Float(Layer.Game.fade, 1f, 0.05f);
                     Layer.Background.fade = Lerp.Float(Layer.Game.fade, 1f, 0.05f);
-                    this._hud.alpha = Lerp.Float(this._hud.alpha, 0f, 0.08f);
-                    this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0f, 0.08f);
-                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == this._followCam.viewSize) && this._hud.alpha == 0f && Layer.Game.fade == 1f)
+                    _hud.alpha = Lerp.Float(_hud.alpha, 0f, 0.08f);
+                    _unlockScreen.alpha = Lerp.Float(_unlockScreen.alpha, 0f, 0.08f);
+                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == _followCam.viewSize) && _hud.alpha == 0f && Layer.Game.fade == 1f)
                     {
                         flag = true;
-                        this._followCam.manualViewSize = -1f;
-                        this._duck.alpha = 1f;
+                        _followCam.manualViewSize = -1f;
+                        _duck.alpha = 1f;
                     }
                 }
-                else if (this._desiredState == ArcadeState.UnlockMachine)
+                else if (_desiredState == ArcadeState.UnlockMachine)
                 {
-                    if (!this._flipState)
+                    if (!_flipState)
                     {
-                        this._followCam.Clear();
-                        this._followCam.Add(this._unlockMachines[0]);
+                        _followCam.Clear();
+                        _followCam.Add(_unlockMachines[0]);
                         HUD.CloseAllCorners();
                     }
-                    if (this._state == ArcadeState.ViewChallenge)
-                        this._followCam.manualViewSize = Lerp.FloatSmooth(this._followCam.manualViewSize, this._followCam.viewSize, 0.14f, 1.05f);
-                    this._duck.alpha = Lerp.FloatSmooth(this._duck.alpha, 1f, 0.1f, 1.1f);
+                    if (_state == ArcadeState.ViewChallenge)
+                        _followCam.manualViewSize = Lerp.FloatSmooth(_followCam.manualViewSize, _followCam.viewSize, 0.14f, 1.05f);
+                    _duck.alpha = Lerp.FloatSmooth(_duck.alpha, 1f, 0.1f, 1.1f);
                     Layer.Game.fade = Lerp.Float(Layer.Game.fade, 1f, 0.05f);
                     Layer.Background.fade = Lerp.Float(Layer.Game.fade, 1f, 0.05f);
-                    this._hud.alpha = Lerp.Float(this._hud.alpha, 0f, 0.08f);
-                    this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0f, 0.08f);
-                    this._unlockMachineWait = 1f;
-                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == this._followCam.viewSize) && this._hud.alpha == 0f && Layer.Game.fade == 1f)
+                    _hud.alpha = Lerp.Float(_hud.alpha, 0f, 0.08f);
+                    _unlockScreen.alpha = Lerp.Float(_unlockScreen.alpha, 0f, 0.08f);
+                    _unlockMachineWait = 1f;
+                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == _followCam.viewSize) && _hud.alpha == 0f && Layer.Game.fade == 1f)
                     {
                         flag = true;
-                        this._followCam.manualViewSize = -1f;
-                        this._duck.alpha = 1f;
+                        _followCam.manualViewSize = -1f;
+                        _duck.alpha = 1f;
                     }
                 }
-                else if (this._desiredState == ArcadeState.LaunchChallenge)
+                else if (_desiredState == ArcadeState.LaunchChallenge)
                 {
-                    if (!this._flipState)
+                    if (!_flipState)
                         HUD.CloseAllCorners();
                     Music.volume = Lerp.Float(Music.volume, 0f, 0.01f);
-                    this._hud.alpha = Lerp.Float(this._hud.alpha, 0f, 0.02f);
-                    this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 0f, 0.08f);
-                    if (this._hud.alpha == 0f)
+                    _hud.alpha = Lerp.Float(_hud.alpha, 0f, 0.02f);
+                    _unlockScreen.alpha = Lerp.Float(_unlockScreen.alpha, 0f, 0.08f);
+                    if (_hud.alpha == 0f)
                         flag = true;
                 }
-                if (this._desiredState == ArcadeState.UnlockScreen)
+                if (_desiredState == ArcadeState.UnlockScreen)
                 {
-                    this._duck.alpha = Lerp.FloatSmooth(this._duck.alpha, 0f, 0.1f);
-                    this._followCam.manualViewSize = Lerp.FloatSmooth(this._followCam.manualViewSize, 2f, 0.16f);
+                    _duck.alpha = Lerp.FloatSmooth(_duck.alpha, 0f, 0.1f);
+                    _followCam.manualViewSize = Lerp.FloatSmooth(_followCam.manualViewSize, 2f, 0.16f);
                     if (_followCam.manualViewSize < 30.0)
                     {
                         Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
                         Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
-                        this._unlockScreen.alpha = Lerp.Float(this._unlockScreen.alpha, 1f, 0.08f);
-                        if (_followCam.manualViewSize < 3f && this._unlockScreen.alpha == 1f && Layer.Game.fade == 0f)
+                        _unlockScreen.alpha = Lerp.Float(_unlockScreen.alpha, 1f, 0.08f);
+                        if (_followCam.manualViewSize < 3f && _unlockScreen.alpha == 1f && Layer.Game.fade == 0f)
                             flag = true;
                     }
                 }
-                this._flipState = true;
-                if (this._launchedChallenge)
+                _flipState = true;
+                if (_launchedChallenge)
                 {
                     Layer.Background.fade = 0f;
                     Layer.Game.fade = 0f;
                 }
                 if (!flag)
                     return;
-                this._flipState = false;
+                _flipState = false;
                 HUD.CloseAllCorners();
-                this._state = this._desiredState;
-                if (this._state == ArcadeState.ViewChallenge)
+                _state = _desiredState;
+                if (_state == ArcadeState.ViewChallenge)
                 {
-                    if (this._afterChallenge)
+                    if (_afterChallenge)
                     {
                         Music.Play(nameof(Arcade));
-                        this._afterChallenge = false;
+                        _afterChallenge = false;
                         DuckFile.FlagForBackup();
                     }
-                    this._hud.MakeActive();
-                    this._duck.active = false;
+                    _hud.MakeActive();
+                    _duck.active = false;
                 }
-                else if (this._state == ArcadeState.LaunchChallenge)
+                else if (_state == ArcadeState.LaunchChallenge)
                 {
                     Arcade.currentArcade = this;
-                    foreach (Thing thing in this.things[typeof(ChallengeConfetti)])
+                    foreach (Thing thing in things[typeof(ChallengeConfetti)])
                         Level.Remove(thing);
                     Music.Stop();
-                    Level.current = new ChallengeLevel(this._hud.selected.challenge.fileName);
-                    this._desiredState = ArcadeState.ViewChallenge;
-                    this._hud.launchChallenge = false;
-                    this._launchedChallenge = false;
-                    this._afterChallenge = true;
+                    Level.current = new ChallengeLevel(_hud.selected.challenge.fileName);
+                    _desiredState = ArcadeState.ViewChallenge;
+                    _hud.launchChallenge = false;
+                    _launchedChallenge = false;
+                    _afterChallenge = true;
                 }
                 else
                 {
-                    if (this._state == ArcadeState.UnlockMachine)
+                    if (_state == ArcadeState.UnlockMachine)
                         return;
-                    if (this._state == ArcadeState.Normal)
+                    if (_state == ArcadeState.Normal)
                     {
-                        this._unlockMachines.Clear();
-                        foreach (ArcadeMachine challenge in this._challenges)
+                        _unlockMachines.Clear();
+                        foreach (ArcadeMachine challenge in _challenges)
                         {
                             if (challenge.CheckUnlocked())
-                                this._unlockMachines.Add(challenge);
+                                _unlockMachines.Add(challenge);
                         }
-                        if (this._unlockMachines.Count > 0)
-                            this._desiredState = ArcadeState.UnlockMachine;
+                        if (_unlockMachines.Count > 0)
+                            _desiredState = ArcadeState.UnlockMachine;
                         else
-                            this._duck.active = true;
+                            _duck.active = true;
                     }
-                    else if (this._state == ArcadeState.UnlockScreen)
+                    else if (_state == ArcadeState.UnlockScreen)
                     {
-                        this._unlockScreen.MakeActive();
-                        this._duck.active = false;
+                        _unlockScreen.MakeActive();
+                        _duck.active = false;
                     }
                     else
                     {
-                        if (this._state != ArcadeState.ViewSpecialChallenge)
+                        if (_state != ArcadeState.ViewSpecialChallenge)
                             return;
-                        if (this._afterChallenge)
+                        if (_afterChallenge)
                         {
                             Music.Play(nameof(Arcade));
-                            this._afterChallenge = false;
+                            _afterChallenge = false;
                             DuckFile.FlagForBackup();
                         }
                         Chancy.afterChallenge = true;
                         Chancy.afterChallengeWait = 1f;
-                        this._duck.active = false;
+                        _duck.active = false;
                     }
                 }
             }
-            else if (this._state == ArcadeState.Normal || this._state == ArcadeState.UnlockMachine)
+            else if (_state == ArcadeState.Normal || _state == ArcadeState.UnlockMachine)
             {
                 Layer.Game.fade = Lerp.Float(Layer.Game.fade, 1f, 0.08f);
                 Layer.Background.fade = Lerp.Float(Layer.Game.fade, 1f, 0.08f);
-                this._hud.alpha = Lerp.Float(this._hud.alpha, 0f, 0.08f);
-                if (this._state == ArcadeState.Normal)
+                _hud.alpha = Lerp.Float(_hud.alpha, 0f, 0.08f);
+                if (_state == ArcadeState.Normal)
                 {
                     object obj = null;
-                    foreach (ArcadeMachine challenge in this._challenges)
+                    foreach (ArcadeMachine challenge in _challenges)
                     {
-                        double length = (this._duck.position - challenge.position).length;
+                        double length = (_duck.position - challenge.position).length;
                         if (challenge.hover)
                         {
                             obj = challenge;
                             if (Input.Pressed("SHOOT"))
                             {
-                                this._hud.activeChallengeGroup = challenge.data;
-                                this._desiredState = ArcadeState.ViewChallenge;
-                                this._followCam.manualViewSize = this._followCam.viewSize;
-                                this._followCam.Clear();
-                                this._followCam.Add(challenge);
+                                _hud.activeChallengeGroup = challenge.data;
+                                _desiredState = ArcadeState.ViewChallenge;
+                                _followCam.manualViewSize = _followCam.viewSize;
+                                _followCam.Clear();
+                                _followCam.Add(challenge);
                                 HUD.CloseAllCorners();
-                                this._hoverMachine = null;
-                                this._hoverThing = null;
+                                _hoverMachine = null;
+                                _hoverThing = null;
                                 return;
                             }
                         }
-                        if (this._prizeTable.hover)
+                        if (_prizeTable.hover)
                         {
                             obj = _prizeTable;
                             if (Input.Pressed("SHOOT"))
                             {
-                                this._desiredState = ArcadeState.UnlockScreen;
-                                this._followCam.manualViewSize = this._followCam.viewSize;
-                                this._followCam.Clear();
-                                this._followCam.Add(_prizeTable);
+                                _desiredState = ArcadeState.UnlockScreen;
+                                _followCam.manualViewSize = _followCam.viewSize;
+                                _followCam.Clear();
+                                _followCam.Add(_prizeTable);
                                 HUD.CloseAllCorners();
-                                this._hoverMachine = null;
-                                this._hoverThing = null;
+                                _hoverMachine = null;
+                                _hoverThing = null;
                                 return;
                             }
                         }
                     }
-                    if (this._hoverThing == obj)
+                    if (_hoverThing == obj)
                         return;
                     HUD.CloseAllCorners();
-                    this._hoverThing = obj;
-                    this._hoverMachine = !(this._hoverThing is ArcadeMachine) ? null : obj as ArcadeMachine;
-                    if (this._hoverMachine != null)
+                    _hoverThing = obj;
+                    _hoverMachine = !(_hoverThing is ArcadeMachine) ? null : obj as ArcadeMachine;
+                    if (_hoverMachine != null)
                     {
-                        HUD.AddCornerControl(HUDCorner.BottomRight, "@SHOOT@PLAY", this._duck.inputProfile);
-                        string text = this._hoverMachine.data.GetNameForDisplay() + " ";
-                        foreach (string challenge in this._hoverMachine.data.challenges)
+                        HUD.AddCornerControl(HUDCorner.BottomRight, "@SHOOT@PLAY", _duck.inputProfile);
+                        string text = _hoverMachine.data.GetNameForDisplay() + " ";
+                        foreach (string challenge in _hoverMachine.data.challenges)
                         {
-                            ChallengeSaveData saveData = this._duck.profile.GetSaveData(Challenges.GetChallenge(challenge).levelID);
+                            ChallengeSaveData saveData = _duck.profile.GetSaveData(Challenges.GetChallenge(challenge).levelID);
                             if (saveData.trophy == TrophyType.Baseline)
                                 text += "@BASELINE@";
                             else if (saveData.trophy == TrophyType.Bronze)
@@ -502,61 +502,61 @@ namespace DuckGame
                     }
                     else
                     {
-                        if (!this._prizeTable.hover)
+                        if (!_prizeTable.hover)
                             return;
-                        HUD.AddCornerControl(HUDCorner.BottomRight, "@SHOOT@CHANCY", this._duck.inputProfile);
+                        HUD.AddCornerControl(HUDCorner.BottomRight, "@SHOOT@CHANCY", _duck.inputProfile);
                         HUD.AddCornerCounter(HUDCorner.BottomMiddle, "@TICKET@ ", new FieldBinding(Profiles.active[0], "ticketCount"), animateCount: true);
                     }
                 }
                 else
                 {
-                    if (this._state != ArcadeState.UnlockMachine)
+                    if (_state != ArcadeState.UnlockMachine)
                         return;
-                    this._unlockMachineWait -= 0.02f;
+                    _unlockMachineWait -= 0.02f;
                     if (_unlockMachineWait >= 0.0)
                         return;
-                    if (this._unlockingMachine)
+                    if (_unlockingMachine)
                     {
-                        this._unlockingMachine = false;
-                        this._followCam.Clear();
-                        this._followCam.Add(this._unlockMachines[0]);
-                        this._unlockMachineWait = 1f;
+                        _unlockingMachine = false;
+                        _followCam.Clear();
+                        _followCam.Add(_unlockMachines[0]);
+                        _unlockMachineWait = 1f;
                     }
-                    else if (this._unlockMachines.Count > 0)
+                    else if (_unlockMachines.Count > 0)
                     {
-                        this._unlockMachines[0].unlocked = true;
-                        this._unlockMachines.RemoveAt(0);
-                        this._unlockingMachine = this._unlockMachines.Count > 0;
+                        _unlockMachines[0].unlocked = true;
+                        _unlockMachines.RemoveAt(0);
+                        _unlockingMachine = _unlockMachines.Count > 0;
                         SFX.Play("lightTurnOn", pitch: Rando.Float(-0.1f, 0.1f));
-                        this._unlockMachineWait = 1f;
+                        _unlockMachineWait = 1f;
                     }
                     else
-                        this._desiredState = ArcadeState.Normal;
+                        _desiredState = ArcadeState.Normal;
                 }
             }
-            else if (this._state == ArcadeState.ViewChallenge)
+            else if (_state == ArcadeState.ViewChallenge)
             {
                 Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.05f);
                 Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.05f);
-                this._hud.alpha = Lerp.Float(this._hud.alpha, 1f, 0.05f);
-                if (!this._hud.quitOut)
+                _hud.alpha = Lerp.Float(_hud.alpha, 1f, 0.05f);
+                if (!_hud.quitOut)
                     return;
-                this._hud.quitOut = false;
-                this._desiredState = ArcadeState.Normal;
+                _hud.quitOut = false;
+                _desiredState = ArcadeState.Normal;
             }
             else
             {
-                if (this._state != ArcadeState.UnlockScreen || !this._unlockScreen.quitOut)
+                if (_state != ArcadeState.UnlockScreen || !_unlockScreen.quitOut)
                     return;
-                this._unlockScreen.quitOut = false;
-                this._desiredState = ArcadeState.Normal;
+                _unlockScreen.quitOut = false;
+                _desiredState = ArcadeState.Normal;
             }
         }
 
         public override void PostDrawLayer(Layer layer)
         {
             if (layer == Layer.HUD)
-                this._hud.Draw();
+                _hud.Draw();
             base.PostDrawLayer(layer);
         }
     }

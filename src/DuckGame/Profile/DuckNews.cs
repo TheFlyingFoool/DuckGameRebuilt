@@ -76,9 +76,9 @@ namespace DuckGame
                     text = text.Replace("%NAME4%", p[3].name);
             }
             text = text.Replace("%PRICE%", Main.GetPriceString());
-            if (this.valueCalculation != null)
+            if (valueCalculation != null)
             {
-                object result = this.valueCalculation.result;
+                object result = valueCalculation.result;
                 switch (result)
                 {
                     case float _:
@@ -93,9 +93,9 @@ namespace DuckGame
                         break;
                 }
             }
-            if (this.valueCalculation2 != null)
+            if (valueCalculation2 != null)
             {
-                object result = this.valueCalculation2.result;
+                object result = valueCalculation2.result;
                 switch (result)
                 {
                     case float _:
@@ -117,21 +117,21 @@ namespace DuckGame
         {
             List<DuckStory> story = new List<DuckStory>();
             List<Profile> p = new List<Profile>();
-            if (this._cycle == CycleMode.Once)
+            if (_cycle == CycleMode.Once)
             {
                 p.Add(Profiles.DefaultPlayer1);
-                story.AddRange(this.CalculateStory(p));
+                story.AddRange(CalculateStory(p));
             }
-            else if (this._cycle == CycleMode.PerProfile)
+            else if (_cycle == CycleMode.PerProfile)
             {
                 foreach (Profile profile in Profiles.active)
                 {
                     p.Add(profile);
-                    story.AddRange(this.CalculateStory(p));
+                    story.AddRange(CalculateStory(p));
                     p.Clear();
                 }
             }
-            else if (this._cycle == CycleMode.PerPosition && this._valueCalculation != null)
+            else if (_cycle == CycleMode.PerPosition && _valueCalculation != null)
             {
                 List<List<Profile>> source = new List<List<Profile>>();
                 List<Profile> active = Profiles.active;
@@ -139,7 +139,7 @@ namespace DuckGame
                 {
                     float num = -999999f;
                     Script.activeProfile = profile;
-                    object result = this.valueCalculation.result;
+                    object result = valueCalculation.result;
                     if (result != null && result is float || result is int || result is double)
                         num = Change.ToSingle(result);
                     profile.storeValue = num;
@@ -173,7 +173,7 @@ namespace DuckGame
                 {
                     Script.currentPosition = num1;
                     p.AddRange(collection);
-                    story.AddRange(this.CalculateStory(p));
+                    story.AddRange(CalculateStory(p));
                     p.Clear();
                     --num1;
                 }
@@ -187,29 +187,29 @@ namespace DuckGame
             Script.activeNewsStory = this;
             if (p == null || p.Count > 0)
                 Script.activeProfile = p[0];
-            foreach (ScriptStatement requirement in this._requirements)
+            foreach (ScriptStatement requirement in _requirements)
             {
                 if (requirement.result is bool result && !result)
                     return story;
             }
-            if (this._dialogue.Count > 0)
+            if (_dialogue.Count > 0)
             {
                 DuckStory duckStory = new DuckStory()
                 {
-                    section = this._section,
-                    text = this._dialogue[Rando.Int(this._dialogue.Count - 1)]
+                    section = _section,
+                    text = _dialogue[Rando.Int(_dialogue.Count - 1)]
                 };
-                duckStory.text = this.FillString(duckStory.text, p);
+                duckStory.text = FillString(duckStory.text, p);
                 story.Add(duckStory);
             }
-            foreach (DuckNews subStorey in this._subStories)
+            foreach (DuckNews subStorey in _subStories)
             {
                 if (subStorey._valueCalculation == null)
-                    subStorey._valueCalculation = this._valueCalculation;
+                    subStorey._valueCalculation = _valueCalculation;
                 if (subStorey._valueCalculation2 == null)
-                    subStorey._valueCalculation2 = this._valueCalculation2;
+                    subStorey._valueCalculation2 = _valueCalculation2;
                 if (subStorey._section == NewsSection.None)
-                    subStorey._section = this._section;
+                    subStorey._section = _section;
                 if (subStorey._cycle == CycleMode.None)
                     story.AddRange(subStorey.CalculateStory(p));
                 else
@@ -277,8 +277,8 @@ namespace DuckGame
             return duckNews1;
         }
 
-        public ScriptStatement valueCalculation => this._valueCalculation;
+        public ScriptStatement valueCalculation => _valueCalculation;
 
-        public ScriptStatement valueCalculation2 => this._valueCalculation2;
+        public ScriptStatement valueCalculation2 => _valueCalculation2;
     }
 }

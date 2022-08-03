@@ -15,27 +15,27 @@ namespace DuckGame
         public PlacementMenu(float xpos, float ypos)
           : base(null)
         {
-            this._alwaysDrawLast = true;
-            this.x = xpos;
-            this.y = ypos;
-            this._root = true;
-            this.willOnlineGrayout = false;
-            this._noneMenu = new ContextMenu(this)
+            _alwaysDrawLast = true;
+            x = xpos;
+            y = ypos;
+            _root = true;
+            willOnlineGrayout = false;
+            _noneMenu = new ContextMenu(this)
             {
                 text = "None"
             };
-            this.AddItem(this._noneMenu);
-            this.fancy = true;
-            this.isPinnable = true;
-            this.InitializeGroups(Editor.Placeables, setPinnable: this.isPinnable);
-            this._searchMenu = new ContextSearch(this);
-            this.AddItem(this._searchMenu);
-            this.AddItem(new ContextToolbarItem(this));
+            AddItem(_noneMenu);
+            fancy = true;
+            isPinnable = true;
+            InitializeGroups(Editor.Placeables, setPinnable: isPinnable);
+            _searchMenu = new ContextSearch(this);
+            AddItem(_searchMenu);
+            AddItem(new ContextToolbarItem(this));
         }
 
         public override void Selected(ContextMenu item)
         {
-            if (item == this._noneMenu && item.scrollButtonDirection == 0)
+            if (item == _noneMenu && item.scrollButtonDirection == 0)
             {
                 if (!(Level.current is Editor current))
                     return;

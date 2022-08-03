@@ -18,14 +18,14 @@ namespace DuckGame
 
         public NMPurpleBoxServed(Duck pDuck, PurpleBlock pBlock)
         {
-            this.duck = pDuck;
-            this.block = pBlock;
+            duck = pDuck;
+            block = pBlock;
         }
 
         public override void Activate()
         {
-            if (this.duck != null && this.duck.profile != null && this.block != null && !this.block._served.Contains(this.duck.profile))
-                this.block._served.Add(this.duck.profile);
+            if (duck != null && duck.profile != null && block != null && !block._served.Contains(duck.profile))
+                block._served.Add(duck.profile);
             base.Activate();
         }
     }

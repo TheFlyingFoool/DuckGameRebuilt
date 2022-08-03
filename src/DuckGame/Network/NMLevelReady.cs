@@ -15,15 +15,15 @@ namespace DuckGame
         {
         }
 
-        public NMLevelReady(byte pLevelIndex) => this.levelIndex = pLevelIndex;
+        public NMLevelReady(byte pLevelIndex) => levelIndex = pLevelIndex;
 
         public override void Activate()
         {
-            DevConsole.Log(DCSection.DuckNet, "|DGORANGE|Level ready message(" + this.connection.levelIndex.ToString() + " -> " + this.levelIndex.ToString() + ")", this.connection);
-            this.connection.levelIndex = this.levelIndex;
+            DevConsole.Log(DCSection.DuckNet, "|DGORANGE|Level ready message(" + connection.levelIndex.ToString() + " -> " + levelIndex.ToString() + ")", connection);
+            connection.levelIndex = levelIndex;
             if (!Network.isServer || levelIndex != DuckNetwork.levelIndex)
                 return;
-            Level.current.ClientReady(this.connection);
+            Level.current.ClientReady(connection);
         }
     }
 }

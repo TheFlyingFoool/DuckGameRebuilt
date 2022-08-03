@@ -30,30 +30,30 @@ namespace DuckGame
         private bool _canGrab;
         private int _lagFrames;
 
-        public Vec2 barrelPosition => this.Offset(this.barrelOffset);
+        public Vec2 barrelPosition => Offset(barrelOffset);
 
-        public Vec2 barrelOffset => this._barrelOffsetTL - this.center;
+        public Vec2 barrelOffset => _barrelOffsetTL - center;
 
-        public bool hookInGun => this._harpoon.inGun;
+        public bool hookInGun => _harpoon.inGun;
 
         public Grapple(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("grappleArm", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-5f, -4f);
-            this.collisionSize = new Vec2(11f, 7f);
-            this._offset = new Vec2(0f, 7f);
-            this._equippedDepth = 12;
-            this._barrelOffsetTL = new Vec2(10f, 4f);
-            this._jumpMod = true;
-            this.thickness = 0.1f;
-            this._laserTex = Content.Load<Tex2D>("pointerLaser");
-            this.editorTooltip = "Allows you to swing from platforms like some kind of loon.";
+            _sprite = new SpriteMap("grappleArm", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-5f, -4f);
+            collisionSize = new Vec2(11f, 7f);
+            _offset = new Vec2(0f, 7f);
+            _equippedDepth = 12;
+            _barrelOffsetTL = new Vec2(10f, 4f);
+            _jumpMod = true;
+            thickness = 0.1f;
+            _laserTex = Content.Load<Tex2D>("pointerLaser");
+            editorTooltip = "Allows you to swing from platforms like some kind of loon.";
         }
 
-        public override void OnTeleport() => this.Degrapple();
+        public override void OnTeleport() => Degrapple();
 
         public override void OnPressAction()
         {
@@ -66,11 +66,11 @@ namespace DuckGame
         public override void Initialize()
         {
             base.Initialize();
-            this._harpoon = new Harpoon(this);
+            _harpoon = new Harpoon(this);
             Level.Add(_harpoon);
-            this._sightHit = new Sprite("laserSightHit");
-            this._sightHit.CenterOrigin();
-            this._ropeSprite = new Sprite("grappleWire")
+            _sightHit = new Sprite("laserSightHit");
+            _sightHit.CenterOrigin();
+            _ropeSprite = new Sprite("grappleWire")
             {
                 center = new Vec2(8f, 0f)
             };
@@ -78,7 +78,7 @@ namespace DuckGame
 
         public Rope GetRopeParent(Thing child)
         {
-            for (Rope ropeParent = this._rope; ropeParent != null; ropeParent = ropeParent.attach2 as Rope)
+            for (Rope ropeParent = _rope; ropeParent != null; ropeParent = ropeParent.attach2 as Rope)
             {
                 if (ropeParent.attach2 == child)
                     return ropeParent;
@@ -90,39 +90,39 @@ namespace DuckGame
         {
             if (r != null)
             {
-                this.ropeData.Write(true);
-                this.ropeData.Write(CompressedVec2Binding.GetCompressedVec2(r.attach2Point));
-                this.SerializeRope(r.attach2 as Rope);
+                ropeData.Write(true);
+                ropeData.Write(CompressedVec2Binding.GetCompressedVec2(r.attach2Point));
+                SerializeRope(r.attach2 as Rope);
             }
             else
-                this.ropeData.Write(false);
+                ropeData.Write(false);
         }
 
         public void DeserializeRope(Rope r)
         {
-            if (this.ropeData.ReadBool())
+            if (ropeData.ReadBool())
             {
                 if (r == null)
                 {
-                    this._rope = new Rope(0f, 0f, r, null, tex: this._ropeSprite, belongsTo: this);
-                    r = this._rope;
+                    _rope = new Rope(0f, 0f, r, null, tex: _ropeSprite, belongsTo: this);
+                    r = _rope;
                 }
                 r.attach1 = r;
                 r._thing = null;
                 Level.Add(r);
-                Vec2 uncompressedVec2 = CompressedVec2Binding.GetUncompressedVec2(this.ropeData.ReadInt());
-                if (r == this._rope)
+                Vec2 uncompressedVec2 = CompressedVec2Binding.GetUncompressedVec2(ropeData.ReadInt());
+                if (r == _rope)
                 {
                     r.attach1 = r;
-                    if (this.duck != null)
-                        r.position = this.duck.position;
+                    if (duck != null)
+                        r.position = duck.position;
                     else
-                        r.position = this.position;
+                        r.position = position;
                     r._thing = duck;
                 }
                 if (r.attach2 == null || !(r.attach2 is Rope) || r.attach2 == r)
                 {
-                    Rope rope = new Rope(uncompressedVec2.x, uncompressedVec2.y, r, null, tex: this._ropeSprite, belongsTo: this);
+                    Rope rope = new Rope(uncompressedVec2.x, uncompressedVec2.y, r, null, tex: _ropeSprite, belongsTo: this);
                     r.attach2 = rope;
                 }
                 if (r.attach2 != null)
@@ -130,11 +130,11 @@ namespace DuckGame
                     r.attach2.position = uncompressedVec2;
                     (r.attach2 as Rope).attach1 = r;
                 }
-                this.DeserializeRope(r.attach2 as Rope);
+                DeserializeRope(r.attach2 as Rope);
             }
-            else if (r == this._rope)
+            else if (r == _rope)
             {
-                this.Degrapple();
+                Degrapple();
             }
             else
             {
@@ -142,189 +142,189 @@ namespace DuckGame
                     return;
                 Rope attach1 = r.attach1 as Rope;
                 attach1.TerminateLaterRopes();
-                this._harpoon.Latch(r.position);
+                _harpoon.Latch(r.position);
                 attach1.attach2 = _harpoon;
             }
         }
 
         public void Degrapple()
         {
-            this._harpoon.Return();
-            if (this._rope != null)
-                this._rope.RemoveRope();
-            if (this._rope != null && this.duck != null)
+            _harpoon.Return();
+            if (_rope != null)
+                _rope.RemoveRope();
+            if (_rope != null && duck != null)
             {
-                this.duck.frictionMult = 1f;
-                this.duck.gravMultiplier = 1f;
-                this.duck._double = false;
-                if (this.duck.vSpeed < 0.0 && this.duck.framesSinceJump > 3)
-                    this.duck.vSpeed *= 1.75f;
-                if (this.duck.vSpeed >= duck.jumpSpeed * 0.949999988079071 && Math.Abs(this.duck.vSpeed) + Math.Abs(this.duck.hSpeed) < 2.0)
+                duck.frictionMult = 1f;
+                duck.gravMultiplier = 1f;
+                duck._double = false;
+                if (duck.vSpeed < 0.0 && duck.framesSinceJump > 3)
+                    duck.vSpeed *= 1.75f;
+                if (duck.vSpeed >= duck.jumpSpeed * 0.949999988079071 && Math.Abs(duck.vSpeed) + Math.Abs(duck.hSpeed) < 2.0)
                 {
                     SFX.Play("jump", 0.5f);
-                    this.duck.vSpeed = this.duck.jumpSpeed;
+                    duck.vSpeed = duck.jumpSpeed;
                 }
             }
-            this._rope = null;
-            this.frictionMult = 1f;
-            this.gravMultiplier = 1f;
+            _rope = null;
+            frictionMult = 1f;
+            gravMultiplier = 1f;
         }
 
-        public Vec2 wallPoint => this._wallPoint;
+        public Vec2 wallPoint => _wallPoint;
 
-        public Vec2 grappelTravel => this._grappleTravel;
+        public Vec2 grappelTravel => _grappleTravel;
 
         public override void Update()
         {
-            if (this._harpoon == null)
+            if (_harpoon == null)
                 return;
-            if (this.isServerForObject)
+            if (isServerForObject)
             {
-                this.ropeData.Clear();
-                this.SerializeRope(this._rope);
+                ropeData.Clear();
+                SerializeRope(_rope);
             }
             else
             {
-                this.ropeData.SeekToStart();
-                this.DeserializeRope(this._rope);
+                ropeData.SeekToStart();
+                DeserializeRope(_rope);
             }
-            if (this._rope != null)
-                this._rope.SetServer(this.isServerForObject);
-            if (this.isServerForObject && this._equippedDuck != null && this.duck != null)
+            if (_rope != null)
+                _rope.SetServer(isServerForObject);
+            if (isServerForObject && _equippedDuck != null && duck != null)
             {
-                if (this.duck._trapped != null)
-                    this.Degrapple();
+                if (duck._trapped != null)
+                    Degrapple();
                 ATTracer type = new ATTracer();
-                float num = type.range = this._grappleLength;
+                float num = type.range = _grappleLength;
                 type.penetration = 1f;
                 float ang = 45f;
-                if (this.offDir < 0)
+                if (offDir < 0)
                     ang = 135f;
-                if (this._harpoon.inGun)
+                if (_harpoon.inGun)
                 {
-                    Vec2 p1 = this.Offset(this.barrelOffset);
-                    if (this._lagFrames > 0)
+                    Vec2 p1 = Offset(barrelOffset);
+                    if (_lagFrames > 0)
                     {
-                        --this._lagFrames;
-                        if (this._lagFrames == 0)
-                            this._canGrab = false;
+                        --_lagFrames;
+                        if (_lagFrames == 0)
+                            _canGrab = false;
                         else
-                            ang = Maths.PointDirection(p1, this._lastHit);
+                            ang = Maths.PointDirection(p1, _lastHit);
                     }
                     type.penetration = 9f;
-                    Bullet bullet = new Bullet(p1.x, p1.y, type, ang, this.owner, tracer: true);
-                    this._wallPoint = bullet.end;
-                    this._grappleTravel = bullet.travelDirNormalized;
-                    num = (p1 - this._wallPoint).length;
+                    Bullet bullet = new Bullet(p1.x, p1.y, type, ang, owner, tracer: true);
+                    _wallPoint = bullet.end;
+                    _grappleTravel = bullet.travelDirNormalized;
+                    num = (p1 - _wallPoint).length;
                 }
                 if (num < _grappleLength - 2.0 && num <= _grappleDist + 16.0)
                 {
-                    this._lastHit = this._wallPoint;
-                    this._canGrab = true;
+                    _lastHit = _wallPoint;
+                    _canGrab = true;
                 }
-                else if (this._canGrab && this._lagFrames == 0)
+                else if (_canGrab && _lagFrames == 0)
                 {
-                    this._lagFrames = 6;
-                    this._wallPoint = this._lastHit;
+                    _lagFrames = 6;
+                    _wallPoint = _lastHit;
                 }
                 else
-                    this._canGrab = false;
-                this._grappleDist = num;
-                if (this.duck.inputProfile.Pressed("JUMP") && this.duck._trapped == null)
+                    _canGrab = false;
+                _grappleDist = num;
+                if (duck.inputProfile.Pressed("JUMP") && duck._trapped == null)
                 {
-                    if (this._harpoon.inGun)
+                    if (_harpoon.inGun)
                     {
-                        if (!this.duck.grounded && this.duck.framesSinceJump > 6 && this._canGrab && (!(this.duck.holdObject is TV) || (this.duck.holdObject as TV)._ruined || !(this.duck.holdObject as TV).channel || !this.duck._double || this.duck._groundValid <= 0))
+                        if (!duck.grounded && duck.framesSinceJump > 6 && _canGrab && (!(duck.holdObject is TV) || (duck.holdObject as TV)._ruined || !(duck.holdObject as TV).channel || !duck._double || duck._groundValid <= 0))
                         {
-                            RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.Short));
-                            this._harpoon.Fire(this.wallPoint, this.grappelTravel);
-                            this._rope = new Rope(this.barrelPosition.x, this.barrelPosition.y, null, _harpoon, duck, tex: this._ropeSprite, belongsTo: this);
+                            RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.Short));
+                            _harpoon.Fire(wallPoint, grappelTravel);
+                            _rope = new Rope(barrelPosition.x, barrelPosition.y, null, _harpoon, duck, tex: _ropeSprite, belongsTo: this);
                             Level.Add(_rope);
                         }
                     }
                     else
                     {
-                        this.Degrapple();
-                        this._lagFrames = 0;
-                        this._canGrab = false;
+                        Degrapple();
+                        _lagFrames = 0;
+                        _canGrab = false;
                     }
                 }
             }
             base.Update();
-            if (this.owner != null)
-                this.offDir = this.owner.offDir;
-            if (this.duck != null)
-                this.duck.grappleMul = false;
-            if (!this.isServerForObject || this._rope == null)
+            if (owner != null)
+                offDir = owner.offDir;
+            if (duck != null)
+                duck.grappleMul = false;
+            if (!isServerForObject || _rope == null)
                 return;
-            if (this.owner != null)
+            if (owner != null)
             {
-                this._rope.position = this.owner.position;
+                _rope.position = owner.position;
             }
             else
             {
-                this._rope.position = this.position;
-                if (this.prevOwner != null)
+                _rope.position = position;
+                if (prevOwner != null)
                 {
                     PhysicsObject prevOwner = this.prevOwner as PhysicsObject;
                     prevOwner.frictionMult = 1f;
                     prevOwner.gravMultiplier = 1f;
-                    this._prevOwner = null;
-                    this.frictionMult = 1f;
-                    this.gravMultiplier = 1f;
+                    _prevOwner = null;
+                    frictionMult = 1f;
+                    gravMultiplier = 1f;
                     if (this.prevOwner is Duck)
                         (this.prevOwner as Duck).grappleMul = false;
                 }
             }
-            if (!this._harpoon.stuck)
+            if (!_harpoon.stuck)
                 return;
-            if (this.duck != null)
+            if (duck != null)
             {
-                if (!this.duck.grounded)
+                if (!duck.grounded)
                 {
-                    this.duck.frictionMult = 0f;
+                    duck.frictionMult = 0f;
                 }
                 else
                 {
-                    this.duck.frictionMult = 1f;
-                    this.duck.gravMultiplier = 1f;
+                    duck.frictionMult = 1f;
+                    duck.gravMultiplier = 1f;
                 }
-                if (this._rope.properLength > 0.0)
+                if (_rope.properLength > 0.0)
                 {
-                    if (this.duck.inputProfile.Down("UP") && this._rope.properLength >= 16.0)
-                        this._rope.properLength -= 2f;
-                    if (this.duck.inputProfile.Down("DOWN") && this._rope.properLength <= 256.0)
-                        this._rope.properLength += 2f;
-                    this._rope.properLength = Maths.Clamp(this._rope.properLength, 16f, 256f);
+                    if (duck.inputProfile.Down("UP") && _rope.properLength >= 16.0)
+                        _rope.properLength -= 2f;
+                    if (duck.inputProfile.Down("DOWN") && _rope.properLength <= 256.0)
+                        _rope.properLength += 2f;
+                    _rope.properLength = Maths.Clamp(_rope.properLength, 16f, 256f);
                 }
             }
-            else if (!this.grounded)
+            else if (!grounded)
             {
-                this.frictionMult = 0f;
+                frictionMult = 0f;
             }
             else
             {
-                this.frictionMult = 1f;
-                this.gravMultiplier = 1f;
+                frictionMult = 1f;
+                gravMultiplier = 1f;
             }
-            Vec2 vec2_1 = this._rope.attach1.position - this._rope.attach2.position;
-            if (this._rope.properLength < 0.0)
-                this._rope.properLength = this._rope.startLength = vec2_1.length;
-            if (vec2_1.length <= this._rope.properLength)
+            Vec2 vec2_1 = _rope.attach1.position - _rope.attach2.position;
+            if (_rope.properLength < 0.0)
+                _rope.properLength = _rope.startLength = vec2_1.length;
+            if (vec2_1.length <= _rope.properLength)
                 return;
             vec2_1 = vec2_1.normalized;
-            if (this.duck != null)
+            if (duck != null)
             {
                 this.duck.grappleMul = true;
                 PhysicsObject duck = this.duck;
                 if (this.duck.ragdoll != null)
                 {
-                    this.Degrapple();
+                    Degrapple();
                 }
                 else
                 {
                     Vec2 position = duck.position;
-                    duck.position = this._rope.attach2.position + vec2_1 * this._rope.properLength;
+                    duck.position = _rope.attach2.position + vec2_1 * _rope.properLength;
                     Vec2 vec2_2 = duck.position - duck.lastPosition;
                     duck.hSpeed = vec2_2.x;
                     duck.vSpeed = vec2_2.y;
@@ -332,44 +332,44 @@ namespace DuckGame
             }
             else
             {
-                this.position = this._rope.attach2.position + vec2_1 * this._rope.properLength;
-                Vec2 vec2_3 = this.position - this.lastPosition;
-                this.hSpeed = vec2_3.x;
-                this.vSpeed = vec2_3.y;
+                position = _rope.attach2.position + vec2_1 * _rope.properLength;
+                Vec2 vec2_3 = position - lastPosition;
+                hSpeed = vec2_3.x;
+                vSpeed = vec2_3.y;
             }
         }
 
         public override void Draw()
         {
-            if (this._equippedDuck == null)
+            if (_equippedDuck == null)
                 base.Draw();
-            else if (this._autoOffset)
+            else if (_autoOffset)
             {
-                Vec2 offset = this._offset;
-                if (this._equippedDuck.offDir < 0)
+                Vec2 offset = _offset;
+                if (_equippedDuck.offDir < 0)
                     offset.x *= -1f;
                 Vec2 vec2 = Vec2.Zero;
-                if (this._equippedDuck.holdObject != null)
+                if (_equippedDuck.holdObject != null)
                 {
-                    vec2 = this._equippedDuck.holdObject.handOffset;
+                    vec2 = _equippedDuck.holdObject.handOffset;
                     vec2.x *= _equippedDuck.offDir;
                 }
-                this.position = this._equippedDuck.armPosition + vec2;
+                position = _equippedDuck.armPosition + vec2;
             }
             if (Options.Data.fireGlow)
                 return;
-            this.DrawGlow();
+            DrawGlow();
         }
 
         public override void DrawGlow()
         {
-            if (this._equippedDuck != null && this._harpoon != null && this._harpoon.inGun && this._canGrab && this._equippedDuck._trapped == null)
+            if (_equippedDuck != null && _harpoon != null && _harpoon.inGun && _canGrab && _equippedDuck._trapped == null)
             {
-                Graphics.DrawTexturedLine(this._laserTex, this.Offset(this.barrelOffset), this._wallPoint, Color.Red, 0.5f, this.depth - 1);
-                if (this._sightHit != null)
+                Graphics.DrawTexturedLine(_laserTex, Offset(barrelOffset), _wallPoint, Color.Red, 0.5f, depth - 1);
+                if (_sightHit != null)
                 {
-                    this._sightHit.color = Color.Red;
-                    Graphics.Draw(this._sightHit, this._wallPoint.x, this._wallPoint.y);
+                    _sightHit.color = Color.Red;
+                    Graphics.Draw(_sightHit, _wallPoint.x, _wallPoint.y);
                 }
             }
             base.DrawGlow();

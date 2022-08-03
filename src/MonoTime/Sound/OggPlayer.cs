@@ -41,114 +41,114 @@ namespace DuckGame
         private int _decodedSamplePosition;
         //private const int kDecoderChunkSize = 176400;
 
-        public SoundState state => this._instance == null || !this._valid || this._iSaidStop ? SoundState.Stopped : this._instance.State;
+        public SoundState state => _instance == null || !_valid || _iSaidStop ? SoundState.Stopped : _instance.State;
 
         public float volume
         {
-            get => this._volume;
+            get => _volume;
             set
             {
-                this._volume = value;
-                if (this._instance == null)
+                _volume = value;
+                if (_instance == null)
                     return;
-                lock (this._instance)
-                    this.ApplyVolume();
+                lock (_instance)
+                    ApplyVolume();
             }
         }
 
         private void ApplyVolume()
         {
-            if (!this._valid || this._instance == null || this._instance.State != SoundState.Playing)
+            if (!_valid || _instance == null || _instance.State != SoundState.Playing)
                 return;
-            this._instance.Volume = MathHelper.Clamp(this._volume, 0f, 1f) * this._replaygainModifier;
+            _instance.Volume = MathHelper.Clamp(_volume, 0f, 1f) * _replaygainModifier;
         }
 
         public bool looped
         {
-            get => this._shouldLoop;
-            set => this._shouldLoop = value;
+            get => _shouldLoop;
+            set => _shouldLoop = value;
         }
 
-        public TimeSpan position => this._activeSong != null && this._valid && this._totalSamplesToDecode > 0 && this._decodedSamplePosition < this._totalSamplesToDecode ? new TimeSpan(0, 0, 0, 0, (int)(this._decodedSamplePosition / this._totalSamplesToDecode / 44100.0) * 500) : new TimeSpan();
+        public TimeSpan position => _activeSong != null && _valid && _totalSamplesToDecode > 0 && _decodedSamplePosition < _totalSamplesToDecode ? new TimeSpan(0, 0, 0, 0, (int)(_decodedSamplePosition / _totalSamplesToDecode / 44100.0) * 500) : new TimeSpan();
 
         public void Terminate()
         {
-            if (this._valid)
-                this._instance.Dispose();
+            if (_valid)
+                _instance.Dispose();
             try
             {
-                if (this._decoderThread != null)
-                    this._decoderThread.Abort();
+                if (_decoderThread != null)
+                    _decoderThread.Abort();
             }
             catch (Exception)
             {
             }
-            this._killDecodingThread = true;
+            _killDecodingThread = true;
         }
 
         public void Initialize()
         {
-            if (this._initialized)
+            if (_initialized)
                 return;
             try
             {
-                this._instance = new DynamicSoundEffectInstance(44100, AudioChannels.Stereo);
-                this._buffer = new byte[this._instance.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(500.0))];
-                this._floatBuffer = new float[this._buffer.Length / 2];
-                this._instance.BufferNeeded += new EventHandler<EventArgs>(this.Thread_Stream);
-                this._decoderThread = new Thread(new ThreadStart(this.Thread_Decoder))
+                _instance = new DynamicSoundEffectInstance(44100, AudioChannels.Stereo);
+                _buffer = new byte[_instance.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(500.0))];
+                _floatBuffer = new float[_buffer.Length / 2];
+                _instance.BufferNeeded += new EventHandler<EventArgs>(Thread_Stream);
+                _decoderThread = new Thread(new ThreadStart(Thread_Decoder))
                 {
                     CurrentCulture = CultureInfo.InvariantCulture,
                     Priority = ThreadPriority.BelowNormal,
                     IsBackground = true
                 };
-                this._decoderThread.Start();
+                _decoderThread.Start();
             }
             catch
             {
                 DevConsole.Log(DCSection.General, "Music player failed to initialize.");
-                this._valid = false;
+                _valid = false;
             }
-            this._initialized = true;
+            _initialized = true;
         }
 
         private void Thread_Decoder_LoadNewSong()
         {
-            if (this._decoderSong == this._activeSong)
+            if (_decoderSong == _activeSong)
                 return;
-            lock (this._decoderDataMutex)
+            lock (_decoderDataMutex)
             {
-                lock (this._decoderMutex)
+                lock (_decoderMutex)
                 {
-                    if (this._decoderSong == this._activeSong)
+                    if (_decoderSong == _activeSong)
                         return;
-                    if (this._decoderSong != null)
-                        this._decoderSong.Dispose();
-                    this._decoderSong = this._activeSong;
-                    this._streamerSong = this._activeSong;
-                    this._decodedSamplePosition = 0;
-                    this._samplesDecoded = 0;
-                    if (this._decoderSong == null)
+                    if (_decoderSong != null)
+                        _decoderSong.Dispose();
+                    _decoderSong = _activeSong;
+                    _streamerSong = _activeSong;
+                    _decodedSamplePosition = 0;
+                    _samplesDecoded = 0;
+                    if (_decoderSong == null)
                         return;
-                    this._totalSamplesToDecode = (int)(this._decoderSong.TotalSamples * 2L);
-                    this._decodedData = new float[this._totalSamplesToDecode];
+                    _totalSamplesToDecode = (int)(_decoderSong.TotalSamples * 2L);
+                    _decodedData = new float[_totalSamplesToDecode];
                 }
             }
         }
 
         private bool Thread_Decoder_DecodeChunk()
         {
-            lock (this._decoderMutex)
+            lock (_decoderMutex)
             {
-                if (this._decoderSong != null)
+                if (_decoderSong != null)
                 {
-                    if (this.volume != 0.0)
+                    if (volume != 0.0)
                     {
-                        int count = Math.Min(176400, this._totalSamplesToDecode - this._samplesDecoded);
+                        int count = Math.Min(176400, _totalSamplesToDecode - _samplesDecoded);
                         if (count > 0)
                         {
-                            this._decoderSong.ReadSamples(this._decodedData, this._samplesDecoded, count);
-                            this._samplesDecoded += count;
+                            _decoderSong.ReadSamples(_decodedData, _samplesDecoded, count);
+                            _samplesDecoded += count;
                             return true;
                         }
                     }
@@ -159,10 +159,10 @@ namespace DuckGame
 
         private void Thread_Decoder()
         {
-            while (!this._killDecodingThread)
+            while (!_killDecodingThread)
             {
-                this.Thread_Decoder_LoadNewSong();
-                if (!this.Thread_Decoder_DecodeChunk())
+                Thread_Decoder_LoadNewSong();
+                if (!Thread_Decoder_DecodeChunk())
                     Thread.Sleep(200);
                 else
                     Thread.Sleep(20);
@@ -171,13 +171,13 @@ namespace DuckGame
 
         public void SetOgg(MemoryStream ogg)
         {
-            if (!this._valid)
+            if (!_valid)
                 return;
             try
             {
-                lock (this._streamingMutex)
+                lock (_streamingMutex)
                 {
-                    this.Stop();
+                    Stop();
                     float num = 0f;
                     try
                     {
@@ -201,70 +201,70 @@ namespace DuckGame
                     {
                         num = 0f;
                     }
-                    this._activeSong = new VorbisReader(ogg, false);
-                    this._replaygainModifier = Math.Max(0f, Math.Min(1f, (float)((100f * (float)Math.Pow(10.0, num / 20.0)) / 100.0 * 1.89999997615814)));
-                    this.Thread_Decoder_LoadNewSong();
-                    this.Thread_Decoder_DecodeChunk();
+                    _activeSong = new VorbisReader(ogg, false);
+                    _replaygainModifier = Math.Max(0f, Math.Min(1f, (float)((100f * (float)Math.Pow(10.0, num / 20.0)) / 100.0 * 1.89999997615814)));
+                    Thread_Decoder_LoadNewSong();
+                    Thread_Decoder_DecodeChunk();
                 }
             }
             catch (Exception ex)
             {
                 DevConsole.Log(DCSection.General, "OggPlayer.SetOgg failed with exception:");
                 DevConsole.Log(DCSection.General, ex.Message);
-                this._activeSong = null;
+                _activeSong = null;
             }
         }
 
         public void Play()
         {
-            if (this._instance == null)
+            if (_instance == null)
                 return;
-            lock (this._instance)
+            lock (_instance)
             {
-                if (!this._valid)
+                if (!_valid)
                     return;
-                this._instance.Play();
-                this.ApplyVolume();
-                this._iSaidStop = false;
+                _instance.Play();
+                ApplyVolume();
+                _iSaidStop = false;
             }
         }
 
         public void Pause()
         {
-            if (this._instance == null)
+            if (_instance == null)
                 return;
-            lock (this._instance)
+            lock (_instance)
             {
-                if (!this._valid)
+                if (!_valid)
                     return;
-                this._instance.Pause();
+                _instance.Pause();
             }
         }
 
         public void Resume()
         {
-            if (this._instance == null)
+            if (_instance == null)
                 return;
-            lock (this._instance)
+            lock (_instance)
             {
-                if (!this._valid)
+                if (!_valid)
                     return;
-                this._instance.Resume();
-                this.ApplyVolume();
-                this._iSaidStop = false;
+                _instance.Resume();
+                ApplyVolume();
+                _iSaidStop = false;
             }
         }
 
         public void Stop()
         {
-            if (this._instance == null)
+            if (_instance == null)
                 return;
-            lock (this._instance)
+            lock (_instance)
             {
-                if (!this._valid)
+                if (!_valid)
                     return;
-                this._instance.Stop();
-                this._iSaidStop = true;
+                _instance.Stop();
+                _iSaidStop = true;
             }
         }
 
@@ -274,46 +274,46 @@ namespace DuckGame
 
         private void Thread_Stream(object sender, EventArgs e)
         {
-            lock (this._streamingMutex)
+            lock (_streamingMutex)
             {
                 int length = 0;
-                lock (this._decoderDataMutex)
+                lock (_decoderDataMutex)
                 {
-                    this.Thread_Decoder_LoadNewSong();
-                    if (this.volume == 0.0 || !this._valid || this._decoderSong == null)
+                    Thread_Decoder_LoadNewSong();
+                    if (volume == 0.0 || !_valid || _decoderSong == null)
                     {
                         for (int index = 0; index < _buffer.Count<byte>(); ++index)
-                            this._buffer[index] = 0;
-                        this._instance.SubmitBuffer(this._buffer, 0, _buffer.Count<byte>());
+                            _buffer[index] = 0;
+                        _instance.SubmitBuffer(_buffer, 0, _buffer.Count<byte>());
                         return;
                     }
                     do
                         ;
-                    while (this._samplesDecoded - this._decodedSamplePosition < this._floatBuffer.Length && this.Thread_Decoder_DecodeChunk());
-                    length = Math.Min(this._totalSamplesToDecode - this._decodedSamplePosition, this._floatBuffer.Length);
+                    while (_samplesDecoded - _decodedSamplePosition < _floatBuffer.Length && Thread_Decoder_DecodeChunk());
+                    length = Math.Min(_totalSamplesToDecode - _decodedSamplePosition, _floatBuffer.Length);
                     if (length > 0)
                     {
-                        Array.Copy(_decodedData, this._decodedSamplePosition, _floatBuffer, 0, length);
-                        this._decodedSamplePosition += length;
+                        Array.Copy(_decodedData, _decodedSamplePosition, _floatBuffer, 0, length);
+                        _decodedSamplePosition += length;
                     }
                     if (length == 0)
                     {
-                        if (this._shouldLoop)
+                        if (_shouldLoop)
                         {
-                            this._decodedSamplePosition = 0;
-                            Array.Copy(_decodedData, this._decodedSamplePosition, _floatBuffer, 0, this._floatBuffer.Length);
-                            this._decodedSamplePosition += this._floatBuffer.Length;
-                            length = this._floatBuffer.Length;
+                            _decodedSamplePosition = 0;
+                            Array.Copy(_decodedData, _decodedSamplePosition, _floatBuffer, 0, _floatBuffer.Length);
+                            _decodedSamplePosition += _floatBuffer.Length;
+                            length = _floatBuffer.Length;
                         }
                         else
                         {
-                            for (int index = 0; index < this._floatBuffer.Length / 2; ++index)
+                            for (int index = 0; index < _floatBuffer.Length / 2; ++index)
                             {
-                                this._floatBuffer[index * 2] = 0f;
-                                this._floatBuffer[index * 2 + 1] = 0f;
+                                _floatBuffer[index * 2] = 0f;
+                                _floatBuffer[index * 2 + 1] = 0f;
                             }
-                            length = this._floatBuffer.Length;
-                            this.Stop();
+                            length = _floatBuffer.Length;
+                            Stop();
                         }
                     }
                 }
@@ -321,11 +321,11 @@ namespace DuckGame
                     return;
                 for (int index = 0; index < length; ++index)
                 {
-                    short num = (short)Math.Max(Math.Min(short.MaxValue * this._floatBuffer[index], short.MaxValue), short.MinValue);
-                    this._buffer[index * 2] = (byte)((uint)num & byte.MaxValue);
-                    this._buffer[index * 2 + 1] = (byte)(num >> 8 & byte.MaxValue);
+                    short num = (short)Math.Max(Math.Min(short.MaxValue * _floatBuffer[index], short.MaxValue), short.MinValue);
+                    _buffer[index * 2] = (byte)((uint)num & byte.MaxValue);
+                    _buffer[index * 2 + 1] = (byte)(num >> 8 & byte.MaxValue);
                 }
-                this._instance.SubmitBuffer(this._buffer, 0, length * 2);
+                _instance.SubmitBuffer(_buffer, 0, length * 2);
             }
         }
     }

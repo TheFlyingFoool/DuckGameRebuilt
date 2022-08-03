@@ -22,9 +22,9 @@ namespace DuckGame
 
         public List<bool> GetHatUnlockStatuses()
         {
-            if (this._unlockList == null)
-                this._unlockList = new List<bool>();
-            return this._unlockList;
+            if (_unlockList == null)
+                _unlockList = new List<bool>();
+            return _unlockList;
         }
 
         public NMProfileInfo()
@@ -40,43 +40,43 @@ namespace DuckGame
           ushort pNumCustomHats,
           List<Team> pTeams)
         {
-            this.profile = pProfile;
-            this.fans = numFans;
-            this.loyalFans = numLoyalFans;
-            this.areParentalControlsActive = pAreParentalControlsActive;
-            this.flagIndex = pFlagIndex;
-            this.numCustomHats = pNumCustomHats;
-            this._teams = pTeams;
+            profile = pProfile;
+            fans = numFans;
+            loyalFans = numLoyalFans;
+            areParentalControlsActive = pAreParentalControlsActive;
+            flagIndex = pFlagIndex;
+            numCustomHats = pNumCustomHats;
+            _teams = pTeams;
         }
 
         protected override void OnSerialize()
         {
-            this._serializedData.Write((ushort)this._teams.Count);
-            for (int index = 0; index < this._teams.Count; ++index)
-                this._serializedData.Write(this._teams[index].locked);
+            _serializedData.Write((ushort)_teams.Count);
+            for (int index = 0; index < _teams.Count; ++index)
+                _serializedData.Write(_teams[index].locked);
             base.OnSerialize();
         }
 
         public override void OnDeserialize(BitBuffer msg)
         {
             ushort num = msg.ReadUShort();
-            this._unlockList = new List<bool>();
+            _unlockList = new List<bool>();
             for (int index = 0; index < num; ++index)
-                this._unlockList.Add(msg.ReadBool());
+                _unlockList.Add(msg.ReadBool());
             base.OnDeserialize(msg);
         }
 
         public override void Activate()
         {
-            if (this.profile != null)
+            if (profile != null)
             {
-                this.profile.stats.unloyalFans = this.fans;
-                this.profile.stats.loyalFans = this.loyalFans;
-                this.profile.ParentalControlsActive = this.areParentalControlsActive;
-                this.profile.flagIndex = this.flagIndex;
-                if (this.numCustomHats > 0)
-                    this.profile.GetCustomTeam((ushort)(numCustomHats - 1U));
-                this.profile.networkHatUnlockStatuses = this._unlockList;
+                profile.stats.unloyalFans = fans;
+                profile.stats.loyalFans = loyalFans;
+                profile.ParentalControlsActive = areParentalControlsActive;
+                profile.flagIndex = flagIndex;
+                if (numCustomHats > 0)
+                    profile.GetCustomTeam((ushort)(numCustomHats - 1U));
+                profile.networkHatUnlockStatuses = _unlockList;
             }
             base.Activate();
         }

@@ -17,61 +17,61 @@ namespace DuckGame
         public Boots(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._pickupSprite = new Sprite("bootsPickup");
-            this._sprite = new SpriteMap("boots", 32, 32);
-            this.graphic = this._pickupSprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-6f, -6f);
-            this.collisionSize = new Vec2(12f, 13f);
-            this._equippedDepth = 3;
-            this.editorTooltip = "Keeps feet safe and smashes bugs, among other things.";
-            this.flammable = 0.3f;
-            this.charThreshold = 0.8f;
+            _pickupSprite = new Sprite("bootsPickup");
+            _sprite = new SpriteMap("boots", 32, 32);
+            graphic = _pickupSprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-6f, -6f);
+            collisionSize = new Vec2(12f, 13f);
+            _equippedDepth = 3;
+            editorTooltip = "Keeps feet safe and smashes bugs, among other things.";
+            flammable = 0.3f;
+            charThreshold = 0.8f;
         }
 
         protected override bool OnDestroy(DestroyType type = null) => !(type is DTIncinerate);
 
         public override void Update()
         {
-            if (this._equippedDuck != null && !this.destroyed)
+            if (_equippedDuck != null && !destroyed)
             {
-                this.center = new Vec2(16f, 12f);
-                this.graphic = _sprite;
-                this.collisionOffset = new Vec2(0f, -9999f);
-                this.collisionSize = new Vec2(0f, 0f);
-                this.solid = false;
-                this._sprite.frame = this._equippedDuck._sprite.imageIndex;
-                if (this._equippedDuck.ragdoll != null)
-                    this._sprite.frame = 12;
-                this._sprite.flipH = this._equippedDuck._sprite.flipH;
+                center = new Vec2(16f, 12f);
+                graphic = _sprite;
+                collisionOffset = new Vec2(0f, -9999f);
+                collisionSize = new Vec2(0f, 0f);
+                solid = false;
+                _sprite.frame = _equippedDuck._sprite.imageIndex;
+                if (_equippedDuck.ragdoll != null)
+                    _sprite.frame = 12;
+                _sprite.flipH = _equippedDuck._sprite.flipH;
             }
             else
             {
-                this.center = new Vec2(8f, 8f);
-                this.graphic = this._pickupSprite;
-                this.collisionOffset = new Vec2(-6f, -6f);
-                this.collisionSize = new Vec2(12f, 13f);
-                this.solid = true;
-                this._sprite.frame = 0;
-                this._sprite.flipH = false;
+                center = new Vec2(8f, 8f);
+                graphic = _pickupSprite;
+                collisionOffset = new Vec2(-6f, -6f);
+                collisionSize = new Vec2(12f, 13f);
+                solid = true;
+                _sprite.frame = 0;
+                _sprite.flipH = false;
             }
-            if (this.destroyed)
-                this.alpha -= 0.05f;
-            if (this.alpha < 0f)
+            if (destroyed)
+                alpha -= 0.05f;
+            if (alpha < 0f)
                 Level.Remove(this);
             base.Update();
         }
 
         public override void Draw()
         {
-            if (this._equippedDuck != null && this._equippedDuck._trapped != null)
-                this.depth = this._equippedDuck._trapped.depth + 2;
-            if (this._equippedDuck != null)
+            if (_equippedDuck != null && _equippedDuck._trapped != null)
+                depth = _equippedDuck._trapped.depth + 2;
+            if (_equippedDuck != null)
             {
-                this._sprite.frame = this._equippedDuck._sprite.imageIndex;
-                if (this._equippedDuck.ragdoll != null)
-                    this._sprite.frame = 12;
-                this._sprite.flipH = this._equippedDuck._sprite.flipH;
+                _sprite.frame = _equippedDuck._sprite.imageIndex;
+                if (_equippedDuck.ragdoll != null)
+                    _sprite.frame = 12;
+                _sprite.flipH = _equippedDuck._sprite.flipH;
             }
             base.Draw();
         }

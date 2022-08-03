@@ -14,19 +14,19 @@ namespace DuckGame
 
         public UIMenuActionOpenMenu(UIComponent menu, UIComponent open)
         {
-            this._menu = menu;
-            this._open = open;
+            _menu = menu;
+            _open = open;
         }
 
         public override void Activate()
         {
             UIComponent pauseMenu = MonoMain.pauseMenu;
-            this._menu.Close();
-            this._open.Open();
-            UIComponent menu = this._menu;
+            _menu.Close();
+            _open.Open();
+            UIComponent menu = _menu;
             if (pauseMenu != menu)
                 return;
-            MonoMain.pauseMenu = this._open;
+            MonoMain.pauseMenu = _open;
         }
     }
 }

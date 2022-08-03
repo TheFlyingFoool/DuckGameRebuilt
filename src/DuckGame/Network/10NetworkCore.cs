@@ -16,6 +16,6 @@ namespace DuckGame
         {
         }
 
-        public NMWrongVersion(string v) => this.version = v;
+        public NMWrongVersion(string v) => version = v;
     }
 }

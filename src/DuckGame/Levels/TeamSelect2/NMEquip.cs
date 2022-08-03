@@ -18,14 +18,14 @@ namespace DuckGame
 
         public NMEquip(Duck pDuck, Equipment pEquipment)
         {
-            this.duck = pDuck;
-            this.equipment = pEquipment;
+            duck = pDuck;
+            equipment = pEquipment;
         }
 
         public override void Activate()
         {
-            if (this.duck != null && this.equipment != null)
-                this.duck.Equip(this.equipment, false, true);
+            if (duck != null && equipment != null)
+                duck.Equip(equipment, false, true);
             base.Activate();
         }
     }

@@ -40,14 +40,14 @@ namespace DuckGame
 
         public float spinAngle
         {
-            get => this._spinAngle;
-            set => this._spinAngle = value;
+            get => _spinAngle;
+            set => _spinAngle = value;
         }
 
         public float life
         {
-            get => this._life;
-            set => this._life = value;
+            get => _life;
+            set => _life = value;
         }
 
         public PhysicsParticle(float xpos, float ypos)
@@ -55,9 +55,9 @@ namespace DuckGame
         {
         }
 
-        public void LerpPosition(Vec2 pos) => this.lerpPos = pos;
+        public void LerpPosition(Vec2 pos) => lerpPos = pos;
 
-        public void LerpSpeed(Vec2 speed) => this.lerpSpeed = speed;
+        public void LerpSpeed(Vec2 speed) => lerpSpeed = speed;
 
         public static void RegisterNetParticleType(System.Type pType)
         {
@@ -78,36 +78,36 @@ namespace DuckGame
 
         public virtual void NetSerialize(BitBuffer b)
         {
-            b.Write((short)this.x);
-            b.Write((short)this.y);
+            b.Write((short)x);
+            b.Write((short)y);
         }
 
-        public virtual void NetDeserialize(BitBuffer d) => this.netLerpPosition = new Vec2(d.ReadShort(), d.ReadShort());
+        public virtual void NetDeserialize(BitBuffer d) => netLerpPosition = new Vec2(d.ReadShort(), d.ReadShort());
 
         public override void ResetProperties()
         {
-            this._life = 1f;
-            this._grounded = false;
-            this._spinAngle = 0f;
-            this._foreverGrounded = false;
-            this.alpha = 1f;
-            this._airFriction = 0.03f;
-            this.vSpeed = 0f;
-            this.hSpeed = 0f;
-            this._framesAlive = 0f;
-            this._waitForNoCollide = false;
-            this.globalIndex = Thing.GetGlobalIndex();
-            this.gotMessage = false;
-            this.isLocal = true;
-            this.netIndex = 0;
-            this.updateOrder = byte.MaxValue;
-            this.netRemove = false;
+            _life = 1f;
+            _grounded = false;
+            _spinAngle = 0f;
+            _foreverGrounded = false;
+            alpha = 1f;
+            _airFriction = 0.03f;
+            vSpeed = 0f;
+            hSpeed = 0f;
+            _framesAlive = 0f;
+            _waitForNoCollide = false;
+            globalIndex = Thing.GetGlobalIndex();
+            gotMessage = false;
+            isLocal = true;
+            netIndex = 0;
+            updateOrder = byte.MaxValue;
+            netRemove = false;
             base.ResetProperties();
         }
 
         public override void Update()
         {
-            if (!this.isLocal)
+            if (!isLocal)
             {
                 Vec2 position = this.position;
                 Vec2 netLerpPosition = this.netLerpPosition;
@@ -116,113 +116,113 @@ namespace DuckGame
                 else
                     this.position = Lerp.Vec2Smooth(position, netLerpPosition, 0.5f);
             }
-            else if (Network.isActive && (this.y < Level.current.highestPoint - 200.0 || this.y > Level.current.lowestPoint + 200.0))
+            else if (Network.isActive && (y < Level.current.highestPoint - 200.0 || y > Level.current.lowestPoint + 200.0))
             {
                 Level.Remove(this);
             }
             else
             {
-                this._hit = false;
-                this._touchedFloor = false;
-                ++this._framesAlive;
-                if (!this.onlyDieWhenGrounded || this._grounded || _framesAlive > 400.0)
+                _hit = false;
+                _touchedFloor = false;
+                ++_framesAlive;
+                if (!onlyDieWhenGrounded || _grounded || _framesAlive > 400.0)
                 {
-                    this._life -= 0.005f;
+                    _life -= 0.005f;
                     if (_life < 0.0)
                     {
-                        this.alpha -= 0.1f;
-                        if (this.alpha < 0.0)
+                        alpha -= 0.1f;
+                        if (alpha < 0.0)
                             Level.Remove(this);
                     }
                 }
-                if (this._foreverGrounded)
+                if (_foreverGrounded)
                 {
-                    this._grounded = true;
+                    _grounded = true;
                     if (Rando.Float(250f) < 1.0 - _sticky)
                     {
-                        this._foreverGrounded = false;
-                        this._grounded = false;
-                        this.hSpeed = -this._stickDir * Rando.Float(0.8f);
+                        _foreverGrounded = false;
+                        _grounded = false;
+                        hSpeed = -_stickDir * Rando.Float(0.8f);
                     }
                 }
-                if (!this._grounded)
+                if (!_grounded)
                 {
-                    if (this.hSpeed > 0.0)
-                        this.hSpeed -= this._airFriction;
-                    if (this.hSpeed < 0.0)
-                        this.hSpeed += this._airFriction;
-                    if (this.hSpeed < _airFriction && this.hSpeed > -this._airFriction)
-                        this.hSpeed = 0f;
-                    if (this.vSpeed < 4.0)
-                        this.vSpeed += 0.1f * this._gravMult;
-                    if (float.IsNaN(this.hSpeed))
-                        this.hSpeed = 0f;
-                    this._spinAngle -= 10 * Math.Sign(this.hSpeed);
-                    Thing thing = Level.CheckPoint<Block>(this.x + this.hSpeed, this.y + this.vSpeed);
+                    if (hSpeed > 0.0)
+                        hSpeed -= _airFriction;
+                    if (hSpeed < 0.0)
+                        hSpeed += _airFriction;
+                    if (hSpeed < _airFriction && hSpeed > -_airFriction)
+                        hSpeed = 0f;
+                    if (vSpeed < 4.0)
+                        vSpeed += 0.1f * _gravMult;
+                    if (float.IsNaN(hSpeed))
+                        hSpeed = 0f;
+                    _spinAngle -= 10 * Math.Sign(hSpeed);
+                    Thing thing = Level.CheckPoint<Block>(x + hSpeed, y + vSpeed);
                     if (thing != null && _framesAlive < 2.0)
-                        this._waitForNoCollide = true;
-                    if (thing != null && this._waitForNoCollide)
+                        _waitForNoCollide = true;
+                    if (thing != null && _waitForNoCollide)
                         thing = null;
-                    else if (thing == null && this._waitForNoCollide)
-                        this._waitForNoCollide = false;
+                    else if (thing == null && _waitForNoCollide)
+                        _waitForNoCollide = false;
                     if (thing != null)
                     {
-                        this._touchedFloor = true;
-                        if (this._bounceSound != "" && (Math.Abs(this.vSpeed) > 1.0 || Math.Abs(this.hSpeed) > 1.0))
-                            SFX.Play(this._bounceSound, 0.5f, Rando.Float(0.2f) - 0.1f);
-                        if (this.vSpeed > 0.0 && thing.top > this.y)
+                        _touchedFloor = true;
+                        if (_bounceSound != "" && (Math.Abs(vSpeed) > 1.0 || Math.Abs(hSpeed) > 1.0))
+                            SFX.Play(_bounceSound, 0.5f, Rando.Float(0.2f) - 0.1f);
+                        if (vSpeed > 0.0 && thing.top > y)
                         {
-                            this.vSpeed = (float)-(this.vSpeed * _bounceEfficiency);
-                            this._hit = true;
-                            if (Math.Abs(this.vSpeed) < 0.5)
+                            vSpeed = (float)-(vSpeed * _bounceEfficiency);
+                            _hit = true;
+                            if (Math.Abs(vSpeed) < 0.5)
                             {
-                                this.vSpeed = 0f;
-                                this._grounded = true;
+                                vSpeed = 0f;
+                                _grounded = true;
                             }
                         }
-                        else if (this.vSpeed < 0.0 && thing.bottom < this.y)
+                        else if (vSpeed < 0.0 && thing.bottom < y)
                         {
-                            this.vSpeed = (float)-(this.vSpeed * _bounceEfficiency);
-                            this._hit = true;
+                            vSpeed = (float)-(vSpeed * _bounceEfficiency);
+                            _hit = true;
                         }
-                        if (this.hSpeed > 0.0 && thing.left > this.x)
+                        if (hSpeed > 0.0 && thing.left > x)
                         {
-                            this.hSpeed = (float)-(this.hSpeed * _bounceEfficiency);
-                            this._hit = true;
+                            hSpeed = (float)-(hSpeed * _bounceEfficiency);
+                            _hit = true;
                             if (_sticky > 0.0 && Rando.Float(1f) < _sticky)
                             {
-                                this.hSpeed = 0f;
-                                this.vSpeed = 0f;
-                                this._foreverGrounded = true;
-                                this._stickDir = 1f;
+                                hSpeed = 0f;
+                                vSpeed = 0f;
+                                _foreverGrounded = true;
+                                _stickDir = 1f;
                             }
                         }
-                        else if (this.hSpeed < 0.0 && thing.right < this.x)
+                        else if (hSpeed < 0.0 && thing.right < x)
                         {
-                            this.hSpeed = (float)-(this.hSpeed * _bounceEfficiency);
-                            this._hit = true;
+                            hSpeed = (float)-(hSpeed * _bounceEfficiency);
+                            _hit = true;
                             if (_sticky > 0.0 && Rando.Float(1f) < _sticky)
                             {
-                                this.hSpeed = 0f;
-                                this.vSpeed = 0f;
-                                this._foreverGrounded = true;
-                                this._stickDir = -1f;
+                                hSpeed = 0f;
+                                vSpeed = 0f;
+                                _foreverGrounded = true;
+                                _stickDir = -1f;
                             }
                         }
-                        if (!this._hit)
-                            this._grounded = true;
+                        if (!_hit)
+                            _grounded = true;
                     }
                     else
                     {
-                        this.x += this.hSpeed;
-                        this.y += this.vSpeed;
+                        x += hSpeed;
+                        y += vSpeed;
                     }
                 }
                 if (_spinAngle > 360.0)
-                    this._spinAngle -= 360f;
+                    _spinAngle -= 360f;
                 if (_spinAngle >= 0.0)
                     return;
-                this._spinAngle += 360f;
+                _spinAngle += 360f;
             }
         }
     }

@@ -29,77 +29,77 @@ namespace DuckGame
           : base("", xpos, ypos, wide, high)
         {
             Graphics.fade = 1f;
-            this._frame = new Sprite("unlockFrame");
-            this._frame.CenterOrigin();
-            this._wrappedFrame = new Sprite("unlockFrameWrapped");
-            this._wrappedFrame.CenterOrigin();
-            this._font = new BitmapFont("biosFontUI", 8, 7);
-            this._fancyFont = new FancyBitmapFont("smallFont");
-            this._furni = f;
-            this._eggSprite = Profile.GetEggSprite();
+            _frame = new Sprite("unlockFrame");
+            _frame.CenterOrigin();
+            _wrappedFrame = new Sprite("unlockFrameWrapped");
+            _wrappedFrame.CenterOrigin();
+            _font = new BitmapFont("biosFontUI", 8, 7);
+            _fancyFont = new FancyBitmapFont("smallFont");
+            _furni = f;
+            _eggSprite = Profile.GetEggSprite();
         }
 
         public override void Open() => base.Open();
 
         public override void Update()
         {
-            if (this.finished)
+            if (finished)
             {
-                this._animating = false;
+                _animating = false;
             }
             else
             {
-                this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0f, 0.3f, 1.1f);
-                if (this.down)
+                yOffset = Lerp.FloatSmooth(yOffset, down ? 150f : 0f, 0.3f, 1.1f);
+                if (down)
                 {
-                    this._downWait -= 0.06f;
+                    _downWait -= 0.06f;
                     if (_downWait <= 0.0)
                     {
-                        if (this._doneDown)
+                        if (_doneDown)
                         {
-                            this.finished = true;
-                            this.Close();
+                            finished = true;
+                            Close();
                             return;
                         }
-                        this._openWait = 1f;
-                        this._wrapped = true;
-                        this._downWait = 1f;
-                        this.down = false;
+                        _openWait = 1f;
+                        _wrapped = true;
+                        _downWait = 1f;
+                        down = false;
                         SFX.Play("pause", 0.6f);
                     }
                 }
                 else
                 {
-                    this._openWait -= 0.06f;
-                    if (_openWait <= 0.0 && this._wrapped && !this._flash)
-                        this._flash = true;
-                    if (this._flash)
+                    _openWait -= 0.06f;
+                    if (_openWait <= 0.0 && _wrapped && !_flash)
+                        _flash = true;
+                    if (_flash)
                     {
                         Graphics.flashAdd = Lerp.Float(Graphics.flashAdd, 1f, 0.2f);
                         if (Graphics.flashAdd > 0.990000009536743)
                         {
-                            this._wrapped = !this._wrapped;
-                            if (!this._wrapped)
+                            _wrapped = !_wrapped;
+                            if (!_wrapped)
                             {
-                                this._oldSong = Music.currentSong;
+                                _oldSong = Music.currentSong;
                                 Music.Play("jollyjingle");
                                 Profiles.experienceProfile.SetNumFurnitures(_furni.index, Profiles.experienceProfile.GetNumFurnitures(_furni.index) + 1);
                                 SFX.Play("harp");
                                 HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
                             }
-                            this._flash = false;
+                            _flash = false;
                         }
                     }
                     else
                         Graphics.flashAdd = Lerp.Float(Graphics.flashAdd, 0f, 0.2f);
-                    if (!this._wrapped && Input.Pressed("SELECT"))
+                    if (!_wrapped && Input.Pressed("SELECT"))
                     {
                         HUD.CloseAllCorners();
                         SFX.Play("resume", 0.6f);
-                        if (this._oldSong != null)
-                            Music.Play(this._oldSong);
-                        this.down = true;
-                        this._doneDown = true;
+                        if (_oldSong != null)
+                            Music.Play(_oldSong);
+                        down = true;
+                        _doneDown = true;
                     }
                 }
                 base.Update();
@@ -108,34 +108,34 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.y += this.yOffset;
-            if (this._wrapped)
+            y += yOffset;
+            if (_wrapped)
             {
-                this._wrappedFrame.depth = this.depth;
-                Graphics.Draw(this._wrappedFrame, this.x, this.y);
+                _wrappedFrame.depth = depth;
+                Graphics.Draw(_wrappedFrame, x, y);
             }
             else
             {
-                this._frame.depth = this.depth;
-                Graphics.Draw(this._frame, this.x, this.y);
+                _frame.depth = depth;
+                Graphics.Draw(_frame, x, y);
                 string text1 = "@LWING@MEMENTO@RWING@";
-                if (this._furni.name == "VOODOO VINCENT")
+                if (_furni.name == "VOODOO VINCENT")
                     text1 = "@LWING@XP SKIP@RWING@";
-                Vec2 vec2_1 = new Vec2((float)-(this._font.GetWidth(text1) / 2.0), -42f);
-                this._font.DrawOutline(text1, this.position + vec2_1, Color.White, Color.Black, this.depth + 2);
-                string text2 = "} " + this._furni.name + " }";
-                if (this._furni.name.Length >= 15)
-                    text2 = this._furni.name;
-                this._fancyFont.scale = new Vec2(1f, 1f);
-                Vec2 vec2_2 = new Vec2((float)-(this._fancyFont.GetWidth(text2) / 2.0), -25f);
-                this._fancyFont.DrawOutline(text2, this.position + vec2_2, Colors.DGYellow, Color.Black, this.depth + 2);
-                this._fancyFont.scale = new Vec2(0.5f, 0.5f);
-                string description = this._furni.description;
-                Vec2 vec2_3 = new Vec2((float)-(this._fancyFont.GetWidth(description) / 2.0), 38f);
-                this._fancyFont.DrawOutline(description, this.position + vec2_3, Colors.DGGreen, Color.Black, this.depth + 2, 0.5f);
-                this._furni.Draw(this.position + new Vec2(0f, 10f), this.depth + 4, this._furni.name == "PHOTO" ? 1 : (this._furni.name == "EASEL" ? 6 : 0));
+                Vec2 vec2_1 = new Vec2((float)-(_font.GetWidth(text1) / 2.0), -42f);
+                _font.DrawOutline(text1, position + vec2_1, Color.White, Color.Black, depth + 2);
+                string text2 = "} " + _furni.name + " }";
+                if (_furni.name.Length >= 15)
+                    text2 = _furni.name;
+                _fancyFont.scale = new Vec2(1f, 1f);
+                Vec2 vec2_2 = new Vec2((float)-(_fancyFont.GetWidth(text2) / 2.0), -25f);
+                _fancyFont.DrawOutline(text2, position + vec2_2, Colors.DGYellow, Color.Black, depth + 2);
+                _fancyFont.scale = new Vec2(0.5f, 0.5f);
+                string description = _furni.description;
+                Vec2 vec2_3 = new Vec2((float)-(_fancyFont.GetWidth(description) / 2.0), 38f);
+                _fancyFont.DrawOutline(description, position + vec2_3, Colors.DGGreen, Color.Black, depth + 2, 0.5f);
+                _furni.Draw(position + new Vec2(0f, 10f), depth + 4, _furni.name == "PHOTO" ? 1 : (_furni.name == "EASEL" ? 6 : 0));
             }
-            this.y -= this.yOffset;
+            y -= yOffset;
         }
     }
 }

@@ -24,32 +24,32 @@ namespace DuckGame
         {
             get
             {
-                if (this._textFunc != null)
-                    this.text = this._textFunc();
-                return this._text;
+                if (_textFunc != null)
+                    text = _textFunc();
+                return _text;
             }
             set
             {
-                this._text = value;
-                if (this.minLength > 0)
+                _text = value;
+                if (minLength > 0)
                 {
-                    while (this._text.Length < this.minLength)
-                        this._text = " " + this._text;
+                    while (_text.Length < minLength)
+                        _text = " " + _text;
                 }
-                this._collisionSize = new Vec2(this._font.GetWidth(this._text), this._font.height + this._heightAdd);
+                _collisionSize = new Vec2(_font.GetWidth(_text), _font.height + _heightAdd);
             }
         }
 
         public void SetFont(BitmapFont f)
         {
             if (f != null)
-                this._font = f;
-            this._collisionSize = new Vec2(this._font.GetWidth(this.text), this._font.height + this._heightAdd);
+                _font = f;
+            _collisionSize = new Vec2(_font.GetWidth(text), _font.height + _heightAdd);
         }
 
         public float scaleVal
         {
-            set => this._font.scale = new Vec2(value);
+            set => _font.scale = new Vec2(value);
         }
 
         public UIText(
@@ -60,12 +60,12 @@ namespace DuckGame
           InputProfile controlProfile = null)
           : base(0f, 0f, 0f, 0f)
         {
-            this._heightAdd = heightAdd;
-            this._font = new BitmapFont("biosFontUI", 8, 7);
-            this.text = textVal;
-            this._color = c;
-            this.align = al;
-            this._controlProfile = controlProfile;
+            _heightAdd = heightAdd;
+            _font = new BitmapFont("biosFontUI", 8, 7);
+            text = textVal;
+            _color = c;
+            align = al;
+            _controlProfile = controlProfile;
         }
 
         public UIText(
@@ -76,31 +76,31 @@ namespace DuckGame
           InputProfile controlProfile = null)
           : base(0f, 0f, 0f, 0f)
         {
-            this._heightAdd = heightAdd;
-            this._font = new BitmapFont("biosFontUI", 8, 7);
-            this._textFunc = textFunc;
-            this.text = this._textFunc();
-            this._color = c;
-            this.align = al;
-            this._controlProfile = controlProfile;
+            _heightAdd = heightAdd;
+            _font = new BitmapFont("biosFontUI", 8, 7);
+            _textFunc = textFunc;
+            text = _textFunc();
+            _color = c;
+            align = al;
+            _controlProfile = controlProfile;
         }
 
         public override void Draw()
         {
-            this._font.scale = this.scale;
-            this._font.alpha = this.alpha;
-            float width = this._font.GetWidth(this.text);
-            float num1 = (this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-width / 2.0) : this.width / 2f - width) : (float)-(this.width / 2.0);
-            float num2 = (this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-(this.height / 2.0);
+            _font.scale = scale;
+            _font.alpha = alpha;
+            float width = _font.GetWidth(text);
+            float num1 = (align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-width / 2.0) : this.width / 2f - width) : (float)-(this.width / 2.0);
+            float num2 = (align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2.0) : height / 2f - _font.height) : (float)-(height / 2.0);
             if (specialScale != 0.0)
             {
-                Vec2 scale = this._font.scale;
-                this._font.scale = new Vec2(this.specialScale);
-                this._font.Draw(this.text, this.x + num1, this.y + num2, UIMenu.disabledDraw ? Colors.BlueGray : this._color, this.depth, this._controlProfile);
-                this._font.scale = scale;
+                Vec2 scale = _font.scale;
+                _font.scale = new Vec2(specialScale);
+                _font.Draw(text, x + num1, y + num2, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
+                _font.scale = scale;
             }
             else
-                this._font.Draw(this.text, this.x + num1, this.y + num2, UIMenu.disabledDraw ? Colors.BlueGray : this._color, this.depth, this._controlProfile);
+                _font.Draw(text, x + num1, y + num2, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
             base.Draw();
         }
     }

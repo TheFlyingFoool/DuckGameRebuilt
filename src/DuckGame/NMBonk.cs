@@ -18,13 +18,13 @@ namespace DuckGame
 
         public NMBonk(Vec2 pPosition, Vec2 pVelocity)
         {
-            this.position = pPosition;
-            this.velocity = pVelocity;
+            position = pPosition;
+            velocity = pVelocity;
         }
 
         public override void Activate()
         {
-            Duck.MakeStars(this.position, this.velocity);
+            Duck.MakeStars(position, velocity);
             base.Activate();
         }
     }

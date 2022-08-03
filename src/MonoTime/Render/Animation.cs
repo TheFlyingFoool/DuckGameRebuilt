@@ -18,20 +18,20 @@ namespace DuckGame
 
         public Animation(string nameVal, float speedVal, bool loopVal, int[] framesVal)
         {
-            this.name = nameVal;
-            this.speed = speedVal;
-            this.frames = framesVal;
-            this.looping = loopVal;
+            name = nameVal;
+            speed = speedVal;
+            frames = framesVal;
+            looping = loopVal;
         }
 
         public static bool operator ==(Animation l, Animation r) => l.Equals(r);
 
         public static bool operator !=(Animation l, Animation r) => !l.Equals(r);
 
-        public bool Equals(Animation other) => this.name == other.name && speed == other.speed && this.frames == other.frames && this.looping == other.looping;
+        public bool Equals(Animation other) => name == other.name && speed == other.speed && frames == other.frames && looping == other.looping;
 
-        public override int GetHashCode() => ((this.name.GetHashCode() * 19 + this.speed.GetHashCode()) * 19 + this.frames.GetHashCode()) * 19 + this.looping.GetHashCode();
+        public override int GetHashCode() => ((name.GetHashCode() * 19 + speed.GetHashCode()) * 19 + frames.GetHashCode()) * 19 + looping.GetHashCode();
 
-        public override bool Equals(object obj) => obj is Animation other ? this.Equals(other) : base.Equals(obj);
+        public override bool Equals(object obj) => obj is Animation other ? Equals(other) : base.Equals(obj);
     }
 }

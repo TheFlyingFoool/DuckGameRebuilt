@@ -390,30 +390,30 @@ namespace DuckGame
         private float _moodVal = 0.5f;
         private int _preferredColor;
 
-        public float fade => this._fade;
+        public float fade => _fade;
 
-        public bool open => this._open;
+        public bool open => _open;
 
         public ProfileSelector(float xpos, float ypos, ProfileBox2 box, HatSelector sel)
           : base(xpos, ypos)
         {
-            this._font = new BitmapFont("biosFontUI", 8, 7)
+            _font = new BitmapFont("biosFontUI", 8, 7)
             {
                 scale = new Vec2(0.5f, 0.5f)
             };
-            this._collisionSize = new Vec2(141f, 89f);
-            this._spinnerArrows = new SpriteMap("spinnerArrows", 8, 4);
-            this._box = box;
-            this._selector = sel;
-            this._happyIcons = new SpriteMap("happyFace", 16, 16);
-            this._happyIcons.CenterOrigin();
-            this._angryIcons = new SpriteMap("angryFace", 16, 16);
-            this._angryIcons.CenterOrigin();
-            this._smallFont = new BitmapFont("smallBiosFont", 7, 6)
+            _collisionSize = new Vec2(141f, 89f);
+            _spinnerArrows = new SpriteMap("spinnerArrows", 8, 4);
+            _box = box;
+            _selector = sel;
+            _happyIcons = new SpriteMap("happyFace", 16, 16);
+            _happyIcons.CenterOrigin();
+            _angryIcons = new SpriteMap("angryFace", 16, 16);
+            _angryIcons.CenterOrigin();
+            _smallFont = new BitmapFont("smallBiosFont", 7, 6)
             {
                 scale = new Vec2(0.5f, 0.5f)
             };
-            this._controlsFont = new BitmapFont("biosFontUIArrows", 8, 7)
+            _controlsFont = new BitmapFont("biosFontUIArrows", 8, 7)
             {
                 scale = new Vec2(1f)
             };
@@ -421,56 +421,56 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._confirmMenu = new UIMenu("DELETE PROFILE!?", 320f / 2f, 180f / 2f, 160f, conString: "@SELECT@SELECT @CANCEL@OH NO!");
-            this._confirmMenu.Add(new UIMenuItem("WHAT? NO!", new UIMenuActionCloseMenu(_confirmMenu), backButton: true), true);
-            this._confirmMenu.Add(new UIMenuItem("YEAH!", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, this._deleteProfile)), true);
-            this._confirmMenu.Close();
+            _confirmMenu = new UIMenu("DELETE PROFILE!?", 320f / 2f, 180f / 2f, 160f, conString: "@SELECT@SELECT @CANCEL@OH NO!");
+            _confirmMenu.Add(new UIMenuItem("WHAT? NO!", new UIMenuActionCloseMenu(_confirmMenu), backButton: true), true);
+            _confirmMenu.Add(new UIMenuItem("YEAH!", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, _deleteProfile)), true);
+            _confirmMenu.Close();
             Level.Add(_confirmMenu);
             base.Initialize();
         }
 
         public void Reset()
         {
-            this._open = false;
-            this._selector.fade = 1f;
-            this._fade = 0f;
-            this._desiredMode = PSMode.SelectProfile;
-            this._controlPage = 0;
-            this._selectedSetting = null;
-            this._configInputMapping = null;
+            _open = false;
+            _selector.fade = 1f;
+            _fade = 0f;
+            _desiredMode = PSMode.SelectProfile;
+            _controlPage = 0;
+            _selectedSetting = null;
+            _configInputMapping = null;
         }
 
         public string GetMaskName(int length)
         {
             string maskName = "";
             for (int index = 0; index < 9; ++index)
-                maskName = index >= length ? maskName + " " : maskName + this._maskName[index].ToString();
+                maskName = index >= length ? maskName + " " : maskName + _maskName[index].ToString();
             return maskName;
         }
 
         public void SelectDown()
         {
-            if (this._desiredSelectorPosition >= this._profiles.Count - 1)
-                this._desiredSelectorPosition = -1;
+            if (_desiredSelectorPosition >= _profiles.Count - 1)
+                _desiredSelectorPosition = -1;
             else
-                ++this._desiredSelectorPosition;
-            this._slideTo = 1f;
+                ++_desiredSelectorPosition;
+            _slideTo = 1f;
         }
 
         public void SelectUp()
         {
-            if (this._desiredSelectorPosition <= -1)
-                this._desiredSelectorPosition = this._profiles.Count - 1;
+            if (_desiredSelectorPosition <= -1)
+                _desiredSelectorPosition = _profiles.Count - 1;
             else
-                --this._desiredSelectorPosition;
-            this._slideTo = -1f;
+                --_desiredSelectorPosition;
+            _slideTo = -1f;
         }
 
         public int GetCharIndex(char c)
         {
-            for (int index = 0; index < this._characters.Count; ++index)
+            for (int index = 0; index < _characters.Count; ++index)
             {
-                if (this._characters[index] == c)
+                if (_characters[index] == c)
                     return index;
             }
             return -1;
@@ -480,426 +480,426 @@ namespace DuckGame
         {
             if (p == null)
                 return;
-            if (this._pendingMaps.Count > 0)
+            if (_pendingMaps.Count > 0)
             {
                 p.inputMappingOverrides.Clear();
-                foreach (DeviceInputMapping pendingMap in this._pendingMaps)
+                foreach (DeviceInputMapping pendingMap in _pendingMaps)
                     Input.SetDefaultMapping(pendingMap, p);
             }
-            p.inputProfile = this._inputProfile;
-            this._pendingMaps.Clear();
-            Input.ApplyDefaultMapping(this._inputProfile, this._profile);
+            p.inputProfile = _inputProfile;
+            _pendingMaps.Clear();
+            Input.ApplyDefaultMapping(_inputProfile, _profile);
         }
 
         private void RebuildProfileList()
         {
-            this._profiles = Profiles.allCustomProfiles;
-            if (this._box.controllerIndex != 0 || !Options.Data.defaultAccountMerged)
-                this._profiles.Add(Profiles.universalProfileList.ElementAt<Profile>(this._box.controllerIndex));
+            _profiles = Profiles.allCustomProfiles;
+            if (_box.controllerIndex != 0 || !Options.Data.defaultAccountMerged)
+                _profiles.Add(Profiles.universalProfileList.ElementAt<Profile>(_box.controllerIndex));
             if (!Network.isActive)
                 return;
-            this._profiles.Remove(Profiles.experienceProfile);
+            _profiles.Remove(Profiles.experienceProfile);
         }
 
         private void SaveSettings(bool pIsEditing, bool pAccepted)
         {
             if (!pIsEditing && !pAccepted)
                 return;
-            string varName = this._name.Replace(" ", "");
-            Profile p = this._profile;
+            string varName = _name.Replace(" ", "");
+            Profile p = _profile;
             if (!pIsEditing)
                 p = new Profile(varName);
-            p.funslider = this._moodVal;
-            p.preferredColor = this._preferredColor;
+            p.funslider = _moodVal;
+            p.preferredColor = _preferredColor;
             p.UpdatePersona();
-            this.ApplyInputSettings(p);
+            ApplyInputSettings(p);
             if (!pIsEditing)
                 Profiles.Add(p);
             if (!pIsEditing)
             {
-                this.RebuildProfileList();
-                for (int index = 0; index < this._profiles.Count; ++index)
+                RebuildProfileList();
+                for (int index = 0; index < _profiles.Count; ++index)
                 {
-                    if (this._profiles[index].name == varName)
+                    if (_profiles[index].name == varName)
                     {
-                        this._selectorPosition = index;
-                        this._desiredSelectorPosition = this._selectorPosition;
+                        _selectorPosition = index;
+                        _desiredSelectorPosition = _selectorPosition;
                         break;
                     }
                 }
-                this._desiredMode = PSMode.SelectProfile;
-                this._autoSelect = true;
+                _desiredMode = PSMode.SelectProfile;
+                _autoSelect = true;
             }
             else
             {
-                Profiles.Save(this._profile);
-                this._desiredMode = PSMode.SelectProfile;
-                this._mode = PSMode.SelectProfile;
-                this._open = false;
-                this._selector.fade = 1f;
-                this._fade = 0f;
-                this._selector.screen.DoFlashTransition();
+                Profiles.Save(_profile);
+                _desiredMode = PSMode.SelectProfile;
+                _mode = PSMode.SelectProfile;
+                _open = false;
+                _selector.fade = 1f;
+                _fade = 0f;
+                _selector.screen.DoFlashTransition();
             }
             SFX.Play("consoleSelect", 0.4f);
         }
 
-        private bool HoveredProfileIsCustom() => this._selectorPosition != -1 && this.hoveredProfile.steamID == 0UL && Profiles.experienceProfile != this.hoveredProfile && !Profiles.IsDefault(this.hoveredProfile);
+        private bool HoveredProfileIsCustom() => _selectorPosition != -1 && hoveredProfile.steamID == 0UL && Profiles.experienceProfile != hoveredProfile && !Profiles.IsDefault(hoveredProfile);
 
-        private Profile hoveredProfile => this._selectorPosition >= 0 && this._selectorPosition < this._profiles.Count ? this._profiles[this._selectorPosition] : Profiles.DefaultPlayer1;
+        private Profile hoveredProfile => _selectorPosition >= 0 && _selectorPosition < _profiles.Count ? _profiles[_selectorPosition] : Profiles.DefaultPlayer1;
 
         public override void Update()
         {
-            if (this._selector.screen.transitioning)
+            if (_selector.screen.transitioning)
                 return;
-            this._takenFlash = Lerp.Float(this._takenFlash, 0f, 0.02f);
-            if (!this._open)
+            _takenFlash = Lerp.Float(_takenFlash, 0f, 0.02f);
+            if (!_open)
             {
-                if (_fade >= 0.01f || !this._closing)
+                if (_fade >= 0.01f || !_closing)
                     return;
-                this._closing = false;
+                _closing = false;
             }
-            else if (this._configInputMapping != null && this._inputProfile != null && this._configInputMapping.device.productName + this._configInputMapping.device.productGUID != this._inputProfile.lastActiveDevice.productName + this._inputProfile.lastActiveDevice.productGUID)
+            else if (_configInputMapping != null && _inputProfile != null && _configInputMapping.device.productName + _configInputMapping.device.productGUID != _inputProfile.lastActiveDevice.productName + _inputProfile.lastActiveDevice.productGUID)
             {
-                this._open = false;
-                this._selector.fade = 1f;
-                this._fade = 0f;
-                this._selector.screen.DoFlashTransition();
-                this._desiredMode = PSMode.SelectProfile;
+                _open = false;
+                _selector.fade = 1f;
+                _fade = 0f;
+                _selector.screen.DoFlashTransition();
+                _desiredMode = PSMode.SelectProfile;
                 SFX.Play("consoleCancel", 0.4f);
             }
             else
             {
-                if (this._mode != this._desiredMode)
+                if (_mode != _desiredMode)
                 {
-                    this._selector.screen.DoFlashTransition();
-                    this._mode = this._desiredMode;
+                    _selector.screen.DoFlashTransition();
+                    _mode = _desiredMode;
                 }
-                if (_fade > 0.9f && this._mode != PSMode.CreateProfile && this._mode != PSMode.EditProfile && this._mode != PSMode.EditControls && this._mode != PSMode.EditControlsConfirm && this._desiredSelectorPosition == this._selectorPosition)
+                if (_fade > 0.9f && _mode != PSMode.CreateProfile && _mode != PSMode.EditProfile && _mode != PSMode.EditControls && _mode != PSMode.EditControlsConfirm && _desiredSelectorPosition == _selectorPosition)
                 {
-                    if (this._inputProfile.Down("MENUUP"))
+                    if (_inputProfile.Down("MENUUP"))
                     {
-                        this.SelectUp();
-                        this._wasDown = false;
-                        if (this._profiles.Count > 0)
+                        SelectUp();
+                        _wasDown = false;
+                        if (_profiles.Count > 0)
                             SFX.Play("consoleTick");
                     }
-                    if (this._inputProfile.Down("MENUDOWN"))
+                    if (_inputProfile.Down("MENUDOWN"))
                     {
-                        this.SelectDown();
-                        this._wasDown = true;
-                        if (this._profiles.Count > 0)
+                        SelectDown();
+                        _wasDown = true;
+                        if (_profiles.Count > 0)
                             SFX.Play("consoleTick");
                     }
-                    if (this.HoveredProfileIsCustom() && MonoMain.pauseMenu == null && this._inputProfile.Pressed("MENU2"))
+                    if (HoveredProfileIsCustom() && MonoMain.pauseMenu == null && _inputProfile.Pressed("MENU2"))
                     {
-                        this._deleteContext = this._profiles[this._selectorPosition];
+                        _deleteContext = _profiles[_selectorPosition];
                         MonoMain.pauseMenu = _confirmMenu;
-                        this._confirmMenu.Open();
+                        _confirmMenu.Open();
                         SFX.Play("pause", 0.6f);
                     }
-                    if (this._deleteProfile.value)
+                    if (_deleteProfile.value)
                     {
-                        this._deleteProfile.value = false;
-                        if (this._deleteContext != null)
+                        _deleteProfile.value = false;
+                        if (_deleteContext != null)
                         {
-                            Profiles.Delete(this._deleteContext);
-                            this.SelectUp();
-                            this.RebuildProfileList();
-                            this._slide = this._slideTo;
-                            this._deleteContext = null;
+                            Profiles.Delete(_deleteContext);
+                            SelectUp();
+                            RebuildProfileList();
+                            _slide = _slideTo;
+                            _deleteContext = null;
                         }
                     }
-                    if (this._inputProfile.Pressed("CANCEL"))
+                    if (_inputProfile.Pressed("CANCEL"))
                     {
-                        if (Profiles.IsDefault(this._starterProfile) || !(Level.current is TeamSelect2))
-                            this._box.ChangeProfile(this._starterProfile);
-                        this._open = false;
-                        this._selector.fade = 1f;
-                        this._fade = 0f;
-                        this._selector.screen.DoFlashTransition();
+                        if (Profiles.IsDefault(_starterProfile) || !(Level.current is TeamSelect2))
+                            _box.ChangeProfile(_starterProfile);
+                        _open = false;
+                        _selector.fade = 1f;
+                        _fade = 0f;
+                        _selector.screen.DoFlashTransition();
                         SFX.Play("consoleCancel", 0.4f);
                         return;
                     }
-                    if (this._inputProfile.Pressed("SELECT") || this._autoSelect)
+                    if (_inputProfile.Pressed("SELECT") || _autoSelect)
                     {
-                        this._autoSelect = false;
-                        if (this._selectorPosition == -1)
+                        _autoSelect = false;
+                        if (_selectorPosition == -1)
                         {
-                            this._desiredMode = PSMode.CreateProfile;
-                            this._changeName = true;
-                            this._currentLetter = 0;
-                            this._createSelection = PSCreateSelection.ChangeName;
-                            this._maskName = "aaaaaaaaa";
-                            this._name = this.GetMaskName(1);
+                            _desiredMode = PSMode.CreateProfile;
+                            _changeName = true;
+                            _currentLetter = 0;
+                            _createSelection = PSCreateSelection.ChangeName;
+                            _maskName = "aaaaaaaaa";
+                            _name = GetMaskName(1);
                             SFX.Play("consoleSelect", 0.4f);
                         }
-                        else if (this.ProfileAlreadySelected(this._profiles[this._selectorPosition]))
+                        else if (ProfileAlreadySelected(_profiles[_selectorPosition]))
                         {
                             SFX.Play("consoleError");
                         }
                         else
                         {
-                            if (this._profiles[this._selectorPosition].linkedProfile == null)
+                            if (_profiles[_selectorPosition].linkedProfile == null)
                             {
                                 if (Network.isActive)
                                 {
-                                    this._profile.linkedProfile = this._profiles[this._selectorPosition];
-                                    Input.ApplyDefaultMapping(this._inputProfile, this._profile);
-                                    this._profile.UpdatePersona();
+                                    _profile.linkedProfile = _profiles[_selectorPosition];
+                                    Input.ApplyDefaultMapping(_inputProfile, _profile);
+                                    _profile.UpdatePersona();
                                 }
-                                else if (this._selectorPosition != -1)
+                                else if (_selectorPosition != -1)
                                 {
-                                    this._box.ChangeProfile(this._profiles[this._selectorPosition]);
-                                    this._profile = this._profiles[this._selectorPosition];
-                                    this._profile.inputProfile = null;
-                                    this._profile.inputProfile = this._inputProfile;
-                                    Input.ApplyDefaultMapping(this._inputProfile, this._profile);
+                                    _box.ChangeProfile(_profiles[_selectorPosition]);
+                                    _profile = _profiles[_selectorPosition];
+                                    _profile.inputProfile = null;
+                                    _profile.inputProfile = _inputProfile;
+                                    Input.ApplyDefaultMapping(_inputProfile, _profile);
                                 }
                             }
-                            this._selector.ConfirmProfile();
-                            this._open = false;
-                            this._selector.fade = 1f;
-                            this._fade = 0f;
-                            this._selector.screen.DoFlashTransition();
+                            _selector.ConfirmProfile();
+                            _open = false;
+                            _selector.fade = 1f;
+                            _fade = 0f;
+                            _selector.screen.DoFlashTransition();
                             SFX.Play("consoleSelect", 0.4f);
                         }
                     }
                 }
-                else if (this._mode == PSMode.EditControlsConfirm)
+                else if (_mode == PSMode.EditControlsConfirm)
                 {
-                    if (this._inputProfile.Pressed("MENUUP"))
+                    if (_inputProfile.Pressed("MENUUP"))
                     {
                         SFX.Play("consoleTick");
-                        --this._editControlSelection;
+                        --_editControlSelection;
                     }
-                    else if (this._inputProfile.Pressed("MENUDOWN"))
+                    else if (_inputProfile.Pressed("MENUDOWN"))
                     {
                         SFX.Play("consoleTick");
-                        ++this._editControlSelection;
+                        ++_editControlSelection;
                     }
                     else
                     {
-                        if (this._inputProfile.Pressed("CANCEL"))
+                        if (_inputProfile.Pressed("CANCEL"))
                         {
-                            this._desiredMode = PSMode.EditControls;
+                            _desiredMode = PSMode.EditControls;
                             SFX.Play("consoleError");
                             return;
                         }
-                        if (this._inputProfile.Pressed("SELECT"))
+                        if (_inputProfile.Pressed("SELECT"))
                         {
                             SFX.Play("consoleSelect");
-                            if (this._editControlSelection == 0)
+                            if (_editControlSelection == 0)
                             {
-                                this._pendingMaps.Add(this._configInputMapping);
-                                this.ApplyInputSettings(this._profile);
+                                _pendingMaps.Add(_configInputMapping);
+                                ApplyInputSettings(_profile);
                             }
                             else
-                                this._configInputMapping = Input.GetDefaultMapping(this._inputProfile.lastActiveDevice.productName, this._inputProfile.lastActiveDevice.productGUID, p: (this.isEditing ? this._profile : null)).Clone();
-                            this._desiredMode = PSMode.CreateProfile;
+                                _configInputMapping = Input.GetDefaultMapping(_inputProfile.lastActiveDevice.productName, _inputProfile.lastActiveDevice.productGUID, p: (isEditing ? _profile : null)).Clone();
+                            _desiredMode = PSMode.CreateProfile;
                         }
                     }
-                    if (this._editControlSelection > 1)
-                        this._editControlSelection = 1;
-                    if (this._editControlSelection < 0)
-                        this._editControlSelection = 0;
+                    if (_editControlSelection > 1)
+                        _editControlSelection = 1;
+                    if (_editControlSelection < 0)
+                        _editControlSelection = 0;
                 }
-                else if (this._mode == PSMode.EditControls)
+                else if (_mode == PSMode.EditControls)
                 {
-                    if (!this._editControl)
+                    if (!_editControl)
                     {
-                        InputDevice d = this._inputProfile.lastActiveDevice;
+                        InputDevice d = _inputProfile.lastActiveDevice;
                         if (d is GenericController)
                             d = (d as GenericController).device;
-                        if (this._selectedSetting == null)
-                            this._selectedSetting = this._controlSettingPages[this._controlPage].Find(x => (x.condition == null || x.condition(d)) && !x.caption);
+                        if (_selectedSetting == null)
+                            _selectedSetting = _controlSettingPages[_controlPage].Find(x => (x.condition == null || x.condition(d)) && !x.caption);
                         Vec2 zero = Vec2.Zero;
-                        if (this._inputProfile.Pressed("MENUUP"))
+                        if (_inputProfile.Pressed("MENUUP"))
                             zero += new Vec2(0f, -8f);
-                        else if (this._inputProfile.Pressed("MENUDOWN"))
+                        else if (_inputProfile.Pressed("MENUDOWN"))
                             zero += new Vec2(0f, 8f);
-                        else if (this._inputProfile.Pressed("MENULEFT"))
+                        else if (_inputProfile.Pressed("MENULEFT"))
                             zero += new Vec2(-30f, 0f);
-                        else if (this._inputProfile.Pressed("MENURIGHT"))
+                        else if (_inputProfile.Pressed("MENURIGHT"))
                             zero += new Vec2(30f, 0f);
                         if (zero != Vec2.Zero)
                         {
                             ControlSetting controlSetting1 = null;
-                            foreach (ControlSetting controlSetting2 in this._controlSettingPages[this._controlPage])
+                            foreach (ControlSetting controlSetting2 in _controlSettingPages[_controlPage])
                             {
                                 if ((controlSetting2.condition == null || controlSetting2.condition(d)) && !controlSetting2.caption)
                                 {
                                     if (zero.x != 0.0)
                                     {
-                                        if (controlSetting2.position.y == this._selectedSetting.position.y)
+                                        if (controlSetting2.position.y == _selectedSetting.position.y)
                                         {
                                             if (zero.x > 0.0)
                                             {
-                                                if (controlSetting2.position.x > this._selectedSetting.position.x && (controlSetting1 == null || controlSetting2.position.x < controlSetting1.position.x))
+                                                if (controlSetting2.position.x > _selectedSetting.position.x && (controlSetting1 == null || controlSetting2.position.x < controlSetting1.position.x))
                                                     controlSetting1 = controlSetting2;
                                             }
-                                            else if (controlSetting2.position.x < this._selectedSetting.position.x && (controlSetting1 == null || controlSetting2.position.x > controlSetting1.position.x))
+                                            else if (controlSetting2.position.x < _selectedSetting.position.x && (controlSetting1 == null || controlSetting2.position.x > controlSetting1.position.x))
                                                 controlSetting1 = controlSetting2;
                                         }
                                     }
-                                    else if (controlSetting2.position.x == this._selectedSetting.position.x || controlSetting2.column == this._selectedSetting.column)
+                                    else if (controlSetting2.position.x == _selectedSetting.position.x || controlSetting2.column == _selectedSetting.column)
                                     {
                                         if (zero.y > 0.0)
                                         {
-                                            if (controlSetting2.position.y > this._selectedSetting.position.y && (controlSetting1 == null || controlSetting2.position.y < controlSetting1.position.y))
+                                            if (controlSetting2.position.y > _selectedSetting.position.y && (controlSetting1 == null || controlSetting2.position.y < controlSetting1.position.y))
                                                 controlSetting1 = controlSetting2;
                                         }
-                                        else if (controlSetting2.position.y < this._selectedSetting.position.y && (controlSetting1 == null || controlSetting2.position.y > controlSetting1.position.y))
+                                        else if (controlSetting2.position.y < _selectedSetting.position.y && (controlSetting1 == null || controlSetting2.position.y > controlSetting1.position.y))
                                             controlSetting1 = controlSetting2;
                                     }
                                 }
                             }
                             if (controlSetting1 != null)
-                                this._selectedSetting = controlSetting1;
+                                _selectedSetting = controlSetting1;
                             SFX.Play("consoleTick");
                         }
-                        if (this._inputProfile.Pressed("SELECT"))
+                        if (_inputProfile.Pressed("SELECT"))
                         {
-                            if (this._selectedSetting.action != null)
+                            if (_selectedSetting.action != null)
                             {
-                                this._selectedSetting.action(this);
+                                _selectedSetting.action(this);
                             }
                             else
                             {
-                                this._editControl = true;
+                                _editControl = true;
                                 SFX.Play("consoleTick");
                             }
                         }
                         else
                         {
-                            if (this._inputProfile.Pressed("CANCEL"))
+                            if (_inputProfile.Pressed("CANCEL"))
                             {
                                 if (ProfileSelector._madeControlChanges)
                                 {
-                                    this._editControlSelection = 0;
-                                    this._desiredMode = PSMode.EditControlsConfirm;
+                                    _editControlSelection = 0;
+                                    _desiredMode = PSMode.EditControlsConfirm;
                                     SFX.Play("consoleError");
                                     return;
                                 }
-                                this._desiredMode = PSMode.CreateProfile;
+                                _desiredMode = PSMode.CreateProfile;
                                 SFX.Play("consoleError");
                                 return;
                             }
-                            if (this._inputProfile.Pressed("START"))
+                            if (_inputProfile.Pressed("START"))
                             {
-                                this._pendingMaps.Add(this._configInputMapping);
-                                this.ApplyInputSettings(this._profile);
-                                this._desiredMode = PSMode.CreateProfile;
+                                _pendingMaps.Add(_configInputMapping);
+                                ApplyInputSettings(_profile);
+                                _desiredMode = PSMode.CreateProfile;
                                 SFX.Play("consoleSelect");
                                 return;
                             }
                         }
                     }
-                    else if (this._inputProfile.Pressed("START"))
+                    else if (_inputProfile.Pressed("START"))
                     {
-                        this._editControl = false;
+                        _editControl = false;
                         SFX.Play("consoleError");
                     }
                     else
                     {
-                        this._configInputMapping.deviceOverride = this._inputProfile.lastActiveDevice;
-                        if (this._configInputMapping.deviceOverride is GenericController)
-                            this._configInputMapping.deviceOverride = (_configInputMapping.deviceOverride as GenericController).device;
-                        if (this._selectedSetting.trigger != "ANY" && this._configInputMapping.RunMappingUpdate(this._selectedSetting.trigger, false))
+                        _configInputMapping.deviceOverride = _inputProfile.lastActiveDevice;
+                        if (_configInputMapping.deviceOverride is GenericController)
+                            _configInputMapping.deviceOverride = (_configInputMapping.deviceOverride as GenericController).device;
+                        if (_selectedSetting.trigger != "ANY" && _configInputMapping.RunMappingUpdate(_selectedSetting.trigger, false))
                         {
-                            this._editControl = false;
+                            _editControl = false;
                             SFX.Play("consoleSelect");
                             ProfileSelector._madeControlChanges = true;
-                            this._configInputMapping.deviceOverride = null;
+                            _configInputMapping.deviceOverride = null;
                             return;
                         }
-                        this._configInputMapping.deviceOverride = null;
+                        _configInputMapping.deviceOverride = null;
                     }
                 }
-                else if (this._mode == PSMode.CreateProfile)
+                else if (_mode == PSMode.CreateProfile)
                 {
-                    if (!this._changeName)
+                    if (!_changeName)
                     {
-                        if (this._createSelection == PSCreateSelection.Controls && this._inputProfile.Pressed("SELECT"))
+                        if (_createSelection == PSCreateSelection.Controls && _inputProfile.Pressed("SELECT"))
                         {
-                            this._desiredMode = PSMode.EditControls;
-                            this._selectedSetting = null;
-                            this._controlPage = 0;
+                            _desiredMode = PSMode.EditControls;
+                            _selectedSetting = null;
+                            _controlPage = 0;
                             ProfileSelector._madeControlChanges = false;
-                            if (this._configInputMapping == null)
-                                this._configInputMapping = Input.GetDefaultMapping(this._inputProfile.lastActiveDevice.productName, this._inputProfile.lastActiveDevice.productGUID, p: (this.isEditing ? this._profile : null)).Clone();
+                            if (_configInputMapping == null)
+                                _configInputMapping = Input.GetDefaultMapping(_inputProfile.lastActiveDevice.productName, _inputProfile.lastActiveDevice.productGUID, p: (isEditing ? _profile : null)).Clone();
                             SFX.Play("consoleTick");
                         }
-                        if (this._createSelection == PSCreateSelection.Mood)
+                        if (_createSelection == PSCreateSelection.Mood)
                         {
-                            if (this._inputProfile.Pressed("MENULEFT"))
+                            if (_inputProfile.Pressed("MENULEFT"))
                             {
-                                this._moodVal = Maths.Clamp(this._moodVal - 0.25f, 0f, 1f);
+                                _moodVal = Maths.Clamp(_moodVal - 0.25f, 0f, 1f);
                                 SFX.Play("consoleTick");
                             }
-                            if (this._inputProfile.Pressed("MENURIGHT"))
+                            if (_inputProfile.Pressed("MENURIGHT"))
                             {
-                                this._moodVal = Maths.Clamp(this._moodVal + 0.25f, 0f, 1f);
+                                _moodVal = Maths.Clamp(_moodVal + 0.25f, 0f, 1f);
                                 SFX.Play("consoleTick");
                             }
                         }
-                        if (this._createSelection == PSCreateSelection.Color)
+                        if (_createSelection == PSCreateSelection.Color)
                         {
-                            if (this._inputProfile.Pressed("MENULEFT"))
+                            if (_inputProfile.Pressed("MENULEFT"))
                             {
-                                this._preferredColor = Maths.Clamp(this._preferredColor - 1, -1, DG.MaxPlayers - 1);
+                                _preferredColor = Maths.Clamp(_preferredColor - 1, -1, DG.MaxPlayers - 1);
                                 SFX.Play("consoleTick");
                             }
-                            if (this._inputProfile.Pressed("MENURIGHT"))
+                            if (_inputProfile.Pressed("MENURIGHT"))
                             {
-                                this._preferredColor = Maths.Clamp(this._preferredColor + 1, -1, DG.MaxPlayers - 1);
+                                _preferredColor = Maths.Clamp(_preferredColor + 1, -1, DG.MaxPlayers - 1);
                                 SFX.Play("consoleTick");
                             }
                         }
-                        if (this._inputProfile.Pressed("MENUDOWN") && this._name != "" && this._createSelection < PSCreateSelection.Accept)
+                        if (_inputProfile.Pressed("MENUDOWN") && _name != "" && _createSelection < PSCreateSelection.Accept)
                         {
-                            ++this._createSelection;
+                            ++_createSelection;
                             SFX.Play("consoleTick");
                         }
-                        if (this._inputProfile.Pressed("MENUUP") && this._name != "" && this._createSelection > (this.isEditing ? PSCreateSelection.Mood : PSCreateSelection.ChangeName))
+                        if (_inputProfile.Pressed("MENUUP") && _name != "" && _createSelection > (isEditing ? PSCreateSelection.Mood : PSCreateSelection.ChangeName))
                         {
-                            --this._createSelection;
+                            --_createSelection;
                             SFX.Play("consoleTick");
                         }
-                        if (this._inputProfile.Pressed("SELECT"))
+                        if (_inputProfile.Pressed("SELECT"))
                         {
-                            if (this._createSelection == PSCreateSelection.ChangeName)
+                            if (_createSelection == PSCreateSelection.ChangeName)
                             {
-                                if (!this.isEditing)
+                                if (!isEditing)
                                 {
-                                    this._changeName = true;
-                                    if (this._name == "")
-                                        this._name = this.GetMaskName(1);
+                                    _changeName = true;
+                                    if (_name == "")
+                                        _name = GetMaskName(1);
                                     SFX.Play("consoleSelect", 0.4f);
                                 }
                                 else
                                     SFX.Play("consoleError", 0.8f);
                             }
-                            else if (this._createSelection == PSCreateSelection.Accept)
+                            else if (_createSelection == PSCreateSelection.Accept)
                             {
-                                this.SaveSettings(this.isEditing, true);
+                                SaveSettings(isEditing, true);
                                 SFX.Play("consoleSelect", 0.4f);
                             }
                         }
-                        if (this._inputProfile.Pressed("CANCEL"))
+                        if (_inputProfile.Pressed("CANCEL"))
                         {
-                            this.SaveSettings(this.isEditing, false);
-                            if (!this.isEditing)
+                            SaveSettings(isEditing, false);
+                            if (!isEditing)
                             {
-                                this._desiredMode = PSMode.SelectProfile;
+                                _desiredMode = PSMode.SelectProfile;
                             }
                             else
                             {
-                                this._desiredMode = PSMode.SelectProfile;
-                                this._mode = PSMode.SelectProfile;
-                                this._open = false;
-                                this._selector.fade = 1f;
-                                this._fade = 0f;
-                                this._selector.screen.DoFlashTransition();
+                                _desiredMode = PSMode.SelectProfile;
+                                _mode = PSMode.SelectProfile;
+                                _open = false;
+                                _selector.fade = 1f;
+                                _fade = 0f;
+                                _selector.screen.DoFlashTransition();
                             }
                             SFX.Play("consoleCancel", 0.4f);
                         }
@@ -908,18 +908,18 @@ namespace DuckGame
                     {
                         InputProfile.repeat = true;
                         Keyboard.repeat = true;
-                        if (this._inputProfile.Pressed("SELECT"))
+                        if (_inputProfile.Pressed("SELECT"))
                         {
-                            string str = this._name.Replace(" ", "");
+                            string str = _name.Replace(" ", "");
                             if (str == "")
                             {
                                 str = "duckis91";
-                                this._name = str + " ";
-                                this._currentLetter = 7;
+                                _name = str + " ";
+                                _currentLetter = 7;
                             }
                             List<Profile> allCustomProfiles = Profiles.allCustomProfiles;
                             bool flag = false;
-                            if (this._selector == null || !this._selector.isArcadeHatSelector)
+                            if (_selector == null || !_selector.isArcadeHatSelector)
                             {
                                 foreach (Profile profile in allCustomProfiles)
                                 {
@@ -931,133 +931,133 @@ namespace DuckGame
                                 }
                             }
                             if (flag)
-                                this._takenFlash = 1f;
+                                _takenFlash = 1f;
                             else
-                                this._changeName = false;
+                                _changeName = false;
                             SFX.Play("consoleTick");
                         }
-                        if (this._inputProfile.Pressed("MENULEFT"))
+                        if (_inputProfile.Pressed("MENULEFT"))
                         {
-                            --this._currentLetter;
-                            if (this._currentLetter < 0)
+                            --_currentLetter;
+                            if (_currentLetter < 0)
                             {
-                                this._currentLetter = 0;
-                            }
-                            else
-                            {
-                                this._name = this._name.Remove(this._currentLetter + 1, 1);
-                                this._name = this._name.Insert(this._currentLetter + 1, " ");
-                            }
-                            SFX.Play("consoleTick");
-                        }
-                        if (this._inputProfile.Pressed("MENURIGHT"))
-                        {
-                            ++this._currentLetter;
-                            if (this._currentLetter > 8)
-                            {
-                                this._currentLetter = 8;
+                                _currentLetter = 0;
                             }
                             else
                             {
-                                this._name = this._name.Remove(this._currentLetter, 1);
-                                if (this._currentLetter > 0)
-                                    this._name = this._name.Insert(this._currentLetter, this._name[this._currentLetter - 1].ToString() ?? "");
+                                _name = _name.Remove(_currentLetter + 1, 1);
+                                _name = _name.Insert(_currentLetter + 1, " ");
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (this._inputProfile.Pressed("MENUUP"))
+                        if (_inputProfile.Pressed("MENURIGHT"))
                         {
-                            int index = this.GetCharIndex(this._name[this._currentLetter]) + 1;
-                            if (index >= this._characters.Count)
+                            ++_currentLetter;
+                            if (_currentLetter > 8)
+                            {
+                                _currentLetter = 8;
+                            }
+                            else
+                            {
+                                _name = _name.Remove(_currentLetter, 1);
+                                if (_currentLetter > 0)
+                                    _name = _name.Insert(_currentLetter, _name[_currentLetter - 1].ToString() ?? "");
+                            }
+                            SFX.Play("consoleTick");
+                        }
+                        if (_inputProfile.Pressed("MENUUP"))
+                        {
+                            int index = GetCharIndex(_name[_currentLetter]) + 1;
+                            if (index >= _characters.Count)
                                 index = 0;
-                            char character = this._characters[index];
-                            this._name = this._name.Remove(this._currentLetter, 1);
-                            this._name = this._name.Insert(this._currentLetter, character.ToString() ?? "");
-                            this._maskName = this._maskName.Remove(this._currentLetter, 1);
-                            this._maskName = this._maskName.Insert(this._currentLetter, character.ToString() ?? "");
+                            char character = _characters[index];
+                            _name = _name.Remove(_currentLetter, 1);
+                            _name = _name.Insert(_currentLetter, character.ToString() ?? "");
+                            _maskName = _maskName.Remove(_currentLetter, 1);
+                            _maskName = _maskName.Insert(_currentLetter, character.ToString() ?? "");
                             SFX.Play("consoleTick");
                         }
-                        if (this._inputProfile.Pressed("MENUDOWN"))
+                        if (_inputProfile.Pressed("MENUDOWN"))
                         {
-                            int index = this.GetCharIndex(this._name[this._currentLetter]) - 1;
+                            int index = GetCharIndex(_name[_currentLetter]) - 1;
                             if (index < 0)
-                                index = this._characters.Count - 1;
-                            char character = this._characters[index];
-                            this._name = this._name.Remove(this._currentLetter, 1);
-                            this._name = this._name.Insert(this._currentLetter, character.ToString() ?? "");
-                            this._maskName = this._maskName.Remove(this._currentLetter, 1);
-                            this._maskName = this._maskName.Insert(this._currentLetter, character.ToString() ?? "");
+                                index = _characters.Count - 1;
+                            char character = _characters[index];
+                            _name = _name.Remove(_currentLetter, 1);
+                            _name = _name.Insert(_currentLetter, character.ToString() ?? "");
+                            _maskName = _maskName.Remove(_currentLetter, 1);
+                            _maskName = _maskName.Insert(_currentLetter, character.ToString() ?? "");
                             SFX.Play("consoleTick");
                         }
-                        if (this._inputProfile.Pressed("CANCEL"))
+                        if (_inputProfile.Pressed("CANCEL"))
                         {
-                            this._desiredMode = PSMode.SelectProfile;
+                            _desiredMode = PSMode.SelectProfile;
                             SFX.Play("consoleCancel", 0.4f);
                         }
                     }
                 }
-                if (_slideTo != 0.0 && _slide != this._slideTo)
-                    this._slide = Lerp.Float(this._slide, this._slideTo, 0.1f);
-                else if (_slideTo != 0.0 && _slide == this._slideTo)
+                if (_slideTo != 0.0 && _slide != _slideTo)
+                    _slide = Lerp.Float(_slide, _slideTo, 0.1f);
+                else if (_slideTo != 0.0 && _slide == _slideTo)
                 {
-                    this._slide = 0f;
-                    this._slideTo = 0f;
-                    if (this._desiredSelectorPosition != -1 && this.ProfileAlreadySelected(this._profiles[this._desiredSelectorPosition]))
+                    _slide = 0f;
+                    _slideTo = 0f;
+                    if (_desiredSelectorPosition != -1 && ProfileAlreadySelected(_profiles[_desiredSelectorPosition]))
                     {
-                        this._selectorPosition = this._desiredSelectorPosition;
-                        if (this._wasDown)
-                            this.SelectDown();
+                        _selectorPosition = _desiredSelectorPosition;
+                        if (_wasDown)
+                            SelectDown();
                         else
-                            this.SelectUp();
+                            SelectUp();
                     }
                     else
                     {
-                        this._selectorPosition = this._desiredSelectorPosition;
+                        _selectorPosition = _desiredSelectorPosition;
                         if (!(Level.current is TeamSelect2))
                         {
-                            if (this._selectorPosition != -1)
+                            if (_selectorPosition != -1)
                             {
-                                this._box.ChangeProfile(this._profiles[this._selectorPosition]);
-                                this._profile = this._profiles[this._selectorPosition];
+                                _box.ChangeProfile(_profiles[_selectorPosition]);
+                                _profile = _profiles[_selectorPosition];
                             }
                             else
                             {
-                                this._box.ChangeProfile(null);
-                                this._profile = this._box.profile;
+                                _box.ChangeProfile(null);
+                                _profile = _box.profile;
                             }
                         }
                     }
                 }
-                this._font.alpha = this._fade;
-                this._font.depth = (Depth)0.96f;
-                this._font.scale = new Vec2(1f, 1f);
-                if (this._mode == PSMode.EditControlsConfirm)
+                _font.alpha = _fade;
+                _font.depth = (Depth)0.96f;
+                _font.scale = new Vec2(1f, 1f);
+                if (_mode == PSMode.EditControlsConfirm)
                 {
                     Vec2 position = this.position;
                     this.position = Vec2.Zero;
-                    this._selector.screen.BeginDraw();
+                    _selector.screen.BeginDraw();
                     string text = "SAVE CHANGES?";
-                    this._smallFont.Draw(text, Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._smallFont.GetWidth(text) / 2.0), this.y + 22f)), Colors.MenuOption * (this._controlPosition == 0 ? 1f : 0.6f), (Depth)0.95f);
-                    Vec2 vec2 = new Vec2((float)(this.x + this.width / 2.0 - 66.0), this.y + 18f) + new Vec2(0.5f, 0f);
-                    this._smallFont.Draw("YES", Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._smallFont.GetWidth("YES") / 2.0), this.y + 34f)), Colors.MenuOption * (this._editControlSelection == 0 ? 1f : 0.6f), (Depth)0.95f);
-                    this._smallFont.Draw("NO", Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._smallFont.GetWidth("NO") / 2.0), (float)(this.y + 34.0 + 8.0))), Colors.MenuOption * (this._editControlSelection == 1 ? 1f : 0.6f), (Depth)0.95f);
-                    this._font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
-                    this._font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
+                    _smallFont.Draw(text, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _smallFont.GetWidth(text) / 2.0), y + 22f)), Colors.MenuOption * (_controlPosition == 0 ? 1f : 0.6f), (Depth)0.95f);
+                    Vec2 vec2 = new Vec2((float)(x + width / 2.0 - 66.0), y + 18f) + new Vec2(0.5f, 0f);
+                    _smallFont.Draw("YES", Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _smallFont.GetWidth("YES") / 2.0), y + 34f)), Colors.MenuOption * (_editControlSelection == 0 ? 1f : 0.6f), (Depth)0.95f);
+                    _smallFont.Draw("NO", Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _smallFont.GetWidth("NO") / 2.0), (float)(y + 34.0 + 8.0))), Colors.MenuOption * (_editControlSelection == 1 ? 1f : 0.6f), (Depth)0.95f);
+                    _font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
+                    _font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
                     this.position = position;
-                    this._selector.screen.EndDraw();
+                    _selector.screen.EndDraw();
                 }
-                else if (this._mode == PSMode.EditControls)
+                else if (_mode == PSMode.EditControls)
                 {
-                    Vec2 position1 = this.position;
-                    this.position = Vec2.Zero;
-                    this._selector.screen.BeginDraw();
-                    InputProfile inputProfile = this._inputProfile;
-                    this._smallFont.scale = new Vec2(1f, 1f);
+                    Vec2 position1 = position;
+                    position = Vec2.Zero;
+                    _selector.screen.BeginDraw();
+                    InputProfile inputProfile = _inputProfile;
+                    _smallFont.scale = new Vec2(1f, 1f);
                     float num = 6f;
                     string text = inputProfile.lastActiveDevice.productName;
                     if (text == null)
                     {
-                        this._desiredMode = PSMode.CreateProfile;
+                        _desiredMode = PSMode.CreateProfile;
                         SFX.Play("consoleError");
                     }
                     else
@@ -1066,14 +1066,14 @@ namespace DuckGame
                             text = "Joy-Con (L)/(R)";
                         if (text.Length > 15)
                             text = text.Substring(0, 15) + "...";
-                        if (this._controlPosition == 0)
+                        if (_controlPosition == 0)
                             text = "< " + text + " >";
-                        this._smallFont.Draw(text, Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._smallFont.GetWidth(text) / 2.0), this.y + num)), Colors.MenuOption * (this._controlPosition == 0 ? 1f : 0.6f), (Depth)0.95f);
-                        Vec2 vec2 = new Vec2((float)(this.x + this.width / 2.0 - 66.0), (float)(this.y + num + 9.0)) + new Vec2(0.5f, 0f);
+                        _smallFont.Draw(text, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _smallFont.GetWidth(text) / 2.0), y + num)), Colors.MenuOption * (_controlPosition == 0 ? 1f : 0.6f), (Depth)0.95f);
+                        Vec2 vec2 = new Vec2((float)(x + width / 2.0 - 66.0), (float)(y + num + 9.0)) + new Vec2(0.5f, 0f);
                         bool flag = false;
-                        foreach (ControlSetting controlSetting in this._controlSettingPages[this._controlPage])
+                        foreach (ControlSetting controlSetting in _controlSettingPages[_controlPage])
                         {
-                            InputDevice inputDevice = this._inputProfile.lastActiveDevice;
+                            InputDevice inputDevice = _inputProfile.lastActiveDevice;
                             if (inputDevice is GenericController)
                                 inputDevice = (inputDevice as GenericController).device;
                             if (controlSetting.condition == null || controlSetting.condition(inputDevice))
@@ -1082,274 +1082,274 @@ namespace DuckGame
                                 Vec2 position2 = controlSetting.position;
                                 if (position2.y == 0.0)
                                     flag = true;
-                                else if (!flag && (this._controlPage != 0 || controlSetting != this._controlSettingPages[this._controlPage][this._controlSettingPages[this._controlPage].Count - 1]))
+                                else if (!flag && (_controlPage != 0 || controlSetting != _controlSettingPages[_controlPage][_controlSettingPages[_controlPage].Count - 1]))
                                     position2.y -= 12f;
                                 if (controlSetting.trigger != "ANY")
                                 {
                                     name += ":|DGBLUE|";
-                                    if (!this._editControl || this._selectedSetting != controlSetting)
-                                        Graphics.Draw(inputProfile.lastActiveDevice.GetMapImage(this._configInputMapping.map[controlSetting.trigger]), (float)(vec2.x + position2.x + this._smallFont.GetWidth(name) - 2.0), (float)(vec2.y + position2.y - 3.0));
+                                    if (!_editControl || _selectedSetting != controlSetting)
+                                        Graphics.Draw(inputProfile.lastActiveDevice.GetMapImage(_configInputMapping.map[controlSetting.trigger]), (float)(vec2.x + position2.x + _smallFont.GetWidth(name) - 2.0), (float)(vec2.y + position2.y - 3.0));
                                     else
                                         name += "_";
                                 }
-                                this._smallFont.Draw(name, Maths.RoundToPixel(new Vec2(position2.x, position2.y) + vec2), Colors.MenuOption * (controlSetting == this._selectedSetting ? 1f : 0.6f), (Depth)0.95f);
+                                _smallFont.Draw(name, Maths.RoundToPixel(new Vec2(position2.x, position2.y) + vec2), Colors.MenuOption * (controlSetting == _selectedSetting ? 1f : 0.6f), (Depth)0.95f);
                             }
                         }
-                        if (!this._editControl)
+                        if (!_editControl)
                         {
-                            this._font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
-                            this._font.Draw("@START@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
+                            _font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
+                            _font.Draw("@START@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
                         }
                         else
-                            this._font.Draw("@START@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
-                        this.position = position1;
-                        this._selector.screen.EndDraw();
+                            _font.Draw("@START@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
+                        position = position1;
+                        _selector.screen.EndDraw();
                     }
                 }
-                else if (this._mode == PSMode.SelectProfile)
+                else if (_mode == PSMode.SelectProfile)
                 {
-                    this._pendingMaps.Clear();
+                    _pendingMaps.Clear();
                     Vec2 position = this.position;
                     this.position = Vec2.Zero;
-                    this._selector.screen.BeginDraw();
+                    _selector.screen.BeginDraw();
                     string text1 = "@LWING@PICK PROFILE@RWING@";
-                    this._font.Draw(text1, Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._font.GetWidth(text1) / 2.0), this.y + 8f)), Color.White, (Depth)0.95f);
+                    _font.Draw(text1, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text1) / 2.0), y + 8f)), Color.White, (Depth)0.95f);
                     float num1 = 8f;
                     for (int index1 = 0; index1 < 7; ++index1)
                     {
-                        int index = this.ProfileIndexAdd(this._selectorPosition, index1 - 3);
+                        int index = ProfileIndexAdd(_selectorPosition, index1 - 3);
                         string text2 = "NEW PROFILE";
                         bool flag1 = true;
                         bool flag2 = false;
                         if (index != -1)
                         {
-                            if (Profiles.IsDefault(this._profiles[index]))
+                            if (Profiles.IsDefault(_profiles[index]))
                             {
                                 text2 = "DEFAULT";
                                 flag2 = true;
                             }
                             else
-                                text2 = this._profiles[index].name;
+                                text2 = _profiles[index].name;
                             flag1 = false;
-                            if (this._profiles[index] == Profiles.experienceProfile)
+                            if (_profiles[index] == Profiles.experienceProfile)
                                 text2 = "@RAINBOWICON@|DGBLUE|" + text2 + "|WHITE|";
-                            else if (this._profiles[index].steamID != 0UL)
+                            else if (_profiles[index].steamID != 0UL)
                                 text2 = "@STEAMICON@|DGBLUE|" + text2 + "|WHITE|";
                         }
                         string text3 = null;
-                        if (this._desiredSelectorPosition == index && (index1 == 3 || _slideTo > 0.0 && index1 == 4 || _slideTo < 0.0 && index1 == 2))
+                        if (_desiredSelectorPosition == index && (index1 == 3 || _slideTo > 0.0 && index1 == 4 || _slideTo < 0.0 && index1 == 2))
                             text3 = "> " + text2 + " <";
                         float num2 = (float)(this.y + num1 + 33.0);
-                        float y = (float)(this.y + num1 + index1 * 11 + -this._slide * 11.0);
+                        float y = (float)(this.y + num1 + index1 * 11 + -_slide * 11.0);
                         float num3 = Maths.Clamp((float)((33.0 - Math.Abs(y - num2)) / 33.0), 0f, 1f);
                         float num4 = num3 * Maths.NormalizeSection(num3, 0f, 0.9f);
                         float num5 = 0.2f;
                         float num6 = Maths.Clamp(num3 >= 0.300000011920929 ? (num3 >= 0.800000011920929 ? Maths.NormalizeSection(num3, 0.8f, 1f) + num5 : num5) : Maths.NormalizeSection(num3, 0f, 0.3f) * num5, 0f, 1f);
                         bool flag3 = false;
-                        if ((this._selector == null || !this._selector.isArcadeHatSelector) && index != -1 && (Profiles.active.Contains(this._profiles[index]) || Profiles.active.FirstOrDefault<Profile>(x => x.linkedProfile == this._profiles[index]) != null))
+                        if ((_selector == null || !_selector.isArcadeHatSelector) && index != -1 && (Profiles.active.Contains(_profiles[index]) || Profiles.active.FirstOrDefault<Profile>(x => x.linkedProfile == _profiles[index]) != null))
                             flag3 = true;
                         if (flag3)
                             text2 = text2.Replace("|DGBLUE|", "");
-                        this._font.Draw(text2, Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._font.GetWidth(text2) / 2.0), y)), (flag3 ? Color.Red : (flag1 ? Color.Lime : (flag2 ? Colors.DGYellow : Colors.MenuOption))) * num6, (Depth)0.95f);
+                        _font.Draw(text2, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text2) / 2.0), y)), (flag3 ? Color.Red : (flag1 ? Color.Lime : (flag2 ? Colors.DGYellow : Colors.MenuOption))) * num6, (Depth)0.95f);
                         if (text3 != null)
-                            this._font.Draw(text3, Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._font.GetWidth(text3) / 2.0), y)), Color.White, (Depth)0.92f);
+                            _font.Draw(text3, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text3) / 2.0), y)), Color.White, (Depth)0.92f);
                     }
                     float y1 = num1 + 32f;
-                    Graphics.DrawRect(this.position + new Vec2(2f, y1), this.position + new Vec2(138f, y1 + 9f), new Color(30, 30, 30) * this._fade, (Depth)0.8f);
-                    this._font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
-                    this._font.Draw(this.HoveredProfileIsCustom() ? "@MENU2@" : "@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
+                    Graphics.DrawRect(this.position + new Vec2(2f, y1), this.position + new Vec2(138f, y1 + 9f), new Color(30, 30, 30) * _fade, (Depth)0.8f);
+                    _font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
+                    _font.Draw(HoveredProfileIsCustom() ? "@MENU2@" : "@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
                     this.position = position;
-                    this._selector.screen.EndDraw();
+                    _selector.screen.EndDraw();
                 }
                 else
                 {
-                    if (this._mode != PSMode.CreateProfile)
+                    if (_mode != PSMode.CreateProfile)
                         return;
                     Vec2 position = this.position;
                     this.position = Vec2.Zero;
-                    this._selector.screen.BeginDraw();
+                    _selector.screen.BeginDraw();
                     string str1 = "NONAME";
-                    if (this._name != "")
+                    if (_name != "")
                     {
-                        str1 = this._name;// ParentalControls.RunProfanityCheck(ref this._name) > 0  
+                        str1 = _name;// ParentalControls.RunProfanityCheck(ref this._name) > 0  
                     }
-                    Vec2 pos = new Vec2(this.x + 36f, this.y + 8f);
-                    if (!this.isEditing)
+                    Vec2 pos = new Vec2(x + 36f, y + 8f);
+                    if (!isEditing)
                     {
-                        if (this._changeName)
+                        if (_changeName)
                         {
                             pos.x -= 2f;
                             for (int index = 0; index < 9; ++index)
                             {
                                 Graphics.DrawRect(pos + new Vec2(index * 8, 0f), pos + new Vec2(index * 8 + 7, 7f), new Color(60, 60, 60), (Depth)0.8f);
-                                if (index == this._currentLetter)
+                                if (index == _currentLetter)
                                 {
-                                    this._spinnerArrows.frame = 0;
+                                    _spinnerArrows.frame = 0;
                                     Vec2 vec2_1 = pos + new Vec2(index * 8, -6f);
                                     Graphics.Draw(_spinnerArrows, vec2_1.x, vec2_1.y, (Depth)0.95f);
-                                    this._spinnerArrows.frame = 1;
+                                    _spinnerArrows.frame = 1;
                                     Vec2 vec2_2 = pos + new Vec2(index * 8, 9f);
                                     Graphics.Draw(_spinnerArrows, vec2_2.x, vec2_2.y, (Depth)0.95f);
                                     Graphics.DrawRect(pos + new Vec2(index * 8 - 2, -2f), pos + new Vec2(index * 8 + 9, 9f), Color.White * 0.8f, (Depth)0.97f, false);
                                 }
                             }
-                            this._font.Draw(str1, Maths.RoundToPixel(pos), Color.Lime * (this._createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
+                            _font.Draw(str1, Maths.RoundToPixel(pos), Color.Lime * (_createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
                             pos.x += 2f;
                             string text4 = ">              <";
-                            this._font.Draw(text4, Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._font.GetWidth(text4) / 2.0), pos.y)), Color.White * (this._createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
+                            _font.Draw(text4, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text4) / 2.0), pos.y)), Color.White * (_createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
                             if (_takenFlash > 0.0500000007450581)
                             {
                                 string text5 = "Name Taken";
-                                this._font.Draw(text5, Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._font.GetWidth(text5) / 2.0), pos.y)), Color.Red * this._takenFlash, (Depth)0.97f);
-                                Graphics.DrawRect(new Vec2(this.x + 20f, pos.y), new Vec2((float)(this.x + this.width - 20.0), pos.y + 8f), Color.Black, (Depth)0.96f);
+                                _font.Draw(text5, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text5) / 2.0), pos.y)), Color.Red * _takenFlash, (Depth)0.97f);
+                                Graphics.DrawRect(new Vec2(x + 20f, pos.y), new Vec2((float)(x + width - 20.0), pos.y + 8f), Color.Black, (Depth)0.96f);
                             }
                         }
                         else
                         {
                             string str2 = str1.Replace(" ", "");
-                            string text = this._createSelection != PSCreateSelection.ChangeName ? "@LWING@" + str2.Reduced(12) + "@RWING@" : "> " + str2.Reduced(12) + " <";
-                            this._font.Draw(text, Maths.RoundToPixel(new Vec2((float)(this.x + 2.0 + this.width / 2.0 - this._font.GetWidth(text) / 2.0), pos.y)), Color.White * (this._createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
+                            string text = _createSelection != PSCreateSelection.ChangeName ? "@LWING@" + str2.Reduced(12) + "@RWING@" : "> " + str2.Reduced(12) + " <";
+                            _font.Draw(text, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text) / 2.0), pos.y)), Color.White * (_createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
                         }
                     }
                     else
                     {
                         string text = "@LWING@" + str1.Reduced(12) + "@RWING@";
-                        this._font.Draw(text, Maths.RoundToPixel(new Vec2((float)(this.x + this.width / 2.0 - this._font.GetWidth(text) / 2.0), this.y + 8f)), Color.White * (1f - Math.Min(1f, this._takenFlash * 2f)), (Depth)0.95f);
+                        _font.Draw(text, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text) / 2.0), y + 8f)), Color.White * (1f - Math.Min(1f, _takenFlash * 2f)), (Depth)0.95f);
                     }
                     pos.y += 14f;
                     string text6 = "            ";
-                    if (this._createSelection == PSCreateSelection.Mood)
+                    if (_createSelection == PSCreateSelection.Mood)
                         text6 = "< " + text6 + " >";
-                    this._font.Draw(text6, (float)(this.x + this.width / 2.0 - this._font.GetWidth(text6) / 2.0), pos.y, Color.White * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f), (Depth)0.95f);
-                    Graphics.DrawLine(new Vec2((float)(this.x + this.width / 4.0 + 4.0), pos.y + 5f), new Vec2(this.x + (float)(this.width / 4.0 * 3.0), pos.y + 5f), Colors.MenuOption * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 2f, (Depth)0.95f);
+                    _font.Draw(text6, (float)(x + width / 2.0 - _font.GetWidth(text6) / 2.0), pos.y, Color.White * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f), (Depth)0.95f);
+                    Graphics.DrawLine(new Vec2((float)(x + width / 4.0 + 4.0), pos.y + 5f), new Vec2(x + (float)(width / 4.0 * 3.0), pos.y + 5f), Colors.MenuOption * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 2f, (Depth)0.95f);
                     float num = 60f;
-                    Graphics.DrawLine(new Vec2((float)(this.x + this.width / 2.0 - num / 2.0 + num * _moodVal + 2.0), pos.y + 1f), new Vec2((float)(this.x + this.width / 2.0 - num / 2.0 + num * _moodVal + 2.0), pos.y + 4f), Colors.MenuOption * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 3f, (Depth)0.95f);
-                    Graphics.DrawLine(new Vec2((float)(this.x + this.width / 2.0 - num / 2.0 + num * _moodVal + 2.0), pos.y + 6f), new Vec2((float)(this.x + this.width / 2.0 - num / 2.0 + num * _moodVal + 2.0), pos.y + 9f), Colors.MenuOption * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 3f, (Depth)0.95f);
-                    this._happyIcons.color = Color.White * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f);
-                    this._happyIcons.alpha = this._fade;
-                    this._happyIcons.frame = (int)Math.Round(_moodVal * 4.0);
-                    this._happyIcons.depth = (Depth)0.95f;
-                    Graphics.Draw(_happyIcons, (float)(this.x + this.width / 6.0 + 2.0), pos.y + 4f);
-                    this._angryIcons.color = Color.White * (this._createSelection == PSCreateSelection.Mood ? 1f : 0.6f);
-                    this._angryIcons.alpha = this._fade;
-                    this._angryIcons.frame = (int)Math.Round((1.0 - _moodVal) * 4.0);
-                    this._angryIcons.depth = (Depth)0.95f;
-                    Graphics.Draw(_angryIcons, this.x + (float)(this.width / 6.0 * 5.0), pos.y + 4f);
+                    Graphics.DrawLine(new Vec2((float)(x + width / 2.0 - num / 2.0 + num * _moodVal + 2.0), pos.y + 1f), new Vec2((float)(x + width / 2.0 - num / 2.0 + num * _moodVal + 2.0), pos.y + 4f), Colors.MenuOption * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 3f, (Depth)0.95f);
+                    Graphics.DrawLine(new Vec2((float)(x + width / 2.0 - num / 2.0 + num * _moodVal + 2.0), pos.y + 6f), new Vec2((float)(x + width / 2.0 - num / 2.0 + num * _moodVal + 2.0), pos.y + 9f), Colors.MenuOption * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 3f, (Depth)0.95f);
+                    _happyIcons.color = Color.White * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f);
+                    _happyIcons.alpha = _fade;
+                    _happyIcons.frame = (int)Math.Round(_moodVal * 4.0);
+                    _happyIcons.depth = (Depth)0.95f;
+                    Graphics.Draw(_happyIcons, (float)(x + width / 6.0 + 2.0), pos.y + 4f);
+                    _angryIcons.color = Color.White * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f);
+                    _angryIcons.alpha = _fade;
+                    _angryIcons.frame = (int)Math.Round((1.0 - _moodVal) * 4.0);
+                    _angryIcons.depth = (Depth)0.95f;
+                    Graphics.Draw(_angryIcons, x + (float)(width / 6.0 * 5.0), pos.y + 4f);
                     pos.y += 16f;
-                    string text7 = this._preferredColor >= 0 ? "COLOR" : "NO COLOR";
-                    if (this._createSelection == PSCreateSelection.Color)
+                    string text7 = _preferredColor >= 0 ? "COLOR" : "NO COLOR";
+                    if (_createSelection == PSCreateSelection.Color)
                         text7 = "< " + text7 + " >";
-                    if (this._preferredColor >= 0)
+                    if (_preferredColor >= 0)
                     {
-                        Graphics.DrawRect(new Vec2(this.x + 20f, pos.y - 2f), new Vec2(this.x + (this.width - 20f), pos.y + 9f), Persona.all.ElementAt<DuckPersona>(this._preferredColor).colorDark.ToColor() * (this._createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.93f, false);
-                        this._font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(this.x + 2.0 + this.width / 2.0 - this._font.GetWidth(text7) / 2.0), pos.y)), Persona.all.ElementAt<DuckPersona>(this._preferredColor).color.ToColor() * (this._createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
+                        Graphics.DrawRect(new Vec2(x + 20f, pos.y - 2f), new Vec2(x + (width - 20f), pos.y + 9f), Persona.all.ElementAt<DuckPersona>(_preferredColor).colorDark.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.93f, false);
+                        _font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text7) / 2.0), pos.y)), Persona.all.ElementAt<DuckPersona>(_preferredColor).color.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
                     }
                     else
                     {
-                        Graphics.DrawRect(new Vec2(this.x + 20f, pos.y - 2f), new Vec2(this.x + (this.width - 20f), pos.y + 9f), Colors.BlueGray * (this._createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.93f, false);
-                        this._font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(this.x + 2.0 + this.width / 2.0 - this._font.GetWidth(text7) / 2.0), pos.y)), Colors.BlueGray * (this._createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
+                        Graphics.DrawRect(new Vec2(x + 20f, pos.y - 2f), new Vec2(x + (width - 20f), pos.y + 9f), Colors.BlueGray * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.93f, false);
+                        _font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text7) / 2.0), pos.y)), Colors.BlueGray * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
                     }
                     pos.y += 12f;
                     string text8 = "CONTROLS";
-                    if (this._createSelection == PSCreateSelection.Controls)
+                    if (_createSelection == PSCreateSelection.Controls)
                         text8 = "> " + text8 + " <";
-                    this._font.Draw(text8, Maths.RoundToPixel(new Vec2((float)(this.x + 2.0 + this.width / 2.0 - this._font.GetWidth(text8) / 2.0), pos.y)), Colors.MenuOption * (this._createSelection == PSCreateSelection.Controls ? 1f : 0.6f), (Depth)0.95f);
+                    _font.Draw(text8, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text8) / 2.0), pos.y)), Colors.MenuOption * (_createSelection == PSCreateSelection.Controls ? 1f : 0.6f), (Depth)0.95f);
                     string text9 = "OK";
-                    if (this._createSelection == PSCreateSelection.Accept)
+                    if (_createSelection == PSCreateSelection.Accept)
                         text9 = "> " + text9 + " <";
                     pos.y += 12f;
-                    this._font.Draw(text9, Maths.RoundToPixel(new Vec2((float)(this.x + 2.0 + this.width / 2.0 - this._font.GetWidth(text9) / 2.0), pos.y)), Colors.MenuOption * (this._createSelection == PSCreateSelection.Accept ? 1f : 0.6f), (Depth)0.95f);
-                    if (this._changeName)
+                    _font.Draw(text9, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text9) / 2.0), pos.y)), Colors.MenuOption * (_createSelection == PSCreateSelection.Accept ? 1f : 0.6f), (Depth)0.95f);
+                    if (_changeName)
                     {
                         string text10 = "@DPAD@";
-                        if (this._selector != null && (this._selector.profileBoxNumber == 0 || this._selector.profileBoxNumber == 2))
+                        if (_selector != null && (_selector.profileBoxNumber == 0 || _selector.profileBoxNumber == 2))
                             text10 = "@WASD@";
-                        this._font.Draw(text10, 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
-                        this._font.Draw("@SELECT@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
+                        _font.Draw(text10, 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
+                        _font.Draw("@SELECT@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
                     }
-                    else if (this._createSelection == PSCreateSelection.ChangeName)
+                    else if (_createSelection == PSCreateSelection.ChangeName)
                     {
-                        this._font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
-                        this._font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
+                        _font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
+                        _font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
                     }
-                    else if (this._createSelection == PSCreateSelection.Mood)
+                    else if (_createSelection == PSCreateSelection.Mood)
                     {
                         string text11 = "@DPAD@";
-                        if (this._selector != null && (this._selector.profileBoxNumber == 0 || this._selector.profileBoxNumber == 2))
+                        if (_selector != null && (_selector.profileBoxNumber == 0 || _selector.profileBoxNumber == 2))
                             text11 = "@WASD@";
-                        this._font.Draw(text11, 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
-                        this._font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
+                        _font.Draw(text11, 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
+                        _font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
                     }
-                    else if (this._createSelection == PSCreateSelection.Color)
+                    else if (_createSelection == PSCreateSelection.Color)
                     {
                         string text12 = "@DPAD@";
-                        if (this._selector != null && (this._selector.profileBoxNumber == 0 || this._selector.profileBoxNumber == 2))
+                        if (_selector != null && (_selector.profileBoxNumber == 0 || _selector.profileBoxNumber == 2))
                             text12 = "@WASD@";
-                        this._font.Draw(text12, 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
-                        this._font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
+                        _font.Draw(text12, 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
+                        _font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
                     }
                     else
                     {
-                        this._font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
-                        this._font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, this._inputProfile);
+                        _font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
+                        _font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
                     }
                     this.position = position;
-                    this._selector.screen.EndDraw();
+                    _selector.screen.EndDraw();
                 }
             }
         }
 
         public void Open(Profile p)
         {
-            this._desiredSelectorPosition = this._selectorPosition = 0;
-            if (this._box == null && Level.current is TeamSelect2)
-                this._box = (Level.current as TeamSelect2).GetBox(p.networkIndex);
-            if (this._box == null)
+            _desiredSelectorPosition = _selectorPosition = 0;
+            if (_box == null && Level.current is TeamSelect2)
+                _box = (Level.current as TeamSelect2).GetBox(p.networkIndex);
+            if (_box == null)
                 return;
-            this.isEditing = false;
-            this._inputProfile = p.inputProfile;
-            this._profile = this._starterProfile = p;
-            this.RebuildProfileList();
-            for (int index = 0; index < this._profiles.Count; ++index)
+            isEditing = false;
+            _inputProfile = p.inputProfile;
+            _profile = _starterProfile = p;
+            RebuildProfileList();
+            for (int index = 0; index < _profiles.Count; ++index)
             {
-                if (this._profiles[index] == this._profile)
+                if (_profiles[index] == _profile)
                 {
-                    this._selectorPosition = index;
+                    _selectorPosition = index;
                     break;
                 }
             }
-            this._desiredSelectorPosition = this._selectorPosition;
-            this._open = true;
-            this._fade = 1f;
+            _desiredSelectorPosition = _selectorPosition;
+            _open = true;
+            _fade = 1f;
         }
 
-        private bool ProfileAlreadySelected(Profile p) => this._profile.linkedProfile != null ? p != null && Profiles.active.FirstOrDefault<Profile>(x => x.linkedProfile == p) != null && p != this._profile.linkedProfile : p != null && Profiles.active.Contains(p) && p != this._profile;
+        private bool ProfileAlreadySelected(Profile p) => _profile.linkedProfile != null ? p != null && Profiles.active.FirstOrDefault<Profile>(x => x.linkedProfile == p) != null && p != _profile.linkedProfile : p != null && Profiles.active.Contains(p) && p != _profile;
 
         public void EditProfile(Profile p)
         {
-            this.Open(p);
-            this.isEditing = true;
-            this._mode = PSMode.EditProfile;
-            this._desiredMode = PSMode.EditProfile;
-            this._name = p.name;
-            this._desiredMode = PSMode.CreateProfile;
-            this._changeName = false;
-            this._currentLetter = 0;
-            this._moodVal = p.funslider;
-            this._preferredColor = p.preferredColor;
-            this._createSelection = PSCreateSelection.Accept;
-            this._configInputMapping = Input.GetDefaultMapping(this._inputProfile.lastActiveDevice.productName, this._inputProfile.lastActiveDevice.productGUID, p: (this.isEditing ? this._profile : null)).Clone();
+            Open(p);
+            isEditing = true;
+            _mode = PSMode.EditProfile;
+            _desiredMode = PSMode.EditProfile;
+            _name = p.name;
+            _desiredMode = PSMode.CreateProfile;
+            _changeName = false;
+            _currentLetter = 0;
+            _moodVal = p.funslider;
+            _preferredColor = p.preferredColor;
+            _createSelection = PSCreateSelection.Accept;
+            _configInputMapping = Input.GetDefaultMapping(_inputProfile.lastActiveDevice.productName, _inputProfile.lastActiveDevice.productGUID, p: (isEditing ? _profile : null)).Clone();
         }
 
         private int ProfileIndexAdd(int index, int plus)
         {
-            if (this._profiles.Count == 0)
+            if (_profiles.Count == 0)
                 return -1;
             int num = index + plus;
-            while (num >= this._profiles.Count)
-                num -= this._profiles.Count + 1;
+            while (num >= _profiles.Count)
+                num -= _profiles.Count + 1;
             while (num < -1)
-                num += this._profiles.Count + 1;
+                num += _profiles.Count + 1;
             return num;
         }
 
@@ -1357,56 +1357,56 @@ namespace DuckGame
         {
             if (_fade < 0.01f)
                 return;
-            if (this._mode == PSMode.EditControlsConfirm)
+            if (_mode == PSMode.EditControlsConfirm)
             {
-                this._selector.firstWord = "OK";
-                this._selector.secondWord = "BACK";
+                _selector.firstWord = "OK";
+                _selector.secondWord = "BACK";
             }
-            else if (this._mode == PSMode.CreateProfile)
+            else if (_mode == PSMode.CreateProfile)
             {
-                if (this._changeName)
+                if (_changeName)
                 {
-                    this._selector.firstWord = "MOVE";
-                    this._selector.secondWord = "OK";
+                    _selector.firstWord = "MOVE";
+                    _selector.secondWord = "OK";
                 }
-                else if (this._createSelection == PSCreateSelection.ChangeName)
+                else if (_createSelection == PSCreateSelection.ChangeName)
                 {
-                    this._selector.firstWord = "ALTER";
-                    this._selector.secondWord = "BACK";
+                    _selector.firstWord = "ALTER";
+                    _selector.secondWord = "BACK";
                 }
-                else if (this._createSelection == PSCreateSelection.Mood)
+                else if (_createSelection == PSCreateSelection.Mood)
                 {
-                    this._selector.firstWord = "MOVE";
-                    this._selector.secondWord = "BACK";
+                    _selector.firstWord = "MOVE";
+                    _selector.secondWord = "BACK";
                 }
                 else
                 {
-                    this._selector.firstWord = "OK";
-                    this._selector.secondWord = "BACK";
+                    _selector.firstWord = "OK";
+                    _selector.secondWord = "BACK";
                 }
             }
-            else if (this._mode == PSMode.SelectProfile)
+            else if (_mode == PSMode.SelectProfile)
             {
-                if (!this.HoveredProfileIsCustom())
+                if (!HoveredProfileIsCustom())
                 {
-                    this._selector.firstWord = "PICK";
-                    this._selector.secondWord = "BACK";
+                    _selector.firstWord = "PICK";
+                    _selector.secondWord = "BACK";
                 }
                 else
                 {
-                    this._selector.firstWord = "PICK";
-                    this._selector.secondWord = "KILL";
+                    _selector.firstWord = "PICK";
+                    _selector.secondWord = "KILL";
                 }
             }
-            else if (!this._editControl)
+            else if (!_editControl)
             {
-                this._selector.firstWord = "EDIT";
-                this._selector.secondWord = "SAVE";
+                _selector.firstWord = "EDIT";
+                _selector.secondWord = "SAVE";
             }
             else
             {
-                this._selector.firstWord = "BACK";
-                this._selector.secondWord = "";
+                _selector.firstWord = "BACK";
+                _selector.secondWord = "";
             }
         }
     }

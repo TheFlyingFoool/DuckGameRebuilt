@@ -11,9 +11,9 @@ namespace DuckGame
     {
         public ATTracer()
         {
-            this.accuracy = 1f;
-            this.range = 250f;
-            this.penetration = 1f;
+            accuracy = 1f;
+            range = 250f;
+            penetration = 1f;
         }
     }
 }

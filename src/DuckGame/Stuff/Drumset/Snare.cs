@@ -14,18 +14,18 @@ namespace DuckGame
         public Snare(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("drumset/snareDrum");
-            this.center = new Vec2(this.graphic.w / 2, this.graphic.h / 2);
-            this._stand = new Sprite("drumset/snareStand");
-            this._stand.center = new Vec2(this._stand.w / 2, 0f);
-            this._sound = "snare";
+            graphic = new Sprite("drumset/snareDrum");
+            center = new Vec2(graphic.w / 2, graphic.h / 2);
+            _stand = new Sprite("drumset/snareStand");
+            _stand.center = new Vec2(_stand.w / 2, 0f);
+            _sound = "snare";
         }
 
         public override void Draw()
         {
             base.Draw();
-            this._stand.depth = this.depth - 1;
-            Graphics.Draw(this._stand, this.x, this.y + 3f);
+            _stand.depth = depth - 1;
+            Graphics.Draw(_stand, x, y + 3f);
         }
     }
 }

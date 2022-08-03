@@ -14,45 +14,45 @@ namespace DuckGame
 
         public object value
         {
-            get => this._value;
-            set => this._value = value;
+            get => _value;
+            set => _value = value;
         }
 
         public int valueInt
         {
-            get => this._value is float ? (int)(float)this._value : (int)this._value;
+            get => _value is float ? (int)(float)_value : (int)_value;
             set
             {
-                if (!(this._value is int) || value > (int)this._value)
-                    this._value = value;
-                Steam.SetStat(this._name, this.valueInt);
+                if (!(_value is int) || value > (int)_value)
+                    _value = value;
+                Steam.SetStat(_name, valueInt);
             }
         }
 
         public float valueFloat
         {
-            get => this._value is int ? (int)this._value : (float)this._value;
+            get => _value is int ? (int)_value : (float)_value;
             set
             {
-                if (!(this._value is float) || value > (float)this._value)
-                    this._value = value;
-                Steam.SetStat(this._name, this.valueFloat);
+                if (!(_value is float) || value > (float)_value)
+                    _value = value;
+                Steam.SetStat(_name, valueFloat);
             }
         }
 
         public void BindName(string name)
         {
-            this._name = name;
-            this._value = 0f;
+            _name = name;
+            _value = 0f;
             if (!Steam.IsInitialized())
                 return;
-            float stat = Steam.GetStat(this._name);
+            float stat = Steam.GetStat(_name);
             if (stat <= -99999f)
                 return;
-            this._value = stat;
+            _value = stat;
         }
 
-        public bool isFloat => this._value is float;
+        public bool isFloat => _value is float;
 
         public static implicit operator float(StatBinding val) => val.valueFloat;
 

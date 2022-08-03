@@ -36,19 +36,19 @@ namespace DuckGame
                 }
             }
             if (pConfig == null)
-                this.configuration = new ModConfiguration();
+                configuration = new ModConfiguration();
             else
-                this.configuration = pConfig;
-            this.configuration.assembly = Assembly.GetExecutingAssembly();
-            this.configuration.contentManager = ContentManagers.GetContentManager(typeof(DefaultContentManager));
-            this.configuration.name = str1;
-            this.configuration.displayName = str1;
-            this.configuration.description = str3;
-            this.configuration.version = new Version(DG.version);
-            this.configuration.author = str2;
-            this.configuration.contentDirectory = pPath;
-            this.configuration.directory = pPath;
-            this.configuration.isHighResReskin = flag;
+                configuration = pConfig;
+            configuration.assembly = Assembly.GetExecutingAssembly();
+            configuration.contentManager = ContentManagers.GetContentManager(typeof(DefaultContentManager));
+            configuration.name = str1;
+            configuration.displayName = str1;
+            configuration.description = str3;
+            configuration.version = new Version(DG.version);
+            configuration.author = str2;
+            configuration.contentDirectory = pPath;
+            configuration.directory = pPath;
+            configuration.isHighResReskin = flag;
         }
     }
 }

@@ -15,6 +15,6 @@ namespace DuckGame
         {
         }
 
-        public NMNoConnectionExists(string who) => this.toWhom = who;
+        public NMNoConnectionExists(string who) => toWhom = who;
     }
 }

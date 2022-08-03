@@ -14,18 +14,18 @@ namespace DuckGame
         public DrumStick(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("drumset/drumStick");
-            this.center = new Vec2(this.graphic.w / 2, this.graphic.h / 2);
-            this._startY = ypos;
-            this.vSpeed = -3f;
+            graphic = new Sprite("drumset/drumStick");
+            center = new Vec2(graphic.w / 2, graphic.h / 2);
+            _startY = ypos;
+            vSpeed = -3f;
         }
 
         public override void Update()
         {
-            this.angle += 0.6f;
-            this.y += this.vSpeed;
-            this.vSpeed += 0.2f;
-            if (this.y <= _startY)
+            angle += 0.6f;
+            y += vSpeed;
+            vSpeed += 0.2f;
+            if (y <= _startY)
                 return;
             Level.Remove(this);
         }

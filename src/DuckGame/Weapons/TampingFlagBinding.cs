@@ -13,20 +13,20 @@ namespace DuckGame
         {
             get
             {
-                this._value = 0;
-                TampingWeapon thing = this._thing as TampingWeapon;
+                _value = 0;
+                TampingWeapon thing = _thing as TampingWeapon;
                 if (thing._tamped)
-                    this._value |= 4;
+                    _value |= 4;
                 if (thing.tamping)
-                    this._value |= 2;
+                    _value |= 2;
                 if (thing._rotating)
-                    this._value |= 1;
-                return this._value;
+                    _value |= 1;
+                return _value;
             }
             set
             {
-                this._value = value;
-                TampingWeapon thing = this._thing as TampingWeapon;
+                _value = value;
+                TampingWeapon thing = _thing as TampingWeapon;
                 thing._tamped = (_value & 4U) > 0U;
                 thing.tamping = (_value & 2U) > 0U;
                 thing._rotating = (_value & 1U) > 0U;

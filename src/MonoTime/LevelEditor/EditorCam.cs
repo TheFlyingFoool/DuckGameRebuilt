@@ -15,29 +15,29 @@ namespace DuckGame
 
         public new Vec2 zoomPoint
         {
-            get => this._zoomPoint;
+            get => _zoomPoint;
             set
             {
-                if (!(this._zoomPoint != value))
+                if (!(_zoomPoint != value))
                     return;
-                this._zoomPoint = value;
-                this._dirty = true;
+                _zoomPoint = value;
+                _dirty = true;
             }
         }
 
         public float zoomInc
         {
-            get => this._zoomInc;
+            get => _zoomInc;
             set
             {
                 if (_zoomInc == value)
                     return;
-                this._zoomInc = value;
-                this._dirty = true;
+                _zoomInc = value;
+                _dirty = true;
             }
         }
 
-        public float zoom => this._zoom;
+        public float zoom => _zoom;
 
         public override void Update()
         {

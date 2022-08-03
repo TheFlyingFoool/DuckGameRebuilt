@@ -38,21 +38,21 @@ namespace DuckGame
 
         public static bool NothingPressed() => Keyboard._keyState.GetPressedKeys().Length == 0 && Keyboard._keyStatePrev.GetPressedKeys().Length == 0;
 
-        public override bool isConnected => !this._fakeDisconnect;
+        public override bool isConnected => !_fakeDisconnect;
 
         public Keyboard(string name, int index)
           : base(index)
         {
-            this._name = "keyboard";
-            this._productName = name;
-            this._productGUID = "";
+            _name = "keyboard";
+            _productName = name;
+            _productGUID = "";
         }
 
         public override Dictionary<int, string> GetTriggerNames()
         {
-            if (this._triggerNames == null)
+            if (_triggerNames == null)
             {
-                this._triggerNames = new Dictionary<int, string>();
+                _triggerNames = new Dictionary<int, string>();
                 foreach (Keys key in Enum.GetValues(typeof(Keys)).Cast<Keys>())
                 {
                     char ch = Keyboard.KeyToChar(key);
@@ -61,119 +61,119 @@ namespace DuckGame
                         switch (key)
                         {
                             case Keys.Back:
-                                this._triggerNames[(int)key] = "BACK";
+                                _triggerNames[(int)key] = "BACK";
                                 continue;
                             case Keys.Tab:
-                                this._triggerNames[(int)key] = "TAB";
+                                _triggerNames[(int)key] = "TAB";
                                 continue;
                             case Keys.Enter:
-                                this._triggerNames[(int)key] = "ENTER";
+                                _triggerNames[(int)key] = "ENTER";
                                 continue;
                             case Keys.Escape:
-                                this._triggerNames[(int)key] = "ESC";
+                                _triggerNames[(int)key] = "ESC";
                                 continue;
                             case Keys.Space:
-                                this._triggerNames[(int)key] = "SPACE";
+                                _triggerNames[(int)key] = "SPACE";
                                 continue;
                             case Keys.PageUp:
-                                this._triggerNames[(int)key] = "PGUP";
+                                _triggerNames[(int)key] = "PGUP";
                                 continue;
                             case Keys.PageDown:
-                                this._triggerNames[(int)key] = "PGDN";
+                                _triggerNames[(int)key] = "PGDN";
                                 continue;
                             case Keys.End:
-                                this._triggerNames[(int)key] = "END";
+                                _triggerNames[(int)key] = "END";
                                 continue;
                             case Keys.Home:
-                                this._triggerNames[(int)key] = "HOME";
+                                _triggerNames[(int)key] = "HOME";
                                 continue;
                             case Keys.Left:
-                                this._triggerNames[(int)key] = "LEFT";
+                                _triggerNames[(int)key] = "LEFT";
                                 continue;
                             case Keys.Up:
-                                this._triggerNames[(int)key] = "UP";
+                                _triggerNames[(int)key] = "UP";
                                 continue;
                             case Keys.Right:
-                                this._triggerNames[(int)key] = "RIGHT";
+                                _triggerNames[(int)key] = "RIGHT";
                                 continue;
                             case Keys.Down:
-                                this._triggerNames[(int)key] = "DOWN";
+                                _triggerNames[(int)key] = "DOWN";
                                 continue;
                             case Keys.Insert:
-                                this._triggerNames[(int)key] = "INSRT";
+                                _triggerNames[(int)key] = "INSRT";
                                 continue;
                             case Keys.F1:
-                                this._triggerNames[(int)key] = "F1";
+                                _triggerNames[(int)key] = "F1";
                                 continue;
                             case Keys.F2:
-                                this._triggerNames[(int)key] = "F2";
+                                _triggerNames[(int)key] = "F2";
                                 continue;
                             case Keys.F3:
-                                this._triggerNames[(int)key] = "F3";
+                                _triggerNames[(int)key] = "F3";
                                 continue;
                             case Keys.F4:
-                                this._triggerNames[(int)key] = "F4";
+                                _triggerNames[(int)key] = "F4";
                                 continue;
                             case Keys.F5:
-                                this._triggerNames[(int)key] = "F5";
+                                _triggerNames[(int)key] = "F5";
                                 continue;
                             case Keys.F6:
-                                this._triggerNames[(int)key] = "F6";
+                                _triggerNames[(int)key] = "F6";
                                 continue;
                             case Keys.F7:
-                                this._triggerNames[(int)key] = "F7";
+                                _triggerNames[(int)key] = "F7";
                                 continue;
                             case Keys.F8:
-                                this._triggerNames[(int)key] = "F8";
+                                _triggerNames[(int)key] = "F8";
                                 continue;
                             case Keys.F9:
-                                this._triggerNames[(int)key] = "F9";
+                                _triggerNames[(int)key] = "F9";
                                 continue;
                             case Keys.F10:
-                                this._triggerNames[(int)key] = "F10";
+                                _triggerNames[(int)key] = "F10";
                                 continue;
                             case Keys.F11:
-                                this._triggerNames[(int)key] = "F11";
+                                _triggerNames[(int)key] = "F11";
                                 continue;
                             case Keys.F12:
-                                this._triggerNames[(int)key] = "F12";
+                                _triggerNames[(int)key] = "F12";
                                 continue;
                             case Keys.LeftShift:
-                                this._triggerNames[(int)key] = "LSHFT";
+                                _triggerNames[(int)key] = "LSHFT";
                                 continue;
                             case Keys.RightShift:
-                                this._triggerNames[(int)key] = "RSHFT";
+                                _triggerNames[(int)key] = "RSHFT";
                                 continue;
                             case Keys.LeftControl:
-                                this._triggerNames[(int)key] = "LCTRL";
+                                _triggerNames[(int)key] = "LCTRL";
                                 continue;
                             case Keys.RightControl:
-                                this._triggerNames[(int)key] = "RCTRL";
+                                _triggerNames[(int)key] = "RCTRL";
                                 continue;
                             case Keys.LeftAlt:
-                                this._triggerNames[(int)key] = "LALT";
+                                _triggerNames[(int)key] = "LALT";
                                 continue;
                             case Keys.RightAlt:
-                                this._triggerNames[(int)key] = "RALT";
+                                _triggerNames[(int)key] = "RALT";
                                 continue;
                             case Keys.MouseLeft:
-                                this._triggerNames[(int)key] = "MB L";
+                                _triggerNames[(int)key] = "MB L";
                                 continue;
                             case Keys.MouseMiddle:
-                                this._triggerNames[(int)key] = "MB M";
+                                _triggerNames[(int)key] = "MB M";
                                 continue;
                             case Keys.MouseRight:
-                                this._triggerNames[(int)key] = "MB R";
+                                _triggerNames[(int)key] = "MB R";
                                 continue;
                             default:
                                 continue;
                         }
                     }
                     else
-                        this._triggerNames[(int)key] = ch.ToString() ?? "";
+                        _triggerNames[(int)key] = ch.ToString() ?? "";
                 }
             }
-            return this._triggerNames;
+            return _triggerNames;
         }
 
         public static void InitTriggerImages()
@@ -711,10 +711,10 @@ namespace DuckGame
                 return;
             if (Keyboard._usingVoiceRegister == 0)
             {
-                if (Keyboard.Pressed(Keys.D8) && this.index == 0)
-                    this._fakeDisconnect = !this._fakeDisconnect;
-                if (Keyboard.Pressed(Keys.D9) && this.index == 1)
-                    this._fakeDisconnect = !this._fakeDisconnect;
+                if (Keyboard.Pressed(Keys.D8) && index == 0)
+                    _fakeDisconnect = !_fakeDisconnect;
+                if (Keyboard.Pressed(Keys.D9) && index == 1)
+                    _fakeDisconnect = !_fakeDisconnect;
             }
             if (Keyboard._flipper == 0)
             {
@@ -725,7 +725,7 @@ namespace DuckGame
                 if (num != Keyboard._lastKeyCount && num != 0)
                     Keyboard._keyboardPress = true;
                 Keyboard._lastKeyCount = num;
-                this.updateKeyboardString();
+                updateKeyboardString();
                 Keyboard._flipper = 1;
                 if (Keyboard._registerLock && (Keyboard._registerSetThing == null || Keyboard._registerSetThing.removeFromLevel || Keyboard._registerSetThing.owner == null || DevConsole.open || DuckNetwork.core.enteringText))
                 {
@@ -735,7 +735,7 @@ namespace DuckGame
             }
             else
                 --Keyboard._flipper;
-            if (this.index == 0)
+            if (index == 0)
                 Keyboard._repeatList.Clear();
             Keyboard.ignoreCore = true;
             if (Keyboard._repeat)
@@ -743,18 +743,18 @@ namespace DuckGame
                 foreach (Keys keys in Enum.GetValues(typeof(Keys)).Cast<Keys>())
                 {
                     Keys k = keys;
-                    if (this.MapPressed((int)k, false) && (k < Keys.F1 || k > Keys.F12) && this._repeatingKeys.FirstOrDefault<Keyboard.RepeatKey>(x => x.key == k) == null)
-                        this._repeatingKeys.Add(new Keyboard.RepeatKey()
+                    if (MapPressed((int)k, false) && (k < Keys.F1 || k > Keys.F12) && _repeatingKeys.FirstOrDefault<Keyboard.RepeatKey>(x => x.key == k) == null)
+                        _repeatingKeys.Add(new Keyboard.RepeatKey()
                         {
                             key = k,
                             repeatTime = 2f
                         });
                 }
                 List<Keyboard.RepeatKey> repeatKeyList = new List<Keyboard.RepeatKey>();
-                foreach (Keyboard.RepeatKey repeatingKey in this._repeatingKeys)
+                foreach (Keyboard.RepeatKey repeatingKey in _repeatingKeys)
                 {
                     repeatingKey.repeatTime -= 0.1f;
-                    bool flag = this.MapDown((int)repeatingKey.key, false);
+                    bool flag = MapDown((int)repeatingKey.key, false);
                     if (flag && repeatingKey.repeatTime < 0.0)
                         Keyboard._repeatList.Add(repeatingKey.key);
                     if (repeatingKey.repeatTime <= 0.0 & flag)
@@ -763,7 +763,7 @@ namespace DuckGame
                         repeatKeyList.Add(repeatingKey);
                 }
                 foreach (Keyboard.RepeatKey repeatKey in repeatKeyList)
-                    this._repeatingKeys.Remove(repeatKey);
+                    _repeatingKeys.Remove(repeatKey);
             }
             Keyboard.ignoreCore = false;
         }
@@ -846,7 +846,7 @@ namespace DuckGame
             {
                 foreach (Microsoft.Xna.Framework.Input.Keys keys in pressedKeys)
                 {
-                    if (this.MapPressed((int)keys, false))
+                    if (MapPressed((int)keys, false))
                     {
                         switch (keys)
                         {

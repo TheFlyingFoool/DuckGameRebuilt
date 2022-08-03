@@ -18,8 +18,8 @@ namespace DuckGame
 
         public long connectionStateMask
         {
-            get => this._connectionStateMask;
-            set => this._connectionStateMask = value;
+            get => _connectionStateMask;
+            set => _connectionStateMask = value;
         }
     }
 }

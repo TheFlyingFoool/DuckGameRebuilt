@@ -27,19 +27,19 @@ namespace DuckGame
         public override Vec2 collisionSize
         {
             get => new Vec2(160f, 2f);
-            set => this._collisionSize = value;
+            set => _collisionSize = value;
         }
 
         public string _trigger
         {
-            set => this._realTrigger = value;
+            set => _realTrigger = value;
             get
             {
-                if (this._realTrigger == "LSTICK" && this.inputMapping != null && this.inputMapping.device is Keyboard)
+                if (_realTrigger == "LSTICK" && inputMapping != null && inputMapping.device is Keyboard)
                     return "CHAT";
-                if (this._realTrigger == "RSTICK" && this.inputMapping != null && this.inputMapping.device is Keyboard)
+                if (_realTrigger == "RSTICK" && inputMapping != null && inputMapping.device is Keyboard)
                     return "VOICEREG";
-                return this._realTrigger == "RTRIGGER" && this.inputMapping != null && this.inputMapping.device is Keyboard ? "PLAYERINDEX" : this._realTrigger;
+                return _realTrigger == "RTRIGGER" && inputMapping != null && inputMapping.device is Keyboard ? "PLAYERINDEX" : _realTrigger;
             }
         }
 
@@ -52,107 +52,107 @@ namespace DuckGame
           Color c = default(Color))
           : base(action)
         {
-            this._trigger = trigger;
+            _trigger = trigger;
             if (c == new Color())
                 c = Colors.MenuOption;
             BitmapFont f = new BitmapFont("smallBiosFontUI", 7, 5);
             UIDivider component1 = new UIDivider(true, 0f);
-            this._uiText = new UIText(text, c);
-            this._uiText.SetFont(f);
-            this._uiText.align = UIAlign.Left;
-            this._uiText.specialScale = 0.5f;
+            _uiText = new UIText(text, c);
+            _uiText.SetFont(f);
+            _uiText.align = UIAlign.Left;
+            _uiText.specialScale = 0.5f;
             component1.leftSection.Add(_uiText, true);
-            UIMultiToggle component2 = new UIMultiToggle(-1f, -1f, new FieldBinding(this, nameof(randomAssIntField)), this._captionList, true);
+            UIMultiToggle component2 = new UIMultiToggle(-1f, -1f, new FieldBinding(this, nameof(randomAssIntField)), _captionList, true);
             component2.SetFont(f);
             component2.align = UIAlign.Right;
             component1.rightSection.Add(component2, true);
-            this.rightSection.Add(component1, true);
+            rightSection.Add(component1, true);
             component2.specialScale = 0.5f;
-            this._arrow = new UIImage("littleContextArrowRight")
+            _arrow = new UIImage("littleContextArrowRight")
             {
                 scale = new Vec2(0.5f, 0.5f),
                 align = UIAlign.Right,
                 visible = false
             };
-            this.leftSection.Add(_arrow, true);
-            this._styleBubble = new Sprite("buttons/styleBubble")
+            leftSection.Add(_arrow, true);
+            _styleBubble = new Sprite("buttons/styleBubble")
             {
                 center = new Vec2(0f, 11f)
             };
-            this._styleTray = new Sprite("buttons/styleTray");
-            this._styleTray.CenterOrigin();
-            this._field = field;
-            this.inputMapping = map;
+            _styleTray = new Sprite("buttons/styleTray");
+            _styleTray.CenterOrigin();
+            _field = field;
+            inputMapping = map;
         }
 
         public override void Update()
         {
-            this.collisionSize = new Vec2(this.collisionSize.x, 2.5f);
-            this._captionList.Clear();
-            if (!this._editing)
+            collisionSize = new Vec2(collisionSize.x, 2.5f);
+            _captionList.Clear();
+            if (!_editing)
             {
-                string str = !(this.inputMapping.device is Keyboard) || !(this._trigger == "LSTICK") && !(this._trigger == "RSTICK") && !(this._trigger == "LTRIGGER") && !(this._trigger == "RTRIGGER") ? (this._trigger == "LSTICK" || this._trigger == "RSTICK" || this._trigger == "LTRIGGER" || this._trigger == "RTRIGGER" ? "|DGYELLOW|" : "|WHITE|") : "|GRAY|";
-                if (this._trigger == "LSTICK")
+                string str = !(inputMapping.device is Keyboard) || !(_trigger == "LSTICK") && !(_trigger == "RSTICK") && !(_trigger == "LTRIGGER") && !(_trigger == "RTRIGGER") ? (_trigger == "LSTICK" || _trigger == "RSTICK" || _trigger == "LTRIGGER" || _trigger == "RTRIGGER" ? "|DGYELLOW|" : "|WHITE|") : "|GRAY|";
+                if (_trigger == "LSTICK")
                 {
-                    this._uiText.text = "|DGGREEN|MOVE STICK";
-                    if (this.inputMapping.device is Keyboard)
-                        this._uiText.text = "|GRAY|MOVE STICK";
+                    _uiText.text = "|DGGREEN|MOVE STICK";
+                    if (inputMapping.device is Keyboard)
+                        _uiText.text = "|GRAY|MOVE STICK";
                 }
-                if (this._trigger == "RSTICK")
+                if (_trigger == "RSTICK")
                 {
-                    this._uiText.text = "|DGGREEN|LICK STICK";
-                    if (this.inputMapping.device is Keyboard)
-                        this._uiText.text = "|GRAY|LICK STICK";
+                    _uiText.text = "|DGGREEN|LICK STICK";
+                    if (inputMapping.device is Keyboard)
+                        _uiText.text = "|GRAY|LICK STICK";
                 }
-                if (this._trigger == "LTRIGGER")
+                if (_trigger == "LTRIGGER")
                 {
-                    this._uiText.text = "|DGGREEN|QUACK PITCH";
-                    if (this.inputMapping.device is Keyboard)
-                        this._uiText.text = "|GRAY|QUACK PITCH";
+                    _uiText.text = "|DGGREEN|QUACK PITCH";
+                    if (inputMapping.device is Keyboard)
+                        _uiText.text = "|GRAY|QUACK PITCH";
                 }
-                if (this._trigger == "RTRIGGER")
+                if (_trigger == "RTRIGGER")
                 {
-                    this._uiText.text = "|DGGREEN|ZOOM   ";
-                    if (this.inputMapping.device is Keyboard)
-                        this._uiText.text = "|GRAY|ZOOM   ";
+                    _uiText.text = "|DGGREEN|ZOOM   ";
+                    if (inputMapping.device is Keyboard)
+                        _uiText.text = "|GRAY|ZOOM   ";
                 }
-                string mappingString = this.inputMapping.GetMappingString(this._trigger);
-                if (this._trigger == "CHAT")
-                    this._uiText.text = "|PINK|CHAT      ";
-                if (this._trigger == "VOICEREG")
-                    this._uiText.text = "|PINK|JAM BUTTON";
-                if (this._trigger == "PLAYERINDEX")
+                string mappingString = inputMapping.GetMappingString(_trigger);
+                if (_trigger == "CHAT")
+                    _uiText.text = "|PINK|CHAT      ";
+                if (_trigger == "VOICEREG")
+                    _uiText.text = "|PINK|JAM BUTTON";
+                if (_trigger == "PLAYERINDEX")
                 {
-                    this._uiText.text = "|LIME|PLAYER#";
-                    if (this.inputMapping.device.productName == "KEYBOARD P1")
+                    _uiText.text = "|LIME|PLAYER#";
+                    if (inputMapping.device.productName == "KEYBOARD P1")
                         mappingString = (Options.Data.keyboard1PlayerIndex + 1).ToString();
-                    else if (this.inputMapping.device.productName == "KEYBOARD P2")
+                    else if (inputMapping.device.productName == "KEYBOARD P2")
                         mappingString = (Options.Data.keyboard2PlayerIndex + 1).ToString();
                 }
-                this._captionList.Add(str + mappingString + "  ");
+                _captionList.Add(str + mappingString + "  ");
             }
             else
             {
-                if (this._skipStep)
+                if (_skipStep)
                 {
-                    this._skipStep = false;
+                    _skipStep = false;
                     return;
                 }
-                if (!this._selectStyle)
+                if (!_selectStyle)
                 {
-                    this._captionList.Add("_");
+                    _captionList.Add("_");
                     if (Keyboard.Pressed(Keys.OemTilde))
                     {
-                        this._editing = false;
+                        _editing = false;
                         UIMenu.globalUILock = false;
                         HUD.CloseAllCorners();
                     }
-                    else if (this.inputMapping.RunMappingUpdate(this._trigger))
+                    else if (inputMapping.RunMappingUpdate(_trigger))
                     {
-                        this._editing = false;
+                        _editing = false;
                         UIMenu.globalUILock = false;
                         HUD.CloseAllCorners();
-                        if (!(this.inputMapping.deviceName != "KEYBOARD P1") || !(this.inputMapping.deviceName != "KEYBOARD P1"))
+                        if (!(inputMapping.deviceName != "KEYBOARD P1") || !(inputMapping.deviceName != "KEYBOARD P1"))
                             return;
                         HUD.AddCornerControl(HUDCorner.BottomLeft, "@MENU2@STYLE");
                         return;
@@ -163,28 +163,28 @@ namespace DuckGame
                     bool flag = false;
                     if (Input.Pressed("MENULEFT"))
                     {
-                        --this._selectionIndex;
+                        --_selectionIndex;
                         SFX.Play("textLetter", 0.7f);
                     }
                     if (Input.Pressed("MENURIGHT"))
                     {
-                        ++this._selectionIndex;
+                        ++_selectionIndex;
                         SFX.Play("textLetter", 0.7f);
                     }
                     if (Input.Pressed("MENUUP"))
                     {
-                        this._selectionIndex -= 4;
+                        _selectionIndex -= 4;
                         SFX.Play("textLetter", 0.7f);
                     }
                     if (Input.Pressed("MENUDOWN"))
                     {
-                        this._selectionIndex += 4;
+                        _selectionIndex += 4;
                         SFX.Play("textLetter", 0.7f);
                     }
-                    if (this._selectionIndex < 0)
-                        this._selectionIndex = 0;
-                    if (this._selectionIndex >= Input.buttonStyles.Count)
-                        this._selectionIndex = Input.buttonStyles.Count - 1;
+                    if (_selectionIndex < 0)
+                        _selectionIndex = 0;
+                    if (_selectionIndex >= Input.buttonStyles.Count)
+                        _selectionIndex = Input.buttonStyles.Count - 1;
                     if (Input.Pressed("CANCEL"))
                     {
                         flag = true;
@@ -194,19 +194,19 @@ namespace DuckGame
                     {
                         flag = true;
                         int key;
-                        if (this.inputMapping.map.TryGetValue(this._trigger, out key))
+                        if (inputMapping.map.TryGetValue(_trigger, out key))
                         {
-                            this.inputMapping.graphicMap[key] = Input.buttonStyles[this._selectionIndex].texture.textureName;
+                            inputMapping.graphicMap[key] = Input.buttonStyles[_selectionIndex].texture.textureName;
                             SFX.Play("consoleSelect");
                         }
                     }
                     if (flag)
                     {
-                        this._editing = false;
-                        this._selectStyle = false;
+                        _editing = false;
+                        _selectStyle = false;
                         UIMenu.globalUILock = false;
                         HUD.CloseAllCorners();
-                        if (!(this.inputMapping.deviceName != "KEYBOARD P1") || !(this.inputMapping.deviceName != "KEYBOARD P1"))
+                        if (!(inputMapping.deviceName != "KEYBOARD P1") || !(inputMapping.deviceName != "KEYBOARD P1"))
                             return;
                         HUD.AddCornerControl(HUDCorner.BottomLeft, "@MENU2@STYLE");
                         return;
@@ -218,38 +218,38 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._arrow.visible)
+            if (_arrow.visible)
             {
-                this._styleBubble.depth = (Depth)0.9f;
-                Vec2 vec2_1 = new Vec2(this.x + 76f, this.y);
-                if (this._selectStyle)
+                _styleBubble.depth = (Depth)0.9f;
+                Vec2 vec2_1 = new Vec2(x + 76f, y);
+                if (_selectStyle)
                 {
-                    vec2_1 = new Vec2(this.x + 85f, this.y);
-                    this._styleBubble.flipH = true;
+                    vec2_1 = new Vec2(x + 85f, y);
+                    _styleBubble.flipH = true;
                 }
                 else
-                    this._styleBubble.flipH = false;
-                Graphics.Draw(this._styleBubble, vec2_1.x, vec2_1.y);
-                if (this.inputMapping.map.ContainsKey(this._trigger))
+                    _styleBubble.flipH = false;
+                Graphics.Draw(_styleBubble, vec2_1.x, vec2_1.y);
+                if (inputMapping.map.ContainsKey(_trigger))
                 {
-                    Sprite g = this.inputMapping.GetSprite(this.inputMapping.map[this._trigger]) ?? this.inputMapping.device.DoGetMapImage(this.inputMapping.map[this._trigger], true);
+                    Sprite g = inputMapping.GetSprite(inputMapping.map[_trigger]) ?? inputMapping.device.DoGetMapImage(inputMapping.map[_trigger], true);
                     if (g != null)
                     {
                         g.depth = (Depth)0.95f;
-                        Graphics.Draw(g, vec2_1.x + (this._selectStyle ? -22f : 9f), vec2_1.y - 7f);
+                        Graphics.Draw(g, vec2_1.x + (_selectStyle ? -22f : 9f), vec2_1.y - 7f);
                     }
                 }
-                if (this._selectStyle)
+                if (_selectStyle)
                 {
-                    this._styleTray.depth = (Depth)0.92f;
-                    Graphics.Draw(this._styleTray, this.x + 118f, Layer.HUD.camera.height / 2f);
-                    Vec2 vec2_2 = new Vec2(this.x + 90f, (float)(Layer.HUD.camera.height / 2.0 - 80.0));
+                    _styleTray.depth = (Depth)0.92f;
+                    Graphics.Draw(_styleTray, x + 118f, Layer.HUD.camera.height / 2f);
+                    Vec2 vec2_2 = new Vec2(x + 90f, (float)(Layer.HUD.camera.height / 2.0 - 80.0));
                     int num = 0;
                     foreach (Sprite buttonStyle in Input.buttonStyles)
                     {
                         Vec2 vec2_3 = vec2_2 + new Vec2(num % 4 * 14, num / 4 * 14);
                         buttonStyle.depth = (Depth)0.95f;
-                        buttonStyle.color = Color.White * (num == this._selectionIndex ? 1f : 0.4f);
+                        buttonStyle.color = Color.White * (num == _selectionIndex ? 1f : 0.4f);
                         Graphics.Draw(buttonStyle, vec2_3.x, vec2_3.y);
                         ++num;
                     }
@@ -262,15 +262,15 @@ namespace DuckGame
         {
             if (trigger == "MENURIGHT")
             {
-                if (this._trigger == "PLAYERINDEX")
+                if (_trigger == "PLAYERINDEX")
                 {
-                    if (this.inputMapping.device.productName == "KEYBOARD P1")
+                    if (inputMapping.device.productName == "KEYBOARD P1")
                     {
                         ++Options.Data.keyboard1PlayerIndex;
                         if (Options.Data.keyboard1PlayerIndex > 7)
                             Options.Data.keyboard1PlayerIndex = 0;
                     }
-                    else if (this.inputMapping.device.productName == "KEYBOARD P2")
+                    else if (inputMapping.device.productName == "KEYBOARD P2")
                     {
                         ++Options.Data.keyboard2PlayerIndex;
                         if (Options.Data.keyboard2PlayerIndex > 7)
@@ -279,15 +279,15 @@ namespace DuckGame
                     SFX.Play("consoleSelect");
                 }
             }
-            else if (trigger == "MENULEFT" && this._trigger == "PLAYERINDEX")
+            else if (trigger == "MENULEFT" && _trigger == "PLAYERINDEX")
             {
-                if (this.inputMapping.device.productName == "KEYBOARD P1")
+                if (inputMapping.device.productName == "KEYBOARD P1")
                 {
                     --Options.Data.keyboard1PlayerIndex;
                     if (Options.Data.keyboard1PlayerIndex < 0)
                         Options.Data.keyboard1PlayerIndex = 7;
                 }
-                else if (this.inputMapping.device.productName == "KEYBOARD P2")
+                else if (inputMapping.device.productName == "KEYBOARD P2")
                 {
                     --Options.Data.keyboard2PlayerIndex;
                     if (Options.Data.keyboard2PlayerIndex < 0)
@@ -297,17 +297,17 @@ namespace DuckGame
             }
             if (trigger == "SELECT")
             {
-                if (this.inputMapping.device is Keyboard && (this._trigger == "LSTICK" || this._trigger == "RSTICK" || this._trigger == "LTRIGGER" || this._trigger == "RTRIGGER"))
+                if (inputMapping.device is Keyboard && (_trigger == "LSTICK" || _trigger == "RSTICK" || _trigger == "LTRIGGER" || _trigger == "RTRIGGER"))
                     SFX.Play("consoleError");
-                else if (this._trigger == "PLAYERINDEX")
+                else if (_trigger == "PLAYERINDEX")
                 {
-                    if (this.inputMapping.device.productName == "KEYBOARD P1")
+                    if (inputMapping.device.productName == "KEYBOARD P1")
                     {
                         ++Options.Data.keyboard1PlayerIndex;
                         if (Options.Data.keyboard1PlayerIndex > 7)
                             Options.Data.keyboard1PlayerIndex = 0;
                     }
-                    else if (this.inputMapping.device.productName == "KEYBOARD P2")
+                    else if (inputMapping.device.productName == "KEYBOARD P2")
                     {
                         ++Options.Data.keyboard2PlayerIndex;
                         if (Options.Data.keyboard2PlayerIndex > 7)
@@ -318,8 +318,8 @@ namespace DuckGame
                 else
                 {
                     UIMenu.globalUILock = true;
-                    this._editing = true;
-                    this._skipStep = true;
+                    _editing = true;
+                    _skipStep = true;
                     SFX.Play("consoleSelect");
                     HUD.CloseAllCorners();
                     HUD.AddCornerControl(HUDCorner.TopLeft, "@CONSOLE@CANCEL");
@@ -327,24 +327,24 @@ namespace DuckGame
             }
             else
             {
-                if (!(trigger == "MENU2") || !(this.inputMapping.deviceName != "KEYBOARD P1") || !(this.inputMapping.deviceName != "KEYBOARD P2"))
+                if (!(trigger == "MENU2") || !(inputMapping.deviceName != "KEYBOARD P1") || !(inputMapping.deviceName != "KEYBOARD P2"))
                     return;
-                this._selectStyle = true;
+                _selectStyle = true;
                 UIMenu.globalUILock = true;
-                this._editing = true;
-                this._skipStep = true;
+                _editing = true;
+                _skipStep = true;
                 int mapping;
-                if (this.inputMapping.map.TryGetValue(this._trigger, out mapping))
+                if (inputMapping.map.TryGetValue(_trigger, out mapping))
                 {
                     int num = 0;
-                    Sprite sprite = this.inputMapping.GetSprite(mapping);
+                    Sprite sprite = inputMapping.GetSprite(mapping);
                     if (sprite != null)
                     {
                         foreach (Sprite buttonStyle in Input.buttonStyles)
                         {
                             if (sprite.texture != null && sprite.texture.textureName == buttonStyle.texture.textureName)
                             {
-                                this._selectionIndex = num;
+                                _selectionIndex = num;
                                 break;
                             }
                             ++num;

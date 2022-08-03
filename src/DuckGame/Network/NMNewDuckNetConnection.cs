@@ -35,16 +35,16 @@ namespace DuckGame
           ulong pProfileID,
           byte pPersona)
         {
-            this.identifier = id;
-            this.name = duckName;
-            this.team = varTeam;
-            this.flippers = varFlippers;
-            this.parentalControlsActive = parentalControls;
-            this.flagIndex = varFlagIndex;
-            this.profile = pProfile;
-            this.profileID = pProfileID;
-            this.latestGhostIndex = pProfile.latestGhostIndex;
-            this.persona = pPersona;
+            identifier = id;
+            name = duckName;
+            team = varTeam;
+            flippers = varFlippers;
+            parentalControlsActive = parentalControls;
+            flagIndex = varFlagIndex;
+            profile = pProfile;
+            profileID = pProfileID;
+            latestGhostIndex = pProfile.latestGhostIndex;
+            persona = pPersona;
         }
     }
 }

@@ -15,15 +15,15 @@ namespace DuckGame
         {
         }
 
-        public NMLayToRest(Duck pWho) => this.who = pWho;
+        public NMLayToRest(Duck pWho) => who = pWho;
 
         public override void Activate()
         {
-            if (this.who != null)
+            if (who != null)
             {
-                this.who.isConversionMessage = true;
-                this.who.LayToRest(null);
-                this.who.isConversionMessage = false;
+                who.isConversionMessage = true;
+                who.LayToRest(null);
+                who.isConversionMessage = false;
             }
             base.Activate();
         }

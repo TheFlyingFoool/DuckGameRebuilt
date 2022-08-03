@@ -57,64 +57,64 @@ namespace DuckGame
 
         public DoorOffHinges _doorInstance
         {
-            get => this._doorInstanceInternal;
-            set => this._doorInstanceInternal = value;
+            get => _doorInstanceInternal;
+            set => _doorInstanceInternal = value;
         }
 
         public override void SetTranslation(Vec2 translation)
         {
-            if (this._frame != null)
-                this._frame.SetTranslation(translation);
+            if (_frame != null)
+                _frame.SetTranslation(translation);
             base.SetTranslation(translation);
         }
 
-        public override void EditorPropertyChanged(object property) => this.sequence.isValid = this.objective.value;
+        public override void EditorPropertyChanged(object property) => sequence.isValid = objective.value;
 
         public Door(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.objective = new EditorProperty<bool>(false, this);
-            this._maxHealth = 50f;
-            this._hitPoints = 50f;
-            this._sprite = new SpriteMap("door", 32, 32);
-            this.graphic = _sprite;
-            this.center = new Vec2(16f, 25f);
-            this.collisionSize = new Vec2(6f, 32f);
-            this.collisionOffset = new Vec2(-3f, -25f);
-            this.depth = -0.5f;
-            this._editorName = nameof(Door);
-            this.thickness = 2f;
-            this._lock = new Sprite("lock");
-            this._lock.CenterOrigin();
-            this._impactThreshold = 0f;
-            this._key = new SpriteMap("keyInDoor", 16, 16)
+            objective = new EditorProperty<bool>(false, this);
+            _maxHealth = 50f;
+            _hitPoints = 50f;
+            _sprite = new SpriteMap("door", 32, 32);
+            graphic = _sprite;
+            center = new Vec2(16f, 25f);
+            collisionSize = new Vec2(6f, 32f);
+            collisionOffset = new Vec2(-3f, -25f);
+            depth = -0.5f;
+            _editorName = nameof(Door);
+            thickness = 2f;
+            _lock = new Sprite("lock");
+            _lock.CenterOrigin();
+            _impactThreshold = 0f;
+            _key = new SpriteMap("keyInDoor", 16, 16)
             {
                 center = new Vec2(2f, 8f)
             };
-            this._canFlip = false;
-            this.physicsMaterial = PhysicsMaterial.Wood;
-            this.sequence = new SequenceItem(this)
+            _canFlip = false;
+            physicsMaterial = PhysicsMaterial.Wood;
+            sequence = new SequenceItem(this)
             {
                 type = SequenceItemType.Goody
             };
-            this._placementCost += 6;
-            this._coll = new List<PhysicsObject>();
-            this.editorTooltip = "Your basic door type door. Blocks some projectiles. If locked, needs a key to open.";
+            _placementCost += 6;
+            _coll = new List<PhysicsObject>();
+            editorTooltip = "Your basic door type door. Blocks some projectiles. If locked, needs a key to open.";
         }
 
         public override void Initialize()
         {
-            this.sequence.isValid = this.objective.value;
-            this._lockDoor = this.locked;
-            if (this._lockDoor)
+            sequence.isValid = objective.value;
+            _lockDoor = locked;
+            if (_lockDoor)
             {
-                this._sprite = new SpriteMap("lockDoor", 32, 32);
-                this.graphic = _sprite;
-                this._lockedSprite = true;
+                _sprite = new SpriteMap("lockDoor", 32, 32);
+                graphic = _sprite;
+                _lockedSprite = true;
             }
             else
             {
-                this._frame = new DoorFrame(this.x, this.y - 1f, this.secondaryFrame);
+                _frame = new DoorFrame(x, y - 1f, secondaryFrame);
                 Level.Add(_frame);
             }
         }
@@ -124,29 +124,29 @@ namespace DuckGame
             if (_hitPoints > 5.0 && !Network.isActive)
             {
                 Level.Remove(_frame);
-                this._frame = null;
+                _frame = null;
             }
             base.Terminate();
         }
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (this._lockDoor || this._destroyed || !this.isServerForObject)
+            if (_lockDoor || _destroyed || !isServerForObject)
                 return false;
-            this._hitPoints = 0f;
+            _hitPoints = 0f;
             Level.Remove(this);
-            if (this.sequence != null && this.sequence.isValid)
+            if (sequence != null && sequence.isValid)
             {
-                this.sequence.Finished();
+                sequence.Finished();
                 if (ChallengeLevel.running)
                     ++ChallengeLevel.goodiesGot;
             }
             DoorOffHinges t = null;
             if (Network.isActive)
             {
-                if (this._doorInstance != null)
+                if (_doorInstance != null)
                 {
-                    t = this._doorInstance;
+                    t = _doorInstance;
                     t.visible = true;
                     t.active = true;
                     t.solid = true;
@@ -155,7 +155,7 @@ namespace DuckGame
                 }
             }
             else
-                t = new DoorOffHinges(this.x, this.y - 8f, this.secondaryFrame);
+                t = new DoorOffHinges(x, y - 8f, secondaryFrame);
             if (t != null)
             {
                 if (type is DTShot dtShot && dtShot.bullet != null)
@@ -168,7 +168,7 @@ namespace DuckGame
                 {
                     t.hSpeed = offDir * 2f;
                     t.vSpeed = -2f;
-                    t.offDir = this.offDir;
+                    t.offDir = offDir;
                 }
                 if (!Network.isActive)
                 {
@@ -186,7 +186,7 @@ namespace DuckGame
             if (_hitPoints <= 0.0)
                 return base.Hit(bullet, hitPos);
             hitPos -= bullet.travelDirNormalized;
-            if (this.physicsMaterial == PhysicsMaterial.Wood)
+            if (physicsMaterial == PhysicsMaterial.Wood)
             {
                 for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
                 {
@@ -197,12 +197,12 @@ namespace DuckGame
                 }
                 SFX.Play("woodHit");
             }
-            if (this.isServerForObject && bullet.isLocal)
+            if (isServerForObject && bullet.isLocal)
             {
-                this._hitPoints -= this.damageMultiplier * 4f;
-                ++this.damageMultiplier;
-                if (_hitPoints <= 0f && !this.destroyed)
-                    this.Destroy(new DTShot(bullet));
+                _hitPoints -= damageMultiplier * 4f;
+                ++damageMultiplier;
+                if (_hitPoints <= 0f && !destroyed)
+                    Destroy(new DTShot(bullet));
             }
             return base.Hit(bullet, hitPos);
         }
@@ -221,22 +221,22 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (with.isServerForObject && this.locked && with is Key)
-                this.UnlockDoor(with as Key);
+            if (with.isServerForObject && locked && with is Key)
+                UnlockDoor(with as Key);
             base.OnSoftImpact(with, from);
         }
 
         public void UnlockDoor(Key with)
         {
-            if (!this.locked || !with.isServerForObject)
+            if (!locked || !with.isServerForObject)
                 return;
             if (Network.isActive)
             {
                 Thing.ExtraFondle(this, with.connection);
                 Send.Message(new NMUnlockDoor(this));
-                this.networkUnlockMessage = true;
+                networkUnlockMessage = true;
             }
-            this.locked = false;
+            locked = false;
             if (with.owner is Duck owner)
             {
                 RumbleManager.AddRumbleEvent(owner.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.None));
@@ -245,7 +245,7 @@ namespace DuckGame
             Level.Remove(with);
             if (Network.isActive)
                 return;
-            this.DoUnlock(with.position);
+            DoUnlock(with.position);
         }
 
         public void DoUnlock(Vec2 keyPos)
@@ -253,15 +253,15 @@ namespace DuckGame
             SFX.Play("deedleBeep");
             Level.Add(SmallSmoke.New(keyPos.x, keyPos.y));
             for (int index = 0; index < 3; ++index)
-                Level.Add(SmallSmoke.New(this.x + Rando.Float(-3f, 3f), this.y + Rando.Float(-3f, 3f)));
-            this.didUnlock = true;
+                Level.Add(SmallSmoke.New(x + Rando.Float(-3f, 3f), y + Rando.Float(-3f, 3f)));
+            didUnlock = true;
         }
 
         public override void Update()
         {
-            if (this._doorInstance == null && Network.isActive && this.isServerForObject)
+            if (_doorInstance == null && Network.isActive && isServerForObject)
             {
-                this._doorInstance = new DoorOffHinges(this.x, this.y - 8f, this.secondaryFrame)
+                _doorInstance = new DoorOffHinges(x, y - 8f, secondaryFrame)
                 {
                     active = false,
                     visible = false,
@@ -269,83 +269,83 @@ namespace DuckGame
                 };
                 Level.Add(_doorInstance);
             }
-            if (!this._lockDoor && this.locked)
+            if (!_lockDoor && locked)
             {
-                this._sprite = new SpriteMap("lockDoor", 32, 32);
-                this.graphic = _sprite;
-                this._lockedSprite = true;
-                this._lockDoor = true;
+                _sprite = new SpriteMap("lockDoor", 32, 32);
+                graphic = _sprite;
+                _lockedSprite = true;
+                _lockDoor = true;
             }
-            if (this.networkUnlockMessage)
-                this.locked = false;
-            if (Network.isActive && !this.locked && this.prevLocked && !this.didUnlock)
-                this.DoUnlock(this.position);
-            this.prevLocked = this.locked;
-            if (this._lockDoor)
+            if (networkUnlockMessage)
+                locked = false;
+            if (Network.isActive && !locked && prevLocked && !didUnlock)
+                DoUnlock(position);
+            prevLocked = locked;
+            if (_lockDoor)
             {
-                this._hitPoints = 100f;
-                this.physicsMaterial = PhysicsMaterial.Metal;
-                this.thickness = 4f;
+                _hitPoints = 100f;
+                physicsMaterial = PhysicsMaterial.Metal;
+                thickness = 4f;
             }
-            if (!this._fucked && _hitPoints < _maxHealth / 2.0)
+            if (!_fucked && _hitPoints < _maxHealth / 2.0)
             {
-                this._sprite = new SpriteMap(this.secondaryFrame ? "flimsyDoorDamaged" : "doorFucked", 32, 32);
-                this.graphic = _sprite;
-                this._fucked = true;
+                _sprite = new SpriteMap(secondaryFrame ? "flimsyDoorDamaged" : "doorFucked", 32, 32);
+                graphic = _sprite;
+                _fucked = true;
             }
-            if (!this._cornerInit)
+            if (!_cornerInit)
             {
-                this._topLeft = this.topLeft;
-                this._topRight = this.topRight;
-                this._bottomLeft = this.bottomLeft;
-                this._bottomRight = this.bottomRight;
-                this._cornerInit = true;
+                _topLeft = topLeft;
+                _topRight = topRight;
+                _bottomLeft = bottomLeft;
+                _bottomRight = bottomRight;
+                _cornerInit = true;
             }
             base.Update();
             if (damageMultiplier > 1.0)
-                this.damageMultiplier -= 0.2f;
+                damageMultiplier -= 0.2f;
             else
-                this.damageMultiplier = 1f;
-            this._removeMines.Clear();
-            foreach (KeyValuePair<Mine, float> mine in this._mines)
+                damageMultiplier = 1f;
+            _removeMines.Clear();
+            foreach (KeyValuePair<Mine, float> mine in _mines)
             {
                 if (mine.Value < 0f && _open > mine.Value || mine.Value >= 0f && _open < mine.Value)
                 {
                     mine.Key.addWeight = 0f;
-                    this._removeMines.Add(mine.Key);
+                    _removeMines.Add(mine.Key);
                 }
                 else
                     mine.Key.addWeight = 3f;
             }
-            foreach (Mine removeMine in this._removeMines)
-                this._mines.Remove(removeMine);
+            foreach (Mine removeMine in _removeMines)
+                _mines.Remove(removeMine);
             bool flag1 = false;
             PhysicsObject t1 = null;
             if (_open < 0.9f && _open > -0.9f)
             {
                 bool flag2 = false;
-                Thing thing = Level.CheckRectFilter<Duck>(this._topLeft - new Vec2(18f, 0f), this._bottomRight + new Vec2(18f, 0f), d => !(d is TargetDuck));
+                Thing thing = Level.CheckRectFilter<Duck>(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f), d => !(d is TargetDuck));
                 if (thing == null)
                 {
-                    thing = Level.CheckRectFilter<Duck>(this._topLeft - new Vec2(32f, 0f), this._bottomRight + new Vec2(32f, 0f), d => !(d is TargetDuck) && Math.Abs(d.hSpeed) > 4.0);
+                    thing = Level.CheckRectFilter<Duck>(_topLeft - new Vec2(32f, 0f), _bottomRight + new Vec2(32f, 0f), d => !(d is TargetDuck) && Math.Abs(d.hSpeed) > 4.0);
                     flag2 = true;
                 }
                 if (thing != null)
                 {
                     (thing as Duck).Fondle(this);
-                    if (thing.x < this.x)
+                    if (thing.x < x)
                     {
-                        this._coll.Clear();
-                        Level.CheckRectAll<PhysicsObject>(this._topRight, this._bottomRight + new Vec2(10f, 0f), this._coll);
+                        _coll.Clear();
+                        Level.CheckRectAll<PhysicsObject>(_topRight, _bottomRight + new Vec2(10f, 0f), _coll);
                         bool flag3 = true;
-                        this._jam = 1f;
-                        foreach (PhysicsObject t2 in this._coll)
+                        _jam = 1f;
+                        foreach (PhysicsObject t2 in _coll)
                         {
                             if (!(t2 is TeamHat) && !(t2 is Duck) && t2.weight > 3.0 && t2.owner == null && (!(t2 is Holdable) || (t2 as Holdable).hoverSpawner == null))
                             {
                                 if (t2 is RagdollPart)
                                 {
-                                    this.Fondle(t2);
+                                    Fondle(t2);
                                     t2.hSpeed = 2f;
                                 }
                                 else
@@ -357,110 +357,110 @@ namespace DuckGame
                                     {
                                         if (_open != 0f && t2 is Gun)
                                         {
-                                            if (t2 is Mine key && !key.pin && !this._mines.ContainsKey(key))
-                                                this._mines[key] = this._open;
+                                            if (t2 is Mine key && !key.pin && !_mines.ContainsKey(key))
+                                                _mines[key] = _open;
                                         }
                                         else
                                         {
-                                            this._jam = num;
+                                            _jam = num;
                                             t1 = t2;
                                         }
                                     }
                                 }
                             }
                         }
-                        this._coll.Clear();
-                        if (this.locked)
+                        _coll.Clear();
+                        if (locked)
                         {
-                            this._jam = 0.1f;
-                            if (!this._didJiggle)
+                            _jam = 0.1f;
+                            if (!_didJiggle)
                             {
-                                this._jiggle = 1f;
-                                this._didJiggle = true;
+                                _jiggle = 1f;
+                                _didJiggle = true;
                             }
                         }
                         if (flag3)
                         {
                             if (flag2)
-                                this._openForce += 0.25f;
+                                _openForce += 0.25f;
                             else
-                                this._openForce += 0.08f;
+                                _openForce += 0.08f;
                         }
                     }
                     else
                     {
-                        this._coll.Clear();
-                        Level.CheckRectAll<PhysicsObject>(this._topLeft - new Vec2(10f, 0f), this._bottomLeft, this._coll);
+                        _coll.Clear();
+                        Level.CheckRectAll<PhysicsObject>(_topLeft - new Vec2(10f, 0f), _bottomLeft, _coll);
                         bool flag4 = true;
-                        this._jam = -1f;
-                        foreach (PhysicsObject t3 in this._coll)
+                        _jam = -1f;
+                        foreach (PhysicsObject t3 in _coll)
                         {
                             if (!(t3 is TeamHat) && !(t3 is Duck) && t3.weight > 3f && t3.owner == null && (!(t3 is Holdable) || (t3 as Holdable).hoverSpawner == null))
                             {
                                 if (t3 is RagdollPart)
                                 {
-                                    this.Fondle(t3);
+                                    Fondle(t3);
                                     t3.hSpeed = -2f;
                                 }
                                 else
                                 {
-                                    float num = Maths.Clamp((t3.right - this.left) / 14f, -1f, 0f);
+                                    float num = Maths.Clamp((t3.right - left) / 14f, -1f, 0f);
                                     if (num > -0.1f)
                                         num = -0.1f;
                                     if (_jam < num)
                                     {
                                         if (_open != 0f && t3 is Gun)
                                         {
-                                            if (t3 is Mine key && !key.pin && !this._mines.ContainsKey(key))
-                                                this._mines[key] = this._open;
+                                            if (t3 is Mine key && !key.pin && !_mines.ContainsKey(key))
+                                                _mines[key] = _open;
                                         }
                                         else
                                         {
-                                            this._jam = num;
+                                            _jam = num;
                                             t1 = t3;
                                         }
                                     }
                                 }
                             }
                         }
-                        this._coll.Clear();
-                        if (this.locked)
+                        _coll.Clear();
+                        if (locked)
                         {
-                            this._jam = -0.1f;
-                            if (!this._didJiggle)
+                            _jam = -0.1f;
+                            if (!_didJiggle)
                             {
-                                this._jiggle = 1f;
-                                this._didJiggle = true;
+                                _jiggle = 1f;
+                                _didJiggle = true;
                             }
                         }
                         if (flag4)
                         {
                             if (flag2)
-                                this._openForce -= 0.25f;
+                                _openForce -= 0.25f;
                             else
-                                this._openForce -= 0.08f;
+                                _openForce -= 0.08f;
                         }
                     }
                 }
                 else
-                    this._didJiggle = false;
+                    _didJiggle = false;
             }
-            this._coll.Clear();
-            Level.CheckRectAll<PhysicsObject>(this._topLeft - new Vec2(18f, 0f), this._bottomRight + new Vec2(18f, 0f), this._coll);
-            foreach (PhysicsObject t4 in this._coll)
+            _coll.Clear();
+            Level.CheckRectAll<PhysicsObject>(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f), _coll);
+            foreach (PhysicsObject t4 in _coll)
             {
-                if (!(t4 is TeamHat) && (t4 is Duck || !this._jammed) && (!(t4 is Holdable) || t4 is Mine || (t4 as Holdable).canPickUp) && t4.solid)
+                if (!(t4 is TeamHat) && (t4 is Duck || !_jammed) && (!(t4 is Holdable) || t4 is Mine || (t4 as Holdable).canPickUp) && t4.solid)
                 {
-                    if (!(t4 is Duck) && this.weight < 3.0)
+                    if (!(t4 is Duck) && weight < 3.0)
                     {
                         if (_open < -0.0)
                         {
-                            this.Fondle(t4);
+                            Fondle(t4);
                             t4.hSpeed = 3f;
                         }
                         else if (_open > 0.0)
                         {
-                            this.Fondle(t4);
+                            Fondle(t4);
                             t4.hSpeed = -3f;
                         }
                     }
@@ -470,111 +470,111 @@ namespace DuckGame
                         flag1 = true;
                 }
             }
-            this._jiggle = Maths.CountDown(this._jiggle, 0.08f);
+            _jiggle = Maths.CountDown(_jiggle, 0.08f);
             if (!flag1)
             {
                 if (_openForce > 1f)
-                    this._openForce = 1f;
+                    _openForce = 1f;
                 if (_openForce < -1f)
-                    this._openForce = -1f;
+                    _openForce = -1f;
                 if (_openForce > 0.04f)
-                    this._openForce -= 0.04f;
+                    _openForce -= 0.04f;
                 else if (_openForce < -0.04f)
-                    this._openForce += 0.04f;
+                    _openForce += 0.04f;
                 else if (_openForce > -0.06f && _openForce < 0.06f)
-                    this._openForce = 0f;
+                    _openForce = 0f;
             }
-            this._open += this._openForce;
-            if (Math.Abs(this._open) > 0.5f && !this._opened)
+            _open += _openForce;
+            if (Math.Abs(_open) > 0.5f && !_opened)
             {
-                this._opened = true;
+                _opened = true;
                 SFX.Play("doorOpen", Rando.Float(0.8f, 0.9f), Rando.Float(-0.1f, 0.1f));
             }
-            else if (Math.Abs(this._open) < 0.1f && this._opened)
+            else if (Math.Abs(_open) < 0.1f && _opened)
             {
-                this._opened = false;
+                _opened = false;
                 SFX.Play("doorClose", Rando.Float(0.5f, 0.6f), Rando.Float(-0.1f, 0.1f));
             }
             if (_open > 1.0)
-                this._open = 1f;
+                _open = 1f;
             if (_open < -1.0)
-                this._open = -1f;
-            if (_jam > 0f && _open > this._jam)
+                _open = -1f;
+            if (_jam > 0f && _open > _jam)
             {
-                if (!this._jammed)
+                if (!_jammed)
                 {
                     if (Network.isActive)
                     {
-                        if (this.isServerForObject)
+                        if (isServerForObject)
                             SFX.PlaySynchronized("doorJam");
                     }
                     else
                         SFX.Play("doorJam");
-                    this._jammed = true;
+                    _jammed = true;
                     if (t1 != null)
                     {
                         t1.hSpeed += 0.6f;
-                        this.Fondle(t1);
+                        Fondle(t1);
                     }
                 }
-                this._open = this._jam;
+                _open = _jam;
                 if (_openForce > 0.1f)
-                    this._openForce = 0.1f;
+                    _openForce = 0.1f;
             }
-            if (_jam < 0f && _open < this._jam)
+            if (_jam < 0f && _open < _jam)
             {
-                if (!this._jammed)
+                if (!_jammed)
                 {
                     if (Network.isActive)
                     {
-                        if (this.isServerForObject)
+                        if (isServerForObject)
                             SFX.PlaySynchronized("doorJam");
                     }
                     else
                         SFX.Play("doorJam");
-                    this._jammed = true;
+                    _jammed = true;
                     if (t1 != null)
                     {
                         t1.hSpeed -= 0.6f;
-                        this.Fondle(t1);
+                        Fondle(t1);
                     }
                 }
-                this._open = this._jam;
+                _open = _jam;
                 if (_openForce < -0.1f)
-                    this._openForce = -0.1f;
+                    _openForce = -0.1f;
             }
             if (_open > 0f)
             {
-                this._sprite.flipH = false;
-                this._sprite.frame = (int)(_open * 15f);
+                _sprite.flipH = false;
+                _sprite.frame = (int)(_open * 15f);
             }
             else
             {
-                this._sprite.flipH = true;
-                this._sprite.frame = (int)(Math.Abs(this._open) * 15f);
+                _sprite.flipH = true;
+                _sprite.frame = (int)(Math.Abs(_open) * 15f);
             }
-            if (this._sprite.frame > 9)
+            if (_sprite.frame > 9)
             {
-                this.collisionSize = new Vec2(0f, 0f);
-                this.solid = false;
-                this.collisionOffset = new Vec2(0f, -999999f); // ok landon
-                this.depth = -0.7f;
+                collisionSize = new Vec2(0f, 0f);
+                solid = false;
+                collisionOffset = new Vec2(0f, -999999f); // ok landon
+                depth = -0.7f;
             }
             else
             {
-                this.collisionSize = new Vec2(this.colWide, 32f);
-                this.solid = true;
-                this.collisionOffset = new Vec2((float)(-this.colWide / 2f), -24f);
-                this.depth = -0.5f;
+                collisionSize = new Vec2(colWide, 32f);
+                solid = true;
+                collisionOffset = new Vec2((float)(-colWide / 2f), -24f);
+                depth = -0.5f;
             }
-            if (_hitPoints <= 0f && !this._destroyed)
-                this.Destroy(new DTImpact(this));
+            if (_hitPoints <= 0f && !_destroyed)
+                Destroy(new DTImpact(this));
             if (_openForce == 0f)
-                this._open = Maths.LerpTowards(this._open, 0f, 0.1f);
+                _open = Maths.LerpTowards(_open, 0f, 0.1f);
             if (_open == 0f)
-                this._jammed = false;
-            float num1 = (_hitPoints / this._maxHealth * 0.2f + 0.8f);
-            this._sprite.color = new Color(num1, num1, num1);
+                _jammed = false;
+            float num1 = (_hitPoints / _maxHealth * 0.2f + 0.8f);
+            _sprite.color = new Color(num1, num1, num1);
         }
 
         public override void Draw()
@@ -582,28 +582,28 @@ namespace DuckGame
             base.Draw();
             if (Level.current is Editor)
             {
-                if (this.locked && !this._lockedSprite)
+                if (locked && !_lockedSprite)
                 {
-                    this._sprite = new SpriteMap("lockDoor", 32, 32);
-                    this.graphic = _sprite;
-                    this._lockedSprite = true;
+                    _sprite = new SpriteMap("lockDoor", 32, 32);
+                    graphic = _sprite;
+                    _lockedSprite = true;
                 }
-                else if (!this.locked && this._lockedSprite)
+                else if (!locked && _lockedSprite)
                 {
-                    this._sprite = new SpriteMap("door", 32, 32);
-                    this.graphic = _sprite;
-                    this._lockedSprite = false;
+                    _sprite = new SpriteMap("door", 32, 32);
+                    graphic = _sprite;
+                    _lockedSprite = false;
                 }
             }
-            if (!this._lockDoor || this.locked)
+            if (!_lockDoor || locked)
                 return;
-            this._key.frame = this._sprite.frame;
-            if (this._key.frame > 12)
-                this._key.depth = this.depth - 1;
+            _key.frame = _sprite.frame;
+            if (_key.frame > 12)
+                _key.depth = depth - 1;
             else
-                this._key.depth = this.depth + 1;
-            this._key.flipH = this.graphic.flipH;
-            Graphics.Draw(_key, this.x + this._open * 12f, this.y - 8f);
+                _key.depth = depth + 1;
+            _key.flipH = graphic.flipH;
+            Graphics.Draw(_key, x + _open * 12f, y - 8f);
         }
 
         public override BinaryClassChunk Serialize()
@@ -616,7 +616,7 @@ namespace DuckGame
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.locked = node.GetProperty<bool>("locked");
+            locked = node.GetProperty<bool>("locked");
             return true;
         }
 
@@ -632,7 +632,7 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode = node.Element("locked");
             if (dxmlNode != null)
-                this.locked = Convert.ToBoolean(dxmlNode.Value);
+                locked = Convert.ToBoolean(dxmlNode.Value);
             return true;
         }
 

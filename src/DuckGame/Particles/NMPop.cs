@@ -15,11 +15,11 @@ namespace DuckGame
         {
         }
 
-        public NMPop(Vec2 pPosition) => this.position = pPosition;
+        public NMPop(Vec2 pPosition) => position = pPosition;
 
         public override void Activate()
         {
-            NMPop.AmazingDisappearingParticles(this.position);
+            NMPop.AmazingDisappearingParticles(position);
             base.Activate();
         }
 

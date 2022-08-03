@@ -19,30 +19,30 @@ namespace DuckGame
         {
             int num = Rando.ChooseInt(0, 1, 2, 3);
             if (num == 0)
-                this._color = Color.Violet;
+                _color = Color.Violet;
             if (num == 1)
-                this._color = Color.SkyBlue;
+                _color = Color.SkyBlue;
             if (num == 2)
-                this._color = Color.Wheat;
+                _color = Color.Wheat;
             if (num == 4)
-                this._color = Color.GreenYellow;
-            this._sin = new SinWaveManualUpdate(0.01f + Rando.Float(0.03f), Rando.Float(7f));
-            this._size = 10f + Rando.Float(60f);
-            this._speed = 0.8f + Rando.Float(1.4f);
-            this.depth = (Depth)0.95f;
+                _color = Color.GreenYellow;
+            _sin = new SinWaveManualUpdate(0.01f + Rando.Float(0.03f), Rando.Float(7f));
+            _size = 10f + Rando.Float(60f);
+            _speed = 0.8f + Rando.Float(1.4f);
+            depth = (Depth)0.95f;
         }
 
         public override void Update()
         {
-            this._sin.Update();
-            this.y += this._speed;
+            _sin.Update();
+            y += _speed;
         }
 
         public override void Draw()
         {
             Vec2 position = this.position;
-            position.x += this._sin.value * this._size;
-            Graphics.DrawRect(position, position + new Vec2(2f, 2f), this._color, this.depth);
+            position.x += _sin.value * _size;
+            Graphics.DrawRect(position, position + new Vec2(2f, 2f), _color, depth);
         }
     }
 }

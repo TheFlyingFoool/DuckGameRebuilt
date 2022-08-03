@@ -16,7 +16,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            string text = this._textElement.text;
+            string text = _textElement.text;
             int num = 0;
             foreach (MatchSetting matchSetting in TeamSelect2.matchSettings)
             {
@@ -29,14 +29,14 @@ namespace DuckGame
                     ++num;
             }
             if (num == 0)
-                this._textElement.text = "|DGBLUE|NO FILTERS";
+                _textElement.text = "|DGBLUE|NO FILTERS";
             else
-                this._textElement.text = "|DGYELLOW|FILTERS: " + num.ToString();
-            if (this._textElement.text != text)
+                _textElement.text = "|DGYELLOW|FILTERS: " + num.ToString();
+            if (_textElement.text != text)
             {
-                this._textElement.Resize();
-                this._dirty = true;
-                this.rightSection.Resize();
+                _textElement.Resize();
+                _dirty = true;
+                rightSection.Resize();
             }
             base.Update();
         }

@@ -13,22 +13,22 @@ namespace DuckGame
         public LaserRifle(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 30;
-            this._ammoType = new ATReboundLaser();
-            this._ammoType.barrelAngleDegrees = 45f;
-            this._type = "gun";
-            this.graphic = new Sprite("laserRifle");
-            this.center = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -3f);
-            this.collisionSize = new Vec2(16f, 10f);
-            this._barrelOffsetTL = new Vec2(26f, 14f);
-            this._fireSound = "laserRifle";
-            this._fullAuto = true;
-            this._fireWait = 1f;
-            this._kickForce = 1f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(-2f, 0f);
-            this.editorTooltip = "Fires a reflecting beam of deadly energy at an angle. Science makes it happen!";
+            ammo = 30;
+            _ammoType = new ATReboundLaser();
+            _ammoType.barrelAngleDegrees = 45f;
+            _type = "gun";
+            graphic = new Sprite("laserRifle");
+            center = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -3f);
+            collisionSize = new Vec2(16f, 10f);
+            _barrelOffsetTL = new Vec2(26f, 14f);
+            _fireSound = "laserRifle";
+            _fullAuto = true;
+            _fireWait = 1f;
+            _kickForce = 1f;
+            _fireRumble = RumbleIntensity.Kick;
+            _holdOffset = new Vec2(-2f, 0f);
+            editorTooltip = "Fires a reflecting beam of deadly energy at an angle. Science makes it happen!";
         }
     }
 }

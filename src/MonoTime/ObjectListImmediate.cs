@@ -28,43 +28,43 @@ namespace DuckGame
             get
             {
                 if (key == typeof(Thing))
-                    return this._bigList;
-                return this._objectsByType.ContainsKey(key) ? this._objectsByType[key] : this._emptyList;
+                    return _bigList;
+                return _objectsByType.ContainsKey(key) ? _objectsByType[key] : _emptyList;
             }
         }
 
-        public int Count => this._bigList.Count;
+        public int Count => _bigList.Count;
 
         public void Add(Thing obj)
         {
             foreach (System.Type key in Editor.AllBaseTypes[obj.GetType()])
-                this._objectsByType.Add(key, obj);
-            this._bigList.Add(obj);
+                _objectsByType.Add(key, obj);
+            _bigList.Add(obj);
         }
 
         public void AddRange(ObjectListImmediate list)
         {
             foreach (Thing thing in list)
-                this.Add(thing);
+                Add(thing);
         }
 
         public void Remove(Thing obj)
         {
             foreach (System.Type key in Editor.AllBaseTypes[obj.GetType()])
-                this._objectsByType.Remove(key, obj);
-            this._bigList.Remove(obj);
+                _objectsByType.Remove(key, obj);
+            _bigList.Remove(obj);
         }
 
         public void Clear()
         {
-            this._bigList.Clear();
-            this._objectsByType.Clear();
+            _bigList.Clear();
+            _objectsByType.Clear();
         }
 
-        public bool Contains(Thing obj) => this._bigList.Contains(obj);
+        public bool Contains(Thing obj) => _bigList.Contains(obj);
 
-        public IEnumerator<Thing> GetEnumerator() => this._bigList.GetEnumerator();
+        public IEnumerator<Thing> GetEnumerator() => _bigList.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

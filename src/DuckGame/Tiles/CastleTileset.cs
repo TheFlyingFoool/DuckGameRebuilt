@@ -13,12 +13,12 @@ namespace DuckGame
         public CastleTileset(float x, float y)
           : base(x, y, "castle")
         {
-            this._editorName = "Castle";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidth = 10f;
-            this.verticalWidthThick = 14f;
-            this.horizontalHeight = 14f;
-            this._hasNubs = false;
+            _editorName = "Castle";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidth = 10f;
+            verticalWidthThick = 14f;
+            horizontalHeight = 14f;
+            _hasNubs = false;
         }
     }
 }

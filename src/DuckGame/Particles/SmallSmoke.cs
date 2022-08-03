@@ -71,44 +71,44 @@ namespace DuckGame
             return smallSmoke;
         }
 
-        public SpriteMap sprite => this._sprite;
+        public SpriteMap sprite => _sprite;
 
         private SmallSmoke()
           : base()
         {
-            this._sprite = new SpriteMap("tinySmokeTestFront", 16, 16);
+            _sprite = new SpriteMap("tinySmokeTestFront", 16, 16);
             int num1 = Rando.Int(3) * 4;
-            this._sprite.AddAnimation("idle", 0.1f, true, num1);
-            this._sprite.AddAnimation("puff", Rando.Float(0.15f, 0.25f), false, num1, 1 + num1, 2 + num1, 3 + num1);
-            this._orbiter = new SpriteMap("tinySmokeTestFront", 16, 16);
+            _sprite.AddAnimation("idle", 0.1f, true, num1);
+            _sprite.AddAnimation("puff", Rando.Float(0.15f, 0.25f), false, num1, 1 + num1, 2 + num1, 3 + num1);
+            _orbiter = new SpriteMap("tinySmokeTestFront", 16, 16);
             int num2 = Rando.Int(3) * 4;
-            this._orbiter.AddAnimation("idle", 0.1f, true, num2);
-            this._orbiter.AddAnimation("puff", Rando.Float(0.15f, 0.25f), false, num2, 1 + num2, 2 + num2, 3 + num2);
-            this._sprite2 = new SpriteMap("tinySmokeTestBack", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
+            _orbiter.AddAnimation("idle", 0.1f, true, num2);
+            _orbiter.AddAnimation("puff", Rando.Float(0.15f, 0.25f), false, num2, 1 + num2, 2 + num2, 3 + num2);
+            _sprite2 = new SpriteMap("tinySmokeTestBack", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
         }
 
         private void Init(float xpos, float ypos)
         {
-            this._orbitInc += 0.2f;
-            this._life = 1f;
-            this.position.x = xpos;
-            this.position.y = ypos;
-            this._sprite.SetAnimation("idle");
-            this._sprite.angleDegrees = Rando.Float(360f);
-            this._orbiter.angleDegrees = Rando.Float(360f);
-            this.s1 = Rando.Float(0.6f, 1f);
-            this.s2 = Rando.Float(0.6f, 1f);
-            this.hSpeed = Rando.Float(-0.15f, 0.15f);
-            this.vSpeed = Rando.Float(-0.15f, 0.1f);
-            this._life += Rando.Float(0.2f);
+            _orbitInc += 0.2f;
+            _life = 1f;
+            position.x = xpos;
+            position.y = ypos;
+            _sprite.SetAnimation("idle");
+            _sprite.angleDegrees = Rando.Float(360f);
+            _orbiter.angleDegrees = Rando.Float(360f);
+            s1 = Rando.Float(0.6f, 1f);
+            s2 = Rando.Float(0.6f, 1f);
+            hSpeed = Rando.Float(-0.15f, 0.15f);
+            vSpeed = Rando.Float(-0.15f, 0.1f);
+            _life += Rando.Float(0.2f);
             float num1 = 0.6f - Rando.Float(0.2f);
             float num2 = 0.7f;
-            this._sprite.color = new Color(num2, num2, num2);
-            this.depth = (Depth)0.8f;
-            this.alpha = 1f;
-            this.layer = Layer.Game;
+            _sprite.color = new Color(num2, num2, num2);
+            depth = (Depth)0.8f;
+            alpha = 1f;
+            layer = Layer.Game;
         }
 
         public override void Initialize()
@@ -117,53 +117,53 @@ namespace DuckGame
 
         public override void Update()
         {
-            this.xscale = 1f;
-            this.yscale = this.xscale;
-            this._orbitInc += this._rotSpeed;
-            this._distPulse += this._distPulseSpeed;
-            this.vSpeed -= 0.01f;
-            this.hSpeed *= 0.95f;
-            this._life -= this.lifeTake;
-            if (_life < 0.0 && this._sprite.currentAnimation != "puff")
-                this._sprite.SetAnimation("puff");
-            if (this._sprite.currentAnimation == "puff" && this._sprite.finished)
+            xscale = 1f;
+            yscale = xscale;
+            _orbitInc += _rotSpeed;
+            _distPulse += _distPulseSpeed;
+            vSpeed -= 0.01f;
+            hSpeed *= 0.95f;
+            _life -= lifeTake;
+            if (_life < 0.0 && _sprite.currentAnimation != "puff")
+                _sprite.SetAnimation("puff");
+            if (_sprite.currentAnimation == "puff" && _sprite.finished)
                 Level.Remove(this);
-            this.x += this.hSpeed;
-            this.y += this.vSpeed;
+            x += hSpeed;
+            y += vSpeed;
         }
 
         public override void Draw()
         {
             float num1 = (float)Math.Sin(_distPulse);
-            float num2 = (float)-(Math.Sin(_orbitInc) * num1) * this.s1;
-            float num3 = (float)Math.Cos(_orbitInc) * num1 * this.s1;
-            this._sprite.imageIndex = this._sprite.imageIndex;
-            this._sprite.depth = this.depth;
-            this._sprite.scale = new Vec2(this.s1);
-            this._sprite.center = this.center;
-            Graphics.Draw(_sprite, this.x + num2, this.y + num3);
-            this._sprite2.imageIndex = this._sprite.imageIndex;
-            this._sprite2.angle = this._sprite.angle;
-            this._sprite2.depth = -0.5f;
-            this._sprite2.scale = this._sprite.scale;
-            this._sprite2.center = this.center;
+            float num2 = (float)-(Math.Sin(_orbitInc) * num1) * s1;
+            float num3 = (float)Math.Cos(_orbitInc) * num1 * s1;
+            _sprite.imageIndex = _sprite.imageIndex;
+            _sprite.depth = depth;
+            _sprite.scale = new Vec2(s1);
+            _sprite.center = center;
+            Graphics.Draw(_sprite, x + num2, y + num3);
+            _sprite2.imageIndex = _sprite.imageIndex;
+            _sprite2.angle = _sprite.angle;
+            _sprite2.depth = -0.5f;
+            _sprite2.scale = _sprite.scale;
+            _sprite2.center = center;
             float num4 = 0.6f - Rando.Float(0.2f);
             float num5 = 0.4f;
-            this._sprite2.color = new Color(num5, num5, num5);
-            Graphics.Draw(_sprite2, this.x + num2, this.y + num3);
-            this._orbiter.imageIndex = this._sprite.imageIndex;
-            this._orbiter.color = this._sprite.color;
-            this._orbiter.depth = this.depth;
-            this._orbiter.scale = new Vec2(this.s2);
-            this._orbiter.center = this.center;
-            Graphics.Draw(_orbiter, this.x - num2, this.y - num3);
-            this._sprite2.imageIndex = this._orbiter.imageIndex;
-            this._sprite2.angle = this._orbiter.angle;
-            this._sprite2.depth = -0.5f;
-            this._sprite2.scale = this._orbiter.scale;
-            this._sprite2.center = this.center;
-            this._sprite2.color = new Color(num5, num5, num5);
-            Graphics.Draw(_sprite2, this.x - num2, this.y - num3);
+            _sprite2.color = new Color(num5, num5, num5);
+            Graphics.Draw(_sprite2, x + num2, y + num3);
+            _orbiter.imageIndex = _sprite.imageIndex;
+            _orbiter.color = _sprite.color;
+            _orbiter.depth = depth;
+            _orbiter.scale = new Vec2(s2);
+            _orbiter.center = center;
+            Graphics.Draw(_orbiter, x - num2, y - num3);
+            _sprite2.imageIndex = _orbiter.imageIndex;
+            _sprite2.angle = _orbiter.angle;
+            _sprite2.depth = -0.5f;
+            _sprite2.scale = _orbiter.scale;
+            _sprite2.center = center;
+            _sprite2.color = new Color(num5, num5, num5);
+            Graphics.Draw(_sprite2, x - num2, y - num3);
         }
     }
 }

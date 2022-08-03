@@ -15,17 +15,17 @@ namespace DuckGame
         public Tombstone(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("grave", 15, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(7f, 8f);
-            this.collisionOffset = new Vec2(-7f, -8f);
-            this.collisionSize = new Vec2(15f, 15f);
-            this.depth = -0.5f;
-            this.thickness = 4f;
-            this.weight = 7f;
-            this.flammable = 0f;
-            this.collideSounds.Add("rockHitGround2");
-            this.editorTooltip = "The saddest rock.";
+            _sprite = new SpriteMap("grave", 15, 16);
+            graphic = _sprite;
+            center = new Vec2(7f, 8f);
+            collisionOffset = new Vec2(-7f, -8f);
+            collisionSize = new Vec2(15f, 15f);
+            depth = -0.5f;
+            thickness = 4f;
+            weight = 7f;
+            flammable = 0f;
+            collideSounds.Add("rockHitGround2");
+            editorTooltip = "The saddest rock.";
         }
     }
 }

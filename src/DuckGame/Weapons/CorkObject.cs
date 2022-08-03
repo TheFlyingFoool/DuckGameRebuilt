@@ -17,15 +17,15 @@ namespace DuckGame
         public CorkObject(float pX, float pY, Thing pOwner)
           : base(pX, pY)
         {
-            this.graphic = new Sprite("cork");
-            this._collisionSize = new Vec2(4f, 4f);
-            this._collisionOffset = new Vec2(-2f, -3f);
-            this.center = new Vec2(3f, 3f);
-            this._gun = pOwner;
-            this.weight = 0.1f;
-            this.bouncy = 0.5f;
-            this.airFrictionMult = 0f;
-            this._ropeSprite = new Sprite("grappleWire")
+            graphic = new Sprite("cork");
+            _collisionSize = new Vec2(4f, 4f);
+            _collisionOffset = new Vec2(-2f, -3f);
+            center = new Vec2(3f, 3f);
+            _gun = pOwner;
+            weight = 0.1f;
+            bouncy = 0.5f;
+            airFrictionMult = 0f;
+            _ropeSprite = new Sprite("grappleWire")
             {
                 center = new Vec2(8f, 0f)
             };
@@ -33,7 +33,7 @@ namespace DuckGame
 
         public Rope GetRopeParent(Thing child)
         {
-            for (Rope ropeParent = this._rope; ropeParent != null; ropeParent = ropeParent.attach2 as Rope)
+            for (Rope ropeParent = _rope; ropeParent != null; ropeParent = ropeParent.attach2 as Rope)
             {
                 if (ropeParent.attach2 == child)
                     return ropeParent;
@@ -43,12 +43,12 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            if (this._gun != null)
+            if (_gun != null)
             {
-                this._sticker = new Harpoon(this);
-                this.level.AddThing(_sticker);
-                this._sticker.SetStuckPoint(this._gun.position);
-                this._rope = new Rope(this.x, this.y, null, _sticker, this, tex: this._ropeSprite, belongsTo: this);
+                _sticker = new Harpoon(this);
+                level.AddThing(_sticker);
+                _sticker.SetStuckPoint(_gun.position);
+                _rope = new Rope(x, y, null, _sticker, this, tex: _ropeSprite, belongsTo: this);
                 Level.Add(_rope);
             }
             base.Initialize();
@@ -56,10 +56,10 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            if (this._sticker != null)
+            if (_sticker != null)
                 Level.Remove(_sticker);
-            if (this._rope != null)
-                this._rope.RemoveRope();
+            if (_rope != null)
+                _rope.RemoveRope();
             base.Terminate();
         }
 
@@ -67,67 +67,67 @@ namespace DuckGame
         {
             if (pAmount <= 0f || _rope.startLength <= 0f)
                 return 100f;
-            this._rope.Pull(-pAmount);
-            this._rope.startLength -= pAmount;
-            return this._rope.startLength;
+            _rope.Pull(-pAmount);
+            _rope.startLength -= pAmount;
+            return _rope.startLength;
         }
 
         public override void Update()
         {
-            if (this._rope != null)
+            if (_rope != null)
             {
-                if (!this.grounded)
-                    this.specialFrictionMod = 0f;
+                if (!grounded)
+                    specialFrictionMod = 0f;
                 else
-                    this.specialFrictionMod = 1f;
-                this._rope.position = this.position;
-                this._rope.SetServer(this.isServerForObject);
-                Vec2 vec2_1 = this._rope.attach1.position - this._rope.attach2.position;
+                    specialFrictionMod = 1f;
+                _rope.position = position;
+                _rope.SetServer(isServerForObject);
+                Vec2 vec2_1 = _rope.attach1.position - _rope.attach2.position;
                 bool flag = true;
-                if (this._rope.properLength < 0f)
+                if (_rope.properLength < 0f)
                 {
-                    this._rope.startLength = this._rope.properLength = 100f;
+                    _rope.startLength = _rope.properLength = 100f;
                     flag = false;
                 }
-                if (vec2_1.length > this._rope.properLength)
+                if (vec2_1.length > _rope.properLength)
                 {
                     vec2_1 = vec2_1.normalized;
-                    Vec2 position2 = this.position;
-                    Vec2 vec2_2 = this._rope.attach2.position + vec2_1 * this._rope.properLength;
+                    Vec2 position2 = position;
+                    Vec2 vec2_2 = _rope.attach2.position + vec2_1 * _rope.properLength;
                     Vec2 end = vec2_2;
                     Vec2 vec2_3;
                     // ref Vec2 local = ref vec2_3;
                     Level.CheckRay<Block>(position2, end, out vec2_3);
                     if (flag)
                     {
-                        this.hSpeed = vec2_2.x - this.position.x;
-                        this.vSpeed = vec2_2.y - this.position.y;
-                        this.gravMultiplier = 0f;
+                        hSpeed = vec2_2.x - position.x;
+                        vSpeed = vec2_2.y - position.y;
+                        gravMultiplier = 0f;
                         float specialFrictionMod = this.specialFrictionMod;
                         this.specialFrictionMod = 0f;
-                        this.airFrictionMult = 0f;
+                        airFrictionMult = 0f;
                         Vec2 lastPosition = this.lastPosition;
-                        this.UpdatePhysics();
-                        this.gravMultiplier = 1f;
+                        UpdatePhysics();
+                        gravMultiplier = 1f;
                         this.specialFrictionMod = specialFrictionMod;
                         Vec2 vec2_4 = vec2_2 - lastPosition;
                         if (vec2_4.length > 32f)
-                            this.position = vec2_2;
+                            position = vec2_2;
                         else if (vec2_4.length > 6f)
                         {
-                            this.hSpeed = Rando.Float(-2f, 2f);
-                            this.vSpeed = Rando.Float(-2f, 2f);
+                            hSpeed = Rando.Float(-2f, 2f);
+                            vSpeed = Rando.Float(-2f, 2f);
                         }
                         else
                         {
-                            this.hSpeed = vec2_4.x;
-                            this.vSpeed = vec2_4.y;
+                            hSpeed = vec2_4.x;
+                            vSpeed = vec2_4.y;
                         }
                     }
                     else
-                        this.position = vec2_2;
+                        position = vec2_2;
                 }
-                this._sticker.SetStuckPoint((this._gun as Gun).barrelPosition);
+                _sticker.SetStuckPoint((_gun as Gun).barrelPosition);
             }
             base.Update();
         }

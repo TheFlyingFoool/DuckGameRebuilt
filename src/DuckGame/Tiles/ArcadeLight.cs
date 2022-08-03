@@ -20,27 +20,27 @@ namespace DuckGame
         public ArcadeLight(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("arcadeLight");
-            this.center = new Vec2(9f, 24f);
-            this._collisionSize = new Vec2(16f, 24f);
-            this._collisionOffset = new Vec2(-8f, -22f);
-            this.depth = (Depth)0.9f;
-            this.hugWalls = WallHug.Ceiling;
-            this.layer = Layer.Game;
+            graphic = new Sprite("arcadeLight");
+            center = new Vec2(9f, 24f);
+            _collisionSize = new Vec2(16f, 24f);
+            _collisionOffset = new Vec2(-8f, -22f);
+            depth = (Depth)0.9f;
+            hugWalls = WallHug.Ceiling;
+            layer = Layer.Game;
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            this._occluders.Add(new LightOccluder(this.position + new Vec2(-8f, 2f), this.position + new Vec2(-8f, -8f), new Color(1f, 0.7f, 0.7f)));
-            this._occluders.Add(new LightOccluder(this.position + new Vec2(10f, 2f), this.position + new Vec2(10f, -8f), new Color(1f, 0.7f, 0.7f)));
-            this._occluders.Add(new LightOccluder(this.position + new Vec2(-8f, -7f), this.position + new Vec2(10f, -7f), new Color(1f, 0.7f, 0.7f)));
-            this._light = new PointLight(this.x + 1f, this.y - 6f, new Color((int)byte.MaxValue, (int)byte.MaxValue, 190), 130f, this._occluders);
+            _occluders.Add(new LightOccluder(position + new Vec2(-8f, 2f), position + new Vec2(-8f, -8f), new Color(1f, 0.7f, 0.7f)));
+            _occluders.Add(new LightOccluder(position + new Vec2(10f, 2f), position + new Vec2(10f, -8f), new Color(1f, 0.7f, 0.7f)));
+            _occluders.Add(new LightOccluder(position + new Vec2(-8f, -7f), position + new Vec2(10f, -7f), new Color(1f, 0.7f, 0.7f)));
+            _light = new PointLight(x + 1f, y - 6f, new Color((int)byte.MaxValue, (int)byte.MaxValue, 190), 130f, _occluders);
             Level.Add(_light);
-            this._shade = new SpriteThing(this.x, this.y, new Sprite("arcadeLight"))
+            _shade = new SpriteThing(x, y, new Sprite("arcadeLight"))
             {
-                center = this.center,
+                center = center,
                 layer = Layer.Foreground
             };
             Level.Add(_shade);
@@ -48,8 +48,8 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._light.visible = this.visible;
-            this._shade.visible = this.visible;
+            _light.visible = visible;
+            _shade.visible = visible;
             base.Update();
         }
     }

@@ -23,9 +23,9 @@ namespace DuckGame
           MethodInfo pMethod,
           object[] pParameters)
         {
-            this.target = pTarget;
-            this._method = pMethod;
-            this._parameters = pParameters;
+            target = pTarget;
+            _method = pMethod;
+            _parameters = pParameters;
             if (pMethod.GetParameters().Count<ParameterInfo>() != pParameters.Count<object>())
                 throw new Exception("NMRunNetworkActionParameters.pParameters.Count() != MethodInfo.GetParameters().Count(). Are you including the correct parameters in your SyncNetworkAction call?");
         }
@@ -38,32 +38,32 @@ namespace DuckGame
         {
             BitBuffer val = new BitBuffer();
             val.Write(target);
-            val.Write(Editor.NetworkActionIndex(this.target.GetType(), this._method));
+            val.Write(Editor.NetworkActionIndex(target.GetType(), _method));
             for (int index = 0; index < _parameters.Count<object>(); ++index)
-                val.Write(this._parameters[index]);
-            this._serializedData.Write(val, true);
+                val.Write(_parameters[index]);
+            _serializedData.Write(val, true);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
             BitBuffer bitBuffer = d.ReadBitBuffer();
-            this.target = bitBuffer.Read<PhysicsObject>();
-            if (this.target == null)
+            target = bitBuffer.Read<PhysicsObject>();
+            if (target == null)
                 return;
-            this._method = Editor.MethodFromNetworkActionIndex(this.target.GetType(), bitBuffer.ReadByte());
-            if (!(this._method != null))
+            _method = Editor.MethodFromNetworkActionIndex(target.GetType(), bitBuffer.ReadByte());
+            if (!(_method != null))
                 return;
             List<object> objectList = new List<object>();
-            foreach (ParameterInfo parameter in this._method.GetParameters())
+            foreach (ParameterInfo parameter in _method.GetParameters())
                 objectList.Add(bitBuffer.Read(parameter.ParameterType));
-            this._parameters = objectList.ToArray();
+            _parameters = objectList.ToArray();
         }
 
         public override void Activate()
         {
-            if (this.target == null || !(this._method != null))
+            if (target == null || !(_method != null))
                 return;
-            this._method.Invoke(target, this._parameters);
+            _method.Invoke(target, _parameters);
         }
     }
 }

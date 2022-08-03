@@ -18,31 +18,31 @@ namespace DuckGame
         public Present(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("presents", 16, 16)
+            _sprite = new SpriteMap("presents", 16, 16)
             {
                 frame = Rando.Int(0, 7)
             };
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-7f, -4f);
-            this.collisionSize = new Vec2(14f, 11f);
-            this.depth = -0.5f;
-            this.thickness = 0f;
-            this.weight = 3f;
-            this.flammable = 0.3f;
-            this.charThreshold = 0.5f;
-            this.collideSounds.Add("presentLand");
-            this.editorTooltip = "You never know what you'll find inside! Spawns a random item once.";
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-7f, -4f);
+            collisionSize = new Vec2(14f, 11f);
+            depth = -0.5f;
+            thickness = 0f;
+            weight = 3f;
+            flammable = 0.3f;
+            charThreshold = 0.5f;
+            collideSounds.Add("presentLand");
+            editorTooltip = "You never know what you'll find inside! Spawns a random item once.";
         }
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (type is DTIncinerate && this.isServerForObject)
+            if (type is DTIncinerate && isServerForObject)
             {
                 SFX.Play("flameExplode");
                 for (int index = 0; index < 3; ++index)
-                    Level.Add(SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
-                Holdable holdable = this.SpawnPresent(null);
+                    Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
+                Holdable holdable = SpawnPresent(null);
                 if (holdable != null)
                     holdable.velocity = Rando.Vec2(-1f, 1f, -2f, 0f);
                 Level.Remove(this);
@@ -54,7 +54,7 @@ namespace DuckGame
         {
             List<System.Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
             physicsObjects.RemoveAll(t => t == typeof(Present) || t == typeof(LavaBarrel) || t == typeof(Grapple));
-            this._contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
+            _contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
         }
 
         public static void OpenEffect(Vec2 pPosition, int pFrame, bool pIsNetMessage)
@@ -70,11 +70,11 @@ namespace DuckGame
 
         public Holdable SpawnPresent(Thing pOwner)
         {
-            if (!this.isServerForObject)
+            if (!isServerForObject)
                 return null;
-            if (this._contains == null)
-                this.Initialize();
-            Holdable thing1 = Editor.CreateThing(this._contains) as Holdable;
+            if (_contains == null)
+                Initialize();
+            Holdable thing1 = Editor.CreateThing(_contains) as Holdable;
             if (thing1 != null)
             {
                 Thing thing = pOwner;
@@ -91,8 +91,8 @@ namespace DuckGame
                 }
                 else
                 {
-                    thing1.x = this.x;
-                    thing1.y = this.y;
+                    thing1.x = x;
+                    thing1.y = y;
                 }
                 Level.Add(thing1);
                 if (duck != null)
@@ -106,7 +106,7 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if (this.owner == null || !this.isServerForObject)
+            if (this.owner == null || !isServerForObject)
                 return;
             Thing owner = this.owner;
             Duck duck = this.duck;
@@ -117,8 +117,8 @@ namespace DuckGame
                 this.duck.ThrowItem();
             }
             Level.Remove(this);
-            Present.OpenEffect(this.position, this._sprite.frame, false);
-            this.SpawnPresent(owner);
+            Present.OpenEffect(position, _sprite.frame, false);
+            SpawnPresent(owner);
         }
     }
 }

@@ -22,18 +22,18 @@ namespace DuckGame
         public MysteryGun(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("mysteryGun", 32, 32);
-            this.graphic = _sprite;
-            this.center = new Vec2(16f, 16f);
-            this.collisionSize = new Vec2(10f, 10f);
-            this.collisionOffset = new Vec2(-5f, -5f);
-            this.depth = (Depth)0.5f;
-            this._canFlip = false;
-            this.editorTooltip = "Can be configured to spawn a random weapon or item from a specified list.";
-            this._placementCost += 4;
+            _sprite = new SpriteMap("mysteryGun", 32, 32);
+            graphic = _sprite;
+            center = new Vec2(16f, 16f);
+            collisionSize = new Vec2(10f, 10f);
+            collisionOffset = new Vec2(-5f, -5f);
+            depth = (Depth)0.5f;
+            _canFlip = false;
+            editorTooltip = "Can be configured to spawn a random weapon or item from a specified list.";
+            _placementCost += 4;
         }
 
-        public void PreparePossibilities() => this.containedType = MysteryGun.PickType(this.chanceGroup, this.contains);
+        public void PreparePossibilities() => containedType = MysteryGun.PickType(chanceGroup, contains);
 
         public static System.Type PickType(int chanceGroup, List<TypeProbPair> contains)
         {
@@ -65,27 +65,27 @@ namespace DuckGame
         {
             if (Level.current is Editor)
                 return;
-            this.ReplaceSelfWithThing();
-            if (!Network.isActive || this._addedThing == null || Thing.loadingLevel == null)
+            ReplaceSelfWithThing();
+            if (!Network.isActive || _addedThing == null || Thing.loadingLevel == null)
                 return;
-            this._addedThing.PrepareForHost();
+            _addedThing.PrepareForHost();
         }
 
         private void ReplaceSelfWithThing()
         {
             if (this.containedType == null)
-                this.PreparePossibilities();
+                PreparePossibilities();
             System.Type containedType = this.containedType;
             if (containedType != null)
             {
-                this._addedThing = Editor.CreateObject(containedType) as Thing;
-                this._addedThing.position = this.position;
-                Level.Add(this._addedThing);
+                _addedThing = Editor.CreateObject(containedType) as Thing;
+                _addedThing.position = position;
+                Level.Add(_addedThing);
             }
             Level.Remove(this);
         }
 
-        public List<TypeProbPair> possible => this.contains;
+        public List<TypeProbPair> possible => contains;
 
         public override ContextMenu GetContextMenu()
         {
@@ -98,14 +98,14 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", MysteryGun.SerializeTypeProb(this.contains));
+            binaryClassChunk.AddProperty("contains", MysteryGun.SerializeTypeProb(contains));
             return binaryClassChunk;
         }
 
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.contains = MysteryGun.DeserializeTypeProb(node.GetProperty<string>("contains"));
+            contains = MysteryGun.DeserializeTypeProb(node.GetProperty<string>("contains"));
             return true;
         }
 
@@ -154,14 +154,14 @@ namespace DuckGame
         public override void DrawHoverInfo()
         {
             float num = 0f;
-            foreach (TypeProbPair contain in this.contains)
+            foreach (TypeProbPair contain in contains)
             {
                 if (contain.probability > 0f)
                 {
                     Color white = Color.White;
                     Color color = contain.probability != 0f ? (contain.probability >= 0.3f ? (contain.probability >= 0.7f ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
                     string text = contain.type.Name + ": " + contain.probability.ToString("0.000");
-                    Graphics.DrawString(text, this.position + new Vec2((-Graphics.GetStringWidth(text, scale: 0.5f) / 2f), -(16f + num)), color, (Depth)0.9f, scale: 0.5f);
+                    Graphics.DrawString(text, position + new Vec2((-Graphics.GetStringWidth(text, scale: 0.5f) / 2f), -(16f + num)), color, (Depth)0.9f, scale: 0.5f);
                     num += 4f;
                 }
             }

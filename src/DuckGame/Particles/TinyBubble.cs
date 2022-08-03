@@ -16,38 +16,38 @@ namespace DuckGame
         public TinyBubble(float xpos, float ypos, float startHSpeed, float minY, bool blue = false)
           : base(xpos, ypos)
         {
-            this.alpha = 0.7f;
-            this._minY = minY;
-            this._gravMult = 0f;
-            this.vSpeed = -Rando.Float(0.5f, 1f);
-            this.hSpeed = startHSpeed;
-            this.depth = (Depth)0.3f;
+            alpha = 0.7f;
+            _minY = minY;
+            _gravMult = 0f;
+            vSpeed = -Rando.Float(0.5f, 1f);
+            hSpeed = startHSpeed;
+            depth = (Depth)0.3f;
             SpriteMap spriteMap = new SpriteMap("tinyBubbles", 8, 8);
             if (blue)
                 spriteMap = new SpriteMap("tinyBlueBubbles", 8, 8);
             spriteMap.frame = Rando.Int(0, 1);
-            this.graphic = spriteMap;
-            this.center = new Vec2(4f, 4f);
-            this._waveSize = Rando.Float(0.1f, 0.3f);
-            this.xscale = this.yscale = 0.1f;
+            graphic = spriteMap;
+            center = new Vec2(4f, 4f);
+            _waveSize = Rando.Float(0.1f, 0.3f);
+            xscale = yscale = 0.1f;
         }
 
         public override void Update()
         {
-            this._wave.Update();
-            this.position.x += this._wave.value * this._waveSize;
-            this.position.x += this.hSpeed;
-            this.position.y += this.vSpeed;
-            this.hSpeed = Lerp.Float(this.hSpeed, 0f, 0.1f);
-            this.xscale = this.yscale = Lerp.Float(this.xscale, 1f, 0.1f);
-            if (this.y < _minY - 4.0)
-                this.alpha -= 0.025f;
-            if (this.y < _minY - 8.0)
-                this.alpha = 0f;
-            if (this.y >= _minY)
+            _wave.Update();
+            position.x += _wave.value * _waveSize;
+            position.x += hSpeed;
+            position.y += vSpeed;
+            hSpeed = Lerp.Float(hSpeed, 0f, 0.1f);
+            xscale = yscale = Lerp.Float(xscale, 1f, 0.1f);
+            if (y < _minY - 4.0)
+                alpha -= 0.025f;
+            if (y < _minY - 8.0)
+                alpha = 0f;
+            if (y >= _minY)
                 return;
-            this.alpha -= 0.025f;
-            if (this.alpha >= 0.0)
+            alpha -= 0.025f;
+            if (alpha >= 0.0)
                 return;
             Level.Remove(this);
         }

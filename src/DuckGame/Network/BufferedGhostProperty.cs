@@ -17,7 +17,7 @@ namespace DuckGame
         public bool isNetworkStateValue;
         public bool initialized;
 
-        public override string ToString() => this.isNetworkStateValue ? this.binding.GetDebugStringSpecial(this.value) + "(ns)" : this.binding.GetDebugStringSpecial(this.value);
+        public override string ToString() => isNetworkStateValue ? binding.GetDebugStringSpecial(value) + "(ns)" : binding.GetDebugStringSpecial(value);
 
         public abstract object value { get; set; }
 
@@ -29,8 +29,8 @@ namespace DuckGame
 
         public void UpdateFrom(BufferedGhostProperty prop)
         {
-            this.tick = prop.tick;
-            this.UpdateFrom(prop.binding);
+            tick = prop.tick;
+            UpdateFrom(prop.binding);
         }
 
         protected static Vec2 Slerp(Vec2 from, Vec2 to, float step)

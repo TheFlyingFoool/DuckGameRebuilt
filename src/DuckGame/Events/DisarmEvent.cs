@@ -13,7 +13,7 @@ namespace DuckGame
           : base(dealerVal, victimVal)
         {
             if (dealerVal != null)
-                ++this.dealer.stats.disarms;
+                ++dealer.stats.disarms;
             if (victimVal == null)
                 return;
             ++victimVal.stats.timesDisarmed;

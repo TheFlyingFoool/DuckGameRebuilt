@@ -31,74 +31,74 @@ namespace DuckGame
           Duck own)
           : base(xpos, ypos)
         {
-            this.offDir = (sbyte)dir;
-            this.graphic = new Sprite("sledgeForce");
-            this.center = new Vec2(graphic.w, graphic.h);
-            this._alphaSub = alphaSub;
-            this._speed = speed;
-            this._speedv = speedv;
-            this._collisionSize = new Vec2(6f, 30f);
-            this._collisionOffset = new Vec2(-3f, -15f);
-            this.graphic.flipH = this.offDir <= 0;
-            this._waveOwner = own;
-            this.depth = -0.7f;
+            offDir = (sbyte)dir;
+            graphic = new Sprite("sledgeForce");
+            center = new Vec2(graphic.w, graphic.h);
+            _alphaSub = alphaSub;
+            _speed = speed;
+            _speedv = speedv;
+            _collisionSize = new Vec2(6f, 30f);
+            _collisionOffset = new Vec2(-3f, -15f);
+            graphic.flipH = offDir <= 0;
+            _waveOwner = own;
+            depth = -0.7f;
         }
 
         public override void Update()
         {
-            this.graphic.flipH = this.offDir <= 0;
-            if (this.alpha > 0.1f)
+            graphic.flipH = offDir <= 0;
+            if (alpha > 0.1f)
             {
-                foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(this.topLeft, this.bottomRight))
+                foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(topLeft, bottomRight))
                 {
-                    if ((materialThing is PhysicsObject || materialThing is Icicles) && !this._hits.Contains(materialThing) && materialThing != this._waveOwner && materialThing.owner != this._waveOwner && Duck.GetAssociatedDuck(materialThing) != this._waveOwner)
+                    if ((materialThing is PhysicsObject || materialThing is Icicles) && !_hits.Contains(materialThing) && materialThing != _waveOwner && materialThing.owner != _waveOwner && Duck.GetAssociatedDuck(materialThing) != _waveOwner)
                     {
                         if (materialThing.owner != null)
                         {
-                            if (this.isServerForObject && !materialThing.isServerForObject)
+                            if (isServerForObject && !materialThing.isServerForObject)
                                 continue;
                         }
-                        else if (!this.isServerForObject)
+                        else if (!isServerForObject)
                             continue;
-                        if (this._waveOwner != null)
-                            Thing.Fondle(materialThing, this._waveOwner.connection);
+                        if (_waveOwner != null)
+                            Thing.Fondle(materialThing, _waveOwner.connection);
                         if (materialThing is Grenade grenade)
                             grenade.PressAction();
                         if (materialThing is PhysicsObject)
                         {
-                            materialThing.hSpeed = (float)((_speed - 3.0) * offDir * 1.5 + offDir * 4.0) * this.alpha;
-                            materialThing.vSpeed = (this._speedv - 4.5f) * this.alpha;
-                            materialThing.clip.Add(this._waveOwner as MaterialThing);
+                            materialThing.hSpeed = (float)((_speed - 3.0) * offDir * 1.5 + offDir * 4.0) * alpha;
+                            materialThing.vSpeed = (_speedv - 4.5f) * alpha;
+                            materialThing.clip.Add(_waveOwner as MaterialThing);
                         }
                         if (!materialThing.destroyed && !(materialThing is Equipment))
                             materialThing.Destroy(new DTImpact(this));
-                        this._hits.Add(materialThing);
+                        _hits.Add(materialThing);
                     }
                 }
-                if (this.isServerForObject)
+                if (isServerForObject)
                 {
-                    foreach (Door t in Level.CheckRectAll<Door>(this.topLeft, this.bottomRight))
+                    foreach (Door t in Level.CheckRectAll<Door>(topLeft, bottomRight))
                     {
-                        if (this._waveOwner != null)
-                            Thing.Fondle(t, this._waveOwner.connection);
+                        if (_waveOwner != null)
+                            Thing.Fondle(t, _waveOwner.connection);
                         if (!t.destroyed)
                             t.Destroy(new DTImpact(this));
                     }
-                    foreach (Window t in Level.CheckRectAll<Window>(this.topLeft, this.bottomRight))
+                    foreach (Window t in Level.CheckRectAll<Window>(topLeft, bottomRight))
                     {
-                        if (this._waveOwner != null)
-                            Thing.Fondle(t, this._waveOwner.connection);
+                        if (_waveOwner != null)
+                            Thing.Fondle(t, _waveOwner.connection);
                         if (!t.destroyed)
                             t.Destroy(new DTImpact(this));
                     }
                 }
             }
-            if (!this.isServerForObject)
+            if (!isServerForObject)
                 return;
-            this.x += offDir * this._speed;
-            this.y += this._speedv;
-            this.alpha -= this._alphaSub;
-            if (this.alpha > 0.0)
+            x += offDir * _speed;
+            y += _speedv;
+            alpha -= _alphaSub;
+            if (alpha > 0.0)
                 return;
             Level.Remove(this);
         }

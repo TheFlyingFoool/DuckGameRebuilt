@@ -14,16 +14,16 @@ namespace DuckGame
         public SpringUpLeft(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.UpdateSprite();
-            this.center = new Vec2(8f, 7f);
-            this.collisionOffset = new Vec2(-8f, 0f);
-            this.collisionSize = new Vec2(16f, 8f);
-            this.depth = -0.5f;
-            this._editorName = "Spring UpLeft";
-            this.editorTooltip = "Can't reach a high platform or want to get somewhere fast? That's why we built springs.";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.editorCycleType = typeof(Spring);
-            this.angleDegrees = -45f;
+            UpdateSprite();
+            center = new Vec2(8f, 7f);
+            collisionOffset = new Vec2(-8f, 0f);
+            collisionSize = new Vec2(16f, 8f);
+            depth = -0.5f;
+            _editorName = "Spring UpLeft";
+            editorTooltip = "Can't reach a high platform or want to get somewhere fast? That's why we built springs.";
+            physicsMaterial = PhysicsMaterial.Metal;
+            editorCycleType = typeof(Spring);
+            angleDegrees = -45f;
         }
 
         public override void Touch(MaterialThing with)
@@ -31,10 +31,10 @@ namespace DuckGame
             if (with.isServerForObject && with.Sprung(this))
             {
                 if (with.vSpeed > -22.0 * _mult)
-                    with.vSpeed = -22f * this._mult;
-                if (!this.flipHorizontal)
+                    with.vSpeed = -22f * _mult;
+                if (!flipHorizontal)
                 {
-                    if (this.purple)
+                    if (purple)
                     {
                         if (with.hSpeed > -7.0)
                             with.hSpeed = -7f;
@@ -42,7 +42,7 @@ namespace DuckGame
                     else if (with.hSpeed > -10.0)
                         with.hSpeed = -10f;
                 }
-                else if (this.purple)
+                else if (purple)
                 {
                     if (with.hSpeed < 7.0)
                         with.hSpeed = 7f;
@@ -54,20 +54,20 @@ namespace DuckGame
                 if (with is Duck)
                 {
                     (with as Duck).jumping = false;
-                    this.DoRumble(with as Duck);
+                    DoRumble(with as Duck);
                 }
                 with.lastHSpeed = with._hSpeed;
                 with.lastVSpeed = with._vSpeed;
             }
-            this.SpringUp();
+            SpringUp();
         }
 
         public override void UpdateAngle()
         {
-            if (this.flipHorizontal)
-                this.angleDegrees = 45f;
+            if (flipHorizontal)
+                angleDegrees = 45f;
             else
-                this.angleDegrees = -45f;
+                angleDegrees = -45f;
         }
 
         public override void Draw() => base.Draw();

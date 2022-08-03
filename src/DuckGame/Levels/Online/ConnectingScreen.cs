@@ -11,7 +11,7 @@ namespace DuckGame
     {
         private float _dots;
 
-        public ConnectingScreen() => this._centeredView = true;
+        public ConnectingScreen() => _centeredView = true;
 
         public override void Initialize()
         {
@@ -22,9 +22,9 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this._dots += 0.01f;
+            _dots += 0.01f;
             if (_dots > 1.0)
-                this._dots = 0f;
+                _dots = 0f;
             string str = "";
             for (int index = 0; index < 3; ++index)
             {

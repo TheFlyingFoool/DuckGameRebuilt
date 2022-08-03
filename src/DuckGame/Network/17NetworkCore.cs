@@ -23,7 +23,7 @@ namespace DuckGame
 
         protected override void OnSerialize()
         {
-            this.hostSynchronizedTime = Network.TickSync;
+            hostSynchronizedTime = Network.TickSync;
             base.OnSerialize();
         }
     }

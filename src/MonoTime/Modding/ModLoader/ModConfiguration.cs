@@ -29,16 +29,16 @@ namespace DuckGame
         /// <summary>The type of mod this is.</summary>
         public ModConfiguration.Type modType { get; internal set; }
 
-        public void SetModType(ModConfiguration.Type pType) => this.modType = pType;
+        public void SetModType(ModConfiguration.Type pType) => modType = pType;
 
-        public MapPack mapPack => this._mapPack;
+        public MapPack mapPack => _mapPack;
 
-        public void SetMapPack(MapPack pPack) => this._mapPack = pPack;
+        public void SetMapPack(MapPack pPack) => _mapPack = pPack;
 
         internal ModConfiguration()
         {
-            this.softDependencies = (new string[0]);
-            this.hardDependencies = (new string[0]);
+            softDependencies = (new string[0]);
+            hardDependencies = (new string[0]);
         }
 
         /// <summary>The full path to the root directory of this mod.</summary>
@@ -46,13 +46,13 @@ namespace DuckGame
 
         public string contentDirectory
         {
-            get => this._contentDirectory;
+            get => _contentDirectory;
             internal set
             {
                 if (value != null)
-                    this._contentDirectory = value.Replace('\\', '/');
+                    _contentDirectory = value.Replace('\\', '/');
                 else
-                    this._contentDirectory = value;
+                    _contentDirectory = value;
             }
         }
 
@@ -66,15 +66,15 @@ namespace DuckGame
         {
             get
             {
-                this._uniqueID = this.name + "|" + this.workshopID.ToString();
-                if (this.workshopID == 0UL)
+                _uniqueID = name + "|" + workshopID.ToString();
+                if (workshopID == 0UL)
                 {
-                    if (this.author != null)
-                        this._uniqueID = this._uniqueID + "_" + this.author.ToString();
-                    if (this.version != null)
-                        this._uniqueID = this._uniqueID + "_" + this.version.ToString();
+                    if (author != null)
+                        _uniqueID = _uniqueID + "_" + author.ToString();
+                    if (version != null)
+                        _uniqueID = _uniqueID + "_" + version.ToString();
                 }
-                return this._uniqueID;
+                return _uniqueID;
             }
         }
 
@@ -108,7 +108,7 @@ namespace DuckGame
         /// <value>The Steam workshop identifier.</value>
         internal ulong workshopID { get; set; }
 
-        public ulong assignedWorkshopID => this.workshopID;
+        public ulong assignedWorkshopID => workshopID;
 
         /// <summary>
         /// Gets a value indicating whether this mod is a local mod.
@@ -201,7 +201,7 @@ namespace DuckGame
 
         private T GetCustomAttribute<T>() where T : Attribute
         {
-            object[] customAttributes = this._assembly.GetCustomAttributes(typeof(T), false);
+            object[] customAttributes = _assembly.GetCustomAttributes(typeof(T), false);
             int index = 0;
             return index < customAttributes.Length ? (T)customAttributes[index] : default(T);
         }
@@ -209,107 +209,107 @@ namespace DuckGame
         /// <summary>The Assembly that this mod was loaded from.</summary>
         public Assembly assembly
         {
-            get => this._assembly;
+            get => _assembly;
             internal set
             {
-                this._assembly = value;
-                this.loaded = true;
-                AssemblyTitleAttribute customAttribute1 = this.GetCustomAttribute<AssemblyTitleAttribute>();
-                this.displayName = customAttribute1 == null ? this.name : customAttribute1.Title;
-                this.version = this._assembly.GetName().Version;
-                AssemblyDescriptionAttribute customAttribute2 = this.GetCustomAttribute<AssemblyDescriptionAttribute>();
+                _assembly = value;
+                loaded = true;
+                AssemblyTitleAttribute customAttribute1 = GetCustomAttribute<AssemblyTitleAttribute>();
+                displayName = customAttribute1 == null ? name : customAttribute1.Title;
+                version = _assembly.GetName().Version;
+                AssemblyDescriptionAttribute customAttribute2 = GetCustomAttribute<AssemblyDescriptionAttribute>();
                 if (customAttribute2 != null)
-                    this.description = customAttribute2.Description;
-                AssemblyCompanyAttribute customAttribute3 = this.GetCustomAttribute<AssemblyCompanyAttribute>();
+                    description = customAttribute2.Description;
+                AssemblyCompanyAttribute customAttribute3 = GetCustomAttribute<AssemblyCompanyAttribute>();
                 if (customAttribute3 != null)
-                    this.author = customAttribute3.Company;
+                    author = customAttribute3.Company;
                 else
-                    this.author = "Unknown";
+                    author = "Unknown";
             }
         }
 
         internal IManageContent contentManager { get; set; }
 
-        internal string assemblyPath => this.directory + "/" + this.name + ".dll";
+        internal string assemblyPath => directory + "/" + name + ".dll";
 
-        internal string tempAssemblyPath => this.directory + "/" + this.name + "_compiled.dll";
+        internal string tempAssemblyPath => directory + "/" + name + "_compiled.dll";
 
-        internal string hashPath => this.directory + "/" + this.name + "_compiled.hash";
+        internal string hashPath => directory + "/" + name + "_compiled.hash";
 
-        internal string buildLogPath => this.directory + "/" + this.name + "_build.log";
+        internal string buildLogPath => directory + "/" + name + "_build.log";
 
-        internal string configFilePath => this.directory + "/mod.conf";
+        internal string configFilePath => directory + "/mod.conf";
 
         internal XmlDocument configDocument { get; set; }
 
         public void LoadOrCreateConfig()
         {
-            this.LoadConfiguration();
-            if (!this.disabled)
+            LoadConfiguration();
+            if (!disabled)
                 return;
-            this.loaded = false;
+            loaded = false;
         }
 
         internal void LoadConfiguration()
         {
-            this.disabled = ModLoader.disabledMods.Contains(this.name) || ModLoader.disabledMods.Contains(this.uniqueID);
-            this.forceHarmonyLegacyLoad = ModLoader.forceLegacyLoad.Contains(this.name) || ModLoader.forceLegacyLoad.Contains(this.uniqueID);
-            if (System.IO.File.Exists(this.configFilePath))
+            disabled = ModLoader.disabledMods.Contains(name) || ModLoader.disabledMods.Contains(uniqueID);
+            forceHarmonyLegacyLoad = ModLoader.forceLegacyLoad.Contains(name) || ModLoader.forceLegacyLoad.Contains(uniqueID);
+            if (System.IO.File.Exists(configFilePath))
             {
-                this.configDocument = new XmlDocument();
-                this.configDocument.Load(this.configFilePath);
-                XmlElement documentElement = this.configDocument.DocumentElement;
+                configDocument = new XmlDocument();
+                configDocument.Load(configFilePath);
+                XmlElement documentElement = configDocument.DocumentElement;
                 XmlElement xmlElement1 = documentElement["SoftDependencies"];
                 if (xmlElement1 != null)
-                    this.softDependencies = xmlElement1.InnerText.Split(new char[1]
+                    softDependencies = xmlElement1.InnerText.Split(new char[1]
                     {
             '|'
                     }, StringSplitOptions.RemoveEmptyEntries);
                 XmlElement xmlElement2 = documentElement["HardDependencies"];
                 if (xmlElement2 != null)
-                    this.hardDependencies = xmlElement2.InnerText.Split(new char[1]
+                    hardDependencies = xmlElement2.InnerText.Split(new char[1]
                     {
             '|'
                     }, StringSplitOptions.RemoveEmptyEntries);
-                this.noCompilation = documentElement["NoCompilation"] != null && documentElement["NoCompilation"].InnerText.ToLower() == "true";
-                this.preloadContent = documentElement["PreloadContent"] == null || !(documentElement["PreloadContent"].InnerText.ToLower() == "false");
-                this.processPinkTransparency = documentElement["PinkTransparency"] == null || !(documentElement["PinkTransparency"].InnerText.ToLower() == "false");
-                this.workshopID = documentElement["WorkshopID"] != null ? ulong.Parse(documentElement["WorkshopID"].InnerText) : 0UL;
-                this.majorSupportedRevision = documentElement["MajorSupportedRevision"] != null ? int.Parse(documentElement["MajorSupportedRevision"].InnerText) : 0;
+                noCompilation = documentElement["NoCompilation"] != null && documentElement["NoCompilation"].InnerText.ToLower() == "true";
+                preloadContent = documentElement["PreloadContent"] == null || !(documentElement["PreloadContent"].InnerText.ToLower() == "false");
+                processPinkTransparency = documentElement["PinkTransparency"] == null || !(documentElement["PinkTransparency"].InnerText.ToLower() == "false");
+                workshopID = documentElement["WorkshopID"] != null ? ulong.Parse(documentElement["WorkshopID"].InnerText) : 0UL;
+                majorSupportedRevision = documentElement["MajorSupportedRevision"] != null ? int.Parse(documentElement["MajorSupportedRevision"].InnerText) : 0;
             }
             else
             {
-                this.configDocument = new XmlDocument();
-                this.configDocument.AppendChild(this.configDocument.CreateElement("Mod"));
-                this.configDocument.Save(this.configFilePath);
+                configDocument = new XmlDocument();
+                configDocument.AppendChild(configDocument.CreateElement("Mod"));
+                configDocument.Save(configFilePath);
             }
         }
 
         internal void Disable()
         {
-            if (this.disabled)
+            if (disabled)
                 return;
-            DevConsole.Log(DCSection.Mod, this.name + " Was Disabled!");
-            this.disabled = true;
+            DevConsole.Log(DCSection.Mod, name + " Was Disabled!");
+            disabled = true;
             ModLoader.SetModDisabled(this, true);
         }
 
         internal void Enable()
         {
-            if (!this.disabled)
+            if (!disabled)
                 return;
-            this.disabled = false;
+            disabled = false;
             ModLoader.SetModDisabled(this, false);
         }
 
         internal void SetWorkshopID(ulong id)
         {
-            XmlElement documentElement = this.configDocument.DocumentElement;
+            XmlElement documentElement = configDocument.DocumentElement;
             if (documentElement["WorkshopID"] == null)
-                documentElement.AppendChild(this.configDocument.CreateElement("WorkshopID"));
+                documentElement.AppendChild(configDocument.CreateElement("WorkshopID"));
             documentElement["WorkshopID"].InnerText = id.ToString();
-            this.workshopID = id;
-            this.configDocument.Save(this.configFilePath);
+            workshopID = id;
+            configDocument.Save(configFilePath);
         }
 
         public enum Type

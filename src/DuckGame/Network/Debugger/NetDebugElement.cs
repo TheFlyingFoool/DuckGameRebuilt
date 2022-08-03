@@ -17,13 +17,13 @@ namespace DuckGame
         protected NetDebugInterface _interface;
         protected string _name;
 
-        public NetDebugElement(NetDebugInterface pInterface) => this._interface = pInterface;
+        public NetDebugElement(NetDebugInterface pInterface) => _interface = pInterface;
 
         public virtual bool DoDraw(Vec2 position, bool allowInput)
         {
-            bool flag = this.Draw(position, allowInput);
-            if (this.right != null)
-                flag |= this.right.DoDraw(position + new Vec2(this.width, 0f), !flag);
+            bool flag = Draw(position, allowInput);
+            if (right != null)
+                flag |= right.DoDraw(position + new Vec2(width, 0f), !flag);
             return flag;
         }
 

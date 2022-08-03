@@ -18,20 +18,20 @@ namespace DuckGame
 
         public NMMojiData(string dat, string nam)
         {
-            this.data = dat;
-            this.name = nam;
+            data = dat;
+            name = nam;
         }
 
         protected override void OnSerialize()
         {
-            this._serializedData.Write(this.name);
-            this._serializedData.Write(this.data);
+            _serializedData.Write(name);
+            _serializedData.Write(data);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
-            this.name = d.ReadString();
-            this.data = d.ReadString();
+            name = d.ReadString();
+            data = d.ReadString();
         }
     }
 }

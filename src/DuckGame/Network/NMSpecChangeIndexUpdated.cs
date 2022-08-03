@@ -14,8 +14,8 @@ namespace DuckGame
 
         public NMSpecChangeIndexUpdated(Profile pProfile, byte pSpecChangeIndex)
         {
-            this.profile = pProfile;
-            this.specChangeIndex = pSpecChangeIndex;
+            profile = pProfile;
+            specChangeIndex = pSpecChangeIndex;
         }
 
         public NMSpecChangeIndexUpdated()
@@ -24,9 +24,9 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (this.profile == null)
+            if (profile == null)
                 return;
-            this.profile.remoteSpectatorChangeIndex = this.specChangeIndex;
+            profile.remoteSpectatorChangeIndex = specChangeIndex;
         }
     }
 }

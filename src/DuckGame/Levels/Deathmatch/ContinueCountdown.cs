@@ -15,16 +15,16 @@ namespace DuckGame
         public ContinueCountdown(float time = 5f)
           : base()
         {
-            this.timer = time;
+            timer = time;
         }
 
         public void UpdateTimer()
         {
-            if (this.isServerForObject)
-                this.timer -= Maths.IncFrameTimer();
+            if (isServerForObject)
+                timer -= Maths.IncFrameTimer();
             if (timer >= 0.0)
                 return;
-            this.timer = 0f;
+            timer = 0f;
         }
     }
 }

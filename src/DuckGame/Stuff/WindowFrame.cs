@@ -15,28 +15,28 @@ namespace DuckGame
         public WindowFrame(float xpos, float ypos, bool f)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("windowFrame");
-            this.center = new Vec2(5f, 26f);
-            this.depth = -0.95f;
-            this._editorCanModify = false;
-            this.floor = f;
-            if (!this.floor)
+            graphic = new Sprite("windowFrame");
+            center = new Vec2(5f, 26f);
+            depth = -0.95f;
+            _editorCanModify = false;
+            floor = f;
+            if (!floor)
                 return;
-            this.graphic.angleDegrees = -90f;
+            graphic.angleDegrees = -90f;
         }
 
         public override void Draw()
         {
-            this.graphic.depth = this.depth;
-            if (this.floor)
+            graphic.depth = depth;
+            if (floor)
             {
-                Graphics.Draw(this.graphic, this.x + 14f, this.y + 5f, new Rectangle(0f, this.graphic.height - 2, graphic.width, 2f));
-                Graphics.Draw(this.graphic, this.x + 14f - this.high, this.y + 5f, new Rectangle(0f, 0f, graphic.width, 3f));
+                Graphics.Draw(graphic, x + 14f, y + 5f, new Rectangle(0f, graphic.height - 2, graphic.width, 2f));
+                Graphics.Draw(graphic, x + 14f - high, y + 5f, new Rectangle(0f, 0f, graphic.width, 3f));
             }
             else
             {
-                Graphics.Draw(this.graphic, this.x - 5f, this.y + 6f, new Rectangle(0f, this.graphic.height - 2, graphic.width, 2f));
-                Graphics.Draw(this.graphic, this.x - 5f, this.y + 6f - this.high, new Rectangle(0f, 0f, graphic.width, 3f));
+                Graphics.Draw(graphic, x - 5f, y + 6f, new Rectangle(0f, graphic.height - 2, graphic.width, 2f));
+                Graphics.Draw(graphic, x - 5f, y + 6f - high, new Rectangle(0f, 0f, graphic.width, 3f));
             }
         }
     }

@@ -42,7 +42,7 @@ namespace DuckGame
                 _storyName = storyName
             };
             newsStory._importance = newsStory.importance;
-            newsStory._section = this._section;
+            newsStory._section = _section;
             return newsStory;
         }
 
@@ -50,24 +50,24 @@ namespace DuckGame
         {
             get
             {
-                if (_impressiveValue - this._awfulValue == 0f)
+                if (_impressiveValue - _awfulValue == 0f)
                     return "";
-                if (this.badRange > 0.2f)
+                if (badRange > 0.2f)
                     return "Bad";
-                return this.goodRange > 0.2f ? "Good" : "";
+                return goodRange > 0.2f ? "Good" : "";
             }
         }
 
-        public float importance => this._importance;
+        public float importance => _importance;
 
-        public float weight => _impressiveValue - this._awfulValue == 0f ? 1f : this.goodRange + this.badRange;
+        public float weight => _impressiveValue - _awfulValue == 0f ? 1f : goodRange + badRange;
 
         public float goodRange
         {
             get
             {
-                float num = Math.Abs(this._impressiveValue - this._awfulValue);
-                return _impressiveValue < this._awfulValue ? Maths.Clamp(((_impressiveValue + num / 2f - (_impressiveValue + this._value)) * 2f) / num, 0f, 99f) : Maths.Clamp(((_value - num / 2f) / (_impressiveValue - num / 2f)), 0f, 99f);
+                float num = Math.Abs(_impressiveValue - _awfulValue);
+                return _impressiveValue < _awfulValue ? Maths.Clamp(((_impressiveValue + num / 2f - (_impressiveValue + _value)) * 2f) / num, 0f, 99f) : Maths.Clamp(((_value - num / 2f) / (_impressiveValue - num / 2f)), 0f, 99f);
             }
         }
 
@@ -75,30 +75,30 @@ namespace DuckGame
         {
             get
             {
-                float num = Math.Abs(this._impressiveValue - this._awfulValue);
-                return _impressiveValue < this._awfulValue ? Maths.Clamp(((_value - num / 2f) / (_awfulValue - num / 2f)), 0f, 99f) : Maths.Clamp(((_awfulValue + num / 2f - (_awfulValue + this._value)) * 2) / num, 0f, 99f);
+                float num = Math.Abs(_impressiveValue - _awfulValue);
+                return _impressiveValue < _awfulValue ? Maths.Clamp(((_value - num / 2f) / (_awfulValue - num / 2f)), 0f, 99f) : Maths.Clamp(((_awfulValue + num / 2f - (_awfulValue + _value)) * 2) / num, 0f, 99f);
             }
         }
 
-        public NewsSection section => this._section;
+        public NewsSection section => _section;
 
         public void AddSubStory(NewsStory story)
         {
             if (story.DoCalculateRemark() == null)
                 return;
-            this._subStories.Add(story);
+            _subStories.Add(story);
         }
 
         public void DoCalculate(List<Team> teams)
         {
-            this._value = 0f;
-            this._storyName = null;
-            this.name = null;
-            this.name2 = null;
-            this.extra01 = null;
-            this.extra02 = null;
-            this.remark = null;
-            this.Calculate(teams);
+            _value = 0f;
+            _storyName = null;
+            name = null;
+            name2 = null;
+            extra01 = null;
+            extra02 = null;
+            remark = null;
+            Calculate(teams);
         }
 
         protected virtual void Calculate(List<Team> teams)
@@ -107,10 +107,10 @@ namespace DuckGame
 
         public string DoCalculateRemark()
         {
-            this.remark = this.CalculateRemark();
-            return this.remark;
+            remark = CalculateRemark();
+            return remark;
         }
 
-        protected virtual string CalculateRemark() => Dialogue.GetRemark(this._storyName != null ? this._storyName : this.GetType().Name + this.remarkModifierString, this.name, this.name2, this.extra01, this.extra02);
+        protected virtual string CalculateRemark() => Dialogue.GetRemark(_storyName != null ? _storyName : GetType().Name + remarkModifierString, name, name2, extra01, extra02);
     }
 }

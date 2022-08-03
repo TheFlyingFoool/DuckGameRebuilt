@@ -20,23 +20,23 @@ namespace DuckGame
         public Basketball(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("basketBall", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this.collisionSize = new Vec2(15f, 15f);
-            this.depth = -0.5f;
-            this.thickness = 1f;
-            this.weight = 3f;
-            this.flammable = 0.3f;
-            this.collideSounds.Add("basketball");
-            this.physicsMaterial = PhysicsMaterial.Rubber;
-            this._bouncy = 0.8f;
-            this.friction = 0.03f;
-            this._impactThreshold = 0.1f;
-            this._holdOffset = new Vec2(6f, 0f);
-            this.handOffset = new Vec2(0f, -0f);
-            this.editorTooltip = "Perfect for playing the world's greatest sport! Also basketball.";
+            _sprite = new SpriteMap("basketBall", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -8f);
+            collisionSize = new Vec2(15f, 15f);
+            depth = -0.5f;
+            thickness = 1f;
+            weight = 3f;
+            flammable = 0.3f;
+            collideSounds.Add("basketball");
+            physicsMaterial = PhysicsMaterial.Rubber;
+            _bouncy = 0.8f;
+            friction = 0.03f;
+            _impactThreshold = 0.1f;
+            _holdOffset = new Vec2(6f, 0f);
+            handOffset = new Vec2(0f, -0f);
+            editorTooltip = "Perfect for playing the world's greatest sport! Also basketball.";
         }
 
         public override void CheckIfHoldObstructed()
@@ -55,55 +55,55 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (!this.isServerForObject)
-                this._bounceDuck = null;
-            else if (this.owner == null)
+            if (!isServerForObject)
+                _bounceDuck = null;
+            else if (owner == null)
             {
-                this._walkFrames = 0;
-                --this._framesInHand;
-                if (this._framesInHand < -60)
-                    this._bounceDuck = null;
-                if (this._bounceDuck != null)
+                _walkFrames = 0;
+                --_framesInHand;
+                if (_framesInHand < -60)
+                    _bounceDuck = null;
+                if (_bounceDuck != null)
                 {
-                    float length = (this._bounceDuck.position - this.position).length;
+                    float length = (_bounceDuck.position - position).length;
                     if (length < 16f)
-                        this.hSpeed = this._bounceDuck.hSpeed;
-                    if (this._bounceDuck.holdObject == null && this.vSpeed < 1f && this._bounceDuck.top + 8f > this.y && length < 16f)
+                        hSpeed = _bounceDuck.hSpeed;
+                    if (_bounceDuck.holdObject == null && vSpeed < 1f && _bounceDuck.top + 8f > y && length < 16f)
                     {
-                        this._bounceDuck.GiveHoldable(this);
-                        this._framesInHand = 0;
+                        _bounceDuck.GiveHoldable(this);
+                        _framesInHand = 0;
                     }
                 }
             }
-            else if (this.duck != null && this.duck.holdObject == this)
+            else if (duck != null && duck.holdObject == this)
             {
-                if (this._framesInHand < 0)
-                    this._framesInHand = 0;
-                if (!this.owner.action && Math.Abs(this.owner.hSpeed) > 0.5f && this._framesInHand > 6)
+                if (_framesInHand < 0)
+                    _framesInHand = 0;
+                if (!owner.action && Math.Abs(owner.hSpeed) > 0.5f && _framesInHand > 6)
                 {
-                    this._bounceDuck = this.duck;
-                    float hSpeed = this.duck.hSpeed;
-                    this.duck.ThrowItem(false);
-                    this.vSpeed = 2f;
+                    _bounceDuck = duck;
+                    float hSpeed = duck.hSpeed;
+                    duck.ThrowItem(false);
+                    vSpeed = 2f;
                     this.hSpeed = hSpeed * 1.1f;
-                    this._framesInHand = 0;
+                    _framesInHand = 0;
                 }
                 else
                 {
-                    if (Math.Abs(this.owner.hSpeed) > 0.5f && this.duck.grounded)
-                        ++this._walkFrames;
-                    else if (this.duck.grounded)
-                        --this._walkFrames;
-                    if (this._walkFrames < 0)
-                        this._walkFrames = 0;
-                    if (this._walkFrames > 20)
+                    if (Math.Abs(owner.hSpeed) > 0.5f && duck.grounded)
+                        ++_walkFrames;
+                    else if (duck.grounded)
+                        --_walkFrames;
+                    if (_walkFrames < 0)
+                        _walkFrames = 0;
+                    if (_walkFrames > 20)
                     {
                         SFX.PlaySynchronized("basketballWhistle");
-                        this.duck.ThrowItem(false);
-                        this._walkFrames = 0;
+                        duck.ThrowItem(false);
+                        _walkFrames = 0;
                     }
-                    this._bounceDuck = null;
-                    ++this._framesInHand;
+                    _bounceDuck = null;
+                    ++_framesInHand;
                 }
             }
             base.Update();

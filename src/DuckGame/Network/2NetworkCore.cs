@@ -12,11 +12,11 @@ namespace DuckGame
     {
         public byte error;
 
-        public DuckNetErrorInfo GetError() => new DuckNetErrorInfo((DuckNetError)this.error, ((DuckNetError)this.error).ToString());
+        public DuckNetErrorInfo GetError() => new DuckNetErrorInfo((DuckNetError)error, ((DuckNetError)error).ToString());
 
-        public NMDisconnect(DuckNetError pError) => this.error = (byte)pError;
+        public NMDisconnect(DuckNetError pError) => error = (byte)pError;
 
-        public NMDisconnect(byte pError) => this.error = pError;
+        public NMDisconnect(byte pError) => error = pError;
 
         public NMDisconnect()
         {

@@ -21,15 +21,15 @@ namespace DuckGame
 
         public RockWeatherState Copy() => new RockWeatherState()
         {
-            add = this.add,
-            multiply = this.multiply,
-            sky = this.sky,
-            sunPos = this.sunPos,
-            lightOpacity = this.lightOpacity,
-            sunGlow = this.sunGlow,
-            sunOpacity = this.sunOpacity,
-            rainbowLight = this.rainbowLight,
-            rainbowLight2 = this.rainbowLight2
+            add = add,
+            multiply = multiply,
+            sky = sky,
+            sunPos = sunPos,
+            lightOpacity = lightOpacity,
+            sunGlow = sunGlow,
+            sunOpacity = sunOpacity,
+            rainbowLight = rainbowLight,
+            rainbowLight2 = rainbowLight2
         };
     }
 }

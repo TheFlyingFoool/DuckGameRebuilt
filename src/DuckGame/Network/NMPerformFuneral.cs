@@ -15,13 +15,13 @@ namespace DuckGame
         {
         }
 
-        public NMPerformFuneral(Duck d) => this.duck = d;
+        public NMPerformFuneral(Duck d) => duck = d;
 
         public override void Activate()
         {
-            if (this.duck == null)
+            if (duck == null)
                 return;
-            this.duck.DoFuneralStuff();
+            duck.DoFuneralStuff();
         }
     }
 }

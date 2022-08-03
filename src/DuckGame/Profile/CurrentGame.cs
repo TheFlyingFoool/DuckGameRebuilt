@@ -14,14 +14,14 @@ namespace DuckGame
 
         public int kills
         {
-            get => this._kills;
-            set => this._kills = value;
+            get => _kills;
+            set => _kills = value;
         }
 
         public int cash
         {
-            get => this._cash;
-            set => this._cash = value;
+            get => _cash;
+            set => _cash = value;
         }
     }
 }

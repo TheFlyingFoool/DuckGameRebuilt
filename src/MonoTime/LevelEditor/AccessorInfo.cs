@@ -15,13 +15,13 @@ namespace DuckGame
         public Func<object, object> getAccessor;
         public System.Type type;
 
-        public T Get<T>(object o) => this.getAccessor != null ? (T)this.getAccessor(o) : default(T);
+        public T Get<T>(object o) => getAccessor != null ? (T)getAccessor(o) : default(T);
 
         public void Set<T>(object o, T value)
         {
-            if (this.setAccessor == null)
+            if (setAccessor == null)
                 return;
-            this.setAccessor(o, value);
+            setAccessor(o, value);
         }
     }
 }

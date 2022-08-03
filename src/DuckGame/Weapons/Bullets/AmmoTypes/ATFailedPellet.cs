@@ -11,25 +11,25 @@ namespace DuckGame
     {
         public ATFailedPellet()
         {
-            this.accuracy = 0.6f;
-            this.range = 4000f;
-            this.penetration = 0.4f;
-            this.bulletSpeed = 7f;
-            this.gravityMultiplier = 2f;
-            this.affectedByGravity = true;
-            this.speedVariation = 0f;
-            this.rebound = true;
-            this.softRebound = true;
-            this.airFrictionMultiplier = 0.94f;
-            this.weight = 5f;
-            this.bulletThickness = 1f;
-            this.bulletColor = Color.White;
-            this.sprite = new Sprite("pellet")
+            accuracy = 0.6f;
+            range = 4000f;
+            penetration = 0.4f;
+            bulletSpeed = 7f;
+            gravityMultiplier = 2f;
+            affectedByGravity = true;
+            speedVariation = 0f;
+            rebound = true;
+            softRebound = true;
+            airFrictionMultiplier = 0.94f;
+            weight = 5f;
+            bulletThickness = 1f;
+            bulletColor = Color.White;
+            sprite = new Sprite("pellet")
             {
                 center = new Vec2(1f, 1f)
             };
-            this.bulletType = typeof(PelletBullet);
-            this.flawlessPipeTravel = true;
+            bulletType = typeof(PelletBullet);
+            flawlessPipeTravel = true;
         }
     }
 }

@@ -21,6 +21,6 @@ namespace DuckGame
         /// Initializes a new instance of the <see cref="T:DuckGame.PriorityAttribute" /> class.
         /// </summary>
         /// <param name="priority">The priority.</param>
-        public PriorityAttribute(Priority priority) => this.Priority = priority;
+        public PriorityAttribute(Priority priority) => Priority = priority;
     }
 }

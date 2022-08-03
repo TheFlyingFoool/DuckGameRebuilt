@@ -125,7 +125,7 @@ namespace DuckGame
 
         public override bool hasMotionAxis => true;
 
-        public override float motionAxis => (float)Math.Abs(Math.Sin(SwitchSixAxis.GetAxis(this._index) * Math.PI * 2.0));
+        public override float motionAxis => (float)Math.Abs(Math.Sin(SwitchSixAxis.GetAxis(_index) * Math.PI * 2.0));
 
         public override bool allowStartRemap => false;
 
@@ -136,26 +136,26 @@ namespace DuckGame
           Dictionary<int, Sprite> image_map)
           : base(idx)
         {
-            this._name = name;
-            this._productName = productname;
-            this._imageMap = image_map;
-            this._productGUID = "";
+            _name = name;
+            _productName = productname;
+            _imageMap = image_map;
+            _productGUID = "";
         }
 
-        public override Vec2 leftStick => new Vec2(this._state.sticks.left.x, this._state.sticks.left.y);
+        public override Vec2 leftStick => new Vec2(_state.sticks.left.x, _state.sticks.left.y);
 
-        protected Vec2 ReadRightStick() => new Vec2(this._state.sticks.right.x, this._state.sticks.right.y);
+        protected Vec2 ReadRightStick() => new Vec2(_state.sticks.right.x, _state.sticks.right.y);
 
         public override Vec2 rightStick => Vec2.Zero;
 
         public abstract override bool isConnected { get; }
 
-        public override Dictionary<int, string> GetTriggerNames() => this._triggerNames;
+        public override Dictionary<int, string> GetTriggerNames() => _triggerNames;
 
         public override Sprite GetMapImage(int map)
         {
             Sprite mapImage;
-            this._imageMap.TryGetValue(map, out mapImage);
+            _imageMap.TryGetValue(map, out mapImage);
             return mapImage;
         }
 

@@ -18,37 +18,37 @@ namespace DuckGame
         {
         }
 
-        public NMJoinDuckNetSuccess(List<Profile> pProfiles) => this.profiles = pProfiles;
+        public NMJoinDuckNetSuccess(List<Profile> pProfiles) => profiles = pProfiles;
 
         protected override void OnSerialize()
         {
-            this._serializedData.Write((byte)this.profiles.Count);
-            for (int index = 0; index < this.profiles.Count; ++index)
+            _serializedData.Write((byte)profiles.Count);
+            for (int index = 0; index < profiles.Count; ++index)
             {
-                this._serializedData.WriteProfile(this.profiles[index]);
-                this._serializedData.Write((ushort)(int)this.profiles[index].latestGhostIndex);
-                this._serializedData.WriteTeam(this.profiles[index].team);
-                this._serializedData.Write(this.profiles[index].reservedSpectatorPersona);
-                this._serializedData.Write((byte)this.profiles[index].persona.index);
+                _serializedData.WriteProfile(profiles[index]);
+                _serializedData.Write((ushort)(int)profiles[index].latestGhostIndex);
+                _serializedData.WriteTeam(profiles[index].team);
+                _serializedData.Write(profiles[index].reservedSpectatorPersona);
+                _serializedData.Write((byte)profiles[index].persona.index);
             }
         }
 
         public override void OnDeserialize(BitBuffer msg)
         {
-            this.profiles = new List<Profile>();
+            profiles = new List<Profile>();
             byte num1 = msg.ReadByte();
             for (int index1 = 0; index1 < num1; ++index1)
             {
-                this.profiles.Add(msg.ReadProfile());
-                this.profiles[index1].latestGhostIndex = (NetIndex16)msg.ReadUShort();
+                profiles.Add(msg.ReadProfile());
+                profiles[index1].latestGhostIndex = (NetIndex16)msg.ReadUShort();
                 Team team = msg.ReadTeam();
                 if (team != null)
-                    this.profiles[index1].reservedTeam = team;
+                    profiles[index1].reservedTeam = team;
                 sbyte num2 = msg.ReadSByte();
-                this.profiles[index1].reservedSpectatorPersona = num2;
+                profiles[index1].reservedSpectatorPersona = num2;
                 sbyte index2 = msg.ReadSByte();
                 if (index2 >= 0 && index2 < Persona.all.Count<DuckPersona>())
-                    this.profiles[index1].persona = Persona.all.ElementAt<DuckPersona>(index2);
+                    profiles[index1].persona = Persona.all.ElementAt<DuckPersona>(index2);
             }
         }
     }

@@ -16,6 +16,6 @@ namespace DuckGame
         {
         }
 
-        public NMHeartbeat(NetIndex4 s) => this.remoteSession = s;
+        public NMHeartbeat(NetIndex4 s) => remoteSession = s;
     }
 }

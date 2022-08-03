@@ -52,62 +52,62 @@ namespace DuckGame
             data.WriteBufferData(this.data);
             data.SeekToStart();
             NetMessage netMessage;
-            if (this.mod != null)
+            if (mod != null)
             {
-                if (this.mod is CoreMod)
+                if (mod is CoreMod)
                 {
                     DevConsole.Log(DCSection.DuckNet, "|GRAY|Ignoring fragmented message from unknown client mod.");
                     return null;
                 }
-                netMessage = this.mod.constructorToMessageID[this.type].Invoke(null) as NetMessage;
+                netMessage = mod.constructorToMessageID[type].Invoke(null) as NetMessage;
             }
             else
-                netMessage = Network.constructorToMessageID[this.type].Invoke(null) as NetMessage;
-            netMessage.order = this.order;
-            netMessage.connection = this.connection;
-            netMessage.priority = this.priority;
-            netMessage.session = this.session;
+                netMessage = Network.constructorToMessageID[type].Invoke(null) as NetMessage;
+            netMessage.order = order;
+            netMessage.connection = connection;
+            netMessage.priority = priority;
+            netMessage.session = session;
             netMessage.typeIndex = data.ReadUShort();
-            netMessage.order = this.order;
-            netMessage.packet = this.packet;
+            netMessage.order = order;
+            netMessage.packet = packet;
             netMessage.SetSerializedData(data);
             return netMessage;
         }
 
         protected override void OnSerialize()
         {
-            if (this.finalFragment)
+            if (finalFragment)
             {
-                this._serializedData.Write(true);
-                if (this.mod != null)
+                _serializedData.Write(true);
+                if (mod != null)
                 {
-                    this._serializedData.Write(ushort.MaxValue);
-                    this._serializedData.Write(this.type);
-                    this._serializedData.Write(this.mod.identifierHash);
+                    _serializedData.Write(ushort.MaxValue);
+                    _serializedData.Write(type);
+                    _serializedData.Write(mod.identifierHash);
                 }
                 else
-                    this._serializedData.Write(this.type);
+                    _serializedData.Write(type);
             }
             else
-                this._serializedData.Write(false);
-            this._serializedData.Write(this.data, true);
+                _serializedData.Write(false);
+            _serializedData.Write(data, true);
         }
 
         public override void OnDeserialize(BitBuffer pData)
         {
-            this.finalFragment = pData.ReadBool();
-            if (this.finalFragment)
+            finalFragment = pData.ReadBool();
+            if (finalFragment)
             {
-                this.type = pData.ReadUShort();
-                if (this.type == ushort.MaxValue)
+                type = pData.ReadUShort();
+                if (type == ushort.MaxValue)
                 {
-                    this.type = pData.ReadUShort();
-                    this.mod = ModLoader.GetModFromHash(pData.ReadUInt());
-                    if (this.mod == null)
-                        this.mod = CoreMod.coreMod;
+                    type = pData.ReadUShort();
+                    mod = ModLoader.GetModFromHash(pData.ReadUInt());
+                    if (mod == null)
+                        mod = CoreMod.coreMod;
                 }
             }
-            this.data = pData.ReadBitBuffer();
+            data = pData.ReadBitBuffer();
         }
     }
 }

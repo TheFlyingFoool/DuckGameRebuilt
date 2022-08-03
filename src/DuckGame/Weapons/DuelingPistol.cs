@@ -15,22 +15,22 @@ namespace DuckGame
         public DuelingPistol(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 1;
-            this._ammoType = new ATShrapnel();
-            this._ammoType.range = 70f;
-            this._ammoType.accuracy = 0.5f;
-            this._ammoType.penetration = 0.4f;
-            this.wideBarrel = true;
-            this._type = "gun";
-            this.graphic = new Sprite("tinyGun");
-            this.center = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-6f, -4f);
-            this.collisionSize = new Vec2(12f, 8f);
-            this._barrelOffsetTL = new Vec2(20f, 15f);
-            this._fireSound = "littleGun";
-            this._kickForce = 0f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this.editorTooltip = "The perfect weapon when a Duck has dishonored your family. One shot only.";
+            ammo = 1;
+            _ammoType = new ATShrapnel();
+            _ammoType.range = 70f;
+            _ammoType.accuracy = 0.5f;
+            _ammoType.penetration = 0.4f;
+            wideBarrel = true;
+            _type = "gun";
+            graphic = new Sprite("tinyGun");
+            center = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-6f, -4f);
+            collisionSize = new Vec2(12f, 8f);
+            _barrelOffsetTL = new Vec2(20f, 15f);
+            _fireSound = "littleGun";
+            _kickForce = 0f;
+            _fireRumble = RumbleIntensity.Kick;
+            editorTooltip = "The perfect weapon when a Duck has dishonored your family. One shot only.";
         }
 
         public static void ExplodeEffect(Vec2 position)
@@ -44,15 +44,15 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if (this.plugged && this.isServerForObject)
+            if (plugged && isServerForObject)
             {
-                this._kickForce = 3f;
-                this.ApplyKick();
-                DuelingPistol.ExplodeEffect(this.position);
+                _kickForce = 3f;
+                ApplyKick();
+                DuelingPistol.ExplodeEffect(position);
                 if (Network.isActive)
-                    Send.Message(new NMPistolExplode(this.position));
-                if (this.duck != null)
-                    this.duck.Swear();
+                    Send.Message(new NMPistolExplode(position));
+                if (duck != null)
+                    duck.Swear();
                 Level.Remove(this);
             }
             else

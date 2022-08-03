@@ -40,44 +40,44 @@ namespace DuckGame
             return obj != null && obj.value != null ? (T)obj.value : default(T);
         }
 
-        public string fullCommandName => this.parent != null ? this.parent.fullCommandName + " " + this.keyword : this.keyword;
+        public string fullCommandName => parent != null ? parent.fullCommandName + " " + keyword : keyword;
 
         public CMD(string pKeyword, CMD.Argument[] pArguments, Action<CMD> pAction)
         {
-            this.keyword = pKeyword.ToLowerInvariant();
-            this.arguments = pArguments;
-            this.action = pAction;
+            keyword = pKeyword.ToLowerInvariant();
+            arguments = pArguments;
+            action = pAction;
         }
 
         public CMD(string pKeyword, Action<CMD> pAction)
         {
-            this.keyword = pKeyword.ToLowerInvariant();
-            this.action = pAction;
+            keyword = pKeyword.ToLowerInvariant();
+            action = pAction;
         }
 
         public CMD(string pKeyword, Action pAction)
         {
-            this.keyword = pKeyword.ToLowerInvariant();
-            this.alternateAction = pAction;
+            keyword = pKeyword.ToLowerInvariant();
+            alternateAction = pAction;
         }
 
         public CMD(string pKeyword, CMD pSubCommand)
         {
-            this.keyword = pKeyword.ToLowerInvariant();
-            this.subcommand = pSubCommand;
+            keyword = pKeyword.ToLowerInvariant();
+            subcommand = pSubCommand;
             pSubCommand.parent = this;
-            this.priority = -1;
+            priority = -1;
         }
 
         public string info
         {
             get
             {
-                string str = this.keyword + "(";
-                if (this.arguments != null)
+                string str = keyword + "(";
+                if (arguments != null)
                 {
                     bool flag = true;
-                    foreach (CMD.Argument obj in this.arguments)
+                    foreach (CMD.Argument obj in arguments)
                     {
                         if (!flag)
                             str += ", ";
@@ -86,27 +86,27 @@ namespace DuckGame
                     }
                 }
                 string info = str + ")";
-                if (this.description != "")
-                    info = info + "\n|DGBLUE|" + this.description;
+                if (description != "")
+                    info = info + "\n|DGBLUE|" + description;
                 return info;
             }
         }
 
         public bool Run(string pArguments)
         {
-            this.logMessage = null;
+            logMessage = null;
             string[] source = pArguments.Split(' ');
-            if (this.subcommand != null)
-                return this.Error("|DGRED|Command (" + this.keyword + ") requires a sub command.");
+            if (subcommand != null)
+                return Error("|DGRED|Command (" + keyword + ") requires a sub command.");
             if (source.Count<string>() > 0 && source[0] == "?")
-                return this.Help(this.info);
-            if (source.Count<string>() > 0 && source[0].Trim().Length > 0 && this.arguments == null)
-                return this.Error("|DGRED|Command (" + this.keyword + ") takes no arguments.");
-            if (this.arguments != null)
+                return Help(info);
+            if (source.Count<string>() > 0 && source[0].Trim().Length > 0 && arguments == null)
+                return Error("|DGRED|Command (" + keyword + ") takes no arguments.");
+            if (arguments != null)
             {
                 int index1 = 0;
                 int num = -1;
-                foreach (CMD.Argument obj in this.arguments)
+                foreach (CMD.Argument obj in arguments)
                 {
                     if (obj.optional)
                     {
@@ -114,78 +114,78 @@ namespace DuckGame
                             num = index1;
                     }
                     else if (num >= 0)
-                        return this.Error("|DGRED|Command implementation error: 'optional' arguments must appear last.");
+                        return Error("|DGRED|Command implementation error: 'optional' arguments must appear last.");
                     if (source.Count<string>() > index1)
                     {
                         if (!string.IsNullOrWhiteSpace(source[index1]))
                         {
                             try
                             {
-                                if (this.arguments[index1].takesMultispaceString)
+                                if (arguments[index1].takesMultispaceString)
                                 {
                                     string str = "";
                                     for (int index2 = index1; index2 < source.Length; ++index2)
                                         str = str + source[index2] + " ";
-                                    obj.value = this.arguments[index1].Parse(str.Trim());
+                                    obj.value = arguments[index1].Parse(str.Trim());
                                     index1 = source.Length;
                                 }
                                 else
-                                    obj.value = this.arguments[index1].Parse(source[index1]);
+                                    obj.value = arguments[index1].Parse(source[index1]);
                                 if (obj.value == null)
-                                    return this.Error("|DGRED|" + obj.GetParseFailedMessage() + " |GRAY|(" + obj.name + ")");
+                                    return Error("|DGRED|" + obj.GetParseFailedMessage() + " |GRAY|(" + obj.name + ")");
                                 goto label_26;
                             }
                             catch (Exception ex)
                             {
-                                return this.Error("|DGRED|Error parsing argument (" + obj.name + "): " + ex.Message);
+                                return Error("|DGRED|Error parsing argument (" + obj.name + "): " + ex.Message);
                             }
                         }
                     }
                     if (!obj.optional)
-                        return this.Error("|DGRED|Missing argument (" + obj.name + ")");
+                        return Error("|DGRED|Missing argument (" + obj.name + ")");
                     label_26:
                     ++index1;
                 }
             }
             try
             {
-                if (this.action != null)
-                    this.action(this);
-                else if (this.alternateAction != null)
-                    this.alternateAction();
+                if (action != null)
+                    action(this);
+                else if (alternateAction != null)
+                    alternateAction();
             }
             catch (Exception ex)
             {
-                this.FinishExecution();
-                return this.Error("|DGRED|Error running command: " + ex.Message);
+                FinishExecution();
+                return Error("|DGRED|Error running command: " + ex.Message);
             }
-            this.FinishExecution();
+            FinishExecution();
             return true;
         }
 
         private void FinishExecution()
         {
-            if (this.arguments == null)
+            if (arguments == null)
                 return;
-            foreach (CMD.Argument obj in this.arguments)
+            foreach (CMD.Argument obj in arguments)
                 obj.value = null;
         }
 
         protected bool Error(string pError = null)
         {
-            this.logMessage = "|DGRED|" + pError;
+            logMessage = "|DGRED|" + pError;
             return false;
         }
 
         protected bool Help(string pMessage = null)
         {
-            this.logMessage = "|DGBLUE|" + pMessage;
+            logMessage = "|DGBLUE|" + pMessage;
             return true;
         }
 
         protected bool Message(string pMessage = null)
         {
-            this.logMessage = pMessage;
+            logMessage = pMessage;
             return true;
         }
 
@@ -200,18 +200,18 @@ namespace DuckGame
 
             public Argument(string pName, bool pOptional)
             {
-                this.name = pName;
-                this.optional = pOptional;
+                name = pName;
+                optional = pOptional;
             }
 
-            public virtual string GetParseFailedMessage() => this._parseFailMessage;
+            public virtual string GetParseFailedMessage() => _parseFailMessage;
 
             public abstract object Parse(string pValue);
 
             protected object Error(string pError = null)
             {
                 if (pError != null)
-                    this._parseFailMessage = pError;
+                    _parseFailMessage = pError;
                 return null;
             }
         }
@@ -221,7 +221,7 @@ namespace DuckGame
             public String(string pName, bool pOptional = false)
               : base(pName, pOptional)
             {
-                this.type = typeof(string);
+                type = typeof(string);
             }
 
             public override object Parse(string pValue) => pValue;
@@ -232,7 +232,7 @@ namespace DuckGame
             public Integer(string pName, bool pOptional = false)
               : base(pName, pOptional)
             {
-                this.type = typeof(int);
+                type = typeof(int);
             }
 
             public override object Parse(string pValue)
@@ -244,7 +244,7 @@ namespace DuckGame
                 catch (Exception)
                 {
                 }
-                return this.Error("Argument value must be an integer.");
+                return Error("Argument value must be an integer.");
             }
         }
 
@@ -255,9 +255,9 @@ namespace DuckGame
             public Font(string pName, Func<int> pDefaultFontSize = null, bool pOptional = false)
               : base(pName, pOptional)
             {
-                this.type = typeof(string);
-                this.takesMultispaceString = true;
-                this.defaultFontSize = pDefaultFontSize;
+                type = typeof(string);
+                takesMultispaceString = true;
+                defaultFontSize = pDefaultFontSize;
             }
 
             public override object Parse(string pValue)
@@ -280,7 +280,7 @@ namespace DuckGame
                     pValue = "comic sans ms";
                 string name = RasterFont.GetName(pValue);
                 if (name == null)
-                    return this.Error("Font (" + pValue + ") was not found.");
+                    return Error("Font (" + pValue + ") was not found.");
                 if (flag1)
                     name += "@BOLD@";
                 if (flag2)
@@ -294,10 +294,10 @@ namespace DuckGame
             public Layer(string pName, bool pOptional = false)
               : base(pName, pOptional)
             {
-                this.type = typeof(CMD.Layer);
+                type = typeof(CMD.Layer);
             }
 
-            public override object Parse(string pValue) => (object)DuckGame.Layer.core._layers.FirstOrDefault<DuckGame.Layer>(x => x.name.ToLower() == pValue) ?? this.Error("Layer named (" + pValue + ") was not found.");
+            public override object Parse(string pValue) => (object)DuckGame.Layer.core._layers.FirstOrDefault<DuckGame.Layer>(x => x.name.ToLower() == pValue) ?? Error("Layer named (" + pValue + ") was not found.");
         }
 
         public class Level : CMD.Argument
@@ -305,8 +305,8 @@ namespace DuckGame
             public Level(string pName, bool pOptional = false)
               : base(pName, pOptional)
             {
-                this.type = typeof(CMD.Level);
-                this.takesMultispaceString = true;
+                type = typeof(CMD.Level);
+                takesMultispaceString = true;
             }
 
             public override object Parse(string pValue)
@@ -363,7 +363,7 @@ namespace DuckGame
                         }
                     }
                 }
-                return this.Error("Level (" + pValue + ") was not found.");
+                return Error("Level (" + pValue + ") was not found.");
             }
         }
 
@@ -372,7 +372,7 @@ namespace DuckGame
             public Thing(string pName, bool pOptional = false)
               : base(pName, pOptional)
             {
-                this.type = typeof(T);
+                type = typeof(T);
             }
 
             public override object Parse(string pValue)
@@ -384,24 +384,24 @@ namespace DuckGame
                 {
                     Profile profile = DevConsole.ProfileByName(pValue);
                     if (profile == null)
-                        return this.Error("Argument (" + pValue + ") should be the name of a player.");
-                    return profile.duck == null ? this.Error("Player (" + pValue + ") is not present in the game.") : profile.duck;
+                        return Error("Argument (" + pValue + ") should be the name of a player.");
+                    return profile.duck == null ? Error("Player (" + pValue + ") is not present in the game.") : profile.duck;
                 }
                 if (typeof(T) == typeof(TeamHat))
                 {
                     Team t = Teams.all.FirstOrDefault<Team>(x => x.name.ToLower() == pValue);
-                    return t != null ? new TeamHat(0f, 0f, t) : this.Error("Argument (" + pValue + ") should be the name of a team");
+                    return t != null ? new TeamHat(0f, 0f, t) : Error("Argument (" + pValue + ") should be the name of a team");
                 }
                 foreach (System.Type thingType in Editor.ThingTypes)
                 {
                     if (thingType.Name.ToLowerInvariant() == pValue)
                     {
                         if (!Editor.HasConstructorParameter(thingType))
-                            return this.Error(thingType.Name + " can not be spawned this way.");
-                        return !typeof(T).IsAssignableFrom(thingType) ? this.Error("Wrong object type (requires " + typeof(T).Name + ").") : Editor.CreateThing(thingType) as T;
+                            return Error(thingType.Name + " can not be spawned this way.");
+                        return !typeof(T).IsAssignableFrom(thingType) ? Error("Wrong object type (requires " + typeof(T).Name + ").") : Editor.CreateThing(thingType) as T;
                     }
                 }
-                return this.Error(typeof(T).Name + " of type (" + pValue + ") was not found.");
+                return Error(typeof(T).Name + " of type (" + pValue + ") was not found.");
             }
         }
     }

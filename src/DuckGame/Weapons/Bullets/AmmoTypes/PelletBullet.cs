@@ -27,22 +27,22 @@ namespace DuckGame
 
         protected override void Rebound(Vec2 pos, float dir, float rng)
         {
-            PelletBullet bullet = this.ammo.GetBullet(pos.x, pos.y, angle: (-dir), firedFrom: this.firedFrom, distance: rng, tracer: this._tracer) as PelletBullet;
-            bullet._teleporter = this._teleporter;
-            bullet._isVolatile = this._isVolatile;
-            bullet.isLocal = this.isLocal;
-            bullet.lastReboundSource = this.lastReboundSource;
-            bullet.connection = this.connection;
-            this.reboundCalled = true;
+            PelletBullet bullet = ammo.GetBullet(pos.x, pos.y, angle: (-dir), firedFrom: firedFrom, distance: rng, tracer: _tracer) as PelletBullet;
+            bullet._teleporter = _teleporter;
+            bullet._isVolatile = _isVolatile;
+            bullet.isLocal = isLocal;
+            bullet.lastReboundSource = lastReboundSource;
+            bullet.connection = connection;
+            reboundCalled = true;
             Level.Add(bullet);
             SFX.Play("littleRic", 0.8f, Rando.Float(-0.15f, 0.15f));
         }
 
         public override void Update()
         {
-            this._isVolatile -= 0.06f;
+            _isVolatile -= 0.06f;
             if (_isVolatile <= 0.0)
-                this.rebound = false;
+                rebound = false;
             base.Update();
         }
     }

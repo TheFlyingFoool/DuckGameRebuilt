@@ -128,7 +128,7 @@ namespace DuckGame
         /// </summary>
         /// <param name="asset">The asset name, relative to the mods' Content folder.</param>
         /// <returns>The path.</returns>
-        public string GetPath(string asset) => ModLoader._modAssemblies[this.GetType().Assembly].configuration.contentDirectory + asset.Replace('\\', '/');
+        public string GetPath(string asset) => ModLoader._modAssemblies[GetType().Assembly].configuration.contentDirectory + asset.Replace('\\', '/');
 
         /// <summary>Gets the path to an asset from a mod.</summary>
         /// <typeparam name="T">The mod type to fetch from</typeparam>
@@ -138,18 +138,18 @@ namespace DuckGame
 
         public virtual Vec2 netPosition
         {
-            get => this.position;
-            set => this.position = value;
+            get => position;
+            set => position = value;
         }
 
         public ushort ghostType
         {
-            get => !this._removeFromLevel ? this._ghostType : (ushort)0;
+            get => !_removeFromLevel ? _ghostType : (ushort)0;
             set
             {
                 if (_ghostType == value)
                     return;
-                this._ghostType = value;
+                _ghostType = value;
             }
         }
 
@@ -157,51 +157,51 @@ namespace DuckGame
         {
             get
             {
-                if (Network.isServer && !this._initializedNetworkSeed && this.isStateObject)
+                if (Network.isServer && !_initializedNetworkSeed && isStateObject)
                 {
-                    this._networkSeed = Rando.Int(2147483646);
-                    this._initializedNetworkSeed = true;
+                    _networkSeed = Rando.Int(2147483646);
+                    _initializedNetworkSeed = true;
                 }
-                return this._networkSeed;
+                return _networkSeed;
             }
             set
             {
-                this._networkSeed = value;
-                this._initializedNetworkSeed = true;
+                _networkSeed = value;
+                _initializedNetworkSeed = true;
             }
         }
 
         public virtual NetIndex8 authority
         {
-            get => this._authority;
+            get => _authority;
             set
             {
-                if (this._authority != value)
-                    this._lastAuthorityChange = Network.synchronizedTime;
-                this._authority = value;
+                if (_authority != value)
+                    _lastAuthorityChange = Network.synchronizedTime;
+                _authority = value;
             }
         }
 
         public virtual NetworkConnection connection
         {
-            get => this._connection;
+            get => _connection;
             set
             {
-                if (value != this._connection && this.ghostObject != null)
+                if (value != _connection && ghostObject != null)
                 {
-                    this.ghostObject.KillNetworkData();
+                    ghostObject.KillNetworkData();
                     if (value == DuckNetwork.localConnection)
-                        this.ghostObject.TakeOwnership();
+                        ghostObject.TakeOwnership();
                 }
-                this._connection = value;
+                _connection = value;
             }
         }
 
         public void Fondle(Thing t)
         {
-            if (t == null || !t.CanBeControlled() || t.connection == this.connection)
+            if (t == null || !t.CanBeControlled() || t.connection == connection)
                 return;
-            t.OnFondle(this.connection, 1);
+            t.OnFondle(connection, 1);
         }
 
         public static void Fondle(Thing t, NetworkConnection c)
@@ -223,8 +223,8 @@ namespace DuckGame
         {
             if (!Network.isActive || c != DuckNetwork.localConnection)
                 return;
-            this.connection = c;
-            this.authority += fondleSize;
+            connection = c;
+            authority += fondleSize;
         }
 
         public static void PowerfulRuleBreakingFondle(Thing t, NetworkConnection c)
@@ -240,31 +240,31 @@ namespace DuckGame
 
         public void IgnoreNetworkSync()
         {
-            this._isStateObject = false;
-            this._isStateObjectInitialized = true;
+            _isStateObject = false;
+            _isStateObjectInitialized = true;
         }
 
         public virtual bool TransferControl(NetworkConnection to, NetIndex8 auth)
         {
-            if (to == this.connection)
+            if (to == connection)
             {
-                if (auth > this.authority)
-                    this.authority = auth;
+                if (auth > authority)
+                    authority = auth;
                 return true;
             }
-            if (this.connection.profile != null && this.connection.profile.slotType != SlotType.Spectator && (auth < this.authority || this.connection != null && this.CanBeControlled() && this.connection.profile != null && this.connection.profile.slotType != SlotType.Spectator && auth == this.authority && (connection.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks < (to.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks))
+            if (connection.profile != null && connection.profile.slotType != SlotType.Spectator && (auth < authority || connection != null && CanBeControlled() && connection.profile != null && connection.profile.slotType != SlotType.Spectator && auth == authority && (connection.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks < (to.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks))
                 return false;
-            if (NetIndex8.Difference(auth, this.authority) > 19)
-                this.wasSuperFondled = 120;
-            this._framesSinceTransfer = 0;
-            this.connection = to;
-            this.authority = auth;
+            if (NetIndex8.Difference(auth, authority) > 19)
+                wasSuperFondled = 120;
+            _framesSinceTransfer = 0;
+            connection = to;
+            authority = auth;
             return true;
         }
 
         public void PlaySFX(string sound, float vol = 1f, float pitch = 0f, float pan = 0f, bool looped = false)
         {
-            if (!this.isServerForObject)
+            if (!isServerForObject)
                 return;
             SFX.PlaySynchronized(sound, vol, pitch, pan, looped);
         }
@@ -275,30 +275,30 @@ namespace DuckGame
 
         public int networkDrawIndex
         {
-            get => this._networkDrawIndex;
-            set => this._networkDrawIndex = value;
+            get => _networkDrawIndex;
+            set => _networkDrawIndex = value;
         }
 
         public bool isStateObject
         {
             get
             {
-                if (!this._isStateObjectInitialized)
+                if (!_isStateObjectInitialized)
                 {
-                    this._isStateObject = Editor.AllStateFields[this.GetType()].Length != 0;
-                    this._isStateObjectInitialized = true;
+                    _isStateObject = Editor.AllStateFields[GetType()].Length != 0;
+                    _isStateObjectInitialized = true;
                 }
-                return this._isStateObject;
+                return _isStateObject;
             }
         }
 
-        public bool isServerForObject => !Network.isActive || this.connection == null || this.connection == DuckNetwork.localConnection || Thing.loadingLevel != null;
+        public bool isServerForObject => !Network.isActive || connection == null || connection == DuckNetwork.localConnection || Thing.loadingLevel != null;
 
-        public bool isClientWhoCreatedObject => this._ghostObject == null || Thing.loadingLevel != null || this._ghostObject.ghostObjectIndex._index / GhostManager.kGhostIndexMax == DuckNetwork.localProfile.fixedGhostIndex;
+        public bool isClientWhoCreatedObject => _ghostObject == null || Thing.loadingLevel != null || _ghostObject.ghostObjectIndex._index / GhostManager.kGhostIndexMax == DuckNetwork.localProfile.fixedGhostIndex;
 
-        public virtual void SetTranslation(Vec2 translation) => this.position += translation;
+        public virtual void SetTranslation(Vec2 translation) => position += translation;
 
-        public virtual Vec2 cameraPosition => this.position;
+        public virtual Vec2 cameraPosition => position;
 
         public static ushort GetGlobalIndex()
         {
@@ -318,143 +318,143 @@ namespace DuckGame
 
         public ushort globalIndex
         {
-            get => this._globalIndex;
-            set => this._globalIndex = value;
+            get => _globalIndex;
+            set => _globalIndex = value;
         }
 
         public ushort physicsIndex
         {
-            get => this._globalIndex;
-            set => this._globalIndex = value;
+            get => _globalIndex;
+            set => _globalIndex = value;
         }
 
         public Vec2 lerpPosition
         {
-            get => this._lerpPosition;
-            set => this._lerpPosition = value;
+            get => _lerpPosition;
+            set => _lerpPosition = value;
         }
 
         public Vec2 lerpVector
         {
-            get => this._lerpVector;
-            set => this._lerpVector = value;
+            get => _lerpVector;
+            set => _lerpVector = value;
         }
 
         public float lerpSpeed
         {
-            get => this._lerpSpeed;
-            set => this._lerpSpeed = value;
+            get => _lerpSpeed;
+            set => _lerpSpeed = value;
         }
 
         public Portal portal
         {
-            get => this._portal;
-            set => this._portal = value;
+            get => _portal;
+            set => _portal = value;
         }
 
         public SequenceItem sequence
         {
-            get => this._sequence;
-            set => this._sequence = value;
+            get => _sequence;
+            set => _sequence = value;
         }
 
-        public string type => this._type;
+        public string type => _type;
 
         public Level level
         {
-            get => this._level;
-            set => this._level = value;
+            get => _level;
+            set => _level = value;
         }
 
         public float lastTeleportDirection
         {
-            get => this._lastTeleportDirection;
-            set => this._lastTeleportDirection = value;
+            get => _lastTeleportDirection;
+            set => _lastTeleportDirection = value;
         }
 
-        public bool removeFromLevel => this._removeFromLevel;
+        public bool removeFromLevel => _removeFromLevel;
 
         public virtual int frame
         {
-            get => !(this.graphic is SpriteMap) ? 0 : (this.graphic as SpriteMap).frame;
+            get => !(graphic is SpriteMap) ? 0 : (graphic as SpriteMap).frame;
             set
             {
-                if (!(this.graphic is SpriteMap))
+                if (!(graphic is SpriteMap))
                     return;
-                (this.graphic as SpriteMap).frame = value;
+                (graphic as SpriteMap).frame = value;
             }
         }
 
         public bool placed
         {
-            get => this._placed;
-            set => this._placed = value;
+            get => _placed;
+            set => _placed = value;
         }
 
-        public bool canBeGrouped => this._canBeGrouped;
+        public bool canBeGrouped => _canBeGrouped;
 
         public virtual Thing realObject => this;
 
         public virtual Thing owner
         {
-            get => this._owner;
+            get => _owner;
             set
             {
-                if (this._owner != value)
-                    this._prevOwner = this._owner;
-                this._lastThrownBy = this._owner;
-                this._owner = value;
+                if (_owner != value)
+                    _prevOwner = _owner;
+                _lastThrownBy = _owner;
+                _owner = value;
             }
         }
 
-        public Thing prevOwner => this._prevOwner;
+        public Thing prevOwner => _prevOwner;
 
-        public Thing lastThrownBy => this._lastThrownBy;
+        public Thing lastThrownBy => _lastThrownBy;
 
         public bool opaque => false;
 
         public virtual Sprite graphic
         {
-            get => this._graphic;
-            set => this._graphic = value;
+            get => _graphic;
+            set => _graphic = value;
         }
 
         public DamageMap damageMap
         {
-            get => this._damageMap;
-            set => this._damageMap = value;
+            get => _damageMap;
+            set => _damageMap = value;
         }
 
         public virtual bool visible
         {
-            get => this._visible;
-            set => this._visible = value;
+            get => _visible;
+            set => _visible = value;
         }
 
         public Material material
         {
-            get => this._material;
-            set => this._material = value;
+            get => _material;
+            set => _material = value;
         }
 
         public virtual bool enablePhysics
         {
-            get => this._enablePhysics;
-            set => this._enablePhysics = value;
+            get => _enablePhysics;
+            set => _enablePhysics = value;
         }
 
-        public float Distance(Thing pOther) => pOther != null ? (this.position - pOther.position).length : float.MaxValue;
+        public float Distance(Thing pOther) => pOther != null ? (position - pOther.position).length : float.MaxValue;
 
         public void Presto()
         {
-            if (!this.isServerForObject || this.removeFromLevel)
+            if (!isServerForObject || removeFromLevel)
                 return;
             if (Network.isActive)
-                Send.Message(new NMPop(this.position));
-            NMPop.AmazingDisappearingParticles(this.position);
+                Send.Message(new NMPop(position));
+            NMPop.AmazingDisappearingParticles(position);
             if (this is MaterialThing)
                 (this as MaterialThing).Destroy(new DTPop());
-            this.y += 9999f;
+            y += 9999f;
             if (this is Duck)
                 return;
             Level.Remove(this);
@@ -462,32 +462,32 @@ namespace DuckGame
 
         public Profile responsibleProfile
         {
-            set => this._responsibleProfile = value;
+            set => _responsibleProfile = value;
             get
             {
-                if (this._responsibleProfile != null)
+                if (_responsibleProfile != null)
                 {
-                    return this._responsibleProfile;
+                    return _responsibleProfile;
                 }
                 Duck d = this as Duck;
                 if (d == null)
                 {
-                    d = (this.owner as Duck);
+                    d = (owner as Duck);
                     if (d == null)
                     {
-                        d = (this.prevOwner as Duck);
-                        if (d == null && this.owner != null)
+                        d = (prevOwner as Duck);
+                        if (d == null && owner != null)
                         {
-                            d = (this.owner.owner as Duck);
+                            d = (owner.owner as Duck);
                             if (d == null)
                             {
-                                d = (this.owner.prevOwner as Duck);
-                                if (d == null && this.prevOwner != null)
+                                d = (owner.prevOwner as Duck);
+                                if (d == null && prevOwner != null)
                                 {
-                                    d = (this.prevOwner.owner as Duck);
+                                    d = (prevOwner.owner as Duck);
                                     if (d == null)
                                     {
-                                        d = (this.prevOwner.prevOwner as Duck);
+                                        d = (prevOwner.prevOwner as Duck);
                                     }
                                 }
                             }
@@ -514,8 +514,8 @@ namespace DuckGame
         {
             get
             {
-                if (this._killThingType != null)
-                    return this._killThingType;
+                if (_killThingType != null)
+                    return _killThingType;
                 if (this is Bullet)
                 {
                     Bullet bullet = this as Bullet;
@@ -528,110 +528,110 @@ namespace DuckGame
                     if (smallFire.firedFrom != null)
                         return smallFire.firedFrom.GetType();
                 }
-                return this.GetType();
+                return GetType();
             }
-            set => this._killThingType = value;
+            set => _killThingType = value;
         }
 
         public virtual float hSpeed
         {
-            get => this._hSpeed;
-            set => this._hSpeed = value;
+            get => _hSpeed;
+            set => _hSpeed = value;
         }
 
         public virtual float vSpeed
         {
-            get => this._vSpeed;
-            set => this._vSpeed = value;
+            get => _vSpeed;
+            set => _vSpeed = value;
         }
 
         public Vec2 velocity
         {
-            get => new Vec2(this.hSpeed, this.vSpeed);
+            get => new Vec2(hSpeed, vSpeed);
             set
             {
-                this._hSpeed = value.x;
-                this._vSpeed = value.y;
+                _hSpeed = value.x;
+                _vSpeed = value.y;
             }
         }
 
         public void ApplyForce(Vec2 force)
         {
-            this._hSpeed += force.x;
-            this._vSpeed += force.y;
+            _hSpeed += force.x;
+            _vSpeed += force.y;
         }
 
         public void ApplyForce(Vec2 force, Vec2 limits)
         {
             limits = new Vec2(Math.Abs(limits.x), Math.Abs(limits.y));
             if (force.x < 0.0 && _hSpeed > -limits.x || force.x > 0.0 && _hSpeed < limits.x)
-                this._hSpeed += force.x;
+                _hSpeed += force.x;
             if ((force.y >= 0.0 || _vSpeed <= -limits.y) && (force.y <= 0.0 || _vSpeed >= limits.y))
                 return;
-            this._vSpeed += force.y;
+            _vSpeed += force.y;
         }
 
         public void ApplyForceLimited(Vec2 force)
         {
-            this._hSpeed += force.x;
+            _hSpeed += force.x;
             if (force.x < 0.0 && _hSpeed < force.x || force.x > 0.0 && _hSpeed > force.x)
-                this._hSpeed = force.x;
-            this._vSpeed += force.y;
+                _hSpeed = force.x;
+            _vSpeed += force.y;
             if ((force.y >= 0.0 || _vSpeed >= force.y) && (force.y <= 0.0 || _vSpeed <= force.y))
                 return;
-            this._vSpeed = force.y;
+            _vSpeed = force.y;
         }
 
         public virtual bool active
         {
-            get => this._active;
-            set => this._active = value;
+            get => _active;
+            set => _active = value;
         }
 
         public virtual bool ShouldUpdate() => true;
 
         public virtual bool action
         {
-            get => this._action;
-            set => this._action = value;
+            get => _action;
+            set => _action = value;
         }
 
         public Anchor anchor
         {
-            get => this._anchor;
-            set => this._anchor = value;
+            get => _anchor;
+            set => _anchor = value;
         }
 
-        public virtual Vec2 anchorPosition => this.position;
+        public virtual Vec2 anchorPosition => position;
 
         public virtual sbyte offDir
         {
-            get => this._offDir;
-            set => this._offDir = value;
+            get => _offDir;
+            set => _offDir = value;
         }
 
         public Layer layer
         {
-            get => this._layer;
+            get => _layer;
             set
             {
-                if (this._layer == value)
+                if (_layer == value)
                     return;
-                if (this._level != null)
+                if (_level != null)
                 {
-                    if (this._layer != null)
-                        this._layer.Remove(this);
+                    if (_layer != null)
+                        _layer.Remove(this);
                     value.Add(this);
                 }
-                this._layer = value;
+                _layer = value;
             }
         }
 
-        public bool isInitialized => this._initialized;
+        public bool isInitialized => _initialized;
 
-        public List<System.Type> GetAllTypes() => Editor.AllBaseTypes[this.GetType()];
+        public List<System.Type> GetAllTypes() => Editor.AllBaseTypes[GetType()];
 
-        public List<System.Type> GetAllTypesFiltered(System.Type stopAt) => Thing.GetAllTypes(this.GetType(), stopAt);
+        public List<System.Type> GetAllTypesFiltered(System.Type stopAt) => Thing.GetAllTypes(GetType(), stopAt);
 
         public static List<System.Type> GetAllTypes(System.Type t, System.Type stopAt = null)
         {
@@ -642,73 +642,73 @@ namespace DuckGame
             return allTypes;
         }
 
-        public int placementCost => this._placementCost;
+        public int placementCost => _placementCost;
 
         public string editorName
         {
             get
             {
-                if (this._editorName == "")
+                if (_editorName == "")
                 {
-                    this._editorName = this.GetType().Name;
-                    if (this._editorName.Length > 1)
+                    _editorName = GetType().Name;
+                    if (_editorName.Length > 1)
                     {
-                        for (int index = 1; index < this._editorName.Length; ++index)
+                        for (int index = 1; index < _editorName.Length; ++index)
                         {
-                            char ch1 = this._editorName[index];
+                            char ch1 = _editorName[index];
                             if (ch1 >= 'A' && ch1 <= 'Z')
                             {
-                                char ch2 = this._editorName[index - 1];
+                                char ch2 = _editorName[index - 1];
                                 if (ch2 >= 'a' && ch2 <= 'z')
                                 {
-                                    this._editorName = this._editorName.Insert(index, " ");
+                                    _editorName = _editorName.Insert(index, " ");
                                     ++index;
                                 }
                             }
                         }
                     }
                 }
-                return this._editorName;
+                return _editorName;
             }
         }
 
-        public void SetEditorName(string s) => this._editorName = s;
+        public void SetEditorName(string s) => _editorName = s;
 
         public virtual void TabRotate()
         {
-            if (!this._canFlip)
+            if (!_canFlip)
                 return;
-            this.flipHorizontal = !this.flipHorizontal;
+            flipHorizontal = !flipHorizontal;
         }
 
-        public Layer placementLayer => this.placementLayerOverride != null ? this.placementLayerOverride : this.layer;
+        public Layer placementLayer => placementLayerOverride != null ? placementLayerOverride : layer;
 
         public float likelyhoodToExist
         {
-            get => this._likelyhoodToExist;
-            set => this._likelyhoodToExist = value;
+            get => _likelyhoodToExist;
+            set => _likelyhoodToExist = value;
         }
 
-        public bool editorCanModify => this._editorCanModify;
+        public bool editorCanModify => _editorCanModify;
 
         public bool processedByEditor
         {
-            get => this._processedByEditor;
-            set => this._processedByEditor = value;
+            get => _processedByEditor;
+            set => _processedByEditor = value;
         }
 
-        public bool visibleInGame => this._visibleInGame;
+        public bool visibleInGame => _visibleInGame;
 
         public Vec2 editorOffset
         {
-            get => this._editorOffset;
-            set => this._editorOffset = value;
+            get => _editorOffset;
+            set => _editorOffset = value;
         }
 
         public WallHug hugWalls
         {
-            get => this._hugWalls;
-            set => this._hugWalls = value;
+            get => _hugWalls;
+            set => _hugWalls = value;
         }
 
         public static Thing Instantiate(System.Type t) => Editor.CreateThing(t);
@@ -726,7 +726,7 @@ namespace DuckGame
         public virtual void PrepareForHost()
         {
             GhostManager.context.MakeGhost(this, initLevel: true);
-            this.ghostType = Editor.IDToType[this.GetType()];
+            ghostType = Editor.IDToType[GetType()];
             DuckNetwork.AssignToHost(this);
         }
 
@@ -748,7 +748,7 @@ namespace DuckGame
         public virtual BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = new BinaryClassChunk();
-            System.Type type = this.GetType();
+            System.Type type = GetType();
             binaryClassChunk.AddProperty("type", ModLoader.SmallTypeName(type));
             binaryClassChunk.AddProperty("x", x);
             binaryClassChunk.AddProperty("y", y);
@@ -756,9 +756,9 @@ namespace DuckGame
             binaryClassChunk.AddProperty("accessible", _isAccessible);
             binaryClassChunk.AddProperty("chanceGroup", _chanceGroup);
             binaryClassChunk.AddProperty("flipHorizontal", _flipHorizontal);
-            if (this._canFlipVert)
+            if (_canFlipVert)
                 binaryClassChunk.AddProperty("flipVertical", flipVertical);
-            if (this.sequence != null)
+            if (sequence != null)
             {
                 binaryClassChunk.AddProperty("loop", sequence.loop);
                 binaryClassChunk.AddProperty("popUpOrder", sequence.order);
@@ -776,21 +776,21 @@ namespace DuckGame
 
         public virtual bool Deserialize(BinaryClassChunk node)
         {
-            this.x = node.GetPrimitive<float>("x");
-            this.y = node.GetPrimitive<float>("y");
-            this._likelyhoodToExist = node.GetPrimitive<float>("chance");
-            this._isAccessible = node.GetPrimitive<bool>("accessible");
-            this.chanceGroup = node.GetPrimitive<int>("chanceGroup");
-            this.flipHorizontal = node.GetPrimitive<bool>("flipHorizontal");
-            if (this._canFlipVert)
-                this.flipVertical = node.GetPrimitive<bool>("flipVertical");
-            if (this.sequence != null)
+            x = node.GetPrimitive<float>("x");
+            y = node.GetPrimitive<float>("y");
+            _likelyhoodToExist = node.GetPrimitive<float>("chance");
+            _isAccessible = node.GetPrimitive<bool>("accessible");
+            chanceGroup = node.GetPrimitive<int>("chanceGroup");
+            flipHorizontal = node.GetPrimitive<bool>("flipHorizontal");
+            if (_canFlipVert)
+                flipVertical = node.GetPrimitive<bool>("flipVertical");
+            if (sequence != null)
             {
-                this.sequence.loop = node.GetPrimitive<bool>("loop");
-                this.sequence.order = node.GetPrimitive<int>("popUpOrder");
-                this.sequence.waitTillOrder = node.GetPrimitive<bool>("waitTillOrder");
+                sequence.loop = node.GetPrimitive<bool>("loop");
+                sequence.order = node.GetPrimitive<int>("popUpOrder");
+                sequence.waitTillOrder = node.GetPrimitive<bool>("waitTillOrder");
             }
-            System.Type type = this.GetType();
+            System.Type type = GetType();
             foreach (FieldInfo fieldInfo in Editor.EditorFieldsForType[type])
             {
                 if (node.HasProperty(fieldInfo.Name))
@@ -816,14 +816,14 @@ namespace DuckGame
 
         public bool isAccessible
         {
-            get => this._isAccessible;
-            set => this._isAccessible = value;
+            get => _isAccessible;
+            set => _isAccessible = value;
         }
 
         public virtual DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = new DXMLNode("Object");
-            System.Type type = this.GetType();
+            System.Type type = GetType();
             dxmlNode.Add(new DXMLNode("type", type.AssemblyQualifiedName));
             dxmlNode.Add(new DXMLNode("x", x));
             dxmlNode.Add(new DXMLNode("y", y));
@@ -831,9 +831,9 @@ namespace DuckGame
             dxmlNode.Add(new DXMLNode("accessible", _isAccessible));
             dxmlNode.Add(new DXMLNode("chanceGroup", _chanceGroup));
             dxmlNode.Add(new DXMLNode("flipHorizontal", _flipHorizontal));
-            if (this._canFlipVert)
+            if (_canFlipVert)
                 dxmlNode.Add(new DXMLNode("flipVertical", _flipVertical));
-            if (this.sequence != null)
+            if (sequence != null)
             {
                 dxmlNode.Add(new DXMLNode("loop", sequence.loop));
                 dxmlNode.Add(new DXMLNode("popUpOrder", sequence.order));
@@ -858,41 +858,41 @@ namespace DuckGame
         {
             DXMLNode dxmlNode1 = node.Element("x");
             if (dxmlNode1 != null)
-                this.x = Change.ToSingle(dxmlNode1.Value);
+                x = Change.ToSingle(dxmlNode1.Value);
             DXMLNode dxmlNode2 = node.Element("y");
             if (dxmlNode2 != null)
-                this.y = Change.ToSingle(dxmlNode2.Value);
+                y = Change.ToSingle(dxmlNode2.Value);
             DXMLNode dxmlNode3 = node.Element("chance");
             if (dxmlNode3 != null)
-                this._likelyhoodToExist = Change.ToSingle(dxmlNode3.Value);
+                _likelyhoodToExist = Change.ToSingle(dxmlNode3.Value);
             DXMLNode dxmlNode4 = node.Element("accessible");
             if (dxmlNode4 != null)
-                this._isAccessible = Change.ToBoolean(dxmlNode4.Value);
+                _isAccessible = Change.ToBoolean(dxmlNode4.Value);
             DXMLNode dxmlNode5 = node.Element("chanceGroup");
             if (dxmlNode5 != null)
-                this.chanceGroup = Convert.ToInt32(dxmlNode5.Value);
+                chanceGroup = Convert.ToInt32(dxmlNode5.Value);
             DXMLNode dxmlNode6 = node.Element("flipHorizontal");
             if (dxmlNode6 != null)
-                this.flipHorizontal = Convert.ToBoolean(dxmlNode6.Value);
-            if (this._canFlipVert)
+                flipHorizontal = Convert.ToBoolean(dxmlNode6.Value);
+            if (_canFlipVert)
             {
                 DXMLNode dxmlNode7 = node.Element("flipVertical");
                 if (dxmlNode7 != null)
-                    this.flipVertical = Convert.ToBoolean(dxmlNode7.Value);
+                    flipVertical = Convert.ToBoolean(dxmlNode7.Value);
             }
-            if (this.sequence != null)
+            if (sequence != null)
             {
                 DXMLNode dxmlNode8 = node.Element("loop");
                 if (dxmlNode8 != null)
-                    this.sequence.loop = Convert.ToBoolean(dxmlNode8.Value);
+                    sequence.loop = Convert.ToBoolean(dxmlNode8.Value);
                 DXMLNode dxmlNode9 = node.Element("popUpOrder");
                 if (dxmlNode9 != null)
-                    this.sequence.order = Convert.ToInt32(dxmlNode9.Value);
+                    sequence.order = Convert.ToInt32(dxmlNode9.Value);
                 DXMLNode dxmlNode10 = node.Element("waitTillOrder");
                 if (dxmlNode10 != null)
-                    this.sequence.waitTillOrder = Convert.ToBoolean(dxmlNode10.Value);
+                    sequence.waitTillOrder = Convert.ToBoolean(dxmlNode10.Value);
             }
-            foreach (System.Type key in Editor.AllBaseTypes[this.GetType()])
+            foreach (System.Type key in Editor.AllBaseTypes[GetType()])
             {
                 if (!key.IsInterface)
                 {
@@ -957,34 +957,34 @@ namespace DuckGame
 
         public virtual bool flipHorizontal
         {
-            get => this._flipHorizontal;
+            get => _flipHorizontal;
             set
             {
-                this._flipHorizontal = value;
-                this.offDir = this._flipHorizontal ? (sbyte)-1 : (sbyte)1;
+                _flipHorizontal = value;
+                offDir = _flipHorizontal ? (sbyte)-1 : (sbyte)1;
             }
         }
 
         public virtual bool flipVertical
         {
-            get => this._flipVertical;
-            set => this._flipVertical = value;
+            get => _flipVertical;
+            set => _flipVertical = value;
         }
 
         public int chanceGroup
         {
-            get => this._chanceGroup;
-            set => this._chanceGroup = value;
+            get => _chanceGroup;
+            set => _chanceGroup = value;
         }
 
         public virtual ContextMenu GetContextMenu()
         {
             EditorGroupMenu owner = new EditorGroupMenu(null, true);
-            if (this._canFlip)
+            if (_canFlip)
                 owner.AddItem(new ContextCheckBox("Flip", null, new FieldBinding(this, "flipHorizontal")));
-            if (this._canFlipVert)
+            if (_canFlipVert)
                 owner.AddItem(new ContextCheckBox("Flip V", null, new FieldBinding(this, "flipVertical")));
-            if (this._canHaveChance)
+            if (_canHaveChance)
             {
                 EditorGroupMenu editorGroupMenu = new EditorGroupMenu(owner)
                 {
@@ -996,28 +996,28 @@ namespace DuckGame
                 editorGroupMenu.AddItem(new ContextSlider("Chance Group", null, new FieldBinding(this, "chanceGroup", -1f, 10f), 1f, null, false, null, "All objects in a chance group will exist, if their group's chance roll is met. -1 means no grouping."));
                 editorGroupMenu.AddItem(new ContextCheckBox("Accessible", null, new FieldBinding(this, "isAccessible"), null, "Flag for level generation, set this to false if the object is behind a locked door and not neccesarily accessible."));
             }
-            if (this.sequence != null && !this._contextMenuFilter.Contains("Sequence"))
+            if (sequence != null && !_contextMenuFilter.Contains("Sequence"))
             {
                 EditorGroupMenu editorGroupMenu = new EditorGroupMenu(owner)
                 {
                     text = "Sequence"
                 };
                 owner.AddItem(editorGroupMenu);
-                if (!this._contextMenuFilter.Contains("Sequence|Loop"))
+                if (!_contextMenuFilter.Contains("Sequence|Loop"))
                     editorGroupMenu.AddItem(new ContextCheckBox("Loop", null, new FieldBinding(sequence, "loop")));
-                if (!this._contextMenuFilter.Contains("Sequence|Order"))
+                if (!_contextMenuFilter.Contains("Sequence|Order"))
                     editorGroupMenu.AddItem(new ContextSlider("Order", null, new FieldBinding(sequence, "order", max: 100f), 1f, "RAND"));
-                if (!this._contextMenuFilter.Contains("Sequence|Wait"))
+                if (!_contextMenuFilter.Contains("Sequence|Wait"))
                     editorGroupMenu.AddItem(new ContextCheckBox("Wait", null, new FieldBinding(sequence, "waitTillOrder")));
             }
             List<string> stringList = new List<string>();
-            foreach (System.Type key in Editor.AllBaseTypes[this.GetType()])
+            foreach (System.Type key in Editor.AllBaseTypes[GetType()])
             {
                 if (!key.IsInterface)
                 {
                     foreach (FieldInfo fieldInfo in Editor.AllEditorFields[key])
                     {
-                        if (!stringList.Contains(fieldInfo.Name) && !this._contextMenuFilter.Contains(fieldInfo.Name))
+                        if (!stringList.Contains(fieldInfo.Name) && !_contextMenuFilter.Contains(fieldInfo.Name))
                         {
                             string text = fieldInfo.Name.Replace("_", " ");
                             object thing = fieldInfo.GetValue(this);
@@ -1054,7 +1054,7 @@ namespace DuckGame
           Effect effect = null,
           RenderTarget2D target = null)
         {
-            return this.GetEditorImage(wide, high, transparentBack, effect, target, false);
+            return GetEditorImage(wide, high, transparentBack, effect, target, false);
         }
 
         public Sprite GetEditorImage(
@@ -1066,7 +1066,7 @@ namespace DuckGame
           bool pUseCollisionSize)
         {
             Sprite editorImage1;
-            if (Thing._editorIcons.TryGetValue(this.GetType(), out editorImage1))
+            if (Thing._editorIcons.TryGetValue(GetType(), out editorImage1))
                 return editorImage1;
             if (Thread.CurrentThread != MonoMain.mainThread)
                 return new Sprite("basketBall");
@@ -1075,29 +1075,29 @@ namespace DuckGame
             if (pUseCollisionSize && collisionSize.x > 0.0)
             {
                 if (wide <= 0)
-                    wide = (int)this.collisionSize.x;
+                    wide = (int)collisionSize.x;
                 if (high <= 0)
-                    high = (int)this.collisionSize.y;
+                    high = (int)collisionSize.y;
             }
-            else if (this.graphic != null)
+            else if (graphic != null)
             {
                 if (wide <= 0)
-                    wide = this.graphic.w;
+                    wide = graphic.w;
                 if (high <= 0)
-                    high = this.graphic.h;
+                    high = graphic.h;
             }
             int num1 = wide > high ? wide : high;
             if (target == null)
                 target = new RenderTarget2D(wide, high, true);
-            if (this.graphic == null)
+            if (graphic == null)
                 return new Sprite(target, 0f, 0f);
-            float num2 = num1 / (collisionSize.x > 0.0 & pUseCollisionSize ? this.collisionSize.x : graphic.width);
+            float num2 = num1 / (collisionSize.x > 0.0 & pUseCollisionSize ? collisionSize.x : graphic.width);
             Camera camera = new Camera(0f, 0f, wide, high)
             {
-                position = new Vec2(this.x - this.centerx * num2, this.y - this.centery * num2)
+                position = new Vec2(x - centerx * num2, y - centery * num2)
             };
             if (pUseCollisionSize && collisionSize.x > 0.0)
-                camera.center = new Vec2((int)((this.left + this.right) / 2.0), (int)((this.top + this.bottom) / 2.0));
+                camera.center = new Vec2((int)((left + right) / 2.0), (int)((top + bottom) / 2.0));
             RenderTarget2D currentRenderTarget = DuckGame.Graphics.currentRenderTarget;
             DuckGame.Graphics.SetRenderTarget(target);
             DepthStencilState depthStencilState = new DepthStencilState()
@@ -1110,7 +1110,7 @@ namespace DuckGame
             };
             DuckGame.Graphics.Clear(transparentBack ? new Color(0, 0, 0, 0) : new Color(15, 4, 16));
             DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)(effect == null ? Thing._alphaTestEffect : effect), camera.getMatrix());
-            this.Draw();
+            Draw();
             DuckGame.Graphics.screen.End();
             if (currentRenderTarget == null || currentRenderTarget.IsDisposed)
                 DuckGame.Graphics.SetRenderTarget(null);
@@ -1119,7 +1119,7 @@ namespace DuckGame
             Texture2D tex = new Texture2D(DuckGame.Graphics.device, target.width, target.height);
             tex.SetData<Color>(target.GetData());
             Sprite editorImage2 = new Sprite((Tex2D)tex);
-            Thing._editorIcons[this.GetType()] = editorImage2;
+            Thing._editorIcons[GetType()] = editorImage2;
             return editorImage2;
         }
 
@@ -1131,26 +1131,26 @@ namespace DuckGame
           RenderTarget2D target = null)
         {
             bool flag = ((wide != 16 ? 0 : (high == 16 ? 1 : 0)) & (transparentBack ? 1 : 0)) != 0 && effect == null && target == null;
-            if (flag && this._editorIcon != null)
-                return this._editorIcon;
+            if (flag && _editorIcon != null)
+                return _editorIcon;
             if (Thread.CurrentThread != MonoMain.mainThread)
                 return new Sprite("basketBall");
             if (Thing._alphaTestEffect == null)
                 Thing._alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
-            if (this.graphic != null)
+            if (graphic != null)
             {
                 if (wide <= 0)
-                    wide = this.graphic.w;
+                    wide = graphic.w;
                 if (high <= 0)
-                    high = this.graphic.h;
+                    high = graphic.h;
             }
             if (target == null)
                 target = new RenderTarget2D(wide, high, true);
-            if (this.graphic == null)
+            if (graphic == null)
                 return new Sprite(target, 0f, 0f);
             Camera camera = new Camera(0f, 0f, wide, high)
             {
-                position = new Vec2(this.x - wide / 2, this.y - high / 2)
+                position = new Vec2(x - wide / 2, y - high / 2)
             };
             DuckGame.Graphics.SetRenderTarget(target);
             DepthStencilState depthStencilState = new DepthStencilState()
@@ -1163,38 +1163,38 @@ namespace DuckGame
             };
             DuckGame.Graphics.Clear(transparentBack ? new Color(0, 0, 0, 0) : new Color(30, 30, 30));
             DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)(effect == null ? Thing._alphaTestEffect : effect), camera.getMatrix());
-            this.Draw();
+            Draw();
             DuckGame.Graphics.screen.End();
             DuckGame.Graphics.SetRenderTarget(null);
             Texture2D tex = new Texture2D(DuckGame.Graphics.device, target.width, target.height);
             tex.SetData<Color>(target.GetData());
             Sprite preview = new Sprite((Tex2D)tex);
             if (flag)
-                this._editorIcon = preview;
+                _editorIcon = preview;
             return preview;
         }
 
         public virtual bool solid
         {
-            get => this._solid;
+            get => _solid;
             set
             {
-                if (value && !this._solid)
-                    this.FixClipping();
-                this._solid = value;
+                if (value && !_solid)
+                    FixClipping();
+                _solid = value;
             }
         }
 
         public void FixClipping()
         {
-            foreach (Block block in Level.CheckRectAll<Block>(this.topLeft, this.bottomRight))
+            foreach (Block block in Level.CheckRectAll<Block>(topLeft, bottomRight))
                 ;
         }
 
         private string GetPropertyDetails()
         {
             string propertyDetails = "";
-            foreach (FieldInfo fieldInfo in Editor.AllEditorFields[this.GetType()])
+            foreach (FieldInfo fieldInfo in Editor.AllEditorFields[GetType()])
             {
                 object obj = fieldInfo.GetValue(this);
                 EditorPropertyInfo editorPropertyInfo = obj.GetType().GetProperty("info").GetValue(obj, null) as EditorPropertyInfo;
@@ -1206,104 +1206,104 @@ namespace DuckGame
 
         public virtual string GetDetailsString()
         {
-            if (_likelyhoodToExist == 1.0 && this._chanceGroup == -1)
-                return this.GetPropertyDetails();
-            return "Chance: " + Math.Round(this.likelyhoodToExist / 1.0 * 100.0).ToString() + "%\nChance Group: " + (this._chanceGroup == -1 ? "None" : this._chanceGroup.ToString(CultureInfo.InvariantCulture)) + "\n" + this.GetPropertyDetails();
+            if (_likelyhoodToExist == 1.0 && _chanceGroup == -1)
+                return GetPropertyDetails();
+            return "Chance: " + Math.Round(likelyhoodToExist / 1.0 * 100.0).ToString() + "%\nChance Group: " + (_chanceGroup == -1 ? "None" : _chanceGroup.ToString(CultureInfo.InvariantCulture)) + "\n" + GetPropertyDetails();
         }
 
         public virtual void ReturnItemToWorld(Thing t)
         {
-            Block block1 = Level.CheckLine<Block>(this.position, this.position + new Vec2(16f, 0f));
+            Block block1 = Level.CheckLine<Block>(position, position + new Vec2(16f, 0f));
             if (block1 != null && block1.solid && t.right > block1.left)
                 t.right = block1.left;
-            Block block2 = Level.CheckLine<Block>(this.position, this.position - new Vec2(16f, 0f));
+            Block block2 = Level.CheckLine<Block>(position, position - new Vec2(16f, 0f));
             if (block2 != null && block2.solid && t.left < block2.right)
                 t.left = block2.right;
-            Block block3 = Level.CheckLine<Block>(this.position, this.position + new Vec2(0f, -16f));
+            Block block3 = Level.CheckLine<Block>(position, position + new Vec2(0f, -16f));
             if (block3 != null && block3.solid && t.top < block3.bottom)
                 t.top = block3.bottom;
-            Block block4 = Level.CheckLine<Block>(this.position, this.position + new Vec2(0f, 16f));
+            Block block4 = Level.CheckLine<Block>(position, position + new Vec2(0f, 16f));
             if (block4 == null || !block4.solid || t.bottom <= block4.top)
                 return;
             t.bottom = block4.top;
         }
 
-        public bool isOffBottomOfLevel => this.y > Level.activeLevel.lowestPoint + 100.0 && this.top > Level.current.camera.bottom + 8.0;
+        public bool isOffBottomOfLevel => y > Level.activeLevel.lowestPoint + 100.0 && top > Level.current.camera.bottom + 8.0;
 
         public virtual Vec2 collisionOffset
         {
-            get => this._collisionOffset;
-            set => this._collisionOffset = value;
+            get => _collisionOffset;
+            set => _collisionOffset = value;
         }
 
         public virtual Vec2 collisionSize
         {
-            get => this._collisionSize;
-            set => this._collisionSize = value;
+            get => _collisionSize;
+            set => _collisionSize = value;
         }
 
-        public float topQuick => this._topQuick;
+        public float topQuick => _topQuick;
 
-        public float bottomQuick => this._bottomQuick;
+        public float bottomQuick => _bottomQuick;
 
-        public float leftQuick => this._leftQuick;
+        public float leftQuick => _leftQuick;
 
-        public float rightQuick => this._rightQuick;
+        public float rightQuick => _rightQuick;
 
-        public float topLocal => this.collisionOffset.y;
+        public float topLocal => collisionOffset.y;
 
-        public float bottomLocal => this.collisionOffset.y + this.collisionSize.y;
+        public float bottomLocal => collisionOffset.y + collisionSize.y;
 
         public float top
         {
-            get => this.position.y + this._collisionOffset.y;
-            set => this.position.y = value + (this.position.y - this.top);
+            get => position.y + _collisionOffset.y;
+            set => position.y = value + (position.y - top);
         }
 
         public float bottom
         {
-            get => this.position.y + this._collisionOffset.y + this._collisionSize.y;
-            set => this.position.y = value + (this.position.y - this.bottom);
+            get => position.y + _collisionOffset.y + _collisionSize.y;
+            set => position.y = value + (position.y - bottom);
         }
 
         public float left
         {
-            get => this.offDir <= 0 ? this.position.x - this._collisionSize.x - this._collisionOffset.x : this.position.x + this._collisionOffset.x;
-            set => this.x = value + (this.x - this.left);
+            get => offDir <= 0 ? position.x - _collisionSize.x - _collisionOffset.x : position.x + _collisionOffset.x;
+            set => x = value + (x - left);
         }
 
         public float right
         {
-            get => this.offDir <= 0 ? this.position.x - this._collisionOffset.x : this.position.x + this._collisionOffset.x + this._collisionSize.x;
-            set => this.x = value + (this.x - this.right);
+            get => offDir <= 0 ? position.x - _collisionOffset.x : position.x + _collisionOffset.x + _collisionSize.x;
+            set => x = value + (x - right);
         }
 
-        public Vec2 topLeft => new Vec2(this.left, this.top);
+        public Vec2 topLeft => new Vec2(left, top);
 
-        public Vec2 topRight => new Vec2(this.right, this.top);
+        public Vec2 topRight => new Vec2(right, top);
 
-        public Vec2 bottomLeft => new Vec2(this.left, this.bottom);
+        public Vec2 bottomLeft => new Vec2(left, bottom);
 
-        public Vec2 bottomRight => new Vec2(this.right, this.bottom);
+        public Vec2 bottomRight => new Vec2(right, bottom);
 
         public Vec2 NearestCorner(Vec2 to)
         {
-            Vec2 vec2 = this.topLeft;
-            float num = (this.topLeft - to).length;
-            float length1 = (this.topRight - to).length;
+            Vec2 vec2 = topLeft;
+            float num = (topLeft - to).length;
+            float length1 = (topRight - to).length;
             if (length1 < num)
             {
-                vec2 = this.topRight;
+                vec2 = topRight;
                 num = length1;
             }
-            float length2 = (this.bottomLeft - to).length;
+            float length2 = (bottomLeft - to).length;
             if (length2 < num)
             {
-                vec2 = this.bottomLeft;
+                vec2 = bottomLeft;
                 num = length2;
             }
-            if ((this.bottomRight - to).length < num)
-                vec2 = this.bottomRight;
+            if ((bottomRight - to).length < num)
+                vec2 = bottomRight;
             return vec2;
         }
 
@@ -1311,156 +1311,156 @@ namespace DuckGame
         {
             Vec2 vec2_1 = Vec2.Zero;
             float num = 9999999f;
-            float length1 = (this.topLeft - to).length;
-            if (length1 < num && Level.CheckCircle<Block>(this.topLeft, 2f, this) == null)
+            float length1 = (topLeft - to).length;
+            if (length1 < num && Level.CheckCircle<Block>(topLeft, 2f, this) == null)
             {
-                vec2_1 = this.topLeft;
+                vec2_1 = topLeft;
                 num = length1;
             }
-            Vec2 vec2_2 = this.topRight - to;
+            Vec2 vec2_2 = topRight - to;
             float length2 = vec2_2.length;
-            if (length2 < num && Level.CheckCircle<Block>(this.topRight, 2f, this) == null)
+            if (length2 < num && Level.CheckCircle<Block>(topRight, 2f, this) == null)
             {
-                vec2_1 = this.topRight;
+                vec2_1 = topRight;
                 num = length2;
             }
-            vec2_2 = this.bottomLeft - to;
+            vec2_2 = bottomLeft - to;
             float length3 = vec2_2.length;
-            if (length3 < num && Level.CheckCircle<Block>(this.bottomLeft, 2f, this) == null)
+            if (length3 < num && Level.CheckCircle<Block>(bottomLeft, 2f, this) == null)
             {
-                vec2_1 = this.bottomLeft;
+                vec2_1 = bottomLeft;
                 num = length3;
             }
-            vec2_2 = this.bottomRight - to;
-            if (vec2_2.length < num && Level.CheckCircle<Block>(this.bottomRight, 2f, this) == null)
-                vec2_1 = this.bottomRight;
+            vec2_2 = bottomRight - to;
+            if (vec2_2.length < num && Level.CheckCircle<Block>(bottomRight, 2f, this) == null)
+                vec2_1 = bottomRight;
             return vec2_1;
         }
 
         public bool isStatic
         {
-            get => this._isStatic;
-            set => this._isStatic = value;
+            get => _isStatic;
+            set => _isStatic = value;
         }
 
-        public float halfWidth => this.width / 2f;
+        public float halfWidth => width / 2f;
 
-        public float halfHeight => this.height / 2f;
+        public float halfHeight => height / 2f;
 
-        public float width => this._collisionSize.x * this.scale.x;
+        public float width => _collisionSize.x * scale.x;
 
-        public float height => this._collisionSize.y * this.scale.y;
+        public float height => _collisionSize.y * scale.y;
 
-        public float w => this.width;
+        public float w => width;
 
-        public float h => this.height;
+        public float h => height;
 
-        public Rectangle rectangle => new Rectangle((int)this.left, (int)this.top, (int)(this.right - this.left), (int)(this.bottom - this.top));
+        public Rectangle rectangle => new Rectangle((int)left, (int)top, (int)(right - left), (int)(bottom - top));
 
         public Vec2 collisionCenter
         {
-            get => new Vec2(this.left + this.collisionSize.x / 2f, this.top + this.collisionSize.y / 2f);
+            get => new Vec2(left + collisionSize.x / 2f, top + collisionSize.y / 2f);
             set
             {
-                this.left = value.x - this.collisionSize.x / 2f;
-                this.top = value.y - this.collisionSize.y / 2f;
+                left = value.x - collisionSize.x / 2f;
+                top = value.y - collisionSize.y / 2f;
             }
         }
 
         public Thing(float xval = 0f, float yval = 0f, Sprite sprite = null)
         {
-            this.x = xval;
-            this.y = yval;
-            this.graphic = sprite;
+            x = xval;
+            y = yval;
+            graphic = sprite;
             if (sprite != null)
-                this._collisionSize = new Vec2(sprite.w, sprite.h);
+                _collisionSize = new Vec2(sprite.w, sprite.h);
             if (!Network.isActive)
                 return;
-            this.connection = DuckNetwork.localConnection;
+            connection = DuckNetwork.localConnection;
         }
 
         public virtual Vec2 OffsetLocal(Vec2 pos)
         {
-            Vec2 vec2 = pos * this.scale;
-            if (this.offDir < 0)
+            Vec2 vec2 = pos * scale;
+            if (offDir < 0)
                 vec2.x *= -1f;
-            return vec2.Rotate(this.angle, new Vec2(0f, 0f));
+            return vec2.Rotate(angle, new Vec2(0f, 0f));
         }
 
         public virtual Vec2 ReverseOffsetLocal(Vec2 pos)
         {
-            Vec2 vec2 = pos * this.scale;
-            vec2 = vec2.Rotate(-this.angle, new Vec2(0f, 0f));
+            Vec2 vec2 = pos * scale;
+            vec2 = vec2.Rotate(-angle, new Vec2(0f, 0f));
             return vec2;
         }
 
-        public virtual Vec2 Offset(Vec2 pos) => this.position + this.OffsetLocal(pos);
+        public virtual Vec2 Offset(Vec2 pos) => position + OffsetLocal(pos);
 
         public virtual Vec2 ReverseOffset(Vec2 pos)
         {
-            pos -= this.position;
-            return this.ReverseOffsetLocal(pos);
+            pos -= position;
+            return ReverseOffsetLocal(pos);
         }
 
         public virtual float OffsetX(float pos)
         {
             Vec2 vec2 = new Vec2(pos, 0f);
-            if (this.offDir < 0)
+            if (offDir < 0)
                 vec2.x *= -1f;
-            return (this.position + vec2.Rotate(this.angle, new Vec2(0f, 0f))).x;
+            return (position + vec2.Rotate(angle, new Vec2(0f, 0f))).x;
         }
 
         public virtual float OffsetY(float pos)
         {
             Vec2 vec2 = new Vec2(0f, pos);
-            if (this.offDir < 0)
+            if (offDir < 0)
                 vec2.x *= -1f;
-            return (this.position + vec2.Rotate(this.angle, new Vec2(0f, 0f))).y;
+            return (position + vec2.Rotate(angle, new Vec2(0f, 0f))).y;
         }
 
         public virtual void ResetProperties()
         {
-            this._level = null;
-            this._removeFromLevel = false;
-            this._initialized = false;
+            _level = null;
+            _removeFromLevel = false;
+            _initialized = false;
         }
 
         public void AddToLayer()
         {
-            if (this._layer == null)
-                this._layer = Layer.Game;
+            if (_layer == null)
+                _layer = Layer.Game;
             if (Thing.skipLayerAdding)
                 return;
-            this._layer.Add(this);
+            _layer.Add(this);
         }
 
         public void DoNetworkInitialize()
         {
-            if (this._networkInitialized)
+            if (_networkInitialized)
                 return;
-            if (this.isStateObject)
+            if (isStateObject)
             {
-                this._ghostType = Editor.IDToType[this.GetType()];
+                _ghostType = Editor.IDToType[GetType()];
                 if (Network.isServer)
-                    this.connection = DuckNetwork.localConnection;
+                    connection = DuckNetwork.localConnection;
             }
-            this._networkInitialized = true;
+            _networkInitialized = true;
         }
 
         public virtual void DoInitialize()
         {
-            if (this._redoLayer)
+            if (_redoLayer)
             {
-                this.AddToLayer();
-                this._redoLayer = false;
+                AddToLayer();
+                _redoLayer = false;
             }
-            if (this._initialized)
+            if (_initialized)
                 return;
             if (Network.isActive)
-                this.DoNetworkInitialize();
-            this._networkDrawIndex = NetworkDebugger.currentIndex;
-            this.Initialize();
-            this._initialized = true;
+                DoNetworkInitialize();
+            _networkDrawIndex = NetworkDebugger.currentIndex;
+            Initialize();
+            _initialized = true;
         }
 
         public virtual void Initialize()
@@ -1469,15 +1469,15 @@ namespace DuckGame
 
         public virtual void DoUpdate()
         {
-            if (this.wasSuperFondled > 0)
-                --this.wasSuperFondled;
-            if (this._anchor != null)
-                this.position = this._anchor.position;
-            this.Update();
-            this._topQuick = this.top;
-            this._bottomQuick = this.bottom;
-            this._leftQuick = this.left;
-            this._rightQuick = this.right;
+            if (wasSuperFondled > 0)
+                --wasSuperFondled;
+            if (_anchor != null)
+                position = _anchor.position;
+            Update();
+            _topQuick = top;
+            _bottomQuick = bottom;
+            _leftQuick = left;
+            _rightQuick = right;
         }
 
         public virtual void Update()
@@ -1490,18 +1490,18 @@ namespace DuckGame
 
         public virtual void DoEditorUpdate()
         {
-            this._topQuick = this.top;
-            this._bottomQuick = this.bottom;
-            this._leftQuick = this.left;
-            this._rightQuick = this.right;
-            this.EditorUpdate();
+            _topQuick = top;
+            _bottomQuick = bottom;
+            _leftQuick = left;
+            _rightQuick = right;
+            EditorUpdate();
         }
 
         public virtual void EditorUpdate()
         {
         }
 
-        public virtual void DoEditorRender() => this.EditorRender();
+        public virtual void DoEditorRender() => EditorRender();
 
         public virtual void EditorRender()
         {
@@ -1513,39 +1513,39 @@ namespace DuckGame
 
         public void Glitch()
         {
-            if (!(this.material is MaterialGlitch))
+            if (!(material is MaterialGlitch))
                 return;
-            (this.material as MaterialGlitch).yoffset = Rando.Float(1f);
-            (this.material as MaterialGlitch).amount = Rando.Float(0.9f, 1.2f);
+            (material as MaterialGlitch).yoffset = Rando.Float(1f);
+            (material as MaterialGlitch).amount = Rando.Float(0.9f, 1.2f);
         }
 
         public ProfileNetData GetOrCreateNetData()
         {
-            if (this._netData == null)
-                this._netData = new ProfileNetData();
-            return this._netData;
+            if (_netData == null)
+                _netData = new ProfileNetData();
+            return _netData;
         }
 
         public void NetworkSet<T>(string pVariable, T pValue)
         {
-            if (!this.isServerForObject)
+            if (!isServerForObject)
                 return;
-            if (this._netData == null)
-                this._netData = new ProfileNetData();
-            this._netData.Set<T>(pVariable, pValue);
+            if (_netData == null)
+                _netData = new ProfileNetData();
+            _netData.Set<T>(pVariable, pValue);
         }
         public T NetworkGet<T>(string pVariable, T pDefault = default(T))
         {
-            if (this._netData == null)
+            if (_netData == null)
             {
                 return default(T);
             }
-            return this._netData.Get<T>(pVariable, pDefault);
+            return _netData.Get<T>(pVariable, pDefault);
         }
         public GhostObject ghostObject
         {
-            get => this._ghostObject;
-            set => this._ghostObject = value;
+            get => _ghostObject;
+            set => _ghostObject = value;
         }
 
         public virtual void OnGhostObjectAdded()
@@ -1555,70 +1555,70 @@ namespace DuckGame
         /// <summary>
         /// If true, this object's Update function is run via Level.UpdateThings. Otherwise, it's run via GhostManager.UpdateGhostLerp
         /// </summary>
-        public bool shouldRunUpdateLocally => (this.connection == null || this.connection.data == null) && this.level != null;
+        public bool shouldRunUpdateLocally => (connection == null || connection.data == null) && level != null;
 
         public bool ignoreGhosting
         {
-            get => this._ignoreGhosting;
-            set => this._ignoreGhosting = value;
+            get => _ignoreGhosting;
+            set => _ignoreGhosting = value;
         }
 
         public virtual void DoDraw()
         {
-            if (NetworkDebugger.currentIndex >= 0 && NetworkDebugger.currentIndex != this._networkDrawIndex)
+            if (NetworkDebugger.currentIndex >= 0 && NetworkDebugger.currentIndex != _networkDrawIndex)
                 return;
-            DuckGame.Graphics.material = this._material;
-            if (this._material != null)
-                this._material.Update();
-            this.Draw();
+            DuckGame.Graphics.material = _material;
+            if (_material != null)
+                _material.Update();
+            Draw();
             DuckGame.Graphics.material = null;
         }
 
         public virtual void Draw()
         {
-            if (this._graphic == null)
+            if (_graphic == null)
                 return;
-            if (!this._skipPositioning)
+            if (!_skipPositioning)
             {
-                this._graphic.position = this.position;
-                this._graphic.alpha = this.alpha;
-                this._graphic.angle = this.angle;
-                this._graphic.depth = this.depth;
-                this._graphic.scale = this.scale;
-                this._graphic.center = this.center;
+                _graphic.position = position;
+                _graphic.alpha = alpha;
+                _graphic.angle = angle;
+                _graphic.depth = depth;
+                _graphic.scale = scale;
+                _graphic.center = center;
             }
-            this._graphic.Draw();
+            _graphic.Draw();
         }
 
         public void DrawCollision()
         {
-            DuckGame.Graphics.DrawRect(this.topLeft, this.bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+            DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
             if (!(this is PhysicsObject))
                 return;
             int num = (this as PhysicsObject).sleeping ? 1 : 0;
         }
 
-        public void Draw(Sprite spr, float xpos, float ypos, int d = 1) => this.Draw(spr, new Vec2(xpos, ypos), d);
+        public void Draw(Sprite spr, float xpos, float ypos, int d = 1) => Draw(spr, new Vec2(xpos, ypos), d);
 
         public void Draw(Sprite spr, Vec2 pos, int d = 1)
         {
-            Vec2 vec2 = this.Offset(pos);
-            if (this.graphic != null)
-                spr.flipH = this.graphic.flipH;
-            spr.angle = this.angle;
-            spr.alpha = this.alpha;
-            spr.depth = this.depth + d;
-            spr.scale = this.scale;
-            spr.flipH = this.offDir < 0;
+            Vec2 vec2 = Offset(pos);
+            if (graphic != null)
+                spr.flipH = graphic.flipH;
+            spr.angle = angle;
+            spr.alpha = alpha;
+            spr.depth = depth + d;
+            spr.scale = scale;
+            spr.flipH = offDir < 0;
             DuckGame.Graphics.Draw(spr, vec2.x, vec2.y);
         }
 
         public void DrawIgnoreAngle(Sprite spr, Vec2 pos, int d = 1)
         {
-            Vec2 vec2 = this.Offset(pos);
-            spr.alpha = this.alpha;
-            spr.depth = this.depth + d;
-            spr.scale = this.scale;
+            Vec2 vec2 = Offset(pos);
+            spr.alpha = alpha;
+            spr.depth = depth + d;
+            spr.scale = scale;
             DuckGame.Graphics.Draw(spr, vec2.x, vec2.y);
         }
 
@@ -1626,7 +1626,7 @@ namespace DuckGame
         {
         }
 
-        public virtual void DoTerminate() => this.Terminate();
+        public virtual void DoTerminate() => Terminate();
 
         public virtual void Terminate()
         {
@@ -1634,28 +1634,28 @@ namespace DuckGame
 
         public virtual void Added(Level parent)
         {
-            this._removeFromLevel = false;
-            this._redoLayer = true;
-            this._level = parent;
-            this.DoInitialize();
+            _removeFromLevel = false;
+            _redoLayer = true;
+            _level = parent;
+            DoInitialize();
         }
 
         public virtual void Added(Level parent, bool redoLayer, bool reinit)
         {
             if (reinit)
-                this._initialized = false;
-            this._removeFromLevel = false;
-            this._redoLayer = redoLayer;
-            this._level = parent;
-            this.DoInitialize();
+                _initialized = false;
+            _removeFromLevel = false;
+            _redoLayer = redoLayer;
+            _level = parent;
+            DoInitialize();
         }
 
         public virtual void Removed()
         {
-            this._removeFromLevel = true;
-            if (this._layer == null)
+            _removeFromLevel = true;
+            if (_layer == null)
                 return;
-            this._layer.RemoveSoon(this);
+            _layer.RemoveSoon(this);
         }
 
         public virtual void NetworkUpdate()

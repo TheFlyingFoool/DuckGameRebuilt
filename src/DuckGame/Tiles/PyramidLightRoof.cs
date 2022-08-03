@@ -22,27 +22,27 @@ namespace DuckGame
         public PyramidLightRoof(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("pyramidRoofLight");
-            this.center = new Vec2(7f, 5f);
-            this._collisionSize = new Vec2(14f, 6f);
-            this._collisionOffset = new Vec2(-7f, -3f);
-            this.depth = (Depth)0.9f;
-            this.hugWalls = WallHug.Ceiling;
-            this.layer = Layer.Game;
+            graphic = new Sprite("pyramidRoofLight");
+            center = new Vec2(7f, 5f);
+            _collisionSize = new Vec2(14f, 6f);
+            _collisionOffset = new Vec2(-7f, -3f);
+            depth = (Depth)0.9f;
+            hugWalls = WallHug.Ceiling;
+            layer = Layer.Game;
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            this._occluders.Add(new LightOccluder(this.position + new Vec2(-15f, -3f), this.position + new Vec2(-15f, 4f), new Color(1f, 0.9f, 0.8f)));
-            this._occluders.Add(new LightOccluder(this.position + new Vec2(15f, -3f), this.position + new Vec2(15f, 4f), new Color(1f, 0.9f, 0.8f)));
-            this._occluders.Add(new LightOccluder(this.position + new Vec2(-15f, -2f), this.position + new Vec2(15f, -2f), new Color(1f, 0.9f, 0.8f)));
-            this.light = new PointLight(this.x, this.y - 1f, PyramidWallLight.lightColor, 110f, this._occluders, true);
+            _occluders.Add(new LightOccluder(position + new Vec2(-15f, -3f), position + new Vec2(-15f, 4f), new Color(1f, 0.9f, 0.8f)));
+            _occluders.Add(new LightOccluder(position + new Vec2(15f, -3f), position + new Vec2(15f, 4f), new Color(1f, 0.9f, 0.8f)));
+            _occluders.Add(new LightOccluder(position + new Vec2(-15f, -2f), position + new Vec2(15f, -2f), new Color(1f, 0.9f, 0.8f)));
+            light = new PointLight(x, y - 1f, PyramidWallLight.lightColor, 110f, _occluders, true);
             Level.Add(light);
-            this._shade = new SpriteThing(this.x, this.y, new Sprite("pyramidRoofLightShade"))
+            _shade = new SpriteThing(x, y, new Sprite("pyramidRoofLightShade"))
             {
-                center = this.center,
+                center = center,
                 layer = Layer.Foreground
             };
             Level.Add(_shade);
@@ -50,12 +50,12 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (!this.did)
+            if (!did)
             {
-                this.myBlock = Level.CheckPoint<Block>(new Vec2(this.x, this.y - 8f));
-                this.did = true;
+                myBlock = Level.CheckPoint<Block>(new Vec2(x, y - 8f));
+                did = true;
             }
-            if (this.myBlock != null && this.myBlock.removeFromLevel)
+            if (myBlock != null && myBlock.removeFromLevel)
             {
                 Level.Remove(this);
                 Level.Remove(light);

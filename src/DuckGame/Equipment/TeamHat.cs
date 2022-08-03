@@ -41,93 +41,93 @@ namespace DuckGame
 
         public ushort netTeamIndex
         {
-            get => this._team == null ? (ushort)0 : (ushort)Teams.IndexOf(this._team);
-            set => this.team = Teams.ParseFromIndex(value);
+            get => _team == null ? (ushort)0 : (ushort)Teams.IndexOf(_team);
+            set => team = Teams.ParseFromIndex(value);
         }
 
         public Team team
         {
-            get => this._team;
+            get => _team;
             set
             {
-                this._team = value;
-                this._shouldUpdateSprite = true;
+                _team = value;
+                _shouldUpdateSprite = true;
             }
         }
 
         public override void SetQuack(int pValue)
         {
-            this.PositionOnOwner();
-            this.frame = pValue;
-            if (this._equippedDuck != null && !this.destroyed)
+            PositionOnOwner();
+            frame = pValue;
+            if (_equippedDuck != null && !destroyed)
             {
-                if (this._prevFrame == 0 && this._sprite.frame == 1)
-                    this.OpenHat();
-                else if (this._prevFrame == 1 && this._sprite.frame == 0)
-                    this.CloseHat();
+                if (_prevFrame == 0 && _sprite.frame == 1)
+                    OpenHat();
+                else if (_prevFrame == 1 && _sprite.frame == 0)
+                    CloseHat();
             }
-            this._prevFrame = this._sprite.frame;
+            _prevFrame = _sprite.frame;
         }
 
         public void UpdateSprite()
         {
-            if (this._profile == null && this.equippedDuck != null && this.equippedDuck.profile == Profiles.EnvironmentProfile)
+            if (_profile == null && equippedDuck != null && equippedDuck.profile == Profiles.EnvironmentProfile)
             {
-                this._shouldUpdateSprite = true;
+                _shouldUpdateSprite = true;
             }
             else
             {
-                if (this._team != null && (this._team != this._lastLoadedTeam && (this._team.facade == null || this._team.facade != this._lastLoadedTeam) || this._prevHatID != this._team.hatID || this._team.filter != this._filter))
+                if (_team != null && (_team != _lastLoadedTeam && (_team.facade == null || _team.facade != _lastLoadedTeam) || _prevHatID != _team.hatID || _team.filter != _filter))
                 {
-                    this._filter = this._team.filter;
-                    if (this._profile == null && this.equippedDuck != null)
-                        this._profile = this.equippedDuck.profile;
-                    this.sprite = this._team.hat.CloneMap();
-                    this.pickupSprite = this._team.hat.Clone();
-                    DuckPersona pPersona = this.quickPersona;
-                    if (this._profile != null)
-                        pPersona = this._profile.persona;
-                    if (pPersona != null && this._team.metadata != null && this._team.metadata.UseDuckColor.value)
+                    _filter = _team.filter;
+                    if (_profile == null && equippedDuck != null)
+                        _profile = equippedDuck.profile;
+                    sprite = _team.hat.CloneMap();
+                    pickupSprite = _team.hat.Clone();
+                    DuckPersona pPersona = quickPersona;
+                    if (_profile != null)
+                        pPersona = _profile.persona;
+                    if (pPersona != null && _team.metadata != null && _team.metadata.UseDuckColor.value)
                     {
-                        this.sprite = this._team.GetHat(pPersona).CloneMap();
-                        this.pickupSprite = this._team.GetHat(pPersona).Clone();
+                        sprite = _team.GetHat(pPersona).CloneMap();
+                        pickupSprite = _team.GetHat(pPersona).Clone();
                     }
-                    this.sprite.center = new Vec2(16f, 16f);
-                    this.hatOffset = this._team.hatOffset;
-                    this.UpdateCape();
-                    this._lastLoadedTeam = this._team.facade != null ? this._team.facade : this._team;
-                    this._prevHatID = this._team.hatID;
-                    this.graphic = sprite;
+                    sprite.center = new Vec2(16f, 16f);
+                    hatOffset = _team.hatOffset;
+                    UpdateCape();
+                    _lastLoadedTeam = _team.facade != null ? _team.facade : _team;
+                    _prevHatID = _team.hatID;
+                    graphic = sprite;
                 }
-                if (this._specialInitialized || this._team == null)
+                if (_specialInitialized || _team == null)
                     return;
-                this._specialInitialized = true;
-                this._isKatanaHat = this._sprite.texture.textureName == "hats/katanaman";
-                if (!this._isKatanaHat)
+                _specialInitialized = true;
+                _isKatanaHat = _sprite.texture.textureName == "hats/katanaman";
+                if (!_isKatanaHat)
                     return;
-                this._katanaMaterial = new MaterialKatanaman(this);
+                _katanaMaterial = new MaterialKatanaman(this);
             }
         }
 
         public TeamHat(float xpos, float ypos, Team t)
           : base(xpos, ypos)
         {
-            this.team = t;
-            this.depth = -0.5f;
+            team = t;
+            depth = -0.5f;
         }
 
         public TeamHat(float xpos, float ypos, Team t, Profile p)
           : base(xpos, ypos)
         {
-            this._profile = p;
-            this.team = t;
-            this.depth = -0.5f;
+            _profile = p;
+            team = t;
+            depth = -0.5f;
         }
 
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("teamIndex", Teams.all.IndexOf(this._team));
+            binaryClassChunk.AddProperty("teamIndex", Teams.all.IndexOf(_team));
             return binaryClassChunk;
         }
 
@@ -135,34 +135,34 @@ namespace DuckGame
         {
             int property = node.GetProperty<int>("teamIndex");
             if (property >= 0 && property < Teams.all.Count - 1)
-                this.team = Teams.all[property];
+                team = Teams.all[property];
             return base.Deserialize(node);
         }
 
         public override void Initialize()
         {
-            this.UpdateCape();
+            UpdateCape();
             base.Initialize();
         }
 
         public void UpdateCape()
         {
-            if (this._team == null)
+            if (_team == null)
                 return;
-            if (this._sprite.texture.textureName == "hats/johnnys")
-                this.quacks = false;
-            if (this._cape != null)
+            if (_sprite.texture.textureName == "hats/johnnys")
+                quacks = false;
+            if (_cape != null)
             {
-                if (this._cape.level != null)
+                if (_cape.level != null)
                     Level.Remove(_cape);
-                this._cape = null;
+                _cape = null;
             }
-            if (this._sprite.texture.textureName == "hats/suit")
+            if (_sprite.texture.textureName == "hats/suit")
             {
                 Tex2D tex = null;
                 int idx = Global.data.flag;
                 if (Network.isActive)
-                    idx = this._networkCape;
+                    idx = _networkCape;
                 if (idx < 0)
                     return;
                 Sprite flag = UIFlagSelection.GetFlag(idx);
@@ -170,102 +170,102 @@ namespace DuckGame
                     tex = flag.texture;
                 if (tex == null)
                     return;
-                this._cape = new Cape(this.x, this.y, this);
+                _cape = new Cape(x, y, this);
                 if (!tex.textureName.Contains("full_"))
-                    this._cape.halfFlag = true;
-                this._cape.SetCapeTexture((Texture2D)tex);
+                    _cape.halfFlag = true;
+                _cape.SetCapeTexture((Texture2D)tex);
             }
             else
             {
-                if (this._team.capeTexture == null)
+                if (_team.capeTexture == null)
                     return;
-                this._cape = new Cape(this.x, this.y, this);
-                this._cape.SetCapeTexture(this._team.capeTexture);
-                if (this._team.metadata == null)
+                _cape = new Cape(x, y, this);
+                _cape.SetCapeTexture(_team.capeTexture);
+                if (_team.metadata == null)
                     return;
-                this._cape.metadata = this._team.metadata;
+                _cape.metadata = _team.metadata;
             }
         }
 
         public override void Terminate()
         {
-            if (this._cape != null)
+            if (_cape != null)
                 Level.Remove(_cape);
             base.Terminate();
         }
 
         public override void Update()
         {
-            if (this._cape != null && this._cape.level == null)
+            if (_cape != null && _cape.level == null)
                 Level.Add(_cape);
             if (Network.isActive)
             {
-                if (this._team != null && this._team.filter != this._filter)
+                if (_team != null && _team.filter != _filter)
                 {
-                    this.UpdateCape();
-                    this._shouldUpdateSprite = true;
+                    UpdateCape();
+                    _shouldUpdateSprite = true;
                 }
-                if (this._networkCape < 0 && this.duck != null && this.duck.profile != null)
+                if (_networkCape < 0 && duck != null && duck.profile != null)
                 {
-                    this._networkCape = !this.duck.profile.localPlayer ? this.duck.profile.flagIndex : Global.data.flag;
-                    this.UpdateCape();
+                    _networkCape = !duck.profile.localPlayer ? duck.profile.flagIndex : Global.data.flag;
+                    UpdateCape();
                 }
-                if (Network.InLobby() && this._team != null && (this.sprite == null || this.sprite != null && this.sprite.globalIndex != this._team.hat.globalIndex))
-                    this._shouldUpdateSprite = true;
+                if (Network.InLobby() && _team != null && (sprite == null || sprite != null && sprite.globalIndex != _team.hat.globalIndex))
+                    _shouldUpdateSprite = true;
             }
-            else if (Level.current is TeamSelect2 && this._equippedDuck != null && this.team != null && this.team.customHatPath != null && Keyboard.Pressed(Keys.F5) && !Network.isActive)
+            else if (Level.current is TeamSelect2 && _equippedDuck != null && team != null && team.customHatPath != null && Keyboard.Pressed(Keys.F5) && !Network.isActive)
             {
-                int index = Teams.core.extraTeams.IndexOf(this.team);
-                Team.deserializeInto = this.team;
-                Teams.core.extraTeams[index] = Team.Deserialize(this.team.customHatPath);
+                int index = Teams.core.extraTeams.IndexOf(team);
+                Team.deserializeInto = team;
+                Teams.core.extraTeams[index] = Team.Deserialize(team.customHatPath);
                 Team.deserializeInto = null;
-                Duck equippedDuck = this._equippedDuck;
-                this._equippedDuck.Unequip(this);
+                Duck equippedDuck = _equippedDuck;
+                _equippedDuck.Unequip(this);
                 Level.Remove(this);
-                TeamHat teamHat = new TeamHat(this.x, this.y, Teams.core.extraTeams[index]);
+                TeamHat teamHat = new TeamHat(x, y, Teams.core.extraTeams[index]);
                 Level.Add(teamHat);
                 TeamHat e = teamHat;
                 equippedDuck.Equip(e, false);
             }
-            if (this._shouldUpdateSprite)
+            if (_shouldUpdateSprite)
             {
-                this._shouldUpdateSprite = false;
-                this.UpdateSprite();
+                _shouldUpdateSprite = false;
+                UpdateSprite();
             }
-            if (this._equippedDuck != null && !this.destroyed)
+            if (_equippedDuck != null && !destroyed)
             {
-                if (this._sprite.frame == 1)
-                    this._timeOpen += 0.1f;
+                if (_sprite.frame == 1)
+                    _timeOpen += 0.1f;
                 else
-                    this._timeOpen = 0f;
+                    _timeOpen = 0f;
             }
-            if (this._sprite.frame == 1 && this._prevFrame == 0)
-                this.glow = 1.2f;
-            this._prevFrame = this._sprite.frame;
-            if (this.destroyed)
-                this.alpha -= 0.05f;
-            if (this.alpha < 0.0)
+            if (_sprite.frame == 1 && _prevFrame == 0)
+                glow = 1.2f;
+            _prevFrame = _sprite.frame;
+            if (destroyed)
+                alpha -= 0.05f;
+            if (alpha < 0.0)
                 Level.Remove(this);
             if (_quackWait > 0.0)
-                this._quackWait -= Maths.IncFrameTimer();
+                _quackWait -= Maths.IncFrameTimer();
             else if (_quackHold > 0.0)
-                this._quackHold -= Maths.IncFrameTimer();
+                _quackHold -= Maths.IncFrameTimer();
             base.Update();
         }
 
         public override void Quack(float volume, float pitch)
         {
-            if (this.duck != null && this._sprite.texture.textureName == "hats/hearts")
+            if (duck != null && _sprite.texture.textureName == "hats/hearts")
             {
                 SFX.Play("heartfart", volume, Math.Min(pitch + 0.4f - Rando.Float(0.1f), 1f));
-                HeartPuff heartPuff = new HeartPuff(this.x, this.y)
+                HeartPuff heartPuff = new HeartPuff(x, y)
                 {
                     anchor = (Anchor)this
                 };
                 Level.Add(heartPuff);
                 for (int index = 0; index < 2; ++index)
                 {
-                    SmallSmoke smallSmoke = SmallSmoke.New(this.x, this.y);
+                    SmallSmoke smallSmoke = SmallSmoke.New(x, y);
                     smallSmoke.sprite.color = Color.Green * (0.4f + Rando.Float(0.3f));
                     Level.Add(smallSmoke);
                 }
@@ -276,29 +276,29 @@ namespace DuckGame
 
         public override void OpenHat()
         {
-            if (this.duck == null || this.duck.z != 0.0)
+            if (duck == null || duck.z != 0.0)
                 return;
-            if (this.team != null && this.team.metadata != null)
+            if (team != null && team.metadata != null)
             {
-                if (this.team.metadata.QuackSuppressRequack.value && (_quackWait > 0.0 || _quackHold > 0.0))
+                if (team.metadata.QuackSuppressRequack.value && (_quackWait > 0.0 || _quackHold > 0.0))
                     return;
-                this._quackWait = this.team.metadata.QuackDelay.value;
-                this._quackHold = this.team.metadata.QuackHold.value;
-                if (this.team.customParticles.Count <= 0)
+                _quackWait = team.metadata.QuackDelay.value;
+                _quackHold = team.metadata.QuackHold.value;
+                if (team.customParticles.Count <= 0)
                     return;
-                if (this._addedParticles == null)
-                    this._addedParticles = new List<TeamHat.CustomParticle>();
-                int num1 = this.team.metadata.ParticleCount.value;
-                Vec2 vec2_1 = new Vec2((float)(-this.team.metadata.ParticleEmitShapeSize.value.x / 2.0), (float)(-this.team.metadata.ParticleEmitShapeSize.value.y / 2.0));
-                Vec2 vec2_2 = new Vec2(this.team.metadata.ParticleEmitShapeSize.value.x / 2f, this.team.metadata.ParticleEmitShapeSize.value.y / 2f);
-                Vec2 vec2_3 = this.team.metadata.ParticleEmitterOffset.value;
+                if (_addedParticles == null)
+                    _addedParticles = new List<TeamHat.CustomParticle>();
+                int num1 = team.metadata.ParticleCount.value;
+                Vec2 vec2_1 = new Vec2((float)(-team.metadata.ParticleEmitShapeSize.value.x / 2.0), (float)(-team.metadata.ParticleEmitShapeSize.value.y / 2.0));
+                Vec2 vec2_2 = new Vec2(team.metadata.ParticleEmitShapeSize.value.x / 2f, team.metadata.ParticleEmitShapeSize.value.y / 2f);
+                Vec2 vec2_3 = team.metadata.ParticleEmitterOffset.value;
                 for (int index1 = 0; index1 < num1; ++index1)
                 {
                     Vec2 pPosition = vec2_3;
                     if (team.metadata.ParticleEmitShape.value.x == 1.0)
                     {
                         float rad = Maths.DegToRad(team.metadata.ParticleEmitShape.value.y == 2.0 ? index1 * (360f / num1) : Rando.Float(360f));
-                        Vec2 vec2_4 = new Vec2((float)Math.Cos(rad) * (this.team.metadata.ParticleEmitShapeSize.value.x / 2f), (float)-Math.Sin(rad) * (this.team.metadata.ParticleEmitShapeSize.value.y / 2f));
+                        Vec2 vec2_4 = new Vec2((float)Math.Cos(rad) * (team.metadata.ParticleEmitShapeSize.value.x / 2f), (float)-Math.Sin(rad) * (team.metadata.ParticleEmitShapeSize.value.y / 2f));
                         if (team.metadata.ParticleEmitShape.value.y == 1.0)
                             pPosition += vec2_4 * Rando.Float(1f);
                         else
@@ -310,12 +310,12 @@ namespace DuckGame
                         {
                             float num2 = Rando.Float(1f) >= 0.5 ? 1f : -1f;
                             if (Rando.Float(1f) >= 0.5)
-                                pPosition += new Vec2(this.team.metadata.ParticleEmitShapeSize.value.x * num2, Rando.Float((float)(-this.team.metadata.ParticleEmitShapeSize.value.y / 2.0), this.team.metadata.ParticleEmitShapeSize.value.y / 2f));
+                                pPosition += new Vec2(team.metadata.ParticleEmitShapeSize.value.x * num2, Rando.Float((float)(-team.metadata.ParticleEmitShapeSize.value.y / 2.0), team.metadata.ParticleEmitShapeSize.value.y / 2f));
                             else
-                                pPosition += new Vec2(Rando.Float((float)(-this.team.metadata.ParticleEmitShapeSize.value.x / 2.0), this.team.metadata.ParticleEmitShapeSize.value.x / 2f), this.team.metadata.ParticleEmitShapeSize.value.y * num2);
+                                pPosition += new Vec2(Rando.Float((float)(-team.metadata.ParticleEmitShapeSize.value.x / 2.0), team.metadata.ParticleEmitShapeSize.value.x / 2f), team.metadata.ParticleEmitShapeSize.value.y * num2);
                         }
                         else if (team.metadata.ParticleEmitShape.value.y == 1.0)
-                            pPosition += new Vec2(Rando.Float((float)(-this.team.metadata.ParticleEmitShapeSize.value.x / 2.0), this.team.metadata.ParticleEmitShapeSize.value.x / 2f), Rando.Float((float)(-this.team.metadata.ParticleEmitShapeSize.value.y / 2.0), this.team.metadata.ParticleEmitShapeSize.value.y / 2f));
+                            pPosition += new Vec2(Rando.Float((float)(-team.metadata.ParticleEmitShapeSize.value.x / 2.0), team.metadata.ParticleEmitShapeSize.value.x / 2f), Rando.Float((float)(-team.metadata.ParticleEmitShapeSize.value.y / 2.0), team.metadata.ParticleEmitShapeSize.value.y / 2f));
                         else if (team.metadata.ParticleEmitShape.value.y == 2.0)
                         {
                             float rad = Maths.DegToRad(team.metadata.ParticleEmitShape.value.y == 2.0 ? index1 * (360f / num1) : Rando.Float(360f));
@@ -350,68 +350,68 @@ namespace DuckGame
                             pPosition += vec2_5;
                         }
                     }
-                    TeamHat.CustomParticle customParticle = new TeamHat.CustomParticle(pPosition, this, this.team.metadata);
-                    if (this.team.metadata.ParticleAnimated.value)
+                    TeamHat.CustomParticle customParticle = new TeamHat.CustomParticle(pPosition, this, team.metadata);
+                    if (team.metadata.ParticleAnimated.value)
                     {
-                        customParticle.animationFrames = this.team.customParticles;
-                        customParticle.animationSpeed = this.team.metadata.ParticleAnimationSpeed.value * 0.5f;
-                        customParticle.animationLoop = this.team.metadata.ParticleAnimationLoop.value;
+                        customParticle.animationFrames = team.customParticles;
+                        customParticle.animationSpeed = team.metadata.ParticleAnimationSpeed.value * 0.5f;
+                        customParticle.animationLoop = team.metadata.ParticleAnimationLoop.value;
                     }
                     Level.Add(customParticle);
-                    this._addedParticles.Add(customParticle);
+                    _addedParticles.Add(customParticle);
                 }
             }
-            else if (this._sprite.texture.textureName == "hats/burgers")
+            else if (_sprite.texture.textureName == "hats/burgers")
             {
                 FluidData ketchup = Fluid.Ketchup;
                 ketchup.amount = Rando.Float(0.0005f, 1f / 1000f);
                 int num = Rando.Int(4) + 1;
                 for (int index = 0; index < num; ++index)
                 {
-                    Fluid fluid = new Fluid(this.x + duck.offDir * (2f + Rando.Float(0f, 7f)), this.y + 3f + Rando.Float(0f, 3f), new Vec2(duck.offDir * Rando.Float(0.5f, 3f), Rando.Float(0f, -2f)), ketchup, thickMult: 2.5f)
+                    Fluid fluid = new Fluid(x + duck.offDir * (2f + Rando.Float(0f, 7f)), y + 3f + Rando.Float(0f, 3f), new Vec2(duck.offDir * Rando.Float(0.5f, 3f), Rando.Float(0f, -2f)), ketchup, thickMult: 2.5f)
                     {
-                        depth = this.depth + 1
+                        depth = depth + 1
                     };
                     Level.Add(fluid);
                 }
             }
-            else if (this._sprite.texture.textureName == "hats/divers" || this._sprite.texture.textureName == "hats/fridge")
+            else if (_sprite.texture.textureName == "hats/divers" || _sprite.texture.textureName == "hats/fridge")
             {
                 FluidData water = Fluid.Water;
                 water.amount = Rando.Float(0.0001f, 0.0005f);
                 int num = Rando.Int(3) + 1;
                 for (int index = 0; index < num; ++index)
                 {
-                    Fluid fluid = new Fluid(this.x + duck.offDir * (2f + Rando.Float(0f, 4f)), this.y + 3f + Rando.Float(0f, 3f), new Vec2(duck.offDir * Rando.Float(0.5f, 3f), Rando.Float(0f, -2f)), water, thickMult: 5f)
+                    Fluid fluid = new Fluid(x + duck.offDir * (2f + Rando.Float(0f, 4f)), y + 3f + Rando.Float(0f, 3f), new Vec2(duck.offDir * Rando.Float(0.5f, 3f), Rando.Float(0f, -2f)), water, thickMult: 5f)
                     {
-                        depth = this.depth + 1
+                        depth = depth + 1
                     };
                     Level.Add(fluid);
                 }
             }
-            else if (this._sprite.texture.textureName == "hats/gross")
+            else if (_sprite.texture.textureName == "hats/gross")
             {
                 FluidData water = Fluid.Water;
                 water.amount = Rando.Float(0.0002f, 0.0007f);
                 int num = Rando.Int(6) + 2;
                 for (int index = 0; index < num; ++index)
                 {
-                    Fluid fluid = new Fluid(this.x + duck.offDir * (6f + Rando.Float(-2f, 4f)), this.y + Rando.Float(-2f, 4f), new Vec2(duck.offDir * Rando.Float(1.2f, 4f), Rando.Float(0f, -2.8f)), water, thickMult: 5f)
+                    Fluid fluid = new Fluid(x + duck.offDir * (6f + Rando.Float(-2f, 4f)), y + Rando.Float(-2f, 4f), new Vec2(duck.offDir * Rando.Float(1.2f, 4f), Rando.Float(0f, -2.8f)), water, thickMult: 5f)
                     {
-                        depth = this.depth + 1
+                        depth = depth + 1
                     };
                     Level.Add(fluid);
                 }
             }
             else
             {
-                if (!(this._sprite.texture.textureName == "hats/tube"))
+                if (!(_sprite.texture.textureName == "hats/tube"))
                     return;
                 for (int index = 0; index < 4; ++index)
                 {
-                    TinyBubble tinyBubble = new TinyBubble(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(0f, 4f), Rando.Float(-1.5f, 1.5f), this.y - 12f, true)
+                    TinyBubble tinyBubble = new TinyBubble(x + Rando.Float(-4f, 4f), y + Rando.Float(0f, 4f), Rando.Float(-1.5f, 1.5f), y - 12f, true)
                     {
-                        depth = this.depth + 1
+                        depth = depth + 1
                     };
                     Level.Add(tinyBubble);
                 }
@@ -420,16 +420,16 @@ namespace DuckGame
 
         public override void CloseHat()
         {
-            if (this.duck == null)
+            if (duck == null)
                 return;
-            if (this.team != null && this.team.metadata != null)
+            if (team != null && team.metadata != null)
             {
-                if (this.team.metadata.WetLips.value && _timeOpen > 1.0)
+                if (team.metadata.WetLips.value && _timeOpen > 1.0)
                     SFX.Play("smallSplat", 0.9f, Rando.Float(-0.4f, 0.4f));
-                if (this.team.metadata.MechanicalLips.value && _timeOpen > 2.0)
+                if (team.metadata.MechanicalLips.value && _timeOpen > 2.0)
                     SFX.Play("smallDoorShut", pitch: Rando.Float(-0.1f, 0.1f));
             }
-            if (this._sprite.texture.textureName == "hats/burgers")
+            if (_sprite.texture.textureName == "hats/burgers")
             {
                 if (_timeOpen <= 1.0)
                     return;
@@ -438,9 +438,9 @@ namespace DuckGame
                 int num = Rando.Int(3) + 1;
                 for (int index = 0; index < num; ++index)
                 {
-                    Fluid fluid = new Fluid(this.x + duck.offDir * (3f + Rando.Float(0f, 6f)), this.y + 4f + Rando.Float(0f, 1f), new Vec2(duck.offDir * Rando.Float(-2f, 2f), Rando.Float(-1f, -2f)), ketchup, thickMult: 2.5f)
+                    Fluid fluid = new Fluid(x + duck.offDir * (3f + Rando.Float(0f, 6f)), y + 4f + Rando.Float(0f, 1f), new Vec2(duck.offDir * Rando.Float(-2f, 2f), Rando.Float(-1f, -2f)), ketchup, thickMult: 2.5f)
                     {
-                        depth = this.depth + 1
+                        depth = depth + 1
                     };
                     Level.Add(fluid);
                 }
@@ -448,7 +448,7 @@ namespace DuckGame
             }
             else
             {
-                if (!(this._sprite.texture.textureName == "hats/divers") && !(this._sprite.texture.textureName == "hats/fridge") || _timeOpen <= 2.0)
+                if (!(_sprite.texture.textureName == "hats/divers") && !(_sprite.texture.textureName == "hats/fridge") || _timeOpen <= 2.0)
                     return;
                 SFX.Play("smallDoorShut", pitch: Rando.Float(-0.1f, 0.1f));
             }
@@ -456,111 +456,111 @@ namespace DuckGame
 
         public override void Draw()
         {
-            int frame = this._sprite.frame;
+            int frame = _sprite.frame;
             sbyte offDir = this.offDir;
-            if (this._team == null && this.duck != null)
-                this._team = this.duck.team;
-            Vec2 hatOffset = this._hatOffset;
-            if (this._team != null)
+            if (_team == null && duck != null)
+                _team = duck.team;
+            Vec2 hatOffset = _hatOffset;
+            if (_team != null)
             {
-                if (this._team.noCrouchOffset && this.duck != null && this.duck.crouch)
-                    ++this._hatOffset.y;
-                if (this._team.metadata != null)
+                if (_team.noCrouchOffset && duck != null && duck.crouch)
+                    ++_hatOffset.y;
+                if (_team.metadata != null)
                 {
-                    if (this._team.metadata.HatNoFlip.value && this.offDir < 0)
-                        this._hatOffset.x -= 4f;
-                    if (this.duck != null && this.duck.sliding)
-                        ++this._hatOffset.y;
+                    if (_team.metadata.HatNoFlip.value && this.offDir < 0)
+                        _hatOffset.x -= 4f;
+                    if (duck != null && duck.sliding)
+                        ++_hatOffset.y;
                     if (_quackWait > 0.0)
-                        this._sprite.frame = 0;
+                        _sprite.frame = 0;
                     else if (_quackHold > 0.0)
-                        this._sprite.frame = 1;
+                        _sprite.frame = 1;
                 }
             }
-            this._wave.Update();
-            if (this._isKatanaHat && !(Level.current is RockScoreboard))
+            _wave.Update();
+            if (_isKatanaHat && !(Level.current is RockScoreboard))
             {
                 DuckGame.Graphics.material = _katanaMaterial;
                 base.Draw();
                 DuckGame.Graphics.material = null;
             }
-            else if (this._team != null && this._team.metadata != null)
+            else if (_team != null && _team.metadata != null)
             {
-                this.PositionOnOwner();
-                if (this.graphic != null)
+                PositionOnOwner();
+                if (graphic != null)
                 {
-                    if (!this._team.metadata.HatNoFlip.value)
-                        this.graphic.flipH = this.offDir <= 0;
-                    this._graphic.position = this.position;
-                    this._graphic.alpha = this.alpha;
-                    this._graphic.angle = this.angle;
-                    this._graphic.depth = this.depth;
-                    this._graphic.scale = this.scale;
-                    this._graphic.center = this.center;
-                    this._graphic.Draw();
+                    if (!_team.metadata.HatNoFlip.value)
+                        graphic.flipH = this.offDir <= 0;
+                    _graphic.position = position;
+                    _graphic.alpha = alpha;
+                    _graphic.angle = angle;
+                    _graphic.depth = depth;
+                    _graphic.scale = scale;
+                    _graphic.center = center;
+                    _graphic.Draw();
                 }
             }
             else
                 base.Draw();
-            this._hatOffset = hatOffset;
-            if (this.duck != null)
+            _hatOffset = hatOffset;
+            if (duck != null)
             {
-                if (this._sprite.texture.textureName == "hats/sensei")
+                if (_sprite.texture.textureName == "hats/sensei")
                 {
-                    if (this._specialSprite == null)
+                    if (_specialSprite == null)
                     {
-                        this._specialSprite = new Sprite("hats/senpaiStar");
-                        this._specialSprite.CenterOrigin();
+                        _specialSprite = new Sprite("hats/senpaiStar");
+                        _specialSprite.CenterOrigin();
                     }
-                    this._fade = Lerp.Float(this._fade, this.frame == 1 ? 1f : 0f, 0.1f);
+                    _fade = Lerp.Float(_fade, this.frame == 1 ? 1f : 0f, 0.1f);
                     if (_fade > 0.00999999977648258)
                     {
-                        this._specialSprite.alpha = (float)(this.alpha * 0.699999988079071 * (0.5 + this._wave.normalized * 0.5)) * this._fade;
-                        this._specialSprite.scale = this.scale;
-                        this._specialSprite.depth = this.depth - 10;
-                        this._specialSprite.angle += 0.02f;
-                        float num = (float)(0.800000011920929 + this._wave.normalized * 0.200000002980232);
-                        this._specialSprite.scale = new Vec2(num, num);
-                        Vec2 vec2 = this.Offset(new Vec2(2f, 4f));
-                        DuckGame.Graphics.Draw(this._specialSprite, vec2.x, vec2.y);
+                        _specialSprite.alpha = (float)(alpha * 0.699999988079071 * (0.5 + _wave.normalized * 0.5)) * _fade;
+                        _specialSprite.scale = scale;
+                        _specialSprite.depth = depth - 10;
+                        _specialSprite.angle += 0.02f;
+                        float num = (float)(0.800000011920929 + _wave.normalized * 0.200000002980232);
+                        _specialSprite.scale = new Vec2(num, num);
+                        Vec2 vec2 = Offset(new Vec2(2f, 4f));
+                        DuckGame.Graphics.Draw(_specialSprite, vec2.x, vec2.y);
                     }
                 }
-                else if (this._sprite.frame == 1 && this._sprite.texture.textureName == "hats/master")
+                else if (_sprite.frame == 1 && _sprite.texture.textureName == "hats/master")
                 {
-                    if (this._specialSprite == null)
+                    if (_specialSprite == null)
                     {
-                        this._specialSprite = new Sprite("hats/master_glow");
-                        this._specialSprite.CenterOrigin();
+                        _specialSprite = new Sprite("hats/master_glow");
+                        _specialSprite.CenterOrigin();
                     }
-                    this._specialSprite.alpha = Math.Min(this.glow, 1f);
-                    this._specialSprite.scale = this.scale;
-                    this._specialSprite.depth = this.depth + 10;
-                    this._specialSprite.angle = this.angle;
+                    _specialSprite.alpha = Math.Min(glow, 1f);
+                    _specialSprite.scale = scale;
+                    _specialSprite.depth = depth + 10;
+                    _specialSprite.angle = angle;
                     if (this.offDir < 0)
                     {
-                        Vec2 vec2_1 = this.Offset(new Vec2(1f, 2f));
-                        DuckGame.Graphics.Draw(this._specialSprite, vec2_1.x, vec2_1.y);
-                        Vec2 vec2_2 = this.Offset(new Vec2(5f, 2f));
-                        DuckGame.Graphics.Draw(this._specialSprite, vec2_2.x, vec2_2.y);
+                        Vec2 vec2_1 = Offset(new Vec2(1f, 2f));
+                        DuckGame.Graphics.Draw(_specialSprite, vec2_1.x, vec2_1.y);
+                        Vec2 vec2_2 = Offset(new Vec2(5f, 2f));
+                        DuckGame.Graphics.Draw(_specialSprite, vec2_2.x, vec2_2.y);
                     }
                     else
                     {
-                        Vec2 vec2_3 = this.Offset(new Vec2(0f, 2f));
-                        DuckGame.Graphics.Draw(this._specialSprite, vec2_3.x, vec2_3.y);
-                        Vec2 vec2_4 = this.Offset(new Vec2(4f, 2f));
-                        DuckGame.Graphics.Draw(this._specialSprite, vec2_4.x, vec2_4.y);
+                        Vec2 vec2_3 = Offset(new Vec2(0f, 2f));
+                        DuckGame.Graphics.Draw(_specialSprite, vec2_3.x, vec2_3.y);
+                        Vec2 vec2_4 = Offset(new Vec2(4f, 2f));
+                        DuckGame.Graphics.Draw(_specialSprite, vec2_4.x, vec2_4.y);
                     }
                     if (glow > 0.0)
-                        this.glow -= 0.02f;
+                        glow -= 0.02f;
                 }
             }
-            if (this._addedParticles != null)
+            if (_addedParticles != null)
             {
-                foreach (Thing addedParticle in this._addedParticles)
+                foreach (Thing addedParticle in _addedParticles)
                     addedParticle.DoDraw();
-                this._addedParticles.Clear();
+                _addedParticles.Clear();
             }
-            this._sprite.frame = frame;
+            _sprite.frame = frame;
             this.offDir = offDir;
         }
 
@@ -584,96 +584,96 @@ namespace DuckGame
             public CustomParticle(Vec2 pPosition, Thing pOwner, Team.CustomHatMetadata pMetadata)
               : base(pPosition.x, pPosition.y)
             {
-                this._metadata = pMetadata;
-                this._owner = pOwner;
-                this._gravMult = 0f;
-                this.graphic = new Sprite((Tex2D)this._metadata.team.customParticles[Rando.Int(this._metadata.team.customParticles.Count - 1)]);
-                this.graphic.CenterOrigin();
-                this.offDir = pOwner.offDir;
-                if (!this._metadata.HatNoFlip.value)
-                    this.graphic.flipH = this.offDir < 0;
-                this.center = new Vec2(this.graphic.width / 2, this.graphic.height / 2);
-                this._lifespan = this._metadata.ParticleLifespan.value;
+                _metadata = pMetadata;
+                _owner = pOwner;
+                _gravMult = 0f;
+                graphic = new Sprite((Tex2D)_metadata.team.customParticles[Rando.Int(_metadata.team.customParticles.Count - 1)]);
+                graphic.CenterOrigin();
+                offDir = pOwner.offDir;
+                if (!_metadata.HatNoFlip.value)
+                    graphic.flipH = offDir < 0;
+                center = new Vec2(graphic.width / 2, graphic.height / 2);
+                _lifespan = _metadata.ParticleLifespan.value;
                 //this._prevOwnerPosition = this._owner.position;
-                this._particleAlpha = this._metadata.ParticleAlpha.value;
-                this._particleScale = this._metadata.ParticleScale.value;
-                this._particleGravity = new Vec2(this._owner.OffsetLocal(this._metadata.ParticleGravity.value).x, this._metadata.ParticleGravity.value.y);
-                this._particleFriction = this._metadata.ParticleFriction.value;
-                this._particleRotation = this._metadata.ParticleRotation.value;
-                this.depth = this._metadata.ParticleBackground.value ? pOwner.depth - 8 : pOwner.depth + 8;
-                this.velocity = this._owner.OffsetLocal(this._metadata.ParticleVelocity.value);
-                this._life = 1f;
-                if (!this._metadata.ParticleAnchor.value)
+                _particleAlpha = _metadata.ParticleAlpha.value;
+                _particleScale = _metadata.ParticleScale.value;
+                _particleGravity = new Vec2(_owner.OffsetLocal(_metadata.ParticleGravity.value).x, _metadata.ParticleGravity.value.y);
+                _particleFriction = _metadata.ParticleFriction.value;
+                _particleRotation = _metadata.ParticleRotation.value;
+                depth = _metadata.ParticleBackground.value ? pOwner.depth - 8 : pOwner.depth + 8;
+                velocity = _owner.OffsetLocal(_metadata.ParticleVelocity.value);
+                _life = 1f;
+                if (!_metadata.ParticleAnchor.value)
                 {
-                    sbyte offDir = this._owner.offDir;
-                    if (this._metadata.HatNoFlip.value)
-                        this._owner.offDir = 1;
-                    this.position = this._owner.Offset(this.position);
-                    this._owner.offDir = offDir;
+                    sbyte offDir = _owner.offDir;
+                    if (_metadata.HatNoFlip.value)
+                        _owner.offDir = 1;
+                    position = _owner.Offset(position);
+                    _owner.offDir = offDir;
                 }
-                if (this._metadata.ParticleAnimationRandomFrame.value)
-                    this._currentAnimationFrame = Rando.Int(this._metadata.team.customParticles.Count - 1);
-                this.UpdateAppearance();
+                if (_metadata.ParticleAnimationRandomFrame.value)
+                    _currentAnimationFrame = Rando.Int(_metadata.team.customParticles.Count - 1);
+                UpdateAppearance();
             }
 
             private void UpdateAppearance()
             {
-                this.xscale = this.yscale = Lerp.FloatSmooth(this._particleScale.x, this._particleScale.y, 1f - this._life);
-                this.xscale = Maths.Clamp(this.xscale, 0f, 1f);
-                this.yscale = Maths.Clamp(this.yscale, 0f, 1f);
-                this.alpha = Lerp.FloatSmooth(this._particleAlpha.x, this._particleAlpha.y, 1f - this._life);
-                this.angleDegrees = Lerp.FloatSmooth(this._particleRotation.x, this._particleRotation.y, 1f - this._life) * 10f;
+                xscale = yscale = Lerp.FloatSmooth(_particleScale.x, _particleScale.y, 1f - _life);
+                xscale = Maths.Clamp(xscale, 0f, 1f);
+                yscale = Maths.Clamp(yscale, 0f, 1f);
+                alpha = Lerp.FloatSmooth(_particleAlpha.x, _particleAlpha.y, 1f - _life);
+                angleDegrees = Lerp.FloatSmooth(_particleRotation.x, _particleRotation.y, 1f - _life) * 10f;
             }
 
             public override void Update()
             {
-                this.velocity += this._particleGravity;
-                this.velocity *= this._particleFriction;
-                this.hSpeed = Maths.Clamp(this.hSpeed, -4f, 4f);
-                this.vSpeed = Maths.Clamp(this.vSpeed, -4f, 4f);
-                this._life -= (float)(60.0 / (60.0 * _lifespan)) * Maths.IncFrameTimer();
-                this.UpdateAppearance();
+                velocity += _particleGravity;
+                velocity *= _particleFriction;
+                hSpeed = Maths.Clamp(hSpeed, -4f, 4f);
+                vSpeed = Maths.Clamp(vSpeed, -4f, 4f);
+                _life -= (float)(60.0 / (60.0 * _lifespan)) * Maths.IncFrameTimer();
+                UpdateAppearance();
                 if (_life <= 0.0)
                     Level.Remove(this);
-                if (this._metadata.ParticleAnchor.value)
+                if (_metadata.ParticleAnchor.value)
                 {
-                    Vec2 position1 = this.position;
-                    sbyte offDir = this._owner.offDir;
-                    if (this._metadata.HatNoFlip.value)
-                        this._owner.offDir = 1;
-                    this.position = this._owner.Offset(this.position);
-                    this._owner.offDir = offDir;
-                    Vec2 position2 = this.position;
+                    Vec2 position1 = position;
+                    sbyte offDir = _owner.offDir;
+                    if (_metadata.HatNoFlip.value)
+                        _owner.offDir = 1;
+                    position = _owner.Offset(position);
+                    _owner.offDir = offDir;
+                    Vec2 position2 = position;
                     base.Update();
-                    this.position = position1 + (this.position - position2);
+                    position = position1 + (position - position2);
                 }
                 else
                     base.Update();
-                if (this.animationFrames == null)
+                if (animationFrames == null)
                     return;
-                this.graphic.texture = (Tex2D)this.animationFrames[(int)this._currentAnimationFrame % this.animationFrames.Count];
-                this._currentAnimationFrame += this.animationSpeed;
-                if (this.animationLoop || _currentAnimationFrame < this.animationFrames.Count)
+                graphic.texture = (Tex2D)animationFrames[(int)_currentAnimationFrame % animationFrames.Count];
+                _currentAnimationFrame += animationSpeed;
+                if (animationLoop || _currentAnimationFrame < animationFrames.Count)
                     return;
-                this._currentAnimationFrame = this.animationFrames.Count - 1;
+                _currentAnimationFrame = animationFrames.Count - 1;
             }
 
             public override void Draw()
             {
-                if (this._metadata.ParticleAnchor.value)
+                if (_metadata.ParticleAnchor.value)
                 {
-                    Vec2 position1 = this.position;
-                    sbyte offDir = this._owner.offDir;
-                    if (this._metadata.HatNoFlip.value)
-                        this._owner.offDir = 1;
-                    this.position = this._owner.Offset(this.position);
-                    this._owner.offDir = offDir;
+                    Vec2 position1 = position;
+                    sbyte offDir = _owner.offDir;
+                    if (_metadata.HatNoFlip.value)
+                        _owner.offDir = 1;
+                    position = _owner.Offset(position);
+                    _owner.offDir = offDir;
                     float angle = this.angle;
-                    if (this._metadata.ParticleAnchorOrientation.value)
-                        this.angleDegrees += this._owner.angleDegrees;
-                    Vec2 position2 = this.position;
+                    if (_metadata.ParticleAnchorOrientation.value)
+                        angleDegrees += _owner.angleDegrees;
+                    Vec2 position2 = position;
                     base.Draw();
-                    this.position = position1 + (this.position - position2);
+                    position = position1 + (position - position2);
                     this.angle = angle;
                 }
                 else

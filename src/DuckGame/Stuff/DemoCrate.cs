@@ -20,25 +20,25 @@ namespace DuckGame
         public DemoCrate(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._maxHealth = 15f;
-            this._hitPoints = 15f;
-            this._canFlip = false;
-            this._editorName = "Demo Crate";
-            this.editorTooltip = "Makes a whole lotta mess.";
-            this.collideSounds.Add("rockHitGround2");
-            this._sprite = new SpriteMap("demoCrate", 20, 20);
-            this.graphic = _sprite;
-            this.center = new Vec2(10f, 10f);
-            this.collisionOffset = new Vec2(-10f, -10f);
-            this.collisionSize = new Vec2(20f, 19f);
-            this.depth = -0.5f;
-            this._editorName = "Demo Crate";
-            this.thickness = 2f;
-            this.weight = 10f;
-            this.buoyancy = 1f;
-            this._holdOffset = new Vec2(2f, 0f);
-            this.flammable = 0.3f;
-            this._placementCost += 15;
+            _maxHealth = 15f;
+            _hitPoints = 15f;
+            _canFlip = false;
+            _editorName = "Demo Crate";
+            editorTooltip = "Makes a whole lotta mess.";
+            collideSounds.Add("rockHitGround2");
+            _sprite = new SpriteMap("demoCrate", 20, 20);
+            graphic = _sprite;
+            center = new Vec2(10f, 10f);
+            collisionOffset = new Vec2(-10f, -10f);
+            collisionSize = new Vec2(20f, 19f);
+            depth = -0.5f;
+            _editorName = "Demo Crate";
+            thickness = 2f;
+            weight = 10f;
+            buoyancy = 1f;
+            _holdOffset = new Vec2(2f, 0f);
+            flammable = 0.3f;
+            _placementCost += 15;
         }
 
         [NetworkAction]
@@ -87,46 +87,46 @@ namespace DuckGame
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (!this.isServerForObject)
+            if (!isServerForObject)
                 return false;
-            if (this.removeFromLevel)
+            if (removeFromLevel)
                 return true;
-            this._hitPoints = 0f;
+            _hitPoints = 0f;
             Level.Remove(this);
             Vec2 vec2 = Vec2.Zero;
             if (type is DTShot)
                 vec2 = (type as DTShot).bullet.travelDirNormalized;
-            this.SyncNetworkAction<Vec2, float>(new Action<Vec2, float>(this.BlowUp), this.position, vec2.x);
+            SyncNetworkAction<Vec2, float>(new Action<Vec2, float>(BlowUp), position, vec2.x);
             List<Bullet> varBullets = new List<Bullet>();
             for (int index = 0; index < 20; ++index)
             {
                 float num = (float)(index * 18.0 - 5.0) + Rando.Float(10f);
                 ATShrapnel type1 = new ATShrapnel
                 {
-                    range = this.baseExplosionRange - 20f + Rando.Float(18f)
+                    range = baseExplosionRange - 20f + Rando.Float(18f)
                 };
-                Bullet bullet = new Bullet(this.x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type1, num)
+                Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type1, num)
                 {
                     firedFrom = this
                 };
                 varBullets.Add(bullet);
                 Level.Add(bullet);
             }
-            this.DoBlockDestruction();
+            DoBlockDestruction();
             if (Network.isActive)
                 Send.Message(new NMExplodingProp(varBullets), NetMessagePriority.ReliableOrdered);
             return true;
         }
 
-        public virtual void DoBlockDestruction() => ATMissile.DestroyRadius(this.position, this.baseExplosionRange, this);
+        public virtual void DoBlockDestruction() => ATMissile.DestroyRadius(position, baseExplosionRange, this);
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (bullet.isLocal && this.owner == null)
+            if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
             if (_hitPoints <= 0f)
                 return base.Hit(bullet, hitPos);
-            this.Destroy(new DTShot(bullet));
+            Destroy(new DTShot(bullet));
             return base.Hit(bullet, hitPos);
         }
 
@@ -134,17 +134,17 @@ namespace DuckGame
         {
             base.Update();
             if (damageMultiplier > 1f)
-                this.damageMultiplier -= 0.2f;
+                damageMultiplier -= 0.2f;
             else
-                this.damageMultiplier = 1f;
-            if (_hitPoints <= 0f && !this._destroyed)
-                this.Destroy(new DTImpact(this));
-            if (!this._onFire || burnt >= 0.9f)
+                damageMultiplier = 1f;
+            if (_hitPoints <= 0f && !_destroyed)
+                Destroy(new DTImpact(this));
+            if (!_onFire || burnt >= 0.9f)
                 return;
-            float num = 1f - this.burnt;
+            float num = 1f - burnt;
             if (_hitPoints > num * _maxHealth)
-                this._hitPoints = num * this._maxHealth;
-            this._sprite.color = new Color(num, num, num);
+                _hitPoints = num * _maxHealth;
+            _sprite.color = new Color(num, num, num);
         }
     }
 }

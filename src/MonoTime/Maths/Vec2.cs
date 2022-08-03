@@ -23,9 +23,9 @@ namespace DuckGame
         public float x;
         public float y;
 
-        public float length => this.Length();
+        public float length => Length();
 
-        public float lengthSq => this.LengthSquared();
+        public float lengthSq => LengthSquared();
 
         public static Vec2 Zero => Vec2.zeroVector;
 
@@ -51,14 +51,14 @@ namespace DuckGame
 
         public Vec2(float value)
         {
-            this.x = value;
-            this.y = value;
+            x = value;
+            y = value;
         }
 
         public Vec2(Vec2 vec)
         {
-            this.x = vec.x;
-            this.y = vec.y;
+            x = vec.x;
+            y = vec.y;
         }
 
         public static Vec2 Add(Vec2 value1, Vec2 value2)
@@ -180,7 +180,7 @@ namespace DuckGame
 
         public static void Dot(ref Vec2 value1, ref Vec2 value2, out float result) => result = (float)(value1.x * value2.x + value1.y * value2.y);
 
-        public override bool Equals(object obj) => obj is Vec2 other && this.Equals(other);
+        public override bool Equals(object obj) => obj is Vec2 other && Equals(other);
 
         public bool Equals(Vec2 other) => x == other.x && y == other.y;
 
@@ -200,7 +200,7 @@ namespace DuckGame
             result.y = vector.y - normal.y * num;
         }
 
-        public override int GetHashCode() => this.x.GetHashCode() + this.y.GetHashCode();
+        public override int GetHashCode() => x.GetHashCode() + y.GetHashCode();
 
         public static Vec2 Hermite(
           Vec2 value1,
@@ -226,9 +226,9 @@ namespace DuckGame
             result.y = MathHelper.Hermite(value1.y, tangent1.y, value2.y, tangent2.y, amount);
         }
 
-        public float Length() => (float)Math.Sqrt(x * this.x + y * this.y);
+        public float Length() => (float)Math.Sqrt(x * x + y * y);
 
-        public float LengthSquared() => (float)(x * this.x + y * this.y);
+        public float LengthSquared() => (float)(x * x + y * y);
 
         public static Vec2 Lerp(Vec2 value1, Vec2 value2, float amount) => DuckGame.Lerp.Vec2Smooth(value1, value2, amount);
 
@@ -291,23 +291,23 @@ namespace DuckGame
 
         public void Normalize()
         {
-            float num1 = (float)Math.Sqrt(x * this.x + y * this.y);
+            float num1 = (float)Math.Sqrt(x * x + y * y);
             if (num1 == 0.0)
                 return;
             float num2 = 1f / num1;
-            this.x *= num2;
-            this.y *= num2;
+            x *= num2;
+            y *= num2;
         }
 
         public Vec2 normalized
         {
             get
             {
-                float num1 = (float)Math.Sqrt(x * this.x + y * this.y);
+                float num1 = (float)Math.Sqrt(x * x + y * y);
                 if (num1 == 0.0)
                     return Vec2.Zero;
                 float num2 = 1f / num1;
-                return new Vec2(this.x * num2, this.y * num2);
+                return new Vec2(x * num2, y * num2);
             }
         }
 
@@ -409,7 +409,7 @@ namespace DuckGame
         public override string ToString()
         {
             CultureInfo currentCulture = CultureInfo.CurrentCulture;
-            return string.Format(currentCulture, "{{x:{0} y:{1}}}", this.x.ToString(currentCulture), this.y.ToString(currentCulture));
+            return string.Format(currentCulture, "{{x:{0} y:{1}}}", x.ToString(currentCulture), y.ToString(currentCulture));
         }
 
         public static Vec2 operator -(Vec2 value)
@@ -479,8 +479,8 @@ namespace DuckGame
             float num2 = (float)Math.Sin(radians);
             Vec2 vec2 = new Vec2
             {
-                x = this.x - pivot.x,
-                y = this.y - pivot.y
+                x = x - pivot.x,
+                y = y - pivot.y
             };
             return new Vec2()
             {

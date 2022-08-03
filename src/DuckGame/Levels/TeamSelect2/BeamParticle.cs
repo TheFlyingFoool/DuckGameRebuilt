@@ -20,32 +20,32 @@ namespace DuckGame
         public BeamParticle(float xpos, float ypos, float spd, bool inverse, Color c)
           : base(xpos, ypos)
         {
-            this.depth = (Depth)0.9f;
-            this.vSpeed = Rando.Float(-0.5f, -1.5f);
-            this.y += Rando.Float(10f);
-            this._inverse = inverse;
-            this._size = 0.5f + Rando.Float(0.8f);
-            this._color = c;
+            depth = (Depth)0.9f;
+            vSpeed = Rando.Float(-0.5f, -1.5f);
+            y += Rando.Float(10f);
+            _inverse = inverse;
+            _size = 0.5f + Rando.Float(0.8f);
+            _color = c;
         }
 
         public override void Update()
         {
-            this._wave += 0.1f;
-            this._sinVal = (float)Math.Sin(_wave);
-            this.y += this.vSpeed;
-            if (_sinVal < -0.8f && this.depth > 0f)
-                this.depth = -0.8f;
-            else if (_sinVal > 0.8f && this.depth < 0f)
-                this.depth = (Depth)0.8f;
-            if (this.y < -20f)
+            _wave += 0.1f;
+            _sinVal = (float)Math.Sin(_wave);
+            y += vSpeed;
+            if (_sinVal < -0.8f && depth > 0f)
+                depth = -0.8f;
+            else if (_sinVal > 0.8f && depth < 0f)
+                depth = (Depth)0.8f;
+            if (y < -20f)
                 Level.Remove(this);
             base.Update();
         }
 
         public override void Draw()
         {
-            Vec2 vec2 = this.position + new Vec2((float)(16f * _sinVal * (this._inverse ? -1f : 1f)), 0f);
-            Graphics.DrawRect(vec2 - new Vec2(this._size, this._size), vec2 + new Vec2(this._size, this._size), this._color * 0.4f, this.depth);
+            Vec2 vec2 = position + new Vec2((float)(16f * _sinVal * (_inverse ? -1f : 1f)), 0f);
+            Graphics.DrawRect(vec2 - new Vec2(_size, _size), vec2 + new Vec2(_size, _size), _color * 0.4f, depth);
             base.Draw();
         }
     }

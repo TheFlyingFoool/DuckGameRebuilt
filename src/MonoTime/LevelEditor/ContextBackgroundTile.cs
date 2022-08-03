@@ -22,187 +22,187 @@ namespace DuckGame
         private bool justOpened = true;
         public bool floatMode;
 
-        public Thing thing => this._thing;
+        public Thing thing => _thing;
 
         public ContextBackgroundTile(Thing thing, IContextListener owner, bool placement = true)
           : base(owner)
         {
-            this._placement = placement;
-            this._thing = thing;
-            this._image = thing.GetEditorImage();
-            this.itemSize.x = 180f;
-            this.itemSize.y = 16f;
-            this._text = thing.editorName;
-            this.itemSize.x = this._text.Length * 8 + 16;
-            this._canExpand = true;
-            this.depth = (Depth)0.8f;
-            if (this._thing is CustomBackground)
-                this._file = new ContextFile("LOAD FILE...", this, new FieldBinding(_thing, "customBackground0" + ((thing as CustomBackground).customIndex + 1).ToString()), ContextFileType.Background);
+            _placement = placement;
+            _thing = thing;
+            _image = thing.GetEditorImage();
+            itemSize.x = 180f;
+            itemSize.y = 16f;
+            _text = thing.editorName;
+            itemSize.x = _text.Length * 8 + 16;
+            _canExpand = true;
+            depth = (Depth)0.8f;
+            if (_thing is CustomBackground)
+                _file = new ContextFile("LOAD FILE...", this, new FieldBinding(_thing, "customBackground0" + ((thing as CustomBackground).customIndex + 1).ToString()), ContextFileType.Background);
             IReadOnlyPropertyBag bag = ContentProperties.GetBag(thing.GetType());
             //if (!Main.isDemo || bag.GetOrDefault("isInDemo", false))
             //    return;
             //this.greyOut = true;
         }
 
-        public override bool HasOpen() => this.opened;
+        public override bool HasOpen() => opened;
 
         public override void Selected()
         {
-            if (this.greyOut)
+            if (greyOut)
                 return;
             SFX.Play("highClick", 0.3f, 0.2f);
-            if (this._owner == null)
+            if (_owner == null)
                 return;
-            this._owner.Selected(this);
+            _owner.Selected(this);
         }
 
         public override void Closed() => base.Closed();
 
         public override void Draw()
         {
-            if (!this._root)
+            if (!_root)
             {
                 float num = 1f;
-                if (this.greyOut)
+                if (greyOut)
                     num = 0.3f;
-                if (this._hover && !this.greyOut)
-                    Graphics.DrawRect(this.position, this.position + this.itemSize, new Color(70, 70, 70), (Depth)0.82f);
-                Graphics.DrawFancyString(this._text, this.position + new Vec2(2f, 4f), Color.White * num, (Depth)0.85f);
-                this._contextArrow.color = Color.White * num;
-                Graphics.Draw(this._contextArrow, (this.x + itemSize.x - 11f), this.y + 3f, (Depth)0.85f);
+                if (_hover && !greyOut)
+                    Graphics.DrawRect(position, position + itemSize, new Color(70, 70, 70), (Depth)0.82f);
+                Graphics.DrawFancyString(_text, position + new Vec2(2f, 4f), Color.White * num, (Depth)0.85f);
+                _contextArrow.color = Color.White * num;
+                Graphics.Draw(_contextArrow, (x + itemSize.x - 11f), y + 3f, (Depth)0.85f);
             }
-            if (this.opened)
+            if (opened)
             {
-                SpriteMap graphic = this._thing.graphic as SpriteMap;
+                SpriteMap graphic = _thing.graphic as SpriteMap;
                 int num1 = graphic.texture.width / graphic.w;
                 int num2 = graphic.texture.height / graphic.h;
-                if (this.justOpened)
+                if (justOpened)
                 {
-                    this.tooltip = this._text;
-                    int placementCost = Editor.CalculatePlacementCost(this._thing);
+                    tooltip = _text;
+                    int placementCost = Editor.CalculatePlacementCost(_thing);
                     if (placementCost > 0)
-                        this.tooltip = this.tooltip + ": (" + placementCost.ToString() + " @EDITORCURRENCY@)";
-                    this._hoverPos = new Vec2(this._selectedIndex % num1 * graphic.w, this._selectedIndex / num1 * graphic.h);
-                    if (Editor.inputMode == EditorInput.Mouse && this.positionCursor)
+                        tooltip = tooltip + ": (" + placementCost.ToString() + " @EDITORCURRENCY@)";
+                    _hoverPos = new Vec2(_selectedIndex % num1 * graphic.w, _selectedIndex / num1 * graphic.h);
+                    if (Editor.inputMode == EditorInput.Mouse && positionCursor)
                     {
-                        this._rememberedMousePosition = Mouse.position;
-                        Mouse.position = this._hoverPos + this.position + new Vec2(8f, 8f);
-                        this.positionCursor = false;
+                        _rememberedMousePosition = Mouse.position;
+                        Mouse.position = _hoverPos + position + new Vec2(8f, 8f);
+                        positionCursor = false;
                     }
                 }
-                this.menuSize = new Vec2(graphic.texture.width + 2, graphic.texture.height + 2);
-                float x = this.menuSize.x;
-                float y = this.menuSize.y;
+                menuSize = new Vec2(graphic.texture.width + 2, graphic.texture.height + 2);
+                float x = menuSize.x;
+                float y = menuSize.y;
                 Vec2 p1 = new Vec2(this.x, this.y);
-                if (Editor.inputMode != EditorInput.Mouse && !this._root)
+                if (Editor.inputMode != EditorInput.Mouse && !_root)
                     p1.y = 16f;
-                if (!this._root)
+                if (!_root)
                 {
-                    p1.x += this.itemSize.x + 4f;
+                    p1.x += itemSize.x + 4f;
                     p1.y -= 2f;
                 }
                 Vec2 vec2_1 = new Vec2(graphic.position);
-                this._thing.x = (float)(p1.x + 1.0 + graphic.w / 2.0);
-                this._thing.y = (float)(p1.y + 1.0 + graphic.h / 2.0);
-                this._thing.depth = (Depth)0.7f;
+                _thing.x = (float)(p1.x + 1.0 + graphic.w / 2.0);
+                _thing.y = (float)(p1.y + 1.0 + graphic.h / 2.0);
+                _thing.depth = (Depth)0.7f;
                 DuckGame.Graphics.DrawRect(p1, p1 + new Vec2(x, y), new Color(70, 70, 70), (Depth)0.5f);
                 DuckGame.Graphics.DrawRect(p1 + new Vec2(1f, 1f), p1 + new Vec2(x - 1f, y - 1f), new Color(30, 30, 30), (Depth)0.6f);
-                this._lastDrawPos = p1;
-                DuckGame.Graphics.Draw(graphic.texture, new Vec2(this._thing.x, this._thing.y), new Rectangle?(), Color.White, 0f, this._thing.center, this._thing.scale, SpriteEffects.None, (Depth)0.7f);
-                if (this._root && this._file != null)
+                _lastDrawPos = p1;
+                DuckGame.Graphics.Draw(graphic.texture, new Vec2(_thing.x, _thing.y), new Rectangle?(), Color.White, 0f, _thing.center, _thing.scale, SpriteEffects.None, (Depth)0.7f);
+                if (_root && _file != null)
                 {
                     Vec2 vec2_2 = new Vec2(p1 + new Vec2(x + 4f, 0f));
                     Vec2 vec2_3 = new Vec2(p1 + new Vec2(x + 97f, 12f));
-                    this._file.position = vec2_2;
-                    this._file.Update();
-                    this._file.Draw();
+                    _file.position = vec2_2;
+                    _file.Update();
+                    _file.Draw();
                 }
-                if (Editor.inputMode == EditorInput.Touch && (this._file == null || !this._file.hover))
+                if (Editor.inputMode == EditorInput.Touch && (_file == null || !_file.hover))
                 {
                     Vec2 vec2_4 = new Vec2(-1f, -1f);
                     if (TouchScreen.GetTap() != Touch.None)
                     {
-                        Vec2 vec2_5 = TouchScreen.GetTap().Transform(this.layer.camera);
-                        this._hoverPos = new Vec2(vec2_5.x - this._thing.x, vec2_5.y - this._thing.y);
+                        Vec2 vec2_5 = TouchScreen.GetTap().Transform(layer.camera);
+                        _hoverPos = new Vec2(vec2_5.x - _thing.x, vec2_5.y - _thing.y);
                     }
                 }
-                else if (Editor.inputMode == EditorInput.Gamepad && (this._file == null || !this._file.hover) && !Editor.clickedMenu)
+                else if (Editor.inputMode == EditorInput.Gamepad && (_file == null || !_file.hover) && !Editor.clickedMenu)
                 {
-                    this._hoverPos = new Vec2(this._selectedIndex % num1 * graphic.w, this._selectedIndex / num1 * graphic.h);
+                    _hoverPos = new Vec2(_selectedIndex % num1 * graphic.w, _selectedIndex / num1 * graphic.h);
                     if (Input.Pressed("MENULEFT"))
                     {
-                        if (this._selectedIndex == 0 && this._owner != null)
+                        if (_selectedIndex == 0 && _owner != null)
                         {
-                            this.Selected(null);
-                            this.opened = false;
+                            Selected(null);
+                            opened = false;
                         }
                         else
-                            --this._selectedIndex;
+                            --_selectedIndex;
                     }
                     if (Input.Pressed("MENURIGHT"))
                     {
-                        if (this._file != null && this._selectedIndex == num1 - 1)
-                            this._file.hover = true;
+                        if (_file != null && _selectedIndex == num1 - 1)
+                            _file.hover = true;
                         else
-                            ++this._selectedIndex;
+                            ++_selectedIndex;
                     }
                     if (Input.Pressed("MENUUP"))
-                        this._selectedIndex -= num1;
+                        _selectedIndex -= num1;
                     if (Input.Pressed("MENUDOWN"))
-                        this._selectedIndex += num1;
-                    if (this._selectedIndex < 0)
-                        this._selectedIndex = 0;
-                    if (this._selectedIndex > num1 * num2 - 1)
-                        this._selectedIndex = num1 * num2 - 1;
+                        _selectedIndex += num1;
+                    if (_selectedIndex < 0)
+                        _selectedIndex = 0;
+                    if (_selectedIndex > num1 * num2 - 1)
+                        _selectedIndex = num1 * num2 - 1;
                 }
                 else if (Editor.inputMode == EditorInput.Mouse)
-                    this._hoverPos = new Vec2(Mouse.x - this._thing.x, Mouse.y - this._thing.y);
-                if (this._file != null && this._file.hover && Input.Pressed("MENULEFT"))
+                    _hoverPos = new Vec2(Mouse.x - _thing.x, Mouse.y - _thing.y);
+                if (_file != null && _file.hover && Input.Pressed("MENULEFT"))
                 {
-                    this._file.hover = false;
-                    this._selectedIndex = num1 - 1;
+                    _file.hover = false;
+                    _selectedIndex = num1 - 1;
                 }
                 Editor current = Level.current as Editor;
-                this._hoverPos.x = (float)Math.Round(_hoverPos.x / graphic.w) * graphic.w;
-                this._hoverPos.y = (float)Math.Round(_hoverPos.y / graphic.h) * graphic.h;
-                if ((this._file == null || !this._file.hover) && _hoverPos.x >= 0f && _hoverPos.x < graphic.texture.width && _hoverPos.y >= 0f && _hoverPos.y < graphic.texture.height)
+                _hoverPos.x = (float)Math.Round(_hoverPos.x / graphic.w) * graphic.w;
+                _hoverPos.y = (float)Math.Round(_hoverPos.y / graphic.h) * graphic.h;
+                if ((_file == null || !_file.hover) && _hoverPos.x >= 0f && _hoverPos.x < graphic.texture.width && _hoverPos.y >= 0f && _hoverPos.y < graphic.texture.height)
                 {
-                    DuckGame.Graphics.DrawRect(this._hoverPos + p1, this._hoverPos + p1 + new Vec2(graphic.w + 2, graphic.h + 2), Color.Lime * 0.8f, (Depth)0.8f, false);
-                    if (Editor.inputMode == EditorInput.Mouse && Mouse.left == InputState.Pressed || Editor.inputMode == EditorInput.Gamepad && Input.Pressed("SELECT") && !this.justOpened || Editor.inputMode == EditorInput.Touch && TouchScreen.GetTap() != Touch.None)
+                    DuckGame.Graphics.DrawRect(_hoverPos + p1, _hoverPos + p1 + new Vec2(graphic.w + 2, graphic.h + 2), Color.Lime * 0.8f, (Depth)0.8f, false);
+                    if (Editor.inputMode == EditorInput.Mouse && Mouse.left == InputState.Pressed || Editor.inputMode == EditorInput.Gamepad && Input.Pressed("SELECT") && !justOpened || Editor.inputMode == EditorInput.Touch && TouchScreen.GetTap() != Touch.None)
                     {
-                        if (this._thing is BackgroundTile)
-                            (this._thing as BackgroundTile).frame = (int)(_hoverPos.x / graphic.w + _hoverPos.y / graphic.h * (graphic.texture.width / graphic.w));
+                        if (_thing is BackgroundTile)
+                            (_thing as BackgroundTile).frame = (int)(_hoverPos.x / graphic.w + _hoverPos.y / graphic.h * (graphic.texture.width / graphic.w));
                         else
                             graphic.frame = (int)(_hoverPos.x / graphic.w + _hoverPos.y / graphic.h * (graphic.texture.width / graphic.w));
-                        current.placementType = this._thing;
-                        current.placementType = this._thing;
-                        if (!this.floatMode || Editor.inputMode == EditorInput.Gamepad)
+                        current.placementType = _thing;
+                        current.placementType = _thing;
+                        if (!floatMode || Editor.inputMode == EditorInput.Gamepad)
                         {
-                            this.Disappear();
+                            Disappear();
                             current.CloseMenu();
                         }
                     }
                 }
-                if (!this.justOpened && Input.Pressed("MENU1") && this.owner == null)
+                if (!justOpened && Input.Pressed("MENU1") && owner == null)
                 {
-                    this.Disappear();
+                    Disappear();
                     current.CloseMenu();
                 }
-                this.justOpened = false;
+                justOpened = false;
             }
             else
             {
-                this.tooltip = "";
-                this.justOpened = true;
+                tooltip = "";
+                justOpened = true;
             }
         }
 
         public override void Disappear()
         {
-            if (this._rememberedMousePosition != Vec2.Zero)
+            if (_rememberedMousePosition != Vec2.Zero)
             {
-                Mouse.position = this._rememberedMousePosition;
-                this._rememberedMousePosition = Vec2.Zero;
+                Mouse.position = _rememberedMousePosition;
+                _rememberedMousePosition = Vec2.Zero;
             }
             base.Disappear();
         }

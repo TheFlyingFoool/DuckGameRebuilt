@@ -18,51 +18,51 @@ namespace DuckGame
 
         public override int frame
         {
-            get => this._frame;
+            get => _frame;
             set
             {
-                this._frame = value;
-                (this.graphic as SpriteMap).frame = this._frame;
+                _frame = value;
+                (graphic as SpriteMap).frame = _frame;
             }
         }
 
         public BackgroundTile(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.layer = Layer.Background;
-            this._canBeGrouped = true;
-            this._isStatic = true;
-            this._opaque = true;
+            layer = Layer.Background;
+            _canBeGrouped = true;
+            _isStatic = true;
+            _opaque = true;
             if (Level.flipH)
-                this.flipHorizontal = true;
-            this._placementCost = 1;
+                flipHorizontal = true;
+            _placementCost = 1;
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
-                this.cheap = false;
+                cheap = false;
             else
-                this.DoPositioning();
+                DoPositioning();
         }
 
         public virtual void DoPositioning()
         {
-            this.cheap = true;
-            this.graphic.position = this.position;
-            this.graphic.scale = this.scale;
-            this.graphic.center = this.center;
-            this.graphic.depth = this.depth;
-            this.graphic.alpha = this.alpha;
-            this.graphic.angle = this.angle;
-            (this.graphic as SpriteMap).UpdateFrame();
+            cheap = true;
+            graphic.position = position;
+            graphic.scale = scale;
+            graphic.center = center;
+            graphic.depth = depth;
+            graphic.alpha = alpha;
+            graphic.angle = angle;
+            (graphic as SpriteMap).UpdateFrame();
         }
 
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
             binaryClassChunk.AddProperty("frame", _frame);
-            if (this.flipHorizontal)
+            if (flipHorizontal)
                 binaryClassChunk.AddProperty("f", 1);
             return binaryClassChunk;
         }
@@ -70,10 +70,10 @@ namespace DuckGame
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this._frame = node.GetProperty<int>("frame");
-            (this.graphic as SpriteMap).frame = this._frame;
+            _frame = node.GetProperty<int>("frame");
+            (graphic as SpriteMap).frame = _frame;
             if (node.GetProperty<int>("f") == 1)
-                this.flipHorizontal = true;
+                flipHorizontal = true;
             return true;
         }
 
@@ -89,15 +89,15 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode = node.Element("frame");
             if (dxmlNode != null)
-                (this.graphic as SpriteMap).frame = Convert.ToInt32(dxmlNode.Value);
+                (graphic as SpriteMap).frame = Convert.ToInt32(dxmlNode.Value);
             return true;
         }
 
         public override void Draw()
         {
-            this.graphic.flipH = this.flipHorizontal;
-            if (this.cheap)
-                this.graphic.UltraCheapStaticDraw(this.flipHorizontal);
+            graphic.flipH = flipHorizontal;
+            if (cheap)
+                graphic.UltraCheapStaticDraw(flipHorizontal);
             else
                 base.Draw();
         }

@@ -20,52 +20,52 @@ namespace DuckGame
 
         public new int frame
         {
-            get => (this.graphic as SpriteMap).frame;
-            set => (this.graphic as SpriteMap).frame = value;
+            get => (graphic as SpriteMap).frame;
+            set => (graphic as SpriteMap).frame = value;
         }
 
         public override void EditorPropertyChanged(object property)
         {
-            (this.graphic as SpriteMap).frame = this.style.value;
-            if ((int)this.style == 3)
-                this.collisionSize = new Vec2(10f, 18f);
+            (graphic as SpriteMap).frame = style.value;
+            if ((int)style == 3)
+                collisionSize = new Vec2(10f, 18f);
             else
-                this.collisionSize = new Vec2(10f, 8f);
-            if (this.background.value)
-                this.depth = -0.1f;
+                collisionSize = new Vec2(10f, 8f);
+            if (background.value)
+                depth = -0.1f;
             else
-                this.depth = (Depth)0.1f;
+                depth = (Depth)0.1f;
         }
 
         public Icicles(float xpos, float ypos, int dir)
           : base(xpos, ypos)
         {
-            this.style = new EditorProperty<int>(0, this, max: 3f, increment: 1f);
-            this.background = new EditorProperty<bool>(false, this);
-            this.graphic = new SpriteMap("icicles", 16, 21);
-            this.hugWalls = WallHug.Ceiling;
-            this.center = new Vec2(8f, 5f);
-            this.collisionSize = new Vec2(10f, 8f);
-            this.collisionOffset = new Vec2(-5f, -3f);
-            this.thickness = 0.1f;
-            this.physicsMaterial = PhysicsMaterial.Glass;
-            this.layer = Layer.Blocks;
-            this.depth = (Depth)0.1f;
+            style = new EditorProperty<int>(0, this, max: 3f, increment: 1f);
+            background = new EditorProperty<bool>(false, this);
+            graphic = new SpriteMap("icicles", 16, 21);
+            hugWalls = WallHug.Ceiling;
+            center = new Vec2(8f, 5f);
+            collisionSize = new Vec2(10f, 8f);
+            collisionOffset = new Vec2(-5f, -3f);
+            thickness = 0.1f;
+            physicsMaterial = PhysicsMaterial.Glass;
+            layer = Layer.Blocks;
+            depth = (Depth)0.1f;
         }
 
         public override void Initialize()
         {
             if (!(Level.current is Editor))
             {
-                if (this.background.value)
+                if (background.value)
                 {
-                    this.depth = -0.8f;
-                    this.layer = Layer.Game;
+                    depth = -0.8f;
+                    layer = Layer.Game;
                 }
                 else
                 {
-                    this.depth = (Depth)0.1f;
-                    this.layer = Layer.Blocks;
+                    depth = (Depth)0.1f;
+                    layer = Layer.Blocks;
                 }
             }
             base.Initialize();
@@ -75,90 +75,90 @@ namespace DuckGame
         {
             if (Network.isActive)
             {
-                if ((this.graphic as SpriteMap).frame == 3 && this._deadlyIcicleInstance == null && Network.isServer)
+                if ((graphic as SpriteMap).frame == 3 && _deadlyIcicleInstance == null && Network.isServer)
                 {
-                    this._deadlyIcicleInstance = new DeadlyIcicle(this.x, this.y + 8f);
-                    this._deadlyIcicleInstance.active = false;
-                    this._deadlyIcicleInstance.visible = false;
-                    this._deadlyIcicleInstance.solid = false;
-                    Level.Add(this._deadlyIcicleInstance);
+                    _deadlyIcicleInstance = new DeadlyIcicle(x, y + 8f);
+                    _deadlyIcicleInstance.active = false;
+                    _deadlyIcicleInstance.visible = false;
+                    _deadlyIcicleInstance.solid = false;
+                    Level.Add(_deadlyIcicleInstance);
                 }
-                if ((this.graphic as SpriteMap).frame == 3 && this._deadlyIcicleInstance != null && this._deadlyIcicleInstance.visible)
-                    (this.graphic as SpriteMap).frame = 7;
-                else if ((this.graphic as SpriteMap).frame == 7 && (this._deadlyIcicleInstance == null || !this._deadlyIcicleInstance.visible))
-                    (this.graphic as SpriteMap).frame = 3;
+                if ((graphic as SpriteMap).frame == 3 && _deadlyIcicleInstance != null && _deadlyIcicleInstance.visible)
+                    (graphic as SpriteMap).frame = 7;
+                else if ((graphic as SpriteMap).frame == 7 && (_deadlyIcicleInstance == null || !_deadlyIcicleInstance.visible))
+                    (graphic as SpriteMap).frame = 3;
             }
-            if ((this.graphic as SpriteMap).frame == 3)
-                this.thickness = 4f;
+            if ((graphic as SpriteMap).frame == 3)
+                thickness = 4f;
             else
-                this.thickness = 0.01f;
+                thickness = 0.01f;
             base.Update();
         }
 
         public override bool Hurt(float points)
         {
-            if (this.isServerForObject)
-                this.Break(this.isServerForObject);
+            if (isServerForObject)
+                Break(isServerForObject);
             return true;
         }
 
         public override void HeatUp(Vec2 location)
         {
-            if (this.isServerForObject)
-                this.Break(this.isServerForObject);
+            if (isServerForObject)
+                Break(isServerForObject);
             base.HeatUp(location);
         }
 
         private void Break(bool pLocal)
         {
-            if ((this.graphic as SpriteMap).frame >= 4)
+            if ((graphic as SpriteMap).frame >= 4)
                 return;
             for (int index = 0; index < 4; ++index)
             {
-                GlassParticle glassParticle = new GlassParticle(this.x + Rando.Int(-3, 3), this.y + Rando.Int(-3, 3), Vec2.Zero);
+                GlassParticle glassParticle = new GlassParticle(x + Rando.Int(-3, 3), y + Rando.Int(-3, 3), Vec2.Zero);
                 Level.Add(glassParticle);
                 glassParticle.hSpeed = Rando.Float(-1f, 1f);
                 glassParticle.vSpeed = Rando.Float(-1f, 1f);
                 Level.Add(glassParticle);
             }
             SFX.Play("glassHit", 0.6f);
-            if ((this.graphic as SpriteMap).frame == 3 & pLocal)
+            if ((graphic as SpriteMap).frame == 3 & pLocal)
             {
                 if (Network.isActive)
                 {
-                    if (this._deadlyIcicleInstance != null)
+                    if (_deadlyIcicleInstance != null)
                     {
-                        this._deadlyIcicleInstance.visible = true;
-                        this._deadlyIcicleInstance.active = true;
-                        this._deadlyIcicleInstance.solid = true;
+                        _deadlyIcicleInstance.visible = true;
+                        _deadlyIcicleInstance.active = true;
+                        _deadlyIcicleInstance.solid = true;
                         Thing.Fondle(this, DuckNetwork.localConnection);
-                        Thing.Fondle(this._deadlyIcicleInstance, DuckNetwork.localConnection);
+                        Thing.Fondle(_deadlyIcicleInstance, DuckNetwork.localConnection);
                     }
                 }
                 else
-                    Level.Add(new DeadlyIcicle(this.x, this.y + 8f));
+                    Level.Add(new DeadlyIcicle(x, y + 8f));
             }
-          (this.graphic as SpriteMap).frame += 4;
+          (graphic as SpriteMap).frame += 4;
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            this.Break(bullet.isLocal);
+            Break(bullet.isLocal);
             return base.Hit(bullet, hitPos);
         }
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (this.isServerForObject)
-                this.Break(true);
+            if (isServerForObject)
+                Break(true);
             return false;
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (with.impactPowerV > 2.0 && (this.graphic as SpriteMap).frame != 3)
+            if (with.impactPowerV > 2.0 && (graphic as SpriteMap).frame != 3)
             {
-                this.Break(with.isLocal);
+                Break(with.isLocal);
             }
             else
             {
@@ -169,7 +169,7 @@ namespace DuckGame
                     case CampingBall _:
                     case Sword _:
                     case EnergyScimitar _:
-                        this.Break(with.isLocal);
+                        Break(with.isLocal);
                         break;
                 }
             }
@@ -178,7 +178,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.graphic.flipH = this.flipHorizontal;
+            graphic.flipH = flipHorizontal;
             base.Draw();
         }
     }

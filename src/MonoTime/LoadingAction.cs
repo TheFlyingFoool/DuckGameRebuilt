@@ -26,40 +26,40 @@ namespace DuckGame
 
         public LoadingAction(Action pAction, Func<bool> pWaitAction = null)
         {
-            this.action = pAction;
-            this.waitAction = pWaitAction;
+            action = pAction;
+            waitAction = pWaitAction;
         }
 
         public bool Invoke()
         {
-            MonoMain.currentActionQueue = this.actions;
-            if (!this.actionInvoked)
+            MonoMain.currentActionQueue = actions;
+            if (!actionInvoked)
             {
-                this.actionInvoked = true;
-                this.action();
+                actionInvoked = true;
+                action();
             }
-            if (this.actions.Count > 0)
+            if (actions.Count > 0)
             {
-                LoadingAction loadingAction = this.actions.Peek();
+                LoadingAction loadingAction = actions.Peek();
                 if (loadingAction.Invoke())
                 {
-                    this.actions.Dequeue();
+                    actions.Dequeue();
                     return false;
                 }
                 if (loadingAction.waiting)
                 {
-                    this.waiting = true;
+                    waiting = true;
                     return false;
                 }
             }
-            if (this.actions.Count > 0)
+            if (actions.Count > 0)
                 return false;
-            if (this.waitAction != null)
+            if (waitAction != null)
             {
-                this.waiting = true;
-                return this.waitAction();
+                waiting = true;
+                return waitAction();
             }
-            this.waiting = false;
+            waiting = false;
             return true;
         }
 

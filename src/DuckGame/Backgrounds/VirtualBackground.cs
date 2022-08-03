@@ -29,26 +29,26 @@ namespace DuckGame
 
         public void SetLayer(Layer l)
         {
-            this.layer = l;
-            this._parallax.layer = l;
+            layer = l;
+            _parallax.layer = l;
         }
 
         public VirtualBackground(float xpos, float ypos, BackgroundUpdater realBackground, bool fore = false)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
+            graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 2
             };
-            this.center = new Vec2(8f, 8f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = (Depth)0.9f;
-            this.layer = Layer.Foreground;
-            this._visibleInGame = false;
-            this._editorName = "Virtual";
-            this._realBackground = realBackground;
-            this._foreground = fore;
+            center = new Vec2(8f, 8f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            depth = (Depth)0.9f;
+            layer = Layer.Foreground;
+            _visibleInGame = false;
+            _editorName = "Virtual";
+            _realBackground = realBackground;
+            _foreground = fore;
         }
 
         public static void InitializeBack()
@@ -92,71 +92,71 @@ namespace DuckGame
         {
             if (Level.current is Editor)
                 return;
-            this.fullyVirtual = true;
-            this.fullyNonVirtual = false;
-            this.virtualMode = true;
-            this.needsWireframe = true;
-            this.backgroundColor = new Color(0, 0, 0);
-            Level.current.backgroundColor = this.backgroundColor;
-            this._parallax = VirtualBackground._para;
-            Layer.Add(this._parallax.layer);
-            this._parallax.layer.Clear();
+            fullyVirtual = true;
+            fullyNonVirtual = false;
+            virtualMode = true;
+            needsWireframe = true;
+            backgroundColor = new Color(0, 0, 0);
+            Level.current.backgroundColor = backgroundColor;
+            _parallax = VirtualBackground._para;
+            Layer.Add(_parallax.layer);
+            _parallax.layer.Clear();
             Level.Add(_parallax);
-            this.visible = true;
-            this.parallax.y = 0f;
-            this.layer = this._parallax.layer;
-            this.layer.fade = 1f;
-            this._scanner = new Sprite("background/scanbeam");
-            this._skipMovement = true;
+            visible = true;
+            parallax.y = 0f;
+            layer = _parallax.layer;
+            layer.fade = 1f;
+            _scanner = new Sprite("background/scanbeam");
+            _skipMovement = true;
         }
 
         public override void Terminate()
         {
-            this.fullyVirtual = false;
-            this.fullyNonVirtual = true;
-            this.virtualMode = false;
-            this.needsWireframe = false;
+            fullyVirtual = false;
+            fullyNonVirtual = true;
+            virtualMode = false;
+            needsWireframe = false;
         }
 
         public override void Update()
         {
-            float num = this.stick;
-            if (this.scanStage < 2)
+            float num = stick;
+            if (scanStage < 2)
             {
-                Level.current.backgroundColor = Lerp.Color(Level.current.backgroundColor, this.backgroundColor, 0.04f);
+                Level.current.backgroundColor = Lerp.Color(Level.current.backgroundColor, backgroundColor, 0.04f);
                 num = 0f;
             }
-            else if (this._realBackground != null)
-                Level.current.backgroundColor = Lerp.Color(Level.current.backgroundColor, this._realBackground.backgroundColor, 0.04f);
+            else if (_realBackground != null)
+                Level.current.backgroundColor = Lerp.Color(Level.current.backgroundColor, _realBackground.backgroundColor, 0.04f);
             Rectangle rectangle1 = new Rectangle((int)((1.0 - num) * Resolution.current.x), 0f, Resolution.current.x - (int)((1.0 - num) * Resolution.current.x), Resolution.current.y);
-            if (this._realBackground != null)
+            if (_realBackground != null)
             {
                 if (rectangle1.width == 0.0)
                 {
-                    this._realBackground.SetVisible(false);
+                    _realBackground.SetVisible(false);
                 }
                 else
                 {
-                    this._realBackground.scissor = rectangle1;
-                    this._realBackground.SetVisible(true);
+                    _realBackground.scissor = rectangle1;
+                    _realBackground.SetVisible(true);
                 }
             }
             Rectangle rectangle2 = new Rectangle(0f, 0f, Resolution.current.x - rectangle1.width, Resolution.current.y);
             if (rectangle2.width == 0.0)
             {
-                this.SetVisible(false);
-                this.visible = false;
+                SetVisible(false);
+                visible = false;
             }
             else
             {
-                this.scissor = rectangle2;
-                this.SetVisible(true);
-                this.visible = true;
+                scissor = rectangle2;
+                SetVisible(true);
+                visible = true;
             }
-            if (this.virtualMode && this.done && this.scanStage == 3)
-                --this.scanStage;
-            else if (!this.virtualMode && !this.done && this.scanStage == -1)
-                ++this.scanStage;
+            if (virtualMode && done && scanStage == 3)
+                --scanStage;
+            else if (!virtualMode && !done && scanStage == -1)
+                ++scanStage;
             float amount1 = 0.04f;
             float amount2 = 0.06f;
             if (Level.current != null)
@@ -164,112 +164,112 @@ namespace DuckGame
                 amount1 *= Level.current.transitionSpeedMultiplier;
                 amount2 *= Level.current.transitionSpeedMultiplier;
             }
-            if (!this.done)
+            if (!done)
             {
-                if (this.scanStage == 0)
+                if (scanStage == 0)
                 {
-                    this.stick = Lerp.Float(this.stick, 1f, amount1);
+                    stick = Lerp.Float(stick, 1f, amount1);
                     if (stick > 0.949999988079071)
                     {
-                        this.stick = 1f;
-                        this.incStage = true;
+                        stick = 1f;
+                        incStage = true;
                     }
                 }
-                else if (this.scanStage == 1)
+                else if (scanStage == 1)
                 {
-                    this.stick = Lerp.Float(this.stick, 0f, amount1);
+                    stick = Lerp.Float(stick, 0f, amount1);
                     if (stick < 0.0500000007450581)
                     {
-                        this.stick = 0f;
-                        this.incStage = true;
+                        stick = 0f;
+                        incStage = true;
                     }
                 }
-                else if (this.scanStage == 2)
+                else if (scanStage == 2)
                 {
-                    this.stick = Lerp.Float(this.stick, 1f, amount1);
+                    stick = Lerp.Float(stick, 1f, amount1);
                     if (stick > 0.949999988079071)
                     {
-                        this.stick = 1f;
-                        this.incStage = true;
-                        this.done = true;
+                        stick = 1f;
+                        incStage = true;
+                        done = true;
                     }
                 }
             }
-            else if (this.scanStage == 2)
+            else if (scanStage == 2)
             {
-                this.stick = Lerp.Float(this.stick, 0f, amount2);
+                stick = Lerp.Float(stick, 0f, amount2);
                 if (stick < 0.0500000007450581)
                 {
-                    this.stick = 0f;
-                    this.decStage = true;
+                    stick = 0f;
+                    decStage = true;
                 }
             }
-            else if (this.scanStage == 1)
+            else if (scanStage == 1)
             {
-                this.stick = Lerp.Float(this.stick, 1f, amount2);
+                stick = Lerp.Float(stick, 1f, amount2);
                 if (stick > 0.949999988079071)
                 {
-                    this.stick = 1f;
-                    this.decStage = true;
+                    stick = 1f;
+                    decStage = true;
                 }
             }
-            else if (this.scanStage == 0)
+            else if (scanStage == 0)
             {
-                this.stick = Lerp.Float(this.stick, 0f, amount2);
+                stick = Lerp.Float(stick, 0f, amount2);
                 if (stick < 0.0500000007450581)
                 {
-                    this.stick = 0f;
-                    this.decStage = true;
-                    this.done = false;
+                    stick = 0f;
+                    decStage = true;
+                    done = false;
                 }
             }
-            if (this.scanStage < 2)
+            if (scanStage < 2)
             {
-                Layer.basicWireframeEffect.effect.Parameters["screenCross"].SetValue(this.stick);
-                Layer.basicWireframeTex = this.scanStage == 1;
+                Layer.basicWireframeEffect.effect.Parameters["screenCross"].SetValue(stick);
+                Layer.basicWireframeTex = scanStage == 1;
             }
-            if (this.incStage)
+            if (incStage)
             {
-                this.incStage = false;
-                ++this.scanStage;
+                incStage = false;
+                ++scanStage;
             }
-            if (this.decStage)
+            if (decStage)
             {
-                this.decStage = false;
-                --this.scanStage;
+                decStage = false;
+                --scanStage;
             }
-            this.fullyVirtual = false;
-            this.fullyNonVirtual = false;
-            if (this.scanStage == 3)
+            fullyVirtual = false;
+            fullyNonVirtual = false;
+            if (scanStage == 3)
             {
-                this.needsWireframe = false;
-                this.fullyNonVirtual = true;
+                needsWireframe = false;
+                fullyNonVirtual = true;
             }
             else
             {
-                this.needsWireframe = true;
-                if (this.scanStage == -1)
-                    this.fullyVirtual = true;
+                needsWireframe = true;
+                if (scanStage == -1)
+                    fullyVirtual = true;
             }
             base.Update();
         }
 
         public override void Draw()
         {
-            if (this._parallax == null)
+            if (_parallax == null)
                 return;
-            if (!this.visible)
+            if (!visible)
             {
-                this._parallax.visible = false;
+                _parallax.visible = false;
             }
             else
             {
-                this.position = this._parallax.position;
-                float num1 = this.stick * 300f;
+                position = _parallax.position;
+                float num1 = stick * 300f;
                 float x = (float)(360.0 - stick * 400.0);
-                Vec2 vec2_1 = new Vec2(this.x + num1, this.y + 72f);
-                Graphics.Draw(this._scanner, vec2_1.x, vec2_1.y);
-                float num2 = Math.Abs(this.stick - 0.5f);
+                Vec2 vec2_1 = new Vec2(this.x + num1, y + 72f);
+                Graphics.Draw(_scanner, vec2_1.x, vec2_1.y);
+                float num2 = Math.Abs(stick - 0.5f);
                 float num3 = 0.5f - num2;
                 Graphics.DrawLine(vec2_1 + new Vec2(18f, 20f), new Vec2(x, (float)(vec2_1.y - 100.0 + num2 * 250.0)), Color.Red * num3, 2f, (Depth)0.9f);
                 Graphics.DrawLine(vec2_1 + new Vec2(18f, 34f), new Vec2(x, (float)(vec2_1.y - 10.0 + 80.0 * num2)), Color.Red * num3, 2f, (Depth)0.9f);

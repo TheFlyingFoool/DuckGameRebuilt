@@ -14,18 +14,18 @@ namespace DuckGame
         public SequenceCrate(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.sequence = new SequenceItem(this)
+            sequence = new SequenceItem(this)
             {
                 type = SequenceItemType.Goody
             };
-            this._editorName = "Seq Crate";
+            _editorName = "Seq Crate";
         }
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (this.sequence != null && this.sequence.isValid)
+            if (sequence != null && sequence.isValid)
             {
-                this.sequence.Finished();
+                sequence.Finished();
                 if (ChallengeLevel.running)
                     ++ChallengeLevel.goodiesGot;
             }

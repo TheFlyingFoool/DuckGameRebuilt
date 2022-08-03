@@ -66,13 +66,13 @@ namespace DuckGame
 
         public SpriteMap GetHat(DuckPersona pPersona)
         {
-            if (this.metadata == null || !this.metadata.UseDuckColor.value)
+            if (metadata == null || !metadata.UseDuckColor.value)
                 return this.hat;
             SpriteMap hat;
-            if (!this._recolors.TryGetValue(pPersona, out hat))
+            if (!_recolors.TryGetValue(pPersona, out hat))
             {
                 hat = new SpriteMap(DuckGame.Graphics.RecolorNew(this.hat.texture, pPersona.color.ToColor(), pPersona.colorDark.ToColor()), 32, 32);
-                this._recolors[pPersona] = hat;
+                _recolors[pPersona] = hat;
             }
             return hat;
         }
@@ -81,26 +81,26 @@ namespace DuckGame
         {
             get
             {
-                if (this.customConnection == null)
+                if (customConnection == null)
                     return false;
-                Profile profile = this.customConnection.profile;
+                Profile profile = customConnection.profile;
                 if (profile != null && profile.muteHat)
                     return true;
                 bool filter = Options.Data.hatFilter == 2;
-                if (Options.Data.hatFilter == 1 && this.customConnection.data is User && (this.customConnection.data as User).relationship != FriendRelationship.Friend)
+                if (Options.Data.hatFilter == 1 && customConnection.data is User && (customConnection.data as User).relationship != FriendRelationship.Friend)
                     filter = true;
                 return filter;
             }
         }
 
-        public Team Clone() => new Team(this.name, (Texture2D)this._hat.texture)
+        public Team Clone() => new Team(name, (Texture2D)_hat.texture)
         {
-            _metadata = this._metadata,
-            _rockTexture = this._rockTexture,
-            _capeTexture = this._capeTexture,
-            _customData = this._customData,
-            _customParticles = this._customParticles,
-            customConnection = this.customConnection
+            _metadata = _metadata,
+            _rockTexture = _rockTexture,
+            _capeTexture = _capeTexture,
+            _customData = _customData,
+            _customParticles = _customParticles,
+            customConnection = customConnection
         };
 
         private static byte[] ReadByteArray(Stream s)
@@ -332,25 +332,25 @@ namespace DuckGame
             return this;
         }
 
-        public Texture2D capeTexture => this.filter ? null : this.GetFacadeTeam()._capeTexture;
+        public Texture2D capeTexture => filter ? null : GetFacadeTeam()._capeTexture;
 
-        public List<Texture2D> customParticles => this.filter ? new List<Texture2D>() : this.GetFacadeTeam()._customParticles;
+        public List<Texture2D> customParticles => filter ? new List<Texture2D>() : GetFacadeTeam()._customParticles;
 
-        public Texture2D rockTexture => this.filter ? null : this.GetFacadeTeam()._rockTexture;
+        public Texture2D rockTexture => filter ? null : GetFacadeTeam()._rockTexture;
 
-        public string name => this._name;
+        public string name => _name;
 
-        public string description => this._description;
+        public string description => _description;
 
-        public string GetNameForDisplay() => this.name.ToUpperInvariant();
+        public string GetNameForDisplay() => name.ToUpperInvariant();
 
         public string currentDisplayName
         {
             get
             {
                 string currentDisplayName = "";
-                if (this.activeProfiles != null && this.activeProfiles.Count > 0)
-                    currentDisplayName = this.activeProfiles.Count <= 1 ? (!Profiles.IsDefault(this.activeProfiles[0]) || Network.isActive ? this.activeProfiles[0].nameUI : this.GetNameForDisplay()) : this.GetNameForDisplay();
+                if (activeProfiles != null && activeProfiles.Count > 0)
+                    currentDisplayName = activeProfiles.Count <= 1 ? (!Profiles.IsDefault(activeProfiles[0]) || Network.isActive ? activeProfiles[0].nameUI : GetNameForDisplay()) : GetNameForDisplay();
                 return currentDisplayName;
             }
         }
@@ -359,59 +359,59 @@ namespace DuckGame
         {
             get
             {
-                if (!this.filter)
-                    return this.GetFacadeTeam()._hat;
-                if (this._default == null)
-                    this._default = new SpriteMap("hats/default", 32, 32);
-                return this._default;
+                if (!filter)
+                    return GetFacadeTeam()._hat;
+                if (_default == null)
+                    _default = new SpriteMap("hats/default", 32, 32);
+                return _default;
             }
         }
 
-        public void SetHatSprite(SpriteMap pSprite) => this._hat = pSprite;
+        public void SetHatSprite(SpriteMap pSprite) => _hat = pSprite;
 
-        public bool hasHat => this.hat != null && this.hat.texture.textureName != "hats/noHat";
+        public bool hasHat => hat != null && hat.texture.textureName != "hats/noHat";
 
         public int score
         {
-            get => this._score;
-            set => this._score = value;
+            get => _score;
+            set => _score = value;
         }
 
         public int rockScore
         {
-            get => this._rockScore;
-            set => this._rockScore = value;
+            get => _rockScore;
+            set => _rockScore = value;
         }
 
         public int wins
         {
-            get => this._wins;
-            set => this._wins = value;
+            get => _wins;
+            set => _wins = value;
         }
 
         public int prevScoreboardScore
         {
-            get => this._prevScoreboardScore;
-            set => this._prevScoreboardScore = value;
+            get => _prevScoreboardScore;
+            set => _prevScoreboardScore = value;
         }
 
         public Vec2 hatOffset
         {
-            get => this.filter ? Vec2.Zero : this.GetFacadeTeam()._hatOffset;
-            set => this._hatOffset = value;
+            get => filter ? Vec2.Zero : GetFacadeTeam()._hatOffset;
+            set => _hatOffset = value;
         }
 
-        public List<Profile> activeProfiles => this._activeProfiles;
+        public List<Profile> activeProfiles => _activeProfiles;
 
-        public int numMembers => this._activeProfiles.Count;
+        public int numMembers => _activeProfiles.Count;
 
         public void Join(Profile prof, bool set = true)
         {
-            if (this._activeProfiles.Contains(prof))
+            if (_activeProfiles.Contains(prof))
                 return;
             if (prof.team != null)
                 prof.team.Leave(prof, set);
-            this._activeProfiles.Add(prof);
+            _activeProfiles.Add(prof);
             if (!set)
                 return;
             prof.team = this;
@@ -419,7 +419,7 @@ namespace DuckGame
 
         public void Leave(Profile prof, bool set = true)
         {
-            this._activeProfiles.Remove(prof);
+            _activeProfiles.Remove(prof);
             if (!set)
                 return;
             prof.team = null;
@@ -428,47 +428,47 @@ namespace DuckGame
         public void ClearProfiles()
         {
             foreach (Profile prof in new List<Profile>(_activeProfiles))
-                this.Leave(prof);
-            this._activeProfiles.Clear();
+                Leave(prof);
+            _activeProfiles.Clear();
         }
 
-        public void ResetTeam() => this._score = 0;
+        public void ResetTeam() => _score = 0;
 
         public Team.CustomHatMetadata metadata
         {
             get
             {
-                if (!this.filter)
-                    return this.GetFacadeTeam()._metadata;
-                if (this._basicMetadata == null)
+                if (!filter)
+                    return GetFacadeTeam()._metadata;
+                if (_basicMetadata == null)
                 {
-                    this._basicMetadata = new Team.CustomHatMetadata(this);
-                    this._basicMetadata.UseDuckColor.value = true;
+                    _basicMetadata = new Team.CustomHatMetadata(this);
+                    _basicMetadata.UseDuckColor.value = true;
                 }
-                return this._basicMetadata;
+                return _basicMetadata;
             }
-            set => this._metadata = value;
+            set => _metadata = value;
         }
 
         public string hatID
         {
-            get => this.GetFacadeTeam()._hatID;
-            set => this._hatID = value;
+            get => GetFacadeTeam()._hatID;
+            set => _hatID = value;
         }
 
         public Team facade
         {
             get
             {
-                Team facadeTeam = this.GetFacadeTeam();
+                Team facadeTeam = GetFacadeTeam();
                 return facadeTeam == this ? null : facadeTeam;
             }
         }
 
         public byte[] customData
         {
-            get => this.GetFacadeTeam()._customData;
-            set => this._customData = value;
+            get => GetFacadeTeam()._customData;
+            set => _customData = value;
         }
 
         public bool locked
@@ -476,10 +476,10 @@ namespace DuckGame
             get
             {
                 if (!NetworkDebugger.enabled || NetworkDebugger.currentIndex != 1)
-                    return this._locked;
+                    return _locked;
                 return Teams.all.IndexOf(this) > 15 && Teams.all.IndexOf(this) < 35;
             }
-            set => this._locked = value;
+            set => _locked = value;
         }
 
         public Team(
@@ -491,13 +491,13 @@ namespace DuckGame
           string desc = "",
           Texture2D capeTex = null)
         {
-            this._name = varName;
-            this._hat = new SpriteMap(hatTexture, 32, 32);
-            this._hatOffset = hatOff;
-            this.inDemo = demo;
-            this._locked = lockd;
-            this._description = desc;
-            this._capeTexture = capeTex;
+            _name = varName;
+            _hat = new SpriteMap(hatTexture, 32, 32);
+            _hatOffset = hatOff;
+            inDemo = demo;
+            _locked = lockd;
+            _description = desc;
+            _capeTexture = capeTex;
         }
 
         public Team(
@@ -511,23 +511,23 @@ namespace DuckGame
           Texture2D capeTex = null)
           : this(varName, hatTexture, demo, lockd, hatOff, desc, capeTex)
         {
-            this._name = varName;
-            this._hat = new SpriteMap(hatTexture, 32, 32);
-            this._hatOffset = hatOff;
-            this.inDemo = demo;
-            this._locked = lockd;
-            this._description = desc;
-            this._capeTexture = capeTex;
-            this.isHair = varHair;
+            _name = varName;
+            _hat = new SpriteMap(hatTexture, 32, 32);
+            _hatOffset = hatOff;
+            inDemo = demo;
+            _locked = lockd;
+            _description = desc;
+            _capeTexture = capeTex;
+            isHair = varHair;
         }
 
         public Team(string varName, string hatTexture, bool demo, bool lockd, Vec2 hatOff)
         {
-            this._name = varName;
-            this._hat = new SpriteMap(hatTexture, 32, 32);
-            this._hatOffset = hatOff;
-            this.inDemo = demo;
-            this._locked = lockd;
+            _name = varName;
+            _hat = new SpriteMap(hatTexture, 32, 32);
+            _hatOffset = hatOff;
+            inDemo = demo;
+            _locked = lockd;
         }
 
         public Team(
@@ -538,16 +538,16 @@ namespace DuckGame
           Vec2 hatOff = default(Vec2),
           string desc = "")
         {
-            this.Construct(varName, hatTexture, demo, lockd, hatOff, desc);
+            Construct(varName, hatTexture, demo, lockd, hatOff, desc);
         }
 
         public Team(string varName, Texture2D hatTexture, bool demo, bool lockd, Vec2 hatOff)
         {
-            this._name = varName;
-            this._hat = new SpriteMap((Tex2D)hatTexture, 32, 32);
-            this._hatOffset = hatOff;
-            this.inDemo = demo;
-            this._locked = lockd;
+            _name = varName;
+            _hat = new SpriteMap((Tex2D)hatTexture, 32, 32);
+            _hatOffset = hatOff;
+            inDemo = demo;
+            _locked = lockd;
         }
 
         public void Construct(
@@ -558,12 +558,12 @@ namespace DuckGame
           Vec2 hatOff = default(Vec2),
           string desc = "")
         {
-            this._name = varName;
-            this._hat = new SpriteMap((Tex2D)hatTexture, 32, 32);
-            this._hatOffset = hatOff;
-            this.inDemo = demo;
-            this._locked = lockd;
-            this._description = desc;
+            _name = varName;
+            _hat = new SpriteMap((Tex2D)hatTexture, 32, 32);
+            _hatOffset = hatOff;
+            inDemo = demo;
+            _locked = lockd;
+            _description = desc;
         }
 
         [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
@@ -575,9 +575,9 @@ namespace DuckGame
 
             public Metapixel(int pIndex, string pName, string pDescription)
             {
-                this.index = pIndex;
-                this.name = pName;
-                this.description = pDescription;
+                index = pIndex;
+                name = pName;
+                description = pDescription;
             }
         }
 
@@ -589,7 +589,7 @@ namespace DuckGame
 
             public int Index(Team.HatMetadataElement pParameter)
             {
-                foreach (KeyValuePair<int, Team.HatMetadataElement> field in this._fieldMap)
+                foreach (KeyValuePair<int, Team.HatMetadataElement> field in _fieldMap)
                 {
                     if (field.Value == pParameter)
                         return field.Key;
@@ -600,7 +600,7 @@ namespace DuckGame
             public virtual bool Deserialize(Color pColor)
             {
                 HatMetadataElement hatMetadataElement;
-                if (!this._fieldMap.TryGetValue(pColor.r, out hatMetadataElement))
+                if (!_fieldMap.TryGetValue(pColor.r, out hatMetadataElement))
                     return false;
                 if (!(hatMetadataElement is Team.CustomHatMetadata.MDRandomizer))
                     Team.CustomMetadata.kCurrentParameter = hatMetadataElement;
@@ -934,35 +934,35 @@ namespace DuckGame
                     value = new Vec2(0.3f, 1f),
                     allowNegative = true
                 };
-                this.CapeSwayModifier = mdVec2Normalized1;
+                CapeSwayModifier = mdVec2Normalized1;
                 Team.CustomHatMetadata.MDVec2Normalized mdVec2Normalized2 = new Team.CustomHatMetadata.MDVec2Normalized
                 {
                     value = new Vec2(1f, 1f),
                     allowNegative = true
                 };
-                this.CapeWiggleModifier = mdVec2Normalized2;
+                CapeWiggleModifier = mdVec2Normalized2;
                 Team.CustomHatMetadata.MDFloat mdFloat1 = new Team.CustomHatMetadata.MDFloat
                 {
                     value = 0.5f
                 };
-                this.CapeTaperStart = mdFloat1;
+                CapeTaperStart = mdFloat1;
                 Team.CustomHatMetadata.MDFloat mdFloat2 = new Team.CustomHatMetadata.MDFloat
                 {
                     value = 1f
                 };
-                this.CapeTaperEnd = mdFloat2;
+                CapeTaperEnd = mdFloat2;
                 Team.CustomHatMetadata.MDFloat mdFloat3 = new Team.CustomHatMetadata.MDFloat
                 {
                     value = 1f
                 };
-                this.CapeAlphaStart = mdFloat3;
+                CapeAlphaStart = mdFloat3;
                 Team.CustomHatMetadata.MDFloat mdFloat4 = new Team.CustomHatMetadata.MDFloat
                 {
                     value = 1f
                 };
-                this.CapeAlphaEnd = mdFloat4;
-                this.CapeIsTrail = new Team.CustomHatMetadata.MDBool();
-                this.ParticleEmitterOffset = new Team.CustomHatMetadata.MDVec2()
+                CapeAlphaEnd = mdFloat4;
+                CapeIsTrail = new Team.CustomHatMetadata.MDBool();
+                ParticleEmitterOffset = new Team.CustomHatMetadata.MDVec2()
                 {
                     range = 16f
                 };
@@ -971,8 +971,8 @@ namespace DuckGame
                     range = 4,
                     postParseScript = new Action(Team.CustomHatMetadata.ApplyDefaultParticleBehavior)
                 };
-                this.ParticleDefaultBehavior = mdInt1;
-                this.ParticleEmitShape = new Team.CustomHatMetadata.MDIntPair()
+                ParticleDefaultBehavior = mdInt1;
+                ParticleEmitShape = new Team.CustomHatMetadata.MDIntPair()
                 {
                     rangeX = 2,
                     rangeY = 2
@@ -982,117 +982,117 @@ namespace DuckGame
                     range = 32f,
                     value = new Vec2(24f, 24f)
                 };
-                this.ParticleEmitShapeSize = mdVec2;
+                ParticleEmitShapeSize = mdVec2;
                 Team.CustomHatMetadata.MDInt mdInt2 = new Team.CustomHatMetadata.MDInt
                 {
                     range = 8,
                     value = 4
                 };
-                this.ParticleCount = mdInt2;
+                ParticleCount = mdInt2;
                 Team.CustomHatMetadata.MDFloat mdFloat5 = new Team.CustomHatMetadata.MDFloat
                 {
                     range = 2f,
                     value = 1f
                 };
-                this.ParticleLifespan = mdFloat5;
+                ParticleLifespan = mdFloat5;
                 Team.CustomHatMetadata.MDVec2Normalized mdVec2Normalized3 = new Team.CustomHatMetadata.MDVec2Normalized
                 {
                     range = 2f,
                     allowNegative = true
                 };
-                this.ParticleVelocity = mdVec2Normalized3;
+                ParticleVelocity = mdVec2Normalized3;
                 Team.CustomHatMetadata.MDVec2Normalized mdVec2Normalized4 = new Team.CustomHatMetadata.MDVec2Normalized
                 {
                     range = 2f,
                     allowNegative = true,
                     value = new Vec2(0f, PhysicsObject.gravity)
                 };
-                this.ParticleGravity = mdVec2Normalized4;
+                ParticleGravity = mdVec2Normalized4;
                 Team.CustomHatMetadata.MDVec2Normalized mdVec2Normalized5 = new Team.CustomHatMetadata.MDVec2Normalized
                 {
                     range = 1f,
                     allowNegative = false,
                     value = new Vec2(1f, 1f)
                 };
-                this.ParticleFriction = mdVec2Normalized5;
+                ParticleFriction = mdVec2Normalized5;
                 Team.CustomHatMetadata.MDVec2Normalized mdVec2Normalized6 = new Team.CustomHatMetadata.MDVec2Normalized
                 {
                     range = 1f,
                     allowNegative = false,
                     value = new Vec2(1f, 1f)
                 };
-                this.ParticleAlpha = mdVec2Normalized6;
+                ParticleAlpha = mdVec2Normalized6;
                 Team.CustomHatMetadata.MDVec2Normalized mdVec2Normalized7 = new Team.CustomHatMetadata.MDVec2Normalized
                 {
                     range = 2f,
                     allowNegative = false,
                     value = new Vec2(1f, 0f)
                 };
-                this.ParticleScale = mdVec2Normalized7;
+                ParticleScale = mdVec2Normalized7;
                 Team.CustomHatMetadata.MDVec2Normalized mdVec2Normalized8 = new Team.CustomHatMetadata.MDVec2Normalized
                 {
                     range = 36f,
                     value = new Vec2(0f, 0f)
                 };
-                this.ParticleRotation = mdVec2Normalized8;
-                this.ParticleOffset = new Team.CustomHatMetadata.MDVec2()
+                ParticleRotation = mdVec2Normalized8;
+                ParticleOffset = new Team.CustomHatMetadata.MDVec2()
                 {
                     range = 16f
                 };
-                this.ParticleBackground = new Team.CustomHatMetadata.MDBool();
-                this.ParticleAnchor = new Team.CustomHatMetadata.MDBool();
-                this.ParticleAnimated = new Team.CustomHatMetadata.MDBool();
-                this.ParticleAnimationLoop = new Team.CustomHatMetadata.MDBool();
-                this.ParticleAnimationRandomFrame = new Team.CustomHatMetadata.MDBool();
+                ParticleBackground = new Team.CustomHatMetadata.MDBool();
+                ParticleAnchor = new Team.CustomHatMetadata.MDBool();
+                ParticleAnimated = new Team.CustomHatMetadata.MDBool();
+                ParticleAnimationLoop = new Team.CustomHatMetadata.MDBool();
+                ParticleAnimationRandomFrame = new Team.CustomHatMetadata.MDBool();
                 Team.CustomHatMetadata.MDFloat mdFloat6 = new Team.CustomHatMetadata.MDFloat
                 {
                     range = 1f,
                     value = 0.1f
                 };
-                this.ParticleAnimationSpeed = mdFloat6;
-                this.ParticleAnchorOrientation = new Team.CustomHatMetadata.MDBool();
+                ParticleAnimationSpeed = mdFloat6;
+                ParticleAnchorOrientation = new Team.CustomHatMetadata.MDBool();
                 Team.CustomHatMetadata.MDFloat mdFloat7 = new Team.CustomHatMetadata.MDFloat
                 {
                     range = 2f,
                     value = 0f
                 };
-                this.QuackDelay = mdFloat7;
+                QuackDelay = mdFloat7;
                 Team.CustomHatMetadata.MDFloat mdFloat8 = new Team.CustomHatMetadata.MDFloat
                 {
                     range = 2f,
                     value = 0f
                 };
-                this.QuackHold = mdFloat8;
-                this.QuackSuppressRequack = new Team.CustomHatMetadata.MDBool();
-                this.WetLips = new Team.CustomHatMetadata.MDBool();
-                this.MechanicalLips = new Team.CustomHatMetadata.MDBool();
+                QuackHold = mdFloat8;
+                QuackSuppressRequack = new Team.CustomHatMetadata.MDBool();
+                WetLips = new Team.CustomHatMetadata.MDBool();
+                MechanicalLips = new Team.CustomHatMetadata.MDBool();
                 Team.CustomHatMetadata.MDRandomizer mdRandomizer1 = new Team.CustomHatMetadata.MDRandomizer
                 {
                     range = 1f,
                     allowNegative = true
                 };
-                this.RandomizeParameterX = mdRandomizer1;
+                RandomizeParameterX = mdRandomizer1;
                 Team.CustomHatMetadata.MDRandomizer mdRandomizer2 = new Team.CustomHatMetadata.MDRandomizer
                 {
                     range = 1f,
                     allowNegative = true,
                     randomizeY = true
                 };
-                this.RandomizeParameterY = mdRandomizer2;
+                RandomizeParameterY = mdRandomizer2;
                 Team.CustomHatMetadata.MDRandomizer mdRandomizer3 = new Team.CustomHatMetadata.MDRandomizer
                 {
                     range = 1f,
                     allowNegative = true,
                     randomizeBoth = true
                 };
-                this.RandomizeParameter = mdRandomizer3;
+                RandomizeParameter = mdRandomizer3;
                 // ISSUE: explicit constructor call
                 // base.\u002Ector(); wtf
-                this.team = pTeam;
+                team = pTeam;
                 Team.CustomHatMetadata.kCurrentMetadata = this;
                 if (Team.CustomHatMetadata.kParameterAttributes == null)
-                    Team.CustomHatMetadata.kParameterAttributes = Team.CustomMetadata.PrepareParameterAttributes(this.GetType());
-                this._fieldMap = Team.CustomMetadata.PrepareFieldMap(Team.CustomHatMetadata.kParameterAttributes, this);
+                    Team.CustomHatMetadata.kParameterAttributes = Team.CustomMetadata.PrepareParameterAttributes(GetType());
+                _fieldMap = Team.CustomMetadata.PrepareFieldMap(Team.CustomHatMetadata.kParameterAttributes, this);
                 Team.CustomHatMetadata.ApplyDefaultParticleBehavior();
             }
 
@@ -1115,25 +1115,25 @@ namespace DuckGame
                     get
                     {
                         Team.HatMetadataElement hatMetadataElement;
-                        return this.defaultCopyIndex != 0 && Team.CustomHatMetadata.kCurrentMetadata != null && Team.CustomHatMetadata.kCurrentMetadata._fieldMap.TryGetValue(this.defaultCopyIndex, out hatMetadataElement) ? hatMetadataElement as Team.CustomHatMetadata.V<T> : null;
+                        return defaultCopyIndex != 0 && Team.CustomHatMetadata.kCurrentMetadata != null && Team.CustomHatMetadata.kCurrentMetadata._fieldMap.TryGetValue(defaultCopyIndex, out hatMetadataElement) ? hatMetadataElement as Team.CustomHatMetadata.V<T> : null;
                     }
                 }
 
                 public virtual T value
                 {
-                    get => this._value;
-                    set => this._value = value;
+                    get => _value;
+                    set => _value = value;
                 }
 
                 public override void Parse(Color pColor)
                 {
-                    this.randomizerX = Vec2.Zero;
-                    this.randomizerY = Vec2.Zero;
-                    this.set = true;
-                    this.OnParse(pColor);
-                    if (this.postParseScript == null)
+                    randomizerX = Vec2.Zero;
+                    randomizerY = Vec2.Zero;
+                    set = true;
+                    OnParse(pColor);
+                    if (postParseScript == null)
                         return;
-                    this.postParseScript();
+                    postParseScript();
                 }
 
                 public abstract void OnParse(Color pColor);
@@ -1144,34 +1144,34 @@ namespace DuckGame
                 public bool allowNegative = true;
                 public float range = 16f;
 
-                public override void OnParse(Color pColor) => this._value = new Vec2(Maths.Clamp(pColor.g - 128, -this.range, this.range), Maths.Clamp(pColor.b - 128, -this.range, this.range));
+                public override void OnParse(Color pColor) => _value = new Vec2(Maths.Clamp(pColor.g - 128, -range, range), Maths.Clamp(pColor.b - 128, -range, range));
 
                 public override Vec2 value
                 {
                     get
                     {
-                        Vec2 vec2 = this._value;
-                        if (this._value == Vec2.MaxValue && this._defaultCopy != null)
-                            vec2 = this._defaultCopy.value;
-                        if (this.randomizerX != Vec2.Zero)
-                            vec2.x = Rando.Float(this._value.x * this.randomizerX.x, this._value.x * this.randomizerX.y);
-                        if (this.randomizerY == Vec2.MaxValue)
+                        Vec2 vec2 = _value;
+                        if (_value == Vec2.MaxValue && _defaultCopy != null)
+                            vec2 = _defaultCopy.value;
+                        if (randomizerX != Vec2.Zero)
+                            vec2.x = Rando.Float(_value.x * randomizerX.x, _value.x * randomizerX.y);
+                        if (randomizerY == Vec2.MaxValue)
                             vec2.y = vec2.x;
-                        else if (this.randomizerY != Vec2.Zero)
-                            vec2.y = Rando.Float(this._value.y * this.randomizerY.x, this._value.y * this.randomizerY.y);
-                        if (this.allowNegative)
+                        else if (randomizerY != Vec2.Zero)
+                            vec2.y = Rando.Float(_value.y * randomizerY.x, _value.y * randomizerY.y);
+                        if (allowNegative)
                         {
-                            vec2.x = Maths.Clamp(vec2.x, -this.range, this.range);
-                            vec2.y = Maths.Clamp(vec2.y, -this.range, this.range);
+                            vec2.x = Maths.Clamp(vec2.x, -range, range);
+                            vec2.y = Maths.Clamp(vec2.y, -range, range);
                         }
                         else
                         {
-                            vec2.x = Maths.Clamp(vec2.x, 0f, this.range);
-                            vec2.y = Maths.Clamp(vec2.y, 0f, this.range);
+                            vec2.x = Maths.Clamp(vec2.x, 0f, range);
+                            vec2.y = Maths.Clamp(vec2.y, 0f, range);
                         }
                         return vec2;
                     }
-                    set => this._value = value;
+                    set => _value = value;
                 }
             }
 
@@ -1179,23 +1179,23 @@ namespace DuckGame
             {
                 public MDVec2Normalized()
                 {
-                    this.range = 1f;
-                    this.allowNegative = false;
+                    range = 1f;
+                    allowNegative = false;
                 }
 
                 public override void OnParse(Color pColor)
                 {
-                    if (this.allowNegative)
+                    if (allowNegative)
                     {
                         float range = this.range;
                         this.range = sbyte.MaxValue;
                         base.OnParse(pColor);
-                        this._value /= this.range;
+                        _value /= this.range;
                         this.range = range;
                     }
                     else
-                        this._value = new Vec2(pColor.g / (float)byte.MaxValue, pColor.b / (float)byte.MaxValue);
-                    this._value *= this.range;
+                        _value = new Vec2(pColor.g / (float)byte.MaxValue, pColor.b / (float)byte.MaxValue);
+                    _value *= range;
                 }
             }
 
@@ -1209,11 +1209,11 @@ namespace DuckGame
                     base.OnParse(pColor);
                     if (Team.CustomMetadata.kPreviousParameter == null)
                         return;
-                    if (!this.randomizeY)
-                        Team.CustomMetadata.kPreviousParameter.randomizerX = this.value;
+                    if (!randomizeY)
+                        Team.CustomMetadata.kPreviousParameter.randomizerX = value;
                     else
-                        Team.CustomMetadata.kPreviousParameter.randomizerY = this.value;
-                    if (!this.randomizeBoth)
+                        Team.CustomMetadata.kPreviousParameter.randomizerY = value;
+                    if (!randomizeBoth)
                         return;
                     Team.CustomMetadata.kPreviousParameter.randomizerY = Vec2.MaxValue;
                 }
@@ -1221,7 +1221,7 @@ namespace DuckGame
 
             public class MDBool : Team.CustomHatMetadata.V<bool>
             {
-                public override void OnParse(Color pColor) => this._value = true;
+                public override void OnParse(Color pColor) => _value = true;
             }
 
             public class MDFloat : Team.CustomHatMetadata.V<float>
@@ -1233,23 +1233,23 @@ namespace DuckGame
                 {
                     get
                     {
-                        float val = this._value;
-                        if (_value == 3.40282346638529E+38 && this._defaultCopy != null)
-                            val = this._defaultCopy.value;
-                        if (this.randomizerX != Vec2.Zero)
-                            val = Rando.Float(this._value * this.randomizerX.x, this._value * this.randomizerX.y);
-                        return this.allowNegative ? Maths.Clamp(val, -this.range, this.range) : Maths.Clamp(val, 0f, this.range);
+                        float val = _value;
+                        if (_value == 3.40282346638529E+38 && _defaultCopy != null)
+                            val = _defaultCopy.value;
+                        if (randomizerX != Vec2.Zero)
+                            val = Rando.Float(_value * randomizerX.x, _value * randomizerX.y);
+                        return allowNegative ? Maths.Clamp(val, -range, range) : Maths.Clamp(val, 0f, range);
                     }
-                    set => this._value = value;
+                    set => _value = value;
                 }
 
                 public override void OnParse(Color pColor)
                 {
-                    if (this.allowNegative)
-                        this._value = (pColor.g - 128) / 128f;
+                    if (allowNegative)
+                        _value = (pColor.g - 128) / 128f;
                     else
-                        this._value = pColor.g / (float)byte.MaxValue;
-                    this._value *= this.range;
+                        _value = pColor.g / (float)byte.MaxValue;
+                    _value *= range;
                 }
             }
 
@@ -1263,22 +1263,22 @@ namespace DuckGame
                     get
                     {
                         float a = _value;
-                        if (this._value == int.MaxValue && this._defaultCopy != null)
+                        if (_value == int.MaxValue && _defaultCopy != null)
                             a = _defaultCopy.value;
-                        if (this.randomizerX != Vec2.Zero)
-                            a = Rando.Float(_value * this.randomizerX.x, _value * this.randomizerX.y);
+                        if (randomizerX != Vec2.Zero)
+                            a = Rando.Float(_value * randomizerX.x, _value * randomizerX.y);
                         return (int)Math.Round(a);
                     }
-                    set => this._value = value;
+                    set => _value = value;
                 }
 
                 public override void OnParse(Color pColor)
                 {
-                    if (this.allowNegative)
-                        this._value = pColor.g - 128;
+                    if (allowNegative)
+                        _value = pColor.g - 128;
                     else
-                        this._value = pColor.g;
-                    this._value = Maths.Clamp(this.value, -this.range, this.range);
+                        _value = pColor.g;
+                    _value = Maths.Clamp(value, -range, range);
                 }
             }
 
@@ -1292,34 +1292,34 @@ namespace DuckGame
                 {
                     get
                     {
-                        Vec2 vec2 = this._value;
-                        if (this._value == Vec2.MaxValue && this._defaultCopy != null)
-                            vec2 = this._defaultCopy.value;
-                        if (this.randomizerX != Vec2.Zero)
-                            vec2.x = (float)Math.Round(Rando.Float(this._value.x * this.randomizerX.x, this._value.x * this.randomizerX.y));
-                        if (this.randomizerY == Vec2.MaxValue)
+                        Vec2 vec2 = _value;
+                        if (_value == Vec2.MaxValue && _defaultCopy != null)
+                            vec2 = _defaultCopy.value;
+                        if (randomizerX != Vec2.Zero)
+                            vec2.x = (float)Math.Round(Rando.Float(_value.x * randomizerX.x, _value.x * randomizerX.y));
+                        if (randomizerY == Vec2.MaxValue)
                             vec2.y = vec2.x;
-                        else if (this.randomizerY != Vec2.Zero)
-                            vec2.y = (float)Math.Round(Rando.Float(this._value.y * this.randomizerY.x, this._value.y * this.randomizerY.y));
+                        else if (randomizerY != Vec2.Zero)
+                            vec2.y = (float)Math.Round(Rando.Float(_value.y * randomizerY.x, _value.y * randomizerY.y));
                         return vec2;
                     }
-                    set => this._value = value;
+                    set => _value = value;
                 }
 
                 public override void OnParse(Color pColor)
                 {
-                    if (this.allowNegative)
+                    if (allowNegative)
                     {
-                        this._value.x = pColor.g - 128;
-                        this._value.y = pColor.b - 128;
+                        _value.x = pColor.g - 128;
+                        _value.y = pColor.b - 128;
                     }
                     else
                     {
-                        this._value.x = pColor.g;
-                        this._value.y = pColor.b;
+                        _value.x = pColor.g;
+                        _value.y = pColor.b;
                     }
-                    this._value.x = Maths.Clamp(this.value.x, -this.rangeX, rangeX);
-                    this._value.y = Maths.Clamp(this.value.y, -this.rangeY, rangeY);
+                    _value.x = Maths.Clamp(value.x, -rangeX, rangeX);
+                    _value.y = Maths.Clamp(value.y, -rangeY, rangeY);
                 }
             }
         }

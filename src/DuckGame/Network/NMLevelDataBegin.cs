@@ -15,7 +15,7 @@ namespace DuckGame
         {
         }
 
-        public NMLevelDataBegin(byte pLevelIndex) => this.levelIndex = pLevelIndex;
+        public NMLevelDataBegin(byte pLevelIndex) => levelIndex = pLevelIndex;
 
         public override bool Update() => Level.current.networkIndex == levelIndex && Level.current.initializeFunctionHasBeenRun;
 

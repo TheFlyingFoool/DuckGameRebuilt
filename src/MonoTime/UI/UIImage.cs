@@ -15,38 +15,38 @@ namespace DuckGame
         public UIImage(string imageVal, UIAlign al = UIAlign.Left)
           : base(0f, 0f, -1f, -1f)
         {
-            this._image = new Sprite(imageVal);
-            this._collisionSize = new Vec2(_image.w, _image.h);
-            this._image.CenterOrigin();
-            this.align = al;
+            _image = new Sprite(imageVal);
+            _collisionSize = new Vec2(_image.w, _image.h);
+            _image.CenterOrigin();
+            align = al;
         }
 
         public UIImage(Sprite imageVal, UIAlign al = UIAlign.Left)
           : base(0f, 0f, -1f, -1f)
         {
-            this._image = imageVal;
-            this._collisionSize = new Vec2(_image.w, _image.h);
-            this._image.CenterOrigin();
-            this.align = al;
+            _image = imageVal;
+            _collisionSize = new Vec2(_image.w, _image.h);
+            _image.CenterOrigin();
+            align = al;
         }
 
         public UIImage(Sprite imageVal, UIAlign al, float s = 1f, float yOff = 0f)
           : base(0f, 0f, -1f, -1f)
         {
-            this._image = imageVal;
-            this._collisionSize = new Vec2(_image.w * s, _image.h * s);
-            this._image.CenterOrigin();
-            this.scale = new Vec2(s);
-            this.align = al;
-            this.yOffset = yOff;
+            _image = imageVal;
+            _collisionSize = new Vec2(_image.w * s, _image.h * s);
+            _image.CenterOrigin();
+            scale = new Vec2(s);
+            align = al;
+            yOffset = yOff;
         }
 
         public override void Draw()
         {
-            this._image.scale = this.scale;
-            this._image.alpha = this.alpha;
-            this._image.depth = this.depth;
-            Graphics.Draw(this._image, this.x, this.y + this.yOffset);
+            _image.scale = scale;
+            _image.alpha = alpha;
+            _image.depth = depth;
+            Graphics.Draw(_image, x, y + yOffset);
             base.Draw();
         }
     }

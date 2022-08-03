@@ -17,8 +17,8 @@ namespace DuckGame
 
         public LSFilterLevelType(LevelType type, bool needsDeathmatchTag = false)
         {
-            this._type = type;
-            this._needsDeathmatchTag = needsDeathmatchTag;
+            _type = type;
+            _needsDeathmatchTag = needsDeathmatchTag;
         }
 
         public bool Filter(string lev, LevelLocation location = LevelLocation.Any)
@@ -27,7 +27,7 @@ namespace DuckGame
             {
                 LevelType levelType = LevelType.Invalid;
                 if (LSFilterLevelType._types.TryGetValue(lev, out levelType))
-                    return levelType == this._type;
+                    return levelType == _type;
                 LevelData levelData = DuckFile.LoadLevelHeaderCached(lev);
                 if (levelData == null)
                 {
@@ -36,7 +36,7 @@ namespace DuckGame
                 }
                 LevelType type = levelData.metaData.type;
                 LSFilterLevelType._types[lev] = type;
-                return type == this._type;
+                return type == _type;
             }
             catch
             {

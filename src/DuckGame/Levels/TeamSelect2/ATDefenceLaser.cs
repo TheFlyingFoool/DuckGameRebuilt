@@ -11,15 +11,15 @@ namespace DuckGame
     {
         public ATDefenceLaser()
         {
-            this.accuracy = 1f;
-            this.range = 600f;
-            this.penetration = 1f;
-            this.bulletSpeed = 30f;
-            this.bulletLength = 40f;
-            this.bulletThickness = 0.3f;
-            this.rangeVariation = 50f;
-            this.bulletType = typeof(LaserBulletPurple);
-            this.angleShot = false;
+            accuracy = 1f;
+            range = 600f;
+            penetration = 1f;
+            bulletSpeed = 30f;
+            bulletLength = 40f;
+            bulletThickness = 0.3f;
+            rangeVariation = 50f;
+            bulletType = typeof(LaserBulletPurple);
+            angleShot = false;
         }
     }
 }

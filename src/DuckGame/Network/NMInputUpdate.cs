@@ -19,9 +19,9 @@ namespace DuckGame
 
         public NMInputUpdate(int idVal, int stateVal, double t)
         {
-            this.id = idVal;
-            this.state = stateVal;
-            this.time = t;
+            id = idVal;
+            state = stateVal;
+            time = t;
         }
     }
 }

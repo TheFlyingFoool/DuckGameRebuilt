@@ -11,11 +11,11 @@ namespace DuckGame
     {
         public ATShrapnel()
         {
-            this.accuracy = 0.75f;
-            this.range = 250f;
-            this.penetration = 0.4f;
-            this.bulletSpeed = 18f;
-            this.combustable = true;
+            accuracy = 0.75f;
+            range = 250f;
+            penetration = 0.4f;
+            bulletSpeed = 18f;
+            combustable = true;
         }
     }
 }

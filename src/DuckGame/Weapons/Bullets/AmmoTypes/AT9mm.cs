@@ -11,10 +11,10 @@ namespace DuckGame
     {
         public AT9mm()
         {
-            this.accuracy = 0.75f;
-            this.range = 250f;
-            this.penetration = 1f;
-            this.combustable = true;
+            accuracy = 0.75f;
+            range = 250f;
+            penetration = 1f;
+            combustable = true;
         }
 
         public override void PopShell(float x, float y, int dir)

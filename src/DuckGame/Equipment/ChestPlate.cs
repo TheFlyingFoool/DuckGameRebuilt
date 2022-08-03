@@ -18,76 +18,76 @@ namespace DuckGame
         public ChestPlate(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("chestPlateAnim", 32, 32);
-            this._spriteOver = new SpriteMap("chestPlateAnimOver", 32, 32);
-            this._pickupSprite = new Sprite("chestPlatePickup");
-            this._pickupSprite.CenterOrigin();
-            this.graphic = this._pickupSprite;
-            this.collisionOffset = new Vec2(-6f, -4f);
-            this.collisionSize = new Vec2(11f, 8f);
-            this._equippedCollisionOffset = new Vec2(-7f, -5f);
-            this._equippedCollisionSize = new Vec2(12f, 11f);
-            this._hasEquippedCollision = true;
-            this.center = new Vec2(8f, 8f);
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this._equippedDepth = 4;
-            this._wearOffset = new Vec2(1f, 1f);
-            this._isArmor = true;
-            this._equippedThickness = 3f;
-            this.editorTooltip = "Protects against impacts to the chest. Makes you look swole.";
+            _sprite = new SpriteMap("chestPlateAnim", 32, 32);
+            _spriteOver = new SpriteMap("chestPlateAnimOver", 32, 32);
+            _pickupSprite = new Sprite("chestPlatePickup");
+            _pickupSprite.CenterOrigin();
+            graphic = _pickupSprite;
+            collisionOffset = new Vec2(-6f, -4f);
+            collisionSize = new Vec2(11f, 8f);
+            _equippedCollisionOffset = new Vec2(-7f, -5f);
+            _equippedCollisionSize = new Vec2(12f, 11f);
+            _hasEquippedCollision = true;
+            center = new Vec2(8f, 8f);
+            physicsMaterial = PhysicsMaterial.Metal;
+            _equippedDepth = 4;
+            _wearOffset = new Vec2(1f, 1f);
+            _isArmor = true;
+            _equippedThickness = 3f;
+            editorTooltip = "Protects against impacts to the chest. Makes you look swole.";
         }
 
         public override void Update()
         {
-            if (this._equippedDuck != null && this.duck == null)
+            if (_equippedDuck != null && duck == null)
                 return;
-            if (this._equippedDuck != null && !this.destroyed)
+            if (_equippedDuck != null && !destroyed)
             {
-                this.center = new Vec2(16f, 16f);
-                this.solid = false;
-                this._sprite.flipH = this.duck._sprite.flipH;
-                this._spriteOver.flipH = this.duck._sprite.flipH;
-                this.graphic = _sprite;
-                if (this._equippedDuck.sliding)
+                center = new Vec2(16f, 16f);
+                solid = false;
+                _sprite.flipH = duck._sprite.flipH;
+                _spriteOver.flipH = duck._sprite.flipH;
+                graphic = _sprite;
+                if (_equippedDuck.sliding)
                 {
-                    this._equippedCollisionOffset = new Vec2(-5f, -5f);
-                    this._equippedCollisionSize = new Vec2(10f, 13f);
+                    _equippedCollisionOffset = new Vec2(-5f, -5f);
+                    _equippedCollisionSize = new Vec2(10f, 13f);
                 }
                 else
                 {
-                    this._equippedCollisionOffset = new Vec2(-7f, -5f);
-                    this._equippedCollisionSize = new Vec2(12f, 11f);
+                    _equippedCollisionOffset = new Vec2(-7f, -5f);
+                    _equippedCollisionSize = new Vec2(12f, 11f);
                 }
             }
             else
             {
-                this.center = new Vec2(this._pickupSprite.w / 2, this._pickupSprite.h / 2);
-                this.solid = true;
-                this._sprite.frame = 0;
-                this._sprite.flipH = false;
-                this.graphic = this._pickupSprite;
+                center = new Vec2(_pickupSprite.w / 2, _pickupSprite.h / 2);
+                solid = true;
+                _sprite.frame = 0;
+                _sprite.flipH = false;
+                graphic = _pickupSprite;
             }
-            if (this.destroyed)
-                this.alpha -= 0.05f;
-            if (this.alpha < 0f)
+            if (destroyed)
+                alpha -= 0.05f;
+            if (alpha < 0f)
                 Level.Remove(this);
             base.Update();
         }
 
         public override void Draw()
         {
-            if (this._equippedDuck != null && this._equippedDuck._trapped != null)
-                this.depth = this._equippedDuck._trapped.depth + 1;
+            if (_equippedDuck != null && _equippedDuck._trapped != null)
+                depth = _equippedDuck._trapped.depth + 1;
             base.Draw();
-            if (this._equippedDuck != null && this.duck == null || this._equippedDuck == null)
+            if (_equippedDuck != null && duck == null || _equippedDuck == null)
                 return;
-            this._spriteOver.flipH = this.graphic.flipH;
-            this._spriteOver.angle = this.angle;
-            this._spriteOver.alpha = this.alpha;
-            this._spriteOver.scale = this.scale;
-            this._spriteOver.depth = this.owner.depth + (this.duck.holdObject != null ? 5 : 12);
-            this._spriteOver.center = this.center;
-            Graphics.Draw(_spriteOver, this.x, this.y);
+            _spriteOver.flipH = graphic.flipH;
+            _spriteOver.angle = angle;
+            _spriteOver.alpha = alpha;
+            _spriteOver.scale = scale;
+            _spriteOver.depth = owner.depth + (duck.holdObject != null ? 5 : 12);
+            _spriteOver.center = center;
+            Graphics.Draw(_spriteOver, x, y);
         }
     }
 }

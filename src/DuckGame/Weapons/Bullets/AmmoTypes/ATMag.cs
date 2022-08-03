@@ -13,13 +13,13 @@ namespace DuckGame
 
         public ATMag()
         {
-            this.accuracy = 0.95f;
-            this.range = 250f;
-            this.penetration = 1f;
-            this.bulletSpeed = 40f;
-            this.bulletThickness = 0.3f;
-            this.bulletType = typeof(MagBullet);
-            this.combustable = true;
+            accuracy = 0.95f;
+            range = 250f;
+            penetration = 1f;
+            bulletSpeed = 40f;
+            bulletThickness = 0.3f;
+            bulletType = typeof(MagBullet);
+            combustable = true;
         }
     }
 }

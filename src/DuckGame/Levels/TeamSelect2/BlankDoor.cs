@@ -14,13 +14,13 @@ namespace DuckGame
         public BlankDoor(float pX, float pY)
           : base(pX, pY, new Sprite("blank_door", Vec2.Zero))
         {
-            this._fontSmall = new BitmapFont("smallBiosFont", 7, 6);
+            _fontSmall = new BitmapFont("smallBiosFont", 7, 6);
         }
 
         public override void Draw()
         {
-            this._fontSmall.DrawOutline("DUCK", new Vec2(this.x + 22f, this.y + 40f), Color.White, Colors.BlueGray, this.depth + 10);
-            this._fontSmall.DrawOutline("GAME", new Vec2(this.x + 90f, this.y + 40f), Color.White, Colors.BlueGray, this.depth + 10);
+            _fontSmall.DrawOutline("DUCK", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, depth + 10);
+            _fontSmall.DrawOutline("GAME", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, depth + 10);
             base.Draw();
         }
     }

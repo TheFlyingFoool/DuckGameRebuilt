@@ -13,24 +13,24 @@ namespace DuckGame
         {
             get
             {
-                this._value = 0;
-                Sword thing = this._thing as Sword;
+                _value = 0;
+                Sword thing = _thing as Sword;
                 if (thing._jabStance)
-                    this._value |= 16;
+                    _value |= 16;
                 if (thing._crouchStance)
-                    this._value |= 8;
+                    _value |= 8;
                 if (thing._slamStance)
-                    this._value |= 4;
+                    _value |= 4;
                 if (thing._swinging)
-                    this._value |= 2;
+                    _value |= 2;
                 if (thing._volatile)
-                    this._value |= 1;
-                return this._value;
+                    _value |= 1;
+                return _value;
             }
             set
             {
-                this._value = value;
-                Sword thing = this._thing as Sword;
+                _value = value;
+                Sword thing = _thing as Sword;
                 thing._jabStance = (_value & 16U) > 0U;
                 thing._crouchStance = (_value & 8U) > 0U;
                 thing._slamStance = (_value & 4U) > 0U;

@@ -15,19 +15,19 @@ namespace DuckGame
         public UndergroundSkyBackground(float xpos, float ypos, bool moving = false, float speedMult = 1f)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
+            graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 1
             };
-            this.center = new Vec2(8f, 8f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = (Depth)0.9f;
-            this.layer = Layer.Foreground;
-            this._visibleInGame = false;
-            this._speedMult = speedMult;
-            this._moving = moving;
-            this.visible = false;
+            center = new Vec2(8f, 8f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            depth = (Depth)0.9f;
+            layer = Layer.Foreground;
+            _visibleInGame = false;
+            _speedMult = speedMult;
+            _moving = moving;
+            visible = false;
         }
 
         public override void Initialize()
@@ -35,31 +35,31 @@ namespace DuckGame
             if (Level.current is Editor)
                 return;
             Level.current.backgroundColor = new Color(0, 0, 0);
-            this._parallax = new ParallaxBackground("background/underground", 0f, 0f, 5);
-            float speed = 0.9f * this._speedMult;
+            _parallax = new ParallaxBackground("background/underground", 0f, 0f, 5);
+            float speed = 0.9f * _speedMult;
             float distance = 0.99f;
-            this._parallax.AddZone(0, distance, speed);
-            this._parallax.AddZone(1, distance, speed);
-            this._parallax.AddZone(2, distance, speed);
-            this._parallax.AddZone(3, distance, speed);
-            this._parallax.AddZone(4, distance, speed);
-            this._parallax.AddZone(5, distance, speed);
-            this._parallax.AddZone(6, distance, speed);
-            this._parallax.AddZone(7, distance, speed);
-            this._parallax.AddZone(8, distance, speed);
-            this._parallax.AddZone(9, distance, speed);
-            this._parallax.AddZone(10, distance, speed);
+            _parallax.AddZone(0, distance, speed);
+            _parallax.AddZone(1, distance, speed);
+            _parallax.AddZone(2, distance, speed);
+            _parallax.AddZone(3, distance, speed);
+            _parallax.AddZone(4, distance, speed);
+            _parallax.AddZone(5, distance, speed);
+            _parallax.AddZone(6, distance, speed);
+            _parallax.AddZone(7, distance, speed);
+            _parallax.AddZone(8, distance, speed);
+            _parallax.AddZone(9, distance, speed);
+            _parallax.AddZone(10, distance, speed);
             Level.Add(_parallax);
-            this._parallax.x -= 340f;
-            this._parallax.restrictBottom = false;
-            this._parallax.depth = -0.9f;
-            this._parallax.layer = new Layer("PARALLAX3", 115, new Camera(0f, 0f, 320f, 200f))
+            _parallax.x -= 340f;
+            _parallax.restrictBottom = false;
+            _parallax.depth = -0.9f;
+            _parallax.layer = new Layer("PARALLAX3", 115, new Camera(0f, 0f, 320f, 200f))
             {
                 aspectReliesOnGameLayer = true,
                 allowTallAspect = true
             };
-            this.overrideBaseScissorCall = true;
-            Layer.Add(this._parallax.layer);
+            overrideBaseScissorCall = true;
+            Layer.Add(_parallax.layer);
             Level.Add(_parallax);
         }
 

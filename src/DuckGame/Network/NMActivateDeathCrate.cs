@@ -18,16 +18,16 @@ namespace DuckGame
 
         public NMActivateDeathCrate(byte sett, DeathCrate d)
         {
-            this.setting = sett;
-            this.crate = d;
+            setting = sett;
+            crate = d;
         }
 
         public override void Activate()
         {
-            if (this.crate == null)
+            if (crate == null)
                 return;
-            this.crate.settingIndex = this.setting;
-            this.crate.ActivateSetting(false);
+            crate.settingIndex = setting;
+            crate.ActivateSetting(false);
         }
     }
 }

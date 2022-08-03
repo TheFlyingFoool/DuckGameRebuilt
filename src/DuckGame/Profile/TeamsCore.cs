@@ -22,23 +22,23 @@ namespace DuckGame
         public List<Team> SpectatorTeams = new List<Team>();
         private List<Team> _folders = new List<Team>();
 
-        public Team Player1 => this.teams[0];
+        public Team Player1 => teams[0];
 
-        public Team Player2 => this.teams[1];
+        public Team Player2 => teams[1];
 
-        public Team Player3 => this.teams[2];
+        public Team Player3 => teams[2];
 
-        public Team Player4 => this.teams[3];
+        public Team Player4 => teams[3];
 
-        public Team Player5 => this.teams[4];
+        public Team Player5 => teams[4];
 
-        public Team Player6 => this.teams[5];
+        public Team Player6 => teams[5];
 
-        public Team Player7 => this.teams[6];
+        public Team Player7 => teams[6];
 
-        public Team Player8 => this.teams[7];
+        public Team Player8 => teams[7];
 
-        public int numTeams => this.teams.Count;
+        public int numTeams => teams.Count;
 
         public List<Team> all
         {
@@ -63,17 +63,17 @@ namespace DuckGame
             }
         }
 
-        public List<Team> folders => this._folders;
+        public List<Team> folders => _folders;
 
         public List<Team> allStock => new List<Team>(teams);
 
         public void Initialize()
         {
-            this.hats = new SpriteMap("hatCollection", 32, 32)
+            hats = new SpriteMap("hatCollection", 32, 32)
             {
                 center = new Vec2(16f, 16f)
             };
-            this.teams = new List<Team>()
+            teams = new List<Team>()
       {
         new Team("Player 1", "hats/noHat", true)
         {

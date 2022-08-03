@@ -12,10 +12,10 @@ namespace DuckGame
         public DoorFrame(float xpos, float ypos, bool secondaryFrame)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite(secondaryFrame ? "pyramidDoorFrame" : "doorFrame");
-            this.center = new Vec2(5f, 26f);
-            this.depth = -0.95f;
-            this._editorCanModify = false;
+            graphic = new Sprite(secondaryFrame ? "pyramidDoorFrame" : "doorFrame");
+            center = new Vec2(5f, 26f);
+            depth = -0.95f;
+            _editorCanModify = false;
         }
     }
 }

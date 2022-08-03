@@ -25,37 +25,37 @@ namespace DuckGame
         public GoalType()
           : base()
         {
-            this.graphic = new Sprite("swirl");
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this._canFlip = false;
-            this._visibleInGame = false;
-            this.Penalize_Misses._tooltip = "If true, points will be lost for every 'Destroy' object that falls off the level.";
-            this.Mode._tooltip = "Special win/lose conditions. Butterfingers should be paired with an Equipper!";
-            this.editorTooltip = "A special Target goal for your challenge (Destroying Crates, for example).";
+            graphic = new Sprite("swirl");
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
+            _canFlip = false;
+            _visibleInGame = false;
+            Penalize_Misses._tooltip = "If true, points will be lost for every 'Destroy' object that falls off the level.";
+            Mode._tooltip = "Special win/lose conditions. Butterfingers should be paired with an Equipper!";
+            editorTooltip = "A special Target goal for your challenge (Destroying Crates, for example).";
         }
 
         public void UpdateTrackedObjects()
         {
-            if (!(this.contains != null))
+            if (!(contains != null))
                 return;
-            foreach (Thing thing in this.level.things[this.contains])
-                this._trackedObjects.Add(thing);
+            foreach (Thing thing in level.things[contains])
+                _trackedObjects.Add(thing);
         }
 
         public int numObjectsRemaining
         {
             get
             {
-                this.UpdateTrackedObjects();
-                return this._trackedObjects.Count;
+                UpdateTrackedObjects();
+                return _trackedObjects.Count;
             }
         }
 
         public GoalType.Result Check()
         {
-            if (this.Mode.value == GoalType.Special.Survival)
+            if (Mode.value == GoalType.Special.Survival)
             {
                 foreach (Duck duck in Level.current.things[typeof(Duck)])
                 {
@@ -64,7 +64,7 @@ namespace DuckGame
                 }
                 return GoalType.Result.Win;
             }
-            if (this.Mode.value == GoalType.Special.Suicide)
+            if (Mode.value == GoalType.Special.Suicide)
             {
                 foreach (Duck duck in Level.current.things[typeof(Duck)])
                 {
@@ -73,7 +73,7 @@ namespace DuckGame
                 }
                 return GoalType.Result.None;
             }
-            if (this.Mode.value != GoalType.Special.Butterfingers)
+            if (Mode.value != GoalType.Special.Butterfingers)
                 return GoalType.Result.Win;
             foreach (PhysicsObject physicsObject in Level.current.things[typeof(Duck)])
             {
@@ -85,24 +85,24 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this.contains != null)
+            if (contains != null)
             {
-                this.UpdateTrackedObjects();
-                for (int index = 0; index < this._trackedObjects.Count; ++index)
+                UpdateTrackedObjects();
+                for (int index = 0; index < _trackedObjects.Count; ++index)
                 {
-                    Thing thing = this._trackedObjects.ElementAt<Thing>(index);
-                    if (!this._finishedObjects.Contains(thing) && thing is PhysicsObject && ChallengeLevel.running)
+                    Thing thing = _trackedObjects.ElementAt<Thing>(index);
+                    if (!_finishedObjects.Contains(thing) && thing is PhysicsObject && ChallengeLevel.running)
                     {
                         if ((thing as PhysicsObject).destroyed || (thing as PhysicsObject)._ruined)
                         {
                             ++ChallengeLevel.targetsShot;
-                            this._finishedObjects.Add(thing);
-                            this._trackedObjects.Remove(thing);
+                            _finishedObjects.Add(thing);
+                            _trackedObjects.Remove(thing);
                             --index;
                         }
                         else if (thing.level == null)
                         {
-                            if (this.Penalize_Misses.value)
+                            if (Penalize_Misses.value)
                             {
                                 if (ChallengeLevel.targetsShot > 0)
                                 {
@@ -113,9 +113,9 @@ namespace DuckGame
                             else
                             {
                                 ++ChallengeLevel.targetsShot;
-                                this._finishedObjects.Add(thing);
+                                _finishedObjects.Add(thing);
                             }
-                            this._trackedObjects.Remove(thing);
+                            _trackedObjects.Remove(thing);
                             --index;
                         }
                     }
@@ -127,14 +127,14 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
+            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(contains));
             return binaryClassChunk;
         }
 
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
+            contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
             return true;
         }
 

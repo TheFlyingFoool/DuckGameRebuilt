@@ -29,72 +29,72 @@ namespace DuckGame
             set
             {
                 base.flipHorizontal = value;
-                if (this.flipHorizontal)
-                    this.offDir = -1;
+                if (flipHorizontal)
+                    offDir = -1;
                 else
-                    this.offDir = 1;
-                if (!this._initialized)
+                    offDir = 1;
+                if (!_initialized)
                     return;
-                this.CreateShutter();
+                CreateShutter();
             }
         }
 
         public override void EditorPropertyChanged(object property)
         {
-            if (!this._initialized)
+            if (!_initialized)
                 return;
-            this._open = this.open.value;
-            this.UpdateShutter();
-            this.newTrapdoorVersion = true;
+            _open = open.value;
+            UpdateShutter();
+            newTrapdoorVersion = true;
         }
 
         private void UpdateShutter()
         {
-            if (this._lastFallthrough != this.fallthrough.value)
+            if (_lastFallthrough != fallthrough.value)
             {
-                Level.Remove(this._shutter);
-                this._shutter = null;
+                Level.Remove(_shutter);
+                _shutter = null;
             }
             bool flag = false;
-            if (this._shutter == null)
+            if (_shutter == null)
             {
                 flag = true;
-                this.CreateShutter();
+                CreateShutter();
             }
-            this._lastFallthrough = this.fallthrough.value;
+            _lastFallthrough = fallthrough.value;
             if (flag || Level.current is Editor)
             {
-                if (this._open)
-                    this._shutter.angleDegrees = 90f * offDir;
+                if (_open)
+                    _shutter.angleDegrees = 90f * offDir;
                 else
-                    this._shutter.angleDegrees = 0f;
+                    _shutter.angleDegrees = 0f;
             }
-            else if (this._open)
-                this._shutter.angleDegrees = Lerp.Float(this._shutter.angleDegrees, 90f * offDir, 10f);
+            else if (_open)
+                _shutter.angleDegrees = Lerp.Float(_shutter.angleDegrees, 90f * offDir, 10f);
             else
-                this._shutter.angleDegrees = Lerp.Float(this._shutter.angleDegrees, 0f, 10f);
-            (this._shutter as IShutter).UpdateSprite();
+                _shutter.angleDegrees = Lerp.Float(_shutter.angleDegrees, 0f, 10f);
+            (_shutter as IShutter).UpdateSprite();
         }
 
         public WireTrapDoor(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.fallthrough = new EditorProperty<bool>(true, this);
-            this.length = new EditorProperty<int>(2, this, 1f, 4f, 1f);
-            this.color = new EditorProperty<int>(2, this, max: 3f, increment: 1f);
-            this.open = new EditorProperty<bool>(false, this);
-            this._sprite = new SpriteMap("wireBlock", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.depth = -0.5f;
-            this._editorName = "Wire Trapdoor";
-            this.editorTooltip = "Opens and closes when a connected Button is pressed.";
-            this.thickness = 4f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.layer = Layer.Foreground;
-            this._canFlip = true;
+            fallthrough = new EditorProperty<bool>(true, this);
+            length = new EditorProperty<int>(2, this, 1f, 4f, 1f);
+            color = new EditorProperty<int>(2, this, max: 3f, increment: 1f);
+            open = new EditorProperty<bool>(false, this);
+            _sprite = new SpriteMap("wireBlock", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -8f);
+            collisionSize = new Vec2(16f, 16f);
+            depth = -0.5f;
+            _editorName = "Wire Trapdoor";
+            editorTooltip = "Opens and closes when a connected Button is pressed.";
+            thickness = 4f;
+            physicsMaterial = PhysicsMaterial.Metal;
+            layer = Layer.Foreground;
+            _canFlip = true;
         }
 
         public override BinaryClassChunk Serialize()
@@ -107,50 +107,50 @@ namespace DuckGame
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.newTrapdoorVersion = node.GetProperty<bool>("newTrapdoorVersion");
-            if (!this.newTrapdoorVersion)
+            newTrapdoorVersion = node.GetProperty<bool>("newTrapdoorVersion");
+            if (!newTrapdoorVersion)
             {
-                this.length.value = 2;
-                this.color.value = !(bool)this.fallthrough ? 3 : 2;
-                this.newTrapdoorVersion = true;
+                length.value = 2;
+                color.value = !(bool)fallthrough ? 3 : 2;
+                newTrapdoorVersion = true;
             }
             return true;
         }
 
         public void CreateShutter()
         {
-            if (this._shutter != null)
-                Level.Remove(this._shutter);
-            this._shutter = !this.fallthrough.value ? new WireTrapDoorShutterSolid(this.x + 4 * this.offDir, this.y - 5f, this) : new WireTrapDoorShutter(this.x + 4 * this.offDir, this.y - 5f, this);
-            this._shutter.depth = this.depth + 5;
-            this._shutter.offDir = this.offDir;
-            Level.Add(this._shutter);
+            if (_shutter != null)
+                Level.Remove(_shutter);
+            _shutter = !fallthrough.value ? new WireTrapDoorShutterSolid(this.x + 4 * this.offDir, this.y - 5f, this) : new WireTrapDoorShutter(this.x + 4 * this.offDir, this.y - 5f, this);
+            _shutter.depth = depth + 5;
+            _shutter.offDir = offDir;
+            Level.Add(_shutter);
         }
 
         public override void Initialize()
         {
-            this._open = this.open.value;
-            this.CreateShutter();
-            (this._shutter as IShutter).UpdateSprite();
+            _open = open.value;
+            CreateShutter();
+            (_shutter as IShutter).UpdateSprite();
             base.Initialize();
         }
 
         public override void Update()
         {
-            this.UpdateShutter();
+            UpdateShutter();
             base.Update();
         }
 
         public override void Terminate()
         {
-            Level.Remove(this._shutter);
+            Level.Remove(_shutter);
             base.Terminate();
         }
 
         public void Pulse(int type, WireTileset wire)
         {
             Thing.Fondle(this, DuckNetwork.localConnection);
-            this._open = !this._open;
+            _open = !_open;
             SFX.Play("click");
         }
     }

@@ -15,8 +15,8 @@ namespace DuckGame
 
         public MaterialPersona(DuckPersona pPersona)
         {
-            this.persona = pPersona;
-            this._effect = Content.Load<MTEffect>("Shaders/recolor_duo");
+            persona = pPersona;
+            _effect = Content.Load<MTEffect>("Shaders/recolor_duo");
         }
 
         public override void Update()
@@ -25,8 +25,8 @@ namespace DuckGame
 
         public override void Apply()
         {
-            this._effect.effect.Parameters["replace1"].SetValue((Vector3)(this.persona.color / byte.MaxValue));
-            this._effect.effect.Parameters["replace2"].SetValue((Vector3)(this.persona.colorDark / byte.MaxValue));
+            _effect.effect.Parameters["replace1"].SetValue((Vector3)(persona.color / byte.MaxValue));
+            _effect.effect.Parameters["replace2"].SetValue((Vector3)(persona.colorDark / byte.MaxValue));
             base.Apply();
         }
     }

@@ -18,29 +18,29 @@ namespace DuckGame
         public EditorGroupMenu(IContextListener owner, bool root = false, SpriteMap image = null)
           : base(owner, image)
         {
-            this.itemSize.x = 100f;
-            this.itemSize.y = 16f;
-            this._root = root;
-            if (!this._root)
-                this.greyOut = Editor._currentLevelData.metaData.onlineMode; //Main.isDemo || 
-            this._maxNumToDraw = 20;
+            itemSize.x = 100f;
+            itemSize.y = 16f;
+            _root = root;
+            if (!_root)
+                greyOut = Editor._currentLevelData.metaData.onlineMode; //Main.isDemo || 
+            _maxNumToDraw = 20;
         }
 
         public override void Update()
         {
             if (Editor.bigInterfaceMode)
-                this._maxNumToDraw = 13;
+                _maxNumToDraw = 13;
             else
-                this._maxNumToDraw = 20;
+                _maxNumToDraw = 20;
             base.Update();
         }
 
         public void UpdateGrayout()
         {
-            this.greyOut = false;
-            if (Editor._currentLevelData.metaData.onlineMode && this.willOnlineGrayout)
-                this.greyOut = true;
-            foreach (ContextMenu contextMenu in this._items)
+            greyOut = false;
+            if (Editor._currentLevelData.metaData.onlineMode && willOnlineGrayout)
+                greyOut = true;
+            foreach (ContextMenu contextMenu in _items)
             {
                 if (contextMenu is EditorGroupMenu)
                     (contextMenu as EditorGroupMenu).UpdateGrayout();
@@ -61,31 +61,31 @@ namespace DuckGame
           bool setPinnable = false)
         {
             ++EditorGroupMenu.deep;
-            this._text = group.Name;
-            this.itemSize.x = Graphics.GetFancyStringWidth(this._text) + 16f;
+            _text = group.Name;
+            itemSize.x = Graphics.GetFancyStringWidth(_text) + 16f;
             foreach (EditorGroup subGroup in group.SubGroups)
             {
                 EditorGroupMenu editorGroupMenu = new EditorGroupMenu(this)
                 {
-                    fancy = this.fancy
+                    fancy = fancy
                 };
                 editorGroupMenu.InitializeGroups(subGroup, radioBinding, setPinnable: setPinnable);
                 if (!editorGroupMenu.greyOut)
-                    this.greyOut = false;
+                    greyOut = false;
                 if (!editorGroupMenu.willOnlineGrayout)
-                    this.willOnlineGrayout = false;
+                    willOnlineGrayout = false;
                 editorGroupMenu.isPinnable = setPinnable;
-                this.AddItem(editorGroupMenu);
+                AddItem(editorGroupMenu);
             }
             if (scriptingGroup != null)
             {
                 EditorGroupMenu editorGroupMenu = new EditorGroupMenu(this);
                 editorGroupMenu.InitializeGroups(scriptingGroup, radioBinding);
                 if (!editorGroupMenu.greyOut)
-                    this.greyOut = false;
+                    greyOut = false;
                 if (!editorGroupMenu.willOnlineGrayout)
-                    this.willOnlineGrayout = false;
-                this.AddItem(editorGroupMenu);
+                    willOnlineGrayout = false;
+                AddItem(editorGroupMenu);
             }
             foreach (Thing allThing in group.AllThings)
             {
@@ -94,8 +94,8 @@ namespace DuckGame
                 //    this.greyOut = false;
                 if (bag.GetOrDefault("isOnlineCapable", true))
                 {
-                    this.greyOut = false;
-                    this.willOnlineGrayout = false;
+                    greyOut = false;
+                    willOnlineGrayout = false;
                 }
                 switch (allThing)
                 {
@@ -106,7 +106,7 @@ namespace DuckGame
                         {
                             contextThing = allThing
                         };
-                        this.AddItem(contextBackgroundTile);
+                        AddItem(contextBackgroundTile);
                         continue;
                     default:
                         if (radioBinding != null)
@@ -121,8 +121,8 @@ namespace DuckGame
                                         contextThing = allThing
                                     };
                                     if (bag.GetOrDefault("isOnlineCapable", true))
-                                        this.willOnlineGrayout = false;
-                                    this.AddItem(contextSlider);
+                                        willOnlineGrayout = false;
+                                    AddItem(contextSlider);
                                     continue;
                                 }
                                 ContextCheckBox contextCheckBox = new ContextCheckBox(allThing.editorName, this, radioBinding, allThing.GetType())
@@ -131,8 +131,8 @@ namespace DuckGame
                                     contextThing = allThing
                                 };
                                 if (bag.GetOrDefault("isOnlineCapable", true))
-                                    this.willOnlineGrayout = false;
-                                this.AddItem(contextCheckBox);
+                                    willOnlineGrayout = false;
+                                AddItem(contextCheckBox);
                                 continue;
                             }
                             ContextRadio contextRadio = new ContextRadio(allThing.editorName, false, allThing.GetType(), this, radioBinding)
@@ -141,8 +141,8 @@ namespace DuckGame
                                 contextThing = allThing
                             };
                             if (bag.GetOrDefault("isOnlineCapable", true))
-                                this.willOnlineGrayout = false;
-                            this.AddItem(contextRadio);
+                                willOnlineGrayout = false;
+                            AddItem(contextRadio);
                             continue;
                         }
                         ContextObject contextObject = new ContextObject(allThing, this)
@@ -150,25 +150,25 @@ namespace DuckGame
                             contextThing = allThing,
                             isPinnable = setPinnable
                         };
-                        this.AddItem(contextObject);
+                        AddItem(contextObject);
                         continue;
                 }
             }
             --EditorGroupMenu.deep;
             if (EditorGroupMenu.deep != 0)
                 return;
-            this.UpdateGrayout();
+            UpdateGrayout();
         }
 
         public void InitializeTypelist(System.Type pType, FieldBinding pBinding)
         {
-            this.AddItem(new ContextRadio("None", false, null, this, pBinding));
-            this.InitializeGroups(new EditorGroup(pType), pBinding);
+            AddItem(new ContextRadio("None", false, null, this, pBinding));
+            InitializeGroups(new EditorGroup(pType), pBinding);
         }
 
         public void InitializeTeams(FieldBinding radioBinding)
         {
-            this.AddItem(new ContextRadio("None", false, 0, this, radioBinding));
+            AddItem(new ContextRadio("None", false, 0, this, radioBinding));
             EditorGroupMenu editorGroupMenu = null;
             int num1 = 0;
             if (Teams.all.Count > 10)
@@ -187,13 +187,13 @@ namespace DuckGame
                     if (editorGroupMenu != null)
                         editorGroupMenu.AddItem(contextRadio);
                     else
-                        this.AddItem(contextRadio);
+                        AddItem(contextRadio);
                     ++num2;
                     if (num2 == 10)
                     {
                         ++num1;
                         num2 = 0;
-                        this.AddItem(editorGroupMenu);
+                        AddItem(editorGroupMenu);
                         editorGroupMenu = new EditorGroupMenu(this)
                         {
                             text = "Hats " + num1.ToString()
@@ -203,7 +203,7 @@ namespace DuckGame
             }
             if (editorGroupMenu == null || num2 <= 0)
                 return;
-            this.AddItem(editorGroupMenu);
+            AddItem(editorGroupMenu);
         }
     }
 }

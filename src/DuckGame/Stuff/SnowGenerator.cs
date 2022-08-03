@@ -18,16 +18,16 @@ namespace DuckGame
         public SnowGenerator(float x, float y)
           : base(x, y)
         {
-            this._editorName = "Snow Machine";
-            this.graphic = new Sprite("snowGenerator");
-            this.center = new Vec2(8f, 8f);
-            this.depth = (Depth)0.55f;
-            this._visibleInGame = false;
-            this.snowWait = Rando.Float(4f);
-            this.editorTooltip = "Let it snow!";
-            this.solid = false;
-            this._collisionSize = new Vec2(0f, 0f);
-            this.maxPlaceable = 32;
+            _editorName = "Snow Machine";
+            graphic = new Sprite("snowGenerator");
+            center = new Vec2(8f, 8f);
+            depth = (Depth)0.55f;
+            _visibleInGame = false;
+            snowWait = Rando.Float(4f);
+            editorTooltip = "Let it snow!";
+            solid = false;
+            _collisionSize = new Vec2(0f, 0f);
+            maxPlaceable = 32;
         }
 
         public override void Initialize()
@@ -43,18 +43,18 @@ namespace DuckGame
                 int num = 0;
                 foreach (SnowGenerator t in Level.current.things[typeof(SnowGenerator)].ToList<Thing>())
                 {
-                    if (num < this.maxPlaceable)
+                    if (num < maxPlaceable)
                         ++num;
                     else
                         Level.current.RemoveThing(t);
                 }
                 SnowGenerator.initGen = false;
             }
-            this.snowWait -= Maths.IncFrameTimer();
+            snowWait -= Maths.IncFrameTimer();
             if (snowWait <= 0.0)
             {
-                this.snowWait = Rando.Float(2f, 4f);
-                Level.Add(new SnowFallParticle(this.x + Rando.Float(-8f, 8f), this.y + Rando.Float(-8f, 8f), new Vec2(0f, 0f)));
+                snowWait = Rando.Float(2f, 4f);
+                Level.Add(new SnowFallParticle(x + Rando.Float(-8f, 8f), y + Rando.Float(-8f, 8f), new Vec2(0f, 0f)));
             }
             base.Update();
         }

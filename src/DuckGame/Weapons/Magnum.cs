@@ -18,50 +18,50 @@ namespace DuckGame
 
         public override float angle
         {
-            get => base.angle + this._angleOffset;
-            set => this._angle = value;
+            get => base.angle + _angleOffset;
+            set => _angle = value;
         }
 
         public Magnum(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 6;
-            this._ammoType = new ATMagnum();
-            this._type = "gun";
-            this.graphic = new Sprite("magnum");
-            this.center = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -6f);
-            this.collisionSize = new Vec2(16f, 10f);
-            this._barrelOffsetTL = new Vec2(25f, 12f);
-            this._fireSound = "magnum";
-            this._kickForce = 3f;
-            this._fireRumble = RumbleIntensity.Light;
-            this._holdOffset = new Vec2(1f, 2f);
-            this.handOffset = new Vec2(0f, 1f);
-            this._bio = "Standard issue .44 Magnum. Pretty great for killing things, really great for killing things that are trying to hide. Watch the kick, unless you're trying to shoot the ceiling.";
-            this._editorName = nameof(Magnum);
-            this.editorTooltip = "Heavy duty pistol that pierces many objects. Cool shades not included.";
+            ammo = 6;
+            _ammoType = new ATMagnum();
+            _type = "gun";
+            graphic = new Sprite("magnum");
+            center = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -6f);
+            collisionSize = new Vec2(16f, 10f);
+            _barrelOffsetTL = new Vec2(25f, 12f);
+            _fireSound = "magnum";
+            _kickForce = 3f;
+            _fireRumble = RumbleIntensity.Light;
+            _holdOffset = new Vec2(1f, 2f);
+            handOffset = new Vec2(0f, 1f);
+            _bio = "Standard issue .44 Magnum. Pretty great for killing things, really great for killing things that are trying to hide. Watch the kick, unless you're trying to shoot the ceiling.";
+            _editorName = nameof(Magnum);
+            editorTooltip = "Heavy duty pistol that pierces many objects. Cool shades not included.";
         }
 
         public override void Update()
         {
             base.Update();
-            this._angleOffset = this.owner == null ? 0f : (this.offDir >= 0 ? -Maths.DegToRad(this.rise * 65f) : -Maths.DegToRad((float)(-this.rise * 65.0)));
+            _angleOffset = owner == null ? 0f : (offDir >= 0 ? -Maths.DegToRad(rise * 65f) : -Maths.DegToRad((float)(-rise * 65.0)));
             if (rise > 0.0)
-                this.rise -= 0.013f;
+                rise -= 0.013f;
             else
-                this.rise = 0f;
-            if (!this._raised)
+                rise = 0f;
+            if (!_raised)
                 return;
-            this._angleOffset = 0f;
+            _angleOffset = 0f;
         }
 
         public override void OnPressAction()
         {
             base.OnPressAction();
-            if (this.ammo <= 0 || rise >= 1.0)
+            if (ammo <= 0 || rise >= 1.0)
                 return;
-            this.rise += 0.4f;
+            rise += 0.4f;
         }
     }
 }

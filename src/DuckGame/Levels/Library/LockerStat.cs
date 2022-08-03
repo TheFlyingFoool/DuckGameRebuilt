@@ -14,8 +14,8 @@ namespace DuckGame
 
         public LockerStat(string n, Color c)
         {
-            this.name = n;
-            this.color = c;
+            name = n;
+            color = c;
         }
     }
 }

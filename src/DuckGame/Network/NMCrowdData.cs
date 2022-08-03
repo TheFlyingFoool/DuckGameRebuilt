@@ -15,10 +15,10 @@ namespace DuckGame
         {
         }
 
-        public NMCrowdData(BitBuffer dat) => this.data = dat;
+        public NMCrowdData(BitBuffer dat) => data = dat;
 
-        protected override void OnSerialize() => this._serializedData.Write(this.data, true);
+        protected override void OnSerialize() => _serializedData.Write(data, true);
 
-        public override void OnDeserialize(BitBuffer d) => this.data = d.ReadBitBuffer();
+        public override void OnDeserialize(BitBuffer d) => data = d.ReadBitBuffer();
     }
 }

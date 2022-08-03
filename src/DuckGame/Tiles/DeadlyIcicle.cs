@@ -14,28 +14,28 @@ namespace DuckGame
         public DeadlyIcicle(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("icicleBig", 10, 18);
-            this.graphic = _sprite;
-            this.center = new Vec2(5f, 5f);
-            this.collisionOffset = new Vec2(-3f, -4f);
-            this.collisionSize = new Vec2(6f, 12f);
-            this.depth = -0.5f;
-            this.thickness = 4f;
-            this.weight = 5f;
-            this.flammable = 0f;
-            this.collideSounds.Add("rockHitGround2");
-            this.physicsMaterial = PhysicsMaterial.Plastic;
+            _sprite = new SpriteMap("icicleBig", 10, 18);
+            graphic = _sprite;
+            center = new Vec2(5f, 5f);
+            collisionOffset = new Vec2(-3f, -4f);
+            collisionSize = new Vec2(6f, 12f);
+            depth = -0.5f;
+            thickness = 4f;
+            weight = 5f;
+            flammable = 0f;
+            collideSounds.Add("rockHitGround2");
+            physicsMaterial = PhysicsMaterial.Plastic;
         }
 
         public override void Update()
         {
             base.Update();
-            this.heat = -1f;
+            heat = -1f;
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (bullet.isLocal && this.owner == null)
+            if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
             for (int index = 0; index < 4; ++index)
             {

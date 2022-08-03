@@ -19,30 +19,30 @@ namespace DuckGame
 
         public bool IsDisposed { get; private set; }
 
-        public short textureIndex => this._textureIndex;
+        public short textureIndex => _textureIndex;
 
-        internal void SetTextureIndex(short index) => this._textureIndex = index;
+        internal void SetTextureIndex(short index) => _textureIndex = index;
 
-        public string textureName => this._textureName;
+        public string textureName => _textureName;
 
-        public void AssignTextureName(string pName) => this._textureName = pName;
+        public void AssignTextureName(string pName) => _textureName = pName;
 
         public float frameWidth
         {
-            get => this._frameWidth;
-            set => this._frameWidth = value;
+            get => _frameWidth;
+            set => _frameWidth = value;
         }
 
         public float frameHeight
         {
-            get => this._frameHeight;
-            set => this._frameHeight = value;
+            get => _frameHeight;
+            set => _frameHeight = value;
         }
 
         public int currentObjectIndex
         {
-            get => this._currentObjectIndex;
-            set => this._currentObjectIndex = value;
+            get => _currentObjectIndex;
+            set => _currentObjectIndex = value;
         }
 
         public abstract object nativeObject { get; }
@@ -51,21 +51,21 @@ namespace DuckGame
 
         public abstract int height { get; }
 
-        public int w => this.width;
+        public int w => width;
 
-        public int h => this.height;
+        public int h => height;
 
         protected Tex2DBase(string texName, short curTexIndex)
         {
-            this._textureIndex = curTexIndex;
-            this._textureName = texName;
+            _textureIndex = curTexIndex;
+            _textureName = texName;
         }
 
         ~Tex2DBase()
         {
-            Content.GetTex2DFromIndex(this._textureIndex);
+            Content.GetTex2DFromIndex(_textureIndex);
             Tex2DBase tex2Dbase = this;
-            this.Dispose();
+            Dispose();
         }
 
         public abstract void GetData<T>(T[] data) where T : struct;
@@ -78,10 +78,10 @@ namespace DuckGame
 
         public void Dispose()
         {
-            if (this.IsDisposed)
+            if (IsDisposed)
                 return;
-            this.DisposeNative();
-            this.IsDisposed = true;
+            DisposeNative();
+            IsDisposed = true;
         }
 
         protected abstract void DisposeNative();

@@ -61,7 +61,7 @@ namespace DuckGame
         public LevelData challenge02Data;
         public LevelData challenge03Data;
 
-        public ChallengeGroup data => this._data;
+        public ChallengeGroup data => _data;
 
         public override bool visible
         {
@@ -69,96 +69,96 @@ namespace DuckGame
             set
             {
                 base.visible = value;
-                this._dust.visible = base.visible;
+                _dust.visible = base.visible;
             }
         }
 
         public bool unlocked
         {
-            get => this._unlocked;
-            set => this._unlocked = value;
+            get => _unlocked;
+            set => _unlocked = value;
         }
 
         public int lightColor
         {
-            get => this._lightColor;
-            set => this._lightColor = value;
+            get => _lightColor;
+            set => _lightColor = value;
         }
 
         public ArcadeMachine(float xpos, float ypos, ChallengeGroup c, int index)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("arcade/arcadeMachines", 29, 36)
+            _sprite = new SpriteMap("arcade/arcadeMachines", 29, 36)
             {
                 frame = index
             };
-            this.graphic = _sprite;
-            this.depth = -0.5f;
-            this._canHaveChance = false;
-            this._customMachineOverlay = new Sprite("arcade/customMachine");
-            this._outline = new Sprite("arcade/arcadeMachineOutline")
+            graphic = _sprite;
+            depth = -0.5f;
+            _canHaveChance = false;
+            _customMachineOverlay = new Sprite("arcade/customMachine");
+            _outline = new Sprite("arcade/arcadeMachineOutline")
             {
-                depth = this.depth + 1
+                depth = depth + 1
             };
-            this._outline.CenterOrigin();
-            this._customMachineOverlayMask = new Sprite("arcade/customOverlay");
-            this._boom = new Sprite("arcade/boommachine");
-            this._wagnus = new Sprite("arcade/wagnustrainer");
-            this._wagnusOverlay = new Sprite("arcade/wagnusOverlay");
-            this._font = new BitmapFont("biosFont", 8);
-            this.center = new Vec2(this._sprite.width / 2, this._sprite.h / 2);
-            this._data = c;
-            this._light = new SpriteMap("arcade/lights2", 56, 57);
-            this._fixture = new Sprite("arcade/fixture");
-            this._flash = new SpriteMap("arcade/monitorFlash", 11, 9);
-            this._flash.AddAnimation("idle", 0.1f, true, 0, 1, 2);
-            this._flash.SetAnimation("idle");
-            this._flashLarge = new SpriteMap("arcade/monitorFlashLarge", 13, 10);
-            this._flashLarge.AddAnimation("idle", 0.1f, true, 0, 1, 2);
-            this._flashLarge.SetAnimation("idle");
-            this._flashWagnus = new SpriteMap("arcade/monitorFlashWagnus", 15, 11);
-            this._flashWagnus.AddAnimation("idle", 0.1f, true, 0, 1, 2);
-            this._flashWagnus.SetAnimation("idle");
-            this._covered = new Sprite("arcade/coveredMachine");
-            this._collisionSize = new Vec2(28f, 34f);
-            this._collisionOffset = new Vec2(-14f, -17f);
-            this.hugWalls = WallHug.Floor;
-            this.respect._tooltip = "How much Chancy needs to like you before this machine unlocks.";
-            this.requirement._tooltip = "How many challenges must be completed before this machine unlocks.";
-            this.name._tooltip = "What's this collection of challenges called?";
+            _outline.CenterOrigin();
+            _customMachineOverlayMask = new Sprite("arcade/customOverlay");
+            _boom = new Sprite("arcade/boommachine");
+            _wagnus = new Sprite("arcade/wagnustrainer");
+            _wagnusOverlay = new Sprite("arcade/wagnusOverlay");
+            _font = new BitmapFont("biosFont", 8);
+            center = new Vec2(_sprite.width / 2, _sprite.h / 2);
+            _data = c;
+            _light = new SpriteMap("arcade/lights2", 56, 57);
+            _fixture = new Sprite("arcade/fixture");
+            _flash = new SpriteMap("arcade/monitorFlash", 11, 9);
+            _flash.AddAnimation("idle", 0.1f, true, 0, 1, 2);
+            _flash.SetAnimation("idle");
+            _flashLarge = new SpriteMap("arcade/monitorFlashLarge", 13, 10);
+            _flashLarge.AddAnimation("idle", 0.1f, true, 0, 1, 2);
+            _flashLarge.SetAnimation("idle");
+            _flashWagnus = new SpriteMap("arcade/monitorFlashWagnus", 15, 11);
+            _flashWagnus.AddAnimation("idle", 0.1f, true, 0, 1, 2);
+            _flashWagnus.SetAnimation("idle");
+            _covered = new Sprite("arcade/coveredMachine");
+            _collisionSize = new Vec2(28f, 34f);
+            _collisionOffset = new Vec2(-14f, -17f);
+            hugWalls = WallHug.Floor;
+            respect._tooltip = "How much Chancy needs to like you before this machine unlocks.";
+            requirement._tooltip = "How many challenges must be completed before this machine unlocks.";
+            name._tooltip = "What's this collection of challenges called?";
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            this._data = new ChallengeGroup
+            _data = new ChallengeGroup
             {
-                name = this.name.value,
-                trophiesRequired = this.requirement.value
+                name = name.value,
+                trophiesRequired = requirement.value
             };
-            this._data.challenges.Add(this.challenge01.value);
-            this._data.challenges.Add(this.challenge02.value);
-            this._data.challenges.Add(this.challenge03.value);
-            if (this.level == null || this.level.bareInitialize)
+            _data.challenges.Add(challenge01.value);
+            _data.challenges.Add(challenge02.value);
+            _data.challenges.Add(challenge03.value);
+            if (level == null || level.bareInitialize)
                 return;
-            this._dust = new DustSparkleEffect(this.x - 28f, this.y - 40f, false, (bool)this.lit);
-            this._lighting = !(bool)this.lit ? new ArcadeScreen(this.x, this.y) : new ArcadeLight(this.x - 1f, this.y - 41f);
+            _dust = new DustSparkleEffect(x - 28f, y - 40f, false, (bool)lit);
+            _lighting = !(bool)lit ? new ArcadeScreen(this.x, this.y) : new ArcadeLight(this.x - 1f, this.y - 41f);
             if (Content.readyToRenderPreview)
-                this._dust.y -= 10f;
+                _dust.y -= 10f;
             else
-                Level.Add(this._lighting);
+                Level.Add(_lighting);
             Level.Add(_dust);
-            this._dust.depth = this.depth - 2;
+            _dust.depth = depth - 2;
         }
 
         public bool CheckUnlocked(bool ignoreAlreadyUnlocked = true)
         {
-            if (this._data == null || ignoreAlreadyUnlocked && this._unlocked)
+            if (_data == null || ignoreAlreadyUnlocked && _unlocked)
                 return false;
-            if (this._data.required.Count > 0)
+            if (_data.required.Count > 0)
             {
-                foreach (string name in this._data.required)
+                foreach (string name in _data.required)
                 {
                     ChallengeData challenge = Challenges.GetChallenge(name);
                     if (challenge != null)
@@ -169,25 +169,25 @@ namespace DuckGame
                     }
                 }
             }
-            if ((float)this.respect != 0f && Challenges.GetChallengeSkillIndex() < (float)this.respect)
+            if ((float)respect != 0f && Challenges.GetChallengeSkillIndex() < (float)respect)
                 return false;
-            return (int)this.requirement <= 0 || Challenges.GetNumTrophies(Profiles.active[0]) >= (int)this.requirement;
+            return (int)requirement <= 0 || Challenges.GetNumTrophies(Profiles.active[0]) >= (int)requirement;
         }
 
         public void UpdateStyle()
         {
-            if (!(this._previousMachineStyle != this.machineStyle) && this._previousStyleOffsetX == this._styleOffsetX && this._previousStyleOffsetY == this._styleOffsetY)
+            if (!(_previousMachineStyle != machineStyle) && _previousStyleOffsetX == _styleOffsetX && _previousStyleOffsetY == _styleOffsetY)
                 return;
-            this._previousStyleOffsetX = this._styleOffsetX;
-            this._previousStyleOffsetY = this._styleOffsetY;
-            if (this.machineStyle == null || this.machineStyle == "")
+            _previousStyleOffsetX = _styleOffsetX;
+            _previousStyleOffsetY = _styleOffsetY;
+            if (machineStyle == null || machineStyle == "")
             {
-                this._machineStyleSprite = null;
-                this._customMachineUnderlay = null;
+                _machineStyleSprite = null;
+                _customMachineUnderlay = null;
             }
             else
             {
-                this._machineStyleSprite = new Sprite((Tex2D)Editor.StringToTexture(this.machineStyle));
+                _machineStyleSprite = new Sprite((Tex2D)Editor.StringToTexture(machineStyle));
                 if (Thing._alphaTestEffect == null)
                     Thing._alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
                 RenderTarget2D t = new RenderTarget2D(48, 48, true);
@@ -203,8 +203,8 @@ namespace DuckGame
                 };
                 DuckGame.Graphics.Clear(new Color(0, 0, 0, 0));
                 DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)Thing._alphaTestEffect, camera.getMatrix());
-                DuckGame.Graphics.Draw(this._machineStyleSprite, _styleOffsetX, _styleOffsetY, -0.9f);
-                DuckGame.Graphics.Draw(this._customMachineOverlayMask, 0f, 0f, (Depth)0.9f);
+                DuckGame.Graphics.Draw(_machineStyleSprite, _styleOffsetX, _styleOffsetY, -0.9f);
+                DuckGame.Graphics.Draw(_customMachineOverlayMask, 0f, 0f, (Depth)0.9f);
                 DuckGame.Graphics.screen.End();
                 DuckGame.Graphics.SetRenderTarget(null);
                 Texture2D tex = new Texture2D(DuckGame.Graphics.device, t.width, t.height);
@@ -215,9 +215,9 @@ namespace DuckGame
                         data[index] = new Color(0, 0, 0, 0);
                 }
                 tex.SetData<Color>(data);
-                this._customMachineUnderlay = new Sprite((Tex2D)tex);
+                _customMachineUnderlay = new Sprite((Tex2D)tex);
             }
-            this._previousMachineStyle = this.machineStyle;
+            _previousMachineStyle = machineStyle;
         }
 
         public override BinaryClassChunk Serialize()
@@ -237,54 +237,54 @@ namespace DuckGame
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.machineStyle = node.GetProperty<string>("machineStyle");
-            if (this.machineStyle == null)
-                this.machineStyle = "";
+            machineStyle = node.GetProperty<string>("machineStyle");
+            if (machineStyle == null)
+                machineStyle = "";
             if (node.GetProperty<bool>("arcadeMachineMode"))
             {
-                this.challenge01WorkshopID = node.GetProperty<ulong>("challenge01WorkshopID");
-                this.challenge02WorkshopID = node.GetProperty<ulong>("challenge02WorkshopID");
-                this.challenge03WorkshopID = node.GetProperty<ulong>("challenge03WorkshopID");
-                this.UpdateData();
+                challenge01WorkshopID = node.GetProperty<ulong>("challenge01WorkshopID");
+                challenge02WorkshopID = node.GetProperty<ulong>("challenge02WorkshopID");
+                challenge03WorkshopID = node.GetProperty<ulong>("challenge03WorkshopID");
+                UpdateData();
             }
             return true;
         }
 
         public void UpdateData()
         {
-            this.challenge01Data = Content.GetLevel(this.challenge01.value);
-            this.challenge02Data = Content.GetLevel(this.challenge02.value);
-            this.challenge03Data = Content.GetLevel(this.challenge03.value);
+            challenge01Data = Content.GetLevel(challenge01.value);
+            challenge02Data = Content.GetLevel(challenge02.value);
+            challenge03Data = Content.GetLevel(challenge03.value);
         }
 
         public override void EditorUpdate()
         {
-            this.UpdateStyle();
+            UpdateStyle();
             base.EditorUpdate();
         }
 
         public override void Update()
         {
-            this.UpdateStyle();
-            if (this._unlocked)
+            UpdateStyle();
+            if (_unlocked)
             {
-                Duck duck = Level.Nearest<Duck>(this.x, this.y);
+                Duck duck = Level.Nearest<Duck>(x, y);
                 if (duck != null)
                 {
-                    if (duck.grounded && (duck.position - this.position).length < 20f)
+                    if (duck.grounded && (duck.position - position).length < 20f)
                     {
-                        this._hoverFade = Lerp.Float(this._hoverFade, 1f, 0.1f);
-                        this.hover = true;
+                        _hoverFade = Lerp.Float(_hoverFade, 1f, 0.1f);
+                        hover = true;
                     }
                     else
                     {
-                        this._hoverFade = Lerp.Float(this._hoverFade, 0f, 0.1f);
-                        this.hover = false;
+                        _hoverFade = Lerp.Float(_hoverFade, 0f, 0.1f);
+                        hover = false;
                     }
                 }
             }
-            this._dust.fade = 0.7f;
-            this._dust.visible = this._lighting.visible = this._unlocked && this.visible;
+            _dust.fade = 0.7f;
+            _dust.visible = _lighting.visible = _unlocked && visible;
         }
 
         public override ContextMenu GetContextMenu()
@@ -298,121 +298,121 @@ namespace DuckGame
         {
             if (Content.readyToRenderPreview)
             {
-                this.y -= 3f;
+                y -= 3f;
                 for (int index = 0; index < 3; ++index)
                 {
-                    LevelData levelData = index != 0 ? (index != 1 ? this.challenge03Data : this.challenge02Data) : this.challenge01Data;
+                    LevelData levelData = index != 0 ? (index != 1 ? challenge03Data : challenge02Data) : challenge01Data;
                     if (levelData != null && levelData.previewData.preview != null)
                     {
                         Tex2D texture = (Tex2D)Editor.StringToTexture(levelData.previewData.preview);
-                        Vec2 vec2 = new Vec2(this.x - 28f, (this.y + 30f - texture.width / 8f - 6f));
+                        Vec2 vec2 = new Vec2(x - 28f, (y + 30f - texture.width / 8f - 6f));
                         switch (index)
                         {
                             case 1:
-                                vec2 = new Vec2((float)(this.x + 28f - texture.width / 8f), (this.y + 30f - texture.width / 8f - 6f));
+                                vec2 = new Vec2((float)(x + 28f - texture.width / 8f), (y + 30f - texture.width / 8f - 6f));
                                 break;
                             case 2:
-                                vec2 = new Vec2(this.x - (float)(texture.width / 8f / 2f), (this.y + 30f - texture.width / 8f));
+                                vec2 = new Vec2(x - (float)(texture.width / 8f / 2f), (y + 30f - texture.width / 8f));
                                 break;
                         }
                         DuckGame.Graphics.DrawRect(new Vec2(vec2.x - 0.5f, vec2.y - 0.5f), new Vec2((vec2.x + texture.width / 8f + 0.5f), (vec2.y + texture.height / 8f + 0.5f)), Color.White, (Depth)(index == 2 ? 0.9f : 0.8f));
                         DuckGame.Graphics.Draw(texture, vec2.x, vec2.y, 0.125f, 0.125f, (Depth)(index == 2 ? 0.99f : 0.85f));
                     }
                 }
-                this.y -= 6f;
+                y -= 6f;
             }
-            this._sprite.frame = this.style.value;
-            this._light.depth = this.depth - 6;
-            this._flash.depth = this.depth + 1;
-            if (this._unlocked)
+            _sprite.frame = style.value;
+            _light.depth = depth - 6;
+            _flash.depth = depth + 1;
+            if (_unlocked)
             {
-                this._light.frame = this._lightColor;
-                this.graphic.color = Color.White;
-                if (this.style.value == 16)
+                _light.frame = _lightColor;
+                graphic.color = Color.White;
+                if (style.value == 16)
                 {
-                    this._flashWagnus.depth = this.depth + 4;
-                    if (this.flipHorizontal)
-                        DuckGame.Graphics.Draw(_flashWagnus, this.x - 3f, this.y - 8f);
+                    _flashWagnus.depth = depth + 4;
+                    if (flipHorizontal)
+                        DuckGame.Graphics.Draw(_flashWagnus, x - 3f, y - 8f);
                     else
-                        DuckGame.Graphics.Draw(_flashWagnus, this.x - 8f, this.y - 9f);
+                        DuckGame.Graphics.Draw(_flashWagnus, x - 8f, y - 9f);
                 }
-                else if (this.style.value == 15)
+                else if (style.value == 15)
                 {
-                    if (this.flipHorizontal)
-                        DuckGame.Graphics.Draw(_flashLarge, this.x - 3f, this.y - 8f);
+                    if (flipHorizontal)
+                        DuckGame.Graphics.Draw(_flashLarge, x - 3f, y - 8f);
                     else
-                        DuckGame.Graphics.Draw(_flashLarge, this.x - 7f, this.y - 8f);
+                        DuckGame.Graphics.Draw(_flashLarge, x - 7f, y - 8f);
                 }
-                else if (this.flipHorizontal)
-                    DuckGame.Graphics.Draw(_flash, this.x - 3f + _screenOffsetX, this.y - 7f + _screenOffsetY);
+                else if (flipHorizontal)
+                    DuckGame.Graphics.Draw(_flash, x - 3f + _screenOffsetX, y - 7f + _screenOffsetY);
                 else
-                    DuckGame.Graphics.Draw(_flash, this.x - 7f + _screenOffsetX, this.y - 7f + _screenOffsetY);
+                    DuckGame.Graphics.Draw(_flash, x - 7f + _screenOffsetX, y - 7f + _screenOffsetY);
             }
             else
             {
-                this._light.frame = 0;
-                this.graphic.color = Color.Black;
+                _light.frame = 0;
+                graphic.color = Color.Black;
             }
-            if ((bool)this.lit)
+            if ((bool)lit)
             {
-                DuckGame.Graphics.Draw(_light, this.x - 28f, this.y - 40f);
-                this._fixture.depth = this.depth - 1;
-                DuckGame.Graphics.Draw(this._fixture, this.x - 10f, this.y - 65f);
+                DuckGame.Graphics.Draw(_light, x - 28f, y - 40f);
+                _fixture.depth = depth - 1;
+                DuckGame.Graphics.Draw(_fixture, x - 10f, y - 65f);
             }
-            this._sprite.flipH = false;
-            if (this.style.value == 15)
+            _sprite.flipH = false;
+            if (style.value == 15)
             {
-                this._boom.flipH = false;
-                this._boom.depth = this.depth;
-                DuckGame.Graphics.Draw(this._boom, this.x - 17f, this.y - 36f);
+                _boom.flipH = false;
+                _boom.depth = depth;
+                DuckGame.Graphics.Draw(_boom, x - 17f, y - 36f);
             }
-            else if (this.style.value == 16)
+            else if (style.value == 16)
             {
-                this._wagnus.flipH = false;
-                this._wagnus.depth = this.depth;
-                DuckGame.Graphics.Draw(this._wagnus, this.x - 17f, this.y - 20f);
-                this._wagnusOverlay.flipH = false;
-                this._wagnusOverlay.depth = this.depth + 10;
-                DuckGame.Graphics.Draw(this._wagnusOverlay, this.x - 17f, this.y - 6f);
+                _wagnus.flipH = false;
+                _wagnus.depth = depth;
+                DuckGame.Graphics.Draw(_wagnus, x - 17f, y - 20f);
+                _wagnusOverlay.flipH = false;
+                _wagnusOverlay.depth = depth + 10;
+                DuckGame.Graphics.Draw(_wagnusOverlay, x - 17f, y - 6f);
             }
-            else if (this._machineStyleSprite != null)
+            else if (_machineStyleSprite != null)
             {
-                if (this._underlayStyle)
+                if (_underlayStyle)
                 {
-                    this._customMachineUnderlay.center = new Vec2(23f, 30f);
-                    this._customMachineUnderlay.depth = this.depth;
-                    DuckGame.Graphics.Draw(this._customMachineUnderlay, this.x, this.y);
+                    _customMachineUnderlay.center = new Vec2(23f, 30f);
+                    _customMachineUnderlay.depth = depth;
+                    DuckGame.Graphics.Draw(_customMachineUnderlay, x, y);
                 }
                 else
                 {
-                    this._machineStyleSprite.center = new Vec2(23f, 30f);
-                    this._machineStyleSprite.depth = this.depth;
-                    DuckGame.Graphics.Draw(this._machineStyleSprite, this.x, this.y);
+                    _machineStyleSprite.center = new Vec2(23f, 30f);
+                    _machineStyleSprite.depth = depth;
+                    DuckGame.Graphics.Draw(_machineStyleSprite, x, y);
                 }
             }
             else
                 base.Draw();
-            if (!this._unlocked)
+            if (!_unlocked)
             {
-                this._covered.depth = this.depth + 2;
-                if (this.flipHorizontal)
+                _covered.depth = depth + 2;
+                if (flipHorizontal)
                 {
-                    this._covered.flipH = true;
-                    DuckGame.Graphics.Draw(this._covered, this.x + 19f, this.y - 19f);
+                    _covered.flipH = true;
+                    DuckGame.Graphics.Draw(_covered, x + 19f, y - 19f);
                 }
                 else
-                    DuckGame.Graphics.Draw(this._covered, this.x - 18f, this.y - 19f);
+                    DuckGame.Graphics.Draw(_covered, x - 18f, y - 19f);
             }
             if (_hoverFade <= 0.0)
                 return;
-            this._outline.alpha = this._hoverFade;
-            this._outline.flipH = this.flipHorizontal;
-            if (this.flipHorizontal)
-                DuckGame.Graphics.Draw(this._outline, this.x, this.y);
+            _outline.alpha = _hoverFade;
+            _outline.flipH = flipHorizontal;
+            if (flipHorizontal)
+                DuckGame.Graphics.Draw(_outline, x, y);
             else
-                DuckGame.Graphics.Draw(this._outline, this.x + 1f, this.y);
-            string name = this._data.name;
-            this._font.alpha = this._hoverFade;
+                DuckGame.Graphics.Draw(_outline, x + 1f, y);
+            string name = _data.name;
+            _font.alpha = _hoverFade;
         }
     }
 }

@@ -18,20 +18,20 @@ namespace DuckGame
 
         public NMRoomData(Profile pProfile, BitBuffer pData)
         {
-            this.data = pData;
-            this.profile = pProfile;
+            data = pData;
+            profile = pProfile;
         }
 
         protected override void OnSerialize()
         {
-            this._serializedData.WriteProfile(this.profile);
-            this._serializedData.Write(this.data, true);
+            _serializedData.WriteProfile(profile);
+            _serializedData.Write(data, true);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
-            this.profile = d.ReadProfile();
-            this.data = d.ReadBitBuffer();
+            profile = d.ReadProfile();
+            data = d.ReadBitBuffer();
         }
     }
 }

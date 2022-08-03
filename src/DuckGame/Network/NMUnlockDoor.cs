@@ -15,13 +15,13 @@ namespace DuckGame
         {
         }
 
-        public NMUnlockDoor(Door d) => this.door = d;
+        public NMUnlockDoor(Door d) => door = d;
 
         public override void Activate()
         {
-            if (this.door == null)
+            if (door == null)
                 return;
-            this.door.networkUnlockMessage = true;
+            door.networkUnlockMessage = true;
         }
     }
 }

@@ -13,15 +13,15 @@ namespace DuckGame
         public GreyBlock(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("greyBlock");
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.depth = -0.5f;
-            this._editorName = "Grey Block";
-            this.editorTooltip = "It's a featureless grey block.";
-            this.thickness = 4f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
+            graphic = new Sprite("greyBlock");
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -8f);
+            collisionSize = new Vec2(16f, 16f);
+            depth = -0.5f;
+            _editorName = "Grey Block";
+            editorTooltip = "It's a featureless grey block.";
+            thickness = 4f;
+            physicsMaterial = PhysicsMaterial.Metal;
         }
     }
 }

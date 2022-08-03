@@ -40,9 +40,9 @@ namespace DuckGame
         {
             get
             {
-                if (this.cloudPath == null)
+                if (cloudPath == null)
                     return true;
-                return this.cloudPath.StartsWith("nq403216_") && !this.cloudPath.EndsWith(".lev");
+                return cloudPath.StartsWith("nq403216_") && !cloudPath.EndsWith(".lev");
             }
         }
 
@@ -51,36 +51,36 @@ namespace DuckGame
         /// </summary>
         public DateTime cloudDate
         {
-            get => this._cloudDate;
-            set => this._cloudDate = value;
+            get => _cloudDate;
+            set => _cloudDate = value;
         }
 
         /// <summary>
         /// The last time steam uploaded the file.  If steamTimestamp == DateTime.MinValue, the file does not exist on the cloud.
         /// </summary>
-        public DateTime steamTimestamp => Steam.FileExists(this.cloudPath) ? Steam.FileTimestamp(this.cloudPath) : DateTime.MinValue;
+        public DateTime steamTimestamp => Steam.FileExists(cloudPath) ? Steam.FileTimestamp(cloudPath) : DateTime.MinValue;
 
         /// <summary>
         /// The last time the file was modified locally. If localData == DateTime.MinValue, a local version of this file does not exist.
         /// </summary>
         public DateTime localDate
         {
-            get => this._localDate;
-            set => this._localDate = value;
+            get => _localDate;
+            set => _localDate = value;
         }
 
         public CloudFile(string pCloudPath)
         {
-            this.cloudPath = pCloudPath;
-            this.localPath = CloudFile.CloudPathToFilePath(pCloudPath);
-            this.oldCloudPath = pCloudPath.Replace("nq500000_", "nq403216_");
+            cloudPath = pCloudPath;
+            localPath = CloudFile.CloudPathToFilePath(pCloudPath);
+            oldCloudPath = pCloudPath.Replace("nq500000_", "nq403216_");
         }
 
         public CloudFile(string pCloudPath, string pLocalPath)
         {
-            this.cloudPath = pCloudPath;
-            this.localPath = pLocalPath;
-            this.oldCloudPath = pCloudPath.Replace("nq500000_", "nq403216_");
+            cloudPath = pCloudPath;
+            localPath = pLocalPath;
+            oldCloudPath = pCloudPath.Replace("nq500000_", "nq403216_");
         }
 
         public static void Initialize()

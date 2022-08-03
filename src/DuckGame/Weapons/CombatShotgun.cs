@@ -23,59 +23,59 @@ namespace DuckGame
         public CombatShotgun(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = this._ammoMax;
-            this._ammoType = new ATShotgun();
-            this._ammoType.range = 140f;
-            this.wideBarrel = true;
-            this._type = "gun";
-            this.graphic = new Sprite("combatShotgun");
-            this.center = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-12f, -3f);
-            this.collisionSize = new Vec2(24f, 9f);
-            this._barrelOffsetTL = new Vec2(29f, 15f);
-            this._fireSound = "shotgunFire2";
-            this._kickForce = 5f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this._numBulletsPerFire = 7;
-            this._manualLoad = true;
-            this._loaderSprite = new SpriteMap("combatShotgunLoader", 16, 16)
+            ammo = _ammoMax;
+            _ammoType = new ATShotgun();
+            _ammoType.range = 140f;
+            wideBarrel = true;
+            _type = "gun";
+            graphic = new Sprite("combatShotgun");
+            center = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-12f, -3f);
+            collisionSize = new Vec2(24f, 9f);
+            _barrelOffsetTL = new Vec2(29f, 15f);
+            _fireSound = "shotgunFire2";
+            _kickForce = 5f;
+            _fireRumble = RumbleIntensity.Kick;
+            _numBulletsPerFire = 7;
+            _manualLoad = true;
+            _loaderSprite = new SpriteMap("combatShotgunLoader", 16, 16)
             {
                 center = new Vec2(8f, 8f)
             };
-            this._ammoSprite = new SpriteMap("combatShotgunAmmo", 16, 16)
+            _ammoSprite = new SpriteMap("combatShotgunAmmo", 16, 16)
             {
                 center = new Vec2(8f, 8f)
             };
-            this.handOffset = new Vec2(0f, 1f);
-            this._holdOffset = new Vec2(4f, 0f);
-            this.editorTooltip = "So many shells, what convenience!";
+            handOffset = new Vec2(0f, 1f);
+            _holdOffset = new Vec2(4f, 0f);
+            editorTooltip = "So many shells, what convenience!";
         }
 
         public override void Update()
         {
-            this._ammoSprite.frame = this._ammoMax - this.ammo;
+            _ammoSprite.frame = _ammoMax - ammo;
             base.Update();
-            if (this._readyToShoot)
+            if (_readyToShoot)
             {
-                this._loadProgress = 1f;
-                this._loadWait = 0f;
+                _loadProgress = 1f;
+                _loadWait = 0f;
             }
             if (_loadWait > 0.0)
                 return;
             if (_loadProgress == 0.0)
                 SFX.Play("shotgunLoad");
             if (_loadProgress == 0.5)
-                this.Reload();
-            this._loadWait = 0f;
+                Reload();
+            _loadWait = 0f;
             if (_loadProgress < 1.0)
             {
-                this._loadProgress += 0.1f;
+                _loadProgress += 0.1f;
             }
             else
             {
-                this._loadProgress = 1f;
-                this._readyToShoot = true;
-                this._readyToShoot = false;
+                _loadProgress = 1f;
+                _readyToShoot = true;
+                _readyToShoot = false;
             }
         }
 
@@ -84,14 +84,14 @@ namespace DuckGame
             if (_loadProgress >= 1.0)
             {
                 base.OnPressAction();
-                this._loadProgress = 0f;
-                this._loadWait = 1f;
+                _loadProgress = 0f;
+                _loadWait = 1f;
             }
             else
             {
                 if (_loadWait != 1.0)
                     return;
-                this._loadWait = 0f;
+                _loadWait = 0f;
             }
         }
 
@@ -100,8 +100,8 @@ namespace DuckGame
             base.Draw();
             Vec2 vec2 = new Vec2(13f, -1f);
             float num = (float)Math.Sin(_loadProgress * 3.14000010490417) * 3f;
-            this.Draw(_loaderSprite, new Vec2(vec2.x - 12f - num, vec2.y + 4f));
-            this.Draw(_ammoSprite, new Vec2(-3f, -2f), 2);
+            Draw(_loaderSprite, new Vec2(vec2.x - 12f - num, vec2.y + 4f));
+            Draw(_ammoSprite, new Vec2(-3f, -2f), 2);
         }
     }
 }

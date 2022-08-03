@@ -14,9 +14,9 @@ namespace DuckGame
         public NMAssignKill(List<Profile> pProfiles, Profile pTheRealWinnerHere)
           : base(pProfiles, pTheRealWinnerHere)
         {
-            this._sound = "scoreDingShort";
+            _sound = "scoreDingShort";
         }
 
-        public NMAssignKill() => this._sound = "scoreDingShort";
+        public NMAssignKill() => _sound = "scoreDingShort";
     }
 }

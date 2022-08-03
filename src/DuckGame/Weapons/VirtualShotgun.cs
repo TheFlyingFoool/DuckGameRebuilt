@@ -16,31 +16,31 @@ namespace DuckGame
 
         public byte roomIndex
         {
-            get => this._roomIndex;
+            get => _roomIndex;
             set
             {
-                this._roomIndex = value;
-                if (!Network.isClient || !Network.InLobby() || this._roomIndex >= 4)
+                _roomIndex = value;
+                if (!Network.isClient || !Network.InLobby() || _roomIndex >= 4)
                     return;
-                (Level.current as TeamSelect2).GetBox(this._roomIndex).gun = this;
+                (Level.current as TeamSelect2).GetBox(_roomIndex).gun = this;
             }
         }
 
         public VirtualShotgun(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 99;
-            this.graphic = new Sprite("virtualShotgun");
-            this._loaderSprite = new SpriteMap("virtualShotgunLoader", 8, 8)
+            ammo = 99;
+            graphic = new Sprite("virtualShotgun");
+            _loaderSprite = new SpriteMap("virtualShotgunLoader", 8, 8)
             {
                 center = new Vec2(4f, 4f)
             };
-            this.editorTooltip = "The perfect shotgun for life inside a computer simulation. Virtually infinite ammo.";
+            editorTooltip = "The perfect shotgun for life inside a computer simulation. Virtually infinite ammo.";
         }
 
         public override void Update()
         {
-            this.ammo = 99;
+            ammo = 99;
             base.Update();
         }
     }

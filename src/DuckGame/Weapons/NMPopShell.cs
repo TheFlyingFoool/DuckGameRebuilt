@@ -15,12 +15,12 @@ namespace DuckGame
         {
         }
 
-        public NMPopShell(Gun pGun) => this.gun = pGun;
+        public NMPopShell(Gun pGun) => gun = pGun;
 
         public override void Activate()
         {
-            if (this.gun != null)
-                this.gun.PopShell(true);
+            if (gun != null)
+                gun.PopShell(true);
             base.Activate();
         }
     }

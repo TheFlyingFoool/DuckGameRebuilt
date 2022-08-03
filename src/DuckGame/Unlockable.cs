@@ -20,17 +20,17 @@ namespace DuckGame
         protected bool _showScreen;
         private Func<bool> _condition;
 
-        public bool locked => this._locked;
+        public bool locked => _locked;
 
-        public string description => this._description;
+        public string description => _description;
 
-        public string name => this._name;
+        public string name => _name;
 
-        public string achievement => this._achievement;
+        public string achievement => _achievement;
 
-        public string id => this._id;
+        public string id => _id;
 
-        public bool showScreen => this._showScreen;
+        public bool showScreen => _showScreen;
 
         public Unlockable(
           string identifier,
@@ -39,16 +39,16 @@ namespace DuckGame
           string desc,
           string achieve = "")
         {
-            this._condition = condition;
-            this._description = desc;
-            this._name = nam;
-            this._achievement = achieve;
-            this._id = identifier;
+            _condition = condition;
+            _description = desc;
+            _name = nam;
+            _achievement = achieve;
+            _id = identifier;
         }
 
-        public string GetNameForDisplay() => this.name.ToUpperInvariant();
+        public string GetNameForDisplay() => name.ToUpperInvariant();
 
-        public bool CheckCondition() => (!NetworkDebugger.enabled || NetworkDebugger.currentIndex != 1) && this._condition();
+        public bool CheckCondition() => (!NetworkDebugger.enabled || NetworkDebugger.currentIndex != 1) && _condition();
 
         public virtual void Initialize()
         {
@@ -56,11 +56,11 @@ namespace DuckGame
 
         public virtual void DoUnlock()
         {
-            this.Unlock();
-            this._locked = false;
-            if (this._achievement == null || !(this._achievement != ""))
+            Unlock();
+            _locked = false;
+            if (_achievement == null || !(_achievement != ""))
                 return;
-            Global.GiveAchievement(this._achievement);
+            Global.GiveAchievement(_achievement);
         }
 
         protected virtual void Unlock()
@@ -69,8 +69,8 @@ namespace DuckGame
 
         public virtual void DoLock()
         {
-            this.Lock();
-            this._locked = true;
+            Lock();
+            _locked = true;
         }
 
         protected virtual void Lock()

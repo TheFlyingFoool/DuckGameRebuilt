@@ -12,21 +12,21 @@ namespace DuckGame
         public WaterParticle(float xpos, float ypos, Vec2 hitAngle)
           : base(xpos, ypos)
         {
-            this.hSpeed = (float)(-hitAngle.x * 2.0 * (Rando.Float(1f) + 0.300000011920929));
+            hSpeed = (float)(-hitAngle.x * 2.0 * (Rando.Float(1f) + 0.300000011920929));
         }
 
         public override void Update()
         {
-            this.vSpeed += 0.1f;
-            this.hSpeed *= 0.9f;
-            this.x += this.hSpeed;
-            this.y += this.vSpeed;
-            this.alpha -= 0.06f;
-            if (this.alpha < 0.0)
+            vSpeed += 0.1f;
+            hSpeed *= 0.9f;
+            x += hSpeed;
+            y += vSpeed;
+            alpha -= 0.06f;
+            if (alpha < 0.0)
                 Level.Remove(this);
             base.Update();
         }
 
-        public override void Draw() => Graphics.DrawRect(this.position, this.position + new Vec2(1f, 1f), Color.LightBlue * this.alpha, this.depth);
+        public override void Draw() => Graphics.DrawRect(position, position + new Vec2(1f, 1f), Color.LightBlue * alpha, depth);
     }
 }

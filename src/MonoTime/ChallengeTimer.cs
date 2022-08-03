@@ -19,33 +19,33 @@ namespace DuckGame
             get
             {
                 TimeSpan timeSpan = new TimeSpan(0, 0, 0, 0, (int)(_time * 1000.0));
-                return this._maxTime.TotalSeconds == 0.0 || timeSpan < this._maxTime ? timeSpan : this._maxTime;
+                return _maxTime.TotalSeconds == 0.0 || timeSpan < _maxTime ? timeSpan : _maxTime;
             }
         }
 
         public ChallengeTimer(TimeSpan max = default(TimeSpan))
           : base()
         {
-            this._maxTime = max;
+            _maxTime = max;
         }
 
         public void Update()
         {
-            if (!this._active)
+            if (!_active)
                 return;
-            this._time += Maths.IncFrameTimer();
+            _time += Maths.IncFrameTimer();
         }
 
-        public override void Start() => this._active = true;
+        public override void Start() => _active = true;
 
-        public override void Stop() => this._active = false;
+        public override void Stop() => _active = false;
 
         public override void Reset()
         {
-            this._time = 0f;
-            this._active = false;
+            _time = 0f;
+            _active = false;
         }
 
-        public override void Restart() => this._time = 0f;
+        public override void Restart() => _time = 0f;
     }
 }

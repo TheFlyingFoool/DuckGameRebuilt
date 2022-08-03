@@ -35,7 +35,7 @@ namespace DuckGame
                 ncBasicPacketList.Add(new NCBasicPacket()
                 {
                     data = data1,
-                    sender = this.localEndPoint
+                    sender = localEndPoint
                 });
                 this.bytesThisFrame += length + 8;
                 int bytesThisFrame = this.bytesThisFrame;
@@ -50,7 +50,7 @@ namespace DuckGame
                 lock (NCNetDebug._socketData)
                 {
                     List<NCBasicPacket> ncBasicPacketList = null;
-                    if (!NCNetDebug._socketData.TryGetValue(this.localEndPoint, out ncBasicPacketList))
+                    if (!NCNetDebug._socketData.TryGetValue(localEndPoint, out ncBasicPacketList))
                         return;
                     foreach (NCBasicPacket ncBasicPacket in ncBasicPacketList)
                         packets.Enqueue(ncBasicPacket);

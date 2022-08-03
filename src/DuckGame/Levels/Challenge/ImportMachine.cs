@@ -19,37 +19,37 @@ namespace DuckGame
 
         public override void EditorPropertyChanged(object property)
         {
-            this._underlayStyle = this.Underlay_Style.value;
-            this._styleOffsetX = this.Style_Offset_X.value;
-            this._styleOffsetY = this.Style_Offset_Y.value;
-            this._screenOffsetX = this.Screen_Offset_X.value;
-            this._screenOffsetY = this.Screen_Offset_Y.value;
+            _underlayStyle = Underlay_Style.value;
+            _styleOffsetX = Style_Offset_X.value;
+            _styleOffsetY = Style_Offset_Y.value;
+            _screenOffsetX = Screen_Offset_X.value;
+            _screenOffsetY = Screen_Offset_Y.value;
             base.EditorPropertyChanged(property);
         }
 
         public ImportMachine(float xpos, float ypos)
           : base(xpos, ypos, null, 0)
         {
-            this.Underlay_Style = new EditorProperty<bool>(true, this);
-            this.Style_Offset_X = new EditorProperty<int>(0, this, -16f, 16f, 1f);
-            this.Style_Offset_Y = new EditorProperty<int>(0, this, -16f, 16f, 1f);
-            this.Screen_Offset_X = new EditorProperty<int>(0, this, -32f, 32f, 1f);
-            this.Screen_Offset_Y = new EditorProperty<int>(0, this, -32f, 32f, 1f);
-            this._contextMenuFilter.Add("lit");
-            this._contextMenuFilter.Add("style");
-            this._contextMenuFilter.Add("requirement");
-            this._contextMenuFilter.Add("respect");
-            this._sprite = new SpriteMap("arcade/userMachine", 48, 48);
-            this.graphic = _sprite;
-            this.depth = -0.5f;
-            this.center = new Vec2(this._sprite.width / 2 - 1, this._sprite.h / 2 + 6);
-            this.lit.value = false;
-            this.Underlay_Style._tooltip = "If disabled, the Arcade Machine art will be completely replaced by your custom style.";
+            Underlay_Style = new EditorProperty<bool>(true, this);
+            Style_Offset_X = new EditorProperty<int>(0, this, -16f, 16f, 1f);
+            Style_Offset_Y = new EditorProperty<int>(0, this, -16f, 16f, 1f);
+            Screen_Offset_X = new EditorProperty<int>(0, this, -32f, 32f, 1f);
+            Screen_Offset_Y = new EditorProperty<int>(0, this, -32f, 32f, 1f);
+            _contextMenuFilter.Add("lit");
+            _contextMenuFilter.Add("style");
+            _contextMenuFilter.Add("requirement");
+            _contextMenuFilter.Add("respect");
+            _sprite = new SpriteMap("arcade/userMachine", 48, 48);
+            graphic = _sprite;
+            depth = -0.5f;
+            center = new Vec2(_sprite.width / 2 - 1, _sprite.h / 2 + 6);
+            lit.value = false;
+            Underlay_Style._tooltip = "If disabled, the Arcade Machine art will be completely replaced by your custom style.";
         }
 
         public override void Initialize()
         {
-            this.lit = (EditorProperty<bool>)false;
+            lit = (EditorProperty<bool>)false;
             base.Initialize();
         }
     }

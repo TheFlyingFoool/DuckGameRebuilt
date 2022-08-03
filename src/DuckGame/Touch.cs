@@ -19,25 +19,25 @@ namespace DuckGame
         public bool canBeDrag = true;
         public Vec2 originalPosition;
 
-        public bool drag => this.canBeDrag && this.data != null && (this.data.touchXY - this.originalPosition).length > 25.0;
+        public bool drag => canBeDrag && data != null && (data.touchXY - originalPosition).length > 25.0;
 
-        public Vec2 positionCamera => this.data == null ? Vec2.Zero : this.Transform(Level.current.camera);
+        public Vec2 positionCamera => data == null ? Vec2.Zero : Transform(Level.current.camera);
 
-        public Vec2 positionHUD => this.data == null ? Vec2.Zero : this.Transform(Layer.HUD.camera);
+        public Vec2 positionHUD => data == null ? Vec2.Zero : Transform(Layer.HUD.camera);
 
         public void SetData(TSData pData)
         {
-            if (this.data == null && pData != null)
-                this.originalPosition = pData.touchXY;
-            this.data = pData;
+            if (data == null && pData != null)
+                originalPosition = pData.touchXY;
+            data = pData;
         }
 
-        public Vec2 Transform(Camera pCamera) => this.data != null ? pCamera.transformScreenVector(this.data.touchXY) : Vec2.Zero;
+        public Vec2 Transform(Camera pCamera) => data != null ? pCamera.transformScreenVector(data.touchXY) : Vec2.Zero;
 
         public Vec2 TransformGrid(Camera pCamera, float pCellSize)
         {
             Vec2 vec2_1 = new Vec2(-1f, -1f);
-            Vec2 vec2_2 = this.Transform(pCamera);
+            Vec2 vec2_2 = Transform(pCamera);
             if (vec2_2 != new Vec2(-1f, -1f))
             {
                 vec2_2.x = (float)Math.Round(vec2_2.x / pCellSize) * pCellSize;
@@ -55,11 +55,11 @@ namespace DuckGame
         /// <returns></returns>
         public bool Check(Rectangle pRect, Camera pCamera = null)
         {
-            if (this.data == null)
+            if (data == null)
                 return false;
             if (pCamera == null)
                 pCamera = Level.current.camera;
-            return Collision.Point(this.Transform(pCamera), pRect);
+            return Collision.Point(Transform(pCamera), pRect);
         }
 
         /// <summary>
@@ -72,11 +72,11 @@ namespace DuckGame
         /// <returns></returns>
         public bool CheckGrid(Rectangle pRect, float pCellSize, Camera pCamera = null)
         {
-            if (this.data == null)
+            if (data == null)
                 return false;
             if (pCamera == null)
                 pCamera = Level.current.camera;
-            return Collision.Point(this.TransformGrid(pCamera, pCellSize), pRect);
+            return Collision.Point(TransformGrid(pCamera, pCellSize), pRect);
         }
     }
 }

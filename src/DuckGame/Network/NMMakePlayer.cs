@@ -15,9 +15,9 @@ namespace DuckGame
 
         public NMMakePlayer(Profile pProfile, Profile pReplacementSlot, byte pSpecChangeIndex)
         {
-            this.profile = pProfile;
-            this.replacementSlot = pReplacementSlot;
-            this.specChangeIndex = pSpecChangeIndex;
+            profile = pProfile;
+            replacementSlot = pReplacementSlot;
+            specChangeIndex = pSpecChangeIndex;
         }
 
         public NMMakePlayer()
@@ -26,13 +26,13 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (this.profile != null && this.replacementSlot != null && this.profile.slotType == SlotType.Spectator && this.replacementSlot.slotType != SlotType.Spectator)
+            if (profile != null && replacementSlot != null && profile.slotType == SlotType.Spectator && replacementSlot.slotType != SlotType.Spectator)
             {
-                DuckNetwork.MakePlayer_Swap(this.profile, this.replacementSlot);
-                if (this.profile.connection == DuckNetwork.localConnection)
+                DuckNetwork.MakePlayer_Swap(profile, replacementSlot);
+                if (profile.connection == DuckNetwork.localConnection)
                     DuckNetwork.OpenSpectatorInfo(false);
             }
-            Send.Message(new NMSpecChangeIndexUpdated(this.profile, this.specChangeIndex), NetMessagePriority.ReliableOrdered);
+            Send.Message(new NMSpecChangeIndexUpdated(profile, specChangeIndex), NetMessagePriority.ReliableOrdered);
         }
     }
 }

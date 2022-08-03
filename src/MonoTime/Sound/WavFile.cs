@@ -15,60 +15,60 @@ namespace DuckGame
         private short[][] _stereoData = new short[2][];
         private string _fileName = "";
 
-        public short[][] stereoData => this._stereoData;
+        public short[][] stereoData => _stereoData;
 
-        public int size => (int)(this._header.dataSize / _header.blockSize);
+        public int size => (int)(_header.dataSize / _header.blockSize);
 
-        public int sampleRate => (int)this._header.sampleRate;
+        public int sampleRate => (int)_header.sampleRate;
 
         public WavFile(string file)
         {
-            this._fileName = file;
-            this._header = new WavHeader();
+            _fileName = file;
+            _header = new WavHeader();
             using (FileStream input = new FileStream(file, FileMode.Open, FileAccess.Read))
             {
                 using (BinaryReader binaryReader = new BinaryReader(input))
                 {
                     try
                     {
-                        this._header.riffID = binaryReader.ReadBytes(4);
-                        this._header.size = binaryReader.ReadUInt32();
-                        this._header.wavID = binaryReader.ReadBytes(4);
-                        this._header.fmtID = binaryReader.ReadBytes(4);
-                        this._header.fmtSize = binaryReader.ReadUInt32();
-                        this._header.format = binaryReader.ReadUInt16();
-                        this._header.channels = binaryReader.ReadUInt16();
-                        this._header.sampleRate = binaryReader.ReadUInt32();
-                        this._header.bytePerSec = binaryReader.ReadUInt32();
-                        this._header.blockSize = binaryReader.ReadUInt16();
-                        this._header.bit = binaryReader.ReadUInt16();
+                        _header.riffID = binaryReader.ReadBytes(4);
+                        _header.size = binaryReader.ReadUInt32();
+                        _header.wavID = binaryReader.ReadBytes(4);
+                        _header.fmtID = binaryReader.ReadBytes(4);
+                        _header.fmtSize = binaryReader.ReadUInt32();
+                        _header.format = binaryReader.ReadUInt16();
+                        _header.channels = binaryReader.ReadUInt16();
+                        _header.sampleRate = binaryReader.ReadUInt32();
+                        _header.bytePerSec = binaryReader.ReadUInt32();
+                        _header.blockSize = binaryReader.ReadUInt16();
+                        _header.bit = binaryReader.ReadUInt16();
                         while (true)
                         {
-                            this._header.dataID = binaryReader.ReadBytes(4);
-                            this._header.dataSize = binaryReader.ReadUInt32();
-                            if (this._header.dataID[0] != 100)
-                                binaryReader.ReadBytes((int)this._header.dataSize);
+                            _header.dataID = binaryReader.ReadBytes(4);
+                            _header.dataSize = binaryReader.ReadUInt32();
+                            if (_header.dataID[0] != 100)
+                                binaryReader.ReadBytes((int)_header.dataSize);
                             else
                                 break;
                         }
-                        if (this._header.channels == 1)
+                        if (_header.channels == 1)
                         {
-                            uint length = this._header.dataSize / _header.blockSize;
-                            this._stereoData[0] = new short[(int)length];
+                            uint length = _header.dataSize / _header.blockSize;
+                            _stereoData[0] = new short[(int)length];
                             for (int index = 0; index < length; ++index)
-                                this._stereoData[0][index] = (short)binaryReader.ReadUInt16();
+                                _stereoData[0][index] = (short)binaryReader.ReadUInt16();
                         }
                         else
                         {
-                            if (this._header.channels != 2)
+                            if (_header.channels != 2)
                                 return;
-                            uint length = this._header.dataSize / _header.blockSize;
-                            this._stereoData[0] = new short[(int)length];
-                            this._stereoData[1] = new short[(int)length];
+                            uint length = _header.dataSize / _header.blockSize;
+                            _stereoData[0] = new short[(int)length];
+                            _stereoData[1] = new short[(int)length];
                             for (int index = 0; index < length; ++index)
                             {
-                                this._stereoData[0][index] = (short)binaryReader.ReadUInt16();
-                                this._stereoData[1][index] = (short)binaryReader.ReadUInt16();
+                                _stereoData[0][index] = (short)binaryReader.ReadUInt16();
+                                _stereoData[1][index] = (short)binaryReader.ReadUInt16();
                             }
                         }
                     }

@@ -9,7 +9,7 @@ namespace DuckGame
 {
     public class NMAllClientsReady : NMSynchronizedEvent
     {
-        public NMAllClientsReady() => this.manager = BelongsToManager.EventManager;
+        public NMAllClientsReady() => manager = BelongsToManager.EventManager;
 
         public override void Activate() => Level.current.DoAllClientsReady();
     }

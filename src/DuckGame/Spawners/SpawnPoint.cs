@@ -16,7 +16,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.graphic.flipH = this.flipHorizontal;
+            graphic.flipH = flipHorizontal;
             base.Draw();
         }
     }

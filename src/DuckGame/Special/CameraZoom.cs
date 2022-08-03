@@ -18,19 +18,19 @@ namespace DuckGame
 
         public float zoomMult
         {
-            get => this._zoomMult;
-            set => this._zoomMult = value;
+            get => _zoomMult;
+            set => _zoomMult = value;
         }
 
         public CameraZoom()
           : base()
         {
-            this.graphic = new Sprite("swirl");
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this._canFlip = false;
-            this._visibleInGame = false;
+            graphic = new Sprite("swirl");
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
+            _canFlip = false;
+            _visibleInGame = false;
         }
 
         public override BinaryClassChunk Serialize()
@@ -43,7 +43,7 @@ namespace DuckGame
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this._zoomMult = node.GetProperty<float>("zoom");
+            _zoomMult = node.GetProperty<float>("zoom");
             return true;
         }
 
@@ -59,7 +59,7 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode = node.Element("zoom");
             if (dxmlNode != null)
-                this._zoomMult = Convert.ToSingle(dxmlNode.Value);
+                _zoomMult = Convert.ToSingle(dxmlNode.Value);
             return true;
         }
 

@@ -41,122 +41,122 @@ namespace DuckGame
             set
             {
                 base.connection = value;
-                if (this.containedObject == null)
+                if (containedObject == null)
                     return;
-                this.containedObject.connection = value;
+                containedObject.connection = value;
             }
         }
 
         public bool netChained
         {
-            get => this.chained.value;
-            set => this.chained.value = value;
+            get => chained.value;
+            set => chained.value = value;
         }
 
         public Holdable containedObject
         {
-            get => this._containedObject;
-            set => this._containedObject = value;
+            get => _containedObject;
+            set => _containedObject = value;
         }
 
         public Holdable netContainedObject
         {
-            get => this._containedObject;
-            set => this._containedObject = value;
+            get => _containedObject;
+            set => _containedObject = value;
         }
 
         public Thing GetContainedInstance(Vec2 pos = default(Vec2))
         {
-            if (this.contains == null)
+            if (contains == null)
                 return null;
-            object[] constructorParameters = Editor.GetConstructorParameters(this.contains);
+            object[] constructorParameters = Editor.GetConstructorParameters(contains);
             if (constructorParameters.Count<object>() > 1)
             {
                 constructorParameters[0] = pos.x;
                 constructorParameters[1] = pos.y;
             }
-            PhysicsObject thing = Editor.CreateThing(this.contains, constructorParameters) as PhysicsObject;
+            PhysicsObject thing = Editor.CreateThing(contains, constructorParameters) as PhysicsObject;
             if (thing is Gun)
-                (thing as Gun).infinite = this.infinite;
+                (thing as Gun).infinite = infinite;
             return thing;
         }
 
         public void SetContainedObject(Holdable h)
         {
-            if (this._containedObject != null)
+            if (_containedObject != null)
             {
-                this._containedObject.visible = true;
-                this.Fondle(_containedObject);
-                this._containedObject.owner = null;
-                this._containedObject = null;
+                _containedObject.visible = true;
+                Fondle(_containedObject);
+                _containedObject.owner = null;
+                _containedObject = null;
             }
             if (h == null)
                 return;
-            this._containedObject = h;
+            _containedObject = h;
             h.lastGrounded = DateTime.Now;
             h.visible = false;
         }
 
         public virtual void EjectItem()
         {
-            if (this.containedObject == null)
+            if (containedObject == null)
                 return;
             SFX.PlaySynchronized("pelletgunBad", pitch: Rando.Float(0.1f, 0.1f));
-            this.containedObject.hSpeed = -this.owner.offDir * 6f;
-            this.containedObject.vSpeed = -1.5f;
-            if (this.duck != null)
+            containedObject.hSpeed = -owner.offDir * 6f;
+            containedObject.vSpeed = -1.5f;
+            if (duck != null)
             {
-                this.duck._lastHoldItem = this.containedObject;
-                this.duck._timeSinceThrow = 0;
+                duck._lastHoldItem = containedObject;
+                duck._timeSinceThrow = 0;
             }
-            this.SetContainedObject(null);
+            SetContainedObject(null);
         }
 
         public virtual void EjectItem(Vec2 pSpeed)
         {
-            if (this.containedObject == null)
+            if (containedObject == null)
                 return;
             SFX.PlaySynchronized("pelletgunBad", pitch: Rando.Float(0.1f, 0.1f));
-            this.containedObject.hSpeed = pSpeed.x;
-            this.containedObject.vSpeed = pSpeed.y;
-            this.SetContainedObject(null);
+            containedObject.hSpeed = pSpeed.x;
+            containedObject.vSpeed = pSpeed.y;
+            SetContainedObject(null);
         }
 
         public System.Type contains
         {
-            get => this._contains;
+            get => _contains;
             set
             {
-                this._contains = value;
+                _contains = value;
                 if (Level.skipInitialize)
                     return;
-                if (this._preview == null)
-                    this._preview = new RenderTarget2D(32, 32);
-                Thing containedInstance = this.GetContainedInstance();
+                if (_preview == null)
+                    _preview = new RenderTarget2D(32, 32);
+                Thing containedInstance = GetContainedInstance();
                 if (containedInstance == null)
                     return;
-                this._previewSprite = containedInstance.GetEditorImage(32, 32, true, target: this._preview);
+                _previewSprite = containedInstance.GetEditorImage(32, 32, true, target: _preview);
             }
         }
 
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
+            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(contains));
             return binaryClassChunk;
         }
 
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
+            contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
             return true;
         }
 
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("contains", this.contains != null ? contains.AssemblyQualifiedName : (object)""));
+            dxmlNode.Add(new DXMLNode("contains", contains != null ? contains.AssemblyQualifiedName : (object)""));
             return dxmlNode;
         }
 
@@ -165,7 +165,7 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode = node.Element("contains");
             if (dxmlNode != null)
-                this.contains = Editor.GetType(dxmlNode.Value);
+                contains = Editor.GetType(dxmlNode.Value);
             return true;
         }
 
@@ -180,146 +180,146 @@ namespace DuckGame
         public override string GetDetailsString()
         {
             string str = "EMPTY";
-            if (this.contains != null)
-                str = this.contains.Name;
-            return this.contains == null ? base.GetDetailsString() : base.GetDetailsString() + "Contains: " + str;
+            if (contains != null)
+                str = contains.Name;
+            return contains == null ? base.GetDetailsString() : base.GetDetailsString() + "Contains: " + str;
         }
 
         public override void DrawHoverInfo()
         {
             string text = "EMPTY";
-            if (this.contains != null)
-                text = this.contains.Name;
-            Graphics.DrawString(text, this.position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
+            if (contains != null)
+                text = contains.Name;
+            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
         }
 
         public Holster(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._chain = new Sprite("holsterChain")
+            _chain = new Sprite("holsterChain")
             {
                 center = new Vec2(3f, 3f)
             };
-            this._lock = new Sprite("holsterLock")
+            _lock = new Sprite("holsterLock")
             {
                 center = new Vec2(3f, 2f)
             };
-            this._sprite = new SpriteMap("holster", 12, 12);
-            this._overPart = new SpriteMap("holster_over", 10, 3)
+            _sprite = new SpriteMap("holster", 12, 12);
+            _overPart = new SpriteMap("holster_over", 10, 3)
             {
                 center = new Vec2(6f, -1f)
             };
-            this._underPart = new SpriteMap("holster_under", 8, 9)
+            _underPart = new SpriteMap("holster_under", 8, 9)
             {
                 center = new Vec2(10f, 8f)
             };
-            this.graphic = _sprite;
-            this.collisionOffset = new Vec2(-5f, -5f);
-            this.collisionSize = new Vec2(10f, 10f);
-            this.center = new Vec2(6f, 6f);
-            this.physicsMaterial = PhysicsMaterial.Wood;
-            this._equippedDepth = 4;
-            this._wearOffset = new Vec2(1f, 1f);
-            this.editorTooltip = "Lets you carry around an additional item!";
+            graphic = _sprite;
+            collisionOffset = new Vec2(-5f, -5f);
+            collisionSize = new Vec2(10f, 10f);
+            center = new Vec2(6f, 6f);
+            physicsMaterial = PhysicsMaterial.Wood;
+            _equippedDepth = 4;
+            _wearOffset = new Vec2(1f, 1f);
+            editorTooltip = "Lets you carry around an additional item!";
         }
 
-        protected override bool OnDestroy(DestroyType type = null) => this.owner == null && this.containedObject == null && base.OnDestroy(type);
+        protected override bool OnDestroy(DestroyType type = null) => owner == null && containedObject == null && base.OnDestroy(type);
 
         public override void Initialize()
         {
-            if (!(Level.current is Editor) && this.GetContainedInstance(this.position) is Holdable containedInstance)
+            if (!(Level.current is Editor) && GetContainedInstance(position) is Holdable containedInstance)
             {
                 Level.Add(containedInstance);
-                this.SetContainedObject(containedInstance);
-                if (Network.isActive && Thing.loadingLevel != null && this._containedObject != null)
-                    this._containedObject.PrepareForHost();
+                SetContainedObject(containedInstance);
+                if (Network.isActive && Thing.loadingLevel != null && _containedObject != null)
+                    _containedObject.PrepareForHost();
             }
             base.Initialize();
         }
 
         public override void Update()
         {
-            if (this._equippedDuck != null && this.duck == null)
+            if (_equippedDuck != null && duck == null)
                 return;
-            if (this.destroyed)
-                this.alpha -= 0.05f;
-            if (this.alpha < 0.0)
+            if (destroyed)
+                alpha -= 0.05f;
+            if (alpha < 0.0)
                 Level.Remove(this);
-            if (this.isServerForObject)
+            if (isServerForObject)
             {
-                this.netRaise = false;
-                if (this._equippedDuck != null && this._equippedDuck.inputProfile != null && this._equippedDuck.inputProfile.Down("UP"))
-                    this.netRaise = true;
-                if (this.owner == null && this.equippedDuck == null)
-                    this.angleDegrees = 0f;
+                netRaise = false;
+                if (_equippedDuck != null && _equippedDuck.inputProfile != null && _equippedDuck.inputProfile.Down("UP"))
+                    netRaise = true;
+                if (owner == null && equippedDuck == null)
+                    angleDegrees = 0f;
                 Vec2 vec2_1;
-                if (this.containedObject != null)
+                if (containedObject != null)
                 {
-                    this.PositionContainedObject();
-                    this._containedObject.HolsterUpdate(this);
-                    this.weight = this.containedObject.weight;
-                    if (this.duck != null)
-                        this.containedObject.owner = duck;
+                    PositionContainedObject();
+                    _containedObject.HolsterUpdate(this);
+                    weight = containedObject.weight;
+                    if (duck != null)
+                        containedObject.owner = duck;
                     else
-                        this.containedObject.owner = this;
-                    if (this.duck != null && this.duck.ragdoll != null)
+                        containedObject.owner = this;
+                    if (duck != null && duck.ragdoll != null)
                     {
-                        this.containedObject.solid = false;
-                        this.containedObject.grounded = false;
+                        containedObject.solid = false;
+                        containedObject.grounded = false;
                     }
                     else
                     {
-                        if (this.equippedDuck != null)
+                        if (equippedDuck != null)
                         {
                             Holdable containedObject = this.containedObject;
-                            vec2_1 = this.equippedDuck.velocity;
+                            vec2_1 = equippedDuck.velocity;
                             int num = vec2_1.length < 0.05f ? 1 : 0;
                             containedObject.solid = num != 0;
                         }
                         else
                         {
                             Holdable containedObject = this.containedObject;
-                            vec2_1 = this.velocity;
+                            vec2_1 = velocity;
                             int num = vec2_1.length < 0.05f ? 1 : 0;
                             containedObject.solid = num != 0;
                         }
-                        this.containedObject.grounded = true;
+                        containedObject.grounded = true;
                     }
-                    if (!this.containedObject.isServerForObject && !(this.containedObject is IAmADuck))
-                        this.Fondle(containedObject);
-                    if (this.containedObject.removeFromLevel || this.containedObject.y < level.topLeft.y - 2000.0 || !this.containedObject.active || !this.containedObject.isServerForObject)
-                        this.SetContainedObject(null);
+                    if (!containedObject.isServerForObject && !(containedObject is IAmADuck))
+                        Fondle(containedObject);
+                    if (containedObject.removeFromLevel || containedObject.y < level.topLeft.y - 2000.0 || !containedObject.active || !containedObject.isServerForObject)
+                        SetContainedObject(null);
                 }
-                if (this.containedObject is Gun && Level.CheckRect<FunBeam>(this.containedObject.position + new Vec2(-4f, -4f), this.containedObject.position + new Vec2(4f, 4f)) != null)
-                    (this.containedObject as Gun).triggerAction = true;
-                if (this.containedObject is RagdollPart && (this.containedObject as RagdollPart).doll != null && (this.containedObject as RagdollPart).doll.part1 != null && (this.containedObject as RagdollPart).doll.part2 != null && (this.containedObject as RagdollPart).doll.part3 != null)
+                if (containedObject is Gun && Level.CheckRect<FunBeam>(containedObject.position + new Vec2(-4f, -4f), containedObject.position + new Vec2(4f, 4f)) != null)
+                    (containedObject as Gun).triggerAction = true;
+                if (containedObject is RagdollPart && (containedObject as RagdollPart).doll != null && (containedObject as RagdollPart).doll.part1 != null && (containedObject as RagdollPart).doll.part2 != null && (containedObject as RagdollPart).doll.part3 != null)
                 {
-                    if ((this.containedObject as RagdollPart).doll.part1.x < (this.containedObject as RagdollPart).doll.part3.x - 4.0)
-                        (this.containedObject as RagdollPart).doll.part1.x = (this.containedObject as RagdollPart).doll.part3.x - 4f;
-                    if ((this.containedObject as RagdollPart).doll.part1.x > (this.containedObject as RagdollPart).doll.part3.x + 4.0)
-                        (this.containedObject as RagdollPart).doll.part1.x = (this.containedObject as RagdollPart).doll.part3.x + 4f;
-                    Vec2 vec2_2 = (this.containedObject as RagdollPart).doll.part3.position + new Vec2(0f, -11f);
-                    Vec2 vec2_3 = (this.containedObject as RagdollPart).doll.part3.position + new Vec2(0f, -5f);
-                    (this.containedObject as RagdollPart).doll.part1.x = Lerp.FloatSmooth((this.containedObject as RagdollPart).doll.part1.x, vec2_2.x, 0.5f);
-                    (this.containedObject as RagdollPart).doll.part1.y = Lerp.FloatSmooth((this.containedObject as RagdollPart).doll.part1.y, vec2_2.y, 0.5f);
-                    (this.containedObject as RagdollPart).doll.part2.x = Lerp.FloatSmooth((this.containedObject as RagdollPart).doll.part1.x, vec2_3.x, 0.5f);
-                    (this.containedObject as RagdollPart).doll.part2.y = Lerp.FloatSmooth((this.containedObject as RagdollPart).doll.part1.y, vec2_3.y, 0.5f);
-                    vec2_1 = vec2_2 - (this.containedObject as RagdollPart).doll.part3.position;
+                    if ((containedObject as RagdollPart).doll.part1.x < (containedObject as RagdollPart).doll.part3.x - 4.0)
+                        (containedObject as RagdollPart).doll.part1.x = (containedObject as RagdollPart).doll.part3.x - 4f;
+                    if ((containedObject as RagdollPart).doll.part1.x > (containedObject as RagdollPart).doll.part3.x + 4.0)
+                        (containedObject as RagdollPart).doll.part1.x = (containedObject as RagdollPart).doll.part3.x + 4f;
+                    Vec2 vec2_2 = (containedObject as RagdollPart).doll.part3.position + new Vec2(0f, -11f);
+                    Vec2 vec2_3 = (containedObject as RagdollPart).doll.part3.position + new Vec2(0f, -5f);
+                    (containedObject as RagdollPart).doll.part1.x = Lerp.FloatSmooth((containedObject as RagdollPart).doll.part1.x, vec2_2.x, 0.5f);
+                    (containedObject as RagdollPart).doll.part1.y = Lerp.FloatSmooth((containedObject as RagdollPart).doll.part1.y, vec2_2.y, 0.5f);
+                    (containedObject as RagdollPart).doll.part2.x = Lerp.FloatSmooth((containedObject as RagdollPart).doll.part1.x, vec2_3.x, 0.5f);
+                    (containedObject as RagdollPart).doll.part2.y = Lerp.FloatSmooth((containedObject as RagdollPart).doll.part1.y, vec2_3.y, 0.5f);
+                    vec2_1 = vec2_2 - (containedObject as RagdollPart).doll.part3.position;
                     Vec2 normalized = vec2_1.normalized;
-                    (this.containedObject as RagdollPart).doll.part1.vSpeed = normalized.y;
-                    (this.containedObject as RagdollPart).doll.part2.vSpeed = normalized.y;
-                    (this.containedObject as RagdollPart).doll.part1.hSpeed = normalized.x;
-                    (this.containedObject as RagdollPart).doll.part2.hSpeed = normalized.x;
-                    (this.containedObject as RagdollPart).doll.part1.vSpeed *= 0.8f;
-                    (this.containedObject as RagdollPart).doll.part1.hSpeed *= 0.8f;
-                    (this.containedObject as RagdollPart).doll.part2.vSpeed *= 0.8f;
-                    (this.containedObject as RagdollPart).doll.part2.hSpeed *= 0.8f;
+                    (containedObject as RagdollPart).doll.part1.vSpeed = normalized.y;
+                    (containedObject as RagdollPart).doll.part2.vSpeed = normalized.y;
+                    (containedObject as RagdollPart).doll.part1.hSpeed = normalized.x;
+                    (containedObject as RagdollPart).doll.part2.hSpeed = normalized.x;
+                    (containedObject as RagdollPart).doll.part1.vSpeed *= 0.8f;
+                    (containedObject as RagdollPart).doll.part1.hSpeed *= 0.8f;
+                    (containedObject as RagdollPart).doll.part2.vSpeed *= 0.8f;
+                    (containedObject as RagdollPart).doll.part2.hSpeed *= 0.8f;
                 }
-                if (this.containedObject != null && !(this.containedObject is Equipment))
+                if (containedObject != null && !(containedObject is Equipment))
                 {
-                    this.containedObject.UpdateAction();
-                    if (this.containedObject is TapedGun)
-                        (this.containedObject as TapedGun).UpdateSubActions(this.containedObject.triggerAction);
+                    containedObject.UpdateAction();
+                    if (containedObject is TapedGun)
+                        (containedObject as TapedGun).UpdateSubActions(containedObject.triggerAction);
                 }
             }
             base.Update();
@@ -327,118 +327,118 @@ namespace DuckGame
 
         protected virtual void DrawParts()
         {
-            if (this._equippedDuck == null)
+            if (_equippedDuck == null)
                 return;
-            Depth depth = this.owner.depth;
-            this._overPart.flipH = this.owner.offDir <= 0;
-            this._overPart.angle = this.angle;
-            this._overPart.alpha = this.alpha;
-            this._overPart.scale = this.scale;
-            this._overPart.depth = this.owner.depth + 5;
-            Graphics.Draw(_overPart, this.x, this.y);
-            this._underPart.flipH = this.owner.offDir <= 0;
-            this._underPart.angle = this.angle;
-            this._underPart.alpha = this.alpha;
-            this._underPart.scale = this.scale;
-            if (this._equippedDuck.ragdoll != null && this._equippedDuck.ragdoll.part2 != null)
-                this._underPart.depth = this._equippedDuck.ragdoll.part2.depth + -11;
+            Depth depth = owner.depth;
+            _overPart.flipH = owner.offDir <= 0;
+            _overPart.angle = angle;
+            _overPart.alpha = alpha;
+            _overPart.scale = scale;
+            _overPart.depth = owner.depth + 5;
+            Graphics.Draw(_overPart, x, y);
+            _underPart.flipH = owner.offDir <= 0;
+            _underPart.angle = angle;
+            _underPart.alpha = alpha;
+            _underPart.scale = scale;
+            if (_equippedDuck.ragdoll != null && _equippedDuck.ragdoll.part2 != null)
+                _underPart.depth = _equippedDuck.ragdoll.part2.depth + -11;
             else
-                this._underPart.depth = this.owner.depth + -7;
-            Graphics.Draw(_underPart, this.x, this.y);
+                _underPart.depth = owner.depth + -7;
+            Graphics.Draw(_underPart, x, y);
         }
 
         private void PositionContainedObject()
         {
-            if (this._equippedDuck != null)
+            if (_equippedDuck != null)
             {
-                this._containedObject.position = this.Offset(new Vec2(this.backOffset, -4f) + this.containedObject.holsterOffset);
-                this._containedObject.depth = this.owner.depth + -14;
-                this._containedObject.angleDegrees = (this.owner.offDir > 0 ? this.containedObject.holsterAngle : -this.containedObject.holsterAngle) + this.angleDegrees;
-                this._containedObject.offDir = this.owner.offDir > 0 ? (sbyte)1 : (sbyte)-1;
-                if (this.containedObject is RagdollPart)
+                _containedObject.position = Offset(new Vec2(backOffset, -4f) + containedObject.holsterOffset);
+                _containedObject.depth = owner.depth + -14;
+                _containedObject.angleDegrees = (owner.offDir > 0 ? containedObject.holsterAngle : -containedObject.holsterAngle) + angleDegrees;
+                _containedObject.offDir = owner.offDir > 0 ? (sbyte)1 : (sbyte)-1;
+                if (containedObject is RagdollPart)
                 {
-                    this._containedObject.position = this.Offset(new Vec2(this.backOffset, 0f));
-                    this._containedObject.angleDegrees += this.owner.offDir > 0 ? 90f : -90f;
-                    if (this.duck != null && this.duck.ragdoll == null)
+                    _containedObject.position = Offset(new Vec2(backOffset, 0f));
+                    _containedObject.angleDegrees += owner.offDir > 0 ? 90f : -90f;
+                    if (duck != null && duck.ragdoll == null)
                     {
-                        this.afterDrawAngle = this._containedObject.angleDegrees;
-                        this._containedObject.angleDegrees -= this.duck.hSpeed * 3f;
+                        afterDrawAngle = _containedObject.angleDegrees;
+                        _containedObject.angleDegrees -= duck.hSpeed * 3f;
                     }
                 }
-                if (!(this.owner is Duck) || (this.owner as Duck).ragdoll == null)
+                if (!(owner is Duck) || (owner as Duck).ragdoll == null)
                     return;
-                RagdollPart part2 = (this.owner as Duck).ragdoll.part2;
+                RagdollPart part2 = (owner as Duck).ragdoll.part2;
                 if (part2 == null)
                     return;
-                this._containedObject.depth = part2.depth + -14;
+                _containedObject.depth = part2.depth + -14;
             }
             else
             {
-                this._containedObject.position = this.Offset(new Vec2(this.backOffset + 6f, -2f) + this.containedObject.holsterOffset);
-                this._containedObject.depth = this.depth + -14;
-                this._containedObject.angleDegrees = (this.offDir > 0 ? this.containedObject.holsterAngle : -this.containedObject.holsterAngle) + this.angleDegrees;
-                this._containedObject.offDir = this.offDir > 0 ? (sbyte)1 : (sbyte)-1;
+                _containedObject.position = Offset(new Vec2(backOffset + 6f, -2f) + containedObject.holsterOffset);
+                _containedObject.depth = depth + -14;
+                _containedObject.angleDegrees = (offDir > 0 ? containedObject.holsterAngle : -containedObject.holsterAngle) + angleDegrees;
+                _containedObject.offDir = offDir > 0 ? (sbyte)1 : (sbyte)-1;
             }
         }
 
         public override void Draw()
         {
-            if (Level.current is Editor && this._previewSprite != null)
+            if (Level.current is Editor && _previewSprite != null)
             {
-                this._previewSprite.depth = this.depth + 1;
-                this._previewSprite.scale = new Vec2(0.5f, 0.5f);
-                this._previewSprite.center = new Vec2(16f, 16f);
-                Graphics.Draw(this._previewSprite, this.x, this.y);
+                _previewSprite.depth = depth + 1;
+                _previewSprite.scale = new Vec2(0.5f, 0.5f);
+                _previewSprite.center = new Vec2(16f, 16f);
+                Graphics.Draw(_previewSprite, x, y);
             }
-            if (this._equippedDuck != null)
-                this.graphic = null;
+            if (_equippedDuck != null)
+                graphic = null;
             else
-                this.graphic = _sprite;
+                graphic = _sprite;
             base.Draw();
-            if (this._equippedDuck != null && this.duck == null)
+            if (_equippedDuck != null && duck == null)
                 return;
-            this.DrawParts();
-            if (this._containedObject != null)
+            DrawParts();
+            if (_containedObject != null)
             {
                 int offDir = this.offDir;
-                this.PositionContainedObject();
-                if (this.chained.value)
+                PositionContainedObject();
+                if (chained.value)
                 {
-                    float num = this._equippedDuck != null ? 0f : 8f;
-                    this._chain.CenterOrigin();
-                    this._chain.depth = this._underPart.depth + 1;
-                    this._chain.angleDegrees = this.angleDegrees - 45 * this.offDir;
-                    Vec2 vec2 = this.Offset(new Vec2(num - 11f, -3f));
-                    Graphics.Draw(this._chain, vec2.x, vec2.y);
-                    this._lock.angleDegrees = this._chainSway;
-                    this._chainSwayVel -= ((this._lock.angleDegrees - (this.owner != null ? this.owner.hSpeed : this.hSpeed) * 10f) * 0.1f);
-                    this._chainSwayVel *= 0.95f;
-                    this._chainSway += this._chainSwayVel;
-                    this._lock.depth = this._underPart.depth + 2;
-                    this.Offset(new Vec2(num - 9f, -5f));
-                    Graphics.Draw(this._lock, vec2.x, vec2.y);
+                    float num = _equippedDuck != null ? 0f : 8f;
+                    _chain.CenterOrigin();
+                    _chain.depth = _underPart.depth + 1;
+                    _chain.angleDegrees = angleDegrees - 45 * this.offDir;
+                    Vec2 vec2 = Offset(new Vec2(num - 11f, -3f));
+                    Graphics.Draw(_chain, vec2.x, vec2.y);
+                    _lock.angleDegrees = _chainSway;
+                    _chainSwayVel -= ((_lock.angleDegrees - (owner != null ? owner.hSpeed : hSpeed) * 10f) * 0.1f);
+                    _chainSwayVel *= 0.95f;
+                    _chainSway += _chainSwayVel;
+                    _lock.depth = _underPart.depth + 2;
+                    Offset(new Vec2(num - 9f, -5f));
+                    Graphics.Draw(_lock, vec2.x, vec2.y);
                 }
-                if (!(this.containedObject is RagdollPart) || !Network.isActive)
-                    this._containedObject.Draw();
+                if (!(containedObject is RagdollPart) || !Network.isActive)
+                    _containedObject.Draw();
                 if (afterDrawAngle <= -99999f)
                     return;
-                this._containedObject.angleDegrees = this.afterDrawAngle;
+                _containedObject.angleDegrees = afterDrawAngle;
             }
             else
             {
-                if (!this.chained.value)
+                if (!chained.value)
                     return;
-                this._chain.depth = this.depth + 1;
-                Vec2 vec2 = this.Offset(new Vec2(-3f, -2f));
-                if (this.equippedDuck != null)
-                    vec2 = this.Offset(new Vec2(-9f, -2f));
-                this._chain.center = new Vec2(3f, 3f);
-                Graphics.Draw(this._chain, vec2.x, vec2.y);
-                this.Offset(new Vec2(0f, -8f));
-                this._chain.angleDegrees = 90f + this._chainSway;
-                this._chainSwayVel -= ((this._chain.angleDegrees - (90f + (this.owner != null ? this.owner.hSpeed : this.hSpeed) * 10f)) * 0.1f);
-                this._chainSwayVel *= 0.95f;
-                this._chainSway += this._chainSwayVel;
+                _chain.depth = depth + 1;
+                Vec2 vec2 = Offset(new Vec2(-3f, -2f));
+                if (equippedDuck != null)
+                    vec2 = Offset(new Vec2(-9f, -2f));
+                _chain.center = new Vec2(3f, 3f);
+                Graphics.Draw(_chain, vec2.x, vec2.y);
+                Offset(new Vec2(0f, -8f));
+                _chain.angleDegrees = 90f + _chainSway;
+                _chainSwayVel -= ((_chain.angleDegrees - (90f + (owner != null ? owner.hSpeed : hSpeed) * 10f)) * 0.1f);
+                _chainSwayVel *= 0.95f;
+                _chainSway += _chainSwayVel;
             }
         }
     }

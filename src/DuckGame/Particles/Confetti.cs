@@ -53,39 +53,39 @@ namespace DuckGame
 
         public void Init(float xpos, float ypos, Vec2 hitAngle, float killSpeed = 0.02f)
         {
-            this.position.x = xpos;
-            this.position.y = ypos;
-            this.hSpeed = (-hitAngle.x * 1.5f) * Rando.Float(-2f, 2f);
-            this.vSpeed = (-hitAngle.y * 2f * (Rando.Float(1f) - 0.3f)) - Rando.Float(1f);
-            this.hSpeed *= 1.5f;
-            this.vSpeed *= 1.5f;
-            this._bounceEfficiency = 0.1f;
-            this.depth = (Depth)0.9f;
-            this._killSpeed = killSpeed;
-            this._color = Color.RainbowColors[ConfettiParticle._confettiNumber % Color.RainbowColors.Count];
+            position.x = xpos;
+            position.y = ypos;
+            hSpeed = (-hitAngle.x * 1.5f) * Rando.Float(-2f, 2f);
+            vSpeed = (-hitAngle.y * 2f * (Rando.Float(1f) - 0.3f)) - Rando.Float(1f);
+            hSpeed *= 1.5f;
+            vSpeed *= 1.5f;
+            _bounceEfficiency = 0.1f;
+            depth = (Depth)0.9f;
+            _killSpeed = killSpeed;
+            _color = Color.RainbowColors[ConfettiParticle._confettiNumber % Color.RainbowColors.Count];
             ++ConfettiParticle._confettiNumber;
-            this._width = 1f;
-            this.life = Rando.Float(0.8f, 1f);
-            this.sin = Rando.Float(3.14f);
-            this._gravMult = 0.3f;
-            this.sinMult = 0f;
-            this.onlyDieWhenGrounded = true;
+            _width = 1f;
+            life = Rando.Float(0.8f, 1f);
+            sin = Rando.Float(3.14f);
+            _gravMult = 0.3f;
+            sinMult = 0f;
+            onlyDieWhenGrounded = true;
         }
 
         public override void Update()
         {
-            this.hSpeed *= 0.95f;
-            this.vSpeed *= 0.96f;
-            this.life -= 0.03f;
+            hSpeed *= 0.95f;
+            vSpeed *= 0.96f;
+            life -= 0.03f;
             if (life <= 0f)
             {
-                this.sinMult += 0.02f;
+                sinMult += 0.02f;
                 if (sinMult > 1f)
-                    this.sinMult = 1f;
-                if (!this._grounded && Math.Abs(this.hSpeed) < 0.2f)
+                    sinMult = 1f;
+                if (!_grounded && Math.Abs(hSpeed) < 0.2f)
                 {
-                    this.sin += 0.2f;
-                    this.x += (float)(Math.Sin(sin) * 0.5f) * this.sinMult;
+                    sin += 0.2f;
+                    x += (float)(Math.Sin(sin) * 0.5f) * sinMult;
                 }
             }
             base.Update();
@@ -93,14 +93,14 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._stringConfetti)
+            if (_stringConfetti)
             {
-                Vec2 p2 = this.position + this.velocity.normalized * (this.velocity.length * (float)(3.0 + sinMult * 3.0));
+                Vec2 p2 = this.position + velocity.normalized * (velocity.length * (float)(3.0 + sinMult * 3.0));
                 Vec2 position;
-                Graphics.DrawLine(this.position, Level.CheckLine<Block>(this.position, p2, out position) != null ? position : p2, this._color * this.alpha, this._width, this.depth);
+                Graphics.DrawLine(this.position, Level.CheckLine<Block>(this.position, p2, out position) != null ? position : p2, _color * alpha, _width, depth);
             }
             else
-                Graphics.DrawRect(this.position + new Vec2(-1f, -1f), this.position + new Vec2(1f, 1f), this._color * this.alpha, this.depth);
+                Graphics.DrawRect(position + new Vec2(-1f, -1f), position + new Vec2(1f, 1f), _color * alpha, depth);
         }
     }
 }

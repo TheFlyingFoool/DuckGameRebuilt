@@ -20,15 +20,15 @@ namespace DuckGame
 
         public override NCError SendPacket(BitBuffer sendData, NetworkConnection connection)
         {
-            if (!this.sendingDuplicate && Rando.Float(1f) < connection.debuggerContext.duplicate)
+            if (!sendingDuplicate && Rando.Float(1f) < connection.debuggerContext.duplicate)
             {
-                this.sendingDuplicate = true;
-                this.SendPacket(sendData, connection);
+                sendingDuplicate = true;
+                SendPacket(sendData, connection);
                 if (connection.debuggerContext.duplicate > 0.4f && Rando.Float(1f) < connection.debuggerContext.duplicate)
-                    this.SendPacket(sendData, connection);
+                    SendPacket(sendData, connection);
                 if (connection.debuggerContext.duplicate > 0.8f && Rando.Float(1f) < connection.debuggerContext.duplicate)
-                    this.SendPacket(sendData, connection);
-                this.sendingDuplicate = false;
+                    SendPacket(sendData, connection);
+                sendingDuplicate = false;
             }
             float num = connection.debuggerContext.CalculateLatency();
             if (connection.debuggerContext.lagSpike > 0)
@@ -36,7 +36,7 @@ namespace DuckGame
             if (num == 3.4E+38f)
                 return null;
             if (num <= 0f)
-                return this._impl.OnSendPacket(sendData.buffer, sendData.lengthInBytes, connection.data);
+                return _impl.OnSendPacket(sendData.buffer, sendData.lengthInBytes, connection.data);
             connection.debuggerContext.packets.Add(new DataLayerDebug.BadConnection.DelayedPacket()
             {
                 data = sendData,
@@ -62,53 +62,53 @@ namespace DuckGame
 
             public float latency
             {
-                get => _latency == 0.0 ? DuckNetwork.localConnection.debuggerContext._latency : this._latency;
-                set => this._latency = value;
+                get => _latency == 0.0 ? DuckNetwork.localConnection.debuggerContext._latency : _latency;
+                set => _latency = value;
             }
 
             public float jitter
             {
-                get => _jitter == 0.0 ? DuckNetwork.localConnection.debuggerContext._jitter : this._jitter;
-                set => this._jitter = value;
+                get => _jitter == 0.0 ? DuckNetwork.localConnection.debuggerContext._jitter : _jitter;
+                set => _jitter = value;
             }
 
             public float loss
             {
-                get => _loss == 0.0 ? DuckNetwork.localConnection.debuggerContext._loss : this._loss;
-                set => this._loss = value;
+                get => _loss == 0.0 ? DuckNetwork.localConnection.debuggerContext._loss : _loss;
+                set => _loss = value;
             }
 
             public float duplicate
             {
-                get => _duplicate == 0.0 ? DuckNetwork.localConnection.debuggerContext._duplicate : this._duplicate;
-                set => this._duplicate = value;
+                get => _duplicate == 0.0 ? DuckNetwork.localConnection.debuggerContext._duplicate : _duplicate;
+                set => _duplicate = value;
             }
 
-            public BadConnection(NetworkConnection pContext) => this.connection = pContext;
+            public BadConnection(NetworkConnection pContext) => connection = pContext;
 
             public float CalculateLatency()
             {
                 float num = 0f;
-                if (this.CalculateLoss())
+                if (CalculateLoss())
                 {
                     if (Rando.Int(3) != 0)
                         return float.MaxValue;
                     num += Rando.Float(2f, 4f);
                 }
-                return (float)(this.latency + 0f - 0.016f) + Rando.Float(-this.jitter, this.jitter) + num;
+                return (float)(latency + 0f - 0.016f) + Rando.Float(-jitter, jitter) + num;
             }
 
-            public bool CalculateLoss() => this.loss != 0f && Rando.Float(1f) < this.loss;
+            public bool CalculateLoss() => loss != 0f && Rando.Float(1f) < loss;
 
             public bool Update(NCNetworkImplementation pNetwork)
             {
                 List<DataLayerDebug.BadConnection.DelayedPacket> delayedPacketList = new List<DataLayerDebug.BadConnection.DelayedPacket>();
-                foreach (DataLayerDebug.BadConnection.DelayedPacket packet in this.packets)
+                foreach (DataLayerDebug.BadConnection.DelayedPacket packet in packets)
                 {
                     packet.time -= Maths.IncFrameTimer();
-                    if (packet.time <= 0.0 && this.connection.debuggerContext.lagSpike <= 0)
+                    if (packet.time <= 0.0 && connection.debuggerContext.lagSpike <= 0)
                     {
-                        pNetwork.OnSendPacket(packet.data.buffer, packet.data.lengthInBytes, this.connection.data);
+                        pNetwork.OnSendPacket(packet.data.buffer, packet.data.lengthInBytes, connection.data);
                         delayedPacketList.Add(packet);
                     }
                 }
@@ -117,14 +117,14 @@ namespace DuckGame
                     if (Rando.Int(15) == 0)
                         delayedPacket.time = Rando.Float(2f, 5f);
                     else
-                        this.packets.Remove(delayedPacket);
+                        packets.Remove(delayedPacket);
                 }
-                if (this.lagSpike > 0)
-                    this.lagSpike -= 9;
-                return this.packets.Count == 0;
+                if (lagSpike > 0)
+                    lagSpike -= 9;
+                return packets.Count == 0;
             }
 
-            public void Reset() => this.packets.Clear();
+            public void Reset() => packets.Clear();
 
             public class DelayedPacket
             {

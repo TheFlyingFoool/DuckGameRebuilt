@@ -26,17 +26,17 @@ namespace DuckGame
         public FontInfo(System.Drawing.Graphics gr, System.Drawing.Font the_font)
         {
             float emHeight = the_font.FontFamily.GetEmHeight(the_font.Style);
-            this.EmHeightPixels = this.ConvertUnits(gr, the_font.Size, the_font.Unit, GraphicsUnit.Pixel);
-            float num = this.EmHeightPixels / emHeight;
-            this.AscentPixels = num * the_font.FontFamily.GetCellAscent(the_font.Style);
-            this.DescentPixels = num * the_font.FontFamily.GetCellDescent(the_font.Style);
-            this.CellHeightPixels = this.AscentPixels + this.DescentPixels;
-            this.InternalLeadingPixels = this.CellHeightPixels - this.EmHeightPixels;
-            this.LineSpacingPixels = num * the_font.FontFamily.GetLineSpacing(the_font.Style);
-            this.ExternalLeadingPixels = this.LineSpacingPixels - this.CellHeightPixels;
-            this.RelTop = this.InternalLeadingPixels;
-            this.RelBaseline = this.AscentPixels;
-            this.RelBottom = this.CellHeightPixels;
+            EmHeightPixels = ConvertUnits(gr, the_font.Size, the_font.Unit, GraphicsUnit.Pixel);
+            float num = EmHeightPixels / emHeight;
+            AscentPixels = num * the_font.FontFamily.GetCellAscent(the_font.Style);
+            DescentPixels = num * the_font.FontFamily.GetCellDescent(the_font.Style);
+            CellHeightPixels = AscentPixels + DescentPixels;
+            InternalLeadingPixels = CellHeightPixels - EmHeightPixels;
+            LineSpacingPixels = num * the_font.FontFamily.GetLineSpacing(the_font.Style);
+            ExternalLeadingPixels = LineSpacingPixels - CellHeightPixels;
+            RelTop = InternalLeadingPixels;
+            RelBaseline = AscentPixels;
+            RelBottom = CellHeightPixels;
         }
 
         private float ConvertUnits(

@@ -15,6 +15,6 @@ namespace DuckGame
         {
         }
 
-        public NMAwaitingLevelReady(byte idx) => this.levelIndex = idx;
+        public NMAwaitingLevelReady(byte idx) => levelIndex = idx;
     }
 }

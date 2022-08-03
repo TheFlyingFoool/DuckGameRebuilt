@@ -36,12 +36,12 @@ namespace DuckGame
           byte ownerIndex = 4,
           bool onlyFireActionVar = false)
         {
-            this.gun = g;
-            this.bullets = varBullets;
-            this.fireIndex = fIndex;
-            this.owner = ownerIndex;
-            this.release = rel;
-            this.onlyFireAction = onlyFireActionVar;
+            gun = g;
+            bullets = varBullets;
+            fireIndex = fIndex;
+            owner = ownerIndex;
+            release = rel;
+            onlyFireAction = onlyFireActionVar;
             if (varBullets == null)
                 return;
             bool flag = true;
@@ -49,12 +49,12 @@ namespace DuckGame
             {
                 if (flag)
                 {
-                    this._ammoTypeInstance = varBullet.ammo;
-                    this.ammoType = AmmoType.indexTypeMap[varBullet.ammo.GetType()];
-                    this.position = new Vec2(varBullet.x, varBullet.y);
+                    _ammoTypeInstance = varBullet.ammo;
+                    ammoType = AmmoType.indexTypeMap[varBullet.ammo.GetType()];
+                    position = new Vec2(varBullet.x, varBullet.y);
                     flag = false;
                 }
-                this._fireEvents.Add(new NMFireBullet(varBullet.range, varBullet.bulletSpeed, varBullet.angle));
+                _fireEvents.Add(new NMFireBullet(varBullet.range, varBullet.bulletSpeed, varBullet.angle));
             }
         }
 
@@ -62,68 +62,68 @@ namespace DuckGame
         {
             if (_levelIndex != DuckNetwork.levelIndex)
                 return;
-            if (this._fireEvents.Count > 0 && this._fireEvents[0].typeInstance != null)
-                this._fireEvents[0].typeInstance.MakeNetEffect(this.position, true);
-            foreach (NMFireBullet fireEvent in this._fireEvents)
+            if (_fireEvents.Count > 0 && _fireEvents[0].typeInstance != null)
+                _fireEvents[0].typeInstance.MakeNetEffect(position, true);
+            foreach (NMFireBullet fireEvent in _fireEvents)
             {
-                fireEvent.connection = this.connection;
-                fireEvent.DoActivate(this.position, owner < DuckNetwork.profiles.Count ? DuckNetwork.profiles[owner] : null);
+                fireEvent.connection = connection;
+                fireEvent.DoActivate(position, owner < DuckNetwork.profiles.Count ? DuckNetwork.profiles[owner] : null);
             }
-            if (this.gun == null)
+            if (gun == null)
                 return;
-            if (this._fireEvents.Count > 0)
-                this.gun.OnNetworkBulletsFired(this.position);
-            this.gun.receivingPress = true;
-            this.gun.hasFireEvents = true;
-            this.gun.onlyFireAction = this.onlyFireAction;
-            float wait = this.gun._wait;
-            this.gun._wait = 0f;
-            if (!this.release)
+            if (_fireEvents.Count > 0)
+                gun.OnNetworkBulletsFired(position);
+            gun.receivingPress = true;
+            gun.hasFireEvents = true;
+            gun.onlyFireAction = onlyFireAction;
+            float wait = gun._wait;
+            gun._wait = 0f;
+            if (!release)
             {
-                bool loaded = this.gun.loaded;
-                this.gun.loaded = this._fireEvents.Count > 0 || this.gun.ammo == 0;
-                this.gun.PressAction();
-                if (this.gun.fullAuto)
-                    this.gun.HoldAction();
-                this.gun.loaded = loaded;
+                bool loaded = gun.loaded;
+                gun.loaded = _fireEvents.Count > 0 || gun.ammo == 0;
+                gun.PressAction();
+                if (gun.fullAuto)
+                    gun.HoldAction();
+                gun.loaded = loaded;
             }
             else
-                this.gun.ReleaseAction();
-            this.gun._wait = wait;
-            this.gun.receivingPress = false;
-            this.gun.hasFireEvents = false;
-            this.gun.onlyFireAction = false;
-            this.gun.bulletFireIndex = this.fireIndex;
+                gun.ReleaseAction();
+            gun._wait = wait;
+            gun.receivingPress = false;
+            gun.hasFireEvents = false;
+            gun.onlyFireAction = false;
+            gun.bulletFireIndex = fireIndex;
         }
 
         protected override void OnSerialize()
         {
             base.OnSerialize();
-            this._serializedData.Write(DuckNetwork.levelIndex);
-            this._serializedData.Write((byte)this._fireEvents.Count);
-            foreach (NMFireBullet fireEvent in this._fireEvents)
+            _serializedData.Write(DuckNetwork.levelIndex);
+            _serializedData.Write((byte)_fireEvents.Count);
+            foreach (NMFireBullet fireEvent in _fireEvents)
             {
                 fireEvent.SerializePacketData();
-                this._serializedData.Write(fireEvent.serializedData, true);
-                if (this._fireEvents.Count > 0)
-                    this._ammoTypeInstance.WriteAdditionalData(this._serializedData);
+                _serializedData.Write(fireEvent.serializedData, true);
+                if (_fireEvents.Count > 0)
+                    _ammoTypeInstance.WriteAdditionalData(_serializedData);
             }
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
             base.OnDeserialize(d);
-            this._levelIndex = d.ReadByte();
+            _levelIndex = d.ReadByte();
             byte num = d.ReadByte();
             for (int index = 0; index < num; ++index)
             {
                 NMFireBullet nmFireBullet = new NMFireBullet();
                 BitBuffer msg = d.ReadBitBuffer();
                 nmFireBullet.OnDeserialize(msg);
-                AmmoType instance = Activator.CreateInstance(AmmoType.indexTypeMap[this.ammoType]) as AmmoType;
+                AmmoType instance = Activator.CreateInstance(AmmoType.indexTypeMap[ammoType]) as AmmoType;
                 instance.ReadAdditionalData(d);
                 nmFireBullet.typeInstance = instance;
-                this._fireEvents.Add(nmFireBullet);
+                _fireEvents.Add(nmFireBullet);
             }
         }
     }

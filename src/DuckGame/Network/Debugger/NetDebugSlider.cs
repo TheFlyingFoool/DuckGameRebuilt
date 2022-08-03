@@ -23,10 +23,10 @@ namespace DuckGame
           Func<float, string> pDisplayFormatter)
           : base(pInterface)
         {
-            this._name = pName;
-            this._getValue = pGet;
-            this._setValue = pSet;
-            this._formatter = pDisplayFormatter;
+            _name = pName;
+            _getValue = pGet;
+            _setValue = pSet;
+            _formatter = pDisplayFormatter;
         }
 
         public void Update()
@@ -36,9 +36,9 @@ namespace DuckGame
         protected override bool Draw(Vec2 position, bool allowInput)
         {
             bool flag = !allowInput;
-            position.x += this.indent;
-            Graphics.DrawString(this._name, position, Color.White, this.depth + 10);
-            float num1 = this._getValue();
+            position.x += indent;
+            Graphics.DrawString(_name, position, Color.White, depth + 10);
+            float num1 = _getValue();
             int num2 = 20;
             int num3 = (int)Math.Round(num1 * num2);
             Rectangle rectangle = new Rectangle(position.x + 100f, position.y, num2 * 5, 8f);
@@ -48,7 +48,7 @@ namespace DuckGame
                 num4 = (int)((Mouse.positionConsole.x - rectangle.Left) / rectangle.width * num2);
                 if (Mouse.left == InputState.Down)
                 {
-                    this._setValue(num4 / num2);
+                    _setValue(num4 / num2);
                     flag = true;
                 }
             }
@@ -60,11 +60,11 @@ namespace DuckGame
                     col = Color.White;
                 else if (num3 >= index)
                     col = new Color(200, 200, 200);
-                Graphics.DrawRect(tl, tl + new Vec2(4f, 8f), col, this.depth + 5);
+                Graphics.DrawRect(tl, tl + new Vec2(4f, 8f), col, depth + 5);
                 tl.x += 5f;
             }
             tl.x += 2f;
-            Graphics.DrawString("(" + this._formatter(num1) + ")", tl, Color.White, this.depth + 5);
+            Graphics.DrawString("(" + _formatter(num1) + ")", tl, Color.White, depth + 5);
             return flag;
         }
     }

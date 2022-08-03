@@ -450,9 +450,9 @@ namespace DGWindows
         {
             public Module(string modulePath, IntPtr baseAddress, uint size)
             {
-                this.ModulePath = modulePath;
-                this.BaseAddress = baseAddress;
-                this.Size = size;
+                ModulePath = modulePath;
+                BaseAddress = baseAddress;
+                Size = size;
             }
 
             public string ModulePath { get; set; }

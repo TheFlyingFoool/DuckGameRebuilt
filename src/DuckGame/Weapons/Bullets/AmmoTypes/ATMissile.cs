@@ -14,15 +14,15 @@ namespace DuckGame
     {
         public ATMissile()
         {
-            this.accuracy = 1f;
-            this.range = 850f;
-            this.penetration = 0.4f;
-            this.bulletSpeed = 7f;
-            this.bulletThickness = 2f;
-            this.sprite = new Sprite("missile");
-            this.sprite.CenterOrigin();
-            this.speedVariation = 0f;
-            this.flawlessPipeTravel = true;
+            accuracy = 1f;
+            range = 850f;
+            penetration = 0.4f;
+            bulletSpeed = 7f;
+            bulletThickness = 2f;
+            sprite = new Sprite("missile");
+            sprite.CenterOrigin();
+            speedVariation = 0f;
+            flawlessPipeTravel = true;
         }
 
         public override void PopShell(float x, float y, int dir)

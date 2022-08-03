@@ -11,24 +11,24 @@ namespace DuckGame
     {
         public ATGrenade()
         {
-            this.accuracy = 1f;
-            this.penetration = 0.35f;
-            this.bulletSpeed = 9f;
-            this.rangeVariation = 0f;
-            this.speedVariation = 0f;
-            this.range = 2000f;
-            this.rebound = true;
-            this.affectedByGravity = true;
-            this.deadly = false;
-            this.weight = 5f;
-            this.ownerSafety = 4;
-            this.bulletThickness = 2f;
-            this.bulletColor = Color.White;
-            this.bulletType = typeof(GrenadeBullet);
-            this.immediatelyDeadly = true;
-            this.sprite = new Sprite("launcherGrenade");
-            this.sprite.CenterOrigin();
-            this.flawlessPipeTravel = true;
+            accuracy = 1f;
+            penetration = 0.35f;
+            bulletSpeed = 9f;
+            rangeVariation = 0f;
+            speedVariation = 0f;
+            range = 2000f;
+            rebound = true;
+            affectedByGravity = true;
+            deadly = false;
+            weight = 5f;
+            ownerSafety = 4;
+            bulletThickness = 2f;
+            bulletColor = Color.White;
+            bulletType = typeof(GrenadeBullet);
+            immediatelyDeadly = true;
+            sprite = new Sprite("launcherGrenade");
+            sprite.CenterOrigin();
+            flawlessPipeTravel = true;
         }
 
         public override void PopShell(float x, float y, int dir)

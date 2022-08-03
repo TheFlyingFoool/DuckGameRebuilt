@@ -14,7 +14,7 @@ namespace DuckGame
             ++DuckNetwork.core.logTransferProgress;
             if (DuckNetwork.core.logTransferProgress != DuckNetwork.core.logTransferSize)
                 return;
-            DevConsole.LogSendingComplete(this.connection);
+            DevConsole.LogSendingComplete(connection);
         }
     }
 }

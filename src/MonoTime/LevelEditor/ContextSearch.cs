@@ -14,25 +14,25 @@ namespace DuckGame
         public ContextSearch(IContextListener owner)
           : base(owner)
         {
-            this.itemSize.y = 16f;
-            this._text = "@searchicon@ search...";
-            this.tooltip = "Search for an object!";
+            itemSize.y = 16f;
+            _text = "@searchicon@ search...";
+            tooltip = "Search for an object!";
         }
 
         public override void Selected() => (Level.current as Editor).searching = true;
 
         public override void Draw()
         {
-            if (this._hover && !this.greyOut)
-                Graphics.DrawRect(this.position, this.position + this.itemSize, new Color(70, 70, 70), this.depth + 1);
+            if (_hover && !greyOut)
+                Graphics.DrawRect(position, position + itemSize, new Color(70, 70, 70), depth + 1);
             Color color = Color.White;
-            if (this.greyOut)
+            if (greyOut)
                 color = Color.White * 0.3f;
-            if (this.hover)
-                this._text = "@searchiconwhite@ search...";
+            if (hover)
+                _text = "@searchiconwhite@ search...";
             else
-                this._text = "@searchicon@ |GRAY|search...";
-            Graphics.DrawFancyString(this._text, this.position + new Vec2(0f, 4f), color, this.depth + 2);
+                _text = "@searchicon@ |GRAY|search...";
+            Graphics.DrawFancyString(_text, position + new Vec2(0f, 4f), color, depth + 2);
         }
     }
 }

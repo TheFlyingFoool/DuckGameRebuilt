@@ -18,10 +18,10 @@ namespace DuckGame
         public GinormoScreen(float xpos, float ypos, BoardMode mode)
           : base(xpos, ypos)
         {
-            this.layer = Layer.Foreground;
-            this.depth = (Depth)0f;
-            this._font = new BitmapFont("biosFont", 8);
-            this._collisionSize = new Vec2(184f, 102f);
+            layer = Layer.Foreground;
+            depth = (Depth)0f;
+            _font = new BitmapFont("biosFont", 8);
+            _collisionSize = new Vec2(184f, 102f);
             List<Team> teamList = new List<Team>();
             int idx = 0;
             foreach (Team team in Teams.all)
@@ -41,7 +41,7 @@ namespace DuckGame
                 float y = this.y + 2f + (smallMode ? 12 : 25) * idx;
                 if (Graphics.aspect > 0.589999973773956)
                     y += 10f;
-                Level.current.AddThing(new GinormoCard(idx * 1f, new Vec2(300f, y), new Vec2(this.x + (mode == BoardMode.Points ? 2f : 2f), y), team, mode, idx, smallMode));
+                Level.current.AddThing(new GinormoCard(idx * 1f, new Vec2(300f, y), new Vec2(x + (mode == BoardMode.Points ? 2f : 2f), y), team, mode, idx, smallMode));
                 ++idx;
             }
         }

@@ -27,99 +27,99 @@ namespace DuckGame
 
         public ICollection<TValue> Values => _byKey.Values;
 
-        public int Count => this._byKey.Count;
+        public int Count => _byKey.Count;
 
         public bool IsReadOnly => false;
 
         public TValue this[TKey key]
         {
-            get => this._byKey[key];
+            get => _byKey[key];
             set
             {
-                this._byKey[key] = value;
-                this._byValue[value] = key;
+                _byKey[key] = value;
+                _byValue[value] = key;
             }
         }
 
         public TKey this[TValue val]
         {
-            get => this._byValue[val];
+            get => _byValue[val];
             set
             {
-                this._byValue[val] = value;
-                this._byKey[value] = val;
+                _byValue[val] = value;
+                _byKey[value] = val;
             }
         }
 
         public void Add(TKey key, TValue value)
         {
-            this._byKey.Add(key, value);
-            this._byValue.Add(value, key);
+            _byKey.Add(key, value);
+            _byValue.Add(value, key);
         }
 
         public void Add(TValue value, TKey key)
         {
-            this._byValue.Add(value, key);
-            this._byKey.Add(key, value);
+            _byValue.Add(value, key);
+            _byKey.Add(key, value);
         }
 
         public bool Remove(TKey key)
         {
             TValue key1;
-            if (!this._byKey.TryGetValue(key, out key1))
+            if (!_byKey.TryGetValue(key, out key1))
                 return false;
-            this._byKey.Remove(key);
-            this._byValue.Remove(key1);
+            _byKey.Remove(key);
+            _byValue.Remove(key1);
             return true;
         }
 
         public bool Remove(TValue value)
         {
             TKey key;
-            if (!this._byValue.TryGetValue(value, out key))
+            if (!_byValue.TryGetValue(value, out key))
                 return false;
-            this._byKey.Remove(key);
-            this._byValue.Remove(value);
+            _byKey.Remove(key);
+            _byValue.Remove(value);
             return true;
         }
 
-        public TValue Get(TKey key) => this._byKey[key];
+        public TValue Get(TKey key) => _byKey[key];
 
-        public TKey Get(TValue value) => this._byValue[value];
+        public TKey Get(TValue value) => _byValue[value];
 
-        public bool ContainsKey(TKey key) => this._byKey.ContainsKey(key);
+        public bool ContainsKey(TKey key) => _byKey.ContainsKey(key);
 
-        public bool ContainsValue(TValue value) => this._byValue.ContainsKey(value);
+        public bool ContainsValue(TValue value) => _byValue.ContainsKey(value);
 
-        public bool Contains(TKey key) => this.ContainsKey(key);
+        public bool Contains(TKey key) => ContainsKey(key);
 
-        public bool Contains(TValue value) => this.ContainsValue(value);
+        public bool Contains(TValue value) => ContainsValue(value);
 
-        public bool TryGetValue(TKey key, out TValue value) => this._byKey.TryGetValue(key, out value);
+        public bool TryGetValue(TKey key, out TValue value) => _byKey.TryGetValue(key, out value);
 
-        public bool TryGetKey(TValue value, out TKey key) => this._byValue.TryGetValue(value, out key);
+        public bool TryGetKey(TValue value, out TKey key) => _byValue.TryGetValue(value, out key);
 
-        public void Add(KeyValuePair<TKey, TValue> item) => this.Add(item.Key, item.Value);
+        public void Add(KeyValuePair<TKey, TValue> item) => Add(item.Key, item.Value);
 
-        public void Add(KeyValuePair<TValue, TKey> item) => this.Add(item.Key, item.Value);
+        public void Add(KeyValuePair<TValue, TKey> item) => Add(item.Key, item.Value);
 
         public void Clear()
         {
-            this._byKey.Clear();
-            this._byValue.Clear();
+            _byKey.Clear();
+            _byValue.Clear();
         }
 
-        public bool Contains(KeyValuePair<TKey, TValue> item) => ((ICollection<KeyValuePair<TKey, TValue>>)this._byKey).Contains(item);
+        public bool Contains(KeyValuePair<TKey, TValue> item) => ((ICollection<KeyValuePair<TKey, TValue>>)_byKey).Contains(item);
 
-        public bool Contains(KeyValuePair<TValue, TKey> item) => ((ICollection<KeyValuePair<TValue, TKey>>)this._byValue).Contains(item);
+        public bool Contains(KeyValuePair<TValue, TKey> item) => ((ICollection<KeyValuePair<TValue, TKey>>)_byValue).Contains(item);
 
-        public bool Remove(KeyValuePair<TKey, TValue> item) => this.Remove(item.Key);
+        public bool Remove(KeyValuePair<TKey, TValue> item) => Remove(item.Key);
 
-        public bool Remove(KeyValuePair<TValue, TKey> item) => this.Remove(item.Key);
+        public bool Remove(KeyValuePair<TValue, TKey> item) => Remove(item.Key);
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => ((IEnumerable<KeyValuePair<TKey, TValue>>)this._byKey).GetEnumerator();
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => ((IEnumerable<KeyValuePair<TKey, TValue>>)_byKey).GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<KeyValuePair<TKey, TValue>>)this._byKey).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<KeyValuePair<TKey, TValue>>)_byKey).GetEnumerator();
 
         void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(
           KeyValuePair<TKey, TValue>[] array,

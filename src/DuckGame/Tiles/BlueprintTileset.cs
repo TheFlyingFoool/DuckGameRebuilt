@@ -14,11 +14,11 @@ namespace DuckGame
         public BlueprintTileset(float x, float y)
           : base(x, y, "blueprintTileset")
         {
-            this._editorName = "Blueprint";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidthThick = 16f;
-            this.verticalWidth = 14f;
-            this.horizontalHeight = 16f;
+            _editorName = "Blueprint";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidthThick = 16f;
+            verticalWidth = 14f;
+            horizontalHeight = 16f;
         }
     }
 }

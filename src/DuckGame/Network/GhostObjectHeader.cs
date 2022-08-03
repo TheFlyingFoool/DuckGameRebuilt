@@ -19,16 +19,16 @@ namespace DuckGame
 
         public GhostObjectHeader(bool pClean)
         {
-            this.id = new NetIndex16();
-            this.classID = 0;
-            this.levelIndex = 0;
-            this.authority = (NetIndex8)0;
-            this.tick = (NetIndex16)2;
-            this.delta = false;
-            this.connection = null;
+            id = new NetIndex16();
+            classID = 0;
+            levelIndex = 0;
+            authority = (NetIndex8)0;
+            tick = (NetIndex16)2;
+            delta = false;
+            connection = null;
         }
 
-        public NetMessagePriority priority => !this.delta ? NetMessagePriority.ReliableOrdered : NetMessagePriority.UnreliableUnordered;
+        public NetMessagePriority priority => !delta ? NetMessagePriority.ReliableOrdered : NetMessagePriority.UnreliableUnordered;
 
         public static void Serialize(
           BitBuffer pBuffer,

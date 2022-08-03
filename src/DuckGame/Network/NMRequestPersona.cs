@@ -20,15 +20,15 @@ namespace DuckGame
 
         public NMRequestPersona(Profile pProfile, DuckPersona pPersona)
         {
-            this.profile = pProfile;
-            this.persona = (byte)pPersona.index;
+            profile = pProfile;
+            persona = (byte)pPersona.index;
         }
 
         public override void Activate()
         {
-            if (this.profile == null || this.persona < 0 || persona >= Persona.all.Count<DuckPersona>())
+            if (profile == null || persona < 0 || persona >= Persona.all.Count<DuckPersona>())
                 return;
-            DuckNetwork.RequestPersona(this.profile, Persona.all.ElementAt<DuckPersona>(persona));
+            DuckNetwork.RequestPersona(profile, Persona.all.ElementAt<DuckPersona>(persona));
         }
     }
 }

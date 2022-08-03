@@ -16,13 +16,13 @@ namespace DuckGame
         public UIMenuActionOpenMenuSetBoolean(UIComponent menu, UIComponent open, MenuBoolean value)
           : base(menu, open)
         {
-            this._value = value;
+            _value = value;
         }
 
         public override void Activate()
         {
             base.Activate();
-            this._value.value = true;
+            _value.value = true;
         }
     }
 }

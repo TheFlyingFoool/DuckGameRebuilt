@@ -9,7 +9,7 @@ namespace DuckGame
 {
     public class NMConditionalEvent : ConditionalMessage
     {
-        public NMConditionalEvent() => this.manager = BelongsToManager.EventManager;
+        public NMConditionalEvent() => manager = BelongsToManager.EventManager;
 
         public virtual void Activate()
         {

@@ -38,28 +38,28 @@ namespace DuckGame
         {
             if (p == null)
                 return false;
-            if (!this._initializedDoubleInputs)
+            if (!_initializedDoubleInputs)
             {
-                this._initializedDoubleInputs = true;
-                foreach (string trigger in this.triggers)
+                _initializedDoubleInputs = true;
+                foreach (string trigger in triggers)
                 {
                     if (trigger.Contains("|"))
                     {
-                        this.hasDoubleInputs = true;
+                        hasDoubleInputs = true;
                         break;
                     }
                 }
             }
-            InputCode.InputCodeProfileStatus status = this.GetStatus(p);
+            InputCode.InputCodeProfileStatus status = GetStatus(p);
             if (status.lastUpdateFrame == Graphics.frame)
                 return status.lastResult;
             status.lastUpdateFrame = Graphics.frame;
-            status.breakTimer -= this.breakSpeed;
+            status.breakTimer -= breakSpeed;
             if (status.breakTimer <= 0.0)
                 status.Break();
-            string trigger1 = this.triggers[status.currentIndex];
+            string trigger1 = triggers[status.currentIndex];
             int num = 0;
-            if (this.hasDoubleInputs && trigger1.Contains("|"))
+            if (hasDoubleInputs && trigger1.Contains("|"))
             {
                 string str1 = trigger1;
                 char[] chArray = new char[1] { '|' };
@@ -72,7 +72,7 @@ namespace DuckGame
             {
                 if (!status.release)
                 {
-                    if (status.currentIndex == this.triggers.Count - 1)
+                    if (status.currentIndex == triggers.Count - 1)
                     {
                         status.Break();
                         status.lastResult = true;
@@ -118,18 +118,18 @@ namespace DuckGame
 
             public void Break()
             {
-                if (this.currentIndex <= 0)
+                if (currentIndex <= 0)
                     return;
-                this.currentIndex = 0;
-                this.release = false;
-                this.breakTimer = 1f;
+                currentIndex = 0;
+                release = false;
+                breakTimer = 1f;
             }
 
             public void Progress()
             {
-                ++this.currentIndex;
-                this.release = false;
-                this.breakTimer = 1f;
+                ++currentIndex;
+                release = false;
+                breakTimer = 1f;
             }
         }
     }

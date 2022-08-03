@@ -13,13 +13,13 @@ namespace DuckGame
 
         public ATLaserOrange()
         {
-            this.accuracy = 0.75f;
-            this.range = 250f;
-            this.penetration = 1f;
-            this.bulletSpeed = 20f;
-            this.bulletThickness = 0.3f;
-            this.bulletType = typeof(LaserBulletOrange);
-            this.complexSync = true;
+            accuracy = 0.75f;
+            range = 250f;
+            penetration = 1f;
+            bulletSpeed = 20f;
+            bulletThickness = 0.3f;
+            bulletType = typeof(LaserBulletOrange);
+            complexSync = true;
         }
     }
 }

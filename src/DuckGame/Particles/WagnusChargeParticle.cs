@@ -44,38 +44,38 @@ namespace DuckGame
 
         private void Init(float xpos, float ypos, Thing target)
         {
-            this.hSpeed = Rando.Float(-1f, 1f);
-            this.vSpeed = Rando.Float(-1f, 1f);
-            this.position.x = xpos;
-            this.position.y = ypos;
-            this.depth = (Depth)0.9f;
-            this.life = 1f;
-            this._target = target;
-            this.alpha = 1f;
+            hSpeed = Rando.Float(-1f, 1f);
+            vSpeed = Rando.Float(-1f, 1f);
+            position.x = xpos;
+            position.y = ypos;
+            depth = (Depth)0.9f;
+            life = 1f;
+            _target = target;
+            alpha = 1f;
         }
 
         public override void Update()
         {
-            Vec2 vec2 = this.position - this._target.position;
+            Vec2 vec2 = position - _target.position;
             float lengthSq = vec2.lengthSq;
             if (lengthSq < 64.0 || lengthSq > 4096.0)
-                this.alpha -= 0.08f;
-            this.hSpeed = Lerp.Float(this.hSpeed, (float)(-vec2.x * 0.699999988079071), 0.15f);
-            this.vSpeed = Lerp.Float(this.vSpeed, (float)(-vec2.y * 0.699999988079071), 0.15f);
-            this.position.x += this.hSpeed;
-            this.position.y += this.vSpeed;
-            this.position.x = Lerp.Float(this.position.x, this._target.x, 0.16f);
-            this.position.y = Lerp.Float(this.position.y, this._target.y, 0.16f);
-            this.hSpeed *= Math.Min(1f, (float)(lengthSq / 128.0 + 0.25));
-            this.vSpeed *= Math.Min(1f, (float)(lengthSq / 128.0 + 0.25));
-            this.life -= 0.02f;
+                alpha -= 0.08f;
+            hSpeed = Lerp.Float(hSpeed, (float)(-vec2.x * 0.699999988079071), 0.15f);
+            vSpeed = Lerp.Float(vSpeed, (float)(-vec2.y * 0.699999988079071), 0.15f);
+            position.x += hSpeed;
+            position.y += vSpeed;
+            position.x = Lerp.Float(position.x, _target.x, 0.16f);
+            position.y = Lerp.Float(position.y, _target.y, 0.16f);
+            hSpeed *= Math.Min(1f, (float)(lengthSq / 128.0 + 0.25));
+            vSpeed *= Math.Min(1f, (float)(lengthSq / 128.0 + 0.25));
+            life -= 0.02f;
             if (life < 0.0)
-                this.alpha -= 0.08f;
-            if (this.alpha < 0.0)
+                alpha -= 0.08f;
+            if (alpha < 0.0)
                 Level.Remove(this);
             base.Update();
         }
 
-        public override void Draw() => Graphics.DrawLine(this.position, this.position + this.velocity.normalized * (this.velocity.length * 2f), new Color(147, 64, 221) * this.alpha, depth: this.depth);
+        public override void Draw() => Graphics.DrawLine(position, position + velocity.normalized * (velocity.length * 2f), new Color(147, 64, 221) * alpha, depth: depth);
     }
 }

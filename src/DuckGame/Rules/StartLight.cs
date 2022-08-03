@@ -14,12 +14,12 @@ namespace DuckGame
         public StartLight()
           : base()
         {
-            this._sprite = new SpriteMap("trafficLight", 42, 23);
-            this.center = new Vec2(this._sprite.w / 2, this._sprite.h / 2);
-            this.graphic = _sprite;
-            this.layer = Layer.HUD;
-            this.x = Layer.HUD.camera.width / 2f;
-            this.y = 20f;
+            _sprite = new SpriteMap("trafficLight", 42, 23);
+            center = new Vec2(_sprite.w / 2, _sprite.h / 2);
+            graphic = _sprite;
+            layer = Layer.HUD;
+            x = Layer.HUD.camera.width / 2f;
+            y = 20f;
         }
 
         public override void Update()

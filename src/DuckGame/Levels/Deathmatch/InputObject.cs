@@ -27,44 +27,44 @@ namespace DuckGame
 
         public sbyte profileNumber
         {
-            get => this._profileNumber;
+            get => _profileNumber;
             set
             {
-                this._profileNumber = value;
-                this.duckProfile = DuckNetwork.profiles[_profileNumber];
-                if (this.duckProfile == null || this.duckProfile.connection != DuckNetwork.localConnection)
+                _profileNumber = value;
+                duckProfile = DuckNetwork.profiles[_profileNumber];
+                if (duckProfile == null || duckProfile.connection != DuckNetwork.localConnection)
                     return;
-                this.connection = DuckNetwork.localConnection;
+                connection = DuckNetwork.localConnection;
             }
         }
 
         public Vec2 leftStick
         {
-            get => this.isServerForObject && this.inputProfile != null ? this.inputProfile.leftStick : this._leftStick;
-            set => this._leftStick = value;
+            get => isServerForObject && inputProfile != null ? inputProfile.leftStick : _leftStick;
+            set => _leftStick = value;
         }
 
         public Vec2 rightStick
         {
-            get => this.isServerForObject && this.inputProfile != null ? this.inputProfile.rightStick : this._rightStick;
-            set => this._rightStick = value;
+            get => isServerForObject && inputProfile != null ? inputProfile.rightStick : _rightStick;
+            set => _rightStick = value;
         }
 
         public float leftTrigger
         {
             get
             {
-                if (!this.isServerForObject || this.inputProfile == null)
-                    return this._leftTrigger;
-                float leftTrigger = this.inputProfile.leftTrigger;
-                if (this.inputProfile.hasMotionAxis)
-                    leftTrigger += this.inputProfile.motionAxis;
+                if (!isServerForObject || inputProfile == null)
+                    return _leftTrigger;
+                float leftTrigger = inputProfile.leftTrigger;
+                if (inputProfile.hasMotionAxis)
+                    leftTrigger += inputProfile.motionAxis;
                 return leftTrigger;
             }
-            set => this._leftTrigger = value;
+            set => _leftTrigger = value;
         }
 
-        public InputProfile inputProfile => this.duckProfile != null ? this.duckProfile.inputProfile : this._blankProfile;
+        public InputProfile inputProfile => duckProfile != null ? duckProfile.inputProfile : _blankProfile;
 
         public InputObject()
           : base()
@@ -73,40 +73,40 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this.duckProfile != null && this.duckProfile.connection == DuckNetwork.localConnection)
+            if (duckProfile != null && duckProfile.connection == DuckNetwork.localConnection)
                 Thing.Fondle(this, DuckNetwork.localConnection);
-            if (this.isServerForObject && this.inputProfile != null)
+            if (isServerForObject && inputProfile != null)
             {
                 if (!Network.isServer)
-                    this.inputProfile.UpdateTriggerStates();
+                    inputProfile.UpdateTriggerStates();
                 if (prevState != inputProfile.state)
                 {
                     NetIndex8 authority = this.authority;
                     this.authority = ++authority;
-                    this._inputChangeIndex += 1;
+                    _inputChangeIndex += 1;
                 }
-                this.prevState = this.inputProfile.state;
+                prevState = inputProfile.state;
             }
             RegisteredVote vote = Vote.GetVote(DuckNetwork.profiles[_profileNumber]);
             if (vote != null)
             {
-                vote.leftStick = this.leftStick;
-                vote.rightStick = this.rightStick;
+                vote.leftStick = leftStick;
+                vote.rightStick = rightStick;
             }
             if (Level.current is RockScoreboard)
             {
                 foreach (Slot3D slot in (Level.current as RockScoreboard)._slots)
                 {
-                    if (slot.duck != null && slot.duck.profile == this.duckProfile)
+                    if (slot.duck != null && slot.duck.profile == duckProfile)
                     {
-                        if (this.inputProfile.virtualDevice != null)
+                        if (inputProfile.virtualDevice != null)
                         {
-                            this.inputProfile.virtualDevice.leftStick = this.leftStick;
-                            this.inputProfile.virtualDevice.rightStick = this.rightStick;
+                            inputProfile.virtualDevice.leftStick = leftStick;
+                            inputProfile.virtualDevice.rightStick = rightStick;
                         }
-                        slot.ai._manualQuack = this.inputProfile;
+                        slot.ai._manualQuack = inputProfile;
                         slot.duck.manualQuackPitch = true;
-                        slot.duck.quackPitch = (byte)(this.leftTrigger * byte.MaxValue);
+                        slot.duck.quackPitch = (byte)(leftTrigger * byte.MaxValue);
                     }
                 }
             }

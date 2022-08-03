@@ -70,74 +70,74 @@ namespace DuckGame
 
         public override float angle
         {
-            get => this._drawing ? this._angle : base.angle + (this._swing + this._hold) * offDir;
-            set => this._angle = value;
+            get => _drawing ? _angle : base.angle + (_swing + _hold) * offDir;
+            set => _angle = value;
         }
 
-        public bool jabStance => this._jabStance;
+        public bool jabStance => _jabStance;
 
-        public bool crouchStance => this._crouchStance;
+        public bool crouchStance => _crouchStance;
 
         public virtual Vec2 barrelStartPos
         {
             get
             {
-                if (this.owner == null)
-                    return this.position - (this.Offset(this.barrelOffset) - this.position).normalized * 6f;
-                return this._slamStance ? this.position + (this.Offset(this.barrelOffset) - this.position).normalized * 12f : this.position + (this.Offset(this.barrelOffset) - this.position).normalized * 2f;
+                if (owner == null)
+                    return position - (Offset(barrelOffset) - position).normalized * 6f;
+                return _slamStance ? position + (Offset(barrelOffset) - position).normalized * 12f : position + (Offset(barrelOffset) - position).normalized * 2f;
             }
         }
 
         public Sword(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 4;
-            this._ammoType = new ATLaser();
-            this._ammoType.range = 170f;
-            this._ammoType.accuracy = 0.8f;
-            this._type = "gun";
-            this.graphic = new Sprite("sword");
-            this.center = new Vec2(4f, 21f);
-            this.collisionOffset = new Vec2(-2f, -16f);
-            this.collisionSize = new Vec2(4f, 18f);
-            this._barrelOffsetTL = new Vec2(4f, 1f);
-            this._fireSound = "smg";
-            this._fullAuto = true;
-            this._fireWait = 1f;
-            this._kickForce = 3f;
-            this._holdOffset = new Vec2(-4f, 4f);
-            this.weight = 0.9f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this._swordSwing = new SpriteMap("swordSwipe", 32, 32);
-            this._swordSwing.AddAnimation("swing", 0.6f, false, 0, 1, 1, 2);
-            this._swordSwing.currentAnimation = "swing";
-            this._swordSwing.speed = 0f;
-            this._swordSwing.center = new Vec2(9f, 25f);
-            this.holsterAngle = 180f;
-            this.tapedIndexPreference = 0;
-            this._bouncy = 0.5f;
-            this._impactThreshold = 0.3f;
-            this.editorTooltip = "Basically a giant letter opener.";
+            ammo = 4;
+            _ammoType = new ATLaser();
+            _ammoType.range = 170f;
+            _ammoType.accuracy = 0.8f;
+            _type = "gun";
+            graphic = new Sprite("sword");
+            center = new Vec2(4f, 21f);
+            collisionOffset = new Vec2(-2f, -16f);
+            collisionSize = new Vec2(4f, 18f);
+            _barrelOffsetTL = new Vec2(4f, 1f);
+            _fireSound = "smg";
+            _fullAuto = true;
+            _fireWait = 1f;
+            _kickForce = 3f;
+            _holdOffset = new Vec2(-4f, 4f);
+            weight = 0.9f;
+            physicsMaterial = PhysicsMaterial.Metal;
+            _swordSwing = new SpriteMap("swordSwipe", 32, 32);
+            _swordSwing.AddAnimation("swing", 0.6f, false, 0, 1, 1, 2);
+            _swordSwing.currentAnimation = "swing";
+            _swordSwing.speed = 0f;
+            _swordSwing.center = new Vec2(9f, 25f);
+            holsterAngle = 180f;
+            tapedIndexPreference = 0;
+            _bouncy = 0.5f;
+            _impactThreshold = 0.3f;
+            editorTooltip = "Basically a giant letter opener.";
         }
 
         public override void Initialize() => base.Initialize();
 
-        public override Vec2 tapedOffset => this.tapedCompatriot is Gun ? (this.tapedCompatriot as Gun).barrelOffset + new Vec2(-14f, 2f) : new Vec2(-6f, -3f);
+        public override Vec2 tapedOffset => tapedCompatriot is Gun ? (tapedCompatriot as Gun).barrelOffset + new Vec2(-14f, 2f) : new Vec2(-6f, -3f);
 
         public override void UpdateTapedPositioning(TapedGun pTaped)
         {
             if (pTaped.gun1 != null && pTaped.gun2 != null)
-                this.angleDegrees = pTaped.angleDegrees - 90 * offDir;
-            if (this.tapedCompatriot is Gun)
+                angleDegrees = pTaped.angleDegrees - 90 * offDir;
+            if (tapedCompatriot is Gun)
             {
-                (this.tapedCompatriot as Gun).addVerticalTapeOffset = false;
-                this.tape._holdOffset = (this.tapedCompatriot as Gun)._holdOffset;
-                this.tape.handOffset = (this.tapedCompatriot as Gun).handOffset;
+                (tapedCompatriot as Gun).addVerticalTapeOffset = false;
+                tape._holdOffset = (tapedCompatriot as Gun)._holdOffset;
+                tape.handOffset = (tapedCompatriot as Gun).handOffset;
             }
-            this.collisionOffset = new Vec2(-4f, 0f);
-            this.collisionSize = new Vec2(4f, 4f);
-            this.center = this.centerHeld;
-            this.thickness = 0f;
+            collisionOffset = new Vec2(-4f, 0f);
+            collisionSize = new Vec2(4f, 4f);
+            center = centerHeld;
+            thickness = 0f;
         }
 
         public override bool CanTapeTo(Thing pThing)
@@ -152,7 +152,7 @@ namespace DuckGame
             }
         }
 
-        public override Holdable BecomeTapedMonster(TapedGun pTaped) => pTaped.gun1 is Sword && pTaped.gun2 is Sword ? new TapedSword(this.x, this.y) : (Holdable)null;
+        public override Holdable BecomeTapedMonster(TapedGun pTaped) => pTaped.gun1 is Sword && pTaped.gun2 is Sword ? new TapedSword(x, y) : (Holdable)null;
 
         public override void CheckIfHoldObstructed()
         {
@@ -173,18 +173,18 @@ namespace DuckGame
 
         public virtual void Shing()
         {
-            if (this._shing)
+            if (_shing)
                 return;
-            this._pullBack = false;
-            this._swinging = false;
-            this._shing = true;
-            this._swingPress = false;
+            _pullBack = false;
+            _swinging = false;
+            _shing = true;
+            _swingPress = false;
             if (!Sword._playedShing)
             {
                 Sword._playedShing = true;
                 SFX.Play("swordClash", Rando.Float(0.6f, 0.7f), Rando.Float(-0.1f, 0.1f), Rando.Float(-0.1f, 0.1f));
             }
-            Vec2 normalized = (this.position - this.barrelPosition).normalized;
+            Vec2 normalized = (position - this.barrelPosition).normalized;
             Vec2 barrelPosition = this.barrelPosition;
             for (int index = 0; index < 6; ++index)
             {
@@ -197,47 +197,47 @@ namespace DuckGame
                 Level.Add(spark);
                 barrelPosition += normalized * 4f;
             }
-            if (this.duck != null)
-                RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));
-            this._swung = false;
-            this._swordSwing.speed = 0f;
+            if (duck != null)
+                RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));
+            _swung = false;
+            _swordSwing.speed = 0f;
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (this.duck == null)
+            if (duck == null)
                 return false;
-            if (this.blocked == 0)
+            if (blocked == 0)
             {
-                this.duck.AddCoolness(1);
+                duck.AddCoolness(1);
             }
             else
             {
-                ++this.blocked;
-                if (this.blocked > 4)
+                ++blocked;
+                if (blocked > 4)
                 {
-                    this.blocked = 1;
-                    this.duck.AddCoolness(1);
+                    blocked = 1;
+                    duck.AddCoolness(1);
                 }
             }
-            RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.None));
+            RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.None));
             SFX.Play("ting");
             return base.Hit(bullet, hitPos);
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this.tape != null && this.tape.owner != null || !this._wasLifted || this.owner != null)
+            if (tape != null && tape.owner != null || !_wasLifted || owner != null)
                 return;
             switch (with)
             {
                 case Block _:
                 label_3:
-                    this.Shing();
-                    this._framesSinceThrown = 25;
+                    Shing();
+                    _framesSinceThrown = 25;
                     break;
                 case IPlatform _:
-                    if (from != ImpactedFrom.Bottom || this.vSpeed <= 0.0)
+                    if (from != ImpactedFrom.Bottom || vSpeed <= 0.0)
                         break;
                     goto label_3;
             }
@@ -245,42 +245,42 @@ namespace DuckGame
 
         public override void ReturnToWorld()
         {
-            this._throwSpin = 90f;
-            this.RestoreCollisionSize();
+            _throwSpin = 90f;
+            RestoreCollisionSize();
         }
 
         public virtual void RestoreCollisionSize(bool pHeld = false)
         {
             if (pHeld)
             {
-                this.collisionOffset = new Vec2(-4f, 0f);
-                this.collisionSize = new Vec2(4f, 4f);
-                if (!this._crouchStance || this._jabStance)
+                collisionOffset = new Vec2(-4f, 0f);
+                collisionSize = new Vec2(4f, 4f);
+                if (!_crouchStance || _jabStance)
                     return;
-                this.collisionOffset = new Vec2(-2f, -19f);
-                this.collisionSize = new Vec2(4f, 16f);
-                this.thickness = 3f;
+                collisionOffset = new Vec2(-2f, -19f);
+                collisionSize = new Vec2(4f, 16f);
+                thickness = 3f;
             }
             else
             {
-                this.collisionOffset = new Vec2(-2f, -16f);
-                this.collisionSize = new Vec2(4f, 18f);
-                if (!this._wasLifted)
+                collisionOffset = new Vec2(-2f, -16f);
+                collisionSize = new Vec2(4f, 18f);
+                if (!_wasLifted)
                     return;
-                this.collisionOffset = new Vec2(-4f, -2f);
-                this.collisionSize = new Vec2(8f, 4f);
+                collisionOffset = new Vec2(-4f, -2f);
+                collisionSize = new Vec2(8f, 4f);
             }
         }
 
         protected virtual void PerformAirSpin()
         {
-            if (this.hSpeed > 0.0)
-                this._throwSpin += (float)((Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed)) * 2.0 + 4.0);
+            if (hSpeed > 0.0)
+                _throwSpin += (float)((Math.Abs(hSpeed) + Math.Abs(vSpeed)) * 2.0 + 4.0);
             else
-                this._throwSpin -= (float)((Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed)) * 2.0 + 4.0);
+                _throwSpin -= (float)((Math.Abs(hSpeed) + Math.Abs(vSpeed)) * 2.0 + 4.0);
         }
 
-        public new bool held => this.duck != null && this.duck.holdObject == this;
+        public new bool held => duck != null && duck.holdObject == this;
 
         protected virtual void QuadLaserHit(QuadLaserBullet pBullet)
         {
@@ -288,17 +288,17 @@ namespace DuckGame
 
         protected virtual void UpdateCrouchStance()
         {
-            if (!this._crouchStance)
+            if (!_crouchStance)
             {
-                this._hold = -0.4f;
-                this.handOffset = new Vec2(this._addOffsetX, this._addOffsetY);
-                this._holdOffset = new Vec2(this._addOffsetX - 4f, 4f + this._addOffsetY) + this.additionalHoldOffset;
+                _hold = -0.4f;
+                handOffset = new Vec2(_addOffsetX, _addOffsetY);
+                _holdOffset = new Vec2(_addOffsetX - 4f, 4f + _addOffsetY) + additionalHoldOffset;
             }
             else
             {
-                this._hold = 0f;
-                this._holdOffset = new Vec2(0f + this._addOffsetX, 4f + this._addOffsetY) + this.additionalHoldOffset;
-                this.handOffset = new Vec2(3f + this._addOffsetX, this._addOffsetY);
+                _hold = 0f;
+                _holdOffset = new Vec2(0f + _addOffsetX, 4f + _addOffsetY) + additionalHoldOffset;
+                handOffset = new Vec2(3f + _addOffsetX, _addOffsetY);
             }
         }
 
@@ -306,229 +306,229 @@ namespace DuckGame
 
         protected virtual void UpdateJabPullback()
         {
-            this._swing = MathHelper.Lerp(this._swing, 1.75f, 0.4f);
+            _swing = MathHelper.Lerp(_swing, 1.75f, 0.4f);
             if (_swing > 1.54999995231628)
             {
-                this._swing = 1.55f;
-                this._shing = false;
-                this._swung = false;
+                _swing = 1.55f;
+                _shing = false;
+                _swung = false;
             }
-            this._addOffsetX = MathHelper.Lerp(this._addOffsetX, -12f, 0.45f);
+            _addOffsetX = MathHelper.Lerp(_addOffsetX, -12f, 0.45f);
             if (_addOffsetX < -12.0)
-                this._addOffsetX = -12f;
-            this._addOffsetY = MathHelper.Lerp(this._addOffsetY, -4f, 0.35f);
+                _addOffsetX = -12f;
+            _addOffsetY = MathHelper.Lerp(_addOffsetY, -4f, 0.35f);
             if (_addOffsetX >= -3.0)
                 return;
-            this._addOffsetY = -3f;
+            _addOffsetY = -3f;
         }
 
         protected virtual void UpdateSlamPullback()
         {
-            this._swing = MathHelper.Lerp(this._swing, 3.14f, 0.8f);
-            if (_swing > 3.09999990463257 && this._unslam == 0)
+            _swing = MathHelper.Lerp(_swing, 3.14f, 0.8f);
+            if (_swing > 3.09999990463257 && _unslam == 0)
             {
-                this._swing = 3.14f;
-                this._shing = false;
-                this._swung = true;
+                _swing = 3.14f;
+                _shing = false;
+                _swung = true;
             }
-            this._addOffsetX = MathHelper.Lerp(this._addOffsetX, -5f, 0.45f);
+            _addOffsetX = MathHelper.Lerp(_addOffsetX, -5f, 0.45f);
             if (_addOffsetX < -4.59999990463257)
-                this._addOffsetX = -5f;
-            this._addOffsetY = MathHelper.Lerp(this._addOffsetY, -6f, 0.35f);
+                _addOffsetX = -5f;
+            _addOffsetY = MathHelper.Lerp(_addOffsetY, -6f, 0.35f);
             if (_addOffsetX >= -5.5)
                 return;
-            this._addOffsetY = -6f;
+            _addOffsetY = -6f;
         }
 
         public override void Update()
         {
-            this.bayonetLethal = false;
-            if (this.tape != null && this.tapedCompatriot != null)
+            bayonetLethal = false;
+            if (tape != null && tapedCompatriot != null)
             {
-                if (this.tapedCompatriot != null && (Math.Abs(this._prevAngle - this.angleDegrees) > 1.0 || (this._prevPos - this.position).length > 2.0))
-                    this.bayonetLethal = true;
-                if (this.isServerForObject && this.bayonetLethal)
+                if (tapedCompatriot != null && (Math.Abs(_prevAngle - angleDegrees) > 1.0 || (_prevPos - position).length > 2.0))
+                    bayonetLethal = true;
+                if (isServerForObject && bayonetLethal)
                 {
-                    foreach (IAmADuck amAduck in Level.CheckLineAll<IAmADuck>(this.Offset(new Vec2(4f, 10f) - this.center + this._extraOffset), this.barrelPosition))
+                    foreach (IAmADuck amAduck in Level.CheckLineAll<IAmADuck>(Offset(new Vec2(4f, 10f) - center + _extraOffset), barrelPosition))
                     {
-                        if (amAduck != this.duck && amAduck is MaterialThing materialThing)
+                        if (amAduck != duck && amAduck is MaterialThing materialThing)
                         {
-                            bool flag = materialThing != this.prevOwner;
-                            if (flag && materialThing is RagdollPart && (materialThing as RagdollPart).doll != null && (materialThing as RagdollPart).doll.captureDuck == this.prevOwner)
+                            bool flag = materialThing != prevOwner;
+                            if (flag && materialThing is RagdollPart && (materialThing as RagdollPart).doll != null && (materialThing as RagdollPart).doll.captureDuck == prevOwner)
                                 flag = false;
                             int num = 16;
                             if (flag || tape._framesSinceThrown > num)
                             {
-                                materialThing.Destroy(this.destroyType);
+                                materialThing.Destroy(destroyType);
                                 if (Recorder.currentRecording != null)
                                     Recorder.currentRecording.LogBonus();
                             }
                         }
                     }
                 }
-                if (this._prevOffdir != offDir)
-                    this.ResetTrailHistory();
-                this._prevOffdir = offDir;
-                this._prevPos = this.position;
-                this._prevAngle = this.angleDegrees;
+                if (_prevOffdir != offDir)
+                    ResetTrailHistory();
+                _prevOffdir = offDir;
+                _prevPos = position;
+                _prevAngle = angleDegrees;
             }
             else
             {
-                this._tapeOffset = Vec2.Zero;
+                _tapeOffset = Vec2.Zero;
                 base.Update();
-                this._timeSinceSwing += Maths.IncFrameTimer();
-                if (this._swordSwing.finished)
-                    this._swordSwing.speed = 0f;
-                if (this._hitWait > 0)
-                    --this._hitWait;
-                ++this._framesExisting;
-                if (this._framesExisting > 100)
-                    this._framesExisting = 100;
-                if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 4.0 && this._framesExisting > 10)
-                    this._wasLifted = true;
-                if (this.owner != null)
-                    this._wasLifted = true;
-                if (this.held)
+                _timeSinceSwing += Maths.IncFrameTimer();
+                if (_swordSwing.finished)
+                    _swordSwing.speed = 0f;
+                if (_hitWait > 0)
+                    --_hitWait;
+                ++_framesExisting;
+                if (_framesExisting > 100)
+                    _framesExisting = 100;
+                if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 4.0 && _framesExisting > 10)
+                    _wasLifted = true;
+                if (owner != null)
+                    _wasLifted = true;
+                if (held)
                 {
                     if (!(this is OldEnergyScimi))
-                        this._hold = -0.4f;
-                    this._wasLifted = true;
-                    this.center = this.centerHeld;
-                    this._framesSinceThrown = 0;
-                    this._volatile = false;
+                        _hold = -0.4f;
+                    _wasLifted = true;
+                    center = centerHeld;
+                    _framesSinceThrown = 0;
+                    _volatile = false;
                 }
                 else
                 {
-                    if (this._framesSinceThrown == 1)
+                    if (_framesSinceThrown == 1)
                     {
-                        this._throwSpin = Maths.RadToDeg(this.angle) - 90f;
-                        this._hold = 0f;
-                        this._swing = 0f;
+                        _throwSpin = Maths.RadToDeg(angle) - 90f;
+                        _hold = 0f;
+                        _swing = 0f;
                     }
-                    if (this._wasLifted)
+                    if (_wasLifted)
                     {
-                        if (this.enablePhysics)
-                            this.angleDegrees = 90f + this._throwSpin;
-                        this.center = this.centerUnheld;
-                        if (this.duck != null || this.owner is Holster)
+                        if (enablePhysics)
+                            angleDegrees = 90f + _throwSpin;
+                        center = centerUnheld;
+                        if (duck != null || owner is Holster)
                         {
-                            this._hold = 0f;
-                            this._swing = 0f;
-                            this.angleDegrees = 0f;
-                            this._throwSpin = 0f;
+                            _hold = 0f;
+                            _swing = 0f;
+                            angleDegrees = 0f;
+                            _throwSpin = 0f;
                             return;
                         }
                     }
-                    this._volatile = this._stayVolatile;
+                    _volatile = _stayVolatile;
                     bool flag1 = false;
                     bool flag2 = false;
-                    if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 2.0 || !this.grounded)
+                    if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2.0 || !grounded)
                     {
-                        if (!this.grounded && Level.CheckRect<Block>(this.position + new Vec2(-6f, -6f), this.position + new Vec2(6f, -2f)) != null)
+                        if (!grounded && Level.CheckRect<Block>(position + new Vec2(-6f, -6f), position + new Vec2(6f, -2f)) != null)
                         {
                             flag2 = true;
-                            if (this.vSpeed > 4.0 && !(this is OldEnergyScimi))
-                                this._volatile = true;
+                            if (vSpeed > 4.0 && !(this is OldEnergyScimi))
+                                _volatile = true;
                         }
-                        if (!flag2 && !this._grounded && (Level.CheckPoint<IPlatform>(this.position + new Vec2(0f, 8f)) == null || this.vSpeed < 0.0))
+                        if (!flag2 && !_grounded && (Level.CheckPoint<IPlatform>(position + new Vec2(0f, 8f)) == null || vSpeed < 0.0))
                         {
-                            this.PerformAirSpin();
+                            PerformAirSpin();
                             flag1 = true;
                         }
                     }
-                    if (this._framesExisting > 15 && !(this is OldEnergyScimi) && Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 3.0)
-                        this._volatile = true;
+                    if (_framesExisting > 15 && !(this is OldEnergyScimi) && Math.Abs(hSpeed) + Math.Abs(vSpeed) > 3.0)
+                        _volatile = true;
                     if (!flag1 | flag2)
                     {
-                        this._throwSpin %= 360f;
+                        _throwSpin %= 360f;
                         if (flag2)
-                            this._throwSpin = Math.Abs(this._throwSpin - 90f) >= Math.Abs(this._throwSpin + 90f) ? Lerp.Float(-90f, 0f, 16f) : Lerp.Float(this._throwSpin, 90f, 16f);
+                            _throwSpin = Math.Abs(_throwSpin - 90f) >= Math.Abs(_throwSpin + 90f) ? Lerp.Float(-90f, 0f, 16f) : Lerp.Float(_throwSpin, 90f, 16f);
                         else if (_throwSpin > 90.0 && _throwSpin < 270.0)
                         {
-                            this._throwSpin = Lerp.Float(this._throwSpin, 180f, 14f);
+                            _throwSpin = Lerp.Float(_throwSpin, 180f, 14f);
                         }
                         else
                         {
                             if (_throwSpin > 180.0)
-                                this._throwSpin -= 360f;
+                                _throwSpin -= 360f;
                             else if (_throwSpin < -180.0)
-                                this._throwSpin += 360f;
-                            this._throwSpin = Lerp.Float(this._throwSpin, 0f, 14f);
+                                _throwSpin += 360f;
+                            _throwSpin = Lerp.Float(_throwSpin, 0f, 14f);
                         }
                     }
-                    if (this._volatile && this._hitWait == 0)
+                    if (_volatile && _hitWait == 0)
                     {
-                        (this.Offset(this.barrelOffset) - this.position).Normalize();
-                        this.Offset(this.barrelOffset);
+                        (Offset(barrelOffset) - position).Normalize();
+                        Offset(barrelOffset);
                         bool flag3 = false;
                         foreach (Sword sword in Level.current.things[typeof(Sword)])
                         {
-                            if (sword != this && sword.owner != null && sword._crouchStance && !sword._jabStance && !sword._jabStance && (this.hSpeed > 0.0 && sword.x > this.x - 4.0 || this.hSpeed < 0.0 && sword.x < this.x + 4.0) && Collision.LineIntersect(this.barrelStartPos, this.barrelPosition, sword.barrelStartPos, sword.barrelPosition))
+                            if (sword != this && sword.owner != null && sword._crouchStance && !sword._jabStance && !sword._jabStance && (hSpeed > 0.0 && sword.x > x - 4.0 || hSpeed < 0.0 && sword.x < x + 4.0) && Collision.LineIntersect(barrelStartPos, barrelPosition, sword.barrelStartPos, sword.barrelPosition))
                             {
-                                this.Shing();
+                                Shing();
                                 sword.Shing();
                                 flag3 = true;
-                                this._hitWait = 4;
+                                _hitWait = 4;
                                 sword.owner.hSpeed += offDir * 1f;
                                 --sword.owner.vSpeed;
-                                this.hSpeed = (float)(-this.hSpeed * 0.600000023841858);
+                                hSpeed = (float)(-hSpeed * 0.600000023841858);
                             }
                         }
                         int num = 12;
-                        if (this._stayVolatile)
+                        if (_stayVolatile)
                             num = 22;
                         if (!flag3)
                         {
                             foreach (Chainsaw chainsaw in Level.current.things[typeof(Chainsaw)])
                             {
-                                if (chainsaw.owner != null && chainsaw.throttle && Collision.LineIntersect(this.barrelStartPos, this.barrelPosition, chainsaw.barrelStartPos, chainsaw.barrelPosition))
+                                if (chainsaw.owner != null && chainsaw.throttle && Collision.LineIntersect(barrelStartPos, barrelPosition, chainsaw.barrelStartPos, chainsaw.barrelPosition))
                                 {
-                                    this.Shing();
+                                    Shing();
                                     chainsaw.Shing(this);
                                     chainsaw.owner.hSpeed += offDir * 1f;
                                     --chainsaw.owner.vSpeed;
                                     flag3 = true;
-                                    this.hSpeed = (float)(-this.hSpeed * 0.600000023841858);
-                                    this._hitWait = 4;
+                                    hSpeed = (float)(-hSpeed * 0.600000023841858);
+                                    _hitWait = 4;
                                     if (Recorder.currentRecording != null)
                                         Recorder.currentRecording.LogBonus();
                                 }
                             }
                             if (!flag3)
                             {
-                                Helmet helmet = Level.CheckLine<Helmet>(this.barrelStartPos, this.barrelPosition, null);
-                                if (helmet != null && helmet.equippedDuck != null && (helmet.owner != this.prevOwner || _framesSinceThrown > num))
+                                Helmet helmet = Level.CheckLine<Helmet>(barrelStartPos, barrelPosition, null);
+                                if (helmet != null && helmet.equippedDuck != null && (helmet.owner != prevOwner || _framesSinceThrown > num))
                                 {
-                                    this.hSpeed = (float)(-this.hSpeed * 0.600000023841858);
-                                    this.Shing();
+                                    hSpeed = (float)(-hSpeed * 0.600000023841858);
+                                    Shing();
                                     flag3 = true;
-                                    this._hitWait = 4;
+                                    _hitWait = 4;
                                 }
                                 else
                                 {
-                                    ChestPlate chestPlate = Level.CheckLine<ChestPlate>(this.barrelStartPos, this.barrelPosition, null);
-                                    if (chestPlate != null && chestPlate.equippedDuck != null && (chestPlate.owner != this.prevOwner || _framesSinceThrown > num))
+                                    ChestPlate chestPlate = Level.CheckLine<ChestPlate>(barrelStartPos, barrelPosition, null);
+                                    if (chestPlate != null && chestPlate.equippedDuck != null && (chestPlate.owner != prevOwner || _framesSinceThrown > num))
                                     {
-                                        this.hSpeed = (float)(-this.hSpeed * 0.600000023841858);
-                                        this.Shing();
+                                        hSpeed = (float)(-hSpeed * 0.600000023841858);
+                                        Shing();
                                         flag3 = true;
-                                        this._hitWait = 4;
+                                        _hitWait = 4;
                                     }
                                 }
                             }
                         }
-                        if (!flag3 && this.isServerForObject)
+                        if (!flag3 && isServerForObject)
                         {
-                            foreach (IAmADuck amAduck in Level.CheckLineAll<IAmADuck>(this.barrelStartPos, this.barrelPosition))
+                            foreach (IAmADuck amAduck in Level.CheckLineAll<IAmADuck>(barrelStartPos, barrelPosition))
                             {
-                                if (amAduck != this.duck && amAduck is MaterialThing materialThing)
+                                if (amAduck != duck && amAduck is MaterialThing materialThing)
                                 {
-                                    bool flag4 = materialThing != this.prevOwner;
-                                    if (flag4 && materialThing is RagdollPart && (materialThing as RagdollPart).doll != null && (materialThing as RagdollPart).doll.captureDuck == this.prevOwner)
+                                    bool flag4 = materialThing != prevOwner;
+                                    if (flag4 && materialThing is RagdollPart && (materialThing as RagdollPart).doll != null && (materialThing as RagdollPart).doll.captureDuck == prevOwner)
                                         flag4 = false;
                                     if (flag4 || _framesSinceThrown > num)
                                     {
-                                        materialThing.Destroy(this.destroyType);
+                                        materialThing.Destroy(destroyType);
                                         if (Recorder.currentRecording != null)
                                             Recorder.currentRecording.LogBonus();
                                     }
@@ -537,202 +537,202 @@ namespace DuckGame
                         }
                     }
                 }
-                if (this._stayVolatile && this.isServerForObject)
+                if (_stayVolatile && isServerForObject)
                 {
                     int num = 28;
-                    foreach (IAmADuck amAduck in Level.CheckLineAll<IAmADuck>(this.barrelStartPos, this.barrelPosition))
+                    foreach (IAmADuck amAduck in Level.CheckLineAll<IAmADuck>(barrelStartPos, barrelPosition))
                     {
-                        if (amAduck != this.duck && amAduck is MaterialThing materialThing)
+                        if (amAduck != duck && amAduck is MaterialThing materialThing)
                         {
-                            bool flag = materialThing != this.prevOwner;
-                            if (flag && materialThing is RagdollPart && (materialThing as RagdollPart).doll != null && (materialThing as RagdollPart).doll.captureDuck == this.prevOwner)
+                            bool flag = materialThing != prevOwner;
+                            if (flag && materialThing is RagdollPart && (materialThing as RagdollPart).doll != null && (materialThing as RagdollPart).doll.captureDuck == prevOwner)
                                 flag = false;
                             if (flag || _framesSinceThrown > num)
                             {
-                                materialThing.Destroy(this.destroyType);
+                                materialThing.Destroy(destroyType);
                                 if (Recorder.currentRecording != null)
                                     Recorder.currentRecording.LogBonus();
                             }
                         }
                     }
                 }
-                if (this.owner == null)
+                if (owner == null)
                 {
-                    this._swinging = false;
-                    this._jabStance = false;
-                    this._crouchStance = false;
-                    this._pullBack = false;
-                    this._swung = false;
-                    this._shing = false;
-                    this._swing = 0f;
-                    this._swingPress = false;
-                    this._slamStance = false;
-                    this._unslam = 0;
+                    _swinging = false;
+                    _jabStance = false;
+                    _crouchStance = false;
+                    _pullBack = false;
+                    _swung = false;
+                    _shing = false;
+                    _swing = 0f;
+                    _swingPress = false;
+                    _slamStance = false;
+                    _unslam = 0;
                 }
-                this._afterSwingCounter += Maths.IncFrameTimer();
-                if (this.isServerForObject)
+                _afterSwingCounter += Maths.IncFrameTimer();
+                if (isServerForObject)
                 {
-                    if (this._unslam > 1)
+                    if (_unslam > 1)
                     {
-                        --this._unslam;
-                        this._slamStance = true;
+                        --_unslam;
+                        _slamStance = true;
                     }
-                    else if (this._unslam == 1)
+                    else if (_unslam == 1)
                     {
-                        this._unslam = 0;
-                        this._slamStance = false;
+                        _unslam = 0;
+                        _slamStance = false;
                     }
-                    if (this._pullBack)
+                    if (_pullBack)
                     {
-                        if (this.duck != null)
+                        if (duck != null)
                         {
-                            if (this._jabStance)
+                            if (_jabStance)
                             {
-                                this._pullBack = false;
-                                this._swinging = true;
+                                _pullBack = false;
+                                _swinging = true;
                             }
                             else
                             {
-                                this._swinging = true;
-                                this._pullBack = false;
+                                _swinging = true;
+                                _pullBack = false;
                             }
                         }
                     }
-                    else if (this._swinging)
+                    else if (_swinging)
                     {
-                        if (this._jabStance)
+                        if (_jabStance)
                         {
-                            this._addOffsetX = MathHelper.Lerp(this._addOffsetX, 3f, 0.4f);
-                            if (_addOffsetX > 2.0 && !this.action)
-                                this._swinging = false;
+                            _addOffsetX = MathHelper.Lerp(_addOffsetX, 3f, 0.4f);
+                            if (_addOffsetX > 2.0 && !action)
+                                _swinging = false;
                         }
-                        else if (this.raised)
+                        else if (raised)
                         {
-                            this._swing = MathHelper.Lerp(this._swing, -2.8f, 0.2f);
-                            if (_swing < -2.40000009536743 && !this.action)
+                            _swing = MathHelper.Lerp(_swing, -2.8f, 0.2f);
+                            if (_swing < -2.40000009536743 && !action)
                             {
-                                this._swinging = false;
-                                this._swing = 1.8f;
+                                _swinging = false;
+                                _swing = 1.8f;
                             }
                         }
                         else
                         {
-                            this._swing = MathHelper.Lerp(this._swing, 2.1f, 0.4f);
-                            if (_swing > 1.79999995231628 && !this.action)
+                            _swing = MathHelper.Lerp(_swing, 2.1f, 0.4f);
+                            if (_swing > 1.79999995231628 && !action)
                             {
-                                this._swinging = false;
-                                this._swing = 1.8f;
+                                _swinging = false;
+                                _swing = 1.8f;
                             }
                         }
                     }
                     else
                     {
-                        if (this._wasLifted && !this._swinging && (!this._swingPress || this._shing || this._jabStance && _addOffsetX < 1.0 || !this._jabStance && _swing < 1.60000002384186))
+                        if (_wasLifted && !_swinging && (!_swingPress || _shing || _jabStance && _addOffsetX < 1.0 || !_jabStance && _swing < 1.60000002384186))
                         {
-                            if (this._jabStance)
-                                this.UpdateJabPullback();
-                            else if (this._slamStance)
-                                this.UpdateSlamPullback();
-                            else if (_afterSwingWait < this._afterSwingCounter)
+                            if (_jabStance)
+                                UpdateJabPullback();
+                            else if (_slamStance)
+                                UpdateSlamPullback();
+                            else if (_afterSwingWait < _afterSwingCounter)
                             {
                                 float amount = 0.36f;
-                                if (this is OldEnergyScimi && (this.duck == null || !this.duck.grounded || !this.duck.crouch))
+                                if (this is OldEnergyScimi && (duck == null || !duck.grounded || !duck.crouch))
                                     amount = 0.36f;
-                                this._swing = MathHelper.Lerp(this._swing, -0.22f, amount);
-                                this._addOffsetX = MathHelper.Lerp(this._addOffsetX, 1f, 0.2f);
+                                _swing = MathHelper.Lerp(_swing, -0.22f, amount);
+                                _addOffsetX = MathHelper.Lerp(_addOffsetX, 1f, 0.2f);
                                 if (_addOffsetX > 0.0)
-                                    this._addOffsetX = 0f;
-                                this._addOffsetY = MathHelper.Lerp(this._addOffsetY, 1f, 0.2f);
+                                    _addOffsetX = 0f;
+                                _addOffsetY = MathHelper.Lerp(_addOffsetY, 1f, 0.2f);
                                 if (_addOffsetY > 0.0)
-                                    this._addOffsetY = 0f;
+                                    _addOffsetY = 0f;
                             }
                         }
-                        if ((_swing < 0.0 || this._jabStance) && _swing < 0.0 && this._enforceJabSwing)
+                        if ((_swing < 0.0 || _jabStance) && _swing < 0.0 && _enforceJabSwing)
                         {
-                            this._swing = 0f;
-                            this._shing = false;
-                            this._swung = false;
+                            _swing = 0f;
+                            _shing = false;
+                            _swung = false;
                         }
                     }
                 }
-                if (this.duck != null)
+                if (duck != null)
                 {
-                    this.RestoreCollisionSize(true);
-                    this._swingPress = false;
-                    if (!this._pullBack && !this._swinging)
+                    RestoreCollisionSize(true);
+                    _swingPress = false;
+                    if (!_pullBack && !_swinging)
                     {
-                        this._crouchStance = false;
-                        this._jabStance = false;
-                        if (this.duck.crouch)
+                        _crouchStance = false;
+                        _jabStance = false;
+                        if (duck.crouch)
                         {
-                            if (!this._pullBack && !this._swinging && this.duck.inputProfile.Down(this.offDir > 0 ? "LEFT" : "RIGHT"))
-                                this._jabStance = true;
-                            this._crouchStance = true;
+                            if (!_pullBack && !_swinging && duck.inputProfile.Down(offDir > 0 ? "LEFT" : "RIGHT"))
+                                _jabStance = true;
+                            _crouchStance = true;
                         }
-                        if (!this._crouchStance || this._jabStance)
-                            this._slamStance = false;
+                        if (!_crouchStance || _jabStance)
+                            _slamStance = false;
                     }
-                    this.UpdateCrouchStance();
+                    UpdateCrouchStance();
                 }
                 else
                 {
-                    this.RestoreCollisionSize();
-                    this.thickness = 0f;
+                    RestoreCollisionSize();
+                    thickness = 0f;
                 }
-                if ((!(this is OldEnergyScimi) && this._swung || this._swinging) && !this._shing)
+                if ((!(this is OldEnergyScimi) && _swung || _swinging) && !_shing)
                 {
-                    (this.Offset(this.barrelOffset) - this.position).Normalize();
-                    this.Offset(this.barrelOffset);
-                    IEnumerable<IAmADuck> amAducks = Level.CheckLineAll<IAmADuck>(this.barrelStartPos, this.barrelPosition);
-                    Block block = Level.CheckLine<Block>(this.barrelStartPos, this.barrelPosition);
-                    Level.CheckRect<Icicles>(this.barrelStartPos, this.barrelPosition)?.Hurt(100f);
-                    if (!(this is OldEnergyScimi) && block != null && !this._slamStance)
+                    (Offset(barrelOffset) - position).Normalize();
+                    Offset(barrelOffset);
+                    IEnumerable<IAmADuck> amAducks = Level.CheckLineAll<IAmADuck>(barrelStartPos, barrelPosition);
+                    Block block = Level.CheckLine<Block>(barrelStartPos, barrelPosition);
+                    Level.CheckRect<Icicles>(barrelStartPos, barrelPosition)?.Hurt(100f);
+                    if (!(this is OldEnergyScimi) && block != null && !_slamStance)
                     {
-                        if (this.offDir < 0 && block.x > this.x)
+                        if (offDir < 0 && block.x > x)
                             block = null;
-                        else if (this.offDir > 0 && block.x < this.x)
+                        else if (offDir > 0 && block.x < x)
                             block = null;
                     }
                     bool flag = false;
-                    if (block != null && this._clashWithWalls)
+                    if (block != null && _clashWithWalls)
                     {
-                        if (this._slamStance)
-                            this.owner.vSpeed = -5f;
-                        this.Shing();
-                        if (this._slamStance)
+                        if (_slamStance)
+                            owner.vSpeed = -5f;
+                        Shing();
+                        if (_slamStance)
                         {
-                            this._swung = false;
-                            this._unslam = 20;
+                            _swung = false;
+                            _unslam = 20;
                         }
                         if (block is Window)
                             block.Destroy(new DTImpact(this));
                     }
-                    else if (!this._jabStance && !this._slamStance && this.isServerForObject)
+                    else if (!_jabStance && !_slamStance && isServerForObject)
                     {
                         Thing ignore = null;
-                        if (this.duck != null)
-                            ignore = this.duck.GetEquipment(typeof(Helmet));
-                        Vec2 vec2_1 = this.barrelPosition + this.barrelVector * 3f;
-                        QuadLaserBullet quadLaserBullet = Level.CheckRect<QuadLaserBullet>(new Vec2(position.x < vec2_1.x ? this.position.x : vec2_1.x, position.y < vec2_1.y ? this.position.y : vec2_1.y), new Vec2(position.x > vec2_1.x ? this.position.x : vec2_1.x, position.y > vec2_1.y ? this.position.y : vec2_1.y));
+                        if (duck != null)
+                            ignore = duck.GetEquipment(typeof(Helmet));
+                        Vec2 vec2_1 = barrelPosition + barrelVector * 3f;
+                        QuadLaserBullet quadLaserBullet = Level.CheckRect<QuadLaserBullet>(new Vec2(position.x < vec2_1.x ? position.x : vec2_1.x, position.y < vec2_1.y ? position.y : vec2_1.y), new Vec2(position.x > vec2_1.x ? position.x : vec2_1.x, position.y > vec2_1.y ? position.y : vec2_1.y));
                         if (quadLaserBullet != null)
                         {
-                            this.Shing();
-                            this.Fondle(quadLaserBullet);
+                            Shing();
+                            Fondle(quadLaserBullet);
                             quadLaserBullet.safeFrames = 8;
-                            quadLaserBullet.safeDuck = this.duck;
+                            quadLaserBullet.safeDuck = duck;
                             Vec2 vec2_2 = quadLaserBullet.travel;
                             float length = vec2_2.length;
                             float num = 1.5f;
-                            vec2_2 = this.offDir <= 0 ? new Vec2(-length * num, 0f) : new Vec2(length * num, 0f);
+                            vec2_2 = offDir <= 0 ? new Vec2(-length * num, 0f) : new Vec2(length * num, 0f);
                             quadLaserBullet.travel = vec2_2;
-                            this.QuadLaserHit(quadLaserBullet);
+                            QuadLaserHit(quadLaserBullet);
                         }
                         else
                         {
-                            Helmet helmet = Level.CheckLine<Helmet>(this.barrelStartPos, this.barrelPosition, ignore);
+                            Helmet helmet = Level.CheckLine<Helmet>(barrelStartPos, barrelPosition, ignore);
                             if (helmet != null && helmet.equippedDuck != null && helmet.owner != null)
                             {
-                                this.Shing();
+                                Shing();
                                 helmet.owner.hSpeed += offDir * 3f;
                                 helmet.owner.vSpeed -= 2f;
                                 if (helmet.duck != null)
@@ -742,12 +742,12 @@ namespace DuckGame
                             }
                             else
                             {
-                                if (this.duck != null)
-                                    ignore = this.duck.GetEquipment(typeof(ChestPlate));
-                                ChestPlate chestPlate = Level.CheckLine<ChestPlate>(this.barrelStartPos, this.barrelPosition, ignore);
+                                if (duck != null)
+                                    ignore = duck.GetEquipment(typeof(ChestPlate));
+                                ChestPlate chestPlate = Level.CheckLine<ChestPlate>(barrelStartPos, barrelPosition, ignore);
                                 if (chestPlate != null && chestPlate.equippedDuck != null && chestPlate.owner != null)
                                 {
-                                    this.Shing();
+                                    Shing();
                                     chestPlate.owner.hSpeed += offDir * 3f;
                                     chestPlate.owner.vSpeed -= 2f;
                                     if (chestPlate.duck != null)
@@ -758,27 +758,27 @@ namespace DuckGame
                             }
                         }
                     }
-                    if (!flag && this.isServerForObject)
+                    if (!flag && isServerForObject)
                     {
                         foreach (Sword sword in Level.current.things[typeof(Sword)])
                         {
-                            if (sword != this && sword.held && sword.owner != null && !this._jabStance && !sword._jabStance && this.duck != null && Collision.LineIntersect(this.barrelStartPos, this.barrelPosition, sword.barrelStartPos, sword.barrelPosition))
+                            if (sword != this && sword.held && sword.owner != null && !_jabStance && !sword._jabStance && duck != null && Collision.LineIntersect(barrelStartPos, barrelPosition, sword.barrelStartPos, sword.barrelPosition))
                             {
-                                this.Shing();
+                                Shing();
                                 sword.Shing();
                                 if (this is OldEnergyScimi)
                                 {
                                     sword.owner.hSpeed += offDir * 5f;
                                     sword.owner.vSpeed -= 4f;
-                                    this.duck.hSpeed += -this.offDir * 5f;
-                                    this.duck.vSpeed -= 4f;
-                                    if (this.isServerForObject)
+                                    duck.hSpeed += -offDir * 5f;
+                                    duck.vSpeed -= 4f;
+                                    if (isServerForObject)
                                     {
-                                        EnergyScimitarBlast energyScimitarBlast1 = new EnergyScimitarBlast((sword.owner.position + this.owner.position) / 2f + new Vec2(0f, -16f), new Vec2(0f, -2000f));
+                                        EnergyScimitarBlast energyScimitarBlast1 = new EnergyScimitarBlast((sword.owner.position + owner.position) / 2f + new Vec2(0f, -16f), new Vec2(0f, -2000f));
                                         Level.Add(energyScimitarBlast1);
                                         if (Network.isActive)
                                             Send.Message(new NMEnergyScimitarBlast(energyScimitarBlast1.position, energyScimitarBlast1._target));
-                                        EnergyScimitarBlast energyScimitarBlast2 = new EnergyScimitarBlast((sword.owner.position + this.owner.position) / 2f + new Vec2(0f, 16f), new Vec2(0f, 2000f));
+                                        EnergyScimitarBlast energyScimitarBlast2 = new EnergyScimitarBlast((sword.owner.position + owner.position) / 2f + new Vec2(0f, 16f), new Vec2(0f, 2000f));
                                         Level.Add(energyScimitarBlast2);
                                         if (Network.isActive)
                                             Send.Message(new NMEnergyScimitarBlast(energyScimitarBlast2.position, energyScimitarBlast2._target));
@@ -788,40 +788,40 @@ namespace DuckGame
                                 {
                                     sword.owner.hSpeed += offDir * 3f;
                                     sword.owner.vSpeed -= 2f;
-                                    this.duck.hSpeed += -this.offDir * 3f;
-                                    this.duck.vSpeed -= 2f;
+                                    duck.hSpeed += -offDir * 3f;
+                                    duck.vSpeed -= 2f;
                                 }
-                                if (sword.duck != null && this.duck != null)
+                                if (sword.duck != null && duck != null)
                                 {
                                     sword.duck.crippleTimer = 1f;
-                                    this.duck.crippleTimer = 1f;
+                                    duck.crippleTimer = 1f;
                                     flag = true;
                                 }
                             }
                         }
                     }
-                    if (flag || !this.isServerForObject)
+                    if (flag || !isServerForObject)
                         return;
                     foreach (IAmADuck amAduck in amAducks)
                     {
-                        if (amAduck != this.duck && amAduck != this.prevOwner && amAduck is MaterialThing materialThing)
+                        if (amAduck != duck && amAduck != prevOwner && amAduck is MaterialThing materialThing)
                         {
                             if (materialThing is Duck duck && !duck.destroyed && this.duck != null)
                             {
                                 RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
                                 ++Global.data.swordKills.valueInt;
                             }
-                            materialThing.Destroy(this.destroyType);
+                            materialThing.Destroy(destroyType);
                         }
                     }
                 }
                 else
                 {
-                    if (!this._crouchStance || this.duck == null)
+                    if (!_crouchStance || duck == null)
                         return;
-                    foreach (IAmADuck amAduck in Level.CheckLineAll<IAmADuck>(this.barrelStartPos, this.barrelPosition))
+                    foreach (IAmADuck amAduck in Level.CheckLineAll<IAmADuck>(barrelStartPos, barrelPosition))
                     {
-                        if (amAduck != this.duck && amAduck is MaterialThing t)
+                        if (amAduck != duck && amAduck is MaterialThing t)
                         {
                             if (t.vSpeed > 0.5 && t.bottom < position.y - 8.0 && t.left < barrelPosition.x && t.right > barrelPosition.x)
                             {
@@ -830,22 +830,22 @@ namespace DuckGame
                                     RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
                                     ++Global.data.swordKills.valueInt;
                                 }
-                                t.Destroy(this.destroyType);
+                                t.Destroy(destroyType);
                             }
-                            else if (!this._jabStance && !t.destroyed && (this.offDir > 0 && t.x > this.duck.x || this.offDir < 0 && t.x < this.duck.x))
+                            else if (!_jabStance && !t.destroyed && (offDir > 0 && t.x > duck.x || offDir < 0 && t.x < duck.x))
                             {
                                 if (t is Duck)
                                     (t as Duck).crippleTimer = 1f;
-                                else if (this.duck.x > t.x && t.hSpeed > 1.5 || this.duck.x < t.x && t.hSpeed < -1.5)
+                                else if (duck.x > t.x && t.hSpeed > 1.5 || duck.x < t.x && t.hSpeed < -1.5)
                                 {
                                     if (t is Duck duck && !duck.destroyed)
                                     {
                                         RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
                                         ++Global.data.swordKills.valueInt;
                                     }
-                                    t.Destroy(this.destroyType);
+                                    t.Destroy(destroyType);
                                 }
-                                this.Fondle(t);
+                                Fondle(t);
                                 t.hSpeed = offDir * 3f;
                                 t.vSpeed = -2f;
                             }
@@ -857,16 +857,16 @@ namespace DuckGame
 
         protected virtual void ResetTrailHistory()
         {
-            this._lastAngles = new float[8];
-            this._lastPositions = new Vec2[8];
-            this._lastIndex = 0;
-            this._lastSize = 0;
-            this._lastHistoryPos = Vec2.Zero;
+            _lastAngles = new float[8];
+            _lastPositions = new Vec2[8];
+            _lastIndex = 0;
+            _lastSize = 0;
+            _lastHistoryPos = Vec2.Zero;
         }
 
         protected int historyIndex(int idx)
         {
-            int num = this._lastIndex - idx - 1;
+            int num = _lastIndex - idx - 1;
             if (num < 0)
                 num += 8;
             return num;
@@ -874,62 +874,62 @@ namespace DuckGame
 
         protected void addHistory(float angle, Vec2 position)
         {
-            if (this._lastHistoryPos != Vec2.Zero)
+            if (_lastHistoryPos != Vec2.Zero)
             {
-                this._lastAngles[this._lastIndex] = (float)((angle + _lastHistoryAngle) / 2.0);
-                this._lastPositions[this._lastIndex] = (position + this._lastHistoryPos) / 2f;
-                this._lastIndex = (this._lastIndex + 1) % 8;
-                ++this._lastSize;
+                _lastAngles[_lastIndex] = (float)((angle + _lastHistoryAngle) / 2.0);
+                _lastPositions[_lastIndex] = (position + _lastHistoryPos) / 2f;
+                _lastIndex = (_lastIndex + 1) % 8;
+                ++_lastSize;
             }
-            this._lastAngles[this._lastIndex] = angle;
-            this._lastPositions[this._lastIndex] = position;
-            this._lastIndex = (this._lastIndex + 1) % 8;
-            ++this._lastSize;
-            this._lastHistoryPos = position;
-            this._lastHistoryAngle = angle;
+            _lastAngles[_lastIndex] = angle;
+            _lastPositions[_lastIndex] = position;
+            _lastIndex = (_lastIndex + 1) % 8;
+            ++_lastSize;
+            _lastHistoryPos = position;
+            _lastHistoryAngle = angle;
         }
 
         public override void Draw()
         {
             Sword._playedShing = false;
-            if (this.owner != this._prevHistoryOwner)
+            if (owner != _prevHistoryOwner)
             {
-                this._prevHistoryOwner = this.owner;
-                this.ResetTrailHistory();
+                _prevHistoryOwner = owner;
+                ResetTrailHistory();
             }
             if (DevConsole.showCollision)
-                Graphics.DrawLine(this.barrelStartPos, this.barrelPosition, Color.Red, depth: ((Depth)1f));
-            if (this._swordSwing.speed > 0.0)
+                Graphics.DrawLine(barrelStartPos, barrelPosition, Color.Red, depth: ((Depth)1f));
+            if (_swordSwing.speed > 0.0)
             {
-                if (this.duck != null)
-                    this._swordSwing.flipH = this.duck.offDir <= 0;
-                this._swordSwing.alpha = 0.4f;
-                this._swordSwing.position = this.position;
-                this._swordSwing.depth = this.depth + 1;
-                this._swordSwing.Draw();
+                if (duck != null)
+                    _swordSwing.flipH = duck.offDir <= 0;
+                _swordSwing.alpha = 0.4f;
+                _swordSwing.position = this.position;
+                _swordSwing.depth = this.depth + 1;
+                _swordSwing.Draw();
             }
             Vec2 position = this.position;
             Depth depth = this.depth;
-            this.graphic.color = Color.White;
-            if (this.owner == null && this.velocity.length > 1.0 || _swing != 0.0 || this.tape != null && this.bayonetLethal)
+            graphic.color = Color.White;
+            if (owner == null && velocity.length > 1.0 || _swing != 0.0 || tape != null && bayonetLethal)
             {
                 float alpha = this.alpha;
                 this.alpha = 1f;
-                float angle1 = this.angle;
-                this._drawing = true;
-                float angle2 = this._angle;
-                this.angle = angle1;
+                float angle1 = angle;
+                _drawing = true;
+                float angle2 = _angle;
+                angle = angle1;
                 for (int idx = 0; idx < 7; ++idx)
                 {
                     base.Draw();
-                    if (this._lastSize > idx)
+                    if (_lastSize > idx)
                     {
-                        int index = this.historyIndex(idx);
-                        this._angle = this._lastAngles[index];
-                        this.position = this._lastPositions[index];
+                        int index = historyIndex(idx);
+                        _angle = _lastAngles[index];
+                        this.position = _lastPositions[index];
                         this.depth -= 2;
                         this.alpha -= 0.15f;
-                        this.graphic.color = Color.Red;
+                        graphic.color = Color.Red;
                     }
                     else
                         break;
@@ -937,13 +937,13 @@ namespace DuckGame
                 this.position = position;
                 this.depth = depth;
                 this.alpha = alpha;
-                this._angle = angle2;
-                this.xscale = 1f;
-                this._drawing = false;
+                _angle = angle2;
+                xscale = 1f;
+                _drawing = false;
             }
             else
                 base.Draw();
-            this.addHistory(this.angle, this.position);
+            addHistory(angle, this.position);
         }
 
         protected virtual void OnSwing()
@@ -952,28 +952,28 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if (this._crouchStance && this._jabStance && !this._swinging || !this._crouchStance && !this._swinging && _swing < 0.100000001490116)
+            if (_crouchStance && _jabStance && !_swinging || !_crouchStance && !_swinging && _swing < 0.100000001490116)
             {
-                if (this._jabStance && !this._allowJabMotion)
+                if (_jabStance && !_allowJabMotion)
                     return;
-                this._afterSwingCounter = 0f;
-                this._pullBack = true;
-                this._swung = true;
-                this._shing = false;
-                this._timeSinceSwing = 0f;
-                this.OnSwing();
-                if (this._swingSound != null)
-                    SFX.Play(this._swingSound, Rando.Float(0.8f, 1f), Rando.Float(-0.1f, 0.1f));
-                if (this._jabStance)
+                _afterSwingCounter = 0f;
+                _pullBack = true;
+                _swung = true;
+                _shing = false;
+                _timeSinceSwing = 0f;
+                OnSwing();
+                if (_swingSound != null)
+                    SFX.Play(_swingSound, Rando.Float(0.8f, 1f), Rando.Float(-0.1f, 0.1f));
+                if (_jabStance)
                     return;
-                this._swordSwing.speed = 1f;
-                this._swordSwing.frame = 0;
+                _swordSwing.speed = 1f;
+                _swordSwing.frame = 0;
             }
             else
             {
-                if (!this._crouchStance || this._jabStance || this.duck == null || this.duck.grounded)
+                if (!_crouchStance || _jabStance || duck == null || duck.grounded)
                     return;
-                this._slamStance = true;
+                _slamStance = true;
             }
         }
 

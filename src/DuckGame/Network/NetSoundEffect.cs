@@ -244,56 +244,56 @@ namespace DuckGame
         {
         }
 
-        public NetSoundEffect(params string[] sounds) => this._sounds = new List<string>(sounds);
+        public NetSoundEffect(params string[] sounds) => _sounds = new List<string>(sounds);
 
         public NetSoundEffect(List<string> sounds, List<string> rareSounds)
         {
-            this._sounds = sounds;
-            this._rareSounds = rareSounds;
+            _sounds = sounds;
+            _rareSounds = rareSounds;
         }
 
         public int index
         {
-            get => this._index;
+            get => _index;
             set
             {
-                this._index = value;
-                if (this._localIndex == value)
+                _index = value;
+                if (_localIndex == value)
                     return;
-                this._localIndex = value;
-                this.PlaySound();
+                _localIndex = value;
+                PlaySound();
             }
         }
 
         public void Play(float vol = 1f, float pit = 0f)
         {
-            this.PlaySound(vol, pit);
-            ++this._index;
-            this._localIndex = this._index;
+            PlaySound(vol, pit);
+            ++_index;
+            _localIndex = _index;
         }
 
         private void PlaySound(float vol = 1f, float pit = 0f)
         {
-            if (this.function != null)
-                this.function();
-            vol *= this.volume;
-            pit += this.pitch;
-            pit += Rando.Float(this.pitchVariationLow, this.pitchVariationHigh);
+            if (function != null)
+                function();
+            vol *= volume;
+            pit += pitch;
+            pit += Rando.Float(pitchVariationLow, pitchVariationHigh);
             if (pit < -1f)
                 pit = -1f;
             if (pit > 1f)
                 pit = 1f;
-            if (this._sounds.Count <= 0)
+            if (_sounds.Count <= 0)
                 return;
-            if (this.pitchBinding != null)
-                pit = (byte)this.pitchBinding.value / (float)byte.MaxValue;
+            if (pitchBinding != null)
+                pit = (byte)pitchBinding.value / (float)byte.MaxValue;
             string str = "";
-            if (this.appendBinding != null)
-                str = ((byte)this.appendBinding.value).ToString();
-            if (this._rareSounds.Count > 0 && Rando.Float(1f) > 0.9f)
-                SFX.Play(this._rareSounds[Rando.Int(this._rareSounds.Count - 1)] + str, vol, pit);
+            if (appendBinding != null)
+                str = ((byte)appendBinding.value).ToString();
+            if (_rareSounds.Count > 0 && Rando.Float(1f) > 0.9f)
+                SFX.Play(_rareSounds[Rando.Int(_rareSounds.Count - 1)] + str, vol, pit);
             else
-                SFX.Play(this._sounds[Rando.Int(this._sounds.Count - 1)] + str, vol, pit);
+                SFX.Play(_sounds[Rando.Int(_sounds.Count - 1)] + str, vol, pit);
         }
 
         public delegate void Function();

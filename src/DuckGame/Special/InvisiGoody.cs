@@ -17,31 +17,31 @@ namespace DuckGame
 
         public override void EditorPropertyChanged(object property)
         {
-            this.UpdateHeight();
-            this.sequence.isValid = this.valid.value;
-            if (this.sound.value)
-                this.collectSound = "goody";
+            UpdateHeight();
+            sequence.isValid = valid.value;
+            if (sound.value)
+                collectSound = "goody";
             else
-                this.collectSound = "";
+                collectSound = "";
         }
 
         public void UpdateHeight()
         {
             float num = size.value;
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(num * 16f);
-            this.collisionOffset = new Vec2((float)(-(num * 16.0) / 2.0));
-            this.scale = new Vec2(num);
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(num * 16f);
+            collisionOffset = new Vec2((float)(-(num * 16.0) / 2.0));
+            scale = new Vec2(num);
         }
 
         public InvisiGoody(float xpos, float ypos)
           : base(xpos, ypos, new Sprite("swirl"))
         {
-            this._visibleInGame = false;
-            this.sequence.isValid = false;
-            this.size = new EditorProperty<int>(1, this, 1f, 16f, 1f);
-            this.valid = new EditorProperty<bool>(false, this);
-            this.sound = new EditorProperty<bool>(false, this);
+            _visibleInGame = false;
+            sequence.isValid = false;
+            size = new EditorProperty<int>(1, this, 1f, 16f, 1f);
+            valid = new EditorProperty<bool>(false, this);
+            sound = new EditorProperty<bool>(false, this);
         }
     }
 }

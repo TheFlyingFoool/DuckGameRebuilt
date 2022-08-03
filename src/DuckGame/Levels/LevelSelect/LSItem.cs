@@ -34,39 +34,39 @@ namespace DuckGame
 
         public bool selected
         {
-            get => this._selected;
-            set => this._selected = value;
+            get => _selected;
+            set => _selected = value;
         }
 
         public bool enabled
         {
-            get => this._enabled;
-            set => this._enabled = value;
+            get => _enabled;
+            set => _enabled = value;
         }
 
         public bool partiallyEnabled
         {
-            get => this._partiallyEnabled;
-            set => this._partiallyEnabled = value;
+            get => _partiallyEnabled;
+            set => _partiallyEnabled = value;
         }
 
         public string path
         {
-            get => this._path;
-            set => this._path = value;
+            get => _path;
+            set => _path = value;
         }
 
         public LSItemType itemType
         {
-            get => this._itemType;
-            set => this._itemType = value;
+            get => _itemType;
+            set => _itemType = value;
         }
 
-        public bool isFolder => this._itemType == LSItemType.Folder || this._itemType == LSItemType.MapPack;
+        public bool isFolder => _itemType == LSItemType.Folder || _itemType == LSItemType.MapPack;
 
-        public bool isPlaylist => this._itemType == LSItemType.Playlist;
+        public bool isPlaylist => _itemType == LSItemType.Playlist;
 
-        public List<string> levelsInside => this._levelsInside;
+        public List<string> levelsInside => _levelsInside;
 
         public LSItem(
           float xpos,
@@ -79,63 +79,63 @@ namespace DuckGame
           bool pIsMapPack = false)
           : base(xpos, ypos)
         {
-            this._select = select;
-            this._icons = new SpriteMap("tinyIcons", 8, 8);
-            this._font = new BitmapFont("biosFont", 8);
-            this.isModPath = pIsModPath;
-            this.isModRoot = pIsModRoot;
-            this._path = PATH;
-            if (this._path == "../")
+            _select = select;
+            _icons = new SpriteMap("tinyIcons", 8, 8);
+            _font = new BitmapFont("biosFont", 8);
+            isModPath = pIsModPath;
+            isModRoot = pIsModRoot;
+            _path = PATH;
+            if (_path == "../")
             {
-                this._name = "../";
-                this._itemType = LSItemType.UpFolder;
+                _name = "../";
+                _itemType = LSItemType.UpFolder;
             }
             else
             {
-                string extension = Path.GetExtension(this._path);
-                this._itemType = !(extension == ".lev") ? (!(extension == ".play") ? LSItemType.Folder : LSItemType.Playlist) : LSItemType.Level;
+                string extension = Path.GetExtension(_path);
+                _itemType = !(extension == ".lev") ? (!(extension == ".play") ? LSItemType.Folder : LSItemType.Playlist) : LSItemType.Level;
                 if (isWorkshop)
-                    this._itemType = LSItemType.Workshop;
+                    _itemType = LSItemType.Workshop;
                 if (pIsMapPack)
-                    this._itemType = LSItemType.MapPack;
-                this._name = Path.GetFileNameWithoutExtension(this._path);
-                string str1 = this._path.Replace('\\', '/');
+                    _itemType = LSItemType.MapPack;
+                _name = Path.GetFileNameWithoutExtension(_path);
+                string str1 = _path.Replace('\\', '/');
                 if (isWorkshop)
                 {
-                    this._path = "@WORKSHOP@";
-                    this._levelsInside = LSItem.GetLevelsInside(this._select, "@WORKSHOP@");
+                    _path = "@WORKSHOP@";
+                    _levelsInside = LSItem.GetLevelsInside(_select, "@WORKSHOP@");
                 }
                 else if (str1 == "@VANILLA@")
                 {
-                    this._path = "@VANILLA@";
-                    this._levelsInside = LSItem.GetLevelsInside(this._select, "@VANILLA@");
+                    _path = "@VANILLA@";
+                    _levelsInside = LSItem.GetLevelsInside(_select, "@VANILLA@");
                 }
                 else
                 {
-                    if (!this.isFolder && !this.isPlaylist)
+                    if (!isFolder && !isPlaylist)
                         str1 = str1.Substring(0, str1.Length - 4);
                     string str2 = str1.Substring(str1.LastIndexOf("/levels/", StringComparison.InvariantCultureIgnoreCase) + 8);
-                    if (this.isFolder || this.isPlaylist)
+                    if (isFolder || isPlaylist)
                     {
-                        this._levelsInside = LSItem.GetLevelsInside(this._select, this._path);
-                        if (!this.isModPath)
-                            this._path = "/" + str2;
+                        _levelsInside = LSItem.GetLevelsInside(_select, _path);
+                        if (!isModPath)
+                            _path = "/" + str2;
                     }
                     else
-                        this._path = str1 + ".lev";
+                        _path = str1 + ".lev";
                 }
                 bool flag1 = false;
                 bool flag2 = true;
-                foreach (string str3 in this._levelsInside)
+                foreach (string str3 in _levelsInside)
                 {
                     if (Editor.activatedLevels.Contains(str3))
                         flag1 = true;
                     else
                         flag2 = false;
                 }
-                this.enabled = flag1;
-                this._partiallyEnabled = flag1 && !flag2;
-                this.data = DuckFile.LoadLevelHeaderCached(this._path);
+                enabled = flag1;
+                _partiallyEnabled = flag1 && !flag2;
+                data = DuckFile.LoadLevelHeaderCached(_path);
             }
         }
 
@@ -206,83 +206,83 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this._itemType == LSItemType.UpFolder || this.isFolder || this._itemType == LSItemType.Playlist || this._itemType == LSItemType.Workshop || this._itemType == LSItemType.Vanilla)
+            if (_itemType == LSItemType.UpFolder || isFolder || _itemType == LSItemType.Playlist || _itemType == LSItemType.Workshop || _itemType == LSItemType.Vanilla)
                 return;
-            this.enabled = Editor.activatedLevels.Contains(this.path);
+            enabled = Editor.activatedLevels.Contains(path);
         }
 
         public override void Draw()
         {
             float x = this.x;
-            if (this._selected)
+            if (_selected)
             {
-                this._icons.frame = 3;
-                Graphics.Draw(_icons, x - 8f, this.y);
+                _icons.frame = 3;
+                Graphics.Draw(_icons, x - 8f, y);
             }
-            string text = this._name;
+            string text = _name;
             if (text.Length > 15)
                 text = text.Substring(0, 14) + ".";
-            if (this._itemType != LSItemType.UpFolder)
+            if (_itemType != LSItemType.UpFolder)
             {
-                this._icons.frame = this._partiallyEnabled ? 4 : (this._enabled ? 1 : 0);
-                Graphics.Draw(_icons, x, this.y);
+                _icons.frame = _partiallyEnabled ? 4 : (_enabled ? 1 : 0);
+                Graphics.Draw(_icons, x, y);
                 x += 10f;
             }
             bool flag1 = false;
             bool flag2 = false;
-            if (this._itemType == LSItemType.Folder || this._itemType == LSItemType.UpFolder)
+            if (_itemType == LSItemType.Folder || _itemType == LSItemType.UpFolder)
             {
-                this._icons.frame = 2;
-                if (this.isModRoot)
+                _icons.frame = 2;
+                if (isModRoot)
                 {
-                    this._icons.frame = 6;
+                    _icons.frame = 6;
                     flag1 = true;
                 }
-                if (this.isCloudFolder)
+                if (isCloudFolder)
                 {
-                    this._icons.frame = 7;
+                    _icons.frame = 7;
                     flag1 = true;
                 }
-                Graphics.Draw(_icons, x, this.y);
+                Graphics.Draw(_icons, x, y);
                 x += 10f;
             }
-            if (this._itemType == LSItemType.Playlist)
+            if (_itemType == LSItemType.Playlist)
             {
-                this._icons.frame = 5;
-                Graphics.Draw(_icons, x, this.y);
+                _icons.frame = 5;
+                Graphics.Draw(_icons, x, y);
                 x += 10f;
                 flag1 = true;
             }
-            if (this._itemType == LSItemType.Workshop)
+            if (_itemType == LSItemType.Workshop)
             {
-                if (this._steamIcon == null)
-                    this._steamIcon = new Sprite("steamIcon");
-                this._steamIcon.scale = new Vec2(0.25f, 0.25f);
-                Graphics.Draw(this._steamIcon, x, this.y);
+                if (_steamIcon == null)
+                    _steamIcon = new Sprite("steamIcon");
+                _steamIcon.scale = new Vec2(0.25f, 0.25f);
+                Graphics.Draw(_steamIcon, x, y);
                 x += 10f;
                 text = "Workshop";
             }
-            if (this._itemType == LSItemType.Vanilla)
+            if (_itemType == LSItemType.Vanilla)
             {
                 text = "@VANILLAICON@Vanilla";
                 flag2 = true;
             }
-            if (this._itemType == LSItemType.MapPack)
+            if (_itemType == LSItemType.MapPack)
             {
-                Graphics.Draw(this._customIcon, x, this.y);
+                Graphics.Draw(_customIcon, x, y);
                 x += 10f;
                 flag1 = true;
             }
-            if (this.data != null && this.data.metaData.eightPlayer)
+            if (data != null && data.metaData.eightPlayer)
                 text = "|DGPURPLE|(8)|PREV|" + text;
             if (text.EndsWith("_8"))
                 text = text.Substring(0, text.Length - 2);
             if (flag2)
-                this._font.Draw(text, x, this.y, this._selected ? Colors.DGVanilla : Colors.DGVanilla * 0.75f, (Depth)0.8f);
+                _font.Draw(text, x, y, _selected ? Colors.DGVanilla : Colors.DGVanilla * 0.75f, (Depth)0.8f);
             else if (flag1)
-                this._font.Draw(text, x, this.y, this._selected ? Colors.DGBlue : Colors.DGBlue * 0.75f, (Depth)0.8f);
+                _font.Draw(text, x, y, _selected ? Colors.DGBlue : Colors.DGBlue * 0.75f, (Depth)0.8f);
             else
-                this._font.Draw(text, x, this.y, this._selected ? Color.White : Color.Gray, (Depth)0.8f);
+                _font.Draw(text, x, y, _selected ? Color.White : Color.Gray, (Depth)0.8f);
         }
     }
 }

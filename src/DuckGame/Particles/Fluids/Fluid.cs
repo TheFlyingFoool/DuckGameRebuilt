@@ -29,14 +29,14 @@ namespace DuckGame
 
         public Fluid child
         {
-            get => this._child;
-            set => this._child = value;
+            get => _child;
+            set => _child = value;
         }
 
         public SmallFire fire
         {
-            get => this._fire;
-            set => this._fire = value;
+            get => _fire;
+            set => _fire = value;
         }
 
         public Fluid(
@@ -48,40 +48,40 @@ namespace DuckGame
           float thickMult = 1f)
           : base(xpos, ypos)
         {
-            this.hSpeed = (-hitAngle.x * 2f * (Rando.Float(1f) + 0.3f));
-            this.vSpeed = (-hitAngle.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
-            this.hSpeed = hitAngle.x;
-            this.vSpeed = hitAngle.y;
-            this._bounceEfficiency = 0.6f;
-            this._stream = stream;
+            hSpeed = (-hitAngle.x * 2f * (Rando.Float(1f) + 0.3f));
+            vSpeed = (-hitAngle.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
+            hSpeed = hitAngle.x;
+            vSpeed = hitAngle.y;
+            _bounceEfficiency = 0.6f;
+            _stream = stream;
             if (stream != null)
                 stream.child = this;
-            this.alpha = 1f;
-            this._gravMult = 2f;
-            this.depth = -0.5f;
-            this.data = dat;
-            this._thickMult = thickMult;
-            this._thickness = Maths.Clamp(this.data.amount * 600f, 0.2f, 8f) * this._thickMult;
-            this.startThick = this._thickness;
-            this._glob = new SpriteMap("bigGlob", 8, 8);
+            alpha = 1f;
+            _gravMult = 2f;
+            depth = -0.5f;
+            data = dat;
+            _thickMult = thickMult;
+            _thickness = Maths.Clamp(data.amount * 600f, 0.2f, 8f) * _thickMult;
+            startThick = _thickness;
+            _glob = new SpriteMap("bigGlob", 8, 8);
         }
 
         public override void Update()
         {
-            if (this._fire != null)
-                this._fire.position = this.position;
-            this._life = 1f;
-            if (_thickness < 4f || Math.Abs(this.vSpeed) < 1.5)
-                this.live -= 0.01f;
-            this._thickness = Lerp.FloatSmooth(this.startThick, 0.1f, 1f - this.live);
-            if (live < 0f || this._grounded && Math.Abs(this.vSpeed) < 0.1f)
+            if (_fire != null)
+                _fire.position = position;
+            _life = 1f;
+            if (_thickness < 4f || Math.Abs(vSpeed) < 1.5)
+                live -= 0.01f;
+            _thickness = Lerp.FloatSmooth(startThick, 0.1f, 1f - live);
+            if (live < 0f || _grounded && Math.Abs(vSpeed) < 0.1f)
             {
                 Level.Remove(this);
-                this.active = false;
+                active = false;
                 FluidPuddle fluidPuddle1 = null;
                 foreach (FluidPuddle fluidPuddle2 in Level.current.things[typeof(FluidPuddle)])
                 {
-                    if (this.x > fluidPuddle2.left && this.x < fluidPuddle2.right && Math.Abs(fluidPuddle2.y - this.y) < 10.0)
+                    if (x > fluidPuddle2.left && x < fluidPuddle2.right && Math.Abs(fluidPuddle2.y - y) < 10.0)
                     {
                         fluidPuddle1 = fluidPuddle2;
                         break;
@@ -97,59 +97,59 @@ namespace DuckGame
                         Level.Add(fluidPuddle1);
                     }
                 }
-                fluidPuddle1?.Feed(this.data);
+                fluidPuddle1?.Feed(data);
             }
             else
             {
                 base.Update();
-                if (this._touchedFloor && !this._firstHit)
+                if (_touchedFloor && !_firstHit)
                 {
-                    this._firstHit = true;
-                    this.hSpeed += Rando.Float(-1f, 1f);
-                    this.hSpeed *= Rando.Float(-1f, 1.5f);
-                    this.vSpeed *= Rando.Float(0.3f, 1f);
+                    _firstHit = true;
+                    hSpeed += Rando.Float(-1f, 1f);
+                    hSpeed *= Rando.Float(-1f, 1.5f);
+                    vSpeed *= Rando.Float(0.3f, 1f);
                 }
-                if (this._stream == null)
+                if (_stream == null)
                     return;
-                float num = Math.Abs(this.hSpeed - this._stream.hSpeed);
-                if (Math.Abs(this.x - this._stream.x) * num <= 40f && Math.Abs(this.vSpeed - this._stream.vSpeed) <= 1.9f && num <= 1.9f)
+                float num = Math.Abs(hSpeed - _stream.hSpeed);
+                if (Math.Abs(x - _stream.x) * num <= 40f && Math.Abs(vSpeed - _stream.vSpeed) <= 1.9f && num <= 1.9f)
                     return;
-                this.BreakStream();
+                BreakStream();
             }
         }
 
         public void BreakStream()
         {
-            if (this._child != null)
-                this._child._stream = null;
-            this._child = null;
-            if (this._stream != null)
-                this._stream._child = null;
-            this._stream = null;
+            if (_child != null)
+                _child._stream = null;
+            _child = null;
+            if (_stream != null)
+                _stream._child = null;
+            _stream = null;
         }
 
         public override void Draw()
         {
-            if (this._stream != null)
+            if (_stream != null)
             {
                 ++Graphics.currentDrawIndex;
-                Graphics.DrawLine(this.position, this._stream.position, new Color(this.data.color) * this.alpha, this._thickness, this.depth);
+                Graphics.DrawLine(position, _stream.position, new Color(data.color) * alpha, _thickness, depth);
             }
             else
             {
-                if (this._child != null)
+                if (_child != null)
                     return;
                 if (_thickness > 4.0)
                 {
-                    this._glob.depth = this.depth;
-                    this._glob.frame = 2;
-                    this._glob.color = new Color(this.data.color) * this.alpha;
-                    this._glob.CenterOrigin();
-                    this._glob.angle = Maths.DegToRad((float)(-Maths.PointDirection(this.position, this.position + this.velocity) + 90.0));
-                    Graphics.Draw(_glob, this.x, this.y);
+                    _glob.depth = depth;
+                    _glob.frame = 2;
+                    _glob.color = new Color(data.color) * alpha;
+                    _glob.CenterOrigin();
+                    _glob.angle = Maths.DegToRad((float)(-Maths.PointDirection(position, position + velocity) + 90.0));
+                    Graphics.Draw(_glob, x, y);
                 }
                 else
-                    Graphics.DrawRect(this.position - new Vec2(this._thickness / 2f, this._thickness / 2f), this.position + new Vec2(this._thickness / 2f, this._thickness / 2f), new Color(this.data.color) * this.alpha, this.depth);
+                    Graphics.DrawRect(position - new Vec2(_thickness / 2f, _thickness / 2f), position + new Vec2(_thickness / 2f, _thickness / 2f), new Color(data.color) * alpha, depth);
             }
         }
     }

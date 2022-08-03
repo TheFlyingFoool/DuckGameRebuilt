@@ -9,7 +9,7 @@ namespace DuckGame
 {
     public class NMBeginCountdown : NMSynchronizedEvent
     {
-        public NMBeginCountdown() => this.manager = BelongsToManager.EventManager;
+        public NMBeginCountdown() => manager = BelongsToManager.EventManager;
 
         public override void Activate() => DuckNetwork.core.startCountdown = true;
     }

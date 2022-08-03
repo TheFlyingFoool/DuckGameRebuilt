@@ -70,11 +70,11 @@ namespace DuckGame
 
         public void WriteComplexValues(BitBuffer pBuffer)
         {
-            if (!this.complexSync)
+            if (!complexSync)
                 return;
             ComplexDiffData complexDiffData;
-            if (!AmmoType._complexDiff.TryGetValue(this.GetType(), out complexDiffData))
-                AmmoType._complexDiff[this.GetType()] = complexDiffData = new AmmoType.ComplexDiffData(this.GetType());
+            if (!AmmoType._complexDiff.TryGetValue(GetType(), out complexDiffData))
+                AmmoType._complexDiff[GetType()] = complexDiffData = new AmmoType.ComplexDiffData(GetType());
             foreach (ClassMember binding in complexDiffData.bindings)
             {
                 object objB = binding.GetValue(this);
@@ -90,11 +90,11 @@ namespace DuckGame
 
         public void ReadComplexValues(BitBuffer pBuffer)
         {
-            if (!this.complexSync)
+            if (!complexSync)
                 return;
             ComplexDiffData complexDiffData;
-            if (!AmmoType._complexDiff.TryGetValue(this.GetType(), out complexDiffData))
-                AmmoType._complexDiff[this.GetType()] = complexDiffData = new AmmoType.ComplexDiffData(this.GetType());
+            if (!AmmoType._complexDiff.TryGetValue(GetType(), out complexDiffData))
+                AmmoType._complexDiff[GetType()] = complexDiffData = new AmmoType.ComplexDiffData(GetType());
             foreach (ClassMember binding in complexDiffData.bindings)
             {
                 if (pBuffer.ReadBool())
@@ -106,9 +106,9 @@ namespace DuckGame
         {
         }
 
-        public virtual void WriteAdditionalData(BitBuffer b) => this.WriteComplexValues(b);
+        public virtual void WriteAdditionalData(BitBuffer b) => WriteComplexValues(b);
 
-        public virtual void ReadAdditionalData(BitBuffer b) => this.ReadComplexValues(b);
+        public virtual void ReadAdditionalData(BitBuffer b) => ReadComplexValues(b);
 
         public virtual void PopShell(float x, float y, int dir)
         {
@@ -126,12 +126,12 @@ namespace DuckGame
         {
             angle *= -1f;
             Bullet bullet;
-            if (this.bulletType == typeof(Bullet))
-                bullet = new Bullet(x, y, this, angle, owner, this.rebound, distance, tracer, network);
+            if (bulletType == typeof(Bullet))
+                bullet = new Bullet(x, y, this, angle, owner, rebound, distance, tracer, network);
             else
-                bullet = Activator.CreateInstance(this.bulletType, x, y, this, angle, owner, rebound, distance, tracer, network) as Bullet;
+                bullet = Activator.CreateInstance(bulletType, x, y, this, angle, owner, rebound, distance, tracer, network) as Bullet;
             bullet.firedFrom = firedFrom;
-            bullet.color = this.bulletColor;
+            bullet.color = bulletColor;
             return bullet;
         }
 
@@ -141,7 +141,7 @@ namespace DuckGame
           float angle = 0f,
           Thing firedFrom = null)
         {
-            Bullet bullet = this.GetBullet(position.x, position.y, owner, angle, firedFrom);
+            Bullet bullet = GetBullet(position.x, position.y, owner, angle, firedFrom);
             Level.current.AddThing(bullet);
             return bullet;
         }
@@ -157,13 +157,13 @@ namespace DuckGame
 
             public ComplexDiffData(System.Type pType)
             {
-                this.original = Activator.CreateInstance(pType) as AmmoType;
+                original = Activator.CreateInstance(pType) as AmmoType;
                 List<ClassMember> members = Editor.GetMembers(pType);
-                this.bindings = new List<ClassMember>();
+                bindings = new List<ClassMember>();
                 foreach (ClassMember classMember in members)
                 {
                     if (!(classMember.name == "complexSync") && (classMember.type.IsPrimitive || classMember.type == typeof(Vec2) || classMember.type == typeof(Color)))
-                        this.bindings.Add(classMember);
+                        bindings.Add(classMember);
                 }
             }
         }

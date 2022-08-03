@@ -18,21 +18,21 @@ namespace DuckGame
 
         public NetIndex16 GetAndIncrementSyncIndex(NetworkConnection pConnection)
         {
-            if (!this.syncIndex.ContainsKey(pConnection))
-                this.syncIndex[pConnection] = (NetIndex16)0;
-            this.syncIndex[pConnection]++;
-            return this.syncIndex[pConnection];
+            if (!syncIndex.ContainsKey(pConnection))
+                syncIndex[pConnection] = (NetIndex16)0;
+            syncIndex[pConnection]++;
+            return syncIndex[pConnection];
         }
 
-        public NetIndex16 GetSyncIndex(NetworkConnection pConnection) => !this.syncIndex.ContainsKey(pConnection) ? (NetIndex16)0 : this.syncIndex[pConnection];
+        public NetIndex16 GetSyncIndex(NetworkConnection pConnection) => !syncIndex.ContainsKey(pConnection) ? (NetIndex16)0 : syncIndex[pConnection];
 
         /// <summary>This is just for iterating, Don't go modifying it.</summary>
         /// <returns></returns>
-        public Dictionary<int, ProfileNetData.NetDataPair> GetElementList() => this._elements;
+        public Dictionary<int, ProfileNetData.NetDataPair> GetElementList() => _elements;
 
         public bool IsDirty(NetworkConnection pConnection)
         {
-            foreach (KeyValuePair<int, ProfileNetData.NetDataPair> element in this._elements)
+            foreach (KeyValuePair<int, ProfileNetData.NetDataPair> element in _elements)
             {
                 if (element.Value.IsDirty(pConnection))
                     return true;
@@ -46,7 +46,7 @@ namespace DuckGame
         /// <typeparam name="T">The type of the value you're getting.</typeparam>
         /// <param name="pKey">The name of the property you're getting.</param>
         /// <returns></returns>
-        public T Get<T>(string pKey) => this.Get<T>(pKey, default(T));
+        public T Get<T>(string pKey) => Get<T>(pKey, default(T));
 
         /// <summary>
         /// Returns a property value based on a string. These values are synchronized over the network!
@@ -59,7 +59,7 @@ namespace DuckGame
         {
             int hashCode = pKey.GetHashCode();
             NetDataPair netDataPair;
-            return this._elements.TryGetValue(hashCode, out netDataPair) && netDataPair.data is T ? (T)netDataPair.data : pDefault;
+            return _elements.TryGetValue(hashCode, out netDataPair) && netDataPair.data is T ? (T)netDataPair.data : pDefault;
         }
 
         /// <summary>
@@ -73,11 +73,11 @@ namespace DuckGame
         {
             int hashCode = pKey.GetHashCode();
             NetDataPair netDataPair;
-            if (!this._elements.TryGetValue(hashCode, out netDataPair))
+            if (!_elements.TryGetValue(hashCode, out netDataPair))
             {
-                this._elements[hashCode] = netDataPair = new ProfileNetData.NetDataPair();
+                _elements[hashCode] = netDataPair = new ProfileNetData.NetDataPair();
                 netDataPair.MakeDirty();
-                if (this._settingFiltered)
+                if (_settingFiltered)
                     netDataPair.filtered = true;
             }
             if (netDataPair.id != null && netDataPair.id != pKey)
@@ -91,22 +91,22 @@ namespace DuckGame
 
         public void SetFiltered<T>(string pKey, T pValue)
         {
-            this._settingFiltered = true;
-            this.Set<T>(pKey, pValue);
-            this._settingFiltered = false;
+            _settingFiltered = true;
+            Set<T>(pKey, pValue);
+            _settingFiltered = false;
         }
 
         public void MakeDirty(int pHash, NetworkConnection pConnection, NetIndex16 pSyncIndex)
         {
             if (pHash == int.MaxValue)
             {
-                foreach (KeyValuePair<int, ProfileNetData.NetDataPair> element in this._elements)
+                foreach (KeyValuePair<int, ProfileNetData.NetDataPair> element in _elements)
                     element.Value.Clean(pConnection);
             }
             else
             {
                 NetDataPair netDataPair;
-                if (!this._elements.TryGetValue(pHash, out netDataPair) || (int)netDataPair.GetLastSyncIndex(pConnection) > (int)pSyncIndex)
+                if (!_elements.TryGetValue(pHash, out netDataPair) || (int)netDataPair.GetLastSyncIndex(pConnection) > (int)pSyncIndex)
                     return;
                 netDataPair.SetConnectionDirty(pConnection, true);
             }
@@ -114,7 +114,7 @@ namespace DuckGame
 
         public void Clean(NetworkConnection pConnection)
         {
-            foreach (KeyValuePair<int, ProfileNetData.NetDataPair> element in this._elements)
+            foreach (KeyValuePair<int, ProfileNetData.NetDataPair> element in _elements)
                 element.Value.SetConnectionDirty(pConnection, false);
         }
 
@@ -125,8 +125,8 @@ namespace DuckGame
           NetworkConnection pConnection)
         {
             NetDataPair netDataPair;
-            if (!this._elements.TryGetValue(pHash, out netDataPair))
-                this._elements[pHash] = netDataPair = new ProfileNetData.NetDataPair();
+            if (!_elements.TryGetValue(pHash, out netDataPair))
+                _elements[pHash] = netDataPair = new ProfileNetData.NetDataPair();
             if (netDataPair.lastReceivedIndex > pSyncIndex && netDataPair.activeControllingConnection == pConnection)
                 return;
             netDataPair.lastReceivedIndex = pSyncIndex;
@@ -137,9 +137,9 @@ namespace DuckGame
         public BitBuffer Serialize(NetworkConnection pConnection, HashSet<int> pOutputHashlist)
         {
             BitBuffer bitBuffer = new BitBuffer();
-            NetIndex16 incrementSyncIndex = this.GetAndIncrementSyncIndex(pConnection);
+            NetIndex16 incrementSyncIndex = GetAndIncrementSyncIndex(pConnection);
             bitBuffer.Write((object)incrementSyncIndex);
-            foreach (KeyValuePair<int, ProfileNetData.NetDataPair> element in this._elements)
+            foreach (KeyValuePair<int, ProfileNetData.NetDataPair> element in _elements)
             {
                 if (element.Value.IsDirty(pConnection))
                 {
@@ -163,9 +163,9 @@ namespace DuckGame
                 Type pTypeRead;
                 object pValue = pBuffer.ReadObject(out pTypeRead);
                 if (!pMakingDirty)
-                    this.Set(pHash, pValue, pSyncIndex, pConnection);
+                    Set(pHash, pValue, pSyncIndex, pConnection);
                 else
-                    this.MakeDirty(pHash, pConnection, (NetIndex16)0);
+                    MakeDirty(pHash, pConnection, (NetIndex16)0);
             }
         }
 
@@ -179,30 +179,30 @@ namespace DuckGame
             public object data;
             public Dictionary<NetworkConnection, bool> dirtyConnections = new Dictionary<NetworkConnection, bool>();
 
-            public NetIndex16 GetLastSyncIndex(NetworkConnection pConnection) => !this.lastSyncIndex.ContainsKey(pConnection) ? (NetIndex16)0 : this.lastSyncIndex[pConnection];
+            public NetIndex16 GetLastSyncIndex(NetworkConnection pConnection) => !lastSyncIndex.ContainsKey(pConnection) ? (NetIndex16)0 : lastSyncIndex[pConnection];
 
-            public void SetConnectionDirty(NetworkConnection pConnection, bool pValue) => this.dirtyConnections[pConnection] = pValue;
+            public void SetConnectionDirty(NetworkConnection pConnection, bool pValue) => dirtyConnections[pConnection] = pValue;
 
             public bool IsDirty(NetworkConnection pConnection)
             {
-                if (this.filtered && pConnection.profile != null && pConnection.profile.muteChat)
+                if (filtered && pConnection.profile != null && pConnection.profile.muteChat)
                     return false;
                 bool flag = true;
-                if (this.dirtyConnections.ContainsKey(pConnection))
-                    flag = this.dirtyConnections[pConnection];
+                if (dirtyConnections.ContainsKey(pConnection))
+                    flag = dirtyConnections[pConnection];
                 return flag;
             }
 
             public void MakeDirty()
             {
                 foreach (NetworkConnection connection in Network.connections)
-                    this.dirtyConnections[connection] = true;
+                    dirtyConnections[connection] = true;
             }
 
             public void Clean(NetworkConnection pConnection)
             {
-                this.dirtyConnections[pConnection] = true;
-                this.lastSyncIndex[pConnection] = (NetIndex16)0;
+                dirtyConnections[pConnection] = true;
+                lastSyncIndex[pConnection] = (NetIndex16)0;
             }
         }
     }

@@ -20,36 +20,36 @@ namespace DuckGame
         public SnowFallParticle(float xpos, float ypos, Vec2 startVel, bool big = false)
           : base(xpos, ypos)
         {
-            this._gravMult = 0.5f;
-            this._sin = Rando.Float(7f);
-            this._moveSpeed = Rando.Float(0.005f, 0.02f);
-            this._sinSize = Rando.Float(8f, 16f);
-            this._size = Rando.Float(0.2f, 0.6f);
+            _gravMult = 0.5f;
+            _sin = Rando.Float(7f);
+            _moveSpeed = Rando.Float(0.005f, 0.02f);
+            _sinSize = Rando.Float(8f, 16f);
+            _size = Rando.Float(0.2f, 0.6f);
             if (big)
-                this._size = Rando.Float(0.8f, 1f);
-            this.life = Rando.Float(0.1f, 0.2f);
-            this.onlyDieWhenGrounded = true;
-            this.velocity = startVel;
+                _size = Rando.Float(0.8f, 1f);
+            life = Rando.Float(0.1f, 0.2f);
+            onlyDieWhenGrounded = true;
+            velocity = startVel;
         }
 
         public override void Update()
         {
             base.Update();
-            if (this.vSpeed > 1.0)
-                this.vSpeed = 1f;
-            if (this._grounded)
+            if (vSpeed > 1.0)
+                vSpeed = 1f;
+            if (_grounded)
                 return;
-            float num = (float)Math.Sin(_sin) * this._sinSize;
-            this._sin += this._moveSpeed;
-            this.x += Rando.Float(-0.3f, 0.3f);
-            this.x += num / 60f;
+            float num = (float)Math.Sin(_sin) * _sinSize;
+            _sin += _moveSpeed;
+            x += Rando.Float(-0.3f, 0.3f);
+            x += num / 60f;
         }
 
         public override void Draw()
         {
-            double num = this.z / 200.0;
-            float size = this._size;
-            Graphics.DrawRect(this.position + new Vec2(-size, -size), this.position + new Vec2(size, size), Color.White * this.alpha, (Depth)0.1f);
+            double num = z / 200.0;
+            float size = _size;
+            Graphics.DrawRect(position + new Vec2(-size, -size), position + new Vec2(size, size), Color.White * alpha, (Depth)0.1f);
         }
     }
 }

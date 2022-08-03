@@ -11,14 +11,14 @@ namespace DuckGame
     {
         public ATSniper()
         {
-            this.accuracy = 0.75f;
-            this.range = 250f;
-            this.penetration = 1f;
-            this.combustable = true;
-            this.range = 1000f;
-            this.accuracy = 1f;
-            this.penetration = 2f;
-            this.bulletSpeed = 48f;
+            accuracy = 0.75f;
+            range = 250f;
+            penetration = 1f;
+            combustable = true;
+            range = 1000f;
+            accuracy = 1f;
+            penetration = 2f;
+            bulletSpeed = 48f;
         }
 
         public override void PopShell(float x, float y, int dir)

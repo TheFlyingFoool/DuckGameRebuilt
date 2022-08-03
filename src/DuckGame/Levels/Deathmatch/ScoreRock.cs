@@ -26,38 +26,38 @@ namespace DuckGame
 
         public float netDepth
         {
-            get => this.depth.value;
-            set => this.depth = (Depth)value;
+            get => depth.value;
+            set => depth = (Depth)value;
         }
 
         public byte netProfileIndex
         {
-            get => this._netProfileIndex;
+            get => _netProfileIndex;
             set
             {
-                this._netProfileIndex = value;
-                this._profile = Profiles.all.ElementAt<Profile>(_netProfileIndex);
-                this.RefreshProfile(this._profile);
+                _netProfileIndex = value;
+                _profile = Profiles.all.ElementAt<Profile>(_netProfileIndex);
+                RefreshProfile(_profile);
             }
         }
 
         public ScoreRock(float xpos, float ypos, Profile profile)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("scoreRock", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -6f);
-            this.collisionSize = new Vec2(16f, 13f);
-            this.depth = -0.5f;
-            this.thickness = 4f;
-            this.weight = 7f;
-            this.RefreshProfile(profile);
-            this.flammable = 0.3f;
-            this.collideSounds.Add("rockHitGround2");
-            this._dropShadow.CenterOrigin();
-            this._profile = profile;
-            this.impactThreshold = 1f;
+            _sprite = new SpriteMap("scoreRock", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -6f);
+            collisionSize = new Vec2(16f, 13f);
+            depth = -0.5f;
+            thickness = 4f;
+            weight = 7f;
+            RefreshProfile(profile);
+            flammable = 0.3f;
+            collideSounds.Add("rockHitGround2");
+            _dropShadow.CenterOrigin();
+            _profile = profile;
+            impactThreshold = 1f;
         }
 
         private void RefreshProfile(Profile profile)
@@ -65,68 +65,68 @@ namespace DuckGame
             if (profile == null)
                 return;
             if (profile.team.hasHat)
-                this._sprite.frame = 0;
+                _sprite.frame = 0;
             else if (profile.persona == Persona.Duck1)
-                this._sprite.frame = 1;
+                _sprite.frame = 1;
             else if (profile.persona == Persona.Duck2)
-                this._sprite.frame = 2;
+                _sprite.frame = 2;
             else if (profile.persona == Persona.Duck3)
-                this._sprite.frame = 3;
+                _sprite.frame = 3;
             else if (profile.persona == Persona.Duck4)
-                this._sprite.frame = 4;
+                _sprite.frame = 4;
             else if (profile.persona == Persona.Duck5)
-                this._sprite.frame = 5;
+                _sprite.frame = 5;
             else if (profile.persona == Persona.Duck6)
-                this._sprite.frame = 6;
+                _sprite.frame = 6;
             else if (profile.persona == Persona.Duck7)
-                this._sprite.frame = 7;
+                _sprite.frame = 7;
             else if (profile.persona == Persona.Duck8)
-                this._sprite.frame = 8;
+                _sprite.frame = 8;
             if (profile.team.rockTexture == null)
                 return;
-            this._sprite = new SpriteMap((Tex2D)profile.team.rockTexture, 24, 24);
-            this.center = new Vec2(12f, 12f);
-            this.graphic = _sprite;
-            this._customRock = true;
-            this.collisionOffset = new Vec2(-8f, -1f);
-            this.collisionSize = new Vec2(16f, 13f);
+            _sprite = new SpriteMap((Tex2D)profile.team.rockTexture, 24, 24);
+            center = new Vec2(12f, 12f);
+            graphic = _sprite;
+            _customRock = true;
+            collisionOffset = new Vec2(-8f, -1f);
+            collisionSize = new Vec2(16f, 13f);
         }
 
         public override void Update()
         {
-            foreach (Block block in Level.CheckLineAll<Block>(this.position, this.position + new Vec2(0f, 100f)))
+            foreach (Block block in Level.CheckLineAll<Block>(position, position + new Vec2(0f, 100f)))
             {
                 if (block.solid)
                 {
-                    this._dropShadowPoint.x = this.x;
-                    this._dropShadowPoint.y = block.top;
+                    _dropShadowPoint.x = x;
+                    _dropShadowPoint.y = block.top;
                 }
             }
-            if (RockScoreboard.wallMode && this.x > 610.0)
+            if (RockScoreboard.wallMode && x > 610.0)
             {
-                this.x = 610f;
-                this.hSpeed = -1f;
+                x = 610f;
+                hSpeed = -1f;
                 SFX.Play("rockHitGround2", pitch: -0.4f);
             }
-            if (RockScoreboard.wallMode && this.x > 610.0)
+            if (RockScoreboard.wallMode && x > 610.0)
             {
-                this.x = 610f;
-                this.hSpeed = -1f;
+                x = 610f;
+                hSpeed = -1f;
                 SFX.Play("rockHitGround2", pitch: -0.4f);
             }
-            this._pos = this.position;
+            _pos = position;
             base.Update();
         }
 
         public override void Draw()
         {
             base.Draw();
-            if (this._customRock || this._profile == null || this._profile.team == null || !this._profile.team.hasHat)
+            if (_customRock || _profile == null || _profile.team == null || !_profile.team.hasHat)
                 return;
-            SpriteMap hat = this._profile.team.GetHat(this._profile.persona);
-            hat.depth = this.depth + 1;
+            SpriteMap hat = _profile.team.GetHat(_profile.persona);
+            hat.depth = depth + 1;
             hat.center = new Vec2(16f, 16f);
-            Vec2 vec2 = this.position - this._profile.team.hatOffset;
+            Vec2 vec2 = position - _profile.team.hatOffset;
             Graphics.Draw(hat, vec2.x, vec2.y - 5f);
         }
     }

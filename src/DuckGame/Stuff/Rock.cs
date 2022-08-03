@@ -23,45 +23,45 @@ namespace DuckGame
         public Rock(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("rock01", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -5f);
-            this.collisionSize = new Vec2(16f, 12f);
-            this.depth = -0.5f;
-            this.thickness = 4f;
-            this.weight = 7f;
-            this.flammable = 0f;
-            this.collideSounds.Add("rockHitGround2");
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.editorTooltip = "Don’t throw rocks!";
-            this.holsterAngle = 90f;
+            _sprite = new SpriteMap("rock01", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -5f);
+            collisionSize = new Vec2(16f, 12f);
+            depth = -0.5f;
+            thickness = 4f;
+            weight = 7f;
+            flammable = 0f;
+            collideSounds.Add("rockHitGround2");
+            physicsMaterial = PhysicsMaterial.Metal;
+            editorTooltip = "Don’t throw rocks!";
+            holsterAngle = 90f;
         }
 
         public override void Initialize()
         {
-            if (this.gold.value)
+            if (gold.value)
             {
-                this.material = new MaterialGold(this);
-                this.isGoldRock = true;
+                material = new MaterialGold(this);
+                isGoldRock = true;
             }
             base.Initialize();
         }
 
         public override void EditorRender()
         {
-            if (this.gold.value)
+            if (gold.value)
             {
-                if (this.material == null)
+                if (material == null)
                 {
-                    this.material = new MaterialGold(this);
-                    this.isGoldRock = true;
+                    material = new MaterialGold(this);
+                    isGoldRock = true;
                 }
             }
             else
             {
-                this.material = null;
-                this.isGoldRock = false;
+                material = null;
+                isGoldRock = false;
             }
             base.EditorRender();
         }
@@ -69,45 +69,45 @@ namespace DuckGame
         [NetworkAction]
         private void StartRockSong()
         {
-            if (this._winSound != null)
-                this._winSound.Stop();
-            this._killWait = 0;
-            this._didKill = true;
-            this._winSound = SFX.Play("winzone");
+            if (_winSound != null)
+                _winSound.Stop();
+            _killWait = 0;
+            _didKill = true;
+            _winSound = SFX.Play("winzone");
         }
 
         [NetworkAction]
         private void StopRockSong()
         {
-            if (this._winSound != null)
-                this._winSound.Stop();
-            this._killWait = 0;
-            this._didKill = false;
-            this._winSound = null;
+            if (_winSound != null)
+                _winSound.Stop();
+            _killWait = 0;
+            _didKill = false;
+            _winSound = null;
         }
 
         public override void Update()
         {
-            if (this.isGoldRock && !(this.material is MaterialGold))
-                this.material = new MaterialGold(this);
-            if (this.isServerForObject)
+            if (isGoldRock && !(material is MaterialGold))
+                material = new MaterialGold(this);
+            if (isServerForObject)
             {
-                if (this.isGoldRock)
+                if (isGoldRock)
                 {
-                    if (this.duck != null && !this._didKill)
-                        this.SyncNetworkAction(new PhysicsObject.NetAction(this.StartRockSong));
-                    if (this.duck == null)
+                    if (duck != null && !_didKill)
+                        SyncNetworkAction(new PhysicsObject.NetAction(StartRockSong));
+                    if (duck == null)
                     {
-                        this._didKill = false;
-                        this._killWait = 0;
-                        if (this._winSound != null)
-                            this.SyncNetworkAction(new PhysicsObject.NetAction(this.StopRockSong));
+                        _didKill = false;
+                        _killWait = 0;
+                        if (_winSound != null)
+                            SyncNetworkAction(new PhysicsObject.NetAction(StopRockSong));
                     }
                 }
-                if (this._didKill && this.duck != null)
+                if (_didKill && duck != null)
                 {
-                    ++this._killWait;
-                    if (this._killWait == 108)
+                    ++_killWait;
+                    if (_killWait == 108)
                     {
                         foreach (Duck duck in Level.current.things[typeof(Duck)])
                         {
@@ -117,40 +117,40 @@ namespace DuckGame
                     }
                 }
             }
-            if (this.duck == null)
+            if (duck == null)
             {
-                this._didKill = false;
-                this._killWait = 0;
+                _didKill = false;
+                _killWait = 0;
             }
-            if (this.raised)
+            if (raised)
             {
-                if (!this._changedCollision)
+                if (!_changedCollision)
                 {
-                    this.collisionSize = new Vec2(this.collisionSize.y, this.collisionSize.x);
-                    this.collisionOffset = new Vec2(this.collisionOffset.y, this.collisionOffset.x);
-                    this._changedCollision = true;
+                    collisionSize = new Vec2(collisionSize.y, collisionSize.x);
+                    collisionOffset = new Vec2(collisionOffset.y, collisionOffset.x);
+                    _changedCollision = true;
                 }
             }
-            else if (this._changedCollision)
+            else if (_changedCollision)
             {
-                this.collisionSize = new Vec2(this.collisionSize.y, this.collisionSize.x);
-                this.collisionOffset = new Vec2(this.collisionOffset.y, this.collisionOffset.x);
-                this._changedCollision = false;
+                collisionSize = new Vec2(collisionSize.y, collisionSize.x);
+                collisionOffset = new Vec2(collisionOffset.y, collisionOffset.x);
+                _changedCollision = false;
             }
             base.Update();
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (bullet.isLocal && this.owner == null)
+            if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
-            if (this.isServerForObject && bullet.isLocal && TeamSelect2.Enabled("EXPLODEYCRATES"))
+            if (isServerForObject && bullet.isLocal && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
-                if (this.duck != null)
-                    this.duck.ThrowItem();
-                this.Destroy(new DTShot(bullet));
+                if (duck != null)
+                    duck.ThrowItem();
+                Destroy(new DTShot(bullet));
                 Level.Remove(this);
-                Level.Add(new GrenadeExplosion(this.x, this.y));
+                Level.Add(new GrenadeExplosion(x, y));
             }
             return base.Hit(bullet, hitPos);
         }

@@ -11,13 +11,13 @@ namespace DuckGame
     {
         public ATPlasmaBlaster()
         {
-            this.accuracy = 0.75f;
-            this.range = 250f;
-            this.penetration = 1f;
-            this.bulletSpeed = 64f;
-            this.bulletColor = Color.Orange;
-            this.bulletType = typeof(Bullet);
-            this.bulletThickness = 1f;
+            accuracy = 0.75f;
+            range = 250f;
+            penetration = 1f;
+            bulletSpeed = 64f;
+            bulletColor = Color.Orange;
+            bulletType = typeof(Bullet);
+            bulletThickness = 1f;
         }
     }
 }

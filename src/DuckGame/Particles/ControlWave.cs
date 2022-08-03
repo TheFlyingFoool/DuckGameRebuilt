@@ -19,33 +19,33 @@ namespace DuckGame
         public ControlWave(float xpos, float ypos, float dir, MindControlRay owner, bool local = true)
           : base(xpos, ypos)
         {
-            this._owner = owner;
-            this.graphic = new Sprite("controlWave")
+            _owner = owner;
+            graphic = new Sprite("controlWave")
             {
-                flipH = this.offDir < 0
+                flipH = offDir < 0
             };
-            this.center = new Vec2(8f, 8f);
-            this.xscale = this.yscale = 0.2f;
-            this.angle = dir;
-            this._isLocalWave = local;
+            center = new Vec2(8f, 8f);
+            xscale = yscale = 0.2f;
+            angle = dir;
+            _isLocalWave = local;
         }
 
         public override void Update()
         {
-            if (this.isServerForObject)
+            if (isServerForObject)
             {
-                this.xscale = this.yscale = Maths.CountUp(this.yscale, 0.05f);
-                this._fade -= 0.05f;
+                xscale = yscale = Maths.CountUp(yscale, 0.05f);
+                _fade -= 0.05f;
                 if (_fade < 0.0)
                     Level.Remove(this);
-                this.alpha = Maths.NormalizeSection(this._fade, 0.2f, 0.3f);
+                alpha = Maths.NormalizeSection(_fade, 0.2f, 0.3f);
                 Vec2 p2 = Vec2.Zero;
-                if (this._owner.controlledDuck == null && !this._isNotControlRay)
+                if (_owner.controlledDuck == null && !_isNotControlRay)
                 {
-                    p2 = new Vec2((float)Math.Cos(this.angle), (float)-Math.Sin(this.angle));
-                    if (this._isLocalWave)
+                    p2 = new Vec2((float)Math.Cos(angle), (float)-Math.Sin(angle));
+                    if (_isLocalWave)
                     {
-                        foreach (IAmADuck amAduck in Level.CheckCircleAll<IAmADuck>(this.position, 3f))
+                        foreach (IAmADuck amAduck in Level.CheckCircleAll<IAmADuck>(position, 3f))
                         {
                             Duck d = amAduck as Duck;
                             switch (amAduck)
@@ -58,26 +58,26 @@ namespace DuckGame
                                     break;
                             }
                             if (d != null && d.mindControl == null && !d.HasEquipment(typeof(TinfoilHat)) && !(d.holdObject is MindControlRay))
-                                this._owner.ControlDuck(d);
+                                _owner.ControlDuck(d);
                         }
                     }
                 }
                 else
                 {
-                    if (this._owner.controlledDuck != null)
+                    if (_owner.controlledDuck != null)
                     {
-                        p2 = this._owner.controlledDuck.cameraPosition - this.position;
+                        p2 = _owner.controlledDuck.cameraPosition - position;
                         p2.Normalize();
-                        this.angleDegrees = -Maths.PointDirection(Vec2.Zero, p2);
+                        angleDegrees = -Maths.PointDirection(Vec2.Zero, p2);
                     }
-                    this._isNotControlRay = true;
+                    _isNotControlRay = true;
                 }
-                this.position += p2 * 2.6f;
+                position += p2 * 2.6f;
             }
             else
             {
-                this.xscale = this.yscale = 1f;
-                this.position += new Vec2((float)Math.Cos(this.angle), (float)-Math.Sin(this.angle)) * 2.6f;
+                xscale = yscale = 1f;
+                position += new Vec2((float)Math.Cos(angle), (float)-Math.Sin(angle)) * 2.6f;
             }
         }
     }

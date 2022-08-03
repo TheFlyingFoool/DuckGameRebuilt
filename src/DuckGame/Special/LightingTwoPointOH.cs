@@ -13,13 +13,13 @@ namespace DuckGame
         public LightingTwoPointOH()
           : base()
         {
-            this.graphic = new Sprite("swirl");
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this._canFlip = false;
-            this._visibleInGame = false;
-            this._editorName = "Lighting 2.0";
+            graphic = new Sprite("swirl");
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
+            _canFlip = false;
+            _visibleInGame = false;
+            _editorName = "Lighting 2.0";
         }
 
         public override void Initialize()

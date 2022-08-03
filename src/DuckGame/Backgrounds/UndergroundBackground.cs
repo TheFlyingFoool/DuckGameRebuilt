@@ -18,46 +18,46 @@ namespace DuckGame
         public UndergroundBackground(float xpos, float ypos, bool moving = false, float speedMult = 1f)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
+            graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 4
             };
-            this.center = new Vec2(8f, 8f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = (Depth)0.9f;
-            this.layer = Layer.Foreground;
-            this._visibleInGame = false;
-            this._speedMult = speedMult;
-            this._moving = moving;
-            this._editorName = "Bunker BG";
-            this._yParallax = false;
+            center = new Vec2(8f, 8f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            depth = (Depth)0.9f;
+            layer = Layer.Foreground;
+            _visibleInGame = false;
+            _speedMult = speedMult;
+            _moving = moving;
+            _editorName = "Bunker BG";
+            _yParallax = false;
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            this.backgroundColor = new Color(0, 0, 0);
-            Level.current.backgroundColor = this.backgroundColor;
-            this._parallax = new ParallaxBackground("background/underground", 0f, 0f, 5);
-            float speed = 0.9f * this._speedMult;
-            this._parallax.AddZone(11, 1f, speed);
-            this._parallax.AddZone(12, 1f, speed);
-            this._parallax.AddZone(13, 1f, speed);
-            this._parallax.AddZone(14, 0.98f, speed);
-            this._parallax.AddZone(15, 0.97f, speed);
-            this._parallax.AddZone(16, 0.75f, speed);
-            this._parallax.AddZone(17, 0.75f, speed);
-            this._parallax.AddZone(18, 0.75f, speed);
-            this._parallax.AddZone(19, 0.75f, speed);
-            this._parallax.AddZone(20, 0.75f, speed);
+            backgroundColor = new Color(0, 0, 0);
+            Level.current.backgroundColor = backgroundColor;
+            _parallax = new ParallaxBackground("background/underground", 0f, 0f, 5);
+            float speed = 0.9f * _speedMult;
+            _parallax.AddZone(11, 1f, speed);
+            _parallax.AddZone(12, 1f, speed);
+            _parallax.AddZone(13, 1f, speed);
+            _parallax.AddZone(14, 0.98f, speed);
+            _parallax.AddZone(15, 0.97f, speed);
+            _parallax.AddZone(16, 0.75f, speed);
+            _parallax.AddZone(17, 0.75f, speed);
+            _parallax.AddZone(18, 0.75f, speed);
+            _parallax.AddZone(19, 0.75f, speed);
+            _parallax.AddZone(20, 0.75f, speed);
             Level.Add(_parallax);
-            this._parallax.x -= 340f;
-            this._parallax.restrictBottom = false;
-            this._undergroundRocks = new UndergroundRocksBackground(this.x, this.y);
+            _parallax.x -= 340f;
+            _parallax.restrictBottom = false;
+            _undergroundRocks = new UndergroundRocksBackground(x, y);
             Level.Add(_undergroundRocks);
-            this._skyline = new UndergroundSkyBackground(this.x, this.y);
+            _skyline = new UndergroundSkyBackground(x, y);
             Level.Add(_skyline);
         }
 
@@ -70,13 +70,13 @@ namespace DuckGame
                 num1 = Resolution.current.y;
             float num2 = Resolution.current.y / (float)Graphics.height;
             Vec2 wallScissor = BackgroundUpdater.GetWallScissor();
-            this._undergroundRocks.scissor = new Rectangle((int)wallScissor.x, num1 * num2, (int)wallScissor.y, Resolution.current.y - num1);
+            _undergroundRocks.scissor = new Rectangle((int)wallScissor.x, num1 * num2, (int)wallScissor.y, Resolution.current.y - num1);
             int height = (int)(Vec2.Transform(new Vec2(0f, -10f), Level.current.camera.getMatrix()).y * num2);
             if (height < 0)
                 height = 0;
             if (height > Resolution.size.y)
                 height = (int)Resolution.size.y;
-            this._skyline.scissor = new Rectangle((int)wallScissor.x, 0f, (int)wallScissor.y, height);
+            _skyline.scissor = new Rectangle((int)wallScissor.x, 0f, (int)wallScissor.y, height);
             base.Update();
         }
 

@@ -14,15 +14,15 @@ namespace DuckGame
 
         public string specialText
         {
-            get => this._specialText;
-            set => this._specialText = value;
+            get => _specialText;
+            set => _specialText = value;
         }
 
         public virtual float width => 71f;
 
         public virtual float height => 12f;
 
-        public Card(string text) => this._specialText = text;
+        public Card(string text) => _specialText = text;
 
         public Card()
         {
@@ -30,11 +30,11 @@ namespace DuckGame
 
         public virtual void Draw(Vec2 position, bool selected, float alpha)
         {
-            Graphics.DrawRect(position, position + new Vec2(this.width, this.height), new Color(25, 38, 41) * alpha, (Depth)0.9f);
+            Graphics.DrawRect(position, position + new Vec2(width, height), new Color(25, 38, 41) * alpha, (Depth)0.9f);
             if (selected)
-                Graphics.DrawRect(position + new Vec2(-1f, 0f), position + new Vec2(this.width + 1f, this.height), Color.White * alpha, (Depth)0.97f, false);
+                Graphics.DrawRect(position + new Vec2(-1f, 0f), position + new Vec2(width + 1f, height), Color.White * alpha, (Depth)0.97f, false);
             Card._font.scale = new Vec2(0.5f, 0.5f);
-            Card._font.Draw(this._specialText, position.x + 4f, position.y + 4f, Color.White * alpha, (Depth)0.98f);
+            Card._font.Draw(_specialText, position.x + 4f, position.y + 4f, Color.White * alpha, (Depth)0.98f);
         }
     }
 }

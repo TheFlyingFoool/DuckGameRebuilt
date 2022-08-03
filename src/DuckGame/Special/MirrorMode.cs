@@ -16,22 +16,22 @@ namespace DuckGame
 
         public override void EditorPropertyChanged(object property)
         {
-            this._sprite.frame = (int)this.mode.value;
+            _sprite.frame = (int)mode.value;
             base.EditorPropertyChanged(property);
         }
 
         public MirrorMode(float pX, float pY)
           : base()
         {
-            this._sprite = new SpriteMap("mirrorMode", 16, 16);
-            this.graphic = _sprite;
-            this.mode = new EditorProperty<MirrorMode.Setting>(MirrorMode.Setting.Vertical, this, 0f, 1f, 0.1f, null, false, false);
-            this.mode.value = MirrorMode.Setting.Vertical;
-            this.collisionSize = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-4f, -4f);
-            this.center = new Vec2(8f, 8f);
-            this.editorOffset = new Vec2(8f, 8f);
-            this._visibleInGame = false;
+            _sprite = new SpriteMap("mirrorMode", 16, 16);
+            graphic = _sprite;
+            mode = new EditorProperty<MirrorMode.Setting>(MirrorMode.Setting.Vertical, this, 0f, 1f, 0.1f, null, false, false);
+            mode.value = MirrorMode.Setting.Vertical;
+            collisionSize = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-4f, -4f);
+            center = new Vec2(8f, 8f);
+            editorOffset = new Vec2(8f, 8f);
+            _visibleInGame = false;
         }
 
         public enum Setting

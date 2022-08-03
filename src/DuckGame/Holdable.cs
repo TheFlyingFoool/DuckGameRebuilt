@@ -54,27 +54,27 @@ namespace DuckGame
 
         public override Thing netOwner
         {
-            get => this.owner;
+            get => owner;
             set
             {
-                this._prevOwner = this.owner;
-                this._lastThrownBy = this._owner;
-                this.owner = value;
+                _prevOwner = owner;
+                _lastThrownBy = _owner;
+                owner = value;
             }
         }
 
         public ItemSpawner hoverSpawner
         {
-            get => this._hoverSpawner;
+            get => _hoverSpawner;
             set
             {
-                if (this._hoverSpawner != null && value == null)
-                    this.gravMultiplier = 1f;
-                else if (this._hoverSpawner == null && value != null)
-                    this.gravMultiplier = 0f;
-                if (value != null && this._hoverSpawner != value)
-                    this._prevHoverPos = this.position;
-                this._hoverSpawner = value;
+                if (_hoverSpawner != null && value == null)
+                    gravMultiplier = 1f;
+                else if (_hoverSpawner == null && value != null)
+                    gravMultiplier = 0f;
+                if (value != null && _hoverSpawner != value)
+                    _prevHoverPos = position;
+                _hoverSpawner = value;
             }
         }
 
@@ -82,31 +82,31 @@ namespace DuckGame
         {
             get
             {
-                if (this.owner != null && !(this is DrumSet))
+                if (owner != null && !(this is DrumSet))
                     return new Vec2(-10000f, -8999f);
-                return this.hoverSpawner == null ? this.position : this.hoverSpawner.position + new Vec2(0f, -8f);
+                return hoverSpawner == null ? position : hoverSpawner.position + new Vec2(0f, -8f);
             }
             set
             {
                 double num = Math.Abs(value.x);
                 if (value.x <= -9000.0)
                     return;
-                if (this.hoverSpawner == null || this._lastReceivedPosition != value || (this._lastReceivedPosition - this.position).length > 25.0)
-                    this.position = value;
-                this._lastReceivedPosition = value;
+                if (hoverSpawner == null || _lastReceivedPosition != value || (_lastReceivedPosition - position).length > 25.0)
+                    position = value;
+                _lastReceivedPosition = value;
             }
         }
         public new Duck duck
         {
             get
             {
-                return this._owner as Duck;
+                return _owner as Duck;
             }
         }
         public virtual bool immobilizeOwner
         {
-            get => this._immobilizeOwner;
-            set => this._immobilizeOwner = value;
+            get => _immobilizeOwner;
+            set => _immobilizeOwner = value;
         }
 
         public virtual bool HolsterActivate(Holster pHolster) => false;
@@ -115,61 +115,61 @@ namespace DuckGame
         {
         }
 
-        public bool keepRaised => this._keepRaised;
+        public bool keepRaised => _keepRaised;
 
-        public bool canRaise => this._canRaise;
+        public bool canRaise => _canRaise;
 
-        public bool hasTrigger => this._hasTrigger;
+        public bool hasTrigger => _hasTrigger;
 
-        public Vec2 holdOffset => new Vec2(this._holdOffset.x * offDir, this._holdOffset.y);
+        public Vec2 holdOffset => new Vec2(_holdOffset.x * offDir, _holdOffset.y);
 
         public override Vec2 center
         {
-            get => this._center + this._extraOffset;
-            set => this._center = value;
+            get => _center + _extraOffset;
+            set => _center = value;
         }
 
         public override Vec2 OffsetLocal(Vec2 pos)
         {
-            Vec2 vec2 = pos * this.scale - this._extraOffset;
-            if (this.offDir < 0)
+            Vec2 vec2 = pos * scale - _extraOffset;
+            if (offDir < 0)
                 vec2.x *= -1f;
-            vec2 = vec2.Rotate(this.angle, new Vec2(0f, 0f));
+            vec2 = vec2.Rotate(angle, new Vec2(0f, 0f));
             return vec2;
         }
 
         public override Vec2 ReverseOffsetLocal(Vec2 pos)
         {
-            Vec2 vec2 = pos * this.scale - this._extraOffset;
-            vec2 = vec2.Rotate(-this.angle, new Vec2(0f, 0f));
+            Vec2 vec2 = pos * scale - _extraOffset;
+            vec2 = vec2.Rotate(-angle, new Vec2(0f, 0f));
             return vec2;
         }
 
-        public override bool action => (this._owner == null || this._owner.owner == this || this._owner is Duck && !(this._owner as Duck).Held(this, true) ? 0 : (this._owner.action ? 1 : 0)) != 0 || this.triggerAction;
+        public override bool action => (_owner == null || _owner.owner == this || _owner is Duck && !(_owner as Duck).Held(this, true) ? 0 : (_owner.action ? 1 : 0)) != 0 || triggerAction;
 
-        public Duck equippedDuck => this._equippedDuck;
+        public Duck equippedDuck => _equippedDuck;
 
         public bool raised
         {
-            get => this._raised;
-            set => this._raised = value;
+            get => _raised;
+            set => _raised = value;
         }
 
         public virtual bool CanTapeTo(Thing pThing) => true;
 
         public Duck disarmedFrom
         {
-            get => this._disarmedFrom;
-            set => this._disarmedFrom = value;
+            get => _disarmedFrom;
+            set => _disarmedFrom = value;
         }
 
         public DateTime disarmTime
         {
-            get => this._disarmTime;
-            set => this._disarmTime = value;
+            get => _disarmTime;
+            set => _disarmTime = value;
         }
 
-        public int equippedDepth => this._equippedDepth;
+        public int equippedDepth => _equippedDepth;
 
         public Holdable()
         {
@@ -199,22 +199,22 @@ namespace DuckGame
         /// <returns></returns>
         public virtual Holdable BecomeTapedMonster(TapedGun pTaped) => null;
 
-        public virtual void Thrown() => this.angle = 0f;
+        public virtual void Thrown() => angle = 0f;
 
         public virtual void CheckIfHoldObstructed()
         {
             if (!(this.owner is Duck owner))
                 return;
-            if (this.offDir > 0)
+            if (offDir > 0)
             {
-                Block block = Level.CheckLine<Block>(new Vec2(owner.x, this.y), new Vec2(this.right, this.y));
+                Block block = Level.CheckLine<Block>(new Vec2(owner.x, y), new Vec2(right, y));
                 if (block is Door && ((block as Door)._jam == 1.0 || (block as Door)._jam == -1.0))
                     block = null;
                 owner.holdObstructed = block != null;
             }
             else
             {
-                Block block = Level.CheckLine<Block>(new Vec2(this.left, this.y), new Vec2(owner.x, this.y));
+                Block block = Level.CheckLine<Block>(new Vec2(left, y), new Vec2(owner.x, y));
                 if (block is Door && ((block as Door)._jam == 1.0 || (block as Door)._jam == -1.0))
                     block = null;
                 owner.holdObstructed = block != null;
@@ -229,48 +229,48 @@ namespace DuckGame
 
         public virtual void UpdateAction()
         {
-            if (!this.isServerForObject)
+            if (!isServerForObject)
                 return;
             bool flag1 = false;
             bool flag2 = false;
-            if (this.action)
+            if (action)
             {
-                if (!this._triggerHeld)
+                if (!_triggerHeld)
                 {
-                    this.PressAction();
+                    PressAction();
                     flag1 = true;
                 }
                 else
-                    this.HoldAction();
+                    HoldAction();
             }
-            else if (this._triggerHeld)
+            else if (_triggerHeld)
             {
-                this.ReleaseAction();
+                ReleaseAction();
                 flag2 = true;
             }
-            if (this is Gun && (flag1 || this._fireActivated))
+            if (this is Gun && (flag1 || _fireActivated))
             {
                 ++(this as Gun).bulletFireIndex;
                 (this as Gun).plugged = false;
             }
-            if (Network.isActive && this.isServerForObject && this is Gun)
+            if (Network.isActive && isServerForObject && this is Gun)
             {
-                if (flag1 || (this as Gun).firedBullets.Count > 0 || this._fireActivated)
-                    Send.Message(new NMFireGun(this as Gun, (this as Gun).firedBullets, (this as Gun).bulletFireIndex, !this._fireActivated && !flag1 && flag2, this.duck != null ? this.duck.netProfileIndex : (byte)4, !flag1 && !flag2), NetMessagePriority.Urgent);
+                if (flag1 || (this as Gun).firedBullets.Count > 0 || _fireActivated)
+                    Send.Message(new NMFireGun(this as Gun, (this as Gun).firedBullets, (this as Gun).bulletFireIndex, !_fireActivated && !flag1 && flag2, duck != null ? duck.netProfileIndex : (byte)4, !flag1 && !flag2), NetMessagePriority.Urgent);
                 (this as Gun).firedBullets.Clear();
             }
-            this._fireActivated = false;
+            _fireActivated = false;
         }
 
         public Thing tapedCompatriot
         {
             get
             {
-                if (this.tape != null)
+                if (tape != null)
                 {
-                    if (this.tape.gun1 == this && this.tape.gun2 != this)
+                    if (tape.gun1 == this && tape.gun2 != this)
                         return tape.gun2;
-                    if (this.tape.gun2 == this && this.tape.gun1 != this)
+                    if (tape.gun2 == this && tape.gun1 != this)
                         return tape.gun1;
                 }
                 return null;
@@ -279,120 +279,120 @@ namespace DuckGame
 
         public virtual Vec2 tapedOffset => Vec2.Zero;
 
-        public bool tapedIsGun1 => this.tape != null && this.tape.gun1 == this;
+        public bool tapedIsGun1 => tape != null && tape.gun1 == this;
 
-        public bool tapedIsGun2 => this.tape != null && this.tape.gun2 == this;
+        public bool tapedIsGun2 => tape != null && tape.gun2 == this;
 
         public override Thing owner
         {
-            get => this._owner;
+            get => _owner;
             set
             {
-                if (this._owner != value)
+                if (_owner != value)
                 {
-                    if (this.owner is TapedGun)
-                        this._prevOwner = this.owner.prevOwner;
+                    if (owner is TapedGun)
+                        _prevOwner = owner.prevOwner;
                     else
-                        this._prevOwner = this._owner;
+                        _prevOwner = _owner;
                 }
-                this._lastThrownBy = this._prevOwner != null ? this._prevOwner : this._owner;
-                this._owner = value;
-                if (this._owner == null)
+                _lastThrownBy = _prevOwner != null ? _prevOwner : _owner;
+                _owner = value;
+                if (_owner == null)
                 {
-                    this.solid = true;
-                    this.enablePhysics = true;
+                    solid = true;
+                    enablePhysics = true;
                 }
                 else
                 {
-                    if (this._owner != null)
+                    if (_owner != null)
                         return;
-                    this.solid = false;
-                    this.enablePhysics = false;
+                    solid = false;
+                    enablePhysics = false;
                 }
             }
         }
 
-        public bool held => this.duck != null && this.duck.Held(this);
+        public bool held => duck != null && duck.Held(this);
 
         public virtual void UpdateMaterial()
         {
-            if (this.material == null && burnt >= this.charThreshold)
+            if (material == null && burnt >= charThreshold)
             {
-                this.material = new MaterialCharred();
+                material = new MaterialCharred();
                 SFX.Play("flameExplode");
                 for (int index = 0; index < 3; ++index)
-                    Level.Add(SmallSmoke.New(this.x + Rando.Float(-2f, 2f), this.y + Rando.Float(-2f, 2f)));
+                    Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
             }
-            else if (this.material == null && heat > 0.1f && this.physicsMaterial == PhysicsMaterial.Metal)
-                this.material = new MaterialRedHot(this);
-            else if (this.material == null && heat < -0.1f)
-                this.material = new MaterialFrozen(this);
-            if (this.material is MaterialRedHot)
+            else if (material == null && heat > 0.1f && physicsMaterial == PhysicsMaterial.Metal)
+                material = new MaterialRedHot(this);
+            else if (material == null && heat < -0.1f)
+                material = new MaterialFrozen(this);
+            if (material is MaterialRedHot)
             {
                 if (heat < 0.1f)
-                    this.material = null;
+                    material = null;
                 else
-                    (this.material as MaterialRedHot).intensity = Math.Min(this.heat - 0.1f, 1f);
+                    (material as MaterialRedHot).intensity = Math.Min(heat - 0.1f, 1f);
             }
             else
             {
-                if (!(this.material is MaterialFrozen))
+                if (!(material is MaterialFrozen))
                     return;
                 if (heat > -0.1f)
-                    this.material = null;
+                    material = null;
                 else
-                    (this.material as MaterialFrozen).intensity = Math.Min(Math.Abs(this.heat) - 0.1f, 1f);
+                    (material as MaterialFrozen).intensity = Math.Min(Math.Abs(heat) - 0.1f, 1f);
             }
         }
 
         public override void Update()
         {
-            this.UpdateMaterial();
-            if (this.owner != null)
+            UpdateMaterial();
+            if (owner != null)
             {
-                if (!this._hasOldDepth)
+                if (!_hasOldDepth)
                 {
-                    this._oldDepth = this.depth;
-                    this._hasOldDepth = true;
+                    _oldDepth = depth;
+                    _hasOldDepth = true;
                 }
                 Thing thing = this.owner;
                 if (this.owner is Duck && (this.owner as Duck)._trapped != null)
                     thing = (this.owner as Duck)._trapped;
-                if (this.duck == null || this.duck.holdObject == this || this is Equipment)
-                    this.depth = thing.depth + (this._equippedDuck != null ? this._equippedDepth : 9);
-                if ((this.duck == null || this.duck.holdObject == this) && !(thing is TapedGun))
-                    this.offDir = thing.offDir;
+                if (duck == null || duck.holdObject == this || this is Equipment)
+                    depth = thing.depth + (_equippedDuck != null ? _equippedDepth : 9);
+                if ((duck == null || duck.holdObject == this) && !(thing is TapedGun))
+                    offDir = thing.offDir;
                 if (this.owner is Duck owner)
                 {
-                    if (Network.isActive && owner.Held(this, true) && !(this is Vine) && (!(this is Equipment) || (this as Equipment).equippedDuck == null) && owner.holdObject != this && !(owner.holdObject is TapedGun) && this.isServerForObject)
+                    if (Network.isActive && owner.Held(this, true) && !(this is Vine) && (!(this is Equipment) || (this as Equipment).equippedDuck == null) && owner.holdObject != this && !(owner.holdObject is TapedGun) && isServerForObject)
                     {
                         owner.ObjectThrown(this);
                         return;
                     }
-                    this._responsibleProfile = owner.profile;
+                    _responsibleProfile = owner.profile;
                     owner.UpdateHoldPosition(false);
                 }
-                this._sleeping = false;
-                if ((this.duck == null || this.duck.Held(this, true) || this is Equipment) && this.tape == null)
-                    this.grounded = false;
-                if (this.duck == null || this.duck.holdObject is TapedGun && !(this is Equipment))
-                    this.UpdateAction();
-                this.solidImpacting.Clear();
-                this.impacting.Clear();
-                this.triggerAction = false;
+                _sleeping = false;
+                if ((duck == null || duck.Held(this, true) || this is Equipment) && tape == null)
+                    grounded = false;
+                if (duck == null || duck.holdObject is TapedGun && !(this is Equipment))
+                    UpdateAction();
+                solidImpacting.Clear();
+                impacting.Clear();
+                triggerAction = false;
             }
             else
             {
-                if (this._hasOldDepth)
+                if (_hasOldDepth)
                 {
-                    this.depth = this._oldDepth;
-                    this._hasOldDepth = false;
+                    depth = _oldDepth;
+                    _hasOldDepth = false;
                 }
-                if (this.owner == null || this.owner is TapedGun)
-                    this.UpdateAction();
+                if (owner == null || owner is TapedGun)
+                    UpdateAction();
                 base.Update();
-                this.DoFloat();
-                this.triggerAction = false;
+                DoFloat();
+                triggerAction = false;
             }
         }
 
@@ -402,9 +402,9 @@ namespace DuckGame
 
         public virtual void PressAction()
         {
-            this._triggerHeld = true;
-            this.OnPressAction();
-            this.HoldAction();
+            _triggerHeld = true;
+            OnPressAction();
+            HoldAction();
         }
 
         public virtual void OnPressAction()
@@ -413,8 +413,8 @@ namespace DuckGame
 
         public void HoldAction()
         {
-            this._triggerHeld = true;
-            this.OnHoldAction();
+            _triggerHeld = true;
+            OnHoldAction();
         }
 
         public virtual void OnHoldAction()
@@ -423,8 +423,8 @@ namespace DuckGame
 
         public void ReleaseAction()
         {
-            this._triggerHeld = false;
-            this.OnReleaseAction();
+            _triggerHeld = false;
+            OnReleaseAction();
         }
 
         public virtual void OnReleaseAction()

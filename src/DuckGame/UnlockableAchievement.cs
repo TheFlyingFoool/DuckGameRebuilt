@@ -30,7 +30,7 @@ namespace DuckGame
           string achieve)
           : base(identifier, condition, nam, desc, achieve)
         {
-            this.allowHints = canHint;
+            allowHints = canHint;
         }
     }
 }

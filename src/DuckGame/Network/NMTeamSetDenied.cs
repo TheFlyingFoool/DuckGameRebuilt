@@ -14,8 +14,8 @@ namespace DuckGame
 
         public NMTeamSetDenied(Profile pProfile, Team pTeam)
         {
-            this.profile = pProfile;
-            this.team = pTeam;
+            profile = pProfile;
+            team = pTeam;
         }
 
         public NMTeamSetDenied()

@@ -21,86 +21,86 @@ namespace DuckGame
 
         public float x
         {
-            get => this.position.x;
-            set => this.position.x = value;
+            get => position.x;
+            set => position.x = value;
         }
 
         public float y
         {
-            get => this.position.y;
-            set => this.position.y = value;
+            get => position.y;
+            set => position.y = value;
         }
 
         public float z
         {
-            get => this._z;
-            set => this._z = value;
+            get => _z;
+            set => _z = value;
         }
 
         public Depth depth
         {
-            get => this._depth;
-            set => this._depth = value;
+            get => _depth;
+            set => _depth = value;
         }
 
         public virtual Vec2 center
         {
-            get => this._center;
-            set => this._center = value;
+            get => _center;
+            set => _center = value;
         }
 
         public float centerx
         {
-            get => this._center.x;
-            set => this._center.x = value;
+            get => _center.x;
+            set => _center.x = value;
         }
 
         public float centery
         {
-            get => this._center.y;
-            set => this._center.y = value;
+            get => _center.y;
+            set => _center.y = value;
         }
 
         public virtual float angle
         {
-            get => this._angle;
-            set => this._angle = value;
+            get => _angle;
+            set => _angle = value;
         }
 
         public float angleDegrees
         {
-            get => Maths.RadToDeg(this.angle);
-            set => this.angle = Maths.DegToRad(value);
+            get => Maths.RadToDeg(angle);
+            set => angle = Maths.DegToRad(value);
         }
 
         public Vec2 scale
         {
-            get => this._scale;
-            set => this._scale = value;
+            get => _scale;
+            set => _scale = value;
         }
 
         public float xscale
         {
-            get => this._scale.x;
-            set => this._scale.x = value;
+            get => _scale.x;
+            set => _scale.x = value;
         }
 
         public float yscale
         {
-            get => this._scale.y;
-            set => this._scale.y = value;
+            get => _scale.y;
+            set => _scale.y = value;
         }
 
         public float alpha
         {
-            get => this._alpha;
-            set => this._alpha = value;
+            get => _alpha;
+            set => _alpha = value;
         }
 
         public float alphaSub
         {
-            get => this._alphaSub;
-            set => this._alphaSub = value;
+            get => _alphaSub;
+            set => _alphaSub = value;
         }
     }
 }

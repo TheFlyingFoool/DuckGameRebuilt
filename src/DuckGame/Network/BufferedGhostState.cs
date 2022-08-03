@@ -21,14 +21,14 @@ namespace DuckGame
         public NetIndex8 authority = (NetIndex8)0;
         public int _framesApplied;
 
-        public override string ToString() => "Tick: " + this.tick.ToString() + " FA: " + this._framesApplied.ToString() + " Mask: " + this.mask.ToString();
+        public override string ToString() => "Tick: " + tick.ToString() + " FA: " + _framesApplied.ToString() + " Mask: " + mask.ToString();
 
-        public Thing owner => this.properties.Count <= 0 ? null : this.properties[0].binding.owner as Thing;
+        public Thing owner => properties.Count <= 0 ? null : properties[0].binding.owner as Thing;
 
         public BufferedGhostState()
         {
             for (int index = 0; index < NetworkConnection.packetsEvery; ++index)
-                this.inputStates.Add(0);
+                inputStates.Add(0);
         }
 
         ~BufferedGhostState()
@@ -37,20 +37,20 @@ namespace DuckGame
 
         public void ReInitialize()
         {
-            this.properties.Clear();
-            this._framesApplied = 0;
+            properties.Clear();
+            _framesApplied = 0;
         }
 
         public void Reset(bool clearProperties = true)
         {
             if (clearProperties)
-                this.properties.Clear();
-            this._framesApplied = 0;
+                properties.Clear();
+            _framesApplied = 0;
         }
 
         public void Apply(float lerp, BufferedGhostState updateNetworkState, bool pApplyPosition = true)
         {
-            foreach (BufferedGhostProperty property in this.properties)
+            foreach (BufferedGhostProperty property in properties)
             {
                 try
                 {
@@ -61,16 +61,16 @@ namespace DuckGame
                         if (!pApplyPosition)
                             property.Apply(0f);
                         else
-                            property.Apply(this._framesApplied >= NetworkConnection.packetsEvery ? 1f : NetworkConnection.ghostLerpDivisor);
+                            property.Apply(_framesApplied >= NetworkConnection.packetsEvery ? 1f : NetworkConnection.ghostLerpDivisor);
                         updateNetworkState.properties[property.index].UpdateFrom(property);
                     }
                 }
                 catch (Exception ex)
                 {
-                    this.System_ApplyException(ex, property, updateNetworkState);
+                    System_ApplyException(ex, property, updateNetworkState);
                 }
             }
-            ++this._framesApplied;
+            ++_framesApplied;
         }
 
         private void System_ApplyException(
@@ -93,7 +93,7 @@ namespace DuckGame
 
         public void ApplyImmediately(long pMask, BufferedGhostState updateNetworkState)
         {
-            foreach (BufferedGhostProperty property in this.properties)
+            foreach (BufferedGhostProperty property in properties)
             {
                 if (!property.isNetworkStateValue && !(updateNetworkState.properties[property.index].tick > property.tick))
                 {
@@ -107,17 +107,17 @@ namespace DuckGame
                         }
                         catch (Exception ex)
                         {
-                            this.System_ApplyException(ex, property, updateNetworkState);
+                            System_ApplyException(ex, property, updateNetworkState);
                         }
                     }
                 }
             }
-            this._framesApplied = NetworkConnection.packetsEvery;
+            _framesApplied = NetworkConnection.packetsEvery;
         }
 
         public void ApplyImmediately(BufferedGhostState updateNetworkState)
         {
-            foreach (BufferedGhostProperty property in this.properties)
+            foreach (BufferedGhostProperty property in properties)
             {
                 if (!property.isNetworkStateValue)
                 {
@@ -130,17 +130,17 @@ namespace DuckGame
                         }
                         catch (Exception ex)
                         {
-                            this.System_ApplyException(ex, property, updateNetworkState);
+                            System_ApplyException(ex, property, updateNetworkState);
                         }
                     }
                 }
             }
-            this._framesApplied = NetworkConnection.packetsEvery;
+            _framesApplied = NetworkConnection.packetsEvery;
         }
 
         public void ApplyImmediately()
         {
-            foreach (BufferedGhostProperty property in this.properties)
+            foreach (BufferedGhostProperty property in properties)
             {
                 try
                 {
@@ -148,10 +148,10 @@ namespace DuckGame
                 }
                 catch (Exception ex)
                 {
-                    this.System_ApplyException(ex, property);
+                    System_ApplyException(ex, property);
                 }
             }
-            this._framesApplied = NetworkConnection.packetsEvery;
+            _framesApplied = NetworkConnection.packetsEvery;
         }
 
         //private Vec2 Slerp(Vec2 from, Vec2 to, float step)

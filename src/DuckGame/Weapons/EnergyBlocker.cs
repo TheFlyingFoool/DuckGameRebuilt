@@ -14,19 +14,19 @@ namespace DuckGame
         public EnergyBlocker(OldEnergyScimi pParent)
           : base(0f, 0f)
         {
-            this.thickness = 100f;
-            this._editorCanModify = false;
-            this.visible = false;
-            this._parent = pParent;
-            this.weight = 0.01f;
+            thickness = 100f;
+            _editorCanModify = false;
+            visible = false;
+            _parent = pParent;
+            weight = 0.01f;
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (!this._solid)
+            if (!_solid)
                 return false;
-            if (this._parent != null)
-                this._parent.Shing();
+            if (_parent != null)
+                _parent.Shing();
             if (!(bullet.ammo is ATLaser))
                 return base.Hit(bullet, hitPos);
             bullet.reboundOnce = true;

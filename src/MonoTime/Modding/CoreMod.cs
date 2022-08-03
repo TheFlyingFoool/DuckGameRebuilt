@@ -18,7 +18,7 @@ namespace DuckGame
 
         internal CoreMod()
         {
-            this.configuration = new ModConfiguration
+            configuration = new ModConfiguration
             {
                 assembly = Assembly.GetExecutingAssembly(),
                 contentManager = ContentManagers.GetContentManager(typeof(DefaultContentManager)),

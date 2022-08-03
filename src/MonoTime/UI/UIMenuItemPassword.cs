@@ -17,7 +17,7 @@ namespace DuckGame
         private UIStringEntry _passwordItem;
         private UIMenuActionOpenMenu _activateFunction;
 
-        public void SetFieldBinding(FieldBinding f) => this._field = f;
+        public void SetFieldBinding(FieldBinding f) => _field = f;
 
         public UIMenuItemString(
           string text,
@@ -29,10 +29,10 @@ namespace DuckGame
           bool tiny = false)
           : base(action)
         {
-            this._text = text;
+            _text = text;
             if (c == new Color())
                 c = Colors.MenuOption;
-            this._id = id;
+            _id = id;
             BitmapFont f = null;
             if (tiny)
                 f = new BitmapFont("smallBiosFontUI", 7, 5);
@@ -45,56 +45,56 @@ namespace DuckGame
                 component2.align = UIAlign.Left;
                 component1.leftSection.Add(component2, true);
             }
-            this._passwordItem = new UIStringEntry(false, "", Color.White)
+            _passwordItem = new UIStringEntry(false, "", Color.White)
             {
                 align = UIAlign.Right
             };
             component1.rightSection.Add(_passwordItem, true);
-            this.rightSection.Add(component1, true);
+            rightSection.Add(component1, true);
             if (tiny)
-                this._arrow = new UIImage("littleContextArrowRight");
+                _arrow = new UIImage("littleContextArrowRight");
             else
-                this._arrow = new UIImage("contextArrowRight");
-            this._arrow.align = UIAlign.Right;
-            this._arrow.visible = false;
-            this.leftSection.Add(_arrow, true);
-            this._field = field;
-            this._filterBinding = filterBinding;
-            this.controlString = "@CANCEL@BACK @WASD@ADJUST";
+                _arrow = new UIImage("contextArrowRight");
+            _arrow.align = UIAlign.Right;
+            _arrow.visible = false;
+            leftSection.Add(_arrow, true);
+            _field = field;
+            _filterBinding = filterBinding;
+            controlString = "@CANCEL@BACK @WASD@ADJUST";
         }
 
         public override void Update()
         {
-            if ((string)this._field.value == "")
+            if ((string)_field.value == "")
             {
-                if (this.open && this._id == "name" && Profiles.active.Count > 0)
+                if (open && _id == "name" && Profiles.active.Count > 0)
                 {
-                    this._field.value = TeamSelect2.DefaultGameName();
-                    this._passwordItem.text = (string)this._field.value;
+                    _field.value = TeamSelect2.DefaultGameName();
+                    _passwordItem.text = (string)_field.value;
                 }
                 else
-                    this._passwordItem.text = "NONE";
+                    _passwordItem.text = "NONE";
             }
             else
-                this._passwordItem.text = (string)this._field.value;
+                _passwordItem.text = (string)_field.value;
             base.Update();
         }
 
         public void InitializeEntryMenu(UIComponent pGroup, UIMenu pReturn)
         {
-            this._enterStringMenu = !(this._id == "port") ? new UIStringEntryMenu(false, "SET " + this._text, this._field) : new UIStringEntryMenu(false, "SET " + this._text, this._field, 6, true, 1337, 55535);
-            this._enterStringMenu.SetBackFunction(new UIMenuActionOpenMenu(_enterStringMenu, pReturn));
-            this._enterStringMenu.Close();
+            _enterStringMenu = !(_id == "port") ? new UIStringEntryMenu(false, "SET " + _text, _field) : new UIStringEntryMenu(false, "SET " + _text, _field, 6, true, 1337, 55535);
+            _enterStringMenu.SetBackFunction(new UIMenuActionOpenMenu(_enterStringMenu, pReturn));
+            _enterStringMenu.Close();
             pGroup.Add(_enterStringMenu, false);
-            this._activateFunction = new UIMenuActionOpenMenu(pReturn, _enterStringMenu);
+            _activateFunction = new UIMenuActionOpenMenu(pReturn, _enterStringMenu);
         }
 
         public override void Activate(string trigger)
         {
             if (!(trigger == "SELECT"))
                 return;
-            this._enterStringMenu.SetValue((string)this._field.value);
-            this._activateFunction.Activate();
+            _enterStringMenu.SetValue((string)_field.value);
+            _activateFunction.Activate();
         }
     }
 }

@@ -253,7 +253,7 @@ namespace DuckGame
 
         public static bool HasFocus() => Editor.focusStack.Count != 0;
 
-        public bool placementLimitReached => Editor.placementLimit > 0 && this.placementTotalCost >= Editor.placementLimit;
+        public bool placementLimitReached => Editor.placementLimit > 0 && placementTotalCost >= Editor.placementLimit;
 
         public bool placementOutOfSizeRange => false;
 
@@ -322,14 +322,14 @@ namespace DuckGame
             }
         }
 
-        protected List<Thing> _levelThings => !this.editingOpenAirVariation ? this._levelThingsNormal : this._levelThingsAlternate;
+        protected List<Thing> _levelThings => !editingOpenAirVariation ? _levelThingsNormal : _levelThingsAlternate;
 
-        public List<Thing> levelThings => this._levelThings;
+        public List<Thing> levelThings => _levelThings;
 
         public string saveName
         {
-            get => this._saveName;
-            set => this._saveName = value;
+            get => _saveName;
+            set => _saveName = value;
         }
 
         public static ContextMenu lockInput
@@ -369,7 +369,7 @@ namespace DuckGame
             Editor.hasUnsavedChanges = true;
             if (obj == null)
                 return;
-            if (obj.maxPlaceable >= 0 && this.things[obj.GetType()].Count<Thing>() >= obj.maxPlaceable)
+            if (obj.maxPlaceable >= 0 && things[obj.GetType()].Count<Thing>() >= obj.maxPlaceable)
             {
                 HUD.AddPlayerChangeDisplay("@UNPLUG@|RED| Too many placed!", 2f);
             }
@@ -387,7 +387,7 @@ namespace DuckGame
                                 {
                                     Thing current = enumerator.Current;
                                     if (!Thing.CheckForBozoData(current))
-                                        this.AddObject(current);
+                                        AddObject(current);
                                 }
                                 return;
                             }
@@ -397,38 +397,38 @@ namespace DuckGame
                             using (List<Thing>.Enumerator enumerator = thingContainer.things.GetEnumerator())
                             {
                                 while (enumerator.MoveNext())
-                                    this.AddObject(enumerator.Current);
+                                    AddObject(enumerator.Current);
                                 return;
                             }
                         }
                     case BackgroundUpdater _:
-                        for (int index = 0; index < this._levelThings.Count; ++index)
+                        for (int index = 0; index < _levelThings.Count; ++index)
                         {
-                            Thing t = this._levelThings[index];
+                            Thing t = _levelThings[index];
                             if (t is BackgroundUpdater)
                             {
-                                History.Add(() => this.RemoveObject(t), () => this.AddObject(t));
+                                History.Add(() => RemoveObject(t), () => AddObject(t));
                                 --index;
                             }
                         }
                         break;
                 }
                 obj.active = false;
-                this.AddThing(obj);
-                this._levelThings.Add(obj);
-                if (!this._loadingLevel && obj is IDontMove)
-                    this._placeObjects.Add(obj);
-                this.placementTotalCost += Editor.CalculatePlacementCost(obj);
+                AddThing(obj);
+                _levelThings.Add(obj);
+                if (!_loadingLevel && obj is IDontMove)
+                    _placeObjects.Add(obj);
+                placementTotalCost += Editor.CalculatePlacementCost(obj);
                 if (_sizeRestriction.x > 0.0)
-                    this.AdjustSizeLimits(obj);
-                if (this._loadingLevel)
+                    AdjustSizeLimits(obj);
+                if (_loadingLevel)
                     return;
-                if (!this._isPaste)
+                if (!_isPaste)
                     obj.EditorAdded();
-                if (obj is MirrorMode || this.processingMirror || obj is BackgroundUpdater)
+                if (obj is MirrorMode || processingMirror || obj is BackgroundUpdater)
                     return;
-                this.processingMirror = true;
-                foreach (MirrorMode mirrorMode in this.things[typeof(MirrorMode)])
+                processingMirror = true;
+                foreach (MirrorMode mirrorMode in things[typeof(MirrorMode)])
                 {
                     if (((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both || (MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Vertical) && Math.Abs(mirrorMode.position.x - obj.position.x) > 2.0)
                     {
@@ -436,7 +436,7 @@ namespace DuckGame
                         Thing thing = Thing.LoadThing(obj.Serialize());
                         thing.position = vec2;
                         thing.flipHorizontal = !obj.flipHorizontal;
-                        this.AddObject(thing);
+                        AddObject(thing);
                         thing.EditorFlip(false);
                     }
                     if (((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both || (MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Horizontal) && Math.Abs(mirrorMode.position.y - obj.position.y) > 2.0)
@@ -444,7 +444,7 @@ namespace DuckGame
                         Vec2 vec2 = obj.position - new Vec2(0f, (float)((obj.position.y - mirrorMode.position.y) * 2.0));
                         Thing thing = Thing.LoadThing(obj.Serialize());
                         thing.position = vec2;
-                        this.AddObject(thing);
+                        AddObject(thing);
                         thing.EditorFlip(true);
                     }
                     if ((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both && Math.Abs(mirrorMode.position.x - obj.position.x) > 2.0 && Math.Abs(mirrorMode.position.y - obj.position.y) > 2.0)
@@ -453,12 +453,12 @@ namespace DuckGame
                         Thing thing = Thing.LoadThing(obj.Serialize());
                         thing.position = vec2;
                         thing.flipHorizontal = !obj.flipHorizontal;
-                        this.AddObject(thing);
+                        AddObject(thing);
                         thing.EditorFlip(false);
                         thing.EditorFlip(true);
                     }
                 }
-                this.processingMirror = false;
+                processingMirror = false;
             }
         }
 
@@ -466,100 +466,100 @@ namespace DuckGame
         {
             Editor.hasUnsavedChanges = true;
             Level.current.RemoveThing(obj);
-            this._levelThings.Remove(obj);
+            _levelThings.Remove(obj);
             if (obj is IDontMove)
-                this._placeObjects.Add(obj);
-            this.placementTotalCost -= Editor.CalculatePlacementCost(obj);
+                _placeObjects.Add(obj);
+            placementTotalCost -= Editor.CalculatePlacementCost(obj);
             if (_sizeRestriction.x > 0.0 && (obj.x <= _topLeftMost.x || obj.x >= _bottomRightMost.x || obj.y <= _topLeftMost.y || obj.y >= _bottomRightMost.y))
-                this.RecalculateSizeLimits();
+                RecalculateSizeLimits();
             obj.EditorRemoved();
-            if (this._loadingLevel || obj is MirrorMode || this.processingMirror || obj is BackgroundUpdater)
+            if (_loadingLevel || obj is MirrorMode || processingMirror || obj is BackgroundUpdater)
                 return;
-            this.processingMirror = true;
-            foreach (MirrorMode mirrorMode in this.things[typeof(MirrorMode)])
+            processingMirror = true;
+            foreach (MirrorMode mirrorMode in things[typeof(MirrorMode)])
             {
                 if ((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both || (MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Vertical)
                 {
                     Thing thing = Level.current.CollisionPoint(obj.position + new Vec2((float)(-(obj.position.x - mirrorMode.position.x) * 2.0), 0f), obj.GetType());
                     if (thing != null)
-                        this.RemoveObject(thing);
+                        RemoveObject(thing);
                 }
                 if ((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both || (MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Horizontal)
                 {
                     Thing thing = Level.current.CollisionPoint(obj.position + new Vec2(0f, (float)(-(obj.position.y - mirrorMode.position.y) * 2.0)), obj.GetType());
                     if (thing != null)
-                        this.RemoveObject(thing);
+                        RemoveObject(thing);
                 }
                 if ((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both)
                 {
                     Thing thing = Level.current.CollisionPoint(obj.position + new Vec2((float)(-(obj.position.x - mirrorMode.position.x) * 2.0), (float)(-(obj.position.y - mirrorMode.position.y) * 2.0)), obj.GetType());
                     if (thing != null)
-                        this.RemoveObject(thing);
+                        RemoveObject(thing);
                 }
             }
-            this.processingMirror = false;
+            processingMirror = false;
         }
 
         public void AdjustSizeLimits(Thing pObject)
         {
             if (pObject.x < _topLeftMost.x)
-                this._topLeftMost.x = pObject.x;
+                _topLeftMost.x = pObject.x;
             if (pObject.x > _bottomRightMost.x)
-                this._bottomRightMost.x = pObject.x;
+                _bottomRightMost.x = pObject.x;
             if (pObject.y < _topLeftMost.y)
-                this._topLeftMost.y = pObject.y;
+                _topLeftMost.y = pObject.y;
             if (pObject.y <= _bottomRightMost.y)
                 return;
-            this._bottomRightMost.y = pObject.y;
+            _bottomRightMost.y = pObject.y;
         }
 
         public void RecalculateSizeLimits()
         {
-            this._topLeftMost = new Vec2(99999f, 99999f);
-            this._bottomRightMost = new Vec2(-99999f, -99999f);
-            foreach (Thing levelThing in this._levelThings)
-                this.AdjustSizeLimits(levelThing);
+            _topLeftMost = new Vec2(99999f, 99999f);
+            _bottomRightMost = new Vec2(-99999f, -99999f);
+            foreach (Thing levelThing in _levelThings)
+                AdjustSizeLimits(levelThing);
         }
 
         public static int CalculatePlacementCost(Thing pObject) => pObject.placementCost;
 
         public void ClearEverything()
         {
-            foreach (Thing t in this._levelThingsNormal)
+            foreach (Thing t in _levelThingsNormal)
                 Level.current.RemoveThing(t);
-            this._levelThingsNormal.Clear();
-            foreach (Thing t in this._levelThingsAlternate)
+            _levelThingsNormal.Clear();
+            foreach (Thing t in _levelThingsAlternate)
                 Level.current.RemoveThing(t);
-            this._levelThingsAlternate.Clear();
-            this.editingOpenAirVariation = this._editingOpenAirVariationPrev = false;
-            this._lastCommand = -1;
-            this._commands.Clear();
-            if (!this._looseClear)
+            _levelThingsAlternate.Clear();
+            editingOpenAirVariation = _editingOpenAirVariationPrev = false;
+            _lastCommand = -1;
+            _commands.Clear();
+            if (!_looseClear)
             {
-                this._procContext = null;
-                this._procTarget = null;
+                _procContext = null;
+                _procTarget = null;
             }
-            this._pathNorth = false;
-            this._pathSouth = false;
-            this._pathWest = false;
-            this._pathEast = false;
-            this._miniMode = false;
-            this.things.quadTree.Clear();
-            this.generatorComplexity = 0;
+            _pathNorth = false;
+            _pathSouth = false;
+            _pathWest = false;
+            _pathEast = false;
+            _miniMode = false;
+            things.quadTree.Clear();
+            generatorComplexity = 0;
             Custom.ClearCustomData();
             Editor._currentLevelData = new LevelData();
             Editor._currentLevelData.metaData.guid = Guid.NewGuid().ToString();
             Editor.previewCapture = null;
             Editor.hasUnsavedChanges = false;
-            this.placementTotalCost = 0;
-            this.RecalculateSizeLimits();
+            placementTotalCost = 0;
+            RecalculateSizeLimits();
             History.Clear();
         }
 
         public float cellSize
         {
-            get => this._cellSize;
-            set => this._cellSize = value;
+            get => _cellSize;
+            set => _cellSize = value;
         }
 
         //private float width => (float)this._gridW * this._cellSize;
@@ -570,10 +570,10 @@ namespace DuckGame
         {
             set
             {
-                this._placementType = value;
-                this._eyeDropperSerialized = null;
+                _placementType = value;
+                _eyeDropperSerialized = null;
             }
-            get => this._placementType;
+            get => _placementType;
         }
 
         private LevelType GetLevelType()
@@ -581,19 +581,19 @@ namespace DuckGame
             if (Editor.arcadeMachineMode)
                 return LevelType.Arcade_Machine;
             LevelType levelType = LevelType.Deathmatch;
-            if (this._levelThings.FirstOrDefault<Thing>(x => x is ChallengeMode) != null)
+            if (_levelThings.FirstOrDefault<Thing>(x => x is ChallengeMode) != null)
                 levelType = LevelType.Challenge;
-            else if (this._levelThings.FirstOrDefault<Thing>(x => x is ArcadeMode) != null)
+            else if (_levelThings.FirstOrDefault<Thing>(x => x is ArcadeMode) != null)
                 levelType = LevelType.Arcade;
             return levelType;
         }
 
         private LevelSize GetLevelSize()
         {
-            this._topLeft = new Vec2(99999f, 99999f);
-            this._bottomRight = new Vec2(-99999f, -99999f);
-            this.CalculateBounds();
-            double length = (this.topLeft - this.bottomRight).length;
+            _topLeft = new Vec2(99999f, 99999f);
+            _bottomRight = new Vec2(-99999f, -99999f);
+            CalculateBounds();
+            double length = (topLeft - bottomRight).length;
             LevelSize levelSize = LevelSize.Ginormous;
             if (length < 900.0)
                 levelSize = LevelSize.Large;
@@ -608,7 +608,7 @@ namespace DuckGame
 
         private bool LevelIsOnlineCapable()
         {
-            foreach (object levelThing in this._levelThings)
+            foreach (object levelThing in _levelThings)
             {
                 if (!ContentProperties.GetBag(levelThing.GetType()).GetOrDefault("isOnlineCapable", true))
                     return false;
@@ -620,34 +620,34 @@ namespace DuckGame
         {
             if (Editor.arcadeMachineMode)
             {
-                (this._levelThings[0] as ArcadeMachine).UpdateData();
-                if ((this._levelThings[0] as ArcadeMachine).challenge01Data == null || (this._levelThings[0] as ArcadeMachine).challenge02Data == null || (this._levelThings[0] as ArcadeMachine).challenge02Data == null)
+                (_levelThings[0] as ArcadeMachine).UpdateData();
+                if ((_levelThings[0] as ArcadeMachine).challenge01Data == null || (_levelThings[0] as ArcadeMachine).challenge02Data == null || (_levelThings[0] as ArcadeMachine).challenge02Data == null)
                 {
-                    this.DoMenuClose();
-                    this._closeMenu = false;
-                    this._notify.Open("You must select 3 valid Challenges!");
+                    DoMenuClose();
+                    _closeMenu = false;
+                    _notify.Open("You must select 3 valid Challenges!");
                     return;
                 }
             }
-            if (this._saveName == "")
+            if (_saveName == "")
             {
-                this.DoMenuClose();
-                this._closeMenu = false;
-                this._notify.Open("Please save the level first...");
+                DoMenuClose();
+                _closeMenu = false;
+                _notify.Open("Please save the level first...");
             }
             else
             {
-                this.Save();
-                this._uploadDialog.Open(Editor._currentLevelData);
-                this.DoMenuClose();
-                this._closeMenu = false;
+                Save();
+                _uploadDialog.Open(Editor._currentLevelData);
+                DoMenuClose();
+                _closeMenu = false;
                 Content.customPreviewWidth = 0;
                 Content.customPreviewHeight = 0;
                 Content.customPreviewCenter = Vec2.Zero;
             }
         }
 
-        public MonoFileDialog fileDialog => this._fileDialog;
+        public MonoFileDialog fileDialog => _fileDialog;
 
         public static string initialDirectory => Editor._initialDirectory;
 
@@ -655,26 +655,26 @@ namespace DuckGame
 
         public void EnterEditor()
         {
-            this.focusWait = 10;
+            focusWait = 10;
             Layer.ClearLayers();
-            this._gridLayer = new Layer("GRID", Layer.Background.depth + 5, Layer.Background.camera)
+            _gridLayer = new Layer("GRID", Layer.Background.depth + 5, Layer.Background.camera)
             {
                 allowTallAspect = true
             };
-            Layer.Add(this._gridLayer);
-            this._procLayer = new Layer("PROC", Layer.Background.depth + 25, new Camera(0f, 0f, Graphics.width, Graphics.height))
+            Layer.Add(_gridLayer);
+            _procLayer = new Layer("PROC", Layer.Background.depth + 25, new Camera(0f, 0f, Graphics.width, Graphics.height))
             {
                 allowTallAspect = true
             };
-            Layer.Add(this._procLayer);
+            Layer.Add(_procLayer);
             Music.Stop();
             if (!Editor.isTesting)
             {
-                this._placementType = null;
-                this.CenterView();
-                this._tilePosition = new Vec2(0f, 0f);
+                _placementType = null;
+                CenterView();
+                _tilePosition = new Vec2(0f, 0f);
             }
-            this._ultimateBounds = Level.current.things.quadTree.rectangle;
+            _ultimateBounds = Level.current.things.quadTree.rectangle;
             Layer.HUD.camera.InitializeToScreenAspect();
             Layer.HUD.camera.width *= 2f;
             Layer.HUD.camera.height *= 2f;
@@ -684,34 +684,34 @@ namespace DuckGame
                 Layer.HUD.camera.width *= 2f;
                 Layer.HUD.camera.height *= 2f;
             }
-            if (this._objectMenuLayer == null)
+            if (_objectMenuLayer == null)
             {
-                this._objectMenuLayer = new Layer("OBJECTMENU", Layer.HUD.depth - 25, new Camera(0f, 0f, Layer.HUD.camera.width, Layer.HUD.camera.height))
+                _objectMenuLayer = new Layer("OBJECTMENU", Layer.HUD.depth - 25, new Camera(0f, 0f, Layer.HUD.camera.width, Layer.HUD.camera.height))
                 {
                     allowTallAspect = true
                 };
             }
-            Layer.Add(this._objectMenuLayer);
-            this.backgroundColor = new Color(20, 20, 20);
+            Layer.Add(_objectMenuLayer);
+            backgroundColor = new Color(20, 20, 20);
             Editor.focusStack.Clear();
             Editor.active = true;
             Editor.isTesting = false;
             Editor.inputMode = EditorInput.Gamepad;
         }
 
-        public void Quit() => this._quitting = true;
+        public void Quit() => _quitting = true;
 
         public override void DoInitialize()
         {
             SFX.StopAllSounds();
-            if (!this._initialized)
+            if (!_initialized)
             {
-                this.Initialize();
-                this._initialized = true;
+                Initialize();
+                _initialized = true;
             }
             else
             {
-                this.EnterEditor();
+                EnterEditor();
                 base.DoInitialize();
             }
         }
@@ -769,54 +769,54 @@ namespace DuckGame
 
         public void UpdateObjectMenu()
         {
-            if (this._objectMenu != null)
+            if (_objectMenu != null)
                 Level.Remove(_objectMenu);
-            this._objectMenu = new PlacementMenu(0f, 0f);
+            _objectMenu = new PlacementMenu(0f, 0f);
             Level.Add(_objectMenu);
-            this._objectMenu.visible = this._objectMenu.active = false;
+            _objectMenu.visible = _objectMenu.active = false;
         }
 
-        public string additionalSaveDirectory => this._additionalSaveDirectory;
+        public string additionalSaveDirectory => _additionalSaveDirectory;
 
         public override void Initialize()
         {
             while (!Editor._listLoaded)
                 Thread.Sleep(16);
-            this._editorCam = new EditorCam();
-            this.camera = _editorCam;
-            this.camera.InitializeToScreenAspect();
-            this._selectionMaterial = new MaterialSelection();
-            this._selectionMaterialPaste = new MaterialSelection
+            _editorCam = new EditorCam();
+            camera = _editorCam;
+            camera.InitializeToScreenAspect();
+            _selectionMaterial = new MaterialSelection();
+            _selectionMaterialPaste = new MaterialSelection
             {
                 fade = 0.5f
             };
-            this._cursor = new SpriteMap("cursors", 16, 16);
-            this._tileset = new SpriteMap("industrialTileset", 16, 16);
-            this._sideArrow = new Sprite("Editor/sideArrow");
-            this._sideArrow.CenterOrigin();
-            this._sideArrowHover = new Sprite("Editor/sideArrowHover");
-            this._sideArrowHover.CenterOrigin();
-            this._cantPlace = new Sprite("cantPlace");
-            this._cantPlace.CenterOrigin();
-            this._editorCurrency = new Sprite("editorCurrency");
-            this._die = new Sprite("die");
-            this._dieHover = new Sprite("dieHover");
-            this._singleBlock = new Sprite("Editor/singleplayerBlock");
-            this._multiBlock = new Sprite("Editor/multiplayerBlock");
+            _cursor = new SpriteMap("cursors", 16, 16);
+            _tileset = new SpriteMap("industrialTileset", 16, 16);
+            _sideArrow = new Sprite("Editor/sideArrow");
+            _sideArrow.CenterOrigin();
+            _sideArrowHover = new Sprite("Editor/sideArrowHover");
+            _sideArrowHover.CenterOrigin();
+            _cantPlace = new Sprite("cantPlace");
+            _cantPlace.CenterOrigin();
+            _editorCurrency = new Sprite("editorCurrency");
+            _die = new Sprite("die");
+            _dieHover = new Sprite("dieHover");
+            _singleBlock = new Sprite("Editor/singleplayerBlock");
+            _multiBlock = new Sprite("Editor/multiplayerBlock");
             Layer.Background.camera.InitializeToScreenAspect();
             Layer.Game.camera.InitializeToScreenAspect();
             Layer.Game.camera.width *= 2f;
             Layer.Game.camera.height *= 2f;
-            this.CalculateGridRestriction();
-            this.EnterEditor();
-            this._camSize = new Vec2(this.camera.width, this.camera.height);
-            this._font = new BitmapFont("biosFont", 8);
+            CalculateGridRestriction();
+            EnterEditor();
+            _camSize = new Vec2(camera.width, camera.height);
+            _font = new BitmapFont("biosFont", 8);
             Editor._input = InputProfile.Get(InputProfile.MPPlayer1);
-            this._tilePosition = new Vec2(0f, 0f);
-            this._tilePositionPrev = this._tilePosition;
-            this._objectMenu = new PlacementMenu(0f, 0f);
+            _tilePosition = new Vec2(0f, 0f);
+            _tilePositionPrev = _tilePosition;
+            _objectMenu = new PlacementMenu(0f, 0f);
             Level.Add(_objectMenu);
-            this._objectMenu.visible = this._objectMenu.active = false;
+            _objectMenu.visible = _objectMenu.active = false;
             Level.Add(new TileButton(0f, 0f, new FieldBinding(this, "_chance", increment: 0.05f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/dieBlock", 16, 16), "CHANCE - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridBottomLeft));
             Level.Add(new TileButton(0f, 16f, new FieldBinding(this, "_maxPerLevel", -1f, 8f, 1f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/numBlock", 16, 16), "MAX IN LEVEL - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridBottomLeft));
             Level.Add(new TileButton(-16f, 0f, new FieldBinding(this, "_enableSingle"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/singleplayerBlock", 16, 16), "AVAILABLE IN SINGLE PLAYER - @SELECT@TOGGLE", TileButtonAlign.TileGridBottomRight));
@@ -832,50 +832,50 @@ namespace DuckGame
             Level.Add(new TileButton(32f, 0f, new FieldBinding(this, "_editTilePos", max: 6f, increment: 1f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/editBlock", 16, 16), "MOVE GEN - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridTopLeft));
             Level.Add(new TileButton(48f, 0f, new FieldBinding(this, "generatorComplexity", max: 9f, increment: 1f), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/dieBlockRed", 16, 16), "NUM TILES - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridTopLeft));
             Level.Add(new TileButton(0f, 0f, new FieldBinding(this, "_doGen"), new FieldBinding(this, "_miniMode"), new SpriteMap("Editor/regenBlock", 16, 16), "REGENERATE - HOLD @SELECT@ AND MOVE @DPAD@", TileButtonAlign.TileGridTopRight));
-            this._notify = new NotifyDialogue();
+            _notify = new NotifyDialogue();
             Level.Add(_notify);
             Vec2 vec2_1 = new Vec2(12f, 12f);
-            this._touchButtons.Add(new Editor.EditorTouchButton()
+            _touchButtons.Add(new Editor.EditorTouchButton()
             {
                 caption = "MENU",
                 explanation = "Pick an object for placement...",
                 state = Editor.EditorTouchState.OpenMenu,
                 threeFingerGesture = true
             });
-            this._touchButtons.Add(new Editor.EditorTouchButton()
+            _touchButtons.Add(new Editor.EditorTouchButton()
             {
                 caption = "COPY",
                 explanation = "Pick an object to copy...",
                 state = Editor.EditorTouchState.Eyedropper
             });
-            this._touchButtons.Add(new Editor.EditorTouchButton()
+            _touchButtons.Add(new Editor.EditorTouchButton()
             {
                 caption = "EDIT",
                 explanation = "Press objects to edit them!",
                 state = Editor.EditorTouchState.EditObject
             });
-            this._cancelButton = new Editor.EditorTouchButton()
+            _cancelButton = new Editor.EditorTouchButton()
             {
                 caption = "CANCEL",
                 explanation = "",
                 state = Editor.EditorTouchState.Normal
             };
-            this._editTilesButton = new Editor.EditorTouchButton()
+            _editTilesButton = new Editor.EditorTouchButton()
             {
                 caption = "PICK TILE",
                 explanation = "",
                 state = Editor.EditorTouchState.PickTile
             };
-            this._editTilesButton.size = new Vec2(DuckGame.Graphics.GetStringWidth(this._editTilesButton.caption) + 6f, 15f) + vec2_1;
-            this._editTilesButton.position = Layer.HUD.camera.OffsetTL(10f, 10f);
+            _editTilesButton.size = new Vec2(DuckGame.Graphics.GetStringWidth(_editTilesButton.caption) + 6f, 15f) + vec2_1;
+            _editTilesButton.position = Layer.HUD.camera.OffsetTL(10f, 10f);
             Vec2 vec2_2 = Layer.HUD.camera.OffsetBR(-14f, -14f);
-            for (int index = this._touchButtons.Count - 1; index >= 0; --index)
+            for (int index = _touchButtons.Count - 1; index >= 0; --index)
             {
-                Editor.EditorTouchButton touchButton = this._touchButtons[index];
-                if (index == this._touchButtons.Count - 1)
+                Editor.EditorTouchButton touchButton = _touchButtons[index];
+                if (index == _touchButtons.Count - 1)
                 {
-                    this._cancelButton.size = new Vec2(DuckGame.Graphics.GetStringWidth(this._cancelButton.caption) + 6f, 15f) + vec2_1;
-                    this._cancelButton.position = vec2_2 - this._cancelButton.size;
+                    _cancelButton.size = new Vec2(DuckGame.Graphics.GetStringWidth(_cancelButton.caption) + 6f, 15f) + vec2_1;
+                    _cancelButton.position = vec2_2 - _cancelButton.size;
                 }
                 touchButton.size = new Vec2(DuckGame.Graphics.GetStringWidth(touchButton.caption) + 6f, 15f) + vec2_1;
                 touchButton.position = vec2_2 - touchButton.size;
@@ -883,14 +883,14 @@ namespace DuckGame
             }
             Editor._initialDirectory = DuckFile.levelDirectory;
             Editor._initialDirectory = Path.GetFullPath(Editor._initialDirectory);
-            this._fileDialog = new MonoFileDialog();
+            _fileDialog = new MonoFileDialog();
             Level.Add(_fileDialog);
-            this._uploadDialog = new SteamUploadDialog();
+            _uploadDialog = new SteamUploadDialog();
             Level.Add(_uploadDialog);
-            this._editorButtons = new SpriteMap("editorButtons", 32, 32);
-            this._doingResave = true;
-            this._doingResave = false;
-            this.ClearEverything();
+            _editorButtons = new SpriteMap("editorButtons", 32, 32);
+            _doingResave = true;
+            _doingResave = false;
+            ClearEverything();
         }
 
         public Vec2 GetAlignOffset(TileButtonAlign align)
@@ -944,15 +944,15 @@ namespace DuckGame
             {
                 try
                 {
-                    this.LoadLevel(load);
-                    this._things.RefreshState();
-                    this._updateEvenWhenInactive = true;
-                    this.Update();
-                    this._updateEvenWhenInactive = false;
-                    if (this.existingGUID.Contains(Editor._currentLevelData.metaData.guid))
+                    LoadLevel(load);
+                    _things.RefreshState();
+                    _updateEvenWhenInactive = true;
+                    Update();
+                    _updateEvenWhenInactive = false;
+                    if (existingGUID.Contains(Editor._currentLevelData.metaData.guid))
                         Editor._currentLevelData.metaData.guid = Guid.NewGuid().ToString();
-                    this.existingGUID.Add(Editor._currentLevelData.metaData.guid);
-                    this.Save();
+                    existingGUID.Add(Editor._currentLevelData.metaData.guid);
+                    Save();
                     Thread.Sleep(10);
                 }
                 catch (Exception)
@@ -960,22 +960,22 @@ namespace DuckGame
                 }
             }
             foreach (string root1 in DuckFile.GetDirectoriesNoCloud(root))
-                this.Resave(root1);
+                Resave(root1);
         }
 
         public static InputProfile input => Editor._input;
 
         public void ShowNoSpawnsDialogue()
         {
-            if (this._noSpawnsDialogue == null)
+            if (_noSpawnsDialogue == null)
             {
-                this._noSpawnsDialogue = new MessageDialogue(null);
+                _noSpawnsDialogue = new MessageDialogue(null);
                 Level.Add(_noSpawnsDialogue);
             }
-            this._noSpawnsDialogue.Open("NO SPAWNS", pDescription: "Your level has no spawns.\n\n\n@_!DUCKSPAWN@\n\n\nPlease place a |DGBLUE|Spawns/Spawn Point|PREV|\n in your level.");
+            _noSpawnsDialogue.Open("NO SPAWNS", pDescription: "Your level has no spawns.\n\n\n@_!DUCKSPAWN@\n\n\nPlease place a |DGBLUE|Spawns/Spawn Point|PREV|\n in your level.");
             Editor.lockInput = _noSpawnsDialogue;
-            this._noSpawnsDialogue.okayOnly = true;
-            this._noSpawnsDialogue.windowYOffsetAdd = -30f;
+            _noSpawnsDialogue.okayOnly = true;
+            _noSpawnsDialogue.windowYOffsetAdd = -30f;
         }
 
         public void CompleteDialogue(ContextMenu pItem)
@@ -995,11 +995,11 @@ namespace DuckGame
                 menu.position = Editor.openPosition + new Vec2(-2f, -3f);
                 Editor.openPosition = Vec2.Zero;
             }
-            if (this._showPlacementMenu)
+            if (_showPlacementMenu)
             {
                 menu.x = 96f;
                 menu.y = 32f;
-                this._showPlacementMenu = false;
+                _showPlacementMenu = false;
             }
             if (Editor.inputMode == EditorInput.Gamepad || Editor.inputMode == EditorInput.Touch)
             {
@@ -1007,8 +1007,8 @@ namespace DuckGame
                 menu.y = 16f;
             }
             menu.opened = true;
-            this._placementMenu = menu;
-            this.disableDragMode();
+            _placementMenu = menu;
+            disableDragMode();
         }
 
         private Layer GetLayerOrOverride(Thing thingToCheck)
@@ -1025,42 +1025,42 @@ namespace DuckGame
 
         private void EndCurrentTouchMode()
         {
-            if (!this._showPlacementMenu)
-                this._closeMenu = true;
-            this._touchState = Editor.EditorTouchState.Normal;
-            this._activeTouchButton = null;
+            if (!_showPlacementMenu)
+                _closeMenu = true;
+            _touchState = Editor.EditorTouchState.Normal;
+            _activeTouchButton = null;
             Editor.clickedMenu = true;
-            this._editMode = false;
-            this._copyMode = false;
-            this._hover = null;
+            _editMode = false;
+            _copyMode = false;
+            _hover = null;
         }
 
         private void disableDragMode()
         {
-            this._dragMode = false;
-            this._deleteMode = false;
-            if (this._move != null)
-                this._move = null;
-            this.dragModeInputType = InputType.eNone;
+            _dragMode = false;
+            _deleteMode = false;
+            if (_move != null)
+                _move = null;
+            dragModeInputType = InputType.eNone;
             History.EndUndoSection();
         }
 
         private void HugObjectPlacement()
         {
-            if (this._placementType is ItemSpawner)
-                (this._placementType as ItemSpawner)._seated = false;
-            if ((this._placementType.hugWalls & WallHug.Right) != WallHug.None && this.CollisionLine<IPlatform>(this._tilePosition, this._tilePosition + new Vec2(16f, 0f), this._placementType) is Thing thing1 && thing1.GetType() != this._placementType.GetType())
-                this._tilePosition.x = thing1.left - this._placementType.collisionSize.x - this._placementType.collisionOffset.x;
-            if ((this._placementType.hugWalls & WallHug.Left) != WallHug.None && this.CollisionLine<IPlatform>(this._tilePosition, this._tilePosition + new Vec2(-16f, 0f), this._placementType) is Thing thing2 && thing2.GetType() != this._placementType.GetType())
-                this._tilePosition.x = thing2.right - this._placementType.collisionOffset.x;
-            if ((this._placementType.hugWalls & WallHug.Ceiling) != WallHug.None && this.CollisionLine<IPlatform>(this._tilePosition, this._tilePosition + new Vec2(0f, -16f), this._placementType) is Thing thing3 && thing3.GetType() != this._placementType.GetType())
-                this._tilePosition.y = thing3.bottom - this._placementType.collisionOffset.y;
-            if ((this._placementType.hugWalls & WallHug.Floor) == WallHug.None || !(this.CollisionLine<IPlatform>(this._tilePosition, this._tilePosition + new Vec2(0f, 16f), this._placementType) is Thing thing4) || !(thing4.GetType() != this._placementType.GetType()))
+            if (_placementType is ItemSpawner)
+                (_placementType as ItemSpawner)._seated = false;
+            if ((_placementType.hugWalls & WallHug.Right) != WallHug.None && CollisionLine<IPlatform>(_tilePosition, _tilePosition + new Vec2(16f, 0f), _placementType) is Thing thing1 && thing1.GetType() != _placementType.GetType())
+                _tilePosition.x = thing1.left - _placementType.collisionSize.x - _placementType.collisionOffset.x;
+            if ((_placementType.hugWalls & WallHug.Left) != WallHug.None && CollisionLine<IPlatform>(_tilePosition, _tilePosition + new Vec2(-16f, 0f), _placementType) is Thing thing2 && thing2.GetType() != _placementType.GetType())
+                _tilePosition.x = thing2.right - _placementType.collisionOffset.x;
+            if ((_placementType.hugWalls & WallHug.Ceiling) != WallHug.None && CollisionLine<IPlatform>(_tilePosition, _tilePosition + new Vec2(0f, -16f), _placementType) is Thing thing3 && thing3.GetType() != _placementType.GetType())
+                _tilePosition.y = thing3.bottom - _placementType.collisionOffset.y;
+            if ((_placementType.hugWalls & WallHug.Floor) == WallHug.None || !(CollisionLine<IPlatform>(_tilePosition, _tilePosition + new Vec2(0f, 16f), _placementType) is Thing thing4) || !(thing4.GetType() != _placementType.GetType()))
                 return;
-            this._tilePosition.y = thing4.top - this._placementType.collisionSize.y - this._placementType.collisionOffset.y;
-            if (!(this._placementType is ItemSpawner))
+            _tilePosition.y = thing4.top - _placementType.collisionSize.y - _placementType.collisionOffset.y;
+            if (!(_placementType is ItemSpawner))
                 return;
-            (this._placementType as ItemSpawner)._seated = true;
+            (_placementType as ItemSpawner)._seated = true;
         }
 
         public static float interfaceSizeMultiplier => Editor.inputMode != EditorInput.Touch ? 1f : 2f;
@@ -1068,35 +1068,35 @@ namespace DuckGame
         public override void Update()
         {
             if (!DuckGame.Graphics.inFocus)
-                this.focusWait = 5;
-            else if (this.focusWait > 0)
+                focusWait = 5;
+            else if (focusWait > 0)
             {
-                --this.focusWait;
+                --focusWait;
             }
             else
             {
                 ++MonoMain.timeInEditor;
                 Editor.tooltip = null;
-                foreach (Thing thing in this.things)
+                foreach (Thing thing in things)
                     thing.DoEditorUpdate();
-                if (this.lastMousePos == Vec2.Zero)
-                    this.lastMousePos = Mouse.position;
+                if (lastMousePos == Vec2.Zero)
+                    lastMousePos = Mouse.position;
                 if (Editor.clickedContextBackground)
                 {
                     Editor.clickedContextBackground = false;
                     Editor.clickedMenu = true;
                 }
                 int inputMode1 = (int)Editor.inputMode;
-                if (Mouse.left == InputState.Pressed || Mouse.right == InputState.Pressed || Mouse.middle == InputState.Pressed || !Editor.fakeTouch && (this.lastMousePos - Mouse.position).length > 3.0)
+                if (Mouse.left == InputState.Pressed || Mouse.right == InputState.Pressed || Mouse.middle == InputState.Pressed || !Editor.fakeTouch && (lastMousePos - Mouse.position).length > 3.0)
                     Editor.inputMode = Editor.fakeTouch ? EditorInput.Touch : EditorInput.Mouse;
                 else if (Editor.inputMode != EditorInput.Gamepad && InputProfile.active.Pressed("ANY", true))
                 {
-                    if ((this._selection.Count == 0 || !Keyboard.Pressed(Keys.F, true)) && !InputProfile.active.Pressed("RSTICK") && !InputProfile.active.Pressed("CANCEL") && !InputProfile.active.Pressed("MENU1") && !Keyboard.Down(Keys.LeftShift) && !Keyboard.Down(Keys.RightShift) && !Keyboard.Down(Keys.LeftControl) && !Keyboard.Down(Keys.RightControl))
+                    if ((_selection.Count == 0 || !Keyboard.Pressed(Keys.F, true)) && !InputProfile.active.Pressed("RSTICK") && !InputProfile.active.Pressed("CANCEL") && !InputProfile.active.Pressed("MENU1") && !Keyboard.Down(Keys.LeftShift) && !Keyboard.Down(Keys.RightShift) && !Keyboard.Down(Keys.LeftControl) && !Keyboard.Down(Keys.RightControl))
                     {
                         if (Editor.inputMode == EditorInput.Mouse)
                         {
-                            this._tilePosition = Maths.Snap(Mouse.positionScreen + new Vec2(8f, 8f), 16f, 16f);
-                            this._tilePositionPrev = this._tilePosition;
+                            _tilePosition = Maths.Snap(Mouse.positionScreen + new Vec2(8f, 8f), 16f, 16f);
+                            _tilePositionPrev = _tilePosition;
                         }
                         Editor.inputMode = EditorInput.Gamepad;
                     }
@@ -1118,117 +1118,117 @@ namespace DuckGame
                 else
                 {
                     Editor.waitForNoTouchInput = false;
-                    this.lastMousePos = Mouse.position;
-                    if (this._editingOpenAirVariationPrev != this.editingOpenAirVariation)
+                    lastMousePos = Mouse.position;
+                    if (_editingOpenAirVariationPrev != editingOpenAirVariation)
                     {
-                        if (this.editingOpenAirVariation)
+                        if (editingOpenAirVariation)
                         {
-                            foreach (Thing t in this._levelThingsNormal)
+                            foreach (Thing t in _levelThingsNormal)
                                 Level.current.RemoveThing(t);
-                            foreach (Thing t in this._levelThingsAlternate)
+                            foreach (Thing t in _levelThingsAlternate)
                                 Level.current.AddThing(t);
                         }
                         else
                         {
-                            foreach (Thing t in this._levelThingsAlternate)
+                            foreach (Thing t in _levelThingsAlternate)
                                 Level.current.RemoveThing(t);
-                            foreach (Thing t in this._levelThingsNormal)
+                            foreach (Thing t in _levelThingsNormal)
                                 Level.current.AddThing(t);
                         }
-                        this._editingOpenAirVariationPrev = this.editingOpenAirVariation;
+                        _editingOpenAirVariationPrev = editingOpenAirVariation;
                     }
                     if (Editor.inputMode == EditorInput.Touch)
                     {
-                        if (this._placementMenu == null)
+                        if (_placementMenu == null)
                         {
-                            this._objectMenuLayer.camera.width = Layer.HUD.width * 0.75f;
-                            this._objectMenuLayer.camera.height = Layer.HUD.height * 0.75f;
+                            _objectMenuLayer.camera.width = Layer.HUD.width * 0.75f;
+                            _objectMenuLayer.camera.height = Layer.HUD.height * 0.75f;
                             Editor.bigInterfaceMode = true;
                         }
-                        if (this._fileDialog.opened && this._touchState != Editor.EditorTouchState.OpenLevel)
+                        if (_fileDialog.opened && _touchState != Editor.EditorTouchState.OpenLevel)
                         {
-                            this.EndCurrentTouchMode();
-                            this._touchState = Editor.EditorTouchState.OpenLevel;
+                            EndCurrentTouchMode();
+                            _touchState = Editor.EditorTouchState.OpenLevel;
                         }
-                        else if (!this._fileDialog.opened && this._touchState == Editor.EditorTouchState.OpenLevel)
-                            this.EndCurrentTouchMode();
+                        else if (!_fileDialog.opened && _touchState == Editor.EditorTouchState.OpenLevel)
+                            EndCurrentTouchMode();
                         Touch tap = TouchScreen.GetTap();
-                        if (this._touchState == Editor.EditorTouchState.Normal)
+                        if (_touchState == Editor.EditorTouchState.Normal)
                         {
-                            this._activeTouchButton = null;
-                            foreach (Editor.EditorTouchButton touchButton in this._touchButtons)
+                            _activeTouchButton = null;
+                            foreach (Editor.EditorTouchButton touchButton in _touchButtons)
                             {
-                                if (tap != Touch.None && tap.positionHUD.x > touchButton.position.x && tap.positionHUD.x < touchButton.position.x + touchButton.size.x && tap.positionHUD.y > touchButton.position.y && tap.positionHUD.y < touchButton.position.y + touchButton.size.y || touchButton.threeFingerGesture && this._threeFingerGesture)
+                                if (tap != Touch.None && tap.positionHUD.x > touchButton.position.x && tap.positionHUD.x < touchButton.position.x + touchButton.size.x && tap.positionHUD.y > touchButton.position.y && tap.positionHUD.y < touchButton.position.y + touchButton.size.y || touchButton.threeFingerGesture && _threeFingerGesture)
                                 {
-                                    this._touchState = touchButton.state;
-                                    this._activeTouchButton = touchButton;
+                                    _touchState = touchButton.state;
+                                    _activeTouchButton = touchButton;
                                     Editor.clickedMenu = true;
-                                    this._threeFingerGesture = false;
+                                    _threeFingerGesture = false;
                                     Editor._clickedTouchButton = true;
                                     SFX.Play("highClick", 0.3f, 0.2f);
                                 }
                             }
                         }
-                        else if (tap.positionHUD.x > this._cancelButton.position.x && tap.positionHUD.x < _cancelButton.position.x + this._cancelButton.size.x && tap.positionHUD.y > this._cancelButton.position.y && tap.positionHUD.y < _cancelButton.position.y + this._cancelButton.size.y || this._activeTouchButton != null && this._activeTouchButton.threeFingerGesture && this._threeFingerGesture || this._activeTouchButton != null && !this._activeTouchButton.threeFingerGesture && this._threeFingerGesture || this._activeTouchButton != null && this._activeTouchButton.threeFingerGesture && this._twoFingerGesture)
+                        else if (tap.positionHUD.x > _cancelButton.position.x && tap.positionHUD.x < _cancelButton.position.x + _cancelButton.size.x && tap.positionHUD.y > _cancelButton.position.y && tap.positionHUD.y < _cancelButton.position.y + _cancelButton.size.y || _activeTouchButton != null && _activeTouchButton.threeFingerGesture && _threeFingerGesture || _activeTouchButton != null && !_activeTouchButton.threeFingerGesture && _threeFingerGesture || _activeTouchButton != null && _activeTouchButton.threeFingerGesture && _twoFingerGesture)
                         {
-                            this.EndCurrentTouchMode();
-                            if (this._fileDialog.opened)
-                                this._fileDialog.Close();
+                            EndCurrentTouchMode();
+                            if (_fileDialog.opened)
+                                _fileDialog.Close();
                             SFX.Play("highClick", 0.3f, 0.2f);
                             return;
                         }
-                        if (this._placingTiles && this._placementMenu == null && tap.positionHUD.x > this._editTilesButton.position.x && tap.positionHUD.x < _editTilesButton.position.x + this._editTilesButton.size.x && tap.positionHUD.y > this._editTilesButton.position.y && tap.positionHUD.y < _editTilesButton.position.y + this._editTilesButton.size.y)
+                        if (_placingTiles && _placementMenu == null && tap.positionHUD.x > _editTilesButton.position.x && tap.positionHUD.x < _editTilesButton.position.x + _editTilesButton.size.x && tap.positionHUD.y > _editTilesButton.position.y && tap.positionHUD.y < _editTilesButton.position.y + _editTilesButton.size.y)
                         {
-                            this._openTileSelector = true;
+                            _openTileSelector = true;
                             Editor.clickedMenu = true;
                         }
-                        if (this._touchState == Editor.EditorTouchState.OpenMenu)
+                        if (_touchState == Editor.EditorTouchState.OpenMenu)
                         {
-                            if (this._placementMenu == null)
-                                this._showPlacementMenu = true;
-                            this.EndCurrentTouchMode();
+                            if (_placementMenu == null)
+                                _showPlacementMenu = true;
+                            EndCurrentTouchMode();
                         }
-                        else if (this._touchState == Editor.EditorTouchState.EditObject)
-                            this._editMode = true;
-                        else if (this._touchState == Editor.EditorTouchState.Eyedropper)
-                            this._copyMode = true;
+                        else if (_touchState == Editor.EditorTouchState.EditObject)
+                            _editMode = true;
+                        else if (_touchState == Editor.EditorTouchState.Eyedropper)
+                            _copyMode = true;
                     }
                     else
                     {
-                        this._editMode = false;
-                        this._copyMode = false;
-                        this._activeTouchButton = null;
-                        this._touchState = Editor.EditorTouchState.Normal;
-                        if (this._placementMenu == null)
+                        _editMode = false;
+                        _copyMode = false;
+                        _activeTouchButton = null;
+                        _touchState = Editor.EditorTouchState.Normal;
+                        if (_placementMenu == null)
                         {
-                            this._objectMenuLayer.camera.width = Layer.HUD.width;
-                            this._objectMenuLayer.camera.height = Layer.HUD.height;
+                            _objectMenuLayer.camera.width = Layer.HUD.width;
+                            _objectMenuLayer.camera.height = Layer.HUD.height;
                             Editor.bigInterfaceMode = false;
                             Editor.pretendPinned = null;
                         }
                     }
-                    if (!DuckGame.Graphics.inFocus && !this._updateEvenWhenInactive)
-                        this._tileDragDif = Vec2.MaxValue;
+                    if (!DuckGame.Graphics.inFocus && !_updateEvenWhenInactive)
+                        _tileDragDif = Vec2.MaxValue;
                     else if (Editor.clickedMenu)
                     {
                         Editor.clickedMenu = false;
                     }
                     else
                     {
-                        if (this._notify.opened)
+                        if (_notify.opened)
                             return;
                         if (Editor.reopenContextMenu)
                         {
                             int num = Editor.ignorePinning ? 1 : 0;
                             Editor.reopenContextMenu = false;
-                            if (this._placementMenu != null)
-                                this._placementMenu.opened = false;
+                            if (_placementMenu != null)
+                                _placementMenu.opened = false;
                             Editor.ignorePinning = num != 0;
-                            if (this._placementMenu == null)
-                                this._placementMenu = this._objectMenu;
-                            this.OpenMenu(this._placementMenu);
+                            if (_placementMenu == null)
+                                _placementMenu = _objectMenu;
+                            OpenMenu(_placementMenu);
                             if (Editor.openContextThing != null)
-                                this._placementMenu.OpenInto(openContextThing);
+                                _placementMenu.OpenInto(openContextThing);
                             Editor.openContextThing = null;
                             SFX.Play("openClick", 0.4f);
                         }
@@ -1247,8 +1247,8 @@ namespace DuckGame
                         }
                         else
                         {
-                            if (this._placementMenu != null)
-                                this._placementMenu.visible = Editor._lockInput == null;
+                            if (_placementMenu != null)
+                                _placementMenu.visible = Editor._lockInput == null;
                             if (Editor.lockInput != null)
                             {
                                 if (Editor._lockInputChange == Editor.lockInput)
@@ -1260,98 +1260,98 @@ namespace DuckGame
                                 if (Editor._lockInputChange != Editor.lockInput)
                                     Editor._lockInput = Editor._lockInputChange;
                                 if (Keyboard.Pressed(Keys.OemComma))
-                                    this.searching = true;
-                                if (this.searching)
+                                    searching = true;
+                                if (searching)
                                 {
                                     Input._imeAllowed = true;
-                                    if (!this.clearedKeyboardStringForSearch)
+                                    if (!clearedKeyboardStringForSearch)
                                     {
-                                        this.clearedKeyboardStringForSearch = true;
+                                        clearedKeyboardStringForSearch = true;
                                         Keyboard.keyString = "";
                                     }
-                                    if (this.searchItems != null && this.searchItems.Count > 0)
+                                    if (searchItems != null && searchItems.Count > 0)
                                     {
                                         if (Keyboard.Pressed(Keys.Down))
                                         {
-                                            if (this._searchHoverIndex == 0)
-                                                this._searchHoverIndex = Math.Min(this.searchItems.Count - 1, 9);
+                                            if (_searchHoverIndex == 0)
+                                                _searchHoverIndex = Math.Min(searchItems.Count - 1, 9);
                                             else
-                                                --this._searchHoverIndex;
-                                            if (this._searchHoverIndex < 0)
-                                                this._searchHoverIndex = 0;
+                                                --_searchHoverIndex;
+                                            if (_searchHoverIndex < 0)
+                                                _searchHoverIndex = 0;
                                         }
                                         else if (Keyboard.Pressed(Keys.Up))
                                         {
-                                            if (this._searchHoverIndex < 0)
-                                                this._searchHoverIndex = 0;
+                                            if (_searchHoverIndex < 0)
+                                                _searchHoverIndex = 0;
                                             else
-                                                ++this._searchHoverIndex;
-                                            if (this._searchHoverIndex > Math.Min(this.searchItems.Count - 1, 9))
-                                                this._searchHoverIndex = 0;
+                                                ++_searchHoverIndex;
+                                            if (_searchHoverIndex > Math.Min(searchItems.Count - 1, 9))
+                                                _searchHoverIndex = 0;
                                         }
-                                        this._searchHoverIndex = Math.Min(this.searchItems.Count - 1, this._searchHoverIndex);
+                                        _searchHoverIndex = Math.Min(searchItems.Count - 1, _searchHoverIndex);
                                     }
                                     else
-                                        this._searchHoverIndex = -1;
+                                        _searchHoverIndex = -1;
                                     bool flag = Mouse.left == InputState.Pressed || Keyboard.Pressed(Keys.Enter);
                                     if (((Mouse.right == InputState.Released || Mouse.middle == InputState.Pressed ? 1 : (Keyboard.Pressed(Keys.Escape) ? 1 : 0)) | (flag ? 1 : 0)) != 0)
                                     {
-                                        if (flag && this._searchHoverIndex != -1 && this._searchHoverIndex < this.searchItems.Count)
+                                        if (flag && _searchHoverIndex != -1 && _searchHoverIndex < searchItems.Count)
                                         {
-                                            this._placementType = this.searchItems[this._searchHoverIndex].thing.thing;
-                                            this._eyeDropperSerialized = null;
+                                            _placementType = searchItems[_searchHoverIndex].thing.thing;
+                                            _eyeDropperSerialized = null;
                                         }
-                                        this.searching = false;
-                                        this.clearedKeyboardStringForSearch = false;
-                                        this.searchItems = null;
-                                        this._searchHoverIndex = -1;
+                                        searching = false;
+                                        clearedKeyboardStringForSearch = false;
+                                        searchItems = null;
+                                        _searchHoverIndex = -1;
                                     }
-                                    if (this._prevSearchString != Keyboard.keyString)
+                                    if (_prevSearchString != Keyboard.keyString)
                                     {
-                                        this.searchItems = this._objectMenu.Search(Keyboard.keyString);
-                                        this._prevSearchString = Keyboard.keyString;
+                                        searchItems = _objectMenu.Search(Keyboard.keyString);
+                                        _prevSearchString = Keyboard.keyString;
                                     }
-                                    if (this._placementMenu == null)
+                                    if (_placementMenu == null)
                                         return;
-                                    this.CloseMenu();
+                                    CloseMenu();
                                 }
                                 if (Keyboard.control && Keyboard.Pressed(Keys.S))
                                 {
                                     if (Keyboard.shift)
-                                        this.SaveAs();
+                                        SaveAs();
                                     else
-                                        this.Save();
+                                        Save();
                                 }
-                                if (this._onlineSettingChanged && this._placementMenu != null && this._placementMenu is EditorGroupMenu)
+                                if (_onlineSettingChanged && _placementMenu != null && _placementMenu is EditorGroupMenu)
                                 {
-                                    (this._placementMenu as EditorGroupMenu).UpdateGrayout();
-                                    this._onlineSettingChanged = false;
+                                    (_placementMenu as EditorGroupMenu).UpdateGrayout();
+                                    _onlineSettingChanged = false;
                                 }
-                                DuckGame.Graphics.fade = Lerp.Float(Graphics.fade, this._quitting ? 0f : 1f, 0.02f);
-                                if (this._quitting && DuckGame.Graphics.fade < 0.01f)
+                                DuckGame.Graphics.fade = Lerp.Float(Graphics.fade, _quitting ? 0f : 1f, 0.02f);
+                                if (_quitting && DuckGame.Graphics.fade < 0.01f)
                                 {
-                                    this._quitting = false;
+                                    _quitting = false;
                                     Editor.active = false;
                                     Level.current = new TitleScreen();
                                 }
                                 if (DuckGame.Graphics.fade < 0.95f)
                                     return;
-                                Layer placementLayer = this.GetLayerOrOverride(this._placementType);
+                                Layer placementLayer = GetLayerOrOverride(_placementType);
                                 switch (Editor.inputMode)
                                 {
                                     case EditorInput.Mouse:
-                                        this.clicked = Mouse.left == InputState.Pressed;
+                                        clicked = Mouse.left == InputState.Pressed;
                                         if (Mouse.middle == InputState.Pressed)
                                         {
-                                            this.middleClickPos = Mouse.position;
+                                            middleClickPos = Mouse.position;
                                             break;
                                         }
                                         break;
                                     case EditorInput.Touch:
-                                        this.clicked = TouchScreen.GetTap() != Touch.None;
+                                        clicked = TouchScreen.GetTap() != Touch.None;
                                         break;
                                 }
-                                if (this._cursorMode == CursorMode.Normal && (Keyboard.Down(Keys.RightShift) || Keyboard.Down(Keys.LeftShift)))
+                                if (_cursorMode == CursorMode.Normal && (Keyboard.Down(Keys.RightShift) || Keyboard.Down(Keys.LeftShift)))
                                 {
                                     Vec2 vec2 = new Vec2(0f, 0f);
                                     if (Keyboard.Pressed(Keys.Up))
@@ -1376,95 +1376,95 @@ namespace DuckGame
                                         }
                                     }
                                 }
-                                this._menuOpen = false;
-                                if (!this._editMode)
+                                _menuOpen = false;
+                                if (!_editMode)
                                 {
-                                    foreach (ContextMenu contextMenu in this.things[typeof(ContextMenu)])
+                                    foreach (ContextMenu contextMenu in things[typeof(ContextMenu)])
                                     {
                                         if (contextMenu.visible && contextMenu.opened)
                                         {
-                                            this.clicked = false;
-                                            this._menuOpen = true;
+                                            clicked = false;
+                                            _menuOpen = true;
                                         }
                                     }
                                 }
                                 if (Editor.inputMode == EditorInput.Gamepad)
                                     Editor._input = InputProfile.active;
-                                if (this._prevEditTilePos != this._editTilePos)
+                                if (_prevEditTilePos != _editTilePos)
                                 {
                                     if (_editTilePos.x < 0f)
-                                        this._editTilePos.x = 0f;
+                                        _editTilePos.x = 0f;
                                     if (_editTilePos.x >= Editor._procTilesWide)
-                                        this._editTilePos.x = Editor._procTilesWide - 1;
+                                        _editTilePos.x = Editor._procTilesWide - 1;
                                     if (_editTilePos.y < 0f)
-                                        this._editTilePos.y = 0f;
+                                        _editTilePos.y = 0f;
                                     if (_editTilePos.y >= Editor._procTilesHigh)
-                                        this._editTilePos.y = Editor._procTilesHigh - 1;
-                                    if (this._currentMapNode != null)
+                                        _editTilePos.y = Editor._procTilesHigh - 1;
+                                    if (_currentMapNode != null)
                                     {
-                                        RandomLevelData data = this._currentMapNode.map[(int)this._editTilePos.x, (int)this._editTilePos.y].data;
-                                        if (this._levelThings.Count > 0)
-                                            this.Save();
-                                        this._looseClear = true;
+                                        RandomLevelData data = _currentMapNode.map[(int)_editTilePos.x, (int)_editTilePos.y].data;
+                                        if (_levelThings.Count > 0)
+                                            Save();
+                                        _looseClear = true;
                                         if (data == null)
                                         {
-                                            this.ClearEverything();
-                                            this._saveName = "";
+                                            ClearEverything();
+                                            _saveName = "";
                                         }
                                         else
-                                            this.LoadLevel(Directory.GetCurrentDirectory() + "\\..\\..\\..\\assets\\levels\\" + data.file + ".lev");
-                                        Editor._procXPos = (int)this._editTilePos.x;
-                                        Editor._procYPos = (int)this._editTilePos.y;
-                                        this._genTilePos = new Vec2(_procXPos, _procYPos);
-                                        this._prevEditTilePos = this._editTilePos;
+                                            LoadLevel(Directory.GetCurrentDirectory() + "\\..\\..\\..\\assets\\levels\\" + data.file + ".lev");
+                                        Editor._procXPos = (int)_editTilePos.x;
+                                        Editor._procYPos = (int)_editTilePos.y;
+                                        _genTilePos = new Vec2(_procXPos, _procYPos);
+                                        _prevEditTilePos = _editTilePos;
                                         int num1 = 144;
                                         int num2 = 192;
-                                        this._procDrawOffset += new Vec2((Editor._procXPos - this._prevProcX) * num2, (Editor._procYPos - this._prevProcY) * num1);
-                                        this._prevProcX = Editor._procXPos;
-                                        this._prevProcY = Editor._procYPos;
+                                        _procDrawOffset += new Vec2((Editor._procXPos - _prevProcX) * num2, (Editor._procYPos - _prevProcY) * num1);
+                                        _prevProcX = Editor._procXPos;
+                                        _prevProcY = Editor._procYPos;
                                     }
                                 }
-                                if (Editor._procXPos != this._prevProcX)
-                                    this._doGen = true;
-                                else if (Editor._procYPos != this._prevProcY)
-                                    this._doGen = true;
-                                this._prevEditTilePos = this._editTilePos;
-                                this._prevProcX = Editor._procXPos;
-                                this._prevProcY = Editor._procYPos;
-                                if (this._miniMode && (Keyboard.Pressed(Keys.F1) || this._doGen) && !this._doingResave)
+                                if (Editor._procXPos != _prevProcX)
+                                    _doGen = true;
+                                else if (Editor._procYPos != _prevProcY)
+                                    _doGen = true;
+                                _prevEditTilePos = _editTilePos;
+                                _prevProcX = Editor._procXPos;
+                                _prevProcY = Editor._procYPos;
+                                if (_miniMode && (Keyboard.Pressed(Keys.F1) || _doGen) && !_doingResave)
                                 {
-                                    if (this._saveName == "")
-                                        this._saveName = Editor._initialDirectory + "/pyramid/" + Guid.NewGuid().ToString() + ".lev";
+                                    if (_saveName == "")
+                                        _saveName = Editor._initialDirectory + "/pyramid/" + Guid.NewGuid().ToString() + ".lev";
                                     LevelGenerator.ReInitialize();
-                                    LevelGenerator.complexity = this.generatorComplexity;
+                                    LevelGenerator.complexity = generatorComplexity;
                                     if (!Keyboard.Down(Keys.RightShift) && !Keyboard.Down(Keys.LeftShift))
-                                        this._procSeed = Rando.Int(2147483646);
-                                    string str = this._saveName.Substring(this._saveName.LastIndexOf("assets/levels/") + "assets/levels/".Length);
+                                        _procSeed = Rando.Int(2147483646);
+                                    string str = _saveName.Substring(_saveName.LastIndexOf("assets/levels/") + "assets/levels/".Length);
                                     string realName = str.Substring(0, str.Length - 4);
-                                    RandomLevelData tile = LevelGenerator.LoadInTile(this.SaveTempVersion(), realName);
-                                    this._loadPosX = Editor._procXPos;
-                                    this._loadPosY = Editor._procYPos;
+                                    RandomLevelData tile = LevelGenerator.LoadInTile(SaveTempVersion(), realName);
+                                    _loadPosX = Editor._procXPos;
+                                    _loadPosY = Editor._procYPos;
                                     LevGenType type = LevGenType.Any;
                                     if (Editor._currentLevelData.proceduralData.enableSingle && !Editor._currentLevelData.proceduralData.enableMulti)
                                         type = LevGenType.SinglePlayer;
                                     else if (!Editor._currentLevelData.proceduralData.enableSingle && Editor._currentLevelData.proceduralData.enableMulti)
                                         type = LevGenType.Deathmatch;
-                                    this._editTilePos = this._prevEditTilePos = this._genTilePos;
+                                    _editTilePos = _prevEditTilePos = _genTilePos;
                                     int num3 = 0;
                                     Level level;
                                     while (true)
                                     {
-                                        this._currentMapNode = LevelGenerator.MakeLevel(tile, this._pathEast && this._pathWest, this._procSeed, type, Editor._procTilesWide, Editor._procTilesHigh, this._loadPosX, this._loadPosY);
-                                        this._procDrawOffset = new Vec2(0f, 0f);
-                                        this._procContext = new GameContext();
-                                        this._procContext.ApplyStates();
+                                        _currentMapNode = LevelGenerator.MakeLevel(tile, _pathEast && _pathWest, _procSeed, type, Editor._procTilesWide, Editor._procTilesHigh, _loadPosX, _loadPosY);
+                                        _procDrawOffset = new Vec2(0f, 0f);
+                                        _procContext = new GameContext();
+                                        _procContext.ApplyStates();
                                         level = new Level
                                         {
                                             backgroundColor = new Color(0, 0, 0, 0)
                                         };
                                         Level.core.currentLevel = level;
                                         RandomLevelNode.editorLoad = true;
-                                        int num4 = this._currentMapNode.LoadParts(0f, 0f, level, this._procSeed) ? 1 : 0;
+                                        int num4 = _currentMapNode.LoadParts(0f, 0f, level, _procSeed) ? 1 : 0;
                                         RandomLevelNode.editorLoad = false;
                                         if (num4 == 0 && num3 <= 100)
                                             ++num3;
@@ -1472,31 +1472,31 @@ namespace DuckGame
                                             break;
                                     }
                                     level.CalculateBounds();
-                                    this._procContext.RevertStates();
-                                    this._doGen = false;
+                                    _procContext.RevertStates();
+                                    _doGen = false;
                                 }
-                                this._looseClear = false;
+                                _looseClear = false;
                                 Vec2 vec2_1;
                                 if (Editor.inputMode == EditorInput.Touch)
                                 {
-                                    if (!this._twoFingerGestureStarting && TouchScreen.GetTouches().Count == 2)
+                                    if (!_twoFingerGestureStarting && TouchScreen.GetTouches().Count == 2)
                                     {
-                                        this._twoFingerGestureStarting = true;
-                                        this._panAnchor = TouchScreen.GetAverageOfTouches().positionHUD;
-                                        this._twoFingerSpacing = (TouchScreen.GetTouches()[0].positionHUD - TouchScreen.GetTouches()[1].positionHUD).length;
+                                        _twoFingerGestureStarting = true;
+                                        _panAnchor = TouchScreen.GetAverageOfTouches().positionHUD;
+                                        _twoFingerSpacing = (TouchScreen.GetTouches()[0].positionHUD - TouchScreen.GetTouches()[1].positionHUD).length;
                                     }
                                     else if (TouchScreen.GetTouches().Count != 2)
                                     {
-                                        this._twoFingerGesture = false;
-                                        this._twoFingerGestureStarting = false;
+                                        _twoFingerGesture = false;
+                                        _twoFingerGestureStarting = false;
                                     }
-                                    if (this._twoFingerGestureStarting && TouchScreen.GetTouches().Count == 2 && !this._twoFingerGesture)
+                                    if (_twoFingerGestureStarting && TouchScreen.GetTouches().Count == 2 && !_twoFingerGesture)
                                     {
-                                        vec2_1 = this._panAnchor - TouchScreen.GetAverageOfTouches().positionHUD;
+                                        vec2_1 = _panAnchor - TouchScreen.GetAverageOfTouches().positionHUD;
                                         if (vec2_1.length > 6.0)
                                         {
-                                            this._twoFingerZooming = false;
-                                            this._twoFingerGesture = true;
+                                            _twoFingerZooming = false;
+                                            _twoFingerGesture = true;
                                         }
                                         else
                                         {
@@ -1505,78 +1505,78 @@ namespace DuckGame
                                             double length = vec2_1.length;
                                             if (Math.Abs((float)(twoFingerSpacing - length)) > 4.0)
                                             {
-                                                this._twoFingerZooming = true;
-                                                this._twoFingerGesture = true;
+                                                _twoFingerZooming = true;
+                                                _twoFingerGesture = true;
                                             }
                                         }
                                     }
-                                    if (!this._threeFingerGestureRelease && TouchScreen.GetTouches().Count == 3)
+                                    if (!_threeFingerGestureRelease && TouchScreen.GetTouches().Count == 3)
                                     {
-                                        this._threeFingerGesture = true;
-                                        this._threeFingerGestureRelease = true;
+                                        _threeFingerGesture = true;
+                                        _threeFingerGestureRelease = true;
                                     }
                                     else if (TouchScreen.GetTouches().Count != 3)
                                     {
-                                        this._threeFingerGesture = false;
-                                        this._threeFingerGestureRelease = false;
+                                        _threeFingerGesture = false;
+                                        _threeFingerGestureRelease = false;
                                     }
                                 }
                                 if (Editor.inputMode == EditorInput.Mouse && Mouse.middle == InputState.Pressed)
-                                    this._panAnchor = Mouse.position;
-                                if (this._procContext != null)
-                                    this._procContext.Update();
-                                if (this.tabletMode && this.clicked)
+                                    _panAnchor = Mouse.position;
+                                if (_procContext != null)
+                                    _procContext.Update();
+                                if (tabletMode && clicked)
                                 {
                                     if (Mouse.x < 32.0 && Mouse.y < 32.0)
                                     {
-                                        this._placementMode = true;
-                                        this._editMode = false;
-                                        this.clicked = false;
+                                        _placementMode = true;
+                                        _editMode = false;
+                                        clicked = false;
                                         return;
                                     }
                                     if (Mouse.x < 64.0 && Mouse.y < 32.0)
                                     {
-                                        this._placementMode = false;
-                                        this._editMode = true;
-                                        this.clicked = false;
+                                        _placementMode = false;
+                                        _editMode = true;
+                                        clicked = false;
                                         return;
                                     }
                                     if (Mouse.x < 96.0 && Mouse.y < 32.0)
                                     {
-                                        if (this._placementMenu == null)
-                                            this._showPlacementMenu = true;
+                                        if (_placementMenu == null)
+                                            _showPlacementMenu = true;
                                         else
-                                            this.CloseMenu();
-                                        this.clicked = false;
+                                            CloseMenu();
+                                        clicked = false;
                                         return;
                                     }
                                 }
-                                if (this._editorLoadFinished)
+                                if (_editorLoadFinished)
                                 {
-                                    foreach (Thing levelThing in this._levelThings)
+                                    foreach (Thing levelThing in _levelThings)
                                         levelThing.OnEditorLoaded();
-                                    foreach (PathNode pathNode in this.things[typeof(PathNode)])
+                                    foreach (PathNode pathNode in things[typeof(PathNode)])
                                     {
                                         pathNode.UninitializeLinks();
                                         pathNode.Update();
                                     }
-                                    this._editorLoadFinished = false;
+                                    _editorLoadFinished = false;
                                 }
-                                this.things.RefreshState();
-                                if (this._placeObjects.Count > 0)
+                                things.RefreshState();
+                                if (_placeObjects.Count > 0)
                                 {
-                                    foreach (Thing placeObject in this._placeObjects)
+                                    foreach (Thing placeObject in _placeObjects)
                                     {
                                         foreach (Thing thing in Level.CheckRectAll<IDontMove>(placeObject.topLeft + new Vec2(-16f, -16f), placeObject.bottomRight + new Vec2(16f, 16f)))
                                             thing.EditorObjectsChanged();
                                     }
-                                    this.things.CleanAddList();
-                                    this._placeObjects.Clear();
+                                    things.CleanAddList();
+                                    _placeObjects.Clear();
                                 }
-                                if (this._placementMenu != null && Editor.inputMode == EditorInput.Mouse && Mouse.right == InputState.Released)
+                                if (_placementMenu != null && Editor.inputMode == EditorInput.Mouse && Mouse.right == InputState.Released)
                                 {
-                                    this._placementMenu.Disappear();
-                                    this.CloseMenu();
+                                    _placementMenu.Disappear();
+                                    CloseMenu();
                                 }
                                 if (Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl))
                                 {
@@ -1589,41 +1589,41 @@ namespace DuckGame
                                             History.Redo();
                                         else
                                             History.Undo();
-                                        this._selection.Clear();
-                                        this._currentDragSelectionHover.Clear();
-                                        foreach (Thing levelThing in this._levelThings)
+                                        _selection.Clear();
+                                        _currentDragSelectionHover.Clear();
+                                        foreach (Thing levelThing in _levelThings)
                                             levelThing.EditorObjectsChanged();
                                     }
                                 }
-                                if (Editor.inputMode == EditorInput.Gamepad && this._placementMenu == null)
+                                if (Editor.inputMode == EditorInput.Gamepad && _placementMenu == null)
                                 {
                                     if (Editor._input.Pressed("STRAFE"))
                                     {
                                         History.Undo();
-                                        this._selection.Clear();
-                                        this._currentDragSelectionHover.Clear();
-                                        foreach (Thing levelThing in this._levelThings)
+                                        _selection.Clear();
+                                        _currentDragSelectionHover.Clear();
+                                        foreach (Thing levelThing in _levelThings)
                                             levelThing.EditorObjectsChanged();
                                     }
                                     if (Editor._input.Pressed("RAGDOLL"))
                                     {
                                         History.Redo();
-                                        this._selection.Clear();
-                                        this._currentDragSelectionHover.Clear();
-                                        foreach (Thing levelThing in this._levelThings)
+                                        _selection.Clear();
+                                        _currentDragSelectionHover.Clear();
+                                        foreach (Thing levelThing in _levelThings)
                                             levelThing.EditorObjectsChanged();
                                     }
                                 }
-                                if ((Editor._input.Pressed("MENU2") || this._showPlacementMenu) && this._cursorMode == CursorMode.Normal)
+                                if ((Editor._input.Pressed("MENU2") || _showPlacementMenu) && _cursorMode == CursorMode.Normal)
                                 {
-                                    if (this._placementMenu == null)
+                                    if (_placementMenu == null)
                                     {
-                                        this._placementMenu = this._objectMenu;
-                                        this.OpenMenu(this._placementMenu);
+                                        _placementMenu = _objectMenu;
+                                        OpenMenu(_placementMenu);
                                         SFX.Play("openClick", 0.4f);
                                     }
                                     else
-                                        this.CloseMenu();
+                                        CloseMenu();
                                 }
                                 if (Editor._clickedTouchButton)
                                 {
@@ -1631,128 +1631,128 @@ namespace DuckGame
                                 }
                                 else
                                 {
-                                    if (this._placementType is AutoBlock || this._placementType is PipeTileset)
-                                        this.cellSize = 16f;
-                                    if (this._cursorMode != CursorMode.Selection && this._placementMenu == null)
+                                    if (_placementType is AutoBlock || _placementType is PipeTileset)
+                                        cellSize = 16f;
+                                    if (_cursorMode != CursorMode.Selection && _placementMenu == null)
                                     {
                                         switch (Editor.inputMode)
                                         {
                                             case EditorInput.Gamepad:
                                                 if (Editor._input.Pressed("CANCEL"))
-                                                    this._selectionDragStart = this._tilePosition;
-                                                if (this._selectionDragStart != Vec2.Zero)
+                                                    _selectionDragStart = _tilePosition;
+                                                if (_selectionDragStart != Vec2.Zero)
                                                 {
-                                                    vec2_1 = this._selectionDragStart - this._tilePosition;
+                                                    vec2_1 = _selectionDragStart - _tilePosition;
                                                     if (vec2_1.length > 4.0)
                                                     {
-                                                        this._dragSelectShiftModifier = this._selection.Count != 0;
-                                                        this._cursorMode = CursorMode.Selection;
-                                                        this._selectionDragEnd = this._tilePosition;
+                                                        _dragSelectShiftModifier = _selection.Count != 0;
+                                                        _cursorMode = CursorMode.Selection;
+                                                        _selectionDragEnd = _tilePosition;
                                                         return;
                                                     }
                                                 }
                                                 if (Editor._input.Released("CANCEL"))
                                                 {
-                                                    this._selectionDragStart = Vec2.Zero;
+                                                    _selectionDragStart = Vec2.Zero;
                                                     break;
                                                 }
                                                 break;
                                             case EditorInput.Mouse:
-                                                bool flag1 = Mouse.left == InputState.Pressed && this._dragSelectShiftModifier;
-                                                if (this._placementMenu == null && Mouse.right == InputState.Pressed | flag1)
-                                                    this._selectionDragStart = Mouse.positionScreen;
-                                                if (this._dragSelectShiftModifier && (Mouse.right == InputState.Released || Mouse.left == InputState.Released))
+                                                bool flag1 = Mouse.left == InputState.Pressed && _dragSelectShiftModifier;
+                                                if (_placementMenu == null && Mouse.right == InputState.Pressed | flag1)
+                                                    _selectionDragStart = Mouse.positionScreen;
+                                                if (_dragSelectShiftModifier && (Mouse.right == InputState.Released || Mouse.left == InputState.Released))
                                                 {
-                                                    if (this._hover != null)
+                                                    if (_hover != null)
                                                     {
-                                                        this._selection.Add(this._hover);
-                                                        this._currentDragSelectionHover.Add(this._hover);
+                                                        _selection.Add(_hover);
+                                                        _currentDragSelectionHover.Add(_hover);
                                                     }
-                                                    if (this._secondaryHover != null)
+                                                    if (_secondaryHover != null)
                                                     {
-                                                        this._selection.Add(this._secondaryHover);
-                                                        this._currentDragSelectionHover.Add(this._secondaryHover);
+                                                        _selection.Add(_secondaryHover);
+                                                        _currentDragSelectionHover.Add(_secondaryHover);
                                                     }
-                                                    this.UpdateSelection(false);
-                                                    this._selectionDragStart = Vec2.Zero;
-                                                    if (this._selection.Count > 0)
+                                                    UpdateSelection(false);
+                                                    _selectionDragStart = Vec2.Zero;
+                                                    if (_selection.Count > 0)
                                                     {
-                                                        this._cursorMode = CursorMode.HasSelection;
+                                                        _cursorMode = CursorMode.HasSelection;
                                                         return;
                                                     }
                                                 }
-                                                if (this._selectionDragStart != Vec2.Zero)
+                                                if (_selectionDragStart != Vec2.Zero)
                                                 {
-                                                    vec2_1 = this._selectionDragStart - Mouse.positionScreen;
+                                                    vec2_1 = _selectionDragStart - Mouse.positionScreen;
                                                     if (vec2_1.length > 8.0)
                                                     {
-                                                        if (!this._dragSelectShiftModifier)
+                                                        if (!_dragSelectShiftModifier)
                                                         {
-                                                            this._selection.Clear();
-                                                            this._currentDragSelectionHover.Clear();
+                                                            _selection.Clear();
+                                                            _currentDragSelectionHover.Clear();
                                                         }
-                                                        this._cursorMode = CursorMode.Selection;
-                                                        this._selectionDragEnd = Mouse.positionScreen;
+                                                        _cursorMode = CursorMode.Selection;
+                                                        _selectionDragEnd = Mouse.positionScreen;
                                                         return;
                                                     }
                                                 }
                                                 if (Mouse.right == InputState.Released || Mouse.left == InputState.Released)
                                                 {
-                                                    this._selectionDragStart = Vec2.Zero;
+                                                    _selectionDragStart = Vec2.Zero;
                                                     break;
                                                 }
                                                 break;
                                         }
                                     }
-                                    if ((this._placementMenu == null || this._editMode) && this._hoverMode == 0)
+                                    if ((_placementMenu == null || _editMode) && _hoverMode == 0)
                                     {
-                                        this.UpdateHover(placementLayer, this._tilePosition);
+                                        UpdateHover(placementLayer, _tilePosition);
                                         bool flag2 = false;
                                         if (Editor.inputMode == EditorInput.Mouse && Mouse.middle == InputState.Released)
                                         {
-                                            vec2_1 = this.middleClickPos - Mouse.position;
+                                            vec2_1 = middleClickPos - Mouse.position;
                                             if (vec2_1.length < 2.0)
                                                 flag2 = true;
                                         }
                                         Thing thing = null;
-                                        if (this._secondaryHover != null)
+                                        if (_secondaryHover != null)
                                         {
                                             if (Input.Released("CANCEL") | flag2)
                                             {
                                                 Editor.copying = true;
-                                                this._eyeDropperSerialized = this._secondaryHover.Serialize();
+                                                _eyeDropperSerialized = _secondaryHover.Serialize();
                                                 Editor.copying = false;
-                                                this._placementType = Thing.LoadThing(this._eyeDropperSerialized);
+                                                _placementType = Thing.LoadThing(_eyeDropperSerialized);
                                             }
                                             else if (Input.Pressed("START"))
-                                                thing = this._secondaryHover;
+                                                thing = _secondaryHover;
                                         }
-                                        else if (this._hover != null)
+                                        else if (_hover != null)
                                         {
-                                            if (this._copyMode || Input.Released("CANCEL") | flag2)
+                                            if (_copyMode || Input.Released("CANCEL") | flag2)
                                             {
                                                 Editor.copying = true;
-                                                this._eyeDropperSerialized = this._hover.Serialize();
+                                                _eyeDropperSerialized = _hover.Serialize();
                                                 Editor.copying = false;
-                                                this._placementType = Thing.LoadThing(this._eyeDropperSerialized);
+                                                _placementType = Thing.LoadThing(_eyeDropperSerialized);
                                                 if (Editor.inputMode == EditorInput.Touch)
                                                 {
-                                                    this.EndCurrentTouchMode();
+                                                    EndCurrentTouchMode();
                                                     return;
                                                 }
                                             }
                                             else if (Input.Pressed("START"))
-                                                thing = this._hover;
+                                                thing = _hover;
                                         }
-                                        else if (this._placementType != null && Input.Pressed("START"))
-                                            thing = this._placementType;
+                                        else if (_placementType != null && Input.Pressed("START"))
+                                            thing = _placementType;
                                         if (thing != null)
                                         {
                                             Editor.ignorePinning = true;
                                             Editor.reopenContextMenu = true;
                                             Editor.openContextThing = thing;
                                         }
-                                        TileButton tileButton = this.CollisionPoint<TileButton>(this._tilePosition);
+                                        TileButton tileButton = CollisionPoint<TileButton>(_tilePosition);
                                         if (tileButton != null)
                                         {
                                             if (!tileButton.visible)
@@ -1767,94 +1767,94 @@ namespace DuckGame
                                                 tileButton.focus = Editor.inputMode == EditorInput.Gamepad && Editor._input.Down("SELECT") || Editor.inputMode == EditorInput.Mouse && (Mouse.left == InputState.Down || Mouse.left == InputState.Pressed) || Editor.inputMode == EditorInput.Touch && TouchScreen.IsScreenTouched() ? Editor._input : null;
                                             }
                                         }
-                                        if (tileButton != this._hoverButton && this._hoverButton != null)
-                                            this._hoverButton.focus = null;
-                                        this._hoverButton = tileButton;
+                                        if (tileButton != _hoverButton && _hoverButton != null)
+                                            _hoverButton.focus = null;
+                                        _hoverButton = tileButton;
                                     }
                                     if (Editor.inputMode == EditorInput.Mouse)
                                     {
                                         int right = (int)Mouse.right;
                                     }
-                                    if (this._cursorMode == CursorMode.Normal)
+                                    if (_cursorMode == CursorMode.Normal)
                                     {
-                                        if (this._hoverMenu != null && !this._placingTiles && (Editor.inputMode == EditorInput.Mouse && Mouse.right == InputState.Released || Editor._input.Pressed("MENU1") && !Editor._input.Down("SELECT")))
+                                        if (_hoverMenu != null && !_placingTiles && (Editor.inputMode == EditorInput.Mouse && Mouse.right == InputState.Released || Editor._input.Pressed("MENU1") && !Editor._input.Down("SELECT")))
                                         {
-                                            if (this._placementMenu == null)
+                                            if (_placementMenu == null)
                                             {
-                                                if (this._hover != null)
+                                                if (_hover != null)
                                                 {
-                                                    this._placementMenu = this._hover.GetContextMenu();
-                                                    if (this._placementMenu != null)
-                                                        this.AddThing(_placementMenu);
+                                                    _placementMenu = _hover.GetContextMenu();
+                                                    if (_placementMenu != null)
+                                                        AddThing(_placementMenu);
                                                 }
-                                                else if (this._secondaryHover != null)
+                                                else if (_secondaryHover != null)
                                                 {
-                                                    this._placementMenu = this._secondaryHover.GetContextMenu();
-                                                    if (this._placementMenu != null)
-                                                        this.AddThing(_placementMenu);
+                                                    _placementMenu = _secondaryHover.GetContextMenu();
+                                                    if (_placementMenu != null)
+                                                        AddThing(_placementMenu);
                                                 }
-                                                if (this._placementMenu != null)
+                                                if (_placementMenu != null)
                                                 {
-                                                    this.OpenMenu(this._placementMenu);
+                                                    OpenMenu(_placementMenu);
                                                     SFX.Play("openClick", 0.4f);
                                                 }
                                             }
                                             else if (Editor.inputMode == EditorInput.Mouse && Mouse.right == InputState.Pressed)
-                                                this.CloseMenu();
+                                                CloseMenu();
                                         }
                                         if (Editor.hoverMiniButton)
                                         {
-                                            this._tilePosition.x = (float)Math.Round(Mouse.positionScreen.x / this._cellSize) * this._cellSize;
-                                            this._tilePosition.y = (float)Math.Round(Mouse.positionScreen.y / this._cellSize) * this._cellSize;
+                                            _tilePosition.x = (float)Math.Round(Mouse.positionScreen.x / _cellSize) * _cellSize;
+                                            _tilePosition.y = (float)Math.Round(Mouse.positionScreen.y / _cellSize) * _cellSize;
                                             Editor.hoverMiniButton = false;
                                             return;
                                         }
-                                        if (this._hoverMenu == null && Editor.inputMode == EditorInput.Mouse && Mouse.right == InputState.Released)
+                                        if (_hoverMenu == null && Editor.inputMode == EditorInput.Mouse && Mouse.right == InputState.Released)
                                         {
-                                            if (this._hover is BackgroundTile)
+                                            if (_hover is BackgroundTile)
                                             {
-                                                if (this._placingTiles && this._placementMenu == null)
+                                                if (_placingTiles && _placementMenu == null)
                                                 {
-                                                    int frame = this._placementType.frame;
-                                                    this._placementMenu = new ContextBackgroundTile(this._placementType, null, false);
-                                                    this._placementMenu.opened = true;
+                                                    int frame = _placementType.frame;
+                                                    _placementMenu = new ContextBackgroundTile(_placementType, null, false);
+                                                    _placementMenu.opened = true;
                                                     SFX.Play("openClick", 0.4f);
-                                                    this._placementMenu.x = 16f;
-                                                    this._placementMenu.y = 16f;
-                                                    this._placementMenu.selectedIndex = frame;
+                                                    _placementMenu.x = 16f;
+                                                    _placementMenu.y = 16f;
+                                                    _placementMenu.selectedIndex = frame;
                                                     Level.Add(_placementMenu);
                                                 }
                                             }
-                                            else if (this._placementMenu == null)
+                                            else if (_placementMenu == null)
                                             {
-                                                this._placementMenu = this._objectMenu;
-                                                this.OpenMenu(this._placementMenu);
+                                                _placementMenu = _objectMenu;
+                                                OpenMenu(_placementMenu);
                                                 SFX.Play("openClick", 0.4f);
                                             }
                                             else
-                                                this.CloseMenu();
+                                                CloseMenu();
                                         }
                                     }
-                                    if (this._cursorMode == CursorMode.Normal)
+                                    if (_cursorMode == CursorMode.Normal)
                                     {
-                                        if (Editor.inputMode == EditorInput.Gamepad && Editor._input.Pressed("CANCEL") && this._placementMenu != null)
-                                            this.CloseMenu();
-                                        if (this._placementType != null && this._objectMenu != null)
+                                        if (Editor.inputMode == EditorInput.Gamepad && Editor._input.Pressed("CANCEL") && _placementMenu != null)
+                                            CloseMenu();
+                                        if (_placementType != null && _objectMenu != null)
                                         {
-                                            this.rotateValid = this._placementType._canFlip || this._placementType.editorCycleType != null;
+                                            rotateValid = _placementType._canFlip || _placementType.editorCycleType != null;
                                             if (Editor._input.Pressed("RSTICK") || Keyboard.Pressed(Keys.Tab))
                                             {
-                                                if (this._placementType.editorCycleType != null)
+                                                if (_placementType.editorCycleType != null)
                                                 {
-                                                    this._placementType = this._objectMenu.GetPlacementType(this._placementType.editorCycleType);
-                                                    this._eyeDropperSerialized = null;
+                                                    _placementType = _objectMenu.GetPlacementType(_placementType.editorCycleType);
+                                                    _eyeDropperSerialized = null;
                                                 }
                                                 else
                                                 {
-                                                    Thing thing = this._eyeDropperSerialized != null ? Thing.LoadThing(this._eyeDropperSerialized) : Editor.CreateThing(this._placementType.GetType());
+                                                    Thing thing = _eyeDropperSerialized != null ? Thing.LoadThing(_eyeDropperSerialized) : Editor.CreateThing(_placementType.GetType());
                                                     thing.TabRotate();
-                                                    this._placementType = thing;
-                                                    this._eyeDropperSerialized = thing.Serialize();
+                                                    _placementType = thing;
+                                                    _eyeDropperSerialized = thing.Serialize();
                                                 }
                                             }
                                         }
@@ -1862,31 +1862,31 @@ namespace DuckGame
                                     float num5 = 0f;
                                     if (Editor.inputMode == EditorInput.Mouse)
                                         num5 = Mouse.scroll;
-                                    else if (Editor.inputMode == EditorInput.Touch && this._twoFingerGesture && this._twoFingerZooming)
+                                    else if (Editor.inputMode == EditorInput.Touch && _twoFingerGesture && _twoFingerZooming)
                                     {
                                         vec2_1 = TouchScreen.GetTouches()[0].positionHUD - TouchScreen.GetTouches()[1].positionHUD;
                                         float length = vec2_1.length;
-                                        if (Math.Abs(length - this._twoFingerSpacing) > 2.0)
+                                        if (Math.Abs(length - _twoFingerSpacing) > 2.0)
                                             num5 = (float)(-(length - _twoFingerSpacing) * 1.0);
-                                        this._twoFingerSpacing = length;
+                                        _twoFingerSpacing = length;
                                     }
                                     if (Editor.inputMode == EditorInput.Gamepad)
                                     {
                                         num5 = Editor._input.leftTrigger - Editor._input.rightTrigger;
-                                        float num6 = (float)(this.camera.width / MonoMain.screenWidth * 5.0);
+                                        float num6 = (float)(camera.width / MonoMain.screenWidth * 5.0);
                                         if (Editor._input.Down("LSTICK"))
                                             num6 *= 2f;
                                         if (Editor._input.Pressed("LOPTION"))
-                                            this.cellSize = this.cellSize >= 10.0 ? 8f : 16f;
+                                            cellSize = cellSize >= 10.0 ? 8f : 16f;
                                         if (num6 < 5.0)
                                             num6 = 5f;
-                                        this.camera.x += Editor._input.rightStick.x * num6;
-                                        this.camera.y -= Editor._input.rightStick.y * num6;
+                                        camera.x += Editor._input.rightStick.x * num6;
+                                        camera.y -= Editor._input.rightStick.y * num6;
                                     }
                                     if (num5 != 0.0 && !Editor.didUIScroll && !Editor.hoverUI)
                                     {
                                         int num7 = Math.Sign(num5);
-                                        double num8 = this.camera.height / this.camera.width;
+                                        double num8 = camera.height / camera.width;
                                         float num9 = num7 * 64f;
                                         switch (Editor.inputMode)
                                         {
@@ -1897,55 +1897,55 @@ namespace DuckGame
                                                 num9 = num5;
                                                 break;
                                         }
-                                        Vec2 vec2_2 = new Vec2(this.camera.width, this.camera.height);
-                                        Vec2 vec2_3 = this.camera.transformScreenVector(Mouse.mousePos);
-                                        if (Editor.inputMode == EditorInput.Touch && this._twoFingerGesture)
+                                        Vec2 vec2_2 = new Vec2(camera.width, camera.height);
+                                        Vec2 vec2_3 = camera.transformScreenVector(Mouse.mousePos);
+                                        if (Editor.inputMode == EditorInput.Touch && _twoFingerGesture)
                                             vec2_3 = TouchScreen.GetAverageOfTouches().positionCamera;
                                         if (Editor.inputMode == EditorInput.Gamepad)
-                                            vec2_3 = this._tilePosition;
-                                        this.camera.width += num9;
-                                        if (this.camera.width < 64.0)
-                                            this.camera.width = 64f;
-                                        this.camera.height = this.camera.width / Resolution.current.aspect;
-                                        Vec2 position = this.camera.position;
+                                            vec2_3 = _tilePosition;
+                                        camera.width += num9;
+                                        if (camera.width < 64.0)
+                                            camera.width = 64f;
+                                        camera.height = camera.width / Resolution.current.aspect;
+                                        Vec2 position = camera.position;
                                         Vec3 translation;
-                                        (Matrix.CreateTranslation(new Vec3(position.x, position.y, 0f)) * Matrix.CreateTranslation(new Vec3(-vec2_3.x, -vec2_3.y, 0f)) * Matrix.CreateScale(this.camera.width / vec2_2.x, this.camera.height / vec2_2.y, 1f) * Matrix.CreateTranslation(new Vec3(vec2_3.x, vec2_3.y, 0f))).Decompose(out Vec3 _, out Quaternion _, out translation);
-                                        this.camera.position = new Vec2(translation.x, translation.y);
+                                        (Matrix.CreateTranslation(new Vec3(position.x, position.y, 0f)) * Matrix.CreateTranslation(new Vec3(-vec2_3.x, -vec2_3.y, 0f)) * Matrix.CreateScale(camera.width / vec2_2.x, camera.height / vec2_2.y, 1f) * Matrix.CreateTranslation(new Vec3(vec2_3.x, vec2_3.y, 0f))).Decompose(out Vec3 _, out Quaternion _, out translation);
+                                        camera.position = new Vec2(translation.x, translation.y);
                                     }
                                     Editor.didUIScroll = false;
                                     switch (Editor.inputMode)
                                     {
                                         case EditorInput.Mouse:
                                             if (Mouse.middle == InputState.Pressed)
-                                                this._panAnchor = Mouse.position;
+                                                _panAnchor = Mouse.position;
                                             if (Mouse.middle == InputState.Down)
                                             {
-                                                Vec2 vec2_4 = Mouse.position - this._panAnchor;
-                                                this._panAnchor = Mouse.position;
-                                                float num10 = this.camera.width / Layer.HUD.width;
+                                                Vec2 vec2_4 = Mouse.position - _panAnchor;
+                                                _panAnchor = Mouse.position;
+                                                float num10 = camera.width / Layer.HUD.width;
                                                 if (vec2_4.length > 0.01)
-                                                    this._didPan = true;
-                                                this.camera.x -= vec2_4.x * num10;
-                                                this.camera.y -= vec2_4.y * num10;
+                                                    _didPan = true;
+                                                camera.x -= vec2_4.x * num10;
+                                                camera.y -= vec2_4.y * num10;
                                             }
                                             if (Mouse.middle == InputState.Released)
                                             {
-                                                int num11 = this._didPan ? 1 : 0;
-                                                this._didPan = false;
+                                                int num11 = _didPan ? 1 : 0;
+                                                _didPan = false;
                                                 break;
                                             }
                                             break;
                                         case EditorInput.Touch:
-                                            if (this._twoFingerGesture && !this._twoFingerZooming)
+                                            if (_twoFingerGesture && !_twoFingerZooming)
                                             {
-                                                Vec2 vec2_5 = TouchScreen.GetAverageOfTouches().positionHUD - this._panAnchor;
-                                                this._panAnchor = TouchScreen.GetAverageOfTouches().positionHUD;
-                                                float num12 = this.camera.width / Layer.HUD.width;
+                                                Vec2 vec2_5 = TouchScreen.GetAverageOfTouches().positionHUD - _panAnchor;
+                                                _panAnchor = TouchScreen.GetAverageOfTouches().positionHUD;
+                                                float num12 = camera.width / Layer.HUD.width;
                                                 if (vec2_5.length > 0.1)
                                                 {
-                                                    this._didPan = true;
-                                                    this.camera.x -= vec2_5.x * num12;
-                                                    this.camera.y -= vec2_5.y * num12;
+                                                    _didPan = true;
+                                                    camera.x -= vec2_5.x * num12;
+                                                    camera.y -= vec2_5.y * num12;
                                                     break;
                                                 }
                                                 break;
@@ -1957,27 +1957,27 @@ namespace DuckGame
                                     bool flag5 = false;
                                     if (flag3 & flag4)
                                     {
-                                        this._hover = null;
-                                        this._secondaryHover = null;
+                                        _hover = null;
+                                        _secondaryHover = null;
                                         flag5 = true;
                                     }
-                                    if ((Editor.inputMode == EditorInput.Gamepad || Editor.inputMode == EditorInput.Touch) && this._placementMenu == null)
+                                    if ((Editor.inputMode == EditorInput.Gamepad || Editor.inputMode == EditorInput.Touch) && _placementMenu == null)
                                     {
                                         int num13 = 1;
                                         if (Editor._input.Down("LSTICK"))
                                             num13 = 4;
-                                        this._tilePosition = this._tilePositionPrev;
-                                        if (_tilePosition.x < this.camera.left)
-                                            this._tilePosition.x = this.camera.left + 32f;
-                                        if (_tilePosition.x > this.camera.right)
-                                            this._tilePosition.x = this.camera.right - 32f;
-                                        if (_tilePosition.y < this.camera.top)
-                                            this._tilePosition.y = this.camera.top + 32f;
-                                        if (_tilePosition.y > this.camera.bottom)
-                                            this._tilePosition.y = this.camera.bottom - 32f;
+                                        _tilePosition = _tilePositionPrev;
+                                        if (_tilePosition.x < camera.left)
+                                            _tilePosition.x = camera.left + 32f;
+                                        if (_tilePosition.x > camera.right)
+                                            _tilePosition.x = camera.right - 32f;
+                                        if (_tilePosition.y < camera.top)
+                                            _tilePosition.y = camera.top + 32f;
+                                        if (_tilePosition.y > camera.bottom)
+                                            _tilePosition.y = camera.bottom - 32f;
                                         int num14 = 0;
                                         int num15 = 0;
-                                        if (this._hoverMode == 0 && (this._hoverButton == null || this._hoverButton.focus == null))
+                                        if (_hoverMode == 0 && (_hoverButton == null || _hoverButton.focus == null))
                                         {
                                             if (Editor._input.Pressed("MENULEFT"))
                                                 num15 = -1;
@@ -1988,227 +1988,227 @@ namespace DuckGame
                                             if (Editor._input.Pressed("MENUDOWN"))
                                                 num14 = 1;
                                         }
-                                        float num16 = this._cellSize * num13 * num15;
-                                        float num17 = this._cellSize * num13 * num14;
-                                        this._tilePosition.x += num16;
-                                        this._tilePosition.y += num17;
-                                        if (_tilePosition.x < this.camera.left || _tilePosition.x > this.camera.right)
-                                            this.camera.x += num16;
-                                        if (_tilePosition.y < this.camera.top || _tilePosition.y > this.camera.bottom)
-                                            this.camera.y += num17;
+                                        float num16 = _cellSize * num13 * num15;
+                                        float num17 = _cellSize * num13 * num14;
+                                        _tilePosition.x += num16;
+                                        _tilePosition.y += num17;
+                                        if (_tilePosition.x < camera.left || _tilePosition.x > camera.right)
+                                            camera.x += num16;
+                                        if (_tilePosition.y < camera.top || _tilePosition.y > camera.bottom)
+                                            camera.y += num17;
                                         if (TouchScreen.GetTouch() != Touch.None)
                                         {
-                                            this._tilePosition.x = (float)Math.Round(TouchScreen.GetTouch().positionCamera.x / this._cellSize) * this._cellSize;
-                                            this._tilePosition.y = (float)Math.Round(TouchScreen.GetTouch().positionCamera.y / this._cellSize) * this._cellSize;
-                                            this._tilePositionPrev = this._tilePosition;
+                                            _tilePosition.x = (float)Math.Round(TouchScreen.GetTouch().positionCamera.x / _cellSize) * _cellSize;
+                                            _tilePosition.y = (float)Math.Round(TouchScreen.GetTouch().positionCamera.y / _cellSize) * _cellSize;
+                                            _tilePositionPrev = _tilePosition;
                                         }
                                         else
                                         {
-                                            this._tilePosition.x = (float)Math.Round(_tilePosition.x / this._cellSize) * this._cellSize;
-                                            this._tilePosition.y = (float)Math.Round(_tilePosition.y / this._cellSize) * this._cellSize;
-                                            this._tilePositionPrev = this._tilePosition;
+                                            _tilePosition.x = (float)Math.Round(_tilePosition.x / _cellSize) * _cellSize;
+                                            _tilePosition.y = (float)Math.Round(_tilePosition.y / _cellSize) * _cellSize;
+                                            _tilePositionPrev = _tilePosition;
                                         }
                                     }
                                     else if (Editor.inputMode == EditorInput.Mouse)
                                     {
                                         if (flag3)
                                         {
-                                            this._tilePosition.x = (float)Math.Round(Mouse.positionScreen.x / 1.0) * 1f;
-                                            this._tilePosition.y = (float)Math.Round(Mouse.positionScreen.y / 1.0) * 1f;
+                                            _tilePosition.x = (float)Math.Round(Mouse.positionScreen.x / 1.0) * 1f;
+                                            _tilePosition.y = (float)Math.Round(Mouse.positionScreen.y / 1.0) * 1f;
                                         }
                                         else
                                         {
-                                            this._tilePosition.x = (float)Math.Round(Mouse.positionScreen.x / this._cellSize) * this._cellSize;
-                                            this._tilePosition.y = (float)Math.Round(Mouse.positionScreen.y / this._cellSize) * this._cellSize;
+                                            _tilePosition.x = (float)Math.Round(Mouse.positionScreen.x / _cellSize) * _cellSize;
+                                            _tilePosition.y = (float)Math.Round(Mouse.positionScreen.y / _cellSize) * _cellSize;
                                         }
                                     }
-                                    if (this._placementType != null && this._placementMenu == null)
+                                    if (_placementType != null && _placementMenu == null)
                                     {
-                                        this._tilePosition += this._placementType.editorOffset;
+                                        _tilePosition += _placementType.editorOffset;
                                         if (!flag3)
-                                            this.HugObjectPlacement();
+                                            HugObjectPlacement();
                                     }
-                                    if (this._move != null)
-                                        this._move.position = new Vec2(this._tilePosition);
-                                    this.UpdateDragSelection();
-                                    if (!this._editMode && !this._copyMode && this._cursorMode == CursorMode.Normal && !this._dragSelectShiftModifier && this._placementMenu == null)
+                                    if (_move != null)
+                                        _move.position = new Vec2(_tilePosition);
+                                    UpdateDragSelection();
+                                    if (!_editMode && !_copyMode && _cursorMode == CursorMode.Normal && !_dragSelectShiftModifier && _placementMenu == null)
                                     {
-                                        this.bMouseInput = false;
-                                        this.bGamepadInput = false;
-                                        this.bTouchInput = false;
+                                        bMouseInput = false;
+                                        bGamepadInput = false;
+                                        bTouchInput = false;
                                         if (Editor.inputMode == EditorInput.Mouse && Mouse.left == InputState.Pressed)
                                         {
-                                            this.bMouseInput = true;
-                                            this.dragModeInputType = InputType.eMouse;
+                                            bMouseInput = true;
+                                            dragModeInputType = InputType.eMouse;
                                         }
                                         else if (Editor.inputMode == EditorInput.Gamepad && Editor._input.Pressed("SELECT"))
                                         {
-                                            this.bGamepadInput = true;
-                                            this.dragModeInputType = InputType.eGamepad;
+                                            bGamepadInput = true;
+                                            dragModeInputType = InputType.eGamepad;
                                         }
                                         else if (Editor.inputMode == EditorInput.Touch && TouchScreen.GetDrag() != Touch.None || TouchScreen.GetTap() != Touch.None)
                                         {
-                                            this.bTouchInput = true;
-                                            this.dragModeInputType = InputType.eTouch;
+                                            bTouchInput = true;
+                                            dragModeInputType = InputType.eTouch;
                                         }
-                                        if (!this._dragMode && (this.bMouseInput || this.bGamepadInput || this.bTouchInput) && this._placementMode && this._hoverMode == 0 && (this._hoverButton == null || this._hoverButton.focus == null))
+                                        if (!_dragMode && (bMouseInput || bGamepadInput || bTouchInput) && _placementMode && _hoverMode == 0 && (_hoverButton == null || _hoverButton.focus == null))
                                         {
-                                            this.firstClick = true;
-                                            this._dragMode = true;
+                                            firstClick = true;
+                                            _dragMode = true;
                                             History.BeginUndoSection();
-                                            Thing hover = this._hover;
-                                            if (hover != null && (!(this._hover is BackgroundTile) || this._placementType != null && this._hover.GetType() == this._placementType.GetType()))
+                                            Thing hover = _hover;
+                                            if (hover != null && (!(_hover is BackgroundTile) || _placementType != null && _hover.GetType() == _placementType.GetType()))
                                             {
-                                                if ((Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl)) && !(this._placementType is BackgroundTile))
-                                                    this._move = hover;
+                                                if ((Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl)) && !(_placementType is BackgroundTile))
+                                                    _move = hover;
                                                 else if (!Keyboard.control)
-                                                    this._deleteMode = true;
+                                                    _deleteMode = true;
                                             }
                                         }
-                                        if (this._dragMode)
+                                        if (_dragMode)
                                         {
-                                            if (this._tileDragDif == Vec2.MaxValue || Editor.inputMode == EditorInput.Gamepad)
-                                                this._tileDragDif = this._tilePosition;
-                                            Vec2 vec2_6 = Maths.Snap(this._tilePosition, this._cellSize, this._cellSize);
-                                            Vec2 vec2_7 = this._tilePosition;
+                                            if (_tileDragDif == Vec2.MaxValue || Editor.inputMode == EditorInput.Gamepad)
+                                                _tileDragDif = _tilePosition;
+                                            Vec2 vec2_6 = Maths.Snap(_tilePosition, _cellSize, _cellSize);
+                                            Vec2 vec2_7 = _tilePosition;
                                             Vec2 vec2_8 = Vec2.MaxValue;
                                             do
                                             {
-                                                Vec2 vec2_9 = Maths.Snap(vec2_7, this._cellSize, this._cellSize);
-                                                if ((Keyboard.control || Input.Down("SELECT") && Input.Down("MENU1")) && this._tileDragContext == Vec2.MinValue)
-                                                    this._tileDragContext = vec2_9;
-                                                if (!(vec2_9 == Maths.Snap(this._tileDragDif, this._cellSize, this._cellSize)) || !(vec2_9 != Maths.Snap(this._tilePosition, this._cellSize, this._cellSize)))
+                                                Vec2 vec2_9 = Maths.Snap(vec2_7, _cellSize, _cellSize);
+                                                if ((Keyboard.control || Input.Down("SELECT") && Input.Down("MENU1")) && _tileDragContext == Vec2.MinValue)
+                                                    _tileDragContext = vec2_9;
+                                                if (!(vec2_9 == Maths.Snap(_tileDragDif, _cellSize, _cellSize)) || !(vec2_9 != Maths.Snap(_tilePosition, _cellSize, _cellSize)))
                                                 {
-                                                    if (vec2_6 != this._tilePosition)
+                                                    if (vec2_6 != _tilePosition)
                                                     {
-                                                        vec2_9 = this._tilePosition;
-                                                        this._tileDragDif = this._tilePosition;
+                                                        vec2_9 = _tilePosition;
+                                                        _tileDragDif = _tilePosition;
                                                     }
-                                                    vec2_7 = Lerp.Vec2(vec2_7, this._tileDragDif, this._cellSize);
-                                                    if (this._tileDragDif != this._tilePosition)
-                                                        this.UpdateHover(placementLayer, vec2_9, true);
-                                                    if (!this._deleteMode && this._placementType != null)
+                                                    vec2_7 = Lerp.Vec2(vec2_7, _tileDragDif, _cellSize);
+                                                    if (_tileDragDif != _tilePosition)
+                                                        UpdateHover(placementLayer, vec2_9, true);
+                                                    if (!_deleteMode && _placementType != null)
                                                     {
-                                                        Thing thing = this._hover;
-                                                        if (thing == null && !(this._placementType is BackgroundTile))
-                                                            thing = this.CollisionPointFilter<Thing>(vec2_9, x =>
+                                                        Thing thing = _hover;
+                                                        if (thing == null && !(_placementType is BackgroundTile))
+                                                            thing = CollisionPointFilter<Thing>(vec2_9, x =>
                                                            {
                                                                if (x.placementLayer != placementLayer)
                                                                    return false;
-                                                               return !(this._placementType is PipeTileset) || x.GetType() == this._placementType.GetType();
+                                                               return !(_placementType is PipeTileset) || x.GetType() == _placementType.GetType();
                                                            });
                                                         if (thing is TileButton)
                                                             thing = null;
-                                                        else if (thing != null && !this._levelThings.Contains(thing))
+                                                        else if (thing != null && !_levelThings.Contains(thing))
                                                             thing = null;
                                                         else if (flag4 & flag3)
                                                             thing = null;
-                                                        else if (this._placementType is BackgroundTile && !(thing is BackgroundTile))
+                                                        else if (_placementType is BackgroundTile && !(thing is BackgroundTile))
                                                             thing = null;
-                                                        else if (this.firstClick && this._hover == null)
+                                                        else if (firstClick && _hover == null)
                                                             thing = null;
-                                                        this.firstClick = false;
-                                                        if ((thing == null || this._placementType is WireTileset && thing is IWirePeripheral || this._placementType is IWirePeripheral && thing is WireTileset) && !this.placementLimitReached && !this.placementOutOfSizeRange && vec2_8 != vec2_9)
+                                                        firstClick = false;
+                                                        if ((thing == null || _placementType is WireTileset && thing is IWirePeripheral || _placementType is IWirePeripheral && thing is WireTileset) && !placementLimitReached && !placementOutOfSizeRange && vec2_8 != vec2_9)
                                                         {
                                                             vec2_8 = vec2_9;
-                                                            System.Type type = this._placementType.GetType();
+                                                            System.Type type = _placementType.GetType();
                                                             Thing newThing = null;
-                                                            newThing = this._eyeDropperSerialized != null ? Thing.LoadThing(this._eyeDropperSerialized) : Editor.CreateThing(type);
+                                                            newThing = _eyeDropperSerialized != null ? Thing.LoadThing(_eyeDropperSerialized) : Editor.CreateThing(type);
                                                             newThing.x = vec2_9.x;
                                                             newThing.y = vec2_9.y;
-                                                            if (this._placementType is SubBackgroundTile)
-                                                                (newThing.graphic as SpriteMap).frame = ((this._placementType as SubBackgroundTile).graphic as SpriteMap).frame;
-                                                            if (this._placementType is BackgroundTile)
+                                                            if (_placementType is SubBackgroundTile)
+                                                                (newThing.graphic as SpriteMap).frame = ((_placementType as SubBackgroundTile).graphic as SpriteMap).frame;
+                                                            if (_placementType is BackgroundTile)
                                                             {
-                                                                int num18 = (int)((vec2_9.x - this._tileDragContext.x) / 16.0);
-                                                                int num19 = (int)((vec2_9.y - this._tileDragContext.y) / 16.0);
-                                                                (newThing as BackgroundTile).frame = (this._placementType as BackgroundTile).frame + num18 + (int)(num19 * (newThing.graphic.texture.width / 16.0));
+                                                                int num18 = (int)((vec2_9.x - _tileDragContext.x) / 16.0);
+                                                                int num19 = (int)((vec2_9.y - _tileDragContext.y) / 16.0);
+                                                                (newThing as BackgroundTile).frame = (_placementType as BackgroundTile).frame + num18 + (int)(num19 * (newThing.graphic.texture.width / 16.0));
                                                             }
-                                                            else if (this._placementType is ForegroundTile)
-                                                                (newThing.graphic as SpriteMap).frame = ((this._placementType as ForegroundTile).graphic as SpriteMap).frame;
-                                                            if (this._hover is BackgroundTile)
-                                                                newThing.depth = this._hover.depth + 1;
-                                                            History.Add(() => this.AddObject(newThing), () => this.RemoveObject(newThing));
+                                                            else if (_placementType is ForegroundTile)
+                                                                (newThing.graphic as SpriteMap).frame = ((_placementType as ForegroundTile).graphic as SpriteMap).frame;
+                                                            if (_hover is BackgroundTile)
+                                                                newThing.depth = _hover.depth + 1;
+                                                            History.Add(() => AddObject(newThing), () => RemoveObject(newThing));
                                                             if (newThing is PathNode)
-                                                                this._editorLoadFinished = true;
+                                                                _editorLoadFinished = true;
                                                             if (flag5)
-                                                                this.disableDragMode();
+                                                                disableDragMode();
                                                         }
                                                     }
                                                     else
                                                     {
-                                                        Thing col = this._hover;
+                                                        Thing col = _hover;
                                                         if (col != null)
                                                         {
-                                                            History.Add(() => this.RemoveObject(col), () => this.AddObject(col));
+                                                            History.Add(() => RemoveObject(col), () => AddObject(col));
                                                             if (col is PathNode)
-                                                                this._editorLoadFinished = true;
-                                                            this._hover = null;
+                                                                _editorLoadFinished = true;
+                                                            _hover = null;
                                                         }
                                                     }
-                                                    this.things.RefreshState();
-                                                    vec2_1 = vec2_7 - this._tileDragDif;
+                                                    things.RefreshState();
+                                                    vec2_1 = vec2_7 - _tileDragDif;
                                                 }
                                                 else
                                                     break;
                                             }
                                             while (vec2_1.length > 2.0);
                                         }
-                                        if (Mouse.left == InputState.Released && this.dragModeInputType == InputType.eMouse || Editor._input.Released("SELECT") && this.dragModeInputType == InputType.eGamepad || TouchScreen.GetRelease() != Touch.None && this.dragModeInputType == InputType.eTouch)
-                                            this.disableDragMode();
+                                        if (Mouse.left == InputState.Released && dragModeInputType == InputType.eMouse || Editor._input.Released("SELECT") && dragModeInputType == InputType.eGamepad || TouchScreen.GetRelease() != Touch.None && dragModeInputType == InputType.eTouch)
+                                            disableDragMode();
                                     }
                                     if (!Keyboard.control && !Input.Down("MENU1"))
-                                        this._tileDragContext = Vec2.MinValue;
-                                    this._tileDragDif = this._tilePosition;
-                                    this._placingTiles = false;
-                                    if (this._placementType is BackgroundTile)
-                                        this._placingTiles = true;
-                                    if (this._placingTiles && this._placementMenu == null && (Editor._input.Pressed("MENU1") && !Editor._input.Down("SELECT") || this._openTileSelector) && this._cursorMode == CursorMode.Normal)
+                                        _tileDragContext = Vec2.MinValue;
+                                    _tileDragDif = _tilePosition;
+                                    _placingTiles = false;
+                                    if (_placementType is BackgroundTile)
+                                        _placingTiles = true;
+                                    if (_placingTiles && _placementMenu == null && (Editor._input.Pressed("MENU1") && !Editor._input.Down("SELECT") || _openTileSelector) && _cursorMode == CursorMode.Normal)
                                     {
-                                        this.DoMenuClose();
-                                        int frame = this._placementType.frame;
-                                        this._placementMenu = new ContextBackgroundTile(this._placementType, null, false)
+                                        DoMenuClose();
+                                        int frame = _placementType.frame;
+                                        _placementMenu = new ContextBackgroundTile(_placementType, null, false)
                                         {
                                             positionCursor = true
                                         };
-                                        this._placementMenu.opened = true;
+                                        _placementMenu.opened = true;
                                         SFX.Play("openClick", 0.4f);
-                                        this._placementMenu.x = 16f;
-                                        this._placementMenu.y = 16f;
-                                        this._placementMenu.selectedIndex = frame;
+                                        _placementMenu.x = 16f;
+                                        _placementMenu.y = 16f;
+                                        _placementMenu.selectedIndex = frame;
                                         Level.Add(_placementMenu);
-                                        this._openTileSelector = false;
+                                        _openTileSelector = false;
                                     }
-                                    if (this._editMode && this._cursorMode == CursorMode.Normal)
+                                    if (_editMode && _cursorMode == CursorMode.Normal)
                                     {
-                                        if (this._twoFingerGesture || this._threeFingerGesture)
-                                            this.DoMenuClose();
-                                        if (this.clicked && this._hover != null)
+                                        if (_twoFingerGesture || _threeFingerGesture)
+                                            DoMenuClose();
+                                        if (clicked && _hover != null)
                                         {
-                                            this.DoMenuClose();
-                                            this._placementMenu = this._hover.GetContextMenu();
-                                            if (this._placementMenu != null)
+                                            DoMenuClose();
+                                            _placementMenu = _hover.GetContextMenu();
+                                            if (_placementMenu != null)
                                             {
-                                                this._placementMenu.x = 96f;
-                                                this._placementMenu.y = 32f;
+                                                _placementMenu.x = 96f;
+                                                _placementMenu.y = 32f;
                                                 if (Editor.inputMode == EditorInput.Gamepad || Editor.inputMode == EditorInput.Touch)
                                                 {
-                                                    this._placementMenu.x = 16f;
-                                                    this._placementMenu.y = 16f;
+                                                    _placementMenu.x = 16f;
+                                                    _placementMenu.y = 16f;
                                                 }
-                                                this._openedEditMenu = true;
-                                                this.AddThing(_placementMenu);
-                                                this._placementMenu.opened = true;
+                                                _openedEditMenu = true;
+                                                AddThing(_placementMenu);
+                                                _placementMenu.opened = true;
                                                 SFX.Play("openClick", 0.4f);
-                                                this.clicked = false;
-                                                this._oldHover = this._hover;
-                                                this._lastHoverMenuOpen = this._placementMenu;
+                                                clicked = false;
+                                                _oldHover = _hover;
+                                                _lastHoverMenuOpen = _placementMenu;
                                             }
                                         }
                                     }
                                     Editor.hoverUI = false;
-                                    if (this._closeMenu)
-                                        this.DoMenuClose();
+                                    if (_closeMenu)
+                                        DoMenuClose();
                                     base.Update();
                                 }
                             }
@@ -2220,48 +2220,48 @@ namespace DuckGame
 
         public override void PostUpdate()
         {
-            if (this._placementMenu != null)
+            if (_placementMenu != null)
             {
-                if (this._editMode && Editor.clickedMenu)
-                    this._hover = this._oldHover;
-                if (Editor.inputMode == EditorInput.Touch && TouchScreen.GetTap() != Touch.None && !Editor.clickedMenu && !Editor.clickedContextBackground && !this._openedEditMenu)
+                if (_editMode && Editor.clickedMenu)
+                    _hover = _oldHover;
+                if (Editor.inputMode == EditorInput.Touch && TouchScreen.GetTap() != Touch.None && !Editor.clickedMenu && !Editor.clickedContextBackground && !_openedEditMenu)
                 {
-                    if (this._touchState == Editor.EditorTouchState.OpenMenu)
-                        this.EndCurrentTouchMode();
-                    this._showPlacementMenu = false;
-                    this.CloseMenu();
+                    if (_touchState == Editor.EditorTouchState.OpenMenu)
+                        EndCurrentTouchMode();
+                    _showPlacementMenu = false;
+                    CloseMenu();
                 }
             }
-            if (this._touchState == Editor.EditorTouchState.OpenMenu && this._placementMenu == null)
+            if (_touchState == Editor.EditorTouchState.OpenMenu && _placementMenu == null)
             {
-                this._touchState = Editor.EditorTouchState.Normal;
-                this._activeTouchButton = null;
+                _touchState = Editor.EditorTouchState.Normal;
+                _activeTouchButton = null;
             }
-            this._openedEditMenu = false;
+            _openedEditMenu = false;
         }
 
         public void DoMenuClose()
         {
-            if (this._placementMenu != null)
+            if (_placementMenu != null)
             {
-                if (this._placementMenu != this._objectMenu)
+                if (_placementMenu != _objectMenu)
                 {
-                    this.RemoveThing(_placementMenu);
+                    RemoveThing(_placementMenu);
                 }
                 else
                 {
-                    this._placementMenu.visible = false;
-                    this._placementMenu.active = false;
-                    this._placementMenu.opened = false;
+                    _placementMenu.visible = false;
+                    _placementMenu.active = false;
+                    _placementMenu.opened = false;
                 }
             }
-            this._placementMenu = null;
-            this._closeMenu = false;
+            _placementMenu = null;
+            _closeMenu = false;
         }
 
         private void UpdateSelection(bool pObjectsChanged = true)
         {
-            foreach (Thing levelThing in this._levelThings)
+            foreach (Thing levelThing in _levelThings)
             {
                 if (pObjectsChanged)
                     levelThing.EditorObjectsChanged();
@@ -2269,27 +2269,27 @@ namespace DuckGame
             }
             foreach (Thing thing in Level.current.things)
                 thing.material = null;
-            foreach (Thing thing in this._selection)
+            foreach (Thing thing in _selection)
             {
                 switch (thing)
                 {
                     case AutoBlock _:
                         AutoBlock autoBlock = thing as AutoBlock;
                         if (autoBlock._bLeftNub != null)
-                            this._currentDragSelectionHover.Add(autoBlock._bLeftNub);
+                            _currentDragSelectionHover.Add(autoBlock._bLeftNub);
                         if (autoBlock._bRightNub != null)
                         {
-                            this._currentDragSelectionHover.Add(autoBlock._bRightNub);
+                            _currentDragSelectionHover.Add(autoBlock._bRightNub);
                             continue;
                         }
                         continue;
                     case AutoPlatform _:
                         AutoPlatform autoPlatform = thing as AutoPlatform;
                         if (autoPlatform._leftNub != null)
-                            this._currentDragSelectionHover.Add(autoPlatform._leftNub);
+                            _currentDragSelectionHover.Add(autoPlatform._leftNub);
                         if (autoPlatform._rightNub != null)
                         {
-                            this._currentDragSelectionHover.Add(autoPlatform._rightNub);
+                            _currentDragSelectionHover.Add(autoPlatform._rightNub);
                             continue;
                         }
                         continue;
@@ -2297,17 +2297,17 @@ namespace DuckGame
                         Door door = thing as Door;
                         if (door._frame != null)
                         {
-                            this._currentDragSelectionHover.Add(door._frame);
+                            _currentDragSelectionHover.Add(door._frame);
                             continue;
                         }
                         continue;
                     case ItemSpawner _:
                         ItemSpawner itemSpawner = thing as ItemSpawner;
                         if (itemSpawner._ball1 != null)
-                            this._currentDragSelectionHover.Add(itemSpawner._ball1);
+                            _currentDragSelectionHover.Add(itemSpawner._ball1);
                         if (itemSpawner._ball2 != null)
                         {
-                            this._currentDragSelectionHover.Add(itemSpawner._ball2);
+                            _currentDragSelectionHover.Add(itemSpawner._ball2);
                             continue;
                         }
                         continue;
@@ -2315,27 +2315,27 @@ namespace DuckGame
                         continue;
                 }
             }
-            foreach (Thing thing in this._currentDragSelectionHover)
+            foreach (Thing thing in _currentDragSelectionHover)
                 thing.material = _selectionMaterial;
-            foreach (Thing thing in this._currentDragSelectionHoverAdd)
-                thing.material = !this._currentDragSelectionHover.Contains(thing) ? _selectionMaterial : (Material)null;
+            foreach (Thing thing in _currentDragSelectionHoverAdd)
+                thing.material = !_currentDragSelectionHover.Contains(thing) ? _selectionMaterial : (Material)null;
         }
 
         private void RebuildPasteBatch()
         {
-            this._pasteBatch.Clear();
-            foreach (BinaryClassChunk node in this._selectionCopy)
-                this._pasteBatch.Add(Thing.LoadThing(node));
+            _pasteBatch.Clear();
+            foreach (BinaryClassChunk node in _selectionCopy)
+                _pasteBatch.Add(Thing.LoadThing(node));
         }
 
         private void UpdateDragSelection()
         {
-            this._dragSelectShiftModifier = Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift) || Editor.inputMode == EditorInput.Gamepad && this._selection.Count > 0;
-            if (this._cursorMode == CursorMode.Selection)
+            _dragSelectShiftModifier = Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift) || Editor.inputMode == EditorInput.Gamepad && _selection.Count > 0;
+            if (_cursorMode == CursorMode.Selection)
             {
-                this._selectionDragEnd = Editor.inputMode == EditorInput.Mouse ? Mouse.positionScreen : this._tilePosition;
-                Vec2 selectionDragStart = this._selectionDragStart;
-                Vec2 selectionDragEnd = this._selectionDragEnd;
+                _selectionDragEnd = Editor.inputMode == EditorInput.Mouse ? Mouse.positionScreen : _tilePosition;
+                Vec2 selectionDragStart = _selectionDragStart;
+                Vec2 selectionDragEnd = _selectionDragEnd;
                 if (selectionDragEnd.x < selectionDragStart.x)
                 {
                     (selectionDragEnd.x, selectionDragStart.x) = (selectionDragStart.x, selectionDragEnd.x);
@@ -2344,56 +2344,56 @@ namespace DuckGame
                 {
                     (selectionDragEnd.y, selectionDragStart.y) = (selectionDragStart.y, selectionDragEnd.y);
                 }
-                if (this._dragSelectShiftModifier)
+                if (_dragSelectShiftModifier)
                 {
-                    this._currentDragSelectionHoverAdd.Clear();
+                    _currentDragSelectionHoverAdd.Clear();
                     foreach (Thing thing in Level.CheckRectAll<Thing>(selectionDragStart, selectionDragEnd))
-                        this._currentDragSelectionHoverAdd.Add(thing);
+                        _currentDragSelectionHoverAdd.Add(thing);
                 }
                 else
                 {
-                    this._currentDragSelectionHover.Clear();
+                    _currentDragSelectionHover.Clear();
                     foreach (Thing thing in Level.CheckRectAll<Thing>(selectionDragStart, selectionDragEnd))
-                        this._currentDragSelectionHover.Add(thing);
+                        _currentDragSelectionHover.Add(thing);
                 }
                 if (Mouse.right == InputState.Released || Mouse.left == InputState.Released || Editor.inputMode == EditorInput.Gamepad && Editor._input.Released("CANCEL"))
                 {
-                    if (this._dragSelectShiftModifier)
+                    if (_dragSelectShiftModifier)
                     {
-                        foreach (Thing thing in this._currentDragSelectionHoverAdd)
+                        foreach (Thing thing in _currentDragSelectionHoverAdd)
                         {
-                            if (this._currentDragSelectionHover.Contains(thing))
+                            if (_currentDragSelectionHover.Contains(thing))
                             {
-                                this._currentDragSelectionHover.Remove(thing);
-                                this._selection.Remove(thing);
+                                _currentDragSelectionHover.Remove(thing);
+                                _selection.Remove(thing);
                             }
                             else
-                                this._currentDragSelectionHover.Add(thing);
+                                _currentDragSelectionHover.Add(thing);
                         }
                     }
-                    foreach (Thing thing in this._currentDragSelectionHover)
+                    foreach (Thing thing in _currentDragSelectionHover)
                     {
-                        if (!(thing is ContextMenu) && this._levelThings.Contains(thing) && !this._selection.Contains(thing))
-                            this._selection.Add(thing);
+                        if (!(thing is ContextMenu) && _levelThings.Contains(thing) && !_selection.Contains(thing))
+                            _selection.Add(thing);
                     }
-                    this._currentDragSelectionHoverAdd.Clear();
+                    _currentDragSelectionHoverAdd.Clear();
                     //this.dragStartInputType = InputType.eNone;
-                    this._cursorMode = this._selection.Count > 0 ? CursorMode.HasSelection : CursorMode.Normal;
+                    _cursorMode = _selection.Count > 0 ? CursorMode.HasSelection : CursorMode.Normal;
                     Editor.clickedMenu = true;
-                    this._selectionDragStart = Vec2.Zero;
+                    _selectionDragStart = Vec2.Zero;
                 }
-                this.UpdateSelection(false);
+                UpdateSelection(false);
             }
-            else if (this._cursorMode == CursorMode.Drag)
+            else if (_cursorMode == CursorMode.Drag)
             {
-                Vec2 vec2 = Maths.Snap(Mouse.positionScreen + new Vec2(this._cellSize / 2f), this._cellSize, this._cellSize);
+                Vec2 vec2 = Maths.Snap(Mouse.positionScreen + new Vec2(_cellSize / 2f), _cellSize, _cellSize);
                 if (Editor.inputMode == EditorInput.Gamepad)
-                    vec2 = Maths.Snap(this._tilePosition + new Vec2(this._cellSize / 2f), this._cellSize, this._cellSize);
-                if (vec2 != this._moveDragStart)
+                    vec2 = Maths.Snap(_tilePosition + new Vec2(_cellSize / 2f), _cellSize, _cellSize);
+                if (vec2 != _moveDragStart)
                 {
-                    Vec2 dif = vec2 - this._moveDragStart;
-                    this._moveDragStart = vec2;
-                    foreach (Thing thing1 in this._currentDragSelectionHover)
+                    Vec2 dif = vec2 - _moveDragStart;
+                    _moveDragStart = vec2;
+                    foreach (Thing thing1 in _currentDragSelectionHover)
                     {
                         Thing t = thing1;
                         History.Add(() =>
@@ -2417,113 +2417,113 @@ namespace DuckGame
                 }
                 if (Mouse.left != InputState.Released && !Editor._input.Released("SELECT"))
                     return;
-                this._cursorMode = CursorMode.HasSelection;
-                this.UpdateSelection();
+                _cursorMode = CursorMode.HasSelection;
+                UpdateSelection();
                 History.EndUndoSection();
                 Editor.hasUnsavedChanges = true;
             }
             else
             {
-                if (this._performCopypaste || (Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl) || this._cursorMode == CursorMode.Pasting) && (this._cursorMode == CursorMode.Normal || this._cursorMode == CursorMode.HasSelection || this._cursorMode == CursorMode.Pasting || this._cursorMode == CursorMode.DragHover))
+                if (_performCopypaste || (Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl) || _cursorMode == CursorMode.Pasting) && (_cursorMode == CursorMode.Normal || _cursorMode == CursorMode.HasSelection || _cursorMode == CursorMode.Pasting || _cursorMode == CursorMode.DragHover))
                 {
                     bool flag = Keyboard.Pressed(Keys.X);
-                    if (this._selection.Count > 0 && (Keyboard.Pressed(Keys.C) | flag || this._performCopypaste))
+                    if (_selection.Count > 0 && (Keyboard.Pressed(Keys.C) | flag || _performCopypaste))
                     {
-                        this._selectionCopy.Clear();
-                        this._copyCenter = Vec2.Zero;
+                        _selectionCopy.Clear();
+                        _copyCenter = Vec2.Zero;
                         History.BeginUndoSection();
-                        foreach (Thing thing in this._selection)
+                        foreach (Thing thing in _selection)
                         {
                             Thing t = thing;
                             Editor.copying = true;
-                            this._selectionCopy.Add(t.Serialize());
-                            this._copyCenter += t.position;
+                            _selectionCopy.Add(t.Serialize());
+                            _copyCenter += t.position;
                             Editor.copying = false;
                             if (flag)
-                                History.Add(() => this.RemoveObject(t), () => this.AddObject(t));
+                                History.Add(() => RemoveObject(t), () => AddObject(t));
                         }
-                        this._copyCenter /= _selection.Count;
+                        _copyCenter /= _selection.Count;
                         if (flag)
                         {
-                            this._selection.Clear();
-                            this._currentDragSelectionHover.Clear();
-                            this.UpdateSelection();
+                            _selection.Clear();
+                            _currentDragSelectionHover.Clear();
+                            UpdateSelection();
                         }
                         History.EndUndoSection();
-                        this.RebuildPasteBatch();
+                        RebuildPasteBatch();
                         HUD.AddPlayerChangeDisplay("@CLIPCOPY@Selection copied!", 1f);
                     }
-                    if (Keyboard.Pressed(Keys.V) && this._pasteBatch.Count > 0 || this._performCopypaste)
+                    if (Keyboard.Pressed(Keys.V) && _pasteBatch.Count > 0 || _performCopypaste)
                     {
-                        this._selection.Clear();
-                        this._currentDragSelectionHover.Clear();
-                        this._cursorMode = CursorMode.Pasting;
-                        this.UpdateSelection(false);
+                        _selection.Clear();
+                        _currentDragSelectionHover.Clear();
+                        _cursorMode = CursorMode.Pasting;
+                        UpdateSelection(false);
                     }
-                    this.pasteOffset = Maths.Snap(this._copyCenter - Mouse.positionScreen, 16f, 16f);
+                    pasteOffset = Maths.Snap(_copyCenter - Mouse.positionScreen, 16f, 16f);
                     if (Editor.inputMode == EditorInput.Gamepad)
-                        this.pasteOffset = Maths.Snap(this._copyCenter - this._tilePosition, 16f, 16f);
-                    this._performCopypaste = false;
-                    if (this._cursorMode == CursorMode.Pasting)
+                        pasteOffset = Maths.Snap(_copyCenter - _tilePosition, 16f, 16f);
+                    _performCopypaste = false;
+                    if (_cursorMode == CursorMode.Pasting)
                     {
                         if (Mouse.right == InputState.Released || Editor._input.Released("CANCEL") && Editor.inputMode == EditorInput.Gamepad)
-                            this._cursorMode = CursorMode.Normal;
+                            _cursorMode = CursorMode.Normal;
                         if (Mouse.left == InputState.Pressed || Editor._input.Pressed("SELECT") && Editor.inputMode == EditorInput.Gamepad)
                         {
                             History.BeginUndoSection();
-                            this._selection.Clear();
-                            this._currentDragSelectionHover.Clear();
-                            this._isPaste = true;
-                            foreach (Thing thing4 in this._pasteBatch)
+                            _selection.Clear();
+                            _currentDragSelectionHover.Clear();
+                            _isPaste = true;
+                            foreach (Thing thing4 in _pasteBatch)
                             {
-                                this._selection.Add(thing4);
+                                _selection.Add(thing4);
                                 Thing thing5 = thing4;
-                                thing5.position -= this.pasteOffset;
-                                foreach (Thing thing6 in this.CollisionRectAll<Thing>(thing4.position + new Vec2(-6f, -6f), thing4.position + new Vec2(6f, 6f), null))
+                                thing5.position -= pasteOffset;
+                                foreach (Thing thing6 in CollisionRectAll<Thing>(thing4.position + new Vec2(-6f, -6f), thing4.position + new Vec2(6f, 6f), null))
                                 {
                                     Thing col = thing6;
-                                    if (col.placementLayer == thing4.placementLayer && this._levelThings.Contains(col))
-                                        History.Add(() => this.RemoveObject(col), () => this.AddObject(col));
+                                    if (col.placementLayer == thing4.placementLayer && _levelThings.Contains(col))
+                                        History.Add(() => RemoveObject(col), () => AddObject(col));
                                 }
                             }
-                            foreach (Thing thing in this._selection)
+                            foreach (Thing thing in _selection)
                             {
                                 Thing t = thing;
-                                History.Add(() => this.AddObject(t), () => this.RemoveObject(t));
+                                History.Add(() => AddObject(t), () => RemoveObject(t));
                             }
-                            this._selection.Clear();
-                            this._currentDragSelectionHover.Clear();
-                            this._isPaste = false;
-                            this.RebuildPasteBatch();
-                            this._placeObjects.Clear();
-                            this.things.RefreshState();
-                            this.UpdateSelection();
-                            this.disableDragMode();
+                            _selection.Clear();
+                            _currentDragSelectionHover.Clear();
+                            _isPaste = false;
+                            RebuildPasteBatch();
+                            _placeObjects.Clear();
+                            things.RefreshState();
+                            UpdateSelection();
+                            disableDragMode();
                         }
                     }
                 }
-                else if (this._cursorMode == CursorMode.Pasting)
-                    this._cursorMode = CursorMode.Normal;
-                if (this._selection.Count > 0 && this._cursorMode != CursorMode.Pasting && (Keyboard.Pressed(Keys.F) || Editor._input.Pressed("MENU1") && Editor.inputMode == EditorInput.Gamepad))
+                else if (_cursorMode == CursorMode.Pasting)
+                    _cursorMode = CursorMode.Normal;
+                if (_selection.Count > 0 && _cursorMode != CursorMode.Pasting && (Keyboard.Pressed(Keys.F) || Editor._input.Pressed("MENU1") && Editor.inputMode == EditorInput.Gamepad))
                 {
                     Vec2 zero = Vec2.Zero;
                     Vec2 pPosition;
-                    if (this._cursorMode == CursorMode.Pasting)
+                    if (_cursorMode == CursorMode.Pasting)
                     {
-                        foreach (Thing thing in this._pasteBatch)
+                        foreach (Thing thing in _pasteBatch)
                             zero += thing.position;
                         pPosition = zero / _pasteBatch.Count;
                     }
                     else
                     {
-                        foreach (Thing thing in this._selection)
+                        foreach (Thing thing in _selection)
                             zero += thing.position;
                         pPosition = zero / _selection.Count;
                     }
-                    Vec2 vec2 = Maths.SnapRound(pPosition, this._cellSize / 2f, this._cellSize / 2f);
-                    if (this._cursorMode == CursorMode.Pasting)
+                    Vec2 vec2 = Maths.SnapRound(pPosition, _cellSize / 2f, _cellSize / 2f);
+                    if (_cursorMode == CursorMode.Pasting)
                     {
-                        foreach (Thing thing in this._pasteBatch)
+                        foreach (Thing thing in _pasteBatch)
                         {
                             thing.SetTranslation(new Vec2((float)(-(thing.position.x - vec2.x) * 2.0), 0f));
                             thing.EditorFlip(false);
@@ -2533,7 +2533,7 @@ namespace DuckGame
                     else
                     {
                         History.BeginUndoSection();
-                        foreach (Thing thing in this._selection)
+                        foreach (Thing thing in _selection)
                         {
                             Thing t = thing;
                             float dif = t.position.x - vec2.x;
@@ -2557,37 +2557,37 @@ namespace DuckGame
                  Level.current.things.quadTree.Add(t);
              });
                         }
-                        this.UpdateSelection();
+                        UpdateSelection();
                         History.EndUndoSection();
                     }
-                    this.UpdateSelection();
+                    UpdateSelection();
                 }
-                if (this._selection.Count > 0)
+                if (_selection.Count > 0)
                 {
-                    this._cursorMode = CursorMode.HasSelection;
+                    _cursorMode = CursorMode.HasSelection;
                     switch (Editor.inputMode)
                     {
                         case EditorInput.Gamepad:
-                            using (HashSet<Thing>.Enumerator enumerator = this._selection.GetEnumerator())
+                            using (HashSet<Thing>.Enumerator enumerator = _selection.GetEnumerator())
                             {
                                 while (enumerator.MoveNext())
                                 {
-                                    if (Collision.Point(this._tilePosition, enumerator.Current))
+                                    if (Collision.Point(_tilePosition, enumerator.Current))
                                     {
-                                        this._cursorMode = CursorMode.DragHover;
+                                        _cursorMode = CursorMode.DragHover;
                                         break;
                                     }
                                 }
                                 break;
                             }
                         case EditorInput.Mouse:
-                            using (HashSet<Thing>.Enumerator enumerator = this._selection.GetEnumerator())
+                            using (HashSet<Thing>.Enumerator enumerator = _selection.GetEnumerator())
                             {
                                 while (enumerator.MoveNext())
                                 {
                                     if (Collision.Point(Mouse.positionScreen, enumerator.Current))
                                     {
-                                        this._cursorMode = CursorMode.DragHover;
+                                        _cursorMode = CursorMode.DragHover;
                                         break;
                                     }
                                 }
@@ -2598,54 +2598,54 @@ namespace DuckGame
                     if (Keyboard.Pressed(Keys.Delete) || Editor._input.Pressed("MENU2") && Editor.inputMode == EditorInput.Gamepad)
                     {
                         History.BeginUndoSection();
-                        foreach (Thing thing in this._selection)
+                        foreach (Thing thing in _selection)
                         {
                             Thing t = thing;
-                            History.Add(() => this.RemoveObject(t), () => this.AddObject(t));
+                            History.Add(() => RemoveObject(t), () => AddObject(t));
                         }
-                        this.UpdateSelection();
+                        UpdateSelection();
                         History.EndUndoSection();
                         flag = true;
                     }
                     if (Mouse.left == InputState.Pressed || Editor._input.Pressed("SELECT") && Editor.inputMode == EditorInput.Gamepad)
                     {
-                        if (this._cursorMode == CursorMode.DragHover)
+                        if (_cursorMode == CursorMode.DragHover)
                         {
                             History.BeginUndoSection();
-                            this._cursorMode = CursorMode.Drag;
-                            this._moveDragStart = Editor.inputMode != EditorInput.Gamepad ? Maths.Snap(Mouse.positionScreen + new Vec2(this._cellSize / 2f), this._cellSize, this._cellSize) : Maths.Snap(this._tilePosition + new Vec2(this._cellSize / 2f), this._cellSize, this._cellSize);
+                            _cursorMode = CursorMode.Drag;
+                            _moveDragStart = Editor.inputMode != EditorInput.Gamepad ? Maths.Snap(Mouse.positionScreen + new Vec2(_cellSize / 2f), _cellSize, _cellSize) : Maths.Snap(_tilePosition + new Vec2(_cellSize / 2f), _cellSize, _cellSize);
                         }
                         else
                             flag = true;
                     }
                     if (Editor._input.Released("CANCEL"))
                     {
-                        if (this._cursorMode == CursorMode.DragHover)
-                            this._performCopypaste = true;
+                        if (_cursorMode == CursorMode.DragHover)
+                            _performCopypaste = true;
                         else
                             flag = true;
                     }
-                    if (this._cursorMode != CursorMode.Pasting && Mouse.right == InputState.Released | flag && (!this._dragSelectShiftModifier || Editor.inputMode == EditorInput.Gamepad))
+                    if (_cursorMode != CursorMode.Pasting && Mouse.right == InputState.Released | flag && (!_dragSelectShiftModifier || Editor.inputMode == EditorInput.Gamepad))
                     {
-                        this._cursorMode = CursorMode.Normal;
-                        this._selection.Clear();
-                        this._currentDragSelectionHover.Clear();
-                        this.UpdateSelection(false);
+                        _cursorMode = CursorMode.Normal;
+                        _selection.Clear();
+                        _currentDragSelectionHover.Clear();
+                        UpdateSelection(false);
                     }
                     Vec2 offset = new Vec2(0f, 0f);
                     if (Keyboard.Pressed(Keys.Up))
-                        offset.y -= this.cellSize;
+                        offset.y -= cellSize;
                     if (Keyboard.Pressed(Keys.Down))
-                        offset.y += this.cellSize;
+                        offset.y += cellSize;
                     if (Keyboard.Pressed(Keys.Left))
-                        offset.x -= this.cellSize;
+                        offset.x -= cellSize;
                     if (Keyboard.Pressed(Keys.Right))
-                        offset.x += this.cellSize;
+                        offset.x += cellSize;
                     if (!(offset != Vec2.Zero))
                         return;
                     Editor.hasUnsavedChanges = true;
                     History.BeginUndoSection();
-                    foreach (Thing thing in this._selection)
+                    foreach (Thing thing in _selection)
                     {
                         Thing t = thing;
                         History.Add(() =>
@@ -2664,14 +2664,14 @@ namespace DuckGame
                Level.current.things.quadTree.Add(t);
            });
                     }
-                    this.UpdateSelection();
+                    UpdateSelection();
                     History.EndUndoSection();
                 }
                 else
                 {
-                    if (this._cursorMode != CursorMode.HasSelection)
+                    if (_cursorMode != CursorMode.HasSelection)
                         return;
-                    this._cursorMode = CursorMode.Normal;
+                    _cursorMode = CursorMode.Normal;
                 }
             }
         }
@@ -2680,85 +2680,85 @@ namespace DuckGame
         {
             IEnumerable<Thing> source1 = new List<Thing>();
             if (Editor.inputMode == EditorInput.Gamepad | isDrag)
-                source1 = this.CollisionPointAll<Thing>(tilePosition);
+                source1 = CollisionPointAll<Thing>(tilePosition);
             else if (Editor.inputMode == EditorInput.Touch && TouchScreen.IsScreenTouched())
             {
-                if (this._editMode || this._copyMode)
+                if (_editMode || _copyMode)
                 {
                     if (TouchScreen.GetTap() != Touch.None)
                     {
                         for (int index = 0; index < 4; ++index)
                         {
-                            source1 = this.CollisionCircleAll<Thing>(TouchScreen.GetTap().positionCamera, index * 2f);
+                            source1 = CollisionCircleAll<Thing>(TouchScreen.GetTap().positionCamera, index * 2f);
                             if (source1.Count<Thing>() > 0)
                                 break;
                         }
-                        this._hover = null;
+                        _hover = null;
                     }
                 }
                 else if (TouchScreen.GetTouch() != Touch.None)
-                    source1 = this.CollisionPointAll<Thing>(tilePosition);
+                    source1 = CollisionPointAll<Thing>(tilePosition);
             }
             else if (Editor.inputMode == EditorInput.Mouse && !isDrag)
-                source1 = this.CollisionPointAll<Thing>(Mouse.positionScreen);
-            this.oldHover = this._hover;
-            if (!this._editMode)
-                this._hover = null;
-            this._secondaryHover = null;
+                source1 = CollisionPointAll<Thing>(Mouse.positionScreen);
+            oldHover = _hover;
+            if (!_editMode)
+                _hover = null;
+            _secondaryHover = null;
             List<Thing> source2 = new List<Thing>();
             foreach (Thing thing in source1)
             {
-                if (!(thing is TileButton) && Editor._placeables.Contains(thing.GetType()) && thing.editorCanModify && this._things.Contains(thing) && (!(this._placementType is WireTileset) || !(thing is IWirePeripheral)) && (!(this._placementType is IWirePeripheral) || !(thing is WireTileset)))
+                if (!(thing is TileButton) && Editor._placeables.Contains(thing.GetType()) && thing.editorCanModify && _things.Contains(thing) && (!(_placementType is WireTileset) || !(thing is IWirePeripheral)) && (!(_placementType is IWirePeripheral) || !(thing is WireTileset)))
                 {
-                    if (this._placementType is PipeTileset && thing is PipeTileset && this._placementType.GetType() != thing.GetType())
+                    if (_placementType is PipeTileset && thing is PipeTileset && _placementType.GetType() != thing.GetType())
                         source2.Add(thing);
-                    else if (thing.placementLayer != placementLayer && !this._copyMode && !this._editMode)
+                    else if (thing.placementLayer != placementLayer && !_copyMode && !_editMode)
                         source2.Add(thing);
-                    else if (this._hover == null)
+                    else if (_hover == null)
                     {
-                        if (this._placementType != null && this._placementType is BackgroundTile)
+                        if (_placementType != null && _placementType is BackgroundTile)
                         {
-                            if (this._things.Contains(thing))
+                            if (_things.Contains(thing))
                             {
-                                if (thing.GetType() == this._placementType.GetType())
-                                    this._hover = thing;
+                                if (thing.GetType() == _placementType.GetType())
+                                    _hover = thing;
                                 else
                                     source2.Add(thing);
                             }
                         }
                         else if (thing.editorCanModify)
-                            this._hover = thing;
+                            _hover = thing;
                     }
-                    else if (thing != this._hover)
+                    else if (thing != _hover)
                         source2.Add(thing);
                 }
             }
-            if (Editor.inputMode == EditorInput.Mouse && !isDrag && this._hover == null && !(this._placementType is BackgroundTile) && !(this._placementType is PipeTileset))
+            if (Editor.inputMode == EditorInput.Mouse && !isDrag && _hover == null && !(_placementType is BackgroundTile) && !(_placementType is PipeTileset))
             {
-                List<KeyValuePair<float, Thing>> keyValuePairList = Level.current.nearest(tilePosition, this._levelThings.AsEnumerable<Thing>(), null, placementLayer, true);
-                if (keyValuePairList.Count > 0 && (!(this._placementType is WireTileset) || !(keyValuePairList[0].Value is IWirePeripheral)) && (!(this._placementType is IWirePeripheral) || !(keyValuePairList[0].Value is WireTileset)) && (keyValuePairList[0].Value.position - tilePosition).length < 8.0)
-                    this._hover = keyValuePairList[0].Value;
+                List<KeyValuePair<float, Thing>> keyValuePairList = Level.current.nearest(tilePosition, _levelThings.AsEnumerable<Thing>(), null, placementLayer, true);
+                if (keyValuePairList.Count > 0 && (!(_placementType is WireTileset) || !(keyValuePairList[0].Value is IWirePeripheral)) && (!(_placementType is IWirePeripheral) || !(keyValuePairList[0].Value is WireTileset)) && (keyValuePairList[0].Value.position - tilePosition).length < 8.0)
+                    _hover = keyValuePairList[0].Value;
             }
-            if (this._hover == null || this.oldHover == null || this._hover.GetType() != this.oldHover.GetType())
-                this._hoverMenu = this._hover != null ? this._hover.GetContextMenu() : null;
+            if (_hover == null || oldHover == null || _hover.GetType() != oldHover.GetType())
+                _hoverMenu = _hover != null ? _hover.GetContextMenu() : null;
             if (source2.Count > 0)
             {
                 IOrderedEnumerable<Thing> source3 = source2.OrderBy<Thing, int>(x => x.placementLayer == null ? -99999 : x.placementLayer.depth);
                 if (Keyboard.control)
-                    this._hover = this._hover != null ? source3.First<Thing>() : source2.OrderBy<Thing, int>(x => x.placementLayer == null ? 99999 : -x.placementLayer.depth).First<Thing>();
-                else if (this._hover == null || Keyboard.control || this._placementType != null && source3.First<Thing>().placementLayer == this._placementType.placementLayer)
+                    _hover = _hover != null ? source3.First<Thing>() : source2.OrderBy<Thing, int>(x => x.placementLayer == null ? 99999 : -x.placementLayer.depth).First<Thing>();
+                else if (_hover == null || Keyboard.control || _placementType != null && source3.First<Thing>().placementLayer == _placementType.placementLayer)
                 {
-                    this._secondaryHover = source3.First<Thing>();
-                    if (this._hoverMenu == null)
-                        this._hoverMenu = this._secondaryHover.GetContextMenu();
+                    _secondaryHover = source3.First<Thing>();
+                    if (_hoverMenu == null)
+                        _hoverMenu = _secondaryHover.GetContextMenu();
                 }
             }
-            if (this._secondaryHover != null || !(this._hover is Block) || source2.Count <= 0)
+            if (_secondaryHover != null || !(_hover is Block) || source2.Count <= 0)
                 return;
-            this._secondaryHover = source2.FirstOrDefault<Thing>(x => x is PipeTileset);
-            if (this._secondaryHover == null || (this._secondaryHover as PipeTileset)._foregroundDraw)
+            _secondaryHover = source2.FirstOrDefault<Thing>(x => x is PipeTileset);
+            if (_secondaryHover == null || (_secondaryHover as PipeTileset)._foregroundDraw)
                 return;
-            this._secondaryHover = null;
+            _secondaryHover = null;
         }
 
         public override void Draw() => base.Draw();
@@ -2767,13 +2767,13 @@ namespace DuckGame
 
         private void CalculateGridRestriction()
         {
-            Vec2 vec2 = this._sizeRestriction * 2f - (this._bottomRightMost - this._topLeftMost) - new Vec2(16f, 16f);
+            Vec2 vec2 = _sizeRestriction * 2f - (_bottomRightMost - _topLeftMost) - new Vec2(16f, 16f);
             if (vec2.x > _sizeRestriction.x * 2.0)
-                vec2.x = this._sizeRestriction.x * 2f;
+                vec2.x = _sizeRestriction.x * 2f;
             if (vec2.y > _sizeRestriction.y * 2.0)
-                vec2.y = this._sizeRestriction.y * 2f;
-            this._gridW = (int)(vec2.x / this._cellSize);
-            this._gridH = (int)(vec2.y / this._cellSize);
+                vec2.y = _sizeRestriction.y * 2f;
+            _gridW = (int)(vec2.x / _cellSize);
+            _gridH = (int)(vec2.y / _cellSize);
         }
 
         public override void PostDrawLayer(Layer layer)
@@ -2781,32 +2781,32 @@ namespace DuckGame
             base.PostDrawLayer(layer);
             if (layer == Layer.Foreground)
             {
-                foreach (Thing thing in this.things)
+                foreach (Thing thing in things)
                     thing.DoEditorRender();
             }
-            if (layer == this._procLayer && this._procTarget != null && this._procContext != null)
+            if (layer == _procLayer && _procTarget != null && _procContext != null)
                 DuckGame.Graphics.Draw(_procTarget, new Vec2(0f, 0f), new Rectangle?(), Color.White * 0.5f, 0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None);
-            if (layer == this._gridLayer)
+            if (layer == _gridLayer)
             {
-                this.backgroundColor = new Color(20, 20, 20);
+                backgroundColor = new Color(20, 20, 20);
                 Color col = new Color(38, 38, 38);
                 if (Editor.arcadeMachineMode)
                 {
-                    DuckGame.Graphics.DrawRect(this._levelThings[0].position + new Vec2(-17f, -21f), this._levelThings[0].position + new Vec2(18f, 21f), col, -0.9f, false);
+                    DuckGame.Graphics.DrawRect(_levelThings[0].position + new Vec2(-17f, -21f), _levelThings[0].position + new Vec2(18f, 21f), col, -0.9f, false);
                 }
                 else
                 {
-                    float x = (float)(-this._cellSize / 2.0);
-                    float y = (float)(-this._cellSize / 2.0);
+                    float x = (float)(-_cellSize / 2.0);
+                    float y = (float)(-_cellSize / 2.0);
                     if (_sizeRestriction.x > 0.0)
                     {
-                        Vec2 vec2 = -new Vec2((float)(_gridW * this._cellSize / 2.0), (float)((this._gridH - 1) * this._cellSize / 2.0)) + new Vec2(8f, 0f);
-                        x += (int)(vec2.x / this._cellSize) * this._cellSize;
-                        y += (int)(vec2.y / this._cellSize) * this._cellSize;
+                        Vec2 vec2 = -new Vec2((float)(_gridW * _cellSize / 2.0), (float)((_gridH - 1) * _cellSize / 2.0)) + new Vec2(8f, 0f);
+                        x += (int)(vec2.x / _cellSize) * _cellSize;
+                        y += (int)(vec2.y / _cellSize) * _cellSize;
                     }
-                    int num1 = this._gridW;
-                    int num2 = this._gridH;
-                    if (this._miniMode)
+                    int num1 = _gridW;
+                    int num2 = _gridH;
+                    if (_miniMode)
                     {
                         num1 = 12;
                         num2 = 9;
@@ -2814,81 +2814,81 @@ namespace DuckGame
                     if (x < _ultimateBounds.x)
                     {
                         int num3 = (int)((_ultimateBounds.x - x) / _cellSize) + 1;
-                        x = (int)(_ultimateBounds.x / this._cellSize * _cellSize) + this._cellSize / 2f;
+                        x = (int)(_ultimateBounds.x / _cellSize * _cellSize) + _cellSize / 2f;
                         num1 -= num3;
                     }
                     if (y < _ultimateBounds.y)
                     {
                         int num4 = (int)((_ultimateBounds.y - y) / _cellSize) + 1;
-                        y = (int)(_ultimateBounds.y / this._cellSize * _cellSize) + this._cellSize / 2f;
+                        y = (int)(_ultimateBounds.y / _cellSize * _cellSize) + _cellSize / 2f;
                         num2 -= num4;
                     }
-                    float num5 = x + num1 * this._cellSize;
-                    if (num5 > this._ultimateBounds.Right)
+                    float num5 = x + num1 * _cellSize;
+                    if (num5 > _ultimateBounds.Right)
                     {
-                        int num6 = (int)((num5 - this._ultimateBounds.Right) / _cellSize) + 1;
+                        int num6 = (int)((num5 - _ultimateBounds.Right) / _cellSize) + 1;
                         num1 -= num6;
-                        x = (int)((this._ultimateBounds.Right - num1 * this._cellSize) / _cellSize * _cellSize) - this._cellSize / 2f;
+                        x = (int)((_ultimateBounds.Right - num1 * _cellSize) / _cellSize * _cellSize) - _cellSize / 2f;
                     }
-                    float num7 = y + num2 * this._cellSize;
-                    if (y + num2 * this._cellSize > this._ultimateBounds.Bottom)
+                    float num7 = y + num2 * _cellSize;
+                    if (y + num2 * _cellSize > _ultimateBounds.Bottom)
                     {
-                        int num8 = (int)((num7 - this._ultimateBounds.Bottom) / _cellSize) + 1;
+                        int num8 = (int)((num7 - _ultimateBounds.Bottom) / _cellSize) + 1;
                         num2 -= num8;
-                        y = (int)((this._ultimateBounds.Bottom - num2 * this._cellSize) / _cellSize * _cellSize) - this._cellSize / 2f;
+                        y = (int)((_ultimateBounds.Bottom - num2 * _cellSize) / _cellSize * _cellSize) - _cellSize / 2f;
                     }
-                    int num9 = num1 * (int)this._cellSize;
-                    int num10 = num2 * (int)this._cellSize;
-                    int num11 = (int)(num9 / this._cellSize);
-                    int num12 = (int)(num10 / this._cellSize);
+                    int num9 = num1 * (int)_cellSize;
+                    int num10 = num2 * (int)_cellSize;
+                    int num11 = (int)(num9 / _cellSize);
+                    int num12 = (int)(num10 / _cellSize);
                     for (int index = 0; index < num11 + 1; ++index)
-                        DuckGame.Graphics.DrawLine(new Vec2(x + index * this._cellSize, y), new Vec2(x + index * this._cellSize, y + num12 * this._cellSize), col, 2f, -0.9f);
+                        DuckGame.Graphics.DrawLine(new Vec2(x + index * _cellSize, y), new Vec2(x + index * _cellSize, y + num12 * _cellSize), col, 2f, -0.9f);
                     for (int index = 0; index < num12 + 1; ++index)
-                        DuckGame.Graphics.DrawLine(new Vec2(x, y + index * this._cellSize), new Vec2(x + num11 * this._cellSize, y + index * this._cellSize), col, 2f, -0.9f);
-                    DuckGame.Graphics.DrawLine(new Vec2(this._ultimateBounds.Left, this._ultimateBounds.Top), new Vec2(this._ultimateBounds.Right, this._ultimateBounds.Top), col, 2f, -0.9f);
-                    DuckGame.Graphics.DrawLine(new Vec2(this._ultimateBounds.Right, this._ultimateBounds.Top), new Vec2(this._ultimateBounds.Right, this._ultimateBounds.Bottom), col, 2f, -0.9f);
-                    DuckGame.Graphics.DrawLine(new Vec2(this._ultimateBounds.Right, this._ultimateBounds.Bottom), new Vec2(this._ultimateBounds.Left, this._ultimateBounds.Bottom), col, 2f, -0.9f);
-                    DuckGame.Graphics.DrawLine(new Vec2(this._ultimateBounds.Left, this._ultimateBounds.Bottom), new Vec2(this._ultimateBounds.Left, this._ultimateBounds.Top), col, 2f, -0.9f);
-                    if (this._miniMode)
+                        DuckGame.Graphics.DrawLine(new Vec2(x, y + index * _cellSize), new Vec2(x + num11 * _cellSize, y + index * _cellSize), col, 2f, -0.9f);
+                    DuckGame.Graphics.DrawLine(new Vec2(_ultimateBounds.Left, _ultimateBounds.Top), new Vec2(_ultimateBounds.Right, _ultimateBounds.Top), col, 2f, -0.9f);
+                    DuckGame.Graphics.DrawLine(new Vec2(_ultimateBounds.Right, _ultimateBounds.Top), new Vec2(_ultimateBounds.Right, _ultimateBounds.Bottom), col, 2f, -0.9f);
+                    DuckGame.Graphics.DrawLine(new Vec2(_ultimateBounds.Right, _ultimateBounds.Bottom), new Vec2(_ultimateBounds.Left, _ultimateBounds.Bottom), col, 2f, -0.9f);
+                    DuckGame.Graphics.DrawLine(new Vec2(_ultimateBounds.Left, _ultimateBounds.Bottom), new Vec2(_ultimateBounds.Left, _ultimateBounds.Top), col, 2f, -0.9f);
+                    if (_miniMode)
                     {
                         int num13 = 0;
-                        if (!this._pathNorth)
+                        if (!_pathNorth)
                         {
-                            this._sideArrow.color = new Color(80, 80, 80);
+                            _sideArrow.color = new Color(80, 80, 80);
                         }
                         else
                         {
-                            this._sideArrow.color = new Color(100, 200, 100);
+                            _sideArrow.color = new Color(100, 200, 100);
                             DuckGame.Graphics.DrawLine(new Vec2(x + num9 / 2, y - 10f), new Vec2(x + num9 / 2, (float)(y + num10 / 2 - 8.0)), Color.Lime * 0.06f, 16f);
                             ++num13;
                         }
-                        if (!this._pathWest)
+                        if (!_pathWest)
                         {
-                            this._sideArrow.color = new Color(80, 80, 80);
+                            _sideArrow.color = new Color(80, 80, 80);
                         }
                         else
                         {
-                            this._sideArrow.color = new Color(100, 200, 100);
+                            _sideArrow.color = new Color(100, 200, 100);
                             DuckGame.Graphics.DrawLine(new Vec2(x - 10f, y + num10 / 2), new Vec2((float)(x + num9 / 2 - 8.0), y + num10 / 2), Color.Lime * 0.06f, 16f);
                             ++num13;
                         }
-                        if (!this._pathEast)
+                        if (!_pathEast)
                         {
-                            this._sideArrow.color = new Color(80, 80, 80);
+                            _sideArrow.color = new Color(80, 80, 80);
                         }
                         else
                         {
-                            this._sideArrow.color = new Color(100, 200, 100);
+                            _sideArrow.color = new Color(100, 200, 100);
                             DuckGame.Graphics.DrawLine(new Vec2((float)(x + num9 / 2 + 8.0), y + num10 / 2), new Vec2((float)(x + num9 + 10.0), y + num10 / 2), Color.Lime * 0.06f, 16f);
                             ++num13;
                         }
-                        if (!this._pathSouth)
+                        if (!_pathSouth)
                         {
-                            this._sideArrow.color = new Color(80, 80, 80);
+                            _sideArrow.color = new Color(80, 80, 80);
                         }
                         else
                         {
-                            this._sideArrow.color = new Color(100, 200, 100);
+                            _sideArrow.color = new Color(100, 200, 100);
                             DuckGame.Graphics.DrawLine(new Vec2(x + num9 / 2, (float)(y + num10 / 2 + 8.0)), new Vec2(x + num9 / 2, (float)(y + num10 + 10.0)), Color.Lime * 0.06f, 16f);
                             ++num13;
                         }
@@ -2899,23 +2899,23 @@ namespace DuckGame
             }
             if (layer == Layer.Foreground)
             {
-                float num14 = (float)(-this._cellSize / 2.0);
-                float num15 = (float)(-this._cellSize / 2.0);
-                int num16 = this._gridW;
-                int num17 = this._gridH;
-                if (this._miniMode)
+                float num14 = (float)(-_cellSize / 2.0);
+                float num15 = (float)(-_cellSize / 2.0);
+                int num16 = _gridW;
+                int num17 = _gridH;
+                if (_miniMode)
                 {
                     num16 = 12;
                     num17 = 9;
                 }
                 int num18 = num16 * 16;
                 int num19 = num17 * 16;
-                if (this._miniMode)
+                if (_miniMode)
                 {
-                    Editor._procTilesWide = (int)this._genSize.x;
-                    Editor._procTilesHigh = (int)this._genSize.y;
-                    Editor._procXPos = (int)this._genTilePos.x;
-                    Editor._procYPos = (int)this._genTilePos.y;
+                    Editor._procTilesWide = (int)_genSize.x;
+                    Editor._procTilesHigh = (int)_genSize.y;
+                    Editor._procXPos = (int)_genTilePos.x;
+                    Editor._procYPos = (int)_genTilePos.y;
                     if (Editor._procXPos > Editor._procTilesWide)
                         Editor._procXPos = Editor._procTilesWide;
                     if (Editor._procYPos > Editor._procTilesHigh)
@@ -2931,64 +2931,64 @@ namespace DuckGame
                         }
                     }
                 }
-                if (this._hoverButton == null)
+                if (_hoverButton == null)
                 {
-                    if (this._cursorMode != CursorMode.Pasting)
+                    if (_cursorMode != CursorMode.Pasting)
                     {
-                        if (this._secondaryHover != null && this._placementMode)
-                            DuckGame.Graphics.DrawRect(this._secondaryHover.topLeft, this._secondaryHover.bottomRight, Color.White * 0.5f, (Depth)1f, false);
-                        else if (this._hover != null && this._placementMode && (Editor.inputMode != EditorInput.Touch || this._editMode))
+                        if (_secondaryHover != null && _placementMode)
+                            DuckGame.Graphics.DrawRect(_secondaryHover.topLeft, _secondaryHover.bottomRight, Color.White * 0.5f, (Depth)1f, false);
+                        else if (_hover != null && _placementMode && (Editor.inputMode != EditorInput.Touch || _editMode))
                         {
-                            DuckGame.Graphics.DrawRect(this._hover.topLeft, this._hover.bottomRight, Color.White * 0.5f, (Depth)1f, false);
-                            this._hover.DrawHoverInfo();
+                            DuckGame.Graphics.DrawRect(_hover.topLeft, _hover.bottomRight, Color.White * 0.5f, (Depth)1f, false);
+                            _hover.DrawHoverInfo();
                         }
                     }
                     if (DevConsole.wagnusDebug)
                     {
-                        DuckGame.Graphics.DrawLine(this._tilePosition, this._tilePosition + new Vec2(128f, 0f), Color.White * 0.5f);
-                        DuckGame.Graphics.DrawLine(this._tilePosition, this._tilePosition + new Vec2(sbyte.MinValue, 0f), Color.White * 0.5f);
-                        DuckGame.Graphics.DrawLine(this._tilePosition, this._tilePosition + new Vec2(0f, 128f), Color.White * 0.5f);
-                        DuckGame.Graphics.DrawLine(this._tilePosition, this._tilePosition + new Vec2(0f, sbyte.MinValue), Color.White * 0.5f);
+                        DuckGame.Graphics.DrawLine(_tilePosition, _tilePosition + new Vec2(128f, 0f), Color.White * 0.5f);
+                        DuckGame.Graphics.DrawLine(_tilePosition, _tilePosition + new Vec2(sbyte.MinValue, 0f), Color.White * 0.5f);
+                        DuckGame.Graphics.DrawLine(_tilePosition, _tilePosition + new Vec2(0f, 128f), Color.White * 0.5f);
+                        DuckGame.Graphics.DrawLine(_tilePosition, _tilePosition + new Vec2(0f, sbyte.MinValue), Color.White * 0.5f);
                     }
-                    if ((this._hover == null || this._cursorMode == CursorMode.DragHover || this._cursorMode == CursorMode.Drag) && Editor.inputMode == EditorInput.Gamepad)
+                    if ((_hover == null || _cursorMode == CursorMode.DragHover || _cursorMode == CursorMode.Drag) && Editor.inputMode == EditorInput.Gamepad)
                     {
-                        if (this._cursorMode == CursorMode.DragHover || this._cursorMode == CursorMode.Drag)
+                        if (_cursorMode == CursorMode.DragHover || _cursorMode == CursorMode.Drag)
                         {
-                            this._cursor.depth = (Depth)1f;
-                            this._cursor.scale = new Vec2(1f, 1f);
-                            this._cursor.position = this._tilePosition;
-                            if (this._cursorMode == CursorMode.DragHover)
-                                this._cursor.frame = 1;
-                            else if (this._cursorMode == CursorMode.Drag)
-                                this._cursor.frame = 5;
-                            this._cursor.Draw();
+                            _cursor.depth = (Depth)1f;
+                            _cursor.scale = new Vec2(1f, 1f);
+                            _cursor.position = _tilePosition;
+                            if (_cursorMode == CursorMode.DragHover)
+                                _cursor.frame = 1;
+                            else if (_cursorMode == CursorMode.Drag)
+                                _cursor.frame = 5;
+                            _cursor.Draw();
                         }
-                        else if (this._placementMenu == null)
-                            DuckGame.Graphics.DrawRect(this._tilePosition - new Vec2(this._cellSize / 2f, this._cellSize / 2f), this._tilePosition + new Vec2(this._cellSize / 2f, this._cellSize / 2f), Color.White * 0.5f, (Depth)1f, false);
+                        else if (_placementMenu == null)
+                            DuckGame.Graphics.DrawRect(_tilePosition - new Vec2(_cellSize / 2f, _cellSize / 2f), _tilePosition + new Vec2(_cellSize / 2f, _cellSize / 2f), Color.White * 0.5f, (Depth)1f, false);
                     }
-                    if (this._cursorMode == CursorMode.Normal && this._hover == null && this._placementMode && Editor.inputMode != EditorInput.Touch && this._placementMenu == null && this._placementType != null)
+                    if (_cursorMode == CursorMode.Normal && _hover == null && _placementMode && Editor.inputMode != EditorInput.Touch && _placementMenu == null && _placementType != null)
                     {
-                        this._placementType.depth = (Depth)0.9f;
-                        this._placementType.x = this._tilePosition.x;
-                        this._placementType.y = this._tilePosition.y;
-                        this._placementType.Draw();
-                        if (this.placementLimitReached || this.placementOutOfSizeRange)
-                            DuckGame.Graphics.Draw(this._cantPlace, this._placementType.x, this._placementType.y, (Depth)0.95f);
+                        _placementType.depth = (Depth)0.9f;
+                        _placementType.x = _tilePosition.x;
+                        _placementType.y = _tilePosition.y;
+                        _placementType.Draw();
+                        if (placementLimitReached || placementOutOfSizeRange)
+                            DuckGame.Graphics.Draw(_cantPlace, _placementType.x, _placementType.y, (Depth)0.95f);
                     }
                 }
-                if (this._cursorMode == CursorMode.Selection || this._cursorMode == CursorMode.HasSelection || this._cursorMode == CursorMode.Drag || this._cursorMode == CursorMode.DragHover)
+                if (_cursorMode == CursorMode.Selection || _cursorMode == CursorMode.HasSelection || _cursorMode == CursorMode.Drag || _cursorMode == CursorMode.DragHover)
                 {
                     //this._leftSelectionDraw = false;
-                    if (this._cursorMode == CursorMode.Selection)
-                        DuckGame.Graphics.DrawDottedRect(this._selectionDragStart, this._selectionDragEnd, Color.White * 0.5f, (Depth)1f, 2f, 4f);
+                    if (_cursorMode == CursorMode.Selection)
+                        DuckGame.Graphics.DrawDottedRect(_selectionDragStart, _selectionDragEnd, Color.White * 0.5f, (Depth)1f, 2f, 4f);
                 }
-                if (this._cursorMode == CursorMode.Pasting)
+                if (_cursorMode == CursorMode.Pasting)
                 {
                     DuckGame.Graphics.material = _selectionMaterialPaste;
-                    foreach (Thing thing in this._pasteBatch)
+                    foreach (Thing thing in _pasteBatch)
                     {
                         Vec2 position = thing.position;
-                        thing.position -= this.pasteOffset;
+                        thing.position -= pasteOffset;
                         thing.Draw();
                         thing.position = position;
                     }
@@ -3000,40 +3000,40 @@ namespace DuckGame
                 if (Editor.inputMode == EditorInput.Touch)
                 {
                     float l = -24f;
-                    if (this._activeTouchButton != null || this._fileDialog.opened)
+                    if (_activeTouchButton != null || _fileDialog.opened)
                     {
-                        if (this._activeTouchButton != null)
-                            DuckGame.Graphics.DrawString(this._activeTouchButton.explanation, Layer.HUD.camera.OffsetBR(-20f, l) - new Vec2(DuckGame.Graphics.GetStringWidth(this._activeTouchButton.explanation) + (this._cancelButton.size.x + 4f), 0f), Color.Gray, (Depth)0.99f);
-                        else if (this._fileDialog.opened)
+                        if (_activeTouchButton != null)
+                            DuckGame.Graphics.DrawString(_activeTouchButton.explanation, Layer.HUD.camera.OffsetBR(-20f, l) - new Vec2(DuckGame.Graphics.GetStringWidth(_activeTouchButton.explanation) + (_cancelButton.size.x + 4f), 0f), Color.Gray, (Depth)0.99f);
+                        else if (_fileDialog.opened)
                         {
                             string text = "Double tap level to open!";
-                            DuckGame.Graphics.DrawString(text, Layer.HUD.camera.OffsetBR(-20f, l) - new Vec2(DuckGame.Graphics.GetStringWidth(text) + (this._cancelButton.size.x + 4f), 0f), Color.Gray, (Depth)0.99f);
+                            DuckGame.Graphics.DrawString(text, Layer.HUD.camera.OffsetBR(-20f, l) - new Vec2(DuckGame.Graphics.GetStringWidth(text) + (_cancelButton.size.x + 4f), 0f), Color.Gray, (Depth)0.99f);
                         }
-                        DuckGame.Graphics.DrawRect(this._cancelButton.position, this._cancelButton.position + this._cancelButton.size, new Color(70, 70, 70), (Depth)0.99f, false);
-                        DuckGame.Graphics.DrawRect(this._cancelButton.position, this._cancelButton.position + this._cancelButton.size, new Color(30, 30, 30), (Depth)0.98f);
-                        DuckGame.Graphics.DrawString(this._cancelButton.caption, this._cancelButton.position + this._cancelButton.size / 2f + new Vec2((float)(-DuckGame.Graphics.GetStringWidth(this._cancelButton.caption) / 2.0), -4f), Color.White, (Depth)0.99f);
+                        DuckGame.Graphics.DrawRect(_cancelButton.position, _cancelButton.position + _cancelButton.size, new Color(70, 70, 70), (Depth)0.99f, false);
+                        DuckGame.Graphics.DrawRect(_cancelButton.position, _cancelButton.position + _cancelButton.size, new Color(30, 30, 30), (Depth)0.98f);
+                        DuckGame.Graphics.DrawString(_cancelButton.caption, _cancelButton.position + _cancelButton.size / 2f + new Vec2((float)(-DuckGame.Graphics.GetStringWidth(_cancelButton.caption) / 2.0), -4f), Color.White, (Depth)0.99f);
                     }
-                    else if (!this._fileDialog.opened)
+                    else if (!_fileDialog.opened)
                     {
                         float num = 0f;
-                        foreach (Editor.EditorTouchButton touchButton in this._touchButtons)
+                        foreach (Editor.EditorTouchButton touchButton in _touchButtons)
                         {
                             DuckGame.Graphics.DrawRect(touchButton.position, touchButton.position + touchButton.size, new Color(70, 70, 70), (Depth)0.99f, false);
                             DuckGame.Graphics.DrawRect(touchButton.position, touchButton.position + touchButton.size, new Color(30, 30, 30), (Depth)0.98f);
                             DuckGame.Graphics.DrawString(touchButton.caption, touchButton.position + touchButton.size / 2f + new Vec2((float)(-DuckGame.Graphics.GetStringWidth(touchButton.caption) / 2.0), -4f), Color.White, (Depth)0.99f);
                             num += touchButton.size.x;
                         }
-                        if (this._placementMenu != null && this._placementMenu is EditorGroupMenu)
+                        if (_placementMenu != null && _placementMenu is EditorGroupMenu)
                         {
                             string text = "Double tap to select!";
                             DuckGame.Graphics.DrawString(text, Layer.HUD.camera.OffsetBR(-20f, l) - new Vec2(DuckGame.Graphics.GetStringWidth(text) + (num + 8f), 0f), Color.Gray, (Depth)0.99f);
                         }
                     }
-                    if (this._placingTiles && this._placementMenu == null)
+                    if (_placingTiles && _placementMenu == null)
                     {
-                        DuckGame.Graphics.DrawRect(this._editTilesButton.position, this._editTilesButton.position + this._editTilesButton.size, new Color(70, 70, 70), (Depth)0.99f, false);
-                        DuckGame.Graphics.DrawRect(this._editTilesButton.position, this._editTilesButton.position + this._editTilesButton.size, new Color(30, 30, 30), (Depth)0.98f);
-                        DuckGame.Graphics.DrawString(this._editTilesButton.caption, this._editTilesButton.position + this._editTilesButton.size / 2f + new Vec2((float)(-DuckGame.Graphics.GetStringWidth(this._editTilesButton.caption) / 2.0), -4f), Color.White, (Depth)0.99f);
+                        DuckGame.Graphics.DrawRect(_editTilesButton.position, _editTilesButton.position + _editTilesButton.size, new Color(70, 70, 70), (Depth)0.99f, false);
+                        DuckGame.Graphics.DrawRect(_editTilesButton.position, _editTilesButton.position + _editTilesButton.size, new Color(30, 30, 30), (Depth)0.98f);
+                        DuckGame.Graphics.DrawString(_editTilesButton.caption, _editTilesButton.position + _editTilesButton.size / 2f + new Vec2((float)(-DuckGame.Graphics.GetStringWidth(_editTilesButton.caption) / 2.0), -4f), Color.White, (Depth)0.99f);
                     }
                 }
                 if (Editor.hasUnsavedChanges)
@@ -3044,7 +3044,7 @@ namespace DuckGame
                     DuckGame.Graphics.DrawFancyString(Editor.tooltip, new Vec2(18f, Layer.HUD.height - 12f), Color.White, (Depth)0.99f);
                 }
                 bool flag1 = Editor._input.lastActiveDevice is Keyboard;
-                if (this._hoverMode == 0 && this._hoverButton == null)
+                if (_hoverMode == 0 && _hoverButton == null)
                 {
                     string text1 = "";
                     string str1 = "@CANCEL@";
@@ -3061,47 +3061,47 @@ namespace DuckGame
                         str3 = "@MIDDLEMOUSE@" + str3;
                         str4 = "@RIGHTMOUSE@" + str4;
                     }
-                    if (this._cursorMode == CursorMode.HasSelection || this._cursorMode == CursorMode.Drag || this._cursorMode == CursorMode.DragHover)
+                    if (_cursorMode == CursorMode.HasSelection || _cursorMode == CursorMode.Drag || _cursorMode == CursorMode.DragHover)
                     {
                         if (Editor.inputMode == EditorInput.Gamepad)
                         {
-                            if (this._cursorMode == CursorMode.DragHover || this._cursorMode == CursorMode.Drag)
+                            if (_cursorMode == CursorMode.DragHover || _cursorMode == CursorMode.Drag)
                                 text1 += "@SELECT@DRAG  ";
-                            if (this._cursorMode == CursorMode.HasSelection || this._cursorMode == CursorMode.DragHover)
+                            if (_cursorMode == CursorMode.HasSelection || _cursorMode == CursorMode.DragHover)
                                 text1 = text1 + "@CANCEL@DRAG ADD  " + "@MENU1@FLIP  " + "@MENU2@DELETE  ";
-                            text1 += this._cursorMode == CursorMode.DragHover ? "@CANCEL@COPY  " : "@CANCEL@DESELECT  ";
+                            text1 += _cursorMode == CursorMode.DragHover ? "@CANCEL@COPY  " : "@CANCEL@DESELECT  ";
                         }
                         else
                         {
                             string str8 = "@KBDARROWS@NUDGE  ";
-                            if (this._cursorMode == CursorMode.DragHover)
+                            if (_cursorMode == CursorMode.DragHover)
                                 str8 += "@LEFTMOUSE@DRAG  ";
                             text1 = str8 + "@RIGHTMOUSE@DESELECT  ";
-                            if (this._cursorMode == CursorMode.HasSelection || this._cursorMode == CursorMode.DragHover)
+                            if (_cursorMode == CursorMode.HasSelection || _cursorMode == CursorMode.DragHover)
                                 text1 = text1 + "@KBDSHIFT@ADD SELECTION  " + "@KBDF@FLIP  ";
                         }
                     }
-                    else if (this._cursorMode == CursorMode.Pasting)
+                    else if (_cursorMode == CursorMode.Pasting)
                         text1 = Editor.inputMode != EditorInput.Gamepad ? text1 + "@LEFTMOUSE@PASTE  " + "@RIGHTMOUSE@CANCEL  " : text1 + "@SELECT@PASTE  " + "@CANCEL@CANCEL  ";
-                    else if (this._fileDialog.opened)
+                    else if (_fileDialog.opened)
                         text1 = "@WASD@MOVE  " + str2 + "SELECT  @MENU2@DELETE  " + str1 + "CANCEL  @STRAFE@+@RAGDOLL@BROWSE..";
-                    else if (this._menuOpen && Editor.inputMode == EditorInput.Gamepad)
+                    else if (_menuOpen && Editor.inputMode == EditorInput.Gamepad)
                         text1 = "@WASD@MOVE  " + str2 + "SELECT  @RIGHT@EXPAND  " + str1 + "CLOSE";
                     else if (Editor.inputMode == EditorInput.Gamepad || Editor.inputMode == EditorInput.Mouse)
                     {
-                        int num = this._secondaryHover != null ? 1 : (this._hover != null ? 1 : 0);
-                        bool flag2 = num != 0 || this._placingTiles || this._placementType != null;
-                        if (this._placementType != null && this._hover != null && this.GetLayerOrOverride(this._placementType) == this.GetLayerOrOverride(this._hover))
+                        int num = _secondaryHover != null ? 1 : (_hover != null ? 1 : 0);
+                        bool flag2 = num != 0 || _placingTiles || _placementType != null;
+                        if (_placementType != null && _hover != null && GetLayerOrOverride(_placementType) == GetLayerOrOverride(_hover))
                             text1 = text1 + str2 + "ERASE  ";
-                        else if (this._placementType != null)
+                        else if (_placementType != null)
                         {
                             text1 = text1 + str2 + "PLACE  ";
-                            if (this.rotateValid)
+                            if (rotateValid)
                                 text1 += "@RSTICK@ROTATE  ";
                         }
                         if (num != 0)
                             text1 = text1 + str3 + "COPY  ";
-                        if (this._hover != null && !this._placingTiles && this._hoverMenu != null)
+                        if (_hover != null && !_placingTiles && _hoverMenu != null)
                             text1 += "@MENU1@EDIT  ";
                         if (Editor.inputMode == EditorInput.Gamepad)
                         {
@@ -3111,12 +3111,12 @@ namespace DuckGame
                                 text1 = text1 + str7 + "REDO  ";
                             text1 += "@CANCEL@DRAG SELECT  ";
                         }
-                        if (this._placingTiles)
+                        if (_placingTiles)
                             text1 += "@MENU1@TILES  ";
                         if (flag2)
                             text1 = text1 + str5 + "BROWSE  ";
                         text1 = text1 + str4 + "MENU";
-                        if (this._font.GetWidth(text1) < 397.0)
+                        if (_font.GetWidth(text1) < 397.0)
                             text1 = "@WASD@MOVE  " + text1;
                         if (Editor.inputMode == EditorInput.Mouse)
                             text1 += "  @RIGHTMOUSE@DRAG SELECT";
@@ -3125,12 +3125,12 @@ namespace DuckGame
                         text1 = "";
                     if (text1 != "")
                     {
-                        float width = this._font.GetWidth(text1);
+                        float width = _font.GetWidth(text1);
                         Vec2 vec2 = new Vec2(layer.width - 22f - width, layer.height - 28f);
-                        this._font.depth = (Depth)0.8f;
-                        this._font.Draw(text1, vec2.x, vec2.y, Color.White, (Depth)0.7f, Editor._input);
+                        _font.depth = (Depth)0.8f;
+                        _font.Draw(text1, vec2.x, vec2.y, Color.White, (Depth)0.7f, Editor._input);
                     }
-                    this._font.scale = new Vec2(0.5f, 0.5f);
+                    _font.scale = new Vec2(0.5f, 0.5f);
                     float num22 = 0f;
                     if (Editor.placementLimit > 0)
                     {
@@ -3138,17 +3138,17 @@ namespace DuckGame
                         Vec2 vec2 = new Vec2(128f, 12f);
                         Vec2 p1_1 = new Vec2(31f, layer.height - 19f - vec2.y);
                         DuckGame.Graphics.DrawRect(p1_1, p1_1 + vec2, Color.Black * 0.5f, (Depth)0.6f);
-                        DuckGame.Graphics.Draw(this._editorCurrency, p1_1.x - 10f, p1_1.y + 2f, (Depth)0.95f);
+                        DuckGame.Graphics.Draw(_editorCurrency, p1_1.x - 10f, p1_1.y + 2f, (Depth)0.95f);
                         float x = (vec2.x - 4f) * Math.Min(placementTotalCost / (float)Editor.placementLimit, 1f);
-                        string text2 = this.placementTotalCost.ToString() + "/" + Editor.placementLimit.ToString();
-                        if (this.placementLimitReached)
+                        string text2 = placementTotalCost.ToString() + "/" + Editor.placementLimit.ToString();
+                        if (placementLimitReached)
                             text2 += " FULL!";
-                        float width = this._font.GetWidth(text2);
-                        this._font.Draw(text2, (float)(p1_1.x + vec2.x / 2.0 - width / 2.0), p1_1.y + 4f, Color.White, (Depth)0.7f);
+                        float width = _font.GetWidth(text2);
+                        _font.Draw(text2, (float)(p1_1.x + vec2.x / 2.0 - width / 2.0), p1_1.y + 4f, Color.White, (Depth)0.7f);
                         Vec2 p1_2 = p1_1 + new Vec2(2f, 2f);
-                        DuckGame.Graphics.DrawRect(p1_2, p1_2 + new Vec2(x, vec2.y - 4f), (this.placementLimitReached ? Colors.DGRed : Colors.DGGreen) * 0.5f, (Depth)0.6f);
+                        DuckGame.Graphics.DrawRect(p1_2, p1_2 + new Vec2(x, vec2.y - 4f), (placementLimitReached ? Colors.DGRed : Colors.DGGreen) * 0.5f, (Depth)0.6f);
                     }
-                    if (this.searching)
+                    if (searching)
                     {
                         DuckGame.Graphics.DrawRect(Vec2.Zero, new Vec2(layer.width, layer.height), Color.Black * 0.5f, (Depth)0.9f);
                         Vec2 position = new Vec2(8f, layer.height - 26f);
@@ -3158,23 +3158,23 @@ namespace DuckGame
                         else
                             DuckGame.Graphics.DrawString(Keyboard.keyString + "_", position + new Vec2(26f, 7f), Color.White, (Depth)0.95f);
                         if (Editor.inputMode == EditorInput.Mouse)
-                            this._searchHoverIndex = -1;
+                            _searchHoverIndex = -1;
                         float num23 = 200f;
-                        if (this.searchItems != null && this.searchItems.Count > 0)
+                        if (searchItems != null && searchItems.Count > 0)
                         {
                             position.y -= 22f;
-                            for (int index = 0; index < 10 && index < this.searchItems.Count; ++index)
+                            for (int index = 0; index < 10 && index < searchItems.Count; ++index)
                             {
-                                DuckGame.Graphics.DrawString(this.searchItems[index].thing.thing.editorName, new Vec2(position.x + 24f, position.y + 6f), Color.White, (Depth)0.95f);
-                                this.searchItems[index].thing.image.depth = (Depth)0.95f;
-                                this.searchItems[index].thing.image.x = position.x + 4f;
-                                this.searchItems[index].thing.image.y = position.y;
-                                this.searchItems[index].thing.image.color = Color.White;
-                                this.searchItems[index].thing.image.scale = new Vec2(1f);
-                                this.searchItems[index].thing.image.Draw();
-                                if (Editor.inputMode == EditorInput.Mouse && Mouse.x > position.x && Mouse.x < position.x + 200.0 && Mouse.y > position.y - 2.0 && Mouse.y < position.y + 19.0 || index == this._searchHoverIndex)
+                                DuckGame.Graphics.DrawString(searchItems[index].thing.thing.editorName, new Vec2(position.x + 24f, position.y + 6f), Color.White, (Depth)0.95f);
+                                searchItems[index].thing.image.depth = (Depth)0.95f;
+                                searchItems[index].thing.image.x = position.x + 4f;
+                                searchItems[index].thing.image.y = position.y;
+                                searchItems[index].thing.image.color = Color.White;
+                                searchItems[index].thing.image.scale = new Vec2(1f);
+                                searchItems[index].thing.image.Draw();
+                                if (Editor.inputMode == EditorInput.Mouse && Mouse.x > position.x && Mouse.x < position.x + 200.0 && Mouse.y > position.y - 2.0 && Mouse.y < position.y + 19.0 || index == _searchHoverIndex)
                                 {
-                                    this._searchHoverIndex = index;
+                                    _searchHoverIndex = index;
                                     DuckGame.Graphics.DrawRect(position + new Vec2(2f, -2f), position + new Vec2(num23 - 2f, 18f), new Color(70, 70, 70), (Depth)0.93f);
                                 }
                                 position.y -= 20f;
@@ -3184,9 +3184,9 @@ namespace DuckGame
                         DuckGame.Graphics.DrawRect(new Vec2(8f, layer.height - 26f), new Vec2(300f, layer.height - 6f), new Color(30, 30, 30), (Depth)0.91f);
                     }
                     float num24 = 0f;
-                    if (this._placementType != null && this._cursorMode == CursorMode.Normal && this._placementMenu == null)
+                    if (_placementType != null && _cursorMode == CursorMode.Normal && _placementMenu == null)
                     {
-                        Vec2 vec2 = new Vec2(this._placementType.width, this._placementType.height);
+                        Vec2 vec2 = new Vec2(_placementType.width, _placementType.height);
                         vec2.x += 4f;
                         vec2.y += 4f;
                         if (vec2.x < 32.0)
@@ -3194,28 +3194,28 @@ namespace DuckGame
                         if (vec2.y < 32.0)
                             vec2.y = 32f;
                         Vec2 p1 = new Vec2(19f, layer.height - 19f - vec2.y + num22);
-                        string str9 = this._placementType.GetDetailsString();
+                        string str9 = _placementType.GetDetailsString();
                         while (str9.Count<char>(x => x == '\n') > 5)
                             str9 = str9.Substring(0, str9.LastIndexOf('\n'));
-                        float x1 = this._font.GetWidth(str9) + 8f;
+                        float x1 = _font.GetWidth(str9) + 8f;
                         if (str9 != "")
-                            this._font.Draw(str9, (float)(p1.x + vec2.x + 4.0), p1.y + 4f, Color.White, (Depth)0.7f);
+                            _font.Draw(str9, (float)(p1.x + vec2.x + 4.0), p1.y + 4f, Color.White, (Depth)0.7f);
                         else
                             x1 = 0f;
                         DuckGame.Graphics.DrawRect(p1, p1 + vec2 + new Vec2(x1, 0f), Color.Black * 0.5f, (Depth)0.6f);
                         Editor.editorDraw = true;
-                        this._placementType.left = p1.x + (float)(vec2.x / 2.0 - this._placementType.w / 2.0);
-                        this._placementType.top = p1.y + (float)(vec2.y / 2.0 - this._placementType.h / 2.0);
-                        this._placementType.depth = (Depth)0.7f;
-                        this._placementType.Draw();
+                        _placementType.left = p1.x + (float)(vec2.x / 2.0 - _placementType.w / 2.0);
+                        _placementType.top = p1.y + (float)(vec2.y / 2.0 - _placementType.h / 2.0);
+                        _placementType.depth = (Depth)0.7f;
+                        _placementType.Draw();
                         Editor.editorDraw = false;
-                        this._font.Draw("Placing (" + this._placementType.editorName + ")", p1.x, p1.y - 6f, Color.White, (Depth)0.7f);
+                        _font.Draw("Placing (" + _placementType.editorName + ")", p1.x, p1.y - 6f, Color.White, (Depth)0.7f);
                         num24 = vec2.y;
                     }
-                    Thing thing = this._hover;
-                    if (this._secondaryHover != null)
-                        thing = this._secondaryHover;
-                    if (thing != null && this._cursorMode == CursorMode.Normal && this._hoverMode == 0)
+                    Thing thing = _hover;
+                    if (_secondaryHover != null)
+                        thing = _secondaryHover;
+                    if (thing != null && _cursorMode == CursorMode.Normal && _hoverMode == 0)
                     {
                         Vec2 vec2 = new Vec2(thing.width, thing.height);
                         vec2.x += 4f;
@@ -3228,9 +3228,9 @@ namespace DuckGame
                         string str10 = thing.GetDetailsString();
                         while (str10.Count<char>(x => x == '\n') > 5)
                             str10 = str10.Substring(0, str10.LastIndexOf('\n'));
-                        float x2 = this._font.GetWidth(str10) + 8f;
+                        float x2 = _font.GetWidth(str10) + 8f;
                         if (str10 != "")
-                            this._font.Draw(str10, (float)(p1.x + vec2.x + 4.0), p1.y + 4f, Color.White, (Depth)0.7f);
+                            _font.Draw(str10, (float)(p1.x + vec2.x + 4.0), p1.y + 4f, Color.White, (Depth)0.7f);
                         else
                             x2 = 0f;
                         DuckGame.Graphics.DrawRect(p1, p1 + vec2 + new Vec2(x2, 0f), Color.Black * 0.5f, (Depth)0.6f);
@@ -3244,56 +3244,56 @@ namespace DuckGame
                         Editor.editorDraw = false;
                         thing.position = position;
                         thing.depth = depth;
-                        this._font.Draw("Hovering (" + thing.editorName + ")", p1.x, p1.y - 6f, Color.White);
+                        _font.Draw("Hovering (" + thing.editorName + ")", p1.x, p1.y - 6f, Color.White);
                     }
                 }
-                else if (this._hoverButton != null)
+                else if (_hoverButton != null)
                 {
-                    string hoverText = this._hoverButton.hoverText;
+                    string hoverText = _hoverButton.hoverText;
                     if (hoverText != null)
                     {
-                        float width = this._font.GetWidth(hoverText);
+                        float width = _font.GetWidth(hoverText);
                         Vec2 vec2 = new Vec2(layer.width - 28f - width, layer.height - 28f);
-                        this._font.depth = (Depth)0.8f;
-                        this._font.Draw(hoverText, vec2.x, vec2.y, Color.White, (Depth)0.8f);
+                        _font.depth = (Depth)0.8f;
+                        _font.Draw(hoverText, vec2.x, vec2.y, Color.White, (Depth)0.8f);
                         DuckGame.Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(width + 2f, 9f), Color.Black * 0.5f, (Depth)0.6f);
                     }
                 }
-                this._font.scale = new Vec2(1f, 1f);
+                _font.scale = new Vec2(1f, 1f);
             }
             else
             {
-                if (layer != this._objectMenuLayer)
+                if (layer != _objectMenuLayer)
                     return;
                 if (Editor.inputMode == EditorInput.Mouse)
                 {
-                    this._cursor.depth = (Depth)1f;
-                    this._cursor.scale = new Vec2(1f, 1f);
-                    this._cursor.position = Mouse.position;
-                    if (this._cursorMode == CursorMode.Normal)
-                        this._cursor.frame = 0;
-                    else if (this._cursorMode == CursorMode.DragHover)
-                        this._cursor.frame = 1;
-                    else if (this._cursorMode == CursorMode.Drag)
-                        this._cursor.frame = 5;
-                    else if (this._cursorMode == CursorMode.Selection)
-                        this._cursor.frame = this._dragSelectShiftModifier ? 6 : 2;
-                    else if (this._cursorMode == CursorMode.HasSelection)
-                        this._cursor.frame = this._dragSelectShiftModifier ? 6 : 0;
+                    _cursor.depth = (Depth)1f;
+                    _cursor.scale = new Vec2(1f, 1f);
+                    _cursor.position = Mouse.position;
+                    if (_cursorMode == CursorMode.Normal)
+                        _cursor.frame = 0;
+                    else if (_cursorMode == CursorMode.DragHover)
+                        _cursor.frame = 1;
+                    else if (_cursorMode == CursorMode.Drag)
+                        _cursor.frame = 5;
+                    else if (_cursorMode == CursorMode.Selection)
+                        _cursor.frame = _dragSelectShiftModifier ? 6 : 2;
+                    else if (_cursorMode == CursorMode.HasSelection)
+                        _cursor.frame = _dragSelectShiftModifier ? 6 : 0;
                     if (Editor.hoverTextBox)
                     {
-                        this._cursor.frame = 7;
-                        this._cursor.position.y -= 4f;
-                        this._cursor.scale = new Vec2(0.5f, 1f);
+                        _cursor.frame = 7;
+                        _cursor.position.y -= 4f;
+                        _cursor.scale = new Vec2(0.5f, 1f);
                     }
-                    this._cursor.Draw();
+                    _cursor.Draw();
                 }
                 if (Editor.inputMode != EditorInput.Touch)
                     return;
                 if (TouchScreen.GetTouches().Count == 0)
                 {
-                    Vec2 pos1 = this._objectMenuLayer.camera.transformScreenVector(Mouse.positionConsole + new Vec2(TouchScreen._spoofFingerDistance, 0f));
-                    Vec2 pos2 = this._objectMenuLayer.camera.transformScreenVector(Mouse.positionConsole - new Vec2(TouchScreen._spoofFingerDistance, 0f));
+                    Vec2 pos1 = _objectMenuLayer.camera.transformScreenVector(Mouse.positionConsole + new Vec2(TouchScreen._spoofFingerDistance, 0f));
+                    Vec2 pos2 = _objectMenuLayer.camera.transformScreenVector(Mouse.positionConsole - new Vec2(TouchScreen._spoofFingerDistance, 0f));
                     DuckGame.Graphics.DrawCircle(pos1, 4f, Color.White * 0.2f, 2f, (Depth)1f);
                     DuckGame.Graphics.DrawCircle(pos2, 4f, Color.White * 0.2f, 2f, (Depth)1f);
                     DuckGame.Graphics.DrawRect(pos1 + new Vec2(-0.5f, -0.5f), pos1 + new Vec2(0.5f, 0.5f), Color.White, (Depth)1f);
@@ -3302,28 +3302,28 @@ namespace DuckGame
                 else
                 {
                     foreach (Touch touch in TouchScreen.GetTouches())
-                        DuckGame.Graphics.DrawCircle(touch.Transform(this._objectMenuLayer.camera), 4f, Color.White, 2f, (Depth)1f);
+                        DuckGame.Graphics.DrawCircle(touch.Transform(_objectMenuLayer.camera), 4f, Color.White, 2f, (Depth)1f);
                 }
             }
         }
 
         public override void StartDrawing()
         {
-            if (this._procTarget == null)
-                this._procTarget = new RenderTarget2D(DuckGame.Graphics.width, DuckGame.Graphics.height);
-            if (this._procContext == null)
+            if (_procTarget == null)
+                _procTarget = new RenderTarget2D(DuckGame.Graphics.width, DuckGame.Graphics.height);
+            if (_procContext == null)
                 return;
-            this._procContext.Draw(this._procTarget, Level.current.camera, this._procDrawOffset);
+            _procContext.Draw(_procTarget, Level.current.camera, _procDrawOffset);
         }
 
-        public void CloseMenu() => this._closeMenu = true;
+        public void CloseMenu() => _closeMenu = true;
 
         public void DoSave(string saveName)
         {
-            this._saveName = saveName;
-            if (!this._saveName.EndsWith(".lev"))
-                this._saveName += ".lev";
-            this.Save();
+            _saveName = saveName;
+            if (!_saveName.EndsWith(".lev"))
+                _saveName += ".lev";
+            Save();
         }
 
         //private void onLoad(object sender, CancelEventArgs e)
@@ -3345,8 +3345,8 @@ namespace DuckGame
             load = load.Replace('\\', '/');
             while (load.StartsWith("/"))
                 load = load.Substring(1);
-            this.ClearEverything();
-            this._saveName = load;
+            ClearEverything();
+            _saveName = load;
             Editor._currentLevelData = DuckFile.LoadLevel(load);
             Thing.loadingLevel = Editor._currentLevelData;
             if (Editor._currentLevelData == null)
@@ -3356,10 +3356,10 @@ namespace DuckGame
             }
             else
             {
-                Editor._currentLevelData.SetPath(this._saveName);
+                Editor._currentLevelData.SetPath(_saveName);
                 if (Editor._currentLevelData.metaData.guid == null || !Editor.editingContent && Content.GetLevel(Editor._currentLevelData.metaData.guid, LevelLocation.Content) != null)
                     Editor._currentLevelData.metaData.guid = Guid.NewGuid().ToString();
-                this._onlineSettingChanged = true;
+                _onlineSettingChanged = true;
                 if (Editor._currentLevelData.customData != null)
                 {
                     if (Editor._currentLevelData.customData.customTileset01Data != null)
@@ -3384,29 +3384,29 @@ namespace DuckGame
                         Custom.ApplyCustomData(Editor._currentLevelData.customData.customParallaxData.GetTileData(), 0, CustomType.Parallax);
                 }
                 Editor.previewCapture = Editor.LoadPreview(Editor._currentLevelData.previewData.preview);
-                this._pathNorth = false;
-                this._pathSouth = false;
-                this._pathEast = false;
-                this._pathWest = false;
-                this._miniMode = false;
+                _pathNorth = false;
+                _pathSouth = false;
+                _pathEast = false;
+                _pathWest = false;
+                _miniMode = false;
                 int sideMask = Editor._currentLevelData.proceduralData.sideMask;
                 if ((sideMask & 1) != 0)
-                    this._pathNorth = true;
+                    _pathNorth = true;
                 if ((sideMask & 2) != 0)
-                    this._pathEast = true;
+                    _pathEast = true;
                 if ((sideMask & 4) != 0)
-                    this._pathSouth = true;
+                    _pathSouth = true;
                 if ((sideMask & 8) != 0)
-                    this._pathWest = true;
+                    _pathWest = true;
                 if (sideMask != 0)
-                    this._miniMode = true;
-                this._loadingLevel = true;
-                this.LoadObjects(false);
-                this.LoadObjects(true);
-                this._loadingLevel = false;
-                this._editorLoadFinished = true;
-                if (!this._looseClear)
-                    this.CenterView();
+                    _miniMode = true;
+                _loadingLevel = true;
+                LoadObjects(false);
+                LoadObjects(true);
+                _loadingLevel = false;
+                _editorLoadFinished = true;
+                if (!_looseClear)
+                    CenterView();
                 Editor.hasUnsavedChanges = false;
                 Thing.loadingLevel = null;
             }
@@ -3430,20 +3430,20 @@ namespace DuckGame
                                 foreach (Thing thing in thingContainer.things)
                                 {
                                     if (!Thing.CheckForBozoData(thing))
-                                        this._levelThingsAlternate.Add(thing);
+                                        _levelThingsAlternate.Add(thing);
                                 }
                             }
                             else
                             {
                                 foreach (Thing thing in thingContainer.things)
-                                    this._levelThingsAlternate.Add(thing);
+                                    _levelThingsAlternate.Add(thing);
                             }
                         }
                         else
-                            this._levelThingsAlternate.Add(pThing);
+                            _levelThingsAlternate.Add(pThing);
                     }
                     else
-                        this.AddObject(pThing);
+                        AddObject(pThing);
                 }
             }
         }
@@ -3453,45 +3453,45 @@ namespace DuckGame
             load = load.Replace('\\', '/');
             while (load.StartsWith("/"))
                 load = load.Substring(1);
-            DuckXML doc = this._additionalSaveDirectory != null ? DuckXML.Load(load) : DuckFile.LoadDuckXML(load);
-            this._saveName = load;
-            this.LegacyLoadLevelParts(doc);
+            DuckXML doc = _additionalSaveDirectory != null ? DuckXML.Load(load) : DuckFile.LoadDuckXML(load);
+            _saveName = load;
+            LegacyLoadLevelParts(doc);
             Editor.hasUnsavedChanges = false;
         }
 
         public void LegacyLoadLevelParts(DuckXML doc)
         {
-            this.hadGUID = false;
-            this.ClearEverything();
+            hadGUID = false;
+            ClearEverything();
             DXMLNode e = doc.Element("Level");
             DXMLNode dxmlNode1 = e.Element("ID");
             if (dxmlNode1 != null)
             {
                 Editor._currentLevelData.metaData.guid = dxmlNode1.Value;
-                this.hadGUID = true;
+                hadGUID = true;
             }
             DXMLNode dxmlNode2 = e.Element("ONLINE");
             Editor._currentLevelData.metaData.onlineMode = dxmlNode2 != null && Convert.ToBoolean(dxmlNode2.Value);
             Editor.previewCapture = Editor.LegacyLoadPreview(e);
-            this._pathNorth = false;
-            this._pathSouth = false;
-            this._pathEast = false;
-            this._pathWest = false;
-            this._miniMode = false;
+            _pathNorth = false;
+            _pathSouth = false;
+            _pathEast = false;
+            _pathWest = false;
+            _miniMode = false;
             DXMLNode dxmlNode3 = e.Element("PathMask");
             if (dxmlNode3 != null)
             {
                 int int32 = Convert.ToInt32(dxmlNode3.Value);
                 if ((int32 & 1) != 0)
-                    this._pathNorth = true;
+                    _pathNorth = true;
                 if ((int32 & 2) != 0)
-                    this._pathEast = true;
+                    _pathEast = true;
                 if ((int32 & 4) != 0)
-                    this._pathSouth = true;
+                    _pathSouth = true;
                 if ((int32 & 8) != 0)
-                    this._pathWest = true;
+                    _pathWest = true;
                 if (int32 != 0)
-                    this._miniMode = true;
+                    _miniMode = true;
             }
             DXMLNode dxmlNode4 = e.Element("workshopID");
             if (dxmlNode4 != null)
@@ -3531,35 +3531,35 @@ namespace DuckGame
             DXMLNode dxmlNode14 = e.Element("IsMirrored");
             if (dxmlNode14 != null)
                 Editor._currentLevelData.proceduralData.isMirrored = Convert.ToBoolean(dxmlNode14.Value);
-            this._loadingLevel = true;
+            _loadingLevel = true;
             IEnumerable<DXMLNode> source1 = e.Elements("Objects");
             if (source1 != null)
             {
                 foreach (DXMLNode element in source1.Elements<DXMLNode>("Object"))
-                    this.AddObject(Thing.LegacyLoadThing(element));
+                    AddObject(Thing.LegacyLoadThing(element));
             }
-            this._loadingLevel = false;
-            this._editorLoadFinished = true;
-            if (this._looseClear)
+            _loadingLevel = false;
+            _editorLoadFinished = true;
+            if (_looseClear)
                 return;
-            this.CenterView();
+            CenterView();
         }
 
         private void CenterView()
         {
-            this.camera.width = this._gridW * 16;
-            this.camera.height = this.camera.width / Resolution.current.aspect;
-            this.camera.centerX = (float)(this.camera.width / 2.0 - 8.0);
-            this.camera.centerY = (float)(this.camera.height / 2.0 - 8.0);
-            float width = this.camera.width;
-            float height = this.camera.height;
-            this.camera.width *= 0.3f;
-            this.camera.height *= 0.3f;
-            this.camera.centerX -= (float)((this.camera.width - width) / 2.0);
-            this.camera.centerY -= (float)((this.camera.height - height) / 2.0);
+            camera.width = _gridW * 16;
+            camera.height = camera.width / Resolution.current.aspect;
+            camera.centerX = (float)(camera.width / 2.0 - 8.0);
+            camera.centerY = (float)(camera.height / 2.0 - 8.0);
+            float width = camera.width;
+            float height = camera.height;
+            camera.width *= 0.3f;
+            camera.height *= 0.3f;
+            camera.centerX -= (float)((camera.width - width) / 2.0);
+            camera.centerY -= (float)((camera.height - height) / 2.0);
             if (_sizeRestriction.x <= 0.0)
                 return;
-            this.camera.center = (this._topLeftMost + this._bottomRightMost) / 2f;
+            camera.center = (_topLeftMost + _bottomRightMost) / 2f;
         }
 
         public static Texture2D LoadPreview(string s)
@@ -3753,9 +3753,9 @@ namespace DuckGame
             Level currentLevel = Level.core.currentLevel;
             Level.core.currentLevel = this;
             Editor._currentLevelData.SetExtraHeaderInfo(new LevelMetaData());
-            Editor._currentLevelData.Header<LevelMetaData>().type = this.GetLevelType();
-            Editor._currentLevelData.Header<LevelMetaData>().size = this.GetLevelSize();
-            Editor._currentLevelData.Header<LevelMetaData>().online = this.LevelIsOnlineCapable();
+            Editor._currentLevelData.Header<LevelMetaData>().type = GetLevelType();
+            Editor._currentLevelData.Header<LevelMetaData>().size = GetLevelSize();
+            Editor._currentLevelData.Header<LevelMetaData>().online = LevelIsOnlineCapable();
             Editor._currentLevelData.Header<LevelMetaData>().guid = Editor._currentLevelData.metaData.guid;
             Editor._currentLevelData.Header<LevelMetaData>().workshopID = Editor._currentLevelData.metaData.workshopID;
             Editor._currentLevelData.Header<LevelMetaData>().deathmatchReady = Editor._currentLevelData.metaData.deathmatchReady;
@@ -3853,10 +3853,10 @@ namespace DuckGame
             else
                 Editor._currentLevelData.customData.customParallaxData.ignore = true;
             Editor._currentLevelData.modData.workshopIDs.Clear();
-            if (this._things.Count > 0)
+            if (_things.Count > 0)
             {
                 HashSet<Mod> modSet = new HashSet<Mod>();
-                foreach (Thing levelThing in this.levelThings)
+                foreach (Thing levelThing in levelThings)
                 {
                     modSet.Add(ModLoader.GetModFromType(levelThing.GetType()));
                     if (levelThing is IContainThings)
@@ -3908,10 +3908,10 @@ namespace DuckGame
             Editor._currentLevelData.metaData.eightPlayer = false;
             Editor._currentLevelData.metaData.eightPlayerRestricted = false;
             Editor._currentLevelData.objects.objects.Clear();
-            if (this._levelThings.Count > 0)
+            if (_levelThings.Count > 0)
             {
                 MultiMap<System.Type, Thing> multiMap = new MultiMap<System.Type, Thing>();
-                foreach (Thing levelThing in this._levelThings)
+                foreach (Thing levelThing in _levelThings)
                 {
                     if (levelThing is EightPlayer)
                     {
@@ -3920,7 +3920,7 @@ namespace DuckGame
                     }
                     if (levelThing.editorCanModify && !levelThing.processedByEditor)
                     {
-                        if (this._miniMode)
+                        if (_miniMode)
                         {
                             switch (levelThing)
                             {
@@ -3990,19 +3990,19 @@ namespace DuckGame
                     }
                 }
             }
-            this.SerializeObjects(false);
-            this.SerializeObjects(true);
+            SerializeObjects(false);
+            SerializeObjects(true);
             Editor._currentLevelData.proceduralData.sideMask = 0;
-            if (this._miniMode)
+            if (_miniMode)
             {
                 int num7 = 0;
-                if (this._pathNorth)
+                if (_pathNorth)
                     num7 |= 1;
-                if (this._pathEast)
+                if (_pathEast)
                     num7 |= 2;
-                if (this._pathSouth)
+                if (_pathSouth)
                     num7 |= 4;
-                if (this._pathWest)
+                if (_pathWest)
                     num7 |= 8;
                 Editor._currentLevelData.proceduralData.sideMask = num7;
                 Editor._currentLevelData.proceduralData.weaponConfig = str1;
@@ -4037,7 +4037,7 @@ namespace DuckGame
         public void SerializeObjects(bool pAlternate)
         {
             List<BinaryClassChunk> binaryClassChunkList = pAlternate ? Editor._currentLevelData.proceduralData.openAirAlternateObjects.objects : Editor._currentLevelData.objects.objects;
-            List<Thing> thingList = pAlternate ? this._levelThingsAlternate : this._levelThingsNormal;
+            List<Thing> thingList = pAlternate ? _levelThingsAlternate : _levelThingsNormal;
             binaryClassChunkList.Clear();
             if (thingList.Count <= 0)
                 return;
@@ -4058,20 +4058,20 @@ namespace DuckGame
             foreach (KeyValuePair<System.Type, List<Thing>> keyValuePair in (MultiMap<System.Type, Thing, List<Thing>>)multiMap)
                 binaryClassChunkList.Add(new ThingContainer(keyValuePair.Value, keyValuePair.Key)
                 {
-                    quickSerialize = this.minimalConversionLoad
+                    quickSerialize = minimalConversionLoad
                 }.Serialize());
         }
 
         public bool Save(bool isTempSaveForPlayTestMode = false)
         {
-            if (this._saveName == "")
+            if (_saveName == "")
             {
-                this.SaveAs();
+                SaveAs();
             }
             else
             {
                 Editor.saving = true;
-                LevelData saveData = this.CreateSaveData(isTempSaveForPlayTestMode);
+                LevelData saveData = CreateSaveData(isTempSaveForPlayTestMode);
                 saveData.customData.customTileset01Data.ignore = Editor._currentLevelData.customData.customTileset01Data.ignore;
                 saveData.customData.customTileset02Data.ignore = Editor._currentLevelData.customData.customTileset02Data.ignore;
                 saveData.customData.customTileset03Data.ignore = Editor._currentLevelData.customData.customTileset03Data.ignore;
@@ -4082,26 +4082,26 @@ namespace DuckGame
                 saveData.customData.customPlatform02Data.ignore = Editor._currentLevelData.customData.customPlatform02Data.ignore;
                 saveData.customData.customPlatform03Data.ignore = Editor._currentLevelData.customData.customPlatform03Data.ignore;
                 saveData.customData.customParallaxData.ignore = Editor._currentLevelData.customData.customParallaxData.ignore;
-                saveData.SetPath(this._saveName);
-                if (!DuckFile.SaveChunk(saveData, this._saveName))
+                saveData.SetPath(_saveName);
+                if (!DuckFile.SaveChunk(saveData, _saveName))
                 {
-                    this._notify.Open("Could not save data.");
+                    _notify.Open("Could not save data.");
                     return false;
                 }
                 if (!isTempSaveForPlayTestMode)
-                    Editor._currentLevelData.SetPath(this._saveName);
+                    Editor._currentLevelData.SetPath(_saveName);
                 Content.MapLevel(saveData.metaData.guid, saveData, LevelLocation.Custom);
-                if (this._additionalSaveDirectory != null && this._saveName.LastIndexOf("assets/levels/") != -1)
+                if (_additionalSaveDirectory != null && _saveName.LastIndexOf("assets/levels/") != -1)
                 {
-                    string str1 = this._saveName.Substring(this._saveName.LastIndexOf("assets/levels/") + "assets/levels/".Length);
+                    string str1 = _saveName.Substring(_saveName.LastIndexOf("assets/levels/") + "assets/levels/".Length);
                     string str2 = Directory.GetCurrentDirectory() + "/Content/levels/" + str1;
                     DuckFile.CreatePath(str2);
-                    System.IO.File.Copy(this._saveName, str2, true);
-                    System.IO.File.SetAttributes(this._saveName, FileAttributes.Normal);
+                    System.IO.File.Copy(_saveName, str2, true);
+                    System.IO.File.SetAttributes(_saveName, FileAttributes.Normal);
                 }
-                if (this._miniMode && !this._doingResave)
+                if (_miniMode && !_doingResave)
                     LevelGenerator.ReInitialize();
-                foreach (Thing levelThing in this._levelThings)
+                foreach (Thing levelThing in _levelThings)
                     levelThing.processedByEditor = false;
                 Editor.saving = false;
                 if (!isTempSaveForPlayTestMode)
@@ -4187,31 +4187,31 @@ namespace DuckGame
 
         public void SaveAs()
         {
-            this._fileDialog.Open(Editor._initialDirectory, Editor._initialDirectory, true);
-            this.DoMenuClose();
-            this._closeMenu = false;
+            _fileDialog.Open(Editor._initialDirectory, Editor._initialDirectory, true);
+            DoMenuClose();
+            _closeMenu = false;
         }
 
         public void Load()
         {
-            this._fileDialog.Open(Editor._initialDirectory, Editor._initialDirectory, false);
-            this.DoMenuClose();
-            this._closeMenu = false;
+            _fileDialog.Open(Editor._initialDirectory, Editor._initialDirectory, false);
+            DoMenuClose();
+            _closeMenu = false;
         }
 
         public string SaveTempVersion()
         {
-            string saveName = this._saveName;
+            string saveName = _saveName;
             string str = Directory.GetCurrentDirectory() + "\\Content\\_tempPlayLevel.lev";
-            this._saveName = str;
-            this.Save(true);
-            this._saveName = saveName;
+            _saveName = str;
+            Save(true);
+            _saveName = saveName;
             return str;
         }
 
         public void Play()
         {
-            if (!this._runLevelAnyway && !Editor.arcadeMachineMode && this._levelThings.FirstOrDefault<Thing>(x =>
+            if (!_runLevelAnyway && !Editor.arcadeMachineMode && _levelThings.FirstOrDefault<Thing>(x =>
            {
                switch (x)
                {
@@ -4223,30 +4223,30 @@ namespace DuckGame
                }
            }) == null)
             {
-                this.CloseMenu();
-                this.ShowNoSpawnsDialogue();
+                CloseMenu();
+                ShowNoSpawnsDialogue();
             }
             else
             {
                 Editor.isTesting = true;
                 string name;
-                if (this._miniMode && this._procContext != null)
+                if (_miniMode && _procContext != null)
                 {
                     LevelGenerator.ReInitialize();
-                    this._centerTile = LevelGenerator.LoadInTile(this.SaveTempVersion());
+                    _centerTile = LevelGenerator.LoadInTile(SaveTempVersion());
                     name = "RANDOM";
                 }
                 else
-                    name = this.SaveTempVersion();
-                this.CloseMenu();
-                this.RunTestLevel(name);
+                    name = SaveTempVersion();
+                CloseMenu();
+                RunTestLevel(name);
             }
         }
 
         public virtual void RunTestLevel(string name)
         {
             Editor.isTesting = true;
-            Level.current = new TestArea(this, name, this._procSeed, this._centerTile);
+            Level.current = new TestArea(this, name, _procSeed, _centerTile);
             Level.current.AddThing(new EditorTestLevel(this));
         }
 

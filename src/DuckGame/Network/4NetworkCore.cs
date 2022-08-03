@@ -15,6 +15,6 @@ namespace DuckGame
         {
         }
 
-        public NMMakeNewConnection(string pIdentifier) => this.identifier = pIdentifier;
+        public NMMakeNewConnection(string pIdentifier) => identifier = pIdentifier;
     }
 }

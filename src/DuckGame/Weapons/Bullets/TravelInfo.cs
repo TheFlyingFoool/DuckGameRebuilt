@@ -15,9 +15,9 @@ namespace DuckGame
 
         public TravelInfo(Vec2 point1, Vec2 point2, float len)
         {
-            this.p1 = point1;
-            this.p2 = point2;
-            this.length = len;
+            p1 = point1;
+            p2 = point2;
+            length = len;
         }
     }
 }

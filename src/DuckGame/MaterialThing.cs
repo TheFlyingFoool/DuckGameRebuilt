@@ -83,91 +83,91 @@ namespace DuckGame
 
         public bool _destroyed
         {
-            get => this._destroyedReal;
+            get => _destroyedReal;
             set
             {
                 int num = value ? 1 : 0;
-                this._destroyedReal = value;
+                _destroyedReal = value;
             }
         }
 
-        public bool translucent => this._translucent;
+        public bool translucent => _translucent;
 
         public virtual bool Hurt(float points)
         {
             if (_maxHealth == 0.0)
                 return false;
-            this._hitPoints -= points;
+            _hitPoints -= points;
             return true;
         }
 
         public bool dontCrush
         {
-            get => this._dontCrush;
-            set => this._dontCrush = value;
+            get => _dontCrush;
+            set => _dontCrush = value;
         }
 
         public HashSet<MaterialThing> clip
         {
-            get => this._clip;
-            set => this._clip = value;
+            get => _clip;
+            set => _clip = value;
         }
 
         public HashSet<MaterialThing> impacting
         {
-            get => this._impacting;
-            set => this._impacting = value;
+            get => _impacting;
+            set => _impacting = value;
         }
 
         public HashSet<MaterialThing> solidImpacting
         {
-            get => this._solidImpacting;
-            set => this._solidImpacting = value;
+            get => _solidImpacting;
+            set => _solidImpacting = value;
         }
 
         public byte planeOfExistence
         {
-            get => this._planeOfExistence;
-            set => this._planeOfExistence = value;
+            get => _planeOfExistence;
+            set => _planeOfExistence = value;
         }
 
         public bool grounded
         {
-            get => this._grounded;
-            set => this._grounded = value;
+            get => _grounded;
+            set => _grounded = value;
         }
 
         public float bouncy
         {
-            get => this._bouncy;
-            set => this._bouncy = value;
+            get => _bouncy;
+            set => _bouncy = value;
         }
 
         public float breakForce
         {
-            get => this._breakForce;
-            set => this._breakForce = value;
+            get => _breakForce;
+            set => _breakForce = value;
         }
 
-        public virtual bool destroyed => this._destroyed;
+        public virtual bool destroyed => _destroyed;
 
         public float impactThreshold
         {
-            get => this._impactThreshold;
-            set => this._impactThreshold = value;
+            get => _impactThreshold;
+            set => _impactThreshold = value;
         }
 
         public virtual float weight
         {
-            get => this._weight;
-            set => this._weight = value;
+            get => _weight;
+            set => _weight = value;
         }
 
         public float weightMultiplier
         {
             get
             {
-                float num = this.weight;
+                float num = weight;
                 if (num < 5.0)
                     num = 5f;
                 return 5f / num;
@@ -178,7 +178,7 @@ namespace DuckGame
         {
             get
             {
-                float num = this.weight * 0.75f;
+                float num = weight * 0.75f;
                 if (num < 5.0)
                     num = 5f;
                 return 5f / num;
@@ -189,40 +189,40 @@ namespace DuckGame
         {
             get
             {
-                float num = this.weight;
+                float num = weight;
                 if (num < 5.0)
                     num = 5f;
                 return num / 5f;
             }
         }
 
-        public float weightMultiplierInvTotal => this.weight / 5f;
+        public float weightMultiplierInvTotal => weight / 5f;
 
         public bool islandDirty
         {
-            get => this._islandDirty;
-            set => this._islandDirty = value;
+            get => _islandDirty;
+            set => _islandDirty = value;
         }
 
         public CollisionIsland island
         {
-            get => this._island;
-            set => this._island = value;
+            get => _island;
+            set => _island = value;
         }
 
-        public virtual void Zap(Thing zapper) => this._zapper = zapper;
+        public virtual void Zap(Thing zapper) => _zapper = zapper;
 
         public void CheckIsland()
         {
-            if (this.island == null || this.island.owner == this || this.level == null || !this.level.simulatePhysics || (this.position - this.island.owner.position).lengthSq <= island.radiusSquared)
+            if (island == null || island.owner == this || level == null || !level.simulatePhysics || (position - island.owner.position).lengthSq <= island.radiusSquared)
                 return;
-            this.island.RemoveThing(this);
-            this.UpdateIsland();
+            island.RemoveThing(this);
+            UpdateIsland();
         }
 
         public void UpdateIsland()
         {
-            CollisionIsland island = Level.current.things.GetIsland(this.position);
+            CollisionIsland island = Level.current.things.GetIsland(position);
             if (this.island != null && this.island != island)
                 this.island.RemoveThing(this);
             if (island != null)
@@ -232,40 +232,40 @@ namespace DuckGame
             }
             else
                 Level.current.things.AddIsland(this);
-            this.islandDirty = false;
+            islandDirty = false;
         }
 
         public override void DoInitialize() => base.DoInitialize();
 
         public override void DoTerminate()
         {
-            if (this.island != null)
-                this.island.RemoveThing(this);
+            if (island != null)
+                island.RemoveThing(this);
             base.DoTerminate();
         }
 
-        public virtual float impactPowerH => Math.Abs(this.hSpeed) * this.weightMultiplierInvTotal;
+        public virtual float impactPowerH => Math.Abs(hSpeed) * weightMultiplierInvTotal;
 
-        public virtual float impactPowerV => Math.Abs(this.vSpeed) * this.weightMultiplierInvTotal;
+        public virtual float impactPowerV => Math.Abs(vSpeed) * weightMultiplierInvTotal;
 
-        public float impactDirectionH => this.hSpeed * this.weightMultiplierInvTotal;
+        public float impactDirectionH => hSpeed * weightMultiplierInvTotal;
 
-        public float impactDirectionV => this.vSpeed * this.weightMultiplierInvTotal;
+        public float impactDirectionV => vSpeed * weightMultiplierInvTotal;
 
-        public float totalImpactPower => this.impactPowerH + this.impactPowerV;
+        public float totalImpactPower => impactPowerH + impactPowerV;
 
-        public Vec2 impactDirection => new Vec2(this.impactDirectionH, this.impactDirectionV);
+        public Vec2 impactDirection => new Vec2(impactDirectionH, impactDirectionV);
 
         public Organizer<ImpactedFrom, string> collideSounds
         {
-            get => this._collideSounds;
-            set => this._collideSounds = value;
+            get => _collideSounds;
+            set => _collideSounds = value;
         }
 
         public float impactVolume
         {
-            get => this._impactVolume;
-            set => this._impactVolume = value;
+            get => _impactVolume;
+            set => _impactVolume = value;
         }
 
         public MaterialThing(float x, float y)
@@ -276,18 +276,18 @@ namespace DuckGame
         public void Bounce(ImpactedFrom direction)
         {
             if (direction == ImpactedFrom.Left || direction == ImpactedFrom.Right)
-                this.BounceH();
+                BounceH();
             else
-                this.BounceV();
+                BounceV();
         }
 
-        public void BounceH() => this.hSpeed = -this.hSpeed * this.bouncy;
+        public void BounceH() => hSpeed = -hSpeed * bouncy;
 
-        public void BounceV() => this.vSpeed = -this.vSpeed * this.bouncy;
+        public void BounceV() => vSpeed = -vSpeed * bouncy;
 
-        public override void Update() => this._didImpactSound = false;
+        public override void Update() => _didImpactSound = false;
 
-        public Thing lastBurnedBy => this._lastBurnedBy;
+        public Thing lastBurnedBy => _lastBurnedBy;
 
         public virtual void UpdateOnFire()
         {
@@ -295,81 +295,81 @@ namespace DuckGame
             {
                 if (_flameWait > 1.0)
                 {
-                    this.AddFire();
-                    this._flameWait = 0f;
+                    AddFire();
+                    _flameWait = 0f;
                 }
-                this._flameWait += 0.03f;
-                this.burnt += this.burnSpeed;
+                _flameWait += 0.03f;
+                burnt += burnSpeed;
             }
             else
-                this.Destroy(new DTIncinerate(this._lastBurnedBy));
+                Destroy(new DTIncinerate(_lastBurnedBy));
         }
 
         public override void DoUpdate()
         {
             if (spreadExtinguisherSmoke > 0.0)
             {
-                this.spreadExtinguisherSmoke -= 0.15f;
-                if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 2f)
+                spreadExtinguisherSmoke -= 0.15f;
+                if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2f)
                 {
-                    ++this.extWait;
-                    if (this.extWait >= 3)
+                    ++extWait;
+                    if (extWait >= 3)
                     {
-                        JetpackSmoke t = new JetpackSmoke(this.x + Rando.Float(-1f, 1f), this.bottom + Rando.Float(-4f, 1f))
+                        JetpackSmoke t = new JetpackSmoke(x + Rando.Float(-1f, 1f), bottom + Rando.Float(-4f, 1f))
                         {
                             depth = (Depth)0.9f
                         };
                         Level.current.AddThing(t);
-                        t.hSpeed += this.hSpeed * Rando.Float(0.2f, 0.3f);
+                        t.hSpeed += hSpeed * Rando.Float(0.2f, 0.3f);
                         t.vSpeed = Rando.Float(-0.1f, 0f);
-                        t.vSpeed -= Math.Abs(this.vSpeed) * Rando.Float(0.05f, 0.1f);
-                        this.extWait = 0;
+                        t.vSpeed -= Math.Abs(vSpeed) * Rando.Float(0.05f, 0.1f);
+                        extWait = 0;
                     }
                 }
             }
             if (heat > 0f)
-                this.heat -= this.coolingFactor;
+                heat -= coolingFactor;
             else if (heat < -0.01f)
-                this.heat += this.coolingFactor;
+                heat += coolingFactor;
             else
-                this.heat = 0f;
-            if (this.isServerForObject && this._onFire)
-                this.UpdateOnFire();
+                heat = 0f;
+            if (isServerForObject && _onFire)
+                UpdateOnFire();
             base.DoUpdate();
         }
 
-        public void NetworkDestroy() => this.OnDestroy(new DTImpact(this));
+        public void NetworkDestroy() => OnDestroy(new DTImpact(this));
 
         public virtual bool Destroy(DestroyType type = null)
         {
-            if (!this._destroyed)
+            if (!_destroyed)
             {
-                this._destroyed = this.OnDestroy(type);
-                if (this.isServerForObject && (this._destroyed || this._sendDestroyMessage && !this._sentDestroyMessage) && this.isStateObject)
+                _destroyed = OnDestroy(type);
+                if (isServerForObject && (_destroyed || _sendDestroyMessage && !_sentDestroyMessage) && isStateObject)
                 {
                     Send.Message(new NMDestroyProp(this));
-                    this._sentDestroyMessage = true;
+                    _sentDestroyMessage = true;
                 }
             }
-            return this._destroyed;
+            return _destroyed;
         }
 
         protected virtual bool OnDestroy(DestroyType type = null) => false;
 
-        public virtual void Regenerate() => this._destroyed = false;
+        public virtual void Regenerate() => _destroyed = false;
 
-        public virtual bool DoHit(Bullet bullet, Vec2 hitPos) => this.Hit(bullet, hitPos);
+        public virtual bool DoHit(Bullet bullet, Vec2 hitPos) => Hit(bullet, hitPos);
 
         public virtual bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (this.physicsMaterial == PhysicsMaterial.Metal)
+            if (physicsMaterial == PhysicsMaterial.Metal)
             {
                 Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0f ? 1 : -1));
                 hitPos -= bullet.travelDirNormalized;
                 for (int index = 0; index < 3; ++index)
                     Level.Add(Spark.New(hitPos.x, hitPos.y, bullet.travelDirNormalized));
             }
-            else if (this.physicsMaterial == PhysicsMaterial.Wood)
+            else if (physicsMaterial == PhysicsMaterial.Wood)
             {
                 hitPos -= bullet.travelDirNormalized;
                 for (int index = 0; index < 3; ++index)
@@ -383,7 +383,7 @@ namespace DuckGame
             return thickness > bullet.ammo.penetration;
         }
 
-        public virtual void DoExitHit(Bullet bullet, Vec2 exitPos) => this.ExitHit(bullet, exitPos);
+        public virtual void DoExitHit(Bullet bullet, Vec2 exitPos) => ExitHit(bullet, exitPos);
 
         public virtual void ExitHit(Bullet bullet, Vec2 exitPos)
         {
@@ -391,35 +391,35 @@ namespace DuckGame
 
         public bool onFire
         {
-            get => this._onFire;
-            set => this._onFire = value;
+            get => _onFire;
+            set => _onFire = value;
         }
 
         public virtual void Burn(Vec2 firePosition, Thing litBy)
         {
-            if (Network.isActive && !this.isServerForObject && !this.isBurnMessage && !this._onFire && this is Duck && (this as Duck).profile != null)
+            if (Network.isActive && !isServerForObject && !isBurnMessage && !_onFire && this is Duck && (this as Duck).profile != null)
                 Send.Message(new NMLightDuck(this as Duck));
-            if (!this.isServerForObject && !this.isBurnMessage || this._onFire || this._burnWaitTimer != null && !(bool)this._burnWaitTimer)
+            if (!isServerForObject && !isBurnMessage || _onFire || _burnWaitTimer != null && !(bool)_burnWaitTimer)
                 return;
-            int num = this.onFire ? 1 : 0;
-            this._onFire = this.OnBurn(firePosition, litBy);
-            this._lastBurnedBy = litBy;
+            int num = onFire ? 1 : 0;
+            _onFire = OnBurn(firePosition, litBy);
+            _lastBurnedBy = litBy;
         }
 
         public virtual void UpdateFirePosition(SmallFire f)
         {
         }
 
-        public virtual void AddFire() => Level.Add(SmallFire.New(Rando.Float(((this.left - this.x) * 0.7f), ((this.right - this.x) * 0.7f)), Rando.Float(((this.top - this.y) * 0.7f), ((this.bottom - this.y) * 0.7f)), 0f, 0f, stick: this));
+        public virtual void AddFire() => Level.Add(SmallFire.New(Rando.Float(((left - x) * 0.7f), ((right - x) * 0.7f)), Rando.Float(((top - y) * 0.7f), ((bottom - y) * 0.7f)), 0f, 0f, stick: this));
 
         protected virtual bool OnBurn(Vec2 firePosition, Thing litBy)
         {
             if (flammable < 1f / 1000f)
                 return false;
-            if (!this._onFire)
+            if (!_onFire)
                 SFX.Play("ignite", 0.7f, Rando.Float(0.3f) - 0.3f);
-            this.AddFire();
-            this.AddFire();
+            AddFire();
+            AddFire();
             return true;
         }
 
@@ -428,18 +428,18 @@ namespace DuckGame
             bool flag = heat < 0f;
             if (!flag || val > 0f)
             {
-                this.heat += val;
+                heat += val;
                 if (heat > 1.5)
-                    this.heat = 1.5f;
+                    heat = 1.5f;
                 if (!flag && heat < 0f)
-                    this.heat = 0f;
+                    heat = 0f;
             }
             if (val <= 0f)
                 return;
-            this.HeatUp(location);
+            HeatUp(location);
         }
 
-        public virtual void DoHeatUp(float val) => this.DoHeatUp(val, this.position);
+        public virtual void DoHeatUp(float val) => DoHeatUp(val, position);
 
         public virtual void HeatUp(Vec2 location)
         {
@@ -449,13 +449,13 @@ namespace DuckGame
         {
             if (val < 0f)
                 val = -val;
-            this.heat -= val;
+            heat -= val;
             if (heat < -1.5)
-                this.heat = -1.5f;
-            this.Freeze(location);
+                heat = -1.5f;
+            Freeze(location);
         }
 
-        public virtual void DoFreeze(float val) => this.DoFreeze(val, this.position);
+        public virtual void DoFreeze(float val) => DoFreeze(val, position);
 
         public virtual void Freeze(Vec2 location)
         {
@@ -463,26 +463,26 @@ namespace DuckGame
 
         public virtual void Extinquish()
         {
-            foreach (SmallFire smallFire in Level.CheckCircleAll<SmallFire>(this.position, 20f))
+            foreach (SmallFire smallFire in Level.CheckCircleAll<SmallFire>(position, 20f))
             {
                 if (smallFire.stick == this)
                     Level.Remove(smallFire);
             }
-            this._onFire = false;
-            this._burnWaitTimer = new ActionTimer(0.05f, reset: false);
+            _onFire = false;
+            _burnWaitTimer = new ActionTimer(0.05f, reset: false);
         }
 
-        protected float CalculateImpactPower(MaterialThing with, ImpactedFrom from) => from == ImpactedFrom.Left || from == ImpactedFrom.Right ? this.impactPowerH + with.impactPowerH : this.impactPowerV + with.impactPowerV;
+        protected float CalculateImpactPower(MaterialThing with, ImpactedFrom from) => from == ImpactedFrom.Left || from == ImpactedFrom.Right ? impactPowerH + with.impactPowerH : impactPowerV + with.impactPowerV;
 
-        protected virtual float CalculatePersonalImpactPower(MaterialThing with, ImpactedFrom from) => Math.Abs(from == ImpactedFrom.Left || from == ImpactedFrom.Right ? this.impactPowerH : this.impactPowerV);
+        protected virtual float CalculatePersonalImpactPower(MaterialThing with, ImpactedFrom from) => Math.Abs(from == ImpactedFrom.Left || from == ImpactedFrom.Right ? impactPowerH : impactPowerV);
 
         public virtual void Impact(MaterialThing with, ImpactedFrom from, bool solidImpact)
         {
-            if (with.ignoreCollisions || this.ignoreCollisions || this.CalculateImpactPower(with, from) <= _impactThreshold)
+            if (with.ignoreCollisions || ignoreCollisions || CalculateImpactPower(with, from) <= _impactThreshold)
                 return;
             if (!with.onlyCrush || from == ImpactedFrom.Top)
-                this.OnSoftImpact(with, from);
-            this.OnImpact(with, from);
+                OnSoftImpact(with, from);
+            OnImpact(with, from);
         }
 
         public virtual void Touch(MaterialThing with)
@@ -491,30 +491,30 @@ namespace DuckGame
 
         public virtual void SolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (with.ignoreCollisions || this.ignoreCollisions)
+            if (with.ignoreCollisions || ignoreCollisions)
                 return;
-            double impactPower = this.CalculateImpactPower(with, from);
+            double impactPower = CalculateImpactPower(with, from);
             if (impactPower > _breakForce)
-                this.Destroy(new DTImpact(with));
-            if (this.CalculatePersonalImpactPower(with, from) > _impactThreshold)
-                this._didImpactSound = this.PlayCollideSound(from);
+                Destroy(new DTImpact(with));
+            if (CalculatePersonalImpactPower(with, from) > _impactThreshold)
+                _didImpactSound = PlayCollideSound(from);
             if (impactPower <= _impactThreshold)
                 return;
-            this.OnSolidImpact(with, from);
-            this.OnImpact(with, from);
+            OnSolidImpact(with, from);
+            OnImpact(with, from);
         }
 
         public virtual bool PlayCollideSound(ImpactedFrom from)
         {
-            if (!this.collideSounds.HasGroup(from) || this._didImpactSound)
+            if (!collideSounds.HasGroup(from) || _didImpactSound)
                 return false;
             if (Network.isActive)
             {
-                if (this.isServerForObject)
-                    this._netCollideSound.Play();
+                if (isServerForObject)
+                    _netCollideSound.Play();
             }
             else
-                SFX.Play(this.collideSounds.GetRandom(from), this._impactVolume);
+                SFX.Play(collideSounds.GetRandom(from), _impactVolume);
             return true;
         }
 

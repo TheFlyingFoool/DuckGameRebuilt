@@ -17,28 +17,28 @@ namespace DuckGame
 
         public TestArea(Editor editor, string level, int seed = 0, RandomLevelData center = null)
         {
-            this._editor = editor;
-            this._level = level;
-            this._seed = seed;
-            this._center = center;
+            _editor = editor;
+            _level = level;
+            _seed = seed;
+            _center = center;
         }
 
         public override void Initialize()
         {
-            if (this._level == "RANDOM")
+            if (_level == "RANDOM")
             {
-                LevelGenerator.MakeLevel(allowSymmetry: (this._center.left && this._center.right), seed: this._seed).LoadParts(0f, 0f, this, this._seed);
+                LevelGenerator.MakeLevel(allowSymmetry: (_center.left && _center.right), seed: _seed).LoadParts(0f, 0f, this, _seed);
             }
             else
             {
-                IEnumerable<DXMLNode> source = DuckXML.Load(this._level).Element("Level").Elements("Objects");
+                IEnumerable<DXMLNode> source = DuckXML.Load(_level).Element("Level").Elements("Objects");
                 if (source == null)
                     return;
                 foreach (DXMLNode element in source.Elements<DXMLNode>("Object"))
                 {
                     Thing t = Thing.LegacyLoadThing(element);
                     if (t != null)
-                        this.AddThing(t);
+                        AddThing(t);
                 }
             }
         }

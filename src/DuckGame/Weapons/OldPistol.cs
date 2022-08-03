@@ -18,93 +18,93 @@ namespace DuckGame
         public OldPistol(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 2;
-            this._ammoType = new ATOldPistol();
-            this._type = "gun";
-            this._sprite = new SpriteMap("oldPistol", 32, 32);
-            this.graphic = _sprite;
-            this.center = new Vec2(16f, 17f);
-            this.collisionOffset = new Vec2(-8f, -4f);
-            this.collisionSize = new Vec2(16f, 8f);
-            this._barrelOffsetTL = new Vec2(24f, 16f);
-            this._fireSound = "shotgun";
-            this._kickForce = 2f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this._manualLoad = true;
-            this._holdOffset = new Vec2(2f, 0f);
-            this.editorTooltip = "A pain in the tailfeathers to reload, but it'll get the job done.";
+            ammo = 2;
+            _ammoType = new ATOldPistol();
+            _type = "gun";
+            _sprite = new SpriteMap("oldPistol", 32, 32);
+            graphic = _sprite;
+            center = new Vec2(16f, 17f);
+            collisionOffset = new Vec2(-8f, -4f);
+            collisionSize = new Vec2(16f, 8f);
+            _barrelOffsetTL = new Vec2(24f, 16f);
+            _fireSound = "shotgun";
+            _kickForce = 2f;
+            _fireRumble = RumbleIntensity.Kick;
+            _manualLoad = true;
+            _holdOffset = new Vec2(2f, 0f);
+            editorTooltip = "A pain in the tailfeathers to reload, but it'll get the job done.";
         }
 
         public override void Update()
         {
             base.Update();
-            this._sprite.frame = this.ammo <= 1 ? 1 : 0;
-            if (this.infinite.value)
+            _sprite.frame = ammo <= 1 ? 1 : 0;
+            if (infinite.value)
             {
-                this.UpdateLoadState();
-                this.UpdateLoadState();
+                UpdateLoadState();
+                UpdateLoadState();
             }
             else
-                this.UpdateLoadState();
+                UpdateLoadState();
         }
 
         private void UpdateLoadState()
         {
-            if (this._loadState <= -1)
+            if (_loadState <= -1)
                 return;
-            if (this.owner == null)
+            if (owner == null)
             {
-                if (this._loadState == 3)
-                    this.loaded = true;
-                this._loadState = -1;
-                this._angleOffset = 0f;
-                this.handOffset = Vec2.Zero;
+                if (_loadState == 3)
+                    loaded = true;
+                _loadState = -1;
+                _angleOffset = 0f;
+                handOffset = Vec2.Zero;
             }
-            if (this._loadState == 0)
+            if (_loadState == 0)
             {
                 if (Network.isActive)
                 {
-                    if (this.isServerForObject)
+                    if (isServerForObject)
                         NetSoundEffect.Play("oldPistolSwipe");
                 }
                 else
                     SFX.Play("swipe", 0.6f, -0.3f);
-                ++this._loadState;
+                ++_loadState;
             }
-            else if (this._loadState == 1)
+            else if (_loadState == 1)
             {
                 if (_angleOffset < 0.16f)
-                    this._angleOffset = MathHelper.Lerp(this._angleOffset, 0.2f, 0.08f);
+                    _angleOffset = MathHelper.Lerp(_angleOffset, 0.2f, 0.08f);
                 else
-                    ++this._loadState;
+                    ++_loadState;
             }
-            else if (this._loadState == 2)
+            else if (_loadState == 2)
             {
-                this.handOffset.y -= 0.28f;
+                handOffset.y -= 0.28f;
                 if (handOffset.y >= -4f)
                     return;
-                ++this._loadState;
-                this.ammo = 2;
-                this.loaded = false;
+                ++_loadState;
+                ammo = 2;
+                loaded = false;
                 if (Network.isActive)
                 {
-                    if (!this.isServerForObject)
+                    if (!isServerForObject)
                         return;
                     NetSoundEffect.Play("oldPistolLoad");
                 }
                 else
                     SFX.Play("shotgunLoad");
             }
-            else if (this._loadState == 3)
+            else if (_loadState == 3)
             {
-                this.handOffset.y += 0.15f;
+                handOffset.y += 0.15f;
                 if (handOffset.y < 0.0)
                     return;
-                ++this._loadState;
-                this.handOffset.y = 0f;
+                ++_loadState;
+                handOffset.y = 0f;
                 if (Network.isActive)
                 {
-                    if (!this.isServerForObject)
+                    if (!isServerForObject)
                         return;
                     NetSoundEffect.Play("oldPistolSwipe2");
                 }
@@ -113,22 +113,22 @@ namespace DuckGame
             }
             else
             {
-                if (this._loadState != 4)
+                if (_loadState != 4)
                     return;
                 if (_angleOffset > 0.04f)
                 {
-                    this._angleOffset = MathHelper.Lerp(this._angleOffset, 0f, 0.08f);
+                    _angleOffset = MathHelper.Lerp(_angleOffset, 0f, 0.08f);
                 }
                 else
                 {
-                    this._loadState = -1;
-                    this.loaded = true;
-                    this._angleOffset = 0f;
-                    if (this.isServerForObject && this.duck != null && this.duck.profile != null)
-                        RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.None));
+                    _loadState = -1;
+                    loaded = true;
+                    _angleOffset = 0f;
+                    if (isServerForObject && duck != null && duck.profile != null)
+                        RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.None));
                     if (Network.isActive)
                     {
-                        if (!this.isServerForObject)
+                        if (!isServerForObject)
                             return;
                         SFX.PlaySynchronized("click", 1f, 0.5f, 0f, false, true);
                     }
@@ -140,30 +140,30 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if (this.loaded && this.ammo > 1)
+            if (loaded && ammo > 1)
             {
                 base.OnPressAction();
                 for (int index = 0; index < 4; ++index)
-                    Level.Add(Spark.New(this.offDir > 0 ? this.x - 9f : this.x + 9f, this.y - 6f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.05f));
+                    Level.Add(Spark.New(offDir > 0 ? x - 9f : x + 9f, y - 6f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.05f));
                 for (int index = 0; index < 4; ++index)
-                    Level.Add(SmallSmoke.New(this.barrelPosition.x + offDir * 4f, this.barrelPosition.y));
-                this.ammo = 1;
+                    Level.Add(SmallSmoke.New(barrelPosition.x + offDir * 4f, barrelPosition.y));
+                ammo = 1;
             }
             else
             {
-                if (this._loadState != -1)
+                if (_loadState != -1)
                     return;
-                this._loadState = 0;
+                _loadState = 0;
             }
         }
 
         public override void Draw()
         {
             float angle = this.angle;
-            if (this.offDir > 0)
-                this.angle -= this._angleOffset;
+            if (offDir > 0)
+                this.angle -= _angleOffset;
             else
-                this.angle += this._angleOffset;
+                this.angle += _angleOffset;
             base.Draw();
             this.angle = angle;
         }

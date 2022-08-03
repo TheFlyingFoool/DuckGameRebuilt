@@ -136,46 +136,46 @@ namespace DuckGame
           UIMenu openOnClose = null)
           : base("", xpos, ypos, wide, high)
         {
-            this._openOnClose = openOnClose;
-            this._rare = rare;
-            this._duckCoin = new SpriteMap("duckCoin", 18, 18);
-            this._duckCoin.CenterOrigin();
+            _openOnClose = openOnClose;
+            _rare = rare;
+            _duckCoin = new SpriteMap("duckCoin", 18, 18);
+            _duckCoin.CenterOrigin();
             Graphics.fade = 1f;
-            this._frame = new Sprite("unlockFrame");
-            this._frame.CenterOrigin();
-            this._furni = new Sprite("furni/tub");
-            this._furni.center = new Vec2(this._furni.width / 2, _furni.height);
-            this._star = new Sprite("prettyStar");
-            this._star.CenterOrigin();
-            this._font = new BitmapFont("biosFontUI", 8, 7);
-            this._fancyFont = new FancyBitmapFont("smallFontGacha");
-            this._gachaEgg = new SpriteMap("gachaEgg", 44, 36);
+            _frame = new Sprite("unlockFrame");
+            _frame.CenterOrigin();
+            _furni = new Sprite("furni/tub");
+            _furni.center = new Vec2(_furni.width / 2, _furni.height);
+            _star = new Sprite("prettyStar");
+            _star.CenterOrigin();
+            _font = new BitmapFont("biosFontUI", 8, 7);
+            _fancyFont = new FancyBitmapFont("smallFontGacha");
+            _gachaEgg = new SpriteMap("gachaEgg", 44, 36);
             bool flag = false;
             if (Rando.Int(10) == 5)
                 flag = true;
-            this._contains = UIGachaBox.GetRandomFurniture(this._rare ? Rarity.VeryVeryRare : Rarity.Common, 1, flag ? 0.75f : (this._rare ? 0.75f : 1f), true)[0];
-            this._rareCapsule = this._contains.rarity >= Rarity.VeryVeryRare;
-            if (this._rareCapsule)
+            _contains = UIGachaBox.GetRandomFurniture(_rare ? Rarity.VeryVeryRare : Rarity.Common, 1, flag ? 0.75f : (_rare ? 0.75f : 1f), true)[0];
+            _rareCapsule = _contains.rarity >= Rarity.VeryVeryRare;
+            if (_rareCapsule)
             {
-                this._gachaEgg.frame = 36;
+                _gachaEgg.frame = 36;
             }
             else
             {
-                this._gachaEgg.frame = Rando.Int(2) * 12;
+                _gachaEgg.frame = Rando.Int(2) * 12;
                 if (Rando.Int(1000) == 1)
-                    this._gachaEgg.frame += 9;
+                    _gachaEgg.frame += 9;
                 else if (Rando.Int(500) == 1)
-                    this._gachaEgg.frame += 6;
+                    _gachaEgg.frame += 6;
                 else if (Rando.Int(100) == 1)
-                    this._gachaEgg.frame += 3;
+                    _gachaEgg.frame += 3;
             }
-            this._gachaEgg.CenterOrigin();
+            _gachaEgg.CenterOrigin();
         }
 
         public override void OnClose()
         {
             Profiles.Save(Profiles.experienceProfile);
-            if (this._openOnClose == null)
+            if (_openOnClose == null)
                 return;
             MonoMain.pauseMenu = _openOnClose;
         }
@@ -184,157 +184,157 @@ namespace DuckGame
 
         public override void UpdateParts()
         {
-            if (!this.doubleUpdating && Input.Down("SELECT"))
+            if (!doubleUpdating && Input.Down("SELECT"))
             {
-                this.doubleUpdating = true;
-                this.UpdateParts();
-                this.doubleUpdating = false;
+                doubleUpdating = true;
+                UpdateParts();
+                doubleUpdating = false;
             }
             if (yOffset < 1.0)
             {
                 if (_insertCoin < 1.0)
                 {
-                    this._insertCoinInc += 0.008f;
-                    this._insertCoin += this._insertCoinInc;
+                    _insertCoinInc += 0.008f;
+                    _insertCoin += _insertCoinInc;
                 }
                 else
                 {
-                    if (!this._chinged)
+                    if (!_chinged)
                     {
                         SFX.Play("ching", pitch: Rando.Float(0.4f, 0.6f));
-                        this._chinged = true;
+                        _chinged = true;
                     }
-                    this._insertCoin = 1f;
+                    _insertCoin = 1f;
                     if (_afterInsertWait < 1.0)
                     {
-                        this._afterInsertWait += 0.32f;
+                        _afterInsertWait += 0.32f;
                     }
                     else
                     {
-                        if (_gachaWait >= 0.5 && !this.played)
+                        if (_gachaWait >= 0.5 && !played)
                         {
-                            this.played = true;
+                            played = true;
                             SFX.Play("gachaSound", pitch: Rando.Float(-0.1f, 0.1f));
                         }
-                        this._gachaWait += 0.1f;
+                        _gachaWait += 0.1f;
                         if (_gachaWait >= 1.0)
                         {
-                            this.gachaSpeed += 0.25f;
+                            gachaSpeed += 0.25f;
                             if (gachaSpeed > 6.0)
-                                this.gachaSpeed = 6f;
-                            this.gachaY += this.gachaSpeed;
+                                gachaSpeed = 6f;
+                            gachaY += gachaSpeed;
                             if (gachaY > 50.0 && gachaSpeed > 0.0)
                             {
                                 if (gachaSpeed > 0.800000011920929)
                                     SFX.Play("gachaBounce", pitch: 0.2f);
-                                this.gachaY = 50f;
-                                this.gachaSpeed = (float)(-this.gachaSpeed * 0.400000005960464);
+                                gachaY = 50f;
+                                gachaSpeed = (float)(-gachaSpeed * 0.400000005960464);
                             }
-                            this._openWait += 0.019f;
+                            _openWait += 0.019f;
                             if (_openWait >= 1.0)
                             {
-                                if (!this.opened)
+                                if (!opened)
                                 {
-                                    this.opened = true;
+                                    opened = true;
                                     SFX.Play("gachaOpen", pitch: Rando.Float(0.1f, 0.3f));
-                                    this._gachaEgg.frame += 2;
+                                    _gachaEgg.frame += 2;
                                 }
-                                this._swapWait += 0.06f;
+                                _swapWait += 0.06f;
                                 if (_swapWait >= 1.0)
                                 {
-                                    if (!this._swapped)
+                                    if (!_swapped)
                                     {
                                         SFX.Play("harp");
                                         HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
                                         Profiles.experienceProfile.SetNumFurnitures(_contains.index, Profiles.experienceProfile.GetNumFurnitures(_contains.index) + 1);
                                     }
-                                    this._starGrow += 0.05f;
-                                    this._swapped = true;
+                                    _starGrow += 0.05f;
+                                    _swapped = true;
                                 }
                             }
                         }
                     }
                 }
             }
-            this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? 150f : 0f, 0.4f, 1.1f);
-            if (this.down)
+            yOffset = Lerp.FloatSmooth(yOffset, down ? 150f : 0f, 0.4f, 1.1f);
+            if (down)
             {
-                if (this._swapped)
+                if (_swapped)
                 {
-                    this.finished = true;
-                    this.Close();
+                    finished = true;
+                    Close();
                 }
                 else
                 {
-                    this._downWait -= 0.06f;
+                    _downWait -= 0.06f;
                     if (_downWait <= 0.0)
                     {
-                        this._downWait = 1f;
-                        this.down = false;
+                        _downWait = 1f;
+                        down = false;
                         SFX.Play("gachaGet", pitch: -0.4f);
                     }
                 }
             }
-            if (this._swapped && Input.Pressed("SELECT"))
+            if (_swapped && Input.Pressed("SELECT"))
             {
                 HUD.CloseAllCorners();
                 SFX.Play("resume", 0.6f);
-                this.down = true;
+                down = true;
             }
             base.UpdateParts();
         }
 
         public override void Draw()
         {
-            this.y += this.yOffset;
-            this._frame.depth = -0.9f;
-            Graphics.Draw(this._frame, this.x, this.y);
-            this._frame.depth = -0.7f;
-            Graphics.Draw(this._frame, this.x, this.y, new Rectangle(0f, 0f, 125f, 36f));
-            if (this._swapped)
+            y += yOffset;
+            _frame.depth = -0.9f;
+            Graphics.Draw(_frame, x, y);
+            _frame.depth = -0.7f;
+            Graphics.Draw(_frame, x, y, new Rectangle(0f, 0f, 125f, 36f));
+            if (_swapped)
             {
-                this._contains.Draw(this.position + new Vec2(0f, 10f), -0.8f);
+                _contains.Draw(position + new Vec2(0f, 10f), -0.8f);
                 if (_starGrow <= 1.0)
                 {
-                    this._star.depth = (Depth)0.9f;
-                    this._star.scale = new Vec2((float)(2.5 + _starGrow * 3.0));
-                    this._star.alpha = 1f - this._starGrow;
-                    Graphics.Draw(this._star, this.x, this.y + 10f);
+                    _star.depth = (Depth)0.9f;
+                    _star.scale = new Vec2((float)(2.5 + _starGrow * 3.0));
+                    _star.alpha = 1f - _starGrow;
+                    Graphics.Draw(_star, x, y + 10f);
                 }
             }
             else if (gachaY > 10.0)
             {
-                this._gachaEgg.depth = -0.8f;
-                Graphics.Draw(_gachaEgg, this.x, this.y - 38f + this.gachaY);
+                _gachaEgg.depth = -0.8f;
+                Graphics.Draw(_gachaEgg, x, y - 38f + gachaY);
             }
             string text1 = "@LWING@NEW TOY@RWING@";
-            if (this._rare)
+            if (_rare)
                 text1 = "@LWING@RARE TOY@RWING@";
-            Vec2 vec2_1 = new Vec2((float)-(this._font.GetWidth(text1) / 2.0), -42f);
-            this._font.DrawOutline(text1, this.position + vec2_1, this._rare ? Colors.DGYellow : Color.White, Color.Black, this.depth + 2);
+            Vec2 vec2_1 = new Vec2((float)-(_font.GetWidth(text1) / 2.0), -42f);
+            _font.DrawOutline(text1, position + vec2_1, _rare ? Colors.DGYellow : Color.White, Color.Black, depth + 2);
             string text2 = "  ???  ";
-            if (this._swapped)
-                text2 = "} " + this._contains.name + " }";
-            this._fancyFont.scale = new Vec2(1f, 1f);
-            Vec2 vec2_2 = new Vec2((float)-(this._fancyFont.GetWidth(text2) / 2.0), -25f);
-            this._fancyFont.DrawOutline(text2, this.position + vec2_2, this._rare || this._swapped && this._rareCapsule ? Colors.DGYellow : Color.White, Color.Black, this.depth + 2);
-            this._fancyFont.scale = new Vec2(0.5f, 0.5f);
+            if (_swapped)
+                text2 = "} " + _contains.name + " }";
+            _fancyFont.scale = new Vec2(1f, 1f);
+            Vec2 vec2_2 = new Vec2((float)-(_fancyFont.GetWidth(text2) / 2.0), -25f);
+            _fancyFont.DrawOutline(text2, position + vec2_2, _rare || _swapped && _rareCapsule ? Colors.DGYellow : Color.White, Color.Black, depth + 2);
+            _fancyFont.scale = new Vec2(0.5f, 0.5f);
             if (_insertCoin > 0.00999999977648258)
             {
-                this._duckCoin.frame = this._rare ? 1 : 0;
-                this._duckCoin.depth = -0.8f;
-                Graphics.Draw(_duckCoin, this.x + 40f, (float)(this.y - 100.0 + _insertCoin * 65.0));
+                _duckCoin.frame = _rare ? 1 : 0;
+                _duckCoin.depth = -0.8f;
+                Graphics.Draw(_duckCoin, x + 40f, (float)(y - 100.0 + _insertCoin * 65.0));
             }
-            if (this._swapped)
+            if (_swapped)
             {
-                string text3 = this._contains.description;
+                string text3 = _contains.description;
                 int num = Profiles.experienceProfile.GetNumFurnitures(_contains.index) - 1;
                 if (num > 0)
-                    text3 = "I've already got " + (num - 1 >= this.numberNames.Count ? num.ToString() : this.numberNames[num - 1]) + " of these...";
-                Vec2 vec2_3 = new Vec2((float)-(this._fancyFont.GetWidth(text3) / 2.0), 38f);
-                this._fancyFont.DrawOutline(text3, this.position + vec2_3, num > 0 ? Colors.DGYellow : Colors.DGGreen, Color.Black, this.depth + 2, 0.5f);
+                    text3 = "I've already got " + (num - 1 >= numberNames.Count ? num.ToString() : numberNames[num - 1]) + " of these...";
+                Vec2 vec2_3 = new Vec2((float)-(_fancyFont.GetWidth(text3) / 2.0), 38f);
+                _fancyFont.DrawOutline(text3, position + vec2_3, num > 0 ? Colors.DGYellow : Colors.DGGreen, Color.Black, depth + 2, 0.5f);
             }
-            this.y -= this.yOffset;
+            y -= yOffset;
         }
     }
 }

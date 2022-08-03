@@ -12,23 +12,23 @@ namespace DuckGame
         public new byte levelIndex;
         private Level _level;
 
-        public NMLevelData() => this.manager = BelongsToManager.EventManager;
+        public NMLevelData() => manager = BelongsToManager.EventManager;
 
         public NMLevelData(Level pLevel)
         {
-            this.manager = BelongsToManager.EventManager;
-            this.levelIndex = pLevel.networkIndex = DuckNetwork.levelIndex;
-            this._level = pLevel;
+            manager = BelongsToManager.EventManager;
+            levelIndex = pLevel.networkIndex = DuckNetwork.levelIndex;
+            _level = pLevel;
         }
 
         public override void Activate()
         {
             if (DuckNetwork.levelIndex != levelIndex)
                 return;
-            DevConsole.Log(DCSection.DuckNet, "|DGGREEN|Received Level Information (" + this.levelIndex.ToString() + ").");
-            Level.current.TransferComplete(this.connection);
-            Send.Message(new NMLevelReady(this.levelIndex), NetMessagePriority.ReliableOrdered);
-            this.connection.levelIndex = this.levelIndex;
+            DevConsole.Log(DCSection.DuckNet, "|DGGREEN|Received Level Information (" + levelIndex.ToString() + ").");
+            Level.current.TransferComplete(connection);
+            Send.Message(new NMLevelReady(levelIndex), NetMessagePriority.ReliableOrdered);
+            connection.levelIndex = levelIndex;
         }
     }
 }

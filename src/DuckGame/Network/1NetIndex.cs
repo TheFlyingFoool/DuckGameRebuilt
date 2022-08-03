@@ -17,7 +17,7 @@ namespace DuckGame
         public int max;
         private bool _zeroSpecial;
 
-        public override string ToString() => Convert.ToString(this._index);
+        public override string ToString() => Convert.ToString(_index);
 
         public static int MaxForBits(int bits)
         {
@@ -29,14 +29,14 @@ namespace DuckGame
 
         public NetIndex8(int index = 1, bool zeroSpecial = true)
         {
-            this._index = index;
-            this._zeroSpecial = false;
-            this.max = NetIndex8.MaxForBits(8);
+            _index = index;
+            _zeroSpecial = false;
+            max = NetIndex8.MaxForBits(8);
         }
 
-        public void Increment() => this._index = this.Mod(this._index + 1);
+        public void Increment() => _index = Mod(_index + 1);
 
-        public int Mod(int val) => this._zeroSpecial ? Math.Max(val % this.max, 1) : val % this.max;
+        public int Mod(int val) => _zeroSpecial ? Math.Max(val % max, 1) : val % max;
 
         public int CompareTo(object obj)
         {
@@ -116,8 +116,8 @@ namespace DuckGame
 
         public static bool operator !=(NetIndex8 c1, int c2) => c1._index != c2;
 
-        public override bool Equals(object obj) => this.CompareTo(obj) == 0;
+        public override bool Equals(object obj) => CompareTo(obj) == 0;
 
-        public override int GetHashCode() => this._index.GetHashCode();
+        public override int GetHashCode() => _index.GetHashCode();
     }
 }

@@ -14,28 +14,28 @@ namespace DuckGame
         public HeartPuff(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("heartpuff", 16, 16);
-            this._sprite.AddAnimation("wither", 0.35f, false, 0, 1, 2, 3, 4);
-            this._sprite.SetAnimation("wither");
-            this.center = new Vec2(5f, 16f);
-            this.alpha = 0.6f;
-            this.depth = (Depth)0.9f;
-            this.graphic = _sprite;
-            this._sprite.color = Color.Green;
+            _sprite = new SpriteMap("heartpuff", 16, 16);
+            _sprite.AddAnimation("wither", 0.35f, false, 0, 1, 2, 3, 4);
+            _sprite.SetAnimation("wither");
+            center = new Vec2(5f, 16f);
+            alpha = 0.6f;
+            depth = (Depth)0.9f;
+            graphic = _sprite;
+            _sprite.color = Color.Green;
         }
 
         public override void Update()
         {
-            if (this.anchor != null && this.anchor.thing != null)
+            if (anchor != null && anchor.thing != null)
             {
-                this.flipHorizontal = this.anchor.thing.offDir < 0;
-                if (this.flipHorizontal)
-                    this.center = new Vec2(10f, 16f);
+                flipHorizontal = anchor.thing.offDir < 0;
+                if (flipHorizontal)
+                    center = new Vec2(10f, 16f);
                 else
-                    this.center = new Vec2(5f, 16f);
-                this.angle = this.anchor.thing.angle;
+                    center = new Vec2(5f, 16f);
+                angle = anchor.thing.angle;
             }
-            if (this._sprite.finished)
+            if (_sprite.finished)
                 Level.Remove(this);
             base.Update();
         }

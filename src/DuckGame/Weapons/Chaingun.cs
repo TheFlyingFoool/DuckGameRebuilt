@@ -31,53 +31,53 @@ namespace DuckGame
         public Chaingun(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 100;
-            this._ammoType = new AT9mm();
-            this._ammoType.range = 170f;
-            this._ammoType.accuracy = 0.5f;
-            this.wideBarrel = true;
-            this.barrelInsertOffset = new Vec2(0f, 0f);
-            this._type = "gun";
-            this._sprite = new SpriteMap("chaingun", 42, 28);
-            this.graphic = _sprite;
-            this.center = new Vec2(14f, 14f);
-            this.collisionOffset = new Vec2(-8f, -3f);
-            this.collisionSize = new Vec2(24f, 10f);
-            this._tip = new SpriteMap("chaingunTip", 42, 28);
-            this._barrelOffsetTL = new Vec2(39f, 14f);
-            this._fireSound = "pistolFire";
-            this._fullAuto = true;
-            this._fireWait = 0.7f;
-            this._kickForce = 1f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this.weight = 8f;
-            this._holdOffset = new Vec2(0f, 2f);
-            this.editorTooltip = "Like a chaingun, but for adults. Fires mean pointy metal things.";
+            ammo = 100;
+            _ammoType = new AT9mm();
+            _ammoType.range = 170f;
+            _ammoType.accuracy = 0.5f;
+            wideBarrel = true;
+            barrelInsertOffset = new Vec2(0f, 0f);
+            _type = "gun";
+            _sprite = new SpriteMap("chaingun", 42, 28);
+            graphic = _sprite;
+            center = new Vec2(14f, 14f);
+            collisionOffset = new Vec2(-8f, -3f);
+            collisionSize = new Vec2(24f, 10f);
+            _tip = new SpriteMap("chaingunTip", 42, 28);
+            _barrelOffsetTL = new Vec2(39f, 14f);
+            _fireSound = "pistolFire";
+            _fullAuto = true;
+            _fireWait = 0.7f;
+            _kickForce = 1f;
+            _fireRumble = RumbleIntensity.Kick;
+            weight = 8f;
+            _holdOffset = new Vec2(0f, 2f);
+            editorTooltip = "Like a chaingun, but for adults. Fires mean pointy metal things.";
         }
 
         public override void Initialize()
         {
-            this._spinUp = SFX.Get("chaingunSpinUp");
-            this._spinDown = SFX.Get("chaingunSpinDown");
+            _spinUp = SFX.Get("chaingunSpinUp");
+            _spinDown = SFX.Get("chaingunSpinDown");
             base.Initialize();
-            this._bullets = new ChaingunBullet(this.x, this.y)
+            _bullets = new ChaingunBullet(x, y)
             {
                 parentThing = this
             };
-            this._topBullet = this._bullets;
+            _topBullet = _bullets;
             float num = 0.1f;
             ChaingunBullet chaingunBullet1 = null;
             for (int index = 0; index < 9; ++index)
             {
-                ChaingunBullet chaingunBullet2 = new ChaingunBullet(this.x, this.y)
+                ChaingunBullet chaingunBullet2 = new ChaingunBullet(x, y)
                 {
                     parentThing = _bullets
                 };
-                this._bullets = chaingunBullet2;
+                _bullets = chaingunBullet2;
                 chaingunBullet2.waveAdd = num;
                 num += 0.4f;
                 if (index == 0)
-                    this._topBullet.childThing = chaingunBullet2;
+                    _topBullet.childThing = chaingunBullet2;
                 else
                     chaingunBullet1.childThing = chaingunBullet2;
                 chaingunBullet1 = chaingunBullet2;
@@ -90,73 +90,73 @@ namespace DuckGame
 
         public override void OnHoldAction()
         {
-            if (!this._spinning)
+            if (!_spinning)
             {
-                this._spinning = true;
-                this._spinDown.Volume = 0f;
-                this._spinDown.Stop();
-                this._spinUp.Volume = 1f;
-                this._spinUp.Play();
+                _spinning = true;
+                _spinDown.Volume = 0f;
+                _spinDown.Stop();
+                _spinUp.Volume = 1f;
+                _spinUp.Play();
             }
             if (_spin < 1.0)
             {
-                this._spin += 0.04f;
+                _spin += 0.04f;
             }
             else
             {
-                this._spin = 1f;
+                _spin = 1f;
                 base.OnHoldAction();
             }
         }
 
         public override void OnReleaseAction()
         {
-            if (!this._spinning)
+            if (!_spinning)
                 return;
-            this._spinning = false;
-            this._spinUp.Volume = 0f;
-            this._spinUp.Stop();
+            _spinning = false;
+            _spinUp.Volume = 0f;
+            _spinUp.Stop();
             if (_spin <= 0.9f)
                 return;
-            this._spinDown.Volume = 1f;
-            this._spinDown.Play();
+            _spinDown.Volume = 1f;
+            _spinDown.Play();
         }
 
         public override void Update()
         {
-            if (this._topBullet != null)
+            if (_topBullet != null)
             {
-                this._topBullet.DoUpdate();
-                int num = (int)(ammo / this.bulletsTillRemove);
-                if (num < this.numHanging)
+                _topBullet.DoUpdate();
+                int num = (int)(ammo / bulletsTillRemove);
+                if (num < numHanging)
                 {
-                    this._topBullet = this._topBullet.childThing as ChaingunBullet;
-                    if (this._topBullet != null)
-                        this._topBullet.parentThing = this;
+                    _topBullet = _topBullet.childThing as ChaingunBullet;
+                    if (_topBullet != null)
+                        _topBullet.parentThing = this;
                 }
-                this.numHanging = num;
+                numHanging = num;
             }
-            this._fireWait = (0.7f + Maths.NormalizeSection(this._barrelHeat, 5f, 9f) * 5f);
+            _fireWait = (0.7f + Maths.NormalizeSection(_barrelHeat, 5f, 9f) * 5f);
             if (_barrelHeat > 11f)
-                this._barrelHeat = 11f;
-            this._barrelHeat -= 0.005f;
+                _barrelHeat = 11f;
+            _barrelHeat -= 0.005f;
             if (_barrelHeat < 0f)
-                this._barrelHeat = 0f;
-            this._sprite.speed = this._spin;
-            this._tip.speed = this._spin;
-            this.spinAmount += this._spin;
-            this.barrelInsertOffset = new Vec2(0f, (2f + (float)Math.Sin(spinAmount / 9f * 3.14f) * 2f));
+                _barrelHeat = 0f;
+            _sprite.speed = _spin;
+            _tip.speed = _spin;
+            spinAmount += _spin;
+            barrelInsertOffset = new Vec2(0f, (2f + (float)Math.Sin(spinAmount / 9f * 3.14f) * 2f));
             if (_spin > 0f)
-                this._spin -= 0.01f;
+                _spin -= 0.01f;
             else
-                this._spin = 0f;
+                _spin = 0f;
             base.Update();
-            if (this._topBullet == null)
+            if (_topBullet == null)
                 return;
-            if (!this.graphic.flipH)
-                this._topBullet.chainOffset = new Vec2(1f, 5f);
+            if (!graphic.flipH)
+                _topBullet.chainOffset = new Vec2(1f, 5f);
             else
-                this._topBullet.chainOffset = new Vec2(-1f, 5f);
+                _topBullet.chainOffset = new Vec2(-1f, 5f);
         }
 
         public override void Draw()
@@ -164,16 +164,16 @@ namespace DuckGame
             Material material = Graphics.material;
             base.Draw();
             Graphics.material = this.material;
-            this._tip.flipH = this.graphic.flipH;
-            this._tip.center = this.graphic.center;
-            this._tip.depth = this.depth + 1;
-            this._tip.alpha = (float)Math.Min((_barrelHeat * 1.5 / 10f), 1f);
-            this._tip.angle = this.angle;
-            Graphics.Draw(_tip, this.x, this.y);
-            if (this._topBullet != null)
+            _tip.flipH = graphic.flipH;
+            _tip.center = graphic.center;
+            _tip.depth = depth + 1;
+            _tip.alpha = (float)Math.Min((_barrelHeat * 1.5 / 10f), 1f);
+            _tip.angle = angle;
+            Graphics.Draw(_tip, x, y);
+            if (_topBullet != null)
             {
-                this._topBullet.material = this.material;
-                this._topBullet.DoDraw();
+                _topBullet.material = this.material;
+                _topBullet.DoDraw();
             }
             Graphics.material = material;
         }

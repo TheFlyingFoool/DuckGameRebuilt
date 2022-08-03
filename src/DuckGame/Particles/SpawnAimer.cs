@@ -37,72 +37,72 @@ namespace DuckGame
           float thickness)
           : base(xpos, ypos)
         {
-            this._moveSpeed = moveSpeed;
-            this._color = color;
-            this._thickness = thickness;
-            this.offDir = (sbyte)dir;
-            this._persona = person;
-            this.targetPos = new Vec2(xpos, ypos);
-            if (this._persona == Persona.Duck1)
-                this.position = new Vec2(0f, 0f);
-            else if (this._persona == Persona.Duck2)
-                this.position = new Vec2(320f, 0f);
-            else if (this._persona == Persona.Duck3)
-                this.position = new Vec2(0f, 180f);
-            else if (this._persona == Persona.Duck4)
-                this.position = new Vec2(320f, 180f);
-            this.prevPos.Add(this.position);
-            this.layer = Layer.Foreground;
+            _moveSpeed = moveSpeed;
+            _color = color;
+            _thickness = thickness;
+            offDir = (sbyte)dir;
+            _persona = person;
+            targetPos = new Vec2(xpos, ypos);
+            if (_persona == Persona.Duck1)
+                position = new Vec2(0f, 0f);
+            else if (_persona == Persona.Duck2)
+                position = new Vec2(320f, 0f);
+            else if (_persona == Persona.Duck3)
+                position = new Vec2(0f, 180f);
+            else if (_persona == Persona.Duck4)
+                position = new Vec2(320f, 180f);
+            prevPos.Add(position);
+            layer = Layer.Foreground;
         }
 
         public override void Update()
         {
-            this._sin.Update();
+            _sin.Update();
             if (GameMode.started)
                 Level.Remove(this);
-            this.distOut = Lerp.FloatSmooth(this.distOut, 16f, 0.08f, 1.2f);
-            this.distLen = Lerp.FloatSmooth(this.distLen, 10f, 0.08f, 1.2f);
-            this.rot = Lerp.FloatSmooth(this.rot, 45f, 0.08f, 1.1f);
-            if (Math.Abs(this.rot - 45f) < 20.0)
+            distOut = Lerp.FloatSmooth(distOut, 16f, 0.08f, 1.2f);
+            distLen = Lerp.FloatSmooth(distLen, 10f, 0.08f, 1.2f);
+            rot = Lerp.FloatSmooth(rot, 45f, 0.08f, 1.1f);
+            if (Math.Abs(rot - 45f) < 20.0)
             {
-                this.streamAlpha -= 0.03f;
+                streamAlpha -= 0.03f;
                 if (streamAlpha < 0.0)
-                    this.streamAlpha = 0f;
+                    streamAlpha = 0f;
             }
             Level.current.camera.getMatrix();
             Vec2 targetPos = this.targetPos;
-            this.aimerScale = this.layer.camera.width / Layer.HUD.width;
-            this.position = Lerp.Vec2Smooth(this.position, targetPos, 0.2f);
-            if ((this.position - targetPos).length > 16.0)
-                this.prevPos.Add(this.position);
-            this.sizeWaver += 0.2f;
+            aimerScale = layer.camera.width / Layer.HUD.width;
+            position = Lerp.Vec2Smooth(position, targetPos, 0.2f);
+            if ((position - targetPos).length > 16.0)
+                prevPos.Add(position);
+            sizeWaver += 0.2f;
         }
 
         public override void Draw()
         {
-            float num1 = (this.distOut + (float)(Math.Sin(sizeWaver) * 2.0)) * this.aimerScale;
+            float num1 = (this.distOut + (float)(Math.Sin(sizeWaver) * 2.0)) * aimerScale;
             float distOut = this.distOut;
-            if (Network.isActive && this.dugg != null && this.dugg.profile != null && this.dugg.profile.connection == DuckNetwork.localConnection)
-                distOut += this._sin.value * 2f;
-            this._thickness = 2f;
+            if (Network.isActive && dugg != null && dugg.profile != null && dugg.profile.connection == DuckNetwork.localConnection)
+                distOut += _sin.value * 2f;
+            _thickness = 2f;
             for (int index = 0; index < 4; ++index)
             {
-                float deg = this.rot + index * 90f;
+                float deg = rot + index * 90f;
                 Vec2 vec2 = new Vec2((float)Math.Cos(Maths.DegToRad(deg)), (float)-Math.Sin(Maths.DegToRad(deg)));
-                Graphics.DrawLine(this.position + vec2 * distOut, this.position + vec2 * (distOut + this.distLen * this.aimerScale), this._color * this.alpha, this._thickness * this.aimerScale, (Depth)0.9f);
-                Graphics.DrawLine(this.position + vec2 * (distOut - 1f * this.aimerScale), this.position + vec2 * (float)(distOut + 1.0 * aimerScale + distLen * this.aimerScale), Color.Black, (this._thickness + 2f) * this.aimerScale, (Depth)0.8f);
+                Graphics.DrawLine(position + vec2 * distOut, position + vec2 * (distOut + distLen * aimerScale), _color * alpha, _thickness * aimerScale, (Depth)0.9f);
+                Graphics.DrawLine(position + vec2 * (distOut - 1f * aimerScale), position + vec2 * (float)(distOut + 1.0 * aimerScale + distLen * aimerScale), Color.Black, (_thickness + 2f) * aimerScale, (Depth)0.8f);
             }
             if (streamAlpha <= 0.00999999977648258)
                 return;
             int num2 = 0;
             Vec2 vec2_1 = Vec2.Zero;
             bool flag = false;
-            foreach (Vec2 prevPo in this.prevPos)
+            foreach (Vec2 prevPo in prevPos)
             {
                 if (flag)
                 {
                     Vec2 normalized = (vec2_1 - prevPo).normalized;
-                    Graphics.DrawLine(vec2_1 - normalized, prevPo + normalized, this._color * this.streamAlpha, (float)(4.0 + num2 * 2.0) * this.aimerScale, (Depth)0.9f);
+                    Graphics.DrawLine(vec2_1 - normalized, prevPo + normalized, _color * streamAlpha, (float)(4.0 + num2 * 2.0) * aimerScale, (Depth)0.9f);
                 }
                 vec2_1 = prevPo;
                 flag = true;

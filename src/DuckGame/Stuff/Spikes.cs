@@ -19,24 +19,24 @@ namespace DuckGame
         public Spikes(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("spikes", 16, 19)
+            _sprite = new SpriteMap("spikes", 16, 19)
             {
                 speed = 0.1f
             };
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 14f);
-            this.collisionOffset = new Vec2(-6f, -3f);
-            this.collisionSize = new Vec2(13f, 5f);
-            this.depth = (Depth)0.28f;
-            this._editorName = "Spikes Up";
-            this.editorTooltip = "Pointy and dangerous, unless you're wearing the right boots.";
-            this.editorCycleType = typeof(SpikesRight);
-            this.thickness = 3f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.editorOffset = new Vec2(0f, 6f);
-            this.hugWalls = WallHug.Floor;
-            this._editorImageCenter = true;
-            this._killImpact = ImpactedFrom.Top;
+            graphic = _sprite;
+            center = new Vec2(8f, 14f);
+            collisionOffset = new Vec2(-6f, -3f);
+            collisionSize = new Vec2(13f, 5f);
+            depth = (Depth)0.28f;
+            _editorName = "Spikes Up";
+            editorTooltip = "Pointy and dangerous, unless you're wearing the right boots.";
+            editorCycleType = typeof(SpikesRight);
+            thickness = 3f;
+            physicsMaterial = PhysicsMaterial.Metal;
+            editorOffset = new Vec2(0f, 6f);
+            hugWalls = WallHug.Floor;
+            _editorImageCenter = true;
+            _killImpact = ImpactedFrom.Top;
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
@@ -44,10 +44,10 @@ namespace DuckGame
             if (with is TV || with is Hat || !with.isServerForObject)
                 return;
             Duck duck = with as Duck;
-            if (this._killImpact == ImpactedFrom.Top && duck != null && duck.holdObject is Sword && (duck.holdObject as Sword)._slamStance)
+            if (_killImpact == ImpactedFrom.Top && duck != null && duck.holdObject is Sword && (duck.holdObject as Sword)._slamStance)
                 return;
             float num = 1f;
-            if (from != this._killImpact)
+            if (from != _killImpact)
                 return;
             if (from == ImpactedFrom.Left && with.hSpeed > num)
                 with.Destroy(new DTImpale(this));

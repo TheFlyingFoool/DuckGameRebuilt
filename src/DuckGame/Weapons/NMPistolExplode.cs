@@ -15,11 +15,11 @@ namespace DuckGame
         {
         }
 
-        public NMPistolExplode(Vec2 pPosition) => this.position = pPosition;
+        public NMPistolExplode(Vec2 pPosition) => position = pPosition;
 
         public override void Activate()
         {
-            DuelingPistol.ExplodeEffect(this.position);
+            DuelingPistol.ExplodeEffect(position);
             base.Activate();
         }
     }

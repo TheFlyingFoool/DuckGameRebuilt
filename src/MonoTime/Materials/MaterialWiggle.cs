@@ -15,8 +15,8 @@ namespace DuckGame
 
         public MaterialWiggle(Sprite t)
         {
-            this._effect = Content.Load<MTEffect>("Shaders/wiggle");
-            this._sprite = t;
+            _effect = Content.Load<MTEffect>("Shaders/wiggle");
+            _sprite = t;
         }
 
         public override void Apply()
@@ -24,10 +24,10 @@ namespace DuckGame
             if (DuckGame.Graphics.device.Textures[0] != null)
             {
                 Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-                this.SetValue("xpos", this._sprite.x);
-                this.SetValue("ypos", this._sprite.y);
+                SetValue("xpos", _sprite.x);
+                SetValue("ypos", _sprite.y);
             }
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

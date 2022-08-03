@@ -16,53 +16,53 @@ namespace DuckGame
         private byte[] _readShort = new byte[2];
         private byte[] _readInt = new byte[4];
 
-        public BinaryFile(string name, BinaryFileMode m) => this._stream = new FileStream(name, (FileMode)m);
+        public BinaryFile(string name, BinaryFileMode m) => _stream = new FileStream(name, (FileMode)m);
 
-        public BinaryFile(byte[] data) => this._stream = new MemoryStream(data);
+        public BinaryFile(byte[] data) => _stream = new MemoryStream(data);
 
-        public void Close() => this._stream.Close();
+        public void Close() => _stream.Close();
 
-        public void SkipBytes(int bytes) => this._stream.Seek(bytes, SeekOrigin.Current);
+        public void SkipBytes(int bytes) => _stream.Seek(bytes, SeekOrigin.Current);
 
-        public void ResetPosition() => this._stream.Seek(0L, SeekOrigin.Begin);
+        public void ResetPosition() => _stream.Seek(0L, SeekOrigin.Begin);
 
-        public byte ReadByte() => (byte)this._stream.ReadByte();
+        public byte ReadByte() => (byte)_stream.ReadByte();
 
         public byte[] ReadBytes(int num)
         {
             byte[] buffer = new byte[num];
-            this._stream.Read(buffer, 0, num);
+            _stream.Read(buffer, 0, num);
             return buffer;
         }
 
         public short ReadShort()
         {
-            this._stream.Read(this._readShort, 0, 2);
-            return BitConverter.ToInt16(this._readShort, 0);
+            _stream.Read(_readShort, 0, 2);
+            return BitConverter.ToInt16(_readShort, 0);
         }
 
         public int ReadInt()
         {
-            this._stream.Read(this._readInt, 0, 4);
-            return BitConverter.ToInt32(this._readInt, 0);
+            _stream.Read(_readInt, 0, 4);
+            return BitConverter.ToInt32(_readInt, 0);
         }
 
-        public void WriteByte(byte b) => this._stream.WriteByte(b);
+        public void WriteByte(byte b) => _stream.WriteByte(b);
 
-        public void WriteBytes(byte[] bytes, int length) => this._stream.Write(bytes, 0, length);
+        public void WriteBytes(byte[] bytes, int length) => _stream.Write(bytes, 0, length);
 
         public void WriteUShort(ushort b)
         {
-            this._readShort = BitConverter.GetBytes(b);
-            foreach (byte num in this._readShort)
-                this._stream.WriteByte(num);
+            _readShort = BitConverter.GetBytes(b);
+            foreach (byte num in _readShort)
+                _stream.WriteByte(num);
         }
 
         public void WriteInt(int b)
         {
-            this._readInt = BitConverter.GetBytes(b);
-            foreach (byte num in this._readInt)
-                this._stream.WriteByte(num);
+            _readInt = BitConverter.GetBytes(b);
+            foreach (byte num in _readInt)
+                _stream.WriteByte(num);
         }
     }
 }

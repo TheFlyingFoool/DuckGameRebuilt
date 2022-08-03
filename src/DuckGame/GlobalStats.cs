@@ -75,13 +75,13 @@ namespace DuckGame
 
         public bool hadTalk { get; set; }
 
-        public int GetHatMatchWins(string hat) => this.hatWins.ContainsKey(hat) ? this.hatWins[hat] : 0;
+        public int GetHatMatchWins(string hat) => hatWins.ContainsKey(hat) ? hatWins[hat] : 0;
 
         public GlobalData()
         {
-            this._nodeName = "Global";
-            this.boughtHats = "";
-            foreach (FieldInfo field in this.GetType().GetFields())
+            _nodeName = "Global";
+            boughtHats = "";
+            foreach (FieldInfo field in GetType().GetFields())
             {
                 if (field.FieldType == typeof(StatBinding))
                 {

@@ -17,85 +17,85 @@ namespace DuckGame
         private UIBox _rightBox;
         private float _seperation = 1f;
 
-        public UIBox leftSection => this._leftBox;
+        public UIBox leftSection => _leftBox;
 
-        public UIBox rightSection => this._rightBox;
+        public UIBox rightSection => _rightBox;
 
-        public UIBox topSection => this._leftBox;
+        public UIBox topSection => _leftBox;
 
-        public UIBox bottomSection => this._rightBox;
+        public UIBox bottomSection => _rightBox;
 
         public UIDivider(bool vert, float splitVal, float sep = 1f)
           : base(0f, 0f, 0f, 0f)
         {
-            this._vertical = vert;
-            this._splitPercent = splitVal;
-            this._leftBox = new UIBox(isVisible: false);
-            this._rightBox = new UIBox(isVisible: false);
-            this.Add(_leftBox);
-            this.Add(_rightBox);
-            this._canFit = true;
-            this._seperation = sep;
+            _vertical = vert;
+            _splitPercent = splitVal;
+            _leftBox = new UIBox(isVisible: false);
+            _rightBox = new UIBox(isVisible: false);
+            Add(_leftBox);
+            Add(_rightBox);
+            _canFit = true;
+            _seperation = sep;
         }
 
         public UIDivider(bool vert, int splitVal, float sep = 1f)
           : base(0f, 0f, 0f, 0f)
         {
-            this._vertical = vert;
-            this._leftBox = new UIBox(isVisible: false);
-            this._rightBox = new UIBox(isVisible: false);
-            this.Add(_leftBox);
-            this.Add(_rightBox);
-            this._splitPixels = splitVal;
-            this._canFit = true;
-            this._seperation = sep;
+            _vertical = vert;
+            _leftBox = new UIBox(isVisible: false);
+            _rightBox = new UIBox(isVisible: false);
+            Add(_leftBox);
+            Add(_rightBox);
+            _splitPixels = splitVal;
+            _canFit = true;
+            _seperation = sep;
         }
 
         protected override void SizeChildren()
         {
-            if (this._vertical)
+            if (_vertical)
             {
-                Vec2 sizes = this.CalculateSizes();
-                this._leftBox.collisionSize = new Vec2(sizes.x, this.collisionSize.y - this.borderSize.y * 2f);
-                this._rightBox.collisionSize = new Vec2(sizes.y, this.collisionSize.y - this.borderSize.y * 2f);
+                Vec2 sizes = CalculateSizes();
+                _leftBox.collisionSize = new Vec2(sizes.x, collisionSize.y - borderSize.y * 2f);
+                _rightBox.collisionSize = new Vec2(sizes.y, collisionSize.y - borderSize.y * 2f);
             }
             else
             {
-                Vec2 sizes = this.CalculateSizes();
-                this._leftBox.collisionSize = new Vec2(this.collisionSize.x - this.borderSize.x * 2f, sizes.x);
-                this._rightBox.collisionSize = new Vec2(this.collisionSize.x - this.borderSize.x * 2f, sizes.y);
+                Vec2 sizes = CalculateSizes();
+                _leftBox.collisionSize = new Vec2(collisionSize.x - borderSize.x * 2f, sizes.x);
+                _rightBox.collisionSize = new Vec2(collisionSize.x - borderSize.x * 2f, sizes.y);
             }
         }
 
         public Vec2 CalculateSizes()
         {
             Vec2 collisionSize = this.collisionSize;
-            if (this._vertical)
+            if (_vertical)
             {
-                collisionSize.x -= this._seperation;
-                float x = this._leftBox.collisionSize.x;
-                float y = this._rightBox.collisionSize.x;
+                collisionSize.x -= _seperation;
+                float x = _leftBox.collisionSize.x;
+                float y = _rightBox.collisionSize.x;
                 if (_splitPercent != 0.0)
                 {
-                    x = collisionSize.x * this._splitPercent;
-                    y = collisionSize.x * (1f - this._splitPercent);
+                    x = collisionSize.x * _splitPercent;
+                    y = collisionSize.x * (1f - _splitPercent);
                 }
-                else if (this._splitPixels > 0)
+                else if (_splitPixels > 0)
                 {
                     x = _splitPixels;
                     y = collisionSize.x - _splitPixels;
                 }
                 return new Vec2(x, y);
             }
-            collisionSize.y -= this._seperation;
-            float x1 = this._leftBox.collisionSize.y;
-            float y1 = this._rightBox.collisionSize.y;
+            collisionSize.y -= _seperation;
+            float x1 = _leftBox.collisionSize.y;
+            float y1 = _rightBox.collisionSize.y;
             if (_splitPercent != 0.0)
             {
-                x1 = collisionSize.y * this._splitPercent;
-                y1 = collisionSize.y * (1f - this._splitPercent);
+                x1 = collisionSize.y * _splitPercent;
+                y1 = collisionSize.y * (1f - _splitPercent);
             }
-            else if (this._splitPixels > 0)
+            else if (_splitPixels > 0)
             {
                 x1 = _splitPixels;
                 y1 = collisionSize.y - _splitPixels;
@@ -105,78 +105,78 @@ namespace DuckGame
 
         protected override void OnResize()
         {
-            if (this._vertical)
+            if (_vertical)
             {
-                this._collisionSize.y = Math.Max(this._leftBox.collisionSize.y, this._rightBox.collisionSize.y);
-                float num1 = this._leftBox.collisionSize.x + this._rightBox.collisionSize.x + this._seperation;
+                _collisionSize.y = Math.Max(_leftBox.collisionSize.y, _rightBox.collisionSize.y);
+                float num1 = _leftBox.collisionSize.x + _rightBox.collisionSize.x + _seperation;
                 if (_collisionSize.x < num1)
-                    this._collisionSize.x = num1;
-                Vec2 sizes = this.CalculateSizes();
+                    _collisionSize.x = num1;
+                Vec2 sizes = CalculateSizes();
                 float num2 = sizes.x;
                 float num3 = sizes.y;
                 if (num2 < _leftBox.collisionSize.x)
-                    num2 = this._leftBox.collisionSize.x;
+                    num2 = _leftBox.collisionSize.x;
                 if (num3 < _rightBox.collisionSize.x)
                 {
-                    num3 = this._rightBox.collisionSize.x;
-                    num2 = this._collisionSize.x - num3;
+                    num3 = _rightBox.collisionSize.x;
+                    num2 = _collisionSize.x - num3;
                 }
-                float num4 = Math.Max(this._leftBox.collisionSize.y, this._rightBox.collisionSize.y);
+                float num4 = Math.Max(_leftBox.collisionSize.y, _rightBox.collisionSize.y);
                 if (_collisionSize.y < num4)
-                    this._collisionSize.y = num4;
-                this._leftBox.anchor.offset.x = (float)(-this.halfWidth + num2 / 2.0);
-                this._leftBox.anchor.offset.y = 0f;
-                this._rightBox.anchor.offset.x = this.halfWidth - num3 / 2f;
-                this._rightBox.anchor.offset.y = 0f;
+                    _collisionSize.y = num4;
+                _leftBox.anchor.offset.x = (float)(-halfWidth + num2 / 2.0);
+                _leftBox.anchor.offset.y = 0f;
+                _rightBox.anchor.offset.x = halfWidth - num3 / 2f;
+                _rightBox.anchor.offset.y = 0f;
             }
             else
             {
-                this._collisionSize.y = Math.Max(this._leftBox.collisionSize.y, _splitPixels) + this._rightBox.collisionSize.y;
-                float num5 = this._leftBox.collisionSize.y + this._rightBox.collisionSize.y + this._seperation;
+                _collisionSize.y = Math.Max(_leftBox.collisionSize.y, _splitPixels) + _rightBox.collisionSize.y;
+                float num5 = _leftBox.collisionSize.y + _rightBox.collisionSize.y + _seperation;
                 if (_collisionSize.y < num5)
-                    this._collisionSize.y = num5;
-                Vec2 sizes = this.CalculateSizes();
+                    _collisionSize.y = num5;
+                Vec2 sizes = CalculateSizes();
                 float num6 = sizes.x;
                 float y = sizes.y;
                 if (num6 < _leftBox.collisionSize.y)
-                    num6 = this._leftBox.collisionSize.y;
+                    num6 = _leftBox.collisionSize.y;
                 if (y < _rightBox.collisionSize.y)
                 {
-                    y = this._rightBox.collisionSize.y;
-                    num6 = this._collisionSize.y - y;
+                    y = _rightBox.collisionSize.y;
+                    num6 = _collisionSize.y - y;
                 }
-                float num7 = Math.Max(this._leftBox.collisionSize.x, this._rightBox.collisionSize.x);
+                float num7 = Math.Max(_leftBox.collisionSize.x, _rightBox.collisionSize.x);
                 if (_collisionSize.x < num7)
-                    this._collisionSize.x = num7;
-                this._leftBox.anchor.offset.x = 0f;
-                this._leftBox.anchor.offset.y = (float)(-this.halfHeight + num6 / 2.0);
-                this._rightBox.anchor.offset.x = 0f;
-                this._rightBox.anchor.offset.y = this.halfHeight - y / 2f;
+                    _collisionSize.x = num7;
+                _leftBox.anchor.offset.x = 0f;
+                _leftBox.anchor.offset.y = (float)(-halfHeight + num6 / 2.0);
+                _rightBox.anchor.offset.x = 0f;
+                _rightBox.anchor.offset.y = halfHeight - y / 2f;
             }
         }
 
         public override void Draw()
         {
-            if (!this._vertical)
+            if (!_vertical)
             {
-                Vec2 vec2_1 = this._rightBox.position - new Vec2(this._rightBox.width / 2f, this._rightBox.height / 2f);
-                Vec2 vec2_2 = this._leftBox.position - new Vec2(this._leftBox.width / 2f, this._leftBox.height / 2f);
+                Vec2 vec2_1 = _rightBox.position - new Vec2(_rightBox.width / 2f, _rightBox.height / 2f);
+                Vec2 vec2_2 = _leftBox.position - new Vec2(_leftBox.width / 2f, _leftBox.height / 2f);
                 if (vec2_2.x < vec2_1.x)
                     vec2_1.x = vec2_2.x;
-                vec2_1.y -= this._seperation / 2f;
-                Vec2 vec2_3 = this._rightBox.position + new Vec2(this._rightBox.width / 2f, this._rightBox.height / 2f);
-                Vec2 vec2_4 = this._leftBox.position + new Vec2(this._leftBox.width / 2f, this._leftBox.height / 2f);
+                vec2_1.y -= _seperation / 2f;
+                Vec2 vec2_3 = _rightBox.position + new Vec2(_rightBox.width / 2f, _rightBox.height / 2f);
+                Vec2 vec2_4 = _leftBox.position + new Vec2(_leftBox.width / 2f, _leftBox.height / 2f);
                 if (vec2_4.x > vec2_3.x)
                     vec2_3.x = vec2_4.x;
-                if (this._splitPixels == 0)
+                if (_splitPixels == 0)
                 {
                 }
                 else
                 {
                 }
-                Graphics.DrawLine(new Vec2(vec2_1.x, vec2_1.y), new Vec2(vec2_3.x, vec2_1.y), Color.White, depth: (this.depth + 10));
+                Graphics.DrawLine(new Vec2(vec2_1.x, vec2_1.y), new Vec2(vec2_3.x, vec2_1.y), Color.White, depth: (depth + 10));
             }
-            int num = this.debug ? 1 : 0;
+            int num = debug ? 1 : 0;
             base.Draw();
         }
     }

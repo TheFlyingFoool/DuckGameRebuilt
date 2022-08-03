@@ -14,12 +14,12 @@ namespace DuckGame
         public EnableWallJump()
           : base()
         {
-            this.graphic = new Sprite("swirl");
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this._canFlip = false;
-            this._visibleInGame = false;
+            graphic = new Sprite("swirl");
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
+            _canFlip = false;
+            _visibleInGame = false;
         }
     }
 }

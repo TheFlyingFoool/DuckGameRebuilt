@@ -18,12 +18,12 @@ namespace DuckGame
         public PhysicsRopeSection(float xpos, float ypos, PhysicsRope r)
           : base(xpos, ypos)
         {
-            this.tempPos = this.position;
-            this.collisionSize = new Vec2(4f, 4f);
-            this.collisionOffset = new Vec2(-2f, -2f);
-            this.weight = 0.1f;
-            this.updatePhysics = false;
-            this.rope = r;
+            tempPos = position;
+            collisionSize = new Vec2(4f, 4f);
+            collisionOffset = new Vec2(-2f, -2f);
+            weight = 0.1f;
+            updatePhysics = false;
+            rope = r;
         }
     }
 }

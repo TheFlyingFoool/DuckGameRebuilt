@@ -19,9 +19,9 @@ namespace DuckGame
 
         public MaterialGlitch(Thing t)
         {
-            this._effect = Content.Load<MTEffect>("Shaders/glitch");
-            this._goldTexture = Content.Load<Tex2D>("glitchMap3");
-            this._thing = t;
+            _effect = Content.Load<MTEffect>("Shaders/glitch");
+            _goldTexture = Content.Load<Tex2D>("glitchMap3");
+            _thing = t;
         }
 
         public override void Apply()
@@ -29,31 +29,31 @@ namespace DuckGame
             if (DuckGame.Graphics.device.Textures[0] != null)
             {
                 Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-                this.SetValue("width", texture.frameWidth / texture.width);
-                this.SetValue("height", texture.frameHeight / texture.height);
-                this.SetValue("frameWidth", texture.frameWidth);
-                this.SetValue("amount", this.amount);
-                this.SetValue("yoff", this.yoffset);
-                this.SetValue("xpos", this._thing.x);
-                this.SetValue("ypos", this._thing.y);
+                SetValue("width", texture.frameWidth / texture.width);
+                SetValue("height", texture.frameHeight / texture.height);
+                SetValue("frameWidth", texture.frameWidth);
+                SetValue("amount", amount);
+                SetValue("yoff", yoffset);
+                SetValue("xpos", _thing.x);
+                SetValue("ypos", _thing.y);
             }
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._goldTexture;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)_goldTexture;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
-            if (this.lockframes > 0)
+            if (lockframes > 0)
             {
-                --this.lockframes;
+                --lockframes;
             }
             else
             {
                 if (Rando.Float(1f) > 0.85f)
-                    this.lockframes = Rando.Int(2, 12);
+                    lockframes = Rando.Int(2, 12);
                 if (Rando.Float(1f) > 0.2f)
-                    this.amount = Lerp.Float(this.amount, 0f, 0.05f);
+                    amount = Lerp.Float(amount, 0f, 0.05f);
                 if (Rando.Float(1f) <= 0.98f)
                     return;
-                this.amount += 0.3f;
+                amount += 0.3f;
             }
         }
     }

@@ -26,20 +26,20 @@ namespace DuckGame
           bool network = false)
           : base(xval, yval, type, ang, owner, rbound, distance, tracer, network)
         {
-            this._thickness = type.bulletThickness;
-            this._beem = Content.Load<Texture2D>("laserBeemOrange");
+            _thickness = type.bulletThickness;
+            _beem = Content.Load<Texture2D>("laserBeemOrange");
         }
 
         protected override void CheckTravelPath(Vec2 pStart, Vec2 pEnd)
         {
-            if (_thickness > 1.0 && this._travels > 0)
+            if (_thickness > 1.0 && _travels > 0)
             {
                 for (int index = 0; index < 10; ++index)
                 {
                     Vec2 vec2 = pStart + (pEnd - pStart) * (index / 10f);
-                    if (ATMissile.DestroyRadius(vec2, 16f, this, true) > 0 && !this._exploded)
+                    if (ATMissile.DestroyRadius(vec2, 16f, this, true) > 0 && !_exploded)
                     {
-                        this._exploded = true;
+                        _exploded = true;
                         SFX.Play("explode");
                     }
                     foreach (PhysicsObject physicsObject in Level.CheckCircleAll<PhysicsObject>(vec2, 16f))
@@ -56,7 +56,7 @@ namespace DuckGame
                     }
                 }
             }
-            ++this._travels;
+            ++_travels;
         }
     }
 }

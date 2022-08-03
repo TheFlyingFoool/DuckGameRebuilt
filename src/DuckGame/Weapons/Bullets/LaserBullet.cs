@@ -28,38 +28,38 @@ namespace DuckGame
           bool network = false)
           : base(xval, yval, type, ang, owner, rbound, distance, tracer, network)
         {
-            this._thickness = type.bulletThickness;
-            this._beem = Content.Load<Texture2D>("laserBeam");
+            _thickness = type.bulletThickness;
+            _beem = Content.Load<Texture2D>("laserBeam");
         }
 
         public override void Draw()
         {
-            if (this._tracer || _bulletDistance <= 0.1f)
+            if (_tracer || _bulletDistance <= 0.1f)
                 return;
-            if (this.gravityAffected)
+            if (gravityAffected)
             {
-                if (this.prev.Count < 1)
+                if (prev.Count < 1)
                     return;
-                int num = (int)Math.Ceiling((drawdist - this.startpoint) / 8f);
-                Vec2 p2 = this.prev.Last<Vec2>();
+                int num = (int)Math.Ceiling((drawdist - startpoint) / 8f);
+                Vec2 p2 = prev.Last<Vec2>();
                 for (int index = 0; index < num; ++index)
                 {
-                    Vec2 pointOnArc = this.GetPointOnArc(index * 8);
-                    DuckGame.Graphics.DrawTexturedLine((Tex2D)this._beem, pointOnArc, p2, this.color * (1f - index / num) * this.alpha, this.ammo.bulletThickness, (Depth)0.9f);
-                    if (pointOnArc == this.prev.First<Vec2>())
+                    Vec2 pointOnArc = GetPointOnArc(index * 8);
+                    DuckGame.Graphics.DrawTexturedLine((Tex2D)_beem, pointOnArc, p2, color * (1f - index / num) * alpha, ammo.bulletThickness, (Depth)0.9f);
+                    if (pointOnArc == prev.First<Vec2>())
                         break;
                     p2 = pointOnArc;
-                    if (index == 0 && this.ammo.sprite != null && !this.doneTravelling)
+                    if (index == 0 && ammo.sprite != null && !doneTravelling)
                     {
-                        this.ammo.sprite.depth = (Depth)1f;
-                        this.ammo.sprite.angleDegrees = -Maths.PointDirection(Vec2.Zero, this.travelDirNormalized);
-                        DuckGame.Graphics.Draw(this.ammo.sprite, p2.x, p2.y);
+                        ammo.sprite.depth = (Depth)1f;
+                        ammo.sprite.angleDegrees = -Maths.PointDirection(Vec2.Zero, travelDirNormalized);
+                        DuckGame.Graphics.Draw(ammo.sprite, p2.x, p2.y);
                     }
                 }
             }
             else
             {
-                float length = (this.drawStart - this.drawEnd).length;
+                float length = (drawStart - drawEnd).length;
                 float val = 0f;
                 float num1 = (1f / (length / 8f));
                 float num2 = 0f;
@@ -73,7 +73,7 @@ namespace DuckGame
                         flag = true;
                     }
                     num2 += num1;
-                    DuckGame.Graphics.DrawTexturedLine((Tex2D)this._beem, this.drawStart + this.travelDirNormalized * val, this.drawStart + this.travelDirNormalized * (val + num3), Color.White * num2, this._thickness, (Depth)0.6f);
+                    DuckGame.Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * val, drawStart + travelDirNormalized * (val + num3), Color.White * num2, _thickness, (Depth)0.6f);
                     if (!flag)
                         val += 8f;
                     else
@@ -84,17 +84,17 @@ namespace DuckGame
 
         protected override void Rebound(Vec2 pos, float dir, float rng)
         {
-            ++this.reboundBulletsCreated;
+            ++reboundBulletsCreated;
             Bullet.isRebound = true;
-            LaserBullet t = new LaserBullet(pos.x, pos.y, this.ammo, dir, rbound: this.rebound, distance: rng);
+            LaserBullet t = new LaserBullet(pos.x, pos.y, ammo, dir, rbound: rebound, distance: rng);
             Bullet.isRebound = false;
-            t._teleporter = this._teleporter;
-            t.firedFrom = this.firedFrom;
-            t.timesRebounded = this.timesRebounded + 1;
-            t.lastReboundSource = this.lastReboundSource;
-            t.isLocal = this.isLocal;
-            t.connection = this.connection;
-            this.reboundCalled = true;
+            t._teleporter = _teleporter;
+            t.firedFrom = firedFrom;
+            t.timesRebounded = timesRebounded + 1;
+            t.lastReboundSource = lastReboundSource;
+            t.isLocal = isLocal;
+            t.connection = connection;
+            reboundCalled = true;
             Level.current.AddThing(t);
             Level.current.AddThing(new LaserRebound(pos.x, pos.y));
         }

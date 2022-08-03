@@ -57,7 +57,7 @@ namespace DuckGame
         private byte[] _currentPreviewZipData;
         public bool drag;
 
-        public string rootFolder => this._rootFolder;
+        public string rootFolder => _rootFolder;
 
         public MonoFileDialog()
           : base(null)
@@ -66,22 +66,22 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this.layer = Layer.HUD;
-            this.depth = (Depth)0.9f;
-            this._showBackground = false;
-            this._fancyFont = new FancyBitmapFont("smallFont");
-            this.itemSize = new Vec2(390f, 16f);
-            this._root = true;
-            this._dialog = new TextEntryDialog
+            layer = Layer.HUD;
+            depth = (Depth)0.9f;
+            _showBackground = false;
+            _fancyFont = new FancyBitmapFont("smallFont");
+            itemSize = new Vec2(390f, 16f);
+            _root = true;
+            _dialog = new TextEntryDialog
             {
                 filename = true
             };
             Level.Add(_dialog);
-            this._deleteDialog = new MessageDialogue();
+            _deleteDialog = new MessageDialogue();
             Level.Add(_deleteDialog);
-            this._overwriteDialog = new MessageDialogue();
+            _overwriteDialog = new MessageDialogue();
             Level.Add(_overwriteDialog);
-            this.drawControls = false;
+            drawControls = false;
         }
 
         public void Open(
@@ -92,34 +92,34 @@ namespace DuckGame
           bool loadLevel = true,
           ContextFileType type = ContextFileType.Level)
         {
-            this._type = type;
-            this._selectLevels = selectLevels;
-            this._loadLevel = loadLevel;
-            if (this._type == ContextFileType.Block || this._type == ContextFileType.Background || this._type == ContextFileType.Platform)
-                this._badTileset = new Sprite("badTileset");
-            if (this._type == ContextFileType.Parallax)
-                this._badParallax = new Sprite("badParallax");
-            if (this._type == ContextFileType.ArcadeStyle)
-                this._badArcade = new Sprite("badArcade");
-            this._preview = null;
-            this._previewSprite = null;
+            _type = type;
+            _selectLevels = selectLevels;
+            _loadLevel = loadLevel;
+            if (_type == ContextFileType.Block || _type == ContextFileType.Background || _type == ContextFileType.Platform)
+                _badTileset = new Sprite("badTileset");
+            if (_type == ContextFileType.Parallax)
+                _badParallax = new Sprite("badParallax");
+            if (_type == ContextFileType.ArcadeStyle)
+                _badArcade = new Sprite("badArcade");
+            _preview = null;
+            _previewSprite = null;
             float num1 = 350f;
             float num2 = 350f;
-            Vec2 vec2_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0) + this.hOffset, (float)(this.layer.height / 2.0 - num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0) + this.hOffset, (float)(this.layer.height / 2.0 + num2 / 2.0));
-            this.position = vec2_1 + new Vec2(4f, 40f);
-            this._save = save;
+            Vec2 vec2_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0) + hOffset, (float)(layer.height / 2.0 - num2 / 2.0));
+            Vec2 vec2_2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0) + hOffset, (float)(layer.height / 2.0 + num2 / 2.0));
+            position = vec2_1 + new Vec2(4f, 40f);
+            _save = save;
             rootFolder = rootFolder.Replace('\\', '/');
             currentFolder = currentFolder.Replace('\\', '/');
-            this._currentDirectory = !(currentFolder == "") ? currentFolder : rootFolder;
-            this._rootFolder = rootFolder;
-            if (this.prevDirectory != null)
-                this._currentDirectory = this.prevDirectory;
-            this.SetDirectory(this._currentDirectory);
+            _currentDirectory = !(currentFolder == "") ? currentFolder : rootFolder;
+            _rootFolder = rootFolder;
+            if (prevDirectory != null)
+                _currentDirectory = prevDirectory;
+            SetDirectory(_currentDirectory);
             Editor.lockInput = this;
-            this.ComputeAvailableStorageSpace();
+            ComputeAvailableStorageSpace();
             SFX.Play("openClick", 0.4f);
-            this.opened = true;
+            opened = true;
         }
 
         private void ComputeAvailableStorageSpace()
@@ -127,24 +127,24 @@ namespace DuckGame
             float percent = 0f;
             if (!DuckFile.GetLevelSpacePercentUsed(ref percent))
                 return;
-            this._percentStorageUsed = percent > 100.0 ? 100f : percent;
+            _percentStorageUsed = percent > 100.0 ? 100f : percent;
         }
 
         public void Close()
         {
             Editor.lockInput = null;
-            this.opened = false;
-            this.ClearItems();
+            opened = false;
+            ClearItems();
         }
 
         public string TypeExtension()
         {
-            if (this._type == ContextFileType.Level)
+            if (_type == ContextFileType.Level)
                 return ".lev";
-            return this._type == ContextFileType.Block || this._type == ContextFileType.Background || this._type == ContextFileType.Platform || this._type == ContextFileType.Parallax || this._type == ContextFileType.ArcadeAnimation || this._type == ContextFileType.ArcadeStyle ? ".png" : "";
+            return _type == ContextFileType.Block || _type == ContextFileType.Background || _type == ContextFileType.Platform || _type == ContextFileType.Parallax || _type == ContextFileType.ArcadeAnimation || _type == ContextFileType.ArcadeStyle ? ".png" : "";
         }
 
-        public void SetDirectory(string dir) => this.SetDirectory(dir, false);
+        public void SetDirectory(string dir) => SetDirectory(dir, false);
 
         private string FixPath(string pPath)
         {
@@ -158,69 +158,69 @@ namespace DuckGame
 
         public void SetDirectory(string dir, bool pIsModPath)
         {
-            if (this._openedArchive != null)
+            if (_openedArchive != null)
             {
-                this._openedArchive.Dispose();
-                this._openedArchive = null;
+                _openedArchive.Dispose();
+                _openedArchive = null;
             }
             DevConsole.Log("MonoFileDialog.SetDirectory(" + dir + ")");
             if (!pIsModPath && dir.Contains("Mods") && (dir.Contains(DuckFile.globalModsDirectory) || dir.Contains(DuckFile.modsDirectory)))
                 pIsModPath = true;
-            this.isModPath = pIsModPath;
-            dir = this.FixPath(dir);
-            this._drawIndex = 0;
+            isModPath = pIsModPath;
+            dir = FixPath(dir);
+            _drawIndex = 0;
             DevConsole.Log("MonoFileDialog.SetDirectory(postfix)(" + dir + ")");
-            if (this.modRootPath != null && this.modRootPath == dir)
+            if (modRootPath != null && modRootPath == dir)
             {
-                dir = this._rootFolder;
-                this.modRootPath = null;
-                this.isModPath = false;
+                dir = _rootFolder;
+                modRootPath = null;
+                isModPath = false;
             }
-            if (dir.Length < this._rootFolder.Length && !pIsModPath)
-                dir = this._rootFolder;
+            if (dir.Length < _rootFolder.Length && !pIsModPath)
+                dir = _rootFolder;
             int num1 = 0;
-            this._currentDirectory = dir;
-            if (this._currentDirectory != this._rootFolder)
+            _currentDirectory = dir;
+            if (_currentDirectory != _rootFolder)
                 ++num1;
-            if (this._save)
+            if (_save)
                 ++num1;
-            this.prevDirectory = dir;
-            string[] directories = DuckFile.GetDirectories(this._currentDirectory);
-            string[] files = DuckFile.GetFiles(this._currentDirectory);
+            prevDirectory = dir;
+            string[] directories = DuckFile.GetDirectories(_currentDirectory);
+            string[] files = DuckFile.GetFiles(_currentDirectory);
             int num2 = num1 + (directories.Length + files.Length);
             Array.Sort<string>(directories);
             Array.Sort<string>(files);
             float x = 338f;
-            this._scrollBar = false;
-            this._scrollPosition = 0f;
-            if (num2 > this._maxItems)
+            _scrollBar = false;
+            _scrollPosition = 0f;
+            if (num2 > _maxItems)
             {
                 x = 326f;
-                this._scrollBar = true;
+                _scrollBar = true;
             }
-            if (this._save)
+            if (_save)
             {
                 ContextMenu contextMenu = new ContextMenu(this)
                 {
-                    layer = this.layer,
+                    layer = layer,
                     text = "@NEWICONTINY@New File...",
                     data = "New File...",
                     itemSize = new Vec2(x, 16f)
                 };
-                this.AddItem(contextMenu);
+                AddItem(contextMenu);
             }
-            if (this._currentDirectory != this._rootFolder)
+            if (_currentDirectory != _rootFolder)
             {
                 ContextMenu contextMenu = new ContextMenu(this)
                 {
-                    layer = this.layer
+                    layer = layer
                 };
                 bool flag = false;
                 contextMenu.text = "@LOADICON@../";
                 contextMenu.data = "../";
                 contextMenu.itemSize = new Vec2(x, 16f);
                 contextMenu.isModPath = flag;
-                this.AddItem(contextMenu);
+                AddItem(contextMenu);
             }
             else
             {
@@ -230,7 +230,7 @@ namespace DuckGame
                     {
                         ContextMenu contextMenu = new ContextMenu(this)
                         {
-                            layer = this.layer,
+                            layer = layer,
                             fancy = true,
                             text = "@RAINBOWTINY@|DGBLUE|" + accessibleMod.configuration.name,
                             data = accessibleMod.configuration.contentDirectory + "/Levels",
@@ -239,7 +239,7 @@ namespace DuckGame
                             isModPath = true,
                             isModRoot = true
                         };
-                        this.AddItem(contextMenu);
+                        AddItem(contextMenu);
                     }
                 }
                 foreach (MapPack mapPack in MapPack.active)
@@ -248,7 +248,7 @@ namespace DuckGame
                     {
                         ContextMenu contextMenu = new ContextMenu(this)
                         {
-                            layer = this.layer,
+                            layer = layer,
                             fancy = true,
                             text = "|DGBLUE|" + mapPack.mod.configuration.name,
                             data = mapPack.mod.configuration.directory,
@@ -258,7 +258,7 @@ namespace DuckGame
                             isModRoot = true,
                             customIcon = mapPack.mod.configuration.mapPack.icon
                         };
-                        this.AddItem(contextMenu);
+                        AddItem(contextMenu);
                     }
                 }
             }
@@ -267,14 +267,14 @@ namespace DuckGame
                 string fileName = Path.GetFileName(path);
                 ContextMenu contextMenu = new ContextMenu(this)
                 {
-                    layer = this.layer,
+                    layer = layer,
                     fancy = true,
                     text = "@LOADICON@" + fileName,
                     data = !pIsModPath ? fileName : path,
                     isModPath = pIsModPath,
                     itemSize = new Vec2(x, 16f)
                 };
-                this.AddItem(contextMenu);
+                AddItem(contextMenu);
             }
             int num3 = 0;
             foreach (string path3 in files)
@@ -283,13 +283,13 @@ namespace DuckGame
                 if (path.StartsWith("|"))
                     path = path.Substring(1, path.Length - 1);
                 string fileName = Path.GetFileName(path);
-                if (!this._selectLevels)
+                if (!_selectLevels)
                 {
-                    if (fileName.EndsWith(this.TypeExtension()))
+                    if (fileName.EndsWith(TypeExtension()))
                     {
                         ContextMenu contextMenu = new ContextMenu(this)
                         {
-                            layer = this.layer,
+                            layer = layer,
                             fancy = true,
                             text = fileName
                         };
@@ -297,7 +297,7 @@ namespace DuckGame
                         contextMenu.data = !pIsModPath ? fileName : path;
                         contextMenu.itemSize = new Vec2(x, 16f);
                         contextMenu.isModPath = pIsModPath;
-                        this.AddItem(contextMenu);
+                        AddItem(contextMenu);
                     }
                 }
                 else
@@ -307,39 +307,39 @@ namespace DuckGame
                     string str3 = str2.Substring(str2.IndexOf("/levels/", StringComparison.InvariantCultureIgnoreCase) + 8);
                     ContextCheckBox contextCheckBox = new ContextCheckBox(fileName, this)
                     {
-                        layer = this.layer,
+                        layer = layer,
                         fancy = true,
                         path = str3,
                         isChecked = Editor.activatedLevels.Contains(str3),
                         itemSize = new Vec2(x, 16f)
                     };
-                    this.AddItem(contextCheckBox);
+                    AddItem(contextCheckBox);
                 }
                 ++num3;
             }
-            int num4 = (int)Math.Round((this._items.Count - 1 - this._maxItems) * this._scrollPosition);
+            int num4 = (int)Math.Round((_items.Count - 1 - _maxItems) * _scrollPosition);
             int num5 = 0;
-            for (int index = 0; index < this._items.Count; ++index)
+            for (int index = 0; index < _items.Count; ++index)
             {
-                if (index < num4 || index > num4 + this._maxItems)
+                if (index < num4 || index > num4 + _maxItems)
                 {
-                    this._items[index].visible = false;
+                    _items[index].visible = false;
                 }
                 else
                 {
-                    this._items[index].visible = true;
-                    this._items[index].position = new Vec2(this._items[index].position.x, (float)(this.y + 3.0 + num5 * (_items[index].itemSize.y + 1.0)));
+                    _items[index].visible = true;
+                    _items[index].position = new Vec2(_items[index].position.x, (float)(y + 3.0 + num5 * (_items[index].itemSize.y + 1.0)));
                     ++num5;
                 }
             }
-            this.menuSize.y = this._fdHeight;
+            menuSize.y = _fdHeight;
         }
 
         private Tex2D GetArcadeSizeTex2D(string pTex, Tex2D pOriginalTex)
         {
             if (pOriginalTex.width == 48 && pOriginalTex.height == 48)
                 return pOriginalTex;
-            Image image = Image.FromFile(this._currentDirectory + "/" + Path.GetFileName(pTex));
+            Image image = Image.FromFile(_currentDirectory + "/" + Path.GetFileName(pTex));
             System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(0, 0, 48, 48);
             Bitmap bitmap = new Bitmap(48, 48);
             bitmap.SetResolution(image.HorizontalResolution, image.VerticalResolution);
@@ -364,13 +364,13 @@ namespace DuckGame
         public override void Selected(ContextMenu item)
         {
             bool flag = false;
-            if (this._framesSinceSelected < 20 && this._lastItemSelected == item)
+            if (_framesSinceSelected < 20 && _lastItemSelected == item)
                 flag = true;
-            this._lastItemSelected = item;
-            this._framesSinceSelected = 0;
+            _lastItemSelected = item;
+            _framesSinceSelected = 0;
             if (!flag && Editor.inputMode == EditorInput.Touch)
                 return;
-            if (_percentStorageUsed >= 100.0 && (this._save || item.text == "@NEWICONTINY@New File..."))
+            if (_percentStorageUsed >= 100.0 && (_save || item.text == "@NEWICONTINY@New File..."))
             {
                 SFX.Play("consoleError");
             }
@@ -379,31 +379,31 @@ namespace DuckGame
                 SFX.Play("highClick", 0.3f, 0.2f);
                 if (item.text == "@NEWICONTINY@New File...")
                 {
-                    this._dialog.Open("Save File As...");
+                    _dialog.Open("Save File As...");
                     Editor.lockInput = _dialog;
                 }
-                else if (item.data.EndsWith(this.TypeExtension()) && this._type != ContextFileType.All)
+                else if (item.data.EndsWith(TypeExtension()) && _type != ContextFileType.All)
                 {
-                    if (!this._selectLevels)
+                    if (!_selectLevels)
                     {
-                        if (!this._save)
+                        if (!_save)
                         {
-                            this.Close();
-                            string str = this._currentDirectory + "/" + item.data;
+                            Close();
+                            string str = _currentDirectory + "/" + item.data;
                             if (item.isModPath)
                                 str = item.data;
-                            if (this._loadLevel)
+                            if (_loadLevel)
                                 (Level.current as Editor).LoadLevel(str);
                             else
-                                this.result = this._type != ContextFileType.ArcadeStyle ? str.Replace(this._rootFolder, "") : Editor.TextureToString((Texture2D)this.GetArcadeSizeTex2D(str, Content.Load<Tex2D>(str)));
+                                result = _type != ContextFileType.ArcadeStyle ? str.Replace(_rootFolder, "") : Editor.TextureToString((Texture2D)GetArcadeSizeTex2D(str, Content.Load<Tex2D>(str)));
                         }
                         else
                         {
-                            this._overwriteDialog.Open("OVERWRITE " + item.data + "?");
+                            _overwriteDialog.Open("OVERWRITE " + item.data + "?");
                             Editor.lockInput = _overwriteDialog;
-                            this._doOverwriteDialog = true;
-                            this._overwriteDialog.result = false;
-                            this._overwriteName = item.data;
+                            _doOverwriteDialog = true;
+                            _overwriteDialog.result = false;
+                            _overwriteName = item.data;
                             Editor.tookInput = true;
                         }
                     }
@@ -418,17 +418,17 @@ namespace DuckGame
                 }
                 else
                 {
-                    this.ClearItems();
+                    ClearItems();
                     if (item.isModPath)
                     {
                         if (item.isModRoot)
-                            this.modRootPath = this.FixPath(item.data + "/../");
-                        this.SetDirectory(item.data, item.isModPath);
+                            modRootPath = FixPath(item.data + "/../");
+                        SetDirectory(item.data, item.isModPath);
                     }
                     else
-                        this.SetDirectory(this._currentDirectory + "/" + item.data);
+                        SetDirectory(_currentDirectory + "/" + item.data);
                 }
-                this.ComputeAvailableStorageSpace();
+                ComputeAvailableStorageSpace();
             }
         }
 
@@ -438,210 +438,210 @@ namespace DuckGame
 
         public override void Update()
         {
-            ++this._framesSinceSelected;
-            if (!this.opened || this._dialog.opened || this._deleteDialog.opened || this._overwriteDialog.opened || this._opening)
+            ++_framesSinceSelected;
+            if (!opened || _dialog.opened || _deleteDialog.opened || _overwriteDialog.opened || _opening)
             {
-                this._opening = false;
-                foreach (ContextMenu contextMenu in this._items)
+                _opening = false;
+                foreach (ContextMenu contextMenu in _items)
                     contextMenu.disabled = true;
             }
             else
             {
                 bool flag1 = false;
-                foreach (ContextMenu contextMenu in this._items)
+                foreach (ContextMenu contextMenu in _items)
                 {
                     contextMenu.disabled = false;
                     if (!flag1 && contextMenu.hover)
                     {
                         flag1 = true;
                         string str1 = "";
-                        int startIndex = this._currentDirectory.IndexOf(this._rootFolder);
+                        int startIndex = _currentDirectory.IndexOf(_rootFolder);
                         if (startIndex != -1)
-                            str1 = this._currentDirectory.Remove(startIndex, this._rootFolder.Length);
+                            str1 = _currentDirectory.Remove(startIndex, _rootFolder.Length);
                         if (str1 != "" && !str1.EndsWith("/"))
                             str1 += "/";
                         if (str1.StartsWith("/"))
                             str1 = str1.Substring(1, str1.Length - 1);
-                        string str2 = this._rootFolder + "/" + str1 + contextMenu.data;
+                        string str2 = _rootFolder + "/" + str1 + contextMenu.data;
                         if (contextMenu.isModPath)
                             str2 = contextMenu.data;
                         bool flag2 = true;
-                        if (this._prevPreviewPath != str2)
+                        if (_prevPreviewPath != str2)
                         {
                             if (str2.EndsWith(".lev"))
                             {
-                                this._previewName = contextMenu.data;
+                                _previewName = contextMenu.data;
                                 try
                                 {
                                     if (contextMenu.zipItem != null)
                                     {
                                         ZipArchiveEntry zipItem = contextMenu.zipItem as ZipArchiveEntry;
-                                        this._currentPreviewZipData = new byte[zipItem.Length];
-                                        zipItem.Open().Read(this._currentPreviewZipData, 0, (int)zipItem.Length);
-                                        Content.generatePreviewBytes = this._currentPreviewZipData;
+                                        _currentPreviewZipData = new byte[zipItem.Length];
+                                        zipItem.Open().Read(_currentPreviewZipData, 0, (int)zipItem.Length);
+                                        Content.generatePreviewBytes = _currentPreviewZipData;
                                     }
-                                    if (this._previewPair != null && this._previewPair.preview != null)
-                                        this._previewPair.preview.Dispose();
-                                    this._previewPair = Content.GeneratePreview(str2);
+                                    if (_previewPair != null && _previewPair.preview != null)
+                                        _previewPair.preview.Dispose();
+                                    _previewPair = Content.GeneratePreview(str2);
                                 }
                                 catch (Exception)
                                 {
-                                    this._previewPair = null;
+                                    _previewPair = null;
                                     flag2 = false;
-                                    this._previewSprite = null;
+                                    _previewSprite = null;
                                 }
-                                if (this._previewPair != null)
-                                    this._preview = (Tex2D)this._previewPair.preview;
+                                if (_previewPair != null)
+                                    _preview = (Tex2D)_previewPair.preview;
                             }
                             else if (str2.EndsWith(".png"))
                             {
-                                string str3 = this._currentDirectory + "/" + Path.GetFileName(str2);
+                                string str3 = _currentDirectory + "/" + Path.GetFileName(str2);
                                 Texture2D pOriginalTex = ContentPack.LoadTexture2D(str3);
-                                this._preview = pOriginalTex == null ? Content.invalidTexture : (this._type != ContextFileType.Block && this._type != ContextFileType.Background && this._type != ContextFileType.Platform || pOriginalTex.Width == 128 && pOriginalTex.Height == 128 ? (this._type != ContextFileType.Parallax || pOriginalTex.Width == 320 && pOriginalTex.Height == 240 ? (this._type != ContextFileType.ArcadeStyle ? (Tex2D)pOriginalTex : this.GetArcadeSizeTex2D(str3, (Tex2D)pOriginalTex)) : this._badParallax.texture) : this._badTileset.texture);
+                                _preview = pOriginalTex == null ? Content.invalidTexture : (_type != ContextFileType.Block && _type != ContextFileType.Background && _type != ContextFileType.Platform || pOriginalTex.Width == 128 && pOriginalTex.Height == 128 ? (_type != ContextFileType.Parallax || pOriginalTex.Width == 320 && pOriginalTex.Height == 240 ? (_type != ContextFileType.ArcadeStyle ? (Tex2D)pOriginalTex : GetArcadeSizeTex2D(str3, (Tex2D)pOriginalTex)) : _badParallax.texture) : _badTileset.texture);
                             }
                             else
                             {
-                                this._prevPreviewPath = null;
+                                _prevPreviewPath = null;
                                 flag2 = false;
                             }
                             if (flag2)
                             {
-                                this._previewSprite = new Sprite(this._preview);
-                                if (this._type == ContextFileType.Block || this._type == ContextFileType.Background || this._type == ContextFileType.Platform || this._type == ContextFileType.Parallax)
-                                    this._previewSprite.scale = new Vec2(2f, 2f);
+                                _previewSprite = new Sprite(_preview);
+                                if (_type == ContextFileType.Block || _type == ContextFileType.Background || _type == ContextFileType.Platform || _type == ContextFileType.Parallax)
+                                    _previewSprite.scale = new Vec2(2f, 2f);
                             }
                             else
-                                this._previewSprite = null;
-                            this._prevPreviewPath = str2;
+                                _previewSprite = null;
+                            _prevPreviewPath = str2;
                         }
                     }
                 }
-                if (!flag1 && this._type == ContextFileType.ArcadeStyle)
+                if (!flag1 && _type == ContextFileType.ArcadeStyle)
                 {
-                    this._preview = this._badArcade.texture;
-                    this._previewSprite = new Sprite(this._preview);
-                    this._prevPreviewPath = null;
+                    _preview = _badArcade.texture;
+                    _previewSprite = new Sprite(_preview);
+                    _prevPreviewPath = null;
                 }
                 Editor.lockInput = this;
                 base.Update();
-                this._scrollWait = Lerp.Float(this._scrollWait, 0f, 0.2f);
-                if (this._dialog.result != null && this._dialog.result != "")
+                _scrollWait = Lerp.Float(_scrollWait, 0f, 0.2f);
+                if (_dialog.result != null && _dialog.result != "")
                 {
-                    string[] files = DuckFile.GetFiles(this._currentDirectory, this._dialog.result + ".lev");
+                    string[] files = DuckFile.GetFiles(_currentDirectory, _dialog.result + ".lev");
                     if (files != null && files.Length != 0)
                     {
-                        this._overwriteDialog.Open("OVERWRITE " + this._dialog.result + "?");
+                        _overwriteDialog.Open("OVERWRITE " + _dialog.result + "?");
                         Editor.lockInput = _overwriteDialog;
-                        this._doOverwriteDialog = true;
-                        this._overwriteDialog.result = false;
-                        this._overwriteName = this._dialog.result;
-                        this._dialog.result = "";
+                        _doOverwriteDialog = true;
+                        _overwriteDialog.result = false;
+                        _overwriteName = _dialog.result;
+                        _dialog.result = "";
                     }
                     else
                     {
                         Editor current = Level.current as Editor;
                         Editor._currentLevelData.metaData.guid = Guid.NewGuid().ToString();
                         Editor._currentLevelData.workshopData.Reset();
-                        string saveName = this._currentDirectory + "/" + this._dialog.result;
+                        string saveName = _currentDirectory + "/" + _dialog.result;
                         current.DoSave(saveName);
-                        this._dialog.result = "";
-                        this.Close();
+                        _dialog.result = "";
+                        Close();
                     }
                 }
-                if (!this._overwriteDialog.opened && this._doOverwriteDialog)
+                if (!_overwriteDialog.opened && _doOverwriteDialog)
                 {
-                    this._doOverwriteDialog = false;
-                    if (this._overwriteDialog.result)
+                    _doOverwriteDialog = false;
+                    if (_overwriteDialog.result)
                     {
                         Editor current = Level.current as Editor;
                         try
                         {
-                            Editor._currentLevelData.metaData.guid = (DuckFile.LoadLevel(this._currentDirectory + "/" + this._overwriteName) ?? throw new Exception()).metaData.guid;
+                            Editor._currentLevelData.metaData.guid = (DuckFile.LoadLevel(_currentDirectory + "/" + _overwriteName) ?? throw new Exception()).metaData.guid;
                         }
                         catch (Exception)
                         {
                             if (string.IsNullOrEmpty(Editor._currentLevelData.metaData.guid))
                                 Editor._currentLevelData.metaData.guid = Guid.NewGuid().ToString();
                         }
-                        current.DoSave(this._currentDirectory + "/" + this._overwriteName);
-                        this._overwriteDialog.result = false;
-                        this._overwriteName = "";
-                        this.Close();
+                        current.DoSave(_currentDirectory + "/" + _overwriteName);
+                        _overwriteDialog.result = false;
+                        _overwriteName = "";
+                        Close();
                     }
                 }
-                if (!this._deleteDialog.opened && this._doDeleteDialog)
+                if (!_deleteDialog.opened && _doDeleteDialog)
                 {
-                    this._doDeleteDialog = false;
-                    if (this._deleteDialog.result)
+                    _doDeleteDialog = false;
+                    if (_deleteDialog.result)
                     {
-                        foreach (ContextMenu contextMenu in this._items)
+                        foreach (ContextMenu contextMenu in _items)
                         {
                             if (contextMenu.hover)
                             {
-                                Editor.Delete(this._currentDirectory + "/" + contextMenu.text + ".lev");
-                                this.ComputeAvailableStorageSpace();
+                                Editor.Delete(_currentDirectory + "/" + contextMenu.text + ".lev");
+                                ComputeAvailableStorageSpace();
                                 break;
                             }
                         }
-                        this.ClearItems();
-                        this.SetDirectory(this._currentDirectory);
+                        ClearItems();
+                        SetDirectory(_currentDirectory);
                     }
                 }
                 if (Keyboard.Pressed(Keys.Escape) || Mouse.right == InputState.Pressed || Input.Pressed("CANCEL"))
-                    this.Close();
+                    Close();
                 if (Input.Down("STRAFE"))
                 {
                     if (Input.Pressed("RAGDOLL"))
                     {
                         try
                         {
-                            Process.Start(Path.GetFullPath(this._currentDirectory));
+                            Process.Start(Path.GetFullPath(_currentDirectory));
                         }
                         catch (Exception ex1)
                         {
                             try
                             {
-                                Process.Start(this._currentDirectory);
+                                Process.Start(_currentDirectory);
                             }
                             catch (Exception)
                             {
-                                DevConsole.Log("|DGRED|Could not open directory '" + Path.GetFullPath(this._currentDirectory) + "' (" + ex1.Message + ")");
+                                DevConsole.Log("|DGRED|Could not open directory '" + Path.GetFullPath(_currentDirectory) + "' (" + ex1.Message + ")");
                             }
                         }
                     }
                 }
-                if (!this._selectLevels && Input.Pressed("MENU2"))
+                if (!_selectLevels && Input.Pressed("MENU2"))
                 {
-                    this._deleteDialog.Open("CONFIRM DELETE");
+                    _deleteDialog.Open("CONFIRM DELETE");
                     Editor.lockInput = _deleteDialog;
-                    this._doDeleteDialog = true;
-                    this._deleteDialog.result = false;
+                    _doDeleteDialog = true;
+                    _deleteDialog.result = false;
                 }
                 else
                 {
                     if (Input.Pressed("MENULEFT"))
-                        this._selectedIndex -= this._maxItems;
+                        _selectedIndex -= _maxItems;
                     else if (Input.Pressed("MENURIGHT"))
-                        this._selectedIndex += this._maxItems;
-                    this._selectedIndex = Maths.Clamp(this._selectedIndex, 0, this._items.Count - 1);
-                    float num1 = 1f / (this._items.Count - this._maxItems);
+                        _selectedIndex += _maxItems;
+                    _selectedIndex = Maths.Clamp(_selectedIndex, 0, _items.Count - 1);
+                    float num1 = 1f / (_items.Count - _maxItems);
                     if (Mouse.scroll != 0.0)
                     {
-                        this._scrollPosition += Math.Sign(Mouse.scroll) * num1;
+                        _scrollPosition += Math.Sign(Mouse.scroll) * num1;
                         if (_scrollPosition > 1.0)
-                            this._scrollPosition = 1f;
+                            _scrollPosition = 1f;
                         if (_scrollPosition < 0.0)
-                            this._scrollPosition = 0f;
+                            _scrollPosition = 0f;
                     }
                     bool flag3 = false;
-                    int num2 = (int)Math.Round((this._items.Count - this._maxItems - 1.0) * _scrollPosition);
+                    int num2 = (int)Math.Round((_items.Count - _maxItems - 1.0) * _scrollPosition);
                     int num3 = 0;
                     int num4 = 0;
-                    for (int index = 0; index < this._items.Count; ++index)
+                    for (int index = 0; index < _items.Count; ++index)
                     {
                         if (flag3)
-                            this._items[index].hover = false;
-                        if (this._items[index].hover)
+                            _items[index].hover = false;
+                        if (_items[index].hover)
                         {
                             num4 = index;
                             break;
@@ -649,24 +649,24 @@ namespace DuckGame
                     }
                     if (Editor.inputMode == EditorInput.Gamepad && !flag3)
                     {
-                        if (num4 > num2 + this._maxItems)
-                            this._scrollPosition += (num4 - (num2 + this._maxItems)) * num1;
+                        if (num4 > num2 + _maxItems)
+                            _scrollPosition += (num4 - (num2 + _maxItems)) * num1;
                         else if (num4 < num2)
-                            this._scrollPosition -= (num2 - num4) * num1;
+                            _scrollPosition -= (num2 - num4) * num1;
                     }
-                    for (int index = 0; index < this._items.Count; ++index)
+                    for (int index = 0; index < _items.Count; ++index)
                     {
-                        this._items[index].disabled = false;
-                        if (index < num2 || index > num2 + this._maxItems)
+                        _items[index].disabled = false;
+                        if (index < num2 || index > num2 + _maxItems)
                         {
-                            this._items[index].visible = false;
-                            this._items[index].hover = false;
+                            _items[index].visible = false;
+                            _items[index].hover = false;
                         }
                         else
                         {
-                            ContextMenu contextMenu = this._items[index];
-                            this._items[index].visible = true;
-                            this._items[index].position = new Vec2(this._items[index].position.x, (float)(this.y + 3.0 + num3 * this._items[index].itemSize.y));
+                            ContextMenu contextMenu = _items[index];
+                            _items[index].visible = true;
+                            _items[index].position = new Vec2(_items[index].position.x, (float)(y + 3.0 + num3 * _items[index].itemSize.y));
                             ++num3;
                         }
                     }
@@ -676,24 +676,24 @@ namespace DuckGame
 
         public override void Draw()
         {
-            this.menuSize.y = this._fdHeight;
-            if (!this.opened)
+            menuSize.y = _fdHeight;
+            if (!opened)
                 return;
             base.Draw();
             float num1 = 350f;
-            float num2 = this._fdHeight + 22f;
-            Vec2 p1_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0 + hOffset - 1.0), (float)(this.layer.height / 2.0 - num2 / 2.0 - 15.0));
-            Vec2 p2_1 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0 + hOffset + 1.0), (float)(this.layer.height / 2.0 + num2 / 2.0 - 12.0));
-            DuckGame.Graphics.DrawRect(p1_1, p2_1, new Color(70, 70, 70), this.depth, false);
-            DuckGame.Graphics.DrawRect(p1_1, p2_1, new Color(30, 30, 30), this.depth - 8);
-            DuckGame.Graphics.DrawRect(p1_1 + new Vec2(3f, 23f), p2_1 + new Vec2(-18f, -4f), new Color(10, 10, 10), this.depth - 4);
+            float num2 = _fdHeight + 22f;
+            Vec2 p1_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0 + hOffset - 1.0), (float)(layer.height / 2.0 - num2 / 2.0 - 15.0));
+            Vec2 p2_1 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0 + hOffset + 1.0), (float)(layer.height / 2.0 + num2 / 2.0 - 12.0));
+            DuckGame.Graphics.DrawRect(p1_1, p2_1, new Color(70, 70, 70), depth, false);
+            DuckGame.Graphics.DrawRect(p1_1, p2_1, new Color(30, 30, 30), depth - 8);
+            DuckGame.Graphics.DrawRect(p1_1 + new Vec2(3f, 23f), p2_1 + new Vec2(-18f, -4f), new Color(10, 10, 10), depth - 4);
             Vec2 p1_2 = new Vec2(p2_1.x - 16f, p1_1.y + 23f);
             Vec2 p2_2 = p2_1 + new Vec2(-3f, -4f);
-            DuckGame.Graphics.DrawRect(p1_2, p2_2, new Color(10, 10, 10), this.depth - 4);
-            DuckGame.Graphics.DrawRect(p1_1 + new Vec2(3f, 3f), new Vec2(p2_1.x - 3f, p1_1.y + 19f), new Color(70, 70, 70), this.depth - 4);
-            if (this._scrollBar)
+            DuckGame.Graphics.DrawRect(p1_2, p2_2, new Color(10, 10, 10), depth - 4);
+            DuckGame.Graphics.DrawRect(p1_1 + new Vec2(3f, 3f), new Vec2(p2_1.x - 3f, p1_1.y + 19f), new Color(70, 70, 70), depth - 4);
+            if (_scrollBar)
             {
-                this._scrollLerp = Lerp.Float(this._scrollLerp, this._scrollPosition, 0.05f);
+                _scrollLerp = Lerp.Float(_scrollLerp, _scrollPosition, 0.05f);
                 Vec2 p1_3 = new Vec2(p2_1.x - 14f, (float)(topRight.y + 7.0 + (240.0 * _scrollLerp - 4.0)));
                 Vec2 p2_3 = new Vec2(p2_1.x - 5f, (float)(topRight.y + 11.0 + (240.0 * _scrollLerp + 8.0)));
                 bool flag = false;
@@ -701,49 +701,49 @@ namespace DuckGame
                 {
                     flag = true;
                     if (Mouse.left == InputState.Pressed)
-                        this.drag = true;
+                        drag = true;
                 }
                 if (Mouse.left == InputState.None)
-                    this.drag = false;
-                if (this.drag)
+                    drag = false;
+                if (drag)
                 {
-                    this._scrollPosition = (float)((Mouse.y - p1_2.y - 10.0) / (p2_2.y - p1_2.y - 20.0));
+                    _scrollPosition = (float)((Mouse.y - p1_2.y - 10.0) / (p2_2.y - p1_2.y - 20.0));
                     if (_scrollPosition < 0.0)
-                        this._scrollPosition = 0f;
+                        _scrollPosition = 0f;
                     if (_scrollPosition > 1.0)
-                        this._scrollPosition = 1f;
-                    this._scrollLerp = this._scrollPosition;
+                        _scrollPosition = 1f;
+                    _scrollLerp = _scrollPosition;
                 }
-                DuckGame.Graphics.DrawRect(p1_3, p2_3, this.drag ? new Color(190, 190, 190) : (flag ? new Color(120, 120, 120) : new Color(70, 70, 70)), this.depth + 4);
+                DuckGame.Graphics.DrawRect(p1_3, p2_3, drag ? new Color(190, 190, 190) : (flag ? new Color(120, 120, 120) : new Color(70, 70, 70)), depth + 4);
             }
-            string str1 = this._currentDirectory;
-            int startIndex1 = this._currentDirectory.IndexOf(this._rootFolder);
+            string str1 = _currentDirectory;
+            int startIndex1 = _currentDirectory.IndexOf(_rootFolder);
             if (startIndex1 != -1)
-                str1 = this._currentDirectory.Remove(startIndex1, this._rootFolder.Length);
-            string str2 = Path.GetFileName(this._rootFolder) + str1;
-            if (this.isModPath)
-                str2 = this._currentDirectory.Replace(DuckFile.modsDirectory, "").Replace(DuckFile.globalModsDirectory, "");
+                str1 = _currentDirectory.Remove(startIndex1, _rootFolder.Length);
+            string str2 = Path.GetFileName(_rootFolder) + str1;
+            if (isModPath)
+                str2 = _currentDirectory.Replace(DuckFile.modsDirectory, "").Replace(DuckFile.globalModsDirectory, "");
             if (str2 == "")
-                str2 = this._type != ContextFileType.Block ? (this._type != ContextFileType.Platform ? (this._type != ContextFileType.Background ? (this._type != ContextFileType.Parallax ? (this._type != ContextFileType.ArcadeStyle ? "LEVELS" : "Custom/Arcade") : "Custom/Parallax") : "Custom/Background") : "Custom/Platform") : "Custom/Blocks";
-            string str3 = !this._save ? (!this._selectLevels ? (this._type != ContextFileType.Block ? (this._type != ContextFileType.Platform ? (this._type != ContextFileType.Background ? (this._type != ContextFileType.Parallax ? (this._type != ContextFileType.ArcadeStyle ? "@LOADICON@Load Level" : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "Select Active Levels") : "@SAVEICON@Save Level";
+                str2 = _type != ContextFileType.Block ? (_type != ContextFileType.Platform ? (_type != ContextFileType.Background ? (_type != ContextFileType.Parallax ? (_type != ContextFileType.ArcadeStyle ? "LEVELS" : "Custom/Arcade") : "Custom/Parallax") : "Custom/Background") : "Custom/Platform") : "Custom/Blocks";
+            string str3 = !_save ? (!_selectLevels ? (_type != ContextFileType.Block ? (_type != ContextFileType.Platform ? (_type != ContextFileType.Background ? (_type != ContextFileType.Parallax ? (_type != ContextFileType.ArcadeStyle ? "@LOADICON@Load Level" : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "Select Active Levels") : "@SAVEICON@Save Level";
             string str4 = str2;
-            DuckGame.Graphics.DrawString(str3 + (str4 == "" ? "" : " - " + str4), p1_1 + new Vec2(5f, 7f), Color.White, this.depth + 8);
+            DuckGame.Graphics.DrawString(str3 + (str4 == "" ? "" : " - " + str4), p1_1 + new Vec2(5f, 7f), Color.White, depth + 8);
             Vec2 p1_4 = new Vec2(p2_1.x + 2f, p1_1.y);
             Vec2 p2_4 = p1_4 + new Vec2(164f, 120f);
-            if (this._previewSprite != null && this._previewSprite.texture != null && (this._type == ContextFileType.Block || this._type == ContextFileType.Background || this._type == ContextFileType.Platform || this._type == ContextFileType.Parallax || this._type == ContextFileType.ArcadeStyle || this._type == ContextFileType.ArcadeAnimation))
-                p2_4 = this._type != ContextFileType.Parallax ? p1_4 + new Vec2(this._previewSprite.width + 4, this._previewSprite.height + 4) : p1_4 + new Vec2(this._previewSprite.width / 2 + 4, this._previewSprite.height / 2 + 4);
-            DuckGame.Graphics.DrawRect(p1_4, p2_4, new Color(70, 70, 70), this.depth, false);
-            DuckGame.Graphics.DrawRect(p1_4, p2_4, new Color(30, 30, 30), this.depth - 8);
-            if (this._previewSprite == null || this._previewSprite.texture == null)
+            if (_previewSprite != null && _previewSprite.texture != null && (_type == ContextFileType.Block || _type == ContextFileType.Background || _type == ContextFileType.Platform || _type == ContextFileType.Parallax || _type == ContextFileType.ArcadeStyle || _type == ContextFileType.ArcadeAnimation))
+                p2_4 = _type != ContextFileType.Parallax ? p1_4 + new Vec2(_previewSprite.width + 4, _previewSprite.height + 4) : p1_4 + new Vec2(_previewSprite.width / 2 + 4, _previewSprite.height / 2 + 4);
+            DuckGame.Graphics.DrawRect(p1_4, p2_4, new Color(70, 70, 70), depth, false);
+            DuckGame.Graphics.DrawRect(p1_4, p2_4, new Color(30, 30, 30), depth - 8);
+            if (_previewSprite == null || _previewSprite.texture == null)
                 return;
-            this._previewSprite.depth = (Depth)0.95f;
-            this._previewSprite.scale = new Vec2(0.5f);
-            if (this._type == ContextFileType.Block || this._type == ContextFileType.Background || this._type == ContextFileType.Platform)
-                this._previewSprite.scale = new Vec2(1f);
-            DuckGame.Graphics.Draw(this._previewSprite, p1_4.x + 2f, p1_4.y + 2f);
-            if (this._previewPair == null)
+            _previewSprite.depth = (Depth)0.95f;
+            _previewSprite.scale = new Vec2(0.5f);
+            if (_type == ContextFileType.Block || _type == ContextFileType.Background || _type == ContextFileType.Platform)
+                _previewSprite.scale = new Vec2(1f);
+            DuckGame.Graphics.Draw(_previewSprite, p1_4.x + 2f, p1_4.y + 2f);
+            if (_previewPair == null)
                 return;
-            string str5 = this._previewName;
+            string str5 = _previewName;
             int startIndex2 = str5.LastIndexOf("/");
             if (startIndex2 != -1)
                 str5 = str5.Substring(startIndex2, str5.Length - startIndex2);
@@ -751,45 +751,45 @@ namespace DuckGame
             {
                 string str6 = str5.Substring(0, 18) + ".";
             }
-            this._fancyFont.maxWidth = 160;
+            _fancyFont.maxWidth = 160;
             string str7 = "";
-            if (this._previewPair.strange)
+            if (_previewPair.strange)
             {
-                DuckGame.Graphics.DrawString(str7 + "STRANGE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGPurple, this.depth + 8);
+                DuckGame.Graphics.DrawString(str7 + "STRANGE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGPurple, depth + 8);
                 Vec2 p1_5 = p1_4 + new Vec2(0f, 122f);
                 Vec2 p2_5 = p1_5 + new Vec2(166f, 36f);
-                DuckGame.Graphics.DrawRect(p1_5, p2_5, new Color(70, 70, 70), this.depth, false);
-                DuckGame.Graphics.DrawRect(p1_5, p2_5, new Color(30, 30, 30), this.depth - 8);
-                this._fancyFont.Draw("Must place at least one Duck Spawn Point to make a valid level.", p1_5.x + 4f, p1_5.y + 4f, Color.White, this.depth + 8);
+                DuckGame.Graphics.DrawRect(p1_5, p2_5, new Color(70, 70, 70), depth, false);
+                DuckGame.Graphics.DrawRect(p1_5, p2_5, new Color(30, 30, 30), depth - 8);
+                _fancyFont.Draw("Must place at least one Duck Spawn Point to make a valid level.", p1_5.x + 4f, p1_5.y + 4f, Color.White, depth + 8);
             }
-            else if (this._previewPair.arcade)
-                DuckGame.Graphics.DrawString(str7 + "ARCADE LAYOUT", p1_4 + new Vec2(5f, 107f), Colors.DGYellow, this.depth + 8);
-            else if (this._previewPair.challenge)
-                DuckGame.Graphics.DrawString(str7 + "CHALLENGE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGRed, this.depth + 8);
-            else if (this._previewPair.invalid == null || this._previewPair.invalid.Count == 0)
+            else if (_previewPair.arcade)
+                DuckGame.Graphics.DrawString(str7 + "ARCADE LAYOUT", p1_4 + new Vec2(5f, 107f), Colors.DGYellow, depth + 8);
+            else if (_previewPair.challenge)
+                DuckGame.Graphics.DrawString(str7 + "CHALLENGE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGRed, depth + 8);
+            else if (_previewPair.invalid == null || _previewPair.invalid.Count == 0)
             {
-                DuckGame.Graphics.DrawString(str7 + "ONLINE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGGreen, this.depth + 8);
+                DuckGame.Graphics.DrawString(str7 + "ONLINE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGGreen, depth + 8);
             }
             else
             {
-                DuckGame.Graphics.DrawString(str7 + "LOCAL LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGBlue, this.depth + 8);
+                DuckGame.Graphics.DrawString(str7 + "LOCAL LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGBlue, depth + 8);
                 Vec2 p1_6 = p1_4 + new Vec2(0f, 122f);
-                this._fancyFont.Draw("Contains the following Local-Only objects:", p1_6.x + 4f, p1_6.y + 4f, Color.White, this.depth + 8);
+                _fancyFont.Draw("Contains the following Local-Only objects:", p1_6.x + 4f, p1_6.y + 4f, Color.White, depth + 8);
                 int num3 = 22;
-                if (this._previewPair.invalid != null)
+                if (_previewPair.invalid != null)
                 {
-                    foreach (KeyValuePair<string, int> keyValuePair in this._previewPair.invalid)
+                    foreach (KeyValuePair<string, int> keyValuePair in _previewPair.invalid)
                     {
                         string text = "- " + keyValuePair.Key + (keyValuePair.Value > 1 ? " (x" + keyValuePair.Value.ToString() + ")" : "");
-                        this._fancyFont.Draw(text, p1_6.x + 4f, p1_6.y + 4f + num3, Color.White, this.depth + 8);
-                        if (this._fancyFont.GetWidth(text) > 160.0)
+                        _fancyFont.Draw(text, p1_6.x + 4f, p1_6.y + 4f + num3, Color.White, depth + 8);
+                        if (_fancyFont.GetWidth(text) > 160.0)
                             num3 += 12;
                         num3 += 12;
                     }
                 }
                 Vec2 p2_6 = p1_6 + new Vec2(166f, 6 + num3);
-                DuckGame.Graphics.DrawRect(p1_6, p2_6, new Color(70, 70, 70), this.depth, false);
-                DuckGame.Graphics.DrawRect(p1_6, p2_6, new Color(30, 30, 30), this.depth - 8);
+                DuckGame.Graphics.DrawRect(p1_6, p2_6, new Color(70, 70, 70), depth, false);
+                DuckGame.Graphics.DrawRect(p1_6, p2_6, new Color(30, 30, 30), depth - 8);
             }
         }
     }

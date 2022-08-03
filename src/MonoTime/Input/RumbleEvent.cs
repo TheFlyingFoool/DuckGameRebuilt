@@ -30,62 +30,62 @@ namespace DuckGame
             switch (intensityToSet)
             {
                 case RumbleIntensity.None:
-                    this.intensityInitial = 0f;
+                    intensityInitial = 0f;
                     break;
                 case RumbleIntensity.Kick:
-                    this.intensityInitial = 0.15f;
+                    intensityInitial = 0.15f;
                     break;
                 case RumbleIntensity.Light:
-                    this.intensityInitial = 0.25f;
+                    intensityInitial = 0.25f;
                     break;
                 case RumbleIntensity.Medium:
-                    this.intensityInitial = 0.5f;
+                    intensityInitial = 0.5f;
                     break;
                 case RumbleIntensity.Heavy:
-                    this.intensityInitial = 0.8f;
+                    intensityInitial = 0.8f;
                     break;
                 default:
-                    this.intensityInitial = 0.25f;
+                    intensityInitial = 0.25f;
                     break;
             }
-            this.intensityCurrent = this.intensityInitial;
+            intensityCurrent = intensityInitial;
             switch (durationToSet)
             {
                 case RumbleDuration.Pulse:
-                    this.timeDuration = 0.075f;
+                    timeDuration = 0.075f;
                     break;
                 case RumbleDuration.Short:
-                    this.timeDuration = 0.15f;
+                    timeDuration = 0.15f;
                     break;
                 case RumbleDuration.Medium:
-                    this.timeDuration = 0.5f;
+                    timeDuration = 0.5f;
                     break;
                 case RumbleDuration.Long:
-                    this.timeDuration = 1f;
+                    timeDuration = 1f;
                     break;
                 default:
-                    this.timeDuration = 0.1f;
+                    timeDuration = 0.1f;
                     break;
             }
             switch (falloffToSet)
             {
                 case RumbleFalloff.None:
-                    this.timeFalloff = 0f;
+                    timeFalloff = 0f;
                     break;
                 case RumbleFalloff.Short:
-                    this.timeFalloff = 0.1f;
+                    timeFalloff = 0.1f;
                     break;
                 case RumbleFalloff.Medium:
-                    this.timeFalloff = 0.25f;
+                    timeFalloff = 0.25f;
                     break;
                 case RumbleFalloff.Long:
-                    this.timeFalloff = 0.5f;
+                    timeFalloff = 0.5f;
                     break;
                 default:
-                    this.timeFalloff = 0.1f;
+                    timeFalloff = 0.1f;
                     break;
             }
-            this.type = rumbleTypeToSet;
+            type = rumbleTypeToSet;
         }
 
         /// <summary>Create a RumbleEvent using only enum definitions</summary>
@@ -95,7 +95,7 @@ namespace DuckGame
           RumbleFalloff falloffToSet,
           RumbleType rumbleTypeToSet = RumbleType.Gameplay)
         {
-            this.SetRumbleParameters(intensityToSet, durationToSet, falloffToSet, rumbleTypeToSet);
+            SetRumbleParameters(intensityToSet, durationToSet, falloffToSet, rumbleTypeToSet);
         }
 
         /// <summary>
@@ -107,17 +107,17 @@ namespace DuckGame
           float falloffToSet,
           RumbleType rumbleTypeToSet = RumbleType.Gameplay)
         {
-            this.intensityInitial = intensityToSet;
-            this.intensityCurrent = this.intensityInitial;
-            this.timeDuration = durationToSet;
-            this.timeFalloff = falloffToSet;
-            this.type = rumbleTypeToSet;
+            intensityInitial = intensityToSet;
+            intensityCurrent = intensityInitial;
+            timeDuration = durationToSet;
+            timeFalloff = falloffToSet;
+            type = rumbleTypeToSet;
         }
 
         /// <summary>
         /// Updates the intensity of a RumbleEvent based on the time remaining in the falloff portion of the full duration.
         /// </summary>
-        public void FallOffLinear() => this.intensityCurrent = (float)(1.0 - (timeElapsed - this.timeDuration) / timeFalloff) * this.intensityInitial;
+        public void FallOffLinear() => intensityCurrent = (float)(1.0 - (timeElapsed - timeDuration) / timeFalloff) * intensityInitial;
 
         /// <summary>
         /// Updates the elapsed time and updates the intensity for any falloff. Returns false if the rumble is completed and should be cleaned up by RumbleManager
@@ -125,11 +125,11 @@ namespace DuckGame
         /// <returns></returns>
         public bool Update()
         {
-            this.timeElapsed += 0.016f;
-            if (timeElapsed >= timeDuration + this.timeFalloff)
+            timeElapsed += 0.016f;
+            if (timeElapsed >= timeDuration + timeFalloff)
                 return false;
-            if (timeElapsed > this.timeDuration)
-                this.FallOffLinear();
+            if (timeElapsed > timeDuration)
+                FallOffLinear();
             return true;
         }
     }

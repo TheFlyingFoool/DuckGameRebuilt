@@ -21,56 +21,56 @@ namespace DuckGame
         public WeightBall(float xpos, float ypos, PhysicsObject d, ChokeCollar c, bool isMace)
           : base(xpos, ypos)
         {
-            this._attach = d;
+            _attach = d;
             if (isMace)
             {
-                this.graphic = new Sprite("maceBall");
-                this.center = new Vec2(9f, 9f);
-                this._collisionOffset = new Vec2(-8f, -8f);
-                this._collisionSize = new Vec2(14f, 14f);
-                this._impactThreshold = 4f;
-                this.canPickUp = false;
-                this.onlyCrush = true;
-                this._isMace = true;
+                graphic = new Sprite("maceBall");
+                center = new Vec2(9f, 9f);
+                _collisionOffset = new Vec2(-8f, -8f);
+                _collisionSize = new Vec2(14f, 14f);
+                _impactThreshold = 4f;
+                canPickUp = false;
+                onlyCrush = true;
+                _isMace = true;
             }
             else
             {
-                this.graphic = new Sprite("weightBall");
-                this.center = new Vec2(8f, 8f);
-                this._collisionOffset = new Vec2(-7f, -7f);
-                this._collisionSize = new Vec2(14f, 14f);
-                this._impactThreshold = 2f;
+                graphic = new Sprite("weightBall");
+                center = new Vec2(8f, 8f);
+                _collisionOffset = new Vec2(-7f, -7f);
+                _collisionSize = new Vec2(14f, 14f);
+                _impactThreshold = 2f;
             }
-            this.weight = 9f;
-            this.thickness = 6f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.collideSounds.Add("rockHitGround2");
-            this.collar = c;
-            this.tapeable = false;
+            weight = 9f;
+            thickness = 6f;
+            physicsMaterial = PhysicsMaterial.Metal;
+            collideSounds.Add("rockHitGround2");
+            collar = c;
+            tapeable = false;
         }
 
-        public void SetAttach(PhysicsObject a) => this._attach = a;
+        public void SetAttach(PhysicsObject a) => _attach = a;
 
         public override void Initialize()
         {
             for (int index = 0; index < 8; ++index)
             {
-                ChainLink chainLink = new ChainLink(this.x, this.y);
+                ChainLink chainLink = new ChainLink(x, y);
                 Level.Add(chainLink);
-                this._links.Add(chainLink);
+                _links.Add(chainLink);
             }
             base.Initialize();
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (with is Duck && this.collar != null && with != null)
+            if (with is Duck && collar != null && with != null)
             {
-                if (with == this.collar.owner || this.totalImpactPower <= 8.0)
+                if (with == collar.owner || totalImpactPower <= 8.0)
                     return;
-                if (this.collar.duck != null)
-                    RumbleManager.AddRumbleEvent(this.collar.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
-                if (!this._isMace)
+                if (collar.duck != null)
+                    RumbleManager.AddRumbleEvent(collar.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
+                if (!_isMace)
                     return;
                 with.Destroy(new DTCrush(this));
             }
@@ -80,15 +80,15 @@ namespace DuckGame
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this.collar != null && this.collar.duck != null && this.collar.duck.profile != null && this.totalImpactPower > 4.0)
-                RumbleManager.AddRumbleEvent(this.collar.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
+            if (collar != null && collar.duck != null && collar.duck.profile != null && totalImpactPower > 4.0)
+                RumbleManager.AddRumbleEvent(collar.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
             base.OnSolidImpact(with, from);
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            this.hSpeed += bullet.travelDirNormalized.x;
-            this.vSpeed += bullet.travelDirNormalized.y;
+            hSpeed += bullet.travelDirNormalized.x;
+            vSpeed += bullet.travelDirNormalized.y;
             SFX.Play("ricochetSmall", Rando.Float(0.6f, 0.7f), Rando.Float(-0.2f, 0.2f));
             return base.Hit(bullet, hitPos);
         }
@@ -140,42 +140,42 @@ namespace DuckGame
             thing2.hSpeed = vec2_4.x;
             thing2.vSpeed = vec2_4.y;
             if (thing1 is ChainLink && (thing2.position - thing1.position).length > num1 * 12.0)
-                thing1.position = this.position;
+                thing1.position = position;
             if (thing2 is ChainLink && (thing2.position - thing1.position).length > num1 * 12.0)
-                thing2.position = this.position;
+                thing2.position = position;
             return num8;
         }
 
         public override void Update()
         {
-            PhysicsObject physicsObject = this._attach;
-            if (this._attach is Duck)
+            PhysicsObject physicsObject = _attach;
+            if (_attach is Duck)
             {
-                Duck attach = this._attach as Duck;
+                Duck attach = _attach as Duck;
                 physicsObject = attach.ragdoll != null ? attach.ragdoll.part1 : attach;
             }
             if (physicsObject == null)
                 return;
-            double num1 = this.Solve(this, physicsObject, 30f);
+            double num1 = Solve(this, physicsObject, 30f);
             int num2 = 0;
             PhysicsObject b2 = this;
-            foreach (ChainLink link in this._links)
+            foreach (ChainLink link in _links)
             {
-                double num3 = this.Solve(link, b2, 2f);
+                double num3 = Solve(link, b2, 2f);
                 b2 = link;
-                link.depth = this._attach.depth - 8 - num2;
+                link.depth = _attach.depth - 8 - num2;
                 ++num2;
             }
-            double num4 = this.Solve(physicsObject, b2, 2f);
+            double num4 = Solve(physicsObject, b2, 2f);
             base.Update();
             if (_sparkWait > 0.0)
-                this._sparkWait -= 0.1f;
+                _sparkWait -= 0.1f;
             else
-                this._sparkWait = 0f;
-            if (_sparkWait != 0.0 || !this.grounded || Math.Abs(this.hSpeed) <= 1.0)
+                _sparkWait = 0f;
+            if (_sparkWait != 0.0 || !grounded || Math.Abs(hSpeed) <= 1.0)
                 return;
-            this._sparkWait = 0.25f;
-            Level.Add(Spark.New(this.x + (this.hSpeed > 0.0 ? -2f : 2f), this.y + 7f, new Vec2(0f, 0.5f)));
+            _sparkWait = 0.25f;
+            Level.Add(Spark.New(x + (hSpeed > 0.0 ? -2f : 2f), y + 7f, new Vec2(0f, 0.5f)));
         }
     }
 }

@@ -69,27 +69,27 @@ namespace DuckGame
 
         public MTSpriteBatcher(GraphicsDevice device, MTSpriteBatch batch)
         {
-            this._device = device;
-            this._batch = batch;
-            this._batchItemList = new List<MTSpriteBatchItem>(256);
-            this._freeBatchItemQueue = new Queue<MTSpriteBatchItem>(256);
-            this._simpleBatchItemList = new List<MTSimpleSpriteBatchItem>(256);
-            this._freeSimpleBatchItemQueue = new Queue<MTSimpleSpriteBatchItem>(256);
-            this._geometryBatch = new List<GeometryItem>(1);
-            this._freeGeometryBatch = new Queue<GeometryItem>(1);
-            this._geometryBatchTextured = new List<GeometryItemTexture>(1);
-            this._freeGeometryBatchTextured = new Queue<GeometryItemTexture>(1);
-            this.EnsureArrayCapacity(256);
-            this.EnsureSimpleArrayCapacity(256);
-            this.EnsureGeometryArrayCapacity(256);
-            this.EnsureTexturedGeometryArrayCapacity(256);
+            _device = device;
+            _batch = batch;
+            _batchItemList = new List<MTSpriteBatchItem>(256);
+            _freeBatchItemQueue = new Queue<MTSpriteBatchItem>(256);
+            _simpleBatchItemList = new List<MTSimpleSpriteBatchItem>(256);
+            _freeSimpleBatchItemQueue = new Queue<MTSimpleSpriteBatchItem>(256);
+            _geometryBatch = new List<GeometryItem>(1);
+            _freeGeometryBatch = new Queue<GeometryItem>(1);
+            _geometryBatchTextured = new List<GeometryItemTexture>(1);
+            _freeGeometryBatchTextured = new Queue<GeometryItemTexture>(1);
+            EnsureArrayCapacity(256);
+            EnsureSimpleArrayCapacity(256);
+            EnsureGeometryArrayCapacity(256);
+            EnsureTexturedGeometryArrayCapacity(256);
         }
 
-        public bool hasSimpleItems => this._simpleBatchItemList.Count != 0;
+        public bool hasSimpleItems => _simpleBatchItemList.Count != 0;
 
-        public bool hasGeometryItems => this._geometryBatch.Count != 0;
+        public bool hasGeometryItems => _geometryBatch.Count != 0;
 
-        public bool hasTexturedGeometryItems => this._geometryBatchTextured.Count != 0;
+        public bool hasTexturedGeometryItems => _geometryBatchTextured.Count != 0;
 
         /// <summary>
         /// Create an instance of MTSpriteBatchItem if there is none available in the free item queue. Otherwise,
@@ -98,24 +98,24 @@ namespace DuckGame
         /// <returns></returns>
         public MTSpriteBatchItem CreateBatchItem()
         {
-            MTSpriteBatchItem batchItem = this._freeBatchItemQueue.Count <= 0 ? new MTSpriteBatchItem() : this._freeBatchItemQueue.Dequeue();
-            this._batchItemList.Add(batchItem);
+            MTSpriteBatchItem batchItem = _freeBatchItemQueue.Count <= 0 ? new MTSpriteBatchItem() : _freeBatchItemQueue.Dequeue();
+            _batchItemList.Add(batchItem);
             return batchItem;
         }
 
         public MTSpriteBatchItem StealLastBatchItem()
         {
-            MTSpriteBatchItem batchItem = this._batchItemList[this._batchItemList.Count - 1];
+            MTSpriteBatchItem batchItem = _batchItemList[_batchItemList.Count - 1];
             batchItem.inPool = false;
             return batchItem;
         }
 
-        public void SqueezeInItem(MTSpriteBatchItem item) => this._batchItemList.Add(item);
+        public void SqueezeInItem(MTSpriteBatchItem item) => _batchItemList.Add(item);
 
         public MTSimpleSpriteBatchItem CreateSimpleBatchItem()
         {
-            MTSimpleSpriteBatchItem simpleBatchItem = this._freeSimpleBatchItemQueue.Count <= 0 ? new MTSimpleSpriteBatchItem() : this._freeSimpleBatchItemQueue.Dequeue();
-            this._simpleBatchItemList.Add(simpleBatchItem);
+            MTSimpleSpriteBatchItem simpleBatchItem = _freeSimpleBatchItemQueue.Count <= 0 ? new MTSimpleSpriteBatchItem() : _freeSimpleBatchItemQueue.Dequeue();
+            _simpleBatchItemList.Add(simpleBatchItem);
             return simpleBatchItem;
         }
 
@@ -127,9 +127,9 @@ namespace DuckGame
         public GeometryItem GetGeometryItem()
         {
             GeometryItem geometryItem;
-            if (this._freeGeometryBatch.Count > 0)
+            if (_freeGeometryBatch.Count > 0)
             {
-                geometryItem = this._freeGeometryBatch.Dequeue();
+                geometryItem = _freeGeometryBatch.Dequeue();
                 geometryItem.material = null;
             }
             else
@@ -143,9 +143,9 @@ namespace DuckGame
 
         public void SubmitGeometryItem(GeometryItem item)
         {
-            if (this._geometryBatch.Contains(item))
+            if (_geometryBatch.Contains(item))
                 return;
-            this._geometryBatch.Add(item);
+            _geometryBatch.Add(item);
         }
 
         public static GeometryItemTexture CreateTexturedGeometryItem() => new GeometryItemTexture()
@@ -156,8 +156,8 @@ namespace DuckGame
         public GeometryItemTexture GetTexturedGeometryItem()
         {
             GeometryItemTexture texturedGeometryItem;
-            if (this._freeGeometryBatch.Count > 0)
-                texturedGeometryItem = this._freeGeometryBatchTextured.Dequeue();
+            if (_freeGeometryBatch.Count > 0)
+                texturedGeometryItem = _freeGeometryBatchTextured.Dequeue();
             else
                 texturedGeometryItem = new GeometryItemTexture()
                 {
@@ -169,9 +169,9 @@ namespace DuckGame
 
         public void SubmitTexturedGeometryItem(GeometryItemTexture item)
         {
-            if (this._geometryBatchTextured.Contains(item))
+            if (_geometryBatchTextured.Contains(item))
                 return;
-            this._geometryBatchTextured.Add(item);
+            _geometryBatchTextured.Add(item);
         }
 
         /// <summary>
@@ -181,14 +181,14 @@ namespace DuckGame
         private void EnsureArrayCapacity(int numBatchItems)
         {
             int num1 = 6 * numBatchItems;
-            if (this._index != null && num1 <= this._index.Length)
+            if (_index != null && num1 <= _index.Length)
                 return;
             short[] numArray = new short[6 * numBatchItems];
             int num2 = 0;
-            if (this._index != null)
+            if (_index != null)
             {
-                this._index.CopyTo(numArray, 0);
-                num2 = this._index.Length / 6;
+                _index.CopyTo(numArray, 0);
+                num2 = _index.Length / 6;
             }
             for (int index = num2; index < numBatchItems; ++index)
             {
@@ -199,21 +199,21 @@ namespace DuckGame
                 numArray[index * 6 + 4] = (short)(index * 4 + 3);
                 numArray[index * 6 + 5] = (short)(index * 4 + 2);
             }
-            this._index = numArray;
-            this._vertexArray = new VertexPositionColorTexture[4 * numBatchItems];
+            _index = numArray;
+            _vertexArray = new VertexPositionColorTexture[4 * numBatchItems];
         }
 
         private void EnsureSimpleArrayCapacity(int numBatchItems)
         {
             int num1 = 6 * numBatchItems;
-            if (this._simpleIndex != null && num1 <= this._simpleIndex.Length)
+            if (_simpleIndex != null && num1 <= _simpleIndex.Length)
                 return;
             short[] numArray = new short[6 * numBatchItems];
             int num2 = 0;
-            if (this._simpleIndex != null)
+            if (_simpleIndex != null)
             {
-                this._simpleIndex.CopyTo(numArray, 0);
-                num2 = this._simpleIndex.Length / 6;
+                _simpleIndex.CopyTo(numArray, 0);
+                num2 = _simpleIndex.Length / 6;
             }
             for (int index = num2; index < numBatchItems; ++index)
             {
@@ -224,21 +224,21 @@ namespace DuckGame
                 numArray[index * 6 + 4] = (short)(index * 4 + 3);
                 numArray[index * 6 + 5] = (short)(index * 4 + 2);
             }
-            this._simpleIndex = numArray;
-            this._simpleVertexArray = new VertexPositionColor[4 * numBatchItems];
+            _simpleIndex = numArray;
+            _simpleVertexArray = new VertexPositionColor[4 * numBatchItems];
         }
 
         private void EnsureGeometryArrayCapacity(int numTris)
         {
             int num1 = 3 * numTris;
-            if (this._geometryIndex != null && num1 <= this._geometryIndex.Length)
+            if (_geometryIndex != null && num1 <= _geometryIndex.Length)
                 return;
             short[] numArray = new short[3 * numTris];
             int num2 = 0;
-            if (this._geometryIndex != null)
+            if (_geometryIndex != null)
             {
-                this._geometryIndex.CopyTo(numArray, 0);
-                num2 = this._geometryIndex.Length / 3;
+                _geometryIndex.CopyTo(numArray, 0);
+                num2 = _geometryIndex.Length / 3;
             }
             for (int index = num2; index < numTris; ++index)
             {
@@ -246,21 +246,21 @@ namespace DuckGame
                 numArray[index * 3 + 1] = (short)(index * 3 + 1);
                 numArray[index * 3 + 2] = (short)(index * 3 + 2);
             }
-            this._geometryIndex = numArray;
-            this._geometryVertexArray = new VertexPositionColor[4 * numTris];
+            _geometryIndex = numArray;
+            _geometryVertexArray = new VertexPositionColor[4 * numTris];
         }
 
         private void EnsureTexturedGeometryArrayCapacity(int numTris)
         {
             int num1 = 3 * numTris;
-            if (this._texturedGeometryIndex != null && num1 <= this._texturedGeometryIndex.Length)
+            if (_texturedGeometryIndex != null && num1 <= _texturedGeometryIndex.Length)
                 return;
             short[] numArray = new short[3 * numTris];
             int num2 = 0;
-            if (this._texturedGeometryIndex != null)
+            if (_texturedGeometryIndex != null)
             {
-                this._texturedGeometryIndex.CopyTo(numArray, 0);
-                num2 = this._texturedGeometryIndex.Length / 3;
+                _texturedGeometryIndex.CopyTo(numArray, 0);
+                num2 = _texturedGeometryIndex.Length / 3;
             }
             for (int index = num2; index < numTris; ++index)
             {
@@ -268,8 +268,8 @@ namespace DuckGame
                 numArray[index * 3 + 1] = (short)(index * 3 + 1);
                 numArray[index * 3 + 2] = (short)(index * 3 + 2);
             }
-            this._texturedGeometryIndex = numArray;
-            this._geometryVertexArrayTextured = new VertexPositionColorTexture[4 * numTris];
+            _texturedGeometryIndex = numArray;
+            _geometryVertexArrayTextured = new VertexPositionColorTexture[4 * numTris];
         }
 
         /// <summary>
@@ -331,23 +331,23 @@ namespace DuckGame
         /// <param name="sortMode">The type of depth sorting desired for the rendering.</param>
         public void DrawBatch(SpriteSortMode sortMode)
         {
-            if (this._batchItemList.Count == 0)
+            if (_batchItemList.Count == 0)
                 return;
             switch (sortMode)
             {
                 case SpriteSortMode.Texture:
-                    DGList.Sort<MTSpriteBatchItem>(this._batchItemList, this.CompareTexture);
+                    DGList.Sort<MTSpriteBatchItem>(_batchItemList, CompareTexture);
                     break;
                 case SpriteSortMode.BackToFront:
-                    DGList.Sort<MTSpriteBatchItem>(this._batchItemList, MTSpriteBatcher.CompareReverseDepth);
+                    DGList.Sort<MTSpriteBatchItem>(_batchItemList, MTSpriteBatcher.CompareReverseDepth);
                     break;
                 case SpriteSortMode.FrontToBack:
-                    DGList.Sort<MTSpriteBatchItem>(this._batchItemList, MTSpriteBatcher.CompareDepth);
+                    DGList.Sort<MTSpriteBatchItem>(_batchItemList, MTSpriteBatcher.CompareDepth);
                     break;
             }
             int index1 = 0;
             int numBatchItems;
-            for (int count = this._batchItemList.Count; count > 0; count -= numBatchItems)
+            for (int count = _batchItemList.Count; count > 0; count -= numBatchItems)
             {
                 int start = 0;
                 int end = 0;
@@ -356,42 +356,42 @@ namespace DuckGame
                 numBatchItems = count;
                 if (numBatchItems > 5461)
                     numBatchItems = 5461;
-                this.EnsureArrayCapacity(numBatchItems);
+                EnsureArrayCapacity(numBatchItems);
                 int num1 = 0;
                 while (num1 < numBatchItems)
                 {
-                    MTSpriteBatchItem batchItem = this._batchItemList[index1];
+                    MTSpriteBatchItem batchItem = _batchItemList[index1];
                     if ((batchItem.Texture != texture2D ? 1 : (batchItem.Material != material ? 1 : 0)) != 0)
                     {
-                        this.FlushVertexArray(start, end);
+                        FlushVertexArray(start, end);
                         if (material != null && batchItem.Material == null)
-                            this._batch.Setup();
-                        material = this._batch.transitionEffect ? null : batchItem.Material;
+                            _batch.Setup();
+                        material = _batch.transitionEffect ? null : batchItem.Material;
                         texture2D = batchItem.Texture;
                         start = end = 0;
-                        this._device.Textures[0] = texture2D;
+                        _device.Textures[0] = texture2D;
                         if (material != null)
                         {
-                            material.SetValue("MatrixTransform", this._batch.fullMatrix);
+                            material.SetValue("MatrixTransform", _batch.fullMatrix);
                             material.Apply();
                         }
                     }
-                    VertexPositionColorTexture[] vertexArray1 = this._vertexArray;
+                    VertexPositionColorTexture[] vertexArray1 = _vertexArray;
                     int index2 = end;
                     int num2 = index2 + 1;
                     VertexPositionColorTexture vertexTl = batchItem.vertexTL;
                     vertexArray1[index2] = vertexTl;
-                    VertexPositionColorTexture[] vertexArray2 = this._vertexArray;
+                    VertexPositionColorTexture[] vertexArray2 = _vertexArray;
                     int index3 = num2;
                     int num3 = index3 + 1;
                     VertexPositionColorTexture vertexTr = batchItem.vertexTR;
                     vertexArray2[index3] = vertexTr;
-                    VertexPositionColorTexture[] vertexArray3 = this._vertexArray;
+                    VertexPositionColorTexture[] vertexArray3 = _vertexArray;
                     int index4 = num3;
                     int num4 = index4 + 1;
                     VertexPositionColorTexture vertexBl = batchItem.vertexBL;
                     vertexArray3[index4] = vertexBl;
-                    VertexPositionColorTexture[] vertexArray4 = this._vertexArray;
+                    VertexPositionColorTexture[] vertexArray4 = _vertexArray;
                     int index5 = num4;
                     end = index5 + 1;
                     VertexPositionColorTexture vertexBr = batchItem.vertexBR;
@@ -400,168 +400,168 @@ namespace DuckGame
                     {
                         batchItem.Texture = null;
                         batchItem.Material = null;
-                        this._freeBatchItemQueue.Enqueue(batchItem);
+                        _freeBatchItemQueue.Enqueue(batchItem);
                     }
                     ++num1;
                     ++index1;
                 }
-                this.FlushVertexArray(start, end);
+                FlushVertexArray(start, end);
             }
-            this._batchItemList.Clear();
+            _batchItemList.Clear();
         }
 
         public void DrawSimpleBatch(SpriteSortMode sortMode)
         {
-            if (this._simpleBatchItemList.Count == 0)
+            if (_simpleBatchItemList.Count == 0)
                 return;
             switch (sortMode)
             {
                 case SpriteSortMode.BackToFront:
-                    DGList.Sort<MTSimpleSpriteBatchItem>(this._simpleBatchItemList, MTSpriteBatcher.CompareSimpleReverseDepth);
+                    DGList.Sort<MTSimpleSpriteBatchItem>(_simpleBatchItemList, MTSpriteBatcher.CompareSimpleReverseDepth);
                     break;
                 case SpriteSortMode.FrontToBack:
-                    DGList.Sort<MTSimpleSpriteBatchItem>(this._simpleBatchItemList, MTSpriteBatcher.CompareSimpleDepth);
+                    DGList.Sort<MTSimpleSpriteBatchItem>(_simpleBatchItemList, MTSpriteBatcher.CompareSimpleDepth);
                     break;
             }
             int index1 = 0;
             int numBatchItems;
-            for (int count = this._simpleBatchItemList.Count; count > 0; count -= numBatchItems)
+            for (int count = _simpleBatchItemList.Count; count > 0; count -= numBatchItems)
             {
                 int start = 0;
                 int end = 0;
                 numBatchItems = count;
                 if (numBatchItems > 5461)
                     numBatchItems = 5461;
-                this.EnsureSimpleArrayCapacity(numBatchItems);
+                EnsureSimpleArrayCapacity(numBatchItems);
                 int num1 = 0;
                 while (num1 < numBatchItems)
                 {
-                    MTSimpleSpriteBatchItem simpleBatchItem = this._simpleBatchItemList[index1];
-                    VertexPositionColor[] simpleVertexArray1 = this._simpleVertexArray;
+                    MTSimpleSpriteBatchItem simpleBatchItem = _simpleBatchItemList[index1];
+                    VertexPositionColor[] simpleVertexArray1 = _simpleVertexArray;
                     int index2 = end;
                     int num2 = index2 + 1;
                     VertexPositionColor vertexTl = simpleBatchItem.vertexTL;
                     simpleVertexArray1[index2] = vertexTl;
-                    VertexPositionColor[] simpleVertexArray2 = this._simpleVertexArray;
+                    VertexPositionColor[] simpleVertexArray2 = _simpleVertexArray;
                     int index3 = num2;
                     int num3 = index3 + 1;
                     VertexPositionColor vertexTr = simpleBatchItem.vertexTR;
                     simpleVertexArray2[index3] = vertexTr;
-                    VertexPositionColor[] simpleVertexArray3 = this._simpleVertexArray;
+                    VertexPositionColor[] simpleVertexArray3 = _simpleVertexArray;
                     int index4 = num3;
                     int num4 = index4 + 1;
                     VertexPositionColor vertexBl = simpleBatchItem.vertexBL;
                     simpleVertexArray3[index4] = vertexBl;
-                    VertexPositionColor[] simpleVertexArray4 = this._simpleVertexArray;
+                    VertexPositionColor[] simpleVertexArray4 = _simpleVertexArray;
                     int index5 = num4;
                     end = index5 + 1;
                     VertexPositionColor vertexBr = simpleBatchItem.vertexBR;
                     simpleVertexArray4[index5] = vertexBr;
-                    this._freeSimpleBatchItemQueue.Enqueue(simpleBatchItem);
+                    _freeSimpleBatchItemQueue.Enqueue(simpleBatchItem);
                     ++num1;
                     ++index1;
                 }
-                this.FlushSimpleVertexArray(start, end);
+                FlushSimpleVertexArray(start, end);
             }
-            this._simpleBatchItemList.Clear();
+            _simpleBatchItemList.Clear();
         }
 
         public void DrawGeometryBatch(SpriteSortMode sortMode)
         {
-            if (this._geometryBatch.Count == 0)
+            if (_geometryBatch.Count == 0)
                 return;
             switch (sortMode)
             {
                 case SpriteSortMode.BackToFront:
-                    DGList.Sort<GeometryItem>(this._geometryBatch, MTSpriteBatcher.CompareGeometryReverseDepth);
+                    DGList.Sort<GeometryItem>(_geometryBatch, MTSpriteBatcher.CompareGeometryReverseDepth);
                     break;
                 case SpriteSortMode.FrontToBack:
-                    DGList.Sort<GeometryItem>(this._geometryBatch, MTSpriteBatcher.CompareGeometryDepth);
+                    DGList.Sort<GeometryItem>(_geometryBatch, MTSpriteBatcher.CompareGeometryDepth);
                     break;
             }
             int num = 0;
-            foreach (GeometryItem geometryItem in this._geometryBatch)
+            foreach (GeometryItem geometryItem in _geometryBatch)
                 num += geometryItem.length;
-            this.EnsureGeometryArrayCapacity((num + 1) / 3);
+            EnsureGeometryArrayCapacity((num + 1) / 3);
             Material material = null;
             int start = 0;
             int end = 0;
-            foreach (GeometryItem geometryItem in this._geometryBatch)
+            foreach (GeometryItem geometryItem in _geometryBatch)
             {
                 if (geometryItem.material != material)
                 {
-                    this.FlushGeometryVertexArray(start, end);
+                    FlushGeometryVertexArray(start, end);
                     if (material != null && geometryItem.material == null)
-                        this._batch.ReapplyEffect(true);
+                        _batch.ReapplyEffect(true);
                     material = geometryItem.material;
                     material?.Apply();
                 }
                 for (int index = 0; index < geometryItem.length; index += 3)
                 {
-                    this._geometryVertexArray[end++] = geometryItem.vertices[index];
-                    this._geometryVertexArray[end++] = geometryItem.vertices[index + 1];
-                    this._geometryVertexArray[end++] = geometryItem.vertices[index + 2];
+                    _geometryVertexArray[end++] = geometryItem.vertices[index];
+                    _geometryVertexArray[end++] = geometryItem.vertices[index + 1];
+                    _geometryVertexArray[end++] = geometryItem.vertices[index + 2];
                 }
                 if (geometryItem.temporary)
-                    this._freeGeometryBatch.Enqueue(geometryItem);
+                    _freeGeometryBatch.Enqueue(geometryItem);
             }
-            this.FlushGeometryVertexArray(start, end);
-            this._geometryBatch.Clear();
+            FlushGeometryVertexArray(start, end);
+            _geometryBatch.Clear();
         }
 
         public void DrawTexturedGeometryBatch(SpriteSortMode sortMode)
         {
-            if (this._geometryBatchTextured.Count == 0)
+            if (_geometryBatchTextured.Count == 0)
                 return;
             switch (sortMode)
             {
                 case SpriteSortMode.BackToFront:
-                    DGList.Sort<GeometryItemTexture>(this._geometryBatchTextured, MTSpriteBatcher.CompareTexturedGeometryReverseDepth);
+                    DGList.Sort<GeometryItemTexture>(_geometryBatchTextured, MTSpriteBatcher.CompareTexturedGeometryReverseDepth);
                     break;
                 case SpriteSortMode.FrontToBack:
-                    DGList.Sort<GeometryItemTexture>(this._geometryBatchTextured, MTSpriteBatcher.CompareTexturedGeometryDepth);
+                    DGList.Sort<GeometryItemTexture>(_geometryBatchTextured, MTSpriteBatcher.CompareTexturedGeometryDepth);
                     break;
             }
             int num1 = 0;
-            foreach (GeometryItemTexture geometryItemTexture in this._geometryBatchTextured)
+            foreach (GeometryItemTexture geometryItemTexture in _geometryBatchTextured)
                 num1 += geometryItemTexture.length;
-            this.EnsureTexturedGeometryArrayCapacity((num1 + 1) / 3);
+            EnsureTexturedGeometryArrayCapacity((num1 + 1) / 3);
             Texture2D texture2D = null;
             int start = 0;
             int end = 0;
-            foreach (GeometryItemTexture geometryItemTexture in this._geometryBatchTextured)
+            foreach (GeometryItemTexture geometryItemTexture in _geometryBatchTextured)
             {
                 if (geometryItemTexture.texture != texture2D)
                 {
-                    this.FlushTexturedGeometryVertexArray(start, end);
+                    FlushTexturedGeometryVertexArray(start, end);
                     texture2D = geometryItemTexture.texture;
                     start = end = 0;
-                    this._device.Textures[0] = texture2D;
+                    _device.Textures[0] = texture2D;
                 }
                 for (int index1 = 0; index1 < geometryItemTexture.length; index1 += 3)
                 {
-                    VertexPositionColorTexture[] vertexArrayTextured1 = this._geometryVertexArrayTextured;
+                    VertexPositionColorTexture[] vertexArrayTextured1 = _geometryVertexArrayTextured;
                     int index2 = end;
                     int num2 = index2 + 1;
                     VertexPositionColorTexture vertex1 = geometryItemTexture.vertices[index1];
                     vertexArrayTextured1[index2] = vertex1;
-                    VertexPositionColorTexture[] vertexArrayTextured2 = this._geometryVertexArrayTextured;
+                    VertexPositionColorTexture[] vertexArrayTextured2 = _geometryVertexArrayTextured;
                     int index3 = num2;
                     int num3 = index3 + 1;
                     VertexPositionColorTexture vertex2 = geometryItemTexture.vertices[index1 + 1];
                     vertexArrayTextured2[index3] = vertex2;
-                    VertexPositionColorTexture[] vertexArrayTextured3 = this._geometryVertexArrayTextured;
+                    VertexPositionColorTexture[] vertexArrayTextured3 = _geometryVertexArrayTextured;
                     int index4 = num3;
                     end = index4 + 1;
                     VertexPositionColorTexture vertex3 = geometryItemTexture.vertices[index1 + 2];
                     vertexArrayTextured3[index4] = vertex3;
                 }
                 if (geometryItemTexture.temporary)
-                    this._freeGeometryBatchTextured.Enqueue(geometryItemTexture);
+                    _freeGeometryBatchTextured.Enqueue(geometryItemTexture);
                 geometryItemTexture.texture = null;
-                this.FlushTexturedGeometryVertexArray(start, end);
+                FlushTexturedGeometryVertexArray(start, end);
             }
-            this._geometryBatchTextured.Clear();
+            _geometryBatchTextured.Clear();
         }
 
         /// <summary>
@@ -574,7 +574,7 @@ namespace DuckGame
             if (start == end)
                 return;
             int numVertices = end - start;
-            this._device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleList, this._vertexArray, 0, numVertices, this._index, 0, numVertices / 4 * 2, VertexPositionColorTexture.VertexDeclaration);
+            _device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleList, _vertexArray, 0, numVertices, _index, 0, numVertices / 4 * 2, VertexPositionColorTexture.VertexDeclaration);
         }
 
         private void FlushSimpleVertexArray(int start, int end)
@@ -582,7 +582,7 @@ namespace DuckGame
             if (start == end)
                 return;
             int numVertices = end - start;
-            this._device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, this._simpleVertexArray, 0, numVertices, this._simpleIndex, 0, numVertices / 4 * 2, VertexPositionColor.VertexDeclaration);
+            _device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, _simpleVertexArray, 0, numVertices, _simpleIndex, 0, numVertices / 4 * 2, VertexPositionColor.VertexDeclaration);
         }
 
         private void FlushGeometryVertexArray(int start, int end)
@@ -590,7 +590,7 @@ namespace DuckGame
             if (start == end)
                 return;
             int numVertices = end - start;
-            this._device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, this._geometryVertexArray, 0, numVertices, this._geometryIndex, 0, numVertices / 3, VertexPositionColor.VertexDeclaration);
+            _device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, _geometryVertexArray, 0, numVertices, _geometryIndex, 0, numVertices / 3, VertexPositionColor.VertexDeclaration);
         }
 
         private void FlushTexturedGeometryVertexArray(int start, int end)
@@ -598,7 +598,7 @@ namespace DuckGame
             if (start == end)
                 return;
             int numVertices = end - start;
-            this._device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleList, this._geometryVertexArrayTextured, 0, numVertices, this._texturedGeometryIndex, 0, numVertices / 3, VertexPositionColorTexture.VertexDeclaration);
+            _device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleList, _geometryVertexArrayTextured, 0, numVertices, _texturedGeometryIndex, 0, numVertices / 3, VertexPositionColorTexture.VertexDeclaration);
         }
     }
 }

@@ -351,18 +351,18 @@ namespace DuckGame
         public Vec2 spriteScale = new Vec2(1f, 1f);
         public Color colorOverride;
 
-        public float height => _texture.height * this.scale.y;
+        public float height => _texture.height * scale.y;
 
         public InputProfile inputProfile
         {
-            get => this._inputProfile;
-            set => this._inputProfile = value;
+            get => _inputProfile;
+            set => _inputProfile = value;
         }
 
         public int maxWidth
         {
-            get => this._maxWidth;
-            set => this._maxWidth = value;
+            get => _maxWidth;
+            set => _maxWidth = value;
         }
 
         public BitmapFont(string image, int size, int ysize = -1)
@@ -370,8 +370,8 @@ namespace DuckGame
             FancyBitmapFont.InitializeKanjis();
             if (ysize < 0)
                 ysize = size;
-            this._texture = new SpriteMap(image, size, ysize);
-            this._tileSize = size;
+            _texture = new SpriteMap(image, size, ysize);
+            _tileSize = size;
             if (!BitmapFont._mapInitialized)
             {
                 for (int index1 = 0; index1 < ushort.MaxValue; ++index1)
@@ -389,17 +389,17 @@ namespace DuckGame
                 }
                 BitmapFont._mapInitialized = true;
             }
-            this._titleWing = new Sprite("arcade/titleWing");
+            _titleWing = new Sprite("arcade/titleWing");
         }
 
         public Sprite ParseSprite(string text, InputProfile input)
         {
-            if (!this.allowBigSprites && text.StartsWith("_!"))
+            if (!allowBigSprites && text.StartsWith("_!"))
                 return null;
-            ++this._letterIndex;
+            ++_letterIndex;
             string str = "";
-            for (; this._letterIndex != text.Length && text[this._letterIndex] != ' ' && text[this._letterIndex] != '@'; ++this._letterIndex)
-                str += text[this._letterIndex].ToString();
+            for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != '@'; ++_letterIndex)
+                str += text[_letterIndex].ToString();
             Sprite sprite = null;
             if (input != null)
             {
@@ -414,17 +414,17 @@ namespace DuckGame
 
         public Color ParseColor(string text)
         {
-            ++this._letterIndex;
+            ++_letterIndex;
             string color = "";
-            for (; this._letterIndex != text.Length && text[this._letterIndex] != ' ' && text[this._letterIndex] != '|'; ++this._letterIndex)
-                color += text[this._letterIndex].ToString();
-            return color == "PREV" ? new Color(this._previousColor.r, this._previousColor.g, this._previousColor.b) : Colors.ParseColor(color);
+            for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != '|'; ++_letterIndex)
+                color += text[_letterIndex].ToString();
+            return color == "PREV" ? new Color(_previousColor.r, _previousColor.g, _previousColor.b) : Colors.ParseColor(color);
         }
 
         public InputProfile GetInputProfile(InputProfile input)
         {
             if (input == null)
-                input = this._inputProfile != null ? this._inputProfile : InputProfile.FirstProfileWithDevice;
+                input = _inputProfile != null ? _inputProfile : InputProfile.FirstProfileWithDevice;
             return input;
         }
 
@@ -439,20 +439,20 @@ namespace DuckGame
                 }
                 else
                 {
-                    input = this._inputProfile != null ? this._inputProfile : Input.lastActiveProfile;
-                    if (this._inputProfile == null && Profiles.active.Count > 0 && !Network.isActive)
+                    input = _inputProfile != null ? _inputProfile : Input.lastActiveProfile;
+                    if (_inputProfile == null && Profiles.active.Count > 0 && !Network.isActive)
                         input = Profiles.GetLastProfileWithInput().inputProfile;
                 }
             }
             float num = 0f;
             float width = 0f;
-            for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
+            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
             {
                 bool flag2 = false;
-                if (text[this._letterIndex] == '@')
+                if (text[_letterIndex] == '@')
                 {
-                    int letterIndex = this._letterIndex;
-                    Sprite sprite = this.ParseSprite(text, input);
+                    int letterIndex = _letterIndex;
+                    Sprite sprite = ParseSprite(text, input);
                     if (sprite != null)
                     {
                         if (sprite.texture != null)
@@ -463,24 +463,24 @@ namespace DuckGame
                         flag2 = true;
                     }
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                else if (text[this._letterIndex] == '|')
+                else if (text[_letterIndex] == '|')
                 {
-                    int letterIndex = this._letterIndex;
-                    if (this.ParseColor(text) != Colors.Transparent)
+                    int letterIndex = _letterIndex;
+                    if (ParseColor(text) != Colors.Transparent)
                         flag2 = true;
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                else if (text[this._letterIndex] == '\n')
+                else if (text[_letterIndex] == '\n')
                 {
                     if (num > width)
                         width = num;
                     num = 0f;
                 }
                 if (!flag2)
-                    num += _tileSize * this.scale.x;
+                    num += _tileSize * scale.x;
             }
             if (num > width)
                 width = num;
@@ -489,15 +489,15 @@ namespace DuckGame
 
         public void DrawOutline(string text, Vec2 pos, Color c, Color outline, Depth deep = default(Depth))
         {
-            this.Draw(text, pos + new Vec2(-1f * this.scale.x, 0f), outline, deep + 2, colorSymbols: true);
-            this.Draw(text, pos + new Vec2(1f * this.scale.x, 0f), outline, deep + 2, colorSymbols: true);
-            this.Draw(text, pos + new Vec2(0f, -1f * this.scale.y), outline, deep + 2, colorSymbols: true);
-            this.Draw(text, pos + new Vec2(0f, 1f * this.scale.y), outline, deep + 2, colorSymbols: true);
-            this.Draw(text, pos + new Vec2(-1f * this.scale.x, -1f * this.scale.y), outline, deep + 2, colorSymbols: true);
-            this.Draw(text, pos + new Vec2(1f * this.scale.x, -1f * this.scale.y), outline, deep + 2, colorSymbols: true);
-            this.Draw(text, pos + new Vec2(-1f * this.scale.x, 1f * this.scale.y), outline, deep + 2, colorSymbols: true);
-            this.Draw(text, pos + new Vec2(1f * this.scale.x, 1f * this.scale.y), outline, deep + 2, colorSymbols: true);
-            this.Draw(text, pos, c, deep + 5);
+            Draw(text, pos + new Vec2(-1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
+            Draw(text, pos + new Vec2(1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
+            Draw(text, pos + new Vec2(0f, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+            Draw(text, pos + new Vec2(0f, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+            Draw(text, pos + new Vec2(-1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+            Draw(text, pos + new Vec2(1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+            Draw(text, pos + new Vec2(-1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+            Draw(text, pos + new Vec2(1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+            Draw(text, pos, c, deep + 5);
         }
 
         public void Draw(
@@ -508,7 +508,7 @@ namespace DuckGame
           InputProfile input = null,
           bool colorSymbols = false)
         {
-            this.Draw(text, pos.x, pos.y, c, deep, input, colorSymbols);
+            Draw(text, pos.x, pos.y, c, deep, input, colorSymbols);
         }
 
         public void Draw(
@@ -520,9 +520,9 @@ namespace DuckGame
           InputProfile input = null,
           bool colorSymbols = false)
         {
-            if (this.colorOverride != new Color())
-                c = this.colorOverride;
-            this._previousColor = c;
+            if (colorOverride != new Color())
+                c = colorOverride;
+            _previousColor = c;
             if (input == null)
             {
                 if (!MonoMain.started)
@@ -531,20 +531,20 @@ namespace DuckGame
                 }
                 else
                 {
-                    input = this._inputProfile != null ? this._inputProfile : Input.lastActiveProfile;
-                    if (this._inputProfile == null && Profiles.active.Count > 0 && !Network.isActive)
+                    input = _inputProfile != null ? _inputProfile : Input.lastActiveProfile;
+                    if (_inputProfile == null && Profiles.active.Count > 0 && !Network.isActive)
                         input = Profiles.GetLastProfileWithInput().inputProfile;
                 }
             }
             float num1 = 0f;
             float num2 = 0f;
-            for (this._letterIndex = 0; this._letterIndex < text.Length; ++this._letterIndex)
+            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
             {
                 bool flag = false;
-                if (text[this._letterIndex] == '@')
+                if (text[_letterIndex] == '@')
                 {
-                    int letterIndex = this._letterIndex;
-                    Sprite sprite1 = this.ParseSprite(text, input);
+                    int letterIndex = _letterIndex;
+                    Sprite sprite1 = ParseSprite(text, input);
                     if (sprite1 != null)
                     {
                         if (sprite1.texture != null)
@@ -555,8 +555,8 @@ namespace DuckGame
                             {
                                 Vec2 scale = sprite1.scale;
                                 Sprite sprite2 = sprite1;
-                                sprite2.scale *= this.spriteScale;
-                                float num3 = (int)(_texture.height * this.spriteScale.y / 2f) - (int)(sprite1.height * this.spriteScale.y / 2f);
+                                sprite2.scale *= spriteScale;
+                                float num3 = (int)(_texture.height * spriteScale.y / 2f) - (int)(sprite1.height * spriteScale.y / 2f);
                                 if (sprite1.moji)
                                 {
                                     if (sprite1.height == 28)
@@ -584,55 +584,55 @@ namespace DuckGame
                         flag = true;
                     }
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
-                else if (text[this._letterIndex] == '|')
+                else if (text[_letterIndex] == '|')
                 {
-                    int letterIndex = this._letterIndex;
-                    Color color = this.ParseColor(text);
-                    if (this.colorOverride != new Color())
-                        color = this.colorOverride;
+                    int letterIndex = _letterIndex;
+                    Color color = ParseColor(text);
+                    if (colorOverride != new Color())
+                        color = colorOverride;
                     if (color != Colors.Transparent)
                     {
-                        this._previousColor = c;
+                        _previousColor = c;
                         float w = c.ToVector4().w;
                         c = color;
                         c *= w;
                         flag = true;
                     }
                     else
-                        this._letterIndex = letterIndex;
+                        _letterIndex = letterIndex;
                 }
                 if (!flag)
                 {
-                    if (this.maxWidth > 0)
+                    if (maxWidth > 0)
                     {
                         string source = "";
-                        int letterIndex = this._letterIndex;
+                        int letterIndex = _letterIndex;
                         while (letterIndex < text.Count<char>() && text[letterIndex] != ' ' && text[letterIndex] != '|' && text[letterIndex] != '@')
                         {
                             source += text[letterIndex].ToString();
                             ++letterIndex;
-                            if (!this.enforceWidthByWord)
+                            if (!enforceWidthByWord)
                                 break;
                         }
-                        if (num2 + source.Count<char>() * (_tileSize * this.scale.x) > maxWidth)
+                        if (num2 + source.Count<char>() * (_tileSize * scale.x) > maxWidth)
                         {
-                            num1 += _texture.height * this.scale.y;
+                            num1 += _texture.height * scale.y;
                             num2 = 0f;
-                            if (this.singleLine)
+                            if (singleLine)
                                 break;
                         }
                     }
-                    if (text[this._letterIndex] == '\n')
+                    if (text[_letterIndex] == '\n')
                     {
-                        num1 += _texture.height * this.scale.y;
+                        num1 += _texture.height * scale.y;
                         num2 = 0f;
                     }
                     else
                     {
-                        SpriteMap g = this._texture;
-                        char index = text[this._letterIndex];
+                        SpriteMap g = _texture;
+                        char index = text[_letterIndex];
                         int num4;
                         if (index >= 'ぁ')
                         {
@@ -640,19 +640,19 @@ namespace DuckGame
                             num4 = FancyBitmapFont._kanjiMap[index];
                         }
                         else
-                            num4 = BitmapFont._characterMap[text[this._letterIndex]];
-                        if (this.fallbackIndex != 0 && num4 >= this.fallbackIndex)
+                            num4 = BitmapFont._characterMap[text[_letterIndex]];
+                        if (fallbackIndex != 0 && num4 >= fallbackIndex)
                         {
-                            if (this._fallbackFont == null)
-                                this._fallbackFont = new BitmapFont("biosFont", 8);
-                            g = this._fallbackFont._texture;
+                            if (_fallbackFont == null)
+                                _fallbackFont = new BitmapFont("biosFont", 8);
+                            g = _fallbackFont._texture;
                         }
                         g.frame = num4;
-                        g.scale = this.scale;
+                        g.scale = scale;
                         g.color = c;
-                        g.alpha = this.alpha;
+                        g.alpha = alpha;
                         Graphics.Draw(g, xpos + num2, ypos + num1 + characterYOffset, deep);
-                        num2 += _tileSize * this.scale.x;
+                        num2 += _tileSize * scale.x;
                     }
                 }
             }

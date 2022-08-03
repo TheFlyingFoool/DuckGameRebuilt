@@ -36,11 +36,11 @@ namespace DuckGame
           MatchSetting setting = null)
           : base(action)
         {
-            this._setting = setting;
+            _setting = setting;
             if (c == new Color())
                 c = Colors.MenuOption;
-            this._valueStrings = valStrings;
-            UIDivider component1 = new UIDivider(true, this._valueStrings != null ? 0f : 0.8f);
+            _valueStrings = valStrings;
+            UIDivider component1 = new UIDivider(true, _valueStrings != null ? 0f : 0.8f);
             UIText component2 = new UIText(text, c)
             {
                 align = UIAlign.Left
@@ -48,71 +48,71 @@ namespace DuckGame
             component1.leftSection.Add(component2, true);
             if (field == null)
             {
-                this._textItem = new UIChangingText(-1f, -1f, field, null);
-                this._textItem.align = UIAlign.Right;
+                _textItem = new UIChangingText(-1f, -1f, field, null);
+                _textItem.align = UIAlign.Right;
                 component1.rightSection.Add(_textItem, true);
             }
-            else if (this._valueStrings != null)
+            else if (_valueStrings != null)
             {
                 if (text == "" || text == null)
                 {
                     component1.leftSection.align = UIAlign.Left;
-                    this._textItem = component2;
+                    _textItem = component2;
                     int index = (int)field.value;
-                    if (index >= 0 && index < this._valueStrings.Count)
-                        this._textItem.text = this._valueStrings[index];
+                    if (index >= 0 && index < _valueStrings.Count)
+                        _textItem.text = _valueStrings[index];
                 }
                 else
                 {
-                    this._textItem = new UIChangingText(-1f, -1f, field, null);
+                    _textItem = new UIChangingText(-1f, -1f, field, null);
                     int index = (int)field.value;
-                    if (index >= 0 && index < this._valueStrings.Count)
-                        this._textItem.text = this._valueStrings[index];
-                    this._textItem.align = UIAlign.Right;
+                    if (index >= 0 && index < _valueStrings.Count)
+                        _textItem.text = _valueStrings[index];
+                    _textItem.align = UIAlign.Right;
                     component1.rightSection.Add(_textItem, true);
                 }
             }
             else
             {
-                UINumber component3 = new UINumber(-1f, -1f, field, append, filterField, this._setting)
+                UINumber component3 = new UINumber(-1f, -1f, field, append, filterField, _setting)
                 {
                     align = UIAlign.Right
                 };
                 component1.rightSection.Add(component3, true);
             }
-            if (this._valueStrings != null)
+            if (_valueStrings != null)
             {
                 string str = "";
-                foreach (string valueString in this._valueStrings)
+                foreach (string valueString in _valueStrings)
                 {
                     if (valueString.Length > str.Length)
                         str = valueString;
                 }
-              (this._textItem as UIChangingText).defaultSizeString = str + "   ";
-                this._textItem.minLength = str.Length + 3;
-                this._textItem.text = this._textItem.text;
+              (_textItem as UIChangingText).defaultSizeString = str + "   ";
+                _textItem.minLength = str.Length + 3;
+                _textItem.text = _textItem.text;
             }
-            this.rightSection.Add(component1, true);
-            this._arrow = new UIImage("contextArrowRight")
+            rightSection.Add(component1, true);
+            _arrow = new UIImage("contextArrowRight")
             {
                 align = UIAlign.Right,
                 visible = false
             };
-            this.leftSection.Add(_arrow, true);
-            this._field = field;
-            this._step = step;
-            this._upperBoundField = upperBoundField;
-            this._lowerBoundField = lowerBoundField;
-            this._filterField = filterField;
-            this.controlString = "@CANCEL@BACK @WASD@ADJUST";
+            leftSection.Add(_arrow, true);
+            _field = field;
+            _step = step;
+            _upperBoundField = upperBoundField;
+            _lowerBoundField = lowerBoundField;
+            _filterField = filterField;
+            controlString = "@CANCEL@BACK @WASD@ADJUST";
         }
 
         private int GetStep(int current, bool up)
         {
-            if (this._setting == null || this._setting.stepMap == null)
-                return this._step;
+            if (_setting == null || _setting.stepMap == null)
+                return _step;
             int step1 = 0;
-            foreach (KeyValuePair<int, int> step2 in this._setting.stepMap)
+            foreach (KeyValuePair<int, int> step2 in _setting.stepMap)
             {
                 step1 = step2.Value;
                 if (up)
@@ -131,79 +131,79 @@ namespace DuckGame
 
         public override void Activate(string trigger)
         {
-            if (this._useBaseActivationLogic)
+            if (_useBaseActivationLogic)
             {
                 base.Activate(trigger);
             }
             else
             {
-                if (this._filterField != null)
+                if (_filterField != null)
                 {
-                    if (!(bool)this._filterField.value && (trigger == "MENURIGHT" || trigger == "SELECT"))
+                    if (!(bool)_filterField.value && (trigger == "MENURIGHT" || trigger == "SELECT"))
                     {
                         SFX.Play("textLetter", 0.7f);
-                        this._filterField.value = true;
-                        this._field.value = (int)this._field.min;
+                        _filterField.value = true;
+                        _field.value = (int)_field.min;
                         return;
                     }
-                    if (!(bool)this._filterField.value && trigger == "MENULEFT")
+                    if (!(bool)_filterField.value && trigger == "MENULEFT")
                     {
                         SFX.Play("textLetter", 0.7f);
-                        this._filterField.value = true;
-                        this._field.value = (int)this._field.max;
+                        _filterField.value = true;
+                        _field.value = (int)_field.max;
                         return;
                     }
-                    if ((bool)this._filterField.value && trigger == "MENULEFT" && (int)this._field.value == this._field.min)
+                    if ((bool)_filterField.value && trigger == "MENULEFT" && (int)_field.value == _field.min)
                     {
                         SFX.Play("textLetter", 0.7f);
-                        this._filterField.value = false;
+                        _filterField.value = false;
                         return;
                     }
-                    if ((bool)this._filterField.value && (trigger == "MENURIGHT" || trigger == "SELECT") && (int)this._field.value == this._field.max)
+                    if ((bool)_filterField.value && (trigger == "MENURIGHT" || trigger == "SELECT") && (int)_field.value == _field.max)
                     {
                         SFX.Play("textLetter", 0.7f);
-                        this._filterField.value = false;
+                        _filterField.value = false;
                         return;
                     }
-                    if (this._setting != null && trigger == "MENU2")
+                    if (_setting != null && trigger == "MENU2")
                     {
                         SFX.Play("textLetter", 0.7f);
-                        if (this._setting.filterMode == FilterMode.GreaterThan)
+                        if (_setting.filterMode == FilterMode.GreaterThan)
                         {
-                            this._setting.filterMode = FilterMode.Equal;
+                            _setting.filterMode = FilterMode.Equal;
                             return;
                         }
-                        if (this._setting.filterMode == FilterMode.Equal)
+                        if (_setting.filterMode == FilterMode.Equal)
                         {
-                            this._setting.filterMode = FilterMode.LessThan;
+                            _setting.filterMode = FilterMode.LessThan;
                             return;
                         }
-                        if (this._setting.filterMode != FilterMode.LessThan)
+                        if (_setting.filterMode != FilterMode.LessThan)
                             return;
-                        this._setting.filterMode = FilterMode.GreaterThan;
+                        _setting.filterMode = FilterMode.GreaterThan;
                         return;
                     }
                 }
-                int num1 = (int)this._field.value;
+                int num1 = (int)_field.value;
                 if (trigger == "MENULEFT")
-                    this._field.value = (int)this._field.value - this.GetStep((int)this._field.value, false);
+                    _field.value = (int)_field.value - GetStep((int)_field.value, false);
                 else if (trigger == "MENURIGHT" || trigger == "SELECT")
-                    this._field.value = (int)this._field.value + this.GetStep((int)this._field.value, true);
-                int index = (int)Maths.Clamp((int)this._field.value, this._field.min, this._field.max);
-                if (this._upperBoundField != null && index > (int)this._upperBoundField.value)
-                    this._upperBoundField.value = index;
-                if (this._lowerBoundField != null && index < (int)this._lowerBoundField.value)
-                    this._lowerBoundField.value = index;
-                if (num1 != index && this._action != null)
-                    this._action.Activate();
-                if (num1 != (int)this._field.value)
+                    _field.value = (int)_field.value + GetStep((int)_field.value, true);
+                int index = (int)Maths.Clamp((int)_field.value, _field.min, _field.max);
+                if (_upperBoundField != null && index > (int)_upperBoundField.value)
+                    _upperBoundField.value = index;
+                if (_lowerBoundField != null && index < (int)_lowerBoundField.value)
+                    _lowerBoundField.value = index;
+                if (num1 != index && _action != null)
+                    _action.Activate();
+                if (num1 != (int)_field.value)
                     SFX.Play("textLetter", 0.7f);
                 int num2 = index - num1;
-                this._field.value = index;
+                _field.value = index;
                 if (num2 > 0)
                 {
                     int num3 = num2;
-                    using (List<FieldBinding>.Enumerator enumerator = this.percentageGroup.GetEnumerator())
+                    using (List<FieldBinding>.Enumerator enumerator = percentageGroup.GetEnumerator())
                     {
                     label_37:
                         while (enumerator.MoveNext())
@@ -226,7 +226,7 @@ namespace DuckGame
                 else if (num2 < 0)
                 {
                     int num5 = num2;
-                    using (List<FieldBinding>.Enumerator enumerator = this.percentageGroup.GetEnumerator())
+                    using (List<FieldBinding>.Enumerator enumerator = percentageGroup.GetEnumerator())
                     {
                     label_45:
                         while (enumerator.MoveNext())
@@ -246,9 +246,9 @@ namespace DuckGame
                         }
                     }
                 }
-                if (this._textItem == null || index < 0 || index >= this._valueStrings.Count)
+                if (_textItem == null || index < 0 || index >= _valueStrings.Count)
                     return;
-                this._textItem.text = this._valueStrings[index];
+                _textItem.text = _valueStrings[index];
             }
         }
     }

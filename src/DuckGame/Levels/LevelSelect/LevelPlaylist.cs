@@ -16,7 +16,7 @@ namespace DuckGame
         public DXMLNode Serialize()
         {
             DXMLNode dxmlNode = new DXMLNode("playlist");
-            foreach (object level in this.levels)
+            foreach (object level in levels)
             {
                 DXMLNode node = new DXMLNode("element", level);
                 dxmlNode.Add(node);
@@ -26,11 +26,11 @@ namespace DuckGame
 
         public void Deserialize(DXMLNode node)
         {
-            this.levels.Clear();
+            levels.Clear();
             foreach (DXMLNode element in node.Elements())
             {
                 if (element.Name == "element" && DuckFile.FileExists(element.Value))
-                    this.levels.Add(element.Value);
+                    levels.Add(element.Value);
             }
         }
     }

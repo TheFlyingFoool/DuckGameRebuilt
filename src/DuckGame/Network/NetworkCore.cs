@@ -30,60 +30,60 @@ namespace DuckGame
         {
             if (from == null)
                 throw new Exception("Network packet connection information cannot be null.");
-            this._data = dat;
-            this._receivedFrom = from;
-            this.order = orderVal;
+            _data = dat;
+            _receivedFrom = from;
+            order = orderVal;
         }
 
-        public bool IsValidSession() => (int)this.sessionID == (int)this._receivedFrom.sessionID;
+        public bool IsValidSession() => (int)sessionID == (int)_receivedFrom.sessionID;
 
-        public bool received => this._received;
+        public bool received => _received;
 
-        public bool sent => this._sent;
+        public bool sent => _sent;
 
-        public BitBuffer data => this._data;
+        public BitBuffer data => _data;
 
-        public NetworkConnection connection => this._receivedFrom;
+        public NetworkConnection connection => _receivedFrom;
 
-        public float timeSinceReceived => this._timeSinceReceived;
+        public float timeSinceReceived => _timeSinceReceived;
 
-        public void Tick() => this._timeSinceReceived += Maths.IncFrameTimer();
+        public void Tick() => _timeSinceReceived += Maths.IncFrameTimer();
 
         public MultiMap<NetMessagePriority, NetMessage> unpackedMessages { get; private set; }
 
         public void Unpack()
         {
-            if (this.unpackedMessages == null)
+            if (unpackedMessages == null)
             {
-                this.unpackedMessages = new MultiMap<NetMessagePriority, NetMessage>();
-                if (this._data.ReadBool())
+                unpackedMessages = new MultiMap<NetMessagePriority, NetMessage>();
+                if (_data.ReadBool())
                 {
                     do
                     {
-                        ushort num = this._data.ReadUShort();
-                        NetMessagePriority netMessagePriority = (NetMessagePriority)this._data.ReadByte();
+                        ushort num = _data.ReadUShort();
+                        NetMessagePriority netMessagePriority = (NetMessagePriority)_data.ReadByte();
                         bool flag1 = false;
-                        bool flag2 = netMessagePriority == NetMessagePriority.ReliableOrdered && this.IsValidSession();
+                        bool flag2 = netMessagePriority == NetMessagePriority.ReliableOrdered && IsValidSession();
                         if (flag2)
                         {
-                            uint reliableMessageSize = this.connection.manager.GetExistingReceivedReliableMessageSize(num);
+                            uint reliableMessageSize = connection.manager.GetExistingReceivedReliableMessageSize(num);
                             if (reliableMessageSize > 0U)
                             {
-                                int positionInBits = (int)this._data.positionInBits;
-                                this._data.positionInBits += reliableMessageSize;
+                                int positionInBits = (int)_data.positionInBits;
+                                _data.positionInBits += reliableMessageSize;
                                 flag1 = true;
                             }
                         }
                         if (!flag1)
                         {
                             NetMessage element = null;
-                            BitBuffer bitBuffer = netMessagePriority == NetMessagePriority.ReliableOrdered || netMessagePriority == NetMessagePriority.MAX_VALUE_DONOT_USE ? this._data.ReadBitBuffer() : this._data;
-                            uint positionInBits = this._data.positionInBits;
+                            BitBuffer bitBuffer = netMessagePriority == NetMessagePriority.ReliableOrdered || netMessagePriority == NetMessagePriority.MAX_VALUE_DONOT_USE ? _data.ReadBitBuffer() : _data;
+                            uint positionInBits = _data.positionInBits;
                             ushort key = bitBuffer.ReadUShort();
                             if (netMessagePriority == NetMessagePriority.MAX_VALUE_DONOT_USE)
                             {
-                                netMessagePriority = (NetMessagePriority)this._data.ReadByte();
-                                Mod modFromHash = ModLoader.GetModFromHash(this._data.ReadUInt());
+                                netMessagePriority = (NetMessagePriority)_data.ReadByte();
+                                Mod modFromHash = ModLoader.GetModFromHash(_data.ReadUInt());
                                 if (modFromHash != null)
                                     element = modFromHash.constructorToMessageID[key].Invoke(null) as NetMessage;
                                 else
@@ -94,8 +94,8 @@ namespace DuckGame
                             if (element != null)
                             {
                                 element.priority = netMessagePriority;
-                                element.connection = this._receivedFrom;
-                                element.session = this.sessionID;
+                                element.connection = _receivedFrom;
+                                element.session = sessionID;
                                 element.typeIndex = key;
                                 element.order = num;
                                 element.packet = this;
@@ -103,19 +103,19 @@ namespace DuckGame
                                     element.Deserialize(bitBuffer);
                                 else
                                     element.SetSerializedData(bitBuffer);
-                                uint pSize = this._data.positionInBits - positionInBits;
+                                uint pSize = _data.positionInBits - positionInBits;
                                 if (flag2)
-                                    this.connection.manager.StoreReceivedReliableMessageSize(num, pSize);
-                                this.unpackedMessages.Add(element.priority, element);
+                                    connection.manager.StoreReceivedReliableMessageSize(num, pSize);
+                                unpackedMessages.Add(element.priority, element);
                             }
                         }
                     }
-                    while (this._data.ReadBool());
+                    while (_data.ReadBool());
                 }
             }
-            if (_data.positionInBits >= _data.lengthInBits || !this._data.ReadBool())
+            if (_data.positionInBits >= _data.lengthInBits || !_data.ReadBool())
                 return;
-            this.synchronizedTime = this._data.ReadNetIndex16();
+            synchronizedTime = _data.ReadNetIndex16();
         }
 
         public List<NetMessage> GetAllMessages()
@@ -124,7 +124,7 @@ namespace DuckGame
             foreach (NetMessagePriority key in Enum.GetValues(typeof(NetMessagePriority)).Cast<NetMessagePriority>())
             {
                 List<NetMessage> list;
-                if (this.unpackedMessages.TryGetValue(key, out list))
+                if (unpackedMessages.TryGetValue(key, out list))
                     allMessages.AddRange(list);
             }
             return allMessages;

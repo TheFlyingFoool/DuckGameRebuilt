@@ -26,13 +26,13 @@ namespace DuckGame
         public CustomTileset3(float x, float y, string tset)
           : base(x, y, "CUSTOM03")
         {
-            this.customIndex = 2;
-            this._editorName = "Custom Block 03";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidthThick = 16f;
-            this.verticalWidth = 14f;
-            this.horizontalHeight = 16f;
-            this.UpdateCurrentTileset();
+            customIndex = 2;
+            _editorName = "Custom Block 03";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidthThick = 16f;
+            verticalWidth = 14f;
+            horizontalHeight = 16f;
+            UpdateCurrentTileset();
         }
     }
 }

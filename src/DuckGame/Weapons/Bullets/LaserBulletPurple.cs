@@ -23,8 +23,8 @@ namespace DuckGame
           bool network = false)
           : base(xval, yval, type, ang, owner, rbound, distance, tracer, network)
         {
-            this._thickness = type.bulletThickness;
-            this._beem = Content.Load<Texture2D>("laserBeamPurple");
+            _thickness = type.bulletThickness;
+            _beem = Content.Load<Texture2D>("laserBeamPurple");
         }
     }
 }

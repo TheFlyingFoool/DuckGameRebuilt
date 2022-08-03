@@ -22,14 +22,14 @@ namespace DuckGame
         /// <param name="group">The editor group, in the format of "root|sub|sub|sub..."</param>
         public EditorGroupAttribute(string group)
         {
-            this.editorGroup = group;
-            this.editorType = EditorItemType.Normal;
+            editorGroup = group;
+            editorType = EditorItemType.Normal;
         }
 
         public EditorGroupAttribute(string pGroup, EditorItemType pType)
         {
-            this.editorGroup = pGroup;
-            this.editorType = pType;
+            editorGroup = pGroup;
+            editorType = pType;
         }
     }
 }

@@ -20,6 +20,6 @@ namespace DuckGame
         public bool isHost;
         public int packets;
 
-        public NCBasicConnection() => this.heartbeat.Start();
+        public NCBasicConnection() => heartbeat.Start();
     }
 }

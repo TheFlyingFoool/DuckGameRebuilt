@@ -19,15 +19,15 @@ namespace DuckGame
 
         public NMEyeCloseWing(Vec2 pPosition, Duck pCloser, Duck pClosee)
         {
-            this.position = pPosition;
-            this.closer = pCloser;
-            this.closee = pClosee;
+            position = pPosition;
+            closer = pCloser;
+            closee = pClosee;
         }
 
         public override void Activate()
         {
-            if (this.closer != null && this.closee != null && this.closee.ragdoll != null && this.closee.ragdoll.part1 != null)
-                Level.Add(new EyeCloseWing(this.closee.ragdoll.part1.angle < 0.0 ? this.position.x - 4f : this.position.x - 11f, this.position.y + 7f, this.closee.ragdoll.part1.angle < 0.0 ? 1 : -1, this.closer._spriteArms, this.closer, this.closee));
+            if (closer != null && closee != null && closee.ragdoll != null && closee.ragdoll.part1 != null)
+                Level.Add(new EyeCloseWing(closee.ragdoll.part1.angle < 0.0 ? position.x - 4f : position.x - 11f, position.y + 7f, closee.ragdoll.part1.angle < 0.0 ? 1 : -1, closer._spriteArms, closer, closee));
             base.Activate();
         }
     }

@@ -36,50 +36,50 @@ namespace DuckGame
 
         public bool groupedWithNeighbors
         {
-            get => this._groupedWithNeighbors;
-            set => this._groupedWithNeighbors = value;
+            get => _groupedWithNeighbors;
+            set => _groupedWithNeighbors = value;
         }
 
         public bool neighborsInitialized
         {
-            get => this._neighborsInitialized;
-            set => this._neighborsInitialized = value;
+            get => _neighborsInitialized;
+            set => _neighborsInitialized = value;
         }
 
         public Block leftBlock
         {
-            get => this._leftBlock;
-            set => this._leftBlock = value;
+            get => _leftBlock;
+            set => _leftBlock = value;
         }
 
         public Block rightBlock
         {
-            get => this._rightBlock;
-            set => this._rightBlock = value;
+            get => _rightBlock;
+            set => _rightBlock = value;
         }
 
         public Block upBlock
         {
-            get => this._upBlock;
-            set => this._upBlock = value;
+            get => _upBlock;
+            set => _upBlock = value;
         }
 
         public Block downBlock
         {
-            get => this._downBlock;
-            set => this._downBlock = value;
+            get => _downBlock;
+            set => _downBlock = value;
         }
 
         public BlockStructure structure
         {
-            get => this._structure;
-            set => this._structure = value;
+            get => _structure;
+            set => _structure = value;
         }
 
         public bool pathed
         {
-            get => this._pathed;
-            set => this._pathed = value;
+            get => _pathed;
+            set => _pathed = value;
         }
 
         public bool BFS(
@@ -88,12 +88,12 @@ namespace DuckGame
           Dictionary<ConcaveLine, ConcaveLine> pairG2)
         {
             Queue<ConcaveLine> concaveLineQueue = new Queue<ConcaveLine>();
-            using (List<ConcaveLine>.Enumerator enumerator = this.G1.GetEnumerator())
+            using (List<ConcaveLine>.Enumerator enumerator = G1.GetEnumerator())
             {
                 if (enumerator.MoveNext())
                 {
                     ConcaveLine current = enumerator.Current;
-                    if (pairG1[current] == this.nullLine)
+                    if (pairG1[current] == nullLine)
                     {
                         dist[current] = 0;
                         concaveLineQueue.Enqueue(current);
@@ -102,11 +102,11 @@ namespace DuckGame
                         dist[current] = int.MaxValue;
                 }
             }
-            dist[this.nullLine] = int.MaxValue;
+            dist[nullLine] = int.MaxValue;
             while (concaveLineQueue.Count > 0)
             {
                 ConcaveLine key = concaveLineQueue.Dequeue();
-                if (dist[key] < dist[this.nullLine])
+                if (dist[key] < dist[nullLine])
                 {
                     foreach (ConcaveLine intersect in key.intersects)
                     {
@@ -118,7 +118,7 @@ namespace DuckGame
                     }
                 }
             }
-            return dist[this.nullLine] != int.MaxValue;
+            return dist[nullLine] != int.MaxValue;
         }
 
         public bool DFS(
@@ -127,11 +127,11 @@ namespace DuckGame
           Dictionary<ConcaveLine, ConcaveLine> pairG2,
           ConcaveLine v)
         {
-            if (v == this.nullLine)
+            if (v == nullLine)
                 return true;
             foreach (ConcaveLine intersect in v.intersects)
             {
-                if (dist[pairG2[intersect]] == dist[v] + 1 && this.DFS(dist, pairG1, pairG2, pairG2[intersect]))
+                if (dist[pairG2[intersect]] == dist[v] + 1 && DFS(dist, pairG1, pairG2, pairG2[intersect]))
                 {
                     pairG2[intersect] = v;
                     pairG1[v] = intersect;
@@ -144,34 +144,34 @@ namespace DuckGame
 
         public void Calculate(List<ConcaveLine> G1val, List<ConcaveLine> G2val)
         {
-            this.G1 = G1val;
-            this.G2 = G2val;
+            G1 = G1val;
+            G2 = G2val;
             Dictionary<ConcaveLine, int> dist = new Dictionary<ConcaveLine, int>();
-            foreach (ConcaveLine key in this.G1)
+            foreach (ConcaveLine key in G1)
             {
                 dist[key] = 0;
-                this.pairG1val[key] = this.nullLine;
+                pairG1val[key] = nullLine;
             }
-            foreach (ConcaveLine key in this.G2)
+            foreach (ConcaveLine key in G2)
             {
                 dist[key] = 0;
-                this.pairG2val[key] = this.nullLine;
+                pairG2val[key] = nullLine;
             }
             int num = 0;
-            while (this.BFS(dist, this.pairG1val, this.pairG2val))
+            while (BFS(dist, pairG1val, pairG2val))
             {
-                foreach (ConcaveLine concaveLine in this.G1)
+                foreach (ConcaveLine concaveLine in G1)
                 {
-                    if (this.pairG1val[concaveLine] == this.nullLine && this.DFS(dist, this.pairG1val, this.pairG2val, concaveLine))
+                    if (pairG1val[concaveLine] == nullLine && DFS(dist, pairG1val, pairG2val, concaveLine))
                     {
                         ++num;
-                        this.matchingSet.Add(new KeyValuePair<ConcaveLine, ConcaveLine>(concaveLine, this.pairG1val[concaveLine]));
+                        matchingSet.Add(new KeyValuePair<ConcaveLine, ConcaveLine>(concaveLine, pairG1val[concaveLine]));
                     }
                 }
             }
             List<ConcaveLine> concaveLineList = new List<ConcaveLine>();
             concaveLineList.AddRange(_concaveLines);
-            foreach (KeyValuePair<ConcaveLine, ConcaveLine> matching in this.matchingSet)
+            foreach (KeyValuePair<ConcaveLine, ConcaveLine> matching in matchingSet)
             {
                 concaveLineList.Remove(matching.Key);
                 concaveLineList.Remove(matching.Value);
@@ -180,7 +180,7 @@ namespace DuckGame
 
         public BlockCorner GetNearestCorner(Vec2 to)
         {
-            List<BlockCorner> groupCorners = this.GetGroupCorners();
+            List<BlockCorner> groupCorners = GetGroupCorners();
             float num = 9999999f;
             BlockCorner nearestCorner = null;
             foreach (BlockCorner blockCorner in groupCorners)
@@ -197,10 +197,10 @@ namespace DuckGame
 
         public void CalculateConcaveLines()
         {
-            this._concaveLines = new List<ConcaveLine>();
+            _concaveLines = new List<ConcaveLine>();
             List<ConcaveLine> concaveLineList1 = new List<ConcaveLine>();
             List<ConcaveLine> concaveLineList2 = new List<ConcaveLine>();
-            List<BlockCorner> list = this._structure.corners.Where<BlockCorner>(v => v.wallCorner).ToList<BlockCorner>();
+            List<BlockCorner> list = _structure.corners.Where<BlockCorner>(v => v.wallCorner).ToList<BlockCorner>();
             foreach (BlockCorner blockCorner1 in list)
             {
                 foreach (BlockCorner blockCorner2 in list)
@@ -250,16 +250,16 @@ namespace DuckGame
                 ConcaveLine concaveLine5 = concaveLineList1[1];
                 concaveLineList1[1] = concaveLineList1[2];
                 concaveLineList1[2] = concaveLine5;
-                this._concaveLines.Add(concaveLineList2[0]);
-                this._concaveLines.Add(concaveLineList2[1]);
-                this._concaveLines.Add(concaveLineList1[1]);
-                this._concaveLines.Add(concaveLineList1[0]);
-                this._concaveLines.Add(concaveLineList1[2]);
-                this._concaveLines.Add(concaveLineList2[2]);
-                this._concaveLines.Add(concaveLineList2[3]);
-                this._concaveLines.Add(concaveLineList1[3]);
+                _concaveLines.Add(concaveLineList2[0]);
+                _concaveLines.Add(concaveLineList2[1]);
+                _concaveLines.Add(concaveLineList1[1]);
+                _concaveLines.Add(concaveLineList1[0]);
+                _concaveLines.Add(concaveLineList1[2]);
+                _concaveLines.Add(concaveLineList2[2]);
+                _concaveLines.Add(concaveLineList2[3]);
+                _concaveLines.Add(concaveLineList1[3]);
                 int num = 1;
-                foreach (ConcaveLine concaveLine6 in this._concaveLines)
+                foreach (ConcaveLine concaveLine6 in _concaveLines)
                 {
                     concaveLine6.index = num;
                     ++num;
@@ -267,38 +267,38 @@ namespace DuckGame
             }
             else
             {
-                this._concaveLines.AddRange(concaveLineList2);
-                this._concaveLines.AddRange(concaveLineList1);
+                _concaveLines.AddRange(concaveLineList2);
+                _concaveLines.AddRange(concaveLineList1);
             }
-            this.Calculate(concaveLineList2, concaveLineList1);
+            Calculate(concaveLineList2, concaveLineList1);
         }
 
         public List<ConcaveLine> GetConcaveLines()
         {
-            if (this._concaveLines == null)
-                this.CalculateConcaveLines();
-            return this._concaveLines;
+            if (_concaveLines == null)
+                CalculateConcaveLines();
+            return _concaveLines;
         }
 
         public virtual List<BlockCorner> GetGroupCorners()
         {
-            if (this._structure != null)
-                return this._structure.corners;
-            this._structure = new BlockStructure();
+            if (_structure != null)
+                return _structure.corners;
+            _structure = new BlockStructure();
             Stack<Block> blockStack = new Stack<Block>();
             blockStack.Push(this);
-            this._hit = true;
+            _hit = true;
             while (blockStack.Count > 0)
             {
                 Block b = blockStack.Pop();
-                b._structure = this._structure;
-                this._structure.blocks.Add(b);
+                b._structure = _structure;
+                _structure.blocks.Add(b);
                 if (b.leftBlock == null)
                 {
                     if (b.upBlock == null)
-                        this._structure.corners.Add(new BlockCorner(b.topLeft, b));
+                        _structure.corners.Add(new BlockCorner(b.topLeft, b));
                     if (b.downBlock == null)
-                        this._structure.corners.Add(new BlockCorner(b.bottomLeft, b));
+                        _structure.corners.Add(new BlockCorner(b.bottomLeft, b));
                 }
                 else if (!b.leftBlock._hit)
                 {
@@ -308,9 +308,9 @@ namespace DuckGame
                 if (b.rightBlock == null)
                 {
                     if (b.upBlock == null)
-                        this._structure.corners.Add(new BlockCorner(b.topRight, b));
+                        _structure.corners.Add(new BlockCorner(b.topRight, b));
                     if (b.downBlock == null)
-                        this._structure.corners.Add(new BlockCorner(b.bottomRight, b));
+                        _structure.corners.Add(new BlockCorner(b.bottomRight, b));
                 }
                 else if (!b.rightBlock._hit)
                 {
@@ -328,36 +328,36 @@ namespace DuckGame
                     blockStack.Push(b.downBlock);
                 }
                 if (b.upBlock != null && b.leftBlock != null && b.upBlock.leftBlock == null)
-                    this._structure.corners.Add(new BlockCorner(b.upBlock.bottomLeft, b, true));
+                    _structure.corners.Add(new BlockCorner(b.upBlock.bottomLeft, b, true));
                 if (b.upBlock != null && b.rightBlock != null && b.upBlock.rightBlock == null)
-                    this._structure.corners.Add(new BlockCorner(b.upBlock.bottomRight, b, true));
+                    _structure.corners.Add(new BlockCorner(b.upBlock.bottomRight, b, true));
                 if (b.downBlock != null && b.leftBlock != null && b.downBlock.leftBlock == null)
-                    this._structure.corners.Add(new BlockCorner(b.downBlock.topLeft, b, true));
+                    _structure.corners.Add(new BlockCorner(b.downBlock.topLeft, b, true));
                 if (b.downBlock != null && b.rightBlock != null && b.downBlock.rightBlock == null)
-                    this._structure.corners.Add(new BlockCorner(b.downBlock.topRight, b, true));
+                    _structure.corners.Add(new BlockCorner(b.downBlock.topRight, b, true));
             }
-            return this._structure.corners;
+            return _structure.corners;
         }
 
         public Block(float x, float y)
           : base(x, y)
         {
-            this.collisionSize = new Vec2(16f, 16f);
-            this.thickness = 10f;
+            collisionSize = new Vec2(16f, 16f);
+            thickness = 10f;
         }
 
         public Block(float x, float y, float wid, float hi, PhysicsMaterial mat = PhysicsMaterial.Default)
           : base(x, y)
         {
-            this.collisionSize = new Vec2(wid, hi);
-            this.thickness = 10f;
-            this.physicsMaterial = mat;
+            collisionSize = new Vec2(wid, hi);
+            thickness = 10f;
+            physicsMaterial = mat;
         }
 
         public override void Update()
         {
-            this.InitializeNeighbors();
-            this._hit = false;
+            InitializeNeighbors();
+            _hit = false;
         }
 
         public override void DoInitialize() => base.DoInitialize();

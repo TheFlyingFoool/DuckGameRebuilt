@@ -20,9 +20,9 @@ namespace DuckGame
 
         public ChatMessage(Profile w, string t, ushort idx)
         {
-            this.who = w;
-            this.text = t;
-            this.index = idx;
+            who = w;
+            text = t;
+            index = idx;
         }
     }
 }

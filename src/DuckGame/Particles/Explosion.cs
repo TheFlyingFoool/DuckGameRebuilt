@@ -18,32 +18,32 @@ namespace DuckGame
         public ExplosionPart(float xpos, float ypos, bool doWait = true)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("explosion", 64, 64);
+            _sprite = new SpriteMap("explosion", 64, 64);
             switch (Rando.ChooseInt(0, 1, 2))
             {
                 case 0:
-                    this._sprite.AddAnimation("explode", 1f, false, 0, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+                    _sprite.AddAnimation("explode", 1f, false, 0, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10);
                     break;
                 case 1:
-                    this._sprite.AddAnimation("explode", 1.2f, false, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+                    _sprite.AddAnimation("explode", 1.2f, false, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
                     break;
                 case 2:
-                    this._sprite.AddAnimation("explode", 0.9f, false, 3, 4, 5, 6, 7, 8, 9);
+                    _sprite.AddAnimation("explode", 0.9f, false, 3, 4, 5, 6, 7, 8, 9);
                     break;
             }
-            this._sprite.SetAnimation("explode");
-            this.graphic = _sprite;
-            this._sprite.speed = 0.4f + Rando.Float(0.2f);
-            this.xscale = 0.5f + Rando.Float(0.5f);
-            this.yscale = this.xscale;
-            this.center = new Vec2(32f, 32f);
-            this._wait = Rando.Float(1f);
-            this._smokeFrame = Rando.Int(1, 3);
-            this.depth = (Depth)1f;
-            this.vSpeed = Rando.Float(-0.2f, -0.4f);
+            _sprite.SetAnimation("explode");
+            graphic = _sprite;
+            _sprite.speed = 0.4f + Rando.Float(0.2f);
+            xscale = 0.5f + Rando.Float(0.5f);
+            yscale = xscale;
+            center = new Vec2(32f, 32f);
+            _wait = Rando.Float(1f);
+            _smokeFrame = Rando.Int(1, 3);
+            depth = (Depth)1f;
+            vSpeed = Rando.Float(-0.2f, -0.4f);
             if (doWait)
                 return;
-            this._wait = 0f;
+            _wait = 0f;
         }
 
         public override void Initialize()
@@ -52,14 +52,14 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (!this._created)
-                this._created = true;
-            if (this._sprite.frame > this._smokeFrame && !this._smoked)
+            if (!_created)
+                _created = true;
+            if (_sprite.frame > _smokeFrame && !_smoked)
             {
                 int num1 = Graphics.effectsLevel == 2 ? Rando.Int(1, 4) : 1;
                 for (int index = 0; index < num1; ++index)
                 {
-                    SmallSmoke smallSmoke = SmallSmoke.New(this.x + Rando.Float(-5f, 5f), this.y + Rando.Float(-5f, 5f));
+                    SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-5f, 5f), y + Rando.Float(-5f, 5f));
                     smallSmoke.vSpeed = Rando.Float(0f, -0.5f);
                     double num2;
                     float num3 = (float)(num2 = Rando.Float(0.2f, 0.7f));
@@ -67,11 +67,11 @@ namespace DuckGame
                     smallSmoke.xscale = num3;
                     Level.Add(smallSmoke);
                 }
-                this._smoked = true;
+                _smoked = true;
             }
             if (_wait <= 0.0)
-                this.y += this.vSpeed;
-            if (!this._sprite.finished)
+                y += vSpeed;
+            if (!_sprite.finished)
                 return;
             Level.Remove(this);
         }
@@ -79,7 +79,7 @@ namespace DuckGame
         public override void Draw()
         {
             if (_wait > 0.0)
-                this._wait -= 0.2f;
+                _wait -= 0.2f;
             else
                 base.Draw();
         }

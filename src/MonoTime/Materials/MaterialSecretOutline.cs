@@ -11,11 +11,11 @@ namespace DuckGame
 {
     public class MaterialSecretOutline : Material
     {
-        public MaterialSecretOutline() => this._effect = Content.Load<MTEffect>("Shaders/secret_outline");
+        public MaterialSecretOutline() => _effect = Content.Load<MTEffect>("Shaders/secret_outline");
 
         public override void Apply()
         {
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

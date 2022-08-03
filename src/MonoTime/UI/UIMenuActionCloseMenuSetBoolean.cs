@@ -14,14 +14,14 @@ namespace DuckGame
 
         public UIMenuActionCloseMenuSetBoolean(UIComponent menu, MenuBoolean value)
         {
-            this._menu = menu;
-            this._value = value;
+            _menu = menu;
+            _value = value;
         }
 
         public override void Activate()
         {
-            this._menu.Close();
-            this._value.value = true;
+            _menu.Close();
+            _value.value = true;
         }
     }
 }

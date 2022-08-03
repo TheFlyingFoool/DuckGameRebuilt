@@ -15,46 +15,46 @@ namespace DuckGame
         public BackgroundPyramid(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("pyramidBackground", 16, 16, true);
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this._editorName = "Pyramid";
+            graphic = new SpriteMap("pyramidBackground", 16, 16, true);
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
+            _editorName = "Pyramid";
         }
 
         public override void Initialize() => base.Initialize();
 
         public override void Update()
         {
-            if (!this.inited)
+            if (!inited)
             {
-                this.inited = true;
+                inited = true;
                 SpriteMap graphic = this.graphic as SpriteMap;
-                if (!this.flipHorizontal && graphic.frame % 8 == 0)
+                if (!flipHorizontal && graphic.frame % 8 == 0)
                 {
-                    if (Level.CheckPoint<BackgroundPyramid>(this.position + new Vec2(-16f, 0f)) != null)
+                    if (Level.CheckPoint<BackgroundPyramid>(position + new Vec2(-16f, 0f)) != null)
                     {
                         ++graphic.frame;
                         graphic.UpdateFrame();
                     }
                 }
-                else if (!this.flipHorizontal && graphic.frame % 8 == 7)
+                else if (!flipHorizontal && graphic.frame % 8 == 7)
                 {
-                    if (Level.CheckPoint<BackgroundPyramid>(this.position + new Vec2(16f, 0f)) != null)
+                    if (Level.CheckPoint<BackgroundPyramid>(position + new Vec2(16f, 0f)) != null)
                     {
                         --graphic.frame;
                         graphic.UpdateFrame();
                     }
                 }
-                else if (this.flipHorizontal && graphic.frame % 8 == 0)
+                else if (flipHorizontal && graphic.frame % 8 == 0)
                 {
-                    if (Level.CheckPoint<BackgroundPyramid>(this.position + new Vec2(16f, 0f)) != null)
+                    if (Level.CheckPoint<BackgroundPyramid>(position + new Vec2(16f, 0f)) != null)
                     {
                         ++graphic.frame;
                         graphic.UpdateFrame();
                     }
                 }
-                else if (this.flipHorizontal && graphic.frame % 8 == 7 && Level.CheckPoint<BackgroundPyramid>(this.position + new Vec2(-16f, 0f)) != null)
+                else if (flipHorizontal && graphic.frame % 8 == 7 && Level.CheckPoint<BackgroundPyramid>(position + new Vec2(-16f, 0f)) != null)
                 {
                     --graphic.frame;
                     graphic.UpdateFrame();

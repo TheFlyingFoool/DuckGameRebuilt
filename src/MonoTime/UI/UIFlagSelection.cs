@@ -39,9 +39,9 @@ namespace DuckGame
             component.Add(new UIText(" ", Color.White), true);
             component.Add(new UIText(" ", Color.White), true);
             component.Add(new UIText(" ", Color.White), true);
-            this.Add(component, true);
-            this._flagSelection = Global.data.flag;
-            this._openOnClose = openOnClose;
+            Add(component, true);
+            _flagSelection = Global.data.flag;
+            _openOnClose = openOnClose;
         }
 
         public static Sprite GetFlag(int idx, bool smallVersion = false)
@@ -92,42 +92,42 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this.open && this.open && !this.animating)
+            if (open && open && !animating)
             {
                 if (Input.Pressed("LEFT"))
                 {
-                    --this._flagSelection;
-                    if (this._flagSelection <= 0)
-                        this._flagSelection = 0;
+                    --_flagSelection;
+                    if (_flagSelection <= 0)
+                        _flagSelection = 0;
                 }
                 if (Input.Pressed("RIGHT"))
                 {
-                    ++this._flagSelection;
-                    if (this._flagSelection >= this.numFlags)
-                        this._flagSelection = this.numFlags - 1;
+                    ++_flagSelection;
+                    if (_flagSelection >= numFlags)
+                        _flagSelection = numFlags - 1;
                 }
                 if (Input.Pressed("UP"))
                 {
-                    this._flagSelection -= this._numFlagsPerRow;
-                    if (this._flagSelection <= 0)
-                        this._flagSelection = 0;
+                    _flagSelection -= _numFlagsPerRow;
+                    if (_flagSelection <= 0)
+                        _flagSelection = 0;
                 }
                 if (Input.Pressed("DOWN"))
                 {
-                    this._flagSelection += this._numFlagsPerRow;
-                    if (this._flagSelection >= this.numFlags)
-                        this._flagSelection = this.numFlags - 1;
+                    _flagSelection += _numFlagsPerRow;
+                    if (_flagSelection >= numFlags)
+                        _flagSelection = numFlags - 1;
                 }
                 if (Input.Pressed("SELECT"))
                 {
-                    Global.data.flag = this._flagSelection;
-                    this.Close();
-                    this._openOnClose.Open();
+                    Global.data.flag = _flagSelection;
+                    Close();
+                    _openOnClose.Open();
                 }
                 if (Input.Pressed("CANCEL"))
                 {
-                    this.Close();
-                    this._openOnClose.Open();
+                    Close();
+                    _openOnClose.Open();
                 }
             }
             base.Update();
@@ -141,17 +141,17 @@ namespace DuckGame
             int num2 = 0;
             float num3 = 0f;
             float num4 = 10f;
-            float num5 = (float)(this.x - this.width / 2.0 + 8.0);
-            float num6 = (float)(this.y - this.height / 2.0 + 8.0);
-            for (int index = 0; index < this.numFlags; ++index)
+            float num5 = (float)(x - width / 2.0 + 8.0);
+            float num6 = (float)(y - height / 2.0 + 8.0);
+            for (int index = 0; index < numFlags; ++index)
             {
                 int num7 = index % 16;
                 int num8 = index / 16;
-                DuckGame.Graphics.Draw(UIFlagSelection._flagTexture, new Vec2(num5 + num3, num6 + num4), new Rectangle?(new Rectangle(num7 * 61, num8 * 41, 61f, 41f)), num2 == this._flagSelection ? Color.White : Color.White * 0.7f, 0f, Vec2.Zero, new Vec2(0.14f, 0.14f), SpriteEffects.None, (Depth)0.9f);
+                DuckGame.Graphics.Draw(UIFlagSelection._flagTexture, new Vec2(num5 + num3, num6 + num4), new Rectangle?(new Rectangle(num7 * 61, num8 * 41, 61f, 41f)), num2 == _flagSelection ? Color.White : Color.White * 0.7f, 0f, Vec2.Zero, new Vec2(0.14f, 0.14f), SpriteEffects.None, (Depth)0.9f);
                 num3 += 9f;
                 ++num1;
                 ++num2;
-                if (num1 >= this._numFlagsPerRow)
+                if (num1 >= _numFlagsPerRow)
                 {
                     num1 = 0;
                     num4 += 8f;

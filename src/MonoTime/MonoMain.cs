@@ -54,12 +54,12 @@ namespace DuckGame
        () => "Date: " + DateTime.UtcNow.ToString( DateTimeFormatInfo.InvariantInfo),
        () => "Version: " + DG.version,
        () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")(" + (SFX.NoSoundcard ? "NO SFX" : "SFX") + ")",
-       () => MonoMain.GetOnlineString(),
+       () => GetOnlineString(),
        () => "Mods: " + ModLoader.modHash,
-       () => "Time Played: " + MonoMain.TimeString(DateTime.Now - MonoMain.startTime) + " (" + DuckGame.Graphics.frame.ToString() + ")",
+       () => "Time Played: " + TimeString(DateTime.Now - startTime) + " (" + Graphics.frame.ToString() + ")",
        () => "Special Code: " + Main.SpecialCode + " " + Main.SpecialCode2,
-       () => "Resolution: (A)" + Resolution.adapterResolution.x.ToString() + "x" + Resolution.adapterResolution.y.ToString() + " (G)" + Resolution.current.x.ToString() + "x" + Resolution.current.y.ToString() + (Options.Data.fullscreen ? " (Fullscreen(" + (Options.Data.windowedFullscreen ? "W" : "H") + "))" : " (Windowed)") + "(RF " + MonoMain.framesSinceFocusChange.ToString() + ")",
-       () => "Level: " + MonoMain.GetLevelString(),
+       () => "Resolution: (A)" + Resolution.adapterResolution.x.ToString() + "x" + Resolution.adapterResolution.y.ToString() + " (G)" + Resolution.current.x.ToString() + "x" + Resolution.current.y.ToString() + (Options.Data.fullscreen ? " (Fullscreen(" + (Options.Data.windowedFullscreen ? "W" : "H") + "))" : " (Windowed)") + "(RF " + framesSinceFocusChange.ToString() + ")",
+       () => "Level: " + GetLevelString(),
        () => "Command Line: " + Program.commandLine
     };
         private static string kCleanupString = "C:\\gamedev\\duckgame_try2\\duckgame\\DuckGame\\src\\";
@@ -184,38 +184,38 @@ namespace DuckGame
 
         public static MonoMainCore core
         {
-            get => MonoMain._core;
-            set => MonoMain._core = value;
+            get => _core;
+            set => _core = value;
         }
 
-        public static void RegisterEngineUpdatable(IEngineUpdatable pUpdatable) => MonoMain.core.engineUpdatables.Add(pUpdatable);
+        public static void RegisterEngineUpdatable(IEngineUpdatable pUpdatable) => core.engineUpdatables.Add(pUpdatable);
 
         private static UIComponent _pauseMenu
         {
-            get => MonoMain._core._pauseMenu;
-            set => MonoMain._core._pauseMenu = value;
+            get => _core._pauseMenu;
+            set => _core._pauseMenu = value;
         }
 
         public static UIComponent pauseMenu
         {
-            get => MonoMain._pauseMenu != null && !MonoMain._pauseMenu.inWorld && !MonoMain._pauseMenu.open ? null : MonoMain._pauseMenu;
+            get => _pauseMenu != null && !_pauseMenu.inWorld && !_pauseMenu.open ? null : _pauseMenu;
             set
             {
-                if (MonoMain._pauseMenu != value && MonoMain._pauseMenu != null && MonoMain._pauseMenu.open && !MonoMain._pauseMenu.inWorld)
-                    MonoMain._pauseMenu.Close();
-                MonoMain._pauseMenu = value;
+                if (_pauseMenu != value && _pauseMenu != null && _pauseMenu.open && !_pauseMenu.inWorld)
+                    _pauseMenu.Close();
+                _pauseMenu = value;
             }
         }
 
-        public static List<UIComponent> closeMenuUpdate => MonoMain._core.closeMenuUpdate;
+        public static List<UIComponent> closeMenuUpdate => _core.closeMenuUpdate;
 
-        public static RenderTarget2D screenCapture => MonoMain._screenCapture;
+        public static RenderTarget2D screenCapture => _screenCapture;
 
-        public static bool started => MonoMain._started;
+        public static bool started => _started;
 
-        public static int screenWidth => MonoMain._screenWidth;
+        public static int screenWidth => _screenWidth;
 
-        public static int screenHeight => MonoMain._screenHeight;
+        public static int screenHeight => _screenHeight;
 
         public static int windowWidth => (int)Math.Round(screenWidth * Options.GetWindowScaleMultiplier());
 
@@ -240,11 +240,11 @@ namespace DuckGame
             return current.data == null ? Level.current.GetType().ToString() : current.data.GetPath();
         }
 
-        public static string GetExceptionString(UnhandledExceptionEventArgs e) => MonoMain.GetExceptionString(e.ExceptionObject);
+        public static string GetExceptionString(UnhandledExceptionEventArgs e) => GetExceptionString(e.ExceptionObject);
 
         public static string GetExceptionString(object e)
         {
-            string str1 = (Program.ProcessExceptionString(e as Exception) + "\r\n").Replace(MonoMain.kCleanupString, "");
+            string str1 = (Program.ProcessExceptionString(e as Exception) + "\r\n").Replace(kCleanupString, "");
             try
             {
                 DevConsole.FlushPendingLines();
@@ -285,13 +285,13 @@ namespace DuckGame
             catch (Exception)
             {
             }
-            return str1 + MonoMain.GetDetails();
+            return str1 + GetDetails();
         }
 
         public static string GetDetails()
         {
             string details = "";
-            foreach (Func<string> extraExceptionDetail in MonoMain._extraExceptionDetails)
+            foreach (Func<string> extraExceptionDetail in _extraExceptionDetails)
             {
                 string str = "FIELD FAILED";
                 try
@@ -342,7 +342,7 @@ namespace DuckGame
         {
             byte[] byteArrayFastest = hex.Length % 2 != 1 ? new byte[hex.Length >> 1] : throw new Exception("The binary key cannot have an odd number of digits");
             for (int index = 0; index < hex.Length >> 1; ++index)
-                byteArrayFastest[index] = (byte)((MonoMain.GetHexVal(hex[index << 1]) << 4) + MonoMain.GetHexVal(hex[(index << 1) + 1]));
+                byteArrayFastest[index] = (byte)((GetHexVal(hex[index << 1]) << 4) + GetHexVal(hex[(index << 1) + 1]));
             return byteArrayFastest;
         }
 
@@ -368,7 +368,7 @@ namespace DuckGame
                         using (StreamReader streamReader = new StreamReader(responseStream, Encoding.UTF8))
                         {
                             string[] strArray = streamReader.ReadToEnd().Split('=');
-                            byte[] byteArray = MonoMain.StringToByteArray(strArray[1].Split('&')[0]);
+                            byte[] byteArray = StringToByteArray(strArray[1].Split('&')[0]);
                             string str = strArray[2];
                             return ContentPack.LoadTexture2DFromStream(new MemoryStream(byteArray), false);
                         }
@@ -442,7 +442,7 @@ namespace DuckGame
             return null;
         }
 
-        public void SaveShot() => new Thread(new ThreadStart(this.SaveShotThread))
+        public void SaveShot() => new Thread(new ThreadStart(SaveShotThread))
         {
             CurrentCulture = CultureInfo.InvariantCulture,
             Priority = ThreadPriority.BelowNormal,
@@ -452,12 +452,12 @@ namespace DuckGame
         public void SaveShotThread()
         {
             RenderTarget2D saveShot = this.saveShot;
-            string str1 = DateTime.Now.ToShortDateString() + "-" + DateTime.Now.ToShortTimeString() + " " + this._numShots.ToString();
-            ++this._numShots;
+            string str1 = DateTime.Now.ToShortDateString() + "-" + DateTime.Now.ToShortTimeString() + " " + _numShots.ToString();
+            ++_numShots;
             string str2 = str1.Replace("/", "_").Replace(":", "-").Replace(" ", "");
             if (!Directory.Exists("screenshots"))
                 Directory.CreateDirectory("screenshots");
-            FileStream fileStream = System.IO.File.OpenWrite("screenshots/duckscreen-" + str2 + ".png");
+            FileStream fileStream = File.OpenWrite("screenshots/duckscreen-" + str2 + ".png");
             (saveShot.nativeObject as Microsoft.Xna.Framework.Graphics.RenderTarget2D).SaveAsPng(fileStream, saveShot.width, saveShot.height);
             fileStream.Close();
         }
@@ -472,10 +472,10 @@ namespace DuckGame
 
         private void graphics_PreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
         {
-            if (!MonoMain.noHidef && e.GraphicsDeviceInformation.Adapter.IsProfileSupported(GraphicsProfile.HiDef))
+            if (!noHidef && e.GraphicsDeviceInformation.Adapter.IsProfileSupported(GraphicsProfile.HiDef))
             {
                 e.GraphicsDeviceInformation.GraphicsProfile = GraphicsProfile.HiDef;
-                MonoMain.hidef = true;
+                hidef = true;
             }
             else
                 e.GraphicsDeviceInformation.GraphicsProfile = GraphicsProfile.Reach;
@@ -484,50 +484,50 @@ namespace DuckGame
 
         public MonoMain()
         {
-            MonoMain.mainThread = Thread.CurrentThread;
-            MonoMain.cultureCode = CultureInfo.CurrentCulture.LCID;
-            MonoMain.startupAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where<Assembly>(x => !x.IsDynamic).Select<Assembly, string>(assembly => assembly.Location).ToArray<string>();
-            this.Content = new SynchronizedContentManager(Services);
+            mainThread = Thread.CurrentThread;
+            cultureCode = CultureInfo.CurrentCulture.LCID;
+            startupAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where<Assembly>(x => !x.IsDynamic).Select<Assembly, string>(assembly => assembly.Location).ToArray<string>();
+            Content = new SynchronizedContentManager(Services);
             DG.SetVersion(Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            this.graphics = new GraphicsDeviceManager(this);
-            this.graphics.PreparingDeviceSettings += new EventHandler<PreparingDeviceSettingsEventArgs>(this.graphics_PreparingDeviceSettings);
-            this.Content.RootDirectory = "Content";
-            this._adapterW = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            this._adapterH = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            if (this._adapterW >= 2048 || this._adapterH >= 2048)
-                MonoMain.fourK = true;
+            graphics = new GraphicsDeviceManager(this);
+            graphics.PreparingDeviceSettings += new EventHandler<PreparingDeviceSettingsEventArgs>(graphics_PreparingDeviceSettings);
+            Content.RootDirectory = "Content";
+            _adapterW = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            _adapterH = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            if (_adapterW >= 2048 || _adapterH >= 2048)
+                fourK = true;
             int num1 = 1280;
-            if (num1 > this._adapterW)
+            if (num1 > _adapterW)
                 num1 = 1024;
-            if (num1 > this._adapterW)
+            if (num1 > _adapterW)
                 num1 = 640;
-            if (num1 > this._adapterW)
+            if (num1 > _adapterW)
                 num1 = 320;
-            if (this._adapterW > 1920)
+            if (_adapterW > 1920)
                 num1 = 1920;
             // I'm not messing with this
-            float num2 = (float)_adapterH / (float)this._adapterW;
+            float num2 = (float)_adapterH / (float)_adapterW;
             if (num2 < 0.56f)
             {
                 num2 = 9f / 16f;
-                this._adapterH = (int)(_adapterW * num2);
+                _adapterH = (int)(_adapterW * num2);
             }
             int num3 = (int)(num2 * num1);
             if (num3 > 1200)
                 num3 = 1200;
-            MonoMain._screenWidth = num1;
-            MonoMain._screenHeight = num3;
+            _screenWidth = num1;
+            _screenHeight = num3;
             DuckFile.Initialize();
             Options.Load();
             Cloud.Initialize();
-            MonoMain.instance = this;
-            Resolution.Initialize((Form)Control.FromHandle(this.Window.Handle), this.graphics);
+            instance = this;
+            Resolution.Initialize((Form)Control.FromHandle(Window.Handle), graphics);
             Options.Load();
             Options.PostLoad();
-            if (MonoMain.noFullscreen)
+            if (noFullscreen)
                 Options.LocalData.currentResolution = Options.LocalData.windowedResolution;
-            DuckGame.Graphics.InitializeBase(this.graphics, MonoMain.screenWidth, MonoMain.screenHeight);
-            this._waitToStartLoadingTimer.Start();
+            Graphics.InitializeBase(graphics, screenWidth, screenHeight);
+            _waitToStartLoadingTimer.Start();
         }
 
         public string screenMode
@@ -538,31 +538,31 @@ namespace DuckGame
             }
         }
 
-        public static void ResetInfiniteLoopTimer() => MonoMain._loopTimer.Reset();
+        public static void ResetInfiniteLoopTimer() => _loopTimer.Reset();
 
         public void InfiniteLoopDetector()
         {
-            while (this._infiniteLoopDetector != null)
+            while (_infiniteLoopDetector != null)
             {
                 Thread.Sleep(40);
-                if (!MonoMain.started || !DuckGame.Graphics.inFocus)
-                    MonoMain.ResetInfiniteLoopTimer();
-                if (MonoMain._loopTimer.Elapsed.TotalSeconds > 5.0)
+                if (!started || !Graphics.inFocus)
+                    ResetInfiniteLoopTimer();
+                if (_loopTimer.Elapsed.TotalSeconds > 5.0)
                 {
                     try
                     {
-                        MonoMain.mainThread.Suspend();
-                        MonoMain.infiniteLoopDetails = "Infinite loop crash: ";
+                        mainThread.Suspend();
+                        infiniteLoopDetails = "Infinite loop crash: ";
                         try
                         {
-                            MonoMain.infiniteLoopDetails += MonoMain.GetInfiniteLoopDetails();
+                            infiniteLoopDetails += GetInfiniteLoopDetails();
                         }
                         catch (Exception)
                         {
                         }
-                        MonoMain.hadInfiniteLoop = true;
-                        MonoMain.mainThread.Resume();
-                        MonoMain.mainThread.Abort(new Exception(MonoMain.infiniteLoopDetails));
+                        hadInfiniteLoop = true;
+                        mainThread.Resume();
+                        mainThread.Abort(new Exception(infiniteLoopDetails));
                     }
                     catch (Exception ex)
                     {
@@ -574,7 +574,7 @@ namespace DuckGame
 
         public static string GetInfiniteLoopDetails()
         {
-            string str = new StackTrace(MonoMain.mainThread, true).ToString();
+            string str = new StackTrace(mainThread, true).ToString();
             int length = str.IndexOf("at Microsoft.Xna.Framework.Game.Tick");
             return length >= 0 ? str.Substring(0, length) : str;
         }
@@ -586,58 +586,58 @@ namespace DuckGame
         protected override void Initialize()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            this.IsFixedTimeStep = true;
-            DuckGame.Graphics.mouseVisible = false;
+            IsFixedTimeStep = true;
+            Graphics.mouseVisible = false;
             base.Initialize();
-            DuckGame.Content.InitializeBase(this.Content);
+            DuckGame.Content.InitializeBase(Content);
             Curve.System_Initialize();
             Rando.DoInitialize();
             NetRand.Initialize();
-            this.InactiveSleepTime = new TimeSpan(0L);
-            DuckGame.Graphics.Initialize(this.GraphicsDevice);
+            InactiveSleepTime = new TimeSpan(0L);
+            Graphics.Initialize(GraphicsDevice);
             Resolution.Set(Options.LocalData.currentResolution);
             Resolution.Apply();
-            MonoMain._screenCapture = new RenderTarget2D(Resolution.current.x, Resolution.current.y, true);
-            this._duckRun = new SpriteMap("duck", 32, 32);
-            this._duckRun.AddAnimation("run", 1f, true, 1, 2, 3, 4, 5, 6);
-            this._duckRun.SetAnimation("run");
-            this._duckArm = new SpriteMap("duckArms", 16, 16);
-            this.graphicsService = this.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
-            DuckGame.Graphics.device.DeviceLost += new EventHandler<EventArgs>(this.DeviceLost);
-            DuckGame.Graphics.device.DeviceResetting += new EventHandler<EventArgs>(this.DeviceResetting);
-            DuckGame.Graphics.device.DeviceReset += new EventHandler<EventArgs>(this.DeviceReset);
-            this.graphicsService.DeviceCreated += (_param1, _param2) => this.OnDeviceCreated();
-            if (MonoMain.infiniteLoopDebug)
+            _screenCapture = new RenderTarget2D(Resolution.current.x, Resolution.current.y, true);
+            _duckRun = new SpriteMap("duck", 32, 32);
+            _duckRun.AddAnimation("run", 1f, true, 1, 2, 3, 4, 5, 6);
+            _duckRun.SetAnimation("run");
+            _duckArm = new SpriteMap("duckArms", 16, 16);
+            graphicsService = Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
+            Graphics.device.DeviceLost += new EventHandler<EventArgs>(DeviceLost);
+            Graphics.device.DeviceResetting += new EventHandler<EventArgs>(DeviceResetting);
+            Graphics.device.DeviceReset += new EventHandler<EventArgs>(DeviceReset);
+            graphicsService.DeviceCreated += (_param1, _param2) => OnDeviceCreated();
+            if (infiniteLoopDebug)
             {
-                this._infiniteLoopDetector = new Thread(new ThreadStart(this.InfiniteLoopDetector))
+                _infiniteLoopDetector = new Thread(new ThreadStart(InfiniteLoopDetector))
                 {
                     CurrentCulture = CultureInfo.InvariantCulture,
                     Priority = ThreadPriority.Lowest,
                     IsBackground = true
                 };
-                this._infiniteLoopDetector.Start();
-                MonoMain._loopTimer.Start();
+                _infiniteLoopDetector.Start();
+                _loopTimer.Start();
             }
-            this._canStartLoading = true;
+            _canStartLoading = true;
         }
 
         private void PostCloudLogic()
         {
-            MonoMain.atPostCloudLogic = true;
+            atPostCloudLogic = true;
             DGSave.Initialize();
             Global.Initialize();
             Layer.InitializeLayers();
         }
 
-        private void OnDeviceCreated() => DuckGame.Graphics.device = this.graphicsService.GraphicsDevice;
+        private void OnDeviceCreated() => Graphics.device = graphicsService.GraphicsDevice;
 
         public void KillEverything()
         {
-            MonoMain.closingGame = true;
-            if (this._killedEverything)
+            closingGame = true;
+            if (_killedEverything)
                 return;
             DevConsole.Log(DCSection.General, "|DGRED|-----------KillEverything()-----------");
-            this._killedEverything = true;
+            _killedEverything = true;
             try
             {
                 if (!Program.crashed)
@@ -663,19 +663,19 @@ namespace DuckGame
             try
             {
                 Music.Terminate();
-                MonoMain.cancelLazyLoad = true;
+                cancelLazyLoad = true;
             }
             catch
             {
             }
             try
             {
-                if (MonoMain._lazyLoadThread != null && MonoMain._lazyLoadThread.IsAlive)
-                    MonoMain._lazyLoadThread.Abort();
-                if (MonoMain._initializeThread != null)
+                if (_lazyLoadThread != null && _lazyLoadThread.IsAlive)
+                    _lazyLoadThread.Abort();
+                if (_initializeThread != null)
                 {
-                    if (MonoMain._initializeThread.IsAlive)
-                        MonoMain._initializeThread.Abort();
+                    if (_initializeThread.IsAlive)
+                        _initializeThread.Abort();
                 }
             }
             catch
@@ -708,7 +708,7 @@ namespace DuckGame
             }
             try
             {
-                if (MonoMain.logFileOperations)
+                if (logFileOperations)
                 {
                     DevConsole.Log(DCSection.General, "Logging file operations finished.");
                     DevConsole.SaveNetLog("duck_file_log.rtf");
@@ -717,28 +717,28 @@ namespace DuckGame
             catch (Exception)
             {
             }
-            if (this._infiniteLoopDetector == null)
+            if (_infiniteLoopDetector == null)
                 return;
-            this._infiniteLoopDetector = null;
+            _infiniteLoopDetector = null;
         }
 
         protected override void OnExiting(object sender, EventArgs args)
         {
-            this.KillEverything();
+            KillEverything();
             Process.GetCurrentProcess().Kill();
         }
 
         private void DoLazyLoading()
         {
-            while (!MonoMain.cancelLazyLoad && MonoMain.lazyLoadActions.Count != 0)
+            while (!cancelLazyLoad && lazyLoadActions.Count != 0)
             {
-                Action action = MonoMain.lazyLoadActions.Dequeue();
+                Action action = lazyLoadActions.Dequeue();
                 if (action != null)
                     action();
             }
         }
 
-        public static Thread lazyLoadThread => MonoMain._lazyLoadThread;
+        public static Thread lazyLoadThread => _lazyLoadThread;
 
         private void StartLazyLoad()
         {
@@ -748,13 +748,13 @@ namespace DuckGame
 
         public static void FinishLazyLoad()
         {
-            while (MonoMain.lazyLoadActions.Count > 0)
-                MonoMain.lazyLoadActions.Dequeue()();
+            while (lazyLoadActions.Count > 0)
+                lazyLoadActions.Dequeue()();
         }
 
-        public static Thread initializeThread => MonoMain._initializeThread;
+        public static Thread initializeThread => _initializeThread;
 
-        public static Task initializeTask => MonoMain._initializeTask;
+        public static Task initializeTask => _initializeTask;
 
         private static void ResultFetched(object value0, WorkshopQueryResult result)
         {
@@ -765,12 +765,12 @@ namespace DuckGame
             int num2 = DuckFile.GetDirectories(publishedFile.path).Count<string>();
             if ((num1 != 0 || num2 != 0) && (publishedFile.stateFlags & WorkshopItemState.Installed) != WorkshopItemState.None && (publishedFile.stateFlags & WorkshopItemState.NeedsUpdate) == WorkshopItemState.None)
                 return;
-            MonoMain.availableModsToDownload.Add(publishedFile);
+            availableModsToDownload.Add(publishedFile);
         }
 
         private void DownloadWorkshopItems()
         {
-            MonoMain.loadMessage = "Downloading workshop mods...";
+            loadMessage = "Downloading workshop mods...";
             if (!Steam.IsInitialized())
                 return;
             LoadingAction steamLoad = new LoadingAction();
@@ -780,7 +780,7 @@ namespace DuckGame
                queryUser.requiredTags.Add("Mod");
                queryUser.onlyQueryIDs = true;
                queryUser.QueryFinished += sender => steamLoad.flag = true;
-               queryUser.ResultFetched += new WorkshopQueryResultFetched(MonoMain.ResultFetched);
+               queryUser.ResultFetched += new WorkshopQueryResultFetched(ResultFetched);
                queryUser.Request();
                Steam.Update();
            };
@@ -789,22 +789,22 @@ namespace DuckGame
                Steam.Update();
                return steamLoad.flag;
            };
-            MonoMain._thingsToLoad.Enqueue(steamLoad);
+            _thingsToLoad.Enqueue(steamLoad);
             steamLoad = new LoadingAction();
             steamLoad.action = () =>
            {
-               MonoMain.totalLoadyBits = MonoMain.availableModsToDownload.Count;
-               MonoMain.loadyBits = 0;
-               foreach (WorkshopItem workshopItem in MonoMain.availableModsToDownload)
+               totalLoadyBits = availableModsToDownload.Count;
+               loadyBits = 0;
+               foreach (WorkshopItem workshopItem in availableModsToDownload)
                {
                    WorkshopItem u = workshopItem;
                    LoadingAction itemDownload = new LoadingAction();
                    itemDownload.action = () =>
              {
-                 MonoMain.loadMessage = "Downloading workshop mods (" + MonoMain.loadyBits.ToString() + "/" + MonoMain.totalLoadyBits.ToString() + ")";
+                 loadMessage = "Downloading workshop mods (" + loadyBits.ToString() + "/" + totalLoadyBits.ToString() + ")";
                  if (Steam.DownloadWorkshopItem(u))
                      itemDownload.context = u;
-                 ++MonoMain.loadyBits;
+                 ++loadyBits;
              };
                    itemDownload.waitAction = () =>
              {
@@ -819,74 +819,74 @@ namespace DuckGame
                Steam.Update();
                return steamLoad.flag;
            };
-            MonoMain._thingsToLoad.Enqueue(steamLoad);
+            _thingsToLoad.Enqueue(steamLoad);
         }
 
-        private void AddLoadingAction(Action pAction) => MonoMain._thingsToLoad.Enqueue((LoadingAction)pAction);
+        private void AddLoadingAction(Action pAction) => _thingsToLoad.Enqueue((LoadingAction)pAction);
 
         private void StartThreadedLoading()
         {
-            this._threadedLoadingStarted = true;
-            MonoMain.currentActionQueue = MonoMain._thingsToLoad;
-            this.AddLoadingAction(new Action(ManagedContent.PreInitializeMods));
-            this.AddLoadingAction(() =>
+            _threadedLoadingStarted = true;
+            currentActionQueue = _thingsToLoad;
+            AddLoadingAction(new Action(ManagedContent.PreInitializeMods));
+            AddLoadingAction(() =>
            {
                DuckGame.Content.InitializeTextureSizeDictionary();
                Network.Initialize();
                Teams.Initialize();
                Chancy.Initialize();
-               this._watermarkEffect = DuckGame.Content.Load<MTEffect>("Shaders/basicWatermark");
-               this._watermarkTexture = DuckGame.Content.Load<Tex2D>("looptex");
+               _watermarkEffect = DuckGame.Content.Load<MTEffect>("Shaders/basicWatermark");
+               _watermarkTexture = DuckGame.Content.Load<Tex2D>("looptex");
                DuckNetwork.Initialize();
                Persona.Initialize();
                DuckRig.Initialize();
            });
-            this.AddLoadingAction(new Action(Input.Initialize));
-            if (MonoMain.downloadWorkshopMods)
-                this.DownloadWorkshopItems();
-            this.AddLoadingAction(new Action(ManagedContent.InitializeMods));
-            this.AddLoadingAction(new Action(Network.InitializeMessageTypes));
-            this.AddLoadingAction(new Action(DeathCrate.InitializeDeathCrateSettings));
-            this.AddLoadingAction(new Action(Editor.InitializeConstructorLists));
-            this.AddLoadingAction(new Action(Team.DeserializeCustomHats));
-            this.AddLoadingAction(new Action(DuckGame.Content.InitializeLevels));
-            this.AddLoadingAction(new Action(DuckGame.Content.InitializeEffects));
-            this.AddLoadingAction(new Action(Input.InitializeGraphics));
-            this.AddLoadingAction(new Action(Music.Initialize));
-            this.AddLoadingAction(new Action(DevConsole.InitializeFont));
-            this.AddLoadingAction(new Action(DevConsole.InitializeCommands));
-            this.AddLoadingAction(new Action(Editor.InitializePlaceableGroup));
-            this.AddLoadingAction(new Action(Challenges.Initialize));
-            this.AddLoadingAction(new Action(Collision.Initialize));
-            this.AddLoadingAction(new Action(Level.InitializeCollisionLists));
-            this.AddLoadingAction(new Action(Keyboard.InitTriggerImages));
-            this.AddLoadingAction(new Action(MapPack.RegeneratePreviewsIfNecessary));
-            this.AddLoadingAction(() => this.StartLazyLoad());
-            this.AddLoadingAction(new Action(this.SetStarted));
+            AddLoadingAction(new Action(Input.Initialize));
+            if (downloadWorkshopMods)
+                DownloadWorkshopItems();
+            AddLoadingAction(new Action(ManagedContent.InitializeMods));
+            AddLoadingAction(new Action(Network.InitializeMessageTypes));
+            AddLoadingAction(new Action(DeathCrate.InitializeDeathCrateSettings));
+            AddLoadingAction(new Action(Editor.InitializeConstructorLists));
+            AddLoadingAction(new Action(Team.DeserializeCustomHats));
+            AddLoadingAction(new Action(DuckGame.Content.InitializeLevels));
+            AddLoadingAction(new Action(DuckGame.Content.InitializeEffects));
+            AddLoadingAction(new Action(Input.InitializeGraphics));
+            AddLoadingAction(new Action(Music.Initialize));
+            AddLoadingAction(new Action(DevConsole.InitializeFont));
+            AddLoadingAction(new Action(DevConsole.InitializeCommands));
+            AddLoadingAction(new Action(Editor.InitializePlaceableGroup));
+            AddLoadingAction(new Action(Challenges.Initialize));
+            AddLoadingAction(new Action(Collision.Initialize));
+            AddLoadingAction(new Action(Level.InitializeCollisionLists));
+            AddLoadingAction(new Action(Keyboard.InitTriggerImages));
+            AddLoadingAction(new Action(MapPack.RegeneratePreviewsIfNecessary));
+            AddLoadingAction(() => StartLazyLoad());
+            AddLoadingAction(new Action(SetStarted));
         }
 
         private void SetStarted()
         {
-            this._doStart = true;
-            if (MonoMain.enableThreadedLoading)
+            _doStart = true;
+            if (enableThreadedLoading)
             {
-                MonoMain._lazyLoadThread = new Thread(new ThreadStart(this.DoLazyLoading))
+                _lazyLoadThread = new Thread(new ThreadStart(DoLazyLoading))
                 {
                     CurrentCulture = CultureInfo.InvariantCulture,
                     Priority = ThreadPriority.BelowNormal,
                     IsBackground = true
                 };
-                MonoMain._lazyLoadThread.Start();
+                _lazyLoadThread.Start();
             }
             else
-                this.DoLazyLoading();
+                DoLazyLoading();
         }
 
         private void Start()
         {
             ModLoader.PostLoadMods();
-            this.OnStart();
-            MonoMain._started = true;
+            OnStart();
+            _started = true;
         }
 
         protected virtual void OnStart()
@@ -899,78 +899,78 @@ namespace DuckGame
 
         public static void StartRecording(string name)
         {
-            MonoMain._recordingStarted = true;
-            MonoMain._recordData = true;
-            int num = MonoMain._recordData ? 1 : 0;
+            _recordingStarted = true;
+            _recordData = true;
+            int num = _recordData ? 1 : 0;
         }
 
         public static void StartPlayback()
         {
-            MonoMain._recordingStarted = true;
-            MonoMain._recordData = false;
+            _recordingStarted = true;
+            _recordData = false;
         }
 
-        public static void StopRecording() => MonoMain._recordingStarted = false;
+        public static void StopRecording() => _recordingStarted = false;
 
         private void DeviceLost(object obj, EventArgs args)
         {
-            MonoMain.loseDevice = 1;
+            loseDevice = 1;
             SynchronizedContentManager.blockLoading = 2;
         }
 
         private void DeviceResetting(object obj, EventArgs args)
         {
-            MonoMain.loseDevice = 1;
+            loseDevice = 1;
             SynchronizedContentManager.blockLoading = 2;
         }
 
         private void DeviceReset(object obj, EventArgs args)
         {
-            MonoMain.loseDevice = 1;
+            loseDevice = 1;
             SynchronizedContentManager.blockLoading = 2;
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (MonoMain.showingSaveTool && MonoMain.saveTool == null && System.IO.File.Exists("SaveTool.dll"))
+            if (showingSaveTool && saveTool == null && File.Exists("SaveTool.dll"))
             {
-                MonoMain.saveTool = Activator.CreateInstance(Assembly.Load(System.IO.File.ReadAllBytes(Directory.GetCurrentDirectory() + "\\SaveTool.dll")).GetType("SaveRecovery.SaveTool")) as Form;
-                DuckGame.Graphics.mouseVisible = true;
-                int num = (int)MonoMain.saveTool.ShowDialog();
+                saveTool = Activator.CreateInstance(Assembly.Load(File.ReadAllBytes(Directory.GetCurrentDirectory() + "\\SaveTool.dll")).GetType("SaveRecovery.SaveTool")) as Form;
+                Graphics.mouseVisible = true;
+                int num = (int)saveTool.ShowDialog();
                 Program.crashed = true;
                 Application.Exit();
             }
             if (Program.isLinux)
             {
-                if (this.IsActive)
+                if (IsActive)
                 {
-                    ++MonoMain.framesBackInFocus;
-                    DuckGame.Graphics.mouseVisible = MonoMain.showingSaveTool;
+                    ++framesBackInFocus;
+                    Graphics.mouseVisible = showingSaveTool;
                 }
                 else
                 {
-                    MonoMain.framesBackInFocus = 0L;
-                    DuckGame.Graphics.mouseVisible = true;
+                    framesBackInFocus = 0L;
+                    Graphics.mouseVisible = true;
                 }
             }
-            else if (Form.ActiveForm != null && this.IsActive)
+            else if (Form.ActiveForm != null && IsActive)
             {
-                ++MonoMain.framesBackInFocus;
-                DuckGame.Graphics.mouseVisible = MonoMain.showingSaveTool;
+                ++framesBackInFocus;
+                Graphics.mouseVisible = showingSaveTool;
             }
             else
             {
-                MonoMain.framesBackInFocus = 0L;
-                DuckGame.Graphics.mouseVisible = true;
+                framesBackInFocus = 0L;
+                Graphics.mouseVisible = true;
             }
-            if (!this.GraphicsDevice.IsDisposed)
+            if (!GraphicsDevice.IsDisposed)
             {
-                if (!DuckGame.Graphics.screen.GraphicsDevice.IsDisposed)
+                if (!Graphics.screen.GraphicsDevice.IsDisposed)
                 {
                     try
                     {
-                        MonoMain._loopTimer.Restart();
-                        this.RunUpdate(gameTime);
+                        _loopTimer.Restart();
+                        RunUpdate(gameTime);
                         return;
                     }
                     catch (Exception ex)
@@ -985,132 +985,132 @@ namespace DuckGame
 
         public static bool closeMenus
         {
-            get => MonoMain._core.closeMenus;
-            set => MonoMain._core.closeMenus = value;
+            get => _core.closeMenus;
+            set => _core.closeMenus = value;
         }
 
         public static bool menuOpenedThisFrame
         {
-            get => MonoMain._core.menuOpenedThisFrame;
-            set => MonoMain._core.menuOpenedThisFrame = value;
+            get => _core.menuOpenedThisFrame;
+            set => _core.menuOpenedThisFrame = value;
         }
 
         public static bool dontResetSelection
         {
-            get => MonoMain._core.dontResetSelection;
-            set => MonoMain._core.dontResetSelection = value;
+            get => _core.dontResetSelection;
+            set => _core.dontResetSelection = value;
         }
 
         public static void UpdatePauseMenu(bool hasFocus = true)
         {
-            MonoMain.shouldPauseGameplay = true;
+            shouldPauseGameplay = true;
             if (Network.isActive && UIMatchmakerMark2.instance == null && (!Network.InLobby() || !(Level.current as TeamSelect2).MatchmakerOpen()))
-                MonoMain.shouldPauseGameplay = false;
-            if (MonoMain._pauseMenu != null)
+                shouldPauseGameplay = false;
+            if (_pauseMenu != null)
             {
-                if (MonoMain.shouldPauseGameplay)
+                if (shouldPauseGameplay)
                 {
                     HUD.Update();
-                    MonoMain._pauseMenu.Update();
+                    _pauseMenu.Update();
                     AutoUpdatables.MuteSounds();
                 }
                 else
                 {
-                    MonoMain._pauseMenu.Update();
+                    _pauseMenu.Update();
                     Input.ignoreInput = true;
                 }
-                if (MonoMain._pauseMenu != null && !MonoMain._pauseMenu.open)
-                    MonoMain._pauseMenu = null;
+                if (_pauseMenu != null && !_pauseMenu.open)
+                    _pauseMenu = null;
             }
             else
-                MonoMain.shouldPauseGameplay = false;
-            for (int index = 0; index < MonoMain.closeMenuUpdate.Count; ++index)
+                shouldPauseGameplay = false;
+            for (int index = 0; index < closeMenuUpdate.Count; ++index)
             {
-                UIComponent uiComponent = MonoMain.closeMenuUpdate[index];
+                UIComponent uiComponent = closeMenuUpdate[index];
                 uiComponent.Update();
                 if (!uiComponent.animating)
                 {
-                    MonoMain.closeMenuUpdate.RemoveAt(index);
+                    closeMenuUpdate.RemoveAt(index);
                     --index;
                 }
             }
-            MonoMain.menuOpenedThisFrame = false;
-            MonoMain.dontResetSelection = false;
+            menuOpenedThisFrame = false;
+            dontResetSelection = false;
         }
 
-        public static void RetakePauseCapture() => MonoMain._didPauseCapture = false;
+        public static void RetakePauseCapture() => _didPauseCapture = false;
 
         public static void CalculateModMemoryOffendersList()
         {
-            List<ModConfiguration> list = MonoMain.loadedModsWithAssemblies.OrderByDescending<ModConfiguration, long>(x => x.content == null ? -1L : x.content.kilobytesPreAllocated).ToList<ModConfiguration>();
+            List<ModConfiguration> list = loadedModsWithAssemblies.OrderByDescending<ModConfiguration, long>(x => x.content == null ? -1L : x.content.kilobytesPreAllocated).ToList<ModConfiguration>();
             bool flag = false;
-            MonoMain.modMemoryOffendersString = "Mods taking up the most memory:\n";
+            modMemoryOffendersString = "Mods taking up the most memory:\n";
             foreach (ModConfiguration modConfiguration in list)
             {
                 long kilobytesPreAllocated = modConfiguration.content.kilobytesPreAllocated;
                 if (kilobytesPreAllocated / 1000L > 20L)
                 {
-                    MonoMain.modMemoryOffendersString = MonoMain.modMemoryOffendersString + modConfiguration.displayName + " (" + (kilobytesPreAllocated / 1000L).ToString() + "MB)(ID:" + modConfiguration.workshopID.ToString() + ")\n";
+                    modMemoryOffendersString = modMemoryOffendersString + modConfiguration.displayName + " (" + (kilobytesPreAllocated / 1000L).ToString() + "MB)(ID:" + modConfiguration.workshopID.ToString() + ")\n";
                     flag = true;
                 }
             }
-            MonoMain.modMemoryOffendersString += "\n";
+            modMemoryOffendersString += "\n";
             if (flag)
                 return;
-            MonoMain.modMemoryOffendersString = "";
+            modMemoryOffendersString = "";
         }
 
         public void RunUpdate(GameTime gameTime)
         {
-            ++DuckGame.Graphics.frame;
+            ++Graphics.frame;
             Tasker.RunTasks();
-            DuckGame.Graphics.GarbageDisposal(false);
-            if (!MonoMain.disableSteam && !MonoMain._started)
+            Graphics.GarbageDisposal(false);
+            if (!disableSteam && !_started)
             {
                 if (Cloud.processing)
                 {
                     Cloud.Update();
                     return;
                 }
-                if (MonoMain.steamConnectionCheckFail)
+                if (steamConnectionCheckFail)
                 {
-                    if (this._loggedConnectionCheckFailure)
+                    if (_loggedConnectionCheckFailure)
                     {
-                        this._loggedConnectionCheckFailure = true;
+                        _loggedConnectionCheckFailure = true;
                         DevConsole.Log("|DGRED|Failed to initialize a connection to Steam.");
                     }
                 }
                 else if (Steam.IsInitialized() && Steam.IsRunningInitializeProcedures())
                 {
-                    MonoMain.loadMessage = "Loading Steam";
+                    loadMessage = "Loading Steam";
                     Steam.Update();
                     return;
                 }
             }
-            if (this._canStartLoading && !this._threadedLoadingStarted && this._didFirstDraw)
+            if (_canStartLoading && !_threadedLoadingStarted && _didFirstDraw)
             {
-                this.PostCloudLogic();
-                this.StartThreadedLoading();
+                PostCloudLogic();
+                StartThreadedLoading();
             }
-            if (MonoMain._thingsToLoad.Count > 0)
+            if (_thingsToLoad.Count > 0)
             {
                 TimeSpan elapsed;
                 if (Program.isLinux)
                 {
-                    elapsed = this._waitToStartLoadingTimer.elapsed;
+                    elapsed = _waitToStartLoadingTimer.elapsed;
                     if (elapsed.TotalMilliseconds <= 3500.0)
                         goto label_19;
                 }
-                this._loadTimer.Restart();
-                while (MonoMain._thingsToLoad.Count > 0)
+                _loadTimer.Restart();
+                while (_thingsToLoad.Count > 0)
                 {
-                    elapsed = this._loadTimer.elapsed;
+                    elapsed = _loadTimer.elapsed;
                     if (elapsed.TotalMilliseconds < 40.0)
                     {
-                        MonoMain.currentActionQueue = MonoMain._thingsToLoad;
-                        LoadingAction loadingAction = MonoMain._thingsToLoad.Peek();
+                        currentActionQueue = _thingsToLoad;
+                        LoadingAction loadingAction = _thingsToLoad.Peek();
                         if (loadingAction.Invoke())
-                            MonoMain._thingsToLoad.Dequeue();
+                            _thingsToLoad.Dequeue();
                         else if (loadingAction.waiting)
                             break;
                     }
@@ -1118,15 +1118,16 @@ namespace DuckGame
                         break;
                 }
             }
-        label_19:
-            if (this._doStart && !MonoMain._started)
+            label_19:
+            if (_doStart && !_started)
             {
-                this._doStart = false;
-                this.Start();
+                _doStart = false;
+                Start();
             }
-            if (!MonoMain._started || DuckGame.Graphics.screenCapture != null)
+            if (!_started || Graphics.screenCapture != null)
                 return;
-            if (DuckGame.Graphics.inFocus)
+
+            if (Graphics.inFocus)
                 Input.Update();
             lock (LevelMetaData._completedPreviewTasks)
             {
@@ -1146,7 +1147,7 @@ namespace DuckGame
                 }
             }
             Cloud.Update();
-            if (MonoMain._started && !NetworkDebugger.enabled)
+            if (_started && !NetworkDebugger.enabled)
             {
                 InputProfile.Update();
                 Network.PreUpdate();
@@ -1166,10 +1167,10 @@ namespace DuckGame
             catch (Exception)
             {
             }
-            if (MonoMain.exit || (Keyboard.Down(Keys.LeftAlt) || Keyboard.Down(Keys.RightAlt)) && Keyboard.Down(Keys.F4))
+            if (exit || (Keyboard.Down(Keys.LeftAlt) || Keyboard.Down(Keys.RightAlt)) && Keyboard.Down(Keys.F4))
             {
-                this.KillEverything();
-                this.Exit();
+                KillEverything();
+                Exit();
             }
             else
             {
@@ -1178,67 +1179,67 @@ namespace DuckGame
                     DevConsole.Update();
                 SFX.Update();
                 Options.Update();
-                InputProfile.repeat = Level.current is Editor || MonoMain._pauseMenu != null || Editor.selectingLevel;
-                Keyboard.repeat = Level.current is Editor || MonoMain._pauseMenu != null || DevConsole.open || DuckNetwork.core.enteringText || Editor.enteringText;
+                InputProfile.repeat = Level.current is Editor || _pauseMenu != null || Editor.selectingLevel;
+                Keyboard.repeat = Level.current is Editor || _pauseMenu != null || DevConsole.open || DuckNetwork.core.enteringText || Editor.enteringText;
                 bool hasFocus = true;
                 if (!NetworkDebugger.enabled)
-                    MonoMain.UpdatePauseMenu(hasFocus);
+                    UpdatePauseMenu(hasFocus);
                 else
-                    MonoMain.shouldPauseGameplay = false;
-                if (MonoMain.transitionDirection != TransitionDirection.None)
+                    shouldPauseGameplay = false;
+                if (transitionDirection != TransitionDirection.None)
                 {
-                    if (MonoMain.transitionLevel != null)
+                    if (transitionLevel != null)
                     {
-                        DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 0f, 0.05f);
-                        if (DuckGame.Graphics.fade <= 0.0)
+                        Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
+                        if (Graphics.fade <= 0.0)
                         {
-                            Level.current = MonoMain.transitionLevel;
-                            MonoMain.transitionLevel = null;
-                            MonoMain.transitionDirection = TransitionDirection.None;
+                            Level.current = transitionLevel;
+                            transitionLevel = null;
+                            transitionDirection = TransitionDirection.None;
                         }
                     }
                     else
                     {
-                        DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 1f, 0.1f);
-                        if (DuckGame.Graphics.fade >= 1.0)
+                        Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.1f);
+                        if (Graphics.fade >= 1.0)
                         {
-                            MonoMain.transitionLevel = null;
-                            MonoMain.transitionDirection = TransitionDirection.None;
+                            transitionLevel = null;
+                            transitionDirection = TransitionDirection.None;
                         }
                     }
-                    MonoMain.shouldPauseGameplay = true;
+                    shouldPauseGameplay = true;
                 }
                 RumbleManager.Update();
-                if (!MonoMain.shouldPauseGameplay)
+                if (!shouldPauseGameplay)
                 {
-                    if (MonoMain._pauseMenu == null)
-                        MonoMain._didPauseCapture = false;
-                    if (!MonoMain._recordingStarted || MonoMain._recordData)
+                    if (_pauseMenu == null)
+                        _didPauseCapture = false;
+                    if (!_recordingStarted || _recordData)
                     {
                         if (DevConsole.rhythmMode && Level.current is GameLevel)
                         {
                             RhythmMode.TickSound((float)(((float)(Music.position + new TimeSpan(0, 0, 0, 0, 80)).TotalMinutes * 140f) % 1.0 / 1.0));
                             RhythmMode.Tick((float)(((float)(Music.position + new TimeSpan(0, 0, 0, 0, 40)).TotalMinutes * 140f) % 1.0 / 1.0));
                         }
-                        foreach (IEngineUpdatable engineUpdatable in MonoMain.core.engineUpdatables)
+                        foreach (IEngineUpdatable engineUpdatable in core.engineUpdatables)
                             engineUpdatable.PreUpdate();
                         AutoUpdatables.Update();
                         DuckGame.Content.Update();
                         Music.Update();
                         Level.UpdateLevelChange();
                         Level.UpdateCurrentLevel();
-                        foreach (IEngineUpdatable engineUpdatable in MonoMain.core.engineUpdatables)
+                        foreach (IEngineUpdatable engineUpdatable in core.engineUpdatables)
                             engineUpdatable.Update();
-                        this.OnUpdate();
+                        OnUpdate();
                     }
                 }
-                DuckGame.Graphics.RunRenderTasks();
+                Graphics.RunRenderTasks();
                 Input.ignoreInput = false;
                 base.Update(gameTime);
                 FPSCounter.Tick(0);
                 if (!NetworkDebugger.enabled)
                     Network.PostUpdate();
-                foreach (IEngineUpdatable engineUpdatable in MonoMain.core.engineUpdatables)
+                foreach (IEngineUpdatable engineUpdatable in core.engineUpdatables)
                     engineUpdatable.PostUpdate();
             }
         }
@@ -1249,25 +1250,25 @@ namespace DuckGame
 
         public static void RenderGame(RenderTarget2D target)
         {
-            int width = DuckGame.Graphics.width;
-            int height = DuckGame.Graphics.height;
-            DuckGame.Graphics.SetRenderTarget(target);
+            int width = Graphics.width;
+            int height = Graphics.height;
+            Graphics.SetRenderTarget(target);
             Viewport viewport = new Viewport();
             viewport.X = viewport.Y = 0;
             viewport.Width = target.width;
             viewport.Height = target.height;
             viewport.MinDepth = 0f;
             viewport.MaxDepth = 1f;
-            DuckGame.Graphics.viewport = viewport;
-            DuckGame.Graphics.width = target.width;
-            DuckGame.Graphics.height = target.height;
+            Graphics.viewport = viewport;
+            Graphics.width = target.width;
+            Graphics.height = target.height;
             Level.DrawCurrentLevel();
-            DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
-            MonoMain.instance.OnDraw();
-            DuckGame.Graphics.screen.End();
-            DuckGame.Graphics.width = width;
-            DuckGame.Graphics.height = height;
-            DuckGame.Graphics.SetRenderTarget(null);
+            Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
+            instance.OnDraw();
+            Graphics.screen.End();
+            Graphics.width = width;
+            Graphics.height = height;
+            Graphics.SetRenderTarget(null);
         }
 
         [DllImport("ntdll.dll", SetLastError = true)]
@@ -1280,7 +1281,7 @@ namespace DuckGame
         public static int GetCurrentResolution()
         {
             int CurrentResolution;
-            MonoMain.NtQueryTimerResolution(out int _, out int _, out CurrentResolution);
+            NtQueryTimerResolution(out int _, out int _, out CurrentResolution);
             return CurrentResolution;
         }
 
@@ -1289,18 +1290,18 @@ namespace DuckGame
         /// </summary>
         public static void SleepForNoMoreThan(double milliseconds)
         {
-            if (MonoMain.LowestSleepThreshold == 0.0)
+            if (LowestSleepThreshold == 0.0)
             {
                 int MinimumResolution;
                 int MaximumResolution;
                 int CurrentResolution;
-                MonoMain.NtQueryTimerResolution(out MinimumResolution, out MaximumResolution, out CurrentResolution);
-                MonoMain.LowestSleepThreshold = 1.0 + MaximumResolution / 10000.0;
+                NtQueryTimerResolution(out MinimumResolution, out MaximumResolution, out CurrentResolution);
+                LowestSleepThreshold = 1.0 + MaximumResolution / 10000.0;
                 DevConsole.Log(DCSection.General, "TIMER RES(" + MinimumResolution.ToString() + ", " + MaximumResolution.ToString() + ", " + CurrentResolution.ToString() + ")");
             }
-            if (milliseconds < MonoMain.LowestSleepThreshold)
+            if (milliseconds < LowestSleepThreshold)
                 return;
-            int millisecondsTimeout = (int)(milliseconds - MonoMain.GetCurrentResolution());
+            int millisecondsTimeout = (int)(milliseconds - GetCurrentResolution());
             if (millisecondsTimeout < 1)
                 return;
             Thread.Sleep(millisecondsTimeout);
@@ -1346,53 +1347,53 @@ namespace DuckGame
 
         protected override void Draw(GameTime gameTime)
         {
-            int num = MonoMain.started ? 1 : 0;
-            ++MonoMain.framesSinceFocusChange;
-            if (MonoMain.loseDevice > 0)
+            int num = started ? 1 : 0;
+            ++framesSinceFocusChange;
+            if (loseDevice > 0)
             {
-                DuckGame.Graphics.Clear(Color.Black);
-                this.GraphicsDevice.SetRenderTarget(null);
-                --MonoMain.loseDevice;
+                Graphics.Clear(Color.Black);
+                GraphicsDevice.SetRenderTarget(null);
+                --loseDevice;
                 base.Draw(gameTime);
             }
             else
             {
-                if (this.GraphicsDevice.IsDisposed)
+                if (GraphicsDevice.IsDisposed)
                     return;
-                DuckGame.Graphics.drawing = true;
+                Graphics.drawing = true;
                 --SynchronizedContentManager.blockLoading;
                 if (SynchronizedContentManager.blockLoading < 0)
                     SynchronizedContentManager.blockLoading = 0;
                 try
                 {
-                    DuckGame.Graphics.device = this.GraphicsDevice;
+                    Graphics.device = GraphicsDevice;
                     if (Resolution.Update())
                     {
-                        DuckGame.Graphics.Clear(Color.Black);
-                        this.GraphicsDevice.SetRenderTarget(null);
+                        Graphics.Clear(Color.Black);
+                        GraphicsDevice.SetRenderTarget(null);
                         base.Draw(gameTime);
-                        DuckGame.Graphics.drawing = false;
+                        Graphics.drawing = false;
                     }
                     else
                     {
-                        this.RunDraw(gameTime);
-                        DuckGame.Graphics.SetRenderTargetToScreen();
-                        if (DuckGame.Graphics._screenBufferTarget != null)
+                        RunDraw(gameTime);
+                        Graphics.SetRenderTargetToScreen();
+                        if (Graphics._screenBufferTarget != null)
                         {
-                            MonoMain._tempRecordingReference = Recorder.currentRecording;
+                            _tempRecordingReference = Recorder.currentRecording;
                             Recorder.currentRecording = null;
-                            DuckGame.Graphics.SetScreenTargetViewport();
-                            DuckGame.Graphics.Clear(Color.Black);
+                            Graphics.SetScreenTargetViewport();
+                            Graphics.Clear(Color.Black);
                             Camera camera = new Camera(0f, 0f, Graphics._screenBufferTarget.width, Graphics._screenBufferTarget.height);
-                            DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
-                            DuckGame.Graphics.Draw(Graphics._screenBufferTarget, 0f, 0f);
-                            DuckGame.Graphics.screen.End();
-                            Recorder.currentRecording = MonoMain._tempRecordingReference;
+                            Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
+                            Graphics.Draw(Graphics._screenBufferTarget, 0f, 0f);
+                            Graphics.screen.End();
+                            Recorder.currentRecording = _tempRecordingReference;
                         }
-                        DuckGame.Graphics.UpdateScreenViewport();
-                        this.GraphicsDevice.SetRenderTarget(null);
+                        Graphics.UpdateScreenViewport();
+                        GraphicsDevice.SetRenderTarget(null);
                         base.Draw(gameTime);
-                        DuckGame.Graphics.drawing = false;
+                        Graphics.drawing = false;
                     }
                 }
                 catch (Exception ex)
@@ -1405,145 +1406,145 @@ namespace DuckGame
         protected void RunDraw(GameTime gameTime)
         {
             FPSCounter.Tick(1);
-            this._didFirstDraw = true;
-            DuckGame.Graphics.frameFlipFlop = !DuckGame.Graphics.frameFlipFlop;
-            if (DuckGame.Graphics.device.IsDisposed)
+            _didFirstDraw = true;
+            Graphics.frameFlipFlop = !Graphics.frameFlipFlop;
+            if (Graphics.device.IsDisposed)
                 return;
-            DuckGame.Graphics.SetScissorRectangle(new Rectangle(0f, 0f, Graphics.width, Graphics.height));
+            Graphics.SetScissorRectangle(new Rectangle(0f, 0f, Graphics.width, Graphics.height));
             if (Recorder.currentRecording != null)
                 Recorder.currentRecording.NextFrame();
-            if (!MonoMain._started)
+            if (!_started)
             {
-                ++this._loadingFramesRendered;
-                DuckGame.Graphics.SetRenderTarget(null);
-                MonoMain._pauseMaterial = new MaterialPause();
-                if (!this._setCulture)
+                ++_loadingFramesRendered;
+                Graphics.SetRenderTarget(null);
+                _pauseMaterial = new MaterialPause();
+                if (!_setCulture)
                 {
                     Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-                    this._setCulture = true;
+                    _setCulture = true;
                 }
-                DuckGame.Graphics.Clear(new Color(0, 0, 0));
+                Graphics.Clear(new Color(0, 0, 0));
                 Camera camera = new Camera(0f, 0f, Graphics.width, Graphics.height);
-                DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
-                Vec2 p1 = new Vec2(50f, DuckGame.Graphics.height - 50);
-                Vec2 vec2_1 = new Vec2(DuckGame.Graphics.width - 100, 20f);
-                DuckGame.Graphics.DrawRect(p1, p1 + vec2_1, Color.DarkGray * 0.1f, (Depth)0.5f);
-                float num = loadyBits / (float)MonoMain.totalLoadyBits;
+                Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
+                Vec2 p1 = new Vec2(50f, Graphics.height - 50);
+                Vec2 vec2_1 = new Vec2(Graphics.width - 100, 20f);
+                Graphics.DrawRect(p1, p1 + vec2_1, Color.DarkGray * 0.1f, (Depth)0.5f);
+                float num = loadyBits / (float)totalLoadyBits;
                 if (num > 1.0)
                     num = 1f;
-                DuckGame.Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * num, vec2_1.y), Color.White * 0.1f, (Depth)0.6f);
-                string text = MonoMain.loadMessage;
+                Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * num, vec2_1.y), Color.White * 0.1f, (Depth)0.6f);
+                string text = loadMessage;
                 if (Cloud.processing && Cloud.progress != 0.0 && Cloud.progress != 1.0)
                     text = "Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100.0)).ToString() + "%)";
-                DuckGame.Graphics.DrawString(text, p1 + new Vec2(0f, -24f), Color.White, (Depth)1f, scale: 2f);
-                this._duckRun.speed = 0.15f;
-                this._duckRun.scale = new Vec2(4f, 4f);
-                this._duckRun.depth = (Depth)0.7f;
-                this._duckRun.color = new Color(80, 80, 80);
-                if (this._timeSinceLastLoadFrame.elapsed.Milliseconds > 16)
-                    ++this._duckRun.frame;
-                Vec2 vec2_2 = new Vec2(DuckGame.Graphics.width - this._duckRun.width * 4 - 50, DuckGame.Graphics.height - this._duckRun.height * 4 - 55);
-                DuckGame.Graphics.Draw(_duckRun, vec2_2.x, vec2_2.y);
-                this._duckArm.frame = this._duckRun.imageIndex;
-                this._duckArm.scale = new Vec2(4f, 4f);
-                this._duckArm.depth = (Depth)0.6f;
-                this._duckArm.color = new Color(80, 80, 80);
-                DuckGame.Graphics.Draw(_duckArm, vec2_2.x + 20f, vec2_2.y + 56f);
-                DuckGame.Graphics.screen.End();
-                this._timeSinceLastLoadFrame.Restart();
+                Graphics.DrawString(text, p1 + new Vec2(0f, -24f), Color.White, (Depth)1f, scale: 2f);
+                _duckRun.speed = 0.15f;
+                _duckRun.scale = new Vec2(4f, 4f);
+                _duckRun.depth = (Depth)0.7f;
+                _duckRun.color = new Color(80, 80, 80);
+                if (_timeSinceLastLoadFrame.elapsed.Milliseconds > 16)
+                    ++_duckRun.frame;
+                Vec2 vec2_2 = new Vec2(Graphics.width - _duckRun.width * 4 - 50, Graphics.height - _duckRun.height * 4 - 55);
+                Graphics.Draw(_duckRun, vec2_2.x, vec2_2.y);
+                _duckArm.frame = _duckRun.imageIndex;
+                _duckArm.scale = new Vec2(4f, 4f);
+                _duckArm.depth = (Depth)0.6f;
+                _duckArm.color = new Color(80, 80, 80);
+                Graphics.Draw(_duckArm, vec2_2.x + 20f, vec2_2.y + 56f);
+                Graphics.screen.End();
+                _timeSinceLastLoadFrame.Restart();
             }
             else
             {
                 if (Level.current == null)
                     return;
-                DuckGame.Reflection.Render();
-                if (!this.takingShot)
+                Reflection.Render();
+                if (!takingShot)
                 {
-                    this.takingShot = true;
-                    if (Keyboard.shift && Keyboard.Pressed(Keys.F12) || this.waitFrames < 0)
+                    takingShot = true;
+                    if (Keyboard.shift && Keyboard.Pressed(Keys.F12) || waitFrames < 0)
                     {
-                        if (this._screenshotTarget == null)
-                            this._screenshotTarget = new RenderTarget2D(DuckGame.Graphics.width, DuckGame.Graphics.height, true);
-                        DuckGame.Graphics.screenCapture = this._screenshotTarget;
-                        this.RunDraw(gameTime);
-                        this.waitFrames = 60 + Rando.Int(60);
+                        if (_screenshotTarget == null)
+                            _screenshotTarget = new RenderTarget2D(Graphics.width, Graphics.height, true);
+                        Graphics.screenCapture = _screenshotTarget;
+                        RunDraw(gameTime);
+                        waitFrames = 60 + Rando.Int(60);
                         SFX.Play("ching");
                     }
-                    this.takingShot = false;
+                    takingShot = false;
                 }
-                if (MonoMain._pauseMenu != null && !NetworkDebugger.enabled && !MonoMain._didPauseCapture)
+                if (_pauseMenu != null && !NetworkDebugger.enabled && !_didPauseCapture)
                 {
-                    DuckGame.Graphics.screenCapture = MonoMain._screenCapture;
-                    MonoMain._didPauseCapture = true;
+                    Graphics.screenCapture = _screenCapture;
+                    _didPauseCapture = true;
                 }
-                if (DuckGame.Graphics.screenCapture != null)
+                if (Graphics.screenCapture != null)
                 {
-                    int width = DuckGame.Graphics.width;
-                    int height = DuckGame.Graphics.height;
-                    DuckGame.Graphics.SetRenderTarget(DuckGame.Graphics.screenCapture);
-                    DuckGame.Graphics.UpdateScreenViewport(true);
+                    int width = Graphics.width;
+                    int height = Graphics.height;
+                    Graphics.SetRenderTarget(Graphics.screenCapture);
+                    Graphics.UpdateScreenViewport(true);
                     HUD.hide = true;
                     Level.DrawCurrentLevel();
-                    DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
-                    this.OnDraw();
-                    DuckGame.Graphics.screen.End();
+                    Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
+                    OnDraw();
+                    Graphics.screen.End();
                     HUD.hide = false;
-                    DuckGame.Graphics.screenCapture = null;
-                    DuckGame.Graphics.width = width;
-                    DuckGame.Graphics.height = height;
-                    DuckGame.Graphics.SetRenderTarget(null);
+                    Graphics.screenCapture = null;
+                    Graphics.width = width;
+                    Graphics.height = height;
+                    Graphics.SetRenderTarget(null);
                 }
-                if (this._screenshotTarget != null)
+                if (_screenshotTarget != null)
                 {
-                    this.saveShot = this._screenshotTarget;
-                    this._screenshotTarget = null;
-                    this.SaveShot();
+                    saveShot = _screenshotTarget;
+                    _screenshotTarget = null;
+                    SaveShot();
                 }
-                if (DuckGame.Graphics.screenTarget != null)
+                if (Graphics.screenTarget != null)
                 {
-                    int width = DuckGame.Graphics.width;
-                    int height = DuckGame.Graphics.height;
-                    DuckGame.Graphics.SetRenderTarget(DuckGame.Graphics.screenTarget);
-                    DuckGame.Graphics.UpdateScreenViewport();
+                    int width = Graphics.width;
+                    int height = Graphics.height;
+                    Graphics.SetRenderTarget(Graphics.screenTarget);
+                    Graphics.UpdateScreenViewport();
                     HUD.hide = true;
                     Level.DrawCurrentLevel();
-                    DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
-                    this.OnDraw();
-                    DuckGame.Graphics.screen.End();
+                    Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
+                    OnDraw();
+                    Graphics.screen.End();
                     HUD.hide = false;
-                    DuckGame.Graphics.width = width;
-                    DuckGame.Graphics.height = height;
-                    DuckGame.Graphics.SetRenderTarget(null);
-                    DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
-                    DuckGame.Graphics.Draw(Graphics.screenTarget, Vec2.Zero, new Rectangle?(), Color.White, 0f, Vec2.Zero, Vec2.One, SpriteEffects.None);
-                    DuckGame.Graphics.screen.End();
+                    Graphics.width = width;
+                    Graphics.height = height;
+                    Graphics.SetRenderTarget(null);
+                    Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
+                    Graphics.Draw(Graphics.screenTarget, Vec2.Zero, new Rectangle?(), Color.White, 0f, Vec2.Zero, Vec2.One, SpriteEffects.None);
+                    Graphics.screen.End();
                 }
                 else
                 {
                     bool flag = true;
                     if (Network.isActive)
                         flag = false;
-                    if (MonoMain._pauseMenu != null && MonoMain._didPauseCapture && DuckGame.Graphics.screenCapture == null)
+                    if (_pauseMenu != null && _didPauseCapture && Graphics.screenCapture == null)
                     {
-                        DuckGame.Graphics.SetRenderTarget(null);
-                        DuckGame.Graphics.Clear(Color.Black * DuckGame.Graphics.fade);
-                        if (MonoMain.autoPauseFade)
+                        Graphics.SetRenderTarget(null);
+                        Graphics.Clear(Color.Black * Graphics.fade);
+                        if (autoPauseFade)
                         {
-                            MonoMain._pauseMaterial.fade = Lerp.FloatSmooth(MonoMain._pauseMaterial.fade, MonoMain.doPauseFade ? 0.6f : 0f, 0.1f, 1.1f);
-                            MonoMain._pauseMaterial.dim = Lerp.FloatSmooth(MonoMain._pauseMaterial.dim, MonoMain.doPauseFade ? 0.6f : 1f, 0.1f, 1.1f);
+                            _pauseMaterial.fade = Lerp.FloatSmooth(_pauseMaterial.fade, doPauseFade ? 0.6f : 0f, 0.1f, 1.1f);
+                            _pauseMaterial.dim = Lerp.FloatSmooth(_pauseMaterial.dim, doPauseFade ? 0.6f : 1f, 0.1f, 1.1f);
                         }
-                        DuckGame.Graphics.SetFullViewport();
+                        Graphics.SetFullViewport();
                         Vec2 vec2 = new Vec2(Layer.HUD.camera.width / _screenCapture.width, Layer.HUD.camera.height / _screenCapture.height);
-                        DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, Matrix.Identity);
-                        DuckGame.Graphics.material = _pauseMaterial;
-                        DuckGame.Graphics.Draw(_screenCapture, new Vec2(0f, 0f), new Rectangle?(), new Color(120, 120, 120), 0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None, -0.9f);
-                        DuckGame.Graphics.material = null;
-                        DuckGame.Graphics.screen.End();
-                        DuckGame.Graphics.RestoreOldViewport();
+                        Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, Matrix.Identity);
+                        Graphics.material = _pauseMaterial;
+                        Graphics.Draw(_screenCapture, new Vec2(0f, 0f), new Rectangle?(), new Color(120, 120, 120), 0f, Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None, -0.9f);
+                        Graphics.material = null;
+                        Graphics.screen.End();
+                        Graphics.RestoreOldViewport();
                         Layer.HUD.Begin(true);
-                        MonoMain._pauseMenu.Draw();
-                        for (int index = 0; index < MonoMain.closeMenuUpdate.Count; ++index)
-                            MonoMain.closeMenuUpdate[index].Draw();
+                        _pauseMenu.Draw();
+                        for (int index = 0; index < closeMenuUpdate.Count; ++index)
+                            closeMenuUpdate[index].Draw();
                         HUD.Draw();
                         if (Level.current.drawsOverPauseMenu)
                             Level.current.PostDrawLayer(Layer.HUD);
@@ -1553,32 +1554,32 @@ namespace DuckGame
                         Level.current.PostDrawLayer(Layer.Console);
                         Layer.Console.End(true);
                         if (!flag && UIMatchmakerMark2.instance == null)
-                            MonoMain._didPauseCapture = false;
+                            _didPauseCapture = false;
                     }
                     else
                     {
-                        if (MonoMain.autoPauseFade)
+                        if (autoPauseFade)
                         {
-                            MonoMain._pauseMaterial.fade = 0f;
-                            MonoMain._pauseMaterial.dim = 0.6f;
+                            _pauseMaterial.fade = 0f;
+                            _pauseMaterial.dim = 0.6f;
                         }
-                        DuckGame.Graphics.SetRenderTarget(null);
+                        Graphics.SetRenderTarget(null);
                         Level.DrawCurrentLevel();
-                        DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Resolution.getTransformationMatrix());
-                        this.OnDraw();
-                        DuckGame.Graphics.screen.End();
-                        if (MonoMain.closeMenuUpdate.Count > 0)
+                        Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Resolution.getTransformationMatrix());
+                        OnDraw();
+                        Graphics.screen.End();
+                        if (closeMenuUpdate.Count > 0)
                         {
                             Layer.HUD.Begin(true);
-                            foreach (Thing thing in MonoMain.closeMenuUpdate)
+                            foreach (Thing thing in closeMenuUpdate)
                                 thing.DoDraw();
                             Layer.HUD.End(true);
                         }
                     }
                     if (!DevConsole.showFPS)
                         return;
-                    FPSCounter.Render(DuckGame.Graphics.device, index: 0, label: "UPS");
-                    FPSCounter.Render(DuckGame.Graphics.device, 100f, index: 1);
+                    FPSCounter.Render(Graphics.device, index: 0, label: "UPS");
+                    FPSCounter.Render(Graphics.device, 100f, index: 1);
                 }
             }
         }

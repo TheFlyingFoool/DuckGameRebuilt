@@ -20,26 +20,26 @@ namespace DuckGame
         public FunBeam(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._beam = new SpriteMap("funBeam", 16, 16);
-            this._beam.ClearAnimations();
-            this._beam.AddAnimation("idle", 1f, true, 0, 1, 2, 3, 4, 5, 6, 7);
-            this._beam.SetAnimation("idle");
-            this._beam.speed = 0.2f;
-            this._beam.alpha = 0.3f;
-            this._beam.center = new Vec2(0f, 8f);
-            this.graphic = new Sprite("funBeamer");
-            this.center = new Vec2(9f, 8f);
-            this.collisionOffset = new Vec2(-2f, -5f);
-            this.collisionSize = new Vec2(4f, 10f);
-            this.depth = -0.5f;
-            this._editorName = "Fun Beam";
-            this.editorTooltip = "Place 2 generators near each other to create a beam that triggers weapons passing through.";
-            this.hugWalls = WallHug.Left;
+            _beam = new SpriteMap("funBeam", 16, 16);
+            _beam.ClearAnimations();
+            _beam.AddAnimation("idle", 1f, true, 0, 1, 2, 3, 4, 5, 6, 7);
+            _beam.SetAnimation("idle");
+            _beam.speed = 0.2f;
+            _beam.alpha = 0.3f;
+            _beam.center = new Vec2(0f, 8f);
+            graphic = new Sprite("funBeamer");
+            center = new Vec2(9f, 8f);
+            collisionOffset = new Vec2(-2f, -5f);
+            collisionSize = new Vec2(4f, 10f);
+            depth = -0.5f;
+            _editorName = "Fun Beam";
+            editorTooltip = "Place 2 generators near each other to create a beam that triggers weapons passing through.";
+            hugWalls = WallHug.Left;
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (!this.enabled || !(with is Gun gun))
+            if (!enabled || !(with is Gun gun))
                 return;
             switch (gun)
             {
@@ -57,43 +57,43 @@ namespace DuckGame
         {
             if (Editor.editorDraw)
                 return;
-            if (this.enabled && this.GetType() == typeof(FunBeam))
+            if (enabled && GetType() == typeof(FunBeam))
             {
-                if (this._prev != this.position)
+                if (_prev != position)
                 {
-                    this._endPoint = Vec2.Zero;
+                    _endPoint = Vec2.Zero;
                     for (int index = 0; index < 32; ++index)
                     {
-                        Thing thing = Level.CheckLine<Block>(this.position + new Vec2(4 + index * 16, 0f), this.position + new Vec2((index + 1) * 16 - 6, 0f));
+                        Thing thing = Level.CheckLine<Block>(position + new Vec2(4 + index * 16, 0f), position + new Vec2((index + 1) * 16 - 6, 0f));
                         if (thing != null)
                         {
-                            this._endPoint = new Vec2(thing.left - 2f, this.y);
+                            _endPoint = new Vec2(thing.left - 2f, y);
                             break;
                         }
                     }
-                    this._prev = this.position;
+                    _prev = position;
                 }
-                if (this._endPoint != Vec2.Zero)
+                if (_endPoint != Vec2.Zero)
                 {
-                    this.graphic.flipH = true;
-                    this.graphic.depth = this.depth;
-                    Graphics.Draw(this.graphic, this._endPoint.x, this._endPoint.y);
-                    this.graphic.flipH = false;
-                    this._beam.depth = this.depth - 2;
-                    float x = this._endPoint.x - this.x;
+                    graphic.flipH = true;
+                    graphic.depth = depth;
+                    Graphics.Draw(graphic, _endPoint.x, _endPoint.y);
+                    graphic.flipH = false;
+                    _beam.depth = depth - 2;
+                    float x = _endPoint.x - this.x;
                     int num = (int)Math.Ceiling(x / 16.0);
                     for (int index = 0; index < num; ++index)
                     {
-                        this._beam.cutWidth = index != num - 1 ? 0 : 16 - (int)(x % 16.0);
-                        Graphics.Draw(_beam, this.x + index * 16, this.y);
+                        _beam.cutWidth = index != num - 1 ? 0 : 16 - (int)(x % 16.0);
+                        Graphics.Draw(_beam, this.x + index * 16, y);
                     }
-                    this.collisionOffset = new Vec2(-1f, -4f);
-                    this.collisionSize = new Vec2(x, 8f);
+                    collisionOffset = new Vec2(-1f, -4f);
+                    collisionSize = new Vec2(x, 8f);
                 }
                 else
                 {
-                    this.collisionOffset = new Vec2(-1f, -5f);
-                    this.collisionSize = new Vec2(4f, 10f);
+                    collisionOffset = new Vec2(-1f, -5f);
+                    collisionSize = new Vec2(4f, 10f);
                 }
             }
             base.Draw();

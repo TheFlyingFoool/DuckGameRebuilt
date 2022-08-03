@@ -15,27 +15,27 @@ namespace DuckGame
         public EffectAnimation(Vec2 pos, SpriteMap spr, float deep)
           : base(pos.x, pos.y)
         {
-            this.depth = (Depth)deep;
-            this._sprite = spr;
-            this._sprite.CenterOrigin();
-            this.layer = Layer.Foreground;
+            depth = (Depth)deep;
+            _sprite = spr;
+            _sprite.CenterOrigin();
+            layer = Layer.Foreground;
         }
 
         public override void Update()
         {
-            if (this._sprite.finished)
+            if (_sprite.finished)
                 Level.Remove(this);
             base.Update();
         }
 
         public override void Draw()
         {
-            this._sprite.scale = this.scale;
-            this._sprite.alpha = this.alpha;
-            this._sprite.color = this.color;
-            this._sprite.depth = this.depth;
-            this._sprite.flipH = this.flipHorizontal;
-            Graphics.Draw(_sprite, this.x, this.y);
+            _sprite.scale = scale;
+            _sprite.alpha = alpha;
+            _sprite.color = color;
+            _sprite.depth = depth;
+            _sprite.flipH = flipHorizontal;
+            Graphics.Draw(_sprite, x, y);
             base.Draw();
         }
     }

@@ -31,80 +31,80 @@ namespace DuckGame
         {
             if (c == new Color())
                 c = Colors.MenuOption;
-            this._valueStrings = valStrings;
-            UIDivider component1 = new UIDivider(true, this._valueStrings != null ? 0f : 0.8f);
+            _valueStrings = valStrings;
+            UIDivider component1 = new UIDivider(true, _valueStrings != null ? 0f : 0.8f);
             UIText component2 = new UIText(text, c)
             {
                 align = UIAlign.Left
             };
             component1.leftSection.Add(component2, true);
-            this.currentIndex = this._valueStrings.IndexOf(field.value as string);
-            if (this.currentIndex < 0)
-                this.currentIndex = 0;
-            this._textItem = new UIChangingText(-1f, -1f, field, null);
+            currentIndex = _valueStrings.IndexOf(field.value as string);
+            if (currentIndex < 0)
+                currentIndex = 0;
+            _textItem = new UIChangingText(-1f, -1f, field, null);
             string str = "";
             foreach (string valString in valStrings)
             {
                 if (valString.Length > str.Length)
                     str = valString;
             }
-          (this._textItem as UIChangingText).defaultSizeString = str;
-            this._textItem.minLength = str.Length;
-            this._textItem.text = this._valueStrings[this.currentIndex];
-            this._textItem.align = UIAlign.Right;
+          (_textItem as UIChangingText).defaultSizeString = str;
+            _textItem.minLength = str.Length;
+            _textItem.text = _valueStrings[currentIndex];
+            _textItem.align = UIAlign.Right;
             component1.rightSection.Add(_textItem, true);
-            this.rightSection.Add(component1, true);
-            this._arrow = new UIImage("contextArrowRight")
+            rightSection.Add(component1, true);
+            _arrow = new UIImage("contextArrowRight")
             {
                 align = UIAlign.Right,
                 visible = false
             };
-            this.leftSection.Add(_arrow, true);
-            this._field = field;
-            this.currentValue = this._field.value as string;
-            this.controlString = "@WASD@ADJUST @SELECT@APPLY";
+            leftSection.Add(_arrow, true);
+            _field = field;
+            currentValue = _field.value as string;
+            controlString = "@WASD@ADJUST @SELECT@APPLY";
         }
 
         public override void Activate(string trigger)
         {
-            if (this._useBaseActivationLogic)
+            if (_useBaseActivationLogic)
                 base.Activate(trigger);
             else if (trigger == "SELECT")
             {
-                if (this.selectAction != null)
-                    this.selectAction(this.currentValue);
-                this._field.value = currentValue;
+                if (selectAction != null)
+                    selectAction(currentValue);
+                _field.value = currentValue;
             }
             else
             {
-                int currentIndex1 = this.currentIndex;
+                int currentIndex1 = currentIndex;
                 if (trigger == "MENULEFT")
-                    --this.currentIndex;
+                    --currentIndex;
                 else if (trigger == "MENURIGHT")
-                    ++this.currentIndex;
-                if (this.currentIndex < 0)
-                    this.currentIndex = 0;
-                if (this.currentIndex > this._valueStrings.Count - 1)
-                    this.currentIndex = this._valueStrings.Count - 1;
-                this.currentValue = this._valueStrings[this.currentIndex];
-                int currentIndex2 = this.currentIndex;
+                    ++currentIndex;
+                if (currentIndex < 0)
+                    currentIndex = 0;
+                if (currentIndex > _valueStrings.Count - 1)
+                    currentIndex = _valueStrings.Count - 1;
+                currentValue = _valueStrings[currentIndex];
+                int currentIndex2 = currentIndex;
                 if (currentIndex1 != currentIndex2)
                     SFX.Play("textLetter", 0.7f);
-                if (this._textItem == null)
+                if (_textItem == null)
                     return;
-                this._textItem.text = this._valueStrings[this.currentIndex];
+                _textItem.text = _valueStrings[currentIndex];
             }
         }
 
         public override void Draw()
         {
-            if (!this.selected)
-                this.currentValue = this._field.value as string;
-            this.currentIndex = this._valueStrings.IndexOf(this.currentValue);
-            if (this.currentIndex < 0)
-                this.currentIndex = 0;
-            if (!this._textItem.text.Contains(this._valueStrings[this.currentIndex]))
-                this._textItem.text = this._valueStrings[this.currentIndex];
+            if (!selected)
+                currentValue = _field.value as string;
+            currentIndex = _valueStrings.IndexOf(currentValue);
+            if (currentIndex < 0)
+                currentIndex = 0;
+            if (!_textItem.text.Contains(_valueStrings[currentIndex]))
+                _textItem.text = _valueStrings[currentIndex];
             base.Draw();
         }
     }

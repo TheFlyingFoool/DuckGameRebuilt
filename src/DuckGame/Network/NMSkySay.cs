@@ -17,9 +17,9 @@ namespace DuckGame
 
         public NMSkySay(string pText, Vec2 pSpawn, bool pFlyLeft)
         {
-            this._text = pText;
-            this._spawn = pSpawn;
-            this._flyLeft = pFlyLeft;
+            _text = pText;
+            _spawn = pSpawn;
+            _flyLeft = pFlyLeft;
         }
 
         public NMSkySay()
@@ -30,7 +30,7 @@ namespace DuckGame
         {
             if (Level.current == null || !(Level.current.things[typeof(CityBackground)].FirstOrDefault<Thing>() is CityBackground cityBackground))
                 return;
-            cityBackground.SkySay(this._text, this._spawn, this._flyLeft);
+            cityBackground.SkySay(_text, _spawn, _flyLeft);
         }
     }
 }

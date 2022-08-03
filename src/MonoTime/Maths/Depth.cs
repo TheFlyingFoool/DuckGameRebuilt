@@ -19,18 +19,18 @@ namespace DuckGame
 
         public Depth(float val)
         {
-            this.value = val;
-            this.span = Depth._currentSpan + Depth.kSpanIncrement * 0.5f;
+            value = val;
+            span = Depth._currentSpan + Depth.kSpanIncrement * 0.5f;
             Depth._currentSpan = (Depth._currentSpan + Depth.kSpanIncrement) % Depth.kDepthSpanMax;
         }
 
         public Depth(float val, float s)
         {
-            this.value = val;
-            this.span = s;
+            value = val;
+            span = s;
         }
 
-        public Depth Add(int val) => new Depth(this.value + Depth.kSpanIncrement / 20f * val, this.span);
+        public Depth Add(int val) => new Depth(value + Depth.kSpanIncrement / 20f * val, span);
 
         public static implicit operator Depth(float val) => new Depth(val);
 

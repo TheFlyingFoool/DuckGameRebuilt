@@ -208,8 +208,8 @@ namespace DuckGame
 
             public BitmapFont(Texture2D image, int size)
             {
-                this._texture = image;
-                this._tileSize = size;
+                _texture = image;
+                _tileSize = size;
                 if (FPSCounter.BitmapFont._mapInitialized)
                     return;
                 for (int index1 = 0; index1 < byte.MaxValue; ++index1)
@@ -236,15 +236,15 @@ namespace DuckGame
                 {
                     if (text[index] == '\n')
                     {
-                        num1 += this._tileSize * 8;
+                        num1 += _tileSize * 8;
                         num2 = 0f;
                     }
                     else
                     {
                         int character = FPSCounter.BitmapFont._characterMap[text[index]];
-                        int x = character % 16 * this._tileSize;
-                        int y = character / 16 * this._tileSize;
-                        batch.Draw(this._texture, (Vector2)new Vec2(xpos + num2, ypos), new Microsoft.Xna.Framework.Rectangle?((Microsoft.Xna.Framework.Rectangle)new Rectangle(x, y, _tileSize, _tileSize)), (Microsoft.Xna.Framework.Color)c, 0f, (Vector2)Vec2.Zero, (Vector2)new Vec2(1f, 1f), SpriteEffects.None, 1f);
+                        int x = character % 16 * _tileSize;
+                        int y = character / 16 * _tileSize;
+                        batch.Draw(_texture, (Vector2)new Vec2(xpos + num2, ypos), new Microsoft.Xna.Framework.Rectangle?((Microsoft.Xna.Framework.Rectangle)new Rectangle(x, y, _tileSize, _tileSize)), (Microsoft.Xna.Framework.Color)c, 0f, (Vector2)Vec2.Zero, (Vector2)new Vec2(1f, 1f), SpriteEffects.None, 1f);
                         num2 += _tileSize;
                     }
                 }

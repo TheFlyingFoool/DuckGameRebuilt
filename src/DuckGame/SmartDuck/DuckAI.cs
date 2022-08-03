@@ -22,28 +22,28 @@ namespace DuckGame
 
        // public AILocomotion locomotion => this._locomotion;
 
-        public void Press(string trigger) => this._inputState[trigger] = InputState.Pressed;
+        public void Press(string trigger) => _inputState[trigger] = InputState.Pressed;
 
-        public void HoldDown(string trigger) => this._inputState[trigger] = InputState.Down;
+        public void HoldDown(string trigger) => _inputState[trigger] = InputState.Down;
 
-        public void Release(string trigger) => this._inputState[trigger] = InputState.Released;
+        public void Release(string trigger) => _inputState[trigger] = InputState.Released;
 
         public override bool Pressed(string trigger, bool any = false)
         {
             InputState inputState;
-            return this._inputState.TryGetValue(trigger, out inputState) && inputState == InputState.Pressed;
+            return _inputState.TryGetValue(trigger, out inputState) && inputState == InputState.Pressed;
         }
 
         public override bool Released(string trigger)
         {
             InputState inputState;
-            return this._inputState.TryGetValue(trigger, out inputState) && inputState == InputState.Released;
+            return _inputState.TryGetValue(trigger, out inputState) && inputState == InputState.Released;
         }
 
         public override bool Down(string trigger)
         {
             InputState inputState;
-            if (!this._inputState.TryGetValue(trigger, out inputState))
+            if (!_inputState.TryGetValue(trigger, out inputState))
                 return false;
             return inputState == InputState.Pressed || inputState == InputState.Down;
         }
@@ -60,7 +60,7 @@ namespace DuckGame
           : base()
         {
             //this._state.Push(new AIStateDeathmatchBot());
-            this._manualQuack = manualQuacker;
+            _manualQuack = manualQuacker;
         }
 
         //public virtual void Update(Duck duck)
@@ -90,25 +90,25 @@ namespace DuckGame
 
         public override void UpdateExtraInput()
         {
-            if (this._inputState.ContainsKey("QUACK") && this._inputState["QUACK"] == InputState.Pressed)
-                this._inputState["QUACK"] = InputState.Down;
-            if (this._inputState.ContainsKey("STRAFE") && this._inputState["STRAFE"] == InputState.Pressed)
-                this._inputState["STRAFE"] = InputState.Down;
-            if (this._manualQuack == null)
+            if (_inputState.ContainsKey("QUACK") && _inputState["QUACK"] == InputState.Pressed)
+                _inputState["QUACK"] = InputState.Down;
+            if (_inputState.ContainsKey("STRAFE") && _inputState["STRAFE"] == InputState.Pressed)
+                _inputState["STRAFE"] = InputState.Down;
+            if (_manualQuack == null)
                 return;
-            if (this._manualQuack.Pressed("QUACK"))
-                this.Press("QUACK");
-            else if (this._manualQuack.Released("QUACK"))
-                this.Release("QUACK");
-            if (this._manualQuack.Pressed("STRAFE"))
+            if (_manualQuack.Pressed("QUACK"))
+                Press("QUACK");
+            else if (_manualQuack.Released("QUACK"))
+                Release("QUACK");
+            if (_manualQuack.Pressed("STRAFE"))
             {
-                this.Press("STRAFE");
+                Press("STRAFE");
             }
             else
             {
-                if (!this._manualQuack.Released("STRAFE"))
+                if (!_manualQuack.Released("STRAFE"))
                     return;
-                this.Release("STRAFE");
+                Release("STRAFE");
             }
         }
 
@@ -116,9 +116,9 @@ namespace DuckGame
         {
             get
             {
-                if (this.virtualQuack)
-                    return this.virtualDevice.leftTrigger;
-                return this._manualQuack != null ? this._manualQuack.leftTrigger : 0f;
+                if (virtualQuack)
+                    return virtualDevice.leftTrigger;
+                return _manualQuack != null ? _manualQuack.leftTrigger : 0f;
             }
         }
 

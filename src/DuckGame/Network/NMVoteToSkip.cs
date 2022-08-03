@@ -15,12 +15,12 @@ namespace DuckGame
         {
         }
 
-        public NMVoteToSkip(Profile pProfile) => this.profile = pProfile;
+        public NMVoteToSkip(Profile pProfile) => profile = pProfile;
 
         public override void Activate()
         {
-            if (this.profile != null && Level.current is RockScoreboard)
-                Vote.RegisterVote(this.profile, VoteType.Skip);
+            if (profile != null && Level.current is RockScoreboard)
+                Vote.RegisterVote(profile, VoteType.Skip);
             base.Activate();
         }
     }

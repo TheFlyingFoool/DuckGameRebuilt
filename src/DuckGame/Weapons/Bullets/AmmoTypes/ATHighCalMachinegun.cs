@@ -11,10 +11,10 @@ namespace DuckGame
     {
         public ATHighCalMachinegun()
         {
-            this.range = 200f;
-            this.penetration = 2f;
-            this.combustable = true;
-            this.accuracy = 0.85f;
+            range = 200f;
+            penetration = 2f;
+            combustable = true;
+            accuracy = 0.85f;
         }
 
         public override void PopShell(float x, float y, int dir)

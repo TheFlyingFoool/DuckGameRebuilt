@@ -18,8 +18,8 @@ namespace DuckGame
 
         public NMConversion(Duck pWho, Duck pTo)
         {
-            this.who = pWho;
-            this.to = pTo;
+            who = pWho;
+            to = pTo;
         }
 
         public Duck GetDuck(int index)
@@ -34,17 +34,17 @@ namespace DuckGame
 
         public NMConversion(byte pWho, byte pTo)
         {
-            this.who = this.GetDuck(pWho);
-            this.to = this.GetDuck(pTo);
+            who = GetDuck(pWho);
+            to = GetDuck(pTo);
         }
 
         public override void Activate()
         {
-            if (this.who != null && this.to != null)
+            if (who != null && to != null)
             {
-                this.who.isConversionMessage = true;
-                this.who.ConvertDuck(this.to);
-                this.who.isConversionMessage = false;
+                who.isConversionMessage = true;
+                who.ConvertDuck(to);
+                who.isConversionMessage = false;
             }
             base.Activate();
         }

@@ -12,8 +12,8 @@ namespace DuckGame
         public RockThrowDuck(float xval, float yval, Profile pro)
           : base(xval, yval, pro)
         {
-            this._isStateObject = false;
-            this._isStateObjectInitialized = true;
+            _isStateObject = false;
+            _isStateObjectInitialized = true;
         }
     }
 }

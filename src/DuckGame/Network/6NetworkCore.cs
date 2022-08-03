@@ -16,6 +16,6 @@ namespace DuckGame
         {
         }
 
-        public NMBadSession(NetIndex4 pMySession) => this.remoteSession = pMySession;
+        public NMBadSession(NetIndex4 pMySession) => remoteSession = pMySession;
     }
 }

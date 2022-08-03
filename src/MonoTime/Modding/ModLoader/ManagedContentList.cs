@@ -17,9 +17,9 @@ namespace DuckGame
         private readonly HashSet<System.Type> _types = new HashSet<System.Type>();
         private readonly Dictionary<System.Type, System.Type> _redirections = new Dictionary<System.Type, System.Type>();
 
-        internal void Add(System.Type type) => this._types.Add(type);
+        internal void Add(System.Type type) => _types.Add(type);
 
-        internal IEnumerable<System.Type> SortedTypes => this._types.OrderBy<System.Type, string>(t => t.FullName);
+        internal IEnumerable<System.Type> SortedTypes => _types.OrderBy<System.Type, string>(t => t.FullName);
 
         /// <summary>Gets the registered types.</summary>
         /// <value>The types registered.</value>
@@ -29,14 +29,14 @@ namespace DuckGame
         /// <param name="type">The type.</param>
         public void Remove(System.Type type)
         {
-            if (!this._types.Contains(type) || type.GetCustomAttributes(typeof(LockedContentAttribute), true).Length != 0)
+            if (!_types.Contains(type) || type.GetCustomAttributes(typeof(LockedContentAttribute), true).Length != 0)
                 return;
-            this._types.Remove(type);
+            _types.Remove(type);
         }
 
         /// <summary>Removes a generic type from the type pool.</summary>
         /// <typeparam name="E">The type to remove</typeparam>
-        public void Remove<E>() where E : T => this.Remove(typeof(E));
+        public void Remove<E>() where E : T => Remove(typeof(E));
 
         /// <summary>
         /// Redirects the a type to another type. Attempts to create an Old
@@ -48,7 +48,7 @@ namespace DuckGame
         {
             if (oldType.GetCustomAttributes(typeof(LockedContentAttribute), true).Length != 0)
                 return;
-            this._redirections[oldType] = newType;
+            _redirections[oldType] = newType;
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace DuckGame
           where Old : T
           where New : Old
         {
-            this.Redirect(typeof(Old), typeof(New));
+            Redirect(typeof(Old), typeof(New));
         }
     }
 }

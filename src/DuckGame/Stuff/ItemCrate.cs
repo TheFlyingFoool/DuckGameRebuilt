@@ -39,162 +39,162 @@ namespace DuckGame
 
         public System.Type contains { get; set; }
 
-        public List<TypeProbPair> possible => this._possible;
+        public List<TypeProbPair> possible => _possible;
 
         public ItemCrate(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._maxHealth = 15f;
-            this._hitPoints = 15f;
-            this._sprite = new SpriteMap("bigItemCrate", 32, 33);
-            this.graphic = _sprite;
-            this.center = new Vec2(16f, 24f);
-            this.collisionOffset = new Vec2(-16f, -24f);
-            this.collisionSize = new Vec2(32f, 32f);
-            this.depth = -0.7f;
-            this.thickness = 2f;
-            this.weight = 10f;
-            this._randomMark = new Sprite("itemBoxRandom");
-            this._randomMark.CenterOrigin();
-            this.flammable = 0.3f;
-            this.collideSounds.Add("rockHitGround2");
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this._containedObjects = new PhysicsObject[4]
+            _maxHealth = 15f;
+            _hitPoints = 15f;
+            _sprite = new SpriteMap("bigItemCrate", 32, 33);
+            graphic = _sprite;
+            center = new Vec2(16f, 24f);
+            collisionOffset = new Vec2(-16f, -24f);
+            collisionSize = new Vec2(32f, 32f);
+            depth = -0.7f;
+            thickness = 2f;
+            weight = 10f;
+            _randomMark = new Sprite("itemBoxRandom");
+            _randomMark.CenterOrigin();
+            flammable = 0.3f;
+            collideSounds.Add("rockHitGround2");
+            physicsMaterial = PhysicsMaterial.Metal;
+            _containedObjects = new PhysicsObject[4]
             {
-        this._containedObject1,
-        this._containedObject2,
-        this._containedObject3,
-        this._containedObject4
+        _containedObject1,
+        _containedObject2,
+        _containedObject3,
+        _containedObject4
             };
-            this.editorTooltip = "Chock full of good stuff- if you can get it open..";
+            editorTooltip = "Chock full of good stuff- if you can get it open..";
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            if (this.randomSpawn)
+            if (randomSpawn)
             {
                 List<System.Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
-                this.contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
+                contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
             }
             else
             {
-                if (this.possible.Count <= 0 || !(this.contains == null))
+                if (possible.Count <= 0 || !(contains == null))
                     return;
-                this.PreparePossibilities();
+                PreparePossibilities();
             }
         }
 
         public void PreparePossibilities()
         {
-            if (this.possible.Count <= 0)
+            if (possible.Count <= 0)
                 return;
-            this.contains = MysteryGun.PickType(this.chanceGroup, this.possible);
+            contains = MysteryGun.PickType(chanceGroup, possible);
         }
 
         public PhysicsObject containedObject
         {
-            get => this._containedObject;
-            set => this._containedObject = value;
+            get => _containedObject;
+            set => _containedObject = value;
         }
 
         public virtual void UpdateContainedObject()
         {
             for (int index = 0; index < 4; ++index)
             {
-                if (Network.isActive && this.isServerForObject && this._containedObjects[index] == null)
+                if (Network.isActive && isServerForObject && _containedObjects[index] == null)
                 {
-                    this._containedObjects[index] = this.GetSpawnItem();
-                    if (this._containedObjects[index] != null)
+                    _containedObjects[index] = GetSpawnItem();
+                    if (_containedObjects[index] != null)
                     {
-                        this._containedObjects[index].visible = false;
-                        this._containedObjects[index].solid = false;
-                        this._containedObjects[index].active = false;
-                        this._containedObjects[index].position = this.position;
-                        Level.Add(this._containedObjects[index]);
+                        _containedObjects[index].visible = false;
+                        _containedObjects[index].solid = false;
+                        _containedObjects[index].active = false;
+                        _containedObjects[index].position = position;
+                        Level.Add(_containedObjects[index]);
                     }
-                    this._containedObject1 = this._containedObjects[0];
-                    this._containedObject2 = this._containedObjects[1];
-                    this._containedObject3 = this._containedObjects[2];
-                    this._containedObject4 = this._containedObjects[3];
+                    _containedObject1 = _containedObjects[0];
+                    _containedObject2 = _containedObjects[1];
+                    _containedObject3 = _containedObjects[2];
+                    _containedObject4 = _containedObjects[3];
                 }
             }
         }
 
         public virtual PhysicsObject GetSpawnItem()
         {
-            if (this.contains == null)
+            if (contains == null)
                 return null;
-            IReadOnlyPropertyBag bag = ContentProperties.GetBag(this.contains);
-            return !Network.isActive || bag.GetOrDefault("isOnlineCapable", true) ? Editor.CreateThing(this.contains) as PhysicsObject : Activator.CreateInstance(typeof(Pistol), Editor.GetConstructorParameters(typeof(Pistol))) as PhysicsObject;
+            IReadOnlyPropertyBag bag = ContentProperties.GetBag(contains);
+            return !Network.isActive || bag.GetOrDefault("isOnlineCapable", true) ? Editor.CreateThing(contains) as PhysicsObject : Activator.CreateInstance(typeof(Pistol), Editor.GetConstructorParameters(typeof(Pistol))) as PhysicsObject;
         }
 
         public override void EditorUpdate()
         {
-            this.UpdatePreview();
+            UpdatePreview();
             base.EditorUpdate();
         }
 
         private void UpdatePreview()
         {
-            if (this._previewThing != null && !(this._previewThing.GetType() != this.contains))
+            if (_previewThing != null && !(_previewThing.GetType() != contains))
                 return;
-            this._previewThing = this.GetSpawnItem();
-            if (this._previewThing != null)
-                this._containedSprite = this._previewThing.GetEditorImage(20, 16, true, null, null, true);
+            _previewThing = GetSpawnItem();
+            if (_previewThing != null)
+                _containedSprite = _previewThing.GetEditorImage(20, 16, true, null, null, true);
             else
-                this._containedSprite = null;
+                _containedSprite = null;
         }
 
         public override void Update()
         {
-            this.UpdateContainedObject();
-            this._containedObjects[0] = this._containedObject1;
-            this._containedObjects[1] = this._containedObject2;
-            this._containedObjects[2] = this._containedObject3;
-            this._containedObjects[3] = this._containedObject4;
-            if (this.isServerForObject)
+            UpdateContainedObject();
+            _containedObjects[0] = _containedObject1;
+            _containedObjects[1] = _containedObject2;
+            _containedObjects[2] = _containedObject3;
+            _containedObjects[3] = _containedObject4;
+            if (isServerForObject)
             {
                 if (damageMultiplier > 1.0)
-                    this.damageMultiplier -= 0.2f;
+                    damageMultiplier -= 0.2f;
                 else
-                    this.damageMultiplier = 1f;
-                if (_hitPoints <= 0.0 && !this._destroyed)
-                    this.Destroy(new DTImpact(this));
-                if (this._onFire)
-                    this._hitPoints = Math.Min(this._hitPoints, (1f - this.burnt) * this._maxHealth);
+                    damageMultiplier = 1f;
+                if (_hitPoints <= 0.0 && !_destroyed)
+                    Destroy(new DTImpact(this));
+                if (_onFire)
+                    _hitPoints = Math.Min(_hitPoints, (1f - burnt) * _maxHealth);
             }
-            this.UpdatePreview();
-            if (this.contains == null)
-                this.buoyancy = 1f;
+            UpdatePreview();
+            if (contains == null)
+                buoyancy = 1f;
             else
-                this.buoyancy = 0f;
+                buoyancy = 0f;
             base.Update();
         }
 
         public override void Draw()
         {
-            if (this.randomSpawn && !this.revealRandom.value)
+            if (randomSpawn && !revealRandom.value)
             {
-                this._sprite.frame = 4;
-                Vec2 vec2 = this.Offset(new Vec2(0f, -8f));
-                this._randomMark.angle = this.angle;
-                this._randomMark.flipH = this.offDir <= 0;
-                DuckGame.Graphics.Draw(this._randomMark, vec2.x, vec2.y, this.depth + 10);
+                _sprite.frame = 4;
+                Vec2 vec2 = Offset(new Vec2(0f, -8f));
+                _randomMark.angle = angle;
+                _randomMark.flipH = offDir <= 0;
+                DuckGame.Graphics.Draw(_randomMark, vec2.x, vec2.y, depth + 10);
             }
-            else if (this._containedSprite != null)
+            else if (_containedSprite != null)
             {
-                this._sprite.frame = 4;
-                this._containedSprite.CenterOrigin();
-                Vec2 vec2 = this.Offset(new Vec2(0f, -8f));
-                this._containedSprite.angle = this.angle;
-                this._containedSprite.flipH = this.offDir <= 0;
-                DuckGame.Graphics.Draw(this._containedSprite, vec2.x, vec2.y, this.depth + 10);
+                _sprite.frame = 4;
+                _containedSprite.CenterOrigin();
+                Vec2 vec2 = Offset(new Vec2(0f, -8f));
+                _containedSprite.angle = angle;
+                _containedSprite.flipH = offDir <= 0;
+                DuckGame.Graphics.Draw(_containedSprite, vec2.x, vec2.y, depth + 10);
             }
             else
-                this._sprite.frame = 0;
-            this._sprite.frame += (int)((1.0 - _hitPoints / this._maxHealth) * 3.5);
+                _sprite.frame = 0;
+            _sprite.frame += (int)((1.0 - _hitPoints / _maxHealth) * 3.5);
             base.Draw();
         }
 
@@ -217,48 +217,48 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
+            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(contains));
             binaryClassChunk.AddProperty("randomSpawn", randomSpawn);
-            binaryClassChunk.AddProperty("possible", MysteryGun.SerializeTypeProb(this.possible));
+            binaryClassChunk.AddProperty("possible", MysteryGun.SerializeTypeProb(possible));
             return binaryClassChunk;
         }
 
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
-            this.randomSpawn = node.GetProperty<bool>("randomSpawn");
-            this._possible = MysteryGun.DeserializeTypeProb(node.GetProperty<string>("possible"));
+            contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
+            randomSpawn = node.GetProperty<bool>("randomSpawn");
+            _possible = MysteryGun.DeserializeTypeProb(node.GetProperty<string>("possible"));
             return true;
         }
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            this._hitPoints = 0f;
+            _hitPoints = 0f;
             for (int index = 0; index < 10; ++index)
             {
-                WoodDebris woodDebris = WoodDebris.New(this.x - 10f + Rando.Float(20f), this.y - 10f + Rando.Float(20f));
+                WoodDebris woodDebris = WoodDebris.New(x - 10f + Rando.Float(20f), y - 10f + Rando.Float(20f));
                 woodDebris.hSpeed = Rando.Float(-4f, 4f);
                 woodDebris.vSpeed = Rando.Float(-4f, 4f);
                 Level.Add(woodDebris);
             }
             for (int index = 0; index < 3; ++index)
             {
-                MusketSmoke musketSmoke = new MusketSmoke(this.x + Rando.Float(-10f, 10f), this.y + Rando.Float(-10f, 10f));
+                MusketSmoke musketSmoke = new MusketSmoke(x + Rando.Float(-10f, 10f), y + Rando.Float(-10f, 10f));
                 musketSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
                 musketSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
                 Level.Add(musketSmoke);
             }
             for (int index = 0; index < 4; ++index)
             {
-                PhysicsObject physicsObject = this._containedObjects[index];
+                PhysicsObject physicsObject = _containedObjects[index];
                 if (!Network.isActive)
-                    physicsObject = this.GetSpawnItem();
+                    physicsObject = GetSpawnItem();
                 if (physicsObject != null)
                 {
-                    if (this._onFire)
+                    if (_onFire)
                         physicsObject.heat = 0.8f;
-                    physicsObject.position = this.position + new Vec2((float)(index * 2.66666674613953 - 4.0), 0f);
+                    physicsObject.position = position + new Vec2((float)(index * 2.66666674613953 - 4.0), 0f);
                     switch (index)
                     {
                         case 0:
@@ -297,7 +297,7 @@ namespace DuckGame
         {
             if (_hitPoints <= 0f)
                 return base.Hit(bullet, hitPos);
-            if (bullet.isLocal && this.owner == null)
+            if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
             for (int index = 0; index < 1f + damageMultiplier / 2f; ++index)
             {
@@ -307,19 +307,19 @@ namespace DuckGame
                 Level.Add(woodDebris);
             }
             SFX.Play("woodHit");
-            if (this.isServerForObject && TeamSelect2.Enabled("EXPLODEYCRATES"))
+            if (isServerForObject && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
                 Thing.Fondle(this, DuckNetwork.localConnection);
-                this.Destroy(new DTShot(bullet));
-                Level.Add(new GrenadeExplosion(this.x, this.y));
+                Destroy(new DTShot(bullet));
+                Level.Add(new GrenadeExplosion(x, y));
             }
-            this._hitPoints -= this.damageMultiplier;
-            this.damageMultiplier += 2f;
+            _hitPoints -= damageMultiplier;
+            damageMultiplier += 2f;
             if (_hitPoints <= 0f)
             {
                 if (bullet.isLocal)
                     Thing.SuperFondle(this, DuckNetwork.localConnection);
-                this.Destroy(new DTShot(bullet));
+                Destroy(new DTShot(bullet));
             }
             return base.Hit(bullet, hitPos);
         }

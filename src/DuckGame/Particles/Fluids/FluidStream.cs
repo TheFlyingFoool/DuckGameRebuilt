@@ -28,69 +28,69 @@ namespace DuckGame
 
         public Vec2 sprayAngle
         {
-            get => this._sprayAngle;
-            set => this._sprayAngle = value;
+            get => _sprayAngle;
+            set => _sprayAngle = value;
         }
 
-        public Vec2 startSprayAngle => this._startSprayAngle;
+        public Vec2 startSprayAngle => _startSprayAngle;
 
         public float holeThickness
         {
-            get => this._holeThickness;
-            set => this._holeThickness = value;
+            get => _holeThickness;
+            set => _holeThickness = value;
         }
 
         public Vec2 offset
         {
-            get => this._offset;
-            set => this._offset = value;
+            get => _offset;
+            set => _offset = value;
         }
 
         public bool onFire
         {
-            get => this._onFire;
-            set => this._onFire = value;
+            get => _onFire;
+            set => _onFire = value;
         }
 
         public FluidStream(float xpos, float ypos, Vec2 sprayAngleVal, float sprayVelocity, Vec2 off = default(Vec2))
           : base(xpos, ypos)
         {
-            this._endPoint = new Vec2(xpos, ypos);
-            this._sprayAngle = sprayAngleVal;
-            this._startSprayAngle = sprayAngleVal;
-            this._sprayVelocity = sprayVelocity;
-            this._offset = off;
+            _endPoint = new Vec2(xpos, ypos);
+            _sprayAngle = sprayAngleVal;
+            _startSprayAngle = sprayAngleVal;
+            _sprayVelocity = sprayVelocity;
+            _offset = off;
         }
 
         public void Feed(FluidData dat)
         {
             float to = Maths.Clamp(dat.amount * 200f, 0.1f, 2f);
             if (to > _maxSpeedMul)
-                this._maxSpeedMul = Lerp.Float(this._maxSpeedMul, to, 0.1f);
-            this._lastFluid = new Fluid(this.x, this.y, (this._sprayAngle * ((2f + (float)Math.Sin(_fluctuate) * 0.5f) * this._speedMul) + new Vec2(this.hSpeed * 0f, this.vSpeed * 0f)) * this.streamSpeedMultiplier, dat, this._lastFluid);
+                _maxSpeedMul = Lerp.Float(_maxSpeedMul, to, 0.1f);
+            _lastFluid = new Fluid(x, y, (_sprayAngle * ((2f + (float)Math.Sin(_fluctuate) * 0.5f) * _speedMul) + new Vec2(hSpeed * 0f, vSpeed * 0f)) * streamSpeedMultiplier, dat, _lastFluid);
             Level.Add(_lastFluid);
-            this._framesSinceFluid = 0;
-            if (dat.flammable > 0.5f && this.onFire && this._framesSinceFire > 12 && Rando.Float(1f) < 0.12f * dat.flammable)
+            _framesSinceFluid = 0;
+            if (dat.flammable > 0.5f && onFire && _framesSinceFire > 12 && Rando.Float(1f) < 0.12f * dat.flammable)
             {
-                SmallFire smallFire = SmallFire.New(this._lastFluid.x, this._lastFluid.y, 0f, 0f);
-                this._lastFluid.fire = smallFire;
+                SmallFire smallFire = SmallFire.New(_lastFluid.x, _lastFluid.y, 0f, 0f);
+                _lastFluid.fire = smallFire;
                 Level.Add(smallFire);
-                this._framesSinceFire = 0;
+                _framesSinceFire = 0;
             }
-            this._fluctuate += 0.2f;
+            _fluctuate += 0.2f;
         }
 
         public override void Update()
         {
-            ++this._framesSinceFire;
-            this._maxSpeedMul = Lerp.Float(this._maxSpeedMul, 0.1f, 1f / 1000f);
-            this._speedMul = Lerp.Float(this._speedMul, this._maxSpeedMul, 0.04f);
-            if (this._lastFluid != null)
-                ++this._framesSinceFluid;
-            if (this._framesSinceFluid <= 12)
+            ++_framesSinceFire;
+            _maxSpeedMul = Lerp.Float(_maxSpeedMul, 0.1f, 1f / 1000f);
+            _speedMul = Lerp.Float(_speedMul, _maxSpeedMul, 0.04f);
+            if (_lastFluid != null)
+                ++_framesSinceFluid;
+            if (_framesSinceFluid <= 12)
                 return;
-            this._framesSinceFluid = 0;
-            this._lastFluid = null;
+            _framesSinceFluid = 0;
+            _lastFluid = null;
         }
 
         public override void Draw() => base.Draw();

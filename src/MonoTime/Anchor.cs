@@ -12,11 +12,11 @@ namespace DuckGame
         private Thing _thing;
         public Vec2 offset = Vec2.Zero;
 
-        public Thing thing => this._thing;
+        public Thing thing => _thing;
 
-        public Vec2 position => this._thing.anchorPosition + this.offset;
+        public Vec2 position => _thing.anchorPosition + offset;
 
-        public Anchor(Thing to) => this._thing = to;
+        public Anchor(Thing to) => _thing = to;
 
         public static implicit operator Anchor(Thing val) => new Anchor(val);
 
@@ -36,10 +36,10 @@ namespace DuckGame
             return c2 != null;
         }
 
-        public bool Equals(Thing p) => p == this._thing;
+        public bool Equals(Thing p) => p == _thing;
 
-        public override bool Equals(object obj) => obj is Thing ? this.Equals(obj as Thing) : base.Equals(obj);
+        public override bool Equals(object obj) => obj is Thing ? Equals(obj as Thing) : base.Equals(obj);
 
-        public override int GetHashCode() => this._thing.GetHashCode();
+        public override int GetHashCode() => _thing.GetHashCode();
     }
 }

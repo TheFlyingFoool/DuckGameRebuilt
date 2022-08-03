@@ -16,45 +16,45 @@ namespace DuckGame
         public DonutSpaceBackground(float xpos, float ypos, bool moving = false, float speedMult = 1f)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
+            graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 3
             };
-            this.center = new Vec2(8f, 8f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = (Depth)0.9f;
-            this.layer = Layer.Foreground;
-            this._visibleInGame = false;
-            this._speedMult = speedMult;
-            this._moving = moving;
-            this._editorName = "Donut BG";
+            center = new Vec2(8f, 8f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            depth = (Depth)0.9f;
+            layer = Layer.Foreground;
+            _visibleInGame = false;
+            _speedMult = speedMult;
+            _moving = moving;
+            _editorName = "Donut BG";
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            this.backgroundColor = new Color(0, 0, 0);
-            Level.current.backgroundColor = this.backgroundColor;
-            this._parallax = new ParallaxBackground("background/space", 0f, 0f, 3);
-            float speed = 0.4f * this._speedMult;
+            backgroundColor = new Color(0, 0, 0);
+            Level.current.backgroundColor = backgroundColor;
+            _parallax = new ParallaxBackground("background/space", 0f, 0f, 3);
+            float speed = 0.4f * _speedMult;
             Sprite sprite = new Sprite("background/donut")
             {
                 depth = -0.9f,
                 position = new Vec2(200f, 50f)
             };
-            this._parallax.AddZoneThing(new SpaceDonut(200f, 50f), 19, 0.99f, speed);
-            this._parallax.AddZone(20, 0.93f, speed, this._moving);
-            this._parallax.AddZone(21, 0.9f, speed, this._moving);
-            this._parallax.AddZone(22, 0.87f, speed, this._moving);
-            this._parallax.AddZone(23, 0.84f, speed, this._moving);
-            this._parallax.AddZone(24, 0.81f, speed, this._moving);
-            this._parallax.AddZone(25, 0.81f, speed, this._moving);
-            this._parallax.AddZone(26, 0.78f, speed, this._moving);
-            this._parallax.AddZone(27, 0.78f, speed, this._moving);
-            this._parallax.AddZone(28, 0.75f, speed, this._moving);
-            this._parallax.AddZone(29, 0.75f, speed, this._moving);
+            _parallax.AddZoneThing(new SpaceDonut(200f, 50f), 19, 0.99f, speed);
+            _parallax.AddZone(20, 0.93f, speed, _moving);
+            _parallax.AddZone(21, 0.9f, speed, _moving);
+            _parallax.AddZone(22, 0.87f, speed, _moving);
+            _parallax.AddZone(23, 0.84f, speed, _moving);
+            _parallax.AddZone(24, 0.81f, speed, _moving);
+            _parallax.AddZone(25, 0.81f, speed, _moving);
+            _parallax.AddZone(26, 0.78f, speed, _moving);
+            _parallax.AddZone(27, 0.78f, speed, _moving);
+            _parallax.AddZone(28, 0.75f, speed, _moving);
+            _parallax.AddZone(29, 0.75f, speed, _moving);
             Level.Add(_parallax);
         }
 

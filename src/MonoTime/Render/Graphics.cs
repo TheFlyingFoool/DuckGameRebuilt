@@ -143,7 +143,13 @@ namespace DuckGame
             set => DuckGame.Graphics._screenTarget = value;
         }
 
-        public static bool inFocus => MonoMain.framesBackInFocus > 4L;
+        public static bool inFocus
+        {
+            get
+            {
+                return MonoMain.framesBackInFocus > 4L;
+            }
+        }
 
         public static bool recordOnly
         {

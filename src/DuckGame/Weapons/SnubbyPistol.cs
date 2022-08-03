@@ -21,57 +21,57 @@ namespace DuckGame
 
         public override float angle
         {
-            get => base.angle + this._angleOffset * offDir;
-            set => this._angle = value;
+            get => base.angle + _angleOffset * offDir;
+            set => _angle = value;
         }
 
         public SnubbyPistol(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 6;
-            this._ammoType = new AT9mm();
-            this._ammoType.range = 130f;
-            this._ammoType.rangeVariation = 10f;
-            this._ammoType.accuracy = 0.95f;
-            this._ammoType.penetration = 0.4f;
-            this._type = "gun";
-            this._sprite = new SpriteMap("snubby", 14, 10);
-            this.graphic = _sprite;
-            this.center = new Vec2(7f, 4f);
-            this.collisionOffset = new Vec2(-7f, -4f);
-            this.collisionSize = new Vec2(14f, 9f);
-            this._barrelOffsetTL = new Vec2(13f, 3f);
-            this._fireSound = "snubbyFire";
-            this._kickForce = 0f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(-1f, -1f);
-            this._loaded = true;
-            this.editorTooltip = "The world's most adorable gun.";
+            ammo = 6;
+            _ammoType = new AT9mm();
+            _ammoType.range = 130f;
+            _ammoType.rangeVariation = 10f;
+            _ammoType.accuracy = 0.95f;
+            _ammoType.penetration = 0.4f;
+            _type = "gun";
+            _sprite = new SpriteMap("snubby", 14, 10);
+            graphic = _sprite;
+            center = new Vec2(7f, 4f);
+            collisionOffset = new Vec2(-7f, -4f);
+            collisionSize = new Vec2(14f, 9f);
+            _barrelOffsetTL = new Vec2(13f, 3f);
+            _fireSound = "snubbyFire";
+            _kickForce = 0f;
+            _fireRumble = RumbleIntensity.Kick;
+            _holdOffset = new Vec2(-1f, -1f);
+            _loaded = true;
+            editorTooltip = "The world's most adorable gun.";
         }
 
         public override void OnPressAction()
         {
-            if (this._loaded)
+            if (_loaded)
             {
                 base.OnPressAction();
-                this._loaded = false;
-                this._sprite.frame = 0;
+                _loaded = false;
+                _sprite.frame = 0;
             }
             else
             {
-                this._loaded = true;
-                this._sprite.frame = 1;
-                this._loadBurst = 1f;
+                _loaded = true;
+                _sprite.frame = 1;
+                _loadBurst = 1f;
                 SFX.Play("snubbyLoad", pitch: Rando.Float(-0.1f, 0.1f));
             }
         }
 
         public override void Update()
         {
-            this._angleOffset = (float)(-this._loadBurst * 0.300000011920929);
-            this._loadBurst = Lerp.FloatSmooth(this._loadBurst, 0f, 0.18f);
+            _angleOffset = (float)(-_loadBurst * 0.300000011920929);
+            _loadBurst = Lerp.FloatSmooth(_loadBurst, 0f, 0.18f);
             if (_loadBurst < 0.100000001490116)
-                this._loadBurst = 0f;
+                _loadBurst = 0f;
             base.Update();
         }
     }

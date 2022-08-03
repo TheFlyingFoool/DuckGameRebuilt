@@ -9,6 +9,6 @@ namespace DuckGame
 {
     public class NMDuckNetworkSynchronized : SynchronizedNetMessage
     {
-        public NMDuckNetworkSynchronized() => this.manager = BelongsToManager.DuckNetwork;
+        public NMDuckNetworkSynchronized() => manager = BelongsToManager.DuckNetwork;
     }
 }

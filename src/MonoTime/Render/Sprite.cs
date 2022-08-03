@@ -20,51 +20,51 @@ namespace DuckGame
         public bool moji;
         protected Color _color = Color.White;
 
-        public int globalIndex => this._globalIndex;
+        public int globalIndex => _globalIndex;
 
         public Tex2D texture
         {
-            get => this._texture;
-            set => this._texture = value;
+            get => _texture;
+            set => _texture = value;
         }
 
         public RenderTarget2D renderTexture
         {
-            get => this._renderTexture;
-            set => this._renderTexture = value;
+            get => _renderTexture;
+            set => _renderTexture = value;
         }
 
-        public virtual int width => this._texture.width;
+        public virtual int width => _texture.width;
 
-        public virtual int w => this.width;
+        public virtual int w => width;
 
-        public virtual int height => this._texture.height;
+        public virtual int height => _texture.height;
 
-        public virtual int h => this.height;
+        public virtual int h => height;
 
         public bool flipH
         {
-            get => this._flipH;
-            set => this._flipH = value;
+            get => _flipH;
+            set => _flipH = value;
         }
 
         public bool flipV
         {
-            get => this._flipV;
-            set => this._flipV = value;
+            get => _flipV;
+            set => _flipV = value;
         }
 
-        public float flipMultH => !this._flipH ? 1f : -1f;
+        public float flipMultH => !_flipH ? 1f : -1f;
 
-        public float flipMultV => !this._flipV ? 1f : -1f;
+        public float flipMultV => !_flipV ? 1f : -1f;
 
         public Color color
         {
-            get => this._color;
-            set => this._color = value;
+            get => _color;
+            set => _color = value;
         }
 
-        public void CenterOrigin() => this.center = new Vec2((float)Math.Round(width / 2.0), (float)Math.Round(height / 2.0));
+        public void CenterOrigin() => center = new Vec2((float)Math.Round(width / 2.0), (float)Math.Round(height / 2.0));
 
         public Sprite()
         {
@@ -72,39 +72,39 @@ namespace DuckGame
 
         public Sprite(Tex2D tex, float x = 0f, float y = 0f)
         {
-            this._texture = tex;
-            this.position = new Vec2(x, y);
+            _texture = tex;
+            position = new Vec2(x, y);
         }
 
         public Sprite(RenderTarget2D tex, float x = 0f, float y = 0f)
         {
-            this._texture = tex;
-            this._renderTexture = tex;
-            this.position = new Vec2(x, y);
+            _texture = tex;
+            _renderTexture = tex;
+            position = new Vec2(x, y);
         }
 
         public Sprite(string tex, float x = 0f, float y = 0f)
         {
-            this._texture = Content.Load<Tex2D>(tex);
-            this.position = new Vec2(x, y);
+            _texture = Content.Load<Tex2D>(tex);
+            position = new Vec2(x, y);
         }
 
         public Sprite(string tex, Vec2 pCenter)
         {
-            this._texture = Content.Load<Tex2D>(tex);
-            this.center = pCenter;
+            _texture = Content.Load<Tex2D>(tex);
+            center = pCenter;
         }
 
         public virtual void Draw()
         {
-            this._texture.currentObjectIndex = this._globalIndex;
-            DuckGame.Graphics.Draw(this._texture, this.position, new Rectangle?(), this._color * this.alpha, this.angle, this.center, this.scale, this._flipH ? SpriteEffects.FlipHorizontally : (this._flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), this.depth);
+            _texture.currentObjectIndex = _globalIndex;
+            DuckGame.Graphics.Draw(_texture, position, new Rectangle?(), _color * alpha, angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public virtual void Draw(Rectangle r)
         {
-            this._texture.currentObjectIndex = this._globalIndex;
-            DuckGame.Graphics.Draw(this._texture, this.position, new Rectangle?(r), this._color * this.alpha, this.angle, this.center, this.scale, this._flipH ? SpriteEffects.FlipHorizontally : (this._flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), this.depth);
+            _texture.currentObjectIndex = _globalIndex;
+            DuckGame.Graphics.Draw(_texture, position, new Rectangle?(r), _color * alpha, angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public virtual void CheapDraw(bool flipH)
@@ -113,17 +113,17 @@ namespace DuckGame
 
         public virtual Sprite Clone()
         {
-            Sprite sprite = new Sprite(this._texture)
+            Sprite sprite = new Sprite(_texture)
             {
-                flipH = this._flipH,
-                flipV = this._flipV,
-                position = this.position,
-                scale = this.scale,
-                center = this.center,
-                depth = this.depth,
-                alpha = this.alpha,
-                angle = this.angle,
-                color = this.color
+                flipH = _flipH,
+                flipV = _flipV,
+                position = position,
+                scale = scale,
+                center = center,
+                depth = depth,
+                alpha = alpha,
+                angle = angle,
+                color = color
             };
             return sprite;
         }
@@ -132,6 +132,6 @@ namespace DuckGame
         {
         }
 
-        object ICloneable.Clone() => this.Clone();
+        object ICloneable.Clone() => Clone();
     }
 }

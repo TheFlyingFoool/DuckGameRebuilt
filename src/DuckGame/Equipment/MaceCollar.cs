@@ -14,15 +14,15 @@ namespace DuckGame
         public MaceCollar(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.editorTooltip = "A heavy ball & chain that can be swung with great force. For profit!";
+            editorTooltip = "A heavy ball & chain that can be swung with great force. For profit!";
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            this._ball = new WeightBall(this.x, this.y, this, this, true);
-            this.ReturnItemToWorld(_ball);
+            _ball = new WeightBall(x, y, this, this, true);
+            ReturnItemToWorld(_ball);
             Level.Add(_ball);
         }
     }

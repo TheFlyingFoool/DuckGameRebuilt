@@ -29,8 +29,8 @@ namespace DuckGame
         public Plane(Vec3 a, Vec3 b, Vec3 c)
         {
             Vec3 vector1 = Vec3.Cross(b - a, c - a);
-            this.normal = Vec3.Normalize(vector1);
-            this.d = -Vec3.Dot(vector1, a);
+            normal = Vec3.Normalize(vector1);
+            d = -Vec3.Dot(vector1, a);
         }
 
         public Plane(float a, float b, float c, float d)
@@ -42,9 +42,9 @@ namespace DuckGame
 
         public void Dot(ref Vec4 value, out float result) => result = (float)(normal.x * value.x + normal.y * value.y + normal.z * value.z + d * value.w);
 
-        public float DotCoordinate(Vec3 value) => (float)(normal.x * value.x + normal.y * value.y + normal.z * value.z) + this.d;
+        public float DotCoordinate(Vec3 value) => (float)(normal.x * value.x + normal.y * value.y + normal.z * value.z) + d;
 
-        public void DotCoordinate(ref Vec3 value, out float result) => result = (float)(normal.x * value.x + normal.y * value.y + normal.z * value.z) + this.d;
+        public void DotCoordinate(ref Vec3 value, out float result) => result = (float)(normal.x * value.x + normal.y * value.y + normal.z * value.z) + d;
 
         public float DotNormal(Vec3 value) => (float)(normal.x * value.x + normal.y * value.y + normal.z * value.z);
 
@@ -62,7 +62,7 @@ namespace DuckGame
         {
             Vec3 normal = this.normal;
             this.normal = Vec3.Normalize(this.normal);
-            this.d *= (float)Math.Sqrt(this.normal.x * this.normal.x + this.normal.y * this.normal.y + this.normal.z * this.normal.z) / (float)Math.Sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+            d *= (float)Math.Sqrt(this.normal.x * this.normal.x + this.normal.y * this.normal.y + this.normal.z * this.normal.z) / (float)Math.Sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
         }
 
         public static Plane Normalize(Plane value)
@@ -83,11 +83,11 @@ namespace DuckGame
 
         public static bool operator ==(Plane plane1, Plane plane2) => plane1.Equals(plane2);
 
-        public override bool Equals(object other) => other is Plane other1 && this.Equals(other1);
+        public override bool Equals(object other) => other is Plane other1 && Equals(other1);
 
-        public bool Equals(Plane other) => this.normal == other.normal && d == other.d;
+        public bool Equals(Plane other) => normal == other.normal && d == other.d;
 
-        public override int GetHashCode() => this.normal.GetHashCode() ^ this.d.GetHashCode();
+        public override int GetHashCode() => normal.GetHashCode() ^ d.GetHashCode();
 
         public override string ToString() => string.Format("{{Normal:{0} D:{1}}}", normal, d);
     }

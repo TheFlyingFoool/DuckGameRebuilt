@@ -212,17 +212,17 @@ namespace DuckGame
         {
             if (hex > 16777215U)
             {
-                this.r = (byte)(hex >> 24 & byte.MaxValue);
-                this.g = (byte)(hex >> 16 & byte.MaxValue);
-                this.b = (byte)(hex >> 8 & byte.MaxValue);
-                this.a = (byte)(hex & byte.MaxValue);
+                r = (byte)(hex >> 24 & byte.MaxValue);
+                g = (byte)(hex >> 16 & byte.MaxValue);
+                b = (byte)(hex >> 8 & byte.MaxValue);
+                a = (byte)(hex & byte.MaxValue);
             }
             else
             {
-                this.r = (byte)(hex >> 16 & byte.MaxValue);
-                this.g = (byte)(hex >> 8 & byte.MaxValue);
-                this.b = (byte)(hex & byte.MaxValue);
-                this.a = byte.MaxValue;
+                r = (byte)(hex >> 16 & byte.MaxValue);
+                g = (byte)(hex >> 8 & byte.MaxValue);
+                b = (byte)(hex & byte.MaxValue);
+                a = byte.MaxValue;
             }
         }
 
@@ -256,7 +256,7 @@ namespace DuckGame
 
         public bool Equals(Color other) => r == other.r && g == other.g && b == other.b && a == other.a;
 
-        public override bool Equals(object obj) => obj is Color other ? this.Equals(other) : base.Equals(obj);
+        public override bool Equals(object obj) => obj is Color other ? Equals(other) : base.Equals(obj);
 
         public override int GetHashCode() => (int)this;
 

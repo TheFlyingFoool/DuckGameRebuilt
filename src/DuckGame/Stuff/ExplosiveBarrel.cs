@@ -13,22 +13,22 @@ namespace DuckGame
         public ExplosiveBarrel(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("explosiveBarrel");
-            this.center = new Vec2(7f, 8f);
-            this.collisionOffset = new Vec2(-7f, -8f);
-            this.collisionSize = new Vec2(14f, 16f);
-            this.depth = -0.1f;
-            this._editorName = "Barrel (Explosive)";
-            this.editorTooltip = "Nobody knows what's in these things or why everyone just leaves them around.";
-            this.thickness = 4f;
-            this.weight = 10f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.collideSounds.Clear();
-            this.collideSounds.Add("barrelThud");
-            this._holdOffset = new Vec2(1f, 0f);
-            this.flammable = 0.3f;
-            this._placementCost += 10;
-            this.baseExplosionRange = 70f;
+            graphic = new Sprite("explosiveBarrel");
+            center = new Vec2(7f, 8f);
+            collisionOffset = new Vec2(-7f, -8f);
+            collisionSize = new Vec2(14f, 16f);
+            depth = -0.1f;
+            _editorName = "Barrel (Explosive)";
+            editorTooltip = "Nobody knows what's in these things or why everyone just leaves them around.";
+            thickness = 4f;
+            weight = 10f;
+            physicsMaterial = PhysicsMaterial.Metal;
+            collideSounds.Clear();
+            collideSounds.Add("barrelThud");
+            _holdOffset = new Vec2(1f, 0f);
+            flammable = 0.3f;
+            _placementCost += 10;
+            baseExplosionRange = 70f;
         }
 
         public override void DoBlockDestruction()

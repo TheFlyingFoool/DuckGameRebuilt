@@ -18,17 +18,17 @@ namespace DuckGame
 
         public NMFuneral(Profile pProfile, Duck pLay)
         {
-            this.profile = pProfile;
-            this.lay = pLay;
+            profile = pProfile;
+            lay = pLay;
         }
 
         public override void Activate()
         {
-            if (this.lay != null && this.profile != null)
+            if (lay != null && profile != null)
             {
-                this.lay.isConversionMessage = true;
-                this.lay.LayToRest(this.profile);
-                this.lay.isConversionMessage = false;
+                lay.isConversionMessage = true;
+                lay.LayToRest(profile);
+                lay.isConversionMessage = false;
                 if (!Music.currentSong.Contains("MarchOfDuck"))
                     Music.Play("MarchOfDuck", false);
             }

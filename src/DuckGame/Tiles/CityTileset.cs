@@ -13,11 +13,11 @@ namespace DuckGame
         public CityTileset(float x, float y)
           : base(x, y, "cityTileset")
         {
-            this._editorName = "City";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidth = 10f;
-            this.verticalWidthThick = 15f;
-            this.horizontalHeight = 13f;
+            _editorName = "City";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidth = 10f;
+            verticalWidthThick = 15f;
+            horizontalHeight = 13f;
         }
 
         public override void Draw() => base.Draw();

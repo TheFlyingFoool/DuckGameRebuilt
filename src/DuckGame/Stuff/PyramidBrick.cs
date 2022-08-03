@@ -13,14 +13,14 @@ namespace DuckGame
         public PyramidBrick(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("pyramidBrick");
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.depth = -0.5f;
-            this._editorName = "Pyramid Block";
-            this.thickness = 4f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
+            graphic = new Sprite("pyramidBrick");
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -8f);
+            collisionSize = new Vec2(16f, 16f);
+            depth = -0.5f;
+            _editorName = "Pyramid Block";
+            thickness = 4f;
+            physicsMaterial = PhysicsMaterial.Metal;
         }
     }
 }

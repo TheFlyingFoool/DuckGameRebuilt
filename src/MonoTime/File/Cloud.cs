@@ -269,34 +269,34 @@ namespace DuckGame
               : base(pProcessName, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 180f, 50f)
             {
                 if (pOpenOnClose != null)
-                    this._openOnClose = pOpenOnClose.rootMenu;
-                this._box = new UIBox(0f, 0f, high: 26f, isVisible: false);
-                this.Add(_box, true);
+                    _openOnClose = pOpenOnClose.rootMenu;
+                _box = new UIBox(0f, 0f, high: 26f, isVisible: false);
+                Add(_box, true);
             }
 
             public override void Close()
             {
-                if (this._closing)
+                if (_closing)
                     return;
-                this._closing = true;
-                if (this._openOnClose != null)
+                _closing = true;
+                if (_openOnClose != null)
                 {
-                    MonoMain.pauseMenu = this._openOnClose;
-                    this._openOnClose.Open();
+                    MonoMain.pauseMenu = _openOnClose;
+                    _openOnClose.Open();
                 }
                 base.Close();
             }
 
             public override void Draw()
             {
-                if (this.open)
+                if (open)
                 {
                     string text = "" + "Working... (" + ((int)(Cloud.progress * 100f)).ToString() + "%)";
-                    Graphics.DrawRect(new Rectangle((this._box.x - this._box.halfWidth + 8f), this._box.y, this._box.width - 16f, 10f), Color.LightGray, (Depth)0.8f);
-                    Graphics.DrawRect(new Rectangle((this._box.x - this._box.halfWidth + 8f), this._box.y, Lerp.FloatSmooth(0f, this._box.width - 16f, Cloud.progress), 10f), Color.White, (Depth)0.8f);
-                    Graphics.DrawString(text, new Vec2(this._box.x - Graphics.GetStringWidth(text) / 2f, this._box.y - 10f), Color.White, (Depth)0.8f);
+                    Graphics.DrawRect(new Rectangle((_box.x - _box.halfWidth + 8f), _box.y, _box.width - 16f, 10f), Color.LightGray, (Depth)0.8f);
+                    Graphics.DrawRect(new Rectangle((_box.x - _box.halfWidth + 8f), _box.y, Lerp.FloatSmooth(0f, _box.width - 16f, Cloud.progress), 10f), Color.White, (Depth)0.8f);
+                    Graphics.DrawString(text, new Vec2(_box.x - Graphics.GetStringWidth(text) / 2f, _box.y - 10f), Color.White, (Depth)0.8f);
                     if (!Cloud.processing)
-                        this.Close();
+                        Close();
                 }
                 base.Draw();
             }
@@ -311,59 +311,59 @@ namespace DuckGame
 
             public void Execute()
             {
-                if (this.type == Cloud.CloudOperation.Type.FinishDeletingCloud)
+                if (type == Cloud.CloudOperation.Type.FinishDeletingCloud)
                     HUD.AddPlayerChangeDisplay("@PLUG@|LIME|Cloud data cleared!");
-                else if (this.type == Cloud.CloudOperation.Type.FinishDeletingFiles)
+                else if (type == Cloud.CloudOperation.Type.FinishDeletingFiles)
                     HUD.AddPlayerChangeDisplay("@PLUG@|LIME|Local deletions applied!");
-                else if (this.type == Cloud.CloudOperation.Type.FinishRecoveringFiles)
+                else if (type == Cloud.CloudOperation.Type.FinishRecoveringFiles)
                     HUD.AddPlayerChangeDisplay("@PLUG@|LIME|Local files recovered!");
-                else if (this.type == Cloud.CloudOperation.Type.Delete)
+                else if (type == Cloud.CloudOperation.Type.Delete)
                 {
                     if (!Cloud.uploadEnabled)
                     {
                         if (!MonoMain.logFileOperations)
                             return;
-                        DevConsole.Log(DCSection.General, "Cloud.Execute.Delete(" + this.file.cloudPath + ") skipped (uploadEnabled == false)");
+                        DevConsole.Log(DCSection.General, "Cloud.Execute.Delete(" + file.cloudPath + ") skipped (uploadEnabled == false)");
                     }
                     else
                     {
                         if (MonoMain.logFileOperations)
-                            DevConsole.Log(DCSection.General, "Cloud.Execute.Delete(" + this.file.cloudPath + ")");
-                        Steam.FileDelete(this.file.cloudPath);
-                        this.file.cloudDate = DateTime.MinValue;
+                            DevConsole.Log(DCSection.General, "Cloud.Execute.Delete(" + file.cloudPath + ")");
+                        Steam.FileDelete(file.cloudPath);
+                        file.cloudDate = DateTime.MinValue;
                     }
                 }
-                else if (this.type == Cloud.CloudOperation.Type.ReadFromCloud)
+                else if (type == Cloud.CloudOperation.Type.ReadFromCloud)
                 {
                     if (!Cloud.downloadEnabled)
                     {
                         if (!MonoMain.logFileOperations)
                             return;
-                        DevConsole.Log(DCSection.General, "Cloud.Execute.ReadFromCloud(" + this.file?.ToString() + ") skipped (downloadEnabled == false)");
+                        DevConsole.Log(DCSection.General, "Cloud.Execute.ReadFromCloud(" + file?.ToString() + ") skipped (downloadEnabled == false)");
                     }
                     else
-                        Cloud.ReplaceLocalFileWithCloudFile(this.file);
+                        Cloud.ReplaceLocalFileWithCloudFile(file);
                 }
-                else if (this.type == Cloud.CloudOperation.Type.WriteToCloud)
+                else if (type == Cloud.CloudOperation.Type.WriteToCloud)
                 {
                     if (!Cloud.uploadEnabled)
                     {
                         if (!MonoMain.logFileOperations)
                             return;
-                        DevConsole.Log(DCSection.General, "Cloud.Execute.WriteToCloud(" + this.file.cloudPath + ") skipped (uploadEnabled == false)");
+                        DevConsole.Log(DCSection.General, "Cloud.Execute.WriteToCloud(" + file.cloudPath + ") skipped (uploadEnabled == false)");
                     }
                     else
                     {
-                        byte[] data = System.IO.File.ReadAllBytes(this.file.localPath);
-                        Steam.FileWrite(this.file.cloudPath, data, data.Length);
+                        byte[] data = System.IO.File.ReadAllBytes(file.localPath);
+                        Steam.FileWrite(file.cloudPath, data, data.Length);
                         if (MonoMain.logFileOperations)
-                            DevConsole.Log(DCSection.General, "Cloud.Execute.WriteToCloud(" + this.file.cloudPath + ")");
-                        this.file.cloudDate = DateTime.Now;
+                            DevConsole.Log(DCSection.General, "Cloud.Execute.WriteToCloud(" + file.cloudPath + ")");
+                        file.cloudDate = DateTime.Now;
                     }
                 }
                 else
                 {
-                    if (this.type != Cloud.CloudOperation.Type.UploadNewFiles)
+                    if (type != Cloud.CloudOperation.Type.UploadNewFiles)
                         return;
                     Cloud.loaded = true;
                 }

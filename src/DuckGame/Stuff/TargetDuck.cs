@@ -44,24 +44,24 @@ namespace DuckGame
         public TargetDuck(float xpos, float ypos, TargetStance stance)
           : base(xpos, ypos, null)
         {
-            this._sprite = new SpriteMap("woodDuck", 32, 32);
-            this._base = new Sprite("popupPad");
-            this._woodWing = new Sprite("woodWing");
-            this.graphic = _sprite;
-            this.center = new Vec2(16f, 22f);
-            this._stance = stance;
-            this.UpdateCollision();
-            this.physicsMaterial = PhysicsMaterial.Wood;
-            this.thickness = 0.5f;
-            this._hitPoints = this._maxHealth = 0.1f;
-            this.editorOffset = new Vec2(0f, -4f);
-            this.hugWalls = WallHug.Floor;
-            this._canHaveChance = false;
-            this.sequence = new SequenceItem(this)
+            _sprite = new SpriteMap("woodDuck", 32, 32);
+            _base = new Sprite("popupPad");
+            _woodWing = new Sprite("woodWing");
+            graphic = _sprite;
+            center = new Vec2(16f, 22f);
+            _stance = stance;
+            UpdateCollision();
+            physicsMaterial = PhysicsMaterial.Wood;
+            thickness = 0.5f;
+            _hitPoints = _maxHealth = 0.1f;
+            editorOffset = new Vec2(0f, -4f);
+            hugWalls = WallHug.Floor;
+            _canHaveChance = false;
+            sequence = new SequenceItem(this)
             {
                 type = SequenceItemType.Target
             };
-            this.speediness.value = 1f;
+            speediness.value = 1f;
         }
 
         public override void OnDrawLayer(Layer pLayer)
@@ -70,39 +70,39 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this._profile = Profiles.EnvironmentProfile;
-            this.InitProfile();
-            this._sprite = new SpriteMap("woodDuck", 32, 32);
-            this._base = new Sprite("popupPad");
-            this._woodWing = new Sprite("woodWing");
-            this.graphic = _sprite;
+            _profile = Profiles.EnvironmentProfile;
+            InitProfile();
+            _sprite = new SpriteMap("woodDuck", 32, 32);
+            _base = new Sprite("popupPad");
+            _woodWing = new Sprite("woodWing");
+            graphic = _sprite;
             if (!(Level.current is Editor))
             {
-                if (this._stance != TargetStance.Fly)
-                    this.scale = new Vec2(1f, 0f);
+                if (_stance != TargetStance.Fly)
+                    scale = new Vec2(1f, 0f);
                 else
-                    this.scale = new Vec2(0f, 1f);
+                    scale = new Vec2(0f, 1f);
                 ChallengeLevel.allTargetsShot = false;
-                this._autoFireWait = this.autofire.value;
+                _autoFireWait = autofire.value;
             }
-            if ((float)this.speediness == 0.0)
-                this.speediness.value = 1f;
-            this._waitFire = (float)this.speediness;
-            this.UpdateCollision();
+            if ((float)speediness == 0.0)
+                speediness.value = 1f;
+            _waitFire = (float)speediness;
+            UpdateCollision();
         }
 
         public void SpawnHoldObject()
         {
-            this._autoFireWait = (float)this.autofire;
-            if (!(this.contains != null) || !(Editor.CreateThing(this.contains) is Holdable thing))
+            _autoFireWait = (float)autofire;
+            if (!(contains != null) || !(Editor.CreateThing(contains) is Holdable thing))
                 return;
             Level.Add(thing);
-            this.GiveThing(thing);
+            GiveThing(thing);
         }
 
         public override void ReturnItemToWorld(Thing t)
         {
-            Vec2 p1 = this.position + new Vec2(offDir * 3, 0f);
+            Vec2 p1 = position + new Vec2(offDir * 3, 0f);
             Block block1 = Level.CheckLine<Block>(p1, p1 + new Vec2(16f, 0f));
             if (block1 != null && block1.solid && t.right > block1.left)
                 t.right = block1.left;
@@ -120,109 +120,109 @@ namespace DuckGame
 
         public void UpdateCollision()
         {
-            if (Level.current is Editor || Level.current == null || this._up && this._popup)
+            if (Level.current is Editor || Level.current == null || _up && _popup)
             {
-                this.crouch = false;
-                this.sliding = false;
-                if (this._stance == TargetStance.Stand)
+                crouch = false;
+                sliding = false;
+                if (_stance == TargetStance.Stand)
                 {
-                    this._sprite.frame = 0;
-                    this._collisionOffset = new Vec2(-6f, -24f);
-                    this.collisionSize = new Vec2(12f, 24f);
-                    this.hugWalls = WallHug.Floor;
+                    _sprite.frame = 0;
+                    _collisionOffset = new Vec2(-6f, -24f);
+                    collisionSize = new Vec2(12f, 24f);
+                    hugWalls = WallHug.Floor;
                 }
-                else if (this._stance == TargetStance.StandArmed)
+                else if (_stance == TargetStance.StandArmed)
                 {
-                    this._sprite.frame = 1;
-                    this._collisionOffset = new Vec2(-6f, -23f);
-                    this.collisionSize = new Vec2(12f, 23f);
-                    this.hugWalls = WallHug.Floor;
+                    _sprite.frame = 1;
+                    _collisionOffset = new Vec2(-6f, -23f);
+                    collisionSize = new Vec2(12f, 23f);
+                    hugWalls = WallHug.Floor;
                 }
-                else if (this._stance == TargetStance.Crouch)
+                else if (_stance == TargetStance.Crouch)
                 {
-                    this._sprite.frame = 2;
-                    this._collisionOffset = new Vec2(-6f, -18f);
-                    this.collisionSize = new Vec2(12f, 18f);
-                    this.crouch = true;
-                    this.hugWalls = WallHug.Floor;
+                    _sprite.frame = 2;
+                    _collisionOffset = new Vec2(-6f, -18f);
+                    collisionSize = new Vec2(12f, 18f);
+                    crouch = true;
+                    hugWalls = WallHug.Floor;
                 }
-                else if (this._stance == TargetStance.Slide)
+                else if (_stance == TargetStance.Slide)
                 {
-                    this._sprite.frame = 3;
-                    this._collisionOffset = new Vec2(-6f, -10f);
-                    this.collisionSize = new Vec2(12f, 10f);
-                    this.sliding = true;
-                    this.hugWalls = WallHug.Floor;
+                    _sprite.frame = 3;
+                    _collisionOffset = new Vec2(-6f, -10f);
+                    collisionSize = new Vec2(12f, 10f);
+                    sliding = true;
+                    hugWalls = WallHug.Floor;
                 }
-                else if (this._stance == TargetStance.Fly)
+                else if (_stance == TargetStance.Fly)
                 {
-                    this._sprite.frame = 4;
-                    this._collisionOffset = new Vec2(-8f, -24f);
-                    this.collisionSize = new Vec2(16f, 24f);
-                    this.hugWalls = WallHug.Left | WallHug.Right;
+                    _sprite.frame = 4;
+                    _collisionOffset = new Vec2(-8f, -24f);
+                    collisionSize = new Vec2(16f, 24f);
+                    hugWalls = WallHug.Left | WallHug.Right;
                 }
             }
             else
             {
-                this.hugWalls = WallHug.Floor;
-                if (this._stance == TargetStance.Stand)
-                    this._sprite.frame = 0;
-                else if (this._stance == TargetStance.StandArmed)
-                    this._sprite.frame = 1;
-                else if (this._stance == TargetStance.Crouch)
-                    this._sprite.frame = 2;
-                else if (this._stance == TargetStance.Slide)
-                    this._sprite.frame = 3;
-                else if (this._stance == TargetStance.Fly)
+                hugWalls = WallHug.Floor;
+                if (_stance == TargetStance.Stand)
+                    _sprite.frame = 0;
+                else if (_stance == TargetStance.StandArmed)
+                    _sprite.frame = 1;
+                else if (_stance == TargetStance.Crouch)
+                    _sprite.frame = 2;
+                else if (_stance == TargetStance.Slide)
+                    _sprite.frame = 3;
+                else if (_stance == TargetStance.Fly)
                 {
-                    this._sprite.frame = 4;
-                    this.hugWalls = WallHug.Left | WallHug.Right;
+                    _sprite.frame = 4;
+                    hugWalls = WallHug.Left | WallHug.Right;
                 }
-                this._collisionOffset = new Vec2(-6000f, 0f);
-                this.collisionSize = new Vec2(2f, 2f);
+                _collisionOffset = new Vec2(-6000f, 0f);
+                collisionSize = new Vec2(2f, 2f);
             }
-            this._collisionOffset.y += 10f;
-            --this._collisionSize.y;
-            this._featherVolume.collisionSize = new Vec2(this.collisionSize.x + 2f, this.collisionSize.y + 2f);
-            this._featherVolume.collisionOffset = new Vec2(this.collisionOffset.x - 1f, this.collisionOffset.y - 1f);
+            _collisionOffset.y += 10f;
+            --_collisionSize.y;
+            _featherVolume.collisionSize = new Vec2(collisionSize.x + 2f, collisionSize.y + 2f);
+            _featherVolume.collisionOffset = new Vec2(collisionOffset.x - 1f, collisionOffset.y - 1f);
         }
 
-        public override void OnSequenceActivate() => this._popup = true;
+        public override void OnSequenceActivate() => _popup = true;
 
         public void PopDown()
         {
-            this._popup = false;
-            if (this.holdObject != null)
+            _popup = false;
+            if (holdObject != null)
             {
                 Level.Remove(holdObject);
-                this.holdObject = null;
+                holdObject = null;
             }
-            foreach (Equipment equipment in this._equipment)
+            foreach (Equipment equipment in _equipment)
             {
                 if (equipment != null)
                     Level.Remove(equipment);
             }
-            this._equipment.Clear();
-            this._sequence.Finished();
+            _equipment.Clear();
+            _sequence.Finished();
         }
 
         public override bool Kill(DestroyType type = null)
         {
-            if (this._up && this._popup)
+            if (_up && _popup)
             {
                 if (ChallengeLevel.running)
                     ++ChallengeLevel.targetsShot;
-                if (this.holdObject is Gun && !(bool)this.dropgun)
-                    (this.holdObject as Gun).ammo = 0;
-                this.ThrowItem(false);
-                foreach (Equipment t in this._equipment)
+                if (holdObject is Gun && !(bool)dropgun)
+                    (holdObject as Gun).ammo = 0;
+                ThrowItem(false);
+                foreach (Equipment t in _equipment)
                 {
                     if (t != null)
                     {
                         t.owner = null;
                         t.hSpeed = Rando.Float(2f) - 1f;
                         t.vSpeed = -Rando.Float(1.5f);
-                        this.ReturnItemToWorld(t);
+                        ReturnItemToWorld(t);
                         t.UnEquip();
                     }
                 }
@@ -234,23 +234,23 @@ namespace DuckGame
                     vec2 = (type as DTShot).bullet.travelDirNormalized;
                 for (int index = 0; index < 4; ++index)
                 {
-                    WoodDebris woodDebris = WoodDebris.New(this.x - 8f + Rando.Float(16f), this.y - 20f + Rando.Float(16f));
+                    WoodDebris woodDebris = WoodDebris.New(x - 8f + Rando.Float(16f), y - 20f + Rando.Float(16f));
                     woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
                     woodDebris.vSpeed = -Rando.Float(1f);
                     Level.Add(woodDebris);
                 }
                 for (int index = 0; index < 2; ++index)
-                    Level.Add(Feather.New(this.x, this.y - 16f, this.persona));
-                this.PopDown();
+                    Level.Add(Feather.New(x, y - 16f, persona));
+                PopDown();
             }
             return false;
         }
 
-        public override bool Hit(Bullet bullet, Vec2 hitPos) => this._up && this._popup && base.Hit(bullet, hitPos);
+        public override bool Hit(Bullet bullet, Vec2 hitPos) => _up && _popup && base.Hit(bullet, hitPos);
 
         public override void ExitHit(Bullet bullet, Vec2 hitPos)
         {
-            if (!this._up || this._popup)
+            if (!_up || _popup)
                 return;
             for (int index = 0; index < 2; ++index)
             {
@@ -263,67 +263,67 @@ namespace DuckGame
 
         public override bool Hurt(float points)
         {
-            if (!this._popup || _maxHealth == 0.0)
+            if (!_popup || _maxHealth == 0.0)
                 return false;
-            this._hitPoints -= points;
+            _hitPoints -= points;
             return true;
         }
 
         public void GiveThing(Holdable h)
         {
-            this.holdObject = h;
-            this.holdObject.owner = this;
-            this.holdObject.solid = false;
+            holdObject = h;
+            holdObject.owner = this;
+            holdObject.solid = false;
         }
 
         public override void UpdateSkeleton()
         {
             int num = 6;
             int frame = 0;
-            if (this.sliding)
+            if (sliding)
                 frame = 12;
-            else if (this.crouch)
+            else if (crouch)
                 frame = 11;
-            this._skeleton.head.position = this.Offset(DuckRig.GetHatPoint(frame) + new Vec2(0f, -num));
-            this._skeleton.upperTorso.position = this.Offset(DuckRig.GetChestPoint(frame) + new Vec2(0f, -num));
-            this._skeleton.lowerTorso.position = this.position + new Vec2(0f, 10 - num);
-            if (this.sliding)
+            _skeleton.head.position = Offset(DuckRig.GetHatPoint(frame) + new Vec2(0f, -num));
+            _skeleton.upperTorso.position = Offset(DuckRig.GetChestPoint(frame) + new Vec2(0f, -num));
+            _skeleton.lowerTorso.position = position + new Vec2(0f, 10 - num);
+            if (sliding)
             {
-                this._skeleton.head.orientation = Maths.DegToRad(90f);
-                this._skeleton.upperTorso.orientation = Maths.DegToRad(90f);
+                _skeleton.head.orientation = Maths.DegToRad(90f);
+                _skeleton.upperTorso.orientation = Maths.DegToRad(90f);
             }
             else
             {
-                this._skeleton.head.orientation = 0f;
-                this._skeleton.upperTorso.orientation = 0f;
+                _skeleton.head.orientation = 0f;
+                _skeleton.upperTorso.orientation = 0f;
             }
         }
 
         public override void UpdateHoldPosition(bool updateLerp = true)
         {
-            if (this.holdObject == null)
+            if (holdObject == null)
                 return;
-            this.holdOffY = 0f;
-            this.armOffY = 0f;
-            if ((!this._up || !this._popup) && !this.editorUpdate)
+            holdOffY = 0f;
+            armOffY = 0f;
+            if ((!_up || !_popup) && !editorUpdate)
                 return;
-            this.holdObject.UpdateAction();
-            this.holdObject.position = this.armPosition + this.holdObject.holdOffset + new Vec2(this.holdOffX, this.holdOffY) + new Vec2(2 * offDir, 0f);
-            this.holdObject.offDir = this.offDir;
-            if (this._sprite.currentAnimation == "slide")
+            holdObject.UpdateAction();
+            holdObject.position = armPosition + holdObject.holdOffset + new Vec2(holdOffX, holdOffY) + new Vec2(2 * offDir, 0f);
+            holdObject.offDir = offDir;
+            if (_sprite.currentAnimation == "slide")
             {
-                --this.holdOffY;
-                ++this.holdOffX;
+                --holdOffY;
+                ++holdOffX;
             }
-            else if (this.crouch)
+            else if (crouch)
             {
-                if (this.holdObject != null)
-                    this.armOffY += 4f;
+                if (holdObject != null)
+                    armOffY += 4f;
             }
-            else if (this.sliding && this.holdObject != null)
-                this.armOffY += 6f;
-            this.holdObject.position = this.HoldOffset(this.holdObject.holdOffset) + new Vec2(offDir * 3, 0f);
-            this.holdObject.angle = this.holdObject.handAngle + this.holdAngleOff;
+            else if (sliding && holdObject != null)
+                armOffY += 6f;
+            holdObject.position = HoldOffset(holdObject.holdOffset) + new Vec2(offDir * 3, 0f);
+            holdObject.angle = holdObject.handAngle + holdAngleOff;
         }
 
         public override void DuckUpdate()
@@ -343,7 +343,7 @@ namespace DuckGame
                 {
                     if ((Collision.Line(this.holdObject.position + new Vec2(0f, -5f), vec2 + new Vec2(0f, -5f), duck.rectangle) || Collision.Line(this.holdObject.position + new Vec2(0f, 5f), vec2 + new Vec2(0f, 5f), duck.rectangle)) && Level.CheckLine<Block>(this.holdObject.position, duck.position) == null)
                     {
-                        this._waitFire -= 0.03f;
+                        _waitFire -= 0.03f;
                         break;
                     }
                 }
@@ -351,119 +351,119 @@ namespace DuckGame
             bool flag = false;
             if (_autoFireWait > 0.0)
             {
-                this._autoFireWait -= Maths.IncFrameTimer();
+                _autoFireWait -= Maths.IncFrameTimer();
                 if (_autoFireWait <= 0.0)
                     flag = true;
             }
             if (_waitFire <= 0.0 | flag)
             {
                 holdObject.PressAction();
-                this._waitFire = (float)this.speediness;
+                _waitFire = (float)speediness;
             }
-            if (_waitFire >= (float)this.speediness)
+            if (_waitFire >= (float)speediness)
                 return;
-            this._waitFire += 0.01f;
+            _waitFire += 0.01f;
         }
 
         public override void Update()
         {
-            this.impacting.Clear();
-            if (this._up && this._popup && this.holdObject is Gun)
-                this.UpdateFire();
-            this.UpdateCollision();
-            this.UpdateSkeleton();
+            impacting.Clear();
+            if (_up && _popup && holdObject is Gun)
+                UpdateFire();
+            UpdateCollision();
+            UpdateSkeleton();
             if (_hitPoints <= 0.0)
-                this.Destroy(new DTCrush(null));
-            if (!this._up)
+                Destroy(new DTCrush(null));
+            if (!_up)
             {
-                this._timeCount = 0f;
-                if (this._popup)
-                    this._upSpeed += 0.1f;
-                if (this._stance != TargetStance.Fly)
+                _timeCount = 0f;
+                if (_popup)
+                    _upSpeed += 0.1f;
+                if (_stance != TargetStance.Fly)
                 {
-                    this.yscale += this._upSpeed;
-                    if (this.yscale < 1.0)
+                    yscale += _upSpeed;
+                    if (yscale < 1.0)
                         return;
-                    this.yscale = 1f;
-                    this._upSpeed = 0f;
-                    this._up = true;
+                    yscale = 1f;
+                    _upSpeed = 0f;
+                    _up = true;
                     SFX.Play("grappleHook", 0.7f, Rando.Float(-0.2f, 0.2f));
-                    Level.Add(SmallSmoke.New(this.x - 4f, this.y));
-                    Level.Add(SmallSmoke.New(this.x + 4f, this.y));
-                    this.SpawnHoldObject();
-                    if (this.helmet)
+                    Level.Add(SmallSmoke.New(x - 4f, y));
+                    Level.Add(SmallSmoke.New(x + 4f, y));
+                    SpawnHoldObject();
+                    if (helmet)
                     {
-                        Helmet e = new Helmet(this.x, this.y);
+                        Helmet e = new Helmet(x, y);
                         Level.Add(e);
-                        this.Equip(e);
+                        Equip(e);
                     }
-                    if (!this.chestPlate)
+                    if (!chestPlate)
                         return;
-                    ChestPlate e1 = new ChestPlate(this.x, this.y);
+                    ChestPlate e1 = new ChestPlate(x, y);
                     Level.Add(e1);
-                    this.Equip(e1);
+                    Equip(e1);
                 }
                 else
                 {
-                    this.xscale += this._upSpeed;
-                    if (this.xscale < 1.0)
+                    xscale += _upSpeed;
+                    if (xscale < 1.0)
                         return;
-                    this.xscale = 1f;
-                    this._upSpeed = 0f;
-                    this._up = true;
+                    xscale = 1f;
+                    _upSpeed = 0f;
+                    _up = true;
                     SFX.Play("grappleHook", 0.7f, Rando.Float(-0.2f, 0.2f));
-                    Level.Add(SmallSmoke.New(this.x - 4f, this.y));
-                    Level.Add(SmallSmoke.New(this.x + 4f, this.y));
-                    if (this.helmet)
+                    Level.Add(SmallSmoke.New(x - 4f, y));
+                    Level.Add(SmallSmoke.New(x + 4f, y));
+                    if (helmet)
                     {
-                        Helmet e = new Helmet(this.x, this.y);
+                        Helmet e = new Helmet(x, y);
                         Level.Add(e);
-                        this.Equip(e);
+                        Equip(e);
                     }
-                    if (!this.chestPlate)
+                    if (!chestPlate)
                         return;
-                    ChestPlate e2 = new ChestPlate(this.x, this.y);
+                    ChestPlate e2 = new ChestPlate(x, y);
                     Level.Add(e2);
-                    this.Equip(e2);
+                    Equip(e2);
                 }
             }
             else
             {
-                this._timeCount += Maths.IncFrameTimer();
-                if (this._popup && this.time.value != 0.0 && _timeCount >= this.time.value)
+                _timeCount += Maths.IncFrameTimer();
+                if (_popup && time.value != 0.0 && _timeCount >= time.value)
                 {
                     SFX.Play("grappleHook", 0.2f, Rando.Float(-0.2f, 0.2f));
-                    this.PopDown();
+                    PopDown();
                 }
                 else
                 {
-                    if (!this._popup)
-                        this._upSpeed += 0.1f;
-                    if (this._stance != TargetStance.Fly)
+                    if (!_popup)
+                        _upSpeed += 0.1f;
+                    if (_stance != TargetStance.Fly)
                     {
-                        this.yscale -= this._upSpeed;
-                        if (this.yscale >= 0.0)
+                        yscale -= _upSpeed;
+                        if (yscale >= 0.0)
                             return;
-                        this.yscale = 0f;
-                        this._upSpeed = 0f;
-                        this._up = false;
+                        yscale = 0f;
+                        _upSpeed = 0f;
+                        _up = false;
                         SFX.Play("grappleHook", 0.2f, Rando.Float(-0.2f, 0.2f));
-                        Level.Add(SmallSmoke.New(this.x - 4f, this.y));
-                        Level.Add(SmallSmoke.New(this.x + 4f, this.y));
-                        this._hitPoints = this._maxHealth = 0.1f;
+                        Level.Add(SmallSmoke.New(x - 4f, y));
+                        Level.Add(SmallSmoke.New(x + 4f, y));
+                        _hitPoints = _maxHealth = 0.1f;
                     }
                     else
                     {
-                        this.xscale -= this._upSpeed;
-                        if (this.xscale >= 0.0)
+                        xscale -= _upSpeed;
+                        if (xscale >= 0.0)
                             return;
-                        this.xscale = 0f;
-                        this._upSpeed = 0f;
-                        this._up = false;
+                        xscale = 0f;
+                        _upSpeed = 0f;
+                        _up = false;
                         SFX.Play("grappleHook", 0.2f, Rando.Float(-0.2f, 0.2f));
-                        Level.Add(SmallSmoke.New(this.x - 4f, this.y));
-                        Level.Add(SmallSmoke.New(this.x + 4f, this.y));
-                        this._hitPoints = this._maxHealth = 0.1f;
+                        Level.Add(SmallSmoke.New(x - 4f, y));
+                        Level.Add(SmallSmoke.New(x + 4f, y));
+                        _hitPoints = _maxHealth = 0.1f;
                     }
                 }
             }
@@ -471,15 +471,15 @@ namespace DuckGame
 
         public new void DrawIcon()
         {
-            if (!this.ShouldDrawIcon() || !this._up || !ChallengeMode.showReticles)
+            if (!ShouldDrawIcon() || !_up || !ChallengeMode.showReticles)
                 return;
-            if (this._reticule == null)
-                this._reticule = new Sprite("challenge/reticule");
-            Vec2 position1 = this.position;
-            if (this.ragdoll != null)
-                position1 = this.ragdoll.part1.position;
-            else if (this._trapped != null)
-                position1 = this._trapped.position;
+            if (_reticule == null)
+                _reticule = new Sprite("challenge/reticule");
+            Vec2 position1 = position;
+            if (ragdoll != null)
+                position1 = ragdoll.part1.position;
+            else if (_trapped != null)
+                position1 = _trapped.position;
             if ((position1 - Level.current.camera.position).length > Level.current.camera.width * 2.0)
                 return;
             float num = 14f;
@@ -494,46 +494,46 @@ namespace DuckGame
             Vec2 position2 = Layer.HUD.camera.transformInverse(Level.current.camera.transform(position1));
             DuckGame.Graphics.DrawRect(position2 + new Vec2(-5f, -5f), position2 + new Vec2(5f, 5f), Color.Black, (Depth)0.8f);
             DuckGame.Graphics.DrawRect(position2 + new Vec2(-5f, -5f), position2 + new Vec2(5f, 5f), Color.White, (Depth)0.81f, false);
-            DuckGame.Graphics.Draw(this._reticule.texture, position2, new Rectangle?(), Color.White, 0f, new Vec2(this._reticule.width / 2, this._reticule.height / 2), new Vec2(0.5f, 0.5f), SpriteEffects.None, (Depth)(0.9f + this.depth.span));
+            DuckGame.Graphics.Draw(_reticule.texture, position2, new Rectangle?(), Color.White, 0f, new Vec2(_reticule.width / 2, _reticule.height / 2), new Vec2(0.5f, 0.5f), SpriteEffects.None, (Depth)(0.9f + depth.span));
         }
 
         public override void Draw()
         {
-            if (this._trapped != null)
-                this.y = -10000f;
-            if (this.graphic == null)
+            if (_trapped != null)
+                y = -10000f;
+            if (graphic == null)
                 return;
-            this.graphic.flipH = this.offDir <= 0;
-            this.graphic.scale = this.scale;
+            graphic.flipH = offDir <= 0;
+            graphic.scale = scale;
             if (Level.current is Editor)
             {
-                this.graphic.center = this.center;
-                this.graphic.position = this.position;
+                graphic.center = center;
+                graphic.position = position;
             }
-            else if (this._stance != TargetStance.Fly)
+            else if (_stance != TargetStance.Fly)
             {
-                this.graphic.center = this.center + new Vec2(0f, 10f);
-                this.graphic.position = this.position + new Vec2(0f, 10f);
+                graphic.center = center + new Vec2(0f, 10f);
+                graphic.position = position + new Vec2(0f, 10f);
             }
             else
             {
-                this.graphic.center = this.center + new Vec2(-12f, 10f);
-                this.graphic.position = this.position + new Vec2(-12 * offDir, 10f);
+                graphic.center = center + new Vec2(-12f, 10f);
+                graphic.position = position + new Vec2(-12 * offDir, 10f);
             }
-            this.graphic.depth = this.depth;
-            this.graphic.alpha = this.alpha;
-            this.graphic.angle = this.angle;
-            this.graphic.Draw();
-            if (!this._popup || !this._up)
+            graphic.depth = depth;
+            graphic.alpha = alpha;
+            graphic.angle = angle;
+            graphic.Draw();
+            if (!_popup || !_up)
                 return;
-            this.DrawHat();
+            DrawHat();
         }
 
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
             binaryClassChunk.AddProperty("stanceSetting", stanceSetting);
-            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
+            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(contains));
             binaryClassChunk.AddProperty("chestPlate", chestPlate);
             binaryClassChunk.AddProperty("helmet", helmet);
             return binaryClassChunk;
@@ -542,10 +542,10 @@ namespace DuckGame
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.stanceSetting = node.GetProperty<int>("stanceSetting");
-            this.contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
-            this.chestPlate = node.GetProperty<bool>("chestPlate");
-            this.helmet = node.GetProperty<bool>("helmet");
+            stanceSetting = node.GetProperty<int>("stanceSetting");
+            contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
+            chestPlate = node.GetProperty<bool>("chestPlate");
+            helmet = node.GetProperty<bool>("helmet");
             return true;
         }
 
@@ -553,7 +553,7 @@ namespace DuckGame
         {
             DXMLNode dxmlNode = base.LegacySerialize();
             dxmlNode.Add(new DXMLNode("stanceSetting", Change.ToString(stanceSetting)));
-            dxmlNode.Add(new DXMLNode("contains", this.contains != null ? contains.AssemblyQualifiedName : (object)""));
+            dxmlNode.Add(new DXMLNode("contains", contains != null ? contains.AssemblyQualifiedName : (object)""));
             dxmlNode.Add(new DXMLNode("chestPlate", Change.ToString(chestPlate)));
             dxmlNode.Add(new DXMLNode("helmet", Change.ToString(helmet)));
             return dxmlNode;
@@ -564,90 +564,90 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode1 = node.Element("stanceSetting");
             if (dxmlNode1 != null)
-                this.stanceSetting = Convert.ToInt32(dxmlNode1.Value);
+                stanceSetting = Convert.ToInt32(dxmlNode1.Value);
             DXMLNode dxmlNode2 = node.Element("contains");
             if (dxmlNode2 != null)
-                this.contains = Editor.GetType(dxmlNode2.Value);
+                contains = Editor.GetType(dxmlNode2.Value);
             DXMLNode dxmlNode3 = node.Element("chestPlate");
             if (dxmlNode3 != null)
-                this.chestPlate = Convert.ToBoolean(dxmlNode3.Value);
+                chestPlate = Convert.ToBoolean(dxmlNode3.Value);
             DXMLNode dxmlNode4 = node.Element("helmet");
             if (dxmlNode4 != null)
-                this.helmet = Convert.ToBoolean(dxmlNode4.Value);
+                helmet = Convert.ToBoolean(dxmlNode4.Value);
             return true;
         }
 
         public int stanceSetting
         {
-            get => this._stanceSetting;
+            get => _stanceSetting;
             set
             {
-                this._stanceSetting = value;
-                this._stance = (TargetStance)this._stanceSetting;
-                this.UpdateCollision();
+                _stanceSetting = value;
+                _stance = (TargetStance)_stanceSetting;
+                UpdateCollision();
             }
         }
 
         public override string GetDetailsString()
         {
             string str = "NONE";
-            if (this.contains != null)
-                str = this.contains.Name;
-            return base.GetDetailsString() + "Order: " + this.sequence.order.ToString() + "\nHolding: " + str;
+            if (contains != null)
+                str = contains.Name;
+            return base.GetDetailsString() + "Order: " + sequence.order.ToString() + "\nHolding: " + str;
         }
 
         public override void Netted(Net n)
         {
             base.Netted(n);
-            this.y -= 10000f;
-            this._trapped.infinite = true;
+            y -= 10000f;
+            _trapped.infinite = true;
         }
 
         public override void EditorUpdate()
         {
-            if (this.chestPlate && this.GetEquipment(typeof(ChestPlate)) == null)
-                this.Equip(new ChestPlate(0f, 0f), false);
-            else if (!this.chestPlate)
+            if (chestPlate && GetEquipment(typeof(ChestPlate)) == null)
+                Equip(new ChestPlate(0f, 0f), false);
+            else if (!chestPlate)
             {
-                Equipment equipment = this.GetEquipment(typeof(ChestPlate));
+                Equipment equipment = GetEquipment(typeof(ChestPlate));
                 if (equipment != null)
-                    this.Unequip(equipment);
+                    Unequip(equipment);
             }
-            if (this.helmet && this.GetEquipment(typeof(Helmet)) == null)
-                this.Equip(new Helmet(0f, 0f), false);
-            else if (!this.helmet)
+            if (helmet && GetEquipment(typeof(Helmet)) == null)
+                Equip(new Helmet(0f, 0f), false);
+            else if (!helmet)
             {
-                Equipment equipment = this.GetEquipment(typeof(Helmet));
+                Equipment equipment = GetEquipment(typeof(Helmet));
                 if (equipment != null)
-                    this.Unequip(equipment);
+                    Unequip(equipment);
             }
-            if (this.contains != null)
+            if (contains != null)
             {
-                if (this.holdObject == null || this.holdObject.GetType() != this.contains)
-                    this.GiveHoldable(Editor.CreateThing(this.contains) as Holdable);
+                if (holdObject == null || holdObject.GetType() != contains)
+                    GiveHoldable(Editor.CreateThing(contains) as Holdable);
             }
             else
-                this.holdObject = null;
-            foreach (Thing thing in this._equipment)
+                holdObject = null;
+            foreach (Thing thing in _equipment)
                 thing.DoUpdate();
-            if (this.holdObject != null)
+            if (holdObject != null)
             {
-                this.editorUpdate = true;
-                this.UpdateHoldPosition(true);
-                this.holdObject.DoUpdate();
-                this.editorUpdate = false;
+                editorUpdate = true;
+                UpdateHoldPosition(true);
+                holdObject.DoUpdate();
+                editorUpdate = false;
             }
             base.EditorUpdate();
         }
 
         public override void EditorRender()
         {
-            foreach (Thing thing in this._equipment)
+            foreach (Thing thing in _equipment)
                 thing.DoDraw();
-            if (this.holdObject != null)
+            if (holdObject != null)
             {
-                this.holdObject.depth = (Depth)0.9f;
-                this.holdObject.DoDraw();
+                holdObject.depth = (Depth)0.9f;
+                holdObject.DoDraw();
             }
             base.EditorRender();
         }
@@ -655,10 +655,10 @@ namespace DuckGame
         public override ContextMenu GetContextMenu()
         {
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
-            contextMenu.AddItem(new ContextRadio("Stand", this.stanceSetting == 0, 0, null, new FieldBinding(this, "stanceSetting")));
-            contextMenu.AddItem(new ContextRadio("Crouch", this.stanceSetting == 2, 2, null, new FieldBinding(this, "stanceSetting")));
-            contextMenu.AddItem(new ContextRadio("Slide", this.stanceSetting == 3, 3, null, new FieldBinding(this, "stanceSetting")));
-            contextMenu.AddItem(new ContextRadio("Fly", this.stanceSetting == 4, 4, null, new FieldBinding(this, "stanceSetting")));
+            contextMenu.AddItem(new ContextRadio("Stand", stanceSetting == 0, 0, null, new FieldBinding(this, "stanceSetting")));
+            contextMenu.AddItem(new ContextRadio("Crouch", stanceSetting == 2, 2, null, new FieldBinding(this, "stanceSetting")));
+            contextMenu.AddItem(new ContextRadio("Slide", stanceSetting == 3, 3, null, new FieldBinding(this, "stanceSetting")));
+            contextMenu.AddItem(new ContextRadio("Fly", stanceSetting == 4, 4, null, new FieldBinding(this, "stanceSetting")));
             contextMenu.AddItem(new ContextCheckBox("Chest Plate", null, new FieldBinding(this, "chestPlate")));
             contextMenu.AddItem(new ContextCheckBox("Helmet", null, new FieldBinding(this, "helmet")));
             FieldBinding pBinding = new FieldBinding(this, "contains");

@@ -14,8 +14,8 @@ namespace DuckGame
 
         public NMDartSmack(Vec2 pVector, PhysicsObject pSmack)
         {
-            this.vector = pVector;
-            this.hit = pSmack;
+            vector = pVector;
+            hit = pSmack;
         }
 
         public NMDartSmack()
@@ -24,13 +24,13 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (Level.current == null || this.hit == null || !this.hit.isServerForObject)
+            if (Level.current == null || hit == null || !hit.isServerForObject)
                 return;
-            this.hit.hSpeed += this.vector.x;
-            this.hit.vSpeed += this.vector.y;
-            Duck duck = this.hit as Duck;
-            if (!(duck != null) && this.hit is RagdollPart && (this.hit as RagdollPart).doll != null && (this.hit as RagdollPart).doll.captureDuck != null)
-                duck = (this.hit as RagdollPart).doll.captureDuck;
+            hit.hSpeed += vector.x;
+            hit.vSpeed += vector.y;
+            Duck duck = hit as Duck;
+            if (!(duck != null) && hit is RagdollPart && (hit as RagdollPart).doll != null && (hit as RagdollPart).doll.captureDuck != null)
+                duck = (hit as RagdollPart).doll.captureDuck;
             if (duck == null)
                 return;
             if (duck.holdObject is Grenade)

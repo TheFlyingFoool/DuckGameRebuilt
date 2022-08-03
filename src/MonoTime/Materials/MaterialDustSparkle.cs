@@ -18,28 +18,28 @@ namespace DuckGame
 
         public MaterialDustSparkle(Vec2 pos, Vec2 s, bool wide, bool lit)
         {
-            this._effect = Content.Load<MTEffect>("Shaders/dustsparkle");
+            _effect = Content.Load<MTEffect>("Shaders/dustsparkle");
             if (!lit)
             {
-                this._cone = Content.Load<Tex2D>("arcade/lightSphere");
+                _cone = Content.Load<Tex2D>("arcade/lightSphere");
                 pos.y += 10f;
             }
             else
-                this._cone = !wide ? Content.Load<Tex2D>("arcade/lightCone") : Content.Load<Tex2D>("arcade/bigLightCone");
-            this.position = pos;
-            this.size = s;
+                _cone = !wide ? Content.Load<Tex2D>("arcade/lightCone") : Content.Load<Tex2D>("arcade/bigLightCone");
+            position = pos;
+            size = s;
         }
 
         public override void Apply()
         {
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._cone;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)_cone;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointClamp;
-            this.SetValue("topLeft", this.position);
-            this.SetValue("size", this.size);
-            this.SetValue("fade", Layer.Game.fade * this.fade);
-            this.SetValue("viewMatrix", DuckGame.Graphics.screen.viewMatrix);
-            this.SetValue("projMatrix", DuckGame.Graphics.screen.projMatrix);
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            SetValue("topLeft", position);
+            SetValue("size", size);
+            SetValue("fade", Layer.Game.fade * fade);
+            SetValue("viewMatrix", DuckGame.Graphics.screen.viewMatrix);
+            SetValue("projMatrix", DuckGame.Graphics.screen.projMatrix);
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

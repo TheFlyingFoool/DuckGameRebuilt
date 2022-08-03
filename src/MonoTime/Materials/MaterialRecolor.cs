@@ -15,8 +15,8 @@ namespace DuckGame
 
         public MaterialRecolor(Vec3 col)
         {
-            this.color = col;
-            this._effect = Content.Load<MTEffect>("Shaders/recolor");
+            color = col;
+            _effect = Content.Load<MTEffect>("Shaders/recolor");
         }
 
         public override void Update()
@@ -25,7 +25,7 @@ namespace DuckGame
 
         public override void Apply()
         {
-            this._effect.effect.Parameters["fcol"].SetValue((Vector3)this.color);
+            _effect.effect.Parameters["fcol"].SetValue((Vector3)color);
             base.Apply();
         }
     }

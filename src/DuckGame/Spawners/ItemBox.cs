@@ -37,61 +37,61 @@ namespace DuckGame
 
         public PhysicsObject containedObject
         {
-            get => this._containedObject;
-            set => this._containedObject = value;
+            get => _containedObject;
+            set => _containedObject = value;
         }
 
         public System.Type contains { get; set; }
 
-        public bool canBounce => this._canBounce;
+        public bool canBounce => _canBounce;
 
         public ItemBox(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("itemBox", 16, 16);
-            this.graphic = _sprite;
-            this.layer = Layer.Foreground;
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this.depth = (Depth)0.5f;
-            this._canFlip = false;
-            this._placementCost += 4;
-            this.editorTooltip = "Spawns a copy of the contained item any time it's used. Recharges after a short duration.";
+            _sprite = new SpriteMap("itemBox", 16, 16);
+            graphic = _sprite;
+            layer = Layer.Foreground;
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
+            depth = (Depth)0.5f;
+            _canFlip = false;
+            _placementCost += 4;
+            editorTooltip = "Spawns a copy of the contained item any time it's used. Recharges after a short duration.";
         }
 
         public override void Initialize()
         {
-            this.UpdateContainedObject();
+            UpdateContainedObject();
             base.Initialize();
         }
 
         public void Pop()
         {
-            this.Bounce();
-            if (this._hit)
+            Bounce();
+            if (_hit)
                 return;
-            this.SpawnItem();
+            SpawnItem();
         }
 
         public void Bounce()
         {
-            if (!this._canBounce)
+            if (!_canBounce)
                 return;
-            this.bounceAmount = 8f;
-            this._canBounce = false;
+            bounceAmount = 8f;
+            _canBounce = false;
             if (Network.isActive)
             {
-                ++this.netDisarmIndex;
+                ++netDisarmIndex;
             }
             else
             {
-                this._aboveList = Level.CheckRectAll<PhysicsObject>(this.topLeft + new Vec2(1f, -4f), this.bottomRight + new Vec2(-1f, -12f)).ToList<PhysicsObject>();
-                foreach (PhysicsObject above in this._aboveList)
+                _aboveList = Level.CheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, -12f)).ToList<PhysicsObject>();
+                foreach (PhysicsObject above in _aboveList)
                 {
                     if (above.grounded || above.vSpeed > 0.0 || above.vSpeed == 0.0)
                     {
-                        this.Fondle(above);
+                        Fondle(above);
                         above.y -= 2f;
                         above.vSpeed = -3f;
                         if (above is Duck pTarget)
@@ -113,69 +113,69 @@ namespace DuckGame
             with.Fondle(this);
             if (with is Duck duck)
                 RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));
-            if (this.containedObject != null)
+            if (containedObject != null)
                 with.Fondle(containedObject);
-            this.Pop();
+            Pop();
         }
 
         public virtual void UpdateCharging()
         {
-            if (!this.isServerForObject)
+            if (!isServerForObject)
                 return;
-            if (this.charging > 0)
+            if (charging > 0)
             {
-                ++this.chargeDelay;
-                if (this.chargeDelay < 50)
+                ++chargeDelay;
+                if (chargeDelay < 50)
                     return;
-                this.charging -= 50;
-                this.chargeDelay = 0;
+                charging -= 50;
+                chargeDelay = 0;
             }
             else
             {
-                this.chargeDelay = 0;
-                this.charging = 0;
-                this._hit = false;
+                chargeDelay = 0;
+                charging = 0;
+                _hit = false;
             }
         }
 
         public override void PrepareForHost()
         {
-            this.UpdateContainedObject();
-            if (this.containedObject != null)
-                this.containedObject.PrepareForHost();
+            UpdateContainedObject();
+            if (containedObject != null)
+                containedObject.PrepareForHost();
             base.PrepareForHost();
         }
 
         public virtual void UpdateContainedObject()
         {
-            if (!Network.isActive || !this.isServerForObject && Thing.loadingLevel == null || this.containedObject != null)
+            if (!Network.isActive || !isServerForObject && Thing.loadingLevel == null || containedObject != null)
                 return;
-            this.containedObject = this.GetSpawnItem();
-            if (this.containedObject == null)
+            containedObject = GetSpawnItem();
+            if (containedObject == null)
                 return;
-            this.containedObject.visible = false;
-            this.containedObject.active = false;
-            this.containedObject.position = this.position;
+            containedObject.visible = false;
+            containedObject.active = false;
+            containedObject.position = position;
             Level.Add(containedObject);
         }
 
         public override void Update()
         {
-            this.UpdateContainedObject();
-            this._aboveList.Clear();
+            UpdateContainedObject();
+            _aboveList.Clear();
             if (startY < -9999.0)
-                this.startY = this.y;
-            this._sprite.frame = this._hit ? 1 : 0;
-            if (this.contains == null && this.containedObject == null && !(this is ItemBoxRandom))
-                this._sprite.frame = 1;
+                startY = y;
+            _sprite.frame = _hit ? 1 : 0;
+            if (contains == null && containedObject == null && !(this is ItemBoxRandom))
+                _sprite.frame = 1;
             if (netDisarmIndex != localNetDisarm)
             {
-                this.localNetDisarm = this.netDisarmIndex;
-                this._aboveList = Level.CheckRectAll<PhysicsObject>(this.topLeft + new Vec2(1f, -4f), this.bottomRight + new Vec2(-1f, -12f)).ToList<PhysicsObject>();
-                foreach (PhysicsObject above in this._aboveList)
+                localNetDisarm = netDisarmIndex;
+                _aboveList = Level.CheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, -12f)).ToList<PhysicsObject>();
+                foreach (PhysicsObject above in _aboveList)
                 {
-                    if (this.isServerForObject && above.owner == null)
-                        this.Fondle(above);
+                    if (isServerForObject && above.owner == null)
+                        Fondle(above);
                     if (above.isServerForObject && (above.grounded || above.vSpeed > 0.0 || above.vSpeed == 0.0))
                     {
                         above.y -= 2f;
@@ -190,61 +190,61 @@ namespace DuckGame
                     }
                 }
             }
-            this.UpdateCharging();
+            UpdateCharging();
             if (bounceAmount > 0f)
-                this.bounceAmount -= 0.8f;
+                bounceAmount -= 0.8f;
             else
-                this.bounceAmount = 0f;
-            this.y -= this.bounceAmount;
-            if (this._canBounce)
+                bounceAmount = 0f;
+            y -= bounceAmount;
+            if (_canBounce)
                 return;
-            if (this.y < startY)
-                this.y += (float)(0.8f + Math.Abs(this.y - this.startY) * 0.4f);
-            if (this.y > startY)
-                this.y -= (float)(0.8f - Math.Abs(this.y - this.startY) * 0.4f);
-            if (Math.Abs(this.y - this.startY) >= 0.8f)
+            if (y < startY)
+                y += (float)(0.8f + Math.Abs(y - startY) * 0.4f);
+            if (y > startY)
+                y -= (float)(0.8f - Math.Abs(y - startY) * 0.4f);
+            if (Math.Abs(y - startY) >= 0.8f)
                 return;
-            this._canBounce = true;
-            this.y = this.startY;
+            _canBounce = true;
+            y = startY;
         }
 
         public virtual PhysicsObject GetSpawnItem()
         {
-            if (this.contains == null)
+            if (contains == null)
                 return null;
-            IReadOnlyPropertyBag bag = ContentProperties.GetBag(this.contains);
-            return !Network.isActive || bag.GetOrDefault("isOnlineCapable", true) ? Editor.CreateThing(this.contains) as PhysicsObject : Activator.CreateInstance(typeof(Pistol), Editor.GetConstructorParameters(typeof(Pistol))) as PhysicsObject;
+            IReadOnlyPropertyBag bag = ContentProperties.GetBag(contains);
+            return !Network.isActive || bag.GetOrDefault("isOnlineCapable", true) ? Editor.CreateThing(contains) as PhysicsObject : Activator.CreateInstance(typeof(Pistol), Editor.GetConstructorParameters(typeof(Pistol))) as PhysicsObject;
         }
 
         public virtual void SpawnItem()
         {
-            this.charging = 500;
-            if (this.containContext == null && (!Network.isActive && this.contains == null && !(this is ItemBoxRandom) || Network.isActive && this.containedObject == null))
+            charging = 500;
+            if (containContext == null && (!Network.isActive && contains == null && !(this is ItemBoxRandom) || Network.isActive && containedObject == null))
                 return;
-            PhysicsObject t = this.containContext;
+            PhysicsObject t = containContext;
             if (t == null)
             {
                 if (!Network.isActive)
                 {
-                    t = this.GetSpawnItem();
+                    t = GetSpawnItem();
                 }
                 else
                 {
-                    if (this.containedObject == null)
+                    if (containedObject == null)
                         return;
-                    t = this.containedObject;
+                    t = containedObject;
                     t.active = true;
                     t.visible = true;
                 }
             }
-            this._hit = true;
-            this.lastSpawnItem = t;
+            _hit = true;
+            lastSpawnItem = t;
             if (t == null)
                 return;
-            foreach (PhysicsObject above in this._aboveList)
+            foreach (PhysicsObject above in _aboveList)
                 t.clip.Add(above);
-            t.x = this.x;
-            t.bottom = this.bottom;
+            t.x = x;
+            t.bottom = bottom;
             t.y -= 12f;
             t.vSpeed = -3.5f;
             t.clip.Add(this);
@@ -254,20 +254,20 @@ namespace DuckGame
                 if (gun.CanSpin())
                     gun.angleDegrees = 180f;
             }
-            Block block1 = Level.CheckPoint<Block>(this.position + new Vec2(-16f, 0f));
+            Block block1 = Level.CheckPoint<Block>(position + new Vec2(-16f, 0f));
             if (block1 != null)
                 t.clip.Add(block1);
-            Block block2 = Level.CheckPoint<Block>(this.position + new Vec2(16f, 0f));
+            Block block2 = Level.CheckPoint<Block>(position + new Vec2(16f, 0f));
             if (block2 != null)
                 t.clip.Add(block2);
             if (!Network.isActive || this is PurpleBlock)
                 Level.Add(t);
             if (!Network.isActive)
                 SFX.Play("hitBox");
-            else if (this.isServerForObject)
+            else if (isServerForObject)
                 NetSoundEffect.Play("itemBoxHit");
             Thing.Fondle(t, DuckNetwork.localConnection);
-            this.containedObject = null;
+            containedObject = null;
         }
 
         public static List<System.Type> GetPhysicsObjects(EditorGroup group) => Editor.ThingTypes.Where<System.Type>(t =>
@@ -281,21 +281,21 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
+            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(contains));
             return binaryClassChunk;
         }
 
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
+            contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
             return true;
         }
 
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("contains", this.contains != null ? contains.AssemblyQualifiedName : (object)""));
+            dxmlNode.Add(new DXMLNode("contains", contains != null ? contains.AssemblyQualifiedName : (object)""));
             return dxmlNode;
         }
 
@@ -304,7 +304,7 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode = node.Element("contains");
             if (dxmlNode != null)
-                this.contains = Editor.GetType(dxmlNode.Value);
+                contains = Editor.GetType(dxmlNode.Value);
             return true;
         }
 
@@ -319,17 +319,17 @@ namespace DuckGame
         public override string GetDetailsString()
         {
             string str = "EMPTY";
-            if (this.contains != null)
-                str = this.contains.Name;
-            return this.contains == null ? base.GetDetailsString() : base.GetDetailsString() + "Contains: " + str;
+            if (contains != null)
+                str = contains.Name;
+            return contains == null ? base.GetDetailsString() : base.GetDetailsString() + "Contains: " + str;
         }
 
         public override void DrawHoverInfo()
         {
             string text = "EMPTY";
-            if (this.contains != null)
-                text = this.contains.Name;
-            Graphics.DrawString(text, this.position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
+            if (contains != null)
+                text = contains.Name;
+            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
         }
     }
 }

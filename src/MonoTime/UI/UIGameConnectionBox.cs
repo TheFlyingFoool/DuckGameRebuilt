@@ -22,24 +22,24 @@ namespace DuckGame
           float high = -1f)
           : base(openOnClose, xpos, ypos, wide, high)
         {
-            this.playMusic = false;
-            this._connectLobby = connect;
-            this._continueSearchOnFail = false;
-            this._caption = "JOINING";
+            playMusic = false;
+            _connectLobby = connect;
+            _continueSearchOnFail = false;
+            _caption = "JOINING";
         }
 
-        public void SetPasswordAttempt(string pPassword) => this._passwordAttempt = pPassword;
+        public void SetPasswordAttempt(string pPassword) => _passwordAttempt = pPassword;
 
         public override void Open()
         {
             base.Open();
-            this._tryConnectLobby = this._connectLobby.lobby;
-            if (this._connectLobby.lobby == null)
-                DuckNetwork.Join("", this._connectLobby.lanAddress, this._passwordAttempt);
+            _tryConnectLobby = _connectLobby.lobby;
+            if (_connectLobby.lobby == null)
+                DuckNetwork.Join("", _connectLobby.lanAddress, _passwordAttempt);
             else
-                DuckNetwork.Join(this._tryConnectLobby.id.ToString(), "localhost", this._passwordAttempt);
-            this.ChangeState(MatchmakingState.Connecting);
-            this._newStatusList.Add("|DGGREEN|Connecting to game...");
+                DuckNetwork.Join(_tryConnectLobby.id.ToString(), "localhost", _passwordAttempt);
+            ChangeState(MatchmakingState.Connecting);
+            _newStatusList.Add("|DGGREEN|Connecting to game...");
         }
 
         protected override void UpdateAdditionalMatchmakingLogic()

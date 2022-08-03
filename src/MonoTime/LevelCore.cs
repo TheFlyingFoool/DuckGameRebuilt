@@ -87,14 +87,14 @@ namespace DuckGame
 
         public Level nextLevel
         {
-            get => this._nextLevel;
-            set => this._nextLevel = value;
+            get => _nextLevel;
+            set => _nextLevel = value;
         }
 
         public Level currentLevel
         {
-            get => this._currentLevel;
-            set => this._currentLevel = value;
+            get => _currentLevel;
+            set => _currentLevel = value;
         }
     }
 }

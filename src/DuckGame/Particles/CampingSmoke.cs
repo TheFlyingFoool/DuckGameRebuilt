@@ -21,15 +21,15 @@ namespace DuckGame
         public CampingSmoke(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.xscale = 0.3f + Rando.Float(0.2f);
-            this.yscale = this.xscale;
-            this.angle = Maths.DegToRad(Rando.Float(360f));
-            this._fastGrow = 0.3f + Rando.Float(0.3f);
-            this._angleInc = Maths.DegToRad(Rando.Float(2f) - 1f);
-            this._scaleInc = 1f / 1000f + Rando.Float(1f / 1000f);
-            this._fade = 0.0015f + Rando.Float(1f / 1000f);
-            this.move.x = Rando.Float(0.2f) - 0.1f;
-            this.move.y = Rando.Float(0.2f) - 0.1f;
+            xscale = 0.3f + Rando.Float(0.2f);
+            yscale = xscale;
+            angle = Maths.DegToRad(Rando.Float(360f));
+            _fastGrow = 0.3f + Rando.Float(0.3f);
+            _angleInc = Maths.DegToRad(Rando.Float(2f) - 1f);
+            _scaleInc = 1f / 1000f + Rando.Float(1f / 1000f);
+            _fade = 0.0015f + Rando.Float(1f / 1000f);
+            move.x = Rando.Float(0.2f) - 0.1f;
+            move.y = Rando.Float(0.2f) - 0.1f;
             GraphicList graphicList = new GraphicList();
             Sprite graphic1 = new Sprite("smoke")
             {
@@ -43,39 +43,39 @@ namespace DuckGame
             };
             graphic2.CenterOrigin();
             graphicList.Add(graphic2);
-            this.graphic = graphicList;
-            this.center = new Vec2(0f, 0f);
-            this.depth = (Depth)1f;
-            this._backgroundSmoke = new Sprite("smokeBack");
-            this._shrinkSpeed = 0.01f + Rando.Float(0.005f);
+            graphic = graphicList;
+            center = new Vec2(0f, 0f);
+            depth = (Depth)1f;
+            _backgroundSmoke = new Sprite("smokeBack");
+            _shrinkSpeed = 0.01f + Rando.Float(0.005f);
         }
 
         public override void Update()
         {
-            this.angle += this._angleInc;
-            this.xscale += this._scaleInc;
+            angle += _angleInc;
+            xscale += _scaleInc;
             if (_fastGrow > 0.0)
             {
-                this._fastGrow -= 0.05f;
-                this.xscale += 0.03f;
+                _fastGrow -= 0.05f;
+                xscale += 0.03f;
             }
             if (fly.x > 0.01f || fly.x < -0.01f)
             {
-                this.x += this.fly.x;
-                this.fly.x *= 0.9f;
+                x += fly.x;
+                fly.x *= 0.9f;
             }
             if (fly.y > 0.01f || fly.y < -0.01f)
             {
-                this.y += this.fly.y;
-                this.fly.y *= 0.9f;
+                y += fly.y;
+                fly.y *= 0.9f;
             }
-            this.yscale = this.xscale;
-            this.x += this.move.x;
-            this.y += this.move.y;
-            if (this.xscale < 0.25f)
-                this.alpha -= 0.01f;
-            this.xscale -= this._shrinkSpeed;
-            if (this.xscale >= 0.05f)
+            yscale = xscale;
+            x += move.x;
+            y += move.y;
+            if (xscale < 0.25f)
+                alpha -= 0.01f;
+            xscale -= _shrinkSpeed;
+            if (xscale >= 0.05f)
                 return;
             Level.Remove(this);
         }

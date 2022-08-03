@@ -20,9 +20,9 @@ namespace DuckGame
         public NMSpawnObject(string obj, float xVal, float yVal, ushort idVal)
           : base(idVal)
         {
-            this.name = obj;
-            this.xpos = xVal;
-            this.ypos = yVal;
+            name = obj;
+            xpos = xVal;
+            ypos = yVal;
         }
     }
 }

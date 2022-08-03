@@ -16,69 +16,69 @@ namespace DuckGame
         public Thing _belongsTo;
         public bool noisy = true;
 
-        public ISwing swingOwner => this._owner as ISwing;
+        public ISwing swingOwner => _owner as ISwing;
 
-        public bool inGun => this._inGun;
+        public bool inGun => _inGun;
 
-        public bool stuck => this._stuck;
+        public bool stuck => _stuck;
 
-        public override NetworkConnection connection => this._belongsTo != null ? this._belongsTo.connection : base.connection;
+        public override NetworkConnection connection => _belongsTo != null ? _belongsTo.connection : base.connection;
 
-        public override NetIndex8 authority => this._belongsTo != null ? this._belongsTo.authority : base.authority;
+        public override NetIndex8 authority => _belongsTo != null ? _belongsTo.authority : base.authority;
 
         public Harpoon(Thing belongsTo = null)
           : base()
         {
-            this._belongsTo = belongsTo;
-            this.owner = belongsTo;
-            this.graphic = new Sprite("hook");
-            this.center = new Vec2(3f, 3f);
-            this.collisionOffset = new Vec2(-5f, -1.5f);
-            this.collisionSize = new Vec2(10f, 5f);
+            _belongsTo = belongsTo;
+            owner = belongsTo;
+            graphic = new Sprite("hook");
+            center = new Vec2(3f, 3f);
+            collisionOffset = new Vec2(-5f, -1.5f);
+            collisionSize = new Vec2(10f, 5f);
         }
 
         public override void Update()
         {
-            if (!this.isServerForObject)
+            if (!isServerForObject)
                 return;
-            if (!this._stuck)
+            if (!_stuck)
                 base.Update();
-            else if (this.swingOwner != null)
+            else if (swingOwner != null)
             {
-                Thing ropeParent = this.swingOwner.GetRopeParent(this);
+                Thing ropeParent = swingOwner.GetRopeParent(this);
             }
-            if (!(this._owner is Grapple) || !this._inGun)
+            if (!(_owner is Grapple) || !_inGun)
                 return;
-            Grapple owner = this._owner as Grapple;
-            this.position = owner.barrelPosition;
-            this.depth = owner.depth - 1;
-            this.hSpeed = 0f;
-            this.vSpeed = 0f;
-            this.graphic.flipH = owner.offDir < 0.0;
+            Grapple owner = _owner as Grapple;
+            position = owner.barrelPosition;
+            depth = owner.depth - 1;
+            hSpeed = 0f;
+            vSpeed = 0f;
+            graphic.flipH = owner.offDir < 0.0;
         }
 
         public void Latch(Vec2 point)
         {
-            this._inGun = false;
-            this.position = point;
-            this._stuck = true;
+            _inGun = false;
+            position = point;
+            _stuck = true;
         }
 
         public void SetStuckPoint(Vec2 pPoint)
         {
-            this._inGun = false;
-            this.position = pPoint;
-            this._stuck = true;
+            _inGun = false;
+            position = pPoint;
+            _stuck = true;
         }
 
         public void Fire(Vec2 point, Vec2 travel)
         {
-            if (!this._inGun)
+            if (!_inGun)
                 return;
-            this._inGun = false;
-            this.position = point + travel * -2f;
-            this._stuck = true;
-            if (!this.noisy)
+            _inGun = false;
+            position = point + travel * -2f;
+            _stuck = true;
+            if (!noisy)
                 return;
             SFX.Play("grappleHook", 0.5f);
             for (int index = 0; index < 6; ++index)
@@ -89,17 +89,17 @@ namespace DuckGame
 
         public void Return()
         {
-            if (this._inGun)
+            if (_inGun)
                 return;
-            this._inGun = true;
-            this.hSpeed = 0f;
-            this.vSpeed = 0f;
-            this._stuck = false;
+            _inGun = true;
+            hSpeed = 0f;
+            vSpeed = 0f;
+            _stuck = false;
         }
 
         public override void Draw()
         {
-            if (this.inGun || !this.noisy)
+            if (inGun || !noisy)
                 return;
             base.Draw();
         }

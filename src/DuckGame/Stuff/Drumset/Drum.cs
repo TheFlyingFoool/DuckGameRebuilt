@@ -17,32 +17,32 @@ namespace DuckGame
         public Drum(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.layer = Layer.Blocks;
+            layer = Layer.Blocks;
         }
 
         public void Hit()
         {
-            SFX.Play(this._sound, 0.9f + Rando.Float(0.1f), Rando.Float(-0.05f, 0.05f));
-            this._shake = 1f;
+            SFX.Play(_sound, 0.9f + Rando.Float(0.1f), Rando.Float(-0.05f, 0.05f));
+            _shake = 1f;
         }
 
         public void AlternateHit()
         {
-            SFX.Play(this._alternateSound, 0.9f + Rando.Float(0.1f), Rando.Float(-0.05f, 0.05f));
-            this._shake = 1f;
+            SFX.Play(_alternateSound, 0.9f + Rando.Float(0.1f), Rando.Float(-0.05f, 0.05f));
+            _shake = 1f;
         }
 
         public override void Update()
         {
-            this._shake = Lerp.Float(this._shake, 0f, 0.08f);
+            _shake = Lerp.Float(_shake, 0f, 0.08f);
             base.Update();
         }
 
         public override void Draw()
         {
-            this.position.x += (float)this._shakeWave * this._shake;
+            position.x += (float)_shakeWave * _shake;
             base.Draw();
-            this.position.x -= (float)this._shakeWave * this._shake;
+            position.x -= (float)_shakeWave * _shake;
         }
     }
 }

@@ -25,9 +25,9 @@ namespace DuckGame
 
         public MaterialPlasma()
         {
-            this._effect = Content.Load<MTEffect>("Shaders/plasma");
-            this._gradient = Content.Load<Texture2D>("arcade/gradient");
-            this._plasma2 = Content.Load<Texture2D>("arcade/plasma2");
+            _effect = Content.Load<MTEffect>("Shaders/plasma");
+            _gradient = Content.Load<Texture2D>("arcade/gradient");
+            _plasma2 = Content.Load<Texture2D>("arcade/plasma2");
         }
 
         public override void Update()
@@ -36,14 +36,14 @@ namespace DuckGame
 
         public override void Apply()
         {
-            this._effect.effect.Parameters["offset"].SetValue(this.offset);
-            this._effect.effect.Parameters["offset2"].SetValue(this.offset2);
-            this._effect.effect.Parameters["scroll"].SetValue(this.scroll);
-            this._effect.effect.Parameters["scroll2"].SetValue(this.scroll2);
-            this._effect.effect.Parameters["gradientOffset"].SetValue(this.gradientOffset);
-            this._effect.effect.Parameters["gradientOffset2"].SetValue(this.gradientOffset2);
-            this._effect.effect.Parameters["color1"].SetValue((Vector4)this.color1.ToVector4());
-            this._effect.effect.Parameters["color2"].SetValue((Vector4)this.color2.ToVector4());
+            _effect.effect.Parameters["offset"].SetValue(offset);
+            _effect.effect.Parameters["offset2"].SetValue(offset2);
+            _effect.effect.Parameters["scroll"].SetValue(scroll);
+            _effect.effect.Parameters["scroll2"].SetValue(scroll2);
+            _effect.effect.Parameters["gradientOffset"].SetValue(gradientOffset);
+            _effect.effect.Parameters["gradientOffset2"].SetValue(gradientOffset2);
+            _effect.effect.Parameters["color1"].SetValue((Vector4)color1.ToVector4());
+            _effect.effect.Parameters["color2"].SetValue((Vector4)color2.ToVector4());
             DuckGame.Graphics.device.Textures[1] = _gradient;
             DuckGame.Graphics.device.Textures[2] = _plasma2;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;

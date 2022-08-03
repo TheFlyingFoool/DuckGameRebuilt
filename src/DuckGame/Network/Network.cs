@@ -51,9 +51,9 @@ namespace DuckGame
 
         public static bool SimulateBadnet => false;
 
-        public int networkIndex => this._networkIndex;
+        public int networkIndex => _networkIndex;
 
-        public Network(int networkIndex = 0) => this._networkIndex = networkIndex;
+        public Network(int networkIndex = 0) => _networkIndex = networkIndex;
 
         public static int simTick
         {
@@ -65,13 +65,13 @@ namespace DuckGame
 
         public NCNetworkImplementation core
         {
-            get => !Network.lanMode ? this._core : this._lanCore;
+            get => !Network.lanMode ? _core : _lanCore;
             set
             {
                 if (Network.lanMode)
-                    this._lanCore = value;
+                    _lanCore = value;
                 else
-                    this._core = value;
+                    _core = value;
             }
         }
 
@@ -108,7 +108,7 @@ namespace DuckGame
             }
         }
 
-        public NetIndex16 synchTime => !this.core.isServer ? this._synchronizedTime : this._tickSync;
+        public NetIndex16 synchTime => !core.isServer ? _synchronizedTime : _tickSync;
 
         public static NetIndex16 synchronizedTime => Network.activeNetwork.synchTime;
 
@@ -229,7 +229,7 @@ namespace DuckGame
 
         public static void JoinServer(string nameVal, int portVal = 1337, string ip = "localhost") => Network.activeNetwork.DoJoinServer(nameVal, portVal, ip);
 
-        private void DoJoinServer(string nameVal, int portVal = 1337, string ip = "localhost") => this.core.JoinServer(nameVal, portVal, ip);
+        private void DoJoinServer(string nameVal, int portVal = 1337, string ip = "localhost") => core.JoinServer(nameVal, portVal, ip);
 
         public static void HostServer(
           NetworkLobbyType lobbyType,
@@ -246,7 +246,7 @@ namespace DuckGame
           string nameVal = "duckGameServer",
           int portVal = 1337)
         {
-            this.core.HostServer(nameVal, portVal, lobbyType, maxConnectionsVal);
+            core.HostServer(nameVal, portVal, lobbyType, maxConnectionsVal);
         }
 
         public static void OnMessageStatic(NetMessage m) => Network._activeNetwork.OnMessage(m);
@@ -256,9 +256,9 @@ namespace DuckGame
             if (m is NMConsoleMessage)
                 DevConsole.Log((m as NMConsoleMessage).message, Color.Lime);
             else if (Network.isServer)
-                this.OnMessageServer(m);
+                OnMessageServer(m);
             else
-                this.OnMessageClient(m);
+                OnMessageClient(m);
         }
 
         private void OnMessageServer(NetMessage m) => Level.current.OnMessage(m);
@@ -301,7 +301,7 @@ namespace DuckGame
                 return;
             if (who == null)
             {
-                this.QueueMessage(msg, Network.connections);
+                QueueMessage(msg, Network.connections);
             }
             else
             {
@@ -362,7 +362,7 @@ namespace DuckGame
         public void QueueMessage(NetMessage msg, NetMessagePriority priority, NetworkConnection who = null)
         {
             msg.priority = priority;
-            this.QueueMessage(msg, who);
+            QueueMessage(msg, who);
         }
 
         public void QueueMessage(
@@ -371,7 +371,7 @@ namespace DuckGame
           List<NetworkConnection> pConnections)
         {
             msg.priority = priority;
-            this.QueueMessage(msg, pConnections);
+            QueueMessage(msg, pConnections);
         }
 
         public void QueueMessageForAllBut(
@@ -380,7 +380,7 @@ namespace DuckGame
           NetworkConnection who)
         {
             msg.priority = priority;
-            this.QueueMessageForAllBut(msg, who);
+            QueueMessageForAllBut(msg, who);
         }
 
         public static bool InLobby() => Level.current is TeamSelect2;
@@ -487,20 +487,20 @@ namespace DuckGame
 
         public void DoInitialize()
         {
-            this._core = new NCSteam(Network.activeNetwork, this._networkIndex);
+            _core = new NCSteam(Network.activeNetwork, _networkIndex);
             if (NetworkDebugger.enabled)
-                this._lanCore = new NCNetDebug(Network.activeNetwork, this._networkIndex);
+                _lanCore = new NCNetDebug(Network.activeNetwork, _networkIndex);
             else
-                this._lanCore = new NCBasic(Network.activeNetwork, this._networkIndex);
+                _lanCore = new NCBasic(Network.activeNetwork, _networkIndex);
         }
 
         public static void Terminate() => Network.activeNetwork.core.Terminate();
 
         public void Reset()
         {
-            this._currentTick = 0U;
-            this._synchronizedTime = new NetIndex16(1, true);
-            this._tickSync = new NetIndex16(1, true);
+            _currentTick = 0U;
+            _synchronizedTime = new NetIndex16(1, true);
+            _tickSync = new NetIndex16(1, true);
         }
 
         public static void PreUpdate()
@@ -511,19 +511,19 @@ namespace DuckGame
 
         public void DoPreUpdate()
         {
-            this._currentTick += 1U;
-            this._synchronizedTime++;
-            this._tickSync += 1;
-            this.core.Update();
+            _currentTick += 1U;
+            _synchronizedTime++;
+            _tickSync += 1;
+            core.Update();
             DuckNetwork.Update();
         }
 
         public static void PostUpdate() => Network.activeNetwork.DoPostUpdate();
 
-        public void DoPostUpdate() => this.core.PostUpdate();
+        public void DoPostUpdate() => core.PostUpdate();
 
         public static void PostDraw() => Network.activeNetwork.DoPostDraw();
 
-        public void DoPostDraw() => this.core.PostDraw();
+        public void DoPostDraw() => core.PostDraw();
     }
 }

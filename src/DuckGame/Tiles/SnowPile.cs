@@ -19,37 +19,37 @@ namespace DuckGame
         public SnowPile(float xpos, float ypos, int dir)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("bigDrift", 32, 32);
-            this.hugWalls = WallHug.Floor;
-            this.center = new Vec2(12f, 24f);
-            this.collisionSize = new Vec2(24f, 10f);
-            this.collisionOffset = new Vec2(-12f, -2f);
-            this.layer = Layer.Game;
-            this.depth = (Depth)0.85f;
-            this.editorTooltip = "A nice, big, fluffy sneaky snow pile.";
+            graphic = new SpriteMap("bigDrift", 32, 32);
+            hugWalls = WallHug.Floor;
+            center = new Vec2(12f, 24f);
+            collisionSize = new Vec2(24f, 10f);
+            collisionOffset = new Vec2(-12f, -2f);
+            layer = Layer.Game;
+            depth = (Depth)0.85f;
+            editorTooltip = "A nice, big, fluffy sneaky snow pile.";
         }
 
         public override void Update()
         {
-            if (this._collisionPred == null)
-                this._collisionPred = thing => thing == null || !Collision.Rect(this.topLeft, this.bottomRight, thing);
-            this.clip.RemoveWhere(this._collisionPred);
-            if (this.melt)
+            if (_collisionPred == null)
+                _collisionPred = thing => thing == null || !Collision.Rect(topLeft, bottomRight, thing);
+            clip.RemoveWhere(_collisionPred);
+            if (melt)
             {
-                this.alpha -= 0.0012f;
-                this.yscale -= 0.015f;
-                this.y += 0.13f;
+                alpha -= 0.0012f;
+                yscale -= 0.015f;
+                y += 0.13f;
             }
-            if (this.yscale < 0.0)
+            if (yscale < 0.0)
                 Level.Remove(this);
             base.Update();
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (!this.kill && (with.impactPowerV > 2.0 || with.impactPowerH > 2.0))
+            if (!kill && (with.impactPowerV > 2.0 || with.impactPowerH > 2.0))
             {
-                this.clip.Add(with);
+                clip.Add(with);
                 float num1 = with.impactPowerV;
                 float num2 = -with.impactDirectionH;
                 if (num1 > 6.0)
@@ -63,7 +63,7 @@ namespace DuckGame
                     float num3 = 1f;
                     if (index < 10)
                         num3 = 0.7f;
-                    Level.Add(new SnowFallParticle(this.x + Rando.Float(-9f, 9f), this.y + 7f + Rando.Float(-16f, 0f), new Vec2((float)(num2 * num3 * 0.100000001490116) + Rando.Float((float)(-0.200000002980232 * (num1 * num3)), (float)(0.200000002980232 * (num1 * num3))), (float)(-Rando.Float(0.8f, 1.5f) * (num1 * num3 * 0.150000005960464))), index < 6));
+                    Level.Add(new SnowFallParticle(x + Rando.Float(-9f, 9f), y + 7f + Rando.Float(-16f, 0f), new Vec2((float)(num2 * num3 * 0.100000001490116) + Rando.Float((float)(-0.200000002980232 * (num1 * num3)), (float)(0.200000002980232 * (num1 * num3))), (float)(-Rando.Float(0.8f, 1.5f) * (num1 * num3 * 0.150000005960464))), index < 6));
                 }
             }
             base.OnSoftImpact(with, from);
@@ -71,13 +71,13 @@ namespace DuckGame
 
         public override void HeatUp(Vec2 location)
         {
-            this.melt = true;
+            melt = true;
             base.HeatUp(location);
         }
 
         public override void Draw()
         {
-            this.graphic.flipH = this.flipHorizontal;
+            graphic.flipH = flipHorizontal;
             base.Draw();
         }
     }

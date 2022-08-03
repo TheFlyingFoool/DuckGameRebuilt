@@ -23,24 +23,24 @@ namespace DuckGame
         public WireActivator(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("activatorBlock", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.depth = -0.5f;
-            this._editorName = "Wire Activator";
-            this.editorTooltip = "Activates nearby objects when powered.";
-            this.layer = Layer.Foreground;
-            this._canFlip = true;
-            this._placementCost += 4;
+            _sprite = new SpriteMap("activatorBlock", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -8f);
+            collisionSize = new Vec2(16f, 16f);
+            depth = -0.5f;
+            _editorName = "Wire Activator";
+            editorTooltip = "Activates nearby objects when powered.";
+            layer = Layer.Foreground;
+            _canFlip = true;
+            _placementCost += 4;
         }
 
         public override void Update()
         {
-            if (!this._preparedObjects)
+            if (!_preparedObjects)
             {
-                foreach (MaterialThing materialThing in this.level.CollisionCircleAll<MaterialThing>(this.position, 16f))
+                foreach (MaterialThing materialThing in level.CollisionCircleAll<MaterialThing>(position, 16f))
                 {
                     if (!(materialThing is PhysicsObject))
                     {
@@ -48,16 +48,16 @@ namespace DuckGame
                             (materialThing as VerticalDoor).slideLocked = true;
                         if (materialThing is FunBeam)
                             (materialThing as FunBeam).enabled = false;
-                        this._controlledObjects.Add(materialThing);
+                        _controlledObjects.Add(materialThing);
                     }
                 }
-                this._preparedObjects = true;
+                _preparedObjects = true;
             }
-            this.UpdateObjectTriggers();
-            if (this.action != this._prevAction)
+            UpdateObjectTriggers();
+            if (action != _prevAction)
             {
-                this.UpdateAction(this.action);
-                this._prevAction = this.action;
+                UpdateAction(action);
+                _prevAction = action;
             }
             base.Update();
         }
@@ -68,9 +68,9 @@ namespace DuckGame
 
         public void UpdateObjectTriggers()
         {
-            if (!this.action)
+            if (!action)
                 return;
-            foreach (PhysicsObject physicsObject in this.level.CollisionCircleAll<PhysicsObject>(this.position, 16f))
+            foreach (PhysicsObject physicsObject in level.CollisionCircleAll<PhysicsObject>(position, 16f))
             {
                 if (physicsObject is Holdable)
                     (physicsObject as Holdable).triggerAction = true;
@@ -79,7 +79,7 @@ namespace DuckGame
 
         public void UpdateAction(bool pOn)
         {
-            foreach (Thing controlledObject in this._controlledObjects)
+            foreach (Thing controlledObject in _controlledObjects)
             {
                 if (controlledObject is VerticalDoor)
                     (controlledObject as VerticalDoor).slideLockOpened = pOn;
@@ -94,20 +94,20 @@ namespace DuckGame
             switch (type)
             {
                 case 0:
-                    this.action = true;
-                    this.UpdateAction(true);
-                    this.action = false;
+                    action = true;
+                    UpdateAction(true);
+                    action = false;
                     break;
                 case 1:
-                    this.action = true;
+                    action = true;
                     break;
                 case 2:
-                    this.action = false;
+                    action = false;
                     break;
                 case 3:
-                    this.action = false;
-                    this.UpdateAction(false);
-                    this.action = true;
+                    action = false;
+                    UpdateAction(false);
+                    action = true;
                     break;
             }
         }

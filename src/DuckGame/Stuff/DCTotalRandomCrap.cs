@@ -11,7 +11,7 @@ namespace DuckGame
 {
     public class DCTotalRandomCrap : DeathCrateSetting
     {
-        public DCTotalRandomCrap() => this.likelyhood = 0.25f;
+        public DCTotalRandomCrap() => likelyhood = 0.25f;
 
         public override void Activate(DeathCrate c, bool server = true)
         {

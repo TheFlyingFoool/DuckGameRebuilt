@@ -18,14 +18,14 @@ namespace DuckGame
 
         public NMPurpleBoxStoreItem(Duck pDuck, PhysicsObject pThing)
         {
-            this.duck = pDuck;
-            this.thing = pThing;
+            duck = pDuck;
+            thing = pThing;
         }
 
         public override void Activate()
         {
-            if (this.duck != null && this.thing != null && this.duck.profile != null)
-                PurpleBlock.StoreItem(this.duck.profile, thing);
+            if (duck != null && thing != null && duck.profile != null)
+                PurpleBlock.StoreItem(duck.profile, thing);
             base.Activate();
         }
     }

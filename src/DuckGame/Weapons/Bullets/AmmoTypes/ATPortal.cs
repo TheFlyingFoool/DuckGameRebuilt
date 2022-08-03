@@ -14,13 +14,13 @@ namespace DuckGame
 
         public ATPortal(PortalGun OwnerGun)
         {
-            this.accuracy = 0.75f;
-            this.range = 250f;
-            this.penetration = 1f;
-            this.bulletSpeed = 20f;
-            this.rebound = true;
-            this.bulletThickness = 0.3f;
-            this._ownerGun = OwnerGun;
+            accuracy = 0.75f;
+            range = 250f;
+            penetration = 1f;
+            bulletSpeed = 20f;
+            rebound = true;
+            bulletThickness = 0.3f;
+            _ownerGun = OwnerGun;
         }
 
         public override Bullet FireBullet(
@@ -30,7 +30,7 @@ namespace DuckGame
           Thing firedFrom = null)
         {
             angle *= -1f;
-            Bullet t = new PortalBullet(position.x, position.y, this, angle, _ownerGun, this.rebound, thick: this.bulletThickness);
+            Bullet t = new PortalBullet(position.x, position.y, this, angle, _ownerGun, rebound, thick: bulletThickness);
             t.firedFrom = firedFrom;
             Level.current.AddThing(t);
             return t;

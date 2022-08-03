@@ -30,80 +30,80 @@ namespace DuckGame
         private bool _pathed;
         public bool needsRefresh;
 
-        public AutoPlatform leftBlock => this._leftBlock;
+        public AutoPlatform leftBlock => _leftBlock;
 
-        public AutoPlatform rightBlock => this._rightBlock;
+        public AutoPlatform rightBlock => _rightBlock;
 
-        public AutoPlatform upBlock => this._upBlock;
+        public AutoPlatform upBlock => _upBlock;
 
-        public AutoPlatform downBlock => this._downBlock;
+        public AutoPlatform downBlock => _downBlock;
 
         public override void SetTranslation(Vec2 translation)
         {
-            if (this._leftNub != null)
-                this._leftNub.SetTranslation(translation);
-            if (this._rightNub != null)
-                this._rightNub.SetTranslation(translation);
+            if (_leftNub != null)
+                _leftNub.SetTranslation(translation);
+            if (_rightNub != null)
+                _rightNub.SetTranslation(translation);
             base.SetTranslation(translation);
         }
 
         public bool pathed
         {
-            get => this._pathed;
-            set => this._pathed = value;
+            get => _pathed;
+            set => _pathed = value;
         }
 
         public override int frame
         {
-            get => this._sprite.frame;
+            get => _sprite.frame;
             set
             {
-                this._sprite.frame = value;
-                this.UpdateCollision();
+                _sprite.frame = value;
+                UpdateCollision();
             }
         }
 
         public AutoTile(float x, float y, string tileset)
           : base(x, y)
         {
-            this._sprite = new SpriteMap(tileset, 16, 16);
-            this._tileset = tileset;
-            this.graphic = _sprite;
-            this.collisionSize = new Vec2(16f, 16f);
-            this.thickness = 0.2f;
-            this.centerx = 8f;
-            this.centery = 8f;
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this.depth = (Depth)0.3f;
-            this._canBeGrouped = true;
-            this._isStatic = true;
-            this._placementCost = 1;
+            _sprite = new SpriteMap(tileset, 16, 16);
+            _tileset = tileset;
+            graphic = _sprite;
+            collisionSize = new Vec2(16f, 16f);
+            thickness = 0.2f;
+            centerx = 8f;
+            centery = 8f;
+            collisionOffset = new Vec2(-8f, -8f);
+            depth = (Depth)0.3f;
+            _canBeGrouped = true;
+            _isStatic = true;
+            _placementCost = 1;
         }
 
         public void InitializeNeighbors()
         {
-            if (this._neighborsInitialized)
+            if (_neighborsInitialized)
                 return;
-            this._leftBlock = Level.CheckPoint<AutoPlatform>(this.left - 2f, this.position.y, this);
-            this._rightBlock = Level.CheckPoint<AutoPlatform>(this.right + 2f, this.position.y, this);
-            this._upBlock = Level.CheckPoint<AutoPlatform>(this.position.x, this.top - 2f, this);
-            this._downBlock = Level.CheckPoint<AutoPlatform>(this.position.x, this.bottom + 2f, this);
-            this._neighborsInitialized = true;
+            _leftBlock = Level.CheckPoint<AutoPlatform>(left - 2f, position.y, this);
+            _rightBlock = Level.CheckPoint<AutoPlatform>(right + 2f, position.y, this);
+            _upBlock = Level.CheckPoint<AutoPlatform>(position.x, top - 2f, this);
+            _downBlock = Level.CheckPoint<AutoPlatform>(position.x, bottom + 2f, this);
+            _neighborsInitialized = true;
         }
 
-        public override void EditorObjectsChanged() => this.PlaceBlock();
+        public override void EditorObjectsChanged() => PlaceBlock();
 
         public bool HasNoCollision() => false;
 
         public override void Update()
         {
-            if (this.needsRefresh)
+            if (needsRefresh)
             {
-                this.PlaceBlock();
-                this.needsRefresh = false;
+                PlaceBlock();
+                needsRefresh = false;
             }
-            if (!this._placed)
-                this.PlaceBlock();
+            if (!_placed)
+                PlaceBlock();
             base.Update();
         }
 
@@ -113,63 +113,63 @@ namespace DuckGame
 
         public void PlaceBlock()
         {
-            this._placed = true;
-            this.FindFrame();
-            this.UpdateCollision();
+            _placed = true;
+            FindFrame();
+            UpdateCollision();
         }
 
         public void UpdateCollision()
         {
-            switch (this._sprite.frame)
+            switch (_sprite.frame)
             {
                 case 32:
                 case 41:
                 case 51:
                 case 53:
                 case 58:
-                    this.collisionSize = new Vec2((8f + verticalWidth / 2f), 16f);
-                    this.collisionOffset = new Vec2((-this.verticalWidth / 2f), -8f);
+                    collisionSize = new Vec2((8f + verticalWidth / 2f), 16f);
+                    collisionOffset = new Vec2((-verticalWidth / 2f), -8f);
                     break;
                 case 37:
                 case 43:
                 case 45:
                 case 52:
                 case 60:
-                    this.collisionSize = new Vec2((8f + verticalWidth / 2f), 16f);
-                    this.collisionOffset = new Vec2(-8f, -8f);
+                    collisionSize = new Vec2((8f + verticalWidth / 2f), 16f);
+                    collisionOffset = new Vec2(-8f, -8f);
                     break;
                 case 40:
                 case 44:
                 case 49:
                 case 50:
-                    this.collisionSize = new Vec2(this.verticalWidth, 16f);
-                    this.collisionOffset = new Vec2((-this.verticalWidth / 2f), -8f);
+                    collisionSize = new Vec2(verticalWidth, 16f);
+                    collisionOffset = new Vec2((-verticalWidth / 2f), -8f);
                     break;
                 default:
-                    this.collisionSize = new Vec2(16f, 16f);
-                    this.collisionOffset = new Vec2(-8f, -8f);
+                    collisionSize = new Vec2(16f, 16f);
+                    collisionOffset = new Vec2(-8f, -8f);
                     break;
             }
-            switch (this._sprite.frame)
+            switch (_sprite.frame)
             {
                 case 1:
                 case 2:
                 case 7:
                 case 18:
                 case 26:
-                    this._collisionSize.x = this.verticalWidthThick;
-                    this._collisionOffset.x = (float)(16.0 - verticalWidthThick - 8.0);
+                    _collisionSize.x = verticalWidthThick;
+                    _collisionOffset.x = (float)(16.0 - verticalWidthThick - 8.0);
                     break;
                 case 4:
                 case 5:
                 case 15:
                 case 20:
                 case 28:
-                    this._collisionSize.x = this.verticalWidthThick;
-                    this._collisionOffset.x = -8f;
+                    _collisionSize.x = verticalWidthThick;
+                    _collisionOffset.x = -8f;
                     break;
             }
-            switch (this._sprite.frame)
+            switch (_sprite.frame)
             {
                 case 25:
                 case 26:
@@ -189,44 +189,44 @@ namespace DuckGame
                 case 58:
                 case 59:
                 case 60:
-                    this._collisionSize.y = this.horizontalHeight;
+                    _collisionSize.y = horizontalHeight;
                     break;
                 default:
-                    this._collisionSize.y = 16f;
+                    _collisionSize.y = 16f;
                     break;
             }
         }
 
         public void FindFrame()
         {
-            AutoTile autoTile1 = Level.CheckPoint<AutoTile>(this.x, this.y - 16f, this);
-            AutoTile autoTile2 = Level.CheckPoint<AutoTile>(this.x, this.y + 16f, this);
-            AutoTile autoTile3 = Level.CheckPoint<AutoTile>(this.x - 16f, this.y, this);
-            AutoTile autoTile4 = Level.CheckPoint<AutoTile>(this.x + 16f, this.y, this);
-            AutoTile autoTile5 = Level.CheckPoint<AutoTile>(this.x - 16f, this.y - 16f, this);
-            AutoTile autoTile6 = Level.CheckPoint<AutoTile>(this.x + 16f, this.y - 16f, this);
-            AutoTile autoTile7 = Level.CheckPoint<AutoTile>(this.x - 16f, this.y + 16f, this);
-            AutoTile autoTile8 = Level.CheckPoint<AutoTile>(this.x + 16f, this.y + 16f, this);
-            if (autoTile1 != null && autoTile1._tileset != this._tileset)
+            AutoTile autoTile1 = Level.CheckPoint<AutoTile>(x, y - 16f, this);
+            AutoTile autoTile2 = Level.CheckPoint<AutoTile>(x, y + 16f, this);
+            AutoTile autoTile3 = Level.CheckPoint<AutoTile>(x - 16f, y, this);
+            AutoTile autoTile4 = Level.CheckPoint<AutoTile>(x + 16f, y, this);
+            AutoTile autoTile5 = Level.CheckPoint<AutoTile>(x - 16f, y - 16f, this);
+            AutoTile autoTile6 = Level.CheckPoint<AutoTile>(x + 16f, y - 16f, this);
+            AutoTile autoTile7 = Level.CheckPoint<AutoTile>(x - 16f, y + 16f, this);
+            AutoTile autoTile8 = Level.CheckPoint<AutoTile>(x + 16f, y + 16f, this);
+            if (autoTile1 != null && autoTile1._tileset != _tileset)
                 autoTile1 = null;
-            if (autoTile2 != null && autoTile2._tileset != this._tileset)
+            if (autoTile2 != null && autoTile2._tileset != _tileset)
                 autoTile2 = null;
-            if (autoTile3 != null && autoTile3._tileset != this._tileset)
+            if (autoTile3 != null && autoTile3._tileset != _tileset)
                 autoTile3 = null;
-            if (autoTile4 != null && autoTile4._tileset != this._tileset)
+            if (autoTile4 != null && autoTile4._tileset != _tileset)
                 autoTile4 = null;
-            if (autoTile5 != null && autoTile5._tileset != this._tileset)
+            if (autoTile5 != null && autoTile5._tileset != _tileset)
                 autoTile5 = null;
-            if (autoTile6 != null && autoTile6._tileset != this._tileset)
+            if (autoTile6 != null && autoTile6._tileset != _tileset)
                 autoTile6 = null;
-            if (autoTile7 != null && autoTile7._tileset != this._tileset)
+            if (autoTile7 != null && autoTile7._tileset != _tileset)
                 autoTile7 = null;
-            if (autoTile8 != null && autoTile8._tileset != this._tileset)
+            if (autoTile8 != null && autoTile8._tileset != _tileset)
                 autoTile8 = null;
-            this.leftTile = autoTile3;
-            this.rightTile = autoTile4;
-            this.upTile = autoTile1;
-            this.downTile = autoTile2;
+            leftTile = autoTile3;
+            rightTile = autoTile4;
+            upTile = autoTile1;
+            downTile = autoTile2;
             if (autoTile1 != null)
             {
                 if (autoTile4 != null)
@@ -242,63 +242,63 @@ namespace DuckGame
                                     if (autoTile7 != null)
                                     {
                                         if (autoTile8 != null)
-                                            this.frame = 11;
+                                            frame = 11;
                                         else
-                                            this.frame = 21;
+                                            frame = 21;
                                     }
                                     else if (autoTile8 != null)
-                                        this.frame = 17;
+                                        frame = 17;
                                     else
-                                        this.frame = 23;
+                                        frame = 23;
                                 }
                                 else if (autoTile8 != null)
                                 {
                                     if (autoTile7 == null)
                                         return;
-                                    this.frame = 12;
+                                    frame = 12;
                                 }
                                 else if (autoTile7 != null)
-                                    this.frame = 22;
+                                    frame = 22;
                                 else
-                                    this.frame = 30;
+                                    frame = 30;
                             }
                             else if (autoTile6 != null)
                             {
                                 if (autoTile8 != null)
                                 {
                                     if (autoTile7 != null)
-                                        this.frame = 10;
+                                        frame = 10;
                                     else
-                                        this.frame = 16;
+                                        frame = 16;
                                 }
                                 else
-                                    this.frame = 24;
+                                    frame = 24;
                             }
                             else if (autoTile8 != null)
                             {
                                 if (autoTile7 != null)
-                                    this.frame = 3;
+                                    frame = 3;
                                 else
-                                    this.frame = 8;
+                                    frame = 8;
                             }
                             else
                             {
                                 if (autoTile7 != null)
                                     return;
-                                this.frame = 42;
+                                frame = 42;
                             }
                         }
                         else if (autoTile6 != null)
                         {
                             if (autoTile8 != null)
                             {
-                                this.frame = 18;
+                                frame = 18;
                             }
                             else
                             {
                                 if (autoTile5 == null)
                                     ;
-                                this.frame = 7;
+                                frame = 7;
                             }
                         }
                         else
@@ -307,11 +307,11 @@ namespace DuckGame
                             {
                                 if (autoTile8 != null)
                                 {
-                                    this.frame = 2;
+                                    frame = 2;
                                     return;
                                 }
                             }
-                            this.frame = 53;
+                            frame = 53;
                         }
                     }
                     else if (autoTile3 != null)
@@ -319,19 +319,19 @@ namespace DuckGame
                         if (autoTile5 != null)
                         {
                             if (autoTile6 != null)
-                                this.frame = 27;
+                                frame = 27;
                             else
-                                this.frame = 29;
+                                frame = 29;
                         }
                         else if (autoTile6 != null)
-                            this.frame = 25;
+                            frame = 25;
                         else
-                            this.frame = 57;
+                            frame = 57;
                     }
                     else if (autoTile6 != null)
-                        this.frame = 26;
+                        frame = 26;
                     else
-                        this.frame = 58;
+                        frame = 58;
                 }
                 else if (autoTile2 != null)
                 {
@@ -341,13 +341,13 @@ namespace DuckGame
                         {
                             if (autoTile7 != null)
                             {
-                                this.frame = 20;
+                                frame = 20;
                             }
                             else
                             {
                                 if (autoTile8 == null)
                                     ;
-                                this.frame = 15;
+                                frame = 15;
                             }
                         }
                         else
@@ -358,33 +358,33 @@ namespace DuckGame
                                 {
                                     if (autoTile7 != null)
                                     {
-                                        this.frame = 4;
+                                        frame = 4;
                                         return;
                                     }
-                                    this.frame = 45;
+                                    frame = 45;
                                     return;
                                 }
                                 if (autoTile7 != null)
                                 {
-                                    this.frame = 4;
+                                    frame = 4;
                                     return;
                                 }
                             }
-                            this.frame = 45;
+                            frame = 45;
                         }
                     }
                     else
-                        this.frame = 50;
+                        frame = 50;
                 }
                 else if (autoTile3 != null)
                 {
                     if (autoTile5 != null)
-                        this.frame = 28;
+                        frame = 28;
                     else
-                        this.frame = 60;
+                        frame = 60;
                 }
                 else
-                    this.frame = 44;
+                    frame = 44;
             }
             else if (autoTile4 != null)
             {
@@ -393,72 +393,72 @@ namespace DuckGame
                     if (autoTile3 != null)
                     {
                         if (autoTile7 == null && autoTile8 == null)
-                            this.frame = 34;
+                            frame = 34;
                         else if (autoTile5 != null)
                         {
                             if (autoTile6 != null)
-                                this.frame = 3;
+                                frame = 3;
                             else if (autoTile8 != null)
                             {
                                 if (autoTile7 == null)
                                     return;
-                                this.frame = 3;
+                                frame = 3;
                             }
                             else if (autoTile7 != null)
-                                this.frame = 6;
+                                frame = 6;
                             else
-                                this.frame = 24;
+                                frame = 24;
                         }
                         else if (autoTile6 != null)
                         {
                             if (autoTile8 != null)
                             {
                                 if (autoTile7 != null)
-                                    this.frame = 3;
+                                    frame = 3;
                                 else
-                                    this.frame = 0;
+                                    frame = 0;
                             }
                             else
                             {
                                 if (autoTile7 != null)
                                     return;
-                                this.frame = 25;
+                                frame = 25;
                             }
                         }
                         else if (autoTile8 != null)
                         {
                             if (autoTile7 != null)
-                                this.frame = 3;
+                                frame = 3;
                             else
-                                this.frame = 8;
+                                frame = 8;
                         }
                         else if (autoTile7 != null)
-                            this.frame = 14;
+                            frame = 14;
                         else
-                            this.frame = 34;
+                            frame = 34;
                     }
                     else if (autoTile5 == null && autoTile6 != null && autoTile7 != null && autoTile8 != null)
-                        this.frame = 1;
+                        frame = 1;
                     else if (autoTile8 != null)
-                        this.frame = 2;
+                        frame = 2;
                     else
-                        this.frame = 51;
+                        frame = 51;
                 }
                 else if (autoTile3 != null)
                 {
                     if ((autoTile7 != null || autoTile5 != null) && (autoTile6 != null || autoTile8 != null))
-                        this.frame = 59;
+                        frame = 59;
                     else if (autoTile8 != null || autoTile6 != null)
-                        this.frame = 33;
+                        frame = 33;
                     else if (autoTile7 != null || autoTile5 != null)
-                        this.frame = 35;
+                        frame = 35;
                     else
-                        this.frame = 36;
+                        frame = 36;
                 }
                 else if (autoTile8 != null || autoTile6 != null)
-                    this.frame = 41;
+                    frame = 41;
                 else
-                    this.frame = 32;
+                    frame = 32;
             }
             else if (autoTile2 != null)
             {
@@ -472,13 +472,13 @@ namespace DuckGame
                             {
                                 if (autoTile8 != null)
                                 {
-                                    this.frame = 5;
+                                    frame = 5;
                                     return;
                                 }
-                                this.frame = 4;
+                                frame = 4;
                                 return;
                             }
-                            this.frame = 52;
+                            frame = 52;
                             return;
                         }
                     }
@@ -486,24 +486,24 @@ namespace DuckGame
                     {
                         if (autoTile7 != null)
                         {
-                            this.frame = 4;
+                            frame = 4;
                             return;
                         }
                     }
-                    this.frame = 52;
+                    frame = 52;
                 }
                 else
-                    this.frame = 49;
+                    frame = 49;
             }
             else if (autoTile3 != null)
             {
                 if (autoTile7 != null || autoTile5 != null)
-                    this.frame = 43;
+                    frame = 43;
                 else
-                    this.frame = 37;
+                    frame = 37;
             }
             else
-                this.frame = 40;
+                frame = 40;
         }
 
         public override ContextMenu GetContextMenu() => null;

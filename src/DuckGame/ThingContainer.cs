@@ -18,11 +18,11 @@ namespace DuckGame
         public bool bozocheck;
         public bool quickSerialize;
 
-        public List<Thing> things => this._things;
+        public List<Thing> things => _things;
 
         public override void SetTranslation(Vec2 translation)
         {
-            foreach (Thing thing in this._things)
+            foreach (Thing thing in _things)
                 thing.SetTranslation(translation);
             base.SetTranslation(translation);
         }
@@ -30,8 +30,8 @@ namespace DuckGame
         public ThingContainer(List<Thing> things, System.Type t)
           : base()
         {
-            this._things = things;
-            this._type = t;
+            _things = things;
+            _type = t;
         }
 
         public ThingContainer()
@@ -42,14 +42,14 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = new BinaryClassChunk();
-            binaryClassChunk.AddProperty("type", ModLoader.SmallTypeName(this.GetType()));
-            binaryClassChunk.AddProperty("blockType", ModLoader.SmallTypeName(this._type));
+            binaryClassChunk.AddProperty("type", ModLoader.SmallTypeName(GetType()));
+            binaryClassChunk.AddProperty("blockType", ModLoader.SmallTypeName(_type));
             BitBuffer bitBuffer1 = new BitBuffer(false);
             BitBuffer bitBuffer2 = new BitBuffer(false);
-            bitBuffer1.Write(this._things.Count);
-            if (typeof(AutoBlock).IsAssignableFrom(this._type))
+            bitBuffer1.Write(_things.Count);
+            if (typeof(AutoBlock).IsAssignableFrom(_type))
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     AutoBlock autoBlock = thing as AutoBlock;
                     autoBlock.groupedWithNeighbors = false;
@@ -58,17 +58,17 @@ namespace DuckGame
                 BitBuffer bitBuffer3 = new BitBuffer(false);
                 bitBuffer3.Write((ushort)0);
                 ushort val = 0;
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     AutoBlock autoBlock = thing as AutoBlock;
                     autoBlock.InitializeNeighbors();
                     bitBuffer1.Write(thing.x);
                     bitBuffer1.Write(thing.y);
                     bitBuffer1.Write((byte)thing.frame);
-                    bitBuffer1.Write(autoBlock.upBlock != null ? (short)this._things.IndexOf(autoBlock.upBlock) : (short)-1);
-                    bitBuffer1.Write(autoBlock.downBlock != null ? (short)this._things.IndexOf(autoBlock.downBlock) : (short)-1);
-                    bitBuffer1.Write(autoBlock.rightBlock != null ? (short)this._things.IndexOf(autoBlock.rightBlock) : (short)-1);
-                    bitBuffer1.Write(autoBlock.leftBlock != null ? (short)this._things.IndexOf(autoBlock.leftBlock) : (short)-1);
+                    bitBuffer1.Write(autoBlock.upBlock != null ? (short)_things.IndexOf(autoBlock.upBlock) : (short)-1);
+                    bitBuffer1.Write(autoBlock.downBlock != null ? (short)_things.IndexOf(autoBlock.downBlock) : (short)-1);
+                    bitBuffer1.Write(autoBlock.rightBlock != null ? (short)_things.IndexOf(autoBlock.rightBlock) : (short)-1);
+                    bitBuffer1.Write(autoBlock.leftBlock != null ? (short)_things.IndexOf(autoBlock.leftBlock) : (short)-1);
                     if (!Editor.miniMode)
                     {
                         BlockGroup blockGroup = autoBlock.GroupWithNeighbors(false);
@@ -82,14 +82,14 @@ namespace DuckGame
                             bitBuffer3.Write(blockGroup.collisionSize.y);
                             bitBuffer3.Write(blockGroup.blocks.Count<Block>());
                             foreach (Block block in blockGroup.blocks)
-                                bitBuffer3.Write((short)this._things.IndexOf(block));
+                                bitBuffer3.Write((short)_things.IndexOf(block));
                             ++val;
                         }
                     }
                 }
                 bitBuffer3.position = 0;
                 bitBuffer3.Write(val);
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     AutoBlock autoBlock = thing as AutoBlock;
                     autoBlock.groupedWithNeighbors = false;
@@ -100,7 +100,7 @@ namespace DuckGame
             }
             else
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     if ((byte)thing.frame == byte.MaxValue)
                         bitBuffer1.Write(-999999f);
@@ -125,7 +125,7 @@ namespace DuckGame
             if (type == null)
                 return false;
             bool flag1 = typeof(AutoBlock).IsAssignableFrom(type);
-            this._things = new List<Thing>();
+            _things = new List<Thing>();
             BitBuffer property1 = node.GetProperty<BitBuffer>("data");
             if (!typeof(AutoBlock).IsAssignableFrom(type))
                 flag1 = false;
@@ -189,7 +189,7 @@ namespace DuckGame
                 thing.y = num3;
                 thing.placed = true;
                 if (thing.isStatic)
-                    this._isStatic = true;
+                    _isStatic = true;
                 if (flag1)
                 {
                     short num5 = property1.ReadShort();
@@ -222,7 +222,7 @@ namespace DuckGame
                 if (flag5)
                 {
                     thing.frame = num4;
-                    this._things.Add(thing);
+                    _things.Add(thing);
                 }
             }
             if (flag1 && !(Level.current is Editor))
@@ -309,7 +309,7 @@ namespace DuckGame
                                     blockGroup.physicsMaterial = b.physicsMaterial;
                                     blockGroup.thickness = b.thickness;
                                 }
-                                this._things.Remove(b);
+                                _things.Remove(b);
                             }
                         }
                         num10 = index1 + num14;
@@ -318,12 +318,12 @@ namespace DuckGame
                         if (Level.symmetry)
                         {
                             if (Level.leftSymmetry && blockGroup.left < num11)
-                                this._things.Add(blockGroup);
+                                _things.Add(blockGroup);
                             else if (!Level.leftSymmetry && blockGroup.right > num11)
-                                this._things.Add(blockGroup);
+                                _things.Add(blockGroup);
                         }
                         else
-                            this._things.Add(blockGroup);
+                            _things.Add(blockGroup);
                     }
                 }
             }
@@ -333,44 +333,44 @@ namespace DuckGame
         public override bool Deserialize(BinaryClassChunk node)
         {
             if (!Level.symmetry)
-                return this.DoDeserialize(node);
+                return DoDeserialize(node);
             Level.leftSymmetry = true;
             Level.loadingOppositeSymmetry = false;
-            this.DoDeserialize(node);
+            DoDeserialize(node);
             List<Thing> collection = new List<Thing>(_things);
             Level.loadingOppositeSymmetry = true;
             Level.leftSymmetry = false;
-            this.DoDeserialize(node);
-            this._things.AddRange(collection);
+            DoDeserialize(node);
+            _things.AddRange(collection);
             return true;
         }
 
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = new DXMLNode("Object");
-            dxmlNode.Add(new DXMLNode("type", this.GetType().AssemblyQualifiedName));
+            dxmlNode.Add(new DXMLNode("type", GetType().AssemblyQualifiedName));
             dxmlNode.Add(new DXMLNode("blockType", _type.AssemblyQualifiedName));
             string str1 = "n,";
             string str2 = "";
-            if (typeof(AutoBlock).IsAssignableFrom(this._type))
+            if (typeof(AutoBlock).IsAssignableFrom(_type))
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     AutoBlock autoBlock = thing as AutoBlock;
                     autoBlock.groupedWithNeighbors = false;
                     autoBlock.neighborsInitialized = false;
                 }
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     AutoBlock autoBlock = thing as AutoBlock;
                     autoBlock.InitializeNeighbors();
                     str1 = str1 + Change.ToString(thing.x) + ",";
                     str1 = str1 + Change.ToString(thing.y) + ",";
                     str1 = str1 + thing.frame.ToString() + ",";
-                    str1 = autoBlock.upBlock == null ? str1 + "-1," : str1 + Change.ToString(this._things.IndexOf(autoBlock.upBlock)) + ",";
-                    str1 = autoBlock.downBlock == null ? str1 + "-1," : str1 + Change.ToString(this._things.IndexOf(autoBlock.downBlock)) + ",";
-                    str1 = autoBlock.rightBlock == null ? str1 + "-1," : str1 + Change.ToString(this._things.IndexOf(autoBlock.rightBlock)) + ",";
-                    str1 = autoBlock.leftBlock == null ? str1 + "-1," : str1 + Change.ToString(this._things.IndexOf(autoBlock.leftBlock)) + ",";
+                    str1 = autoBlock.upBlock == null ? str1 + "-1," : str1 + Change.ToString(_things.IndexOf(autoBlock.upBlock)) + ",";
+                    str1 = autoBlock.downBlock == null ? str1 + "-1," : str1 + Change.ToString(_things.IndexOf(autoBlock.downBlock)) + ",";
+                    str1 = autoBlock.rightBlock == null ? str1 + "-1," : str1 + Change.ToString(_things.IndexOf(autoBlock.rightBlock)) + ",";
+                    str1 = autoBlock.leftBlock == null ? str1 + "-1," : str1 + Change.ToString(_things.IndexOf(autoBlock.leftBlock)) + ",";
                     BlockGroup blockGroup = autoBlock.GroupWithNeighbors(false);
                     if (blockGroup != null)
                     {
@@ -382,10 +382,10 @@ namespace DuckGame
                         str2 = str2 + Change.ToString(blockGroup.collisionSize.y) + ",";
                         str2 = str2 + Change.ToString(blockGroup.blocks.Count<Block>()) + ",";
                         foreach (Block block in blockGroup.blocks)
-                            str2 = str2 + Change.ToString(this._things.IndexOf(block)) + ",";
+                            str2 = str2 + Change.ToString(_things.IndexOf(block)) + ",";
                     }
                 }
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     AutoBlock autoBlock = thing as AutoBlock;
                     autoBlock.groupedWithNeighbors = false;
@@ -399,7 +399,7 @@ namespace DuckGame
             }
             else
             {
-                foreach (Thing thing in this._things)
+                foreach (Thing thing in _things)
                 {
                     str1 = str1 + Change.ToString(thing.x) + ",";
                     str1 = str1 + Change.ToString(thing.y) + ",";
@@ -415,7 +415,7 @@ namespace DuckGame
         {
             System.Type type = Editor.GetType(node.Element("blockType").Value);
             bool flag1 = typeof(AutoBlock).IsAssignableFrom(type);
-            this._things = new List<Thing>();
+            _things = new List<Thing>();
             string[] source1 = node.Element("data").Value.Split(',');
             int num1 = source1[0] == "n" ? 1 : 0;
             if (num1 == 0)
@@ -443,7 +443,7 @@ namespace DuckGame
                 thing.y = single;
                 thing.placed = true;
                 if (thing.isStatic)
-                    this._isStatic = true;
+                    _isStatic = true;
                 if (flag1)
                 {
                     AutoBlock autoBlock = thing as AutoBlock;
@@ -473,7 +473,7 @@ namespace DuckGame
                 if (flag3)
                 {
                     thing.frame = int32;
-                    this._things.Add(thing);
+                    _things.Add(thing);
                 }
             }
             if (flag1 && !(Level.current is Editor))
@@ -559,7 +559,7 @@ namespace DuckGame
                                 blockGroup.physicsMaterial = b.physicsMaterial;
                                 blockGroup.thickness = b.thickness;
                             }
-                            this._things.Remove(b);
+                            _things.Remove(b);
                         }
                         num3 = index1 + int32_1;
                         if (flag4)
@@ -567,12 +567,12 @@ namespace DuckGame
                         if (Level.symmetry)
                         {
                             if (Level.leftSymmetry && blockGroup.left < num4)
-                                this._things.Add(blockGroup);
+                                _things.Add(blockGroup);
                             else if (!Level.leftSymmetry && blockGroup.right > num4)
-                                this._things.Add(blockGroup);
+                                _things.Add(blockGroup);
                         }
                         else
-                            this._things.Add(blockGroup);
+                            _things.Add(blockGroup);
                     }
                 }
             }
@@ -582,15 +582,15 @@ namespace DuckGame
         public override bool LegacyDeserialize(DXMLNode node)
         {
             if (!Level.symmetry)
-                return this.LegacyDoDeserialize(node);
+                return LegacyDoDeserialize(node);
             Level.leftSymmetry = true;
             Level.loadingOppositeSymmetry = false;
-            this.LegacyDoDeserialize(node);
+            LegacyDoDeserialize(node);
             List<Thing> collection = new List<Thing>(_things);
             Level.loadingOppositeSymmetry = true;
             Level.leftSymmetry = false;
-            this.LegacyDoDeserialize(node);
-            this._things.AddRange(collection);
+            LegacyDoDeserialize(node);
+            _things.AddRange(collection);
             return true;
         }
     }

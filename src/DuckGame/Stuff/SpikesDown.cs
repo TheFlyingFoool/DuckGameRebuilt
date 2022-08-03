@@ -17,23 +17,23 @@ namespace DuckGame
         public SpikesDown(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("spikes", 16, 19)
+            _sprite = new SpriteMap("spikes", 16, 19)
             {
                 speed = 0.1f
             };
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 14f);
-            this.collisionOffset = new Vec2(-7f, -2f);
-            this.collisionSize = new Vec2(13f, 5f);
-            this._editorName = "Spikes Down";
-            this.editorTooltip = "Pointy and dangerous.";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.editorCycleType = typeof(SpikesLeft);
-            this.angle = 3.141593f;
-            this.up = false;
-            this.editorOffset = new Vec2(0f, -6f);
-            this.hugWalls = WallHug.Ceiling;
-            this._killImpact = ImpactedFrom.Bottom;
+            graphic = _sprite;
+            center = new Vec2(8f, 14f);
+            collisionOffset = new Vec2(-7f, -2f);
+            collisionSize = new Vec2(13f, 5f);
+            _editorName = "Spikes Down";
+            editorTooltip = "Pointy and dangerous.";
+            physicsMaterial = PhysicsMaterial.Metal;
+            editorCycleType = typeof(SpikesLeft);
+            angle = 3.141593f;
+            up = false;
+            editorOffset = new Vec2(0f, -6f);
+            hugWalls = WallHug.Ceiling;
+            _killImpact = ImpactedFrom.Bottom;
         }
 
         public override void Update() => base.Update();

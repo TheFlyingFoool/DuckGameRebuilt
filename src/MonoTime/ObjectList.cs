@@ -20,78 +20,78 @@ namespace DuckGame
         private MultiMap<System.Type, Thing> _objectsByType = new MultiMap<System.Type, Thing>();
         private bool _autoRefresh;
 
-        public ObjectList(bool automatic = false) => this._autoRefresh = automatic;
+        public ObjectList(bool automatic = false) => _autoRefresh = automatic;
 
         public List<Thing> ToList()
         {
             List<Thing> list = new List<Thing>();
-            foreach (List<Thing> collection in this._objects.Values)
+            foreach (List<Thing> collection in _objects.Values)
                 list.AddRange(collection);
             return list;
         }
 
-        public IEnumerable<Thing> this[System.Type key] => this._objectsByType.ContainsKey(key) ? this._objectsByType[key] : Enumerable.Empty<Thing>();
+        public IEnumerable<Thing> this[System.Type key] => _objectsByType.ContainsKey(key) ? _objectsByType[key] : Enumerable.Empty<Thing>();
 
-        public IEnumerable<Thing> this[string key] => this._objects.ContainsKey(key) ? this._objects[key] : Enumerable.Empty<Thing>();
+        public IEnumerable<Thing> this[string key] => _objects.ContainsKey(key) ? _objects[key] : Enumerable.Empty<Thing>();
 
-        public Thing this[int key] => key < this._bigList.Count ? this._bigList[key] : null;
+        public Thing this[int key] => key < _bigList.Count ? _bigList[key] : null;
 
-        public int Count => this._bigList.Count;
+        public int Count => _bigList.Count;
 
         public void Add(Thing obj)
         {
-            this.removeItem(this._removeThings, obj);
-            this.addItem(this._addThings, obj);
-            if (!this._autoRefresh)
+            removeItem(_removeThings, obj);
+            addItem(_addThings, obj);
+            if (!_autoRefresh)
                 return;
-            this.RefreshState();
+            RefreshState();
         }
 
         public void AddRange(ObjectList list)
         {
             foreach (Thing thing in list)
-                this.Add(thing);
+                Add(thing);
         }
 
         public void Remove(Thing obj)
         {
-            this.addItem(this._removeThings, obj);
-            this.removeItem(this._addThings, obj);
-            if (!this._autoRefresh)
+            addItem(_removeThings, obj);
+            removeItem(_addThings, obj);
+            if (!_autoRefresh)
                 return;
-            this.RefreshState();
+            RefreshState();
         }
 
         public void Clear()
         {
-            for (int key = 0; key < this.Count; ++key)
-                this.Remove(this[key]);
+            for (int key = 0; key < Count; ++key)
+                Remove(this[key]);
         }
 
-        public bool Contains(Thing obj) => this._bigList.Contains(obj);
+        public bool Contains(Thing obj) => _bigList.Contains(obj);
 
         public void RefreshState()
         {
-            foreach (KeyValuePair<string, List<Thing>> removeThing in (MultiMap<string, Thing, List<Thing>>)this._removeThings)
+            foreach (KeyValuePair<string, List<Thing>> removeThing in (MultiMap<string, Thing, List<Thing>>)_removeThings)
             {
                 foreach (Thing thing in removeThing.Value)
                 {
-                    this._bigList.Remove(thing);
-                    this.removeItem(this._objects, thing);
-                    this.removeItem(this._objectsByType, thing);
+                    _bigList.Remove(thing);
+                    removeItem(_objects, thing);
+                    removeItem(_objectsByType, thing);
                 }
             }
-            this._removeThings.Clear();
-            foreach (KeyValuePair<string, List<Thing>> addThing in (MultiMap<string, Thing, List<Thing>>)this._addThings)
+            _removeThings.Clear();
+            foreach (KeyValuePair<string, List<Thing>> addThing in (MultiMap<string, Thing, List<Thing>>)_addThings)
             {
                 foreach (Thing thing in addThing.Value)
                 {
-                    this._bigList.Add(thing);
-                    this.addItem(this._objects, thing);
-                    this.addItem(this._objectsByType, thing);
+                    _bigList.Add(thing);
+                    addItem(_objects, thing);
+                    addItem(_objectsByType, thing);
                 }
             }
-            this._addThings.Clear();
+            _addThings.Clear();
         }
 
         private void addItem(MultiMap<string, Thing> list, Thing obj)
@@ -119,8 +119,8 @@ namespace DuckGame
                 list.Remove(key, obj);
         }
 
-        public IEnumerator<Thing> GetEnumerator() => this._bigList.GetEnumerator();
+        public IEnumerator<Thing> GetEnumerator() => _bigList.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

@@ -25,19 +25,19 @@ namespace DuckGame
         public StandingFluid(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this._editorIcon = new Sprite("standingFluidIcon");
-            this._editorName = "Liquid";
-            this.editorTooltip = "Place a liquid near the floor in a contained space and you've got yourself a pool party.";
-            this.hugWalls = WallHug.Floor;
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            _editorIcon = new Sprite("standingFluidIcon");
+            _editorName = "Liquid";
+            editorTooltip = "Place a liquid near the floor in a contained space and you've got yourself a pool party.";
+            hugWalls = WallHug.Floor;
         }
 
         public override void Initialize() => base.Initialize();
 
         private FluidData GetFluidType()
         {
-            switch ((int)this.fluidType)
+            switch ((int)fluidType)
             {
                 case 0:
                     return Fluid.Water;
@@ -52,19 +52,19 @@ namespace DuckGame
 
         public override void Update()
         {
-            ++this.w8;
-            if (!this._filled && this.w8 > 2)
+            ++w8;
+            if (!_filled && w8 > 2)
             {
-                this._filled = true;
-                Block b = Level.CheckRay<Block>(new Vec2(this.x, this.y), new Vec2(this.x, this.y + 64f));
+                _filled = true;
+                Block b = Level.CheckRay<Block>(new Vec2(x, y), new Vec2(x, y + 64f));
                 if (b != null)
                 {
-                    FluidPuddle fluidPuddle = new FluidPuddle(this.x, b.top, b);
+                    FluidPuddle fluidPuddle = new FluidPuddle(x, b.top, b);
                     Level.Add(fluidPuddle);
                     float num = 0f;
-                    while (fluidPuddle.CalculateDepth() < (int)this.deep * 8)
+                    while (fluidPuddle.CalculateDepth() < (int)deep * 8)
                     {
-                        FluidData fluidType = this.GetFluidType();
+                        FluidData fluidType = GetFluidType();
                         fluidType.amount = 0.5f;
                         fluidPuddle.Feed(fluidType);
                         float depth = fluidPuddle.CalculateDepth();
@@ -86,24 +86,24 @@ namespace DuckGame
         {
             if (Level.current is Editor)
             {
-                Graphics.Draw(this._editorIcon, this.x - 8f, this.y - 8f);
-                if (this._prevPos != this.position)
+                Graphics.Draw(_editorIcon, x - 8f, y - 8f);
+                if (_prevPos != position)
                 {
-                    this._isValid = false;
-                    this._prevPos = this.position;
+                    _isValid = false;
+                    _prevPos = position;
                     Vec2 hitPos1;
                     Vec2 hitPos2;
                     Vec2 hitPos3;
-                    if (Level.CheckRay<Block>(this.position, this.position - new Vec2(1000f, 0f), out hitPos1) != null && Level.CheckRay<Block>(this.position, this.position + new Vec2(1000f, 0f), out hitPos2) != null && Level.CheckRay<Block>(this.position, this.position + new Vec2(0f, 64f), out hitPos3) != null)
+                    if (Level.CheckRay<Block>(position, position - new Vec2(1000f, 0f), out hitPos1) != null && Level.CheckRay<Block>(position, position + new Vec2(1000f, 0f), out hitPos2) != null && Level.CheckRay<Block>(position, position + new Vec2(0f, 64f), out hitPos3) != null)
                     {
-                        this._floor = hitPos3.y;
-                        this._leftSide = hitPos1;
-                        this._rightSide = hitPos2;
-                        this._isValid = true;
+                        _floor = hitPos3.y;
+                        _leftSide = hitPos1;
+                        _rightSide = hitPos2;
+                        _isValid = true;
                     }
                 }
-                if (this._isValid)
-                    Graphics.DrawRect(new Vec2(this._leftSide.x, this._floor - (int)this.deep * 8), new Vec2(this._rightSide.x, this._floor), new Color(this.GetFluidType().color) * 0.5f, (Depth)0.9f);
+                if (_isValid)
+                    Graphics.DrawRect(new Vec2(_leftSide.x, _floor - (int)deep * 8), new Vec2(_rightSide.x, _floor), new Color(GetFluidType().color) * 0.5f, (Depth)0.9f);
             }
             base.Draw();
         }

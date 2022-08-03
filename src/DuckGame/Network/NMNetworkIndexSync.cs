@@ -16,19 +16,19 @@ namespace DuckGame
         protected override void OnSerialize()
         {
             for (int index = 0; index < DuckNetwork.profiles.Count; ++index)
-                this._serializedData.Write(DuckNetwork.profiles[index].fixedGhostIndex);
+                _serializedData.Write(DuckNetwork.profiles[index].fixedGhostIndex);
         }
 
         public override void OnDeserialize(BitBuffer msg)
         {
             for (int index = 0; index < DuckNetwork.profiles.Count; ++index)
-                this.indexes.Add(msg.ReadByte());
+                indexes.Add(msg.ReadByte());
         }
 
         public override void Activate()
         {
-            for (int index = 0; index < this.indexes.Count; ++index)
-                DuckNetwork.profiles[index].SetFixedGhostIndex(this.indexes[index]);
+            for (int index = 0; index < indexes.Count; ++index)
+                DuckNetwork.profiles[index].SetFixedGhostIndex(indexes[index]);
             DuckNetwork.core.ReorderFixedList();
         }
     }

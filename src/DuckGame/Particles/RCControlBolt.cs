@@ -12,30 +12,30 @@ namespace DuckGame
         private bool _fade;
         private RCCar _control;
 
-        public RCCar control => this._control;
+        public RCCar control => _control;
 
         public RCControlBolt(float xval, float yval, RCCar c)
           : base(xval, yval)
         {
-            this._control = c;
-            this.graphic = new Sprite("rcBolt");
-            this.center = new Vec2(8f, 8f);
-            this.scale = new Vec2(0.3f, 0.3f);
-            this.alpha = 1f;
+            _control = c;
+            graphic = new Sprite("rcBolt");
+            center = new Vec2(8f, 8f);
+            scale = new Vec2(0.3f, 0.3f);
+            alpha = 1f;
         }
 
         public override void Update()
         {
-            Vec2 vec2 = this._control.position - this.position;
+            Vec2 vec2 = _control.position - position;
             double length = vec2.length;
             vec2.Normalize();
-            this.angleDegrees = (float)(-Maths.PointDirection(this.position, this._control.position) + 90.0);
-            this.position += vec2 * 8f;
-            this.xscale = this.yscale = Lerp.Float(this.xscale, 1f, 0.1f);
-            if (length < 48.0 || this._control.destroyed || !this._control.receivingSignal)
-                this._fade = true;
-            this.alpha = Lerp.Float(this.alpha, this._fade ? 0f : 1f, 0.1f);
-            if (this.alpha < 0.00999999977648258 && this._fade)
+            angleDegrees = (float)(-Maths.PointDirection(position, _control.position) + 90.0);
+            position += vec2 * 8f;
+            xscale = yscale = Lerp.Float(xscale, 1f, 0.1f);
+            if (length < 48.0 || _control.destroyed || !_control.receivingSignal)
+                _fade = true;
+            alpha = Lerp.Float(alpha, _fade ? 0f : 1f, 0.1f);
+            if (alpha < 0.00999999977648258 && _fade)
                 Level.Remove(this);
             base.Update();
         }

@@ -40,7 +40,7 @@ namespace DuckGame
         public UIMenuAction _acceptFunction;
         private bool _isPauseMenu;
 
-        public UIComponent parent => this._parent;
+        public UIComponent parent => _parent;
 
         public UIMenu rootMenu
         {
@@ -48,105 +48,105 @@ namespace DuckGame
             {
                 if (this is UIMenu)
                     return this as UIMenu;
-                return this._parent != null ? this._parent.rootMenu : null;
+                return _parent != null ? _parent.rootMenu : null;
             }
         }
 
         public bool dirty
         {
-            get => this._dirty;
-            set => this._dirty = value;
+            get => _dirty;
+            set => _dirty = value;
         }
 
         public Vec2 offset
         {
-            get => this._offset;
-            set => this._offset = value;
+            get => _offset;
+            set => _offset = value;
         }
 
         public bool vertical
         {
-            get => this._vertical;
-            set => this._vertical = value;
+            get => _vertical;
+            set => _vertical = value;
         }
 
         public IList<UIComponent> components => _components;
 
-        public bool canFit => this._canFit;
+        public bool canFit => _canFit;
 
         public UIFit fit
         {
-            get => this._fit;
+            get => _fit;
             set
             {
-                if (this._fit != value)
-                    this._dirty = true;
-                this._fit = value;
+                if (_fit != value)
+                    _dirty = true;
+                _fit = value;
             }
         }
 
         public UIAlign align
         {
-            get => this._align;
+            get => _align;
             set
             {
-                if (this._align != value)
-                    this._dirty = true;
-                this._align = value;
+                if (_align != value)
+                    _dirty = true;
+                _align = value;
             }
         }
 
-        public bool animate => this._animate;
+        public bool animate => _animate;
 
-        public bool open => !this._close;
+        public bool open => !_close;
 
         public bool animating
         {
-            get => this._animating;
+            get => _animating;
             set
             {
-                foreach (UIComponent component in this._components)
+                foreach (UIComponent component in _components)
                     component.animating = value;
-                this._animating = value;
+                _animating = value;
             }
         }
 
-        public bool autoSizeVert => this._autoSizeVert;
+        public bool autoSizeVert => _autoSizeVert;
 
-        public bool autoSizeHor => this._autoSizeHor;
+        public bool autoSizeHor => _autoSizeHor;
 
         public UIComponent(float xpos, float ypos, float wide, float high)
           : base(xpos, ypos)
         {
-            this._collisionSize = new Vec2(wide, high);
-            this.layer = Layer.HUD;
-            this.depth = (Depth)0f;
-            this._autoSizeHor = wide < 0.0;
-            this._autoSizeVert = high < 0.0;
+            _collisionSize = new Vec2(wide, high);
+            layer = Layer.HUD;
+            depth = (Depth)0f;
+            _autoSizeHor = wide < 0.0;
+            _autoSizeVert = high < 0.0;
         }
 
         public virtual void Open()
         {
             MonoMain.menuOpenedThisFrame = true;
-            this._close = false;
-            this.animating = true;
-            foreach (UIComponent component in this._components)
+            _close = false;
+            animating = true;
+            foreach (UIComponent component in _components)
             {
                 if (component.anchor == this)
                     component.Open();
             }
-            this._initialSizingComplete = false;
+            _initialSizingComplete = false;
         }
 
         public virtual void Close()
         {
-            this._close = true;
-            this.animating = true;
-            foreach (UIComponent component in this._components)
+            _close = true;
+            animating = true;
+            foreach (UIComponent component in _components)
                 component.Close();
-            if (!this.inWorld && this.rootMenu == this && !MonoMain.closeMenuUpdate.Contains(this))
+            if (!inWorld && rootMenu == this && !MonoMain.closeMenuUpdate.Contains(this))
                 MonoMain.closeMenuUpdate.Add(this);
-            this.OnClose();
+            OnClose();
         }
 
         public override void DoUpdate() => base.DoUpdate();
@@ -157,7 +157,7 @@ namespace DuckGame
 
         public override void Added(Level parent)
         {
-            this.inWorld = true;
+            inWorld = true;
             base.Added(parent);
         }
 
@@ -169,56 +169,56 @@ namespace DuckGame
         {
             get
             {
-                if (this._isPauseMenu)
+                if (_isPauseMenu)
                     return true;
-                return this._parent != null && this._parent.isPauseMenu;
+                return _parent != null && _parent.isPauseMenu;
             }
-            set => this._isPauseMenu = value;
+            set => _isPauseMenu = value;
         }
 
         public override void Update()
         {
-            if (!this._startInitialized)
+            if (!_startInitialized)
             {
-                this._startInitialized = true;
-                this._startPosition = this.position;
-                this.position.y = this.layer.camera.height * 2f;
+                _startInitialized = true;
+                _startPosition = position;
+                position.y = layer.camera.height * 2f;
             }
-            if (this.anchor == null)
+            if (anchor == null)
             {
-                float to = this._close ? this.layer.camera.height * 2f : this._startPosition.y;
-                this.position.y = Lerp.FloatSmooth(this.position.y, to, 0.2f, 1.05f);
+                float to = _close ? layer.camera.height * 2f : _startPosition.y;
+                position.y = Lerp.FloatSmooth(position.y, to, 0.2f, 1.05f);
                 bool flag = position.y != to;
-                if (this.animating != flag)
-                    this.animating = flag;
+                if (animating != flag)
+                    animating = flag;
             }
-            if (this.open && !this.animating)
-                this.UpdateParts();
-            if (this._parent != null || this.open || this.animating)
+            if (open && !animating)
+                UpdateParts();
+            if (_parent != null || open || animating)
             {
-                this.SizeChildren();
-                foreach (UIComponent component in this._components)
+                SizeChildren();
+                foreach (UIComponent component in _components)
                 {
                     if (component.condition == null || component.condition())
                     {
                         component.DoUpdate();
                         if (component._didResize)
-                            this._dirty = true;
+                            _dirty = true;
                         component._didResize = false;
                     }
                 }
             }
-            if (this._dirty)
-                this.Resize();
-            if (!UIMenu.globalUILock && !MonoMain.menuOpenedThisFrame && MonoMain.pauseMenu == this && (Input.Pressed("START") && this.isPauseMenu || MonoMain.closeMenus))
+            if (_dirty)
+                Resize();
+            if (!UIMenu.globalUILock && !MonoMain.menuOpenedThisFrame && MonoMain.pauseMenu == this && (Input.Pressed("START") && isPauseMenu || MonoMain.closeMenus))
             {
                 MonoMain.closeMenus = false;
-                if (this._closeFunction != null)
-                    this._closeFunction.Activate();
-                this.Close();
+                if (_closeFunction != null)
+                    _closeFunction.Activate();
+                Close();
             }
-            this._dirty = false;
-            this._initialSizingComplete = true;
+            _dirty = false;
+            _initialSizingComplete = true;
         }
 
         protected virtual void SizeChildren()
@@ -227,7 +227,7 @@ namespace DuckGame
 
         public override void DoDraw()
         {
-            if (!this._initialSizingComplete || !this._animating && this._close)
+            if (!_initialSizingComplete || !_animating && _close)
                 return;
             base.DoDraw();
         }
@@ -236,27 +236,27 @@ namespace DuckGame
         {
             if (HUD.hide)
                 return;
-            foreach (UIComponent component in this._components)
+            foreach (UIComponent component in _components)
             {
                 if (component.condition == null || component.condition())
                 {
                     if (component is UIMenuItem)
                         UIMenu.disabledDraw = component.mode == MenuItemMode.Disabled;
-                    component.depth = this.depth + 10;
+                    component.depth = depth + 10;
                     if (component.visible && component.mode != MenuItemMode.Hidden)
                         component.Draw();
                     if (component is UIMenuItem)
                         UIMenu.disabledDraw = false;
                 }
             }
-            int num = this.debug ? 1 : 0;
+            int num = debug ? 1 : 0;
         }
 
         public void Resize()
         {
-            this._dirty = false;
-            this._didResize = true;
-            this.OnResize();
+            _dirty = false;
+            _didResize = true;
+            OnResize();
         }
 
         protected virtual void OnResize()
@@ -265,9 +265,9 @@ namespace DuckGame
 
         public virtual void Add(UIComponent component, bool doAnchor = true)
         {
-            this._components.Add(component);
+            _components.Add(component);
             component._parent = this;
-            this._dirty = true;
+            _dirty = true;
             component.dirty = true;
             if (!doAnchor)
                 return;
@@ -276,11 +276,11 @@ namespace DuckGame
 
         public virtual void Insert(UIComponent component, int position, bool doAnchor = true)
         {
-            if (position >= this._components.Count)
-                position = this._components.Count;
-            this._components.Insert(position, component);
+            if (position >= _components.Count)
+                position = _components.Count;
+            _components.Insert(position, component);
             component._parent = this;
-            this._dirty = true;
+            _dirty = true;
             component.dirty = true;
             if (!doAnchor)
                 return;
@@ -289,12 +289,12 @@ namespace DuckGame
 
         public virtual void Remove(UIComponent component)
         {
-            this._components.Remove(component);
+            _components.Remove(component);
             if (component._parent == this)
                 component._parent = null;
             if (component.anchor == this)
                 component.anchor = null;
-            this._dirty = true;
+            _dirty = true;
         }
     }
 }

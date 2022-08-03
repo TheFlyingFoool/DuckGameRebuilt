@@ -16,19 +16,19 @@ namespace DuckGame
         public CryoTube(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("survival/cryoTube");
-            this.center = new Vec2(16f, 15f);
-            this._collisionSize = new Vec2(18f, 32f);
-            this._collisionOffset = new Vec2(-9f, -16f);
-            this.depth = (Depth)0.9f;
-            this.hugWalls = WallHug.Floor;
+            graphic = new Sprite("survival/cryoTube");
+            center = new Vec2(16f, 15f);
+            _collisionSize = new Vec2(18f, 32f);
+            _collisionOffset = new Vec2(-9f, -16f);
+            depth = (Depth)0.9f;
+            hugWalls = WallHug.Floor;
         }
 
         public override void Initialize()
         {
-            this._plug = new CryoPlug(this.x - 20f, this.y);
+            _plug = new CryoPlug(x - 20f, y);
             Level.Add(_plug);
-            this._plug.AttachTo(this);
+            _plug.AttachTo(this);
         }
 
         public override void Terminate() => Level.Remove(_plug);

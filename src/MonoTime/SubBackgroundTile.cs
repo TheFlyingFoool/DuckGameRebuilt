@@ -32,7 +32,7 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode = node.Element("frame");
             if (dxmlNode != null)
-                (this.graphic as SpriteMap).frame = Convert.ToInt32(dxmlNode.Value);
+                (graphic as SpriteMap).frame = Convert.ToInt32(dxmlNode.Value);
             return true;
         }
 

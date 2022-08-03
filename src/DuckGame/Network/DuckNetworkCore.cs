@@ -341,8 +341,8 @@ namespace DuckGame
 
         public void RecreateProfiles()
         {
-            this.profiles.Clear();
-            this.profilesFixedOrder.Clear();
+            profiles.Clear();
+            profilesFixedOrder.Clear();
             int num;
             for (int index = 0; index < DG.MaxPlayers; ++index)
             {
@@ -352,8 +352,8 @@ namespace DuckGame
                 profile.SetFixedGhostIndex((byte)index);
                 if (index > 3)
                     profile.Special_SetSlotType(SlotType.Closed);
-                this.profiles.Add(profile);
-                this.profilesFixedOrder.Add(profile);
+                profiles.Add(profile);
+                profilesFixedOrder.Add(profile);
             }
             for (int index = 0; index < DG.MaxSpectators; ++index)
             {
@@ -362,27 +362,27 @@ namespace DuckGame
                 profile.SetNetworkIndex((byte)(index + DG.MaxPlayers));
                 profile.SetFixedGhostIndex((byte)(index + DG.MaxPlayers));
                 profile.slotType = SlotType.Spectator;
-                this.profiles.Add(profile);
-                this.profilesFixedOrder.Add(profile);
+                profiles.Add(profile);
+                profilesFixedOrder.Add(profile);
             }
         }
 
         public DuckNetworkCore()
         {
-            this.RecreateProfiles();
-            this.randomID = Rando.Int(2147483646);
+            RecreateProfiles();
+            randomID = Rando.Int(2147483646);
         }
 
         public DuckNetworkCore(bool waitInit)
         {
             if (!waitInit)
-                this.RecreateProfiles();
-            this.randomID = Rando.Int(2147483646);
+                RecreateProfiles();
+            randomID = Rando.Int(2147483646);
         }
 
-        public void ReorderFixedList() => this.profilesFixedOrder = this.profiles.OrderBy<Profile, byte>(x => x.fixedGhostIndex).ToList<Profile>();
+        public void ReorderFixedList() => profilesFixedOrder = profiles.OrderBy<Profile, byte>(x => x.fixedGhostIndex).ToList<Profile>();
 
-        public FancyBitmapFont _chatFont => this._rasterChatFont == null ? this._builtInChatFont : this._rasterChatFont;
+        public FancyBitmapFont _chatFont => _rasterChatFont == null ? _builtInChatFont : _rasterChatFont;
 
         public string FilterText(string pText, User pUser)
         {
@@ -391,7 +391,7 @@ namespace DuckGame
                 DuckNetworkCore.filteredSpeech = "";
                 pText = pText.Replace("*", "@_sr_@");
                 pText = Steam.FilterText(pText, pUser);
-                this.swearCharOffset = 0;
+                swearCharOffset = 0;
                 bool flag = false;
                 string str1 = "";
                 for (int index = 0; index < pText.Length; ++index)
@@ -403,23 +403,23 @@ namespace DuckGame
                             flag = true;
                             DuckNetworkCore.filteredSpeech += "quack";
                         }
-                        string str2 = str1 + this.swearColors[this.rainbowIndex];
-                        this.rainbowIndex = (this.rainbowIndex + 1) % this.swearColors.Length;
-                        if (this._rasterChatFont == null)
+                        string str2 = str1 + swearColors[rainbowIndex];
+                        rainbowIndex = (rainbowIndex + 1) % swearColors.Length;
+                        if (_rasterChatFont == null)
                         {
-                            str1 = str2 + this.swearChars[Rando.Int(this.swearChars.Length - 1)] + "|PREV|";
-                            this.swearCharOffset = (this.swearCharOffset + 1) % this.swearChars2.Length;
+                            str1 = str2 + swearChars[Rando.Int(swearChars.Length - 1)] + "|PREV|";
+                            swearCharOffset = (swearCharOffset + 1) % swearChars2.Length;
                         }
                         else
                         {
-                            str1 = str2 + this.swearChars2[Rando.Int(this.swearChars2.Length - 1)] + "|PREV|";
-                            this.swearCharOffset = (this.swearCharOffset + 1) % this.swearChars2.Length;
+                            str1 = str2 + swearChars2[Rando.Int(swearChars2.Length - 1)] + "|PREV|";
+                            swearCharOffset = (swearCharOffset + 1) % swearChars2.Length;
                         }
                     }
                     else
                     {
                         flag = false;
-                        this.swearCharOffset = 0;
+                        swearCharOffset = 0;
                         str1 += pText[index].ToString();
                         DuckNetworkCore.filteredSpeech += pText[index].ToString();
                     }
@@ -438,9 +438,9 @@ namespace DuckGame
             if (pMessage.who == null)
                 return;
             ChatMessage chatMessage = null;
-            if (this.chatMessages.Count > 0)
-                chatMessage = this.chatMessages[0];
-            pMessage.text = this.FilterText(pMessage.text, null);
+            if (chatMessages.Count > 0)
+                chatMessage = chatMessages[0];
+            pMessage.text = FilterText(pMessage.text, null);
             if (Options.Data.textToSpeech)
             {
                 if (Options.Data.textToSpeechReadNames)
@@ -449,15 +449,15 @@ namespace DuckGame
                     SFX.Say(DuckNetworkCore.filteredSpeech);
             }
             float chatScale = DuckNetwork.chatScale;
-            this._chatFont.scale = new Vec2(2f * pMessage.scale * chatScale);
-            if (this._chatFont is RasterFont)
+            _chatFont.scale = new Vec2(2f * pMessage.scale * chatScale);
+            if (_chatFont is RasterFont)
             {
-                FancyBitmapFont chatFont = this._chatFont;
+                FancyBitmapFont chatFont = _chatFont;
                 chatFont.scale *= 0.5f;
             }
             try
             {
-                pMessage.text = this._chatFont.FormatWithNewlines(pMessage.text, 800f);
+                pMessage.text = _chatFont.FormatWithNewlines(pMessage.text, 800f);
             }
             catch (Exception)
             {
@@ -478,9 +478,9 @@ namespace DuckGame
             {
                 pMessage.newlines = num + 1;
                 pMessage.text = "|WHITE|" + pMessage.who.nameUI + ": |BLACK|" + pMessage.text;
-                this.chatMessages.Add(pMessage);
+                chatMessages.Add(pMessage);
             }
-            this.chatMessages = this.chatMessages.OrderBy<ChatMessage, int>(x => -x.index).ToList<ChatMessage>();
+            chatMessages = chatMessages.OrderBy<ChatMessage, int>(x => -x.index).ToList<ChatMessage>();
         }
     }
 }

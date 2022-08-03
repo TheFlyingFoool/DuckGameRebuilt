@@ -27,25 +27,25 @@ namespace DuckGame
         public override void Update()
         {
             Layer.HUD.camera.x = Page.camOffset;
-            if (this._state == CategoryState.OpenPage)
+            if (_state == CategoryState.OpenPage)
             {
-                this.DeactivateAll();
+                DeactivateAll();
                 Page.camOffset = Lerp.FloatSmooth(Page.camOffset, 360f, 0.1f);
                 if (camOffset <= 330.0)
                     return;
-                this.TransitionOutComplete();
+                TransitionOutComplete();
             }
             else
             {
-                if (this._state != CategoryState.Idle)
+                if (_state != CategoryState.Idle)
                     return;
                 Page.camOffset = Lerp.FloatSmooth(Page.camOffset, -40f, 0.1f);
                 if (camOffset < 0.0)
                     Page.camOffset = 0f;
                 if (camOffset == 0.0)
-                    this.ActivateAll();
+                    ActivateAll();
                 else
-                    this.DeactivateAll();
+                    DeactivateAll();
             }
         }
     }

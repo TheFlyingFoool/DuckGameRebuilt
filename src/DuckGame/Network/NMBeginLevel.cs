@@ -9,7 +9,7 @@ namespace DuckGame
 {
     public class NMBeginLevel : NMSynchronizedEvent
     {
-        public NMBeginLevel() => this.manager = BelongsToManager.EventManager;
+        public NMBeginLevel() => manager = BelongsToManager.EventManager;
 
         public override void Activate() => GameMode.getReady = true;
     }

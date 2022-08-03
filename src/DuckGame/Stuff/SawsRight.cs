@@ -16,23 +16,23 @@ namespace DuckGame
         public SawsRight(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("movingSpikes", 16, 21)
+            _sprite = new SpriteMap("movingSpikes", 16, 21)
             {
                 speed = 0.3f
             };
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 14f);
-            this.collisionOffset = new Vec2(-2f, -6f);
-            this.collisionSize = new Vec2(4f, 12f);
-            this._editorName = "Saws Right";
-            this.editorTooltip = "Deadly hazards, able to cut through even the strongest of boots";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.editorCycleType = typeof(SawsDown);
-            this.angle = 1.570796f;
-            this.editorOffset = new Vec2(-6f, 0f);
-            this.hugWalls = WallHug.Left;
-            this._editorImageCenter = true;
-            this.impactThreshold = 0.01f;
+            graphic = _sprite;
+            center = new Vec2(8f, 14f);
+            collisionOffset = new Vec2(-2f, -6f);
+            collisionSize = new Vec2(4f, 12f);
+            _editorName = "Saws Right";
+            editorTooltip = "Deadly hazards, able to cut through even the strongest of boots";
+            physicsMaterial = PhysicsMaterial.Metal;
+            editorCycleType = typeof(SawsDown);
+            angle = 1.570796f;
+            editorOffset = new Vec2(-6f, 0f);
+            hugWalls = WallHug.Left;
+            _editorImageCenter = true;
+            impactThreshold = 0.01f;
         }
 
         public override void Touch(MaterialThing with)

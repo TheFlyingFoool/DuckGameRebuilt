@@ -13,48 +13,48 @@ namespace DuckGame
         public PyramidDoor(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("pyramidDoor", 16, 32);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 24f);
-            this.collisionSize = new Vec2(10f, 32f);
-            this.collisionOffset = new Vec2(-5f, -24f);
-            this.depth = -0.5f;
-            this._editorName = "Pyramid Door";
-            this.thickness = 3f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this._bottom = new Sprite("pyramidDoorBottom");
-            this._bottom.CenterOrigin();
-            this._top = new Sprite("pyramidDoorTop");
-            this._top.CenterOrigin();
+            _sprite = new SpriteMap("pyramidDoor", 16, 32);
+            graphic = _sprite;
+            center = new Vec2(8f, 24f);
+            collisionSize = new Vec2(10f, 32f);
+            collisionOffset = new Vec2(-5f, -24f);
+            depth = -0.5f;
+            _editorName = "Pyramid Door";
+            thickness = 3f;
+            physicsMaterial = PhysicsMaterial.Metal;
+            _bottom = new Sprite("pyramidDoorBottom");
+            _bottom.CenterOrigin();
+            _top = new Sprite("pyramidDoorTop");
+            _top.CenterOrigin();
         }
 
         public override void Update()
         {
-            if (!this._cornerInit)
+            if (!_cornerInit)
             {
-                this._topLeft = this.topLeft;
-                this._topRight = this.topRight;
-                this._bottomLeft = this.bottomLeft;
-                this._bottomRight = this.bottomRight;
-                this._cornerInit = true;
+                _topLeft = topLeft;
+                _topRight = topRight;
+                _bottomLeft = bottomLeft;
+                _bottomRight = bottomRight;
+                _cornerInit = true;
             }
-            if (Level.CheckRect<Duck>(this._topLeft - new Vec2(18f, 0f), this._bottomRight + new Vec2(18f, 0f)) != null)
-                this._desiredOpen = 1f;
-            else if (Level.CheckRectFilter<PhysicsObject>(new Vec2(this.x - 4f, this.y - 24f), new Vec2(this.x + 4f, this.y + 8f), d => !(d is TeamHat)) == null)
-                this._desiredOpen = 0f;
-            if (_desiredOpen > 0.5 && !this._opened)
+            if (Level.CheckRect<Duck>(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f)) != null)
+                _desiredOpen = 1f;
+            else if (Level.CheckRectFilter<PhysicsObject>(new Vec2(x - 4f, y - 24f), new Vec2(x + 4f, y + 8f), d => !(d is TeamHat)) == null)
+                _desiredOpen = 0f;
+            if (_desiredOpen > 0.5 && !_opened)
             {
-                this._opened = true;
+                _opened = true;
                 SFX.Play("pyramidOpen", 0.6f);
             }
-            if (_desiredOpen < 0.5 && this._opened)
+            if (_desiredOpen < 0.5 && _opened)
             {
-                this._opened = false;
+                _opened = false;
                 SFX.Play("pyramidClose", 0.6f);
             }
-            this._open = Maths.LerpTowards(this._open, this._desiredOpen, 0.15f);
-            this._sprite.frame = (int)(_open * 32.0);
-            this._collisionSize.y = (float)((1.0 - _open) * 32.0);
+            _open = Maths.LerpTowards(_open, _desiredOpen, 0.15f);
+            _sprite.frame = (int)(_open * 32.0);
+            _collisionSize.y = (float)((1.0 - _open) * 32.0);
         }
     }
 }

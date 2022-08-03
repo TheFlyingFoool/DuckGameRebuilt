@@ -17,9 +17,9 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Graphics.DrawString("@JUMP@", new Vec2(this.x + 7f, this.y - 30f), Color.White * 0.5f);
-            Graphics.DrawString("@DOWN@", new Vec2(this.x - 18f, this.y - 30f), Color.White * 0.5f);
-            this.graphic.color = Color.White * 0.5f;
+            Graphics.DrawString("@JUMP@", new Vec2(x + 7f, y - 30f), Color.White * 0.5f);
+            Graphics.DrawString("@DOWN@", new Vec2(x - 18f, y - 30f), Color.White * 0.5f);
+            graphic.color = Color.White * 0.5f;
             base.Draw();
         }
     }

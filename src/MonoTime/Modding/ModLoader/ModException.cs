@@ -17,8 +17,8 @@ namespace DuckGame
         public ModException(string pMessage, ModConfiguration pMod, Exception pRealException)
           : base(pMessage)
         {
-            this.exception = pRealException;
-            this.mod = pMod;
+            exception = pRealException;
+            mod = pMod;
         }
     }
 }

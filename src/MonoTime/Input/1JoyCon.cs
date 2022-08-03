@@ -99,6 +99,6 @@ namespace DuckGame
 
         public override extern bool isConnected { [MethodImpl(MethodImplOptions.InternalCall)] get; }
 
-        public override Vec2 rightStick => this.ReadRightStick();
+        public override Vec2 rightStick => ReadRightStick();
     }
 }

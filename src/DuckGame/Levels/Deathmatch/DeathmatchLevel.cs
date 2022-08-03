@@ -37,16 +37,16 @@ namespace DuckGame
             set => DeathmatchLevel._started = value;
         }
 
-        public FollowCam followCam => this._followCam;
+        public FollowCam followCam => _followCam;
 
         public DeathmatchLevel(string level)
           : base(level)
         {
-            this._followCam = new FollowCam
+            _followCam = new FollowCam
             {
                 lerpMult = 1.2f
             };
-            this.camera = _followCam;
+            camera = _followCam;
             DeathmatchLevel._started = false;
         }
 
@@ -63,50 +63,50 @@ namespace DuckGame
             DeathmatchLevel.playedGame = true;
             foreach (Profile profile in Profiles.active)
                 profile.duck = null;
-            this._font = new BitmapFont("biosFont", 8);
+            _font = new BitmapFont("biosFont", 8);
             base.Initialize();
             if (!Network.isActive)
-                this.StartDeathmatch();
-            this._deathmatch = new Deathmatch(this);
-            this.AddThing(_deathmatch);
-            this._pendingSpawns = this._deathmatch.SpawnPlayers(true);
-            this._pendingSpawns = this._pendingSpawns.OrderBy<Duck, float>(sp => sp.x).ToList<Duck>();
-            foreach (Thing pendingSpawn in this._pendingSpawns)
-                this.followCam.Add(pendingSpawn);
-            this.followCam.Adjust();
-            this._things.RefreshState();
-            this._p1 = new Vec2(9999f, -9999f);
-            this._p2 = Vec2.Zero;
+                StartDeathmatch();
+            _deathmatch = new Deathmatch(this);
+            AddThing(_deathmatch);
+            _pendingSpawns = _deathmatch.SpawnPlayers(true);
+            _pendingSpawns = _pendingSpawns.OrderBy<Duck, float>(sp => sp.x).ToList<Duck>();
+            foreach (Thing pendingSpawn in _pendingSpawns)
+                followCam.Add(pendingSpawn);
+            followCam.Adjust();
+            _things.RefreshState();
+            _p1 = new Vec2(9999f, -9999f);
+            _p2 = Vec2.Zero;
             int num = 0;
-            foreach (Duck duck in this.things[typeof(Duck)])
+            foreach (Duck duck in things[typeof(Duck)])
             {
                 if (duck.x < _p1.x)
-                    this._p1 = duck.position;
-                this._p2 += duck.position;
+                    _p1 = duck.position;
+                _p2 += duck.position;
                 ++num;
             }
-            this._p2 /= num;
+            _p2 /= num;
         }
 
         public void StartDeathmatch()
         {
-            this._deathmatchStarted = true;
+            _deathmatchStarted = true;
             Music.LoadAlternateSong(Music.RandomTrack("InGame", Music.currentSong));
             Music.CancelLooping();
         }
 
         public override void Update()
         {
-            if (!this._deathmatchStarted)
+            if (!_deathmatchStarted)
                 return;
-            if (!this.didStart)
+            if (!didStart)
             {
                 Graphics.fade = 1f;
-                this.didStart = true;
+                didStart = true;
             }
-            if (this._deathmatch != null && Music.finished)
+            if (_deathmatch != null && Music.finished)
             {
-                if (this._didPlay)
+                if (_didPlay)
                 {
                     Music.Play(Music.currentSong, false);
                 }
@@ -115,25 +115,25 @@ namespace DuckGame
                     if (Music.pendingSong != null)
                         Music.SwitchSongs();
                     else
-                        this._deathmatch.PlayMusic();
-                    this._didPlay = true;
+                        _deathmatch.PlayMusic();
+                    _didPlay = true;
                 }
             }
-            this._waitFade -= 0.04f;
+            _waitFade -= 0.04f;
             if (_waitFade > 0.0)
                 return;
-            this._waitSpawn -= 0.06f;
+            _waitSpawn -= 0.06f;
             if (_waitSpawn > 0.0)
                 return;
-            if (this._pendingSpawns != null && this._pendingSpawns.Count > 0)
+            if (_pendingSpawns != null && _pendingSpawns.Count > 0)
             {
-                this._waitSpawn = 1.1f;
-                if (this._pendingSpawns.Count == 1)
-                    this._waitSpawn = 2f;
-                Duck pendingSpawn = this._pendingSpawns[0];
+                _waitSpawn = 1.1f;
+                if (_pendingSpawns.Count == 1)
+                    _waitSpawn = 2f;
+                Duck pendingSpawn = _pendingSpawns[0];
                 pendingSpawn.visible = true;
-                this.AddThing(pendingSpawn);
-                this._pendingSpawns.RemoveAt(0);
+                AddThing(pendingSpawn);
+                _pendingSpawns.RemoveAt(0);
                 if (Network.isServer && Network.isActive)
                     Send.Message(new NMSpawnDuck(pendingSpawn.netProfileIndex));
                 Vec3 color = pendingSpawn.profile.persona.color;
@@ -189,13 +189,13 @@ namespace DuckGame
             }
             else if (!DeathmatchLevel._started)
             {
-                this._waitAfterSpawn -= 0.05f;
+                _waitAfterSpawn -= 0.05f;
                 if (_waitAfterSpawn > 0f)
                     return;
-                if (Network.isServer && Network.isActive && this._waitAfterSpawnDings == 0)
+                if (Network.isServer && Network.isActive && _waitAfterSpawnDings == 0)
                     Send.Message(new NMGetReady());
-                ++this._waitAfterSpawnDings;
-                if (this._waitAfterSpawnDings > 2)
+                ++_waitAfterSpawnDings;
+                if (_waitAfterSpawnDings > 2)
                 {
                     Party.Clear();
                     DeathmatchLevel._started = true;
@@ -204,30 +204,30 @@ namespace DuckGame
                 }
                 else
                     SFX.Play("preStartDing");
-                this._waitSpawn = 1.1f;
+                _waitSpawn = 1.1f;
             }
             else
             {
-                this._fontFade -= 0.1f;
+                _fontFade -= 0.1f;
                 if (_fontFade >= 0f)
                     return;
-                this._fontFade = 0f;
+                _fontFade = 0f;
             }
         }
 
         public override void PostDrawLayer(Layer layer)
         {
-            if (layer == Layer.HUD && this._waitAfterSpawnDings > 0 && _fontFade > 0.01f)
+            if (layer == Layer.HUD && _waitAfterSpawnDings > 0 && _fontFade > 0.01f)
             {
-                this._font.scale = new Vec2(2f, 2f);
-                this._font.alpha = this._fontFade;
+                _font.scale = new Vec2(2f, 2f);
+                _font.alpha = _fontFade;
                 string text = "GET";
-                if (this._waitAfterSpawnDings == 2)
+                if (_waitAfterSpawnDings == 2)
                     text = "READY";
-                else if (this._waitAfterSpawnDings == 3)
+                else if (_waitAfterSpawnDings == 3)
                     text = "";
-                float width = this._font.GetWidth(text);
-                this._font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f), (Layer.HUD.camera.height / 2f - this._font.height / 2f), Color.White);
+                float width = _font.GetWidth(text);
+                _font.Draw(text, (Layer.HUD.camera.width / 2f - width / 2f), (Layer.HUD.camera.height / 2f - _font.height / 2f), Color.White);
             }
             base.PostDrawLayer(layer);
         }

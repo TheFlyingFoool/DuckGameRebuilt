@@ -16,41 +16,41 @@ namespace DuckGame
         private LevelLocation _location;
         private WorkshopItem _publishingWorkshopItem;
 
-        public void RerouteMetadata(LevelMetaData data) => this._rerouteMetadata = data;
+        public void RerouteMetadata(LevelMetaData data) => _rerouteMetadata = data;
 
-        public void SetPath(string path) => this._path = path;
+        public void SetPath(string path) => _path = path;
 
-        public string GetPath() => this._path;
+        public string GetPath() => _path;
 
-        public void SetLocation(LevelLocation loc) => this._location = loc;
+        public void SetLocation(LevelLocation loc) => _location = loc;
 
-        public LevelLocation GetLocation() => this._location;
+        public LevelLocation GetLocation() => _location;
 
-        public LevelMetaData metaData => this._rerouteMetadata == null ? this.GetChunk<LevelMetaData>(nameof(metaData)) : this._rerouteMetadata;
+        public LevelMetaData metaData => _rerouteMetadata == null ? GetChunk<LevelMetaData>(nameof(metaData)) : _rerouteMetadata;
 
-        public LevelCustomData customData => this.GetChunk<LevelCustomData>(nameof(customData));
+        public LevelCustomData customData => GetChunk<LevelCustomData>(nameof(customData));
 
-        public WorkshopMetaData workshopData => this.GetChunk<WorkshopMetaData>(nameof(workshopData), false, true);
+        public WorkshopMetaData workshopData => GetChunk<WorkshopMetaData>(nameof(workshopData), false, true);
 
-        public ModMetaData modData => this.GetChunk<ModMetaData>(nameof(modData), false, true);
+        public ModMetaData modData => GetChunk<ModMetaData>(nameof(modData), false, true);
 
-        public WorkshopItem GetPublishingWorkshopItem() => this._publishingWorkshopItem;
+        public WorkshopItem GetPublishingWorkshopItem() => _publishingWorkshopItem;
 
-        public void SetPublishingWorkshopItem(WorkshopItem pItem) => this._publishingWorkshopItem = pItem;
+        public void SetPublishingWorkshopItem(WorkshopItem pItem) => _publishingWorkshopItem = pItem;
 
-        public ProceduralChunkData proceduralData => this.GetChunk<ProceduralChunkData>(nameof(proceduralData));
+        public ProceduralChunkData proceduralData => GetChunk<ProceduralChunkData>(nameof(proceduralData));
 
-        public PreviewData previewData => this.GetChunk<PreviewData>(nameof(previewData));
+        public PreviewData previewData => GetChunk<PreviewData>(nameof(previewData));
 
-        public LevelObjects objects => this.GetChunk<LevelObjects>(nameof(objects));
+        public LevelObjects objects => GetChunk<LevelObjects>(nameof(objects));
 
         public LevelData Clone()
         {
             BinaryClassChunk.fullDeserializeMode = true;
-            LevelData levelData = DuckFile.LoadLevel(this.Serialize().buffer);
+            LevelData levelData = DuckFile.LoadLevel(Serialize().buffer);
             BinaryClassChunk.fullDeserializeMode = false;
-            levelData._path = this._path;
-            levelData._location = this._location;
+            levelData._path = _path;
+            levelData._location = _location;
             return levelData;
         }
     }

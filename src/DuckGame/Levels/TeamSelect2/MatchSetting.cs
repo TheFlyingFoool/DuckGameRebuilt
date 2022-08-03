@@ -37,12 +37,12 @@ namespace DuckGame
 
         public object value
         {
-            get => this._value;
+            get => _value;
             set
             {
-                if (this._value == null && value != null)
-                    this.defaultValue = value;
-                this._value = value;
+                if (_value == null && value != null)
+                    defaultValue = value;
+                _value = value;
             }
         }
     }

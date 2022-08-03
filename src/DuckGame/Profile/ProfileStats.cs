@@ -31,19 +31,19 @@ namespace DuckGame
             switch (info)
             {
                 case StatInfo.KillDeathRatio:
-                    return this.kills / this.timesKilled;
+                    return kills / timesKilled;
                 case StatInfo.Coolness:
                     return coolness;
                 case StatInfo.ProfileScore:
-                    return this.GetProfileScore();
+                    return GetProfileScore();
                 default:
                     return 0f;
             }
         }
 
-        public int GetProfileScore() => (int)Math.Round(Maths.Clamp((float)(this.CalculateProfileScore() * 0.300000011920929 * 250.0), -50f, 200f));
+        public int GetProfileScore() => (int)Math.Round(Maths.Clamp((float)(CalculateProfileScore() * 0.300000011920929 * 250.0), -50f, 200f));
 
-        public string GetCoolnessString() => this._hotnessStrings[(int)Math.Floor((Maths.Clamp(this.GetProfileScore(), -50, 200) + 50) / 250.0 * 8.98999977111816)];
+        public string GetCoolnessString() => _hotnessStrings[(int)Math.Floor((Maths.Clamp(GetProfileScore(), -50, 200) + 50) / 250.0 * 8.98999977111816)];
 
         public string currentTitle { get; set; }
 
@@ -80,17 +80,17 @@ namespace DuckGame
             string key = "";
             if (p != null)
                 key = p.name;
-            if (!this._timesKilledBy.ContainsKey(key))
-                this._timesKilledBy[key] = 0;
-            ++this._timesKilledBy[key];
+            if (!_timesKilledBy.ContainsKey(key))
+                _timesKilledBy[key] = 0;
+            ++_timesKilledBy[key];
         }
 
         public ProfileStats()
         {
-            this.lastPlayed = DateTime.Now;
-            this.lastWon = DateTime.MinValue;
-            this.currentTitle = "";
-            this._nodeName = "Stats";
+            lastPlayed = DateTime.Now;
+            lastWon = DateTime.MinValue;
+            currentTitle = "";
+            _nodeName = "Stats";
         }
 
         public DateTime lastPlayed { get; set; }
@@ -111,23 +111,23 @@ namespace DuckGame
 
         public int GetFans()
         {
-            if (this.loyalFans < 0)
-                this.loyalFans = 0;
-            if (this.unloyalFans < 0)
-                this.unloyalFans = 0;
-            return this.loyalFans + this.unloyalFans;
+            if (loyalFans < 0)
+                loyalFans = 0;
+            if (unloyalFans < 0)
+                unloyalFans = 0;
+            return loyalFans + unloyalFans;
         }
 
         public bool TryFanTransfer(Profile to, float awesomeness, bool loyal)
         {
-            if (this.unloyalFans > 0 && !loyal)
+            if (unloyalFans > 0 && !loyal)
             {
-                --this.unloyalFans;
+                --unloyalFans;
                 return true;
             }
-            if (this.loyalFans > 0 && Rando.Float(3f) < awesomeness)
+            if (loyalFans > 0 && Rando.Float(3f) < awesomeness)
             {
-                this.MakeFanUnloyal();
+                MakeFanUnloyal();
                 if (loyal)
                     return true;
             }
@@ -136,26 +136,26 @@ namespace DuckGame
 
         public void MakeFanLoyal()
         {
-            --this.unloyalFans;
-            ++this.loyalFans;
+            --unloyalFans;
+            ++loyalFans;
         }
 
         public void MakeFanUnloyal()
         {
-            ++this.unloyalFans;
-            --this.loyalFans;
+            ++unloyalFans;
+            --loyalFans;
         }
 
         public bool FanConsidersLeaving(float awfulness, bool loyal)
         {
-            if (this.unloyalFans > 0 && !loyal)
+            if (unloyalFans > 0 && !loyal)
             {
-                --this.unloyalFans;
+                --unloyalFans;
                 return true;
             }
-            if (this.loyalFans > 0 && Rando.Float(3f) < Math.Abs(awfulness))
+            if (loyalFans > 0 && Rando.Float(3f) < Math.Abs(awfulness))
             {
-                this.MakeFanUnloyal();
+                MakeFanUnloyal();
                 if (loyal)
                     return true;
             }
@@ -213,8 +213,8 @@ namespace DuckGame
             float num2 = 0f;
             float num3 = 0f;
             float num4 = 0f;
-            if (this.timesSpawned > 0)
-                num4 = (matchesWon / this.timesSpawned * 0.4f);
+            if (timesSpawned > 0)
+                num4 = (matchesWon / timesSpawned * 0.4f);
             float num5 = num1 + num4;
             if (num4 > 0f)
                 num3 += num4;
@@ -225,8 +225,8 @@ namespace DuckGame
                 name = "MAT",
                 amount = num4
             });
-            if (this.gamesPlayed > 0)
-                num4 = (trophiesWon / this.gamesPlayed * 0.4f);
+            if (gamesPlayed > 0)
+                num4 = (trophiesWon / gamesPlayed * 0.4f);
             float num6 = num5 + num4;
             if (num4 > 0f)
                 num3 += num4;
@@ -237,7 +237,7 @@ namespace DuckGame
                 name = "WON",
                 amount = num4
             });
-            int num7 = this.timesKilled;
+            int num7 = timesKilled;
             if (num7 < 1)
                 num7 = 1;
             float num8 = (float)Math.Log(1f + kills / num7) * 0.4f;
@@ -251,7 +251,7 @@ namespace DuckGame
                 name = "KDR",
                 amount = num8
             });
-            float num10 = (float)(Maths.Clamp((DateTime.Now - this.lastPlayed).Days, 0, 60) / 60f * 0.5f);
+            float num10 = (float)(Maths.Clamp((DateTime.Now - lastPlayed).Days, 0, 60) / 60f * 0.5f);
             float num11 = num9 + num10;
             if (num10 > 0f)
                 num3 += num10;
@@ -295,8 +295,8 @@ namespace DuckGame
                 name = "SHT",
                 amount = num16
             });
-            if (this.bulletsFired > 0)
-                num16 = (float)(bulletsThatHit / this.bulletsFired * 0.2f - 0.1f);
+            if (bulletsFired > 0)
+                num16 = (float)(bulletsThatHit / bulletsFired * 0.2f - 0.1f);
             float num18 = num17 + num16;
             if (num16 > 0f)
                 num3 += num16;
@@ -318,7 +318,7 @@ namespace DuckGame
                 name = "DSM",
                 amount = num19
             });
-            float num21 = (float)-(Math.Log(1f + (this.timesLitOnFire + this.timesMindControlled + this.timesNetted + this.timesDisarmed + this.minesSteppedOn + this.fallDeaths) * 0.0005f) * 0.5f);
+            float num21 = (float)-(Math.Log(1f + (timesLitOnFire + timesMindControlled + timesNetted + timesDisarmed + minesSteppedOn + fallDeaths) * 0.0005f) * 0.5f);
             float num22 = num20 + num21;
             if (num21 > 0f)
                 num3 += num21;
@@ -329,7 +329,7 @@ namespace DuckGame
                 name = "BAD",
                 amount = num21
             });
-            float num23 = (float)(-(Maths.Clamp((DateTime.Now - this.lastWon).Days, 0, 60) / 60f) * 0.3f);
+            float num23 = (float)(-(Maths.Clamp((DateTime.Now - lastWon).Days, 0, 60) / 60f) * 0.3f);
             float num24 = num22 + num23;
             if (num23 > 0f)
                 num3 += num23;
@@ -351,7 +351,7 @@ namespace DuckGame
                 name = "JMP",
                 amount = num25
             });
-            float num27 = (float)Math.Log(1f + this.timeWithMouthOpen * (1f / 1000f)) * 0.5f;
+            float num27 = (float)Math.Log(1f + timeWithMouthOpen * (1f / 1000f)) * 0.5f;
             float num28 = num26 + num27;
             if (num27 > 0f)
                 num3 += num27;

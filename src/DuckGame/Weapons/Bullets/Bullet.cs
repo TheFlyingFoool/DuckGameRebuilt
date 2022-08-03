@@ -73,40 +73,40 @@ namespace DuckGame
 
         public new NetworkConnection connection
         {
-            get => this._connection;
-            set => this._connection = value;
+            get => _connection;
+            set => _connection = value;
         }
 
         public Vec2 end
         {
-            get => this._realEnd;
-            set => this._realEnd = value;
+            get => _realEnd;
+            set => _realEnd = value;
         }
 
         public bool gravityAffected
         {
-            get => this._gravityAffected;
-            set => this._gravityAffected = value;
+            get => _gravityAffected;
+            set => _gravityAffected = value;
         }
 
-        public float travelTime => this._travelTime;
+        public float travelTime => _travelTime;
 
-        public float bulletDistance => this._bulletDistance;
+        public float bulletDistance => _bulletDistance;
 
-        public float bulletSpeed => this._bulletSpeed;
+        public float bulletSpeed => _bulletSpeed;
 
-        public bool didPenetrate => this._didPenetrate;
+        public bool didPenetrate => _didPenetrate;
 
         public Thing firedFrom
         {
-            get => this._firedFrom;
-            set => this._firedFrom = value;
+            get => _firedFrom;
+            set => _firedFrom = value;
         }
 
         public Profile contributeToAccuracy
         {
-            get => this._contributeToAccuracy;
-            set => this._contributeToAccuracy = value;
+            get => _contributeToAccuracy;
+            set => _contributeToAccuracy = value;
         }
 
         public Bullet(
@@ -121,67 +121,67 @@ namespace DuckGame
           bool network = true)
           : base()
         {
-            this._gravityAffected = type.affectedByGravity;
-            this.gravityMultiplier = type.gravityMultiplier;
-            this._bulletLength = type.bulletLength;
-            this.depth = -0.1f;
-            if (owner is Duck && (Math.Abs((owner as Duck).holdAngle) > 0.1f || (owner as Duck).holdObject is Gun && Math.Abs(((owner as Duck).holdObject as Gun).angleDegrees) > 20f && !this._gravityAffected))
-                this.trickshot = true;
+            _gravityAffected = type.affectedByGravity;
+            gravityMultiplier = type.gravityMultiplier;
+            _bulletLength = type.bulletLength;
+            depth = -0.1f;
+            if (owner is Duck && (Math.Abs((owner as Duck).holdAngle) > 0.1f || (owner as Duck).holdObject is Gun && Math.Abs(((owner as Duck).holdObject as Gun).angleDegrees) > 20f && !_gravityAffected))
+                trickshot = true;
             if (!tracer)
             {
-                this._tracePhase = true;
+                _tracePhase = true;
                 if (owner != null && owner is Duck duck)
                 {
-                    this._contributeToAccuracy = duck.profile;
+                    _contributeToAccuracy = duck.profile;
                     if (Highlights.highlightRatingMultiplier != 0f)
                         ++duck.profile.stats.bulletsFired;
                 }
             }
             this.x = xval;
-            this.y = yval;
-            this.ammo = type;
-            this.rebound = rbound;
-            this._owner = owner;
-            this.angle = ang;
-            this._tracer = tracer;
-            this.range = type.range - Rando.Float(type.rangeVariation);
+            y = yval;
+            ammo = type;
+            rebound = rbound;
+            _owner = owner;
+            angle = ang;
+            _tracer = tracer;
+            range = type.range - Rando.Float(type.rangeVariation);
             if (distance > 0f)
-                this.range = distance;
-            this._bulletSpeed = type.bulletSpeed + Rando.Float(type.speedVariation);
-            if (!this.traced)
+                range = distance;
+            _bulletSpeed = type.bulletSpeed + Rando.Float(type.speedVariation);
+            if (!traced)
             {
-                if (this.randomDir)
-                    this.angle = Rando.Float(360f);
-                this.angle += (Rando.Float(30f) - 15f) * (1f - ammo.accuracy);
-                this.travel.x = (float)Math.Cos(Maths.DegToRad(this.angle)) * this.range;
-                this.travel.y = (float)-Math.Sin(Maths.DegToRad(this.angle)) * this.range;
-                this.start = new Vec2(this.x, this.y);
-                this._actualStart = this.start;
-                this.end = this.start + this.travel;
-                this.travelDirNormalized = this.end - this.start;
-                this.travelDirNormalized.Normalize();
-                if (this._gravityAffected)
+                if (randomDir)
+                    angle = Rando.Float(360f);
+                angle += (Rando.Float(30f) - 15f) * (1f - ammo.accuracy);
+                travel.x = (float)Math.Cos(Maths.DegToRad(angle)) * range;
+                travel.y = (float)-Math.Sin(Maths.DegToRad(angle)) * range;
+                start = new Vec2(this.x, y);
+                _actualStart = start;
+                end = start + travel;
+                travelDirNormalized = end - start;
+                travelDirNormalized.Normalize();
+                if (_gravityAffected)
                 {
-                    this.hSpeed = this.travelDirNormalized.x * this._bulletSpeed;
-                    this.vSpeed = this.travelDirNormalized.y * this._bulletSpeed;
-                    this._physicalBullet = new PhysicalBullet
+                    hSpeed = travelDirNormalized.x * _bulletSpeed;
+                    vSpeed = travelDirNormalized.y * _bulletSpeed;
+                    _physicalBullet = new PhysicalBullet
                     {
                         bullet = this,
-                        weight = this.ammo.weight
+                        weight = ammo.weight
                     };
                 }
-                if (this._tracer)
+                if (_tracer)
                 {
-                    this.TravelBullet();
+                    TravelBullet();
                 }
                 else
                 {
-                    this.travelStart = this.start;
-                    this.travelEnd = this.end;
-                    this._totalLength = (this.end - this.start).length;
-                    this._tracePhase = false;
+                    travelStart = start;
+                    travelEnd = end;
+                    _totalLength = (end - start).length;
+                    _tracePhase = false;
                 }
-                this.traced = true;
+                traced = true;
             }
             if (PewPewLaser.inFire)
                 return;
@@ -190,38 +190,38 @@ namespace DuckGame
 
         public Bullet ReverseTravel()
         {
-            ++this.reboundBulletsCreated;
+            ++reboundBulletsCreated;
             Vec2 travelDirNormalized = this.travelDirNormalized;
             Vec2 vec2 = new Vec2(-Math.Sign(this.travelDirNormalized.x), 0f);
             float dir = Maths.PointDirection(Vec2.Zero, travelDirNormalized - vec2 * 2f * Vec2.Dot(travelDirNormalized, vec2));
-            float length = (this._actualStart - this.start).length;
+            float length = (_actualStart - start).length;
             if (length > 2f)
             {
-                float rng = this._totalLength - length;
-                this.Rebound(this.start, dir, rng);
-                this.end = this.start;
-                this.travelEnd = this.end;
-                this.doneTravelling = true;
-                this.position = this.start;
-                this.drawStart = this.start;
+                float rng = _totalLength - length;
+                Rebound(start, dir, rng);
+                end = start;
+                travelEnd = end;
+                doneTravelling = true;
+                position = start;
+                drawStart = start;
                 this.travelDirNormalized = Vec2.Zero;
-                this.OnHit(true);
+                OnHit(true);
             }
-            return this._reboundedBullet;
+            return _reboundedBullet;
         }
 
-        public virtual void DoRebound(Vec2 pos, float dir, float rng) => this.Rebound(pos, dir, rng);
+        public virtual void DoRebound(Vec2 pos, float dir, float rng) => Rebound(pos, dir, rng);
 
         protected virtual void Rebound(Vec2 pos, float dir, float rng)
         {
-            ++this.reboundBulletsCreated;
-            Bullet bullet = this.ammo.GetBullet(pos.x, pos.y, angle: (-dir), firedFrom: this.firedFrom, distance: rng, tracer: this._tracer);
-            bullet._teleporter = this._teleporter;
-            bullet.timesRebounded = this.timesRebounded + 1;
-            bullet.lastReboundSource = this.lastReboundSource;
-            bullet.isLocal = this.isLocal;
-            this._reboundedBullet = bullet;
-            this.reboundCalled = true;
+            ++reboundBulletsCreated;
+            Bullet bullet = ammo.GetBullet(pos.x, pos.y, angle: (-dir), firedFrom: firedFrom, distance: rng, tracer: _tracer);
+            bullet._teleporter = _teleporter;
+            bullet.timesRebounded = timesRebounded + 1;
+            bullet.lastReboundSource = lastReboundSource;
+            bullet.isLocal = isLocal;
+            _reboundedBullet = bullet;
+            reboundCalled = true;
             Level.Add(bullet);
         }
 
@@ -237,38 +237,38 @@ namespace DuckGame
           List<MaterialThing> collideList)
         {
             int num1 = (int)Math.Ceiling(length);
-            this.currentTravel = p1;
+            currentTravel = p1;
             Vec2 zero = Vec2.Zero;
             bool willBeStopped = false;
-            this.reboundCalled = false;
+            reboundCalled = false;
             do
             {
                 Bullet.bulletImpactList.Clear();
                 --num1;
-                --this._totalSteps;
-                Level.current.CollisionBullet(this.currentTravel, Bullet.bulletImpactList);
-                if (!this._tracer)
+                --_totalSteps;
+                Level.current.CollisionBullet(currentTravel, Bullet.bulletImpactList);
+                if (!_tracer)
                 {
-                    for (int index = 0; index < this._currentlyImpacting.Count; ++index)
+                    for (int index = 0; index < _currentlyImpacting.Count; ++index)
                     {
-                        MaterialThing materialThing = this._currentlyImpacting[index];
+                        MaterialThing materialThing = _currentlyImpacting[index];
                         if (!Bullet.bulletImpactList.Contains(materialThing))
                         {
-                            if (this.ammo.deadly)
-                                materialThing.DoExitHit(this, this.currentTravel);
-                            this._currentlyImpacting.RemoveAt(index);
+                            if (ammo.deadly)
+                                materialThing.DoExitHit(this, currentTravel);
+                            _currentlyImpacting.RemoveAt(index);
                             --index;
                         }
                     }
                 }
-                Duck owner = this._owner as Duck;
+                Duck owner = _owner as Duck;
                 for (int index1 = 0; index1 < 2; ++index1)
                 {
                     bool flag1 = index1 == 1;
                     for (int index2 = 0; index2 < Bullet.bulletImpactList.Count; ++index2)
                     {
                         MaterialThing bulletImpact = Bullet.bulletImpactList[index2];
-                        if (flag1 == bulletImpact is IAmADuck && (bulletImpact != this._owner && (!(this._owner is Duck) || !(this._owner as Duck).ExtendsTo(bulletImpact)) || this.ammo.immediatelyDeadly) && (owner == null || bulletImpact != owner.holdObject) && bulletImpact != this._teleporter && (!(bulletImpact is Teleporter) || !this._tracer && this.ammo.canTeleport) && (this.ammo.ownerSafety <= 0 || _travelTime / Maths.IncFrameTimer() >= ammo.ownerSafety || this.firedFrom == null || bulletImpact != this.firedFrom.owner))
+                        if (flag1 == bulletImpact is IAmADuck && (bulletImpact != _owner && (!(_owner is Duck) || !(_owner as Duck).ExtendsTo(bulletImpact)) || ammo.immediatelyDeadly) && (owner == null || bulletImpact != owner.holdObject) && bulletImpact != _teleporter && (!(bulletImpact is Teleporter) || !_tracer && ammo.canTeleport) && (ammo.ownerSafety <= 0 || _travelTime / Maths.IncFrameTimer() >= ammo.ownerSafety || firedFrom == null || bulletImpact != firedFrom.owner))
                         {
                             bool flag2 = false;
                             if (DevConsole.shieldMode && bulletImpact is Duck && (bulletImpact as Duck)._shieldCharge > 0.6f)
@@ -276,183 +276,183 @@ namespace DuckGame
                                 flag2 = true;
                                 willBeStopped = true;
                             }
-                            if (bulletImpact is Duck && !this._tracer && this._contributeToAccuracy != null)
+                            if (bulletImpact is Duck && !_tracer && _contributeToAccuracy != null)
                             {
                                 if (Highlights.highlightRatingMultiplier != 0f)
-                                    ++this._contributeToAccuracy.stats.bulletsThatHit;
-                                this._contributeToAccuracy = null;
+                                    ++_contributeToAccuracy.stats.bulletsThatHit;
+                                _contributeToAccuracy = null;
                             }
-                            if (!flag2 && bulletImpact.thickness >= 0f && !this._currentlyImpacting.Contains(bulletImpact))
+                            if (!flag2 && bulletImpact.thickness >= 0f && !_currentlyImpacting.Contains(bulletImpact))
                             {
-                                if (!this._tracer && !this._tracePhase)
+                                if (!_tracer && !_tracePhase)
                                 {
-                                    if (this.ammo.deadly)
+                                    if (ammo.deadly)
                                     {
-                                        willBeStopped = bulletImpact.DoHit(this, this.currentTravel);
-                                        if (bulletImpact is Duck && (bulletImpact as Duck).dead && !(this.ammo is ATShrapnel) && this.trickshot)
+                                        willBeStopped = bulletImpact.DoHit(this, currentTravel);
+                                        if (bulletImpact is Duck && (bulletImpact as Duck).dead && !(ammo is ATShrapnel) && trickshot)
                                         {
                                             ++Global.data.angleShots;
-                                            if (this._owner != null && this._owner is Duck && (this._owner as Duck).profile != null)
-                                                ++(this._owner as Duck).profile.stats.trickShots;
+                                            if (_owner != null && _owner is Duck && (_owner as Duck).profile != null)
+                                                ++(_owner as Duck).profile.stats.trickShots;
                                         }
                                     }
-                                    else if (this._physicalBullet != null)
+                                    else if (_physicalBullet != null)
                                     {
                                         ImpactedFrom from = currentTravel.y < bulletImpact.top + 1f || currentTravel.y > bulletImpact.bottom - 1f ? (travelDirNormalized.y > 0f ? ImpactedFrom.Top : ImpactedFrom.Bottom) : (travelDirNormalized.x > 0f ? ImpactedFrom.Left : ImpactedFrom.Right);
-                                        this._physicalBullet.position = this.currentTravel;
-                                        this._physicalBullet.velocity = this.velocity;
+                                        _physicalBullet.position = currentTravel;
+                                        _physicalBullet.velocity = velocity;
                                         if (bulletImpact is Block || bulletImpact is IPlatform && travelDirNormalized.y > 0f)
                                             bulletImpact.SolidImpact(_physicalBullet, from);
-                                        else if (bulletImpact.thickness > this.ammo.penetration)
+                                        else if (bulletImpact.thickness > ammo.penetration)
                                             bulletImpact.Impact(_physicalBullet, from, false);
-                                        this.velocity = this._physicalBullet.velocity;
-                                        willBeStopped = bulletImpact.thickness > this.ammo.penetration;
+                                        velocity = _physicalBullet.velocity;
+                                        willBeStopped = bulletImpact.thickness > ammo.penetration;
                                     }
                                     else
-                                        willBeStopped = bulletImpact.thickness > this.ammo.penetration;
-                                    if (Recorder.currentRecording != null && this.hitsLogged < 1)
+                                        willBeStopped = bulletImpact.thickness > ammo.penetration;
+                                    if (Recorder.currentRecording != null && hitsLogged < 1)
                                     {
                                         Recorder.currentRecording.LogAction();
-                                        ++this.hitsLogged;
+                                        ++hitsLogged;
                                     }
                                 }
                                 else
-                                    willBeStopped = bulletImpact.thickness > this.ammo.penetration;
-                                this.OnCollide(this.currentTravel, bulletImpact, willBeStopped);
-                                this._currentlyImpacting.Add(bulletImpact);
+                                    willBeStopped = bulletImpact.thickness > ammo.penetration;
+                                OnCollide(currentTravel, bulletImpact, willBeStopped);
+                                _currentlyImpacting.Add(bulletImpact);
                                 if (bulletImpact.thickness > 1.5f && ammo.penetration >= bulletImpact.thickness)
                                 {
-                                    this._didPenetrate = true;
-                                    this.position = this.currentTravel;
-                                    if (this.isLocal)
-                                        this.OnHit(false);
+                                    _didPenetrate = true;
+                                    position = currentTravel;
+                                    if (isLocal)
+                                        OnHit(false);
                                 }
                             }
-                            bool flag3 = this.reboundCalled;
+                            bool flag3 = reboundCalled;
                             if (willBeStopped)
                             {
                                 willBeStopped = true;
                                 if (bulletImpact is Teleporter)
                                 {
-                                    this._teleporter = bulletImpact as Teleporter;
-                                    if (this._teleporter.link != null)
+                                    _teleporter = bulletImpact as Teleporter;
+                                    if (_teleporter.link != null)
                                     {
-                                        float rng = this._totalLength - (this._actualStart - this.currentTravel).length;
+                                        float rng = _totalLength - (_actualStart - currentTravel).length;
                                         if (rng > 0f)
                                         {
-                                            float dir1 = Maths.PointDirection(this._actualStart, this.currentTravel);
-                                            if ((int)this._teleporter.teleHeight == 2 && (int)this._teleporter._link.teleHeight == 2)
+                                            float dir1 = Maths.PointDirection(_actualStart, currentTravel);
+                                            if ((int)_teleporter.teleHeight == 2 && (int)_teleporter._link.teleHeight == 2)
                                             {
-                                                Vec2 vec2 = this._teleporter.position - this.currentTravel;
-                                                this._teleporter = this._teleporter.link;
-                                                this.Rebound(this._teleporter.position - vec2, dir1, rng);
+                                                Vec2 vec2 = _teleporter.position - currentTravel;
+                                                _teleporter = _teleporter.link;
+                                                Rebound(_teleporter.position - vec2, dir1, rng);
                                             }
                                             else
                                             {
                                                 Vec2 currentTravel = this.currentTravel;
                                                 if (_teleporter._dir.y == 0f)
-                                                    currentTravel.x = this._teleporter._link.x - (this._teleporter.x - this.currentTravel.x) + this.travelDirNormalized.x;
+                                                    currentTravel.x = _teleporter._link.x - (_teleporter.x - this.currentTravel.x) + travelDirNormalized.x;
                                                 else if (_teleporter._dir.x == 0f)
-                                                    currentTravel.y = this._teleporter._link.y - (this._teleporter.y - this.currentTravel.y) + this.travelDirNormalized.y;
-                                                if ((bool)this._teleporter._link.horizontal)
+                                                    currentTravel.y = _teleporter._link.y - (_teleporter.y - this.currentTravel.y) + travelDirNormalized.y;
+                                                if ((bool)_teleporter._link.horizontal)
                                                 {
-                                                    if (currentTravel.x < this._teleporter._link.left + 2f)
-                                                        currentTravel.x = this._teleporter._link.left + 2f;
-                                                    if (currentTravel.x > this._teleporter._link.right - 2f)
-                                                        currentTravel.x = this._teleporter._link.right - 2f;
+                                                    if (currentTravel.x < _teleporter._link.left + 2f)
+                                                        currentTravel.x = _teleporter._link.left + 2f;
+                                                    if (currentTravel.x > _teleporter._link.right - 2f)
+                                                        currentTravel.x = _teleporter._link.right - 2f;
                                                 }
                                                 else
                                                 {
-                                                    if (currentTravel.y < this._teleporter._link.top + 2f)
-                                                        currentTravel.y = this._teleporter._link.top + 2f;
-                                                    if (currentTravel.y > this._teleporter._link.bottom - 2f)
-                                                        currentTravel.y = this._teleporter._link.bottom - 2f;
+                                                    if (currentTravel.y < _teleporter._link.top + 2f)
+                                                        currentTravel.y = _teleporter._link.top + 2f;
+                                                    if (currentTravel.y > _teleporter._link.bottom - 2f)
+                                                        currentTravel.y = _teleporter._link.bottom - 2f;
                                                 }
-                                                this._teleporter = this._teleporter.link;
-                                                this.Rebound(currentTravel, dir1, rng);
+                                                _teleporter = _teleporter.link;
+                                                Rebound(currentTravel, dir1, rng);
                                             }
                                         }
                                         flag3 = true;
                                     }
                                 }
-                                else if (!flag3 && (this.rebound && (!this.ammo.softRebound || bulletImpact.physicsMaterial != PhysicsMaterial.Wood) && bulletImpact is Block || this.reboundOnce))
+                                else if (!flag3 && (rebound && (!ammo.softRebound || bulletImpact.physicsMaterial != PhysicsMaterial.Wood) && bulletImpact is Block || reboundOnce))
                                 {
-                                    float length1 = (this._actualStart - this.currentTravel).length;
+                                    float length1 = (_actualStart - currentTravel).length;
                                     if (length1 > 2f)
                                     {
-                                        float rng = this._totalLength - length1;
+                                        float rng = _totalLength - length1;
                                         if (rng > 0f)
                                         {
                                             Vec2 vec2_1 = Vec2.Zero;
-                                            Vec2 pos = this.currentTravel;
-                                            Vec2 vec2_2 = this.currentTravel - this.travelDirNormalized;
+                                            Vec2 pos = currentTravel;
+                                            Vec2 vec2_2 = currentTravel - this.travelDirNormalized;
                                             float num2 = 0f;
                                             float num3 = 999.9f;
                                             if (currentTravel.y >= bulletImpact.top && vec2_2.y < bulletImpact.top)
                                             {
-                                                num2 = Math.Abs(this.currentTravel.y - vec2_2.y);
+                                                num2 = Math.Abs(currentTravel.y - vec2_2.y);
                                                 if (num2 < num3)
                                                 {
                                                     vec2_1 = new Vec2(0f, -1f);
-                                                    pos = new Vec2(this.currentTravel.x, bulletImpact.top - 1f);
+                                                    pos = new Vec2(currentTravel.x, bulletImpact.top - 1f);
                                                     num3 = num2;
                                                 }
                                             }
                                             if (currentTravel.y <= bulletImpact.bottom && vec2_2.y > bulletImpact.bottom)
                                             {
-                                                num2 = Math.Abs(this.currentTravel.y - vec2_2.y);
+                                                num2 = Math.Abs(currentTravel.y - vec2_2.y);
                                                 if (num2 < num3)
                                                 {
                                                     vec2_1 = new Vec2(0f, 1f);
-                                                    pos = new Vec2(this.currentTravel.x, bulletImpact.bottom + 1f);
+                                                    pos = new Vec2(currentTravel.x, bulletImpact.bottom + 1f);
                                                     num3 = num2;
                                                 }
                                             }
                                             if (currentTravel.x >= bulletImpact.left && vec2_2.x < bulletImpact.left)
                                             {
-                                                num2 = Math.Abs(this.currentTravel.x - vec2_2.x);
+                                                num2 = Math.Abs(currentTravel.x - vec2_2.x);
                                                 if (num2 < num3)
                                                 {
                                                     vec2_1 = new Vec2(1f, 0f);
-                                                    pos = new Vec2(bulletImpact.left - 1f, this.currentTravel.y);
+                                                    pos = new Vec2(bulletImpact.left - 1f, currentTravel.y);
                                                     num3 = num2;
                                                 }
                                             }
 
                                             if (currentTravel.x <= bulletImpact.right && vec2_2.x > bulletImpact.right)
                                             {
-                                                num2 = Math.Abs(this.currentTravel.x - vec2_2.x);
+                                                num2 = Math.Abs(currentTravel.x - vec2_2.x);
                                                 if (num2 < num3)
                                                 {
                                                     vec2_1 = new Vec2(-1f, 0f);
-                                                    pos = new Vec2(bulletImpact.right + 1f, this.currentTravel.y);
+                                                    pos = new Vec2(bulletImpact.right + 1f, currentTravel.y);
                                                 }
                                             }
                                             if (vec2_1 == Vec2.Zero)
                                             {
                                                 vec2_1 = new Vec2(0f, -1f);
-                                                pos = new Vec2(this.currentTravel.x, bulletImpact.top - 1f);
+                                                pos = new Vec2(currentTravel.x, bulletImpact.top - 1f);
                                             }
                                             Vec2 travelDirNormalized = this.travelDirNormalized;
                                             Vec2 p2_1 = travelDirNormalized - vec2_1 * 2f * Vec2.Dot(travelDirNormalized, vec2_1);
-                                            this.lastReboundSource = bulletImpact;
-                                            if (this.reboundOnce)
+                                            lastReboundSource = bulletImpact;
+                                            if (reboundOnce)
                                                 pos += p2_1.normalized * 3f;
                                             float dir2 = Maths.PointDirection(Vec2.Zero, p2_1);
-                                            this.Rebound(pos, dir2, rng);
+                                            Rebound(pos, dir2, rng);
                                         }
                                         flag3 = true;
                                     }
                                     else
                                         willBeStopped = false;
-                                    this.reboundOnce = false;
+                                    reboundOnce = false;
                                 }
-                                this.end = this.currentTravel;
-                                this.travelEnd = this.end;
-                                this.doneTravelling = true;
-                                this.position = this.currentTravel;
-                                this.OnHit(!flag3);
-                                if (this.hitArmor)
+                                end = currentTravel;
+                                travelEnd = end;
+                                doneTravelling = true;
+                                position = currentTravel;
+                                OnHit(!flag3);
+                                if (hitArmor)
                                 {
                                     index1 = 1;
                                     break;
@@ -463,13 +463,13 @@ namespace DuckGame
                     }
                 }
 
-                this.currentTravel += this.travelDirNormalized;
+                currentTravel += travelDirNormalized;
             }
             while (!(num1 <= 0 | willBeStopped));
             return willBeStopped;
         }
 
-        protected virtual void OnHit(bool destroyed) => this.ammo.OnHit(destroyed, this);
+        protected virtual void OnHit(bool destroyed) => ammo.OnHit(destroyed, this);
 
         protected virtual void CheckTravelPath(Vec2 pStart, Vec2 pEnd)
         {
@@ -477,22 +477,22 @@ namespace DuckGame
 
         private void TravelBullet()
         {
-            this.travelDirNormalized = this.end - this.start;
+            travelDirNormalized = end - start;
             if (travelDirNormalized.x == double.NaN || travelDirNormalized.y == double.NaN)
             {
-                this.travelDirNormalized = Vec2.One;
+                travelDirNormalized = Vec2.One;
             }
             else
             {
-                float length = this.travelDirNormalized.length;
+                float length = travelDirNormalized.length;
                 if (length <= 1f / 1000f)
                     return;
-                this.travelDirNormalized.Normalize();
-                this._totalSteps = (int)Math.Ceiling(length);
+                travelDirNormalized.Normalize();
+                _totalSteps = (int)Math.Ceiling(length);
                 List<MaterialThing> collideList = new List<MaterialThing>();
                 Stack<TravelInfo> travelInfoStack = new Stack<TravelInfo>();
-                this.CheckTravelPath(this.start, this.end);
-                travelInfoStack.Push(new TravelInfo(this.start, this.end, length));
+                CheckTravelPath(start, end);
+                travelInfoStack.Push(new TravelInfo(start, end, length));
                 int num = 0;
                 while (travelInfoStack.Count > 0 && num < 128)
                 {
@@ -502,13 +502,13 @@ namespace DuckGame
                     {
                         if (travelInfo.length < 8f)
                         {
-                            if (this.RaycastBullet(travelInfo.p1, travelInfo.p2, this.travelDirNormalized, travelInfo.length, collideList))
+                            if (RaycastBullet(travelInfo.p1, travelInfo.p2, travelDirNormalized, travelInfo.length, collideList))
                                 break;
                         }
                         else
                         {
                             float len = travelInfo.length * 0.5f;
-                            Vec2 vec2 = travelInfo.p1 + this.travelDirNormalized * len;
+                            Vec2 vec2 = travelInfo.p1 + travelDirNormalized * len;
                             travelInfoStack.Push(new TravelInfo(vec2, travelInfo.p2, len));
                             travelInfoStack.Push(new TravelInfo(travelInfo.p1, vec2, len));
                         }
@@ -519,125 +519,125 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this._tracer)
+            if (_tracer)
                 Level.Remove(this);
-            if (!this._initializedDraw)
+            if (!_initializedDraw)
             {
-                this.prev.Add(this.start);
-                this.vel.Add(0f);
-                this._initializedDraw = true;
+                prev.Add(start);
+                vel.Add(0f);
+                _initializedDraw = true;
             }
-            this._travelTime += Maths.IncFrameTimer();
-            this._bulletDistance += this._bulletSpeed;
-            this.startpoint = Maths.Clamp(this._bulletDistance - this._bulletLength, 0f, 99999f);
-            float num = this._bulletDistance;
-            if (this._gravityAffected)
+            _travelTime += Maths.IncFrameTimer();
+            _bulletDistance += _bulletSpeed;
+            startpoint = Maths.Clamp(_bulletDistance - _bulletLength, 0f, 99999f);
+            float num = _bulletDistance;
+            if (_gravityAffected)
             {
-                this.end = this.start + this.velocity;
-                this.vSpeed += PhysicsObject.gravity * this.gravityMultiplier;
-                this.hSpeed *= this.ammo.airFrictionMultiplier;
-                if (this.vSpeed > 8f)
-                    this.vSpeed = 8f;
-                if (!this.doneTravelling)
+                end = start + velocity;
+                vSpeed += PhysicsObject.gravity * gravityMultiplier;
+                hSpeed *= ammo.airFrictionMultiplier;
+                if (vSpeed > 8f)
+                    vSpeed = 8f;
+                if (!doneTravelling)
                 {
-                    this.prev.Add(this.end);
-                    float length = (this.end - this.start).length;
-                    this._totalArc += length;
-                    this.vel.Add(length);
+                    prev.Add(end);
+                    float length = (end - start).length;
+                    _totalArc += length;
+                    vel.Add(length);
                 }
             }
             else
-                this.end = this.start + this.travelDirNormalized * this._bulletSpeed;
-            if (!this.doneTravelling)
+                end = start + travelDirNormalized * _bulletSpeed;
+            if (!doneTravelling)
             {
-                this.TravelBullet();
-                this._totalLength = (this.travelStart - this.travelEnd).length;
-                if (_bulletDistance >= this._totalLength)
+                TravelBullet();
+                _totalLength = (travelStart - travelEnd).length;
+                if (_bulletDistance >= _totalLength)
                 {
-                    this.doneTravelling = true;
-                    this.travelEnd = this.end;
-                    this._totalLength = (this.travelStart - this.end).length;
+                    doneTravelling = true;
+                    travelEnd = end;
+                    _totalLength = (travelStart - end).length;
                 }
-                if (this._gravityAffected && this.doneTravelling)
+                if (_gravityAffected && doneTravelling)
                 {
-                    this.prev[this.prev.Count - 1] = this.travelEnd;
-                    float length = (this.travelEnd - this.start).length;
-                    this._totalArc += length;
-                    this.vel[this.vel.Count - 1] = length;
+                    prev[prev.Count - 1] = travelEnd;
+                    float length = (travelEnd - start).length;
+                    _totalArc += length;
+                    vel[vel.Count - 1] = length;
                 }
             }
             else
             {
-                this.alpha -= 0.1f;
-                if (this.alpha <= 0f)
+                alpha -= 0.1f;
+                if (alpha <= 0f)
                     Level.Remove(this);
             }
-            this.start = this.end;
+            start = end;
             if (num > _totalLength)
-                num = this._totalLength;
+                num = _totalLength;
             if (startpoint > num)
-                this.startpoint = num;
-            this.drawStart = this.travelStart + this.travelDirNormalized * this.startpoint;
-            this.drawEnd = this.travelStart + this.travelDirNormalized * num;
-            this.drawdist = num;
+                startpoint = num;
+            drawStart = travelStart + travelDirNormalized * startpoint;
+            drawEnd = travelStart + travelDirNormalized * num;
+            drawdist = num;
         }
 
         public Vec2 GetPointOnArc(float distanceBack)
         {
             float num1 = 0f;
-            Vec2 pointOnArc = this.prev.Last<Vec2>();
-            for (int index = this.prev.Count - 1; index > 0; --index)
+            Vec2 pointOnArc = prev.Last<Vec2>();
+            for (int index = prev.Count - 1; index > 0; --index)
             {
                 if (index == 0)
-                    return this.prev[index];
+                    return prev[index];
                 float num2 = num1;
-                num1 += this.vel[index];
+                num1 += vel[index];
                 if (num1 >= distanceBack)
                 {
                     if (index == 1)
-                        return this.prev[index - 1];
-                    float num3 = (distanceBack - num2) / this.vel[index];
-                    return this.prev[index] + (this.prev[index - 1] - this.prev[index]) * num3;
+                        return prev[index - 1];
+                    float num3 = (distanceBack - num2) / vel[index];
+                    return prev[index] + (prev[index - 1] - prev[index]) * num3;
                 }
-                pointOnArc = this.prev[index];
+                pointOnArc = prev[index];
             }
             return pointOnArc;
         }
 
         public override void Draw()
         {
-            if (this._tracer || _bulletDistance <= 0.1f)
+            if (_tracer || _bulletDistance <= 0.1f)
                 return;
-            if (this.gravityAffected)
+            if (gravityAffected)
             {
-                if (this.prev.Count < 1)
+                if (prev.Count < 1)
                     return;
-                int num = (int)Math.Ceiling((drawdist - this.startpoint) / 8f);
-                Vec2 p2 = this.prev.Last<Vec2>();
+                int num = (int)Math.Ceiling((drawdist - startpoint) / 8f);
+                Vec2 p2 = prev.Last<Vec2>();
                 for (int index = 0; index < num; ++index)
                 {
-                    Vec2 pointOnArc = this.GetPointOnArc(index * 8);
-                    Graphics.DrawLine(pointOnArc, p2, this.color * (float)(1f - index / num) * this.alpha, this.ammo.bulletThickness, (Depth)0.9f);
-                    if (pointOnArc == this.prev.First<Vec2>())
+                    Vec2 pointOnArc = GetPointOnArc(index * 8);
+                    Graphics.DrawLine(pointOnArc, p2, color * (float)(1f - index / num) * alpha, ammo.bulletThickness, (Depth)0.9f);
+                    if (pointOnArc == prev.First<Vec2>())
                         break;
                     p2 = pointOnArc;
-                    if (index == 0 && this.ammo.sprite != null && !this.doneTravelling)
+                    if (index == 0 && ammo.sprite != null && !doneTravelling)
                     {
-                        this.ammo.sprite.depth = (Depth)1f;
-                        this.ammo.sprite.angleDegrees = -Maths.PointDirection(Vec2.Zero, this.travelDirNormalized);
-                        Graphics.Draw(this.ammo.sprite, p2.x, p2.y);
+                        ammo.sprite.depth = (Depth)1f;
+                        ammo.sprite.angleDegrees = -Maths.PointDirection(Vec2.Zero, travelDirNormalized);
+                        Graphics.Draw(ammo.sprite, p2.x, p2.y);
                     }
                 }
             }
             else
             {
-                if (this.ammo.sprite != null && !this.doneTravelling)
+                if (ammo.sprite != null && !doneTravelling)
                 {
-                    this.ammo.sprite.depth = this.depth + 10;
-                    this.ammo.sprite.angleDegrees = -Maths.PointDirection(Vec2.Zero, this.travelDirNormalized);
-                    Graphics.Draw(this.ammo.sprite, this.drawEnd.x, this.drawEnd.y);
+                    ammo.sprite.depth = depth + 10;
+                    ammo.sprite.angleDegrees = -Maths.PointDirection(Vec2.Zero, travelDirNormalized);
+                    Graphics.Draw(ammo.sprite, drawEnd.x, drawEnd.y);
                 }
-                float length = (this.drawStart - this.drawEnd).length;
+                float length = (drawStart - drawEnd).length;
                 float val = 0f;
                 float num1 = (1f / (length / 8f));
                 float num2 = 1f;
@@ -652,7 +652,7 @@ namespace DuckGame
                     }
                     num2 -= num1;
                     --Graphics.currentDrawIndex;
-                    Graphics.DrawLine(this.drawStart + this.travelDirNormalized * length - this.travelDirNormalized * val, this.drawStart + this.travelDirNormalized * length - this.travelDirNormalized * (val + num3), this.color * num2, this.ammo.bulletThickness, this.depth);
+                    Graphics.DrawLine(drawStart + travelDirNormalized * length - travelDirNormalized * val, drawStart + travelDirNormalized * length - travelDirNormalized * (val + num3), color * num2, ammo.bulletThickness, depth);
                     if (!flag)
                         val += 8f;
                     else

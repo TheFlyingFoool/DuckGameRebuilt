@@ -15,75 +15,75 @@ namespace DuckGame
         public IceWedge(float xpos, float ypos, int dir)
           : base(xpos, ypos)
         {
-            this._canFlipVert = true;
-            this.graphic = new SpriteMap("iceWedge", 17, 17);
-            this.hugWalls = WallHug.Left | WallHug.Right | WallHug.Floor;
-            this.center = new Vec2(8f, 14f);
-            this.collisionSize = new Vec2(14f, 8f);
-            this.collisionOffset = new Vec2(-7f, -6f);
-            this.depth = -0.9f;
+            _canFlipVert = true;
+            graphic = new SpriteMap("iceWedge", 17, 17);
+            hugWalls = WallHug.Left | WallHug.Right | WallHug.Floor;
+            center = new Vec2(8f, 14f);
+            collisionSize = new Vec2(14f, 8f);
+            collisionOffset = new Vec2(-7f, -6f);
+            depth = -0.9f;
         }
 
         public override void EditorUpdate() => base.EditorUpdate();
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this.flipVertical)
+            if (flipVertical)
             {
-                if (with.vSpeed < -1.0 && (this.offDir > 0 && with.hSpeed < 1.0 || this.offDir < 0 && with.hSpeed >= -1.0))
+                if (with.vSpeed < -1.0 && (offDir > 0 && with.hSpeed < 1.0 || offDir < 0 && with.hSpeed >= -1.0))
                     with.hSpeed = (float)(-with.vSpeed * 1.5) * offDir;
-                else if ((this.offDir < 0 && with.right > this.left + 4.0 || this.offDir > 0 && with.left < this.right - 4.0) && (this.offDir > 0 && with.hSpeed < -1.0 || this.offDir < 0 && with.hSpeed > 1.0) && with.vSpeed < 0.5)
+                else if ((offDir < 0 && with.right > left + 4.0 || offDir > 0 && with.left < right - 4.0) && (offDir > 0 && with.hSpeed < -1.0 || offDir < 0 && with.hSpeed > 1.0) && with.vSpeed < 0.5)
                     with.vSpeed = Math.Abs(with.hSpeed * 1.6f);
             }
-            else if (with.vSpeed > 1.0 && (this.offDir > 0 && with.hSpeed < 1.0 || this.offDir < 0 && with.hSpeed >= -1.0))
+            else if (with.vSpeed > 1.0 && (offDir > 0 && with.hSpeed < 1.0 || offDir < 0 && with.hSpeed >= -1.0))
                 with.hSpeed = with.vSpeed * 1.5f * offDir;
-            else if ((this.offDir < 0 && with.right > this.left + 4.0 || this.offDir > 0 && with.left < this.right - 4.0) && (this.offDir > 0 && with.hSpeed < -1.0 || this.offDir < 0 && with.hSpeed > 1.0) && with.vSpeed > -0.5)
+            else if ((offDir < 0 && with.right > left + 4.0 || offDir > 0 && with.left < right - 4.0) && (offDir > 0 && with.hSpeed < -1.0 || offDir < 0 && with.hSpeed > 1.0) && with.vSpeed > -0.5)
                 with.vSpeed = -Math.Abs(with.hSpeed * 1.6f);
             base.OnSoftImpact(with, from);
         }
 
         public override void Draw()
         {
-            this.hugWalls = WallHug.None;
-            if (this.flipVertical)
-                this.hugWalls |= WallHug.Ceiling;
+            hugWalls = WallHug.None;
+            if (flipVertical)
+                hugWalls |= WallHug.Ceiling;
             else
-                this.hugWalls |= WallHug.Floor;
-            if (this.flipHorizontal)
-                this.hugWalls |= WallHug.Right;
+                hugWalls |= WallHug.Floor;
+            if (flipHorizontal)
+                hugWalls |= WallHug.Right;
             else
-                this.hugWalls |= WallHug.Left;
-            this.angleDegrees = 0f;
-            if (this.flipVertical)
+                hugWalls |= WallHug.Left;
+            angleDegrees = 0f;
+            if (flipVertical)
             {
-                if (this.flipHorizontal)
+                if (flipHorizontal)
                 {
-                    this.angleDegrees = 180f;
-                    this.center = new Vec2(8f, 14f);
-                    this.collisionSize = new Vec2(14f, 8f);
-                    this.collisionOffset = new Vec2(-7f, -2f);
+                    angleDegrees = 180f;
+                    center = new Vec2(8f, 14f);
+                    collisionSize = new Vec2(14f, 8f);
+                    collisionOffset = new Vec2(-7f, -2f);
                 }
                 else
                 {
-                    this.angleDegrees = 90f;
-                    this.center = new Vec2(3f, 9f);
-                    this.collisionSize = new Vec2(14f, 8f);
-                    this.collisionOffset = new Vec2(-7f, -2f);
+                    angleDegrees = 90f;
+                    center = new Vec2(3f, 9f);
+                    collisionSize = new Vec2(14f, 8f);
+                    collisionOffset = new Vec2(-7f, -2f);
                 }
             }
-            else if (this.flipHorizontal)
+            else if (flipHorizontal)
             {
-                this.angleDegrees = 270f;
-                this.center = new Vec2(3f, 9f);
-                this.collisionSize = new Vec2(14f, 8f);
-                this.collisionOffset = new Vec2(-7f, -6f);
+                angleDegrees = 270f;
+                center = new Vec2(3f, 9f);
+                collisionSize = new Vec2(14f, 8f);
+                collisionOffset = new Vec2(-7f, -6f);
             }
             else
             {
-                this.angleDegrees = 0f;
-                this.center = new Vec2(8f, 14f);
-                this.collisionSize = new Vec2(14f, 8f);
-                this.collisionOffset = new Vec2(-7f, -6f);
+                angleDegrees = 0f;
+                center = new Vec2(8f, 14f);
+                collisionSize = new Vec2(14f, 8f);
+                collisionOffset = new Vec2(-7f, -6f);
             }
             base.Draw();
         }

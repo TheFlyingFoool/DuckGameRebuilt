@@ -18,8 +18,8 @@ namespace DuckGame
 
         public NMMeltTile(Vec2 pPosition)
         {
-            this.x = (short)pPosition.x;
-            this.y = (short)pPosition.y;
+            x = (short)pPosition.x;
+            y = (short)pPosition.y;
         }
 
         public override void Activate()

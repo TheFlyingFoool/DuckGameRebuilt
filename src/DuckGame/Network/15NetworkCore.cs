@@ -13,9 +13,9 @@ namespace DuckGame
         private Timer _pingTimer;
         public byte index;
 
-        public float GetTotalSeconds() => this._pingTimer == null ? 1f : (float)this._pingTimer.elapsed.TotalSeconds;
+        public float GetTotalSeconds() => _pingTimer == null ? 1f : (float)_pingTimer.elapsed.TotalSeconds;
 
-        public NMNewPing(byte pIndex) => this.index = pIndex;
+        public NMNewPing(byte pIndex) => index = pIndex;
 
         public NMNewPing()
         {
@@ -23,10 +23,10 @@ namespace DuckGame
 
         protected override void OnSerialize()
         {
-            if (this._pingTimer == null)
+            if (_pingTimer == null)
             {
-                this._pingTimer = new Timer();
-                this._pingTimer.Start();
+                _pingTimer = new Timer();
+                _pingTimer.Start();
             }
             base.OnSerialize();
         }

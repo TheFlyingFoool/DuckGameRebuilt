@@ -22,28 +22,28 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this.layer = Layer.HUD;
-            this.depth = (Depth)0.95f;
+            layer = Layer.HUD;
+            depth = (Depth)0.95f;
             float num1 = 300f;
             float num2 = 40f;
-            Vec2 vec2_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0), (float)(this.layer.height / 2.0 - num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0), (float)(this.layer.height / 2.0 + num2 / 2.0));
-            this.position = vec2_1 + new Vec2(4f, 20f);
-            this.itemSize = new Vec2(490f, 16f);
-            this._root = true;
-            this._font = new BitmapFont("biosFont", 8);
+            Vec2 vec2_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0), (float)(layer.height / 2.0 - num2 / 2.0));
+            Vec2 vec2_2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0), (float)(layer.height / 2.0 + num2 / 2.0));
+            position = vec2_1 + new Vec2(4f, 20f);
+            itemSize = new Vec2(490f, 16f);
+            _root = true;
+            _font = new BitmapFont("biosFont", 8);
         }
 
         public void Open(string text, WorkshopItem pItem)
         {
-            this.opened = true;
-            this._text = text;
+            opened = true;
+            _text = text;
             SFX.Play("openClick", 0.4f);
-            this._item = pItem;
+            _item = pItem;
             //this._uploadIndex = 0;
         }
 
-        public void Close() => this.opened = false;
+        public void Close() => opened = false;
 
         public override void Selected(ContextMenu item)
         {
@@ -51,57 +51,57 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (!this.opened)
+            if (!opened)
                 return;
-            if (this._opening)
+            if (_opening)
             {
-                this._opening = false;
-                this._selectedIndex = 1;
+                _opening = false;
+                _selectedIndex = 1;
             }
             float num1 = 300f;
             float num2 = 80f;
-            Vec2 vec2_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0), (float)(this.layer.height / 2.0 - num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0), (float)(this.layer.height / 2.0 + num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0), (float)(layer.height / 2.0 - num2 / 2.0));
+            Vec2 vec2_2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0), (float)(layer.height / 2.0 + num2 / 2.0));
             Vec2 vec2_3 = vec2_1 + new Vec2(18f, 28f);
             Vec2 vec2_4 = new Vec2(120f, 40f);
             Vec2 vec2_5 = vec2_1 + new Vec2(160f, 28f);
             Vec2 vec2_6 = new Vec2(120f, 40f);
-            this._hoverOk = Mouse.x > vec2_3.x && Mouse.x < vec2_3.x + vec2_4.x && Mouse.y > vec2_3.y && Mouse.y < vec2_3.y + vec2_4.y;
+            _hoverOk = Mouse.x > vec2_3.x && Mouse.x < vec2_3.x + vec2_4.x && Mouse.y > vec2_3.y && Mouse.y < vec2_3.y + vec2_4.y;
             if (!Editor.tookInput && Input.Pressed("MENULEFT"))
-                --this._selectedIndex;
+                --_selectedIndex;
             else if (!Editor.tookInput && Input.Pressed("MENURIGHT"))
-                ++this._selectedIndex;
-            if (this._selectedIndex < 0)
-                this._selectedIndex = 0;
-            if (this._selectedIndex <= 1)
+                ++_selectedIndex;
+            if (_selectedIndex < 0)
+                _selectedIndex = 0;
+            if (_selectedIndex <= 1)
                 return;
-            this._selectedIndex = 1;
+            _selectedIndex = 1;
         }
 
         public override void Draw()
         {
-            if (!this.opened)
+            if (!opened)
                 return;
             base.Draw();
             float num1 = 300f;
             float num2 = 60f;
-            Vec2 p1_1 = new Vec2((float)(this.layer.width / 2.0 - num1 / 2.0), (float)(this.layer.height / 2.0 - num2 / 2.0));
-            Vec2 p2 = new Vec2((float)(this.layer.width / 2.0 + num1 / 2.0), (float)(this.layer.height / 2.0 + num2 / 2.0));
-            Graphics.DrawRect(p1_1, p2, new Color(70, 70, 70), this.depth, false);
-            Graphics.DrawRect(p1_1, p2, new Color(30, 30, 30), this.depth - 1);
-            Graphics.DrawRect(p1_1 + new Vec2(4f, 20f), p2 + new Vec2(-4f, -4f), new Color(10, 10, 10), this.depth + 1);
-            Graphics.DrawRect(p1_1 + new Vec2(2f, 2f), new Vec2(p2.x - 2f, p1_1.y + 16f), new Color(70, 70, 70), this.depth + 1);
-            Graphics.DrawString(this._text, p1_1 + new Vec2(5f, 5f), Color.White, this.depth + 2);
-            this._font.scale = new Vec2(1f, 1f);
+            Vec2 p1_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0), (float)(layer.height / 2.0 - num2 / 2.0));
+            Vec2 p2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0), (float)(layer.height / 2.0 + num2 / 2.0));
+            Graphics.DrawRect(p1_1, p2, new Color(70, 70, 70), depth, false);
+            Graphics.DrawRect(p1_1, p2, new Color(30, 30, 30), depth - 1);
+            Graphics.DrawRect(p1_1 + new Vec2(4f, 20f), p2 + new Vec2(-4f, -4f), new Color(10, 10, 10), depth + 1);
+            Graphics.DrawRect(p1_1 + new Vec2(2f, 2f), new Vec2(p2.x - 2f, p1_1.y + 16f), new Color(70, 70, 70), depth + 1);
+            Graphics.DrawString(_text, p1_1 + new Vec2(5f, 5f), Color.White, depth + 2);
+            _font.scale = new Vec2(1f, 1f);
             Vec2 p1_2 = p1_1 + new Vec2(14f, 38f);
             Vec2 vec2 = new Vec2(270f, 16f);
-            TransferProgress uploadProgress = this._item.GetUploadProgress();
+            TransferProgress uploadProgress = _item.GetUploadProgress();
             float x = uploadProgress.bytesDownloaded / (float)uploadProgress.bytesTotal;
-            Graphics.DrawRect(p1_2, p1_2 + vec2 * new Vec2(x, 1f), this._hoverOk ? new Color(80, 80, 80) : new Color(30, 30, 30), this.depth + 2);
+            Graphics.DrawRect(p1_2, p1_2 + vec2 * new Vec2(x, 1f), _hoverOk ? new Color(80, 80, 80) : new Color(30, 30, 30), depth + 2);
             if (uploadProgress.bytesTotal == 0UL)
-                this._font.Draw("Waiting...", p1_2.x, p1_2.y - 12f, Color.White, this.depth + 3);
+                _font.Draw("Waiting...", p1_2.x, p1_2.y - 12f, Color.White, depth + 3);
             else
-                this._font.Draw("Uploading " + uploadProgress.bytesDownloaded.ToString() + "/" + uploadProgress.bytesTotal.ToString() + "B", p1_2.x, (float)(p1_2.y - 12.0), Color.White, this.depth + 3);
+                _font.Draw("Uploading " + uploadProgress.bytesDownloaded.ToString() + "/" + uploadProgress.bytesTotal.ToString() + "B", p1_2.x, (float)(p1_2.y - 12.0), Color.White, depth + 3);
         }
     }
 }

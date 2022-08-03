@@ -14,17 +14,17 @@ namespace DuckGame
         public OpenPresent(float xpos, float ypos, int frame)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("presents", 16, 16)
+            _sprite = new SpriteMap("presents", 16, 16)
             {
                 frame = frame + 8
             };
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 13f);
-            this.hSpeed = 0f;
-            this.vSpeed = 0f;
-            this._bounceEfficiency = 0f;
-            this.depth = (Depth)0.9f;
-            this._life = 5f;
+            graphic = _sprite;
+            center = new Vec2(8f, 13f);
+            hSpeed = 0f;
+            vSpeed = 0f;
+            _bounceEfficiency = 0f;
+            depth = (Depth)0.9f;
+            _life = 5f;
         }
 
         public override void Update() => base.Update();

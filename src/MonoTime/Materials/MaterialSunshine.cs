@@ -15,8 +15,8 @@ namespace DuckGame
 
         public MaterialSunshine(RenderTarget2D col)
         {
-            this._effect = Content.Load<MTEffect>("Shaders/sunshine");
-            this._colorMap = col;
+            _effect = Content.Load<MTEffect>("Shaders/sunshine");
+            _colorMap = col;
         }
 
         public override void Apply()
@@ -24,7 +24,7 @@ namespace DuckGame
             DuckGame.Graphics.device.Textures[1] = (Texture2D)_colorMap;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointClamp;
             DuckGame.Graphics.device.SamplerStates[0] = SamplerState.PointClamp;
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

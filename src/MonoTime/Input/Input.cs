@@ -634,11 +634,12 @@ namespace DuckGame
         {
             get
             {
-                if (DuckGame.Input.debuggerInputOverride)
-                    return false;
-                return !Graphics.inFocus || DuckGame.Input._ignoreInput;
+                return !Input.debuggerInputOverride && (!Graphics.inFocus || Input._ignoreInput);
             }
-            set => DuckGame.Input._ignoreInput = value;
+            set
+            {
+                Input._ignoreInput = value;
+            }
         }
 
         public static List<Sprite> buttonStyles => DuckGame.Input._buttonStyles;

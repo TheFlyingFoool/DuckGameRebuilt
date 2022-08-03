@@ -15,9 +15,9 @@ namespace DuckGame
 
         public LightOccluder(Vec2 p, Vec2 pp, Color c)
         {
-            this.p1 = p;
-            this.p2 = pp;
-            this.color = c;
+            p1 = p;
+            p2 = pp;
+            color = c;
         }
     }
 }

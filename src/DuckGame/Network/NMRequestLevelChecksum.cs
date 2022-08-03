@@ -22,35 +22,35 @@ namespace DuckGame
 
         public NMRequestLevelChecksum(string pLevel, uint pChecksum, int pLevelIndex)
         {
-            this.level = pLevel;
-            this.checksum = pChecksum;
-            this.levelIndex = pLevelIndex;
+            level = pLevel;
+            checksum = pChecksum;
+            levelIndex = pLevelIndex;
         }
 
-        public override bool Update() => Level.current.networkIndex >= this.levelIndex || Math.Abs(Level.current.networkIndex - this.levelIndex) > 100;
+        public override bool Update() => Level.current.networkIndex >= levelIndex || Math.Abs(Level.current.networkIndex - levelIndex) > 100;
 
         public override void Activate()
         {
-            if (!(Level.current is GameLevel) || Level.current.networkIndex != this.levelIndex)
+            if (!(Level.current is GameLevel) || Level.current.networkIndex != levelIndex)
                 return;
-            List<LevelData> allLevels = Content.GetAllLevels(this.level);
+            List<LevelData> allLevels = Content.GetAllLevels(level);
             foreach (LevelData levelData2 in allLevels)
             {
-                if ((int)levelData2.GetChecksum() == (int)this.checksum)
+                if ((int)levelData2.GetChecksum() == (int)checksum)
                 {
                     LevelData levelData1 = levelData2;
                     break;
                 }
             }
             LevelData levelData3 = null;
-            (Level.current as XMLLevel)._level = this.level;
+            (Level.current as XMLLevel)._level = level;
             if (levelData3 == null)
             {
                 ++DuckNetwork.core.levelTransferSession;
                 DuckNetwork.core.compressedLevelData = null;
                 DuckNetwork.core.levelTransferSize = 0;
                 DuckNetwork.core.levelTransferProgress = 0;
-                Send.Message(new NMClientNeedsLevelData(Level.current.networkIndex, DuckNetwork.core.levelTransferSession), this.connection);
+                Send.Message(new NMClientNeedsLevelData(Level.current.networkIndex, DuckNetwork.core.levelTransferSession), connection);
             }
             else
             {

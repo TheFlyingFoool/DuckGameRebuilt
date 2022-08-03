@@ -91,34 +91,34 @@ namespace DuckGame
         public Deathmatch(Level l)
           : base()
         {
-            this._level = l;
-            this.layer = Layer.HUD;
+            _level = l;
+            layer = Layer.HUD;
             //this._bottomWedge = new Sprite("bottomWedge");
         }
 
         public override void Initialize()
         {
-            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
-            this._pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
-            this._confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
+            _pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
+            _confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             UIDivider component = new UIDivider(true, 0.8f);
-            component.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(this._pauseGroup), UIAlign.Left), true);
+            component.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup), UIAlign.Left), true);
             component.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
             component.leftSection.Add(new UIText(" ", Color.White, UIAlign.Left), true);
             component.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_pauseMenu, _confirmMenu), UIAlign.Left), true);
             component.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
-            this._pauseMenu.Add(component, true);
-            this._pauseMenu.Close();
-            this._pauseGroup.Add(_pauseMenu, false);
-            Options.AddMenus(this._pauseGroup);
-            Options.openOnClose = this._pauseMenu;
-            this._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
-            this._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
-            this._confirmMenu.Close();
-            this._pauseGroup.Add(_confirmMenu, false);
-            this._pauseGroup.Close();
-            this._pauseGroup.Update();
-            this._pauseGroup.Update();
+            _pauseMenu.Add(component, true);
+            _pauseMenu.Close();
+            _pauseGroup.Add(_pauseMenu, false);
+            Options.AddMenus(_pauseGroup);
+            Options.openOnClose = _pauseMenu;
+            _confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
+            _confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit)), true);
+            _confirmMenu.Close();
+            _pauseGroup.Add(_confirmMenu, false);
+            _pauseGroup.Close();
+            _pauseGroup.Update();
+            _pauseGroup.Update();
             Level.Add(_pauseGroup);
             Highlights.StartRound();
         }
@@ -337,24 +337,24 @@ namespace DuckGame
         {
             if (Graphics.fade > 0.9f && Input.Pressed("START") && !NetworkDebugger.enabled)
             {
-                this._pauseGroup.Open();
-                this._pauseMenu.Open();
-                MonoMain.pauseMenu = this._pauseGroup;
-                if (this._paused)
+                _pauseGroup.Open();
+                _pauseMenu.Open();
+                MonoMain.pauseMenu = _pauseGroup;
+                if (_paused)
                     return;
                 Music.Pause();
                 SFX.Play("pause", 0.6f);
-                this._paused = true;
+                _paused = true;
             }
             else
             {
-                if (this._paused && MonoMain.pauseMenu == null)
+                if (_paused && MonoMain.pauseMenu == null)
                 {
-                    this._paused = false;
+                    _paused = false;
                     SFX.Play("resume", 0.6f);
                     Music.Resume();
                 }
-                if (this._quit.value)
+                if (_quit.value)
                 {
                     Graphics.fade -= 0.04f;
                     if (Graphics.fade >= 0.01f)
@@ -365,7 +365,7 @@ namespace DuckGame
                 {
                     if (Music.finished)
                         Deathmatch._wait -= 0.0006f;
-                    if (!this._matchOver)
+                    if (!_matchOver)
                     {
                         List<Team> teamList = new List<Team>();
                         foreach (Team team in Teams.all)
@@ -394,15 +394,15 @@ namespace DuckGame
                         }
                         if (teamList.Count <= 1)
                         {
-                            this._matchOver = true;
+                            _matchOver = true;
                             ++Deathmatch.numMatches;
                             if (Deathmatch.numMatches >= Deathmatch.roundsBetweenIntermission || Deathmatch.showdown)
                                 Deathmatch.numMatches = 0;
                         }
                     }
-                    if (this._matchOver)
-                        this._deadTimer -= 0.005f;
-                    if (_deadTimer < 0.5 && !this._addedPoints)
+                    if (_matchOver)
+                        _deadTimer -= 0.005f;
+                    if (_deadTimer < 0.5 && !_addedPoints)
                     {
                         List<Team> collection = new List<Team>();
                         List<Team> source = new List<Team>();
@@ -471,14 +471,14 @@ namespace DuckGame
                                 }
                             }
                         }
-                        this._addedPoints = true;
+                        _addedPoints = true;
                     }
                     if (_deadTimer < 0.1f && !Deathmatch._endedHighlights)
                     {
                         Deathmatch._endedHighlights = true;
                         Highlights.FinishRound();
                     }
-                    if (_deadTimer >= 0.0 || this.switched || Network.isActive)
+                    if (_deadTimer >= 0.0 || switched || Network.isActive)
                         return;
                     foreach (Team team in Teams.all)
                     {

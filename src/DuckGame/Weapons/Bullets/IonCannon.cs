@@ -18,39 +18,39 @@ namespace DuckGame
         public IonCannon(Vec2 pos, Vec2 target)
           : base(pos.x, pos.y)
         {
-            this._target = target;
+            _target = target;
         }
 
         public override void Initialize()
         {
-            Vec2 vec2_1 = this.position - this._target;
+            Vec2 vec2_1 = position - _target;
             vec2_1 = vec2_1.Rotate(Maths.DegToRad(-90f), Vec2.Zero);
             Vec2 normalized1 = vec2_1.normalized;
-            Vec2 vec2_2 = this.position - this._target;
+            Vec2 vec2_2 = position - _target;
             vec2_2 = vec2_2.Rotate(Maths.DegToRad(90f), Vec2.Zero);
             Vec2 normalized2 = vec2_2.normalized;
-            Level.Add(new LaserLine(this.position, this._target - this.position, normalized1, 4f, Color.White, 1f, 0.03f));
-            Level.Add(new LaserLine(this.position, this._target - this.position, normalized2, 4f, Color.White, 1f, 0.03f));
-            Level.Add(new LaserLine(this.position, this._target - this.position, normalized1, 2.5f, Color.White, 2f, 0.03f));
-            Level.Add(new LaserLine(this.position, this._target - this.position, normalized2, 2.5f, Color.White, 2f, 0.03f));
-            if (!this.serverVersion)
+            Level.Add(new LaserLine(position, _target - position, normalized1, 4f, Color.White, 1f, 0.03f));
+            Level.Add(new LaserLine(position, _target - position, normalized2, 4f, Color.White, 1f, 0.03f));
+            Level.Add(new LaserLine(position, _target - position, normalized1, 2.5f, Color.White, 2f, 0.03f));
+            Level.Add(new LaserLine(position, _target - position, normalized2, 2.5f, Color.White, 2f, 0.03f));
+            if (!serverVersion)
                 return;
             float num1 = 64f;
             float num2 = 12f;
             float num3 = num1 / (num2 - 1f);
-            Vec2 vec2_3 = this.position + normalized1 * num1 / 2f;
+            Vec2 vec2_3 = position + normalized1 * num1 / 2f;
             HashSet<ushort> varBlocks = new HashSet<ushort>();
             List<BlockGroup> blockGroupList = new List<BlockGroup>();
             for (int index = 0; index < num2; ++index)
             {
                 Vec2 vec2_4 = vec2_3 + normalized2 * num3 * index;
-                foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(vec2_4, vec2_4 + (this._target - this.position)))
+                foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(vec2_4, vec2_4 + (_target - position)))
                 {
                     physicsObject.Destroy(new DTIncinerate(this));
                     physicsObject._sleeping = false;
                     physicsObject.vSpeed = -2f;
                 }
-                foreach (BlockGroup blockGroup1 in Level.CheckLineAll<BlockGroup>(vec2_4, vec2_4 + (this._target - this.position)))
+                foreach (BlockGroup blockGroup1 in Level.CheckLineAll<BlockGroup>(vec2_4, vec2_4 + (_target - position)))
                 {
                     if (blockGroup1 != null)
                     {
@@ -58,7 +58,7 @@ namespace DuckGame
                         List<Block> blockList = new List<Block>();
                         foreach (Block block in blockGroup2.blocks)
                         {
-                            if (Collision.Line(vec2_4, vec2_4 + (this._target - this.position), block.rectangle))
+                            if (Collision.Line(vec2_4, vec2_4 + (_target - position), block.rectangle))
                             {
                                 block.shouldWreck = true;
                                 if (block is AutoBlock)
@@ -68,7 +68,7 @@ namespace DuckGame
                         blockGroupList.Add(blockGroup1);
                     }
                 }
-                foreach (Block block in Level.CheckLineAll<Block>(vec2_4, vec2_4 + (this._target - this.position)))
+                foreach (Block block in Level.CheckLineAll<Block>(vec2_4, vec2_4 + (_target - position)))
                 {
                     switch (block)
                     {
@@ -98,7 +98,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            this._blast = Maths.CountDown(this._blast, 0.05f);
+            _blast = Maths.CountDown(_blast, 0.05f);
             if (_blast >= 0.0)
                 return;
             Level.Remove(this);
@@ -106,22 +106,22 @@ namespace DuckGame
 
         public override void Draw()
         {
-            double num1 = Maths.NormalizeSection(this._blast, 0f, 0.2f);
-            double num2 = Maths.NormalizeSection(this._blast, 0.6f, 1f);
-            Vec2 vec2_1 = this.position - this._target;
+            double num1 = Maths.NormalizeSection(_blast, 0f, 0.2f);
+            double num2 = Maths.NormalizeSection(_blast, 0.6f, 1f);
+            Vec2 vec2_1 = position - _target;
             vec2_1 = vec2_1.Rotate(Maths.DegToRad(-90f), Vec2.Zero);
             Vec2 normalized1 = vec2_1.normalized;
-            Vec2 vec2_2 = this.position - this._target;
+            Vec2 vec2_2 = position - _target;
             vec2_2 = vec2_2.Rotate(Maths.DegToRad(90f), Vec2.Zero);
             Vec2 normalized2 = vec2_2.normalized;
             float num3 = 64f;
             float num4 = 7f;
             float num5 = num3 / (num4 - 1f);
-            Vec2 vec2_3 = this.position + normalized1 * num3 / 2f;
+            Vec2 vec2_3 = position + normalized1 * num3 / 2f;
             for (int index = 0; index < num4; ++index)
             {
                 Vec2 p1 = vec2_3 + normalized2 * num5 * index;
-                Graphics.DrawLine(p1, p1 + (this._target - this.position), Color.SkyBlue * (this._blast * 0.9f), 2f, (Depth)0.9f);
+                Graphics.DrawLine(p1, p1 + (_target - position), Color.SkyBlue * (_blast * 0.9f), 2f, (Depth)0.9f);
             }
         }
     }

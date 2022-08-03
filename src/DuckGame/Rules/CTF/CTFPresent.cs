@@ -14,21 +14,21 @@ namespace DuckGame
         public CTFPresent(float xpos, float ypos, bool team)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("ctf/present", 18, 17)
+            _sprite = new SpriteMap("ctf/present", 18, 17)
             {
                 frame = team ? 0 : 1
             };
-            this.graphic = _sprite;
-            this.center = new Vec2(9f, 8f);
-            this.collisionOffset = new Vec2(-9f, -6f);
-            this.collisionSize = new Vec2(18f, 14f);
-            this.weight = 7f;
-            this.flammable = 0.8f;
+            graphic = _sprite;
+            center = new Vec2(9f, 8f);
+            collisionOffset = new Vec2(-9f, -6f);
+            collisionSize = new Vec2(18f, 14f);
+            weight = 7f;
+            flammable = 0.8f;
         }
 
         public override void OnPressAction()
         {
-            if (this.duck == null || this.duck.ctfTeamIndex == this._sprite.frame)
+            if (duck == null || duck.ctfTeamIndex == _sprite.frame)
                 return;
             base.OnPressAction();
         }
@@ -38,7 +38,7 @@ namespace DuckGame
             if (type is DTIncinerate)
             {
                 Level.Remove(this);
-                Level.Add(SmallSmoke.New(this.x, this.y));
+                Level.Add(SmallSmoke.New(x, y));
             }
             return false;
         }

@@ -29,21 +29,21 @@ namespace DuckGame
 
         protected override void OnHit(bool destroyed)
         {
-            if (!destroyed || !this.isLocal)
+            if (!destroyed || !isLocal)
                 return;
             for (int index = 0; index < 1; ++index)
             {
-                ExplosionPart explosionPart = new ExplosionPart(this.x - 8f + Rando.Float(16f), this.y - 8f + Rando.Float(16f));
+                ExplosionPart explosionPart = new ExplosionPart(x - 8f + Rando.Float(16f), y - 8f + Rando.Float(16f));
                 explosionPart.xscale *= 0.7f;
                 explosionPart.yscale *= 0.7f;
                 Level.Add(explosionPart);
             }
             SFX.Play("explode");
-            RumbleManager.AddRumbleEvent(this.position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
-            foreach (MaterialThing materialThing in Level.CheckCircleAll<TV>(this.position, 20f))
+            RumbleManager.AddRumbleEvent(position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
+            foreach (MaterialThing materialThing in Level.CheckCircleAll<TV>(position, 20f))
                 materialThing.Destroy(new DTImpact(this));
             List<Bullet> varBullets = new List<Bullet>();
-            Vec2 vec2 = this.position - this.travelDirNormalized;
+            Vec2 vec2 = position - travelDirNormalized;
             for (int index = 0; index < 12; ++index)
             {
                 float ang = (float)(index * 30.0 - 10.0) + Rando.Float(20f);
@@ -58,36 +58,36 @@ namespace DuckGame
                 varBullets.Add(bullet);
                 Level.Add(bullet);
             }
-            if (Network.isActive && this.isLocal)
+            if (Network.isActive && isLocal)
             {
                 Send.Message(new NMFireGun(null, varBullets, 0, false), NetMessagePriority.ReliableOrdered);
                 varBullets.Clear();
             }
-            foreach (Window ignore in Level.CheckCircleAll<Window>(this.position, 20f))
+            foreach (Window ignore in Level.CheckCircleAll<Window>(position, 20f))
             {
-                if (Level.CheckLine<Block>(this.position, ignore.position, ignore) == null)
+                if (Level.CheckLine<Block>(position, ignore.position, ignore) == null)
                     ignore.Destroy(new DTImpact(this));
             }
         }
 
         protected override void Rebound(Vec2 pos, float dir, float rng)
         {
-            GrenadeBullet bullet = this.ammo.GetBullet(pos.x, pos.y, angle: (-dir), firedFrom: this.firedFrom, distance: rng, tracer: this._tracer) as GrenadeBullet;
-            bullet._teleporter = this._teleporter;
-            bullet._isVolatile = this._isVolatile;
-            bullet.isLocal = this.isLocal;
-            bullet.lastReboundSource = this.lastReboundSource;
-            bullet.connection = this.connection;
-            this.reboundCalled = true;
+            GrenadeBullet bullet = ammo.GetBullet(pos.x, pos.y, angle: (-dir), firedFrom: firedFrom, distance: rng, tracer: _tracer) as GrenadeBullet;
+            bullet._teleporter = _teleporter;
+            bullet._isVolatile = _isVolatile;
+            bullet.isLocal = isLocal;
+            bullet.lastReboundSource = lastReboundSource;
+            bullet.connection = connection;
+            reboundCalled = true;
             Level.Add(bullet);
             SFX.Play("grenadeBounce", 0.8f, Rando.Float(-0.1f, 0.1f));
         }
 
         public override void Update()
         {
-            this._isVolatile -= 0.06f;
+            _isVolatile -= 0.06f;
             if (_isVolatile <= 0.0)
-                this.rebound = false;
+                rebound = false;
             base.Update();
         }
     }

@@ -15,23 +15,23 @@ namespace DuckGame
         public MallardBillboard(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("billboard", 217, 126);
-            this.graphic = _sprite;
-            this.center = new Vec2(126f, 77f);
-            this._collisionSize = new Vec2(167f, 6f);
-            this._collisionOffset = new Vec2(-84f, -2f);
-            this.editorOffset = new Vec2(0f, 40f);
-            this.depth = -0.5f;
-            this._editorName = "Mallard Billboard";
-            this.thickness = 0.2f;
-            this.hugWalls = WallHug.Floor;
+            _sprite = new SpriteMap("billboard", 217, 126);
+            graphic = _sprite;
+            center = new Vec2(126f, 77f);
+            _collisionSize = new Vec2(167f, 6f);
+            _collisionOffset = new Vec2(-84f, -2f);
+            editorOffset = new Vec2(0f, 40f);
+            depth = -0.5f;
+            _editorName = "Mallard Billboard";
+            thickness = 0.2f;
+            hugWalls = WallHug.Floor;
         }
 
         public override void Initialize() => base.Initialize();
 
         public override void Draw()
         {
-            this._sprite.frame = this.offDir > 0 ? 0 : 1;
+            _sprite.frame = offDir > 0 ? 0 : 1;
             base.Draw();
         }
     }

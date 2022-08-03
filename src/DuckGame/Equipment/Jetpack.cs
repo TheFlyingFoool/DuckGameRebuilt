@@ -22,65 +22,65 @@ namespace DuckGame
         public Jetpack(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("jetpack", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-5f, -5f);
-            this.collisionSize = new Vec2(11f, 12f);
-            this._offset = new Vec2(-3f, 3f);
-            this._equippedDepth = -15;
-            this._jumpMod = true;
-            this.thickness = 0.1f;
-            this._wearOffset = new Vec2(-2f, 0f);
-            this.editorTooltip = "Allows you to fly like some kind of soaring bird.";
+            _sprite = new SpriteMap("jetpack", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-5f, -5f);
+            collisionSize = new Vec2(11f, 12f);
+            _offset = new Vec2(-3f, 3f);
+            _equippedDepth = -15;
+            _jumpMod = true;
+            thickness = 0.1f;
+            _wearOffset = new Vec2(-2f, 0f);
+            editorTooltip = "Allows you to fly like some kind of soaring bird.";
         }
 
-        public override void OnPressAction() => this._on = true;
+        public override void OnPressAction() => _on = true;
 
-        public override void OnReleaseAction() => this._on = false;
+        public override void OnReleaseAction() => _on = false;
 
         public override void Update()
         {
             base.Update();
-            this._sprite.frame = (int)(_heat * 7.0);
-            if (this._equippedDuck != null)
+            _sprite.frame = (int)(_heat * 7.0);
+            if (_equippedDuck != null)
             {
                 float num1 = 0f;
-                this._offset = new Vec2(-3f, 3f);
-                this.angle = 0f;
-                if (this._equippedDuck.sliding && this._equippedDuck._trapped == null)
+                _offset = new Vec2(-3f, 3f);
+                angle = 0f;
+                if (_equippedDuck.sliding && _equippedDuck._trapped == null)
                 {
-                    if (this._equippedDuck.offDir > 0)
-                        this.angle = -1.570796f;
+                    if (_equippedDuck.offDir > 0)
+                        angle = -1.570796f;
                     else
-                        this.angle = 1.570796f;
-                    this._offset.y += 12f;
+                        angle = 1.570796f;
+                    _offset.y += 12f;
                     num1 -= 6f;
                 }
-                if (this._equippedDuck.crouch && !this._equippedDuck.sliding)
-                    this._offset.y += 4f;
-                this.collisionOffset = new Vec2(0f, -9999f);
-                this.collisionSize = new Vec2(0f, 0f);
-                this.solid = false;
+                if (_equippedDuck.crouch && !_equippedDuck.sliding)
+                    _offset.y += 4f;
+                collisionOffset = new Vec2(0f, -9999f);
+                collisionSize = new Vec2(0f, 0f);
+                solid = false;
                 PhysicsObject physicsObject1 = _equippedDuck;
-                if (this._equippedDuck._trapped != null)
+                if (_equippedDuck._trapped != null)
                     physicsObject1 = _equippedDuck._trapped;
-                else if (this._equippedDuck.ragdoll != null && this._equippedDuck.ragdoll.part1 != null)
+                else if (_equippedDuck.ragdoll != null && _equippedDuck.ragdoll.part1 != null)
                     physicsObject1 = _equippedDuck.ragdoll.part1;
-                this._sprite.flipH = this._equippedDuck._sprite.flipH;
-                if (this._on && _heat < 1.0)
+                _sprite.flipH = _equippedDuck._sprite.flipH;
+                if (_on && _heat < 1.0)
                 {
-                    if (this._equippedDuck._trapped == null && this._equippedDuck.crouch)
-                        this._equippedDuck.sliding = true;
-                    if (this.isServerForObject)
+                    if (_equippedDuck._trapped == null && _equippedDuck.crouch)
+                        _equippedDuck.sliding = true;
+                    if (isServerForObject)
                         Global.data.jetFuelUsed.valueFloat += Maths.IncFrameTimer();
-                    this._heat += 11f / 1000f;
+                    _heat += 11f / 1000f;
                     if (physicsObject1 is RagdollPart)
                     {
                         ++Global.data.timeJetpackedAsRagdoll;
                         float angle = this.angle;
                         this.angle = physicsObject1.angle;
-                        Vec2 vec2_1 = this.Offset(new Vec2(0f, 8f));
+                        Vec2 vec2_1 = Offset(new Vec2(0f, 8f));
                         Level.Add(new JetpackSmoke(vec2_1.x, vec2_1.y));
                         this.angle = angle;
                         Vec2 vec2_2 = physicsObject1.velocity;
@@ -88,24 +88,24 @@ namespace DuckGame
                         {
                             RagdollPart ragdollPart = physicsObject1 as RagdollPart;
                             ragdollPart.addWeight = 0.2f;
-                            this._equippedDuck.ragdoll.jetting = true;
+                            _equippedDuck.ragdoll.jetting = true;
                             float num2 = -(physicsObject1.angle - 1.5707964f);
                             Vec2 vec2_3 = Vec2.Zero;
-                            vec2_2 = this._equippedDuck.inputProfile.leftStick;
+                            vec2_2 = _equippedDuck.inputProfile.leftStick;
                             if (vec2_2.length > 0.1f)
                             {
-                                vec2_3 = new Vec2(this._equippedDuck.inputProfile.leftStick.x, -this._equippedDuck.inputProfile.leftStick.y);
+                                vec2_3 = new Vec2(_equippedDuck.inputProfile.leftStick.x, -_equippedDuck.inputProfile.leftStick.y);
                             }
                             else
                             {
                                 vec2_3 = new Vec2(0f, 0f);
-                                if (this._equippedDuck.inputProfile.Down("LEFT"))
+                                if (_equippedDuck.inputProfile.Down("LEFT"))
                                     --vec2_3.x;
-                                if (this._equippedDuck.inputProfile.Down("RIGHT"))
+                                if (_equippedDuck.inputProfile.Down("RIGHT"))
                                     ++vec2_3.x;
-                                if (this._equippedDuck.inputProfile.Down("UP"))
+                                if (_equippedDuck.inputProfile.Down("UP"))
                                     --vec2_3.y;
-                                if (this._equippedDuck.inputProfile.Down("DOWN"))
+                                if (_equippedDuck.inputProfile.Down("DOWN"))
                                     ++vec2_3.y;
                             }
                             if (vec2_3.length < 0.1f)
@@ -122,13 +122,13 @@ namespace DuckGame
                     }
                     else
                     {
-                        Level.Add(new JetpackSmoke(this.x, this.y + 8f + num1));
-                        if (this.angle > 0f)
+                        Level.Add(new JetpackSmoke(x, y + 8f + num1));
+                        if (angle > 0f)
                         {
                             if (physicsObject1.hSpeed < 6f)
                                 physicsObject1.hSpeed += 0.9f;
                         }
-                        else if (this.angle < 0f)
+                        else if (angle < 0f)
                         {
                             if (physicsObject1.hSpeed > -6f)
                                 physicsObject1.hSpeed -= 0.9f;
@@ -138,20 +138,20 @@ namespace DuckGame
                     }
                 }
                 if (_heat >= 1f)
-                    this._on = false;
+                    _on = false;
                 if (!physicsObject1.grounded)
                     return;
                 if (_heat > 0f)
-                    this._heat -= 0.25f;
+                    _heat -= 0.25f;
                 else
-                    this._heat = 0f;
+                    _heat = 0f;
             }
             else
             {
-                this._sprite.flipH = false;
-                this.collisionOffset = new Vec2(-5f, -5f);
-                this.collisionSize = new Vec2(11f, 12f);
-                this.solid = true;
+                _sprite.flipH = false;
+                collisionOffset = new Vec2(-5f, -5f);
+                collisionSize = new Vec2(11f, 12f);
+                solid = true;
             }
         }
     }

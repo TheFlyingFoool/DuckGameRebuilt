@@ -15,6 +15,6 @@ namespace DuckGame
         {
         }
 
-        public NMClientLoadedLevel(byte idx) => this.levelIndex = idx;
+        public NMClientLoadedLevel(byte idx) => levelIndex = idx;
     }
 }

@@ -15,25 +15,25 @@ namespace DuckGame
 
         public CameraBoundsNew()
         {
-            this._contextMenuFilter.Add("wide");
-            this._contextMenuFilter.Add("high");
-            this._editorName = "Camera Bounds";
-            this.editorTooltip = "A boundary that keeps moving cameras locked within it!";
-            this.Wide._tooltip = "Width of the boundary area (in Pixels)";
-            this.High._tooltip = "Height of the boundary area (in Pixels)";
+            _contextMenuFilter.Add("wide");
+            _contextMenuFilter.Add("high");
+            _editorName = "Camera Bounds";
+            editorTooltip = "A boundary that keeps moving cameras locked within it!";
+            Wide._tooltip = "Width of the boundary area (in Pixels)";
+            High._tooltip = "Height of the boundary area (in Pixels)";
         }
 
         public override void Initialize()
         {
-            this.wide = (EditorProperty<int>)this.Wide.value;
-            this.high = (EditorProperty<int>)this.High.value;
+            wide = (EditorProperty<int>)Wide.value;
+            high = (EditorProperty<int>)High.value;
             base.Initialize();
         }
 
         public override void Draw()
         {
-            this.wide = (EditorProperty<int>)this.Wide.value;
-            this.high = (EditorProperty<int>)this.High.value;
+            wide = (EditorProperty<int>)Wide.value;
+            high = (EditorProperty<int>)High.value;
             base.Draw();
         }
     }

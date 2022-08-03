@@ -16,13 +16,13 @@ namespace DuckGame
         public override object classValue
         {
             get => byteValue;
-            set => this.byteValue = (byte)value;
+            set => byteValue = (byte)value;
         }
 
         public override ushort ushortValue
         {
-            get => this._soundIndexBlock;
-            set => this._soundIndexBlock = value;
+            get => _soundIndexBlock;
+            set => _soundIndexBlock = value;
         }
 
         public NetSoundsBinding(string field)
@@ -33,7 +33,7 @@ namespace DuckGame
         public NetSoundsBinding(GhostPriority p, string field)
           : base(field, 2)
         {
-            this._priority = p;
+            _priority = p;
         }
     }
 }

@@ -14,14 +14,14 @@ namespace DuckGame
         private bool _isOnline;
         private static Dictionary<string, Dictionary<bool, bool>> _filters = new Dictionary<string, Dictionary<bool, bool>>();
 
-        public LSFilterMods(bool isOnline) => this._isOnline = isOnline;
+        public LSFilterMods(bool isOnline) => _isOnline = isOnline;
 
         private bool Cache(string lev, bool result)
         {
             Dictionary<bool, bool> dictionary;
             if (!LSFilterMods._filters.TryGetValue(lev, out dictionary))
                 LSFilterMods._filters[lev] = dictionary = new Dictionary<bool, bool>();
-            dictionary[this._isOnline] = result;
+            dictionary[_isOnline] = result;
             return result;
         }
 
@@ -31,16 +31,16 @@ namespace DuckGame
             {
                 Dictionary<bool, bool> dictionary = null;
                 bool flag;
-                if (LSFilterMods._filters.TryGetValue(lev, out dictionary) && dictionary.TryGetValue(this._isOnline, out flag))
+                if (LSFilterMods._filters.TryGetValue(lev, out dictionary) && dictionary.TryGetValue(_isOnline, out flag))
                     return flag;
                 LevelData levelData = DuckFile.LoadLevelHeaderCached(lev);
                 if (levelData == null)
-                    return this.Cache(lev, false);
+                    return Cache(lev, false);
                 ModMetaData modData = levelData.modData;
-                if (this._isOnline)
+                if (_isOnline)
                 {
                     if (modData.hasLocalMods && !MonoMain.modDebugging)
-                        return this.Cache(lev, false);
+                        return Cache(lev, false);
                     HashSet<ulong> other = new HashSet<ulong>();
                     foreach (Mod accessibleMod in (IEnumerable<Mod>)ModLoader.accessibleMods)
                     {
@@ -50,13 +50,13 @@ namespace DuckGame
                             other.Add(accessibleMod.workshopIDFacade);
                     }
                     if (!modData.workshopIDs.IsSubsetOf(other))
-                        return this.Cache(lev, false);
+                        return Cache(lev, false);
                 }
-                return this.Cache(lev, true);
+                return Cache(lev, true);
             }
             catch
             {
-                return this.Cache(lev, false);
+                return Cache(lev, false);
             }
         }
     }

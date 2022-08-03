@@ -22,30 +22,30 @@ namespace DuckGame
 
         public string IdentifierString()
         {
-            if (this.checksum == 0U)
-                this.CalculateChecksum();
-            return this.path + "@" + this.checksum.ToString();
+            if (checksum == 0U)
+                CalculateChecksum();
+            return path + "@" + checksum.ToString();
         }
 
         public void ApplyToChunk(CustomTileDataChunk chunk)
         {
-            chunk.path = this.path;
-            chunk.textureData = Editor.TextureToString(this.texture);
-            chunk.verticalWidthThick = this.verticalWidthThick;
-            chunk.verticalWidth = this.verticalWidth;
-            chunk.horizontalHeight = this.horizontalHeight;
-            chunk.leftNubber = this.leftNubber;
-            chunk.rightNubber = this.rightNubber;
-            if (this.checksum == 0U)
-                this.CalculateChecksum();
-            chunk.textureChecksum = this.checksum;
+            chunk.path = path;
+            chunk.textureData = Editor.TextureToString(texture);
+            chunk.verticalWidthThick = verticalWidthThick;
+            chunk.verticalWidth = verticalWidth;
+            chunk.horizontalHeight = horizontalHeight;
+            chunk.leftNubber = leftNubber;
+            chunk.rightNubber = rightNubber;
+            if (checksum == 0U)
+                CalculateChecksum();
+            chunk.textureChecksum = checksum;
         }
 
         public void CalculateChecksum(string texString = "")
         {
-            if (this.texture != null && texString == "")
-                texString = Editor.TextureToString(this.texture);
-            this.checksum = CRC32.Generate(texString);
+            if (texture != null && texString == "")
+                texString = Editor.TextureToString(texture);
+            checksum = CRC32.Generate(texString);
         }
     }
 }

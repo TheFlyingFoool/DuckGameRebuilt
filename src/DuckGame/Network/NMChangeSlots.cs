@@ -21,26 +21,26 @@ namespace DuckGame
 
         public NMChangeSlots(List<byte> pSlots, bool pOriginalConfiguration)
         {
-            this.slots = pSlots;
-            this.originalConfiguration = pOriginalConfiguration;
+            slots = pSlots;
+            originalConfiguration = pOriginalConfiguration;
         }
 
         protected override void OnSerialize()
         {
-            this._serializedData.Write(this.originalConfiguration);
-            this._serializedData.Write((byte)this.slots.Count);
-            for (int index = 0; index < this.slots.Count; ++index)
-                this._serializedData.Write(this.slots[index]);
+            _serializedData.Write(originalConfiguration);
+            _serializedData.Write((byte)slots.Count);
+            for (int index = 0; index < slots.Count; ++index)
+                _serializedData.Write(slots[index]);
             base.OnSerialize();
         }
 
         public override void OnDeserialize(BitBuffer msg)
         {
-            this.originalConfiguration = msg.ReadBool();
-            this.slots = new List<byte>();
+            originalConfiguration = msg.ReadBool();
+            slots = new List<byte>();
             byte num = msg.ReadByte();
             for (int index = 0; index < num; ++index)
-                this.slots.Add(msg.ReadByte());
+                slots.Add(msg.ReadByte());
             base.OnDeserialize(msg);
         }
 
@@ -49,12 +49,12 @@ namespace DuckGame
             if (!Network.isServer)
             {
                 int index = 0;
-                foreach (int slot in this.slots)
+                foreach (int slot in slots)
                 {
                     if (index < DuckNetwork.profiles.Count)
                     {
                         DuckNetwork.profiles[index].slotType = (SlotType)slot;
-                        if (this.originalConfiguration && index < DG.MaxPlayers)
+                        if (originalConfiguration && index < DG.MaxPlayers)
                             DuckNetwork.profiles[index].originalSlotType = (SlotType)slot;
                     }
                     ++index;

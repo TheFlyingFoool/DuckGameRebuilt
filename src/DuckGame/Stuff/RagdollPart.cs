@@ -42,145 +42,145 @@ namespace DuckGame
 
         public override NetworkConnection connection
         {
-            get => this._doll != null ? this._doll.connection : base.connection;
+            get => _doll != null ? _doll.connection : base.connection;
             set
             {
-                if (this._setting)
+                if (_setting)
                     return;
-                this._setting = true;
-                if (this._doll != null)
-                    this._doll.connection = value;
+                _setting = true;
+                if (_doll != null)
+                    _doll.connection = value;
                 base.connection = value;
-                this._setting = false;
+                _setting = false;
             }
         }
 
         public override NetIndex8 authority
         {
-            get => this._doll != null ? this._doll.authority : base.authority;
+            get => _doll != null ? _doll.authority : base.authority;
             set
             {
-                if (this._setting)
+                if (_setting)
                     return;
-                this._setting = true;
-                if (this._doll != null)
-                    this._doll.authority = value;
+                _setting = true;
+                if (_doll != null)
+                    _doll.authority = value;
                 base.authority = value;
-                this._setting = false;
+                _setting = false;
             }
         }
 
-        public override float currentGravity => PhysicsObject.gravity * this.gravMultiplier * this.floatMultiplier * this.extraGravMultiplier;
+        public override float currentGravity => PhysicsObject.gravity * gravMultiplier * floatMultiplier * extraGravMultiplier;
 
         public byte netPart
         {
-            get => (byte)this._part;
-            set => this.part = value;
+            get => (byte)_part;
+            set => part = value;
         }
 
         public RagdollPart joint
         {
-            get => this._joint;
-            set => this._joint = value;
+            get => _joint;
+            set => _joint = value;
         }
 
         public int part
         {
-            get => this._part;
+            get => _part;
             set
             {
-                int part = this._part;
-                this._part = value;
-                if (this._doll != null && this._doll._duck != null)
-                    this._persona = this._doll._duck.persona;
+                int part = _part;
+                _part = value;
+                if (_doll != null && _doll._duck != null)
+                    _persona = _doll._duck.persona;
                 if (this.part == 0)
-                    this.center = new Vec2(16f, 13f);
+                    center = new Vec2(16f, 13f);
                 else if (this.part == 1)
-                    this.center = new Vec2(16f, 13f);
+                    center = new Vec2(16f, 13f);
                 else if (this.part == 3)
-                    this.center = new Vec2(6f, 8f);
+                    center = new Vec2(6f, 8f);
                 else
-                    this.center = new Vec2(8f, 8f);
+                    center = new Vec2(8f, 8f);
                 if (this.part == 0 || this.part == 1)
                 {
                     if (this.part == 0)
                     {
-                        this.collisionOffset = new Vec2(-4f, -5f);
-                        this.collisionSize = new Vec2(8f, 10f);
+                        collisionOffset = new Vec2(-4f, -5f);
+                        collisionSize = new Vec2(8f, 10f);
                     }
                     else
                     {
-                        this.collisionOffset = new Vec2(-4f, -5f);
-                        this.collisionSize = new Vec2(8f, 10f);
+                        collisionOffset = new Vec2(-4f, -5f);
+                        collisionSize = new Vec2(8f, 10f);
                     }
                 }
                 else
                 {
-                    this.collisionOffset = new Vec2(-1f, -1f);
-                    this.collisionSize = new Vec2(2f, 2f);
+                    collisionOffset = new Vec2(-1f, -1f);
+                    collisionSize = new Vec2(2f, 2f);
                 }
-                if (this._persona == null || this._prevPersona == this._persona && part == this._part)
+                if (_persona == null || _prevPersona == _persona && part == _part)
                     return;
-                this._quackSprite = this._persona.quackSprite.CloneMap();
-                this._sprite = this._persona.sprite.CloneMap();
-                this._quackSprite.frame = 18;
-                this._sprite.frame = 18;
-                if (part != this._part || this.graphic == null)
-                    this.graphic = _sprite;
-                this._quackSprite.frame = this._part == 0 ? 18 : 19;
-                this._sprite.frame = this._part == 0 ? 18 : 19;
-                if (this.doll != null && this.doll.captureDuck != null && this.doll.captureDuck.eyesClosed)
+                _quackSprite = _persona.quackSprite.CloneMap();
+                _sprite = _persona.sprite.CloneMap();
+                _quackSprite.frame = 18;
+                _sprite.frame = 18;
+                if (part != _part || graphic == null)
+                    graphic = _sprite;
+                _quackSprite.frame = _part == 0 ? 18 : 19;
+                _sprite.frame = _part == 0 ? 18 : 19;
+                if (doll != null && doll.captureDuck != null && doll.captureDuck.eyesClosed)
                 {
-                    this._quackSprite.frame = this._part == 0 ? 20 : 19;
-                    this._sprite.frame = this._part == 0 ? 20 : 19;
+                    _quackSprite.frame = _part == 0 ? 20 : 19;
+                    _sprite.frame = _part == 0 ? 20 : 19;
                 }
-                this._prevPersona = this._persona;
+                _prevPersona = _persona;
             }
         }
 
         public override float weight
         {
-            get => this._weight + this.addWeight;
-            set => this._weight = value;
+            get => _weight + addWeight;
+            set => _weight = value;
         }
 
         public override void Zap(Thing zapper)
         {
-            if (this._doll != null)
-                this._doll.Zap(zapper);
+            if (_doll != null)
+                _doll.Zap(zapper);
             base.Zap(zapper);
         }
 
         public void MakeZekeBear()
         {
-            this._quackSprite = new SpriteMap("teddy", 32, 32);
-            this._sprite = this._quackSprite;
-            this._quackSprite.frame = 0;
-            this._sprite.frame = 0;
-            this.graphic = _sprite;
-            this._quackSprite.frame = this._part == 0 ? 0 : 1;
-            this._sprite.frame = this._part == 0 ? 0 : 1;
-            if (this.part == 0)
-                this.center = new Vec2(16f, 16f);
-            else if (this.part == 1)
-                this.center = new Vec2(16f, 13f);
-            else if (this.part == 3)
-                this.center = new Vec2(6f, 8f);
+            _quackSprite = new SpriteMap("teddy", 32, 32);
+            _sprite = _quackSprite;
+            _quackSprite.frame = 0;
+            _sprite.frame = 0;
+            graphic = _sprite;
+            _quackSprite.frame = _part == 0 ? 0 : 1;
+            _sprite.frame = _part == 0 ? 0 : 1;
+            if (part == 0)
+                center = new Vec2(16f, 16f);
+            else if (part == 1)
+                center = new Vec2(16f, 13f);
+            else if (part == 3)
+                center = new Vec2(6f, 8f);
             else
-                this.center = new Vec2(8f, 8f);
-            this._zekeBear = true;
+                center = new Vec2(8f, 8f);
+            _zekeBear = true;
         }
 
         public DuckPersona _persona
         {
-            get => this._rlPersona;
-            set => this._rlPersona = value;
+            get => _rlPersona;
+            set => _rlPersona = value;
         }
 
         public Ragdoll doll
         {
-            get => this._doll;
-            set => this._doll = value;
+            get => _doll;
+            set => _doll = value;
         }
 
         public RagdollPart(
@@ -194,28 +194,28 @@ namespace DuckGame
         {
             if (persona == null)
                 persona = Persona.Duck1;
-            this._sprite = new SpriteMap("crate", 16, 16);
-            this._campDuck = new SpriteMap("campduck", 32, 32);
-            this.graphic = _sprite;
-            this._editorName = "Crate";
-            this.thickness = 0.5f;
-            this.weight = 0.05f;
-            this.bouncy = 0.6f;
-            this._holdOffset = new Vec2(2f, 0f);
-            this.flammable = 0.3f;
-            this.tapeable = false;
-            this.SortOutDetails(xpos, ypos, p, persona, off, doll);
+            _sprite = new SpriteMap("crate", 16, 16);
+            _campDuck = new SpriteMap("campduck", 32, 32);
+            graphic = _sprite;
+            _editorName = "Crate";
+            thickness = 0.5f;
+            weight = 0.05f;
+            bouncy = 0.6f;
+            _holdOffset = new Vec2(2f, 0f);
+            flammable = 0.3f;
+            tapeable = false;
+            SortOutDetails(xpos, ypos, p, persona, off, doll);
         }
 
         public override void Extinquish()
         {
-            if (this.extinguishing)
+            if (extinguishing)
                 return;
-            this.extinguishing = true;
-            if (this.doll != null && this.doll.captureDuck != null)
-                this.doll.captureDuck.Extinquish();
+            extinguishing = true;
+            if (doll != null && doll.captureDuck != null)
+                doll.captureDuck.Extinquish();
             base.Extinquish();
-            this.extinguishing = false;
+            extinguishing = false;
         }
 
         public void SortOutDetails(
@@ -226,38 +226,38 @@ namespace DuckGame
           int off,
           Ragdoll doll)
         {
-            this.x = xpos;
-            this.y = ypos;
-            this.hSpeed = 0f;
-            this.vSpeed = 0f;
-            this._part = this.part;
-            this.offDir = (sbyte)off;
-            this.airFrictionMult = 0.3f;
-            this._persona = persona;
-            this._doll = doll;
-            this.part = p;
+            x = xpos;
+            y = ypos;
+            hSpeed = 0f;
+            vSpeed = 0f;
+            _part = part;
+            offDir = (sbyte)off;
+            airFrictionMult = 0.3f;
+            _persona = persona;
+            _doll = doll;
+            part = p;
         }
 
         public override void OnTeleport()
         {
-            this.position.x += Math.Sign(this.hSpeed) * 8;
-            this.doll.part1.position = this.position;
-            this.doll.part2.position = this.position;
-            this.doll.part3.position = this.position;
-            this.doll.part1.hSpeed = this.hSpeed;
-            this.doll.part2.hSpeed = this.hSpeed;
-            this.doll.part3.hSpeed = this.hSpeed;
+            position.x += Math.Sign(hSpeed) * 8;
+            doll.part1.position = position;
+            doll.part2.position = position;
+            doll.part3.position = position;
+            doll.part1.hSpeed = hSpeed;
+            doll.part2.hSpeed = hSpeed;
+            doll.part3.hSpeed = hSpeed;
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (this._doll == null)
+            if (_doll == null)
                 return false;
-            if (bullet.isLocal && this.owner == null)
+            if (bullet.isLocal && owner == null)
                 Thing.Fondle(_doll, DuckNetwork.localConnection);
-            if (bullet.isLocal && this._doll.captureDuck != null)
+            if (bullet.isLocal && _doll.captureDuck != null)
             {
-                Duck captureDuck = this._doll.captureDuck;
+                Duck captureDuck = _doll.captureDuck;
                 Equipment equipment1 = captureDuck.GetEquipment(typeof(ChestPlate));
                 if (equipment1 != null && Collision.Point(hitPos, equipment1))
                 {
@@ -283,51 +283,51 @@ namespace DuckGame
                     return true;
                 }
             }
-            Feather feather = Feather.New(0f, 0f, this._persona);
+            Feather feather = Feather.New(0f, 0f, _persona);
             feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1.0 + Rando.Float(1f)));
             feather.vSpeed = -Rando.Float(2f);
             feather.position = hitPos;
             Level.Add(feather);
             if (bullet.isLocal)
             {
-                this.hSpeed += bullet.travelDirNormalized.x * bullet.ammo.impactPower;
-                this.vSpeed += bullet.travelDirNormalized.y * bullet.ammo.impactPower;
+                hSpeed += bullet.travelDirNormalized.x * bullet.ammo.impactPower;
+                vSpeed += bullet.travelDirNormalized.y * bullet.ammo.impactPower;
                 SFX.Play("thwip", pitch: Rando.Float(-0.1f, 0.1f));
-                this._doll.Shot(bullet);
+                _doll.Shot(bullet);
             }
             return base.Hit(bullet, hitPos);
         }
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (this._doll == null)
+            if (_doll == null)
                 return false;
             if (type is DTIncinerate)
             {
-                if (!this._doll.removeFromLevel && this._doll.captureDuck != null && this._doll.captureDuck.dead)
+                if (!_doll.removeFromLevel && _doll.captureDuck != null && _doll.captureDuck.dead)
                 {
-                    CookedDuck t = new CookedDuck(this._doll.x, this._doll.y);
-                    Level.Add(SmallSmoke.New(this._doll.x + Rando.Float(-4f, 4f), this._doll.y + Rando.Float(-4f, 4f)));
-                    Level.Add(SmallSmoke.New(this._doll.x + Rando.Float(-4f, 4f), this._doll.y + Rando.Float(-4f, 4f)));
-                    Level.Add(SmallSmoke.New(this._doll.x + Rando.Float(-4f, 4f), this._doll.y + Rando.Float(-4f, 4f)));
-                    this.ReturnItemToWorld(t);
-                    t.vSpeed = this.vSpeed - 2f;
-                    t.hSpeed = this.hSpeed;
+                    CookedDuck t = new CookedDuck(_doll.x, _doll.y);
+                    Level.Add(SmallSmoke.New(_doll.x + Rando.Float(-4f, 4f), _doll.y + Rando.Float(-4f, 4f)));
+                    Level.Add(SmallSmoke.New(_doll.x + Rando.Float(-4f, 4f), _doll.y + Rando.Float(-4f, 4f)));
+                    Level.Add(SmallSmoke.New(_doll.x + Rando.Float(-4f, 4f), _doll.y + Rando.Float(-4f, 4f)));
+                    ReturnItemToWorld(t);
+                    t.vSpeed = vSpeed - 2f;
+                    t.hSpeed = hSpeed;
                     Level.Add(t);
                     SFX.Play("ignite", pitch: (Rando.Float(0.3f) - 0.3f));
                     Level.Remove(_doll);
-                    this._doll.captureDuck._cooked = t;
+                    _doll.captureDuck._cooked = t;
                 }
                 else
                 {
-                    if (this._doll.captureDuck == null)
+                    if (_doll.captureDuck == null)
                         return false;
-                    this._doll.captureDuck.Kill(type);
+                    _doll.captureDuck.Kill(type);
                     return true;
                 }
             }
-            if (!this.destroyed)
-                this._doll.Killed(type);
+            if (!destroyed)
+                _doll.Killed(type);
             return false;
         }
 
@@ -337,238 +337,238 @@ namespace DuckGame
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this._doll.captureDuck != null && !this._doll.captureDuck.dead && (this.part == 0 || this.part == 1) && this.totalImpactPower > 5.0 && _doll.captureDuck.quack < 0.25)
+            if (_doll.captureDuck != null && !_doll.captureDuck.dead && (part == 0 || part == 1) && totalImpactPower > 5.0 && _doll.captureDuck.quack < 0.25)
             {
-                this._doll.captureDuck.Swear();
-                float intensityToSet = Math.Min(this.totalImpactPower * 0.01f, 1f);
+                _doll.captureDuck.Swear();
+                float intensityToSet = Math.Min(totalImpactPower * 0.01f, 1f);
                 if (intensityToSet > 0.0500000007450581)
-                    RumbleManager.AddRumbleEvent(this._doll.captureDuck.profile, new RumbleEvent(intensityToSet, 0.05f, 0.6f));
+                    RumbleManager.AddRumbleEvent(_doll.captureDuck.profile, new RumbleEvent(intensityToSet, 0.05f, 0.6f));
             }
             base.OnSolidImpact(with, from);
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this._doll == null || !this.isServerForObject || !with.isServerForObject || with is RagdollPart || with is FeatherVolume || with == this.owner || with == this._doll.holdingOwner || with == this._doll.captureDuck)
+            if (_doll == null || !isServerForObject || !with.isServerForObject || with is RagdollPart || with is FeatherVolume || with == owner || with == _doll.holdingOwner || with == _doll.captureDuck)
                 return;
             if (with is Duck)
             {
                 Holdable lastHoldItem = (with as Duck)._lastHoldItem;
-                if ((with as Duck)._timeSinceThrow < 15 && (lastHoldItem == this._doll.part1 || lastHoldItem == this._doll.part2 || lastHoldItem == this._doll.part3))
+                if ((with as Duck)._timeSinceThrow < 15 && (lastHoldItem == _doll.part1 || lastHoldItem == _doll.part2 || lastHoldItem == _doll.part3))
                     return;
             }
-            if (this._doll.captureDuck == null)
+            if (_doll.captureDuck == null)
                 return;
-            Vec2 position = this._doll.captureDuck.position;
-            this._doll.captureDuck.collisionOffset = this.collisionOffset;
-            this._doll.captureDuck.collisionSize = this.collisionSize;
-            this._doll.captureDuck.position = this.position;
-            this._doll.captureDuck.OnSoftImpact(with, from);
-            this._doll.captureDuck.position = position;
+            Vec2 position = _doll.captureDuck.position;
+            _doll.captureDuck.collisionOffset = collisionOffset;
+            _doll.captureDuck.collisionSize = collisionSize;
+            _doll.captureDuck.position = this.position;
+            _doll.captureDuck.OnSoftImpact(with, from);
+            _doll.captureDuck.position = position;
         }
 
         public void UpdateLastReasonablePosition(Vec2 pPosition)
         {
             if (pPosition.y <= -7000.0 || pPosition.y >= Level.activeLevel.lowestPoint + 400.0)
                 return;
-            this._lastReasonablePosition = pPosition;
+            _lastReasonablePosition = pPosition;
         }
 
         public override void Update()
         {
-            if (this._doll == null || this.y > Level.activeLevel.lowestPoint + 1000.0 && this.isOffBottomOfLevel)
+            if (_doll == null || y > Level.activeLevel.lowestPoint + 1000.0 && isOffBottomOfLevel)
                 return;
-            this.UpdateLastReasonablePosition(this.position);
-            if (this.clipFrames > 0)
-                --this.clipFrames;
-            if (this.owner != null && this._doll != null && !this.doll.inSleepingBag)
+            UpdateLastReasonablePosition(position);
+            if (clipFrames > 0)
+                --clipFrames;
+            if (owner != null && _doll != null && !doll.inSleepingBag)
             {
-                ++this._ownTime;
-                if (this._ownTime > 20)
+                ++_ownTime;
+                if (_ownTime > 20)
                 {
-                    this._doll.ShakeOutOfSleepingBag();
-                    this._ownTime = 0;
+                    _doll.ShakeOutOfSleepingBag();
+                    _ownTime = 0;
                 }
             }
-            if (this._doll.captureDuck != null)
+            if (_doll.captureDuck != null)
             {
-                if (this._zekeBear)
+                if (_zekeBear)
                 {
-                    if (this._part == 0)
-                        this.depth = this._doll.captureDuck.depth + 2;
+                    if (_part == 0)
+                        depth = _doll.captureDuck.depth + 2;
                     else
-                        this.depth = this._doll.captureDuck.depth;
+                        depth = _doll.captureDuck.depth;
                 }
-                else if (this._part == 0)
+                else if (_part == 0)
                 {
-                    this.depth = this._doll.captureDuck.depth - 10;
-                    if (this._doll.part3 != null)
-                        this.depth = this._doll.part3.depth - 10;
+                    depth = _doll.captureDuck.depth - 10;
+                    if (_doll.part3 != null)
+                        depth = _doll.part3.depth - 10;
                 }
                 else
-                    this.depth = this._doll.captureDuck.depth;
-                this.canPickUp = true;
-                if (this._doll.captureDuck.HasEquipment(typeof(ChokeCollar)) && this._part != 0)
-                    this.canPickUp = false;
+                    depth = _doll.captureDuck.depth;
+                canPickUp = true;
+                if (_doll.captureDuck.HasEquipment(typeof(ChokeCollar)) && _part != 0)
+                    canPickUp = false;
             }
-            if (this._joint != null && this.connect != null)
+            if (_joint != null && connect != null)
             {
-                if (this.owner == null && this.prevOwner != null)
+                if (owner == null && prevOwner != null)
                 {
-                    this.clip.Add(this.prevOwner as PhysicsObject);
-                    this.connect.clip.Add(this.prevOwner as PhysicsObject);
-                    this._joint.clipFrames = 12;
-                    this._joint.clipThing = this._prevOwner;
-                    this._prevOwner = null;
+                    clip.Add(prevOwner as PhysicsObject);
+                    connect.clip.Add(prevOwner as PhysicsObject);
+                    _joint.clipFrames = 12;
+                    _joint.clipThing = _prevOwner;
+                    _prevOwner = null;
                 }
-                if (this.owner != null)
+                if (owner != null)
                 {
-                    this._joint.clipFrames = 0;
-                    this._joint.depth = this.depth;
+                    _joint.clipFrames = 0;
+                    _joint.depth = depth;
                 }
-                if (this.owner != null || this._joint.owner != null)
-                    this.weight = 0.1f;
+                if (owner != null || _joint.owner != null)
+                    weight = 0.1f;
                 else
-                    this.weight = 4f;
-                if (this._zekeBear)
+                    weight = 4f;
+                if (_zekeBear)
                 {
-                    if (this.owner != null || this._joint.owner != null)
-                        this.weight = 0.1f;
+                    if (owner != null || _joint.owner != null)
+                        weight = 0.1f;
                     else
-                        this.weight = 0.2f;
+                        weight = 0.2f;
                 }
-                if (this._joint.clipFrames > 0)
+                if (_joint.clipFrames > 0)
                 {
-                    this.skipClip = true;
-                    this._setSkipClip = true;
+                    skipClip = true;
+                    _setSkipClip = true;
                 }
-                else if (this._setSkipClip)
+                else if (_setSkipClip)
                 {
-                    this.skipClip = false;
-                    this._setSkipClip = false;
+                    skipClip = false;
+                    _setSkipClip = false;
                 }
             }
-            if (this._part > 1)
-                this.canPickUp = false;
+            if (_part > 1)
+                canPickUp = false;
             base.Update();
-            if (this._doll.captureDuck != null && this._doll.captureDuck.HasEquipment(typeof(FancyShoes)) && this._part == 0 && this._doll.captureDuck.holdObject != null)
+            if (_doll.captureDuck != null && _doll.captureDuck.HasEquipment(typeof(FancyShoes)) && _part == 0 && _doll.captureDuck.holdObject != null)
             {
-                this._doll.captureDuck.holdObject.position = this.Offset(new Vec2(3f, 5f) + this._doll.captureDuck.holdObject.holdOffset);
-                this._doll.captureDuck.holdObject.angle = this.angle;
-                if (this._doll.captureDuck.holdObject != null && this._doll.captureDuck.isServerForObject)
+                _doll.captureDuck.holdObject.position = Offset(new Vec2(3f, 5f) + _doll.captureDuck.holdObject.holdOffset);
+                _doll.captureDuck.holdObject.angle = angle;
+                if (_doll.captureDuck.holdObject != null && _doll.captureDuck.isServerForObject)
                 {
-                    this._doll.captureDuck.holdObject.isLocal = this.isLocal;
-                    this._doll.captureDuck.holdObject.UpdateAction();
+                    _doll.captureDuck.holdObject.isLocal = isLocal;
+                    _doll.captureDuck.holdObject.UpdateAction();
                 }
             }
-            if (this.doll != null && this.doll.part3 != null)
+            if (doll != null && doll.part3 != null)
             {
-                this.offDir = this.doll.part3.offDir;
-                if (this.doll.captureDuck != null && this.enablePhysics)
+                offDir = doll.part3.offDir;
+                if (doll.captureDuck != null && enablePhysics)
                 {
-                    this.doll.captureDuck.offDir = this.offDir;
-                    if (this.owner != null)
-                        this.doll.captureDuck._prevOwner = this.owner;
+                    doll.captureDuck.offDir = offDir;
+                    if (owner != null)
+                        doll.captureDuck._prevOwner = owner;
                 }
             }
-            FluidPuddle fluidPuddle = Level.CheckPoint<FluidPuddle>(this.position + new Vec2(0f, 4f));
+            FluidPuddle fluidPuddle = Level.CheckPoint<FluidPuddle>(position + new Vec2(0f, 4f));
             if (fluidPuddle != null)
             {
-                if (this.y + 4.0 - fluidPuddle.top > 8.0)
+                if (y + 4.0 - fluidPuddle.top > 8.0)
                 {
-                    this.gravMultiplier = -0.5f;
-                    this.grounded = false;
+                    gravMultiplier = -0.5f;
+                    grounded = false;
                 }
                 else
                 {
-                    if (this.y + 4.0 - fluidPuddle.top < 3.0)
+                    if (y + 4.0 - fluidPuddle.top < 3.0)
                     {
-                        this.gravMultiplier = 0.2f;
-                        this.grounded = true;
+                        gravMultiplier = 0.2f;
+                        grounded = true;
                     }
-                    else if (this.y + 4.0 - fluidPuddle.top > 4.0)
+                    else if (y + 4.0 - fluidPuddle.top > 4.0)
                     {
-                        this.gravMultiplier = -0.2f;
-                        this.grounded = true;
+                        gravMultiplier = -0.2f;
+                        grounded = true;
                     }
-                    this.grounded = true;
+                    grounded = true;
                 }
             }
             else
-                this.gravMultiplier = 1f;
-            if (this._joint != null)
+                gravMultiplier = 1f;
+            if (_joint != null)
             {
-                if (this._doll.captureDuck != null && this._doll.captureDuck.IsQuacking())
-                    this.graphic = _quackSprite;
+                if (_doll.captureDuck != null && _doll.captureDuck.IsQuacking())
+                    graphic = _quackSprite;
                 else
-                    this.graphic = _sprite;
-                if (this.isServerForObject)
+                    graphic = _sprite;
+                if (isServerForObject)
                 {
-                    if (this.offDir < 0)
-                        this.angleDegrees = (float)(-Maths.PointDirection(this.position, this._joint.position) + 180.0 + 90.0);
+                    if (offDir < 0)
+                        angleDegrees = (float)(-Maths.PointDirection(position, _joint.position) + 180.0 + 90.0);
                     else
-                        this.angleDegrees = (float)(-Maths.PointDirection(this.position, this._joint.position) - 90.0);
+                        angleDegrees = (float)(-Maths.PointDirection(position, _joint.position) - 90.0);
                 }
             }
-            if (this._part == 3 && this.connect != null)
+            if (_part == 3 && connect != null)
             {
-                this.angleDegrees = (float)(-Maths.PointDirection(this.position, this.connect.position) + 180.0);
-                this.depth = this.connect.depth + 2;
+                angleDegrees = (float)(-Maths.PointDirection(position, connect.position) + 180.0);
+                depth = connect.depth + 2;
             }
-            this.visible = this._part != 2;
+            visible = _part != 2;
         }
 
         protected override bool OnBurn(Vec2 firePosition, Thing litBy)
         {
-            if (!this._onFire)
+            if (!_onFire)
             {
                 SFX.Play("ignite", pitch: (Rando.Float(0.3f) - 0.3f));
                 for (int index = 0; index < 2; ++index)
                     Level.Add(SmallFire.New(Rando.Float(6f) - 3f, Rando.Float(2f) - 2f, 0f, 0f, stick: this));
-                this._onFire = true;
-                this._doll.LitOnFire(litBy);
+                _onFire = true;
+                _doll.LitOnFire(litBy);
             }
             return true;
         }
 
         public override void Draw()
         {
-            this.addWeight = 0f;
-            this.extraGravMultiplier = 1f;
-            if (this._part == 2 || this._joint == null)
+            addWeight = 0f;
+            extraGravMultiplier = 1f;
+            if (_part == 2 || _joint == null)
                 return;
             Vec2 position = this.position;
-            Vec2 vec2_1 = this.position - this._joint.position;
+            Vec2 vec2_1 = this.position - _joint.position;
             float num1 = vec2_1.length;
             if (num1 > 8.0)
                 num1 = 8f;
-            this.position = this._joint.position + vec2_1.normalized * num1;
-            if (this._part == 0 && this._doll != null && this._doll.captureDuck != null && (this._doll.captureDuck.quack > 0 || this.doll != null && this.doll.tongueStuck != Vec2.Zero))
+            this.position = _joint.position + vec2_1.normalized * num1;
+            if (_part == 0 && _doll != null && _doll.captureDuck != null && (_doll.captureDuck.quack > 0 || doll != null && doll.tongueStuck != Vec2.Zero))
             {
-                Vec2 tounge = this._doll.captureDuck.tounge;
-                this._stickLerp = Lerp.Vec2Smooth(this._stickLerp, tounge, 0.2f);
-                this._stickSlowLerp = Lerp.Vec2Smooth(this._stickSlowLerp, tounge, 0.1f);
-                Vec2 stickLerp = this._stickLerp;
-                Vec2 vec = Maths.AngleToVec(this.angle);
-                Vec2 vec2_2 = this.offDir >= 0 ? stickLerp * Maths.Clamp(1f - (vec - stickLerp).length, 0f, 1f) : stickLerp * Maths.Clamp(1f - (vec - stickLerp * -1f).length, 0f, 1f);
+                Vec2 tounge = _doll.captureDuck.tounge;
+                _stickLerp = Lerp.Vec2Smooth(_stickLerp, tounge, 0.2f);
+                _stickSlowLerp = Lerp.Vec2Smooth(_stickSlowLerp, tounge, 0.1f);
+                Vec2 stickLerp = _stickLerp;
+                Vec2 vec = Maths.AngleToVec(angle);
+                Vec2 vec2_2 = offDir >= 0 ? stickLerp * Maths.Clamp(1f - (vec - stickLerp).length, 0f, 1f) : stickLerp * Maths.Clamp(1f - (vec - stickLerp * -1f).length, 0f, 1f);
                 vec2_2.y *= -1f;
-                Vec2 vec2_3 = this._stickSlowLerp;
+                Vec2 vec2_3 = _stickSlowLerp;
                 vec2_3.y *= -1f;
                 float num2 = vec2_2.length;
                 bool flag = false;
-                if (this.doll != null && this.doll.tongueStuck != Vec2.Zero)
+                if (doll != null && doll.tongueStuck != Vec2.Zero)
                 {
                     flag = true;
                     num2 = 1f;
                 }
                 if (num2 > 0.0500000007450581 | flag)
                 {
-                    Vec2 vec2_4 = this.position - (this.position - this._joint.position).normalized * 3f;
+                    Vec2 vec2_4 = this.position - (this.position - _joint.position).normalized * 3f;
                     if (flag)
                     {
-                        vec2_2 = (this.doll.tongueStuck - vec2_4) / 6f;
-                        Vec2 vec2_5 = (this.doll.tongueStuck - vec2_4) / 6f / 2f;
-                        vec2_3 = (this.Offset(new Vec2((this.doll.tongueStuck - vec2_4).length / 2f, 2f)) - vec2_4) / 6f;
+                        vec2_2 = (doll.tongueStuck - vec2_4) / 6f;
+                        Vec2 vec2_5 = (doll.tongueStuck - vec2_4) / 6f / 2f;
+                        vec2_3 = (Offset(new Vec2((doll.tongueStuck - vec2_4).length / 2f, 2f)) - vec2_4) / 6f;
                     }
                     List<Vec2> vec2List = Curve.Bezier(8, vec2_4, vec2_4 + vec2_3 * 6f, vec2_4 + vec2_2 * 6f);
                     Vec2 vec2_6 = Vec2.Zero;
@@ -578,69 +578,69 @@ namespace DuckGame
                         if (vec2_6 != Vec2.Zero)
                         {
                             Vec2 vec2_7 = vec2_6 - p2;
-                            Graphics.DrawTexturedLine(Graphics.tounge.texture, vec2_6 + vec2_7.normalized * 0.4f, p2, new Color(223, 30, 30), 0.15f * num3, this.depth + 1);
-                            Graphics.DrawTexturedLine(Graphics.tounge.texture, vec2_6 + vec2_7.normalized * 0.4f, p2 - vec2_7.normalized * 0.4f, Color.Black, 0.3f * num3, this.depth - 1);
+                            Graphics.DrawTexturedLine(Graphics.tounge.texture, vec2_6 + vec2_7.normalized * 0.4f, p2, new Color(223, 30, 30), 0.15f * num3, depth + 1);
+                            Graphics.DrawTexturedLine(Graphics.tounge.texture, vec2_6 + vec2_7.normalized * 0.4f, p2 - vec2_7.normalized * 0.4f, Color.Black, 0.3f * num3, depth - 1);
                         }
                         num3 -= 0.1f;
                         vec2_6 = p2;
-                        if (this.doll != null && this.doll.captureDuck != null)
-                            this.doll.captureDuck.tongueCheck = p2;
+                        if (doll != null && doll.captureDuck != null)
+                            doll.captureDuck.tongueCheck = p2;
                     }
-                    if (this._graphic != null && this._graphic == this._quackSprite)
+                    if (_graphic != null && _graphic == _quackSprite)
                     {
                         SpriteMap graphic = this.graphic as SpriteMap;
-                        if (this.doll != null && this.doll.inSleepingBag)
-                            this._graphic = _campDuck;
-                        if (this._offDir < 0)
-                            this._graphic.flipH = true;
+                        if (doll != null && doll.inSleepingBag)
+                            _graphic = _campDuck;
+                        if (_offDir < 0)
+                            _graphic.flipH = true;
                         else
-                            this._graphic.flipH = false;
-                        this._graphic.position = this.position;
-                        this._graphic.alpha = this.alpha;
-                        this._graphic.angle = this.angle;
-                        this._graphic.depth = this.depth + 4;
-                        this._graphic.scale = this.scale;
-                        this._graphic.center = this.center;
-                        if (this._graphic == this._campDuck)
+                            _graphic.flipH = false;
+                        _graphic.position = this.position;
+                        _graphic.alpha = alpha;
+                        _graphic.angle = angle;
+                        _graphic.depth = depth + 4;
+                        _graphic.scale = scale;
+                        _graphic.center = center;
+                        if (_graphic == _campDuck)
                         {
-                            (this._graphic as SpriteMap).frame = 4;
-                            this._graphic.Draw();
+                            (_graphic as SpriteMap).frame = 4;
+                            _graphic.Draw();
                         }
                         else
                         {
-                            (this._graphic as SpriteMap).frame += 36;
-                            this._graphic.Draw();
-                            (this._graphic as SpriteMap).frame -= 36;
+                            (_graphic as SpriteMap).frame += 36;
+                            _graphic.Draw();
+                            (_graphic as SpriteMap).frame -= 36;
                         }
-                        this._graphic = graphic;
+                        _graphic = graphic;
                     }
                 }
-                else if (this.doll != null && this.doll.captureDuck != null)
-                    this.doll.captureDuck.tongueCheck = Vec2.Zero;
+                else if (doll != null && doll.captureDuck != null)
+                    doll.captureDuck.tongueCheck = Vec2.Zero;
             }
-            else if (this.doll != null && this.doll.captureDuck != null)
-                this.doll.captureDuck.tongueCheck = Vec2.Zero;
-            SpriteMap graphic1 = this.graphic as SpriteMap;
-            if (graphic1 != null && this.doll != null && this.doll.inSleepingBag)
+            else if (doll != null && doll.captureDuck != null)
+                doll.captureDuck.tongueCheck = Vec2.Zero;
+            SpriteMap graphic1 = graphic as SpriteMap;
+            if (graphic1 != null && doll != null && doll.inSleepingBag)
             {
                 if (graphic1.frame == 18)
-                    this._campDuck.frame = 0;
+                    _campDuck.frame = 0;
                 else if (graphic1.frame == 19)
-                    this._campDuck.frame = 1;
+                    _campDuck.frame = 1;
                 else if (graphic1.frame == 20)
-                    this._campDuck.frame = 2;
-                if (graphic1 == this._quackSprite && graphic1.frame == 18)
-                    this._campDuck.frame = 3;
-                this.graphic = _campDuck;
+                    _campDuck.frame = 2;
+                if (graphic1 == _quackSprite && graphic1.frame == 18)
+                    _campDuck.frame = 3;
+                graphic = _campDuck;
             }
             float angleDegrees = this.angleDegrees;
-            if (this.offDir < 0)
-                this.angleDegrees = (float)(-Maths.PointDirection(this.position, this._joint.position) + 180.0 + 90.0);
+            if (offDir < 0)
+                this.angleDegrees = (float)(-Maths.PointDirection(this.position, _joint.position) + 180.0 + 90.0);
             else
-                this.angleDegrees = (float)(-Maths.PointDirection(this.position, this._joint.position) - 90.0);
+                this.angleDegrees = (float)(-Maths.PointDirection(this.position, _joint.position) - 90.0);
             base.Draw();
             this.angleDegrees = angleDegrees;
-            this.graphic = graphic1;
+            graphic = graphic1;
             this.position = position;
         }
     }

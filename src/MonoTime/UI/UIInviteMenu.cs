@@ -85,7 +85,7 @@ namespace DuckGame
             return avatar;
         }
 
-        public void SetAction(UIMenuAction a) => this._menuAction = a;
+        public void SetAction(UIMenuAction a) => _menuAction = a;
 
         public UIInviteMenu(
           string title,
@@ -102,17 +102,17 @@ namespace DuckGame
             if (Steam.IsInitialized())
             {
                 int num = Steam.friends.OrderBy<User, int>(u => UIInviteMenu._sortDictionary[(int)u.state]).Count<User>();
-                if (num > this._maxShow)
-                    num = this._maxShow;
-                this._littleFont = new BitmapFont("smallBiosFont", 7, 6);
-                this._moreArrow = new Sprite("moreArrow");
-                this._moreArrow.CenterOrigin();
-                this._box = new UIBox(0f, 0f, 100f, 14 * num + 8, isVisible: false);
-                this._noAvatar = new Sprite("noAvatar");
-                this._noAvatar.CenterOrigin();
-                this.Add(_box, true);
+                if (num > _maxShow)
+                    num = _maxShow;
+                _littleFont = new BitmapFont("smallBiosFont", 7, 6);
+                _moreArrow = new Sprite("moreArrow");
+                _moreArrow.CenterOrigin();
+                _box = new UIBox(0f, 0f, 100f, 14 * num + 8, isVisible: false);
+                _noAvatar = new Sprite("noAvatar");
+                _noAvatar.CenterOrigin();
+                Add(_box, true);
             }
-            this._menuAction = act;
+            _menuAction = act;
         }
 
         public override void Open()
@@ -120,7 +120,7 @@ namespace DuckGame
             HUD.CloseAllCorners();
             HUD.AddCornerControl(HUDCorner.BottomRight, "@MENU1@INVITE");
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@EXIT");
-            this._users.Clear();
+            _users.Clear();
             if (Steam.IsInitialized())
             {
                 IOrderedEnumerable<User> source1 = Steam.friends.OrderBy<User, int>(u => UIInviteMenu._sortDictionary[(int)u.state]);
@@ -133,7 +133,7 @@ namespace DuckGame
                         source2 = source2.Substring(0, 16) + ".";
                     UserInfo info = u.info;
                     if (info.relationship == FriendRelationship.Friend)
-                        this._users.Add(new UIInviteUser()
+                        _users.Add(new UIInviteUser()
                         {
                             user = u,
                             sprite = UIInviteMenu.GetAvatar(u),
@@ -144,7 +144,7 @@ namespace DuckGame
                             inMyLobby = info.inLobby
                         });
                 }
-                this._users = this._users.OrderBy<UIInviteUser, UIInviteUser>(h => h, new CompareUsers()).ToList<UIInviteUser>();
+                _users = _users.OrderBy<UIInviteUser, UIInviteUser>(h => h, new CompareUsers()).ToList<UIInviteUser>();
             }
             base.Open();
         }
@@ -157,32 +157,32 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this.open)
+            if (open)
             {
-                if (Input.Pressed("MENUUP") && this._selection > 0)
+                if (Input.Pressed("MENUUP") && _selection > 0)
                 {
-                    --this._selection;
+                    --_selection;
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (Input.Pressed("MENUDOWN") && this._selection < this._users.Count - 1)
+                if (Input.Pressed("MENUDOWN") && _selection < _users.Count - 1)
                 {
-                    ++this._selection;
+                    ++_selection;
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (this._selection >= this._viewTop + this._maxShow)
-                    this._viewTop = this._selection - (this._maxShow - 1);
-                if (this._selection < this._viewTop)
-                    this._viewTop = this._selection;
+                if (_selection >= _viewTop + _maxShow)
+                    _viewTop = _selection - (_maxShow - 1);
+                if (_selection < _viewTop)
+                    _viewTop = _selection;
                 if (Input.Pressed("CANCEL"))
                 {
-                    this._menuAction.Activate();
+                    _menuAction.Activate();
                     SFX.Play("resume", 0.6f);
                 }
-                if (this._users.Count > 0 && Input.Pressed("MENU1") && !this._users[this._selection].triedInvite)
+                if (_users.Count > 0 && Input.Pressed("MENU1") && !_users[_selection].triedInvite)
                 {
                     SFX.Play("rockHitGround", 0.8f);
-                    this._users[this._selection].triedInvite = true;
-                    TeamSelect2.InvitedFriend(this._users[this._selection].user);
+                    _users[_selection].triedInvite = true;
+                    TeamSelect2.InvitedFriend(_users[_selection].user);
                 }
             }
             base.Update();
@@ -190,61 +190,61 @@ namespace DuckGame
 
         public override void Draw()
         {
-            int num1 = this._users.Count;
-            if (num1 > this._maxShow)
-                num1 = this._maxShow;
+            int num1 = _users.Count;
+            if (num1 > _maxShow)
+                num1 = _maxShow;
             float num2 = 14 * num1 - 12;
             float num3 = 0f;
             bool flag = false;
-            for (int viewTop = this._viewTop; viewTop < this._viewTop + this._maxShow && viewTop < this._users.Count; ++viewTop)
+            for (int viewTop = _viewTop; viewTop < _viewTop + _maxShow && viewTop < _users.Count; ++viewTop)
             {
-                UIInviteUser user = this._users[viewTop];
+                UIInviteUser user = _users[viewTop];
                 float y = this.y - num2 / 2f + num3;
                 float x = this.x - 68f;
-                Sprite g = user.sprite ?? this._noAvatar;
-                g.depth = this.depth + 4;
+                Sprite g = user.sprite ?? _noAvatar;
+                g.depth = depth + 4;
                 g.scale = new Vec2(0.25f);
-                g.alpha = this._selection == viewTop ? 1f : 0.3f;
+                g.alpha = _selection == viewTop ? 1f : 0.3f;
                 DuckGame.Graphics.Draw(g, x + 8f, y + 8f, new Rectangle(6f, 6f, 52f, 52f));
-                this._littleFont.Draw(user.name, new Vec2(x + 15f, y), Color.White * (this._selection == viewTop ? 1f : 0.3f), this.depth + 4);
+                _littleFont.Draw(user.name, new Vec2(x + 15f, y), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
                 if (user.triedInvite)
-                    this._littleFont.Draw("|LIME|@CHECK@INVITED", new Vec2(x + 15f, y + 6f), Color.White * (this._selection == viewTop ? 1f : 0.3f), this.depth + 4);
+                    _littleFont.Draw("|LIME|@CHECK@INVITED", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
                 else if (user.inGame)
                 {
                     if (user.inDuckGame)
-                        this._littleFont.Draw("@ITEMBOX@|DGBLUE|IN DUCK GAME!", new Vec2(x + 15f, y + 6f), Color.White * (this._selection == viewTop ? 1f : 0.3f), this.depth + 4);
+                        _littleFont.Draw("@ITEMBOX@|DGBLUE|IN DUCK GAME!", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
                     else
-                        this._littleFont.Draw("@USERONLINE@|YELLOW|IN SOME GAME", new Vec2(x + 15f, y + 6f), Color.White * (this._selection == viewTop ? 1f : 0.3f), this.depth + 4);
+                        _littleFont.Draw("@USERONLINE@|YELLOW|IN SOME GAME", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
                 }
                 else if (user.state == SteamUserState.Online)
-                    this._littleFont.Draw("@USERONLINE@|DGGREEN|ONLINE", new Vec2(x + 15f, y + 6f), Color.White * (this._selection == viewTop ? 1f : 0.3f), this.depth + 4);
+                    _littleFont.Draw("@USERONLINE@|DGGREEN|ONLINE", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
                 else if (user.state == SteamUserState.Away)
-                    this._littleFont.Draw("@USERAWAY@|YELLOW|AWAY", new Vec2(x + 15f, y + 6f), Color.White * (this._selection == viewTop ? 1f : 0.3f), this.depth + 4);
+                    _littleFont.Draw("@USERAWAY@|YELLOW|AWAY", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
                 else if (user.state == SteamUserState.Busy)
-                    this._littleFont.Draw("@USERBUSY@|YELLOW|BUSY", new Vec2(x + 15f, y + 6f), Color.White * (this._selection == viewTop ? 1f : 0.3f), this.depth + 4);
+                    _littleFont.Draw("@USERBUSY@|YELLOW|BUSY", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
                 else if (user.state == SteamUserState.Snooze)
-                    this._littleFont.Draw("@USERBUSY@|YELLOW|SNOOZE", new Vec2(x + 15f, y + 6f), Color.White * (this._selection == viewTop ? 1f : 0.3f), this.depth + 4);
+                    _littleFont.Draw("@USERBUSY@|YELLOW|SNOOZE", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
                 else if (user.state == SteamUserState.Offline)
-                    this._littleFont.Draw("@USEROFFLINE@|LIGHTGRAY|OFFLINE", new Vec2(x + 15f, y + 6f), Color.White * (this._selection == viewTop ? 1f : 0.3f), this.depth + 4);
+                    _littleFont.Draw("@USEROFFLINE@|LIGHTGRAY|OFFLINE", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
                 else if (user.state == SteamUserState.LookingToPlay)
-                    this._littleFont.Draw("@USERONLINE@|DGGREEN|WANTS TO PLAY", new Vec2(x + 15f, y + 6f), Color.White * (this._selection == viewTop ? 1f : 0.3f), this.depth + 4);
+                    _littleFont.Draw("@USERONLINE@|DGGREEN|WANTS TO PLAY", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
                 else if (user.state == SteamUserState.LookingToTrade)
-                    this._littleFont.Draw("@USERONLINE@|DGGREEN|WANTS TO TRADE", new Vec2(x + 15f, y + 6f), Color.White * (this._selection == viewTop ? 1f : 0.3f), this.depth + 4);
-                DuckGame.Graphics.DrawRect(new Vec2(x, y), new Vec2(x + 135f, y + 13f), (flag ? Colors.BlueGray : Colors.BlueGray * 0.6f) * (this._selection == viewTop ? 1f : 0.3f), this.depth + 2);
+                    _littleFont.Draw("@USERONLINE@|DGGREEN|WANTS TO TRADE", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
+                DuckGame.Graphics.DrawRect(new Vec2(x, y), new Vec2(x + 135f, y + 13f), (flag ? Colors.BlueGray : Colors.BlueGray * 0.6f) * (_selection == viewTop ? 1f : 0.3f), depth + 2);
                 num3 += 14f;
                 flag = !flag;
             }
-            if (this._viewTop < this._users.Count - this._maxShow)
+            if (_viewTop < _users.Count - _maxShow)
             {
-                this._moreArrow.depth = this.depth + 2;
-                this._moreArrow.flipV = false;
-                DuckGame.Graphics.Draw(this._moreArrow, this.x, (float)(this.y + num2 / 2.0 + 13.0));
+                _moreArrow.depth = depth + 2;
+                _moreArrow.flipV = false;
+                DuckGame.Graphics.Draw(_moreArrow, x, (float)(y + num2 / 2.0 + 13.0));
             }
-            if (this._viewTop > 0)
+            if (_viewTop > 0)
             {
-                this._moreArrow.depth = this.depth + 2;
-                this._moreArrow.flipV = true;
-                DuckGame.Graphics.Draw(this._moreArrow, this.x, (float)(this.y - num2 / 2.0 - 2.0));
+                _moreArrow.depth = depth + 2;
+                _moreArrow.flipV = true;
+                DuckGame.Graphics.Draw(_moreArrow, x, (float)(y - num2 / 2.0 - 2.0));
             }
             base.Draw();
         }

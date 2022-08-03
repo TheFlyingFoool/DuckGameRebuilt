@@ -81,18 +81,18 @@ namespace DuckGame
 
         public override void NetSerialize(BitBuffer b)
         {
-            if (this.stick != null && this.stick.ghostObject != null)
+            if (stick != null && stick.ghostObject != null)
             {
                 b.Write(true);
-                b.Write((ushort)(int)this.stick.ghostObject.ghostObjectIndex);
-                b.Write((sbyte)this.stickOffset.x);
-                b.Write((sbyte)this.stickOffset.y);
+                b.Write((ushort)(int)stick.ghostObject.ghostObjectIndex);
+                b.Write((sbyte)stickOffset.x);
+                b.Write((sbyte)stickOffset.y);
             }
             else
             {
                 b.Write(false);
-                b.Write((short)this.x);
-                b.Write((short)this.y);
+                b.Write((short)x);
+                b.Write((short)y);
             }
         }
 
@@ -102,51 +102,51 @@ namespace DuckGame
             {
                 GhostObject ghost = GhostManager.context.GetGhost((NetIndex16)d.ReadUShort());
                 if (ghost != null && ghost.thing != null)
-                    this.stick = ghost.thing as MaterialThing;
-                this.stickOffset = new Vec2(d.ReadSByte(), d.ReadSByte());
-                this.UpdateStick();
-                this.hSpeed = 0f;
-                this.vSpeed = 0f;
+                    stick = ghost.thing as MaterialThing;
+                stickOffset = new Vec2(d.ReadSByte(), d.ReadSByte());
+                UpdateStick();
+                hSpeed = 0f;
+                vSpeed = 0f;
             }
             else
-                this.netLerpPosition = new Vec2(d.ReadShort(), d.ReadShort());
+                netLerpPosition = new Vec2(d.ReadShort(), d.ReadShort());
         }
 
         public byte groundLife
         {
-            get => this._groundLife;
-            set => this._groundLife = value;
+            get => _groundLife;
+            set => _groundLife = value;
         }
 
         public Vec2 stickOffset
         {
-            get => this._stickOffset;
-            set => this._stickOffset = value;
+            get => _stickOffset;
+            set => _stickOffset = value;
         }
 
         public MaterialThing stick
         {
-            get => this._stick;
-            set => this._stick = value;
+            get => _stick;
+            set => _stick = value;
         }
 
-        public Thing firedFrom => this._firedFrom;
+        public Thing firedFrom => _firedFrom;
 
-        public int fireID => this._fireID;
+        public int fireID => _fireID;
 
         private SmallFire()
           : base(0f, 0f)
         {
-            this._bounceEfficiency = 0.2f;
-            this._sprite = new SpriteMap("smallFire", 16, 16);
-            this._sprite.AddAnimation("burn", (float)(0.200000002980232 + Rando.Float(0.2f)), true, 0, 1, 2, 3, 4);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 14f);
-            this._airFire = new SpriteMap("airFire", 16, 16);
-            this._airFire.AddAnimation("burn", (float)(0.200000002980232 + Rando.Float(0.2f)), true, 0, 1, 2, 1);
-            this._airFire.center = new Vec2(8f, 8f);
-            this._collisionSize = new Vec2(12f, 12f);
-            this._collisionOffset = new Vec2(-6f, -6f);
+            _bounceEfficiency = 0.2f;
+            _sprite = new SpriteMap("smallFire", 16, 16);
+            _sprite.AddAnimation("burn", (float)(0.200000002980232 + Rando.Float(0.2f)), true, 0, 1, 2, 3, 4);
+            graphic = _sprite;
+            center = new Vec2(8f, 14f);
+            _airFire = new SpriteMap("airFire", 16, 16);
+            _airFire.AddAnimation("burn", (float)(0.200000002980232 + Rando.Float(0.2f)), true, 0, 1, 2, 1);
+            _airFire.center = new Vec2(8f, 8f);
+            _collisionSize = new Vec2(12f, 12f);
+            _collisionOffset = new Vec2(-6f, -6f);
         }
 
         private void Init(
@@ -163,55 +163,55 @@ namespace DuckGame
                 xpos = Vec2.NetMin.x;
                 ypos = Vec2.NetMin.y;
             }
-            this.position.x = xpos;
-            this.position.y = ypos;
-            this._airFireScale = 0f;
-            this._multiplied = false;
-            this._groundLife = 125;
-            this.doFloat = false;
-            this.hSpeed = hspeed;
-            this.vSpeed = vspeed;
-            this._sprite.SetAnimation("burn");
-            this._sprite.imageIndex = Rando.Int(4);
-            this.xscale = this.yscale = 0.8f + Rando.Float(0.6f);
-            this.angleDegrees = Rando.Float(20f) - 10f;
-            this._airFire.SetAnimation("burn");
-            this._airFire.imageIndex = Rando.Int(2);
-            this._airFire.xscale = this._airFire.yscale = 0f;
-            this._spinSpeed = 0.1f + Rando.Float(0.1f);
-            this._airFire.color = Color.Orange * (0.8f + Rando.Float(0.2f));
-            this._gravMult = 0.7f;
-            this._sticky = 0.6f;
-            this._life = 100f;
+            position.x = xpos;
+            position.y = ypos;
+            _airFireScale = 0f;
+            _multiplied = false;
+            _groundLife = 125;
+            doFloat = false;
+            hSpeed = hspeed;
+            vSpeed = vspeed;
+            _sprite.SetAnimation("burn");
+            _sprite.imageIndex = Rando.Int(4);
+            xscale = yscale = 0.8f + Rando.Float(0.6f);
+            angleDegrees = Rando.Float(20f) - 10f;
+            _airFire.SetAnimation("burn");
+            _airFire.imageIndex = Rando.Int(2);
+            _airFire.xscale = _airFire.yscale = 0f;
+            _spinSpeed = 0.1f + Rando.Float(0.1f);
+            _airFire.color = Color.Orange * (0.8f + Rando.Float(0.2f));
+            _gravMult = 0.7f;
+            _sticky = 0.6f;
+            _life = 100f;
             if (Network.isActive)
-                this._sticky = 0f;
-            this._fireID = FireManager.GetFireID();
-            this.needsSynchronization = true;
+                _sticky = 0f;
+            _fireID = FireManager.GetFireID();
+            needsSynchronization = true;
             if (shortLife)
-                this._groundLife = 31;
-            this.depth = (Depth)0.6f;
-            this._stick = stick;
-            this._stickOffset = new Vec2(xpos, ypos);
-            this.UpdateStick();
-            this._alternate = SmallFire.kAlternate;
+                _groundLife = 31;
+            depth = (Depth)0.6f;
+            _stick = stick;
+            _stickOffset = new Vec2(xpos, ypos);
+            UpdateStick();
+            _alternate = SmallFire.kAlternate;
             SmallFire.kAlternate = !SmallFire.kAlternate;
-            this._canMultiply = canMultiply;
+            _canMultiply = canMultiply;
         }
 
         public void UpdateStick()
         {
-            if (this._stick == null)
+            if (_stick == null)
                 return;
-            this.position = this._stick.Offset(this._stickOffset);
+            position = _stick.Offset(_stickOffset);
         }
 
-        public void SuckLife(float l) => this._life -= l;
+        public void SuckLife(float l) => _life -= l;
 
         public override void Removed()
         {
-            if (Network.isActive && !this.didRemove && this.isLocal && GhostManager.context != null)
+            if (Network.isActive && !didRemove && isLocal && GhostManager.context != null)
             {
-                this.didRemove = true;
+                didRemove = true;
                 GhostManager.context.particleManager.RemoveParticle(this);
             }
             base.Removed();
@@ -220,80 +220,80 @@ namespace DuckGame
         public override void Update()
         {
             if (waitToHurt > 0.0)
-                this.waitToHurt -= Maths.IncFrameTimer();
+                waitToHurt -= Maths.IncFrameTimer();
             else
-                this.whoWait = null;
-            if (!this.isLocal)
+                whoWait = null;
+            if (!isLocal)
             {
-                if (this._stick != null)
-                    this.UpdateStick();
+                if (_stick != null)
+                    UpdateStick();
                 else
                     base.Update();
             }
             else
             {
                 if (_airFireScale < 1.20000004768372)
-                    this._airFireScale += 0.15f;
-                if (this._grounded && this._stick == null)
+                    _airFireScale += 0.15f;
+                if (_grounded && _stick == null)
                 {
-                    this._airFireScale -= 0.3f;
+                    _airFireScale -= 0.3f;
                     if (_airFireScale < 0.899999976158142)
-                        this._airFireScale = 0.9f;
-                    this._spinSpeed -= 0.01f;
+                        _airFireScale = 0.9f;
+                    _spinSpeed -= 0.01f;
                     if (_spinSpeed < 0.0500000007450581)
-                        this._spinSpeed = 0.05f;
+                        _spinSpeed = 0.05f;
                 }
-                if (this._grounded)
+                if (_grounded)
                 {
-                    if (this._groundLife <= 0)
+                    if (_groundLife <= 0)
                     {
-                        this.alpha -= 0.04f;
-                        if (this.alpha < 0.0)
+                        alpha -= 0.04f;
+                        if (alpha < 0.0)
                             Level.Remove(this);
                     }
                     else
-                        --this._groundLife;
+                        --_groundLife;
                 }
-                if (this.y > Level.current.bottomRight.y + 200.0)
+                if (y > Level.current.bottomRight.y + 200.0)
                     Level.Remove(this);
-                this._airFire.xscale = this._airFire.yscale = this._airFireScale;
-                this._airFire.depth = this.depth - 1;
-                this._airFire.alpha = 0.5f;
-                this._airFire.angle += this.hSpeed * this._spinSpeed;
-                if (this.isLocal && this._canMultiply && !this._multiplied && Rando.Float(310f) < 1.0 && this.y > level.topLeft.y - 500.0)
+                _airFire.xscale = _airFire.yscale = _airFireScale;
+                _airFire.depth = depth - 1;
+                _airFire.alpha = 0.5f;
+                _airFire.angle += hSpeed * _spinSpeed;
+                if (isLocal && _canMultiply && !_multiplied && Rando.Float(310f) < 1.0 && y > level.topLeft.y - 500.0)
                 {
-                    Level.Add(SmallFire.New(this.x, this.y, Rando.Float(1f) - 0.5f, (float)-(0.5 + Rando.Float(0.5f))));
-                    this._multiplied = true;
+                    Level.Add(SmallFire.New(x, y, Rando.Float(1f) - 0.5f, (float)-(0.5 + Rando.Float(0.5f))));
+                    _multiplied = true;
                 }
-                if (this._stick == null)
+                if (_stick == null)
                 {
-                    if (this.level != null && this.y < level.topLeft.y - 1500.0)
+                    if (level != null && y < level.topLeft.y - 1500.0)
                         Level.Remove(this);
                     base.Update();
                 }
                 else
                 {
-                    this._grounded = true;
-                    if (this._stick.destroyed)
+                    _grounded = true;
+                    if (_stick.destroyed)
                     {
-                        this._stick = null;
-                        this._grounded = false;
+                        _stick = null;
+                        _grounded = false;
                     }
                     else
                     {
-                        this.UpdateStick();
-                        this.stick.UpdateFirePosition(this);
-                        if (!this._stick.onFire || this._stick.removeFromLevel || this._stick.alpha < 0.00999999977648258)
+                        UpdateStick();
+                        stick.UpdateFirePosition(this);
+                        if (!_stick.onFire || _stick.removeFromLevel || _stick.alpha < 0.00999999977648258)
                         {
-                            Level.Add(SmallSmoke.New(this.x, this.y));
+                            Level.Add(SmallSmoke.New(x, y));
                             Level.Remove(this);
                         }
                     }
                 }
-                this._alternateb = !this._alternateb;
-                if (!this._alternateb)
+                _alternateb = !_alternateb;
+                if (!_alternateb)
                     return;
-                this._alternate = !this._alternate;
+                _alternate = !_alternate;
             }
         }
 

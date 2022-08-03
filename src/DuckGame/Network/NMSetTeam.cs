@@ -15,9 +15,9 @@ namespace DuckGame
 
         public NMSetTeam(Profile pProfile, Team pTeam, bool pCustomHat)
         {
-            this.profile = pProfile;
-            this.team = pTeam;
-            this.custom = pCustomHat;
+            profile = pProfile;
+            team = pTeam;
+            custom = pCustomHat;
         }
 
         public NMSetTeam()

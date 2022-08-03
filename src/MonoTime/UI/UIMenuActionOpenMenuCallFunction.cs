@@ -18,18 +18,18 @@ namespace DuckGame
           UIComponent open,
           UIMenuActionOpenMenuCallFunction.Function f)
         {
-            this._menu = menu;
-            this._open = open;
-            this._function = f;
+            _menu = menu;
+            _open = open;
+            _function = f;
         }
 
         public override void Activate()
         {
-            this._menu.Close();
-            this._open.Open();
-            if (MonoMain.pauseMenu == this._menu || MonoMain.pauseMenu != null && MonoMain.pauseMenu.GetType() != typeof(UIComponent) || MonoMain.pauseMenu == null)
-                MonoMain.pauseMenu = this._open;
-            this._function();
+            _menu.Close();
+            _open.Open();
+            if (MonoMain.pauseMenu == _menu || MonoMain.pauseMenu != null && MonoMain.pauseMenu.GetType() != typeof(UIComponent) || MonoMain.pauseMenu == null)
+                MonoMain.pauseMenu = _open;
+            _function();
         }
 
         public delegate void Function();

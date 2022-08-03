@@ -18,63 +18,63 @@ namespace DuckGame
 
         public TrophyType type
         {
-            get => this._type;
-            set => this._type = value;
+            get => _type;
+            set => _type = value;
         }
 
         public int goodies
         {
-            get => this._goodies;
+            get => _goodies;
             set
             {
-                this._goodies = value;
-                this._owner.Update();
+                _goodies = value;
+                _owner.Update();
             }
         }
 
         public int targets
         {
-            get => this._targets;
+            get => _targets;
             set
             {
-                this._targets = value;
-                this._owner.Update();
+                _targets = value;
+                _owner.Update();
             }
         }
 
         public int timeRequirement
         {
-            get => this._timeRequirement;
+            get => _timeRequirement;
             set
             {
-                this._timeRequirement = value;
-                this._owner.Update();
+                _timeRequirement = value;
+                _owner.Update();
             }
         }
 
         public int timeRequirementMilliseconds
         {
-            get => this._timeRequirementMilliseconds;
+            get => _timeRequirementMilliseconds;
             set
             {
-                this._timeRequirementMilliseconds = value;
-                this._owner.Update();
+                _timeRequirementMilliseconds = value;
+                _owner.Update();
             }
         }
 
-        public ChallengeTrophy(ChallengeData owner) => this._owner = owner;
+        public ChallengeTrophy(ChallengeData owner) => _owner = owner;
 
         public Color color
         {
             get
             {
-                if (this.type == TrophyType.Bronze)
+                if (type == TrophyType.Bronze)
                     return Colors.Bronze;
-                if (this.type == TrophyType.Silver)
+                if (type == TrophyType.Silver)
                     return Colors.Silver;
-                if (this.type == TrophyType.Gold)
+                if (type == TrophyType.Gold)
                     return Colors.Gold;
-                return this.type == TrophyType.Platinum ? Colors.Platinum : Colors.Developer;
+                return type == TrophyType.Platinum ? Colors.Platinum : Colors.Developer;
             }
         }
 
@@ -82,13 +82,13 @@ namespace DuckGame
         {
             get
             {
-                if (this.type == TrophyType.Bronze)
+                if (type == TrophyType.Bronze)
                     return "|CBRONZE|";
-                if (this.type == TrophyType.Silver)
+                if (type == TrophyType.Silver)
                     return "|CSILVER|";
-                if (this.type == TrophyType.Gold)
+                if (type == TrophyType.Gold)
                     return "|CGOLD|";
-                return this.type == TrophyType.Platinum ? "|CPLATINUM|" : "|CDEV|";
+                return type == TrophyType.Platinum ? "|CPLATINUM|" : "|CDEV|";
             }
         }
 
@@ -96,55 +96,55 @@ namespace DuckGame
         {
             get
             {
-                if (this.type == TrophyType.Bronze)
+                if (type == TrophyType.Bronze)
                     return "BRONZE";
-                if (this.type == TrophyType.Silver)
+                if (type == TrophyType.Silver)
                     return "SILVER";
-                if (this.type == TrophyType.Gold)
+                if (type == TrophyType.Gold)
                     return "GOLD";
-                return this.type == TrophyType.Platinum ? "PLATINUM" : "UR THE BEST";
+                return type == TrophyType.Platinum ? "PLATINUM" : "UR THE BEST";
             }
         }
 
         public BinaryClassChunk Serialize()
         {
             BinaryClassChunk element = new BinaryClassChunk();
-            this.SerializeField(element, "type");
-            this.SerializeField(element, "goodies");
-            this.SerializeField(element, "targets");
-            this.SerializeField(element, "timeRequirement");
-            this.SerializeField(element, "timeRequirementMilliseconds");
+            SerializeField(element, "type");
+            SerializeField(element, "goodies");
+            SerializeField(element, "targets");
+            SerializeField(element, "timeRequirement");
+            SerializeField(element, "timeRequirementMilliseconds");
             return element;
         }
 
         public bool Deserialize(BinaryClassChunk node)
         {
-            this.DeserializeField(node, "type");
-            this.DeserializeField(node, "goodies");
-            this.DeserializeField(node, "targets");
-            this.DeserializeField(node, "timeRequirement");
-            this.DeserializeField(node, "timeRequirementMilliseconds");
+            DeserializeField(node, "type");
+            DeserializeField(node, "goodies");
+            DeserializeField(node, "targets");
+            DeserializeField(node, "timeRequirement");
+            DeserializeField(node, "timeRequirementMilliseconds");
             return true;
         }
 
         public DXMLNode LegacySerialize()
         {
             DXMLNode element = new DXMLNode("challengeTrophy");
-            this.LegacySerializeField(element, "type");
-            this.LegacySerializeField(element, "goodies");
-            this.LegacySerializeField(element, "targets");
-            this.LegacySerializeField(element, "timeRequirement");
-            this.LegacySerializeField(element, "timeRequirementMilliseconds");
+            LegacySerializeField(element, "type");
+            LegacySerializeField(element, "goodies");
+            LegacySerializeField(element, "targets");
+            LegacySerializeField(element, "timeRequirement");
+            LegacySerializeField(element, "timeRequirementMilliseconds");
             return element;
         }
 
         public bool LegacyDeserialize(DXMLNode node)
         {
-            this.LegacyDeserializeField(node, "type");
-            this.LegacyDeserializeField(node, "goodies");
-            this.LegacyDeserializeField(node, "targets");
-            this.LegacyDeserializeField(node, "timeRequirement");
-            this.LegacyDeserializeField(node, "timeRequirementMilliseconds");
+            LegacyDeserializeField(node, "type");
+            LegacyDeserializeField(node, "goodies");
+            LegacyDeserializeField(node, "targets");
+            LegacyDeserializeField(node, "timeRequirement");
+            LegacyDeserializeField(node, "timeRequirementMilliseconds");
             return true;
         }
     }

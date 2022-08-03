@@ -22,31 +22,31 @@ namespace DuckGame
           string valTooltip)
           : base(owner)
         {
-            this.itemSize.x = 150f;
-            this.itemSize.y = 16f;
-            this._text = text;
-            this._field = field;
+            itemSize.x = 150f;
+            itemSize.y = 16f;
+            _text = text;
+            _field = field;
             if (field == null)
-                this._field = new FieldBinding(this, "isChecked");
-            this._fancyFont = new FancyBitmapFont("smallFont");
-            this.tooltip = valTooltip;
+                _field = new FieldBinding(this, "isChecked");
+            _fancyFont = new FancyBitmapFont("smallFont");
+            tooltip = valTooltip;
         }
 
         public ContextTextbox(string text, IContextListener owner, FieldBinding field = null)
           : base(owner)
         {
-            this.itemSize.x = 150f;
-            this.itemSize.y = 16f;
-            this._text = text;
-            this._field = field;
+            itemSize.x = 150f;
+            itemSize.y = 16f;
+            _text = text;
+            _field = field;
             if (field == null)
-                this._field = new FieldBinding(this, "isChecked");
-            this._fancyFont = new FancyBitmapFont("smallFont");
+                _field = new FieldBinding(this, "isChecked");
+            _fancyFont = new FancyBitmapFont("smallFont");
         }
 
         public override void Initialize()
         {
-            this._dialog = new TextEntryDialog();
+            _dialog = new TextEntryDialog();
             Level.Add(_dialog);
         }
 
@@ -55,32 +55,32 @@ namespace DuckGame
         public override void Selected()
         {
             string startingText = "";
-            if (this._field != null && this._field.value is string)
-                startingText = this._field.value as string;
+            if (_field != null && _field.value is string)
+                startingText = _field.value as string;
             SFX.Play("highClick", 0.3f, 0.2f);
             if (Level.current is Editor)
             {
-                this._dialog.Open(this._text, startingText, 999999);
+                _dialog.Open(_text, startingText, 999999);
             }
             else
             {
-                if (this._owner == null)
+                if (_owner == null)
                     return;
-                this._owner.Selected(this);
+                _owner.Selected(this);
             }
         }
 
         public override void Update()
         {
-            if (this._dialog.opened)
+            if (_dialog.opened)
                 return;
-            this._blink += 0.04f;
+            _blink += 0.04f;
             if (_blink >= 1f)
-                this._blink = 0f;
-            if (this._dialog.result != null)
+                _blink = 0f;
+            if (_dialog.result != null)
             {
-                this._field.value = _dialog.result;
-                this._dialog.result = null;
+                _field.value = _dialog.result;
+                _dialog.result = null;
                 Editor.hasUnsavedChanges = true;
             }
             base.Update();
@@ -89,40 +89,40 @@ namespace DuckGame
         public override void Draw()
         {
             string text = "";
-            if (this._field != null && this._field.value is string)
-                text = this._field.value as string;
-            if (this._hover)
+            if (_field != null && _field.value is string)
+                text = _field.value as string;
+            if (_hover)
             {
-                Graphics.DrawRect(this.position, this.position + this.itemSize, new Color(70, 70, 70), (Depth)0.82f);
+                Graphics.DrawRect(position, position + itemSize, new Color(70, 70, 70), (Depth)0.82f);
                 if (text.Length > 12)
                 {
                     Vec2 p1 = new Vec2(this.x, this.y);
-                    p1.x += this.itemSize.x + 4f;
+                    p1.x += itemSize.x + 4f;
                     p1.y -= 2f;
                     float x = 200f;
                     float y = 100f;
-                    Graphics.DrawString(this._text, this.position + new Vec2(2f, 5f), Color.White, (Depth)0.88f);
+                    Graphics.DrawString(_text, position + new Vec2(2f, 5f), Color.White, (Depth)0.88f);
                     Graphics.DrawRect(p1, p1 + new Vec2(x, y), new Color(70, 70, 70), (Depth)0.83f);
                     Graphics.DrawRect(p1 + new Vec2(1f, 1f), p1 + new Vec2(x - 1f, y - 1f), new Color(30, 30, 30), (Depth)0.84f);
-                    this._fancyFont.depth = (Depth)0.8f;
-                    this._fancyFont.maxWidth = 200;
-                    this._fancyFont.Draw(text, p1 + new Vec2(4f, 4f), Color.White, (Depth)0.86f);
+                    _fancyFont.depth = (Depth)0.8f;
+                    _fancyFont.maxWidth = 200;
+                    _fancyFont.Draw(text, p1 + new Vec2(4f, 4f), Color.White, (Depth)0.86f);
                 }
                 else
                 {
                     if (_blink >= 0.5)
                         text += "_";
-                    this._fancyFont.maxWidth = 200;
-                    this._fancyFont.Draw(text, this.position + new Vec2(2f, 5f), Color.White, (Depth)0.86f);
+                    _fancyFont.maxWidth = 200;
+                    _fancyFont.Draw(text, position + new Vec2(2f, 5f), Color.White, (Depth)0.86f);
                 }
             }
             else
             {
-                Graphics.DrawString(this._text, this.position + new Vec2(2f, 5f), Color.White, (Depth)0.84f);
+                Graphics.DrawString(_text, position + new Vec2(2f, 5f), Color.White, (Depth)0.84f);
                 if (text.Length > 12)
                     text = text.Substring(0, 12) + "..";
-                this._fancyFont.depth = (Depth)0.81f;
-                this._fancyFont.Draw(text, this.position + new Vec2(this.itemSize.x - 4f - this._fancyFont.GetWidth(text), 5f), Color.White, (Depth)0.84f);
+                _fancyFont.depth = (Depth)0.81f;
+                _fancyFont.Draw(text, position + new Vec2(itemSize.x - 4f - _fancyFont.GetWidth(text), 5f), Color.White, (Depth)0.84f);
             }
         }
     }

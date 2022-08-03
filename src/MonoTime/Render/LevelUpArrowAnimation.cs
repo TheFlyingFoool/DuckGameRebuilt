@@ -18,25 +18,25 @@ namespace DuckGame
         public LevelUpArrowAnimation(Vec2 pos)
           : base(pos, new SpriteMap("levelUpArrow", 16, 16), 0.9f)
         {
-            this.layer = Layer.HUD;
-            this.alpha = 0f;
-            this._startWait = Rando.Float(2.5f);
-            this._sprite.depth = (Depth)1f;
+            layer = Layer.HUD;
+            alpha = 0f;
+            _startWait = Rando.Float(2.5f);
+            _sprite.depth = (Depth)1f;
         }
 
         public override void Update()
         {
             if (_startWait > 0.0)
             {
-                this._startWait -= 0.1f;
+                _startWait -= 0.1f;
             }
             else
             {
-                this._vel -= 0.1f;
-                this.y += this._vel;
-                this._alph -= 0.1f;
-                this.alpha = Math.Min(this._alph, 1f);
-                if (this.alpha <= 0.0)
+                _vel -= 0.1f;
+                y += _vel;
+                _alph -= 0.1f;
+                alpha = Math.Min(_alph, 1f);
+                if (alpha <= 0.0)
                     Level.Remove(this);
             }
             base.Update();

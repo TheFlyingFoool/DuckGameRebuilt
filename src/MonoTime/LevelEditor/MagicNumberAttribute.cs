@@ -17,6 +17,6 @@ namespace DuckGame
     {
         public readonly long magicNumber;
 
-        public MagicNumberAttribute(long number) => this.magicNumber = number;
+        public MagicNumberAttribute(long number) => magicNumber = number;
     }
 }

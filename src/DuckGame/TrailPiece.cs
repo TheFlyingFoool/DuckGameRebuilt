@@ -17,11 +17,11 @@ namespace DuckGame
 
         internal TrailPiece(float _x, float _y, float _width, Vec2 _p1, Vec2 _p2)
         {
-            this.position.x = _x;
-            this.position.y = _y;
-            this.wide = _width;
-            this.p1 = _p1;
-            this.p2 = _p2;
+            position.x = _x;
+            position.y = _y;
+            wide = _width;
+            p1 = _p1;
+            p2 = _p2;
         }
     }
 }

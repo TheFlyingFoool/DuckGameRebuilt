@@ -14,6 +14,6 @@ namespace DuckGame
     {
         public ushort FixedID { get; private set; }
 
-        public FixedNetworkID(ushort id) => this.FixedID = id;
+        public FixedNetworkID(ushort id) => FixedID = id;
     }
 }

@@ -22,48 +22,48 @@ namespace DuckGame
         public float fireDirection;
         public float firePower = 1f;
 
-        public float direction => this.fireDirection + (this.flipHorizontal ? 180f : 0f);
+        public float direction => fireDirection + (flipHorizontal ? 180f : 0f);
 
         public LaserSpawner(float xpos, float ypos, System.Type c = null)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("laserSpawner");
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(12f, 12f);
-            this.collisionOffset = new Vec2(-6f, -6f);
-            this.depth = (Depth)0.99f;
-            this.hugWalls = WallHug.None;
-            this._visibleInGame = false;
-            this.editorTooltip = "Spawns Quad Laser bullets in the specified direction.";
+            graphic = new Sprite("laserSpawner");
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(12f, 12f);
+            collisionOffset = new Vec2(-6f, -6f);
+            depth = (Depth)0.99f;
+            hugWalls = WallHug.None;
+            _visibleInGame = false;
+            editorTooltip = "Spawns Quad Laser bullets in the specified direction.";
         }
 
         public override void Initialize()
         {
-            if (!this.spawnOnStart)
+            if (!spawnOnStart)
                 return;
-            this._spawnWait = this.spawnTime;
+            _spawnWait = spawnTime;
         }
 
         public override void Update()
         {
             if (Level.current.simulatePhysics)
-                this._spawnWait += 0.0166666f;
-            if (Level.current.simulatePhysics && Network.isServer && (this._numSpawned < this.spawnNum || this.spawnNum == -1) && _spawnWait >= this.spawnTime)
+                _spawnWait += 0.0166666f;
+            if (Level.current.simulatePhysics && Network.isServer && (_numSpawned < spawnNum || spawnNum == -1) && _spawnWait >= spawnTime)
             {
                 if (initialDelay > 0.0)
                 {
-                    this.initialDelay -= 0.0166666f;
+                    initialDelay -= 0.0166666f;
                 }
                 else
                 {
-                    Vec2 travel = Maths.AngleToVec(Maths.DegToRad(this.direction)) * this.firePower;
-                    Vec2 vec2 = this.position - travel.normalized * 16f;
+                    Vec2 travel = Maths.AngleToVec(Maths.DegToRad(direction)) * firePower;
+                    Vec2 vec2 = position - travel.normalized * 16f;
                     Level.Add(new QuadLaserBullet(vec2.x, vec2.y, travel));
-                    this._spawnWait = 0f;
-                    ++this._numSpawned;
+                    _spawnWait = 0f;
+                    ++_numSpawned;
                 }
             }
-            this.angleDegrees = -this.direction;
+            angleDegrees = -direction;
         }
 
         public override void Terminate()
@@ -85,12 +85,12 @@ namespace DuckGame
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.spawnTime = node.GetProperty<float>("spawnTime");
-            this.initialDelay = node.GetProperty<float>("initialDelay");
-            this.spawnOnStart = node.GetProperty<bool>("spawnOnStart");
-            this.spawnNum = node.GetProperty<int>("spawnNum");
-            this.fireDirection = node.GetProperty<float>("fireDirection");
-            this.firePower = node.GetProperty<float>("firePower");
+            spawnTime = node.GetProperty<float>("spawnTime");
+            initialDelay = node.GetProperty<float>("initialDelay");
+            spawnOnStart = node.GetProperty<bool>("spawnOnStart");
+            spawnNum = node.GetProperty<int>("spawnNum");
+            fireDirection = node.GetProperty<float>("fireDirection");
+            firePower = node.GetProperty<float>("firePower");
             return true;
         }
 
@@ -111,22 +111,22 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode1 = node.Element("spawnTime");
             if (dxmlNode1 != null)
-                this.spawnTime = Change.ToSingle(dxmlNode1.Value);
+                spawnTime = Change.ToSingle(dxmlNode1.Value);
             DXMLNode dxmlNode2 = node.Element("initialDelay");
             if (dxmlNode2 != null)
-                this.initialDelay = Change.ToSingle(dxmlNode2.Value);
+                initialDelay = Change.ToSingle(dxmlNode2.Value);
             DXMLNode dxmlNode3 = node.Element("spawnOnStart");
             if (dxmlNode3 != null)
-                this.spawnOnStart = Convert.ToBoolean(dxmlNode3.Value);
+                spawnOnStart = Convert.ToBoolean(dxmlNode3.Value);
             DXMLNode dxmlNode4 = node.Element("spawnNum");
             if (dxmlNode4 != null)
-                this.spawnNum = Convert.ToInt32(dxmlNode4.Value);
+                spawnNum = Convert.ToInt32(dxmlNode4.Value);
             DXMLNode dxmlNode5 = node.Element("fireDirection");
             if (dxmlNode5 != null)
-                this.fireDirection = Convert.ToSingle(dxmlNode5.Value);
+                fireDirection = Convert.ToSingle(dxmlNode5.Value);
             DXMLNode dxmlNode6 = node.Element("firePower");
             if (dxmlNode6 != null)
-                this.firePower = Convert.ToSingle(dxmlNode6.Value);
+                firePower = Convert.ToSingle(dxmlNode6.Value);
             return true;
         }
 
@@ -142,11 +142,11 @@ namespace DuckGame
             return contextMenu;
         }
 
-        public override void DrawHoverInfo() => Graphics.DrawLine(this.position, this.position + Maths.AngleToVec(Maths.DegToRad(this.direction)) * (this.firePower * 5f), Color.Red, 2f, (Depth)1f);
+        public override void DrawHoverInfo() => Graphics.DrawLine(position, position + Maths.AngleToVec(Maths.DegToRad(direction)) * (firePower * 5f), Color.Red, 2f, (Depth)1f);
 
         public override void Draw()
         {
-            this.angleDegrees = -this.direction;
+            angleDegrees = -direction;
             base.Draw();
         }
     }

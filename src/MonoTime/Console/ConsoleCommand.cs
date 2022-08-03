@@ -11,32 +11,32 @@ namespace DuckGame
     {
         private string _command;
 
-        public ConsoleCommand(string command) => this._command = command;
+        public ConsoleCommand(string command) => _command = command;
 
         public string NextWord(bool toLower = true, bool peek = false)
         {
             int num = 0;
-            if (this._command.Length <= 0)
+            if (_command.Length <= 0)
                 return "";
-            while (this._command[num] == ' ')
+            while (_command[num] == ' ')
             {
                 ++num;
-                if (num >= this._command.Length)
+                if (num >= _command.Length)
                     return "";
             }
             int startIndex = num;
-            while (this._command[num] != ' ')
+            while (_command[num] != ' ')
             {
                 ++num;
-                if (num >= this._command.Length)
+                if (num >= _command.Length)
                     break;
             }
-            string str = this._command.Substring(startIndex, num - startIndex);
+            string str = _command.Substring(startIndex, num - startIndex);
             if (!peek)
-                this._command = this._command.Substring(num, this._command.Length - num);
+                _command = _command.Substring(num, _command.Length - num);
             return !toLower ? str : str.ToLower();
         }
 
-        public string Remainder(bool toLower = true) => (toLower ? this._command.ToLower() : this._command).Trim();
+        public string Remainder(bool toLower = true) => (toLower ? _command.ToLower() : _command).Trim();
     }
 }

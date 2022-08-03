@@ -17,20 +17,20 @@ namespace DuckGame
 
         public ResultData(Team t)
         {
-            this.font = Profiles.EnvironmentProfile.font;
+            font = Profiles.EnvironmentProfile.font;
             if (t.activeProfiles.Count > 1)
             {
-                this.name = t.GetNameForDisplay();
-                this.multi = true;
+                name = t.GetNameForDisplay();
+                multi = true;
             }
             else
             {
-                this.name = !Profiles.IsDefault(t.activeProfiles[0]) ? t.activeProfiles[0].name : t.GetNameForDisplay();
-                this.font = t.activeProfiles[0].font;
-                this.multi = false;
+                name = !Profiles.IsDefault(t.activeProfiles[0]) ? t.activeProfiles[0].name : t.GetNameForDisplay();
+                font = t.activeProfiles[0].font;
+                multi = false;
             }
-            this.data = t;
-            this.score = t.score;
+            data = t;
+            score = t.score;
         }
     }
 }

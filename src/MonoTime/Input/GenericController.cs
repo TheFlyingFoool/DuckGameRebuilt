@@ -22,60 +22,60 @@ namespace DuckGame
 
         public AnalogGamePad device
         {
-            get => this._device;
+            get => _device;
             set
             {
-                if (this._device != null)
-                    this._device.genericController = null;
-                this._device = value;
-                if (this._device == null)
+                if (_device != null)
+                    _device.genericController = null;
+                _device = value;
+                if (_device == null)
                     return;
-                this._device.genericController = this;
+                _device.genericController = this;
             }
         }
 
-        public override Dictionary<int, string> GetTriggerNames() => this._device != null ? this._device.GetTriggerNames() : null;
+        public override Dictionary<int, string> GetTriggerNames() => _device != null ? _device.GetTriggerNames() : null;
 
-        public override Sprite GetMapImage(int map) => this._device != null ? this._device.GetMapImage(map) : null;
+        public override Sprite GetMapImage(int map) => _device != null ? _device.GetMapImage(map) : null;
 
         public override string productName
         {
-            get => this._device == null ? this._productName : this._device.productName;
-            set => this._productName = value;
+            get => _device == null ? _productName : _device.productName;
+            set => _productName = value;
         }
 
         public override string productGUID
         {
-            get => this._device == null ? this._productGUID : this._device.productGUID;
-            set => this._productName = value;
+            get => _device == null ? _productGUID : _device.productGUID;
+            set => _productName = value;
         }
 
-        public override bool isConnected => this._device != null && this._device.isConnected;
+        public override bool isConnected => _device != null && _device.isConnected;
 
-        public float leftTrigger => this._device == null ? 0f : this._device.leftTrigger;
+        public float leftTrigger => _device == null ? 0f : _device.leftTrigger;
 
-        public float rightTrigger => this._device == null ? 0f : this._device.rightTrigger;
+        public float rightTrigger => _device == null ? 0f : _device.rightTrigger;
 
-        public Vec2 leftStick => this._device == null ? Vec2.Zero : this._device.leftStick;
+        public Vec2 leftStick => _device == null ? Vec2.Zero : _device.leftStick;
 
-        public Vec2 rightStick => this._device == null ? Vec2.Zero : this._device.rightStick;
+        public Vec2 rightStick => _device == null ? Vec2.Zero : _device.rightStick;
 
         public GenericController(int index)
           : base(index)
         {
         }
 
-        public override bool MapPressed(int mapping, bool any = false) => this._device != null && this._device.MapPressed(mapping, any);
+        public override bool MapPressed(int mapping, bool any = false) => _device != null && _device.MapPressed(mapping, any);
 
-        public override bool MapReleased(int mapping) => this._device != null && this._device.MapReleased(mapping);
+        public override bool MapReleased(int mapping) => _device != null && _device.MapReleased(mapping);
 
-        public override bool MapDown(int mapping, bool any = false) => this._device != null && this._device.MapDown(mapping, any);
+        public override bool MapDown(int mapping, bool any = false) => _device != null && _device.MapDown(mapping, any);
 
         public override void Rumble(float leftIntensity = 0f, float rightIntensity = 0f)
         {
-            if (!(this.device is XInputPad))
+            if (!(device is XInputPad))
                 return;
-            (this.device as XInputPad).Rumble(Math.Min(leftIntensity * 1.5f, 1f), Math.Min(rightIntensity * 1.5f, 1f));
+            (device as XInputPad).Rumble(Math.Min(leftIntensity * 1.5f, 1f), Math.Min(rightIntensity * 1.5f, 1f));
         }
     }
 }

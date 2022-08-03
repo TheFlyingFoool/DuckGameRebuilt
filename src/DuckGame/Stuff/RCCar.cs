@@ -33,41 +33,41 @@ namespace DuckGame
 
         public bool receivingSignal
         {
-            get => this._receivingSignal;
+            get => _receivingSignal;
             set
             {
-                if (this._receivingSignal != value && !this.destroyed)
+                if (_receivingSignal != value && !destroyed)
                 {
                     if (value)
                         SFX.Play("rcConnect", 0.5f);
                     else
                         SFX.Play("rcDisconnect", 0.5f);
                 }
-                this._receivingSignal = value;
+                _receivingSignal = value;
             }
         }
 
         public RCCar(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("rcBody", 32, 32);
-            this._sprite.AddAnimation("idle", 1f, true, new int[1]);
-            this._sprite.AddAnimation("beep", 0.2f, true, 0, 1);
-            this.graphic = _sprite;
-            this.center = new Vec2(16f, 24f);
-            this.collisionOffset = new Vec2(-8f, 0f);
-            this.collisionSize = new Vec2(16f, 11f);
-            this.depth = -0.5f;
-            this._editorName = "RC Car";
-            this.thickness = 2f;
-            this.weight = 5f;
-            this.flammable = 0.3f;
-            this._wheel = new Sprite("rcWheel")
+            _sprite = new SpriteMap("rcBody", 32, 32);
+            _sprite.AddAnimation("idle", 1f, true, new int[1]);
+            _sprite.AddAnimation("beep", 0.2f, true, 0, 1);
+            graphic = _sprite;
+            center = new Vec2(16f, 24f);
+            collisionOffset = new Vec2(-8f, 0f);
+            collisionSize = new Vec2(16f, 11f);
+            depth = -0.5f;
+            _editorName = "RC Car";
+            thickness = 2f;
+            weight = 5f;
+            flammable = 0.3f;
+            _wheel = new Sprite("rcWheel")
             {
                 center = new Vec2(4f, 4f)
             };
-            this.weight = 0.5f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
+            weight = 0.5f;
+            physicsMaterial = PhysicsMaterial.Metal;
         }
 
         public override void Initialize()
@@ -77,16 +77,16 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            this._idle.Kill();
-            this._idle.lerpVolume = 0f;
+            _idle.Kill();
+            _idle.lerpVolume = 0f;
         }
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            RumbleManager.AddRumbleEvent(this.position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
-            if (!this.isServerForObject)
+            RumbleManager.AddRumbleEvent(position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
+            if (!isServerForObject)
                 return false;
-            new ATRCShrapnel().MakeNetEffect(this.position, false);
+            new ATRCShrapnel().MakeNetEffect(position, false);
             List<Bullet> varBullets = new List<Bullet>();
             for (int index = 0; index < 20; ++index)
             {
@@ -95,7 +95,7 @@ namespace DuckGame
                 {
                     range = 55f + Rando.Float(14f)
                 };
-                Bullet bullet = new Bullet(this.x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type1, num)
+                Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type1, num)
                 {
                     firedFrom = this
                 };
@@ -117,84 +117,84 @@ namespace DuckGame
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (bullet.isLocal && this.owner == null)
+            if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
             if (bullet.isLocal)
-                this.Destroy(new DTShot(bullet));
+                Destroy(new DTShot(bullet));
             return false;
         }
 
         public override void Update()
         {
-            if (this._controller == null && !(Level.current is Editor) && this.isServerForObject)
+            if (_controller == null && !(Level.current is Editor) && isServerForObject)
             {
-                this._controller = new RCController(this.x, this.y, this);
+                _controller = new RCController(x, y, this);
                 Level.Add(_controller);
             }
-            this._wave.Update();
+            _wave.Update();
             base.Update();
-            this._sprite.currentAnimation = this._receivingSignal ? "beep" : "idle";
-            this._idle.lerpVolume = Math.Min(this._idleSpeed * 10f, 0.7f);
-            if (this._destroyed)
+            _sprite.currentAnimation = _receivingSignal ? "beep" : "idle";
+            _idle.lerpVolume = Math.Min(_idleSpeed * 10f, 0.7f);
+            if (_destroyed)
             {
-                this._idle.lerpVolume = 0f;
-                this._idle.lerpSpeed = 1f;
+                _idle.lerpVolume = 0f;
+                _idle.lerpSpeed = 1f;
             }
-            this._idle.pitch = (float)(0.5 + _idleSpeed * 0.5);
-            if (this.moveLeft)
+            _idle.pitch = (float)(0.5 + _idleSpeed * 0.5);
+            if (moveLeft)
             {
-                if (this.isServerForObject)
+                if (isServerForObject)
                 {
-                    if (this.hSpeed > -this._maxSpeed)
-                        this.hSpeed -= 0.4f;
+                    if (hSpeed > -_maxSpeed)
+                        hSpeed -= 0.4f;
                     else
-                        this.hSpeed = -this._maxSpeed;
-                    this.offDir = -1;
+                        hSpeed = -_maxSpeed;
+                    offDir = -1;
                 }
-                this._idleSpeed += 0.03f;
-                ++this._inc;
+                _idleSpeed += 0.03f;
+                ++_inc;
             }
-            if (this.moveRight)
+            if (moveRight)
             {
-                if (this.isServerForObject)
+                if (isServerForObject)
                 {
-                    if (this.hSpeed < _maxSpeed)
-                        this.hSpeed += 0.4f;
+                    if (hSpeed < _maxSpeed)
+                        hSpeed += 0.4f;
                     else
-                        this.hSpeed = this._maxSpeed;
-                    this.offDir = 1;
+                        hSpeed = _maxSpeed;
+                    offDir = 1;
                 }
-                this._idleSpeed += 0.03f;
-                ++this._inc;
+                _idleSpeed += 0.03f;
+                ++_inc;
             }
             if (_idleSpeed > 0.100000001490116)
             {
-                this._inc = 0;
-                Level.Add(SmallSmoke.New(this.x - offDir * 10, this.y));
+                _inc = 0;
+                Level.Add(SmallSmoke.New(x - offDir * 10, y));
             }
-            if (!this.moveLeft && !this.moveRight)
-                this._idleSpeed -= 0.03f;
+            if (!moveLeft && !moveRight)
+                _idleSpeed -= 0.03f;
             if (_idleSpeed > 1.0)
-                this._idleSpeed = 1f;
+                _idleSpeed = 1f;
             if (_idleSpeed < 0.0)
-                this._idleSpeed = 0f;
-            if (this.jump && this.grounded)
-                this.vSpeed -= 4.8f;
-            this._tilt = MathHelper.Lerp(this._tilt, -this.hSpeed, 0.4f);
-            this._waveMult = MathHelper.Lerp(this._waveMult, -this.hSpeed, 0.1f);
-            this.angleDegrees = (float)(_tilt * 2.0 + this._wave.value * (_waveMult * (_maxSpeed - Math.Abs(this.hSpeed))));
-            if (!this.isServerForObject || !this.isOffBottomOfLevel || this.destroyed)
+                _idleSpeed = 0f;
+            if (jump && grounded)
+                vSpeed -= 4.8f;
+            _tilt = MathHelper.Lerp(_tilt, -hSpeed, 0.4f);
+            _waveMult = MathHelper.Lerp(_waveMult, -hSpeed, 0.1f);
+            angleDegrees = (float)(_tilt * 2.0 + _wave.value * (_waveMult * (_maxSpeed - Math.Abs(hSpeed))));
+            if (!isServerForObject || !isOffBottomOfLevel || destroyed)
                 return;
-            this.Destroy(new DTFall());
+            Destroy(new DTFall());
         }
 
         public override void Draw()
         {
-            if (this.owner == null)
-                this._sprite.flipH = offDir < 0.0;
+            if (owner == null)
+                _sprite.flipH = offDir < 0.0;
             base.Draw();
-            Graphics.Draw(this._wheel, this.x - 7f, this.y + 9f);
-            Graphics.Draw(this._wheel, this.x + 7f, this.y + 9f);
+            Graphics.Draw(_wheel, x - 7f, y + 9f);
+            Graphics.Draw(_wheel, x + 7f, y + 9f);
         }
     }
 }

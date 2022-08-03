@@ -14,55 +14,55 @@ namespace DuckGame
         public MusicInstance(SoundEffect pData)
           : base(pData)
         {
-            this._isMusic = true;
+            _isMusic = true;
         }
 
         public override int Read(float[] buffer, int offset, int count)
         {
-            if (this._data == null || !this._inMixer)
+            if (_data == null || !_inMixer)
                 return 0;
             if (_volume <= 0.0)
                 return count;
             int length = 0;
             lock (this)
             {
-                if (this._data.data == null)
+                if (_data.data == null)
                 {
-                    length = this._data.Decode(buffer, offset, count);
+                    length = _data.Decode(buffer, offset, count);
                 }
                 else
                 {
                     do
                         ;
-                    while (this._position + count > this._data.decodedSamples && this._data.Decoder_DecodeChunk());
-                    length = Math.Min(count, this._data.decodedSamples - this._position);
-                    Array.Copy(SoundEffect._songBuffer, this._position, buffer, offset, length);
+                    while (_position + count > _data.decodedSamples && _data.Decoder_DecodeChunk());
+                    length = Math.Min(count, _data.decodedSamples - _position);
+                    Array.Copy(SoundEffect._songBuffer, _position, buffer, offset, length);
                 }
-                this._position += length;
+                _position += length;
                 if (length != count)
                 {
-                    if (this.SoundEndEvent != null)
-                        this.SoundEndEvent();
-                    if (this._loop)
+                    if (SoundEndEvent != null)
+                        SoundEndEvent();
+                    if (_loop)
                     {
-                        this._position = 0;
+                        _position = 0;
                         offset += length;
-                        if (this._data.data == null)
+                        if (_data.data == null)
                         {
-                            this._data.Rewind();
-                            length = this._data.Decode(buffer, offset, count);
+                            _data.Rewind();
+                            length = _data.Decode(buffer, offset, count);
                         }
                         else
                         {
-                            length = Math.Min(SoundEffect._songBuffer.Length - this._position, count - length);
-                            Array.Copy(SoundEffect._songBuffer, this._position, buffer, offset, length);
+                            length = Math.Min(SoundEffect._songBuffer.Length - _position, count - length);
+                            Array.Copy(SoundEffect._songBuffer, _position, buffer, offset, length);
                         }
-                        this._position += length;
+                        _position += length;
                         length = count;
                     }
                 }
             }
-            this._inMixer = this._inMixer && length == count;
+            _inMixer = _inMixer && length == count;
             return length;
         }
     }

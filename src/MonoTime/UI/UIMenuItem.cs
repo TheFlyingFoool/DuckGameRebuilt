@@ -20,27 +20,27 @@ namespace DuckGame
 
         public bool selected
         {
-            get => this._selected;
-            set => this._selected = value;
+            get => _selected;
+            set => _selected = value;
         }
 
-        public bool isBackButton => this._isBackButton;
+        public bool isBackButton => _isBackButton;
 
         public UIMenuAction menuAction
         {
-            get => this._action;
-            set => this._action = value;
+            get => _action;
+            set => _action = value;
         }
 
-        public void SetFont(BitmapFont font) => this._textElement.SetFont(font);
+        public void SetFont(BitmapFont font) => _textElement.SetFont(font);
 
         public string text
         {
-            get => this._textElement.text;
+            get => _textElement.text;
             set
             {
-                this._textElement.text = value;
-                this._dirty = this._textElement.dirty = true;
+                _textElement.text = value;
+                _dirty = _textElement.dirty = true;
             }
         }
 
@@ -49,20 +49,20 @@ namespace DuckGame
         {
             if (c == new Color())
                 c = Colors.MenuOption;
-            this._textElement = new UIText(text, c)
+            _textElement = new UIText(text, c)
             {
                 align = UIAlign.Left
             };
-            this.rightSection.Add(_textElement, true);
-            this._arrow = new UIImage("contextArrowRight")
+            rightSection.Add(_textElement, true);
+            _arrow = new UIImage("contextArrowRight")
             {
                 align = UIAlign.Right,
                 visible = false
             };
-            this.leftSection.Add(_arrow, true);
-            this._action = action;
-            this.align = al;
-            this._isBackButton = backButton;
+            leftSection.Add(_arrow, true);
+            _action = action;
+            align = al;
+            _isBackButton = backButton;
         }
 
         public UIMenuItem(
@@ -75,41 +75,41 @@ namespace DuckGame
         {
             if (c == new Color())
                 c = Colors.MenuOption;
-            this._textElement = new UIText(pTextFunc, c)
+            _textElement = new UIText(pTextFunc, c)
             {
                 align = UIAlign.Left
             };
-            this.rightSection.Add(_textElement, true);
-            this._arrow = new UIImage("contextArrowRight")
+            rightSection.Add(_textElement, true);
+            _arrow = new UIImage("contextArrowRight")
             {
                 align = UIAlign.Right,
                 visible = false
             };
-            this.leftSection.Add(_arrow, true);
-            this._action = action;
-            this.align = al;
-            this._isBackButton = backButton;
+            leftSection.Add(_arrow, true);
+            _action = action;
+            align = al;
+            _isBackButton = backButton;
         }
 
         public UIMenuItem(UIMenuAction action = null, Color c = default(Color))
           : base(true, 8, 1f)
         {
-            this._action = action;
+            _action = action;
         }
 
         public override void Update()
         {
-            this._arrow.visible = this._selected;
-            if (this._action != null)
-                this._action.Update();
+            _arrow.visible = _selected;
+            if (_action != null)
+                _action.Update();
             base.Update();
         }
 
         public virtual void Activate(string trigger)
         {
-            if (this._action == null || !(trigger == "SELECT"))
+            if (_action == null || !(trigger == "SELECT"))
                 return;
-            this._action.Activate();
+            _action.Activate();
         }
     }
 }

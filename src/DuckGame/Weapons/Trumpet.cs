@@ -27,28 +27,28 @@ namespace DuckGame
         public Trumpet(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 4;
-            this._ammoType = new ATLaser();
-            this._ammoType.range = 170f;
-            this._ammoType.accuracy = 0.8f;
-            this.wideBarrel = true;
-            this.barrelInsertOffset = new Vec2(-4f, -2f);
-            this._type = "gun";
-            this.graphic = new Sprite("trumpet");
-            this.center = new Vec2(12f, 5f);
-            this.collisionOffset = new Vec2(-6f, -4f);
-            this.collisionSize = new Vec2(12f, 8f);
-            this._barrelOffsetTL = new Vec2(24f, 4f);
-            this._fireSound = "smg";
-            this._fullAuto = true;
-            this._fireWait = 1f;
-            this._kickForce = 3f;
-            this._holdOffset = new Vec2(6f, 2f);
-            this.hoverRaise = false;
-            this.ignoreHands = true;
-            this._notePitchBinding.skipLerp = true;
-            this.editorTooltip = "The poor man's trombone.";
-            this.isFatal = false;
+            ammo = 4;
+            _ammoType = new ATLaser();
+            _ammoType.range = 170f;
+            _ammoType.accuracy = 0.8f;
+            wideBarrel = true;
+            barrelInsertOffset = new Vec2(-4f, -2f);
+            _type = "gun";
+            graphic = new Sprite("trumpet");
+            center = new Vec2(12f, 5f);
+            collisionOffset = new Vec2(-6f, -4f);
+            collisionSize = new Vec2(12f, 8f);
+            _barrelOffsetTL = new Vec2(24f, 4f);
+            _fireSound = "smg";
+            _fullAuto = true;
+            _fireWait = 1f;
+            _kickForce = 3f;
+            _holdOffset = new Vec2(6f, 2f);
+            hoverRaise = false;
+            ignoreHands = true;
+            _notePitchBinding.skipLerp = true;
+            editorTooltip = "The poor man's trombone.";
+            isFatal = false;
         }
 
         public override void Initialize() => base.Initialize();
@@ -57,100 +57,100 @@ namespace DuckGame
         {
             if (this.owner is Duck owner && owner.inputProfile != null)
             {
-                this.hideLeftWing = this.ignoreHands = !this.raised;
-                if (this.isServerForObject)
+                hideLeftWing = ignoreHands = !raised;
+                if (isServerForObject)
                 {
                     if (owner.inputProfile.Pressed("SHOOT"))
-                        this.currentPitch = 2;
+                        currentPitch = 2;
                     if (owner.inputProfile.Pressed("STRAFE"))
-                        this.currentPitch = 0;
+                        currentPitch = 0;
                     if (owner.inputProfile.Pressed("RAGDOLL"))
-                        this.currentPitch = 1;
-                    if (owner.inputProfile.leftTrigger > 0.5 && !this.leftPressed)
+                        currentPitch = 1;
+                    if (owner.inputProfile.leftTrigger > 0.5 && !leftPressed)
                     {
-                        this.currentPitch = 2;
-                        this.leftPressed = true;
+                        currentPitch = 2;
+                        leftPressed = true;
                     }
-                    if (owner.inputProfile.rightTrigger > 0.5 && !this.rightPressed)
+                    if (owner.inputProfile.rightTrigger > 0.5 && !rightPressed)
                     {
-                        this.currentPitch = 3;
-                        this.rightPressed = true;
+                        currentPitch = 3;
+                        rightPressed = true;
                     }
-                    if (owner.inputProfile.Released("STRAFE") && this.currentPitch == 0)
-                        this.currentPitch = -1;
-                    if (owner.inputProfile.Released("SHOOT") && this.currentPitch == 2)
-                        this.currentPitch = -1;
-                    if (owner.inputProfile.Released("RAGDOLL") && this.currentPitch == 1)
-                        this.currentPitch = -1;
+                    if (owner.inputProfile.Released("STRAFE") && currentPitch == 0)
+                        currentPitch = -1;
+                    if (owner.inputProfile.Released("SHOOT") && currentPitch == 2)
+                        currentPitch = -1;
+                    if (owner.inputProfile.Released("RAGDOLL") && currentPitch == 1)
+                        currentPitch = -1;
                     if (owner.inputProfile.leftTrigger <= 0.5)
                     {
-                        if (this.currentPitch == 2 && this.leftPressed)
-                            this.currentPitch = -1;
-                        this.leftPressed = false;
+                        if (currentPitch == 2 && leftPressed)
+                            currentPitch = -1;
+                        leftPressed = false;
                     }
                     if (owner.inputProfile.rightTrigger <= 0.5)
                     {
-                        if (this.currentPitch == 3 && this.rightPressed)
-                            this.currentPitch = -1;
-                        this.rightPressed = false;
+                        if (currentPitch == 3 && rightPressed)
+                            currentPitch = -1;
+                        rightPressed = false;
                     }
-                    this.notePitch = this.currentPitch < 0 || this._raised ? 0f : (float)(currentPitch / 3.0 + 0.00999999977648258);
+                    notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3.0 + 0.00999999977648258);
                 }
-                if (notePitch != this.prevNotePitch)
+                if (notePitch != prevNotePitch)
                 {
                     if (notePitch != 0.0)
                     {
-                        if (this.noteSound != null)
+                        if (noteSound != null)
                         {
-                            this.noteSound.Stop();
-                            this.noteSound = null;
+                            noteSound.Stop();
+                            noteSound = null;
                         }
                         int num = (int)Math.Round(notePitch * 3.0);
                         if (num < 0)
                             num = 0;
                         if (num > 12)
                             num = 12;
-                        if (this.noteSound == null)
+                        if (noteSound == null)
                         {
-                            this.hitPitch = this.notePitch;
-                            this.noteSound = SFX.Play("trumpet0" + Change.ToString(num + 1), 0.8f);
-                            Level.Add(new MusicNote(this.barrelPosition.x, this.barrelPosition.y, this.barrelVector));
+                            hitPitch = notePitch;
+                            noteSound = SFX.Play("trumpet0" + Change.ToString(num + 1), 0.8f);
+                            Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
                         }
                         else
-                            this.noteSound.Pitch = Maths.Clamp((float)((notePitch - this.hitPitch) * 0.00999999977648258), -1f, 1f);
+                            noteSound.Pitch = Maths.Clamp((float)((notePitch - hitPitch) * 0.00999999977648258), -1f, 1f);
                     }
-                    else if (this.noteSound != null)
+                    else if (noteSound != null)
                     {
-                        this.noteSound.Stop();
-                        this.noteSound = null;
+                        noteSound.Stop();
+                        noteSound = null;
                     }
                 }
-                if (this._raised)
+                if (_raised)
                 {
-                    this.collisionOffset = new Vec2(4f, -4f);
-                    this.collisionSize = new Vec2(8f, 8f);
-                    this._holdOffset = new Vec2(0f, 0f);
-                    this.handOffset = new Vec2(0f, 0f);
-                    this.OnReleaseAction();
+                    collisionOffset = new Vec2(4f, -4f);
+                    collisionSize = new Vec2(8f, 8f);
+                    _holdOffset = new Vec2(0f, 0f);
+                    handOffset = new Vec2(0f, 0f);
+                    OnReleaseAction();
                 }
                 else
                 {
-                    this.collisionOffset = new Vec2(-6f, -4f);
-                    this.collisionSize = new Vec2(8f, 8f);
-                    this._holdOffset = new Vec2(10f, -2f);
-                    this.handOffset = new Vec2(5f, -2f);
+                    collisionOffset = new Vec2(-6f, -4f);
+                    collisionSize = new Vec2(8f, 8f);
+                    _holdOffset = new Vec2(10f, -2f);
+                    handOffset = new Vec2(5f, -2f);
                 }
             }
             else
             {
-                this.leftPressed = false;
-                this.rightPressed = false;
-                this.currentPitch = -1;
-                this.collisionOffset = new Vec2(-6f, -4f);
-                this.collisionSize = new Vec2(8f, 8f);
-                this._holdOffset = new Vec2(6f, 2f);
+                leftPressed = false;
+                rightPressed = false;
+                currentPitch = -1;
+                collisionOffset = new Vec2(-6f, -4f);
+                collisionSize = new Vec2(8f, 8f);
+                _holdOffset = new Vec2(6f, 2f);
             }
-            this.prevNotePitch = this.notePitch;
+            prevNotePitch = notePitch;
             base.Update();
         }
 
@@ -168,14 +168,14 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this.duck != null && !this.raised)
+            if (duck != null && !raised)
             {
-                SpriteMap fingerPositionSprite = this.duck.profile.persona.fingerPositionSprite;
-                fingerPositionSprite.frame = this.currentPitch + 1;
-                fingerPositionSprite.depth = this.depth - 100;
-                fingerPositionSprite.flipH = this.offDir <= 0;
+                SpriteMap fingerPositionSprite = duck.profile.persona.fingerPositionSprite;
+                fingerPositionSprite.frame = currentPitch + 1;
+                fingerPositionSprite.depth = depth - 100;
+                fingerPositionSprite.flipH = offDir <= 0;
                 fingerPositionSprite.angle = 0f;
-                Vec2 vec2 = this.Offset(new Vec2(-8f, -2f));
+                Vec2 vec2 = Offset(new Vec2(-8f, -2f));
                 Graphics.Draw(fingerPositionSprite, vec2.x, vec2.y);
             }
             base.Draw();

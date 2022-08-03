@@ -8,17 +8,17 @@ namespace DuckGame
     {
         public Cape(float xpos, float ypos, PhysicsObject attach, bool trail = false) : base(xpos, ypos, null)
         {
-            this.graphic = new Sprite("cape", 0f, 0f);
-            this.visible = attach.visible;
+            graphic = new Sprite("cape", 0f, 0f);
+            visible = attach.visible;
             //this.killTimer = this.killTime;
-            this._attach = attach;
+            _attach = attach;
             base.depth = -0.5f;
-            this._trail = trail;
-            this._editorCanModify = false;
-            if (this._trail)
+            _trail = trail;
+            _editorCanModify = false;
+            if (_trail)
             {
-                this.metadata.CapeTaperStart.value = 0.8f;
-                this.metadata.CapeTaperEnd.value = 0f;
+                metadata.CapeTaperStart.value = 0.8f;
+                metadata.CapeTaperEnd.value = 0f;
             }
         }
 
@@ -26,22 +26,22 @@ namespace DuckGame
         {
             base.Update();
             Vec2 attachOffset = Vec2.Zero;
-            if (this._attach != null)
+            if (_attach != null)
             {
-                attachOffset = this._attach.OffsetLocal(this.metadata.CapeOffset.value);
-                if (this._attach.removeFromLevel)
+                attachOffset = _attach.OffsetLocal(metadata.CapeOffset.value);
+                if (_attach.removeFromLevel)
                 {
                     Level.Remove(this);
                     return;
                 }
             }
-            this._trail = this.metadata.CapeIsTrail.value;
-            if (this._initLastPos)
+            _trail = metadata.CapeIsTrail.value;
+            if (_initLastPos)
             {
                 //this._lastPos = this._attach.position + attachOffset;
-                this._initLastPos = false;
+                _initLastPos = false;
             }
-            Thing attach = this._attach;
+            Thing attach = _attach;
             float yOffset = 1f;
             if (attach is TeamHat && attach.owner != null)
             {
@@ -71,116 +71,116 @@ namespace DuckGame
                 velLength = 3f;
             }
             float inverseVel = 1f - velLength / 3f;
-            this._capeWave += velLength * 0.1f;
-            this._inverseWave += inverseVel * 0.09f;
-            this._inverseWave2 += inverseVel * 0.06f;
+            _capeWave += velLength * 0.1f;
+            _inverseWave += inverseVel * 0.09f;
+            _inverseWave2 += inverseVel * 0.06f;
             float sin = (float)Math.Sin(_capeWave);
             float sin2 = (float)Math.Sin(_inverseWave);
             float sin3 = (float)Math.Sin(_inverseWave2);
-            if (this._trail)
+            if (_trail)
             {
                 sin = 0f;
                 sin2 = 0f;
                 sin3 = 0f;
             }
-            this._capeWaveMult = velLength * 0.5f;
+            _capeWaveMult = velLength * 0.5f;
             float inverseMult = inverseVel * 0.5f;
-            this.offDir = (sbyte)-this._attach.offDir;
+            offDir = (sbyte)-_attach.offDir;
             Vec2 p = attach.position + attachOffset;
             Vec2 p2 = attach.position + attachOffset;
-            base.depth = (this.metadata.CapeForeground.value ? (attach.depth + 50) : (attach.depth - 50));
+            base.depth = (metadata.CapeForeground.value ? (attach.depth + 50) : (attach.depth - 50));
             p.y += yOffset;
             p2.y += yOffset;
-            if (!this._trail)
+            if (!_trail)
             {
-                p.y += sin * this._capeWaveMult * this.metadata.CapeWiggleModifier.value.y * (attach.velocity.x * 0.5f);
-                p.x += sin * this._capeWaveMult * this.metadata.CapeWiggleModifier.value.x * (attach.velocity.y * 0.2f);
+                p.y += sin * _capeWaveMult * metadata.CapeWiggleModifier.value.y * (attach.velocity.x * 0.5f);
+                p.x += sin * _capeWaveMult * metadata.CapeWiggleModifier.value.x * (attach.velocity.y * 0.2f);
             }
-            if (this.capePeices.Count > 0)
+            if (capePeices.Count > 0)
             {
-                p2 = this.capePeices[this.capePeices.Count - 1].p1;
+                p2 = capePeices[capePeices.Count - 1].p1;
             }
-            if (this._trail)
+            if (_trail)
             {
-                this.capePeices.Add(new CapePeice(attach.x + attachOffset.x, attach.y + attachOffset.y, this.metadata.CapeTaperStart.value, p, p2));
+                capePeices.Add(new CapePeice(attach.x + attachOffset.x, attach.y + attachOffset.y, metadata.CapeTaperStart.value, p, p2));
             }
             else
             {
-                this.capePeices.Add(new CapePeice(attach.x - this.offDir * -10 + attachOffset.x, attach.y + 6f + attachOffset.y, this.metadata.CapeTaperStart.value, p, p2));
+                capePeices.Add(new CapePeice(attach.x - offDir * -10 + attachOffset.x, attach.y + 6f + attachOffset.y, metadata.CapeTaperStart.value, p, p2));
             }
             int idx = 0;
-            foreach (CapePeice cp in this.capePeices)
+            foreach (CapePeice cp in capePeices)
             {
-                cp.wide = Lerp.FloatSmooth(this.metadata.CapeTaperEnd.value, this.metadata.CapeTaperStart.value, idx / (float)(this.capePeices.Count - 1), 1f);
-                if (!this._trail)
+                cp.wide = Lerp.FloatSmooth(metadata.CapeTaperEnd.value, metadata.CapeTaperStart.value, idx / (float)(capePeices.Count - 1), 1f);
+                if (!_trail)
                 {
                     CapePeice capePeice = cp;
-                    capePeice.p1.x += sin2 * inverseMult * this.metadata.CapeWiggleModifier.value.x * (cp.wide - 0.5f) * 0.9f;
+                    capePeice.p1.x += sin2 * inverseMult * metadata.CapeWiggleModifier.value.x * (cp.wide - 0.5f) * 0.9f;
                     CapePeice capePeice2 = cp;
-                    capePeice2.p2.x += sin2 * inverseMult * this.metadata.CapeWiggleModifier.value.x * (cp.wide - 0.5f) * 0.9f;
+                    capePeice2.p2.x += sin2 * inverseMult * metadata.CapeWiggleModifier.value.x * (cp.wide - 0.5f) * 0.9f;
                     CapePeice capePeice3 = cp;
-                    capePeice3.p1.y += sin3 * inverseMult * this.metadata.CapeWiggleModifier.value.y * (cp.wide - 0.5f) * 0.8f;
+                    capePeice3.p1.y += sin3 * inverseMult * metadata.CapeWiggleModifier.value.y * (cp.wide - 0.5f) * 0.8f;
                     CapePeice capePeice4 = cp;
-                    capePeice4.p2.y += sin3 * inverseMult * this.metadata.CapeWiggleModifier.value.y * (cp.wide - 0.5f) * 0.8f;
+                    capePeice4.p2.y += sin3 * inverseMult * metadata.CapeWiggleModifier.value.y * (cp.wide - 0.5f) * 0.8f;
                     CapePeice capePeice5 = cp;
-                    capePeice5.p1.y += this.metadata.CapeSwayModifier.value.y;
+                    capePeice5.p1.y += metadata.CapeSwayModifier.value.y;
                     CapePeice capePeice6 = cp;
-                    capePeice6.p2.y += this.metadata.CapeSwayModifier.value.y;
+                    capePeice6.p2.y += metadata.CapeSwayModifier.value.y;
                     CapePeice capePeice7 = cp;
-                    capePeice7.p1.x += this.metadata.CapeSwayModifier.value.x * offDir;
+                    capePeice7.p1.x += metadata.CapeSwayModifier.value.x * offDir;
                     CapePeice capePeice8 = cp;
-                    capePeice8.p2.x += this.metadata.CapeSwayModifier.value.x * offDir;
+                    capePeice8.p2.x += metadata.CapeSwayModifier.value.x * offDir;
                     CapePeice capePeice9 = cp;
                     capePeice9.position.x += 0.5f * offDir;
                 }
                 idx++;
             }
-            if (this._trail)
+            if (_trail)
             {
-                this.maxLength = 16;
+                maxLength = 16;
             }
-            while (this.capePeices.Count > this.maxLength + 1 && this.capePeices.Count > 0)
+            while (capePeices.Count > maxLength + 1 && capePeices.Count > 0)
             {
-                this.capePeices.RemoveAt(0);
+                capePeices.RemoveAt(0);
             }
             //this._lastPos = attach.position + attachOffset;
-            this.visible = attach.visible;
+            visible = attach.visible;
             if (attach is Holdable && attach.owner != null)
             {
-                this.visible = attach.owner.visible;
+                visible = attach.owner.visible;
                 if (attach.owner.owner != null && attach.owner.owner is Duck)
                 {
-                    this.visible = attach.owner.owner.visible;
+                    visible = attach.owner.owner.visible;
                 }
             }
-            if (this._capeTexture == null)
+            if (_capeTexture == null)
             {
-                this.SetCapeTexture(Content.Load<Texture2D>("plainCape"));
+                SetCapeTexture(Content.Load<Texture2D>("plainCape"));
             }
         }
 
         public void SetCapeTexture(Texture2D tex)
         {
-            this._capeTexture = tex;
-            this.maxLength = this._capeTexture.height / 2 - 6;
-            if (this.halfFlag)
+            _capeTexture = tex;
+            maxLength = _capeTexture.height / 2 - 6;
+            if (halfFlag)
             {
-                this.maxLength = (int)(_capeTexture.width * 0.28f) - 6;
+                maxLength = (int)(_capeTexture.width * 0.28f) - 6;
             }
         }
 
         public override void Draw()
         {
-            if (this._attach != null)
+            if (_attach != null)
             {
-                base.depth = (this.metadata.CapeForeground.value ? (this._attach.depth + 50) : (this._attach.depth - 50));
-                bool hide = !this._attach.visible;
-                if (this._attach.owner != null)
+                base.depth = (metadata.CapeForeground.value ? (_attach.depth + 50) : (_attach.depth - 50));
+                bool hide = !_attach.visible;
+                if (_attach.owner != null)
                 {
-                    hide &= !this._attach.owner.visible;
-                    if (this._attach.owner.owner != null)
+                    hide &= !_attach.owner.visible;
+                    if (_attach.owner.owner != null)
                     {
-                        hide &= !this._attach.owner.owner.visible;
+                        hide &= !_attach.owner.owner.visible;
                     }
                 }
                 if (hide)
@@ -193,25 +193,25 @@ namespace DuckGame
             Vec2 lastEdgeOffset = Vec2.Zero;
             bool hasLastPart = false;
             bool bust = false;
-            if (this._capeTexture != null)
+            if (_capeTexture != null)
             {
                 float deep = Graphics.AdjustDepth(base.depth);
-                float uvPart = 1f / (this.capePeices.Count - 1);
+                float uvPart = 1f / (capePeices.Count - 1);
                 float uvInc = 0f;
-                for (int i = this.capePeices.Count - 1; i >= 0; i--)
+                for (int i = capePeices.Count - 1; i >= 0; i--)
                 {
                     Vec2 texTL = new Vec2(0f, Math.Min(uvInc + uvPart, 1f));
                     Vec2 texTR = new Vec2(1f, Math.Min(uvInc + uvPart, 1f));
                     Vec2 texBL = new Vec2(0f, Math.Min(uvInc, 1f));
                     Vec2 texBR = new Vec2(1f, Math.Min(uvInc, 1f));
-                    if (this.halfFlag)
+                    if (halfFlag)
                     {
                         texTL = new Vec2(Math.Min(uvInc + uvPart, 1f), 0f);
                         texTR = new Vec2(Math.Min(uvInc + uvPart, 1f), 1f);
                         texBL = new Vec2(Math.Min(uvInc, 1f), 0f);
                         texBR = new Vec2(Math.Min(uvInc, 1f), 1f);
                     }
-                    if (this.offDir > 0)
+                    if (offDir > 0)
                     {
                         Vec2 vec = texTL;
                         Vec2 bbl = texBL;
@@ -220,11 +220,11 @@ namespace DuckGame
                         texBL = texBR;
                         texBR = bbl;
                     }
-                    CapePeice cp = this.capePeices[i];
+                    CapePeice cp = capePeices[i];
                     Vec2 edgeOffset = lastEdgeOffset;
                     if (i > 0)
                     {
-                        Vec2 v = cp.p1 - this.capePeices[i - 1].p1;
+                        Vec2 v = cp.p1 - capePeices[i - 1].p1;
                         v.Normalize();
                         edgeOffset = v.Rotate(Maths.DegToRad(90f), Vec2.Zero);
                     }
@@ -238,8 +238,8 @@ namespace DuckGame
                         {
                             pos = lastPart + v2 * 2f;
                         }
-                        float drawAlpha = Lerp.Float(this.metadata.CapeAlphaStart.value, this.metadata.CapeAlphaEnd.value, i / (float)(this.capePeices.Count - 1));
-                        Graphics.screen.DrawQuad(pos - edgeOffset * (capeWide * cp.wide / 2f), pos + edgeOffset * (capeWide * cp.wide / 2f), lastPart - lastEdgeOffset * (capeWide * cp.wide / 2f), lastPart + lastEdgeOffset * (capeWide * cp.wide / 2f), texTL, texTR, texBL, texBR, deep, this._capeTexture, Color.White * drawAlpha);
+                        float drawAlpha = Lerp.Float(metadata.CapeAlphaStart.value, metadata.CapeAlphaEnd.value, i / (float)(capePeices.Count - 1));
+                        Graphics.screen.DrawQuad(pos - edgeOffset * (capeWide * cp.wide / 2f), pos + edgeOffset * (capeWide * cp.wide / 2f), lastPart - lastEdgeOffset * (capeWide * cp.wide / 2f), lastPart + lastEdgeOffset * (capeWide * cp.wide / 2f), texTL, texTR, texBL, texBR, deep, _capeTexture, Color.White * drawAlpha);
                         if (bust)
                         {
                             break;

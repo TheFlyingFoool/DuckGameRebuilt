@@ -16,8 +16,8 @@ namespace DuckGame
 
         public NMRunNetworkAction(PhysicsObject pTarget, byte pNetworkActionIndex)
         {
-            this.target = pTarget;
-            this.actionIndex = pNetworkActionIndex;
+            target = pTarget;
+            actionIndex = pNetworkActionIndex;
         }
 
         public NMRunNetworkAction()
@@ -26,9 +26,9 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (this.target == null || this.actionIndex == byte.MaxValue)
+            if (target == null || actionIndex == byte.MaxValue)
                 return;
-            MethodInfo methodInfo = Editor.MethodFromNetworkActionIndex(this.target.GetType(), this.actionIndex);
+            MethodInfo methodInfo = Editor.MethodFromNetworkActionIndex(target.GetType(), actionIndex);
             if (!(methodInfo != null))
                 return;
             methodInfo.Invoke(target, null);

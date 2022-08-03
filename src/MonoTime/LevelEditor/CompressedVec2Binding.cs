@@ -17,7 +17,7 @@ namespace DuckGame
 
         public override System.Type type => typeof(int);
 
-        public override object GetNetValue() => CompressedVec2Binding.GetCompressedVec2(this.getTyped<Vec2>(), this._range);
+        public override object GetNetValue() => CompressedVec2Binding.GetCompressedVec2(getTyped<Vec2>(), _range);
 
         public static int GetCompressedVec2(Vec2 val, int range = 2147483647)
         {
@@ -34,11 +34,11 @@ namespace DuckGame
             return (int)((long)(ushort)Maths.Clamp((int)Math.Round(val.x), short.MinValue, short.MaxValue) << 16 | (ushort)Maths.Clamp((int)Math.Round(val.y), short.MinValue, short.MaxValue));
         }
 
-        public override int intValue => CompressedVec2Binding.GetCompressedVec2((Vec2)this.classValue, this._range);
+        public override int intValue => CompressedVec2Binding.GetCompressedVec2((Vec2)classValue, _range);
 
-        public override object ReadNetValue(object val) => CompressedVec2Binding.GetUncompressedVec2((int)val, this._range);
+        public override object ReadNetValue(object val) => CompressedVec2Binding.GetUncompressedVec2((int)val, _range);
 
-        public override object ReadNetValue(BitBuffer pData) => CompressedVec2Binding.GetUncompressedVec2((int)pData.ReadBits(this.type, this.bits), this._range);
+        public override object ReadNetValue(BitBuffer pData) => CompressedVec2Binding.GetUncompressedVec2((int)pData.ReadBits(type, bits), _range);
 
         public static Vec2 GetUncompressedVec2(int val, int range = 2147483647)
         {
@@ -56,8 +56,8 @@ namespace DuckGame
         public CompressedVec2Binding(string field, int range = 2147483647, bool isvelocity = false, bool doLerp = false)
           : base(field, vel: isvelocity)
         {
-            this._range = range;
-            this._lerp = doLerp;
+            _range = range;
+            _lerp = doLerp;
         }
 
         public CompressedVec2Binding(
@@ -68,22 +68,22 @@ namespace DuckGame
           bool doLerp = false)
           : base(field, vel: isvelocity)
         {
-            this._range = range;
-            this._priority = p;
-            this._lerp = doLerp;
+            _range = range;
+            _priority = p;
+            _lerp = doLerp;
         }
 
         public CompressedVec2Binding(string field, int range, bool doLerp)
           : base(field)
         {
-            this._range = range;
-            this._lerp = doLerp;
+            _range = range;
+            _lerp = doLerp;
         }
 
         public CompressedVec2Binding(string field, int range)
           : base(field)
         {
-            this._range = range;
+            _range = range;
         }
     }
 }

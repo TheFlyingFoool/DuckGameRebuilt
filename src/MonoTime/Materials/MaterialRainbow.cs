@@ -14,13 +14,13 @@ namespace DuckGame
         public float offset;
         public float offset2;
 
-        public MaterialRainbow() => this._effect = Content.Load<MTEffect>("Shaders/rainbow");
+        public MaterialRainbow() => _effect = Content.Load<MTEffect>("Shaders/rainbow");
 
         public override void Apply()
         {
-            this._effect.effect.Parameters["offset"].SetValue(this.offset);
-            this._effect.effect.Parameters["offset2"].SetValue(this.offset2);
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            _effect.effect.Parameters["offset"].SetValue(offset);
+            _effect.effect.Parameters["offset2"].SetValue(offset2);
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

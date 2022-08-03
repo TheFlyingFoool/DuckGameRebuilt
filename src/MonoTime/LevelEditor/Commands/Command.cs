@@ -14,30 +14,30 @@ namespace DuckGame
 
         public Command Inverse()
         {
-            this._inverse = !this._inverse;
+            _inverse = !_inverse;
             return this;
         }
 
         public void Do()
         {
-            if (this._done)
+            if (_done)
                 return;
-            if (this._inverse)
-                this.OnUndo();
+            if (_inverse)
+                OnUndo();
             else
-                this.OnDo();
-            this._done = true;
+                OnDo();
+            _done = true;
         }
 
         public void Undo()
         {
-            if (!this._done)
+            if (!_done)
                 return;
-            if (this._inverse)
-                this.OnDo();
+            if (_inverse)
+                OnDo();
             else
-                this.OnUndo();
-            this._done = false;
+                OnUndo();
+            _done = false;
         }
 
         public virtual void OnDo()

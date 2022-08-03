@@ -12,29 +12,29 @@ namespace DuckGame
         public ushort transferSession;
         private BitBuffer _buffer;
 
-        public BitBuffer GetBuffer() => this._buffer;
+        public BitBuffer GetBuffer() => _buffer;
 
         public NMLevelDataChunk(ushort tSession, BitBuffer dat)
         {
-            this.transferSession = tSession;
-            this._buffer = dat;
+            transferSession = tSession;
+            _buffer = dat;
         }
 
         public NMLevelDataChunk()
         {
         }
 
-        public override void MessageWasReceived() => this.connection.dataTransferProgress += this._buffer.lengthInBytes;
+        public override void MessageWasReceived() => connection.dataTransferProgress += _buffer.lengthInBytes;
 
         protected override void OnSerialize()
         {
-            this.serializedData.Write(this._buffer, true);
+            serializedData.Write(_buffer, true);
             base.OnSerialize();
         }
 
         public override void OnDeserialize(BitBuffer msg)
         {
-            this._buffer = msg.ReadBitBuffer();
+            _buffer = msg.ReadBitBuffer();
             base.OnDeserialize(msg);
         }
     }

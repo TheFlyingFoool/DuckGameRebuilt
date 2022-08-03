@@ -14,13 +14,13 @@ namespace DuckGame
         {
             if (image == null)
                 return;
-            this.graphic = new Sprite(image);
-            this.center = new Vec2(this.graphic.w / 2, this.graphic.h / 2);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = -0.5f;
-            this._editorName = name;
-            this.layer = Layer.Background;
+            graphic = new Sprite(image);
+            center = new Vec2(graphic.w / 2, graphic.h / 2);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            depth = -0.5f;
+            _editorName = name;
+            layer = Layer.Background;
         }
     }
 }

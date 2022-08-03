@@ -13,12 +13,12 @@ namespace DuckGame
         public PineTreeTileset(float x, float y)
           : base(x, y, "pineTileset")
         {
-            this._editorName = "Pine";
-            this.physicsMaterial = PhysicsMaterial.Default;
-            this.verticalWidth = 14f;
-            this.verticalWidthThick = 15f;
-            this.horizontalHeight = 8f;
-            this.depth = -0.55f;
+            _editorName = "Pine";
+            physicsMaterial = PhysicsMaterial.Default;
+            verticalWidth = 14f;
+            verticalWidthThick = 15f;
+            horizontalHeight = 8f;
+            depth = -0.55f;
         }
     }
 }

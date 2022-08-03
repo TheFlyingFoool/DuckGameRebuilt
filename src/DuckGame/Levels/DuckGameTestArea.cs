@@ -40,53 +40,53 @@ namespace DuckGame
           LevGenType genType = LevGenType.Any)
           : base(level)
         {
-            this._editor = editor;
+            _editor = editor;
             DeathmatchLevel._started = true;
-            this._followCam.lerpMult = 1.1f;
-            this._seed = seed;
-            this._center = center;
-            this._genType = genType;
-            this._levelValue = level;
+            _followCam.lerpMult = 1.1f;
+            _seed = seed;
+            _center = center;
+            _genType = genType;
+            _levelValue = level;
             DuckGameTestArea.currentEditor = editor;
         }
 
         public override void Initialize()
         {
-            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
-            this._pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE  @SELECT@SELECT");
-            this._confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
-            this._testMode = new UIMenu("TEST MODE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
+            _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
+            _pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE  @SELECT@SELECT");
+            _confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
+            _testMode = new UIMenu("TEST MODE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
             UIDivider component = new UIDivider(true, 0.8f);
-            component.leftSection.Add(new UIMenuItem("RESTART", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._restart), UIAlign.Left), true);
+            component.leftSection.Add(new UIMenuItem("RESTART", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _restart), UIAlign.Left), true);
             component.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
             component.leftSection.Add(new UIMenuItem("TEST MODE", new UIMenuActionOpenMenu(_pauseMenu, _testMode), UIAlign.Left), true);
             component.leftSection.Add(new UIText("", Color.White), true);
-            component.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit), UIAlign.Left), true);
+            component.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit), UIAlign.Left), true);
             component.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
-            this._pauseMenu.Add(component, true);
-            this._pauseMenu.Close();
-            this._pauseGroup.Add(_pauseMenu, false);
-            Options.AddMenus(this._pauseGroup);
-            Options.openOnClose = this._pauseMenu;
-            this._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
-            this._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
-            this._confirmMenu.Close();
-            this._pauseGroup.Add(_confirmMenu, false);
-            this._testMode.Add(new UIMenuItemNumber("PLAYERS", field: new FieldBinding(this, "numPlayers", 2f, 8f, 1f)), true);
-            this._testMode.Add(new UIMenuItem("START", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._startTestMode)), true);
-            this._testMode.SetBackFunction(new UIMenuActionOpenMenu(_testMode, _pauseMenu));
-            this._testMode.Close();
-            this._pauseGroup.Add(_testMode, false);
-            this._pauseGroup.isPauseMenu = true;
-            this._pauseGroup.Close();
-            this._pauseGroup.Update();
-            this._pauseGroup.Update();
+            _pauseMenu.Add(component, true);
+            _pauseMenu.Close();
+            _pauseGroup.Add(_pauseMenu, false);
+            Options.AddMenus(_pauseGroup);
+            Options.openOnClose = _pauseMenu;
+            _confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
+            _confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit)), true);
+            _confirmMenu.Close();
+            _pauseGroup.Add(_confirmMenu, false);
+            _testMode.Add(new UIMenuItemNumber("PLAYERS", field: new FieldBinding(this, "numPlayers", 2f, 8f, 1f)), true);
+            _testMode.Add(new UIMenuItem("START", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _startTestMode)), true);
+            _testMode.SetBackFunction(new UIMenuActionOpenMenu(_testMode, _pauseMenu));
+            _testMode.Close();
+            _pauseGroup.Add(_testMode, false);
+            _pauseGroup.isPauseMenu = true;
+            _pauseGroup.Close();
+            _pauseGroup.Update();
+            _pauseGroup.Update();
             Level.Add(_pauseGroup);
-            if (this._level == "RANDOM")
+            if (_level == "RANDOM")
             {
-                LevelGenerator.MakeLevel(this._center, this._center.left && this._center.right, this._seed, this._genType, Editor._procTilesWide, Editor._procTilesHigh, Editor._procXPos, Editor._procYPos).LoadParts(0f, 0f, this, this._seed);
+                LevelGenerator.MakeLevel(_center, _center.left && _center.right, _seed, _genType, Editor._procTilesWide, Editor._procTilesHigh, Editor._procXPos, Editor._procYPos).LoadParts(0f, 0f, this, _seed);
                 List<SpawnPoint> source1 = new List<SpawnPoint>();
-                foreach (SpawnPoint spawnPoint in this.things[typeof(SpawnPoint)])
+                foreach (SpawnPoint spawnPoint in things[typeof(SpawnPoint)])
                     source1.Add(spawnPoint);
                 List<SpawnPoint> chosenSpawns = new List<SpawnPoint>();
                 for (int index = 0; index < 4; ++index)
@@ -120,8 +120,8 @@ namespace DuckGame
             }
             else
             {
-                this._level = this._level.Replace(Directory.GetCurrentDirectory() + "\\", "");
-                LevelData levelData = DuckFile.LoadLevel(this._level);
+                _level = _level.Replace(Directory.GetCurrentDirectory() + "\\", "");
+                LevelData levelData = DuckFile.LoadLevel(_level);
                 if (levelData != null)
                 {
                     foreach (BinaryClassChunk node in levelData.objects.objects)
@@ -131,19 +131,19 @@ namespace DuckGame
                         {
                             if (!t.visibleInGame)
                                 t.visible = false;
-                            this.AddThing(t);
+                            AddThing(t);
                         }
                     }
                 }
             }
-            this.things.RefreshState();
+            things.RefreshState();
             foreach (Profile prof in Profiles.active)
             {
                 if (prof.team != null)
                     prof.team.Leave(prof);
             }
             int num = 4;
-            if (this.things[typeof(EightPlayer)].Count<Thing>() > 0)
+            if (things[typeof(EightPlayer)].Count<Thing>() > 0)
                 num = 8;
             for (int index = 0; index < num; ++index)
             {
@@ -155,7 +155,7 @@ namespace DuckGame
             foreach (Duck spawnPlayer in new Deathmatch(this).SpawnPlayers(false))
             {
                 Level.Add(spawnPlayer);
-                this.followCam.Add(spawnPlayer);
+                followCam.Add(spawnPlayer);
             }
         }
 
@@ -163,19 +163,19 @@ namespace DuckGame
         {
             if (Input.Pressed("START"))
             {
-                this._pauseGroup.Open();
-                this._pauseMenu.Open();
-                MonoMain.pauseMenu = this._pauseGroup;
-                if (this._paused)
+                _pauseGroup.Open();
+                _pauseMenu.Open();
+                MonoMain.pauseMenu = _pauseGroup;
+                if (_paused)
                     return;
                 SFX.Play("pause", 0.6f);
-                this._paused = true;
+                _paused = true;
             }
             else
             {
-                if (!this._paused || MonoMain.pauseMenu != null)
+                if (!_paused || MonoMain.pauseMenu != null)
                     return;
-                this._paused = false;
+                _paused = false;
                 SFX.Play("resume", 0.6f);
                 DeathmatchLevel._started = false;
             }
@@ -183,69 +183,69 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this._startTestMode.value)
+            if (_startTestMode.value)
             {
                 foreach (Profile profile in Profiles.active)
                     profile.team = null;
-                if (this.numPlayers > 7)
+                if (numPlayers > 7)
                 {
                     Profiles.DefaultPlayer8.team = Teams.Player8;
                     if (Profiles.DefaultPlayer8.inputProfile == null)
                         Profiles.DefaultPlayer8.inputProfile = InputProfile.DefaultPlayer8;
                 }
-                if (this.numPlayers > 6)
+                if (numPlayers > 6)
                 {
                     Profiles.DefaultPlayer7.team = Teams.Player7;
                     if (Profiles.DefaultPlayer7.inputProfile == null)
                         Profiles.DefaultPlayer7.inputProfile = InputProfile.DefaultPlayer7;
                 }
-                if (this.numPlayers > 5)
+                if (numPlayers > 5)
                 {
                     Profiles.DefaultPlayer6.team = Teams.Player6;
                     if (Profiles.DefaultPlayer6.inputProfile == null)
                         Profiles.DefaultPlayer6.inputProfile = InputProfile.DefaultPlayer6;
                 }
-                if (this.numPlayers > 4)
+                if (numPlayers > 4)
                 {
                     Profiles.DefaultPlayer5.team = Teams.Player5;
                     if (Profiles.DefaultPlayer5.inputProfile == null)
                         Profiles.DefaultPlayer5.inputProfile = InputProfile.DefaultPlayer5;
                 }
-                if (this.numPlayers > 3)
+                if (numPlayers > 3)
                 {
                     Profiles.DefaultPlayer4.team = Teams.Player4;
                     if (Profiles.DefaultPlayer4.inputProfile == null)
                         Profiles.DefaultPlayer4.inputProfile = InputProfile.DefaultPlayer4;
                 }
-                if (this.numPlayers > 2)
+                if (numPlayers > 2)
                 {
                     Profiles.DefaultPlayer3.team = Teams.Player3;
                     if (Profiles.DefaultPlayer3.inputProfile == null)
                         Profiles.DefaultPlayer3.inputProfile = InputProfile.DefaultPlayer3;
                 }
-                if (this.numPlayers > 1)
+                if (numPlayers > 1)
                 {
                     Profiles.DefaultPlayer2.team = Teams.Player2;
                     if (Profiles.DefaultPlayer2.inputProfile == null)
                         Profiles.DefaultPlayer2.inputProfile = InputProfile.DefaultPlayer2;
                 }
-                if (this.numPlayers > 0)
+                if (numPlayers > 0)
                     Profiles.experienceProfile.team = Teams.Player1;
                 EditorTestLevel t = null;
-                if (this.things[typeof(EditorTestLevel)].Count<Thing>() > 0)
-                    t = this.things[typeof(EditorTestLevel)].First<Thing>() as EditorTestLevel;
-                Level.current = new GameLevel(this._levelValue, editorTestMode: true);
+                if (things[typeof(EditorTestLevel)].Count<Thing>() > 0)
+                    t = things[typeof(EditorTestLevel)].First<Thing>() as EditorTestLevel;
+                Level.current = new GameLevel(_levelValue, editorTestMode: true);
                 if (t == null)
                     return;
                 Level.current.AddThing(t);
             }
-            else if (this._restart.value)
+            else if (_restart.value)
             {
-                this.transitionSpeedMultiplier = 2f;
+                transitionSpeedMultiplier = 2f;
                 EditorTestLevel t = null;
-                if (this.things[typeof(EditorTestLevel)].Count<Thing>() > 0)
-                    t = this.things[typeof(EditorTestLevel)].First<Thing>() as EditorTestLevel;
-                Level.current = new DuckGameTestArea(this._editor, this._levelValue, this._seed, this._center, this._genType);
+                if (things[typeof(EditorTestLevel)].Count<Thing>() > 0)
+                    t = things[typeof(EditorTestLevel)].First<Thing>() as EditorTestLevel;
+                Level.current = new DuckGameTestArea(_editor, _levelValue, _seed, _center, _genType);
                 Level.current.transitionSpeedMultiplier = 2f;
                 if (t == null)
                     return;
@@ -253,21 +253,21 @@ namespace DuckGame
             }
             else
             {
-                if (this._level == "RANDOM")
+                if (_level == "RANDOM")
                 {
-                    if (this.wait < 4)
-                        ++this.wait;
-                    if (this.wait == 4)
+                    if (wait < 4)
+                        ++wait;
+                    if (wait == 4)
                     {
-                        ++this.wait;
-                        foreach (AutoBlock autoBlock in this.things[typeof(AutoBlock)])
+                        ++wait;
+                        foreach (AutoBlock autoBlock in things[typeof(AutoBlock)])
                             autoBlock.PlaceBlock();
-                        foreach (AutoPlatform autoPlatform in this.things[typeof(AutoPlatform)])
+                        foreach (AutoPlatform autoPlatform in things[typeof(AutoPlatform)])
                         {
                             autoPlatform.PlaceBlock();
                             autoPlatform.UpdateNubbers();
                         }
-                        foreach (BlockGroup blockGroup in this.things[typeof(BlockGroup)])
+                        foreach (BlockGroup blockGroup in things[typeof(BlockGroup)])
                         {
                             foreach (Block block in blockGroup.blocks)
                             {
@@ -277,8 +277,8 @@ namespace DuckGame
                         }
                     }
                 }
-                this.PauseLogic();
-                if (this._quit.value)
+                PauseLogic();
+                if (_quit.value)
                     Level.current = _editor;
                 base.Update();
             }

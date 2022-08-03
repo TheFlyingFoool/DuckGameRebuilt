@@ -15,22 +15,22 @@ namespace DuckGame
 
         public ButtonImage(char key)
         {
-            this._font = new BitmapFont("tinyNumbers", 4, 5);
-            this._keySprite = new Sprite("buttons/genericButton");
-            this._keyString = ((int)key).ToString() ?? "";
-            this._texture = this._keySprite.texture;
+            _font = new BitmapFont("tinyNumbers", 4, 5);
+            _keySprite = new Sprite("buttons/genericButton");
+            _keyString = ((int)key).ToString() ?? "";
+            _texture = _keySprite.texture;
         }
 
         public override void Draw()
         {
-            this._keySprite.position = this.position;
-            this._keySprite.alpha = this.alpha;
-            this._keySprite.color = this.color;
-            this._keySprite.depth = this.depth;
-            this._keySprite.scale = this.scale;
-            this._keySprite.Draw();
-            this._font.scale = this.scale;
-            this._font.Draw(this._keyString, this.position + new Vec2((float)(_keySprite.width * this.scale.x / 2f - this._font.GetWidth(this._keyString) / 2f), 4f * this.scale.y), new Color(20, 32, 34), this.depth + 2);
+            _keySprite.position = position;
+            _keySprite.alpha = alpha;
+            _keySprite.color = color;
+            _keySprite.depth = depth;
+            _keySprite.scale = scale;
+            _keySprite.Draw();
+            _font.scale = scale;
+            _font.Draw(_keyString, position + new Vec2((float)(_keySprite.width * scale.x / 2f - _font.GetWidth(_keyString) / 2f), 4f * scale.y), new Color(20, 32, 34), depth + 2);
         }
     }
 }

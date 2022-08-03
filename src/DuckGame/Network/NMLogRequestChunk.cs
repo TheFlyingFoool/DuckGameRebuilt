@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public string data;
 
-        public NMLogRequestChunk(string pData) => this.data = pData;
+        public NMLogRequestChunk(string pData) => data = pData;
 
         public NMLogRequestChunk()
         {
@@ -19,14 +19,14 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (!DevConsole.core.requestingLogs.Contains(this.connection))
+            if (!DevConsole.core.requestingLogs.Contains(connection))
                 return;
-            DevConsole.core.ReceiveLogData(this.data, this.connection);
-            ++this.connection.logTransferProgress;
-            Send.Message(new NMLogPartWasReceived(), this.connection);
-            if (this.connection.logTransferProgress != this.connection.logTransferSize)
+            DevConsole.core.ReceiveLogData(data, connection);
+            ++connection.logTransferProgress;
+            Send.Message(new NMLogPartWasReceived(), connection);
+            if (connection.logTransferProgress != connection.logTransferSize)
                 return;
-            DevConsole.LogTransferComplete(this.connection);
+            DevConsole.LogTransferComplete(connection);
         }
     }
 }

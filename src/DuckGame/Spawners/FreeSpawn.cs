@@ -24,29 +24,29 @@ namespace DuckGame
             {
                 depth = (Depth)0.9f
             };
-            this.graphic = spriteMap;
-            this._editorName = "Spawn Point";
-            this.center = new Vec2(16f, 23f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -16f);
-            this._visibleInGame = false;
-            this.editorTooltip = "Basic spawn point for a single Duck. Every level needs at least one.";
-            this.secondSpawn._tooltip = "If set, this duck will be the alternate duck in a 1V1 pair.";
+            graphic = spriteMap;
+            _editorName = "Spawn Point";
+            center = new Vec2(16f, 23f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -16f);
+            _visibleInGame = false;
+            editorTooltip = "Basic spawn point for a single Duck. Every level needs at least one.";
+            secondSpawn._tooltip = "If set, this duck will be the alternate duck in a 1V1 pair.";
         }
 
         public override void Draw()
         {
-            this.frame = (int)this.spawnType;
-            if (this.secondSpawn.value)
-                this.frame = 3;
-            if (this.eightPlayerOnly.value)
+            frame = (int)spawnType;
+            if (secondSpawn.value)
+                frame = 3;
+            if (eightPlayerOnly.value)
             {
-                if (this._eight == null)
+                if (_eight == null)
                 {
-                    this._eight = new SpriteMap("redEight", 10, 10);
-                    this._eight.CenterOrigin();
+                    _eight = new SpriteMap("redEight", 10, 10);
+                    _eight.CenterOrigin();
                 }
-                Graphics.Draw(_eight, this.x - 5f, this.y + 7f, (Depth)1f);
+                Graphics.Draw(_eight, x - 5f, y + 7f, (Depth)1f);
             }
             base.Draw();
         }

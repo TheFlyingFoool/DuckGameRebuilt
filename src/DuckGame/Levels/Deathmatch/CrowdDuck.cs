@@ -35,93 +35,93 @@ namespace DuckGame
         public int duckColor;
         private SpriteMap _originalSprite;
 
-        public bool empty => this._empty;
+        public bool empty => _empty;
 
         public string letter
         {
-            get => this._letter;
-            set => this._letter = value;
+            get => _letter;
+            set => _letter = value;
         }
 
-        public Profile lastLoyalty => this._lastLoyalty;
+        public Profile lastLoyalty => _lastLoyalty;
 
         public Profile loyalty
         {
-            get => this._loyalty;
-            set => this._loyalty = value;
+            get => _loyalty;
+            set => _loyalty = value;
         }
 
         public bool busy
         {
-            get => this._busy;
-            set => this._busy = value;
+            get => _busy;
+            set => _busy = value;
         }
 
         public void ClearActions()
         {
-            this._busy = false;
-            this._hate = false;
-            this._letterNumber = 0;
-            this._letter = null;
-            this._lastLoyalty = this._loyalty;
+            _busy = false;
+            _hate = false;
+            _letterNumber = 0;
+            _letter = null;
+            _lastLoyalty = _loyalty;
         }
 
         public void SetLetter(string l, int num, bool hate = false, Profile p = null)
         {
-            this._letter = l;
-            this._letterNumber = num;
-            this._busy = this._letter != null;
-            this._hate = hate;
-            this._signProfile = p;
+            _letter = l;
+            _letterNumber = num;
+            _busy = _letter != null;
+            _hate = hate;
+            _signProfile = p;
         }
 
         public void TryChangingAllegiance(Profile to, float awesomeness)
         {
             if (awesomeness > 0.1f && Rando.Float(1f) < awesomeness)
             {
-                if (this.loyalty != null)
+                if (loyalty != null)
                 {
-                    if (this.loyalty != to)
+                    if (loyalty != to)
                     {
-                        if (!this.loyalty.stats.TryFanTransfer(to, awesomeness, this.loyal))
+                        if (!loyalty.stats.TryFanTransfer(to, awesomeness, loyal))
                             return;
-                        if (this.loyal)
-                            this.newLoyal = false;
+                        if (loyal)
+                            newLoyal = false;
                         else
-                            this.loyalty = to;
+                            loyalty = to;
                     }
                     else
                     {
                         if (awesomeness <= 0.15f || Rando.Float(1.1f) >= awesomeness)
                             return;
                         to.stats.MakeFanLoyal();
-                        this.newLoyal = true;
+                        newLoyal = true;
                     }
                 }
                 else
                 {
-                    this.loyalty = to;
+                    loyalty = to;
                     ++to.stats.unloyalFans;
                 }
             }
             else
             {
-                if (awesomeness >= -0.1f || Rando.Float(1f) >= Math.Abs(awesomeness) || this.loyalty != to || !this.loyalty.stats.FanConsidersLeaving(awesomeness, this.loyal))
+                if (awesomeness >= -0.1f || Rando.Float(1f) >= Math.Abs(awesomeness) || loyalty != to || !loyalty.stats.FanConsidersLeaving(awesomeness, loyal))
                     return;
-                if (this.loyal)
-                    this.newLoyal = false;
+                if (loyal)
+                    newLoyal = false;
                 else
-                    this.loyalty = null;
+                    loyalty = null;
             }
         }
 
         public void ThrowHat(Profile p)
         {
-            if (this._lastLoyalty != this._loyalty && (this._lastLoyalty == p && this._loyalty == null || this._loyalty == p))
-                this._hatThrowTime = Rando.Float(0.2f, 1f);
-            if (this._loyalty != p)
+            if (_lastLoyalty != _loyalty && (_lastLoyalty == p && _loyalty == null || _loyalty == p))
+                _hatThrowTime = Rando.Float(0.2f, 1f);
+            if (_loyalty != p)
                 return;
-            this.loyal = this.newLoyal;
+            loyal = newLoyal;
         }
 
         public CrowdDuck(
@@ -138,8 +138,8 @@ namespace DuckGame
           int varColor = -1)
           : base(xpos, ypos)
         {
-            this.distVal = dist;
-            this.z = zpos;
+            distVal = dist;
+            z = zpos;
             int totalFans = Crowd.totalFans;
             int _max = 3;
             if (dist <= 20)
@@ -152,13 +152,13 @@ namespace DuckGame
                 _max = 0;
             ++Crowd.fansUsed;
             Rando.Int(1);
-            this.duckColor = varColor > -1 ? varColor : Rando.Int(3);
-            this._originalSprite = Persona.all.ElementAt<DuckPersona>(this.duckColor).crowdSprite;
-            SpriteMap spriteMap = this._originalSprite.CloneMap();
+            duckColor = varColor > -1 ? varColor : Rando.Int(3);
+            _originalSprite = Persona.all.ElementAt<DuckPersona>(duckColor).crowdSprite;
+            SpriteMap spriteMap = _originalSprite.CloneMap();
             if (empty == 0 || empty == -1 && Rando.Int(_max) < 1)
             {
                 spriteMap.AddAnimation("idle", Rando.Float(0.05f, 0.1f), true, 9);
-                this._empty = true;
+                _empty = true;
             }
             else
             {
@@ -170,15 +170,15 @@ namespace DuckGame
                     {
                         profile = fan.profile;
                         if (fan.loyalFans > 0)
-                            this.newLoyal = this.loyal = true;
+                            newLoyal = loyal = true;
                     }
-                    this._loyalty = this._lastLoyalty = profile;
+                    _loyalty = _lastLoyalty = profile;
                 }
                 else
                 {
-                    this._loyalty = varLoyalty;
-                    this._lastLoyalty = varLastLoyalty;
-                    this.loyal = this.newLoyal = varLoyal;
+                    _loyalty = varLoyalty;
+                    _lastLoyalty = varLastLoyalty;
+                    loyal = newLoyal = varLoyal;
                 }
                 switch (facing)
                 {
@@ -200,114 +200,114 @@ namespace DuckGame
                 }
             }
             spriteMap.SetAnimation("idle");
-            this._sprite = spriteMap;
-            this.graphic = _sprite;
-            this.collisionSize = new Vec2(_sprite.width, _sprite.height);
-            this.collisionOffset = new Vec2(-(this._sprite.w / 2), -(this._sprite.h / 2));
-            this.center = new Vec2(0f, spriteMap.h);
-            this.collisionOffset = new Vec2(this.collisionOffset.x, -this._sprite.h);
-            this.depth = (Depth)(0.3f - row * 0.05f);
-            this.layer = Layer.Background;
-            this._letterSign = new Sprite("letterSign");
-            this._letterSign.CenterOrigin();
-            this._letterSign.depth = this.depth + 2;
-            this._font = new BitmapFont("biosFont", 8);
-            this._loveSign = new Sprite("loveSign");
-            this._loveSign.CenterOrigin();
-            this._loveSign.depth = (Depth)(0.32f - row * 0.05f);
-            this._sucksSign = new Sprite("sucksSign");
-            this._sucksSign.CenterOrigin();
-            this._sucksSign.depth = (Depth)(0.32f - row * 0.05f);
-            this._suckSign = new Sprite("suckSign");
-            this._suckSign.CenterOrigin();
-            this._suckSign.depth = (Depth)(0.32f - row * 0.05f);
+            _sprite = spriteMap;
+            graphic = _sprite;
+            collisionSize = new Vec2(_sprite.width, _sprite.height);
+            collisionOffset = new Vec2(-(_sprite.w / 2), -(_sprite.h / 2));
+            center = new Vec2(0f, spriteMap.h);
+            collisionOffset = new Vec2(collisionOffset.x, -_sprite.h);
+            depth = (Depth)(0.3f - row * 0.05f);
+            layer = Layer.Background;
+            _letterSign = new Sprite("letterSign");
+            _letterSign.CenterOrigin();
+            _letterSign.depth = depth + 2;
+            _font = new BitmapFont("biosFont", 8);
+            _loveSign = new Sprite("loveSign");
+            _loveSign.CenterOrigin();
+            _loveSign.depth = (Depth)(0.32f - row * 0.05f);
+            _sucksSign = new Sprite("sucksSign");
+            _sucksSign.CenterOrigin();
+            _sucksSign.depth = (Depth)(0.32f - row * 0.05f);
+            _suckSign = new Sprite("suckSign");
+            _suckSign.CenterOrigin();
+            _suckSign.depth = (Depth)(0.32f - row * 0.05f);
         }
 
         public override void Initialize() => base.Initialize();
 
         public override void Update()
         {
-            if (this._empty)
+            if (_empty)
                 return;
-            if (this._mood != Crowd.mood)
-                this._mood = Crowd.mood;
-            if (this._mood == Mood.Calm || this._mood == Mood.Silent || this._mood == Mood.Dead || this._mood == Mood.Excited)
-                this._sprite.SetAnimation("cheer");
-            else if (this._mood == Mood.Extatic)
-                this._sprite.SetAnimation("scream");
+            if (_mood != Crowd.mood)
+                _mood = Crowd.mood;
+            if (_mood == Mood.Calm || _mood == Mood.Silent || _mood == Mood.Dead || _mood == Mood.Excited)
+                _sprite.SetAnimation("cheer");
+            else if (_mood == Mood.Extatic)
+                _sprite.SetAnimation("scream");
             if (_hatThrowTime > 0f)
             {
-                this._hatThrowTime -= 0.01f;
+                _hatThrowTime -= 0.01f;
             }
             else
             {
                 if (_hatThrowTime <= -0.5f)
                     return;
-                this._lastLoyalty = this._loyalty;
-                if (this._lastLoyalty == null)
+                _lastLoyalty = _loyalty;
+                if (_lastLoyalty == null)
                     SFX.Play("cutOffQuack2", 0.9f, Rando.Float(-0.1f, 0.1f));
                 else
                     SFX.Play("cutOffQuack", 0.9f, Rando.Float(-0.1f, 0.1f));
-                Level.Add(SmallSmoke.New(this.x + 6f, this.y - 35f));
-                this._hatThrowTime = -1f;
+                Level.Add(SmallSmoke.New(x + 6f, y - 35f));
+                _hatThrowTime = -1f;
             }
         }
 
         public override void Draw()
         {
-            if (this._sprite == null || this._originalSprite == null)
+            if (_sprite == null || _originalSprite == null)
                 return;
-            this._sprite.texture = this._originalSprite.texture;
-            if (!this._empty && this._letter != null)
+            _sprite.texture = _originalSprite.texture;
+            if (!_empty && _letter != null)
             {
                 float num = (float)(Math.Sin(_letterSway + _letterNumber * 0.1f) * 2f + 4f);
-                this._letterSway += 0.1f;
-                if (this._letter.Length == 1)
+                _letterSway += 0.1f;
+                if (_letter.Length == 1)
                 {
-                    if ((this._signProfile == null || this._signProfile == this.loyalty) && this._letter != " ")
+                    if ((_signProfile == null || _signProfile == loyalty) && _letter != " ")
                     {
-                        this._letterSign.depth = this.depth + 5;
-                        Graphics.Draw(this._letterSign, this.x + 10f, this.y - 24f + num);
-                        this._font.Draw(this._letter, this.x + 6f, this.y - 28f + num, Color.Gray, this.depth + 9);
+                        _letterSign.depth = depth + 5;
+                        Graphics.Draw(_letterSign, x + 10f, y - 24f + num);
+                        _font.Draw(_letter, x + 6f, y - 28f + num, Color.Gray, depth + 9);
                     }
                 }
-                else if (this._hate)
+                else if (_hate)
                 {
-                    if (this._letter[this._letter.Length - 1] == 'S')
+                    if (_letter[_letter.Length - 1] == 'S')
                     {
-                        Graphics.Draw(this._suckSign, this.x + 28f, this.y - 27f + num);
-                        this._font.Draw(this._letter, (float)(this.x - this._font.GetWidth(this._letter) / 2.0 + 28.0), (float)(this.y - 26.0 - 8.0) + num, Color.Gray, this._suckSign.depth + 3);
+                        Graphics.Draw(_suckSign, x + 28f, y - 27f + num);
+                        _font.Draw(_letter, (float)(x - _font.GetWidth(_letter) / 2.0 + 28.0), (float)(y - 26.0 - 8.0) + num, Color.Gray, _suckSign.depth + 3);
                     }
                     else
                     {
-                        Graphics.Draw(this._sucksSign, this.x + 28f, this.y - 27f + num);
-                        this._font.Draw(this._letter, (float)(this.x - this._font.GetWidth(this._letter) / 2.0 + 28.0), (float)(this.y - 26.0 - 8.0) + num, Color.Gray, this._sucksSign.depth + 3);
+                        Graphics.Draw(_sucksSign, x + 28f, y - 27f + num);
+                        _font.Draw(_letter, (float)(x - _font.GetWidth(_letter) / 2.0 + 28.0), (float)(y - 26.0 - 8.0) + num, Color.Gray, _sucksSign.depth + 3);
                     }
                 }
                 else
                 {
-                    Graphics.Draw(this._loveSign, this.x + 28f, this.y - 27f + num);
-                    this._font.Draw(this._letter, (float)(this.x - this._font.GetWidth(this._letter) / 2.0 + 29.0), this.y - 26f + num, Color.Gray, this._loveSign.depth + 3);
+                    Graphics.Draw(_loveSign, x + 28f, y - 27f + num);
+                    _font.Draw(_letter, (float)(x - _font.GetWidth(_letter) / 2.0 + 29.0), y - 26f + num, Color.Gray, _loveSign.depth + 3);
                 }
             }
-            if (!this._empty && this._lastLoyalty != null && this._lastLoyalty.persona != null && this._lastLoyalty.team != null)
+            if (!_empty && _lastLoyalty != null && _lastLoyalty.persona != null && _lastLoyalty.team != null)
             {
-                SpriteMap g = this._lastLoyalty.persona.defaultHead;
+                SpriteMap g = _lastLoyalty.persona.defaultHead;
                 Vec2 vec2 = Vec2.Zero;
-                if (this._lastLoyalty.team.hasHat)
+                if (_lastLoyalty.team.hasHat)
                 {
-                    vec2 = this._lastLoyalty.team.hatOffset;
-                    g = this._lastLoyalty.team.GetHat(this._lastLoyalty.persona);
+                    vec2 = _lastLoyalty.team.hatOffset;
+                    g = _lastLoyalty.team.GetHat(_lastLoyalty.persona);
                 }
                 if (g == null)
                     return;
-                g.depth = this.depth + 2;
+                g.depth = depth + 2;
                 g.angle = 0f;
                 g.alpha = 1f;
                 g.color = Color.White;
-                bool flag = this._sprite.imageIndex == 1 || this._sprite.imageIndex == 2 || this._sprite.imageIndex == 4 || this._sprite.imageIndex == 5 || this._sprite.imageIndex == 7 || this._sprite.imageIndex == 8;
+                bool flag = _sprite.imageIndex == 1 || _sprite.imageIndex == 2 || _sprite.imageIndex == 4 || _sprite.imageIndex == 5 || _sprite.imageIndex == 7 || _sprite.imageIndex == 8;
                 float num = 0f;
-                if (this._sprite.imageIndex > 2)
+                if (_sprite.imageIndex > 2)
                 {
                     g.flipH = true;
                     num += 5f;
@@ -322,10 +322,10 @@ namespace DuckGame
                 }
                 if (g.flipH)
                     vec2.x = -vec2.x;
-                if (this.loyal)
+                if (loyal)
                     g.frame = flag ? 1 : 0;
                 g.CenterOrigin();
-                Graphics.Draw(g, (float)(this.x - vec2.x + 8.0) + num, (float)(this.y - vec2.y - 22.0 - (flag ? 1.0 : 0.0)));
+                Graphics.Draw(g, (float)(x - vec2.x + 8.0) + num, (float)(y - vec2.y - 22.0 - (flag ? 1.0 : 0.0)));
                 g.frame = 0;
                 g.flipH = false;
             }

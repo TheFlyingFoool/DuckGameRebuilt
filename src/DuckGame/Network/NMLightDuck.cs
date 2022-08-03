@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public Duck duck;
 
-        public NMLightDuck(Duck pDuck) => this.duck = pDuck;
+        public NMLightDuck(Duck pDuck) => duck = pDuck;
 
         public NMLightDuck()
         {
@@ -19,11 +19,11 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (this.duck == null)
+            if (duck == null)
                 return;
-            this.duck.isBurnMessage = true;
-            this.duck.Burn(this.duck.position, null);
-            this.duck.isBurnMessage = false;
+            duck.isBurnMessage = true;
+            duck.Burn(duck.position, null);
+            duck.isBurnMessage = false;
         }
     }
 }

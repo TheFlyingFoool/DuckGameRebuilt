@@ -19,27 +19,27 @@ namespace DuckGame
         public WallDoor(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("wallDoor", 21, 30);
-            this._sprite.AddAnimation("opening", 1f, false, 1, 2, 3, 4, 5, 6, 6, 6, 6, 6);
-            this._sprite.AddAnimation("closing", 1f, false, 5, 4, 3, 2, 1);
-            this._sprite.AddAnimation("open", 1f, false, 6);
-            this._sprite.AddAnimation("closed", 1f, false, new int[1]);
-            this._sprite.SetAnimation("closed");
-            this.graphic = _sprite;
-            this.center = new Vec2(10f, 22f);
-            this.collisionSize = new Vec2(21f, 30f);
-            this.collisionOffset = new Vec2(-10f, -20f);
-            this.depth = -0.5f;
-            this._editorName = "Wall Door";
-            this._canFlip = false;
+            _sprite = new SpriteMap("wallDoor", 21, 30);
+            _sprite.AddAnimation("opening", 1f, false, 1, 2, 3, 4, 5, 6, 6, 6, 6, 6);
+            _sprite.AddAnimation("closing", 1f, false, 5, 4, 3, 2, 1);
+            _sprite.AddAnimation("open", 1f, false, 6);
+            _sprite.AddAnimation("closed", 1f, false, new int[1]);
+            _sprite.SetAnimation("closed");
+            graphic = _sprite;
+            center = new Vec2(10f, 22f);
+            collisionSize = new Vec2(21f, 30f);
+            collisionOffset = new Vec2(-10f, -20f);
+            depth = -0.5f;
+            _editorName = "Wall Door";
+            _canFlip = false;
         }
 
         public void AddDuck(Duck d)
         {
             d.autoExitDoor = true;
             d.autoExitDoorFrames = 5;
-            this._transportingDucks.Add(d);
-            this._sprite.SetAnimation("open");
+            _transportingDucks.Add(d);
+            _sprite.SetAnimation("open");
             if (d.spriteImageIndex >= 4)
                 return;
             SFX.Play("doorOpen", Rando.Float(0.8f, 0.9f), Rando.Float(-0.1f, 0.1f));
@@ -47,42 +47,42 @@ namespace DuckGame
 
         public override void Update()
         {
-            foreach (Duck duck in Level.CheckRectAll<Duck>(this.topLeft, this.bottomRight))
+            foreach (Duck duck in Level.CheckRectAll<Duck>(topLeft, bottomRight))
             {
-                if (duck.grounded && duck.inputProfile.Pressed("UP") && !duck.enteringWalldoor && !duck.exitingWalldoor && !this._transportingDucks.Contains(duck))
+                if (duck.grounded && duck.inputProfile.Pressed("UP") && !duck.enteringWalldoor && !duck.exitingWalldoor && !_transportingDucks.Contains(duck))
                 {
-                    this._transportingDucks.Add(duck);
+                    _transportingDucks.Add(duck);
                     duck.wallDoorAI = new DuckAI(duck.inputProfile);
                     duck.autoExitDoorFrames = 0;
                     duck.enterDoorSpeed = duck.hSpeed;
                     if (duck.spriteImageIndex < 4)
                         SFX.Play("doorOpen", Rando.Float(0.8f, 0.9f), Rando.Float(-0.1f, 0.1f));
-                    this._sprite.SetAnimation("opening");
+                    _sprite.SetAnimation("opening");
                 }
             }
-            if (this._sprite.currentAnimation == "opening" && this._sprite.finished)
-                this._sprite.SetAnimation("open");
-            if (this._sprite.currentAnimation == "closing" && this._sprite.finished)
+            if (_sprite.currentAnimation == "opening" && _sprite.finished)
+                _sprite.SetAnimation("open");
+            if (_sprite.currentAnimation == "closing" && _sprite.finished)
             {
-                this._sprite.SetAnimation("closed");
+                _sprite.SetAnimation("closed");
                 SFX.Play("doorClose", Rando.Float(0.5f, 0.6f), Rando.Float(-0.1f, 0.1f));
             }
-            if (this._transportingDucks.Count == 0 && this._sprite.currentAnimation != "closing" && this._sprite.currentAnimation != "closed")
-                this._sprite.SetAnimation("closing");
-            for (int index = 0; index < this._transportingDucks.Count; ++index)
+            if (_transportingDucks.Count == 0 && _sprite.currentAnimation != "closing" && _sprite.currentAnimation != "closed")
+                _sprite.SetAnimation("closing");
+            for (int index = 0; index < _transportingDucks.Count; ++index)
             {
-                Duck transportingDuck = this._transportingDucks[index];
+                Duck transportingDuck = _transportingDucks[index];
                 if (transportingDuck.wallDoorAI == null && !transportingDuck.autoExitDoor && !transportingDuck.exitingWalldoor)
                 {
                     WallDoor wallDoor = null;
                     if (transportingDuck.inputProfile.Pressed("LEFT") || transportingDuck.inputProfile.Down("LEFT") && transportingDuck.autoExitDoorFrames > 5)
-                        wallDoor = Level.CheckRay<WallDoor>(this.position, this.position + new Vec2(-10000f, 0f), this, out Vec2 _);
+                        wallDoor = Level.CheckRay<WallDoor>(position, position + new Vec2(-10000f, 0f), this, out Vec2 _);
                     if (transportingDuck.inputProfile.Pressed("RIGHT") || transportingDuck.inputProfile.Down("RIGHT") && transportingDuck.autoExitDoorFrames > 5)
-                        wallDoor = Level.CheckRay<WallDoor>(this.position, this.position + new Vec2(10000f, 0f), this, out Vec2 _);
+                        wallDoor = Level.CheckRay<WallDoor>(position, position + new Vec2(10000f, 0f), this, out Vec2 _);
                     if (transportingDuck.inputProfile.Pressed("UP") || transportingDuck.inputProfile.Down("UP") && transportingDuck.autoExitDoorFrames > 10)
-                        wallDoor = Level.CheckRay<WallDoor>(this.position, this.position + new Vec2(0f, -10000f), this, out Vec2 _);
+                        wallDoor = Level.CheckRay<WallDoor>(position, position + new Vec2(0f, -10000f), this, out Vec2 _);
                     if (transportingDuck.inputProfile.Pressed("DOWN") || transportingDuck.inputProfile.Down("DOWN") && transportingDuck.autoExitDoorFrames > 5)
-                        wallDoor = Level.CheckRay<WallDoor>(this.position, this.position + new Vec2(0f, 10000f), this, out Vec2 _);
+                        wallDoor = Level.CheckRay<WallDoor>(position, position + new Vec2(0f, 10000f), this, out Vec2 _);
                     if (wallDoor != null)
                     {
                         transportingDuck.enteringWalldoor = true;
@@ -90,7 +90,7 @@ namespace DuckGame
                         transportingDuck.autoExitDoorFrames = 0;
                     }
                 }
-                if (Math.Abs(transportingDuck.x - this.x) < 3.0 && transportingDuck.wallDoorAI != null)
+                if (Math.Abs(transportingDuck.x - x) < 3.0 && transportingDuck.wallDoorAI != null)
                 {
                     transportingDuck.hSpeed *= 0.5f;
                     transportingDuck.moveLock = true;
@@ -98,9 +98,9 @@ namespace DuckGame
                 }
                 else if (transportingDuck.wallDoorAI != null)
                 {
-                    if (transportingDuck.x > this.x + 2.0)
+                    if (transportingDuck.x > x + 2.0)
                         transportingDuck.wallDoorAI.Press("LEFT");
-                    if (transportingDuck.x < this.x - 2.0)
+                    if (transportingDuck.x < x - 2.0)
                         transportingDuck.wallDoorAI.Press("RIGHT");
                 }
                 if (transportingDuck.transportDoor != null)
@@ -119,7 +119,7 @@ namespace DuckGame
                     transportingDuck.position = transportingDuck.transportDoor.position + new Vec2(0f, -6f);
                     transportingDuck.transportDoor.AddDuck(transportingDuck);
                     transportingDuck.transportDoor = null;
-                    this._transportingDucks.RemoveAt(index);
+                    _transportingDucks.RemoveAt(index);
                     --index;
                 }
                 else if (transportingDuck.exitingWalldoor)
@@ -128,7 +128,7 @@ namespace DuckGame
                     transportingDuck.enteringWalldoor = false;
                     transportingDuck.exitingWalldoor = false;
                     transportingDuck.wallDoorAI = null;
-                    this._transportingDucks.RemoveAt(index);
+                    _transportingDucks.RemoveAt(index);
                     transportingDuck.autoExitDoor = false;
                     transportingDuck.transportDoor = null;
                     transportingDuck.hSpeed = transportingDuck.enterDoorSpeed;
@@ -140,7 +140,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Graphics.DrawRect(this.topLeft, this.bottomRight, new Color(18, 25, 33), -0.6f);
+            Graphics.DrawRect(topLeft, bottomRight, new Color(18, 25, 33), -0.6f);
             base.Draw();
         }
     }

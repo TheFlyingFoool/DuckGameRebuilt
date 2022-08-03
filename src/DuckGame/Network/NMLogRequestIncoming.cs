@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public int numChunks;
 
-        public NMLogRequestIncoming(int pNumChunks) => this.numChunks = pNumChunks;
+        public NMLogRequestIncoming(int pNumChunks) => numChunks = pNumChunks;
 
         public NMLogRequestIncoming()
         {
@@ -19,10 +19,10 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (!DevConsole.core.requestingLogs.Contains(this.connection))
+            if (!DevConsole.core.requestingLogs.Contains(connection))
                 return;
-            this.connection.logTransferSize = this.numChunks;
-            this.connection.logTransferProgress = 0;
+            connection.logTransferSize = numChunks;
+            connection.logTransferProgress = 0;
         }
     }
 }

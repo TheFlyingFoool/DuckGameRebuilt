@@ -368,80 +368,80 @@ namespace DuckGame
 
         public override int numTriggers => 2;
 
-        public bool isMaybePlaystation => this._productName == "Wireless Controller";
+        public bool isMaybePlaystation => _productName == "Wireless Controller";
 
         public override string productName
         {
             get
             {
-                if (this.isConnected)
+                if (isConnected)
                 {
-                    string productName = DInput.GetProductName(this.index);
+                    string productName = DInput.GetProductName(index);
                     if (productName != null)
-                        this._productName = productName.Trim();
+                        _productName = productName.Trim();
                     else
-                        this._productName = null;
+                        _productName = null;
                 }
-                return this._productName;
+                return _productName;
             }
-            set => this._productName = value;
+            set => _productName = value;
         }
 
         public override string productGUID
         {
             get
             {
-                if (this.isConnected)
+                if (isConnected)
                 {
-                    string productGuid = DInput.GetProductGUID(this.index);
+                    string productGuid = DInput.GetProductGUID(index);
                     if (productGuid != null)
-                        this._productGUID = productGuid;
+                        _productGUID = productGuid;
                     else
-                        this._productGUID = null;
+                        _productGUID = null;
                 }
-                return this._productGUID;
+                return _productGUID;
             }
-            set => this._productGUID = value;
+            set => _productGUID = value;
         }
 
-        public override bool isConnected => DInput.IsConnected(this.index);
+        public override bool isConnected => DInput.IsConnected(index);
 
-        public bool isXInput => DInput.IsXInput(this.index);
+        public bool isXInput => DInput.IsXInput(index);
 
         public DInputPad(int idx)
           : base(idx)
         {
-            this._name = "dinput" + idx.ToString();
-            this._productName = DInput.GetProductName(this.index);
-            if (this._productName != null)
-                this._productName = this._productName.Trim();
-            this._productGUID = DInput.GetProductGUID(this.index);
+            _name = "dinput" + idx.ToString();
+            _productName = DInput.GetProductName(index);
+            if (_productName != null)
+                _productName = _productName.Trim();
+            _productGUID = DInput.GetProductGUID(index);
         }
 
         public override Dictionary<int, string> GetTriggerNames()
         {
-            if (this.isXInput)
+            if (isXInput)
             {
-                if (this._internalXInput == null)
-                    this._internalXInput = new XInputPad(0);
-                return this._internalXInput._triggerNames;
+                if (_internalXInput == null)
+                    _internalXInput = new XInputPad(0);
+                return _internalXInput._triggerNames;
             }
-            return this.isMaybePlaystation ? this._triggerNamesPS : this._triggerNames;
+            return isMaybePlaystation ? _triggerNamesPS : _triggerNames;
         }
 
         public override Sprite GetMapImage(int map)
         {
             Sprite mapImage;
-            if (this.isXInput)
+            if (isXInput)
             {
-                if (this._internalXInput == null)
-                    this._internalXInput = new XInputPad(0);
-                this._internalXInput._triggerImages.TryGetValue(map, out mapImage);
+                if (_internalXInput == null)
+                    _internalXInput = new XInputPad(0);
+                _internalXInput._triggerImages.TryGetValue(map, out mapImage);
             }
-            else if (this.isMaybePlaystation)
-                this._triggerImagesPS.TryGetValue(map, out mapImage);
+            else if (isMaybePlaystation)
+                _triggerImagesPS.TryGetValue(map, out mapImage);
             else
-                this._triggerImages.TryGetValue(map, out mapImage);
+                _triggerImages.TryGetValue(map, out mapImage);
             return mapImage;
         }
 
@@ -450,7 +450,7 @@ namespace DuckGame
             PadState padState = new PadState();
             if (state == null)
                 return padState;
-            if (this.isXInput)
+            if (isXInput)
             {
                 if (state.buttons[0])
                     padState.buttons |= PadButton.A;
@@ -546,6 +546,6 @@ namespace DuckGame
             return padState;
         }
 
-        protected override PadState GetState(int index) => this.ConvertDInputState(DInput.GetState(index));
+        protected override PadState GetState(int index) => ConvertDInputState(DInput.GetState(index));
     }
 }

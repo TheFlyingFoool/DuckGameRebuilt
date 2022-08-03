@@ -12,8 +12,8 @@ namespace DuckGame
         public UIModifierMenuItem(UIMenuAction action = null, UIAlign al = UIAlign.Center, Color c = default(Color))
           : base("MODIFIERS", action, step: 0, c: c)
         {
-            this._useBaseActivationLogic = true;
-            this.controlString = null;
+            _useBaseActivationLogic = true;
+            controlString = null;
         }
 
         public override void Update()
@@ -24,12 +24,12 @@ namespace DuckGame
                 if (unlock.enabled && unlock.unlocked)
                     ++num;
             }
-            if (this._textItem != null)
+            if (_textItem != null)
             {
                 if (num == 0)
-                    this._textItem.text = "NONE";
+                    _textItem.text = "NONE";
                 else
-                    this._textItem.text = num.ToString();
+                    _textItem.text = num.ToString();
             }
             base.Update();
         }

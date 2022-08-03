@@ -15,63 +15,63 @@ namespace DuckGame
         public static int lastForceGrid;
         private int _framesSinceSelected = 999;
 
-        public Thing thing => this._thing;
+        public Thing thing => _thing;
 
         public ContextObject(Thing thing, IContextListener owner, bool placement = true)
           : base(owner)
         {
-            this._placement = placement;
-            this._thing = thing;
-            this._image = thing.GeneratePreview(transparentBack: true);
-            this.itemSize.y = 16f;
-            this._text = thing.editorName;
-            this.itemSize.x = Graphics.GetFancyStringWidth(this._text) + 26f;
-            this._thingBag = ContentProperties.GetBag(thing.GetType());
+            _placement = placement;
+            _thing = thing;
+            _image = thing.GeneratePreview(transparentBack: true);
+            itemSize.y = 16f;
+            _text = thing.editorName;
+            itemSize.x = Graphics.GetFancyStringWidth(_text) + 26f;
+            _thingBag = ContentProperties.GetBag(thing.GetType());
             //if (Main.isDemo && !this._thingBag.GetOrDefault("isInDemo", false))
             //    this.greyOut = true;
             //else
-            this.greyOut = false;
-            if (this._thingBag.GetOrDefault("previewPriority", false))
-                this._previewPriority = true;
-            this.tooltip = thing.editorTooltip;
-            if (!this._thingBag.GetOrDefault("isOnlineCapable", true))
-                this.tooltip = "(OFFLINE ONLY) " + this.tooltip;
+            greyOut = false;
+            if (_thingBag.GetOrDefault("previewPriority", false))
+                _previewPriority = true;
+            tooltip = thing.editorTooltip;
+            if (!_thingBag.GetOrDefault("isOnlineCapable", true))
+                tooltip = "(OFFLINE ONLY) " + tooltip;
             int placementCost = Editor.CalculatePlacementCost(thing);
             bool flag = false;
             if (placementCost > 0 && Editor.placementLimit > 0)
             {
-                this.tooltip = "(" + placementCost.ToString() + " @EDITORCURRENCY@) " + this.tooltip;
+                tooltip = "(" + placementCost.ToString() + " @EDITORCURRENCY@) " + tooltip;
                 flag = true;
             }
-            if (this.tooltip == null)
-                this.tooltip = "";
-            if (!(this.tooltip != "" | flag))
+            if (tooltip == null)
+                tooltip = "";
+            if (!(tooltip != "" | flag))
                 return;
-            this.tooltip = thing.editorName + ": " + this.tooltip;
+            tooltip = thing.editorName + ": " + tooltip;
         }
 
         public override void Selected()
         {
             bool flag = false;
-            if (this._framesSinceSelected < 20 || Editor.inputMode != EditorInput.Touch)
+            if (_framesSinceSelected < 20 || Editor.inputMode != EditorInput.Touch)
                 flag = true;
-            this._framesSinceSelected = 0;
-            if (this.scrollButtonDirection != 0)
+            _framesSinceSelected = 0;
+            if (scrollButtonDirection != 0)
             {
-                this._owner.Selected(this);
+                _owner.Selected(this);
             }
             else
             {
                 //if (Main.isDemo && !this._thingBag.GetOrDefault("isInDemo", false))
                 //    return;
-                if (this._placement)
+                if (_placement)
                 {
                     if (!(Level.current is Editor current))
                         return;
-                    current.placementType = this._thing;
+                    current.placementType = _thing;
                     if (flag)
                         current.CloseMenu();
-                    if (this._thing.forceEditorGrid != 0)
+                    if (_thing.forceEditorGrid != 0)
                     {
                         current.cellSize = _thing.forceEditorGrid;
                         ContextObject.lastForceGrid = (int)current.cellSize;
@@ -85,44 +85,44 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (this._owner == null)
+                    if (_owner == null)
                         return;
-                    this._owner.Selected(this);
+                    _owner.Selected(this);
                 }
             }
         }
 
         public override void Draw()
         {
-            ++this._framesSinceSelected;
-            if (this._hover && !this.greyOut)
-                Graphics.DrawRect(this.position, this.position + this.itemSize, new Color(70, 70, 70), this.depth + 1);
-            if (this.scrollButtonDirection != 0)
+            ++_framesSinceSelected;
+            if (_hover && !greyOut)
+                Graphics.DrawRect(position, position + itemSize, new Color(70, 70, 70), depth + 1);
+            if (scrollButtonDirection != 0)
             {
-                this._arrow.depth = this.depth + 2;
-                if (this.scrollButtonDirection > 0)
+                _arrow.depth = depth + 2;
+                if (scrollButtonDirection > 0)
                 {
-                    this._arrow.flipV = true;
-                    Graphics.Draw(this._arrow, this.position.x + (this._owner as ContextMenu).menuSize.x / 2f, this.position.y + 8f);
+                    _arrow.flipV = true;
+                    Graphics.Draw(_arrow, position.x + (_owner as ContextMenu).menuSize.x / 2f, position.y + 8f);
                 }
                 else
                 {
-                    this._arrow.flipV = false;
-                    Graphics.Draw(this._arrow, this.position.x + (this._owner as ContextMenu).menuSize.x / 2f, this.position.y + 8f);
+                    _arrow.flipV = false;
+                    Graphics.Draw(_arrow, position.x + (_owner as ContextMenu).menuSize.x / 2f, position.y + 8f);
                 }
             }
             else
             {
                 Color color = Color.White;
-                if (this.greyOut)
+                if (greyOut)
                     color = Color.White * 0.3f;
-                Graphics.DrawFancyString(this._text, this.position + new Vec2(22f, 4f), color, this.depth + 2);
-                this._image.depth = this.depth + 3;
-                this._image.x = this.x + 1f;
-                this._image.y = this.y;
-                this._image.color = color;
-                this._image.scale = new Vec2(1f);
-                this._image.Draw();
+                Graphics.DrawFancyString(_text, position + new Vec2(22f, 4f), color, depth + 2);
+                _image.depth = depth + 3;
+                _image.x = x + 1f;
+                _image.y = y;
+                _image.color = color;
+                _image.scale = new Vec2(1f);
+                _image.Draw();
             }
         }
     }

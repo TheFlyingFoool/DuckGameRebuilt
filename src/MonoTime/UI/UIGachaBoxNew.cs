@@ -98,47 +98,47 @@ namespace DuckGame
           UIMenu openOnClose = null)
           : base("", xpos, ypos, wide, high)
         {
-            this._openOnClose = openOnClose;
-            this._rare = rare;
-            this._duckCoin = new SpriteMap("duckCoin", 18, 18);
-            this._duckCoin.CenterOrigin();
-            this._gachaMachine = new Sprite("arcade/gotcha/machine");
-            this._gachaMachine.CenterOrigin();
-            this._gachaGlass = new Sprite("arcade/gotcha/glass");
-            this._gachaGlass.CenterOrigin();
-            this._gachaDoor = new Sprite("arcade/gotcha/door");
-            this._gachaDoor.CenterOrigin();
-            this._gachaTwister = new Sprite("arcade/gotcha/twister");
-            this._gachaTwister.CenterOrigin();
-            this._gachaBall = new SpriteMap("arcade/gotcha/balls", 40, 42);
-            this._gachaBall.CenterOrigin();
-            this._gachaTwisterShadow = new Sprite("arcade/gotcha/twisterShadow");
-            this._gachaTwisterShadow.CenterOrigin();
-            this._whiteCircle = new Sprite("furni/whiteCircle");
-            this._whiteCircle.CenterOrigin();
-            this._coin = new SpriteMap("arcade/gotcha/coin", 22, 22);
-            this._coin.CenterOrigin();
-            this._coinSlot = new Sprite("arcade/gotcha/coinSlot");
-            this._coinSlot.CenterOrigin();
-            this._rainbow = new Sprite("arcade/rainbow");
+            _openOnClose = openOnClose;
+            _rare = rare;
+            _duckCoin = new SpriteMap("duckCoin", 18, 18);
+            _duckCoin.CenterOrigin();
+            _gachaMachine = new Sprite("arcade/gotcha/machine");
+            _gachaMachine.CenterOrigin();
+            _gachaGlass = new Sprite("arcade/gotcha/glass");
+            _gachaGlass.CenterOrigin();
+            _gachaDoor = new Sprite("arcade/gotcha/door");
+            _gachaDoor.CenterOrigin();
+            _gachaTwister = new Sprite("arcade/gotcha/twister");
+            _gachaTwister.CenterOrigin();
+            _gachaBall = new SpriteMap("arcade/gotcha/balls", 40, 42);
+            _gachaBall.CenterOrigin();
+            _gachaTwisterShadow = new Sprite("arcade/gotcha/twisterShadow");
+            _gachaTwisterShadow.CenterOrigin();
+            _whiteCircle = new Sprite("furni/whiteCircle");
+            _whiteCircle.CenterOrigin();
+            _coin = new SpriteMap("arcade/gotcha/coin", 22, 22);
+            _coin.CenterOrigin();
+            _coinSlot = new Sprite("arcade/gotcha/coinSlot");
+            _coinSlot.CenterOrigin();
+            _rainbow = new Sprite("arcade/rainbow");
             Graphics.fade = 1f;
-            this._frame = new Sprite("unlockFrame");
-            this._frame.CenterOrigin();
-            this._furni = new Sprite("furni/stone");
-            this._furni.center = new Vec2(this._furni.width / 2, _furni.height);
-            this._star = new Sprite("prettyStar");
-            this._star.CenterOrigin();
-            this._font = new BitmapFont("biosFontUI", 8, 7);
-            this._fancyFont = new FancyBitmapFont("smallFontGacha");
-            this._gachaEgg = new SpriteMap("gachaEgg", 44, 36);
-            this._capsule = new SpriteMap("arcade/egg", 40, 23);
-            this._capsule.CenterOrigin();
-            this._capsuleBorder = new SpriteMap("arcade/eggBorder", 66, 65);
-            this._capsuleBorder.CenterOrigin();
-            this._rare = false;
-            this.numGenerate = MonoMain.core.gachas;
-            this.numGenerateRare = MonoMain.core.rareGachas;
-            for (int index = 0; index < this.numGenerate; ++index)
+            _frame = new Sprite("unlockFrame");
+            _frame.CenterOrigin();
+            _furni = new Sprite("furni/stone");
+            _furni.center = new Vec2(_furni.width / 2, _furni.height);
+            _star = new Sprite("prettyStar");
+            _star.CenterOrigin();
+            _font = new BitmapFont("biosFontUI", 8, 7);
+            _fancyFont = new FancyBitmapFont("smallFontGacha");
+            _gachaEgg = new SpriteMap("gachaEgg", 44, 36);
+            _capsule = new SpriteMap("arcade/egg", 40, 23);
+            _capsule.CenterOrigin();
+            _capsuleBorder = new SpriteMap("arcade/eggBorder", 66, 65);
+            _capsuleBorder.CenterOrigin();
+            _rare = false;
+            numGenerate = MonoMain.core.gachas;
+            numGenerateRare = MonoMain.core.rareGachas;
+            for (int index = 0; index < numGenerate; ++index)
             {
                 UIGachaBox.useNumGachas = true;
                 Furniture furniture = UIGachaBox.GetRandomFurniture(Rarity.Common, 1, gacha: true)[0];
@@ -146,9 +146,9 @@ namespace DuckGame
                 ++Global.data.numGachas;
                 furniture.ballRot = Rando.Float(360f);
                 furniture.rareGen = false;
-                this.prizes.Add(furniture);
+                prizes.Add(furniture);
             }
-            for (int index = 0; index < this.numGenerateRare; ++index)
+            for (int index = 0; index < numGenerateRare; ++index)
             {
                 UIGachaBox.useNumGachas = true;
                 Furniture furniture = UIGachaBox.GetRandomFurniture(Rarity.VeryVeryRare, 1, 0.4f, true).OrderBy<Furniture, int>(x => -x.rarity).ElementAt<Furniture>(0);
@@ -156,7 +156,7 @@ namespace DuckGame
                 ++Global.data.numGachas;
                 furniture.ballRot = Rando.Float(360f);
                 furniture.rareGen = true;
-                this.prizes.Add(furniture);
+                prizes.Add(furniture);
             }
             for (int index = 0; index < 3; ++index)
             {
@@ -166,21 +166,21 @@ namespace DuckGame
                 ++Global.data.numGachas;
                 furniture.ballRot = Rando.Float(360f);
                 furniture.rareGen = false;
-                this.prizes.Add(furniture);
+                prizes.Add(furniture);
             }
             if (UIGachaBoxNew.skipping)
             {
-                while (this.prizes.Count > 3)
+                while (prizes.Count > 3)
                 {
-                    this.LoadNextPrize();
+                    LoadNextPrize();
                     Profiles.experienceProfile.SetNumFurnitures(_contains.index, Profiles.experienceProfile.GetNumFurnitures(_contains.index) + 1);
-                    this.prizes.RemoveAt(0);
+                    prizes.RemoveAt(0);
                 }
                 SFX.Play("harp");
                 UIGachaBoxNew.skipping = false;
             }
-            this.LoadNextPrize();
-            this._gachaEgg.CenterOrigin();
+            LoadNextPrize();
+            _gachaEgg.CenterOrigin();
         }
 
         public int FigureFrame(Furniture f)
@@ -192,18 +192,18 @@ namespace DuckGame
 
         public void LoadNextPrize()
         {
-            this._contains = this.prizes.ElementAt<Furniture>(0);
-            this._capsule.frame = this.FigureFrame(this._contains);
+            _contains = prizes.ElementAt<Furniture>(0);
+            _capsule.frame = FigureFrame(_contains);
         }
 
         public override void OnClose()
         {
             MonoMain.core.gachas = 0;
             MonoMain.core.rareGachas = 0;
-            this.numGenerate = 0;
-            this.numGenerateRare = 0;
+            numGenerate = 0;
+            numGenerateRare = 0;
             Profiles.Save(Profiles.experienceProfile);
-            if (this._openOnClose == null)
+            if (_openOnClose == null)
                 return;
             MonoMain.pauseMenu = _openOnClose;
         }
@@ -219,91 +219,91 @@ namespace DuckGame
             }
             if (UIGachaBoxNew.skipping)
             {
-                while (this.prizes.Count > 3)
+                while (prizes.Count > 3)
                 {
-                    this.LoadNextPrize();
+                    LoadNextPrize();
                     Profiles.experienceProfile.SetNumFurnitures(_contains.index, Profiles.experienceProfile.GetNumFurnitures(_contains.index) + 1);
-                    this.prizes.RemoveAt(0);
+                    prizes.RemoveAt(0);
                 }
                 UIGachaBoxNew.skipping = false;
-                this.finished = true;
-                this.Close();
+                finished = true;
+                Close();
                 HUD.CloseAllCorners();
             }
             else
             {
-                if (!this.didSkipPrompt)
+                if (!didSkipPrompt)
                 {
                     if (Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0)
                         HUD.AddCornerControl(HUDCorner.BottomLeft, "@START@SKIP");
-                    this.didSkipPrompt = true;
+                    didSkipPrompt = true;
                 }
-                if (!this.doubleUpdating && Input.Down("SELECT"))
+                if (!doubleUpdating && Input.Down("SELECT"))
                 {
-                    this.doubleUpdating = true;
-                    this.UpdateParts();
-                    this.doubleUpdating = false;
+                    doubleUpdating = true;
+                    UpdateParts();
+                    doubleUpdating = false;
                 }
-                if (!this.down && yOffset > -1.0)
+                if (!down && yOffset > -1.0)
                 {
                     if (_initialWait < 1.0)
-                        this._initialWait += 0.1f;
+                        _initialWait += 0.1f;
                     else if (_insertCoin < 1.0)
                     {
-                        if (!this._chinged)
+                        if (!_chinged)
                         {
                             SFX.Play("ching", pitch: Rando.Float(0.4f, 0.6f));
-                            this._chinged = true;
+                            _chinged = true;
                         }
-                        this._insertCoinInc += 0.008f;
-                        this._insertCoin += this._insertCoinInc;
+                        _insertCoinInc += 0.008f;
+                        _insertCoin += _insertCoinInc;
                     }
                     else
                     {
-                        this._insertCoin = 1f;
+                        _insertCoin = 1f;
                         if (_afterInsertWait < 1.0)
                         {
-                            this._afterInsertWait += 0.2f;
+                            _afterInsertWait += 0.2f;
                         }
                         else
                         {
-                            if (_gachaWait >= 0.200000002980232 && !this.played)
+                            if (_gachaWait >= 0.200000002980232 && !played)
                             {
-                                this.played = true;
+                                played = true;
                                 SFX.Play("gachaSound", pitch: Rando.Float(-0.1f, 0.1f));
                             }
-                            if (!this._coined && _gachaWait > 0.200000002980232)
+                            if (!_coined && _gachaWait > 0.200000002980232)
                             {
                                 SFX.Play("gachaCoin", pitch: Rando.Float(0.4f, 0.6f));
-                                this._coined = true;
+                                _coined = true;
                             }
-                            this._gachaWait += 0.06f;
+                            _gachaWait += 0.06f;
                             if (_gachaWait >= 1.0)
                             {
-                                this._gachaWait = 1f;
-                                this.gachaSpeed += 0.25f;
+                                _gachaWait = 1f;
+                                gachaSpeed += 0.25f;
                                 if (gachaSpeed > 6.0)
-                                    this.gachaSpeed = 6f;
-                                this.gachaY += this.gachaSpeed;
+                                    gachaSpeed = 6f;
+                                gachaY += gachaSpeed;
                                 if (gachaY > 50.0 && gachaSpeed > 0.0)
                                 {
                                     if (gachaSpeed > 0.800000011920929)
                                         SFX.Play("gachaBounce", pitch: 0.2f);
-                                    this.gachaY = 50f;
-                                    this.gachaSpeed = (float)(-this.gachaSpeed * 0.400000005960464);
+                                    gachaY = 50f;
+                                    gachaSpeed = (float)(-gachaSpeed * 0.400000005960464);
                                 }
                                 float num = 8f;
-                                this._toyVelocity.y += 0.2f;
-                                Vec2 toyPosition1 = this._toyPosition;
+                                _toyVelocity.y += 0.2f;
+                                Vec2 toyPosition1 = _toyPosition;
                                 if (toyPosition1.length > num)
                                 {
-                                    Vec2 toyPosition2 = this._toyPosition;
-                                    this._toyPosition = toyPosition1.normalized * num;
-                                    Vec2 vec2 = this._toyPosition - toyPosition2;
-                                    this._toyVelocity += vec2;
+                                    Vec2 toyPosition2 = _toyPosition;
+                                    _toyPosition = toyPosition1.normalized * num;
+                                    Vec2 vec2 = _toyPosition - toyPosition2;
+                                    _toyVelocity += vec2;
                                     if (vec2.length > 1.0)
                                         SFX.Play("gachaBounce", pitch: (0.7f + Rando.Float(0.2f)));
-                                    this._toyAngleLerp = Maths.PointDirection(Vec2.Zero, this._toyPosition);
+                                    _toyAngleLerp = Maths.PointDirection(Vec2.Zero, _toyPosition);
                                 }
                                 Vec2 leftStick = InputProfile.active.leftStick;
                                 if (InputProfile.active.lastActiveDevice is Keyboard)
@@ -317,50 +317,50 @@ namespace DuckGame
                                     if (InputProfile.active.Down("DOWN"))
                                         leftStick.y = -1f;
                                 }
-                                this._toyVelocity += (this._lastStick - leftStick) * new Vec2(2f, -2f);
-                                this._lastStick = leftStick;
-                                this._toyVelocity.x = Math.Max(Math.Min(this._toyVelocity.x, 3f), -3f);
-                                this._toyVelocity.y = Math.Max(Math.Min(this._toyVelocity.y, 3f), -3f);
-                                this._toyPosition += this._toyVelocity;
-                                if (!this.opened)
+                                _toyVelocity += (_lastStick - leftStick) * new Vec2(2f, -2f);
+                                _lastStick = leftStick;
+                                _toyVelocity.x = Math.Max(Math.Min(_toyVelocity.x, 3f), -3f);
+                                _toyVelocity.y = Math.Max(Math.Min(_toyVelocity.y, 3f), -3f);
+                                _toyPosition += _toyVelocity;
+                                if (!opened)
                                 {
-                                    this._toyAngle = Lerp.FloatSmooth(this._toyAngle, this._toyAngleLerp, 0.1f);
-                                    this._eggOffset = Lerp.Vec2Smooth(this._eggOffset, leftStick * 8f, 0.3f);
+                                    _toyAngle = Lerp.FloatSmooth(_toyAngle, _toyAngleLerp, 0.1f);
+                                    _eggOffset = Lerp.Vec2Smooth(_eggOffset, leftStick * 8f, 0.3f);
                                 }
                                 else
                                 {
-                                    this._toyAngle = Lerp.FloatSmooth(this._toyAngle, -90f, 0.1f);
-                                    this._eggOffset = Lerp.Vec2Smooth(this._eggOffset, Vec2.Zero, 0.3f);
-                                    this._toyPosition = Lerp.Vec2Smooth(this._toyPosition, Vec2.Zero, 0.3f);
+                                    _toyAngle = Lerp.FloatSmooth(_toyAngle, -90f, 0.1f);
+                                    _eggOffset = Lerp.Vec2Smooth(_eggOffset, Vec2.Zero, 0.3f);
+                                    _toyPosition = Lerp.Vec2Smooth(_toyPosition, Vec2.Zero, 0.3f);
                                 }
-                                this._openWait += 0.029f;
+                                _openWait += 0.029f;
                                 if (_openWait >= 1.0)
                                 {
-                                    if (!this.didOpenToyCorner)
+                                    if (!didOpenToyCorner)
                                     {
                                         HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@OPEN TOY");
-                                        this.didOpenToyCorner = true;
+                                        didOpenToyCorner = true;
                                     }
-                                    if (Input.Pressed("SELECT") && !this.opened)
+                                    if (Input.Pressed("SELECT") && !opened)
                                     {
-                                        this.opened = true;
+                                        opened = true;
                                         SFX.Play("gachaOpen", pitch: Rando.Float(0.1f, 0.3f));
-                                        this._gachaEgg.frame += 2;
+                                        _gachaEgg.frame += 2;
                                     }
-                                    if (this.opened)
+                                    if (opened)
                                     {
-                                        this._swapWait += 0.06f;
+                                        _swapWait += 0.06f;
                                         if (_swapWait >= 1.0)
                                         {
-                                            if (!this._swapped)
+                                            if (!_swapped)
                                             {
                                                 SFX.Play("harp");
                                                 HUD.CloseAllCorners();
                                                 HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
                                                 Profiles.experienceProfile.SetNumFurnitures(_contains.index, Profiles.experienceProfile.GetNumFurnitures(_contains.index) + 1);
                                             }
-                                            this._starGrow += 0.05f;
-                                            this._swapped = true;
+                                            _starGrow += 0.05f;
+                                            _swapped = true;
                                         }
                                     }
                                 }
@@ -368,63 +368,63 @@ namespace DuckGame
                         }
                     }
                 }
-                this.yOffset = Lerp.FloatSmooth(this.yOffset, this.down ? -250f : 0f, 0.4f);
-                if (this.down)
+                yOffset = Lerp.FloatSmooth(yOffset, down ? -250f : 0f, 0.4f);
+                if (down)
                 {
-                    if (this._swapped)
+                    if (_swapped)
                     {
-                        this.finished = true;
-                        this.Close();
+                        finished = true;
+                        Close();
                     }
                     else
                     {
-                        this._downWait -= 0.06f;
+                        _downWait -= 0.06f;
                         if (_downWait <= 0.0)
                         {
-                            this._downWait = 1f;
-                            this.down = false;
+                            _downWait = 1f;
+                            down = false;
                             SFX.Play("gachaGet", pitch: -0.4f);
                         }
                     }
                 }
-                if (!this.down && this._swapped && Input.Pressed("SELECT"))
+                if (!down && _swapped && Input.Pressed("SELECT"))
                 {
-                    this.played = false;
-                    this._gachaWait = 0f;
-                    this._openWait = 0f;
-                    this.finished = false;
-                    this.opened = false;
-                    this._swapWait = 0f;
-                    this._swapped = false;
-                    this._starGrow = 0f;
-                    this._insertCoin = 0f;
-                    this._insertCoinInc = 0f;
-                    this._afterInsertWait = 0f;
-                    this._chinged = false;
-                    this.gachaY = 0f;
-                    this.gachaSpeed = 0f;
-                    this.doubleUpdating = false;
-                    ++this._prizesGiven;
-                    this._eggOffset = Vec2.Zero;
-                    this._toyPosition = Vec2.Zero;
-                    this._toyVelocity = Vec2.Zero;
-                    this._lastStick = Vec2.Zero;
-                    this._toyAngle = 0f;
-                    this._toyAngleLerp = 0f;
-                    this._coined = false;
-                    this._initialWait = 0f;
-                    this.didOpenToyCorner = false;
+                    played = false;
+                    _gachaWait = 0f;
+                    _openWait = 0f;
+                    finished = false;
+                    opened = false;
+                    _swapWait = 0f;
+                    _swapped = false;
+                    _starGrow = 0f;
+                    _insertCoin = 0f;
+                    _insertCoinInc = 0f;
+                    _afterInsertWait = 0f;
+                    _chinged = false;
+                    gachaY = 0f;
+                    gachaSpeed = 0f;
+                    doubleUpdating = false;
+                    ++_prizesGiven;
+                    _eggOffset = Vec2.Zero;
+                    _toyPosition = Vec2.Zero;
+                    _toyVelocity = Vec2.Zero;
+                    _lastStick = Vec2.Zero;
+                    _toyAngle = 0f;
+                    _toyAngleLerp = 0f;
+                    _coined = false;
+                    _initialWait = 0f;
+                    didOpenToyCorner = false;
                     HUD.CloseAllCorners();
                     SFX.Play("resume", 0.6f);
-                    if (this.prizes.Count > 4)
+                    if (prizes.Count > 4)
                     {
-                        this.prizes.RemoveAt(0);
-                        this.LoadNextPrize();
+                        prizes.RemoveAt(0);
+                        LoadNextPrize();
                     }
                     else
                     {
-                        this.down = true;
-                        this._swapped = true;
+                        down = true;
+                        _swapped = true;
                     }
                 }
                 base.UpdateParts();
@@ -433,160 +433,160 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this.animating)
+            if (animating)
                 return;
-            this.y += this.yOffset;
+            y += yOffset;
             Random generator = Rando.generator;
-            Rando.generator = new Random(this.seed);
-            this._gachaMachine.depth = -0.8f;
-            Graphics.Draw(this._gachaMachine, this.x - 14f, this.y);
-            this._coinSlot.depth = -0.795f;
-            Graphics.Draw(this._coinSlot, this.x - 13f, this.y - 13f);
-            this._coin.depth = (Depth)0.9f;
-            for (int index = 0; index < this.numGenerate + this.numGenerateRare - (this._prizesGiven + 1); ++index)
+            Rando.generator = new Random(seed);
+            _gachaMachine.depth = -0.8f;
+            Graphics.Draw(_gachaMachine, x - 14f, y);
+            _coinSlot.depth = -0.795f;
+            Graphics.Draw(_coinSlot, x - 13f, y - 13f);
+            _coin.depth = (Depth)0.9f;
+            for (int index = 0; index < numGenerate + numGenerateRare - (_prizesGiven + 1); ++index)
             {
-                this._coin.frame = this.numGenerate - (this._prizesGiven + 1) <= 0 || index >= this.numGenerate - (this._prizesGiven + 1) ? 1 : 0;
-                this._coin.depth = (Depth)(float)(0.899999976158142 - index * 0.00999999977648258);
+                _coin.frame = numGenerate - (_prizesGiven + 1) <= 0 || index >= numGenerate - (_prizesGiven + 1) ? 1 : 0;
+                _coin.depth = (Depth)(float)(0.899999976158142 - index * 0.00999999977648258);
                 Graphics.Draw(_coin, 16 + index * 4, 16f);
             }
-            this._coin.frame = !this._contains.rareGen ? 0 : 1;
-            float num1 = Math.Min(this._gachaWait * 2f, 1f);
-            this._coin.depth = -0.798f;
-            Graphics.Draw(_coin, (float)(this.x - 15.0 + num1 * 21.0), (float)(this.y - 25.0 - 40.0 * (1.0 - _insertCoin) + num1 * 4.0));
-            this._gachaGlass.depth = -0.9f;
-            Graphics.Draw(this._gachaGlass, this.x - 14f, this.y - 10f);
-            this._gachaDoor.depth = -0.84f;
-            Graphics.Draw(this._gachaDoor, this.x - 14f, this.y);
+            _coin.frame = !_contains.rareGen ? 0 : 1;
+            float num1 = Math.Min(_gachaWait * 2f, 1f);
+            _coin.depth = -0.798f;
+            Graphics.Draw(_coin, (float)(x - 15.0 + num1 * 21.0), (float)(y - 25.0 - 40.0 * (1.0 - _insertCoin) + num1 * 4.0));
+            _gachaGlass.depth = -0.9f;
+            Graphics.Draw(_gachaGlass, x - 14f, y - 10f);
+            _gachaDoor.depth = -0.84f;
+            Graphics.Draw(_gachaDoor, x - 14f, y);
             Vec2 vec2_1 = Vec2.Zero;
-            this._gachaBall.depth = -0.85f;
-            this._gachaBall.alpha = 0.3f;
-            this._gachaBall.angleDegrees = Rando.Float(360f);
-            this._gachaBall.frame = Rando.Int(2);
+            _gachaBall.depth = -0.85f;
+            _gachaBall.alpha = 0.3f;
+            _gachaBall.angleDegrees = Rando.Float(360f);
+            _gachaBall.frame = Rando.Int(2);
             float num2 = Rando.Float(4f, 8f);
             vec2_1 = new Vec2((float)Math.Sin(_gachaWait * num2 + Rando.Float(4f)) * Rando.Float(1f, 2f), (float)Math.Sin(_gachaWait * num2 + Rando.Float(4f)) * Rando.Float(1f, 2f));
-            Graphics.Draw(_gachaBall, this.x - 56f + vec2_1.x, this.y - 54f + vec2_1.y);
-            this._gachaBall.angleDegrees = Rando.Float(360f);
-            this._gachaBall.frame = Rando.Int(2);
+            Graphics.Draw(_gachaBall, x - 56f + vec2_1.x, y - 54f + vec2_1.y);
+            _gachaBall.angleDegrees = Rando.Float(360f);
+            _gachaBall.frame = Rando.Int(2);
             float num3 = Rando.Float(4f, 8f);
             vec2_1 = new Vec2((float)Math.Sin(_gachaWait * num3 + Rando.Float(4f)) * Rando.Float(1f, 2f), (float)Math.Sin(_gachaWait * num3 + Rando.Float(4f)) * Rando.Float(1f, 2f));
-            Graphics.Draw(_gachaBall, this.x - 26f + vec2_1.x, this.y - 74f + vec2_1.y);
-            this._gachaBall.angleDegrees = Rando.Float(360f);
-            this._gachaBall.frame = Rando.Int(2);
+            Graphics.Draw(_gachaBall, x - 26f + vec2_1.x, y - 74f + vec2_1.y);
+            _gachaBall.angleDegrees = Rando.Float(360f);
+            _gachaBall.frame = Rando.Int(2);
             float num4 = Rando.Float(4f, 8f);
             vec2_1 = new Vec2((float)Math.Sin(_gachaWait * num4 + Rando.Float(4f)) * Rando.Float(1f, 2f), (float)Math.Sin(_gachaWait * num4 + Rando.Float(4f)) * Rando.Float(1f, 2f));
-            Graphics.Draw(_gachaBall, this.x - 62f + vec2_1.x, this.y - 94f + vec2_1.y);
-            this._gachaBall.angleDegrees = Rando.Float(360f);
-            this._gachaBall.frame = Rando.Int(2);
+            Graphics.Draw(_gachaBall, x - 62f + vec2_1.x, y - 94f + vec2_1.y);
+            _gachaBall.angleDegrees = Rando.Float(360f);
+            _gachaBall.frame = Rando.Int(2);
             float num5 = Rando.Float(4f, 8f);
             vec2_1 = new Vec2((float)Math.Sin(_gachaWait * num5 + Rando.Float(4f)) * Rando.Float(1f, 2f), (float)Math.Sin(_gachaWait * num5 + Rando.Float(4f)) * Rando.Float(1f, 2f));
-            Graphics.Draw(_gachaBall, this.x + 6f + vec2_1.x, this.y - 44f + vec2_1.y);
-            this._gachaBall.angleDegrees = Rando.Float(360f);
-            this._gachaBall.frame = Rando.Int(2);
+            Graphics.Draw(_gachaBall, x + 6f + vec2_1.x, y - 44f + vec2_1.y);
+            _gachaBall.angleDegrees = Rando.Float(360f);
+            _gachaBall.frame = Rando.Int(2);
             float num6 = Rando.Float(4f, 8f);
             vec2_1 = new Vec2((float)Math.Sin(_gachaWait * num6 + Rando.Float(4f)) * Rando.Float(1f, 2f), (float)Math.Sin(_gachaWait * num6 + Rando.Float(4f)) * Rando.Float(1f, 2f));
-            Graphics.Draw(_gachaBall, this.x + 31f + vec2_1.x, this.y - 64f + vec2_1.y);
-            this._gachaBall.angleDegrees = Rando.Float(360f);
-            this._gachaBall.frame = Rando.Int(2);
+            Graphics.Draw(_gachaBall, x + 31f + vec2_1.x, y - 64f + vec2_1.y);
+            _gachaBall.angleDegrees = Rando.Float(360f);
+            _gachaBall.frame = Rando.Int(2);
             float num7 = Rando.Float(4f, 8f);
             vec2_1 = new Vec2((float)Math.Sin(_gachaWait * num7 + Rando.Float(4f)) * Rando.Float(1f, 2f), (float)Math.Sin(_gachaWait * num7 + Rando.Float(4f)) * Rando.Float(1f, 2f));
-            Graphics.Draw(_gachaBall, this.x + 8f + vec2_1.x, this.y - 92f + vec2_1.y);
-            this._gachaBall.angleDegrees = this.prizes[2].ballRot;
-            this._gachaBall.frame = this.FigureFrame(this.prizes[2]);
-            Graphics.Draw(_gachaBall, (float)(this.x + 31.0 - 42.0 + _gachaWait * 42.0), (float)(this.y - 16.0 - 12.0 + _gachaWait * 12.0));
-            this._gachaBall.angleDegrees = this.prizes[1].ballRot;
-            this._gachaBall.frame = this.FigureFrame(this.prizes[1]);
-            Graphics.Draw(_gachaBall, this.x + 31f, (float)(this.y - 16.0 + _gachaWait * 42.0));
-            this._gachaBall.angleDegrees = this.prizes[0].ballRot;
-            this._gachaBall.frame = this.FigureFrame(this.prizes[0]);
-            Graphics.Draw(_gachaBall, (float)(this.x + 31.0 - _gachaWait * 42.0), (float)(this.y - 16.0 + 42.0));
-            this._gachaBall.alpha = 1f;
-            this._gachaBall.angleDegrees = 0f;
-            this._gachaBall.frame = Rando.Int(2);
-            this._gachaTwister.angleDegrees = this._gachaTwisterShadow.angleDegrees = this._gachaWait * 360f;
+            Graphics.Draw(_gachaBall, x + 8f + vec2_1.x, y - 92f + vec2_1.y);
+            _gachaBall.angleDegrees = prizes[2].ballRot;
+            _gachaBall.frame = FigureFrame(prizes[2]);
+            Graphics.Draw(_gachaBall, (float)(x + 31.0 - 42.0 + _gachaWait * 42.0), (float)(y - 16.0 - 12.0 + _gachaWait * 12.0));
+            _gachaBall.angleDegrees = prizes[1].ballRot;
+            _gachaBall.frame = FigureFrame(prizes[1]);
+            Graphics.Draw(_gachaBall, x + 31f, (float)(y - 16.0 + _gachaWait * 42.0));
+            _gachaBall.angleDegrees = prizes[0].ballRot;
+            _gachaBall.frame = FigureFrame(prizes[0]);
+            Graphics.Draw(_gachaBall, (float)(x + 31.0 - _gachaWait * 42.0), (float)(y - 16.0 + 42.0));
+            _gachaBall.alpha = 1f;
+            _gachaBall.angleDegrees = 0f;
+            _gachaBall.frame = Rando.Int(2);
+            _gachaTwister.angleDegrees = _gachaTwisterShadow.angleDegrees = _gachaWait * 360f;
             Vec2 vec2_2 = new Vec2(0f, -4f);
-            this._gachaTwister.depth = -0.1f;
-            Graphics.Draw(this._gachaTwister, this.x - 14f + vec2_2.x, this.y + vec2_2.y);
+            _gachaTwister.depth = -0.1f;
+            Graphics.Draw(_gachaTwister, x - 14f + vec2_2.x, y + vec2_2.y);
             Vec2 vec2_3 = new Vec2(2f, 2f);
-            this._gachaTwisterShadow.depth = -0.11f;
-            this._gachaTwisterShadow.alpha = 0.5f;
-            Graphics.Draw(this._gachaTwisterShadow, this.x - 14f + vec2_2.x + vec2_3.x, this.y + vec2_2.y + vec2_3.y);
+            _gachaTwisterShadow.depth = -0.11f;
+            _gachaTwisterShadow.alpha = 0.5f;
+            Graphics.Draw(_gachaTwisterShadow, x - 14f + vec2_2.x + vec2_3.x, y + vec2_2.y + vec2_3.y);
             Material material1 = Graphics.material;
             Graphics.material = _rainbowMaterial;
-            this._rainbowMaterial.offset += 0.05f;
-            this._rainbowMaterial.offset2 += 0.02f;
-            this._rainbow.alpha = 0.25f;
-            this._rainbow.depth = -0.95f;
-            Graphics.Draw(this._rainbow, 0f, 0f);
+            _rainbowMaterial.offset += 0.05f;
+            _rainbowMaterial.offset2 += 0.02f;
+            _rainbow.alpha = 0.25f;
+            _rainbow.depth = -0.95f;
+            Graphics.Draw(_rainbow, 0f, 0f);
             Graphics.material = material1;
             Rando.generator = generator;
-            this._frame.depth = -0.9f;
-            if (this._swapped)
+            _frame.depth = -0.9f;
+            if (_swapped)
             {
-                this._contains.Draw(this.position + new Vec2(0f, 10f), this.depth - 20);
-                this._whiteCircle.color = this._contains.group.color;
-                this._whiteCircle.depth = this.depth - 30;
-                Graphics.Draw(this._whiteCircle, this.position.x, this.position.y + 10f);
+                _contains.Draw(position + new Vec2(0f, 10f), depth - 20);
+                _whiteCircle.color = _contains.group.color;
+                _whiteCircle.depth = depth - 30;
+                Graphics.Draw(_whiteCircle, position.x, position.y + 10f);
                 if (_starGrow <= 1.0)
                 {
-                    this._star.depth = (Depth)0.9f;
-                    this._star.scale = new Vec2((float)(2.5 + _starGrow * 3.0));
-                    this._star.alpha = 1f - this._starGrow;
-                    Graphics.Draw(this._star, this.x, this.y + 10f);
+                    _star.depth = (Depth)0.9f;
+                    _star.scale = new Vec2((float)(2.5 + _starGrow * 3.0));
+                    _star.alpha = 1f - _starGrow;
+                    Graphics.Draw(_star, x, y + 10f);
                 }
             }
             else if (gachaY > 10.0)
             {
                 Vec2 vec2_4 = new Vec2(-25f, 40f);
                 float num8 = 0f;
-                if (this.opened)
+                if (opened)
                     num8 = 3f;
-                this._capsule.depth = -0.84f;
-                Graphics.Draw(_capsule, this.x + this._eggOffset.x + vec2_4.x, (float)(this.y - 38.0 + gachaY - _eggOffset.y - (10.0 + num8)) + vec2_4.y);
+                _capsule.depth = -0.84f;
+                Graphics.Draw(_capsule, x + _eggOffset.x + vec2_4.x, (float)(y - 38.0 + gachaY - _eggOffset.y - (10.0 + num8)) + vec2_4.y);
                 Material material2 = Graphics.material;
-                Graphics.material = this._flatColor;
-                this._contains.Draw(new Vec2(this.x + this._eggOffset.x + this._toyPosition.x + vec2_4.x, (float)(this.y - 38.0 + gachaY - _eggOffset.y - 10.0 + _toyPosition.y + 8.0) + vec2_4.y), -0.835f, affectScale: true, halfscale: (!this._swapped), angle: Maths.DegToRad(this._toyAngle + 90f));
+                Graphics.material = _flatColor;
+                _contains.Draw(new Vec2(x + _eggOffset.x + _toyPosition.x + vec2_4.x, (float)(y - 38.0 + gachaY - _eggOffset.y - 10.0 + _toyPosition.y + 8.0) + vec2_4.y), -0.835f, affectScale: true, halfscale: (!_swapped), angle: Maths.DegToRad(_toyAngle + 90f));
                 Graphics.material = material2;
-                this._capsule.depth = -0.83f;
-                this._capsule.frame += 3;
-                Graphics.Draw(_capsule, this.x + this._eggOffset.x + vec2_4.x, (float)(this.y - 38.0 + gachaY - _eggOffset.y + (11.0 + num8)) + vec2_4.y, new Rectangle(0f, 2f, _capsule.width, this._capsule.height - 2));
-                this._capsule.frame -= 3;
-                if (gachaY > 30.0 && !this.opened)
+                _capsule.depth = -0.83f;
+                _capsule.frame += 3;
+                Graphics.Draw(_capsule, x + _eggOffset.x + vec2_4.x, (float)(y - 38.0 + gachaY - _eggOffset.y + (11.0 + num8)) + vec2_4.y, new Rectangle(0f, 2f, _capsule.width, _capsule.height - 2));
+                _capsule.frame -= 3;
+                if (gachaY > 30.0 && !opened)
                 {
-                    this._capsuleBorder.depth = -0.81f;
-                    this._capsuleBorder.frame = 0;
-                    Graphics.Draw(_capsuleBorder, this.x + this._eggOffset.x + vec2_4.x, (float)(this.y - 38.0 + gachaY - _eggOffset.y - 2.0) + vec2_4.y);
+                    _capsuleBorder.depth = -0.81f;
+                    _capsuleBorder.frame = 0;
+                    Graphics.Draw(_capsuleBorder, x + _eggOffset.x + vec2_4.x, (float)(y - 38.0 + gachaY - _eggOffset.y - 2.0) + vec2_4.y);
                 }
             }
-            if (this._swapped)
+            if (_swapped)
             {
                 string text1 = "@LWING@NEW TOY@RWING@";
-                if (this._rare)
+                if (_rare)
                     text1 = "@LWING@RARE TOY@RWING@";
-                Vec2 vec2_5 = new Vec2((float)-(this._font.GetWidth(text1) / 2.0), -42f);
+                Vec2 vec2_5 = new Vec2((float)-(_font.GetWidth(text1) / 2.0), -42f);
                 string text2 = "  ???  ";
-                if (this._swapped)
-                    text2 = "} " + this._contains.name + " }";
-                this._fancyFont.scale = new Vec2(1f, 1f);
-                Vec2 vec2_6 = new Vec2((float)-(this._fancyFont.GetWidth(text2) / 2.0), -25f);
-                this._fancyFont.DrawOutline(text2, this.position + vec2_6, this._rare || this._swapped && this._rareCapsule ? Colors.DGYellow : Color.White, Color.Black, this.depth + 2);
-                Graphics.DrawRect(this.position + new Vec2((float)-(this._fancyFont.GetWidth(text2) / 2.0 + 4.0), -26f), this.position + new Vec2((float)(this._fancyFont.GetWidth(text2) / 2.0 + 4.0), -14f), Color.Black, this.depth - 4);
-                this._fancyFont.scale = new Vec2(0.5f, 0.5f);
+                if (_swapped)
+                    text2 = "} " + _contains.name + " }";
+                _fancyFont.scale = new Vec2(1f, 1f);
+                Vec2 vec2_6 = new Vec2((float)-(_fancyFont.GetWidth(text2) / 2.0), -25f);
+                _fancyFont.DrawOutline(text2, position + vec2_6, _rare || _swapped && _rareCapsule ? Colors.DGYellow : Color.White, Color.Black, depth + 2);
+                Graphics.DrawRect(position + new Vec2((float)-(_fancyFont.GetWidth(text2) / 2.0 + 4.0), -26f), position + new Vec2((float)(_fancyFont.GetWidth(text2) / 2.0 + 4.0), -14f), Color.Black, depth - 4);
+                _fancyFont.scale = new Vec2(0.5f, 0.5f);
                 if (_insertCoin > 0.00999999977648258)
                 {
-                    this._duckCoin.frame = this._rare ? 1 : 0;
-                    this._duckCoin.depth = -0.8f;
-                    Graphics.Draw(_duckCoin, this.x + 40f, (float)(this.y - 100.0 + _insertCoin * 65.0));
+                    _duckCoin.frame = _rare ? 1 : 0;
+                    _duckCoin.depth = -0.8f;
+                    Graphics.Draw(_duckCoin, x + 40f, (float)(y - 100.0 + _insertCoin * 65.0));
                 }
-                string text3 = this._contains.description;
+                string text3 = _contains.description;
                 int num9 = Profiles.experienceProfile.GetNumFurnitures(_contains.index) - 1;
                 if (num9 > 0)
-                    text3 = "I've already got " + (num9 - 1 >= this.numberNames.Count ? (num9 - 1).ToString() : this.numberNames[num9 - 1]) + " of these...";
-                Vec2 vec2_7 = new Vec2((float)-(this._fancyFont.GetWidth(text3) / 2.0), 38f);
-                this._fancyFont.DrawOutline(text3, this.position + vec2_7, num9 > 0 ? Colors.DGYellow : Colors.DGGreen, Color.Black, this.depth + 2, 0.5f);
-                Graphics.DrawRect(this.position + new Vec2((float)-(this._fancyFont.GetWidth(text3) / 2.0 + 4.0), 37f), this.position + new Vec2((float)(this._fancyFont.GetWidth(text3) / 2.0 + 4.0), 44f), Color.Black, this.depth - 4);
-                Graphics.DrawRect(new Vec2(-100f, -100f), new Vec2(2000f, 2000f), Color.Black * 0.6f, this.depth - 100);
+                    text3 = "I've already got " + (num9 - 1 >= numberNames.Count ? (num9 - 1).ToString() : numberNames[num9 - 1]) + " of these...";
+                Vec2 vec2_7 = new Vec2((float)-(_fancyFont.GetWidth(text3) / 2.0), 38f);
+                _fancyFont.DrawOutline(text3, position + vec2_7, num9 > 0 ? Colors.DGYellow : Colors.DGGreen, Color.Black, depth + 2, 0.5f);
+                Graphics.DrawRect(position + new Vec2((float)-(_fancyFont.GetWidth(text3) / 2.0 + 4.0), 37f), position + new Vec2((float)(_fancyFont.GetWidth(text3) / 2.0 + 4.0), 44f), Color.Black, depth - 4);
+                Graphics.DrawRect(new Vec2(-100f, -100f), new Vec2(2000f, 2000f), Color.Black * 0.6f, depth - 100);
             }
-            this.y -= this.yOffset;
+            y -= yOffset;
         }
     }
 }

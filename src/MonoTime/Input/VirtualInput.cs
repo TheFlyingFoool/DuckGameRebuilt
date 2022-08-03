@@ -34,65 +34,65 @@ namespace DuckGame
 
         public ushort state
         {
-            get => this._state;
-            set => this._state = value;
+            get => _state;
+            set => _state = value;
         }
 
         public ushort prevState
         {
-            get => this._prevState;
-            set => this._prevState = value;
+            get => _prevState;
+            set => _prevState = value;
         }
 
         public List<string> availableTriggers
         {
-            get => this._availableTriggers;
-            set => this._availableTriggers = value;
+            get => _availableTriggers;
+            set => _availableTriggers = value;
         }
 
         public VirtualInput(int idx)
           : base(idx)
         {
-            this._name = "virtual" + idx.ToString();
+            _name = "virtual" + idx.ToString();
         }
 
         public override void Update()
         {
         }
 
-        private bool GetState(int mapping, bool prev = false) => ((prev ? _prevState : _state) & 1 << this._availableTriggers.Count - mapping) != 0;
+        private bool GetState(int mapping, bool prev = false) => ((prev ? _prevState : _state) & 1 << _availableTriggers.Count - mapping) != 0;
 
         public void SetState(ushort val, bool flagPrev = true)
         {
             if (flagPrev)
-                this._prevState = this._state;
-            this._state = val;
-            this.setThisFrame = true;
-            this.leftStick = Vec2.Zero;
-            this.rightStick = Vec2.Zero;
+                _prevState = _state;
+            _state = val;
+            setThisFrame = true;
+            leftStick = Vec2.Zero;
+            rightStick = Vec2.Zero;
         }
 
         public override bool MapPressed(int mapping, bool any = false)
         {
             if (any)
             {
-                for (int mapping1 = 0; mapping1 < this._availableTriggers.Count; ++mapping1)
+                for (int mapping1 = 0; mapping1 < _availableTriggers.Count; ++mapping1)
                 {
-                    if (this.MapPressed(mapping1, false))
+                    if (MapPressed(mapping1, false))
                         return true;
                 }
                 return false;
             }
-            return this.GetState(mapping) && !this.GetState(mapping, true);
+            return GetState(mapping) && !GetState(mapping, true);
         }
 
-        public override bool MapReleased(int mapping) => !this.GetState(mapping) && this.GetState(mapping, true);
+        public override bool MapReleased(int mapping) => !GetState(mapping) && GetState(mapping, true);
 
         public override bool MapDown(int mapping, bool any = false)
         {
             if (any)
-                return this._state > 0;
-            return this.GetState(mapping);
+                return _state > 0;
+            return GetState(mapping);
         }
     }
 }

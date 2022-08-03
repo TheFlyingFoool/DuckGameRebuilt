@@ -9,6 +9,6 @@ namespace DuckGame
 {
     public class WorkshopMap : WorkshopContent
     {
-        public WorkshopMap() => this._type = WorkshopContentType.Map;
+        public WorkshopMap() => _type = WorkshopContentType.Map;
     }
 }

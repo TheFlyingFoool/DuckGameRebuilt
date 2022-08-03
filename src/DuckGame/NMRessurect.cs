@@ -19,17 +19,17 @@ namespace DuckGame
 
         public NMRessurect(Vec2 pPosition, Duck pDuck, byte pLifeChangeIndex)
         {
-            this.position = pPosition;
-            this.duck = pDuck;
-            this.lifeIndex = pLifeChangeIndex;
+            position = pPosition;
+            duck = pDuck;
+            lifeIndex = pLifeChangeIndex;
         }
 
         public override void Activate()
         {
-            if (this.duck != null && this.duck.profile != null && this.duck.WillAcceptLifeChange(this.lifeIndex))
+            if (duck != null && duck.profile != null && duck.WillAcceptLifeChange(lifeIndex))
             {
-                Duck.ResurrectEffect(this.position);
-                this.duck.ResetNonServerDeathState();
+                Duck.ResurrectEffect(position);
+                duck.ResetNonServerDeathState();
             }
             base.Activate();
         }

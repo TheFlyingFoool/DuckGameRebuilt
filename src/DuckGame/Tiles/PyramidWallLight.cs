@@ -22,27 +22,27 @@ namespace DuckGame
         public PyramidWallLight(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("pyramidWallLight", 14, 12);
-            this._sprite.AddAnimation("go", 0.2f, true, 0, 1, 2, 3, 4);
-            this._sprite.SetAnimation("go");
-            this.graphic = _sprite;
-            this.center = new Vec2(7f, 8f);
-            this._collisionSize = new Vec2(8f, 8f);
-            this._collisionOffset = new Vec2(-4f, -4f);
-            this.depth = -0.9f;
-            this.alpha = 0.7f;
-            this.layer = Layer.Game;
-            this.placementLayerOverride = Layer.Blocks;
-            this.hugWalls = WallHug.Left | WallHug.Right;
+            _sprite = new SpriteMap("pyramidWallLight", 14, 12);
+            _sprite.AddAnimation("go", 0.2f, true, 0, 1, 2, 3, 4);
+            _sprite.SetAnimation("go");
+            graphic = _sprite;
+            center = new Vec2(7f, 8f);
+            _collisionSize = new Vec2(8f, 8f);
+            _collisionOffset = new Vec2(-4f, -4f);
+            depth = -0.9f;
+            alpha = 0.7f;
+            layer = Layer.Game;
+            placementLayerOverride = Layer.Blocks;
+            hugWalls = WallHug.Left | WallHug.Right;
         }
 
         public override void Draw()
         {
-            this.graphic.flipH = this.flipHorizontal;
+            graphic.flipH = flipHorizontal;
             if (DevConsole.showCollision)
             {
-                Graphics.DrawCircle(this.lightPos, 2f, Color.Blue);
-                foreach (LightOccluder occluder in this._occluders)
+                Graphics.DrawCircle(lightPos, 2f, Color.Blue);
+                foreach (LightOccluder occluder in _occluders)
                     Graphics.DrawLine(occluder.p1, occluder.p2, Color.Red, depth: ((Depth)1f));
             }
             base.Draw();
@@ -52,18 +52,18 @@ namespace DuckGame
         {
             if (Level.current is Editor)
                 return;
-            this._occluders.Add(new LightOccluder(this.position + new Vec2(-15f, 3f), this.position + new Vec2(-15f, -4f), new Color(0.95f, 0.9f, 0.85f)));
-            this._occluders.Add(new LightOccluder(this.position + new Vec2(15f, 3f), this.position + new Vec2(15f, -4f), new Color(0.95f, 0.9f, 0.85f)));
-            this._occluders.Add(new LightOccluder(this.position + new Vec2(-15f, 2f), this.position + new Vec2(15f, 2f), new Color(0.95f, 0.9f, 0.85f)));
-            if (this.flipHorizontal)
+            _occluders.Add(new LightOccluder(position + new Vec2(-15f, 3f), position + new Vec2(-15f, -4f), new Color(0.95f, 0.9f, 0.85f)));
+            _occluders.Add(new LightOccluder(position + new Vec2(15f, 3f), position + new Vec2(15f, -4f), new Color(0.95f, 0.9f, 0.85f)));
+            _occluders.Add(new LightOccluder(position + new Vec2(-15f, 2f), position + new Vec2(15f, 2f), new Color(0.95f, 0.9f, 0.85f)));
+            if (flipHorizontal)
             {
-                this.lightPos = new Vec2(this.x, this.y);
-                Level.Add(new PointLight(this.lightPos.x, this.lightPos.y, PyramidWallLight.lightColor, 120f, this._occluders, true));
+                lightPos = new Vec2(x, y);
+                Level.Add(new PointLight(lightPos.x, lightPos.y, PyramidWallLight.lightColor, 120f, _occluders, true));
             }
             else
             {
-                this.lightPos = new Vec2(this.x, this.y);
-                Level.Add(new PointLight(this.lightPos.x, this.lightPos.y, PyramidWallLight.lightColor, 120f, this._occluders, true));
+                lightPos = new Vec2(x, y);
+                Level.Add(new PointLight(lightPos.x, lightPos.y, PyramidWallLight.lightColor, 120f, _occluders, true));
             }
         }
     }

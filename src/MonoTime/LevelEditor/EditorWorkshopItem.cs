@@ -26,20 +26,20 @@ namespace DuckGame
         {
             get
             {
-                if (this._preview == null)
+                if (_preview == null)
                 {
-                    if (this._mod != null)
+                    if (_mod != null)
                     {
-                        string pathToScreenshot = this._mod.generateAndGetPathToScreenshot;
+                        string pathToScreenshot = _mod.generateAndGetPathToScreenshot;
                         if (!System.IO.File.Exists(pathToScreenshot))
                             return null;
                         using (FileStream fileStream = System.IO.File.Open(pathToScreenshot, FileMode.Open))
-                            this._preview = (Tex2D)Texture2D.FromStream(DuckGame.Graphics.device, fileStream);
+                            _preview = (Tex2D)Texture2D.FromStream(DuckGame.Graphics.device, fileStream);
                     }
                     else
                     {
                         RenderTarget2D pCustomPreviewTarget;
-                        if (this._level.metaData.type == LevelType.Arcade_Machine)
+                        if (_level.metaData.type == LevelType.Arcade_Machine)
                         {
                             pCustomPreviewTarget = new RenderTarget2D(512, 512);
                             Content.customPreviewWidth = 128;
@@ -48,150 +48,150 @@ namespace DuckGame
                         }
                         else
                             pCustomPreviewTarget = new RenderTarget2D(1280, 720);
-                        Content.GeneratePreview(this._level, true, pCustomPreviewTarget);
+                        Content.GeneratePreview(_level, true, pCustomPreviewTarget);
                         Content.customPreviewWidth = 0;
                         Content.customPreviewHeight = 0;
                         Content.customPreviewCenter = Vec2.Zero;
-                        this._preview = (Tex2D)new Texture2D(DuckGame.Graphics.device, pCustomPreviewTarget.width, pCustomPreviewTarget.height);
+                        _preview = (Tex2D)new Texture2D(DuckGame.Graphics.device, pCustomPreviewTarget.width, pCustomPreviewTarget.height);
                         Color[] colorArray = new Color[pCustomPreviewTarget.width * pCustomPreviewTarget.height];
                         pCustomPreviewTarget.GetData<Color>(colorArray);
-                        this._preview.SetData<Color>(colorArray);
+                        _preview.SetData<Color>(colorArray);
                     }
                 }
-                return this._preview;
+                return _preview;
             }
         }
 
         public IEnumerable<EditorWorkshopItem> subItems => _subItems;
 
-        public int subIndex => this._parent == null ? -1 : this._parent._subItems.IndexOf(this);
+        public int subIndex => _parent == null ? -1 : _parent._subItems.IndexOf(this);
 
-        public EditorWorkshopItem parent => this._parent;
+        public EditorWorkshopItem parent => _parent;
 
-        public LevelType levelType => this._level.metaData.type;
+        public LevelType levelType => _level.metaData.type;
 
-        public LevelSize levelSize => this._level.metaData.size;
+        public LevelSize levelSize => _level.metaData.size;
 
         public IEnumerable<string> tags => workshopData.tags;
 
         public void AddTag(string pTag)
         {
-            if (this.workshopData.tags.Contains(pTag))
+            if (workshopData.tags.Contains(pTag))
                 return;
-            this.workshopData.tags.Add(pTag);
+            workshopData.tags.Add(pTag);
         }
 
-        public void RemoveTag(string pTag) => this.workshopData.tags.Remove(pTag);
+        public void RemoveTag(string pTag) => workshopData.tags.Remove(pTag);
 
-        private WorkshopMetaData workshopData => this._mod == null ? this._level.workshopData : this._mod.workshopData;
+        private WorkshopMetaData workshopData => _mod == null ? _level.workshopData : _mod.workshopData;
 
         public string name
         {
-            get => this.workshopData.name;
-            set => this.workshopData.name = value;
+            get => workshopData.name;
+            set => workshopData.name = value;
         }
 
         public string description
         {
-            get => this.workshopData.description;
-            set => this.workshopData.description = value;
+            get => workshopData.description;
+            set => workshopData.description = value;
         }
 
-        public SteamResult result => this._item.result;
+        public SteamResult result => _item.result;
 
-        public bool finishedProcessing => this._item.finishedProcessing;
+        public bool finishedProcessing => _item.finishedProcessing;
 
-        public WorkshopItem item => this._item;
+        public WorkshopItem item => _item;
 
         public EditorWorkshopItem(LevelData pLevel, EditorWorkshopItem pParent = null)
         {
-            this._parent = pParent;
-            this._level = pLevel;
-            if (this._level.metaData.workshopID != 0UL)
+            _parent = pParent;
+            _level = pLevel;
+            if (_level.metaData.workshopID != 0UL)
             {
-                this._item = WorkshopItem.GetItem(this._level.metaData.workshopID);
+                _item = WorkshopItem.GetItem(_level.metaData.workshopID);
                 Steam.RequestWorkshopInfo(new List<WorkshopItem>()
         {
-          this._item
+          _item
         });
-                this.Wait();
-                this._level.workshopData.name = this._item.data.name;
-                this._level.workshopData.description = this._item.data.description;
-                this._level.workshopData.tags = new List<string>(_item.data.tags);
+                Wait();
+                _level.workshopData.name = _item.data.name;
+                _level.workshopData.description = _item.data.description;
+                _level.workshopData.tags = new List<string>(_item.data.tags);
             }
-            if (this._level.workshopData.name == "")
-                this._level.workshopData.name = Path.GetFileNameWithoutExtension(this._level.GetPath());
-            if (this._level.metaData.type != LevelType.Arcade_Machine)
+            if (_level.workshopData.name == "")
+                _level.workshopData.name = Path.GetFileNameWithoutExtension(_level.GetPath());
+            if (_level.metaData.type != LevelType.Arcade_Machine)
                 return;
             if (((Level.current as Editor).levelThings[0] as ArcadeMachine).challenge01Data != null)
-                this._subItems.Add(new EditorWorkshopItem(((Level.current as Editor).levelThings[0] as ArcadeMachine).challenge01Data, this));
+                _subItems.Add(new EditorWorkshopItem(((Level.current as Editor).levelThings[0] as ArcadeMachine).challenge01Data, this));
             if (((Level.current as Editor).levelThings[0] as ArcadeMachine).challenge02Data != null)
-                this._subItems.Add(new EditorWorkshopItem(((Level.current as Editor).levelThings[0] as ArcadeMachine).challenge02Data, this));
+                _subItems.Add(new EditorWorkshopItem(((Level.current as Editor).levelThings[0] as ArcadeMachine).challenge02Data, this));
             if (((Level.current as Editor).levelThings[0] as ArcadeMachine).challenge03Data == null)
                 return;
-            this._subItems.Add(new EditorWorkshopItem(((Level.current as Editor).levelThings[0] as ArcadeMachine).challenge03Data, this));
+            _subItems.Add(new EditorWorkshopItem(((Level.current as Editor).levelThings[0] as ArcadeMachine).challenge03Data, this));
         }
 
         public EditorWorkshopItem(Mod pMod, EditorWorkshopItem pParent = null)
         {
-            this._parent = pParent;
-            this._mod = pMod;
-            if (this._mod.configuration.workshopID != 0UL)
+            _parent = pParent;
+            _mod = pMod;
+            if (_mod.configuration.workshopID != 0UL)
             {
-                this._item = WorkshopItem.GetItem(this._mod.configuration.workshopID);
+                _item = WorkshopItem.GetItem(_mod.configuration.workshopID);
                 Steam.RequestWorkshopInfo(new List<WorkshopItem>()
         {
-          this._item
+          _item
         });
-                this.Wait();
-                this._mod.workshopData.name = this._item.data.name;
-                this._mod.workshopData.description = this._item.data.description;
-                this._mod.workshopData.tags = new List<string>(_item.data.tags);
+                Wait();
+                _mod.workshopData.name = _item.data.name;
+                _mod.workshopData.description = _item.data.description;
+                _mod.workshopData.tags = new List<string>(_item.data.tags);
             }
-            this._mod.workshopData.name = this._mod.configuration.displayName;
-            if (this.workshopData.tags.Contains("Mod"))
+            _mod.workshopData.name = _mod.configuration.displayName;
+            if (workshopData.tags.Contains("Mod"))
                 return;
-            this.AddTag("Mod");
+            AddTag("Mod");
         }
 
         public SteamResult PrepareItem()
         {
-            if (this._item == null)
+            if (_item == null)
             {
-                this._item = Steam.CreateItem();
-                this.Wait();
-                this._level.metaData.workshopID = this._item.id;
-                this._item.SetDetails(this.workshopData.name, new WorkshopItemData());
-                if (this._parent != null && this._parent._level.metaData.type == LevelType.Arcade_Machine)
+                _item = Steam.CreateItem();
+                Wait();
+                _level.metaData.workshopID = _item.id;
+                _item.SetDetails(workshopData.name, new WorkshopItemData());
+                if (_parent != null && _parent._level.metaData.type == LevelType.Arcade_Machine)
                 {
-                    this._level.workshopData.name = this._parent._item.name + " Sub Challenge " + this.subIndex.ToString();
-                    this._level.workshopData.description = "One of the challenges in the \"" + this._parent._item.name + "\" Arcade Machine.";
+                    _level.workshopData.name = _parent._item.name + " Sub Challenge " + subIndex.ToString();
+                    _level.workshopData.description = "One of the challenges in the \"" + _parent._item.name + "\" Arcade Machine.";
                 }
             }
-            if (this.result != SteamResult.OK)
-                return this.result;
-            this._item.data.name = this.workshopData.name;
-            this._item.data.description = this.workshopData.description;
-            this.workshopData.tags.RemoveAll(x => !SteamUploadDialog.possibleTags.Contains(x));
-            if (this._level.metaData.type != LevelType.Arcade_Machine)
+            if (result != SteamResult.OK)
+                return result;
+            _item.data.name = workshopData.name;
+            _item.data.description = workshopData.description;
+            workshopData.tags.RemoveAll(x => !SteamUploadDialog.possibleTags.Contains(x));
+            if (_level.metaData.type != LevelType.Arcade_Machine)
             {
-                this.AddTag("Map");
-                this.AddTag(this._level.metaData.size.ToString());
+                AddTag("Map");
+                AddTag(_level.metaData.size.ToString());
             }
-            if (this._level.metaData.type != LevelType.Deathmatch)
-                this.AddTag(this._level.metaData.type.ToString().Replace("_", " "));
-            if (this.deathmatchTestSuccess)
-                this.AddTag("Deathmatch");
-            if (this._level.metaData.eightPlayer)
-                this.AddTag("EightPlayer");
-            if (this._level.metaData.eightPlayerRestricted)
-                this.AddTag("EightPlayerOnly");
-            else if (this._level.metaData.type == LevelType.Arcade_Machine)
+            if (_level.metaData.type != LevelType.Deathmatch)
+                AddTag(_level.metaData.type.ToString().Replace("_", " "));
+            if (deathmatchTestSuccess)
+                AddTag("Deathmatch");
+            if (_level.metaData.eightPlayer)
+                AddTag("EightPlayer");
+            if (_level.metaData.eightPlayerRestricted)
+                AddTag("EightPlayerOnly");
+            else if (_level.metaData.type == LevelType.Arcade_Machine)
             {
-                if (this._subItems.Count == 3)
+                if (_subItems.Count == 3)
                 {
                     bool flag = true;
-                    foreach (EditorWorkshopItem subItem in this._subItems)
+                    foreach (EditorWorkshopItem subItem in _subItems)
                     {
                         if (!subItem.challengeTestSuccess)
                         {
@@ -200,71 +200,71 @@ namespace DuckGame
                         }
                     }
                     if (flag)
-                        this.AddTag("Tested Machine");
+                        AddTag("Tested Machine");
                 }
             }
-            else if (this._level.metaData.type == LevelType.Challenge && this.challengeTestSuccess)
-                this.AddTag("Tested Challenge");
-            else if (this._level.metaData.type == LevelType.Deathmatch)
-                this.AddTag("Strange");
+            else if (_level.metaData.type == LevelType.Challenge && challengeTestSuccess)
+                AddTag("Tested Challenge");
+            else if (_level.metaData.type == LevelType.Deathmatch)
+                AddTag("Strange");
             if ((Level.current as Editor).levelThings.Exists(x => x is CustomCamera))
-                this.AddTag("Fixed Camera");
-            if (this._level.metaData.hasCustomArt)
-                this.AddTag("Custom Art");
-            this._item.data.tags = new List<string>(workshopData.tags);
-            foreach (ulong dependency in this._level.workshopData.dependencies)
-                Steam.WorkshopRemoveDependency(this._item, WorkshopItem.GetItem(dependency));
-            this._level.workshopData.dependencies.Clear();
-            foreach (EditorWorkshopItem subItem in this.subItems)
+                AddTag("Fixed Camera");
+            if (_level.metaData.hasCustomArt)
+                AddTag("Custom Art");
+            _item.data.tags = new List<string>(workshopData.tags);
+            foreach (ulong dependency in _level.workshopData.dependencies)
+                Steam.WorkshopRemoveDependency(_item, WorkshopItem.GetItem(dependency));
+            _level.workshopData.dependencies.Clear();
+            foreach (EditorWorkshopItem subItem in subItems)
             {
                 if (subItem.PrepareItem() != SteamResult.OK)
                     return subItem.result;
-                this._level.workshopData.dependencies.Add(subItem.item.id);
-                Steam.WorkshopAddDependency(this._item, subItem.item);
+                _level.workshopData.dependencies.Add(subItem.item.id);
+                Steam.WorkshopAddDependency(_item, subItem.item);
             }
-            this.CopyFiles();
+            CopyFiles();
             return SteamResult.OK;
         }
 
         private void CopyFiles()
         {
-            DuckFile.SaveChunk(_level, this._level.GetPath());
-            string pathString1 = DuckFile.workshopDirectory + this._level.metaData.workshopID.ToString() + "/";
-            string pathString2 = DuckFile.workshopDirectory + this._level.metaData.workshopID.ToString() + "-preview/";
+            DuckFile.SaveChunk(_level, _level.GetPath());
+            string pathString1 = DuckFile.workshopDirectory + _level.metaData.workshopID.ToString() + "/";
+            string pathString2 = DuckFile.workshopDirectory + _level.metaData.workshopID.ToString() + "-preview/";
             DuckFile.CreatePath(pathString1);
             DuckFile.CreatePath(pathString2);
-            string withoutExtension = Path.GetFileNameWithoutExtension(this._level.GetPath());
-            string str = pathString1 + Path.GetFileName(this._level.GetPath());
+            string withoutExtension = Path.GetFileNameWithoutExtension(_level.GetPath());
+            string str = pathString1 + Path.GetFileName(_level.GetPath());
             if (System.IO.File.Exists(str))
                 System.IO.File.Delete(str);
-            System.IO.File.Copy(this._level.GetPath(), str);
-            System.IO.File.SetAttributes(this._level.GetPath(), FileAttributes.Normal);
-            this._item.data.contentFolder = pathString1;
+            System.IO.File.Copy(_level.GetPath(), str);
+            System.IO.File.SetAttributes(_level.GetPath(), FileAttributes.Normal);
+            _item.data.contentFolder = pathString1;
             string path = pathString2 + withoutExtension + ".png";
             if (System.IO.File.Exists(path))
                 System.IO.File.Delete(path);
             Stream stream = DuckFile.Create(path);
-            ((Texture2D)this.preview.nativeObject).SaveAsPng(stream, this.preview.width, this.preview.height);
+            ((Texture2D)preview.nativeObject).SaveAsPng(stream, preview.width, preview.height);
             stream.Dispose();
-            this._item.data.previewPath = path;
+            _item.data.previewPath = path;
         }
 
         public void Upload()
         {
-            this._item.ResetProcessing();
-            this._item.ApplyWorkshopData(this._item.data);
+            _item.ResetProcessing();
+            _item.ApplyWorkshopData(_item.data);
         }
 
         public void FinishUpload()
         {
-            if (!this._item.needsLegal)
+            if (!_item.needsLegal)
                 return;
-            Steam.ShowWorkshopLegalAgreement(this._item.id.ToString());
+            Steam.ShowWorkshopLegalAgreement(_item.id.ToString());
         }
 
         private void Wait()
         {
-            while (!this._item.finishedProcessing)
+            while (!_item.finishedProcessing)
                 Steam.Update();
         }
     }

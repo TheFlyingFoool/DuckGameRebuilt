@@ -28,37 +28,37 @@ namespace DuckGame
 
         public override bool visible
         {
-            get => this.alpha >= 0.01f && base.visible;
+            get => alpha >= 0.01f && base.visible;
             set => base.visible = value;
         }
 
         public FurniShopScreen()
           : base()
         {
-            this._tail = new Sprite("arcade/bubbleTail");
-            this.layer = Layer.HUD;
+            _tail = new Sprite("arcade/bubbleTail");
+            layer = Layer.HUD;
         }
 
         public override void Initialize()
         {
-            this._plasma = new PlasmaLayer("PLASMA", -85);
+            _plasma = new PlasmaLayer("PLASMA", -85);
             Layer.Add(_plasma);
-            this._treeLayer = new Layer("TREE", -95, new Camera());
-            Layer.Add(this._treeLayer);
+            _treeLayer = new Layer("TREE", -95, new Camera());
+            Layer.Add(_treeLayer);
         }
 
         public void OpenBuyConfirmation(UnlockData unlock)
         {
-            if (this._pauseGroup != null)
+            if (_pauseGroup != null)
             {
                 Level.Remove(_pauseGroup);
-                this._pauseGroup = null;
+                _pauseGroup = null;
             }
-            this._confirm.value = false;
-            this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
-            this._confirmMenu = new UIMenu("UNLOCK FEATURE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@CANCEL@CANCEL  @SELECT@BUY");
-            this._confirmMenu.Add(new UIText(unlock.name, Color.Green), true);
-            this._confirmMenu.Add(new UIText(" ", Color.White), true);
+            _confirm.value = false;
+            _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
+            _confirmMenu = new UIMenu("UNLOCK FEATURE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@CANCEL@CANCEL  @SELECT@BUY");
+            _confirmMenu.Add(new UIText(unlock.name, Color.Green), true);
+            _confirmMenu.Add(new UIText(" ", Color.White), true);
             float num = 190f;
             string str1 = unlock.longDescription;
             string textVal = "";
@@ -73,7 +73,7 @@ namespace DuckGame
                 {
                     if ((textVal.Length + str2.Length) * 8 > num)
                     {
-                        this._confirmMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
+                        _confirmMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                         textVal = "";
                     }
                     if (textVal.Length > 0)
@@ -93,22 +93,22 @@ namespace DuckGame
                 textVal += str2;
             }
             if (textVal.Length > 0)
-                this._confirmMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
-            this._confirmMenu.Add(new UIText(" ", Color.White), true);
-            this._confirmMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(this._pauseGroup), c: Colors.MenuOption, backButton: true), true);
-            this._confirmMenu.Add(new UIMenuItem("BUY UNLOCK |WHITE|(|LIME|" + unlock.cost.ToString() + "|WHITE| TICKETS)", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._confirm)), true);
-            this._confirmMenu.Close();
-            this._pauseGroup.Add(_confirmMenu, false);
-            this._pauseGroup.Close();
+                _confirmMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
+            _confirmMenu.Add(new UIText(" ", Color.White), true);
+            _confirmMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(_pauseGroup), c: Colors.MenuOption, backButton: true), true);
+            _confirmMenu.Add(new UIMenuItem("BUY UNLOCK |WHITE|(|LIME|" + unlock.cost.ToString() + "|WHITE| TICKETS)", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _confirm)), true);
+            _confirmMenu.Close();
+            _pauseGroup.Add(_confirmMenu, false);
+            _pauseGroup.Close();
             Level.Add(_pauseGroup);
             for (int index = 0; index < 10; ++index)
             {
-                this._pauseGroup.Update();
-                this._confirmMenu.Update();
+                _pauseGroup.Update();
+                _confirmMenu.Update();
             }
-            this._pauseGroup.Open();
-            this._confirmMenu.Open();
-            MonoMain.pauseMenu = this._pauseGroup;
+            _pauseGroup.Open();
+            _confirmMenu.Open();
+            MonoMain.pauseMenu = _pauseGroup;
             SFX.Play("pause", 0.6f);
             //this._tryBuy = unlock;
         }
@@ -127,20 +127,20 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this.alpha < 0.01f)
+            if (alpha < 0.01f)
                 return;
-            Graphics.DrawRect(new Vec2(26f, 22f), new Vec2(Layer.HUD.width - 105f, Layer.HUD.height - 51f), new Color(20, 20, 20) * this.alpha * 0.7f, -0.9f);
+            Graphics.DrawRect(new Vec2(26f, 22f), new Vec2(Layer.HUD.width - 105f, Layer.HUD.height - 51f), new Color(20, 20, 20) * alpha * 0.7f, -0.9f);
             Vec2 p1 = new Vec2(20f, 8f);
             Vec2 vec2 = new Vec2(226f, 11f);
             Graphics.DrawRect(p1, p1 + vec2, Color.Black, (Depth)0.96f);
             string text = "what a name";
-            Graphics.DrawString(text, p1 + new Vec2(((vec2.x - 27f) / 2f - Graphics.GetStringWidth(text) / 2f), 2f), new Color(163, 206, 39) * this.alpha, (Depth)0.97f);
-            this._tail.depth = (Depth)0.5f;
-            this._tail.alpha = this.alpha;
-            this._tail.flipH = false;
-            this._tail.flipV = false;
-            Graphics.Draw(this._tail, 222f, 18f);
-            Chancy.alpha = this.alpha;
+            Graphics.DrawString(text, p1 + new Vec2(((vec2.x - 27f) / 2f - Graphics.GetStringWidth(text) / 2f), 2f), new Color(163, 206, 39) * alpha, (Depth)0.97f);
+            _tail.depth = (Depth)0.5f;
+            _tail.alpha = alpha;
+            _tail.flipH = false;
+            _tail.flipV = false;
+            Graphics.Draw(_tail, 222f, 18f);
+            Chancy.alpha = alpha;
             Chancy.Draw();
         }
     }

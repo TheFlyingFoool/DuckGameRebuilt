@@ -19,27 +19,27 @@ namespace DuckGame
 
         public void SetBackFunction(UIMenuAction pAction)
         {
-            this._section._backFunction = pAction;
-            this._backFunction = pAction;
+            _section._backFunction = pAction;
+            _backFunction = pAction;
         }
 
         public void SetCloseFunction(UIMenuAction pAction)
         {
-            this._section._closeFunction = pAction;
-            this._closeFunction = pAction;
+            _section._closeFunction = pAction;
+            _closeFunction = pAction;
         }
 
         public void SetAcceptFunction(UIMenuAction pAction)
         {
-            this._section._acceptFunction = pAction;
-            this._acceptFunction = pAction;
+            _section._acceptFunction = pAction;
+            _acceptFunction = pAction;
         }
 
         public void RunBackFunction()
         {
-            if (this._section._backFunction == null)
+            if (_section._backFunction == null)
                 return;
-            this._section._backFunction.Activate();
+            _section._backFunction.Activate();
         }
 
         public UIMenu(
@@ -53,9 +53,9 @@ namespace DuckGame
           bool tiny = false)
           : base(xpos, ypos, wide, high)
         {
-            this._controlProfile = conProfile;
-            this._splitter = new UIDivider(false, 0f, 4f);
-            this._section = this._splitter.rightSection;
+            _controlProfile = conProfile;
+            _splitter = new UIDivider(false, 0f, 4f);
+            _section = _splitter.rightSection;
             UIText component1 = new UIText(title, Color.White);
             if (tiny)
             {
@@ -63,51 +63,51 @@ namespace DuckGame
                 component1.SetFont(f);
             }
             component1.align |= UIAlign.Top;
-            this._splitter.topSection.Add(component1, true);
-            this._controlString = conString;
-            if (this._controlString != "" && this._controlString != null)
+            _splitter.topSection.Add(component1, true);
+            _controlString = conString;
+            if (_controlString != "" && _controlString != null)
             {
                 UIDivider component2 = new UIDivider(false, 0f, 4f);
-                this._controlText = new UIText(this._controlString, Color.White, heightAdd: 4f, controlProfile: this._controlProfile);
+                _controlText = new UIText(_controlString, Color.White, heightAdd: 4f, controlProfile: _controlProfile);
                 component2.bottomSection.Add(_controlText, true);
-                this.Add(component2, true);
-                this._section = component2.topSection;
+                Add(component2, true);
+                _section = component2.topSection;
             }
             base.Add(_splitter, true);
         }
 
         public string title
         {
-            get => ((UIText)this._splitter.topSection.components[0]).text;
-            set => ((UIText)this._splitter.topSection.components[0]).text = value;
+            get => ((UIText)_splitter.topSection.components[0]).text;
+            set => ((UIText)_splitter.topSection.components[0]).text = value;
         }
 
-        public override void SelectLastMenuItem() => this._section.SelectLastMenuItem();
+        public override void SelectLastMenuItem() => _section.SelectLastMenuItem();
 
-        public override void AssignDefaultSelection() => this._section.AssignDefaultSelection();
+        public override void AssignDefaultSelection() => _section.AssignDefaultSelection();
 
         public override void Add(UIComponent component, bool doAnchor = true)
         {
-            this._section.Add(component, doAnchor);
-            this._dirty = true;
+            _section.Add(component, doAnchor);
+            _dirty = true;
         }
 
         public override void Insert(UIComponent component, int position, bool doAnchor = true)
         {
-            this._section.Insert(component, position, doAnchor);
-            this._dirty = true;
+            _section.Insert(component, position, doAnchor);
+            _dirty = true;
         }
 
         public override void Update()
         {
-            if (this._controlText != null)
-                this._controlText.text = this._section._hoverControlString != null ? this._section._hoverControlString : this._controlString;
+            if (_controlText != null)
+                _controlText.text = _section._hoverControlString != null ? _section._hoverControlString : _controlString;
             base.Update();
         }
 
         public override void Draw()
         {
-            if (!this.open && !this.animating)
+            if (!open && !animating)
                 return;
             base.Draw();
         }
@@ -153,16 +153,16 @@ namespace DuckGame
             if (component != null)
             {
                 component.isEnabled = enabled;
-                this._section.Add(component, true);
-                this._dirty = true;
+                _section.Add(component, true);
+                _dirty = true;
             }
             return component;
         }
 
         public override void Remove(UIComponent component)
         {
-            this._section.Remove(component);
-            this._dirty = true;
+            _section.Remove(component);
+            _dirty = true;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace DuckGame
                 genType = LevGenType.SinglePlayer;
             else if (!Editor._currentLevelData.proceduralData.enableSingle && Editor._currentLevelData.proceduralData.enableMulti)
                 genType = LevGenType.Deathmatch;
-            if (this._levelThings.Exists(x => x is ChallengeMode))
+            if (_levelThings.Exists(x => x is ChallengeMode))
             {
                 foreach (Profile prof in Profiles.active)
                 {
@@ -26,14 +26,14 @@ namespace DuckGame
                 Profiles.experienceProfile.team = Teams.Player1;
                 Level.current = new ChallengeLevel(name);
             }
-            else if (this._levelThings.Exists(x => x is ImportMachine))
+            else if (_levelThings.Exists(x => x is ImportMachine))
                 Level.current = new ArcadeLevel(DuckFile.contentDirectory + "Levels/arcade_machine_preview.lev")
                 {
                     genType = LevGenType.CustomArcadeMachine,
                     customMachine = name,
                     editor = this
                 };
-            else if (this._levelThings.Exists(x => x is ArcadeMode))
+            else if (_levelThings.Exists(x => x is ArcadeMode))
             {
                 foreach (Profile prof in Profiles.active)
                 {
@@ -61,7 +61,7 @@ namespace DuckGame
                 Profiles.DefaultPlayer6.team = Teams.Player6;
                 Profiles.DefaultPlayer7.team = Teams.Player7;
                 Profiles.DefaultPlayer8.team = Teams.Player8;
-                Level.current = new DuckGameTestArea(this, name, this._procSeed, this._centerTile, genType);
+                Level.current = new DuckGameTestArea(this, name, _procSeed, _centerTile, genType);
             }
             Level.current.AddThing(new EditorTestLevel(this));
         }

@@ -14,7 +14,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this.camera.x = 480f;
+            camera.x = 480f;
             UIMenu menu = new UIMenu("MULTIPLAYER", Graphics.width / 2f, Graphics.height / 2f, 160f)
             {
                 scale = new Vec2(4f)

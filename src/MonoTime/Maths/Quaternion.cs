@@ -29,10 +29,10 @@ namespace DuckGame
 
         public Quaternion(Vec3 vectorPart, float scalarPart)
         {
-            this.x = vectorPart.x;
-            this.y = vectorPart.y;
-            this.z = vectorPart.z;
-            this.w = scalarPart;
+            x = vectorPart.x;
+            y = vectorPart.y;
+            z = vectorPart.z;
+            w = scalarPart;
         }
 
         public static Quaternion Identity => Quaternion.identity;
@@ -69,9 +69,9 @@ namespace DuckGame
 
         public void Conjugate()
         {
-            this.x = -this.x;
-            this.y = -this.y;
-            this.z = -this.z;
+            x = -x;
+            y = -y;
+            z = -z;
         }
 
         public static Quaternion Conjugate(Quaternion value)
@@ -270,7 +270,7 @@ namespace DuckGame
 
         public bool Equals(Quaternion other) => x == other.x && y == other.y && z == other.z && w == other.w;
 
-        public override int GetHashCode() => this.x.GetHashCode() + this.y.GetHashCode() + this.z.GetHashCode() + this.w.GetHashCode();
+        public override int GetHashCode() => x.GetHashCode() + y.GetHashCode() + z.GetHashCode() + w.GetHashCode();
 
         public static Quaternion Inverse(Quaternion quaternion)
         {
@@ -292,9 +292,9 @@ namespace DuckGame
             result.w = quaternion.w * num;
         }
 
-        public float Length() => (float)Math.Sqrt(x * this.x + y * this.y + z * this.z + w * this.w);
+        public float Length() => (float)Math.Sqrt(x * x + y * y + z * z + w * w);
 
-        public float LengthSquared() => (float)(x * this.x + y * this.y + z * this.z + w * this.w);
+        public float LengthSquared() => (float)(x * x + y * y + z * z + w * w);
 
         public static Quaternion Lerp(
           Quaternion quaternion1,
@@ -509,11 +509,11 @@ namespace DuckGame
 
         public void Normalize()
         {
-            float num = 1f / (float)Math.Sqrt(x * this.x + y * this.y + z * this.z + w * this.w);
-            this.x *= num;
-            this.y *= num;
-            this.z *= num;
-            this.w *= num;
+            float num = 1f / (float)Math.Sqrt(x * x + y * y + z * z + w * w);
+            x *= num;
+            y *= num;
+            z *= num;
+            w *= num;
         }
 
         public static Quaternion Normalize(Quaternion quaternion)
@@ -609,13 +609,13 @@ namespace DuckGame
         {
             StringBuilder stringBuilder = new StringBuilder(32);
             stringBuilder.Append("{X:");
-            stringBuilder.Append(this.x);
+            stringBuilder.Append(x);
             stringBuilder.Append(" Y:");
-            stringBuilder.Append(this.y);
+            stringBuilder.Append(y);
             stringBuilder.Append(" Z:");
-            stringBuilder.Append(this.z);
+            stringBuilder.Append(z);
             stringBuilder.Append(" W:");
-            stringBuilder.Append(this.w);
+            stringBuilder.Append(w);
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }

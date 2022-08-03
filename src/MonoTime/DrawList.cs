@@ -20,38 +20,38 @@ namespace DuckGame
         {
             if (obj.opaque)
             {
-                this._opaque.Add(obj);
-                this._opaqueRemove.Remove(obj);
+                _opaque.Add(obj);
+                _opaqueRemove.Remove(obj);
             }
             else
             {
-                this._transparent.Add(obj);
-                this._transparentRemove.Remove(obj);
+                _transparent.Add(obj);
+                _transparentRemove.Remove(obj);
             }
         }
 
         public void Remove(Thing obj)
         {
             if (obj.opaque)
-                this._opaque.Remove(obj);
+                _opaque.Remove(obj);
             else
-                this._transparent.Remove(obj);
+                _transparent.Remove(obj);
         }
 
         public void RemoveSoon(Thing obj)
         {
             if (obj.opaque)
-                this._opaqueRemove.Add(obj);
+                _opaqueRemove.Add(obj);
             else
-                this._transparentRemove.Add(obj);
+                _transparentRemove.Add(obj);
         }
 
         public void Clear()
         {
-            this._transparent.Clear();
-            this._transparentRemove.Clear();
-            this._opaque.Clear();
-            this._opaqueRemove.Clear();
+            _transparent.Clear();
+            _transparentRemove.Clear();
+            _opaque.Clear();
+            _opaqueRemove.Clear();
         }
     }
 }

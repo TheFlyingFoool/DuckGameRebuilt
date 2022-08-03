@@ -19,25 +19,25 @@ namespace DuckGame
         public Lamp(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("lamp");
-            this.center = new Vec2(7f, 28f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -15f);
-            this.depth = (Depth)0.9f;
-            this.hugWalls = WallHug.Floor;
-            this.layer = Layer.Game;
+            graphic = new Sprite("lamp");
+            center = new Vec2(7f, 28f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -15f);
+            depth = (Depth)0.9f;
+            hugWalls = WallHug.Floor;
+            layer = Layer.Game;
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            this._occluders.Add(new LightOccluder(this.position + new Vec2(-7f, -16f), this.position + new Vec2(-3f, -28f), new Color(1f, 0.7f, 0.7f)));
-            this._occluders.Add(new LightOccluder(this.position + new Vec2(7f, -16f), this.position + new Vec2(3f, -28f), new Color(1f, 0.7f, 0.7f)));
-            Level.Add(new PointLight(this.x, this.y - 24f, new Color((int)byte.MaxValue, (int)byte.MaxValue, 180), 100f, this._occluders));
-            this._shade = new SpriteThing(this.x, this.y, new Sprite("lampShade"))
+            _occluders.Add(new LightOccluder(position + new Vec2(-7f, -16f), position + new Vec2(-3f, -28f), new Color(1f, 0.7f, 0.7f)));
+            _occluders.Add(new LightOccluder(position + new Vec2(7f, -16f), position + new Vec2(3f, -28f), new Color(1f, 0.7f, 0.7f)));
+            Level.Add(new PointLight(x, y - 24f, new Color((int)byte.MaxValue, (int)byte.MaxValue, 180), 100f, _occluders));
+            _shade = new SpriteThing(x, y, new Sprite("lampShade"))
             {
-                center = this.center,
+                center = center,
                 layer = Layer.Foreground
             };
             Level.Add(_shade);

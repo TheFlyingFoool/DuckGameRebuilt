@@ -11,17 +11,17 @@ namespace DuckGame
     {
         public ATWagnus()
         {
-            this.accuracy = 1f;
-            this.range = 128f;
-            this.penetration = 2f;
-            this.bulletSpeed = 25f;
-            this.bulletLength = 40f;
-            this.bulletThickness = 0.3f;
-            this.rangeVariation = 0f;
-            this.barrelAngleDegrees = 180f;
-            this.bulletType = typeof(LaserBulletPurple);
-            this.canBeReflected = false;
-            this.canTeleport = false;
+            accuracy = 1f;
+            range = 128f;
+            penetration = 2f;
+            bulletSpeed = 25f;
+            bulletLength = 40f;
+            bulletThickness = 0.3f;
+            rangeVariation = 0f;
+            barrelAngleDegrees = 180f;
+            bulletType = typeof(LaserBulletPurple);
+            canBeReflected = false;
+            canTeleport = false;
         }
     }
 }

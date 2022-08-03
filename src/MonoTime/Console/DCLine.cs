@@ -19,11 +19,11 @@ namespace DuckGame
         public Verbosity verbosity;
         public int frames;
 
-        public override string ToString() => this.line + " | " + this.timestamp.ToLongTimeString();
+        public override string ToString() => line + " | " + timestamp.ToLongTimeString();
 
-        public string ToSendString() => this.timestamp.ToLongTimeString() + " " + this.SectionString() + " " + this.color.ToDGColorString() + this.line + "\n";
+        public string ToSendString() => timestamp.ToLongTimeString() + " " + SectionString() + " " + color.ToDGColorString() + line + "\n";
 
-        public string ToShortString() => this.SectionString() + " " + this.line + "\n";
+        public string ToShortString() => SectionString() + " " + line + "\n";
 
         public static Color ColorForSection(DCSection s)
         {
@@ -225,6 +225,6 @@ namespace DuckGame
             return "";
         }
 
-        public string SectionString(bool colored = true, bool small = false) => DCLine.StringForSection(this.section, colored, small);
+        public string SectionString(bool colored = true, bool small = false) => DCLine.StringForSection(section, colored, small);
     }
 }

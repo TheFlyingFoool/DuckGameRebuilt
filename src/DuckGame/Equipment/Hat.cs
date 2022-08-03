@@ -18,35 +18,35 @@ namespace DuckGame
 
         public Vec2 hatOffset
         {
-            get => this._hatOffset;
-            set => this._hatOffset = value;
+            get => _hatOffset;
+            set => _hatOffset = value;
         }
 
-        public virtual void SetQuack(int pValue) => this.frame = pValue;
+        public virtual void SetQuack(int pValue) => frame = pValue;
 
         public SpriteMap sprite
         {
-            get => this._sprite;
-            set => this._sprite = value;
+            get => _sprite;
+            set => _sprite = value;
         }
 
         public Sprite pickupSprite
         {
-            get => this._pickupSprite;
-            set => this._pickupSprite = value;
+            get => _pickupSprite;
+            set => _pickupSprite = value;
         }
 
         public Hat(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.center = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-6f, -6f);
-            this.collisionSize = new Vec2(12f, 12f);
-            this._autoOffset = false;
-            this.thickness = 0.1f;
-            this._sprite = new SpriteMap("hats/burgers", 32, 32);
-            this._pickupSprite = new SpriteMap("hats/burgers", 32, 32);
-            this._equippedDepth = 6;
+            center = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-6f, -6f);
+            collisionSize = new Vec2(12f, 12f);
+            _autoOffset = false;
+            thickness = 0.1f;
+            _sprite = new SpriteMap("hats/burgers", 32, 32);
+            _pickupSprite = new SpriteMap("hats/burgers", 32, 32);
+            _equippedDepth = 6;
         }
 
         public virtual void Quack(float volume, float pitch) => SFX.Play("quack", volume, pitch);
@@ -61,37 +61,37 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this._equippedDuck != null && !this.destroyed)
+            if (_equippedDuck != null && !destroyed)
             {
-                this.center = new Vec2(this._sprite.w / 2, this._sprite.h / 2);
-                this.graphic = _sprite;
-                this.solid = false;
-                this.visible = false;
+                center = new Vec2(_sprite.w / 2, _sprite.h / 2);
+                graphic = _sprite;
+                solid = false;
+                visible = false;
             }
             else
             {
-                this._sprite.frame = 0;
-                if (!this._hasUnequippedCenter)
-                    this.center = new Vec2(this._pickupSprite.w / 2, this._pickupSprite.h / 2);
-                this.graphic = this._pickupSprite;
-                this.solid = true;
-                this._sprite.flipH = false;
-                this.visible = true;
+                _sprite.frame = 0;
+                if (!_hasUnequippedCenter)
+                    center = new Vec2(_pickupSprite.w / 2, _pickupSprite.h / 2);
+                graphic = _pickupSprite;
+                solid = true;
+                _sprite.flipH = false;
+                visible = true;
             }
-            if (this.destroyed)
-                this.alpha -= 0.05f;
-            if (this.alpha < 0.0)
+            if (destroyed)
+                alpha -= 0.05f;
+            if (alpha < 0.0)
                 Level.Remove(this);
             base.Update();
-            if (this._equippedDuck != null && this._equippedDuck._trapped != null)
+            if (_equippedDuck != null && _equippedDuck._trapped != null)
             {
-                this.depth = this._equippedDuck._trapped.depth + 2;
+                depth = _equippedDuck._trapped.depth + 2;
             }
             else
             {
-                if (this.owner != null || !(this is TeamHat))
+                if (owner != null || !(this is TeamHat))
                     return;
-                this.depth = -0.2f;
+                depth = -0.2f;
             }
         }
     }

@@ -25,7 +25,7 @@ namespace DuckGame
 
         public NMExplodingProp(List<Bullet> varBullets)
         {
-            this.bullets = varBullets;
+            bullets = varBullets;
             if (varBullets == null)
                 return;
             bool flag = true;
@@ -33,12 +33,12 @@ namespace DuckGame
             {
                 if (flag)
                 {
-                    this._ammoTypeInstance = varBullet.ammo;
-                    this.ammoType = AmmoType.indexTypeMap[varBullet.ammo.GetType()];
-                    this.position = new Vec2(varBullet.x, varBullet.y);
+                    _ammoTypeInstance = varBullet.ammo;
+                    ammoType = AmmoType.indexTypeMap[varBullet.ammo.GetType()];
+                    position = new Vec2(varBullet.x, varBullet.y);
                     flag = false;
                 }
-                this._fireEvents.Add(new NMFireBullet(varBullet.range, varBullet.bulletSpeed, varBullet.angle));
+                _fireEvents.Add(new NMFireBullet(varBullet.range, varBullet.bulletSpeed, varBullet.angle));
             }
         }
 
@@ -46,40 +46,40 @@ namespace DuckGame
         {
             if (_levelIndex != DuckNetwork.levelIndex)
                 return;
-            if (this._fireEvents.Count > 0 && this._fireEvents[0].typeInstance != null)
-                this._fireEvents[0].typeInstance.MakeNetEffect(this.position, true);
-            foreach (NMFireBullet fireEvent in this._fireEvents)
-                fireEvent.DoActivate(this.position, null);
+            if (_fireEvents.Count > 0 && _fireEvents[0].typeInstance != null)
+                _fireEvents[0].typeInstance.MakeNetEffect(position, true);
+            foreach (NMFireBullet fireEvent in _fireEvents)
+                fireEvent.DoActivate(position, null);
         }
 
         protected override void OnSerialize()
         {
             base.OnSerialize();
-            this._serializedData.Write(DuckNetwork.levelIndex);
-            this._serializedData.Write((byte)this._fireEvents.Count);
-            foreach (NMFireBullet fireEvent in this._fireEvents)
+            _serializedData.Write(DuckNetwork.levelIndex);
+            _serializedData.Write((byte)_fireEvents.Count);
+            foreach (NMFireBullet fireEvent in _fireEvents)
             {
                 fireEvent.SerializePacketData();
-                this._serializedData.Write(fireEvent.serializedData, true);
-                if (this._fireEvents.Count > 0)
-                    this._ammoTypeInstance.WriteAdditionalData(this._serializedData);
+                _serializedData.Write(fireEvent.serializedData, true);
+                if (_fireEvents.Count > 0)
+                    _ammoTypeInstance.WriteAdditionalData(_serializedData);
             }
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
             base.OnDeserialize(d);
-            this._levelIndex = d.ReadByte();
+            _levelIndex = d.ReadByte();
             byte num = d.ReadByte();
             for (int index = 0; index < num; ++index)
             {
                 NMFireBullet nmFireBullet = new NMFireBullet();
                 BitBuffer msg = d.ReadBitBuffer();
                 nmFireBullet.OnDeserialize(msg);
-                AmmoType instance = Activator.CreateInstance(AmmoType.indexTypeMap[this.ammoType]) as AmmoType;
+                AmmoType instance = Activator.CreateInstance(AmmoType.indexTypeMap[ammoType]) as AmmoType;
                 instance.ReadAdditionalData(d);
                 nmFireBullet.typeInstance = instance;
-                this._fireEvents.Add(nmFireBullet);
+                _fireEvents.Add(nmFireBullet);
             }
         }
     }

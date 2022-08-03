@@ -16,21 +16,21 @@ namespace DuckGame
 
         public CameraZoomNew()
         {
-            this._contextMenuFilter.Add("overFollow");
-            this._contextMenuFilter.Add("allowWarps");
-            this._editorName = "Camera Zoom";
-            this.editorTooltip = "A camera that follows your Ducks with an adjustable zoom.";
-            this.Zoom._tooltip = "The Zoom factor (Counter-intuitively, Higher values zoom out further!)";
-            this.Allow_Warps._tooltip = "If enabled, the camera will instantly move to follow Faster-Than-Light ducks";
-            this.Overfollow._tooltip = "If enabled, the camera will keep a tighter focus on fast moving Ducks (think Chainsaw challenges!)";
-            this.graphic = new Sprite("cameraIcon");
+            _contextMenuFilter.Add("overFollow");
+            _contextMenuFilter.Add("allowWarps");
+            _editorName = "Camera Zoom";
+            editorTooltip = "A camera that follows your Ducks with an adjustable zoom.";
+            Zoom._tooltip = "The Zoom factor (Counter-intuitively, Higher values zoom out further!)";
+            Allow_Warps._tooltip = "If enabled, the camera will instantly move to follow Faster-Than-Light ducks";
+            Overfollow._tooltip = "If enabled, the camera will keep a tighter focus on fast moving Ducks (think Chainsaw challenges!)";
+            graphic = new Sprite("cameraIcon");
         }
 
         public override void Initialize()
         {
-            this.zoomMult = this.Zoom.value;
-            this.overFollow = (EditorProperty<bool>)this.Overfollow.value;
-            this.allowWarps = (EditorProperty<bool>)this.Allow_Warps.value;
+            zoomMult = Zoom.value;
+            overFollow = (EditorProperty<bool>)Overfollow.value;
+            allowWarps = (EditorProperty<bool>)Allow_Warps.value;
             base.Initialize();
         }
     }

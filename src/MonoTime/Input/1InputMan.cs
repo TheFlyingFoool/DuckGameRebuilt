@@ -15,6 +15,6 @@ namespace Microsoft.Xna.Framework.Input
 
         public KeyEventArgs(Keys keyCode) => this.keyCode = keyCode;
 
-        public Keys KeyCode => this.keyCode;
+        public Keys KeyCode => keyCode;
     }
 }

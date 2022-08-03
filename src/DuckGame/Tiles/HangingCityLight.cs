@@ -19,23 +19,23 @@ namespace DuckGame
         public HangingCityLight(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("hangingCityLight");
-            this.center = new Vec2(8f, 5f);
-            this._collisionSize = new Vec2(8f, 8f);
-            this._collisionOffset = new Vec2(-4f, -5f);
-            this.depth = (Depth)0.9f;
-            this.hugWalls = WallHug.Ceiling;
-            this.layer = Layer.Game;
+            graphic = new Sprite("hangingCityLight");
+            center = new Vec2(8f, 5f);
+            _collisionSize = new Vec2(8f, 8f);
+            _collisionOffset = new Vec2(-4f, -5f);
+            depth = (Depth)0.9f;
+            hugWalls = WallHug.Ceiling;
+            layer = Layer.Game;
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            Vec2 vec2 = new Vec2(this.x, this.y);
-            this._occluders.Add(new LightOccluder(vec2 + new Vec2(-8f, 5f), vec2 + new Vec2(1f, -4f), new Color(0.4f, 0.4f, 0.4f)));
-            this._occluders.Add(new LightOccluder(vec2 + new Vec2(-1f, -4f), vec2 + new Vec2(8f, 5f), new Color(0.4f, 0.4f, 0.4f)));
-            Level.Add(new PointLight(vec2.x, vec2.y, new Color(247, 198, 120), 180f, this._occluders));
+            Vec2 vec2 = new Vec2(x, y);
+            _occluders.Add(new LightOccluder(vec2 + new Vec2(-8f, 5f), vec2 + new Vec2(1f, -4f), new Color(0.4f, 0.4f, 0.4f)));
+            _occluders.Add(new LightOccluder(vec2 + new Vec2(-1f, -4f), vec2 + new Vec2(8f, 5f), new Color(0.4f, 0.4f, 0.4f)));
+            Level.Add(new PointLight(vec2.x, vec2.y, new Color(247, 198, 120), 180f, _occluders));
         }
     }
 }

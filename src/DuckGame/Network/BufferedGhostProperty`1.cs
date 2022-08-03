@@ -14,45 +14,45 @@ namespace DuckGame
         public override object value
         {
             get => _value;
-            set => this._value = (T)value;
+            set => _value = (T)value;
         }
 
         public override bool Refresh()
         {
             T newVal;
-            if (this.binding.Compare<T>(this._value, out newVal))
+            if (binding.Compare<T>(_value, out newVal))
                 return false;
-            this._value = newVal;
+            _value = newVal;
             return true;
         }
 
-        public override void UpdateFrom(StateBinding bind) => this._value = bind.getTyped<T>();
+        public override void UpdateFrom(StateBinding bind) => _value = bind.getTyped<T>();
 
         public override void Apply(float lerp)
         {
             if (lerp < 1f)
             {
-                if (this.binding is CompressedVec2Binding)
+                if (binding is CompressedVec2Binding)
                 {
-                    Vec2 typed = this.binding.getTyped<Vec2>();
-                    Vec2 to = (Vec2)this.value;
+                    Vec2 typed = binding.getTyped<Vec2>();
+                    Vec2 to = (Vec2)value;
                     if ((typed - to).lengthSq > 1024f)
-                        this.binding.setTyped<Vec2>(to);
+                        binding.setTyped<Vec2>(to);
                     else
-                        this.binding.setTyped<Vec2>(Lerp.Vec2Smooth(typed, to, lerp));
+                        binding.setTyped<Vec2>(Lerp.Vec2Smooth(typed, to, lerp));
                 }
-                else if (this.binding.isRotation)
-                    this.binding.setTyped<float>(Maths.DegToRad(Maths.PointDirection(Vec2.Zero, BufferedGhostProperty.Slerp(Maths.AngleToVec(this.binding.getTyped<float>()), Maths.AngleToVec((float)this.value), lerp))));
+                else if (binding.isRotation)
+                    binding.setTyped<float>(Maths.DegToRad(Maths.PointDirection(Vec2.Zero, BufferedGhostProperty.Slerp(Maths.AngleToVec(binding.getTyped<float>()), Maths.AngleToVec((float)value), lerp))));
                 else
-                    this.binding.setTyped<T>(this._value);
+                    binding.setTyped<T>(_value);
             }
             else
             {
-                if (this.binding.name == "netPosition")
+                if (binding.name == "netPosition")
                 {
                     double x = ((Vec2)value).x;
                 }
-                this.binding.setTyped<T>(this._value);
+                binding.setTyped<T>(_value);
             }
         }
     }

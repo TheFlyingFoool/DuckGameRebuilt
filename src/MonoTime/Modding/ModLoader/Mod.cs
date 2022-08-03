@@ -39,7 +39,7 @@ namespace DuckGame
 
         public void System_RuinDatahash()
         {
-            this._dataHash = (uint)Rando.Int(9999999);
+            _dataHash = (uint)Rando.Int(9999999);
             DevConsole.Log("|DGRED|Mod.System_RuinDatahash called!");
         }
 
@@ -50,9 +50,9 @@ namespace DuckGame
         {
             get
             {
-                if (this._dataHash == 0U)
-                    this._dataHash = (this.thingHash + this.netMessageHash) % uint.MaxValue;
-                return this._dataHash;
+                if (_dataHash == 0U)
+                    _dataHash = (thingHash + netMessageHash) % uint.MaxValue;
+                return _dataHash;
             }
         }
 
@@ -61,14 +61,14 @@ namespace DuckGame
         {
             get
             {
-                if (this._thingHash == 0U)
+                if (_thingHash == 0U)
                 {
                     string str = "";
-                    foreach (System.Type type in this.GetTypeList(typeof(Thing)))
+                    foreach (System.Type type in GetTypeList(typeof(Thing)))
                         str += type.Name;
-                    this._thingHash = CRC32.Generate(str);
+                    _thingHash = CRC32.Generate(str);
                 }
-                return this._thingHash;
+                return _thingHash;
             }
         }
 
@@ -77,46 +77,46 @@ namespace DuckGame
         {
             get
             {
-                if (this._netMessageHash == 0U)
+                if (_netMessageHash == 0U)
                 {
                     string str = "";
-                    foreach (KeyValuePair<ushort, System.Type> keyValuePair in this.typeToMessageID)
+                    foreach (KeyValuePair<ushort, System.Type> keyValuePair in typeToMessageID)
                         str += keyValuePair.Value.Name;
-                    this._netMessageHash = CRC32.Generate(str);
+                    _netMessageHash = CRC32.Generate(str);
                 }
-                return this._netMessageHash;
+                return _netMessageHash;
             }
         }
 
         public List<System.Type> GetTypeList(System.Type pType)
         {
             List<System.Type> typeList;
-            if (!this._typeLists.TryGetValue(pType, out typeList))
-                typeList = this._typeLists[pType] = new List<System.Type>();
+            if (!_typeLists.TryGetValue(pType, out typeList))
+                typeList = _typeLists[pType] = new List<System.Type>();
             return typeList;
         }
 
         /// <summary>
         /// Used by the mod upload window, you shouldn't need this.
         /// </summary>
-        public WorkshopMetaData workshopData => this._workshopData;
+        public WorkshopMetaData workshopData => _workshopData;
 
         public string generateAndGetPathToScreenshot
         {
             get
             {
-                string directory = this.configuration.directory;
+                string directory = configuration.directory;
                 DuckFile.CreatePath(directory);
                 string path = directory + "screenshot.png";
                 if (!System.IO.File.Exists(path))
                 {
-                    if (this.configuration.modType == ModConfiguration.Type.MapPack && this.configuration.mapPack != null)
+                    if (configuration.modType == ModConfiguration.Type.MapPack && configuration.mapPack != null)
                     {
-                        path = this.configuration.mapPack.RegeneratePreviewImage(null);
+                        path = configuration.mapPack.RegeneratePreviewImage(null);
                     }
                     else
                     {
-                        string pathString = this.configuration.directory + "/content/";
+                        string pathString = configuration.directory + "/content/";
                         DuckFile.CreatePath(pathString);
                         path = pathString + "screenshot.png";
                     }
@@ -143,7 +143,7 @@ namespace DuckGame
         /// <summary>
         /// Returns a formatted path that leads to the "asset" parameter in this mod.
         /// </summary>
-        public string GetPath(string asset) => this.configuration.contentDirectory + asset.Replace('\\', '/');
+        public string GetPath(string asset) => configuration.contentDirectory + asset.Replace('\\', '/');
 
         /// <summary>
         /// The read-only property bag that this mod was initialized with.
@@ -155,9 +155,9 @@ namespace DuckGame
 
         /// <summary>The priority of this mod as compared to other mods.</summary>
         /// <value>The priority.</value>
-        public virtual Priority priority => this._priority;
+        public virtual Priority priority => _priority;
 
-        public void SetPriority(Priority pPriority) => this._priority = pPriority;
+        public void SetPriority(Priority pPriority) => _priority = pPriority;
 
         /// <summary>
         /// The workshop IDs of this mods parent mod. This is useful for DEV versions of mods, and will allow the parent mod's levels to be played in this mod and vice-versa.
@@ -183,21 +183,21 @@ namespace DuckGame
         {
             get
             {
-                if (this._previewTexture == null)
+                if (_previewTexture == null)
                 {
-                    if (this.configuration.loaded)
+                    if (configuration.loaded)
                     {
-                        if (this.configuration.contentDirectory != null)
-                            this._previewTexture = (Tex2D)ContentPack.LoadTexture2D(this.GetPath("preview") + ".png", false);
-                        if (this._previewTexture == null)
-                            this._previewTexture = Content.Load<Tex2D>("notexture");
+                        if (configuration.contentDirectory != null)
+                            _previewTexture = (Tex2D)ContentPack.LoadTexture2D(GetPath("preview") + ".png", false);
+                        if (_previewTexture == null)
+                            _previewTexture = Content.Load<Tex2D>("notexture");
                     }
                     else
-                        this._previewTexture = Content.Load<Tex2D>("none");
+                        _previewTexture = Content.Load<Tex2D>("none");
                 }
-                return this._previewTexture;
+                return _previewTexture;
             }
-            protected set => this._previewTexture = value;
+            protected set => _previewTexture = value;
         }
 
         /// <summary>Gets path for screenshot.png from Content folder.</summary>
@@ -206,23 +206,23 @@ namespace DuckGame
         {
             get
             {
-                if (this._screenshot == null)
+                if (_screenshot == null)
                 {
-                    if (this.configuration.loaded)
+                    if (configuration.loaded)
                     {
-                        if (this.configuration.contentDirectory != null)
+                        if (configuration.contentDirectory != null)
                         {
-                            string str = this.GetPath(nameof(screenshot)) + ".png";
+                            string str = GetPath(nameof(screenshot)) + ".png";
                             if (System.IO.File.Exists(str))
-                                this._screenshot = Content.Load<Tex2D>(str);
+                                _screenshot = Content.Load<Tex2D>(str);
                         }
-                        if (this._screenshot == null)
-                            this._screenshot = Content.Load<Tex2D>("defaultMod");
+                        if (_screenshot == null)
+                            _screenshot = Content.Load<Tex2D>("defaultMod");
                     }
                     else
-                        this._screenshot = null;
+                        _screenshot = null;
                 }
-                return this._screenshot;
+                return _screenshot;
             }
         }
 
@@ -252,23 +252,23 @@ namespace DuckGame
         {
         }
 
-        internal void InvokeOnPreInitialize() => this.OnPreInitialize();
+        internal void InvokeOnPreInitialize() => OnPreInitialize();
 
-        internal void InvokeOnPostInitialize() => this.OnPostInitialize();
+        internal void InvokeOnPostInitialize() => OnPostInitialize();
 
-        internal void InvokeStart() => this.OnStart();
+        internal void InvokeStart() => OnStart();
 
-        public Map<ushort, System.Type> typeToMessageID => this._typeToMessageID;
+        public Map<ushort, System.Type> typeToMessageID => _typeToMessageID;
 
-        public Map<ushort, ConstructorInfo> constructorToMessageID => this._constructorToMessageID;
+        public Map<ushort, ConstructorInfo> constructorToMessageID => _constructorToMessageID;
 
         public uint identifierHash
         {
             get
             {
-                if (this._identifierHash == 0U && this.configuration != null)
-                    this._identifierHash = CRC32.Generate(this.configuration.uniqueID);
-                return this._identifierHash;
+                if (_identifierHash == 0U && configuration != null)
+                    _identifierHash = CRC32.Generate(configuration.uniqueID);
+                return _identifierHash;
             }
         }
 

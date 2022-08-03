@@ -14,17 +14,17 @@ namespace DuckGame
     {
         public void SerializeField(BinaryClassChunk element, string name)
         {
-            ClassMember member = Editor.GetMember(this.GetType(), name);
+            ClassMember member = Editor.GetMember(GetType(), name);
             if (member == null)
                 return;
             element.AddProperty(name, member.GetValue(this));
         }
 
-        public void DeserializeField(BinaryClassChunk node, string name) => Editor.GetMember(this.GetType(), name)?.SetValue(this, node.GetProperty(name));
+        public void DeserializeField(BinaryClassChunk node, string name) => Editor.GetMember(GetType(), name)?.SetValue(this, node.GetProperty(name));
 
         public void LegacySerializeField(DXMLNode element, string name)
         {
-            FieldInfo field = this.GetType().GetField(name);
+            FieldInfo field = GetType().GetField(name);
             object name1;
             if (field != null)
             {
@@ -32,7 +32,7 @@ namespace DuckGame
             }
             else
             {
-                PropertyInfo property = this.GetType().GetProperty(name);
+                PropertyInfo property = GetType().GetProperty(name);
                 if (!(property != null))
                     return;
                 name1 = property.GetValue(this, null);
@@ -49,7 +49,7 @@ namespace DuckGame
                 DXMLNode dxmlNode = node.Element(name);
                 if (dxmlNode == null)
                     return;
-                FieldInfo field = this.GetType().GetField(name);
+                FieldInfo field = GetType().GetField(name);
                 if (field != null)
                 {
                     if (field.FieldType.IsEnum)
@@ -59,7 +59,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    PropertyInfo property = this.GetType().GetProperty(name);
+                    PropertyInfo property = GetType().GetProperty(name);
                     if (!(property != null))
                         return;
                     if (property.PropertyType.IsEnum)

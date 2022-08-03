@@ -33,45 +33,45 @@ namespace DuckGame
             return serializedGhostData;
         }
 
-        public NMGhostData() => this.manager = BelongsToManager.GhostManager;
+        public NMGhostData() => manager = BelongsToManager.GhostManager;
 
         protected override void OnSerialize()
         {
-            this._serializedData.Write(DuckNetwork.levelIndex);
-            int position = this._serializedData.position;
-            this._serializedData.Write((byte)0);
+            _serializedData.Write(DuckNetwork.levelIndex);
+            int position = _serializedData.position;
+            _serializedData.Write((byte)0);
             ushort val = ushort.MaxValue;
-            for (int startIndex = this._startIndex; startIndex < this._ghostSelection.Count; ++startIndex)
+            for (int startIndex = _startIndex; startIndex < _ghostSelection.Count; ++startIndex)
             {
-                GhostObject ghostObject = this._ghostSelection[startIndex];
-                if (this._serializedData.lengthInBytes + ghostObject.previouslySerializedData.lengthInBytes <= 512)
+                GhostObject ghostObject = _ghostSelection[startIndex];
+                if (_serializedData.lengthInBytes + ghostObject.previouslySerializedData.lengthInBytes <= 512)
                 {
                     if (val == ushort.MaxValue || val != ghostObject.thing.ghostType)
                     {
                         val = ghostObject.thing.ghostType;
-                        this._serializedData.Write(true);
-                        this._serializedData.Write(val);
+                        _serializedData.Write(true);
+                        _serializedData.Write(val);
                     }
                     else
-                        this._serializedData.Write(false);
-                    this.ghostMaskPairs.Add(new NMGhostData.GhostMaskPair()
+                        _serializedData.Write(false);
+                    ghostMaskPairs.Add(new NMGhostData.GhostMaskPair()
                     {
                         ghost = ghostObject,
                         mask = ghostObject.lastWrittenMask
                     });
-                    this._serializedData.Write(ghostObject.previouslySerializedData, true);
+                    _serializedData.Write(ghostObject.previouslySerializedData, true);
                 }
                 else
                     break;
             }
-            this._serializedData.position = position;
-            this._serializedData.bitOffset = 0;
-            this._serializedData.Write((byte)this.ghostMaskPairs.Count);
+            _serializedData.position = position;
+            _serializedData.bitOffset = 0;
+            _serializedData.Write((byte)ghostMaskPairs.Count);
         }
 
         public override void OnDeserialize(BitBuffer pData)
         {
-            this.levelIndex = pData.ReadByte();
+            levelIndex = pData.ReadByte();
             ushort num1 = pData.ReadByte();
             ushort num2 = 0;
             for (int index = 0; index < num1; ++index)
@@ -82,19 +82,19 @@ namespace DuckGame
                 NMGhostState nmGhostState1 = new NMGhostState
                 {
                     minimalState = true,
-                    packet = this.packet
+                    packet = packet
                 };
                 NMGhostState nmGhostState2 = nmGhostState1;
                 if (num2 == 0)
                     nmGhostState2.header.id = (NetIndex16)msg.ReadUShort();
                 else
                     nmGhostState2.Deserialize(msg);
-                nmGhostState2.header.levelIndex = this.levelIndex;
-                nmGhostState2.connection = this.connection;
+                nmGhostState2.header.levelIndex = levelIndex;
+                nmGhostState2.connection = connection;
                 nmGhostState2.header.classID = num2;
                 if (!nmGhostState2.header.delta)
                     nmGhostState2.header.tick = (NetIndex16)1;
-                this.states.Add(nmGhostState2);
+                states.Add(nmGhostState2);
             }
         }
 

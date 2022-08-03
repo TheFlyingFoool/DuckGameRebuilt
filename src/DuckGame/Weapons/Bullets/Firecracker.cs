@@ -19,13 +19,13 @@ namespace DuckGame
         public Firecracker(float xpos, float ypos, float ang = 0f)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("fireCracker");
-            this.center = new Vec2(4f, 4f);
-            this._bounceSound = "plasticBounce";
-            this._airFriction = 0.02f;
-            this._bounceEfficiency = 0.65f;
-            this._spinAngle = ang;
-            this.isLocal = true;
+            graphic = new Sprite("fireCracker");
+            center = new Vec2(4f, 4f);
+            _bounceSound = "plasticBounce";
+            _airFriction = 0.02f;
+            _bounceEfficiency = 0.65f;
+            _spinAngle = ang;
+            isLocal = true;
             if (!Network.isActive)
                 return;
             GhostManager.context.particleManager.AddLocalParticle(this);
@@ -36,35 +36,35 @@ namespace DuckGame
         {
             if (Network.isActive && !network)
                 GhostManager.context.particleManager.AddLocalParticle(this);
-            this.isLocal = !network;
+            isLocal = !network;
         }
 
         public override void NetSerialize(BitBuffer b)
         {
-            b.Write((short)this.x);
-            b.Write((short)this.y);
-            b.Write(this._spinAngle);
+            b.Write((short)x);
+            b.Write((short)y);
+            b.Write(_spinAngle);
         }
 
         public override void NetDeserialize(BitBuffer d)
         {
-            this.netLerpPosition = new Vec2(d.ReadShort(), d.ReadShort());
-            this._spinAngle = d.ReadFloat();
+            netLerpPosition = new Vec2(d.ReadShort(), d.ReadShort());
+            _spinAngle = d.ReadFloat();
         }
 
         public override void Removed()
         {
-            if (Network.isActive && !this.didRemove)
+            if (Network.isActive && !didRemove)
             {
-                this.didRemove = true;
-                if (this.isLocal && GhostManager.context != null)
+                didRemove = true;
+                if (isLocal && GhostManager.context != null)
                 {
                     GhostManager.context.particleManager.RemoveParticle(this);
                 }
                 else
                 {
-                    this.position = this.netLerpPosition;
-                    Level.Add(SmallSmoke.New(this.x, this.y));
+                    position = netLerpPosition;
+                    Level.Add(SmallSmoke.New(x, y));
                 }
             }
             base.Removed();
@@ -72,12 +72,12 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((bool)this._sparkTimer)
-                Level.Add(Spark.New(this.x, this.y - 2f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
-            this._life = 1f;
-            this.angleDegrees = this._spinAngle;
+            if ((bool)_sparkTimer)
+                Level.Add(Spark.New(x, y - 2f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
+            _life = 1f;
+            angleDegrees = _spinAngle;
             base.Update();
-            if (!this.isLocal || !(bool)this._explodeTimer)
+            if (!isLocal || !(bool)_explodeTimer)
                 return;
             SFX.PlaySynchronized("littleGun", Rando.Float(0.8f, 1f), Rando.Float(-0.5f, 0.5f));
             List<Bullet> varBullets = new List<Bullet>();
@@ -88,7 +88,7 @@ namespace DuckGame
                 {
                     range = 8f + Rando.Float(3f)
                 };
-                Bullet bullet = new Bullet(this.x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), this.y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type, num)
+                Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type, num)
                 {
                     firedFrom = this
                 };
@@ -97,9 +97,9 @@ namespace DuckGame
             }
             if (Network.isActive)
                 Send.Message(new NMFireGun(null, varBullets, 0, false), NetMessagePriority.ReliableOrdered);
-            Level.Add(SmallSmoke.New(this.x, this.y));
+            Level.Add(SmallSmoke.New(x, y));
             if (Rando.Float(1f) < 0.1f)
-                Level.Add(SmallFire.New(this.x, this.y, 0f, 0f, firedFrom: this));
+                Level.Add(SmallFire.New(x, y, 0f, 0f, firedFrom: this));
             Level.Remove(this);
         }
     }

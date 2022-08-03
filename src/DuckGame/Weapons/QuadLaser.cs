@@ -13,46 +13,46 @@ namespace DuckGame
         public QuadLaser(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 3;
-            this._ammoType = new AT9mm();
-            this._type = "gun";
-            this.graphic = new Sprite("quadLaser");
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -3f);
-            this.collisionSize = new Vec2(16f, 8f);
-            this._barrelOffsetTL = new Vec2(20f, 8f);
-            this._fireSound = "pistolFire";
-            this._kickForce = 3f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this.loseAccuracy = 0.1f;
-            this.maxAccuracyLost = 0.6f;
-            this._holdOffset = new Vec2(2f, -2f);
-            this._bio = "Stop moving...";
-            this._editorName = "Quad Laser";
-            this.editorTooltip = "Shoots a slow-moving science block of doom that passes through walls.";
+            ammo = 3;
+            _ammoType = new AT9mm();
+            _type = "gun";
+            graphic = new Sprite("quadLaser");
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -3f);
+            collisionSize = new Vec2(16f, 8f);
+            _barrelOffsetTL = new Vec2(20f, 8f);
+            _fireSound = "pistolFire";
+            _kickForce = 3f;
+            _fireRumble = RumbleIntensity.Kick;
+            loseAccuracy = 0.1f;
+            maxAccuracyLost = 0.6f;
+            _holdOffset = new Vec2(2f, -2f);
+            _bio = "Stop moving...";
+            _editorName = "Quad Laser";
+            editorTooltip = "Shoots a slow-moving science block of doom that passes through walls.";
         }
 
         public override void OnPressAction()
         {
-            if (this.ammo <= 0)
+            if (ammo <= 0)
                 return;
-            Vec2 vec2 = this.Offset(this.barrelOffset);
-            if (this.isServerForObject)
+            Vec2 vec2 = Offset(barrelOffset);
+            if (isServerForObject)
             {
-                QuadLaserBullet quadLaserBullet = new QuadLaserBullet(vec2.x, vec2.y, this.barrelVector)
+                QuadLaserBullet quadLaserBullet = new QuadLaserBullet(vec2.x, vec2.y, barrelVector)
                 {
-                    killThingType = this.GetType()
+                    killThingType = GetType()
                 };
                 Level.Add(quadLaserBullet);
-                if (this.duck != null)
+                if (duck != null)
                 {
-                    RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(this._fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
-                    this.duck.hSpeed = (float)(-this.barrelVector.x * 8.0);
-                    this.duck.vSpeed = (float)(-this.barrelVector.y * 4.0 - 2.0);
-                    quadLaserBullet.responsibleProfile = this.duck.profile;
+                    RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
+                    duck.hSpeed = (float)(-barrelVector.x * 8.0);
+                    duck.vSpeed = (float)(-barrelVector.y * 4.0 - 2.0);
+                    quadLaserBullet.responsibleProfile = duck.profile;
                 }
             }
-            --this.ammo;
+            --ammo;
             SFX.Play("laserBlast");
         }
     }

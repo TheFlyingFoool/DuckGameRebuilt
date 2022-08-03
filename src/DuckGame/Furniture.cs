@@ -141,20 +141,20 @@ namespace DuckGame
         {
             get
             {
-                if (this.type == FurnitureType.Prop)
-                    return (int)Math.Ceiling(this.sprite.width * this.sprite.height / 12.0 * group.priceMultiplier * (1.0 + rarity / 100.0));
-                if (this.type == FurnitureType.Theme)
+                if (type == FurnitureType.Prop)
+                    return (int)Math.Ceiling(sprite.width * sprite.height / 12.0 * group.priceMultiplier * (1.0 + rarity / 100.0));
+                if (type == FurnitureType.Theme)
                     return (int)Math.Ceiling(100.0 * group.priceMultiplier * (1.0 + rarity / 100.0));
-                return this.type == FurnitureType.Font ? (int)Math.Ceiling(60.0 * group.priceMultiplier * (1.0 + rarity / 100.0)) : 9999;
+                return type == FurnitureType.Font ? (int)Math.Ceiling(60.0 * group.priceMultiplier * (1.0 + rarity / 100.0)) : 9999;
             }
         }
 
         public VariatingSprite GetSprite(ulong id, int variation, VSType t)
         {
-            VariatingSprite sprite = this._eggSprites.FirstOrDefault<VariatingSprite>(x => (long)x.id == (long)id && x.variation == variation && x.type == t);
+            VariatingSprite sprite = _eggSprites.FirstOrDefault<VariatingSprite>(x => (long)x.id == (long)id && x.variation == variation && x.type == t);
             if (sprite != null)
                 return sprite;
-            this._eggSprites.Add(new VariatingSprite()
+            _eggSprites.Add(new VariatingSprite()
             {
                 variation = variation,
                 id = id,
@@ -184,12 +184,12 @@ namespace DuckGame
             }
             else
                 num1 = profile.steamID;
-            SpriteMap g = this.sprite;
-            if (this.icon != null)
-                g = this.icon;
-            if (g != null && this.neverFlip)
+            SpriteMap g = sprite;
+            if (icon != null)
+                g = icon;
+            if (g != null && neverFlip)
                 g.flipH = false;
-            if (this.isFlag && profile != null)
+            if (isFlag && profile != null)
             {
                 int idx = Network.isActive ? profile.flagIndex : Global.data.flag;
                 if (idx < 0)
@@ -209,9 +209,9 @@ namespace DuckGame
                     }
                 }
             }
-            if (this.name == "EGG")
+            if (name == "EGG")
             {
-                VariatingSprite sprite = this.GetSprite(num1, variation, VSType.Egg);
+                VariatingSprite sprite = GetSprite(num1, variation, VSType.Egg);
                 if (sprite != null && sprite.sprite.texture != null && sprite.sprite.texture != null)
                 {
                     sprite.sprite.depth = depth + 6;
@@ -220,20 +220,20 @@ namespace DuckGame
                     g.frame = 0;
                 }
             }
-            else if (this.name == "PHOTO")
+            else if (name == "PHOTO")
             {
-                if (this._photoSprite == null)
-                    this._photoSprite = new SpriteMap("littleMan", 16, 16);
-                this._photoSprite.frame = UILevelBox.LittleManFrame(variation, 7, num1);
-                this._photoSprite.depth = depth + 6;
-                this._photoSprite.scale = this.sprite.scale;
-                DuckGame.Graphics.Draw(_photoSprite, pos.x - 6f * this._photoSprite.xscale, pos.y - 4f * this._photoSprite.yscale, new Rectangle(2f, 0f, 12f, 10f));
-                DuckGame.Graphics.DrawRect(pos + new Vec2(-6f * this._photoSprite.xscale, -6f * this._photoSprite.yscale), pos + new Vec2(6f * this._photoSprite.xscale, 6f * this._photoSprite.yscale), Colors.DGBlue, depth - 4);
+                if (_photoSprite == null)
+                    _photoSprite = new SpriteMap("littleMan", 16, 16);
+                _photoSprite.frame = UILevelBox.LittleManFrame(variation, 7, num1);
+                _photoSprite.depth = depth + 6;
+                _photoSprite.scale = sprite.scale;
+                DuckGame.Graphics.Draw(_photoSprite, pos.x - 6f * _photoSprite.xscale, pos.y - 4f * _photoSprite.yscale, new Rectangle(2f, 0f, 12f, 10f));
+                DuckGame.Graphics.DrawRect(pos + new Vec2(-6f * _photoSprite.xscale, -6f * _photoSprite.yscale), pos + new Vec2(6f * _photoSprite.xscale, 6f * _photoSprite.yscale), Colors.DGBlue, depth - 4);
                 g.frame = 0;
             }
-            else if (this.name == "EASEL")
+            else if (name == "EASEL")
             {
-                VariatingSprite sprite = this.GetSprite(num1, variation, VSType.Portrait);
+                VariatingSprite sprite = GetSprite(num1, variation, VSType.Portrait);
                 if (sprite != null && sprite.sprite.texture != null)
                 {
                     sprite.sprite.depth = depth + 6;
@@ -246,10 +246,10 @@ namespace DuckGame
             }
             else
                 g.frame = variation;
-            if (this.font != null && this.sprite == null)
+            if (font != null && sprite == null)
             {
-                this.font.scale = new Vec2(1f, 1f);
-                this.font.Draw("F", pos + new Vec2(-3.5f, -3f), Color.Black, depth + 8);
+                font.scale = new Vec2(1f, 1f);
+                font.Draw("F", pos + new Vec2(-3.5f, -3f), Color.Black, depth + 8);
             }
             if (affectScale)
             {
@@ -260,11 +260,11 @@ namespace DuckGame
             }
             g.depth = depth;
             g.angle = angle;
-            DuckGame.Graphics.Draw(g, pos.x, pos.y - this.yOffset);
+            DuckGame.Graphics.Draw(g, pos.x, pos.y - yOffset);
             g.scale = new Vec2(1f);
         }
 
-        public int rarity => this._rarity + this.group.additionalRarity;
+        public int rarity => _rarity + group.additionalRarity;
 
         public Furniture(
           bool canflip,
@@ -286,41 +286,41 @@ namespace DuckGame
           int maxval = -1,
           bool canGacha = true)
         {
-            this.neverFlip = neverflip;
-            this.canGetInGacha = canGacha;
-            this.canFlip = canflip;
-            this.stickToFloor = stickTofloor;
-            this.stickToRoof = stickToroof;
-            this.max = maxval;
-            this._rarity = rarityval;
-            this.description = desc;
+            neverFlip = neverflip;
+            canGetInGacha = canGacha;
+            canFlip = canflip;
+            stickToFloor = stickTofloor;
+            stickToRoof = stickToroof;
+            max = maxval;
+            _rarity = rarityval;
+            description = desc;
             if (spr != null)
-                this.sprite = new SpriteMap("furni/" + gr.name + "/" + spr, wide, high);
+                sprite = new SpriteMap("furni/" + gr.name + "/" + spr, wide, high);
             if (bak != null)
-                this.background = new SpriteMap("furni/" + gr.name + "/" + bak, wide, high);
-            this.name = nam;
-            this.icon = ico;
-            this.type = t;
-            this.font = f;
-            this.group = gr;
-            this.deep = deepval;
+                background = new SpriteMap("furni/" + gr.name + "/" + bak, wide, high);
+            name = nam;
+            icon = ico;
+            type = t;
+            font = f;
+            group = gr;
+            deep = deepval;
             if (stickToroof)
-                this.deep += 20;
+                deep += 20;
             if (!stickToroof && !stickTofloor)
-                --this.deep;
-            if (this.sprite != null)
+                --deep;
+            if (sprite != null)
             {
-                this.sprite.CenterOrigin();
+                sprite.CenterOrigin();
                 if (sprite.height / 2.0 - Math.Floor(sprite.height / 2.0) == 0.0)
-                    --this.sprite.centery;
+                    --sprite.centery;
                 else
-                    this.sprite.centery = (float)Math.Floor(sprite.height / 2.0);
+                    sprite.centery = (float)Math.Floor(sprite.height / 2.0);
             }
-            if (this.icon != null)
-                this.icon.CenterOrigin();
-            if (this.background == null)
+            if (icon != null)
+                icon.CenterOrigin();
+            if (background == null)
                 return;
-            this.background.CenterOrigin();
+            background.CenterOrigin();
         }
 
         public Furniture(
@@ -341,39 +341,39 @@ namespace DuckGame
           int maxval = -1,
           bool canGacha = true)
         {
-            this.neverFlip = neverflip;
-            this.canGetInGacha = canGacha;
-            this.canFlip = canflip;
-            this.stickToFloor = stickTofloor;
-            this.stickToRoof = stickToroof;
-            this.isSurface = surface;
-            this.topOffset = topoff;
-            this.description = desc;
-            this.max = maxval;
-            this._rarity = rarityval;
+            neverFlip = neverflip;
+            canGetInGacha = canGacha;
+            canFlip = canflip;
+            stickToFloor = stickTofloor;
+            stickToRoof = stickToroof;
+            isSurface = surface;
+            topOffset = topoff;
+            description = desc;
+            max = maxval;
+            _rarity = rarityval;
             if (spr != null)
-                this.sprite = new SpriteMap("furni/" + gr.name + "/" + spr, wide, high);
+                sprite = new SpriteMap("furni/" + gr.name + "/" + spr, wide, high);
             if (stickToroof)
-                this.deep += 20;
+                deep += 20;
             if (!stickToroof && !stickTofloor)
-                --this.deep;
-            this.name = nam;
-            this.icon = ico;
-            this.type = FurnitureType.Prop;
-            this.group = gr;
-            if (this.sprite != null)
+                --deep;
+            name = nam;
+            icon = ico;
+            type = FurnitureType.Prop;
+            group = gr;
+            if (sprite != null)
             {
-                this.sprite.CenterOrigin();
+                sprite.CenterOrigin();
                 if (sprite.height / 2.0 - Math.Floor(sprite.height / 2.0) == 0.0)
-                    --this.sprite.centery;
+                    --sprite.centery;
                 else
-                    this.sprite.centery = (float)Math.Floor(sprite.height / 2.0);
+                    sprite.centery = (float)Math.Floor(sprite.height / 2.0);
             }
-            if (this.icon != null)
-                this.icon.CenterOrigin();
-            if (this.background == null)
+            if (icon != null)
+                icon.CenterOrigin();
+            if (background == null)
                 return;
-            this.background.CenterOrigin();
+            background.CenterOrigin();
         }
     }
 }

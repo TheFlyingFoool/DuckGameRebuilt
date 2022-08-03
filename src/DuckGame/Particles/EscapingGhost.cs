@@ -14,18 +14,18 @@ namespace DuckGame
         public EscapingGhost(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("ghost", 32, 32);
-            this._sprite.AddAnimation("wither", 0.5f, false, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
-            this._sprite.SetAnimation("wither");
-            this.center = new Vec2(16f, 32f);
-            this.alpha = 0.6f;
-            this.depth = (Depth)0.9f;
-            this.graphic = _sprite;
+            _sprite = new SpriteMap("ghost", 32, 32);
+            _sprite.AddAnimation("wither", 0.5f, false, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+            _sprite.SetAnimation("wither");
+            center = new Vec2(16f, 32f);
+            alpha = 0.6f;
+            depth = (Depth)0.9f;
+            graphic = _sprite;
         }
 
         public override void Update()
         {
-            if (this._sprite.finished)
+            if (_sprite.finished)
                 Level.Remove(this);
             base.Update();
         }

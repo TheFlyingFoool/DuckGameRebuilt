@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public override void Activate()
         {
-            Network.activeNetwork.core.DisconnectClient(this.connection, new DuckNetErrorInfo(DuckNetError.ClientCrashed, "CLOSED"));
+            Network.activeNetwork.core.DisconnectClient(connection, new DuckNetErrorInfo(DuckNetError.ClientCrashed, "CLOSED"));
             base.Activate();
         }
     }

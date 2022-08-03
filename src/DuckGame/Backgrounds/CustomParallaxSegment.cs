@@ -20,24 +20,24 @@ namespace DuckGame
         public CustomParallaxSegment(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
+            graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 6
             };
-            this.center = new Vec2(8f, 8f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = (Depth)0.9f;
-            this.layer = Layer.Foreground;
-            this._visibleInGame = false;
-            this._editorName = "Parallax Segment";
-            this._canFlip = false;
-            this._canHaveChance = false;
+            center = new Vec2(8f, 8f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            depth = (Depth)0.9f;
+            layer = Layer.Foreground;
+            _visibleInGame = false;
+            _editorName = "Parallax Segment";
+            _canFlip = false;
+            _canHaveChance = false;
         }
 
         public override void Update()
         {
-            if (!this.initializedParallax)
+            if (!initializedParallax)
             {
                 CustomParallax customParallax = Level.current.FirstOfType<CustomParallax>();
                 if (customParallax != null)
@@ -46,13 +46,13 @@ namespace DuckGame
                         customParallax.DoInitialize();
                     if (customParallax.parallax != null)
                     {
-                        for (int ystart = (int)this.ystart; ystart <= (int)this.yend; ++ystart)
-                            customParallax.parallax.AddZone(ystart, this.distance.value, this.speed.value, this.moving.value);
+                        for (int ystart = (int)this.ystart; ystart <= (int)yend; ++ystart)
+                            customParallax.parallax.AddZone(ystart, distance.value, speed.value, moving.value);
                     }
                 }
-                this.initializedParallax = true;
+                initializedParallax = true;
             }
-            this.Initialize();
+            Initialize();
         }
     }
 }

@@ -13,36 +13,36 @@ namespace DuckGame
         {
             get
             {
-                this._value = 0;
-                Duck thing = this._thing as Duck;
+                _value = 0;
+                Duck thing = _thing as Duck;
                 if (thing.invincible)
-                    this._value |= 1024;
+                    _value |= 1024;
                 if (thing.crouch)
-                    this._value |= 512;
+                    _value |= 512;
                 if (thing.sliding)
-                    this._value |= 256;
+                    _value |= 256;
                 if (thing.jumping)
-                    this._value |= 128;
+                    _value |= 128;
                 if (thing._hovering)
-                    this._value |= 64;
+                    _value |= 64;
                 if (thing.immobilized)
-                    this._value |= 32;
+                    _value |= 32;
                 if (thing._canFire)
-                    this._value |= 16;
+                    _value |= 16;
                 if (thing.afk)
-                    this._value |= 8;
+                    _value |= 8;
                 if (thing.listening)
-                    this._value |= 4;
+                    _value |= 4;
                 if (thing.beammode)
-                    this._value |= 2;
+                    _value |= 2;
                 if (thing.eyesClosed)
-                    this._value |= 1;
-                return this._value;
+                    _value |= 1;
+                return _value;
             }
             set
             {
-                this._value = value;
-                Duck thing = this._thing as Duck;
+                _value = value;
+                Duck thing = _thing as Duck;
                 thing.invincible = (_value & 1024U) > 0U;
                 thing.crouch = (_value & 512U) > 0U;
                 thing.sliding = (_value & 256U) > 0U;

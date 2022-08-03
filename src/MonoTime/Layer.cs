@@ -143,41 +143,41 @@ namespace DuckGame
 
         public static bool Contains(Layer l) => Layer._core.Contains(l);
 
-        public Matrix fullMatrix => this._batch.fullMatrix;
+        public Matrix fullMatrix => _batch.fullMatrix;
 
-        public string name => this._name;
+        public string name => _name;
 
         public int depth
         {
-            get => this._depth;
-            set => this._depth = value;
+            get => _depth;
+            set => _depth = value;
         }
 
         public Vec2 depthSpan
         {
-            get => this._depthSpan;
-            set => this._depthSpan = value;
+            get => _depthSpan;
+            set => _depthSpan = value;
         }
 
         public Effect effect
         {
-            get => this._effect;
-            set => this._effect = value;
+            get => _effect;
+            set => _effect = value;
         }
 
         public bool visible
         {
-            get => this._visible;
-            set => this._visible = value;
+            get => _visible;
+            set => _visible = value;
         }
 
         public bool blurEffect
         {
-            get => this._blurEffect;
-            set => this._blurEffect = value;
+            get => _blurEffect;
+            set => _blurEffect = value;
         }
 
-        public float barSize => (float)((this.camera.width * DuckGame.Graphics.aspect - this.camera.width * (9.0 / 16.0)) / 2.0);
+        public float barSize => (float)((camera.width * DuckGame.Graphics.aspect - camera.width * (9.0 / 16.0)) / 2.0);
 
         public Matrix projection { get; set; }
 
@@ -185,60 +185,60 @@ namespace DuckGame
 
         public bool perspective
         {
-            get => this._perspective;
-            set => this._perspective = value;
+            get => _perspective;
+            set => _perspective = value;
         }
 
         public BlendState blend
         {
-            get => this._blend;
-            set => this._blend = value;
+            get => _blend;
+            set => _blend = value;
         }
 
         public BlendState targetBlend
         {
-            get => this._targetBlend;
-            set => this._targetBlend = value;
+            get => _targetBlend;
+            set => _targetBlend = value;
         }
 
         public Color targetClearColor
         {
-            get => this._targetClearColor;
-            set => this._targetClearColor = value;
+            get => _targetClearColor;
+            set => _targetClearColor = value;
         }
 
         public DepthStencilState targetDepthStencil
         {
-            get => this._targetDepthStencil;
-            set => this._targetDepthStencil = value;
+            get => _targetDepthStencil;
+            set => _targetDepthStencil = value;
         }
 
         public RenderTarget2D slaveTarget
         {
-            get => this._slaveTarget;
-            set => this._slaveTarget = value;
+            get => _slaveTarget;
+            set => _slaveTarget = value;
         }
 
         public float targetFade
         {
-            get => this._targetFade;
-            set => this._targetFade = value;
+            get => _targetFade;
+            set => _targetFade = value;
         }
 
         public Rectangle scissor
         {
-            get => this._scissor;
+            get => _scissor;
             set
             {
                 if (_scissor.width == 0.0 && value.width != 0.0)
                 {
-                    this._state = new RasterizerState
+                    _state = new RasterizerState
                     {
                         CullMode = CullMode.None,
                         ScissorTestEnable = true
                     };
                 }
-                this._scissor = value;
+                _scissor = value;
             }
         }
 
@@ -246,8 +246,8 @@ namespace DuckGame
         {
             if (_scissor.width == 0.0)
                 return;
-            this._scissor = new Rectangle(0f, 0f, 0f, 0f);
-            this._state = new RasterizerState
+            _scissor = new Rectangle(0f, 0f, 0f, 0f);
+            _state = new RasterizerState
             {
                 CullMode = CullMode.None
             };
@@ -255,117 +255,117 @@ namespace DuckGame
 
         public float fade
         {
-            get => this._fade;
-            set => this._fade = value;
+            get => _fade;
+            set => _fade = value;
         }
 
         public float fadeAdd
         {
-            get => this._fadeAdd;
-            set => this._fadeAdd = value;
+            get => _fadeAdd;
+            set => _fadeAdd = value;
         }
 
         public Vec3 colorAdd
         {
-            get => this._colorAdd;
-            set => this._colorAdd = value;
+            get => _colorAdd;
+            set => _colorAdd = value;
         }
 
         public Vec3 colorMul
         {
-            get => this._colorMul;
-            set => this._colorMul = value;
+            get => _colorMul;
+            set => _colorMul = value;
         }
 
         public float darken
         {
-            get => this._darken;
-            set => this._darken = value;
+            get => _darken;
+            set => _darken = value;
         }
 
         public Camera camera
         {
-            get => this._camera == null && Level.activeLevel != null ? Level.activeLevel.camera : this._camera;
-            set => this._camera = value;
+            get => _camera == null && Level.activeLevel != null ? Level.activeLevel.camera : _camera;
+            set => _camera = value;
         }
 
-        public float width => this.camera.width;
+        public float width => camera.width;
 
-        public float height => this.camera.height;
+        public float height => camera.height;
 
-        public RenderTarget2D target => this._slaveTarget != null ? this._slaveTarget : this._target;
+        public RenderTarget2D target => _slaveTarget != null ? _slaveTarget : _target;
 
         public Layer shareDrawObjects
         {
-            get => this._shareDrawObjects;
-            set => this._shareDrawObjects = value;
+            get => _shareDrawObjects;
+            set => _shareDrawObjects = value;
         }
 
         public bool targetOnly
         {
-            get => this._targetOnly;
-            set => this._targetOnly = value;
+            get => _targetOnly;
+            set => _targetOnly = value;
         }
 
         public bool allowTallAspect
         {
-            get => this._allowTallAspect && !this.camera.sixteenNine;
-            set => this._allowTallAspect = value;
+            get => _allowTallAspect && !camera.sixteenNine;
+            set => _allowTallAspect = value;
         }
 
-        public bool isTargetLayer => this.target != null;
+        public bool isTargetLayer => target != null;
 
         public Layer(string nameval, int depthval = 0, Camera cam = null, bool targetLayer = false, Vec2 targetSize = default(Vec2))
         {
-            this._name = nameval;
-            this._depth = depthval;
-            this._batch = new MTSpriteBatch(DuckGame.Graphics.device);
-            this._state = new RasterizerState
+            _name = nameval;
+            _depth = depthval;
+            _batch = new MTSpriteBatch(DuckGame.Graphics.device);
+            _state = new RasterizerState
             {
                 CullMode = CullMode.None
             };
-            this._camera = cam;
-            this._dropShadow.CenterOrigin();
-            this._dropShadow.alpha = 0.5f;
+            _camera = cam;
+            _dropShadow.CenterOrigin();
+            _dropShadow.alpha = 0.5f;
             if (!targetLayer)
                 return;
             if (targetSize == new Vec2())
-                this._target = new RenderTarget2D(DuckGame.Graphics.width, DuckGame.Graphics.height);
+                _target = new RenderTarget2D(DuckGame.Graphics.width, DuckGame.Graphics.height);
             else
-                this._target = new RenderTarget2D((int)targetSize.x, (int)targetSize.y);
+                _target = new RenderTarget2D((int)targetSize.x, (int)targetSize.y);
         }
 
         public virtual void Update()
         {
-            foreach (Thing thing in this._transparentRemove)
-                this._transparent.Remove(thing);
-            foreach (Thing thing in this._opaqueRemove)
-                this._opaque.Remove(thing);
-            this._transparentRemove.Clear();
-            this._opaqueRemove.Clear();
+            foreach (Thing thing in _transparentRemove)
+                _transparent.Remove(thing);
+            foreach (Thing thing in _opaqueRemove)
+                _opaque.Remove(thing);
+            _transparentRemove.Clear();
+            _opaqueRemove.Clear();
         }
 
         public virtual void Begin(bool transparent, bool isTargetDraw = false)
         {
-            int num1 = this.name == "LIGHTING" ? 1 : 0;
-            if (this.aspectReliesOnGameLayer && this.camera != Layer.Game.camera)
+            int num1 = name == "LIGHTING" ? 1 : 0;
+            if (aspectReliesOnGameLayer && this.camera != Layer.Game.camera)
             {
                 this.camera.width = 320f;
                 this.camera.height = 320f / Layer.Game.camera.aspect;
             }
-            if (this.allowTallAspect)
+            if (allowTallAspect)
                 DuckGame.Graphics.SetFullViewport();
             try
             {
-                if (isTargetDraw & transparent && this._target != null)
+                if (isTargetDraw & transparent && _target != null)
                 {
-                    this._oldRenderTarget = DuckGame.Graphics.GetRenderTarget();
-                    this._oldViewport = DuckGame.Graphics.viewport;
-                    DuckGame.Graphics.SetRenderTarget(this._target);
+                    _oldRenderTarget = DuckGame.Graphics.GetRenderTarget();
+                    _oldViewport = DuckGame.Graphics.viewport;
+                    DuckGame.Graphics.SetRenderTarget(_target);
                     if (flashAddClearInfluence > 0.0)
-                        DuckGame.Graphics.Clear(new Color((byte)Math.Min(_targetClearColor.r + (float)(flashAddClearInfluence * DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.g + (float)(flashAddClearInfluence * DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.b + (float)(flashAddClearInfluence * DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), this._targetClearColor.a));
+                        DuckGame.Graphics.Clear(new Color((byte)Math.Min(_targetClearColor.r + (float)(flashAddClearInfluence * DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.g + (float)(flashAddClearInfluence * DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.b + (float)(flashAddClearInfluence * DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), _targetClearColor.a));
                     else
-                        DuckGame.Graphics.Clear(this._targetClearColor);
+                        DuckGame.Graphics.Clear(_targetClearColor);
                 }
                 if (!isTargetDraw)
                 {
@@ -384,8 +384,8 @@ namespace DuckGame
         label_14:
             Graphics.ResetSpanAdjust();
             Effect effect = (Effect)Layer._core._basicEffect;
-            Vec3 vec3_1 = new Vec3((Graphics.fade * _fade * (1f - _darken))) * this.colorMul;
-            Vec3 vec3_2 = this._colorAdd + new Vec3(this._fadeAdd) + new Vec3(Graphics.flashAddRenderValue) * this.flashAddInfluence + new Vec3(Graphics.fadeAddRenderValue) - new Vec3(this.darken);
+            Vec3 vec3_1 = new Vec3((Graphics.fade * _fade * (1f - _darken))) * colorMul;
+            Vec3 vec3_2 = _colorAdd + new Vec3(_fadeAdd) + new Vec3(Graphics.flashAddRenderValue) * flashAddInfluence + new Vec3(Graphics.fadeAddRenderValue) - new Vec3(darken);
             vec3_2 = new Vec3(Maths.Clamp(vec3_2.x, -1f, 1f), Maths.Clamp(vec3_2.y, -1f, 1f), Maths.Clamp(vec3_2.z, -1f, 1f));
             vec3_2 *= vec3_1;
             if (this == Layer.Game)
@@ -394,14 +394,14 @@ namespace DuckGame
                 Layer.kGameLayerAdd = vec3_2;
             }
             if (_darken > 0f)
-                this._darken -= 0.15f;
+                _darken -= 0.15f;
             else if (_darken < 0f)
-                this._darken += 0.15f;
-            if (Math.Abs(this._darken) < 0.16f)
-                this._darken = 0f;
-            if (this._effect != null)
+                _darken += 0.15f;
+            if (Math.Abs(_darken) < 0.16f)
+                _darken = 0f;
+            if (_effect != null)
             {
-                effect = this._effect;
+                effect = _effect;
                 effect.Parameters["fade"]?.SetValue((Vector3)vec3_1);
                 effect.Parameters["add"]?.SetValue((Vector3)vec3_2);
             }
@@ -427,22 +427,22 @@ namespace DuckGame
                 if (Layer.doVirtualEffect && (Layer.Game == this || Layer.Foreground == this || Layer.Blocks == this || Layer.Background == this))
                     effect = !Layer.basicWireframeTex ? (Effect)Layer._core._basicWireframeEffect : (Effect)Layer._core._basicWireframeEffectTex;
             }
-            if (this._state.ScissorTestEnable)
-                DuckGame.Graphics.SetScissorRectangle(this._scissor);
-            DuckGame.Graphics.screen = this._batch;
+            if (_state.ScissorTestEnable)
+                DuckGame.Graphics.SetScissorRectangle(_scissor);
+            DuckGame.Graphics.screen = _batch;
             Camera camera = this.camera;
-            if (this.target != null & isTargetDraw && !this.targetOnly)
+            if (target != null & isTargetDraw && !targetOnly)
             {
-                this._targetCamera.x = (float)Math.Round(this.camera.x - 1f);
-                this._targetCamera.y = (float)Math.Round(this.camera.y - 1f);
-                this._targetCamera.width = Math.Max(this.camera.width, Graphics.width);
-                this._targetCamera.height = Math.Max(this.camera.height, Graphics.height);
-                camera = this._targetCamera;
+                _targetCamera.x = (float)Math.Round(this.camera.x - 1f);
+                _targetCamera.y = (float)Math.Round(this.camera.y - 1f);
+                _targetCamera.width = Math.Max(this.camera.width, Graphics.width);
+                _targetCamera.height = Math.Max(this.camera.height, Graphics.height);
+                camera = _targetCamera;
             }
-            BlendState blendState = this._blend;
+            BlendState blendState = _blend;
             if (isTargetDraw)
-                blendState = this._targetBlend;
-            if (this.target != null & isTargetDraw)
+                blendState = _targetBlend;
+            if (target != null & isTargetDraw)
             {
                 Vec2 position1 = camera.position;
                 position1.x = (float)Math.Floor(position1.x);
@@ -452,34 +452,34 @@ namespace DuckGame
                 size1.y = (float)Math.Floor(size1.y);
                 Vec2 position2 = camera.position;
                 Vec2 size2 = camera.size;
-                this._batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.PointClamp, this._targetDepthStencil, this._state, (MTEffect)effect, camera.getMatrix());
+                _batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.PointClamp, _targetDepthStencil, _state, (MTEffect)effect, camera.getMatrix());
                 camera.position = position2;
                 camera.size = size2;
             }
-            else if (Layer.blurry || this._blurEffect)
+            else if (Layer.blurry || _blurEffect)
             {
                 if (!transparent)
-                    this._batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.LinearClamp, DepthStencilState.Default, this._state, (MTEffect)effect, camera.getMatrix());
+                    _batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.LinearClamp, DepthStencilState.Default, _state, (MTEffect)effect, camera.getMatrix());
                 else
-                    this._batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.LinearClamp, DepthStencilState.DepthRead, this._state, (MTEffect)effect, camera.getMatrix());
+                    _batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.LinearClamp, DepthStencilState.DepthRead, _state, (MTEffect)effect, camera.getMatrix());
             }
             else if (!transparent)
-                this._batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.PointClamp, DepthStencilState.Default, this._state, (MTEffect)effect, camera.getMatrix());
+                _batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.PointClamp, DepthStencilState.Default, _state, (MTEffect)effect, camera.getMatrix());
             else
-                this._batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.PointClamp, DepthStencilState.DepthRead, this._state, (MTEffect)effect, camera.getMatrix());
+                _batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.PointClamp, DepthStencilState.DepthRead, _state, (MTEffect)effect, camera.getMatrix());
         }
 
         public void End(bool transparent, bool isTargetDraw = false)
         {
-            this._batch.End();
+            _batch.End();
             Graphics.screen = null;
             Graphics.currentLayer = null;
-            if (isTargetDraw & transparent && this._target != null)
+            if (isTargetDraw & transparent && _target != null)
             {
-                Graphics.SetRenderTarget(this._oldRenderTarget);
-                Graphics.viewport = this._oldViewport;
+                Graphics.SetRenderTarget(_oldRenderTarget);
+                Graphics.viewport = _oldViewport;
             }
-            if (!this.allowTallAspect)
+            if (!allowTallAspect)
                 return;
             Graphics.RestoreOldViewport();
         }
@@ -487,29 +487,29 @@ namespace DuckGame
         public virtual void Draw(bool transparent, bool isTargetDraw = false)
         {
             if (currentSpanOffset > 10000f)
-                this.currentSpanOffset = 0f;
-            if (!transparent && Layer.ignoreTransparent || isTargetDraw && this.slaveTarget != null || this.target != null && !isTargetDraw && this.targetOnly)
+                currentSpanOffset = 0f;
+            if (!transparent && Layer.ignoreTransparent || isTargetDraw && slaveTarget != null || target != null && !isTargetDraw && targetOnly)
                 return;
             if (Network.isActive && this == Layer.Game)
                 DuckGame.Graphics.currentFrameCalls = new List<DrawCall>();
             Level.activeLevel.InitializeDraw(this);
             DuckGame.Graphics.currentLayer = this;
-            this.Begin(transparent, isTargetDraw);
-            if (this.target != null && !isTargetDraw)
+            Begin(transparent, isTargetDraw);
+            if (target != null && !isTargetDraw)
             {
                 Vec2 position = Level.activeLevel.camera.position - new Vec2(1f, 1f);
                 position.x = (float)Math.Round(position.x);
                 position.y = (float)Math.Round(position.y);
-                Color color = new Color(1f * this._targetFade, 1f * this._targetFade, 1f * this._targetFade, 1f);
-                Vec2 vec2 = new Vec2(Math.Max(this.camera.width, Graphics.width), Math.Max(this.camera.height, Graphics.height));
+                Color color = new Color(1f * _targetFade, 1f * _targetFade, 1f * _targetFade, 1f);
+                Vec2 vec2 = new Vec2(Math.Max(camera.width, Graphics.width), Math.Max(camera.height, Graphics.height));
                 DuckGame.Graphics.skipReplayRender = true;
                 DuckGame.Graphics.Draw(target, position, new Rectangle?(), color, 0f, Vec2.Zero, new Vec2(vec2.x / target.width, vec2.y / target.height), SpriteEffects.None, (Depth)1f);
-                if (this.name == "LIGHTING")
+                if (name == "LIGHTING")
                 {
                     if (VirtualTransition.core._scanStage == 1)
-                        this.targetClearColor = Lerp.ColorSmooth(new Color(120, 120, 120, (int)byte.MaxValue), Color.White, VirtualTransition.core._stick);
+                        targetClearColor = Lerp.ColorSmooth(new Color(120, 120, 120, (int)byte.MaxValue), Color.White, VirtualTransition.core._stick);
                     else if (VirtualTransition.core._scanStage == 3)
-                        this.targetClearColor = new Color(120, 120, 120, (int)byte.MaxValue);
+                        targetClearColor = new Color(120, 120, 120, (int)byte.MaxValue);
                 }
                 DuckGame.Graphics.skipReplayRender = false;
             }
@@ -517,12 +517,12 @@ namespace DuckGame
             {
                 if (transparent)
                     Level.activeLevel.PreDrawLayer(this);
-                HashSet<Thing> transparent1 = this._transparent;
-                HashSet<Thing> opaque = this._opaque;
-                if (this._shareDrawObjects != null)
+                HashSet<Thing> transparent1 = _transparent;
+                HashSet<Thing> opaque = _opaque;
+                if (_shareDrawObjects != null)
                 {
-                    transparent1 = this._shareDrawObjects._transparent;
-                    opaque = this._shareDrawObjects._opaque;
+                    transparent1 = _shareDrawObjects._transparent;
+                    opaque = _shareDrawObjects._opaque;
                 }
                 if (!Layer.skipDrawing)
                 {
@@ -534,12 +534,12 @@ namespace DuckGame
                             {
                                 if (thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
                                 {
-                                    if (this._perspective)
+                                    if (_perspective)
                                     {
                                         Vec2 position = thing.position;
                                         Vec3 source = new Vec3(position.x, thing.z, thing.bottom);
                                         Viewport viewport = new Viewport(0, 0, 320, 180);
-                                        source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)this.projection, (Microsoft.Xna.Framework.Matrix)this.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                                        source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
                                         thing.position = new Vec2(source.x, source.y - thing.centery);
                                         thing.DoDraw();
                                         Graphics.material = null;
@@ -547,12 +547,12 @@ namespace DuckGame
                                         if (thing is PhysicsObject)
                                         {
                                             float num = Maths.NormalizeSection(-thing.y, 8f, 64f);
-                                            this._dropShadow.alpha = (float)(0.5 - 0.5 * num);
-                                            this._dropShadow.scale = new Vec2(1f - num, 1f - num);
-                                            this._dropShadow.depth = thing.depth - 10;
+                                            _dropShadow.alpha = (float)(0.5 - 0.5 * num);
+                                            _dropShadow.scale = new Vec2(1f - num, 1f - num);
+                                            _dropShadow.depth = thing.depth - 10;
                                             source = new Vec3(position.x, thing.z, 0f);
-                                            source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)this.projection, (Microsoft.Xna.Framework.Matrix)this.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
-                                            Graphics.Draw(this._dropShadow, source.x - 1f, source.y - 1f);
+                                            source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                                            Graphics.Draw(_dropShadow, source.x - 1f, source.y - 1f);
                                         }
                                     }
                                     else
@@ -578,12 +578,12 @@ namespace DuckGame
                             {
                                 if (thing.visible)
                                 {
-                                    if (this._perspective)
+                                    if (_perspective)
                                     {
                                         Vec2 position = thing.position;
                                         Vec3 source = new Vec3(position.x, thing.z, thing.bottom);
                                         Viewport viewport = new Viewport(0, 0, 320, 180);
-                                        source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)this.projection, (Microsoft.Xna.Framework.Matrix)this.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                                        source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
                                         thing.position = new Vec2(source.x, source.y - thing.centery);
                                         thing.DoDraw();
                                         Graphics.material = null;
@@ -591,12 +591,12 @@ namespace DuckGame
                                         if (thing is PhysicsObject)
                                         {
                                             float num = Maths.NormalizeSection(-thing.y, 8f, 64f);
-                                            this._dropShadow.alpha = (float)(0.5 - 0.5 * num);
-                                            this._dropShadow.scale = new Vec2(1f - num, 1f - num);
-                                            this._dropShadow.depth = thing.depth - 10;
+                                            _dropShadow.alpha = (float)(0.5 - 0.5 * num);
+                                            _dropShadow.scale = new Vec2(1f - num, 1f - num);
+                                            _dropShadow.depth = thing.depth - 10;
                                             source = new Vec3(position.x, thing.z, 0f);
-                                            source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)this.projection, (Microsoft.Xna.Framework.Matrix)this.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
-                                            Graphics.Draw(this._dropShadow, source.x - 1f, source.y - 1f);
+                                            source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                                            Graphics.Draw(_dropShadow, source.x - 1f, source.y - 1f);
                                         }
                                     }
                                     else
@@ -654,7 +654,7 @@ namespace DuckGame
                     }
                 }
             }
-            this.End(transparent, isTargetDraw);
+            End(transparent, isTargetDraw);
         }
     }
 }

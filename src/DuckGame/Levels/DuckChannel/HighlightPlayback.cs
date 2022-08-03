@@ -26,59 +26,59 @@ namespace DuckGame
 
         public HighlightPlayback(int highlight)
         {
-            this._font = new BitmapFont("biosFont", 8);
-            this._currentHighlight = highlight;
-            this._highlights = Highlights.GetHighlights();
-            while (this._currentHighlight >= this._highlights.Count)
-                --this._currentHighlight;
-            this._numbers = new SpriteMap("newscast/numberfont", 25, 22);
+            _font = new BitmapFont("biosFont", 8);
+            _currentHighlight = highlight;
+            _highlights = Highlights.GetHighlights();
+            while (_currentHighlight >= _highlights.Count)
+                --_currentHighlight;
+            _numbers = new SpriteMap("newscast/numberfont", 25, 22);
         }
 
         public override void Initialize()
         {
-            this._tv = new Sprite("bigTV");
+            _tv = new Sprite("bigTV");
             Vote.OpenVoting("SKIP", "START");
         }
 
         public override void Update()
         {
-            if (!this._skip && Vote.Passed(VoteType.Skip))
-                this._skip = true;
-            if (this._skip)
-                this._fadeOut = true;
-            Graphics.fade = Lerp.Float(Graphics.fade, this._fadeOut ? 0f : 1f, 0.02f);
-            if (Graphics.fade < 0.01f && this._skip)
+            if (!_skip && Vote.Passed(VoteType.Skip))
+                _skip = true;
+            if (_skip)
+                _fadeOut = true;
+            Graphics.fade = Lerp.Float(Graphics.fade, _fadeOut ? 0f : 1f, 0.02f);
+            if (Graphics.fade < 0.01f && _skip)
             {
                 HighlightLevel.didSkip = true;
                 Vote.CloseVoting();
                 Level.current = new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true); //!Main.isDemo ? new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true) : new HighlightLevel(true);
             }
-            if (!this._showHighlight && Graphics.fade > 0.95f)
+            if (!_showHighlight && Graphics.fade > 0.95f)
             {
-                this._waitToShow -= 0.02f;
+                _waitToShow -= 0.02f;
                 if (_waitToShow <= 0f)
                 {
-                    this._waitToShow = 0f;
-                    this._fadeOut = true;
+                    _waitToShow = 0f;
+                    _fadeOut = true;
                 }
             }
-            if (Graphics.fade < 0.01f && !this._showHighlight && this._fadeOut)
+            if (Graphics.fade < 0.01f && !_showHighlight && _fadeOut)
             {
-                this._fadeOut = false;
-                this._showHighlight = true;
+                _fadeOut = false;
+                _showHighlight = true;
             }
-            if (this._showHighlight && Graphics.fade > 0.95f)
-                this._keepPaused -= 0.03f;
-            if (this._currentHighlight >= 0 && !this._highlights[this._currentHighlight].finished)
+            if (_showHighlight && Graphics.fade > 0.95f)
+                _keepPaused -= 0.03f;
+            if (_currentHighlight >= 0 && !_highlights[_currentHighlight].finished)
                 return;
-            this._endWait -= 0.03f;
+            _endWait -= 0.03f;
             if (_endWait > 0f)
                 return;
-            this._fadeOut = true;
+            _fadeOut = true;
             if (Graphics.fade >= 0.01f)
                 return;
-            int highlight = this._currentHighlight - 1;
-            if (this._currentHighlight <= 0)
+            int highlight = _currentHighlight - 1;
+            if (_currentHighlight <= 0)
                 Level.current = new HighlightLevel(true);
             else
                 Level.current = new HighlightPlayback(highlight);
@@ -96,28 +96,28 @@ namespace DuckGame
 
         public override void BeforeDraw()
         {
-            if (!this._showHighlight || this._currentHighlight < 0)
+            if (!_showHighlight || _currentHighlight < 0)
                 return;
             if (_keepPaused > 0f)
-                this._highlights[this._currentHighlight].frame = this._highlights[this._currentHighlight].startFrame + 5;
-            this._highlights[this._currentHighlight].RenderFrame();
-            if (_keepPaused > 0f || this._highlights[this._currentHighlight].finished)
+                _highlights[_currentHighlight].frame = _highlights[_currentHighlight].startFrame + 5;
+            _highlights[_currentHighlight].RenderFrame();
+            if (_keepPaused > 0f || _highlights[_currentHighlight].finished)
                 return;
-            this._highlights[this._currentHighlight].UpdateFrame();
-            this._highlights[this._currentHighlight].IncrementFrame();
+            _highlights[_currentHighlight].UpdateFrame();
+            _highlights[_currentHighlight].IncrementFrame();
         }
 
         public override void AfterDrawLayers()
         {
-            if (_keepPaused <= 0f || this._currentHighlight < 0)
+            if (_keepPaused <= 0f || _currentHighlight < 0)
                 return;
             DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Resolution.getTransformationMatrix());
-            this._font.scale = new Vec2(8f, 8f);
-            double width = this._font.GetWidth(Change.ToString(this._currentHighlight + 1));
-            double height = this._font.height;
-            this._numbers.frame = 4 - this._currentHighlight;
-            this._numbers.depth = (Depth)1f;
-            this._numbers.scale = new Vec2(4f, 4f);
+            _font.scale = new Vec2(8f, 8f);
+            double width = _font.GetWidth(Change.ToString(_currentHighlight + 1));
+            double height = _font.height;
+            _numbers.frame = 4 - _currentHighlight;
+            _numbers.depth = (Depth)1f;
+            _numbers.scale = new Vec2(4f, 4f);
             DuckGame.Graphics.Draw(_numbers, 32f, 32f);
             DuckGame.Graphics.screen.End();
         }

@@ -17,41 +17,41 @@ namespace DuckGame
         public PopEffect(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("popLine", 16, 16);
-            this.center = new Vec2(this._sprite.w / 2, this._sprite.h / 2);
-            this.graphic = _sprite;
+            _sprite = new SpriteMap("popLine", 16, 16);
+            center = new Vec2(_sprite.w / 2, _sprite.h / 2);
+            graphic = _sprite;
             int num1 = 8;
             for (int index = 0; index < num1; ++index)
             {
                 float num2 = 360f / num1 * index;
-                this.parts.Add(new PopEffectPart()
+                parts.Add(new PopEffectPart()
                 {
                     scale = Rando.Float(0.6f, 1f),
                     rot = Maths.DegToRad(num2 + Rando.Float(-10f, 10f))
                 });
             }
-            this.scale = new Vec2(1.5f, 1.5f);
-            this.depth = (Depth)0.85f;
+            scale = new Vec2(1.5f, 1.5f);
+            depth = (Depth)0.85f;
         }
 
         public override void Update()
         {
-            this.xscale -= 0.24f;
-            this.yscale = this.xscale;
-            if (this.xscale >= 0.01f)
+            xscale -= 0.24f;
+            yscale = xscale;
+            if (xscale >= 0.01f)
                 return;
             Level.Remove(this);
         }
 
         public override void Draw()
         {
-            foreach (PopEffect.PopEffectPart part in this.parts)
+            foreach (PopEffect.PopEffectPart part in parts)
             {
-                this._sprite.angle = part.rot;
-                this._sprite.xscale = this._sprite.yscale = this.xscale * part.scale;
-                this._sprite.center = new Vec2(this._sprite.w / 2, this._sprite.h / 2);
-                this._sprite.alpha = 0.8f;
-                Graphics.Draw(_sprite, this.x, this.y);
+                _sprite.angle = part.rot;
+                _sprite.xscale = _sprite.yscale = xscale * part.scale;
+                _sprite.center = new Vec2(_sprite.w / 2, _sprite.h / 2);
+                _sprite.alpha = 0.8f;
+                Graphics.Draw(_sprite, x, y);
             }
             base.Draw();
         }

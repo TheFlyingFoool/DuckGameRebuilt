@@ -14,41 +14,41 @@ namespace DuckGame
         public long mask;
         public GhostObject ghost;
 
-        public NetIndex16 id => this.header.id;
+        public NetIndex16 id => header.id;
 
-        public byte levelIndex => this.header.levelIndex;
+        public byte levelIndex => header.levelIndex;
 
-        public ushort classID => this.header.classID;
+        public ushort classID => header.classID;
 
-        public NetIndex8 authority => this.header.authority;
+        public NetIndex8 authority => header.authority;
 
         public NetIndex16 tick
         {
-            get => this.header.tick;
-            set => this.header.tick = value;
+            get => header.tick;
+            set => header.tick = value;
         }
 
         public bool minimalState { get; set; }
 
         public NMGhostState(BitBuffer dat)
         {
-            this.data = dat;
-            this.manager = BelongsToManager.GhostManager;
-            this.header = new GhostObjectHeader(true);
+            data = dat;
+            manager = BelongsToManager.GhostManager;
+            header = new GhostObjectHeader(true);
         }
 
         public NMGhostState()
         {
-            this.manager = BelongsToManager.GhostManager;
-            this.header = new GhostObjectHeader(true);
+            manager = BelongsToManager.GhostManager;
+            header = new GhostObjectHeader(true);
         }
 
-        protected override void OnSerialize() => this._serializedData.WriteBufferData(this.data);
+        protected override void OnSerialize() => _serializedData.WriteBufferData(data);
 
         public override void OnDeserialize(BitBuffer d)
         {
-            this.header = GhostObjectHeader.Deserialize(d, this.minimalState);
-            this.data = d.ReadBitBuffer();
+            header = GhostObjectHeader.Deserialize(d, minimalState);
+            data = d.ReadBitBuffer();
         }
 
         public override string ToString() => base.ToString();

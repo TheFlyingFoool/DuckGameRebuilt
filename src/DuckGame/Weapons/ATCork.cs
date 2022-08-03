@@ -11,11 +11,11 @@ namespace DuckGame
     {
         public ATCork()
         {
-            this.accuracy = 0.85f;
-            this.range = 100f;
-            this.penetration = 2f;
-            this.bulletSpeed = 18f;
-            this.bulletType = typeof(CorkBullet);
+            accuracy = 0.85f;
+            range = 100f;
+            penetration = 2f;
+            bulletSpeed = 18f;
+            bulletType = typeof(CorkBullet);
         }
     }
 }

@@ -17,8 +17,8 @@ namespace DuckGame
 
         public bool InRange(int x, int y)
         {
-            x = (int)(x - this.thing.left);
-            y = (int)(y - this.thing.top);
+            x = (int)(x - thing.left);
+            y = (int)(y - thing.top);
             x += y * 16;
             return x >= 0 && x < 256;
         }
@@ -27,28 +27,28 @@ namespace DuckGame
         {
             x = (float)Math.Round(x);
             y = (float)Math.Round(y);
-            return this.InRange((int)x, (int)y);
+            return InRange((int)x, (int)y);
         }
 
         public bool CheckPoint(int x, int y)
         {
-            x = (int)(x - this.thing.left);
-            y = (int)(y - this.thing.top);
+            x = (int)(x - thing.left);
+            y = (int)(y - thing.top);
             x += y * 16;
-            return x < 0 || x >= 256 || this.bytes[x] > 0;
+            return x < 0 || x >= 256 || bytes[x] > 0;
         }
 
         public bool CheckPointRelative(int x, int y)
         {
             x += y * 16;
-            return x < 0 || x >= 256 || this.bytes[x] > 0;
+            return x < 0 || x >= 256 || bytes[x] > 0;
         }
 
         public bool CheckPoint(float x, float y)
         {
             x = (float)Math.Round(x);
             y = (float)Math.Round(y);
-            return this.CheckPoint((int)x, (int)y);
+            return CheckPoint((int)x, (int)y);
         }
 
         public void SetPoint(int x, int y, bool val)
@@ -56,19 +56,19 @@ namespace DuckGame
             x += y * 16;
             if (x < 0 || x >= 256)
                 return;
-            this.bytes[x] = val ? (byte)1 : (byte)0;
+            bytes[x] = val ? (byte)1 : (byte)0;
         }
 
         public void Damage(Vec2 point, float radius)
         {
-            point.x -= this.thing.left;
-            point.y -= this.thing.top;
+            point.x -= thing.left;
+            point.y -= thing.top;
             for (int y = 0; y < 16; ++y)
             {
                 for (int x = 0; x < 16; ++x)
                 {
                     if ((new Vec2(x, y) - point).length <= radius)
-                        this.SetPoint(x, y, false);
+                        SetPoint(x, y, false);
                 }
             }
         }
@@ -76,7 +76,7 @@ namespace DuckGame
         public void Clear()
         {
             for (int index = 0; index < 256; ++index)
-                this.bytes[index] = 1;
+                bytes[index] = 1;
         }
     }
 }

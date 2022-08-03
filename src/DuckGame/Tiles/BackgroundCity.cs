@@ -13,12 +13,12 @@ namespace DuckGame
         public BackgroundCity(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("cityBackground", 16, 16, true);
-            this._opacityFromGraphic = true;
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this._editorName = "City";
+            graphic = new SpriteMap("cityBackground", 16, 16, true);
+            _opacityFromGraphic = true;
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
+            _editorName = "City";
         }
     }
 }

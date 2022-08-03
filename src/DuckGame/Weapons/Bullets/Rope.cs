@@ -37,39 +37,39 @@ namespace DuckGame
 
         public Thing attach1
         {
-            get => this._attach1;
-            set => this._attach1 = value;
+            get => _attach1;
+            set => _attach1 = value;
         }
 
         public Thing attach2
         {
-            get => this._attach2;
-            set => this._attach2 = value;
+            get => _attach2;
+            set => _attach2 = value;
         }
 
-        public override NetworkConnection connection => this._belongsTo != null ? this._belongsTo.connection : base.connection;
+        public override NetworkConnection connection => _belongsTo != null ? _belongsTo.connection : base.connection;
 
-        public override NetIndex8 authority => this._belongsTo != null ? this._belongsTo.authority : base.authority;
+        public override NetIndex8 authority => _belongsTo != null ? _belongsTo.authority : base.authority;
 
-        public float linkDirection => this.attach2 is Rope attach2 ? Maths.PointDirection(new Vec2(0f, 0f), (this.attach2Point - this.attach1Point).Rotate(Maths.DegToRad(attach2.offsetDegrees), Vec2.Zero)) : 0f;
+        public float linkDirection => this.attach2 is Rope attach2 ? Maths.PointDirection(new Vec2(0f, 0f), (attach2Point - attach1Point).Rotate(Maths.DegToRad(attach2.offsetDegrees), Vec2.Zero)) : 0f;
 
-        public float linkDirectionNormalized => Maths.PointDirection(new Vec2(0f, 0f), this.attach2Point - this.attach1Point);
+        public float linkDirectionNormalized => Maths.PointDirection(new Vec2(0f, 0f), attach2Point - attach1Point);
 
         public float properLength
         {
-            get => this._properLength;
-            set => this._properLength = value;
+            get => _properLength;
+            set => _properLength = value;
         }
 
         public Vec2 attach1Point
         {
             get
             {
-                if (!(this._attach1 is Rope attach1) || attach1._corner == null)
-                    return this._attach1.position;
+                if (!(_attach1 is Rope attach1) || attach1._corner == null)
+                    return _attach1.position;
                 Vec2 vec2 = attach1._corner.corner - attach1._corner.block.position;
                 vec2.Normalize();
-                return this._attach1.position + vec2 * 4f;
+                return _attach1.position + vec2 * 4f;
             }
         }
 
@@ -77,15 +77,15 @@ namespace DuckGame
         {
             get
             {
-                if (!(this._attach2 is Rope attach2) || attach2._corner == null)
-                    return this._attach2.position;
+                if (!(_attach2 is Rope attach2) || attach2._corner == null)
+                    return _attach2.position;
                 Vec2 vec2 = attach2._corner.corner - attach2._corner.block.position;
                 vec2.Normalize();
-                return this._attach2.position + vec2 * 4f;
+                return _attach2.position + vec2 * 4f;
             }
         }
 
-        public float length => this._attach1 != null && this._attach2 != null ? (this._attach1.position - this._attach2.position).length : 0f;
+        public float length => _attach1 != null && _attach2 != null ? (_attach1.position - _attach2.position).length : 0f;
 
         public Rope(
           float xpos,
@@ -98,54 +98,54 @@ namespace DuckGame
           Thing belongsTo = null)
           : base(xpos, ypos)
         {
-            this._belongsTo = belongsTo;
+            _belongsTo = belongsTo;
             if (attach1Val == null)
                 attach1Val = this;
             if (attach2Val == null)
                 attach2Val = this;
-            this._attach1 = attach1Val;
-            this._attach2 = attach2Val;
-            this._pos1 = attach1Val.position;
-            this._pos2 = attach2Val.position;
-            this._thing = thing;
+            _attach1 = attach1Val;
+            _attach2 = attach2Val;
+            _pos1 = attach1Val.position;
+            _pos2 = attach2Val.position;
+            _thing = thing;
             if (vine)
             {
-                this._vine = new Sprite(nameof(vine))
+                _vine = new Sprite(nameof(vine))
                 {
                     center = new Vec2(8f, 0f)
                 };
             }
             if (tex != null)
-                this._vine = tex;
-            this._isVine = vine;
-            this.depth = -0.5f;
+                _vine = tex;
+            _isVine = vine;
+            depth = -0.5f;
         }
 
         public void RemoveRope()
         {
-            this._terminated = true;
-            this.visible = false;
+            _terminated = true;
+            visible = false;
             Level.Remove(this);
-            if (this._attach1 is Rope attach1 && !attach1._terminated)
+            if (_attach1 is Rope attach1 && !attach1._terminated)
                 attach1.RemoveRope();
-            if (!(this._attach2 is Rope attach2) || attach2._terminated)
+            if (!(_attach2 is Rope attach2) || attach2._terminated)
                 return;
             attach2.RemoveRope();
         }
 
         public void TerminateLaterRopes()
         {
-            if (this._attach2 is Rope attach2 && !attach2._terminated)
+            if (_attach2 is Rope attach2 && !attach2._terminated)
                 attach2.TerminateLaterRopesRecurse();
-            this._attach2 = null;
+            _attach2 = null;
         }
 
         public void TerminateLaterRopesRecurse()
         {
-            this._terminated = true;
-            this.visible = false;
+            _terminated = true;
+            visible = false;
             Level.Remove(this);
-            if (!(this._attach2 is Rope attach2) || attach2._terminated)
+            if (!(_attach2 is Rope attach2) || attach2._terminated)
                 return;
             attach2.TerminateLaterRopesRecurse();
         }
@@ -156,43 +156,43 @@ namespace DuckGame
 
         public void CheckLinks()
         {
-            if (!(this._attach2.GetType() == typeof(Rope)) || !(this.cornerVector != Vec2.Zero))
+            if (!(_attach2.GetType() == typeof(Rope)) || !(cornerVector != Vec2.Zero))
                 return;
-            Rope attach2_1 = this._attach2 as Rope;
+            Rope attach2_1 = _attach2 as Rope;
             bool flag = false;
-            if ((this.attach1Point - this.attach2Point).length < 4.0)
+            if ((attach1Point - attach2Point).length < 4.0)
             {
                 flag = true;
             }
             else
             {
                 float deg = cornerVector.x <= 0.0 ? attach2_1.linkDirectionNormalized + 90f : attach2_1.linkDirectionNormalized - 90f;
-                this.breakVector = Maths.AngleToVec(Maths.DegToRad(deg));
-                if (Math.Acos(Vec2.Dot(this.breakVector, this.cornerVector)) > Math.PI / 2.0)
-                    this.breakVector = Maths.AngleToVec(Maths.DegToRad(deg + 180f));
-                this.dirLine = (this.attach1.position - this.attach2.position).normalized;
-                if (Math.Acos(Vec2.Dot(this.breakVector, this.dirLine)) < 1.52079632604984)
+                breakVector = Maths.AngleToVec(Maths.DegToRad(deg));
+                if (Math.Acos(Vec2.Dot(breakVector, cornerVector)) > Math.PI / 2.0)
+                    breakVector = Maths.AngleToVec(Maths.DegToRad(deg + 180f));
+                dirLine = (attach1.position - attach2.position).normalized;
+                if (Math.Acos(Vec2.Dot(breakVector, dirLine)) < 1.52079632604984)
                     flag = true;
             }
             if (!flag)
                 return;
-            this._attach2 = attach2_1.attach2;
-            this._properLength += attach2_1.properLength;
+            _attach2 = attach2_1.attach2;
+            _properLength += attach2_1.properLength;
             Level.Remove(attach2_1);
-            this.cornerVector = attach2_1.cornerVector;
+            cornerVector = attach2_1.cornerVector;
         }
 
         public void AddLength(float length)
         {
-            if (this._attach2 is Rope attach2_1)
+            if (_attach2 is Rope attach2_1)
             {
                 attach2_1.AddLength(length);
             }
             else
             {
-                if (!(this._attach2 is Harpoon attach2))
+                if (!(_attach2 is Harpoon attach2))
                     return;
-                Vec2 vec2 = this.position - attach2.position;
+                Vec2 vec2 = position - attach2.position;
                 vec2.Normalize();
                 Harpoon harpoon = attach2;
                 harpoon.position -= vec2 * length;
@@ -201,37 +201,37 @@ namespace DuckGame
 
         public void Pull(float length)
         {
-            this.pulled = true;
+            pulled = true;
             Rope pull = this.pull;
             if (pull != null)
                 pull.Pull(length);
             else
-                this.properLength += length;
+                properLength += length;
         }
 
         public override void Update()
         {
-            if (Network.isActive && this._belongsTo != null && this._belongsTo is Grapple)
+            if (Network.isActive && _belongsTo != null && _belongsTo is Grapple)
             {
-                this._isVine = false;
-                this._vine = (this._belongsTo as Grapple)._ropeSprite;
+                _isVine = false;
+                _vine = (_belongsTo as Grapple)._ropeSprite;
             }
-            if (this._terminated || !this.isServerForObject || !this.serverForObject)
+            if (_terminated || !isServerForObject || !serverForObject)
                 return;
             bool flag = false;
-            if (this._attach1.position != this._pos1)
+            if (_attach1.position != _pos1)
             {
                 flag = true;
-                this._pos1 = this._attach1.position;
+                _pos1 = _attach1.position;
             }
-            if (this._attach2.position != this._pos2)
+            if (_attach2.position != _pos2)
             {
                 flag = true;
-                this._pos2 = this._attach2.position;
+                _pos2 = _attach2.position;
             }
-            if (flag || this.pulled)
+            if (flag || pulled)
             {
-                this.pulled = false;
+                pulled = false;
                 Vec2 attach1Point = this.attach1Point;
                 Vec2 attach2Point = this.attach2Point;
                 Vec2 vec2_1 = attach2Point - attach1Point;
@@ -249,14 +249,14 @@ namespace DuckGame
                 Vec2 vec2_2 = attach2Point - attach1Point;
                 float num3 = vec2_2.length;
                 vec2_2.Normalize();
-                if (this._belongsTo is IPullBack)
+                if (_belongsTo is IPullBack)
                 {
-                    if (this.pull == null && this._attach2 is Harpoon)
-                        this.properLength = this.startLength;
-                    else if (this.attach2 is Harpoon)
+                    if (pull == null && _attach2 is Harpoon)
+                        properLength = startLength;
+                    else if (attach2 is Harpoon)
                     {
-                        this.Pull(this.properLength - num3);
-                        this.properLength = num3;
+                        Pull(properLength - num3);
+                        properLength = num3;
                     }
                 }
                 while (Level.CheckPoint<Block>(attach1Point) != null)
@@ -283,64 +283,64 @@ namespace DuckGame
                             Vec2 vec2_3 = blockCorner.corner - blockCorner.block.position;
                             vec2_3.Normalize();
                             blockCorner.corner += vec2_3 * 1f;
-                            Vec2 vec2_4 = blockCorner.corner - this.attach2.position;
+                            Vec2 vec2_4 = blockCorner.corner - attach2.position;
                             if (vec2_4.length > 4.0)
                             {
                                 vec2_4 = this.attach2Point - this.attach1Point;
-                                this.linkVector = vec2_4.normalized;
-                                Rope rope = new Rope(blockCorner.corner.x, blockCorner.corner.y, null, this._attach2, vine: this._isVine, tex: this._vine)
+                                linkVector = vec2_4.normalized;
+                                Rope rope = new Rope(blockCorner.corner.x, blockCorner.corner.y, null, _attach2, vine: _isVine, tex: _vine)
                                 {
-                                    cornerVector = this.cornerVector
+                                    cornerVector = cornerVector
                                 };
                                 vec2_4 = new Vec2(vec2_3.x > 0.0 ? 1f : -1f, vec2_3.y > 0.0 ? 1f : -1f);
-                                this.cornerVector = vec2_4.normalized;
+                                cornerVector = vec2_4.normalized;
                                 rope._corner = blockCorner;
-                                rope._belongsTo = this._belongsTo;
-                                this._attach2 = rope;
+                                rope._belongsTo = _belongsTo;
+                                _attach2 = rope;
                                 Level.Add(rope);
-                                this.properLength -= rope.length;
+                                properLength -= rope.length;
                                 rope.properLength = rope.length;
                                 rope.pull = this;
                                 rope.offsetDegrees = rope.linkDirectionNormalized;
                                 rope.offsetDir = rope.attach2Point - rope.attach1Point;
-                                rope.linkDirectionOnSplit = this.linkDirection;
+                                rope.linkDirectionOnSplit = linkDirection;
                             }
                         }
                     }
                 }
             }
-            this.CheckLinks();
+            CheckLinks();
         }
 
         public void SetServer(bool server)
         {
-            this.serverForObject = server;
-            if (!(this._attach2 is Rope attach2) || attach2._terminated)
+            serverForObject = server;
+            if (!(_attach2 is Rope attach2) || attach2._terminated)
                 return;
             attach2.SetServer(server);
         }
 
         public override void Draw()
         {
-            if (DevConsole.showCollision && this.cornerVector != Vec2.Zero)
+            if (DevConsole.showCollision && cornerVector != Vec2.Zero)
             {
-                Graphics.DrawLine(this._attach2.position, this._attach2.position + this.cornerVector * 32f, Color.Red);
-                Graphics.DrawLine(this._attach2.position, this._attach2.position + this.breakVector * 16f, Color.Blue);
-                Graphics.DrawLine(this._attach2.position, this._attach2.position + this.dirLine * 8f, Color.Orange);
+                Graphics.DrawLine(_attach2.position, _attach2.position + cornerVector * 32f, Color.Red);
+                Graphics.DrawLine(_attach2.position, _attach2.position + breakVector * 16f, Color.Blue);
+                Graphics.DrawLine(_attach2.position, _attach2.position + dirLine * 8f, Color.Orange);
             }
-            float num1 = this.length / this.properLength;
-            if (!this.serverForObject)
+            float num1 = length / properLength;
+            if (!serverForObject)
                 num1 = 1f;
-            if (this._vine != null)
+            if (_vine != null)
             {
-                Vec2 vec2_1 = this.attach2Point - this.attach1Point;
+                Vec2 vec2_1 = attach2Point - attach1Point;
                 Vec2 normalized = vec2_1.normalized;
                 Vec2 vec2_2 = normalized;
                 vec2_2 = vec2_2.Rotate(Maths.DegToRad(90f), Vec2.Zero);
                 double length1 = vec2_1.length;
                 float num2 = 16f;
-                Vec2 vec2_3 = this.attach1Point + normalized * num2;
-                Vec2 p1 = this.attach1Point;
+                Vec2 vec2_3 = attach1Point + normalized * num2;
+                Vec2 p1 = attach1Point;
                 Depth depth = this.depth;
                 double num3 = num2;
                 int num4 = (int)Math.Ceiling(length1 / num3);
@@ -350,20 +350,20 @@ namespace DuckGame
                     float num5 = (float)((1.0 - num1) * 16.0);
                     Vec2 p2 = vec2_3 + vec2_2 * ((float)Math.Sin(a) * num5);
                     if (index == num4 - 1)
-                        p2 = this.attach2Point;
-                    this._vine.angleDegrees = (float)-(Maths.PointDirection(p1, p2) + 90.0);
-                    this._vine.depth = depth;
+                        p2 = attach2Point;
+                    _vine.angleDegrees = (float)-(Maths.PointDirection(p1, p2) + 90.0);
+                    _vine.depth = depth;
                     depth += 1;
                     float length2 = (p2 - p1).length;
                     if (index == num4 - 1)
                     {
-                        this._vine.yscale = 1f;
-                        Graphics.Draw(this._vine, p1.x, p1.y, new Rectangle(0f, 0f, 16f, (int)(length2 % num2)));
+                        _vine.yscale = 1f;
+                        Graphics.Draw(_vine, p1.x, p1.y, new Rectangle(0f, 0f, 16f, (int)(length2 % num2)));
                     }
                     else
                     {
-                        this._vine.yscale = (float)(length2 / 16.0 + 0.100000001490116);
-                        Graphics.Draw(this._vine, p1.x, p1.y);
+                        _vine.yscale = (float)(length2 / 16.0 + 0.100000001490116);
+                        Graphics.Draw(_vine, p1.x, p1.y);
                     }
                     p1 = p2;
                     vec2_3 += normalized * num2;
@@ -372,23 +372,23 @@ namespace DuckGame
             }
             else if (num1 < 0.949999988079071 && num1 > 0.0)
             {
-                Vec2 vec2_4 = this.attach2Point - this.attach1Point;
+                Vec2 vec2_4 = attach2Point - attach1Point;
                 Vec2 vec2_5 = vec2_4.normalized;
                 vec2_5 = vec2_5.Rotate(Maths.DegToRad(90f), Vec2.Zero);
                 float a = 0.7853982f;
-                Vec2 vec2_6 = this.attach1Point + vec2_4 / 8f;
-                Vec2 p1 = this.attach1Point;
+                Vec2 vec2_6 = attach1Point + vec2_4 / 8f;
+                Vec2 p1 = attach1Point;
                 for (int index = 0; index < 8; ++index)
                 {
                     float num7 = (float)((1.0 - num1) * 8.0);
-                    Graphics.DrawLine(p1, vec2_6 + vec2_5 * (float)Math.Sin(a) * num7, Color.White * 0.8f, depth: (this.depth - 1));
+                    Graphics.DrawLine(p1, vec2_6 + vec2_5 * (float)Math.Sin(a) * num7, Color.White * 0.8f, depth: (depth - 1));
                     p1 = vec2_6 + vec2_5 * (float)Math.Sin(a) * num7;
                     vec2_6 += vec2_4 / 8f;
                     a += 0.7853982f;
                 }
             }
             else
-                Graphics.DrawLine(this.attach1Point, this.attach2Point, Color.White * 0.8f, depth: (this.depth - 1));
+                Graphics.DrawLine(attach1Point, attach2Point, Color.White * 0.8f, depth: (depth - 1));
         }
     }
 }

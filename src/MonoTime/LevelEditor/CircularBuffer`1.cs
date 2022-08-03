@@ -18,42 +18,42 @@ namespace DuckGame
 
         public CircularBuffer(int size = 100)
         {
-            this._data = new T[size];
-            this._size = size;
-            this._begin = 0;
-            this._length = 0;
+            _data = new T[size];
+            _size = size;
+            _begin = 0;
+            _length = 0;
         }
 
         public void Add(T val)
         {
-            if (this._length >= this._size)
-                this.AdvanceBuffer();
-            this._data[(this._begin + this._length) % this._size] = val;
-            ++this._length;
+            if (_length >= _size)
+                AdvanceBuffer();
+            _data[(_begin + _length) % _size] = val;
+            ++_length;
         }
 
         public void AdvanceBuffer()
         {
-            this._begin = (this._begin + 1) % this._size;
-            --this._length;
-            if (this._length >= 0)
+            _begin = (_begin + 1) % _size;
+            --_length;
+            if (_length >= 0)
                 return;
-            this._length = 0;
+            _length = 0;
         }
 
         public T this[int key]
         {
             get
             {
-                if (key >= this._length || key < 0)
+                if (key >= _length || key < 0)
                     throw new Exception("Array Index Out Of Range");
-                return this._data[(this._begin + key) % this._size];
+                return _data[(_begin + key) % _size];
             }
-            set => this._data[(this._begin + key) % this._size] = value;
+            set => _data[(_begin + key) % _size] = value;
         }
 
-        public int Count => this._length;
+        public int Count => _length;
 
-        public void Clear() => this._length = 0;
+        public void Clear() => _length = 0;
     }
 }

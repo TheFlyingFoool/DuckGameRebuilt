@@ -28,55 +28,55 @@ namespace DuckGame
             string str2 = "";
             for (int index = 0; index < DXMLNode.toStringDeep; ++index)
                 str2 += "  ";
-            if (this.Name != "")
+            if (Name != "")
             {
-                str1 = str1 + str2 + "<" + this.Name;
-                foreach (DXMLAttribute attribute in this.Attributes())
+                str1 = str1 + str2 + "<" + Name;
+                foreach (DXMLAttribute attribute in Attributes())
                     str1 = str1 + " " + attribute.Name + "=" + attribute.Value;
             }
-            if (this.NumberOfElements > 0 || this.Value != "")
+            if (NumberOfElements > 0 || Value != "")
             {
-                if (this.Value != "")
+                if (Value != "")
                 {
-                    str1 = str1 + ">" + this.StoreValue(this.Value) + "</" + this.Name + ">\r\n";
+                    str1 = str1 + ">" + StoreValue(Value) + "</" + Name + ">\r\n";
                 }
                 else
                 {
-                    if (this.Name != "")
+                    if (Name != "")
                     {
                         str1 += ">\r\n";
                         ++DXMLNode.toStringDeep;
                     }
-                    foreach (DXMLNode element in this.Elements())
+                    foreach (DXMLNode element in Elements())
                         str1 += element.ToString();
-                    if (this.Name != "")
+                    if (Name != "")
                     {
                         --DXMLNode.toStringDeep;
-                        str1 = str1 + str2 + "</" + this.Name + ">\r\n";
+                        str1 = str1 + str2 + "</" + Name + ">\r\n";
                     }
                 }
             }
-            else if (this.Name != "")
+            else if (Name != "")
                 str1 += "/>\r\n";
             return str1;
         }
 
-        public string Name => this._name;
+        public string Name => _name;
 
-        public string Value => this._value;
+        public string Value => _value;
 
-        public int NumberOfElements => this._elements.Count;
+        public int NumberOfElements => _elements.Count;
 
-        public void SetValue(string varValue) => this._value = this.ReadValue(varValue);
+        public void SetValue(string varValue) => _value = ReadValue(varValue);
 
-        public DXMLNode(string varName) => this._name = varName;
+        public DXMLNode(string varName) => _name = varName;
 
         public DXMLNode(string varName, object varValue)
         {
-            this._name = varName;
+            _name = varName;
             if (varValue == null)
                 return;
-            this._value = varValue.ToString();
+            _value = varValue.ToString();
         }
 
         protected static DXMLNode ReadNode(string text, ref int index)
@@ -143,16 +143,16 @@ namespace DuckGame
             return null;
         }
 
-        public void Add(DXMLNode node) => this._elements.Add(node);
+        public void Add(DXMLNode node) => _elements.Add(node);
 
-        public void Add(DXMLAttribute attribute) => this._attributes.Add(attribute);
+        public void Add(DXMLAttribute attribute) => _attributes.Add(attribute);
 
-        public IEnumerable<DXMLNode> Elements() => this._elements.AsEnumerable<DXMLNode>();
+        public IEnumerable<DXMLNode> Elements() => _elements.AsEnumerable<DXMLNode>();
 
         public IEnumerable<DXMLNode> Elements(string varName)
         {
             List<DXMLNode> dxmlNodeList = new List<DXMLNode>();
-            foreach (DXMLNode element in this._elements)
+            foreach (DXMLNode element in _elements)
             {
                 if (element.Name == varName)
                     dxmlNodeList.Add(element);
@@ -163,7 +163,7 @@ namespace DuckGame
         public DXMLNode Element(string varName)
         {
             List<DXMLNode> dxmlNodeList = new List<DXMLNode>();
-            foreach (DXMLNode element in this._elements)
+            foreach (DXMLNode element in _elements)
             {
                 if (element.Name == varName)
                     return element;
@@ -174,7 +174,7 @@ namespace DuckGame
         public IEnumerable<DXMLAttribute> Attributes(string varName)
         {
             List<DXMLAttribute> dxmlAttributeList = new List<DXMLAttribute>();
-            foreach (DXMLAttribute attribute in this._attributes)
+            foreach (DXMLAttribute attribute in _attributes)
             {
                 if (attribute.Name == varName)
                     dxmlAttributeList.Add(attribute);
@@ -182,6 +182,6 @@ namespace DuckGame
             return dxmlAttributeList;
         }
 
-        public IEnumerable<DXMLAttribute> Attributes() => this._attributes.AsEnumerable<DXMLAttribute>();
+        public IEnumerable<DXMLAttribute> Attributes() => _attributes.AsEnumerable<DXMLAttribute>();
     }
 }

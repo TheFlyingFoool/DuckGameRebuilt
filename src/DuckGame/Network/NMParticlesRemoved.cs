@@ -17,32 +17,32 @@ namespace DuckGame
 
         public NMParticlesRemoved()
         {
-            this.manager = BelongsToManager.GhostManager;
-            this.levelIndex = DuckNetwork.levelIndex;
+            manager = BelongsToManager.GhostManager;
+            levelIndex = DuckNetwork.levelIndex;
         }
 
         public override void CopyTo(NetMessage pMessage)
         {
-            (pMessage as NMParticlesRemoved).removeParticles = this.removeParticles;
+            (pMessage as NMParticlesRemoved).removeParticles = removeParticles;
             base.CopyTo(pMessage);
         }
 
         protected override void OnSerialize()
         {
-            if (this.removeParticles.Count > byte.MaxValue)
+            if (removeParticles.Count > byte.MaxValue)
                 throw new Exception("NMParticlesRemoved.removeParticles should not have more than 255 particles.");
-            this._serializedData.Write(this.levelIndex);
-            this._serializedData.Write((byte)this.removeParticles.Count);
-            foreach (ushort removeParticle in this.removeParticles)
-                this._serializedData.Write(removeParticle);
+            _serializedData.Write(levelIndex);
+            _serializedData.Write((byte)removeParticles.Count);
+            foreach (ushort removeParticle in removeParticles)
+                _serializedData.Write(removeParticle);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
-            this.levelIndex = d.ReadByte();
+            levelIndex = d.ReadByte();
             byte num = d.ReadByte();
             for (int index = 0; index < num; ++index)
-                this.removeParticles.Add(d.ReadUShort());
+                removeParticles.Add(d.ReadUShort());
         }
     }
 }

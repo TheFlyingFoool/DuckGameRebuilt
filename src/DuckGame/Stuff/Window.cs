@@ -61,14 +61,14 @@ namespace DuckGame
 
         public override Vec2 netPosition
         {
-            get => this.position;
+            get => position;
             set
             {
-                if (!(this.position != value))
+                if (!(position != value))
                     return;
-                this.position = value;
-                if (this._frame != null)
-                    this._frame.position = this.position;
+                position = value;
+                if (_frame != null)
+                    _frame.position = position;
                 Level.current.things.quadTree.Remove(this);
                 Level.current.things.quadTree.Add(this);
             }
@@ -76,87 +76,87 @@ namespace DuckGame
 
         public override void EditorPropertyChanged(object property)
         {
-            this.UpdateHeight();
-            this.sequence.isValid = this.valid.value;
+            UpdateHeight();
+            sequence.isValid = valid.value;
         }
 
         public override void SetTranslation(Vec2 translation)
         {
-            if (this._frame != null)
-                this._frame.SetTranslation(translation);
+            if (_frame != null)
+                _frame.SetTranslation(translation);
             base.SetTranslation(translation);
         }
 
         public virtual void UpdateHeight()
         {
             float num = windowHeight.value * 16f;
-            this.center = new Vec2(3f, 0f);
-            if (this.floor)
+            center = new Vec2(3f, 0f);
+            if (floor)
             {
-                this.collisionSize = new Vec2(num, 6f);
-                this.collisionOffset = new Vec2((float)(-num + 16.0), -2f);
-                this._sprite.angleDegrees = -90f;
+                collisionSize = new Vec2(num, 6f);
+                collisionOffset = new Vec2((float)(-num + 16.0), -2f);
+                _sprite.angleDegrees = -90f;
             }
             else
             {
-                this.collisionSize = new Vec2(6f, num);
-                this.collisionOffset = new Vec2(-3f, (float)(-num + 8.0));
-                this._sprite.angle = 0f;
+                collisionSize = new Vec2(6f, num);
+                collisionOffset = new Vec2(-3f, (float)(-num + 8.0));
+                _sprite.angle = 0f;
             }
-            this._sprite.yscale = num;
-            this._borderSprite.yscale = num;
-            if (this._frame != null)
-                this._frame.high = num;
-            this.sequence.isValid = this.valid.value;
+            _sprite.yscale = num;
+            _borderSprite.yscale = num;
+            if (_frame != null)
+                _frame.high = num;
+            sequence.isValid = valid.value;
         }
 
         public Window(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.windowHeight = new EditorProperty<int>(2, this, 1f, 16f, 1f);
-            this.valid = new EditorProperty<bool>(false, this);
-            this._sprite = new Sprite("window32", 6f, 1f);
-            this._barSprite = new Sprite("windowBars", 8f, 1f);
-            this._borderSprite = new Sprite("window32border");
-            this._editorIcon = new Sprite("windowIconVertical");
-            this.sequence = new SequenceItem(this)
+            windowHeight = new EditorProperty<int>(2, this, 1f, 16f, 1f);
+            valid = new EditorProperty<bool>(false, this);
+            _sprite = new Sprite("window32", 6f, 1f);
+            _barSprite = new Sprite("windowBars", 8f, 1f);
+            _borderSprite = new Sprite("window32border");
+            _editorIcon = new Sprite("windowIconVertical");
+            sequence = new SequenceItem(this)
             {
                 type = SequenceItemType.Goody
             };
-            this.physicsMaterial = PhysicsMaterial.Glass;
-            this.center = new Vec2(3f, 24f);
-            this.collisionSize = new Vec2(6f, 32f);
-            this.collisionOffset = new Vec2(-3f, -24f);
-            this.depth = -0.5f;
-            this._editorName = nameof(Window);
-            this.editorTooltip = "Classic window. Really opens up the room.";
-            this.thickness = 0.3f;
-            this._sprite.color = new Color(1f, 1f, 1f, 0.2f);
-            this.alpha = 0.7f;
-            this.breakForce = 3f;
-            this._canFlip = false;
-            this._translucent = true;
-            this.UpdateHeight();
+            physicsMaterial = PhysicsMaterial.Glass;
+            center = new Vec2(3f, 24f);
+            collisionSize = new Vec2(6f, 32f);
+            collisionOffset = new Vec2(-3f, -24f);
+            depth = -0.5f;
+            _editorName = nameof(Window);
+            editorTooltip = "Classic window. Really opens up the room.";
+            thickness = 0.3f;
+            _sprite.color = new Color(1f, 1f, 1f, 0.2f);
+            alpha = 0.7f;
+            breakForce = 3f;
+            _canFlip = false;
+            _translucent = true;
+            UpdateHeight();
         }
 
         public override void Initialize()
         {
-            if (!this.floor && !this.noframe)
+            if (!floor && !noframe)
             {
-                this._frame = new WindowFrame(this.x, this.y, this.floor);
+                _frame = new WindowFrame(x, y, floor);
                 Level.Add(_frame);
             }
-            this.UpdateHeight();
+            UpdateHeight();
         }
 
         public override void Terminate()
         {
-            if (!(Level.current is Editor) && !this._wrecked && !this.lobbyRemoving)
+            if (!(Level.current is Editor) && !_wrecked && !lobbyRemoving)
             {
-                this._wrecked = true;
+                _wrecked = true;
                 for (int index = 0; index < 8; ++index)
                 {
-                    GlassParticle glassParticle = new GlassParticle(this.x - 4f + Rando.Float(8f), this.y - 16f + Rando.Float(32f), Vec2.Zero, this.tint.value)
+                    GlassParticle glassParticle = new GlassParticle(x - 4f + Rando.Float(8f), y - 16f + Rando.Float(32f), Vec2.Zero, tint.value)
                     {
                         hSpeed = (Rando.Float(1f) > 0.5 ? 1f : -1f) * Rando.Float(3f),
                         vSpeed = -Rando.Float(1f)
@@ -166,8 +166,8 @@ namespace DuckGame
                 if (this is FloorWindow)
                 {
                     for (int index = 0; index < 8; ++index)
-                        Level.Add(new GlassDebris(false, this.left + index * 4, this.y, -Rando.Float(2f), -Rando.Float(2f), 1));
-                    foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(this.topLeft + new Vec2(-2f, -3f), this.topRight + new Vec2(2f, -3f)))
+                        Level.Add(new GlassDebris(false, left + index * 4, y, -Rando.Float(2f), -Rando.Float(2f), 1));
+                    foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(topLeft + new Vec2(-2f, -3f), topRight + new Vec2(2f, -3f)))
                     {
                         physicsObject._sleeping = false;
                         physicsObject.vSpeed -= 2f;
@@ -176,14 +176,14 @@ namespace DuckGame
                 else
                 {
                     for (int index = 0; index < 8; ++index)
-                        Level.Add(new GlassDebris(false, this.x, this.top + index * 4, -Rando.Float(2f), -Rando.Float(2f), 1, this.tint.value));
+                        Level.Add(new GlassDebris(false, x, top + index * 4, -Rando.Float(2f), -Rando.Float(2f), 1, tint.value));
                 }
                 SFX.Play("glassBreak");
             }
-            if (!this.floor && !this._wrecked)
+            if (!floor && !_wrecked)
             {
                 Level.Remove(_frame);
-                this._frame = null;
+                _frame = null;
             }
             base.Terminate();
         }
@@ -192,77 +192,77 @@ namespace DuckGame
         {
             if (bullet.isLocal)
                 Thing.Fondle(this, DuckNetwork.localConnection);
-            if (!this._hasGlass)
+            if (!_hasGlass)
                 return base.Hit(bullet, hitPos);
-            this._enter = hitPos + bullet.travelDirNormalized;
-            if (_enter.x < this.x && _enter.x < this.left + 2.0)
-                this._enter.x = this.left;
-            else if (_enter.x > this.x && _enter.x > this.right - 2.0)
-                this._enter.x = this.right;
-            if (_enter.y < this.y && _enter.y < this.top + 2.0)
-                this._enter.y = this.top;
-            else if (_enter.y > this.y && _enter.y > this.bottom - 2.0)
-                this._enter.y = this.bottom;
+            _enter = hitPos + bullet.travelDirNormalized;
+            if (_enter.x < x && _enter.x < left + 2.0)
+                _enter.x = left;
+            else if (_enter.x > x && _enter.x > right - 2.0)
+                _enter.x = right;
+            if (_enter.y < y && _enter.y < top + 2.0)
+                _enter.y = top;
+            else if (_enter.y > y && _enter.y > bottom - 2.0)
+                _enter.y = bottom;
             if (hitPoints <= 0.0)
                 return false;
             hitPos -= bullet.travelDirNormalized;
             for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
-                Level.Add(new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized, this.tint.value));
+                Level.Add(new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized, tint.value));
             SFX.Play("glassHit", 0.5f);
-            if (this.isServerForObject && bullet.isLocal)
+            if (isServerForObject && bullet.isLocal)
             {
-                this.hitPoints -= this.damageMultiplier;
-                ++this.damageMultiplier;
+                hitPoints -= damageMultiplier;
+                ++damageMultiplier;
             }
             return base.Hit(bullet, hitPos);
         }
 
         public override void ExitHit(Bullet bullet, Vec2 exitPos)
         {
-            if (!this._hasGlass)
+            if (!_hasGlass)
                 return;
-            this._hits.Add(this._enter);
+            _hits.Add(_enter);
             Vec2 vec2 = exitPos - bullet.travelDirNormalized;
-            if (vec2.x < this.x && vec2.x < this.left + 2.0)
-                vec2.x = this.left;
-            else if (vec2.x > this.x && vec2.x > this.right - 2.0)
-                vec2.x = this.right;
-            if (vec2.y < this.y && vec2.y < this.top + 2.0)
-                vec2.y = this.top;
-            else if (vec2.y > this.y && vec2.y > this.bottom - 2.0)
-                vec2.y = this.bottom;
-            this._hits.Add(vec2);
+            if (vec2.x < x && vec2.x < left + 2.0)
+                vec2.x = left;
+            else if (vec2.x > x && vec2.x > right - 2.0)
+                vec2.x = right;
+            if (vec2.y < y && vec2.y < top + 2.0)
+                vec2.y = top;
+            else if (vec2.y > y && vec2.y > bottom - 2.0)
+                vec2.y = bottom;
+            _hits.Add(vec2);
             exitPos += bullet.travelDirNormalized;
             for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
-                Level.Add(new GlassParticle(exitPos.x, exitPos.y, -bullet.travelDirNormalized, this.tint.value));
+                Level.Add(new GlassParticle(exitPos.x, exitPos.y, -bullet.travelDirNormalized, tint.value));
         }
 
         public void Shake()
         {
-            if (this._hasGlass)
+            if (_hasGlass)
                 SFX.Play("glassBump", 0.7f);
-            this._shakeVal = 3.141593f;
+            _shakeVal = 3.141593f;
         }
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
             with.Fondle(this);
-            if (this.floor && with.top > this.top && this.CalculateImpactPower(with, from) > 2.79999995231628 && with.isServerForObject)
+            if (floor && with.top > top && CalculateImpactPower(with, from) > 2.79999995231628 && with.isServerForObject)
             {
                 if (with is Duck duck)
                     RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
-                this.Destroy(new DTImpact(with));
+                Destroy(new DTImpact(with));
             }
             else
             {
                 float num = Math.Abs(with.hSpeed) + Math.Abs(with.vSpeed);
-                if (!this.destroyed && num > 1.5)
+                if (!destroyed && num > 1.5)
                 {
-                    ++this.shakeTimes;
-                    if (this.isServerForObject && Level.current is TeamSelect2 && with is PhysicsObject && (with as PhysicsObject).gravMultiplier < 0.100000001490116)
-                        this.Destroy(new DTImpact(with));
+                    ++shakeTimes;
+                    if (isServerForObject && Level.current is TeamSelect2 && with is PhysicsObject && (with as PhysicsObject).gravMultiplier < 0.100000001490116)
+                        Destroy(new DTImpact(with));
                 }
-                if (!this.destroyed || !(with is Duck duck))
+                if (!destroyed || !(with is Duck duck))
                     return;
                 RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
             }
@@ -270,90 +270,90 @@ namespace DuckGame
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (!this._hasGlass)
+            if (!_hasGlass)
                 return false;
-            if (this.bars.value)
-                this._hasGlass = false;
+            if (bars.value)
+                _hasGlass = false;
             else
                 Level.Remove(this);
-            if (this.sequence != null && this.sequence.isValid)
+            if (sequence != null && sequence.isValid)
             {
-                this.sequence.Finished();
+                sequence.Finished();
                 if (ChallengeLevel.running)
                     ++ChallengeLevel.goodiesGot;
             }
-            return !this.bars.value;
+            return !bars.value;
         }
 
         public override void Update()
         {
-            this._shake.Update();
-            this.breakForce = (float)(6.0 * (hitPoints / this.maxHealth));
+            _shake.Update();
+            breakForce = (float)(6.0 * (hitPoints / maxHealth));
             if (hitPoints <= 0.0)
-                this.Destroy(new DTImpact(null));
+                Destroy(new DTImpact(null));
             base.Update();
             if (damageMultiplier > 1.0)
-                this.damageMultiplier -= 0.2f;
+                damageMultiplier -= 0.2f;
             else
-                this.damageMultiplier = 1f;
-            this._shakeMult = Lerp.Vec2(this._shakeMult, Vec2.Zero, 0.1f);
-            if (this._localShakeTimes < this.shakeTimes)
+                damageMultiplier = 1f;
+            _shakeMult = Lerp.Vec2(_shakeMult, Vec2.Zero, 0.1f);
+            if (_localShakeTimes < shakeTimes)
             {
-                this.Shake();
-                this._localShakeTimes = this.shakeTimes;
+                Shake();
+                _localShakeTimes = shakeTimes;
             }
-            this._shakeVal = Lerp.Float(this._shakeVal, 0f, 0.05f);
+            _shakeVal = Lerp.Float(_shakeVal, 0f, 0.05f);
         }
 
         public override void Draw()
         {
             Vec2 zero = Vec2.Zero;
-            float num1 = (float)((float)this._shake * _shakeVal * 0.800000011920929);
-            if (this.floor)
+            float num1 = (float)((float)_shake * _shakeVal * 0.800000011920929);
+            if (floor)
                 zero.y = num1;
             else
                 zero.x = num1;
-            this.position += zero;
+            position += zero;
             float num2 = windowHeight.value * 16f;
-            this._sprite.depth = this.depth;
-            this._borderSprite.depth = this.depth;
-            this._borderSprite.angle = this._sprite.angle;
-            this._barSprite.depth = this._sprite.depth + 4;
-            this._barSprite.yscale = this._sprite.yscale;
-            this._barSprite.alpha = this._sprite.alpha;
-            this._barSprite.angle = this.angle;
-            if (this._hasGlass)
+            _sprite.depth = depth;
+            _borderSprite.depth = depth;
+            _borderSprite.angle = _sprite.angle;
+            _barSprite.depth = _sprite.depth + 4;
+            _barSprite.yscale = _sprite.yscale;
+            _barSprite.alpha = _sprite.alpha;
+            _barSprite.angle = angle;
+            if (_hasGlass)
             {
-                Color windowColor = Window.windowColors[this.tint.value];
+                Color windowColor = Window.windowColors[tint.value];
                 windowColor.a = 51;
-                this._sprite.color = windowColor;
-                this.alpha = 0.7f;
-                if (this.floor)
+                _sprite.color = windowColor;
+                alpha = 0.7f;
+                if (floor)
                 {
-                    Graphics.Draw(this._sprite, (float)(this.x - num2 + 16.0), this.y + 4f);
-                    Graphics.Draw(this._borderSprite, (float)(this.x - num2 + 16.0), this.y + 4f);
+                    Graphics.Draw(_sprite, (float)(x - num2 + 16.0), y + 4f);
+                    Graphics.Draw(_borderSprite, (float)(x - num2 + 16.0), y + 4f);
                 }
                 else
                 {
-                    Graphics.Draw(this._sprite, this.x - 3f, (float)(this.y - num2 + 8.0));
-                    Graphics.Draw(this._borderSprite, this.x - 3f, (float)(this.y - num2 + 8.0));
+                    Graphics.Draw(_sprite, x - 3f, (float)(y - num2 + 8.0));
+                    Graphics.Draw(_borderSprite, x - 3f, (float)(y - num2 + 8.0));
                 }
-                for (int index = 0; index < this._hits.Count; index += 2)
+                for (int index = 0; index < _hits.Count; index += 2)
                 {
-                    if (index + 1 > this._hits.Count)
+                    if (index + 1 > _hits.Count)
                         return;
                     Color col = new Color((byte)(windowColor.r * 0.5), (byte)(windowColor.g * 0.5), (byte)(windowColor.b * 0.800000011920929), (byte)178);
-                    Graphics.DrawLine(this._hits[index] + zero, this._hits[index + 1] + zero, col);
+                    Graphics.DrawLine(_hits[index] + zero, _hits[index + 1] + zero, col);
                 }
             }
-            this.position -= zero;
-            if (this.floor)
+            position -= zero;
+            if (floor)
             {
-                if (this.bars.value)
-                    Graphics.Draw(this._barSprite, (float)(this.x - num2 + 16.0), this.y + 5f);
+                if (bars.value)
+                    Graphics.Draw(_barSprite, (float)(x - num2 + 16.0), y + 5f);
             }
-            else if (this.bars.value)
-                Graphics.Draw(this._barSprite, this.x - 4f, (float)(this.y - num2 + 8.0));
+            else if (bars.value)
+                Graphics.Draw(_barSprite, x - 4f, (float)(y - num2 + 8.0));
             base.Draw();
         }
     }

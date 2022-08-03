@@ -33,20 +33,20 @@ namespace DuckGame
         public RainbowTrail(float xpos, float ypos, PhysicsObject attach)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("cape");
-            this.visible = attach.visible;
+            graphic = new Sprite("cape");
+            visible = attach.visible;
             //this.killTimer = this.killTime;
-            this._attach = attach;
-            this.depth = -0.5f;
+            _attach = attach;
+            depth = -0.5f;
         }
 
         public override void Update()
         {
             base.Update();
-            if (this._initLastPos)
+            if (_initLastPos)
             {
                 //this._lastPos = this._attach.position;
-                this._initLastPos = false;
+                _initLastPos = false;
             }
             Thing thing = _attach;
             float num1 = 1f;
@@ -70,26 +70,26 @@ namespace DuckGame
             if (num2 > 3.0)
                 num2 = 3f;
             float num3 = (float)(1.0 - num2 / 3.0);
-            this._capeWave += num2 * 0.1f;
-            this._inverseWave += num3 * 0.09f;
-            this._inverseWave2 += num3 * 0.06f;
+            _capeWave += num2 * 0.1f;
+            _inverseWave += num3 * 0.09f;
+            _inverseWave2 += num3 * 0.06f;
             float num4 = (float)Math.Sin(_capeWave);
             float num5 = (float)Math.Sin(_inverseWave);
             float num6 = (float)Math.Sin(_inverseWave2);
-            this._capeWaveMult = num2 * 0.5f;
+            _capeWaveMult = num2 * 0.5f;
             float num7 = num3 * 0.5f;
-            this.offDir = (sbyte)-this._attach.offDir;
+            offDir = (sbyte)-_attach.offDir;
             Vec2 position = thing.position;
             Vec2 _p2 = thing.position;
-            this.depth = thing.depth - 18;
+            depth = thing.depth - 18;
             position.y += num1;
             _p2.y += num1;
             position.y += (float)(num4 * _capeWaveMult * (thing.velocity.x * 0.5));
             position.x += (float)(num4 * _capeWaveMult * (thing.velocity.y * 0.200000002980232));
-            if (this.capePeices.Count > 0)
-                _p2 = this.capePeices[this.capePeices.Count - 1].p1;
-            this.capePeices.Add(new TrailPiece(thing.x - offDir * -10, thing.y + 6f, 0.5f, position, _p2));
-            foreach (TrailPiece capePeice in this.capePeices)
+            if (capePeices.Count > 0)
+                _p2 = capePeices[capePeices.Count - 1].p1;
+            capePeices.Add(new TrailPiece(thing.x - offDir * -10, thing.y + 6f, 0.5f, position, _p2));
+            foreach (TrailPiece capePeice in capePeices)
             {
                 if (capePeice.wide < 1.0)
                     capePeice.wide += 0.05f;
@@ -103,13 +103,13 @@ namespace DuckGame
                 capePeice.p2.x += 0.3f * offDir;
                 capePeice.position.x += 0.5f * offDir;
             }
-            while (this.capePeices.Count > this.maxLength)
-                this.capePeices.RemoveAt(0);
+            while (capePeices.Count > maxLength)
+                capePeices.RemoveAt(0);
             //this._lastPos = thing.position;
-            this.visible = thing.visible;
-            if (this._capeTexture != null)
+            visible = thing.visible;
+            if (_capeTexture != null)
                 return;
-            this._capeTexture = (Tex2D)Content.Load<Texture2D>("plainCape");
+            _capeTexture = (Tex2D)Content.Load<Texture2D>("plainCape");
         }
 
         public override void Draw()
@@ -125,16 +125,16 @@ namespace DuckGame
             Vec2 t2 = new Vec2(1f, 0f);
             Vec2 t3 = new Vec2(0f, 1f);
             Vec2 t4 = new Vec2(1f, 1f);
-            if (this._capeTexture == null)
+            if (_capeTexture == null)
                 return;
             float depth = DuckGame.Graphics.AdjustDepth(this.depth);
-            for (int index = this.capePeices.Count - 1; index >= 0; --index)
+            for (int index = capePeices.Count - 1; index >= 0; --index)
             {
-                TrailPiece capePeice = this.capePeices[index];
+                TrailPiece capePeice = capePeices[index];
                 Vec2 vec2_3 = vec2_2;
                 if (index > 0)
                 {
-                    Vec2 vec2_4 = capePeice.p1 - this.capePeices[index - 1].p1;
+                    Vec2 vec2_4 = capePeice.p1 - capePeices[index - 1].p1;
                     vec2_4.Normalize();
                     vec2_3 = vec2_4.Rotate(Maths.DegToRad(90f), Vec2.Zero);
                 }
@@ -150,7 +150,7 @@ namespace DuckGame
                         vec2_5 = vec2_1 + vec2_6 * (length - (num2 - num1));
                         flag2 = true;
                     }
-                    DuckGame.Graphics.screen.DrawQuad(vec2_5 - vec2_3 * (float)(num3 * capePeice.wide / 2.0), vec2_5 + vec2_3 * (float)(num3 * capePeice.wide / 2.0), vec2_1 - vec2_2 * (float)(num3 * capePeice.wide / 2.0), vec2_1 + vec2_2 * (float)(num3 * capePeice.wide / 2.0), t1, t2, t3, t4, depth, this._capeTexture, Color.White);
+                    DuckGame.Graphics.screen.DrawQuad(vec2_5 - vec2_3 * (float)(num3 * capePeice.wide / 2.0), vec2_5 + vec2_3 * (float)(num3 * capePeice.wide / 2.0), vec2_1 - vec2_2 * (float)(num3 * capePeice.wide / 2.0), vec2_1 + vec2_2 * (float)(num3 * capePeice.wide / 2.0), t1, t2, t3, t4, depth, _capeTexture, Color.White);
                     if (flag2)
                         break;
                 }

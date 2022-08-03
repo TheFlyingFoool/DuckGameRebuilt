@@ -15,45 +15,45 @@ namespace DuckGame
         public CityWall(float xpos, float ypos, System.Type c = null)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("laserSpawner");
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(12f, 12f);
-            this.collisionOffset = new Vec2(-6f, -6f);
-            this.depth = -0.6f;
-            this.hugWalls = WallHug.None;
-            this.layer = Layer.Foreground;
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this._visibleInGame = true;
-            this._wall = new Sprite("citywall");
-            this._wall.center = new Vec2(this._wall.w - 4, this._wall.h / 2);
-            this.editorTooltip = "Adds an infinite vertical building.";
+            graphic = new Sprite("laserSpawner");
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(12f, 12f);
+            collisionOffset = new Vec2(-6f, -6f);
+            depth = -0.6f;
+            hugWalls = WallHug.None;
+            layer = Layer.Foreground;
+            physicsMaterial = PhysicsMaterial.Metal;
+            _visibleInGame = true;
+            _wall = new Sprite("citywall");
+            _wall.center = new Vec2(_wall.w - 4, _wall.h / 2);
+            editorTooltip = "Adds an infinite vertical building.";
         }
 
         public override void Initialize()
         {
             if (!(Level.current is Editor))
             {
-                this.collisionSize = new Vec2(64f, 4096f);
-                this.collisionOffset = new Vec2(-61f, -700f);
+                collisionSize = new Vec2(64f, 4096f);
+                collisionOffset = new Vec2(-61f, -700f);
             }
             base.Initialize();
         }
 
         public override void Draw()
         {
-            this._wall.flipH = this.flipHorizontal;
+            _wall.flipH = flipHorizontal;
             if (!(Level.current is Editor))
             {
-                Graphics.Draw(this._wall, this.x, this.y);
-                if (Level.current.topLeft.y < this.y - 500f)
-                    Graphics.Draw(this._wall, this.x, this.y - _wall.h);
-                if (Level.current.bottomRight.y <= this.y + 500f)
+                Graphics.Draw(_wall, x, y);
+                if (Level.current.topLeft.y < y - 500f)
+                    Graphics.Draw(_wall, x, y - _wall.h);
+                if (Level.current.bottomRight.y <= y + 500f)
                     return;
-                Graphics.Draw(this._wall, this.x, this.y + _wall.h);
+                Graphics.Draw(_wall, x, y + _wall.h);
             }
             else
             {
-                Graphics.DrawLine(this.position, this.position + new Vec2(this.flipHorizontal ? 16f : -16f, 0f), Color.Red);
+                Graphics.DrawLine(position, position + new Vec2(flipHorizontal ? 16f : -16f, 0f), Color.Red);
                 base.Draw();
             }
         }

@@ -26,25 +26,25 @@ namespace DuckGame
           Depth depth,
           float scale)
         {
-            this._image = image;
-            this._frame = frame;
-            this._depth = depth;
-            this._scale = scale;
-            this._position = new Vec2(xpos, ypos);
-            this._sin = Rando.Float(8f);
+            _image = image;
+            _frame = frame;
+            _depth = depth;
+            _scale = scale;
+            _position = new Vec2(xpos, ypos);
+            _sin = Rando.Float(8f);
         }
 
         public void Draw(Vec2 pos)
         {
-            this._image.frame = this._frame;
-            this._image.depth = this._depth;
-            this._image.xscale = this._image.yscale = this._scale;
+            _image.frame = _frame;
+            _image.depth = _depth;
+            _image.xscale = _image.yscale = _scale;
             if (_scale == 1.0)
-                this._image.color = new Color(0.8f, 0.8f, 0.8f, 1f);
+                _image.color = new Color(0.8f, 0.8f, 0.8f, 1f);
             else
-                this._image.color = Color.White * this._scale;
-            Graphics.Draw(_image, pos.x + this._position.x, (float)(pos.y + this._position.y + Math.Sin(_sin) * (_scale * 2.0)));
-            this._sin += 0.01f;
+                _image.color = Color.White * _scale;
+            Graphics.Draw(_image, pos.x + _position.x, (float)(pos.y + _position.y + Math.Sin(_sin) * (_scale * 2.0)));
+            _sin += 0.01f;
         }
     }
 }

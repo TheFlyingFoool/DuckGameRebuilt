@@ -11,6 +11,6 @@ namespace DuckGame
     {
         protected WorkshopContentType _type;
 
-        public WorkshopContentType type => this._type;
+        public WorkshopContentType type => _type;
     }
 }

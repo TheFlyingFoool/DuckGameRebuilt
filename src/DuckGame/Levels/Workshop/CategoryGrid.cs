@@ -19,16 +19,16 @@ namespace DuckGame
         public CategoryGrid(float xpos, float ypos, List<Card> cards, IPageListener listener)
           : base(xpos, ypos)
         {
-            this._cards = cards;
-            this._listener = listener;
+            _cards = cards;
+            _listener = listener;
         }
 
         public void AddStrip(List<Card> infos)
         {
             List<Card> cards = new List<Card>();
             cards.AddRange(infos);
-            CardStrip cardStrip = new CardStrip(this.x, this.y, cards, this._listener, true);
-            this._strips.Add(cardStrip);
+            CardStrip cardStrip = new CardStrip(x, y, cards, _listener, true);
+            _strips.Add(cardStrip);
             Level.Add(cardStrip);
         }
 
@@ -36,27 +36,27 @@ namespace DuckGame
         {
             List<Card> cards = new List<Card>();
             cards.AddRange(infos.cards);
-            CardStrip cardStrip = new CardStrip(this.x, this.y, cards, this._listener, infos.large, infos.cardsVisible, infos.header);
-            this._strips.Add(cardStrip);
+            CardStrip cardStrip = new CardStrip(x, y, cards, _listener, infos.large, infos.cardsVisible, infos.header);
+            _strips.Add(cardStrip);
             Level.Add(cardStrip);
         }
 
         public override void Initialize()
         {
-            if (this._cards != null)
+            if (_cards != null)
             {
                 List<Card> infos = new List<Card>();
-                foreach (Card card in this._cards)
+                foreach (Card card in _cards)
                 {
                     infos.Add(card);
                     if (infos.Count == 3)
                     {
-                        this.AddStrip(infos);
+                        AddStrip(infos);
                         infos.Clear();
                     }
                 }
                 if (infos.Count > 0)
-                    this.AddStrip(infos);
+                    AddStrip(infos);
             }
             base.Initialize();
         }
@@ -64,18 +64,18 @@ namespace DuckGame
         public override void Update()
         {
             if (InputProfile.active.Pressed("MENUUP"))
-                --this._selectedStripIndex;
+                --_selectedStripIndex;
             else if (InputProfile.active.Pressed("MENUDOWN"))
-                ++this._selectedStripIndex;
-            if (this._selectedStripIndex < 0)
+                ++_selectedStripIndex;
+            if (_selectedStripIndex < 0)
             {
-                this._selectedStripIndex = 0;
+                _selectedStripIndex = 0;
             }
             else
             {
-                if (this._selectedStripIndex < this._strips.Count)
+                if (_selectedStripIndex < _strips.Count)
                     return;
-                this._selectedStripIndex = this._strips.Count - 1;
+                _selectedStripIndex = _strips.Count - 1;
             }
         }
 
@@ -83,11 +83,11 @@ namespace DuckGame
         {
             float y = this.y;
             int num = 0;
-            foreach (CardStrip strip in this._strips)
+            foreach (CardStrip strip in _strips)
             {
                 strip.y = y;
                 y += strip.height + 4f;
-                strip.selected = num == this._selectedStripIndex;
+                strip.selected = num == _selectedStripIndex;
                 ++num;
             }
         }

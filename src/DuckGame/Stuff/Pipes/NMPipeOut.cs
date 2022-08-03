@@ -14,8 +14,8 @@ namespace DuckGame
 
         public NMPipeOut(Vec2 pPosition, byte pDirection)
         {
-            this.direction = pDirection;
-            this.position = pPosition;
+            direction = pDirection;
+            position = pPosition;
         }
 
         public NMPipeOut()
@@ -26,26 +26,26 @@ namespace DuckGame
         {
             for (int index = 0; index < 6; ++index)
             {
-                SmallSmoke smallSmoke = SmallSmoke.New(this.position.x + Rando.Float(-4f, 4f), this.position.y + Rando.Float(-4f, 4f));
-                if (this.direction == 0)
+                SmallSmoke smallSmoke = SmallSmoke.New(position.x + Rando.Float(-4f, 4f), position.y + Rando.Float(-4f, 4f));
+                if (direction == 0)
                 {
                     smallSmoke.velocity = new Vec2(Rando.Float(-0.5f, 0.5f), Rando.Float(0f, -0.5f));
-                    Level.current.CollisionPoint<PipeTileset>(this.position)?.FlapPipe();
+                    Level.current.CollisionPoint<PipeTileset>(position)?.FlapPipe();
                 }
-                else if (this.direction == 1)
+                else if (direction == 1)
                 {
                     smallSmoke.velocity = new Vec2(Rando.Float(0.2f, 0.7f), Rando.Float(-0.5f, 0.5f));
-                    Level.current.CollisionPoint<PipeTileset>(this.position + new Vec2(-10f, 0f))?.FlapPipe();
+                    Level.current.CollisionPoint<PipeTileset>(position + new Vec2(-10f, 0f))?.FlapPipe();
                 }
-                else if (this.direction == 3)
+                else if (direction == 3)
                 {
                     smallSmoke.velocity = new Vec2(Rando.Float(-0.7f, -0.2f), Rando.Float(-0.5f, 0.5f));
-                    Level.current.CollisionPoint<PipeTileset>(this.position + new Vec2(10f, 0f))?.FlapPipe();
+                    Level.current.CollisionPoint<PipeTileset>(position + new Vec2(10f, 0f))?.FlapPipe();
                 }
-                else if (this.direction == 2)
+                else if (direction == 2)
                 {
                     smallSmoke.velocity = new Vec2(Rando.Float(-0.5f, 0.5f), Rando.Float(0.2f, 0.7f));
-                    Level.current.CollisionPoint<PipeTileset>(this.position + new Vec2(0f, -10f))?.FlapPipe();
+                    Level.current.CollisionPoint<PipeTileset>(position + new Vec2(0f, -10f))?.FlapPipe();
                 }
                 Level.Add(smallSmoke);
             }

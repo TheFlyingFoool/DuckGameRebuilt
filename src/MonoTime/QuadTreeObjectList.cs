@@ -27,16 +27,16 @@ namespace DuckGame
         private bool _useTree;
         public bool objectsDirty;
 
-        public HashSet<Thing> updateList => this._bigList;
+        public HashSet<Thing> updateList => _bigList;
 
-        public void RandomizeObjectOrder() => this._bigList = new HashSet<Thing>(this._bigList.OrderBy<Thing, int>(x => Rando.Int(999999)).ToList<Thing>());
+        public void RandomizeObjectOrder() => _bigList = new HashSet<Thing>(_bigList.OrderBy<Thing, int>(x => Rando.Int(999999)).ToList<Thing>());
 
-        public QuadTree quadTree => this._quadTree;
+        public QuadTree quadTree => _quadTree;
 
         public List<CollisionIsland> GetIslands(Vec2 point)
         {
             List<CollisionIsland> islands = new List<CollisionIsland>();
-            foreach (CollisionIsland island in this._islands)
+            foreach (CollisionIsland island in _islands)
             {
                 if (!island.willDie && (point - island.owner.position).lengthSq < island.radiusSquared)
                     islands.Add(island);
@@ -47,7 +47,7 @@ namespace DuckGame
         public List<CollisionIsland> GetIslandsForCollisionCheck(Vec2 point)
         {
             List<CollisionIsland> forCollisionCheck = new List<CollisionIsland>();
-            foreach (CollisionIsland island in this._islands)
+            foreach (CollisionIsland island in _islands)
             {
                 if (!island.willDie && (point - island.owner.position).lengthSq < island.radiusCheckSquared)
                     forCollisionCheck.Add(island);
@@ -57,7 +57,7 @@ namespace DuckGame
 
         public CollisionIsland GetIsland(Vec2 point, CollisionIsland ignore = null)
         {
-            foreach (CollisionIsland island in this._islands)
+            foreach (CollisionIsland island in _islands)
             {
                 if (!island.willDie && island != ignore && (point - island.owner.position).lengthSq < island.radiusSquared)
                     return island;
@@ -65,7 +65,7 @@ namespace DuckGame
             return null;
         }
 
-        public void AddIsland(MaterialThing t) => this._islands.Add(new CollisionIsland(t, this));
+        public void AddIsland(MaterialThing t) => _islands.Add(new CollisionIsland(t, this));
 
         public void RemoveIsland(CollisionIsland i)
         {
@@ -94,14 +94,14 @@ namespace DuckGame
 
         public bool useTree
         {
-            get => this._useTree;
-            set => this._useTree = value;
+            get => _useTree;
+            set => _useTree = value;
         }
 
         public QuadTreeObjectList(bool automatic = false, bool tree = true)
         {
-            this._autoRefresh = automatic;
-            this._useTree = tree;
+            _autoRefresh = automatic;
+            _useTree = tree;
         }
 
         public List<Thing> ToList()
@@ -118,30 +118,30 @@ namespace DuckGame
                 if (key == typeof(Thing))
                     return _bigList;
                 HashSet<Thing> list;
-                return this._allObjectsByType.TryGetValue(key, out list) ? list : (IEnumerable<Thing>)this._emptyList;
+                return _allObjectsByType.TryGetValue(key, out list) ? list : (IEnumerable<Thing>)_emptyList;
             }
         }
 
         public int CountType<T>()
         {
             HashSet<Thing> list;
-            return this._allObjectsByType.TryGetValue(typeof(T), out list) ? list.Count : 0;
+            return _allObjectsByType.TryGetValue(typeof(T), out list) ? list.Count : 0;
         }
 
         public HashSet<Thing> GetDynamicObjects(System.Type key)
         {
             if (key == typeof(Thing))
-                return this._bigList;
+                return _bigList;
             HashSet<Thing> list;
-            return this._objectsByType.TryGetValue(key, out list) ? list : this._emptyList;
+            return _objectsByType.TryGetValue(key, out list) ? list : _emptyList;
         }
 
         public HashSet<Thing> GetStaticObjects(System.Type key)
         {
             if (key == typeof(Thing))
-                return this._bigList;
+                return _bigList;
             HashSet<Thing> list;
-            return this._staticObjectsByType.TryGetValue(key, out list) ? list : this._emptyList;
+            return _staticObjectsByType.TryGetValue(key, out list) ? list : _emptyList;
         }
 
         //private IEnumerable<Thing> GetIslandObjects(System.Type t, Vec2 pos, float radiusSq)
@@ -155,80 +155,80 @@ namespace DuckGame
         //    return first;
         //}
 
-        public bool HasStaticObjects(System.Type key) => key == typeof(Thing) || this._staticObjectsByType.ContainsKey(key);
+        public bool HasStaticObjects(System.Type key) => key == typeof(Thing) || _staticObjectsByType.ContainsKey(key);
 
-        public int Count => this._bigList.Count;
+        public int Count => _bigList.Count;
 
         public void Add(Thing obj)
         {
-            this._addThings.Add(obj);
-            if (!this._autoRefresh)
+            _addThings.Add(obj);
+            if (!_autoRefresh)
                 return;
-            this.RefreshState();
+            RefreshState();
         }
 
         public void AddRange(ObjectList list)
         {
             foreach (Thing thing in list)
-                this.Add(thing);
+                Add(thing);
         }
 
         public void Remove(Thing obj)
         {
-            this._removeThings.Add(obj);
-            if (!this._autoRefresh)
+            _removeThings.Add(obj);
+            if (!_autoRefresh)
                 return;
-            this.RefreshState();
+            RefreshState();
         }
 
         public void Clear()
         {
-            this._bigList.Clear();
-            this._addThings.Clear();
-            this._objectsByType.Clear();
-            this._staticObjectsByType.Clear();
-            this._quadTree.Clear();
-            this._allObjectsByType.Clear();
+            _bigList.Clear();
+            _addThings.Clear();
+            _objectsByType.Clear();
+            _staticObjectsByType.Clear();
+            _quadTree.Clear();
+            _allObjectsByType.Clear();
         }
 
-        public bool Contains(Thing obj) => this._bigList.Contains(obj);
+        public bool Contains(Thing obj) => _bigList.Contains(obj);
 
         public void CleanAddList()
         {
-            foreach (Thing removeThing in this._removeThings)
-                this._addThings.Remove(removeThing);
+            foreach (Thing removeThing in _removeThings)
+                _addThings.Remove(removeThing);
         }
 
         public void RefreshState()
         {
-            foreach (Thing removeThing in this._removeThings)
+            foreach (Thing removeThing in _removeThings)
             {
                 removeThing.level = null;
-                if (removeThing is IDontMove && this._useTree)
+                if (removeThing is IDontMove && _useTree)
                 {
-                    this.removeItem(this._staticObjectsByType, removeThing);
-                    this._quadTree.Remove(removeThing);
+                    removeItem(_staticObjectsByType, removeThing);
+                    _quadTree.Remove(removeThing);
                 }
                 else
-                    this.removeItem(this._objectsByType, removeThing);
-                this._bigList.Remove(removeThing);
-                this.objectsDirty = true;
+                    removeItem(_objectsByType, removeThing);
+                _bigList.Remove(removeThing);
+                objectsDirty = true;
             }
-            this._removeThings.Clear();
-            foreach (Thing addThing in this._addThings)
+            _removeThings.Clear();
+            foreach (Thing addThing in _addThings)
             {
-                this._bigList.Add(addThing);
+                _bigList.Add(addThing);
                 addThing.level = Level.current;
-                if (addThing is IDontMove && this._useTree)
+                if (addThing is IDontMove && _useTree)
                 {
-                    this.addItem(this._staticObjectsByType, addThing);
-                    this._quadTree.Add(addThing);
+                    addItem(_staticObjectsByType, addThing);
+                    _quadTree.Add(addThing);
                 }
                 else
-                    this.addItem(this._objectsByType, addThing);
-                this.objectsDirty = true;
+                    addItem(_objectsByType, addThing);
+                objectsDirty = true;
             }
-            this._addThings.Clear();
+            _addThings.Clear();
         }
 
         private void addItem(MultiMap<System.Type, Thing, HashSet<Thing>> list, Thing obj)
@@ -236,7 +236,7 @@ namespace DuckGame
             foreach (System.Type key in Editor.AllBaseTypes[obj.GetType()])
             {
                 list.Add(key, obj);
-                this._allObjectsByType.Add(key, obj);
+                _allObjectsByType.Add(key, obj);
             }
         }
 
@@ -245,20 +245,20 @@ namespace DuckGame
             foreach (System.Type key in Editor.AllBaseTypes[obj.GetType()])
             {
                 list.Remove(key, obj);
-                this._allObjectsByType.Remove(key, obj);
+                _allObjectsByType.Remove(key, obj);
             }
         }
 
-        public IEnumerator<Thing> GetEnumerator() => this._bigList.GetEnumerator();
+        public IEnumerator<Thing> GetEnumerator() => _bigList.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => this._bigList.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _bigList.GetEnumerator();
 
         public void Draw()
         {
             if (!DevConsole.showIslands)
                 return;
             int num = 0;
-            foreach (CollisionIsland island in this._islands)
+            foreach (CollisionIsland island in _islands)
             {
                 Graphics.DrawCircle(island.owner.position, island.radiusCheck, Color.Red * 0.7f, depth: ((Depth)0.9f), iterations: 64);
                 Graphics.DrawCircle(island.owner.position, island.radius, Color.Blue * 0.3f, depth: ((Depth)0.9f), iterations: 64);

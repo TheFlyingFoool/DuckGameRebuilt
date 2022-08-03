@@ -27,18 +27,18 @@ namespace DuckGame
 
         public string fileName
         {
-            get => this._fileName;
+            get => _fileName;
             set
             {
-                this._fileName = value;
-                this._setFile = true;
+                _fileName = value;
+                _setFile = true;
             }
         }
 
         public FileRecording()
         {
-            this.Initialize();
-            this._defaultRasterizerState = new RasterizerState
+            Initialize();
+            _defaultRasterizerState = new RasterizerState
             {
                 CullMode = CullMode.None
             };
@@ -46,26 +46,26 @@ namespace DuckGame
 
         public void StopWriting()
         {
-            if (this._writer != null)
-                this._writer.Close();
-            if (this._reader != null)
-                this._reader.Close();
-            this.UpdateAtlasFile();
+            if (_writer != null)
+                _writer.Close();
+            if (_reader != null)
+                _reader.Close();
+            UpdateAtlasFile();
         }
 
         public void StartWriting(string name)
         {
-            if (this._reader != null)
+            if (_reader != null)
             {
-                this._reader.Close();
-                this._reader = null;
+                _reader.Close();
+                _reader = null;
             }
-            this._loadedNextFrame = false;
-            if (!this._setFile)
+            _loadedNextFrame = false;
+            if (!_setFile)
             {
                 if (name != "" && name != null)
                 {
-                    this._fileName = name;
+                    _fileName = name;
                 }
                 else
                 {
@@ -73,26 +73,26 @@ namespace DuckGame
                     string shortDateString = now.ToShortDateString();
                     now = DateTime.Now;
                     string shortTimeString = now.ToShortTimeString();
-                    this._fileName = "funstream-" + (shortDateString + "-" + shortTimeString).Replace("/", "_").Replace(":", "-").Replace(" ", "");
+                    _fileName = "funstream-" + (shortDateString + "-" + shortTimeString).Replace("/", "_").Replace(":", "-").Replace(" ", "");
                 }
-                this._writer = new BinaryWriter(new GZipStream(System.IO.File.Open(this._fileName + ".vid", FileMode.Create), CompressionMode.Compress));
+                _writer = new BinaryWriter(new GZipStream(System.IO.File.Open(_fileName + ".vid", FileMode.Create), CompressionMode.Compress));
             }
             else
             {
-                if (this._writer == null)
+                if (_writer == null)
                     return;
-                this._writer.Close();
-                this._writer = null;
+                _writer.Close();
+                _writer = null;
             }
         }
 
         public void LoadAtlasFile(string file = "")
         {
-            if (this._writer != null)
-                this.UpdateAtlasFile();
+            if (_writer != null)
+                UpdateAtlasFile();
             if (file == "")
-                file = this._fileName;
-            this._fileName = file;
+                file = _fileName;
+            _fileName = file;
             BinaryReader binaryReader = new BinaryReader(System.IO.File.Open(file + ".dat", FileMode.Open));
             while (binaryReader.BaseStream.Position != binaryReader.BaseStream.Length)
             {
@@ -126,11 +126,11 @@ namespace DuckGame
 
         public void UpdateAtlasFile()
         {
-            if (this._writer == null)
+            if (_writer == null)
                 return;
-            BinaryWriter binaryWriter = new BinaryWriter(System.IO.File.Open(this._fileName + ".dat", FileMode.OpenOrCreate));
+            BinaryWriter binaryWriter = new BinaryWriter(System.IO.File.Open(_fileName + ".dat", FileMode.OpenOrCreate));
             binaryWriter.Seek(0, SeekOrigin.End);
-            for (int textureWrittenIndex = this._lastTextureWrittenIndex; textureWrittenIndex < Content.textureList.Count; ++textureWrittenIndex)
+            for (int textureWrittenIndex = _lastTextureWrittenIndex; textureWrittenIndex < Content.textureList.Count; ++textureWrittenIndex)
             {
                 binaryWriter.Write((byte)0);
                 Tex2D texture = Content.textureList[textureWrittenIndex];
@@ -150,176 +150,176 @@ namespace DuckGame
                     binaryWriter.Write((byte)1);
                     binaryWriter.Write(texture.textureName);
                 }
-                ++this._lastTextureWrittenIndex;
+                ++_lastTextureWrittenIndex;
             }
-            for (int effectWrittenIndex = this._lastEffectWrittenIndex; effectWrittenIndex < Content.effectList.Count; ++effectWrittenIndex)
+            for (int effectWrittenIndex = _lastEffectWrittenIndex; effectWrittenIndex < Content.effectList.Count; ++effectWrittenIndex)
             {
                 binaryWriter.Write((byte)1);
                 MTEffect effect = Content.effectList[effectWrittenIndex];
                 binaryWriter.Write(effect.effectIndex);
                 binaryWriter.Write(effect.effectName);
-                ++this._lastEffectWrittenIndex;
+                ++_lastEffectWrittenIndex;
             }
             binaryWriter.Close();
         }
 
         public override void IncrementFrame(float speed = 1f)
         {
-            if (this._writer != null)
+            if (_writer != null)
             {
-                this._writer.Close();
-                this._writer = null;
+                _writer.Close();
+                _writer = null;
             }
-            if (this._reader == null)
-                this._reader = new BinaryReader(new GZipStream(System.IO.File.Open(this._fileName + ".vid", FileMode.Open), CompressionMode.Decompress));
+            if (_reader == null)
+                _reader = new BinaryReader(new GZipStream(System.IO.File.Open(_fileName + ".vid", FileMode.Open), CompressionMode.Decompress));
             int num1 = 2;
             int num2 = 0;
-            if (this._loadedNextFrame)
+            if (_loadedNextFrame)
             {
-                this._framePos += speed;
+                _framePos += speed;
                 if (_framePos < 1.0)
                     return;
-                --this._framePos;
+                --_framePos;
                 num1 = 1;
-                num2 = this._curFrame == 0 ? 0 : 1;
-                this._curFrame = this._curFrame == 0 ? 1 : 0;
-                this._frames[this._curFrame].Update();
+                num2 = _curFrame == 0 ? 0 : 1;
+                _curFrame = _curFrame == 0 ? 1 : 0;
+                _frames[_curFrame].Update();
             }
-            this._loadedNextFrame = true;
+            _loadedNextFrame = true;
             for (int index1 = num2; index1 < num2 + num1; ++index1)
             {
-                this._frame = index1;
-                this._frames[this._frame].Reset();
-                Color color = new Color(this._reader.ReadByte(), this._reader.ReadByte(), this._reader.ReadByte(), this._reader.ReadByte());
-                int num3 = this._reader.ReadInt32();
-                this._frames[this._frame].sounds.Clear();
+                _frame = index1;
+                _frames[_frame].Reset();
+                Color color = new Color(_reader.ReadByte(), _reader.ReadByte(), _reader.ReadByte(), _reader.ReadByte());
+                int num3 = _reader.ReadInt32();
+                _frames[_frame].sounds.Clear();
                 for (int index2 = 0; index2 < num3; ++index2)
                 {
                     RecorderSoundItem recorderSoundItem;
-                    recorderSoundItem.sound = this._reader.ReadString();
-                    recorderSoundItem.pan = this._reader.ReadSingle();
-                    recorderSoundItem.pitch = this._reader.ReadSingle();
-                    recorderSoundItem.volume = this._reader.ReadSingle();
-                    this._frames[this._frame].sounds.Add(recorderSoundItem);
+                    recorderSoundItem.sound = _reader.ReadString();
+                    recorderSoundItem.pan = _reader.ReadSingle();
+                    recorderSoundItem.pitch = _reader.ReadSingle();
+                    recorderSoundItem.volume = _reader.ReadSingle();
+                    _frames[_frame].sounds.Add(recorderSoundItem);
                 }
-                int num4 = this._reader.ReadInt32();
-                this._frames[this._frame].currentObject = num4;
-                this._frames[this._frame].backgroundColor = color;
+                int num4 = _reader.ReadInt32();
+                _frames[_frame].currentObject = num4;
+                _frames[_frame].backgroundColor = color;
                 for (int key = 0; key < num4; ++key)
                 {
-                    if (this._reader.ReadByte() == 0)
-                        this._frames[this._frame]._states[key] = new RecorderFrameStateChange()
+                    if (_reader.ReadByte() == 0)
+                        _frames[_frame]._states[key] = new RecorderFrameStateChange()
                         {
-                            rasterizerState = this._defaultRasterizerState,
+                            rasterizerState = _defaultRasterizerState,
                             samplerState = SamplerState.PointClamp,
                             blendState = BlendState.AlphaBlend,
-                            sortMode = (SpriteSortMode)this._reader.ReadInt32(),
-                            depthStencilState = this._reader.ReadByte() == 0 ? DepthStencilState.Default : DepthStencilState.DepthRead,
-                            effectIndex = this._reader.ReadInt16(),
-                            stateIndex = this._reader.ReadInt32(),
+                            sortMode = (SpriteSortMode)_reader.ReadInt32(),
+                            depthStencilState = _reader.ReadByte() == 0 ? DepthStencilState.Default : DepthStencilState.DepthRead,
+                            effectIndex = _reader.ReadInt16(),
+                            stateIndex = _reader.ReadInt32(),
                             camera = new Matrix()
                             {
-                                M11 = this._reader.ReadSingle(),
-                                M12 = this._reader.ReadSingle(),
-                                M13 = this._reader.ReadSingle(),
-                                M14 = this._reader.ReadSingle(),
-                                M21 = this._reader.ReadSingle(),
-                                M22 = this._reader.ReadSingle(),
-                                M23 = this._reader.ReadSingle(),
-                                M24 = this._reader.ReadSingle(),
-                                M31 = this._reader.ReadSingle(),
-                                M32 = this._reader.ReadSingle(),
-                                M33 = this._reader.ReadSingle(),
-                                M34 = this._reader.ReadSingle(),
-                                M41 = this._reader.ReadSingle(),
-                                M42 = this._reader.ReadSingle(),
-                                M43 = this._reader.ReadSingle(),
-                                M44 = this._reader.ReadSingle()
+                                M11 = _reader.ReadSingle(),
+                                M12 = _reader.ReadSingle(),
+                                M13 = _reader.ReadSingle(),
+                                M14 = _reader.ReadSingle(),
+                                M21 = _reader.ReadSingle(),
+                                M22 = _reader.ReadSingle(),
+                                M23 = _reader.ReadSingle(),
+                                M24 = _reader.ReadSingle(),
+                                M31 = _reader.ReadSingle(),
+                                M32 = _reader.ReadSingle(),
+                                M33 = _reader.ReadSingle(),
+                                M34 = _reader.ReadSingle(),
+                                M41 = _reader.ReadSingle(),
+                                M42 = _reader.ReadSingle(),
+                                M43 = _reader.ReadSingle(),
+                                M44 = _reader.ReadSingle()
                             },
-                            scissor = new Rectangle(this._reader.ReadInt32(), this._reader.ReadInt32(), this._reader.ReadInt32(), this._reader.ReadInt32())
+                            scissor = new Rectangle(_reader.ReadInt32(), _reader.ReadInt32(), _reader.ReadInt32(), _reader.ReadInt32())
                         };
-                    this._frames[this._frame].objects[key].texture = this._reader.ReadInt16();
-                    this._frames[this._frame].objects[key].topLeft.x = this._reader.ReadSingle();
-                    this._frames[this._frame].objects[key].topLeft.y = this._reader.ReadSingle();
-                    this._frames[this._frame].objects[key].bottomRight.x = this._reader.ReadSingle();
-                    this._frames[this._frame].objects[key].bottomRight.y = this._reader.ReadSingle();
-                    this._frames[this._frame].objects[key].rotation = this._reader.ReadSingle();
-                    this._frames[this._frame].objects[key].color = new Color(this._reader.ReadByte(), this._reader.ReadByte(), this._reader.ReadByte(), this._reader.ReadByte());
-                    this._frames[this._frame].objects[key].texX = this._reader.ReadInt16();
-                    this._frames[this._frame].objects[key].texY = this._reader.ReadInt16();
-                    this._frames[this._frame].objects[key].texW = this._reader.ReadInt16();
-                    this._frames[this._frame].objects[key].texH = this._reader.ReadInt16();
-                    this._frames[this._frame].objects[key].depth = this._reader.ReadSingle();
+                    _frames[_frame].objects[key].texture = _reader.ReadInt16();
+                    _frames[_frame].objects[key].topLeft.x = _reader.ReadSingle();
+                    _frames[_frame].objects[key].topLeft.y = _reader.ReadSingle();
+                    _frames[_frame].objects[key].bottomRight.x = _reader.ReadSingle();
+                    _frames[_frame].objects[key].bottomRight.y = _reader.ReadSingle();
+                    _frames[_frame].objects[key].rotation = _reader.ReadSingle();
+                    _frames[_frame].objects[key].color = new Color(_reader.ReadByte(), _reader.ReadByte(), _reader.ReadByte(), _reader.ReadByte());
+                    _frames[_frame].objects[key].texX = _reader.ReadInt16();
+                    _frames[_frame].objects[key].texY = _reader.ReadInt16();
+                    _frames[_frame].objects[key].texW = _reader.ReadInt16();
+                    _frames[_frame].objects[key].texH = _reader.ReadInt16();
+                    _frames[_frame].objects[key].depth = _reader.ReadSingle();
                 }
             }
-            this._frame = this._curFrame;
+            _frame = _curFrame;
         }
 
         public override void NextFrame()
         {
-            if (this._writer == null)
+            if (_writer == null)
                 return;
-            this._writer.Write(this._frames[this._frame].backgroundColor.r);
-            this._writer.Write(this._frames[this._frame].backgroundColor.g);
-            this._writer.Write(this._frames[this._frame].backgroundColor.b);
-            this._writer.Write(this._frames[this._frame].backgroundColor.a);
-            this._writer.Write(this._frames[this._frame].sounds.Count);
-            for (int index = 0; index < this._frames[this._frame].sounds.Count; ++index)
+            _writer.Write(_frames[_frame].backgroundColor.r);
+            _writer.Write(_frames[_frame].backgroundColor.g);
+            _writer.Write(_frames[_frame].backgroundColor.b);
+            _writer.Write(_frames[_frame].backgroundColor.a);
+            _writer.Write(_frames[_frame].sounds.Count);
+            for (int index = 0; index < _frames[_frame].sounds.Count; ++index)
             {
-                this._writer.Write(this._frames[this._frame].sounds[index].sound);
-                this._writer.Write(this._frames[this._frame].sounds[index].pan);
-                this._writer.Write(this._frames[this._frame].sounds[index].pitch);
-                this._writer.Write(this._frames[this._frame].sounds[index].volume);
+                _writer.Write(_frames[_frame].sounds[index].sound);
+                _writer.Write(_frames[_frame].sounds[index].pan);
+                _writer.Write(_frames[_frame].sounds[index].pitch);
+                _writer.Write(_frames[_frame].sounds[index].volume);
             }
-            this._writer.Write(this._frames[this._frame].currentObject);
-            for (int key = 0; key < this._frames[this._frame].currentObject; ++key)
+            _writer.Write(_frames[_frame].currentObject);
+            for (int key = 0; key < _frames[_frame].currentObject; ++key)
             {
-                if (this._frames[this._frame]._states.ContainsKey(key))
+                if (_frames[_frame]._states.ContainsKey(key))
                 {
-                    this._writer.Write((byte)0);
-                    RecorderFrameStateChange state = this._frames[this._frame]._states[key];
-                    this._writer.Write((int)state.sortMode);
-                    this._writer.Write(state.depthStencilState == DepthStencilState.Default ? (byte)0 : (byte)1);
-                    this._writer.Write(state.effectIndex);
-                    this._writer.Write(state.stateIndex);
-                    this._writer.Write(state.camera.M11);
-                    this._writer.Write(state.camera.M12);
-                    this._writer.Write(state.camera.M13);
-                    this._writer.Write(state.camera.M14);
-                    this._writer.Write(state.camera.M21);
-                    this._writer.Write(state.camera.M22);
-                    this._writer.Write(state.camera.M23);
-                    this._writer.Write(state.camera.M24);
-                    this._writer.Write(state.camera.M31);
-                    this._writer.Write(state.camera.M32);
-                    this._writer.Write(state.camera.M33);
-                    this._writer.Write(state.camera.M34);
-                    this._writer.Write(state.camera.M41);
-                    this._writer.Write(state.camera.M42);
-                    this._writer.Write(state.camera.M43);
-                    this._writer.Write(state.camera.M44);
-                    this._writer.Write(state.scissor.x);
-                    this._writer.Write(state.scissor.y);
-                    this._writer.Write(state.scissor.width);
-                    this._writer.Write(state.scissor.height);
+                    _writer.Write((byte)0);
+                    RecorderFrameStateChange state = _frames[_frame]._states[key];
+                    _writer.Write((int)state.sortMode);
+                    _writer.Write(state.depthStencilState == DepthStencilState.Default ? (byte)0 : (byte)1);
+                    _writer.Write(state.effectIndex);
+                    _writer.Write(state.stateIndex);
+                    _writer.Write(state.camera.M11);
+                    _writer.Write(state.camera.M12);
+                    _writer.Write(state.camera.M13);
+                    _writer.Write(state.camera.M14);
+                    _writer.Write(state.camera.M21);
+                    _writer.Write(state.camera.M22);
+                    _writer.Write(state.camera.M23);
+                    _writer.Write(state.camera.M24);
+                    _writer.Write(state.camera.M31);
+                    _writer.Write(state.camera.M32);
+                    _writer.Write(state.camera.M33);
+                    _writer.Write(state.camera.M34);
+                    _writer.Write(state.camera.M41);
+                    _writer.Write(state.camera.M42);
+                    _writer.Write(state.camera.M43);
+                    _writer.Write(state.camera.M44);
+                    _writer.Write(state.scissor.x);
+                    _writer.Write(state.scissor.y);
+                    _writer.Write(state.scissor.width);
+                    _writer.Write(state.scissor.height);
                 }
                 else
-                    this._writer.Write((byte)1);
-                this._writer.Write(this._frames[this._frame].objects[key].texture);
-                this._writer.Write(this._frames[this._frame].objects[key].topLeft.x);
-                this._writer.Write(this._frames[this._frame].objects[key].topLeft.y);
-                this._writer.Write(this._frames[this._frame].objects[key].bottomRight.x);
-                this._writer.Write(this._frames[this._frame].objects[key].bottomRight.y);
-                this._writer.Write(this._frames[this._frame].objects[key].rotation);
-                this._writer.Write(this._frames[this._frame].objects[key].color.r);
-                this._writer.Write(this._frames[this._frame].objects[key].color.g);
-                this._writer.Write(this._frames[this._frame].objects[key].color.b);
-                this._writer.Write(this._frames[this._frame].objects[key].color.a);
-                this._writer.Write(this._frames[this._frame].objects[key].texX);
-                this._writer.Write(this._frames[this._frame].objects[key].texY);
-                this._writer.Write(this._frames[this._frame].objects[key].texW);
-                this._writer.Write(this._frames[this._frame].objects[key].texH);
-                this._writer.Write(this._frames[this._frame].objects[key].depth);
+                    _writer.Write((byte)1);
+                _writer.Write(_frames[_frame].objects[key].texture);
+                _writer.Write(_frames[_frame].objects[key].topLeft.x);
+                _writer.Write(_frames[_frame].objects[key].topLeft.y);
+                _writer.Write(_frames[_frame].objects[key].bottomRight.x);
+                _writer.Write(_frames[_frame].objects[key].bottomRight.y);
+                _writer.Write(_frames[_frame].objects[key].rotation);
+                _writer.Write(_frames[_frame].objects[key].color.r);
+                _writer.Write(_frames[_frame].objects[key].color.g);
+                _writer.Write(_frames[_frame].objects[key].color.b);
+                _writer.Write(_frames[_frame].objects[key].color.a);
+                _writer.Write(_frames[_frame].objects[key].texX);
+                _writer.Write(_frames[_frame].objects[key].texY);
+                _writer.Write(_frames[_frame].objects[key].texW);
+                _writer.Write(_frames[_frame].objects[key].texH);
+                _writer.Write(_frames[_frame].objects[key].depth);
             }
             base.NextFrame();
         }

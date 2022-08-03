@@ -9,7 +9,7 @@ namespace DuckGame
 {
     public class NMSynchronizedEvent : SynchronizedNetMessage
     {
-        public NMSynchronizedEvent() => this.manager = BelongsToManager.EventManager;
+        public NMSynchronizedEvent() => manager = BelongsToManager.EventManager;
 
         public virtual void Activate()
         {

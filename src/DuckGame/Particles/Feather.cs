@@ -41,62 +41,62 @@ namespace DuckGame
         private Feather()
           : base()
         {
-            this._sprite = new SpriteMap("feather", 12, 4)
+            _sprite = new SpriteMap("feather", 12, 4)
             {
                 speed = 0.3f
             };
-            this._sprite.AddAnimation("feather", 1f, true, 0, 1, 2, 3);
-            this.graphic = _sprite;
-            this.center = new Vec2(6f, 1f);
+            _sprite.AddAnimation("feather", 1f, true, 0, 1, 2, 3);
+            graphic = _sprite;
+            center = new Vec2(6f, 1f);
         }
 
         private void Init(float xpos, float ypos, DuckPersona who)
         {
-            this.position.x = xpos;
-            this.position.y = ypos;
-            this.alpha = 1f;
-            this.hSpeed = Rando.Float(6f) - 3f;
-            this.vSpeed = (float)(Rando.Float(2f) - 1.0 - 1.0);
-            this._sprite = who.featherSprite.CloneMap();
-            this._sprite.SetAnimation("feather");
-            this._sprite.frame = Rando.Int(3);
+            position.x = xpos;
+            position.y = ypos;
+            alpha = 1f;
+            hSpeed = Rando.Float(6f) - 3f;
+            vSpeed = (float)(Rando.Float(2f) - 1.0 - 1.0);
+            _sprite = who.featherSprite.CloneMap();
+            _sprite.SetAnimation("feather");
+            _sprite.frame = Rando.Int(3);
             if (Rando.Double() > 0.5)
-                this._sprite.flipH = true;
+                _sprite.flipH = true;
             else
-                this._sprite.flipH = false;
-            this.graphic = _sprite;
-            this._rested = false;
+                _sprite.flipH = false;
+            graphic = _sprite;
+            _rested = false;
         }
 
         public override void Update()
         {
-            if (this._rested)
+            if (_rested)
                 return;
-            if (this.hSpeed > 0f)
-                this.hSpeed -= 0.1f;
-            if (this.hSpeed < 0f)
-                this.hSpeed += 0.1f;
-            if (this.hSpeed < 0.1f && this.hSpeed > -0.1f)
-                this.hSpeed = 0f;
-            if (this.vSpeed < 1f)
-                this.vSpeed += 0.06f;
-            if (this.vSpeed < 0f)
+            if (hSpeed > 0f)
+                hSpeed -= 0.1f;
+            if (hSpeed < 0f)
+                hSpeed += 0.1f;
+            if (hSpeed < 0.1f && hSpeed > -0.1f)
+                hSpeed = 0f;
+            if (vSpeed < 1f)
+                vSpeed += 0.06f;
+            if (vSpeed < 0f)
             {
-                this._sprite.speed = 0f;
-                if (Level.CheckPoint<Block>(this.x, this.y - 7f) != null)
-                    this.vSpeed = 0f;
+                _sprite.speed = 0f;
+                if (Level.CheckPoint<Block>(x, y - 7f) != null)
+                    vSpeed = 0f;
             }
-            else if (Level.CheckPoint<IPlatform>(this.x, this.y + 3f) is Thing thing)
+            else if (Level.CheckPoint<IPlatform>(x, y + 3f) is Thing thing)
             {
-                this.vSpeed = 0f;
-                this._sprite.speed = 0f;
+                vSpeed = 0f;
+                _sprite.speed = 0f;
                 if (thing is Block)
-                    this._rested = true;
+                    _rested = true;
             }
             else
-                this._sprite.speed = 0.3f;
-            this.x += this.hSpeed;
-            this.y += this.vSpeed;
+                _sprite.speed = 0.3f;
+            x += hSpeed;
+            y += vSpeed;
         }
     }
 }

@@ -33,16 +33,16 @@ namespace DuckGame
                 align = UIAlign.Right
             };
             component1.rightSection.Add(component3, true);
-            this.rightSection.Add(component1, true);
-            this._arrow = new UIImage("contextArrowRight")
+            rightSection.Add(component1, true);
+            _arrow = new UIImage("contextArrowRight")
             {
                 align = UIAlign.Right,
                 visible = false
             };
-            this.leftSection.Add(_arrow, true);
-            this._field = field;
-            this._step = step;
-            this.controlString = "@CANCEL@BACK @WASD@ADJUST";
+            leftSection.Add(_arrow, true);
+            _field = field;
+            _step = step;
+            controlString = "@CANCEL@BACK @WASD@ADJUST";
         }
 
         public override void Activate(string trigger)
@@ -50,17 +50,17 @@ namespace DuckGame
             float num;
             if (trigger == "MENULEFT")
             {
-                num = Maths.Clamp((float)this._field.value - this._step, this._field.min, this._field.max);
+                num = Maths.Clamp((float)_field.value - _step, _field.min, _field.max);
             }
             else
             {
                 if (!(trigger == "MENURIGHT"))
                     return;
-                num = Maths.Clamp((float)this._field.value + this._step, this._field.min, this._field.max);
+                num = Maths.Clamp((float)_field.value + _step, _field.min, _field.max);
             }
-            if (num != (float)this._field.value)
+            if (num != (float)_field.value)
                 SFX.Play("textLetter", 0.7f);
-            this._field.value = num;
+            _field.value = num;
         }
     }
 }

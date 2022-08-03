@@ -19,6 +19,6 @@ namespace DuckGame
 
         public Resolution previousAdapterResolution { get; set; }
 
-        public OptionsDataLocal() => this._nodeName = "Options";
+        public OptionsDataLocal() => _nodeName = "Options";
     }
 }

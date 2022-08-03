@@ -21,21 +21,21 @@ namespace DuckGame
                 position = new Vec2(-8f, -18f)
             };
             graphicList.Add(graphic);
-            this._spawnSprite = new SpriteMap("spawnSheet", 16, 16)
+            _spawnSprite = new SpriteMap("spawnSheet", 16, 16)
             {
                 depth = (Depth)0.95f
             };
             graphicList.Add(_spawnSprite);
             this.graphic = graphicList;
-            this._editorName = "enemy spawn";
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
+            _editorName = "enemy spawn";
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
         }
 
         public override void Draw()
         {
-            this._spawnSprite.frame = 0;
+            _spawnSprite.frame = 0;
             base.Draw();
         }
     }

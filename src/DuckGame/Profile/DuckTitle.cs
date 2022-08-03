@@ -78,8 +78,8 @@ namespace DuckGame
 
         public string previousOwner
         {
-            get => this._previousOwner;
-            set => this._previousOwner = value;
+            get => _previousOwner;
+            set => _previousOwner = value;
         }
 
         public static Dictionary<DuckTitle, float> ScoreTowardsTitles(Profile p)
@@ -94,21 +94,21 @@ namespace DuckGame
         {
             float num1 = 0f;
             float num2 = 0f;
-            foreach (KeyValuePair<PropertyInfo, float> keyValuePair in this._requirementsFloat)
+            foreach (KeyValuePair<PropertyInfo, float> keyValuePair in _requirementsFloat)
             {
                 num1 += keyValuePair.Value;
                 num2 += (float)keyValuePair.Key.GetValue(p.stats, null);
             }
             int num3 = 0;
             int num4 = 0;
-            foreach (KeyValuePair<PropertyInfo, int> keyValuePair in this._requirementsInt)
+            foreach (KeyValuePair<PropertyInfo, int> keyValuePair in _requirementsInt)
             {
                 num3 += keyValuePair.Value;
                 num4 += (int)keyValuePair.Key.GetValue(p.stats, null);
             }
             int num5 = 0;
             int num6 = 0;
-            foreach (KeyValuePair<PropertyInfo, string> keyValuePair in this._requirementsString)
+            foreach (KeyValuePair<PropertyInfo, string> keyValuePair in _requirementsString)
             {
                 ++num5;
                 if ((string)keyValuePair.Key.GetValue(p.stats, null) == keyValuePair.Value)

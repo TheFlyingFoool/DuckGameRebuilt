@@ -12,7 +12,7 @@ namespace DuckGame
     {
         public byte index;
 
-        public NMNewPong(byte pIndex) => this.index = pIndex;
+        public NMNewPong(byte pIndex) => index = pIndex;
 
         public NMNewPong()
         {

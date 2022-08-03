@@ -19,38 +19,38 @@ namespace DuckGame
 
         public FluidData(float am, Vec4 col, float flam, string spr = "", float h = 0f, float trans = 0.7f)
         {
-            this.amount = am;
-            this.color = col;
-            this.flammable = flam;
-            this.sprite = spr;
-            this.heat = h;
-            this.transparent = trans;
-            this.douseFire = 1f;
+            amount = am;
+            color = col;
+            flammable = flam;
+            sprite = spr;
+            heat = h;
+            transparent = trans;
+            douseFire = 1f;
         }
 
         public void Mix(FluidData with)
         {
-            float num1 = with.amount + this.amount;
+            float num1 = with.amount + amount;
             if (with.amount > 0.0)
             {
-                float num2 = this.amount / num1;
+                float num2 = amount / num1;
                 float num3 = with.amount / num1;
-                this.flammable = (float)(num2 * flammable + num3 * with.flammable);
-                this.color = this.color * num2 + with.color * num3;
-                this.heat = (float)(heat * num2 + with.heat * num3);
-                this.transparent = (float)(transparent * num2 + with.transparent * num3);
-                this.douseFire = (float)(douseFire * num2 + with.douseFire * num3);
+                flammable = (float)(num2 * flammable + num3 * with.flammable);
+                color = color * num2 + with.color * num3;
+                heat = (float)(heat * num2 + with.heat * num3);
+                transparent = (float)(transparent * num2 + with.transparent * num3);
+                douseFire = (float)(douseFire * num2 + with.douseFire * num3);
             }
-            this.amount = num1;
+            amount = num1;
         }
 
         public FluidData Take(float val)
         {
-            if (val > this.amount)
+            if (val > amount)
             {
-                val = this.amount;
+                val = amount;
             }
-            this.amount -= val;
+            amount -= val;
             FluidData newData = this;
             newData.amount = val;
             return newData;

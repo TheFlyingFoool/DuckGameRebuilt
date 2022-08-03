@@ -19,9 +19,9 @@ namespace DuckGame
 
         public NMChatMessage(Profile pProfile, string t, ushort idx)
         {
-            this.profile = pProfile;
-            this.text = t;
-            this.index = idx;
+            profile = pProfile;
+            text = t;
+            index = idx;
         }
     }
 }

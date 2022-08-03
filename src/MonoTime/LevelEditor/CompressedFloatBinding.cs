@@ -17,45 +17,45 @@ namespace DuckGame
 
         public int GetCompressedFloat(float val)
         {
-            int num1 = (int)BitBuffer.GetMaxValue(this._bits) / 2;
-            if (this.isRotation)
+            int num1 = (int)BitBuffer.GetMaxValue(_bits) / 2;
+            if (isRotation)
             {
                 if (val < 0f)
                 {
                     double num2 = _range / 2f;
-                    val = val % -this._range + this._range;
+                    val = val % -_range + _range;
                 }
-                val = val % this._range / this._range;
+                val = val % _range / _range;
             }
             else
-                val = Maths.Clamp(val, -this._range, this._range) / this._range;
+                val = Maths.Clamp(val, -_range, _range) / _range;
             return (int)Math.Round(val * num1);
         }
 
-        public override object GetNetValue() => this.GetCompressedFloat(this.getTyped<float>());
+        public override object GetNetValue() => GetCompressedFloat(getTyped<float>());
 
-        public override int intValue => this.GetCompressedFloat(this.getTyped<float>());
+        public override int intValue => GetCompressedFloat(getTyped<float>());
 
-        public override object ReadNetValue(object val) => (float)((int)val / (BitBuffer.GetMaxValue(this._bits) / 2L) * _range);
+        public override object ReadNetValue(object val) => (float)((int)val / (BitBuffer.GetMaxValue(_bits) / 2L) * _range);
 
-        public override object ReadNetValue(BitBuffer pData) => (float)((int)pData.ReadBits(this.type, this.bits) / (BitBuffer.GetMaxValue(this._bits) / 2L) * _range);
+        public override object ReadNetValue(BitBuffer pData) => (float)((int)pData.ReadBits(type, bits) / (BitBuffer.GetMaxValue(_bits) / 2L) * _range);
 
         public CompressedFloatBinding(string field, float range = 1f, int bits = 16, bool isRot = false, bool doLerp = false)
           : base(field, bits, isRot)
         {
-            this._range = range;
+            _range = range;
             if (isRot)
-                this._range = 6.2831855f;
-            this._lerp = doLerp;
+                _range = 6.2831855f;
+            _lerp = doLerp;
         }
 
         public CompressedFloatBinding(string field, float range, int bits, bool isRot)
           : base(field, bits, isRot)
         {
-            this._range = range;
+            _range = range;
             if (!isRot)
                 return;
-            this._range = 6.2831855f;
+            _range = 6.2831855f;
         }
 
         public CompressedFloatBinding(
@@ -67,11 +67,11 @@ namespace DuckGame
           bool doLerp = false)
           : base(field, bits, isRot)
         {
-            this._range = range;
+            _range = range;
             if (isRot)
-                this._range = 6.2831855f;
-            this._priority = p;
-            this._lerp = doLerp;
+                _range = 6.2831855f;
+            _priority = p;
+            _lerp = doLerp;
         }
     }
 }

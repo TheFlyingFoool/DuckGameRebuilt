@@ -13,6 +13,6 @@ namespace DuckGame
         public bool pressed = true;
         public float hitPitch;
 
-        public InstrumentNote(Sound s) => this.sound = s;
+        public InstrumentNote(Sound s) => sound = s;
     }
 }

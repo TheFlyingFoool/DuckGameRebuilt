@@ -19,20 +19,20 @@ namespace DuckGame
 
         public NMDeathBeam(HugeLaser pLaser, Vec2 pPosition, Vec2 pTarget)
         {
-            this.position = pPosition;
-            this.target = pTarget;
-            this.laser = pLaser;
+            position = pPosition;
+            target = pTarget;
+            laser = pLaser;
         }
 
         public override void Activate()
         {
-            DeathBeam deathBeam = new DeathBeam(this.position, this.target)
+            DeathBeam deathBeam = new DeathBeam(position, target)
             {
                 isLocal = false
             };
             Level.Add(deathBeam);
-            if (this.laser != null)
-                this.laser.PostFireLogic();
+            if (laser != null)
+                laser.PostFireLogic();
             base.Activate();
         }
     }

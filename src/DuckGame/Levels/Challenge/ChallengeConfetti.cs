@@ -18,9 +18,9 @@ namespace DuckGame
             SpriteMap spriteMap = new SpriteMap("arcade/confetti", 8, 8);
             spriteMap.AddAnimation("idle", 0.1f, true, 0, 1);
             spriteMap.SetAnimation("idle");
-            this.graphic = spriteMap;
-            this._fallSpeed = Rando.Float(0.5f, 1.2f);
-            this.layer = Layer.HUD;
+            graphic = spriteMap;
+            _fallSpeed = Rando.Float(0.5f, 1.2f);
+            layer = Layer.HUD;
             int num = Rando.ChooseInt(0, 1, 2, 3);
             if (num == 0)
                 spriteMap.color = Color.Violet;
@@ -30,20 +30,20 @@ namespace DuckGame
                 spriteMap.color = Color.Wheat;
             if (num == 4)
                 spriteMap.color = Color.GreenYellow;
-            this.depth = (Depth)1f;
+            depth = (Depth)1f;
         }
 
         public override void Update()
         {
-            this.alpha = ArcadeHUD.alphaVal + Chancy.alpha;
-            this.y += this._fallSpeed;
-            this._horSpeed += Rando.Float(-0.1f, 0.1f);
+            alpha = ArcadeHUD.alphaVal + Chancy.alpha;
+            y += _fallSpeed;
+            _horSpeed += Rando.Float(-0.1f, 0.1f);
             if (_horSpeed < -0.3f)
-                this._horSpeed = -0.3f;
+                _horSpeed = -0.3f;
             else if (_horSpeed > 0.3f)
-                this._horSpeed = 0.3f;
-            this.x += this._horSpeed;
-            if (this.y <= 200f)
+                _horSpeed = 0.3f;
+            x += _horSpeed;
+            if (y <= 200f)
                 return;
             Level.Remove(this);
         }

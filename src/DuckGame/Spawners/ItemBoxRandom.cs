@@ -17,16 +17,16 @@ namespace DuckGame
         public ItemBoxRandom(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.editorTooltip = "Spawns a random object each time it's used. Recharges after a short duration.";
+            editorTooltip = "Spawns a random object each time it's used. Recharges after a short duration.";
         }
 
         public override void Update() => base.Update();
 
         public override void Draw()
         {
-            this._sprite.frame += 2;
+            _sprite.frame += 2;
             base.Draw();
-            this._sprite.frame -= 2;
+            _sprite.frame -= 2;
         }
 
         public static PhysicsObject GetRandomItem()
@@ -63,7 +63,7 @@ namespace DuckGame
         public override PhysicsObject GetSpawnItem()
         {
             PhysicsObject randomItem = ItemBoxRandom.GetRandomItem();
-            this.contains = randomItem.GetType();
+            contains = randomItem.GetType();
             return randomItem;
         }
 

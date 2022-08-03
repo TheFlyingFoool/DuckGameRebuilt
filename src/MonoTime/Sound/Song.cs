@@ -14,21 +14,21 @@ namespace DuckGame
         private MemoryStream _data;
         private string _name;
 
-        public MemoryStream data => this._data;
+        public MemoryStream data => _data;
 
-        public string name => this._name;
+        public string name => _name;
 
         public Song(MemoryStream dat, string nam)
         {
-            this._data = dat;
-            this._name = nam;
+            _data = dat;
+            _name = nam;
         }
 
         public void Play(bool loop = true) => Music.Play(this, loop);
 
         public void Stop()
         {
-            if (!(Music.currentSong == this._name))
+            if (!(Music.currentSong == _name))
                 return;
             Music.Stop();
         }

@@ -29,48 +29,48 @@ namespace DuckGame
 
         public Action SoundEndEvent { get; set; }
 
-        public WaveFormat WaveFormat => this._data.format;
+        public WaveFormat WaveFormat => _data.format;
 
         public void SetData(SoundEffect pData)
         {
-            this._position = 0;
+            _position = 0;
             lock (this)
             {
-                this._data = pData;
-                this.RebuildChain();
+                _data = pData;
+                RebuildChain();
             }
         }
 
-        public SoundEffectInstance(SoundEffect pData) => this.SetData(pData);
+        public SoundEffectInstance(SoundEffect pData) => SetData(pData);
 
         private void RebuildChain()
         {
-            if (this._chainEnd != null)
-                Windows_Audio.RemoveSound(this._chainEnd);
-            this._chainEnd = this;
-            if (this._data == null)
+            if (_chainEnd != null)
+                Windows_Audio.RemoveSound(_chainEnd);
+            _chainEnd = this;
+            if (_data == null)
                 return;
-            if (this._data.format.Channels == 1 || _pan != 0.0)
+            if (_data.format.Channels == 1 || _pan != 0.0)
             {
-                this._panChain = new PanningSampleProvider(this._chainEnd);
-                this._chainEnd = _panChain;
-                this._panChain.Pan = this._pan;
+                _panChain = new PanningSampleProvider(_chainEnd);
+                _chainEnd = _panChain;
+                _panChain.Pan = _pan;
             }
             if (_volume != 1.0)
             {
-                this._volumeChain = new VolumeSampleProvider(this._chainEnd);
-                this._chainEnd = _volumeChain;
-                this._volumeChain.Volume = this._volume * this._data.replaygainModifier;
+                _volumeChain = new VolumeSampleProvider(_chainEnd);
+                _chainEnd = _volumeChain;
+                _volumeChain.Volume = _volume * _data.replaygainModifier;
             }
             if (_pitch != 0.0)
             {
-                this._pitchChain = new SoundEffectInstance.PitchShiftProvider(this._chainEnd);
-                this._chainEnd = _pitchChain;
-                this._pitchChain.pitch = this._pitch;
+                _pitchChain = new SoundEffectInstance.PitchShiftProvider(_chainEnd);
+                _chainEnd = _pitchChain;
+                _pitchChain.pitch = _pitch;
             }
-            if (!this._inMixer)
+            if (!_inMixer)
                 return;
-            Windows_Audio.AddSound(this._chainEnd, this._isMusic);
+            Windows_Audio.AddSound(_chainEnd, _isMusic);
         }
 
         public bool IsDisposed { get; }
@@ -93,131 +93,131 @@ namespace DuckGame
 
         public void Play()
         {
-            if (this._data == null)
+            if (_data == null)
                 return;
-            if (this._inMixer)
-                this.Stop();
-            this._inMixer = true;
-            Windows_Audio.AddSound(this._chainEnd, this._isMusic);
+            if (_inMixer)
+                Stop();
+            _inMixer = true;
+            Windows_Audio.AddSound(_chainEnd, _isMusic);
         }
 
         public void Resume()
         {
-            if (this._data == null || this._inMixer)
+            if (_data == null || _inMixer)
                 return;
-            this._inMixer = true;
-            Windows_Audio.AddSound(this._chainEnd, this._isMusic);
+            _inMixer = true;
+            Windows_Audio.AddSound(_chainEnd, _isMusic);
         }
 
         public void Stop()
         {
-            if (this._data == null)
+            if (_data == null)
                 return;
-            this.Pause();
-            this._position = 0;
+            Pause();
+            _position = 0;
         }
 
-        public void Stop(bool immediate) => this.Stop();
+        public void Stop(bool immediate) => Stop();
 
         public void Pause()
         {
-            if (this._data == null)
+            if (_data == null)
                 return;
-            this._inMixer = false;
+            _inMixer = false;
         }
 
         public virtual bool IsLooped
         {
-            get => this._loop;
-            set => this._loop = value;
+            get => _loop;
+            set => _loop = value;
         }
 
         public float Pitch
         {
-            get => this._pitch;
+            get => _pitch;
             set
             {
-                this._pitch = value;
-                if (_pitch != 0.0 && this._pitchChain == null)
-                    this.RebuildChain();
-                if (this._pitchChain == null)
+                _pitch = value;
+                if (_pitch != 0.0 && _pitchChain == null)
+                    RebuildChain();
+                if (_pitchChain == null)
                     return;
-                this._pitchChain.pitch = this._pitch;
+                _pitchChain.pitch = _pitch;
             }
         }
 
         public float Volume
         {
-            get => this._volume;
+            get => _volume;
             set
             {
-                this._volume = value;
-                if (_volume != 1.0 && this._volumeChain == null)
-                    this.RebuildChain();
-                if (this._volumeChain == null || this._data == null)
+                _volume = value;
+                if (_volume != 1.0 && _volumeChain == null)
+                    RebuildChain();
+                if (_volumeChain == null || _data == null)
                     return;
-                this._volumeChain.Volume = this._volume * this._data.replaygainModifier;
+                _volumeChain.Volume = _volume * _data.replaygainModifier;
             }
         }
 
         public float Pan
         {
-            get => this._pan;
+            get => _pan;
             set
             {
-                this._pan = value;
-                if (_pan != 0.0 && this._panChain == null)
-                    this.RebuildChain();
-                if (this._panChain == null)
+                _pan = value;
+                if (_pan != 0.0 && _panChain == null)
+                    RebuildChain();
+                if (_panChain == null)
                     return;
-                this._panChain.Pan = this._pan;
+                _panChain.Pan = _pan;
             }
         }
 
-        public SoundState State => !this._inMixer ? SoundState.Stopped : SoundState.Playing;
+        public SoundState State => !_inMixer ? SoundState.Stopped : SoundState.Playing;
 
         public virtual int Read(float[] buffer, int offset, int count)
         {
-            if (this._data == null || !this._inMixer)
+            if (_data == null || !_inMixer)
                 return 0;
             int length = 0;
             lock (this)
             {
-                int val1 = this._data.dataSize - this._position;
-                if (this._data.data == null)
+                int val1 = _data.dataSize - _position;
+                if (_data.data == null)
                 {
-                    length = this._data.Decode(buffer, offset, count);
+                    length = _data.Decode(buffer, offset, count);
                 }
                 else
                 {
                     length = Math.Min(val1, count);
-                    Array.Copy(_data.data, this._position, buffer, offset, length);
+                    Array.Copy(_data.data, _position, buffer, offset, length);
                 }
-                this._position += length;
+                _position += length;
                 if (length != count)
                 {
-                    if (this.SoundEndEvent != null)
-                        this.SoundEndEvent();
-                    if (this._loop)
+                    if (SoundEndEvent != null)
+                        SoundEndEvent();
+                    if (_loop)
                     {
-                        this._position = 0;
+                        _position = 0;
                         offset += length;
-                        if (this._data.data == null)
+                        if (_data.data == null)
                         {
-                            this._data.Rewind();
-                            length = this._data.Decode(buffer, offset, count);
+                            _data.Rewind();
+                            length = _data.Decode(buffer, offset, count);
                         }
                         else
                         {
-                            length = Math.Min(this._data.dataSize - this._position, count - length);
-                            Array.Copy(_data.data, this._position, buffer, offset, length);
+                            length = Math.Min(_data.dataSize - _position, count - length);
+                            Array.Copy(_data.data, _position, buffer, offset, length);
                         }
-                        this._position += length;
+                        _position += length;
                         length = count;
                     }
                 }
             }
-            this._inMixer = this._inMixer && length == count;
+            _inMixer = _inMixer && length == count;
             return length;
         }
 
@@ -227,15 +227,15 @@ namespace DuckGame
 
         public void Platform_SetProgress(float pProgress)
         {
-            if (this._data == null)
+            if (_data == null)
                 return;
             pProgress = Maths.Clamp(pProgress, 0f, 1f);
-            this._position = (int)(pProgress * _data.data.Length);
+            _position = (int)(pProgress * _data.data.Length);
         }
 
-        public float Platform_GetProgress() => this._data == null ? 1f : _position / (float)this._data.data.Length;
+        public float Platform_GetProgress() => _data == null ? 1f : _position / (float)_data.data.Length;
 
-        public int Platform_GetLengthInMilliseconds() => this._data == null ? 0 : (int)(this._data.data.Length * 4 / this.WaveFormat.AverageBytesPerSecond) * 500;
+        public int Platform_GetLengthInMilliseconds() => _data == null ? 0 : (int)(_data.data.Length * 4 / WaveFormat.AverageBytesPerSecond) * 500;
 
         public class PitchShiftProvider : ISampleProvider
         {
@@ -244,12 +244,12 @@ namespace DuckGame
             public SoundEffectInstance instance;
             private WdlResamplingSampleProvider _resampler;
 
-            public WaveFormat WaveFormat => this._chain.WaveFormat;
+            public WaveFormat WaveFormat => _chain.WaveFormat;
 
             public PitchShiftProvider(ISampleProvider pChain)
             {
-                this._chain = pChain;
-                this._resampler = new WdlResamplingSampleProvider(pChain);
+                _chain = pChain;
+                _resampler = new WdlResamplingSampleProvider(pChain);
             }
 
             public int Read(float[] buffer, int offset, int count)
@@ -257,8 +257,8 @@ namespace DuckGame
                 if (pitch < 0.0)
                 {
                 }
-                this._resampler.sampleRate = (int)(44100.0 * Math.Pow(2.0, -this.pitch));
-                return this._resampler.Read(buffer, offset, count);
+                _resampler.sampleRate = (int)(44100.0 * Math.Pow(2.0, -pitch));
+                return _resampler.Read(buffer, offset, count);
             }
         }
     }

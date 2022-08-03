@@ -351,7 +351,7 @@ namespace DuckGame
             }
         }
 
-        public virtual DXMLNode Serialize() => DataClass.SerializeClass(this, this._nodeName);
+        public virtual DXMLNode Serialize() => DataClass.SerializeClass(this, _nodeName);
 
         public virtual bool Deserialize(DXMLNode node)
         {

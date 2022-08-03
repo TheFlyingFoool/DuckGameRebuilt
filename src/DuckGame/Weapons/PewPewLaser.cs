@@ -20,53 +20,53 @@ namespace DuckGame
         public PewPewLaser(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 36;
-            this._ammoType = new ATPewPew();
-            this._type = "gun";
-            this.graphic = new Sprite("pewpewLaser");
-            this.center = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -3f);
-            this.collisionSize = new Vec2(16f, 7f);
-            this._barrelOffsetTL = new Vec2(31f, 15f);
-            this._fireSound = "laserRifle";
-            this._fullAuto = true;
-            this._fireWait = 2f;
-            this._kickForce = 1f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(0f, 0f);
-            this._flare = new SpriteMap("laserFlare", 16, 16)
+            ammo = 36;
+            _ammoType = new ATPewPew();
+            _type = "gun";
+            graphic = new Sprite("pewpewLaser");
+            center = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -3f);
+            collisionSize = new Vec2(16f, 7f);
+            _barrelOffsetTL = new Vec2(31f, 15f);
+            _fireSound = "laserRifle";
+            _fullAuto = true;
+            _fireWait = 2f;
+            _kickForce = 1f;
+            _fireRumble = RumbleIntensity.Kick;
+            _holdOffset = new Vec2(0f, 0f);
+            _flare = new SpriteMap("laserFlare", 16, 16)
             {
                 center = new Vec2(0f, 8f)
             };
-            this.editorTooltip = "Quick-fire laser beam of ULTIMATE DESTRUCTION... with an adorable wittle name.";
+            editorTooltip = "Quick-fire laser beam of ULTIMATE DESTRUCTION... with an adorable wittle name.";
         }
 
         public override void Update()
         {
-            if (this._bursting)
+            if (_bursting)
             {
-                this._burstWait = Maths.CountDown(this._burstWait, 0.16f);
+                _burstWait = Maths.CountDown(_burstWait, 0.16f);
                 if (_burstWait <= 0.0)
                 {
-                    this._burstWait = 1f;
-                    if (this.isServerForObject)
+                    _burstWait = 1f;
+                    if (isServerForObject)
                     {
                         PewPewLaser.inFire = true;
-                        this.Fire();
+                        Fire();
                         PewPewLaser.inFire = false;
                         if (Network.isActive)
-                            Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, false, this.duck != null ? this.duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
-                        this.firedBullets.Clear();
+                            Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false, duck != null ? duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
+                        firedBullets.Clear();
                     }
-                    this._wait = 0f;
-                    ++this._burstNum;
+                    _wait = 0f;
+                    ++_burstNum;
                 }
-                if (this._burstNum == 3)
+                if (_burstNum == 3)
                 {
-                    this._burstNum = 0;
-                    this._burstWait = 0f;
-                    this._bursting = false;
-                    this._wait = this._fireWait;
+                    _burstNum = 0;
+                    _burstWait = 0f;
+                    _bursting = false;
+                    _wait = _fireWait;
                 }
             }
             base.Update();
@@ -74,15 +74,15 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if (this.receivingPress && this.hasFireEvents && this.onlyFireAction)
+            if (receivingPress && hasFireEvents && onlyFireAction)
             {
                 PewPewLaser.inFire = true;
-                this.Fire();
+                Fire();
                 PewPewLaser.inFire = false;
             }
-            if (this._bursting || _wait != 0.0)
+            if (_bursting || _wait != 0.0)
                 return;
-            this._bursting = true;
+            _bursting = true;
         }
 
         public override void OnHoldAction()

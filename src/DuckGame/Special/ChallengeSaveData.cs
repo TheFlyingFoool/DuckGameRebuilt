@@ -20,23 +20,23 @@ namespace DuckGame
 
         public ChallengeSaveData Clone() => new ChallengeSaveData()
         {
-            trophy = this.trophy,
-            bestTime = this.bestTime,
-            profileID = this.profileID,
-            targets = this.targets,
-            goodies = this.goodies
+            trophy = trophy,
+            bestTime = bestTime,
+            profileID = profileID,
+            targets = targets,
+            goodies = goodies
         };
 
         public BitBuffer ToBuffer()
         {
             BitBuffer buffer = new BitBuffer(false);
-            buffer.Write(this.challenge);
-            buffer.Write((int)this.trophy);
-            buffer.Write(this.bestTime);
-            buffer.Write(this.targets);
-            buffer.Write(this.goodies);
-            buffer.Write(this.frameID);
-            buffer.Write(this.frameImage);
+            buffer.Write(challenge);
+            buffer.Write((int)trophy);
+            buffer.Write(bestTime);
+            buffer.Write(targets);
+            buffer.Write(goodies);
+            buffer.Write(frameID);
+            buffer.Write(frameImage);
             return buffer;
         }
 
@@ -54,50 +54,50 @@ namespace DuckGame
         public BinaryClassChunk Serialize()
         {
             BinaryClassChunk element = new BinaryClassChunk();
-            this.SerializeField(element, "trophy");
-            this.SerializeField(element, "bestTime");
-            this.SerializeField(element, "profileID");
-            this.SerializeField(element, "targets");
-            this.SerializeField(element, "goodies");
-            this.SerializeField(element, "frameID");
-            this.SerializeField(element, "frameImage");
+            SerializeField(element, "trophy");
+            SerializeField(element, "bestTime");
+            SerializeField(element, "profileID");
+            SerializeField(element, "targets");
+            SerializeField(element, "goodies");
+            SerializeField(element, "frameID");
+            SerializeField(element, "frameImage");
             return element;
         }
 
         public bool Deserialize(BinaryClassChunk node)
         {
-            this.DeserializeField(node, "trophy");
-            this.DeserializeField(node, "bestTime");
-            this.DeserializeField(node, "profileID");
-            this.DeserializeField(node, "targets");
-            this.DeserializeField(node, "goodies");
-            this.DeserializeField(node, "frameID");
-            this.DeserializeField(node, "frameImage");
+            DeserializeField(node, "trophy");
+            DeserializeField(node, "bestTime");
+            DeserializeField(node, "profileID");
+            DeserializeField(node, "targets");
+            DeserializeField(node, "goodies");
+            DeserializeField(node, "frameID");
+            DeserializeField(node, "frameImage");
             return true;
         }
 
         public DXMLNode LegacySerialize()
         {
             DXMLNode element = new DXMLNode("challengeSaveData");
-            this.LegacySerializeField(element, "trophy");
-            this.LegacySerializeField(element, "bestTime");
-            this.LegacySerializeField(element, "profileID");
-            this.LegacySerializeField(element, "targets");
-            this.LegacySerializeField(element, "goodies");
-            this.LegacySerializeField(element, "frameID");
-            this.LegacySerializeField(element, "frameImage");
+            LegacySerializeField(element, "trophy");
+            LegacySerializeField(element, "bestTime");
+            LegacySerializeField(element, "profileID");
+            LegacySerializeField(element, "targets");
+            LegacySerializeField(element, "goodies");
+            LegacySerializeField(element, "frameID");
+            LegacySerializeField(element, "frameImage");
             return element;
         }
 
         public bool LegacyDeserialize(DXMLNode node)
         {
-            this.LegacyDeserializeField(node, "trophy");
-            this.LegacyDeserializeField(node, "bestTime");
-            this.LegacyDeserializeField(node, "profileID");
-            this.LegacyDeserializeField(node, "targets");
-            this.LegacyDeserializeField(node, "goodies");
-            this.LegacyDeserializeField(node, "frameID");
-            this.LegacyDeserializeField(node, "frameImage");
+            LegacyDeserializeField(node, "trophy");
+            LegacyDeserializeField(node, "bestTime");
+            LegacyDeserializeField(node, "profileID");
+            LegacyDeserializeField(node, "targets");
+            LegacyDeserializeField(node, "goodies");
+            LegacyDeserializeField(node, "frameID");
+            LegacyDeserializeField(node, "frameImage");
             return true;
         }
     }

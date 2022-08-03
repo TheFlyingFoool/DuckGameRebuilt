@@ -29,12 +29,12 @@ namespace System.Collections.Concurrent
         public ConcurrentStack(IEnumerable<T> collection)
         {
             foreach (T obj in collection)
-                this.Push(obj);
+                Push(obj);
         }
 
         bool IProducerConsumerCollection<T>.TryAdd(T elem)
         {
-            this.Push(elem);
+            Push(elem);
             return true;
         }
 
@@ -46,13 +46,13 @@ namespace System.Collections.Concurrent
             };
             do
             {
-                node.Next = this.head;
+                node.Next = head;
             }
-            while (Interlocked.CompareExchange<ConcurrentStack<T>.Node>(ref this.head, node, node.Next) != node.Next);
-            Interlocked.Increment(ref this.count);
+            while (Interlocked.CompareExchange<ConcurrentStack<T>.Node>(ref head, node, node.Next) != node.Next);
+            Interlocked.Increment(ref count);
         }
 
-        public void PushRange(T[] items) => this.PushRange(items, 0, items.Length);
+        public void PushRange(T[] items) => PushRange(items, 0, items.Length);
 
         public void PushRange(T[] items, int startIndex, int count)
         {
@@ -71,9 +71,9 @@ namespace System.Collections.Concurrent
             }
             do
             {
-                node2.Next = this.head;
+                node2.Next = head;
             }
-            while (Interlocked.CompareExchange<ConcurrentStack<T>.Node>(ref this.head, node1, node2.Next) != node2.Next);
+            while (Interlocked.CompareExchange<ConcurrentStack<T>.Node>(ref head, node1, node2.Next) != node2.Next);
             Interlocked.Add(ref count, count);
         }
 
@@ -90,12 +90,12 @@ namespace System.Collections.Concurrent
                 }
             }
             while (Interlocked.CompareExchange<ConcurrentStack<T>.Node>(ref this.head, head.Next, head) != head);
-            Interlocked.Decrement(ref this.count);
+            Interlocked.Decrement(ref count);
             result = head.Value;
             return true;
         }
 
-        public int TryPopRange(T[] items) => this.TryPopRange(items, 0, items.Length);
+        public int TryPopRange(T[] items) => TryPopRange(items, 0, items.Length);
 
         public int TryPopRange(T[] items, int startIndex, int count)
         {
@@ -103,7 +103,7 @@ namespace System.Collections.Concurrent
             ConcurrentStack<T>.Node node;
             do
             {
-                comparand = this.head;
+                comparand = head;
                 if (comparand == null)
                     return -1;
                 node = comparand;
@@ -114,7 +114,7 @@ namespace System.Collections.Concurrent
                         break;
                 }
             }
-            while (Interlocked.CompareExchange<ConcurrentStack<T>.Node>(ref this.head, node, comparand) != comparand);
+            while (Interlocked.CompareExchange<ConcurrentStack<T>.Node>(ref head, node, comparand) != comparand);
             int index1;
             for (index1 = startIndex; index1 < count && comparand != null; ++index1)
             {
@@ -138,17 +138,17 @@ namespace System.Collections.Concurrent
 
         public void Clear()
         {
-            this.count = 0;
-            this.head = null;
+            count = 0;
+            head = null;
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => this.InternalGetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => InternalGetEnumerator();
 
-        public IEnumerator<T> GetEnumerator() => this.InternalGetEnumerator();
+        public IEnumerator<T> GetEnumerator() => InternalGetEnumerator();
 
         private IEnumerator<T> InternalGetEnumerator()
         {
-            ConcurrentStack<T>.Node my_head = this.head;
+            ConcurrentStack<T>.Node my_head = head;
             if (my_head != null)
             {
                 do
@@ -163,12 +163,12 @@ namespace System.Collections.Concurrent
         {
             if (!(array is T[] array1))
                 return;
-            this.CopyTo(array1, index);
+            CopyTo(array1, index);
         }
 
         public void CopyTo(T[] array, int index)
         {
-            IEnumerator<T> enumerator = this.InternalGetEnumerator();
+            IEnumerator<T> enumerator = InternalGetEnumerator();
             int num = index;
             while (enumerator.MoveNext())
                 array[num++] = enumerator.Current;
@@ -176,20 +176,20 @@ namespace System.Collections.Concurrent
 
         bool ICollection.IsSynchronized => true;
 
-        bool IProducerConsumerCollection<T>.TryTake(out T item) => this.TryPop(out item);
+        bool IProducerConsumerCollection<T>.TryTake(out T item) => TryPop(out item);
 
-        object ICollection.SyncRoot => this.syncRoot;
+        object ICollection.SyncRoot => syncRoot;
 
         public T[] ToArray()
         {
-            T[] array = new T[this.count];
-            this.CopyTo(array, 0);
+            T[] array = new T[count];
+            CopyTo(array, 0);
             return array;
         }
 
-        public int Count => this.count;
+        public int Count => count;
 
-        public bool IsEmpty => this.count == 0;
+        public bool IsEmpty => count == 0;
 
         private class Node
         {

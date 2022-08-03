@@ -37,18 +37,18 @@ namespace DuckGame
           string achieve = "")
           : base(identifier, condition, nam, desc, achieve)
         {
-            this.allowHints = canHint;
-            this._teams = t;
-            this._showScreen = true;
-            this._persona[0] = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
-            this._persona[1] = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
-            this._persona[2] = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
-            this._persona[3] = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
+            allowHints = canHint;
+            _teams = t;
+            _showScreen = true;
+            _persona[0] = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
+            _persona[1] = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
+            _persona[2] = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
+            _persona[3] = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
         }
 
         public override void Initialize()
         {
-            foreach (Team team in this._teams)
+            foreach (Team team in _teams)
             {
                 if (team != null)
                     team.locked = true;
@@ -57,7 +57,7 @@ namespace DuckGame
 
         protected override void Unlock()
         {
-            foreach (Team team in this._teams)
+            foreach (Team team in _teams)
             {
                 if (team != null)
                     team.locked = false;
@@ -66,7 +66,7 @@ namespace DuckGame
 
         protected override void Lock()
         {
-            foreach (Team team in this._teams)
+            foreach (Team team in _teams)
             {
                 if (team != null)
                     team.locked = true;
@@ -77,23 +77,23 @@ namespace DuckGame
         {
             y -= 9f;
             float num1 = 9f;
-            if (this._teams.Count == 3)
+            if (_teams.Count == 3)
                 num1 = 18f;
             int index = 0;
-            foreach (Team team in this._teams)
+            foreach (Team team in _teams)
             {
                 if (team != null && index < 8)
                 {
                     float num2 = x;
                     float y1 = y + 12f;
-                    this._persona[index].sprite.depth = depth;
-                    this._persona[index].sprite.color = Color.White;
-                    Graphics.Draw(this._persona[index].sprite, 0, num2 - num1 + index * 18, y1);
-                    this._persona[index].armSprite.frame = this._persona[index].sprite.imageIndex;
-                    this._persona[index].armSprite.scale = new Vec2(1f, 1f);
-                    this._persona[index].armSprite.depth = depth + 4;
+                    _persona[index].sprite.depth = depth;
+                    _persona[index].sprite.color = Color.White;
+                    Graphics.Draw(_persona[index].sprite, 0, num2 - num1 + index * 18, y1);
+                    _persona[index].armSprite.frame = _persona[index].sprite.imageIndex;
+                    _persona[index].armSprite.scale = new Vec2(1f, 1f);
+                    _persona[index].armSprite.depth = depth + 4;
                     Graphics.Draw(_persona[index].armSprite, (float)(num2 - num1 + index * 18 - 3.0), y1 + 6f);
-                    Vec2 hatPoint = DuckRig.GetHatPoint(this._persona[index].sprite.imageIndex);
+                    Vec2 hatPoint = DuckRig.GetHatPoint(_persona[index].sprite.imageIndex);
                     team.hat.depth = depth + 2;
                     team.hat.center = new Vec2(16f, 16f) + team.hatOffset;
                     Graphics.Draw(team.hat, team.hat.frame, num2 - num1 + index * 18 + hatPoint.x, y1 + hatPoint.y);

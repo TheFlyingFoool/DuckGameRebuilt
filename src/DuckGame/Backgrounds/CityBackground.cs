@@ -22,57 +22,57 @@ namespace DuckGame
         public CityBackground(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new SpriteMap("backgroundIcons", 16, 16)
+            graphic = new SpriteMap("backgroundIcons", 16, 16)
             {
                 frame = 5
             };
-            this.center = new Vec2(8f, 8f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = (Depth)0.9f;
-            this.layer = Layer.Foreground;
-            this._visibleInGame = false;
-            this._editorName = "City BG";
+            center = new Vec2(8f, 8f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            depth = (Depth)0.9f;
+            layer = Layer.Foreground;
+            _visibleInGame = false;
+            _editorName = "City BG";
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            this.backgroundColor = new Color(24, 0, 31);
-            Level.current.backgroundColor = this.backgroundColor;
-            this._parallax = new ParallaxBackground("background/city", 0f, 0f, 3);
+            backgroundColor = new Color(24, 0, 31);
+            Level.current.backgroundColor = backgroundColor;
+            _parallax = new ParallaxBackground("background/city", 0f, 0f, 3);
             float speed = 0.4f;
-            this._parallax.AddZone(0, 0f, -speed, true);
-            this._parallax.AddZone(1, 0f, -speed, true);
-            this._parallax.AddZone(2, 0f, -speed, true);
-            this._parallax.AddZone(3, 0.2f, -speed, true);
-            this._parallax.AddZone(4, 0.2f, -speed, true);
-            this._parallax.AddZone(5, 0.4f, -speed, true);
-            this._parallax.AddZone(6, 0.6f, -speed, true);
+            _parallax.AddZone(0, 0f, -speed, true);
+            _parallax.AddZone(1, 0f, -speed, true);
+            _parallax.AddZone(2, 0f, -speed, true);
+            _parallax.AddZone(3, 0.2f, -speed, true);
+            _parallax.AddZone(4, 0.2f, -speed, true);
+            _parallax.AddZone(5, 0.4f, -speed, true);
+            _parallax.AddZone(6, 0.6f, -speed, true);
             float distance = 0.8f;
-            this._parallax.AddZone(14, distance, speed);
-            this._parallax.AddZone(15, distance, speed);
-            this._parallax.AddZone(16, distance, speed);
-            this._parallax.AddZone(17, distance, speed);
-            this._parallax.AddZone(18, distance, speed);
-            this._parallax.AddZone(19, distance, speed);
-            this._parallax.AddZone(20, distance, speed);
-            this._parallax.AddZone(21, distance, speed);
-            this._parallax.AddZone(22, distance, speed);
-            this._parallax.AddZone(23, distance, speed);
-            this._parallax.AddZone(24, distance, speed);
-            this._parallax.AddZone(25, distance, speed);
-            this._parallax.AddZone(26, distance, speed);
-            this._parallax.AddZone(27, distance, speed);
-            this._parallax.AddZone(28, distance, speed);
-            this._parallax.AddZone(29, distance, speed);
-            this.layer = Layer.Parallax;
+            _parallax.AddZone(14, distance, speed);
+            _parallax.AddZone(15, distance, speed);
+            _parallax.AddZone(16, distance, speed);
+            _parallax.AddZone(17, distance, speed);
+            _parallax.AddZone(18, distance, speed);
+            _parallax.AddZone(19, distance, speed);
+            _parallax.AddZone(20, distance, speed);
+            _parallax.AddZone(21, distance, speed);
+            _parallax.AddZone(22, distance, speed);
+            _parallax.AddZone(23, distance, speed);
+            _parallax.AddZone(24, distance, speed);
+            _parallax.AddZone(25, distance, speed);
+            _parallax.AddZone(26, distance, speed);
+            _parallax.AddZone(27, distance, speed);
+            _parallax.AddZone(28, distance, speed);
+            _parallax.AddZone(29, distance, speed);
+            layer = Layer.Parallax;
             Level.Add(_parallax);
             if (Rando.Int(200) == 0)
-                this.RandomSkySay();
-            this._visibleInGame = true;
-            this.visible = true;
+                RandomSkySay();
+            _visibleInGame = true;
+            visible = true;
         }
 
         public void SkySay(string text, Vec2 spawn = default(Vec2), bool pFlyLeft = false)
@@ -111,7 +111,7 @@ namespace DuckGame
                     vec2.x += (plane.textWidth * 0.5f + 80f);
                 else
                     vec2.x -= (plane.textWidth * 0.5f + 80f);
-                this._planes.Add(plane);
+                _planes.Add(plane);
             }
         }
 
@@ -166,22 +166,22 @@ namespace DuckGame
                 text = "HAPPY BIRTHDAY!";
             if (Rando.Int(200) == 1 && Network.isActive && DuckNetwork.core.chatMessages.Count > 0)
                 text = DuckNetwork.core.chatMessages[Rando.Int(DuckNetwork.core.chatMessages.Count - 1)].text;
-            this.SkySay(text);
+            SkySay(text);
         }
 
         public override void Update()
         {
-            foreach (CityBackground.Plane plane in this._planes)
+            foreach (CityBackground.Plane plane in _planes)
                 plane.UpdateFlying();
-            this._planes.RemoveAll(x => x.finished);
+            _planes.RemoveAll(x => x.finished);
             if (!Network.isActive || Network.isServer)
             {
-                this.timeSinceSkySay += Maths.IncFrameTimer();
-                if (timeSinceSkySay > 30f && this._planes.Count == 0)
+                timeSinceSkySay += Maths.IncFrameTimer();
+                if (timeSinceSkySay > 30f && _planes.Count == 0)
                 {
                     if (Rando.Float(1f) > 0.5f)
-                        this.RandomSkySay();
-                    this.timeSinceSkySay = Rando.Float(15f);
+                        RandomSkySay();
+                    timeSinceSkySay = Rando.Float(15f);
                 }
             }
             base.Update();
@@ -191,7 +191,7 @@ namespace DuckGame
         {
             if (Level.current is Editor)
                 base.Draw();
-            foreach (CityBackground.Plane plane in this._planes)
+            foreach (CityBackground.Plane plane in _planes)
             {
                 plane.depth = (Depth)1f;
                 plane.Draw();
@@ -210,25 +210,25 @@ namespace DuckGame
             private bool _flyLeft;
             public bool finished;
 
-            public float textWidth => this.bannerTarget != null ? bannerTarget.width : 1f;
+            public float textWidth => bannerTarget != null ? bannerTarget.width : 1f;
 
             public Plane(Vec2 pos, string text, bool flyLeft)
               : base("plane", 18, 13)
             {
-                this._font = new FancyBitmapFont("smallFont");
-                this._flyLeft = flyLeft;
+                _font = new FancyBitmapFont("smallFont");
+                _flyLeft = flyLeft;
                 //this._text = text;
                 //this.originalY = pos.y;
-                this.position = pos;
-                this.AddAnimation("idle", 0.8f, true, 0, 1);
-                this.SetAnimation("idle");
-                this.bannerTarget = new RenderTarget2D((int)(this._font.GetWidth(text) + 4f) + 8, 15);
-                this._wiggle = new MaterialWiggle(this);
+                position = pos;
+                AddAnimation("idle", 0.8f, true, 0, 1);
+                SetAnimation("idle");
+                bannerTarget = new RenderTarget2D((int)(_font.GetWidth(text) + 4f) + 8, 15);
+                _wiggle = new MaterialWiggle(this);
                 Camera camera = new Camera(0f, 0f, bannerTarget.width, bannerTarget.height)
                 {
                     position = Vec2.Zero
                 };
-                DuckGame.Graphics.SetRenderTarget(this.bannerTarget);
+                DuckGame.Graphics.SetRenderTarget(bannerTarget);
                 DepthStencilState depthStencilState = new DepthStencilState()
                 {
                     StencilEnable = true,
@@ -239,38 +239,38 @@ namespace DuckGame
                 };
                 DuckGame.Graphics.Clear(Color.Transparent);
                 DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
-                DuckGame.Graphics.DrawRect(new Vec2(0f, 2f), new Vec2(this.bannerTarget.width - 8, this.bannerTarget.height - 2), Color.Black);
-                this._font.Draw(text, new Vec2(1f, 3f), new Color(47, 0, 66), (Depth)1f);
+                DuckGame.Graphics.DrawRect(new Vec2(0f, 2f), new Vec2(bannerTarget.width - 8, bannerTarget.height - 2), Color.Black);
+                _font.Draw(text, new Vec2(1f, 3f), new Color(47, 0, 66), (Depth)1f);
                 DuckGame.Graphics.screen.End();
                 DuckGame.Graphics.SetRenderTarget(null);
             }
 
             public void UpdateFlying()
             {
-                this.position.x += this._flyLeft ? -0.25f : 0.25f;
-                if (this.bannerTarget != null && (this._flyLeft && this.x < -(400 + this.bannerTarget.width) || !this._flyLeft && this.x > 400 + this.bannerTarget.width))
-                    this.finished = true;
+                position.x += _flyLeft ? -0.25f : 0.25f;
+                if (bannerTarget != null && (_flyLeft && x < -(400 + bannerTarget.width) || !_flyLeft && x > 400 + bannerTarget.width))
+                    finished = true;
                 double num = -(Level.current.bottomRight.y + Level.current.topLeft.y) / 2f;
             }
 
             public override void Draw()
             {
-                if (this.bannerTarget == null)
+                if (bannerTarget == null)
                     return;
-                this.scale = new Vec2(0.5f, 0.5f);
-                if (this._flyLeft)
+                scale = new Vec2(0.5f, 0.5f);
+                if (_flyLeft)
                 {
-                    this.flipH = true;
+                    flipH = true;
                     base.Draw();
                     DuckGame.Graphics.material = _wiggle;
-                    DuckGame.Graphics.Draw(bannerTarget, this.x + 4f, this.y, 0.5f, 0.5f, (Depth)1f);
+                    DuckGame.Graphics.Draw(bannerTarget, x + 4f, y, 0.5f, 0.5f, (Depth)1f);
                     DuckGame.Graphics.material = null;
                 }
                 else
                 {
                     base.Draw();
                     DuckGame.Graphics.material = _wiggle;
-                    DuckGame.Graphics.Draw(bannerTarget, this.x - (this.bannerTarget.width / 2 + 4), this.y, 0.5f, 0.5f, (Depth)1f);
+                    DuckGame.Graphics.Draw(bannerTarget, x - (bannerTarget.width / 2 + 4), y, 0.5f, 0.5f, (Depth)1f);
                     DuckGame.Graphics.material = null;
                 }
             }

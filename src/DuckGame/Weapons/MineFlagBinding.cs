@@ -13,22 +13,22 @@ namespace DuckGame
         {
             get
             {
-                this._value = 0;
-                Mine thing = this._thing as Mine;
+                _value = 0;
+                Mine thing = _thing as Mine;
                 if (thing._pin)
-                    this._value |= 8;
+                    _value |= 8;
                 if (thing._armed)
-                    this._value |= 4;
+                    _value |= 4;
                 if (thing._clicked)
-                    this._value |= 2;
+                    _value |= 2;
                 if (thing._thrown)
-                    this._value |= 1;
-                return this._value;
+                    _value |= 1;
+                return _value;
             }
             set
             {
-                this._value = value;
-                Mine thing = this._thing as Mine;
+                _value = value;
+                Mine thing = _thing as Mine;
                 thing._pin = (_value & 8U) > 0U;
                 thing._armed = (_value & 4U) > 0U;
                 thing._clicked = (_value & 2U) > 0U;

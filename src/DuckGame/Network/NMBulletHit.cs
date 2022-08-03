@@ -18,8 +18,8 @@ namespace DuckGame
 
         public NMBulletHit(Vec2 pos)
         {
-            this.x = pos.x;
-            this.y = pos.y;
+            x = pos.x;
+            y = pos.y;
         }
 
         public override void Activate()

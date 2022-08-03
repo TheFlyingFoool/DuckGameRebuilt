@@ -11,7 +11,7 @@ namespace DuckGame
     {
         private int _numBytes;
 
-        public NMNetworkTrafficGarbage(int numBytes) => this._numBytes = numBytes;
+        public NMNetworkTrafficGarbage(int numBytes) => _numBytes = numBytes;
 
         public NMNetworkTrafficGarbage()
         {
@@ -19,18 +19,18 @@ namespace DuckGame
 
         protected override void OnSerialize()
         {
-            if (this._numBytes < 4)
-                this._numBytes = 4;
-            this._serializedData.Write(this._numBytes);
-            for (int index = 0; index < this._numBytes - 4; ++index)
-                this._serializedData.Write((byte)Rando.Int(byte.MaxValue));
+            if (_numBytes < 4)
+                _numBytes = 4;
+            _serializedData.Write(_numBytes);
+            for (int index = 0; index < _numBytes - 4; ++index)
+                _serializedData.Write((byte)Rando.Int(byte.MaxValue));
             base.OnSerialize();
         }
 
         public override void OnDeserialize(BitBuffer msg)
         {
-            this._numBytes = msg.ReadInt();
-            for (int index = 0; index < this._numBytes - 4; ++index)
+            _numBytes = msg.ReadInt();
+            for (int index = 0; index < _numBytes - 4; ++index)
             {
                 int num = msg.ReadByte();
             }

@@ -23,7 +23,7 @@ namespace DuckGame
         private Layer overlayLayer;
         private bool _smallMode;
 
-        public bool activated => this._activated;
+        public bool activated => _activated;
 
         public static Layer boardLayer
         {
@@ -34,14 +34,14 @@ namespace DuckGame
         public GinormoBoard(float xpos, float ypos, BoardMode mode, bool smallMode)
           : base(xpos, ypos)
         {
-            this._smallMode = smallMode;
-            this._board = new Sprite("rockThrow/boardMiddle");
-            this._board.center = new Vec2(this._board.w / 2, this._board.h / 2 - 30);
-            this._lighting = new SpriteMap("rockThrow/lighting", 191, 23)
+            _smallMode = smallMode;
+            _board = new Sprite("rockThrow/boardMiddle");
+            _board.center = new Vec2(_board.w / 2, _board.h / 2 - 30);
+            _lighting = new SpriteMap("rockThrow/lighting", 191, 23)
             {
                 frame = 1
             };
-            this.boardLightingLayer = new Layer("LIGHTING", -85)
+            boardLightingLayer = new Layer("LIGHTING", -85)
             {
                 blend = new BlendState()
                 {
@@ -53,72 +53,72 @@ namespace DuckGame
                     AlphaBlendFunction = BlendFunction.Add
                 }
             };
-            Layer.Add(this.boardLightingLayer);
-            BoardLighting boardLighting = new BoardLighting(this.x + 0.5f, this.y - 125f)
+            Layer.Add(boardLightingLayer);
+            BoardLighting boardLighting = new BoardLighting(x + 0.5f, y - 125f)
             {
-                layer = this.boardLightingLayer
+                layer = boardLightingLayer
             };
             Level.Add(boardLighting);
             if (RockWeather.weather == Weather.Snowing)
             {
-                this._boardTop = new Sprite("rockThrow/boardTopSnow");
-                this._boardBottom = new Sprite("rockThrow/boardBottomSnow");
+                _boardTop = new Sprite("rockThrow/boardTopSnow");
+                _boardBottom = new Sprite("rockThrow/boardBottomSnow");
             }
             else
             {
-                this._boardTop = new Sprite("rockThrow/boardTop");
-                this._boardBottom = new Sprite("rockThrow/boardBottom");
+                _boardTop = new Sprite("rockThrow/boardTop");
+                _boardBottom = new Sprite("rockThrow/boardBottom");
             }
-            this._boardTop.center = new Vec2(this._boardTop.w / 2, this._boardTop.h / 2 - 30);
-            this._boardBottom.center = new Vec2(this._boardBottom.w / 2, this._boardBottom.h / 2 - 30);
-            this.layer = Layer.Background;
-            this._pos = new Vec2(xpos, ypos);
-            this._mode = mode;
-            GinormoBoard.boardLayer = new Layer("BOARD", -85, targetLayer: true, targetSize: new Vec2(GinormoScreen.GetSize(this._smallMode).x, GinormoScreen.GetSize(this._smallMode).y))
+            _boardTop.center = new Vec2(_boardTop.w / 2, _boardTop.h / 2 - 30);
+            _boardBottom.center = new Vec2(_boardBottom.w / 2, _boardBottom.h / 2 - 30);
+            layer = Layer.Background;
+            _pos = new Vec2(xpos, ypos);
+            _mode = mode;
+            GinormoBoard.boardLayer = new Layer("BOARD", -85, targetLayer: true, targetSize: new Vec2(GinormoScreen.GetSize(_smallMode).x, GinormoScreen.GetSize(_smallMode).y))
             {
-                camera = new Camera(0f, 0f, GinormoScreen.GetSize(this._smallMode).x, GinormoScreen.GetSize(this._smallMode).y),
+                camera = new Camera(0f, 0f, GinormoScreen.GetSize(_smallMode).x, GinormoScreen.GetSize(_smallMode).y),
                 targetOnly = true,
                 targetClearColor = new Color(0.05f, 0.05f, 0.05f)
             };
             Layer.Add(GinormoBoard.boardLayer);
-            this.overlayLayer = new Layer("OVERLAY", 10);
-            Layer.Add(this.overlayLayer);
-            GinormoOverlay ginormoOverlay = new GinormoOverlay(this.x - 182f, this.y - 65f, this._smallMode)
+            overlayLayer = new Layer("OVERLAY", 10);
+            Layer.Add(overlayLayer);
+            GinormoOverlay ginormoOverlay = new GinormoOverlay(x - 182f, y - 65f, _smallMode)
             {
                 z = -130f,
-                position = this.position,
-                layer = this.overlayLayer
+                position = position,
+                layer = overlayLayer
             };
             Level.Add(ginormoOverlay);
         }
 
         public void Activate()
         {
-            if (this._activated)
+            if (_activated)
                 return;
-            this._screen = new GinormoScreen(0f, 0f, this._mode);
+            _screen = new GinormoScreen(0f, 0f, _mode);
             Level.Add(_screen);
-            this._activated = true;
+            _activated = true;
         }
 
         public override void Draw()
         {
-            this.boardLightingLayer.perspective = true;
-            this.boardLightingLayer.projection = Layer.Background.projection;
-            this.boardLightingLayer.view = Layer.Background.view;
-            this.overlayLayer.perspective = true;
-            this.overlayLayer.projection = Layer.Game.projection;
-            this.overlayLayer.view = Layer.Game.view;
-            this.overlayLayer.camera = Layer.Game.camera;
-            this.boardLightingLayer.colorAdd = new Vec3(1f - RockWeather.lightOpacity);
-            this._lighting.frame = RockWeather.lightOpacity <= 0.01f ? 0 : 1;
-            this._board.depth = this.depth;
-            DuckGame.Graphics.Draw(this._board, this.x, this.y - 12f);
-            DuckGame.Graphics.Draw(this._boardBottom, this.x, this.y + 58f);
-            DuckGame.Graphics.Draw(this._boardTop, this.x, this.y - 68f);
+            boardLightingLayer.perspective = true;
+            boardLightingLayer.projection = Layer.Background.projection;
+            boardLightingLayer.view = Layer.Background.view;
+            overlayLayer.perspective = true;
+            overlayLayer.projection = Layer.Game.projection;
+            overlayLayer.view = Layer.Game.view;
+            overlayLayer.camera = Layer.Game.camera;
+            boardLightingLayer.colorAdd = new Vec3(1f - RockWeather.lightOpacity);
+            _lighting.frame = RockWeather.lightOpacity <= 0.01f ? 0 : 1;
+            _board.depth = depth;
+            DuckGame.Graphics.Draw(_board, x, y - 12f);
+            DuckGame.Graphics.Draw(_boardBottom, x, y + 58f);
+            DuckGame.Graphics.Draw(_boardTop, x, y - 68f);
             if (!RockScoreboard._sunEnabled)
                 return;
-            DuckGame.Graphics.Draw(_lighting, this.x - 95f, this.y - 67f);
+            DuckGame.Graphics.Draw(_lighting, x - 95f, y - 67f);
         }
     }
 }

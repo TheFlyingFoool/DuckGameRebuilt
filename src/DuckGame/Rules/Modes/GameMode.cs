@@ -119,18 +119,18 @@ namespace DuckGame
             set => GameMode._core.playedGame = value;
         }
 
-        public bool matchOver => this._matchOver;
+        public bool matchOver => _matchOver;
 
         public List<Duck> pendingSpawns
         {
-            get => this._pendingSpawns;
-            set => this._pendingSpawns = value;
+            get => _pendingSpawns;
+            set => _pendingSpawns = value;
         }
 
         public GameMode(bool validityTest = false, bool editorTestMode = false)
         {
-            this._validityTest = validityTest;
-            this._editorTestMode = editorTestMode;
+            _validityTest = validityTest;
+            _editorTestMode = editorTestMode;
         }
 
         public static void Subscribe()
@@ -170,9 +170,9 @@ namespace DuckGame
             GameMode._started = false;
             GameMode.firstDead = false;
             GameMode.playedGame = true;
-            if (!this._editorTestMode)
+            if (!_editorTestMode)
                 Highlights.StartRound();
-            this._font = new BitmapFont("biosFont", 8);
+            _font = new BitmapFont("biosFont", 8);
             if (Network.isServer)
             {
                 string str = Music.RandomTrack("InGame", Music.currentSong);
@@ -181,7 +181,7 @@ namespace DuckGame
                 if (Network.isActive)
                     Send.Message(new NMSwitchMusic(str));
             }
-            this.Initialize();
+            Initialize();
             if (Network.isActive)
                 GameMode.getReady = false;
             else
@@ -190,54 +190,54 @@ namespace DuckGame
 
         private void CreatePauseGroup()
         {
-            if (this._pauseGroup != null)
+            if (_pauseGroup != null)
                 Level.Remove(_pauseGroup);
-            if (this._editorTestMode)
+            if (_editorTestMode)
             {
-                this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
-                this._pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
-                this._confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
+                _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
+                _pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
+                _confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
                 UIDivider component = new UIDivider(true, 0.8f);
-                component.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(this._pauseGroup), UIAlign.Left), true);
+                component.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup), UIAlign.Left), true);
                 component.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
                 component.leftSection.Add(new UIText(" ", Color.White, UIAlign.Left), true);
-                component.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit), UIAlign.Left), true);
+                component.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit), UIAlign.Left), true);
                 component.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
-                this._pauseMenu.Add(component, true);
-                this._pauseMenu.Close();
-                this._pauseGroup.Add(_pauseMenu, false);
-                Options.AddMenus(this._pauseGroup);
-                Options.openOnClose = this._pauseMenu;
-                this._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
-                this._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
-                this._confirmMenu.Close();
-                this._pauseGroup.Add(_confirmMenu, false);
-                this._pauseGroup.isPauseMenu = true;
+                _pauseMenu.Add(component, true);
+                _pauseMenu.Close();
+                _pauseGroup.Add(_pauseMenu, false);
+                Options.AddMenus(_pauseGroup);
+                Options.openOnClose = _pauseMenu;
+                _confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
+                _confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit)), true);
+                _confirmMenu.Close();
+                _pauseGroup.Add(_confirmMenu, false);
+                _pauseGroup.isPauseMenu = true;
                 Level.Add(_pauseGroup);
-                this._pauseGroup.Update();
-                this._pauseGroup.Update();
-                this._pauseGroup.Close();
-                this._confirmMenu.Update();
+                _pauseGroup.Update();
+                _pauseGroup.Update();
+                _pauseGroup.Close();
+                _confirmMenu.Update();
             }
             else
             {
-                this._pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
-                this._pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
-                this._confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
-                this._confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
-                this._confirmReturnToLobby = new UIMenu("RETURN TO LOBBY?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
+                _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
+                _pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
+                _confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
+                _confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
+                _confirmReturnToLobby = new UIMenu("RETURN TO LOBBY?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
                 UIDivider component1 = new UIDivider(true, 0.8f);
-                component1.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(this._pauseGroup), UIAlign.Left), true);
+                component1.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup), UIAlign.Left), true);
                 component1.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
                 component1.leftSection.Add(new UIText(" ", Color.White, UIAlign.Left), true);
                 component1.leftSection.Add(new UIMenuItem("|DGRED|BACK TO LOBBY", new UIMenuActionOpenMenu(_pauseMenu, _confirmReturnToLobby), UIAlign.Left), true);
                 component1.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_pauseMenu, _confirmMenu), UIAlign.Left), true);
-                this._confirmReturnToLobby.Add(new UIText("YOUR CURRENT GAME", Color.White), true);
-                this._confirmReturnToLobby.Add(new UIText("WILL BE CANCELLED.", Color.White), true);
-                this._confirmReturnToLobby.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmReturnToLobby, _pauseMenu), UIAlign.Left, backButton: true), true);
-                this._confirmReturnToLobby.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._returnToLobby)), true);
-                this._confirmReturnToLobby.Close();
-                this._pauseGroup.Add(_confirmReturnToLobby, false);
+                _confirmReturnToLobby.Add(new UIText("YOUR CURRENT GAME", Color.White), true);
+                _confirmReturnToLobby.Add(new UIText("WILL BE CANCELLED.", Color.White), true);
+                _confirmReturnToLobby.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmReturnToLobby, _pauseMenu), UIAlign.Left, backButton: true), true);
+                _confirmReturnToLobby.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _returnToLobby)), true);
+                _confirmReturnToLobby.Close();
+                _pauseGroup.Add(_confirmReturnToLobby, false);
                 if (Level.current.isCustomLevel || Level.current is RandomLevel)
                 {
                     component1.leftSection.Add(new UIText(" ", Color.White), true);
@@ -249,66 +249,66 @@ namespace DuckGame
                             component1.leftSection.Add(new UIMenuItem("@STEAMICON@|DGGREEN|VIEW", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(GameMode.View)), UIAlign.Left), true);
                             if ((workshopItem.stateFlags & WorkshopItemState.Subscribed) != WorkshopItemState.None)
                             {
-                                component1.leftSection.Add(new UIMenuItem("@STEAMICON@|DGRED|UNSUBSCRIBE", new UIMenuActionCloseMenuCallFunction(this._pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
+                                component1.leftSection.Add(new UIMenuItem("@STEAMICON@|DGRED|UNSUBSCRIBE", new UIMenuActionCloseMenuCallFunction(_pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
                             }
                             else
                             {
-                                component1.leftSection.Add(new UIMenuItem("@STEAMICON@|DGGREEN|SUBSCRIBE", new UIMenuActionCloseMenuCallFunction(this._pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
+                                component1.leftSection.Add(new UIMenuItem("@STEAMICON@|DGGREEN|SUBSCRIBE", new UIMenuActionCloseMenuCallFunction(_pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
                                 component1.leftSection.Add(new UIMenuItem("@blacklist@|DGRED|NEVER AGAIN", new UIMenuActionOpenMenu(_pauseMenu, _confirmBlacklistMenu), UIAlign.Left), true);
                             }
                         }
                     }
-                    if (!this._matchOver && Network.isServer)
-                        component1.leftSection.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(this._pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Skip)), UIAlign.Left), true);
+                    if (!_matchOver && Network.isServer)
+                        component1.leftSection.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(_pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Skip)), UIAlign.Left), true);
                 }
                 component1.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
-                this._pauseMenu.Add(component1, true);
-                this._pauseMenu.Close();
-                this._pauseGroup.Add(_pauseMenu, false);
-                Options.AddMenus(this._pauseGroup);
-                Options.openOnClose = this._pauseMenu;
-                this._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
-                this._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(this._pauseGroup, this._quit)), true);
-                this._confirmMenu.Close();
-                this._pauseGroup.Add(_confirmMenu, false);
-                UIMenu confirmBlacklistMenu1 = this._confirmBlacklistMenu;
+                _pauseMenu.Add(component1, true);
+                _pauseMenu.Close();
+                _pauseGroup.Add(_pauseMenu, false);
+                Options.AddMenus(_pauseGroup);
+                Options.openOnClose = _pauseMenu;
+                _confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
+                _confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit)), true);
+                _confirmMenu.Close();
+                _pauseGroup.Add(_confirmMenu, false);
+                UIMenu confirmBlacklistMenu1 = _confirmBlacklistMenu;
                 UIText component2 = new UIText("", Color.White, heightAdd: -4f)
                 {
                     scale = new Vec2(0.5f)
                 };
                 confirmBlacklistMenu1.Add(component2, true);
-                UIMenu confirmBlacklistMenu2 = this._confirmBlacklistMenu;
+                UIMenu confirmBlacklistMenu2 = _confirmBlacklistMenu;
                 UIText component3 = new UIText("Are you sure you want to avoid", Color.White, heightAdd: -4f)
                 {
                     scale = new Vec2(0.5f)
                 };
                 confirmBlacklistMenu2.Add(component3, true);
-                UIMenu confirmBlacklistMenu3 = this._confirmBlacklistMenu;
+                UIMenu confirmBlacklistMenu3 = _confirmBlacklistMenu;
                 UIText component4 = new UIText("this level in the future?", Color.White, heightAdd: -4f)
                 {
                     scale = new Vec2(0.5f)
                 };
                 confirmBlacklistMenu3.Add(component4, true);
-                UIMenu confirmBlacklistMenu4 = this._confirmBlacklistMenu;
+                UIMenu confirmBlacklistMenu4 = _confirmBlacklistMenu;
                 UIText component5 = new UIText("", Color.White, heightAdd: -4f)
                 {
                     scale = new Vec2(0.5f)
                 };
                 confirmBlacklistMenu4.Add(component5, true);
-                this._confirmBlacklistMenu.Add(new UIMenuItem("|DGRED|@blacklist@YES!", new UIMenuActionCloseMenuCallFunction(this._pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Blacklist))), true);
-                this._confirmBlacklistMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_confirmBlacklistMenu, _pauseMenu), backButton: true), true);
-                this._confirmBlacklistMenu.Close();
-                this._pauseGroup.Add(_confirmBlacklistMenu, false);
+                _confirmBlacklistMenu.Add(new UIMenuItem("|DGRED|@blacklist@YES!", new UIMenuActionCloseMenuCallFunction(_pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Blacklist))), true);
+                _confirmBlacklistMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_confirmBlacklistMenu, _pauseMenu), backButton: true), true);
+                _confirmBlacklistMenu.Close();
+                _pauseGroup.Add(_confirmBlacklistMenu, false);
                 Level.Add(_pauseGroup);
-                this._pauseGroup.isPauseMenu = true;
-                this._pauseGroup.Close();
-                this._pauseGroup.Update();
-                this._pauseGroup.Update();
-                this._confirmBlacklistMenu.Update();
-                this._confirmMenu.Update();
-                this._pauseMenu.Update();
-                this._confirmReturnToLobby.Update();
-                this._confirmBlacklistMenu.Update();
+                _pauseGroup.isPauseMenu = true;
+                _pauseGroup.Close();
+                _pauseGroup.Update();
+                _pauseGroup.Update();
+                _confirmBlacklistMenu.Update();
+                _confirmMenu.Update();
+                _pauseMenu.Update();
+                _confirmReturnToLobby.Update();
+                _confirmBlacklistMenu.Update();
             }
         }
 
@@ -316,7 +316,7 @@ namespace DuckGame
 
         public void DoStart()
         {
-            if (!this._editorTestMode)
+            if (!_editorTestMode)
             {
                 ++Deathmatch.levelsSinceRandom;
                 ++Deathmatch.levelsSinceWorkshop;
@@ -325,7 +325,7 @@ namespace DuckGame
                     ++profile.stats.timesSpawned;
                 ++Global.data.timesSpawned.valueInt;
             }
-            this.Start();
+            Start();
             GameMode._started = true;
         }
 
@@ -335,50 +335,50 @@ namespace DuckGame
 
         public void DoUpdate()
         {
-            if (this._validityTest)
+            if (_validityTest)
             {
-                if (this._watch == null)
-                    this._watch = new Stopwatch();
-                this._watch.Start();
+                if (_watch == null)
+                    _watch = new Stopwatch();
+                _watch.Start();
             }
             if (Graphics.fade > 0.9f && Input.Pressed("START") && !Network.isActive)
             {
-                if (this._watch != null)
-                    this._watch.Stop();
-                this.CreatePauseGroup();
-                this._pauseGroup.DoUpdate();
-                this._pauseGroup.DoUpdate();
-                this._pauseGroup.DoUpdate();
-                this._pauseMenu.DoUpdate();
-                this._pauseGroup.Open();
-                this._pauseMenu.Open();
-                MonoMain.pauseMenu = this._pauseGroup;
-                if (this._paused)
+                if (_watch != null)
+                    _watch.Stop();
+                CreatePauseGroup();
+                _pauseGroup.DoUpdate();
+                _pauseGroup.DoUpdate();
+                _pauseGroup.DoUpdate();
+                _pauseMenu.DoUpdate();
+                _pauseGroup.Open();
+                _pauseMenu.Open();
+                MonoMain.pauseMenu = _pauseGroup;
+                if (_paused)
                     return;
-                if (!this._validityTest)
+                if (!_validityTest)
                     Music.Pause();
                 SFX.Play("pause", 0.6f);
-                this._paused = true;
+                _paused = true;
             }
             else
             {
-                if (this._paused && MonoMain.pauseMenu == null)
+                if (_paused && MonoMain.pauseMenu == null)
                 {
-                    this._paused = false;
+                    _paused = false;
                     SFX.Play("resume", 0.6f);
-                    if (!this._validityTest)
+                    if (!_validityTest)
                         Music.Resume();
                 }
-                if (this._returnToLobby.value && !Network.isActive)
+                if (_returnToLobby.value && !Network.isActive)
                 {
                     Level.current = new TeamSelect2(true);
-                    this._returnToLobby.value = false;
+                    _returnToLobby.value = false;
                 }
-                if (this._quit.value)
+                if (_quit.value)
                 {
-                    if (this._editorTestMode)
+                    if (_editorTestMode)
                         Level.current = DuckGameTestArea.currentEditor;
-                    else if (this._validityTest)
+                    else if (_validityTest)
                         Level.current = DeathmatchTestDialogue.currentEditor;
                     else if (Network.isActive)
                     {
@@ -395,32 +395,32 @@ namespace DuckGame
                 else
                 {
                     Graphics.fade = 1f;
-                    if (!this._validityTest && Music.finished)
+                    if (!_validityTest && Music.finished)
                     {
                         if (Music.pendingSong != null)
                             Music.SwitchSongs();
                         else
-                            this.PlayMusic();
+                            PlayMusic();
                     }
                     if (Music.finished)
-                        this._wait -= 0.0006f;
-                    this._waitFade -= 0.04f;
+                        _wait -= 0.0006f;
+                    _waitFade -= 0.04f;
                     if (_waitFade > 0.0 || !GameMode.getReady || Network.isActive && Network.isClient && !Level.current.transferCompleteCalled)
                         return;
-                    this._waitSpawn -= 0.06f;
+                    _waitSpawn -= 0.06f;
                     if (_waitSpawn <= 0.0)
                     {
-                        if (Network.isServer && this._pendingSpawns == null)
-                            this._pendingSpawns = this.AssignSpawns();
-                        if (this._pendingSpawns != null && this._pendingSpawns.Count > 0)
+                        if (Network.isServer && _pendingSpawns == null)
+                            _pendingSpawns = AssignSpawns();
+                        if (_pendingSpawns != null && _pendingSpawns.Count > 0)
                         {
-                            this._waitSpawn = 1.1f;
-                            if (this._pendingSpawns.Count == 1)
-                                this._waitSpawn = 2f;
-                            Duck pendingSpawn = this._pendingSpawns[0];
+                            _waitSpawn = 1.1f;
+                            if (_pendingSpawns.Count == 1)
+                                _waitSpawn = 2f;
+                            Duck pendingSpawn = _pendingSpawns[0];
                             pendingSpawn.respawnPos = pendingSpawn.position;
                             pendingSpawn.localSpawnVisible = true;
-                            this._pendingSpawns.RemoveAt(0);
+                            _pendingSpawns.RemoveAt(0);
                             Vec3 color = pendingSpawn.profile.persona.color;
                             Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
                             Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
@@ -430,7 +430,7 @@ namespace DuckGame
                                 dugg = pendingSpawn
                             });
                             SFX.Play("pullPin", 0.7f);
-                            if (pendingSpawn.isServerForObject && !this._editorTestMode)
+                            if (pendingSpawn.isServerForObject && !_editorTestMode)
                             {
                                 if (!Network.isActive && pendingSpawn.profile.team.name == "ZEKE")
                                 {
@@ -529,14 +529,14 @@ namespace DuckGame
                         }
                         else if (!GameMode._started)
                         {
-                            this._waitAfterSpawn -= 0.05f;
+                            _waitAfterSpawn -= 0.05f;
                             if (_waitAfterSpawn <= 0.0)
                             {
-                                ++this._waitAfterSpawnDings;
-                                if (this._waitAfterSpawnDings > 2)
+                                ++_waitAfterSpawnDings;
+                                if (_waitAfterSpawnDings > 2)
                                 {
                                     Party.Clear();
-                                    this.DoStart();
+                                    DoStart();
                                     SFX.Play("ding");
                                     Event.Log(new RoundStartEvent());
                                     GameMode.lastWinners.Clear();
@@ -551,36 +551,36 @@ namespace DuckGame
                                 }
                                 else
                                     SFX.Play("preStartDing");
-                                this._waitSpawn = 1.1f;
+                                _waitSpawn = 1.1f;
                             }
                         }
                         else
                         {
-                            this._fontFade -= 0.1f;
+                            _fontFade -= 0.1f;
                             if (_fontFade < 0.0)
-                                this._fontFade = 0f;
+                                _fontFade = 0f;
                         }
                     }
                     if (Network.isClient)
                         return;
                     if (GameMode._started)
-                        this.Update();
-                    if (this._matchOver)
-                        this._roundEndWait -= 0.005f;
-                    if (this.skippedLevel)
-                        this._roundEndWait = -1f;
-                    if (_roundEndWait < 0.5f && !this._addedPoints && !this.skippedLevel)
-                        this.DoAddPoints();
-                    if (_roundEndWait < 0.1f && !this._endedHighlights)
+                        Update();
+                    if (_matchOver)
+                        _roundEndWait -= 0.005f;
+                    if (skippedLevel)
+                        _roundEndWait = -1f;
+                    if (_roundEndWait < 0.5f && !_addedPoints && !skippedLevel)
+                        DoAddPoints();
+                    if (_roundEndWait < 0.1f && !_endedHighlights)
                     {
-                        this._endedHighlights = true;
-                        if (!this._editorTestMode)
+                        _endedHighlights = true;
+                        if (!_editorTestMode)
                             Highlights.FinishRound();
                     }
-                    if (_roundEndWait >= 0f || this._switchedLevel)
+                    if (_roundEndWait >= 0f || _switchedLevel)
                         return;
                     bool flag = false;
-                    if (!Network.isActive && !this.skippedLevel)
+                    if (!Network.isActive && !skippedLevel)
                     {
                         int num = 0;
                         List<Team> winning = Teams.winning;
@@ -596,7 +596,7 @@ namespace DuckGame
                             if (Teams.active.Count > 1)
                                 Global.WinLevel(null);
                         }
-                        if (!this._editorTestMode && num > 4)
+                        if (!_editorTestMode && num > 4)
                         {
                             foreach (Team team in Teams.active)
                             {
@@ -631,17 +631,17 @@ namespace DuckGame
                             }
                         }
                     }
-                    Level nextLevel = this.GetNextLevel();
+                    Level nextLevel = GetNextLevel();
                     GameMode.previousLevel = nextLevel.level;
-                    if (!this.skippedLevel)
+                    if (!skippedLevel)
                     {
                         if (Teams.active.Count > 1)
                         {
-                            if (!this._editorTestMode)
+                            if (!_editorTestMode)
                                 ++Global.data.levelsPlayed;
                             if (flag && Network.isServer)
                             {
-                                if (!this._editorTestMode)
+                                if (!_editorTestMode)
                                     ++Global.data.littleDraws.valueInt;
                                 if (Network.isActive)
                                     Send.Message(new NMAssignDraw());
@@ -663,12 +663,12 @@ namespace DuckGame
                                     scrs.Add(0);
                             }
                             Send.Message(new NMTransferScores(scrs));
-                            GameMode.RunPostRound(this._editorTestMode);
+                            GameMode.RunPostRound(_editorTestMode);
                         }
                     }
-                    if (this._validityTest && this._watch != null)
+                    if (_validityTest && _watch != null)
                     {
-                        long elapsedMilliseconds = this._watch.ElapsedMilliseconds;
+                        long elapsedMilliseconds = _watch.ElapsedMilliseconds;
                         if (frames / (_watch.ElapsedMilliseconds / 1000.0) < 30.0)
                         {
                             DeathmatchTestDialogue.success = false;
@@ -692,39 +692,39 @@ namespace DuckGame
                         }
                         if (!DuckNetwork.TryPeacefulResolution())
                         {
-                            if (this._doScore && !this.skippedLevel)
+                            if (_doScore && !skippedLevel)
                             {
-                                this._doScore = false;
+                                _doScore = false;
                                 if (GameMode.showdown)
                                 {
-                                    if (this._roundHadWinner)
+                                    if (_roundHadWinner)
                                     {
                                         GameMode.showdown = false;
                                         Level.current = new RockScoreboard(nextLevel, ScoreBoardMode.ShowWinner);
-                                        if (!this._editorTestMode)
+                                        if (!_editorTestMode)
                                             ++Global.data.drawsPlayed.valueInt;
                                         if (Network.isActive)
                                             Send.Message(new NMDrawBroken());
                                     }
                                     else
                                     {
-                                        this._endedHighlights = false;
+                                        _endedHighlights = false;
                                         Level.current = nextLevel;
                                     }
                                 }
                                 else
                                 {
                                     Level.current = new RockIntro(nextLevel);
-                                    this._doScore = false;
+                                    _doScore = false;
                                 }
                             }
                             else
                             {
-                                this._endedHighlights = false;
-                                Level.current = !TeamSelect2.partyMode || this.skippedLevel ? nextLevel : new DrinkRoom(nextLevel);
+                                _endedHighlights = false;
+                                Level.current = !TeamSelect2.partyMode || skippedLevel ? nextLevel : new DrinkRoom(nextLevel);
                             }
                         }
-                        this._switchedLevel = true;
+                        _switchedLevel = true;
                     }
                 }
             }
@@ -775,76 +775,76 @@ namespace DuckGame
 
         public List<Duck> PrepareSpawns()
         {
-            this._pendingSpawns = this.AssignSpawns();
-            return this._pendingSpawns;
+            _pendingSpawns = AssignSpawns();
+            return _pendingSpawns;
         }
 
         protected virtual List<Duck> AssignSpawns() => new List<Duck>();
 
         protected virtual void PlayMusic()
         {
-            if (this._validityTest)
+            if (_validityTest)
                 return;
             string music = Music.RandomTrack("InGame", GameMode._currentMusic);
             Music.Play(music, false);
             GameMode._currentMusic = music;
         }
 
-        protected virtual Level GetNextLevel() => this._editorTestMode ? new GameLevel((Level.current as GameLevel).levelInputString, editorTestMode: true) : (Level)new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
+        protected virtual Level GetNextLevel() => _editorTestMode ? new GameLevel((Level.current as GameLevel).levelInputString, editorTestMode: true) : (Level)new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
 
         protected void DoAddPoints()
         {
-            this._addedPoints = true;
+            _addedPoints = true;
             Event.Log(new RoundEndEvent());
             Highlights.highlightRatingMultiplier = 0f;
-            if (this.AddPoints().Count > 0)
+            if (AddPoints().Count > 0)
             {
-                this._roundHadWinner = true;
+                _roundHadWinner = true;
                 SFX.Play("scoreDing", 0.9f);
             }
-            if (this.skippedLevel || this._editorTestMode)
+            if (skippedLevel || _editorTestMode)
                 return;
             ++GameMode._numMatchesPlayed;
             if (GameMode._numMatchesPlayed < GameMode.roundsBetweenIntermission && !GameMode.showdown)
                 return;
             GameMode._numMatchesPlayed = 0;
-            this._doScore = true;
+            _doScore = true;
         }
 
         protected virtual List<Profile> AddPoints() => new List<Profile>();
 
         public void SkipMatch()
         {
-            this.skippedLevel = true;
-            this.EndMatch();
+            skippedLevel = true;
+            EndMatch();
         }
 
-        protected void EndMatch() => this._matchOver = true;
+        protected void EndMatch() => _matchOver = true;
 
         public virtual void PostDrawLayer(Layer layer)
         {
-            ++this.frames;
+            ++frames;
             if (layer != Layer.HUD)
                 return;
-            if (this._waitAfterSpawnDings > 0 && _fontFade > 0.01f)
+            if (_waitAfterSpawnDings > 0 && _fontFade > 0.01f)
             {
-                this._font.scale = new Vec2(2f, 2f);
-                this._font.alpha = this._fontFade;
+                _font.scale = new Vec2(2f, 2f);
+                _font.alpha = _fontFade;
                 string text = "GET";
-                if (this._waitAfterSpawnDings == 2)
+                if (_waitAfterSpawnDings == 2)
                     text = "READY";
-                else if (this._waitAfterSpawnDings == 3)
+                else if (_waitAfterSpawnDings == 3)
                     text = "";
-                float width = this._font.GetWidth(text);
-                this._font.Draw(text, (float)(Layer.HUD.camera.width / 2.0 - width / 2.0), (float)(Layer.HUD.camera.height / 2.0 - this._font.height / 2.0), Color.White);
+                float width = _font.GetWidth(text);
+                _font.Draw(text, (float)(Layer.HUD.camera.width / 2.0 - width / 2.0), (float)(Layer.HUD.camera.height / 2.0 - _font.height / 2.0), Color.White);
             }
-            if (!this._validityTest || this._waitAfterSpawnDings <= 0 || _fontFade >= 0.5)
+            if (!_validityTest || _waitAfterSpawnDings <= 0 || _fontFade >= 0.5)
                 return;
-            this._pulse += 0.08f;
+            _pulse += 0.08f;
             string text1 = "WIN THE MATCH";
-            float width1 = this._font.GetWidth(text1);
-            this._font.alpha = (float)((Math.Sin(_pulse) + 1.0) / 2.0);
-            this._font.Draw(text1, (float)(Layer.HUD.camera.width / 2.0 - width1 / 2.0), (float)(Layer.HUD.camera.height - this._font.height - 16.0), Color.Red);
+            float width1 = _font.GetWidth(text1);
+            _font.alpha = (float)((Math.Sin(_pulse) + 1.0) / 2.0);
+            _font.Draw(text1, (float)(Layer.HUD.camera.width / 2.0 - width1 / 2.0), (float)(Layer.HUD.camera.height - _font.height - 16.0), Color.Red);
         }
     }
 }

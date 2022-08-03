@@ -145,7 +145,7 @@ namespace DuckGame
                 else
                     Level.current = !MonoMain.startInEditor ? (!MonoMain.noIntro ? new BIOSScreen() : new TitleScreen()) : Main.editor;
             }
-            this._font = new BitmapFont("biosFont", 8);
+            _font = new BitmapFont("biosFont", 8);
             ModLoader.Start();
         }
 
@@ -164,12 +164,12 @@ namespace DuckGame
             DamageManager.Update();
             if (!Network.isActive)
                 NetRand.generator = Rando.generator;
-            if (this.joinedLobby || !Program.testServer || Network.isActive || !Steam.lobbySearchComplete)
+            if (joinedLobby || !Program.testServer || Network.isActive || !Steam.lobbySearchComplete)
                 return;
             if (Steam.lobbySearchResult != null)
             {
                 Network.JoinServer("", 0, Steam.lobbySearchResult.id.ToString());
-                this.joinedLobby = true;
+                joinedLobby = true;
             }
             else
             {

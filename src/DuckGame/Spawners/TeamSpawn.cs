@@ -26,25 +26,25 @@ namespace DuckGame
                 graphic.position = new Vec2((float)(index * 9.41176414489746 - 16.0 + 16.0), -2f);
                 graphicList.Add(graphic);
             }
-            this.graphic = graphicList;
-            this._editorName = "Team Spawn";
-            this.center = new Vec2(8f, 5f);
-            this.collisionSize = new Vec2(32f, 16f);
-            this.collisionOffset = new Vec2(-16f, -8f);
-            this._visibleInGame = false;
-            this.editorTooltip = "Spawn point for a whole team of Ducks.";
+            graphic = graphicList;
+            _editorName = "Team Spawn";
+            center = new Vec2(8f, 5f);
+            collisionSize = new Vec2(32f, 16f);
+            collisionOffset = new Vec2(-16f, -8f);
+            _visibleInGame = false;
+            editorTooltip = "Spawn point for a whole team of Ducks.";
         }
 
         public override void Draw()
         {
-            if (this.eightPlayerOnly.value)
+            if (eightPlayerOnly.value)
             {
-                if (this._eight == null)
+                if (_eight == null)
                 {
-                    this._eight = new SpriteMap("redEight", 10, 10);
-                    this._eight.CenterOrigin();
+                    _eight = new SpriteMap("redEight", 10, 10);
+                    _eight.CenterOrigin();
                 }
-                Graphics.Draw(_eight, this.x - 5f, this.y + 7f, (Depth)1f);
+                Graphics.Draw(_eight, x - 5f, y + 7f, (Depth)1f);
             }
             base.Draw();
         }

@@ -14,11 +14,11 @@ namespace DuckGame
         public NatureTileset(float x, float y)
           : base(x, y, "natureTileset")
         {
-            this._editorName = "Nature";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidthThick = 15f;
-            this.verticalWidth = 14f;
-            this.horizontalHeight = 15f;
+            _editorName = "Nature";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidthThick = 15f;
+            verticalWidth = 14f;
+            horizontalHeight = 15f;
         }
     }
 }

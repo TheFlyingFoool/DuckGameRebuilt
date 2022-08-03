@@ -18,30 +18,30 @@ namespace DuckGame
 
         public MTSimpleSpriteBatchItem()
         {
-            this.vertexTL = new VertexPositionColor();
-            this.vertexTR = new VertexPositionColor();
-            this.vertexBL = new VertexPositionColor();
-            this.vertexBR = new VertexPositionColor();
+            vertexTL = new VertexPositionColor();
+            vertexTR = new VertexPositionColor();
+            vertexBL = new VertexPositionColor();
+            vertexBR = new VertexPositionColor();
         }
 
         public void Set(float x, float y, float w, float h, Microsoft.Xna.Framework.Color color)
         {
-            this.vertexTL.Position.X = x;
-            this.vertexTL.Position.Y = y;
-            this.vertexTL.Position.Z = 0f;
-            this.vertexTL.Color = color;
-            this.vertexTR.Position.X = x + w;
-            this.vertexTR.Position.Y = y;
-            this.vertexTR.Position.Z = 0f;
-            this.vertexTR.Color = color;
-            this.vertexBL.Position.X = x;
-            this.vertexBL.Position.Y = y + h;
-            this.vertexBL.Position.Z = 0f;
-            this.vertexBL.Color = color;
-            this.vertexBR.Position.X = x + w;
-            this.vertexBR.Position.Y = y + h;
-            this.vertexBR.Position.Z = 0f;
-            this.vertexBR.Color = color;
+            vertexTL.Position.X = x;
+            vertexTL.Position.Y = y;
+            vertexTL.Position.Z = 0f;
+            vertexTL.Color = color;
+            vertexTR.Position.X = x + w;
+            vertexTR.Position.Y = y;
+            vertexTR.Position.Z = 0f;
+            vertexTR.Color = color;
+            vertexBL.Position.X = x;
+            vertexBL.Position.Y = y + h;
+            vertexBL.Position.Z = 0f;
+            vertexBL.Color = color;
+            vertexBR.Position.X = x + w;
+            vertexBR.Position.Y = y + h;
+            vertexBR.Position.Z = 0f;
+            vertexBR.Color = color;
         }
 
         public void Set(
@@ -57,22 +57,22 @@ namespace DuckGame
           Vec2 texCoordTL,
           Vec2 texCoordBR)
         {
-            this.vertexTL.Position.X = (float)(x + dx * cos - dy * sin);
-            this.vertexTL.Position.Y = (float)(y + dx * sin + dy * cos);
-            this.vertexTL.Position.Z = 0f;
-            this.vertexTL.Color = color;
-            this.vertexTR.Position.X = (float)(x + (dx + w) * cos - dy * sin);
-            this.vertexTR.Position.Y = (float)(y + (dx + w) * sin + dy * cos);
-            this.vertexTR.Position.Z = 0f;
-            this.vertexTR.Color = color;
-            this.vertexBL.Position.X = (float)(x + dx * cos - (dy + h) * sin);
-            this.vertexBL.Position.Y = (float)(y + dx * sin + (dy + h) * cos);
-            this.vertexBL.Position.Z = 0f;
-            this.vertexBL.Color = color;
-            this.vertexBR.Position.X = (float)(x + (dx + w) * cos - (dy + h) * sin);
-            this.vertexBR.Position.Y = (float)(y + (dx + w) * sin + (dy + h) * cos);
-            this.vertexBR.Position.Z = 0f;
-            this.vertexBR.Color = color;
+            vertexTL.Position.X = (float)(x + dx * cos - dy * sin);
+            vertexTL.Position.Y = (float)(y + dx * sin + dy * cos);
+            vertexTL.Position.Z = 0f;
+            vertexTL.Color = color;
+            vertexTR.Position.X = (float)(x + (dx + w) * cos - dy * sin);
+            vertexTR.Position.Y = (float)(y + (dx + w) * sin + dy * cos);
+            vertexTR.Position.Z = 0f;
+            vertexTR.Color = color;
+            vertexBL.Position.X = (float)(x + dx * cos - (dy + h) * sin);
+            vertexBL.Position.Y = (float)(y + dx * sin + (dy + h) * cos);
+            vertexBL.Position.Z = 0f;
+            vertexBL.Color = color;
+            vertexBR.Position.X = (float)(x + (dx + w) * cos - (dy + h) * sin);
+            vertexBR.Position.Y = (float)(y + (dx + w) * sin + (dy + h) * cos);
+            vertexBR.Position.Z = 0f;
+            vertexBR.Color = color;
         }
     }
 }

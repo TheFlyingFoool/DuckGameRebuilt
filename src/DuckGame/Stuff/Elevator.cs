@@ -14,16 +14,16 @@ namespace DuckGame
         public Elevator(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("elevator", 32, 37);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -6f);
-            this.collisionSize = new Vec2(16f, 13f);
-            this.depth = -0.5f;
-            this.thickness = 4f;
-            this.weight = 7f;
-            this.flammable = 0.3f;
-            this.collideSounds.Add("rockHitGround2");
+            _sprite = new SpriteMap("elevator", 32, 37);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -6f);
+            collisionSize = new Vec2(16f, 13f);
+            depth = -0.5f;
+            thickness = 4f;
+            weight = 7f;
+            flammable = 0.3f;
+            collideSounds.Add("rockHitGround2");
         }
     }
 }

@@ -15,71 +15,71 @@ namespace DuckGame
 
         public bool hover
         {
-            get => this._hover;
-            set => this._hover = value;
+            get => _hover;
+            set => _hover = value;
         }
 
         public ToolbarButton(ContextToolbarItem owner, int image, string ht)
           : base()
         {
-            this._owner = owner;
-            this.layer = Editor.objectMenuLayer;
+            _owner = owner;
+            layer = Editor.objectMenuLayer;
             if (image == 99)
             {
-                this.graphic = new Sprite("steamIcon")
+                graphic = new Sprite("steamIcon")
                 {
                     scale = new Vec2(0.5f, 0.5f)
                 };
             }
             else
-                this.graphic = new SpriteMap("iconSheet", 16, 16)
+                graphic = new SpriteMap("iconSheet", 16, 16)
                 {
                     frame = image
                 };
-            this.hoverText = ht;
-            this.depth = (Depth)0.88f;
+            hoverText = ht;
+            depth = (Depth)0.88f;
         }
 
         public override void Update()
         {
-            Rectangle pRect = new Rectangle(this.position.x, this.position.y, 16f, 16f);
+            Rectangle pRect = new Rectangle(position.x, position.y, 16f, 16f);
             switch (Editor.inputMode)
             {
                 case EditorInput.Mouse:
-                    if (Mouse.x > this.x && Mouse.x < this.x + 16.0 && Mouse.y > this.y && Mouse.y < this.y + 16.0)
+                    if (Mouse.x > x && Mouse.x < x + 16.0 && Mouse.y > y && Mouse.y < y + 16.0)
                     {
-                        this._owner.toolBarToolTip = this.hoverText;
-                        this._hover = true;
+                        _owner.toolBarToolTip = hoverText;
+                        _hover = true;
                         if (Mouse.left != InputState.Pressed)
                             return;
-                        this._owner.toolBarToolTip = null;
+                        _owner.toolBarToolTip = null;
                         Editor.clickedMenu = true;
-                        this._owner.ButtonPressed(this);
+                        _owner.ButtonPressed(this);
                         return;
                     }
-                    this._hover = false;
+                    _hover = false;
                     return;
                 case EditorInput.Touch:
-                    if (TouchScreen.GetTap().Check(pRect, this.layer.camera))
+                    if (TouchScreen.GetTap().Check(pRect, layer.camera))
                     {
-                        this._hover = true;
+                        _hover = true;
                         Editor.clickedMenu = true;
-                        this._owner.ButtonPressed(this);
+                        _owner.ButtonPressed(this);
                         return;
                     }
                     break;
             }
-            if (!this._hover)
+            if (!_hover)
                 return;
-            this._owner.toolBarToolTip = this.hoverText;
+            _owner.toolBarToolTip = hoverText;
         }
 
         public override void Draw()
         {
-            Graphics.DrawRect(this.position, this.position + new Vec2(16f, 16f), this._hover ? new Color(170, 170, 170) : new Color(70, 70, 70), (Depth)0.87f);
-            this.graphic.position = this.position;
-            this.graphic.depth = (Depth)0.88f;
-            this.graphic.Draw();
+            Graphics.DrawRect(position, position + new Vec2(16f, 16f), _hover ? new Color(170, 170, 170) : new Color(70, 70, 70), (Depth)0.87f);
+            graphic.position = position;
+            graphic.depth = (Depth)0.88f;
+            graphic.Draw();
         }
     }
 }

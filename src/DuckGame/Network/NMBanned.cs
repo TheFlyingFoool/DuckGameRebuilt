@@ -13,6 +13,6 @@ namespace DuckGame
         {
         }
 
-        public NMBanned(Profile pProfile) => this.profile = pProfile;
+        public NMBanned(Profile pProfile) => profile = pProfile;
     }
 }

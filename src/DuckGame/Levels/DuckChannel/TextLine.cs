@@ -19,7 +19,7 @@ namespace DuckGame
             get
             {
                 string text = "";
-                foreach (TextSegment segment in this.segments)
+                foreach (TextSegment segment in segments)
                     text += segment.text;
                 return text;
             }
@@ -27,31 +27,31 @@ namespace DuckGame
 
         public void Add(char letter)
         {
-            if (this.segments.Count == 0)
-                this.segments.Add(new TextSegment()
+            if (segments.Count == 0)
+                segments.Add(new TextSegment()
                 {
-                    color = this.lineColor
+                    color = lineColor
                 });
-            this.segments[0].text += letter.ToString();
+            segments[0].text += letter.ToString();
         }
 
         public void Add(string val)
         {
-            if (this.segments.Count == 0)
-                this.segments.Add(new TextSegment()
+            if (segments.Count == 0)
+                segments.Add(new TextSegment()
                 {
-                    color = this.lineColor
+                    color = lineColor
                 });
-            this.segments[0].text += val;
+            segments[0].text += val;
         }
 
         public void SwitchColor(Color c)
         {
-            this.lineColor = c;
-            if (this.segments.Count > 0 && this.segments[this.segments.Count - 1].text.Length == 0)
-                this.segments[this.segments.Count - 1].color = c;
+            lineColor = c;
+            if (segments.Count > 0 && segments[segments.Count - 1].text.Length == 0)
+                segments[segments.Count - 1].color = c;
             else
-                this.segments.Insert(0, new TextSegment()
+                segments.Insert(0, new TextSegment()
                 {
                     color = c
                 });
@@ -60,7 +60,7 @@ namespace DuckGame
         public int Length()
         {
             int num1 = 0;
-            foreach (TextSegment segment in this.segments)
+            foreach (TextSegment segment in segments)
             {
                 int num2 = 0;
                 for (int index = 0; index < segment.text.Length; ++index)

@@ -24,70 +24,70 @@ namespace DuckGame
         public LauncherGrenade(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("launcherGrenade");
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(8f, 6f);
-            this.collisionOffset = new Vec2(-4f, -3f);
+            graphic = new Sprite("launcherGrenade");
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(8f, 6f);
+            collisionOffset = new Vec2(-4f, -3f);
             for (int index = 0; index < 17; ++index)
-                this._trail.Add(new Vec2(0f, 0f));
-            this._prevPosition = new Vec2(this.position);
-            this.bouncy = 1f;
-            this.friction = 0f;
-            this._dontCrush = true;
+                _trail.Add(new Vec2(0f, 0f));
+            _prevPosition = new Vec2(position);
+            bouncy = 1f;
+            friction = 0f;
+            _dontCrush = true;
         }
 
         public override void Initialize()
         {
-            if (Level.CheckPoint<Block>(this.position) != null)
-                this._blowUp = true;
+            if (Level.CheckPoint<Block>(position) != null)
+                _blowUp = true;
             base.Initialize();
         }
 
         public override void Update()
         {
-            if (this._fade)
-                this.enablePhysics = false;
+            if (_fade)
+                enablePhysics = false;
             base.Update();
-            this._startWait -= 0.1f;
-            this.angle = -Maths.DegToRad(Maths.PointDirection(this.x, this.y, this._prevPosition.x, this._prevPosition.y));
-            this._isVolatile -= 0.06f;
+            _startWait -= 0.1f;
+            angle = -Maths.DegToRad(Maths.PointDirection(x, y, _prevPosition.x, _prevPosition.y));
+            _isVolatile -= 0.06f;
             for (int index = 15; index >= 0; --index)
-                this._trail[index + 1] = new Vec2(this._trail[index].x, this._trail[index].y);
-            if (!this._fade)
+                _trail[index + 1] = new Vec2(_trail[index].x, _trail[index].y);
+            if (!_fade)
             {
-                this._trail[0] = new Vec2(this.x, this.y);
-                ++this._numTrail;
+                _trail[0] = new Vec2(x, y);
+                ++_numTrail;
             }
             else
             {
-                --this._numTrail;
-                this._fadeVal -= 0.1f;
+                --_numTrail;
+                _fadeVal -= 0.1f;
                 if (_fadeVal <= 0.0)
                     Level.Remove(this);
             }
-            this._prevPosition.x = this.position.x;
-            this._prevPosition.y = this.position.y;
+            _prevPosition.x = position.x;
+            _prevPosition.y = position.y;
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this._fade || with is Gun || (with is AutoPlatform || with is Nubber) && this.vSpeed <= 0.0)
+            if (_fade || with is Gun || (with is AutoPlatform || with is Nubber) && vSpeed <= 0.0)
                 return;
             if (with is PhysicsObject)
-                this._isVolatile = -1f;
-            if (_startWait <= 0.0 && !this._fade && (this.totalImpactPower > 2.0 && (_isVolatile <= 0.0 || !(with is Block)) || this._blowUp))
+                _isVolatile = -1f;
+            if (_startWait <= 0.0 && !_fade && (totalImpactPower > 2.0 && (_isVolatile <= 0.0 || !(with is Block)) || _blowUp))
             {
                 int num1 = 0;
                 for (int index = 0; index < 1; ++index)
                 {
-                    ExplosionPart explosionPart = new ExplosionPart(this.x - 8f + Rando.Float(16f), this.y - 8f + Rando.Float(16f));
+                    ExplosionPart explosionPart = new ExplosionPart(x - 8f + Rando.Float(16f), y - 8f + Rando.Float(16f));
                     explosionPart.xscale *= 0.7f;
                     explosionPart.yscale *= 0.7f;
                     Level.Add(explosionPart);
                     ++num1;
                 }
                 SFX.Play("explode");
-                RumbleManager.AddRumbleEvent(this.position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
+                RumbleManager.AddRumbleEvent(position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
                 for (int index = 0; index < 12; ++index)
                 {
                     float num2 = (index * 30f - 10f) + Rando.Float(20f);
@@ -95,36 +95,36 @@ namespace DuckGame
                     {
                         range = 25f + Rando.Float(10f)
                     };
-                    Level.Add(new Bullet(this.x + (float)(Math.Cos(Maths.DegToRad(num2)) * 8f), this.y - (float)(Math.Sin(Maths.DegToRad(num2)) * 8f), type, num2)
+                    Level.Add(new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num2)) * 8f), y - (float)(Math.Sin(Maths.DegToRad(num2)) * 8f), type, num2)
                     {
                         firedFrom = this
                     });
                 }
-                this._fade = true;
-                this.y += 10000f;
+                _fade = true;
+                y += 10000f;
             }
             else
             {
                 if (with is IPlatform)
                     return;
                 if (from == ImpactedFrom.Left || from == ImpactedFrom.Right)
-                    this.BounceH();
+                    BounceH();
                 if (from != ImpactedFrom.Top && from != ImpactedFrom.Bottom)
                     return;
-                this.BounceV();
+                BounceV();
             }
         }
 
         public override void Draw()
         {
-            if (!this._fade)
+            if (!_fade)
                 base.Draw();
             for (int index = 1; index < 16; ++index)
             {
-                if (index < this._numTrail)
+                if (index < _numTrail)
                 {
                     float num = ((1f - index / 16f) * _fadeVal * 0.8f);
-                    Graphics.DrawLine(new Vec2(this._trail[index - 1].x, this._trail[index - 1].y), new Vec2(this._trail[index].x, this._trail[index].y), Color.White * num);
+                    Graphics.DrawLine(new Vec2(_trail[index - 1].x, _trail[index - 1].y), new Vec2(_trail[index].x, _trail[index].y), Color.White * num);
                 }
             }
         }

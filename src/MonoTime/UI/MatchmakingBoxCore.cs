@@ -18,6 +18,6 @@ namespace DuckGame
         public MatchmakingState _state;
         public List<MatchmakingPlayer> matchmakingProfiles = new List<MatchmakingPlayer>();
 
-        public MatchmakingState state => this._state;
+        public MatchmakingState state => _state;
     }
 }

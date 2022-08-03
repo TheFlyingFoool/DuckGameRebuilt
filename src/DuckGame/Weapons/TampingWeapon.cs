@@ -29,14 +29,14 @@ namespace DuckGame
 
         public override float angle
         {
-            get => base.angle + Maths.DegToRad(-this._rotAngle);
-            set => this._angle = value;
+            get => base.angle + Maths.DegToRad(-_rotAngle);
+            set => _angle = value;
         }
 
         public TampingWeapon(float xval, float yval)
           : base(xval, yval)
         {
-            this._tampingHand = new Sprite("tampingHand")
+            _tampingHand = new Sprite("tampingHand")
             {
                 center = new Vec2(4f, 8f)
             };
@@ -45,47 +45,47 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            this._tampBoost = Lerp.Float(this._tampBoost, 1f, 0.01f);
-            if (this.owner is Duck owner && owner.inputProfile != null && this.duck != null && this.duck.profile != null)
+            _tampBoost = Lerp.Float(_tampBoost, 1f, 0.01f);
+            if (this.owner is Duck owner && owner.inputProfile != null && duck != null && duck.profile != null)
             {
-                this._prevDuckOwner = owner;
+                _prevDuckOwner = owner;
                 if (owner.inputProfile.Pressed("SHOOT"))
-                    this._tampBoost += 0.14f;
-                if (this.duck.immobilized)
-                    this.duck.profile.stats.timeSpentReloadingOldTimeyWeapons += Maths.IncFrameTimer();
-                if (this._rotating)
+                    _tampBoost += 0.14f;
+                if (duck.immobilized)
+                    duck.profile.stats.timeSpentReloadingOldTimeyWeapons += Maths.IncFrameTimer();
+                if (_rotating)
                 {
-                    if (this.offDir < 0)
+                    if (offDir < 0)
                     {
                         if (_rotAngle > -90.0)
-                            this._rotAngle -= 3f;
+                            _rotAngle -= 3f;
                         if (_rotAngle <= -90.0)
                         {
-                            this.tamping = true;
-                            this._tampInc += 0.2f * this._tampBoost;
-                            this.tampPos = (float)Math.Sin(_tampInc) * 2f;
-                            if (tampPos < -1.0 && !this._puffed)
+                            tamping = true;
+                            _tampInc += 0.2f * _tampBoost;
+                            tampPos = (float)Math.Sin(_tampInc) * 2f;
+                            if (tampPos < -1.0 && !_puffed)
                             {
-                                Vec2 vec2 = this.Offset(this.barrelOffset) - this.barrelVector * 8f;
+                                Vec2 vec2 = Offset(barrelOffset) - barrelVector * 8f;
                                 Level.Add(SmallSmoke.New(vec2.x, vec2.y));
-                                this._puffed = true;
+                                _puffed = true;
                             }
                             if (tampPos > -1.0)
-                                this._puffed = false;
-                            this._tampTime += 0.005f * this._tampBoost;
+                                _puffed = false;
+                            _tampTime += 0.005f * _tampBoost;
                         }
                         if (_tampTime >= 1.0)
                         {
-                            this._rotAngle += 8f;
+                            _rotAngle += 8f;
                             if (_offsetY > 0.0)
-                                this._offsetY -= 2f;
-                            this.tamping = false;
+                                _offsetY -= 2f;
+                            tamping = false;
                             if (_rotAngle >= 0.0)
                             {
-                                this._rotAngle = 0f;
-                                this._rotating = false;
-                                this._tamped = true;
-                                this._offsetY = 0f;
+                                _rotAngle = 0f;
+                                _rotating = false;
+                                _tamped = true;
+                                _offsetY = 0f;
                                 owner.immobilized = false;
                             }
                         }
@@ -93,86 +93,86 @@ namespace DuckGame
                     else
                     {
                         if (_rotAngle < 90.0)
-                            this._rotAngle += 3f;
+                            _rotAngle += 3f;
                         if (_rotAngle >= 90.0)
                         {
-                            this.tamping = true;
-                            this._tampInc += 0.2f * this._tampBoost;
-                            this.tampPos = (float)Math.Sin(_tampInc) * 2f;
-                            if (tampPos < -1.0 && !this._puffed)
+                            tamping = true;
+                            _tampInc += 0.2f * _tampBoost;
+                            tampPos = (float)Math.Sin(_tampInc) * 2f;
+                            if (tampPos < -1.0 && !_puffed)
                             {
-                                Vec2 vec2 = this.Offset(this.barrelOffset) - this.barrelVector * 8f;
+                                Vec2 vec2 = Offset(barrelOffset) - barrelVector * 8f;
                                 Level.Add(SmallSmoke.New(vec2.x, vec2.y));
-                                this._puffed = true;
+                                _puffed = true;
                             }
                             if (tampPos > -1.0)
-                                this._puffed = false;
-                            this._tampTime += 0.005f * this._tampBoost;
+                                _puffed = false;
+                            _tampTime += 0.005f * _tampBoost;
                         }
                         if (_tampTime >= 1.0)
                         {
-                            this._rotAngle -= 8f;
+                            _rotAngle -= 8f;
                             if (_offsetY > 0.0)
-                                this._offsetY -= 2f;
-                            this.tamping = false;
+                                _offsetY -= 2f;
+                            tamping = false;
                             if (_rotAngle <= 0.0)
                             {
-                                this._rotAngle = 0f;
-                                this._rotating = false;
-                                this._tamped = true;
-                                this._offsetY = 0f;
+                                _rotAngle = 0f;
+                                _rotating = false;
+                                _tamped = true;
+                                _offsetY = 0f;
                                 owner.immobilized = false;
                             }
                         }
                     }
                     if (_offsetY >= 10.0)
                         return;
-                    ++this._offsetY;
+                    ++_offsetY;
                 }
                 else
-                    this._tampBoost = 1f;
+                    _tampBoost = 1f;
             }
             else
             {
-                if (this._prevDuckOwner == null)
+                if (_prevDuckOwner == null)
                     return;
-                this._prevDuckOwner.immobilized = false;
-                this.tamping = false;
-                this._rotAngle = 0f;
-                this._rotating = false;
-                this._offsetY = 0f;
-                this._prevDuckOwner = null;
+                _prevDuckOwner.immobilized = false;
+                tamping = false;
+                _rotAngle = 0f;
+                _rotating = false;
+                _offsetY = 0f;
+                _prevDuckOwner = null;
             }
         }
 
         public override void Draw()
         {
-            this.y += this._offsetY;
+            y += _offsetY;
             base.Draw();
-            if (this.duck != null && this.tamping)
+            if (duck != null && tamping)
             {
-                if (this.offDir < 0)
+                if (offDir < 0)
                 {
-                    this._tampingHand.x = this.x + 3f;
-                    this._tampingHand.y = this.y - 16f + this.tampPos;
-                    this._tampingHand.flipH = true;
+                    _tampingHand.x = x + 3f;
+                    _tampingHand.y = y - 16f + tampPos;
+                    _tampingHand.flipH = true;
                 }
                 else
                 {
-                    this._tampingHand.x = this.x - 3f;
-                    this._tampingHand.y = this.y - 16f + this.tampPos;
-                    this._tampingHand.flipH = false;
+                    _tampingHand.x = x - 3f;
+                    _tampingHand.y = y - 16f + tampPos;
+                    _tampingHand.flipH = false;
                 }
-                this._tampingHand.depth = this.depth - 1;
-                float angle = this.duck._spriteArms.angle;
-                Vec2 vec2 = this.Offset(this.barrelOffset);
-                Vec2 p2 = vec2 + this.barrelVector * (float)(tampPos * 2.0 + 3.0);
-                Graphics.DrawLine(vec2 - this.barrelVector * 6f, p2, Color.Gray, depth: (this.depth - 2));
-                this.duck._spriteArms.depth = this.depth - 1;
+                _tampingHand.depth = depth - 1;
+                float angle = duck._spriteArms.angle;
+                Vec2 vec2 = Offset(barrelOffset);
+                Vec2 p2 = vec2 + barrelVector * (float)(tampPos * 2.0 + 3.0);
+                Graphics.DrawLine(vec2 - barrelVector * 6f, p2, Color.Gray, depth: (depth - 2));
+                duck._spriteArms.depth = depth - 1;
                 Graphics.Draw(duck._spriteArms, p2.x, p2.y);
-                this.duck._spriteArms.angle = angle;
+                duck._spriteArms.angle = angle;
             }
-            this.position = new Vec2(this.position.x, this.position.y - this._offsetY);
+            position = new Vec2(position.x, position.y - _offsetY);
         }
     }
 }

@@ -14,16 +14,16 @@ namespace DuckGame
         public ArcadeMode()
           : base()
         {
-            this.graphic = new Sprite("arcadeIcon");
-            this.center = new Vec2(8f, 8f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = (Depth)0.9f;
-            this.layer = Layer.Foreground;
-            this._visibleInGame = false;
-            this._editorName = "Arcade";
-            this._canFlip = false;
-            this._canHaveChance = false;
+            graphic = new Sprite("arcadeIcon");
+            center = new Vec2(8f, 8f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            depth = (Depth)0.9f;
+            layer = Layer.Foreground;
+            _visibleInGame = false;
+            _editorName = "Arcade";
+            _canFlip = false;
+            _canHaveChance = false;
         }
 
         public override void Initialize()

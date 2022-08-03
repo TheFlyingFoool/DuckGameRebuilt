@@ -111,29 +111,29 @@ namespace DuckGame
         public string fileName = "";
         private bool isDefaultProfile;
 
-        public void ReportConnectionTrouble(NetworkConnection pFrom) => this.connectionTrouble[pFrom] = 200;
+        public void ReportConnectionTrouble(NetworkConnection pFrom) => connectionTrouble[pFrom] = 200;
 
         public void TickConnectionTrouble()
         {
-            if (this.connectionTrouble.Count > 0)
+            if (connectionTrouble.Count > 0)
             {
                 foreach (NetworkConnection connection in Network.connections)
                 {
-                    if (this.connectionTrouble.ContainsKey(connection) && this.connectionTrouble[connection] > 0)
-                        this.connectionTrouble[connection]--;
+                    if (connectionTrouble.ContainsKey(connection) && connectionTrouble[connection] > 0)
+                        connectionTrouble[connection]--;
                 }
             }
-            if (this._spectatorChangeCooldown <= 0)
+            if (_spectatorChangeCooldown <= 0)
                 return;
-            --this._spectatorChangeCooldown;
+            --_spectatorChangeCooldown;
         }
 
         public void HasConnectionFailed()
         {
             foreach (NetworkConnection connection in Network.connections)
             {
-                if (this.connectionTrouble.ContainsKey(connection) && this.connectionTrouble[connection] > 0)
-                    this.connectionTrouble[connection]--;
+                if (connectionTrouble.ContainsKey(connection) && connectionTrouble[connection] > 0)
+                    connectionTrouble[connection]--;
             }
         }
 
@@ -141,43 +141,43 @@ namespace DuckGame
 
         public DuckPersona networkDefaultPersona => _networkIndex < DG.MaxPlayers ? Persona.all.ElementAt<DuckPersona>(_networkIndex) : Persona.Duck1;
 
-        public Dictionary<string, ChallengeSaveData> challengeData => this._challengeData;
+        public Dictionary<string, ChallengeSaveData> challengeData => _challengeData;
 
         public ChallengeSaveData GetSaveData(string guid, bool canBeNull = false)
         {
             ChallengeSaveData saveData1;
-            if (this._challengeData.TryGetValue(guid, out saveData1))
+            if (_challengeData.TryGetValue(guid, out saveData1))
                 return saveData1;
             if (canBeNull)
                 return null;
             ChallengeSaveData saveData2 = new ChallengeSaveData
             {
-                profileID = this.id,
+                profileID = id,
                 challenge = guid
             };
-            this._challengeData.Add(guid, saveData2);
+            _challengeData.Add(guid, saveData2);
             return saveData2;
         }
 
         private void RefreshBlockStatus()
         {
-            this._blockStatusDirty = false;
-            this._blocked = Options.Data.blockedPlayers != null && Options.Data.blockedPlayers.Contains(this.steamID);
-            this._muteString = Options.GetMuteSettings(this);
+            _blockStatusDirty = false;
+            _blocked = Options.Data.blockedPlayers != null && Options.Data.blockedPlayers.Contains(steamID);
+            _muteString = Options.GetMuteSettings(this);
         }
 
         public bool muteChat
         {
             get
             {
-                if (this._blockStatusDirty)
-                    this.RefreshBlockStatus();
-                return this._muteString.Contains("C");
+                if (_blockStatusDirty)
+                    RefreshBlockStatus();
+                return _muteString.Contains("C");
             }
             set
             {
                 Options.SetMuteSetting(this, "C", value);
-                this.RefreshBlockStatus();
+                RefreshBlockStatus();
             }
         }
 
@@ -185,14 +185,14 @@ namespace DuckGame
         {
             get
             {
-                if (this._blockStatusDirty)
-                    this.RefreshBlockStatus();
-                return this._muteString.Contains("H");
+                if (_blockStatusDirty)
+                    RefreshBlockStatus();
+                return _muteString.Contains("H");
             }
             set
             {
                 Options.SetMuteSetting(this, "H", value);
-                this.RefreshBlockStatus();
+                RefreshBlockStatus();
             }
         }
 
@@ -200,14 +200,14 @@ namespace DuckGame
         {
             get
             {
-                if (this._blockStatusDirty)
-                    this.RefreshBlockStatus();
-                return this._muteString.Contains("R");
+                if (_blockStatusDirty)
+                    RefreshBlockStatus();
+                return _muteString.Contains("R");
             }
             set
             {
                 Options.SetMuteSetting(this, "R", value);
-                this.RefreshBlockStatus();
+                RefreshBlockStatus();
             }
         }
 
@@ -215,14 +215,14 @@ namespace DuckGame
         {
             get
             {
-                if (this._blockStatusDirty)
-                    this.RefreshBlockStatus();
-                return this._muteString.Contains("N");
+                if (_blockStatusDirty)
+                    RefreshBlockStatus();
+                return _muteString.Contains("N");
             }
             set
             {
                 Options.SetMuteSetting(this, "N", value);
-                this.RefreshBlockStatus();
+                RefreshBlockStatus();
             }
         }
 
@@ -230,47 +230,47 @@ namespace DuckGame
         {
             get
             {
-                if (this._blockStatusDirty)
-                    this.RefreshBlockStatus();
-                return this._blocked;
+                if (_blockStatusDirty)
+                    RefreshBlockStatus();
+                return _blocked;
             }
         }
 
-        public bool spectator => this.slotType == SlotType.Spectator;
+        public bool spectator => slotType == SlotType.Spectator;
 
         public ushort customTeamIndexOffset => (ushort)(Teams.kCustomOffset + fixedGhostIndex * Teams.kCustomSpread);
 
         public int IndexOfCustomTeam(Team pTeam)
         {
-            int num = this.customTeams.IndexOf(pTeam);
+            int num = customTeams.IndexOf(pTeam);
             return num >= 0 ? customTeamIndexOffset + num : num;
         }
 
         public Team GetCustomTeam(ushort pIndex)
         {
-            if (this.connection == DuckNetwork.localConnection)
+            if (connection == DuckNetwork.localConnection)
                 return Teams.core.extraTeams.Count > pIndex && pIndex >= 0 ? Teams.core.extraTeams[pIndex] : null;
-            while (this.customTeams.Count <= pIndex)
-                this.customTeams.Add(new Team("CUSTOM", "hats/cluehat")
+            while (customTeams.Count <= pIndex)
+                customTeams.Add(new Team("CUSTOM", "hats/cluehat")
                 {
                     owner = this
                 });
-            return this.customTeams[pIndex];
+            return customTeams[pIndex];
         }
 
         public bool ParentalControlsActive
         {
             get
             {
-                if (this.connection != null && this.connection != DuckNetwork.localConnection)
+                if (connection != null && connection != DuckNetwork.localConnection)
                 {
-                    return this._parentalControlsActive;
+                    return _parentalControlsActive;
                 }
                 return false;
             }
             set
             {
-                this._parentalControlsActive = value;
+                _parentalControlsActive = value;
             }
         }
 
@@ -281,7 +281,7 @@ namespace DuckGame
                 if (Profile._defaultFont == null)
                     Profile._defaultFont = new BitmapFont("biosFont", 8);
                 BitmapFont font = Profile._defaultFont;
-                foreach (FurniturePosition furniturePosition in this._furniturePositions)
+                foreach (FurniturePosition furniturePosition in _furniturePositions)
                 {
                     if (furniturePosition != null)
                     {
@@ -301,30 +301,30 @@ namespace DuckGame
         {
             get
             {
-                if (this._linkedProfile != null)
-                    return this._linkedProfile._furniturePositions;
-                this._internalFurniturePositions.RemoveAll(x => x == null);
-                return this._internalFurniturePositions;
+                if (_linkedProfile != null)
+                    return _linkedProfile._furniturePositions;
+                _internalFurniturePositions.RemoveAll(x => x == null);
+                return _internalFurniturePositions;
             }
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile._furniturePositions = value;
+                if (_linkedProfile != null)
+                    _linkedProfile._furniturePositions = value;
                 else
-                    this._internalFurniturePositions = value;
+                    _internalFurniturePositions = value;
             }
         }
 
-        public List<FurniturePosition> furniturePositions => this._furniturePositions;
+        public List<FurniturePosition> furniturePositions => _furniturePositions;
 
         public BitBuffer furniturePositionData
         {
             get
             {
-                if (this._linkedProfile != null)
-                    return this._linkedProfile.furniturePositionData;
+                if (_linkedProfile != null)
+                    return _linkedProfile.furniturePositionData;
                 BitBuffer furniturePositionData = new BitBuffer();
-                foreach (FurniturePosition furniturePosition in this._furniturePositions)
+                foreach (FurniturePosition furniturePosition in _furniturePositions)
                 {
                     furniturePositionData.Write(furniturePosition.x);
                     furniturePositionData.Write(furniturePosition.y);
@@ -336,13 +336,13 @@ namespace DuckGame
             }
             set
             {
-                if (this._linkedProfile != null)
+                if (_linkedProfile != null)
                 {
-                    this._linkedProfile.furniturePositionData = value;
+                    _linkedProfile.furniturePositionData = value;
                 }
                 else
                 {
-                    this._furniturePositions.Clear();
+                    _furniturePositions.Clear();
                     try
                     {
                         int num = 0;
@@ -362,7 +362,7 @@ namespace DuckGame
                                 furniturePosition.furniMapping = furniture;
                                 if (furniture.type == FurnitureType.Font || furniture.type == FurnitureType.Theme || furniturePosition.y < 80 && furniturePosition.x < RoomEditor.roomSize + 20)
                                 {
-                                    this._furniturePositions.Add(furniturePosition);
+                                    _furniturePositions.Add(furniturePosition);
                                     if (furniture.name == "PERIMETER DEFENCE")
                                         ++num;
                                 }
@@ -370,12 +370,12 @@ namespace DuckGame
                         }
                         if (num <= 1)
                             return;
-                        this._furniturePositions.RemoveAll(x => x.furniMapping.name == "PERIMETER DEFENCE");
+                        _furniturePositions.RemoveAll(x => x.furniMapping.name == "PERIMETER DEFENCE");
                     }
                     catch (Exception)
                     {
                         DevConsole.Log(DCSection.General, "Failed to load furniture position data.");
-                        this._furniturePositions.Clear();
+                        _furniturePositions.Clear();
                     }
                 }
             }
@@ -384,7 +384,7 @@ namespace DuckGame
         public int GetNumFurnituresPlaced(int idx)
         {
             int furnituresPlaced = 0;
-            foreach (FurniturePosition furniturePosition in this._furniturePositions)
+            foreach (FurniturePosition furniturePosition in _furniturePositions)
             {
                 if (furniturePosition.id == idx)
                     ++furnituresPlaced;
@@ -395,7 +395,7 @@ namespace DuckGame
         public int GetTotalFurnituresPlaced()
         {
             int furnituresPlaced = 0;
-            foreach (FurniturePosition furniturePosition in this._furniturePositions)
+            foreach (FurniturePosition furniturePosition in _furniturePositions)
             {
                 Furniture furniture = RoomEditor.GetFurniture(furniturePosition.id);
                 if (furniture != null && furniture.type != FurnitureType.Theme && furniture.type != FurnitureType.Font)
@@ -408,10 +408,10 @@ namespace DuckGame
         {
             get
             {
-                if (this._linkedProfile != null)
-                    return this._linkedProfile.furnitureOwnershipData;
+                if (_linkedProfile != null)
+                    return _linkedProfile.furnitureOwnershipData;
                 BitBuffer furnitureOwnershipData = new BitBuffer();
-                foreach (KeyValuePair<int, int> furniture in this._furnitures)
+                foreach (KeyValuePair<int, int> furniture in _furnitures)
                 {
                     furnitureOwnershipData.Write(furniture.Key);
                     furnitureOwnershipData.Write(furniture.Value);
@@ -420,20 +420,20 @@ namespace DuckGame
             }
             set
             {
-                if (this._linkedProfile != null)
+                if (_linkedProfile != null)
                 {
-                    this._linkedProfile.furnitureOwnershipData = value;
+                    _linkedProfile.furnitureOwnershipData = value;
                 }
                 else
                 {
-                    this._furnitures.Clear();
-                    this._availableList = null;
+                    _furnitures.Clear();
+                    _availableList = null;
                     try
                     {
                         while (value.position != value.lengthInBytes)
                         {
                             FurniturePosition furniturePosition = new FurniturePosition();
-                            this._furnitures[value.ReadInt()] = value.ReadInt();
+                            _furnitures[value.ReadInt()] = value.ReadInt();
                         }
                     }
                     catch (Exception)
@@ -446,19 +446,19 @@ namespace DuckGame
 
         public void ClearFurnitures()
         {
-            this._furnitures.Clear();
-            this._furniturePositions.Clear();
+            _furnitures.Clear();
+            _furniturePositions.Clear();
         }
 
         public Dictionary<int, int> _furnitures
         {
-            get => this._linkedProfile != null ? this._linkedProfile._furnitures : this._internalFurnitures;
+            get => _linkedProfile != null ? _linkedProfile._furnitures : _internalFurnitures;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile._furnitures = value;
+                if (_linkedProfile != null)
+                    _linkedProfile._furnitures = value;
                 else
-                    this._internalFurnitures = value;
+                    _internalFurnitures = value;
             }
         }
 
@@ -473,20 +473,20 @@ namespace DuckGame
                     return Profiles.experienceProfile.numLittleMen + 1;
             }
             int num;
-            this._furnitures.TryGetValue(idx, out num);
+            _furnitures.TryGetValue(idx, out num);
             return furniture.name == "PERIMETER DEFENCE" && num > 1 ? 1 : num;
         }
 
         public void SetNumFurnitures(int idx, int num)
         {
-            this._furnitures[idx] = num;
-            this._availableList = null;
+            _furnitures[idx] = num;
+            _availableList = null;
         }
 
         public int GetTotalFurnitures()
         {
             int totalFurnitures = 0;
-            foreach (KeyValuePair<int, int> furniture in this._furnitures)
+            foreach (KeyValuePair<int, int> furniture in _furnitures)
                 totalFurnitures += furniture.Value;
             return totalFurnitures;
         }
@@ -503,113 +503,113 @@ namespace DuckGame
 
         public List<Furniture> GetAvailableFurnis()
         {
-            if (this._availableList == null)
+            if (_availableList == null)
             {
-                this._availableList = new List<Furniture>();
-                foreach (KeyValuePair<int, int> furniture1 in this._furnitures)
+                _availableList = new List<Furniture>();
+                foreach (KeyValuePair<int, int> furniture1 in _furnitures)
                 {
                     if (furniture1.Value > 0)
                     {
                         Furniture furniture2 = RoomEditor.GetFurniture(furniture1.Key);
                         if (furniture2 != null)
-                            this._availableList.Add(furniture2);
+                            _availableList.Add(furniture2);
                     }
                 }
                 foreach (Furniture allFurni in RoomEditor.AllFurnis())
                 {
                     if (allFurni.alwaysHave)
-                        this._availableList.Add(allFurni);
+                        _availableList.Add(allFurni);
                 }
-                this._availableList.Sort((x, y) => Profile.AvailFurniSortKey(x).CompareTo(Profile.AvailFurniSortKey(y)));
+                _availableList.Sort((x, y) => Profile.AvailFurniSortKey(x).CompareTo(Profile.AvailFurniSortKey(y)));
             }
-            return this._availableList;
+            return _availableList;
         }
 
         public int roundsSinceXP
         {
-            get => this._linkedProfile != null ? this._linkedProfile.roundsSinceXP : this._roundsSinceXP;
+            get => _linkedProfile != null ? _linkedProfile.roundsSinceXP : _roundsSinceXP;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.roundsSinceXP = value;
-                this._roundsSinceXP = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.roundsSinceXP = value;
+                _roundsSinceXP = value;
             }
         }
 
         public int littleManBucks
         {
-            get => this._linkedProfile != null ? this._linkedProfile.littleManBucks : this._littleManBucks;
+            get => _linkedProfile != null ? _linkedProfile.littleManBucks : _littleManBucks;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.littleManBucks = value;
-                this._littleManBucks = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.littleManBucks = value;
+                _littleManBucks = value;
             }
         }
 
         public int numLittleMen
         {
-            get => this._linkedProfile != null ? this._linkedProfile.numLittleMen : this._numLittleMen;
+            get => _linkedProfile != null ? _linkedProfile.numLittleMen : _numLittleMen;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.numLittleMen = value;
-                this._numLittleMen = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.numLittleMen = value;
+                _numLittleMen = value;
             }
         }
 
         public int littleManLevel
         {
-            get => this._linkedProfile != null ? this._linkedProfile.littleManLevel : this._littleManLevel;
+            get => _linkedProfile != null ? _linkedProfile.littleManLevel : _littleManLevel;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.littleManLevel = value;
-                this._littleManLevel = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.littleManLevel = value;
+                _littleManLevel = value;
             }
         }
 
         public int milkFill
         {
-            get => this._linkedProfile != null ? this._linkedProfile.milkFill : this._milkFill;
+            get => _linkedProfile != null ? _linkedProfile.milkFill : _milkFill;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.milkFill = value;
-                this._milkFill = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.milkFill = value;
+                _milkFill = value;
             }
         }
 
         public int numSandwiches
         {
-            get => this._linkedProfile != null ? this._linkedProfile.numSandwiches : this._numSandwiches;
+            get => _linkedProfile != null ? _linkedProfile.numSandwiches : _numSandwiches;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.numSandwiches = value;
-                this._numSandwiches = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.numSandwiches = value;
+                _numSandwiches = value;
             }
         }
 
         public int currentDay
         {
-            get => this._linkedProfile != null ? this._linkedProfile.currentDay : this._currentDay;
+            get => _linkedProfile != null ? _linkedProfile.currentDay : _currentDay;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.currentDay = value;
-                this._currentDay = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.currentDay = value;
+                _currentDay = value;
             }
         }
 
         public int punished
         {
-            get => this._linkedProfile != null ? this._linkedProfile.punished : this._punished;
+            get => _linkedProfile != null ? _linkedProfile.punished : _punished;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.punished = value;
-                this._punished = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.punished = value;
+                _punished = value;
             }
         }
 
@@ -618,20 +618,20 @@ namespace DuckGame
             get
             {
                 string rawName = this.rawName;
-                if (this.steamID != 0UL)
-                    rawName = this.steamID.ToString();
+                if (steamID != 0UL)
+                    rawName = steamID.ToString();
                 return rawName;
             }
         }
 
-        public string rawName => this._name;
+        public string rawName => _name;
 
         public string nameUI
         {
             get
             {
-                string nameUi = this.name;
-                if (this.muteName)
+                string nameUi = name;
+                if (muteName)
                     nameUi = "Player " + (networkIndex + 1).ToString();
                 return nameUi;
             }
@@ -641,35 +641,35 @@ namespace DuckGame
         {
             get
             {
-                if (this.linkedProfile != null && this.connection == DuckNetwork.localConnection && !Profiles.IsExperience(this))
-                    return this.linkedProfile.name;
-                if (this.keepSetName || this.steamID == 0UL || this.slotType == SlotType.Local)
-                    return this._name;
-                if (Steam.user != null && (long)this.steamID == (long)Steam.user.id)
+                if (linkedProfile != null && connection == DuckNetwork.localConnection && !Profiles.IsExperience(this))
+                    return linkedProfile.name;
+                if (keepSetName || steamID == 0UL || slotType == SlotType.Local)
+                    return _name;
+                if (Steam.user != null && (long)steamID == (long)Steam.user.id)
                     return Steam.user.name;
-                if (this.lastKnownName != null)
-                    return this.lastKnownName;
-                if (!(this._name == this.steamID.ToString()))
-                    return this._name;
+                if (lastKnownName != null)
+                    return lastKnownName;
+                if (!(_name == steamID.ToString()))
+                    return _name;
                 if (Steam.IsInitialized())
                 {
-                    User user = User.GetUser(this.steamID);
+                    User user = User.GetUser(steamID);
                     if (user != null && user.id != 0UL)
                     {
-                        this.lastKnownName = user.name;
-                        return this.lastKnownName;
+                        lastKnownName = user.name;
+                        return lastKnownName;
                     }
                 }
                 return "STEAM PROFILE";
             }
-            set => this._name = value;
+            set => _name = value;
         }
 
         public static bool logStats => true;
 
-        public string id => this._id;
+        public string id => _id;
 
-        public void SetID(string varID) => this._id = varID;
+        public void SetID(string varID) => _id = varID;
 
         private static Color PickColor()
         {
@@ -1033,73 +1033,73 @@ namespace DuckGame
 
         public List<string> unlocks
         {
-            get => this._unlocks;
-            set => this._unlocks = value;
+            get => _unlocks;
+            set => _unlocks = value;
         }
 
         public int ticketCount
         {
-            get => this._ticketCount;
+            get => _ticketCount;
             set
             {
-                if (MonoMain.logFileOperations && this._ticketCount != value)
-                    DevConsole.Log(DCSection.General, "Profile(" + this.name != null ? this.name : ").ticketCount set(" + this.ticketCount.ToString() + ")");
-                this._ticketCount = value;
+                if (MonoMain.logFileOperations && _ticketCount != value)
+                    DevConsole.Log(DCSection.General, "Profile(" + name != null ? name : ").ticketCount set(" + ticketCount.ToString() + ")");
+                _ticketCount = value;
             }
         }
 
         public int timesMetVincent
         {
-            get => this._linkedProfile != null ? this._linkedProfile.timesMetVincent : this._timesMetVincent;
+            get => _linkedProfile != null ? _linkedProfile.timesMetVincent : _timesMetVincent;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.timesMetVincent = value;
-                this._timesMetVincent = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.timesMetVincent = value;
+                _timesMetVincent = value;
             }
         }
 
         public int timesMetVincentSale
         {
-            get => this._linkedProfile != null ? this._linkedProfile.timesMetVincentSale : this._timesMetVincentSale;
+            get => _linkedProfile != null ? _linkedProfile.timesMetVincentSale : _timesMetVincentSale;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.timesMetVincentSale = value;
-                this._timesMetVincentSale = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.timesMetVincentSale = value;
+                _timesMetVincentSale = value;
             }
         }
 
         public int timesMetVincentSell
         {
-            get => this._linkedProfile != null ? this._linkedProfile.timesMetVincentSell : this._timesMetVincentSell;
+            get => _linkedProfile != null ? _linkedProfile.timesMetVincentSell : _timesMetVincentSell;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.timesMetVincentSell = value;
-                this._timesMetVincentSell = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.timesMetVincentSell = value;
+                _timesMetVincentSell = value;
             }
         }
 
         public int timesMetVincentImport
         {
-            get => this._linkedProfile != null ? this._linkedProfile.timesMetVincentImport : this._timesMetVincentImport;
+            get => _linkedProfile != null ? _linkedProfile.timesMetVincentImport : _timesMetVincentImport;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.timesMetVincentImport = value;
-                this._timesMetVincentImport = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.timesMetVincentImport = value;
+                _timesMetVincentImport = value;
             }
         }
 
         public int timesMetVincentHint
         {
-            get => this._linkedProfile != null ? this._linkedProfile.timesMetVincentHint : this._timesMetVincentHint;
+            get => _linkedProfile != null ? _linkedProfile.timesMetVincentHint : _timesMetVincentHint;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.timesMetVincentHint = value;
-                this._timesMetVincentHint = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.timesMetVincentHint = value;
+                _timesMetVincentHint = value;
             }
         }
 
@@ -1107,22 +1107,22 @@ namespace DuckGame
         {
             get
             {
-                if (this._linkedProfile != null)
-                    return this._linkedProfile.xp;
+                if (_linkedProfile != null)
+                    return _linkedProfile.xp;
                 if (Steam.user == null || this != Profiles.experienceProfile || (int)Steam.GetStat(nameof(xp)) != 0)
-                    return this._xp;
-                Steam.SetStat(nameof(xp), this._xp);
-                return this._xp;
+                    return _xp;
+                Steam.SetStat(nameof(xp), _xp);
+                return _xp;
             }
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.xp = value;
-                if (MonoMain.logFileOperations && this._xp != value)
-                    DevConsole.Log(DCSection.General, "Profile(" + this.name != null ? this.name : ").xp set(" + this.xp.ToString() + ")");
+                if (_linkedProfile != null)
+                    _linkedProfile.xp = value;
+                if (MonoMain.logFileOperations && _xp != value)
+                    DevConsole.Log(DCSection.General, "Profile(" + name != null ? name : ").xp set(" + xp.ToString() + ")");
                 if (Steam.user != null && this == Profiles.experienceProfile)
                     Steam.SetStat(nameof(xp), value);
-                this._xp = value;
+                _xp = value;
             }
         }
 
@@ -1163,40 +1163,40 @@ namespace DuckGame
 
         public float funslider
         {
-            get => this._funSlider;
-            set => this._funSlider = value;
+            get => _funSlider;
+            set => _funSlider = value;
         }
 
         public int preferredColor
         {
-            get => this.linkedProfile != null ? this.linkedProfile.preferredColor : this._preferredColor;
+            get => linkedProfile != null ? linkedProfile.preferredColor : _preferredColor;
             set
             {
-                if (this.linkedProfile != null)
-                    this.linkedProfile.preferredColor = value;
+                if (linkedProfile != null)
+                    linkedProfile.preferredColor = value;
                 else
-                    this._preferredColor = value;
+                    _preferredColor = value;
             }
         }
 
         public int requestedColor
         {
-            get => this.linkedProfile != null ? this.linkedProfile.requestedColor : this._requestedColor;
+            get => linkedProfile != null ? linkedProfile.requestedColor : _requestedColor;
             set
             {
-                if (this.linkedProfile != null)
-                    this.linkedProfile.requestedColor = value;
+                if (linkedProfile != null)
+                    linkedProfile.requestedColor = value;
                 else
-                    this._requestedColor = value;
+                    _requestedColor = value;
             }
         }
 
-        public int currentColor => this.persona.index;
+        public int currentColor => persona.index;
 
         public void IncrementRequestedColor()
         {
             int index;
-            for (index = this.requestedColor + 1; index != this.requestedColor; ++index)
+            for (index = requestedColor + 1; index != requestedColor; ++index)
             {
                 if (index >= DG.MaxPlayers)
                     index = 0;
@@ -1213,7 +1213,7 @@ namespace DuckGame
                 if (!flag)
                     break;
             }
-            this.requestedColor = index;
+            requestedColor = index;
         }
 
         public ProfileStats stats
@@ -1222,42 +1222,42 @@ namespace DuckGame
             {
                 if (!Profile.logStats)
                 {
-                    if (this._junkStats == null)
+                    if (_junkStats == null)
                     {
-                        DXMLNode node = this._stats.Serialize();
-                        this._junkStats = new ProfileStats();
-                        this._junkStats.Deserialize(node);
+                        DXMLNode node = _stats.Serialize();
+                        _junkStats = new ProfileStats();
+                        _junkStats.Deserialize(node);
                     }
-                    return this._junkStats;
+                    return _junkStats;
                 }
-                this._junkStats = null;
-                return this._linkedProfile != null ? this._linkedProfile.stats : this._stats;
+                _junkStats = null;
+                return _linkedProfile != null ? _linkedProfile.stats : _stats;
             }
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.stats = value;
-                this._stats = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.stats = value;
+                _stats = value;
             }
         }
 
         public ProfileStats prevStats
         {
-            get => this._linkedProfile != null ? this._linkedProfile.prevStats : this._prevStats;
+            get => _linkedProfile != null ? _linkedProfile.prevStats : _prevStats;
             set
             {
-                if (this._linkedProfile != null)
-                    this._linkedProfile.prevStats = value;
-                this._prevStats = value;
+                if (_linkedProfile != null)
+                    _linkedProfile.prevStats = value;
+                _prevStats = value;
             }
         }
 
         public void RecordPreviousStats()
         {
-            DXMLNode node = this.stats.Serialize();
-            this.prevStats = new ProfileStats();
-            this.prevStats.Deserialize(node);
-            this._endOfRoundStats = null;
+            DXMLNode node = stats.Serialize();
+            prevStats = new ProfileStats();
+            prevStats.Deserialize(node);
+            _endOfRoundStats = null;
         }
 
         public static int totalFansThisGame
@@ -1278,191 +1278,191 @@ namespace DuckGame
         {
             get
             {
-                this._endOfRoundStats = stats - prevStats as ProfileStats;
-                return this._endOfRoundStats;
+                _endOfRoundStats = stats - prevStats as ProfileStats;
+                return _endOfRoundStats;
             }
-            set => this._endOfRoundStats = value;
+            set => _endOfRoundStats = value;
         }
 
-        public CurrentGame currentGame => this._currentGame;
+        public CurrentGame currentGame => _currentGame;
 
         public ulong steamID
         {
             get
             {
-                if (this.connection == DuckNetwork.localConnection && (!Network.isActive || !Network.lanMode))
+                if (connection == DuckNetwork.localConnection && (!Network.isActive || !Network.lanMode))
                     return DG.localID;
-                return this.connection != null && this.connection.data is User ? (this.connection.data as User).id : this._steamID;
+                return connection != null && connection.data is User ? (connection.data as User).id : _steamID;
             }
             set
             {
-                if ((long)this._steamID != (long)value)
-                    this._blockStatusDirty = true;
-                this._steamID = value;
+                if ((long)_steamID != (long)value)
+                    _blockStatusDirty = true;
+                _steamID = value;
             }
         }
 
         public NetworkConnection connection
         {
-            get => this._connection;
+            get => _connection;
             set
             {
-                this._connection = value;
-                if (this._connection != null)
+                _connection = value;
+                if (_connection != null)
                     return;
-                this._networkStatus = DuckNetStatus.Disconnected;
+                _networkStatus = DuckNetStatus.Disconnected;
             }
         }
 
         public DuckNetStatus networkStatus
         {
-            get => this._networkStatus;
+            get => _networkStatus;
             set
             {
-                if (!this.isRemoteLocalDuck && !Profile._networkStatusLooping && this.connection != null)
+                if (!isRemoteLocalDuck && !Profile._networkStatusLooping && connection != null)
                 {
                     Profile._networkStatusLooping = true;
                     foreach (Profile profile in DuckNetwork.profiles)
                     {
-                        if (profile.connection == this.connection)
+                        if (profile.connection == connection)
                             profile.networkStatus = value;
                     }
                     Profile._networkStatusLooping = false;
                 }
                 else
                 {
-                    if (value != this._networkStatus)
+                    if (value != _networkStatus)
                     {
-                        this._currentStatusTimeout = 1f;
-                        this._currentStatusTries = 0;
+                        _currentStatusTimeout = 1f;
+                        _currentStatusTries = 0;
                     }
-                    this._networkStatus = value;
+                    _networkStatus = value;
                 }
             }
         }
 
         public float currentStatusTimeout
         {
-            get => this._currentStatusTimeout;
-            set => this._currentStatusTimeout = value;
+            get => _currentStatusTimeout;
+            set => _currentStatusTimeout = value;
         }
 
         public int currentStatusTries
         {
-            get => this._currentStatusTries;
-            set => this._currentStatusTries = value;
+            get => _currentStatusTries;
+            set => _currentStatusTries = value;
         }
 
         public Profile linkedProfile
         {
-            get => this._linkedProfile;
-            set => this._linkedProfile = value;
+            get => _linkedProfile;
+            set => _linkedProfile = value;
         }
 
-        public bool isHost => this.connection == Network.host;
+        public bool isHost => connection == Network.host;
 
         public bool ready
         {
-            get => this._ready;
-            set => this._ready = value;
+            get => _ready;
+            set => _ready = value;
         }
 
-        public byte networkIndex => this._networkIndex;
+        public byte networkIndex => _networkIndex;
 
-        public void SetNetworkIndex(byte idx) => this._networkIndex = idx;
+        public void SetNetworkIndex(byte idx) => _networkIndex = idx;
 
-        public byte fixedGhostIndex => this._fixedGhostIndex;
+        public byte fixedGhostIndex => _fixedGhostIndex;
 
-        public void SetFixedGhostIndex(byte idx) => this._fixedGhostIndex = idx;
+        public void SetFixedGhostIndex(byte idx) => _fixedGhostIndex = idx;
 
-        public bool localPlayer => !Network.isActive || this._connection == DuckNetwork.localConnection;
+        public bool localPlayer => !Network.isActive || _connection == DuckNetwork.localConnection;
 
         public byte remoteSpectatorChangeIndex
         {
-            get => this._remoteSpectatorChangeIndex;
+            get => _remoteSpectatorChangeIndex;
             set
             {
-                this._remoteSpectatorChangeIndex = value;
-                this._spectatorChangeCooldown = 120;
+                _remoteSpectatorChangeIndex = value;
+                _spectatorChangeCooldown = 120;
             }
         }
 
-        public bool readyForSpectatorChange => this._spectatorChangeCooldown <= 0 && DuckNetwork.allClientsReady;
+        public bool readyForSpectatorChange => _spectatorChangeCooldown <= 0 && DuckNetwork.allClientsReady;
 
         public SlotType slotType
         {
-            get => this._slotType;
+            get => _slotType;
             set
             {
-                if (this._slotType == value)
+                if (_slotType == value)
                     return;
-                this._slotType = value;
-                if (DuckNetwork.preparingProfiles || this._slotType == SlotType.Spectator)
+                _slotType = value;
+                if (DuckNetwork.preparingProfiles || _slotType == SlotType.Spectator)
                     return;
                 DuckNetwork.ChangeSlotSettings();
             }
         }
 
-        public void Special_SetSlotType(SlotType pType) => this._slotType = pType;
+        public void Special_SetSlotType(SlotType pType) => _slotType = pType;
 
         public object reservedUser
         {
-            get => this._reservedUser;
-            set => this._reservedUser = value;
+            get => _reservedUser;
+            set => _reservedUser = value;
         }
 
         public Team reservedTeam
         {
-            get => this._reservedTeam;
-            set => this._reservedTeam = value;
+            get => _reservedTeam;
+            set => _reservedTeam = value;
         }
 
         public sbyte reservedSpectatorPersona
         {
-            get => this._reservedSpectatorPersona;
-            set => this._reservedSpectatorPersona = value;
+            get => _reservedSpectatorPersona;
+            set => _reservedSpectatorPersona = value;
         }
 
-        public DuckPersona fallbackPersona => Network.isActive ? this.networkDefaultPersona : this.defaultPersona;
+        public DuckPersona fallbackPersona => Network.isActive ? networkDefaultPersona : defaultPersona;
 
         public DuckPersona desiredPersona
         {
             get
             {
-                if (this.requestedColor >= 0 && this.requestedColor < DG.MaxPlayers)
-                    return Persona.all.ElementAt<DuckPersona>(this.requestedColor);
-                return this.preferredColor >= 0 && this.preferredColor < DG.MaxPlayers ? Persona.all.ElementAt<DuckPersona>(this.preferredColor) : this.fallbackPersona;
+                if (requestedColor >= 0 && requestedColor < DG.MaxPlayers)
+                    return Persona.all.ElementAt<DuckPersona>(requestedColor);
+                return preferredColor >= 0 && preferredColor < DG.MaxPlayers ? Persona.all.ElementAt<DuckPersona>(preferredColor) : fallbackPersona;
             }
         }
 
-        public void UpdatePersona() => DuckNetwork.RequestPersona(this, this.desiredPersona);
+        public void UpdatePersona() => DuckNetwork.RequestPersona(this, desiredPersona);
 
-        public void PersonaRequestResult(DuckPersona pPersona) => this.persona = pPersona;
+        public void PersonaRequestResult(DuckPersona pPersona) => persona = pPersona;
 
         public Duck duck
         {
-            get => this._duck;
-            set => this._duck = value;
+            get => _duck;
+            set => _duck = value;
         }
 
         public DuckPersona persona
         {
             get
             {
-                if (this.slotType == SlotType.Spectator)
+                if (slotType == SlotType.Spectator)
                 {
-                    sbyte index = this.netData.Get<sbyte>("spectatorPersona", -1);
+                    sbyte index = netData.Get<sbyte>("spectatorPersona", -1);
                     if (index >= 0 && index < 8)
                         return Persona.all.ElementAt<DuckPersona>(index);
                 }
-                if (this._persona == null)
-                    this._persona = this != Profiles.DefaultPlayer1 ? (this != Profiles.DefaultPlayer2 ? (this != Profiles.DefaultPlayer3 ? (this != Profiles.DefaultPlayer4 ? Persona.Duck1 : Persona.Duck4) : Persona.Duck3) : Persona.Duck2) : Persona.Duck1;
-                return this._persona;
+                if (_persona == null)
+                    _persona = this != Profiles.DefaultPlayer1 ? (this != Profiles.DefaultPlayer2 ? (this != Profiles.DefaultPlayer3 ? (this != Profiles.DefaultPlayer4 ? Persona.Duck1 : Persona.Duck4) : Persona.Duck3) : Persona.Duck2) : Persona.Duck1;
+                return _persona;
             }
-            set => this._persona = value;
+            set => _persona = value;
         }
 
-        public void SetInputProfileLink(InputProfile pLink) => this._inputProfile = pLink;
+        public void SetInputProfileLink(InputProfile pLink) => _inputProfile = pLink;
 
         public static List<Profile> defaultProfileMappings => Profiles.core.defaultProfileMappings;
 
@@ -1470,65 +1470,65 @@ namespace DuckGame
         {
             get
             {
-                if (!Network.isActive && this._inputProfile == null)
-                    this._inputProfile = this != Profiles.DefaultPlayer1 ? (this != Profiles.DefaultPlayer2 ? (this != Profiles.DefaultPlayer3 ? (this != Profiles.DefaultPlayer4 ? (this != Profiles.DefaultPlayer5 ? (this != Profiles.DefaultPlayer6 ? (this != Profiles.DefaultPlayer7 ? (this != Profiles.DefaultPlayer8 ? InputProfile.Get(InputProfile.MPPlayer1) : InputProfile.Get(InputProfile.MPPlayer8)) : InputProfile.Get(InputProfile.MPPlayer7)) : InputProfile.Get(InputProfile.MPPlayer6)) : InputProfile.Get(InputProfile.MPPlayer5)) : InputProfile.Get(InputProfile.MPPlayer4)) : InputProfile.Get(InputProfile.MPPlayer3)) : InputProfile.Get(InputProfile.MPPlayer2)) : InputProfile.Get(InputProfile.MPPlayer1);
-                return this._inputProfile;
+                if (!Network.isActive && _inputProfile == null)
+                    _inputProfile = this != Profiles.DefaultPlayer1 ? (this != Profiles.DefaultPlayer2 ? (this != Profiles.DefaultPlayer3 ? (this != Profiles.DefaultPlayer4 ? (this != Profiles.DefaultPlayer5 ? (this != Profiles.DefaultPlayer6 ? (this != Profiles.DefaultPlayer7 ? (this != Profiles.DefaultPlayer8 ? InputProfile.Get(InputProfile.MPPlayer1) : InputProfile.Get(InputProfile.MPPlayer8)) : InputProfile.Get(InputProfile.MPPlayer7)) : InputProfile.Get(InputProfile.MPPlayer6)) : InputProfile.Get(InputProfile.MPPlayer5)) : InputProfile.Get(InputProfile.MPPlayer4)) : InputProfile.Get(InputProfile.MPPlayer3)) : InputProfile.Get(InputProfile.MPPlayer2)) : InputProfile.Get(InputProfile.MPPlayer1);
+                return _inputProfile;
             }
             set
             {
-                if (this._inputProfile != null && this._inputProfile != value)
+                if (_inputProfile != null && _inputProfile != value)
                 {
-                    this._inputProfile.lastActiveDevice.Rumble();
-                    Input.ApplyDefaultMapping(this._inputProfile);
+                    _inputProfile.lastActiveDevice.Rumble();
+                    Input.ApplyDefaultMapping(_inputProfile);
                 }
-                if (value != null && value != this._inputProfile)
+                if (value != null && value != _inputProfile)
                     Input.ApplyDefaultMapping(value, this);
-                this._inputProfile = value;
+                _inputProfile = value;
             }
         }
 
         public Team team
         {
-            get => this._team;
+            get => _team;
             set
             {
                 if (value != null)
                 {
-                    if (this.slotType != SlotType.Spectator)
+                    if (slotType != SlotType.Spectator)
                         value.Join(this, false);
-                    this._team = value;
+                    _team = value;
                 }
                 else
                 {
-                    if (this._team == null)
+                    if (_team == null)
                         return;
-                    this._team.Leave(this, false);
-                    this._team = null;
-                    this.requestedColor = -1;
+                    _team.Leave(this, false);
+                    _team = null;
+                    requestedColor = -1;
                 }
             }
         }
 
         public int wins
         {
-            get => this._wins;
-            set => this._wins = value;
+            get => _wins;
+            set => _wins = value;
         }
 
         public bool wasRockThrower
         {
-            get => this._wasRockThrower;
-            set => this._wasRockThrower = value;
+            get => _wasRockThrower;
+            set => _wasRockThrower = value;
         }
 
-        public List<DeviceInputMapping> inputMappingOverrides => this._linkedProfile != null ? this._linkedProfile.inputMappingOverrides : this._inputMappingOverrides;
+        public List<DeviceInputMapping> inputMappingOverrides => _linkedProfile != null ? _linkedProfile.inputMappingOverrides : _inputMappingOverrides;
 
-        public void ClearCurrentGame() => this._currentGame = new CurrentGame();
+        public void ClearCurrentGame() => _currentGame = new CurrentGame();
 
         public void ApplyDefaults()
         {
-            this.team = this.defaultTeam != null ? this.defaultTeam : Teams.Player1;
-            this.UpdatePersona();
+            team = defaultTeam != null ? defaultTeam : Teams.Player1;
+            UpdatePersona();
         }
 
         public Profile(
@@ -1540,20 +1540,20 @@ namespace DuckGame
           string varID,
           bool pDefaultProfile)
         {
-            this._name = varName;
-            this._inputProfile = varProfile;
-            if (this._inputProfile != null)
-                this._inputProfile.oldAngles = false;
+            _name = varName;
+            _inputProfile = varProfile;
+            if (_inputProfile != null)
+                _inputProfile.oldAngles = false;
             if (varStartTeam != null)
             {
                 varStartTeam.Join(this);
-                this.defaultTeam = varStartTeam;
+                defaultTeam = varStartTeam;
             }
-            this._persona = varDefaultPersona;
-            this.defaultPersona = varDefaultPersona;
-            this._id = varID != null ? varID : Guid.NewGuid().ToString();
-            this.isNetworkProfile = network;
-            this.isDefaultProfile = pDefaultProfile;
+            _persona = varDefaultPersona;
+            defaultPersona = varDefaultPersona;
+            _id = varID != null ? varID : Guid.NewGuid().ToString();
+            isNetworkProfile = network;
+            isDefaultProfile = pDefaultProfile;
             if (!MonoMain.logFileOperations)
                 return;
             DevConsole.Log(DCSection.General, "new Profile(" + varName + ")");

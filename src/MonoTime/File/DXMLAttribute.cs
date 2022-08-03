@@ -12,14 +12,14 @@ namespace DuckGame
         private string _name = "";
         private string _value = "";
 
-        public string Name => this._name;
+        public string Name => _name;
 
-        public string Value => this._value;
+        public string Value => _value;
 
         public DXMLAttribute(string varName, string varValue)
         {
-            this._name = varName;
-            this._value = varValue;
+            _name = varName;
+            _value = varValue;
         }
     }
 }

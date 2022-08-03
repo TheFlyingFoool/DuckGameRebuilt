@@ -11,12 +11,12 @@ namespace DuckGame
     {
         public string song;
 
-        public NMPlayMusic(string s) => this.song = s;
+        public NMPlayMusic(string s) => song = s;
 
         public NMPlayMusic()
         {
         }
 
-        public override void Activate() => Music.Play(this.song);
+        public override void Activate() => Music.Play(song);
     }
 }

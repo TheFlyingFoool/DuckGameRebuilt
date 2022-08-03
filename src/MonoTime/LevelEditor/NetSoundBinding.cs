@@ -14,13 +14,13 @@ namespace DuckGame
         public override object classValue
         {
             get => byteValue;
-            set => this.byteValue = (byte)value;
+            set => byteValue = (byte)value;
         }
 
         public override byte byteValue
         {
-            get => (byte)(this._accessor.getAccessor(this._thing) as NetSoundEffect).index;
-            set => (this._accessor.getAccessor(this._thing) as NetSoundEffect).index = value;
+            get => (byte)(_accessor.getAccessor(_thing) as NetSoundEffect).index;
+            set => (_accessor.getAccessor(_thing) as NetSoundEffect).index = value;
         }
 
         public NetSoundBinding(string field)
@@ -31,7 +31,7 @@ namespace DuckGame
         public NetSoundBinding(GhostPriority p, string field)
           : base(field, 2)
         {
-            this._priority = p;
+            _priority = p;
         }
     }
 }

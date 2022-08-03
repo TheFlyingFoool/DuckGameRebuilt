@@ -15,6 +15,6 @@ namespace DuckGame
         public bool oneWay;
         public bool gap;
 
-        public Vec2 position => this.owner.position;
+        public Vec2 position => owner.position;
     }
 }

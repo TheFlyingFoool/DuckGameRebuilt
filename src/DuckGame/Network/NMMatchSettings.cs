@@ -42,26 +42,26 @@ namespace DuckGame
           List<byte> enabledModifiers,
           bool varClientLevels)
         {
-            this.roundsPerIntermission = varRoundsPerIntermission;
-            this.winsPerSet = varWinsPerSet;
-            this.randomPercent = varRandomPercent;
-            this.workshopPercent = varWorkshopPercent;
-            this.teams = varTeams;
-            this._enabledModifiers = enabledModifiers;
-            this.initialSettings = initial;
-            this.customPercent = varCustomPercent;
-            this.customLevels = varCustomLevels;
-            this.normalPercent = varNormalPercent;
-            this.wallmode = varWallmode;
-            this.clientLevels = varClientLevels;
+            roundsPerIntermission = varRoundsPerIntermission;
+            winsPerSet = varWinsPerSet;
+            randomPercent = varRandomPercent;
+            workshopPercent = varWorkshopPercent;
+            teams = varTeams;
+            _enabledModifiers = enabledModifiers;
+            initialSettings = initial;
+            customPercent = varCustomPercent;
+            customLevels = varCustomLevels;
+            normalPercent = varNormalPercent;
+            wallmode = varWallmode;
+            clientLevels = varClientLevels;
         }
 
         protected override void OnSerialize()
         {
             base.OnSerialize();
-            this._serializedData.Write((byte)this._enabledModifiers.Count);
-            foreach (byte enabledModifier in this._enabledModifiers)
-                this._serializedData.Write(enabledModifier);
+            _serializedData.Write((byte)_enabledModifiers.Count);
+            foreach (byte enabledModifier in _enabledModifiers)
+                _serializedData.Write(enabledModifier);
         }
 
         public override void OnDeserialize(BitBuffer d)
@@ -69,12 +69,12 @@ namespace DuckGame
             base.OnDeserialize(d);
             byte num = d.ReadByte();
             for (int index = 0; index < num; ++index)
-                this._enabledModifiers.Add(d.ReadByte());
+                _enabledModifiers.Add(d.ReadByte());
         }
 
         public override void Activate()
         {
-            DuckNetwork.SetMatchSettings(this.initialSettings, winsPerSet, roundsPerIntermission, this.teams, this.wallmode, normalPercent, randomPercent, workshopPercent, customPercent, this.customLevels, this._enabledModifiers, this.clientLevels);
+            DuckNetwork.SetMatchSettings(initialSettings, winsPerSet, roundsPerIntermission, teams, wallmode, normalPercent, randomPercent, workshopPercent, customPercent, customLevels, _enabledModifiers, clientLevels);
             base.Activate();
         }
     }

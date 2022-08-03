@@ -15,7 +15,7 @@ namespace DuckGame
         {
         }
 
-        public NMThrowRock(byte duckIndex) => this.index = duckIndex;
+        public NMThrowRock(byte duckIndex) => index = duckIndex;
 
         public override void Activate() => base.Activate();
     }

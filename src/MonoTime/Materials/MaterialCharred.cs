@@ -11,11 +11,11 @@ namespace DuckGame
 {
     public class MaterialCharred : Material
     {
-        public MaterialCharred() => this._effect = Content.Load<MTEffect>("Shaders/charred");
+        public MaterialCharred() => _effect = Content.Load<MTEffect>("Shaders/charred");
 
         public override void Apply()
         {
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

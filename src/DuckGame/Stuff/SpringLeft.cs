@@ -14,26 +14,26 @@ namespace DuckGame
     {
         public override bool flipHorizontal
         {
-            get => this._flipHorizontal;
+            get => _flipHorizontal;
             set
             {
-                this._flipHorizontal = value;
-                this.offDir = this._flipHorizontal ? (sbyte)-1 : (sbyte)1;
-                if (!this._flipHorizontal)
+                _flipHorizontal = value;
+                offDir = _flipHorizontal ? (sbyte)-1 : (sbyte)1;
+                if (!_flipHorizontal)
                 {
-                    this.center = new Vec2(8f, 7f);
-                    this.collisionOffset = new Vec2(0f, -8f);
-                    this.collisionSize = new Vec2(8f, 16f);
-                    this.angleDegrees = -90f;
-                    this.hugWalls = WallHug.Right;
+                    center = new Vec2(8f, 7f);
+                    collisionOffset = new Vec2(0f, -8f);
+                    collisionSize = new Vec2(8f, 16f);
+                    angleDegrees = -90f;
+                    hugWalls = WallHug.Right;
                 }
                 else
                 {
-                    this.center = new Vec2(8f, 7f);
-                    this.collisionOffset = new Vec2(-8f, -8f);
-                    this.collisionSize = new Vec2(8f, 16f);
-                    this.angleDegrees = 90f;
-                    this.hugWalls = WallHug.Left;
+                    center = new Vec2(8f, 7f);
+                    collisionOffset = new Vec2(-8f, -8f);
+                    collisionSize = new Vec2(8f, 16f);
+                    angleDegrees = 90f;
+                    hugWalls = WallHug.Left;
                 }
             }
         }
@@ -41,41 +41,41 @@ namespace DuckGame
         public SpringLeft(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.UpdateSprite();
-            this.center = new Vec2(8f, 7f);
-            this.collisionOffset = new Vec2(0f, -8f);
-            this.collisionSize = new Vec2(8f, 16f);
-            this.depth = -0.5f;
-            this._editorName = "Spring Left";
-            this.editorTooltip = "Can't reach a high platform or want to get somewhere fast? That's why we built springs.";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.editorCycleType = typeof(SpringUpLeft);
-            this.angleDegrees = -90f;
-            this.hugWalls = WallHug.Right;
+            UpdateSprite();
+            center = new Vec2(8f, 7f);
+            collisionOffset = new Vec2(0f, -8f);
+            collisionSize = new Vec2(8f, 16f);
+            depth = -0.5f;
+            _editorName = "Spring Left";
+            editorTooltip = "Can't reach a high platform or want to get somewhere fast? That's why we built springs.";
+            physicsMaterial = PhysicsMaterial.Metal;
+            editorCycleType = typeof(SpringUpLeft);
+            angleDegrees = -90f;
+            hugWalls = WallHug.Right;
         }
 
         public override void Touch(MaterialThing with)
         {
             if (with.isServerForObject && with.Sprung(this))
             {
-                if (!this._flipHorizontal)
+                if (!_flipHorizontal)
                 {
                     if (with.hSpeed > -12.0 * _mult)
-                        with.hSpeed = -12f * this._mult;
+                        with.hSpeed = -12f * _mult;
                 }
                 else if (with.hSpeed < 12.0 * _mult)
-                    with.hSpeed = 12f * this._mult;
+                    with.hSpeed = 12f * _mult;
                 if (with is Gun)
                     (with as Gun).PressAction();
                 if (with is Duck)
                 {
                     (with as Duck).jumping = false;
-                    this.DoRumble(with as Duck);
+                    DoRumble(with as Duck);
                 }
                 with.lastHSpeed = with._hSpeed;
                 with.lastVSpeed = with._vSpeed;
             }
-            this.SpringUp();
+            SpringUp();
         }
 
         public override void Draw() => base.Draw();

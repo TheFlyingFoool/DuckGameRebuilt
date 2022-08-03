@@ -12,33 +12,33 @@ namespace DuckGame
         private bool _fade;
         private Duck _controlledDuck;
 
-        public Duck controlledDuck => this._controlledDuck;
+        public Duck controlledDuck => _controlledDuck;
 
         public MindControlBolt(float xval, float yval, Duck control)
           : base(xval, yval)
         {
-            this._controlledDuck = control;
-            this.graphic = new Sprite("mindBolt");
-            this.center = new Vec2(8f, 8f);
-            this.scale = new Vec2(0.1f, 0.1f);
-            this.alpha = 0f;
+            _controlledDuck = control;
+            graphic = new Sprite("mindBolt");
+            center = new Vec2(8f, 8f);
+            scale = new Vec2(0.1f, 0.1f);
+            alpha = 0f;
         }
 
         public override void Update()
         {
-            Vec2 position = this._controlledDuck.position;
-            if (this._controlledDuck.ragdoll != null)
-                position = this._controlledDuck.ragdoll.part3.position;
+            Vec2 position = _controlledDuck.position;
+            if (_controlledDuck.ragdoll != null)
+                position = _controlledDuck.ragdoll.part3.position;
             Vec2 vec2 = position - this.position;
             double length = vec2.length;
             vec2.Normalize();
-            this.angleDegrees = (-Maths.PointDirection(this.position, position) + 90f);
+            angleDegrees = (-Maths.PointDirection(this.position, position) + 90f);
             this.position += vec2 * 4f;
-            this.xscale = this.yscale = Lerp.Float(this.xscale, 1f, 0.05f);
-            if (length < 48f || this._controlledDuck.mindControl == null)
-                this._fade = true;
-            this.alpha = Lerp.Float(this.alpha, this._fade ? 0f : 1f, 0.1f);
-            if (this.alpha < 0.01f && this._fade)
+            xscale = yscale = Lerp.Float(xscale, 1f, 0.05f);
+            if (length < 48f || _controlledDuck.mindControl == null)
+                _fade = true;
+            alpha = Lerp.Float(alpha, _fade ? 0f : 1f, 0.1f);
+            if (alpha < 0.01f && _fade)
                 Level.Remove(this);
             base.Update();
         }

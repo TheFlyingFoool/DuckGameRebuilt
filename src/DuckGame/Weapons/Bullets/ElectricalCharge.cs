@@ -17,27 +17,27 @@ namespace DuckGame
         public ElectricalCharge(float xpos, float ypos, int off, Thing own)
           : base(xpos, ypos)
         {
-            this.offDir = (sbyte)off;
-            this._travelVec = new Vec2(offDir * Rando.Float(6f, 10f), Rando.Float(-10f, 10f));
-            this.owner = own;
+            offDir = (sbyte)off;
+            _travelVec = new Vec2(offDir * Rando.Float(6f, 10f), Rando.Float(-10f, 10f));
+            owner = own;
         }
 
         public override void Update()
         {
-            if (this._prevPositions.Count == 0)
-                this._prevPositions.Insert(0, this.position);
-            Vec2 position1 = this.position;
-            this.position += this._travelVec;
-            this._travelVec = new Vec2(offDir * Rando.Float(6f, 10f), Rando.Float(-10f, 10f));
-            this._prevPositions.Insert(0, this.position);
-            this.alpha -= 0.1f;
-            if (this.alpha < 0.0)
+            if (_prevPositions.Count == 0)
+                _prevPositions.Insert(0, position);
+            Vec2 position1 = position;
+            position += _travelVec;
+            _travelVec = new Vec2(offDir * Rando.Float(6f, 10f), Rando.Float(-10f, 10f));
+            _prevPositions.Insert(0, position);
+            alpha -= 0.1f;
+            if (alpha < 0.0)
                 Level.Remove(this);
-            Vec2 position2 = this.position;
+            Vec2 position2 = position;
             foreach (IAmADuck amAduck in Level.CheckLineAll<IAmADuck>(position1, position2))
             {
-                if (amAduck is MaterialThing materialThing && amAduck != this.owner.owner)
-                    materialThing.Zap(this.owner);
+                if (amAduck is MaterialThing materialThing && amAduck != owner.owner)
+                    materialThing.Zap(owner);
             }
             base.Update();
         }
@@ -47,7 +47,7 @@ namespace DuckGame
             Vec2 p2 = Vec2.Zero;
             bool flag = false;
             float num = 1f;
-            foreach (Vec2 prevPosition in this._prevPositions)
+            foreach (Vec2 prevPosition in _prevPositions)
             {
                 if (!flag)
                 {

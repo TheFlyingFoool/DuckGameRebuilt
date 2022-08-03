@@ -32,16 +32,16 @@ namespace DuckGame
           short texHVal,
           float depthVal)
         {
-            this.texture = textureVal;
-            this.topLeft = topLeftVal;
-            this.bottomRight = bottomRightVal;
-            this.rotation = rotationVal;
-            this.color = colorVal;
-            this.texX = texXVal;
-            this.texY = texYVal;
-            this.texW = texWVal;
-            this.texH = texHVal;
-            this.depth = depthVal;
+            texture = textureVal;
+            topLeft = topLeftVal;
+            bottomRight = bottomRightVal;
+            rotation = rotationVal;
+            color = colorVal;
+            texX = texXVal;
+            texY = texYVal;
+            texW = texWVal;
+            texH = texHVal;
+            depth = depthVal;
         }
     }
 }

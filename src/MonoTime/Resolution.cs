@@ -152,18 +152,18 @@ namespace DuckGame
             return Matrix.CreateScale((float)xScale, (float)yScale, 1f);
         }
 
-        public float aspect => this.dimensions.x / this.dimensions.y;
+        public float aspect => dimensions.x / dimensions.y;
 
         public int x
         {
-            get => (int)this.dimensions.x;
-            set => this.dimensions.x = value;
+            get => (int)dimensions.x;
+            set => dimensions.x = value;
         }
 
         public int y
         {
-            get => (int)this.dimensions.y;
-            set => this.dimensions.y = value;
+            get => (int)dimensions.y;
+            set => dimensions.y = value;
         }
 
         public static void Initialize(object pWindow, GraphicsDeviceManager pDeviceManager)
@@ -282,13 +282,13 @@ namespace DuckGame
             Options.LocalData.windowedFullscreenResolution = Resolution.GetDefault(ScreenMode.Borderless);
         }
 
-        public override string ToString() => this.x.ToString() + "x" + this.y.ToString() + "x" + ((int)this.mode).ToString();
+        public override string ToString() => x.ToString() + "x" + y.ToString() + "x" + ((int)mode).ToString();
 
         public string ToShortString()
         {
-            int num = this.x;
+            int num = x;
             string str1 = num.ToString();
-            num = this.y;
+            num = y;
             string str2 = num.ToString();
             return str1 + "x" + str2;
         }

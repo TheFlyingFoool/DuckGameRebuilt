@@ -15,7 +15,7 @@ namespace DuckGame
         {
         }
 
-        public NMBeginLevelTransition(byte pLevelIndex) => this.levelIndex = pLevelIndex;
+        public NMBeginLevelTransition(byte pLevelIndex) => levelIndex = pLevelIndex;
 
         public override void Activate()
         {

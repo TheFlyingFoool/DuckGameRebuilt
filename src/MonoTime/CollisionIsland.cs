@@ -20,34 +20,34 @@ namespace DuckGame
         public QuadTreeObjectList level;
         public bool willDie;
 
-        public HashSet<MaterialThing> things => this._things;
+        public HashSet<MaterialThing> things => _things;
 
         public CollisionIsland(MaterialThing own, QuadTreeObjectList lev)
         {
-            this.radiusSquared = this.radius * this.radius;
-            this.radiusCheckSquared = this.radiusCheck * this.radiusCheck;
-            this.owner = own;
-            this.level = lev;
-            this.AddThing(own);
+            radiusSquared = radius * radius;
+            radiusCheckSquared = radiusCheck * radiusCheck;
+            owner = own;
+            level = lev;
+            AddThing(own);
         }
 
-        public void KillIsland() => this.level.RemoveIsland(this);
+        public void KillIsland() => level.RemoveIsland(this);
 
         public void AddThing(MaterialThing thing)
         {
             if (thing.island != null && thing.island != this)
                 thing.island.RemoveThing(thing);
             thing.island = this;
-            this._things.Add(thing);
+            _things.Add(thing);
         }
 
         public void RemoveThing(MaterialThing thing)
         {
-            this._things.Remove(thing);
+            _things.Remove(thing);
             thing.island = null;
-            if (thing != this.owner)
+            if (thing != owner)
                 return;
-            this.KillIsland();
+            KillIsland();
         }
     }
 }

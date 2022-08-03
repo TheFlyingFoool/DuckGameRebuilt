@@ -19,38 +19,38 @@ namespace DuckGame
         public StreetLight(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("streetLight");
-            this.center = new Vec2(6f, 54f);
-            this._collisionSize = new Vec2(8f, 8f);
-            this._collisionOffset = new Vec2(-4f, -2f);
-            this.depth = (Depth)0.9f;
-            this.hugWalls = WallHug.Floor;
-            this.layer = Layer.Game;
+            graphic = new Sprite("streetLight");
+            center = new Vec2(6f, 54f);
+            _collisionSize = new Vec2(8f, 8f);
+            _collisionOffset = new Vec2(-4f, -2f);
+            depth = (Depth)0.9f;
+            hugWalls = WallHug.Floor;
+            layer = Layer.Game;
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            if (this.flipHorizontal)
+            if (flipHorizontal)
             {
-                Vec2 vec2 = new Vec2(this.x - 16f, (float)(this.y - 32.0 - 20.0));
-                this._occluders.Add(new LightOccluder(vec2 + new Vec2(8f, 5f), vec2 + new Vec2(-1f, -4f), new Color(0.4f, 0.4f, 0.4f)));
-                this._occluders.Add(new LightOccluder(vec2 + new Vec2(1f, -4f), vec2 + new Vec2(-8f, 5f), new Color(0.4f, 0.4f, 0.4f)));
-                Level.Add(new PointLight(vec2.x, vec2.y + 1f, new Color(247, 198, 120), 200f, this._occluders));
+                Vec2 vec2 = new Vec2(x - 16f, (float)(y - 32.0 - 20.0));
+                _occluders.Add(new LightOccluder(vec2 + new Vec2(8f, 5f), vec2 + new Vec2(-1f, -4f), new Color(0.4f, 0.4f, 0.4f)));
+                _occluders.Add(new LightOccluder(vec2 + new Vec2(1f, -4f), vec2 + new Vec2(-8f, 5f), new Color(0.4f, 0.4f, 0.4f)));
+                Level.Add(new PointLight(vec2.x, vec2.y + 1f, new Color(247, 198, 120), 200f, _occluders));
             }
             else
             {
-                Vec2 vec2 = new Vec2(this.x + 16f, (float)(this.y - 32.0 - 20.0));
-                this._occluders.Add(new LightOccluder(vec2 + new Vec2(-8f, 5f), vec2 + new Vec2(1f, -4f), new Color(0.4f, 0.4f, 0.4f)));
-                this._occluders.Add(new LightOccluder(vec2 + new Vec2(-1f, -4f), vec2 + new Vec2(8f, 5f), new Color(0.4f, 0.4f, 0.4f)));
-                Level.Add(new PointLight(vec2.x, vec2.y + 1f, new Color(247, 198, 120), 200f, this._occluders));
+                Vec2 vec2 = new Vec2(x + 16f, (float)(y - 32.0 - 20.0));
+                _occluders.Add(new LightOccluder(vec2 + new Vec2(-8f, 5f), vec2 + new Vec2(1f, -4f), new Color(0.4f, 0.4f, 0.4f)));
+                _occluders.Add(new LightOccluder(vec2 + new Vec2(-1f, -4f), vec2 + new Vec2(8f, 5f), new Color(0.4f, 0.4f, 0.4f)));
+                Level.Add(new PointLight(vec2.x, vec2.y + 1f, new Color(247, 198, 120), 200f, _occluders));
             }
         }
 
         public override void Draw()
         {
-            this.graphic.flipH = this.flipHorizontal;
+            graphic.flipH = flipHorizontal;
             base.Draw();
         }
     }

@@ -18,9 +18,9 @@ namespace DuckGame
         public ProfileStatRank(StatInfo s, float val, Profile pro = null)
         {
             if (pro != null)
-                this.profiles.Add(pro);
-            this.value = val;
-            this.stat = s;
+                profiles.Add(pro);
+            value = val;
+            stat = s;
         }
     }
 }

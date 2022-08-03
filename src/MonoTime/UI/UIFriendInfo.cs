@@ -22,13 +22,13 @@ namespace DuckGame
             {
                 Texture2D tex = new Texture2D(DuckGame.Graphics.device, 32, 32);
                 tex.SetData<byte>(avatarSmall);
-                this._avatar = new Sprite((Tex2D)tex);
-                this._avatar.CenterOrigin();
+                _avatar = new Sprite((Tex2D)tex);
+                _avatar.CenterOrigin();
             }
-            this._rootMenu = rootMenu;
-            this._collisionSize.y = 14f;
-            this._textElement.SetFont(new BitmapFont("smallBiosFont", 7, 6));
-            this._textElement.text = "  " + friend.name + "\n  |LIME|WANTS TO PLAY";
+            _rootMenu = rootMenu;
+            _collisionSize.y = 14f;
+            _textElement.SetFont(new BitmapFont("smallBiosFont", 7, 6));
+            _textElement.text = "  " + friend.name + "\n  |LIME|WANTS TO PLAY";
         }
 
         public override void Activate(string trigger)
@@ -39,12 +39,12 @@ namespace DuckGame
 
         public override void Draw()
         {
-            DuckGame.Graphics.DrawRect(this.leftSection.topLeft, this.rightSection.bottomRight, Colors.BlueGray, this.depth - 1);
-            if (this._avatar != null)
+            DuckGame.Graphics.DrawRect(leftSection.topLeft, rightSection.bottomRight, Colors.BlueGray, depth - 1);
+            if (_avatar != null)
             {
-                this._avatar.depth = this.depth + 2;
-                this._avatar.scale = new Vec2(0.25f);
-                DuckGame.Graphics.Draw(this._avatar, (float)(this.leftSection.left + _avatar.width * this._avatar.scale.x / 2.0 + 6.0), this.y + 3f);
+                _avatar.depth = depth + 2;
+                _avatar.scale = new Vec2(0.25f);
+                DuckGame.Graphics.Draw(_avatar, (float)(leftSection.left + _avatar.width * _avatar.scale.x / 2.0 + 6.0), y + 3f);
             }
             base.Draw();
         }

@@ -23,68 +23,68 @@ namespace DuckGame
 
         public override float angle
         {
-            get => base.angle + this._aimAngle;
-            set => this._angle = value;
+            get => base.angle + _aimAngle;
+            set => _angle = value;
         }
 
         public GrenadeLauncher(float xval, float yval)
           : base(xval, yval)
         {
-            this.wideBarrel = true;
-            this.ammo = 6;
-            this._type = "gun";
-            this.graphic = new Sprite("grenadeLauncher");
-            this.center = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-6f, -4f);
-            this.collisionSize = new Vec2(16f, 7f);
-            this._barrelOffsetTL = new Vec2(28f, 14f);
-            this._fireSound = "pistol";
-            this._kickForce = 3f;
-            this._fireRumble = RumbleIntensity.Light;
-            this._holdOffset = new Vec2(4f, 0f);
-            this._ammoType = new ATGrenade();
-            this._fireSound = "deepMachineGun";
-            this._bulletColor = Color.White;
-            this.editorTooltip = "Delivers a fun & exciting present to a long distance friend. Hold fire to adjust arc.";
+            wideBarrel = true;
+            ammo = 6;
+            _type = "gun";
+            graphic = new Sprite("grenadeLauncher");
+            center = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-6f, -4f);
+            collisionSize = new Vec2(16f, 7f);
+            _barrelOffsetTL = new Vec2(28f, 14f);
+            _fireSound = "pistol";
+            _kickForce = 3f;
+            _fireRumble = RumbleIntensity.Light;
+            _holdOffset = new Vec2(4f, 0f);
+            _ammoType = new ATGrenade();
+            _fireSound = "deepMachineGun";
+            _bulletColor = Color.White;
+            editorTooltip = "Delivers a fun & exciting present to a long distance friend. Hold fire to adjust arc.";
         }
 
         public override void Update()
         {
             base.Update();
-            if (this._aiming && _aimWait <= 0.0 && _fireAngle < 90.0)
-                this._fireAngle += 3f;
+            if (_aiming && _aimWait <= 0.0 && _fireAngle < 90.0)
+                _fireAngle += 3f;
             if (_aimWait > 0.0)
-                this._aimWait -= 0.9f;
+                _aimWait -= 0.9f;
             if (_cooldown > 0.0)
-                this._cooldown -= 0.1f;
+                _cooldown -= 0.1f;
             else
-                this._cooldown = 0f;
-            if (this.owner != null)
+                _cooldown = 0f;
+            if (owner != null)
             {
-                this._aimAngle = -Maths.DegToRad(this._fireAngle);
-                if (this.offDir < 0)
-                    this._aimAngle = -this._aimAngle;
+                _aimAngle = -Maths.DegToRad(_fireAngle);
+                if (offDir < 0)
+                    _aimAngle = -_aimAngle;
             }
             else
             {
-                this._aimWait = 0f;
-                this._aiming = false;
-                this._aimAngle = 0f;
-                this._fireAngle = 0f;
+                _aimWait = 0f;
+                _aiming = false;
+                _aimAngle = 0f;
+                _fireAngle = 0f;
             }
-            if (!this._raised)
+            if (!_raised)
                 return;
-            this._aimAngle = 0f;
+            _aimAngle = 0f;
         }
 
         public override void OnPressAction()
         {
             if (_cooldown != 0.0)
                 return;
-            if (this.ammo > 0)
+            if (ammo > 0)
             {
-                this._aiming = true;
-                this._aimWait = 1f;
+                _aiming = true;
+                _aimWait = 1f;
             }
             else
                 SFX.Play("click");
@@ -92,13 +92,13 @@ namespace DuckGame
 
         public override void OnReleaseAction()
         {
-            if (_cooldown != 0.0 || this.ammo <= 0)
+            if (_cooldown != 0.0 || ammo <= 0)
                 return;
-            this._aiming = false;
-            this.Fire();
-            this._cooldown = 1f;
-            this.angle = 0f;
-            this._fireAngle = 0f;
+            _aiming = false;
+            Fire();
+            _cooldown = 1f;
+            angle = 0f;
+            _fireAngle = 0f;
         }
     }
 }

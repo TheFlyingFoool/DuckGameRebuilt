@@ -20,24 +20,24 @@ namespace DuckGame
           InputProfile controlProfile = null)
           : base(textVal, c, al, heightAdd, controlProfile)
         {
-            this._directionalPassword = directional;
+            _directionalPassword = directional;
         }
 
         public override void Draw()
         {
-            if (this._directionalPassword && this._text != "  NONE")
+            if (_directionalPassword && _text != "  NONE")
             {
-                this._collisionSize.x = 48f;
-                float num = this._text.Length * 8;
-                Graphics.DrawPassword(this._text, new Vec2(this.x + (((this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-num / 2.0) : this.width / 2f - num) : (float)-(this.width / 2.0)) - 8f), this.y + ((this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-(this.height / 2.0))), this._color, this.depth);
+                _collisionSize.x = 48f;
+                float num = _text.Length * 8;
+                Graphics.DrawPassword(_text, new Vec2(x + (((align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-num / 2.0) : width / 2f - num) : (float)-(width / 2.0)) - 8f), y + ((align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2.0) : height / 2f - _font.height) : (float)-(height / 2.0))), _color, depth);
             }
             else
             {
-                if (this._text.Length > 10)
-                    this._text = this._text.Substring(0, 8) + "..";
-                this._collisionSize.x = 48f;
-                float num = this._text.Length * 8;
-                Graphics.DrawString(this._text, new Vec2(this.x + (((this.align & UIAlign.Left) <= UIAlign.Center ? ((this.align & UIAlign.Right) <= UIAlign.Center ? (float)(-num / 2.0) : this.width / 2f - num) : (float)-(this.width / 2.0)) - 8f), this.y + ((this.align & UIAlign.Top) <= UIAlign.Center ? ((this.align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-this._font.height / 2.0) : this.height / 2f - this._font.height) : (float)-(this.height / 2.0))), this._color, this.depth);
+                if (_text.Length > 10)
+                    _text = _text.Substring(0, 8) + "..";
+                _collisionSize.x = 48f;
+                float num = _text.Length * 8;
+                Graphics.DrawString(_text, new Vec2(x + (((align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-num / 2.0) : width / 2f - num) : (float)-(width / 2.0)) - 8f), y + ((align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2.0) : height / 2f - _font.height) : (float)-(height / 2.0))), _color, depth);
             }
         }
     }

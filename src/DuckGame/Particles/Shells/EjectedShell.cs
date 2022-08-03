@@ -14,19 +14,19 @@ namespace DuckGame
         protected EjectedShell(float xpos, float ypos, string shellSprite, string bounceSound = "metalBounce")
           : base(xpos, ypos)
         {
-            this.hSpeed = -4f - Rando.Float(3f);
-            this.vSpeed = (float)-(Rando.Float(1.5f) + 1.0);
-            this._sprite = new SpriteMap(shellSprite, 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this._bounceSound = bounceSound;
-            this.depth = (Depth)(0.3f + Rando.Float(0f, 0.1f));
+            hSpeed = -4f - Rando.Float(3f);
+            vSpeed = (float)-(Rando.Float(1.5f) + 1.0);
+            _sprite = new SpriteMap(shellSprite, 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            _bounceSound = bounceSound;
+            depth = (Depth)(0.3f + Rando.Float(0f, 0.1f));
         }
 
         public override void Update()
         {
             base.Update();
-            this._angle = Maths.DegToRad(-this._spinAngle);
+            _angle = Maths.DegToRad(-_spinAngle);
         }
     }
 }

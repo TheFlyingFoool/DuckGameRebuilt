@@ -19,46 +19,46 @@ namespace DuckGame
 
         public MaterialEnergyBlade(OldEnergyScimi t)
         {
-            this._effect = Content.Load<MTEffect>("Shaders/energyBlade");
-            this._energyTexture = Content.Load<Tex2D>("energyTex");
-            this._thing = t;
+            _effect = Content.Load<MTEffect>("Shaders/energyBlade");
+            _energyTexture = Content.Load<Tex2D>("energyTex");
+            _thing = t;
         }
 
         public MaterialEnergyBlade(EnergyScimitar t)
         {
-            this._effect = Content.Load<MTEffect>("Shaders/energyBlade");
-            this._energyTexture = Content.Load<Tex2D>("energyTex");
-            this._thing2 = t;
+            _effect = Content.Load<MTEffect>("Shaders/energyBlade");
+            _energyTexture = Content.Load<Tex2D>("energyTex");
+            _thing2 = t;
         }
 
         public override void Apply()
         {
-            this._time += 0.016f;
+            _time += 0.016f;
             if (DuckGame.Graphics.device.Textures[0] != null)
             {
                 Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-                this.SetValue("width", texture.frameWidth / texture.width);
-                this.SetValue("height", texture.frameHeight / texture.height);
-                if (this._thing != null)
+                SetValue("width", texture.frameWidth / texture.width);
+                SetValue("height", texture.frameHeight / texture.height);
+                if (_thing != null)
                 {
-                    this.SetValue("xpos", this._thing.x);
-                    this.SetValue("ypos", this._thing.y);
-                    this.SetValue("time", this._time);
-                    this.SetValue("glow", this.glow);
-                    this.SetValue("bladeColor", this._thing.swordColor);
+                    SetValue("xpos", _thing.x);
+                    SetValue("ypos", _thing.y);
+                    SetValue("time", _time);
+                    SetValue("glow", glow);
+                    SetValue("bladeColor", _thing.swordColor);
                 }
                 else
                 {
-                    this.SetValue("xpos", this._thing2.x);
-                    this.SetValue("ypos", this._thing2.y);
-                    this.SetValue("time", this._time);
-                    this.SetValue("glow", this.glow);
-                    this.SetValue("bladeColor", this._thing2.swordColor);
+                    SetValue("xpos", _thing2.x);
+                    SetValue("ypos", _thing2.y);
+                    SetValue("time", _time);
+                    SetValue("glow", glow);
+                    SetValue("bladeColor", _thing2.swordColor);
                 }
             }
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._energyTexture;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)_energyTexture;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

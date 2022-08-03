@@ -26,51 +26,51 @@ namespace DuckGame
 
         public NMInputSettings(Profile pro, InputDevice d = null)
         {
-            this._device = d != null ? d : pro.inputProfile.lastActiveDevice;
-            if (this._device != null && this._device.productName == null && this._device.productGUID == null)
-                this._device = null;
-            this._index = pro.networkIndex;
-            this._profile = pro;
-            this._inputProfile = pro.inputProfile;
+            _device = d != null ? d : pro.inputProfile.lastActiveDevice;
+            if (_device != null && _device.productName == null && _device.productGUID == null)
+                _device = null;
+            _index = pro.networkIndex;
+            _profile = pro;
+            _inputProfile = pro.inputProfile;
         }
 
         protected override void OnSerialize()
         {
-            if (this._serializedData == null || this._device == null || this._inputProfile == null)
+            if (_serializedData == null || _device == null || _inputProfile == null)
             {
-                this._serializedData.Write(false);
+                _serializedData.Write(false);
             }
             else
             {
-                this._serializedData.Write(true);
-                this._serializedData.Write(this._index);
-                this._serializedData.Write(this._device.inputDeviceType);
+                _serializedData.Write(true);
+                _serializedData.Write(_index);
+                _serializedData.Write(_device.inputDeviceType);
                 MultiMap<string, int> multiMap = null;
-                if (this._device != null)
-                    multiMap = this._inputProfile.GetMappings(this._device.GetType());
+                if (_device != null)
+                    multiMap = _inputProfile.GetMappings(_device.GetType());
                 if (multiMap != null)
                 {
-                    this.serializedData.Write(true);
+                    serializedData.Write(true);
                     byte val1 = 0;
                     foreach (KeyValuePair<string, List<int>> keyValuePair in (MultiMap<string, int, List<int>>)multiMap)
                     {
                         if (keyValuePair.Value.Count > 0 && Triggers.toIndex.ContainsKey(keyValuePair.Key))
                             ++val1;
                     }
-                    this.serializedData.Write(val1);
+                    serializedData.Write(val1);
                     foreach (KeyValuePair<string, List<int>> keyValuePair in (MultiMap<string, int, List<int>>)multiMap)
                     {
                         if (keyValuePair.Value.Count > 0 && Triggers.toIndex.ContainsKey(keyValuePair.Key))
                         {
-                            this.serializedData.Write(Triggers.toIndex[keyValuePair.Key]);
-                            this.serializedData.Write(keyValuePair.Value[0]);
+                            serializedData.Write(Triggers.toIndex[keyValuePair.Key]);
+                            serializedData.Write(keyValuePair.Value[0]);
                         }
                     }
-                    DeviceInputMapping deviceInputMapping = this._device.overrideMap == null ? Input.GetDefaultMapping(this._device.productName, this._device.productGUID, p: this._profile) : this._device.overrideMap;
+                    DeviceInputMapping deviceInputMapping = _device.overrideMap == null ? Input.GetDefaultMapping(_device.productName, _device.productGUID, p: _profile) : _device.overrideMap;
                     if (deviceInputMapping.graphicMap.Count > 0)
                     {
-                        this.serializedData.Write(true);
-                        this.serializedData.Write((byte)deviceInputMapping.graphicMap.Count);
+                        serializedData.Write(true);
+                        serializedData.Write((byte)deviceInputMapping.graphicMap.Count);
                         foreach (KeyValuePair<int, string> graphic in deviceInputMapping.graphicMap)
                         {
                             KeyValuePair<int, string> pair = graphic;
@@ -78,15 +78,15 @@ namespace DuckGame
                             byte val2 = 0;
                             if (sprite != null)
                                 val2 = (byte)Input.buttonStyles.IndexOf(sprite);
-                            this.serializedData.Write(pair.Key);
-                            this.serializedData.Write(val2);
+                            serializedData.Write(pair.Key);
+                            serializedData.Write(val2);
                         }
                     }
                     else
-                        this.serializedData.Write(false);
+                        serializedData.Write(false);
                 }
                 else
-                    this.serializedData.Write(false);
+                    serializedData.Write(false);
                 base.OnSerialize();
             }
         }
@@ -95,11 +95,11 @@ namespace DuckGame
         {
             if (!msg.ReadBool())
             {
-                this._valid = false;
+                _valid = false;
             }
             else
             {
-                this._index = msg.ReadByte();
+                _index = msg.ReadByte();
                 byte num1 = msg.ReadByte();
                 DeviceInputMapping deviceInputMapping = new DeviceInputMapping
                 {
@@ -138,21 +138,21 @@ namespace DuckGame
                         }
                     }
                 }
-                this._mapping = deviceInputMapping;
+                _mapping = deviceInputMapping;
                 base.OnDeserialize(msg);
             }
         }
 
         public override void Activate()
         {
-            if (this._index < 0 || this._index > 3 || !this._valid)
+            if (_index < 0 || _index > 3 || !_valid)
                 return;
             Profile profile = DuckNetwork.profiles[_index];
-            profile.inputMappingOverrides.RemoveAll(x => x.inputOverrideType == this._mapping.inputOverrideType);
-            profile.inputMappingOverrides.Add(this._mapping);
-            foreach (KeyValuePair<string, int> keyValuePair in this._mapping.map)
-                profile.inputProfile.Map(this._mapping.deviceOverride, keyValuePair.Key, keyValuePair.Value, true);
-            profile.inputProfile.lastActiveOverride = this._mapping.deviceOverride;
+            profile.inputMappingOverrides.RemoveAll(x => x.inputOverrideType == _mapping.inputOverrideType);
+            profile.inputMappingOverrides.Add(_mapping);
+            foreach (KeyValuePair<string, int> keyValuePair in _mapping.map)
+                profile.inputProfile.Map(_mapping.deviceOverride, keyValuePair.Key, keyValuePair.Value, true);
+            profile.inputProfile.lastActiveOverride = _mapping.deviceOverride;
             base.Activate();
         }
     }

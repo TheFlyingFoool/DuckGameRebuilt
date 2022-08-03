@@ -11,11 +11,11 @@ namespace DuckGame
     {
         public ATG18()
         {
-            this.accuracy = 0.5f;
-            this.range = 90f;
-            this.penetration = 1f;
-            this.rangeVariation = 40f;
-            this.combustable = true;
+            accuracy = 0.5f;
+            range = 90f;
+            penetration = 1f;
+            rangeVariation = 40f;
+            combustable = true;
         }
 
         public override void PopShell(float x, float y, int dir)

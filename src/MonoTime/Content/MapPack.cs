@@ -25,11 +25,11 @@ namespace DuckGame
         public static ReskinPack context;
         private Tex2D _preview;
 
-        public string name => this._mod == null ? this._name : this._mod.configuration.name;
+        public string name => _mod == null ? _name : _mod.configuration.name;
 
-        public Sprite icon => this._icon;
+        public Sprite icon => _icon;
 
-        public Mod mod => this._mod;
+        public Mod mod => _mod;
 
         public MapPack()
           : base(null)
@@ -127,12 +127,12 @@ namespace DuckGame
             }
         }
 
-        public Tex2D preview => this._preview;
+        public Tex2D preview => _preview;
 
         public string RegeneratePreviewImage(string pPath)
         {
             if (pPath == null)
-                pPath = this.path + "/screenshot_autogen.png";
+                pPath = path + "/screenshot_autogen.png";
             int num1 = 1280;
             int num2 = 720;
             RenderTarget2D t = new RenderTarget2D(num1, num2);
@@ -144,7 +144,7 @@ namespace DuckGame
             Camera camera = new Camera(0f, 0f, num1, num2);
             DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
             DuckGame.Graphics.Draw(sprite.texture, 0f, 0f, 4f, 4f, (Depth)0.1f);
-            string[] files = Directory.GetFiles(this._mod.configuration.directory, "*.lev", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(_mod.configuration.directory, "*.lev", SearchOption.AllDirectories);
             int num3 = 0;
             int num4 = (int)Math.Ceiling(Math.Sqrt(files.Count<string>()));
             float num5 = (float)(1280.0 / num4 / 1280.0 * 4.0);
@@ -188,9 +188,9 @@ namespace DuckGame
             DuckGame.Graphics.screen.End();
             DuckGame.Graphics.SetRenderTarget(renderTarget);
             DuckGame.Graphics.viewport = viewport;
-            this._preview = t.ToTex2D();
+            _preview = t.ToTex2D();
             FileStream fileStream = System.IO.File.Create(pPath);
-            (this._preview.nativeObject as Texture2D).SaveAsPng(fileStream, this._preview.width, this._preview.height);
+            (_preview.nativeObject as Texture2D).SaveAsPng(fileStream, _preview.width, _preview.height);
             fileStream.Close();
             return pPath;
         }

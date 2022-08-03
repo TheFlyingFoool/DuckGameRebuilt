@@ -111,10 +111,10 @@ namespace DuckGame
 
         public bool textToSpeech
         {
-            get => this._textToSpeech;
+            get => _textToSpeech;
             set
             {
-                if (!Program.isLinux && this._textToSpeech != value && value)
+                if (!Program.isLinux && _textToSpeech != value && value)
                 {
                     SFX.ApplyTTSSettings();
                     if (MonoMain.started)
@@ -123,16 +123,16 @@ namespace DuckGame
                         SFX.Say("Chat Text To Speech Enabled!");
                     }
                 }
-                this._textToSpeech = value;
+                _textToSpeech = value;
             }
         }
 
         public float textToSpeechVolume
         {
-            get => this._textToSpeechVolume;
+            get => _textToSpeechVolume;
             set
             {
-                if (!Program.isLinux && _textToSpeechVolume != value && this.textToSpeech)
+                if (!Program.isLinux && _textToSpeechVolume != value && textToSpeech)
                 {
                     SFX.ApplyTTSSettings();
                     if (MonoMain.started)
@@ -141,7 +141,7 @@ namespace DuckGame
                         SFX.Say("Volume " + ((int)(value * 100.0)).ToString());
                     }
                 }
-                this._textToSpeechVolume = value;
+                _textToSpeechVolume = value;
             }
         }
 
@@ -149,10 +149,10 @@ namespace DuckGame
 
         public float textToSpeechRate
         {
-            get => this._textToSpeechRate;
+            get => _textToSpeechRate;
             set
             {
-                if (!Program.isLinux && _textToSpeechRate != value && this.textToSpeech)
+                if (!Program.isLinux && _textToSpeechRate != value && textToSpeech)
                 {
                     SFX.ApplyTTSSettings();
                     if (MonoMain.started)
@@ -161,16 +161,16 @@ namespace DuckGame
                         SFX.Say("Speed " + ((int)Math.Round((value - 0.5) * 20.0)).ToString());
                     }
                 }
-                this._textToSpeechRate = value;
+                _textToSpeechRate = value;
             }
         }
 
         public int textToSpeechVoice
         {
-            get => this._textToSpeechVoice;
+            get => _textToSpeechVoice;
             set
             {
-                if (!Program.isLinux && this._textToSpeechVoice != value && this.textToSpeech)
+                if (!Program.isLinux && _textToSpeechVoice != value && textToSpeech)
                 {
                     SFX.ApplyTTSSettings();
                     List<string> sayVoices = SFX.GetSayVoices();
@@ -183,7 +183,7 @@ namespace DuckGame
                         SFX.Say(sayVoices[value]);
                     }
                 }
-                this._textToSpeechVoice = value;
+                _textToSpeechVoice = value;
             }
         }
 
@@ -197,51 +197,51 @@ namespace DuckGame
 
         public OptionsData()
         {
-            this._nodeName = "Options";
-            this.sfxVolume = 0.8f;
-            this.musicVolume = 0.7f;
-            this.shennanigans = true;
-            this.controllerRumble = true;
-            this.vsync = true;
-            this.windowedFullscreen = true;
-            this.windowScale = -1;
-            this.specialTimes = 0;
-            this.flashing = true;
-            this.fireGlow = true;
-            this.lighting = true;
-            this.disableModOnCrash = true;
-            this.disableModOnLoadFailure = true;
-            this.showNetworkModWarning = true;
-            this.showControllerWarning = true;
-            this.fillBackground = true;
-            this.keyboard1PlayerIndex = 0;
-            this.keyboard2PlayerIndex = 1;
-            this.rumbleIntensity = 1f;
-            this.powerUser = false;
-            this.defaultAccountMerged = false;
-            this.didAutoMerge = false;
-            this.cloud = true;
-            this.textToSpeechVolume = 1f;
-            this.textToSpeech = false;
-            this.textToSpeechReadNames = true;
-            this.textToSpeechRate = 0.5f;
-            this.languageFilter = true;
-            this.chatHeadScale = 0;
-            this.chatFontSize = 18;
-            this.chatFont = "";
-            this.chatOpacity = 100;
-            this.muteSettings = new Dictionary<ulong, string>();
-            this.blockedPlayers = new List<ulong>();
-            this.unblockedPlayers = new List<ulong>();
-            this.recentPlayers = new List<ulong>();
-            this.consoleWidth = 80;
-            this.consoleHeight = 40;
-            this.consoleScale = 1;
-            this.consoleFontSize = 12;
-            this.currentSaveVersion = -1;
-            this.audioMode = 2;
+            _nodeName = "Options";
+            sfxVolume = 0.8f;
+            musicVolume = 0.7f;
+            shennanigans = true;
+            controllerRumble = true;
+            vsync = true;
+            windowedFullscreen = true;
+            windowScale = -1;
+            specialTimes = 0;
+            flashing = true;
+            fireGlow = true;
+            lighting = true;
+            disableModOnCrash = true;
+            disableModOnLoadFailure = true;
+            showNetworkModWarning = true;
+            showControllerWarning = true;
+            fillBackground = true;
+            keyboard1PlayerIndex = 0;
+            keyboard2PlayerIndex = 1;
+            rumbleIntensity = 1f;
+            powerUser = false;
+            defaultAccountMerged = false;
+            didAutoMerge = false;
+            cloud = true;
+            textToSpeechVolume = 1f;
+            textToSpeech = false;
+            textToSpeechReadNames = true;
+            textToSpeechRate = 0.5f;
+            languageFilter = true;
+            chatHeadScale = 0;
+            chatFontSize = 18;
+            chatFont = "";
+            chatOpacity = 100;
+            muteSettings = new Dictionary<ulong, string>();
+            blockedPlayers = new List<ulong>();
+            unblockedPlayers = new List<ulong>();
+            recentPlayers = new List<ulong>();
+            consoleWidth = 80;
+            consoleHeight = 40;
+            consoleScale = 1;
+            consoleFontSize = 12;
+            currentSaveVersion = -1;
+            audioMode = 2;
         }
 
-        public void UpdateCurrentVersion() => this.currentSaveVersion = 5;
+        public void UpdateCurrentVersion() => currentSaveVersion = 5;
     }
 }

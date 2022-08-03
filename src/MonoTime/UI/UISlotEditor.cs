@@ -47,7 +47,7 @@ namespace DuckGame
         {
             float num = 38f;
             //this._captureRectangle = new Rectangle((float)(int)(Layer.HUD.camera.width / 2.0 - num / 2.0), (float)(int)(Layer.HUD.camera.height / 2.0 - num / 2.0), (float)(int)num, (float)(int)num);
-            this._closeMenu = closeMenu;
+            _closeMenu = closeMenu;
             //this._littleFont = new BitmapFont("smallBiosFontUI", 7, 5);
             //this._littleFont2 = new BitmapFont("smallBiosFont", 7, 6);
         }
@@ -57,7 +57,7 @@ namespace DuckGame
             HUD.CloseAllCorners();
             UISlotEditor.editingSlots = true;
             //this._showedWarning = false;
-            this._showWarning = false;
+            _showWarning = false;
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@EXIT");
             MonoMain.doPauseFade = false;
             base.Open();
@@ -74,21 +74,21 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (this.open)
+            if (open)
             {
-                if (this._showWarning)
+                if (_showWarning)
                 {
-                    this._selectionChanged = true;
+                    _selectionChanged = true;
                     if (Input.Pressed("CANCEL"))
                     {
                         SFX.Play("consoleCancel");
-                        this._showWarning = false;
+                        _showWarning = false;
                     }
                     else if (Input.Pressed("MENU2"))
                     {
                         SFX.Play("death");
                         //this._showedWarning = true;
-                        this._showWarning = false;
+                        _showWarning = false;
                         if (Level.core.gameInProgress)
                             DuckNetwork.ResetScores();
                     }
@@ -144,10 +144,10 @@ namespace DuckGame
                     UISlotEditor._slot = UISlotEditor.kIndexMap[UISlotEditor._indexY, UISlotEditor._indexX];
                     UISlotEditor.hoveringSlot = UISlotEditor._slot;
                     if (UISlotEditor._slot != slot)
-                        this._selectionChanged = true;
+                        _selectionChanged = true;
                     if (UISlotEditor._slot >= 0)
                     {
-                        if (this._selectionChanged)
+                        if (_selectionChanged)
                         {
                             if (DuckNetwork.profiles[UISlotEditor._slot].connection != null && DuckNetwork.profiles[UISlotEditor._slot] != DuckNetwork.hostProfile)
                             {
@@ -172,11 +172,11 @@ namespace DuckGame
                             }
                             else
                                 HUD.CloseCorner(HUDCorner.BottomRight);
-                            this._selectionChanged = false;
+                            _selectionChanged = false;
                         }
                         if (DuckNetwork.profiles[UISlotEditor._slot].readyForSpectatorChange && Network.canSetObservers && Input.Pressed("MENU1") && DuckNetwork.profiles[UISlotEditor._slot].connection != null)
                         {
-                            this._selectionChanged = true;
+                            _selectionChanged = true;
                             DuckNetwork.MakeSpectator(DuckNetwork.profiles[UISlotEditor._slot]);
                             SFX.Play("menuBlip01");
                         }

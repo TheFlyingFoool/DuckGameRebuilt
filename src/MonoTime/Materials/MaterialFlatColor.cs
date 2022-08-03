@@ -11,11 +11,11 @@ namespace DuckGame
 {
     public class MaterialFlatColor : Material
     {
-        public MaterialFlatColor() => this._effect = Content.Load<MTEffect>("Shaders/flatColor");
+        public MaterialFlatColor() => _effect = Content.Load<MTEffect>("Shaders/flatColor");
 
         public override void Apply()
         {
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

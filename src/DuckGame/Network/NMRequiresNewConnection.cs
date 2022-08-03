@@ -15,6 +15,6 @@ namespace DuckGame
         {
         }
 
-        public NMRequiresNewConnection(string who) => this.toWhom = who;
+        public NMRequiresNewConnection(string who) => toWhom = who;
     }
 }

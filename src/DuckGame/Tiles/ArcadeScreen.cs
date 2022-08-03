@@ -19,26 +19,26 @@ namespace DuckGame
         public ArcadeScreen(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.center = new Vec2(5f, 4f);
-            this._collisionSize = new Vec2(16f, 24f);
-            this._collisionOffset = new Vec2(-8f, -22f);
-            this.depth = (Depth)0.9f;
-            this.hugWalls = WallHug.Ceiling;
-            this.layer = Layer.Game;
+            center = new Vec2(5f, 4f);
+            _collisionSize = new Vec2(16f, 24f);
+            _collisionOffset = new Vec2(-8f, -22f);
+            depth = (Depth)0.9f;
+            hugWalls = WallHug.Ceiling;
+            layer = Layer.Game;
         }
 
         public override void Initialize()
         {
             if (Level.current is Editor)
                 return;
-            this._occluders.Add(new LightOccluder(this.position + new Vec2(-7f, -8f), this.position + new Vec2(7f, -8f), new Color(0.7f, 0.7f, 0.7f)));
-            this._light = new PointLight(this.x + 1f, this.y - 7f, new Color(100, 130, 180), 30f, this._occluders);
+            _occluders.Add(new LightOccluder(position + new Vec2(-7f, -8f), position + new Vec2(7f, -8f), new Color(0.7f, 0.7f, 0.7f)));
+            _light = new PointLight(x + 1f, y - 7f, new Color(100, 130, 180), 30f, _occluders);
             Level.Add(_light);
         }
 
         public override void Update()
         {
-            this._light.visible = this.visible;
+            _light.visible = visible;
             base.Update();
         }
     }

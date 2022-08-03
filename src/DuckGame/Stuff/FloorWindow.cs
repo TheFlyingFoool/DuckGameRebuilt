@@ -13,16 +13,16 @@ namespace DuckGame
         public FloorWindow(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.angle = -1.570796f;
-            this.collisionSize = new Vec2(32f, 6f);
-            this.collisionOffset = new Vec2(-16f, -2f);
-            this._editorName = "Floor Window";
-            this.editorTooltip = "When you really want to see what's underneath your house.";
-            this._editorIcon = new Sprite("windowIconHorizontal");
-            this.center = new Vec2(2f, 16f);
-            this.editorOffset = new Vec2(8f, -6f);
-            this.floor = true;
-            this.UpdateHeight();
+            angle = -1.570796f;
+            collisionSize = new Vec2(32f, 6f);
+            collisionOffset = new Vec2(-16f, -2f);
+            _editorName = "Floor Window";
+            editorTooltip = "When you really want to see what's underneath your house.";
+            _editorIcon = new Sprite("windowIconHorizontal");
+            center = new Vec2(2f, 16f);
+            editorOffset = new Vec2(8f, -6f);
+            floor = true;
+            UpdateHeight();
         }
     }
 }

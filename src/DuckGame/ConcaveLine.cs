@@ -18,8 +18,8 @@ namespace DuckGame
 
         public ConcaveLine(Vec2 p1val, Vec2 p2val)
         {
-            this.p1 = p1val;
-            this.p2 = p2val;
+            p1 = p1val;
+            p2 = p2val;
         }
     }
 }

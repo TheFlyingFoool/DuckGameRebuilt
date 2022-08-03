@@ -32,7 +32,7 @@ namespace DuckGame
             LevelMetaData.PreviewPair previewPair = null;
             try
             {
-                string str1 = DuckFile.LoadString(DuckFile.editorPreviewDirectory + this.guid);
+                string str1 = DuckFile.LoadString(DuckFile.editorPreviewDirectory + guid);
                 if (str1 != null)
                 {
                     int length = str1.IndexOf('@');
@@ -68,7 +68,7 @@ namespace DuckGame
             }
             catch (Exception)
             {
-                DevConsole.Log(DCSection.General, "Failed to load preview string in metadata for " + this.guid);
+                DevConsole.Log(DCSection.General, "Failed to load preview string in metadata for " + guid);
                 previewPair = null;
             }
             return previewPair;
@@ -112,16 +112,16 @@ namespace DuckGame
                 string str = "" + (pStrange ? "1" : "0") + (pChallenge ? "1" : "0") + (pArcade ? "1" : "0");
                 foreach (KeyValuePair<string, int> keyValuePair in pInvalidData)
                     str = str + keyValuePair.Key + "," + keyValuePair.Value.ToString() + "|";
-                this.RunSaveLevelPreviewTask(new LevelMetaData.SaveLevelPreviewTask()
+                RunSaveLevelPreviewTask(new LevelMetaData.SaveLevelPreviewTask()
                 {
                     levelString = str,
                     levelTexture = pPreview,
-                    savePath = DuckFile.editorPreviewDirectory + this.guid
+                    savePath = DuckFile.editorPreviewDirectory + guid
                 });
             }
             catch (Exception)
             {
-                DevConsole.Log(DCSection.General, "Failed to save preview string in metadata for " + this.guid);
+                DevConsole.Log(DCSection.General, "Failed to save preview string in metadata for " + guid);
             }
             return new LevelMetaData.PreviewPair()
             {

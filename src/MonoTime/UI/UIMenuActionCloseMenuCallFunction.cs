@@ -16,14 +16,14 @@ namespace DuckGame
           UIComponent menu,
           UIMenuActionCloseMenuCallFunction.Function f)
         {
-            this._menu = menu;
-            this._function = f;
+            _menu = menu;
+            _function = f;
         }
 
         public override void Activate()
         {
-            this._menu.Close();
-            this._function();
+            _menu.Close();
+            _function();
         }
 
         public delegate void Function();

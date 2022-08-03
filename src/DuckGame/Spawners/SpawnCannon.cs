@@ -30,38 +30,38 @@ namespace DuckGame
         private PhysicsObject _hoverThing;
         private Vec2 _scaleLerp = Vec2.One;
 
-        public float direction => this.fireDirection + (this.flipHorizontal ? 180f : 0f);
+        public float direction => fireDirection + (flipHorizontal ? 180f : 0f);
 
         public override void EditorPropertyChanged(object property)
         {
-            if (this.showClock.value)
-                this._sprite = new SpriteMap("cannonTimer", 18, 18);
+            if (showClock.value)
+                _sprite = new SpriteMap("cannonTimer", 18, 18);
             else
-                this._sprite = new SpriteMap("cannon", 18, 18);
-            this.graphic = _sprite;
+                _sprite = new SpriteMap("cannon", 18, 18);
+            graphic = _sprite;
         }
 
         public SpawnCannon(float xpos, float ypos, System.Type c = null)
           : base(xpos, ypos)
         {
-            this.bing = new EditorProperty<int>(0, this, max: 240f, increment: 1f, minSpecial: "none")
+            bing = new EditorProperty<int>(0, this, max: 240f, increment: 1f, minSpecial: "none")
             {
                 _tooltip = "If set, this cannon will BING this many frames before it activates."
             };
-            this.showClock = new EditorProperty<bool>(false, this);
-            this.cannonColor = new EditorProperty<int>(0, this, max: 3f, increment: 1f);
-            this._arrowHead = new Sprite("arrowHead", new Vec2(3.5f, 8f));
-            this._sprite = new SpriteMap("cannon", 18, 18);
-            this.graphic = _sprite;
-            this.center = new Vec2(7f, 9f);
-            this.collisionSize = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-6f, -6f);
-            this.depth = (Depth)0.8f;
-            this.contains = c;
-            this.hugWalls = WallHug.None;
-            this._placementCost += 4;
-            this.editorTooltip = "Shoots the specified item in the specified direction after the specified delay.";
-            this.sequence = new SequenceItem(this)
+            showClock = new EditorProperty<bool>(false, this);
+            cannonColor = new EditorProperty<int>(0, this, max: 3f, increment: 1f);
+            _arrowHead = new Sprite("arrowHead", new Vec2(3.5f, 8f));
+            _sprite = new SpriteMap("cannon", 18, 18);
+            graphic = _sprite;
+            center = new Vec2(7f, 9f);
+            collisionSize = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-6f, -6f);
+            depth = (Depth)0.8f;
+            contains = c;
+            hugWalls = WallHug.None;
+            _placementCost += 4;
+            editorTooltip = "Shoots the specified item in the specified direction after the specified delay.";
+            sequence = new SequenceItem(this)
             {
                 type = SequenceItemType.Activator
             };
@@ -70,60 +70,60 @@ namespace DuckGame
         public override void OnSequenceActivate()
         {
             SFX.Play("basketball", 0.8f, Rando.Float(0.2f, 0.4f));
-            this.scale = new Vec2(2f, 2f);
-            this._running = true;
+            scale = new Vec2(2f, 2f);
+            _running = true;
         }
 
         public override void Initialize()
         {
-            if (this.spawnOnStart)
-                this._spawnWait = this.spawnTime;
-            this._startupDelay = this.initialDelay;
+            if (spawnOnStart)
+                _spawnWait = spawnTime;
+            _startupDelay = initialDelay;
         }
 
         public void Spawn()
         {
-            if (!Network.isServer && !this.wasPulse)
+            if (!Network.isServer && !wasPulse)
             {
-                this._spawnWait = 0f;
-                ++this._numSpawned;
+                _spawnWait = 0f;
+                ++_numSpawned;
             }
             else
             {
-                if (this.sequence != null)
+                if (sequence != null)
                 {
-                    if (this.sequence.waitTillOrder)
-                        this._running = false;
-                    this.sequence.Finished();
+                    if (sequence.waitTillOrder)
+                        _running = false;
+                    sequence.Finished();
                 }
-                this.xscale = 2f;
-                this.yscale = 0.5f;
-                if (!this.initializedWired)
+                xscale = 2f;
+                yscale = 0.5f;
+                if (!initializedWired)
                 {
-                    WireTileset wireTileset = Level.current.NearestThing<WireTileset>(this.position);
-                    if (wireTileset != null && (wireTileset.position - this.position).length < 1.0)
-                        this.wired = true;
-                    this.initializedWired = true;
+                    WireTileset wireTileset = Level.current.NearestThing<WireTileset>(position);
+                    if (wireTileset != null && (wireTileset.position - position).length < 1.0)
+                        wired = true;
+                    initializedWired = true;
                 }
-                if (!this.wasPulse && this.wired)
+                if (!wasPulse && wired)
                     return;
-                if (this.randomSpawn && this.keepRandom)
+                if (randomSpawn && keepRandom)
                 {
                     List<System.Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
-                    this.contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
+                    contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
                 }
-                else if (this.possible.Count > 0)
+                else if (possible.Count > 0)
                 {
-                    System.Type type = MysteryGun.PickType(this.chanceGroup, this.possible);
+                    System.Type type = MysteryGun.PickType(chanceGroup, possible);
                     if (type != null)
-                        this.contains = type;
+                        contains = type;
                 }
-                this._spawnWait = 0f;
-                ++this._numSpawned;
-                if (this.contains == null || !(Editor.CreateThing(this.contains) is PhysicsObject thing))
+                _spawnWait = 0f;
+                ++_numSpawned;
+                if (contains == null || !(Editor.CreateThing(contains) is PhysicsObject thing))
                     return;
-                Vec2 vec2 = Maths.AngleToVec(Maths.DegToRad(this.direction)) * this.firePower;
-                thing.position = this.position + vec2.normalized * 8f;
+                Vec2 vec2 = Maths.AngleToVec(Maths.DegToRad(direction)) * firePower;
+                thing.position = position + vec2.normalized * 8f;
                 thing.hSpeed = vec2.x;
                 thing.vSpeed = vec2.y;
                 Level.Add(thing);
@@ -147,57 +147,57 @@ namespace DuckGame
 
         public override void Update()
         {
-            this.scale = Lerp.Vec2Smooth(this.scale, Vec2.One, 0.2f);
-            if ((this.sequence == null || !this.sequence.waitTillOrder || this._running) && (this._numSpawned < this.spawnNum || this.spawnNum == -1))
+            scale = Lerp.Vec2Smooth(scale, Vec2.One, 0.2f);
+            if ((sequence == null || !sequence.waitTillOrder || _running) && (_numSpawned < spawnNum || spawnNum == -1))
             {
                 if (Level.current.simulatePhysics)
-                    this._spawnWait += 0.0166666f;
-                if (this.bing.value > 0)
+                    _spawnWait += 0.0166666f;
+                if (bing.value > 0)
                 {
-                    float num1 = Math.Max(this.spawnTime - this._spawnWait, 0f) + this.initialDelay;
+                    float num1 = Math.Max(spawnTime - _spawnWait, 0f) + initialDelay;
                     float num2 = bing.value * Maths.IncFrameTimer();
                     float num3 = (num2 - num1) / num2;
-                    if (this.beeps == 0 && num3 > 0.0)
+                    if (beeps == 0 && num3 > 0.0)
                     {
                         SFX.Play("singleBeep");
-                        ++this.beeps;
+                        ++beeps;
                     }
-                    if (this.beeps == 1 && num3 > 0.333333343267441)
+                    if (beeps == 1 && num3 > 0.333333343267441)
                     {
                         SFX.Play("singleBeep");
-                        ++this.beeps;
+                        ++beeps;
                     }
-                    if (this.beeps == 2 && num3 > 0.666666686534882)
+                    if (beeps == 2 && num3 > 0.666666686534882)
                     {
                         SFX.Play("singleBeep");
-                        ++this.beeps;
+                        ++beeps;
                     }
                 }
-                if (Level.current.simulatePhysics && _spawnWait >= this.spawnTime)
+                if (Level.current.simulatePhysics && _spawnWait >= spawnTime)
                 {
                     if (initialDelay > 0.0)
                     {
-                        this.initialDelay -= 0.0166666f;
+                        initialDelay -= 0.0166666f;
                     }
                     else
                     {
-                        if (this.bing.value > 0)
+                        if (bing.value > 0)
                             SFX.Play("bing");
-                        this.beeps = 0;
-                        this.Spawn();
-                        this._startupDelay = 0f;
-                        this.initialDelay = 0f;
+                        beeps = 0;
+                        Spawn();
+                        _startupDelay = 0f;
+                        initialDelay = 0f;
                     }
                 }
             }
-            this.angleDegrees = -this.direction;
+            angleDegrees = -direction;
         }
 
         public void Pulse(int type, WireTileset wire)
         {
-            this.wasPulse = true;
-            this.Spawn();
-            this.wasPulse = false;
+            wasPulse = true;
+            Spawn();
+            wasPulse = false;
             SFX.Play("click");
         }
 
@@ -216,8 +216,8 @@ namespace DuckGame
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.fireDirection = node.GetProperty<float>("fireDirection");
-            this.firePower = node.GetProperty<float>("firePower");
+            fireDirection = node.GetProperty<float>("fireDirection");
+            firePower = node.GetProperty<float>("firePower");
             return true;
         }
 
@@ -234,10 +234,10 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode1 = node.Element("fireDirection");
             if (dxmlNode1 != null)
-                this.fireDirection = Convert.ToSingle(dxmlNode1.Value);
+                fireDirection = Convert.ToSingle(dxmlNode1.Value);
             DXMLNode dxmlNode2 = node.Element("firePower");
             if (dxmlNode2 != null)
-                this.firePower = Convert.ToSingle(dxmlNode2.Value);
+                firePower = Convert.ToSingle(dxmlNode2.Value);
             return true;
         }
 
@@ -252,54 +252,54 @@ namespace DuckGame
         public override void DrawHoverInfo()
         {
             string text = "EMPTY";
-            if (this.contains != null)
-                text = this.contains.Name;
+            if (contains != null)
+                text = contains.Name;
             Graphics.DrawString(text, this.position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
-            if (!(this.contains != null))
+            if (!(contains != null))
                 return;
-            if (this._hoverThing == null || this._hoverThing.GetType() != this.contains)
-                this._hoverThing = Editor.CreateThing(this.contains) as PhysicsObject;
-            if (this._hoverThing == null)
+            if (_hoverThing == null || _hoverThing.GetType() != contains)
+                _hoverThing = Editor.CreateThing(contains) as PhysicsObject;
+            if (_hoverThing == null)
                 return;
-            Vec2 vec2 = Maths.AngleToVec(Maths.DegToRad(this.direction)) * this.firePower;
-            this._hoverThing.position = this.position + vec2.normalized * 8f;
-            this._hoverThing.hSpeed = vec2.x;
-            this._hoverThing.vSpeed = vec2.y;
+            Vec2 vec2 = Maths.AngleToVec(Maths.DegToRad(direction)) * firePower;
+            _hoverThing.position = this.position + vec2.normalized * 8f;
+            _hoverThing.hSpeed = vec2.x;
+            _hoverThing.vSpeed = vec2.y;
             SFX.enabled = false;
-            Vec2 position = this._hoverThing.position;
+            Vec2 position = _hoverThing.position;
             for (int index = 0; index < 100; ++index)
             {
-                this._hoverThing.UpdatePhysics();
-                Graphics.DrawLine(position, this._hoverThing.position, Color.Red, 2f, (Depth)1f);
-                position = this._hoverThing.position;
+                _hoverThing.UpdatePhysics();
+                Graphics.DrawLine(position, _hoverThing.position, Color.Red, 2f, (Depth)1f);
+                position = _hoverThing.position;
             }
             SFX.enabled = true;
         }
 
         public override void Draw()
         {
-            this._sprite.frame = this.cannonColor.value;
-            this.xscale = 1f;
-            this.yscale = 1f;
-            float val = this._spawnWait / (this.spawnTime + this._startupDelay);
-            if (this.showClock.value)
+            _sprite.frame = cannonColor.value;
+            xscale = 1f;
+            yscale = 1f;
+            float val = _spawnWait / (spawnTime + _startupDelay);
+            if (showClock.value)
             {
-                float radians = (float)((this.flipHorizontal ? val : -val) * 6.28318548202515);
-                if (this.flipHorizontal)
+                float radians = (float)((flipHorizontal ? val : -val) * 6.28318548202515);
+                if (flipHorizontal)
                     radians += 3.141593f;
-                Graphics.DrawLine(this.Offset(new Vec2(0f, 0f)), this.Offset(Maths.AngleToVec(radians) * 3f), Color.Black, depth: (this.depth + 2));
-                Vec2 vec2 = this.Offset(Maths.AngleToVec(radians) * 2f);
-                this._arrowHead.angle = (float)((this.flipHorizontal ? radians : -radians) + this.angle + 3.14159274101257 * (this.flipHorizontal ? -0.5 : 0.5));
-                this._arrowHead.scale = new Vec2(0.5f, 0.5f);
-                Graphics.Draw(this._arrowHead, vec2.x, vec2.y, this.depth + 2);
+                Graphics.DrawLine(Offset(new Vec2(0f, 0f)), Offset(Maths.AngleToVec(radians) * 3f), Color.Black, depth: (depth + 2));
+                Vec2 vec2 = Offset(Maths.AngleToVec(radians) * 2f);
+                _arrowHead.angle = (float)((flipHorizontal ? radians : -radians) + angle + 3.14159274101257 * (flipHorizontal ? -0.5 : 0.5));
+                _arrowHead.scale = new Vec2(0.5f, 0.5f);
+                Graphics.Draw(_arrowHead, vec2.x, vec2.y, depth + 2);
             }
             float num = Maths.Clamp(val, 0f, 1f);
             if (num > 0.800000011920929 && !(Level.current is Editor))
             {
-                this.xscale = (float)(1.0 - (num - 0.800000011920929) * 2.0);
-                this.yscale = (float)(1.0 + (num - 0.800000011920929) * 4.0);
+                xscale = (float)(1.0 - (num - 0.800000011920929) * 2.0);
+                yscale = (float)(1.0 + (num - 0.800000011920929) * 4.0);
             }
-            this.angleDegrees = -this.direction;
+            angleDegrees = -direction;
             base.Draw();
         }
     }

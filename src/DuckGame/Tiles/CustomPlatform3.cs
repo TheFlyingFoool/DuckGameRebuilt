@@ -26,13 +26,13 @@ namespace DuckGame
         public CustomPlatform3(float x, float y, string tset)
           : base(x, y, "CUSTOMPLAT03")
         {
-            this.customIndex = 2;
-            this._editorName = "Custom Platform 03";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidth = 14f;
-            this.verticalWidthThick = 15f;
-            this.horizontalHeight = 8f;
-            this.UpdateCurrentTileset();
+            customIndex = 2;
+            _editorName = "Custom Platform 03";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidth = 14f;
+            verticalWidthThick = 15f;
+            horizontalHeight = 8f;
+            UpdateCurrentTileset();
         }
     }
 }

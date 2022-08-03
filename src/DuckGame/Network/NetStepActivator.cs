@@ -12,28 +12,28 @@ namespace DuckGame
         private NetStepActivator.Function _function;
         private int _index;
 
-        public NetStepActivator(NetStepActivator.Function del) => this._function = del;
+        public NetStepActivator(NetStepActivator.Function del) => _function = del;
 
         public int index
         {
-            get => this._index;
+            get => _index;
             set
             {
-                this._index = value;
-                if (this._index <= 3)
+                _index = value;
+                if (_index <= 3)
                     return;
-                this._index = 0;
+                _index = 0;
             }
         }
 
         public void Activate()
         {
-            if (this._function != null)
-                this._function();
-            this.Step();
+            if (_function != null)
+                _function();
+            Step();
         }
 
-        public void Step() => ++this.index;
+        public void Step() => ++index;
 
         public delegate void Function();
     }

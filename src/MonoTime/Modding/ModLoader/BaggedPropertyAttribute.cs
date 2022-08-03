@@ -26,8 +26,8 @@ namespace DuckGame
         /// <param name="val">The value.</param>
         public BaggedPropertyAttribute(string prop, object val)
         {
-            this.Property = prop;
-            this.Value = val;
+            Property = prop;
+            Value = val;
         }
     }
 }

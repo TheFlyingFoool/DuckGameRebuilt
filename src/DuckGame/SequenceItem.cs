@@ -25,36 +25,36 @@ namespace DuckGame
         public bool randomMode;
         public bool _resetLikelyhood = true;
 
-        public bool finished => this._finished;
+        public bool finished => _finished;
 
-        public bool activated => this._activated;
+        public bool activated => _activated;
 
         public SequenceItemType type
         {
-            get => this._type;
-            set => this._type = value;
+            get => _type;
+            set => _type = value;
         }
 
         public bool loop
         {
-            get => this._loop;
-            set => this._loop = value;
+            get => _loop;
+            set => _loop = value;
         }
 
-        public SequenceItem(Thing t) => this._thing = t;
+        public SequenceItem(Thing t) => _thing = t;
 
         public virtual void Finished()
         {
-            this._finished = true;
-            if (this.order < 0)
+            _finished = true;
+            if (order < 0)
                 return;
-            this.CheckSequence();
+            CheckSequence();
         }
 
         public void Reset()
         {
-            this._activated = false;
-            this._finished = false;
+            _activated = false;
+            _finished = false;
         }
 
         public void BeginRandomSequence()
@@ -65,11 +65,11 @@ namespace DuckGame
                 SequenceItem sequence = (sequenceItem as Thing).sequence;
                 sequence._finished = false;
                 sequence._activated = false;
-                if (sequence.order != this.order && !intList.Contains(sequence.order))
+                if (sequence.order != order && !intList.Contains(sequence.order))
                     intList.Add(sequence.order);
             }
             if (intList.Count == 0)
-                intList.Add(this.order);
+                intList.Add(order);
             int num = Rando.ChooseInt(intList.ToArray());
             foreach (ISequenceItem sequenceItem in Level.current.things[typeof(ISequenceItem)])
             {
@@ -84,7 +84,7 @@ namespace DuckGame
             foreach (ISequenceItem sequenceItem in Level.current.things[typeof(ISequenceItem)])
             {
                 SequenceItem sequence = (sequenceItem as Thing).sequence;
-                if (sequence.order == this.order && !sequence._finished)
+                if (sequence.order == order && !sequence._finished)
                     return false;
             }
             return true;
@@ -92,12 +92,12 @@ namespace DuckGame
 
         private void CheckSequence()
         {
-            if (this.randomMode)
+            if (randomMode)
                 return;
             List<SequenceItem> sequenceItemList = new List<SequenceItem>();
             int num1 = 9999999;
-            int num2 = this.order;
-            if (this.loop && this.SequenceFinished())
+            int num2 = order;
+            if (loop && SequenceFinished())
             {
                 num2 = -1;
                 foreach (ISequenceItem sequenceItem in Level.current.things[typeof(ISequenceItem)])
@@ -111,7 +111,7 @@ namespace DuckGame
             foreach (ISequenceItem sequenceItem in Level.current.things[typeof(ISequenceItem)])
             {
                 SequenceItem sequence = (sequenceItem as Thing).sequence;
-                if ((sequence != this || this.loop) && (!(sequenceItem is Window) && !(sequenceItem is Door) || sequence.isValid))
+                if ((sequence != this || loop) && (!(sequenceItem is Window) && !(sequenceItem is Door) || sequence.isValid))
                 {
                     if (!sequence._activated && sequence.order > num2)
                     {
@@ -134,7 +134,7 @@ namespace DuckGame
             }
             if (!flag && ChallengeLevel.random)
             {
-                this.BeginRandomSequence();
+                BeginRandomSequence();
             }
             else
             {
@@ -175,14 +175,14 @@ namespace DuckGame
 
         public void Activate()
         {
-            if (this._activated)
+            if (_activated)
                 return;
-            if (this._resetLikelyhood)
-                this.likelyhood = 0;
-            this._activated = true;
-            this._thing.OnSequenceActivate();
-            this.OnActivate();
-            ++this.timesActivated;
+            if (_resetLikelyhood)
+                likelyhood = 0;
+            _activated = true;
+            _thing.OnSequenceActivate();
+            OnActivate();
+            ++timesActivated;
         }
 
         public virtual void OnActivate()

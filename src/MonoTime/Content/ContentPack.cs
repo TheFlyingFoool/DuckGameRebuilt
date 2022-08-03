@@ -25,7 +25,7 @@ namespace DuckGame
         public static ContentPack currentPreloadPack;
         //private long _beginCalculatingAllocatedBytes;
 
-        public ContentPack(ModConfiguration modConfiguration) => this._modConfig = modConfiguration;
+        public ContentPack(ModConfiguration modConfiguration) => _modConfig = modConfiguration;
 
         public void ImportAsset(string path, byte[] data)
         {
@@ -35,7 +35,7 @@ namespace DuckGame
                 if (path.EndsWith(".png"))
                 {
                     Texture2D texture2D = TextureConverter.LoadPNGWithPinkAwesomeness(DuckGame.Graphics.device, new Bitmap(new MemoryStream(data)), true);
-                    this._textures[str] = texture2D;
+                    _textures[str] = texture2D;
                     Content.textures[str] = (Tex2D)texture2D;
                 }
                 else
@@ -46,7 +46,7 @@ namespace DuckGame
                     if (pEffect != null)
                     {
                         pEffect.file = path;
-                        this._sounds[str] = pEffect;
+                        _sounds[str] = pEffect;
                         SFX.RegisterSound(str, pEffect);
                     }
                     else
@@ -61,41 +61,41 @@ namespace DuckGame
         /// <summary>
         /// Called when the mod is loaded to preload content. This is only called if preload is set to true.
         /// </summary>
-        public virtual void PreloadContent() => this.PreloadContentPaths();
+        public virtual void PreloadContent() => PreloadContentPaths();
 
         /// <summary>
         /// Called when the mod is loaded to preload the paths to all content. Does not actually load content, and is only called if PreloadContent is disabled (looks like that's a lie, this function loads the content).
         /// </summary>
         public virtual void PreloadContentPaths()
         {
-            List<string> files = Content.GetFiles<Texture2D>(this._modConfig.contentDirectory);
-            int length = this._modConfig.contentDirectory.Length;
+            List<string> files = Content.GetFiles<Texture2D>(_modConfig.contentDirectory);
+            int length = _modConfig.contentDirectory.Length;
             foreach (string file in files)
             {
                 Texture2D texture2D = ContentPack.LoadTexture2DInternal(file);
                 string key = file.Substring(0, file.Length - 4);
-                this._textures[key] = texture2D;
+                _textures[key] = texture2D;
                 Content.textures[key] = (Tex2D)texture2D;
             }
-            foreach (string file in Content.GetFiles<SoundEffect>(this._modConfig.contentDirectory))
+            foreach (string file in Content.GetFiles<SoundEffect>(_modConfig.contentDirectory))
             {
                 string s = file;
                 MonoMain.currentActionQueue.Enqueue(new LoadingAction(() =>
                {
                    ContentPack.currentPreloadPack = this;
-                   SoundEffect pEffect = this.LoadSoundInternal(s);
+                   SoundEffect pEffect = LoadSoundInternal(s);
                    string str = s.Substring(0, s.Length - 4);
-                   this._sounds[str] = pEffect;
+                   _sounds[str] = pEffect;
                    SFX.RegisterSound(str, pEffect);
                }));
             }
-            string str1 = this._modConfig.contentDirectory + "/Levels";
+            string str1 = _modConfig.contentDirectory + "/Levels";
             if (DuckFile.DirectoryExists(str1))
-                this.levels = Content.GetFiles<Level>(str1);
+                levels = Content.GetFiles<Level>(str1);
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() =>
            {
                ContentPack.currentPreloadPack = null;
-               if (this.kilobytesPreAllocated / 1000L <= 20L)
+               if (kilobytesPreAllocated / 1000L <= 20L)
                    return;
                MonoMain.CalculateModMemoryOffendersList();
            }));
@@ -177,7 +177,7 @@ namespace DuckGame
             if (Path.GetExtension(name) == "")
                 name += ".wav";
             if (System.IO.File.Exists(name))
-                soundEffect = this.LoadSoundInternal(name);
+                soundEffect = LoadSoundInternal(name);
             return soundEffect;
         }
 
@@ -202,7 +202,7 @@ namespace DuckGame
             if (!name.EndsWith(".ogg"))
                 name += ".ogg";
             if (System.IO.File.Exists(name))
-                song = this.LoadSongInternal(name);
+                song = LoadSongInternal(name);
             return song;
         }
 
@@ -215,28 +215,28 @@ namespace DuckGame
             if (typeof(T) == typeof(Texture2D))
             {
                 Texture2D texture2D1;
-                if (this._textures.TryGetValue(name, out texture2D1))
+                if (_textures.TryGetValue(name, out texture2D1))
                     return (T)(object)texture2D1;
-                Texture2D texture2D2 = ContentPack.LoadTexture2D(name, this._modConfig == null || this._modConfig.processPinkTransparency);
-                this._textures[name] = texture2D2;
+                Texture2D texture2D2 = ContentPack.LoadTexture2D(name, _modConfig == null || _modConfig.processPinkTransparency);
+                _textures[name] = texture2D2;
                 return (T)(object)texture2D2;
             }
             if (typeof(T) == typeof(SoundEffect))
             {
                 SoundEffect soundEffect1;
-                if (this._sounds.TryGetValue(name, out soundEffect1))
+                if (_sounds.TryGetValue(name, out soundEffect1))
                     return (T)(object)soundEffect1;
-                SoundEffect soundEffect2 = this.LoadSoundEffect(name);
-                this._sounds[name] = soundEffect2;
+                SoundEffect soundEffect2 = LoadSoundEffect(name);
+                _sounds[name] = soundEffect2;
                 return (T)(object)soundEffect2;
             }
             if (!(typeof(T) == typeof(Song)))
                 return default(T);
             Song song1;
-            if (this._songs.TryGetValue(name, out song1))
+            if (_songs.TryGetValue(name, out song1))
                 return (T)(object)song1;
-            Song song2 = this.LoadSong(name);
-            this._songs[name] = song2;
+            Song song2 = LoadSong(name);
+            _songs[name] = song2;
             return (T)(object)song2;
         }
     }

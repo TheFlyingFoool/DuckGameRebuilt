@@ -30,7 +30,7 @@ namespace DuckGame
 
         protected override void Update()
         {
-            if (!this._matchOver)
+            if (!_matchOver)
             {
                 List<Team> teamList = new List<Team>();
                 int num = 0;
@@ -87,7 +87,7 @@ namespace DuckGame
                     }
                 }
                 if (CTF.hasWinner)
-                    this.EndMatch();
+                    EndMatch();
             }
             base.Update();
         }

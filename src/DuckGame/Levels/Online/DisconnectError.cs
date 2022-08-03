@@ -13,8 +13,8 @@ namespace DuckGame
 
         public DisconnectError(Profile who)
         {
-            this._profile = who;
-            this._centeredView = true;
+            _profile = who;
+            _centeredView = true;
         }
 
         public override void Initialize()
@@ -22,7 +22,7 @@ namespace DuckGame
             DuckNetwork.ClosePauseMenu();
             ConnectionStatusUI.Hide();
             HUD.AddCornerMessage(HUDCorner.BottomRight, "@START@CONTINUE");
-            this._startCalled = true;
+            _startCalled = true;
             base.Initialize();
         }
 
@@ -35,9 +35,9 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._profile != null)
+            if (_profile != null)
             {
-                string text = " |RED|" + this._profile.name + " has disconnected.";
+                string text = " |RED|" + _profile.name + " has disconnected.";
                 Graphics.DrawString(text, new Vec2((float)(Layer.HUD.camera.width / 2.0 - Graphics.GetStringWidth(text) / 2.0), Layer.HUD.camera.height / 2f), Color.White);
             }
             else

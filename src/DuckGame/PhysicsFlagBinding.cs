@@ -13,30 +13,30 @@ namespace DuckGame
         {
             get
             {
-                this._value = 0;
-                PhysicsObject thing = this._thing as PhysicsObject;
+                _value = 0;
+                PhysicsObject thing = _thing as PhysicsObject;
                 if (thing.solid)
-                    this._value |= 128;
+                    _value |= 128;
                 if (thing.enablePhysics)
-                    this._value |= 16;
+                    _value |= 16;
                 if (thing.active)
-                    this._value |= 8;
+                    _value |= 8;
                 if (thing.visible)
-                    this._value |= 4;
+                    _value |= 4;
                 if (thing.grounded)
-                    this._value |= 64;
+                    _value |= 64;
                 if (thing.onFire)
-                    this._value |= 32;
+                    _value |= 32;
                 if (thing._destroyed)
-                    this._value |= 2;
+                    _value |= 2;
                 if (thing.isSpawned)
-                    this._value |= 1;
-                return this._value;
+                    _value |= 1;
+                return _value;
             }
             set
             {
-                this._value = value;
-                PhysicsObject thing = this._thing as PhysicsObject;
+                _value = value;
+                PhysicsObject thing = _thing as PhysicsObject;
                 thing.solid = (_value & 128U) > 0U;
                 thing.enablePhysics = (_value & 16U) > 0U;
                 thing.active = (_value & 8U) > 0U;

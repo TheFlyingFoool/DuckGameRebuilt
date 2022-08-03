@@ -11,11 +11,11 @@ namespace DuckGame
     {
         public ATOldPistol()
         {
-            this.accuracy = 0.8f;
-            this.range = 170f;
-            this.penetration = 0.4f;
-            this.bulletSpeed = 28f;
-            this.combustable = true;
+            accuracy = 0.8f;
+            range = 170f;
+            penetration = 0.4f;
+            bulletSpeed = 28f;
+            combustable = true;
         }
     }
 }

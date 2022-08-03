@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public ushort objectID;
 
-        public NMObjectMessage(ushort id) => this.objectID = id;
+        public NMObjectMessage(ushort id) => objectID = id;
 
         public NMObjectMessage()
         {

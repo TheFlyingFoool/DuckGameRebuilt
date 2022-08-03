@@ -15,19 +15,19 @@ namespace DuckGame
         public VeryHardSign(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("veryHardSign", 32, 32);
-            this.graphic = _sprite;
-            this.center = new Vec2(16f, 24f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = -0.5f;
-            this._editorName = "Very Hard Sign";
-            this.hugWalls = WallHug.Floor;
+            _sprite = new SpriteMap("veryHardSign", 32, 32);
+            graphic = _sprite;
+            center = new Vec2(16f, 24f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            depth = -0.5f;
+            _editorName = "Very Hard Sign";
+            hugWalls = WallHug.Floor;
         }
 
         public override void Draw()
         {
-            this._sprite.frame = this.offDir > 0 ? 1 : 0;
+            _sprite.frame = offDir > 0 ? 1 : 0;
             base.Draw();
         }
     }

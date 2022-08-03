@@ -12,7 +12,7 @@ namespace DuckGame
         public SpawnedGoldRock(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.gold.value = true;
+            gold.value = true;
         }
     }
 }

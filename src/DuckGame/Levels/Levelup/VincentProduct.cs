@@ -22,47 +22,47 @@ namespace DuckGame
         {
             get
             {
-                if (this.furnitureData != null)
+                if (furnitureData != null)
                     return furnitureData.sprite;
-                return this.teamData != null ? teamData.hat : (Sprite)null;
+                return teamData != null ? teamData.hat : (Sprite)null;
             }
         }
 
-        public Color color => this.furnitureData != null ? this.furnitureData.group.color : Color.White;
+        public Color color => furnitureData != null ? furnitureData.group.color : Color.White;
 
         public string name
         {
             get
             {
-                if (this.furnitureData != null)
-                    return this.furnitureData.name;
-                return this.teamData != null ? this.teamData.name + " HAT" : "Something";
+                if (furnitureData != null)
+                    return furnitureData.name;
+                return teamData != null ? teamData.name + " HAT" : "Something";
             }
         }
 
-        public string group => this.furnitureData != null ? this.furnitureData.group.name : "HATS";
+        public string group => furnitureData != null ? furnitureData.group.name : "HATS";
 
         public string description
         {
             get
             {
-                if (this.furnitureData != null)
-                    return this.furnitureData.description;
-                return this.teamData != null ? this.teamData.description : "What a fine piece of furniture.";
+                if (furnitureData != null)
+                    return furnitureData.description;
+                return teamData != null ? teamData.description : "What a fine piece of furniture.";
             }
         }
 
         public void Draw(Vec2 pos, float alpha, float deep)
         {
-            if (this.furnitureData != null)
+            if (furnitureData != null)
             {
-                SpriteMap g = this.furnitureData.sprite;
-                if (this.furnitureData.icon != null)
-                    g = this.furnitureData.icon;
-                if (this.furnitureData.font != null && this.furnitureData.sprite == null)
+                SpriteMap g = furnitureData.sprite;
+                if (furnitureData.icon != null)
+                    g = furnitureData.icon;
+                if (furnitureData.font != null && furnitureData.sprite == null)
                 {
-                    this.furnitureData.font.scale = new Vec2(1f, 1f);
-                    this.furnitureData.font.Draw("F", pos + new Vec2(-3.5f, -3f), Color.Black, (Depth)(deep + 0.005f));
+                    furnitureData.font.scale = new Vec2(1f, 1f);
+                    furnitureData.font.Draw("F", pos + new Vec2(-3.5f, -3f), Color.Black, (Depth)(deep + 0.005f));
                 }
                 g.depth = (Depth)deep;
                 g.frame = 0;
@@ -70,13 +70,13 @@ namespace DuckGame
                 Graphics.Draw(g, pos.x, pos.y);
                 g.alpha = 1f;
             }
-            if (this.teamData == null)
+            if (teamData == null)
                 return;
-            SpriteMap hat = this.teamData.hat;
+            SpriteMap hat = teamData.hat;
             hat.depth = (Depth)deep;
             hat.frame = 0;
             hat.alpha = alpha;
-            hat.center = new Vec2(16f, 16f) + this.teamData.hatOffset;
+            hat.center = new Vec2(16f, 16f) + teamData.hatOffset;
             Graphics.Draw(hat, pos.x, pos.y);
             hat.alpha = 1f;
         }

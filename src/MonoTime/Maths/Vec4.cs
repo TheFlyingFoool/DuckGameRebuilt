@@ -47,26 +47,26 @@ namespace DuckGame
 
         public Vec4(Vec2 value, float z, float w)
         {
-            this.x = value.x;
-            this.y = value.y;
+            x = value.x;
+            y = value.y;
             this.z = z;
             this.w = w;
         }
 
         public Vec4(Vec3 value, float w)
         {
-            this.x = value.x;
-            this.y = value.y;
-            this.z = value.z;
+            x = value.x;
+            y = value.y;
+            z = value.z;
             this.w = w;
         }
 
         public Vec4(float value)
         {
-            this.x = value;
-            this.y = value;
-            this.z = value;
-            this.w = value;
+            x = value;
+            y = value;
+            z = value;
+            w = value;
         }
 
         public static Vec4 Add(Vec4 value1, Vec4 value2)
@@ -184,7 +184,7 @@ namespace DuckGame
 
         public bool Equals(Vec4 other) => w == other.w && x == other.x && y == other.y && z == other.z;
 
-        public override int GetHashCode() => (int)(w + this.x + y + y);
+        public override int GetHashCode() => (int)(w + x + y + y);
 
         public static Vec4 Hermite(
           Vec4 value1,
@@ -214,9 +214,9 @@ namespace DuckGame
             result.z = MathHelper.Hermite(value1.z, tangent1.z, value2.z, tangent2.z, amount);
         }
 
-        public float Length() => (float)Math.Sqrt(x * this.x + y * this.y + z * this.z + w * this.w);
+        public float Length() => (float)Math.Sqrt(x * x + y * y + z * z + w * w);
 
-        public float LengthSquared() => (float)(x * this.x + y * this.y + z * this.z + w * this.w);
+        public float LengthSquared() => (float)(x * x + y * y + z * z + w * w);
 
         public static Vec4 Lerp(Vec4 value1, Vec4 value2, float amount) => new Vec4(MathHelper.Lerp(value1.x, value2.x, amount), MathHelper.Lerp(value1.y, value2.y, amount), MathHelper.Lerp(value1.z, value2.z, amount), MathHelper.Lerp(value1.w, value2.w, amount));
 
@@ -283,11 +283,11 @@ namespace DuckGame
 
         public void Normalize()
         {
-            float num = 1f / (float)Math.Sqrt(x * this.x + y * this.y + z * this.z + w * this.w);
-            this.w *= num;
-            this.x *= num;
-            this.y *= num;
-            this.z *= num;
+            float num = 1f / (float)Math.Sqrt(x * x + y * y + z * z + w * w);
+            w *= num;
+            x *= num;
+            y *= num;
+            z *= num;
         }
 
         public static Vec4 Normalize(Vec4 vector)
@@ -404,13 +404,13 @@ namespace DuckGame
         {
             StringBuilder stringBuilder = new StringBuilder(32);
             stringBuilder.Append("{X:");
-            stringBuilder.Append(this.x);
+            stringBuilder.Append(x);
             stringBuilder.Append(" Y:");
-            stringBuilder.Append(this.y);
+            stringBuilder.Append(y);
             stringBuilder.Append(" Z:");
-            stringBuilder.Append(this.z);
+            stringBuilder.Append(z);
             stringBuilder.Append(" W:");
-            stringBuilder.Append(this.w);
+            stringBuilder.Append(w);
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }

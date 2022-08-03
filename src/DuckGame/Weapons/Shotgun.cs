@@ -20,25 +20,25 @@ namespace DuckGame
         public Shotgun(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 2;
-            this._ammoType = new ATShotgun();
-            this.wideBarrel = true;
-            this._type = "gun";
-            this.graphic = new Sprite("shotgun");
-            this.center = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -3f);
-            this.collisionSize = new Vec2(16f, 8f);
-            this._barrelOffsetTL = new Vec2(30f, 14f);
-            this._fireSound = "shotgunFire2";
-            this._kickForce = 4f;
-            this._fireRumble = RumbleIntensity.Light;
-            this._numBulletsPerFire = 6;
-            this._manualLoad = true;
-            this._loaderSprite = new SpriteMap("shotgunLoader", 8, 8)
+            ammo = 2;
+            _ammoType = new ATShotgun();
+            wideBarrel = true;
+            _type = "gun";
+            graphic = new Sprite("shotgun");
+            center = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -3f);
+            collisionSize = new Vec2(16f, 8f);
+            _barrelOffsetTL = new Vec2(30f, 14f);
+            _fireSound = "shotgunFire2";
+            _kickForce = 4f;
+            _fireRumble = RumbleIntensity.Light;
+            _numBulletsPerFire = 6;
+            _manualLoad = true;
+            _loaderSprite = new SpriteMap("shotgunLoader", 8, 8)
             {
                 center = new Vec2(4f, 4f)
             };
-            this.editorTooltip = "It's...a shotgun. I don't really have anything more to say about it.";
+            editorTooltip = "It's...a shotgun. I don't really have anything more to say about it.";
         }
 
         public override void Update()
@@ -47,41 +47,41 @@ namespace DuckGame
             if (_loadAnimation == -1.0)
             {
                 SFX.Play("shotgunLoad");
-                this._loadAnimation = 0f;
+                _loadAnimation = 0f;
             }
             if (_loadAnimation >= 0.0)
             {
-                if (_loadAnimation == 0.5 && this.ammo != 0)
-                    this.PopShell();
+                if (_loadAnimation == 0.5 && ammo != 0)
+                    PopShell();
                 if (_loadAnimation < 1.0)
-                    this._loadAnimation += 0.1f;
+                    _loadAnimation += 0.1f;
                 else
-                    this._loadAnimation = 1f;
+                    _loadAnimation = 1f;
             }
-            if (this._loadProgress < 0)
+            if (_loadProgress < 0)
                 return;
-            if (this._loadProgress == 50)
-                this.Reload(false);
-            if (this._loadProgress < 100)
-                this._loadProgress += 10;
+            if (_loadProgress == 50)
+                Reload(false);
+            if (_loadProgress < 100)
+                _loadProgress += 10;
             else
-                this._loadProgress = 100;
+                _loadProgress = 100;
         }
 
         public override void OnPressAction()
         {
-            if (this.loaded)
+            if (loaded)
             {
                 base.OnPressAction();
-                this._loadProgress = -1;
-                this._loadAnimation = -0.01f;
+                _loadProgress = -1;
+                _loadAnimation = -0.01f;
             }
             else
             {
-                if (this._loadProgress != -1)
+                if (_loadProgress != -1)
                     return;
-                this._loadProgress = 0;
-                this._loadAnimation = -1f;
+                _loadProgress = 0;
+                _loadAnimation = -1f;
             }
         }
 
@@ -90,7 +90,7 @@ namespace DuckGame
             base.Draw();
             Vec2 vec2 = new Vec2(13f, -2f);
             float num = (float)Math.Sin(_loadAnimation * 3.14000010490417) * 3f;
-            this.Draw(_loaderSprite, new Vec2(vec2.x - 8f - num, vec2.y + 4f));
+            Draw(_loaderSprite, new Vec2(vec2.x - 8f - num, vec2.y + 4f));
         }
     }
 }

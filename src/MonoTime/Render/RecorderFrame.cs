@@ -29,30 +29,30 @@ namespace DuckGame
 
         public void Initialize()
         {
-            this.currentObject = 0;
-            this.objects = new RecorderFrameItem[RecorderFrame.kMaxObjects];
-            this._states = new Dictionary<int, RecorderFrameStateChange>();
-            this.sortedObjects = new Dictionary<long, RecorderFrameItem>();
-            this.sounds = new List<RecorderSoundItem>();
-            this.backgroundColor = Color.White;
+            currentObject = 0;
+            objects = new RecorderFrameItem[RecorderFrame.kMaxObjects];
+            _states = new Dictionary<int, RecorderFrameStateChange>();
+            sortedObjects = new Dictionary<long, RecorderFrameItem>();
+            sounds = new List<RecorderSoundItem>();
+            backgroundColor = Color.White;
         }
 
         public void Reset()
         {
-            this.currentObject = 0;
-            this.totalVelocity = 0f;
-            this.actions = 0;
-            this.bonus = 0;
-            this.deaths = 0;
-            this.coolness = 0;
-            this._states.Clear();
-            this.sounds.Clear();
-            this.sortedObjects.Clear();
+            currentObject = 0;
+            totalVelocity = 0f;
+            actions = 0;
+            bonus = 0;
+            deaths = 0;
+            coolness = 0;
+            _states.Clear();
+            sounds.Clear();
+            sortedObjects.Clear();
         }
 
-        public RecorderFrameStateChange GetStateWithIndex(int index) => this._states.FirstOrDefault<KeyValuePair<int, RecorderFrameStateChange>>(x => x.Value.stateIndex == index).Value;
+        public RecorderFrameStateChange GetStateWithIndex(int index) => _states.FirstOrDefault<KeyValuePair<int, RecorderFrameStateChange>>(x => x.Value.stateIndex == index).Value;
 
-        public bool HasStateWithIndex(int index) => this._states.Where<KeyValuePair<int, RecorderFrameStateChange>>(x => x.Value.stateIndex == index).Count<KeyValuePair<int, RecorderFrameStateChange>>() > 0;
+        public bool HasStateWithIndex(int index) => _states.Where<KeyValuePair<int, RecorderFrameStateChange>>(x => x.Value.stateIndex == index).Count<KeyValuePair<int, RecorderFrameStateChange>>() > 0;
 
         public void StateChange(
           SpriteSortMode sortModeVal,
@@ -64,7 +64,7 @@ namespace DuckGame
           Matrix cameraVal,
           Rectangle sciss)
         {
-            this._states[this.currentObject] = new RecorderFrameStateChange()
+            _states[currentObject] = new RecorderFrameStateChange()
             {
                 sortMode = sortModeVal,
                 blendState = blendStateVal,
@@ -80,23 +80,23 @@ namespace DuckGame
 
         public void IncrementObject()
         {
-            ++this.currentObject;
-            if (this.currentObject < RecorderFrame.kMaxObjects)
+            ++currentObject;
+            if (currentObject < RecorderFrame.kMaxObjects)
                 return;
-            this.currentObject = RecorderFrame.kMaxObjects - 1;
+            currentObject = RecorderFrame.kMaxObjects - 1;
         }
 
         public void Render()
         {
             bool flag = false;
-            DuckGame.Graphics.Clear(this.backgroundColor * DuckGame.Graphics.fade);
-            for (int key = 0; key < this.currentObject; ++key)
+            DuckGame.Graphics.Clear(backgroundColor * DuckGame.Graphics.fade);
+            for (int key = 0; key < currentObject; ++key)
             {
-                if (this._states.ContainsKey(key))
+                if (_states.ContainsKey(key))
                 {
                     if (flag)
                         DuckGame.Graphics.screen.End();
-                    RecorderFrameStateChange state = this._states[key];
+                    RecorderFrameStateChange state = _states[key];
                     flag = true;
                     MTEffect mtEffectFromIndex = Content.GetMTEffectFromIndex(state.effectIndex);
                     if (Layer.IsBasicLayerEffect(mtEffectFromIndex))
@@ -107,7 +107,7 @@ namespace DuckGame
                     DuckGame.Graphics.screen.Begin(state.sortMode, state.blendState, state.samplerState, state.depthStencilState, state.rasterizerState, Content.GetMTEffectFromIndex(state.effectIndex), state.camera);
                     DuckGame.Graphics.SetScissorRectangle(state.scissor);
                 }
-                DuckGame.Graphics.DrawRecorderItem(ref this.objects[key]);
+                DuckGame.Graphics.DrawRecorderItem(ref objects[key]);
             }
             if (!flag)
                 return;
@@ -116,7 +116,7 @@ namespace DuckGame
 
         public void Update()
         {
-            foreach (RecorderSoundItem sound in this.sounds)
+            foreach (RecorderSoundItem sound in sounds)
                 SFX.Play(sound.sound, sound.volume, sound.pitch, sound.pan);
         }
     }

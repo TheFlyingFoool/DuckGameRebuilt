@@ -15,33 +15,33 @@ namespace DuckGame
         private bool _hit;
         private bool _reset = true;
 
-        public bool hit => this._hit;
+        public bool hit => _hit;
 
         public ActionTimer(float inc, float max = 1f, bool reset = true)
         {
-            this._inc = inc;
-            this._max = max;
-            this._reset = reset;
+            _inc = inc;
+            _max = max;
+            _reset = reset;
             AutoUpdatables.Add(this);
         }
 
         public void Update()
         {
-            if (this._reset)
-                this._hit = false;
-            this._val += this._inc;
-            if (_val < this._max)
+            if (_reset)
+                _hit = false;
+            _val += _inc;
+            if (_val < _max)
                 return;
-            this._val = 0f;
-            this._hit = true;
+            _val = 0f;
+            _hit = true;
         }
 
-        public void Reset() => this._val = 0f;
+        public void Reset() => _val = 0f;
 
         public void SetToEnd()
         {
-            this._val = 0f;
-            this._hit = true;
+            _val = 0f;
+            _hit = true;
         }
 
         public static implicit operator bool(ActionTimer val) => val.hit;

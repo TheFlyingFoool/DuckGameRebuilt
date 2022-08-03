@@ -16,14 +16,14 @@ namespace DuckGame
         public CameraBounds()
           : base()
         {
-            this.graphic = new Sprite("swirl");
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this._canFlip = false;
-            this._visibleInGame = false;
-            this.wide = new EditorProperty<int>(320, this, 60f, 1920f, 1f);
-            this.high = new EditorProperty<int>(320, this, 60f, 1920f, 1f);
+            graphic = new Sprite("swirl");
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
+            _canFlip = false;
+            _visibleInGame = false;
+            wide = new EditorProperty<int>(320, this, 60f, 1920f, 1f);
+            high = new EditorProperty<int>(320, this, 60f, 1920f, 1f);
         }
 
         public override void Draw()
@@ -31,7 +31,7 @@ namespace DuckGame
             base.Draw();
             float num1 = wide.value;
             float num2 = high.value;
-            Graphics.DrawRect(this.position + new Vec2((-num1 / 2f), (-num2 / 2f)), this.position + new Vec2(num1 / 2f, num2 / 2f), Color.Blue * 0.5f, (Depth)1f, false);
+            Graphics.DrawRect(position + new Vec2((-num1 / 2f), (-num2 / 2f)), position + new Vec2(num1 / 2f, num2 / 2f), Color.Blue * 0.5f, (Depth)1f, false);
         }
     }
 }

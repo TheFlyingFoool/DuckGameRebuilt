@@ -13,20 +13,20 @@ namespace DuckGame
         {
             get
             {
-                this._value = 0;
-                CoilGun thing = this._thing as CoilGun;
+                _value = 0;
+                CoilGun thing = _thing as CoilGun;
                 if (thing._charging)
-                    this._value |= 4;
+                    _value |= 4;
                 if (thing._fired)
-                    this._value |= 2;
+                    _value |= 2;
                 if (thing.doBlast)
-                    this._value |= 1;
-                return this._value;
+                    _value |= 1;
+                return _value;
             }
             set
             {
-                this._value = value;
-                CoilGun thing = this._thing as CoilGun;
+                _value = value;
+                CoilGun thing = _thing as CoilGun;
                 thing._charging = (_value & 4U) > 0U;
                 thing._fired = (_value & 2U) > 0U;
                 thing.doBlast = (_value & 1U) > 0U;

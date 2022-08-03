@@ -14,15 +14,15 @@ namespace DuckGame
         public LaserRebound(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite(this._rebound);
-            this.depth = (Depth)0.9f;
-            this.center = new Vec2(4f, 4f);
+            graphic = new Sprite(_rebound);
+            depth = (Depth)0.9f;
+            center = new Vec2(4f, 4f);
         }
 
         public override void Update()
         {
-            this.alpha -= 0.07f;
-            if (this.alpha > 0.0)
+            alpha -= 0.07f;
+            if (alpha > 0.0)
                 return;
             Level.Remove(this);
         }

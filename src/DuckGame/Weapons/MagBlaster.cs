@@ -16,55 +16,55 @@ namespace DuckGame
         public MagBlaster(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 12;
-            this._ammoType = new ATMag();
-            this._ammoType.penetration = 0.4f;
-            this.wideBarrel = true;
-            this.barrelInsertOffset = new Vec2(3f, 1f);
-            this._type = "gun";
-            this._sprite = new SpriteMap("magBlaster", 25, 19);
-            this._sprite.AddAnimation("idle", 1f, true, new int[1]);
-            this._sprite.AddAnimation("fire", 0.8f, false, 1, 1, 2, 2, 3, 3);
-            this._sprite.AddAnimation("empty", 1f, true, 4);
-            this.graphic = _sprite;
-            this.center = new Vec2(12f, 8f);
-            this.collisionOffset = new Vec2(-8f, -7f);
-            this.collisionSize = new Vec2(16f, 14f);
-            this._barrelOffsetTL = new Vec2(20f, 5f);
-            this._fireSound = "magShot";
-            this._kickForce = 5f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(1f, 0f);
-            this.loseAccuracy = 0.1f;
-            this.maxAccuracyLost = 0.6f;
-            this._bio = "Old faithful, the 9MM pistol.";
-            this._editorName = "Mag Blaster";
-            this.editorTooltip = "The preferred gun for enacting justice in a post-apocalyptic megacity.";
-            this.physicsMaterial = PhysicsMaterial.Metal;
+            ammo = 12;
+            _ammoType = new ATMag();
+            _ammoType.penetration = 0.4f;
+            wideBarrel = true;
+            barrelInsertOffset = new Vec2(3f, 1f);
+            _type = "gun";
+            _sprite = new SpriteMap("magBlaster", 25, 19);
+            _sprite.AddAnimation("idle", 1f, true, new int[1]);
+            _sprite.AddAnimation("fire", 0.8f, false, 1, 1, 2, 2, 3, 3);
+            _sprite.AddAnimation("empty", 1f, true, 4);
+            graphic = _sprite;
+            center = new Vec2(12f, 8f);
+            collisionOffset = new Vec2(-8f, -7f);
+            collisionSize = new Vec2(16f, 14f);
+            _barrelOffsetTL = new Vec2(20f, 5f);
+            _fireSound = "magShot";
+            _kickForce = 5f;
+            _fireRumble = RumbleIntensity.Kick;
+            _holdOffset = new Vec2(1f, 0f);
+            loseAccuracy = 0.1f;
+            maxAccuracyLost = 0.6f;
+            _bio = "Old faithful, the 9MM pistol.";
+            _editorName = "Mag Blaster";
+            editorTooltip = "The preferred gun for enacting justice in a post-apocalyptic megacity.";
+            physicsMaterial = PhysicsMaterial.Metal;
         }
 
         public override void Update()
         {
-            if (this._sprite.currentAnimation == "fire" && this._sprite.finished)
-                this._sprite.SetAnimation("idle");
+            if (_sprite.currentAnimation == "fire" && _sprite.finished)
+                _sprite.SetAnimation("idle");
             base.Update();
         }
 
         public override void OnPressAction()
         {
-            if (this.ammo > 0)
+            if (ammo > 0)
             {
-                this._sprite.SetAnimation("fire");
+                _sprite.SetAnimation("fire");
                 for (int index = 0; index < 3; ++index)
                 {
-                    Vec2 vec2 = this.Offset(new Vec2(-9f, 0f));
-                    Vec2 hitAngle = this.barrelVector.Rotate(Rando.Float(1f), Vec2.Zero);
+                    Vec2 vec2 = Offset(new Vec2(-9f, 0f));
+                    Vec2 hitAngle = barrelVector.Rotate(Rando.Float(1f), Vec2.Zero);
                     Level.Add(Spark.New(vec2.x, vec2.y, hitAngle, 0.1f));
                 }
             }
             else
-                this._sprite.SetAnimation("empty");
-            this.Fire();
+                _sprite.SetAnimation("empty");
+            Fire();
         }
     }
 }

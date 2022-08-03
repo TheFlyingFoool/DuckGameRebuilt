@@ -32,81 +32,81 @@ namespace DuckGame
         public VerticalDoor(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sensorSprite = this._sprite = new SpriteMap("verticalDoor", 16, 32);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 24f);
-            this.collisionSize = new Vec2(6f, 32f);
-            this.collisionOffset = new Vec2(-3f, -24f);
-            this.depth = -0.5f;
-            this._editorName = "Vertical Door";
-            this.thickness = 3f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this._bottom = new Sprite("verticalDoorBottom");
-            this._bottom.CenterOrigin();
-            this._top = new Sprite("verticalDoorTop");
-            this._top.CenterOrigin();
-            this.editorTooltip = "One of them science fiction type doors.";
+            _sensorSprite = _sprite = new SpriteMap("verticalDoor", 16, 32);
+            graphic = _sprite;
+            center = new Vec2(8f, 24f);
+            collisionSize = new Vec2(6f, 32f);
+            collisionOffset = new Vec2(-3f, -24f);
+            depth = -0.5f;
+            _editorName = "Vertical Door";
+            thickness = 3f;
+            physicsMaterial = PhysicsMaterial.Metal;
+            _bottom = new Sprite("verticalDoorBottom");
+            _bottom.CenterOrigin();
+            _top = new Sprite("verticalDoorTop");
+            _top.CenterOrigin();
+            editorTooltip = "One of them science fiction type doors.";
         }
 
         public override void Update()
         {
-            if (!this._cornerInit)
+            if (!_cornerInit)
             {
-                this._topLeft = this.topLeft;
-                this._topRight = this.topRight;
-                this._bottomLeft = this.bottomLeft;
-                this._bottomRight = this.bottomRight;
-                this._cornerInit = true;
+                _topLeft = topLeft;
+                _topRight = topRight;
+                _bottomLeft = bottomLeft;
+                _bottomRight = bottomRight;
+                _cornerInit = true;
             }
-            if (!this.slideLocked)
+            if (!slideLocked)
             {
-                this._sprite = this._sensorSprite;
-                Duck duck = Level.CheckRect<Duck>(this._topLeft - new Vec2(18f, 0f), this._bottomRight + new Vec2(18f, 0f));
+                _sprite = _sensorSprite;
+                Duck duck = Level.CheckRect<Duck>(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f));
                 if (duck != null)
                 {
-                    if (!this.filterDefault || !Profiles.IsDefault(duck.profile))
-                        this._desiredOpen = 1f;
-                    else if (!this.showedWarning)
+                    if (!filterDefault || !Profiles.IsDefault(duck.profile))
+                        _desiredOpen = 1f;
+                    else if (!showedWarning)
                     {
                         HUD.AddPlayerChangeDisplay("@UNPLUG@|GRAY|NO ARCADE (SELECT A PROFILE)");
-                        this.showedWarning = true;
+                        showedWarning = true;
                     }
                 }
-                else if (Level.CheckRectFilter<PhysicsObject>(new Vec2(this.x - 4f, this.y - 24f), new Vec2(this.x + 4f, this.y + 8f), d => !(d is TeamHat)) == null)
-                    this._desiredOpen = 0f;
+                else if (Level.CheckRectFilter<PhysicsObject>(new Vec2(x - 4f, y - 24f), new Vec2(x + 4f, y + 8f), d => !(d is TeamHat)) == null)
+                    _desiredOpen = 0f;
             }
             else
             {
-                if (this._noSensorSprite == null)
-                    this._noSensorSprite = new SpriteMap("verticalDoorNoSensor", 16, 32);
-                this._sprite = this._noSensorSprite;
-                this._desiredOpen = this.slideLockOpened ? 1f : 0f;
-                if (Level.CheckRectFilter<PhysicsObject>(new Vec2(this.x - 4f, this.y - 24f), new Vec2(this.x + 4f, this.y + 8f), d => !(d is TeamHat)) != null && this._opened)
-                    this._desiredOpen = 1f;
+                if (_noSensorSprite == null)
+                    _noSensorSprite = new SpriteMap("verticalDoorNoSensor", 16, 32);
+                _sprite = _noSensorSprite;
+                _desiredOpen = slideLockOpened ? 1f : 0f;
+                if (Level.CheckRectFilter<PhysicsObject>(new Vec2(x - 4f, y - 24f), new Vec2(x + 4f, y + 8f), d => !(d is TeamHat)) != null && _opened)
+                    _desiredOpen = 1f;
             }
-            if (_desiredOpen > 0.5 && !this._opened)
+            if (_desiredOpen > 0.5 && !_opened)
             {
-                this._opened = true;
+                _opened = true;
                 SFX.Play("slideDoorOpen", 0.6f);
             }
-            if (_desiredOpen < 0.5 && this._opened)
+            if (_desiredOpen < 0.5 && _opened)
             {
-                this._opened = false;
+                _opened = false;
                 SFX.Play("slideDoorClose", 0.6f);
             }
-            this.graphic = _sprite;
-            this._open = Maths.LerpTowards(this._open, this._desiredOpen, 0.15f);
-            this._sprite.frame = (int)(_open * 32.0);
-            this._collisionSize.y = (float)((1.0 - _open) * 32.0);
+            graphic = _sprite;
+            _open = Maths.LerpTowards(_open, _desiredOpen, 0.15f);
+            _sprite.frame = (int)(_open * 32.0);
+            _collisionSize.y = (float)((1.0 - _open) * 32.0);
         }
 
         public override void Draw()
         {
             base.Draw();
-            this._top.depth = this.depth + 1;
-            this._bottom.depth = this.depth + 1;
-            Graphics.Draw(this._top, this.x, this.y - 27f);
-            Graphics.Draw(this._bottom, this.x, this.y + 5f);
+            _top.depth = depth + 1;
+            _bottom.depth = depth + 1;
+            Graphics.Draw(_top, x, y - 27f);
+            Graphics.Draw(_bottom, x, y + 5f);
         }
     }
 }

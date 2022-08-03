@@ -15,16 +15,16 @@ namespace DuckGame
         public ItemBoxOneTime(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.editorTooltip = "Spawns the contained item one time when it's used.";
+            editorTooltip = "Spawns the contained item one time when it's used.";
         }
 
-        public override void UpdateCharging() => this.charging = 500;
+        public override void UpdateCharging() => charging = 500;
 
         public override void Draw()
         {
-            this._sprite.frame += 4;
+            _sprite.frame += 4;
             base.Draw();
-            this._sprite.frame -= 4;
+            _sprite.frame -= 4;
         }
     }
 }

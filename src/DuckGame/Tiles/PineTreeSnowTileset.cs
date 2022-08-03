@@ -17,30 +17,30 @@ namespace DuckGame
         public PineTreeSnowTileset(float x, float y)
           : base(x, y, "pineTilesetSnow")
         {
-            this._editorName = "Pine Snow";
-            this.physicsMaterial = PhysicsMaterial.Wood;
-            this.verticalWidth = 14f;
-            this.verticalWidthThick = 15f;
-            this.horizontalHeight = 8f;
-            this._tileset = "pineTileset";
-            this.depth = -0.55f;
-            this._snowFall = new SpriteMap("snowFall", 8, 24);
-            this._snowFall.AddAnimation("fall", (float)(0.200000002980232 + Rando.Float(0.1f)), false, 0, 1, 2, 3, 4);
-            this._snowFall.AddAnimation("idle", 0.4f, false, new int[1]);
-            this._snowFall.SetAnimation("idle");
-            this._snowFall.center = new Vec2(4f, 0f);
-            this.snowWait = Rando.Float(4f);
+            _editorName = "Pine Snow";
+            physicsMaterial = PhysicsMaterial.Wood;
+            verticalWidth = 14f;
+            verticalWidthThick = 15f;
+            horizontalHeight = 8f;
+            _tileset = "pineTileset";
+            depth = -0.55f;
+            _snowFall = new SpriteMap("snowFall", 8, 24);
+            _snowFall.AddAnimation("fall", (float)(0.200000002980232 + Rando.Float(0.1f)), false, 0, 1, 2, 3, 4);
+            _snowFall.AddAnimation("idle", 0.4f, false, new int[1]);
+            _snowFall.SetAnimation("idle");
+            _snowFall.center = new Vec2(4f, 0f);
+            snowWait = Rando.Float(4f);
         }
 
         public override void KnockOffSnow(Vec2 dir, bool vertShake)
         {
-            this.iterated = true;
-            if (!this.knocked | vertShake)
+            iterated = true;
+            if (!knocked | vertShake)
             {
-                int num = this.knocked ? 1 : 0;
-                this.knocked = true;
-                PineTree pineTree1 = Level.CheckPoint<PineTreeSnowTileset>(this.x - 8f, this.y, this);
-                PineTree pineTree2 = Level.CheckPoint<PineTreeSnowTileset>(this.x + 8f, this.y, this);
+                int num = knocked ? 1 : 0;
+                knocked = true;
+                PineTree pineTree1 = Level.CheckPoint<PineTreeSnowTileset>(x - 8f, y, this);
+                PineTree pineTree2 = Level.CheckPoint<PineTreeSnowTileset>(x + 8f, y, this);
                 if (pineTree1 != null && !pineTree1.iterated && !pineTree1.knocked | vertShake)
                     pineTree1.KnockOffSnow(dir, vertShake);
                 if (pineTree2 != null && !pineTree2.iterated && !pineTree2.knocked | vertShake)
@@ -48,27 +48,27 @@ namespace DuckGame
                 if (num == 0)
                 {
                     for (int index = 0; index < 2; ++index)
-                        Level.Add(new SnowFallParticle(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f), dir * Rando.Float(1f) + new Vec2(Rando.Float(-0.1f, -0.1f), Rando.Float(-0.1f, -0.1f) - Rando.Float(0.1f, 0.3f))));
+                        Level.Add(new SnowFallParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), dir * Rando.Float(1f) + new Vec2(Rando.Float(-0.1f, -0.1f), Rando.Float(-0.1f, -0.1f) - Rando.Float(0.1f, 0.3f))));
                 }
             }
-            if (this._snowFall.currentAnimation == "idle")
-                this._snowFall.SetAnimation("fall");
+            if (_snowFall.currentAnimation == "idle")
+                _snowFall.SetAnimation("fall");
             if (vertShake)
-                this._vertPush = 0.5f;
-            this.knocked = true;
-            this.iterated = false;
+                _vertPush = 0.5f;
+            knocked = true;
+            iterated = false;
         }
 
         public override void Update()
         {
-            if (!this.edge && !this.didChange)
+            if (!edge && !didChange)
             {
-                this.snowWait -= 0.01f;
+                snowWait -= 0.01f;
                 if (snowWait <= 0.0)
                 {
-                    this.snowWait = Rando.Float(2f, 3f);
+                    snowWait = Rando.Float(2f, 3f);
                     if (Rando.Float(1f) > 0.920000016689301)
-                        Level.Add(new SnowFallParticle(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f), new Vec2(0f, 0f)));
+                        Level.Add(new SnowFallParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), new Vec2(0f, 0f)));
                 }
             }
             base.Update();
@@ -76,21 +76,21 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (!this.edge && this._snowFall.currentAnimation != "idle" && !this._snowFall.finished)
+            if (!edge && _snowFall.currentAnimation != "idle" && !_snowFall.finished)
             {
-                this._snowFall.depth = -0.1f;
-                this._snowFall.scale = new Vec2(1f, (float)(_snowFall.frame / 5.0 * 0.400000005960464 + 0.200000002980232));
-                this._snowFall.alpha = (float)(1.0 - _snowFall.frame / 5.0 * 1.0);
-                Graphics.Draw(_snowFall, this.x, (float)(this.y - 7.0 + _snowFall.frame / 5.0 * 3.0));
+                _snowFall.depth = -0.1f;
+                _snowFall.scale = new Vec2(1f, (float)(_snowFall.frame / 5.0 * 0.400000005960464 + 0.200000002980232));
+                _snowFall.alpha = (float)(1.0 - _snowFall.frame / 5.0 * 1.0);
+                Graphics.Draw(_snowFall, x, (float)(y - 7.0 + _snowFall.frame / 5.0 * 3.0));
             }
-            if (this._snowFall.currentAnimation != "idle" && (this.edge || this._snowFall.frame == 1 && !this.didChange))
+            if (_snowFall.currentAnimation != "idle" && (edge || _snowFall.frame == 1 && !didChange))
             {
-                this.didChange = true;
-                this._sprite = new SpriteMap("pineTileset", 8, 16)
+                didChange = true;
+                _sprite = new SpriteMap("pineTileset", 8, 16)
                 {
-                    frame = (this.graphic as SpriteMap).frame
+                    frame = (graphic as SpriteMap).frame
                 };
-                this.graphic = _sprite;
+                graphic = _sprite;
             }
             base.Draw();
         }

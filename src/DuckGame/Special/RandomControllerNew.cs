@@ -35,99 +35,99 @@ namespace DuckGame
         public RandomControllerNew()
           : base()
         {
-            this.graphic = new Sprite("swirl");
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this._canFlip = false;
-            this._visibleInGame = false;
-            this._editorName = "Random Controller";
-            this.editorTooltip = "Allows you to make it so Targets/Goodies appear randomly.";
-            this.Max_Up._tooltip = "How many Targets/Goodies can be active at once.";
-            this.Delay._tooltip = "The delay (in seconds) before new Targets/Goodies popup.";
-            this.Continuous._tooltip = "If true, Targets/Goodies will keep popping up forever. Otherwise, each will appear only once.";
-            this.Group._tooltip = "Which sequence group this controller activates.";
-            this.Ordered_Groups._tooltip = "If true, Targets/Goodie Order Groups will run sequentially. Otherwise groups will appear randomly.";
-            this.Group_Wait._tooltip = "If true, each Target/Goodie Order Group will wait until the previous group is finished before appearing.";
-            this.Type._tooltip = "Selects which sort of Sequence this controller activates.";
+            graphic = new Sprite("swirl");
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-8f, -8f);
+            _canFlip = false;
+            _visibleInGame = false;
+            _editorName = "Random Controller";
+            editorTooltip = "Allows you to make it so Targets/Goodies appear randomly.";
+            Max_Up._tooltip = "How many Targets/Goodies can be active at once.";
+            Delay._tooltip = "The delay (in seconds) before new Targets/Goodies popup.";
+            Continuous._tooltip = "If true, Targets/Goodies will keep popping up forever. Otherwise, each will appear only once.";
+            Group._tooltip = "Which sequence group this controller activates.";
+            Ordered_Groups._tooltip = "If true, Targets/Goodie Order Groups will run sequentially. Otherwise groups will appear randomly.";
+            Group_Wait._tooltip = "If true, each Target/Goodie Order Group will wait until the previous group is finished before appearing.";
+            Type._tooltip = "Selects which sort of Sequence this controller activates.";
         }
 
         public override void Initialize()
         {
-            this._originalMaxUp = this.Max_Up.value;
-            if (this.Group.value > 0)
-                this._sequenceNumber = this.Group.value;
+            _originalMaxUp = Max_Up.value;
+            if (Group.value > 0)
+                _sequenceNumber = Group.value;
             base.Initialize();
         }
 
         public override void Update()
         {
-            if (this._finished || !this.isServerForObject || !Level.current.simulatePhysics)
+            if (_finished || !isServerForObject || !Level.current.simulatePhysics)
                 return;
-            if (!this._started)
+            if (!_started)
             {
-                if (!this.Ordered_Groups.value)
+                if (!Ordered_Groups.value)
                 {
                     List<Thing> list = Level.current.things[typeof(ISequenceItem)].ToList<Thing>();
                     if (list.Count > 0)
-                        this._sequenceNumber = list[ChallengeRando.Int(list.Count - 1)].sequence.order;
+                        _sequenceNumber = list[ChallengeRando.Int(list.Count - 1)].sequence.order;
                 }
-                this.PopUpItems();
-                this._started = true;
+                PopUpItems();
+                _started = true;
             }
-            if (this._up.Count > 0)
+            if (_up.Count > 0)
             {
-                for (int index = 0; index < this._up.Count; ++index)
+                for (int index = 0; index < _up.Count; ++index)
                 {
-                    if (this._up[index].finished)
+                    if (_up[index].finished)
                     {
-                        this._lastUp = this._up[index];
-                        this._up[index].Reset();
-                        this._up.Remove(this._up[index]);
-                        if (!this.Continuous.value)
-                            this._lastUp.isValid = false;
-                        else if (!this._hadFutureItems)
-                            this._lastUp.timesActivated = 0;
+                        _lastUp = _up[index];
+                        _up[index].Reset();
+                        _up.Remove(_up[index]);
+                        if (!Continuous.value)
+                            _lastUp.isValid = false;
+                        else if (!_hadFutureItems)
+                            _lastUp.timesActivated = 0;
                         --index;
                     }
                 }
             }
-            if (this.Group_Wait.value && this._up.Count != 0 || this._up.Count >= (int)this.Max_Up && (int)this.Max_Up != 0)
+            if (Group_Wait.value && _up.Count != 0 || _up.Count >= (int)Max_Up && (int)Max_Up != 0)
                 return;
-            this._waitCount += Maths.IncFrameTimer();
-            if (_waitCount < this.Delay.value)
+            _waitCount += Maths.IncFrameTimer();
+            if (_waitCount < Delay.value)
                 return;
-            this.PopUpItems();
-            this._waitCount = 0f;
+            PopUpItems();
+            _waitCount = 0f;
         }
 
         private void PopUpItems()
         {
             bool flag1 = false;
-            int num1 = this.Max_Up.value;
+            int num1 = Max_Up.value;
             if (num1 == 0)
                 num1 = 9999;
-            while (this._up.Count < num1)
+            while (_up.Count < num1)
             {
-                List<Thing> source1 = this.Group.value >= 0 ? (this.Type.value != SequenceItemType.ALL ? Level.current.things[typeof(ISequenceItem)].Where<Thing>(x => x.sequence.type == this.Type.value && x.sequence.order == this.Group.value).ToList<Thing>() : Level.current.things[typeof(ISequenceItem)].Where<Thing>(x => x.sequence.order == this.Group.value).ToList<Thing>()) : (this.Type.value != SequenceItemType.ALL ? Level.current.things[typeof(ISequenceItem)].Where<Thing>(x => x.sequence.type == this.Type.value).ToList<Thing>() : Level.current.things[typeof(ISequenceItem)].ToList<Thing>());
+                List<Thing> source1 = Group.value >= 0 ? (Type.value != SequenceItemType.ALL ? Level.current.things[typeof(ISequenceItem)].Where<Thing>(x => x.sequence.type == Type.value && x.sequence.order == Group.value).ToList<Thing>() : Level.current.things[typeof(ISequenceItem)].Where<Thing>(x => x.sequence.order == Group.value).ToList<Thing>()) : (Type.value != SequenceItemType.ALL ? Level.current.things[typeof(ISequenceItem)].Where<Thing>(x => x.sequence.type == Type.value).ToList<Thing>() : Level.current.things[typeof(ISequenceItem)].ToList<Thing>());
                 IEnumerable<Thing> source2;
                 while (true)
                 {
-                    IEnumerable<Thing> source3 = source1.Where<Thing>(v => v.sequence.isValid && v.sequence.order != this._sequenceNumber && v.sequence.timesActivated <= this._activationCycle);
-                    source2 = source1.Where<Thing>(v => v.sequence.isValid && v.sequence.order == this._sequenceNumber);
+                    IEnumerable<Thing> source3 = source1.Where<Thing>(v => v.sequence.isValid && v.sequence.order != _sequenceNumber && v.sequence.timesActivated <= _activationCycle);
+                    source2 = source1.Where<Thing>(v => v.sequence.isValid && v.sequence.order == _sequenceNumber);
                     if (source3.Count<Thing>() > 0)
-                        this._hadFutureItems = true;
-                    if (this._hadFutureItems)
+                        _hadFutureItems = true;
+                    if (_hadFutureItems)
                     {
-                        source2 = source2.Where<Thing>(v => v.sequence.timesActivated == this._activationCycle);
+                        source2 = source2.Where<Thing>(v => v.sequence.timesActivated == _activationCycle);
                         if (source2.Count<Thing>() == 0)
                         {
-                            if (!this.Ordered_Groups.value)
+                            if (!Ordered_Groups.value)
                             {
-                                IEnumerable<Thing> source4 = source1.Where<Thing>(x => x.sequence.order != this._sequenceNumber);
-                                if (!this.Continuous.value)
+                                IEnumerable<Thing> source4 = source1.Where<Thing>(x => x.sequence.order != _sequenceNumber);
+                                if (!Continuous.value)
                                 {
-                                    source4 = source4.Where<Thing>(x => x.sequence.timesActivated <= this._activationCycle);
+                                    source4 = source4.Where<Thing>(x => x.sequence.timesActivated <= _activationCycle);
                                 }
                                 else
                                 {
@@ -136,28 +136,28 @@ namespace DuckGame
                                 }
                                 if (source4.Count<Thing>() > 0)
                                 {
-                                    this._sequenceNumber = source4.OrderBy<Thing, int>(x => x.sequence.likelyhood + ChallengeRando.Int(8)).ElementAt<Thing>(0).sequence.order;
-                                    this.Max_Up.value = this._originalMaxUp;
+                                    _sequenceNumber = source4.OrderBy<Thing, int>(x => x.sequence.likelyhood + ChallengeRando.Int(8)).ElementAt<Thing>(0).sequence.order;
+                                    Max_Up.value = _originalMaxUp;
                                     continue;
                                 }
                             }
                             if (source3.Count<Thing>() == 0)
                             {
-                                if (this.Continuous.value)
+                                if (Continuous.value)
                                 {
-                                    if (this.Group.value < 0)
-                                        this._sequenceNumber = 0;
-                                    ++this._activationCycle;
-                                    this.Max_Up.value = this._originalMaxUp;
+                                    if (Group.value < 0)
+                                        _sequenceNumber = 0;
+                                    ++_activationCycle;
+                                    Max_Up.value = _originalMaxUp;
                                 }
                                 else
                                     break;
                             }
                             else
                             {
-                                if (this.Group.value < 0)
-                                    ++this._sequenceNumber;
-                                this.Max_Up.value = this._originalMaxUp;
+                                if (Group.value < 0)
+                                    ++_sequenceNumber;
+                                Max_Up.value = _originalMaxUp;
                             }
                         }
                         else
@@ -166,11 +166,11 @@ namespace DuckGame
                     else
                         goto label_31;
                 }
-                this._finished = true;
+                _finished = true;
                 break;
             label_29:
-                if (this.Group_Wait.value && this._up.Count == 0)
-                    this.Max_Up.value = source2.Count<Thing>();
+                if (Group_Wait.value && _up.Count == 0)
+                    Max_Up.value = source2.Count<Thing>();
                 label_31:
                 int num2 = 0;
                 List<SequenceItem> sequenceItemList = new List<SequenceItem>();
@@ -184,7 +184,7 @@ namespace DuckGame
                     if ((!sequence.activated || sequence.finished) && sequence.isValid)
                     {
                         flag2 = true;
-                        if (sequence != this._lastUp || flag1)
+                        if (sequence != _lastUp || flag1)
                         {
                             ++sequence.likelyhood;
                             num2 += sequence.likelyhood;
@@ -208,14 +208,14 @@ namespace DuckGame
                     {
                         sequenceItem.randomMode = true;
                         sequenceItem.Activate();
-                        ++this._totalUp;
+                        ++_totalUp;
                         flag3 = true;
-                        this._up.Add(sequenceItem);
+                        _up.Add(sequenceItem);
                         break;
                     }
                     num4 += num5;
                 }
-                if (flag3 && this.Max_Up.value == 0)
+                if (flag3 && Max_Up.value == 0)
                     break;
             }
         }

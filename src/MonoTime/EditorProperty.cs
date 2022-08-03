@@ -23,30 +23,30 @@ namespace DuckGame
 
         public T value
         {
-            get => this._value;
+            get => _value;
             set
             {
-                this._value = value;
-                if (this._notify == null)
+                _value = value;
+                if (_notify == null)
                     return;
-                this._notify.EditorPropertyChanged(this);
+                _notify.EditorPropertyChanged(this);
             }
         }
 
         public EditorPropertyInfo info => new EditorPropertyInfo()
         {
             value = _value,
-            min = this._min,
-            max = this._max,
-            increment = this._increment,
-            minSpecial = this._minSpecial,
-            isTime = this._isTime,
-            isLevel = this._isLevel,
-            tooltip = this._tooltip,
-            name = this.name
+            min = _min,
+            max = _max,
+            increment = _increment,
+            minSpecial = _minSpecial,
+            isTime = _isTime,
+            isLevel = _isLevel,
+            tooltip = _tooltip,
+            name = name
         };
 
-        public string section => this._section;
+        public string section => _section;
 
         public EditorProperty(
           T val,
@@ -58,14 +58,14 @@ namespace DuckGame
           bool isTime = false,
           bool isLevel = false)
         {
-            this._value = val;
-            this._min = min;
-            this._max = max;
-            this._increment = increment;
-            this._minSpecial = minSpecial;
-            this._isTime = isTime;
-            this._notify = notify;
-            this._isLevel = isLevel;
+            _value = val;
+            _min = min;
+            _max = max;
+            _increment = increment;
+            _minSpecial = minSpecial;
+            _isTime = isTime;
+            _notify = notify;
+            _isLevel = isLevel;
         }
 
         public EditorProperty(
@@ -79,15 +79,15 @@ namespace DuckGame
           bool isTime = false,
           bool isLevel = false)
         {
-            this._value = val;
-            this._min = min;
-            this._max = max;
-            this._increment = increment;
-            this._minSpecial = minSpecial;
-            this._isTime = isTime;
-            this._notify = notify;
-            this._section = varSection;
-            this._isLevel = isLevel;
+            _value = val;
+            _min = min;
+            _max = max;
+            _increment = increment;
+            _minSpecial = minSpecial;
+            _isTime = isTime;
+            _notify = notify;
+            _section = varSection;
+            _isLevel = isLevel;
         }
 
         /// <summary>

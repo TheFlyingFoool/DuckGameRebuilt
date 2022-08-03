@@ -30,45 +30,45 @@ namespace DuckGame
           string pPassword = "",
           ulong pLocalID = 0)
         {
-            this.wasInvited = pWasInvited;
-            this.localID = pLocalID;
-            this.names = pNames;
-            this.info = NMRequestJoin.Info.Construct();
-            this.password = pPassword;
-            this.personas = pPersonas;
+            wasInvited = pWasInvited;
+            localID = pLocalID;
+            names = pNames;
+            info = NMRequestJoin.Info.Construct();
+            password = pPassword;
+            personas = pPersonas;
         }
 
         protected override void OnSerialize()
         {
-            this.info.Serialize(this._serializedData);
-            this._serializedData.Write(this.wasInvited);
-            this._serializedData.Write((byte)0);
-            this._serializedData.Write(this.password);
-            this._serializedData.Write(this.localID);
-            this._serializedData.Write((byte)this.names.Count);
-            foreach (string name in this.names)
-                this._serializedData.Write(name);
-            foreach (byte persona in this.personas)
-                this._serializedData.Write(persona);
+            info.Serialize(_serializedData);
+            _serializedData.Write(wasInvited);
+            _serializedData.Write((byte)0);
+            _serializedData.Write(password);
+            _serializedData.Write(localID);
+            _serializedData.Write((byte)names.Count);
+            foreach (string name in names)
+                _serializedData.Write(name);
+            foreach (byte persona in personas)
+                _serializedData.Write(persona);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
-            this.info = NMRequestJoin.Info.Deserialize(d);
-            this.wasInvited = d.ReadBool();
+            info = NMRequestJoin.Info.Deserialize(d);
+            wasInvited = d.ReadBool();
             int num = d.ReadByte();
             if (num == 0)
             {
-                this.password = d.ReadString();
-                this.localID = d.ReadULong();
+                password = d.ReadString();
+                localID = d.ReadULong();
                 num = d.ReadByte();
             }
-            this.names = new List<string>();
-            this.personas = new List<byte>();
+            names = new List<string>();
+            personas = new List<byte>();
             for (int index = 0; index < num; ++index)
-                this.names.Add(d.ReadString());
+                names.Add(d.ReadString());
             for (int index = 0; index < num; ++index)
-                this.personas.Add(d.ReadByte());
+                personas.Add(d.ReadByte());
         }
 
         public struct Info
@@ -88,10 +88,10 @@ namespace DuckGame
 
             public void Serialize(BitBuffer pBuffer)
             {
-                pBuffer.Write(this.roomFlippers);
-                pBuffer.Write(this.flagIndex);
-                pBuffer.Write(this.hasCustomHats);
-                pBuffer.Write(this.parentalControlsActive);
+                pBuffer.Write(roomFlippers);
+                pBuffer.Write(flagIndex);
+                pBuffer.Write(hasCustomHats);
+                pBuffer.Write(parentalControlsActive);
             }
 
             public static NMRequestJoin.Info Deserialize(BitBuffer pBuffer) => new NMRequestJoin.Info()

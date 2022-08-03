@@ -14,7 +14,7 @@ namespace DuckGame
         public HatConsole(float xpos, float ypos, ProfileBox2 bbox)
           : base(xpos, ypos)
         {
-            this.box = bbox;
+            box = bbox;
         }
     }
 }

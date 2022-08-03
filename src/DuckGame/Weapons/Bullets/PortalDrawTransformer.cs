@@ -12,30 +12,30 @@ namespace DuckGame
         private Portal _portal;
         private Thing _thing;
 
-        public new Portal portal => this._portal;
+        public new Portal portal => _portal;
 
-        public Thing thing => this._thing;
+        public Thing thing => _thing;
 
         public PortalDrawTransformer(Thing t, Portal p)
           : base()
         {
-            this._portal = p;
-            this._thing = t;
+            _portal = p;
+            _thing = t;
         }
 
         public override void Draw()
         {
-            Vec2 position = this._thing.position;
-            foreach (PortalDoor door in this._portal.GetDoors())
+            Vec2 position = _thing.position;
+            foreach (PortalDoor door in _portal.GetDoors())
             {
                 if (Graphics.currentLayer == door.layer)
                 {
-                    if (door.isLeft && this._thing.x > door.center.x + 32.0)
-                        this._thing.position += (door.center - this._portal.GetOtherDoor(door).center);
-                    else if (!door.isLeft && this._thing.x < door.center.x - 32.0)
-                        this._thing.position += (this._portal.GetOtherDoor(door).center - door.center);
-                    this._thing.DoDraw();
-                    this._thing.position = position;
+                    if (door.isLeft && _thing.x > door.center.x + 32.0)
+                        _thing.position += (door.center - _portal.GetOtherDoor(door).center);
+                    else if (!door.isLeft && _thing.x < door.center.x - 32.0)
+                        _thing.position += (_portal.GetOtherDoor(door).center - door.center);
+                    _thing.DoDraw();
+                    _thing.position = position;
                 }
             }
         }

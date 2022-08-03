@@ -25,59 +25,59 @@ namespace DuckGame
 
         public System.Type contains
         {
-            get => this._contains;
-            set => this._contains = value;
+            get => _contains;
+            set => _contains = value;
         }
 
         public Equipper(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.serverOnly = true;
-            this.graphic = new Sprite("equipper");
-            this.center = new Vec2(8f, 8f);
-            this.collisionSize = new Vec2(14f, 14f);
-            this.collisionOffset = new Vec2(-7f, -7f);
-            this.depth = (Depth)0.5f;
-            this._canFlip = false;
-            this._visibleInGame = false;
-            this.editorTooltip = "Allows equipment to automatically be equipped to all ducks on level start.";
-            this._placementCost += 4;
+            serverOnly = true;
+            graphic = new Sprite("equipper");
+            center = new Vec2(8f, 8f);
+            collisionSize = new Vec2(14f, 14f);
+            collisionOffset = new Vec2(-7f, -7f);
+            depth = (Depth)0.5f;
+            _canFlip = false;
+            _visibleInGame = false;
+            editorTooltip = "Allows equipment to automatically be equipped to all ducks on level start.";
+            _placementCost += 4;
         }
 
         public Thing GetContainedInstance(Vec2 pos = default(Vec2))
         {
-            if (this.contains == null)
+            if (contains == null)
                 return null;
-            object[] constructorParameters = Editor.GetConstructorParameters(this.contains);
+            object[] constructorParameters = Editor.GetConstructorParameters(contains);
             if (constructorParameters.Count<object>() > 1)
             {
                 constructorParameters[0] = pos.x;
                 constructorParameters[1] = pos.y;
             }
-            PhysicsObject thing = Editor.CreateThing(this.contains, constructorParameters) as PhysicsObject;
+            PhysicsObject thing = Editor.CreateThing(contains, constructorParameters) as PhysicsObject;
             if (thing is Gun)
-                (thing as Gun).infinite = this.infinite;
+                (thing as Gun).infinite = infinite;
             return thing;
         }
 
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
+            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(contains));
             return binaryClassChunk;
         }
 
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
+            contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
             return true;
         }
 
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("contains", this.contains != null ? contains.AssemblyQualifiedName : (object)""));
+            dxmlNode.Add(new DXMLNode("contains", contains != null ? contains.AssemblyQualifiedName : (object)""));
             return dxmlNode;
         }
 
@@ -86,7 +86,7 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode = node.Element("contains");
             if (dxmlNode != null)
-                this.contains = Editor.GetType(dxmlNode.Value);
+                contains = Editor.GetType(dxmlNode.Value);
             return true;
         }
 
@@ -101,21 +101,21 @@ namespace DuckGame
         public override string GetDetailsString()
         {
             string str = "EMPTY";
-            if (this.contains != null)
-                str = this.contains.Name;
-            return this.contains == null ? base.GetDetailsString() : base.GetDetailsString() + "Contains: " + str;
+            if (contains != null)
+                str = contains.Name;
+            return contains == null ? base.GetDetailsString() : base.GetDetailsString() + "Contains: " + str;
         }
 
         public override void EditorUpdate()
         {
-            if (this._previewSprite == null || this._previewType != this.contains)
+            if (_previewSprite == null || _previewType != contains)
             {
-                if (this._preview == null)
-                    this._preview = new RenderTarget2D(32, 32);
-                Thing containedInstance = this.GetContainedInstance();
+                if (_preview == null)
+                    _preview = new RenderTarget2D(32, 32);
+                Thing containedInstance = GetContainedInstance();
                 if (containedInstance != null)
-                    this._previewSprite = containedInstance.GetEditorImage(32, 32, true, target: this._preview);
-                this._previewType = this.contains;
+                    _previewSprite = containedInstance.GetEditorImage(32, 32, true, target: _preview);
+                _previewType = contains;
             }
             base.EditorUpdate();
         }
@@ -123,23 +123,23 @@ namespace DuckGame
         public override void DrawHoverInfo()
         {
             string text = "EMPTY";
-            if (this.contains != null)
-                text = this.contains.Name;
-            Graphics.DrawString(text, this.position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
-            if (this.radius.value == 0)
+            if (contains != null)
+                text = contains.Name;
+            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
+            if (radius.value == 0)
                 return;
-            Graphics.DrawCircle(this.position, radius.value, Color.Red, depth: ((Depth)0.9f));
+            Graphics.DrawCircle(position, radius.value, Color.Red, depth: ((Depth)0.9f));
         }
 
         public override void Draw()
         {
             base.Draw();
-            if (this._previewSprite == null)
+            if (_previewSprite == null)
                 return;
-            this._previewSprite.depth = this.depth + 1;
-            this._previewSprite.scale = new Vec2(0.5f, 0.5f);
-            this._previewSprite.CenterOrigin();
-            Graphics.Draw(this._previewSprite, this.x, this.y);
+            _previewSprite.depth = depth + 1;
+            _previewSprite.scale = new Vec2(0.5f, 0.5f);
+            _previewSprite.CenterOrigin();
+            Graphics.Draw(_previewSprite, x, y);
         }
     }
 }

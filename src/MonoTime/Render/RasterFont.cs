@@ -19,38 +19,38 @@ namespace DuckGame
 
         public float size
         {
-            get => this.data.fontSize;
+            get => data.fontSize;
             set
             {
                 if (value == data.fontSize)
                     return;
-                this.Rebuild(this.data.name, value);
+                Rebuild(data.name, value);
             }
         }
 
-        public RasterFont(string pFont, float pSize) => this.Rebuild(pFont, pSize);
+        public RasterFont(string pFont, float pSize) => Rebuild(pFont, pSize);
 
         public override Sprite _texture
         {
             get
             {
-                if (this._textureInternal == null)
+                if (_textureInternal == null)
                 {
-                    Tex2D tex = new Tex2D(this.data.colorsWidth, this.data.colorsHeight);
-                    if (this.data.colors != null)
-                        tex.SetData<uint>(this.data.colors);
-                    this._textureInternal = new Sprite(tex);
+                    Tex2D tex = new Tex2D(data.colorsWidth, data.colorsHeight);
+                    if (data.colors != null)
+                        tex.SetData<uint>(data.colors);
+                    _textureInternal = new Sprite(tex);
                 }
-                return this._textureInternal;
+                return _textureInternal;
             }
-            set => this._textureInternal = value;
+            set => _textureInternal = value;
         }
 
         ~RasterFont()
         {
-            if (this._textureInternal == null)
+            if (_textureInternal == null)
                 return;
-            this._textureInternal.texture.Dispose();
+            _textureInternal.texture.Dispose();
         }
 
         public static string GetName(string pFont) => FontGDIContext.GetName(pFont);
@@ -59,27 +59,27 @@ namespace DuckGame
         {
             if (pFont != null && pFont != "NULLDUCKFONTDATA")
             {
-                this.data = FontGDIContext.CreateRasterFontData(pFont, pSize);
-                this._texture = null;
-                this._widths = new List<Rectangle>();
-                foreach (BitmapFont_CharacterInfo character in this.data.characters)
-                    this._widths.Add(character.area);
-                this._charHeight = (int)this.data.fontHeight;
-                this._characterInfos = this.data.characters;
-                this._rasterData = this.data;
+                data = FontGDIContext.CreateRasterFontData(pFont, pSize);
+                _texture = null;
+                _widths = new List<Rectangle>();
+                foreach (BitmapFont_CharacterInfo character in data.characters)
+                    _widths.Add(character.area);
+                _charHeight = (int)data.fontHeight;
+                _characterInfos = data.characters;
+                _rasterData = data;
             }
             else
-                this.data = new RasterFont.Data()
+                data = new RasterFont.Data()
                 {
                     name = "NULLDUCKFONTDATA",
                     fontSize = pSize
                 };
-            if (this._widths != null && this._widths.Count != 0)
+            if (_widths != null && _widths.Count != 0)
                 return;
-            this.Construct("smallFont");
+            Construct("smallFont");
         }
 
-        public string Serialize() => this.data.name + "^" + this.data.fontSize.ToString();
+        public string Serialize() => data.name + "^" + data.fontSize.ToString();
 
         public static RasterFont Deserialize(string pData)
         {

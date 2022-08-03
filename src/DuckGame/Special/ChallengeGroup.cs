@@ -16,6 +16,6 @@ namespace DuckGame
         public int trophiesRequired;
         public string name;
 
-        public string GetNameForDisplay() => this.name.ToUpperInvariant();
+        public string GetNameForDisplay() => name.ToUpperInvariant();
     }
 }

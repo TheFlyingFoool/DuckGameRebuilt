@@ -18,24 +18,24 @@ namespace DuckGame
         public WaterRifle(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 9;
-            this._ammoType = new AT9mm();
-            this._type = "gun";
-            this.graphic = new Sprite("waterGun");
-            this.center = new Vec2(11f, 7f);
-            this.collisionOffset = new Vec2(-11f, -6f);
-            this.collisionSize = new Vec2(23f, 13f);
-            this._barrelOffsetTL = new Vec2(24f, 6f);
-            this._fireSound = "pistolFire";
-            this._kickForce = 3f;
-            this._holdOffset = new Vec2(-1f, 0f);
-            this.loseAccuracy = 0.1f;
-            this.maxAccuracyLost = 0.6f;
-            this._bio = "";
-            this._editorName = "Water Blaster";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this._stream = new FluidStream(this.x, this.y, new Vec2(1f, 0f), 2f);
-            this.isFatal = false;
+            ammo = 9;
+            _ammoType = new AT9mm();
+            _type = "gun";
+            graphic = new Sprite("waterGun");
+            center = new Vec2(11f, 7f);
+            collisionOffset = new Vec2(-11f, -6f);
+            collisionSize = new Vec2(23f, 13f);
+            _barrelOffsetTL = new Vec2(24f, 6f);
+            _fireSound = "pistolFire";
+            _kickForce = 3f;
+            _holdOffset = new Vec2(-1f, 0f);
+            loseAccuracy = 0.1f;
+            maxAccuracyLost = 0.6f;
+            _bio = "";
+            _editorName = "Water Blaster";
+            physicsMaterial = PhysicsMaterial.Metal;
+            _stream = new FluidStream(x, y, new Vec2(1f, 0f), 2f);
+            isFatal = false;
         }
 
         public override void Initialize()
@@ -54,15 +54,15 @@ namespace DuckGame
 
         public override void OnHoldAction()
         {
-            ++this._wait;
-            if (this._wait != 3)
+            ++_wait;
+            if (_wait != 3)
                 return;
-            this._stream.sprayAngle = this.barrelVector * 2f;
-            this._stream.position = this.barrelPosition;
+            _stream.sprayAngle = barrelVector * 2f;
+            _stream.position = barrelPosition;
             FluidData dat = Fluid.Water;
             dat.amount = 0.01f;
-            this._stream.Feed(dat);
-            this._wait = 0;
+            _stream.Feed(dat);
+            _wait = 0;
         }
     }
 }

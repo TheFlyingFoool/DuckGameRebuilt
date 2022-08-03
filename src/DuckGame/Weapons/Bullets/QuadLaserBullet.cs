@@ -20,29 +20,29 @@ namespace DuckGame
 
         public Vec2 travel
         {
-            get => this._travel;
-            set => this._travel = value;
+            get => _travel;
+            set => _travel = value;
         }
 
         public QuadLaserBullet(float xpos, float ypos, Vec2 travel)
           : base(xpos, ypos)
         {
-            this._travel = travel;
-            this.collisionOffset = new Vec2(-1f, -1f);
-            this._collisionSize = new Vec2(2f, 2f);
+            _travel = travel;
+            collisionOffset = new Vec2(-1f, -1f);
+            _collisionSize = new Vec2(2f, 2f);
         }
 
         public override void Update()
         {
-            this._wave.Update();
-            this._wave2.Update();
-            this.timeAlive += 0.016f;
-            this.position += this._travel * 0.5f;
-            if (this.isServerForObject && (this.x > Level.current.bottomRight.x + 200.0 || this.x < Level.current.topLeft.x - 200.0))
+            _wave.Update();
+            _wave2.Update();
+            timeAlive += 0.016f;
+            position += _travel * 0.5f;
+            if (isServerForObject && (x > Level.current.bottomRight.x + 200.0 || x < Level.current.topLeft.x - 200.0))
                 Level.Remove(this);
-            foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(this.topLeft, this.bottomRight))
+            foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(topLeft, bottomRight))
             {
-                if ((this.safeFrames <= 0 || materialThing != this.safeDuck) && materialThing.isServerForObject)
+                if ((safeFrames <= 0 || materialThing != safeDuck) && materialThing.isServerForObject)
                 {
                     bool destroyed = materialThing.destroyed;
                     materialThing.Destroy(new DTIncinerate(this));
@@ -55,15 +55,15 @@ namespace DuckGame
                     }
                 }
             }
-            if (this.safeFrames > 0)
-                --this.safeFrames;
+            if (safeFrames > 0)
+                --safeFrames;
             base.Update();
         }
 
         public override void Draw()
         {
-            Graphics.DrawRect(this.position + new Vec2(-4f, -4f), this.position + new Vec2(4f, 4f), new Color(byte.MaxValue - (int)(this._wave.normalized * 90.0), 137 + (int)(this._wave.normalized * 50.0), 31 + (int)(this._wave.normalized * 30.0)), this.depth);
-            Graphics.DrawRect(this.position + new Vec2(-4f, -4f), this.position + new Vec2(4f, 4f), new Color(byte.MaxValue, 224 - (int)(this._wave2.normalized * 150.0), 90 + (int)(this._wave2.normalized * 50.0)), this.depth + 1, false);
+            Graphics.DrawRect(position + new Vec2(-4f, -4f), position + new Vec2(4f, 4f), new Color(byte.MaxValue - (int)(_wave.normalized * 90.0), 137 + (int)(_wave.normalized * 50.0), 31 + (int)(_wave.normalized * 30.0)), depth);
+            Graphics.DrawRect(position + new Vec2(-4f, -4f), position + new Vec2(4f, 4f), new Color(byte.MaxValue, 224 - (int)(_wave2.normalized * 150.0), 90 + (int)(_wave2.normalized * 50.0)), depth + 1, false);
             base.Draw();
         }
     }

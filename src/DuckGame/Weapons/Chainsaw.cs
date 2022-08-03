@@ -62,49 +62,49 @@ namespace DuckGame
 
         public override float angle
         {
-            get => (base.angle + _hold * this.offDir + _animRot * this.offDir + _rotSway * this.offDir);
-            set => this._angle = value;
+            get => (base.angle + _hold * offDir + _animRot * offDir + _rotSway * offDir);
+            set => _angle = value;
         }
 
-        public Vec2 barrelStartPos => this.position + (this.Offset(this.barrelOffset) - this.position).normalized * 2f;
+        public Vec2 barrelStartPos => position + (Offset(barrelOffset) - position).normalized * 2f;
 
-        public override Vec2 tapedOffset => !this.tapedIsGun1 ? Vec2.Zero : new Vec2(6f, 0f);
+        public override Vec2 tapedOffset => !tapedIsGun1 ? Vec2.Zero : new Vec2(6f, 0f);
 
-        public bool throttle => this._throttle;
+        public bool throttle => _throttle;
 
         public Chainsaw(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 4;
-            this._ammoType = new ATLaser();
-            this._ammoType.range = 170f;
-            this._ammoType.accuracy = 0.8f;
-            this._type = "gun";
-            this._sprite = new SpriteMap("chainsaw", 29, 13);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 7f);
-            this.collisionOffset = new Vec2(-8f, -6f);
-            this.collisionSize = new Vec2(20f, 11f);
-            this._barrelOffsetTL = new Vec2(27f, 8f);
-            this._fireSound = "smg";
-            this._fullAuto = true;
-            this._fireWait = 1f;
-            this._kickForce = 3f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(-4f, 4f);
-            this.weight = 5f;
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this._swordSwing = new SpriteMap("swordSwipe", 32, 32);
-            this._swordSwing.AddAnimation("swing", 0.6f, false, 0, 1, 1, 2);
-            this._swordSwing.currentAnimation = "swing";
-            this._swordSwing.speed = 0f;
-            this._swordSwing.center = new Vec2(9f, 25f);
-            this.throwSpeedMultiplier = 0.5f;
-            this._bouncy = 0.5f;
-            this._impactThreshold = 0.3f;
-            this.collideSounds.Add("landTV");
-            this.holsterAngle = -10f;
-            this.editorTooltip = "The perfect tool for cutting wood or carving decorative ice sculptures.";
+            ammo = 4;
+            _ammoType = new ATLaser();
+            _ammoType.range = 170f;
+            _ammoType.accuracy = 0.8f;
+            _type = "gun";
+            _sprite = new SpriteMap("chainsaw", 29, 13);
+            graphic = _sprite;
+            center = new Vec2(8f, 7f);
+            collisionOffset = new Vec2(-8f, -6f);
+            collisionSize = new Vec2(20f, 11f);
+            _barrelOffsetTL = new Vec2(27f, 8f);
+            _fireSound = "smg";
+            _fullAuto = true;
+            _fireWait = 1f;
+            _kickForce = 3f;
+            _fireRumble = RumbleIntensity.Kick;
+            _holdOffset = new Vec2(-4f, 4f);
+            weight = 5f;
+            physicsMaterial = PhysicsMaterial.Metal;
+            _swordSwing = new SpriteMap("swordSwipe", 32, 32);
+            _swordSwing.AddAnimation("swing", 0.6f, false, 0, 1, 1, 2);
+            _swordSwing.currentAnimation = "swing";
+            _swordSwing.speed = 0f;
+            _swordSwing.center = new Vec2(9f, 25f);
+            throwSpeedMultiplier = 0.5f;
+            _bouncy = 0.5f;
+            _impactThreshold = 0.3f;
+            collideSounds.Add("landTV");
+            holsterAngle = -10f;
+            editorTooltip = "The perfect tool for cutting wood or carving decorative ice sculptures.";
         }
 
         public override void Initialize()
@@ -112,39 +112,39 @@ namespace DuckGame
              _sound = new LoopingSound("chainsawIdle", multiSound: "chainsawIdleMulti");
             _bladeSound = new LoopingSound("chainsawBladeLoop", multiSound: "chainsawBladeLoopMulti");
             _bladeSoundLow = new LoopingSound("chainsawBladeLoopLow", multiSound: "chainsawBladeLoopLowMulti");
-            this._sprite = new SpriteMap("chainsaw", 29, 13);
-            if ((bool)this.souped)
-                this._sprite = new SpriteMap("turbochainsaw", 29, 13);
-            this.graphic = _sprite;
+            _sprite = new SpriteMap("chainsaw", 29, 13);
+            if ((bool)souped)
+                _sprite = new SpriteMap("turbochainsaw", 29, 13);
+            graphic = _sprite;
             base.Initialize();
         }
 
         public override void Terminate()
         {
-            this._sound.Kill();
-            this._bladeSound.Kill();
-            this._bladeSoundLow.Kill();
+            _sound.Kill();
+            _bladeSound.Kill();
+            _bladeSoundLow.Kill();
         }
 
         public void Shing(Thing wall)
         {
-            if (this._shing)
+            if (_shing)
                 return;
-            this._struggling = true;
-            this._shing = true;
+            _struggling = true;
+            _shing = true;
             if (!Chainsaw._playedShing)
             {
                 Chainsaw._playedShing = true;
                 SFX.Play("chainsawClash", Rando.Float(0.4f, 0.55f), Rando.Float(-0.2f, 0.2f), Rando.Float(-0.1f, 0.1f));
             }
-            Vec2 normalized = (this.position - this.barrelPosition).normalized;
+            Vec2 normalized = (position - this.barrelPosition).normalized;
             Vec2 barrelPosition = this.barrelPosition;
             for (int index = 0; index < 6; ++index)
             {
                 Level.Add(Spark.New(barrelPosition.x, barrelPosition.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
                 barrelPosition += normalized * 4f;
             }
-            this._swordSwing.speed = 0f;
+            _swordSwing.speed = 0f;
             if (Recorder.currentRecording != null)
                 Recorder.currentRecording.LogAction(7);
             if (this.duck == null)
@@ -175,35 +175,35 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this.owner != null || !(with is Block))
+            if (owner != null || !(with is Block))
                 return;
-            this.Shing(with);
-            if (this.totalImpactPower <= 3f)
+            Shing(with);
+            if (totalImpactPower <= 3f)
                 return;
-            this._started = false;
+            _started = false;
         }
 
-        public override void ReturnToWorld() => this._throwSpin = 90f;
+        public override void ReturnToWorld() => _throwSpin = 90f;
 
         public void PullEngine()
         {
-            float pitch = (bool)this.souped ? 0.3f : 0f;
-            if (!this._flooded && _gas > 0f && (_warmUp > 0.5f || _engineResistance < 1f))
+            float pitch = (bool)souped ? 0.3f : 0f;
+            if (!_flooded && _gas > 0f && (_warmUp > 0.5f || _engineResistance < 1f))
             {
                 SFX.Play("chainsawFire");
-                this._started = true;
-                this._engineSpin = 1.5f;
+                _started = true;
+                _engineSpin = 1.5f;
                 for (int index = 0; index < 2; ++index)
-                    Level.Add(SmallSmoke.New(this.x + offDir * 4, this.y + 5f));
-                this._flooded = false;
-                this._flood = 0f;
+                    Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f));
+                _flooded = false;
+                _flood = 0f;
             }
             else
             {
-                if (this._flooded && _gas > 0f)
+                if (_flooded && _gas > 0f)
                 {
                     SFX.Play("chainsawFlooded", 0.9f, Rando.Float(-0.2f, 0.2f));
-                    this._engineSpin = 1.6f;
+                    _engineSpin = 1.6f;
                 }
                 else
                 {
@@ -211,20 +211,20 @@ namespace DuckGame
                         SFX.Play("chainsawPull", pitch: pitch);
                     else
                         SFX.Play("chainsawFire", pitch: pitch);
-                    this._engineSpin = 0.8f;
+                    _engineSpin = 0.8f;
                 }
                 if (Rando.Float(1f) > 0.8f)
                 {
-                    this._flooded = false;
-                    this._flood = 0f;
+                    _flooded = false;
+                    _flood = 0f;
                 }
             }
-            this._engineResistance -= 0.5f;
+            _engineResistance -= 0.5f;
             if (_gas <= 0f)
                 return;
-            int num = this._flooded ? 4 : 2;
+            int num = _flooded ? 4 : 2;
             for (int index = 0; index < num; ++index)
-                Level.Add(SmallSmoke.New(this.x + offDir * 4, this.y + 5f));
+                Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f));
         }
 
         public override void PreUpdateTapedPositioning(TapedGun pTaped)
@@ -249,412 +249,412 @@ namespace DuckGame
             base.UpdateTapedPositioning(pTaped);
             if (pTaped.gun1 != this)
                 return;
-            this.offDir = pTaped.offDir;
-            if (this.offDir < 0)
-                this.angleDegrees -= 200f;
+            offDir = pTaped.offDir;
+            if (offDir < 0)
+                angleDegrees -= 200f;
             else
-                this.angleDegrees -= 160f;
+                angleDegrees -= 160f;
         }
 
         public override void Update()
         {
             base.Update();
             float num1 = 1f;
-            if ((bool)this.souped)
+            if ((bool)souped)
                 num1 = 1.3f;
-            if (this._swordSwing.finished)
-                this._swordSwing.speed = 0f;
-            if (this._hitWait > 0)
-                --this._hitWait;
-            ++this._framesExisting;
-            if (this._framesExisting > 100)
-                this._framesExisting = 100;
-            float pitch = (bool)this.souped ? 0.3f : 0f;
-            this._sound.lerpVolume = !this._started || this._throttle ? 0f : 0.6f;
-            this._sound.pitch = pitch;
-            if (this.isServerForObject && this.duck != null)
-                RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent((float)(_engineSpin / 4f / 12f + (this._started ? 0.02f : 0f)), 0.05f, 0f));
-            if (this._started)
+            if (_swordSwing.finished)
+                _swordSwing.speed = 0f;
+            if (_hitWait > 0)
+                --_hitWait;
+            ++_framesExisting;
+            if (_framesExisting > 100)
+                _framesExisting = 100;
+            float pitch = (bool)souped ? 0.3f : 0f;
+            _sound.lerpVolume = !_started || _throttle ? 0f : 0.6f;
+            _sound.pitch = pitch;
+            if (isServerForObject && duck != null)
+                RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent((float)(_engineSpin / 4f / 12f + (_started ? 0.02f : 0f)), 0.05f, 0f));
+            if (_started)
             {
-                this._warmUp += 1f / 1000f;
+                _warmUp += 1f / 1000f;
                 if (_warmUp > 1f)
-                    this._warmUp = 1f;
-                if (!this._puffClick && this._idleWave > 0.9f)
+                    _warmUp = 1f;
+                if (!_puffClick && _idleWave > 0.9f)
                 {
-                    this._skipSmoke = !this._skipSmoke;
-                    if (this._throttle || !this._skipSmoke)
+                    _skipSmoke = !_skipSmoke;
+                    if (_throttle || !_skipSmoke)
                     {
-                        Level.Add(SmallSmoke.New(this.x + offDir * 4, this.y + 5f, this._smokeFlipper ? -0.1f : 0.8f, 0.7f));
-                        this._smokeFlipper = !this._smokeFlipper;
-                        this._puffClick = true;
+                        Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f, _smokeFlipper ? -0.1f : 0.8f, 0.7f));
+                        _smokeFlipper = !_smokeFlipper;
+                        _puffClick = true;
                     }
                 }
-                else if (this._puffClick && (float)this._idleWave < 0f)
-                    this._puffClick = false;
-                if (this._pullState < 0)
+                else if (_puffClick && (float)_idleWave < 0f)
+                    _puffClick = false;
+                if (_pullState < 0)
                 {
-                    float num2 = (1f + Maths.NormalizeSection(this._engineSpin, 1f, 2f) * 2f);
-                    float num3 = this._idleWave;
+                    float num2 = (1f + Maths.NormalizeSection(_engineSpin, 1f, 2f) * 2f);
+                    float num3 = _idleWave;
                     if (num2 > 1f)
-                        num3 = (float)this._spinWave;
-                    this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(0f, (2f + num3 * num2)), 0.23f);
-                    this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(1f, (2f + num3 * num2)), 0.23f);
-                    this._rotSway = (this._idleWave.normalized * (Maths.NormalizeSection(this._engineSpin, 1f, 2f) * 3f) * 0.03f);
+                        num3 = (float)_spinWave;
+                    handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(0f, (2f + num3 * num2)), 0.23f);
+                    _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(1f, (2f + num3 * num2)), 0.23f);
+                    _rotSway = (_idleWave.normalized * (Maths.NormalizeSection(_engineSpin, 1f, 2f) * 3f) * 0.03f);
                 }
                 else
-                    this._rotSway = 0f;
-                if (!this.infinite.value)
+                    _rotSway = 0f;
+                if (!infinite.value)
                 {
-                    this._gas -= 3E-05f;
-                    if (this._throttle)
-                        this._gas -= 0.0002f;
+                    _gas -= 3E-05f;
+                    if (_throttle)
+                        _gas -= 0.0002f;
                     if (_gas < 0f)
                     {
-                        this._gas = 0f;
-                        this._started = false;
-                        this._throttle = false;
+                        _gas = 0f;
+                        _started = false;
+                        _throttle = false;
                     }
                 }
-                if (this._triggerHeld)
+                if (_triggerHeld)
                 {
-                    if (this._releasedSincePull)
+                    if (_releasedSincePull)
                     {
-                        if (!this._throttle)
+                        if (!_throttle)
                         {
-                            this._throttle = true;
+                            _throttle = true;
                             SFX.Play("chainsawBladeRevUp", 0.5f, pitch);
                         }
-                        this._engineSpin = Lerp.FloatSmooth(this._engineSpin, 4f, 0.1f);
+                        _engineSpin = Lerp.FloatSmooth(_engineSpin, 4f, 0.1f);
                     }
                 }
                 else
                 {
-                    if (this._throttle)
+                    if (_throttle)
                     {
-                        this._throttle = false;
+                        _throttle = false;
                         if (_engineSpin > 1.7f)
                             SFX.Play("chainsawBladeRevDown", 0.5f, pitch);
                     }
-                    this._engineSpin = Lerp.FloatSmooth(this._engineSpin, 0f, 0.1f);
-                    this._releasedSincePull = true;
+                    _engineSpin = Lerp.FloatSmooth(_engineSpin, 0f, 0.1f);
+                    _releasedSincePull = true;
                 }
             }
             else
             {
-                this._warmUp -= 1f / 1000f;
+                _warmUp -= 1f / 1000f;
                 if (_warmUp < 0f)
-                    this._warmUp = 0f;
-                this._releasedSincePull = false;
-                this._throttle = false;
+                    _warmUp = 0f;
+                _releasedSincePull = false;
+                _throttle = false;
             }
-            this._bladeSound.lerpSpeed = 0.1f;
-            this._throttleWait = Lerp.Float(this._throttleWait, this._throttle ? 1f : 0f, 0.07f);
-            this._bladeSound.lerpVolume = _throttleWait > 0.96f ? 0.6f : 0f;
-            if (this._struggling)
-                this._bladeSound.lerpVolume = 0f;
-            this._bladeSoundLow.lerpVolume = _throttleWait <= 0.959999978542328 || !this._struggling ? 0f : 0.6f;
-            this._bladeSound.pitch = pitch;
-            this._bladeSoundLow.pitch = pitch;
-            if (this.owner == null)
+            _bladeSound.lerpSpeed = 0.1f;
+            _throttleWait = Lerp.Float(_throttleWait, _throttle ? 1f : 0f, 0.07f);
+            _bladeSound.lerpVolume = _throttleWait > 0.96f ? 0.6f : 0f;
+            if (_struggling)
+                _bladeSound.lerpVolume = 0f;
+            _bladeSoundLow.lerpVolume = _throttleWait <= 0.959999978542328 || !_struggling ? 0f : 0.6f;
+            _bladeSound.pitch = pitch;
+            _bladeSoundLow.pitch = pitch;
+            if (owner == null)
             {
-                this.collisionOffset = new Vec2(-8f, -6f);
-                this.collisionSize = new Vec2(13f, 11f);
+                collisionOffset = new Vec2(-8f, -6f);
+                collisionSize = new Vec2(13f, 11f);
             }
-            else if (this.duck != null && (this.duck.sliding || this.duck.crouch))
+            else if (duck != null && (duck.sliding || duck.crouch))
             {
-                this.collisionOffset = new Vec2(-8f, -6f);
-                this.collisionSize = new Vec2(6f, 11f);
+                collisionOffset = new Vec2(-8f, -6f);
+                collisionSize = new Vec2(6f, 11f);
             }
             else
             {
-                this.collisionOffset = new Vec2(-8f, -6f);
-                this.collisionSize = new Vec2(10f, 11f);
+                collisionOffset = new Vec2(-8f, -6f);
+                collisionSize = new Vec2(10f, 11f);
             }
-            if (this.owner != null)
+            if (owner != null)
             {
-                this._resetDuck = false;
-                if (this._pullState == -1)
+                _resetDuck = false;
+                if (_pullState == -1)
                 {
-                    if (!this._started)
+                    if (!_started)
                     {
-                        this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(0f, 2f), 0.25f);
-                        this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(1f, 2f), 0.23f);
+                        handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(0f, 2f), 0.25f);
+                        _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(1f, 2f), 0.23f);
                     }
-                    this._upWait = 0f;
+                    _upWait = 0f;
                 }
-                else if (this._pullState == 0)
+                else if (_pullState == 0)
                 {
-                    this._animRot = Lerp.FloatSmooth(this._animRot, -0.4f, 0.15f);
-                    this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(-2f, -2f), 0.25f);
-                    this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(-4f, 4f), 0.23f);
+                    _animRot = Lerp.FloatSmooth(_animRot, -0.4f, 0.15f);
+                    handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(-2f, -2f), 0.25f);
+                    _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(-4f, 4f), 0.23f);
                     if (_animRot <= -0.35f)
                     {
-                        this._animRot = -0.4f;
-                        this._pullState = 1;
-                        this.PullEngine();
+                        _animRot = -0.4f;
+                        _pullState = 1;
+                        PullEngine();
                     }
-                    this._upWait = 0f;
+                    _upWait = 0f;
                 }
-                else if (this._pullState == 1)
+                else if (_pullState == 1)
                 {
-                    this._releasePull = false;
-                    this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(2f, 3f), 0.23f);
-                    this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(-4f, -2f), 0.23f);
-                    this._animRot = Lerp.FloatSmooth(this._animRot, -0.5f, 0.07f);
+                    _releasePull = false;
+                    _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(2f, 3f), 0.23f);
+                    handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(-4f, -2f), 0.23f);
+                    _animRot = Lerp.FloatSmooth(_animRot, -0.5f, 0.07f);
                     if (_animRot < -0.45f)
                     {
-                        this._animRot = -0.5f;
-                        this._pullState = 2;
+                        _animRot = -0.5f;
+                        _pullState = 2;
                     }
-                    this._upWait = 0f;
+                    _upWait = 0f;
                 }
-                else if (this._pullState == 2)
+                else if (_pullState == 2)
                 {
-                    if (this._releasePull || !this._triggerHeld)
+                    if (_releasePull || !_triggerHeld)
                     {
-                        this._releasePull = true;
-                        if (this._started)
+                        _releasePull = true;
+                        if (_started)
                         {
-                            this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(0f, 2f + this._idleWave.normalized), 0.23f);
-                            this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(1f, 2f + this._idleWave.normalized), 0.23f);
-                            this._animRot = Lerp.FloatSmooth(this._animRot, 0f, 0.1f);
+                            handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(0f, 2f + _idleWave.normalized), 0.23f);
+                            _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(1f, 2f + _idleWave.normalized), 0.23f);
+                            _animRot = Lerp.FloatSmooth(_animRot, 0f, 0.1f);
                             if (_animRot > -0.07f)
                             {
-                                this._animRot = 0f;
-                                this._pullState = -1;
+                                _animRot = 0f;
+                                _pullState = -1;
                             }
                         }
                         else
                         {
-                            this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(-4f, 4f), 0.24f);
-                            this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(-2f, -2f), 0.24f);
-                            this._animRot = Lerp.FloatSmooth(this._animRot, -0.4f, 0.12f);
+                            _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(-4f, 4f), 0.24f);
+                            handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(-2f, -2f), 0.24f);
+                            _animRot = Lerp.FloatSmooth(_animRot, -0.4f, 0.12f);
                             if (_animRot > -0.44f)
                             {
-                                this._releasePull = false;
-                                this._animRot = -0.4f;
-                                this._pullState = 3;
-                                this._holdOffset = new Vec2(-4f, 4f);
-                                this.handOffset = new Vec2(-2f, -2f);
+                                _releasePull = false;
+                                _animRot = -0.4f;
+                                _pullState = 3;
+                                _holdOffset = new Vec2(-4f, 4f);
+                                handOffset = new Vec2(-2f, -2f);
                             }
                         }
                     }
-                    this._upWait = 0f;
+                    _upWait = 0f;
                 }
-                else if (this._pullState == 3)
+                else if (_pullState == 3)
                 {
-                    this._releasePull = false;
-                    this._upWait += 0.1f;
+                    _releasePull = false;
+                    _upWait += 0.1f;
                     if (_upWait > 6.0)
-                        this._pullState = -1;
+                        _pullState = -1;
                 }
-                this._bladeSpin += this._engineSpin;
+                _bladeSpin += _engineSpin;
                 while (_bladeSpin >= 1.0)
                 {
-                    --this._bladeSpin;
-                    int num4 = this._sprite.frame + 1;
+                    --_bladeSpin;
+                    int num4 = _sprite.frame + 1;
                     if (num4 > 15)
                         num4 = 0;
-                    this._sprite.frame = num4;
+                    _sprite.frame = num4;
                 }
-                this._engineSpin = Lerp.FloatSmooth(this._engineSpin, 0f, 0.1f);
-                this._engineResistance = Lerp.FloatSmooth(this._engineResistance, 1f, 0.01f);
-                this._hold = -0.4f;
-                this.center = new Vec2(8f, 7f);
-                this._framesSinceThrown = 0;
+                _engineSpin = Lerp.FloatSmooth(_engineSpin, 0f, 0.1f);
+                _engineResistance = Lerp.FloatSmooth(_engineResistance, 1f, 0.01f);
+                _hold = -0.4f;
+                center = new Vec2(8f, 7f);
+                _framesSinceThrown = 0;
             }
             else
             {
-                this._rotSway = 0f;
-                this._shing = false;
-                this._animRot = Lerp.FloatSmooth(this._animRot, 0f, 0.18f);
-                if (this._framesSinceThrown == 1)
-                    this._throwSpin = this.angleDegrees;
-                this._hold = 0f;
-                this.angleDegrees = this._throwSpin;
-                this.center = new Vec2(8f, 7f);
+                _rotSway = 0f;
+                _shing = false;
+                _animRot = Lerp.FloatSmooth(_animRot, 0f, 0.18f);
+                if (_framesSinceThrown == 1)
+                    _throwSpin = angleDegrees;
+                _hold = 0f;
+                angleDegrees = _throwSpin;
+                center = new Vec2(8f, 7f);
                 bool flag1 = false;
                 bool flag2 = false;
-                if ((Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 2f || !this.grounded) && gravMultiplier > 0f)
+                if ((Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2f || !grounded) && gravMultiplier > 0f)
                 {
-                    if (!this.grounded && Level.CheckRect<Block>(this.position + new Vec2(-8f, -6f), this.position + new Vec2(8f, -2f)) != null)
+                    if (!grounded && Level.CheckRect<Block>(position + new Vec2(-8f, -6f), position + new Vec2(8f, -2f)) != null)
                         flag2 = true;
-                    if (!flag2 && !this._grounded && Level.CheckPoint<IPlatform>(this.position + new Vec2(0f, 8f)) == null)
+                    if (!flag2 && !_grounded && Level.CheckPoint<IPlatform>(position + new Vec2(0f, 8f)) == null)
                     {
-                        if (this.offDir > 0)
-                            this._throwSpin += ((Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed)) * 1f + 5f);
+                        if (offDir > 0)
+                            _throwSpin += ((Math.Abs(hSpeed) + Math.Abs(vSpeed)) * 1f + 5f);
                         else
-                            this._throwSpin -= ((Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed)) * 1f + 5f);
+                            _throwSpin -= ((Math.Abs(hSpeed) + Math.Abs(vSpeed)) * 1f + 5f);
                         flag1 = true;
                     }
                 }
                 if (!flag1 | flag2)
                 {
-                    this._throwSpin %= 360f;
+                    _throwSpin %= 360f;
                     if (_throwSpin < 0f)
-                        this._throwSpin += 360f;
+                        _throwSpin += 360f;
                     if (flag2)
-                        this._throwSpin = Math.Abs(this._throwSpin - 90f) >= Math.Abs(this._throwSpin + 90f) ? Lerp.Float(-90f, 0f, 16f) : Lerp.Float(this._throwSpin, 90f, 16f);
+                        _throwSpin = Math.Abs(_throwSpin - 90f) >= Math.Abs(_throwSpin + 90f) ? Lerp.Float(-90f, 0f, 16f) : Lerp.Float(_throwSpin, 90f, 16f);
                     else if (_throwSpin > 90f && _throwSpin < 270f)
                     {
-                        this._throwSpin = Lerp.Float(this._throwSpin, 180f, 14f);
+                        _throwSpin = Lerp.Float(_throwSpin, 180f, 14f);
                     }
                     else
                     {
                         if (_throwSpin > 180.0)
-                            this._throwSpin -= 360f;
+                            _throwSpin -= 360f;
                         else if (_throwSpin < -180.0)
-                            this._throwSpin += 360f;
-                        this._throwSpin = Lerp.Float(this._throwSpin, 0f, 14f);
+                            _throwSpin += 360f;
+                        _throwSpin = Lerp.Float(_throwSpin, 0f, 14f);
                     }
                 }
             }
-            if (Math.Abs(this.angleDegrees) > 90f && Math.Abs(this.angleDegrees) < 270f && !this.infinite.value)
+            if (Math.Abs(angleDegrees) > 90f && Math.Abs(angleDegrees) < 270f && !infinite.value)
             {
-                if (this.isServerForObject)
+                if (isServerForObject)
                 {
-                    this._flood += 0.005f;
+                    _flood += 0.005f;
                     if (_flood > 1f)
                     {
-                        this._flooded = true;
-                        this._started = false;
+                        _flooded = true;
+                        _started = false;
                     }
                 }
-                ++this._gasDripFrames;
-                if (_gas > 0f && this._flooded && this._gasDripFrames > 2)
+                ++_gasDripFrames;
+                if (_gas > 0f && _flooded && _gasDripFrames > 2)
                 {
                     FluidData gas = Fluid.Gas;
                     gas.amount = 3f / 1000f;
-                    this._gas -= 0.005f;
+                    _gas -= 0.005f;
                     if (_gas < 0.0)
-                        this._gas = 0f;
-                    Level.Add(new Fluid(this.x, this.y, Vec2.Zero, gas));
-                    this._gasDripFrames = 0;
+                        _gas = 0f;
+                    Level.Add(new Fluid(x, y, Vec2.Zero, gas));
+                    _gasDripFrames = 0;
                 }
-                if (_gas <= 0.0 && this.isServerForObject)
-                    this._started = false;
+                if (_gas <= 0.0 && isServerForObject)
+                    _started = false;
             }
-            else if (this.isServerForObject)
+            else if (isServerForObject)
             {
-                this._flood -= 0.008f;
+                _flood -= 0.008f;
                 if (_flood < 0.0)
-                    this._flood = 0f;
+                    _flood = 0f;
             }
-            if (this.duck != null)
+            if (duck != null)
             {
-                this.duck.frictionMult = 1f;
-                if (this._skipSpark > 0)
+                duck.frictionMult = 1f;
+                if (_skipSpark > 0)
                 {
-                    ++this._skipSpark;
-                    if (this._skipSpark > 2)
-                        this._skipSpark = 0;
+                    ++_skipSpark;
+                    if (_skipSpark > 2)
+                        _skipSpark = 0;
                 }
-                if (this.duck.sliding && this._throttle && !this.tapedIsGun2 && this._skipSpark == 0)
+                if (duck.sliding && _throttle && !tapedIsGun2 && _skipSpark == 0)
                 {
-                    if (Level.CheckLine<Block>(this.barrelStartPos + new Vec2(0f, 8f), this.barrelPosition + new Vec2(0f, 8f)) != null)
+                    if (Level.CheckLine<Block>(barrelStartPos + new Vec2(0f, 8f), barrelPosition + new Vec2(0f, 8f)) != null)
                     {
-                        this._skipSpark = 1;
-                        Vec2 vec2 = this.position + this.barrelVector * 5f;
+                        _skipSpark = 1;
+                        Vec2 vec2 = position + barrelVector * 5f;
                         for (int index = 0; index < 2; ++index)
                         {
                             Level.Add(Spark.New(vec2.x, vec2.y, new Vec2(offDir * Rando.Float(0f, 2f), Rando.Float(0.5f, 1.5f))));
-                            vec2 += this.barrelVector * 2f;
-                            this._fireTrailWait -= 0.5f;
-                            if ((bool)this.souped && _fireTrailWait <= 0.0)
+                            vec2 += barrelVector * 2f;
+                            _fireTrailWait -= 0.5f;
+                            if ((bool)souped && _fireTrailWait <= 0.0)
                             {
-                                this._fireTrailWait = 1f;
+                                _fireTrailWait = 1f;
                                 SmallFire smallFire = SmallFire.New(vec2.x, vec2.y, offDir * Rando.Float(0f, 2f), Rando.Float(0.5f, 1.5f));
                                 smallFire.waitToHurt = Rando.Float(1f, 2f);
-                                smallFire.whoWait = this.owner as Duck;
+                                smallFire.whoWait = owner as Duck;
                                 Level.Add(smallFire);
                             }
                         }
-                        if (this.offDir > 0 && this.owner.hSpeed < offDir * 6 * num1)
-                            this.owner.hSpeed = offDir * 6 * num1;
-                        else if (this.offDir < 0 && this.owner.hSpeed > offDir * 6 * num1)
-                            this.owner.hSpeed = offDir * 6 * num1;
+                        if (offDir > 0 && owner.hSpeed < offDir * 6 * num1)
+                            owner.hSpeed = offDir * 6 * num1;
+                        else if (offDir < 0 && owner.hSpeed > offDir * 6 * num1)
+                            owner.hSpeed = offDir * 6 * num1;
                     }
-                    else if (this.offDir > 0 && this.owner.hSpeed < offDir * 3 * num1)
-                        this.owner.hSpeed = offDir * 3 * num1;
-                    else if (this.offDir < 0 && this.owner.hSpeed > offDir * 3 * num1)
-                        this.owner.hSpeed = offDir * 3 * num1;
+                    else if (offDir > 0 && owner.hSpeed < offDir * 3 * num1)
+                        owner.hSpeed = offDir * 3 * num1;
+                    else if (offDir < 0 && owner.hSpeed > offDir * 3 * num1)
+                        owner.hSpeed = offDir * 3 * num1;
                 }
-                if (this._pullState == -1)
+                if (_pullState == -1)
                 {
-                    if (!this._throttle)
+                    if (!_throttle)
                     {
-                        this._animRot = MathHelper.Lerp(this._animRot, 0.3f, 0.2f);
-                        this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(-2f, 2f), 0.25f);
-                        this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(-3f, 4f), 0.23f);
+                        _animRot = MathHelper.Lerp(_animRot, 0.3f, 0.2f);
+                        handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(-2f, 2f), 0.25f);
+                        _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(-3f, 4f), 0.23f);
                     }
-                    else if (this._shing)
+                    else if (_shing)
                     {
-                        this._animRot = MathHelper.Lerp(this._animRot, -1.8f, 0.4f);
-                        this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(1f, 0f), 0.25f);
-                        this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(1f, 2f), 0.23f);
+                        _animRot = MathHelper.Lerp(_animRot, -1.8f, 0.4f);
+                        handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(1f, 0f), 0.25f);
+                        _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(1f, 2f), 0.23f);
                         if (_animRot < -1.5)
-                            this._shing = false;
+                            _shing = false;
                     }
-                    else if (this.duck.crouch)
+                    else if (duck.crouch)
                     {
-                        this._animRot = this.tape == null ? MathHelper.Lerp(this._animRot, 0.4f, 0.2f) : (this.tape.gun1 != this ? MathHelper.Lerp(this._animRot, 0.4f, 0.2f) : MathHelper.Lerp(this._animRot, 0.2f, 0.2f));
-                        this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(1f, 0f), 0.25f);
-                        this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(1f, 2f), 0.23f);
+                        _animRot = tape == null ? MathHelper.Lerp(_animRot, 0.4f, 0.2f) : (tape.gun1 != this ? MathHelper.Lerp(_animRot, 0.4f, 0.2f) : MathHelper.Lerp(_animRot, 0.2f, 0.2f));
+                        handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(1f, 0f), 0.25f);
+                        _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(1f, 2f), 0.23f);
                     }
-                    else if (this.duck.inputProfile.Down("UP"))
+                    else if (duck.inputProfile.Down("UP"))
                     {
-                        this._animRot = this.tape == null ? MathHelper.Lerp(this._animRot, -0.9f, 0.2f) : (this.tape.gun1 != this ? MathHelper.Lerp(this._animRot, -0.6f, 0.2f) : MathHelper.Lerp(this._animRot, -0.4f, 0.2f));
-                        this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(1f, 0f), 0.25f);
-                        this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(1f, 2f), 0.23f);
+                        _animRot = tape == null ? MathHelper.Lerp(_animRot, -0.9f, 0.2f) : (tape.gun1 != this ? MathHelper.Lerp(_animRot, -0.6f, 0.2f) : MathHelper.Lerp(_animRot, -0.4f, 0.2f));
+                        handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(1f, 0f), 0.25f);
+                        _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(1f, 2f), 0.23f);
                     }
                     else
                     {
-                        this._animRot = MathHelper.Lerp(this._animRot, 0f, 0.2f);
-                        this.handOffset = Lerp.Vec2Smooth(this.handOffset, new Vec2(1f, 0f), 0.25f);
-                        this._holdOffset = Lerp.Vec2Smooth(this._holdOffset, new Vec2(1f, 2f), 0.23f);
+                        _animRot = MathHelper.Lerp(_animRot, 0f, 0.2f);
+                        handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(1f, 0f), 0.25f);
+                        _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(1f, 2f), 0.23f);
                     }
                 }
             }
-            else if (!this._resetDuck && this.prevOwner != null)
+            else if (!_resetDuck && prevOwner != null)
             {
                 if (this.prevOwner is PhysicsObject prevOwner)
                     prevOwner.frictionMult = 1f;
-                this._resetDuck = true;
+                _resetDuck = true;
             }
-            if (this._skipDebris > 0)
-                ++this._skipDebris;
-            if (this._skipDebris > 3)
-                this._skipDebris = 0;
-            this._struggling = false;
-            if (this.owner != null && this._started && this._throttle && !this._shing)
+            if (_skipDebris > 0)
+                ++_skipDebris;
+            if (_skipDebris > 3)
+                _skipDebris = 0;
+            _struggling = false;
+            if (owner != null && _started && _throttle && !_shing)
             {
-                (this.Offset(this.barrelOffset) - this.position).Normalize();
-                this.Offset(this.barrelOffset);
-                IEnumerable<IAmADuck> amAducks = Level.CheckLineAll<IAmADuck>(this.barrelStartPos, this.barrelPosition);
-                Block wall1 = Level.CheckLine<Block>(this.barrelStartPos, this.barrelPosition);
-                if (this.owner != null)
+                (Offset(barrelOffset) - position).Normalize();
+                Offset(barrelOffset);
+                IEnumerable<IAmADuck> amAducks = Level.CheckLineAll<IAmADuck>(barrelStartPos, barrelPosition);
+                Block wall1 = Level.CheckLine<Block>(barrelStartPos, barrelPosition);
+                if (owner != null)
                 {
-                    foreach (MaterialThing materialThing in Level.CheckLineAll<MaterialThing>(this.barrelStartPos, this.barrelPosition))
+                    foreach (MaterialThing materialThing in Level.CheckLineAll<MaterialThing>(barrelStartPos, barrelPosition))
                     {
                         if (materialThing.Hurt(materialThing is Door ? 1.8f : 0.5f))
                         {
-                            if (this.duck != null && this.duck.sliding && materialThing is Door && (materialThing as Door)._jammed)
+                            if (duck != null && duck.sliding && materialThing is Door && (materialThing as Door)._jammed)
                             {
                                 materialThing.Destroy(new DTImpale(this));
                             }
                             else
                             {
-                                this._struggling = true;
-                                if (this.duck != null)
-                                    this.duck.frictionMult = 4f;
-                                if (this._skipDebris == 0)
+                                _struggling = true;
+                                if (duck != null)
+                                    duck.frictionMult = 4f;
+                                if (_skipDebris == 0)
                                 {
-                                    this._skipDebris = 1;
-                                    Vec2 vec2_1 = Collision.LinePoint(this.barrelStartPos, this.barrelPosition, materialThing.rectangle);
+                                    _skipDebris = 1;
+                                    Vec2 vec2_1 = Collision.LinePoint(barrelStartPos, barrelPosition, materialThing.rectangle);
                                     if (vec2_1 != Vec2.Zero)
                                     {
-                                        Vec2 vec2_2 = vec2_1 + this.barrelVector * Rando.Float(0f, 3f);
-                                        Vec2 vec2_3 = -this.barrelVector.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero);
+                                        Vec2 vec2_2 = vec2_1 + barrelVector * Rando.Float(0f, 3f);
+                                        Vec2 vec2_3 = -barrelVector.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero);
                                         if (materialThing.physicsMaterial == PhysicsMaterial.Wood)
                                         {
                                             WoodDebris woodDebris = WoodDebris.New(vec2_2.x, vec2_2.y);
@@ -691,44 +691,44 @@ namespace DuckGame
                     case Door _:
                         foreach (Sword wall2 in Level.current.things[typeof(Sword)])
                         {
-                            if (wall2.owner != null && wall2.crouchStance && !wall2.jabStance && Collision.LineIntersect(this.barrelStartPos, this.barrelPosition, wall2.barrelStartPos, wall2.barrelPosition))
+                            if (wall2.owner != null && wall2.crouchStance && !wall2.jabStance && Collision.LineIntersect(barrelStartPos, barrelPosition, wall2.barrelStartPos, wall2.barrelPosition))
                             {
-                                this.Shing(wall2);
+                                Shing(wall2);
                                 wall2.Shing();
                                 wall2.owner.hSpeed += offDir * 3f;
                                 wall2.owner.vSpeed -= 2f;
-                                this.duck.hSpeed += -this.offDir * 3f;
-                                this.duck.vSpeed -= 2f;
+                                duck.hSpeed += -offDir * 3f;
+                                duck.vSpeed -= 2f;
                                 if (wall2.duck != null)
                                     wall2.duck.crippleTimer = 1f;
-                                this.duck.crippleTimer = 1f;
+                                duck.crippleTimer = 1f;
                                 flag = true;
                             }
                         }
                         if (!flag)
                         {
                             Thing ignore = null;
-                            if (this.duck != null)
-                                ignore = this.duck.GetEquipment(typeof(Helmet));
-                            QuadLaserBullet wall3 = Level.CheckLine<QuadLaserBullet>(this.position, this.barrelPosition);
+                            if (duck != null)
+                                ignore = duck.GetEquipment(typeof(Helmet));
+                            QuadLaserBullet wall3 = Level.CheckLine<QuadLaserBullet>(position, barrelPosition);
                             if (wall3 != null)
                             {
-                                this.Shing(wall3);
+                                Shing(wall3);
                                 Vec2 vec2 = wall3.travel;
                                 float length = vec2.length;
                                 float num5 = 1f;
-                                if (this.offDir > 0 && vec2.x < 0.0)
+                                if (offDir > 0 && vec2.x < 0.0)
                                     num5 = 1.5f;
-                                else if (this.offDir < 0 && vec2.x > 0.0)
+                                else if (offDir < 0 && vec2.x > 0.0)
                                     num5 = 1.5f;
-                                vec2 = this.offDir <= 0 ? new Vec2(-length * num5, 0f) : new Vec2(length * num5, 0f);
+                                vec2 = offDir <= 0 ? new Vec2(-length * num5, 0f) : new Vec2(length * num5, 0f);
                                 wall3.travel = vec2;
                                 break;
                             }
-                            Helmet wall4 = Level.CheckLine<Helmet>(this.barrelStartPos, this.barrelPosition, ignore);
+                            Helmet wall4 = Level.CheckLine<Helmet>(barrelStartPos, barrelPosition, ignore);
                             if (wall4 != null && wall4.equippedDuck != null && wall4.owner != null)
                             {
-                                this.Shing(wall4);
+                                Shing(wall4);
                                 if (wall4.owner != null)
                                 {
                                     wall4.owner.hSpeed += offDir * 3f;
@@ -740,12 +740,12 @@ namespace DuckGame
                                 flag = true;
                                 break;
                             }
-                            if (this.duck != null)
-                                ignore = this.duck.GetEquipment(typeof(ChestPlate));
-                            ChestPlate wall5 = Level.CheckLine<ChestPlate>(this.barrelStartPos, this.barrelPosition, ignore);
+                            if (duck != null)
+                                ignore = duck.GetEquipment(typeof(ChestPlate));
+                            ChestPlate wall5 = Level.CheckLine<ChestPlate>(barrelStartPos, barrelPosition, ignore);
                             if (wall5 != null && wall5.equippedDuck != null && wall5.owner != null)
                             {
-                                this.Shing(wall5);
+                                Shing(wall5);
                                 if (wall5.owner != null)
                                 {
                                     wall5.owner.hSpeed += offDir * 3f;
@@ -761,7 +761,7 @@ namespace DuckGame
                         }
                         break;
                     default:
-                        this.Shing(wall1);
+                        Shing(wall1);
                         if (wall1 is Window)
                         {
                             wall1.Destroy(new DTImpact(this));
@@ -773,17 +773,17 @@ namespace DuckGame
                 {
                     foreach (Chainsaw wall6 in Level.current.things[typeof(Chainsaw)])
                     {
-                        if (wall6 != this && wall6.owner != null && this.duck != null && wall6 != this.tapedCompatriot && Collision.LineIntersect(this.barrelStartPos, this.barrelPosition, wall6.barrelStartPos, wall6.barrelPosition))
+                        if (wall6 != this && wall6.owner != null && duck != null && wall6 != tapedCompatriot && Collision.LineIntersect(barrelStartPos, barrelPosition, wall6.barrelStartPos, wall6.barrelPosition))
                         {
-                            this.Shing(wall6);
+                            Shing(wall6);
                             wall6.Shing(this);
                             wall6.owner.hSpeed += offDir * 2f;
                             wall6.owner.vSpeed -= 1.5f;
-                            this.duck.hSpeed += -this.offDir * 2f;
-                            this.duck.vSpeed -= 1.5f;
+                            duck.hSpeed += -offDir * 2f;
+                            duck.vSpeed -= 1.5f;
                             if (wall6.duck != null)
                                 wall6.duck.crippleTimer = 1f;
-                            this.duck.crippleTimer = 1f;
+                            duck.crippleTimer = 1f;
                             flag = true;
                             if (Recorder.currentRecording != null)
                                 Recorder.currentRecording.LogBonus();
@@ -794,81 +794,81 @@ namespace DuckGame
                 {
                     foreach (IAmADuck amAduck in amAducks)
                     {
-                        if (amAduck != this.duck)
+                        if (amAduck != duck)
                         {
-                            if (amAduck is Duck && this.duck != null)
-                                RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
+                            if (amAduck is Duck && duck != null)
+                                RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
                             if (amAduck is MaterialThing materialThing1)
                             {
                                 MaterialThing materialThing = materialThing1;
                                 materialThing.velocity += new Vec2(offDir * 0.8f, -0.8f);
                                 materialThing1.Destroy(new DTImpale(this));
-                                if (this.duck != null)
-                                    this.duck._timeSinceChainKill = 0;
+                                if (duck != null)
+                                    duck._timeSinceChainKill = 0;
                             }
                         }
                     }
                 }
             }
-            this._sound.Update();
-            this._bladeSound.Update();
-            this._bladeSoundLow.Update();
+            _sound.Update();
+            _bladeSound.Update();
+            _bladeSoundLow.Update();
         }
 
         public override void HolsterUpdate(Holster pHolster)
         {
-            this.holsterOffset = Vec2.Zero;
+            holsterOffset = Vec2.Zero;
             if (pHolster is PowerHolster)
             {
-                if (this.duck != null && this.duck.sliding)
+                if (duck != null && duck.sliding)
                 {
-                    this.holsterAngle = 90f;
-                    this.holsterOffset = new Vec2(6f, 0f);
+                    holsterAngle = 90f;
+                    holsterOffset = new Vec2(6f, 0f);
                 }
                 else
-                    this.holsterAngle = -10f;
+                    holsterAngle = -10f;
             }
             else
-                this.holsterAngle = 90f;
-            this._flood = 0f;
+                holsterAngle = 90f;
+            _flood = 0f;
         }
 
         public override void Draw()
         {
             Chainsaw._playedShing = false;
-            if (this._swordSwing.speed > 0f)
+            if (_swordSwing.speed > 0f)
             {
-                if (this.duck != null)
-                    this._swordSwing.flipH = this.duck.offDir <= 0;
-                this._swordSwing.alpha = 0.4f;
-                this._swordSwing.position = this.position;
-                this._swordSwing.depth = this.depth + 1;
-                this._swordSwing.Draw();
+                if (duck != null)
+                    _swordSwing.flipH = duck.offDir <= 0;
+                _swordSwing.alpha = 0.4f;
+                _swordSwing.position = position;
+                _swordSwing.depth = depth + 1;
+                _swordSwing.Draw();
             }
-            if (this.duck != null && (this._pullState == 1 || this._pullState == 2))
-                Graphics.DrawLine(this.Offset(new Vec2(-2f, -2f)), this.duck.armPosition + new Vec2(this.handOffset.x * offDir, this.handOffset.y), Color.White, depth: (this.duck.depth + 11 - 1));
-            this._idleOffset = this.duck != null && this.tape == null || !this._started ? Vec2.Zero : Lerp.Vec2Smooth(this.handOffset, new Vec2(0f, 2f + this._idleWave.normalized), 0.23f);
-            this.position += this._idleOffset;
+            if (duck != null && (_pullState == 1 || _pullState == 2))
+                Graphics.DrawLine(Offset(new Vec2(-2f, -2f)), duck.armPosition + new Vec2(handOffset.x * offDir, handOffset.y), Color.White, depth: (duck.depth + 11 - 1));
+            _idleOffset = duck != null && tape == null || !_started ? Vec2.Zero : Lerp.Vec2Smooth(handOffset, new Vec2(0f, 2f + _idleWave.normalized), 0.23f);
+            position += _idleOffset;
             base.Draw();
-            this.position -= this._idleOffset;
+            position -= _idleOffset;
         }
 
         public override void OnPressAction()
         {
-            if (this._started)
+            if (_started)
                 return;
-            if (this.duck != null)
-                RumbleManager.AddRumbleEvent(this.duck.profile, new RumbleEvent(this._fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
-            if (this._pullState == -1)
+            if (duck != null)
+                RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
+            if (_pullState == -1)
             {
-                this._pullState = 0;
+                _pullState = 0;
             }
             else
             {
-                if (this._pullState != 3)
+                if (_pullState != 3)
                     return;
-                this._pullState = 1;
-                this.PullEngine();
+                _pullState = 1;
+                PullEngine();
             }
         }
 
@@ -882,20 +882,20 @@ namespace DuckGame
             {
                 get
                 {
-                    this._value = 0;
-                    Chainsaw thing = this._thing as Chainsaw;
+                    _value = 0;
+                    Chainsaw thing = _thing as Chainsaw;
                     if (thing._flooded)
-                        this._value |= 4;
+                        _value |= 4;
                     if (thing._started)
-                        this._value |= 2;
+                        _value |= 2;
                     if (thing._throttle)
-                        this._value |= 1;
-                    return this._value;
+                        _value |= 1;
+                    return _value;
                 }
                 set
                 {
-                    this._value = value;
-                    Chainsaw thing = this._thing as Chainsaw;
+                    _value = value;
+                    Chainsaw thing = _thing as Chainsaw;
                     thing._flooded = (_value & 4U) > 0U;
                     thing._started = (_value & 2U) > 0U;
                     thing._throttle = (_value & 1U) > 0U;

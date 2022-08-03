@@ -19,18 +19,18 @@ namespace DuckGame
         public GinormoOverlay(float xpos, float ypos, bool smallMode)
           : base(xpos, ypos)
         {
-            this.depth = (Depth)0.9f;
-            this.graphic = new Sprite("rockThrow/boardOverlay");
-            this._smallMode = smallMode;
+            depth = (Depth)0.9f;
+            graphic = new Sprite("rockThrow/boardOverlay");
+            _smallMode = smallMode;
         }
 
         public override void Initialize()
         {
-            this._overlaySprite = Content.Load<Tex2D>("rockThrow/boardOverlayLarge");
-            this._targetSprite = new Sprite(GinormoBoard.boardLayer.target, 0f, 0f);
-            this._screenMaterial = new Material("Shaders/lcdNoBlur");
-            this._screenMaterial.SetValue("screenWidth", GinormoScreen.GetSize(this._smallMode).x);
-            this._screenMaterial.SetValue("screenHeight", GinormoScreen.GetSize(this._smallMode).y);
+            _overlaySprite = Content.Load<Tex2D>("rockThrow/boardOverlayLarge");
+            _targetSprite = new Sprite(GinormoBoard.boardLayer.target, 0f, 0f);
+            _screenMaterial = new Material("Shaders/lcdNoBlur");
+            _screenMaterial.SetValue("screenWidth", GinormoScreen.GetSize(_smallMode).x);
+            _screenMaterial.SetValue("screenHeight", GinormoScreen.GetSize(_smallMode).y);
             base.Initialize();
         }
 
@@ -39,11 +39,11 @@ namespace DuckGame
             if (!RockScoreboard.drawingNormalTarget && !NetworkDebugger.enabled)
                 return;
             Material material = DuckGame.Graphics.material;
-            DuckGame.Graphics.material = this._screenMaterial;
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._overlaySprite;
+            DuckGame.Graphics.material = _screenMaterial;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)_overlaySprite;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.LinearClamp;
-            this._targetSprite.depth = (Depth)0.9f;
-            DuckGame.Graphics.Draw(this._targetSprite, this.x - 92f, this.y - 33f);
+            _targetSprite.depth = (Depth)0.9f;
+            DuckGame.Graphics.Draw(_targetSprite, x - 92f, y - 33f);
             DuckGame.Graphics.material = material;
         }
     }

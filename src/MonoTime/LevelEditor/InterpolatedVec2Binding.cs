@@ -12,7 +12,7 @@ namespace DuckGame
         public InterpolatedVec2Binding(string field, int range = 2147483647, bool real = true)
           : base(field, range)
         {
-            this._priority = GhostPriority.High;
+            _priority = GhostPriority.High;
         }
     }
 }

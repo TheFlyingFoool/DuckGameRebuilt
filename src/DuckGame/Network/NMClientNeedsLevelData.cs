@@ -18,8 +18,8 @@ namespace DuckGame
 
         public NMClientNeedsLevelData(byte idx, ushort tSession)
         {
-            this.levelIndex = idx;
-            this.transferSession = tSession;
+            levelIndex = idx;
+            transferSession = tSession;
         }
     }
 }

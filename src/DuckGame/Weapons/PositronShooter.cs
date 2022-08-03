@@ -81,167 +81,167 @@ namespace DuckGame
         public PositronShooter(float xval, float yval)
           : base(xval, yval)
         {
-            this.ammo = 999999;
-            this._ammoType = new ATLaserOrange();
-            this._ammoType.affectedByGravity = true;
-            this._type = "gun";
-            this.graphic = new Sprite("positronShooter");
-            this.center = new Vec2(10f, 4f);
-            this.collisionOffset = new Vec2(-8f, -3f);
-            this.collisionSize = new Vec2(16f, 7f);
-            this._positronWinder = new Sprite("positronWinder")
+            ammo = 999999;
+            _ammoType = new ATLaserOrange();
+            _ammoType.affectedByGravity = true;
+            _type = "gun";
+            graphic = new Sprite("positronShooter");
+            center = new Vec2(10f, 4f);
+            collisionOffset = new Vec2(-8f, -3f);
+            collisionSize = new Vec2(16f, 7f);
+            _positronWinder = new Sprite("positronWinder")
             {
                 center = new Vec2(1.5f, 6.5f)
             };
-            this._barrelOffsetTL = new Vec2(27f, 4f);
-            this._fireSound = "laserRifle";
-            this._fullAuto = true;
-            this._fireWait = 0f;
-            this._kickForce = 1f;
-            this._fireRumble = RumbleIntensity.Kick;
-            this._holdOffset = new Vec2(-4f, -2f);
-            this._flare = new SpriteMap("laserFlareOrange", 16, 16)
+            _barrelOffsetTL = new Vec2(27f, 4f);
+            _fireSound = "laserRifle";
+            _fullAuto = true;
+            _fireWait = 0f;
+            _kickForce = 1f;
+            _fireRumble = RumbleIntensity.Kick;
+            _holdOffset = new Vec2(-4f, -2f);
+            _flare = new SpriteMap("laserFlareOrange", 16, 16)
             {
                 center = new Vec2(0f, 8f)
             };
-            this.editorTooltip = "A futuristic weapon from the WORLD OF TOMORROW!";
+            editorTooltip = "A futuristic weapon from the WORLD OF TOMORROW!";
         }
 
         public override void Update()
         {
-            if (this._bursting)
+            if (_bursting)
             {
-                this._burstWait = Maths.CountDown(this._burstWait, 0.16f);
+                _burstWait = Maths.CountDown(_burstWait, 0.16f);
                 if (_burstWait <= 0f)
                 {
-                    this._burstWait = 1f;
-                    if (this.isServerForObject)
+                    _burstWait = 1f;
+                    if (isServerForObject)
                     {
                         PositronShooter.inFire = true;
-                        this.Fire();
+                        Fire();
                         PositronShooter.inFire = false;
                         if (Network.isActive)
-                            Send.Message(new NMFireGun(this, this.firedBullets, this.bulletFireIndex, false, this.duck != null ? this.duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
-                        this.firedBullets.Clear();
+                            Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false, duck != null ? duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
+                        firedBullets.Clear();
                     }
-                    this._wait = 0f;
-                    ++this._burstNum;
+                    _wait = 0f;
+                    ++_burstNum;
                 }
-                if (this._burstNum == 3)
+                if (_burstNum == 3)
                 {
-                    this._burstNum = 0;
-                    this._burstWait = 0f;
-                    this._bursting = false;
-                    this._wait = this._fireWait;
+                    _burstNum = 0;
+                    _burstWait = 0f;
+                    _bursting = false;
+                    _wait = _fireWait;
                 }
             }
             if (_windVelocity > 0.3f)
-                this._windVelocity = 0.3f;
-            this._windVelocity = Lerp.Float(this._windVelocity, 0f, 0.0035f);
-            if (this._noteIndex <= this._notes.Count)
+                _windVelocity = 0.3f;
+            _windVelocity = Lerp.Float(_windVelocity, 0f, 0.0035f);
+            if (_noteIndex <= _notes.Count)
             {
-                this._wind += this._windVelocity;
-                if ((int)this._wind > this._prevInc)
+                _wind += _windVelocity;
+                if ((int)_wind > _prevInc)
                 {
-                    if (this._noteIndex < this._notes.Count)
+                    if (_noteIndex < _notes.Count)
                     {
-                        if (this._notes[this._noteIndex] != "")
-                            SFX.Play("musicBox" + this._notes[this._noteIndex]);
-                        ++this._noteIndex;
+                        if (_notes[_noteIndex] != "")
+                            SFX.Play("musicBox" + _notes[_noteIndex]);
+                        ++_noteIndex;
                     }
                     else
-                        this._windVelocity = 0f;
-                    ++this._prevInc;
+                        _windVelocity = 0f;
+                    ++_prevInc;
                 }
             }
             else
-                this._noteIndex = this._notes.Count + 1;
-            this._winding = this.duck != null && this.duck.inputProfile.Down("UP");
+                _noteIndex = _notes.Count + 1;
+            _winding = duck != null && duck.inputProfile.Down("UP");
             base.Update();
         }
 
         public override void CheckIfHoldObstructed()
         {
-            if (this.duck != null && this.duck.inputProfile.Down("UP"))
-                this.duck.holdObstructed = true;
+            if (duck != null && duck.inputProfile.Down("UP"))
+                duck.holdObstructed = true;
             else
                 base.CheckIfHoldObstructed();
         }
 
         public override void Draw()
         {
-            Vec2 vec2 = this.Offset(new Vec2(0.5f, 0.5f));
-            this._positronWinder.angle = this._wind * offDir;
-            Graphics.Draw(this._positronWinder, vec2.x, vec2.y, this.depth + 10);
+            Vec2 vec2 = Offset(new Vec2(0.5f, 0.5f));
+            _positronWinder.angle = _wind * offDir;
+            Graphics.Draw(_positronWinder, vec2.x, vec2.y, depth + 10);
             base.Draw();
         }
 
         public override void OnPressAction()
         {
-            if (this._winding && this._noteIndex != this._notes.Count)
+            if (_winding && _noteIndex != _notes.Count)
             {
                 //this._manualWind = false;
-                this._windVelocity += 0.05f;
+                _windVelocity += 0.05f;
             }
             else
             {
-                float num = _noteIndex / (float)this._notes.Count;
-                this._ammoType.range = 1000f;
-                this._ammoType.bulletSpeed = (1f + num * 20f);
-                this._ammoType.affectedByGravity = num < 0.6f;
-                this._ammoType.accuracy = num;
-                this._ammoType.bulletThickness = (0.2f + num * 0.3f);
-                this._ammoType.penetration = 0.5f;
-                this._fireSound = "awfulLaser";
-                this._ammoType.bulletSpeed -= 0.5f;
+                float num = _noteIndex / (float)_notes.Count;
+                _ammoType.range = 1000f;
+                _ammoType.bulletSpeed = (1f + num * 20f);
+                _ammoType.affectedByGravity = num < 0.6f;
+                _ammoType.accuracy = num;
+                _ammoType.bulletThickness = (0.2f + num * 0.3f);
+                _ammoType.penetration = 0.5f;
+                _fireSound = "awfulLaser";
+                _ammoType.bulletSpeed -= 0.5f;
                 if (num > 0.1f)
                 {
-                    this._ammoType.bulletSpeed += 0.5f;
-                    this._ammoType.penetration = 1f;
-                    this._fireSound = "phaserSmall";
+                    _ammoType.bulletSpeed += 0.5f;
+                    _ammoType.penetration = 1f;
+                    _fireSound = "phaserSmall";
                 }
                 if (num > 0.3f)
                 {
-                    this._ammoType.penetration = 2f;
-                    this._fireSound = "phaserMedium";
+                    _ammoType.penetration = 2f;
+                    _fireSound = "phaserMedium";
                 }
                 if (num > 0.75f)
                 {
-                    this._ammoType.penetration = 4f;
-                    this._fireSound = "laserRifle";
+                    _ammoType.penetration = 4f;
+                    _fireSound = "laserRifle";
                 }
-                this._ammoType.bulletLength = 100f;
-                if (this._noteIndex == this._notes.Count)
+                _ammoType.bulletLength = 100f;
+                if (_noteIndex == _notes.Count)
                 {
-                    this._ammoType.bulletSpeed = 32f;
-                    this._ammoType.bulletThickness = 4.4f;
-                    this._ammoType.penetration = 100f;
-                    this._ammoType.bulletLength = 250f;
-                    if (this.duck != null)
+                    _ammoType.bulletSpeed = 32f;
+                    _ammoType.bulletThickness = 4.4f;
+                    _ammoType.penetration = 100f;
+                    _ammoType.bulletLength = 250f;
+                    if (duck != null)
                     {
-                        this.duck.vSpeed -= 3f;
-                        this.duck.hSpeed = duck.offDir * -6;
-                        if (this._winding)
+                        duck.vSpeed -= 3f;
+                        duck.hSpeed = duck.offDir * -6;
+                        if (_winding)
                         {
-                            this.duck.Swear();
-                            this.duck.GoRagdoll();
-                            this.hSpeed += offDir * 3f;
-                            this.vSpeed -= 3f;
-                            this._winding = false;
-                            this._windVelocity = 0f;
+                            duck.Swear();
+                            duck.GoRagdoll();
+                            hSpeed += offDir * 3f;
+                            vSpeed -= 3f;
+                            _winding = false;
+                            _windVelocity = 0f;
                         }
                         else
                         {
-                            this.duck.sliding = true;
-                            this.duck.crippleTimer = 1f;
+                            duck.sliding = true;
+                            duck.crippleTimer = 1f;
                         }
                     }
-                    this._noteIndex = 0;
-                    this._fireSound = "laserBlast";
+                    _noteIndex = 0;
+                    _fireSound = "laserBlast";
                 }
-                if (this._noteIndex > 1)
-                    --this._noteIndex;
-                this.Fire();
+                if (_noteIndex > 1)
+                    --_noteIndex;
+                Fire();
             }
         }
 

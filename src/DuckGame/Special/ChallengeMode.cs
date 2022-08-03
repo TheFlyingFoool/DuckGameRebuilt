@@ -38,21 +38,21 @@ namespace DuckGame
         public ChallengeMode()
           : base()
         {
-            this.graphic = new Sprite("challengeIcon");
-            this.center = new Vec2(8f, 8f);
-            this._collisionSize = new Vec2(16f, 16f);
-            this._collisionOffset = new Vec2(-8f, -8f);
-            this.depth = (Depth)0.9f;
-            this.layer = Layer.Foreground;
-            this._editorName = "Challenge";
-            this._canFlip = false;
-            this._canHaveChance = false;
-            this.random._tooltip = "If enabled, this challenge will activate a random target sequence whenever all targets are down.";
-            this.music._tooltip = "The name of a music file (without extension) from the Duck Game Content/Audio/Music/InGame folder.";
-            this.Next._tooltip = "If specified, the next challenge will play immediately after this one (for challenge rush modes).";
+            graphic = new Sprite("challengeIcon");
+            center = new Vec2(8f, 8f);
+            _collisionSize = new Vec2(16f, 16f);
+            _collisionOffset = new Vec2(-8f, -8f);
+            depth = (Depth)0.9f;
+            layer = Layer.Foreground;
+            _editorName = "Challenge";
+            _canFlip = false;
+            _canHaveChance = false;
+            random._tooltip = "If enabled, this challenge will activate a random target sequence whenever all targets are down.";
+            music._tooltip = "The name of a music file (without extension) from the Duck Game Content/Audio/Music/InGame folder.";
+            Next._tooltip = "If specified, the next challenge will play immediately after this one (for challenge rush modes).";
         }
 
-        public List<ChallengeTrophy> wonTrophies => this._wonTrophies;
+        public List<ChallengeTrophy> wonTrophies => _wonTrophies;
 
         public override void Initialize()
         {
@@ -61,107 +61,107 @@ namespace DuckGame
                 return;
             if (Level.current.camera is FollowCam camera)
                 camera.minSize = 90f;
-            this._eligibleTrophies.AddRange(_challenge.trophies);
+            _eligibleTrophies.AddRange(_challenge.trophies);
             if (ChallengeLevel.timer != null)
             {
-                if (this._challenge.trophies[0].timeRequirement != 0)
-                    ChallengeLevel.timer.maxTime = new TimeSpan(0, 0, this._challenge.trophies[0].timeRequirement);
+                if (_challenge.trophies[0].timeRequirement != 0)
+                    ChallengeLevel.timer.maxTime = new TimeSpan(0, 0, _challenge.trophies[0].timeRequirement);
                 else
                     ChallengeLevel.timer.maxTime = new TimeSpan();
             }
-            this._startGoodies = Level.current.things[typeof(Goody)].Count<Thing>();
+            _startGoodies = Level.current.things[typeof(Goody)].Count<Thing>();
         }
 
         public virtual void PrepareCounts()
         {
-            this.baselineTargetCount = this._challenge.trophies[0].targets;
-            this.baselineGoodyCount = this._challenge.trophies[0].goodies;
-            this.goalTypes = new List<GoalType>();
+            baselineTargetCount = _challenge.trophies[0].targets;
+            baselineGoodyCount = _challenge.trophies[0].goodies;
+            goalTypes = new List<GoalType>();
             foreach (GoalType goalType in Level.current.things[typeof(GoalType)])
-                this.goalTypes.Add(goalType);
-            for (int index = 0; index < this._eligibleTrophies.Count; ++index)
+                goalTypes.Add(goalType);
+            for (int index = 0; index < _eligibleTrophies.Count; ++index)
             {
-                if (this._eligibleTrophies[index].targets > 0)
-                    this.hasTargetLimit = true;
+                if (_eligibleTrophies[index].targets > 0)
+                    hasTargetLimit = true;
                 //else if (this._eligibleTrophies[index].goodies > 0)
                 //this.hasGoodyLimit = true;
-                if (index > 0 && this._eligibleTrophies[index - 1].timeRequirement < this._eligibleTrophies[index].timeRequirement && this._eligibleTrophies[index - 1].timeRequirement != 0)
-                    this.reverseTimeLimit = true;
+                if (index > 0 && _eligibleTrophies[index - 1].timeRequirement < _eligibleTrophies[index].timeRequirement && _eligibleTrophies[index - 1].timeRequirement != 0)
+                    reverseTimeLimit = true;
             }
         }
 
         public override void Update()
         {
-            if (this._ended || ChallengeLevel.timer == null)
+            if (_ended || ChallengeLevel.timer == null)
                 return;
-            if (this.duck != null && this.duck.dead)
+            if (duck != null && duck.dead)
             {
-                ++this.restartWait;
-                if (this.restartWait >= 3)
+                ++restartWait;
+                if (restartWait >= 3)
                 {
-                    if (this._wonTrophies.Count > 0)
+                    if (_wonTrophies.Count > 0)
                     {
-                        this._eligibleTrophies.Clear();
+                        _eligibleTrophies.Clear();
                     }
                     else
                     {
-                        this._ended = true;
+                        _ended = true;
                         if (Level.current is ChallengeLevel current)
                             current.RestartChallenge();
                     }
                 }
             }
-            if (this.duck == null)
+            if (duck == null)
                 return;
             bool flag1 = true;
-            for (int index = 0; index < this._eligibleTrophies.Count; ++index)
+            for (int index = 0; index < _eligibleTrophies.Count; ++index)
             {
                 bool flag2 = true;
                 bool flag3 = false;
-                ChallengeTrophy eligibleTrophy = this._eligibleTrophies[index];
+                ChallengeTrophy eligibleTrophy = _eligibleTrophies[index];
                 if (eligibleTrophy.type == TrophyType.Developer && (eligibleTrophy.goodies == -1 && eligibleTrophy.targets == -1 && eligibleTrophy.timeRequirement == 0 || !flag1))
                 {
                     flag2 = false;
                 }
                 else
                 {
-                    bool flag4 = this.reverseTimeLimit;
+                    bool flag4 = reverseTimeLimit;
                     if (eligibleTrophy.timeRequirement != 0 && (int)ChallengeLevel.timer.elapsed.TotalSeconds >= eligibleTrophy.timeRequirement && (eligibleTrophy.type == TrophyType.Baseline || Math.Abs(ChallengeLevel.timer.elapsed.TotalSeconds - eligibleTrophy.timeRequirement) > 0.01f) && (eligibleTrophy.timeRequirementMilliseconds == 0 || (int)Math.Round(ChallengeLevel.timer.elapsed.TotalSeconds % 1f * 100f) > eligibleTrophy.timeRequirementMilliseconds))
                     {
                         flag2 = false;
-                        flag4 = !this.reverseTimeLimit;
+                        flag4 = !reverseTimeLimit;
                     }
                     if (!flag4)
                     {
                         flag3 = true;
-                        if (this.baselineTargetCount == -1)
+                        if (baselineTargetCount == -1)
                         {
                             if (eligibleTrophy.targets == -1 && !SequenceItem.IsFinished(SequenceItemType.Target))
                                 flag3 = false;
                             else if (eligibleTrophy.targets != -1 && ChallengeLevel.targetsShot < eligibleTrophy.targets)
                                 flag3 = false;
                         }
-                        else if (ChallengeLevel.targetsShot < this.baselineTargetCount)
+                        else if (ChallengeLevel.targetsShot < baselineTargetCount)
                             flag3 = false;
-                        if (this.baselineGoodyCount == -1 || this.baselineGoodyCount == 0 && this._challenge.countGoodies)
+                        if (baselineGoodyCount == -1 || baselineGoodyCount == 0 && _challenge.countGoodies)
                         {
-                            if ((eligibleTrophy.goodies == -1 || eligibleTrophy.goodies == 0 && this._challenge.countGoodies) && !SequenceItem.IsFinished(SequenceItemType.Goody))
+                            if ((eligibleTrophy.goodies == -1 || eligibleTrophy.goodies == 0 && _challenge.countGoodies) && !SequenceItem.IsFinished(SequenceItemType.Goody))
                                 flag3 = false;
                             else if (ChallengeLevel.goodiesGot < eligibleTrophy.goodies)
                                 flag3 = false;
                         }
-                        else if (ChallengeLevel.goodiesGot < this.baselineGoodyCount)
+                        else if (ChallengeLevel.goodiesGot < baselineGoodyCount)
                             flag3 = false;
-                        if (eligibleTrophy.targets == -1 && !this.hasTargetLimit)
+                        if (eligibleTrophy.targets == -1 && !hasTargetLimit)
                         {
-                            foreach (GoalType goalType in this.goalTypes)
+                            foreach (GoalType goalType in goalTypes)
                             {
                                 if (goalType.numObjectsRemaining != 0)
                                     flag3 = false;
                             }
                         }
                     }
-                    foreach (GoalType goalType in this.goalTypes)
+                    foreach (GoalType goalType in goalTypes)
                     {
                         switch (goalType.Check())
                         {
@@ -180,10 +180,10 @@ namespace DuckGame
                         flag2 = false;
                         if (eligibleTrophy.type != TrophyType.Baseline)
                         {
-                            this._wonTrophies.Add(eligibleTrophy);
+                            _wonTrophies.Add(eligibleTrophy);
                             if (DuckNetwork.core.speedrunMaxTrophy > 0 && eligibleTrophy.type == (TrophyType)DuckNetwork.core.speedrunMaxTrophy)
                             {
-                                this._eligibleTrophies.Clear();
+                                _eligibleTrophies.Clear();
                                 break;
                             }
                         }
@@ -191,36 +191,36 @@ namespace DuckGame
                 }
                 if (!flag2)
                 {
-                    this._eligibleTrophies.RemoveAt(index);
+                    _eligibleTrophies.RemoveAt(index);
                     if (eligibleTrophy.type == TrophyType.Baseline && !flag3)
-                        this._eligibleTrophies.Clear();
+                        _eligibleTrophies.Clear();
                     --index;
                 }
             }
-            if (Level.current != this.level || this._eligibleTrophies.Count != 0)
+            if (Level.current != level || _eligibleTrophies.Count != 0)
                 return;
-            foreach (ChallengeTrophy challengeTrophy in this._wonTrophies.ToList<ChallengeTrophy>())
+            foreach (ChallengeTrophy challengeTrophy in _wonTrophies.ToList<ChallengeTrophy>())
             {
                 if (challengeTrophy.targets != -1 && ChallengeLevel.targetsShot < challengeTrophy.targets)
-                    this._wonTrophies.Remove(challengeTrophy);
+                    _wonTrophies.Remove(challengeTrophy);
                 if (challengeTrophy.goodies != -1 && ChallengeLevel.goodiesGot < challengeTrophy.goodies)
-                    this._wonTrophies.Remove(challengeTrophy);
+                    _wonTrophies.Remove(challengeTrophy);
             }
-            if (this._wonTrophies.Count > 1)
+            if (_wonTrophies.Count > 1)
             {
-                ChallengeTrophy challengeTrophy = this._wonTrophies[0];
-                foreach (ChallengeTrophy wonTrophy in this._wonTrophies)
+                ChallengeTrophy challengeTrophy = _wonTrophies[0];
+                foreach (ChallengeTrophy wonTrophy in _wonTrophies)
                 {
                     if (wonTrophy.type > challengeTrophy.type)
                         challengeTrophy = wonTrophy;
                 }
-                this._wonTrophies.Clear();
-                this._wonTrophies.Add(challengeTrophy);
+                _wonTrophies.Clear();
+                _wonTrophies.Add(challengeTrophy);
             }
             ChallengeLevel.timer.Stop();
             if (Level.current is ChallengeLevel current1)
                 current1.ChallengeEnded(this);
-            this._ended = true;
+            _ended = true;
         }
 
         public override void Draw()
@@ -232,28 +232,28 @@ namespace DuckGame
 
         public int hatIndex
         {
-            get => this._hatIndex;
+            get => _hatIndex;
             set
             {
-                this._hatIndex = value;
-                this.UpdateMenuHat();
+                _hatIndex = value;
+                UpdateMenuHat();
             }
         }
 
         private void UpdateMenuHat()
         {
-            if (this._hatMenu == null)
+            if (_hatMenu == null)
                 return;
-            if (Teams.all[this._hatIndex].hasHat)
+            if (Teams.all[_hatIndex].hasHat)
             {
-                this._hatMenu.image = Teams.all[this._hatIndex].hat.CloneMap();
-                this._hatMenu.image.center = new Vec2(12f, 12f) + Teams.all[this._hatIndex].hatOffset;
+                _hatMenu.image = Teams.all[_hatIndex].hat.CloneMap();
+                _hatMenu.image.center = new Vec2(12f, 12f) + Teams.all[_hatIndex].hatOffset;
             }
             else
-                this._hatMenu.image = null;
+                _hatMenu.image = null;
         }
 
-        public ChallengeData challenge => this._challenge;
+        public ChallengeData challenge => _challenge;
 
         public override ContextMenu GetContextMenu()
         {
@@ -279,7 +279,7 @@ namespace DuckGame
             bool flag1 = false;
             bool flag2 = false;
             bool flag3 = false;
-            foreach (ChallengeTrophy trophy in this._challenge.trophies)
+            foreach (ChallengeTrophy trophy in _challenge.trophies)
             {
                 SpriteMap image = new SpriteMap("challengeTrophyIcons", 16, 16)
                 {
@@ -330,22 +330,22 @@ namespace DuckGame
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
             binaryClassChunk.AddProperty("hatIndex", hatIndex);
-            binaryClassChunk.AddProperty("challengeData", this._challenge.Serialize());
+            binaryClassChunk.AddProperty("challengeData", _challenge.Serialize());
             return binaryClassChunk;
         }
 
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.hatIndex = node.GetProperty<int>("hatIndex");
+            hatIndex = node.GetProperty<int>("hatIndex");
             BinaryClassChunk property = node.GetProperty<BinaryClassChunk>("challengeData");
             if (property != null)
             {
-                this._challenge = new ChallengeData();
-                this._challenge.Deserialize(property);
+                _challenge = new ChallengeData();
+                _challenge.Deserialize(property);
             }
-            if (this.Next.value == null)
-                this.Next.value = "";
+            if (Next.value == null)
+                Next.value = "";
             return true;
         }
 
@@ -353,7 +353,7 @@ namespace DuckGame
         {
             DXMLNode dxmlNode = base.LegacySerialize();
             dxmlNode.Add(new DXMLNode("hatIndex", hatIndex));
-            dxmlNode.Add(this._challenge.LegacySerialize());
+            dxmlNode.Add(_challenge.LegacySerialize());
             return dxmlNode;
         }
 
@@ -362,12 +362,12 @@ namespace DuckGame
             base.LegacyDeserialize(node);
             DXMLNode dxmlNode = node.Element("hatIndex");
             if (dxmlNode != null)
-                this.hatIndex = Convert.ToInt32(dxmlNode.Value);
+                hatIndex = Convert.ToInt32(dxmlNode.Value);
             DXMLNode node1 = node.Element("challengeData");
             if (node1 != null)
             {
-                this._challenge = new ChallengeData();
-                this._challenge.LegacyDeserialize(node1);
+                _challenge = new ChallengeData();
+                _challenge.LegacyDeserialize(node1);
             }
             return true;
         }

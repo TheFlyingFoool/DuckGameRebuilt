@@ -12,28 +12,28 @@ namespace DuckGame
         public GhostPack(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("jetpack", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-5f, -5f);
-            this.collisionSize = new Vec2(11f, 12f);
-            this._offset = new Vec2(-3f, 3f);
-            this.thickness = 0.1f;
+            _sprite = new SpriteMap("jetpack", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-5f, -5f);
+            collisionSize = new Vec2(11f, 12f);
+            _offset = new Vec2(-3f, 3f);
+            thickness = 0.1f;
         }
 
         public override void Draw()
         {
-            this._heat = 0.01f;
-            if (this._equippedDuck != null)
+            _heat = 0.01f;
+            if (_equippedDuck != null)
             {
-                this.depth = -0.5f;
-                Vec2 offset = this._offset;
-                if (this.duck.offDir < 0)
+                depth = -0.5f;
+                Vec2 offset = _offset;
+                if (duck.offDir < 0)
                     offset.x *= -1f;
-                this.position = this.duck.position + offset;
+                position = duck.position + offset;
             }
             else
-                this.depth = (Depth)0f;
+                depth = (Depth)0f;
         }
     }
 }

@@ -28,32 +28,32 @@ namespace DuckGame
         private static int quadTreeIDX;
         private int _personalIDX;
 
-        public Rectangle rectangle => this._rectangle;
+        public Rectangle rectangle => _rectangle;
 
         public QuadTree(int depth, Vec2 position, float width, int max = 4, QuadTree parent = null)
         {
-            this._depth = depth;
-            this._position = position;
-            this._width = width;
-            this._halfWidth = this._width / 2f;
-            this._max = max;
-            this._parent = parent;
-            this._center = this._position + new Vec2(this._halfWidth, this._halfWidth);
-            this._rectangle = new Rectangle((int)position.x, (int)position.y, (int)width, (int)width);
-            if (this._depth != 0)
+            _depth = depth;
+            _position = position;
+            _width = width;
+            _halfWidth = _width / 2f;
+            _max = max;
+            _parent = parent;
+            _center = _position + new Vec2(_halfWidth, _halfWidth);
+            _rectangle = new Rectangle((int)position.x, (int)position.y, (int)width, (int)width);
+            if (_depth != 0)
             {
                 for (int index = 0; index < 4; ++index)
                 {
-                    this._corners.Add(new Vec2());
-                    Vec2 position1 = new Vec2(this._position);
+                    _corners.Add(new Vec2());
+                    Vec2 position1 = new Vec2(_position);
                     if (index == 1 || index == 3)
-                        position1.x += this._halfWidth;
+                        position1.x += _halfWidth;
                     if (index == 2 || index == 3)
-                        position1.y += this._halfWidth;
-                    this._children.Add(new QuadTree(this._depth - 1, position1, this._halfWidth, this._max, this));
+                        position1.y += _halfWidth;
+                    _children.Add(new QuadTree(_depth - 1, position1, _halfWidth, _max, this));
                 }
             }
-            this._personalIDX = QuadTree.quadTreeIDX;
+            _personalIDX = QuadTree.quadTreeIDX;
             ++QuadTree.quadTreeIDX;
         }
 
@@ -345,11 +345,11 @@ namespace DuckGame
 
         public T CheckLine<T>(Vec2 p1, Vec2 p2, Thing ignore, Layer layer)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -364,7 +364,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Line(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -373,11 +373,11 @@ namespace DuckGame
 
         public T CheckLine<T>(Vec2 p1, Vec2 p2, Thing ignore)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -392,7 +392,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Line(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -401,11 +401,11 @@ namespace DuckGame
 
         public T CheckLine<T>(Vec2 p1, Vec2 p2)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -420,7 +420,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Line(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -429,12 +429,12 @@ namespace DuckGame
 
         public List<T> CheckLineAll<T>(Vec2 p1, Vec2 p2, Thing ignore, Layer layer)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
+            recurse.Clear();
+            recurse.Push(this);
             List<T> objList = new List<T>();
-            while (this.recurse.Count > 0)
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -449,7 +449,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Line(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -458,12 +458,12 @@ namespace DuckGame
 
         public List<T> CheckLineAll<T>(Vec2 p1, Vec2 p2, Thing ignore)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
+            recurse.Clear();
+            recurse.Push(this);
             List<T> objList = new List<T>();
-            while (this.recurse.Count > 0)
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -478,7 +478,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Line(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -487,12 +487,12 @@ namespace DuckGame
 
         public List<T> CheckLineAll<T>(Vec2 p1, Vec2 p2)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
+            recurse.Clear();
+            recurse.Push(this);
             List<T> objList = new List<T>();
-            while (this.recurse.Count > 0)
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -507,7 +507,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Line(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -517,11 +517,11 @@ namespace DuckGame
         public T CheckLinePoint<T>(Vec2 p1, Vec2 p2, out Vec2 hit, Thing ignore, Layer layer)
         {
             hit = new Vec2();
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -543,7 +543,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Line(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -553,11 +553,11 @@ namespace DuckGame
         public T CheckLinePoint<T>(Vec2 p1, Vec2 p2, out Vec2 hit, Thing ignore)
         {
             hit = new Vec2();
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -579,7 +579,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Line(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -589,11 +589,11 @@ namespace DuckGame
         public T CheckLinePoint<T>(Vec2 p1, Vec2 p2, out Vec2 hit)
         {
             hit = new Vec2();
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -615,7 +615,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Line(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -624,11 +624,11 @@ namespace DuckGame
 
         public T CheckRectangleFilter<T>(Vec2 p1, Vec2 p2, Predicate<T> filter, Layer layer)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -643,7 +643,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Rect(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -652,11 +652,11 @@ namespace DuckGame
 
         public T CheckRectangleFilter<T>(Vec2 p1, Vec2 p2, Predicate<T> filter)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -671,7 +671,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Rect(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -680,11 +680,11 @@ namespace DuckGame
 
         public T CheckRectangle<T>(Vec2 p1, Vec2 p2, Thing ignore, Layer layer)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -699,7 +699,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Rect(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -708,11 +708,11 @@ namespace DuckGame
 
         public T CheckRectangle<T>(Vec2 p1, Vec2 p2, Thing ignore)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -727,7 +727,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Rect(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -736,11 +736,11 @@ namespace DuckGame
 
         public T CheckRectangle<T>(Vec2 p1, Vec2 p2)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -755,7 +755,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Rect(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -764,11 +764,11 @@ namespace DuckGame
 
         public void CheckRectangleAll<T>(Vec2 p1, Vec2 p2, List<T> outList)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -784,7 +784,7 @@ namespace DuckGame
                     {
                         QuadTree child = quadTree._children[index];
                         if (Collision.Rect(p1, p2, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -792,11 +792,11 @@ namespace DuckGame
 
         public T CheckCircle<T>(Vec2 p1, float radius, Thing ignore, Layer layer)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -811,7 +811,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Circle(p1, radius, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -820,11 +820,11 @@ namespace DuckGame
 
         public T CheckCircle<T>(Vec2 p1, float radius, Thing ignore)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -839,7 +839,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Circle(p1, radius, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -848,11 +848,11 @@ namespace DuckGame
 
         public T CheckCircle<T>(Vec2 p1, float radius)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -867,7 +867,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Circle(p1, radius, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -876,11 +876,11 @@ namespace DuckGame
 
         public void CheckCircleAll<T>(Vec2 p1, float radius, List<object> outList)
         {
-            this.recurse.Clear();
-            this.recurse.Push(this);
-            while (this.recurse.Count > 0)
+            recurse.Clear();
+            recurse.Push(this);
+            while (recurse.Count > 0)
             {
-                QuadTree quadTree = this.recurse.Pop();
+                QuadTree quadTree = recurse.Pop();
                 if (!quadTree._split)
                 {
                     System.Type key = typeof(T);
@@ -895,7 +895,7 @@ namespace DuckGame
                     for (int index = 0; index < 4; ++index)
                     {
                         if (Collision.Circle(p1, radius, quadTree._children[index].rectangle))
-                            this.recurse.Push(quadTree._children[index]);
+                            recurse.Push(quadTree._children[index]);
                     }
                 }
             }
@@ -903,14 +903,14 @@ namespace DuckGame
 
         private void GetUniqueChildren(List<Thing> things)
         {
-            foreach (Thing thing in this._objects)
+            foreach (Thing thing in _objects)
             {
                 if (!things.Contains(thing))
                     things.Add(thing);
             }
-            if (!this._split)
+            if (!_split)
                 return;
-            foreach (QuadTree child in this._children)
+            foreach (QuadTree child in _children)
                 child.GetUniqueChildren(things);
         }
 
@@ -918,39 +918,39 @@ namespace DuckGame
 
         private void Divide()
         {
-            if (this._split || this._depth == 0)
+            if (_split || _depth == 0)
                 return;
-            this._split = true;
-            foreach (Thing t in this._objects)
-                this.Add(t);
+            _split = true;
+            foreach (Thing t in _objects)
+                Add(t);
         }
 
         private void Combine()
         {
-            if (!this._split)
+            if (!_split)
                 return;
-            foreach (QuadTree child in this._children)
+            foreach (QuadTree child in _children)
             {
                 child.Combine();
-                this._objects.AddRange(child._objects);
+                _objects.AddRange(child._objects);
                 child._objects.Clear();
             }
-            this._split = false;
+            _split = false;
         }
 
         public void Add(Thing t)
         {
-            this._objects.Add(t);
-            if (!this._split)
+            _objects.Add(t);
+            if (!_split)
             {
-                if (this._objects.Count <= this._max || this._depth <= 0)
+                if (_objects.Count <= _max || _depth <= 0)
                     return;
-                this.Divide();
+                Divide();
             }
             else
             {
                 Rectangle rectangle = t.rectangle;
-                foreach (QuadTree child in this._children)
+                foreach (QuadTree child in _children)
                 {
                     if (Collision.Rect(child.rectangle, rectangle))
                         child.Add(t);
@@ -960,44 +960,44 @@ namespace DuckGame
 
         public void Remove(Thing t)
         {
-            this._objects.Remove(t);
-            if (!this._split)
+            _objects.Remove(t);
+            if (!_split)
                 return;
             Rectangle rectangle = t.rectangle;
-            foreach (QuadTree child in this._children)
+            foreach (QuadTree child in _children)
             {
                 if (Collision.Rect(child.rectangle, rectangle))
                     child.Remove(t);
             }
-            if (this._objects.Count > this._max)
+            if (_objects.Count > _max)
                 return;
-            this.Combine();
+            Combine();
         }
 
         public void Draw()
         {
-            Graphics.DrawRect(this._position, this._position + new Vec2(this._width, this._width), Color.Red, (Depth)1f, false);
-            if (!this._split)
+            Graphics.DrawRect(_position, _position + new Vec2(_width, _width), Color.Red, (Depth)1f, false);
+            if (!_split)
             {
-                Graphics.DrawString(Change.ToString(_objects.Count), this._position + new Vec2(2f, 2f), Color.White, (Depth)0.9f);
-                Graphics.DrawString(Change.ToString(_personalIDX), this._position + new Vec2(2f, 16f), Color.White, (Depth)0.9f, scale: 0.5f);
-                foreach (Thing thing in this._objects)
+                Graphics.DrawString(Change.ToString(_objects.Count), _position + new Vec2(2f, 2f), Color.White, (Depth)0.9f);
+                Graphics.DrawString(Change.ToString(_personalIDX), _position + new Vec2(2f, 16f), Color.White, (Depth)0.9f, scale: 0.5f);
+                foreach (Thing thing in _objects)
                 {
                     Graphics.DrawRect(thing.rectangle, Color.Blue, (Depth)0f, false);
                     Graphics.DrawString(Change.ToString(_personalIDX), thing.position, Color.Green, (Depth)0.9f, scale: 0.5f);
                 }
             }
-            if (this._depth == 0 || !this._split)
+            if (_depth == 0 || !_split)
                 return;
-            foreach (QuadTree child in this._children)
+            foreach (QuadTree child in _children)
                 child.Draw();
         }
 
         public void Clear()
         {
-            foreach (QuadTree child in this._children)
+            foreach (QuadTree child in _children)
                 child.Clear();
-            this._objects.Clear();
+            _objects.Clear();
         }
     }
 }

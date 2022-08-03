@@ -16,27 +16,27 @@ namespace DuckGame
         public Key(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("key", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-7f, -4f);
-            this.collisionSize = new Vec2(14f, 8f);
-            this.depth = -0.5f;
-            this.thickness = 1f;
-            this.weight = 3f;
-            this.flammable = 0f;
-            this.collideSounds.Add("metalRebound");
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.editorTooltip = "For opening locked doors. You've heard of keys before, right?";
-            this.holsterAngle = 90f;
-            this.coolingFactor = 1f / 1000f;
+            _sprite = new SpriteMap("key", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-7f, -4f);
+            collisionSize = new Vec2(14f, 8f);
+            depth = -0.5f;
+            thickness = 1f;
+            weight = 3f;
+            flammable = 0f;
+            collideSounds.Add("metalRebound");
+            physicsMaterial = PhysicsMaterial.Metal;
+            editorTooltip = "For opening locked doors. You've heard of keys before, right?";
+            holsterAngle = 90f;
+            coolingFactor = 1f / 1000f;
         }
 
         public override void Update()
         {
-            this._sprite.flipH = this.offDir < 0;
-            if (this.owner != null)
-                Level.CheckLine<Door>(this.position + new Vec2(-10f, 0f), this.position + new Vec2(10f, 0f))?.UnlockDoor(this);
+            _sprite.flipH = offDir < 0;
+            if (owner != null)
+                Level.CheckLine<Door>(position + new Vec2(-10f, 0f), position + new Vec2(10f, 0f))?.UnlockDoor(this);
             base.Update();
         }
 

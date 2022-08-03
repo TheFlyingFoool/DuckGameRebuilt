@@ -22,22 +22,22 @@ namespace DuckGame
           float thickness)
           : base(xpos, ypos)
         {
-            this._moveSpeed = moveSpeed;
-            this._color = color;
-            this._thickness = thickness;
-            this.offDir = (sbyte)dir;
-            this.layer = Layer.Foreground;
-            this.depth = (Depth)0.9f;
+            _moveSpeed = moveSpeed;
+            _color = color;
+            _thickness = thickness;
+            offDir = (sbyte)dir;
+            layer = Layer.Foreground;
+            depth = (Depth)0.9f;
         }
 
         public override void Update()
         {
-            this.alpha -= 0.03f;
-            if (this.alpha < 0.0)
+            alpha -= 0.03f;
+            if (alpha < 0.0)
                 Level.Remove(this);
-            this.x += this._moveSpeed;
+            x += _moveSpeed;
         }
 
-        public override void Draw() => Graphics.DrawLine(this.position, this.position + new Vec2(0f, -1200f), this._color * this.alpha, this._thickness, (Depth)0.9f);
+        public override void Draw() => Graphics.DrawLine(position, position + new Vec2(0f, -1200f), _color * alpha, _thickness, (Depth)0.9f);
     }
 }

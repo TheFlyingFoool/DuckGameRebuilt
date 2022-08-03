@@ -14,22 +14,22 @@ namespace DuckGame
         public NublessSnowIceTileset(float x, float y)
           : base(x, y, "nublessIceTileset")
         {
-            this._editorName = "Snow Ice NONUBS";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidthThick = 15f;
-            this.verticalWidth = 14f;
-            this.horizontalHeight = 15f;
-            this._impactThreshold = -1f;
-            this.willHeat = true;
-            this._tileset = "snowTileset";
-            this._sprite = new SpriteMap("nublessIceTileset", 16, 16)
+            _editorName = "Snow Ice NONUBS";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidthThick = 15f;
+            verticalWidth = 14f;
+            horizontalHeight = 15f;
+            _impactThreshold = -1f;
+            willHeat = true;
+            _tileset = "snowTileset";
+            _sprite = new SpriteMap("nublessIceTileset", 16, 16)
             {
                 frame = 40
             };
-            this.graphic = _sprite;
-            this._hasNubs = false;
-            this.meltedTileset = "nublessSnow";
-            this.frozenTileset = "nublessIceTileset";
+            graphic = _sprite;
+            _hasNubs = false;
+            meltedTileset = "nublessSnow";
+            frozenTileset = "nublessIceTileset";
         }
     }
 }

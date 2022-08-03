@@ -17,29 +17,29 @@ namespace DuckGame
 
         public float value
         {
-            get => this._value;
-            set => this._value = value;
+            get => _value;
+            set => _value = value;
         }
 
         public float normalized => (float)((_value + 1.0) / 2.0);
 
         public SinWave(float inc, float start = 0f)
         {
-            this._increment = inc;
-            this._wave = start;
+            _increment = inc;
+            _wave = start;
             AutoUpdatables.Add(this);
         }
 
         public SinWave()
         {
-            this._increment = 0.1f;
-            this._wave = 0f;
+            _increment = 0.1f;
+            _wave = 0f;
         }
 
         public void Update()
         {
-            this._wave += this._increment;
-            this._value = (float)Math.Sin(_wave);
+            _wave += _increment;
+            _value = (float)Math.Sin(_wave);
         }
 
         public static implicit operator float(SinWave val) => val.value;

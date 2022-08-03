@@ -13,6 +13,6 @@ namespace DuckGame
     {
         public List<BinaryClassChunk> objects = new List<BinaryClassChunk>();
 
-        public void Add(BinaryClassChunk obj) => this.objects.Add(obj);
+        public void Add(BinaryClassChunk obj) => objects.Add(obj);
     }
 }

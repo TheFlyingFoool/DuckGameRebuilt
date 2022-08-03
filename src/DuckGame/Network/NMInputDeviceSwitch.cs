@@ -19,13 +19,13 @@ namespace DuckGame
 
         public NMInputDeviceSwitch(byte idx, byte inpType)
         {
-            this.index = idx;
-            this.inputType = inpType;
+            index = idx;
+            inputType = inpType;
         }
 
         public override void Activate()
         {
-            if (this.index < 0 || this.index > 3)
+            if (index < 0 || index > 3)
                 return;
             Profile profile = DuckNetwork.profiles[index];
             if (profile != null && profile.inputProfile != null)

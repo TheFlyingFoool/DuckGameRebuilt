@@ -18,14 +18,14 @@ namespace DuckGame
 
         public NMClientDisconnect(string who, Profile pProfile)
         {
-            this.whom = who;
-            this.profile = pProfile;
+            whom = who;
+            profile = pProfile;
         }
 
         public NMClientDisconnect(string who, byte pProfile)
         {
-            this.whom = who;
-            this.profile = DuckNetwork.profiles[pProfile];
+            whom = who;
+            profile = DuckNetwork.profiles[pProfile];
         }
     }
 }

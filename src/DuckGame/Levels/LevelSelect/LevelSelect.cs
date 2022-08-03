@@ -47,68 +47,68 @@ namespace DuckGame
         private UIMenu _notOnlineMenu;
         private MenuBoolean _deleteFile = new MenuBoolean();
 
-        public List<IFilterLSItems> filters => this._filters;
+        public List<IFilterLSItems> filters => _filters;
 
         public LevelSelect(string root = "", Level returnLevel = null, UIMenu returnMenu = null, bool onlineMode = false)
         {
-            this._centeredView = true;
+            _centeredView = true;
             if (root == "")
                 root = DuckFile.levelDirectory;
             root = root.TrimEnd('/');
-            this._rootDirectory = root;
-            this._font = new BitmapFont("biosFont", 8);
-            this._returnLevel = returnLevel;
-            this._dialog = new TextEntryDialog
+            _rootDirectory = root;
+            _font = new BitmapFont("biosFont", 8);
+            _returnLevel = returnLevel;
+            _dialog = new TextEntryDialog
             {
                 filename = true
             };
-            this._returnMenu = returnMenu;
-            this._iconSheet = new SpriteMap("iconSheet", 16, 16);
-            this._onlineMode = onlineMode;
-            this._filters.Add(new LSFilterLevelType(LevelType.Deathmatch, true));
-            this._filters.Add(new LSFilterMods(true));
+            _returnMenu = returnMenu;
+            _iconSheet = new SpriteMap("iconSheet", 16, 16);
+            _onlineMode = onlineMode;
+            _filters.Add(new LSFilterLevelType(LevelType.Deathmatch, true));
+            _filters.Add(new LSFilterMods(true));
         }
 
-        public void SetCurrentFolder(string folder) => this.SetCurrentFolder(folder, false, false);
+        public void SetCurrentFolder(string folder) => SetCurrentFolder(folder, false, false);
 
         public void SetCurrentFolder(string folder, bool isModPath, bool isModRoot, MapPack pMapPack = null)
         {
             if (isModRoot)
-                this.modRoot = folder;
-            this._currentDirectory = folder;
-            if (this._currentDirectory == this._rootDirectory)
+                modRoot = folder;
+            _currentDirectory = folder;
+            if (_currentDirectory == _rootDirectory)
             {
-                this._selectedItem = 0;
-                this.mapPack = null;
+                _selectedItem = 0;
+                mapPack = null;
             }
             else
-                this._selectedItem = 1;
+                _selectedItem = 1;
             if (pMapPack != null)
-                this.mapPack = pMapPack;
-            this.HUDTopRightSetup();
-            this._topIndex = 0;
-            this._items.Clear();
-            if (this._currentDirectory != this._rootDirectory)
+                mapPack = pMapPack;
+            HUDTopRightSetup();
+            _topIndex = 0;
+            _items.Clear();
+            if (_currentDirectory != _rootDirectory)
             {
-                this.AddItem(new LSItem(0f, 0f, this, "../"));
+                AddItem(new LSItem(0f, 0f, this, "../"));
             }
             else
             {
-                this.AddItem(new LSItem(0f, 0f, this, "@VANILLA@")
+                AddItem(new LSItem(0f, 0f, this, "@VANILLA@")
                 {
                     itemType = LSItemType.Vanilla
                 });
                 if (Steam.GetNumWorkshopItems() > 0)
-                    this.AddItem(new LSItem(0f, 0f, this, "@WORKSHOP@", true));
+                    AddItem(new LSItem(0f, 0f, this, "@WORKSHOP@", true));
             }
             if (folder.EndsWith(".play") || folder == "@WORKSHOP@" || folder == "@VANILLA@")
             {
                 List<string> levelsInside = LSItem.GetLevelsInside(this, folder);
                 levelsInside.Sort();
                 foreach (string PATH in levelsInside)
-                    this.AddItem(new LSItem(0f, 0f, this, PATH));
-                this._items = this._items.OrderBy<LSItem, bool>(x => x.data != null && x.data.metaData.eightPlayer).ToList<LSItem>();
-                this.PositionItems();
+                    AddItem(new LSItem(0f, 0f, this, PATH));
+                _items = _items.OrderBy<LSItem, bool>(x => x.data != null && x.data.metaData.eightPlayer).ToList<LSItem>();
+                PositionItems();
             }
             else
             {
@@ -116,18 +116,18 @@ namespace DuckGame
                 string[] files = DuckFile.GetFiles(folder);
                 Array.Sort<string>(directories);
                 Array.Sort<string>(files);
-                if (this._currentDirectory == this._rootDirectory)
+                if (_currentDirectory == _rootDirectory)
                 {
                     foreach (Mod accessibleMod in (IEnumerable<Mod>)ModLoader.accessibleMods)
                     {
                         if (accessibleMod.configuration != null && accessibleMod.configuration.content != null && accessibleMod.configuration.content.levels.Count > 0)
-                            this.AddItem(new LSItem(0f, 0f, this, accessibleMod.configuration.contentDirectory + "/Levels", pIsModPath: true, pIsModRoot: true)
+                            AddItem(new LSItem(0f, 0f, this, accessibleMod.configuration.contentDirectory + "/Levels", pIsModPath: true, pIsModRoot: true)
                             {
                                 _name = accessibleMod.configuration.name
                             });
                     }
                     foreach (MapPack mapPack in MapPack.active)
-                        this.AddItem(new LSItem(0f, 0f, this, mapPack.path, pIsModPath: true, pIsModRoot: true, pIsMapPack: true)
+                        AddItem(new LSItem(0f, 0f, this, mapPack.path, pIsModPath: true, pIsModRoot: true, pIsMapPack: true)
                         {
                             _name = mapPack.name,
                             _customIcon = mapPack.icon,
@@ -137,20 +137,20 @@ namespace DuckGame
                 foreach (string str in directories)
                 {
                     if (DuckFile.GetFiles(str, "*.lev", SearchOption.AllDirectories).Count<string>() > 0)
-                        this.AddItem(new LSItem(0f, 0f, this, str, pIsModPath: isModPath));
+                        AddItem(new LSItem(0f, 0f, this, str, pIsModPath: isModPath));
                 }
                 List<string> stringList = new List<string>();
                 foreach (string str in files)
                 {
                     string file = str;
-                    if (Path.GetExtension(file) == ".lev" && this._filters.TrueForAll(a => a.Filter(file)))
+                    if (Path.GetExtension(file) == ".lev" && _filters.TrueForAll(a => a.Filter(file)))
                         stringList.Add(file);
                     else if (Path.GetExtension(file) == ".play")
-                        this.AddItem(new LSItem(0f, 0f, this, file, pIsModPath: isModPath));
+                        AddItem(new LSItem(0f, 0f, this, file, pIsModPath: isModPath));
                 }
                 foreach (string PATH in stringList)
-                    this.AddItem(new LSItem(0f, 0f, this, PATH, pIsModPath: isModPath));
-                this.PositionItems();
+                    AddItem(new LSItem(0f, 0f, this, PATH, pIsModPath: isModPath));
+                PositionItems();
             }
         }
 
@@ -158,47 +158,47 @@ namespace DuckGame
         {
             InputProfile.repeat = true;
             Keyboard.repeat = true;
-            this.SetCurrentFolder(this._rootDirectory);
-            this.isInitialized = true;
-            this._dialog.DoInitialize();
+            SetCurrentFolder(_rootDirectory);
+            isInitialized = true;
+            _dialog.DoInitialize();
             float num1 = 320f;
             float num2 = 180f;
-            this._confirmMenu = new UIMenu("DELETE FILE!?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@CANCEL @SELECT@SELECT");
-            if (this._returnMenu != null)
+            _confirmMenu = new UIMenu("DELETE FILE!?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@CANCEL @SELECT@SELECT");
+            if (_returnMenu != null)
             {
-                this._confirmMenu.Add(new UIMenuItem("WHAT? NO!", new UIMenuActionOpenMenu(_confirmMenu, _returnMenu), backButton: true), true);
-                this._confirmMenu.Add(new UIMenuItem("YEAH!", new UIMenuActionOpenMenuSetBoolean(_confirmMenu, _returnMenu, this._deleteFile)), true);
-                this._notOnlineMenu = new UIMenu("NO WAY", num1 / 2f, num2 / 2f, 160f, conString: "@SELECT@OH :(");
+                _confirmMenu.Add(new UIMenuItem("WHAT? NO!", new UIMenuActionOpenMenu(_confirmMenu, _returnMenu), backButton: true), true);
+                _confirmMenu.Add(new UIMenuItem("YEAH!", new UIMenuActionOpenMenuSetBoolean(_confirmMenu, _returnMenu, _deleteFile)), true);
+                _notOnlineMenu = new UIMenu("NO WAY", num1 / 2f, num2 / 2f, 160f, conString: "@SELECT@OH :(");
                 BitmapFont f = new BitmapFont("smallBiosFontUI", 7, 5);
                 UIText component1 = new UIText("THIS LEVEL CONTAINS", Color.White);
                 component1.SetFont(f);
-                this._notOnlineMenu.Add(component1, true);
+                _notOnlineMenu.Add(component1, true);
                 UIText component2 = new UIText("OFFLINE ONLY STUFF.", Color.White);
                 component2.SetFont(f);
-                this._notOnlineMenu.Add(component2, true);
+                _notOnlineMenu.Add(component2, true);
                 UIText component3 = new UIText(" ", Color.White);
                 component3.SetFont(f);
-                this._notOnlineMenu.Add(component3, true);
-                this._notOnlineMenu.Add(new UIMenuItem("OH", new UIMenuActionOpenMenu(_confirmMenu, _returnMenu), backButton: true), true);
+                _notOnlineMenu.Add(component3, true);
+                _notOnlineMenu.Add(new UIMenuItem("OH", new UIMenuActionOpenMenu(_confirmMenu, _returnMenu), backButton: true), true);
             }
             else
             {
-                this._confirmMenu.Add(new UIMenuItem("WHAT? NO!", new UIMenuActionCloseMenu(_confirmMenu), backButton: true), true);
-                this._confirmMenu.Add(new UIMenuItem("YEAH!", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, this._deleteFile)), true);
+                _confirmMenu.Add(new UIMenuItem("WHAT? NO!", new UIMenuActionCloseMenu(_confirmMenu), backButton: true), true);
+                _confirmMenu.Add(new UIMenuItem("YEAH!", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, _deleteFile)), true);
             }
-            this._confirmMenu.Close();
+            _confirmMenu.Close();
             Level.Add(_confirmMenu);
         }
 
-        public void AddItem(LSItem item) => this._items.Add(item);
+        public void AddItem(LSItem item) => _items.Add(item);
 
         public void PositionItems()
         {
             int num1 = 0;
             int num2 = 0;
-            foreach (LSItem lsItem in this._items)
+            foreach (LSItem lsItem in _items)
             {
-                if (num1 >= this._topIndex + this._maxItems || num1 < this._topIndex)
+                if (num1 >= _topIndex + _maxItems || num1 < _topIndex)
                 {
                     lsItem.visible = false;
                     ++num1;
@@ -206,12 +206,12 @@ namespace DuckGame
                 else
                 {
                     lsItem.visible = true;
-                    lsItem.x = this._leftPos;
-                    lsItem.y = this._topPos + num2 * 10;
-                    if (num1 == this._selectedItem)
+                    lsItem.x = _leftPos;
+                    lsItem.y = _topPos + num2 * 10;
+                    if (num1 == _selectedItem)
                     {
                         lsItem.selected = true;
-                        this._selectedLevel = lsItem;
+                        _selectedLevel = lsItem;
                     }
                     else
                         lsItem.selected = false;
@@ -221,32 +221,32 @@ namespace DuckGame
             }
         }
 
-        public void FolderUp() => this.FolderUp(false);
+        public void FolderUp() => FolderUp(false);
 
         public void FolderUp(bool pIsModPath)
         {
-            if (this._currentDirectory == "@WORKSHOP@" || this.modRoot != null && this.modRoot.Contains(this._currentDirectory) || this._currentDirectory == "@VANILLA@")
+            if (_currentDirectory == "@WORKSHOP@" || modRoot != null && modRoot.Contains(_currentDirectory) || _currentDirectory == "@VANILLA@")
             {
-                this.SetCurrentFolder(this._rootDirectory);
-                this.modRoot = null;
+                SetCurrentFolder(_rootDirectory);
+                modRoot = null;
             }
             else
-                this.SetCurrentFolder(this._currentDirectory.Substring(0, this._currentDirectory.LastIndexOf('/')), pIsModPath, false);
+                SetCurrentFolder(_currentDirectory.Substring(0, _currentDirectory.LastIndexOf('/')), pIsModPath, false);
         }
 
         public void HUDRefresh()
         {
-            this.showPlaylistOption = false;
-            this.HUDBottomRightSetup();
-            this.HUDTopRightSetup();
+            showPlaylistOption = false;
+            HUDBottomRightSetup();
+            HUDTopRightSetup();
         }
 
         private void HUDBottomRightSetup()
         {
             HUD.CloseCorner(HUDCorner.BottomRight);
-            if (this._selectedLevel.itemType == LSItemType.UpFolder)
+            if (_selectedLevel.itemType == LSItemType.UpFolder)
                 HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@RETURN");
-            else if (this._selectedLevel.itemType == LSItemType.Folder || this._selectedLevel.itemType == LSItemType.Playlist || this._selectedLevel.itemType == LSItemType.Workshop || this._selectedLevel.itemType == LSItemType.Vanilla)
+            else if (_selectedLevel.itemType == LSItemType.Folder || _selectedLevel.itemType == LSItemType.Playlist || _selectedLevel.itemType == LSItemType.Workshop || _selectedLevel.itemType == LSItemType.Vanilla)
             {
                 HUD.AddCornerControl(HUDCorner.BottomRight, "@MENU1@TOGGLE");
                 HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@OPEN", allowStacking: true);
@@ -258,7 +258,7 @@ namespace DuckGame
         private void HUDTopRightSetup()
         {
             HUD.CloseCorner(HUDCorner.TopRight);
-            if (this._currentDirectory == this._rootDirectory)
+            if (_currentDirectory == _rootDirectory)
             {
                 HUD.AddCornerControl(HUDCorner.TopRight, "@CANCEL@DONE");
                 HUD.AddCornerControl(HUDCorner.TopRight, "@MENU2@DELETE", allowStacking: true);
@@ -266,7 +266,7 @@ namespace DuckGame
             else
             {
                 HUD.AddCornerControl(HUDCorner.TopRight, "@CANCEL@RETURN");
-                if (this.modRoot != null || !(this._currentDirectory != "@VANILLA@"))
+                if (modRoot != null || !(_currentDirectory != "@VANILLA@"))
                     return;
                 HUD.AddCornerControl(HUDCorner.TopRight, "@MENU2@DELETE", allowStacking: true);
             }
@@ -275,187 +275,187 @@ namespace DuckGame
         public override void Update()
         {
             HUD.CloseCorner(HUDCorner.TopLeft);
-            this._dialog.DoUpdate();
-            if (this._dialog.opened)
+            _dialog.DoUpdate();
+            if (_dialog.opened)
                 return;
             Editor.lockInput = null;
-            if (this._dialog.result != null && this._dialog.result != "")
+            if (_dialog.result != null && _dialog.result != "")
             {
-                string result = this._dialog.result;
+                string result = _dialog.result;
                 LevelPlaylist levelPlaylist = new LevelPlaylist();
                 levelPlaylist.levels.AddRange(Editor.activatedLevels);
                 DuckXML doc = new DuckXML();
                 doc.Add(levelPlaylist.Serialize());
                 DuckFile.SaveDuckXML(doc, DuckFile.levelDirectory + result + ".play");
-                this.SetCurrentFolder(this._rootDirectory);
-                this._dialog.result = null;
+                SetCurrentFolder(_rootDirectory);
+                _dialog.result = null;
             }
             else
             {
-                if (this._selectedLevel == null)
-                    this._exiting = true;
+                if (_selectedLevel == null)
+                    _exiting = true;
                 if (Editor.activatedLevels.Count > 0)
                 {
-                    if (!this.showPlaylistOption)
+                    if (!showPlaylistOption)
                     {
-                        this.showPlaylistOption = true;
+                        showPlaylistOption = true;
                         HUD.AddCornerControl(HUDCorner.BottomLeft, "@RAGDOLL@NEW PLAYLIST");
                     }
                 }
-                else if (this.showPlaylistOption)
+                else if (showPlaylistOption)
                 {
-                    this.showPlaylistOption = false;
+                    showPlaylistOption = false;
                     HUD.CloseCorner(HUDCorner.BottomLeft);
                 }
-                if (this._deleteFile.value)
+                if (_deleteFile.value)
                 {
-                    foreach (string str in this._selectedLevel.levelsInside)
+                    foreach (string str in _selectedLevel.levelsInside)
                         Editor.activatedLevels.Remove(str);
-                    Editor.activatedLevels.Remove(this._selectedLevel.path);
-                    if (this._selectedLevel.itemType == LSItemType.Folder)
-                        DuckFile.DeleteFolder(DuckFile.levelDirectory + this._selectedLevel.path);
-                    else if (this._selectedLevel.itemType == LSItemType.Playlist)
-                        DuckFile.Delete(DuckFile.levelDirectory + this._selectedLevel.path);
+                    Editor.activatedLevels.Remove(_selectedLevel.path);
+                    if (_selectedLevel.itemType == LSItemType.Folder)
+                        DuckFile.DeleteFolder(DuckFile.levelDirectory + _selectedLevel.path);
+                    else if (_selectedLevel.itemType == LSItemType.Playlist)
+                        DuckFile.Delete(DuckFile.levelDirectory + _selectedLevel.path);
                     else
-                        Editor.Delete(this._selectedLevel.path);
+                        Editor.Delete(_selectedLevel.path);
                     Thread.Sleep(100);
-                    this.SetCurrentFolder(this._currentDirectory);
-                    this._deleteFile.value = false;
+                    SetCurrentFolder(_currentDirectory);
+                    _deleteFile.value = false;
                 }
-                if (this._exiting)
+                if (_exiting)
                 {
                     HUD.CloseAllCorners();
                     Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.04f);
                     if (Graphics.fade >= 0.01f)
                         return;
-                    this.isClosed = true;
+                    isClosed = true;
                 }
                 else
                 {
                     Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.04f);
                     if (Input.Pressed("MENUUP"))
                     {
-                        if (this._selectedItem > 0)
-                            --this._selectedItem;
+                        if (_selectedItem > 0)
+                            --_selectedItem;
                         else
-                            this._selectedItem = this._items.Count<LSItem>() - 1;
-                        if (this._selectedItem < this._topIndex)
-                            this._topIndex = this._selectedItem;
-                        if (this._selectedItem >= this._topIndex + this._maxItems)
-                            this._topIndex = this._selectedItem + 1 - this._maxItems;
+                            _selectedItem = _items.Count<LSItem>() - 1;
+                        if (_selectedItem < _topIndex)
+                            _topIndex = _selectedItem;
+                        if (_selectedItem >= _topIndex + _maxItems)
+                            _topIndex = _selectedItem + 1 - _maxItems;
                     }
                     else if (Input.Pressed("MENUDOWN"))
                     {
-                        if (this._selectedItem < this._items.Count<LSItem>() - 1)
-                            ++this._selectedItem;
+                        if (_selectedItem < _items.Count<LSItem>() - 1)
+                            ++_selectedItem;
                         else
-                            this._selectedItem = 0;
-                        if (this._selectedItem < this._topIndex)
-                            this._topIndex = this._selectedItem;
-                        if (this._selectedItem >= this._topIndex + this._maxItems)
-                            this._topIndex = this._selectedItem + 1 - this._maxItems;
+                            _selectedItem = 0;
+                        if (_selectedItem < _topIndex)
+                            _topIndex = _selectedItem;
+                        if (_selectedItem >= _topIndex + _maxItems)
+                            _topIndex = _selectedItem + 1 - _maxItems;
                     }
                     else if (Input.Pressed("MENULEFT"))
                     {
-                        this._selectedItem -= this._maxItems - 1;
-                        if (this._selectedItem < 0)
-                            this._selectedItem = 0;
-                        if (this._selectedItem < this._topIndex)
-                            this._topIndex = this._selectedItem;
+                        _selectedItem -= _maxItems - 1;
+                        if (_selectedItem < 0)
+                            _selectedItem = 0;
+                        if (_selectedItem < _topIndex)
+                            _topIndex = _selectedItem;
                     }
                     else if (Input.Pressed("MENURIGHT"))
                     {
-                        this._selectedItem += this._maxItems - 1;
-                        if (this._selectedItem > this._items.Count<LSItem>() - 1)
-                            this._selectedItem = this._items.Count<LSItem>() - 1;
-                        if (this._selectedItem >= this._topIndex + this._maxItems)
-                            this._topIndex = this._selectedItem + 1 - this._maxItems;
+                        _selectedItem += _maxItems - 1;
+                        if (_selectedItem > _items.Count<LSItem>() - 1)
+                            _selectedItem = _items.Count<LSItem>() - 1;
+                        if (_selectedItem >= _topIndex + _maxItems)
+                            _topIndex = _selectedItem + 1 - _maxItems;
                     }
                     else if (Input.Pressed("MENU1"))
                     {
-                        if (this._selectedLevel.itemType != LSItemType.UpFolder)
+                        if (_selectedLevel.itemType != LSItemType.UpFolder)
                         {
-                            if (this._selectedLevel.isFolder || this._selectedLevel.itemType == LSItemType.Playlist || this._selectedLevel.itemType == LSItemType.Workshop || this._selectedLevel.itemType == LSItemType.Vanilla)
+                            if (_selectedLevel.isFolder || _selectedLevel.itemType == LSItemType.Playlist || _selectedLevel.itemType == LSItemType.Workshop || _selectedLevel.itemType == LSItemType.Vanilla)
                             {
-                                if (!this._selectedLevel.enabled)
+                                if (!_selectedLevel.enabled)
                                 {
-                                    this._selectedLevel.enabled = true;
-                                    this._selectedLevel.partiallyEnabled = false;
+                                    _selectedLevel.enabled = true;
+                                    _selectedLevel.partiallyEnabled = false;
                                     Editor.activatedLevels.AddRange(_selectedLevel.levelsInside);
                                 }
                                 else
                                 {
-                                    this._selectedLevel.enabled = false;
-                                    this._selectedLevel.partiallyEnabled = false;
-                                    foreach (string str in this._selectedLevel.levelsInside)
+                                    _selectedLevel.enabled = false;
+                                    _selectedLevel.partiallyEnabled = false;
+                                    foreach (string str in _selectedLevel.levelsInside)
                                         Editor.activatedLevels.Remove(str);
                                 }
                             }
-                            else if (Editor.activatedLevels.Contains(this._selectedLevel.path))
-                                Editor.activatedLevels.Remove(this._selectedLevel.path);
+                            else if (Editor.activatedLevels.Contains(_selectedLevel.path))
+                                Editor.activatedLevels.Remove(_selectedLevel.path);
                             else
-                                Editor.activatedLevels.Add(this._selectedLevel.path);
+                                Editor.activatedLevels.Add(_selectedLevel.path);
                         }
                     }
                     else if (Input.Pressed("SELECT"))
                     {
-                        if (this._selectedLevel.itemType == LSItemType.Workshop || this._selectedLevel.itemType == LSItemType.Vanilla)
-                            this.SetCurrentFolder(this._selectedLevel.path);
-                        else if (this._selectedLevel.isFolder || this._selectedLevel.itemType == LSItemType.Playlist)
+                        if (_selectedLevel.itemType == LSItemType.Workshop || _selectedLevel.itemType == LSItemType.Vanilla)
+                            SetCurrentFolder(_selectedLevel.path);
+                        else if (_selectedLevel.isFolder || _selectedLevel.itemType == LSItemType.Playlist)
                         {
-                            if (this._selectedLevel.isModRoot || this._selectedLevel.isModPath)
-                                this.SetCurrentFolder(this._selectedLevel.path, this._selectedLevel.isModPath, this._selectedLevel.isModRoot, this._selectedLevel.mapPack);
+                            if (_selectedLevel.isModRoot || _selectedLevel.isModPath)
+                                SetCurrentFolder(_selectedLevel.path, _selectedLevel.isModPath, _selectedLevel.isModRoot, _selectedLevel.mapPack);
                             else
-                                this.SetCurrentFolder(this._rootDirectory + this._selectedLevel.path);
+                                SetCurrentFolder(_rootDirectory + _selectedLevel.path);
                         }
-                        else if (this._selectedLevel.itemType == LSItemType.UpFolder)
-                            this.FolderUp(this._selectedLevel.isModPath);
+                        else if (_selectedLevel.itemType == LSItemType.UpFolder)
+                            FolderUp(_selectedLevel.isModPath);
                     }
                     else if (Input.Pressed("CANCEL"))
                     {
-                        if (this._currentDirectory != this._rootDirectory)
-                            this.FolderUp(this._selectedLevel.isModPath);
+                        if (_currentDirectory != _rootDirectory)
+                            FolderUp(_selectedLevel.isModPath);
                         else
-                            this._exiting = true;
+                            _exiting = true;
                     }
                     else if (Input.Pressed("RAGDOLL"))
                     {
-                        this._dialog.Open("New Playlist...");
+                        _dialog.Open("New Playlist...");
                         Editor.lockInput = _dialog;
                     }
-                    else if (Input.Pressed("MENU2") && this.modRoot == null && this._currentDirectory != "@VANILLA@" && this._selectedLevel.path != "@VANILLA@" && this._currentDirectory != "@WORKSHOP@" && this.mapPack == null && MonoMain.pauseMenu != this._confirmMenu && this._selectedLevel.itemType != LSItemType.UpFolder && this._selectedLevel.itemType != LSItemType.Workshop && this._selectedLevel.itemType != LSItemType.MapPack)
+                    else if (Input.Pressed("MENU2") && modRoot == null && _currentDirectory != "@VANILLA@" && _selectedLevel.path != "@VANILLA@" && _currentDirectory != "@WORKSHOP@" && mapPack == null && MonoMain.pauseMenu != _confirmMenu && _selectedLevel.itemType != LSItemType.UpFolder && _selectedLevel.itemType != LSItemType.Workshop && _selectedLevel.itemType != LSItemType.MapPack)
                     {
                         LevelSelect._skipCompanionOpening = true;
                         MonoMain.pauseMenu = _confirmMenu;
                         HUD.CloseAllCorners();
-                        this._confirmMenu.Open();
+                        _confirmMenu.Open();
                         SFX.Play("pause", 0.6f);
                     }
-                    this.PositionItems();
-                    if (this._selectedLevel != this._lastSelection)
+                    PositionItems();
+                    if (_selectedLevel != _lastSelection)
                     {
-                        if (this._lastSelection == null || this._selectedLevel.itemType != this._lastSelection.itemType)
-                            this.HUDBottomRightSetup();
-                        this._lastSelection = this._selectedLevel;
+                        if (_lastSelection == null || _selectedLevel.itemType != _lastSelection.itemType)
+                            HUDBottomRightSetup();
+                        _lastSelection = _selectedLevel;
                     }
-                    if (this._selectedLevel != this._previewItem)
+                    if (_selectedLevel != _previewItem)
                     {
-                        if (this._selectedLevel.itemType == LSItemType.Level)
+                        if (_selectedLevel.itemType == LSItemType.Level)
                         {
-                            LevelMetaData.PreviewPair preview = Content.GeneratePreview(this._selectedLevel.path);
+                            LevelMetaData.PreviewPair preview = Content.GeneratePreview(_selectedLevel.path);
                             if (preview != null)
                             {
-                                this._preview = preview.preview;
-                                this._previewSprite = this._preview == null ? null : new Sprite((Tex2D)this._preview);
+                                _preview = preview.preview;
+                                _previewSprite = _preview == null ? null : new Sprite((Tex2D)_preview);
                             }
                             else
-                                this._previewSprite = null;
+                                _previewSprite = null;
                         }
                         else
-                            this._previewSprite = null;
-                        this._previewItem = this._selectedLevel;
+                            _previewSprite = null;
+                        _previewItem = _selectedLevel;
                     }
-                    foreach (Thing thing in this._items)
+                    foreach (Thing thing in _items)
                         thing.Update();
                 }
             }
@@ -465,39 +465,39 @@ namespace DuckGame
         {
             if (drawBack)
                 DuckGame.Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Layer.HUD.camera.width, Layer.HUD.camera.height), Color.Black, -0.8f);
-            foreach (LSItem lsItem in this._items)
+            foreach (LSItem lsItem in _items)
             {
                 if (lsItem.visible)
                     lsItem.Draw();
             }
-            Depth depth = this._font.depth;
-            if (this._previewSprite != null)
+            Depth depth = _font.depth;
+            if (_previewSprite != null)
             {
-                this._previewSprite.scale = new Vec2(0.5f, 0.5f);
-                this._previewSprite.depth = (Depth)0.9f;
-                DuckGame.Graphics.Draw(this._previewSprite, 150f, 45f);
+                _previewSprite.scale = new Vec2(0.5f, 0.5f);
+                _previewSprite.depth = (Depth)0.9f;
+                DuckGame.Graphics.Draw(_previewSprite, 150f, 45f);
             }
-            else if (this._selectedLevel.mapPack != null && this._selectedLevel.mapPack.preview != null)
+            else if (_selectedLevel.mapPack != null && _selectedLevel.mapPack.preview != null)
             {
-                Tex2D preview = this._selectedLevel.mapPack.preview;
+                Tex2D preview = _selectedLevel.mapPack.preview;
                 Vec2 vec2 = new Vec2(320f / preview.width, 180f / preview.height) * 0.5f;
                 DuckGame.Graphics.Draw(preview, 150f, 45f, vec2.x, vec2.y);
             }
-            this._font.depth = depth;
-            this._font.Draw(this.mapPack == null ? (!(this._currentDirectory == "@WORKSHOP@") ? (!(this._currentDirectory == "@VANILLA@") ? "Levels" + this._currentDirectory.Substring(this._rootDirectory.Length, this._currentDirectory.Length - this._rootDirectory.Length) : "Levels/Deathmatch") : "Levels/Workshop") : this.mapPack.name, this._leftPos, this._topPos - 10f, Color.LimeGreen);
-            this._dialog.DoDraw();
+            _font.depth = depth;
+            _font.Draw(mapPack == null ? (!(_currentDirectory == "@WORKSHOP@") ? (!(_currentDirectory == "@VANILLA@") ? "Levels" + _currentDirectory.Substring(_rootDirectory.Length, _currentDirectory.Length - _rootDirectory.Length) : "Levels/Deathmatch") : "Levels/Workshop") : mapPack.name, _leftPos, _topPos - 10f, Color.LimeGreen);
+            _dialog.DoDraw();
         }
 
         public override void PostDrawLayer(Layer layer)
         {
             if (layer == Layer.HUD)
-                this.DrawThings();
+                DrawThings();
             base.PostDrawLayer(layer);
         }
 
         public override void Terminate()
         {
-            this._items.Clear();
+            _items.Clear();
             InputProfile.repeat = false;
             Keyboard.repeat = false;
         }

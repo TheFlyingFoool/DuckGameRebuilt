@@ -18,10 +18,10 @@ namespace DuckGame
 
         public StripInfo(bool l)
         {
-            this.header = null;
-            this.large = l;
-            this.cardsVisible = 3;
-            this.cards = new List<Card>();
+            header = null;
+            large = l;
+            cardsVisible = 3;
+            cards = new List<Card>();
         }
     }
 }

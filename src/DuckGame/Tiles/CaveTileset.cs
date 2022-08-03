@@ -13,12 +13,12 @@ namespace DuckGame
         public CaveTileset(float x, float y)
           : base(x, y, "caveTileset")
         {
-            this._editorName = "Cave";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidth = 16f;
-            this.verticalWidthThick = 16f;
-            this.horizontalHeight = 16f;
-            this._hasNubs = false;
+            _editorName = "Cave";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidth = 16f;
+            verticalWidthThick = 16f;
+            horizontalHeight = 16f;
+            _hasNubs = false;
         }
     }
 }

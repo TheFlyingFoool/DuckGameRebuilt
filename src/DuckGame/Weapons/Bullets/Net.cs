@@ -17,29 +17,29 @@ namespace DuckGame
         public Net(float xpos, float ypos, Duck owner)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("net", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 7f);
-            this.collisionOffset = new Vec2(-6f, -5f);
-            this.collisionSize = new Vec2(12f, 12f);
-            this.depth = -0.5f;
-            this.thickness = 2f;
-            this.weight = 1f;
-            this._owner = owner;
-            this._impactThreshold = 0.01f;
+            _sprite = new SpriteMap("net", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 7f);
+            collisionOffset = new Vec2(-6f, -5f);
+            collisionSize = new Vec2(12f, 12f);
+            depth = -0.5f;
+            thickness = 2f;
+            weight = 1f;
+            _owner = owner;
+            _impactThreshold = 0.01f;
         }
 
         public override void Update()
         {
-            if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 0.1f)
-                this.angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(this.hSpeed, this.vSpeed));
-            if (this.grounded && Math.Abs(this.vSpeed) + Math.Abs(this.hSpeed) <= 0f)
-                this.alpha -= 0.2f;
-            if (this.alpha <= 0f)
+            if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 0.1f)
+                angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(hSpeed, vSpeed));
+            if (grounded && Math.Abs(vSpeed) + Math.Abs(hSpeed) <= 0f)
+                alpha -= 0.2f;
+            if (alpha <= 0f)
                 Level.Remove(this);
-            if (!this.onFire && Level.CheckRect<SmallFire>(this.position + new Vec2(-4f, -4f), this.position + new Vec2(4f, 4f), this) != null)
+            if (!onFire && Level.CheckRect<SmallFire>(position + new Vec2(-4f, -4f), position + new Vec2(4f, 4f), this) != null)
             {
-                this.onFire = true;
+                onFire = true;
                 Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: this, firedFrom: this));
             }
             base.Update();
@@ -47,7 +47,7 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (Network.isActive && this.connection != DuckNetwork.localConnection)
+            if (Network.isActive && connection != DuckNetwork.localConnection)
                 return;
             switch (with)
             {
@@ -69,7 +69,7 @@ namespace DuckGame
                     break;
                 case RagdollPart ragdollPart when ragdollPart.doll.captureDuck != null && !ragdollPart.doll.captureDuck.dead:
                     Duck captureDuck = ragdollPart.doll.captureDuck;
-                    this.Fondle(ragdollPart.doll);
+                    Fondle(ragdollPart.doll);
                     ragdollPart.doll.Unragdoll();
                     captureDuck.Netted(this);
                     if (captureDuck._trapped != null)

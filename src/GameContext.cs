@@ -16,36 +16,36 @@ namespace DuckGame
 
         public GameContext()
         {
-            this.layerCore = new LayerCore();
-            this.layerCore.InitializeLayers();
-            this.levelCore = new LevelCore();
+            layerCore = new LayerCore();
+            layerCore.InitializeLayers();
+            levelCore = new LevelCore();
         }
 
         public void ApplyStates()
         {
-            this._oldLayerCore = Layer.core;
-            Layer.core = this.layerCore;
-            this._oldLevelCore = Level.core;
-            Level.core = this.levelCore;
+            _oldLayerCore = Layer.core;
+            Layer.core = layerCore;
+            _oldLevelCore = Level.core;
+            Level.core = levelCore;
         }
 
         public void RevertStates()
         {
-            Layer.core = this._oldLayerCore;
-            Level.core = this._oldLevelCore;
+            Layer.core = _oldLayerCore;
+            Level.core = _oldLevelCore;
         }
 
         public void Update()
         {
-            this.ApplyStates();
+            ApplyStates();
             Level.UpdateLevelChange();
             Level.UpdateCurrentLevel();
-            this.RevertStates();
+            RevertStates();
         }
 
         public void Draw(RenderTarget2D target = null, Camera c = null, Vec2 offset = default(Vec2))
         {
-            this.ApplyStates();
+            ApplyStates();
             c.position += offset;
             if (c != null)
                 Level.current.camera = c;
@@ -58,7 +58,7 @@ namespace DuckGame
             Level.DrawCurrentLevel();
             if (target != null)
                 Graphics.SetRenderTarget(t);
-            this.RevertStates();
+            RevertStates();
             c.position -= offset;
         }
     }

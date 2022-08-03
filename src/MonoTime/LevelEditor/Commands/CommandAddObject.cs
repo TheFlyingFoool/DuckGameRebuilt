@@ -11,20 +11,20 @@ namespace DuckGame
     {
         private Thing _object;
 
-        public CommandAddObject(Thing obj) => this._object = obj;
+        public CommandAddObject(Thing obj) => _object = obj;
 
         public override void OnDo()
         {
             if (!(Level.current is Editor current))
                 return;
-            current.AddObject(this._object);
+            current.AddObject(_object);
         }
 
         public override void OnUndo()
         {
             if (!(Level.current is Editor current))
                 return;
-            current.RemoveObject(this._object);
+            current.RemoveObject(_object);
         }
     }
 }

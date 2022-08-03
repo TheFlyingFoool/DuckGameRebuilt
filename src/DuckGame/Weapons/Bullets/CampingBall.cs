@@ -17,70 +17,70 @@ namespace DuckGame
         public CampingBall(float xpos, float ypos, Duck owner)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("camping_ball", 8, 9);
-            this.graphic = _sprite;
-            this.center = new Vec2(4f, 4f);
-            this.collisionOffset = new Vec2(-4f, -4f);
-            this.collisionSize = new Vec2(8f, 8f);
-            this.depth = -0.5f;
-            this.thickness = 2f;
-            this.weight = 1f;
-            this.bouncy = 0.5f;
-            this._owner = owner;
-            this._impactThreshold = 0.01f;
+            _sprite = new SpriteMap("camping_ball", 8, 9);
+            graphic = _sprite;
+            center = new Vec2(4f, 4f);
+            collisionOffset = new Vec2(-4f, -4f);
+            collisionSize = new Vec2(8f, 8f);
+            depth = -0.5f;
+            thickness = 2f;
+            weight = 1f;
+            bouncy = 0.5f;
+            _owner = owner;
+            _impactThreshold = 0.01f;
         }
 
         public override void Update()
         {
-            if (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed) > 0.1f)
-                this.angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(this.hSpeed, this.vSpeed));
-            if (this.isServerForObject)
+            if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 0.1f)
+                angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(hSpeed, vSpeed));
+            if (isServerForObject)
             {
-                if (this.grounded && Math.Abs(this.vSpeed) + Math.Abs(this.hSpeed) <= 0.2f)
-                    this.alpha -= 0.2f;
-                if (this.alpha <= 0f)
+                if (grounded && Math.Abs(vSpeed) + Math.Abs(hSpeed) <= 0.2f)
+                    alpha -= 0.2f;
+                if (alpha <= 0f)
                     Level.Remove(this);
-                if (!this.onFire && Level.CheckRect<SmallFire>(this.position + new Vec2(-6f, -6f), this.position + new Vec2(6f, 6f), this) != null)
-                    this.LightOnFire();
+                if (!onFire && Level.CheckRect<SmallFire>(position + new Vec2(-6f, -6f), position + new Vec2(6f, 6f), this) != null)
+                    LightOnFire();
             }
             base.Update();
         }
 
         public void LightOnFire()
         {
-            this.onFire = true;
+            onFire = true;
             Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: this, firedFrom: this));
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (Network.isActive && this.connection != DuckNetwork.localConnection || this.removeFromLevel)
+            if (Network.isActive && connection != DuckNetwork.localConnection || removeFromLevel)
                 return;
             switch (with)
             {
                 case Duck t when t.ragdoll == null:
                     if (t._trapped != null)
                         break;
-                    t.hSpeed = this.hSpeed * 0.75f;
-                    t.vSpeed = this.vSpeed * 0.75f;
+                    t.hSpeed = hSpeed * 0.75f;
+                    t.vSpeed = vSpeed * 0.75f;
                     if (t.holdObject != null)
                     {
                         Thing holdObject = t.holdObject;
                         t.ThrowItem();
-                        this.Fondle(holdObject);
+                        Fondle(holdObject);
                     }
-                    this.Fondle(t);
+                    Fondle(t);
                     t.GoRagdoll();
                     if (t.ragdoll != null && t.ragdoll.part1 != null && t.ragdoll.part2 != null && t.ragdoll.part3 != null)
                     {
-                        this.Fondle(t.ragdoll);
-                        t.ragdoll.connection = this.connection;
-                        t.ragdoll.part1.connection = this.connection;
-                        t.ragdoll.part2.connection = this.connection;
-                        t.ragdoll.part3.connection = this.connection;
+                        Fondle(t.ragdoll);
+                        t.ragdoll.connection = connection;
+                        t.ragdoll.part1.connection = connection;
+                        t.ragdoll.part2.connection = connection;
+                        t.ragdoll.part3.connection = connection;
                         t.ragdoll.inSleepingBag = true;
                         t.ragdoll.sleepingBagHealth = 60;
-                        if (this.onFire)
+                        if (onFire)
                             t.ragdoll.LightOnFire();
                         for (int index = 0; index < 4; ++index)
                         {
@@ -95,17 +95,17 @@ namespace DuckGame
                     Level.Remove(this);
                     break;
                 case RagdollPart ragdollPart when ragdollPart.doll != null && !ragdollPart.doll.inSleepingBag:
-                    this.Fondle(ragdollPart.doll);
+                    Fondle(ragdollPart.doll);
                     ragdollPart.doll.inSleepingBag = true;
                     ragdollPart.doll.sleepingBagHealth = 60;
-                    if (this.onFire)
+                    if (onFire)
                         ragdollPart.doll.LightOnFire();
                     if (ragdollPart.doll.part2 != null && ragdollPart.doll.part1 != null)
                     {
-                        ragdollPart.doll.part2.hSpeed = this.hSpeed * 0.75f;
-                        ragdollPart.doll.part2.vSpeed = this.vSpeed * 0.75f;
-                        ragdollPart.doll.part1.hSpeed = this.hSpeed * 0.75f;
-                        ragdollPart.doll.part1.vSpeed = this.vSpeed * 0.75f;
+                        ragdollPart.doll.part2.hSpeed = hSpeed * 0.75f;
+                        ragdollPart.doll.part2.vSpeed = vSpeed * 0.75f;
+                        ragdollPart.doll.part1.hSpeed = hSpeed * 0.75f;
+                        ragdollPart.doll.part1.vSpeed = vSpeed * 0.75f;
                     }
                     for (int index = 0; index < 4; ++index)
                     {

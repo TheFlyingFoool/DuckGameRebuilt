@@ -13,6 +13,6 @@ namespace DuckGame
         public int loyalFans;
         public int unloyalFans;
 
-        public int totalFans => this.loyalFans + this.unloyalFans;
+        public int totalFans => loyalFans + unloyalFans;
     }
 }

@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public int customLevels;
 
-        public NMNumCustomLevels(int pCustomLevels) => this.customLevels = pCustomLevels;
+        public NMNumCustomLevels(int pCustomLevels) => customLevels = pCustomLevels;
 
         public NMNumCustomLevels()
         {
@@ -21,8 +21,8 @@ namespace DuckGame
         {
             foreach (Profile profile in DuckNetwork.profiles)
             {
-                if (profile.connection == this.connection)
-                    profile.numClientCustomLevels = this.customLevels;
+                if (profile.connection == connection)
+                    profile.numClientCustomLevels = customLevels;
             }
             TeamSelect2.UpdateModifierStatus();
         }

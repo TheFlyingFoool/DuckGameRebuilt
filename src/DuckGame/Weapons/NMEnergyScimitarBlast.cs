@@ -14,8 +14,8 @@ namespace DuckGame
 
         public NMEnergyScimitarBlast(Vec2 pPosition, Vec2 pTarget)
         {
-            this.position = pPosition;
-            this.target = pTarget;
+            position = pPosition;
+            target = pTarget;
         }
 
         public NMEnergyScimitarBlast()
@@ -26,7 +26,7 @@ namespace DuckGame
         {
             if (Level.current == null)
                 return;
-            Level.Add(new EnergyScimitarBlast(this.position, this.target));
+            Level.Add(new EnergyScimitarBlast(position, target));
         }
     }
 }

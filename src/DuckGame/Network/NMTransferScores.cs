@@ -13,7 +13,7 @@ namespace DuckGame
     {
         public List<int> scores = new List<int>();
 
-        public NMTransferScores(List<int> scrs) => this.scores = scrs;
+        public NMTransferScores(List<int> scrs) => scores = scrs;
 
         public NMTransferScores()
         {
@@ -22,9 +22,9 @@ namespace DuckGame
         protected override void OnSerialize()
         {
             base.OnSerialize();
-            this._serializedData.Write((byte)this.scores.Count);
-            foreach (byte score in this.scores)
-                this._serializedData.Write(score);
+            _serializedData.Write((byte)scores.Count);
+            foreach (byte score in scores)
+                _serializedData.Write(score);
         }
 
         public override void OnDeserialize(BitBuffer d)
@@ -32,7 +32,7 @@ namespace DuckGame
             base.OnDeserialize(d);
             byte num = d.ReadByte();
             for (int index = 0; index < num; ++index)
-                this.scores.Add(d.ReadByte());
+                scores.Add(d.ReadByte());
         }
 
         public override void Activate()
@@ -40,8 +40,8 @@ namespace DuckGame
             int index = 0;
             foreach (Profile profile in DuckNetwork.profiles)
             {
-                if (profile.team != null && index < this.scores.Count)
-                    profile.team.score = this.scores[index];
+                if (profile.team != null && index < scores.Count)
+                    profile.team.score = scores[index];
                 ++index;
             }
             GameMode.RunPostRound(false);

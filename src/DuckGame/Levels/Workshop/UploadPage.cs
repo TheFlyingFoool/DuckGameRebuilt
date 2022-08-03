@@ -19,38 +19,38 @@ namespace DuckGame
 
         public UploadPage(List<Card> cards, bool grid)
         {
-            this._grid = grid;
-            this._cards = cards;
+            _grid = grid;
+            _cards = cards;
         }
 
-        public override void DeactivateAll() => this._strip.active = false;
+        public override void DeactivateAll() => _strip.active = false;
 
-        public override void ActivateAll() => this._strip.active = true;
+        public override void ActivateAll() => _strip.active = true;
 
         public override void TransitionOutComplete()
         {
-            if (!(this._pageToOpen.specialText == "Upload Thing"))
+            if (!(_pageToOpen.specialText == "Upload Thing"))
                 return;
-            Level.current = new MainPage(this._cards, true);
+            Level.current = new MainPage(_cards, true);
         }
 
         public void CardSelected(Card card)
         {
-            this._state = CategoryState.OpenPage;
-            this._pageToOpen = card;
+            _state = CategoryState.OpenPage;
+            _pageToOpen = card;
         }
 
         public override void Initialize()
         {
             Layer.HUD.camera.x = Page.camOffset;
-            this.backgroundColor = new Color(8, 12, 13);
-            this._font = new BitmapFont("biosFont", 8);
+            backgroundColor = new Color(8, 12, 13);
+            _font = new BitmapFont("biosFont", 8);
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@SELECT@SELECT");
             HUD.AddCornerControl(HUDCorner.BottomRight, "@CANCEL@BACK");
             CategoryGrid categoryGrid = new CategoryGrid(12f, 20f, null, this);
             Level.Add(categoryGrid);
-            if (this._cards.Count > 4)
-                this._cards.Insert(4, new LevelInfo(false, "Upload Thing"));
+            if (_cards.Count > 4)
+                _cards.Insert(4, new LevelInfo(false, "Upload Thing"));
             StripInfo infos = new StripInfo(false);
             infos.cards.AddRange(_cards);
             infos.header = "Your Things";
@@ -64,7 +64,7 @@ namespace DuckGame
                 header = "Browse Things",
                 cardsVisible = 4
             });
-            this._strip = categoryGrid;
+            _strip = categoryGrid;
             base.Initialize();
         }
 
@@ -72,8 +72,8 @@ namespace DuckGame
         {
             if (layer != Layer.HUD)
                 return;
-            this._font.xscale = this._font.yscale = 1f;
-            this._font.Draw("Upload", 8f, 8f, Color.White, (Depth)0.95f);
+            _font.xscale = _font.yscale = 1f;
+            _font.Draw("Upload", 8f, 8f, Color.White, (Depth)0.95f);
         }
     }
 }

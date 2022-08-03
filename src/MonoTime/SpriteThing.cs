@@ -15,16 +15,16 @@ namespace DuckGame
         public SpriteThing(float xpos, float ypos, Sprite spr)
           : base(xpos, ypos, spr)
         {
-            this.collisionSize = new Vec2(spr.width, spr.height);
-            this.center = new Vec2(spr.w / 2, spr.h / 2);
-            this.collisionOffset = new Vec2(-(spr.w / 2), -(spr.h / 2));
-            this.color = Color.White;
+            collisionSize = new Vec2(spr.width, spr.height);
+            center = new Vec2(spr.w / 2, spr.h / 2);
+            collisionOffset = new Vec2(-(spr.w / 2), -(spr.h / 2));
+            color = Color.White;
         }
 
         public override void Draw()
         {
-            this.graphic.flipH = this.flipHorizontal;
-            this.graphic.color = this.color;
+            graphic.flipH = flipHorizontal;
+            graphic.color = color;
             base.Draw();
         }
     }

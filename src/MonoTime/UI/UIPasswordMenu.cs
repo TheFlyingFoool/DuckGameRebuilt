@@ -34,89 +34,89 @@ namespace DuckGame
           int pMaxNumber = 2147483647)
           : base(title, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, directional ? 160f : 220f, 60f, directional ? "@WASD@SET @SELECT@ACCEPT" : "@ENTERKEY@ACCEPT @ESCAPEKEY@")
         {
-            this.Add(new UIBox(0f, 0f, 100f, 16f, isVisible: false), true);
-            this._binding = pBinding;
-            this._directional = directional;
-            this._numeric = pNumeric;
-            this._maxLength = pMaxLength;
-            this._minNumber = pMinNumber;
-            this._maxNumber = pMaxNumber;
+            Add(new UIBox(0f, 0f, 100f, 16f, isVisible: false), true);
+            _binding = pBinding;
+            _directional = directional;
+            _numeric = pNumeric;
+            _maxLength = pMaxLength;
+            _minNumber = pMinNumber;
+            _maxNumber = pMaxNumber;
         }
 
-        public void SetValue(string pValue) => this.password = pValue;
+        public void SetValue(string pValue) => password = pValue;
 
         public override void Open()
         {
-            if (this._directional)
-                this.password = "";
-            this._originalValue = this.password;
-            Keyboard.keyString = this.password;
-            this._cancelled = true;
+            if (_directional)
+                password = "";
+            _originalValue = password;
+            Keyboard.keyString = password;
+            _cancelled = true;
             base.Open();
         }
 
         public override void OnClose()
         {
             Keyboard.repeat = false;
-            if (this.wasOpen && this._cancelled)
-                this._binding.value = this._directional ? "" : (object)this._originalValue;
-            this.wasOpen = false;
+            if (wasOpen && _cancelled)
+                _binding.value = _directional ? "" : (object)_originalValue;
+            wasOpen = false;
             base.OnClose();
         }
 
         public override void Update()
         {
-            if (this.open)
+            if (open)
             {
                 Input._imeAllowed = true;
                 Keyboard.repeat = true;
-                this.wasOpen = true;
-                this.blink += 0.02f;
-                if (this._directional)
+                wasOpen = true;
+                blink += 0.02f;
+                if (_directional)
                 {
-                    if (this.password.Length < 6)
+                    if (password.Length < 6)
                     {
                         if (Input.Pressed("LEFT"))
-                            this.password += "L";
+                            password += "L";
                         else if (Input.Pressed("RIGHT"))
-                            this.password += "R";
+                            password += "R";
                         else if (Input.Pressed("UP"))
-                            this.password += "U";
+                            password += "U";
                         else if (Input.Pressed("DOWN"))
-                            this.password += "D";
+                            password += "D";
                     }
                     if (Input.Pressed("SELECT"))
                     {
-                        this._binding.value = password;
-                        this._cancelled = false;
-                        this._backFunction.Activate();
+                        _binding.value = password;
+                        _cancelled = false;
+                        _backFunction.Activate();
                     }
                 }
                 else
                 {
                     UIMenu.globalUILock = true;
-                    if (Keyboard.keyString.Length > this._maxLength)
-                        Keyboard.keyString = Keyboard.keyString.Substring(0, this._maxLength);
-                    if (this._numeric)
+                    if (Keyboard.keyString.Length > _maxLength)
+                        Keyboard.keyString = Keyboard.keyString.Substring(0, _maxLength);
+                    if (_numeric)
                         Keyboard.keyString = Regex.Replace(Keyboard.keyString, "[^0-9]", "");
                     InputProfile.ignoreKeyboard = true;
-                    this.password = Keyboard.keyString;
+                    password = Keyboard.keyString;
                     if (Keyboard.Pressed(Keys.Enter))
                     {
                         bool flag = false;
-                        if (this._numeric)
+                        if (_numeric)
                         {
                             try
                             {
                                 int num = Convert.ToInt32(Keyboard.keyString);
-                                if (num < this._minNumber)
+                                if (num < _minNumber)
                                 {
-                                    num = this._minNumber;
+                                    num = _minNumber;
                                     flag = true;
                                 }
-                                else if (num > this._maxNumber)
+                                else if (num > _maxNumber)
                                 {
-                                    num = this._maxNumber;
+                                    num = _maxNumber;
                                     flag = true;
                                 }
                                 Keyboard.keyString = num.ToString();
@@ -130,16 +130,16 @@ namespace DuckGame
                         if (!flag)
                         {
                             UIMenu.globalUILock = false;
-                            this._binding.value = password;
-                            this._cancelled = false;
-                            this._backFunction.Activate();
+                            _binding.value = password;
+                            _cancelled = false;
+                            _backFunction.Activate();
                         }
                     }
                     else if (Keyboard.Pressed(Keys.Escape) || Input.Pressed("CANCEL"))
                     {
                         UIMenu.globalUILock = false;
-                        this._cancelled = true;
-                        this._backFunction.Activate();
+                        _cancelled = true;
+                        _backFunction.Activate();
                     }
                 }
                 InputProfile.ignoreKeyboard = false;
@@ -149,10 +149,10 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._directional)
-                Graphics.DrawPassword(this.password, new Vec2(this.x - this.password.Length * 8 / 2, this.y - 6f), Color.White, this.depth + 10);
+            if (_directional)
+                Graphics.DrawPassword(password, new Vec2(x - password.Length * 8 / 2, y - 6f), Color.White, depth + 10);
             else
-                Graphics.DrawString(this.password + (blink % 1.0 > 0.5 ? "_" : ""), new Vec2(this.x - this.password.Length * 8 / 2, this.y - 6f), Color.White, this.depth + 10);
+                Graphics.DrawString(password + (blink % 1.0 > 0.5 ? "_" : ""), new Vec2(x - password.Length * 8 / 2, y - 6f), Color.White, depth + 10);
             base.Draw();
         }
     }

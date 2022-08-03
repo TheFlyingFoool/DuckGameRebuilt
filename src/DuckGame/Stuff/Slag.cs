@@ -16,39 +16,39 @@ namespace DuckGame
         public Slag(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("slag", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.depth = -0.5f;
-            this.thickness = 4f;
-            this.weight = 7f;
-            this.flammable = 0f;
-            this.collideSounds.Add("rockHitGround2");
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.buoyancy = 1f;
-            this.onlyFloatInLava = true;
-            this.editorTooltip = "What a WORD! Floats in Lava and doesn't burn.";
+            _sprite = new SpriteMap("slag", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -8f);
+            collisionSize = new Vec2(16f, 16f);
+            depth = -0.5f;
+            thickness = 4f;
+            weight = 7f;
+            flammable = 0f;
+            collideSounds.Add("rockHitGround2");
+            physicsMaterial = PhysicsMaterial.Metal;
+            buoyancy = 1f;
+            onlyFloatInLava = true;
+            editorTooltip = "What a WORD! Floats in Lava and doesn't burn.";
         }
 
         public override void Update()
         {
-            this.heat = 0f;
+            heat = 0f;
             base.Update();
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (bullet.isLocal && this.owner == null)
+            if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
-            if (this.isServerForObject && bullet.isLocal && TeamSelect2.Enabled("EXPLODEYCRATES"))
+            if (isServerForObject && bullet.isLocal && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
-                if (this.duck != null)
-                    this.duck.ThrowItem();
-                this.Destroy(new DTShot(bullet));
+                if (duck != null)
+                    duck.ThrowItem();
+                Destroy(new DTShot(bullet));
                 Level.Remove(this);
-                Level.Add(new GrenadeExplosion(this.x, this.y));
+                Level.Add(new GrenadeExplosion(x, y));
             }
             return base.Hit(bullet, hitPos);
         }

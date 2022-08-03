@@ -42,45 +42,45 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(this.contains));
+            binaryClassChunk.AddProperty("contains", Editor.SerializeTypeName(contains));
             return binaryClassChunk;
         }
 
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            this.contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
+            contains = Editor.DeSerializeTypeName(node.GetProperty<string>("contains"));
             return true;
         }
 
         public override void EditorUpdate()
         {
-            if (this.contains != null && (this._previewSprite == null || this._previewType != this.contains))
+            if (contains != null && (_previewSprite == null || _previewType != contains))
             {
-                Thing thing = Editor.GetThing(this.contains);
+                Thing thing = Editor.GetThing(contains);
                 if (thing != null)
                 {
-                    this._previewSprite = thing.GeneratePreview(48, 48, true);
-                    this._previewSprite.CenterOrigin();
+                    _previewSprite = thing.GeneratePreview(48, 48, true);
+                    _previewSprite.CenterOrigin();
                 }
-                this._previewType = this.contains;
+                _previewType = contains;
             }
             base.EditorUpdate();
         }
 
         public override void EditorRender()
         {
-            if (this.contains != null && this._previewSprite != null)
+            if (contains != null && _previewSprite != null)
             {
-                if (this._frozen == null)
-                    this._frozen = new MaterialFrozen(this)
+                if (_frozen == null)
+                    _frozen = new MaterialFrozen(this)
                     {
                         intensity = 1f
                     };
                 Material material = DuckGame.Graphics.material;
                 DuckGame.Graphics.material = _frozen;
-                this._previewSprite.alpha = 0.5f;
-                DuckGame.Graphics.Draw(this._previewSprite, this.x, this.y, this.depth + 10);
+                _previewSprite.alpha = 0.5f;
+                DuckGame.Graphics.Draw(_previewSprite, x, y, depth + 10);
                 DuckGame.Graphics.material = material;
             }
             base.EditorRender();
@@ -89,24 +89,24 @@ namespace DuckGame
         public IceBlock(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._sprite = new SpriteMap("iceBlock", 16, 16);
-            this.graphic = _sprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-8f, -8f);
-            this.collisionSize = new Vec2(16f, 16f);
-            this.depth = -0.5f;
-            this._editorName = "Ice Block";
-            this.editorTooltip = "Slippery, slidery, fun. Also great for keeping your (gigantic) drinks cold.";
-            this.thickness = 2f;
-            this.weight = 5f;
-            this.buoyancy = 1f;
-            this._hitPoints = 1f;
-            this.impactThreshold = -1f;
-            this.physicsMaterial = PhysicsMaterial.Glass;
-            this._holdOffset = new Vec2(2f, 0f);
-            this.flammable = 0f;
-            this.collideSounds.Add("glassHit");
-            this.superNonFlammable = true;
+            _sprite = new SpriteMap("iceBlock", 16, 16);
+            graphic = _sprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-8f, -8f);
+            collisionSize = new Vec2(16f, 16f);
+            depth = -0.5f;
+            _editorName = "Ice Block";
+            editorTooltip = "Slippery, slidery, fun. Also great for keeping your (gigantic) drinks cold.";
+            thickness = 2f;
+            weight = 5f;
+            buoyancy = 1f;
+            _hitPoints = 1f;
+            impactThreshold = -1f;
+            physicsMaterial = PhysicsMaterial.Glass;
+            _holdOffset = new Vec2(2f, 0f);
+            flammable = 0f;
+            collideSounds.Add("glassHit");
+            superNonFlammable = true;
         }
 
         public override void Initialize()
@@ -114,24 +114,24 @@ namespace DuckGame
             base.Initialize();
             if (Network.isActive)
                 return;
-            this.UpdateContainedThing();
+            UpdateContainedThing();
         }
 
         private void UpdateContainedThing()
         {
-            if (!(this.contains != null) || Level.current is Editor)
+            if (!(contains != null) || Level.current is Editor)
                 return;
-            this._containedThing = Editor.CreateThing(this.contains);
-            this._containedThing.active = false;
-            this._containedThing.visible = false;
-            Level.Add(this._containedThing);
+            _containedThing = Editor.CreateThing(contains);
+            _containedThing.active = false;
+            _containedThing.visible = false;
+            Level.Add(_containedThing);
         }
 
         public override void PrepareForHost()
         {
-            this.UpdateContainedThing();
-            if (this._containedThing != null)
-                this._containedThing.PrepareForHost();
+            UpdateContainedThing();
+            if (_containedThing != null)
+                _containedThing.PrepareForHost();
             base.PrepareForHost();
         }
 
@@ -149,7 +149,7 @@ namespace DuckGame
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (bullet.isLocal && this.owner == null)
+            if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
             for (int index = 0; index < 4; ++index)
             {
@@ -163,20 +163,20 @@ namespace DuckGame
             if (bullet.isLocal && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
                 Thing.Fondle(this, DuckNetwork.localConnection);
-                if (this.duck != null)
-                    this.duck.ThrowItem();
-                this.Destroy(new DTShot(bullet));
-                Level.Add(new GrenadeExplosion(this.x, this.y));
+                if (duck != null)
+                    duck.ThrowItem();
+                Destroy(new DTShot(bullet));
+                Level.Add(new GrenadeExplosion(x, y));
             }
-            if (this.isServerForObject && bullet.isLocal)
+            if (isServerForObject && bullet.isLocal)
             {
-                this.breakPoints -= this.damageMultiplier;
-                this.damageMultiplier += 2f;
+                breakPoints -= damageMultiplier;
+                damageMultiplier += 2f;
                 if (breakPoints <= 0f)
-                    this.Destroy(new DTShot(bullet));
-                --this.vSpeed;
-                this.hSpeed += bullet.travelDirNormalized.x;
-                this.vSpeed += bullet.travelDirNormalized.y;
+                    Destroy(new DTShot(bullet));
+                --vSpeed;
+                hSpeed += bullet.travelDirNormalized.x;
+                vSpeed += bullet.travelDirNormalized.y;
             }
             return base.Hit(bullet, hitPos);
         }
@@ -184,13 +184,13 @@ namespace DuckGame
         public override bool Hurt(float points)
         {
             if (carved >= 0f)
-                this.carved += points * 0.05f;
+                carved += points * 0.05f;
             return true;
         }
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            this._hitPoints = 0f;
+            _hitPoints = 0f;
             Level.Remove(this);
             SFX.Play("glassHit");
             Vec2 hitAngle = Vec2.Zero;
@@ -198,7 +198,7 @@ namespace DuckGame
                 hitAngle = (type as DTShot).bullet.travelDirNormalized;
             for (int index = 0; index < 8; ++index)
             {
-                GlassParticle glassParticle = new GlassParticle(this.x + Rando.Float(-4f, 4f), this.y + Rando.Float(-4f, 4f), hitAngle);
+                GlassParticle glassParticle = new GlassParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), hitAngle);
                 Level.Add(glassParticle);
                 glassParticle.hSpeed = (hitAngle.x * 2f * (Rando.Float(1f) + 0.3f));
                 glassParticle.vSpeed = (hitAngle.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
@@ -206,12 +206,12 @@ namespace DuckGame
             }
             for (int index = 0; index < 5; ++index)
             {
-                SmallSmoke smallSmoke = SmallSmoke.New(this.x + Rando.Float(-6f, 6f), this.y + Rando.Float(-6f, 6f));
+                SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-6f, 6f), y + Rando.Float(-6f, 6f));
                 smallSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
                 smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
                 Level.Add(smallSmoke);
             }
-            this.ReleaseContainedObject();
+            ReleaseContainedObject();
             return true;
         }
 
@@ -229,32 +229,32 @@ namespace DuckGame
 
         private void ReleaseContainedObject()
         {
-            if (!this.isServerForObject || this._containedThing == null)
+            if (!isServerForObject || _containedThing == null)
                 return;
-            this.Fondle(this._containedThing);
-            this._containedThing.alpha = 1f;
-            this._containedThing.active = true;
-            this._containedThing.material = null;
-            this._containedThing.visible = true;
-            this._containedThing.velocity = this.velocity + new Vec2(0f, -2f);
-            if (this.duck == null)
+            Fondle(_containedThing);
+            _containedThing.alpha = 1f;
+            _containedThing.active = true;
+            _containedThing.material = null;
+            _containedThing.visible = true;
+            _containedThing.velocity = velocity + new Vec2(0f, -2f);
+            if (duck == null)
                 return;
-            this.duck.GiveHoldable(this._containedThing as Holdable);
+            duck.GiveHoldable(_containedThing as Holdable);
         }
 
         public override void HeatUp(Vec2 location)
         {
-            this._hitPoints -= 0.01f;
+            _hitPoints -= 0.01f;
             if (_hitPoints < 0.05f)
             {
                 Level.Remove(this);
-                this._destroyed = true;
-                this.ReleaseContainedObject();
+                _destroyed = true;
+                ReleaseContainedObject();
                 for (int index = 0; index < 16; ++index)
                 {
                     FluidData water = Fluid.Water;
                     water.amount = 1f / 1000f;
-                    Fluid fluid = new Fluid(this.x + Rando.Int(-6, 6), this.y + Rando.Int(-6, 6), Vec2.Zero, water)
+                    Fluid fluid = new Fluid(x + Rando.Int(-6, 6), y + Rando.Int(-6, 6), Vec2.Zero, water)
                     {
                         hSpeed = (index / 16f - 0.5f) * Rando.Float(0.3f, 0.4f),
                         vSpeed = Rando.Float(-1.5f, 0.5f)
@@ -264,7 +264,7 @@ namespace DuckGame
             }
             FluidData water1 = Fluid.Water;
             water1.amount = 1f / 1000f;
-            Fluid fluid1 = new Fluid(this.x + Rando.Int(-6, 6), this.y + Rando.Int(-6, 6), Vec2.Zero, water1)
+            Fluid fluid1 = new Fluid(x + Rando.Int(-6, 6), y + Rando.Int(-6, 6), Vec2.Zero, water1)
             {
                 hSpeed = Rando.Float(-0.1f, 0.1f),
                 vSpeed = Rando.Float(-0.3f, 0.3f)
@@ -275,46 +275,46 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._containedThing != null)
+            if (_containedThing != null)
             {
                 Depth depth = this.depth;
                 this.depth = depth - 8;
                 base.Draw();
-                if (this._frozen == null)
+                if (_frozen == null)
                 {
-                    this._frozen = new MaterialFrozen(this._containedThing)
+                    _frozen = new MaterialFrozen(_containedThing)
                     {
                         intensity = 1f
                     };
                 }
                 Material material = DuckGame.Graphics.material;
                 DuckGame.Graphics.material = _frozen;
-                this._containedThing.position = this.position;
-                this._containedThing.alpha = 1f;
-                this._containedThing.depth = depth - 4;
-                this._containedThing.angle = this.angle;
-                this._containedThing.offDir = this.offDir;
-                this._containedThing.Draw();
+                _containedThing.position = position;
+                _containedThing.alpha = 1f;
+                _containedThing.depth = depth - 4;
+                _containedThing.angle = angle;
+                _containedThing.offDir = offDir;
+                _containedThing.Draw();
                 DuckGame.Graphics.material = material;
                 this.depth = depth;
-                this.alpha = 0.5f;
+                alpha = 0.5f;
                 base.Draw();
-                this.alpha = 1f;
+                alpha = 1f;
                 this.depth = depth;
             }
-            else if (this.didCarve)
+            else if (didCarve)
             {
-                float y1 = this.y;
-                this.graphic.flipH = this.offDir <= 0;
-                this._graphic.position = this.position;
-                this._graphic.alpha = this.alpha;
-                this._graphic.angle = this.angle;
-                this._graphic.depth = this.depth;
-                this._graphic.scale = this.scale;
-                this._graphic.center = this.center;
+                float y1 = y;
+                graphic.flipH = offDir <= 0;
+                _graphic.position = position;
+                _graphic.alpha = alpha;
+                _graphic.angle = angle;
+                _graphic.depth = depth;
+                _graphic.scale = scale;
+                _graphic.center = center;
                 int y2 = (int)((1.0 - _hitPoints) * 12.0);
-                DuckGame.Graphics.Draw(this._graphic.texture, this.position + new Vec2(0f, y2), new Rectangle?(new Rectangle(0f, 0f, 16f, 24 - y2)), Color.White, this.angle, this._graphic.center, this.scale, this.graphic.flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, this.depth);
-                this.y = y1;
+                DuckGame.Graphics.Draw(_graphic.texture, position + new Vec2(0f, y2), new Rectangle?(new Rectangle(0f, 0f, 16f, 24 - y2)), Color.White, angle, _graphic.center, scale, graphic.flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
+                y = y1;
             }
             else
                 base.Draw();
@@ -330,89 +330,89 @@ namespace DuckGame
             set
             {
                 base.connection = value;
-                if (!this.isServerForObject)
+                if (!isServerForObject)
                     return;
-                this.Fondle(this._containedThing);
+                Fondle(_containedThing);
             }
         }
 
         public override void Update()
         {
             base.Update();
-            this.heat = -1f;
-            if (this._containedThing != null && this._containedThing is Holdable)
+            heat = -1f;
+            if (_containedThing != null && _containedThing is Holdable)
             {
-                if ((this._containedThing as MaterialThing).weight > this.weight)
-                    this.weight = (this._containedThing as MaterialThing).weight;
-                (this._containedThing as MaterialThing).heat = -1f;
-                (this._containedThing as Holdable).UpdateMaterial();
+                if ((_containedThing as MaterialThing).weight > weight)
+                    weight = (_containedThing as MaterialThing).weight;
+                (_containedThing as MaterialThing).heat = -1f;
+                (_containedThing as Holdable).UpdateMaterial();
             }
-            if (carved >= 1.0 && !this.didCarve)
+            if (carved >= 1.0 && !didCarve)
             {
-                if (this._containedThing != null)
+                if (_containedThing != null)
                 {
-                    this.Destroy(new DTImpale(this));
+                    Destroy(new DTImpale(this));
                 }
                 else
                 {
-                    this._sprite = new SpriteMap("iceSculpture", 16, 24);
-                    this.graphic = _sprite;
-                    this.center = new Vec2(8f, 15f);
+                    _sprite = new SpriteMap("iceSculpture", 16, 24);
+                    graphic = _sprite;
+                    center = new Vec2(8f, 15f);
                     for (int index = 0; index < 12; ++index)
                     {
-                        SmallSmoke smallSmoke = SmallSmoke.New(this.x + Rando.Float(-9f, 9f), this.y + Rando.Float(-9f, 9f));
+                        SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-9f, 9f), y + Rando.Float(-9f, 9f));
                         smallSmoke._sprite.color = Color.White;
                         Level.Add(smallSmoke);
                     }
                     SFX.Play("crateDestroy", pitch: Rando.Float(0.1f, 0.3f));
-                    this.didCarve = true;
+                    didCarve = true;
                 }
             }
             if (damageMultiplier > 1.0)
             {
-                this.damageMultiplier -= 0.2f;
+                damageMultiplier -= 0.2f;
             }
             else
             {
-                this.damageMultiplier = 1f;
-                this.breakPoints = 15f;
+                damageMultiplier = 1f;
+                breakPoints = 15f;
             }
-            if (!this.didCarve)
+            if (!didCarve)
             {
-                this._sprite.frame = (int)Math.Floor((1.0 - _hitPoints / 1.0) * 5.0);
-                if (this._sprite.frame == 0)
+                _sprite.frame = (int)Math.Floor((1.0 - _hitPoints / 1.0) * 5.0);
+                if (_sprite.frame == 0)
                 {
-                    this.collisionOffset = new Vec2(-8f, -8f);
-                    this.collisionSize = new Vec2(16f, 16f);
+                    collisionOffset = new Vec2(-8f, -8f);
+                    collisionSize = new Vec2(16f, 16f);
                 }
-                else if (this._sprite.frame == 1)
+                else if (_sprite.frame == 1)
                 {
-                    this.collisionOffset = new Vec2(-8f, -7f);
-                    this.collisionSize = new Vec2(16f, 15f);
+                    collisionOffset = new Vec2(-8f, -7f);
+                    collisionSize = new Vec2(16f, 15f);
                 }
-                else if (this._sprite.frame == 2)
+                else if (_sprite.frame == 2)
                 {
-                    this.collisionOffset = new Vec2(-7f, -4f);
-                    this.collisionSize = new Vec2(14f, 11f);
+                    collisionOffset = new Vec2(-7f, -4f);
+                    collisionSize = new Vec2(14f, 11f);
                 }
-                else if (this._sprite.frame == 3)
+                else if (_sprite.frame == 3)
                 {
-                    this.collisionOffset = new Vec2(-6f, -2f);
-                    this.collisionSize = new Vec2(12f, 7f);
+                    collisionOffset = new Vec2(-6f, -2f);
+                    collisionSize = new Vec2(12f, 7f);
                 }
                 else
                 {
-                    if (this._sprite.frame != 4)
+                    if (_sprite.frame != 4)
                         return;
-                    this.collisionOffset = new Vec2(-6f, -1f);
-                    this.collisionSize = new Vec2(12f, 5f);
+                    collisionOffset = new Vec2(-6f, -1f);
+                    collisionSize = new Vec2(12f, 5f);
                 }
             }
             else
             {
                 int num = (int)((1.0 - _hitPoints) * 12.0);
-                this.collisionOffset = new Vec2(-8f, num - 8);
-                this.collisionSize = new Vec2(16f, 16 - num);
+                collisionOffset = new Vec2(-8f, num - 8);
+                collisionSize = new Vec2(16f, 16 - num);
             }
         }
     }

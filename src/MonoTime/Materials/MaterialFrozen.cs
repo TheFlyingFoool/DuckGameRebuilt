@@ -17,9 +17,9 @@ namespace DuckGame
 
         public MaterialFrozen(Thing t)
         {
-            this._effect = Content.Load<MTEffect>("Shaders/frozen");
-            this._frozenTexture = Content.Load<Tex2D>("frozen");
-            this._thing = t;
+            _effect = Content.Load<MTEffect>("Shaders/frozen");
+            _frozenTexture = Content.Load<Tex2D>("frozen");
+            _thing = t;
         }
 
         public override void Apply()
@@ -27,15 +27,15 @@ namespace DuckGame
             if (DuckGame.Graphics.device.Textures[0] != null)
             {
                 Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-                this.SetValue("width", texture.frameWidth / (texture.width * 0.75f));
-                this.SetValue("height", texture.frameHeight / (texture.height * 0.75f));
-                this.SetValue("xpos", this._thing.x);
-                this.SetValue("ypos", this._thing.y);
-                this.SetValue("intensity", this.intensity);
+                SetValue("width", texture.frameWidth / (texture.width * 0.75f));
+                SetValue("height", texture.frameHeight / (texture.height * 0.75f));
+                SetValue("xpos", _thing.x);
+                SetValue("ypos", _thing.y);
+                SetValue("intensity", intensity);
             }
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._frozenTexture;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)_frozenTexture;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

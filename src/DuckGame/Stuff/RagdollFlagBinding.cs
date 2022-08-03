@@ -13,24 +13,24 @@ namespace DuckGame
         {
             get
             {
-                this._value = 0;
-                Ragdoll thing = this._thing as Ragdoll;
+                _value = 0;
+                Ragdoll thing = _thing as Ragdoll;
                 if (thing.inSleepingBag)
-                    this._value |= 16;
+                    _value |= 16;
                 if (thing.solid)
-                    this._value |= 8;
+                    _value |= 8;
                 if (thing.enablePhysics)
-                    this._value |= 4;
+                    _value |= 4;
                 if (thing.active)
-                    this._value |= 2;
+                    _value |= 2;
                 if (thing.visible)
-                    this._value |= 1;
-                return this._value;
+                    _value |= 1;
+                return _value;
             }
             set
             {
-                this._value = value;
-                Ragdoll thing = this._thing as Ragdoll;
+                _value = value;
+                Ragdoll thing = _thing as Ragdoll;
                 thing.inSleepingBag = (_value & 16U) > 0U;
                 thing.solid = (_value & 8U) > 0U;
                 thing.enablePhysics = (_value & 4U) > 0U;

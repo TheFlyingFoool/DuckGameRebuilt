@@ -21,10 +21,10 @@ namespace DuckGame
         public NMSpawnPlayer(float xVal, float yVal, int duck, bool playerDuck, ushort objectID)
           : base(objectID)
         {
-            this.xpos = xVal;
-            this.ypos = yVal;
-            this.duckID = duck;
-            this.isPlayerDuck = playerDuck;
+            xpos = xVal;
+            ypos = yVal;
+            duckID = duck;
+            isPlayerDuck = playerDuck;
         }
     }
 }

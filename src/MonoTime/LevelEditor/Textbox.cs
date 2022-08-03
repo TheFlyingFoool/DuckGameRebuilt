@@ -30,17 +30,17 @@ namespace DuckGame
 
         public Vec2 position
         {
-            get => this._position;
-            set => this._position = value;
+            get => _position;
+            set => _position = value;
         }
 
         public Vec2 size
         {
-            get => this._size;
+            get => _size;
             set
             {
-                this._size = value;
-                this._font.maxWidth = (int)value.x;
+                _size = value;
+                _font.maxWidth = (int)value.x;
             }
         }
 
@@ -53,64 +53,64 @@ namespace DuckGame
           int maxLines = 2147483647,
           string emptyText = "")
         {
-            this._font = new FancyBitmapFont("smallFont")
+            _font = new FancyBitmapFont("smallFont")
             {
                 scale = new Vec2(scale),
                 maxWidth = (int)width
             };
-            this._position = new Vec2(x, y);
-            this._size = new Vec2(width, height);
-            this._maxLines = maxLines;
-            this._emptyText = emptyText;
+            _position = new Vec2(x, y);
+            _size = new Vec2(width, height);
+            _maxLines = maxLines;
+            _emptyText = emptyText;
         }
 
         private void ConstrainSelection()
         {
-            if (this._font._highlightEnd < 0)
-                this._font._highlightEnd = 0;
-            if (this._font._highlightStart < 0)
-                this._font._highlightStart = 0;
-            if (this._font._highlightEnd > this.text.Length)
-                this._font._highlightEnd = this.text.Length;
-            if (this._font._highlightStart <= this.text.Length)
+            if (_font._highlightEnd < 0)
+                _font._highlightEnd = 0;
+            if (_font._highlightStart < 0)
+                _font._highlightStart = 0;
+            if (_font._highlightEnd > text.Length)
+                _font._highlightEnd = text.Length;
+            if (_font._highlightStart <= text.Length)
                 return;
-            this._font._highlightStart = this.text.Length;
+            _font._highlightStart = text.Length;
         }
 
         private void DeleteHighlight()
         {
-            this.ConstrainSelection();
-            if (this._font._highlightStart < this._font._highlightEnd)
+            ConstrainSelection();
+            if (_font._highlightStart < _font._highlightEnd)
             {
-                this.text = this.text.Remove(this._font._highlightStart, this._font._highlightEnd - this._font._highlightStart);
-                this._cursorPosition = this._font._highlightStart;
-                this._font._highlightEnd = this._cursorPosition;
+                text = text.Remove(_font._highlightStart, _font._highlightEnd - _font._highlightStart);
+                _cursorPosition = _font._highlightStart;
+                _font._highlightEnd = _cursorPosition;
             }
             else
             {
-                this.text = this.text.Remove(this._font._highlightEnd, this._font._highlightStart - this._font._highlightEnd);
-                this._cursorPosition = this._font._highlightEnd;
-                this._font._highlightStart = this._cursorPosition;
+                text = text.Remove(_font._highlightEnd, _font._highlightStart - _font._highlightEnd);
+                _cursorPosition = _font._highlightEnd;
+                _font._highlightStart = _cursorPosition;
             }
         }
 
         public void ReadClipboardText()
         {
-            this._clipboardText = "";
+            _clipboardText = "";
             if (!Clipboard.ContainsText())
                 return;
-            this._clipboardText = Clipboard.GetText();
+            _clipboardText = Clipboard.GetText();
         }
 
         public void LoseFocus()
         {
-            this._inFocus = false;
+            _inFocus = false;
             Editor.PopFocusNow();
         }
 
         public void GainFocus()
         {
-            this._inFocus = true;
+            _inFocus = true;
             Keyboard.keyString = "";
             Editor.PushFocus(this);
         }
@@ -118,7 +118,7 @@ namespace DuckGame
         public void Update()
         {
             bool flag = false;
-            if (Mouse.x > _position.x && Mouse.y > _position.y && Mouse.x < _position.x + this._size.x && Mouse.y < _position.y + this._size.y)
+            if (Mouse.x > _position.x && Mouse.y > _position.y && Mouse.x < _position.x + _size.x && Mouse.y < _position.y + _size.y)
             {
                 flag = true;
                 Editor.hoverTextBox = true;
@@ -129,37 +129,37 @@ namespace DuckGame
                         (Editor.PeekFocus() as Textbox)._inFocus = false;
                         Editor.PopFocusNow();
                     }
-                    this._inFocus = true;
+                    _inFocus = true;
                     Keyboard.keyString = "";
                     Editor.PushFocus(this);
                 }
             }
-            Vec2 position = this._position;
-            if (this._inFocus)
+            Vec2 position = _position;
+            if (_inFocus)
             {
                 Input._imeAllowed = true;
                 Keyboard.repeat = true;
-                int length1 = this.text.Length;
+                int length1 = text.Length;
                 if (Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl))
                 {
                     if (Keyboard.Pressed(Keys.V))
                     {
-                        Thread thread = new Thread(() => this.ReadClipboardText());
+                        Thread thread = new Thread(() => ReadClipboardText());
                         thread.SetApartmentState(ApartmentState.STA);
                         thread.Start();
                         thread.Join();
-                        if (this._clipboardText != "")
+                        if (_clipboardText != "")
                         {
-                            if (this._font._highlightStart != this._font._highlightEnd)
-                                this.DeleteHighlight();
-                            this.text = this.text.Insert(this._cursorPosition, this._clipboardText);
-                            this._cursorPosition += this._clipboardText.Length;
+                            if (_font._highlightStart != _font._highlightEnd)
+                                DeleteHighlight();
+                            text = text.Insert(_cursorPosition, _clipboardText);
+                            _cursorPosition += _clipboardText.Length;
                         }
                     }
-                    else if ((Keyboard.Pressed(Keys.C) || Keyboard.Pressed(Keys.X)) && this._font._highlightStart != this._font._highlightEnd)
+                    else if ((Keyboard.Pressed(Keys.C) || Keyboard.Pressed(Keys.X)) && _font._highlightStart != _font._highlightEnd)
                     {
                         string copyText = "";
-                        copyText = this._font._highlightStart >= this._font._highlightEnd ? this.text.Substring(this._font._highlightEnd, this._font._highlightStart - this._font._highlightEnd) : this.text.Substring(this._font._highlightStart, this._font._highlightEnd - this._font._highlightStart);
+                        copyText = _font._highlightStart >= _font._highlightEnd ? text.Substring(_font._highlightEnd, _font._highlightStart - _font._highlightEnd) : text.Substring(_font._highlightStart, _font._highlightEnd - _font._highlightStart);
                         if (copyText != "")
                         {
                             Thread thread = new Thread(() => Clipboard.SetText(copyText));
@@ -168,112 +168,112 @@ namespace DuckGame
                             thread.Join();
                         }
                         if (Keyboard.Pressed(Keys.X))
-                            this.DeleteHighlight();
+                            DeleteHighlight();
                     }
                     Keyboard.keyString = "";
                 }
-                if (Keyboard.keyString.Length > 0 && this._font._highlightStart != this._font._highlightEnd)
-                    this.DeleteHighlight();
-                this.text = this.text.Insert(this._cursorPosition, Keyboard.keyString);
-                if (Keyboard.Pressed(Keys.Back) && this.text.Length > 0)
+                if (Keyboard.keyString.Length > 0 && _font._highlightStart != _font._highlightEnd)
+                    DeleteHighlight();
+                text = text.Insert(_cursorPosition, Keyboard.keyString);
+                if (Keyboard.Pressed(Keys.Back) && text.Length > 0)
                 {
-                    if (this._font._highlightStart != this._font._highlightEnd)
-                        this.DeleteHighlight();
-                    else if (this._cursorPosition > 0)
+                    if (_font._highlightStart != _font._highlightEnd)
+                        DeleteHighlight();
+                    else if (_cursorPosition > 0)
                     {
-                        this.text = this.text.Remove(this._cursorPosition - 1, 1);
-                        --this._cursorPosition;
+                        text = text.Remove(_cursorPosition - 1, 1);
+                        --_cursorPosition;
                     }
                 }
-                if (Keyboard.Pressed(Keys.Delete) && this.text.Length > 0)
+                if (Keyboard.Pressed(Keys.Delete) && text.Length > 0)
                 {
-                    if (this._font._highlightStart != this._font._highlightEnd)
-                        this.DeleteHighlight();
-                    else if (this._cursorPosition > 0 && this._cursorPosition < this.text.Length)
-                        this.text = this.text.Remove(this._cursorPosition, 1);
+                    if (_font._highlightStart != _font._highlightEnd)
+                        DeleteHighlight();
+                    else if (_cursorPosition > 0 && _cursorPosition < text.Length)
+                        text = text.Remove(_cursorPosition, 1);
                 }
                 if (Keyboard.Pressed(Keys.Enter))
                 {
-                    if (this._font._highlightStart != this._font._highlightEnd)
-                        this.DeleteHighlight();
-                    this.text = this.text.Insert(this._cursorPosition, "\n");
-                    ++this._cursorPosition;
+                    if (_font._highlightStart != _font._highlightEnd)
+                        DeleteHighlight();
+                    text = text.Insert(_cursorPosition, "\n");
+                    ++_cursorPosition;
                 }
-                int length2 = this.text.Length;
-                this._cursorPosition += Keyboard.keyString.Length;
+                int length2 = text.Length;
+                _cursorPosition += Keyboard.keyString.Length;
                 Keyboard.keyString = "";
                 if (Keyboard.Pressed(Keys.Left))
                 {
-                    --this._cursorPosition;
-                    this._font._highlightStart = this._cursorPosition;
-                    this._font._highlightEnd = this._cursorPosition;
-                    this._blink = 0.5f;
+                    --_cursorPosition;
+                    _font._highlightStart = _cursorPosition;
+                    _font._highlightEnd = _cursorPosition;
+                    _blink = 0.5f;
                 }
                 if (Keyboard.Pressed(Keys.Right))
                 {
-                    ++this._cursorPosition;
-                    this._font._highlightStart = this._cursorPosition;
-                    this._font._highlightEnd = this._cursorPosition;
-                    this._blink = 0.5f;
+                    ++_cursorPosition;
+                    _font._highlightStart = _cursorPosition;
+                    _font._highlightEnd = _cursorPosition;
+                    _blink = 0.5f;
                 }
                 if (Keyboard.Pressed(Keys.Up))
                 {
-                    this._cursorPosition = this._font.GetCharacterIndex(this._drawText, this._cursorPos.x + 4f * this._font.scale.x, this._cursorPos.y - _font.characterHeight * this._font.scale.y);
-                    this._font._highlightStart = this._cursorPosition;
-                    this._font._highlightEnd = this._cursorPosition;
-                    this._blink = 0.5f;
+                    _cursorPosition = _font.GetCharacterIndex(_drawText, _cursorPos.x + 4f * _font.scale.x, _cursorPos.y - _font.characterHeight * _font.scale.y);
+                    _font._highlightStart = _cursorPosition;
+                    _font._highlightEnd = _cursorPosition;
+                    _blink = 0.5f;
                 }
                 if (Keyboard.Pressed(Keys.Down))
                 {
-                    this._cursorPosition = this._font.GetCharacterIndex(this._drawText, this._cursorPos.x + 4f * this._font.scale.x, this._cursorPos.y + _font.characterHeight * this._font.scale.y);
-                    this._font._highlightStart = this._cursorPosition;
-                    this._font._highlightEnd = this._cursorPosition;
-                    this._blink = 0.5f;
+                    _cursorPosition = _font.GetCharacterIndex(_drawText, _cursorPos.x + 4f * _font.scale.x, _cursorPos.y + _font.characterHeight * _font.scale.y);
+                    _font._highlightStart = _cursorPosition;
+                    _font._highlightEnd = _cursorPosition;
+                    _blink = 0.5f;
                 }
-                this.ConstrainSelection();
-                this.text = this.text.Substring(0, this._font.GetCharacterIndex(this.text, 99999f, 99999f, this._maxLines));
+                ConstrainSelection();
+                text = text.Substring(0, _font.GetCharacterIndex(text, 99999f, 99999f, _maxLines));
             }
             else
-                this._font._highlightStart = this._font._highlightEnd = 0;
-            this._drawText = this.text;
+                _font._highlightStart = _font._highlightEnd = 0;
+            _drawText = text;
             if (flag && Mouse.left == InputState.Pressed)
             {
-                int characterIndex = this._font.GetCharacterIndex(this._drawText, Mouse.x + 4f * this._font.scale.x - position.x, Mouse.y - position.y);
-                this._cursorPosition = characterIndex;
-                this._font._highlightStart = characterIndex;
-                this._font._highlightEnd = characterIndex;
-                this._highlightDrag = true;
-                this._blink = 0.5f;
+                int characterIndex = _font.GetCharacterIndex(_drawText, Mouse.x + 4f * _font.scale.x - position.x, Mouse.y - position.y);
+                _cursorPosition = characterIndex;
+                _font._highlightStart = characterIndex;
+                _font._highlightEnd = characterIndex;
+                _highlightDrag = true;
+                _blink = 0.5f;
             }
-            if (this._highlightDrag)
+            if (_highlightDrag)
             {
-                this._font._highlightEnd = this._font.GetCharacterIndex(this._drawText, Mouse.x + 4f * this._font.scale.x - position.x, Mouse.y - position.y);
-                this._blink = 0.5f;
+                _font._highlightEnd = _font.GetCharacterIndex(_drawText, Mouse.x + 4f * _font.scale.x - position.x, Mouse.y - position.y);
+                _blink = 0.5f;
             }
-            if (this.text.Length > this.maxLength)
-                this.text = this.text.Substring(0, this.maxLength);
-            this.ConstrainSelection();
+            if (text.Length > maxLength)
+                text = text.Substring(0, maxLength);
+            ConstrainSelection();
             if (Mouse.left != InputState.Pressed && Mouse.left != InputState.Down)
-                this._highlightDrag = false;
-            if (this._cursorPosition > this.text.Length)
-                this._cursorPosition = this.text.Length;
-            if (this._cursorPosition < 0)
-                this._cursorPosition = 0;
-            this._cursorPos = this._font.GetCharacterPosition(this._drawText, this._cursorPosition);
-            this._drawText = this.text;
-            if (this.text.Length == 0 && !this._inFocus)
-                this._drawText = this._emptyText;
-            this._blink = (float)((_blink + 0.0199999995529652) % 1.0);
+                _highlightDrag = false;
+            if (_cursorPosition > text.Length)
+                _cursorPosition = text.Length;
+            if (_cursorPosition < 0)
+                _cursorPosition = 0;
+            _cursorPos = _font.GetCharacterPosition(_drawText, _cursorPosition);
+            _drawText = text;
+            if (text.Length == 0 && !_inFocus)
+                _drawText = _emptyText;
+            _blink = (float)((_blink + 0.0199999995529652) % 1.0);
         }
 
         public void Draw()
         {
-            this._font.Draw(this._drawText, this._position, this.text.Length == 0 ? Colors.Silver * 0.8f : Color.White, this.depth);
-            if (!this._inFocus || _blink < 0.5)
+            _font.Draw(_drawText, _position, text.Length == 0 ? Colors.Silver * 0.8f : Color.White, depth);
+            if (!_inFocus || _blink < 0.5)
                 return;
-            Vec2 cursorPos = this._cursorPos;
-            cursorPos.x += 1f * this._font.scale.x;
-            Graphics.DrawLine(this._position + cursorPos, this._position + cursorPos + new Vec2(0f, 8f * this._font.scale.y), Color.White, 0.5f, this.depth);
+            Vec2 cursorPos = _cursorPos;
+            cursorPos.x += 1f * _font.scale.x;
+            Graphics.DrawLine(_position + cursorPos, _position + cursorPos + new Vec2(0f, 8f * _font.scale.y), Color.White, 0.5f, depth);
         }
     }
 }

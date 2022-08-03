@@ -60,7 +60,7 @@ namespace DuckGame
             --Windows_Audio._losingDevice;
             if (Windows_Audio._losingDevice != 0)
                 return;
-            this.RecreateDevice();
+            RecreateDevice();
         }
 
         public void LoseDevice()
@@ -102,7 +102,7 @@ namespace DuckGame
                     Windows_Audio._output.Dispose();
                     Windows_Audio._output = null;
                 }
-                if (Windows_Audio._forceMode != AudioMode.None && !this._recreateAlternateAudio && !this._recreateNonExclusive)
+                if (Windows_Audio._forceMode != AudioMode.None && !_recreateAlternateAudio && !_recreateNonExclusive)
                     Windows_Audio._mode = Windows_Audio._forceMode;
                 switch (Windows_Audio._mode)
                 {
@@ -118,18 +118,18 @@ namespace DuckGame
                         Windows_Audio._output = new DirectSoundOut();
                         break;
                     default:
-                        if (!this._recreateAlternateAudio)
+                        if (!_recreateAlternateAudio)
                         {
-                            if (this.notificationClient == null)
+                            if (notificationClient == null)
                             {
-                                this.notificationClient = new Windows_Audio.NotificationClientImplementation(this);
-                                this.notifyClient = notificationClient;
-                                if (this.deviceEnum == null)
-                                    this.deviceEnum = new MMDeviceEnumerator();
-                                this.deviceEnum.RegisterEndpointNotificationCallback(this.notifyClient);
+                                notificationClient = new Windows_Audio.NotificationClientImplementation(this);
+                                notifyClient = notificationClient;
+                                if (deviceEnum == null)
+                                    deviceEnum = new MMDeviceEnumerator();
+                                deviceEnum.RegisterEndpointNotificationCallback(notifyClient);
                             }
                             new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
-                            Windows_Audio._output = new WasapiOut(this._recreateNonExclusive || !Options.Data.audioExclusiveMode ? AudioClientShareMode.Shared : AudioClientShareMode.Exclusive, 20);
+                            Windows_Audio._output = new WasapiOut(_recreateNonExclusive || !Options.Data.audioExclusiveMode ? AudioClientShareMode.Shared : AudioClientShareMode.Exclusive, 20);
                             break;
                         }
                         goto case AudioMode.Wave;
@@ -145,29 +145,29 @@ namespace DuckGame
             }
             catch (Exception ex)
             {
-                if (this._recreateAlternateAudio)
+                if (_recreateAlternateAudio)
                 {
                     Windows_Audio.initialized = false;
                     Windows_Audio._output = null;
                     Windows_Audio._mixer = null;
                     return;
                 }
-                if (this._recreateNonExclusive)
+                if (_recreateNonExclusive)
                 {
-                    this._recreateAlternateAudio = true;
+                    _recreateAlternateAudio = true;
                     DevConsole.Log(DCSection.General, "|DGRED|Failed to create audio device, reattempting creation in alternate mode:");
                     DevConsole.Log(DCSection.General, ex.Message);
-                    this.RecreateDevice();
-                    this._recreateNonExclusive = false;
-                    this._recreateAlternateAudio = false;
+                    RecreateDevice();
+                    _recreateNonExclusive = false;
+                    _recreateAlternateAudio = false;
                 }
                 else
                 {
-                    this._recreateNonExclusive = true;
+                    _recreateNonExclusive = true;
                     DevConsole.Log(DCSection.General, "|DGRED|Failed to create audio device, reattempting creation in non-exclusive mode:");
                     DevConsole.Log(DCSection.General, ex.Message);
-                    this.RecreateDevice();
-                    this._recreateNonExclusive = false;
+                    RecreateDevice();
+                    _recreateNonExclusive = false;
                     return;
                 }
             }
@@ -206,9 +206,9 @@ namespace DuckGame
 
         public void Dispose()
         {
-            if (!Windows_Audio.initialized || this.notificationClient == null)
+            if (!Windows_Audio.initialized || notificationClient == null)
                 return;
-            this.UnRegisterEndpointNotificationCallback(notificationClient);
+            UnRegisterEndpointNotificationCallback(notificationClient);
             Windows_Audio._output.Dispose();
         }
 
@@ -217,9 +217,9 @@ namespace DuckGame
         /// <returns></returns>
         public int RegisterEndpointNotificationCallback([MarshalAs(UnmanagedType.Interface), In] IMMNotificationClient client)
         {
-            if (this.deviceEnum == null)
-                this.deviceEnum = new MMDeviceEnumerator();
-            return this.deviceEnum.RegisterEndpointNotificationCallback(client);
+            if (deviceEnum == null)
+                deviceEnum = new MMDeviceEnumerator();
+            return deviceEnum.RegisterEndpointNotificationCallback(client);
         }
 
         /// <summary>UnRegisters a call back for Device Events</summary>
@@ -227,9 +227,9 @@ namespace DuckGame
         /// <returns></returns>
         public int UnRegisterEndpointNotificationCallback([MarshalAs(UnmanagedType.Interface), In] IMMNotificationClient client)
         {
-            if (this.deviceEnum == null)
-                this.deviceEnum = new MMDeviceEnumerator();
-            return this.deviceEnum.UnregisterEndpointNotificationCallback(client);
+            if (deviceEnum == null)
+                deviceEnum = new MMDeviceEnumerator();
+            return deviceEnum.UnregisterEndpointNotificationCallback(client);
         }
 
         private class NotificationClientImplementation : IMMNotificationClient
@@ -241,7 +241,7 @@ namespace DuckGame
               Role deviceRole,
               string defaultDeviceId)
             {
-                this._owner.LoseDevice();
+                _owner.LoseDevice();
             }
 
             public void OnDeviceAdded(string deviceId)
@@ -258,7 +258,7 @@ namespace DuckGame
 
             public NotificationClientImplementation(Windows_Audio pOwner)
             {
-                this._owner = pOwner;
+                _owner = pOwner;
                 if (Environment.OSVersion.Version.Major < 6)
                     throw new NotSupportedException("This functionality is only supported on Windows Vista or newer.");
             }

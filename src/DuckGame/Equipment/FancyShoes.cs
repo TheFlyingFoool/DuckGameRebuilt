@@ -15,13 +15,13 @@ namespace DuckGame
         public FancyShoes(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this._pickupSprite = new Sprite("walljumpBootsPickup");
-            this._sprite = new SpriteMap("walljumpBoots", 32, 32);
-            this.graphic = this._pickupSprite;
-            this.center = new Vec2(8f, 8f);
-            this.collisionOffset = new Vec2(-6f, -6f);
-            this.collisionSize = new Vec2(12f, 13f);
-            this._equippedDepth = 3;
+            _pickupSprite = new Sprite("walljumpBootsPickup");
+            _sprite = new SpriteMap("walljumpBoots", 32, 32);
+            graphic = _pickupSprite;
+            center = new Vec2(8f, 8f);
+            collisionOffset = new Vec2(-6f, -6f);
+            collisionSize = new Vec2(12f, 13f);
+            _equippedDepth = 3;
         }
     }
 }

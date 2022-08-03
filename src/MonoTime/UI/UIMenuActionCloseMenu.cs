@@ -11,8 +11,8 @@ namespace DuckGame
     {
         private UIComponent _menu;
 
-        public UIMenuActionCloseMenu(UIComponent menu) => this._menu = menu;
+        public UIMenuActionCloseMenu(UIComponent menu) => _menu = menu;
 
-        public override void Activate() => this._menu.Close();
+        public override void Activate() => _menu.Close();
     }
 }

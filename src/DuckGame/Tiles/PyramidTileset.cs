@@ -14,11 +14,11 @@ namespace DuckGame
         public PyramidTileset(float x, float y)
           : base(x, y, "pyramidTileset")
         {
-            this._editorName = "Pyramid";
-            this.physicsMaterial = PhysicsMaterial.Metal;
-            this.verticalWidthThick = 14f;
-            this.verticalWidth = 12f;
-            this.horizontalHeight = 13f;
+            _editorName = "Pyramid";
+            physicsMaterial = PhysicsMaterial.Metal;
+            verticalWidthThick = 14f;
+            verticalWidth = 12f;
+            horizontalHeight = 13f;
         }
     }
 }

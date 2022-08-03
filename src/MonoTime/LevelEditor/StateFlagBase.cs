@@ -16,7 +16,7 @@ namespace DuckGame
         public override object classValue
         {
             get => ushortValue;
-            set => this.ushortValue = (ushort)value;
+            set => ushortValue = (ushort)value;
         }
 
         public abstract override ushort ushortValue { get; set; }
@@ -24,9 +24,9 @@ namespace DuckGame
         public StateFlagBase(GhostPriority p, int bits)
           : base("multiple", bits)
         {
-            this._priority = p;
+            _priority = p;
         }
 
-        public override void Connect(Thing t) => this._thing = t;
+        public override void Connect(Thing t) => _thing = t;
     }
 }

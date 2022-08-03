@@ -15,15 +15,15 @@ namespace DuckGame
 
         public MaterialAlbum()
         {
-            this._effect = Content.Load<MTEffect>("Shaders/album");
-            this._albumTexture = Content.Load<Tex2D>("playBookPageOffset");
+            _effect = Content.Load<MTEffect>("Shaders/album");
+            _albumTexture = Content.Load<Tex2D>("playBookPageOffset");
         }
 
         public override void Apply()
         {
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)this._albumTexture;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)_albumTexture;
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointClamp;
-            foreach (EffectPass pass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

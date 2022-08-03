@@ -17,29 +17,29 @@ namespace DuckGame
         private NetworkConnection _connection;
         public BitBuffer _netData;
 
-        public NMProfileNetData() => this.manager = BelongsToManager.GhostManager;
+        public NMProfileNetData() => manager = BelongsToManager.GhostManager;
 
         public NMProfileNetData(Profile pProfile, NetworkConnection pConnection)
           : this()
         {
-            this._profile = pProfile;
-            this._connection = pConnection;
+            _profile = pProfile;
+            _connection = pConnection;
         }
 
         protected override void OnSerialize()
         {
-            if (!DuckNetwork.profiles.Contains(this._profile))
+            if (!DuckNetwork.profiles.Contains(_profile))
                 return;
-            this._serializedData.WriteProfile(this._profile);
-            BitBuffer val = this._profile.netData.Serialize(this._connection, this._hashes);
-            this.syncIndex = this._profile.netData.GetSyncIndex(this._connection);
-            this._serializedData.Write(val, true);
+            _serializedData.WriteProfile(_profile);
+            BitBuffer val = _profile.netData.Serialize(_connection, _hashes);
+            syncIndex = _profile.netData.GetSyncIndex(_connection);
+            _serializedData.Write(val, true);
         }
 
         public override void OnDeserialize(BitBuffer d)
         {
-            this._profile = d.ReadProfile();
-            this._netData = d.ReadBitBuffer();
+            _profile = d.ReadProfile();
+            _netData = d.ReadBitBuffer();
         }
     }
 }

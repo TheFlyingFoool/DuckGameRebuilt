@@ -14,14 +14,14 @@ namespace DuckGame
         public LavaBarrel(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.graphic = new Sprite("lavaBarrel");
-            this.center = new Vec2(7f, 8f);
-            this._melting = new Sprite("blueBarrelMelting");
-            this._editorName = "Barrel (Lava)";
-            this.editorTooltip = "Your standard lava barrel - for carrying delicious, refreshing lava. Choose lava!";
-            this.flammable = 0f;
-            this._fluid = Fluid.Lava;
-            this._toreUp = new SpriteMap("blueBarrelToreUp", 14, 17)
+            graphic = new Sprite("lavaBarrel");
+            center = new Vec2(7f, 8f);
+            _melting = new Sprite("blueBarrelMelting");
+            _editorName = "Barrel (Lava)";
+            editorTooltip = "Your standard lava barrel - for carrying delicious, refreshing lava. Choose lava!";
+            flammable = 0f;
+            _fluid = Fluid.Lava;
+            _toreUp = new SpriteMap("blueBarrelToreUp", 14, 17)
             {
                 frame = 1,
                 center = new Vec2(0f, -6f)

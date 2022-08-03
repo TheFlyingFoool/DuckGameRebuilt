@@ -15,6 +15,6 @@ namespace DuckGame
         {
         }
 
-        public NMKicked(Profile pProfile) => this.profile = pProfile;
+        public NMKicked(Profile pProfile) => profile = pProfile;
     }
 }

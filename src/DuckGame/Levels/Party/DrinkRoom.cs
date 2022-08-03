@@ -14,9 +14,9 @@ namespace DuckGame
 
         public DrinkRoom(Level next)
         {
-            this.transitionSpeedMultiplier = 4f;
-            this._centeredView = true;
-            this._next = next;
+            transitionSpeedMultiplier = 4f;
+            _centeredView = true;
+            _next = next;
         }
 
         public override void Initialize()
@@ -28,10 +28,10 @@ namespace DuckGame
         public override void Update()
         {
             if (Input.Pressed("MENU2"))
-                this._fade = true;
-            Graphics.fade = Lerp.Float(Graphics.fade, this._fade ? 0f : 1f, 0.1f);
-            if (this._fade && Graphics.fade < 0.01f)
-                Level.current = this._next;
+                _fade = true;
+            Graphics.fade = Lerp.Float(Graphics.fade, _fade ? 0f : 1f, 0.1f);
+            if (_fade && Graphics.fade < 0.01f)
+                Level.current = _next;
             base.Update();
         }
 

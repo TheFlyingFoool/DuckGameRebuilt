@@ -20,8 +20,8 @@ namespace DuckGame
 
         public DuckNetErrorInfo(DuckNetError e, string msg)
         {
-            this.message = msg;
-            this.error = e;
+            message = msg;
+            error = e;
         }
     }
 }

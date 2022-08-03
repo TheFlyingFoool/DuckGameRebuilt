@@ -18,75 +18,75 @@ namespace DuckGame
         {
             get
             {
-                if (this._effectTexture == null)
-                    this._effectTexture = new RenderTarget2D(this.width, this.height);
-                return this._effectTexture;
+                if (_effectTexture == null)
+                    _effectTexture = new RenderTarget2D(width, height);
+                return _effectTexture;
             }
         }
 
         public override object nativeObject => _base;
 
-        public override int width => this._base == null ? -1 : this._base.Width;
+        public override int width => _base == null ? -1 : _base.Width;
 
-        public override int height => this._base == null ? -1 : this._base.Height;
+        public override int height => _base == null ? -1 : _base.Height;
 
         internal Tex2D(Texture2D tex, string texName, short curTexIndex = 0)
           : base(texName, curTexIndex)
         {
-            this._base = tex;
-            this._frameWidth = tex.Width;
-            this._frameHeight = tex.Height;
+            _base = tex;
+            _frameWidth = tex.Width;
+            _frameHeight = tex.Height;
         }
 
         public Tex2D(int width, int height)
           : base("__internal", 0)
         {
-            this._base = new Texture2D(DuckGame.Graphics.device, width, height, false, SurfaceFormat.Color);
-            this._frameWidth = width;
-            this._frameHeight = height;
+            _base = new Texture2D(DuckGame.Graphics.device, width, height, false, SurfaceFormat.Color);
+            _frameWidth = width;
+            _frameHeight = height;
             Content.AssignTextureIndex(this);
         }
 
         public override void GetData<T>(T[] data)
         {
-            if (this._base == null)
+            if (_base == null)
                 return;
-            this._base.GetData<T>(data);
+            _base.GetData<T>(data);
         }
 
         public override Color[] GetData()
         {
-            if (this._base == null)
+            if (_base == null)
                 return null;
-            Color[] data = new Color[this._base.Width * this._base.Height];
-            this._base.GetData<Color>(data);
+            Color[] data = new Color[_base.Width * _base.Height];
+            _base.GetData<Color>(data);
             return data;
         }
 
         public override void SetData<T>(T[] colors)
         {
-            if (this._base == null)
+            if (_base == null)
                 return;
-            this._base.SetData<T>(colors);
+            _base.SetData<T>(colors);
         }
 
         public override void SetData(Color[] colors)
         {
-            if (this._base == null)
+            if (_base == null)
                 return;
-            this._base.SetData<Color>(colors);
+            _base.SetData<Color>(colors);
         }
 
         protected override void DisposeNative()
         {
-            if (this._base == null)
+            if (_base == null)
                 return;
             if (!DuckGame.Graphics.disposingObjects)
             {
                 lock (DuckGame.Graphics.objectsToDispose)
                     DuckGame.Graphics.objectsToDispose.Add(_base);
             }
-            this._base = null;
+            _base = null;
         }
 
         public static implicit operator Texture2D(Tex2D tex) => tex._base;

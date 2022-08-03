@@ -23,63 +23,63 @@ namespace DuckGame
         public PlusOne(float xpos, float ypos, Profile p, bool temp = false, bool testMode = false)
           : base(xpos, ypos)
         {
-            this._font = new BitmapFont("biosFont", 8);
-            this._profile = p;
-            this._temp = temp;
-            this.layer = Layer.Blocks;
-            this.depth = (Depth)0.9f;
-            this._testMode = testMode;
+            _font = new BitmapFont("biosFont", 8);
+            _profile = p;
+            _temp = temp;
+            layer = Layer.Blocks;
+            depth = (Depth)0.9f;
+            _testMode = testMode;
         }
 
         public override void Initialize()
         {
-            if (!this._testMode && this._profile != null)
+            if (!_testMode && _profile != null)
             {
-                if (Teams.active.Count > 1 && Network.isActive && this._profile.connection == DuckNetwork.localConnection)
+                if (Teams.active.Count > 1 && Network.isActive && _profile.connection == DuckNetwork.localConnection)
                     DuckNetwork.GiveXP("Rounds Won", 1, 4, firstCap: 10, secondCap: 20);
-                this._profile.stats.lastWon = DateTime.Now;
-                ++this._profile.stats.matchesWon;
+                _profile.stats.lastWon = DateTime.Now;
+                ++_profile.stats.matchesWon;
             }
             base.Initialize();
         }
 
         public void Pulse()
         {
-            this._wait = 1f;
-            this.pulse = 1f;
-            ++this._num;
+            _wait = 1f;
+            pulse = 1f;
+            ++_num;
         }
 
         public override void Update()
         {
-            this.pulse = Lerp.FloatSmooth(this.pulse, 0f, 0.1f);
+            pulse = Lerp.FloatSmooth(pulse, 0f, 0.1f);
             if (pulse < 0.03f)
-                this.pulse = 0f;
-            if (!this._temp)
-                this._wait -= 0.01f;
+                pulse = 0f;
+            if (!_temp)
+                _wait -= 0.01f;
             if (_wait >= 0f)
                 return;
             Level.Remove(this);
-            if (this._duck == null)
+            if (_duck == null)
                 return;
-            this._duck.currentPlusOne = null;
+            _duck.currentPlusOne = null;
         }
 
         public override void Draw()
         {
-            if (this._profile == null || this._profile.persona == null || this.anchor == null)
+            if (_profile == null || _profile.persona == null || anchor == null)
                 return;
-            this.position = this.anchor.position;
-            this._font.scale = new Vec2((float)(1f + pulse * 0.5f));
-            this._num = 1;
-            string text = "+" + this._num.ToString();
-            float xpos = this.x - this._font.GetWidth(text) / 2f;
-            this._font.Draw(text, xpos - 1f, this.y - 1f, Color.Black, (Depth)0.8f);
-            this._font.Draw(text, xpos + 1f, this.y - 1f, Color.Black, (Depth)0.8f);
-            this._font.Draw(text, xpos - 1f, this.y + 1f, Color.Black, (Depth)0.8f);
-            this._font.Draw(text, xpos + 1f, this.y + 1f, Color.Black, (Depth)0.8f);
-            Color c = new Color((byte)this._profile.persona.color.x, (byte)this._profile.persona.color.y, (byte)this._profile.persona.color.z);
-            this._font.Draw(text, xpos, this.y, c, (Depth)0.9f);
+            position = anchor.position;
+            _font.scale = new Vec2((float)(1f + pulse * 0.5f));
+            _num = 1;
+            string text = "+" + _num.ToString();
+            float xpos = x - _font.GetWidth(text) / 2f;
+            _font.Draw(text, xpos - 1f, y - 1f, Color.Black, (Depth)0.8f);
+            _font.Draw(text, xpos + 1f, y - 1f, Color.Black, (Depth)0.8f);
+            _font.Draw(text, xpos - 1f, y + 1f, Color.Black, (Depth)0.8f);
+            _font.Draw(text, xpos + 1f, y + 1f, Color.Black, (Depth)0.8f);
+            Color c = new Color((byte)_profile.persona.color.x, (byte)_profile.persona.color.y, (byte)_profile.persona.color.z);
+            _font.Draw(text, xpos, y, c, (Depth)0.9f);
         }
     }
 }

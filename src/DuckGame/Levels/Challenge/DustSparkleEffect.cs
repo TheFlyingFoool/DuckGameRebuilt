@@ -21,60 +21,60 @@ namespace DuckGame
         public DustSparkleEffect(float xpos, float ypos, bool wide, bool lit)
           : base(xpos, ypos)
         {
-            this._light = !wide ? new SpriteMap("arcade/lights", 56, 57) : new SpriteMap("arcade/prizeLights", 107, 55);
-            this._wide = wide;
-            this._lit = lit;
+            _light = !wide ? new SpriteMap("arcade/lights", 56, 57) : new SpriteMap("arcade/prizeLights", 107, 55);
+            _wide = wide;
+            _lit = lit;
         }
 
         public override void Initialize()
         {
-            this.material = new MaterialDustSparkle(this.position, new Vec2(_light.width, _light.height), this._wide, this._lit);
+            material = new MaterialDustSparkle(position, new Vec2(_light.width, _light.height), _wide, _lit);
             base.Initialize();
         }
 
         public float fade
         {
-            get => (this.material as MaterialDustSparkle).fade;
-            set => (this.material as MaterialDustSparkle).fade = value;
+            get => (material as MaterialDustSparkle).fade;
+            set => (material as MaterialDustSparkle).fade = value;
         }
 
         public override void Update()
         {
-            for (int index = 0; index < this._sparkles.Count; ++index)
+            for (int index = 0; index < _sparkles.Count; ++index)
             {
-                DustSparkle sparkle = this._sparkles[index];
+                DustSparkle sparkle = _sparkles[index];
                 sparkle.position += sparkle.velocity;
                 sparkle.position.y += (float)Math.Sin(sparkle.sin) * 0.01f;
                 sparkle.sin += 0.01f;
                 if (sparkle.alpha < 1.0)
                     sparkle.alpha += 0.01f;
                 bool flag = false;
-                if (sparkle.position.x > this.x + _light.width + 2.0 || sparkle.position.x < this.x - 2.0 || sparkle.position.y < this.y + 1.0 || sparkle.position.y > this.y + _light.height)
+                if (sparkle.position.x > x + _light.width + 2.0 || sparkle.position.x < x - 2.0 || sparkle.position.y < y + 1.0 || sparkle.position.y > y + _light.height)
                     flag = true;
                 if (flag)
                 {
-                    this._sparkles.RemoveAt(index);
+                    _sparkles.RemoveAt(index);
                     --index;
                 }
             }
-            ++this._sparkleWait;
-            if (this._sparkleWait <= 10)
+            ++_sparkleWait;
+            if (_sparkleWait <= 10)
                 return;
-            this._sparkleWait = 0;
+            _sparkleWait = 0;
             int num = 1;
             if (Rando.Float(1f) > 0.5)
                 num = -1;
-            this._sparkles.Add(new DustSparkle(new Vec2(this.x + Rando.Float(_light.width), this.y + Rando.Float(_light.height)), new Vec2(Rando.Float(0.15f, 0.25f) * num, Rando.Float(-0.05f, 0.05f))));
+            _sparkles.Add(new DustSparkle(new Vec2(x + Rando.Float(_light.width), y + Rando.Float(_light.height)), new Vec2(Rando.Float(0.15f, 0.25f) * num, Rando.Float(-0.05f, 0.05f))));
         }
 
         public override void Draw()
         {
-            this._light.depth = this.depth - 2;
-            this._light.frame = 1;
-            this._light.alpha = 0.7f;
-            Graphics.Draw(_light, this.x, this.y);
-            foreach (DustSparkle sparkle in this._sparkles)
-                Graphics.DrawRect(sparkle.position + new Vec2(-0.5f, -0.5f), sparkle.position + new Vec2(0.5f, 0.5f), Color.White * sparkle.alpha, this.depth + 10);
+            _light.depth = depth - 2;
+            _light.frame = 1;
+            _light.alpha = 0.7f;
+            Graphics.Draw(_light, x, y);
+            foreach (DustSparkle sparkle in _sparkles)
+                Graphics.DrawRect(sparkle.position + new Vec2(-0.5f, -0.5f), sparkle.position + new Vec2(0.5f, 0.5f), Color.White * sparkle.alpha, depth + 10);
         }
     }
 }

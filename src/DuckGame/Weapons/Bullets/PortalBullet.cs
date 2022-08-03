@@ -27,8 +27,8 @@ namespace DuckGame
           float thick = 0.3f)
           : base(xval, yval, type, ang, owner, rbound, distance)
         {
-            this._thickness = thick;
-            this._beem = Content.Load<Texture2D>("laserBeam");
+            _thickness = thick;
+            _beem = Content.Load<Texture2D>("laserBeam");
         }
 
         public override void OnCollide(Vec2 pos, Thing t, bool willBeStopped)
@@ -40,12 +40,12 @@ namespace DuckGame
                 portal = new Portal(owner);
                 Level.Add(portal);
             }
-            Vec2 p1 = pos - this.travelDirNormalized;
+            Vec2 p1 = pos - travelDirNormalized;
             PortalDoor door = new PortalDoor
             {
                 center = pos
             };
-            if (Math.Abs(this.travelDirNormalized.y) < 0.5)
+            if (Math.Abs(travelDirNormalized.y) < 0.5)
             {
                 door.horizontal = false;
                 door.point1 = new Vec2(pos + new Vec2(0f, -16f));
@@ -74,9 +74,9 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (this._tracer || _bulletDistance <= 0.100000001490116)
+            if (_tracer || _bulletDistance <= 0.100000001490116)
                 return;
-            float length = (this.drawStart - this.drawEnd).length;
+            float length = (drawStart - drawEnd).length;
             float val = 0f;
             float num1 = (float)(1.0 / (length / 8.0));
             float num2 = 0f;
@@ -90,7 +90,7 @@ namespace DuckGame
                     flag = true;
                 }
                 num2 += num1;
-                DuckGame.Graphics.DrawTexturedLine((Tex2D)this._beem, this.drawStart + this.travelDirNormalized * val, this.drawStart + this.travelDirNormalized * (val + num3), Color.White * num2, this._thickness, (Depth)0.6f);
+                DuckGame.Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * val, drawStart + travelDirNormalized * (val + num3), Color.White * num2, _thickness, (Depth)0.6f);
                 if (!flag)
                     val += 8f;
                 else
