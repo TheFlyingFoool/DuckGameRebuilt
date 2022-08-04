@@ -59,7 +59,7 @@ namespace DuckGame
         private static string _currentTransferLevelName = null;
         public const string kServerIdentifier = "SERVER";
         public const string kServerLocalIdentifier = "SERVERLOCAL";
-
+        private static bool WasDownLastFrame = false;
         public static void UpdateFont()
         {
             if (Options.Data.chatFont != "" && RasterFont.GetName(Options.Data.chatFont) != null)
@@ -1925,7 +1925,8 @@ namespace DuckGame
                     {
                         bool enteringText = _core.enteringText;
                         _core.enteringText = false;
-                        int num2 = !Input.Pressed("CHAT") ? 0 : (!Keyboard.alt ? 1 : (!Keyboard.Pressed(Keys.Enter) ? 1 : 0));
+                        int num2 = !(Input.Down("CHAT") && !WasDownLastFrame) ? 0 : (!Keyboard.alt ? 1 : (!Keyboard.Pressed(Keys.Enter) ? 1 : 0)); // Replaced !(Input.Pressed("CHAT")) ? with that because Press can cause issues with it auto trying to close 
+                        WasDownLastFrame = Input.Down("CHAT");
                         _core.enteringText = enteringText;
                         if (num2 != 0)
                         {

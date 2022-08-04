@@ -2164,7 +2164,7 @@ namespace DuckGame
                 DevConsole._core.pendingLines.Clear();
             }
         }
-
+        private static bool WasDownLastFrame;
         public static void Update()
         {
             if (DevConsole._core == null)
@@ -2182,7 +2182,8 @@ namespace DuckGame
             }
             DevConsole.FlushPendingLines();
             bool flag = Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift);
-            int num1 = !Keyboard.Pressed(Keys.OemTilde) ? 0 : (!flag ? 1 : 0);
+            int num1 = !(Keyboard.Down(Keys.OemTilde) && !WasDownLastFrame) ? 0 : (!flag ? 1 : 0); // Replaced !(Keyboard.Pressed(Keys.OemTilde)) ? with that because Press can cause issues with it auto trying to close 
+            WasDownLastFrame = Keyboard.Down(Keys.OemTilde);
             if (DevConsole.core.pendingSends.Count > 0)
             {
                 NetMessage msg = DevConsole.core.pendingSends.Dequeue();
@@ -2219,7 +2220,7 @@ namespace DuckGame
                 Input._imeAllowed = true;
                 if (DevConsole._core.cursorPosition > DevConsole._core.typing.Length)
                     DevConsole._core.cursorPosition = DevConsole._core.typing.Length;
-                DevConsole._core.typing = DevConsole._core.typing.Insert(DevConsole._core.cursorPosition, Keyboard.keyString);
+                DevConsole._core.typing = DevConsole._core.typing.Insert(DevConsole._core.cursorPosition, Keyboard.keyString.Replace("`","")); // added the Replace because the fix to the input makes it possible to do this if holding it down
                 if (DevConsole._core.typing != "" && DevConsole._pendingCommandQueue.Count > 0)
                 {
                     DevConsole._pendingCommandQueue.Clear();
