@@ -64,7 +64,7 @@ namespace DuckGame
         {
             if (Options.Data.chatFont != "" && RasterFont.GetName(Options.Data.chatFont) != null)
             {
-                DuckNetworkCore core = DuckNetwork._core;
+                DuckNetworkCore core = _core;
                 RasterFont rasterFont = new RasterFont(Options.Data.chatFont, Options.Data.chatFontSize)
                 {
                     chatFont = true
@@ -72,27 +72,27 @@ namespace DuckGame
                 core._rasterChatFont = rasterFont;
             }
             else
-                DuckNetwork._core._rasterChatFont = null;
+                _core._rasterChatFont = null;
         }
 
-        public static void Disconnect() => DuckNetwork._core.status = DuckNetStatus.Disconnecting;
+        public static void Disconnect() => _core.status = DuckNetStatus.Disconnecting;
 
         public static float chatScale => 1f;
 
         public static OnlineLevel GetLevel(int lev)
         {
-            foreach (OnlineLevel level in DuckNetwork._levels)
+            foreach (OnlineLevel level in _levels)
             {
                 if (level.num == lev)
                     return level;
             }
-            return DuckNetwork._levels.Last<OnlineLevel>();
+            return _levels.Last<OnlineLevel>();
         }
 
         public static Dictionary<string, XPPair> _xpEarned
         {
-            get => DuckNetwork._core._xpEarned;
-            set => DuckNetwork._core._xpEarned = value;
+            get => _core._xpEarned;
+            set => _core._xpEarned = value;
         }
 
         public static void GiveXP(
@@ -106,31 +106,31 @@ namespace DuckGame
         {
             if (Profiles.experienceProfile == null || NetworkDebugger.enabled && DG.di != 0)
                 return;
-            if (!DuckNetwork._xpEarned.ContainsKey(category))
-                DuckNetwork._xpEarned[category] = new XPPair();
-            DuckNetwork._xpEarned[category].num += num;
-            if (DuckNetwork._xpEarned[category].xp > secondCap)
-                DuckNetwork._xpEarned[category].xp += xp / 4;
-            else if (DuckNetwork._xpEarned[category].xp > firstCap)
-                DuckNetwork._xpEarned[category].xp += xp / 2;
+            if (!_xpEarned.ContainsKey(category))
+                _xpEarned[category] = new XPPair();
+            _xpEarned[category].num += num;
+            if (_xpEarned[category].xp > secondCap)
+                _xpEarned[category].xp += xp / 4;
+            else if (_xpEarned[category].xp > firstCap)
+                _xpEarned[category].xp += xp / 2;
             else
-                DuckNetwork._xpEarned[category].xp += xp;
-            if (DuckNetwork._xpEarned[category].xp > finalCap)
-                DuckNetwork._xpEarned[category].xp = finalCap;
-            DuckNetwork._xpEarned[category].type = type;
+                _xpEarned[category].xp += xp;
+            if (_xpEarned[category].xp > finalCap)
+                _xpEarned[category].xp = finalCap;
+            _xpEarned[category].type = type;
         }
 
         private static UIMenu _xpMenu
         {
-            get => DuckNetwork._core.xpMenu;
-            set => DuckNetwork._core.xpMenu = value;
+            get => _core.xpMenu;
+            set => _core.xpMenu = value;
         }
 
         public static bool ShowUserXPGain()
         {
-            if (!Level.core.gameFinished || DuckNetwork._xpEarned.Count <= 0)
+            if (!Level.core.gameFinished || _xpEarned.Count <= 0)
                 return false;
-            DuckNetwork._xpMenu = new UILevelBox("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
+            _xpMenu = new UILevelBox("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
             MonoMain.pauseMenu = _xpMenu;
             Level.core.gameFinished = false;
             return true;
@@ -138,99 +138,99 @@ namespace DuckGame
 
         public static KeyValuePair<string, XPPair> TakeXPStat()
         {
-            if (DuckNetwork._xpEarned.Count == 0)
+            if (_xpEarned.Count == 0)
                 return new KeyValuePair<string, XPPair>();
-            KeyValuePair<string, XPPair> xpStat = DuckNetwork._xpEarned.ElementAt<KeyValuePair<string, XPPair>>(0);
-            DuckNetwork._xpEarned.Remove(xpStat.Key);
+            KeyValuePair<string, XPPair> xpStat = _xpEarned.ElementAt<KeyValuePair<string, XPPair>>(0);
+            _xpEarned.Remove(xpStat.Key);
             return xpStat;
         }
 
         public static int GetTotalXPEarned()
         {
             int totalXpEarned = 0;
-            foreach (KeyValuePair<string, XPPair> keyValuePair in DuckNetwork._xpEarned)
+            foreach (KeyValuePair<string, XPPair> keyValuePair in _xpEarned)
                 totalXpEarned += keyValuePair.Value.xp;
             return totalXpEarned;
         }
 
         public static DuckNetworkCore core
         {
-            get => DuckNetwork._core;
-            set => DuckNetwork._core = value;
+            get => _core;
+            set => _core = value;
         }
 
         public static NetworkConnection localConnection
         {
-            get => DuckNetwork._core.localConnection;
-            set => DuckNetwork._core.localConnection = value;
+            get => _core.localConnection;
+            set => _core.localConnection = value;
         }
 
-        public static bool active => DuckNetwork._core.status != 0;
+        public static bool active => _core.status != 0;
 
         public static byte levelIndex
         {
-            get => DuckNetwork.localConnection.levelIndex;
-            set => DuckNetwork.localConnection.levelIndex = value;
+            get => localConnection.levelIndex;
+            set => localConnection.levelIndex = value;
         }
 
         public static MemoryStream compressedLevelData
         {
-            get => DuckNetwork._core.compressedLevelData;
-            set => DuckNetwork._core.compressedLevelData = value;
+            get => _core.compressedLevelData;
+            set => _core.compressedLevelData = value;
         }
 
-        public static List<Profile> profiles => DuckNetwork._core.profiles;
+        public static List<Profile> profiles => _core.profiles;
 
-        public static List<Profile> profilesFixedOrder => DuckNetwork._core.profilesFixedOrder;
+        public static List<Profile> profilesFixedOrder => _core.profilesFixedOrder;
 
-        public static Profile localProfile => DuckNetwork._core.localProfile;
+        public static Profile localProfile => _core.localProfile;
 
-        public static Profile hostProfile => DuckNetwork._core.hostProfile;
+        public static Profile hostProfile => _core.hostProfile;
 
-        public static int hostDuckIndex => DuckNetwork.hostProfile == null ? 0 : DuckNetwork.profiles.IndexOf(DuckNetwork.hostProfile);
+        public static int hostDuckIndex => hostProfile == null ? 0 : profiles.IndexOf(hostProfile);
 
-        public static int localDuckIndex => DuckNetwork.localProfile == null ? 0 : DuckNetwork.profiles.IndexOf(DuckNetwork.localProfile);
+        public static int localDuckIndex => localProfile == null ? 0 : profiles.IndexOf(localProfile);
 
-        public static DuckNetStatus status => DuckNetwork._core.status;
+        public static DuckNetStatus status => _core.status;
 
         public static bool inGame
         {
-            get => DuckNetwork._core.inGame;
-            set => DuckNetwork._core.inGame = value;
+            get => _core.inGame;
+            set => _core.inGame = value;
         }
 
-        public static bool enteringText => DuckNetwork._core.enteringText;
+        public static bool enteringText => _core.enteringText;
 
         private static UIComponent _ducknetUIGroup
         {
-            get => DuckNetwork._core.ducknetUIGroup;
-            set => DuckNetwork._core.ducknetUIGroup = value;
+            get => _core.ducknetUIGroup;
+            set => _core.ducknetUIGroup = value;
         }
 
-        public static UIComponent duckNetUIGroup => DuckNetwork._ducknetUIGroup;
+        public static UIComponent duckNetUIGroup => _ducknetUIGroup;
 
         public static void Initialize()
         {
-            DuckNetwork._core._builtInChatFont = new FancyBitmapFont("smallFontChat")
+            _core._builtInChatFont = new FancyBitmapFont("smallFontChat")
             {
                 chatFont = true
             };
-            DuckNetwork._core.initialized = true;
+            _core.initialized = true;
         }
 
         public static void Kick(Profile p)
         {
             if (p.slotType == SlotType.Local)
             {
-                DuckNetwork.SendToEveryone(new NMClientDisconnect(DuckNetwork.localConnection.identifier, p));
-                DuckNetwork.ResetProfile(p, false);
+                SendToEveryone(new NMClientDisconnect(localConnection.identifier, p));
+                ResetProfile(p, false);
                 p.team = null;
                 p.slotType = SlotType.Open;
-                DuckNetwork.ChangeSlotSettings();
+                ChangeSlotSettings();
             }
             else
             {
-                if (!Network.isServer || p == null || p.connection == null || p.connection == DuckNetwork.localConnection)
+                if (!Network.isServer || p == null || p.connection == null || p.connection == localConnection)
                     return;
                 SFX.Play("little_punch");
                 Send.Message(new NMKick(), p.connection);
@@ -243,7 +243,7 @@ namespace DuckGame
 
         public static void Ban(Profile p)
         {
-            if (!Network.isServer || p == null || p.connection == null || p.connection == DuckNetwork.localConnection)
+            if (!Network.isServer || p == null || p.connection == null || p.connection == localConnection)
                 return;
             SFX.Play("little_punch");
             Send.Message(new NMBan(), p.connection);
@@ -286,8 +286,8 @@ namespace DuckGame
             TeamSelect2.GetOnlineSetting("teams").value = varTeams;
             TeamSelect2.prevCustomLevels = !initialSettings ? TeamSelect2.customLevels : varCustomLevels;
             TeamSelect2.customLevels = varCustomLevels;
-            if (DuckNetwork.ShouldKickForCustomContent())
-                Network.DisconnectClient(DuckNetwork.localConnection, new DuckNetErrorInfo(DuckNetError.ParentalControls, "Disconnected - Restricted Content"));
+            if (ShouldKickForCustomContent())
+                Network.DisconnectClient(localConnection, new DuckNetErrorInfo(DuckNetError.ParentalControls, "Disconnected - Restricted Content"));
             int num1 = 0;
             foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
             {
@@ -321,74 +321,74 @@ namespace DuckGame
                 onlineSetting.prevValue = onlineSetting.value;
         }
 
-        public static DuckNetwork.LobbyType lobbyType => DuckNetwork._core.lobbyType;
+        public static DuckNetwork.LobbyType lobbyType => _core.lobbyType;
 
-        public static void ChangeSlotSettings() => DuckNetwork.ChangeSlotSettings(false);
+        public static void ChangeSlotSettings() => ChangeSlotSettings(false);
 
         public static void ChangeSlotSettings(bool pInitializingClient)
         {
-            DuckNetwork.numSlots = 0;
-            DuckNetwork.LobbyType lobbyType = DuckNetwork.LobbyType.Private;
-            foreach (Profile profile in DuckNetwork.profiles)
+            numSlots = 0;
+            DuckNetwork.LobbyType lobbyType = LobbyType.Private;
+            foreach (Profile profile in profiles)
             {
-                if (profile.connection != DuckNetwork.localConnection)
+                if (profile.connection != localConnection)
                 {
-                    if (profile.slotType == SlotType.Friend && lobbyType < DuckNetwork.LobbyType.FriendsOnly)
-                        lobbyType = DuckNetwork.LobbyType.FriendsOnly;
-                    if (profile.slotType == SlotType.Open && lobbyType < DuckNetwork.LobbyType.Public)
-                        lobbyType = DuckNetwork.LobbyType.Public;
+                    if (profile.slotType == SlotType.Friend && lobbyType < LobbyType.FriendsOnly)
+                        lobbyType = LobbyType.FriendsOnly;
+                    if (profile.slotType == SlotType.Open && lobbyType < LobbyType.Public)
+                        lobbyType = LobbyType.Public;
                 }
                 if (profile.slotType != SlotType.Closed && profile.slotType != SlotType.Spectator)
-                    ++DuckNetwork.numSlots;
+                    ++numSlots;
             }
             if (!Network.isServer)
                 return;
             if (Steam.lobby != null)
             {
                 if (Steam.lobby.type == SteamLobbyType.Private || Steam.lobby.type == SteamLobbyType.FriendsOnly)
-                    DuckNetwork.invited = true;
+                    invited = true;
                 Steam.lobby.type = (SteamLobbyType)lobbyType;
                 Steam.lobby.maxMembers = 32;
-                Steam.lobby.SetLobbyData("numSlots", DuckNetwork.numSlots.ToString());
+                Steam.lobby.SetLobbyData("numSlots", numSlots.ToString());
                 TeamSelect2.GetOnlineSetting("maxplayers").value = numSlots;
-                Steam.lobby.SetLobbyData("maxplayers", DuckNetwork.numSlots.ToString());
+                Steam.lobby.SetLobbyData("maxplayers", numSlots.ToString());
             }
             List<byte> pSlots = new List<byte>();
             for (int index = 0; index < DG.MaxPlayers; ++index)
-                pSlots.Add((byte)DuckNetwork.profiles[index].slotType);
+                pSlots.Add((byte)profiles[index].slotType);
             Send.Message(new NMChangeSlots(pSlots, pInitializingClient));
         }
 
         public static void KickedPlayer()
         {
-            if (DuckNetwork._core.kickContext == null)
+            if (_core.kickContext == null)
                 return;
-            DuckNetwork.Kick(DuckNetwork._core.kickContext);
-            DuckNetwork._core.kickContext = null;
+            Kick(_core.kickContext);
+            _core.kickContext = null;
         }
 
         public static void BannedPlayer()
         {
-            if (DuckNetwork._core.kickContext == null)
+            if (_core.kickContext == null)
                 return;
-            DuckNetwork.Ban(DuckNetwork._core.kickContext);
-            DuckNetwork._core.kickContext = null;
+            Ban(_core.kickContext);
+            _core.kickContext = null;
         }
 
         public static void BlockedPlayer()
         {
-            if (DuckNetwork._core.kickContext == null)
+            if (_core.kickContext == null)
                 return;
-            if (Options.Data.blockedPlayers != null && !Options.Data.blockedPlayers.Contains(DuckNetwork._core.kickContext.steamID))
+            if (Options.Data.blockedPlayers != null && !Options.Data.blockedPlayers.Contains(_core.kickContext.steamID))
             {
-                Options.Data.muteSettings[DuckNetwork._core.kickContext.steamID] = "CHR";
-                Options.Data.blockedPlayers.Add(DuckNetwork._core.kickContext.steamID);
-                Options.Data.unblockedPlayers.Remove(DuckNetwork._core.kickContext.steamID);
+                Options.Data.muteSettings[_core.kickContext.steamID] = "CHR";
+                Options.Data.blockedPlayers.Add(_core.kickContext.steamID);
+                Options.Data.unblockedPlayers.Remove(_core.kickContext.steamID);
                 Options.Save();
             }
-            DuckNetwork._core.kickContext._blockStatusDirty = true;
-            DuckNetwork.Ban(DuckNetwork._core.kickContext);
-            DuckNetwork._core.kickContext = null;
+            _core.kickContext._blockStatusDirty = true;
+            Ban(_core.kickContext);
+            _core.kickContext = null;
         }
 
         public static void UnblockPlayer(Profile pProfile)
@@ -407,41 +407,41 @@ namespace DuckGame
                 return;
             MonoMain.pauseMenu.Close();
             MonoMain.pauseMenu = null;
-            if (DuckNetwork._ducknetUIGroup == null)
+            if (_ducknetUIGroup == null)
                 return;
             Level.Remove(_ducknetUIGroup);
-            DuckNetwork._ducknetUIGroup = null;
+            _ducknetUIGroup = null;
         }
 
-        public static void OpenMatchSettingsInfo() => DuckNetwork._core._willOpenSettingsInfo = true;
+        public static void OpenMatchSettingsInfo() => _core._willOpenSettingsInfo = true;
 
-        public static void OpenSpectatorInfo(bool pSpectator) => DuckNetwork._core._willOpenSpectatorInfo = pSpectator ? 2 : 1;
+        public static void OpenSpectatorInfo(bool pSpectator) => _core._willOpenSpectatorInfo = pSpectator ? 2 : 1;
 
         public static void OpenNoModsWindow(
           UIMenuActionCloseMenuCallFunction.Function acceptFunction)
         {
             float num1 = 320f;
             float num2 = 180f;
-            DuckNetwork._core._noModsUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f);
-            DuckNetwork._core._noModsMenu = DuckNetwork.CreateNoModsOnlineWindow(acceptFunction);
-            DuckNetwork._core._noModsUIGroup.Add(_core._noModsMenu, false);
-            DuckNetwork._core._noModsUIGroup.Close();
-            DuckNetwork._core._noModsUIGroup.Close();
+            _core._noModsUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f);
+            _core._noModsMenu = CreateNoModsOnlineWindow(acceptFunction);
+            _core._noModsUIGroup.Add(_core._noModsMenu, false);
+            _core._noModsUIGroup.Close();
+            _core._noModsUIGroup.Close();
             Level.Add(_core._noModsUIGroup);
-            DuckNetwork._core._noModsUIGroup.Update();
-            DuckNetwork._core._noModsUIGroup.Update();
-            DuckNetwork._core._noModsUIGroup.Update();
-            DuckNetwork._core._noModsUIGroup.Open();
-            DuckNetwork._core._noModsMenu.Open();
-            MonoMain.pauseMenu = DuckNetwork._core._noModsUIGroup;
-            DuckNetwork._core._pauseOpen = true;
+            _core._noModsUIGroup.Update();
+            _core._noModsUIGroup.Update();
+            _core._noModsUIGroup.Update();
+            _core._noModsUIGroup.Open();
+            _core._noModsMenu.Open();
+            MonoMain.pauseMenu = _core._noModsUIGroup;
+            _core._pauseOpen = true;
             SFX.Play("pause", 0.6f);
         }
 
         private static UIMenu CreateNoModsOnlineWindow(
           UIMenuActionCloseMenuCallFunction.Function acceptFunction)
         {
-            DuckNetwork._modsAcceptFunction = acceptFunction;
+            _modsAcceptFunction = acceptFunction;
             UIMenu modsOnlineWindow = new UIMenu("@LWING@YOU HAVE MODS ENABLED@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@CANCEL@BACK");
             BitmapFont f = new BitmapFont("smallBiosFontUI", 7, 5);
             UIText component1 = new UIText("YOU WILL |DGRED|NOT|WHITE| BE ABLE TO PLAY", Color.White);
@@ -468,21 +468,21 @@ namespace DuckGame
             UIText component8 = new UIText("", Color.White);
             component8.SetFont(f);
             modsOnlineWindow.Add(component8, true);
-            modsOnlineWindow.Add(new UIMenuItem("|DGGREEN|DISABLE MODS AND RESTART", new UIMenuActionCloseMenuCallFunction(DuckNetwork._core._noModsUIGroup, new UIMenuActionCloseMenuCallFunction.Function(ModLoader.DisableModsAndRestart)), c: Color.White), true);
-            modsOnlineWindow.Add(new UIMenuItem("|DGYELLOW|I KNOW WHAT I'M DOING", new UIMenuActionCloseMenuCallFunction(DuckNetwork._core._noModsUIGroup, acceptFunction), c: Color.White), true);
+            modsOnlineWindow.Add(new UIMenuItem("|DGGREEN|DISABLE MODS AND RESTART", new UIMenuActionCloseMenuCallFunction(_core._noModsUIGroup, new UIMenuActionCloseMenuCallFunction.Function(ModLoader.DisableModsAndRestart)), c: Color.White), true);
+            modsOnlineWindow.Add(new UIMenuItem("|DGYELLOW|I KNOW WHAT I'M DOING", new UIMenuActionCloseMenuCallFunction(_core._noModsUIGroup, acceptFunction), c: Color.White), true);
             modsOnlineWindow.Add(new UIText(" ", Color.White), true);
-            modsOnlineWindow.Add(new UIMenuItem("|DGPURPLE|STOP ASKING, I LOVE MODS!", new UIMenuActionCloseMenuCallFunction(DuckNetwork._core._noModsUIGroup, new UIMenuActionCloseMenuCallFunction.Function(DuckNetwork.QuitShowingModWindow)), c: Color.White), true);
-            modsOnlineWindow.SetBackFunction(new UIMenuActionCloseMenu(DuckNetwork._core._noModsUIGroup));
+            modsOnlineWindow.Add(new UIMenuItem("|DGPURPLE|STOP ASKING, I LOVE MODS!", new UIMenuActionCloseMenuCallFunction(_core._noModsUIGroup, new UIMenuActionCloseMenuCallFunction.Function(QuitShowingModWindow)), c: Color.White), true);
+            modsOnlineWindow.SetBackFunction(new UIMenuActionCloseMenu(_core._noModsUIGroup));
             modsOnlineWindow.Close();
             return modsOnlineWindow;
         }
 
         public static void QuitShowingModWindow()
         {
-            if (DuckNetwork._modsAcceptFunction == null)
+            if (_modsAcceptFunction == null)
                 return;
             Options.Data.showNetworkModWarning = false;
-            DuckNetwork._modsAcceptFunction();
+            _modsAcceptFunction();
             Options.Save();
         }
 
@@ -490,42 +490,42 @@ namespace DuckGame
         {
             float num1 = 320f;
             float num2 = 180f;
-            DuckNetwork._core._restartModsUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f);
-            DuckNetwork._core._restartModsMenu = DuckNetwork.CreateModsRestartWindow(openOnClose);
-            DuckNetwork._core._restartModsUIGroup.Add(_core._restartModsMenu, false);
-            DuckNetwork._core._restartModsUIGroup.Close();
-            DuckNetwork._core._restartModsUIGroup.Close();
+            _core._restartModsUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f);
+            _core._restartModsMenu = CreateModsRestartWindow(openOnClose);
+            _core._restartModsUIGroup.Add(_core._restartModsMenu, false);
+            _core._restartModsUIGroup.Close();
+            _core._restartModsUIGroup.Close();
             Level.Add(_core._restartModsUIGroup);
-            DuckNetwork._core._restartModsUIGroup.Update();
-            DuckNetwork._core._restartModsUIGroup.Update();
-            DuckNetwork._core._restartModsUIGroup.Update();
-            DuckNetwork._core._restartModsUIGroup.Open();
-            DuckNetwork._core._restartModsMenu.Open();
-            MonoMain.pauseMenu = DuckNetwork._core._restartModsUIGroup;
-            DuckNetwork._core._pauseOpen = true;
+            _core._restartModsUIGroup.Update();
+            _core._restartModsUIGroup.Update();
+            _core._restartModsUIGroup.Update();
+            _core._restartModsUIGroup.Open();
+            _core._restartModsMenu.Open();
+            MonoMain.pauseMenu = _core._restartModsUIGroup;
+            _core._pauseOpen = true;
             SFX.Play("pause", 0.6f);
-            return DuckNetwork._core._restartModsUIGroup;
+            return _core._restartModsUIGroup;
         }
 
         public static UIComponent OpenResolutionRestartMenu(UIMenu openOnClose)
         {
             float num1 = 320f;
             float num2 = 180f;
-            DuckNetwork._core._resUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f);
-            DuckNetwork._core._resMenu = DuckNetwork.CreateResolutionRestartWindow(openOnClose);
-            DuckNetwork._core._resUIGroup.Add(_core._resMenu, false);
-            DuckNetwork._core._resUIGroup.Close();
-            DuckNetwork._core._resUIGroup.Close();
+            _core._resUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f);
+            _core._resMenu = CreateResolutionRestartWindow(openOnClose);
+            _core._resUIGroup.Add(_core._resMenu, false);
+            _core._resUIGroup.Close();
+            _core._resUIGroup.Close();
             Level.Add(_core._resUIGroup);
-            DuckNetwork._core._resUIGroup.Update();
-            DuckNetwork._core._resUIGroup.Update();
-            DuckNetwork._core._resUIGroup.Update();
-            DuckNetwork._core._resUIGroup.Open();
-            DuckNetwork._core._resMenu.Open();
-            MonoMain.pauseMenu = DuckNetwork._core._resUIGroup;
-            DuckNetwork._core._pauseOpen = true;
+            _core._resUIGroup.Update();
+            _core._resUIGroup.Update();
+            _core._resUIGroup.Update();
+            _core._resUIGroup.Open();
+            _core._resMenu.Open();
+            MonoMain.pauseMenu = _core._resUIGroup;
+            _core._pauseOpen = true;
             SFX.Play("pause", 0.6f);
-            return DuckNetwork._core._restartModsUIGroup;
+            return _core._restartModsUIGroup;
         }
 
         private static UIMenu CreateResolutionRestartWindow(UIMenu openOnClose)
@@ -547,8 +547,8 @@ namespace DuckGame
             UIText component5 = new UIText("DO YOU WANT TO |DGGREEN|RESTART|WHITE| NOW? ", Color.White);
             component5.SetFont(f);
             resolutionRestartWindow.Add(component5, true);
-            resolutionRestartWindow.Add(new UIMenuItem("|DGGREEN|RESTART NOW", new UIMenuActionCloseMenuCallFunction(DuckNetwork._core._resUIGroup, new UIMenuActionCloseMenuCallFunction.Function(ModLoader.RestartGame)), c: Color.White), true);
-            resolutionRestartWindow.Add(new UIMenuItem("|DGYELLOW|RESTART LATER", new UIMenuActionOpenMenu(DuckNetwork._core._resUIGroup, openOnClose), c: Color.White), true);
+            resolutionRestartWindow.Add(new UIMenuItem("|DGGREEN|RESTART NOW", new UIMenuActionCloseMenuCallFunction(_core._resUIGroup, new UIMenuActionCloseMenuCallFunction.Function(ModLoader.RestartGame)), c: Color.White), true);
+            resolutionRestartWindow.Add(new UIMenuItem("|DGYELLOW|RESTART LATER", new UIMenuActionOpenMenu(_core._resUIGroup, openOnClose), c: Color.White), true);
             resolutionRestartWindow.Close();
             return resolutionRestartWindow;
         }
@@ -569,8 +569,8 @@ namespace DuckGame
             UIText component4 = new UIText("DO YOU WANT TO |DGGREEN|RESTART|WHITE| NOW? ", Color.White);
             component4.SetFont(f);
             modsRestartWindow.Add(component4, true);
-            modsRestartWindow.Add(new UIMenuItem("|DGGREEN|RESTART", new UIMenuActionCloseMenuCallFunction(DuckNetwork._core._restartModsUIGroup, new UIMenuActionCloseMenuCallFunction.Function(ModLoader.RestartGame)), c: Color.White), true);
-            modsRestartWindow.Add(new UIMenuItem("|DGYELLOW|CONTINUE", new UIMenuActionOpenMenu(DuckNetwork._core._restartModsUIGroup, openOnClose), c: Color.White), true);
+            modsRestartWindow.Add(new UIMenuItem("|DGGREEN|RESTART", new UIMenuActionCloseMenuCallFunction(_core._restartModsUIGroup, new UIMenuActionCloseMenuCallFunction.Function(ModLoader.RestartGame)), c: Color.White), true);
+            modsRestartWindow.Add(new UIMenuItem("|DGYELLOW|CONTINUE", new UIMenuActionOpenMenu(_core._restartModsUIGroup, openOnClose), c: Color.White), true);
             modsRestartWindow.Close();
             return modsRestartWindow;
         }
@@ -609,7 +609,7 @@ namespace DuckGame
             UIText component = new UIText("", Color.White);
             component.SetFont(f);
             spectatorWindow.Add(component, true);
-            spectatorWindow.SetBackFunction(new UIMenuActionCloseMenu(DuckNetwork._ducknetUIGroup));
+            spectatorWindow.SetBackFunction(new UIMenuActionCloseMenu(_ducknetUIGroup));
             spectatorWindow.Close();
             return spectatorWindow;
         }
@@ -799,7 +799,7 @@ namespace DuckGame
             if (openOnClose != null)
                 menu.SetBackFunction(new UIMenuActionOpenMenu(menu, openOnClose));
             else
-                menu.SetBackFunction(new UIMenuActionCloseMenu(DuckNetwork._ducknetUIGroup));
+                menu.SetBackFunction(new UIMenuActionCloseMenu(_ducknetUIGroup));
             menu.Close();
             return menu;
         }
@@ -825,20 +825,20 @@ namespace DuckGame
 
         private static void DoSpectatorOpen(bool pSpectator)
         {
-            DuckNetwork._ducknetUIGroup = new UIComponent((float)(320.0 / 2.0), 180f / 2f, 0f, 0f);
-            UIMenu spectatorWindow = DuckNetwork.CreateSpectatorWindow(pSpectator);
-            DuckNetwork._ducknetUIGroup.Add(spectatorWindow, false);
-            DuckNetwork._ducknetUIGroup.Close();
-            DuckNetwork._ducknetUIGroup.Close();
+            _ducknetUIGroup = new UIComponent((float)(320.0 / 2.0), 180f / 2f, 0f, 0f);
+            UIMenu spectatorWindow = CreateSpectatorWindow(pSpectator);
+            _ducknetUIGroup.Add(spectatorWindow, false);
+            _ducknetUIGroup.Close();
+            _ducknetUIGroup.Close();
             Level.Add(_ducknetUIGroup);
-            DuckNetwork._ducknetUIGroup.Update();
-            DuckNetwork._ducknetUIGroup.Update();
-            DuckNetwork._ducknetUIGroup.Update();
-            DuckNetwork._ducknetUIGroup.Open();
+            _ducknetUIGroup.Update();
+            _ducknetUIGroup.Update();
+            _ducknetUIGroup.Update();
+            _ducknetUIGroup.Open();
             spectatorWindow.Open();
-            DuckNetwork._ducknetUIGroup.isPauseMenu = true;
-            MonoMain.pauseMenu = DuckNetwork._ducknetUIGroup;
-            DuckNetwork._core._pauseOpen = true;
+            _ducknetUIGroup.isPauseMenu = true;
+            MonoMain.pauseMenu = _ducknetUIGroup;
+            _core._pauseOpen = true;
             SFX.Play("pause", 0.6f);
         }
 
@@ -875,125 +875,125 @@ namespace DuckGame
 
         private static void OpenMenu(Profile whoOpen)
         {
-            if (DuckNetwork._ducknetUIGroup != null)
+            if (_ducknetUIGroup != null)
                 Level.Remove(_ducknetUIGroup);
             bool flag = Network.InLobby();
-            DuckNetwork._core._menuOpenProfile = whoOpen;
+            _core._menuOpenProfile = whoOpen;
             float num1 = 320f;
             float num2 = 180f;
-            DuckNetwork._ducknetUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f)
+            _ducknetUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f)
             {
                 isPauseMenu = true
             };
-            DuckNetwork.core._ducknetMenu = new UIMenu("@LWING@MULTIPLAYER@RWING@", num1 / 2f, num2 / 2f, 210f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
+            core._ducknetMenu = new UIMenu("@LWING@MULTIPLAYER@RWING@", num1 / 2f, num2 / 2f, 210f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
             //DuckNetwork._ducknetMenu = DuckNetwork.core._ducknetMenu;
-            DuckNetwork.core._confirmMenu = whoOpen.slotType != SlotType.Local ? new UIMenu("REALLY QUIT?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT") : new UIMenu("REALLY BACK OUT?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            DuckNetwork.core._confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", num1 / 2f, num2 / 2f, 10f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            DuckNetwork.core._confirmKick = new UIMenu("REALLY KICK?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            DuckNetwork.core._confirmBan = new UIMenu("REALLY BAN?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            DuckNetwork.core._confirmBlock = new UIMenu("BLOCK PLAYER?", num1 / 2f, num2 / 2f, 280f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            DuckNetwork.core._confirmReturnToLobby = new UIMenu("RETURN TO LOBBY?", num1 / 2f, num2 / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            DuckNetwork.core._confirmMatchSettings = new UIMenu("CHANGING SETTINGS", num1 / 2f, num2 / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            DuckNetwork.core._confirmEditSlots = new UIMenu("CHANGING SETTINGS", num1 / 2f, num2 / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            DuckNetwork.core._optionsMenu = Options.CreateOptionsMenu();
-            DuckNetwork._core._settingsBeforeOpen = TeamSelect2.GetMatchSettingString();
+            core._confirmMenu = whoOpen.slotType != SlotType.Local ? new UIMenu("REALLY QUIT?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT") : new UIMenu("REALLY BACK OUT?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", num1 / 2f, num2 / 2f, 10f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmKick = new UIMenu("REALLY KICK?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmBan = new UIMenu("REALLY BAN?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmBlock = new UIMenu("BLOCK PLAYER?", num1 / 2f, num2 / 2f, 280f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmReturnToLobby = new UIMenu("RETURN TO LOBBY?", num1 / 2f, num2 / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmMatchSettings = new UIMenu("CHANGING SETTINGS", num1 / 2f, num2 / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmEditSlots = new UIMenu("CHANGING SETTINGS", num1 / 2f, num2 / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._optionsMenu = Options.CreateOptionsMenu();
+            _core._settingsBeforeOpen = TeamSelect2.GetMatchSettingString();
             Main.SpecialCode = "men0";
-            foreach (Profile p in (IEnumerable<Profile>)DuckNetwork.profiles.OrderBy<Profile, bool>(x => x.slotType == SlotType.Spectator))
+            foreach (Profile p in (IEnumerable<Profile>)profiles.OrderBy<Profile, bool>(x => x.slotType == SlotType.Spectator))
             {
                 if (p.connection != null)
-                    DuckNetwork.core._ducknetMenu.Add(new UIConnectionInfo(p, DuckNetwork.core._ducknetMenu, DuckNetwork.core._confirmKick, DuckNetwork.core._confirmBan, DuckNetwork.core._confirmBlock), true);
+                    core._ducknetMenu.Add(new UIConnectionInfo(p, core._ducknetMenu, core._confirmKick, core._confirmBan, core._confirmBlock), true);
             }
             Main.SpecialCode = "men1";
-            DuckNetwork.core._ducknetMenu.Add(new UIText("", Color.White), true);
-            DuckNetwork.core._ducknetMenu.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenuSetBoolean(DuckNetwork._ducknetUIGroup, DuckNetwork.core._menuClosed), UIAlign.Left, backButton: true), true);
-            DuckNetwork.core._ducknetMenu.AssignDefaultSelection();
+            core._ducknetMenu.Add(new UIText("", Color.White), true);
+            core._ducknetMenu.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenuSetBoolean(_ducknetUIGroup, core._menuClosed), UIAlign.Left, backButton: true), true);
+            core._ducknetMenu.AssignDefaultSelection();
             if (whoOpen.slotType != SlotType.Local)
-                DuckNetwork.core._ducknetMenu.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(core._ducknetMenu, core._optionsMenu), UIAlign.Left), true);
+                core._ducknetMenu.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(core._ducknetMenu, core._optionsMenu), UIAlign.Left), true);
             if (whoOpen.slotType != SlotType.Local & flag && Network.isServer)
             {
-                DuckNetwork._core._slotEditor = new UISlotEditor(DuckNetwork.core._ducknetMenu, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
-                DuckNetwork._core._slotEditor.Close();
-                DuckNetwork._ducknetUIGroup.Add(_core._slotEditor, false);
-                DuckNetwork._core._matchSettingMenu = new UIMenu("@LWING@MATCH SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
-                DuckNetwork._core._matchModifierMenu = new UIMenu("MODIFIERS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
-                DuckNetwork._core._levelSelectMenu = new LevelSelectCompanionMenu(num1 / 2f, num2 / 2f, DuckNetwork._core._matchSettingMenu);
+                _core._slotEditor = new UISlotEditor(core._ducknetMenu, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
+                _core._slotEditor.Close();
+                _ducknetUIGroup.Add(_core._slotEditor, false);
+                _core._matchSettingMenu = new UIMenu("@LWING@MATCH SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
+                _core._matchModifierMenu = new UIMenu("MODIFIERS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+                _core._levelSelectMenu = new LevelSelectCompanionMenu(num1 / 2f, num2 / 2f, _core._matchSettingMenu);
                 foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
                 {
                     if (unlock.onlineEnabled)
                     {
                         if (unlock.unlocked)
-                            DuckNetwork._core._matchModifierMenu.Add(new UIMenuItemToggle(unlock.GetShortNameForDisplay(), field: new FieldBinding(unlock, "enabled")), true);
+                            _core._matchModifierMenu.Add(new UIMenuItemToggle(unlock.GetShortNameForDisplay(), field: new FieldBinding(unlock, "enabled")), true);
                         else
-                            DuckNetwork._core._matchModifierMenu.Add(new UIMenuItem("@TINYLOCK@LOCKED", c: Color.Red), true);
+                            _core._matchModifierMenu.Add(new UIMenuItem("@TINYLOCK@LOCKED", c: Color.Red), true);
                     }
                 }
                 Main.SpecialCode = "men2";
-                DuckNetwork._core._matchModifierMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchModifierMenu, _core._matchSettingMenu));
-                DuckNetwork._core._matchModifierMenu.Close();
-                DuckNetwork._core._matchSettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("teams"), false);
+                _core._matchModifierMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchModifierMenu, _core._matchSettingMenu));
+                _core._matchModifierMenu.Close();
+                _core._matchSettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("teams"), false);
                 foreach (MatchSetting matchSetting in TeamSelect2.matchSettings) // removed ParentalControls.AreParentalControlsActive bs
                 {
                     if (!(matchSetting.id == "workshopmaps") || Network.available)
                     { 
                         if (matchSetting.id != "partymode")
                         {
-                            DuckNetwork._core._matchSettingMenu.AddMatchSetting(matchSetting, false, true);
+                            _core._matchSettingMenu.AddMatchSetting(matchSetting, false, true);
                         }
                         if (matchSetting.id == "wallmode")
                         {
-                            DuckNetwork._core._matchSettingMenu.Add(new UIText(" ", Color.White, UIAlign.Center, 0f, null), true);
+                            _core._matchSettingMenu.Add(new UIText(" ", Color.White, UIAlign.Center, 0f, null), true);
                         }
                     }
                 }
                 Main.SpecialCode = "men3";
-                DuckNetwork._core._matchSettingMenu.Add(new UIText(" ", Color.White), true);
-               
-                DuckNetwork._core._matchSettingMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_core._matchSettingMenu, _core._levelSelectMenu)), true); // ParentalControls.AreParentalControlsActive()
-                DuckNetwork._core._matchSettingMenu.Add(new UIModifierMenuItem(new UIMenuActionOpenMenu(_core._matchSettingMenu, _core._matchModifierMenu)), true);
-                DuckNetwork._core._matchSettingMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchSettingMenu, core._ducknetMenu));
-                DuckNetwork._core._matchSettingMenu.Close();
-                DuckNetwork._ducknetUIGroup.Add(_core._matchSettingMenu, false);
-                DuckNetwork._ducknetUIGroup.Add(_core._matchModifierMenu, false);
-                DuckNetwork._ducknetUIGroup.Add(_core._levelSelectMenu, false);
-                DuckNetwork._ducknetUIGroup.Close();
+                _core._matchSettingMenu.Add(new UIText(" ", Color.White), true);
+
+                _core._matchSettingMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_core._matchSettingMenu, _core._levelSelectMenu)), true); // ParentalControls.AreParentalControlsActive()
+                _core._matchSettingMenu.Add(new UIModifierMenuItem(new UIMenuActionOpenMenu(_core._matchSettingMenu, _core._matchModifierMenu)), true);
+                _core._matchSettingMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchSettingMenu, core._ducknetMenu));
+                _core._matchSettingMenu.Close();
+                _ducknetUIGroup.Add(_core._matchSettingMenu, false);
+                _ducknetUIGroup.Add(_core._matchModifierMenu, false);
+                _ducknetUIGroup.Add(_core._levelSelectMenu, false);
+                _ducknetUIGroup.Close();
                 Main.SpecialCode = "men4";
                 if (Level.core.gameInProgress)
                 {
-                    DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|MATCH SETTINGS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmMatchSettings), UIAlign.Left), true);
-                    DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|EDIT SLOTS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmEditSlots), UIAlign.Left), true);
+                    _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|MATCH SETTINGS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmMatchSettings), UIAlign.Left), true);
+                    _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|EDIT SLOTS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmEditSlots), UIAlign.Left), true);
                 }
                 else
                 {
-                    DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|MATCH SETTINGS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._matchSettingMenu), UIAlign.Left), true);
-                    DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|EDIT SLOTS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._slotEditor), UIAlign.Left), true);
+                    _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|MATCH SETTINGS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._matchSettingMenu), UIAlign.Left), true);
+                    _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|EDIT SLOTS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._slotEditor), UIAlign.Left), true);
                 }
             }
             Main.SpecialCode = "men5";
             if (Network.isClient && whoOpen.slotType != SlotType.Local || Network.isServer && !Network.InLobby())
             {
-                UIMenu settingsInfoWindow = DuckNetwork.CreateMatchSettingsInfoWindow(DuckNetwork._core._ducknetMenu);
-                DuckNetwork._ducknetUIGroup.Add(settingsInfoWindow, false);
-                DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|VIEW MATCH SETTINGS", new UIMenuActionOpenMenu(_core._ducknetMenu, settingsInfoWindow), UIAlign.Left), true);
+                UIMenu settingsInfoWindow = CreateMatchSettingsInfoWindow(_core._ducknetMenu);
+                _ducknetUIGroup.Add(settingsInfoWindow, false);
+                _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|VIEW MATCH SETTINGS", new UIMenuActionOpenMenu(_core._ducknetMenu, settingsInfoWindow), UIAlign.Left), true);
                 Main.SpecialCode = "men6";
                 if ((bool)TeamSelect2.GetMatchSetting("clientlevelsenabled").value && Network.InLobby()) // removed && !ParentalControls.AreParentalControlsActive()
                 {
-                    DuckNetwork._core._levelSelectMenu = new LevelSelectCompanionMenu(num1 / 2f, num2 / 2f, DuckNetwork._core._ducknetMenu);
-                    DuckNetwork._core._ducknetMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_core._ducknetMenu, _core._levelSelectMenu)), true);
-                    DuckNetwork._ducknetUIGroup.Add(_core._levelSelectMenu, false);
+                    _core._levelSelectMenu = new LevelSelectCompanionMenu(num1 / 2f, num2 / 2f, _core._ducknetMenu);
+                    _core._ducknetMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_core._ducknetMenu, _core._levelSelectMenu)), true);
+                    _ducknetUIGroup.Add(_core._levelSelectMenu, false);
                 }
             }
             Main.SpecialCode = "men7";
-            DuckNetwork._core._ducknetMenu.Add(new UIText("", Color.White), true);
+            _core._ducknetMenu.Add(new UIText("", Color.White), true);
             if (flag && whoOpen.slotType != SlotType.Local && Network.available)
             {
                 Main.SpecialCode = "men8";
-                DuckNetwork._core._inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
-                ((UIInviteMenu)DuckNetwork._core._inviteMenu).SetAction(new UIMenuActionOpenMenu(_core._inviteMenu, _core._ducknetMenu));
-                DuckNetwork._core._inviteMenu.Close();
-                DuckNetwork._ducknetUIGroup.Add(_core._inviteMenu, false);
+                _core._inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
+                ((UIInviteMenu)_core._inviteMenu).SetAction(new UIMenuActionOpenMenu(_core._inviteMenu, _core._ducknetMenu));
+                _core._inviteMenu.Close();
+                _ducknetUIGroup.Add(_core._inviteMenu, false);
                 Main.SpecialCode = "men9";
-                DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|INVITE FRIENDS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._inviteMenu), UIAlign.Left), true);
-                DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|COPY INVITE LINK", new UIMenuActionCloseMenuCallFunction(DuckNetwork._ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(DuckNetwork.CopyInviteLink)), UIAlign.Left), true);
+                _core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|INVITE FRIENDS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._inviteMenu), UIAlign.Left), true);
+                _core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|COPY INVITE LINK", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(CopyInviteLink)), UIAlign.Left), true);
             }
             Main.SpecialCode = "men10";
             if (Level.current is GameLevel && Level.current.isCustomLevel)
@@ -1004,142 +1004,142 @@ namespace DuckGame
                     WorkshopItem workshopItem = WorkshopItem.GetItem((Level.current as GameLevel).data.metaData.workshopID);
                     if (workshopItem != null)
                     {
-                        DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGGREEN|VIEW", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(GameMode.View)), UIAlign.Left), true);
+                        _core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGGREEN|VIEW", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(GameMode.View)), UIAlign.Left), true);
                         if ((workshopItem.stateFlags & WorkshopItemState.Subscribed) != WorkshopItemState.None)
                         {
-                            DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGRED|UNSUBSCRIBE", new UIMenuActionCloseMenuCallFunction(DuckNetwork._ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
+                            _core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGRED|UNSUBSCRIBE", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
                         }
                         else
                         {
-                            DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGGREEN|SUBSCRIBE", new UIMenuActionCloseMenuCallFunction(DuckNetwork._ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
+                            _core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGGREEN|SUBSCRIBE", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
                             if (Network.isServer)
-                                DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("@blacklist@|DGRED|NEVER AGAIN", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmBlacklistMenu), UIAlign.Left), true);
+                                _core._ducknetMenu.Add(new UIMenuItem("@blacklist@|DGRED|NEVER AGAIN", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmBlacklistMenu), UIAlign.Left), true);
                         }
                     }
                 }
                 Main.SpecialCode = "men12";
                 if (!(Level.current as GameLevel).matchOver && Network.isServer)
-                    DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(DuckNetwork._ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Skip)), UIAlign.Left), true);
-                DuckNetwork._core._ducknetMenu.Add(new UIText(" ", Color.White), true);
+                    _core._ducknetMenu.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Skip)), UIAlign.Left), true);
+                _core._ducknetMenu.Add(new UIText(" ", Color.White), true);
             }
             Main.SpecialCode = "men13";
             if (whoOpen.slotType != SlotType.Local || Network.InLobby())
             {
                 if (whoOpen.slotType == SlotType.Local)
-                    DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("|DGRED|BACK OUT", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmMenu), UIAlign.Left), true);
+                    _core._ducknetMenu.Add(new UIMenuItem("|DGRED|BACK OUT", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmMenu), UIAlign.Left), true);
                 else
-                    DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("|DGRED|DISCONNECT", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmMenu), UIAlign.Left), true);
+                    _core._ducknetMenu.Add(new UIMenuItem("|DGRED|DISCONNECT", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmMenu), UIAlign.Left), true);
             }
             Main.SpecialCode = "men14";
             if (Network.isServer && Level.current is GameLevel)
-                DuckNetwork._core._ducknetMenu.Add(new UIMenuItem("|DGRED|BACK TO LOBBY", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmReturnToLobby), UIAlign.Left), true);
-            DuckNetwork._ducknetUIGroup._closeFunction = new UIMenuActionCloseMenuSetBoolean(DuckNetwork._ducknetUIGroup, DuckNetwork._core._menuClosed);
-            DuckNetwork._core._ducknetMenu.Close();
-            DuckNetwork._ducknetUIGroup.Add(_core._ducknetMenu, false);
-            Options.AddMenus(DuckNetwork._ducknetUIGroup);
-            Options.openOnClose = DuckNetwork._core._ducknetMenu;
+                _core._ducknetMenu.Add(new UIMenuItem("|DGRED|BACK TO LOBBY", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmReturnToLobby), UIAlign.Left), true);
+            _ducknetUIGroup._closeFunction = new UIMenuActionCloseMenuSetBoolean(_ducknetUIGroup, _core._menuClosed);
+            _core._ducknetMenu.Close();
+            _ducknetUIGroup.Add(_core._ducknetMenu, false);
+            Options.AddMenus(_ducknetUIGroup);
+            Options.openOnClose = _core._ducknetMenu;
             Main.SpecialCode = "men15";
-            DuckNetwork._core._confirmReturnToLobby.Add(new UIText("YOU WILL BE ABLE TO RETURN", Color.White), true);
-            DuckNetwork._core._confirmReturnToLobby.Add(new UIText("TO THE CURRENT GAME.", Color.White), true);
-            DuckNetwork._core._confirmReturnToLobby.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmReturnToLobby, _core._ducknetMenu), UIAlign.Left, backButton: true), true);
-            DuckNetwork._core._confirmReturnToLobby.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(DuckNetwork._ducknetUIGroup, DuckNetwork._core._returnToLobby)), true);
-            DuckNetwork._core._confirmReturnToLobby.Close();
-            DuckNetwork._ducknetUIGroup.Add(_core._confirmReturnToLobby, false);
-            DuckNetwork._core._confirmEditSlots.Add(new UIText("WOULD YOU LIKE TO", Color.White), true);
-            DuckNetwork._core._confirmEditSlots.Add(new UIText("RESET SCORES?", Color.White), true);
-            DuckNetwork._core._confirmEditSlots.Add(new UIText("", Color.White), true);
-            DuckNetwork._core._confirmEditSlots.Add(new UIMenuItem("KEEP SCORES", new UIMenuActionOpenMenu(_core._confirmEditSlots, _core._slotEditor)), true);
-            DuckNetwork._core._confirmEditSlots.Add(new UIMenuItem("|DGRED|RESET SCORES", new UIMenuActionOpenMenuCallFunction(_core._confirmEditSlots, _core._slotEditor, new UIMenuActionOpenMenuCallFunction.Function(DuckNetwork.ResetScores))), true);
-            DuckNetwork._core._confirmEditSlots.Close();
-            DuckNetwork._ducknetUIGroup.Add(_core._confirmEditSlots, false);
-            DuckNetwork._core._confirmMatchSettings.Add(new UIText("WOULD YOU LIKE TO", Color.White), true);
-            DuckNetwork._core._confirmMatchSettings.Add(new UIText("RESET SCORES?", Color.White), true);
-            DuckNetwork._core._confirmMatchSettings.Add(new UIText("", Color.White), true);
-            DuckNetwork._core._confirmMatchSettings.Add(new UIMenuItem("KEEP SCORES", new UIMenuActionOpenMenu(_core._confirmMatchSettings, _core._matchSettingMenu)), true);
-            DuckNetwork._core._confirmMatchSettings.Add(new UIMenuItem("|DGRED|RESET SCORES", new UIMenuActionOpenMenuCallFunction(_core._confirmMatchSettings, _core._matchSettingMenu, new UIMenuActionOpenMenuCallFunction.Function(DuckNetwork.ResetScores))), true);
-            DuckNetwork._core._confirmMatchSettings.Close();
-            DuckNetwork._ducknetUIGroup.Add(_core._confirmMatchSettings, false);
+            _core._confirmReturnToLobby.Add(new UIText("YOU WILL BE ABLE TO RETURN", Color.White), true);
+            _core._confirmReturnToLobby.Add(new UIText("TO THE CURRENT GAME.", Color.White), true);
+            _core._confirmReturnToLobby.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmReturnToLobby, _core._ducknetMenu), UIAlign.Left, backButton: true), true);
+            _core._confirmReturnToLobby.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_ducknetUIGroup, _core._returnToLobby)), true);
+            _core._confirmReturnToLobby.Close();
+            _ducknetUIGroup.Add(_core._confirmReturnToLobby, false);
+            _core._confirmEditSlots.Add(new UIText("WOULD YOU LIKE TO", Color.White), true);
+            _core._confirmEditSlots.Add(new UIText("RESET SCORES?", Color.White), true);
+            _core._confirmEditSlots.Add(new UIText("", Color.White), true);
+            _core._confirmEditSlots.Add(new UIMenuItem("KEEP SCORES", new UIMenuActionOpenMenu(_core._confirmEditSlots, _core._slotEditor)), true);
+            _core._confirmEditSlots.Add(new UIMenuItem("|DGRED|RESET SCORES", new UIMenuActionOpenMenuCallFunction(_core._confirmEditSlots, _core._slotEditor, new UIMenuActionOpenMenuCallFunction.Function(ResetScores))), true);
+            _core._confirmEditSlots.Close();
+            _ducknetUIGroup.Add(_core._confirmEditSlots, false);
+            _core._confirmMatchSettings.Add(new UIText("WOULD YOU LIKE TO", Color.White), true);
+            _core._confirmMatchSettings.Add(new UIText("RESET SCORES?", Color.White), true);
+            _core._confirmMatchSettings.Add(new UIText("", Color.White), true);
+            _core._confirmMatchSettings.Add(new UIMenuItem("KEEP SCORES", new UIMenuActionOpenMenu(_core._confirmMatchSettings, _core._matchSettingMenu)), true);
+            _core._confirmMatchSettings.Add(new UIMenuItem("|DGRED|RESET SCORES", new UIMenuActionOpenMenuCallFunction(_core._confirmMatchSettings, _core._matchSettingMenu, new UIMenuActionOpenMenuCallFunction.Function(ResetScores))), true);
+            _core._confirmMatchSettings.Close();
+            _ducknetUIGroup.Add(_core._confirmMatchSettings, false);
             Main.SpecialCode = "men16";
-            DuckNetwork._core._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmMenu, _core._ducknetMenu), UIAlign.Left, backButton: true), true);
-            DuckNetwork._core._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(DuckNetwork._ducknetUIGroup, DuckNetwork._core._quit)), true);
-            DuckNetwork._core._confirmMenu.Close();
-            DuckNetwork._ducknetUIGroup.Add(_core._confirmMenu, false);
-            UIMenu confirmBlacklistMenu1 = DuckNetwork._core._confirmBlacklistMenu;
+            _core._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmMenu, _core._ducknetMenu), UIAlign.Left, backButton: true), true);
+            _core._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_ducknetUIGroup, _core._quit)), true);
+            _core._confirmMenu.Close();
+            _ducknetUIGroup.Add(_core._confirmMenu, false);
+            UIMenu confirmBlacklistMenu1 = _core._confirmBlacklistMenu;
             UIText component1 = new UIText("", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
             confirmBlacklistMenu1.Add(component1, true);
-            UIMenu confirmBlacklistMenu2 = DuckNetwork._core._confirmBlacklistMenu;
+            UIMenu confirmBlacklistMenu2 = _core._confirmBlacklistMenu;
             UIText component2 = new UIText("Are you sure you want to avoid", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
             confirmBlacklistMenu2.Add(component2, true);
-            UIMenu confirmBlacklistMenu3 = DuckNetwork._core._confirmBlacklistMenu;
+            UIMenu confirmBlacklistMenu3 = _core._confirmBlacklistMenu;
             UIText component3 = new UIText("this level in the future?", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
             confirmBlacklistMenu3.Add(component3, true);
-            UIMenu confirmBlacklistMenu4 = DuckNetwork._core._confirmBlacklistMenu;
+            UIMenu confirmBlacklistMenu4 = _core._confirmBlacklistMenu;
             UIText component4 = new UIText("", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
             confirmBlacklistMenu4.Add(component4, true);
-            DuckNetwork._core._confirmBlacklistMenu.Add(new UIMenuItem("|DGRED|@blacklist@YES!", new UIMenuActionCloseMenuCallFunction(DuckNetwork._ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Blacklist))), true);
-            DuckNetwork._core._confirmBlacklistMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_core._confirmBlacklistMenu, _core._ducknetMenu), backButton: true), true);
-            DuckNetwork._core._confirmBlacklistMenu.Close();
-            DuckNetwork._ducknetUIGroup.Add(_core._confirmBlacklistMenu, false);
+            _core._confirmBlacklistMenu.Add(new UIMenuItem("|DGRED|@blacklist@YES!", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Blacklist))), true);
+            _core._confirmBlacklistMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_core._confirmBlacklistMenu, _core._ducknetMenu), backButton: true), true);
+            _core._confirmBlacklistMenu.Close();
+            _ducknetUIGroup.Add(_core._confirmBlacklistMenu, false);
             Main.SpecialCode = "men17";
-            DuckNetwork._core._confirmKick.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmKick, _core._ducknetMenu), UIAlign.Left, backButton: true), true);
-            DuckNetwork._core._confirmKick.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuCallFunction(DuckNetwork._ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(DuckNetwork.KickedPlayer))), true);
-            DuckNetwork._core._confirmKick.Close();
-            DuckNetwork._ducknetUIGroup.Add(_core._confirmKick, false);
-            DuckNetwork._core._confirmBan.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmBan, _core._ducknetMenu), UIAlign.Left, backButton: true), true);
-            DuckNetwork._core._confirmBan.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuCallFunction(DuckNetwork._ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(DuckNetwork.BannedPlayer))), true);
-            DuckNetwork._core._confirmBan.Close();
-            DuckNetwork._ducknetUIGroup.Add(_core._confirmBan, false);
+            _core._confirmKick.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmKick, _core._ducknetMenu), UIAlign.Left, backButton: true), true);
+            _core._confirmKick.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(KickedPlayer))), true);
+            _core._confirmKick.Close();
+            _ducknetUIGroup.Add(_core._confirmKick, false);
+            _core._confirmBan.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmBan, _core._ducknetMenu), UIAlign.Left, backButton: true), true);
+            _core._confirmBan.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(BannedPlayer))), true);
+            _core._confirmBan.Close();
+            _ducknetUIGroup.Add(_core._confirmBan, false);
             Main.SpecialCode = "men18";
-            DuckNetwork._core._confirmBlock.Add(new UIText("I'm sorry it's come to this :(", Colors.DGBlue), true);
-            DuckNetwork._core._confirmBlock.Add(new UIText("", Color.White), true);
-            DuckNetwork._core._confirmBlock.Add(new UIText("Blocking this player will", Colors.DGBlue), true);
-            DuckNetwork._core._confirmBlock.Add(new UIText("stop their interactions with", Colors.DGBlue), true);
-            DuckNetwork._core._confirmBlock.Add(new UIText("you and prevent them from", Colors.DGBlue), true);
-            DuckNetwork._core._confirmBlock.Add(new UIText("joining your games in the future.", Colors.DGBlue), true);
-            DuckNetwork._core._confirmBlock.Add(new UIText("", Color.White), true);
-            DuckNetwork._core._confirmBlock.Add(new UIText("Are you sure?", Colors.DGBlue), true);
-            DuckNetwork._core._confirmBlock.Add(new UIText("", Color.White), true);
-            DuckNetwork._core._confirmBlock.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmBlock, _core._ducknetMenu), backButton: true), true);
-            DuckNetwork._core._confirmBlock.Add(new UIMenuItem("YES, PLEASE BLOCK THEM!", new UIMenuActionCloseMenuCallFunction(DuckNetwork._ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(DuckNetwork.BlockedPlayer))), true);
-            DuckNetwork._core._confirmBlock.Close();
-            DuckNetwork._ducknetUIGroup.Add(_core._confirmBlock, false);
+            _core._confirmBlock.Add(new UIText("I'm sorry it's come to this :(", Colors.DGBlue), true);
+            _core._confirmBlock.Add(new UIText("", Color.White), true);
+            _core._confirmBlock.Add(new UIText("Blocking this player will", Colors.DGBlue), true);
+            _core._confirmBlock.Add(new UIText("stop their interactions with", Colors.DGBlue), true);
+            _core._confirmBlock.Add(new UIText("you and prevent them from", Colors.DGBlue), true);
+            _core._confirmBlock.Add(new UIText("joining your games in the future.", Colors.DGBlue), true);
+            _core._confirmBlock.Add(new UIText("", Color.White), true);
+            _core._confirmBlock.Add(new UIText("Are you sure?", Colors.DGBlue), true);
+            _core._confirmBlock.Add(new UIText("", Color.White), true);
+            _core._confirmBlock.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmBlock, _core._ducknetMenu), backButton: true), true);
+            _core._confirmBlock.Add(new UIMenuItem("YES, PLEASE BLOCK THEM!", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(BlockedPlayer))), true);
+            _core._confirmBlock.Close();
+            _ducknetUIGroup.Add(_core._confirmBlock, false);
             Main.SpecialCode = "men19";
-            DuckNetwork._core._optionsMenu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(_core._optionsMenu, _core._ducknetMenu, new UIMenuActionOpenMenuCallFunction.Function(Options.OptionsMenuClosed)));
-            DuckNetwork._core._optionsMenu.Close();
-            DuckNetwork._ducknetUIGroup.Add(_core._optionsMenu, false);
-            DuckNetwork._ducknetUIGroup.Add(Options._lastCreatedGraphicsMenu, false);
-            DuckNetwork._ducknetUIGroup.Add(Options._lastCreatedAudioMenu, false);
+            _core._optionsMenu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(_core._optionsMenu, _core._ducknetMenu, new UIMenuActionOpenMenuCallFunction.Function(Options.OptionsMenuClosed)));
+            _core._optionsMenu.Close();
+            _ducknetUIGroup.Add(_core._optionsMenu, false);
+            _ducknetUIGroup.Add(Options._lastCreatedGraphicsMenu, false);
+            _ducknetUIGroup.Add(Options._lastCreatedAudioMenu, false);
             if (Options._lastCreatedAccessibilityMenu != null)
-                DuckNetwork._ducknetUIGroup.Add(Options._lastCreatedAccessibilityMenu, false);
+                _ducknetUIGroup.Add(Options._lastCreatedAccessibilityMenu, false);
             if (Options._lastCreatedTTSMenu != null)
-                DuckNetwork._ducknetUIGroup.Add(Options._lastCreatedTTSMenu, false);
+                _ducknetUIGroup.Add(Options._lastCreatedTTSMenu, false);
             if (Options._lastCreatedBlockMenu != null)
-                DuckNetwork._ducknetUIGroup.Add(Options._lastCreatedBlockMenu, false);
+                _ducknetUIGroup.Add(Options._lastCreatedBlockMenu, false);
             if (Options._lastCreatedControlsMenu != null)
-                DuckNetwork._ducknetUIGroup.Add(Options._lastCreatedControlsMenu, false);
+                _ducknetUIGroup.Add(Options._lastCreatedControlsMenu, false);
             Main.SpecialCode = "men20";
-            DuckNetwork._ducknetUIGroup.Close();
+            _ducknetUIGroup.Close();
             Level.Add(_ducknetUIGroup);
-            DuckNetwork._ducknetUIGroup.Update();
-            DuckNetwork._ducknetUIGroup.Update();
-            DuckNetwork._ducknetUIGroup.Update();
-            DuckNetwork._ducknetUIGroup.Open();
-            DuckNetwork._core._ducknetMenu.Open();
-            MonoMain.pauseMenu = DuckNetwork._ducknetUIGroup;
+            _ducknetUIGroup.Update();
+            _ducknetUIGroup.Update();
+            _ducknetUIGroup.Update();
+            _ducknetUIGroup.Open();
+            _core._ducknetMenu.Open();
+            MonoMain.pauseMenu = _ducknetUIGroup;
             HUD.AddCornerControl(HUDCorner.BottomRight, "@CHAT@CHAT");
-            DuckNetwork._core._pauseOpen = true;
+            _core._pauseOpen = true;
             SFX.Play("pause", 0.6f);
         }
 
@@ -1151,7 +1151,7 @@ namespace DuckGame
             int offset = 0;
             Math.Ceiling((double)(length1 / val2));
             compressedLevelData.Position = 0L;
-            Send.Message(new NMLevelDataHeader(session, (int)length1, DuckNetwork.compressedLevelName), c);
+            Send.Message(new NMLevelDataHeader(session, (int)length1, compressedLevelName), c);
             while (offset != length1)
             {
                 BitBuffer dat = new BitBuffer();
@@ -1167,7 +1167,7 @@ namespace DuckGame
         {
             get
             {
-                foreach (Profile profile in DuckNetwork.profiles)
+                foreach (Profile profile in profiles)
                 {
                     if (profile.connection != null && profile.connection.levelIndex != levelIndex)
                         return false;
@@ -1178,13 +1178,13 @@ namespace DuckGame
 
         private static void OpenTeamSwitchDialogue(Profile p)
         {
-            if (DuckNetwork._uhOhGroup != null && DuckNetwork._uhOhGroup.open)
+            if (_uhOhGroup != null && _uhOhGroup.open)
                 return;
-            if (DuckNetwork._uhOhGroup != null)
+            if (_uhOhGroup != null)
                 Level.Remove(_uhOhGroup);
-            DuckNetwork.ClearTeam(p);
-            DuckNetwork._uhOhGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
-            DuckNetwork._uhOhMenu = new UIMenu("UH OH", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 210f, conString: "@SELECT@OK");
+            ClearTeam(p);
+            _uhOhGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
+            _uhOhMenu = new UIMenu("UH OH", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 210f, conString: "@SELECT@OK");
             float num = 190f;
             string str1 = "The host isn't allowing teams, and someone else is already wearing your hat :(";
             string textVal = "";
@@ -1199,7 +1199,7 @@ namespace DuckGame
                 {
                     if ((textVal.Length + str2.Length) * 8 > num)
                     {
-                        DuckNetwork._uhOhMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
+                        _uhOhMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                         textVal = "";
                     }
                     if (textVal.Length > 0)
@@ -1219,16 +1219,16 @@ namespace DuckGame
                 textVal += str2;
             }
             if (textVal.Length > 0)
-                DuckNetwork._uhOhMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
-            DuckNetwork._uhOhMenu.Add(new UIText(" ", Color.White), true);
-            DuckNetwork._uhOhMenu.Add(new UIMenuItem("OH DEAR", new UIMenuActionCloseMenu(DuckNetwork._uhOhGroup), c: Colors.MenuOption, backButton: true), true);
-            DuckNetwork._uhOhMenu.Close();
-            DuckNetwork._uhOhGroup.Add(_uhOhMenu, false);
-            DuckNetwork._uhOhGroup.Close();
+                _uhOhMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
+            _uhOhMenu.Add(new UIText(" ", Color.White), true);
+            _uhOhMenu.Add(new UIMenuItem("OH DEAR", new UIMenuActionCloseMenu(_uhOhGroup), c: Colors.MenuOption, backButton: true), true);
+            _uhOhMenu.Close();
+            _uhOhGroup.Add(_uhOhMenu, false);
+            _uhOhGroup.Close();
             Level.Add(_uhOhGroup);
-            DuckNetwork._uhOhGroup.Open();
-            DuckNetwork._uhOhMenu.Open();
-            MonoMain.pauseMenu = DuckNetwork._uhOhGroup;
+            _uhOhGroup.Open();
+            _uhOhMenu.Open();
+            MonoMain.pauseMenu = _uhOhGroup;
             SFX.Play("pause", 0.6f);
         }
 
@@ -1247,12 +1247,12 @@ namespace DuckGame
             bool flag = true;
             if (team != null)
             {
-                foreach (Profile profile in DuckNetwork.profiles)
+                foreach (Profile profile in profiles)
                 {
                     if (p.connection != null && p != profile && profile.team == p.team && profile.slotType != SlotType.Spectator && Network.isServer)
                     {
-                        if (p.connection == DuckNetwork.localConnection)
-                            DuckNetwork.OpenTeamSwitchDialogue(p);
+                        if (p.connection == localConnection)
+                            OpenTeamSwitchDialogue(p);
                         else
                             Send.Message(new NMTeamSetDenied(p, p.team), p.connection);
                         flag = false;
@@ -1275,10 +1275,10 @@ namespace DuckGame
 
         private static void SendJoinMessage(NetworkConnection c)
         {
-            DuckNetwork.invited = false;
+            invited = false;
             ulong pLocalID = 0;
             if (Steam.lobby != null && NCSteam.inviteLobbyID != 0UL && (long)NCSteam.inviteLobbyID == (long)Steam.lobby.id)
-                DuckNetwork.invited = true;
+                invited = true;
             NCSteam.inviteLobbyID = 0UL;
             if (!Network.lanMode)
                 pLocalID = DG.localID;
@@ -1289,14 +1289,14 @@ namespace DuckGame
             {
                 if (matchmakingProfile.masterProfile != null)
                 {
-                    pNames.Add(DuckNetwork.GetNameForIndex(matchmakingProfile.masterProfile.name, pIndex));
+                    pNames.Add(GetNameForIndex(matchmakingProfile.masterProfile.name, pIndex));
                     ++pIndex;
                 }
                 else
                     pNames.Add(matchmakingProfile.originallySelectedProfile.name);
                 pPersonas.Add((byte)matchmakingProfile.persona.index);
             }
-            Send.Message(new NMRequestJoin(pNames, pPersonas, DuckNetwork.invited, DuckNetwork.core.serverPassword, pLocalID), NetMessagePriority.ReliableOrdered, c);
+            Send.Message(new NMRequestJoin(pNames, pPersonas, invited, core.serverPassword, pLocalID), NetMessagePriority.ReliableOrdered, c);
         }
 
         //private static void ClearAllNetworkData() => Network.Terminate();
@@ -1321,31 +1321,31 @@ namespace DuckGame
 
         public static bool isDedicatedServer
         {
-            get => DuckNetwork._core.isDedicatedServer;
-            set => DuckNetwork._core.isDedicatedServer = value;
+            get => _core.isDedicatedServer;
+            set => _core.isDedicatedServer = value;
         }
 
         public static void Host(int maxPlayers, NetworkLobbyType lobbyType, bool useCurrentSettings = false)
         {
-            DuckNetwork.isDedicatedServer = false;
-            DuckNetwork.invited = false;
+            isDedicatedServer = false;
+            invited = false;
             Network.lanMode = lobbyType == NetworkLobbyType.LAN || lobbyType == NetworkLobbyType.Invisible;
-            DuckNetwork._core.serverPassword = (string)TeamSelect2.GetOnlineSetting("password").value;
-            if (DuckNetwork._core.status == DuckNetStatus.Disconnected && Network.connections.Count == 0)
+            _core.serverPassword = (string)TeamSelect2.GetOnlineSetting("password").value;
+            if (_core.status == DuckNetStatus.Disconnected && Network.connections.Count == 0)
             {
                 DevConsole.Log(DCSection.DuckNet, "|LIME|Hosting new server. ");
-                DuckNetwork.EnsureMatchmakingProfileExperienceProfile(Network.lanMode);
-                DuckNetwork.Reset();
+                EnsureMatchmakingProfileExperienceProfile(Network.lanMode);
+                Reset();
                 foreach (Profile universalProfile in Profiles.universalProfileList)
                     universalProfile.team = null;
                 if (!useCurrentSettings)
                     TeamSelect2.DefaultSettings();
                 int lanPort = TeamSelect2.GetLANPort();
                 Network.HostServer(lobbyType, maxPlayers, (string)TeamSelect2.GetOnlineSetting("name").value, lanPort);
-                DuckNetwork.localConnection.BeginConnection();
-                DuckNetwork.preparingProfiles = true;
+                localConnection.BeginConnection();
+                preparingProfiles = true;
                 int num1 = 0;
-                foreach (Profile profile in DuckNetwork.profiles)
+                foreach (Profile profile in profiles)
                 {
                     switch (lobbyType)
                     {
@@ -1366,52 +1366,52 @@ namespace DuckGame
                     profile.originalSlotType = profile.slotType;
                     ++num1;
                 }
-                DuckNetwork.preparingProfiles = false;
-                DuckNetwork.ChangeSlotSettings();
+                preparingProfiles = false;
+                ChangeSlotSettings();
                 int num2 = 1;
                 foreach (MatchmakingPlayer matchmakingProfile in UIMatchmakingBox.core.matchmakingProfiles)
                 {
                     if (matchmakingProfile.spectator)
-                        DuckNetwork.isDedicatedServer = true;
+                        isDedicatedServer = true;
                     string pName = Network.activeNetwork.core.GetLocalName();
                     if (Network.activeNetwork.core is NCBasic)
                     {
                         pName = matchmakingProfile.originallySelectedProfile.name;
                         NCBasic._localName = pName;
                     }
-                    DuckNetwork.ServerCreateProfile(DuckNetwork._core.localConnection, matchmakingProfile.inputProfile, matchmakingProfile.originallySelectedProfile, pName, true, false, matchmakingProfile.spectator).persona = matchmakingProfile.persona;
+                    ServerCreateProfile(_core.localConnection, matchmakingProfile.inputProfile, matchmakingProfile.originallySelectedProfile, pName, true, false, matchmakingProfile.spectator).persona = matchmakingProfile.persona;
                     ++num2;
                 }
-                DuckNetwork._core.localConnection.levelIndex = 0;
-                DuckNetwork._core.localConnection.isHost = true;
-                DuckNetwork._core.status = DuckNetStatus.ConnectingToServer;
+                _core.localConnection.levelIndex = 0;
+                _core.localConnection.isHost = true;
+                _core.status = DuckNetStatus.ConnectingToServer;
             }
             else
                 DevConsole.Log(DCSection.DuckNet, "@error !!DuckNetwork.Host called while still connected!!@error");
         }
 
-        public static void Join(string id, string ip = "localhost") => DuckNetwork.Join(id, ip, "");
+        public static void Join(string id, string ip = "localhost") => Join(id, ip, "");
 
         public static void Join(string id, string ip, string pPassword)
         {
-            DuckNetwork.isDedicatedServer = false;
+            isDedicatedServer = false;
             if (pPassword == null)
                 pPassword = "";
-            DuckNetwork.core.serverPassword = pPassword;
-            if (DuckNetwork._core.status == DuckNetStatus.Disconnected && Network.connections.Count == 0)
+            core.serverPassword = pPassword;
+            if (_core.status == DuckNetStatus.Disconnected && Network.connections.Count == 0)
             {
                 Network.lanMode = ip != "localhost";
                 DevConsole.Log(DCSection.DuckNet, "|LIME|Attempting to join " + id);
-                DuckNetwork.EnsureMatchmakingProfileExperienceProfile(Network.lanMode);
-                DuckNetwork.Reset();
+                EnsureMatchmakingProfileExperienceProfile(Network.lanMode);
+                Reset();
                 foreach (Profile universalProfile in Profiles.universalProfileList)
                     universalProfile.team = null;
                 for (int index = 0; index < DG.MaxPlayers; ++index)
                     Teams.all[index].customData = null;
                 TeamSelect2.DefaultSettings();
-                Network.JoinServer(id, 1337 + DuckNetwork.joinPort, ip);
-                DuckNetwork.localConnection.BeginConnection();
-                DuckNetwork._core.status = DuckNetStatus.EstablishingCommunicationWithServer;
+                Network.JoinServer(id, 1337 + joinPort, ip);
+                localConnection.BeginConnection();
+                _core.status = DuckNetStatus.EstablishingCommunicationWithServer;
             }
             else
                 DevConsole.Log(DCSection.DuckNet, "@error !!DuckNetwork.Join called while still connected!!@error");
@@ -1421,24 +1421,24 @@ namespace DuckGame
         {
             if (!Network.isServer)
                 return null;
-            foreach (Profile profile in DuckNetwork.profiles)
+            foreach (Profile profile in profiles)
             {
                 if (profile.team != null && profile.inputProfile == pInput)
                     return profile;
             }
-            int num = DuckNetwork.profiles.Where<Profile>(x => x.connection == DuckNetwork.localConnection).Count<Profile>();
+            int num = profiles.Where<Profile>(x => x.connection == localConnection).Count<Profile>();
             string pName = Network.activeNetwork.core.GetLocalName();
             if (num > 0)
                 pName = pName + "(" + (num + 1).ToString() + ")";
             Profile pLocalProfile = null;
             if (pInput.mpIndex >= 0)
                 pLocalProfile = Profile.defaultProfileMappings[pInput.mpIndex];
-            Profile profile1 = DuckNetwork.ServerCreateProfile(DuckNetwork.localConnection, pInput, pLocalProfile, pName, true, false, false);
+            Profile profile1 = ServerCreateProfile(localConnection, pInput, pLocalProfile, pName, true, false, false);
             if (profile1 == null)
                 return null;
             profile1.isRemoteLocalDuck = true;
             Level.current.OnNetworkConnecting(profile1);
-            DuckNetwork.Server_AcceptJoinRequest(new List<Profile>()
+            Server_AcceptJoinRequest(new List<Profile>()
       {
         profile1
       }, true);
@@ -1454,14 +1454,14 @@ namespace DuckGame
             bool pFriend = false;
             if (pConnection.data is User && (pConnection.data as User).id != 0UL)
             {
-                if (DuckNetwork._core._invitedFriends.Contains((pConnection.data as User).id))
+                if (_core._invitedFriends.Contains((pConnection.data as User).id))
                     pInvited = true;
                 if ((pConnection.data as User).relationship == FriendRelationship.Friend)
                     pFriend = true;
             }
-            IEnumerable<Profile> source = DuckNetwork.profiles.Where<Profile>(x => x.connection == null && x.reservedUser != null && pConnection.data == x.reservedUser);
+            IEnumerable<Profile> source = profiles.Where<Profile>(x => x.connection == null && x.reservedUser != null && pConnection.data == x.reservedUser);
             if (source.Count<Profile>() == 0)
-                source = !pSpectator ? DuckNetwork.profiles.Where<Profile>(x => x.connection == null && (x.slotType == SlotType.Invite && pInvited | pLocal || x.slotType == SlotType.Friend && pFriend | pLocal || pLocal && x.slotType == SlotType.Local || x.slotType == SlotType.Open) && x.slotType != SlotType.Spectator && x.networkIndex <= 7) : DuckNetwork.profiles.Where<Profile>(x => x.connection == null && x.slotType == SlotType.Spectator);
+                source = !pSpectator ? profiles.Where<Profile>(x => x.connection == null && (x.slotType == SlotType.Invite && pInvited | pLocal || x.slotType == SlotType.Friend && pFriend | pLocal || pLocal && x.slotType == SlotType.Local || x.slotType == SlotType.Open) && x.slotType != SlotType.Spectator && x.networkIndex <= 7) : profiles.Where<Profile>(x => x.connection == null && x.slotType == SlotType.Spectator);
             return source;
         }
 
@@ -1474,10 +1474,10 @@ namespace DuckGame
           bool pWasInvited,
           bool pSpectator)
         {
-            Profile pProfile = DuckNetwork.GetOpenProfiles(pConnection, pWasInvited, pLocal, pSpectator).FirstOrDefault<Profile>();
+            Profile pProfile = GetOpenProfiles(pConnection, pWasInvited, pLocal, pSpectator).FirstOrDefault<Profile>();
             if (pProfile == null)
                 return null;
-            DuckNetwork.PrepareProfile(pProfile, pConnection, pInput, pLocalProfile, pName);
+            PrepareProfile(pProfile, pConnection, pInput, pLocalProfile, pName);
             pProfile.invited = pWasInvited;
             return pProfile;
         }
@@ -1492,7 +1492,7 @@ namespace DuckGame
             DevConsole.Log(DCSection.DuckNet, "PrepareProfile(" + pConnection.ToString() + ", " + pName + "," + pProfile.networkIndex.ToString() + ")");
             Team reservedTeam = pProfile.reservedTeam;
             sbyte spectatorPersona = pProfile.reservedSpectatorPersona;
-            DuckNetwork.ResetProfile(pProfile);
+            ResetProfile(pProfile);
             pProfile.linkedProfile = pLocalProfile;
             if (pConnection.profile == null)
             {
@@ -1501,16 +1501,16 @@ namespace DuckGame
             }
             pProfile.connection = pConnection;
             pProfile.name = pName;
-            if (pConnection == DuckNetwork.localConnection)
+            if (pConnection == localConnection)
             {
-                if (DuckNetwork._core.localProfile == null)
-                    DuckNetwork._core.localProfile = pProfile;
-                if (Network.isServer && DuckNetwork._core.hostProfile == null)
-                    DuckNetwork._core.hostProfile = pProfile;
+                if (_core.localProfile == null)
+                    _core.localProfile = pProfile;
+                if (Network.isServer && _core.hostProfile == null)
+                    _core.hostProfile = pProfile;
                 pProfile.networkStatus = DuckNetStatus.Connected;
                 if (!Network.lanMode)
                     pProfile.steamID = DG.localID;
-                if (DuckNetwork.profiles.Where<Profile>(x => x.connection == pConnection).Count<Profile>() > 1)
+                if (profiles.Where<Profile>(x => x.connection == pConnection).Count<Profile>() > 1)
                 {
                     pProfile.slotType = SlotType.Local;
                     pProfile.isRemoteLocalDuck = true;
@@ -1541,38 +1541,38 @@ namespace DuckGame
 
         public static void Reset()
         {
-            foreach (Profile profile in DuckNetwork.profiles)
-                DuckNetwork.ResetProfile(profile, false);
+            foreach (Profile profile in profiles)
+                ResetProfile(profile, false);
             Level.core.gameInProgress = false;
-            DuckNetwork._core._invitedFriends.Clear();
+            _core._invitedFriends.Clear();
             Main.ResetGameStuff();
             Main.ResetMatchStuff();
-            DuckNetwork._core.RecreateProfiles();
-            DuckNetwork._core.hostProfile = null;
-            DuckNetwork._core.localProfile = null;
+            _core.RecreateProfiles();
+            _core.hostProfile = null;
+            _core.localProfile = null;
             DataLayerDebug.BadConnection pContext = null;
-            if (DuckNetwork._core.localConnection != null)
-                pContext = DuckNetwork._core.localConnection.debuggerContext;
-            DuckNetwork._core.localConnection = new NetworkConnection(null);
-            DuckNetwork._core.localConnection.SetDebuggerContext(pContext);
-            DuckNetwork._core.inGame = false;
-            DuckNetwork._core.status = DuckNetStatus.Disconnected;
-            DuckNetwork._core.levelTransferSession = 0;
-            DuckNetwork._core.levelTransferProgress = 0;
-            DuckNetwork._core.levelTransferSize = 0;
-            DuckNetwork._core.enteringText = false;
-            DuckNetwork._core.localConnection.levelIndex = byte.MaxValue;
+            if (_core.localConnection != null)
+                pContext = _core.localConnection.debuggerContext;
+            _core.localConnection = new NetworkConnection(null);
+            _core.localConnection.SetDebuggerContext(pContext);
+            _core.inGame = false;
+            _core.status = DuckNetStatus.Disconnected;
+            _core.levelTransferSession = 0;
+            _core.levelTransferProgress = 0;
+            _core.levelTransferSize = 0;
+            _core.enteringText = false;
+            _core.localConnection.levelIndex = byte.MaxValue;
             DevConsole.Log(DCSection.DuckNet, "|LIME|----------------Duck Network has been RESET----------------");
         }
 
-        public static void ResetProfile(Profile p) => DuckNetwork.ResetProfile(p, false);
+        public static void ResetProfile(Profile p) => ResetProfile(p, false);
 
         public static void ResetProfile(Profile p, bool reserve)
         {
             DevConsole.Log(DCSection.DuckNet, "|DGRED|Resetting profile (" + (p.connection != null ? p.connection.ToString() : "null") + ")");
             if (p.connection != null && p.connection.profile == p)
             {
-                if (p.connection != DuckNetwork.localConnection)
+                if (p.connection != localConnection)
                     Level.current.OnNetworkDisconnected(p);
                 p.connection.profile = null;
             }
@@ -1614,13 +1614,13 @@ namespace DuckGame
 
         public static void OnDisconnect(NetworkConnection connection, string reason, bool kicked = false)
         {
-            if (DuckNetwork._core.localProfile == null || connection == DuckNetwork.localConnection)
+            if (_core.localProfile == null || connection == localConnection)
             {
                 if (!connection.isHost)
                     return;
                 Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.EveryoneDisconnected, "Could not connect to server."));
             }
-            else if (DuckNetwork.status == DuckNetStatus.ConnectingToClients && NCNetworkImplementation.currentError != null && NCNetworkImplementation.currentError.error == DuckNetError.ConnectionTimeout)
+            else if (status == DuckNetStatus.ConnectingToClients && NCNetworkImplementation.currentError != null && NCNetworkImplementation.currentError.error == DuckNetError.ConnectionTimeout)
                 Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.EveryoneDisconnected, "Could not connect to: {\n\n\n" + connection.name));
             else if (connection.isHost & kicked)
             {
@@ -1633,15 +1633,15 @@ namespace DuckGame
                     byte pStationID = 99;
                     NetworkConnection networkConnection = null;
                     byte num = 99;
-                    if (DuckNetwork.hostProfile == null)
+                    if (hostProfile == null)
                     {
                         DevConsole.Log(DCSection.General, "Host changed but I'm still in the process of connecting.  This is bad since I have incomplete data, disconnecting.");
                         Level.current = new DisconnectFromGame();
                         return;
                     }
-                    if (DuckNetwork.hostProfile.connection == connection)
+                    if (hostProfile.connection == connection)
                     {
-                        foreach (Profile profile in DuckNetwork.core.profiles)
+                        foreach (Profile profile in core.profiles)
                         {
                             if (!profile.isRemoteLocalDuck)
                             {
@@ -1650,28 +1650,28 @@ namespace DuckGame
                                     pStationID = profile.networkIndex;
                                     networkConnection = profile.connection;
                                 }
-                                if (profile.connection == DuckNetwork.localConnection && profile.networkIndex < num)
+                                if (profile.connection == localConnection && profile.networkIndex < num)
                                     num = profile.networkIndex;
                             }
                         }
                         if (networkConnection == null)
                             throw new Exception("DuckNetwork.OnDisconnect index failure!");
-                        DuckNetwork.OnHostChange(pStationID, num <= pStationID);
+                        OnHostChange(pStationID, num <= pStationID);
                     }
                 }
-                List<Profile> profiles = DuckNetwork.GetProfiles(connection);
+                List<Profile> profiles = GetProfiles(connection);
                 bool flag = false;
                 foreach (Profile profile in profiles)
                 {
                     flag = true;
-                    if (profile.connection != DuckNetwork.localConnection)
+                    if (profile.connection != localConnection)
                     {
                         if (Network.isServer)
                         {
                             if (MonoMain.closingGame)
-                                DuckNetwork.SendToEveryone(new NMClientClosedGame());
+                                SendToEveryone(new NMClientClosedGame());
                             else
-                                DuckNetwork.SendToEveryone(new NMClientDisconnect(profile.connection.identifier, profile));
+                                SendToEveryone(new NMClientDisconnect(profile.connection.identifier, profile));
                         }
                         bool reserve = false;
                         if (Network.InMatch())
@@ -1687,56 +1687,56 @@ namespace DuckGame
                         }
                         DevConsole.Log(DCSection.DuckNet, profile.nameUI + " |RED|Has left the DuckNet.");
                         int networkStatus = (int)profile.networkStatus;
-                        DuckNetwork.ResetProfile(profile, reserve);
+                        ResetProfile(profile, reserve);
                         if (reserve && profile.slotType != SlotType.Spectator)
                         {
                             profile.slotType = SlotType.Reserved;
-                            DuckNetwork.ChangeSlotSettings();
+                            ChangeSlotSettings();
                         }
                         if (Level.core.gameInProgress && Network.InLobby())
                         {
                             if (profile.slotType != SlotType.Spectator)
                                 profile.slotType = SlotType.Closed;
-                            DuckNetwork.ChangeSlotSettings();
+                            ChangeSlotSettings();
                         }
                     }
                     else
                         profile.networkStatus = DuckNetStatus.Disconnected;
                 }
-                if (DuckNetwork.status == DuckNetStatus.ConnectingToClients && DuckNetwork.hostProfile != null && DuckNetwork.hostProfile.connection != null)
-                    DuckNetwork.CheckConnectingStatus();
-                if (!flag || DuckNetwork.status == DuckNetStatus.Disconnecting || DuckNetwork.status == DuckNetStatus.Disconnected || !Network.isServer || Level.current is TeamSelect2 || !Level.current._waitingOnTransition && Level.current._startCalled)
+                if (status == DuckNetStatus.ConnectingToClients && hostProfile != null && hostProfile.connection != null)
+                    CheckConnectingStatus();
+                if (!flag || status == DuckNetStatus.Disconnecting || status == DuckNetStatus.Disconnected || !Network.isServer || Level.current is TeamSelect2 || !Level.current._waitingOnTransition && Level.current._startCalled)
                     return;
                 Level.current = new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
             }
         }
 
-        public static bool IsEstablishingConnection() => DuckNetwork.status == DuckNetStatus.EstablishingCommunicationWithServer || DuckNetwork.status == DuckNetStatus.ConnectingToServer || DuckNetwork.status == DuckNetStatus.ConnectingToClients;
+        public static bool IsEstablishingConnection() => status == DuckNetStatus.EstablishingCommunicationWithServer || status == DuckNetStatus.ConnectingToServer || status == DuckNetStatus.ConnectingToClients;
 
         public static void OnHostChange(ulong pStationID, bool pLocal)
         {
-            if (DuckNetwork.IsEstablishingConnection())
+            if (IsEstablishingConnection())
             {
                 DevConsole.Log(DCSection.General, "|DGRED|Host changed but I'm still in the process of connecting.  This is bad since I have incomplete data, disconnecting.");
-                Network.DisconnectClient(DuckNetwork.localConnection, new DuckNetErrorInfo(DuckNetError.ConnectionTimeout, "Host disconnected."));
+                Network.DisconnectClient(localConnection, new DuckNetErrorInfo(DuckNetError.ConnectionTimeout, "Host disconnected."));
             }
-            else if (DuckNetwork.status == DuckNetStatus.Disconnected || DuckNetwork.status == DuckNetStatus.Disconnecting)
+            else if (status == DuckNetStatus.Disconnected || status == DuckNetStatus.Disconnecting)
             {
-                DevConsole.Log(DCSection.General, "|DGRED|Skipping host migration (DuckNetwork.status = " + DuckNetwork.status.ToString() + ").");
+                DevConsole.Log(DCSection.General, "|DGRED|Skipping host migration (DuckNetwork.status = " + status.ToString() + ").");
             }
             else
             {
                 bool flag1 = pLocal;
                 Network.isServer = flag1;
                 bool flag2 = false;
-                foreach (Profile profile in DuckNetwork.core.profiles)
+                foreach (Profile profile in core.profiles)
                 {
                     if (profile.connection != null)
                     {
                         profile.connection.isHost = false;
-                        if (profile.networkIndex == (long)pStationID || pLocal && profile.connection == DuckNetwork.localConnection)
+                        if (profile.networkIndex == (long)pStationID || pLocal && profile.connection == localConnection)
                         {
-                            DuckNetwork.core.hostProfile = profile;
+                            core.hostProfile = profile;
                             profile.connection.isHost = true;
                             DevConsole.Log(DCSection.NetCore, "Host migrating, new host is " + profile.connection?.ToString() + (flag1 ? "(local)" : "(remote)"));
                             flag2 = true;
@@ -1762,7 +1762,7 @@ namespace DuckGame
                         current.controlMessage = -1;
                         current.controlMessage = controlMessage;
                     }
-                    Thing.Fondle(current.netCountdown, DuckNetwork.localConnection);
+                    Thing.Fondle(current.netCountdown, localConnection);
                 }
             }
         }
@@ -1770,112 +1770,116 @@ namespace DuckGame
         public static void OnSessionEnded()
         {
             DevConsole.Log(DCSection.DuckNet, "----------------Duck Network Session ENDED----------------");
-            DuckNetwork._core.enteringText = false;
-            DuckNetwork.Reset();
+            _core.enteringText = false;
+            Reset();
         }
 
         private static void CheckConnectingStatus()
         {
-            if (DuckNetwork.status != DuckNetStatus.ConnectingToClients || DuckNetwork.hostProfile == null)
+            if (status != DuckNetStatus.ConnectingToClients || hostProfile == null)
                 return;
             bool flag = true;
-            foreach (Profile profile in DuckNetwork.profiles)
+            foreach (Profile profile in profiles)
             {
                 if (profile.connection != null && profile.connection.status != ConnectionStatus.Connected)
                     flag = false;
             }
             if (!flag)
                 return;
-            Send.Message(new NMAllClientsConnected(), DuckNetwork.hostProfile.connection);
+            Send.Message(new NMAllClientsConnected(), hostProfile.connection);
         }
 
         public static void OnConnection(NetworkConnection c)
         {
-            switch (DuckNetwork.status)
+            switch (status)
             {
                 case DuckNetStatus.EstablishingCommunicationWithServer:
                     if (!c.isHost)
                         break;
                     DevConsole.Log(DCSection.DuckNet, "Host contacted. Sending join request. ");
-                    DuckNetwork._core.status = DuckNetStatus.ConnectingToServer;
-                    DuckNetwork.SendJoinMessage(c);
+                    _core.status = DuckNetStatus.ConnectingToServer;
+                    SendJoinMessage(c);
                     break;
                 case DuckNetStatus.ConnectingToClients:
-                    DuckNetwork.CheckConnectingStatus();
+                    CheckConnectingStatus();
                     break;
                 default:
                     if (!c.isHost)
                         break;
-                    DevConsole.Log(DCSection.DuckNet, "@error Host contacted. Join request not sent due to wrong status (" + DuckNetwork.status.ToString() + ")@error");
+                    DevConsole.Log(DCSection.DuckNet, "@error Host contacted. Join request not sent due to wrong status (" + status.ToString() + ")@error");
                     break;
             }
         }
 
         public static void Update()
         {
-            if (MonoMain.pauseMenu == null && DuckNetwork._core._pauseOpen)
+            if (localProfile != null)
+            {
+                localProfile.netData.Set("REBUILT", true);
+            }
+            if (MonoMain.pauseMenu == null && _core._pauseOpen)
             {
                 HUD.CloseAllCorners();
-                DuckNetwork._core._pauseOpen = false;
+                _core._pauseOpen = false;
                 if (Network.isServer)
                     TeamSelect2.UpdateModifierStatus();
             }
-            if (MonoMain.pauseMenu == null && DuckNetwork._core._willOpenSettingsInfo)
+            if (MonoMain.pauseMenu == null && _core._willOpenSettingsInfo)
             {
-                if (!DuckNetwork.ShouldKickForCustomContent())
+                if (!ShouldKickForCustomContent())
                     HUD.AddPlayerChangeDisplay("@SETTINGSCHANGED@NEW MATCH SETTINGS");
-                DuckNetwork._core._willOpenSettingsInfo = false;
+                _core._willOpenSettingsInfo = false;
             }
-            if (MonoMain.pauseMenu == null && DuckNetwork._core._willOpenSpectatorInfo > 0)
+            if (MonoMain.pauseMenu == null && _core._willOpenSpectatorInfo > 0)
             {
-                DuckNetwork.DoSpectatorOpen(DuckNetwork._core._willOpenSpectatorInfo != 1);
-                DuckNetwork._core._willOpenSpectatorInfo = 0;
+                DoSpectatorOpen(_core._willOpenSpectatorInfo != 1);
+                _core._willOpenSpectatorInfo = 0;
             }
-            if (DuckNetwork._core.status == DuckNetStatus.Disconnected || DuckNetwork._core.status == DuckNetStatus.Disconnecting)
+            if (_core.status == DuckNetStatus.Disconnected || _core.status == DuckNetStatus.Disconnecting)
             {
-                DuckNetwork._core._quit.value = false;
+                _core._quit.value = false;
             }
             else
             {
-                if (DuckNetwork._core._quit.value)
+                if (_core._quit.value)
                 {
-                    if (DuckNetwork._core._menuOpenProfile != null && DuckNetwork._core._menuOpenProfile.slotType == SlotType.Local)
+                    if (_core._menuOpenProfile != null && _core._menuOpenProfile.slotType == SlotType.Local)
                     {
-                        DuckNetwork.Kick(DuckNetwork._core._menuOpenProfile);
+                        Kick(_core._menuOpenProfile);
                     }
                     else
                     {
                         if (Steam.lobby != null)
                             UIMatchmakingBox.core.nonPreferredServers.Add(Steam.lobby.id);
-                        if (!DuckNetwork.finishedMatch)
-                            DuckNetwork._xpEarned.Clear();
+                        if (!finishedMatch)
+                            _xpEarned.Clear();
                         Level.current = new DisconnectFromGame();
                     }
-                    DuckNetwork._core._quit.value = false;
+                    _core._quit.value = false;
                 }
-                if (DuckNetwork._core._returnToLobby.value && Network.isServer)
+                if (_core._returnToLobby.value && Network.isServer)
                 {
                     Level.current = new TeamSelect2(true);
-                    DuckNetwork._core._returnToLobby.value = false;
+                    _core._returnToLobby.value = false;
                 }
-                if (DuckNetwork._core._menuClosed.value)
+                if (_core._menuClosed.value)
                 {
                     if (Level.current is TeamSelect2)
                         Send.Message(new NMNumCustomLevels(Editor.activatedLevels.Count));
                     if (Level.current is TeamSelect2)
                     {
-                        if (TeamSelect2.GetMatchSettingString() != DuckNetwork._core._settingsBeforeOpen)
+                        if (TeamSelect2.GetMatchSettingString() != _core._settingsBeforeOpen)
                         {
                             TeamSelect2.SendMatchSettings();
                             Send.Message(new NMMatchSettingsChanged());
                         }
                         Network.activeNetwork.core.ApplyLobbyData();
                     }
-                    DuckNetwork._core._menuClosed.value = false;
+                    _core._menuClosed.value = false;
                 }
                 if (Keyboard.Pressed(Keys.F1) && !Keyboard.Down(Keys.LeftShift) && !Keyboard.Down(Keys.RightShift))
                     ConnectionStatusUI.Show();
-                if (DuckNetwork.core.logTransferSize > 0)
+                if (core.logTransferSize > 0)
                     ConnectionStatusUI.core.tempShow = 2;
                 if (Keyboard.Released(Keys.F1))
                     ConnectionStatusUI.Hide();
@@ -1895,14 +1899,14 @@ namespace DuckGame
                 bool flag1 = num1 != 0;
                 if (!flag1)
                 {
-                    DuckNetwork._core.enteringText = false;
-                    DuckNetwork._core.stopEnteringText = false;
+                    _core.enteringText = false;
+                    _core.stopEnteringText = false;
                 }
                 bool flag2 = false;
                 if (Network.isActive & flag1)
                 {
                     List<ChatMessage> chatMessageList = new List<ChatMessage>();
-                    foreach (ChatMessage chatMessage in DuckNetwork._core.chatMessages)
+                    foreach (ChatMessage chatMessage in _core.chatMessages)
                     {
                         chatMessage.timeout -= 0.016f;
                         if (chatMessage.timeout < 0.0)
@@ -1911,31 +1915,31 @@ namespace DuckGame
                             chatMessageList.Add(chatMessage);
                     }
                     foreach (ChatMessage chatMessage in chatMessageList)
-                        DuckNetwork._core.chatMessages.Remove(chatMessage);
-                    if (DuckNetwork._core.stopEnteringText)
+                        _core.chatMessages.Remove(chatMessage);
+                    if (_core.stopEnteringText)
                     {
-                        DuckNetwork._core.enteringText = false;
-                        DuckNetwork._core.stopEnteringText = false;
+                        _core.enteringText = false;
+                        _core.stopEnteringText = false;
                     }
                     if (!DevConsole.open)
                     {
-                        bool enteringText = DuckNetwork._core.enteringText;
-                        DuckNetwork._core.enteringText = false;
+                        bool enteringText = _core.enteringText;
+                        _core.enteringText = false;
                         int num2 = !Input.Pressed("CHAT") ? 0 : (!Keyboard.alt ? 1 : (!Keyboard.Pressed(Keys.Enter) ? 1 : 0));
-                        DuckNetwork._core.enteringText = enteringText;
+                        _core.enteringText = enteringText;
                         if (num2 != 0)
                         {
-                            if (!DuckNetwork._core.enteringText)
+                            if (!_core.enteringText)
                             {
-                                DuckNetwork._core.enteringText = true;
-                                DuckNetwork._core.currentEnterText = "";
+                                _core.enteringText = true;
+                                _core.currentEnterText = "";
                                 Keyboard.keyString = "";
                             }
                             else
                             {
-                                if (DuckNetwork._core.currentEnterText != "")
+                                if (_core.currentEnterText != "")
                                 {
-                                    string currentEnterText = DuckNetwork._core.currentEnterText;
+                                    string currentEnterText = _core.currentEnterText;
                                     if (currentEnterText.StartsWith("/steal"))
                                     {
                                         string[] source = currentEnterText.Split(':');
@@ -1955,9 +1959,9 @@ namespace DuckGame
                                                         str = "@" + moji.Key + "@";
                                                     if (currentEnterText.Contains(str))
                                                     {
-                                                        foreach (Profile profile in DuckNetwork.profiles)
+                                                        foreach (Profile profile in profiles)
                                                         {
-                                                            if (profile.connection != null && profile.connection != DuckNetwork.localConnection && (!profile.isHost || profile == DuckNetwork.hostProfile) && !profile.sentMojis.Contains(str))
+                                                            if (profile.connection != null && profile.connection != localConnection && (!profile.isHost || profile == hostProfile) && !profile.sentMojis.Contains(str))
                                                             {
                                                                 if (moji.Value.texture.width <= 28 && moji.Value.texture.height <= 28)
                                                                     Send.Message(new NMMojiData(Editor.TextureToString((Texture2D)moji.Value.texture), moji.Key), profile.connection);
@@ -1971,43 +1975,43 @@ namespace DuckGame
                                         catch (Exception)
                                         {
                                         }
-                                        NMChatMessage nmChatMessage = new NMChatMessage(DuckNetwork._core.localProfile, currentEnterText, DuckNetwork._core.chatIndex);
-                                        ++DuckNetwork._core.chatIndex;
-                                        DuckNetwork.SendToEveryoneFiltered(nmChatMessage);
-                                        DuckNetwork.ChatMessageReceived(nmChatMessage, DuckNetwork._core.currentEnterText);
+                                        NMChatMessage nmChatMessage = new NMChatMessage(_core.localProfile, currentEnterText, _core.chatIndex);
+                                        ++_core.chatIndex;
+                                        SendToEveryoneFiltered(nmChatMessage);
+                                        ChatMessageReceived(nmChatMessage, _core.currentEnterText);
                                     }
-                                    DuckNetwork._core.currentEnterText = "";
+                                    _core.currentEnterText = "";
                                 }
-                                DuckNetwork._core.stopEnteringText = true;
+                                _core.stopEnteringText = true;
                             }
                         }
-                        else if (DuckNetwork._core.enteringText && Keyboard.Pressed(Keys.Escape))
+                        else if (_core.enteringText && Keyboard.Pressed(Keys.Escape))
                         {
-                            DuckNetwork._core.stopEnteringText = true;
+                            _core.stopEnteringText = true;
                             flag2 = true;
                         }
                     }
-                    if (DuckNetwork._core.enteringText)
+                    if (_core.enteringText)
                     {
                         Input._imeAllowed = true;
                         if (Keyboard.keyString.Length > 90)
                             Keyboard.keyString = Keyboard.keyString.Substring(0, 90);
                         Keyboard.keyString = Keyboard.keyString.Replace("\n", "");
-                        DuckNetwork._core.currentEnterText = Keyboard.keyString;
+                        _core.currentEnterText = Keyboard.keyString;
                     }
                 }
                 bool flag3 = false;
                 int num3 = 0;
-                DuckNetwork._processedConnections.Clear();
+                _processedConnections.Clear();
                 Profile profile1 = null;
-                foreach (Profile profile2 in DuckNetwork.profiles)
+                foreach (Profile profile2 in profiles)
                 {
                     if (profile2.pendingSpectatorMode != SlotType.Max && Network.isServer && (Level.current is TeamSelect2 || VirtualTransition.active))
-                        DuckNetwork._spectatorSwaps.Add(profile2);
+                        _spectatorSwaps.Add(profile2);
                     //if (NetworkDebugger.enabled && profile2.inputProfile is BullshitInput)
                     //    profile2.inputProfile.UpdateExtraInput();
                     profile2.TickConnectionTrouble();
-                    if (profile2.connection == DuckNetwork.localConnection && profile2.inputProfile != null)
+                    if (profile2.connection == localConnection && profile2.inputProfile != null)
                     {
                         if (profile2.duck == null || profile2.duck.dead)
                         {
@@ -2073,19 +2077,19 @@ namespace DuckGame
                             }
                         }
                         profile2.netData.Set<bool>("gamePaused", MonoMain.pauseMenu != null);
-                        profile2.netData.Set<bool>("gameInFocus", DuckGame.Graphics.inFocus);
-                        profile2.netData.SetFiltered<bool>("chatting", DuckNetwork._core.enteringText);
+                        profile2.netData.Set<bool>("gameInFocus", Graphics.inFocus);
+                        profile2.netData.SetFiltered<bool>("chatting", _core.enteringText);
                         profile2.netData.Set<bool>("consoleOpen", DevConsole.open);
-                        if (MonoMain.pauseMenu == null && (DuckNetwork._ducknetUIGroup == null || !DuckNetwork._ducknetUIGroup.open) && profile2.inputProfile.Pressed("START") && !flag2 && !flag3 && (Network.InLobby() || Network.InGameLevel()) && (!(Level.current is TeamSelect2) || !(Level.current as TeamSelect2).HasBoxOpen(profile2)))
+                        if (MonoMain.pauseMenu == null && (_ducknetUIGroup == null || !_ducknetUIGroup.open) && profile2.inputProfile.Pressed("START") && !flag2 && !flag3 && (Network.InLobby() || Network.InGameLevel()) && (!(Level.current is TeamSelect2) || !(Level.current as TeamSelect2).HasBoxOpen(profile2)))
                         {
-                            DuckNetwork.OpenMenu(profile2);
+                            OpenMenu(profile2);
                             flag3 = true;
                         }
                     }
-                    if (profile2.connection != null && !DuckNetwork._processedConnections.Contains(profile2.connection))
+                    if (profile2.connection != null && !_processedConnections.Contains(profile2.connection))
                     {
-                        DuckNetwork._processedConnections.Add(profile2.connection);
-                        if (Network.isServer && profile2.connection != DuckNetwork.localConnection && profile2.connection.status == ConnectionStatus.Connected && profile2.networkStatus == DuckNetStatus.Connected && (profile1 == null || profile1.networkIndex > profile2.networkIndex))
+                        _processedConnections.Add(profile2.connection);
+                        if (Network.isServer && profile2.connection != localConnection && profile2.connection.status == ConnectionStatus.Connected && profile2.networkStatus == DuckNetStatus.Connected && (profile1 == null || profile1.networkIndex > profile2.networkIndex))
                             profile1 = profile2;
                         ++num3;
                         if (profile2.connection.status == ConnectionStatus.Connected && profile2.networkStatus != DuckNetStatus.Disconnecting && profile2.networkStatus != DuckNetStatus.Disconnected && profile2.networkStatus != DuckNetStatus.Failure)
@@ -2093,30 +2097,30 @@ namespace DuckGame
                     }
                 }
                 if (profile1 != null)
-                    DuckNetwork.potentialHostObject = profile1.connection.data;
-                if (DuckNetwork._spectatorSwaps.Count <= 0)
+                    potentialHostObject = profile1.connection.data;
+                if (_spectatorSwaps.Count <= 0)
                     return;
                 if (Network.isServer)
                 {
-                    foreach (Profile spectatorSwap in DuckNetwork._spectatorSwaps)
+                    foreach (Profile spectatorSwap in _spectatorSwaps)
                     {
                         if (spectatorSwap.pendingSpectatorMode == SlotType.Spectator && spectatorSwap.slotType != SlotType.Spectator)
                         {
-                            Profile pReplacementSlot = DuckNetwork.profiles.FirstOrDefault<Profile>(x => x.slotType == SlotType.Spectator && x.connection == null);
+                            Profile pReplacementSlot = profiles.FirstOrDefault<Profile>(x => x.slotType == SlotType.Spectator && x.connection == null);
                             if (pReplacementSlot != null)
-                                DuckNetwork.MakeSpectator_Swap(spectatorSwap, pReplacementSlot);
+                                MakeSpectator_Swap(spectatorSwap, pReplacementSlot);
                         }
                         else if (spectatorSwap.pendingSpectatorMode == SlotType.Open && spectatorSwap.slotType == SlotType.Spectator)
                         {
-                            Profile pReplacementSlot = DuckNetwork.profiles.FirstOrDefault<Profile>(x => x.slotType != SlotType.Spectator && x.slotType != SlotType.Reserved && x.slotType != SlotType.Closed && x.connection == null) ?? DuckNetwork.profiles.FirstOrDefault<Profile>(x => x.slotType != SlotType.Spectator && x.slotType != SlotType.Reserved && x.connection == null);
+                            Profile pReplacementSlot = profiles.FirstOrDefault<Profile>(x => x.slotType != SlotType.Spectator && x.slotType != SlotType.Reserved && x.slotType != SlotType.Closed && x.connection == null) ?? profiles.FirstOrDefault<Profile>(x => x.slotType != SlotType.Spectator && x.slotType != SlotType.Reserved && x.connection == null);
                             if (pReplacementSlot != null)
-                                DuckNetwork.MakePlayer_Swap(spectatorSwap, pReplacementSlot);
+                                MakePlayer_Swap(spectatorSwap, pReplacementSlot);
                         }
                         spectatorSwap.pendingSpectatorMode = SlotType.Max;
                     }
-                    DuckNetwork.TryPeacefulResolution();
+                    TryPeacefulResolution();
                 }
-                DuckNetwork._spectatorSwaps.Clear();
+                _spectatorSwaps.Clear();
             }
         }
 
@@ -2145,15 +2149,15 @@ namespace DuckGame
                     if (pDoLevelSwitch && Network.isServer)
                     {
                         bool pReturningFromGame = false;
-                        foreach (Profile profile in DuckNetwork.profiles)
+                        foreach (Profile profile in profiles)
                         {
                             if (profile.reservedUser != null)
                                 pReturningFromGame = true;
                         }
                         if (!pReturningFromGame)
                         {
-                            DuckNetwork.ResetScores();
-                            foreach (Profile profile in DuckNetwork.profiles)
+                            ResetScores();
+                            foreach (Profile profile in profiles)
                             {
                                 if (profile.slotType != SlotType.Spectator)
                                     profile.slotType = profile.originalSlotType;
@@ -2168,11 +2172,11 @@ namespace DuckGame
             return false;
         }
 
-        public static void ChatMessageReceived(NMChatMessage message) => DuckNetwork.ChatMessageReceived(message, null);
+        public static void ChatMessageReceived(NMChatMessage message) => ChatMessageReceived(message, null);
 
         private static int FilterPlayer(Profile pProfile)
         {
-            if (pProfile != null && pProfile.connection != DuckNetwork.localConnection && pProfile.connection != null)
+            if (pProfile != null && pProfile.connection != localConnection && pProfile.connection != null)
             {
                 int num = Options.Data.chatMode;
                 if (DG.di == 1)
@@ -2197,7 +2201,7 @@ namespace DuckGame
                     bool flag3 = false;
                     if (pProfile.connection.data is User data && data.relationship == FriendRelationship.Friend)
                         flag3 = true;
-                    if (num == 1 && !flag3 && !DuckNetwork.invited)
+                    if (num == 1 && !flag3 && !invited)
                         flag1 = true;
                     else if (num == 2 && !flag3)
                         flag1 = true;
@@ -2214,7 +2218,7 @@ namespace DuckGame
         {
             if (message.profile == null)
                 return;
-            int num = DuckNetwork.FilterPlayer(message.profile);
+            int num = FilterPlayer(message.profile);
             if (num > 0)
             {
                 if (message.connection.sentFilterMessage)
@@ -2222,7 +2226,7 @@ namespace DuckGame
                 message.connection.sentFilterMessage = true;
                 realText = !(message is NMChatDisabledMessage) ? (num != 2 ? "@error@Chat |DGRED|disabled|PREV| in options. Ignoring messages..." : "@error@Player is |DGRED|muted|PREV|. Ignoring messages...") : message.text;
             }
-            DuckNetwork._core.AddChatMessage(new ChatMessage(message.profile, realText != null ? realText : message.text, message.index));
+            _core.AddChatMessage(new ChatMessage(message.profile, realText != null ? realText : message.text, message.index));
             SFX.Play("chatmessage", 0.8f, Rando.Float(-0.15f, 0.15f));
         }
 
@@ -2248,7 +2252,7 @@ namespace DuckGame
             return profiles;
         }
 
-        public static int IndexOf(Profile p) => DuckNetwork.profiles.IndexOf(p);
+        public static int IndexOf(Profile p) => profiles.IndexOf(p);
 
         public static void SendSpecialHat(Team pTeam, NetworkConnection pTo)
         {
@@ -2269,7 +2273,7 @@ namespace DuckGame
             Send.Message(new NMOldAngles(who, Options.Data.oldAngleCode), to);
         }
 
-        public static void Server_SendProfile(Profile p, NetworkConnection to) => Send.Message(new NMNewDuckNetConnection(p, p.connection == DuckNetwork.localConnection ? (p.isRemoteLocalDuck ? "SERVERLOCAL" : "SERVER") : p.connection.identifier, p.name, p.team, p.flippers, p.ParentalControlsActive, p.flagIndex, p.steamID, (byte)p.persona.index), to);
+        public static void Server_SendProfile(Profile p, NetworkConnection to) => Send.Message(new NMNewDuckNetConnection(p, p.connection == localConnection ? (p.isRemoteLocalDuck ? "SERVERLOCAL" : "SERVER") : p.connection.identifier, p.name, p.team, p.flippers, p.ParentalControlsActive, p.flagIndex, p.steamID, (byte)p.persona.index), to);
 
         public static void Server_AcceptJoinRequest(List<Profile> pJoinedProfiles, bool pLocal = false)
         {
@@ -2281,13 +2285,13 @@ namespace DuckGame
                 Send.Message(new NMJoinDuckNetSuccess(pJoinedProfiles), pJoinedProfiles[0].connection);
                 List<byte> byteList = new List<byte>();
                 for (int index = 0; index < DG.MaxPlayers; ++index)
-                    byteList.Add((byte)DuckNetwork.profiles[index].slotType);
+                    byteList.Add((byte)profiles[index].slotType);
                 TeamSelect2.SendMatchSettings(pJoinedProfiles[0].connection, true);
-                DuckNetwork.ChangeSlotSettings(true);
+                ChangeSlotSettings(true);
             }
-            DuckNetwork.Server_SendAllProfiles(pJoinedProfiles, pLocal);
-            foreach (Profile profile in DuckNetwork.GetProfiles(DuckNetwork.localConnection))
-                DuckNetwork.SendAllPlayerMetaData(profile, pJoinedProfiles[0].connection);
+            Server_SendAllProfiles(pJoinedProfiles, pLocal);
+            foreach (Profile profile in GetProfiles(localConnection))
+                SendAllPlayerMetaData(profile, pJoinedProfiles[0].connection);
             Send.Message(new NMEndOfDuckNetworkData(), pJoinedProfiles[0].connection);
         }
 
@@ -2298,7 +2302,7 @@ namespace DuckGame
             if (pProfile.slotType == SlotType.Spectator || pReplacementSlot.slotType != SlotType.Spectator || pProfile.networkIndex >= DG.MaxPlayers)
                 return;
             ++pProfile.spectatorChangeIndex;
-            if (pProfile.connection == DuckNetwork.localConnection)
+            if (pProfile.connection == localConnection)
                 pProfile.remoteSpectatorChangeIndex = pProfile.spectatorChangeIndex;
             if (Network.isServer)
                 Send.Message(new NMMakeSpectator(pProfile, pReplacementSlot, pProfile.spectatorChangeIndex));
@@ -2308,7 +2312,7 @@ namespace DuckGame
                 profile.Despawn();
                 profile.SetProfile(pReplacementSlot);
             }
-            DuckNetwork.SwapProfileIndices(pProfile, pReplacementSlot);
+            SwapProfileIndices(pProfile, pReplacementSlot);
             pReplacementSlot.slotType = pProfile.slotType;
             pReplacementSlot.team = null;
             pReplacementSlot.duck = null;
@@ -2329,7 +2333,7 @@ namespace DuckGame
                 Send.Message(new NMMakePlayer(pProfile, pReplacementSlot, pProfile.spectatorChangeIndex));
             if (Level.current is TeamSelect2)
                 (Level.current as TeamSelect2)._profiles[pReplacementSlot.networkIndex].SetProfile(pProfile);
-            DuckNetwork.SwapProfileIndices(pProfile, pReplacementSlot);
+            SwapProfileIndices(pProfile, pReplacementSlot);
             pProfile.slotType = pReplacementSlot.slotType;
             if (pProfile.team != null && (pProfile.team.activeProfiles.Count == 0 || TeamSelect2.GetSettingBool("teams")) && !pProfile.team.defaultTeam)
                 pProfile.team.Join(pProfile, false);
@@ -2344,8 +2348,8 @@ namespace DuckGame
 
         public static void SwapProfileIndices(Profile pProfile, Profile pReplacementSlot)
         {
-            DuckNetwork.profiles[pProfile.networkIndex] = pReplacementSlot;
-            DuckNetwork.profiles[pReplacementSlot.networkIndex] = pProfile;
+            profiles[pProfile.networkIndex] = pReplacementSlot;
+            profiles[pReplacementSlot.networkIndex] = pProfile;
             byte networkIndex = pProfile.networkIndex;
             pProfile.SetNetworkIndex(pReplacementSlot.networkIndex);
             pReplacementSlot.SetNetworkIndex(networkIndex);
@@ -2353,16 +2357,16 @@ namespace DuckGame
 
         public static void Server_SendAllProfiles(List<Profile> pTo, bool local = false)
         {
-            foreach (Profile profile in DuckNetwork.profiles)
+            foreach (Profile profile in profiles)
             {
-                if (profile.networkStatus != DuckNetStatus.Disconnecting && !pTo.Contains(profile) && profile.connection != null && (!local || profile.connection != DuckNetwork.localConnection))
+                if (profile.networkStatus != DuckNetStatus.Disconnecting && !pTo.Contains(profile) && profile.connection != null && (!local || profile.connection != localConnection))
                 {
                     if (!local)
-                        DuckNetwork.Server_SendProfile(profile, pTo[0].connection);
-                    if (profile.connection != DuckNetwork.localConnection)
+                        Server_SendProfile(profile, pTo[0].connection);
+                    if (profile.connection != localConnection)
                     {
                         foreach (Profile p in pTo)
-                            DuckNetwork.Server_SendProfile(p, profile.connection);
+                            Server_SendProfile(p, profile.connection);
                     }
                 }
             }
@@ -2403,7 +2407,7 @@ namespace DuckGame
                 switch (m)
                 {
                     case NMRequestJoin _:
-                        if (!DuckNetwork.inGame)
+                        if (!inGame)
                         {
                             switch (Level.current)
                             {
@@ -2413,12 +2417,12 @@ namespace DuckGame
                                     if (nmRequestJoin.names == null || nmRequestJoin.names.Count == 0)
                                         return new NMErrorEmptyJoinMessage();
                                     DevConsole.Log(DCSection.DuckNet, "Join attempt from " + nmRequestJoin.names.First<string>());
-                                    if (DuckNetwork.GetOpenProfiles(m.connection, nmRequestJoin.wasInvited, false, false).Count<Profile>() < nmRequestJoin.names.Count)
+                                    if (GetOpenProfiles(m.connection, nmRequestJoin.wasInvited, false, false).Count<Profile>() < nmRequestJoin.names.Count)
                                     {
                                         DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, server is full.@error");
                                         return new NMServerFull();
                                     }
-                                    if (nmRequestJoin.password != DuckNetwork.core.serverPassword && !DuckNetwork.core._invitedFriends.Contains(nmRequestJoin.localID))
+                                    if (nmRequestJoin.password != core.serverPassword && !core._invitedFriends.Contains(nmRequestJoin.localID))
                                     {
                                         DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, password was incorrect.@error");
                                         return new NMInvalidPassword();
@@ -2427,7 +2431,7 @@ namespace DuckGame
                                     int index = 0;
                                     foreach (string name in nmRequestJoin.names)
                                     {
-                                        Profile profile = DuckNetwork.ServerCreateProfile(m.connection, null, null, name, false, nmRequestJoin.wasInvited, false);
+                                        Profile profile = ServerCreateProfile(m.connection, null, null, name, false, nmRequestJoin.wasInvited, false);
                                         profile.ParentalControlsActive = nmRequestJoin.info.parentalControlsActive;
                                         profile.flippers = nmRequestJoin.info.roomFlippers;
                                         profile.flagIndex = nmRequestJoin.info.flagIndex;
@@ -2439,15 +2443,15 @@ namespace DuckGame
                                             if (persona >= 0 && persona < Persona.all.Count<DuckPersona>())
                                             {
                                                 profile.preferredColor = persona;
-                                                DuckNetwork.RequestPersona(profile, Persona.all.ElementAt<DuckPersona>(persona), false);
+                                                RequestPersona(profile, Persona.all.ElementAt<DuckPersona>(persona), false);
                                             }
                                         }
-                                        DuckNetwork._core.status = DuckNetStatus.Connected;
+                                        _core.status = DuckNetStatus.Connected;
                                         Level.current.OnNetworkConnecting(profile);
                                         pJoinedProfiles.Add(profile);
                                         ++index;
                                     }
-                                    DuckNetwork.Server_AcceptJoinRequest(pJoinedProfiles);
+                                    Server_AcceptJoinRequest(pJoinedProfiles);
                                     return null;
                             }
                         }
@@ -2472,17 +2476,17 @@ namespace DuckGame
 
         private static void AttemptReconnect(NetworkConnection fromConnection, string toConnection)
         {
-            List<Profile> profiles1 = DuckNetwork.GetProfiles(fromConnection);
+            List<Profile> profiles1 = GetProfiles(fromConnection);
             if (profiles1.Count > 0)
             {
-                List<Profile> profiles2 = DuckNetwork.GetProfiles(toConnection);
+                List<Profile> profiles2 = GetProfiles(toConnection);
                 foreach (Profile p1 in profiles2)
                 {
-                    DuckNetwork.Server_SendProfile(p1, fromConnection);
-                    if (p1.connection != DuckNetwork.localConnection)
+                    Server_SendProfile(p1, fromConnection);
+                    if (p1.connection != localConnection)
                     {
                         foreach (Profile p2 in profiles1)
-                            DuckNetwork.Server_SendProfile(p2, p1.connection);
+                            Server_SendProfile(p2, p1.connection);
                     }
                     DevConsole.Log(DCSection.DuckNet, fromConnection.name + " needs a connection to " + p1.connection.name + "...");
                 }
@@ -2510,9 +2514,9 @@ namespace DuckGame
             }
             else if (m is NMRightOnManNiceJob)
             {
-                if (DuckNetwork.status == DuckNetStatus.ConnectingToClients)
+                if (status == DuckNetStatus.ConnectingToClients)
                 {
-                    DuckNetwork._core.status = DuckNetStatus.Connected;
+                    _core.status = DuckNetStatus.Connected;
                     if (UIMatchmakerMark2.instance != null)
                         UIMatchmakerMark2.instance.Hook_OnDucknetJoined();
                 }
@@ -2526,7 +2530,7 @@ namespace DuckGame
                     {
                         m.connection.dataTransferProgress = 0;
                         m.connection.dataTransferSize = 0;
-                        DuckNetwork.SendCurrentLevelData(clientNeedsLevelData.transferSession, m.connection);
+                        SendCurrentLevelData(clientNeedsLevelData.transferSession, m.connection);
                         Level.current.ChecksumReplied(clientNeedsLevelData.connection);
                     }
                     return true;
@@ -2543,9 +2547,9 @@ namespace DuckGame
                     NMLevelDataHeader nmLevelDataHeader = m as NMLevelDataHeader;
                     if (_core.levelTransferSession == nmLevelDataHeader.transferSession)
                     {
-                        DuckNetwork._core.levelTransferProgress = 0;
-                        DuckNetwork._core.levelTransferSize = nmLevelDataHeader.length;
-                        DuckNetwork._currentTransferLevelName = nmLevelDataHeader.levelName;
+                        _core.levelTransferProgress = 0;
+                        _core.levelTransferSize = nmLevelDataHeader.length;
+                        _currentTransferLevelName = nmLevelDataHeader.levelName;
                     }
                     return true;
                 }
@@ -2554,11 +2558,11 @@ namespace DuckGame
                     NMLevelDataChunk nmLevelDataChunk = m as NMLevelDataChunk;
                     if (_core.levelTransferSession == nmLevelDataChunk.transferSession)
                     {
-                        DuckNetwork._core.levelTransferProgress += nmLevelDataChunk.GetBuffer().lengthInBytes;
-                        if (DuckNetwork._core.compressedLevelData == null)
-                            DuckNetwork._core.compressedLevelData = new MemoryStream();
-                        DuckNetwork._core.compressedLevelData.Write(nmLevelDataChunk.GetBuffer().buffer, 0, nmLevelDataChunk.GetBuffer().lengthInBytes);
-                        if (DuckNetwork._core.levelTransferProgress == DuckNetwork._core.levelTransferSize)
+                        _core.levelTransferProgress += nmLevelDataChunk.GetBuffer().lengthInBytes;
+                        if (_core.compressedLevelData == null)
+                            _core.compressedLevelData = new MemoryStream();
+                        _core.compressedLevelData.Write(nmLevelDataChunk.GetBuffer().buffer, 0, nmLevelDataChunk.GetBuffer().lengthInBytes);
+                        if (_core.levelTransferProgress == _core.levelTransferSize)
                         {
                             if (!(Level.core.nextLevel is XMLLevel xmlLevel))
                                 xmlLevel = Level.core.currentLevel as XMLLevel;
@@ -2567,12 +2571,12 @@ namespace DuckGame
                                 DevConsole.Log("|DGRED|Tried to apply NMLevelDataChunk while connecting/disconnecting. Ignoring...");
                                 return true;
                             }
-                            xmlLevel.synchronizedLevelName = DuckNetwork._currentTransferLevelName;
-                            if (!xmlLevel.ApplyLevelData(Editor.ReadCompressedLevelData(DuckNetwork._core.compressedLevelData)))
-                                Network.DisconnectClient(DuckNetwork.localConnection, new DuckNetErrorInfo(DuckNetError.ParentalControls, "Disconnecting - Error storing custom map."));
+                            xmlLevel.synchronizedLevelName = _currentTransferLevelName;
+                            if (!xmlLevel.ApplyLevelData(Editor.ReadCompressedLevelData(_core.compressedLevelData)))
+                                Network.DisconnectClient(localConnection, new DuckNetErrorInfo(DuckNetError.ParentalControls, "Disconnecting - Error storing custom map."));
                             xmlLevel.ChecksumReplied(nmLevelDataChunk.connection);
                             if (!Network.isServer)
-                                Send.Message(new NMLevelFileReady(xmlLevel.networkIndex), DuckNetwork.hostProfile.connection);
+                                Send.Message(new NMLevelFileReady(xmlLevel.networkIndex), hostProfile.connection);
                         }
                     }
                     return true;
@@ -2581,9 +2585,9 @@ namespace DuckGame
             if (m is NMChatMessage)
             {
                 NMChatMessage message = m as NMChatMessage;
-                message.index = DuckNetwork._core.chatIndex;
-                ++DuckNetwork._core.chatIndex;
-                DuckNetwork.ChatMessageReceived(message);
+                message.index = _core.chatIndex;
+                ++_core.chatIndex;
+                ChatMessageReceived(message);
                 return true;
             }
             if (Network.isServer)
@@ -2591,13 +2595,13 @@ namespace DuckGame
                 if (m is NMRequiresNewConnection)
                 {
                     NMRequiresNewConnection requiresNewConnection = m as NMRequiresNewConnection;
-                    DuckNetwork.AttemptReconnect(requiresNewConnection.connection, requiresNewConnection.toWhom);
+                    AttemptReconnect(requiresNewConnection.connection, requiresNewConnection.toWhom);
                     return true;
                 }
             }
             else if (m is NMKicked || m is NMBanned)
             {
-                Profile profile = DuckNetwork.profiles.FirstOrDefault<Profile>(x => x == (m as NMKicked).profile);
+                Profile profile = profiles.FirstOrDefault<Profile>(x => x == (m as NMKicked).profile);
                 if (profile != null)
                 {
                     if (profile.connection != null)
@@ -2615,7 +2619,7 @@ namespace DuckGame
             {
                 if (m is NMKick)
                 {
-                    DuckNetwork._core.status = DuckNetStatus.Failure;
+                    _core.status = DuckNetStatus.Failure;
                     if (Steam.lobby != null)
                         UIMatchmakingBox.core.blacklist.Add(Steam.lobby.id);
                     Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.Kicked, "|RED|Oh no! The host kicked you :("));
@@ -2623,7 +2627,7 @@ namespace DuckGame
                 }
                 if (m is NMBan)
                 {
-                    DuckNetwork._core.status = DuckNetStatus.Failure;
+                    _core.status = DuckNetStatus.Failure;
                     if (Steam.lobby != null)
                     {
                         UIMatchmakingBox.core.nonPreferredServers.Add(Steam.lobby.id);
@@ -2642,7 +2646,7 @@ namespace DuckGame
                             flag = clientDisconnect.profile.connection == clientDisconnect.connection;
                         if (flag)
                         {
-                            if (clientDisconnect.profile.connection == Network.host && clientDisconnect.profile != DuckNetwork.hostProfile)
+                            if (clientDisconnect.profile.connection == Network.host && clientDisconnect.profile != hostProfile)
                             {
                                 clientDisconnect.profile.networkStatus = DuckNetStatus.Disconnected;
                                 clientDisconnect.profile.connection = null;
@@ -2660,51 +2664,51 @@ namespace DuckGame
                 }
                 if (m is NMErrorEmptyJoinMessage)
                 {
-                    DuckNetwork._core.status = DuckNetStatus.Failure;
+                    _core.status = DuckNetStatus.Failure;
                     Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.GameInProgress, "|RED|No ducks, please retry."));
                     return true;
                 }
                 if (m is NMGameInProgress)
                 {
-                    DuckNetwork._core.status = DuckNetStatus.Failure;
+                    _core.status = DuckNetStatus.Failure;
                     Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.GameInProgress, "|RED|Game was already in progress."));
                     return true;
                 }
                 if (m is NMServerFull)
                 {
-                    DuckNetwork._core.status = DuckNetStatus.Failure;
+                    _core.status = DuckNetStatus.Failure;
                     Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.FullServer, "|RED|The game was full!"));
                     return true;
                 }
                 if (m is NMInvalidPassword)
                 {
-                    DuckNetwork._core.status = DuckNetStatus.Failure;
+                    _core.status = DuckNetStatus.Failure;
                     Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.InvalidPassword, "|RED|Password was incorrect!"));
                     return true;
                 }
                 if (m is NMInvalidLevel)
                 {
-                    DuckNetwork._core.status = DuckNetStatus.Failure;
+                    _core.status = DuckNetStatus.Failure;
                     Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.InvalidLevel, "|RED|Level request was invalid!"));
                     return true;
                 }
                 if (m is NMInvalidUser)
                 {
-                    DuckNetwork._core.status = DuckNetStatus.Failure;
+                    _core.status = DuckNetStatus.Failure;
                     Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.InvalidUser, "|RED|The host did not reconize you!"));
                     return true;
                 }
                 if (m is NMInvalidCustomHat)
                 {
-                    DuckNetwork._core.status = DuckNetStatus.Failure;
+                    _core.status = DuckNetStatus.Failure;
                     Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.InvalidCustomHat, "|RED|Your custom hat was invalid!"));
                     return true;
                 }
                 if (m is NMVersionMismatch)
                 {
-                    DuckNetwork._core.status = DuckNetStatus.Failure;
+                    _core.status = DuckNetStatus.Failure;
                     NMVersionMismatch nmVersionMismatch = m as NMVersionMismatch;
-                    DuckNetwork.FailWithVersionMismatch(nmVersionMismatch.serverVersion, nmVersionMismatch.GetCode());
+                    FailWithVersionMismatch(nmVersionMismatch.serverVersion, nmVersionMismatch.GetCode());
                     return true;
                 }
             }
@@ -2714,44 +2718,44 @@ namespace DuckGame
         public static void FailWithVersionMismatch(string theirVersion, NMVersionMismatch.Type type)
         {
             Steam.MarkForUpdateCheck();
-            DuckNetwork._core.status = DuckNetStatus.Failure;
-            Network.EndNetworkingSession(DuckNetwork.AssembleMismatchError(theirVersion));
+            _core.status = DuckNetStatus.Failure;
+            Network.EndNetworkingSession(AssembleMismatchError(theirVersion));
         }
 
         public static void FailWithDatahashMismatch()
         {
             Steam.MarkForUpdateCheck();
-            DuckNetwork._core.status = DuckNetStatus.Failure;
+            _core.status = DuckNetStatus.Failure;
             Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.ModsIncompatible, "|RED|Game data does not match the host's!\n    Please ensure game versions\n           are the same."));
         }
 
         public static void FailWithModDatahashMismatch(Mod pMod)
         {
             Steam.MarkForUpdateCheck();
-            DuckNetwork._core.status = DuckNetStatus.Failure;
+            _core.status = DuckNetStatus.Failure;
             Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.ModsIncompatible, "|RED|Mod data mismatch:\n   |DGBLUE|" + pMod.configuration.displayName + "|PREV|\n"));
         }
 
         public static void FailWithDifferentModsError()
         {
-            DuckNetwork._core.status = DuckNetStatus.Failure;
+            _core.status = DuckNetStatus.Failure;
             Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.ModsIncompatible, "Host has different Mods enabled!"));
         }
 
         public static void FailWithBlockedUser()
         {
-            DuckNetwork._core.status = DuckNetStatus.Failure;
+            _core.status = DuckNetStatus.Failure;
             Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.HostIsABlockedUser, "|RED|Could not join lobby: \n   you have blocked\n         the host."));
         }
 
         public static DuckNetErrorInfo AssembleMismatchError(string theirVersion)
         {
-            int num = (int)DuckNetwork.CheckVersion(theirVersion);
-            string versionMismatchError = DuckNetwork.GetVersionMismatchError((NMVersionMismatch.Type)num, theirVersion);
+            int num = (int)CheckVersion(theirVersion);
+            string versionMismatchError = GetVersionMismatchError((NMVersionMismatch.Type)num, theirVersion);
             return new DuckNetErrorInfo(num == 0 ? DuckNetError.YourVersionTooNew : DuckNetError.YourVersionTooOld, versionMismatchError);
         }
 
-        public static string GetVersionMismatchError(string theirVersion) => DuckNetwork.GetVersionMismatchError(DuckNetwork.CheckVersion(theirVersion), theirVersion);
+        public static string GetVersionMismatchError(string theirVersion) => GetVersionMismatchError(CheckVersion(theirVersion), theirVersion);
 
         public static string GetVersionMismatchError(
           NMVersionMismatch.Type type,
@@ -2816,7 +2820,7 @@ namespace DuckGame
                     }
                 }
                 if (flag)
-                    pProfile.PersonaRequestResult(DuckNetwork.NextFree(pProfile, pProfile.persona));
+                    pProfile.PersonaRequestResult(NextFree(pProfile, pProfile.persona));
                 else
                     pProfile.PersonaRequestResult(pPersona);
                 if (!pSendMessages)
@@ -2825,9 +2829,9 @@ namespace DuckGame
             }
             else
             {
-                if (((DuckNetwork.hostProfile == null ? 0 : (DuckNetwork.hostProfile.connection != null ? 1 : 0)) & (pSendMessages ? 1 : 0)) == 0)
+                if (((hostProfile == null ? 0 : (hostProfile.connection != null ? 1 : 0)) & (pSendMessages ? 1 : 0)) == 0)
                     return;
-                Send.Message(new NMRequestPersona(pProfile, pPersona), DuckNetwork.hostProfile.connection);
+                Send.Message(new NMRequestPersona(pProfile, pPersona), hostProfile.connection);
             }
         }
 
@@ -2842,7 +2846,7 @@ namespace DuckGame
             }
             if (m is NMJoinDuckNetSuccess || m is NMNewDuckNetConnection)
                 DevConsole.Log(DCSection.DuckNet, "Received new DuckNet connection message (NMJoinDuckNetSuccess)!");
-            if (DuckNetwork.status == DuckNetStatus.Disconnected)
+            if (status == DuckNetStatus.Disconnected)
                 return;
             if (m is NMDuckNetworkEvent)
             {
@@ -2851,19 +2855,19 @@ namespace DuckGame
             else
             {
                 UIMatchmakingBox.core.pulseNetwork = true;
-                if (DuckNetwork.GetProfiles(m.connection).Count == 0 && m.connection != Network.host)
+                if (GetProfiles(m.connection).Count == 0 && m.connection != Network.host)
                 {
-                    NetMessage msg = DuckNetwork.OnMessageFromNewClient(m);
+                    NetMessage msg = OnMessageFromNewClient(m);
                     if (msg == null)
                         return;
                     Send.Message(msg, m.connection);
                 }
                 else
                 {
-                    if (DuckNetwork.HandleCoreConnectionMessages(m) || DuckNetwork.status == DuckNetStatus.Disconnecting)
+                    if (HandleCoreConnectionMessages(m) || status == DuckNetStatus.Disconnecting)
                         return;
                     Main.codeNumber = 13373;
-                    foreach (Profile profile in DuckNetwork.GetProfiles(m.connection))
+                    foreach (Profile profile in GetProfiles(m.connection))
                     {
                         if (profile.networkStatus == DuckNetStatus.Disconnecting || profile.networkStatus == DuckNetStatus.Disconnected || profile.networkStatus == DuckNetStatus.Failure)
                             return;
@@ -2884,7 +2888,7 @@ namespace DuckGame
                             }
                         case NMSpecialHat _:
                             NMSpecialHat nmSpecialHat = m as NMSpecialHat;
-                            using (List<Profile>.Enumerator enumerator = DuckNetwork.profiles.GetEnumerator())
+                            using (List<Profile>.Enumerator enumerator = profiles.GetEnumerator())
                             {
                                 while (enumerator.MoveNext())
                                 {
@@ -2928,13 +2932,13 @@ namespace DuckGame
                             }
                             else
                                 nmSetTeam.profile.team = nmSetTeam.team;
-                            if (!Network.isServer || !DuckNetwork.OnTeamSwitch(nmSetTeam.profile))
+                            if (!Network.isServer || !OnTeamSwitch(nmSetTeam.profile))
                                 break;
                             Send.MessageToAllBut(new NMSetTeam(nmSetTeam.profile, nmSetTeam.team, nmSetTeam.custom), NetMessagePriority.ReliableOrdered, m.connection);
                             break;
                         case NMRoomData _:
                             NMRoomData nmRoomData = m as NMRoomData;
-                            if (nmRoomData.profile == null || nmRoomData.profile.linkedProfile != null || nmRoomData.profile.connection == null || nmRoomData.profile.connection == DuckNetwork.localConnection)
+                            if (nmRoomData.profile == null || nmRoomData.profile.linkedProfile != null || nmRoomData.profile.connection == null || nmRoomData.profile.connection == localConnection)
                                 break;
                             nmRoomData.profile.furniturePositionData = nmRoomData.data;
                             break;
@@ -2948,7 +2952,7 @@ namespace DuckGame
                                     m.connection.wantsGhostData = (m as NMClientLoadedLevel).levelIndex;
                                     break;
                                 }
-                                DevConsole.Log(DCSection.DuckNet, "@error The client loaded the wrong level! (" + (m as NMClientLoadedLevel).levelIndex.ToString() + " VS " + DuckNetwork.levelIndex.ToString() + ")@error", m.connection);
+                                DevConsole.Log(DCSection.DuckNet, "@error The client loaded the wrong level! (" + (m as NMClientLoadedLevel).levelIndex.ToString() + " VS " + levelIndex.ToString() + ")@error", m.connection);
                                 break;
                             }
                             switch (m)
@@ -2966,7 +2970,7 @@ namespace DuckGame
                                             while (enumerator.MoveNext())
                                             {
                                                 Profile current = enumerator.Current;
-                                                if (current.connection == DuckNetwork.localConnection)
+                                                if (current.connection == localConnection)
                                                 {
                                                     current.networkStatus = DuckNetStatus.Connected;
                                                 }
@@ -2982,8 +2986,8 @@ namespace DuckGame
                                                         profile = UIMatchmakingBox.core.matchmakingProfiles[num].masterProfile ?? pLocalProfile;
                                                     }
                                                     DuckPersona persona = current.persona;
-                                                    string pName = profile != null ? DuckNetwork.GetNameForIndex(profile.name, num) : DuckNetwork.GetNameForIndex(Network.activeNetwork.core.GetLocalName(), num);
-                                                    DuckNetwork.PrepareProfile(current, DuckNetwork.localConnection, pLocalInput, pLocalProfile, pName);
+                                                    string pName = profile != null ? GetNameForIndex(profile.name, num) : GetNameForIndex(Network.activeNetwork.core.GetLocalName(), num);
+                                                    PrepareProfile(current, localConnection, pLocalInput, pLocalProfile, pName);
                                                     current.keepSetName = num != 0;
                                                     current.flippers = localFlippers;
                                                     current.persona = persona;
@@ -3008,7 +3012,7 @@ namespace DuckGame
                                             }
                                         }
                                         Profile profile1 = duckNetConnection.profile;
-                                        DuckNetwork.PrepareProfile(profile1, networkConnection, null, null, duckNetConnection.name);
+                                        PrepareProfile(profile1, networkConnection, null, null, duckNetConnection.name);
                                         profile1.team = duckNetConnection.team;
                                         profile1.flippers = duckNetConnection.flippers;
                                         profile1.flagIndex = duckNetConnection.flagIndex;
@@ -3023,23 +3027,23 @@ namespace DuckGame
                                             DevConsole.Log(DCSection.DuckNet, "|DGBLUE|This Payload will be sent when a connection is established.");
                                         else
                                             DevConsole.Log(DCSection.DuckNet, "|DGBLUE|This Payload will be sent at once!");
-                                        Send.Message(new NMLevelReady(DuckNetwork.levelIndex), networkConnection);
-                                        foreach (Profile profile2 in DuckNetwork.GetProfiles(DuckNetwork.localConnection))
-                                            DuckNetwork.SendAllPlayerMetaData(profile2, networkConnection);
-                                        if (!flag || DuckNetwork._core.hostProfile != null)
+                                        Send.Message(new NMLevelReady(levelIndex), networkConnection);
+                                        foreach (Profile profile2 in GetProfiles(localConnection))
+                                            SendAllPlayerMetaData(profile2, networkConnection);
+                                        if (!flag || _core.hostProfile != null)
                                             return;
-                                        DuckNetwork._core.hostProfile = duckNetConnection.profile;
+                                        _core.hostProfile = duckNetConnection.profile;
                                         return;
                                     }
                                 case NMEndOfDuckNetworkData _:
-                                    DuckNetwork._core.status = DuckNetStatus.ConnectingToClients;
-                                    DuckNetwork.CheckConnectingStatus();
+                                    _core.status = DuckNetStatus.ConnectingToClients;
+                                    CheckConnectingStatus();
                                     return;
                                 case NMTeamSetDenied _:
                                     NMTeamSetDenied nmTeamSetDenied = m as NMTeamSetDenied;
-                                    if (nmTeamSetDenied.profile == null || nmTeamSetDenied.profile.connection != DuckNetwork.localConnection || nmTeamSetDenied.profile.team == null || nmTeamSetDenied.profile.team != nmTeamSetDenied.team)
+                                    if (nmTeamSetDenied.profile == null || nmTeamSetDenied.profile.connection != localConnection || nmTeamSetDenied.profile.team == null || nmTeamSetDenied.profile.team != nmTeamSetDenied.team)
                                         return;
-                                    DuckNetwork.OpenTeamSwitchDialogue(nmTeamSetDenied.profile);
+                                    OpenTeamSwitchDialogue(nmTeamSetDenied.profile);
                                     return;
                                 default:
                                     return;
@@ -3051,17 +3055,17 @@ namespace DuckGame
 
         public static void AssignToHost(Thing pThing)
         {
-            if (DuckNetwork.hostProfile == null || DuckNetwork.hostProfile.connection == null)
+            if (hostProfile == null || hostProfile.connection == null)
                 return;
-            pThing.connection = DuckNetwork.hostProfile.connection;
+            pThing.connection = hostProfile.connection;
         }
 
         public static void SendToEveryone(NetMessage m)
         {
             List<NetworkConnection> pConnections = new List<NetworkConnection>();
-            foreach (Profile profile in DuckNetwork.profiles)
+            foreach (Profile profile in profiles)
             {
-                if (profile.connection != null && profile.connection != DuckNetwork.localConnection && (!profile.isHost || profile == DuckNetwork.hostProfile) && !pConnections.Contains(profile.connection))
+                if (profile.connection != null && profile.connection != localConnection && (!profile.isHost || profile == hostProfile) && !pConnections.Contains(profile.connection))
                     pConnections.Add(profile.connection);
             }
             Send.Message(m, NetMessagePriority.ReliableOrdered, pConnections);
@@ -3070,9 +3074,9 @@ namespace DuckGame
         public static void SendToEveryoneFiltered(NetMessage m)
         {
             List<NetworkConnection> pConnections = new List<NetworkConnection>();
-            foreach (Profile profile in DuckNetwork.profiles)
+            foreach (Profile profile in profiles)
             {
-                if (DuckNetwork.FilterPlayer(profile) == 0 && profile.connection != null && profile.connection != DuckNetwork.localConnection && (!profile.isHost || profile == DuckNetwork.hostProfile) && !pConnections.Contains(profile.connection))
+                if (FilterPlayer(profile) == 0 && profile.connection != null && profile.connection != localConnection && (!profile.isHost || profile == hostProfile) && !pConnections.Contains(profile.connection))
                     pConnections.Add(profile.connection);
             }
             Send.Message(m, NetMessagePriority.ReliableOrdered, pConnections);
@@ -3080,68 +3084,68 @@ namespace DuckGame
 
         public static void Draw()
         {
-            if (DuckNetwork.localProfile == null)
+            if (localProfile == null)
                 return;
             Vec2 vec2_1 = new Vec2(Layer.Console.width, Layer.Console.height);
             float num1 = 0f;
             int num2 = 8;
             float chatScale = DuckNetwork.chatScale;
             float num3 = Resolution.current.x > 1920 ? 2f : 1f;
-            DuckNetwork._core._chatFont.scale = new Vec2(Resolution.fontSizeMultiplier * chatScale);
-            DuckNetwork._core._chatFont.scale = new Vec2(num3, num3);
-            if (DuckNetwork._core._chatFont is RasterFont)
-                DuckNetwork._core._chatFont.scale = new Vec2(0.5f);
+            _core._chatFont.scale = new Vec2(Resolution.fontSizeMultiplier * chatScale);
+            _core._chatFont.scale = new Vec2(num3, num3);
+            if (_core._chatFont is RasterFont)
+                _core._chatFont.scale = new Vec2(0.5f);
             float num4 = Options.Data.chatOpacity / 100f;
-            if (DuckNetwork._core.enteringText && !DuckNetwork._core.stopEnteringText)
+            if (_core.enteringText && !_core.stopEnteringText)
             {
-                ++DuckNetwork._core.cursorFlash;
-                if (DuckNetwork._core.cursorFlash > 30)
-                    DuckNetwork._core.cursorFlash = 0;
-                int num5 = DuckNetwork._core.cursorFlash >= 15 ? 1 : 0;
+                ++_core.cursorFlash;
+                if (_core.cursorFlash > 30)
+                    _core.cursorFlash = 0;
+                int num5 = _core.cursorFlash >= 15 ? 1 : 0;
                 Profile localProfile = DuckNetwork.localProfile;
-                string text = localProfile.name + ": " + DuckNetwork._core.currentEnterText;
+                string text = localProfile.name + ": " + _core.currentEnterText;
                 string str = text;
                 if (num5 != 0)
                     text += "_";
-                float x = DuckNetwork._core._chatFont.GetWidth(str + "_") + 8f * chatScale;
-                float y = (DuckNetwork._core._chatFont.characterHeight + 2) * DuckNetwork._core._chatFont.scale.y;
-                Vec2 p1 = new Vec2(14f, num1 + (vec2_1.y - (DuckNetwork._core._chatFont.characterHeight + 10) * DuckNetwork._core._chatFont.scale.y));
-                DuckGame.Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p1 + new Vec2(x, y) + new Vec2(1f, 1f), Color.Black * num4, (Depth)0.7f, false, 1f * chatScale);
+                float x = _core._chatFont.GetWidth(str + "_") + 8f * chatScale;
+                float y = (_core._chatFont.characterHeight + 2) * _core._chatFont.scale.y;
+                Vec2 p1 = new Vec2(14f, num1 + (vec2_1.y - (_core._chatFont.characterHeight + 10) * _core._chatFont.scale.y));
+                Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p1 + new Vec2(x, y) + new Vec2(1f, 1f), Color.Black * num4, (Depth)0.7f, false, 1f * chatScale);
                 Color color = Color.White;
                 Color black = Color.Black;
                 if (localProfile.persona != null)
                     color = localProfile.persona.colorUsable;
                 if (localProfile.slotType == SlotType.Spectator)
                     color = Colors.DGPurple;
-                DuckGame.Graphics.DrawRect(p1, p1 + new Vec2(x, y), color * 0.85f * num4, (Depth)0.8f);
-                DuckNetwork._core._chatFont.symbolYOffset = 4f;
-                DuckNetwork._core._chatFont.Draw(text, p1 + new Vec2(2f, 2f), black * num4, (Depth)1f);
-                num1 -= y + 4f * DuckNetwork._core._chatFont.scale.y;
+                Graphics.DrawRect(p1, p1 + new Vec2(x, y), color * 0.85f * num4, (Depth)0.8f);
+                _core._chatFont.symbolYOffset = 4f;
+                _core._chatFont.Draw(text, p1 + new Vec2(2f, 2f), black * num4, (Depth)1f);
+                num1 -= y + 4f * _core._chatFont.scale.y;
             }
             float num6 = 0.1f;
-            foreach (ChatMessage chatMessage in DuckNetwork._core.chatMessages)
+            foreach (ChatMessage chatMessage in _core.chatMessages)
             {
                 float num7 = 10 * (Options.Data.chatHeadScale + 1) * num3;
-                DuckNetwork._core._chatFont._currentConnection = chatMessage.who.connection == DuckNetwork.localConnection ? null : chatMessage.who.connection;
-                DuckNetwork._core._chatFont.scale = new Vec2(Resolution.fontSizeMultiplier * chatMessage.scale * chatScale);
-                DuckNetwork._core._chatFont.scale = new Vec2(num3, num3) * chatMessage.scale;
-                if (DuckNetwork._core._chatFont is RasterFont)
-                    DuckNetwork._core._chatFont.scale = new Vec2(0.5f);
-                float x = (float)(DuckNetwork._core._chatFont.GetWidth(chatMessage.text) + num7 + 8.0 * chatScale);
+                _core._chatFont._currentConnection = chatMessage.who.connection == localConnection ? null : chatMessage.who.connection;
+                _core._chatFont.scale = new Vec2(Resolution.fontSizeMultiplier * chatMessage.scale * chatScale);
+                _core._chatFont.scale = new Vec2(num3, num3) * chatMessage.scale;
+                if (_core._chatFont is RasterFont)
+                    _core._chatFont.scale = new Vec2(0.5f);
+                float x = (float)(_core._chatFont.GetWidth(chatMessage.text) + num7 + 8.0 * chatScale);
                 if (chatMessage.who.slotType == SlotType.Spectator)
                 {
-                    if (DuckNetwork._core._chatFont is RasterFont)
+                    if (_core._chatFont is RasterFont)
                     {
                         float num8 = (float)((_core._chatFont as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10.0);
                         x += 6f * num8;
                     }
                     else
-                        x += 8f * DuckNetwork._core._chatFont.scale.x;
+                        x += 8f * _core._chatFont.scale.x;
                 }
-                float y = chatMessage.newlines * (DuckNetwork._core._chatFont.characterHeight + 2) * DuckNetwork._core._chatFont.scale.y;
+                float y = chatMessage.newlines * (_core._chatFont.characterHeight + 2) * _core._chatFont.scale.y;
                 Vec2 p1 = new Vec2(14f, num1 + (vec2_1.y - (y + 10f)));
                 Vec2 p2 = p1 + new Vec2(x, y);
-                DuckGame.Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p2 + new Vec2(1f, 1f), Color.Black * 0.8f * chatMessage.alpha * num4, (Depth)(num6 - 0.0015f), false, 1f * chatScale);
+                Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p2 + new Vec2(1f, 1f), Color.Black * 0.8f * chatMessage.alpha * num4, (Depth)(num6 - 0.0015f), false, 1f * chatScale);
                 float num9 = (0.3f + chatMessage.text.Length * 0.007f);
                 if (num9 > 0.5f)
                     num9 = 0.5f;
@@ -3166,7 +3170,7 @@ namespace DuckGame
                     SpriteMap g = null;
                     SpriteMap chatBust = chatMessage.who.persona.chatBust;
                     Vec2 vec2_2 = Vec2.Zero;
-                    if (chatMessage.who.team != null && chatMessage.who.team.hasHat && (chatMessage.who.connection != DuckNetwork.localConnection || !chatMessage.who.team.locked))
+                    if (chatMessage.who.team != null && chatMessage.who.team.hasHat && (chatMessage.who.connection != localConnection || !chatMessage.who.team.locked))
                     {
                         vec2_2 = chatMessage.who.team.hatOffset * num3 * (Options.Data.chatHeadScale + 1);
                         g = chatMessage.who.team.GetHat(chatMessage.who.persona);
@@ -3182,7 +3186,7 @@ namespace DuckGame
                         g.alpha = chatMessage.alpha * num4;
                         g.frame = !flag || g.texture == null || g.texture.width <= 32 ? 0 : 1;
                         g.scale = new Vec2(num3, num3) * (Options.Data.chatHeadScale + 1);
-                        DuckGame.Graphics.Draw(g, vec2_3.x - vec2_2.x, vec2_3.y - vec2_2.y);
+                        Graphics.Draw(g, vec2_3.x - vec2_2.x, vec2_3.y - vec2_2.y);
                         g.scale = new Vec2(1f, 1f);
                         g.alpha = 1f;
                     }
@@ -3190,18 +3194,18 @@ namespace DuckGame
                     chatBust.depth = (Depth)(num6 - 0.0015f);
                     chatBust.alpha = chatMessage.alpha * num4;
                     chatBust.scale = new Vec2(num3, num3) * (Options.Data.chatHeadScale + 1);
-                    DuckGame.Graphics.Draw(chatBust, vec2_3.x + 2f * chatBust.scale.x, vec2_3.y + 5f * chatBust.scale.y);
+                    Graphics.Draw(chatBust, vec2_3.x + 2f * chatBust.scale.x, vec2_3.y + 5f * chatBust.scale.y);
                     color *= 0.85f;
                     color.a = byte.MaxValue;
                 }
-                DuckGame.Graphics.DrawRect(p1, p2, color * 0.85f * chatMessage.alpha * num4, (Depth)(num6 - 1f / 500f));
-                DuckNetwork._core._chatFont.symbolYOffset = 4f;
-                DuckNetwork._core._chatFont.lineGap = 2f;
+                Graphics.DrawRect(p1, p2, color * 0.85f * chatMessage.alpha * num4, (Depth)(num6 - 1f / 500f));
+                _core._chatFont.symbolYOffset = 4f;
+                _core._chatFont.lineGap = 2f;
                 if (chatMessage.who.slotType == SlotType.Spectator)
-                    DuckNetwork._core._chatFont.Draw("@SPECTATORBIG@" + chatMessage.text, p1 + new Vec2(2f + num7, 1f * DuckNetwork._core._chatFont.scale.y), black * chatMessage.alpha * num4, (Depth)1f);
+                    _core._chatFont.Draw("@SPECTATORBIG@" + chatMessage.text, p1 + new Vec2(2f + num7, 1f * _core._chatFont.scale.y), black * chatMessage.alpha * num4, (Depth)1f);
                 else
-                    DuckNetwork._core._chatFont.Draw(chatMessage.text, p1 + new Vec2(2f + num7, 1f * DuckNetwork._core._chatFont.scale.y), black * chatMessage.alpha * num4, (Depth)1f);
-                DuckNetwork._core._chatFont._currentConnection = null;
+                    _core._chatFont.Draw(chatMessage.text, p1 + new Vec2(2f + num7, 1f * _core._chatFont.scale.y), black * chatMessage.alpha * num4, (Depth)1f);
+                _core._chatFont._currentConnection = null;
                 num1 -= y + 4f;
                 num6 -= 0.01f;
                 if (num2 == 0)

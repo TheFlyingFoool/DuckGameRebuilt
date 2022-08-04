@@ -14,6 +14,15 @@ namespace DuckGame
 {
     public class Profile
     {
+        public bool isUsingRebuilt
+        {
+            get
+            {
+                if (netData == null) return false;
+                return netData.Get("REBUILT", false);
+            }
+        }
+
         public int prevXPsave;
         public string prevFurniPositionData;
         public Dictionary<NetworkConnection, int> connectionTrouble = new Dictionary<NetworkConnection, int>();
