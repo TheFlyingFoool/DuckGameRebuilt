@@ -260,6 +260,7 @@ namespace DuckGame
             AddCreditLine("NiK0");
             AddCreditLine("Dan");
             AddCreditLine("Collin");
+            AddCreditLine("|RED|Fire|WHITE|break|CREDITSGRAY|");
             AddCreditLine("Landon Podbielski");
             AddCreditLine("");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@ROOM FURNITURE@RWINGGRAY@");
