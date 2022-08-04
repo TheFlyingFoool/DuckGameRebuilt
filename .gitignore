@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Idfk what this is but dan said it's not important
+DuckGame.exe.CodeAnalysisLog.xml
+
