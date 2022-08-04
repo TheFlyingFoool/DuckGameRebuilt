@@ -6,11 +6,10 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <LangVersion>latestmajor</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <WarningLevel>4</WarningLevel>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -132,7 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
-    <Compile Include="src\MonoTime\Console\ConsoleCommandAttribute.cs" />
     <Compile Include="src\MonoTime\Input\InputMan.cs" />
     <Compile Include="src\MonoTime\Input\1InputMan.cs" />
     <Compile Include="src\MonoTime\Input\CharEnteredHandler.cs" />
