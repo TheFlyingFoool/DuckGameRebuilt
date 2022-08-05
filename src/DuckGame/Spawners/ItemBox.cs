@@ -269,10 +269,9 @@ namespace DuckGame
             Thing.Fondle(t, DuckNetwork.localConnection);
             containedObject = null;
         }
-
         public static List<System.Type> GetPhysicsObjects(EditorGroup group) => Editor.ThingTypes.Where<System.Type>(t =>
        {
-           if (t.IsAbstract || !t.IsSubclassOf(typeof(PhysicsObject)) || t.GetCustomAttributes(typeof(EditorGroupAttribute), false).Length == 0)
+           if (t.IsAbstract || !t.IsSubclassOf(typeof(PhysicsObject)) || t.GetCustomAttributes(typeof(EditorGroupAttribute), false).Length == 0 || (!Editor.clientonlycontent || t.IsDefined(typeof(ClientOnlyAttribute), false)))
                return false;
            IReadOnlyPropertyBag bag = ContentProperties.GetBag(t);
            return bag.GetOrDefault("canSpawn", true) && (!Network.isActive || !bag.GetOrDefault("noRandomSpawningOnline", false)) && (!Network.isActive || bag.GetOrDefault("isOnlineCapable", true)) && !bag.GetOrDefault("onlySpawnInDemo", false);//(Main.isDemo || !bag.GetOrDefault("onlySpawnInDemo", false));

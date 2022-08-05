@@ -16,10 +16,14 @@ namespace DuckGame
     {
         private readonly HashSet<System.Type> _types = new HashSet<System.Type>();
         private readonly Dictionary<System.Type, System.Type> _redirections = new Dictionary<System.Type, System.Type>();
+        internal void Add(System.Type type)
+        {
+            _types.Add(type);
+        }
 
-        internal void Add(System.Type type) => _types.Add(type);
-
-        internal IEnumerable<System.Type> SortedTypes => _types.OrderBy<System.Type, string>(t => t.FullName);
+        internal IEnumerable<System.Type> AllSortedTypes => _types.OrderBy<System.Type, string>(t => t.FullName).OrderBy(type => type.IsDefined(typeof(ClientOnlyAttribute), false) ? 1 : 0); // Dan
+        //(type.IsSubclassOf(parentType) && (Editor.clientonlycontent || !type.IsDefined(typeof(ClientOnlyAttribute), false)))
+        internal IEnumerable<System.Type> SortedTypes => _types.Where<System.Type>(type => (Editor.clientonlycontent || !type.IsDefined(typeof(ClientOnlyAttribute), false))).OrderBy<System.Type, string>(t => t.FullName).OrderBy(type => type.IsDefined(typeof(ClientOnlyAttribute), false) ? 1 : 0);
 
         /// <summary>Gets the registered types.</summary>
         /// <value>The types registered.</value>

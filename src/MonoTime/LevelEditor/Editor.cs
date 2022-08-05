@@ -4384,9 +4384,15 @@ namespace DuckGame
                 field.SetValue(destination, field.GetValue(source));
         }
 
-        public static IEnumerable<System.Type> GetSubclasses(System.Type parentType) => DG.assemblies.SelectMany<Assembly, System.Type>(assembly => assembly.GetTypes()).Where<System.Type>(type => type.IsSubclassOf(parentType)).OrderBy<System.Type, string>(t => t.FullName).ToArray<System.Type>();
-
-        public static IEnumerable<System.Type> GetSubclassesAndInterfaces(System.Type parentType) => DG.assemblies.SelectMany<Assembly, System.Type>(assembly => assembly.GetTypes()).Where<System.Type>(type => parentType.IsAssignableFrom(type)).OrderBy<System.Type, string>(t => t.FullName).ToArray<System.Type>();
+        public static IEnumerable<System.Type> GetSubclasses(System.Type parentType)
+        {
+            return DG.assemblies.SelectMany<Assembly, System.Type>(assembly => assembly.GetTypes()).Where<System.Type>(type => (type.IsSubclassOf(parentType) && (Editor.clientonlycontent || !type.IsDefined(typeof(ClientOnlyAttribute), false)))).OrderBy<System.Type, string>(t => t.FullName).OrderBy(type => type.IsDefined(typeof(ClientOnlyAttribute), false) ? 1 : 0);
+        }
+        public static IEnumerable<System.Type> GetAllSubclasses(System.Type parentType) // Dan
+        {
+            return DG.assemblies.SelectMany<Assembly, System.Type>(assembly => assembly.GetTypes()).Where<System.Type>(type => type.IsSubclassOf(parentType)).OrderBy<System.Type, string>(t => t.FullName).OrderBy(type => type.IsDefined(typeof(ClientOnlyAttribute), false) ? 1 : 0).ToArray<System.Type>();
+        }
+        public static IEnumerable<System.Type> GetSubclassesAndInterfaces(System.Type parentType) => DG.assemblies.SelectMany<Assembly, System.Type>(assembly => assembly.GetTypes()).Where<System.Type>(type => (parentType.IsAssignableFrom(type) && (Editor.clientonlycontent || !type.IsDefined(typeof(ClientOnlyAttribute), false)))).OrderBy<System.Type, string>(t => t.FullName).OrderBy(type => type.IsDefined(typeof(ClientOnlyAttribute), false) ? 1 : 0).ToArray<System.Type>();
 
         public static AccessorInfo GetAccessorInfo(
           System.Type t,
@@ -4537,10 +4543,10 @@ namespace DuckGame
             if (MonoMain.moddingEnabled)
             {
                 MonoMain.loadMessage = "Loading Constructor Lists";
-                Editor.ThingTypes = ManagedContent.Things.SortedTypes.ToList<System.Type>();
+                Editor.ThingTypes = ManagedContent.Things.AllSortedTypes.ToList<System.Type>();
             }
             else
-                Editor.ThingTypes = Editor.GetSubclasses(typeof(Thing)).ToList<System.Type>();
+                Editor.ThingTypes = Editor.GetAllSubclasses(typeof(Thing)).ToList<System.Type>();
             Editor.GroupThingTypes = new List<System.Type>();
             Editor.GroupThingTypes.AddRange(ThingTypes);
             Editor.AllBaseTypes = new Dictionary<System.Type, List<System.Type>>();
@@ -4562,7 +4568,7 @@ namespace DuckGame
                 if (Editor.AllStateFields[thingType].Count<FieldInfo>() > 0)
                 {
                     Editor.IDToType[key] = thingType;
-                    if (thingType.Assembly == executingAssembly)
+                    if (thingType.Assembly == executingAssembly && !thingType.IsDefined(typeof(ClientOnlyAttribute), false))
                         str += thingType.Name;
                     ++key;
                 }
@@ -4631,7 +4637,15 @@ namespace DuckGame
                 ++MonoMain.loadyBits;
             }
         }
-
+        public static bool clientonlycontent;
+        public static void EnableClientOnlyContent()
+        {
+            Editor.clientonlycontent = true;
+        }
+        public static void DisableClientOnlyContent()
+        {
+            Editor.clientonlycontent = false;
+        }
         public static void InitializePlaceableList()
         {
             if (Editor._placeables != null)
@@ -4665,7 +4679,7 @@ namespace DuckGame
                 int num = 0;
                 try
                 {
-                    Editor.ThingTypes = !MonoMain.moddingEnabled ? Editor.GetSubclasses(typeof(Thing)).ToList<System.Type>() : ManagedContent.Things.SortedTypes.ToList<System.Type>();
+                    Editor.ThingTypes = !MonoMain.moddingEnabled ? Editor.GetAllSubclasses(typeof(Thing)).ToList<System.Type>() : ManagedContent.Things.AllSortedTypes.ToList<System.Type>();
                     num = Editor.ThingTypes.Count;
                 }
                 catch (Exception)
