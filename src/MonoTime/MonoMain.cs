@@ -586,7 +586,7 @@ namespace DuckGame
         protected override void Initialize()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            IsFixedTimeStep = true;
+            //IsFixedTimeStep = true; edited because i change it back after load is done
             Graphics.mouseVisible = false;
             base.Initialize();
             DuckGame.Content.InitializeBase(Content);
