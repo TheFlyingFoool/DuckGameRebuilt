@@ -131,9 +131,13 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DuckGame\AddedContent\Bubble.cs" />
     <Compile Include="DuckGame\AddedContent\ClientOnlyAttribute.cs" />
+    <Compile Include="DuckGame\AddedContent\Extensions.cs" />
+    <Compile Include="DuckGame\AddedContent\NMSetScale.cs" />
     <Compile Include="DuckGame\AddedContent\PistolTwo.cs" />
-    <Compile Include="DuckGame\AddedContent\ScaleNM.cs" />
+    <Compile Include="DuckGame\AddedContent\ShatterDuck.cs" />
+    <Compile Include="DuckGame\AddedContent\TheDishes.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Test.cs" />
     <Compile Include="src\MonoTime\Console\DevConsoleCommandAttribute.cs" />
