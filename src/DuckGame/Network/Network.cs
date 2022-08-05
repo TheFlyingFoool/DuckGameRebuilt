@@ -409,19 +409,27 @@ namespace DuckGame
             Network.activeNetwork.DoInitialize();
         }
 
-        public static long gameDataHash => Network.messageTypeHash + Editor.thingTypesHash;
+        public static long gameDataHash
+        {
+            get
+            {
+                return Network.messageTypeHash + Editor.thingTypesHash;
+            }
+            
+        }
 
         public static void InitializeMessageTypes()
         {
-            IEnumerable<System.Type> subclasses = Editor.GetSubclasses(typeof(NetMessage));
+            IEnumerable<System.Type> subclasses = Editor.GetAllSubclasses(typeof(NetMessage));
             Network._typeToMessageID.Clear();
             Network._constructorToMessageID.Clear();
             ushort key = 1;
             foreach (System.Type type in subclasses)
             {
-                if (type.GetCustomAttributes(typeof(FixedNetworkID), false).Length != 0)
+                object[] Attributes = type.GetCustomAttributes(typeof(FixedNetworkID), false);
+                if (Attributes.Length != 0)
                 {
-                    FixedNetworkID customAttribute = (FixedNetworkID)type.GetCustomAttributes(typeof(FixedNetworkID), false)[0];
+                    FixedNetworkID customAttribute = (FixedNetworkID)Attributes[0];
                     if (customAttribute != null)
                     {
                         Mod fromTypeIgnoreCore = ModLoader.GetModFromTypeIgnoreCore(type);
@@ -470,7 +478,7 @@ namespace DuckGame
                     {
                         while (Network._typeToMessageID.ContainsKey(key))
                             ++key;
-                        if (fromTypeIgnoreCore == null)
+                        if (fromTypeIgnoreCore == null && !type.IsDefined(typeof(ClientOnlyAttribute), false))
                             str += type.Name;
                         Network._typeToMessageID.Add(type, key);
                         Network._constructorToMessageID.Add(constructor, key);

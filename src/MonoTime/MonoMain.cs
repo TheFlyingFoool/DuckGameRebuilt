@@ -887,6 +887,7 @@ namespace DuckGame
             ModLoader.PostLoadMods();
             OnStart();
             _started = true;
+            this.IsFixedTimeStep = true; // UNZOOOM
         }
 
         protected virtual void OnStart()

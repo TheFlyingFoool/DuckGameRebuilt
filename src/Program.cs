@@ -7,6 +7,7 @@
 
 using DbMon.NET;
 using DGWindows;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,6 +24,7 @@ namespace DuckGame
     /// <summary>The main class.</summary>
     public static class Program
     {
+        public static bool intro = false;
         public static bool testServer = false;
         public static DuckGame.Main main;
         public static string commandLine = "";
@@ -160,6 +162,9 @@ namespace DuckGame
                         ++index;
                         if (args.Count<string>() > index)
                             MonoMain.lobbyPassword = args[index];
+                        break;
+                    case "-intro":
+                        intro = true;
                         break;
                     case "-debug":
                         flag = true;
@@ -334,6 +339,7 @@ namespace DuckGame
             DeviceChangeNotifier.Start();
             DevConsole.Log("Starting Duck Game (" + DG.platform + ")...");
             Program.main = new DuckGame.Main();
+            Program.main.IsFixedTimeStep = false; // ZOOOM
             Program.main.Run();
         }
 

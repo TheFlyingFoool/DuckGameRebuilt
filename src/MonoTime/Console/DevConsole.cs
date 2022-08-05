@@ -558,7 +558,20 @@ namespace DuckGame
                     if (!flag1)
                     {
                         lastCommand = null;
-                        if (pKeyword == "spawn")
+                        if (pKeyword == "gun")
+                        {
+                            if (Level.current != null)
+                            {
+                                foreach(Duck d in Level.current.things[typeof(Duck)])
+                                {
+                                    PistolTwo p = new PistolTwo(d.x, d.y);
+                                    Level.Add(p);
+                                    p.x = d.x;
+                                    p.y = d.y;
+                                }
+                            }
+                        }
+                        else if (pKeyword == "spawn")
                         {
                             if (CheckCheats())
                                 return;

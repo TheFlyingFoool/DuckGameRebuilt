@@ -34,6 +34,8 @@ namespace DuckGame
 
         public override void Update()
         {
+            TitleScreen.SpargLogic();
+
             _wait -= 0.008f;
             if (_wait >= 0.0)
                 return;

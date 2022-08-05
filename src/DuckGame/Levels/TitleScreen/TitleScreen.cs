@@ -112,7 +112,10 @@ namespace DuckGame
           : this(false, null)
         {
         }
-
+        public static void SpargLogic()
+        {
+            if (Input.Pressed("START") || Input.Pressed("SELECT")) Level.current = new TitleScreen();
+        }
         public TitleScreen(bool returnFromArcade, Profile arcadeProfile)
         {
             _centeredView = true;
@@ -990,6 +993,23 @@ namespace DuckGame
                 SFX.Play("pause", 0.6f);
                 MonoMain.pauseMenu = _pauseGroup;
             }
+
+            InputProfile profileWithDevice = InputProfile.FirstProfileWithDevice;
+            if (profileWithDevice != null)
+            {
+                if (profileWithDevice.Pressed("GRAB"))
+                {
+                    current = Main.editor;
+                }
+                if (profileWithDevice.Pressed("SHOOT"))
+                {
+                    for (int i = 0; i < Teams.all.Count; i++)
+                    {
+                        Teams.all[i].ClearProfiles();
+                    }
+                    current = new TeamSelect2();
+                }
+            }
             for (int index = 0; index < num; ++index)
             {
                 starWait -= Maths.IncFrameTimer();
@@ -1042,7 +1062,7 @@ namespace DuckGame
                 _duck.immobilized = true;
                 _duck.enablePhysics = false;
                 Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
-                if (Graphics.fade < 0.00999999977648258)
+                if (Graphics.fade < 0.01f)
                 {
                     Level.current.Clear();
                     Level.current = new ArcadeLevel(Content.GetLevelID("arcade"));
@@ -1408,20 +1428,30 @@ namespace DuckGame
                 else
                 {
                     string text = "PRESS START";
+                    string text2 = "@GRAB@";
+                    string text3 = "@SHOOT@";
+
+                    InputProfile profileWithDevice = InputProfile.FirstProfileWithDevice;
+
                     if (_pressStartBlink >= 0.5)
                     {
                         _font.Draw(text, Level.current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 15f, Color.White, (Depth)0.95f);
+                        text2 = "GO TO EDITOR";
+                        text3 = "GO TO LOBBY";
+                        _font.Draw(text2, Level.current.camera.PercentW(50f) - _font.GetWidth(text2) / 2f, 4f, Color.White, (Depth)0.95f, profileWithDevice);
+                        _font.Draw(text3, Level.current.camera.PercentW(50f) - _font.GetWidth(text3) / 2f, 26f, Color.White, (Depth)0.95f, profileWithDevice);
                     }
                     else
                     {
-                        InputProfile profileWithDevice = InputProfile.FirstProfileWithDevice;
                         if (profileWithDevice != null && profileWithDevice.lastActiveDevice != null && profileWithDevice.lastActiveDevice is GenericController)
                             Graphics.Draw(_bigUButton, Level.current.camera.PercentW(50f) - 1f, 18f);
                         else
                             Graphics.DrawString("@START@", new Vec2(Level.current.camera.PercentW(50f) - 7f, 16f), Color.White, (Depth)0.9f, profileWithDevice);
+                        _font.Draw(text2, Level.current.camera.PercentW(50f) - _font.GetWidth(text2) / 2f + 1.5f, 3f, Color.White, (Depth)0.95f, profileWithDevice);
+                        _font.Draw(text3, Level.current.camera.PercentW(50f) - _font.GetWidth(text3) / 2f + 1.5f, 27f, Color.White, (Depth)0.95f, profileWithDevice);
                     }
                 }
-            }
+            } 
             else if (layer == Layer.Game)
             {
                 Graphics.Draw(_leftPlatform, 0f, 61f);

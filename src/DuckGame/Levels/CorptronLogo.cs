@@ -25,6 +25,7 @@ namespace DuckGame
 
         public override void Update()
         {
+            TitleScreen.SpargLogic();
             if (!_fading)
             {
                 if (Graphics.fade < 1f)
@@ -41,8 +42,8 @@ namespace DuckGame
                 Graphics.fade = 0f;
                 Level.current = new AdultSwimLogo();
             }
-            _wait -= 3f / 500f;
-            if (_wait >= 0f && !Input.Pressed("START") && !Input.Pressed("SELECT"))
+            _wait -= 0.06f;
+            if (_wait >= 0f)
                 return;
             _fading = true;
         }
