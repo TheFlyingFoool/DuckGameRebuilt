@@ -887,7 +887,7 @@ namespace DuckGame
             ModLoader.PostLoadMods();
             OnStart();
             _started = true;
-            this.TargetElapsedTime = TimeSpan.FromTicks(166667L); // UNZOOOM
+            this.IsFixedTimeStep = true; // UNZOOOM
         }
 
         protected virtual void OnStart()
