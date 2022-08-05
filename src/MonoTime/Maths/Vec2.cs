@@ -406,6 +406,36 @@ namespace DuckGame
 
         public static void TransformNormal(ref Vec2 normal, ref Matrix matrix, out Vec2 result) => result = new Vec2((float)(normal.x * matrix.M11 + normal.y * matrix.M21), (float)(normal.x * matrix.M12 + normal.y * matrix.M22));
 
+        public static Vec2 Parse(string s)
+        {
+            if (s.Split(',') is {Length: 2} values
+                && float.TryParse(values[0], out float x)
+                && float.TryParse(values[1], out float y))
+                return new Vec2(x, y);
+
+            throw new Exception($"Cannot parse [{s}] as a Vec2");
+        }
+        
+        public static bool TryParse(string s, out Vec2 result)
+        {
+            if (s.Split(',') is {Length: 2} values
+                && float.TryParse(values[0], out float x)
+                && float.TryParse(values[1], out float y))
+            {
+                result = new Vec2(x, y);
+                return true;
+            }
+
+            result = default;
+            return false;
+        }
+
+        public void Deconstruct(out float x, out float y)
+        {
+            x = this.x;
+            y = this.y;
+        }
+        
         public override string ToString()
         {
             CultureInfo currentCulture = CultureInfo.CurrentCulture;

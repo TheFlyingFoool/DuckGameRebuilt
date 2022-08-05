@@ -53,7 +53,10 @@ namespace DuckGame
         public override void Initialize()
         {
             List<System.Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
-            physicsObjects.RemoveAll(t => t == typeof(Present) || t == typeof(LavaBarrel) || t == typeof(Grapple));
+            physicsObjects.RemoveAll(t => 
+                t == typeof(Present) 
+                || t == typeof(LavaBarrel) 
+                || t == typeof(Grapple));
             _contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
         }
 

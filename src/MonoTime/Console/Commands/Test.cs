@@ -1,16 +1,12 @@
-﻿namespace DuckGame;
+﻿using System.Linq;
+
+namespace DuckGame;
 
 public static partial class DevConsoleCommands
 {
     [DevConsoleCommand]
-    public static void Test()
+    public static string Test(string argument = "None")
     {
-        DevConsole.Log("1");
-    }
-    
-    [DevConsoleCommand(Name = "secondtest")]
-    public static void Test2()
-    {
-        DevConsole.Log("2");
+        return argument;
     }
 }

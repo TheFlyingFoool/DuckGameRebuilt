@@ -1517,6 +1517,7 @@ namespace DuckGame
         }
 
         public static void Log(string text) => Log(DCSection.General, text);
+        public static void Log(object? obj) => Log(obj?.ToString() ?? "null");
 
         public static void Log(string text, Color c, float scale = 2f, int index = -1)
         {

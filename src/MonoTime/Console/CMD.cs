@@ -246,6 +246,48 @@ namespace DuckGame
                     : Error("Argument value must be an integer.");
         }
 
+        public class Boolean : Argument
+        {
+            public Boolean(string pName, bool pOptional = false)
+              : base(pName, pOptional)
+            {
+                type = typeof(bool);
+            }
+
+            public override object Parse(string pValue) =>
+                bool.TryParse(pValue, out bool result)
+                    ? result
+                    : Error("Argument value must be an boolean.");
+        }
+
+        public class Vec2 : Argument
+        {
+            public Vec2(string pName, bool pOptional = false)
+              : base(pName, pOptional)
+            {
+                type = typeof(Vec2);
+            }
+
+            public override object Parse(string pValue) =>
+                DuckGame.Vec2.TryParse(pValue, out var result)
+                    ? result
+                    : Error("Argument value must be an 2D vector.");
+        }
+
+        public class Float : Argument
+        {
+            public Float(string pName, bool pOptional = false)
+              : base(pName, pOptional)
+            {
+                type = typeof(float);
+            }
+
+            public override object Parse(string pValue) =>
+                float.TryParse(pValue, out float result)
+                    ? result
+                    : Error("Argument value must be an floating point number.");
+        }
+
         public class Font : Argument
         {
             private Func<int> defaultFontSize;
