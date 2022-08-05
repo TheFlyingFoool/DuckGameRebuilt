@@ -25,28 +25,18 @@ namespace DuckGame
 
         public string ToShortString() => SectionString() + " " + line + "\n";
 
-        public static Color ColorForSection(DCSection s)
-        {
-            switch (s)
+        public static Color ColorForSection(DCSection s) =>
+            s switch
             {
-                case DCSection.NetCore:
-                    return Colors.DGBlue;
-                case DCSection.DuckNet:
-                    return Colors.DGPink;
-                case DCSection.GhostMan:
-                    return Colors.DGPurple;
-                case DCSection.Steam:
-                    return Colors.DGOrange;
-                case DCSection.Mod:
-                    return Colors.DGGreen;
-                case DCSection.Connection:
-                    return Colors.DGYellow;
-                case DCSection.Ack:
-                    return Colors.DGGreen;
-                default:
-                    return Color.White;
-            }
-        }
+                DCSection.NetCore => Colors.DGBlue,
+                DCSection.DuckNet => Colors.DGPink,
+                DCSection.GhostMan => Colors.DGPurple,
+                DCSection.Steam => Colors.DGOrange,
+                DCSection.Mod => Colors.DGGreen,
+                DCSection.Connection => Colors.DGYellow,
+                DCSection.Ack => Colors.DGGreen,
+                _ => Color.White
+            };
 
         public static string StringForSection(DCSection s, bool colored, bool small, bool formatting = true)
         {
@@ -225,6 +215,6 @@ namespace DuckGame
             return "";
         }
 
-        public string SectionString(bool colored = true, bool small = false) => DCLine.StringForSection(section, colored, small);
+        public string SectionString(bool colored = true, bool small = false) => StringForSection(section, colored, small);
     }
 }

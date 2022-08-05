@@ -20,8 +20,6 @@ namespace DuckGame
             editorTooltip = "Spawns a random object each time it's used. Recharges after a short duration.";
         }
 
-        public override void Update() => base.Update();
-
         public override void Draw()
         {
             _sprite.frame += 2;

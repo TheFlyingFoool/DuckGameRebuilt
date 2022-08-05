@@ -23,11 +23,6 @@ namespace WinFormsGraphicsDevice
         public void AddService<T>(T service) => services.Add(typeof(T), service);
 
         /// <summary>Looks up the specified service.</summary>
-        public object GetService(Type serviceType)
-        {
-            object service;
-            services.TryGetValue(serviceType, out service);
-            return service;
-        }
+        public object GetService(Type serviceType) => services[serviceType];
     }
 }
