@@ -8,7 +8,7 @@ namespace DuckGame;
 public static class Helper
 {
     public static IEnumerable<(TInfoType Member, IEnumerable<TAttribute> Attributes)>
-        GetAllMembersWithAttribute<TInfoType, TAttribute>() where TInfoType  : MemberInfo 
+        GetAllMembersWithAttribute<TInfoType, TAttribute>() where TInfoType : MemberInfo 
         where TAttribute : Attribute
     {
         MemberTypes memberType = MemberTypes.All;
