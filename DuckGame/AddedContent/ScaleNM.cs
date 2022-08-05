@@ -8,23 +8,22 @@
 namespace DuckGame
 {
     [ClientOnly]
-    public class ScaleNMTest : NMEvent
+    public class NMSetScale : NMEvent
     {
-
-        public ScaleNMTest()
+        public NMSetScale(Thing thing, Vec2 vec)
+        {
+            t = thing;
+            v = vec;
+        }
+        public NMSetScale()
         {
         }
+        public Thing t;
+        public Vec2 v;
 
         public override void Activate()
         {
-            if (Level.current == null)
-            {
-                return;
-            }
-            foreach(Thing T in Level.current.things)
-            {
-                T.scale = new Vec2(0.5f, 0.5f);
-            }
+            t.scale = v;
         }
         protected override void OnSerialize()
         {

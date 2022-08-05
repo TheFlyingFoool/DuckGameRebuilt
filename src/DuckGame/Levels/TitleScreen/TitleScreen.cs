@@ -57,6 +57,7 @@ namespace DuckGame
         private MultiBeam _multiBeam;
         private EditorBeam _editorBeam;
         private Duck _duck;
+        private bool _fastMultiplayer;
         private bool _enterMultiplayer;
         private UIComponent _optionsGroup;
         private MenuBoolean _quit = new MenuBoolean();
@@ -995,19 +996,29 @@ namespace DuckGame
             }
 
             InputProfile profileWithDevice = InputProfile.FirstProfileWithDevice;
-            if (profileWithDevice != null)
+            if (profileWithDevice != null && (_multiBeam.entered || !_fadeInFull))
             {
                 if (profileWithDevice.Pressed("GRAB"))
                 {
-                    current = Main.editor;
+                    if (_enterEditor)
+                    {
+                        Level.current = Main.editor;
+                    }
+                    _enterEditor = true;
                 }
                 if (profileWithDevice.Pressed("SHOOT"))
                 {
-                    for (int i = 0; i < Teams.all.Count; i++)
+                    if (_enterMultiplayer)
                     {
-                        Teams.all[i].ClearProfiles();
+                        for (int i = 0; i < Teams.all.Count; i++)
+                        {
+                            if (Teams.all[i].activeProfiles.Find(p => p.inputProfile == profileWithDevice) != null) continue;
+                            Teams.all[i].ClearProfiles();
+                        }
+                        Level.current = new TeamSelect2();
                     }
-                    current = new TeamSelect2();
+                    _fastMultiplayer = true;
+                    _enterMultiplayer = true;
                 }
             }
             for (int index = 0; index < num; ++index)
@@ -1175,8 +1186,19 @@ namespace DuckGame
                     Music.Stop();
                     if (_enterMultiplayer)
                     {
-                        foreach (Team team in Teams.all)
-                            team.ClearProfiles();
+                        if (_fastMultiplayer)
+                        {
+                            for (int i = 0; i < Teams.all.Count; i++)
+                            {
+                                if (Teams.all[i].activeProfiles.Find(p => p.inputProfile == profileWithDevice) != null) continue;
+                                Teams.all[i].ClearProfiles();
+                            }
+                        }
+                        else
+                        {
+                            foreach (Team team in Teams.all)
+                                team.ClearProfiles();
+                        }
                         Level.current = new TeamSelect2();
                     }
                     else if (_enterEditor)
