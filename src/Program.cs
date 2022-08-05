@@ -339,6 +339,7 @@ namespace DuckGame
             DeviceChangeNotifier.Start();
             DevConsole.Log("Starting Duck Game (" + DG.platform + ")...");
             Program.main = new DuckGame.Main();
+           // Program.main.TargetElapsedTime = TimeSpan.FromTicks(1000L);
             Program.main.IsFixedTimeStep = false; // ZOOOM
             Program.main.Run();
         }
