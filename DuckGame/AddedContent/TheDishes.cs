@@ -1,13 +1,8 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
@@ -28,6 +23,8 @@ namespace DuckGame
             collisionSize = new Vec2(16);
             center = new Vec2(8);
             _collisionOffset = new Vec2(-8);
+
+            collideSounds.Add("glassBump");
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
@@ -70,6 +67,9 @@ namespace DuckGame
                             }
                         }
 
+                        Send.Message(new NMDuckShatter(dd.position, velocity, dd, ((SpriteMap)dd.graphic).imageIndex));
+
+                        SFX.Play("glassBreak");
 
                         dd.y = -9999;
                         dd.x = -5000;
