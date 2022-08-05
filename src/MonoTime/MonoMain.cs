@@ -887,6 +887,7 @@ namespace DuckGame
             ModLoader.PostLoadMods();
             OnStart();
             _started = true;
+            //Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667L);
             this.IsFixedTimeStep = true; // UNZOOOM
         }
 
@@ -1070,8 +1071,7 @@ namespace DuckGame
             {
                 if (Cloud.processing)
                 {
-                    Cloud.Update();
-                    return;
+                    Cloud.Update();//return; unneded probly
                 }
                 if (steamConnectionCheckFail)
                 {
@@ -1084,8 +1084,7 @@ namespace DuckGame
                 else if (Steam.IsInitialized() && Steam.IsRunningInitializeProcedures())
                 {
                     loadMessage = "Loading Steam";
-                    Steam.Update();
-                    return;
+                    Steam.Update();//  why return lets just roll through itll be fine =);
                 }
             }
             if (_canStartLoading && !_threadedLoadingStarted && _didFirstDraw)
