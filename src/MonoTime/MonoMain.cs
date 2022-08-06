@@ -7,6 +7,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SDL2;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -931,7 +932,10 @@ namespace DuckGame
             loseDevice = 1;
             SynchronizedContentManager.blockLoading = 2;
         }
-
+        public bool IsFocused
+        {
+            get => (SDL.SDL_GetWindowFlags(this.Window.Handle) & (uint)SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS) > 0;
+        }
         protected override void Update(GameTime gameTime)
         {
             if (showingSaveTool && saveTool == null && File.Exists("SaveTool.dll"))
@@ -955,7 +959,7 @@ namespace DuckGame
                     Graphics.mouseVisible = true;
                 }
             }
-            else if (IsActive) // Form.ActiveForm != null &&
+            else if (IsActive && IsFocused) // Form.ActiveForm != null &&
             {
                 ++framesBackInFocus;
                 Graphics.mouseVisible = showingSaveTool;
