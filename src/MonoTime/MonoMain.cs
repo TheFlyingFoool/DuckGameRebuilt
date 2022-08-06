@@ -187,7 +187,6 @@ namespace DuckGame
             get => _core;
             set => _core = value;
         }
-
         public static void RegisterEngineUpdatable(IEngineUpdatable pUpdatable) => core.engineUpdatables.Add(pUpdatable);
 
         private static UIComponent _pauseMenu
@@ -521,7 +520,7 @@ namespace DuckGame
             Options.Load();
             Cloud.Initialize();
             instance = this;
-            Resolution.Initialize((Form)Control.FromHandle(Window.Handle), graphics);
+            Resolution.Initialize(this.Window.Handle, this.graphics);
             Options.Load();
             Options.PostLoad();
             if (noFullscreen)
@@ -955,7 +954,7 @@ namespace DuckGame
                     Graphics.mouseVisible = true;
                 }
             }
-            else if (Form.ActiveForm != null && IsActive)
+            else if (IsActive) // Form.ActiveForm != null &&
             {
                 ++framesBackInFocus;
                 Graphics.mouseVisible = showingSaveTool;
