@@ -37,6 +37,6 @@ namespace DuckGame
             return !toLower ? str : str.ToLower();
         }
 
-        public string Remainder(bool toLower = false) => (toLower ? _command.ToLower() : _command).Trim();
+        public string Remainder(bool toLower = true) => (toLower ? _command.ToLower() : _command).Trim();
     }
 }

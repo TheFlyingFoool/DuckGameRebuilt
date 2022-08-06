@@ -278,7 +278,7 @@ namespace DuckGame
         public float tilt;
         //private static Material kGhostMaterial;
         public int waitGhost;
-        private ConnectionIndicators _indicators;
+        private Duck.ConnectionIndicators _indicators;
 
         public override bool destroyed => _destroyed || forceDead;
 
@@ -385,12 +385,12 @@ namespace DuckGame
                 if (value == null && _mindControl != null && profile != null && (profile.localPlayer || forceMindControl))
                 {
                     if (holdObject != null)
-                        Fondle(holdObject, DuckNetwork.localConnection);
+                        Thing.Fondle(holdObject, DuckNetwork.localConnection);
                     foreach (Thing t in _equipment)
-                        Fondle(t, DuckNetwork.localConnection);
-                    Fondle(_ragdollInstance, DuckNetwork.localConnection);
-                    Fondle(_cookedInstance, DuckNetwork.localConnection);
-                    Fondle(_trappedInstance, DuckNetwork.localConnection);
+                        Thing.Fondle(t, DuckNetwork.localConnection);
+                    Thing.Fondle(_ragdollInstance, DuckNetwork.localConnection);
+                    Thing.Fondle(_cookedInstance, DuckNetwork.localConnection);
+                    Thing.Fondle(_trappedInstance, DuckNetwork.localConnection);
                 }
                 _mindControl = value;
             }
@@ -464,12 +464,12 @@ namespace DuckGame
                 visible = true;
                 SetCollisionMode("normal");
                 if (holdObject != null)
-                    Fondle(holdObject, DuckNetwork.localConnection);
+                    Thing.Fondle(holdObject, DuckNetwork.localConnection);
                 foreach (Thing t in _equipment)
-                    Fondle(t, DuckNetwork.localConnection);
-                Fondle(_ragdollInstance, DuckNetwork.localConnection);
-                Fondle(_cookedInstance, DuckNetwork.localConnection);
-                Fondle(_trappedInstance, DuckNetwork.localConnection);
+                    Thing.Fondle(t, DuckNetwork.localConnection);
+                Thing.Fondle(_ragdollInstance, DuckNetwork.localConnection);
+                Thing.Fondle(_cookedInstance, DuckNetwork.localConnection);
+                Thing.Fondle(_trappedInstance, DuckNetwork.localConnection);
             }
         }
 
@@ -659,7 +659,7 @@ namespace DuckGame
                     return;
                 if (_profile.localPlayer)
                 {
-                    Fondle(this, DuckNetwork.localConnection);
+                    Thing.Fondle(this, DuckNetwork.localConnection);
                 }
                 else
                 {
@@ -927,7 +927,7 @@ namespace DuckGame
             return false;
         }
 
-        public Equipment GetEquipment(Type t)
+        public Equipment GetEquipment(System.Type t)
         {
             foreach (Equipment equipment in _equipment)
             {
@@ -941,10 +941,10 @@ namespace DuckGame
         {
             if (!(isServerForObject | forceNetwork))
                 return;
-            List<Type> allTypesFiltered = e.GetAllTypesFiltered(typeof(Equipment));
+            List<System.Type> allTypesFiltered = e.GetAllTypesFiltered(typeof(Equipment));
             if (allTypesFiltered.Contains(typeof(ITeleport)))
                 allTypesFiltered.Remove(typeof(ITeleport));
-            foreach (Type t in allTypesFiltered)
+            foreach (System.Type t in allTypesFiltered)
             {
                 if (!t.IsInterface)
                 {
@@ -1094,7 +1094,7 @@ namespace DuckGame
             {
                 Recorder.currentRecording.LogDeath();
             }
-            _destroyed = true;
+            base._destroyed = true;
             if (_isGhost)
             {
                 return false;
@@ -1109,7 +1109,7 @@ namespace DuckGame
                     e.owner = null;
                     if (!isKillMessage)
                     {
-                        ExtraFondle(e, DuckNetwork.localConnection);
+                        Thing.ExtraFondle(e, DuckNetwork.localConnection);
                     }
                     e.hSpeed = hSpeed - (1f + NetRand.Float(2f));
                     e.vSpeed = vSpeed - NetRand.Float(1.5f);
@@ -1168,7 +1168,7 @@ namespace DuckGame
                     }
                     if (Network.isActive)
                     {
-                        AuthorityFondle(prevHold, DuckNetwork.localConnection, 5);
+                        Thing.AuthorityFondle(prevHold, DuckNetwork.localConnection, 5);
                     }
                 }
             }
@@ -1176,7 +1176,7 @@ namespace DuckGame
             {
                 ThrowItem(false);
             }
-            depth = 0.3f;
+            base.depth = 0.3f;
             if (killedBy != null)
             {
                 if (killedBy == profile)
@@ -1477,7 +1477,7 @@ namespace DuckGame
                 }
                 if (TeamSelect2.Enabled("CORPSEBLOW", false))
                 {
-                    Grenade grenade = new Grenade(x, y)
+                    Grenade grenade = new Grenade(base.x, base.y)
                     {
                         hSpeed = hSpeed + Rando.Float(-2f, 2f),
                         vSpeed = vSpeed - Rando.Float(1f, 2.5f)
@@ -1485,16 +1485,16 @@ namespace DuckGame
                     Level.Add(grenade);
                     grenade.PressAction();
                 }
-                SuperFondle(this, DuckNetwork.localConnection);
+                Thing.SuperFondle(this, DuckNetwork.localConnection);
                 if (_trappedInstance != null)
                 {
-                    SuperFondle(_trappedInstance, DuckNetwork.localConnection);
+                    Thing.SuperFondle(_trappedInstance, DuckNetwork.localConnection);
                 }
                 if (holdObject != null)
                 {
-                    SuperFondle(holdObject, DuckNetwork.localConnection);
+                    Thing.SuperFondle(holdObject, DuckNetwork.localConnection);
                 }
-                if (y < -999f)
+                if (base.y < -999f)
                 {
                     Vec2 pos2 = position;
                     position = _lastGoodPosition;
@@ -1508,7 +1508,7 @@ namespace DuckGame
             }
             if (Network.isActive && ragdoll != null && !isKillMessage)
             {
-                SuperFondle(ragdoll, DuckNetwork.localConnection);
+                Thing.SuperFondle(ragdoll, DuckNetwork.localConnection);
             }
             if (Network.isActive && !isKillMessage)
             {
@@ -1536,17 +1536,17 @@ namespace DuckGame
             {
                 if (_ragdollInstance != null)
                 {
-                    Fondle(_ragdollInstance, DuckNetwork.localConnection);
+                    Thing.Fondle(_ragdollInstance, DuckNetwork.localConnection);
                     Level.Remove(_ragdollInstance);
                 }
                 if (_trappedInstance != null)
                 {
-                    Fondle(_trappedInstance, DuckNetwork.localConnection);
+                    Thing.Fondle(_trappedInstance, DuckNetwork.localConnection);
                     Level.Remove(_trappedInstance);
                 }
                 if (_cookedInstance != null)
                 {
-                    Fondle(_cookedInstance, DuckNetwork.localConnection);
+                    Thing.Fondle(_cookedInstance, DuckNetwork.localConnection);
                     Level.Remove(_cookedInstance);
                 }
             }
@@ -1594,7 +1594,7 @@ namespace DuckGame
                     _cookedInstance.x = x;
                     _cookedInstance.y = y;
                     _cookedInstance.owner = null;
-                    ExtraFondle(_cookedInstance, DuckNetwork.localConnection);
+                    Thing.ExtraFondle(_cookedInstance, DuckNetwork.localConnection);
                     ReturnItemToWorld(_cooked);
                     _cooked.vSpeed = vSpeed;
                     _cooked.hSpeed = hSpeed;
@@ -1757,7 +1757,7 @@ namespace DuckGame
 
         public bool HasEquipment(Equipment t) => HasEquipment(t.GetType());
 
-        public bool HasEquipment(Type t)
+        public bool HasEquipment(System.Type t)
         {
             foreach (Thing thing in _equipment)
             {
@@ -2113,11 +2113,11 @@ namespace DuckGame
             if (Level.current.camera is FollowCam)
                 (Level.current.camera as FollowCam).Add(this);
             _cooked = null;
-            ResurrectEffect(position);
+            Duck.ResurrectEffect(position);
             vSpeed = -3f;
             if (!Network.isActive || !isServerForObject)
                 return;
-            SuperFondle(_cookedInstance, DuckNetwork.localConnection);
+            Thing.SuperFondle(_cookedInstance, DuckNetwork.localConnection);
             _cookedInstance.visible = false;
             _cookedInstance.active = false;
             ++lastAppliedLifeChange;
@@ -2292,7 +2292,7 @@ namespace DuckGame
                 {
                     Duck d = with as Duck;
                     bool bootsmash = d.HasEquipment(typeof(Boots)) && !d.sliding;
-                    if (from == ImpactedFrom.Top && with.bottom - 5f < top && with.impactPowerV > 2f && bootsmash)
+                    if (from == ImpactedFrom.Top && with.bottom - 5f < base.top && with.impactPowerV > 2f && bootsmash)
                     {
                         vSpeed = with.impactDirectionV * 0.5f;
                         with.vSpeed = -with.vSpeed * 0.7f;
@@ -2301,10 +2301,10 @@ namespace DuckGame
                         if (with.isServerForObject)
                         {
                             RumbleManager.AddRumbleEvent(d.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None, RumbleType.Gameplay));
-                            MakeStars(position + new Vec2(0f, (crouch || ragdoll != null) ? -2 : -6), velocity);
+                            Duck.MakeStars(position + new Vec2(0f, (crouch || ragdoll != null) ? -2 : -6), base.velocity);
                             if (Network.isActive)
                             {
-                                Send.Message(new NMBonk(position + new Vec2(0f, (crouch || ragdoll != null) ? -2 : -6), velocity));
+                                Send.Message(new NMBonk(position + new Vec2(0f, (crouch || ragdoll != null) ? -2 : -6), base.velocity));
                             }
                         }
                         Helmet h = GetEquipment(typeof(Helmet)) as Helmet;
@@ -2341,13 +2341,13 @@ namespace DuckGame
                             {
                                 with.hSpeed = -with.hSpeed * with.bouncy;
                             }
-                            if (isServerForObject && (!Network.isActive || _disarmWait == 0) && _disarmDisable <= 0)
+                            if (base.isServerForObject && (!Network.isActive || _disarmWait == 0) && _disarmDisable <= 0)
                             {
                                 Disarm(with);
                                 _disarmWait = 5;
                                 RumbleManager.AddRumbleEvent(profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Short, RumbleFalloff.None, RumbleType.Gameplay));
                             }
-                            if (!isServerForObject)
+                            if (!base.isServerForObject)
                             {
                                 Send.Message(new NMDisarm(this, with.impactDirectionH * 0.5f), connection);
                                 return;
@@ -2355,12 +2355,12 @@ namespace DuckGame
                         }
                     }
                 }
-                else if (from == ImpactedFrom.Top && with.y < y && with.vSpeed > 0f && with.impactPowerV > 2f && with.weight >= 5f)
+                else if (from == ImpactedFrom.Top && with.y < base.y && with.vSpeed > 0f && with.impactPowerV > 2f && with.weight >= 5f)
                 {
                     if (with is PhysicsObject)
                     {
                         PhysicsObject wp = with as PhysicsObject;
-                        if (wp.lastPosition.y + with.collisionOffset.y + with.collisionSize.y < top)
+                        if (wp.lastPosition.y + with.collisionOffset.y + with.collisionSize.y < base.top)
                         {
                             Helmet h2 = GetEquipment(typeof(Helmet)) as Helmet;
                             if (h2 != null && h2 is SpikeHelm && wp == (h2 as SpikeHelm).oldPoke)
@@ -2371,10 +2371,10 @@ namespace DuckGame
                             with.vSpeed = -with.vSpeed * 0.5f;
                             if (with.isServerForObject)
                             {
-                                MakeStars(position + new Vec2(0f, (crouch || ragdoll != null) ? -2 : -6), velocity);
+                                Duck.MakeStars(position + new Vec2(0f, (crouch || ragdoll != null) ? -2 : -6), base.velocity);
                                 if (Network.isActive)
                                 {
-                                    Send.Message(new NMBonk(position + new Vec2(0f, (crouch || ragdoll != null) ? -2 : -6), velocity));
+                                    Send.Message(new NMBonk(position + new Vec2(0f, (crouch || ragdoll != null) ? -2 : -6), base.velocity));
                                 }
                             }
                             if (h2 != null && ragdoll == null)
@@ -2415,20 +2415,20 @@ namespace DuckGame
                             return;
                         }
                         hSpeed = with.impactDirectionH * 0.5f;
-                        if (isServerForObject && (!Network.isActive || _disarmWait == 0) && _disarmDisable <= 0)
+                        if (base.isServerForObject && (!Network.isActive || _disarmWait == 0) && _disarmDisable <= 0)
                         {
                             Disarm(with);
                             RumbleManager.AddRumbleEvent(profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Short, RumbleFalloff.None, RumbleType.Gameplay));
                             _disarmWait = 5;
                         }
-                        if (!isServerForObject)
+                        if (!base.isServerForObject)
                         {
                             Send.Message(new NMDisarm(this, with.impactDirectionH * 0.5f), connection);
                             return;
                         }
                     }
                 }
-                else if (!(with is TeamHat) && from == ImpactedFrom.Bottom && with.y > bottom && with.impactPowerV > 2f)
+                else if (!(with is TeamHat) && from == ImpactedFrom.Bottom && with.y > base.bottom && with.impactPowerV > 2f)
                 {
                     vSpeed = with.impactDirectionV * 0.5f;
                     with.vSpeed = -with.vSpeed * 0.5f;
@@ -2460,7 +2460,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            jumpSpeed = JumpSpeed;
+            jumpSpeed = Duck.JumpSpeed;
             if (Level.current != null)
             {
                 if (isServerForObject)
@@ -2884,7 +2884,7 @@ namespace DuckGame
                     {
                         num3 = 1f;
                         if (_leftPressedFrame == 0)
-                            _leftPressedFrame = (int)Graphics.frame;
+                            _leftPressedFrame = (int)DuckGame.Graphics.frame;
                     }
                     else
                     {
@@ -2892,7 +2892,7 @@ namespace DuckGame
                         if (num3 > 0.01f)
                         {
                             if (_leftPressedFrame == 0)
-                                _leftPressedFrame = (int)Graphics.frame;
+                                _leftPressedFrame = (int)DuckGame.Graphics.frame;
                         }
                         else
                             _leftPressedFrame = 0;
@@ -2902,7 +2902,7 @@ namespace DuckGame
                     {
                         num4 = 1f;
                         if (_rightPressedFrame == 0)
-                            _rightPressedFrame = (int)Graphics.frame;
+                            _rightPressedFrame = (int)DuckGame.Graphics.frame;
                     }
                     else
                     {
@@ -2910,7 +2910,7 @@ namespace DuckGame
                         if (num4 > 0.01f)
                         {
                             if (_rightPressedFrame == 0)
-                                _rightPressedFrame = (int)Graphics.frame;
+                                _rightPressedFrame = (int)DuckGame.Graphics.frame;
                         }
                         else
                             _rightPressedFrame = 0;
@@ -3503,12 +3503,12 @@ namespace DuckGame
 
         private void RecoverServerControl()
         {
-            Fondle(this, DuckNetwork.localConnection);
-            Fondle(holdObject, DuckNetwork.localConnection);
-            Fondle(_trappedInstance, DuckNetwork.localConnection);
-            Fondle(_ragdollInstance, DuckNetwork.localConnection);
+            Thing.Fondle(this, DuckNetwork.localConnection);
+            Thing.Fondle(holdObject, DuckNetwork.localConnection);
+            Thing.Fondle(_trappedInstance, DuckNetwork.localConnection);
+            Thing.Fondle(_ragdollInstance, DuckNetwork.localConnection);
             foreach (Thing t in _equipment)
-                Fondle(t, DuckNetwork.localConnection);
+                Thing.Fondle(t, DuckNetwork.localConnection);
         }
 
         public override void Update()
@@ -3579,13 +3579,13 @@ namespace DuckGame
                     if (_assignedIndex)
                     {
                         _assignedIndex = false;
-                        Fondle(this, DuckNetwork.localConnection);
+                        Thing.Fondle(this, DuckNetwork.localConnection);
                         if (this.holdObject != null)
-                            PowerfulRuleBreakingFondle(this.holdObject, DuckNetwork.localConnection);
+                            Thing.PowerfulRuleBreakingFondle(this.holdObject, DuckNetwork.localConnection);
                         foreach (Equipment t in _equipment)
                         {
                             if (t != null)
-                                PowerfulRuleBreakingFondle(t, DuckNetwork.localConnection);
+                                Thing.PowerfulRuleBreakingFondle(t, DuckNetwork.localConnection);
                         }
                     }
                     if (inputProfile != null && !manualQuackPitch)
@@ -3595,13 +3595,13 @@ namespace DuckGame
                             leftTrigger += inputProfile.motionAxis;
                         quackPitch = (byte)(leftTrigger * byte.MaxValue);
                     }
-                    ++_framesSinceInput;
+                    ++Duck._framesSinceInput;
                     if (inputProfile != null && (inputProfile.Pressed("", true) || Level.current is RockScoreboard))
                     {
-                        _framesSinceInput = 0;
+                        Duck._framesSinceInput = 0;
                         afk = false;
                     }
-                    if (_framesSinceInput > 1200)
+                    if (Duck._framesSinceInput > 1200)
                         afk = true;
                 }
                 else if (profile != null)
@@ -3857,14 +3857,14 @@ namespace DuckGame
                         {
                             if (profile.duck == this)
                             {
-                                UnstoppableFondle(this, DuckNetwork.localConnection);
+                                Thing.UnstoppableFondle(this, DuckNetwork.localConnection);
                                 Vec2 vec2 = profile.position + new Vec2(82f, 58f);
                                 if (!profile.rightRoom)
                                     vec2 = profile.position + new Vec2(58f, 58f);
                                 position = vec2;
                                 if (_ragdollInstance != null)
                                 {
-                                    UnstoppableFondle(_ragdollInstance, DuckNetwork.localConnection);
+                                    Thing.UnstoppableFondle(_ragdollInstance, DuckNetwork.localConnection);
                                     _ragdollInstance.position = new Vec2(vec2.x, vec2.y - 3f);
                                     _ragdollInstance.Unragdoll();
                                 }
@@ -3996,7 +3996,7 @@ namespace DuckGame
             _gripped = false;
         }
 
-        public override Thing realObject => _trapped != null ? _trapped : this;
+        public override Thing realObject => _trapped != null ? this._trapped : this;
 
         public bool protectedFromFire
         {
@@ -4356,10 +4356,10 @@ namespace DuckGame
             if (dead)
                 return;
             RenderTarget2D iconMap = persona.iconMap;
-            Viewport viewport = Graphics.viewport;
-            RenderTarget2D renderTarget = Graphics.GetRenderTarget();
-            Graphics.SetRenderTarget(iconMap);
-            Graphics.viewport = new Viewport(0, 0, 96, 96);
+            Viewport viewport = DuckGame.Graphics.viewport;
+            RenderTarget2D renderTarget = DuckGame.Graphics.GetRenderTarget();
+            DuckGame.Graphics.SetRenderTarget(iconMap);
+            DuckGame.Graphics.viewport = new Viewport(0, 0, 96, 96);
             if (_iconCamera == null)
                 _iconCamera = new Camera(0f, 0f, 48f, 48f);
             _iconCamera.center = position + new Vec2(0f, 2f);
@@ -4376,13 +4376,13 @@ namespace DuckGame
                 _iconCamera.center = _trapped.position + new Vec2(0f, -5f);
             if (_cooked != null)
                 _iconCamera.center = _cooked.position + new Vec2(0f, -5f);
-            renderingIcon = true;
+            Duck.renderingIcon = true;
             _renderingDuck = true;
-            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, _iconCamera.getMatrix());
-            Graphics.DrawRect(_iconCamera.rectangle, Colors.Transparent, (Depth)0.99f);
-            Graphics.screen.End();
-            Graphics.ResetSpanAdjust();
-            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, _iconCamera.getMatrix());
+            DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, _iconCamera.getMatrix());
+            DuckGame.Graphics.DrawRect(_iconCamera.rectangle, Colors.Transparent, (Depth)0.99f);
+            DuckGame.Graphics.screen.End();
+            DuckGame.Graphics.ResetSpanAdjust();
+            DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, _iconCamera.getMatrix());
             if (_cooked != null && (!Network.isActive || _cookedInstance != null && _cookedInstance.visible))
                 _cooked.Draw();
             else if (ragdoll != null && ragdoll.part1 != null && ragdoll.part3 != null)
@@ -4408,11 +4408,11 @@ namespace DuckGame
                         smallFire.Draw();
                 }
             }
-            Graphics.screen.End();
+            DuckGame.Graphics.screen.End();
             _renderingDuck = false;
-            renderingIcon = false;
-            Graphics.SetRenderTarget(renderTarget);
-            Graphics.viewport = viewport;
+            Duck.renderingIcon = false;
+            DuckGame.Graphics.SetRenderTarget(renderTarget);
+            DuckGame.Graphics.viewport = viewport;
         }
 
         public void DrawIcon()
@@ -4451,7 +4451,7 @@ namespace DuckGame
             }
             Vec2 vec2_2 = vec2_1 * (3f / 1000f);
             float num4 = num2 - Math.Min(vec2_2.length, 1f) * 0.4f;
-            Graphics.Draw(persona.iconMap, position, new Rectangle?(_iconRect), Color.White, 0f, new Vec2(48f, 48f), new Vec2(0.5f, 0.5f) * num4, SpriteEffects.None, (Depth)(0.9f + depth.span));
+            DuckGame.Graphics.Draw(persona.iconMap, position, new Rectangle?(_iconRect), Color.White, 0f, new Vec2(48f, 48f), new Vec2(0.5f, 0.5f) * num4, SpriteEffects.None, (Depth)(0.9f + depth.span));
             int imageIndex = _sprite.imageIndex;
             _sprite.imageIndex = 21;
             float rad = Maths.DegToRad(Maths.PointDirection(position, p2));
@@ -4504,7 +4504,7 @@ namespace DuckGame
             else
             {
                 if (DevConsole.showCollision)
-                    Graphics.DrawRect(_featherVolume.rectangle, Color.LightGreen, (Depth)0.6f, false, 0.5f);
+                    DuckGame.Graphics.DrawRect(_featherVolume.rectangle, Color.LightGreen, (Depth)0.6f, false, 0.5f);
                 int num1 = _renderingDuck ? 1 : 0;
                 bool flag1 = false;
                 if (Network.isActive)
@@ -4599,7 +4599,7 @@ namespace DuckGame
                         double length = stickLerp.length;
                         if (length > 0.5)
                             num10 = 72;
-                        Graphics.Draw(_mindControl == null || !_derpMindControl ? _spriteQuack : _spriteControlled, _sprite.imageIndex + num10, x, y + verticalOffset, xscale, yscale);
+                        DuckGame.Graphics.Draw(_mindControl == null || !_derpMindControl ? _spriteQuack : _spriteControlled, _sprite.imageIndex + num10, x, y + verticalOffset, xscale, yscale);
                         if (length > 0.05f)
                         {
                             Vec2 vec2_1 = position + new Vec2(0f, 1f);
@@ -4620,8 +4620,8 @@ namespace DuckGame
                                 if (vec2_2 != Vec2.Zero)
                                 {
                                     Vec2 vec2_3 = vec2_2 - p2;
-                                    Graphics.DrawTexturedLine(Graphics.tounge.texture, vec2_2 + vec2_3.normalized * 0.4f, p2, new Color(223, 30, 30), 0.15f * num11, this.depth + 1);
-                                    Graphics.DrawTexturedLine(Graphics.tounge.texture, vec2_2 + vec2_3.normalized * 0.4f, p2 - vec2_3.normalized * 0.4f, Color.Black, 0.3f * num11, this.depth - 1);
+                                    DuckGame.Graphics.DrawTexturedLine(DuckGame.Graphics.tounge.texture, vec2_2 + vec2_3.normalized * 0.4f, p2, new Color(223, 30, 30), 0.15f * num11, this.depth + 1);
+                                    DuckGame.Graphics.DrawTexturedLine(DuckGame.Graphics.tounge.texture, vec2_2 + vec2_3.normalized * 0.4f, p2 - vec2_3.normalized * 0.4f, Color.Black, 0.3f * num11, this.depth - 1);
                                 }
                                 num11 -= 0.1f;
                                 vec2_2 = p2;
@@ -4645,7 +4645,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        Graphics.DrawWithoutUpdate(_sprite, x, y + verticalOffset, xscale, yscale);
+                        DuckGame.Graphics.DrawWithoutUpdate(_sprite, x, y + verticalOffset, xscale, yscale);
                         _stickLerp = Vec2.Zero;
                         _stickSlowLerp = Vec2.Zero;
                     }
@@ -4661,7 +4661,7 @@ namespace DuckGame
                 {
                     _swirlSpin += 0.2f;
                     _swirl.angle = _swirlSpin;
-                    Graphics.Draw(_swirl, x, y - 12f);
+                    DuckGame.Graphics.Draw(_swirl, x, y - 12f);
                 }
                 DrawHat();
                 if (!flag1)
@@ -4691,14 +4691,14 @@ namespace DuckGame
                                 bool flipH = _spriteArms.flipH;
                                 if (holdObject.handFlip)
                                     _spriteArms.flipH = !_spriteArms.flipH;
-                                Graphics.Draw(_spriteArms, _sprite.imageIndex + 18 + Maths.Int(action) * 18 * (holdObject.hasTrigger ? 1 : 0), armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
+                                DuckGame.Graphics.Draw(_spriteArms, _sprite.imageIndex + 18 + Maths.Int(action) * 18 * (holdObject.hasTrigger ? 1 : 0), armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
                                 _spriteArms._frameInc = 0f;
                                 _spriteArms.flipH = flipH;
                                 if (_sprite.currentAnimation == "jump")
                                 {
                                     _spriteArms.angle = 0f;
                                     _spriteArms.depth = this.depth + -10;
-                                    Graphics.Draw(_spriteArms, _sprite.imageIndex + 5 + (int)Math.Round(num13 * 2.0), (float)(x + vec2.x + 2 * offDir * xscale), (float)(y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
+                                    DuckGame.Graphics.Draw(_spriteArms, _sprite.imageIndex + 5 + (int)Math.Round(num13 * 2.0), (float)(x + vec2.x + 2 * offDir * xscale), (float)(y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
                                     _spriteArms.depth = this.depth + 11;
                                 }
                             }
@@ -4707,7 +4707,7 @@ namespace DuckGame
                                 _bionicArm.flipH = _sprite.flipH;
                                 if (holdObject.handFlip)
                                     _bionicArm.flipH = !_bionicArm.flipH;
-                                Graphics.Draw(_bionicArm, _sprite.imageIndex + 18 + num12, armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
+                                DuckGame.Graphics.Draw(_bionicArm, _sprite.imageIndex + 18 + num12, armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
                             }
                         }
                         else if (!_closingEyes)
@@ -4723,24 +4723,24 @@ namespace DuckGame
                                     if (holdObject == null || !holdObject.hideRightWing)
                                     {
                                         _spriteArms.depth = this.depth + 11;
-                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2.0), (float)(x + vec2.x - offDir * num14 * xscale), (float)(y + vec2.y + armOffY * yscale), _sprite.xscale, _sprite.yscale, true);
+                                        DuckGame.Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2.0), (float)(x + vec2.x - offDir * num14 * xscale), (float)(y + vec2.y + armOffY * yscale), _sprite.xscale, _sprite.yscale, true);
                                         _spriteArms.depth = this.depth + -10;
                                     }
                                     if (holdObject == null || !holdObject.hideLeftWing)
                                     {
                                         _spriteArms.imageIndex = 9;
-                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2.0), (float)(x + vec2.x + 2 * offDir * xscale), (float)(y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
+                                        DuckGame.Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2.0), (float)(x + vec2.x + 2 * offDir * xscale), (float)(y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
                                         _spriteArms.depth = this.depth + 11;
                                     }
                                 }
                                 else if (holdObject == null || !holdObject.hideRightWing)
-                                    Graphics.Draw(_spriteArms, _sprite.imageIndex, armPosition.x, armPosition.y, _sprite.xscale, _sprite.yscale);
+                                    DuckGame.Graphics.Draw(_spriteArms, _sprite.imageIndex, armPosition.x, armPosition.y, _sprite.xscale, _sprite.yscale);
                             }
                             else
                             {
                                 _bionicArm.angle = 0f;
                                 _bionicArm.flipH = _sprite.flipH;
-                                Graphics.Draw(_bionicArm, _sprite.imageIndex + num12, armPosition.x, armPosition.y, _sprite.xscale, _sprite.yscale);
+                                DuckGame.Graphics.Draw(_bionicArm, _sprite.imageIndex + num12, armPosition.x, armPosition.y, _sprite.xscale, _sprite.yscale);
                             }
                         }
                     }
@@ -4759,13 +4759,21 @@ namespace DuckGame
 
         public void UpdateConnectionIndicators()
         {
-            _indicators ??= new ConnectionIndicators { duck = this };
+            if (_indicators == null)
+                _indicators = new Duck.ConnectionIndicators()
+                {
+                    duck = this
+                };
             _indicators.Update();
         }
 
         public void DrawConnectionIndicators()
         {
-            _indicators ??= new ConnectionIndicators { duck = this };
+            if (_indicators == null)
+                _indicators = new Duck.ConnectionIndicators()
+                {
+                    duck = this
+                };
             _indicators.Draw();
         }
 
@@ -4793,96 +4801,96 @@ namespace DuckGame
         private class ConnectionIndicators
         {
             public Duck duck;
-            private List<Indicator> _indicators;
+            private List<Duck.ConnectionIndicators.Indicator> _indicators;
             private int numProblems;
             private static Sprite _rainbowGradient;
 
             public ConnectionIndicators()
             {
-                List<Indicator> indicatorList = new List<Indicator>();
+                List<Duck.ConnectionIndicators.Indicator> indicatorList = new List<Duck.ConnectionIndicators.Indicator>();
                 SpriteMap pSprite1 = new SpriteMap("lagturtle", 16, 16, 3)
                 {
                     center = new Vec2(8f)
                 };
-                indicatorList.Add(new Indicator(pSprite1)
+                indicatorList.Add(new Duck.ConnectionIndicators.Indicator(pSprite1)
                 {
-                    problem = ConnectionTrouble.AFK
+                    problem = Duck.ConnectionTrouble.AFK
                 });
                 SpriteMap pSprite2 = new SpriteMap("lagturtle", 16, 16, 4)
                 {
                     center = new Vec2(8f)
                 };
-                indicatorList.Add(new Indicator(pSprite2)
+                indicatorList.Add(new Duck.ConnectionIndicators.Indicator(pSprite2)
                 {
-                    problem = ConnectionTrouble.Chatting
+                    problem = Duck.ConnectionTrouble.Chatting
                 });
                 SpriteMap pSprite3 = new SpriteMap("lagturtle", 16, 16, 2)
                 {
                     center = new Vec2(8f)
                 };
-                indicatorList.Add(new Indicator(pSprite3)
+                indicatorList.Add(new Duck.ConnectionIndicators.Indicator(pSprite3)
                 {
-                    problem = ConnectionTrouble.Disconnection
+                    problem = Duck.ConnectionTrouble.Disconnection
                 });
                 SpriteMap pSprite4 = new SpriteMap("lagturtle", 16, 16, 0)
                 {
                     center = new Vec2(8f)
                 };
-                indicatorList.Add(new Indicator(pSprite4)
+                indicatorList.Add(new Duck.ConnectionIndicators.Indicator(pSprite4)
                 {
-                    problem = ConnectionTrouble.Lag
+                    problem = Duck.ConnectionTrouble.Lag
                 });
                 SpriteMap pSprite5 = new SpriteMap("lagturtle", 16, 16, 1)
                 {
                     center = new Vec2(8f)
                 };
-                indicatorList.Add(new Indicator(pSprite5)
+                indicatorList.Add(new Duck.ConnectionIndicators.Indicator(pSprite5)
                 {
-                    problem = ConnectionTrouble.Loss
+                    problem = Duck.ConnectionTrouble.Loss
                 });
                 SpriteMap pSprite6 = new SpriteMap("lagturtle", 16, 16, 8)
                 {
                     center = new Vec2(8f)
                 };
-                indicatorList.Add(new Indicator(pSprite6)
+                indicatorList.Add(new Duck.ConnectionIndicators.Indicator(pSprite6)
                 {
-                    problem = ConnectionTrouble.Minimized
+                    problem = Duck.ConnectionTrouble.Minimized
                 });
                 SpriteMap pSprite7 = new SpriteMap("lagturtle", 16, 16, 7)
                 {
                     center = new Vec2(8f)
                 };
-                indicatorList.Add(new Indicator(pSprite7)
+                indicatorList.Add(new Duck.ConnectionIndicators.Indicator(pSprite7)
                 {
-                    problem = ConnectionTrouble.Spectator
+                    problem = Duck.ConnectionTrouble.Spectator
                 });
                 SpriteMap pSprite8 = new SpriteMap("lagturtle", 16, 16, 9)
                 {
                     center = new Vec2(8f)
                 };
-                indicatorList.Add(new Indicator(pSprite8)
+                indicatorList.Add(new Duck.ConnectionIndicators.Indicator(pSprite8)
                 {
-                    problem = ConnectionTrouble.Paused
+                    problem = Duck.ConnectionTrouble.Paused
                 });
                 SpriteMap pSprite9 = new SpriteMap("lagturtle", 16, 16, 10)
                 {
                     center = new Vec2(8f)
                 };
-                indicatorList.Add(new Indicator(pSprite9)
+                indicatorList.Add(new Duck.ConnectionIndicators.Indicator(pSprite9)
                 {
-                    problem = ConnectionTrouble.DevConsole
+                    problem = Duck.ConnectionTrouble.DevConsole
                 });
                 _indicators = indicatorList;
                 // ISSUE: explicit constructor call
                 // base.\u002Ector(); wtf weird
-                foreach (Indicator indicator in _indicators)
+                foreach (Duck.ConnectionIndicators.Indicator indicator in _indicators)
                     indicator.owner = this;
             }
 
             public void Update()
             {
                 numProblems = 0;
-                foreach (Indicator indicator in _indicators)
+                foreach (Duck.ConnectionIndicators.Indicator indicator in _indicators)
                 {
                     indicator.Update();
                     if (indicator.visible)
@@ -4894,7 +4902,8 @@ namespace DuckGame
             {
                 if (duck.position.x < -4000.0)
                     return;
-                _rainbowGradient ??= new Sprite("rainbowGradient");
+                if (Duck.ConnectionIndicators._rainbowGradient == null)
+                    Duck.ConnectionIndicators._rainbowGradient = new Sprite("rainbowGradient");
                 if (numProblems <= 0)
                     return;
                 float num1 = 37f;
@@ -4906,43 +4915,40 @@ namespace DuckGame
                 float num5 = -20f;
                 bool flag = false;
                 Vec2 vec2_2 = Vec2.Zero;
-                foreach (Indicator indicator in _indicators)
+                foreach (Duck.ConnectionIndicators.Indicator indicator in _indicators)
                 {
-                    if (!indicator.visible) 
-                        continue;
-                    
-                    double deg = -num2 / 2f + num4 * num1;
-                    float x = (float)-(Math.Sin(Maths.DegToRad((float)deg)) * num5);
-                    float y = (float)Math.Cos(Maths.DegToRad((float)deg)) * num5;
-                    Vec2 pOffset = new Vec2(x, y);
-                    indicator.Draw(pPos, pOffset);
-                    if (flag)
+                    if (indicator.visible)
                     {
-                        pOffset = pPos + pOffset;
-                        Vec2 normalized = (pOffset - vec2_2).normalized;
-                        Graphics.DrawTexturedLine(_rainbowGradient.texture, vec2_2 - normalized, pOffset + normalized, Color.White * num3, (0.3f + 0.6f * num3), (Depth)0.85f);
+                        double deg = -num2 / 2f + num4 * num1;
+                        float x = (float)-(Math.Sin(Maths.DegToRad((float)deg)) * num5);
+                        float y = (float)Math.Cos(Maths.DegToRad((float)deg)) * num5;
+                        Vec2 pOffset = new Vec2(x, y);
+                        indicator.Draw(pPos, pOffset);
+                        if (flag)
+                        {
+                            pOffset = pPos + pOffset;
+                            Vec2 normalized = (pOffset - vec2_2).normalized;
+                            DuckGame.Graphics.DrawTexturedLine(Duck.ConnectionIndicators._rainbowGradient.texture, vec2_2 - normalized, pOffset + normalized, Color.White * num3, (0.3f + 0.6f * num3), (Depth)0.85f);
+                        }
+                        flag = true;
+                        vec2_2 = new Vec2(pPos.x + x, pPos.y + y);
+                        ++num4;
                     }
-                    flag = true;
-                    vec2_2 = new Vec2(pPos.x + x, pPos.y + y);
-                    ++num4;
                 }
             }
 
             private class Indicator
             {
-                public ConnectionTrouble problem;
+                public Duck.ConnectionTrouble problem;
                 public SpriteMap sprite;
                 public float bloop;
-                public ConnectionIndicators owner;
+                public Duck.ConnectionIndicators owner;
                 public float wait;
                 public float activeLerp;
                 public bool _prevActive;
                 private Vec2 drawPos = Vec2.Zero;
 
-                public bool noWait => problem 
-                    is ConnectionTrouble.Chatting 
-                    or ConnectionTrouble.AFK 
-                    or ConnectionTrouble.Minimized;
+                public bool noWait => problem == Duck.ConnectionTrouble.Chatting || problem == Duck.ConnectionTrouble.AFK || problem == Duck.ConnectionTrouble.Minimized;
 
                 public bool active
                 {
@@ -4950,21 +4956,21 @@ namespace DuckGame
                     {
                         if (owner.duck.connection == null || owner.duck.profile == null)
                             return false;
-                        if (problem == ConnectionTrouble.Chatting)
+                        if (problem == Duck.ConnectionTrouble.Chatting)
                             return owner.duck.chatting;
-                        if (problem == ConnectionTrouble.AFK)
+                        if (problem == Duck.ConnectionTrouble.AFK)
                             return owner.duck.afk;
-                        if (problem == ConnectionTrouble.Disconnection)
+                        if (problem == Duck.ConnectionTrouble.Disconnection)
                             return owner.duck.connection != DuckNetwork.localConnection && owner.duck.connection.isExperiencingConnectionTrouble;
-                        if (problem == ConnectionTrouble.Lag)
+                        if (problem == Duck.ConnectionTrouble.Lag)
                             return owner.duck.connection != DuckNetwork.localConnection && owner.duck.connection.manager.ping > 0.25;
-                        if (problem == ConnectionTrouble.Loss)
+                        if (problem == Duck.ConnectionTrouble.Loss)
                             return owner.duck.connection != DuckNetwork.localConnection && owner.duck.connection.manager.accumulatedLoss > 10;
-                        if (problem == ConnectionTrouble.Minimized)
+                        if (problem == Duck.ConnectionTrouble.Minimized)
                             return !owner.duck.profile.netData.Get<bool>("gameInFocus", true);
-                        if (problem == ConnectionTrouble.Paused)
+                        if (problem == Duck.ConnectionTrouble.Paused)
                             return owner.duck.profile.netData.Get<bool>("gamePaused", false);
-                        return problem == ConnectionTrouble.DevConsole && owner.duck.profile.netData.Get<bool>("consoleOpen", false);
+                        return problem == Duck.ConnectionTrouble.DevConsole && owner.duck.profile.netData.Get<bool>("consoleOpen", false);
                     }
                 }
 
@@ -4978,13 +4984,7 @@ namespace DuckGame
                         _prevActive = active;
                         if (active)
                             bloop = 1f;
-                        
-                        if (problem 
-                            is ConnectionTrouble.Chatting 
-                            or ConnectionTrouble.Minimized 
-                            or ConnectionTrouble.Paused 
-                            or ConnectionTrouble.DevConsole 
-                            or ConnectionTrouble.AFK)
+                        if (problem == Duck.ConnectionTrouble.Chatting || problem == Duck.ConnectionTrouble.Minimized || problem == Duck.ConnectionTrouble.Paused || problem == Duck.ConnectionTrouble.DevConsole || problem == Duck.ConnectionTrouble.AFK)
                             SFX.Play("rainpop", 0.65f, Rando.Float(-0.1f, 0.1f));
                     }
                     if (!active)
@@ -5022,7 +5022,7 @@ namespace DuckGame
                     drawPos = Lerp.Vec2Smooth(drawPos, pOffset, 0.4f);
                     sprite.scale = new Vec2((float)(1.0 + bloop * 0.6f), (float)(1.0 + bloop * 0.35f));
                     sprite.depth = (Depth)0.9f;
-                    Graphics.Draw(sprite, pPos.x + drawPos.x, pPos.y + drawPos.y);
+                    DuckGame.Graphics.Draw(sprite, pPos.x + drawPos.x, pPos.y + drawPos.y);
                 }
 
                 public Indicator(SpriteMap pSprite)

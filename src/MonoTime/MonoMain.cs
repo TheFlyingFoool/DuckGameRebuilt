@@ -1151,9 +1151,9 @@ namespace DuckGame
                 InputProfile.Update();
                 Network.PreUpdate();
             }
-            if (!Keyboard.alt && Keyboard.Pressed(Keys.F4) || Keyboard.alt && Keyboard.Pressed(Keys.Enter))
+            if (Keyboard.Pressed(Keys.F4) || Keyboard.alt && Keyboard.Pressed(Keys.Enter))
             {
-                Options.Data.fullscreen ^= true;
+                Options.Data.fullscreen = !Options.Data.fullscreen;
                 Options.FullscreenChanged();
             }
             if (!Cloud.processing)
@@ -1166,7 +1166,7 @@ namespace DuckGame
             catch (Exception)
             {
             }
-            if (exit || (Graphics.inFocus && Keyboard.alt && Keyboard.Pressed(Keys.F4)))
+            if (exit || (Keyboard.Down(Keys.LeftAlt) || Keyboard.Down(Keys.RightAlt)) && Keyboard.Down(Keys.F4))
             {
                 KillEverything();
                 Exit();
