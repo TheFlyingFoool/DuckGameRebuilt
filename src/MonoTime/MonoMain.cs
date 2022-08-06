@@ -187,6 +187,7 @@ namespace DuckGame
             get => _core;
             set => _core = value;
         }
+
         public static void RegisterEngineUpdatable(IEngineUpdatable pUpdatable) => core.engineUpdatables.Add(pUpdatable);
 
         private static UIComponent _pauseMenu
