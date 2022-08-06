@@ -2,6 +2,7 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!--Project was exported from assembly: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe-->
   <PropertyGroup>
+    <UseNETCoreGenerator>true</UseNETCoreGenerator>
     <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -11,6 +12,21 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <Nullable>disable</Nullable>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.1.8175.33388</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -18,7 +34,6 @@
     <ProjectGuid>{A63C7222-EEE1-4BCD-844D-F6AC1501A655}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <ApplicationVersion>1.1.8175.33388</ApplicationVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -68,7 +83,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|AnyCPU'">
     <AssemblyName>DuckGame</AssemblyName>
-    <OutputPath>.\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>false</Optimize>
@@ -78,7 +93,8 @@
     <Prefer32Bit>true</Prefer32Bit>
     <DocumentationFile>
     </DocumentationFile>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|x86'">
     <AssemblyName>DuckGame</AssemblyName>
@@ -109,9 +125,17 @@
     <Reference Include="DGSteam">
       <HintPath>lib\DGSteam.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xna.Framework" />
-    <Reference Include="Microsoft.Xna.Framework.Game" />
-    <Reference Include="Microsoft.Xna.Framework.Graphics" />
+    <Reference Include="FNA">
+      <HintPath>.\FNA.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMod, Version=22.5.1.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\MonoMod.exe</HintPath>
+    </Reference>
     <Reference Include="NAudio">
       <HintPath>lib\NAudio.dll</HintPath>
     </Reference>
@@ -1721,6 +1745,91 @@
     <Compile Include="src\MonoTime\UI\UIMenuCustomUpdate.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="XnaToFna\Application.cs" />
+    <Compile Include="XnaToFna\AvatarExpression.cs" />
+    <Compile Include="XnaToFna\AvatarEye.cs" />
+    <Compile Include="XnaToFna\AvatarEyebrow.cs" />
+    <Compile Include="XnaToFna\AvatarMouth.cs" />
+    <Compile Include="XnaToFna\BinaryFormatterHelper.cs" />
+    <Compile Include="XnaToFna\CloseReason.cs" />
+    <Compile Include="XnaToFna\ConsoleRegion.cs" />
+    <Compile Include="XnaToFna\ContentHelper.cs" />
+    <Compile Include="XnaToFna\ContentHelperGame.cs" />
+    <Compile Include="XnaToFna\Control.cs" />
+    <Compile Include="XnaToFna\CopyingStream.cs" />
+    <Compile Include="XnaToFna\Cursor.cs" />
+    <Compile Include="XnaToFna\DeviceEvents.cs" />
+    <Compile Include="XnaToFna\DInput.cs" />
+    <Compile Include="XnaToFna\DInputState.cs" />
+    <Compile Include="XnaToFna\EffectTransformer.cs" />
+    <Compile Include="XnaToFna\FakeMonitor.cs" />
+    <Compile Include="XnaToFna\FieldInfoHelper.cs" />
+    <Compile Include="XnaToFna\FileSystemHelper.cs" />
+    <Compile Include="XnaToFna\FindServicesCompletedArgs.cs" />
+    <Compile Include="XnaToFna\fix.cs" />
+    <Compile Include="XnaToFna\FNAHooks.cs" />
+    <Compile Include="XnaToFna\ForcedStreamContentManager.cs" />
+    <Compile Include="XnaToFna\Form.cs" />
+    <Compile Include="XnaToFna\FormBorderStyle.cs" />
+    <Compile Include="XnaToFna\FormClosedEventArgs.cs" />
+    <Compile Include="XnaToFna\FormClosedEventHandler.cs" />
+    <Compile Include="XnaToFna\FormClosingEventArgs.cs" />
+    <Compile Include="XnaToFna\FormClosingEventHandler.cs" />
+    <Compile Include="XnaToFna\FormStartPosition.cs" />
+    <Compile Include="XnaToFna\FormWindowState.cs" />
+    <Compile Include="XnaToFna\GameForm.cs" />
+    <Compile Include="XnaToFna\GamerExtensions.cs" />
+    <Compile Include="XnaToFna\GamerPresenceExtensions.cs" />
+    <Compile Include="XnaToFna\GuideExtensions.cs" />
+    <Compile Include="XnaToFna\GZipContentReader`1.cs" />
+    <Compile Include="XnaToFna\HookProc.cs" />
+    <Compile Include="XnaToFna\HookType.cs" />
+    <Compile Include="XnaToFna\IAvatarAnimation.cs" />
+    <Compile Include="XnaToFna\ILPlatform.cs" />
+    <Compile Include="XnaToFna\KeyboardEvents.cs" />
+    <Compile Include="XnaToFna\LeaderboardEntryExtensions.cs" />
+    <Compile Include="XnaToFna\LeaderboardWriterExtensions.cs" />
+    <Compile Include="XnaToFna\LzxDecoder.cs" />
+    <Compile Include="XnaToFna\Message.cs" />
+    <Compile Include="XnaToFna\Messages.cs" />
+    <Compile Include="XnaToFna\MethodInvoker.cs" />
+    <Compile Include="XnaToFna\MouseButtons.cs" />
+    <Compile Include="XnaToFna\MouseEventArgs.cs" />
+    <Compile Include="XnaToFna\MouseEventHandler.cs" />
+    <Compile Include="XnaToFna\MouseEvents.cs" />
+    <Compile Include="XnaToFna\NN.cs" />
+    <Compile Include="XnaToFna\PInvoke.cs" />
+    <Compile Include="XnaToFna\PInvokeHelper.cs" />
+    <Compile Include="XnaToFna\PInvokeHooks.cs" />
+    <Compile Include="XnaToFna\Point.cs" />
+    <Compile Include="XnaToFna\ProxyMessageHelper.cs" />
+    <Compile Include="XnaToFna\really.cs" />
+    <Compile Include="XnaToFna\Rectangle.cs" />
+    <Compile Include="XnaToFna\SoundEffectTransformer.cs" />
+    <Compile Include="XnaToFna\StackOpHelper.cs" />
+    <Compile Include="XnaToFna\StubXDKHelper.cs" />
+    <Compile Include="XnaToFna\SyncResult.cs" />
+    <Compile Include="XnaToFna\TitleServiceConnection.cs" />
+    <Compile Include="XnaToFna\TitleServiceConnectionStatus.cs" />
+    <Compile Include="XnaToFna\TitleServiceDescription.cs" />
+    <Compile Include="XnaToFna\TitleServiceDirectory.cs" />
+    <Compile Include="XnaToFna\WndProc.cs" />
+    <Compile Include="XnaToFna\X360Helper.cs" />
+    <Compile Include="XnaToFna\XEXImageData.cs" />
+    <Compile Include="XnaToFna\XnaToFnaExt.cs" />
+    <Compile Include="XnaToFna\XnaToFnaGame.cs" />
+    <Compile Include="XnaToFna\XnaToFnaHelper.cs" />
+    <Compile Include="XnaToFna\XnaToFnaMapping.cs" />
+    <Compile Include="XnaToFna\XnaToFnaModder.cs" />
+    <Compile Include="XnaToFna\XNAtofnaProgram.cs" />
+    <Compile Include="XnaToFna\XnaToFnaUtil.cs" />
+    <Compile Include="XnaToFna\__LeaderboardIdentity__.cs" />
+    <Compile Include="XnaToFna\__LeaderboardReader__.cs" />
+    <Compile Include="XnaToFna\__LeaderboardWriter__.cs" />
+    <Compile Include="XnaToFna\__LocalNetworkGamer__.cs" />
+    <Compile Include="XnaToFna\__NetworkMachine__.cs" />
+    <Compile Include="XnaToFna\__NetworkSession__.cs" />
+    <Compile Include="XnaToFna\__PropertyDictionary__.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DuckGame\Properties\Resources.resx" />
@@ -1732,11 +1841,17 @@
   <ItemGroup>
     <Content Include="DuckGame.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>if not exist "$(TargetDir)bin\" mkdir  "$(TargetDir)bin\"
-if  "$(ConfigurationName)" == "DuckGame" copy /Y "$(TargetDir)DuckGame.exe" "$(TargetDir)bin\DuckGameRebuilt.exe"
-if NOT "$(ConfigurationName)" == "DuckGame" copy /Y "$(TargetDir)DuckGame.exe" "$(TargetDir)bin\$(Configuration).exe"
-del "$(TargetDir)DuckGame.exe"</PostBuildEvent>
-  </PropertyGroup>
 </Project>

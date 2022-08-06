@@ -164,11 +164,11 @@ namespace DuckGame
             graphicsDevice.SamplerStates[0] = _samplerState;
             Viewport viewport = graphicsDevice.Viewport;
             Matrix.CreateOrthographicOffCenter(0f, viewport.Width, viewport.Height, 0f, 1f, -1f, out _projMatrix);
-            if (!Program.isLinux)
-            {
-                _projMatrix.M41 += -0.5f * _projMatrix.M11;
-                _projMatrix.M42 += -0.5f * _projMatrix.M22;
-            }
+            //if (!Program.isLinux)
+            //{
+            //    _projMatrix.M41 += -0.5f * _projMatrix.M11;
+            //    _projMatrix.M42 += -0.5f * _projMatrix.M22;
+            //}
             Matrix result;
             Matrix.Multiply(ref _matrix, ref _projMatrix, out result);
             fullMatrix = result;
