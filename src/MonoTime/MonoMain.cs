@@ -520,7 +520,7 @@ namespace DuckGame
             Options.Load();
             Cloud.Initialize();
             instance = this;
-            Resolution.Initialize(this.Window.Handle, this.graphics);
+            Resolution.Initialize((Form)Control.FromHandle(Window.Handle), graphics);
             Options.Load();
             Options.PostLoad();
             if (noFullscreen)
@@ -954,7 +954,7 @@ namespace DuckGame
                     Graphics.mouseVisible = true;
                 }
             }
-            else if (IsActive) // Form.ActiveForm != null &&
+            else if (Form.ActiveForm != null && IsActive)
             {
                 ++framesBackInFocus;
                 Graphics.mouseVisible = showingSaveTool;

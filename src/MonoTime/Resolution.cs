@@ -7,7 +7,6 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SDL2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +18,7 @@ namespace DuckGame
     {
         public bool recommended;
         private static Resolution _lastApplied;
-        private static IntPtr _window;
+        private static Form _window;
         private static float _screenDPI;
         private static int _takeFocus;
         private static GraphicsDeviceManager _device;
@@ -48,10 +47,8 @@ namespace DuckGame
             return dpiX;
         }
 
-        public static void Set(Resolution pResolution)
-        {
-            Resolution._pendingResolution = pResolution;
-        }
+        public static void Set(Resolution pResolution) => Resolution._pendingResolution = pResolution;
+
         public static void Apply()
         {
             DuckGame.Graphics.snap = 4f;
@@ -93,9 +90,8 @@ namespace DuckGame
                     case ScreenMode.Windowed:
                         DuckGame.Graphics.mouseVisible = false;
                         DuckGame.Graphics._screenBufferTarget = null;
-                        SDL.SDL_SetWindowBordered(Resolution._window, false ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE);// Resolution._window.FormBorderStyle = FormBorderStyle.FixedSingle;
-                        SDL.SDL_SetWindowPosition(Resolution._window, Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
-                        // Resolution._window.Location = new System.Drawing.Point(Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
+                        Resolution._window.FormBorderStyle = FormBorderStyle.FixedSingle;
+                        Resolution._window.Location = new System.Drawing.Point(Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
                         break;
                     case ScreenMode.Fullscreen:
                         DuckGame.Graphics.mouseVisible = false;
@@ -104,8 +100,8 @@ namespace DuckGame
                     case ScreenMode.Borderless:
                         DuckGame.Graphics.mouseVisible = false;
                         DuckGame.Graphics._screenBufferTarget = new RenderTarget2D(Options.LocalData.currentResolution.x, Options.LocalData.currentResolution.y, true, RenderTargetUsage.PreserveContents);
-                        SDL.SDL_SetWindowBordered(Resolution._window, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); //  Resolution._window.FormBorderStyle = FormBorderStyle.None;
-                        SDL.SDL_SetWindowPosition(Resolution._window, 0, 0); //Resolution._window.Location = new System.Drawing.Point(0, 0);
+                        Resolution._window.FormBorderStyle = FormBorderStyle.None;
+                        Resolution._window.Location = new System.Drawing.Point(0, 0);
                         if (DuckGame.Graphics._screenBufferTarget.width < 400)
                         {
                             DuckGame.Graphics.snap = 1f;
@@ -139,9 +135,7 @@ namespace DuckGame
             {
                 --Resolution._takeFocus;
                 if (Resolution._takeFocus == 0)
-                    SDL.SDL_RaiseWindow(Resolution._window);
-                SDL.SDL_SetWindowInputFocus(Resolution._window);
-                //Resolution._window.Focus();
+                    Resolution._window.Focus();
             }
             if (Resolution._pendingResolution == null)
                 return false;
@@ -174,7 +168,7 @@ namespace DuckGame
 
         public static void Initialize(object pWindow, GraphicsDeviceManager pDeviceManager)
         {
-            Resolution._window = (IntPtr)pWindow;
+            Resolution._window = pWindow as Form;
             Resolution._device = pDeviceManager;
             Resolution.supportedDisplaySizes = new Dictionary<ScreenMode, List<Resolution>>();
             DevConsole.Log(DCSection.General, "Enumerating display modes (" + GraphicsAdapter.DefaultAdapter.SupportedDisplayModes.Count<DisplayMode>().ToString() + " found...)");
