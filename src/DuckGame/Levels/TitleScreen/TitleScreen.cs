@@ -208,13 +208,7 @@ namespace DuckGame
             AddCreditLine("Leonardo \"Baffo\" Magnani");
             AddCreditLine("The Burger Always Wins");
             AddCreditLine("RaV3_past");
-#if DuckGameTurbo
-            this.AddCreditLine("Collin But Faster", "|DGPURPLE|Drake");
-#elif DuckGame
-            this.AddCreditLine("Collin Based", "|DGPURPLE|Drake");
-#else
             AddCreditLine("Collin", "|DGPURPLE|Drake");
-#endif
             AddCreditLine("Tater");
             AddCreditLine("");
             AddCreditLine("Jaydex72");

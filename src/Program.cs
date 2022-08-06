@@ -24,6 +24,10 @@ namespace DuckGame
     /// <summary>The main class.</summary>
     public static class Program
     {
+        public static string GameDirectory;
+        public static string FileName = "";
+        public static string FilePath = "";
+        public static bool IsLinuxD;
         public static bool intro = false;
         public static bool testServer = false;
         public static DuckGame.Main main;
@@ -56,8 +60,13 @@ namespace DuckGame
         /// <summary>The main entry point for the application.</summary>
         public static void Main(string[] args)
         {
+            int p = (int)Environment.OSVersion.Platform;
+            IsLinuxD = (p == 4) || (p == 6) || (p == 128);
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = Program.gameAssembly.GetName().Name;
+            FilePath = Program.gameAssembly.Location;
+            FileName = Path.GetFileName(FilePath);
+            GameDirectory = FilePath.Substring(0, FilePath.Length - FileName.Length);
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(Program.Resolve);
             if (args.Contains<string>("-linux") || WindowsPlatformStartup.isRunningWine && !args.Contains<string>("-nolinux"))
             {

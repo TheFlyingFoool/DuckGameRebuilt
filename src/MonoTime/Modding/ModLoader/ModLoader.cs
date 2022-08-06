@@ -6,6 +6,8 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.CSharp;
+using Mono.Cecil;
+using MonoMod.Utils;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -19,6 +21,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
+using XnaToFna;
 
 namespace DuckGame
 {
@@ -27,6 +30,7 @@ namespace DuckGame
     /// </summary>
     public static class ModLoader
     {
+        private static XnaToFnaUtil xnaToFnaUtil;
         private static readonly Dictionary<string, Mod> _loadedMods = new Dictionary<string, Mod>();
         internal static readonly Dictionary<string, Mod> _modAssemblyNames = new Dictionary<string, Mod>();
         internal static readonly Dictionary<Assembly, Mod> _modAssemblies = new Dictionary<Assembly, Mod>();
@@ -151,7 +155,26 @@ namespace DuckGame
                 ModLoader._modsByWorkshopID[mod.configuration.workshopID] = mod;
             ModLoader._modTypes.Add(mod.GetType(), mod);
         }
-
+        public static Assembly FixLoadAssembly(string path)
+        {
+            xnaToFnaUtil = new XnaToFnaUtil();
+            //xnaToFnaUtil.ScanPath(Program.GameDirectory + "DGSteamref.dll");
+            xnaToFnaUtil.ScanPath(Program.GameDirectory + "FNA.dll");
+            xnaToFnaUtil.ScanPath(Program.FilePath);
+            xnaToFnaUtil.RelinkAll();
+            string folderpath = Path.GetDirectoryName(path);
+            really really = new really();
+            really.name = AssemblyName.GetAssemblyName(path);
+            ReaderParameters rp = xnaToFnaUtil.Modder.GenReaderParameters(false);
+            (xnaToFnaUtil.Modder.AssemblyResolver as DefaultAssemblyResolver).AddSearchDirectory(folderpath);
+            rp.ReadWrite = path != XnaToFnaUtil.ThisAssembly.Location && !xnaToFnaUtil.Mappings.Exists(new Predicate<XnaToFnaMapping>(really.ScanPath));
+            rp.ReadSymbols = false;
+            ModuleDefinition mod = MonoModExt.ReadModule(path, rp);
+            Assembly assembly = xnaToFnaUtil.RelinkToAssembly(mod);
+            (xnaToFnaUtil.Modder.AssemblyResolver as DefaultAssemblyResolver).RemoveSearchDirectory(folderpath);
+            xnaToFnaUtil.Dispose();
+            return assembly;
+        }
         private static ModConfiguration GetDependency(
           string pDependency,
           ref Dictionary<string, ModConfiguration> pLoadableMods)
@@ -281,7 +304,7 @@ namespace DuckGame
                                 if (dependency != null && !dependency.disabled)
                                     ModLoader.GetOrLoad(dependency, ref modLoadStack, ref loadableMods);
                             }
-                            modConfig.assembly = Assembly.Load(System.IO.File.ReadAllBytes(modConfig.isDynamic ? modConfig.tempAssemblyPath : modConfig.assemblyPath));
+                            modConfig.assembly = FixLoadAssembly(modConfig.isDynamic ? modConfig.tempAssemblyPath : modConfig.assemblyPath);
                             MonoMain.loadedModsWithAssemblies.Add(modConfig);
                             System.Type[] array1 = modConfig.assembly.GetExportedTypes().Where<System.Type>(type => type.IsSubclassOf(typeof(IManageContent)) && type.IsPublic && type.IsClass && !type.IsAbstract).ToArray<System.Type>();
                             modConfig.contentManager = array1.Length <= 1 ? ContentManagers.GetContentManager(array1.Length == 1 ? array1[0] : null) : throw new ModTypeMissingException(modConfig.uniqueID + " has more than one content manager class");
