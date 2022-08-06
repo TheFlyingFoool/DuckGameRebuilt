@@ -135,6 +135,7 @@
     <Compile Include="DuckGame\AddedContent\PistolTwo.cs" />
     <Compile Include="DuckGame\AddedContent\ScaleNM.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Exit.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Test.cs" />
     <Compile Include="src\MonoTime\Console\DevConsoleCommandAttribute.cs" />
     <Compile Include="src\MonoTime\ExecuteOnAttribute.cs" />
