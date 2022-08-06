@@ -159,6 +159,9 @@
     <Compile Include="DuckGame\AddedContent\ClientOnlyAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Extensions.cs" />
     <Compile Include="DuckGame\AddedContent\NMDuckShatter.cs" />
+    <Compile Include="DuckGame\AddedContent\NMPinkCollision.cs" />
+    <Compile Include="DuckGame\AddedContent\NMPinkExplode.cs" />
+    <Compile Include="DuckGame\AddedContent\PinkBox.cs" />
     <Compile Include="DuckGame\AddedContent\PistolTwo.cs" />
     <Compile Include="DuckGame\AddedContent\NMSetScale.cs" />
     <Compile Include="DuckGame\AddedContent\ShatterDuck.cs" />

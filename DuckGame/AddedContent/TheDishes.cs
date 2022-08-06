@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace DuckGame
 {
     [ClientOnly]
+    [EditorGroup("Rebuilt")]
     public class TheDishes : Holdable
     {
         public const string DirtySprite = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAKpJREFUOE9jZKAQMOLSXx8i///Vdz64tBjnJ4bGNQ8x1KMIZHrr/gcpBAFsirFZBjcAZCMpGmGG4fQCum24LCDKAFh4IIcDSAzkTbABMA6+AEX3Hii8pm+9TJwBsMBFDlgUA9AVgPggG3FFHbKrsXqBGANQYgE5hJHTAq5oRQ4zeCzA/AQzDF+awGsAoawBi1JQDIDUoqQDYlIjepQTnZlgNqK7kKiUiM9bALxWgBFUCrntAAAAAElFTkSuQmCC";
@@ -25,6 +26,9 @@ namespace DuckGame
             _collisionOffset = new Vec2(-8);
 
             collideSounds.Add("glassBump");
+
+            _editorName = "Dishes";
+            editorTooltip = "DO THE FUCKING DISHES COLLIN";
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
