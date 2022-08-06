@@ -331,7 +331,7 @@ namespace DuckGame
                 Vec2 vec2_4 = Vec2.Zero;
                 vec2_4 = new Vec2(0f, -num3);
                 Graphics.DrawRect(vec2_3 + vec2_4 * inputChangeDisplay.slide, vec2_3 + new Vec2(x, num1 - 1f) + vec2_4 * inputChangeDisplay.slide, Color.Black, (Depth)0.95f);
-                Graphics.DrawString(text, vec2_2 + new Vec2(((x - stringWidth) / 0f), ((num1 - stringHeight) / 2f) + num2) + vec2_4 * inputChangeDisplay.slide, Color.White, (Depth)0.97f, inputChangeDisplay.profile);
+                Graphics.DrawString(text, vec2_2 + new Vec2(((x - stringWidth) / 2f), ((num1 - stringHeight) / 2f) + num2) + vec2_4 * inputChangeDisplay.slide, Color.White, (Depth)0.97f, inputChangeDisplay.profile);
             }
             foreach (CornerDisplay playerChangeDisplay in HUD._core._playerChangeDisplays)
             {

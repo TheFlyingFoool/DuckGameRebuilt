@@ -1,15 +1,5 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Pistol
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
-    [EditorGroup("Guns|Pistols")]
-    [BaggedProperty("isInDemo", true)]
-    [BaggedProperty("previewPriority", true)]
     [ClientOnly]
     public class PistolTwo : Gun
     {
@@ -38,16 +28,12 @@ namespace DuckGame
             _holdOffset = new Vec2(0f, 0f);
             loseAccuracy = 0.1f;
             maxAccuracyLost = 0.6f;
-            _bio = "Old faithful, the 9MM pistol.";
-            _editorName = nameof(PistolTwo);
-            editorTooltip = "Your average everyday pistol. Just workin' to keep its kids fed, never bothered nobody.";
             physicsMaterial = PhysicsMaterial.Metal;
         }
 
         public override void Update()
         {
-            if (_sprite.currentAnimation == "fire" && _sprite.finished)
-                _sprite.SetAnimation("idle");
+            if (_sprite.currentAnimation == "fire" && _sprite.finished) _sprite.SetAnimation("idle");
             base.Update();
         }
 
@@ -63,8 +49,7 @@ namespace DuckGame
                     Level.Add(Spark.New(vec2.x, vec2.y, hitAngle, 0.1f));
                 }
             }
-            else
-                _sprite.SetAnimation("empty");
+            else _sprite.SetAnimation("empty");
             Fire();
         }
     }
