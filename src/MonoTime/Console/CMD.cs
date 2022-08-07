@@ -152,6 +152,7 @@ namespace DuckGame
                     ++index1;
                 }
             }
+            
             try
             {
                 if (action != null)
@@ -164,6 +165,7 @@ namespace DuckGame
                 FinishExecution();
                 return Error($"|DGRED|Error running command: {ex.Message}");
             }
+            
             FinishExecution();
             return true;
         }
