@@ -23,6 +23,8 @@ namespace DuckGame
 
         public float sfxVolume { get; set; }
 
+        public bool muteOnBackground { get; set; }
+
         public bool shennanigans { get; set; }
 
         public bool controllerRumble { get; set; }
@@ -200,6 +202,7 @@ namespace DuckGame
             _nodeName = "Options";
             sfxVolume = 0.8f;
             musicVolume = 0.7f;
+            muteOnBackground = false;
             shennanigans = true;
             controllerRumble = true;
             vsync = true;
