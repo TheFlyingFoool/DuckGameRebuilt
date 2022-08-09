@@ -375,7 +375,7 @@ namespace DuckGame
           Color c)
         {
             ++DuckGame.Graphics.currentDrawIndex;
-            MTSpriteBatchItem batchItem = _batcher.CreateBatchItem();
+            MTSpriteBatchItem batchItem = _batcher.CreateBatchItemDepth(depth);
             batchItem.Depth = depth;
             batchItem.Texture = tex.nativeObject as Texture2D;
             batchItem.Material = null;
@@ -395,7 +395,7 @@ namespace DuckGame
           Material fx)
         {
             ++DuckGame.Graphics.currentDrawIndex;
-            MTSpriteBatchItem batchItem = _batcher.CreateBatchItem();
+            MTSpriteBatchItem batchItem = _batcher.CreateBatchItemDepth(depth);
             batchItem.Depth = depth;
             batchItem.Texture = texture.nativeObject as Texture2D;
             batchItem.Material = fx;
@@ -457,7 +457,7 @@ namespace DuckGame
 
         public void DrawRecorderItem(ref RecorderFrameItem frame)
         {
-            MTSpriteBatchItem batchItem = _batcher.CreateBatchItem();
+            MTSpriteBatchItem batchItem = _batcher.CreateBatchItemDepth(frame.depth);
             batchItem.Depth = frame.depth;
             if (frame.texture == -1)
             {

@@ -165,6 +165,7 @@
   <ItemGroup>
     <Compile Include="DuckGame\AddedContent\Bubble.cs" />
     <Compile Include="DuckGame\AddedContent\ClientOnlyAttribute.cs" />
+    <Compile Include="DuckGame\AddedContent\Drake\PolygonBatcher.cs" />
     <Compile Include="DuckGame\AddedContent\Extensions.cs" />
     <Compile Include="DuckGame\AddedContent\NMDuckShatter.cs" />
     <Compile Include="DuckGame\AddedContent\NMPinkCollision.cs" />

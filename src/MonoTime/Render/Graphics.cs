@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using DuckGame.AddedContent.Drake;
 
 namespace DuckGame
 {
@@ -75,6 +76,8 @@ namespace DuckGame
         private static Viewport _lastViewport;
         private static bool _lastViewportSet = false;
         private static Stack<Rectangle> _scissorStack = new Stack<Rectangle>();
+        
+        public static PolygonBatcher polyBatcher;
 
         public static void GarbageDisposal(bool pLevelTransition)
         {
@@ -896,6 +899,8 @@ namespace DuckGame
             Graphics._projectionMatrix.M41 += -0.5f * Graphics._projectionMatrix.M11;
             Graphics._projectionMatrix.M42 += -0.5f * Graphics._projectionMatrix.M22;
             Graphics.tounge = new Sprite("tounge");
+
+            polyBatcher = new PolygonBatcher(device);
         }
 
         public static RenderTarget2D currentRenderTarget => Graphics._currentRenderTarget;
@@ -1055,6 +1060,7 @@ namespace DuckGame
                 value.Height = (int)bounds.height;
                 Internal_ViewportSet(value);
                 _lastViewport = value;
+                
             }
         }
 
