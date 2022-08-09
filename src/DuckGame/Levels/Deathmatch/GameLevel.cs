@@ -239,9 +239,9 @@ namespace DuckGame
             get
             {
                 string displayName = null;
-                if (data.workshopData != null && data.workshopData.name != null && data.workshopData.name != "")
+                if (data != null && data.workshopData != null && data.workshopData.name != null && data.workshopData.name != "")
                     displayName = data.workshopData.name;
-                else if (data.GetPath() != "" && data.GetPath() != null)
+                else if (data != null && data.GetPath() != "" && data.GetPath() != null)
                     displayName = Path.GetFileNameWithoutExtension(data.GetPath());
                 return displayName;
             }

@@ -146,6 +146,7 @@ namespace DuckGame
                     Level.current = !MonoMain.startInEditor ? (!(!Program.intro || MonoMain.noIntro) ? new BIOSScreen() : new TitleScreen()) : Main.editor;
             }
             _font = new BitmapFont("biosFont", 8);
+            DiscordRichPresence.Initialize();
             ModLoader.Start();
         }
 
