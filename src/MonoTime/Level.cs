@@ -890,134 +890,140 @@ namespace DuckGame
                 engineUpdatable.OnDrawLayer(layer);
             foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
                 toDifferentLayers.OnDrawLayer(layer);
-            if (layer == Layer.Console)
+            while (true)
             {
-                DevConsole.Draw();
-                if (!Network.isActive)
-                    return;
-                DuckNetwork.Draw();
-            }
-            else if (layer == Layer.Foreground)
-            {
-                if (layer.fade <= 0.0)
-                    return;
-                HUD.DrawForeground();
-            }
-            else if (layer == Layer.HUD)
-            {
-                if (layer.fade <= 0.0)
-                    return;
-                Vote.Draw();
-                HUD.Draw();
-                ConnectionStatusUI.Draw();
-            }
-            else
-            {
-                if (layer == Layer.Lighting)
-                    return;
-                if (layer == Layer.Glow && Options.Data.fireGlow)
+                if (layer == Layer.Console)
                 {
-                    foreach (MaterialThing materialThing in things[typeof(MaterialThing)])
-                    {
-                        switch (materialThing)
-                        {
-                            case Holdable _ when materialThing.heat > 0.3f &&
-                                                 materialThing.physicsMaterial == PhysicsMaterial.Metal:
-                                if (_burnGlow == null)
-                                {
-                                    _burnGlow = new Sprite("redHotGlow");
-                                    _burnGlow.CenterOrigin();
-                                }
-
-                                _burnGlow.alpha = (Math.Min(materialThing.heat, 1f) / 1f - 0.2f);
-                                _burnGlow.scale = new Vec2((materialThing.width + 22f) / _burnGlow.width,
-                                    (materialThing.height + 22f) / _burnGlow.height);
-                                Vec2 center = materialThing.rectangle.Center;
-                                DuckGame.Graphics.Draw(_burnGlow, center.x, center.y);
-                                DuckGame.Graphics.Draw(_burnGlow, center.x, center.y);
-                                break;
-                            case FluidPuddle _:
-                                FluidPuddle fluidPuddle = materialThing as FluidPuddle;
-                                if ((fluidPuddle.onFire || fluidPuddle.data.heat > 0.5f) && fluidPuddle.alpha > 0.5f)
-                                {
-                                    double num1 = fluidPuddle.right - fluidPuddle.left;
-                                    float num2 = 16f;
-                                    Math.Sin(fluidPuddle.fluidWave);
-                                    if (_burnGlowWide == null)
-                                    {
-                                        _burnGlowWide = new Sprite("redGlowWideSharp");
-                                        _burnGlowWide.CenterOrigin();
-                                        _burnGlowWide.alpha = 0.75f;
-                                        _burnGlowWideLeft = new Sprite("redGlowWideLeft");
-                                        _burnGlowWideLeft.center = new Vec2(_burnGlowWideLeft.width,
-                                            _burnGlowWideLeft.height / 2);
-                                        _burnGlowWideLeft.alpha = 0.75f;
-                                        _burnGlowWideRight = new Sprite("redGlowWideRight");
-                                        _burnGlowWideRight.center = new Vec2(0f, _burnGlowWideRight.height / 2);
-                                        _burnGlowWideRight.alpha = 0.75f;
-                                    }
-
-                                    double num3 = num2;
-                                    int num4 = (int) Math.Floor(num1 / num3);
-                                    if (fluidPuddle.collisionSize.y > 8f)
-                                    {
-                                        _burnGlowWide.xscale = 16f;
-                                        for (int index = 0; index < num4; ++index)
-                                        {
-                                            float x = (fluidPuddle.bottomLeft.x + index * num2 + 11f - 8f);
-                                            float y = fluidPuddle.top - 1f +
-                                                      (float) Math.Sin(fluidPuddle.fluidWave + index * 0.7f);
-                                            DuckGame.Graphics.Draw(_burnGlowWide, x, y);
-                                            if (index == 0)
-                                                DuckGame.Graphics.Draw(_burnGlowWideLeft, x, y);
-                                            else if (index == num4 - 1)
-                                                DuckGame.Graphics.Draw(_burnGlowWideRight, x + 16f, y);
-                                        }
-
-                                        break;
-                                    }
-
-                                    Graphics.doSnap = false;
-                                    _burnGlowWide.xscale = fluidPuddle.collisionSize.x;
-                                    Graphics.Draw(_burnGlowWide, fluidPuddle.left, fluidPuddle.bottom - 2f);
-                                    Graphics.Draw(_burnGlowWideLeft, fluidPuddle.left, fluidPuddle.bottom - 2f);
-                                    Graphics.Draw(_burnGlowWideRight, fluidPuddle.right, fluidPuddle.bottom - 2f);
-                                    Graphics.doSnap = true;
-                                    break;
-                                }
-
-                                break;
-                        }
-
-                        materialThing.DrawGlow();
-                    }
-
-                    foreach (SmallFire smallFire in things[typeof(SmallFire)])
-                    {
-                        if (_burnGlow == null)
-                        {
-                            _burnGlow = new Sprite("redGlow");
-                            _burnGlow.CenterOrigin();
-                        }
-
-                        _burnGlow.alpha = 0.65f * smallFire.alpha;
-                        DuckGame.Graphics.Draw(_burnGlow, smallFire.x, smallFire.y - 4f);
-                    }
+                    DevConsole.Draw();
+                    if (!Network.isActive)
+                        break;
+                    DuckNetwork.Draw();
                 }
-                else if (layer == Layer.Virtual)
+                else if (layer == Layer.Foreground)
                 {
-                    VirtualTransition.Draw();
+                    if (layer.fade <= 0.0)
+                        break;
+                    HUD.DrawForeground();
+                }
+                else if (layer == Layer.HUD)
+                {
+                    if (layer.fade <= 0.0)
+                        break;
+                    Vote.Draw();
+                    HUD.Draw();
+                    ConnectionStatusUI.Draw();
                 }
                 else
                 {
-                    if (layer != Layer.Game || !NetworkDebugger.enabled || VirtualTransition.active ||
-                        this is NetworkDebugger)
-                        return;
-                    NetworkDebugger.DrawInstanceGameDebug();
+                    if (layer == Layer.Lighting)
+                        break;
+                    if (layer == Layer.Glow && Options.Data.fireGlow)
+                    {
+                        foreach (MaterialThing materialThing in things[typeof(MaterialThing)])
+                        {
+                            switch (materialThing)
+                            {
+                                case Holdable _ when materialThing.heat > 0.3f &&
+                                                     materialThing.physicsMaterial == PhysicsMaterial.Metal:
+                                    if (_burnGlow == null)
+                                    {
+                                        _burnGlow = new Sprite("redHotGlow");
+                                        _burnGlow.CenterOrigin();
+                                    }
+
+                                    _burnGlow.alpha = (Math.Min(materialThing.heat, 1f) / 1f - 0.2f);
+                                    _burnGlow.scale = new Vec2((materialThing.width + 22f) / _burnGlow.width,
+                                        (materialThing.height + 22f) / _burnGlow.height);
+                                    Vec2 center = materialThing.rectangle.Center;
+                                    DuckGame.Graphics.Draw(_burnGlow, center.x, center.y);
+                                    DuckGame.Graphics.Draw(_burnGlow, center.x, center.y);
+                                    break;
+                                case FluidPuddle _:
+                                    FluidPuddle fluidPuddle = materialThing as FluidPuddle;
+                                    if ((fluidPuddle.onFire || fluidPuddle.data.heat > 0.5f) &&
+                                        fluidPuddle.alpha > 0.5f)
+                                    {
+                                        double num1 = fluidPuddle.right - fluidPuddle.left;
+                                        float num2 = 16f;
+                                        Math.Sin(fluidPuddle.fluidWave);
+                                        if (_burnGlowWide == null)
+                                        {
+                                            _burnGlowWide = new Sprite("redGlowWideSharp");
+                                            _burnGlowWide.CenterOrigin();
+                                            _burnGlowWide.alpha = 0.75f;
+                                            _burnGlowWideLeft = new Sprite("redGlowWideLeft");
+                                            _burnGlowWideLeft.center = new Vec2(_burnGlowWideLeft.width,
+                                                _burnGlowWideLeft.height / 2);
+                                            _burnGlowWideLeft.alpha = 0.75f;
+                                            _burnGlowWideRight = new Sprite("redGlowWideRight");
+                                            _burnGlowWideRight.center = new Vec2(0f, _burnGlowWideRight.height / 2);
+                                            _burnGlowWideRight.alpha = 0.75f;
+                                        }
+
+                                        double num3 = num2;
+                                        int num4 = (int) Math.Floor(num1 / num3);
+                                        if (fluidPuddle.collisionSize.y > 8f)
+                                        {
+                                            _burnGlowWide.xscale = 16f;
+                                            for (int index = 0; index < num4; ++index)
+                                            {
+                                                float x = (fluidPuddle.bottomLeft.x + index * num2 + 11f - 8f);
+                                                float y = fluidPuddle.top - 1f +
+                                                          (float) Math.Sin(fluidPuddle.fluidWave + index * 0.7f);
+                                                DuckGame.Graphics.Draw(_burnGlowWide, x, y);
+                                                if (index == 0)
+                                                    DuckGame.Graphics.Draw(_burnGlowWideLeft, x, y);
+                                                else if (index == num4 - 1)
+                                                    DuckGame.Graphics.Draw(_burnGlowWideRight, x + 16f, y);
+                                            }
+
+                                            break;
+                                        }
+
+                                        Graphics.doSnap = false;
+                                        _burnGlowWide.xscale = fluidPuddle.collisionSize.x;
+                                        Graphics.Draw(_burnGlowWide, fluidPuddle.left, fluidPuddle.bottom - 2f);
+                                        Graphics.Draw(_burnGlowWideLeft, fluidPuddle.left, fluidPuddle.bottom - 2f);
+                                        Graphics.Draw(_burnGlowWideRight, fluidPuddle.right, fluidPuddle.bottom - 2f);
+                                        Graphics.doSnap = true;
+                                        break;
+                                    }
+
+                                    break;
+                            }
+
+                            materialThing.DrawGlow();
+                        }
+
+                        foreach (SmallFire smallFire in things[typeof(SmallFire)])
+                        {
+                            if (_burnGlow == null)
+                            {
+                                _burnGlow = new Sprite("redGlow");
+                                _burnGlow.CenterOrigin();
+                            }
+
+                            _burnGlow.alpha = 0.65f * smallFire.alpha;
+                            DuckGame.Graphics.Draw(_burnGlow, smallFire.x, smallFire.y - 4f);
+                        }
+                    }
+                    else if (layer == Layer.Virtual)
+                    {
+                        VirtualTransition.Draw();
+                    }
+                    else
+                    {
+                        if (layer != Layer.Game || !NetworkDebugger.enabled || VirtualTransition.active ||
+                            this is NetworkDebugger)
+                            break;
+                        NetworkDebugger.DrawInstanceGameDebug();
+                    }
                 }
+
+                break;
             }
-            
-            // DrawingContextAttribute.ExecuteAll(DrawingContextAttribute.DrawingLayerFromLayer(layer));
+
+            DrawingContextAttribute.ExecuteAll(DrawingContextAttribute.DrawingLayerFromLayer(layer));
         }
 
         public static T Nearest<T>(float x, float y, Thing ignore, Layer layer) =>

@@ -153,18 +153,6 @@ public sealed class DrawingContextAttribute : Attribute
     }
 }
 
-public class DrawingContextHandler : IEngineUpdatable
-{
-    public void PreUpdate() { }
-    public void Update() { }
-    public void PostUpdate() { }
-
-    public void OnDrawLayer(Layer pLayer)
-    {
-        DrawingContextAttribute.ExecuteAll(DrawingContextAttribute.DrawingLayerFromLayer(pLayer));
-    }
-}
-
 [Flags]
 public enum DrawingLayer
 {

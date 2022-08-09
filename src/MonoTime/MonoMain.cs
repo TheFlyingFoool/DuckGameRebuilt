@@ -885,7 +885,6 @@ namespace DuckGame
 
         private void Start()
         {
-            RegisterEngineUpdatable(new DrawingContextHandler());
             ModLoader.PostLoadMods();
             OnStart();
             _started = true;
