@@ -167,9 +167,13 @@
     <Compile Include="DuckGame\AddedContent\ShatterDuck.cs" />
     <Compile Include="DuckGame\AddedContent\TheDishes.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Clear.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Debug.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\DoDraw.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Exit.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Test.cs" />
+    <Compile Include="src\MonoTime\Console\DrawingContextAttribute.cs" />
     <Compile Include="src\MonoTime\Console\DevConsoleCommandAttribute.cs" />
     <Compile Include="src\MonoTime\ExecuteOnAttribute.cs" />
     <Compile Include="src\MonoTime\Input\InputMan.cs" />
@@ -178,6 +182,7 @@
     <Compile Include="src\MonoTime\Input\KeyEventHandler.cs" />
     <Compile Include="src\MonoTime\Input\2InputMan.cs" />
     <Compile Include="src\Utilities\Helper.cs" />
+    <Compile Include="src\Utilities\MemberAttributePair.cs" />
     <Compile Include="src\WindowsPlatformStartup.cs" />
     <Compile Include="src\MonoTime\Console\ServiceContainer.cs" />
     <Compile Include="src\OnOutputDebugStringHandler.cs" />

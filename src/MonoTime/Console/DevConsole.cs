@@ -25,6 +25,7 @@ namespace DuckGame
         public static bool showFPS;
         public static List<string> startupCommands = new();
         public static bool fancyMode;
+        public static int ConsoleLineOffset;
         private static DevConsoleCore _core = new();
         private static bool _enableNetworkDebugging;
         private static bool _oldConsole;
@@ -246,6 +247,9 @@ namespace DuckGame
 
         public static void Draw()
         {
+            // Graphics.DrawString(ConsoleLineOffset.ToString(), new Vec2(16, 16), Color.White, 2f);
+            // Graphics.DrawString($"{core.lines.Count + ConsoleLineOffset}", new Vec2(16, 32), Color.White, 2f);
+            
             if (Layer.core._console != null)
             {
                 Layer.core._console.camera.width = Resolution.current.x / 2;
@@ -285,12 +289,13 @@ namespace DuckGame
                     new Rectangle(_tray.width - 114, _tray.height - 18, 114f, 18f));
                 for (int index = 0; index < num2; ++index)
                 {
+                    const float width = 16f;
                     Graphics.Draw(_tray, (float) (18.0 * _tray.scale.x + 16.0 * _tray.scale.x * index), 0.0f,
-                        new Rectangle(16f, 0.0f, 16f, 18f));
+                        new Rectangle(width, 0.0f, width, 18f));
                     if (index < num2 - 6)
                         Graphics.Draw(_tray, (float) (18.0 * _tray.scale.x + 16.0 * _tray.scale.x * index),
                             (float) (18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)),
-                            new Rectangle(16f, _tray.height - 18, 16f, 18f));
+                            new Rectangle(width, _tray.height - 18, width, 18f));
                 }
 
                 Graphics.Draw(_tray, (float) (18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x)), 0.0f,
@@ -348,27 +353,27 @@ namespace DuckGame
                     Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * _tray.scale.x), Color.White, 2f, 1f);
                 }
 
-                int index1 = _core.lines.Count - 1 - _core.viewOffset;
+                int index1 = _core.lines.Count - 1 - _core.viewOffset + ConsoleLineOffset;
                 float num5 = 0.0f;
                 _core.font.scale = new Vec2((float) Math.Max(Math.Round(_tray.scale.x / 4.0), 1.0));
                 float num6 = _core.font.scale.x / 2f;
                 float num7 = 18f * num6;
-                float num8 = (float) (20.0 * (_core.font.scale.x * 2.0));
+                float num8 = (float) (20.0 * (_core.font.scale.x * 2.0)) + core.font.GetWidth("HH:mm:ss ");
                 if (_raster != null)
                 {
                     num7 = (_raster.characterHeight - 2) * _raster.scale.y;
                     num5 = num7;
-                    num8 = _raster.GetWidth("0000  ");
+                    num8 = _raster.GetWidth("HH:mm:ss 0000  ");
                 }
 
-                for (int index2 = 0;
-                     index2 < (num3 - 2.0 * _tray.scale.y) / num7 - 1.0 && index1 >= 0;
-                     ++index2)
+                for (int index2 = ConsoleLineOffset; index2 < (num3 - 2.0 * _tray.scale.y) / num7 - 1.0 && index1 >= 0; ++index2)
                 {
-                    DCLine dcLine = _core.lines.ElementAt(index1);
-                    string text = index1.ToString();
-                    while (text.Length < 4)
-                        text = $"0{text}";
+                    if (_core.lines.ElementAtOrDefault(index1 + ConsoleLineOffset) is not { } dcLine)
+                        return;
+                    
+                    string text = index1.ToString().PadLeft(4, '0');
+                    string timeString = $"{dcLine.timestamp:HH:mm:ss} ";
+                    text = timeString + text;
                     if (_raster != null)
                     {
                         _raster.maxWidth = (int) (num4 - 35.0 * _tray.scale.x);
@@ -389,7 +394,7 @@ namespace DuckGame
                         _core.font.Draw(text, 4f * _tray.scale.x,
                             (float) (num3 - 18.0 * num6 - num5 + 2.0),
                             index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, 0.9f);
-                        _core.font.Draw(dcLine.SectionString() + dcLine.line,
+                        _core.font.Draw($"{dcLine.SectionString()}{dcLine.line}",
                             4f * _tray.scale.x + num8,
                             (float) (num3 - 18.0 * num6 - num5 + 2.0), dcLine.color * 0.8f,
                             0.9f);
@@ -2423,14 +2428,18 @@ namespace DuckGame
                 }
             }
 
+            if (Mouse.isScrolling)
+            {
+                ConsoleLineOffset = Maths.Clamp(ConsoleLineOffset + Mouse.discreteScroll, -core.lines.Count, 0);
+            }
+
             if (_core.open && NetworkDebugger.hoveringInstance)
             {
                 Input._imeAllowed = true;
                 if (_core.cursorPosition > _core.typing.Length)
                     _core.cursorPosition = _core.typing.Length;
                 _core.typing = _core.typing.Insert(_core.cursorPosition,
-                    Keyboard.keyString.Replace("`",
-                        "")); // added the Replace because the fix to the input makes it possible to do this if holding it down
+                    Keyboard.keyString.Replace("`", "")); // added the Replace because the fix to the input makes it possible to do this if holding it down
                 if (_core.typing != "" && _pendingCommandQueue.Count > 0)
                 {
                     _pendingCommandQueue.Clear();

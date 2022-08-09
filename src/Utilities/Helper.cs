@@ -8,7 +8,7 @@ namespace DuckGame;
 public static class Helper
 {
     public static IEnumerable<(TInfoType Member, IEnumerable<TAttribute> Attributes)>
-        GetAllMembersWithAttribute<TInfoType, TAttribute>() where TInfoType : MemberInfo 
+        GetAllMembersWithAttribute<TInfoType, TAttribute>(Type? inType = null) where TInfoType : MemberInfo 
         where TAttribute : Attribute
     {
         MemberTypes memberType = MemberTypes.All;
@@ -22,7 +22,7 @@ public static class Helper
         else if (typeof(TInfoType).IsAssignableFrom(typeof(ConstructorInfo)))
             memberType = MemberTypes.Constructor;
         
-        return GetAllMembersWithAttribute<TAttribute>(memberType)
+        return GetAllMembersWithAttribute<TAttribute>(memberType, inType)
             .Select<(MemberInfo Member, IEnumerable<TAttribute> Attributes), (TInfoType, IEnumerable<TAttribute>)>
                 (x => ((TInfoType) x.Member, x.Attributes));
     }
@@ -43,4 +43,15 @@ public static class Helper
                         && x.MemberType.HasFlag(filter))
             .Select(x => (x, x.GetCustomAttributes<TAttribute>(false)));
     }
+    
+    public static bool TryFirst<T>(this IEnumerable<T> collection, Func<T, bool> condition, out T? first)
+    {
+        first = default;
+        if (!collection.Any(condition)) return false;
+        first = collection.First(condition);
+        return true;
+    }
+
+    public static bool CaselessEquals(this string str, string str2) => 
+        string.Equals(str, str2, StringComparison.CurrentCultureIgnoreCase);
 }
