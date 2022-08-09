@@ -54,7 +54,7 @@ namespace DuckGame
 				Assets = new Assets()
 				{
 					LargeImageKey = "icon",
-					LargeImageText = "DuckGames",
+					LargeImageText = "Duck Game Rebuilt",
 				},
 				Timestamps = new Timestamps(whenGameStarted)
 			});
@@ -73,7 +73,7 @@ namespace DuckGame
 			{
 				LargeImageKey = "beam",
 				SmallImageKey = "icon",
-				SmallImageText = "DuckGames",
+				SmallImageText = "Duck Game Rebuilt",
 			};
 
 			switch (Level.current)
