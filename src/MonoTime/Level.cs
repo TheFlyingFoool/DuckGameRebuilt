@@ -1017,7 +1017,7 @@ namespace DuckGame
                 }
             }
             
-            DrawingContextAttribute.ExecuteAll(DrawingContextAttribute.DrawingLayerFromLayer(layer));
+            // DrawingContextAttribute.ExecuteAll(DrawingContextAttribute.DrawingLayerFromLayer(layer));
         }
 
         public static T Nearest<T>(float x, float y, Thing ignore, Layer layer) =>

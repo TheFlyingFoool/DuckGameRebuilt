@@ -134,29 +134,41 @@ public sealed class DrawingContextAttribute : Attribute
                      .OrderByDescending(x => x.Attribute.Priority)
                      .ToArray())
         {
-            if (pair.Attribute.Layer != layer)
-                continue;
-
             if (!pair.Attribute.DoDraw)
                 continue;
             
-            switch (pair.ActionOrMethodInfo)
+            if (pair.Attribute.Layer.HasFlag(layer))
             {
-                case MethodInfo mi:
-                    mi.Invoke(null, null);
-                    break;
-                case Action a:
-                    a.Invoke();
-                    break;
+                switch (pair.ActionOrMethodInfo)
+                {
+                    case MethodInfo mi:
+                        mi.Invoke(null, null);
+                        break;
+                    case Action a:
+                        a.Invoke();
+                        break;
+                }
             }
         }
+    }
+}
+
+public class DrawingContextHandler : IEngineUpdatable
+{
+    public void PreUpdate() { }
+    public void Update() { }
+    public void PostUpdate() { }
+
+    public void OnDrawLayer(Layer pLayer)
+    {
+        DrawingContextAttribute.ExecuteAll(DrawingContextAttribute.DrawingLayerFromLayer(pLayer));
     }
 }
 
 [Flags]
 public enum DrawingLayer
 {
-    PreDrawLayer,
+    [Obsolete] PreDrawLayer,
     Parallax,
     Virtual,
     Background,
