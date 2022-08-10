@@ -16,6 +16,7 @@ public static class AutoConfigHandler
     
     public static void Initialize()
     {
+        return;
         DevConsole.Log("|240,164,65|ACFG Attempting to load config field data...");
         
         if (!Directory.Exists(SaveDirPath))
