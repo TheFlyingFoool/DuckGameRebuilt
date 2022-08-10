@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 //Direct port from HiK0Client
 //Includes MathParser.cs
@@ -11,16 +13,17 @@ namespace DuckGame
 	{
 		public static float ToSingle(object value)
 		{
-			if (!(value is string)) return Convert.ToSingle(value, CultureInfo.InvariantCulture);
+			if (value is not string vol) 
+				return Convert.ToSingle(value, CultureInfo.InvariantCulture);
+			
 			try
 			{
-				string vol = (string)value;
 				MathParser stf = new MathParser();
 				return (float)stf.Parse(vol);
 			}
-			catch
+			catch (Exception e)
 			{
-				throw new Exception("Can't convert from " + (string)value + " to float!");
+				throw new Exception($"Can't convert from {vol} to float!", e);
 			}
 		}
 		public static Vec2 ToVec2(string value)
@@ -29,14 +32,14 @@ namespace DuckGame
 			{
 				if (value == "mouse") return Mouse.positionScreen;
 				Vec2 val = Vec2.Zero;
-				string[] p = value.Split(':');
+				string[] p = value.Split(new[] {':', ','}, StringSplitOptions.RemoveEmptyEntries);
 				val.x = ToSingle(p[0]);
 				val.y = ToSingle(p[1]);
 				return val;
 			}
-			catch
+			catch (Exception e)
 			{
-				throw new Exception("Can't convert from " + value + " to Vec2!");
+				throw new Exception($"Can't convert from {value} to Vec2!", e);
 			}
 		}
 		public static int ToInt32(string value)
@@ -46,9 +49,9 @@ namespace DuckGame
 				MathParser stf = new MathParser();
 				return (int)Math.Round(stf.Parse(value));
 			}
-			catch
+			catch (Exception e)
 			{
-				throw new Exception("Can't convert from " + value + " to int!");
+				throw new Exception($"Can't convert from {value} to int!", e);
 			}
 		}
 		public static Color ToColor(string value)
@@ -87,68 +90,70 @@ namespace DuckGame
 					case "purple":
 						return Color.Purple;
 					default:
-						if (value.Contains(":"))
-						{
-							string[] p = value.Split(':');
-							Color val = new Color(ToInt32(p[0]), ToInt32(p[1]), ToInt32(p[2]));
-							return val;
-						}
-						else
-						{
-							string[] p = value.Split(',');
-							Color val = new Color(ToInt32(p[0]), ToInt32(p[1]), ToInt32(p[2]));
-							return val;
-						}
+						string[] p = value.Split(new[] {':', ','}, StringSplitOptions.RemoveEmptyEntries);
+						Color val = new Color(ToInt32(p[0]), ToInt32(p[1]), ToInt32(p[2]));
+						return val;
 				}
 			}
-			catch
+			catch (Exception e)
 			{
-				throw new Exception("Can't convert from " + value + " to Color!");
+				throw new Exception($"Can't convert from {value} to Color!", e);
 			}
 		}
+		
+		/// <summary>Matches two sides (floats) between a comparison operator.</summary>
+		/// <example>
+		///	<![CDATA[4 > 4]]> <br />
+		/// <![CDATA[56 != 57]]> <br />
+		/// <![CDATA[8 <= 2]]>
+		/// </example>
+		/// <remarks>
+		/// An operator is valid with this RegEx if it uses one of these
+		/// 4 characters (<![CDATA[<, >, =, !]]>) in any combination with
+		/// a length of 1 or 2. 
+		/// </remarks>
+		private static readonly Regex _twoSideOperationRegex = new(@"([\d.]+?)\s*([<>=!]{1,2})\s*([\d.]+)", RegexOptions.Compiled);
+		
 		public static bool ToBoolean(string value)
 		{
 			try
 			{
-				if (value.Contains("%"))
+				if (value.Last() == '%')
 				{
-					float chance = ToSingle(value.Replace("%", string.Empty));
-					if (Rando.Float(100.00f) <= chance) return false;
+					float chance = ToSingle(value.Substring(0, value.Length - 1));
+					return chance > Rando.Float(100.00f);
 				}
-				if (value.Contains(">"))
+				else if (_twoSideOperationRegex.Match(value) 
+				         is var m && m.Success)
 				{
-					float comp1 = ToSingle(value.Split('>')[0]);
-					float comp2 = ToSingle(value.Split('>')[1]);
-					if (comp1 > comp2) return true;
-					else return false;
+					float comp1 = ToSingle(m.Groups[1].Value);
+					float comp2 = ToSingle(m.Groups[3].Value);
+					string operation = m.Groups[2].Value;
+					switch (operation)
+					{
+						case ">":
+							return comp1 > comp2;
+						case "<":
+							return comp1 < comp2;
+						case ">=":
+							return comp1 >= comp2;
+						case "<=":
+							return comp1 <= comp2;
+						case "=":
+						case "==":
+							return comp1 == comp2;
+						case "!=":
+							return comp1 != comp2;
+						default:
+							throw new Exception($"Invalid Operation: {operation}");
+					}
 				}
-				else if (value.Contains("<"))
-				{
-					float comp1 = ToSingle(value.Split('<')[0]);
-					float comp2 = ToSingle(value.Split('<')[1]);
-					if (comp1 < comp2) return true;
-					else return false;
-				}
-				else if (value.Contains("=") && !value.Contains("!"))
-				{
-					float comp1 = ToSingle(value.Split('=')[0]);
-					float comp2 = ToSingle(value.Split('=')[1]);
-					if (comp1 == comp2) return true;
-					else return false;
-				}
-				else if (value.Contains("!="))
-				{
-					value = value.Replace("!", string.Empty);
-					float comp1 = ToSingle(value.Split('=')[0]);
-					float comp2 = ToSingle(value.Split('=')[1]);
-					if (comp1 != comp2) return true;
-					else return false;
-				}
+				
 				return Convert.ToBoolean(value);
 			}
-			catch
+			catch (Exception e)
 			{
-				throw new Exception("Can't convert from " + value + " to boolean!");
+				throw new Exception($"Can't convert from {value} to boolean!", e);
 			}
 		}
 	}

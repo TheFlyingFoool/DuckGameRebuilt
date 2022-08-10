@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace DuckGame;
 
@@ -52,6 +53,70 @@ public static class Helper
         return true;
     }
 
+    public static string GetFullName(this MemberInfo mi) => $"{mi.DeclaringType}:{mi.Name}";
+    
+    public static bool InheritsFrom(this Type t1, Type t2) => t2.IsAssignableFrom(t1);
+
     public static bool CaselessEquals(this string str, string str2) => 
         string.Equals(str, str2, StringComparison.CurrentCultureIgnoreCase);
+
+    public static string ToReadableString(this IEnumerable<object> collection, int indentationLevel = 0, bool doIndent = true)
+    {
+        object[] arr = collection.ToArray();
+        StringBuilder stringBuilder = new();
+        
+        stringBuilder.Append("[\n");
+        indentationLevel++;
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            object o = arr[i];
+            if (o is IEnumerable<object> subCollection)
+            {
+                indentedAppend(subCollection.ToReadableString(indentationLevel));
+            }
+            else indentedAppend(o.ToString());
+
+            if (i != arr.Length)
+                stringBuilder.Append(",\n");
+        }
+
+        indentationLevel--;
+        indentedAppend("]");
+
+        return stringBuilder.ToString();
+        
+        void indentedAppend(string s) => 
+            stringBuilder.Append($"{(doIndent ? new string(' ', indentationLevel * 2) : "")}{s}");
+    }
+
+    public static bool Try(Action action)
+    {
+        try
+        {
+            action();
+        }
+        catch
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static bool Try<T>(Func<T> action, out T result)
+    {
+        result = default;
+        
+        try
+        {
+            result = action();
+        }
+        catch
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

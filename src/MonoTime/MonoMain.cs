@@ -723,8 +723,13 @@ namespace DuckGame
             _infiniteLoopDetector = null;
         }
 
+        public static event Action<bool> OnGameExit;
+
+        public static void InvokeOnGameExitEvent(bool isDangerous) => OnGameExit?.Invoke(isDangerous);
+        
         protected override void OnExiting(object sender, EventArgs args)
         {
+            InvokeOnGameExitEvent(false);
             KillEverything();
             Process.GetCurrentProcess().Kill();
         }
@@ -885,6 +890,7 @@ namespace DuckGame
 
         private void Start()
         {
+            AutoConfigHandler.Initialize();
             ModLoader.PostLoadMods();
             OnStart();
             _started = true;

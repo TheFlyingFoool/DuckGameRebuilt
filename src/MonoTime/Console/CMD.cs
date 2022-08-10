@@ -163,7 +163,7 @@ namespace DuckGame
             catch (Exception ex)
             {
                 FinishExecution();
-                return Error($"|DGRED|Error running command: {ex.Message}");
+                return Error($"|DGRED|Error: {ex.Message}");
             }
             
             FinishExecution();
@@ -288,6 +288,19 @@ namespace DuckGame
             {
                 return ChangePlus.ToSingle(pValue);
             }
+        }
+
+        public class Enum : Argument
+        {
+            public Enum(string pName, Type pEnumType, bool pOptional = false)
+              : base(pName, pOptional)
+            {
+                type = pEnumType;
+            }
+
+            public override object Parse(string pValue) =>
+                System.Enum.Parse(type, pValue, true) 
+                ?? Error("Argument value must be an floating point number.");
         }
 
         public class Font : Argument
