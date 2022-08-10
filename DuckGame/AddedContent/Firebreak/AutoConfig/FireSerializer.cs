@@ -21,7 +21,10 @@ public static class FireSerializer
 
         if (obj is null)
             return "null";
-        
+
+        if (obj is BitBuffer buffer)
+            return BitConverter.ToString(buffer.buffer);
+
         if (type.IsPrimitive)
             return obj.ToString();
         
@@ -56,7 +59,10 @@ public static class FireSerializer
     {
         if (str == "null")
             return null;
-        
+
+        if (type == typeof(BitBuffer))
+            return new BitBuffer(str.Select(b => Convert.ToByte(b)).ToArray());
+
         if (type.IsPrimitive)
             return Convert.ChangeType(str, type);
 

@@ -11,8 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using DuckGame.AddedContent.Drake;
-using DuckGame.AddedContent.Drake.PolyRender;
 
 namespace DuckGame
 {
@@ -900,7 +898,8 @@ namespace DuckGame
             Graphics._projectionMatrix.M41 += -0.5f * Graphics._projectionMatrix.M11;
             Graphics._projectionMatrix.M42 += -0.5f * Graphics._projectionMatrix.M22;
             Graphics.tounge = new Sprite("tounge");
-            polyBatcher = new PolygonBatcher(_manager);
+
+            polyBatcher = new PolygonBatcher(device);
         }
 
         public static RenderTarget2D currentRenderTarget => Graphics._currentRenderTarget;

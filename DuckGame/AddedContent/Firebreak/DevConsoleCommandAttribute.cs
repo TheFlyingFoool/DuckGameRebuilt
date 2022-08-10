@@ -133,7 +133,7 @@ public class DevConsoleCommandAttribute : Attribute
 
     private static List<(MethodInfo Method, DevConsoleCommandAttribute Attribute)> CollectAllMethodsUsingThisAttribute()
     {
-        return Helper.GetAllMembersWithAttribute<MethodInfo, DevConsoleCommandAttribute>()
+        return Extensions.GetAllMembersWithAttribute<MethodInfo, DevConsoleCommandAttribute>()
             .Select(x => (x.Member, x.Attributes.First()))
             .ToList();
     }
