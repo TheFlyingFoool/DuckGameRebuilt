@@ -617,8 +617,7 @@ namespace DuckGame
                 for (int index = 0; index < num; ++index)
                 {
                     Vec2 pointOnArc = GetPointOnArc(index * 8);
-
-                    Graphics.DrawLine(pointOnArc, p2, color * (1f - (float)index / num) * alpha, ammo.bulletThickness, (Depth)0.9f);
+                    Graphics.DrawLine(pointOnArc, p2, color * (float)(1f - index / num) * alpha, ammo.bulletThickness, (Depth)0.9f);
                     if (pointOnArc == prev.First<Vec2>())
                         break;
                     p2 = pointOnArc;

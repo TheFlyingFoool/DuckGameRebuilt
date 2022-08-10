@@ -30,7 +30,7 @@ namespace DuckGame
 			client.OnReady += (sender, e) =>
 			{
 				tryReconnect.Enabled = false;
-				DevConsole.Log("|DGRED|DGREBUILT |PREV|Connected to discord", Color.LightGreen);
+				DevConsole.Log("Connected to discord", Color.LightGreen);
 				connected = true;
 			};
 			

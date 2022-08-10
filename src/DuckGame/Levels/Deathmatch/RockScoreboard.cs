@@ -1070,96 +1070,92 @@ namespace DuckGame
                 if (!_shiftCamera)
                     _controlSlide = Lerp.FloatSmooth(_controlSlide, 1f, 0.1f, 1.05f);
                 bool flag2 = true;
-                foreach (Slot3D slot3D in _slots)
+                foreach (Slot3D slot in _slots)
                 {
-                    slot3D.follow = false;
+                    slot.follow = false;
                     if (flag2)
                     {
-                        if (slot3D.state != RockThrow.Finished)
+                        if (slot.state != RockThrow.Finished)
                         {
                             flag2 = false;
-                            slot3D.follow = true;
+                            slot.follow = true;
                         }
-                        else if (slot3D == _slots[_slots.Count - 1])
+                        else if (slot == _slots[_slots.Count - 1])
                         {
                             if (_matchOver)
                                 _skipFade = true;
                             else
                                 _state = ScoreBoardState.ShowBoard;
                         }
-                        if (slot3D.state == RockThrow.Idle)
-                            slot3D.state = RockThrow.PickUpRock;
-                        if (slot3D.state == RockThrow.PickUpRock)
+                        if (slot.state == RockThrow.Idle)
+                            slot.state = RockThrow.PickUpRock;
+                        if (slot.state == RockThrow.PickUpRock)
                         {
-                            if (slot3D.duck.position.x < slot3D.rock.position.x)
+                            if (slot.duck.position.x < slot.rock.position.x)
                             {
-                                slot3D.ai.Press("RIGHT");
+                                slot.ai.Press("RIGHT");
                             }
                             else
                             {
-                                slot3D.state = RockThrow.ThrowRock;
-                                slot3D.duck.position.x = slot3D.rock.position.x;
-                                slot3D.duck.hSpeed = 0f;
+                                slot.state = RockThrow.ThrowRock;
+                                slot.duck.position.x = slot.rock.position.x;
+                                slot.duck.hSpeed = 0f;
                                 _throwWait = !TeamSelect2.eightPlayersActive ? 0.9f : 0.5f;
                             }
                         }
-                        if (slot3D.state == RockThrow.ThrowRock)
+                        if (slot.state == RockThrow.ThrowRock)
                         {
                             if (_throwWait > 0.0)
                             {
                                 _throwWait -= 0.08f;
-                                slot3D.ai.Release("RIGHT");
-                                slot3D.duck.GiveHoldable(slot3D.rock);
+                                slot.ai.Release("RIGHT");
+                                slot.duck.GiveHoldable(slot.rock);
                                 _afterThrowWait = !TeamSelect2.eightPlayersActive ? 0.7f : 0.5f;
                             }
                             else
                             {
-                                if (slot3D.duck.holdObject != null)
+                                if (slot.duck.holdObject != null)
                                 {
-                                    if (slot3D.duck.profile.team == null)
+                                    if (slot.duck.profile.team == null)
                                     {
-                                        slot3D.duck.Kill(new DTDisconnect(slot3D.duck));
+                                        slot.duck.Kill(new DTDisconnect(slot.duck));
                                     }
                                     else
                                     {
-                                        this._misfire = false;
-                                        slot3D.duck.ThrowItem(true);
-                                        float num = slot3D.duck.profile.team.rockScore;
+                                        _misfire = false;
+                                        slot.duck.ThrowItem();
+                                        float num1 = slot.duck.profile.team.rockScore;
                                         int num2 = GameMode.winsPerSet * 2;
-                                        if (num > (num2 - 2))
-                                        {
-                                            num = (num2 - 2) + Math.Min((float)(slot3D.duck.profile.team.rockScore - GameMode.winsPerSet * 2) / 16f, 1f);
-                                        }
-                                        float num3 = slot3D.startX + 30f + num / (float)num2 * this._fieldWidth - slot3D.rock.x;
-                                        slot3D.rock.vSpeed = -2f - Maths.Clamp(num3 / 300f, 0f, 1f) * 4f;
-                                        float num4 = Math.Abs(2f * slot3D.rock.vSpeed) / slot3D.rock.currentGravity;
-                                        float currentFriction = slot3D.rock.currentFriction;
+                                        if (num1 > num2 - 2)
+                                            num1 = num2 - 2 + Math.Min((slot.duck.profile.team.rockScore - GameMode.winsPerSet * 2) / 16f, 1f);
+                                        float num3 = (float)(slot.startX + 30.0 + num1 / num2 * _fieldWidth) - slot.rock.x;
+                                        slot.rock.vSpeed = (float)(-2.0 - Maths.Clamp(num3 / 300f, 0f, 1f) * 4.0);
+                                        float num4 = Math.Abs(2f * slot.rock.vSpeed) / slot.rock.currentGravity;
+                                        double currentFriction = slot.rock.currentFriction;
                                         float num5 = num3 / num4;
-                                        slot3D.rock.frictionMult = 0f;
-                                        slot3D.rock.grounded = false;
-                                        slot3D.rock.hMax = 100f;
-                                        slot3D.rock.vMax = 100f;
-                                        if (slot3D.duck.profile.team.rockScore == slot3D.duck.profile.team.prevScoreboardScore)
+                                        slot.rock.frictionMult = 0f;
+                                        slot.rock.grounded = false;
+                                        slot.rock.hMax = 100f;
+                                        slot.rock.vMax = 100f;
+                                        if (slot.duck.profile.team.rockScore == slot.duck.profile.team.prevScoreboardScore)
                                         {
                                             num5 = 0.3f;
-                                            slot3D.rock.vSpeed = -0.6f;
-                                            this._misfire = true;
+                                            slot.rock.vSpeed = -0.6f;
+                                            _misfire = true;
                                         }
-                                        slot3D.rock.hSpeed = num5 * 0.88f;
-                                        if (RockScoreboard.wallMode && slot3D.duck.profile.team.rockScore > GameMode.winsPerSet)
-                                        {
-                                            slot3D.rock.hSpeed += 1f;
-                                        }
+                                        slot.rock.hSpeed = num5 * 0.88f;
+                                        if (RockScoreboard.wallMode && slot.duck.profile.team.rockScore > GameMode.winsPerSet)
+                                            ++slot.rock.hSpeed;
                                     }
                                 }
-                                if (slot3D.rock.grounded)
+                                if (slot.rock.grounded)
                                 {
-                                    if (slot3D.duck.profile.team == null)
-                                        slot3D.duck.Kill(new DTDisconnect(slot3D.duck));
+                                    if (slot.duck.profile.team == null)
+                                        slot.duck.Kill(new DTDisconnect(slot.duck));
                                     float num6 = 0.015f;
-                                    if (slot3D.duck.profile.team != null)
+                                    if (slot.duck.profile.team != null)
                                     {
-                                        int num7 = slot3D.duck.profile.team.rockScore - slot3D.duck.profile.team.prevScoreboardScore;
+                                        int num7 = slot.duck.profile.team.rockScore - slot.duck.profile.team.prevScoreboardScore;
                                         if (num7 == 0)
                                             Crowd.mood = Mood.Dead;
                                         else if (num7 < 2)
@@ -1176,7 +1172,7 @@ namespace DuckGame
                                         }
                                     }
                                     int winsPerSet = GameMode.winsPerSet;
-                                    if (slot3D.rock.frictionMult == 0.0)
+                                    if (slot.rock.frictionMult == 0.0)
                                     {
                                         Sprite s;
                                         switch (RockWeather.weather)
@@ -1191,15 +1187,15 @@ namespace DuckGame
                                                 s = new Sprite("rockThrow/rockSmudge");
                                                 break;
                                         }
-                                        s.position = new Vec2(slot3D.rock.x - 12f, slot3D.rock.z - 10f);
+                                        s.position = new Vec2(slot.rock.x - 12f, slot.rock.z - 10f);
                                         s.depth = (Depth)0.9f;
                                         s.xscale = 0.8f;
                                         s.yscale = 1.4f;
                                         s.alpha = 0.9f;
                                         _field.AddSprite(s);
                                     }
-                                    ++slot3D.slideWait;
-                                    if (slot3D.slideWait > 3 && slot3D.rock.hSpeed > 0.0)
+                                    ++slot.slideWait;
+                                    if (slot.slideWait > 3 && slot.rock.hSpeed > 0.0)
                                     {
                                         Sprite s;
                                         switch (RockWeather.weather)
@@ -1214,89 +1210,89 @@ namespace DuckGame
                                                 s = new Sprite("rockThrow/rockSmear");
                                                 break;
                                         }
-                                        s.position = new Vec2(slot3D.rock.x - 5f, slot3D.rock.z - 10f);
+                                        s.position = new Vec2(slot.rock.x - 5f, slot.rock.z - 10f);
                                         s.depth = (Depth)0.9f;
                                         s.xscale = 0.6f;
                                         s.yscale = 1.4f;
                                         s.alpha = 0.9f;
-                                        slot3D.slideWait = 0;
+                                        slot.slideWait = 0;
                                         _field.AddSprite(s);
                                     }
-                                    slot3D.rock.frictionMult = 4f;
+                                    slot.rock.frictionMult = 4f;
                                     _afterThrowWait -= num6;
                                     if (_afterThrowWait < 0.400000005960464)
                                     {
-                                        slot3D.state = RockThrow.ShowScore;
+                                        slot.state = RockThrow.ShowScore;
                                         SFX.Play("scoreDing");
-                                        if (slot3D.duck.profile.team != null && RockScoreboard.wallMode && slot3D.duck.profile.team.rockScore > GameMode.winsPerSet)
-                                            slot3D.duck.profile.team.rockScore = GameMode.winsPerSet;
+                                        if (slot.duck.profile.team != null && RockScoreboard.wallMode && slot.duck.profile.team.rockScore > GameMode.winsPerSet)
+                                            slot.duck.profile.team.rockScore = GameMode.winsPerSet;
                                         _showScoreWait = !TeamSelect2.eightPlayersActive ? 0.6f : 0.5f;
-                                        Crowd.ThrowHats(slot3D.duck.profile);
-                                        if (!slot3D.showScore)
+                                        Crowd.ThrowHats(slot.duck.profile);
+                                        if (!slot.showScore)
                                         {
-                                            slot3D.showScore = true;
-                                            PointBoard pointBoard = new PointBoard(slot3D.rock, slot3D.duck.profile.team)
+                                            slot.showScore = true;
+                                            PointBoard pointBoard = new PointBoard(slot.rock, slot.duck.profile.team)
                                             {
-                                                depth = slot3D.rock.depth + 1,
-                                                z = slot3D.rock.z
+                                                depth = slot.rock.depth + 1,
+                                                z = slot.rock.z
                                             };
                                             Level.Add(pointBoard);
                                         }
                                     }
                                 }
-                                else if (slot3D.duck.profile.team == null)
+                                else if (slot.duck.profile.team == null)
                                 {
-                                    slot3D.duck.Kill(new DTDisconnect(slot3D.duck));
+                                    slot.duck.Kill(new DTDisconnect(slot.duck));
                                 }
                                 else
                                 {
-                                    int rockScore = slot3D.duck.profile.team.rockScore;
+                                    int rockScore = slot.duck.profile.team.rockScore;
                                     int num = GameMode.winsPerSet * 2;
-                                    if (!_misfire && slot3D.rock.x > slot3D.startX + 30.0 + rockScore / num * _fieldWidth)
-                                        slot3D.rock.x = (float)(slot3D.startX + 30.0 + rockScore / num * _fieldWidth);
+                                    if (!_misfire && slot.rock.x > slot.startX + 30.0 + rockScore / num * _fieldWidth)
+                                        slot.rock.x = (float)(slot.startX + 30.0 + rockScore / num * _fieldWidth);
                                 }
                             }
                         }
-                        if (slot3D.state == RockThrow.ShowScore)
+                        if (slot.state == RockThrow.ShowScore)
                         {
                             _showScoreWait -= 0.016f;
                             if (_showScoreWait < 0.0)
                             {
-                                if (slot3D.duck.profile.team == null)
+                                if (slot.duck.profile.team == null)
                                 {
-                                    slot3D.state = RockThrow.Finished;
+                                    slot.state = RockThrow.Finished;
                                     _backWait = !TeamSelect2.eightPlayersActive ? 0.9f : 0.5f;
                                 }
                                 else
-                                    slot3D.state = RockThrow.RunBack;
+                                    slot.state = RockThrow.RunBack;
                             }
                         }
-                        if (slot3D.state == RockThrow.RunBack)
+                        if (slot.state == RockThrow.RunBack)
                         {
-                            if (slot3D == _slots[_slots.Count - 1])
-                                slot3D.follow = false;
-                            if (slot3D.duck.position.x > slot3D.startX)
+                            if (slot == _slots[_slots.Count - 1])
+                                slot.follow = false;
+                            if (slot.duck.position.x > slot.startX)
                             {
-                                slot3D.ai.Press("LEFT");
+                                slot.ai.Press("LEFT");
                             }
                             else
                             {
-                                slot3D.duck.position.x = slot3D.startX;
-                                slot3D.duck.hSpeed = 0f;
-                                slot3D.duck.offDir = 1;
-                                slot3D.ai.Release("LEFT");
+                                slot.duck.position.x = slot.startX;
+                                slot.duck.hSpeed = 0f;
+                                slot.duck.offDir = 1;
+                                slot.ai.Release("LEFT");
                                 _backWait -= 0.05f;
                                 Crowd.mood = Mood.Silent;
-                                if (_backWait < 0.0 && (flag1 || slot3D == _slots[_slots.Count - 1]))
+                                if (_backWait < 0.0 && (flag1 || slot == _slots[_slots.Count - 1]))
                                 {
-                                    slot3D.state = RockThrow.Finished;
+                                    slot.state = RockThrow.Finished;
                                     _backWait = !TeamSelect2.eightPlayersActive ? 0.9f : 0.5f;
                                 }
                             }
                         }
                     }
-                    if (slot3D.follow)
-                        _desiredScroll = slot3D.state == RockThrow.ThrowRock || slot3D.state == RockThrow.ShowScore ? slot3D.rock.position.x : slot3D.duck.position.x;
+                    if (slot.follow)
+                        _desiredScroll = slot.state == RockThrow.ThrowRock || slot.state == RockThrow.ShowScore ? slot.rock.position.x : slot.duck.position.x;
                     if (Input.Pressed("START"))
                     {
                         foreach (Profile profile in Profiles.active)

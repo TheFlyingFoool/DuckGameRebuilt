@@ -14,13 +14,13 @@ namespace DuckGame
 {
     public abstract class PhysicsObject : MaterialThing, ITeleport
     {
-        public StateBinding _positionBinding = new InterpolatedVec2Binding("netPosition", 10000, true);
-        public StateBinding _velocityBinding = new CompressedVec2Binding(GhostPriority.High, "netVelocity", 20, true, false);
-        public StateBinding _angleBinding = new CompressedFloatBinding(GhostPriority.High, "_angle", 0f, 16, true, true);
-        public StateBinding _offDirBinding = new StateBinding(GhostPriority.High, "_offDir", -1, false, false, false);
-        public StateBinding _ownerBinding = new StateBinding(GhostPriority.High, "netOwner", -1, false, false, false);
+        public StateBinding _positionBinding = new InterpolatedVec2Binding(nameof(netPosition), 10000);
+        public StateBinding _velocityBinding = new CompressedVec2Binding(GhostPriority.High, nameof(netVelocity), 20, true);
+        public StateBinding _angleBinding = new CompressedFloatBinding(GhostPriority.High, "_angle", 0f, isRot: true, doLerp: true);
+        public StateBinding _offDirBinding = new StateBinding(GhostPriority.High, "_offDir");
+        public StateBinding _ownerBinding = new StateBinding(GhostPriority.High, nameof(netOwner));
         public StateBinding _physicsStateBinding = new PhysicsFlagBinding(GhostPriority.High);
-        public StateBinding _burntBinding = new CompressedFloatBinding("burnt", 1f, 8, false, false);
+        public StateBinding _burntBinding = new CompressedFloatBinding("burnt", bits: 8);
         public StateBinding _collideSoundBinding = new NetSoundBinding("_netCollideSound");
         public bool isSpawned;
         //private const short positionMax = 8191;

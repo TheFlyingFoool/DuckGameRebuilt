@@ -23,4 +23,10 @@ public record MemberAttributePair<TMemberInfo, TAttribute>(TMemberInfo MemberInf
             .Select(x => new MemberAttributePair<TMemberInfo, TAttribute>(x.Member, x.Attributes.First()))
             .ToArray();
     }
+
+    public void Deconstruct(out TMemberInfo memberInfo, out TAttribute attribute)
+    {
+        memberInfo = MemberInfo;
+        attribute = Attribute;
+    }
 }
