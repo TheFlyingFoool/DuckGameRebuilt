@@ -283,6 +283,9 @@ namespace DuckGame
                         if (index < args.Count<string>())
                             DevConsole.startupCommands.Add(args[index]);
                         break;
+                    case "-useRPC":
+                        MonoMain.useRPC = true;
+                        break;
                     default:
                         if (args[index] == "-nolaunch")
                         {
