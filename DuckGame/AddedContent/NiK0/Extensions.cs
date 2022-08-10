@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public static T GetPrivateFieldValue<T>(this object obj, string propName)
         {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            if (obj == null) throw new ArgumentNullException("obj");
             Type t = obj.GetType();
             FieldInfo fi = null;
             while (fi == null && t != null)
@@ -19,13 +19,12 @@ namespace DuckGame
                 fi = t.GetField(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 t = t.BaseType;
             }
-            if (fi == null) 
-                throw new ArgumentOutOfRangeException(nameof(propName), $"Field {propName} was not found in Type {obj.GetType().FullName}");
+            if (fi == null) throw new ArgumentOutOfRangeException("propName", string.Format("Field {0} was not found in Type {1}", propName, obj.GetType().FullName));
             return (T)fi.GetValue(obj);
         }
-        public static float Distance(this Vec2 pos1, Vec2 pos2)
+        public static float Distance(Vec2 pos1, Vec2 pos2)
         {
-            return Math.Abs(pos1.x - pos2.x) + Math.Abs(pos1.y - pos2.y);
+            return (float)(Math.Abs(pos1.x - pos2.x) + Math.Abs(pos1.y - pos2.y));
         }
     }
 }

@@ -163,17 +163,10 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\FireSerializer.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DevConsoleCommandAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DrawingContextAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\CustomKeyBinds.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\Helper.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\MemberAttributePair.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\Bubble.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ChangePlus.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\MathParser.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\PizzaLauncher.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Drake\PolygonBatcher.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\Extensions.cs" />
@@ -193,13 +186,17 @@
     <Compile Include="src\MonoTime\Console\Commands\DoDraw.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Exit.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
-    <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Test.cs" />
+    <Compile Include="src\MonoTime\Console\DrawingContextAttribute.cs" />
+    <Compile Include="DuckGame\AddedContent\DevConsoleCommandAttribute.cs" />
     <Compile Include="src\MonoTime\ExecuteOnAttribute.cs" />
     <Compile Include="src\MonoTime\Input\InputMan.cs" />
     <Compile Include="src\MonoTime\Input\1InputMan.cs" />
     <Compile Include="src\MonoTime\Input\CharEnteredHandler.cs" />
     <Compile Include="src\MonoTime\Input\KeyEventHandler.cs" />
     <Compile Include="src\MonoTime\Input\2InputMan.cs" />
+    <Compile Include="src\Utilities\Helper.cs" />
+    <Compile Include="src\Utilities\MemberAttributePair.cs" />
     <Compile Include="src\WindowsPlatformStartup.cs" />
     <Compile Include="src\MonoTime\Console\ServiceContainer.cs" />
     <Compile Include="src\OnOutputDebugStringHandler.cs" />
@@ -1880,5 +1877,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

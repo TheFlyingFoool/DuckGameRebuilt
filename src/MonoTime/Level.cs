@@ -923,9 +923,8 @@ namespace DuckGame
                         {
                             switch (materialThing)
                             {
-                                case Holdable when materialThing.heat > 0.3f &&
+                                case Holdable _ when materialThing.heat > 0.3f &&
                                                      materialThing.physicsMaterial == PhysicsMaterial.Metal:
-                                {
                                     if (_burnGlow == null)
                                     {
                                         _burnGlow = new Sprite("redHotGlow");
@@ -939,8 +938,8 @@ namespace DuckGame
                                     DuckGame.Graphics.Draw(_burnGlow, center.x, center.y);
                                     DuckGame.Graphics.Draw(_burnGlow, center.x, center.y);
                                     break;
-                                }
-                                case FluidPuddle fluidPuddle:
+                                case FluidPuddle _:
+                                    FluidPuddle fluidPuddle = materialThing as FluidPuddle;
                                     if ((fluidPuddle.onFire || fluidPuddle.data.heat > 0.5f) &&
                                         fluidPuddle.alpha > 0.5f)
                                     {

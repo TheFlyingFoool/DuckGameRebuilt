@@ -155,7 +155,6 @@ public sealed class DrawingContextAttribute : Attribute
 
 
 //FIIIIRREBREAAAAK learn how flags work pls thanks :(
-// SORRY
 [Flags]
 public enum DrawingLayer
 {

@@ -435,8 +435,6 @@ namespace DuckGame
 
         public static void HandleGameCrash(Exception pException)
         {
-            MonoMain.InvokeOnGameExitEvent(true);
-            
             if (!System.IO.File.Exists("CrashWindow.exe"))
                 return;
             if (pException is ThreadAbortException)

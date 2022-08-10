@@ -1,6 +1,5 @@
 ﻿#nullable enable
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -64,29 +63,14 @@ public class DevConsoleCommandAttribute : Attribute
                 {
                     objectParameters[i] = cmd.Arg<object>(parameters[i].Name);
                 }
-
-                try
-                {
-                    // invokes the method. if it returns a value, logs it
-                    if (method.Invoke(null, objectParameters) is { } result)
-                        DevConsole.LogComplexMessage(result switch
-                        {
-                            IEnumerable<object> ie => ie.ToReadableString(),
-                            _ => result.ToString()
-                        }, Color.White);
-                }
-                catch (Exception e)
-                {
-                    // using this try catch i can get the inner exception
-                    // and log that instead of logging an ambigious message
-                    // telling me that the target of invocation threw an error
-                    throw e.InnerException ?? e;
-                }
+                
+                // invokes the method. if it returns a value, logs it
+                if (method.Invoke(null, objectParameters) is { } result)
+                    DevConsole.Log(result);
             })
             {
                 description = attribute.Description ?? "",
-                cheat = attribute.IsCheat,
-                aliases = attribute.Aliases.ToList()
+                cheat = attribute.IsCheat
             });
         }
 
@@ -103,26 +87,22 @@ public class DevConsoleCommandAttribute : Attribute
         string name = parameter.Name;
         bool optional = parameter.IsOptional;
         object? defaultValue = parameter.DefaultValue;
-
+                
         if (type == typeof(int))
             arg = new CMD.Integer(name, optional);
         else if (type == typeof(float))
             arg = new CMD.Float(name, optional);
         else if (type == typeof(bool))
             arg = new CMD.Boolean(name, optional);
-        else if (type == typeof(Vec2))
-            arg = new CMD.Vec2(name, optional);
         else if (type == typeof(string))
-            arg = new CMD.String(name, optional) {takesMultispaceString = isLast};
+            arg = new CMD.String(name, optional) { takesMultispaceString = isLast };
         else if (typeof(Thing).IsAssignableFrom(type))
             arg = new CMD.Thing<Thing>(name, optional);
         else if (typeof(Level).IsAssignableFrom(type))
             arg = new CMD.Level(name, optional);
         else if (typeof(Layer).IsAssignableFrom(type))
             arg = new CMD.Layer(name, optional);
-        else if (typeof(Enum).IsAssignableFrom(type))
-            arg = new CMD.Enum(name, type, optional);
-        else
+        else 
             throw new Exception($"Parameter type of [{type.FullName}] is not supported");
 
         if (optional)

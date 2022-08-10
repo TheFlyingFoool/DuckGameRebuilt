@@ -226,19 +226,6 @@ namespace DuckGame
             }
         }
 
-        public void Deconstruct(out byte r, out byte g, out byte b)
-        {
-            r = this.r;
-            g = this.g;
-            b = this.b;
-        }
-
-        public void Deconstruct(out byte r, out byte g, out byte b, out byte a)
-        {
-            Deconstruct(out r, out g, out b);
-            a = this.a;
-        }
-
         public static Color FromHexString(string pString)
         {
             try

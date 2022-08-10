@@ -461,7 +461,7 @@ namespace DuckGame
             return commands;
         }
 
-        public static void RunCommand(string command, bool writeExecutedCommand = true)
+        public static void RunCommand(string command)
         {
             command = command.Trim();
         
@@ -485,16 +485,11 @@ namespace DuckGame
                 bool flag1 = false;
                 ConsoleCommand consoleCommand1 = new(command);
                 string pKeyword = consoleCommand1.NextWord();
-                
-                if (writeExecutedCommand)
+                _core.lines.Enqueue(new DCLine
                 {
-                    _core.lines.Enqueue(new DCLine
-                    {
-                        line = command,
-                        color = Color.White
-                    });
-                }
-
+                    line = command,
+                    color = Color.White
+                });
                 string str1 = null;
                 int num = int.MinValue;
                 string str2 = "";
@@ -2376,11 +2371,6 @@ namespace DuckGame
 
         public static void Update()
         {
-            foreach (var bind in DevConsoleCommands.Binds)
-            {
-                bind.TryExecute();
-            }
-        
             if (_core == null)
                 return;
             if (_doDataSubmission && _dataSubmissionMessage != null)
