@@ -105,7 +105,14 @@ namespace DuckGame
 
 				case ChallengeLevel:
 					rpc.Details = "Playing Arcade Level";
-					rpc.State = (Level.current as ChallengeLevel)._challenge.challenge.GetNameForDisplay() ?? "";
+					if ((Level.current as ChallengeLevel)._challenge != null)
+					{
+						rpc.State = (Level.current as ChallengeLevel)._challenge.challenge.GetNameForDisplay();
+					}
+					else
+					{
+						rpc.State = "";
+					}
 					assets.LargeImageKey = "arcade";
 					assets.LargeImageText = $"Trophy: {Profiles.active.FirstOrDefault().challengeData[(Level.current as ChallengeLevel)._challenge.challenge.name].trophy}";
 					assets.SmallImageKey = "ticket";
