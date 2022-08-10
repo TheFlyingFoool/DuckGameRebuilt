@@ -16,7 +16,7 @@ namespace DuckGame
     {
         public StateBinding _positionBinding = new InterpolatedVec2Binding(nameof(netPosition), 10000);
         public StateBinding _velocityBinding = new CompressedVec2Binding(GhostPriority.High, nameof(netVelocity), 20, true);
-        public StateBinding _angleBinding = new CompressedFloatBinding(GhostPriority.High, "_angle", 0f, isRot: true, doLerp: true);
+        public StateBinding _angleBinding = new CompressedFloatBinding(GhostPriority.High, "_angle", 0, 16, true, true);
         public StateBinding _offDirBinding = new StateBinding(GhostPriority.High, "_offDir");
         public StateBinding _ownerBinding = new StateBinding(GhostPriority.High, nameof(netOwner));
         public StateBinding _physicsStateBinding = new PhysicsFlagBinding(GhostPriority.High);

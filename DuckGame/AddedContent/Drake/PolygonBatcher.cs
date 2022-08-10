@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace DuckGame.AddedContent.Drake
+namespace DuckGame
 {
 
     public sealed class PolygonBatcher : IDisposable
