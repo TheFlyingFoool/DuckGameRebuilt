@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -58,10 +59,12 @@ public static class AutoConfigHandler
         }
         
         File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
+        DevConsole.Log("|0,255,255|REBFILE SAVED ALL CUSTOM CONFIG SUCCESSFULLY!");
     }
     
     public static bool LoadAll()
     {
+        DevConsole.Log("|0,255,255|REBFILE LOADED ALL CUSTOM CONFIG SUCCESSFULLY!");
         var all = AutoConfigFieldAttribute.All;
         string[] lines = File.ReadAllLines(MainSaveFilePath);
         
@@ -73,6 +76,7 @@ public static class AutoConfigHandler
 
     private static bool LoadAllIndex(MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>[] all, string[] lines)
     {
+        lines = lines.Where(Enumerable.Any).ToArray();
         for (int i = 0; i < all.Length; i++)
         {
             (FieldInfo field, _) = all[i];
