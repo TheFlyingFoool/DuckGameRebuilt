@@ -242,10 +242,10 @@ namespace DuckGame
                 type = typeof(int);
             }
 
-            public override object Parse(string pValue) =>
-                int.TryParse(pValue, out int result)
-                    ? result
-                    : Error("Argument value must be an integer.");
+            public override object Parse(string pValue)
+            {
+                return ChangePlus.ToInt32(pValue);
+            }
         }
 
         public class Boolean : Argument
@@ -256,10 +256,10 @@ namespace DuckGame
                 type = typeof(bool);
             }
 
-            public override object Parse(string pValue) =>
-                bool.TryParse(pValue, out bool result)
-                    ? result
-                    : Error("Argument value must be an boolean.");
+            public override object Parse(string pValue)
+            {
+                return ChangePlus.ToBoolean(pValue);
+            }
         }
 
         public class Vec2 : Argument
@@ -270,10 +270,10 @@ namespace DuckGame
                 type = typeof(Vec2);
             }
 
-            public override object Parse(string pValue) =>
-                DuckGame.Vec2.TryParse(pValue, out var result)
-                    ? result
-                    : Error("Argument value must be an 2D vector.");
+            public override object Parse(string pValue)
+            {
+                return ChangePlus.ToVec2(pValue);
+            }
         }
 
         public class Float : Argument
@@ -284,10 +284,10 @@ namespace DuckGame
                 type = typeof(float);
             }
 
-            public override object Parse(string pValue) =>
-                float.TryParse(pValue, out float result)
-                    ? result
-                    : Error("Argument value must be an floating point number.");
+            public override object Parse(string pValue)
+            {
+                return ChangePlus.ToSingle(pValue);
+            }
         }
 
         public class Font : Argument

@@ -122,6 +122,23 @@ namespace DuckGame
                 text = "HAPPY 25TH!";
             else if (DateTime.Now.Day == 1 && DateTime.Now.Month == 1)
                 text = "HAPPY NEW YEARS";
+            else if (Rando.Int(10) == 0) //:)
+            {
+                bool rebuilt = true;
+                if (Network.isActive)
+                {
+                    for (int i = 0; i < Profiles.active.Count; i++)
+                    {
+                        if (!Profiles.active[i].isUsingRebuilt)
+                        {
+                            rebuilt = false;
+                            break;
+                        }
+                    }
+                }
+                if (rebuilt) text = "DUCK GAME REBUILT ROCKS!!";
+                else text = "CONSIDER GETTING DUCK GAME REBUILT!";
+            }
             else if (Teams.active.Count > 0 && Rando.Int(10) == 1 && !(Level.current is ChallengeLevel))
                 text = "GO " + Profiles.active[Rando.Int(Profiles.active.Count - 1)].team.name.ToUpperInvariant();
             else if (Teams.active.Count > 0 && Rando.Int(500) == 1 && !(Level.current is ChallengeLevel))

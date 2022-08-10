@@ -36,7 +36,7 @@ public static partial class DevConsoleCommands
     [DrawingContext(DrawingLayer.Blocks)]
     public static void PolygonDrawTest()
     {
-        Graphics.polyBatcher.ResetBuffer();
-        Graphics.polyBatcher.Vert(Vector2.Zero).Col(Color.Aqua).Vert(Vector2.UnitX * 100).Vert(Vector2.UnitY * 100).DrawTriList();
+        //Graphics.polyBatcher.ResetBuffer();
+        //Graphics.polyBatcher.Vert(Vector2.Zero).Col(Color.Aqua).Vert(Vector2.UnitX * 100).Vert(Vector2.UnitY * 100).DrawTriList();
     }
 }

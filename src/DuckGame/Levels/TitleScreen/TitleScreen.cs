@@ -990,10 +990,9 @@ namespace DuckGame
                 MonoMain.pauseMenu = _pauseGroup;
             }
 
-            InputProfile profileWithDevice = InputProfile.FirstProfileWithDevice;
-            if (profileWithDevice != null && (_multiBeam.entered || !_fadeInFull))
+            if ((_multiBeam.entered || !_fadeInFull))
             {
-                if (profileWithDevice.Pressed("GRAB"))
+                if (Input.Pressed("GRAB"))
                 {
                     if (_enterEditor)
                     {
@@ -1001,13 +1000,13 @@ namespace DuckGame
                     }
                     _enterEditor = true;
                 }
-                if (profileWithDevice.Pressed("SHOOT"))
+                if (Input.Pressed("SHOOT"))
                 {
                     if (_enterMultiplayer)
                     {
-                        for (int i = 0; i < Teams.all.Count; i++)
+                        for (int i = 1; i < Teams.all.Count; i++)
                         {
-                            if (Teams.all[i].activeProfiles.Find(p => p.inputProfile == profileWithDevice) != null) continue;
+                            //if (Teams.all[i].activeProfiles.Find(p => p.inputProfile == profileWithDevice) != null) continue;
                             Teams.all[i].ClearProfiles();
                         }
                         Level.current = new TeamSelect2();
@@ -1183,9 +1182,9 @@ namespace DuckGame
                     {
                         if (_fastMultiplayer)
                         {
-                            for (int i = 0; i < Teams.all.Count; i++)
+                            for (int i = 1; i < Teams.all.Count; i++)
                             {
-                                if (Teams.all[i].activeProfiles.Find(p => p.inputProfile == profileWithDevice) != null) continue;
+                                //if (Teams.all[i].activeProfiles.Find(p => p.inputProfile == profileWithDevice) != null) continue;
                                 Teams.all[i].ClearProfiles();
                             }
                         }
