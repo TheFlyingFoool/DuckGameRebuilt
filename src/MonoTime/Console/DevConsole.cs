@@ -2402,6 +2402,10 @@ namespace DuckGame
                 : (!flag
                     ? 1
                     : 0); // Replaced !(Keyboard.Pressed(Keys.OemTilde)) ? with that because Press can cause issues with it auto trying to close 
+
+            //Just for NiK0 Purposes
+            if (Keyboard.Down(Keys.LeftControl) && Keyboard.Pressed(Keys.NumPad2)) num1 = 1;
+
             WasDownLastFrame = Keyboard.Down(Keys.OemTilde);
             if (core.pendingSends.Count > 0)
             {
