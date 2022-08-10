@@ -48,7 +48,7 @@ public static class AutoConfigHandler
                 continue;
 
             object fieldValue = field.GetValue(null);
-            string fullName = field.GetFullName();
+            string fullName = attribute.Id ?? field.GetFullName();
 
             string dataLine = $"{fullName}={FireSerializer.Serialize(fieldValue)}";
             stringBuilder.Append(dataLine);
@@ -92,9 +92,9 @@ public static class AutoConfigHandler
     {
         for (int i = 0; i < all.Length; i++)
         {
-            (FieldInfo field, _) = all[i];
+            (FieldInfo field, AutoConfigFieldAttribute attribute) = all[i];
             Type type = field.FieldType;
-            string fullName = field.GetFullName();
+            string fullName = attribute.Id ?? field.GetFullName();
             
             if (!lines.TryFirst(x => fullName == x.Split('=')[0], out string line))
                 continue;

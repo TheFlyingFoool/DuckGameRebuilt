@@ -18,4 +18,6 @@ public sealed class AutoConfigFieldAttribute : Attribute
     /// eternal crash loop.
     /// </summary>
     public bool PotentiallyDangerous { get; set; } = true;
+
+    public string? Id { get; set; } = null;
 }
