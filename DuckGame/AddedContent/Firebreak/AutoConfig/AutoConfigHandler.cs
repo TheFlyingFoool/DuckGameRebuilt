@@ -24,9 +24,10 @@ public static class AutoConfigHandler
         
         if (!File.Exists(MainSaveFilePath))
             SaveAll(false);
-        
-        if (!LoadAll())
-            DevConsole.Log("|240,164,65|ACFG Failed to load configuration fields");
+
+        DevConsole.Log(LoadAll()
+            ? "|240,164,65|ACFG Successfully loaded configuration fields"
+            : "|240,164,65|ACFG Failed to load configuration fields");
 
         MonoMain.OnGameExit += SaveAll;
     }
