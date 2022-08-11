@@ -8,7 +8,7 @@ public static partial class DevConsoleCommands
     [DevConsoleCommand]
     public static void Test()
     {
-        /*RoomEditorExtra.favoriteHats.Add(1);
+        RoomEditorExtra.favoriteHats.Add(1);
         RoomEditorExtra.favoriteHats.Add(9);
         RoomEditorExtra.favoriteHats.Add(8);
         RoomEditorExtra.favoriteHats.Add(4);
@@ -20,6 +20,6 @@ public static partial class DevConsoleCommands
         RoomEditorExtra.room1 = b.buffer.ToList();
 
         AutoConfigHandler.SaveAll(false);
-        DevConsole.Log("yay");*/
+        DevConsole.Log("yay");
     }
 }

@@ -77,35 +77,53 @@ public static class AutoConfigHandler
     private static bool LoadAllIndex(MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>[] all, string[] lines)
     {
         lines = lines.Where(Enumerable.Any).ToArray();
-        for (int i = 0; i < all.Length; i++)
-        {
-            (FieldInfo field, _) = all[i];
-            Type type = field.FieldType;
-            string[] sides = lines[i].Split('=');
-            
-            if (sides[0] != type.GetFullName())
-                return false;
-            
-            field.SetValue(null, FireSerializer.Deserialize(type, sides[1]));
-        }
+
+        if (all.Length != lines.Length)
+            return false;
         
+        try
+        {
+            for (int i = 0; i < all.Length; i++)
+            {
+                (FieldInfo field, _) = all[i];
+                Type type = field.FieldType;
+                string[] sides = lines[i].Split('=');
+
+                if (sides[0] != type.GetFullName())
+                    return false;
+
+                field.SetValue(null, FireSerializer.Deserialize(type, sides[1]));
+            }
+        }
+        catch
+        {
+            return false;
+        }
+
         return true;
     }
 
     private static bool LoadAllSearch(MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>[] all, string[] lines)
     {
-        for (int i = 0; i < all.Length; i++)
+        try
         {
-            (FieldInfo field, AutoConfigFieldAttribute attribute) = all[i];
-            Type type = field.FieldType;
-            string fullName = attribute.Id ?? field.GetFullName();
-            
-            if (!lines.TryFirst(x => fullName == x.Split('=')[0], out string line))
-                continue;
-            
-            string[] sides = line.Split('=');
-            
-            field.SetValue(null, FireSerializer.Deserialize(type, sides[1]));
+            for (int i = 0; i < all.Length; i++)
+            {
+                (FieldInfo field, AutoConfigFieldAttribute attribute) = all[i];
+                Type type = field.FieldType;
+                string fullName = attribute.Id ?? field.GetFullName();
+
+                if (!lines.TryFirst(x => fullName == x.Split('=')[0], out string line))
+                    continue;
+
+                string[] sides = line.Split('=');
+
+                field.SetValue(null, FireSerializer.Deserialize(type, sides[1]));
+            }
+        }
+        catch
+        {
+            return false;
         }
 
         return true;
