@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace DuckGame;
 
@@ -21,6 +20,9 @@ public static class FireSerializer
 
         if (obj is null)
             return "null";
+
+        if (obj is BitBuffer buffer)
+            return BitConverter.ToString(buffer.buffer);
 
         Type type = obj.GetType();
 
@@ -66,6 +68,9 @@ public static class FireSerializer
 
         if (type == typeof(string))
             return str;
+
+        if (type == typeof(BitBuffer))
+            return new BitBuffer(str.Select(b => Convert.ToByte(b)).ToArray());
 
         if (type.IsPrimitive)
             return Convert.ChangeType(str, type);

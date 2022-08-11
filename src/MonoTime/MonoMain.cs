@@ -121,6 +121,7 @@ namespace DuckGame
         public static bool networkDebugger = false;
         public static bool disableSteam = false;
         public static bool noIntro = false;
+        public static bool useRPC = false;
         public static bool startInEditor = false;
         public static bool preloadModContent = true;
         public static bool breakSteam = false;

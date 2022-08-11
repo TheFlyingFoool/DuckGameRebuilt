@@ -163,21 +163,26 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DuckGame\AddedContent\Drake\DrakeTests.cs" />
+    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\PolygonBatcher.cs" />
+    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\PolyRenderer.cs" />
+    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\VectorMath.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\FireSerializer.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DevConsoleCommandAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DrawingContextAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\CustomKeyBinds.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\Helper.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\MemberAttributePair.cs" />
+    <Compile Include="DuckGame\AddedContent\klof44\DartGrenade.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\Bubble.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ChangePlus.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\MathParser.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\PizzaLauncher.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\RoomEditorExtra.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Drake\PolygonBatcher.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\Extensions.cs" />
+    <Compile Include="DuckGame\AddedContent\Extensions.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\NMDuckShatter.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\NMPinkCollision.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\NMPinkExplode.cs" />
@@ -194,6 +199,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Debug.cs" />
     <Compile Include="src\MonoTime\Console\Commands\DoDraw.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Exit.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Test.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />
     <Compile Include="src\MonoTime\ExecuteOnAttribute.cs" />

@@ -12,14 +12,14 @@ public record MemberAttributePair<TMemberInfo, TAttribute>(TMemberInfo MemberInf
 
     public static MemberAttributePair<TMemberInfo, TAttribute>[] GetAll()
     {
-        return Helper.GetAllMembersWithAttribute<TMemberInfo, TAttribute>()
+        return Extensions.GetAllMembersWithAttribute<TMemberInfo, TAttribute>()
             .Select(x => new MemberAttributePair<TMemberInfo, TAttribute>(x.Member, x.Attributes.First()))
             .ToArray();
     }
     
     public static MemberAttributePair<TMemberInfo, TAttribute>[] GetAllFromClass<T>()
     {
-        return Helper.GetAllMembersWithAttribute<TMemberInfo, TAttribute>(typeof(T))
+        return Extensions.GetAllMembersWithAttribute<TMemberInfo, TAttribute>(typeof(T))
             .Select(x => new MemberAttributePair<TMemberInfo, TAttribute>(x.Member, x.Attributes.First()))
             .ToArray();
     }

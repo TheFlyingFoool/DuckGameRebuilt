@@ -14,17 +14,17 @@ public static class AutoConfigHandler
     public static string SaveDirPath => DuckFile.userDirectory + SaveDirName;
     public static string MainSaveFilePath => SaveDirPath + MainSaveFileName;
 
-
+    
     public static void Initialize()
     {
         DevConsole.Log("|240,164,65|ACFG Attempting to load config field data...");
-
+        
         if (!Directory.Exists(SaveDirPath))
             Directory.CreateDirectory(SaveDirPath);
-
+        
         if (!File.Exists(MainSaveFilePath))
             SaveAll(false);
-
+        
         if (!LoadAll())
             DevConsole.Log("|240,164,65|ACFG Failed to load configuration fields");
 
@@ -41,7 +41,7 @@ public static class AutoConfigHandler
         {
             (FieldInfo field, AutoConfigFieldAttribute attribute) = all[i];
             Type fieldType = field.FieldType;
-
+            
             if (isDangerous && attribute.PotentiallyDangerous)
                 continue;
 
@@ -57,15 +57,17 @@ public static class AutoConfigHandler
             if (i != length)
                 stringBuilder.Append("\n");
         }
-
+        
         File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
+        DevConsole.Log("|0,255,255|REBFILE SAVED ALL CUSTOM CONFIG SUCCESSFULLY!");
     }
-
+    
     public static bool LoadAll()
     {
+        DevConsole.Log("|0,255,255|REBFILE LOADED ALL CUSTOM CONFIG SUCCESSFULLY!");
         var all = AutoConfigFieldAttribute.All;
         string[] lines = File.ReadAllLines(MainSaveFilePath);
-
+        
         // tries to load all via indexing. if that fails, tries to
         // load all via searching. if that false, returns false, 
         // otherwise returns true
