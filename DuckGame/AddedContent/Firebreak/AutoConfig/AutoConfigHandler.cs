@@ -14,10 +14,10 @@ public static class AutoConfigHandler
     public static string SaveDirPath => DuckFile.userDirectory + SaveDirName;
     public static string MainSaveFilePath => SaveDirPath + MainSaveFileName;
 
-    
+    [PostInitialize]
     public static void Initialize()
     {
-        DevConsole.Log("|240,164,65|ACFG Attempting to load config field data...");
+        DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING TO LOAD CONFIG FIELD DATA...");
         
         if (!Directory.Exists(SaveDirPath))
             Directory.CreateDirectory(SaveDirPath);
@@ -25,9 +25,8 @@ public static class AutoConfigHandler
         if (!File.Exists(MainSaveFilePath))
             SaveAll(false);
 
-        DevConsole.Log(LoadAll()
-            ? "|240,164,65|ACFG Successfully loaded configuration fields"
-            : "|240,164,65|ACFG Failed to load configuration fields");
+        if (!LoadAll())
+            DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS");
 
         MonoMain.OnGameExit += SaveAll;
     }
@@ -60,27 +59,33 @@ public static class AutoConfigHandler
         }
         
         File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
-        DevConsole.Log("|0,255,255|REBFILE SAVED ALL CUSTOM CONFIG SUCCESSFULLY!");
+        DevConsole.Log("|240,164,65|ACFG|DGGREEN| SAVED ALL CUSTOM CONFIG SUCCESSFULLY!");
     }
     
     public static bool LoadAll()
     {
-        DevConsole.Log("|0,255,255|REBFILE LOADED ALL CUSTOM CONFIG SUCCESSFULLY!");
         var all = AutoConfigFieldAttribute.All;
         string[] lines = File.ReadAllLines(MainSaveFilePath);
         
         // tries to load all via indexing. if that fails, tries to
         // load all via searching. if that false, returns false, 
         // otherwise returns true
-        return LoadAllIndex(all, lines) || LoadAllSearch(all, lines);
+        if (LoadAllIndex(all, lines) || LoadAllSearch(all, lines))
+        {
+            DevConsole.Log("|240,164,65|ACFG|DGGREEN| LOADED ALL CUSTOM CONFIG SUCCESSFULLY!");
+            return true;
+        }
+        
+        return false;
     }
 
     private static bool LoadAllIndex(MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>[] all, string[] lines)
     {
+        DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING CONFIG INDEX LOADING...");
         lines = lines.Where(Enumerable.Any).ToArray();
 
         if (all.Length != lines.Length)
-            return false;
+            goto Fail;
         
         try
         {
@@ -91,21 +96,28 @@ public static class AutoConfigHandler
                 string[] sides = lines[i].Split('=');
 
                 if (sides[0] != type.GetFullName())
-                    return false;
+                    goto Fail;
 
                 field.SetValue(null, FireSerializer.Deserialize(type, sides[1]));
             }
         }
         catch
         {
+            goto Fail;
+        }
+        
+        return true;
+
+        Fail:
+        {
+            DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS VIA INDEX");
             return false;
         }
-
-        return true;
     }
 
     private static bool LoadAllSearch(MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>[] all, string[] lines)
     {
+        DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING CONFIG SEARCH LOADING...");
         try
         {
             for (int i = 0; i < all.Length; i++)
@@ -124,6 +136,7 @@ public static class AutoConfigHandler
         }
         catch
         {
+            DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS VIA SEARCH");
             return false;
         }
 

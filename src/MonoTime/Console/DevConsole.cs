@@ -2376,9 +2376,13 @@ namespace DuckGame
 
         public static void Update()
         {
-            foreach (var bind in DevConsoleCommands.Binds)
+            // checks if its not null and if it's length is greater than 0
+            if (DevConsoleCommands.Binds is { Count: > 0 })
             {
-                bind.TryExecute();
+                foreach (var bind in DevConsoleCommands.Binds)
+                {
+                    bind.TryExecute();
+                }
             }
         
             if (_core == null)

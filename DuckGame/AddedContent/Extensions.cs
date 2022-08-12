@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Reflection;
@@ -23,6 +24,8 @@ namespace DuckGame
                 memberType = MemberTypes.Property;
             else if (typeof(TInfoType).IsAssignableFrom(typeof(ConstructorInfo)))
                 memberType = MemberTypes.Constructor;
+            else if (typeof(TInfoType).IsAssignableFrom(typeof(TypeInfo)))
+                memberType = MemberTypes.TypeInfo;
 
             return GetAllMembersWithAttribute<TAttribute>(memberType, inType)
                 .Select<(MemberInfo Member, IEnumerable<TAttribute> Attributes), (TInfoType, IEnumerable<TAttribute>)>
@@ -30,33 +33,63 @@ namespace DuckGame
         }
 
         public static IEnumerable<(MemberInfo Member, IEnumerable<TAttribute> Attributes)>
-            GetAllMembersWithAttribute<TAttribute>(MemberTypes filter = MemberTypes.All, Type? inType = null) where TAttribute : Attribute
+            GetAllMembersWithAttribute<TAttribute>(MemberTypes filter = MemberTypes.All, Type? inType = null) 
+            where TAttribute : Attribute
         {
             if (inType is { })
-                return inType.GetMembers(BindingFlags.Public | BindingFlags.Static)
+                return inType.GetMembers()
                     .Where(x => x.GetCustomAttributes<TAttribute>(false).Any()
                                 && x.MemberType.HasFlag(filter))
                     .Select(x => (x, x.GetCustomAttributes<TAttribute>(false)));
 
-            return Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .SelectMany(x => x.GetMembers(BindingFlags.Public | BindingFlags.Static))
-                .Where(x => x.GetCustomAttributes<TAttribute>(false).Any()
-                            && x.MemberType.HasFlag(filter))
+            var types = Assembly.GetExecutingAssembly().GetTypes();
+            
+            return types
+                .SelectMany(x => x.GetMembers())
+                .Concat(types.Select(x => x.GetTypeInfo()))
+                .Where(x => x.GetCustomAttributes<TAttribute>().Any())
+                .Where(x => x.MemberType.HasFlag(filter))
                 .Select(x => (x, x.GetCustomAttributes<TAttribute>(false)));
         }
 
-        public static bool TryFirst<T>(this IEnumerable<T> collection, Func<T, bool> condition, out T? first)
+        public const BindingFlags ALL_BINDING_FLAGS =
+            BindingFlags.CreateInstance
+            | BindingFlags.DeclaredOnly
+            | BindingFlags.FlattenHierarchy
+            | BindingFlags.IgnoreCase
+            | BindingFlags.Instance
+            | BindingFlags.NonPublic
+            | BindingFlags.Public
+            | BindingFlags.Static;
+
+        public static bool TryFirst<T>(this IEnumerable<T> collection, Func<T, bool> condition, out T first)
         {
             first = default;
-            if (!collection.Any(condition)) return false;
-            first = collection.First(condition);
-            return true;
+            
+            foreach (var item in collection)
+            {
+                if (!condition(item)) 
+                    continue;
+                
+                first = item;
+                return true;
+            }
+
+            return false;
         }
 
         public static string GetFullName(this MemberInfo mi) => $"{mi.DeclaringType}:{mi.Name}";
 
         public static bool InheritsFrom(this Type t1, Type t2) => t2.IsAssignableFrom(t1);
+
+        public static Vec2 ButX(this Vec2 vec2, Func<float, float> function) => new(function(vec2.x), vec2.y);
+        public static Vec2 ButX(this Vec2 vec2, float newX, bool add = false) => vec2.ButX(x => add ? x + newX : newX);
+
+        public static Vec2 ButY(this Vec2 vec2, Func<float, float> function) => new(vec2.x, function(vec2.y));
+        public static Vec2 ButY(this Vec2 vec2, float newY, bool add = false) => vec2.ButY(y => add ? y + newY : newY);
+
+        public static Vec2 ButBoth(this Vec2 vec2, Func<float, float> function) => vec2.ButX(function).ButY(function);
+        public static Vec2 ButBoth(this Vec2 vec2, float newValue, bool add = false) => vec2.ButX(newValue, add).ButY(newValue, add);
 
         public static bool CaselessEquals(this string str, string str2) =>
             string.Equals(str, str2, StringComparison.CurrentCultureIgnoreCase);
@@ -72,11 +105,9 @@ namespace DuckGame
             for (int i = 0; i < arr.Length; i++)
             {
                 object o = arr[i];
-                if (o is IEnumerable<object> subCollection)
-                {
-                    indentedAppend(subCollection.ToReadableString(indentationLevel));
-                }
-                else indentedAppend(o.ToString());
+                indentedAppend(o is IEnumerable subCollection and not string
+                    ? subCollection.Cast<object>().ToReadableString(indentationLevel)
+                    : o.ToString());
 
                 if (i != arr.Length)
                     stringBuilder.Append(",\n");

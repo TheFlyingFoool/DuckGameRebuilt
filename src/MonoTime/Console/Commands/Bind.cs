@@ -8,6 +8,7 @@ namespace DuckGame;
 
 public static partial class DevConsoleCommands
 {
+    [AutoConfigField]
     public static List<ConsoleBind> Binds = new();
 
     public record ConsoleBind(string hotkey, string command)

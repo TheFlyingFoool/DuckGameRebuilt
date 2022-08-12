@@ -9,8 +9,8 @@ namespace DuckGame
     public class RoomEditorExtra
     {
         [AutoConfigField]
-        public static List<byte> room1 = new List<byte>();
-
+        public static BitBuffer room1 = new BitBuffer();
+        
         [AutoConfigField]
         public static List<int> favoriteHats = new List<int>();
     }

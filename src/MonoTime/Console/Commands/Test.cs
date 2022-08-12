@@ -13,11 +13,11 @@ public static partial class DevConsoleCommands
         RoomEditorExtra.favoriteHats.Add(8);
         RoomEditorExtra.favoriteHats.Add(4);
 
-        BitBuffer b = new BitBuffer(RoomEditorExtra.room1.ToArray());
+        BitBuffer b = RoomEditorExtra.room1;
         b.Write(255);
         b.Write(false);
         b.Write("E");
-        RoomEditorExtra.room1 = b.buffer.ToList();
+        RoomEditorExtra.room1 = b;
 
         AutoConfigHandler.SaveAll(false);
         DevConsole.Log("yay");

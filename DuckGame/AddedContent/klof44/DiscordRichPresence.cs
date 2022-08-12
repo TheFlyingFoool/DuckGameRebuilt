@@ -40,7 +40,12 @@ namespace DuckGame
 				tryReconnect.Start();
 			};
 			
-			tryReconnect.Elapsed += (sender, e) => client.Initialize();
+			tryReconnect.Elapsed += (sender, e) =>
+			{
+				// FOR THE LOVE OF ALLAH DONT FORGET YOUR CHECKS - Firebreak
+				if (!client.IsDisposed && !client.IsInitialized)
+					client.Initialize();
+			};
 			updatePresence.Elapsed += (sender, e) => TriggerRPCUpdate();
 			
 			client.Initialize();

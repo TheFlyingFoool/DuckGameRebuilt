@@ -71,7 +71,7 @@ public class DevConsoleCommandAttribute : Attribute
                     if (method.Invoke(null, objectParameters) is { } result)
                         DevConsole.LogComplexMessage(result switch
                         {
-                            IEnumerable<object> ie => ie.ToReadableString(),
+                            IEnumerable ie and not string => ie.Cast<object>().ToReadableString(),
                             _ => result.ToString()
                         }, Color.White);
                 }

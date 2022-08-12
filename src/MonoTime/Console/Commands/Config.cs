@@ -23,7 +23,7 @@ public static partial class DevConsoleCommands
 
         var all = AutoConfigFieldAttribute.All;
 
-        if (!all.TryFirst(x => (x.Attribute.Id ?? x.MemberInfo.Name).CaselessEquals(id), out var field))
+        if (!all.TryFirst(x => (x.Attribute.ShortName ?? x.Attribute.Id ?? x.MemberInfo.Name).CaselessEquals(id), out var field))
             throw new Exception($"No configuration field found with ID: {id}");
 
         object val = field!.MemberInfo.GetValue(null);

@@ -891,12 +891,17 @@ namespace DuckGame
 
         private void Start()
         {
-            AutoConfigHandler.Initialize();
             ModLoader.PostLoadMods();
             OnStart();
             _started = true;
             //Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667L);
             this.IsFixedTimeStep = true; // UNZOOOM
+            
+            // post init
+            foreach (var methodInfo in PostInitializeAttribute.All)
+            {
+                methodInfo.Invoke(null, null);
+            }
         }
 
         protected virtual void OnStart()
