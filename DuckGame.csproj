@@ -173,7 +173,6 @@
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\FireSerializer.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\FireSerializerModuleAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\IFireSerializerModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\BitBufferSerializerModule.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\ColorSerializerModule.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\ConsoleBindSerializerModule.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\DateTimeSerializeModule.cs" />
