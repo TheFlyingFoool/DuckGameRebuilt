@@ -2381,7 +2381,7 @@ namespace DuckGame
             {
                 foreach (var bind in DevConsoleCommands.Binds)
                 {
-                    bind.TryExecute();
+                    bind?.TryExecute();
                 }
             }
         

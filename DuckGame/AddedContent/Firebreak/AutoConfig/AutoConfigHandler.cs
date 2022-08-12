@@ -66,6 +66,9 @@ public static class AutoConfigHandler
     {
         var all = AutoConfigFieldAttribute.All;
         string[] lines = File.ReadAllLines(MainSaveFilePath);
+
+        if (!lines.Any())
+            SaveAll(false);
         
         // tries to load all via indexing. if that fails, tries to
         // load all via searching. if that false, returns false, 

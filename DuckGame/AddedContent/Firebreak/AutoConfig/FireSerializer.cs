@@ -174,8 +174,10 @@ public static class FireSerializer
 
             stringBuilder.Append(currentCharacter);
         }
-
-        split.Add(stringBuilder.ToString());
+        
+        if (stringBuilder.Length > 0)
+            split.Add(stringBuilder.ToString());
+        
         return split.ToArray();
     }
 }
