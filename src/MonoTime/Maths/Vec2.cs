@@ -413,7 +413,7 @@ namespace DuckGame
                 && float.TryParse(values[1], out float y))
                 return new Vec2(x, y);
 
-            throw new Exception($"Cannot parse [{s}] as a Vec2");
+            throw new Exception($"Cannot parse [{s}] as a {nameof(Vec2)}");
         }
         
         public static bool TryParse(string s, out Vec2 result)

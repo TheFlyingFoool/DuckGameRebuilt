@@ -133,7 +133,7 @@ namespace DuckGame
 
         public static float Clamp(float val, float min, float max) => Math.Min(Math.Max(val, min), max);
 
-        public static int Clamp(int val, int min, int max) => Math.Min(Math.Max(val, min), max);
+        public static int Clamp(int val, int min, int max) => val > max ? max : val < min ? min : val;
 
         public static int Int(bool val) => !val ? 0 : 1;
 

@@ -14,7 +14,7 @@ namespace DuckGame
         public string line;
         public Color color;
         public int threadIndex;
-        public DateTime timestamp;
+        public DateTime timestamp = DateTime.Now;
         public DCSection section;
         public Verbosity verbosity;
         public int frames;

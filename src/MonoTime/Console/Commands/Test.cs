@@ -36,7 +36,7 @@ public static partial class DevConsoleCommands
 
     }
     public static bool runv2;
-    [DevConsoleCommand(Name ="test")]
+    [DevConsoleCommand(Name ="dantest")]
     public static void Test()
     {
         //Level.CheckRectAllDan<MaterialThing>(new Vec2(-1100.6f, -414.2592f), new Vec2(800.3334f, 497.3408f));
@@ -92,6 +92,24 @@ public static partial class DevConsoleCommands
         DevConsole.Log(t.GetHashCode().ToString() + " " + ptr.ToString());
         DevConsole.Log(t2.GetHashCode().ToString() + " " + ptr2.ToString());
         DevConsole.Log(t3.GetHashCode().ToString() + " " + ptr3.ToString());
+    }
+    [DevConsoleCommand]
+    public static void Test()
+    {
+
+        /*RoomEditorExtra.favoriteHats.Add(1);
+        RoomEditorExtra.favoriteHats.Add(9);
+        RoomEditorExtra.favoriteHats.Add(8);
+        RoomEditorExtra.favoriteHats.Add(4);
+
+        BitBuffer b = RoomEditorExtra.room1;
+        b.Write(255);
+        b.Write(false);
+        b.Write("E");
+        RoomEditorExtra.room1 = b;
+
+        AutoConfigHandler.SaveAll(false);
+        DevConsole.Log("yay");*/
     }
    
 }

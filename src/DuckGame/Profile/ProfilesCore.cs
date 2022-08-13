@@ -131,7 +131,8 @@ namespace DuckGame
             Profile.defaultProfileMappings[7] = _profiles[7];
             Profile.loading = true;
             DevConsole.Log(DCSection.General, "Loading profiles from (" + DuckFile.profileDirectory + ")");
-            string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, ".pro"); // added ".pro" so it doesnt just loop over all files
+            string[] files = DuckFile.GetFiles(DuckFile.profileDirectory); // NO YOU FUCKING DUMBASS IT NEEDS TO LOOP OVER ALL THE FILES TO FUCKING WORK -NiK0
+            //string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, ".pro"); // added ".pro" so it doesnt just loop over all files
             DevConsole.Log(DCSection.General, "Found (" + files.Count<string>().ToString() + ") profiles.");
             List<Profile> profileList = new List<Profile>();
             foreach (string path in files)

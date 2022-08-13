@@ -22,7 +22,7 @@ namespace DuckGame
             {
                 if (val < 0f)
                 {
-                    double num2 = _range / 2f;
+                    float num2 = _range / 2f;
                     val = val % -_range + _range;
                 }
                 val = val % _range / _range;
@@ -36,9 +36,19 @@ namespace DuckGame
 
         public override int intValue => GetCompressedFloat(getTyped<float>());
 
-        public override object ReadNetValue(object val) => (float)((int)val / (BitBuffer.GetMaxValue(_bits) / 2L) * _range);
+        public override object ReadNetValue(object val)
+        {
+            float num = (float)((int)val);
+            long num2 = BitBuffer.GetMaxValue(this._bits) / 2L;
+            return num / (float)num2 * this._range;
+        }
 
-        public override object ReadNetValue(BitBuffer pData) => (float)((int)pData.ReadBits(type, bits) / (BitBuffer.GetMaxValue(_bits) / 2L) * _range);
+        public override object ReadNetValue(BitBuffer pData)
+        {
+            float num = (float)((int)pData.ReadBits(this.type, this.bits));
+            long num2 = BitBuffer.GetMaxValue(this._bits) / 2L;
+            return num / (float)num2 * this._range;
+        }
 
         public CompressedFloatBinding(string field, float range = 1f, int bits = 16, bool isRot = false, bool doLerp = false)
           : base(field, bits, isRot)

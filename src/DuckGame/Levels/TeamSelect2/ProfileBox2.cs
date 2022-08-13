@@ -199,6 +199,7 @@ namespace DuckGame
             }
             _gunSpawnPoint = !rightRoom ? new Vec2(x + 113f, y + 50f) : new Vec2((float)(x + 142.0 - 118.0), y + 50f);
             _readySign.depth = (Depth)0.2f;
+            _readySign.center = new Vec2(21.5f, 3.5f);
             _roomLeftBackground.depth = -0.85f;
             _roomLeftForeground.depth = (Depth)0.1f;
             _tutorialMessages = new SpriteMap("tutorialScreensPC", 53, 30);
@@ -537,6 +538,8 @@ namespace DuckGame
 
         public void OpenDoor(Duck d) => _duck = d;
 
+
+        public SinWave sin = new SinWave(0.05f, Rando.Float(3.14f));
         public override void Update()
         {
             if (Network.isActive && Network.isServer && _duck != null && profile.connection == null)
@@ -643,12 +646,39 @@ namespace DuckGame
                         SFX.Play("consoleOpen", 0.5f);
                     }
                 }
-                else
-                    _duck.canFire = true;
+                else _duck.canFire = true;
                 if (_hatSelector.hat != null && _hatSelector.hat.alpha < 0.01f && !_duck.HasEquipment(_hatSelector.hat))
                 {
                     _hatSelector.hat.alpha = 1f;
                     _duck.Equip(_hatSelector.hat, false);
+                }
+                if (profile != null && profile.isUsingRebuilt)
+                {
+                    if (rightRoom)
+                    {
+                        if (sin > 0)
+                        {
+                            _readySign.angle = Lerp.FloatSmooth(_readySign.angle, 3.14f, 0.2f);
+                        }
+                        else if (_readySign.angle > 0)
+                        {
+                            _readySign.angle = Lerp.FloatSmooth(_readySign.angle, 6.28f, 0.2f);
+                            if (_readySign.angle > 6.27f) _readySign.angle = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (sin > 0)
+                        {
+                            _readySign.angle = Lerp.FloatSmooth(_readySign.angle, -3.14f, 0.2f);
+                        }
+                        else if (_readySign.angle < 0)
+                        {
+                            _readySign.angle = Lerp.FloatSmooth(_readySign.angle, -6.28f, 0.2f);
+                            if (_readySign.angle < -6.27f) _readySign.angle = 0;
+                        }
+                    }
+                    //_readySign.yscale -= sin2 / 100;
                 }
                 if (ready)
                 {
@@ -1200,7 +1230,7 @@ namespace DuckGame
                         _consoleHighlight.alpha = _consoleFade;
                         Graphics.Draw(_consoleHighlight, _consolePos.x, _consolePos.y);
                     }
-                    Graphics.Draw(_readySign, x + 1f, y + 3f);
+                    Graphics.Draw(_readySign, x + 22.5f, y + 6.5f);
                     float num2 = -0.57f;
                     if (furniture1 != null)
                         num2 = -0.8f;
@@ -1335,7 +1365,7 @@ namespace DuckGame
                         _consoleHighlight.alpha = _consoleFade;
                         Graphics.Draw(_consoleHighlight, _consolePos.x, _consolePos.y);
                     }
-                    Graphics.Draw(_readySign, x + 96f, y + 3f);
+                    Graphics.Draw(_readySign, x + 117.5f, y + 6.5f);
                     float num11 = -0.57f;
                     if (furniture1 != null)
                         num11 = -0.8f;

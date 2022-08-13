@@ -1504,7 +1504,10 @@ namespace DuckGame
             if (pConnection == localConnection)
             {
                 if (_core.localProfile == null)
+                {
                     _core.localProfile = pProfile;
+                    pProfile.netData.Set("REBUILT", true);
+                }
                 if (Network.isServer && _core.hostProfile == null)
                     _core.hostProfile = pProfile;
                 pProfile.networkStatus = DuckNetStatus.Connected;
@@ -1514,6 +1517,7 @@ namespace DuckGame
                 {
                     pProfile.slotType = SlotType.Local;
                     pProfile.isRemoteLocalDuck = true;
+                    pProfile.netData.Set("REBUILT", true);
                 }
                 pProfile.flagIndex = Global.data.flag;
                 pProfile.inputProfile = pLocalInput;
@@ -1813,10 +1817,6 @@ namespace DuckGame
 
         public static void Update()
         {
-            if (localProfile != null)
-            {
-                localProfile.netData.Set("REBUILT", true);
-            }
             if (MonoMain.pauseMenu == null && _core._pauseOpen)
             {
                 HUD.CloseAllCorners();

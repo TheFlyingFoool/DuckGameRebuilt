@@ -260,6 +260,11 @@ namespace DuckGame
             Windows_Audio.ResetDevice();
         }
 
+        private static void MuteOnBackground()
+        {
+            
+        }
+
         private static void ApplyResolution()
         {
             if (!Options._doingResolutionRestart)
@@ -320,6 +325,8 @@ namespace DuckGame
         "Wasapi",
         "DirectSound"
       }), true);
+            menu.Add(new UIText(" ", Color.White), true);
+            menu.Add(new UIMenuItemToggle("Mute If In The Background", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(Options.MuteOnBackground)), new FieldBinding(Data, "muteOnBackground")), true);
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true), true);
             return menu;
@@ -742,8 +749,16 @@ namespace DuckGame
 
         public static void Update()
         {
-            Music.masterVolume = Math.Min(1f, Math.Max(0f, Options.Data.musicVolume));
-            SFX.volume = Math.Min(1f, Math.Max(0f, Options.Data.sfxVolume));
+            if (!Options.Data.muteOnBackground || MonoMain.instance.IsFocused)
+            {
+                Music.masterVolume = Math.Min(1f, Math.Max(0f, Options.Data.musicVolume));
+                SFX.volume = Math.Min(1f, Math.Max(0f, Options.Data.sfxVolume));
+            }
+            else if (Options.Data.muteOnBackground && !MonoMain.instance.IsFocused)
+            {
+                Music.masterVolume = 0f;
+                SFX.volume = 0f;
+            }
             if (Options._openedOptionsMenu && !Options._removedOptionsMenu && Options._optionsMenu != null && !Options._optionsMenu.open && !Options._optionsMenu.animating)
             {
                 Options._openedOptionsMenu = false;

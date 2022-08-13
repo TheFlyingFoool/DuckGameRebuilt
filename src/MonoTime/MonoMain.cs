@@ -121,6 +121,7 @@ namespace DuckGame
         public static bool networkDebugger = false;
         public static bool disableSteam = false;
         public static bool noIntro = false;
+        public static bool useRPC = false;
         public static bool startInEditor = false;
         public static bool preloadModContent = true;
         public static bool breakSteam = false;
@@ -723,8 +724,13 @@ namespace DuckGame
             _infiniteLoopDetector = null;
         }
 
+        public static event Action<bool> OnGameExit;
+
+        public static void InvokeOnGameExitEvent(bool isDangerous) => OnGameExit?.Invoke(isDangerous);
+        
         protected override void OnExiting(object sender, EventArgs args)
         {
+            InvokeOnGameExitEvent(false);
             KillEverything();
             Process.GetCurrentProcess().Kill();
         }
@@ -890,6 +896,12 @@ namespace DuckGame
             _started = true;
             //Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667L);
             this.IsFixedTimeStep = true; // UNZOOOM
+            
+            // post init
+            foreach (var methodInfo in PostInitializeAttribute.All)
+            {
+                methodInfo.Invoke(null, null);
+            }
         }
 
         protected virtual void OnStart()

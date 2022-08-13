@@ -125,6 +125,10 @@
     <Reference Include="DGSteam">
       <HintPath>lib\DGSteam.dll</HintPath>
     </Reference>
+    <Reference Include="DiscordRPC, Version=1.0.175.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\DiscordRPC.dll</HintPath>
+    </Reference>
     <Reference Include="FNA">
       <HintPath>.\FNA.dll</HintPath>
     </Reference>
@@ -138,6 +142,10 @@
     </Reference>
     <Reference Include="NAudio">
       <HintPath>lib\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NVorbis">
       <HintPath>lib\NVorbis.dll</HintPath>
@@ -155,28 +163,60 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DuckGame\AddedContent\Bubble.cs" />
-    <Compile Include="DuckGame\AddedContent\ClientOnlyAttribute.cs" />
+    <Compile Include="DuckGame\AddedContent\Drake\DrakeTests.cs" />
+    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\PolygonBatcher.cs" />
+    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\PolyRenderer.cs" />
+    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\VectorMath.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\ConfigTest.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\FireSerializer.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\FireSerializerModuleAttribute.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\IFireSerializerModule.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\ColorSerializerModule.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\ConsoleBindSerializerModule.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\DateTimeSerializeModule.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\StringSerializerModule.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\Vec2SerializerModule.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\DevConsoleCommandAttribute.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\DrawingContextAttribute.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\PostInitializeAttribute.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\CustomKeyBinds.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\MemberAttributePair.cs" />
+    <Compile Include="DuckGame\AddedContent\klof44\DartGrenade.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\Bubble.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ChangePlus.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\MathParser.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\PizzaLauncher.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\RoomEditorExtra.cs" />
+    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
+    <Compile Include="DuckGame\AddedContent\Drake\PolygonBatcher.cs" />
     <Compile Include="DuckGame\AddedContent\Extensions.cs" />
-    <Compile Include="DuckGame\AddedContent\NMDuckShatter.cs" />
-    <Compile Include="DuckGame\AddedContent\NMPinkCollision.cs" />
-    <Compile Include="DuckGame\AddedContent\NMPinkExplode.cs" />
-    <Compile Include="DuckGame\AddedContent\PinkBox.cs" />
-    <Compile Include="DuckGame\AddedContent\PistolTwo.cs" />
-    <Compile Include="DuckGame\AddedContent\NMSetScale.cs" />
-    <Compile Include="DuckGame\AddedContent\ShatterDuck.cs" />
-    <Compile Include="DuckGame\AddedContent\TheDishes.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\NMDuckShatter.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\NMPinkCollision.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\NMPinkExplode.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\PinkBox.cs" />
+    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\PistolTwo.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\NMSetScale.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ShatterDuck.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\TheDishes.cs" />
+    <Compile Include="DuckGame\AddedContent\klof44\DiscordRichPresence.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Clear.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Config.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Debug.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\DoDraw.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Exit.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Test.cs" />
-    <Compile Include="src\MonoTime\Console\DevConsoleCommandAttribute.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />
     <Compile Include="src\MonoTime\ExecuteOnAttribute.cs" />
     <Compile Include="src\MonoTime\Input\InputMan.cs" />
     <Compile Include="src\MonoTime\Input\1InputMan.cs" />
     <Compile Include="src\MonoTime\Input\CharEnteredHandler.cs" />
     <Compile Include="src\MonoTime\Input\KeyEventHandler.cs" />
     <Compile Include="src\MonoTime\Input\2InputMan.cs" />
-    <Compile Include="src\Utilities\Helper.cs" />
     <Compile Include="src\WindowsPlatformStartup.cs" />
     <Compile Include="src\MonoTime\Console\ServiceContainer.cs" />
     <Compile Include="src\OnOutputDebugStringHandler.cs" />

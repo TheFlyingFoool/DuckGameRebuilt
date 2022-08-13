@@ -283,6 +283,9 @@ namespace DuckGame
                         if (index < args.Count<string>())
                             DevConsole.startupCommands.Add(args[index]);
                         break;
+                    case "-useRPC":
+                        MonoMain.useRPC = true;
+                        break;
                     default:
                         if (args[index] == "-nolaunch")
                         {
@@ -435,6 +438,8 @@ namespace DuckGame
 
         public static void HandleGameCrash(Exception pException)
         {
+            MonoMain.InvokeOnGameExitEvent(true);
+            
             if (!System.IO.File.Exists("CrashWindow.exe"))
                 return;
             if (pException is ThreadAbortException)
