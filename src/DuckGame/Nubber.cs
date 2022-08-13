@@ -68,6 +68,7 @@ namespace DuckGame
                 collisionOffset = new Vec2(-5f, 0f);
             _editorCanModify = false;
             UpdateCustomTileset();
+            shouldbeinupdateloop = false;
         }
 
         public override void Terminate()

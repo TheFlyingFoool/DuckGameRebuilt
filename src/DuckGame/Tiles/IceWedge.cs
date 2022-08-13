@@ -22,6 +22,7 @@ namespace DuckGame
             collisionSize = new Vec2(14f, 8f);
             collisionOffset = new Vec2(-7f, -6f);
             depth = -0.9f;
+            shouldbeinupdateloop = false;
         }
 
         public override void EditorUpdate() => base.EditorUpdate();

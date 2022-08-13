@@ -69,11 +69,20 @@ namespace DuckGame
             set
             {
                 if (_hoverSpawner != null && value == null)
+                {
                     gravMultiplier = 1f;
+                    initemspawner = false;
+                }
                 else if (_hoverSpawner == null && value != null)
+                {
                     gravMultiplier = 0f;
+                    initemspawner = true;
+                }
                 if (value != null && _hoverSpawner != value)
+                {
                     _prevHoverPos = position;
+                    initemspawner = true;
+                }
                 _hoverSpawner = value;
             }
         }

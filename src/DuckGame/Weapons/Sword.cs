@@ -274,10 +274,12 @@ namespace DuckGame
 
         protected virtual void PerformAirSpin()
         {
-            if (hSpeed > 0.0)
-                _throwSpin += (float)((Math.Abs(hSpeed) + Math.Abs(vSpeed)) * 2.0 + 4.0);
-            else
-                _throwSpin -= (float)((Math.Abs(hSpeed) + Math.Abs(vSpeed)) * 2.0 + 4.0);
+            if (this.hSpeed > 0f)
+            {
+                this._throwSpin += (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed)) * 2f + 4f;
+                return;
+            }
+            this._throwSpin -= (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed)) * 2f + 4f;
         }
 
         public new bool held => duck != null && duck.holdObject == this;
@@ -345,7 +347,7 @@ namespace DuckGame
             bayonetLethal = false;
             if (tape != null && tapedCompatriot != null)
             {
-                if (tapedCompatriot != null && (Math.Abs(_prevAngle - angleDegrees) > 1.0 || (_prevPos - position).length > 2.0))
+                if (tapedCompatriot != null && (Math.Abs(_prevAngle - angleDegrees) > 1.0f || (_prevPos - position).length > 2.0f))
                     bayonetLethal = true;
                 if (isServerForObject && bayonetLethal)
                 {
@@ -384,7 +386,7 @@ namespace DuckGame
                 ++_framesExisting;
                 if (_framesExisting > 100)
                     _framesExisting = 100;
-                if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 4.0 && _framesExisting > 10)
+                if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 4.0f && _framesExisting > 10)
                     _wasLifted = true;
                 if (owner != null)
                     _wasLifted = true;
@@ -422,36 +424,36 @@ namespace DuckGame
                     _volatile = _stayVolatile;
                     bool flag1 = false;
                     bool flag2 = false;
-                    if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2.0 || !grounded)
+                    if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2.0f || !grounded)
                     {
                         if (!grounded && Level.CheckRect<Block>(position + new Vec2(-6f, -6f), position + new Vec2(6f, -2f)) != null)
                         {
                             flag2 = true;
-                            if (vSpeed > 4.0 && !(this is OldEnergyScimi))
+                            if (vSpeed > 4.0f && !(this is OldEnergyScimi))
                                 _volatile = true;
                         }
-                        if (!flag2 && !_grounded && (Level.CheckPoint<IPlatform>(position + new Vec2(0f, 8f)) == null || vSpeed < 0.0))
+                        if (!flag2 && !_grounded && !this.initemspawner && (Level.CheckPoint<IPlatform>(position + new Vec2(0f, 8f)) == null || vSpeed < 0.0f))
                         {
                             PerformAirSpin();
                             flag1 = true;
                         }
                     }
-                    if (_framesExisting > 15 && !(this is OldEnergyScimi) && Math.Abs(hSpeed) + Math.Abs(vSpeed) > 3.0)
+                    if (_framesExisting > 15 && !(this is OldEnergyScimi) && Math.Abs(hSpeed) + Math.Abs(vSpeed) > 3.0f)
                         _volatile = true;
                     if (!flag1 | flag2)
                     {
                         _throwSpin %= 360f;
                         if (flag2)
                             _throwSpin = Math.Abs(_throwSpin - 90f) >= Math.Abs(_throwSpin + 90f) ? Lerp.Float(-90f, 0f, 16f) : Lerp.Float(_throwSpin, 90f, 16f);
-                        else if (_throwSpin > 90.0 && _throwSpin < 270.0)
+                        else if (_throwSpin > 90.0f && _throwSpin < 270.0f)
                         {
                             _throwSpin = Lerp.Float(_throwSpin, 180f, 14f);
                         }
                         else
                         {
-                            if (_throwSpin > 180.0)
+                            if (_throwSpin > 180.0f)
                                 _throwSpin -= 360f;
-                            else if (_throwSpin < -180.0)
+                            else if (_throwSpin < -180.0f)
                                 _throwSpin += 360f;
                             _throwSpin = Lerp.Float(_throwSpin, 0f, 14f);
                         }
@@ -463,7 +465,7 @@ namespace DuckGame
                         bool flag3 = false;
                         foreach (Sword sword in Level.current.things[typeof(Sword)])
                         {
-                            if (sword != this && sword.owner != null && sword._crouchStance && !sword._jabStance && !sword._jabStance && (hSpeed > 0.0 && sword.x > x - 4.0 || hSpeed < 0.0 && sword.x < x + 4.0) && Collision.LineIntersect(barrelStartPos, barrelPosition, sword.barrelStartPos, sword.barrelPosition))
+                            if (sword != this && sword.owner != null && sword._crouchStance && !sword._jabStance && !sword._jabStance && (hSpeed > 0.0f && sword.x > x - 4.0f || hSpeed < 0.0f && sword.x < x + 4.0f) && Collision.LineIntersect(barrelStartPos, barrelPosition, sword.barrelStartPos, sword.barrelPosition))
                             {
                                 Shing();
                                 sword.Shing();
@@ -471,7 +473,7 @@ namespace DuckGame
                                 _hitWait = 4;
                                 sword.owner.hSpeed += offDir * 1f;
                                 --sword.owner.vSpeed;
-                                hSpeed = (float)(-hSpeed * 0.600000023841858);
+                                hSpeed = -hSpeed * 0.6f;
                             }
                         }
                         int num = 12;
@@ -488,7 +490,7 @@ namespace DuckGame
                                     chainsaw.owner.hSpeed += offDir * 1f;
                                     --chainsaw.owner.vSpeed;
                                     flag3 = true;
-                                    hSpeed = (float)(-hSpeed * 0.600000023841858);
+                                    hSpeed = -hSpeed * 0.6f;
                                     _hitWait = 4;
                                     if (Recorder.currentRecording != null)
                                         Recorder.currentRecording.LogBonus();
@@ -499,7 +501,7 @@ namespace DuckGame
                                 Helmet helmet = Level.CheckLine<Helmet>(barrelStartPos, barrelPosition, null);
                                 if (helmet != null && helmet.equippedDuck != null && (helmet.owner != prevOwner || _framesSinceThrown > num))
                                 {
-                                    hSpeed = (float)(-hSpeed * 0.600000023841858);
+                                    hSpeed = (float)(-hSpeed * 0.6f);
                                     Shing();
                                     flag3 = true;
                                     _hitWait = 4;
@@ -509,7 +511,7 @@ namespace DuckGame
                                     ChestPlate chestPlate = Level.CheckLine<ChestPlate>(barrelStartPos, barrelPosition, null);
                                     if (chestPlate != null && chestPlate.equippedDuck != null && (chestPlate.owner != prevOwner || _framesSinceThrown > num))
                                     {
-                                        hSpeed = (float)(-hSpeed * 0.600000023841858);
+                                        hSpeed = -this.hSpeed * 0.6f;
                                         Shing();
                                         flag3 = true;
                                         _hitWait = 4;
@@ -603,13 +605,13 @@ namespace DuckGame
                         if (_jabStance)
                         {
                             _addOffsetX = MathHelper.Lerp(_addOffsetX, 3f, 0.4f);
-                            if (_addOffsetX > 2.0 && !action)
+                            if (_addOffsetX > 2.0f && !action)
                                 _swinging = false;
                         }
                         else if (raised)
                         {
                             _swing = MathHelper.Lerp(_swing, -2.8f, 0.2f);
-                            if (_swing < -2.40000009536743 && !action)
+                            if (_swing < -2.4f && !action)
                             {
                                 _swinging = false;
                                 _swing = 1.8f;
@@ -618,7 +620,7 @@ namespace DuckGame
                         else
                         {
                             _swing = MathHelper.Lerp(_swing, 2.1f, 0.4f);
-                            if (_swing > 1.79999995231628 && !action)
+                            if (_swing > 1.8f && !action)
                             {
                                 _swinging = false;
                                 _swing = 1.8f;
@@ -627,7 +629,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        if (_wasLifted && !_swinging && (!_swingPress || _shing || _jabStance && _addOffsetX < 1.0 || !_jabStance && _swing < 1.60000002384186))
+                        if (_wasLifted && !_swinging && (!_swingPress || _shing || _jabStance && _addOffsetX < 1.0f || !_jabStance && _swing < 1.6f))
                         {
                             if (_jabStance)
                                 UpdateJabPullback();
@@ -640,14 +642,14 @@ namespace DuckGame
                                     amount = 0.36f;
                                 _swing = MathHelper.Lerp(_swing, -0.22f, amount);
                                 _addOffsetX = MathHelper.Lerp(_addOffsetX, 1f, 0.2f);
-                                if (_addOffsetX > 0.0)
+                                if (_addOffsetX > 0.0f)
                                     _addOffsetX = 0f;
                                 _addOffsetY = MathHelper.Lerp(_addOffsetY, 1f, 0.2f);
-                                if (_addOffsetY > 0.0)
+                                if (_addOffsetY > 0.0f)
                                     _addOffsetY = 0f;
                             }
                         }
-                        if ((_swing < 0.0 || _jabStance) && _swing < 0.0 && _enforceJabSwing)
+                        if ((_swing < 0.0f || _jabStance) && _swing < 0.0f && _enforceJabSwing)
                         {
                             _swing = 0f;
                             _shing = false;
@@ -823,7 +825,7 @@ namespace DuckGame
                     {
                         if (amAduck != duck && amAduck is MaterialThing t)
                         {
-                            if (t.vSpeed > 0.5 && t.bottom < position.y - 8.0 && t.left < barrelPosition.x && t.right > barrelPosition.x)
+                            if (t.vSpeed > 0.5f && t.bottom < position.y - 8.0f && t.left < barrelPosition.x && t.right > barrelPosition.x)
                             {
                                 if (t is Duck duck && !duck.destroyed)
                                 {
@@ -836,7 +838,7 @@ namespace DuckGame
                             {
                                 if (t is Duck)
                                     (t as Duck).crippleTimer = 1f;
-                                else if (duck.x > t.x && t.hSpeed > 1.5 || duck.x < t.x && t.hSpeed < -1.5)
+                                else if (duck.x > t.x && t.hSpeed > 1.5f || duck.x < t.x && t.hSpeed < -1.5f)
                                 {
                                     if (t is Duck duck && !duck.destroyed)
                                     {

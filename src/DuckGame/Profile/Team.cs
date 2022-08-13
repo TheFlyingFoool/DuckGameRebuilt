@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Team
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,17 +11,21 @@ namespace DuckGame
 {
     public class Team
     {
+        //YUH YEAH AYUYH YUH YYUH ELETI GUEWHYUH YUH YUH
+        public float shake;
+        public bool favorited;
+
         public NetworkConnection customConnection;
         private Dictionary<DuckPersona, SpriteMap> _recolors = new Dictionary<DuckPersona, SpriteMap>();
         public string customHatPath;
         private static readonly long kPngHatKey = 630430737023345;
         public static bool networkDeserialize = false;
         public static List<string> hatSearchPaths = new List<string>()
-    {
-      Directory.GetCurrentDirectory() + "/Hats",
-      DuckFile.saveDirectory + "/Hats",
-      DuckFile.saveDirectory + "/Custom/Hats"
-    };
+        {
+          Directory.GetCurrentDirectory() + "/Hats",
+          DuckFile.saveDirectory + "/Hats",
+          DuckFile.saveDirectory + "/Custom/Hats"
+        };
         public static List<Team> deserializedTeams = new List<Team>();
         public static int currentLoadHat = 0;
         public static int totalLoadHats = 0;

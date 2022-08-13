@@ -12,6 +12,7 @@ namespace DuckGame
         public SpawnPoint(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            shouldbeinupdateloop = false;
         }
 
         public override void Draw()

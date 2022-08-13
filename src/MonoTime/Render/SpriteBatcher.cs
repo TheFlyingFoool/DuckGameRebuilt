@@ -68,7 +68,6 @@ namespace DuckGame
         private static Comparison<GeometryItem> CompareGeometryReverseDepth = new Comparison<GeometryItem>(MTSpriteBatcher.CompareGeometryReverseDepthFunc);
         private static Comparison<GeometryItemTexture> CompareTexturedGeometryReverseDepth = new Comparison<GeometryItemTexture>(MTSpriteBatcher.CompareTexturedGeometryReverseDepthFunc);
 
-
         public MTSpriteBatcher(GraphicsDevice device, MTSpriteBatch batch)
         {
             _device = device;
@@ -98,12 +97,16 @@ namespace DuckGame
         /// a previously allocated MTSpriteBatchItem is reused.
         /// </summary>
         /// <returns></returns>
-        ///
-        private SortedDictionary<float, List<MTSpriteBatchItem>> _batchItemListv2 = new SortedDictionary<float, List<MTSpriteBatchItem>>();
-
+        /// 
+        List<float> keys = new List<float>();
+        Dictionary<float, List<MTSpriteBatchItem>> _batchItemListv2 = new Dictionary<float, List<MTSpriteBatchItem>>();
+        MTSpriteBatchItem LastSpriteBatchItem;
+        int batchlistCount = 0;
+        public float depthmod = -1f;
         public MTSpriteBatchItem CreateBatchItem()
         {
-            MTSpriteBatchItem batchItem = _freeBatchItemQueue.Count <= 0 ? new MTSpriteBatchItem() : _freeBatchItemQueue.Dequeue();
+            // _freeBatchItemQueue.Count <= 0 ? new MTSpriteBatchItem() : _freeBatchItemQueue.Dequeue();
+            MTSpriteBatchItem batchItem = new MTSpriteBatchItem();
             _batchItemList.Add(batchItem); // add something to later for fixing if a mod uses CreateBatchItem()
             return batchItem;
         }
@@ -112,18 +115,18 @@ namespace DuckGame
 
         public MTSpriteBatchItem CreateBatchItemDepth(float Depth)
         {
+            batchlistCount += 1;
             // MTSpriteBatchItem batchItem = _freeBatchItemQueue.Count <= 0 ? new MTSpriteBatchItem() : _freeBatchItemQueue.Dequeue();
-            MTSpriteBatchItem batchItem = _freeBatchItemQueue.Count <= 0
-                ? new MTSpriteBatchItem()
-                : _freeBatchItemQueue.Dequeue();
-            _batchItemList.Add(batchItem);
-            float ndepth = Depth;
-            if (!_batchItemListv2.TryGetValue(ndepth, out List<MTSpriteBatchItem> LbatchItemList))
+            MTSpriteBatchItem batchItem = new MTSpriteBatchItem();
+            LastSpriteBatchItem = batchItem;
+            // _batchItemList.Add(batchItem);
+            Depth *= depthmod;
+            if (!_batchItemListv2.TryGetValue(Depth, out List<MTSpriteBatchItem> LbatchItemList))
             {
-                _batchItemListv2.Add(ndepth, new List<MTSpriteBatchItem> { batchItem });
+                keys.Add(Depth);
+                _batchItemListv2.Add(Depth, new List<MTSpriteBatchItem> { batchItem });
                 return batchItem;
             }
-
             LbatchItemList.Add(batchItem);
             return batchItem;
         }
@@ -131,17 +134,18 @@ namespace DuckGame
 
         public MTSpriteBatchItem StealLastBatchItem()
         {
-            MTSpriteBatchItem batchItem = _batchItemList[_batchItemList.Count - 1];
-            batchItem.inPool = false;
+            MTSpriteBatchItem batchItem = LastSpriteBatchItem;//_batchItemList[_batchItemList.Count - 1];
+            //batchItem.inPool = false;
             return batchItem;
         }
 
         public void SqueezeInItem(MTSpriteBatchItem item)
         {
-            _batchItemList.Add(item);
-            float ndepth = item.Depth;
+            batchlistCount += 1;
+            float ndepth = item.Depth * depthmod;
             if (!_batchItemListv2.TryGetValue(ndepth, out List<MTSpriteBatchItem> LbatchItemList))
             {
+                keys.Add(ndepth);
                 _batchItemListv2.Add(ndepth, new List<MTSpriteBatchItem> { item });
                 return;
             }
@@ -150,7 +154,7 @@ namespace DuckGame
 
         public MTSimpleSpriteBatchItem CreateSimpleBatchItem()
         {
-            MTSimpleSpriteBatchItem simpleBatchItem = _freeSimpleBatchItemQueue.Count <= 0 ? new MTSimpleSpriteBatchItem() : _freeSimpleBatchItemQueue.Dequeue();
+            MTSimpleSpriteBatchItem simpleBatchItem = new MTSimpleSpriteBatchItem();
             _simpleBatchItemList.Add(simpleBatchItem);
             return simpleBatchItem;
         }
@@ -396,31 +400,16 @@ namespace DuckGame
         }
         public void DrawBatch(SpriteSortMode sortMode)
         {
-            if (_batchItemList.Count == 0)
+            if (batchlistCount == 0)
                 return;
-            IEnumerable<KeyValuePair<float, List<MTSpriteBatchItem>>> _localthing = _batchItemListv2;
-            switch (sortMode)
-            {
-                case SpriteSortMode.Texture:
-                ///DGList.Sort<MTSpriteBatchItem>(_batchItemList, CompareTexture);
-                    break;
-                case SpriteSortMode.BackToFront:
-                    //_localthing = _batchItemListv2.Reverse(); mmm
-                    _localthing = _batchItemListv2.Reverse();
-                    //keys = _batchItemListv2.Keys.OrderByDescending(x => x);
-                    // DGList.Sort<MTSpriteBatchItem>(_batchItemList, MTSpriteBatcher.CompareReverseDepth);
-                    break;
-                case SpriteSortMode.FrontToBack:
-                    //keys.Sort();
-                    //DGList.Sort<MTSpriteBatchItem>(_batchItemList, MTSpriteBatcher.CompareDepth);
-                    break;
-            }
-
-            IEnumerator<KeyValuePair<float, List<MTSpriteBatchItem>>> enumerator = _localthing.GetEnumerator();
-            enumerator.MoveNext();
+            //IEnumerator<KeyValuePair<float, List<MTSpriteBatchItem>>> enumerator = _batchItemListv2.GetEnumerator();
+            //enumerator.MoveNext();
+            keys.Sort();
+            int keyindex = 0;
             int index1 = 0;
             int numBatchItems;
-            for (int count = _batchItemList.Count; count > 0; count -= numBatchItems)
+            List<MTSpriteBatchItem> mTSpriteBatchItems = _batchItemListv2[keys[keyindex]];
+            for (int count = batchlistCount; count > 0; count -= numBatchItems)
             {
                 int start = 0;
                 int end = 0;
@@ -433,12 +422,13 @@ namespace DuckGame
                 int num1 = 0;
                 while (num1 < numBatchItems)
                 {
-                    while (index1 >= enumerator.Current.Value.Count)//CollectionLengths[pagenumber])   //int[] N = fixindex(CollectionLengths, index1);//_batchItemListv2[keys[N[0]][N[1]];
+                    while (index1 >= mTSpriteBatchItems.Count)//CollectionLengths[pagenumber])   //int[] N = fixindex(CollectionLengths, index1);//_batchItemListv2[keys[N[0]][N[1]];
                     {
                         index1 = 0;
-                        enumerator.MoveNext();
+                        keyindex += 1;
+                        mTSpriteBatchItems = _batchItemListv2[keys[keyindex]];
                     }
-                    MTSpriteBatchItem batchItem = enumerator.Current.Value[index1];//_batchItemListv2[keys[pagenumber]][index1];//_subbatchItemList[index1];
+                    MTSpriteBatchItem batchItem = mTSpriteBatchItems[index1];//_batchItemListv2[keys[pagenumber]][index1];//_subbatchItemList[index1];
                     if ((batchItem.Texture != texture2D ? 1 : (batchItem.Material != material ? 1 : 0)) != 0)
                     {
                         FlushVertexArray(start, end);
@@ -474,12 +464,12 @@ namespace DuckGame
                     end = index5 + 1;
                     VertexPositionColorTexture vertexBr = batchItem.vertexBR;
                     vertexArray4[index5] = vertexBr;
-                    if (batchItem.inPool)
-                    {
-                        batchItem.Texture = null;
-                        batchItem.Material = null;
-                        _freeBatchItemQueue.Enqueue(batchItem);
-                    }
+                    //if (batchItem.inPool)
+                    //{
+                    //    batchItem.Texture = null;
+                    //    batchItem.Material = null;
+                    //    _freeBatchItemQueue.Enqueue(batchItem);
+                    //}
                     ++num1;
                     ++index1;
                 }
@@ -547,8 +537,16 @@ namespace DuckGame
             //    }
             //    flushvertexarray(start, end);
             //}
+          
+            batchlistCount = 0;
             _batchItemListv2.Clear();
-            _batchItemList.Clear();
+            //foreach(float key in keys)
+            //{
+            //    _batchItemListv2[key].Clear();
+            //}
+            keys.Clear();
+            LastSpriteBatchItem = null;
+            //_batchItemList.Clear();
         }
         //DevConsoleCommands.runv2
         public void DrawSimpleBatch(SpriteSortMode sortMode)

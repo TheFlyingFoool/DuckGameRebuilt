@@ -34,6 +34,7 @@ namespace DuckGame
                     Block block2 = blockGroup.blocks.FirstOrDefault<Block>(x => x is AutoBlock && (x as AutoBlock).blockIndex == u);
                     if (block2 != null)
                     {
+                        Level.current.AddUpdateOnce(block2);
                         block2.shouldWreck = true;
                         flag = true;
                     }
@@ -48,6 +49,7 @@ namespace DuckGame
                     blocks.Remove(autoBlock.blockIndex);
                     autoBlock.shouldWreck = true;
                     autoBlock.skipWreck = true;
+                    Level.current.AddUpdateOnce(autoBlock);
                 }
             }
         }

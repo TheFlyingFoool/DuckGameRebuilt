@@ -67,8 +67,10 @@ namespace DuckGame
           MTEffect effect,
           Matrix transformMatrix)
         {
-            GraphicsDevice device = DuckGame.Graphics.device;
-            GraphicsDevice graphicsDevice = GraphicsDevice;
+            if (sortMode == SpriteSortMode.BackToFront)
+            {
+                _batcher.depthmod = 1f;
+            }
             DuckGame.Graphics.currentStateIndex = _globalIndex;
             if (_beginCalled)
                 throw new InvalidOperationException("Begin cannot be called again until End has been successfully called.");

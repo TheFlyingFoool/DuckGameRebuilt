@@ -23,6 +23,7 @@ namespace DuckGame
             if (!floor)
                 return;
             graphic.angleDegrees = -90f;
+            shouldbeinupdateloop = false;
         }
 
         public override void Draw()

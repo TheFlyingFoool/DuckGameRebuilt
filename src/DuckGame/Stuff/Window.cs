@@ -144,6 +144,7 @@ namespace DuckGame
             if (!floor && !noframe)
             {
                 _frame = new WindowFrame(x, y, floor);
+                _frame.shouldbeinupdateloop = false;
                 Level.Add(_frame);
             }
             UpdateHeight();
@@ -247,7 +248,7 @@ namespace DuckGame
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
             with.Fondle(this);
-            if (floor && with.top > top && CalculateImpactPower(with, from) > 2.79999995231628 && with.isServerForObject)
+            if (floor && with.top > top && CalculateImpactPower(with, from) > 2.8f && with.isServerForObject)
             {
                 if (with is Duck duck)
                     RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
@@ -308,7 +309,7 @@ namespace DuckGame
         public override void Draw()
         {
             Vec2 zero = Vec2.Zero;
-            float num1 = (float)((float)_shake * _shakeVal * 0.800000011920929);
+            float num1 = (float)((float)_shake * _shakeVal * 0.8);
             if (floor)
                 zero.y = num1;
             else

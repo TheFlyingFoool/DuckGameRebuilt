@@ -37,6 +37,7 @@ namespace DuckGame
             hugWalls = WallHug.Floor;
             _editorImageCenter = true;
             _killImpact = ImpactedFrom.Top;
+            shouldbeinupdateloop = false;
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)

@@ -35,12 +35,11 @@ namespace DuckGame
             editorTooltip = "Things gotta float somehow.";
             hugWalls = WallHug.Ceiling;
             _canFlip = false;
+            shouldbeinupdateloop = false;
         }
 
         public override void Update()
         {
-            _leftAlternate = !_leftAlternate;
-            _rightAlternate = !_rightAlternate;
         }
 
         public override void Draw()

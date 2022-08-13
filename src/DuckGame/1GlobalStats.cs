@@ -80,16 +80,22 @@ namespace DuckGame
 
         public static void WinMatch(Team t)
         {
-            if (!Global._data.hatWins.ContainsKey(t.name))
-                Global._data.hatWins[t.name] = 0;
-            Global._data.hatWins[t.name]++;
+            if (!Global._data.hatWins.TryGetValue(t.name, out int n))
+            {
+                Global._data.hatWins[t.name] = 1;
+                return;
+            }
+            Global._data.hatWins[t.name] = n + 1;
         }
 
         public static void PlayCustomLevel(string lev)
         {
-            if (!Global._data.customMapPlayCount.ContainsKey(lev))
-                Global._data.customMapPlayCount[lev] = 0;
-            Global._data.customMapPlayCount[lev]++;
+            if (!Global._data.customMapPlayCount.TryGetValue(lev, out int n))
+            {
+                Global._data.customMapPlayCount[lev] = 1;
+                return;
+            }
+            Global._data.customMapPlayCount[lev] = n + 1;
         }
 
         public static void Save()

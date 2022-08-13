@@ -8,11 +8,15 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace DuckGame
 {
     public class HatSelector : Thing, ITakeInput
     {
+        public const string ButtonSprite = "iVBORw0KGgoAAAANSUhEUgAAABkAAAAYCAMAAAA4a6b0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAPUExURQAAANkCAoMBARsmMgAAAJo1rnoAAAAFdFJOU/////8A+7YOUwAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAGBJREFUKFOtjlsKwEAIA7Np73/mJtY+FUphZz8EZ41iFUCUJ25hDFaljkSnIEG/amKincHQ/spulgIUESb/nchQxSajExvv+GvmptmwNfOv7vd83/biSiscMw1pMv4GSGw7tAWYP02v3wAAAABJRU5ErkJggg==";
+        public Sprite extraButton;
+
         public StateBinding _profileBoxNumberBinding = new StateBinding(nameof(profileBoxNumber));
         private sbyte _profileBoxNumber = -1;
         public StateBinding _positionBinding = new StateBinding(nameof(netPosition));
@@ -110,7 +114,7 @@ namespace DuckGame
                 if (_profile == null || _profile.connection != DuckNetwork.localConnection)
                     return;
                 if (flag)
-                    Thing.Fondle(this, DuckNetwork.localConnection);
+                    Fondle(this, DuckNetwork.localConnection);
                 connection = DuckNetwork.localConnection;
             }
         }
@@ -218,6 +222,8 @@ namespace DuckGame
                 scale = new Vec2(0.5f, 0.5f)
             };
             _collisionSize = new Vec2(141f, 89f);
+            extraButton = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(ButtonSprite))), "boton"));
+            extraButton.center = new Vec2(12.5f, 12);
             _oButton = new Sprite("oButton");
             _demoBox = new SpriteMap("demoCrate", 20, 20);
             _demoBox.CenterOrigin();
@@ -407,7 +413,26 @@ namespace DuckGame
         public List<Team> AllTeams()
         {
             if (!Network.isActive)
-                return Teams.all;
+            {
+                List<Team> tts = new List<Team>();
+
+                List<Team> laterer = new List<Team>();
+                for (int i = 0; i < Teams.all.Count; i++)
+                {
+                    Team t = Teams.all[i];
+                    if (t.favorited)
+                    {
+                        laterer.Add(t);
+                    }
+                    else
+                    {
+                        tts.Add(t);
+                    }
+                }
+                tts.AddRange(laterer);
+
+                return tts;
+            }
             if (_profile == null)
                 return Teams.core.teams;
             if (_profile.connection != DuckNetwork.localConnection)
@@ -417,10 +442,37 @@ namespace DuckGame
                     teamList.Add(customTeam);
                 return teamList;
             }
-            List<Team> teamList1 = new List<Team>(Teams.core.teams);
-            foreach (Team extraTeam in Teams.core.extraTeams)
-                teamList1.Add(extraTeam);
-            return teamList1;
+
+
+            List<Team> ttss = new List<Team>();
+            List<Team> later = new List<Team>();
+            for (int i = 0; i < Teams.core.teams.Count; i++)
+            {
+                Team t = Teams.core.teams[i];
+                if (t.favorited)
+                {
+                    later.Add(t);
+                }
+                else
+                {
+                    ttss.Add(t);
+                }
+            }
+            for (int i = 0; i < Teams.core.extraTeams.Count; i++)
+            {
+                Team t = Teams.core.extraTeams[i];
+                if (t.favorited)
+                {
+                    later.Add(t);
+                }
+                else
+                {
+                    ttss.Add(t);
+                }
+            }
+            ttss.AddRange(later);
+
+            return ttss;
         }
 
         public override void Update()
@@ -581,6 +633,9 @@ namespace DuckGame
                     }
                     if (_selection == HSSelection.ChooseTeam)
                     {
+                        string name = _profile.team.name;//Canewton's balls
+                        string text1 = name == Teams.Player1.name || name == Teams.Player2.name || name == Teams.Player3.name || name == Teams.Player4.name || name == Teams.Player5.name || name == Teams.Player6.name || name == Teams.Player7.name || name == Teams.Player8.name ? "NO TEAM" : _profile.team.GetNameForDisplay();
+
                         if (_desiredTeamSelection == _teamSelection)
                         {
                             bool flag2 = false;
@@ -646,6 +701,7 @@ namespace DuckGame
                             {
                                 if (_profile.team.locked)
                                 {
+                                    _profile.team.shake = 2;
                                     SFX.Play("consoleError");
                                 }
                                 else
@@ -654,6 +710,22 @@ namespace DuckGame
                                     _selection = HSSelection.Main;
                                     _screen.DoFlashTransition();
                                     ConfirmTeamSelection();
+                                }
+                            }
+                            //NiK0's personal hell
+                            if (inputProfile.Pressed("SHOOT") && text1 != "NO TEAM")
+                            {
+                                Team t = FilterTeam();
+                                if (t.locked)
+                                {
+                                    SFX.Play("consoleError");
+                                    t.shake = 2;
+                                }
+                                else
+                                {
+                                    SFX.Play("click");
+                                    t.favorited = !t.favorited;
+                                    RoomEditorExtra.ReloadFavHats();
                                 }
                             }
                             if (inputProfile.Pressed("RAGDOLL"))
@@ -684,7 +756,7 @@ namespace DuckGame
                         _profile.persona.sprite.color = new Color(_profile.persona.sprite.color.r, _profile.persona.sprite.color.g, _profile.persona.sprite.color.b);
                         _profile.persona.sprite.depth = (Depth)0.9f;
                         _profile.persona.sprite.scale = new Vec2(1f, 1f);
-                        DuckGame.Graphics.Draw(_profile.persona.sprite, x + 70f, y + 60f + num1, (Depth)0.9f);
+                        Graphics.Draw(_profile.persona.sprite, x + 70f, y + 60f + num1, (Depth)0.9f);
                         short num2 = 0;
                         bool flag3 = false;
                         if (_teamSelection >= AllTeams().Count)
@@ -694,6 +766,11 @@ namespace DuckGame
                             flag3 = true;
                         }
                         int count = AllTeams().Count;
+
+                        extraButton.depth = 0.849f;
+                        extraButton.alpha = _fade;
+                        Graphics.Draw(extraButton, Mouse.positionScreen.x, Mouse.positionScreen.y);
+
                         for (int index1 = 0; index1 < 5; ++index1)
                         {
                             for (int index2 = 0; index2 < 7; ++index2)
@@ -783,20 +860,25 @@ namespace DuckGame
                                         //Vec2 pos = Vec2.Zero;
                                         Vec2 pos = new Vec2(x, (num3 + num1 + index1 * 20 - 20f)); //!flag5 ? new Vec2(x, (float)(num3 + num1 + index1 * 20 - 20.0)) : new Vec2(x + 2f, (float)(num3 + num1 + index1 * 20 - 20.0 + 1.0));
                                         Vec2 pixel = Maths.RoundToPixel(pos);
+                                        if (allTeam.shake > 0)
+                                        {
+                                            pixel.x += Rando.Float(-allTeam.shake, allTeam.shake);
+                                            allTeam.shake -= 0.1f;
+                                        }
                                         if (index4 != -1 && !flag4 && allTeam.locked)
                                         {
                                             if (_outlineMaterial == null)
                                                 _outlineMaterial = new MaterialSecretOutline();
-                                            DuckGame.Graphics.material = _outlineMaterial;
-                                            DuckGame.Graphics.Draw(g, pixel.x, pixel.y);
-                                            DuckGame.Graphics.material = null;
+                                            Graphics.material = _outlineMaterial;
+                                            Graphics.Draw(g, pixel.x, pixel.y);
+                                            Graphics.material = null;
                                         }
                                         else
                                         {
-                                            if (allTeam.metadata != null && allTeam.metadata.UseDuckColor.value)
-                                                DuckGame.Graphics.material = _profile.persona.material;
-                                            DuckGame.Graphics.Draw(g, pixel.x, pixel.y);
-                                            DuckGame.Graphics.material = null;
+                                            if (allTeam.favorited) Graphics.DrawDottedRect(pixel - new Vec2(16), pixel + new Vec2(16), Color.White, 0.95f, 1, 6);
+                                            if (allTeam.metadata != null && allTeam.metadata.UseDuckColor.value) Graphics.material = _profile.persona.material;
+                                            Graphics.Draw(g, pixel.x, pixel.y);
+                                            Graphics.material = null;
                                         }
                                     }
                                     _profile.persona.sprite.color = Color.White;
@@ -821,8 +903,7 @@ namespace DuckGame
                             Vec2 pixel = Maths.RoundToPixel(new Vec2((float)(x + this.width / 2.0 - _font.GetWidth(text) / 2.0), y + 60f + num1));
                             _font.Draw(text, pixel.x, pixel.y, Color.White, (Depth)0.95f);
                         }
-                        string name = _profile.team.name;
-                        string text1 = name == Teams.Player1.name || name == Teams.Player2.name || name == Teams.Player3.name || name == Teams.Player4.name || name == Teams.Player5.name || name == Teams.Player6.name || name == Teams.Player7.name || name == Teams.Player8.name ? "NO TEAM" : _profile.team.GetNameForDisplay();
+
                         if (_teamName != "")
                             text1 = _teamName;
                         bool flag6 = _profile.team.locked;
@@ -840,7 +921,7 @@ namespace DuckGame
                         float width = _font.GetWidth(text1);
                         Vec2 pixel1 = Maths.RoundToPixel(new Vec2((float)(x + this.width / 2.0 - width / 2.0), y + 25f + num1));
                         _font.Draw(text1, pixel1.x, pixel1.y, Color.LimeGreen * (_selection == HSSelection.ChooseTeam ? 1f : 0.6f), (Depth)0.95f);
-                        DuckGame.Graphics.DrawLine(pixel1 + new Vec2(-10f, 4f), pixel1 + new Vec2(width + 10f, 4f), Color.White * 0.1f, 2f, (Depth)0.93f);
+                        Graphics.DrawLine(pixel1 + new Vec2(-10f, 4f), pixel1 + new Vec2(width + 10f, 4f), Color.White * 0.1f, 2f, (Depth)0.93f);
                         _font.Draw("@SELECT@", x + 4f, y + 79f, new Color(180, 180, 180), (Depth)0.95f, profileInput);
                         _font.Draw("@RAGDOLL@", x + 122f, y + 79f, new Color(180, 180, 180), (Depth)0.95f, profileInput);
                         _screen.EndDraw();
@@ -944,29 +1025,29 @@ namespace DuckGame
                         Vec2 pixel2 = Maths.RoundToPixel(new Vec2((float)(width / 2.0 - _font.GetWidth(text3) / 2.0), 39f));
                         _font.Draw(text3, pixel2, Colors.MenuOption * (_mainSelection == 1 ? 1f : 0.6f), (Depth)0.95f);
                         if (_mainSelection == 1)
-                            DuckGame.Graphics.Draw(_contextArrow, pixel2.x - 8f, pixel2.y);
+                            Graphics.Draw(_contextArrow, pixel2.x - 8f, pixel2.y);
                         if (flag1)
                         {
                             string text4 = "@RAINBOWICON@EDIT ROOM";
                             Vec2 pixel3 = Maths.RoundToPixel(new Vec2((float)(width / 2.0 - _font.GetWidth(text4) / 2.0), 48f));
                             _font.Draw(text4, pixel3, _editRoomDisabled ? Colors.SuperDarkBlueGray : Colors.MenuOption * (_mainSelection == 2 ? 1f : 0.6f), (Depth)0.95f, colorSymbols: true);
                             if (_mainSelection == 2)
-                                DuckGame.Graphics.Draw(_contextArrow, pixel3.x - 8f, pixel3.y);
+                                Graphics.Draw(_contextArrow, pixel3.x - 8f, pixel3.y);
                         }
                         string text5 = _profile.team.hasHat ? "|LIME|" + _profile.team.GetNameForDisplay() + "|MENUORANGE| HAT" : "|MENUORANGE|CHOOSE HAT";
                         Vec2 pixel4 = Maths.RoundToPixel(new Vec2((float)(width / 2.0 - _font.GetWidth(text5) / 2.0), 30f));
                         _font.Draw(text5, pixel4, Color.White * (_mainSelection == 0 ? 1f : 0.6f), (Depth)0.95f);
                         if (_mainSelection == 0)
-                            DuckGame.Graphics.Draw(_contextArrow, pixel4.x - 8f, pixel4.y);
+                            Graphics.Draw(_contextArrow, pixel4.x - 8f, pixel4.y);
                         string text6 = "EXIT";
                         Vec2 pixel5 = Maths.RoundToPixel(new Vec2((float)(width / 2.0 - _font.GetWidth(text6) / 2.0), 50 + (flag1 ? 12 : 9)));
                         _font.Draw(text6, pixel5, Colors.MenuOption * (_mainSelection == (flag1 ? 3 : 2) ? 1f : 0.6f), (Depth)0.95f);
                         if (_mainSelection == (flag1 ? 3 : 2))
-                            DuckGame.Graphics.Draw(_contextArrow, pixel5.x - 8f, pixel5.y);
+                            Graphics.Draw(_contextArrow, pixel5.x - 8f, pixel5.y);
                         _font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, profileInput);
                         _font.Draw(_mainSelection != 1 || Profiles.IsDefault(_profile) ? "@CANCEL@" : "@MENU1@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, profileInput);
                         _consoleText.color = new Color(140, 140, 140);
-                        DuckGame.Graphics.Draw(_consoleText, 30f, 18f);
+                        Graphics.Draw(_consoleText, 30f, 18f);
                         _screen.EndDraw();
                     }
                 }
@@ -996,32 +1077,32 @@ namespace DuckGame
                 _blindLerp = Lerp.Float(_blindLerp, _editingRoom || _gettingXP ? 1f : 0f, 0.05f);
                 if (_blindLerp > 0.01f)
                 {
-                    for (int index = 0; index < 8; ++index)
+                    for (int i = 0; i < 8; ++i)
                     {
-                        _blind.yscale = Math.Max(0f, Math.Min((float)(_blindLerp * 3.0 - index * 0.05f), 1f));
-                        _blind.depth = (Depth)(float)(0.91f + index * 0.008f);
+                        _blind.yscale = Math.Max(0f, Math.Min(this._blindLerp * 3f - (float)i * 0.05f, 1f));
+                        _blind.depth = 0.91f + (float)i * 0.008f;
                         _blind.flipH = false;
-                        DuckGame.Graphics.Draw(_blind, (x - 3f + index * (9f * _blindLerp)), y + 1f);
+                        Graphics.Draw(_blind, base.x - 3f + (float)i * (9f * this._blindLerp), base.y + 1f);
                         _blind.flipH = true;
-                        DuckGame.Graphics.Draw(_blind, (x + 4f + 14f - index * (9f * _blindLerp)), y + 1f);
+                        Graphics.Draw(_blind, base.x + 4f + 140f - (float)i * (9f * this._blindLerp), base.y + 1f);
                     }
-                    float num = Math.Max((float)((_blindLerp - 0.5) * 2f), 0f);
+                    float num = Math.Max((this._blindLerp - 0.5f) * 2f, 0f);
                     if (num > 0.01f)
                     {
                         if (_gettingXP)
                         {
                             _gettingXPBoard.depth = (Depth)0.99f;
                             _gettingXPBoard.frame = (int)Math.Round(_gettingXPCompletion * 9f);
-                            DuckGame.Graphics.Draw(_gettingXPBoard, x + 71f, y + 43f * num);
+                            Graphics.Draw(_gettingXPBoard, x + 71f, y + 43f * num);
                             _boardLoader.depth = (Depth)0.995f;
-                            DuckGame.Graphics.Draw(_boardLoader, x + 94f, y + 52f * num);
+                            Graphics.Draw(_boardLoader, x + 94f, y + 52f * num);
                         }
                         else if (_editingRoom)
                         {
                             _editingRoomBoard.depth = (Depth)0.99f;
-                            DuckGame.Graphics.Draw(_editingRoomBoard, x + 71f, y + 43f * num);
+                            Graphics.Draw(_editingRoomBoard, x + 71f, y + 43f * num);
                             _boardLoader.depth = (Depth)0.995f;
-                            DuckGame.Graphics.Draw(_boardLoader, x + 94f, y + 52f * num);
+                            Graphics.Draw(_boardLoader, x + 94f, y + 52f * num);
                         }
                     }
                 }
@@ -1030,13 +1111,13 @@ namespace DuckGame
             }
             if (fadeVal < 0.01f || _roomEditor._mode == REMode.Place)
                 return;
-            DuckGame.Graphics.Draw(_screen.target, position + new Vec2(3f, 3f), new Rectangle?(), new Color(_screen.darken, _screen.darken, _screen.darken) * fadeVal, 0f, Vec2.Zero, new Vec2(0.25f, 0.25f), SpriteEffects.None, (Depth)0.82f);
+            Graphics.Draw(_screen.target, position + new Vec2(3f, 3f), new Rectangle?(), new Color(_screen.darken, _screen.darken, _screen.darken) * fadeVal, 0f, Vec2.Zero, new Vec2(0.25f, 0.25f), SpriteEffects.None, (Depth)0.82f);
             _selectBorder.alpha = fadeVal;
             _selectBorder.depth = (Depth)0.85f;
-            DuckGame.Graphics.Draw(_selectBorder, x - 1f, y, new Rectangle(0f, 0f, 4f, _selectBorder.height));
-            DuckGame.Graphics.Draw(_selectBorder, (x - 1f + _selectBorder.width - 4f), y, new Rectangle(_selectBorder.width - 4, 0f, 4f, _selectBorder.height));
-            DuckGame.Graphics.Draw(_selectBorder, (x - 1f + 4f), y, new Rectangle(4f, 0f, _selectBorder.width - 8, 4f));
-            DuckGame.Graphics.Draw(_selectBorder, (x - 1f + 4f), y + (_selectBorder.height - 25), new Rectangle(4f, _selectBorder.height - 25, _selectBorder.width - 8, 25f));
+            Graphics.Draw(_selectBorder, x - 1f, y, new Rectangle(0f, 0f, 4f, _selectBorder.height));
+            Graphics.Draw(_selectBorder, (x - 1f + _selectBorder.width - 4f), y, new Rectangle(_selectBorder.width - 4, 0f, 4f, _selectBorder.height));
+            Graphics.Draw(_selectBorder, (x - 1f + 4f), y, new Rectangle(4f, 0f, _selectBorder.width - 8, 4f));
+            Graphics.Draw(_selectBorder, (x - 1f + 4f), y + (_selectBorder.height - 25), new Rectangle(4f, _selectBorder.height - 25, _selectBorder.width - 8, 25f));
             string firstWord = _firstWord;
             _font.scale = new Vec2(1f, 1f);
             _font.Draw(firstWord, x + 25f, y + 79f, new Color(163, 206, 39) * fadeVal * _lcdFlash, (Depth)0.9f);

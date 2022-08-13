@@ -2872,8 +2872,8 @@ namespace DuckGame
                         profile.stats.airTime += Maths.IncFrameTimer();
                     if (isServerForObject && !sliding && inputProfile.Pressed("UP"))
                     {
-                        Desk t = Level.Nearest<Desk>(position);
-                        if (t != null && (t.position - position).length < 22.0 && Level.CheckLine<Block>(position, t.position) == null)
+                        Desk t = Level.Nearest<Desk>(position,22f);
+                        if (t != null && Level.CheckLine<Block>(position, t.position) == null)
                         {
                             Fondle(t);
                             t.Flip(offDir < 0);
@@ -3126,7 +3126,7 @@ namespace DuckGame
                         {
                             PhysicsRopeSection section = null;
                             if (_vine == null)
-                                section = Level.Nearest<PhysicsRopeSection>(x, y);
+                                section = Level.Nearest<PhysicsRopeSection>(this.position,18.0f);
                             if (section != null && (position - section.position).length < 18.0)
                             {
                                 _vine = section.rope.LatchOn(section, this);
@@ -3174,8 +3174,8 @@ namespace DuckGame
                         PhysicsRopeSection section1 = null;
                         if (_vine == null)
                         {
-                            section1 = Level.Nearest<PhysicsRopeSection>(x, y);
-                            if (section1 != null && (position - section1.position).length >= 18.0)
+                            section1 = Level.Nearest<PhysicsRopeSection>(this.position, 19f);
+                            if (section1 != null && (position - section1.position).length >= 18.0f)
                                 section1 = null;
                         }
                         bool flag6 = false;
@@ -3353,8 +3353,8 @@ namespace DuckGame
                         }
                         if (isServerForObject && grounded && Math.Abs(vSpeed) + Math.Abs(hSpeed) < 0.5 && !_closingEyes && holdObject == null && inputProfile.Pressed("SHOOT"))
                         {
-                            Ragdoll t = Level.Nearest<Ragdoll>(x, y, this);
-                            if (t != null && t.active && t.visible && (t.position - position).length < 100.0 && t.captureDuck != null && t.captureDuck.dead && !t.captureDuck._eyesClosed && (t.part1.position - (position + new Vec2(0f, 8f))).length < 4.0)
+                            Ragdoll t = Level.Nearest<Ragdoll>(this.position, 100.0f);
+                            if (t != null && t.active && t.visible && t.captureDuck != null && t.captureDuck.dead && !t.captureDuck._eyesClosed && (t.part1.position - (position + new Vec2(0f, 8f))).length < 4.0)
                             {
                                 Level.Add(new EyeCloseWing(t.part1.angle < 0.0 ? x - 4f : x - 11f, y + 7f, t.part1.angle < 0.0 ? 1 : -1, _spriteArms, this, t.captureDuck));
                                 if (Network.isActive)
@@ -3363,7 +3363,7 @@ namespace DuckGame
                                 ++profile.stats.respectGivenToDead;
                                 AddCoolness(1);
                                 _timeSinceDuckLayedToRest = DateTime.Now;
-                                Flower flower = Level.Nearest<Flower>(x, y);
+                                Flower flower = Level.Nearest<Flower>(this.position, 22.0f);
                                 if (flower != null && (flower.position - position).length < 22.0)
                                 {
                                     Fondle(t);

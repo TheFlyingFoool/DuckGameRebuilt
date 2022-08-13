@@ -2674,7 +2674,6 @@ namespace DuckGame
                 {
                     (selectionDragEnd.y, selectionDragStart.y) = (selectionDragStart.y, selectionDragEnd.y);
                 }
-
                 if (_dragSelectShiftModifier)
                 {
                     _currentDragSelectionHoverAdd.Clear();
@@ -2827,7 +2826,7 @@ namespace DuckGame
                                 _selection.Add(thing4);
                                 Thing thing5 = thing4;
                                 thing5.position -= pasteOffset;
-                                foreach (Thing thing6 in CollisionRectAll<Thing>(thing4.position + new Vec2(-6f, -6f),
+                                foreach (Thing thing6 in CollisionRectAllDan<Thing>(thing4.position + new Vec2(-6f, -6f),
                                              thing4.position + new Vec2(6f, 6f), null))
                                 {
                                     Thing col = thing6;

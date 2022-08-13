@@ -324,10 +324,26 @@ namespace DuckGame
             if (_open < 0.9f && _open > -0.9f)
             {
                 bool flag2 = false;
-                Thing thing = Level.CheckRectFilter<Duck>(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f), d => !(d is TargetDuck));
+                Duck search2 = null;
+                Thing thing = null;//Level.CheckRectFilter<Duck>(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f), d => !(d is TargetDuck));
+                foreach(Duck d in Level.CheckRectAll<Duck>(_topLeft - new Vec2(32f, 0f), _bottomRight + new Vec2(32f, 0f)))
+                {
+                    if (!(d is TargetDuck))
+                    {
+                        if (Collision.Rect(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f), d))
+                        {
+                            thing = d;
+                            break;
+                        }
+                        if (Math.Abs(d.hSpeed) > 4.0)
+                        {
+                            search2 = d;
+                        }
+                    }
+                }
                 if (thing == null)
                 {
-                    thing = Level.CheckRectFilter<Duck>(_topLeft - new Vec2(32f, 0f), _bottomRight + new Vec2(32f, 0f), d => !(d is TargetDuck) && Math.Abs(d.hSpeed) > 4.0);
+                    thing = search2;//Level.CheckRectFilter<Duck>(_topLeft - new Vec2(32f, 0f), _bottomRight + new Vec2(32f, 0f), d => !(d is TargetDuck) && Math.Abs(d.hSpeed) > 4.0);
                     flag2 = true;
                 }
                 if (thing != null)
@@ -445,31 +461,35 @@ namespace DuckGame
                 else
                     _didJiggle = false;
             }
-            _coll.Clear();
-            Level.CheckRectAll<PhysicsObject>(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f), _coll);
-            foreach (PhysicsObject t4 in _coll)
+            if (_open < -0.0 || _open > 0.0)
             {
-                if (!(t4 is TeamHat) && (t4 is Duck || !_jammed) && (!(t4 is Holdable) || t4 is Mine || (t4 as Holdable).canPickUp) && t4.solid)
+                _coll.Clear();
+                Level.CheckRectAll<PhysicsObject>(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f), _coll);
+                foreach (PhysicsObject t4 in _coll)
                 {
-                    if (!(t4 is Duck) && weight < 3.0)
+                    if (!(t4 is TeamHat) && (t4 is Duck || !_jammed) && (!(t4 is Holdable) || t4 is Mine || (t4 as Holdable).canPickUp) && t4.solid)
                     {
-                        if (_open < -0.0)
+                        if (!(t4 is Duck) && weight < 3.0)
                         {
-                            Fondle(t4);
-                            t4.hSpeed = 3f;
+                            if (_open < -0.0)
+                            {
+                                Fondle(t4);
+                                t4.hSpeed = 3f;
+                            }
+                            else if (_open > 0.0)
+                            {
+                                Fondle(t4);
+                                t4.hSpeed = -3f;
+                            }
                         }
-                        else if (_open > 0.0)
-                        {
-                            Fondle(t4);
-                            t4.hSpeed = -3f;
-                        }
+                        if (_open < -0.0 && t4 != null && (t4 is Duck || t4.right > _topLeft.x - 10.0 && t4.left < _topRight.x))
+                            flag1 = true;
+                        if (_open > 0.0 && t4 != null && (t4 is Duck || t4.left < _topRight.x + 10.0 && t4.right > _topLeft.x))
+                            flag1 = true;
                     }
-                    if (_open < -0.0 && t4 != null && (t4 is Duck || t4.right > _topLeft.x - 10.0 && t4.left < _topRight.x))
-                        flag1 = true;
-                    if (_open > 0.0 && t4 != null && (t4 is Duck || t4.left < _topRight.x + 10.0 && t4.right > _topLeft.x))
-                        flag1 = true;
                 }
             }
+            
             _jiggle = Maths.CountDown(_jiggle, 0.08f);
             if (!flag1)
             {

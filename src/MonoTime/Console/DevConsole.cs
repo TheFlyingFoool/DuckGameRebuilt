@@ -2,6 +2,7 @@
 // Type: DuckGame.DevConsole
 // Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
+// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
@@ -464,7 +465,22 @@ namespace DuckGame
         public static void RunCommand(string command, bool writeExecutedCommand = true)
         {
             command = command.Trim();
-        
+            
+            StreamReader streamRead = new StreamReader(DuckFile.optionsDirectory + "CommandHistory.txt");
+            string[] history = streamRead.ReadToEnd().Replace("\r\n", "\n").Split('\n');
+            streamRead.Close();
+            if (history.Length > 100)
+            {
+                history = history.Skip(1).ToArray();
+                File.WriteAllLines(DuckFile.optionsDirectory + "CommandHistory.txt", history);
+            }
+            else
+            {
+                StreamWriter streamWrite = File.AppendText(DuckFile.optionsDirectory + "CommandHistory.txt");
+                streamWrite.WriteLine(command);
+                streamWrite.Close();
+            }
+
             if (DG.buildExpired)
                 return;
             if (_doDataSubmission)
@@ -1540,7 +1556,18 @@ namespace DuckGame
 
         public static void Log(string text) => Log(DCSection.General, text);
         public static void Log(object? obj) => Log(obj?.ToString() ?? "null");
-
+        public static void Log(params object[]? obj)
+        {
+            string objstring = "";
+            if (obj != null)
+            {
+                for (var i = 0; i < obj.Length; i++)
+                {
+                    objstring += " " + obj[i]?.ToString() ?? "null";
+                }
+            }
+            Log(objstring);
+        }
         public static void Log(string text, Color c, float scale = 2f, int index = -1)
         {
             DCLine dcLine = new()
@@ -1714,6 +1741,23 @@ namespace DuckGame
 
         public static void InitializeCommands()
         {
+            if (!File.Exists(DuckFile.optionsDirectory + "CommandHistory.txt"))
+            {
+                File.Create(DuckFile.optionsDirectory + "CommandHistory.txt");
+            }
+
+            StreamReader streamRead = new StreamReader(DuckFile.optionsDirectory + "CommandHistory.txt");
+            string[] history = streamRead.ReadToEnd().Replace("\r\n", "\n").Split('\n');
+            streamRead.Close();
+            foreach (string line in history)
+            {
+                if (line != "")
+                {
+                    _core.previousLines.Add(line);
+                    _core.lastCommandIndex++;
+                }
+            }
+
             DevConsoleCommandAttribute.Initialize();
 
             AddCommand(new CMD("level", new CMD.Argument[1]

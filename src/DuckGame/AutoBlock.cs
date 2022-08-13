@@ -78,25 +78,25 @@ namespace DuckGame
             _neighborsInitialized = true;
             if (_leftBlock == null)
             {
-                _leftBlock = Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(left - 2f, position.y), checkFilter);
+                _leftBlock = _level.QuadTreePointFilter<AutoBlock>(new Vec2(left - 2f, position.y), checkFilter);
                 if (_leftBlock != null)
                     _leftBlock.InitializeNeighbors();
             }
             if (_rightBlock == null)
             {
-                _rightBlock = Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(right + 2f, position.y), checkFilter);
+                _rightBlock = _level.QuadTreePointFilter<AutoBlock>(new Vec2(right + 2f, position.y), checkFilter);
                 if (_rightBlock != null)
                     _rightBlock.InitializeNeighbors();
             }
             if (_upBlock == null)
             {
-                _upBlock = Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(position.x, top - 2f), checkFilter);
+                _upBlock = _level.QuadTreePointFilter<AutoBlock>(new Vec2(position.x, top - 2f), checkFilter);
                 if (_upBlock != null)
                     _upBlock.InitializeNeighbors();
             }
             if (_downBlock != null)
                 return;
-            _downBlock = Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(position.x, bottom + 2f), checkFilter);
+            _downBlock = _level.QuadTreePointFilter<AutoBlock>(new Vec2(position.x, bottom + 2f), checkFilter);
             if (_downBlock == null)
                 return;
             _downBlock.InitializeNeighbors();
@@ -352,7 +352,11 @@ namespace DuckGame
             if (structure != null)
             {
                 foreach (Block block in structure.blocks)
+                {
+                    block.hit = false;
                     block.structure = null;
+                }
+                this.hit = false;
                 structure = null;
             }
             if (up == null)
@@ -488,15 +492,15 @@ namespace DuckGame
                     Destroy(new DTRocketExplosion(null));
                     Level.Remove(this);
                 }
-                if (needsRefresh)
-                {
-                    PlaceBlock();
-                    needsRefresh = false;
-                    //this.neededRefresh = true;
-                }
             }
-            if (setLayer)
-                layer = Layer.Blocks;
+            if (needsRefresh)
+            {
+                PlaceBlock();
+                needsRefresh = false;
+                //this.neededRefresh = true;
+            }
+            //if (setLayer)
+            //    layer = Layer.Blocks;
             base.Update();
         }
 
@@ -571,12 +575,16 @@ namespace DuckGame
                 Level.Add(blockGroup);
             return blockGroup;
         }
-
+        public override void PreLevelInitialize()
+        {
+        }
         public override void Initialize()
         {
             if (_sprite != null)
                 UpdateCollision();
             DoPositioning();
+            _level.AddUpdateOnce(this);
+            shouldbeinupdateloop = false;
         }
 
         public virtual void DoPositioning()

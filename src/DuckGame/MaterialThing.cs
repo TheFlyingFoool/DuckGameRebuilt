@@ -327,13 +327,22 @@ namespace DuckGame
                     }
                 }
             }
-            if (heat > 0f)
-                heat -= coolingFactor;
-            else if (heat < -0.01f)
-                heat += coolingFactor;
-            else
-                heat = 0f;
-            if (isServerForObject && _onFire)
+            if (heat != 0f)
+            {
+                if (heat > 0f)
+                    heat -= coolingFactor;
+                else if (heat < -0.01f)
+                    heat += coolingFactor;
+                else
+                    heat = 0f;
+            }
+            //if (heat > 0f)
+            //    heat -= coolingFactor;
+            //else if (heat < -0.01f)
+            //    heat += coolingFactor;
+            //else
+            //    heat = 0f;
+            if (_onFire && isServerForObject)
                 UpdateOnFire();
             base.DoUpdate();
         }

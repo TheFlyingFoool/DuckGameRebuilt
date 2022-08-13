@@ -78,8 +78,8 @@ namespace DuckGame
         public override void Update()
         {
             bool hover = this.hover;
-            Duck duck = Level.Nearest<Duck>(x, y);
-            this.hover = duck != null && (duck.position - (position + new Vec2(8f, 0f))).length < 16f;
+            Duck duck = Level.Nearest<Duck>((position + new Vec2(8f, 0f)), 16f);
+            this.hover = duck != null;// && (duck.position - (position + new Vec2(8f, 0f))).length < 16f;
             if (!hover && this.hover)
                 HUD.AddCornerControl(HUDCorner.BottomRight, "@SHOOT@PROFILE");
             else if (hover && !this.hover)

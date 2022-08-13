@@ -137,11 +137,20 @@ namespace DuckGame
             return vec2_2.x * vec2_2.x + vec2_2.y * vec2_2.y <= radius * radius;
         }
 
-        public static bool Rect(Vec2 tl1, Vec2 br1, Thing t) => br1.y >= t.top && tl1.y <= t.bottom && tl1.x <= t.right && br1.x >= t.left;
+        public static bool Rect(Vec2 tl1, Vec2 br1, Thing t)
+        {
+            return br1.y >= t.top && tl1.y <= t.bottom && tl1.x <= t.right && br1.x >= t.left;//!(br1.y < t.top || tl1.y > t.bottom || tl1.x > t.right || br1.x < t.left); // return br1.y >= t.top && tl1.y <= t.bottom && tl1.x <= t.right && br1.x >= t.left;
+        }
 
-        public static bool Rect(Vec2 tl1, Vec2 br1, Rectangle t) => br1.y >= t.y && tl1.y <= t.Bottom && tl1.x <= t.Right && br1.x >= t.x;
+        public static bool Rect(Vec2 tl1, Vec2 br1, Rectangle t)
+        {
+            return !(br1.y < t.y && tl1.y > t.Bottom && tl1.x > t.Right && br1.x < t.x);//br1.y >= t.y && tl1.y <= t.Bottom && tl1.x <= t.Right && br1.x >= t.x;
+        }
 
-        public static bool Rect(Rectangle r1, Rectangle r2) => r1.y + r1.height >= r2.y && r1.y <= r2.y + r2.height && r1.x <= r2.x + r2.width && r1.x + r1.width >= r2.x;
+        public static bool Rect(Rectangle r1, Rectangle r2)
+        {
+            return !(r1.y + r1.height < r2.y || r1.y > r2.y + r2.height || r1.x > r2.x + r2.width || r1.x + r1.width < r2.x);//r1.y + r1.height >= r2.y && r1.y <= r2.y + r2.height && r1.x <= r2.x + r2.width && r1.x + r1.width >= r2.x;
+        }
 
         public static bool Rect(Rectangle r1, Vec4 r2) => r1.y + r1.height >= r2.y && r1.y <= r2.y + r2.w && r1.x <= r2.x + r2.z && r1.x + r1.width >= r2.x;
 

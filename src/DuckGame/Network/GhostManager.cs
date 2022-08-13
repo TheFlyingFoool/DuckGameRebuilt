@@ -230,9 +230,8 @@ namespace DuckGame
         private void ProcessGhostState(NMGhostState pState)
         {
             Profile profile = GhostObject.IndexToProfile(pState.id);
-            if (profile != null && profile.removedGhosts.ContainsKey(pState.id))
+            if (profile != null && profile.removedGhosts.TryGetValue(pState.id, out GhostObject removedGhost))
             {
-                GhostObject removedGhost = profile.removedGhosts[pState.id];
                 if (removedGhost != null)
                 {
                     if (removedGhost.removeLogCooldown == 0)

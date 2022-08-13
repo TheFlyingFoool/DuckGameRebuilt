@@ -28,6 +28,7 @@ namespace DuckGame
             _collisionOffset = new Vec2(-8f, -8f);
             depth = (Depth)0.9f;
             hugWalls = WallHug.Left | WallHug.Right | WallHug.Ceiling | WallHug.Floor;
+            shouldbeinupdateloop = false;
         }
 
         public override void Draw()

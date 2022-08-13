@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 namespace DuckGame
 {
     public class Layer : DrawList
@@ -578,6 +578,11 @@ namespace DuckGame
                         }
                         else
                         {
+                            //DuckGame.Graphics.viewport.Width
+                            //DuckGame.Graphics.viewport.Height
+                           // Vec2 topleft = Vec2.Zero;
+                            //Vec2 bottomright = Level.current.camera.transformScreenVector(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));
+                           // L//ist<Thing> stuff = (Level.CheckRectAll<Thing>(topleft, bottomright).ToList<Thing>());
                             foreach (Thing thing in transparent1)
                             {
                                 if (thing.visible)
@@ -640,6 +645,11 @@ namespace DuckGame
                 }
                 if (transparent)
                     Level.activeLevel.PostDrawLayer(this);
+                if (this == Layer.Game)
+                {
+                    DevConsoleCommands.drawthething();
+                }
+
             }
             if (Network.isActive && Network.inputDelayFrames > 0 && this == Layer.Game)
             {

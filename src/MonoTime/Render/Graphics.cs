@@ -270,7 +270,13 @@ namespace DuckGame
 
         public static void ResetSpanAdjust() => Depth.ResetSpan();
 
-        public static float AdjustDepth(Depth depth) => 1f - ((float)((depth.value + 1.0) / 2.0 * (1.0 - Depth.kDepthSpanMax)) + depth.span);
+        public static float AdjustDepth(Depth depth)
+        {
+            float DDepth = (depth.value + 1f) / 2f * (1f - Depth.kDepthSpanMax) + depth.span;//(depth.value + 1f) / 2f;//(depth.value + 1f) / 2f * (1f - Depth.kDepthSpanMax) + depth.span;
+            float FDepth = 1.0f - DDepth;
+
+            return FDepth;
+        }
 
         public static void ResetDepthBias()
         {
@@ -479,9 +485,9 @@ namespace DuckGame
                 origin.x = (sourceRectangle.HasValue ? sourceRectangle.Value.width : texture.w) - origin.x;
             float depth1 = DuckGame.Graphics.AdjustDepth(depth);
             if (DuckGame.Graphics.material != null)
-                DuckGame.Graphics._currentBatch.DrawWithMaterial(texture, position, sourceRectangle, color, rotation, origin, scale, effects, depth1, DuckGame.Graphics.material);
+                DuckGame.Graphics._currentBatch.DrawWithMaterial(texture, position, sourceRectangle, color, rotation, origin, scale, effects, depth.value, DuckGame.Graphics.material);
             else
-                DuckGame.Graphics._currentBatch.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, depth1);
+                DuckGame.Graphics._currentBatch.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, depth.value);
         }
 
         public static void Draw(Sprite g, float x, float y)

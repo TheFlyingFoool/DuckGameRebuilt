@@ -645,8 +645,8 @@ namespace DuckGame
                 return GhostManager.context.GetSpecialSync(index);
             NetIndex16 netIndex16 = (NetIndex16)index;
             Profile profile = GhostObject.IndexToProfile(netIndex16);
-            if (profile != null && profile.removedGhosts.ContainsKey(netIndex16))
-                return profile.removedGhosts[netIndex16].thing;
+            if (profile != null && profile.removedGhosts.TryGetValue(netIndex16, out GhostObject removedGhost))
+                return removedGhost.thing;
             System.Type type = Editor.IDToType[key];
             if (!pThingType.IsAssignableFrom(type))
             {
