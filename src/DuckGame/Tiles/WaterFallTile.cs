@@ -20,6 +20,7 @@ namespace DuckGame
             layer = Layer.Foreground;
             depth = (Depth)0.9f;
             alpha = 0.8f;
+            shouldbeinupdateloop = false;
         }
 
         public override void Draw()

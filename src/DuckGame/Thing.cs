@@ -20,6 +20,10 @@ namespace DuckGame
     /// </summary>
     public abstract class Thing : Transform
     {
+        public bool shouldbeinupdateloop = true;
+        public int hashcodeindex; // dont touch :)
+        public Vec2 oldposition = Vec2.Zero; 
+        public Vec2[] Buckets = new Vec2[0];
         public int maxPlaceable = -1;
         public GhostPriority syncPriority;
         public ushort _ghostType = 1;
@@ -128,12 +132,21 @@ namespace DuckGame
         /// </summary>
         /// <param name="asset">The asset name, relative to the mods' Content folder.</param>
         /// <returns>The path.</returns>
+
+        //public override int GetHashCode()
+        //{
+        //    return (int)(hashcodeindex + this.x + this.y);
+        //}
         public string GetPath(string asset) => ModLoader._modAssemblies[GetType().Assembly].configuration.contentDirectory + asset.Replace('\\', '/');
 
         /// <summary>Gets the path to an asset from a mod.</summary>
         /// <typeparam name="T">The mod type to fetch from</typeparam>
         /// <param name="asset">The asset name, relative to the mods' Content folder.</param>
         /// <returns>The path.</returns>
+
+        public virtual void PreLevelInitialize()
+        {
+        }
         public static string GetPath<T>(string asset) where T : Mod => Mod.GetPath<T>(asset);
 
         public virtual Vec2 netPosition
@@ -1474,10 +1487,14 @@ namespace DuckGame
             if (_anchor != null)
                 position = _anchor.position;
             Update();
-            _topQuick = top;
-            _bottomQuick = bottom;
-            _leftQuick = left;
-            _rightQuick = right;
+            if (Buckets.Length > 0 && ((oldposition - position)).length > 10 && Level.current != null) //((oldposition - position)).length > 10
+            {
+                Level.current.things.UpdateObject(this);
+            }
+            //_topQuick = top;
+            //_bottomQuick = bottom;
+            //_leftQuick = left;
+            //_rightQuick = right;
         }
 
         public virtual void Update()
@@ -1490,10 +1507,10 @@ namespace DuckGame
 
         public virtual void DoEditorUpdate()
         {
-            _topQuick = top;
-            _bottomQuick = bottom;
-            _leftQuick = left;
-            _rightQuick = right;
+            //_topQuick = top;
+            //_bottomQuick = bottom;
+            //_leftQuick = left;
+            //_rightQuick = right;
             EditorUpdate();
         }
 
@@ -1592,10 +1609,25 @@ namespace DuckGame
 
         public void DrawCollision()
         {
-            DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
-            if (!(this is PhysicsObject))
+            
+           
+            PhysicsObject d = this as PhysicsObject;
+            if (d == null)
                 return;
-            int num = (this as PhysicsObject).sleeping ? 1 : 0;
+            if (d.sleeping)
+            {
+                DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.LightBlue * 0.8f, (Depth)1f, false, 0.5f);
+            }
+            else
+            {
+                DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Red * 0.8f, (Depth)1f, false, 0.5f);
+            }
+            //     return;
+            // int num = (this as PhysicsObject).sleeping ? 1 : 0;
+
+            // if (!(this is PhysicsObject))
+            //     return;
+            // int num = (this as PhysicsObject).sleeping ? 1 : 0;
         }
 
         public void Draw(Sprite spr, float xpos, float ypos, int d = 1) => Draw(spr, new Vec2(xpos, ypos), d);

@@ -22,6 +22,7 @@ namespace DuckGame
             editorTooltip = "It's a featureless grey block.";
             thickness = 4f;
             physicsMaterial = PhysicsMaterial.Metal;
+            shouldbeinupdateloop = false;
         }
     }
 }

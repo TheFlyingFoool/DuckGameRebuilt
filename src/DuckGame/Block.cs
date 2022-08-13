@@ -34,6 +34,11 @@ namespace DuckGame
         //private List<ConcaveLine> minimumVertex = new List<ConcaveLine>();
         //private int _initializeWait = 20;
 
+        public bool hit
+        {
+            get => _hit;
+            set => _hit = value;
+        }
         public bool groupedWithNeighbors
         {
             get => _groupedWithNeighbors;
@@ -194,7 +199,6 @@ namespace DuckGame
             }
             return nearestCorner;
         }
-
         public void CalculateConcaveLines()
         {
             _concaveLines = new List<ConcaveLine>();
@@ -356,12 +360,16 @@ namespace DuckGame
 
         public override void Update()
         {
-            InitializeNeighbors();
-            _hit = false;
+            //InitializeNeighbors();
+            //_hit = false;
         }
 
-        public override void DoInitialize() => base.DoInitialize();
-
+        public override void DoInitialize()
+        {
+            InitializeNeighbors();
+            base.DoInitialize();
+        }
+      
         public virtual void InitializeNeighbors()
         {
         }

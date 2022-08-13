@@ -49,6 +49,8 @@ namespace DuckGame
         private MaterialThing _collideBottom;
         private MaterialThing _wallCollideLeft;
         private MaterialThing _wallCollideRight;
+        private MaterialThing _lastrealcollideBottom;
+        private Vec2 _lastrealcollidepos;
         protected bool _inPhysicsLoop;
         protected Vec2 _lastPosition = Vec2.Zero;
         protected Vec2 _lastVelocity = Vec2.Zero;
@@ -83,7 +85,7 @@ namespace DuckGame
         private MaterialGrid _gridMaterial;
         private Material _oldMaterial;
         private bool _oldMaterialSet;
-
+        public bool initemspawner;
         public short netVelocityX
         {
             get => (short)Math.Round(hSpeed * 1000.0);
@@ -340,8 +342,8 @@ namespace DuckGame
                     impacting.RemoveWhere(_collisionPred);
                 }
                 if (_sleeping)
-                {
-                    if (hSpeed == 0.0 && this.vSpeed == 0.0 && heat <= 0.0 && !_awaken)
+                {//(_collideBottom is PhysicsObject)
+                    if (hSpeed == 0.0 && this.vSpeed == 0.0 && heat <= 0.0 && !_awaken && (this._lastrealcollideBottom is not PhysicsObject || (int)(this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0 && (int)(this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0))
                         return;
                     _sleeping = false;
                     _awaken = false;
@@ -574,8 +576,10 @@ namespace DuckGame
                                     flag5 = true;
                                     if (this.vSpeed > 0.0)
                                     {
-                                        EnergyScimitar energyScimitar = this as EnergyScimitar;
+                                        //EnergyScimitar energyScimitar = this as EnergyScimitar;
                                         _collideBottom = hitThing;
+                                        _lastrealcollidepos = hitThing.position;
+                                        _lastrealcollideBottom = hitThing;
                                         hitThing.Impact(this, ImpactedFrom.Top, true);
                                         Impact(hitThing, ImpactedFrom.Bottom, true);
                                     }
@@ -594,11 +598,11 @@ namespace DuckGame
                     else
                         break;
                 }
-                if (grounded)
+                if (grounded || initemspawner)
                 {
                     lastGrounded = DateTime.Now;
-                    framesSinceGrounded = 0;
-                    if (!doFloat && hSpeed == 0.0 && this.vSpeed == 0.0 && !(_collideBottom is PhysicsObject) && (_collideBottom is Block || _collideBottom is IPlatform) && (!(_collideBottom is ItemBox) || (_collideBottom as ItemBox).canBounce))
+                    framesSinceGrounded = 0;/// mmmm remove i shall !(_collideBottom is PhysicsObject)
+                    if (!doFloat && hSpeed == 0.0 && this.vSpeed == 0.0 && (((_collideBottom is Block || _collideBottom is IPlatform) && (!(_collideBottom is ItemBox) || (_collideBottom as ItemBox).canBounce)) || initemspawner))
                         _sleeping = true;
                 }
                 if (num5 > -999.0)
@@ -765,8 +769,10 @@ namespace DuckGame
                         if (vSpeed > -vSpeed * bouncy)
                         {
                             vSpeed = -vSpeed * bouncy;
-                            if (Math.Abs(vSpeed) < 0.1f)
+                            if (Math.Abs(vSpeed) < 0.1f || (bouncy != 0f && Math.Abs(_vSpeed) < 0.1f))
+                            {
                                 vSpeed = 0f;
+                            }
                         }
                         grounded = true;
                         break;
@@ -786,7 +792,7 @@ namespace DuckGame
                         if (vSpeed > -vSpeed * bouncy)
                         {
                             vSpeed = -vSpeed * bouncy;
-                            if (Math.Abs(vSpeed) < 0.1f)
+                            if (Math.Abs(vSpeed) < 0.1f || (bouncy != 0f && Math.Abs(_vSpeed) < 0.1f))
                                 vSpeed = 0f;
                         }
                         grounded = true;

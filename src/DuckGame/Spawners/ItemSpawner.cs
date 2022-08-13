@@ -84,6 +84,8 @@ namespace DuckGame
                 _isClassicSpawner = true;
             _ball1 = new SpawnerBall(x, y - 1f, false);
             _ball2 = new SpawnerBall(x, y - 1f, true);
+            _ball1.shouldbeinupdateloop = false;
+            _ball2.shouldbeinupdateloop = false;
             Level.Add(_ball1);
             Level.Add(_ball2);
             if (spawnOnStart)

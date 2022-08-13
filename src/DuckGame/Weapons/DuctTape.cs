@@ -33,7 +33,7 @@ namespace DuckGame
                 if (!isServerForObject)
                     return;
                 Holdable holdable = Level.current.NearestThingFilter<Holdable>(position, t =>
-               {
+                {
                    if (t.owner == null && t != this)
                    {
                        switch (t)
@@ -47,8 +47,8 @@ namespace DuckGame
                        }
                    }
                    return false;
-               });
-                if (Distance(holdable) >= 16.0)
+                }, 16.0f);
+                if (Distance(holdable) >= 16.0f)
                     return;
                 Level.Add(SmallSmoke.New(position.x, position.y));
                 Level.Add(SmallSmoke.New(position.x, position.y));

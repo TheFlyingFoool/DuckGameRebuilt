@@ -72,7 +72,7 @@ namespace DuckGame
                         showedWarning = true;
                     }
                 }
-                else if (Level.CheckRectFilter<PhysicsObject>(new Vec2(x - 4f, y - 24f), new Vec2(x + 4f, y + 8f), d => !(d is TeamHat)) == null)
+                else if (_desiredOpen != 0f && Level.CheckRectFilter<PhysicsObject>(new Vec2(x - 4f, y - 24f), new Vec2(x + 4f, y + 8f), d => !(d is TeamHat)) == null)
                     _desiredOpen = 0f;
             }
             else
@@ -81,7 +81,7 @@ namespace DuckGame
                     _noSensorSprite = new SpriteMap("verticalDoorNoSensor", 16, 32);
                 _sprite = _noSensorSprite;
                 _desiredOpen = slideLockOpened ? 1f : 0f;
-                if (Level.CheckRectFilter<PhysicsObject>(new Vec2(x - 4f, y - 24f), new Vec2(x + 4f, y + 8f), d => !(d is TeamHat)) != null && _opened)
+                if (_opened && Level.CheckRectFilter<PhysicsObject>(new Vec2(x - 4f, y - 24f), new Vec2(x + 4f, y + 8f), d => !(d is TeamHat)) != null)
                     _desiredOpen = 1f;
             }
             if (_desiredOpen > 0.5 && !_opened)

@@ -218,6 +218,18 @@ namespace DuckGame
                     camera.centerY -= (float)(((DuckGame.Graphics.aspect * camera.width) - (9f / 16f * camera.width)) / 2.0);
                 if (!VirtualTransition.active)
                     StaticRenderer.Update();
+                foreach (BlockGroup block in _things[typeof(BlockGroup)])
+                {
+                    block.PreLevelInitialize();
+                }
+                foreach (AutoBlock block in _things[typeof(AutoBlock)])
+                {
+                    block.PreLevelInitialize();
+                }
+                foreach (AutoPlatform autoPlatform in _things[typeof(AutoPlatform)])
+                {
+                    autoPlatform.PreLevelInitialize();
+                }
                 if (!Network.isActive)
                     return;
                 ClientReady(DuckNetwork.localConnection);
@@ -226,6 +238,18 @@ namespace DuckGame
             {
                 foreach (Thing thing in _things)
                     thing.AddToLayer();
+                foreach (BlockGroup block in _things[typeof(BlockGroup)])
+                {
+                    block.PreLevelInitialize();
+                }
+                foreach (AutoBlock block in _things[typeof(AutoBlock)])
+                {
+                    block.PreLevelInitialize();
+                }
+                foreach (AutoPlatform autoPlatform in _things[typeof(AutoPlatform)])
+                {
+                    autoPlatform.PreLevelInitialize();
+                }
             }
         }
 
@@ -686,7 +710,11 @@ namespace DuckGame
         public virtual void NetworkDebuggerPrepare()
         {
         }
-
+        public void AddUpdateOnce(Thing T)
+        {
+            occasionalupdatethings.Add(T);
+        }
+        public List<Thing> occasionalupdatethings = new List<Thing>();
         public virtual void UpdateThings()
         {
             Network.PostDraw();
@@ -698,7 +726,19 @@ namespace DuckGame
                     if (thing2.shouldRunUpdateLocally)
                         (thing2 as IComplexUpdate).OnPreUpdate();
                 }
-                foreach (Thing update in _things.updateList)
+                foreach (Thing update in _things.RealupdateList)//_things.updateList)
+                {
+                    if (update.active)
+                    {
+                        if (update.shouldRunUpdateLocally)
+                            update.DoUpdate();
+                    }
+                    else
+                        update.InactiveUpdate();
+                    if (Level._core.nextLevel != null)
+                        break;
+                }
+                foreach (Thing update in occasionalupdatethings)
                 {
                     if (update.active)
                     {
@@ -720,7 +760,14 @@ namespace DuckGame
             {
                 foreach (Thing thing4 in thing1)
                     (thing4 as IComplexUpdate).OnPreUpdate();
-                foreach (Thing update in _things.updateList)
+                foreach (Thing update in _things.RealupdateList)//_things.updateList)
+                {
+                    if (update.active && update.level != null)
+                        update.DoUpdate();
+                    if (Level._core.nextLevel != null)
+                        break;
+                }
+                foreach (Thing update in occasionalupdatethings)
                 {
                     if (update.active && update.level != null)
                         update.DoUpdate();
@@ -730,6 +777,7 @@ namespace DuckGame
                 foreach (Thing thing5 in thing1)
                     (thing5 as IComplexUpdate).OnPostUpdate();
             }
+            occasionalupdatethings.Clear();
         }
 
         public virtual void Update()
@@ -786,6 +834,7 @@ namespace DuckGame
             DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
             Draw();
             things.Draw();
+            
             DuckGame.Graphics.screen.End();
             if (DevConsole.splitScreen && this is GameLevel)
                 SplitScreen.Draw();
@@ -955,7 +1004,9 @@ namespace DuckGame
         public static T Nearest<T>(float x, float y, Thing ignore) => Level.current.NearestThing<T>(new Vec2(x, y), ignore);
 
         public static T Nearest<T>(float x, float y) => Level.current.NearestThing<T>(new Vec2(x, y));
+        public static T Nearest<T>(Vec2 point, float maxdistance) => Level.current.NearestThing<T>(point, maxdistance);
 
+        public static T Nearest<T>(Vec2 point, float maxdistance, Thing ignore) => Level.current.NearestThing<T>(point, maxdistance, ignore);
         public static T Nearest<T>(Vec2 p) => Level.current.NearestThing<T>(p);
 
         public static T Nearest<T>(Vec2 point, Thing ignore, int nearIndex, Layer layer) => Level.current.NearestThing<T>(point, ignore, nearIndex, layer);
@@ -986,9 +1037,17 @@ namespace DuckGame
 
         public static T CheckRect<T>(Vec2 p1, Vec2 p2) => Level.current.CollisionRect<T>(p1, p2);
 
-        public static List<T> CheckRectAll<T>(Vec2 p1, Vec2 p2, List<T> outList) => Level.current.CollisionRectAll<T>(p1, p2, outList);
+        public static List<T> CheckRectAll<T>(Vec2 p1, Vec2 p2, List<T> outList) => Level.current.CollisionRectAllDan<T>(p1, p2, outList);
 
-        public static IEnumerable<T> CheckRectAll<T>(Vec2 p1, Vec2 p2) => Level.current.CollisionRectAll<T>(p1, p2, null);
+        public static IEnumerable<T> CheckRectAll<T>(Vec2 p1, Vec2 p2)
+        {
+            return Level.current.CollisionRectAllDan<T>(p1, p2, null); // spooky time
+            //return Level.current.CollisionRectAll<T>(p1, p2, null);
+        }
+        public static IEnumerable<T> CheckRectAllDan<T>(Vec2 p1, Vec2 p2)
+        {
+            return Level.current.CollisionRectAllDan<T>(p1, p2, null);
+        }
 
         public T CollisionRect<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
 
@@ -1298,17 +1357,100 @@ namespace DuckGame
         public T NearestThingFilter<T>(Vec2 point, Predicate<Thing> filter, float maxDistance)
         {
             maxDistance *= maxDistance;
+            Type t = typeof(T);
             Thing thing1 = null;
             float num = float.MaxValue;
-            foreach (Thing thing2 in things[typeof(T)])
+            int positionx = (int)((point.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
+            int positiony = (int)((point.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
+            for (int x = -1; x < 2; x++)
             {
-                if (!thing2.removeFromLevel)
+                for (int y = -1; y < 2; y++)
                 {
-                    float lengthSq = (point - thing2.position).lengthSq;
-                    if (lengthSq < num && lengthSq < maxDistance && filter(thing2))
+                    if (_things.Buckets.TryGetValue(new Vec2(positionx + x, positiony + y), out Dictionary<Type, List<Thing>> output))
                     {
-                        num = lengthSq;
-                        thing1 = thing2;
+                        if (output.TryGetValue(t, out List<Thing> output2))
+                        {
+                            foreach (Thing thing2 in output2)
+                            {
+                                if (!thing2.removeFromLevel)
+                                {
+                                    float lengthSq = (point - thing2.position).lengthSq;
+                                    if (lengthSq < num && lengthSq < maxDistance && filter(thing2))
+                                    {
+                                        num = lengthSq;
+                                        thing1 = thing2;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return thing1 == null ? default(T) : (T)(object)thing1;
+        }
+        public T NearestThing<T>(Vec2 point, float maxDistance)
+        {
+            maxDistance *= maxDistance;
+            Type t = typeof(T);
+            Thing thing1 = null;
+            float num = float.MaxValue;
+            int positionx = (int)((point.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
+            int positiony = (int)((point.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
+            for (int x = -1; x < 2; x++)
+            {
+                for (int y = -1; y < 2; y++)
+                {
+                    if (_things.Buckets.TryGetValue(new Vec2(positionx + x, positiony + y), out Dictionary<Type, List<Thing>> output))
+                    {
+                        if (output.TryGetValue(t, out List<Thing> output2))
+                        {
+                            foreach (Thing thing2 in output2)
+                            {
+                                if (!thing2.removeFromLevel)
+                                {
+                                    float lengthSq = (point - thing2.position).lengthSq;
+                                    if (lengthSq < num && lengthSq < maxDistance)
+                                    {
+                                        num = lengthSq;
+                                        thing1 = thing2;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return thing1 == null ? default(T) : (T)(object)thing1;
+        }
+        public T NearestThing<T>(Vec2 point, float maxDistance, Thing ignore)
+        {
+            maxDistance *= maxDistance;
+            Type t = typeof(T);
+            Thing thing1 = null;
+            float num = float.MaxValue;
+            int positionx = (int)((point.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
+            int positiony = (int)((point.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
+            for (int x = -1; x < 2; x++)
+            {
+                for (int y = -1; y < 2; y++)
+                {
+                    if (_things.Buckets.TryGetValue(new Vec2(positionx + x, positiony + y), out Dictionary<Type, List<Thing>> output))
+                    {
+                        if (output.TryGetValue(t, out List<Thing> output2))
+                        {
+                            foreach (Thing thing2 in output2)
+                            {
+                                if (!thing2.removeFromLevel)
+                                {
+                                    float lengthSq = (point - thing2.position).lengthSq;
+                                    if (thing2 != ignore && lengthSq < num && lengthSq < maxDistance)
+                                    {
+                                        num = lengthSq;
+                                        thing1 = thing2;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1317,74 +1459,123 @@ namespace DuckGame
 
         public T CollisionCircle<T>(Vec2 p1, float radius, Thing ignore)
         {
-            System.Type key = typeof(T);
-            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            foreach (Thing thing in this.things.CollisionCircleAll(p1, radius,typeof(T)))
             {
-                if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Circle(p1, radius, dynamicObject))
-                    return (T)(object)dynamicObject;
+                if (!thing.removeFromLevel && thing != ignore && Collision.Circle(p1, radius, thing))
+                {
+                    return(T)(object)thing;
+                }
             }
-            return _things.HasStaticObjects(key) ? _things.quadTree.CheckCircle<T>(p1, radius, ignore) : default(T);
+            return default(T);
         }
 
+        //public T CollisionCircle<T>(Vec2 p1, float radius)
+        //{
+        //    System.Type key = typeof(T);
+        //    foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+        //    {
+        //        if (!dynamicObject.removeFromLevel && Collision.Circle(p1, radius, dynamicObject))
+        //            return (T)(object)dynamicObject;
+        //    }
+        //    return _things.HasStaticObjects(key) ? _things.quadTree.CheckCircle<T>(p1, radius) : default(T);
+        //}
         public T CollisionCircle<T>(Vec2 p1, float radius)
         {
-            System.Type key = typeof(T);
-            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            foreach (Thing thing in this.things.CollisionCircleAll(p1, radius, typeof(T)))
             {
-                if (!dynamicObject.removeFromLevel && Collision.Circle(p1, radius, dynamicObject))
-                    return (T)(object)dynamicObject;
+                if (!thing.removeFromLevel && Collision.Circle(p1, radius, thing))
+                {
+                    return (T)(object)thing;
+                }
             }
-            return _things.HasStaticObjects(key) ? _things.quadTree.CheckCircle<T>(p1, radius) : default(T);
+            return default(T);
         }
-
-        public IEnumerable<T> CollisionCircleAll<T>(Vec2 p1, float radius)
+        public IEnumerable<T> CollisionCircleAll<T>(Vec2 p1, float radius) //ban
         {
-            List<object> nextCollisionList = Level.GetNextCollisionList();
-            System.Type key = typeof(T);
-            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            List<T> outList1 = new List<T>();
+            foreach (Thing thing in this.things.CollisionCircleAll(p1, radius, typeof(T)))
             {
-                if (!dynamicObject.removeFromLevel && Collision.Circle(p1, radius, dynamicObject))
-                    nextCollisionList.Add(dynamicObject);
+                if (!thing.removeFromLevel && Collision.Circle(p1, radius, thing))
+                {
+                    outList1.Add((T)(object)thing);
+                }
             }
-            if (_things.HasStaticObjects(key))
-                _things.quadTree.CheckCircleAll<T>(p1, radius, nextCollisionList);
-            return nextCollisionList.AsEnumerable<object>().Cast<T>();
+            return outList1;//nextCollisionList.AsEnumerable<object>().Cast<T>();
         }
+        //public IEnumerable<T> CollisionCircleAll<T>(Vec2 p1, float radius) old
+        //{
+
+        //    List<object> nextCollisionList = Level.GetNextCollisionList();
+        //    System.Type key = typeof(T);
+        //    foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+        //    {
+        //        if (!dynamicObject.removeFromLevel && Collision.Circle(p1, radius, dynamicObject))
+        //            nextCollisionList.Add(dynamicObject);
+        //    }
+        //    if (_things.HasStaticObjects(key))
+        //        _things.quadTree.CheckCircleAll<T>(p1, radius, nextCollisionList);
+        //    return nextCollisionList.AsEnumerable<object>().Cast<T>();
+        //}
 
         public T CollisionRectFilter<T>(Vec2 p1, Vec2 p2, Predicate<T> filter)
         {
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            //System.Type key = typeof(T);
+            //foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            //{
+            //    if (!dynamicObject.removeFromLevel && Collision.Rect(p1, p2, dynamicObject) && filter((T)(object)dynamicObject))
+            //        return (T)(object)dynamicObject;
+            //}
+            //return _things.HasStaticObjects(key) ? _things.quadTree.CheckRectangleFilter<T>(p1, p2, filter) : default(T);
+            foreach (Thing thing in this.things.CollisionRectAll(p1, p2, key))
             {
-                if (!dynamicObject.removeFromLevel && Collision.Rect(p1, p2, dynamicObject) && filter((T)(object)dynamicObject))
-                    return (T)(object)dynamicObject;
+                if (!thing.removeFromLevel && Collision.Rect(p1, p2, thing) && filter((T)(object)thing))
+                {
+                    return (T)(object)thing;
+                }
             }
-            return _things.HasStaticObjects(key) ? _things.quadTree.CheckRectangleFilter<T>(p1, p2, filter) : default(T);
+            return default(T);
         }
 
         public T CollisionRect<T>(Vec2 p1, Vec2 p2, Thing ignore)
         {
-            System.Type key = typeof(T);
-            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            //System.Type key = typeof(T);
+            //foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            //{
+            //    if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Rect(p1, p2, dynamicObject))
+            //        return (T)(object)dynamicObject;
+            //}
+            //return _things.HasStaticObjects(key) ? _things.quadTree.CheckRectangle<T>(p1, p2, ignore) : default(T);
+            foreach (Thing thing in this.things.CollisionRectAll(p1, p2, typeof(T)))
             {
-                if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Rect(p1, p2, dynamicObject))
-                    return (T)(object)dynamicObject;
+                if (!thing.removeFromLevel && thing != ignore && Collision.Rect(p1, p2, thing))
+                {
+                    return (T)(object)thing;
+                }
             }
-            return _things.HasStaticObjects(key) ? _things.quadTree.CheckRectangle<T>(p1, p2, ignore) : default(T);
+            return default(T);
         }
 
         public T CollisionRect<T>(Vec2 p1, Vec2 p2)
         {
-            System.Type key = typeof(T);
-            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            foreach (Thing thing in this.things.CollisionRectAll(p1, p2, typeof(T)))
             {
-                if (!dynamicObject.removeFromLevel && Collision.Rect(p1, p2, dynamicObject))
-                    return (T)(object)dynamicObject;
+                if (!thing.removeFromLevel && Collision.Rect(p1, p2, thing))
+                {
+                    return (T)(object)thing;
+                }
             }
-            return _things.HasStaticObjects(key) ? _things.quadTree.CheckRectangle<T>(p1, p2) : default(T);
+            return default(T);
+            //System.Type key = typeof(T);
+            //foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            //{
+            //    if (!dynamicObject.removeFromLevel && Collision.Rect(p1, p2, dynamicObject))
+            //        return (T)(object)dynamicObject;
+            //}
+            //return _things.HasStaticObjects(key) ? _things.quadTree.CheckRectangle<T>(p1, p2) : default(T);
         }
-
-        public List<T> CollisionRectAll<T>(Vec2 p1, Vec2 p2, List<T> outList)
+        //GetThings
+        public List<T> CollisionRectAll<T>(Vec2 p1, Vec2 p2, List<T> outList) // old DG
         {
             List<T> outList1 = outList == null ? new List<T>() : outList;
             System.Type key = typeof(T);
@@ -1395,6 +1586,27 @@ namespace DuckGame
             }
             if (_things.HasStaticObjects(key))
                 _things.quadTree.CheckRectangleAll<T>(p1, p2, outList1);
+            return outList1;
+        }
+        public List<T> CollisionRectAllDan<T>(Vec2 p1, Vec2 p2, List<T> outList)
+        {
+            List<T> outList1 = outList == null ? new List<T>() : outList;
+            foreach (Thing thing in this.things.CollisionRectAll(p1, p2, typeof(T)))
+            {
+                if (!thing.removeFromLevel && Collision.Rect(p1, p2, thing))
+                {
+                    outList1.Add((T)(object)thing);
+                }
+            }
+            //bool flag2 = !t.removeFromLevel && Collision.Rect(p1, p2, t);
+            //System.Type key = typeof(T);
+            //foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            //{
+            //    if (!dynamicObject.removeFromLevel && Collision.Rect(p1, p2, dynamicObject))
+            //        outList1.Add((T)(object)dynamicObject);
+            //}
+            //if (_things.HasStaticObjects(key))
+            //    _things.quadTree.CheckRectangleAll<T>(p1, p2, outList1);
             return outList1;
         }
 
@@ -1443,6 +1655,7 @@ namespace DuckGame
         {
             position = new Vec2(0f, 0f);
             System.Type key = typeof(T);
+
             foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel)
@@ -1531,25 +1744,33 @@ namespace DuckGame
             return _things.HasStaticObjects(pType) ? _things.quadTree.CheckPoint(pType, point, ignore) : null;
         }
 
+        //public T CollisionPoint<T>(Vec2 point)
+        //{
+        //    System.Type key = typeof(T);
+        //    if (key == typeof(Thing))
+        //    {
+        //        foreach (Thing thing in _things)
+        //        {
+        //            if (!thing.removeFromLevel && Collision.Point(point, thing))
+        //                return (T)(object)thing;
+        //        }
+        //    }
+        //    foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+        //    {
+        //        if (!dynamicObject.removeFromLevel && Collision.Point(point, dynamicObject))
+        //            return (T)(object)dynamicObject;
+        //    }
+        //    return _things.HasStaticObjects(key) ? _things.quadTree.CheckPoint<T>(point) : default(T);
+        //}
         public T CollisionPoint<T>(Vec2 point)
         {
-            System.Type key = typeof(T);
-            if (key == typeof(Thing))
+            foreach (Thing thing in things.CollisionPointAll(point, typeof(T)))
             {
-                foreach (Thing thing in _things)
-                {
-                    if (!thing.removeFromLevel && Collision.Point(point, thing))
-                        return (T)(object)thing;
-                }
+                if (!thing.removeFromLevel && Collision.Point(point, thing))
+                    return (T)(object)thing;
             }
-            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
-            {
-                if (!dynamicObject.removeFromLevel && Collision.Point(point, dynamicObject))
-                    return (T)(object)dynamicObject;
-            }
-            return _things.HasStaticObjects(key) ? _things.quadTree.CheckPoint<T>(point) : default(T);
+            return default(T);
         }
-
         public T QuadTreePointFilter<T>(Vec2 point, Func<Thing, bool> pFilter) => _things.HasStaticObjects(typeof(T)) ? _things.quadTree.CheckPointFilter<T>(point, pFilter) : default(T);
 
         public Thing CollisionPoint(Vec2 point, System.Type t, Thing ignore, Layer layer)
@@ -1662,38 +1883,50 @@ namespace DuckGame
             return nextCollisionList.AsEnumerable<object>().Cast<T>();
         }
 
+        //public IEnumerable<T> CollisionPointAll<T>(Vec2 point)
+        //{
+        //    List<object> nextCollisionList = Level.GetNextCollisionList();
+        //    System.Type key = typeof(T);
+        //    foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+        //    {
+        //        if (!dynamicObject.removeFromLevel && Collision.Point(point, dynamicObject))
+        //            nextCollisionList.Add(dynamicObject);
+        //    }
+        //    if (_things.HasStaticObjects(key))
+        //    {
+        //        T obj = _things.quadTree.CheckPoint<T>(point);
+        //        if (obj != null)
+        //            nextCollisionList.Add(obj);
+        //    }
+        //    return nextCollisionList.AsEnumerable<object>().Cast<T>();
+        //}
         public IEnumerable<T> CollisionPointAll<T>(Vec2 point)
         {
             List<object> nextCollisionList = Level.GetNextCollisionList();
-            System.Type key = typeof(T);
-            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
-            {
-                if (!dynamicObject.removeFromLevel && Collision.Point(point, dynamicObject))
-                    nextCollisionList.Add(dynamicObject);
-            }
-            if (_things.HasStaticObjects(key))
-            {
-                T obj = _things.quadTree.CheckPoint<T>(point);
-                if (obj != null)
-                    nextCollisionList.Add(obj);
+            foreach (Thing thing in things.CollisionPointAll(point, typeof(T)))
+            {      
+                if (!thing.removeFromLevel && Collision.Point(point, thing))
+                    nextCollisionList.Add(thing);
+                
             }
             return nextCollisionList.AsEnumerable<object>().Cast<T>();
         }
+        //public ICollection<Thing> CollisionPointAll(Vec2 point)
+        //{
+        //    if (Buckets.TryGetValue(new Vec2((int)((point.x + offset) / cellsize), (int)((point.y + offset) / cellsize)), out List<Thing> output))
+        //    {
+        //        return output;
+        //    }
+        //    return new List<Thing>();
+        //}
 
         public void CollisionBullet(Vec2 point, List<MaterialThing> output)
         {
-            System.Type key = typeof(MaterialThing);
-            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            foreach (Thing thing in things.CollisionPointAll(point, typeof(MaterialThing)))
             {
-                if (!dynamicObject.removeFromLevel && Collision.Point(point, dynamicObject))
-                    output.Add(dynamicObject as MaterialThing);
+                if (!thing.removeFromLevel && Collision.Point(point, thing))
+                    output.Add(thing as MaterialThing);
             }
-            if (!_things.HasStaticObjects(key))
-                return;
-            MaterialThing materialThing = _things.quadTree.CheckPoint<MaterialThing>(point);
-            if (materialThing == null)
-                return;
-            output.Add(materialThing);
         }
 
         public static T CheckRay<T>(Vec2 start, Vec2 end) => Level.current.CollisionRay<T>(start, end);

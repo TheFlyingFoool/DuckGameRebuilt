@@ -168,7 +168,7 @@ namespace DuckGame
                 if (Level.loadingOppositeSymmetry)
                     flag4 = !flag4;
                 if (flag4)
-                    num2 = (float)(192.0 - num2 - 16.0);
+                    num2 = 192f - num2 - 16f;
                 Thing thing = Editor.CreateThing(type);
                 if (flag4 && thing is AutoBlock)
                 {

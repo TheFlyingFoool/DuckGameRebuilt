@@ -8,6 +8,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -96,25 +97,64 @@ namespace DuckGame
         /// a previously allocated MTSpriteBatchItem is reused.
         /// </summary>
         /// <returns></returns>
+        /// 
+        List<float> keys = new List<float>();
+        Dictionary<float, List<MTSpriteBatchItem>> _batchItemListv2 = new Dictionary<float, List<MTSpriteBatchItem>>();
+        MTSpriteBatchItem LastSpriteBatchItem;
+        int batchlistCount = 0;
+        public float depthmod = -1f;
         public MTSpriteBatchItem CreateBatchItem()
         {
-            MTSpriteBatchItem batchItem = _freeBatchItemQueue.Count <= 0 ? new MTSpriteBatchItem() : _freeBatchItemQueue.Dequeue();
-            _batchItemList.Add(batchItem);
+            // _freeBatchItemQueue.Count <= 0 ? new MTSpriteBatchItem() : _freeBatchItemQueue.Dequeue();
+            MTSpriteBatchItem batchItem = new MTSpriteBatchItem();
+            _batchItemList.Add(batchItem); // add something to later for fixing if a mod uses CreateBatchItem()
             return batchItem;
         }
+
+
+
+        public MTSpriteBatchItem CreateBatchItemDepth(float Depth)
+        {
+            batchlistCount += 1;
+            // MTSpriteBatchItem batchItem = _freeBatchItemQueue.Count <= 0 ? new MTSpriteBatchItem() : _freeBatchItemQueue.Dequeue();
+            MTSpriteBatchItem batchItem = new MTSpriteBatchItem();
+            LastSpriteBatchItem = batchItem;
+            // _batchItemList.Add(batchItem);
+            Depth *= depthmod;
+            if (!_batchItemListv2.TryGetValue(Depth, out List<MTSpriteBatchItem> LbatchItemList))
+            {
+                keys.Add(Depth);
+                _batchItemListv2.Add(Depth, new List<MTSpriteBatchItem> { batchItem });
+                return batchItem;
+            }
+            LbatchItemList.Add(batchItem);
+            return batchItem;
+        }
+
 
         public MTSpriteBatchItem StealLastBatchItem()
         {
-            MTSpriteBatchItem batchItem = _batchItemList[_batchItemList.Count - 1];
-            batchItem.inPool = false;
+            MTSpriteBatchItem batchItem = LastSpriteBatchItem;//_batchItemList[_batchItemList.Count - 1];
+            //batchItem.inPool = false;
             return batchItem;
         }
 
-        public void SqueezeInItem(MTSpriteBatchItem item) => _batchItemList.Add(item);
+        public void SqueezeInItem(MTSpriteBatchItem item)
+        {
+            batchlistCount += 1;
+            float ndepth = item.Depth * depthmod;
+            if (!_batchItemListv2.TryGetValue(ndepth, out List<MTSpriteBatchItem> LbatchItemList))
+            {
+                keys.Add(ndepth);
+                _batchItemListv2.Add(ndepth, new List<MTSpriteBatchItem> { item });
+                return;
+            }
+            LbatchItemList.Add(item);
+        }
 
         public MTSimpleSpriteBatchItem CreateSimpleBatchItem()
         {
-            MTSimpleSpriteBatchItem simpleBatchItem = _freeSimpleBatchItemQueue.Count <= 0 ? new MTSimpleSpriteBatchItem() : _freeSimpleBatchItemQueue.Dequeue();
+            MTSimpleSpriteBatchItem simpleBatchItem = new MTSimpleSpriteBatchItem();
             _simpleBatchItemList.Add(simpleBatchItem);
             return simpleBatchItem;
         }
@@ -329,25 +369,47 @@ namespace DuckGame
         /// overflow the 16 bit array indices for vertices.
         /// </summary>
         /// <param name="sortMode">The type of depth sorting desired for the rendering.</param>
+        static int[] fixindex(List<int> lengths, int targetindex)
+        {
+            int totalindex = 0;
+            int listindex = 0;
+            int index = 0;
+            while (listindex < lengths.Count)
+            {
+                if (index >= lengths[listindex])
+                {
+                    listindex += 1;
+                    index = 0;
+                    if (totalindex == targetindex)
+                    {
+                        break;
+                    }
+
+                }
+                else
+                {
+                    if (totalindex == targetindex)
+                    {
+                        break;
+                    }
+                    totalindex += 1;
+                    index += 1;
+                }
+            }
+            return new int[] { listindex, index };
+        }
         public void DrawBatch(SpriteSortMode sortMode)
         {
-            if (_batchItemList.Count == 0)
+            if (batchlistCount == 0)
                 return;
-            switch (sortMode)
-            {
-                case SpriteSortMode.Texture:
-                    DGList.Sort<MTSpriteBatchItem>(_batchItemList, CompareTexture);
-                    break;
-                case SpriteSortMode.BackToFront:
-                    DGList.Sort<MTSpriteBatchItem>(_batchItemList, MTSpriteBatcher.CompareReverseDepth);
-                    break;
-                case SpriteSortMode.FrontToBack:
-                    DGList.Sort<MTSpriteBatchItem>(_batchItemList, MTSpriteBatcher.CompareDepth);
-                    break;
-            }
+            //IEnumerator<KeyValuePair<float, List<MTSpriteBatchItem>>> enumerator = _batchItemListv2.GetEnumerator();
+            //enumerator.MoveNext();
+            keys.Sort();
+            int keyindex = 0;
             int index1 = 0;
             int numBatchItems;
-            for (int count = _batchItemList.Count; count > 0; count -= numBatchItems)
+            List<MTSpriteBatchItem> mTSpriteBatchItems = _batchItemListv2[keys[keyindex]];
+            for (int count = batchlistCount; count > 0; count -= numBatchItems)
             {
                 int start = 0;
                 int end = 0;
@@ -360,7 +422,13 @@ namespace DuckGame
                 int num1 = 0;
                 while (num1 < numBatchItems)
                 {
-                    MTSpriteBatchItem batchItem = _batchItemList[index1];
+                    while (index1 >= mTSpriteBatchItems.Count)//CollectionLengths[pagenumber])   //int[] N = fixindex(CollectionLengths, index1);//_batchItemListv2[keys[N[0]][N[1]];
+                    {
+                        index1 = 0;
+                        keyindex += 1;
+                        mTSpriteBatchItems = _batchItemListv2[keys[keyindex]];
+                    }
+                    MTSpriteBatchItem batchItem = mTSpriteBatchItems[index1];//_batchItemListv2[keys[pagenumber]][index1];//_subbatchItemList[index1];
                     if ((batchItem.Texture != texture2D ? 1 : (batchItem.Material != material ? 1 : 0)) != 0)
                     {
                         FlushVertexArray(start, end);
@@ -396,20 +464,91 @@ namespace DuckGame
                     end = index5 + 1;
                     VertexPositionColorTexture vertexBr = batchItem.vertexBR;
                     vertexArray4[index5] = vertexBr;
-                    if (batchItem.inPool)
-                    {
-                        batchItem.Texture = null;
-                        batchItem.Material = null;
-                        _freeBatchItemQueue.Enqueue(batchItem);
-                    }
+                    //if (batchItem.inPool)
+                    //{
+                    //    batchItem.Texture = null;
+                    //    batchItem.Material = null;
+                    //    _freeBatchItemQueue.Enqueue(batchItem);
+                    //}
                     ++num1;
                     ++index1;
                 }
                 FlushVertexArray(start, end);
             }
-            _batchItemList.Clear();
+            //int index1 = 0;
+            //int numbatchitems;
+            //for (int count = _batchitemlist.count; count > 0; count -= numbatchitems)
+            //{
+            //    int start = 0;
+            //    int end = 0;
+            //    texture2d texture2d = null;
+            //    material material = null;
+            //    numbatchitems = count;
+            //    if (numbatchitems > 5461)
+            //        numbatchitems = 5461;
+            //    ensurearraycapacity(numbatchitems);
+            //    int num1 = 0;
+            //    while (num1 < numbatchitems)
+            //    {
+            //        mtspritebatchitem batchitem = _batchitemlist[index1];
+            //        if ((batchitem.texture != texture2d ? 1 : (batchitem.material != material ? 1 : 0)) != 0)
+            //        {
+            //            flushvertexarray(start, end);
+            //            if (material != null && batchitem.material == null)
+            //                _batch.setup();
+            //            material = _batch.transitioneffect ? null : batchitem.material;
+            //            texture2d = batchitem.texture;
+            //            start = end = 0;
+            //            _device.textures[0] = texture2d;
+            //            if (material != null)
+            //            {
+            //                material.setvalue("matrixtransform", _batch.fullmatrix);
+            //                material.apply();
+            //            }
+            //        }
+            //        vertexpositioncolortexture[] vertexarray1 = _vertexarray;
+            //        int index2 = end;
+            //        int num2 = index2 + 1;
+            //        vertexpositioncolortexture vertextl = batchitem.vertextl;
+            //        vertexarray1[index2] = vertextl;
+            //        vertexpositioncolortexture[] vertexarray2 = _vertexarray;
+            //        int index3 = num2;
+            //        int num3 = index3 + 1;
+            //        vertexpositioncolortexture vertextr = batchitem.vertextr;
+            //        vertexarray2[index3] = vertextr;
+            //        vertexpositioncolortexture[] vertexarray3 = _vertexarray;
+            //        int index4 = num3;
+            //        int num4 = index4 + 1;
+            //        vertexpositioncolortexture vertexbl = batchitem.vertexbl;
+            //        vertexarray3[index4] = vertexbl;
+            //        vertexpositioncolortexture[] vertexarray4 = _vertexarray;
+            //        int index5 = num4;
+            //        end = index5 + 1;
+            //        vertexpositioncolortexture vertexbr = batchitem.vertexbr;
+            //        vertexarray4[index5] = vertexbr;
+            //        if (batchitem.inpool)
+            //        {
+            //            batchitem.texture = null;
+            //            batchitem.material = null;
+            //            _freebatchitemqueue.enqueue(batchitem);
+            //        }
+            //        ++num1;
+            //        ++index1;
+            //    }
+            //    flushvertexarray(start, end);
+            //}
+          
+            batchlistCount = 0;
+            _batchItemListv2.Clear();
+            //foreach(float key in keys)
+            //{
+            //    _batchItemListv2[key].Clear();
+            //}
+            keys.Clear();
+            LastSpriteBatchItem = null;
+            //_batchItemList.Clear();
         }
-
+        //DevConsoleCommands.runv2
         public void DrawSimpleBatch(SpriteSortMode sortMode)
         {
             if (_simpleBatchItemList.Count == 0)

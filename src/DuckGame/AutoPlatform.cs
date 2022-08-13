@@ -110,8 +110,12 @@ namespace DuckGame
             _neighborsInitialized = true;
         }
 
-        public override void Initialize() => DoPositioning();
-
+        public override void Initialize()
+        {
+            DoPositioning();
+            _level.AddUpdateOnce(this);
+            shouldbeinupdateloop = false;
+        }
         public virtual void DoPositioning()
         {
             if (Level.current is Editor || graphic == null)
@@ -135,7 +139,10 @@ namespace DuckGame
             _rightNub.cheap = cheap;
             _rightNub.DoPositioning();
         }
-
+        public override void PreLevelInitialize()
+        {
+           // this.UpdatePlatform();
+        }
         public override void EditorObjectsChanged() => PlaceBlock();
 
         public virtual bool HasNoCollision() => _sprite.frame == 50;

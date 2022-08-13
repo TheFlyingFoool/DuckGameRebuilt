@@ -108,9 +108,9 @@ namespace DuckGame
             ammo = 9999;
             if (isServerForObject && !_triggerHeld)
                 gravMultTime = 0f;
-            IPlatform platform = Level.Nearest<IPlatform>(x, y);
+            IPlatform platform = Level.Nearest<IPlatform>(position, 32.0f);
             bool flag = false;
-            if (platform != null && ((platform as Thing).position - position).length < 32.0)
+            if (platform != null) //((platform as Thing).position - position).length < 32.0
                 flag = true;
             if (!flag)
             {

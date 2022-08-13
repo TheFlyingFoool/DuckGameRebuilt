@@ -24,6 +24,7 @@ namespace DuckGame
             depth = -0.5f;
             _editorName = "Danger Sign";
             hugWalls = WallHug.Floor;
+            shouldbeinupdateloop = false;
         }
 
         public override void Draw()

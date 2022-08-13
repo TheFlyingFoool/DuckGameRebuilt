@@ -1477,7 +1477,7 @@ namespace DuckGame
                 Graphics.Draw(_optionsTV, 0f, 19f);
                 Graphics.Draw(_libraryBookcase, 263f, 12f);
                 Graphics.Draw(_editorBench, 1f, 130f);
-                if (creditsScroll > 0.100000001490116)
+                if (creditsScroll > 0.1)
                 {
                     Graphics.caseSensitiveStringDrawing = true;
                     float num1 = 0f;

@@ -118,7 +118,14 @@ namespace DuckGame
 
         public static Vec2 mousePos => Mouse._mousePos;
 
-        public static Vec2 positionScreen => Level.current.camera.transformScreenVector(Mouse._mousePos);
+        public static Vec2 positionScreen
+        {
+            get
+            {
+                return Level.current.camera.transformScreenVector(Mouse._mousePos);//(Mouse._mousePos
+            }
+            
+        }
 
         public static Vec2 positionConsole => Layer.Console.camera.transformScreenVector(Mouse._mousePos);
 

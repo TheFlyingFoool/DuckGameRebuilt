@@ -29,6 +29,7 @@ namespace DuckGame
         public BackgroundTile(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            this.shouldbeinupdateloop = false;
             layer = Layer.Background;
             _canBeGrouped = true;
             _isStatic = true;

@@ -27,13 +27,21 @@ namespace DuckGame;
 [AttributeUsage(AttributeTargets.Method, Inherited = false)]
 public class DevConsoleCommandAttribute : Attribute
 {
-    public string? Name { get; set; } = null;
+    public DevConsoleCommandAttribute()
+    {
+    }
+   // public static
+    public string? Name 
+    { get; 
+        set; 
+    } = null;
     public string? Description { get; set; } = null;
     public bool IsCheat { get; set; }
     public string[] Aliases { get; set; } = Array.Empty<string>();
 
     public static void Initialize()
     {
+        List<Attribute> yep = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(DevConsoleCommandAttribute)).ToList();
         var methodsUsing = CollectAllMethodsUsingThisAttribute();
 
         foreach ((MethodInfo method, DevConsoleCommandAttribute attribute) in methodsUsing)

@@ -96,7 +96,15 @@ namespace DuckGame
             }
             base.Update();
         }
-
+        public override void Initialize()
+        {
+            _level.AddUpdateOnce(this);
+            shouldbeinupdateloop = false;
+            //base.Initialize();
+        }
+        public override void PreLevelInitialize()
+        {
+        }
         public override List<BlockCorner> GetGroupCorners() => _blocks.Count > 0 ? _blocks[0].GetGroupCorners() : base.GetGroupCorners();
 
         public override void Draw()

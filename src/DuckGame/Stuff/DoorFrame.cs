@@ -16,6 +16,7 @@ namespace DuckGame
             center = new Vec2(5f, 26f);
             depth = -0.95f;
             _editorCanModify = false;
+            shouldbeinupdateloop = false;
         }
     }
 }

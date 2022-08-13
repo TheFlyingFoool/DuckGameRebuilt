@@ -34,9 +34,15 @@ namespace DuckGame
             _sprite.center = new Vec2(2f, 2f);
             depth = (Depth)0.5f;
             _secondBall = secondBall;
+            shouldbeinupdateloop = false;
         }
 
         public override void Update()
+        {
+            
+        }
+
+        public override void Draw()
         {
             orbitDistance = MathHelper.Lerp(orbitDistance, desiredOrbitDistance, 0.05f);
             orbitHeight = MathHelper.Lerp(orbitHeight, desiredOrbitHeight, 0.05f);
@@ -47,10 +53,6 @@ namespace DuckGame
                 _grow = !_grow;
             }
             _wave2 += 0.05f;
-        }
-
-        public override void Draw()
-        {
             float num = (float)((Math.Sin(_wave + 1.57000005245209) + 1.0) / 2.0 * 0.5);
             if (!_secondBall)
             {

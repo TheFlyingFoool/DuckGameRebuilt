@@ -283,7 +283,7 @@ namespace DuckGame
                 _ringPulse = 1f;
                 if (Rando.Int(1) == 0)
                     _raiseArm = Rando.Float(1.2f, 2f);
-                Ragdoll t3 = Level.Nearest<Ragdoll>(x, y, this);
+                Ragdoll t3 = Level.Nearest<Ragdoll>(this.position, _ammoType.range);
                 Vec2 vec2;
                 if (t3 != null && t3.captureDuck != null && t3.captureDuck.dead && Level.CheckLine<Block>(duck.position, t3.position) == null)
                 {

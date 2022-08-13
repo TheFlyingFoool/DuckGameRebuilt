@@ -430,7 +430,7 @@ namespace DuckGame
                             if (vSpeed > 4.0 && !(this is OldEnergyScimi))
                                 _volatile = true;
                         }
-                        if (!flag2 && !_grounded && (Level.CheckPoint<IPlatform>(position + new Vec2(0f, 8f)) == null || vSpeed < 0.0))
+                        if (!flag2 && !_grounded && this.initemspawner && (Level.CheckPoint<IPlatform>(position + new Vec2(0f, 8f)) == null || vSpeed < 0.0))
                         {
                             PerformAirSpin();
                             flag1 = true;
