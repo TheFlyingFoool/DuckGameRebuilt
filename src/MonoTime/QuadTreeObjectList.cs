@@ -386,14 +386,14 @@ namespace DuckGame
             int left = (int)((Position.x - width + offset) / cellsize);
             Vec2[] Chunk = new Vec2[(right - left + 1) * (top - bottom + 1)]; //Math.Abs((right - left + 1) * (top - bottom + 1))] removed the abs im pretty sure i only put it here because i wasnt abs the width & height
             int N = -1;
-            string stuff = "";
+            //string stuff = "";
             for (int x = left; x <= right; x++)
             {
                 for (int y = bottom; y <= top; y++)
                 {
                     N += 1;
                     Chunk[N] = new Vec2(x, y);
-                    stuff += x.ToString() + " " + y.ToString() + " ";
+                   // stuff += x.ToString() + " " + y.ToString() + " ";
                 }
             }
             //try

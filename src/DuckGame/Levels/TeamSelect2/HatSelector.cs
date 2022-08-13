@@ -1079,7 +1079,7 @@ namespace DuckGame
                 {
                     for (int index = 0; index < 8; ++index)
                     {
-                        _blind.yscale = Math.Max(0f, Math.Min((float)(_blindLerp * 3.0 - index * 0.05f), 1f));
+                        _blind.yscale = Math.Max(0f, Math.Min((float)(_blindLerp * 3.0f - index * 0.05f), 1f));
                         _blind.depth = (Depth)(float)(0.91f + index * 0.008f);
                         _blind.flipH = false;
                         Graphics.Draw(_blind, (x - 3f + index * (9f * _blindLerp)), y + 1f);
