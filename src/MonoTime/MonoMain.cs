@@ -897,6 +897,11 @@ namespace DuckGame
             //Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667L);
             this.IsFixedTimeStep = true; // UNZOOOM
             
+            // this is basically the lifeline of all attributes so i cant
+            // use the PostInitialize attribute for it since it wont even
+            // work without this lol
+            MemberAttributePairHandler.Init();
+
             // post init
             foreach (var methodInfo in PostInitializeAttribute.All)
             {

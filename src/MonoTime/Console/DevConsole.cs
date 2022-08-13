@@ -1759,9 +1759,7 @@ namespace DuckGame
                     _core.lastCommandIndex++;
                 }
             }
-
-            DevConsoleCommandAttribute.Initialize();
-
+            
             AddCommand(new CMD("level", new CMD.Argument[1]
             {
                 new CMD.Level("level")

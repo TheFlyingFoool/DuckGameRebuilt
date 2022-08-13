@@ -71,24 +71,25 @@ public sealed class DrawingContextAttribute : Attribute
 
     static DrawingContextAttribute()
     {
-        var all = MemberAttributePair<MethodInfo, DrawingContextAttribute>.GetAll();
-        
-        for (int i = 0; i < all.Length; i++)
+        MemberAttributePair<MethodInfo, DrawingContextAttribute>.RequestSearch(all =>
         {
-            var item = all[i];
-            if (!item.Attribute.UsePrecompiledLambda)
+            for (int i = 0; i < all.Count; i++)
             {
-                ReflectionMethodsUsing.Add(item);
-            }
-            else
-            {
-                var precompiled = (Action) Delegate.CreateDelegate(typeof(Action), item.MemberInfo);
+                var item = all[i];
+                if (!item.Attribute.UsePrecompiledLambda)
+                {
+                    ReflectionMethodsUsing.Add(item);
+                }
+                else
+                {
+                    var precompiled = (Action) Delegate.CreateDelegate(typeof(Action), item.MemberInfo);
 
-                item.Attribute.CustomID ??= item.MemberInfo.Name;
+                    item.Attribute.CustomID ??= item.MemberInfo.Name;
                 
-                PrecompiledMethodsUsing.Add((precompiled, item.Attribute));
+                    PrecompiledMethodsUsing.Add((precompiled, item.Attribute));
+                }
             }
-        }
+        });
     }
 
     public static DrawingLayer? DrawingLayerFromLayer(Layer layer)

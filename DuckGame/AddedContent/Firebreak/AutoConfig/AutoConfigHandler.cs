@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -34,7 +35,7 @@ public static class AutoConfigHandler
     public static void SaveAll(bool isDangerous)
     {
         var all = AutoConfigFieldAttribute.All;
-        int length = all.Length;
+        int length = all.Count;
         var stringBuilder = new StringBuilder();
 
         for (int i = 0; i < length; i++)
@@ -82,17 +83,17 @@ public static class AutoConfigHandler
         return false;
     }
 
-    private static bool LoadAllIndex(MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>[] all, string[] lines)
+    private static bool LoadAllIndex(IReadOnlyList<MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>> all, string[] lines)
     {
         DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING CONFIG INDEX LOADING...");
         lines = lines.Where(Enumerable.Any).ToArray();
 
-        if (all.Length != lines.Length)
+        if (all.Count != lines.Length)
             goto Fail;
         
         try
         {
-            for (int i = 0; i < all.Length; i++)
+            for (int i = 0; i < all.Count; i++)
             {
                 (FieldInfo field, _) = all[i];
                 Type type = field.FieldType;
@@ -118,12 +119,12 @@ public static class AutoConfigHandler
         }
     }
 
-    private static bool LoadAllSearch(MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>[] all, string[] lines)
+    private static bool LoadAllSearch(IReadOnlyList<MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>> all, string[] lines)
     {
         DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING CONFIG SEARCH LOADING...");
         try
         {
-            for (int i = 0; i < all.Length; i++)
+            for (int i = 0; i < all.Count; i++)
             {
                 (FieldInfo field, AutoConfigFieldAttribute attribute) = all[i];
                 Type type = field.FieldType;

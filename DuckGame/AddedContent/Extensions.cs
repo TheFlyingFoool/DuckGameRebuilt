@@ -11,57 +11,13 @@ namespace DuckGame
 {
     public static class Extensions
     {
-        public static IEnumerable<(TInfoType Member, IEnumerable<TAttribute> Attributes)>
-        GetAllMembersWithAttribute<TInfoType, TAttribute>(Type? inType = null) where TInfoType : MemberInfo
-        where TAttribute : Attribute
+        public static void TryUse<T1, T2>(this Dictionary<T1, T2> dic, T1 requestedKey, T2 defaultValue, Action<T2> action)
         {
-            MemberTypes memberType = MemberTypes.All;
+            if (!dic.ContainsKey(requestedKey))
+                dic.Add(requestedKey, defaultValue);
 
-            if (typeof(TInfoType).IsAssignableFrom(typeof(FieldInfo)))
-                memberType = MemberTypes.Field;
-            else if (typeof(TInfoType).IsAssignableFrom(typeof(MethodInfo)))
-                memberType = MemberTypes.Method;
-            else if (typeof(TInfoType).IsAssignableFrom(typeof(PropertyInfo)))
-                memberType = MemberTypes.Property;
-            else if (typeof(TInfoType).IsAssignableFrom(typeof(ConstructorInfo)))
-                memberType = MemberTypes.Constructor;
-            else if (typeof(TInfoType).IsAssignableFrom(typeof(TypeInfo)))
-                memberType = MemberTypes.TypeInfo;
-
-            return GetAllMembersWithAttribute<TAttribute>(memberType, inType)
-                .Select<(MemberInfo Member, IEnumerable<TAttribute> Attributes), (TInfoType, IEnumerable<TAttribute>)>
-                    (x => ((TInfoType)x.Member, x.Attributes));
+            action(dic[requestedKey]);
         }
-
-        public static IEnumerable<(MemberInfo Member, IEnumerable<TAttribute> Attributes)>
-            GetAllMembersWithAttribute<TAttribute>(MemberTypes filter = MemberTypes.All, Type? inType = null) 
-            where TAttribute : Attribute
-        {
-            if (inType is { })
-                return inType.GetMembers()
-                    .Where(x => x.GetCustomAttributes<TAttribute>(false).Any()
-                                && x.MemberType.HasFlag(filter))
-                    .Select(x => (x, x.GetCustomAttributes<TAttribute>(false)));
-
-            var types = Assembly.GetExecutingAssembly().GetTypes();
-            
-            return types
-                .SelectMany(x => x.GetMembers())
-                .Concat(types.Select(x => x.GetTypeInfo()))
-                .Where(x => x.GetCustomAttributes<TAttribute>().Any()
-                        && x.MemberType.HasFlag(filter))
-                .Select(x => (x, x.GetCustomAttributes<TAttribute>(false)));
-        }
-
-        public const BindingFlags ALL_BINDING_FLAGS =
-            BindingFlags.CreateInstance
-            | BindingFlags.DeclaredOnly
-            | BindingFlags.FlattenHierarchy
-            | BindingFlags.IgnoreCase
-            | BindingFlags.Instance
-            | BindingFlags.NonPublic
-            | BindingFlags.Public
-            | BindingFlags.Static;
 
         public static bool TryFirst<T>(this IEnumerable<T> collection, Func<T, bool> condition, out T first)
         {

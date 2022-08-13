@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -10,19 +11,29 @@ public record MemberAttributePair<TMemberInfo, TAttribute>(TMemberInfo MemberInf
     public TMemberInfo MemberInfo = MemberInfo;
     public TAttribute Attribute = Attribute;
 
-    public static MemberAttributePair<TMemberInfo, TAttribute>[] GetAll()
+    public static void RequestSearch(Action<List<MemberAttributePair<TMemberInfo, TAttribute>>>? onSearchComplete = null)
     {
-        return Extensions.GetAllMembersWithAttribute<TMemberInfo, TAttribute>()
-            .Select(x => new MemberAttributePair<TMemberInfo, TAttribute>(x.Member, x.Attributes.First()))
-            .ToArray();
+        var attributeType = typeof(TAttribute);
+        if (!MemberAttributePairHandler.AttributeLookupRequests.Contains(attributeType))
+            MemberAttributePairHandler.AttributeLookupRequests.Add(attributeType);
+
+        MemberAttributePairHandler.OnSearchComplete += dic =>
+        {
+            List<MemberAttributePair<TMemberInfo, TAttribute>> pairsUsing = new();
+            
+            foreach (var (memberInfo, attribute) in dic[typeof(TAttribute)])
+            {
+                pairsUsing.Add(new ( (TMemberInfo) memberInfo, (TAttribute) attribute) );
+            }
+            
+            OnSearchComplete.Invoke(pairsUsing);
+        };
+
+        if (onSearchComplete is not null)
+            OnSearchComplete += onSearchComplete;
     }
-    
-    public static MemberAttributePair<TMemberInfo, TAttribute>[] GetAllFromClass<T>()
-    {
-        return Extensions.GetAllMembersWithAttribute<TMemberInfo, TAttribute>(typeof(T))
-            .Select(x => new MemberAttributePair<TMemberInfo, TAttribute>(x.Member, x.Attributes.First()))
-            .ToArray();
-    }
+
+    public static event Action<List<MemberAttributePair<TMemberInfo, TAttribute>>> OnSearchComplete = default;
 
     public void Deconstruct(out TMemberInfo memberInfo, out TAttribute attribute)
     {

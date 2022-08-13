@@ -7,8 +7,12 @@ namespace DuckGame;
 [AttributeUsage(AttributeTargets.Field)]
 public sealed class AutoConfigFieldAttribute : Attribute
 {
-    public static readonly MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>[] All
-        = MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>.GetAll();
+    public static IReadOnlyList<MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>> All;
+
+    static AutoConfigFieldAttribute()
+    {
+        MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>.RequestSearch(all => All = all);
+    }
 
     public string? ShortName { get; set; } = null;
     /// <summary>

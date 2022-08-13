@@ -30,10 +30,13 @@ public static class FireSerializer
         if (obj is Enum @enum)
             return @enum.ToString();
 
-        if (FireSerializerModuleAttribute.Serializers
-            .TryFirst(x => x.CanSerialize(type),
-                out var serializer))
-            return serializer.Serialize(obj);
+        foreach (var serializerModule in FireSerializerModuleAttribute.Serializers)
+        {
+            if (!serializerModule.CanSerialize(type))
+                continue;
+            
+            return serializerModule.Serialize(obj);
+        }
 
         if (type.InheritsFrom(typeof(IEnumerable))
             && HandleIEnumerableSerialize(type, (IEnumerable) obj, out string result))

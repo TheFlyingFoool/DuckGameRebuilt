@@ -183,6 +183,7 @@
     <Compile Include="DuckGame\AddedContent\Firebreak\PostInitializeAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\CustomKeyBinds.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\MemberAttributePair.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\MemberAttributePairHandler.cs" />
     <Compile Include="DuckGame\AddedContent\klof44\DartGrenade.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\Bubble.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ChangePlus.cs" />
