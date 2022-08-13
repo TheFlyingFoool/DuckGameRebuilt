@@ -1748,6 +1748,7 @@ namespace DuckGame
 
             StreamReader streamRead = new StreamReader(DuckFile.optionsDirectory + "CommandHistory.txt");
             string[] history = streamRead.ReadToEnd().Replace("\r\n", "\n").Split('\n');
+            streamRead.Close();
             foreach (string line in history)
             {
                 if (line != "")
