@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.WireButtonTop
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -43,13 +43,13 @@ namespace DuckGame
         {
             if (with is PhysicsObject && !(with is TeamHat))
             {
-                if (_orientation == 0 && with.vSpeed > -0.100000001490116)
+                if (_orientation == 0 && with.vSpeed > -0.1f)
                     _button.ButtonPressed(with as PhysicsObject);
-                else if (_orientation == 1 && with.hSpeed < 0.100000001490116)
+                else if (_orientation == 1 && with.hSpeed < 0.1f)
                     _button.ButtonPressed(with as PhysicsObject);
-                else if (_orientation == 2 && with.vSpeed < 0.100000001490116)
+                else if (_orientation == 2 && with.vSpeed < 0.1f)
                     _button.ButtonPressed(with as PhysicsObject);
-                else if (_orientation == 3 && with.hSpeed > -0.100000001490116)
+                else if (_orientation == 3 && with.hSpeed > -0.1f)
                     _button.ButtonPressed(with as PhysicsObject);
             }
             base.OnSoftImpact(with, from);

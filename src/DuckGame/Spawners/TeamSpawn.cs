@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.TeamSpawn
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -22,8 +22,8 @@ namespace DuckGame
             {
                 SpriteMap graphic = new SpriteMap("duck", 32, 32);
                 graphic.CenterOrigin();
-                graphic.depth = (Depth)(float)(0.899999976158142 + 0.00999999977648258 * index);
-                graphic.position = new Vec2((float)(index * 9.41176414489746 - 16.0 + 16.0), -2f);
+                graphic.depth = (Depth)(float)(0.9f +  0.01f * index);
+                graphic.position = new Vec2((float)(index * 9.411764f - 16.0 + 16.0), -2f);
                 graphicList.Add(graphic);
             }
             graphic = graphicList;

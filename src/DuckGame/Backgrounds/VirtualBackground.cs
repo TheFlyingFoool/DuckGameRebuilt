@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.VirtualBackground
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -169,7 +169,7 @@ namespace DuckGame
                 if (scanStage == 0)
                 {
                     stick = Lerp.Float(stick, 1f, amount1);
-                    if (stick > 0.949999988079071)
+                    if (stick > 0.95f)
                     {
                         stick = 1f;
                         incStage = true;
@@ -178,7 +178,7 @@ namespace DuckGame
                 else if (scanStage == 1)
                 {
                     stick = Lerp.Float(stick, 0f, amount1);
-                    if (stick < 0.0500000007450581)
+                    if (stick < 0.05f)
                     {
                         stick = 0f;
                         incStage = true;
@@ -187,7 +187,7 @@ namespace DuckGame
                 else if (scanStage == 2)
                 {
                     stick = Lerp.Float(stick, 1f, amount1);
-                    if (stick > 0.949999988079071)
+                    if (stick > 0.95f)
                     {
                         stick = 1f;
                         incStage = true;
@@ -198,7 +198,7 @@ namespace DuckGame
             else if (scanStage == 2)
             {
                 stick = Lerp.Float(stick, 0f, amount2);
-                if (stick < 0.0500000007450581)
+                if (stick < 0.05f)
                 {
                     stick = 0f;
                     decStage = true;
@@ -207,7 +207,7 @@ namespace DuckGame
             else if (scanStage == 1)
             {
                 stick = Lerp.Float(stick, 1f, amount2);
-                if (stick > 0.949999988079071)
+                if (stick > 0.95f)
                 {
                     stick = 1f;
                     decStage = true;
@@ -216,7 +216,7 @@ namespace DuckGame
             else if (scanStage == 0)
             {
                 stick = Lerp.Float(stick, 0f, amount2);
-                if (stick < 0.0500000007450581)
+                if (stick < 0.05f)
                 {
                     stick = 0f;
                     decStage = true;

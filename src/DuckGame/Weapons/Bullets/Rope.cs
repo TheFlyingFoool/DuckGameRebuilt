@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Rope
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -168,10 +168,10 @@ namespace DuckGame
             {
                 float deg = cornerVector.x <= 0.0 ? attach2_1.linkDirectionNormalized + 90f : attach2_1.linkDirectionNormalized - 90f;
                 breakVector = Maths.AngleToVec(Maths.DegToRad(deg));
-                if (Math.Acos(Vec2.Dot(breakVector, cornerVector)) > Math.PI / 2.0)
+                if (Math.Acos(Vec2.Dot(breakVector, cornerVector)) > Math.PI / 2.0) // the decompiler put Math.PI here not me dan :)
                     breakVector = Maths.AngleToVec(Maths.DegToRad(deg + 180f));
                 dirLine = (attach1.position - attach2.position).normalized;
-                if (Math.Acos(Vec2.Dot(breakVector, dirLine)) < 1.52079632604984)
+                if (Math.Acos(Vec2.Dot(breakVector, dirLine)) < 1.52079632604984) //uhhhh i think this is just / 2 of pi
                     flag = true;
             }
             if (!flag)
@@ -362,7 +362,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        _vine.yscale = (float)(length2 / 16.0 + 0.100000001490116);
+                        _vine.yscale = length2 / 16f + 0.1f;
                         Graphics.Draw(_vine, p1.x, p1.y);
                     }
                     p1 = p2;
@@ -370,7 +370,7 @@ namespace DuckGame
                     float num6 = a + 6.283185f / num4;
                 }
             }
-            else if (num1 < 0.949999988079071 && num1 > 0.0)
+            else if (num1 < 0.95f && num1 > 0.0f)
             {
                 Vec2 vec2_4 = attach2Point - attach1Point;
                 Vec2 vec2_5 = vec2_4.normalized;

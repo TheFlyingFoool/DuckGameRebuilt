@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.ItemCrate
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -258,7 +258,7 @@ namespace DuckGame
                 {
                     if (_onFire)
                         physicsObject.heat = 0.8f;
-                    physicsObject.position = position + new Vec2((float)(index * 2.66666674613953 - 4.0), 0f);
+                    physicsObject.position = position + new Vec2(-4f + (float)index * 2.6666667f, 0f);
                     switch (index)
                     {
                         case 0:

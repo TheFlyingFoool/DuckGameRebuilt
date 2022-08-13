@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.RockIntro
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -65,14 +65,14 @@ namespace DuckGame
             _panWait -= 0.04f;
             if (_panWait >= 0.0)
                 return;
-            _yScrollVel += _yScroll < 0.400000005960464 ? -0.0001f : 0.0008f;
-            if (_yScrollVel > 0.00999999977648258)
+            _yScrollVel += _yScroll < 0.04f ? -0.0001f : 0.0008f;
+            if (_yScrollVel >  0.01f)
                 _yScrollVel = 0.01f;
             if (_yScrollVel < 0.0)
                 _yScrollVel = 0f;
             _yScroll -= _yScrollVel;
             _virtualBackground.layer.fade = Lerp.Float(_virtualBackground.layer.fade, 0.5f, 0.01f);
-            if (_yScroll >= 0.400000005960464)
+            if (_yScroll >= 0.04f)
                 return;
             _afterDownWait -= 0.05f;
             if (_afterDownWait >= 0.0)
@@ -84,7 +84,7 @@ namespace DuckGame
             _virtualBackground.layer.fade -= 0.02f;
             if (_virtualBackground.layer.fade < 0.0)
                 _virtualBackground.layer.fade = 0f;
-            if (!Network.isServer || _subHUD.fade > 0.0 || _intermissionSlide < 0.990000009536743 || !ready)
+            if (!Network.isServer || _subHUD.fade > 0.0 || _intermissionSlide < 0.99f || !ready)
                 return;
             Music.volume = 1f;
             Level.current = new RockScoreboard(_next);
@@ -111,7 +111,7 @@ namespace DuckGame
                         _smallDome.depth = (Depth)0.6f;
                     else
                         _smallDome.depth = (Depth)0.4f;
-                    Vec2 vec2_1 = new Vec2((float)Math.Cos(rad2 + index * rad1), (float)(-Math.Sin(rad2 + index * rad1) * (0.400000005960464 * (1.0 - num2 / num1))));
+                    Vec2 vec2_1 = new Vec2((float)Math.Cos(rad2 + index * rad1), (float)(-Math.Sin(rad2 + index * rad1) * (0.04f * (1.0 - num2 / num1))));
                     Vec2 vec2_2 = new Vec2(160f, 130f + num2) + vec2_1 * 100f;
                     Graphics.Draw(_smallDome, vec2_2.x, vec2_2.y - 30f);
                     _smallPillar.depth = _smallDome.depth;
@@ -125,7 +125,7 @@ namespace DuckGame
             {
                 _cornerWedge.flipH = false;
                 _cornerWedge.depth = (Depth)0.7f;
-                if (_intermissionSlide > 0.00999999977648258)
+                if (_intermissionSlide >  0.01f)
                 {
                     float x1 = (float)(_intermissionSlide * 320.0 - 320.0);
                     float y = 60f;

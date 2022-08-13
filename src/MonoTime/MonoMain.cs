@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.MonoMain
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -1356,7 +1356,7 @@ namespace DuckGame
         {
             get
             {
-                double num = (DateTime.UtcNow - new DateTime(1900, 1, 1)).TotalDays % 29.530588853;
+                double num = (DateTime.UtcNow - new DateTime(1900, 1, 1)).TotalDays % 29.530588853;// Not a Floating point error as far as i know
                 return DateTime.Now.Hour < 1 && num > 13.0 && num < 17.0;
             }
         }

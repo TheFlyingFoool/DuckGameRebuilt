@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.UILevelBox
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -488,7 +488,7 @@ namespace DuckGame
                         return DayType.ToyDay;
                 }
             }
-            return Unlockables.lockedItems.Count > 18 || Unlockables.lockedItems.Count > 14 && num2 > 0.200000002980232 || Unlockables.lockedItems.Count > 10 && num2 > 0.300000011920929 || Unlockables.lockedItems.Count > 5 && num2 > 0.5 || Unlockables.lockedItems.Count > 0 && num2 > 0.75 ? DayType.HintDay : DayType.Empty;
+            return Unlockables.lockedItems.Count > 18 || Unlockables.lockedItems.Count > 14 && num2 > 0.2f || Unlockables.lockedItems.Count > 10 && num2 > 0.3f || Unlockables.lockedItems.Count > 5 && num2 > 0.5 || Unlockables.lockedItems.Count > 0 && num2 > 0.75 ? DayType.HintDay : DayType.Empty;
         }
 
         private bool IsVinceDay(DayType d) => d == DayType.Special || d == DayType.PawnDay || d == DayType.ImportDay || d == DayType.SaleDay || d == DayType.Shop || d == DayType.HintDay;
@@ -791,7 +791,7 @@ namespace DuckGame
                         if (_unSlide)
                         {
                             _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 0f, 0.45f);
-                            if (_intermissionSlide > 0.00999999977648258)
+                            if (_intermissionSlide >  0.01f)
                                 return;
                             playedSound = false;
                             _unSlide = false;
@@ -848,7 +848,7 @@ namespace DuckGame
                 else
                 {
                     Graphics.fadeAdd = Lerp.Float(Graphics.fadeAdd, 0f, 0.1f);
-                    if (Graphics.fadeAdd > 0.00999999977648258)
+                    if (Graphics.fadeAdd >  0.01f)
                         return;
                 }
                 if (!_talking)
@@ -1005,7 +1005,7 @@ namespace DuckGame
                     _hearts.RemoveAll(t => t.alpha <= 0.0);
                     _coinLerp2 = Lerp.Float(_coinLerp2, 1f, 0.08f);
                     _stampWobble = Lerp.Float(_stampWobble, 0f, 0.08f);
-                    if (_stampCard || _stampCardLerp > 0.00999999977648258)
+                    if (_stampCard || _stampCardLerp >  0.01f)
                     {
                         if (!_showCard)
                         {
@@ -1076,7 +1076,7 @@ namespace DuckGame
                                 }
                             }
                         }
-                        if (_stampCardLerp < 0.990000009536743)
+                        if (_stampCardLerp < 0.99f)
                             return;
                         _stampWait += 0.2f;
                         if (_stampWait < 1.0)
@@ -1372,7 +1372,7 @@ namespace DuckGame
                                                 if (_unSlide)
                                                 {
                                                     _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 0f, 0.42f);
-                                                    if (_intermissionSlide <= 0.0199999995529652)
+                                                    if (_intermissionSlide <= 0.02f)
                                                     {
                                                         _intermissionSlide = 0f;
                                                         _dayStartWait += 0.11f;
@@ -1400,7 +1400,7 @@ namespace DuckGame
                                                             _roundsPlayed = 0;
                                                         }
                                                         _slideWait += 0.11f;
-                                                        if (_slideWait >= 1.79999995231628)
+                                                        if (_slideWait >= 1.8f)
                                                             _unSlide = true;
                                                     }
                                                 }
@@ -1536,7 +1536,7 @@ namespace DuckGame
                             else if (_state == UILevelBoxState.HideXPBar)
                             {
                                 _slideXPBar = Lerp.FloatSmooth(_slideXPBar, 0f, 0.2f, 1.1f);
-                                if (_slideXPBar <= 0.0199999995529652)
+                                if (_slideXPBar <= 0.02f)
                                 {
                                     _currentStat = new KeyValuePair<string, XPPair>();
                                     _state = UILevelBoxState.ShowXPBar;
@@ -1694,7 +1694,7 @@ namespace DuckGame
             if (_currentLevel >= 7)
                 num8 = -1f;
             _fancyFont.DrawOutline(text2, position + new Vec2(num8 - 8f, num3 - 31f) - new Vec2(_fancyFont.GetWidth(text2), 0f), Colors.DGYellow, Color.Black, depth + 2);
-            if (num7 < 0.0234999991953373)
+            if (num7 < 0.0235f)
                 num7 = 0.0235f;
             float num9 = num4 * num7;
             _xpBar.depth = depth + 2;
@@ -1873,7 +1873,7 @@ namespace DuckGame
                     Graphics.DrawString(talkLine, vec2_8 + new Vec2(6f, 2f), Color.Black, (Depth)0.95f);
                 }
             }
-            if (_stampCardLerp > 0.00999999977648258)
+            if (_stampCardLerp >  0.01f)
             {
                 float num24 = (float)(-((1.0 - _stampCardLerp) * 200.0) + Math.Sin(_stampWobbleSin) * _stampWobble * 4.0);
                 Graphics.DrawRect(new Vec2(-1000f, -1000f), new Vec2(1000f, 1000f), Color.Black * 0.5f * _stampCardLerp, (Depth)0.96f);
@@ -1931,7 +1931,7 @@ namespace DuckGame
                 string text4 = littleManBucks <= 9999 ? str2 + littleManBucks.ToString() : str2 + (littleManBucks / 1000).ToString() + "K";
                 Graphics.DrawRect(vec2_10 + new Vec2(-16f, 9f), vec2_10 + new Vec2(15f, 18f), Color.Black, (Depth)0.89f);
                 _fancyFont.Draw(text4, vec2_10 + new Vec2(-16f, 9f) + new Vec2(30f - _fancyFont.GetWidth(text4), 0f), Color.White, (Depth)0.9f);
-                if (_giveMoney > 0 && _giveMoneyRise < 0.949999988079071)
+                if (_giveMoney > 0 && _giveMoneyRise < 0.95f)
                 {
                     string text5 = "+" + _giveMoney.ToString();
                     Color dgGreen = Colors.DGGreen;
@@ -1940,13 +1940,13 @@ namespace DuckGame
                 }
                 Vec2 vec2_11 = new Vec2
                 {
-                    x = (float)(-Math.Sin(time * 12.0 * 6.28318548202515 - 3.14159274101257) * 8.0),
-                    y = (float)Math.Cos(time * 12.0 * 6.28318548202515 - 3.14159274101257) * 8f
+                    x = (float)(-Math.Sin(time * 12.0 * 6.2831855f - 3.1415927f) * 8.0),
+                    y = (float)Math.Cos(time * 12.0 * 6.2831855f - 3.1415927f) * 8f
                 };
                 Vec2 vec2_12 = new Vec2
                 {
-                    x = (float)(-Math.Sin(time * 6.28318548202515 - 3.14159274101257) * 5.0),
-                    y = (float)Math.Cos(time * 6.28318548202515 - 3.14159274101257) * 5f
+                    x = (float)(-Math.Sin(time * 6.2831855f - 3.1415927f) * 5.0),
+                    y = (float)Math.Cos(time * 6.2831855f - 3.1415927f) * 5f
                 };
                 Graphics.DrawLine(p1_1, p1_1 + vec2_11, Color.Black, depth: ((Depth)0.9f));
                 Graphics.DrawLine(p1_1, p1_1 + vec2_12, Color.Black, 1.5f, (Depth)0.9f);
@@ -1964,7 +1964,7 @@ namespace DuckGame
                     if (index == 0)
                         num31 += 0.1f;
                     float num32 = Rando.Float(-0.1f, 0.1f);
-                    int num33 = (int)((num32 + 0.100000001490116) / 0.200000002980232 * 10.0);
+                    int num33 = (int)((num32 + 0.1f) / 0.2f * 10.0);
                     if (_popDay && index == 0 && _dayFallAway != 0.0)
                         _weekDays.angle = _ranRot;
                     else if (_currentLevel < 6)
@@ -2020,7 +2020,7 @@ namespace DuckGame
                     Graphics.Draw(_littleMan, vec2_13.x - 16f, vec2_13.y - 8f, new Rectangle(0f, 0f, 16f, 6f));
                 }
             }
-            if (_intermissionSlide > 0.00999999977648258)
+            if (_intermissionSlide >  0.01f)
             {
                 float x4 = (float)(_intermissionSlide * 320.0 - 320.0);
                 float y3 = 60f;

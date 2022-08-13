@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.HotnessAnimation
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -152,7 +152,7 @@ namespace DuckGame
                 _font.Draw(text, new Vec2((float)(x - _font.GetWidth(text) / 2.0 + 3.0), 140f), Color.White, (Depth)0.25f);
                 _font.scale = new Vec2(1f);
                 _icon.depth = (Depth)0.3f;
-                _icon.frame = (int)Math.Floor(num2 * 8.98999977111816);
+                _icon.frame = (int)Math.Floor(num2 * 8.99f);
                 if (_icon.frame != _lastFrame[index1])
                 {
                     _lastFrame[index1] = _icon.frame;

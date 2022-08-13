@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.RainParticle
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -32,13 +32,13 @@ namespace DuckGame
                     num1 = 3;
                 RainParticle.splash.frame = num1;
                 _frame += 0.3f;
-                if (_frame >= 3.90000009536743)
+                if (_frame >= 3.9f)
                     alpha = 0f;
                 Vec2 position = this.position;
-                Vec3 vec3 = (Vec3)new Viewport(0, 0, (int)Layer.HUD.width, (int)Layer.HUD.height).Project((Vector3)new Vec3(position.x, z, position.y), (Microsoft.Xna.Framework.Matrix)Layer.Game.projection, (Microsoft.Xna.Framework.Matrix)Layer.Game.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                Vec3 vec3 = new Viewport(0, 0, (int)Layer.HUD.width, (int)Layer.HUD.height).Project((Vector3)new Vec3(position.x, z, position.y), (Microsoft.Xna.Framework.Matrix)Layer.Game.projection, (Microsoft.Xna.Framework.Matrix)Layer.Game.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
                 this.position = new Vec2(vec3.x, vec3.y);
                 float num2 = z / 200f;
-                RainParticle.splash.depth = (Depth)(float)(num2 * 0.100000001490116 - 0.0199999995529652);
+                RainParticle.splash.depth = -0.02f + num2 * 0.1f;
                 RainParticle.splash.color = Color.White * 0.8f;
                 DuckGame.Graphics.Draw(splash, this.position.x - 6f, this.position.y - 6f);
                 this.position = position;
@@ -49,7 +49,7 @@ namespace DuckGame
                 Vec3 vec3 = (Vec3)new Viewport(0, 0, (int)Layer.HUD.width, (int)Layer.HUD.height).Project((Vector3)new Vec3(position.x, z, position.y), (Microsoft.Xna.Framework.Matrix)Layer.Game.projection, (Microsoft.Xna.Framework.Matrix)Layer.Game.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
                 this.position = new Vec2(vec3.x, vec3.y);
                 float num = z / 200f;
-                DuckGame.Graphics.DrawLine(this.position, _prevPos, Color.White * 0.8f, depth: ((Depth)(float)(num * 0.100000001490116 - 0.0199999995529652)));
+                Graphics.DrawLine(this.position, this._prevPos, Color.White * 0.8f, 1f, -0.02f + num * 0.1f);
                 _prevPos = this.position;
                 this.position = position;
             }

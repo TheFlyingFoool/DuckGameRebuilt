@@ -6,7 +6,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender;
 
 public class VectorMath
 {
-    public const float DegToRad = (float)0.0174533;
+        public const float DegToRad = (float)0.0174533;
 
         public const float RadToDeg = (float)57.2958;
 

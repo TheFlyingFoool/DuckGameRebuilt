@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.ProfileSelector
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -1144,7 +1144,7 @@ namespace DuckGame
                         float num3 = Maths.Clamp((float)((33.0 - Math.Abs(y - num2)) / 33.0), 0f, 1f);
                         float num4 = num3 * Maths.NormalizeSection(num3, 0f, 0.9f);
                         float num5 = 0.2f;
-                        float num6 = Maths.Clamp(num3 >= 0.300000011920929 ? (num3 >= 0.800000011920929 ? Maths.NormalizeSection(num3, 0.8f, 1f) + num5 : num5) : Maths.NormalizeSection(num3, 0f, 0.3f) * num5, 0f, 1f);
+                        float num6 = Maths.Clamp(num3 >= 0.3f ? (num3 >= 0.8f ? Maths.NormalizeSection(num3, 0.8f, 1f) + num5 : num5) : Maths.NormalizeSection(num3, 0f, 0.3f) * num5, 0f, 1f);
                         bool flag3 = false;
                         if ((_selector == null || !_selector.isArcadeHatSelector) && index != -1 && (Profiles.active.Contains(_profiles[index]) || Profiles.active.FirstOrDefault<Profile>(x => x.linkedProfile == _profiles[index]) != null))
                             flag3 = true;
@@ -1197,7 +1197,7 @@ namespace DuckGame
                             pos.x += 2f;
                             string text4 = ">              <";
                             _font.Draw(text4, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text4) / 2.0), pos.y)), Color.White * (_createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
-                            if (_takenFlash > 0.0500000007450581)
+                            if (_takenFlash > 0.05f)
                             {
                                 string text5 = "Name Taken";
                                 _font.Draw(text5, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text5) / 2.0), pos.y)), Color.Red * _takenFlash, (Depth)0.97f);

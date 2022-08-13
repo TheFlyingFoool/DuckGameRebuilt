@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Spark
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -42,10 +42,10 @@ namespace DuckGame
         {
             position.x = xpos;
             position.y = ypos;
-            hSpeed = (float)(-hitAngle.x * 2.0 * (Rando.Float(1f) + 0.300000011920929)) - Rando.Float(-1f, 1f);
-            vSpeed = (float)(-hitAngle.y * 2.0 * (Rando.Float(1f) + 0.300000011920929)) - Rando.Float(2f);
+            hSpeed = -hitAngle.x * 2f * (Rando.Float(1f) + 0.3f) - Rando.Float(-1f, 1f);
+            vSpeed = -hitAngle.y * 2f * (Rando.Float(1f) + 0.3f) - Rando.Float(2f);
             _bounceEfficiency = 0.6f;
-            depth = (Depth)0.9f;
+            depth = 0.9f;
             _killSpeed = killSpeed;
             _color = new Color(byte.MaxValue, (byte)Rando.Int(180, byte.MaxValue), (byte)0);
             _width = 0.5f;

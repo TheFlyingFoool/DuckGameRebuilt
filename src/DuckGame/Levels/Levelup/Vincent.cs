@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Vincent
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -263,7 +263,7 @@ namespace DuckGame
                         };
                         vincentProduct.originalCost = vincentProduct.furnitureData.price;
                         vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 2.5);
-                        if (Rando.Float(1f) > 0.949999988079071)
+                        if (Rando.Float(1f) > 0.95f)
                             vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 4.0);
                         if (vincentProduct.furnitureData.name == "ROUND TABLE" && Rando.Float(1f) > 0.5)
                         {
@@ -876,9 +876,9 @@ namespace DuckGame
             if (UILevelBox.menuOpen)
                 return;
             Vincent._showLerp = Lerp.FloatSmooth(Vincent._showLerp, Vincent.show ? 1f : 0f, 0.09f, 1.05f);
-            bool flag1 = Vincent.lookingAtList && _challengeLerp < 0.300000011920929;
-            bool flag2 = Vincent.lookingAtChallenge && _listLerp < 0.300000011920929;
-            bool flag3 = FurniShopScreen.open && _listLerp < 0.300000011920929;
+            bool flag1 = Vincent.lookingAtList && _challengeLerp < 0.3f;
+            bool flag2 = Vincent.lookingAtChallenge && _listLerp < 0.3f;
+            bool flag3 = FurniShopScreen.open && _listLerp < 0.3f;
             Vincent._listLerp = Lerp.FloatSmooth(Vincent._listLerp, flag1 ? 1f : 0f, 0.2f, 1.05f);
             Vincent._challengeLerp = Lerp.FloatSmooth(Vincent._challengeLerp, flag2 ? 1f : 0f, 0.2f, 1.05f);
             Vincent._chancyLerp = Lerp.FloatSmooth(Vincent._chancyLerp, flag3 ? 1f : 0f, 0.2f, 1.05f);
@@ -1335,7 +1335,7 @@ namespace DuckGame
         public static void Draw()
         {
             Vec2 vec2_1 = new Vec2((float)(_listLerp * 270.0 - 200.0), 20f);
-            if (_challengeLerp < 0.00999999977648258 && _chancyLerp < 0.00999999977648258)
+            if (_challengeLerp <  0.01f && _chancyLerp <  0.01f)
                 return;
             Vec2 vec2_2 = new Vec2((float)(100.0 * (1.0 - _chancyLerp)), (float)(100.0 * (1.0 - _chancyLerp) - 4.0));
             Vec2 vec2_3 = new Vec2(280f, 30f);

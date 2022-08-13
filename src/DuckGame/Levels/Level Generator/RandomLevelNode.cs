@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.RandomLevelNode
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -359,9 +359,9 @@ namespace DuckGame
                 }
                 if (symmetricVal && !LevelGenerator.openAirMode)
                 {
-                    if (num == 2 && Rando.Float(1f) < 0.300000011920929)
+                    if (num == 2 && Rando.Float(1f) < 0.3f)
                         symmetricVal = false;
-                    else if (num == 1 && Rando.Float(1f) < 0.800000011920929)
+                    else if (num == 1 && Rando.Float(1f) < 0.8f)
                         symmetricVal = false;
                     else if (num == 1 && tile.right && (right == null || right.right == null))
                         symmetricVal = false;

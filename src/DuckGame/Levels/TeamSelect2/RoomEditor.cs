@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.RoomEditor
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -422,7 +422,7 @@ namespace DuckGame
             _takenFlash = Lerp.Float(_takenFlash, 0f, 0.02f);
             if (!_open)
             {
-                if (_fade >= 0.00999999977648258 || !_closing)
+                if (_fade >=  0.01f || !_closing)
                     return;
                 _closing = false;
             }
@@ -430,7 +430,7 @@ namespace DuckGame
             {
                 if (_mode != _desiredMode)
                     _mode = _desiredMode;
-                if (_fade > 0.899999976158142)
+                if (_fade > 0.9f)
                 {
                     int furniSelection = _furniSelection;
                     if (_slideTo != 0.0 && _slide != _slideTo)
@@ -820,13 +820,13 @@ namespace DuckGame
                             g.scale = new Vec2(Math.Min((float)(0.5 + Math.Max(num11 - 0.5f, 0f) * 2.0), 1f));
                             pos1.x -= 44f;
                             pos1.y -= 6f;
-                            g.depth = (Depth)(float)(0.850000023841858 + g.xscale * 0.100000001490116);
+                            g.depth = (Depth)(float)(0.85f + g.xscale * 0.1f);
                             if (availableFurni.type == FurnitureType.Theme && index2 == 5 && index1 == 2)
                             {
                                 SpriteMap spriteMap = g;
                                 spriteMap.scale *= 0.25f;
                             }
-                            if (_fade > 0.00999999977648258)
+                            if (_fade >  0.01f)
                             {
                                 if (availableFurni.group == sel.group)
                                 {
@@ -985,7 +985,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (_fade < 0.00999999977648258)
+            if (_fade <  0.01f)
                 return;
             if (_mode == REMode.Main)
             {

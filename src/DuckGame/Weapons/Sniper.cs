@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Sniper
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -67,7 +67,7 @@ namespace DuckGame
                 }
                 else if (_loadState == 1)
                 {
-                    if (_angleOffset < 0.159999996423721)
+                    if (_angleOffset < 0.16f)
                         _angleOffset = MathHelper.Lerp(_angleOffset, 0.2f, 0.15f);
                     else
                         ++_loadState;
@@ -93,7 +93,7 @@ namespace DuckGame
                 }
                 else if (_loadState == 4)
                 {
-                    if (_angleOffset > 0.0399999991059303)
+                    if (_angleOffset > 0.04f)
                     {
                         _angleOffset = MathHelper.Lerp(_angleOffset, 0f, 0.15f);
                     }

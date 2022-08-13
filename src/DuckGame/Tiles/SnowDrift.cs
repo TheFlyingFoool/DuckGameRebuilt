@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.SnowDrift
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -61,20 +61,26 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (!kill && with.impactPowerV > 2.0)
+            if (!kill && with.impactPowerV > 2f)
             {
-                float num1 = with.impactPowerV;
-                float num2 = with.impactDirectionH;
-                if (num1 > 6.0)
-                    num1 = 6f;
-                if (num2 > 6.0)
-                    num2 = 6f;
-                for (int index = 0; index < 12; ++index)
+                float vPower = with.impactPowerV;
+                float hPower = with.impactDirectionH;
+                if (vPower > 6f)
                 {
-                    float num3 = 1f;
-                    if (index < 10)
-                        num3 = 0.7f;
-                    Level.Add(new SnowFallParticle(x + Rando.Float(-8f, 8f), y + Rando.Float(-6f, 0f), new Vec2((float)(num2 * num3 * 0.100000001490116) + Rando.Float((float)(-0.200000002980232 * (num1 * num3)), (float)(0.200000002980232 * (num1 * num3))), (float)(-Rando.Float(0.8f, 1.5f) * (num1 * num3 * 0.150000005960464))), index < 6));
+                    vPower = 6f;
+                }
+                if (hPower > 6f)
+                {
+                    hPower = 6f;
+                }
+                for (int i = 0; i < 12; i++)
+                {
+                    float mul = 1f;
+                    if (i < 10)
+                    {
+                        mul = 0.7f;
+                    }
+                    Level.Add(new SnowFallParticle(x + Rando.Float(-8f, 8f), y + Rando.Float(-6f, 0f), new Vec2(hPower * mul * 0.1f + Rando.Float(-0.2f * (vPower * mul), 0.2f * (vPower * mul)), -Rando.Float(0.8f, 1.5f) * (vPower * mul * 0.15f)), i < 6));
                 }
                 kill = true;
             }

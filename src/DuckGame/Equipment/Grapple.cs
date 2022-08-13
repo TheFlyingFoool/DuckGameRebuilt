@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Grapple
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -159,7 +159,7 @@ namespace DuckGame
                 duck._double = false;
                 if (duck.vSpeed < 0.0 && duck.framesSinceJump > 3)
                     duck.vSpeed *= 1.75f;
-                if (duck.vSpeed >= duck.jumpSpeed * 0.949999988079071 && Math.Abs(duck.vSpeed) + Math.Abs(duck.hSpeed) < 2.0)
+                if (duck.vSpeed >= duck.jumpSpeed * 0.95f && Math.Abs(duck.vSpeed) + Math.Abs(duck.hSpeed) < 2.0f)
                 {
                     SFX.Play("jump", 0.5f);
                     duck.vSpeed = duck.jumpSpeed;

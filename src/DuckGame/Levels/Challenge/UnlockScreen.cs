@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.UnlockScreen
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -25,7 +25,7 @@ namespace DuckGame
 
         public override bool visible
         {
-            get => alpha >= 0.00999999977648258 && base.visible;
+            get => alpha >= 0.01f && base.visible;
             set => base.visible = value;
         }
 
@@ -210,7 +210,7 @@ namespace DuckGame
                 Layer.Add(_treeLayer);
             _plasma.alpha = alpha;
             _tree.alpha = alpha;
-            if (alpha > 0.899999976158142)
+            if (alpha > 0.9f)
             {
                 UnlockScreen.open = true;
                 if (!Input.Pressed("CANCEL"))
@@ -224,7 +224,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (alpha < 0.00999999977648258)
+            if (alpha < 0.01f)
                 return;
             Graphics.DrawRect(new Vec2(26f, 22f), new Vec2(Layer.HUD.width - 105f, 140f), new Color(20, 20, 20) * alpha * 0.7f, -0.9f);
             Vec2 p1 = new Vec2(20f, 8f);

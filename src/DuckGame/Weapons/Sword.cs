@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Sword
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -309,7 +309,7 @@ namespace DuckGame
         protected virtual void UpdateJabPullback()
         {
             _swing = MathHelper.Lerp(_swing, 1.75f, 0.4f);
-            if (_swing > 1.54999995231628)
+            if (_swing > 1.55f)
             {
                 _swing = 1.55f;
                 _shing = false;
@@ -327,14 +327,14 @@ namespace DuckGame
         protected virtual void UpdateSlamPullback()
         {
             _swing = MathHelper.Lerp(_swing, 3.14f, 0.8f);
-            if (_swing > 3.09999990463257 && _unslam == 0)
+            if (_swing > 3.1f && _unslam == 0)
             {
                 _swing = 3.14f;
                 _shing = false;
                 _swung = true;
             }
             _addOffsetX = MathHelper.Lerp(_addOffsetX, -5f, 0.45f);
-            if (_addOffsetX < -4.59999990463257)
+            if (_addOffsetX < -4.6f)
                 _addOffsetX = -5f;
             _addOffsetY = MathHelper.Lerp(_addOffsetY, -6f, 0.35f);
             if (_addOffsetX >= -5.5)
@@ -954,7 +954,7 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if (_crouchStance && _jabStance && !_swinging || !_crouchStance && !_swinging && _swing < 0.100000001490116)
+            if (_crouchStance && _jabStance && !_swinging || !_crouchStance && !_swinging && _swing < 0.1f)
             {
                 if (_jabStance && !_allowJabMotion)
                     return;

@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.UIGachaBoxNew
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -267,12 +267,12 @@ namespace DuckGame
                         }
                         else
                         {
-                            if (_gachaWait >= 0.200000002980232 && !played)
+                            if (_gachaWait >= 0.2f && !played)
                             {
                                 played = true;
                                 SFX.Play("gachaSound", pitch: Rando.Float(-0.1f, 0.1f));
                             }
-                            if (!_coined && _gachaWait > 0.200000002980232)
+                            if (!_coined && _gachaWait > 0.2f)
                             {
                                 SFX.Play("gachaCoin", pitch: Rando.Float(0.4f, 0.6f));
                                 _coined = true;
@@ -287,10 +287,10 @@ namespace DuckGame
                                 gachaY += gachaSpeed;
                                 if (gachaY > 50.0 && gachaSpeed > 0.0)
                                 {
-                                    if (gachaSpeed > 0.800000011920929)
+                                    if (gachaSpeed > 0.8f)
                                         SFX.Play("gachaBounce", pitch: 0.2f);
                                     gachaY = 50f;
-                                    gachaSpeed = (float)(-gachaSpeed * 0.400000005960464);
+                                    gachaSpeed = (float)(-gachaSpeed * 0.04f);
                                 }
                                 float num = 8f;
                                 _toyVelocity.y += 0.2f;
@@ -446,7 +446,7 @@ namespace DuckGame
             for (int index = 0; index < numGenerate + numGenerateRare - (_prizesGiven + 1); ++index)
             {
                 _coin.frame = numGenerate - (_prizesGiven + 1) <= 0 || index >= numGenerate - (_prizesGiven + 1) ? 1 : 0;
-                _coin.depth = (Depth)(float)(0.899999976158142 - index * 0.00999999977648258);
+                _coin.depth = (Depth)(float)(0.9f - index *  0.01f);
                 Graphics.Draw(_coin, 16 + index * 4, 16f);
             }
             _coin.frame = !_contains.rareGen ? 0 : 1;
@@ -571,7 +571,7 @@ namespace DuckGame
                 _fancyFont.DrawOutline(text2, position + vec2_6, _rare || _swapped && _rareCapsule ? Colors.DGYellow : Color.White, Color.Black, depth + 2);
                 Graphics.DrawRect(position + new Vec2((float)-(_fancyFont.GetWidth(text2) / 2.0 + 4.0), -26f), position + new Vec2((float)(_fancyFont.GetWidth(text2) / 2.0 + 4.0), -14f), Color.Black, depth - 4);
                 _fancyFont.scale = new Vec2(0.5f, 0.5f);
-                if (_insertCoin > 0.00999999977648258)
+                if (_insertCoin >  0.01f)
                 {
                     _duckCoin.frame = _rare ? 1 : 0;
                     _duckCoin.depth = -0.8f;

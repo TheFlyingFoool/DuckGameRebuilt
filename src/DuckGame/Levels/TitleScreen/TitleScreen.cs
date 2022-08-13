@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.TitleScreen
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -1026,7 +1026,7 @@ namespace DuckGame
                         color = Colors.DGBlue;
                     else if (cpick == 2)
                         color = Colors.DGGreen;
-                    if (Rando.Float(1f) > 0.995000004768372)
+                    if (Rando.Float(1f) > 0.995f)
                         color = Colors.DGPink;
                     particles.Add(new StarParticle()
                     {
@@ -1327,7 +1327,7 @@ namespace DuckGame
                     InputProfile.active = _duck.profile.inputProfile;
                 }
                 Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.05f);
-                if (Graphics.fade > 0.990000009536743)
+                if (Graphics.fade > 0.99f)
                 {
                     Graphics.fade = 1f;
                     _returnFromArcade = false;
@@ -1521,7 +1521,7 @@ namespace DuckGame
                     float num4 = 0.2f;
                     if (camera.y > 0.0)
                         num4 += camera.y / 52f;
-                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.600000023841858) * (0.300000011920929 + (1.0 - extraFade) * 0.699999988079071)), -0.3f);
+                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.6f) * (0.3f + (1.0 - extraFade) *  0.7f)), -0.3f);
                     float num5 = 0.1f;
                     if (camera.y > 0.0)
                         num5 += camera.y / 52f;
@@ -1530,7 +1530,7 @@ namespace DuckGame
                     for (int index = 0; index < num6; ++index)
                     {
                         float num7 = particle.speed.x * 8f;
-                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1.0 - index / num6) * num5) * (float)(0.300000011920929 + (1.0 - extraFade) * 0.699999988079071), depth: (-0.4f));
+                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1.0 - index / num6) * num5) * (float)(0.3f + (1.0 - extraFade) *  0.7f), depth: (-0.4f));
                         pos.x -= num7;
                     }
                 }

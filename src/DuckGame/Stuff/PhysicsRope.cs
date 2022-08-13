@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.PhysicsRope
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -199,9 +199,9 @@ namespace DuckGame
             for (int index = 1; index <= _divisions; ++index)
             {
                 float x = _nodes[index].position.x;
-                _nodes[index].calcPos.x += (float)(0.999000012874603 * _nodes[index].calcPos.x - 0.999000012874603 * _nodes[index].tempPos.x) + _nodes[index].accel.x;
+                _nodes[index].calcPos.x += (float)(0.999f * _nodes[index].calcPos.x - 0.999f * _nodes[index].tempPos.x) + _nodes[index].accel.x;
                 float y = _nodes[index].position.y;
-                _nodes[index].calcPos.y += (float)(0.999000012874603 * _nodes[index].calcPos.y - 0.999000012874603 * _nodes[index].tempPos.y) + _nodes[index].accel.y;
+                _nodes[index].calcPos.y += (float)(0.999f * _nodes[index].calcPos.y - 0.999f * _nodes[index].tempPos.y) + _nodes[index].accel.y;
                 _nodes[index].tempPos.x = x;
                 _nodes[index].tempPos.y = y;
             }

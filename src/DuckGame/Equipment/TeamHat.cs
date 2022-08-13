@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.TeamHat
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -513,13 +513,13 @@ namespace DuckGame
                         _specialSprite.CenterOrigin();
                     }
                     _fade = Lerp.Float(_fade, this.frame == 1 ? 1f : 0f, 0.1f);
-                    if (_fade > 0.00999999977648258)
+                    if (_fade > 0.01f)
                     {
-                        _specialSprite.alpha = (float)(alpha * 0.699999988079071 * (0.5 + _wave.normalized * 0.5)) * _fade;
+                        _specialSprite.alpha = alpha * 0.7f * (0.5f + _wave.normalized * 0.5f) * _fade;
                         _specialSprite.scale = scale;
                         _specialSprite.depth = depth - 10;
                         _specialSprite.angle += 0.02f;
-                        float num = (float)(0.800000011920929 + _wave.normalized * 0.200000002980232);
+                        float num = 0.8f + this._wave.normalized * 0.2f;
                         _specialSprite.scale = new Vec2(num, num);
                         Vec2 vec2 = Offset(new Vec2(2f, 4f));
                         DuckGame.Graphics.Draw(_specialSprite, vec2.x, vec2.y);

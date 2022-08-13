@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.UIGachaBox
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -225,10 +225,10 @@ namespace DuckGame
                             gachaY += gachaSpeed;
                             if (gachaY > 50.0 && gachaSpeed > 0.0)
                             {
-                                if (gachaSpeed > 0.800000011920929)
+                                if (gachaSpeed > 0.8f)
                                     SFX.Play("gachaBounce", pitch: 0.2f);
                                 gachaY = 50f;
-                                gachaSpeed = (float)(-gachaSpeed * 0.400000005960464);
+                                gachaSpeed = (float)(-gachaSpeed * 0.04f);
                             }
                             _openWait += 0.019f;
                             if (_openWait >= 1.0)
@@ -319,7 +319,7 @@ namespace DuckGame
             Vec2 vec2_2 = new Vec2((float)-(_fancyFont.GetWidth(text2) / 2.0), -25f);
             _fancyFont.DrawOutline(text2, position + vec2_2, _rare || _swapped && _rareCapsule ? Colors.DGYellow : Color.White, Color.Black, depth + 2);
             _fancyFont.scale = new Vec2(0.5f, 0.5f);
-            if (_insertCoin > 0.00999999977648258)
+            if (_insertCoin >  0.01f)
             {
                 _duckCoin.frame = _rare ? 1 : 0;
                 _duckCoin.depth = -0.8f;

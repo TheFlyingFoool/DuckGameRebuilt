@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.UIMenuItemResolution
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -77,7 +77,7 @@ namespace DuckGame
                 if (Resolution.current.mode == ScreenMode.Windowed)
                     _values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where<Resolution>(x => x.recommended || x == Resolution.current).ToList<Resolution>();
                 else
-                    _values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where<Resolution>(x => Math.Abs(x.aspect - Resolution.adapterResolution.aspect) < 0.0500000007450581 || x == Resolution.current).ToList<Resolution>();
+                    _values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where<Resolution>(x => Math.Abs(x.aspect - Resolution.adapterResolution.aspect) < 0.05f || x == Resolution.current).ToList<Resolution>();
             }
         }
 

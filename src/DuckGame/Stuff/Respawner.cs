@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Respawner
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -53,14 +53,14 @@ namespace DuckGame
             for (int index = 0; index < vec2_1.x * vec2_1.y; ++index)
             {
                 Vec2 vec2_3 = new Vec2((int)(index % vec2_1.x), (int)(index / vec2_1.y));
-                float num3 = (float)((Noise.Generate(vec2_3.x * 32f, 0f) + 1.0) / 2.0 * 1.5 + 0.100000001490116);
+                float num3 = (float)((Noise.Generate(vec2_3.x * 32f, 0f) + 1.0) / 2.0 * 1.5 + 0.1f);
                 float num4 = _animate * 0.1f - (int)(_animate * num3 / 1.0);
                 float num5 = Noise.Generate(vec2_3.x + 100f, (float)((vec2_3.y + 100.0 - num4) * 0.5));
                 if (num5 > 0.25)
                 {
                     vec2_3.y -= (float)(_animate * num3 % 1.0);
                     float num6 = 1f - Math.Abs((float)((vec2_1.x / 2.0 - vec2_3.x) / vec2_1.x * 2.0));
-                    float num7 = (float)((num5 - 0.25) / 0.75) * num6 * Math.Max(0f, Math.Min((float)((vec2_3.y / vec2_1.y - 0.100000001490116) * 2.0), 1f));
+                    float num7 = (float)((num5 - 0.25) / 0.75) * num6 * Math.Max(0f, Math.Min((float)((vec2_3.y / vec2_1.y - 0.1f) * 2.0), 1f));
                     vec2_3 *= 2f;
                     vec2_3.y *= 2f;
                     Graphics.DrawRect(vec2_3 + vec2_2, vec2_3 + vec2_2 + new Vec2(1f, 1f), Color.White * num7, -0.5f);

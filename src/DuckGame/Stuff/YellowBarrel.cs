@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.YellowBarrel
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -149,16 +149,16 @@ namespace DuckGame
                 _collisionOffset.y = -2f;
             }
             burnSpeed = 0.0015f;
-            if (_onFire && burnt < 0.899999976158142)
+            if (_onFire && burnt < 0.9f)
             {
-                if (burnt > 0.300000011920929)
+                if (burnt > 0.3f)
                     graphic = _melting;
                 yscale = (float)(0.5 + (1.0 - burnt) * 0.5);
                 centery = (float)(8.0 - burnt * 7.0);
                 _collisionOffset.y = (float)(burnt * 7.0 - 8.0);
                 _collisionSize.y = (float)(16.0 - burnt * 7.0);
             }
-            if (!_bottomHoles && burnt > 0.600000023841858)
+            if (!_bottomHoles && burnt > 0.6f)
             {
                 _bottomHoles = true;
                 _holes.Add(new FluidStream(0f, 0f, new Vec2(-1f, -1f), 1f, new Vec2(-7f, 8f))
@@ -195,7 +195,7 @@ namespace DuckGame
                         hole.Feed(fluid);
                         _fluidLevel -= num5;
                         _lossAccum += num5;
-                        while (_lossAccum > 0.0500000007450581)
+                        while (_lossAccum > 0.05f)
                         {
                             _lossAccum -= 0.05f;
                             if (sequence != null && sequence.isValid && ChallengeLevel.running)
@@ -217,7 +217,7 @@ namespace DuckGame
         public override void Draw()
         {
             float num1 = 1f - _fluidLevel;
-            float num2 = (float)(0.600000023841858 + (1.0 - burnt) * 0.400000005960464);
+            float num2 = (float)(0.6f + (1.0 - burnt) * 0.04f);
             graphic.color = new Color((byte)(150.0 * num2), (byte)(150.0 * num2), (byte)(150.0 * num2));
             base.Draw();
             if (_hitPoints <= 0.0)

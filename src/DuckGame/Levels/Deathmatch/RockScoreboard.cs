@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.RockScoreboard
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -898,8 +898,8 @@ namespace DuckGame
                 rainbowThing.x = rainbowThing2.x = (float)(-_field.scroll * 15.0 + 6800.0);
                 rainbowThing.alpha = _weather.rainbowLight;
                 rainbowThing2.alpha = _weather.rainbowLight2;
-                rainbowThing.visible = rainbowThing.alpha > 0.00999999977648258;
-                rainbowThing2.visible = rainbowThing2.alpha > 0.00999999977648258;
+                rainbowThing.visible = (rainbowThing.alpha > 0.01f);
+                rainbowThing2.visible = (rainbowThing2.alpha > 0.01f);
                 RockScoreboard._drawingSunTarget = true;
                 Layer.Game.camera.width = 320f;
                 Layer.Game.camera.height = 180f;
@@ -990,7 +990,7 @@ namespace DuckGame
                     {
                         Crowd.mood = Mood.Silent;
                         _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 2.1f, 0.1f, 1.05f);
-                        if (_intermissionSlide > 2.08999991416931)
+                        if (_intermissionSlide > 2.09f)
                         {
                             controlMessage = 0;
                             Vote.OpenVoting("", "", false);
@@ -1030,14 +1030,14 @@ namespace DuckGame
                     if (_focusRock)
                     {
                         _highestSlot.ai.Release("JUMP");
-                        if (Rando.Float(1f) > 0.980000019073486)
+                        if (Rando.Float(1f) > 0.98f)
                             _highestSlot.ai.Press("JUMP");
                         for (int index = 0; index < _highestSlot.subAIs.Count; ++index)
                         {
                             DuckAI subAi = _highestSlot.subAIs[index];
                             Duck subDuck = _highestSlot.subDucks[index];
                             subAi.Release("JUMP");
-                            if (Rando.Float(1f) > 0.980000019073486)
+                            if (Rando.Float(1f) > 0.98f)
                                 subAi.Press("JUMP");
                         }
                         if (!_droppedConfetti)
@@ -1220,7 +1220,7 @@ namespace DuckGame
                                     }
                                     slot.rock.frictionMult = 4f;
                                     _afterThrowWait -= num6;
-                                    if (_afterThrowWait < 0.400000005960464)
+                                    if (_afterThrowWait < 0.4f)
                                     {
                                         slot.state = RockThrow.ShowScore;
                                         SFX.Play("scoreDing");
@@ -1315,7 +1315,7 @@ namespace DuckGame
             {
                 Network.isServer = isServer;
                 _controlSlide = Lerp.FloatSmooth(_controlSlide, controlMessage == 1 ? 1f : 0f, 0.1f, 1.05f);
-                if (_controlSlide < 0.00999999977648258)
+                if (_controlSlide <  0.01f)
                     controlMessage = -1;
             }
             if (_state == ScoreBoardState.ShowBoard)
@@ -1323,7 +1323,7 @@ namespace DuckGame
                 Network.isServer = isServer;
                 _shiftCamera = true;
                 _controlSlide = Lerp.FloatSmooth(_controlSlide, controlMessage == 1 ? 1f : 0f, 0.1f, 1.05f);
-                if (_controlSlide < 0.00999999977648258)
+                if (_controlSlide <  0.01f)
                     controlMessage = 1;
             }
             if (_shiftCamera)
@@ -1351,7 +1351,7 @@ namespace DuckGame
                 Network.isServer = isServer;
                 controlMessage = -1;
                 DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 0f, 0.02f);
-                if (DuckGame.Graphics.fade < 0.00999999977648258)
+                if (DuckGame.Graphics.fade <  0.01f)
                 {
                     _skipFade = false;
                     if (_mode == ScoreBoardMode.ShowScores)
@@ -1398,7 +1398,7 @@ namespace DuckGame
             if (_finished)
             {
                 DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 0f, 0.03f);
-                if (DuckGame.Graphics.fade < 0.00999999977648258)
+                if (DuckGame.Graphics.fade <  0.01f)
                 {
                     foreach (Team team in Teams.all)
                         team.prevScoreboardScore = team.score;
@@ -1446,7 +1446,7 @@ namespace DuckGame
             if (_mode == ScoreBoardMode.ShowWinner)
             {
                 _controlSlide = Lerp.FloatSmooth(_controlSlide, controlMessage == 1 ? 1f : 0f, 0.1f, 1.05f);
-                if (_controlSlide < 0.00999999977648258)
+                if (_controlSlide <  0.01f)
                     controlMessage = 1;
                 if (_viewBoard)
                 {
@@ -1471,12 +1471,12 @@ namespace DuckGame
                     if (_takePicture && _flashSkipFrames == 0)
                     {
                         _cameraWait -= 0.01f;
-                        if (_cameraWait < 0.600000023841858 && _playedBeeps == 0)
+                        if (_cameraWait < 0.6f && _playedBeeps == 0)
                         {
                             _playedBeeps = 1;
                             SFX.Play("cameraBeep", pitch: -0.5f);
                         }
-                        else if (_cameraWait < 0.300000011920929 && _playedBeeps == 1)
+                        else if (_cameraWait < 0.3f && _playedBeeps == 1)
                         {
                             _playedBeeps = 2;
                             SFX.Play("cameraBeep", pitch: -0.5f);
@@ -1486,10 +1486,10 @@ namespace DuckGame
                             _playedFlash = true;
                             SFX.Play("cameraFlash", 0.8f, 1f);
                         }
-                        if (_cameraWait < 0.100000001490116)
+                        if (_cameraWait < 0.1f)
                         {
-                            _cameraFadeVel += 3f / 1000f;
-                            if (_cameraWait < 0.0399999991059303)
+                            _cameraFadeVel += 0.003f;
+                            if (_cameraWait < 0.04f)
                                 _cameraFadeVel += 0.01f;
                         }
                         DuckGame.Graphics.fadeAdd += _cameraFadeVel;
@@ -1675,7 +1675,7 @@ namespace DuckGame
                     _finalSprite.scale = new Vec2(0.25f, 0.25f);
                     DuckGame.Graphics.Draw(_finalSprite, 0f, 0f);
                 }
-                if (_intermissionSlide > 0.00999999977648258)
+                if (_intermissionSlide >  0.01f)
                 {
                     _intermissionText.depth = (Depth)0.91f;
                     float x1 = (float)(_intermissionSlide * 320.0 - 320.0);

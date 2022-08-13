@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.TrappedDuck
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -88,7 +88,7 @@ namespace DuckGame
             {
                 _duckOwner.hSpeed = hSpeed;
                 bool flag = type != null;
-                if (!flag && jumpCountdown > 0.00999999977648258)
+                if (!flag && jumpCountdown >  0.01f)
                     _duckOwner.vSpeed = Duck.JumpSpeed;
                 else
                     _duckOwner.vSpeed = flag ? vSpeed - 1f : -3f;
@@ -253,9 +253,9 @@ namespace DuckGame
                     tounge.x = 0f;
                 if (_duckOwner._spriteQuack.flipH && tounge.x > 0.0)
                     tounge.x = 0f;
-                if (tounge.y < -0.300000011920929)
+                if (tounge.y < -0.3f)
                     tounge.y = -0.3f;
-                if (tounge.y > 0.400000005960464)
+                if (tounge.y > 0.04f)
                     tounge.y = 0.4f;
                 _stickLerp = Lerp.Vec2Smooth(_stickLerp, tounge, 0.2f);
                 _stickSlowLerp = Lerp.Vec2Smooth(_stickSlowLerp, tounge, 0.1f);
@@ -268,7 +268,7 @@ namespace DuckGame
                 if (length > 0.5)
                     num2 = 72;
                 Graphics.Draw(_duckOwner._spriteQuack, _duckOwner._sprite.imageIndex + num2, x + num1, y - 8f);
-                if (length > 0.0500000007450581)
+                if (length > 0.05f)
                 {
                     Vec2 vec2_1 = position + new Vec2(num1 + (_duckOwner._spriteQuack.flipH ? -1f : 1f), -2f);
                     List<Vec2> vec2List = Curve.Bezier(8, vec2_1, vec2_1 + stickSlowLerp * 6f, vec2_1 + stickLerp * 6f);

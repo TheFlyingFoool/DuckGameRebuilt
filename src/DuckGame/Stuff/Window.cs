@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Window
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -234,7 +234,7 @@ namespace DuckGame
                 vec2.y = bottom;
             _hits.Add(vec2);
             exitPos += bullet.travelDirNormalized;
-            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+            for (int index = 0; index < 1.0f + damageMultiplier / 2.0f; ++index)
                 Level.Add(new GlassParticle(exitPos.x, exitPos.y, -bullet.travelDirNormalized, tint.value));
         }
 
@@ -257,10 +257,10 @@ namespace DuckGame
             else
             {
                 float num = Math.Abs(with.hSpeed) + Math.Abs(with.vSpeed);
-                if (!destroyed && num > 1.5)
+                if (!destroyed && num > 1.5f)
                 {
                     ++shakeTimes;
-                    if (isServerForObject && Level.current is TeamSelect2 && with is PhysicsObject && (with as PhysicsObject).gravMultiplier < 0.100000001490116)
+                    if (isServerForObject && Level.current is TeamSelect2 && with is PhysicsObject && (with as PhysicsObject).gravMultiplier < 0.1f)
                         Destroy(new DTImpact(with));
                 }
                 if (!destroyed || !(with is Duck duck))
@@ -343,8 +343,9 @@ namespace DuckGame
                 {
                     if (index + 1 > _hits.Count)
                         return;
-                    Color col = new Color((byte)(windowColor.r * 0.5), (byte)(windowColor.g * 0.5), (byte)(windowColor.b * 0.800000011920929), (byte)178);
-                    Graphics.DrawLine(_hits[index] + zero, _hits[index + 1] + zero, col);
+
+                    Color col = new Color((byte)((float)windowColor.r * 0.5f), (byte)((float)windowColor.g * 0.5f), (byte)((float)windowColor.b * 0.8f), (byte)178);
+                    Graphics.DrawLine(this._hits[index] + zero, this._hits[index + 1] + zero, col, 1f, default(Depth));
                 }
             }
             position -= zero;

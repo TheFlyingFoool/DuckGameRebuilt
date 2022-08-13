@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.SpikeHelm
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -96,7 +96,7 @@ namespace DuckGame
                 foreach (MaterialThing materialThing1 in materialThings)
                 {
                     Vec2 vec2 = velocity - materialThing1.velocity;
-                    if (materialThing1 != this && materialThing1 != equippedDuck && materialThing1 != oldPoke && (materialThing1.velocity.length >= 0.5 || materialThing1 is IAmADuck) && Vec2.Dot(vec2.normalized, spikeDir) >= 0.649999976158142 && vec2.length >= 1.5 && _equippedDuck != null)
+                    if (materialThing1 != this && materialThing1 != equippedDuck && materialThing1 != oldPoke && (materialThing1.velocity.length >= 0.5f || materialThing1 is IAmADuck) && Vec2.Dot(vec2.normalized, spikeDir) >= 0.65f && vec2.length >= 1.5f && _equippedDuck != null)
                     {
                         if (materialThing1 is IAmADuck)
                         {
@@ -117,7 +117,7 @@ namespace DuckGame
                             MaterialThing materialThing2 = materialThing1;
                             if (materialThing2 != null)
                             {
-                                if (!(materialThing1 is Duck) || !(materialThing1 as Duck).HasEquipment(typeof(Boots)) || (materialThing1 as Duck).sliding || spikeDir.y >= 0.5 || Math.Abs(spikeDir.x) >= 0.200000002980232)
+                                if (!(materialThing1 is Duck) || !(materialThing1 as Duck).HasEquipment(typeof(Boots)) || (materialThing1 as Duck).sliding || spikeDir.y >= 0.5 || Math.Abs(spikeDir.x) >= 0.2f)
                                 {
                                     Duck associatedDuck = Duck.GetAssociatedDuck(materialThing2);
                                     if ((associatedDuck == null || associatedDuck != _equippedDuck && (_equippedDuck == null || !_equippedDuck.IsOwnedBy(associatedDuck))) && (associatedDuck != _filteredDuck || throwCooldown <= 0))
@@ -187,7 +187,7 @@ namespace DuckGame
                 poked.hSpeed = duck.hSpeed;
                 poked.vSpeed = duck.vSpeed;
                 if (equippedDuck.ragdoll == null)
-                    poked.solid = equippedDuck.velocity.length < 0.0500000007450581;
+                    poked.solid = equippedDuck.velocity.length < 0.05f;
                 if (equippedDuck.ragdoll != null && prevRagdoll == null)
                     ReleasePokedObject();
                 prevRagdoll = equippedDuck.ragdoll;

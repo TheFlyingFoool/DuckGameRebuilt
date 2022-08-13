@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.WireTileset
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -228,7 +228,7 @@ namespace DuckGame
             }
             else
                 overshoot = 0f;
-            signal.life -= (float)(travelSpeed / 16.0 * 0.00999999977648258);
+            signal.life -= (float)(travelSpeed / 16.0 *  0.01f);
             if (overshoot >= 0.0 && signal.life > 0.0)
                 Emit(signal, overshoot, signal.signalType);
             if (signal.life > 0.0)
