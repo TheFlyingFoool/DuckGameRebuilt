@@ -181,7 +181,7 @@ namespace DuckGame
 							rpc.State = "In Lobby";
 						}
 
-						if (Network.isActive)
+						if (Network.isActive && Network.lanMode == false)
                         {
 							Button[] joinButton = new Button[1]
 							{						
