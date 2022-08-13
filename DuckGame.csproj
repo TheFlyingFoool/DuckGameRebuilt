@@ -209,6 +209,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Debug.cs" />
     <Compile Include="src\MonoTime\Console\Commands\DoDraw.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Exit.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\For.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Test.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />
@@ -1897,6 +1898,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\MonoTime\Console\Commands\Default" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
