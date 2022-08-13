@@ -23,6 +23,7 @@ namespace DuckGame
 {
     public class DevConsole
     {
+        public static readonly string CommandHistoryFilePath = DuckFile.optionsDirectory + "CommandHistory.txt";
         public static bool showFPS;
         public static List<string> startupCommands = new();
         public static bool fancyMode;
@@ -1743,22 +1744,15 @@ namespace DuckGame
 
         public static void InitializeCommands()
         {
-            if (!File.Exists(DuckFile.optionsDirectory + "CommandHistory.txt"))
+            if (!File.Exists(CommandHistoryFilePath))
             {
-                File.Create(DuckFile.optionsDirectory + "CommandHistory.txt");
+                File.Create(CommandHistoryFilePath).Close();
             }
 
-            StreamReader streamRead = new StreamReader(DuckFile.optionsDirectory + "CommandHistory.txt");
-            string[] history = streamRead.ReadToEnd().Replace("\r\n", "\n").Split('\n');
-            streamRead.Close();
-            foreach (string line in history)
-            {
-                if (line != "")
-                {
-                    _core.previousLines.Add(line);
-                    _core.lastCommandIndex++;
-                }
-            }
+            string[] history = File.ReadAllLines(CommandHistoryFilePath);
+            
+            _core.previousLines.AddRange(history);
+            _core.lastCommandIndex += history.Length;
             
             AddCommand(new CMD("level", new CMD.Argument[1]
             {
