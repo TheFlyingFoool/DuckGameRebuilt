@@ -18,12 +18,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using DuckGame.AddedContent.Drake;
 
 namespace DuckGame
 {
     public class DevConsole
     {
-        public static readonly string CommandHistoryFilePath = DuckFile.optionsDirectory + "CommandHistory.txt";
         public static bool showFPS;
         public static List<string> startupCommands = new();
         public static bool fancyMode;
@@ -467,23 +467,6 @@ namespace DuckGame
 
         public static void RunCommand(string command, bool writeExecutedCommand = true)
         {
-            command = command.Trim();
-            
-            StreamReader streamRead = new StreamReader(DuckFile.optionsDirectory + "CommandHistory.txt");
-            string[] history = streamRead.ReadToEnd().Replace("\r\n", "\n").Split('\n');
-            streamRead.Close();
-            if (history.Length > 100)
-            {
-                history = history.Skip(1).ToArray();
-                File.WriteAllLines(DuckFile.optionsDirectory + "CommandHistory.txt", history);
-            }
-            else
-            {
-                StreamWriter streamWrite = File.AppendText(DuckFile.optionsDirectory + "CommandHistory.txt");
-                streamWrite.WriteLine(command);
-                streamWrite.Close();
-            }
-
             if (DG.buildExpired)
                 return;
             if (_doDataSubmission)
@@ -1741,19 +1724,12 @@ namespace DuckGame
         public static void UpdateGraph(int index, NetGraph target)
         {
         }
+        
 
         public static void InitializeCommands()
         {
-            if (!File.Exists(CommandHistoryFilePath))
-            {
-                File.Create(CommandHistoryFilePath).Close();
-            }
+            FixedCommandHistory.LoadCommandHistory();
 
-            string[] history = File.ReadAllLines(CommandHistoryFilePath);
-            
-            _core.previousLines.AddRange(history);
-            _core.lastCommandIndex += history.Length;
-            
             AddCommand(new CMD("level", new CMD.Argument[1]
             {
                 new CMD.Level("level")

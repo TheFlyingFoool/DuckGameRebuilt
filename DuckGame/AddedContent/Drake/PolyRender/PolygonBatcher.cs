@@ -29,7 +29,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
             _rasterState.MultiSampleAntiAlias = false;
             _manager.ApplyChanges();
             ResetDrawParams();
-            UpdateMatrices();
+            UpdateMatricesForCurrentLayer();
             ResetBuffer();
         }
 
@@ -47,11 +47,21 @@ namespace DuckGame.AddedContent.Drake.PolyRender
             _isDisposed = true;
         }
 
-        public void UpdateMatrices()
+        public void UpdateMatricesForCurrentLayer()
         {
             _effect.View = Graphics.currentLayer?.camera?.getMatrix() ?? Matrix.Identity;
             _effect.Projection = Matrix.CreateOrthographicOffCenter(0f, _device.Viewport.Width, _device.Viewport.Height, 0f, 100f, -100f);
         }
+        
+        public void SetOrthographicProjection() => _effect.Projection = Matrix.CreateOrthographicOffCenter(0f, _device.Viewport.Width, _device.Viewport.Height, 0f, 100f, -100f);
+
+        public void SetPerspectiveProjection() => _effect.Projection = Matrix.CreatePerspectiveOffCenter(0f, _device.Viewport.Width, _device.Viewport.Height, 0f, 100f, -100f);
+
+        public void SetScreenView() => _effect.View = Matrix.Identity;
+
+        public void SetCurrentLayerView() => _effect.View = Graphics.currentLayer?.camera?.getMatrix() ?? Matrix.Identity;
+
+        public void ResetMatrices() => UpdateMatricesForCurrentLayer();
 
         public void ResetDrawParams()
         {
@@ -63,6 +73,8 @@ namespace DuckGame.AddedContent.Drake.PolyRender
             Texture = null;
             BlendState = BlendState.Opaque;
         }
+
+
         
         public bool ScissorTest { set => _rasterState.ScissorTestEnable = value; }
         public Rectangle ScissorRect { set => _device.ScissorRectangle = value; }
