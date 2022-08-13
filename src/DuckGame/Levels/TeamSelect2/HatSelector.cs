@@ -1077,16 +1077,16 @@ namespace DuckGame
                 _blindLerp = Lerp.Float(_blindLerp, _editingRoom || _gettingXP ? 1f : 0f, 0.05f);
                 if (_blindLerp > 0.01f)
                 {
-                    for (int index = 0; index < 8; ++index)
+                    for (int i = 0; i < 8; ++i)
                     {
-                        _blind.yscale = Math.Max(0f, Math.Min((float)(_blindLerp * 3.0f - index * 0.05f), 1f));
-                        _blind.depth = (Depth)(float)(0.91f + index * 0.008f);
+                        _blind.yscale = Math.Max(0f, Math.Min(this._blindLerp * 3f - (float)i * 0.05f, 1f));
+                        _blind.depth = 0.91f + (float)i * 0.008f;
                         _blind.flipH = false;
-                        Graphics.Draw(_blind, (x - 3f + index * (9f * _blindLerp)), y + 1f);
+                        Graphics.Draw(_blind, base.x - 3f + (float)i * (9f * this._blindLerp), base.y + 1f);
                         _blind.flipH = true;
-                        Graphics.Draw(_blind, (x + 4f + 14f - index * (9f * _blindLerp)), y + 1f);
+                        Graphics.Draw(_blind, base.x + 4f + 140f - (float)i * (9f * this._blindLerp), base.y + 1f);
                     }
-                    float num = Math.Max((float)((_blindLerp - 0.5) * 2f), 0f);
+                    float num = Math.Max((this._blindLerp - 0.5f) * 2f, 0f);
                     if (num > 0.01f)
                     {
                         if (_gettingXP)
