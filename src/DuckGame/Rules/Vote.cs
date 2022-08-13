@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Vote
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -85,7 +85,7 @@ namespace DuckGame
                         Vote.RegisterVote(who, VoteType.Skip);
                 }
             }
-            if (!Vote._votes.Exists(x => x.open && x.slide < 0.899999976158142))
+            if (!Vote._votes.Exists(x => x.open && x.slide < 0.9f))
             {
                 foreach (RegisteredVote vote in Vote._votes)
                 {
@@ -100,7 +100,7 @@ namespace DuckGame
                 vote.slide = Lerp.FloatSmooth(vote.slide, vote.open ? 1f : -0.1f, 0.1f, 1.1f);
                 vote.wobble = Lerp.Float(vote.wobble, 0f, 0.05f);
                 vote.wobbleInc += 0.5f;
-                if (!vote.open && vote.slide < 0.00999999977648258)
+                if (!vote.open && vote.slide <  0.01f)
                     vote.vote = VoteType.None;
             }
         }
@@ -114,7 +114,7 @@ namespace DuckGame
                 {
                     float num2 = (float)(Math.Sin(vote.wobbleInc) * vote.wobble * 3.0);
                     Vec2 vec2 = Network.isActive ? vote.leftStick : vote.who.inputProfile.leftStick;
-                    vote.who.persona.skipSprite.angle = (float)(num2 * 0.0299999993294477 + vec2.y * 0.400000005960464);
+                    vote.who.persona.skipSprite.angle = (float)(num2 * 0.03f + vec2.y * 0.04f);
                     float num3 = 0f;
                     float num4 = 3f;
                     float num5 = 49f;

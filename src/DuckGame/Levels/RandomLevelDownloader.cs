@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.RandomLevelDownloader
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -68,17 +68,17 @@ namespace DuckGame
             if (RandomLevelDownloader.numSinceLowRating > 3)
             {
                 RandomLevelDownloader.numSinceLowRating = 0;
-                if (Rando.Float(1f) > 0.800000011920929)
+                if (Rando.Float(1f) > 0.8f)
                     num %= 100;
             }
             else
             {
                 num %= 12;
-                if (Rando.Float(1f) > 0.800000011920929)
+                if (Rando.Float(1f) > 0.8f)
                     num %= 30;
             }
             RandomLevelDownloader._orderMode = RandomLevelDownloader.numSinceLowRating != 2 ? WorkshopQueryFilterOrder.RankedByVote : WorkshopQueryFilterOrder.RankedByTrend;
-            if (Rando.Float(1f) > 0.699999988079071)
+            if (Rando.Float(1f) >  0.7f)
             {
                 switch (Rando.Int(5))
                 {

@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.OldEnergyScimi
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -388,7 +388,7 @@ namespace DuckGame
         {
             _swing = MathHelper.Lerp(_swing, 0.8f, 0.8f);
             _addOffsetX = MathHelper.Lerp(_addOffsetX, -5f, 0.45f);
-            if (_addOffsetX < -4.59999990463257)
+            if (_addOffsetX < -4.6f)
                 _addOffsetX = -5f;
             _addOffsetY = MathHelper.Lerp(_addOffsetY, 6f, 0.35f);
             if (_addOffsetX >= -5.5)
@@ -559,7 +559,7 @@ namespace DuckGame
                         wall.solid = _glow > 0.5;
                     }
                 }
-                if (duck != null && _timeSincePickedUp > 0.400000005960464 && held && _swinging && Level.CheckLine<Block>(position, position + new Vec2(offDir * 16, 0f)) != null)
+                if (duck != null && _timeSincePickedUp > 0.04f && held && _swinging && Level.CheckLine<Block>(position, position + new Vec2(offDir * 16, 0f)) != null)
                 {
                     duck.Swear();
                     double angle = this.angle;
@@ -575,7 +575,7 @@ namespace DuckGame
             float num3 = Math.Min(_glow, 1f);
             float to1 = Math.Min(Math.Abs(_lastAngleHum - angle), 1f);
             _angleWhoom = Lerp.FloatSmooth(_angleWhoom, to1, 0.2f);
-            _hum.volume = Lerp.FloatSmooth(_hum.volume, Math.Min((float)(Math.Min(Math.Abs(hSpeed) + Math.Abs(vSpeed), 5f) / 10.0 + to1 * 2.0 + 0.150000005960464 + num3 * 0.100000001490116) * _glow, 0.75f), 0.2f);
+            _hum.volume = Lerp.FloatSmooth(_hum.volume, Math.Min((float)(Math.Min(Math.Abs(hSpeed) + Math.Abs(vSpeed), 5f) / 10.0 + to1 * 2.0f + 0.15f + num3 * 0.1f) * _glow, 0.75f), 0.2f);
             if (level != null)
             {
                 float val2_1 = 800f;
@@ -617,7 +617,7 @@ namespace DuckGame
                     _glow = Lerp.Float(_glow, 0f, 0.2f);
                 }
             }
-            if (_glow > 0.100000001490116)
+            if (_glow > 0.1f)
             {
                 _stayVolatile = true;
                 _volatile = true;
@@ -682,7 +682,7 @@ namespace DuckGame
             _blade.color = Color.Lerp(Color.White, Color.Red, heat);
             swordColor = Color.Lerp(properColor, Color.Red, heat);
             if (_glow > 1.0)
-                _blade.scale = new Vec2((float)(1.0 + (_glow - 1.0) * 0.0299999993294477), 1f);
+                _blade.scale = new Vec2(1f + (_glow - 1f) * 0.03f, 1f);
             else
                 _blade.scale = new Vec2(1f);
             _bladeTrail.yscale = _blade.yscale + num2;
@@ -714,7 +714,7 @@ namespace DuckGame
                     if (owner != null)
                         vec2 += owner.velocity * 0.5f;
                     _bladeTrail.angle = num3;
-                    _bladeTrail.alpha = Math.Min(Math.Max((float)((_hum.volume - 0.100000001490116) * 4.0), 0f), 1f) * 0.7f;
+                    _bladeTrail.alpha = Math.Min(Math.Max((float)((_hum.volume - 0.1f) * 4.0), 0f), 1f) * 0.7f;
                     Graphics.Draw(_bladeTrail, vec2.x, vec2.y, this.depth - 2);
                 }
                 num4 -= 0.15f;

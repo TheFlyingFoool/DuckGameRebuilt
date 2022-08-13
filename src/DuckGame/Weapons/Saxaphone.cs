@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Saxaphone
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -63,7 +63,7 @@ namespace DuckGame
                     int num = Keyboard.CurrentNote(owner.inputProfile, this);
                     if (num >= 0)
                     {
-                        notePitch = (float)(num / 12.0 + 0.00999999977648258);
+                        notePitch = (float)(num / 12.0 +  0.01f);
                         handPitch = notePitch;
                         if (notePitch != prevNotePitch)
                         {
@@ -94,7 +94,7 @@ namespace DuckGame
                             Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
                         }
                         else
-                            noteSound.Pitch = Maths.Clamp((float)((notePitch - hitPitch) * 0.100000001490116), -1f, 1f);
+                            noteSound.Pitch = Maths.Clamp((float)((notePitch - hitPitch) * 0.1f), -1f, 1f);
                     }
                     else if (noteSound != null)
                     {
@@ -114,7 +114,7 @@ namespace DuckGame
                 else
                 {
                     handOffset = new Vec2((float)(5.0 + (1.0 - handPitch) * 2.0), (float)((1.0 - handPitch) * 4.0 - 2.0));
-                    handAngle = (float)((1.0 - handPitch) * 0.400000005960464) * offDir;
+                    handAngle = (float)((1.0 - handPitch) * 0.04f) * offDir;
                     _holdOffset = new Vec2((float)(4.0 + handPitch * 2.0), handPitch * 2f);
                     collisionOffset = new Vec2(-1f, -7f);
                     collisionSize = new Vec2(2f, 16f);

@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.PineTree
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -124,10 +124,10 @@ namespace DuckGame
                 _graphic.Draw();
             }
             shiftTime = Lerp.FloatSmooth(shiftTime, 0f, 0.1f);
-            if (shiftTime < 0.0500000007450581)
+            if (shiftTime < 0.05f)
                 shiftTime = 0f;
             _vertPush = Lerp.FloatSmooth(_vertPush, 0f, 0.3f);
-            if (_vertPush >= 0.0500000007450581)
+            if (_vertPush >= 0.05f)
                 return;
             _vertPush = 0f;
         }

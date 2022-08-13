@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.RainbowTrail
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -85,7 +85,7 @@ namespace DuckGame
             position.y += num1;
             _p2.y += num1;
             position.y += (float)(num4 * _capeWaveMult * (thing.velocity.x * 0.5));
-            position.x += (float)(num4 * _capeWaveMult * (thing.velocity.y * 0.200000002980232));
+            position.x += (float)(num4 * _capeWaveMult * (thing.velocity.y * 0.2f));
             if (capePeices.Count > 0)
                 _p2 = capePeices[capePeices.Count - 1].p1;
             capePeices.Add(new TrailPiece(thing.x - offDir * -10, thing.y + 6f, 0.5f, position, _p2));
@@ -93,10 +93,10 @@ namespace DuckGame
             {
                 if (capePeice.wide < 1.0)
                     capePeice.wide += 0.05f;
-                capePeice.p1.x += (float)(num5 * num7 * (capePeice.wide - 0.5) * 0.899999976158142);
-                capePeice.p2.x += (float)(num5 * num7 * (capePeice.wide - 0.5) * 0.899999976158142);
-                capePeice.p1.y += (float)(num6 * num7 * (capePeice.wide - 0.5) * 0.800000011920929);
-                capePeice.p2.y += (float)(num6 * num7 * (capePeice.wide - 0.5) * 0.800000011920929);
+                capePeice.p1.x += (float)(num5 * num7 * (capePeice.wide - 0.5) * 0.9f);
+                capePeice.p2.x += (float)(num5 * num7 * (capePeice.wide - 0.5) * 0.9f);
+                capePeice.p1.y += (float)(num6 * num7 * (capePeice.wide - 0.5) * 0.8f);
+                capePeice.p2.y += (float)(num6 * num7 * (capePeice.wide - 0.5) * 0.8f);
                 ++capePeice.p1.y;
                 ++capePeice.p2.y;
                 capePeice.p1.x += 0.3f * offDir;

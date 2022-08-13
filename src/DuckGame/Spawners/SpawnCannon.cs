@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.SpawnCannon
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -162,12 +162,12 @@ namespace DuckGame
                         SFX.Play("singleBeep");
                         ++beeps;
                     }
-                    if (beeps == 1 && num3 > 0.333333343267441)
+                    if (beeps == 1 && num3 > 0.33333334f)
                     {
                         SFX.Play("singleBeep");
                         ++beeps;
                     }
-                    if (beeps == 2 && num3 > 0.666666686534882)
+                    if (beeps == 2 && num3 > 0.6666667f)
                     {
                         SFX.Play("singleBeep");
                         ++beeps;
@@ -284,20 +284,20 @@ namespace DuckGame
             float val = _spawnWait / (spawnTime + _startupDelay);
             if (showClock.value)
             {
-                float radians = (float)((flipHorizontal ? val : -val) * 6.28318548202515);
+                float radians = (float)((flipHorizontal ? val : -val) * 6.2831855f);
                 if (flipHorizontal)
                     radians += 3.141593f;
                 Graphics.DrawLine(Offset(new Vec2(0f, 0f)), Offset(Maths.AngleToVec(radians) * 3f), Color.Black, depth: (depth + 2));
                 Vec2 vec2 = Offset(Maths.AngleToVec(radians) * 2f);
-                _arrowHead.angle = (float)((flipHorizontal ? radians : -radians) + angle + 3.14159274101257 * (flipHorizontal ? -0.5 : 0.5));
+                _arrowHead.angle = (float)((flipHorizontal ? radians : -radians) + angle + 3.1415927f * (flipHorizontal ? -0.5 : 0.5));
                 _arrowHead.scale = new Vec2(0.5f, 0.5f);
                 Graphics.Draw(_arrowHead, vec2.x, vec2.y, depth + 2);
             }
             float num = Maths.Clamp(val, 0f, 1f);
-            if (num > 0.800000011920929 && !(Level.current is Editor))
+            if (num > 0.8f && !(Level.current is Editor))
             {
-                xscale = (float)(1.0 - (num - 0.800000011920929) * 2.0);
-                yscale = (float)(1.0 + (num - 0.800000011920929) * 4.0);
+                xscale = (float)(1.0 - (num - 0.8f) * 2.0);
+                yscale = (float)(1.0 + (num - 0.8f) * 4.0);
             }
             angleDegrees = -direction;
             base.Draw();

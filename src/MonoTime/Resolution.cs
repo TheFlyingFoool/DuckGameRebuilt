@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Resolution
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -364,8 +364,8 @@ namespace DuckGame
             {
                 float num1 = Math.Abs(resolution.aspect - pAspect);
                 float num2 = Math.Abs(nearestInternal.aspect - pAspect);
-                bool flag1 = num1 < num2 && Math.Abs(num1 - num2) > 0.0500000007450581;
-                bool flag2 = Math.Abs(num1 - num2) < 0.0500000007450581;
+                bool flag1 = num1 < num2 && Math.Abs(num1 - num2) > 0.05f;
+                bool flag2 = Math.Abs(num1 - num2) < 0.05f;
                 if ((nearestInternal == null || Math.Abs(resolution.x - pX) + Math.Abs(resolution.y - pY) < Math.Abs(nearestInternal.x - pX) + Math.Abs(nearestInternal.y - pY) || flag1 && pAspect > 0.0 || pRecommended && resolution.recommended && !nearestInternal.recommended) && (nearestInternal == null || pAspect < 0.0 || flag1 | flag2 && (resolution.recommended || !pRecommended)))
                     nearestInternal = resolution;
             }

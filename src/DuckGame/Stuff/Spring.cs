@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Spring
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -143,14 +143,14 @@ namespace DuckGame
                     with.vSpeed = -22f * _mult;
                 if (with is RagdollPart)
                 {
-                    if (Math.Abs(with.hSpeed) < 0.100000001490116)
+                    if (Math.Abs(with.hSpeed) < 0.1f)
                         with.hSpeed = Rando.Float(1f) >= 0.5 ? 1.3f : -1.3f;
                     else
                         with.hSpeed *= Rando.Float(1.1f, 1.4f);
                 }
                 if (with is Mine)
                 {
-                    if (Math.Abs(with.hSpeed) < 0.100000001490116)
+                    if (Math.Abs(with.hSpeed) < 0.1f)
                         with.hSpeed = Rando.Float(1f) >= 0.5 ? 1.2f : -1.2f;
                     else
                         with.hSpeed *= Rando.Float(1.1f, 1.2f);

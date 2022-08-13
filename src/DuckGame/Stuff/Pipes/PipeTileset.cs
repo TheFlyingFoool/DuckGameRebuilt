@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.PipeTileset
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -366,13 +366,13 @@ namespace DuckGame
                     {
                         bool flag2 = false;
                         if (Down() != null)
-                            flag2 = physicsObject.vSpeed > -0.100000001490116 && physicsObject.bottom < top + 4.0 && Math.Abs(physicsObject.hSpeed) < 10.0;
+                            flag2 = physicsObject.vSpeed > -0.1f && physicsObject.bottom < top + 4.0 && Math.Abs(physicsObject.hSpeed) < 10.0;
                         else if (Up() != null)
                             flag2 = physicsObject.vSpeed < -2.0 && physicsObject.top > bottom - 4.0 && Math.Abs(physicsObject.hSpeed) < 10.0;
                         else if (Left() != null)
-                            flag2 = physicsObject.hSpeed < -0.200000002980232 && physicsObject.left > right - 4.0 && Math.Abs(physicsObject.vSpeed) < 4.0;
+                            flag2 = physicsObject.hSpeed < -0.2f && physicsObject.left > right - 4.0 && Math.Abs(physicsObject.vSpeed) < 4.0;
                         else if (Right() != null)
-                            flag2 = physicsObject.hSpeed > 0.200000002980232 && physicsObject.right < left + 4.0 && Math.Abs(physicsObject.vSpeed) < 4.0;
+                            flag2 = physicsObject.hSpeed > 0.2f && physicsObject.right < left + 4.0 && Math.Abs(physicsObject.vSpeed) < 4.0;
                         if (flag2 && !_pipingOut.Contains(physicsObject))
                         {
                             if (physicsObject is RagdollPart)
@@ -818,7 +818,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             entered = false;
-            if (connections.Count == 1 && (!(bool)trapdoor || bullet.ammo.penetration >= thickness) && ((hitPos.x - 8.0 < left && Right() != null && bullet.travelDirNormalized.x > 0.300000011920929 || hitPos.x + 8.0 > right && Left() != null && bullet.travelDirNormalized.x < -0.300000011920929) && hitPos.y > top && hitPos.y < bottom || (hitPos.y - 8.0 < top && Down() != null && bullet.travelDirNormalized.y > 0.300000011920929 || hitPos.y + 8.0 > bottom && Up() != null && bullet.travelDirNormalized.y < -0.300000011920929) && hitPos.x > left && hitPos.x < right) && oppositeEnd != null)
+            if (connections.Count == 1 && (!(bool)trapdoor || bullet.ammo.penetration >= thickness) && ((hitPos.x - 8.0 < left && Right() != null && bullet.travelDirNormalized.x > 0.3f || hitPos.x + 8.0 > right && Left() != null && bullet.travelDirNormalized.x < -0.3f) && hitPos.y > top && hitPos.y < bottom || (hitPos.y - 8.0 < top && Down() != null && bullet.travelDirNormalized.y > 0.3f || hitPos.y + 8.0 > bottom && Up() != null && bullet.travelDirNormalized.y < -0.3f) && hitPos.x > left && hitPos.x < right) && oppositeEnd != null)
             {
                 float rng = bullet._totalLength - (bullet._actualStart - hitPos).length;
                 float num = 0f;

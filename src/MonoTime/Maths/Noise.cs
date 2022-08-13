@@ -1,810 +1,831 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Noise
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
-    /// <summary>
-    /// Implementation of the Perlin simplex noise, an improved Perlin noise algorithm.
-    /// Based loosely on SimplexNoise1234 by Stefan Gustavson http://staffwww.itn.liu.se/~stegu/aqsis/aqsis-newnoise/
-    /// 
-    /// </summary>
-    public class Noise
-    {
-        public static byte[] perm = new byte[512]
-        {
-       151,
-       160,
-       137,
-       91,
-       90,
-       15,
-       131,
-       13,
-       201,
-       95,
-       96,
-       53,
-       194,
-       233,
-       7,
-       225,
-       140,
-       36,
-       103,
-       30,
-       69,
-       142,
-       8,
-       99,
-       37,
-       240,
-       21,
-       10,
-       23,
-       190,
-       6,
-       148,
-       247,
-       120,
-       234,
-       75,
-       0,
-       26,
-       197,
-       62,
-       94,
-       252,
-       219,
-       203,
-       117,
-       35,
-       11,
-       32,
-       57,
-       177,
-       33,
-       88,
-       237,
-       149,
-       56,
-       87,
-       174,
-       20,
-       125,
-       136,
-       171,
-       168,
-       68,
-       175,
-       74,
-       165,
-       71,
-       134,
-       139,
-       48,
-       27,
-       166,
-       77,
-       146,
-       158,
-       231,
-       83,
-       111,
-       229,
-       122,
-       60,
-       211,
-       133,
-       230,
-       220,
-       105,
-       92,
-       41,
-       55,
-       46,
-       245,
-       40,
-       244,
-       102,
-       143,
-       54,
-       65,
-       25,
-       63,
-       161,
-       1,
-       216,
-       80,
-       73,
-       209,
-       76,
-       132,
-       187,
-       208,
-       89,
-       18,
-       169,
-       200,
-       196,
-       135,
-       130,
-       116,
-       188,
-       159,
-       86,
-       164,
-       100,
-       109,
-       198,
-       173,
-       186,
-       3,
-       64,
-       52,
-       217,
-       226,
-       250,
-       124,
-       123,
-       5,
-       202,
-       38,
-       147,
-       118,
-       126,
-      byte.MaxValue,
-       82,
-       85,
-       212,
-       207,
-       206,
-       59,
-       227,
-       47,
-       16,
-       58,
-       17,
-       182,
-       189,
-       28,
-       42,
-       223,
-       183,
-       170,
-       213,
-       119,
-       248,
-       152,
-       2,
-       44,
-       154,
-       163,
-       70,
-       221,
-       153,
-       101,
-       155,
-       167,
-       43,
-       172,
-       9,
-       129,
-       22,
-       39,
-       253,
-       19,
-       98,
-       108,
-       110,
-       79,
-       113,
-       224,
-       232,
-       178,
-       185,
-       112,
-       104,
-       218,
-       246,
-       97,
-       228,
-       251,
-       34,
-       242,
-       193,
-       238,
-       210,
-       144,
-       12,
-       191,
-       179,
-       162,
-       241,
-       81,
-       51,
-       145,
-       235,
-       249,
-       14,
-       239,
-       107,
-       49,
-       192,
-       214,
-       31,
-       181,
-       199,
-       106,
-       157,
-       184,
-       84,
-       204,
-       176,
-       115,
-       121,
-       50,
-       45,
-       127,
-       4,
-       150,
-       254,
-       138,
-       236,
-       205,
-       93,
-       222,
-       114,
-       67,
-       29,
-       24,
-       72,
-       243,
-       141,
-       128,
-       195,
-       78,
-       66,
-       215,
-       61,
-       156,
-       180,
-       151,
-       160,
-       137,
-       91,
-       90,
-       15,
-       131,
-       13,
-       201,
-       95,
-       96,
-       53,
-       194,
-       233,
-       7,
-       225,
-       140,
-       36,
-       103,
-       30,
-       69,
-       142,
-       8,
-       99,
-       37,
-       240,
-       21,
-       10,
-       23,
-       190,
-       6,
-       148,
-       247,
-       120,
-       234,
-       75,
-       0,
-       26,
-       197,
-       62,
-       94,
-       252,
-       219,
-       203,
-       117,
-       35,
-       11,
-       32,
-       57,
-       177,
-       33,
-       88,
-       237,
-       149,
-       56,
-       87,
-       174,
-       20,
-       125,
-       136,
-       171,
-       168,
-       68,
-       175,
-       74,
-       165,
-       71,
-       134,
-       139,
-       48,
-       27,
-       166,
-       77,
-       146,
-       158,
-       231,
-       83,
-       111,
-       229,
-       122,
-       60,
-       211,
-       133,
-       230,
-       220,
-       105,
-       92,
-       41,
-       55,
-       46,
-       245,
-       40,
-       244,
-       102,
-       143,
-       54,
-       65,
-       25,
-       63,
-       161,
-       1,
-       216,
-       80,
-       73,
-       209,
-       76,
-       132,
-       187,
-       208,
-       89,
-       18,
-       169,
-       200,
-       196,
-       135,
-       130,
-       116,
-       188,
-       159,
-       86,
-       164,
-       100,
-       109,
-       198,
-       173,
-       186,
-       3,
-       64,
-       52,
-       217,
-       226,
-       250,
-       124,
-       123,
-       5,
-       202,
-       38,
-       147,
-       118,
-       126,
-      byte.MaxValue,
-       82,
-       85,
-       212,
-       207,
-       206,
-       59,
-       227,
-       47,
-       16,
-       58,
-       17,
-       182,
-       189,
-       28,
-       42,
-       223,
-       183,
-       170,
-       213,
-       119,
-       248,
-       152,
-       2,
-       44,
-       154,
-       163,
-       70,
-       221,
-       153,
-       101,
-       155,
-       167,
-       43,
-       172,
-       9,
-       129,
-       22,
-       39,
-       253,
-       19,
-       98,
-       108,
-       110,
-       79,
-       113,
-       224,
-       232,
-       178,
-       185,
-       112,
-       104,
-       218,
-       246,
-       97,
-       228,
-       251,
-       34,
-       242,
-       193,
-       238,
-       210,
-       144,
-       12,
-       191,
-       179,
-       162,
-       241,
-       81,
-       51,
-       145,
-       235,
-       249,
-       14,
-       239,
-       107,
-       49,
-       192,
-       214,
-       31,
-       181,
-       199,
-       106,
-       157,
-       184,
-       84,
-       204,
-       176,
-       115,
-       121,
-       50,
-       45,
-       127,
-       4,
-       150,
-       254,
-       138,
-       236,
-       205,
-       93,
-       222,
-       114,
-       67,
-       29,
-       24,
-       72,
-       243,
-       141,
-       128,
-       195,
-       78,
-       66,
-       215,
-       61,
-       156,
-       180
-        };
+	/// <summary>
+	/// Implementation of the Perlin simplex noise, an improved Perlin noise algorithm.
+	/// Based loosely on SimplexNoise1234 by Stefan Gustavson http://staffwww.itn.liu.se/~stegu/aqsis/aqsis-newnoise/
+	///
+	/// </summary>
+	public class Noise
+	{
+		/// <summary>
+		/// 1D simplex noise
+		/// </summary>
+		/// <param name="x"></param>
+		/// <returns></returns>
+		public static float Generate(float x)
+		{
+			int i0 = Noise.FastFloor(x);
+			int i = i0 + 1;
+			float x2 = x - (float)i0;
+			float x3 = x2 - 1f;
+			float num = 1f - x2 * x2;
+			float num2 = num * num;
+			float n0 = num2 * num2 * Noise.grad((int)Noise.perm[i0 & 255], x2);
+			float num3 = 1f - x3 * x3;
+			float num4 = num3 * num3;
+			float n = num4 * num4 * Noise.grad((int)Noise.perm[i & 255], x3);
+			return 0.395f * (n0 + n);
+		}
 
-        /// <summary>1D simplex noise</summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public static float Generate(float x)
-        {
-            int num1 = Noise.FastFloor(x);
-            int num2 = num1 + 1;
-            float x1 = x - num1;
-            float x2 = x1 - 1f;
-            double num3 = 1.0 - x1 * x1;
-            double num4 = num3 * num3;
-            float num5 = (float)(num4 * num4) * Noise.grad(Noise.perm[num1 & byte.MaxValue], x1);
-            double num6 = 1.0 - x2 * x2;
-            double num7 = num6 * num6;
-            float num8 = (float)(num7 * num7) * Noise.grad(Noise.perm[num2 & byte.MaxValue], x2);
-            return (float)(0.395000010728836 * (num5 + num8));
-        }
+		/// <summary>
+		/// 2D simplex noise
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
+		public static float Generate(float x, float y)
+		{
+			float s = (x + y) * 0.3660254f;
+			float x5 = x + s;
+			float ys = y + s;
+			int num = Noise.FastFloor(x5);
+			int i = Noise.FastFloor(ys);
+			float t = (float)(num + i) * 0.21132487f;
+			float X0 = (float)num - t;
+			float Y0 = (float)i - t;
+			float x2 = x - X0;
+			float y2 = y - Y0;
+			int i2;
+			int j;
+			if (x2 > y2)
+			{
+				i2 = 1;
+				j = 0;
+			}
+			else
+			{
+				i2 = 0;
+				j = 1;
+			}
+			float x3 = x2 - (float)i2 + 0.21132487f;
+			float y3 = y2 - (float)j + 0.21132487f;
+			float x4 = x2 - 1f + 0.42264974f;
+			float y4 = y2 - 1f + 0.42264974f;
+			int ii = num % 256;
+			int jj = i % 256;
+			float t2 = 0.5f - x2 * x2 - y2 * y2;
+			float n0;
+			if (t2 < 0f)
+			{
+				n0 = 0f;
+			}
+			else
+			{
+				t2 *= t2;
+				n0 = t2 * t2 * Noise.grad((int)Noise.perm[ii + (int)Noise.perm[jj]], x2, y2);
+			}
+			float t3 = 0.5f - x3 * x3 - y3 * y3;
+			float n;
+			if (t3 < 0f)
+			{
+				n = 0f;
+			}
+			else
+			{
+				t3 *= t3;
+				n = t3 * t3 * Noise.grad((int)Noise.perm[ii + i2 + (int)Noise.perm[jj + j]], x3, y3);
+			}
+			float t4 = 0.5f - x4 * x4 - y4 * y4;
+			float n2;
+			if (t4 < 0f)
+			{
+				n2 = 0f;
+			}
+			else
+			{
+				t4 *= t4;
+				n2 = t4 * t4 * Noise.grad((int)Noise.perm[ii + 1 + (int)Noise.perm[jj + 1]], x4, y4);
+			}
+			return 40f * (n0 + n + n2);
+		}
 
-        /// <summary>2D simplex noise</summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public static float Generate(float x, float y)
-        {
-            float num1 = (float)((x + y) * 0.366025388240814);
-            double x1 = x + num1;
-            float x2 = y + num1;
-            int num2 = Noise.FastFloor((float)x1);
-            int num3 = Noise.FastFloor(x2);
-            float num4 = (num2 + num3) * 0.2113249f;
-            float num5 = num2 - num4;
-            float num6 = num3 - num4;
-            float x3 = x - num5;
-            float y1 = y - num6;
-            int num7;
-            int num8;
-            if (x3 > y1)
-            {
-                num7 = 1;
-                num8 = 0;
-            }
-            else
-            {
-                num7 = 0;
-                num8 = 1;
-            }
-            float x4 = (float)(x3 - num7 + 0.211324870586395);
-            float y2 = (float)(y1 - num8 + 0.211324870586395);
-            float x5 = (float)(x3 - 1.0 + 0.422649741172791);
-            float y3 = (float)(y1 - 1.0 + 0.422649741172791);
-            int num9 = num2 % 256;
-            int index = num3 % 256;
-            float num10 = (float)(0.5 - x3 * x3 - y1 * y1);
-            float num11;
-            if (num10 < 0.0)
-            {
-                num11 = 0f;
-            }
-            else
-            {
-                float num12 = num10 * num10;
-                num11 = num12 * num12 * Noise.grad(Noise.perm[num9 + Noise.perm[index]], x3, y1);
-            }
-            float num13 = (float)(0.5 - x4 * x4 - y2 * y2);
-            float num14;
-            if (num13 < 0.0)
-            {
-                num14 = 0f;
-            }
-            else
-            {
-                float num15 = num13 * num13;
-                num14 = num15 * num15 * Noise.grad(Noise.perm[num9 + num7 + Noise.perm[index + num8]], x4, y2);
-            }
-            float num16 = (float)(0.5 - x5 * x5 - y3 * y3);
-            float num17;
-            if (num16 < 0.0)
-            {
-                num17 = 0f;
-            }
-            else
-            {
-                float num18 = num16 * num16;
-                num17 = num18 * num18 * Noise.grad(Noise.perm[num9 + 1 + Noise.perm[index + 1]], x5, y3);
-            }
-            return (float)(40.0 * (num11 + num14 + num17));
-        }
+		public static float Generate(float x, float y, float z)
+		{
+			float s = (x + y + z) * 0.33333334f;
+			float x6 = x + s;
+			float ys = y + s;
+			float zs = z + s;
+			int num = Noise.FastFloor(x6);
+			int i = Noise.FastFloor(ys);
+			int j = Noise.FastFloor(zs);
+			float t = (float)(num + i + j) * 0.16666667f;
+			float X0 = (float)num - t;
+			float Y0 = (float)i - t;
+			float Z0 = (float)j - t;
+			float x2 = x - X0;
+			float y2 = y - Y0;
+			float z2 = z - Z0;
+			int i2;
+			int j2;
+			int k;
+			int i3;
+			int j3;
+			int k2;
+			if (x2 >= y2)
+			{
+				if (y2 >= z2)
+				{
+					i2 = 1;
+					j2 = 0;
+					k = 0;
+					i3 = 1;
+					j3 = 1;
+					k2 = 0;
+				}
+				else if (x2 >= z2)
+				{
+					i2 = 1;
+					j2 = 0;
+					k = 0;
+					i3 = 1;
+					j3 = 0;
+					k2 = 1;
+				}
+				else
+				{
+					i2 = 0;
+					j2 = 0;
+					k = 1;
+					i3 = 1;
+					j3 = 0;
+					k2 = 1;
+				}
+			}
+			else if (y2 < z2)
+			{
+				i2 = 0;
+				j2 = 0;
+				k = 1;
+				i3 = 0;
+				j3 = 1;
+				k2 = 1;
+			}
+			else if (x2 < z2)
+			{
+				i2 = 0;
+				j2 = 1;
+				k = 0;
+				i3 = 0;
+				j3 = 1;
+				k2 = 1;
+			}
+			else
+			{
+				i2 = 0;
+				j2 = 1;
+				k = 0;
+				i3 = 1;
+				j3 = 1;
+				k2 = 0;
+			}
+			float x3 = x2 - (float)i2 + 0.16666667f;
+			float y3 = y2 - (float)j2 + 0.16666667f;
+			float z3 = z2 - (float)k + 0.16666667f;
+			float x4 = x2 - (float)i3 + 0.33333334f;
+			float y4 = y2 - (float)j3 + 0.33333334f;
+			float z4 = z2 - (float)k2 + 0.33333334f;
+			float x5 = x2 - 1f + 0.5f;
+			float y5 = y2 - 1f + 0.5f;
+			float z5 = z2 - 1f + 0.5f;
+			int ii = Noise.Mod(num, 256);
+			int jj = Noise.Mod(i, 256);
+			int kk = Noise.Mod(j, 256);
+			float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
+			float n0;
+			if (t2 < 0f)
+			{
+				n0 = 0f;
+			}
+			else
+			{
+				t2 *= t2;
+				n0 = t2 * t2 * Noise.grad((int)Noise.perm[ii + (int)Noise.perm[jj + (int)Noise.perm[kk]]], x2, y2, z2);
+			}
+			float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
+			float n;
+			if (t3 < 0f)
+			{
+				n = 0f;
+			}
+			else
+			{
+				t3 *= t3;
+				n = t3 * t3 * Noise.grad((int)Noise.perm[ii + i2 + (int)Noise.perm[jj + j2 + (int)Noise.perm[kk + k]]], x3, y3, z3);
+			}
+			float t4 = 0.6f - x4 * x4 - y4 * y4 - z4 * z4;
+			float n2;
+			if (t4 < 0f)
+			{
+				n2 = 0f;
+			}
+			else
+			{
+				t4 *= t4;
+				n2 = t4 * t4 * Noise.grad((int)Noise.perm[ii + i3 + (int)Noise.perm[jj + j3 + (int)Noise.perm[kk + k2]]], x4, y4, z4);
+			}
+			float t5 = 0.6f - x5 * x5 - y5 * y5 - z5 * z5;
+			float n3;
+			if (t5 < 0f)
+			{
+				n3 = 0f;
+			}
+			else
+			{
+				t5 *= t5;
+				n3 = t5 * t5 * Noise.grad((int)Noise.perm[ii + 1 + (int)Noise.perm[jj + 1 + (int)Noise.perm[kk + 1]]], x5, y5, z5);
+			}
+			return 32f * (n0 + n + n2 + n3);
+		}
 
-        public static float Generate(float x, float y, float z)
-        {
-            float num1 = (float)((x + y + z) * 0.333333343267441);
-            double x1 = x + num1;
-            float x2 = y + num1;
-            float x3 = z + num1;
-            int x4 = Noise.FastFloor((float)x1);
-            int x5 = Noise.FastFloor(x2);
-            int x6 = Noise.FastFloor(x3);
-            float num2 = (x4 + x5 + x6) * 0.1666667f;
-            float num3 = x4 - num2;
-            float num4 = x5 - num2;
-            float num5 = x6 - num2;
-            float x7 = x - num3;
-            float y1 = y - num4;
-            float z1 = z - num5;
-            int num6;
-            int num7;
-            int num8;
-            int num9;
-            int num10;
-            int num11;
-            if (x7 >= y1)
-            {
-                if (y1 >= z1)
-                {
-                    num6 = 1;
-                    num7 = 0;
-                    num8 = 0;
-                    num9 = 1;
-                    num10 = 1;
-                    num11 = 0;
-                }
-                else if (x7 >= z1)
-                {
-                    num6 = 1;
-                    num7 = 0;
-                    num8 = 0;
-                    num9 = 1;
-                    num10 = 0;
-                    num11 = 1;
-                }
-                else
-                {
-                    num6 = 0;
-                    num7 = 0;
-                    num8 = 1;
-                    num9 = 1;
-                    num10 = 0;
-                    num11 = 1;
-                }
-            }
-            else if (y1 < z1)
-            {
-                num6 = 0;
-                num7 = 0;
-                num8 = 1;
-                num9 = 0;
-                num10 = 1;
-                num11 = 1;
-            }
-            else if (x7 < z1)
-            {
-                num6 = 0;
-                num7 = 1;
-                num8 = 0;
-                num9 = 0;
-                num10 = 1;
-                num11 = 1;
-            }
-            else
-            {
-                num6 = 0;
-                num7 = 1;
-                num8 = 0;
-                num9 = 1;
-                num10 = 1;
-                num11 = 0;
-            }
-            float x8 = (x7 - num6 + 0.16666667f);
-            float y2 = (y1 - num7 + 0.16666667f);
-            float z2 = (z1 - num8 + 0.16666667f);
-            float x9 = (x7 - num9 + 0.33333334f);
-            float y3 = (y1 - num10 + 0.33333334f);
-            float z3 = (z1 - num11 + 0.33333334f);
-            float x10 = (x7 - 1f + 0.5f);
-            float y4 = (y1 - 1f + 0.5f);
-            float z4 = (z1 - 1f + 0.5f);
-            int num12 = Noise.Mod(x4, 256);
-            int num13 = Noise.Mod(x5, 256);
-            int index = Noise.Mod(x6, 256);
-            float num14 = (0.6f - x7 * x7 - y1 * y1 - z1 * z1);
-            float num15;
-            if (num14 < 0f)
-            {
-                num15 = 0f;
-            }
-            else
-            {
-                float num16 = num14 * num14;
-                num15 = num16 * num16 * Noise.grad(Noise.perm[num12 + Noise.perm[num13 + Noise.perm[index]]], x7, y1, z1);
-            }
-            float num17 = (0.6f - x8 * x8 - y2 * y2 - z2 * z2);
-            float num18;
-            if (num17 < 0f)
-            {
-                num18 = 0f;
-            }
-            else
-            {
-                float num19 = num17 * num17;
-                num18 = num19 * num19 * Noise.grad(Noise.perm[num12 + num6 + Noise.perm[num13 + num7 + Noise.perm[index + num8]]], x8, y2, z2);
-            }
-            float num20 = (0.6f - x9 * x9 - y3 * y3 - z3 * z3);
-            float num21;
-            if (num20 < 0.0)
-            {
-                num21 = 0f;
-            }
-            else
-            {
-                float num22 = num20 * num20;
-                num21 = num22 * num22 * Noise.grad(Noise.perm[num12 + num9 + Noise.perm[num13 + num10 + Noise.perm[index + num11]]], x9, y3, z3);
-            }
-            float num23 = (0.6f - x10 * x10 - y4 * y4 - z4 * z4);
-            float num24;
-            if (num23 < 0f)
-            {
-                num24 = 0f;
-            }
-            else
-            {
-                float num25 = num23 * num23;
-                num24 = num25 * num25 * Noise.grad(Noise.perm[num12 + 1 + Noise.perm[num13 + 1 + Noise.perm[index + 1]]], x10, y4, z4);
-            }
-            return (32f * (num15 + num18 + num21 + num24));
-        }
+		public static void Seed(int value)
+		{
+			Random r = new Random(value);
+			for (int i = 0; i < 512; i++)
+			{
+				Noise.perm[i] = (byte)Math.Round(r.NextDouble() * 255.0);
+			}
+		}
 
-        public static void Seed(int value)
-        {
-            Random random = new Random(value);
-            for (int index = 0; index < 512; ++index)
-                Noise.perm[index] = (byte)Math.Round(random.NextDouble() * byte.MaxValue);
-        }
+		private static int FastFloor(float x)
+		{
+			if (x <= 0f)
+			{
+				return (int)x - 1;
+			}
+			return (int)x;
+		}
 
-        private static int FastFloor(float x) => x <= 0.0 ? (int)x - 1 : (int)x;
+		private static int Mod(int x, int m)
+		{
+			int a = x % m;
+			if (a >= 0)
+			{
+				return a;
+			}
+			return a + m;
+		}
 
-        private static int Mod(int x, int m)
-        {
-            int num = x % m;
-            return num >= 0 ? num : num + m;
-        }
+		private static float grad(int hash, float x)
+		{
+			int h = hash & 15;
+			float grad = 1f + (float)(h & 7);
+			if ((h & 8) != 0)
+			{
+				grad = -grad;
+			}
+			return grad * x;
+		}
 
-        private static float grad(int hash, float x)
-        {
-            int num1 = hash & 15;
-            float num2 = 1f + (num1 & 7);
-            if ((num1 & 8) != 0)
-                num2 = -num2;
-            return num2 * x;
-        }
+		private static float grad(int hash, float x, float y)
+		{
+			int h = hash & 7;
+			float u = (h < 4) ? x : y;
+			float v = (h < 4) ? y : x;
+			return (((h & 1) != 0) ? (-u) : u) + (((h & 2) != 0) ? (-2f * v) : (2f * v));
+		}
 
-        private static float grad(int hash, float x, float y)
-        {
-            int num1 = hash & 7;
-            float num2 = num1 < 4 ? x : y;
-            float num3 = num1 < 4 ? y : x;
-            return (((num1 & 1) != 0 ? -num2 : num2) + ((num1 & 2) != 0 ? -2f * num3 : 2f * num3));
-        }
+		private static float grad(int hash, float x, float y, float z)
+		{
+			int h = hash & 15;
+			float u = (h < 8) ? x : y;
+			float v = (h < 4) ? y : ((h == 12 || h == 14) ? x : z);
+			return (((h & 1) != 0) ? (-u) : u) + (((h & 2) != 0) ? (-v) : v);
+		}
 
-        private static float grad(int hash, float x, float y, float z)
-        {
-            int num1 = hash & 15;
-            float num2 = num1 < 8 ? x : y;
-            float num3 = num1 < 4 ? y : (num1 == 12 || num1 == 14 ? x : z);
-            return (((num1 & 1) != 0 ? -num2 : num2) + ((num1 & 2) != 0 ? -num3 : num3));
-        }
+		private static float grad(int hash, float x, float y, float z, float t)
+		{
+			int h = hash & 31;
+			float u = (h < 24) ? x : y;
+			float v = (h < 16) ? y : z;
+			float w = (h < 8) ? z : t;
+			return (((h & 1) != 0) ? (-u) : u) + (((h & 2) != 0) ? (-v) : v) + (((h & 4) != 0) ? (-w) : w);
+		}
 
-        private static float grad(int hash, float x, float y, float z, float t)
-        {
-            int num1 = hash & 31;
-            float num2 = num1 < 24 ? x : y;
-            float num3 = num1 < 16 ? y : z;
-            float num4 = num1 < 8 ? z : t;
-            return (((num1 & 1) != 0 ? -num2 : num2) + ((num1 & 2) != 0 ? -num3 : num3) + ((num1 & 4) != 0 ? -num4 : num4));
-        }
-    }
+		public Noise()
+		{
+		}
+
+		// Note: this type is marked as 'beforefieldinit'.
+		static Noise()
+		{
+		}
+
+		public static byte[] perm = new byte[]
+		{
+			151,
+			160,
+			137,
+			91,
+			90,
+			15,
+			131,
+			13,
+			201,
+			95,
+			96,
+			53,
+			194,
+			233,
+			7,
+			225,
+			140,
+			36,
+			103,
+			30,
+			69,
+			142,
+			8,
+			99,
+			37,
+			240,
+			21,
+			10,
+			23,
+			190,
+			6,
+			148,
+			247,
+			120,
+			234,
+			75,
+			0,
+			26,
+			197,
+			62,
+			94,
+			252,
+			219,
+			203,
+			117,
+			35,
+			11,
+			32,
+			57,
+			177,
+			33,
+			88,
+			237,
+			149,
+			56,
+			87,
+			174,
+			20,
+			125,
+			136,
+			171,
+			168,
+			68,
+			175,
+			74,
+			165,
+			71,
+			134,
+			139,
+			48,
+			27,
+			166,
+			77,
+			146,
+			158,
+			231,
+			83,
+			111,
+			229,
+			122,
+			60,
+			211,
+			133,
+			230,
+			220,
+			105,
+			92,
+			41,
+			55,
+			46,
+			245,
+			40,
+			244,
+			102,
+			143,
+			54,
+			65,
+			25,
+			63,
+			161,
+			1,
+			216,
+			80,
+			73,
+			209,
+			76,
+			132,
+			187,
+			208,
+			89,
+			18,
+			169,
+			200,
+			196,
+			135,
+			130,
+			116,
+			188,
+			159,
+			86,
+			164,
+			100,
+			109,
+			198,
+			173,
+			186,
+			3,
+			64,
+			52,
+			217,
+			226,
+			250,
+			124,
+			123,
+			5,
+			202,
+			38,
+			147,
+			118,
+			126,
+			byte.MaxValue,
+			82,
+			85,
+			212,
+			207,
+			206,
+			59,
+			227,
+			47,
+			16,
+			58,
+			17,
+			182,
+			189,
+			28,
+			42,
+			223,
+			183,
+			170,
+			213,
+			119,
+			248,
+			152,
+			2,
+			44,
+			154,
+			163,
+			70,
+			221,
+			153,
+			101,
+			155,
+			167,
+			43,
+			172,
+			9,
+			129,
+			22,
+			39,
+			253,
+			19,
+			98,
+			108,
+			110,
+			79,
+			113,
+			224,
+			232,
+			178,
+			185,
+			112,
+			104,
+			218,
+			246,
+			97,
+			228,
+			251,
+			34,
+			242,
+			193,
+			238,
+			210,
+			144,
+			12,
+			191,
+			179,
+			162,
+			241,
+			81,
+			51,
+			145,
+			235,
+			249,
+			14,
+			239,
+			107,
+			49,
+			192,
+			214,
+			31,
+			181,
+			199,
+			106,
+			157,
+			184,
+			84,
+			204,
+			176,
+			115,
+			121,
+			50,
+			45,
+			127,
+			4,
+			150,
+			254,
+			138,
+			236,
+			205,
+			93,
+			222,
+			114,
+			67,
+			29,
+			24,
+			72,
+			243,
+			141,
+			128,
+			195,
+			78,
+			66,
+			215,
+			61,
+			156,
+			180,
+			151,
+			160,
+			137,
+			91,
+			90,
+			15,
+			131,
+			13,
+			201,
+			95,
+			96,
+			53,
+			194,
+			233,
+			7,
+			225,
+			140,
+			36,
+			103,
+			30,
+			69,
+			142,
+			8,
+			99,
+			37,
+			240,
+			21,
+			10,
+			23,
+			190,
+			6,
+			148,
+			247,
+			120,
+			234,
+			75,
+			0,
+			26,
+			197,
+			62,
+			94,
+			252,
+			219,
+			203,
+			117,
+			35,
+			11,
+			32,
+			57,
+			177,
+			33,
+			88,
+			237,
+			149,
+			56,
+			87,
+			174,
+			20,
+			125,
+			136,
+			171,
+			168,
+			68,
+			175,
+			74,
+			165,
+			71,
+			134,
+			139,
+			48,
+			27,
+			166,
+			77,
+			146,
+			158,
+			231,
+			83,
+			111,
+			229,
+			122,
+			60,
+			211,
+			133,
+			230,
+			220,
+			105,
+			92,
+			41,
+			55,
+			46,
+			245,
+			40,
+			244,
+			102,
+			143,
+			54,
+			65,
+			25,
+			63,
+			161,
+			1,
+			216,
+			80,
+			73,
+			209,
+			76,
+			132,
+			187,
+			208,
+			89,
+			18,
+			169,
+			200,
+			196,
+			135,
+			130,
+			116,
+			188,
+			159,
+			86,
+			164,
+			100,
+			109,
+			198,
+			173,
+			186,
+			3,
+			64,
+			52,
+			217,
+			226,
+			250,
+			124,
+			123,
+			5,
+			202,
+			38,
+			147,
+			118,
+			126,
+			byte.MaxValue,
+			82,
+			85,
+			212,
+			207,
+			206,
+			59,
+			227,
+			47,
+			16,
+			58,
+			17,
+			182,
+			189,
+			28,
+			42,
+			223,
+			183,
+			170,
+			213,
+			119,
+			248,
+			152,
+			2,
+			44,
+			154,
+			163,
+			70,
+			221,
+			153,
+			101,
+			155,
+			167,
+			43,
+			172,
+			9,
+			129,
+			22,
+			39,
+			253,
+			19,
+			98,
+			108,
+			110,
+			79,
+			113,
+			224,
+			232,
+			178,
+			185,
+			112,
+			104,
+			218,
+			246,
+			97,
+			228,
+			251,
+			34,
+			242,
+			193,
+			238,
+			210,
+			144,
+			12,
+			191,
+			179,
+			162,
+			241,
+			81,
+			51,
+			145,
+			235,
+			249,
+			14,
+			239,
+			107,
+			49,
+			192,
+			214,
+			31,
+			181,
+			199,
+			106,
+			157,
+			184,
+			84,
+			204,
+			176,
+			115,
+			121,
+			50,
+			45,
+			127,
+			4,
+			150,
+			254,
+			138,
+			236,
+			205,
+			93,
+			222,
+			114,
+			67,
+			29,
+			24,
+			72,
+			243,
+			141,
+			128,
+			195,
+			78,
+			66,
+			215,
+			61,
+			156,
+			180
+		};
+	}
 }

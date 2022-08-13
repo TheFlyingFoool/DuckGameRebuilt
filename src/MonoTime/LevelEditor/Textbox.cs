@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Textbox
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -263,7 +263,7 @@ namespace DuckGame
             _drawText = text;
             if (text.Length == 0 && !_inFocus)
                 _drawText = _emptyText;
-            _blink = (float)((_blink + 0.0199999995529652) % 1.0);
+            _blink = (float)((_blink + 0.02f) % 1.0);
         }
 
         public void Draw()

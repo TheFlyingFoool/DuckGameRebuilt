@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.TeamBeam
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -34,7 +34,7 @@ namespace DuckGame
             };
             _selectBeam.center = new Vec2(_selectBeam.w / 2, 0f);
             depth = (Depth)0f;
-            _collisionOffset = new Vec2((float)-(_selectBeam.w / 2 * 0.800000011920929), 0f);
+            _collisionOffset = new Vec2((float)-(_selectBeam.w / 2 * 0.8f), 0f);
             _collisionSize = new Vec2(_selectBeam.w * 0.8f, 180f);
             center = new Vec2(_selectBeam.w / 2);
             thickness = 10f;
@@ -99,7 +99,7 @@ namespace DuckGame
                 _beamHeight = 180f;
                 _collisionSize = new Vec2(_selectBeam.w * 0.8f, 180f);
             }
-            _selectBeam.color = new Color(0.3f, (float)(0.300000011920929 + _wave2.normalized * 0.200000002980232), (float)(0.5 + _wave.normalized * 0.300000011920929)) * (1f + _flash);
+            _selectBeam.color = new Color(0.3f, (float)(0.3f + _wave2.normalized * 0.2f), (float)(0.5 + _wave.normalized * 0.3f)) * (1f + _flash);
             _flash = Maths.CountDown(_flash, 0.1f);
             _spawnWait -= 0.1f;
             if (_spawnWait < 0.0)

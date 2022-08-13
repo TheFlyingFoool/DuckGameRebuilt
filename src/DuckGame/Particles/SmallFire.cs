@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.SmallFire
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -139,11 +139,11 @@ namespace DuckGame
         {
             _bounceEfficiency = 0.2f;
             _sprite = new SpriteMap("smallFire", 16, 16);
-            _sprite.AddAnimation("burn", (float)(0.200000002980232 + Rando.Float(0.2f)), true, 0, 1, 2, 3, 4);
+            _sprite.AddAnimation("burn", (float)(0.2f + Rando.Float(0.2f)), true, 0, 1, 2, 3, 4);
             graphic = _sprite;
             center = new Vec2(8f, 14f);
             _airFire = new SpriteMap("airFire", 16, 16);
-            _airFire.AddAnimation("burn", (float)(0.200000002980232 + Rando.Float(0.2f)), true, 0, 1, 2, 1);
+            _airFire.AddAnimation("burn", (float)(0.2f + Rando.Float(0.2f)), true, 0, 1, 2, 1);
             _airFire.center = new Vec2(8f, 8f);
             _collisionSize = new Vec2(12f, 12f);
             _collisionOffset = new Vec2(-6f, -6f);
@@ -232,15 +232,15 @@ namespace DuckGame
             }
             else
             {
-                if (_airFireScale < 1.20000004768372)
+                if (_airFireScale < 1.2f)
                     _airFireScale += 0.15f;
                 if (_grounded && _stick == null)
                 {
                     _airFireScale -= 0.3f;
-                    if (_airFireScale < 0.899999976158142)
+                    if (_airFireScale < 0.9f)
                         _airFireScale = 0.9f;
                     _spinSpeed -= 0.01f;
-                    if (_spinSpeed < 0.0500000007450581)
+                    if (_spinSpeed < 0.05f)
                         _spinSpeed = 0.05f;
                 }
                 if (_grounded)
@@ -283,7 +283,7 @@ namespace DuckGame
                     {
                         UpdateStick();
                         stick.UpdateFirePosition(this);
-                        if (!_stick.onFire || _stick.removeFromLevel || _stick.alpha < 0.00999999977648258)
+                        if (!_stick.onFire || _stick.removeFromLevel || _stick.alpha <  0.01f)
                         {
                             Level.Add(SmallSmoke.New(x, y));
                             Level.Remove(this);

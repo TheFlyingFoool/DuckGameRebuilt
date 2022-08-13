@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.WdlResampler
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -461,7 +461,7 @@ namespace DuckGame
                 double a = num5 * -num2;
                 for (int index = -num2; index < num2 + m_lp_oversize; ++index)
                 {
-                    double num6 = 287.0 / 800.0 - 0.48829 * Math.Cos(d) + 0.14128 * Math.Cos(2.0 * d) - 0.01168 * Math.Cos(6.0 * d);
+                    double num6 = 0.35875 - 0.48829 * Math.Cos(d) + 0.14128 * Math.Cos(2.0 * d) - 0.01168 * Math.Cos(6.0 * d);
                     if (index != 0)
                         num6 *= Math.Sin(a) / a;
                     d += num4;

@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.TouchScreen
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -184,7 +184,8 @@ namespace DuckGame
                         TouchScreen.System_MapTouch(new TSData(0)
                         {
                             fingerId = 1,
-                            touchXY = new Vec2(Mouse.xConsole + TouchScreen._spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin(_spoofFinger2Waver * 1.5), (float)Math.Cos(_spoofFinger2Waver * 0.300000011920929)) * 3f
+                            touchXY = new Vec2(Mouse.xConsole + TouchScreen._spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin((double)(TouchScreen._spoofFinger2Waver * 1.5f)), (float)Math.Cos((double)(TouchScreen._spoofFinger2Waver * 0.3f))) * 3f
+                        
                         });
                     if (Mouse.middle == InputState.Down)
                         TouchScreen.System_MapTouch(new TSData(0)

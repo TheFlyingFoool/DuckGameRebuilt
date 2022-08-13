@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Ragdoll
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -360,7 +360,7 @@ namespace DuckGame
             Organize();
             if (Network.isActive && !GhostManager.inGhostLoop)
                 GhostManager.context.MakeGhost(this);
-            if (Math.Abs(hSpeed) < 0.200000002980232)
+            if (Math.Abs(hSpeed) < 0.2f)
                 hSpeed = NetRand.Float(0.3f, 1f) * (NetRand.Float(1f) >= 0.5 ? 1f : -1f);
             float num1 = _slide ? 1f : 1.05f;
             float num2 = _slide ? 1f : 0.95f;

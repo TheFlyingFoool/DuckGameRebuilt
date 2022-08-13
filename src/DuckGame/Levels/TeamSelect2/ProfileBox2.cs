@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.ProfileBox2
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -1046,7 +1046,7 @@ namespace DuckGame
                                 Furniture furniMapping1 = furniturePosition1.furniMapping;
                                 FurniturePosition furniturePosition2 = source3.ElementAt<FurniturePosition>(index1);
                                 Furniture furniMapping2 = furniturePosition2.furniMapping;
-                                furniMapping1.sprite.depth = (Depth)(float)(furniMapping2.deep * (1.0 / 1000.0) - 0.560000002384186);
+                                furniMapping1.sprite.depth = (Depth)(float)(furniMapping2.deep * (1.0 / 1000.0) - 0.56f);
                                 furniMapping1.sprite.frame = furniturePosition1.variation;
                                 Vec2 pos = new Vec2(furniturePosition2.x, furniturePosition2.y);
                                 furniMapping1.sprite.flipH = furniturePosition1.flip;
@@ -1075,7 +1075,7 @@ namespace DuckGame
                                 Furniture furniMapping3 = furniturePosition3.furniMapping;
                                 FurniturePosition furniturePosition4 = source5.ElementAt<FurniturePosition>(index3);
                                 Furniture furniMapping4 = furniturePosition4.furniMapping;
-                                furniMapping3.sprite.depth = (Depth)(float)(furniMapping4.deep * (1.0 / 1000.0) - 0.560000002384186);
+                                furniMapping3.sprite.depth = (Depth)(float)(furniMapping4.deep * (1.0 / 1000.0) - 0.56f);
                                 furniMapping3.sprite.frame = furniturePosition4.variation;
                                 Vec2 pos = new Vec2(furniturePosition3.x, furniturePosition3.y);
                                 furniMapping3.sprite.flipH = furniturePosition3.flip;
@@ -1335,7 +1335,7 @@ namespace DuckGame
                             profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 68.0 - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.5) + num7, Color.Black, (Depth)0.7f);
                             Vec2 p1 = new Vec2((float)(x + 56.0 - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.0) + num7);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f, 3f), Colors.BlueGray, (Depth)0.66f, borderWidth: 0.5f);
-                            Graphics.DrawRect(p1, p1 + new Vec2(37f * num10, 3f), num10 < 0.400000005960464 ? Colors.DGGreen : (num10 < 0.800000011920929 ? Colors.DGYellow : Colors.DGRed), (Depth)0.68f, borderWidth: 0.5f);
+                            Graphics.DrawRect(p1, p1 + new Vec2(37f * num10, 3f), num10 < 0.04f ? Colors.DGGreen : (num10 < 0.8f ? Colors.DGYellow : Colors.DGRed), (Depth)0.68f, borderWidth: 0.5f);
                         }
                         profile.font.spriteScale = new Vec2(1f, 1f);
                         profile.font.scale = new Vec2(1f, 1f);
@@ -1467,7 +1467,7 @@ namespace DuckGame
                             profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 68.0 - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.5) + num15, Color.Black, (Depth)0.7f);
                             Vec2 p1 = new Vec2((float)(x + 56.0 - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.0) + num15);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f, 3f), Colors.BlueGray, (Depth)0.66f, borderWidth: 0.5f);
-                            Graphics.DrawRect(p1, p1 + new Vec2(37f * num17, 3f), num17 < 0.400000005960464 ? Colors.DGGreen : (num17 < 0.800000011920929 ? Colors.DGYellow : Colors.DGRed), (Depth)0.68f, borderWidth: 0.5f);
+                            Graphics.DrawRect(p1, p1 + new Vec2(37f * num17, 3f), num17 < 0.04f ? Colors.DGGreen : (num17 < 0.8f ? Colors.DGYellow : Colors.DGRed), (Depth)0.68f, borderWidth: 0.5f);
                         }
                         profile.font.spriteScale = new Vec2(1f, 1f);
                         profile.font.scale = new Vec2(1f, 1f);

@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Warpgun
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -214,7 +214,7 @@ namespace DuckGame
             else
             {
                 lerpShut += 0.2f;
-                _sprite.frame = lerpShut >= 0.400000005960464 ? (lerpShut >= 0.800000011920929 ? 4 : 3) : 2;
+                _sprite.frame = lerpShut >= 0.4f ? (lerpShut >= 0.8f ? 4 : 3) : 2;
             }
             ++framesSinceShot;
             base.Update();
@@ -384,12 +384,12 @@ namespace DuckGame
             framesSinceShot = 0;
             ++shotsSinceGrounded;
             ++shotsSinceDuckWasGrounded;
-            if (heat > 0.800000011920929)
+            if (heat > 0.8f)
             {
                 explode = true;
                 PressAction();
             }
-            if (level != null && y < level.topLeft.y - 256.0)
+            if (level != null && y < level.topLeft.y - 256.0f)
             {
                 shotsSinceDuckWasGrounded = 16;
                 heat = 1f;
@@ -413,7 +413,7 @@ namespace DuckGame
                 Graphics.DrawTexturedLine(_warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0f, 4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
                 blockGlow.glow -= 0.05f;
             }
-            blockGlows.RemoveAll(x => x.glow < 0.00999999977648258);
+            blockGlows.RemoveAll(x => x.glow < 0.01f);
             Color purple = Color.Purple;
             foreach (WarpLine warpLine in warpLines)
             {
@@ -423,10 +423,10 @@ namespace DuckGame
                 Graphics.DrawTexturedLine(_warpLine.texture, warpLine.start + vec2_2 * warpLine.lerp, warpLine.start, purple * 0.8f, warpLine.wide / 32f, (Depth)0.9f);
                 warpLine.lerp += 0.1f;
             }
-            warpLines.RemoveAll(v => v.lerp >= 1.0);
+            warpLines.RemoveAll(v => v.lerp >= 1.0f);
             if (duck != null && visible)
             {
-                if (gravMultTime > 0.0)
+                if (gravMultTime > 0.0f)
                 {
                     Graphics.DrawTexturedLine(_warpLine.texture, new Vec2(duck.x, duck.y), new Vec2(duck.x, duck.top - 8f), purple * (gravMultTime + 0.2f), 0.7f, (Depth)0.9f);
                     Graphics.DrawTexturedLine(_warpLine.texture, new Vec2(duck.x, duck.y), new Vec2(duck.x, duck.bottom + 8f), purple * (gravMultTime + 0.2f), 0.7f, (Depth)0.9f);

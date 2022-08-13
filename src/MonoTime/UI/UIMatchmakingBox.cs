@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.UIMatchmakingBox
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -624,15 +624,15 @@ namespace DuckGame
                     float num2 = num1 + 63f;
                     double num3 = (x - num1) / (num2 - num1);
                     _matchmakingSignal.depth = depth + 4;
-                    if (num3 > -0.100000001490116)
+                    if (num3 > -0.1f)
                         _matchmakingSignal.frame = 0;
-                    if (num3 > 0.0500000007450581)
+                    if (num3 > 0.05f)
                         _matchmakingSignal.frame = 1;
-                    if (num3 > 0.100000001490116)
+                    if (num3 > 0.1f)
                         _matchmakingSignal.frame = 2;
-                    if (num3 > 0.899999976158142)
+                    if (num3 > 0.9f)
                         _matchmakingSignal.frame = 1;
-                    if (num3 > 0.949999988079071)
+                    if (num3 > 0.95f)
                         _matchmakingSignal.frame = 0;
                     Graphics.Draw(_matchmakingSignal, x, y - 21f);
                 }

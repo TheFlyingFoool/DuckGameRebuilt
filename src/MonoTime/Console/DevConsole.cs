@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.DevConsole
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
@@ -269,144 +269,146 @@ namespace DuckGame
                 };
             }
 
-            if (_core.alpha <= 0.00999999977648258)
-                return;
-            InitializeFont();
-            if (_tray == null)
-                return;
-            _tray.alpha = _core.alpha;
-            _tray.scale = new Vec2((float) (Math.Round(Resolution.current.x / 1280.0 * 2.0) / 2.0) * 2f) *
-                (consoleScale + 1) / 2f;
-            _tray.depth = 0.75f;
-            if (Layer.core._console != null)
+            if (DevConsole._core.alpha > 0.01f)
             {
-                int num1 = (int) ((double) Layer.core._console.camera.height * dimensions.y / (16.0 * _tray.scale.y)) - 2;
-                int num2 = (int) ((double) Layer.core._console.camera.width * dimensions.x / (16.0 * _tray.scale.x)) - 2;
-                Graphics.Draw(_tray, 0.0f, 0.0f, new Rectangle(0.0f, 0.0f, 18f, 18f));
-                Graphics.Draw(_tray, 0.0f, (float) (18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)),
-                    new Rectangle(0.0f, _tray.height - 18, 18f, 18f));
-                Graphics.Draw(_tray, (float) (18.0 * _tray.scale.x + (num2 - 6) * (16.0 * _tray.scale.x)),
-                    (float) (18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)),
-                    new Rectangle(_tray.width - 114, _tray.height - 18, 114f, 18f));
-                for (int index = 0; index < num2; ++index)
+                InitializeFont();
+                if (_tray == null)
+                    return;
+                _tray.alpha = _core.alpha;
+                _tray.scale = new Vec2((float)(Math.Round(Resolution.current.x / 1280.0 * 2.0) / 2.0) * 2f) *
+                    (consoleScale + 1) / 2f;
+                _tray.depth = 0.75f;
+                if (Layer.core._console != null)
                 {
-                    const float width = 16f;
-                    Graphics.Draw(_tray, (float) (18.0 * _tray.scale.x + 16.0 * _tray.scale.x * index), 0.0f,
-                        new Rectangle(width, 0.0f, width, 18f));
-                    if (index < num2 - 6)
-                        Graphics.Draw(_tray, (float) (18.0 * _tray.scale.x + 16.0 * _tray.scale.x * index),
-                            (float) (18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)),
-                            new Rectangle(width, _tray.height - 18, width, 18f));
-                }
+                    int num1 = (int)((double)Layer.core._console.camera.height * dimensions.y / (16.0 * _tray.scale.y)) - 2;
+                    int num2 = (int)((double)Layer.core._console.camera.width * dimensions.x / (16.0 * _tray.scale.x)) - 2;
+                    Graphics.Draw(_tray, 0.0f, 0.0f, new Rectangle(0.0f, 0.0f, 18f, 18f));
+                    Graphics.Draw(_tray, 0.0f, (float)(18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)),
+                        new Rectangle(0.0f, _tray.height - 18, 18f, 18f));
+                    Graphics.Draw(_tray, (float)(18.0 * _tray.scale.x + (num2 - 6) * (16.0 * _tray.scale.x)),
+                        (float)(18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)),
+                        new Rectangle(_tray.width - 114, _tray.height - 18, 114f, 18f));
+                    for (int index = 0; index < num2; ++index)
+                    {
+                        const float width = 16f;
+                        Graphics.Draw(_tray, (float)(18.0 * _tray.scale.x + 16.0 * _tray.scale.x * index), 0.0f,
+                            new Rectangle(width, 0.0f, width, 18f));
+                        if (index < num2 - 6)
+                            Graphics.Draw(_tray, (float)(18.0 * _tray.scale.x + 16.0 * _tray.scale.x * index),
+                                (float)(18.0 * _tray.scale.y + num1 * (16.0 * _tray.scale.y)),
+                                new Rectangle(width, _tray.height - 18, width, 18f));
+                    }
 
-                Graphics.Draw(_tray, (float) (18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x)), 0.0f,
-                    new Rectangle(_tray.width - 18, 0.0f, 18f, 18f));
-                for (int index = 0; index < num1; ++index)
-                {
-                    Graphics.Draw(_tray, 0.0f, (float) (18.0 * _tray.scale.y + 16.0 * _tray.scale.y * index),
-                        new Rectangle(0.0f, 18f, 18f, 16f));
-                    Graphics.Draw(_tray, (float) (18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x)),
-                        (float) (18.0 * _tray.scale.y + 16.0 * _tray.scale.y * index),
-                        new Rectangle(_tray.width - 18, 18f, 18f, 16f));
-                }
+                    Graphics.Draw(_tray, (float)(18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x)), 0.0f,
+                        new Rectangle(_tray.width - 18, 0.0f, 18f, 18f));
+                    for (int index = 0; index < num1; ++index)
+                    {
+                        Graphics.Draw(_tray, 0.0f, (float)(18.0 * _tray.scale.y + 16.0 * _tray.scale.y * index),
+                            new Rectangle(0.0f, 18f, 18f, 16f));
+                        Graphics.Draw(_tray, (float)(18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x)),
+                            (float)(18.0 * _tray.scale.y + 16.0 * _tray.scale.y * index),
+                            new Rectangle(_tray.width - 18, 18f, 18f, 16f));
+                    }
 
-                Graphics.DrawRect(Vec2.Zero,
-                    new Vec2((float) (18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x) + _tray.scale.y * 4.0),
-                        (num1 + 2) * (16f * _tray.scale.y)), Color.Black * 0.8f * _core.alpha,
-                    0.7f);
-                _core.fancyFont.scale = new Vec2(_tray.scale.x / 2f);
-                _core.fancyFont.depth = 0.98f;
-                _core.fancyFont.alpha = _core.alpha;
-                float num3 = (float) ((num1 + 1) * 16 * (double) _tray.scale.y + 5.0 * _tray.scale.y);
-                float num4 = (num2 + 2) * (16f * _tray.scale.x);
-                string version = DG.version;
-                _core.fancyFont.Draw(version,
-                    new Vec2((float) (82.0 * _tray.scale.x + (num2 - 6) * (16.0 * _tray.scale.x)),
-                        num3 + 7f * _tray.scale.y), new Color(62, 114, 122), 0.98f);
-                _core.cursorPosition = Math.Min(Math.Max(_core.cursorPosition, 0),
-                    _core.typing.Length);
-                if (_raster != null)
-                {
-                    _raster.scale = new Vec2(0.5f);
-                    _raster.alpha = _core.alpha;
-                    _raster.Draw(_core.typing, 4f * _tray.scale.x,
-                        (float) (num3 + _tray.scale.y * 8.0 -
-                                 _raster.characterHeight * (double) _raster.scale.y / 2.0), Color.White,
-                        0.9f);
-                    Vec2 p1 = new(
-                        (float) (_raster.GetWidth(
-                                     _core.typing.Substring(0, _core.cursorPosition)) +
-                                 4.0 * _tray.scale.x +
-                                 1.0), num3 + 6f * _tray.scale.y);
-                    Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * _tray.scale.x), Color.White,
-                        depth: 1f);
-                }
-                else
-                {
-                    _core.font.scale = new Vec2(_tray.scale.x / 2f);
-                    _core.font.alpha = _core.alpha;
-                    _core.font.Draw(_core.typing, 4f * _tray.scale.x,
-                        num3 + 6f * _tray.scale.y, Color.White, 0.9f);
-                    Vec2 p1 = new(
-                        _core.font.GetWidth(
-                            _core.typing.Substring(0, _core.cursorPosition)) +
-                        4f * _tray.scale.x, num3 + 6f * _tray.scale.y);
-                    Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * _tray.scale.x), Color.White, 2f, 1f);
-                }
-
-                int index1 = _core.lines.Count - 1 - _core.viewOffset + ConsoleLineOffset;
-                float num5 = 0.0f;
-                _core.font.scale = new Vec2((float) Math.Max(Math.Round(_tray.scale.x / 4.0), 1.0));
-                float num6 = _core.font.scale.x / 2f;
-                float num7 = 18f * num6;
-                float num8 = (float) (20.0 * (_core.font.scale.x * 2.0)) + core.font.GetWidth("HH:mm:ss ");
-                if (_raster != null)
-                {
-                    num7 = (_raster.characterHeight - 2) * _raster.scale.y;
-                    num5 = num7;
-                    num8 = _raster.GetWidth("HH:mm:ss 0000  ");
-                }
-
-                for (int index2 = ConsoleLineOffset; index2 < (num3 - 2.0 * _tray.scale.y) / num7 - 1.0 && index1 >= 0; ++index2)
-                {
-                    if (_core.lines.ElementAtOrDefault(index1 + ConsoleLineOffset) is not { } dcLine)
-                        return;
-                    
-                    string text = index1.ToString().PadLeft(4, '0');
-                    string timeString = $"{dcLine.timestamp:HH:mm:ss} ";
-                    text = timeString + text;
+                    Graphics.DrawRect(Vec2.Zero,
+                        new Vec2((float)(18.0 * _tray.scale.x + num2 * (16.0 * _tray.scale.x) + _tray.scale.y * 4.0),
+                            (num1 + 2) * (16f * _tray.scale.y)), Color.Black * 0.8f * _core.alpha,
+                        0.7f);
+                    _core.fancyFont.scale = new Vec2(_tray.scale.x / 2f);
+                    _core.fancyFont.depth = 0.98f;
+                    _core.fancyFont.alpha = _core.alpha;
+                    float num3 = (float)((num1 + 1) * 16 * (double)_tray.scale.y + 5.0 * _tray.scale.y);
+                    float num4 = (num2 + 2) * (16f * _tray.scale.x);
+                    string version = DG.version;
+                    _core.fancyFont.Draw(version,
+                        new Vec2((float)(82.0 * _tray.scale.x + (num2 - 6) * (16.0 * _tray.scale.x)),
+                            num3 + 7f * _tray.scale.y), new Color(62, 114, 122), 0.98f);
+                    _core.cursorPosition = Math.Min(Math.Max(_core.cursorPosition, 0),
+                        _core.typing.Length);
                     if (_raster != null)
                     {
-                        _raster.maxWidth = (int) (num4 - 35.0 * _tray.scale.x);
-                        _raster.singleLine = true;
-                        _raster.enforceWidthByWord = false;
-                        _raster.Draw(text, 4f * _tray.scale.x,
-                            (float) (num3 - (double) num5 + 2.0),
-                            index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, 0.9f);
-                        _raster.Draw(dcLine.SectionString() + dcLine.line, 4f * _tray.scale.x + num8,
-                            (float) (num3 - (double) num5 + 2.0), dcLine.color, 0.9f);
-                        num5 += num7;
+                        _raster.scale = new Vec2(0.5f);
+                        _raster.alpha = _core.alpha;
+                        _raster.Draw(_core.typing, 4f * _tray.scale.x,
+                            (float)(num3 + _tray.scale.y * 8.0 -
+                                     _raster.characterHeight * (double)_raster.scale.y / 2.0), Color.White,
+                            0.9f);
+                        Vec2 p1 = new(
+                            (float)(_raster.GetWidth(
+                                         _core.typing.Substring(0, _core.cursorPosition)) +
+                                     4.0 * _tray.scale.x +
+                                     1.0), num3 + 6f * _tray.scale.y);
+                        Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * _tray.scale.x), Color.White,
+                            depth: 1f);
                     }
                     else
                     {
-                        _core.font.maxWidth = (int) (num4 - 35.0 * _tray.scale.x);
-                        _core.font.singleLine = true;
-                        _core.font.enforceWidthByWord = false;
-                        _core.font.Draw(text, 4f * _tray.scale.x,
-                            (float) (num3 - 18.0 * num6 - num5 + 2.0),
-                            index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, 0.9f);
-                        _core.font.Draw($"{dcLine.SectionString()}{dcLine.line}",
-                            4f * _tray.scale.x + num8,
-                            (float) (num3 - 18.0 * num6 - num5 + 2.0), dcLine.color * 0.8f,
-                            0.9f);
-                        num5 += 18f * num6;
+                        _core.font.scale = new Vec2(_tray.scale.x / 2f);
+                        _core.font.alpha = _core.alpha;
+                        _core.font.Draw(_core.typing, 4f * _tray.scale.x,
+                            num3 + 6f * _tray.scale.y, Color.White, 0.9f);
+                        Vec2 p1 = new(
+                            _core.font.GetWidth(
+                                _core.typing.Substring(0, _core.cursorPosition)) +
+                            4f * _tray.scale.x, num3 + 6f * _tray.scale.y);
+                        Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * _tray.scale.x), Color.White, 2f, 1f);
                     }
 
-                    --index1;
-                }
-            }
+                    int index1 = _core.lines.Count - 1 - _core.viewOffset + ConsoleLineOffset;
+                    float num5 = 0.0f;
+                    _core.font.scale = new Vec2((float)Math.Max(Math.Round(_tray.scale.x / 4.0), 1.0));
+                    float num6 = _core.font.scale.x / 2f;
+                    float num7 = 18f * num6;
+                    float num8 = (float)(20.0 * (_core.font.scale.x * 2.0)) + core.font.GetWidth("HH:mm:ss ");
+                    if (_raster != null)
+                    {
+                        num7 = (_raster.characterHeight - 2) * _raster.scale.y;
+                        num5 = num7;
+                        num8 = _raster.GetWidth("HH:mm:ss 0000  ");
+                    }
 
-            _core.font.scale = new Vec2(2f);
+                    for (int index2 = ConsoleLineOffset; index2 < (num3 - 2.0 * _tray.scale.y) / num7 - 1.0 && index1 >= 0; ++index2)
+                    {
+                        if (_core.lines.ElementAtOrDefault(index1 + ConsoleLineOffset) is not { } dcLine)
+                            return;
+
+                        string text = index1.ToString().PadLeft(4, '0');
+                        string timeString = $"{dcLine.timestamp:HH:mm:ss} ";
+                        text = timeString + text;
+                        if (_raster != null)
+                        {
+                            _raster.maxWidth = (int)(num4 - 35.0 * _tray.scale.x);
+                            _raster.singleLine = true;
+                            _raster.enforceWidthByWord = false;
+                            _raster.Draw(text, 4f * _tray.scale.x,
+                                (float)(num3 - (double)num5 + 2.0),
+                                index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, 0.9f);
+                            _raster.Draw(dcLine.SectionString() + dcLine.line, 4f * _tray.scale.x + num8,
+                                (float)(num3 - (double)num5 + 2.0), dcLine.color, 0.9f);
+                            num5 += num7;
+                        }
+                        else
+                        {
+                            _core.font.maxWidth = (int)(num4 - 35.0 * _tray.scale.x);
+                            _core.font.singleLine = true;
+                            _core.font.enforceWidthByWord = false;
+                            _core.font.Draw(text, 4f * _tray.scale.x,
+                                (float)(num3 - 18.0 * num6 - num5 + 2.0),
+                                index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, 0.9f);
+                            _core.font.Draw($"{dcLine.SectionString()}{dcLine.line}",
+                                4f * _tray.scale.x + num8,
+                                (float)(num3 - 18.0 * num6 - num5 + 2.0), dcLine.color * 0.8f,
+                                0.9f);
+                            num5 += 18f * num6;
+                        }
+
+                        --index1;
+                    }
+                }
+
+                _core.font.scale = new Vec2(2f);
+            }
+            
         }
 
         public static Vec2 dimensions => new(Options.Data.consoleWidth / 100f, Options.Data.consoleHeight / 100f);

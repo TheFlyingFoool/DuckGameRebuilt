@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Trumpet
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -94,7 +94,7 @@ namespace DuckGame
                             currentPitch = -1;
                         rightPressed = false;
                     }
-                    notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3.0 + 0.00999999977648258);
+                    notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3.0 +  0.01f);
                 }
                 if (notePitch != prevNotePitch)
                 {
@@ -117,7 +117,7 @@ namespace DuckGame
                             Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
                         }
                         else
-                            noteSound.Pitch = Maths.Clamp((float)((notePitch - hitPitch) * 0.00999999977648258), -1f, 1f);
+                            noteSound.Pitch = Maths.Clamp((float)((notePitch - hitPitch) *  0.01f), -1f, 1f);
                     }
                     else if (noteSound != null)
                     {

@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.GinormoScreen
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -39,7 +39,7 @@ namespace DuckGame
             foreach (Team team in teamList)
             {
                 float y = this.y + 2f + (smallMode ? 12 : 25) * idx;
-                if (Graphics.aspect > 0.589999973773956)
+                if (Graphics.aspect > 0.59f)
                     y += 10f;
                 Level.current.AddThing(new GinormoCard(idx * 1f, new Vec2(300f, y), new Vec2(x + (mode == BoardMode.Points ? 2f : 2f), y), team, mode, idx, smallMode));
                 ++idx;

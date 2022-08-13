@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.SnowPile
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -63,7 +63,7 @@ namespace DuckGame
                     float num3 = 1f;
                     if (index < 10)
                         num3 = 0.7f;
-                    Level.Add(new SnowFallParticle(x + Rando.Float(-9f, 9f), y + 7f + Rando.Float(-16f, 0f), new Vec2((float)(num2 * num3 * 0.100000001490116) + Rando.Float((float)(-0.200000002980232 * (num1 * num3)), (float)(0.200000002980232 * (num1 * num3))), (float)(-Rando.Float(0.8f, 1.5f) * (num1 * num3 * 0.150000005960464))), index < 6));
+                    Level.Add(new SnowFallParticle(x + Rando.Float(-9f, 9f), y + 7f + Rando.Float(-16f, 0f), new Vec2((float)(num2 * num3 * 0.1f) + Rando.Float((float)(-0.2f * (num1 * num3)), (float)(0.2f * (num1 * num3))), (float)(-Rando.Float(0.8f, 1.5f) * (num1 * num3 * 0.15f))), index < 6));
                 }
             }
             base.OnSoftImpact(with, from);

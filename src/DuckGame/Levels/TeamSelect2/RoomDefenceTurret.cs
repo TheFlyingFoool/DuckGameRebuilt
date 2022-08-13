@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.RoomDefenceTurret
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -66,7 +66,7 @@ namespace DuckGame
                         if (isServerForObject)
                         {
                             _charge += Maths.IncFrameTimer();
-                            if (_charge > 0.200000002980232)
+                            if (_charge > 0.2f)
                             {
                                 owner = _friendly;
                                 _charge = 0f;

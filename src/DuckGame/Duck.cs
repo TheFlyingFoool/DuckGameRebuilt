@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Duck
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -4957,7 +4957,7 @@ namespace DuckGame
                         if (problem == ConnectionTrouble.Disconnection)
                             return owner.duck.connection != DuckNetwork.localConnection && owner.duck.connection.isExperiencingConnectionTrouble;
                         if (problem == ConnectionTrouble.Lag)
-                            return owner.duck.connection != DuckNetwork.localConnection && owner.duck.connection.manager.ping > 0.25;
+                            return owner.duck.connection != DuckNetwork.localConnection && owner.duck.connection.manager.ping > 0.25f;
                         if (problem == ConnectionTrouble.Loss)
                             return owner.duck.connection != DuckNetwork.localConnection && owner.duck.connection.manager.accumulatedLoss > 10;
                         if (problem == ConnectionTrouble.Minimized)

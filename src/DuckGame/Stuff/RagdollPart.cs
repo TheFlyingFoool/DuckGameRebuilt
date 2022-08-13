@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.RagdollPart
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -341,7 +341,7 @@ namespace DuckGame
             {
                 _doll.captureDuck.Swear();
                 float intensityToSet = Math.Min(totalImpactPower * 0.01f, 1f);
-                if (intensityToSet > 0.0500000007450581)
+                if (intensityToSet > 0.05f)
                     RumbleManager.AddRumbleEvent(_doll.captureDuck.profile, new RumbleEvent(intensityToSet, 0.05f, 0.6f));
             }
             base.OnSolidImpact(with, from);
@@ -561,7 +561,7 @@ namespace DuckGame
                     flag = true;
                     num2 = 1f;
                 }
-                if (num2 > 0.0500000007450581 | flag)
+                if (num2 > 0.05f | flag)
                 {
                     Vec2 vec2_4 = this.position - (this.position - _joint.position).normalized * 3f;
                     if (flag)

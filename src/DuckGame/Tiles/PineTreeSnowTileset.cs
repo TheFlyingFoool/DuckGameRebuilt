@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.PineTreeSnowTileset
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -25,7 +25,7 @@ namespace DuckGame
             _tileset = "pineTileset";
             depth = -0.55f;
             _snowFall = new SpriteMap("snowFall", 8, 24);
-            _snowFall.AddAnimation("fall", (float)(0.200000002980232 + Rando.Float(0.1f)), false, 0, 1, 2, 3, 4);
+            _snowFall.AddAnimation("fall", (float)(0.2f + Rando.Float(0.1f)), false, 0, 1, 2, 3, 4);
             _snowFall.AddAnimation("idle", 0.4f, false, new int[1]);
             _snowFall.SetAnimation("idle");
             _snowFall.center = new Vec2(4f, 0f);
@@ -67,7 +67,7 @@ namespace DuckGame
                 if (snowWait <= 0.0)
                 {
                     snowWait = Rando.Float(2f, 3f);
-                    if (Rando.Float(1f) > 0.920000016689301)
+                    if (Rando.Float(1f) > 0.92)
                         Level.Add(new SnowFallParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), new Vec2(0f, 0f)));
                 }
             }
@@ -79,7 +79,7 @@ namespace DuckGame
             if (!edge && _snowFall.currentAnimation != "idle" && !_snowFall.finished)
             {
                 _snowFall.depth = -0.1f;
-                _snowFall.scale = new Vec2(1f, (float)(_snowFall.frame / 5.0 * 0.400000005960464 + 0.200000002980232));
+                _snowFall.scale = new Vec2(1f, (float)(_snowFall.frame / 5.0 * 0.04f + 0.2f));
                 _snowFall.alpha = (float)(1.0 - _snowFall.frame / 5.0 * 1.0);
                 Graphics.Draw(_snowFall, x, (float)(y - 7.0 + _snowFall.frame / 5.0 * 3.0));
             }

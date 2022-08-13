@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Chainsaw
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -352,7 +352,7 @@ namespace DuckGame
             _bladeSound.lerpVolume = _throttleWait > 0.96f ? 0.6f : 0f;
             if (_struggling)
                 _bladeSound.lerpVolume = 0f;
-            _bladeSoundLow.lerpVolume = _throttleWait <= 0.959999978542328 || !_struggling ? 0f : 0.6f;
+            _bladeSoundLow.lerpVolume = ((this._throttleWait > 0.96f && this._struggling) ? 0.6f : 0f);
             _bladeSound.pitch = pitch;
             _bladeSoundLow.pitch = pitch;
             if (owner == null)

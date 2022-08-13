@@ -1,6 +1,6 @@
 ﻿//// decompiled with jetbrains decompiler
 //// type: duckgame.ailocomotion
-//// assembly: duckgame, version=1.1.8175.33388, culture=neutral, publickeytoken=null
+////removed for regex reasons culture=neutral, publickeytoken=null
 //// mvid: c907f20b-c12b-4773-9b1e-25290117c0e4
 //// assembly location: d:\program files (x86)\steam\steamapps\common\duck game\duckgame.exe
 //// xml documentation location: d:\program files (x86)\steam\steamapps\common\duck game\duckgame.xml

@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.GameLevel
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -257,7 +257,7 @@ namespace DuckGame
                 if (_showInfo && !GameMode.started || MonoMain.pauseMenu != null)
                 {
                     _infoSlide = Lerp.Float(_infoSlide, 1f, 0.06f);
-                    if (_infoSlide > 0.949999988079071)
+                    if (_infoSlide > 0.95f)
                     {
                         _infoWait += Maths.IncFrameTimer();
                         if (_infoWait > 2.5)
@@ -266,7 +266,7 @@ namespace DuckGame
                 }
                 else
                     _infoSlide = Lerp.Float(_infoSlide, 0f, 0.1f);
-                if (_infoSlide > 0.0)
+                if (_infoSlide > 0.0f)
                 {
                     float x = 10f;
                     string text1 = displayName;

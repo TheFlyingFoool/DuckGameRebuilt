@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.TeamSelect2
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -1194,7 +1194,7 @@ namespace DuckGame
             if (openLevelSelect)
             {
                 Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.04f);
-                if (Graphics.fade >= 0.00999999977648258)
+                if (Graphics.fade >=  0.01f)
                     return;
                 _levelSelector = new LevelSelect(returnLevel: this);
                 _levelSelector.Initialize();
@@ -1320,7 +1320,7 @@ namespace DuckGame
                     {
                         DuckNetwork.inGame = false;
                         dim = Maths.LerpTowards(dim, 0f, 0.1f);
-                        if (dim < 0.0500000007450581)
+                        if (dim < 0.05f)
                             _countTime = 1.5f;
                     }
                     _matchSetup = true;
@@ -1361,7 +1361,7 @@ namespace DuckGame
                 else
                 {
                     dim = Maths.LerpTowards(dim, 0f, 0.1f);
-                    if (dim < 0.0500000007450581)
+                    if (dim < 0.05f)
                         _countTime = 1.5f;
                     _matchSetup = false;
                     _starting = false;
@@ -1552,7 +1552,7 @@ namespace DuckGame
                             ++_topScroll;
                         _littleFont.Draw(text4, new Vec2((float)(1.0 - _topScroll * (_littleFont.GetWidth(text3) + 7.0)), vec2.y + 3f), Color.White, (Depth)0.95f);
                     }
-                    if (_setupFade > 0.00999999977648258)
+                    if (_setupFade >  0.01f)
                     {
                         float num = (float)(Layer.HUD.camera.height / 2.0 - 28.0);
                         string str1 = "@MENU2@PLAY ONLINE";
@@ -1620,7 +1620,7 @@ namespace DuckGame
                         _countdownScreen.centery = _countdownScreen.height / 2;
                         Graphics.Draw(_countdownScreen, Layer.HUD.camera.x, Layer.HUD.camera.height / 2f);
                     }
-                    if (dim > 0.00999999977648258)
+                    if (dim >  0.01f)
                     {
                         _countdownScreen.alpha = 1f;
                         _countdownScreen.depth = (Depth)0.8f;

@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.PelletGun
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -255,9 +255,9 @@ namespace DuckGame
             _spring.angleDegrees = Maths.PointDirection(position + _posOffset, springPos) - 90f;
             _spring.yscale = (float)((position.y + _posOffset.y - springPos.y) / 8.0);
             _spring.flipH = offDir < 0;
-            if (_spring.yscale > 1.20000004768372)
+            if (_spring.yscale > 1.2f)
                 _spring.yscale = 1.2f;
-            if (_spring.yscale < -1.20000004768372)
+            if (_spring.yscale < -1.2f)
                 _spring.yscale = -1.2f;
             _spring.alpha = alpha;
             Graphics.Draw(_spring, vec2.x, vec2.y);

@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.SledgeHammer
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -144,7 +144,7 @@ namespace DuckGame
                 {
                     float hSpeed = owner.hSpeed;
                     _hPull = Maths.LerpTowards(_hPull, owner.hSpeed, 0.15f);
-                    if (Math.Abs(owner.hSpeed) < 0.100000001490116)
+                    if (Math.Abs(owner.hSpeed) < 0.1f)
                         _hPull = 0f;
                     float num2 = Math.Abs(_hPull) / 2.5f;
                     if (num2 > 1.0)
@@ -155,9 +155,9 @@ namespace DuckGame
                     float num3 = Math.Abs(owner.hSpeed - _hPull);
                     owner.frictionMod = 0f;
                     if (owner.hSpeed > 0.0 && _hPull > owner.hSpeed)
-                        owner.frictionMod = (float)(-num3 * 1.79999995231628);
+                        owner.frictionMod = (float)(-num3 * 1.8f);
                     if (owner.hSpeed < 0.0 && _hPull < owner.hSpeed)
-                        owner.frictionMod = (float)(-num3 * 1.79999995231628);
+                        owner.frictionMod = (float)(-num3 * 1.8f);
                     _lastDir = owner.offDir;
                     _lastSpeed = hSpeed;
                     if (_swing != 0.0 && num1 > 0.0)
@@ -188,15 +188,15 @@ namespace DuckGame
             {
                 float num = _swing * 2f;
                 _sprite.imageIndex = (int)(num * 10.0);
-                _sprite.angle = (float)(1.20000004768372 - num * 1.5);
-                _sprite.yscale = (float)(1.0 - num * 0.100000001490116);
+                _sprite.angle = (float)(1.2f - num * 1.5);
+                _sprite.yscale = (float)(1.0 - num * 0.1f);
             }
             else if (_swing >= 0.5)
             {
                 float num = (float)((_swing - 0.5) * 2.0);
                 _sprite.imageIndex = 10 - (int)(num * 10.0);
-                _sprite.angle = (float)(-0.300000011920929 - num * 1.5);
-                _sprite.yscale = (float)(1.0 - (1.0 - num) * 0.100000001490116);
+                _sprite.angle = (float)(-0.3f - num * 1.5);
+                _sprite.yscale = (float)(1.0 - (1.0 - num) * 0.1f);
                 _fullSwing += 0.16f;
                 if (!_swung)
                 {
@@ -237,7 +237,7 @@ namespace DuckGame
                 }
             }
             handOffset = new Vec2(_swing * 3f, (float)(0.0 - _swing * 4.0));
-            handAngle = (float)(1.39999997615814 + (_sprite.angle * 0.5 - 1.0));
+            handAngle = (float)(1.4f + (_sprite.angle * 0.5 - 1.0));
             if (owner != null && owner.offDir < 0)
             {
                 _sprite.angle = -_sprite.angle;

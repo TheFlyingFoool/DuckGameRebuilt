@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.UIMenuItemSlider
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -28,7 +28,7 @@ namespace DuckGame
                 align = UIAlign.Left
             };
             component1.leftSection.Add(component2, true);
-            UIProgressBar component3 = new UIProgressBar(step < 0.0526315793395042 ? 26f : 30f, 7f, field, step)
+            UIProgressBar component3 = new UIProgressBar(step < 0.05263158f ? 26f : 30f, 7f, field, step)
             {
                 align = UIAlign.Right
             };

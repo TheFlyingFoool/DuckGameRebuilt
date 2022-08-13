@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.RockWeather
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -700,9 +700,9 @@ namespace DuckGame
                 if (localTime.Month > 10)
                     RockWeather.rainChance = 0f;
             }
-            if (localTime.Month == 12 && Rando.Float(1f) > 0.850000023841858)
+            if (localTime.Month == 12 && Rando.Float(1f) > 0.85f)
                 RockWeather._weather = Weather.Snowing;
-            if (localTime.Month == 4 && Rando.Float(1f) > 0.920000016689301)
+            if (localTime.Month == 4 && Rando.Float(1f) > 0.92)
             {
                 RockWeather._weather = Weather.Raining;
                 RockWeather.rainChance = 0.2f;
@@ -790,7 +790,7 @@ namespace DuckGame
                 if (wait > 1.0)
                 {
                     wait = 0f;
-                    if (_weatherTime > 0.100000001490116)
+                    if (_weatherTime > 0.1f)
                     {
                         if (snowChance > 0.0 && RockWeather._weather != Weather.Snowing && Rando.Float(1f) > 1.0 - snowChance)
                         {
@@ -812,14 +812,14 @@ namespace DuckGame
                                 Send.Message(new NMChangeWeather((byte)RockWeather._weather));
                             RockWeather._weatherTime = 0f;
                         }
-                        if (RockWeather._weather != Weather.Sunny && Rando.Float(1f) > 0.980000019073486)
+                        if (RockWeather._weather != Weather.Sunny && Rando.Float(1f) > 0.98f)
                         {
                             RockWeather._prevWeatherLerp = 1f;
                             if (RockWeather._weather == Weather.Raining)
                             {
-                                if (_timeRaining > 900.0 && Rando.Float(1f) > 0.449999988079071 || Rando.Float(1f) > 0.949999988079071)
+                                if (_timeRaining > 900.0 && Rando.Float(1f) > 0.45f || Rando.Float(1f) > 0.95f)
                                     RockWeather.rainbowTime = Rando.Float(30f, 240f);
-                                if (Rando.Float(1f) > 0.400000005960464)
+                                if (Rando.Float(1f) > 0.04f)
                                     RockWeather.sunshowers = Rando.Float(0.1f, 60f);
                             }
                             RockWeather._timeRaining = 0f;
@@ -887,7 +887,7 @@ namespace DuckGame
                         particle.position.y = -362f;
                         break;
                 }
-                if (particle.alpha < 0.00999999977648258)
+                if (particle.alpha <  0.01f)
                     weatherParticleList.Add(particle);
             }
             foreach (WeatherParticle weatherParticle in weatherParticleList)

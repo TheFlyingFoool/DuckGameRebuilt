@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.UnlockTree
-// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -48,7 +48,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (alpha < 0.00999999977648258)
+            if (alpha < 0.01f)
                 return;
             Duck duck = Level.First<Duck>();
             InputProfile inputProfile = InputProfile.DefaultPlayer1;
@@ -180,7 +180,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (alpha < 0.00999999977648258)
+            if (alpha < 0.01f)
                 return;
             int num1;
             if (_desiredLayer < _topLayer)
@@ -291,8 +291,8 @@ namespace DuckGame
                                         num11 = 3f;
                                     else if (vec2_3.x > p1.x)
                                         num11 = -3f;
-                                    Graphics.DrawLine(new Vec2(vec2_3.x + num10, p1.y + 30f), new Vec2(p1.x + num11, p1.y + 30f), color3 * alpha, 6f, (Depth)(float)((_selected == unlockData2 ? 0.100000001490116 : 0.0) - 0.200000002980232));
-                                    Graphics.DrawLine(new Vec2(vec2_3.x, p1.y + 30f), new Vec2(vec2_3.x, vec2_3.y), color3 * alpha, 6f, (Depth)(float)((_selected == unlockData2 ? 0.100000001490116 : 0.0) - 0.200000002980232));
+                                    Graphics.DrawLine(new Vec2(vec2_3.x + num10, p1.y + 30f), new Vec2(p1.x + num11, p1.y + 30f), color3 * alpha, 6f, (Depth)(float)((_selected == unlockData2 ? 0.1f : 0.0f) - 0.2f));
+                                    Graphics.DrawLine(new Vec2(vec2_3.x, p1.y + 30f), new Vec2(vec2_3.x, vec2_3.y), color3 * alpha, 6f, (Depth)(float)((_selected == unlockData2 ? 0.1f : 0.0f) - 0.2f));
                                 }
                             }
                         }
