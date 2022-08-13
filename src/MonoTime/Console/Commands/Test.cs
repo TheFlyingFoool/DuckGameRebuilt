@@ -37,7 +37,7 @@ public static partial class DevConsoleCommands
     }
     public static bool runv2;
     [DevConsoleCommand(Name ="dantest")]
-    public static void Test()
+    public static void DanTest()
     {
         //Level.CheckRectAllDan<MaterialThing>(new Vec2(-1100.6f, -414.2592f), new Vec2(800.3334f, 497.3408f));
         // runv2 = !runv2;
