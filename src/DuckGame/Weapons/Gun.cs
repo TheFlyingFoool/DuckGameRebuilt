@@ -110,7 +110,7 @@ namespace DuckGame
 
         public float barrelAngle => Maths.DegToRad(Maths.PointDirection(Vec2.Zero, barrelVector) + _barrelAngleOffset * offDir);
 
-        public bool CanSpin() => weight <= 5.0;
+        public bool CanSpin() => weight <= 5.0f;
 
         public override void EditorPropertyChanged(object property)
         {
