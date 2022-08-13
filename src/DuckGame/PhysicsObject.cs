@@ -343,7 +343,7 @@ namespace DuckGame
                 }
                 if (_sleeping)
                 {//(_collideBottom is PhysicsObject)
-                    if (hSpeed == 0.0 && this.vSpeed == 0.0 && heat <= 0.0 && !_awaken && (this._lastrealcollideBottom is not PhysicsObject || (int)(this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0 && (int)(this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0))
+                    if (hSpeed == 0.0 && this.vSpeed == 0.0 && heat <= 0.0 && !_awaken && (this._lastrealcollideBottom is PhysicsObject && !this._lastrealcollideBottom.removeFromLevel && (int)(this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0 && (int)(this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0))
                         return;
                     _sleeping = false;
                     _awaken = false;
