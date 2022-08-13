@@ -5,6 +5,7 @@ using System.Text;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace DuckGame
 {
@@ -47,8 +48,8 @@ namespace DuckGame
             return types
                 .SelectMany(x => x.GetMembers())
                 .Concat(types.Select(x => x.GetTypeInfo()))
-                .Where(x => x.GetCustomAttributes<TAttribute>().Any())
-                .Where(x => x.MemberType.HasFlag(filter))
+                .Where(x => x.GetCustomAttributes<TAttribute>().Any()
+                        && x.MemberType.HasFlag(filter))
                 .Select(x => (x, x.GetCustomAttributes<TAttribute>(false)));
         }
 
@@ -76,6 +77,37 @@ namespace DuckGame
             }
 
             return false;
+        }
+
+        private static readonly Regex _defaultWordLineBreakRegex = new(@"(.{0,30})(?:\s+|$)", RegexOptions.Compiled);
+        
+        public static string[] SplitByLength(this string str, int maxLength = 30, bool breakAtWordEnding = true)
+        {
+            if (breakAtWordEnding)
+            {
+                return (maxLength == 30 
+                        ? _defaultWordLineBreakRegex 
+                        : new Regex($@"(.{{0,{maxLength}}})(?:\s+|$)")).Matches(str)
+                    .Cast<Match>()
+                    .SelectMany(x => x.Groups[1].Value.Split(new[] {'\n'}, StringSplitOptions.RemoveEmptyEntries))
+                    .ToArray();
+            }
+
+            StringBuilder stringBuilder = new();
+            int i = 0;
+            for (int j = 0; j < str.Length; j++)
+            {
+                char currentCharacter = str[j];
+                if (currentCharacter == '\n')
+                    i = -1;
+
+                stringBuilder.Append(currentCharacter);
+                if (i++ != maxLength)
+                    continue;
+                stringBuilder.Append('\n');
+                i = 0;
+            }
+            return stringBuilder.ToString().Split('\n');
         }
 
         public static string GetFullName(this MemberInfo mi) => $"{mi.DeclaringType}:{mi.Name}";
