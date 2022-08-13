@@ -29,7 +29,8 @@ namespace DuckGame
         //private bool didHash;
         public bool joinedLobby;
 
-        public static string GetPriceString() => "|GREEN|" + Main.price.ToString("0.00", CultureInfo.InvariantCulture) + " " + Main.currencyType + "|WHITE|";
+        public static string GetPriceString() =>
+            $"|GREEN|{price.ToString("0.00", CultureInfo.InvariantCulture)} {currencyType}|WHITE|";
 
         //public static void SetPurchaseDetails(float p, string ct)
         //{

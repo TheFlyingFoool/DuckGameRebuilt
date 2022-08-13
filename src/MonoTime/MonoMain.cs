@@ -835,7 +835,7 @@ namespace DuckGame
         {
             _threadedLoadingStarted = true;
             currentActionQueue = _thingsToLoad;
-            AddLoadingAction(new Action(ManagedContent.PreInitializeMods));
+            AddLoadingAction(ManagedContent.PreInitializeMods);
             AddLoadingAction(() =>
            {
                DuckGame.Content.InitializeTextureSizeDictionary();
@@ -848,28 +848,28 @@ namespace DuckGame
                Persona.Initialize();
                DuckRig.Initialize();
            });
-            AddLoadingAction(new Action(Input.Initialize));
+            AddLoadingAction(Input.Initialize);
             if (downloadWorkshopMods)
                 DownloadWorkshopItems();
-            AddLoadingAction(new Action(ManagedContent.InitializeMods));
-            AddLoadingAction(new Action(Network.InitializeMessageTypes));
-            AddLoadingAction(new Action(DeathCrate.InitializeDeathCrateSettings));
-            AddLoadingAction(new Action(Editor.InitializeConstructorLists));
-            AddLoadingAction(new Action(Team.DeserializeCustomHats));
-            AddLoadingAction(new Action(DuckGame.Content.InitializeLevels));
-            AddLoadingAction(new Action(DuckGame.Content.InitializeEffects));
-            AddLoadingAction(new Action(Input.InitializeGraphics));
-            AddLoadingAction(new Action(Music.Initialize));
-            AddLoadingAction(new Action(DevConsole.InitializeFont));
-            AddLoadingAction(new Action(DevConsole.InitializeCommands));
-            AddLoadingAction(new Action(Editor.InitializePlaceableGroup));
-            AddLoadingAction(new Action(Challenges.Initialize));
-            AddLoadingAction(new Action(Collision.Initialize));
-            AddLoadingAction(new Action(Level.InitializeCollisionLists));
-            AddLoadingAction(new Action(Keyboard.InitTriggerImages));
-            AddLoadingAction(new Action(MapPack.RegeneratePreviewsIfNecessary));
-            AddLoadingAction(() => StartLazyLoad());
-            AddLoadingAction(new Action(SetStarted));
+            AddLoadingAction(ManagedContent.InitializeMods);
+            AddLoadingAction(Network.InitializeMessageTypes);
+            AddLoadingAction(DeathCrate.InitializeDeathCrateSettings);
+            AddLoadingAction(Editor.InitializeConstructorLists);
+            AddLoadingAction(Team.DeserializeCustomHats);
+            AddLoadingAction(DuckGame.Content.InitializeLevels);
+            AddLoadingAction(DuckGame.Content.InitializeEffects);
+            AddLoadingAction(Input.InitializeGraphics);
+            AddLoadingAction(Music.Initialize);
+            AddLoadingAction(DevConsole.InitializeFont);
+            AddLoadingAction(DevConsole.InitializeCommands);
+            AddLoadingAction(Editor.InitializePlaceableGroup);
+            AddLoadingAction(Challenges.Initialize);
+            AddLoadingAction(Collision.Initialize);
+            AddLoadingAction(Level.InitializeCollisionLists);
+            AddLoadingAction(Keyboard.InitTriggerImages);
+            AddLoadingAction(MapPack.RegeneratePreviewsIfNecessary);
+            AddLoadingAction(StartLazyLoad);
+            AddLoadingAction(SetStarted);
         }
 
         private void SetStarted()
