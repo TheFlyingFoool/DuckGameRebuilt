@@ -40,8 +40,13 @@ public static class AutoConfigHandler
 
         for (int i = 0; i < length; i++)
         {
-            (FieldInfo field, AutoConfigFieldAttribute attribute) = all[i];
-            Type fieldType = field.FieldType;
+            (MemberInfo field, AutoConfigFieldAttribute attribute) = all[i];
+            Type fieldType = field switch
+            {
+                FieldInfo fi => fi.FieldType,
+                PropertyInfo pi => pi.PropertyType,
+                _ => throw new Exception("Unsupported AutoConfig field type")
+            };
             
             if (isDangerous && attribute.PotentiallyDangerous)
                 continue;
@@ -49,7 +54,12 @@ public static class AutoConfigHandler
             if (!FireSerializer.IsSerializable(fieldType))
                 continue;
 
-            object fieldValue = field.GetValue(null);
+            object fieldValue = field switch
+            {
+                FieldInfo fi => fi.GetValue(null),
+                PropertyInfo pi => pi.GetMethod?.Invoke(null, null),
+                _ => throw new Exception("Unsupported AutoConfig field type")
+            };
             string fullName = attribute.Id ?? field.GetFullName();
 
             string writtenValue = FireSerializer.Serialize(fieldValue);
@@ -94,7 +104,7 @@ public static class AutoConfigHandler
         return false;
     }
 
-    private static bool LoadAllIndex(IReadOnlyList<MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>> all, string[] lines)
+    private static bool LoadAllIndex(IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> all, string[] lines)
     {
         DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING CONFIG INDEX LOADING...");
         lines = lines.Where(Enumerable.Any).ToArray();
@@ -106,8 +116,13 @@ public static class AutoConfigHandler
         {
             for (int i = 0; i < all.Count; i++)
             {
-                (FieldInfo field, _) = all[i];
-                Type type = field.FieldType;
+                (MemberInfo field, _) = all[i];
+                Type type = field switch
+                {
+                    FieldInfo fi => fi.FieldType,
+                    PropertyInfo pi => pi.PropertyType,
+                    _ => throw new Exception("Unsupported AutoConfig field type")
+                };
                 string[] sides = lines[i].Split('=');
 
                 if (sides[0] != type.GetFullName())
@@ -130,14 +145,14 @@ public static class AutoConfigHandler
         }
     }
 
-    private static bool LoadAllSearch(IReadOnlyList<MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>> all, string[] lines)
+    private static bool LoadAllSearch(IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> all, string[] lines)
     {
         DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING CONFIG SEARCH LOADING...");
         try
         {
             for (int i = 0; i < all.Count; i++)
             {
-                (FieldInfo field, AutoConfigFieldAttribute attribute) = all[i];
+                (MemberInfo field, AutoConfigFieldAttribute attribute) = all[i];
                 string fullName = attribute.Id ?? field.GetFullName();
 
                 if (!lines.TryFirst(x => fullName == x.Split('=')[0], out string line))
@@ -157,15 +172,32 @@ public static class AutoConfigHandler
         return true;
     }
 
-    private static void SetFieldValue(MemberAttributePair<FieldInfo, AutoConfigFieldAttribute> pair, string newValue)
+    private static void SetFieldValue(MemberAttributePair<MemberInfo, AutoConfigFieldAttribute> pair, string newValue)
     {
-        (FieldInfo field, AutoConfigFieldAttribute attribute) = pair;
-        Type type = field.FieldType;
+        (MemberInfo field, AutoConfigFieldAttribute attribute) = pair;
+        Type type = field switch
+        {
+            FieldInfo fi => fi.FieldType,
+            PropertyInfo pi => pi.PropertyType,
+            _ => throw new Exception("Unsupported AutoConfig field type")
+        };
 
         object val = FireSerializer.Deserialize(type, attribute.External is not null
             ? File.ReadAllText(SaveDirPath + newValue)
             : newValue);
-        
-        field.SetValue(null, val);
+
+        switch (field)
+        {
+            case FieldInfo fi:
+            {
+                fi.SetValue(null, val);
+                break;
+            }
+            case PropertyInfo pi:
+            {
+                pi.SetMethod?.Invoke(null, new[] {val});
+                break;
+            }
+        }
     }
 }

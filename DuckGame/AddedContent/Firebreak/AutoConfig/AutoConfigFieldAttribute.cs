@@ -4,14 +4,23 @@ using System.Reflection;
 
 namespace DuckGame;
 
-[AttributeUsage(AttributeTargets.Field)]
+/// <summary>
+/// Use this attribute on a field or property and it will be saved
+/// on a file when you exit, then loaded when you boot up the game
+/// </summary>
+/// <remarks>
+/// Using this on properties: <br />
+/// The getter will be invoked when the value is being saved <br />
+/// The setter will be invoked when the value is being loaded
+/// </remarks>
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public sealed class AutoConfigFieldAttribute : Attribute
 {
-    public static IReadOnlyList<MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>> All;
+    public static IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> All;
 
     static AutoConfigFieldAttribute()
     {
-        MemberAttributePair<FieldInfo, AutoConfigFieldAttribute>.RequestSearch(all => All = all);
+        MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>.RequestSearch(all => All = all);
     }
 
     public string? ShortName { get; set; } = null;
