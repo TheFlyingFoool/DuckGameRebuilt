@@ -7,37 +7,24 @@ namespace DuckGame.AddedContent.Drake;
 
 public static class FixedCommandHistory
 {
-    public static readonly string CommandHistoryFilePath = DuckFile.optionsDirectory + "CommandHistory.txt";
-    
-    static FixedCommandHistory()
+    [AutoConfigField(External = "CommandHistory")]
+    public static List<string> SavedCommandHistory
     {
-        MonoMain.OnGameExit += _ => { SaveCommandHistory(); };
-    }
-    
-    [PostInitialize]
-    public static void LoadCommandHistory()
-    {
-        //you don't need to create and load the file if it doesn't exist...
-        if (!File.Exists(CommandHistoryFilePath)) return;
-
-        string[] history = File.ReadAllLines(CommandHistoryFilePath);
-
-        DevConsole.core.previousLines.AddRange(history);
-        DevConsole.core.lastCommandIndex += history.Length;
-    }
-    
-    public static void SaveCommandHistory()
-    {
-        IEnumerable<string> lines = DevConsole.core.previousLines.FastTake(25);
-        
-        File.WriteAllLines(CommandHistoryFilePath, lines);
-    }
-
-    private static IEnumerable<string> FastTake(this IReadOnlyList<string> list, int limit)
-    {
-        for (int i = 0; i < limit && i < list.Count; i++)
+        get => DevConsole.core.previousLines.FastTakeFromEnd(25).Reverse().ToList();
+        set
         {
-            yield return list[i];
+            DevConsole.core.previousLines.AddRange(value);
+            DevConsole.core.lastCommandIndex += value.Count;
+        }
+    }
+    
+    private static IEnumerable<string> FastTakeFromEnd(this IReadOnlyList<string> list, int limit)
+    {
+        for (int i = list.Count - 1; i >= 0; i--)
+        {
+            if (limit --> 0)
+                yield return list[i];
+            else break;
         }
     }
 }
