@@ -14,7 +14,7 @@ public static partial class DevConsoleCommands
         {
             case 0:
             {
-                
+                return MemberAttributePairHandler.AttributeLookupRequests;
                 break;
             }
         }

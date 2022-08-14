@@ -17,7 +17,7 @@ public record MemberAttributePair<TMemberInfo, TAttribute>(TMemberInfo MemberInf
         if (!MemberAttributePairHandler.AttributeLookupRequests.Contains(attributeType))
             MemberAttributePairHandler.AttributeLookupRequests.Add(attributeType);
 
-        MemberAttributePairHandler.OnSearchComplete += dic =>
+        MemberAttributePairHandler.GlobalOnSearchComplete += dic =>
         {
             List<MemberAttributePair<TMemberInfo, TAttribute>> pairsUsing = new();
             

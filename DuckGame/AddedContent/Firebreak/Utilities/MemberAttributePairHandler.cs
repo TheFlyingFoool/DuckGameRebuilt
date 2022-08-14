@@ -12,9 +12,8 @@ public static class MemberAttributePairHandler
     /// <summary>This is a list of attribute types btw</summary>
     public static List<Type> AttributeLookupRequests = new();
     
-    public static event Action<Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>>> OnSearchComplete = default;
+    public static event Action<Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>>> GlobalOnSearchComplete = default;
 
-    [PostInitialize]
     public static void Init()
     {
         var types = Assembly.GetExecutingAssembly().GetTypes();
@@ -42,13 +41,13 @@ public static class MemberAttributePairHandler
             {
                 // if the lookup table contains the wanted attribute KeyValue pair, add a
                 // new (MemberInfo, Attribute) tuple to it, otherwise add the key and do the same
-                LookupTable.TryUse(attribute.GetType(), new List<(MemberInfo, Attribute)>(), x =>
+                LookupTable.TryUse(attribute.GetType(), new List<(MemberInfo, Attribute)>(), relatedList =>
                 {
-                    x.Add((memberInfo, attribute));
+                    relatedList.Add((memberInfo, attribute));
                 });
             }
         }
 
-        OnSearchComplete.Invoke(LookupTable);
+        GlobalOnSearchComplete.Invoke(LookupTable);
     }
 }
