@@ -233,58 +233,31 @@ namespace DuckGame
                 {
                     if (dubberspeed && _currentMenuItemSelection != null)
                     {
+                        Keys[] keysOfInterest =
+                        {
+                            Keys.D1,
+                            Keys.D2,
+                            Keys.D3,
+                            Keys.D4,
+                            Keys.D5,
+                            Keys.D6,
+                            Keys.D7,
+                            Keys.D8,
+                            Keys.D9,
+                            Keys.D0
+                        };
+
                         int c = _currentMenuItemSelection.Count;
-                        if (Keyboard.Pressed(Keys.D1)) //surely i dont have to check if "c > 0" theres no way a menu just wouldn't have any elements (clueless)
+                        for (int i = 0; i < keysOfInterest.Length; i++)
                         {
-                            SFX.Play("rockHitGround");
-                            ((UIMenuItem)_currentMenuItemSelection[0]).Activate("SELECT");
-                        }
-                        else if (Keyboard.Pressed(Keys.D2) && c > 1)
-                        {
-                            SFX.Play("rockHitGround");
-                            ((UIMenuItem)_currentMenuItemSelection[1]).Activate("SELECT");
-                        }
-                        else if (Keyboard.Pressed(Keys.D3) && c > 2)
-                        {
-                            SFX.Play("rockHitGround");
-                            ((UIMenuItem)_currentMenuItemSelection[2]).Activate("SELECT");
-                        }
-                        else if (Keyboard.Pressed(Keys.D4) && c > 3)
-                        {
-                            SFX.Play("rockHitGround");
-                            ((UIMenuItem)_currentMenuItemSelection[3]).Activate("SELECT");
-                        }
-                        else if (Keyboard.Pressed(Keys.D5) && c > 4)
-                        {
-                            SFX.Play("rockHitGround");
-                            ((UIMenuItem)_currentMenuItemSelection[4]).Activate("SELECT");
-                        }
-                        else if (Keyboard.Pressed(Keys.D6) && c > 5)
-                        {
-                            SFX.Play("rockHitGround");
-                            ((UIMenuItem)_currentMenuItemSelection[5]).Activate("SELECT");
-                        }
-                        else if (Keyboard.Pressed(Keys.D7) && c > 6)
-                        {
-                            SFX.Play("rockHitGround");
-                            ((UIMenuItem)_currentMenuItemSelection[6]).Activate("SELECT");
-                        }
-                        else if (Keyboard.Pressed(Keys.D8) && c > 7)
-                        {
-                            SFX.Play("rockHitGround");
-                            ((UIMenuItem)_currentMenuItemSelection[7]).Activate("SELECT");
-                        }
-                        else if (Keyboard.Pressed(Keys.D9) && c > 8)
-                        {
-                            SFX.Play("rockHitGround");
-                            ((UIMenuItem)_currentMenuItemSelection[8]).Activate("SELECT");
-                        }
-                        else if (Keyboard.Pressed(Keys.D0) && c > 9)
-                        {
-                            SFX.Play("rockHitGround");
-                            ((UIMenuItem)_currentMenuItemSelection[9]).Activate("SELECT");
+                            if (Keyboard.Pressed(keysOfInterest[i]) && i < c)
+                            {
+                                SFX.Play("rockHitGround");
+                                ((UIMenuItem) _currentMenuItemSelection[i]).Activate(Triggers.Select);
+                            }
                         }
                     }
+                    
                     _currentMenuItemSelection = _components.Where<UIComponent>(val =>
                    {
                        if (!(val is UIMenuItem))
