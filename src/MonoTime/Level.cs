@@ -712,8 +712,9 @@ namespace DuckGame
         }
         public void AddUpdateOnce(Thing T)
         {
-            occasionalupdatethings.Add(T);
+            occasionalupdatethingspending.Add(T);
         }
+        public List<Thing> occasionalupdatethingspending = new List<Thing>();
         public List<Thing> occasionalupdatethings = new List<Thing>();
         public virtual void UpdateThings()
         {
@@ -738,6 +739,8 @@ namespace DuckGame
                     if (Level._core.nextLevel != null)
                         break;
                 }
+                occasionalupdatethings = new List<Thing>(occasionalupdatethingspending);
+                occasionalupdatethingspending.Clear();
                 foreach (Thing update in occasionalupdatethings)
                 {
                     if (update.active)
@@ -767,6 +770,8 @@ namespace DuckGame
                     if (Level._core.nextLevel != null)
                         break;
                 }
+                occasionalupdatethings = new List<Thing>(occasionalupdatethingspending);
+                occasionalupdatethingspending.Clear();
                 foreach (Thing update in occasionalupdatethings)
                 {
                     if (update.active && update.level != null)
@@ -778,6 +783,7 @@ namespace DuckGame
                     (thing5 as IComplexUpdate).OnPostUpdate();
             }
             occasionalupdatethings.Clear();
+            //occasionalupdatethingspending.Clear();
         }
 
         public virtual void Update()

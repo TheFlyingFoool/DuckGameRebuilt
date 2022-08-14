@@ -107,7 +107,10 @@ namespace DuckGame
                     {
                         if (Collision.Circle(pPosition, pRadius - 22f, block.rectangle))
                         {
-                            Level.current.AddUpdateOnce(block);
+                            if (!block.shouldbeinupdateloop)
+                            {
+                                Level.current.AddUpdateOnce(block);
+                            }
                             block.shouldWreck = true;
                             if (block is AutoBlock && !(block as AutoBlock).indestructable)
                             {
@@ -131,7 +134,10 @@ namespace DuckGame
                     case AutoBlock _ when !(block as AutoBlock).indestructable:
                         block.skipWreck = true;
                         block.shouldWreck = true;
-                        Level.current.AddUpdateOnce(block);
+                        if (!block.shouldbeinupdateloop)
+                        {
+                            Level.current.AddUpdateOnce(block);
+                        }
                         varBlocks.Add((block as AutoBlock).blockIndex);
                         if (pExplode)
                         {

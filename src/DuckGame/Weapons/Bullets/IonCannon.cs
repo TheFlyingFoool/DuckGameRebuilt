@@ -60,7 +60,10 @@ namespace DuckGame
                         {
                             if (Collision.Line(vec2_4, vec2_4 + (_target - position), block.rectangle))
                             {
-                                Level.current.AddUpdateOnce(block);
+                                if (!block.shouldbeinupdateloop)
+                                {
+                                    Level.current.AddUpdateOnce(block);
+                                }
                                 block.shouldWreck = true;
                                 if (block is AutoBlock)
                                     varBlocks.Add((block as AutoBlock).blockIndex);
@@ -74,7 +77,10 @@ namespace DuckGame
                     switch (block)
                     {
                         case AutoBlock _:
-                            Level.current.AddUpdateOnce(block);
+                            if (!block.shouldbeinupdateloop)
+                            {
+                                Level.current.AddUpdateOnce(block);
+                            }
                             block.skipWreck = true;
                             block.shouldWreck = true;
                             varBlocks.Add((block as AutoBlock).blockIndex);

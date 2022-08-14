@@ -484,10 +484,14 @@ namespace DuckGame
             if (skipWreck)
             {
                 skipWreck = false;
+                if (!shouldbeinupdateloop)
+                {
+                    _level.AddUpdateOnce(this);
+                }
             }
             else
             {
-                if (shouldWreck)
+                 if (shouldWreck)
                 {
                     Destroy(new DTRocketExplosion(null));
                     Level.Remove(this);
