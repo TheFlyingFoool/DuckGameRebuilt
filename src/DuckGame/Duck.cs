@@ -3676,7 +3676,7 @@ namespace DuckGame
                 }
                 if (_profile.localPlayer && !(this is RockThrowDuck) && isServerForObject)
                 {
-                    if (ragdoll == null && _trapped == null && _cooked == null && y < -5000.0)
+                    if (ragdoll == null && _trapped == null && _cooked == null && y < -5000.0f)
                         position = cameraPosition;
                     if (_ragdollInstance != null)
                     {
