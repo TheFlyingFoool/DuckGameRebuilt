@@ -201,7 +201,7 @@ namespace DuckGame
             while (_currentMenuItemSelection[_selection].mode != MenuItemMode.Normal && selection != _selection);
             SFX.Play("textLetter", 0.7f);
         }
-
+        public static bool dubberspeed;
         public override void Update()
         {
             if (!UIMenu.globalUILock && !_close && !_inputLock)
@@ -231,6 +231,60 @@ namespace DuckGame
                 }
                 if (_isMenu)
                 {
+                    if (dubberspeed && _currentMenuItemSelection != null)
+                    {
+                        int c = _currentMenuItemSelection.Count;
+                        if (Keyboard.Pressed(Keys.D1)) //surely i dont have to check if "c > 0" theres no way a menu just wouldn't have any elements (clueless)
+                        {
+                            SFX.Play("rockHitGround");
+                            ((UIMenuItem)_currentMenuItemSelection[0]).Activate("SELECT");
+                        }
+                        else if (Keyboard.Pressed(Keys.D2) && c > 1)
+                        {
+                            SFX.Play("rockHitGround");
+                            ((UIMenuItem)_currentMenuItemSelection[1]).Activate("SELECT");
+                        }
+                        else if (Keyboard.Pressed(Keys.D3) && c > 2)
+                        {
+                            SFX.Play("rockHitGround");
+                            ((UIMenuItem)_currentMenuItemSelection[2]).Activate("SELECT");
+                        }
+                        else if (Keyboard.Pressed(Keys.D4) && c > 3)
+                        {
+                            SFX.Play("rockHitGround");
+                            ((UIMenuItem)_currentMenuItemSelection[3]).Activate("SELECT");
+                        }
+                        else if (Keyboard.Pressed(Keys.D5) && c > 4)
+                        {
+                            SFX.Play("rockHitGround");
+                            ((UIMenuItem)_currentMenuItemSelection[4]).Activate("SELECT");
+                        }
+                        else if (Keyboard.Pressed(Keys.D6) && c > 5)
+                        {
+                            SFX.Play("rockHitGround");
+                            ((UIMenuItem)_currentMenuItemSelection[5]).Activate("SELECT");
+                        }
+                        else if (Keyboard.Pressed(Keys.D7) && c > 6)
+                        {
+                            SFX.Play("rockHitGround");
+                            ((UIMenuItem)_currentMenuItemSelection[6]).Activate("SELECT");
+                        }
+                        else if (Keyboard.Pressed(Keys.D8) && c > 7)
+                        {
+                            SFX.Play("rockHitGround");
+                            ((UIMenuItem)_currentMenuItemSelection[7]).Activate("SELECT");
+                        }
+                        else if (Keyboard.Pressed(Keys.D9) && c > 8)
+                        {
+                            SFX.Play("rockHitGround");
+                            ((UIMenuItem)_currentMenuItemSelection[8]).Activate("SELECT");
+                        }
+                        else if (Keyboard.Pressed(Keys.D0) && c > 9)
+                        {
+                            SFX.Play("rockHitGround");
+                            ((UIMenuItem)_currentMenuItemSelection[9]).Activate("SELECT");
+                        }
+                    }
                     _currentMenuItemSelection = _components.Where<UIComponent>(val =>
                    {
                        if (!(val is UIMenuItem))

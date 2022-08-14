@@ -222,7 +222,7 @@ namespace DuckGame
                 scale = new Vec2(0.5f, 0.5f)
             };
             _collisionSize = new Vec2(141f, 89f);
-            extraButton = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(ButtonSprite))), "boton"));
+            extraButton = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(ButtonSprite))), "button"));
             extraButton.center = new Vec2(12.5f, 12);
             _oButton = new Sprite("oButton");
             _demoBox = new SpriteMap("demoCrate", 20, 20);
@@ -414,6 +414,10 @@ namespace DuckGame
         {
             if (!Network.isActive)
             {
+                if (RoomEditorExtra.favoriteHats.Count == 0)
+                {
+                    return Teams.all;
+                }
                 List<Team> tts = new List<Team>();
 
                 List<Team> laterer = new List<Team>();
@@ -443,7 +447,15 @@ namespace DuckGame
                 return teamList;
             }
 
-
+            if (RoomEditorExtra.favoriteHats.Count == 0)
+            {
+                List<Team> list2 = new List<Team>(Teams.core.teams);
+                foreach (Team item2 in Teams.core.extraTeams)
+                {
+                    list2.Add(item2);
+                }
+                return list2;
+            }
             List<Team> ttss = new List<Team>();
             List<Team> later = new List<Team>();
             for (int i = 0; i < Teams.core.teams.Count; i++)
@@ -627,7 +639,7 @@ namespace DuckGame
                         if (isServerForObject)
                         {
                             Team allTeam = AllTeams()[_desiredTeamSelection];
-                           //if (!Main.isDemo || allTeam.inDemo) that was under this
+                            //if (!Main.isDemo || allTeam.inDemo) that was under this
                             SelectTeam();
                         }
                     }
@@ -765,11 +777,14 @@ namespace DuckGame
                             _teamSelection = (short)(AllTeams().Count - 1);
                             flag3 = true;
                         }
-                        int count = AllTeams().Count;
 
-                        extraButton.depth = 0.849f;
+                        //do not question the elevated one's broken code
+                        //as for it is PERFECT
+                        extraButton.depth = 1;
                         extraButton.alpha = _fade;
-                        Graphics.Draw(extraButton, Mouse.positionScreen.x, Mouse.positionScreen.y);
+                        Graphics.Draw(extraButton, x + 15, y + 61, (Depth)1);
+                        _font.Draw("@SHOOT@", x + 7.5f, y + 61, new Color(180, 180, 180), (Depth)1, profileInput);
+                        _font.Draw("@STARGOODY@", x + 23, y + 61, new Color(180, 180, 180) * 0.3f, (Depth)1, profileInput);
 
                         for (int index1 = 0; index1 < 5; ++index1)
                         {

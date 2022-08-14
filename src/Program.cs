@@ -221,6 +221,13 @@ namespace DuckGame
                     case "-nointro":
                         MonoMain.noIntro = true;
                         break;
+                    case "-speedruntypingthisstartupparameterformaximumdubberspeed":
+                    case "-dubberspeed":
+                    case "-vimuser":
+                    case "-neovim":
+                    case "-vim":
+                        UIBox.dubberspeed = true;
+                        break;
                     case "-startineditor":
                         MonoMain.startInEditor = true;
                         break;

@@ -97,7 +97,6 @@ namespace DuckGame
             _section.Insert(component, position, doAnchor);
             _dirty = true;
         }
-
         public override void Update()
         {
             if (_controlText != null)
