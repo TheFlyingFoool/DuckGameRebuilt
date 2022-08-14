@@ -27,6 +27,13 @@ public static class FixedCommandHistory
     
     public static void SaveCommandHistory()
     {
-        File.WriteAllLines(CommandHistoryFilePath, DevConsole.core.previousLines.GetRange(0, Math.Min(25, DevConsole.core.previousLines.Count - 1)));
+       try
+       {
+            File.WriteAllLines(CommandHistoryFilePath, DevConsole.core.previousLines.GetRange(0, Math.Min(25, DevConsole.core.previousLines.Count - 1)));
+       }
+       catch
+       {
+
+       }
     }
 }

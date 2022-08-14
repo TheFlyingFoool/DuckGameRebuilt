@@ -368,43 +368,42 @@ namespace DuckGame
         //            }
         public static float offset = 4000000.0f;
         public static float cellsize = 100f;
-        private Vec2[] GetIdForObj(Vec2 Position, float width, float height)
+        private Vec2[] GetIdForObj(Vec2 Topleft , Vec2 Bottomright)
         {
-            //Math.Floor(-0.5);
-            // height += 4f;
-            //width += 4f;
-            //if (new StackTrace().GetFrame(5) != null && new System.Diagnostics.StackTrace().GetFrame(5).GetMethod().DeclaringType.ToString() == "DuckGame.Chainsaw")
-            //{
-            //    height = 1000f;
-            //    width = 1000f;
-            //}
-            height = height * 0.5f;
-            width = width * 0.5f;
-            int top = (int)((Position.y + height + offset) / cellsize);
-            int bottom = (int)((Position.y - height + offset) / cellsize);
-            int right = (int)((Position.x + width + offset) / cellsize);
-            int left = (int)((Position.x - width + offset) / cellsize);
-            Vec2[] Chunk = new Vec2[(right - left + 1) * (top - bottom + 1)]; //Math.Abs((right - left + 1) * (top - bottom + 1))] removed the abs im pretty sure i only put it here because i wasnt abs the width & height
+            int top = (int)((Bottomright.y + offset) / cellsize);
+            int left = (int)((Topleft.x + offset) / cellsize);
+            int bottom = (int)((Topleft.y + offset) / cellsize);
+            int right = (int)((Bottomright.x + offset) / cellsize);
+            Vec2[] Chunk = new Vec2[(right - left + 1) * (top - bottom + 1)];
             int N = -1;
-            //string stuff = "";
             for (int x = left; x <= right; x++)
             {
                 for (int y = bottom; y <= top; y++)
                 {
                     N += 1;
                     Chunk[N] = new Vec2(x, y);
-                   // stuff += x.ToString() + " " + y.ToString() + " ";
                 }
             }
-            //try
-            //{
-            //    if (new StackTrace().GetFrame(5) != null && new System.Diagnostics.StackTrace().GetFrame(5).GetMethod().DeclaringType.ToString() == "DuckGame.Chainsaw")
-            //    {
-            //        DevConsole.Log(stuff);
-            //    }
-            //}
-            //catch
-            //{}
+            return Chunk;
+        }
+        private Vec2[] GetIdForObj(Vec2 Position, float width, float height)
+        {
+            height = height * 0.5f;
+            width = width * 0.5f;
+            int top = (int)((Position.y + height + offset) / cellsize);
+            int bottom = (int)((Position.y - height + offset) / cellsize);
+            int right = (int)((Position.x + width + offset) / cellsize);
+            int left = (int)((Position.x - width + offset) / cellsize);
+            Vec2[] Chunk = new Vec2[(right - left + 1) * (top - bottom + 1)];
+            int N = -1;
+            for (int x = left; x <= right; x++)
+            {
+                for (int y = bottom; y <= top; y++)
+                {
+                    N += 1;
+                    Chunk[N] = new Vec2(x, y);
+                }
+            }
             return Chunk;
         }
         public static bool ValueinList(Vec2[] array, Vec2 value, int count)
@@ -497,7 +496,7 @@ namespace DuckGame
         public Dictionary<Vec2, Dictionary<Type, List<Thing>>> Buckets = new Dictionary<Vec2, Dictionary<Type, List<Thing>>>();
         public void UpdateObject(Thing thing)  //float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
         {
-            Vec2[] buckets = GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);
+            Vec2[] buckets = GetIdForObj(thing.topLeft, thing.bottomRight);//GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);
             thing.oldposition = thing.position;
             if (thing.Buckets.SequenceEqual(buckets))
             {
@@ -589,7 +588,10 @@ namespace DuckGame
             //{
             //    DevConsole.Log(thing.ToString());
             //}
-            thing.Buckets = GetIdForObj(thing.position, thing.width, thing.height); // float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
+
+
+
+            thing.Buckets = GetIdForObj(thing.topLeft, thing.bottomRight); // float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
             thing.oldposition = thing.position;
             foreach (Vec2 item in thing.Buckets)
             {

@@ -27,7 +27,12 @@ public static partial class DevConsoleCommands
         //    float suboffset = QuadTreeObjectList.cellsize / 4;
         //    foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
         //    {
-        //        Graphics.DrawString(bucket.x.ToString() + " " + bucket.y.ToString(), new Vec2(((bucket.x - offset) * QuadTreeObjectList.cellsize) + suboffset, ((bucket.y - offset) * QuadTreeObjectList.cellsize) + suboffset) , Color.Green, default(Depth),null,0.8f);
+        //        foreach(Thing t in Level.current.things.Buckets[bucket][typeof(Thing)])
+        //        {
+        //            DuckGame.Graphics.DrawRect(t.topLeft,t.bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+
+        //        }
+        //        Graphics.DrawString(bucket.x.ToString() + " " + bucket.y.ToString(), new Vec2(((bucket.x - offset) * QuadTreeObjectList.cellsize) + suboffset, ((bucket.y - offset) * QuadTreeObjectList.cellsize) + suboffset), Color.Green, default(Depth), null, 0.8f);
         //        DuckGame.Graphics.DrawRect(new Vec2((bucket.x - offset) * QuadTreeObjectList.cellsize, (bucket.y - offset) * QuadTreeObjectList.cellsize), new Vec2((bucket.x - offset + 1) * QuadTreeObjectList.cellsize, (bucket.y - offset + 1) * QuadTreeObjectList.cellsize), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
 
         //    }
