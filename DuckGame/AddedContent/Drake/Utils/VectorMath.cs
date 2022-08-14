@@ -6,9 +6,9 @@ namespace DuckGame.AddedContent.Drake.Utils;
 
 public static class VectorMath
 {
-        public const float DegToRad = (float)0.0174533;
+        public const float DegToRad = 0.0174533f;
 
-        public const float RadToDeg = (float)57.2958;
+        public const float RadToDeg = 57.2958f;
 
         public static Vector2 CalcHitPoint(Vector2 start, Vector2 end, Thing thing)
         {

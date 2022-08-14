@@ -2,20 +2,31 @@
 using System.Linq;
 using DuckGame.AddedContent.Drake.PolyRender;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame;
 
 public static partial class DevConsoleCommands
 {
-    [DrawingContext(CustomID = "collision", DoDraw = false)]
+    [DrawingContext(DoDraw = false)]
+    public static void testdraw()
+    {
+        const float length = 16f;
+        Graphics.polyBatcher.BlendState = BlendState.Opaque;
+        Graphics.DrawRect(new Rectangle(length, length, length, length), Color.Red);
+        PolyRenderer.Rect(new Vec2(length * 2, length), new Vec2(length * 3, length * 2), Color.Blue);
+    }
+    
+    [DrawingContext(CustomID = "cursor", DoDraw = false)]
     public static void DrawCollisions()
     {
         const float length = 2f;
+        Graphics.polyBatcher.BlendState = BlendState.Opaque;
         PolyRenderer.Line(Mouse.position.ButY(-length, true), Mouse.position.ButY(length, true), 0.5f, Color.White);
         PolyRenderer.Line(Mouse.position.ButX(-length, true), Mouse.position.ButX(length, true), 0.5f, Color.White);
     }
     
-    [DrawingContext(DrawingLayer.Foreground, CustomID = "collision2", DoDraw = false)]
+    [DrawingContext(DrawingLayer.Foreground, CustomID = "cursorhighlight", DoDraw = false)]
     public static void DrawCollisions2()
     {
         foreach (var t in Level.current.things)

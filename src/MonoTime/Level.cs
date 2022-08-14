@@ -890,6 +890,9 @@ namespace DuckGame
                 engineUpdatable.OnDrawLayer(layer);
             foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
                 toDifferentLayers.OnDrawLayer(layer);
+            
+            DrawingContextAttribute.ExecuteAll(DrawingContextAttribute.DrawingLayerFromLayer(layer));
+            
             if (layer == Layer.Console)
             {
                 DevConsole.Draw();
