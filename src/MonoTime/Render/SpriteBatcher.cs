@@ -102,7 +102,7 @@ namespace DuckGame
         Dictionary<float, List<MTSpriteBatchItem>> _batchItemListv2 = new Dictionary<float, List<MTSpriteBatchItem>>();
         MTSpriteBatchItem LastSpriteBatchItem;
         int batchlistCount = 0;
-        public float depthmod = -1f;
+        public float depthmod = 1f;
         public MTSpriteBatchItem CreateBatchItem()
         {
             // _freeBatchItemQueue.Count <= 0 ? new MTSpriteBatchItem() : _freeBatchItemQueue.Dequeue();

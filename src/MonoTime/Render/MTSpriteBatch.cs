@@ -69,7 +69,7 @@ namespace DuckGame
         {
             if (sortMode == SpriteSortMode.BackToFront)
             {
-                _batcher.depthmod = 1f;
+                _batcher.depthmod = -1f;
             }
             DuckGame.Graphics.currentStateIndex = _globalIndex;
             if (_beginCalled)

@@ -486,9 +486,9 @@ namespace DuckGame
                 origin.x = (sourceRectangle.HasValue ? sourceRectangle.Value.width : texture.w) - origin.x;
             float depth1 = DuckGame.Graphics.AdjustDepth(depth);
             if (DuckGame.Graphics.material != null)
-                DuckGame.Graphics._currentBatch.DrawWithMaterial(texture, position, sourceRectangle, color, rotation, origin, scale, effects, depth.value, DuckGame.Graphics.material);
+                DuckGame.Graphics._currentBatch.DrawWithMaterial(texture, position, sourceRectangle, color, rotation, origin, scale, effects, depth1, DuckGame.Graphics.material);
             else
-                DuckGame.Graphics._currentBatch.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, depth.value);
+                DuckGame.Graphics._currentBatch.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, depth1);
         }
 
         public static void Draw(Sprite g, float x, float y)
