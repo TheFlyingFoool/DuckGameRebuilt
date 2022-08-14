@@ -2,9 +2,9 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.PolyRender;
+namespace DuckGame.AddedContent.Drake.Utils;
 
-public class VectorMath
+public static class VectorMath
 {
         public const float DegToRad = (float)0.0174533;
 
@@ -72,23 +72,23 @@ public class VectorMath
 
         public static bool PointOnLine(Vector2 point, Vector2 s, Vector2 e, float accuracy = 0f)
         {
-            float dist1 = Dist(s, point);
-            float dist2 = Dist(e, point);
-            float dist3 = Dist(s, e);
+            float dist1 = s.DistTo(point);
+            float dist2 = e.DistTo(point);
+            float dist3 = s.DistTo(e);
             float dist4 = dist1 + dist2;
 
             return dist4 - dist3 <= accuracy;
         }
 
-        public static float Dist(Vector2 s, Vector2 e) => (s - e).Length();
+        public static float DistTo(this Vector2 s, Vector2 e) => (s - e).Length();
         public static float DistSqr(Vector2 s, Vector2 e) => (s - e).LengthSquared();
-        public static Vector2 CalcPerpCw(Vec2 vec) => new Vec2(vec.y, -vec.x);
+        public static Vector2 PerpCw(this Vec2 vec) => new Vec2(vec.y, -vec.x);
 
-        public static Vector2 CalcPerpCcw(Vec2 vec) => new Vec2(-vec.y, vec.x);
+        public static Vector2 PerpCcw(this Vec2 vec) => new Vec2(-vec.y, vec.x);
 
-        public static Vector2 CalcPerpCw(Vec2 start, Vec2 end) => CalcPerpCw(end - start);
+        public static Vector2 PerpCw(this Vec2 start, Vec2 end) => (end - start).PerpCw();
 
-        public static Vector2 CalcPerpCcw(Vec2 start, Vec2 end) => CalcPerpCcw(end - start);
+        public static Vector2 PerpCcw(this Vec2 start, Vec2 end) => (end - start).PerpCcw();
 
         public static Vector2 CalcVec(float degrees, float magnitude, int offDir)
         {
@@ -103,7 +103,7 @@ public class VectorMath
         }
 
 
-        public static Vector2[] CalcClosestPoints(Vector2[] points, Vector2 origin, int number)
+        public static Vector2[] CalcClosestPoints(this Vector2 origin, Vector2[] points,  int number)
         {
             if (number > points.Length)
             {
@@ -116,7 +116,7 @@ public class VectorMath
             return new ArraySegment<Vector2>(points, 0, number).Array;
         }
 
-        public static Vector2 CalcClosestPoint(Vector2[] points, Vector2 origin, out int index)
+        public static Vector2 CalcClosestPoint(this Vector2 origin, Vector2[] points, out int index)
         {
             float closest = float.MaxValue;
             index = -1;
@@ -133,10 +133,90 @@ public class VectorMath
 
             return index != -1 ? points[index] : origin;
         }
+        
+        
 
-        public static float CalcRadians(Vector2 vec) => (float)(Math.Tan(vec.X / vec.Y) * -1);
+        public static float CalcRadians(this Vector2 vec) => (float)(Math.Tan(vec.X / vec.Y) * -1);
 
-        public static float CalcDegreesBetween(Vec2 start, Vec2 end) => CalcRadians(start - end) * RadToDeg;
+        public static float CalcDegreesBetween(this Vec2 start, Vec2 end) => CalcRadians(start - end) * RadToDeg;
+        
+        public static bool IsInsideRect(this Vector2 point, Vector2 rectOrigin, Vector2 rectSize)
+        {
+            return point.X > rectOrigin.X && point.X < (rectOrigin + rectSize).X && point.Y > rectOrigin.Y &&
+                   point.Y < (rectOrigin + rectSize).Y;
+        }
 
-        public static double Cbrt(double d) => Math.Pow(d, 1f / 3f);
+        private static Vector2 _negateX = new Vector2(-1, 1);
+        private static Vector2 _negateY = new Vector2(1, -1);
+        
+        public static Vector2 NegateX(this Vector2 self)
+        {
+            return self * _negateX;
+        }
+
+        public static Vector2 NegateY(this Vector2 self)
+        {
+            return self * _negateY;
+        }
+
+        public static Vector2 ZeroX(this Vector2 self)
+        {
+            return self * Vector2.UnitY;
+        }
+
+        public static Vector2 ZeroY(this Vector2 self)
+        {
+            return self * Vector2.UnitX;
+        }
+
+        public static Vector2 ReplaceX(this Vector2 self, float x)
+        {
+            return new Vector2(x, self.Y);
+        }
+
+        public static Vector2 ReplaceY(this Vector2 self, float y)
+        {
+            return new Vector2(self.X, y);
+        }
+
+        public static Vector2 SubtractX(this Vector2 self, float amount)
+        {
+            return new Vector2(self.X - amount, self.Y);
+        }
+
+        public static Vector2 SubtractY(this Vector2 self, float amount)
+        {
+            return new Vector2(self.X, self.Y - amount);
+        }
+
+        public static Vector2 AddX(this Vector2 self, float amount)
+        {
+            return new Vector2(self.X + amount, self.Y);
+        }
+
+        public static Vector2 AddY(this Vector2 self, float amount)
+        {
+            return new Vector2(self.X, self.Y + amount);
+        }
+
+        public static Vector2 MultiplyX(this Vector2 self, float amount)
+        {
+            return new Vector2(self.X * amount, self.Y);
+        }
+
+        public static Vector2 MultiplyY(this Vector2 self, float amount)
+        {
+            return new Vector2(self.X, self.Y * amount);
+        }
+
+
+        public static Vector2 XX(this Vector2 self)
+        {
+            return new Vector2(self.X, self.X);
+        }
+
+        public static Vector2 YY(this Vector2 self)
+        {
+            return new Vector2(self.Y, self.Y);
+        }
 }

@@ -495,7 +495,7 @@ namespace DuckGame
             Level.activeLevel.InitializeDraw(this);
             DuckGame.Graphics.currentLayer = this;
             
-            Graphics.polyBatcher.UpdateMatrices();
+            Graphics.polyBatcher.UpdateMatricesForCurrentLayer();
             
             
             Begin(transparent, isTargetDraw);

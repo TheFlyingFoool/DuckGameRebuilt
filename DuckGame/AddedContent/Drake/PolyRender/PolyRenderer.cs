@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using DuckGame.AddedContent.Drake.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -117,6 +118,17 @@ public static class PolyRenderer
             .DrawTriStrip();
     }
 
+    public static void Rect(Vector2 topL, Vector2 lowR, Color c1, Color c2, Color c3, Color c4)
+    {
+        Graphics.polyBatcher.ResetBuffer();
+        Graphics.polyBatcher
+            .Vert(topL).Col(c1)
+            .Vert(new Vector2(lowR.X, topL.Y)).Col(c2)
+            .Vert(new Vector2(topL.X, lowR.Y)).Col(c3)
+            .Vert(lowR).Col(c4)
+            .DrawTriStrip();
+    }
+
     public static void Rect(Vector2 topL, Vector2 lowR, Color c1, Color c2)
     {
         Graphics.polyBatcher.ResetBuffer();
@@ -164,14 +176,14 @@ public static class PolyRenderer
     public static void Line(Vector2 v1, Vector2 v2, float thickness, Color c1, Color c2)
     {   
         float halfThick = thickness / 2f;
-        var offset = VectorMath.CalcPerpCw(v1, v2) * halfThick;
+        var offset = VectorMath.PerpCw(v1, v2) * halfThick;
         Quad(v1 - offset, v2 - offset, v1 + offset, v2 + offset, c1, c2, c1, c2);
     }
 
     public static void Line(Vector2 v1, Vector2 v2, float thickness, Color c)
     {
         float halfThick = thickness / 2f;
-        var offset = Vector2.Normalize(VectorMath.CalcPerpCw(v1, v2)) * halfThick;
+        var offset = Vector2.Normalize(VectorMath.PerpCw(v1, v2)) * halfThick;
         Quad(v1 - offset, v2 - offset, v1 + offset, v2 + offset, c);
     }
 
