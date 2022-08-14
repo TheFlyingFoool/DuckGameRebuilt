@@ -13,6 +13,7 @@ public static class FixedCommandHistory
         MonoMain.OnGameExit += _ => { SaveCommandHistory(); };
     }
     
+    [PostInitialize]
     public static void LoadCommandHistory()
     {
         //you don't need to create and load the file if it doesn't exist...

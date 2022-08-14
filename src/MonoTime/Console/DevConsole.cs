@@ -1728,8 +1728,6 @@ namespace DuckGame
 
         public static void InitializeCommands()
         {
-            FixedCommandHistory.LoadCommandHistory();
-
             AddCommand(new CMD("level", new CMD.Argument[1]
             {
                 new CMD.Level("level")
