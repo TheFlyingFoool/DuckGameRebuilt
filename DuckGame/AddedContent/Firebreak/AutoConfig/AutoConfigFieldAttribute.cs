@@ -24,4 +24,14 @@ public sealed class AutoConfigFieldAttribute : Attribute
     public bool PotentiallyDangerous { get; set; } = true;
 
     public string? Id { get; set; } = null;
+
+    /// <summary>
+    /// The name of the file (without the file extension) that
+    /// the data will be saved to instead of on the main file
+    /// </summary>
+    /// <remarks>
+    /// If no value is specified, then the value is saved on
+    /// the main file as usual
+    /// </remarks>
+    public string? External { get; set; } = null;
 }

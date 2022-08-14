@@ -52,7 +52,18 @@ public static class AutoConfigHandler
             object fieldValue = field.GetValue(null);
             string fullName = attribute.Id ?? field.GetFullName();
 
-            string dataLine = $"{fullName}={FireSerializer.Serialize(fieldValue)}";
+            string writtenValue = FireSerializer.Serialize(fieldValue);
+
+            if (attribute.External is not null)
+            {
+                string fileName = attribute.External + FileExtension;
+                string fullPath = SaveDirPath + fileName;
+                File.WriteAllText(fullPath, writtenValue);
+                
+                writtenValue = fileName;
+            }
+            
+            string dataLine = $"{fullName}={writtenValue}";
             stringBuilder.Append(dataLine);
 
             if (i != length)
@@ -66,9 +77,9 @@ public static class AutoConfigHandler
     public static bool LoadAll()
     {
         var all = AutoConfigFieldAttribute.All;
-        string[] lines = File.ReadAllLines(MainSaveFilePath);
-
-        if (!lines.Any())
+        Extensions.Try(() => File.ReadAllLines(MainSaveFilePath), out string[] lines);
+        
+        if (lines is null || lines.Length == 0)
             SaveAll(false);
         
         // tries to load all via indexing. if that fails, tries to
@@ -102,7 +113,7 @@ public static class AutoConfigHandler
                 if (sides[0] != type.GetFullName())
                     goto Fail;
 
-                field.SetValue(null, FireSerializer.Deserialize(type, sides[1]));
+                SetFieldValue(all[i], sides[1]);
             }
         }
         catch
@@ -127,7 +138,6 @@ public static class AutoConfigHandler
             for (int i = 0; i < all.Count; i++)
             {
                 (FieldInfo field, AutoConfigFieldAttribute attribute) = all[i];
-                Type type = field.FieldType;
                 string fullName = attribute.Id ?? field.GetFullName();
 
                 if (!lines.TryFirst(x => fullName == x.Split('=')[0], out string line))
@@ -135,7 +145,7 @@ public static class AutoConfigHandler
 
                 string[] sides = line.Split('=');
 
-                field.SetValue(null, FireSerializer.Deserialize(type, sides[1]));
+                SetFieldValue(all[i], sides[1]);
             }
         }
         catch
@@ -145,5 +155,17 @@ public static class AutoConfigHandler
         }
 
         return true;
+    }
+
+    private static void SetFieldValue(MemberAttributePair<FieldInfo, AutoConfigFieldAttribute> pair, string newValue)
+    {
+        (FieldInfo field, AutoConfigFieldAttribute attribute) = pair;
+        Type type = field.FieldType;
+
+        object val = FireSerializer.Deserialize(type, attribute.External is not null
+            ? File.ReadAllText(SaveDirPath + newValue)
+            : newValue);
+        
+        field.SetValue(null, val);
     }
 }
