@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -27,13 +28,16 @@ public static class FixedCommandHistory
     
     public static void SaveCommandHistory()
     {
-       try
-       {
-            File.WriteAllLines(CommandHistoryFilePath, DevConsole.core.previousLines.GetRange(0, Math.Min(25, DevConsole.core.previousLines.Count - 1)));
-       }
-       catch
-       {
+        IEnumerable<string> lines = DevConsole.core.previousLines.FastTake(25);
+        
+        File.WriteAllLines(CommandHistoryFilePath, lines);
+    }
 
-       }
+    private static IEnumerable<string> FastTake(this IReadOnlyList<string> list, int limit)
+    {
+        for (int i = 0; i < limit && i < list.Count; i++)
+        {
+            yield return list[i];
+        }
     }
 }
