@@ -29,7 +29,7 @@ namespace DuckGame;
 public sealed class DrawingContextAttribute : Attribute
 {
     public static List<MemberAttributePair<MethodInfo, DrawingContextAttribute>> ReflectionMethodsUsing = new();
-    public static List<(Action Action, DrawingContextAttribute Attribute)> PrecompiledMethodsUsing = new();
+    public static List<(Action Action, DrawingContextAttribute Attribute, string Name)> PrecompiledMethodsUsing = new();
     
     /// <summary>
     /// The layer this method will be invoked at for drawing
@@ -86,7 +86,7 @@ public sealed class DrawingContextAttribute : Attribute
 
                     item.Attribute.CustomID ??= item.MemberInfo.Name;
                 
-                    PrecompiledMethodsUsing.Add((precompiled, item.Attribute));
+                    PrecompiledMethodsUsing.Add((precompiled, item.Attribute, item.MemberInfo.Name));
                 }
             }
         });
@@ -130,7 +130,7 @@ public sealed class DrawingContextAttribute : Attribute
                      .Select<MemberAttributePair<MethodInfo, DrawingContextAttribute>, 
                          (object ActionOrMethodInfo, DrawingContextAttribute Attribute)>(x => (x.MemberInfo, x.Attribute))
                      .Concat(PrecompiledMethodsUsing
-                         .Select<(Action Action, DrawingContextAttribute Attribute), 
+                         .Select<(Action Action, DrawingContextAttribute Attribute, string), 
                              (object ActionOrMethodInfo, DrawingContextAttribute Attribute)>(x => (x.Action, x.Attribute)))
                      .OrderByDescending(x => x.Attribute.Priority)
                      .ToArray())
