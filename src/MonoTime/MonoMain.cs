@@ -894,11 +894,11 @@ namespace DuckGame
             ModLoader.PostLoadMods();
             OnStart();
             _started = true;
-            
+
             // this is basically the lifeline of all attributes so i cant
             // use the PostInitialize attribute for it since it wont even
             // work without this lol
-            MemberAttributePairHandler.Init();
+            Program.FirebreakReflectionsht.Wait();
 
             //Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667L);
             this.IsFixedTimeStep = true; // UNZOOOM

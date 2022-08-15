@@ -17,6 +17,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DuckGame
@@ -356,8 +357,10 @@ namespace DuckGame
             accumulatedElapsedTimefieldinfo = typeof(Game).GetField("accumulatedElapsedTime", BindingFlags.NonPublic | BindingFlags.Instance);
             SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
             Program.main.IsFixedTimeStep = false; // ZOOOM
+            FirebreakReflectionsht = Task.Factory.StartNew(() => { MemberAttributePairHandler.Init(); });
             Program.main.Run();
         }
+        public static Task FirebreakReflectionsht;
         private static FieldInfo accumulatedElapsedTimefieldinfo; 
         public static void SetAccumulatedElapsedTime(Game g, TimeSpan t)
         {
