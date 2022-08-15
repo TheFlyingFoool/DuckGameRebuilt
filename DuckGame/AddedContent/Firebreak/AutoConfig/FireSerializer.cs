@@ -81,6 +81,54 @@ public static class FireSerializer
                || type.InheritsFrom(typeof(IEnumerable));
     }
 
+    public static string UnescapeString(string str)
+    {
+        StringBuilder builder = new();
+        for (int i = 0; i < str.Length; i++)
+        {
+            char c = str[i];
+            switch (c)
+            {
+                case '\\':
+                {
+                    builder.Append(str[++i]);
+                    break;
+                }
+                default:
+                {
+                    builder.Append(c);
+                    break;
+                }
+            }
+        }
+
+        return builder.ToString();
+    }
+
+    public static readonly char[] BadChars = new[] 
+    {
+        '[',
+        ']',
+        ';',
+    };
+
+    public static string EscapeBadStringCharacters(string str)
+    {
+        StringBuilder builder = new();
+        
+        for (int i = 0; i < str.Length; i++)
+        {
+            char c = str[i];
+            
+            if (BadChars.Contains(c))
+                builder.Append('\\');
+
+            builder.Append(c);
+        }
+
+        return builder.ToString();
+    }
+
     private static bool HandleIEnumerableSerialize(Type enumerableType, IEnumerable from, out string result)
     {
         result = default;
@@ -91,7 +139,7 @@ public static class FireSerializer
             return false;
 
         result = collection.Any() 
-            ? $"[{string.Join(";", collection.Select(Serialize))}]"
+            ? $"[{string.Join(";", collection.Select(o => $"{EscapeBadStringCharacters(Serialize(o))}"))}]"
             : "[]";
         return true;
     }
@@ -111,12 +159,12 @@ public static class FireSerializer
             : genericArguments[0];
 
         if (from.Length >= 2 && (from.First() != '[' || from.Last() != ']'))
-            throw new Exception($"Error while parsing type: {enumerableType}");
+            throw new Exception($"Invalid IEnumerable format for type: {enumerableType}");
 
         from = from.Substring(1, from.Length - 2);
 
         string[] split = SmartIEnumerableSplit(from);
-        var usableCollection = split.Select(x => Deserialize(argType, x));
+        var usableCollection = split.Select(x => Deserialize(argType, UnescapeString(x)));
 
         var arr = Array.CreateInstance(argType!, split.Length);
         for (int i = 0; i < split.Length; i++)
@@ -153,6 +201,7 @@ public static class FireSerializer
         StringBuilder stringBuilder = new();
 
         int expectedClosingBrackets = 0;
+        bool capturingItem = false;
     
         for (int i = 0; i < str.Length; i++)
         {
@@ -160,6 +209,10 @@ public static class FireSerializer
 
             switch (currentCharacter)
             {
+                case '\\':
+                    // stringBuilder.Append(currentCharacter);
+                    stringBuilder.Append(str[++i]);
+                    break;
                 case ';':
                     if (expectedClosingBrackets > 0)
                         break;

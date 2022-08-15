@@ -14,8 +14,15 @@ public static partial class DevConsoleCommands
         {
             case 0:
             {
-                return MemberAttributePairHandler.AttributeLookupRequests;
-                break;
+                return FireSerializer.Serialize(new[] {"x;y", "z"});
+            }
+            case 1:
+            {
+                return FireSerializer.Deserialize<string[]>(@"[x\;y;z]");
+            }
+            case 2:
+            {
+                return FireSerializer.Deserialize<string[]>(@"[x\;y\;z;w]");
             }
         }
 
