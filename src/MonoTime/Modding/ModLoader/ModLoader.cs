@@ -51,20 +51,20 @@ namespace DuckGame
         private static int _numModsTotal = 0;
         private static bool _preloading = false;
         internal static string _modString;
-        private static List<ulong> brokenclientsidemods = new List<ulong>()
-    {
-      2291455300UL,
-      2285058623UL,
-      1704010547UL,
-      1422187117UL,
-      1217536842UL,
-      1337905266UL,
-      1653126591UL,
-      1220996500UL,
-      804666647UL,
-      1198406315UL,
-      1356415641UL
-    };
+        private static List<ulong> brokenclientsidemods = new List<ulong>() 
+        {
+            2291455300UL,
+            2285058623UL,
+            1704010547UL,
+            1422187117UL,
+            1217536842UL,
+            1337905266UL,
+            1653126591UL,
+            1220996500UL,
+            804666647UL,
+            1198406315UL,
+            1356415641UL
+        };
         private static CSharpCodeProvider _provider = null;
         private static CompilerParameters _parameters = null;
         private static string _buildErrorText = null;
@@ -94,7 +94,8 @@ namespace DuckGame
             ModLoader._modAssemblyArray = source.ToArray<Assembly>();
         }
 
-        internal static void AddMod(object p) => throw new NotImplementedException();
+        internal static void AddMod(object p) =>
+          throw new NotImplementedException();
 
         internal static List<Tuple<string, Exception>> modLoadErrors => ModLoader._modLoadErrors;
 
@@ -152,7 +153,7 @@ namespace DuckGame
             ModLoader._modAssemblies.Add(mod.configuration.assembly, mod);
             ModLoader._modsByHash.Add(mod.identifierHash, mod);
             if (mod.configuration.workshopID != 0UL)
-                ModLoader._modsByWorkshopID[mod.configuration.workshopID] = mod;
+        ModLoader._modsByWorkshopID[mod.configuration.workshopID] = mod;
             ModLoader._modTypes.Add(mod.GetType(), mod);
         }
         public static Assembly FixLoadAssembly(string path)
@@ -220,51 +221,43 @@ namespace DuckGame
                     }
                     else if (modConfig.majorSupportedRevision != 1)
                     {
-                        if (modConfig.workshopID == 1198406315UL || modConfig.workshopID == 1354346379UL)
-                        {
+                        if (modConfig.workshopID == 1198406315UL || modConfig.workshopID == 1354346379UL) {
                             modConfig.Disable();
                             modConfig.error = "!This mod has been officially implemented, Thanks EIM64!";
                             mod = new DisabledMod();
                         }
-                        if (modConfig.workshopID == 1820667892UL)
-                        {
+                        if (modConfig.workshopID == 1820667892UL) {
                             modConfig.Disable();
                             modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel!";
                             mod = new DisabledMod();
                         }
-                        if (modConfig.workshopID == 1603886916UL)
-                        {
+                        if (modConfig.workshopID == 1603886916UL) {
                             modConfig.Disable();
                             modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel || Mr. Potatooh!";
                             mod = new DisabledMod();
                         }
-                        if (modConfig.workshopID == 796033146UL)
-                        {
+                        if (modConfig.workshopID == 796033146UL) {
                             modConfig.Disable();
                             modConfig.error = "!This mod has been officially implemented, Thanks TheSpicyChef!";
                             mod = new DisabledMod();
                         }
-                        if (modConfig.workshopID == 1425615438UL)
-                        {
+                        if (modConfig.workshopID == 1425615438UL) {
                             modConfig.Disable();
                             modConfig.error = "!This mod has been officially implemented, Thanks EIM64 || Killer-Fackur!";
                             mod = new DisabledMod();
                         }
-                        if (modConfig.workshopID == 1704010547UL)
-                        {
+                        if (modConfig.workshopID == 1704010547UL) {
                             modConfig.Disable();
                             modConfig.error = "!Regrettably, this version of QOL is incompatible with Duck Game 2020!";
                             mod = new DisabledMod();
                         }
                     }
-                    else if (modConfig.workshopID == 1657985708UL)
-                    {
+                    else if (modConfig.workshopID == 1657985708UL) {
                         modConfig.Disable();
                         modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel!";
                         mod = new DisabledMod();
                     }
-                    if (Program.isLinux && !modConfig.linuxFix && modConfig.workshopID == 1439906266UL)
-                    {
+                    if (Program.isLinux && !modConfig.linuxFix && modConfig.workshopID == 1439906266UL) {
                         modConfig.Disable();
                         modConfig.error = "!This mod does not currently work on Linux!";
                         mod = new DisabledMod();
@@ -346,22 +339,25 @@ namespace DuckGame
                 return "nomods";
             using (SHA256Cng shA256Cng = new SHA256Cng())
             {
-                ModLoader._modString = string.Join("|", ModLoader._sortedAccessibleMods.Where<Mod>(a =>
-              {
-                  switch (a)
-                  {
-                      case CoreMod _:
-                      case DisabledMod _:
-                          return false;
-                      default:
-                          return !ModLoader.brokenclientsidemods.Contains(a.configuration.workshopID);
-                  }
-              }).Select<Mod, string>(a => a.configuration.uniqueID + "_" + a.configuration.version?.ToString()).OrderBy<string, string>(x => x));
+                ModLoader._modString = string.Join("|", ModLoader._sortedAccessibleMods.Where<Mod>(a => {
+                    switch (a)
+                    {
+                        case CoreMod _:
+                        case DisabledMod _:
+                            return false;
+                        default:
+                            return !ModLoader.brokenclientsidemods.Contains(a.configuration.workshopID);
+                    }
+                }).Select<Mod, string>(a => a.configuration.uniqueID + "_" + a.configuration.version?.ToString()).OrderBy<string, string>(x => x));
                 return string.IsNullOrEmpty(ModLoader._modString) ? "nomods" : Convert.ToBase64String(shA256Cng.ComputeHash(Encoding.ASCII.GetBytes(ModLoader._modString)));
             }
         }
 
-        internal static string modHash { get; private set; }
+        internal static string modHash
+        {
+            get;
+            private set;
+        }
 
         public static string SmallTypeName(string fullName)
         {
@@ -411,9 +407,7 @@ namespace DuckGame
                         if ((int)BitConverter.ToUInt32(System.IO.File.ReadAllBytes(config.hashPath), 0) == (int)num)
                             return true;
                     }
-                    catch
-                    {
-                    }
+                    catch { }
                 }
             }
             System.IO.File.WriteAllBytes(config.hashPath, BitConverter.GetBytes(num));
@@ -524,17 +518,15 @@ namespace DuckGame
                 DuckFile.SaveSharpXML(pDoc, ModLoader.modConfigFile);
             }
             if (newChild["Disabled"] != null)
-                ModLoader.disabledMods = new HashSet<string>(newChild["Disabled"].InnerText.Split(new char[1]
-                {
+                ModLoader.disabledMods = new HashSet<string>(newChild["Disabled"].InnerText.Split(new char[1] {
           '|'
-                }, StringSplitOptions.RemoveEmptyEntries).Select<string, string>(a => a.Trim()));
+        }, StringSplitOptions.RemoveEmptyEntries).Select<string, string>(a => a.Trim()));
             else
                 ModLoader.disabledMods = new HashSet<string>();
             if (newChild["ForceLegacyLoad"] != null)
-                ModLoader.forceLegacyLoad = new HashSet<string>(newChild["ForceLegacyLoad"].InnerText.Split(new char[1]
-                {
+                ModLoader.forceLegacyLoad = new HashSet<string>(newChild["ForceLegacyLoad"].InnerText.Split(new char[1] {
           '|'
-                }, StringSplitOptions.RemoveEmptyEntries).Select<string, string>(a => a.Trim()));
+        }, StringSplitOptions.RemoveEmptyEntries).Select<string, string>(a => a.Trim()));
             else
                 ModLoader.forceLegacyLoad = new HashSet<string>();
             if (newChild["CompiledFor"] == null)
@@ -557,14 +549,18 @@ namespace DuckGame
             if (!pDisabled)
             {
                 string str1 = uniqueId;
-                char[] chArray = new char[1] { '|' };
+                char[] chArray = new char[1] {
+          '|'
+        };
                 foreach (string str2 in str1.Split(chArray))
                     list.Remove(str2);
             }
             else
             {
                 string str3 = uniqueId;
-                char[] chArray = new char[1] { '|' };
+                char[] chArray = new char[1] {
+          '|'
+        };
                 foreach (string str4 in str3.Split(chArray))
                 {
                     if (!list.Contains(str4))
@@ -614,15 +610,11 @@ namespace DuckGame
                             modConfiguration.isWorkshop = true;
                             ModLoader.loadableMods.Add(modConfiguration.uniqueID, modConfiguration);
                         }
-                        catch (Exception)
-                        {
-                        }
+                        catch (Exception) { }
                     }
                 }
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) { }
         }
 
         public static void FailWithHarmonyException()
@@ -643,52 +635,48 @@ namespace DuckGame
                 if (Steam.IsInitialized())
                 {
                     LoadingAction steamLoad = new LoadingAction();
-                    steamLoad.action = () =>
-                   {
-                       ModLoader.runningModloadCode = true;
-                       WorkshopQueryUser queryUser = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
-                       queryUser.requiredTags.Add("Mod");
-                       queryUser.onlyQueryIDs = true;
-                       queryUser.QueryFinished += sender => steamLoad.flag = true;
-                       queryUser.ResultFetched += new WorkshopQueryResultFetched(ModLoader.ResultFetched);
-                       queryUser.Request();
-                       Steam.Update();
-                   };
-                    steamLoad.waitAction = () =>
-                   {
-                       Steam.Update();
-                       return steamLoad.flag;
-                   };
+                    steamLoad.action = () => {
+                        ModLoader.runningModloadCode = true;
+                        WorkshopQueryUser queryUser = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
+                        queryUser.requiredTags.Add("Mod");
+                        queryUser.onlyQueryIDs = true;
+                        queryUser.QueryFinished += sender => steamLoad.flag = true;
+                        queryUser.ResultFetched += new WorkshopQueryResultFetched(ModLoader.ResultFetched);
+                        queryUser.Request();
+                        Steam.Update();
+                    };
+                    steamLoad.waitAction = () => {
+                        Steam.Update();
+                        return steamLoad.flag;
+                    };
                     MonoMain.currentActionQueue.Enqueue(steamLoad);
                 }
                 LoadingAction attemptLoadMods = new LoadingAction();
                 MonoMain.currentActionQueue.Enqueue(attemptLoadMods);
-                attemptLoadMods.action = () =>
-               {
-                   ModLoader.runningModloadCode = true;
-                   List<string> directoriesNoCloud = DuckFile.GetDirectoriesNoCloud(ModLoader.modDirectory);
-                   directoriesNoCloud.AddRange(DuckFile.GetDirectoriesNoCloud(DuckFile.globalModsDirectory));
-                   MonoMain.totalLoadyBits += directoriesNoCloud.Count<string>() * 2;
-                   foreach (string str in directoriesNoCloud)
-                   {
-                       string folder = str;
-                       if (!folder.ToLowerInvariant().EndsWith("/texpacks") && !folder.ToLowerInvariant().EndsWith("/mappacks") && !folder.ToLowerInvariant().EndsWith("/hatpacks"))
-                           attemptLoadMods.actions.Enqueue(new LoadingAction(() =>
-                   {
-                       ModConfiguration modConfiguration = ModLoader.AttemptModLoad(folder);
-                       MonoMain.loadyBits += 2;
-                       if (modConfiguration == null)
-                           return;
-                       if (ModLoader.loadableMods.ContainsKey(modConfiguration.uniqueID))
-                       {
-                           if (!ModLoader.loadableMods[modConfiguration.uniqueID].disabled || modConfiguration.disabled)
-                               return;
-                           ModLoader.loadableMods.Remove(modConfiguration.uniqueID);
-                       }
-                       ModLoader.loadableMods.Add(modConfiguration.uniqueID, modConfiguration);
-                   }));
-                   }
-               };
+                attemptLoadMods.action = () => {
+                    ModLoader.runningModloadCode = true;
+                    List<string> directoriesNoCloud = DuckFile.GetDirectoriesNoCloud(ModLoader.modDirectory);
+                    directoriesNoCloud.AddRange(DuckFile.GetDirectoriesNoCloud(DuckFile.globalModsDirectory));
+                    MonoMain.totalLoadyBits += directoriesNoCloud.Count<string>() * 2;
+                    foreach (string str in directoriesNoCloud)
+                    {
+                        string folder = str;
+                        if (!folder.ToLowerInvariant().EndsWith("/texpacks") && !folder.ToLowerInvariant().EndsWith("/mappacks") && !folder.ToLowerInvariant().EndsWith("/hatpacks"))
+                            attemptLoadMods.actions.Enqueue(new LoadingAction(() => {
+                                ModConfiguration modConfiguration = ModLoader.AttemptModLoad(folder);
+                                MonoMain.loadyBits += 2;
+                                if (modConfiguration == null)
+                                    return;
+                                if (ModLoader.loadableMods.ContainsKey(modConfiguration.uniqueID))
+                                {
+                                    if (!ModLoader.loadableMods[modConfiguration.uniqueID].disabled || modConfiguration.disabled)
+                                        return;
+                                    ModLoader.loadableMods.Remove(modConfiguration.uniqueID);
+                                }
+                                ModLoader.loadableMods.Add(modConfiguration.uniqueID, modConfiguration);
+                            }));
+                    }
+                };
             }
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => ReskinPack.InitializeReskins()));
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => MapPack.InitializeMapPacks()));
@@ -700,151 +688,146 @@ namespace DuckGame
             Stack<string> modLoadStack = new Stack<string>();
             LoadingAction getOrLoadMods = new LoadingAction();
             MonoMain.currentActionQueue.Enqueue(getOrLoadMods);
-            getOrLoadMods.action = () =>
-           {
-               ModLoader._preloading = pPreload;
-               MonoMain.totalLoadyBits += ModLoader.loadableMods.Count * 2;
-               int cluster = 0;
-               List<ReskinPack> active = ReskinPack.active;
-               foreach (ModConfiguration modConfiguration in ModLoader.loadableMods.Values)
-               {
-                   ModConfiguration loadable = modConfiguration;
-                   getOrLoadMods.actions.Enqueue(new LoadingAction(() =>
-             {
-                 try
-                 {
-                     ModLoader.currentModLoadString = loadable.name;
-                     Mod orLoad = ModLoader.GetOrLoad(loadable, ref modLoadStack, ref ModLoader.loadableMods);
-                     if (orLoad != null && loadable.isExistingReskinMod && !loadable.disabled && !(orLoad is ErrorMod))
-                         ReskinPack.LoadReskin(loadable.contentDirectory + "tp/", orLoad);
-                     MonoMain.loadyBits += 2;
-                     ++cluster;
-                     if (cluster != 10)
-                         return;
-                     cluster = 0;
-                     Thread.Sleep(50);
-                 }
-                 catch (Exception)
-                 {
-                     if (!Options.Data.disableModOnLoadFailure)
-                         return;
-                     loadable.Disable();
-                 }
-             }));
-               }
-           };
+            getOrLoadMods.action = () => {
+                ModLoader._preloading = pPreload;
+                MonoMain.totalLoadyBits += ModLoader.loadableMods.Count * 2;
+                //int cluster = 0;
+                List<ReskinPack> active = ReskinPack.active;
+                foreach (ModConfiguration modConfiguration in ModLoader.loadableMods.Values)
+                {
+                    ModConfiguration loadable = modConfiguration;
+                    getOrLoadMods.actions.Enqueue(new LoadingAction(() => 
+                    {
+                        try
+                        {
+                            ModLoader.currentModLoadString = loadable.name;
+                            Mod orLoad = ModLoader.GetOrLoad(loadable, ref modLoadStack, ref ModLoader.loadableMods);
+                            if (orLoad != null && loadable.isExistingReskinMod && !loadable.disabled && !(orLoad is ErrorMod))
+                                ReskinPack.LoadReskin(loadable.contentDirectory + "tp/", orLoad);
+                            MonoMain.loadyBits += 2;
+                            //++cluster;
+                            //if (cluster != 10)
+                            //    return;
+                            //cluster = 0;
+                            //Thread.Sleep(50);
+                        }
+                        catch (Exception)
+                        {
+                            if (!Options.Data.disableModOnLoadFailure)
+                                return;
+                            loadable.Disable();
+                        }
+                    }));
+                }
+            };
         }
 
         internal static void LoadMods(string dir)
         {
             ModLoader.GetOrLoadMods(false);
-            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() =>
-           {
-               ModLoader.InitializeAssemblyArray();
-               ReskinPack.FinalizeReskins();
-               ModLoader._sortedMods = ModLoader._loadedMods.Values.OrderBy<Mod, int>(mod => (int)(mod.priority + (!mod.configuration.disabled || mod is ErrorMod ? -1000 : 0))).ToList<Mod>();
-               ModLoader._sortedAccessibleMods = ModLoader._sortedMods.Where<Mod>(mod => !mod.configuration.disabled && !(mod is ErrorMod)).ToList<Mod>();
-               foreach (Mod mod in ModLoader._sortedMods.Where<Mod>(a => a.configuration.disabled || a is ErrorMod))
-               {
-                   if (mod != null && mod.configuration != null)
-                       ModLoader._loadedMods.Remove(mod.configuration.uniqueID);
-               }
-           }));
+            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => {
+                ModLoader.InitializeAssemblyArray();
+                ReskinPack.FinalizeReskins();
+                ModLoader._sortedMods = ModLoader._loadedMods.Values.OrderBy<Mod, int>(mod => (int)(mod.priority + (!mod.configuration.disabled || mod is ErrorMod ? -1000 : 0))).ToList<Mod>();
+                ModLoader._sortedAccessibleMods = ModLoader._sortedMods.Where<Mod>(mod => !mod.configuration.disabled && !(mod is ErrorMod)).ToList<Mod>();
+                foreach (Mod mod in ModLoader._sortedMods.Where<Mod>(a => a.configuration.disabled || a is ErrorMod))
+                {
+                    if (mod != null && mod.configuration != null)
+                        ModLoader._loadedMods.Remove(mod.configuration.uniqueID);
+                }
+            }));
             LoadingAction preInitializeMods = new LoadingAction();
             MonoMain.currentActionQueue.Enqueue(preInitializeMods);
-            preInitializeMods.action = () =>
-           {
-               foreach (Mod sortedAccessibleMod in (IEnumerable<Mod>)ModLoader._sortedAccessibleMods)
-               {
-                   Mod mod = sortedAccessibleMod;
-                   preInitializeMods.actions.Enqueue(new LoadingAction(() =>
-             {
-                 try
-                 {
-                     AssemblyName assemblyName = mod.GetType().Assembly.GetReferencedAssemblies().FirstOrDefault<AssemblyName>(x => x.Name == "DuckGame");
-                     if (assemblyName != null && assemblyName.Version.Minor != DG.versionMajor)
-                     {
-                         ModLoader.loadingOldMod = mod;
-                         if (Directory.GetFiles(mod.configuration.directory, "0Harmony.dll", SearchOption.AllDirectories).FirstOrDefault<string>() != null)
-                             ModLoader.FailWithHarmonyException();
-                     }
-                     mod.InvokeOnPreInitialize();
-                 }
-                 catch (Exception ex)
-                 {
-                     mod.configuration.error = ex.ToString();
-                     if (Options.Data.disableModOnLoadFailure)
-                         mod.configuration.Disable();
-                     if (MonoMain.modDebugging)
-                         throw new ModException(mod.configuration.name + " OnPreInitialize failed with exception:", mod.configuration, ex);
-                 }
-                 ModLoader.loadingOldMod = null;
-             }));
-               }
-           };
-            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() =>
-           {
-               foreach (Mod initializationFailure in ModLoader.initializationFailures)
-                   ModLoader._sortedAccessibleMods.Remove(initializationFailure);
-               ModLoader.modHash = ModLoader.GetModHash();
-               foreach (Mod sortedAccessibleMod in (IEnumerable<Mod>)ModLoader._sortedAccessibleMods)
-               {
-                   string[] strArray = null;
-                   if (sortedAccessibleMod.namespaceFacade != null)
-                   {
-                       try
-                       {
-                           strArray = sortedAccessibleMod.namespaceFacade.Split(':');
-                           strArray[0] = strArray[0].Trim();
-                           strArray[1] = strArray[1].Trim();
-                       }
-                       catch (Exception)
-                       {
-                           strArray = null;
-                       }
-                   }
-                   try
-                   {
-                       foreach (System.Type type in sortedAccessibleMod.configuration.assembly.GetTypes())
-                       {
-                           string key1 = ModLoader.SmallTypeName(type.AssemblyQualifiedName);
-                           ModLoader._typesByNameUnprocessed[key1] = type;
-                           if (Program.isLinux && !key1.Contains("\""))
-                           {
-                               string key2 = key1.Insert(key1.IndexOf(", ") + 2, "\"") + "\"";
-                               ModLoader._typesByNameUnprocessed[key2] = type;
-                           }
-                           if ((sortedAccessibleMod.assemblyNameFacade != null || sortedAccessibleMod.namespaceFacade != null) && type.Namespace != null)
-                           {
-                               int num = key1.IndexOf(',');
-                               string str1 = key1.Substring(num + 2, key1.Length - (num + 2));
-                               string str2 = "";
-                               if (strArray != null)
-                                   str2 = type.Namespace.Replace(strArray[0], strArray[1]) + "." + type.Name;
-                               if (sortedAccessibleMod.assemblyNameFacade != null)
-                                   str1 = sortedAccessibleMod.assemblyNameFacade;
-                               key1 = str2 + ", " + str1;
-                           }
-                           ModLoader._typesByName[key1] = type;
-                           if (Program.isLinux && !key1.Contains("\""))
-                           {
-                               string key3 = key1.Insert(key1.IndexOf(", ") + 2, "\"") + "\"";
-                               ModLoader._typesByName[key3] = type;
-                           }
-                           ModLoader._namesByType[type] = key1;
-                       }
-                   }
-                   catch (Exception ex)
-                   {
-                       if (ex is ReflectionTypeLoadException)
-                       {
-                           DevConsole.Log(DCSection.General, "ModLoader.Load Assembly.GetAssemblies crashed with above exception-");
-                           throw (ex as ReflectionTypeLoadException).LoaderExceptions.FirstOrDefault<Exception>();
-                       }
-                   }
-               }
-               ModLoader.runningModloadCode = false;
-           }));
+            preInitializeMods.action = () => {
+                foreach (Mod sortedAccessibleMod in (IEnumerable<Mod>)ModLoader._sortedAccessibleMods)
+                {
+                    Mod mod = sortedAccessibleMod;
+                    preInitializeMods.actions.Enqueue(new LoadingAction(() => {
+                        try
+                        {
+                            AssemblyName assemblyName = mod.GetType().Assembly.GetReferencedAssemblies().FirstOrDefault<AssemblyName>(x => x.Name == "DuckGame");
+                            if (assemblyName != null && assemblyName.Version.Minor != DG.versionMajor)
+                            {
+                                ModLoader.loadingOldMod = mod;
+                                if (Directory.GetFiles(mod.configuration.directory, "0Harmony.dll", SearchOption.AllDirectories).FirstOrDefault<string>() != null)
+                                    ModLoader.FailWithHarmonyException();
+                            }
+                            mod.InvokeOnPreInitialize();
+                        }
+                        catch (Exception ex)
+                        {
+                            mod.configuration.error = ex.ToString();
+                            if (Options.Data.disableModOnLoadFailure)
+                                mod.configuration.Disable();
+                            if (MonoMain.modDebugging)
+                                throw new ModException(mod.configuration.name + " OnPreInitialize failed with exception:", mod.configuration, ex);
+                        }
+                        ModLoader.loadingOldMod = null;
+                    }));
+                }
+            };
+            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => {
+                foreach (Mod initializationFailure in ModLoader.initializationFailures)
+                    ModLoader._sortedAccessibleMods.Remove(initializationFailure);
+                ModLoader.modHash = ModLoader.GetModHash();
+                foreach (Mod sortedAccessibleMod in (IEnumerable<Mod>)ModLoader._sortedAccessibleMods)
+                {
+                    string[] strArray = null;
+                    if (sortedAccessibleMod.namespaceFacade != null)
+                    {
+                        try
+                        {
+                            strArray = sortedAccessibleMod.namespaceFacade.Split(':');
+                            strArray[0] = strArray[0].Trim();
+                            strArray[1] = strArray[1].Trim();
+                        }
+                        catch (Exception)
+                        {
+                            strArray = null;
+                        }
+                    }
+                    try
+                    {
+                        foreach (System.Type type in sortedAccessibleMod.configuration.assembly.GetTypes())
+                        {
+                            string key1 = ModLoader.SmallTypeName(type.AssemblyQualifiedName);
+                            ModLoader._typesByNameUnprocessed[key1] = type;
+                            if (Program.isLinux && !key1.Contains("\""))
+                            {
+                                string key2 = key1.Insert(key1.IndexOf(", ") + 2, "\"") + "\"";
+                                ModLoader._typesByNameUnprocessed[key2] = type;
+                            }
+                            if ((sortedAccessibleMod.assemblyNameFacade != null || sortedAccessibleMod.namespaceFacade != null) && type.Namespace != null)
+                            {
+                                int num = key1.IndexOf(',');
+                                string str1 = key1.Substring(num + 2, key1.Length - (num + 2));
+                                string str2 = "";
+                                if (strArray != null)
+                                    str2 = type.Namespace.Replace(strArray[0], strArray[1]) + "." + type.Name;
+                                if (sortedAccessibleMod.assemblyNameFacade != null)
+                                    str1 = sortedAccessibleMod.assemblyNameFacade;
+                                key1 = str2 + ", " + str1;
+                            }
+                            ModLoader._typesByName[key1] = type;
+                            if (Program.isLinux && !key1.Contains("\""))
+                            {
+                                string key3 = key1.Insert(key1.IndexOf(", ") + 2, "\"") + "\"";
+                                ModLoader._typesByName[key3] = type;
+                            }
+                            ModLoader._namesByType[type] = key1;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is ReflectionTypeLoadException)
+                        {
+                            DevConsole.Log(DCSection.General, "ModLoader.Load Assembly.GetAssemblies crashed with above exception-");
+                            throw (ex as ReflectionTypeLoadException).LoaderExceptions.FirstOrDefault<Exception>();
+                        }
+                    }
+                }
+                ModLoader.runningModloadCode = false;
+            }));
         }
 
         private static void LogModFailure(string s)
@@ -853,9 +836,7 @@ namespace DuckGame
             {
                 Program.LogLine("Mod Load Failure (Did not cause crash)\n================================================\n " + s + "\n================================================\n");
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) { }
         }
 
         internal static void PostLoadMods()

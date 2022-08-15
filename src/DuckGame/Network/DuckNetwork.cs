@@ -18,28 +18,28 @@ namespace DuckGame
     public class DuckNetwork
     {
         private static List<OnlineLevel> _levels = new List<OnlineLevel>()
-    {
-      new OnlineLevel() { num = 1, xpRequired = 0 },
-      new OnlineLevel() { num = 2, xpRequired = 175 },
-      new OnlineLevel() { num = 3, xpRequired = 400 },
-      new OnlineLevel() { num = 4, xpRequired = 1200 },
-      new OnlineLevel() { num = 5, xpRequired = 3500 },
-      new OnlineLevel() { num = 6, xpRequired = 6500 },
-      new OnlineLevel() { num = 7, xpRequired = 10000 },
-      new OnlineLevel() { num = 8, xpRequired = 13000 },
-      new OnlineLevel() { num = 9, xpRequired = 16000 },
-      new OnlineLevel() { num = 10, xpRequired = 19000 },
-      new OnlineLevel() { num = 11, xpRequired = 23000 },
-      new OnlineLevel() { num = 12, xpRequired = 28000 },
-      new OnlineLevel() { num = 13, xpRequired = 34000 },
-      new OnlineLevel() { num = 14, xpRequired = 40000 },
-      new OnlineLevel() { num = 15, xpRequired = 45000 },
-      new OnlineLevel() { num = 16, xpRequired = 50000 },
-      new OnlineLevel() { num = 17, xpRequired = 56000 },
-      new OnlineLevel() { num = 18, xpRequired = 62000 },
-      new OnlineLevel() { num = 19, xpRequired = 75000 },
-      new OnlineLevel() { num = 20, xpRequired = 100000 }
-    };
+        {
+          new OnlineLevel() { num = 1, xpRequired = 0 },
+          new OnlineLevel() { num = 2, xpRequired = 175 },
+          new OnlineLevel() { num = 3, xpRequired = 400 },
+          new OnlineLevel() { num = 4, xpRequired = 1200 },
+          new OnlineLevel() { num = 5, xpRequired = 3500 },
+          new OnlineLevel() { num = 6, xpRequired = 6500 },
+          new OnlineLevel() { num = 7, xpRequired = 10000 },
+          new OnlineLevel() { num = 8, xpRequired = 13000 },
+          new OnlineLevel() { num = 9, xpRequired = 16000 },
+          new OnlineLevel() { num = 10, xpRequired = 19000 },
+          new OnlineLevel() { num = 11, xpRequired = 23000 },
+          new OnlineLevel() { num = 12, xpRequired = 28000 },
+          new OnlineLevel() { num = 13, xpRequired = 34000 },
+          new OnlineLevel() { num = 14, xpRequired = 40000 },
+          new OnlineLevel() { num = 15, xpRequired = 45000 },
+          new OnlineLevel() { num = 16, xpRequired = 50000 },
+          new OnlineLevel() { num = 17, xpRequired = 56000 },
+          new OnlineLevel() { num = 18, xpRequired = 62000 },
+          new OnlineLevel() { num = 19, xpRequired = 75000 },
+          new OnlineLevel() { num = 20, xpRequired = 100000 }
+        };
         public static int kills;
         public static int deaths;
         public static bool finishedMatch = false;

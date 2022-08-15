@@ -43,12 +43,11 @@ namespace DuckGame
         //private const uint WM_CLOSE = 16;
         public static bool isLinux = false;
         public static string wineVersion = null;
-        private static List<Func<string>> _extraExceptionDetailsMinimal = new List<Func<string>>()
-    {
-       () => "Date: " + DateTime.UtcNow.ToString( DateTimeFormatInfo.InvariantInfo),
-       () => "Version: " + DG.version,
-       () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")",
-       () => "Command Line: " + Program.commandLine
+        private static List<Func<string>> _extraExceptionDetailsMinimal = new List<Func<string>>() {
+      () => "Date: " + DateTime.UtcNow.ToString(DateTimeFormatInfo.InvariantInfo),
+        () => "Version: " + DG.version,
+        () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")",
+        () => "Command Line: " + Program.commandLine
     };
         private static string kCleanupString = "C:\\gamedev\\duckgame_try2\\duckgame\\DuckGame\\src\\";
         public static bool crashed = false;
@@ -108,9 +107,7 @@ namespace DuckGame
                     {
                         assembly = Program.ModResolve(sender, args);
                     }
-                    catch (Exception)
-                    {
-                    }
+                    catch (Exception) { }
                     Program._attemptingResolve = false;
                     if (assembly != null)
                         return assembly;
@@ -151,7 +148,7 @@ namespace DuckGame
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)
             {
-                switch(args[index])
+                switch (args[index])
                 {
                     case "+connect_lobby":
                         ++index;
@@ -210,6 +207,7 @@ namespace DuckGame
                         break;
                     case "-nomods":
                         MonoMain.nomodsMode = true;
+                        MonoMain.moddingEnabled = false;
                         break;
                     case "-linux":
                         if (MonoMain.audioModeOverride == AudioMode.None)
@@ -312,9 +310,7 @@ namespace DuckGame
                         MonoMain.audioModeOverride = AudioMode.Wave;
                 }
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) { }
             if (flag)
             {
                 try
@@ -351,14 +347,12 @@ namespace DuckGame
                 else
                     Program.steamBuildID = -1;
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) { }
         label_109:
             DeviceChangeNotifier.Start();
             DevConsole.Log("Starting Duck Game (" + DG.platform + ")...");
             Program.main = new DuckGame.Main();
-           // Program.main.TargetElapsedTime = TimeSpan.FromTicks(1000L);
+            // Program.main.TargetElapsedTime = TimeSpan.FromTicks(1000L);
             Program.main.IsFixedTimeStep = false; // ZOOOM
             Program.main.Run();
         }
@@ -418,9 +412,7 @@ namespace DuckGame
                     }
                 }
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) { }
             return str1;
         }
 
@@ -434,9 +426,7 @@ namespace DuckGame
                 {
                     str = func();
                 }
-                catch
-                {
-                }
+                catch { }
                 exceptionStringMinimal += "\r\n";
                 exceptionStringMinimal += str;
             }
@@ -446,7 +436,7 @@ namespace DuckGame
         public static void HandleGameCrash(Exception pException)
         {
             MonoMain.InvokeOnGameExitEvent(true);
-            
+
             if (!System.IO.File.Exists("CrashWindow.exe"))
                 return;
             if (pException is ThreadAbortException)
@@ -470,9 +460,7 @@ namespace DuckGame
                     Program.crashed = true;
                 }
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) { }
             string str1 = "";
             int num = 0;
             try
@@ -510,16 +498,12 @@ namespace DuckGame
                             MonoMain.CalculateModMemoryOffendersList();
                             str1 = MonoMain.modMemoryOffendersString + str1;
                         }
-                        catch (Exception)
-                        {
-                        }
+                        catch (Exception) { }
                     label_23:
                         str1 = WindowsPlatformStartup.ProcessErrorLine(str1, pException);
                     }
                 }
-                catch (Exception)
-                {
-                }
+                catch (Exception) { }
                 try
                 {
                     Program.WriteToLog(str1);
@@ -593,9 +577,7 @@ namespace DuckGame
                         }
                     }
                 }
-                catch (Exception)
-                {
-                }
+                catch (Exception) { }
                 num = 4;
                 if (pAssembly == null)
                     pAssembly = Program.crashAssembly;
@@ -608,9 +590,7 @@ namespace DuckGame
                             Program.SendMessage(Program.main.Window.Handle, 16U, IntPtr.Zero, IntPtr.Zero);
                     }
                 }
-                catch (Exception)
-                {
-                }
+                catch (Exception) { }
                 num = 6;
                 if (System.IO.File.Exists("CrashWindow.exe"))
                 {
@@ -691,9 +671,7 @@ namespace DuckGame
                 streamWriter.WriteLine(line + "\n");
                 streamWriter.Close();
             }
-            catch
-            {
-            }
+            catch { }
         }
 
         public static string RemoveColorTags(string s)

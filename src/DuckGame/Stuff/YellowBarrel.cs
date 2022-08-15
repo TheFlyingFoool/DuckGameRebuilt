@@ -216,19 +216,20 @@ namespace DuckGame
 
         public override void Draw()
         {
-            float num1 = 1f - _fluidLevel;
-            float num2 = (float)(0.6f + (1.0 - burnt) * 0.04f);
-            graphic.color = new Color((byte)(150.0 * num2), (byte)(150.0 * num2), (byte)(150.0 * num2));
+            float level = 1f - this._fluidLevel;
+            float darken = 0.6f + (1f - this.burnt) * 0.4f;
+            this.graphic.color = new Color((byte)(150f * darken), (byte)(150f * darken), (byte)(150f * darken));
             base.Draw();
-            if (_hitPoints <= 0.0)
-                return;
-            graphic.color = new Color((byte)(byte.MaxValue * num2), (byte)(byte.MaxValue * num2), (byte)(byte.MaxValue * num2));
-            graphic.angle = angle;
-            graphic.depth = depth + 1;
-            graphic.scale = scale;
-            float y = num1 * graphic.height;
-            graphic.center = center - new Vec2(0f, (int)y);
-            Graphics.Draw(graphic, x, this.y, new Rectangle(0f, (int)y, graphic.w, (int)(graphic.h - y)));
+            if (this._hitPoints > 0f)
+            {
+                this.graphic.color = new Color((byte)(255f * darken), (byte)(255f * darken), (byte)(255f * darken));
+                this.graphic.angle = this.angle;
+                this.graphic.depth = base.depth + 1;
+                this.graphic.scale = base.scale;
+                float ypos = level * (float)this.graphic.height;
+                this.graphic.center = this.center - new Vec2(0f, (float)((int)ypos));
+                Graphics.Draw(this.graphic, base.x, base.y, new Rectangle(0f, (float)((int)ypos), (float)this.graphic.w, (float)((int)((float)this.graphic.h - ypos))));
+            }
         }
     }
 }
