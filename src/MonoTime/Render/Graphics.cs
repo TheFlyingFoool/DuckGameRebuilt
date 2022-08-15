@@ -814,34 +814,37 @@ namespace DuckGame
 
         public static Tex2D RecolorM(Tex2D sprite, Color color1, Color color2, Color color3)
         {
-            Color color4 = new Color(161, 146, 130);
-            Color color5 = new Color(128, 113, 96);
-            Color color6 = new Color(191, 181, 171);
-            Color color7 = new Color(236, 89, 60);
-            Color color8 = new Color(248, 131, 99);
-            Color color9 = new Color(235, 137, 49);
-            Color color10 = new Color(247, 224, 90);
-            Color color11 = new Color(219, 88, 31);
-            Color color12 = new Color(236, 116, 60);
-            Color color13 = new Color(164, 100, 34);
-            Color color14 = new Color(235, 137, 49);
+            Color color9 = new Color(235, 137, 49); //-1341135  C
+            Color color10 = new Color(247, 224, 90); // -532390
+            Color color13 = new Color(164, 100, 34); // -6003678
+            Color color14 = new Color(235, 137, 49); // -1341135 C
             Color[] data = sprite.GetData();
             for (int index = 0; index < data.Length; ++index)
             {
-                if (data[index] == color4)
-                    data[index] = color1;
-                else if (data[index] == color5)
-                    data[index] = color2;
-                else if (data[index] == color6)
-                    data[index] = color3;
-                else if (data[index] == color7)
-                    data[index] = color9;
-                else if (data[index] == color8)
-                    data[index] = color10;
-                else if (data[index] == color11)
-                    data[index] = color13;
-                else if (data[index] == color12)
-                    data[index] = color14;
+                switch(data[index].GetHashCode())
+                {
+                    case -6188414: //new Color(161, 146, 130); 
+                        data[index] = color1;
+                        break;
+                    case -8359584: // new Color(128, 113, 96);
+                        data[index] = color2;
+                        break;
+                    case -4213333: //new Color(191, 181, 171);
+                        data[index] = color3;
+                        break;
+                    case -1287876: //new Color(236, 89, 60);
+                        data[index] = color9;
+                        break;
+                    case -490653: //new Color(248, 131, 99);
+                        data[index] = color10;
+                        break;
+                    case -2402273: // new Color(219, 88, 31);
+                        data[index] = color13;
+                        break;
+                    case -1280964: //  new Color(236, 116, 60);
+                        data[index] = color14;
+                        break;
+                } 
             }
             Tex2D tex2D = new Tex2D(sprite.w, sprite.h);
             tex2D.SetData(data);

@@ -158,15 +158,15 @@ namespace DuckGame
         public static Color Yellow = new Color((int)byte.MaxValue, (int)byte.MaxValue, 0, (int)byte.MaxValue);
         public static Color YellowGreen = new Color(154, 205, 50, (int)byte.MaxValue);
         public static readonly List<Color> RainbowColors = new List<Color>()
-    {
-      new Color(163, 206, 39),
-      new Color(247, 224, 90),
-      new Color(235, 137, 49),
-      new Color(192, 32, 45),
-      new Color(237, 94, 238),
-      new Color(138, 38, 190),
-      new Color(49, 162, 242)
-    };
+        {
+          new Color(163, 206, 39),
+          new Color(247, 224, 90),
+          new Color(235, 137, 49),
+          new Color(192, 32, 45),
+          new Color(237, 94, 238),
+          new Color(138, 38, 190),
+          new Color(49, 162, 242)
+        };
 
         public Color(byte r, byte g, byte b, byte a)
           : this()
@@ -267,11 +267,11 @@ namespace DuckGame
 
         public static bool operator !=(Color l, Color r) => !l.Equals(r);
 
-        public bool Equals(Color other) => r == other.r && g == other.g && b == other.b && a == other.a;
+        public bool Equals(Color other) => Colors.GetHash(this) == Colors.GetHash(other);// r == other.r && g == other.g && b == other.b && a == other.a;
 
         public override bool Equals(object obj) => obj is Color other ? Equals(other) : base.Equals(obj);
 
-        public override int GetHashCode() => (int)this;
+        public override int GetHashCode() => (int)Colors.GetHash(this);
 
         public override string ToString() => string.Format("{0} {1} {2} {3}", r, g, b, a);
 

@@ -12,6 +12,7 @@ namespace DuckGame
 {
     public class Colors
     {
+
         public static Color MenuOption = new Color(235, 137, 51);
         public static Color Bronze = new Color(216, 105, 65);
         public static Color Silver = new Color(191, 191, 191);
@@ -210,7 +211,14 @@ namespace DuckGame
         new Color(235, 137, 49)
       }
     };
-
+        public static long GetHash(byte alpha, byte red, byte green, byte blue)
+        {
+            return (long)(((int)red << 16 | (int)green << 8 | (int)blue | (int)alpha << 24) & -1); //& (ulong)-1);
+        }
+        public static long GetHash(Color color)
+        {
+            return (long)(((int)color.r << 16 | (int)color.g << 8 | (int)color.b | (int)color.a << 24) & -1); //& (ulong)-1); 
+        }
         public static Color ParseColor(string color)
         {
             Color transparent;
