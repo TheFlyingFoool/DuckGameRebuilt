@@ -179,9 +179,11 @@ namespace DuckGame
         private int waitFrames;
         private bool takingShot;
         public static bool doPauseFade = true;
+        public static bool firebreak = false;
         public static volatile int loadyBits = 0;
         public static volatile int totalLoadyBits = 365;
         private Timer _timeSinceLastLoadFrame = new Timer();
+
         //private int deviceLostWait;
 
         public static MonoMainCore core

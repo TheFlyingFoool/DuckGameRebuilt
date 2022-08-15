@@ -140,6 +140,8 @@ public static class PolyRenderer
             .DrawTriStrip();
     }
 
+    public static void Rect(Rectangle rectangle, Color c) => Rect(rectangle.tl, rectangle.br, c);
+    
     public static void Rect(Vector2 topL, Vector2 lowR, Color c)
     {
         Graphics.polyBatcher.ResetBuffer();

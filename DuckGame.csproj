@@ -179,6 +179,7 @@
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\DateTimeSerializeModule.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\StringSerializerModule.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\Vec2SerializerModule.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\FireDebug.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DevConsoleCommandAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DrawingContextAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\PostInitializeAttribute.cs" />

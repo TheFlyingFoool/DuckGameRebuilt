@@ -12,10 +12,20 @@ public static partial class DevConsoleCommands
     [DrawingContext(DoDraw = false)]
     public static void TestDraw()
     {
-        const float length = 16f;
-        Graphics.polyBatcher.BlendState = BlendState.Opaque;
-        Graphics.DrawRect(new Rectangle(length, length, length, length), Color.Red);
-        PolyRenderer.Rect(new Vec2(length * 2, length), new Vec2(length * 3, length * 2), Color.Blue);
+        const float length = 8f;
+        Color[] colors =
+        {
+            new(255, 000, 000),
+            new(000, 255, 000),
+            new(000, 000, 255),
+            new(255, 255, 000),
+        };
+        Vec2 center = new(length, length);
+
+        PolyRenderer.Tri(center, center.ButX( length, true), center.ButY( length, true), colors[0]);
+        PolyRenderer.Tri(center, center.ButX(-length, true), center.ButY( length, true), colors[1]);
+        PolyRenderer.Tri(center, center.ButX( length, true), center.ButY(-length, true), colors[2]);
+        PolyRenderer.Tri(center, center.ButX(-length, true), center.ButY(-length, true), colors[3]);
     }
 
     private static readonly List<(string Name, DrawingContextAttribute Attribute)> AllDrawingContexts =

@@ -220,6 +220,9 @@ namespace DuckGame
                     case "-nointro":
                         MonoMain.noIntro = true;
                         break;
+                    case "-firebreak":
+                        MonoMain.firebreak = true;
+                        break;
                     case "-speedruntypingthisstartupparameterformaximumdubberspeed":
                     case "-dubberspeed":
                     case "-vimuser":
