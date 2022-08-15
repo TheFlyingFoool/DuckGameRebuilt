@@ -10,21 +10,24 @@ public static class FixedCommandHistory
     [AutoConfigField(External = "CommandHistory")]
     public static List<string> SavedCommandHistory
     {
-        get => DevConsole.core.previousLines.FastTakeFromEnd(25).Reverse().ToList();
+        get => DevConsole.core.previousLines.FastTakeFromEnd(25);
         set
         {
             DevConsole.core.previousLines.AddRange(value);
             DevConsole.core.lastCommandIndex += value.Count;
         }
     }
-    
-    private static IEnumerable<string> FastTakeFromEnd(this IReadOnlyList<string> list, int limit)
+
+    private static List<string> FastTakeFromEnd(this IReadOnlyList<string> list, int limit)
     {
-        for (int i = list.Count - 1; i >= 0; i--)
+        int smartLimit = Math.Min(list.Count, limit);
+        List<string> result = new(smartLimit);
+        
+        for (int i = list.Count - smartLimit; i < list.Count; i++)
         {
-            if (limit --> 0)
-                yield return list[i];
-            else break;
+            result.Add(list[i]);
         }
+
+        return result;
     }
 }
