@@ -132,6 +132,7 @@ namespace DuckGame
         public static float PointDirection(float x1, float y1, float x2, float y2) => Maths.RadToDeg((float)Math.Atan2(y1 - y2, x2 - x1));
 
         public static float Clamp(float val, float min, float max) => Math.Min(Math.Max(val, min), max);
+        public static double Clamp(double val, double min, double max) => Math.Min(Math.Max(val, min), max);
 
         public static int Clamp(int val, int min, int max) => val > max ? max : val < min ? min : val;
 
