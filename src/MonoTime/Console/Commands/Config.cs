@@ -6,8 +6,8 @@ namespace DuckGame;
 
 public static partial class DevConsoleCommands
 {
-    [DevConsoleCommand]
-    public static object Config(string id, string newValue = null)
+    [DevConsoleCommand(Description = "Get or Modify config fields from the console")]
+    public static object Config(string fieldId, string serializedValue = null)
     {
         object getValue(MemberInfo mi)
         {
@@ -19,7 +19,7 @@ public static partial class DevConsoleCommands
             };
         }
         
-        switch (id)
+        switch (fieldId)
         {
             case "%SAVE":
                 AutoConfigHandler.SaveAll(false);
@@ -34,12 +34,12 @@ public static partial class DevConsoleCommands
 
         var all = AutoConfigFieldAttribute.All;
 
-        if (!all.TryFirst(x => (x.Attribute.ShortName ?? x.Attribute.Id ?? x.MemberInfo.Name).CaselessEquals(id), out var field))
-            throw new Exception($"No configuration field found with ID: {id}");
+        if (!all.TryFirst(x => (x.Attribute.ShortName ?? x.Attribute.Id ?? x.MemberInfo.Name).CaselessEquals(fieldId), out var field))
+            throw new Exception($"No configuration field found with ID: {fieldId}");
 
         object val = getValue(field.MemberInfo);
         
-        if (newValue is null)
+        if (serializedValue is null)
             return val;
 
         object newVal = FireSerializer.Deserialize(field.MemberInfo switch
@@ -47,7 +47,7 @@ public static partial class DevConsoleCommands
             FieldInfo fi => fi.FieldType,
             PropertyInfo pi => pi.PropertyType,
             _ => throw new Exception("Unsupported AutoConfig field type")
-        }, newValue);
+        }, serializedValue);
 
         switch (field.MemberInfo)
         {

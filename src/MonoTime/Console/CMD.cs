@@ -378,6 +378,8 @@ namespace DuckGame
                 }
                 switch (pValue)
                 {
+                    case "fb":
+                        return new TestLev();
                     case "title":
                         return new TitleScreen();
                     case "rockintro":

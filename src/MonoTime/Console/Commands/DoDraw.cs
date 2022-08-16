@@ -9,6 +9,25 @@ namespace DuckGame;
 
 public static partial class DevConsoleCommands
 {
+    [DevConsoleCommand(Description = "Toggle the activity of a Drawing Context from it's ID")]
+    public static string DoDraw(string id)
+    {
+        foreach (var item in AllDrawingContexts)
+        {
+            string lookupName = item.Attribute.CustomID ?? item.Name;
+
+            if (!lookupName.CaselessEquals(id)) 
+                continue;
+            
+            bool prevState = item.Attribute.DoDraw;
+            item.Attribute.DoDraw ^= true;
+            
+            return $"|DGBLUE|Drawing Context [{id}] toggled ({prevState} -> {!prevState})";
+        }
+        
+        return $"|DGRED|No Drawing Context matches id of [{id}]";
+    }
+    
     [DrawingContext(DoDraw = false)]
     public static void TestDraw()
     {
@@ -47,23 +66,4 @@ public static partial class DevConsoleCommands
 
             return bigList;
         })();
-
-    [DevConsoleCommand(Description = "Toggle the activity of a Drawing Context from it's ID")]
-    public static string DoDraw(string id)
-    {
-        foreach (var item in AllDrawingContexts)
-        {
-            string lookupName = item.Attribute.CustomID ?? item.Name;
-
-            if (!lookupName.CaselessEquals(id)) 
-                continue;
-            
-            bool prevState = item.Attribute.DoDraw;
-            item.Attribute.DoDraw ^= true;
-            
-            return $"|DGBLUE|Drawing Context [{id}] toggled ({prevState} -> {!prevState})";
-        }
-        
-        return $"|DGRED|No Drawing Context matches id of [{id}]";
-    }
 }

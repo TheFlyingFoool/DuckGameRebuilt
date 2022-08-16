@@ -211,9 +211,11 @@
     <Compile Include="src\MonoTime\Console\Commands\DoDraw.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Exit.cs" />
     <Compile Include="src\MonoTime\Console\Commands\For.cs" />
-    <Compile Include="src\MonoTime\Console\Commands\Test.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\GraphicCull.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Help.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Test.cs" />
     <Compile Include="src\MonoTime\ExecuteOnAttribute.cs" />
     <Compile Include="src\MonoTime\Input\InputMan.cs" />
     <Compile Include="src\MonoTime\Input\1InputMan.cs" />

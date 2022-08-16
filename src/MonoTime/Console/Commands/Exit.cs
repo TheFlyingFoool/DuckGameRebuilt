@@ -5,7 +5,7 @@ namespace DuckGame;
 
 public static partial class DevConsoleCommands
 {
-    [DevConsoleCommand]
+    [DevConsoleCommand(Description = "Exits the game")]
     public static void Exit()
     {
         MonoMain.exit = true;

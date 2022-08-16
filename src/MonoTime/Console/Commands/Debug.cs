@@ -7,22 +7,24 @@ namespace DuckGame;
 
 public static partial class DevConsoleCommands
 {
-    [DevConsoleCommand]
+    [DevConsoleCommand(Description = "If this command still exists after release im gonna eat my shoes[")]
     public static object Debug(int i)
     {
         switch (i)
         {
             case 0:
             {
-                return FireSerializer.Serialize(new[] {"x;y", "z"});
-            }
-            case 1:
-            {
-                return FireSerializer.Deserialize<string[]>(@"[x\;y;z]");
-            }
-            case 2:
-            {
-                return FireSerializer.Deserialize<string[]>(@"[x\;y\;z;w]");
+                ProgressValue val = 0;
+                DevConsole.Log("> val++");
+                DevConsole.Log(val);
+                DevConsole.Log(val++);
+                DevConsole.Log(val);
+                DevConsole.Log("> ++val");
+                val = 0;
+                DevConsole.Log(val);
+                DevConsole.Log(++val);
+                DevConsole.Log(val);
+                return null;
             }
         }
 

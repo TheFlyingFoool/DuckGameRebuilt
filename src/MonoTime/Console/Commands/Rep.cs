@@ -10,7 +10,7 @@ public static partial class DevConsoleCommands
     {
         for (int i = 0; i < times; i++)
         {
-            DevConsole.RunCommand(command);
+            DevConsole.RunCommand(command, false);
         }
 
         return $"|DGBLUE|Repeated the command [{command}], [{times}] times!";

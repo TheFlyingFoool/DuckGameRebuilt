@@ -534,7 +534,7 @@ namespace DuckGame
                     {
                         if (Network.isActive)
                         {
-                            if (this != Layer.Parallax && DevConsoleCommands.graphicculling)
+                            if (this != Layer.Parallax && DevConsoleCommands.GraphicsCulling)
                             {
                                 Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));
                                 Vec2 Bottomright = this.camera.transformInverse(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));
@@ -633,7 +633,7 @@ namespace DuckGame
                         }
                         else
                         {
-                            if (this != Layer.Parallax && DevConsoleCommands.graphicculling)
+                            if (this != Layer.Parallax && DevConsoleCommands.GraphicsCulling)
                             {
                                 Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));
                                 Vec2 Bottomright = this.camera.transformInverse(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));
@@ -751,11 +751,6 @@ namespace DuckGame
                 }
                 if (transparent)
                     Level.activeLevel.PostDrawLayer(this);
-                if (this == Layer.Game)
-                {
-                    DevConsoleCommands.drawthething();
-                }
-
             }
             if (Network.isActive && Network.inputDelayFrames > 0 && this == Layer.Game)
             {

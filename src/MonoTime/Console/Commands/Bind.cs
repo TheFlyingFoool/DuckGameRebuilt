@@ -11,40 +11,9 @@ public static partial class DevConsoleCommands
     [AutoConfigField]
     public static List<ConsoleBind> Binds = new();
 
-    public record ConsoleBind(string hotkey, string command)
-    {
-        public string hotkey { get; set; } = hotkey;
-        public string command { get; set; } = command;
-
-        public override string ToString()
-        {
-            return $"[{hotkey}]({command})";
-        }
-
-        private static readonly Regex _parseRegex = new(@"\[.+\]\((.+)\)", RegexOptions.Compiled);
-
-        public static ConsoleBind? Parse(string s)
-        {
-            var m = _parseRegex.Match(s);
-
-            return m.Success
-                ? new ConsoleBind(m.Groups[1].Value, m.Groups[2].Value)
-                : null;
-        }
-
-        public bool Activated => CustomKeyBinds.CheckInput(hotkey, CustomKeyBinds.CheckInputMethod.Pressed);
-
-        public bool TryExecute()
-        {
-            if (!Activated) 
-                return false;
-            
-            DevConsole.RunCommand(command, false);
-            return true;
-        }
-    }
-
-    [DevConsoleCommand(Aliases = new[] {"binds"})]
+    [DevConsoleCommand(
+        Description = "Binds a command to a hotkey to be executed when pressed",
+        Aliases = new[] {"binds"})]
     public static object Bind(BindAction action, string? hotkey = null, string? command = null)
     {
         switch (action)
@@ -88,5 +57,38 @@ public static partial class DevConsoleCommands
         Add,
         Remove,
         List
+    }
+    
+    public record ConsoleBind(string hotkey, string command)
+    {
+        public string hotkey { get; set; } = hotkey;
+        public string command { get; set; } = command;
+
+        public override string ToString()
+        {
+            return $"[{hotkey}]({command})";
+        }
+
+        private static readonly Regex _parseRegex = new(@"\[.+\]\((.+)\)", RegexOptions.Compiled);
+
+        public static ConsoleBind? Parse(string s)
+        {
+            var m = _parseRegex.Match(s);
+
+            return m.Success
+                ? new ConsoleBind(m.Groups[1].Value, m.Groups[2].Value)
+                : null;
+        }
+
+        public bool Activated => CustomKeyBinds.CheckInput(hotkey, CustomKeyBinds.CheckInputMethod.Pressed);
+
+        public bool TryExecute()
+        {
+            if (!Activated) 
+                return false;
+            
+            DevConsole.RunCommand(command, false);
+            return true;
+        }
     }
 }
