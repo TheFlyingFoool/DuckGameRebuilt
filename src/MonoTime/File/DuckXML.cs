@@ -33,13 +33,13 @@ namespace DuckGame
 
         public static DuckXML Load(string file)
         {
-            //using (StreamReader sr = File.OpenText(fileName))
-            //{
-            //    string s = sr.ReadToEnd();
-            //    //you then have to process the string
-            //}
+            using (StreamReader sr = File.OpenText(file))
+            {
+                string s = sr.ReadToEnd();
+                //you then have to process the string
+            }
 
-            return DuckXML.FromString(File.OpenText(file).ReadToEnd());  //DuckXML.FromString(System.IO.File.ReadAllText(file, Encoding.UTF8));
+            return DuckXML.FromString(System.IO.File.ReadAllText(file, Encoding.UTF8)); /*DuckXML.FromString(File.OpenText(file).ReadToEnd());*/
         }
 
         public static DuckXML FromString(string text)
