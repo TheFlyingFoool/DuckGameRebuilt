@@ -40,12 +40,12 @@ public static partial class DevConsoleCommands
 
 
     }
-    public static bool dantoggle = true;
-    [DevConsoleCommand(Name = "dantest2")]
-    public static void DanTest5()
+    public static bool graphicculling = true;
+    [DevConsoleCommand(Name = "graphiccull")]
+    public static void GraphiCullToggle()
     {
-        dantoggle = !dantoggle;
-        DevConsole.Log(dantoggle.ToString());
+        graphicculling = !graphicculling;
+        DevConsole.Log("Graphi Cull " + graphicculling.ToString());
     }
     public static bool runv2;
     [DevConsoleCommand(Name ="dantest")]

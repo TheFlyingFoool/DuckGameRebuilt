@@ -534,34 +534,89 @@ namespace DuckGame
                     {
                         if (Network.isActive)
                         {
-                            foreach (Thing thing in transparent1)
+                            if (this != Layer.Parallax && DevConsoleCommands.graphicculling)
                             {
-                                if (thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
+                                Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));
+                                Vec2 Bottomright = this.camera.transformInverse(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));
+                                int top = (int)((Bottomright.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
+                                int left = (int)((Topleft.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
+                                int bottom = (int)((Topleft.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
+                                int right = (int)((Bottomright.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
+                                top += 1;
+                                bottom -= 1;
+                                right += 1;
+                                left -= 1;
+                                foreach (Thing thing in transparent1)
                                 {
-                                    if (_perspective)
+                                    bool flag = false;
+                                    foreach (Vec2 vec2 in thing.Buckets)
                                     {
-                                        Vec2 position = thing.position;
-                                        Vec3 source = new Vec3(position.x, thing.z, thing.bottom);
-                                        Viewport viewport = new Viewport(0, 0, 320, 180);
-                                        source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
-                                        thing.position = new Vec2(source.x, source.y - thing.centery);
-                                        thing.DoDraw();
-                                        Graphics.material = null;
-                                        thing.position = position;
-                                        if (thing is PhysicsObject)
+                                        flag = vec2.x <= right && vec2.x >= left && vec2.y <= top && vec2.y >= bottom;
+                                        if (flag)
                                         {
-                                            float num = Maths.NormalizeSection(-thing.y, 8f, 64f);
-                                            _dropShadow.alpha = (float)(0.5 - 0.5 * num);
-                                            _dropShadow.scale = new Vec2(1f - num, 1f - num);
-                                            _dropShadow.depth = thing.depth - 10;
-                                            source = new Vec3(position.x, thing.z, 0f);
-                                            source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
-                                            Graphics.Draw(_dropShadow, source.x - 1f, source.y - 1f);
+                                            break;
                                         }
                                     }
-                                    else
-                                        thing.DoDraw();
-                                    Graphics.material = null;
+                                    if ((flag || thing.Buckets.Length == 0) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
+                                    {
+                                        if (_perspective)
+                                        {
+                                            Vec2 position = thing.position;
+                                            Vec3 source = new Vec3(position.x, thing.z, thing.bottom);
+                                            Viewport viewport = new Viewport(0, 0, 320, 180);
+                                            source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                                            thing.position = new Vec2(source.x, source.y - thing.centery);
+                                            thing.DoDraw();
+                                            Graphics.material = null;
+                                            thing.position = position;
+                                            if (thing is PhysicsObject)
+                                            {
+                                                float num = Maths.NormalizeSection(-thing.y, 8f, 64f);
+                                                _dropShadow.alpha = (float)(0.5 - 0.5 * num);
+                                                _dropShadow.scale = new Vec2(1f - num, 1f - num);
+                                                _dropShadow.depth = thing.depth - 10;
+                                                source = new Vec3(position.x, thing.z, 0f);
+                                                source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                                                Graphics.Draw(_dropShadow, source.x - 1f, source.y - 1f);
+                                            }
+                                        }
+                                        else
+                                            thing.DoDraw();
+                                        Graphics.material = null;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                foreach (Thing thing in transparent1)
+                                {
+                                    if (thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
+                                    {
+                                        if (_perspective)
+                                        {
+                                            Vec2 position = thing.position;
+                                            Vec3 source = new Vec3(position.x, thing.z, thing.bottom);
+                                            Viewport viewport = new Viewport(0, 0, 320, 180);
+                                            source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                                            thing.position = new Vec2(source.x, source.y - thing.centery);
+                                            thing.DoDraw();
+                                            Graphics.material = null;
+                                            thing.position = position;
+                                            if (thing is PhysicsObject)
+                                            {
+                                                float num = Maths.NormalizeSection(-thing.y, 8f, 64f);
+                                                _dropShadow.alpha = (float)(0.5 - 0.5 * num);
+                                                _dropShadow.scale = new Vec2(1f - num, 1f - num);
+                                                _dropShadow.depth = thing.depth - 10;
+                                                source = new Vec3(position.x, thing.z, 0f);
+                                                source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                                                Graphics.Draw(_dropShadow, source.x - 1f, source.y - 1f);
+                                            }
+                                        }
+                                        else
+                                            thing.DoDraw();
+                                        Graphics.material = null;
+                                    }
                                 }
                             }
                         }
@@ -578,25 +633,10 @@ namespace DuckGame
                         }
                         else
                         {
-                            //DuckGame.Graphics.viewport.Width
-                            //DuckGame.Graphics.viewport.Height
-                            // Vec2 topleft = Vec2.Zero;
-                            //Vec2 bottomright = Level.current.camera.transformScreenVector(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));
-                            // L//ist<Thing> stuff = (Level.CheckRectAll<Thing>(topleft, bottomright).ToList<Thing>());
-
-                            //if (this == Layer.Blocks || this == Layer.Game) //this == Layer.Game ||
-                            //                            {
-                            //            Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));//Level.current.camera.transformInverse(this.camera.transform(new Vec2(0f,0f)));
-                            //            Vec2 Bottomright = this.camera.transformInverse(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));//Level.current.camera.transformInverse(this.camera.transform(new Vec2(1f, 1f)));
-                            //            Graphics.DrawLine(Topleft, Bottomright, Color.Green);
-                            //            int top = (int)((Bottomright.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
-
-
-                            if (this != Layer.Parallax && DevConsoleCommands.dantoggle) //this == Layer.Game || (this == Layer.Blocks || this == Layer.Game || this == Layer.Background) && 
+                            if (this != Layer.Parallax && DevConsoleCommands.graphicculling)
                             {
-                                Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));//Level.current.camera.transformInverse(this.camera.transform(new Vec2(0f,0f)));
-                                Vec2 Bottomright = this.camera.transformInverse(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));//Level.current.camera.transformInverse(this.camera.transform(new Vec2(1f, 1f)));
-                                //Graphics.DrawLine(Topleft, Bottomright, Color.Green);
+                                Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));
+                                Vec2 Bottomright = this.camera.transformInverse(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));
                                 int top = (int)((Bottomright.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
                                 int left = (int)((Topleft.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
                                 int bottom = (int)((Topleft.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
@@ -605,13 +645,6 @@ namespace DuckGame
                                 bottom -= 1;
                                 right += 1;
                                 left -= 1;
-                                //if (Level.current is ArcadeLevel)
-                                //{
-                                //    top += 100;
-                                //    bottom -= 100;
-                                //    right += 100;
-                                //    left -= 100;
-                                //}
                                 foreach (Thing thing in transparent1)
                                 {
                                     bool flag = false;
@@ -623,35 +656,32 @@ namespace DuckGame
                                             break;
                                         }
                                     }
-                                    if (flag)
+                                    if ((flag || thing.Buckets.Length == 0) && flag && thing.visible)
                                     {
-                                        if (thing.visible)
+                                        if (_perspective)
                                         {
-                                            if (_perspective)
-                                            {
-                                                Vec2 position = thing.position;
-                                                Vec3 source = new Vec3(position.x, thing.z, thing.bottom);
-                                                Viewport viewport = new Viewport(0, 0, 320, 180);
-                                                source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
-                                                thing.position = new Vec2(source.x, source.y - thing.centery);
-                                                thing.DoDraw();
-                                                Graphics.material = null;
-                                                thing.position = position;
-                                                if (thing is PhysicsObject)
-                                                {
-                                                    float num = Maths.NormalizeSection(-thing.y, 8f, 64f);
-                                                    _dropShadow.alpha = (float)(0.5 - 0.5 * num);
-                                                    _dropShadow.scale = new Vec2(1f - num, 1f - num);
-                                                    _dropShadow.depth = thing.depth - 10;
-                                                    source = new Vec3(position.x, thing.z, 0f);
-                                                    source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
-                                                    Graphics.Draw(_dropShadow, source.x - 1f, source.y - 1f);
-                                                }
-                                            }
-                                            else
-                                                thing.DoDraw();
+                                            Vec2 position = thing.position;
+                                            Vec3 source = new Vec3(position.x, thing.z, thing.bottom);
+                                            Viewport viewport = new Viewport(0, 0, 320, 180);
+                                            source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                                            thing.position = new Vec2(source.x, source.y - thing.centery);
+                                            thing.DoDraw();
                                             Graphics.material = null;
+                                            thing.position = position;
+                                            if (thing is PhysicsObject)
+                                            {
+                                                float num = Maths.NormalizeSection(-thing.y, 8f, 64f);
+                                                _dropShadow.alpha = (float)(0.5 - 0.5 * num);
+                                                _dropShadow.scale = new Vec2(1f - num, 1f - num);
+                                                _dropShadow.depth = thing.depth - 10;
+                                                source = new Vec3(position.x, thing.z, 0f);
+                                                source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                                                Graphics.Draw(_dropShadow, source.x - 1f, source.y - 1f);
+                                            }
                                         }
+                                        else
+                                            thing.DoDraw();
+                                        Graphics.material = null;
                                     }
 
                                 }
@@ -689,7 +719,6 @@ namespace DuckGame
                                     }
                                 }
                             }
-                            
                             if (DevConsole.showCollision)
                             {
                                 foreach (Thing thing in transparent1)
