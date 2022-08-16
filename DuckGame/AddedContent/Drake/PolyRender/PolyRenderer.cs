@@ -189,6 +189,14 @@ public static class PolyRenderer
         Quad(v1 - offset, v2 - offset, v1 + offset, v2 + offset, c);
     }
 
+    public static void Line(Vector2[] points, float thickness, Color c)
+    {
+        for (int i = 1; i < points.Length; i++)
+        {
+            Line(points[i - 1], points[i], thickness, c);
+        }
+    }
+
     //THIS METHOD IS SLOW! If you need to draw arcs (or circles) for anything other than debug purposes, PRE-CALCULATE THE VERTEXES FOR THEM AND DRAW WITH OFFSETS!
     public static void Arc(Vector2 origin, float angleStart, float angleEnd, float radius, int divisions, Color c1, Color c2)
     {
