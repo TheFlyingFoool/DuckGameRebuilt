@@ -8,8 +8,8 @@ public struct ProgressValue
     
     public double Value
     {
-        get => _value;
-        set => _value = Maths.Clamp(value, MinimumValue, MaximumValue);
+        get => Maths.Clamp(_value, MinimumValue, MaximumValue);
+        set => _value = value;
     }
 
     public double NormalizedValue
