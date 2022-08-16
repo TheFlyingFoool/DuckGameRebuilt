@@ -77,8 +77,8 @@ namespace DuckGame
 
         public virtual void DoPositioning()
         {
-            if (Level.current is Editor || graphic == null)
-                return;
+            //if (Level.current is Editor || graphic == null)
+           //     return;
             graphic.position = position;
             graphic.scale = scale;
             graphic.center = center;
@@ -91,7 +91,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (cheap)
+            if (cheap && !Editor.editorDraw)
                 graphic.UltraCheapStaticDraw(flipHorizontal);
             else
                 base.Draw();

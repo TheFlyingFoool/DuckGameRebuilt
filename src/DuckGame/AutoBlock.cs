@@ -593,10 +593,10 @@ namespace DuckGame
 
         public virtual void DoPositioning()
         {
-            if (Level.current is Editor || graphic == null)
-                return;
-            if (!RandomLevelNode.editorLoad)
-                cheap = true;
+          //  if (Level.current is Editor || graphic == null)
+            //    return;
+            //if (!RandomLevelNode.editorLoad)
+            cheap = true;
             graphic.position = position;
             graphic.scale = scale;
             graphic.center = center;
@@ -669,7 +669,7 @@ namespace DuckGame
                     Graphics.Draw(_brokenSprite, x, y + 16f);
                 }
             }
-            if (cheap)
+            if (cheap && !Editor.editorDraw)
                 graphic.UltraCheapStaticDraw(flipHorizontal);
             else
                 base.Draw();
