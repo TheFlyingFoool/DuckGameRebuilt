@@ -1366,7 +1366,8 @@ namespace DuckGame
         public T NearestThingFilter<T>(Vec2 point, Predicate<Thing> filter, float maxDistance)
         {
             maxDistance *= maxDistance;
-            Type t = typeof(T);
+            int hashcode = typeof(T).GetHashCode();
+
             Thing thing1 = null;
             float num = float.MaxValue;
             int positionx = (int)((point.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
@@ -1375,9 +1376,9 @@ namespace DuckGame
             {
                 for (int y = -1; y < 2; y++)
                 {
-                    if (_things.Buckets.TryGetValue(new Vec2(positionx + x, positiony + y), out Dictionary<Type, List<Thing>> output))
+                    if (_things.Buckets.TryGetValue(new Vec2(positionx + x, positiony + y), out Dictionary<int, List<Thing>> output))
                     {
-                        if (output.TryGetValue(t, out List<Thing> output2))
+                        if (output.TryGetValue(hashcode, out List<Thing> output2))
                         {
                             foreach (Thing thing2 in output2)
                             {
@@ -1400,7 +1401,7 @@ namespace DuckGame
         public T NearestThing<T>(Vec2 point, float maxDistance)
         {
             maxDistance *= maxDistance;
-            Type t = typeof(T);
+            int hashcode = typeof(T).GetHashCode();
             Thing thing1 = null;
             float num = float.MaxValue;
             int positionx = (int)((point.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
@@ -1409,9 +1410,9 @@ namespace DuckGame
             {
                 for (int y = -1; y < 2; y++)
                 {
-                    if (_things.Buckets.TryGetValue(new Vec2(positionx + x, positiony + y), out Dictionary<Type, List<Thing>> output))
+                    if (_things.Buckets.TryGetValue(new Vec2(positionx + x, positiony + y), out Dictionary<int, List<Thing>> output))
                     {
-                        if (output.TryGetValue(t, out List<Thing> output2))
+                        if (output.TryGetValue(hashcode, out List<Thing> output2))
                         {
                             foreach (Thing thing2 in output2)
                             {
@@ -1434,7 +1435,7 @@ namespace DuckGame
         public T NearestThing<T>(Vec2 point, float maxDistance, Thing ignore)
         {
             maxDistance *= maxDistance;
-            Type t = typeof(T);
+            int hashcode = typeof(T).GetHashCode();
             Thing thing1 = null;
             float num = float.MaxValue;
             int positionx = (int)((point.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
@@ -1443,9 +1444,9 @@ namespace DuckGame
             {
                 for (int y = -1; y < 2; y++)
                 {
-                    if (_things.Buckets.TryGetValue(new Vec2(positionx + x, positiony + y), out Dictionary<Type, List<Thing>> output))
+                    if (_things.Buckets.TryGetValue(new Vec2(positionx + x, positiony + y), out Dictionary<int, List<Thing>> output))
                     {
-                        if (output.TryGetValue(t, out List<Thing> output2))
+                        if (output.TryGetValue(hashcode, out List<Thing> output2))
                         {
                             foreach (Thing thing2 in output2)
                             {
@@ -1633,13 +1634,14 @@ namespace DuckGame
         public T CollisionLine<T>(Vec2 p1, Vec2 p2)
         {
             System.Type key = typeof(T);
-            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            foreach (Thing thing in this.things.CollisionRectAll(p1, p2, key))
             {
-                if (!dynamicObject.removeFromLevel && Collision.Line(p1, p2, dynamicObject))
-                    return (T)(object)dynamicObject;
+                if (!thing.removeFromLevel && Collision.Line(p1, p2, thing))
+                    return (T)(object)thing;
             }
-            return _things.HasStaticObjects(key) ? _things.quadTree.CheckLine<T>(p1, p2) : default(T);
+            return default(T);
         }
+
 
         public T CollisionLine<T>(Vec2 p1, Vec2 p2, out Vec2 position, Thing ignore)
         {

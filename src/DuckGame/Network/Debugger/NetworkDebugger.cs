@@ -17,16 +17,16 @@ namespace DuckGame
     {
         public const int kNumDebuggers = 4;
         public static List<ulong> profileIDs = new List<ulong>()
-    {
-      0UL,
-      1UL,
-      2UL,
-      3UL,
-      5UL,
-      6UL,
-      7UL,
-      8UL
-    };
+        {
+          0UL,
+          1UL,
+          2UL,
+          3UL,
+          5UL,
+          6UL,
+          7UL,
+          8UL
+        };
         public static bool enableFrameTimeDebugging = false;
         private static int _currentIndex = 0;
         public static List<InputProfile> inputProfiles = new List<InputProfile>();

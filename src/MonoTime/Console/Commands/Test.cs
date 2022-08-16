@@ -40,6 +40,13 @@ public static partial class DevConsoleCommands
 
 
     }
+    public static bool dantoggle = true;
+    [DevConsoleCommand(Name = "dantest2")]
+    public static void DanTest5()
+    {
+        dantoggle = !dantoggle;
+        DevConsole.Log(dantoggle.ToString());
+    }
     public static bool runv2;
     [DevConsoleCommand(Name ="dantest")]
     public static void DanTest()

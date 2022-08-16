@@ -88,7 +88,7 @@ namespace DuckGame
         public void SetFrameWithoutReset(int frame)
         {
             _frame = frame;
-            if (_currentAnimation.HasValue && valid)
+            if (_currentAnimation.HasValue)//&& valid)
             {
                 if (_frame >= _currentAnimation.Value.frames.Length)
                     _frame = _currentAnimation.Value.frames.Length - 1;
@@ -193,8 +193,8 @@ namespace DuckGame
 
         public void UpdateSpriteBox()
         {
-            if (!valid)
-                return;
+            //if (!valid)
+            //    return;
             int num1 = _texture.width / w;
             int num2 = _imageIndex / num1;
             _spriteBox = new Rectangle((_imageIndex - num2 * num1) * w, num2 * h, w - cutWidth, h);
@@ -203,8 +203,8 @@ namespace DuckGame
 
         public bool UpdateFrame(bool ignoreFlipFlop = false)
         {
-            if (!valid)
-                return false;
+            //if (!valid)
+            //    return false;
             if (_currentAnimation.HasValue && (ignoreFlipFlop || _flipFlop != DuckGame.Graphics.frameFlipFlop) && !VirtualTransition.doingVirtualTransition)
             {
                 _frameInc += _currentAnimation.Value.speed * _speed;
@@ -239,8 +239,8 @@ namespace DuckGame
 
         public void UpdateFrameSpecial()
         {
-            if (!valid)
-                return;
+            //if (!valid)
+            //    return;
             if (_currentAnimation.HasValue && !VirtualTransition.doingVirtualTransition)
             {
                 _frameInc += _currentAnimation.Value.speed * _speed;
@@ -298,8 +298,8 @@ namespace DuckGame
 
         public void DrawWithoutUpdate()
         {
-            if (!valid)
-                return;
+            //if (!valid)
+            //    return;
             _texture.currentObjectIndex = _globalIndex;
             if (w <= 0)
                 return;
@@ -308,8 +308,8 @@ namespace DuckGame
 
         public override void CheapDraw(bool flipH = false)
         {
-            if (!valid)
-                return;
+           // if (!valid)
+            //    return;
             _texture.currentObjectIndex = _globalIndex;
             DuckGame.Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
         }
@@ -320,8 +320,8 @@ namespace DuckGame
         {
             if (_batchItem == null)
             {
-                if (!valid)
-                    return;
+                //if (!valid)
+                //    return;
                 UpdateFrame();
                 DuckGame.Graphics.recordMetadata = true;
                 _texture.currentObjectIndex = _globalIndex;

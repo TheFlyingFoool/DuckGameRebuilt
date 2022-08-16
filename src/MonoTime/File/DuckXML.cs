@@ -31,7 +31,16 @@ namespace DuckGame
 
         public static DuckXML Load(byte[] data) => DuckXML.FromString(Encoding.UTF8.GetString(data));
 
-        public static DuckXML Load(string file) => DuckXML.FromString(System.IO.File.ReadAllText(file, Encoding.UTF8));
+        public static DuckXML Load(string file)
+        {
+            //using (StreamReader sr = File.OpenText(fileName))
+            //{
+            //    string s = sr.ReadToEnd();
+            //    //you then have to process the string
+            //}
+
+            return DuckXML.FromString(File.OpenText(file).ReadToEnd());  //DuckXML.FromString(System.IO.File.ReadAllText(file, Encoding.UTF8));
+        }
 
         public static DuckXML FromString(string text)
         {

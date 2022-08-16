@@ -11,6 +11,7 @@ namespace DuckGame
 {
     public class MTSpriteBatchItem
     {
+        public float DepthIndex;
         public MTSpriteBatchItemMetaData MetaData;
         public bool inPool = false;
         public Texture2D Texture;

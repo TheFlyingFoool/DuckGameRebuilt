@@ -203,169 +203,6 @@ namespace DuckGame
                 _addThings.Remove(removeThing);
         }
 
-        //static int Radius = 10;
-        //private List<int> GetIdForObj(Vec2 position, float Radius)
-        //{
-        //    List<int> bucketsObjIsIn = new List<int>();
-
-        //    Vec2 min = new Vec2(
-        //        position.x - (Radius),
-        //        position.y - (Radius));
-        //    Vec2 max = new Vec2(
-        //        position.x + (Radius),
-        //        position.y + (Radius));
-
-        //    float width = CellSize;
-        //    //TopLeft
-        //    Vec2 Vholder = min;
-        //    int cellPosition = (int)(
-        //              (Math.Floor(Vholder.x / CellSize)) +
-        //              (Math.Floor(Vholder.y / CellSize)) *
-        //              width
-        //   );
-        //    if (!bucketsObjIsIn.Contains(cellPosition))
-        //        bucketsObjIsIn.Add(cellPosition);
-
-
-        //    //TopRight
-        //    Vholder = new Vec2(max.x, min.y);
-        //    cellPosition = (int)(
-        //              (Math.Floor(Vholder.x / CellSize)) +
-        //              (Math.Floor(Vholder.y / CellSize)) *
-        //              width
-        //   );
-        //    if (!bucketsObjIsIn.Contains(cellPosition))
-        //        bucketsObjIsIn.Add(cellPosition);
-
-        //    //BottomRight
-        //    Vholder = new Vec2(max.x, max.y);
-        //    cellPosition = (int)(
-        //              (Math.Floor(Vholder.x / CellSize)) +
-        //              (Math.Floor(Vholder.y / CellSize)) *
-        //              width
-        //   );
-        //    if (!bucketsObjIsIn.Contains(cellPosition))
-        //        bucketsObjIsIn.Add(cellPosition);
-        //    Vholder = new Vec2(min.x, max.y);
-        //    cellPosition = (int)(
-        //              (Math.Floor(Vholder.x / CellSize)) +
-        //              (Math.Floor(Vholder.y / CellSize)) *
-        //              width
-        //   );
-        //    if (!bucketsObjIsIn.Contains(cellPosition))
-        //        bucketsObjIsIn.Add(cellPosition);
-
-        //    return bucketsObjIsIn;
-        //}
-
-        //private static int[] GetIdForObj(Vec2 position, float Radius, Thing thing = null) // there were  * width; here btw future dan and some screen stuff idk  //int width = CellSize;
-        //{
-        //    //float mxcell = (position.x - Radius) / CellSize;
-        //    //float mycell = (position.y - Radius) / CellSize;
-        //    //float Mxcell = (position.x + Radius) / CellSize;
-        //    //float Mycell = (position.y + Radius) / CellSize;
-        //    int mxcell = (int)((position.x - Radius) / CellSize);
-        //    int mycell = (int)((position.y - Radius) / CellSize);
-        //    int Mxcell = (int)((position.x + Radius) / CellSize);
-        //    int Mycell = (int)((position.y + Radius) / CellSize); //TopLeft - BottomRight
-
-        //    int TopLeft = (int)(int(mxcell + mycell) * CellSize);
-        //    int BottomRight = (int)(Mxcell + Mycell * CellSize);
-        //    int BottomLeft = (int)(mxcell + Mycell * CellSize);
-        //    int TopRight = (int)(Mxcell + mycell * CellSize);
-        //    int localarea = (Math.Abs(TopRight - BottomLeft ) +Math.Abs( BottomRight - TopLeft)) / 2;
-        //    if (Math.Abs(TopLeft - BottomRight) > 1 && thing != null) // BottomRight
-        //    {
-        //        if (!RadiusC.Contains(Radius) || !postionsC.Contains(position))
-        //        {
-
-        //            RadiusC.Add(Radius);
-        //            postionsC.Add(position);
-        //            DevConsole.Log(TopLeft.ToString() + "  " + TopRight.ToString() + "  " + BottomRight.ToString() + "  " + BottomLeft.ToString() + " " + thing.ToString());
-        //        }
-        //    }
-
-
-
-        //    if (TopLeft != BottomLeft)
-        //    {
-        //        if (BottomLeft != BottomRight)
-        //        {
-        //            return new int[] { TopLeft, BottomRight, BottomLeft, (int)(Mxcell + mycell * CellSize )};
-        //        }
-        //        return new int[] { TopLeft, BottomLeft };
-        //    }
-        //    else if (TopLeft != BottomRight)
-        //    {
-        //        return new int[] { TopLeft, BottomRight };
-        //    }
-        //    return new int[] { TopLeft };
-        //}
-        //private int[] GetIdForObj(Vec2 Position, float Radius, Thing thing = null)
-        //{
-        //    List<int> bucketsObjIsIn = new List<int>();
-
-        //    Vec2 min = new Vec2(
-        //        Position.x - (Radius),
-        //        Position.y - (Radius));
-        //    Vec2 max = new Vec2(
-        //        Position.x + (Radius),
-        //        Position.y + (Radius));
-        //    //  ( (Math.Floor(Position.x / CellSize)) + (Math.Floor(Position.y / CellSize)) * width);
-        //    float width = CellSize;// (CellSize * 4.0f) / CellSize;/*SceneWidth / CellSize;*/
-        //    //
-        //    int cellPosition = (int)((Math.Floor(min.x / CellSize)) + (Math.Floor(min.y / CellSize)) * width);
-        //    if (!bucketsObjIsIn.Contains(cellPosition))
-        //        bucketsObjIsIn.Add(cellPosition);
-
-        //    int cellPosition2 = (int)((Math.Floor(max.x / CellSize)) + (Math.Floor(min.y / CellSize)) * width);
-        //    if (!bucketsObjIsIn.Contains(cellPosition2))
-        //        bucketsObjIsIn.Add(cellPosition2);
-
-        //    int cellPosition3 = (int)((Math.Floor(max.x / CellSize)) + (Math.Floor(max.y / CellSize)) * width); //BottomRight
-        //    if (!bucketsObjIsIn.Contains(cellPosition3))
-        //        bucketsObjIsIn.Add(cellPosition3);
-
-        //    int cellPosition4  = (int)((Math.Floor(min.x / CellSize)) + (Math.Floor(max.y / CellSize)) * width); //BottomRight
-        //    if (!bucketsObjIsIn.Contains(cellPosition4))
-        //        bucketsObjIsIn.Add(cellPosition4);
-
-
-        //    if (Math.Abs(cellPosition - cellPosition2) > 1 && thing != null) // BottomRight
-        //    {
-        //        if (!RadiusC.Contains(Radius) || !postionsC.Contains(Position))
-        //        {
-
-        //            RadiusC.Add(Radius);
-        //            postionsC.Add(Position);
-        //            DevConsole.Log(cellPosition.ToString() + "  " + cellPosition2.ToString() + "  " + cellPosition3.ToString() + "  " + cellPosition4.ToString() + " " + thing.ToString());
-        //        }
-        //    }
-
-        //    return bucketsObjIsIn.ToArray();
-        //    }
-        //         if (false)//thing is BlockGroup
-        //            {
-        //                List<Vec2> BlockGBuckets = new List<Vec2>();
-        //                foreach (Block b in (thing as BlockGroup).blocks) // float size = Math.Max(Math.Max(b.right - b.left, b.bottom - b.top), 16);
-        //                {
-        //                    Vec2[] _buckets = GetIdForObj(thing.position, b.right - b.left, b.bottom - b.top);
-        //    thing.oldposition = thing.position;
-        //                    foreach (Vec2 item in _buckets)
-        //                    {
-        //                        if (Buckets.TryGetValue(item, out List<Thing> output))
-        //                        {
-        //                            output.Add(thing);
-        //                            continue;
-        //                        }
-        //Buckets.Add(item, new List<Thing>() { thing
-        //});
-        //                    }
-        //                    BlockGBuckets.AddRange(_buckets);
-        //                }
-        //                thing.Buckets = BlockGBuckets.ToArray();
-
-        //            }
         public static float offset = 4000000.0f;
         public static float cellsize = 100f;
         private Vec2[] GetIdForObj(Vec2 Topleft , Vec2 Bottomright)
@@ -432,32 +269,16 @@ namespace DuckGame
             }
             return true;
         }
-        //if (item.Buckets.Length == 1)
-        //{
-        //    objects.Add(item);
-        //}
-        //else if (item.Buckets.Length == 2 && ids.Length == 2 && !((item.Buckets[0] != ids[0] || item.Buckets[0] != ids[1]) || (item.Buckets[0] != ids[0] || item.Buckets[0] != ids[1])))
-        //{
-        //    objects.Add(item);
-        //}
-        //else if (!ints.Contains(item.hashcodeindex))
-        //{
-        //    ints.Add(item.hashcodeindex);
-        //    objects.Add(item);
-        //}
-        private static Vec2 cantbe = new Vec2(-0.5f,0.5f);
+       
         public ICollection<Thing> GetThings(Vec2 Position, float width, float height, Type t)
         {
-            //if (t == typeof(Thing))
-            //{
-            //    cantbe = new Vec2(-0.5f, 0.5f);
-            //}
             Vec2[] ids = GetIdForObj(Position, width, height);
+            int typekey = t.GetHashCode();
             if (ids.Length == 1)
             {
-                if (Buckets.TryGetValue(ids[0], out Dictionary<Type, List<Thing>> output))
+                if (Buckets.TryGetValue(ids[0], out Dictionary<int, List<Thing>> output))
                 {
-                    if (output.TryGetValue(t, out List<Thing> outputthings))
+                    if (output.TryGetValue(typekey, out List<Thing> outputthings))
                     {
                         return outputthings;
                     }
@@ -467,12 +288,13 @@ namespace DuckGame
             Vec2[] usedids = new Vec2[ids.Length];
             List<Thing> objects = new List<Thing>();
             int n = -1;
-            foreach (Vec2 bucket in ids)
+
+            for (int i = 0; i < ids.Length; i++)
             {
-                n += 1;
-                if (Buckets.TryGetValue(bucket, out Dictionary<Type, List<Thing>> output))
+                Vec2 bucket = ids[i];
+                if (Buckets.TryGetValue(bucket, out Dictionary<int, List<Thing>> output))
                 {
-                    if (output.TryGetValue(t, out List<Thing> outputthings))
+                    if (output.TryGetValue(typekey, out List<Thing> outputthings))
                     {
                         foreach (Thing item in outputthings)
                         {
@@ -480,20 +302,20 @@ namespace DuckGame
                             {
                                 objects.Add(item);
                             }
-                            else if (NotinList(usedids, item.Buckets, usedids.Length)) //n
+                            else if (NotinList(usedids, item.Buckets, i)) //n
                             {
                                 objects.Add(item);
                             }
                         }
                     }
                 }
-                usedids[n] = bucket;
+                usedids[i] = bucket;
             }
             return objects;
         }
 
         // public Dictionary<Vec2, List<Thing>> Buckets = new Dictionary<Vec2, List<Thing>>();
-        public Dictionary<Vec2, Dictionary<Type, List<Thing>>> Buckets = new Dictionary<Vec2, Dictionary<Type, List<Thing>>>();
+        public Dictionary<Vec2, Dictionary<int, List<Thing>>> Buckets = new Dictionary<Vec2, Dictionary<int, List<Thing>>>();
         public void UpdateObject(Thing thing)  //float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
         {
             Vec2[] buckets = GetIdForObj(thing.topLeft, thing.bottomRight);//GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);
@@ -504,26 +326,27 @@ namespace DuckGame
             }
             foreach (Vec2 item in thing.Buckets)
             {
-                if (Buckets.TryGetValue(item, out Dictionary<Type, List<Thing>> output))
+                if (Buckets.TryGetValue(item, out Dictionary<int, List<Thing>> output))
                 {
                     foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
                     {
                         //output[key].Add(thing);
-                        if (output.TryGetValue(key, out List<Thing> output2))
+                        int hashcode = key.GetHashCode();
+                        if (output.TryGetValue(hashcode, out List<Thing> output2))
                         {
                             output2.Remove(thing);
                         }
                         else
                         {
-                            output[key] = new List<Thing>() { };
+                            output[hashcode] = new List<Thing>() { };
                         }
                         //_allObjectsByType.Add(key, obj);
                     }
                     //output[typeof(Thing)].Add(thing);
                     continue;
                 }
-                output = new Dictionary<Type, List<Thing>>();
-                output[typeof(Thing)] = new List<Thing>() { };
+                output = new Dictionary<int, List<Thing>>();
+                output[typeof(Thing).GetHashCode()] = new List<Thing>() { };
                 //foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
                 //{
                 //    //output[key].Add(thing);
@@ -543,37 +366,39 @@ namespace DuckGame
             thing.Buckets = buckets;
             foreach (Vec2 item in thing.Buckets)
             {
-                if (Buckets.TryGetValue(item, out Dictionary<Type, List<Thing>> output))
+                if (Buckets.TryGetValue(item, out Dictionary<int, List<Thing>> output))
                 {
                     foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
                     {
                         //output[key].Add(thing);
-                        if (output.TryGetValue(key, out List<Thing> output2))
+                        int hashcode = key.GetHashCode();
+                        if (output.TryGetValue(hashcode, out List<Thing> output2))
                         {
                             output2.Add(thing);
                         }
                         else
                         {
-                            output[key] = new List<Thing>() { thing };
+                            output[hashcode] = new List<Thing>() { thing };
                         }
 
                         //_allObjectsByType.Add(key, obj);
                     }
-                    output[typeof(Thing)].Add(thing);
+                    output[typeof(Thing).GetHashCode()].Add(thing);
                     continue;
                 }
-                output = new Dictionary<Type, List<Thing>>();
-                output[typeof(Thing)] = new List<Thing>() {thing };
+                output = new Dictionary<int, List<Thing>>();
+                output[typeof(Thing).GetHashCode()] = new List<Thing>() {thing };
                 foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
                 {
                     //output[key].Add(thing);
-                    if (output.TryGetValue(key, out List<Thing> output2))
+                    int hashcode = key.GetHashCode();
+                    if (output.TryGetValue(hashcode, out List<Thing> output2))
                     {
                         output2.Add(thing);
                     }
                     else
                     {
-                        output[key] = new List<Thing>() { thing };
+                        output[hashcode] = new List<Thing>() { thing };
                     }
                     //_allObjectsByType.Add(key, obj);
                 }
@@ -595,36 +420,38 @@ namespace DuckGame
             thing.oldposition = thing.position;
             foreach (Vec2 item in thing.Buckets)
             {
-                if (Buckets.TryGetValue(item, out Dictionary<Type, List<Thing>> TypeList))
+                if (Buckets.TryGetValue(item, out Dictionary<int, List<Thing>> TypeList))
                 {
                     foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
                     {
                         //output[key].Add(thing);
-                        if (TypeList.TryGetValue(key, out List<Thing> ThingsWithin))
+                        int hashcode = key.GetHashCode();
+                        if (TypeList.TryGetValue(hashcode, out List<Thing> ThingsWithin))
                         {
                             ThingsWithin.Add(thing);
                         }
                         else
                         {
-                            TypeList[key] = new List<Thing>() { thing };
+                            TypeList[hashcode] = new List<Thing>() { thing };
                         }
                         //_allObjectsByType.Add(key, obj);
                     }
-                    TypeList[typeof(Thing)].Add(thing);
+                    TypeList[typeof(Thing).GetHashCode()].Add(thing);
                     continue;
                 }
-                TypeList = new Dictionary<Type, List<Thing>>();
-                TypeList[typeof(Thing)] = new List<Thing>() { thing };
+                TypeList = new Dictionary<int, List<Thing>>();
+                TypeList[typeof(Thing).GetHashCode()] = new List<Thing>() { thing };
                 foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
                 {
                     //output[key].Add(thing);
-                    if (TypeList.TryGetValue(key, out List<Thing> ThingsWithin))
+                    int hashcode = key.GetHashCode();
+                    if (TypeList.TryGetValue(hashcode, out List<Thing> ThingsWithin))
                     {
                         ThingsWithin.Add(thing);
                     }
                     else
                     {
-                        TypeList[key] = new List<Thing>() { thing };
+                        TypeList[hashcode] = new List<Thing>() { thing };
                     }
                     
                     //_allObjectsByType.Add(key, obj);
@@ -653,9 +480,9 @@ namespace DuckGame
         }
         public ICollection<Thing> CollisionPointAll(Vec2 point, Type t)
         {
-            if (Buckets.TryGetValue(new Vec2((int)((point.x + offset )/ cellsize), (int)((point.y + offset) / cellsize)), out Dictionary<Type, List<Thing>> output))
+            if (Buckets.TryGetValue(new Vec2((int)((point.x + offset )/ cellsize), (int)((point.y + offset) / cellsize)), out Dictionary<int, List<Thing>> output))
             {
-                if (output.TryGetValue(t, out List<Thing> output2))
+                if (output.TryGetValue(t.GetHashCode(), out List<Thing> output2))
                 {
                     return output2;
                 }   
@@ -671,17 +498,18 @@ namespace DuckGame
             //float max = Math.Max(Length, Height);
             foreach (Vec2 item in thing.Buckets)
             {
-                if (Buckets.TryGetValue(item, out Dictionary<Type, List<Thing>> output))
+                if (Buckets.TryGetValue(item, out Dictionary<int, List<Thing>> output))
                 {
                     foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
                     {
-                        if (output.TryGetValue(key, out List<Thing> output2))
+
+                        if (output.TryGetValue(key.GetHashCode(), out List<Thing> output2))
                         {
                             output2.Remove(thing);
                         }
                         //_allObjectsByType.Add(key, obj);
                     }
-                    if (output.TryGetValue(typeof(Thing), out List<Thing> output3))
+                    if (output.TryGetValue(typeof(Thing).GetHashCode(), out List<Thing> output3))
                     {
                         output3.Remove(thing);
                     }

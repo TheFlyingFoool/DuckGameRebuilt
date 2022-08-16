@@ -374,18 +374,10 @@ namespace DuckGame
             _tileSize = size;
             if (!BitmapFont._mapInitialized)
             {
-                for (int index1 = 0; index1 < ushort.MaxValue; ++index1)
+                for (int index2 = 0; index2 < BitmapFont._characters.Length; ++index2)
                 {
-                    char ch = (char)index1;
-                    BitmapFont._characterMap[index1] = 91;
-                    for (int index2 = 0; index2 < BitmapFont._characters.Length; ++index2)
-                    {
-                        if (BitmapFont._characters[index2] == ch)
-                        {
-                            BitmapFont._characterMap[index1] = index2;
-                            break;
-                        }
-                    }
+                    char ch = BitmapFont._characters[index2];
+                    BitmapFont._characterMap[(int)ch] = index2;
                 }
                 BitmapFont._mapInitialized = true;
             }
@@ -640,7 +632,13 @@ namespace DuckGame
                             num4 = FancyBitmapFont._kanjiMap[index];
                         }
                         else
-                            num4 = BitmapFont._characterMap[text[_letterIndex]];
+                        {
+                            num4 = BitmapFont._characterMap[index];
+                            if (num4 == 0 && index != ' ')
+                            {
+                                num4 = 91;
+                            }
+                        } 
                         if (fallbackIndex != 0 && num4 >= fallbackIndex)
                         {
                             if (_fallbackFont == null)

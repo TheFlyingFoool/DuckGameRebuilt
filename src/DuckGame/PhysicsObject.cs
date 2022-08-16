@@ -319,7 +319,7 @@ namespace DuckGame
             base.Update();
             if (!solid || !enablePhysics || level != null && !level.simulatePhysics)
             {
-                lastGrounded = DateTime.Now;
+                //lastGrounded = DateTime.Now;
                 if (solid)
                     return;
                 solidImpacting.Clear();
@@ -600,8 +600,8 @@ namespace DuckGame
                 }
                 if (grounded || initemspawner)
                 {
-                    lastGrounded = DateTime.Now;
-                    framesSinceGrounded = 0;/// mmmm remove i shall !(_collideBottom is PhysicsObject)
+                   // lastGrounded = DateTime.Now;
+                    framesSinceGrounded = 0;// mmmm remove i shall !(_collideBottom is PhysicsObject)
                     if (!doFloat && hSpeed == 0.0 && this.vSpeed == 0.0 && (((_collideBottom is Block || _collideBottom is IPlatform) && (!(_collideBottom is ItemBox) || (_collideBottom as ItemBox).canBounce)) || initemspawner))
                         _sleeping = true;
                 }

@@ -1582,8 +1582,8 @@ namespace DuckGame
 
         public virtual void DoDraw()
         {
-            if (NetworkDebugger.currentIndex >= 0 && NetworkDebugger.currentIndex != _networkDrawIndex)
-                return;
+            //if (NetworkDebugger.currentIndex >= 0 && NetworkDebugger.currentIndex != _networkDrawIndex)
+           //     return;
             DuckGame.Graphics.material = _material;
             if (_material != null)
                 _material.Update();
