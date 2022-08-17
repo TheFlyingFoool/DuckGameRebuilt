@@ -12,41 +12,49 @@ public static class Ease
     {
         public static ProgressValue Sine(ProgressValue x)
         {
+            x = ~x;
             return 1 - Cos(x * PI / 2);
         }
 
         public static ProgressValue Quad(ProgressValue x)
         {
+            x = ~x;
             return x * x;
         }
 
         public static ProgressValue Cubic(ProgressValue x)
         {
+            x = ~x;
             return x * x * x;
         }
 
         public static ProgressValue Quart(ProgressValue x)
         {
+            x = ~x;
             return x * x * x;
         }
 
         public static ProgressValue Quint(ProgressValue x)
         {
+            x = ~x;
             return x * x * x;
         }
 
         public static ProgressValue Exponential(ProgressValue x)
         {
+            x = ~x;
             return x == 0 ? 0 : Pow(2, 10 * x - 10);
         }
 
         public static ProgressValue Circular(ProgressValue x)
         {
+            x = ~x;
             return 1 - Sqrt(1 - Pow(x, 2));
         }
 
         public static ProgressValue Back(ProgressValue x)
         {
+            x = ~x;
             const double c1 = 1.70158;
             const double c3 = c1 + 1;
 
@@ -55,6 +63,7 @@ public static class Ease
 
         public static ProgressValue Elastic(ProgressValue x)
         {
+            x = ~x;
             const double c4 = 2 * PI / 3;
 
             return x == 0
@@ -66,6 +75,7 @@ public static class Ease
 
         public static ProgressValue Bounce(ProgressValue x)
         {
+            x = ~x;
             return 1 - Out.Bounce(1 - x);
         }
     }
@@ -73,41 +83,49 @@ public static class Ease
     {
         public static ProgressValue Sine(ProgressValue x)
         {
+            x = ~x;
             return Sin(x * PI / 2);
         }
 
         public static ProgressValue Quad(ProgressValue x)
         {
+            x = ~x;
             return 1 - Pow(1 - x, 2);
         }
 
         public static ProgressValue Cubic(ProgressValue x)
         {
+            x = ~x;
             return 1 - Pow(1 - x, 3);
         }
 
         public static ProgressValue Quart(ProgressValue x)
         {
+            x = ~x;
             return 1 - Pow(1 - x, 4);
         }
 
         public static ProgressValue Quint(ProgressValue x)
         {
+            x = ~x;
             return 1 - Pow(1 - x, 5);
         }
 
         public static ProgressValue Exponential(ProgressValue x)
         {
+            x = ~x;
             return x == 1 ? 1 : 1 - Pow(2, -10 * x);
         }
 
         public static ProgressValue Circular(ProgressValue x)
         {
+            x = ~x;
             return Sqrt(1 - Pow(x - 1, 2));
         }
 
         public static ProgressValue Back(ProgressValue x)
         {
+            x = ~x;
             const double c1 = 1.70158;
             const double c3 = c1 + 1;
 
@@ -116,6 +134,7 @@ public static class Ease
 
         public static ProgressValue Elastic(ProgressValue x)
         {
+            x = ~x;
             const double c4 = 2 * PI / 3;
 
             return x == 0
@@ -127,6 +146,7 @@ public static class Ease
 
         public static ProgressValue Bounce(ProgressValue x)
         {
+            x = ~x;
             const double n1 = 7.5625;
             const double d1 = 2.75;
 
@@ -144,31 +164,37 @@ public static class Ease
     {
         public static ProgressValue Sine(ProgressValue x)
         {
+            x = ~x;
             return -(Cos(PI * x) - 1) / 2;
         }
 
         public static ProgressValue Quad(ProgressValue x)
         {
+            x = ~x;
             return x < 0.5 ? 2 * x * x : 1 - Pow(-2 * x + 2, 2) / 2;
         }
 
         public static ProgressValue Cubic(ProgressValue x)
         {
+            x = ~x;
             return x < 0.5 ? 4 * x * x * x : 1 - Pow(-2 * x + 2, 3) / 2;
         }
 
         public static ProgressValue Quart(ProgressValue x)
         {
+            x = ~x;
             return x < 0.5 ? 8 * x * x * x * x : 1 - Pow(-2 * x + 2, 4) / 2;
         }
 
         public static ProgressValue Quint(ProgressValue x)
         {
+            x = ~x;
             return x < 0.5 ? 8 * x * x * x * x * x : 1 - Pow(-2 * x + 2, 4) / 2;
         }
 
         public static ProgressValue Exponential(ProgressValue x)
         {
+            x = ~x;
             return x == 0
                 ? 0
                 : x == 1
@@ -179,6 +205,7 @@ public static class Ease
 
         public static ProgressValue Circular(ProgressValue x)
         {
+            x = ~x;
             return x < 0.5
                 ? (1 - Sqrt(1 - Pow(2 * x, 2))) / 2
                 : (Sqrt(1 - Pow(-2 * x + 2, 2)) + 1) / 2;
@@ -186,6 +213,7 @@ public static class Ease
 
         public static ProgressValue Back(ProgressValue x)
         {
+            x = ~x;
             const double c1 = 1.70158;
             const double c2 = c1 * 1.525;
 
@@ -196,6 +224,7 @@ public static class Ease
 
         public static ProgressValue Elastic(ProgressValue x)
         {
+            x = ~x;
             const double c5 = 2 * PI / 4.5;
 
             return x == 0
@@ -209,6 +238,7 @@ public static class Ease
 
         public static ProgressValue Bounce(ProgressValue x)
         {
+            x = ~x;
             return x < 0.5
                 ? (1 - Out.Bounce(1 - 2 * x)) / 2
                 : (1 + Out.Bounce(2 * x - 1)) / 2;

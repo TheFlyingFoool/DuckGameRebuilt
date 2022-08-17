@@ -4,17 +4,11 @@ namespace DuckGame;
 
 public struct ProgressValue
 {
-    private double _value = 0;
-    
-    public double Value
-    {
-        get => Maths.Clamp(_value, MinimumValue, MaximumValue);
-        set => _value = value;
-    }
+    public double Value = 0;
 
     public double NormalizedValue
     {
-        get => Value - MinimumValue / MaximumValue - MinimumValue;
+        get => (Value - MinimumValue) / (MaximumValue - MinimumValue);
         set => Value = value * (MaximumValue - MinimumValue) + MinimumValue;
     }
     
@@ -22,8 +16,15 @@ public struct ProgressValue
     public double MinimumValue = 0;
     public double IncrementSize = 0.05;
 
+    public ProgressValue() : this(0) { }
+
+    public ProgressValue(ProgressValue p) : this(p.Value, p.IncrementSize, p.MinimumValue, p.MaximumValue) { }
+
     public ProgressValue(double value, double incrementSize = 0.05, double min = 0, double max = 1)
     {
+        if (MinimumValue > MaximumValue)
+            throw new Exception("Minimum size cannot be less than the maximum size");
+        
         Value = value;
         MaximumValue = max;
         MinimumValue = min;
@@ -32,6 +33,8 @@ public struct ProgressValue
 
     public string GenerateBar(int characterCount = 30, char filled = '#', char empty = '-')
     {
+        this = ~this;
+        
         double fillPercentage = NormalizedValue * characterCount;
 
         string whiteBar = $"{(fillPercentage > 0 ? new string(filled, (int)fillPercentage) : "")}";
@@ -51,19 +54,19 @@ public struct ProgressValue
     public static implicit operator int(ProgressValue f) => (int) f.Value;
     
     // From T to Progress
-    public static implicit operator ProgressValue(float f) => new(f);
+    public static implicit operator ProgressValue(float f) => new((double) f);
     public static implicit operator ProgressValue(double f) => new(f);
-    public static implicit operator ProgressValue(int f) => new(f);
+    public static implicit operator ProgressValue(int f) => new((double) f);
     
     // Positive/Negative
     public static ProgressValue operator +(ProgressValue f) => f;
-    public static ProgressValue operator -(ProgressValue f) => new(-f.Value, f.IncrementSize, f.MinimumValue, f.MaximumValue);
+    public static ProgressValue operator -(ProgressValue f) => f *= -1;
     
     // Arithmetic
-    public static ProgressValue operator +(ProgressValue a, ProgressValue b) => new(a.Value + b.Value, a.IncrementSize, a.MinimumValue, a.MaximumValue);
-    public static ProgressValue operator -(ProgressValue a, ProgressValue b) => new(a.Value - b.Value, a.IncrementSize, a.MinimumValue, a.MaximumValue);
-    public static ProgressValue operator *(ProgressValue a, ProgressValue b) => new(a.Value * b.Value, a.IncrementSize, a.MinimumValue, a.MaximumValue);
-    public static ProgressValue operator /(ProgressValue a, ProgressValue b) => new(a.Value / b.Value, a.IncrementSize, a.MinimumValue, a.MaximumValue);
+    public static ProgressValue operator +(ProgressValue a, ProgressValue b) => a with { Value = a.Value + b.Value };
+    public static ProgressValue operator -(ProgressValue a, ProgressValue b) => a with { Value = a.Value - b.Value };
+    public static ProgressValue operator *(ProgressValue a, ProgressValue b) => a with { Value = a.Value * b.Value };
+    public static ProgressValue operator /(ProgressValue a, ProgressValue b) => a with { Value = a.Value / b.Value };
     
     // Equality
     public static bool operator ==(ProgressValue a, ProgressValue b) => a.Value == b.Value;
@@ -78,7 +81,10 @@ public struct ProgressValue
     public static ProgressValue operator --(ProgressValue p) => p -= p.IncrementSize;
     
     // Inversion
-    public static ProgressValue operator !(ProgressValue p) => p.MaximumValue - p.Value + p.MinimumValue;
+    public static ProgressValue operator !(ProgressValue p) => p with { Value = p.MaximumValue - p.Value + p.MinimumValue };
+    
+    // Clamping
+    public static ProgressValue operator ~(ProgressValue p) => p with { Value = Maths.Clamp(p.Value, p.MinimumValue, p.MaximumValue) };
     
     // Method Overrides
     public override bool Equals(object obj)
@@ -98,7 +104,7 @@ public struct ProgressValue
     {
         unchecked
         {
-            int hashCode = _value.GetHashCode();
+            int hashCode = Value.GetHashCode();
             hashCode = (hashCode * 397) ^ MaximumValue.GetHashCode();
             hashCode = (hashCode * 397) ^ MinimumValue.GetHashCode();
             hashCode = (hashCode * 397) ^ IncrementSize.GetHashCode();
