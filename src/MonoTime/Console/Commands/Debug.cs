@@ -13,7 +13,7 @@ public static partial class DevConsoleCommands
     private static ProgressValue _progress = new();
     private static int _nextUpdateFrame = 0;
     
-    [DevConsoleCommand(Description = "If this command still exists after release im gonna eat my shoes[")]
+    [DevConsoleCommand(Description = "If this command still exists after release im gonna eat my shoes")]
     public static object Debug(int i)
     {
         switch (i)
@@ -39,19 +39,28 @@ public static partial class DevConsoleCommands
     }
 
     [DrawingContext]
-    public static void dctestlineupdate()
+    public static void DcTestLineUpdate()
     {
         if (_lineIndex is null || _lineIndex >= DevConsole.core.lines.Count || _lineIndex < 0 || _nextUpdateFrame++ >= 30) 
             return;
 
         _progress++;
         _progress = ~_progress;
+
+        string highlightColor = _progress.NormalizedValue switch
+        {
+            >= 1.0f => "|DGGREEN|",
+            >= 0.5f => "|DGYELLOW|",
+            _ => "|DGRED|",
+        };
         
-        DevConsole.core.lines.ElementAt(_lineIndex.Value).line = $"{Regex.Replace($"[{_progress.GenerateBar()}]", @"#+", @"|DGGREEN|$&|WHITE|")}" +
-                                                                 $" {Math.Round(_progress.NormalizedValue * 100, 2)}%";
+        DevConsole.core.lines.ElementAt(_lineIndex.Value).line = 
+            $"{Regex.Replace($"[{_progress.GenerateBar()}]", @"#+", @"|DGGREEN|$&|WHITE|")}" +
+            $"{highlightColor} {Math.Round(_progress.NormalizedValue * 100, 2)}%";
+        
         _nextUpdateFrame = 0;
 
-        if (_progress.NormalizedValue == 1)
+        if (!_progress.Completed)
             _lineIndex = null;
     }
 }

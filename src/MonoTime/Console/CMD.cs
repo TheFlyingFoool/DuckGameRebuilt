@@ -234,6 +234,34 @@ namespace DuckGame
             public override object Parse(string pValue) => pValue;
         }
 
+        public class Duck : Argument
+        {
+            public Duck(string pName, bool pOptional = false)
+              : base(pName, pOptional)
+            {
+                type = typeof(Duck);
+            }
+
+            public override object Parse(string pValue)
+            {
+                return Extensions.GetProf(pValue).duck;
+            }
+        }
+
+        public class Profile : Argument
+        {
+            public Profile(string pName, bool pOptional = false)
+              : base(pName, pOptional)
+            {
+                type = typeof(Profile);
+            }
+
+            public override object Parse(string pValue)
+            {
+                return Extensions.GetProf(pValue);
+            }
+        }
+
         public class Integer : Argument
         {
             public Integer(string pName, bool pOptional = false)
@@ -434,19 +462,11 @@ namespace DuckGame
             public override object Parse(string pValue)
             {
                 pValue = pValue.ToLowerInvariant();
-                
+
                 if (pValue == "gun")
                     return ItemBoxRandom.GetRandomItem();
-                
-                if (typeof(T) == typeof(Duck))
-                {
-                    Profile profile = DevConsole.ProfileByName(pValue);
-                    if (profile == null)
-                        return Error($"Argument ({pValue}) should be the name of a player.");
-                    return profile.duck ?? Error($"Player ({pValue}) is not present in the game.");
-                }
-                
-                if (typeof(T) == typeof(TeamHat))
+
+                if (type == typeof(TeamHat))
                 {
                     Team t = Teams.all.FirstOrDefault(x => x.name.ToLower() == pValue);
                     return t != null ? new TeamHat(0f, 0f, t) : Error(

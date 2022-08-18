@@ -115,6 +115,10 @@ public class DevConsoleCommandAttribute : Attribute
             arg = new CMD.Vec2(name, optional);
         else if (type == typeof(string))
             arg = new CMD.String(name, optional) {takesMultispaceString = isLast};
+        else if (type == typeof(Duck))
+            arg = new CMD.Duck(name, optional);
+        else if (type == typeof(Profile))
+            arg = new CMD.Profile(name, optional);
         else if (typeof(Thing).IsAssignableFrom(type))
             arg = new CMD.Thing<Thing>(name, optional);
         else if (typeof(Level).IsAssignableFrom(type))
