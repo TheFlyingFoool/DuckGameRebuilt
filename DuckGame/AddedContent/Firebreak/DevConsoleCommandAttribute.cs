@@ -42,11 +42,11 @@ public class DevConsoleCommandAttribute : Attribute
                 ParameterInfo[] parameters = method.GetParameters();
                 string realName = getRealName(method, attribute);
 
-                if (!parameters.Any())
-                {
-                    DevConsole.AddCommand(new CMD(realName, (Action) Delegate.CreateDelegate(typeof(Action), method)));
-                    continue;
-                }
+                // if (!parameters.Any())
+                // {
+                //     DevConsole.AddCommand(new CMD(realName, (Action) Delegate.CreateDelegate(typeof(Action), method)));
+                //     continue;
+                // }
 
                 CMD.Argument[] arguments = new CMD.Argument[parameters.Length];
                 for (int i = 0; i < arguments.Length; i++)
