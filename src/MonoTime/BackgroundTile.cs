@@ -96,11 +96,33 @@ namespace DuckGame
 
         public override void Draw()
         {
+<<<<<<< Updated upstream
             graphic.flipH = flipHorizontal;
             if (cheap && !Editor.editorDraw)
                 graphic.UltraCheapStaticDraw(flipHorizontal);
             else
                 base.Draw();
+=======
+            //graphic.flipH = flipHorizontal;
+            //if (cheap && !Editor.editorDraw)
+            //    graphic.UltraCheapStaticDraw(flipHorizontal);
+            //else
+            //    base.Draw();
+            if (graphic.position != position)
+            {
+                (graphic as SpriteMap).ClearCache();
+            }
+            graphic.position = position;
+            graphic.scale = scale;
+            graphic.center = center;
+            graphic.depth = depth;
+            graphic.alpha = alpha;
+            graphic.angle = angle;
+            graphic.cheapmaterial = this.material;
+            (graphic as SpriteMap).UpdateFrame();
+            graphic.UltraCheapStaticDraw(flipHorizontal);
+            //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 
+>>>>>>> Stashed changes
         }
 
         public override ContextMenu GetContextMenu() => null;

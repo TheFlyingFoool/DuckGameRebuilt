@@ -32,7 +32,7 @@ namespace DuckGame
         private bool _flipFlop = true;
         private MTSpriteBatchItem _batchItem;
         private int _waitFrames;
-
+        
         public new int globalIndex
         {
             get => _globalIndex;
@@ -314,12 +314,20 @@ namespace DuckGame
             DuckGame.Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
         }
 
-        public void ClearCache() => _batchItem = null;
+        public void ClearCache()
+        {
+            _batchItem = null;
+            _waitFrames = 0;
+        }
 
         public override void UltraCheapStaticDraw(bool flipH = false)
         {
             if (_batchItem == null)
             {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
                 //if (!valid)
                 //    return;
                 UpdateFrame();
@@ -337,6 +345,7 @@ namespace DuckGame
             }
             else
             {
+                _batchItem.Material = cheapmaterial;
                 _texture.currentObjectIndex = _globalIndex;
                 DuckGame.Graphics.Draw(_batchItem);
             }

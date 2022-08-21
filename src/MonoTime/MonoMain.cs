@@ -510,7 +510,7 @@ namespace DuckGame
             if (_adapterW > 1920)
                 num1 = 1920;
             // I'm not messing with this
-            float num2 = (float)_adapterH / (float)_adapterW;
+            float num2 = _adapterH / (float)_adapterW;
             if (num2 < 0.56f)
             {
                 num2 = 9f / 16f;
@@ -844,8 +844,8 @@ namespace DuckGame
                Network.Initialize();
                Teams.Initialize();
                Chancy.Initialize();
-               _watermarkEffect = DuckGame.Content.Load<MTEffect>("Shaders/basicWatermark");
-               _watermarkTexture = DuckGame.Content.Load<Tex2D>("looptex");
+              // _watermarkEffect = DuckGame.Content.Load<MTEffect>("Shaders/basicWatermark");
+              // _watermarkTexture = DuckGame.Content.Load<Tex2D>("looptex");
                DuckNetwork.Initialize();
                Persona.Initialize();
                DuckRig.Initialize();
@@ -1410,7 +1410,7 @@ namespace DuckGame
                             Graphics.Clear(Color.Black);
                             Camera camera = new Camera(0f, 0f, Graphics._screenBufferTarget.width, Graphics._screenBufferTarget.height);
                             Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
-                            Graphics.Draw(Graphics._screenBufferTarget, 0f, 0f);
+                            Graphics.Draw(Graphics._screenBufferTarget, 0f, 0f, 1f, 1f);
                             Graphics.screen.End();
                             Recorder.currentRecording = _tempRecordingReference;
                         }
@@ -1448,6 +1448,38 @@ namespace DuckGame
                     _setCulture = true;
                 }
                 Graphics.Clear(new Color(0, 0, 0));
+                if (!DuckGame.Content.didsetbigboi)
+                {
+                    DuckGame.Content.didsetbigboi = true;
+                    DuckGame.Content.offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();
+                    if (File.Exists(@"..\spriteatlas.png"))
+                    {
+                        DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(@"..\spriteatlas.png", Graphics.device);
+                        DuckGame.Content.Thick.Namebase = "SpriteAtlas";
+                        
+                        //RSplit("de mo", ' ', -1);
+                        string[] lines = System.IO.File.ReadAllLines(@"..\spriteatlas_offsets.txt");
+                        foreach (string line in lines)
+                        {
+                            try
+                            {
+                                List<string> texturedetails = DuckGame.Content.RSplit(line, ' ', 4);
+                                string texturename = texturedetails[0];
+                                int x = Int32.Parse(texturedetails[1]);
+                                int y = Int32.Parse(texturedetails[2]);
+                                int height = Int32.Parse(texturedetails[3]);
+                                int width = Int32.Parse(texturedetails[4]);
+
+                                DuckGame.Content.offests.Add(texturename, new Microsoft.Xna.Framework.Rectangle(x, y, width, height));
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                    }
+                    
+                }
                 Camera camera = new Camera(0f, 0f, Graphics.width, Graphics.height);
                 Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
                 Vec2 p1 = new Vec2(50f, Graphics.height - 50);

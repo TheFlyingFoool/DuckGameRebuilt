@@ -35,7 +35,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            _background = new Sprite("gym");
+            //_background = new Sprite("gym");
             _boardHighlight = new Sprite("boardHighlight");
             _boardHighlight.CenterOrigin();
             _trophiesHighlight = new Sprite("trophiesHighlight");
@@ -213,10 +213,10 @@ namespace DuckGame
             {
                 if (_screen == LockerScreen.Locker)
                 {
-                    _background.scale = new Vec2(1f, 1f);
-                    _background.depth = (Depth)0.4f;
-                    _background.alpha = _fade;
-                    Graphics.Draw(_background, 0f, 0f);
+                    //_background.scale = new Vec2(1f, 1f); just removing this for now this part of the code cant be run ill remove the rest later
+                    //_background.depth = (Depth)0.4f;
+                    //_background.alpha = _fade;
+                    //Graphics.Draw(_background, 0f, 0f);
                     string text = _profile.name;
                     Vec2 vec2 = new Vec2(115f, 46f);
                     Graphics.DrawString(text, vec2 + new Vec2((-Graphics.GetStringWidth(text) / 2f), 0f), Color.Gray * _fade, (Depth)0.5f);

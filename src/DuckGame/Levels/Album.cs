@@ -33,7 +33,7 @@ namespace DuckGame
         public override void Initialize()
         {
             _album = new Sprite("album");
-            _screen = new Sprite("albumpic");
+            //_screen = new Sprite("albumpic");
             //this._pageMaterial = (Material)new MaterialAlbum();
             _font = new BitmapFont("biosFont", 8);
             _stats.Add(new LockerStat("QUACKS: " + Global.data.quacks.valueInt.ToString(), Color.DarkSlateGray));
@@ -156,7 +156,7 @@ namespace DuckGame
             {
                 _album.depth = -0.8f;
                 DuckGame.Graphics.Draw(_album, 0f, 0f);
-                _screen.depth = -0.6f;
+                //_screen.depth = -0.6f;
                 if (_pages.Count > 0)
                 {
                     int index1 = 0;

@@ -32,24 +32,11 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            SnowGenerator.initGen = true;
             base.Initialize();
         }
 
         public override void Update()
         {
-            if (SnowGenerator.initGen)
-            {
-                int num = 0;
-                foreach (SnowGenerator t in Level.current.things[typeof(SnowGenerator)].ToList<Thing>())
-                {
-                    if (num < maxPlaceable)
-                        ++num;
-                    else
-                        Level.current.RemoveThing(t);
-                }
-                SnowGenerator.initGen = false;
-            }
             snowWait -= Maths.IncFrameTimer();
             if (snowWait <= 0.0)
             {

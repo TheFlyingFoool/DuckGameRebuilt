@@ -54,7 +54,7 @@ namespace DuckGame
             center = new Vec2(graphic.width / 2, graphic.height / 2);
             _collisionSize = new Vec2(16f, 16f);
             _collisionOffset = new Vec2(-8f, -8f);
-            _screen = new Sprite("shot01");
+            //_screen = new Sprite("shot01");
             depth = -0.9f;
         }
 

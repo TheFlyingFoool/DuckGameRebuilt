@@ -45,7 +45,7 @@ namespace DuckGame
         private int _timeSincePress;
         public StateBinding _glowBinding = new StateBinding(nameof(_glow));
         private MaterialEnergyBlade _bladeMaterial;
-        private Sprite _blade;
+        public Sprite _blade;
         private Sprite _bladeTrail;
         private List<EnergyScimitar.Blocker> _walls = new List<EnergyScimitar.Blocker>();
         private Platform _platform;

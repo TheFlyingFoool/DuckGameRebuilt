@@ -588,8 +588,8 @@ namespace DuckGame
         public static void DrawLine(Vec2 p1, Vec2 p2, Color col, float width = 1f, Depth depth = default(Depth))
         {
             ++DuckGame.Graphics.currentDrawIndex;
-            p1 = new Vec2(p1.x, p1.y);
-            p2 = new Vec2(p2.x, p2.y);
+           //p1 = new Vec2(p1.x, p1.y);
+            //p2 = new Vec2(p2.x, p2.y);
             float rotation = (float)Math.Atan2(p2.y - p1.y, p2.x - p1.x);
             float length = (p1 - p2).length;
             DuckGame.Graphics.Draw(DuckGame.Graphics._blank, p1, new Rectangle?(), col, rotation, new Vec2(0f, 0.5f), new Vec2(length, width), SpriteEffects.None, depth);
@@ -886,15 +886,21 @@ namespace DuckGame
             Graphics._defaultBatch = new MTSpriteBatch(Graphics._base);
             Graphics.screen = Graphics._defaultBatch;
             Graphics._blank = new Tex2D(1, 1);
+           
             Graphics._blank.SetData(new Color[1]
             {
-        Color.White
+                    Color.White
             });
+           
             Graphics._blank2 = new Tex2D(1, 1);
             Graphics._blank2.SetData(new Color[1]
             {
-        Color.White
+                    Color.White
             });
+            Graphics._blank.Namebase = "_blanktex2d";
+            Graphics._blank2.Namebase = "_blank2tex2d";
+            Content.textures[Graphics._blank.Namebase] = Graphics._blank; //spriteatlas stuff
+            Content.textures[Graphics._blank2.Namebase] = Graphics._blank2; //spriteatlas stuff
             Graphics._biosFont = new BitmapFont("biosFont", 8);
             Graphics._biosFontCaseSensitive = new BitmapFont("biosFontCaseSensitive", 8);
             Graphics._fancyBiosFont = new FancyBitmapFont("smallFont");

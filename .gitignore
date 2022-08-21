@@ -365,3 +365,6 @@ FodyWeavers.xsd
 # Idfk what this is but dan said it's not important
 DuckGame.exe.CodeAnalysisLog.xml
 
+unnamedtexs/unnamed MTSpriteBatch.DoDrawInternal^MTSpriteBatch.DrawWithMaterial^Graphics.Draw^MonoMain.RunDraw 1.png
+*.png
+*.txt

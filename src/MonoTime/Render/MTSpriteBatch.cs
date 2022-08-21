@@ -5,8 +5,11 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace DuckGame
@@ -34,6 +37,11 @@ namespace DuckGame
         public Matrix fullMatrix;
         public static float edgeBias = 1E-05f;
         private RasterizerState _prevRast;
+
+        public IEnumerable<MTSpriteBatchItem> StealSpriteBatchItems()
+        {
+            return _batcher.StealSpriteBatchItems();
+        }
 
         public MTSpriteBatchItem StealLastSpriteBatchItem() => _batcher.StealLastBatchItem();
 
@@ -293,7 +301,7 @@ namespace DuckGame
           SpriteEffects effect,
           float depth)
         {
-            CheckValid(texture);
+            //CheckValid(texture);
             float z = texture.width * scale.x;
             float w = texture.height * scale.y;
             if (sourceRectangle.HasValue)
@@ -316,7 +324,7 @@ namespace DuckGame
           float depth,
           Material fx)
         {
-            CheckValid(texture);
+            //CheckValid(texture);
             float z = texture.width * scale.x;
             float w = texture.height * scale.y;
             if (sourceRectangle.HasValue)
@@ -338,7 +346,7 @@ namespace DuckGame
           SpriteEffects effect,
           float depth)
         {
-            CheckValid(texture);
+            //CheckValid(texture);
             float z = texture.width * scale;
             float w = texture.height * scale;
             if (sourceRectangle.HasValue)
@@ -359,7 +367,7 @@ namespace DuckGame
           SpriteEffects effect,
           float depth)
         {
-            CheckValid(texture);
+            //CheckValid(texture);
             DoDrawInternal(texture, new Vec4(destinationRectangle.x, destinationRectangle.y, destinationRectangle.width, destinationRectangle.height), sourceRectangle, color, rotation, new Vec2(origin.x * (destinationRectangle.width / (!sourceRectangle.HasValue || sourceRectangle.Value.width == 0.0 ? texture.width : sourceRectangle.Value.width)), (float)(origin.y * destinationRectangle.height / (!sourceRectangle.HasValue || sourceRectangle.Value.height == 0.0 ? texture.height : sourceRectangle.Value.height))), effect, depth, true, null);
         }
 
@@ -373,17 +381,55 @@ namespace DuckGame
           Vec2 t3,
           Vec2 t4,
           float depth,
-          Tex2D tex,
+          Tex2D texture,
           Color c)
         {
             ++DuckGame.Graphics.currentDrawIndex;
             MTSpriteBatchItem batchItem = _batcher.CreateBatchItemDepth(depth);
             batchItem.Depth = depth;
-            batchItem.Texture = tex.nativeObject as Texture2D;
+
+            if (texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
+            {
+                batchItem.Texture = Content.Thick.Texbase;
+
+                //float sizeoffsetx = (float)offset.Left / (float)Content.Thick.width;
+                //float sizeoffsety = (float)offset.Top / (float)Content.Thick.height;
+                t1.x = ((t1.x * texture.width) + offset.Left) / Content.Thick.height;
+                t2.x = ((t2.x * texture.width) + offset.Left) / Content.Thick.height;
+                t3.x = ((t3.x * texture.width) + offset.Left) / Content.Thick.height;
+                t4.x = ((t4.x * texture.width) + offset.Left) / Content.Thick.height;
+
+                t1.y = ((t1.y * texture.height) + offset.Top) / Content.Thick.height;
+                t2.y = ((t1.y * texture.height) + offset.Top) / Content.Thick.height;
+                t3.y = ((t1.y * texture.height) + offset.Top) / Content.Thick.height;
+                t4.y = ((t1.y * texture.height) + offset.Top) / Content.Thick.height;
+                //offset
+                //_tempRect.x += offset.Left;
+                //_tempRect.y += offset.Top;
+                //_texCoordTL.x = _tempRect.x / Content.Thick.width + MTSpriteBatch.edgeBias;
+                //_texCoordTL.y = _tempRect.y / Content.Thick.height + MTSpriteBatch.edgeBias;
+                //_texCoordBR.x = (_tempRect.x + _tempRect.width) / Content.Thick.width - MTSpriteBatch.edgeBias;
+                //_texCoordBR.y = (_tempRect.y + _tempRect.height) / Content.Thick.height - MTSpriteBatch.edgeBias;
+            }
+            else
+            {
+                batchItem.Texture = texture.nativeObject as Texture2D;
+            }
+            if (!MTSpriteBatcher.Texidonthave.Contains(batchItem.Texture) && (batchItem.Texture == null || batchItem.Texture.Name == null || batchItem.Texture.Name != "SpriteAtlas"))
+            {
+                if (batchItem.Texture != null && batchItem.Texture.Name != null)
+                {
+                    DevConsole.Log("DrawQuad " + batchItem.Texture.Name);
+                }
+                MTSpriteBatcher.Texidonthave.Add(batchItem.Texture);
+            }
+
+
+            
             batchItem.Material = null;
             batchItem.Set(p1, p2, p3, p4, t1, t2, t3, t4, c);
         }
-
+        private static List<string> usednames = new List<string>();
         internal void DoDrawInternal(
           Tex2D texture,
           Vec4 destinationRectangle,
@@ -399,8 +445,7 @@ namespace DuckGame
             ++DuckGame.Graphics.currentDrawIndex;
             MTSpriteBatchItem batchItem = _batcher.CreateBatchItemDepth(depth);
             batchItem.Depth = depth;
-            batchItem.Texture = texture.nativeObject as Texture2D;
-            batchItem.Material = fx;
+           
             if (sourceRectangle.HasValue)
             {
                 _tempRect = sourceRectangle.Value;
@@ -412,6 +457,52 @@ namespace DuckGame
                 _tempRect.width = texture.width;
                 _tempRect.height = texture.height;
             }
+            if (texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
+            {
+                batchItem.Texture = Content.Thick.Texbase;
+                batchItem.Material = fx;
+                //offset
+                _tempRect.x += offset.Left;
+                _tempRect.y += offset.Top;
+                _texCoordTL.x = _tempRect.x / Content.Thick.width + MTSpriteBatch.edgeBias;
+                _texCoordTL.y = _tempRect.y / Content.Thick.height + MTSpriteBatch.edgeBias;
+                _texCoordBR.x = (_tempRect.x + _tempRect.width) / Content.Thick.width - MTSpriteBatch.edgeBias;
+                _texCoordBR.y = (_tempRect.y + _tempRect.height) / Content.Thick.height - MTSpriteBatch.edgeBias;
+                if ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None)
+                {
+                    float y = _texCoordBR.y;
+                    _texCoordBR.y = _texCoordTL.y;
+                    _texCoordTL.y = y;
+                }
+                if ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None)
+                {
+                    float x = _texCoordBR.x;
+                    _texCoordBR.x = _texCoordTL.x;
+                    _texCoordTL.x = x;
+                }
+                batchItem.Set(destinationRectangle.x, destinationRectangle.y, -origin.x, -origin.y, destinationRectangle.z, destinationRectangle.w, (float)Math.Sin(rotation), (float)Math.Cos(rotation), color, _texCoordTL, _texCoordBR);
+                if (DuckGame.Graphics.recordMetadata)
+                {
+                    batchItem.MetaData = new MTSpriteBatchItemMetaData
+                    {
+                        texture = Content.Thick,
+                        rotation = rotation,
+                        color = color,
+                        tempRect = _tempRect,
+                        effect = effect,
+                        depth = depth
+                    };
+                }
+                if (!DuckGame.Graphics.skipReplayRender && Recorder.currentRecording != null && DuckGame.Graphics.currentRenderTarget == null)
+                    Recorder.currentRecording.LogDraw(Content.Thick.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)_tempRect.x, (short)_tempRect.y, (short)(_tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)(_tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), depth);
+                if (!autoFlush)
+                    return;
+                FlushIfNeeded();
+                return;
+
+            }
+            batchItem.Texture = texture.nativeObject as Texture2D;
+            batchItem.Material = fx;
             _texCoordTL.x = _tempRect.x / texture.width + MTSpriteBatch.edgeBias;
             _texCoordTL.y = _tempRect.y / texture.height + MTSpriteBatch.edgeBias;
             _texCoordBR.x = (_tempRect.x + _tempRect.width) / texture.width - MTSpriteBatch.edgeBias;
@@ -427,6 +518,43 @@ namespace DuckGame
                 float x = _texCoordBR.x;
                 _texCoordBR.x = _texCoordTL.x;
                 _texCoordTL.x = x;
+            }
+            if (!MTSpriteBatcher.Texidonthave.Contains(batchItem.Texture) && (batchItem.Texture == null || batchItem.Texture.Name == null || batchItem.Texture.Name != "SpriteAtlas"))
+            {
+                StackTrace st = new StackTrace(true);
+                if (batchItem.Texture != null && batchItem.Texture.Name != null)
+                {
+                    DevConsole.Log("DoDrawInternal " + batchItem.Texture.Name);
+                }
+                string stacktracepath = "";
+                List<string> keepgoingback = new List<string>() { "MTSpriteBatch", "Graphics", "SpriteMap", "Sprite", "Thing" };
+                for (int i = 0; i < st.FrameCount; i++)
+                {
+                    string classname = st.GetFrame(i).GetMethod().DeclaringType.Name;
+                    if (classname == "HatSelector")
+                    {
+                        DevConsole.Log("fuck");
+                    }
+                    if (!keepgoingback.Contains(classname))
+                    {
+                        string path = st.GetFrame(i).GetMethod().GetFullName();
+                        int index = 1;
+                        while (usednames.Contains(path + " " + index.ToString()))
+                        {
+                            index += 1;
+                        }
+                        path += " " + index.ToString();
+                        usednames.Add(path);
+                        if (batchItem.Texture.Name == null)
+                        {
+                            batchItem.Texture.Name = "unnamed" + " " + stacktracepath + path.Replace("DuckGame.", "").Replace(":", ".");
+                        }
+                        break;
+                    }
+                    stacktracepath += st.GetFrame(i).GetMethod().GetFullName().Replace("DuckGame.", "").Replace(":", ".") + "*";
+                }
+                //st.GetFrame(0).GetMethod().DeclaringType.Name
+                MTSpriteBatcher.Texidonthave.Add(batchItem.Texture);
             }
             batchItem.Set(destinationRectangle.x, destinationRectangle.y, -origin.x, -origin.y, destinationRectangle.z, destinationRectangle.w, (float)Math.Sin(rotation), (float)Math.Cos(rotation), color, _texCoordTL, _texCoordBR);
             if (DuckGame.Graphics.recordMetadata)
@@ -446,15 +574,34 @@ namespace DuckGame
             if (!autoFlush)
                 return;
             FlushIfNeeded();
+            //else
+            //{
+            //    string name = "null";
+            //    if (batchItem.Texture != null && batchItem.Texture.Name != null)
+            //    {
+            //        name = batchItem.Texture.Name;
+            //    }
+            //    //DevConsole.Log(name);
+            //}
+
+
         }
 
         public void DrawExistingBatchItem(MTSpriteBatchItem item)
         {
             ++DuckGame.Graphics.currentDrawIndex;
             _batcher.SqueezeInItem(item);
-            if (Recorder.currentRecording == null)
-                return;
-            Recorder.currentRecording.LogDraw(item.MetaData.texture.textureIndex, new Vec2(item.vertexTL.Position.X, item.vertexTL.Position.Y), new Vec2(item.vertexBR.Position.X, item.vertexBR.Position.Y), item.MetaData.rotation, item.MetaData.color, (short)item.MetaData.tempRect.x, (short)item.MetaData.tempRect.y, (short)(item.MetaData.tempRect.width * ((item.MetaData.effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)(item.MetaData.tempRect.height * ((item.MetaData.effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), item.MetaData.depth);
+            if (!MTSpriteBatcher.Texidonthave.Contains(item.Texture) && (item.Texture == null || item.Texture.Name == null || item.Texture.Name != "SpriteAtlas"))
+            {
+                if (item.Texture != null && item.Texture.Name != null)
+                {
+                    DevConsole.Log("DrawExistingBatchItem " + item.Texture.Name);
+                }
+                MTSpriteBatcher.Texidonthave.Add(item.Texture);
+            }
+            //  if (Recorder.currentRecording == null)
+            //      return;
+            //  Recorder.currentRecording.LogDraw(item.MetaData.texture.textureIndex, new Vec2(item.vertexTL.Position.X, item.vertexTL.Position.Y), new Vec2(item.vertexBR.Position.X, item.vertexBR.Position.Y), item.MetaData.rotation, item.MetaData.color, (short)item.MetaData.tempRect.x, (short)item.MetaData.tempRect.y, (short)(item.MetaData.tempRect.width * ((item.MetaData.effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)(item.MetaData.tempRect.height * ((item.MetaData.effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), item.MetaData.depth);
         }
 
         public void DrawRecorderItem(ref RecorderFrameItem frame)

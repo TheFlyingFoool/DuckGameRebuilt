@@ -84,6 +84,7 @@ namespace DuckGame
         public static Exception lastException = null;
         private static Dictionary<string, ParallaxBackground.Definition> _parallaxDefinitions = new Dictionary<string, ParallaxBackground.Definition>();
 
+
         public static LevelData GetLevel(string guid, LevelLocation location = LevelLocation.Any)
         {
             List<LevelData> list;
@@ -741,10 +742,51 @@ namespace DuckGame
                 DevConsole.Log(DCSection.General, "|DGRED|" + ex.Message);
             }
         }
+        public static Color FromNonPremultiplied(int r, int g, int b, int a)
+        {
+            return new Color(r * a / 255, g * a / 255, b * a / 255, a);
+        }
 
+        public static Texture2D SpriteAtlasTextureFromStream(string FilePath, GraphicsDevice device)
+        {
+            Texture2D texture;
+            FileStream titleStream = File.OpenRead(FilePath);
+            texture = Texture2D.FromStream(device, titleStream);
+            titleStream.Close();
+            Color[] buffer = new Color[texture.Width * texture.Height];
+            texture.GetData(buffer);
+            for (int i = 0; i < buffer.Length; i++)
+                buffer[i] = FromNonPremultiplied(buffer[i].r, buffer[i].g, buffer[i].b, buffer[i].a); // Needs to handle transparent textures that use other types of draw calls
+            texture.SetData(buffer);
+            return texture;
+        }
+        public static List<string> RSplit(string stringInput, char target, int maxsplits = -1)
+        {
+            int splitcount = 0;
+            List<string> split = new List<string>();
+            int lastindex = stringInput.Length;
+            for (int i = stringInput.Length; i-- > 0;)
+            {
+
+                if (stringInput[i] == target && (maxsplits > splitcount || maxsplits == -1))
+                {
+                    string s = stringInput.Substring(i + 1, lastindex - i - 1);
+                    split.Add(s);
+                    lastindex = i;
+                    splitcount += 1;
+                }
+            }
+            split.Add(stringInput.Substring(0, lastindex));
+            split.Reverse();
+            return split;
+        }
+        public static bool didsetbigboi;
+        public static Tex2D Thick;
+        public static Dictionary<string, Microsoft.Xna.Framework.Rectangle> offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();
         public static void Initialize(bool reverse)
         {
             MonoMain.loadMessage = "Loading Textures";
+           
             DuckGame.Content.SearchDirTextures("Content/", reverse);
         }
 

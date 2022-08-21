@@ -443,11 +443,15 @@ namespace DuckGame
             get => _visible;
             set => _visible = value;
         }
-
+        public Material prevmaterial;
         public Material material
         {
             get => _material;
-            set => _material = value;
+            set
+            {
+                prevmaterial = _material;
+                _material = value;
+            }
         }
 
         public virtual bool enablePhysics
@@ -1181,6 +1185,10 @@ namespace DuckGame
             DuckGame.Graphics.SetRenderTarget(null);
             Texture2D tex = new Texture2D(DuckGame.Graphics.device, target.width, target.height);
             tex.SetData<Color>(target.GetData());
+            List<string> text = DuckGame.Content.RSplit(this.GetType().AssemblyQualifiedName, ',', -1);
+            string texname = text[0] + text[1] + wide.ToString() + " "+ high.ToString();
+            tex.Name = texname;
+            Content.textures[texname] = tex; //spritea las stuff
             Sprite preview = new Sprite((Tex2D)tex);
             if (flag)
                 _editorIcon = preview;

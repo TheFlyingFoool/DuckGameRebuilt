@@ -33,7 +33,7 @@ namespace DuckGame
             itemSize.x = Graphics.GetFancyStringWidth(_text) + 40f;
             if (index == null || (object)(index as System.Type) == null)
                 return;
-            _image = Editor.GetThing(index as System.Type).GeneratePreview(transparentBack: true);
+            _image = Editor.GetThing(index as System.Type).GeneratePreview(16, 16, true);
             itemSize.x += 32f;
         }
 

@@ -224,6 +224,11 @@ namespace DuckGame
             _collisionSize = new Vec2(141f, 89f);
             extraButton = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(ButtonSprite))), "button"));
             extraButton.center = new Vec2(12.5f, 12);
+<<<<<<< Updated upstream
+=======
+            extraButton.Namebase = "nikoextraButton";
+            Content.textures[extraButton.Namebase] = extraButton.texture;
+>>>>>>> Stashed changes
             _oButton = new Sprite("oButton");
             _demoBox = new SpriteMap("demoCrate", 20, 20);
             _demoBox.CenterOrigin();
@@ -1094,12 +1099,21 @@ namespace DuckGame
                 {
                     for (int i = 0; i < 8; ++i)
                     {
+<<<<<<< Updated upstream
                         _blind.yscale = Math.Max(0f, Math.Min(this._blindLerp * 3f - (float)i * 0.05f, 1f));
                         _blind.depth = 0.91f + (float)i * 0.008f;
                         _blind.flipH = false;
                         Graphics.Draw(_blind, base.x - 3f + (float)i * (9f * this._blindLerp), base.y + 1f);
                         _blind.flipH = true;
                         Graphics.Draw(_blind, base.x + 4f + 140f - (float)i * (9f * this._blindLerp), base.y + 1f);
+=======
+                        _blind.yscale = Math.Max(0f, Math.Min(this._blindLerp * 3f - i * 0.05f, 1f));
+                        _blind.depth = 0.91f + i * 0.008f;
+                        _blind.flipH = false;
+                        Graphics.Draw(_blind, base.x - 3f + i * (9f * this._blindLerp), base.y + 1f);
+                        _blind.flipH = true;
+                        Graphics.Draw(_blind, base.x + 4f + 140f - i * (9f * this._blindLerp), base.y + 1f);
+>>>>>>> Stashed changes
                     }
                     float num = Math.Max((this._blindLerp - 0.5f) * 2f, 0f);
                     if (num > 0.01f)

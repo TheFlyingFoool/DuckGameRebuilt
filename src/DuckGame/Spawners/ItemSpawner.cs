@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -36,6 +37,7 @@ namespace DuckGame
         private int _seatingTries;
         private Thing previewThing;
         private Sprite previewSprite;
+        private Sprite testpreviewSprite;
         private float _bob;
         private List<TypeProbPair> _possible = new List<TypeProbPair>();
 
@@ -165,7 +167,6 @@ namespace DuckGame
                 _seated = false;
             ++_seatingTries;
         }
-
         public override void EditorUpdate()
         {
             _hoverSin.Update();
@@ -173,7 +174,9 @@ namespace DuckGame
             {
                 previewThing = Editor.GetThing(contains);
                 if (previewThing != null)
-                    previewSprite = previewThing.GeneratePreview(32, 32, true);
+                {
+                    this.previewSprite = this.previewThing.GeneratePreview(32, 32, true);
+                }
             }
             collisionSize = new Vec2(14f, 8f);
             collisionOffset = new Vec2(-7f, -6f);

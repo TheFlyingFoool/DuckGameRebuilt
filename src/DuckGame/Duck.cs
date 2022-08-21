@@ -1887,7 +1887,7 @@ namespace DuckGame
 
         private void TryGrab()
         {
-            foreach (Holdable h in (IEnumerable<Holdable>)Level.CheckCircleAll<Holdable>(new Vec2(x, y + 4f), 18f).OrderBy<Holdable, Holdable>(h => h, new CompareHoldablePriorities(this)))
+            foreach (Holdable h in Level.CheckCircleAll<Holdable>(new Vec2(x, y + 4f), 18f).OrderBy<Holdable, Holdable>(h => h, new CompareHoldablePriorities(this)))
             {
                 if (h.owner == null && h.canPickUp && (h != _lastHoldItem || _timeSinceThrow >= 30) && h.active && h.visible && Level.CheckLine<Block>(position, h.position) == null)
                 {

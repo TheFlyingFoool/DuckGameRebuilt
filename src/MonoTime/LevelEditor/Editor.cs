@@ -400,20 +400,21 @@ namespace DuckGame
             hasUnsavedChanges = true;
             if (obj == null)
                 return;
+<<<<<<< Updated upstream
             if (obj.maxPlaceable >= 0 && things[obj.GetType()].Count() >= obj.maxPlaceable)
+=======
+            switch (obj)
+>>>>>>> Stashed changes
             {
-                HUD.AddPlayerChangeDisplay("@UNPLUG@|RED| Too many placed!", 2f);
-            }
-            else
-            {
-                switch (obj)
-                {
-                    case ThingContainer _:
-                        ThingContainer thingContainer = obj as ThingContainer;
-                        if (thingContainer.bozocheck)
+                case ThingContainer _:
+                    ThingContainer thingContainer = obj as ThingContainer;
+                    if (thingContainer.bozocheck)
+                    {
+                        using (List<Thing>.Enumerator enumerator = thingContainer.things.GetEnumerator())
                         {
-                            using (List<Thing>.Enumerator enumerator = thingContainer.things.GetEnumerator())
+                            while (enumerator.MoveNext())
                             {
+<<<<<<< Updated upstream
                                 while (enumerator.MoveNext())
                                 {
                                     Thing current = enumerator.Current;
@@ -422,27 +423,35 @@ namespace DuckGame
                                 }
 
                                 return;
+=======
+                                Thing current = enumerator.Current;
+                                if (!Thing.CheckForBozoData(current))
+                                    AddObject(current);
+>>>>>>> Stashed changes
                             }
+
+                            return;
                         }
-                        else
+                    }
+                    else
+                    {
+                        using (List<Thing>.Enumerator enumerator = thingContainer.things.GetEnumerator())
                         {
-                            using (List<Thing>.Enumerator enumerator = thingContainer.things.GetEnumerator())
-                            {
-                                while (enumerator.MoveNext())
-                                    AddObject(enumerator.Current);
-                                return;
-                            }
+                            while (enumerator.MoveNext())
+                                AddObject(enumerator.Current);
+                            return;
                         }
-                    case BackgroundUpdater _:
-                        for (int index = 0; index < _levelThings.Count; ++index)
+                    }
+                case BackgroundUpdater _:
+                    for (int index = 0; index < _levelThings.Count; ++index)
+                    {
+                        Thing t = _levelThings[index];
+                        if (t is BackgroundUpdater)
                         {
-                            Thing t = _levelThings[index];
-                            if (t is BackgroundUpdater)
-                            {
-                                History.Add(() => RemoveObject(t), () => AddObject(t));
-                                --index;
-                            }
+                            History.Add(() => RemoveObject(t), () => AddObject(t));
+                            --index;
                         }
+<<<<<<< Updated upstream
 
                         break;
                 }
@@ -505,7 +514,71 @@ namespace DuckGame
                 }
 
                 processingMirror = false;
+=======
+                    }
+
+                    break;
             }
+
+            obj.active = false;
+            AddThing(obj);
+            _levelThings.Add(obj);
+            if (!_loadingLevel && obj is IDontMove)
+                _placeObjects.Add(obj);
+            placementTotalCost += CalculatePlacementCost(obj);
+            if (_sizeRestriction.x > 0.0)
+                AdjustSizeLimits(obj);
+            if (_loadingLevel)
+                return;
+            if (!_isPaste)
+                obj.EditorAdded();
+            if (obj is MirrorMode || processingMirror || obj is BackgroundUpdater)
+                return;
+            processingMirror = true;
+            foreach (MirrorMode mirrorMode in things[typeof(MirrorMode)])
+            {
+                if (((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both ||
+                     (MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Vertical) &&
+                    Math.Abs(mirrorMode.position.x - obj.position.x) > 2.0)
+                {
+                    Vec2 vec2 = obj.position -
+                                new Vec2((float)((obj.position.x - mirrorMode.position.x) * 2.0), 0f);
+                    Thing thing = Thing.LoadThing(obj.Serialize());
+                    thing.position = vec2;
+                    thing.flipHorizontal = !obj.flipHorizontal;
+                    AddObject(thing);
+                    thing.EditorFlip(false);
+                }
+
+                if (((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both ||
+                     (MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Horizontal) &&
+                    Math.Abs(mirrorMode.position.y - obj.position.y) > 2.0)
+                {
+                    Vec2 vec2 = obj.position -
+                                new Vec2(0f, (float)((obj.position.y - mirrorMode.position.y) * 2.0));
+                    Thing thing = Thing.LoadThing(obj.Serialize());
+                    thing.position = vec2;
+                    AddObject(thing);
+                    thing.EditorFlip(true);
+                }
+
+                if ((MirrorMode.Setting)mirrorMode.mode == MirrorMode.Setting.Both &&
+                    Math.Abs(mirrorMode.position.x - obj.position.x) > 2.0 &&
+                    Math.Abs(mirrorMode.position.y - obj.position.y) > 2.0)
+                {
+                    Vec2 vec2 = obj.position - new Vec2((float)((obj.position.x - mirrorMode.position.x) * 2.0),
+                        (float)((obj.position.y - mirrorMode.position.y) * 2.0));
+                    Thing thing = Thing.LoadThing(obj.Serialize());
+                    thing.position = vec2;
+                    thing.flipHorizontal = !obj.flipHorizontal;
+                    AddObject(thing);
+                    thing.EditorFlip(false);
+                    thing.EditorFlip(true);
+                }
+>>>>>>> Stashed changes
+            }
+
+            processingMirror = false;
         }
 
         public void RemoveObject(Thing obj)
@@ -613,6 +686,10 @@ namespace DuckGame
             placementTotalCost = 0;
             RecalculateSizeLimits();
             History.Clear();
+            foreach(Nubber nubber in Level.current.things[typeof(Nubber)])
+            {
+                current.RemoveThing(nubber);
+            }
         }
 
         public float cellSize
@@ -993,6 +1070,24 @@ namespace DuckGame
             _doingResave = true;
             _doingResave = false;
             ClearEverything();
+            string filepath = DuckFile.levelDirectory + Program.StartinEditorLevelName;
+            if (Path.GetExtension(filepath) != ".lev")
+            {
+                filepath += ".lev";
+            }
+            if (MonoMain.startInEditor && Program.StartinEditorLevelName != "")
+            {
+                if (File.Exists(filepath))
+                {
+                    DevConsole.Log("Loading Level " + filepath, Color.Green);
+                    Main.editor.LoadLevel(filepath);
+                    Main.editor.Play();
+                }
+                else
+                {
+                    DevConsole.Log("Level Not Found " + filepath, Color.Red);
+                }
+            }
         }
 
         public Vec2 GetAlignOffset(TileButtonAlign align)

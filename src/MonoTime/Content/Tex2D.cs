@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace DuckGame
 {
@@ -23,7 +24,18 @@ namespace DuckGame
                 return _effectTexture;
             }
         }
-
+        public string Namebase
+        {
+            get
+            {
+                return _base.Name;
+            }
+            set
+            {
+                _base.Name = value;
+            }
+        }
+        public Texture2D Texbase => _base;
         public override object nativeObject => _base;
 
         public override int width => _base == null ? -1 : _base.Width;
@@ -46,7 +58,12 @@ namespace DuckGame
             _frameHeight = height;
             Content.AssignTextureIndex(this);
         }
-
+        public void SaveAsPng(Stream stream, int width, int height)
+        {
+            if (_base == null)
+                return;
+            _base.SaveAsPng(stream, width, height);
+        }
         public override void GetData<T>(T[] data)
         {
             if (_base == null)

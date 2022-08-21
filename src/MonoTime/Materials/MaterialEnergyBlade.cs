@@ -37,10 +37,10 @@ namespace DuckGame
             if (DuckGame.Graphics.device.Textures[0] != null)
             {
                 Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-                SetValue("width", texture.frameWidth / texture.width);
-                SetValue("height", texture.frameHeight / texture.height);
                 if (_thing != null)
                 {
+                    SetValue("width", _thing.graphic.texture.frameWidth / _thing.graphic.texture.width);
+                    SetValue("height", _thing.graphic.texture.frameHeight / _thing.graphic.texture.height);
                     SetValue("xpos", _thing.x);
                     SetValue("ypos", _thing.y);
                     SetValue("time", _time);
@@ -49,6 +49,8 @@ namespace DuckGame
                 }
                 else
                 {
+                    SetValue("width", _thing2.graphic.texture.frameWidth / _thing2.graphic.texture.width); // / _thing2._blade.texture.width
+                    SetValue("height", _thing2.graphic.texture.frameHeight / _thing2.graphic.texture.height); // / _thing2._blade.texture.height
                     SetValue("xpos", _thing2.x);
                     SetValue("ypos", _thing2.y);
                     SetValue("time", _time);
