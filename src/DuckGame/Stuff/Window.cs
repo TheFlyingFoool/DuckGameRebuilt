@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Window
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
+// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -144,7 +144,6 @@ namespace DuckGame
             if (!floor && !noframe)
             {
                 _frame = new WindowFrame(x, y, floor);
-                _frame.shouldbeinupdateloop = false;
                 Level.Add(_frame);
             }
             UpdateHeight();
@@ -234,7 +233,7 @@ namespace DuckGame
                 vec2.y = bottom;
             _hits.Add(vec2);
             exitPos += bullet.travelDirNormalized;
-            for (int index = 0; index < 1.0f + damageMultiplier / 2.0f; ++index)
+            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
                 Level.Add(new GlassParticle(exitPos.x, exitPos.y, -bullet.travelDirNormalized, tint.value));
         }
 
@@ -248,7 +247,7 @@ namespace DuckGame
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
             with.Fondle(this);
-            if (floor && with.top > top && CalculateImpactPower(with, from) > 2.8f && with.isServerForObject)
+            if (floor && with.top > top && CalculateImpactPower(with, from) > 2.79999995231628 && with.isServerForObject)
             {
                 if (with is Duck duck)
                     RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
@@ -257,10 +256,10 @@ namespace DuckGame
             else
             {
                 float num = Math.Abs(with.hSpeed) + Math.Abs(with.vSpeed);
-                if (!destroyed && num > 1.5f)
+                if (!destroyed && num > 1.5)
                 {
                     ++shakeTimes;
-                    if (isServerForObject && Level.current is TeamSelect2 && with is PhysicsObject && (with as PhysicsObject).gravMultiplier < 0.1f)
+                    if (isServerForObject && Level.current is TeamSelect2 && with is PhysicsObject && (with as PhysicsObject).gravMultiplier < 0.100000001490116)
                         Destroy(new DTImpact(with));
                 }
                 if (!destroyed || !(with is Duck duck))
@@ -309,7 +308,7 @@ namespace DuckGame
         public override void Draw()
         {
             Vec2 zero = Vec2.Zero;
-            float num1 = (float)((float)_shake * _shakeVal * 0.8);
+            float num1 = (float)((float)_shake * _shakeVal * 0.800000011920929);
             if (floor)
                 zero.y = num1;
             else
@@ -344,11 +343,7 @@ namespace DuckGame
                     if (index + 1 > _hits.Count)
                         return;
 
-<<<<<<< Updated upstream
                     Color col = new Color((byte)((float)windowColor.r * 0.5f), (byte)((float)windowColor.g * 0.5f), (byte)((float)windowColor.b * 0.8f), (byte)178);
-=======
-                    Color col = new Color((byte)(windowColor.r * 0.5f), (byte)(windowColor.g * 0.5f), (byte)(windowColor.b * 0.8f), (byte)178);
->>>>>>> Stashed changes
                     Graphics.DrawLine(this._hits[index] + zero, this._hits[index + 1] + zero, col, 1f, default(Depth));
                 }
             }
