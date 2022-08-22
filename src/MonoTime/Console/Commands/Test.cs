@@ -95,9 +95,11 @@ namespace DuckGame
             List<string> strings = new List<string>();
             for (int i = 0; i < rectangles.Length; i++)
             {
+                string texturename = "";
                 try
                 {
                     PackingRectangle r = rectangles[i];
+                    texturename = texs[r.Id].Value;
                     Texture2D tex = texs[r.Id].Key;
                     Color[] data = new Color[tex.Width * tex.Height];
                     texs[r.Id].Key.GetData<Color>(data);
@@ -108,54 +110,55 @@ namespace DuckGame
                             bigimage.SetPixel(x + (int)r.X, y + (int)r.Y, data[x + y * tex.Width]);
                         }
                     }
-                    //DirectBitmap img = new DirectBitmap((int)r.Width, (int)r.Height, data);
-                    // img.Bitmap.Save(@"C:\Users\daniel\Documents\GitHub\DuckGamesOG\bin\king\named\" + tex + ".png", ImageFormat.Png);
-                    //img.Dispose();
-                    Stream stream = File.Create(@"C:\Users\daniel\Documents\GitHub\DuckGamesOG\bin\king\named\" + texs[r.Id].Value.Replace("/", "__") + ".png");
-                    tex.SaveAsPng(stream, (int)r.Width, (int)r.Height);
-                    stream.Dispose();
-                    // stream.Dispose();
+                    if (file == "unsaved")
+                    {
+                        Stream stream = File.Create(@"..\unnamedtexs\" + texs[r.Id].Value.Replace("/", "__") + ".png");
+                        tex.SaveAsPng(stream, (int)r.Width, (int)r.Height);
+                        stream.Dispose();
+                    }
+                 
                     strings.Add(texs[r.Id].Value + " " + r.X.ToString() + " " + r.Y.ToString() + " " + r.Height.ToString() + " " + r.Width.ToString());
                 }
-                catch
-                { }
+                catch (Exception ex)
+                {
+
+                    DevConsole.Log("Error handling Texture " + texturename + " " + file +  " "+ ex.Message, Color.Red);
+                }
             }
-            System.IO.File.WriteAllLines(@"C:\Users\daniel\Documents\GitHub\DuckGamesOG\bin\king\" + file + "_offsets.txt", strings);
-            bigimage.Bitmap.Save(@"C:\Users\daniel\Documents\GitHub\DuckGamesOG\bin\king\" + file + ".png", ImageFormat.Png);
+            System.IO.File.WriteAllLines(@"..\" + file + "_offsets.txt", strings);
+            bigimage.Bitmap.Save(@"..\" + file + ".png", ImageFormat.Png);
             bigimage.Dispose();
         }
         public static bool dothing = true;
-        public static void savenonexistent()
+        public static void PackTextures(List<Tex2D> Textures, List<string> skip = null, string filename = "")
         {
-            List<PackingRectangle> unnamedrectangles = new List<PackingRectangle>();
-            List<KeyValuePair<Texture2D, string>> unnamedtexs = new List<KeyValuePair<Texture2D, string>>();
+            if (skip == null)
+            {
+                skip = new List<string>();
+            }
             List<PackingRectangle> rectangles = new List<PackingRectangle>();
             List<KeyValuePair<Texture2D, string>> texs = new List<KeyValuePair<Texture2D, string>>();
             List<Texture2D> inlist = new List<Texture2D>();
             int n = -1;
-            int n2 = -1;
-            List<string> unneeedtexs = new List<string>() { "shot01", "message", "screen05", "albumpic", "gym", "furni", "ginormoScore", "logo_armature", "arcade/arcadeBackground", "looptex", "civ/desertTileset", "civ/grassTileset", "civ/snowTileset", "civ/grass" };
-            foreach (Texture2D thing in MTSpriteBatcher.Texidonthave)
+            foreach (Texture2D thing in Textures)
             {
                 Texture2D t = thing;
-                inlist.Add(t);
-
-
                 if (t.Name != null)
                 {
-                    n += 1;
-                    string texname = t.Name;
-                    texs.Add(new KeyValuePair<Texture2D, string>(t, texname));
-                    rectangles.Add(new PackingRectangle(0, 0, (uint)t.Width, (uint)t.Height, n));
+                    if (skip.Contains(t.Name))
+                    {
+                        continue;
+                    }
                 }
-                else
+                n += 1;
+                inlist.Add(t);
+                string texname = "empty" + n.ToString();
+                if (t.Name != null)
                 {
-
-                    n2 += 1;
-                    string texname = n2.ToString() + " unnamed";
-                    unnamedtexs.Add(new KeyValuePair<Texture2D, string>(t, texname));
-                    unnamedrectangles.Add(new PackingRectangle(0, 0, (uint)t.Width, (uint)t.Height, n2));
+                    texname = t.Name;
                 }
+                texs.Add(new KeyValuePair<Texture2D, string>(t, texname));
+                rectangles.Add(new PackingRectangle(0, 0, (uint)t.Width, (uint)t.Height, n));
 
             }
             PackingRectangle[] arrayrecs = rectangles.OrderBy(p => p.Area).ToArray();
@@ -163,41 +166,30 @@ namespace DuckGame
             {
 
                 RectanglePacker.Pack(arrayrecs, out PackingRectangle bounds);
-                SaveAsImage(texs, arrayrecs, in bounds, "unseen");
+                SaveAsImage(texs, arrayrecs, in bounds, filename);
             }
-
-            PackingRectangle[] unnamedarrayrecs = unnamedrectangles.OrderBy(p => p.Area).ToArray();
-            RectanglePacker.Pack(unnamedarrayrecs, out PackingRectangle unanmedbounds);
-            SaveAsImage(unnamedtexs, unnamedarrayrecs, in unanmedbounds, "unnamedunseen");
+        }
+        public static void TextureInit()
+        {
+            Tex2D extraButton = new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(HatSelector.ButtonSprite))), "button");
+            extraButton.Namebase = "nikoextraButton";
+            Content.textures[extraButton.Namebase] = extraButton;
+            foreach (Thing thing in Editor.thingMap.Values) // those texures get created on the fly so we just going to make them here to save
+            {
+                thing.GeneratePreview(48, 48, true); // IceBlock
+                thing.GeneratePreview(32, 32, true); // ItemSpawner
+                thing.GeneratePreview(16, 16, true); // menus
+            }
+        }
+        public static void SaveTextures()
+        {
+            List<string> unneeedtexs = new List<string>() { "shot01", "message", "screen05", "albumpic", "gym", "furni", "ginormoScore", "logo_armature", "arcade/arcadeBackground", "looptex", "civ/desertTileset", "civ/grassTileset", "civ/snowTileset", "civ/grass" };
+            TextureInit();
+            PackTextures(MTSpriteBatcher.Texidonthave, null, "unsaved"); ;
+            PackTextures(Content.textures.Values.ToList(), unneeedtexs, "spriteatlas");
         }
         public static void drawthething()
         {
-            //if (dothing)
-            //{
-            //    dothing = false;
-            //    List<PackingRectangle> rectangles = new List<PackingRectangle>();
-            //    List<KeyValuePair<Texture2D, string>> texs = new List<KeyValuePair<Texture2D, string>>();
-            //    List<Texture2D> inlist = new List<Texture2D>();
-            //    int n = -1;
-            //    List<string> unneeedtexs = new List<string>() { "shot01", "message", "screen05", "albumpic", "gym", "furni", "ginormoScore", "logo_armature", "arcade/arcadeBackground", "looptex", "civ/desertTileset", "civ/grassTileset", "civ/snowTileset", "civ/grass" };
-            //    foreach (KeyValuePair<string, DuckGame.Tex2D> thing in Content.textures)
-            //    {
-            //        Texture2D t = (Texture2D)thing.Value;
-            //        if (inlist.Contains(t) || unneeedtexs.Contains(t.Name))
-            //        {
-            //            continue;
-            //        }
-            //        inlist.Add(t);
-            //        n += 1;
-            //        texs.Add(new KeyValuePair<Texture2D, string>(t, t.Name));
-            //        rectangles.Add(new PackingRectangle(0, 0, (uint)t.Width, (uint)t.Height, n));
-            //    }
-            //    PackingRectangle[] arrayrecs = rectangles.OrderBy(p => p.Area).ToArray();
-            //    RectanglePacker.Pack(arrayrecs, out PackingRectangle bounds);
-            //    SaveAsImage(texs, arrayrecs, in bounds, "profit.png");
-            //    Console.WriteLine("e");
-            //}
-
             //Buckets.Keys
             //if (Level.current != null)
             //{
@@ -227,11 +219,11 @@ namespace DuckGame
 
         }
 
-        [DevConsoleCommand(Name = "see")]
+        [DevConsoleCommand(Name = "savegraphic")]
         public static void seetheunseen()
         {
-            savenonexistent();
-            DevConsole.Log("did see " + MTSpriteBatcher.Texidonthave.Count.ToString());
+            SaveTextures();
+            DevConsole.Log("wasnt in spriteatlas " + MTSpriteBatcher.Texidonthave.Count.ToString());
         }
         public static bool graphicculling = true;
         [DevConsoleCommand(Name = "graphiccull")]

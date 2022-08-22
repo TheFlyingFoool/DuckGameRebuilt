@@ -50,6 +50,10 @@ namespace DuckGame
                 }
                 else
                 {
+                    if (!DuckGame.Content.offests.ContainsKey("energyTex") || !DuckGame.Content.offests.ContainsKey(_thing2._blade.texture.Namebase))
+                    {
+                        return;
+                    }
                     Microsoft.Xna.Framework.Rectangle r = DuckGame.Content.offests[_thing2._blade.texture.Namebase];
                     Microsoft.Xna.Framework.Rectangle r2 = DuckGame.Content.offests["energyTex"]; //_thing2._blade.texture
                     SetValue("width", _thing2._blade.texture.frameWidth / _thing2._blade.texture.width); // / _thing2._blade.texture.width
