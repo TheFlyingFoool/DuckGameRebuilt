@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.Xna.Framework.Graphics;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -49,13 +50,25 @@ namespace DuckGame
                 }
                 else
                 {
-                    SetValue("width", _thing2.graphic.texture.frameWidth / _thing2.graphic.texture.width); // / _thing2._blade.texture.width
-                    SetValue("height", _thing2.graphic.texture.frameHeight / _thing2.graphic.texture.height); // / _thing2._blade.texture.height
+                    Microsoft.Xna.Framework.Rectangle r = DuckGame.Content.offests[_thing2._blade.texture.Namebase];
+                    Microsoft.Xna.Framework.Rectangle r2 = DuckGame.Content.offests["energyTex"]; //_thing2._blade.texture
+                    SetValue("width", _thing2._blade.texture.frameWidth / _thing2._blade.texture.width); // / _thing2._blade.texture.width
+                    SetValue("height", _thing2._blade.texture.frameHeight / _thing2._blade.texture.height); // / _thing2._blade.texture.height
                     SetValue("xpos", _thing2.x);
                     SetValue("ypos", _thing2.y);
                     SetValue("time", _time);
                     SetValue("glow", glow);
                     SetValue("bladeColor", _thing2.swordColor);
+
+                    SetValue("xoffset", r.X / (float)Content.Thick.width);
+                    SetValue("yoffset", r.Y / (float)Content.Thick.height);
+                    SetValue("spritesizex", r.Width / (float)Content.Thick.width);
+                    SetValue("spritesizey", r.Height / (float)Content.Thick.height);
+
+                    SetValue("goldxoffset", r2.X / (float)Content.Thick.width);
+                    SetValue("goldyoffset", r2.Y / (float)Content.Thick.height);
+                    SetValue("goldsizex", r2.Width / (float)Content.Thick.width);
+                    SetValue("goldsizey", r2.Height / (float)Content.Thick.height);
                 }
             }
             DuckGame.Graphics.device.Textures[1] = (Texture2D)_energyTexture;

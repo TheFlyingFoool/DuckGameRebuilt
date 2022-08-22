@@ -20,17 +20,31 @@ namespace DuckGame
             _goldTexture = Content.Load<Tex2D>("bigGold");
             _thing = t;
         }
-
+        //float xoffset;
+        //float yoffset;
         public override void Apply()
         {
             if (_thing.graphic != null && _thing.graphic.texture != null)
             {
-                SetValue("width", _thing.graphic.texture.frameWidth / _thing.graphic.texture.width);
-                SetValue("height", _thing.graphic.texture.frameHeight / _thing.graphic.texture.height);
+                Microsoft.Xna.Framework.Rectangle r = DuckGame.Content.offests[_thing.graphic.texture.Namebase];
+                Microsoft.Xna.Framework.Rectangle r2 = DuckGame.Content.offests["bigGold"];
+                //bigGold
+                SetValue("width", _thing.graphic.texture.frameWidth / (float)_thing.graphic.texture.width);
+                SetValue("height", _thing.graphic.texture.frameHeight / (float)_thing.graphic.texture.height);
                 SetValue("xpos", _thing.x);
                 SetValue("ypos", _thing.y);
+                SetValue("xoffset", r.X / (float)Content.Thick.width);
+                SetValue("yoffset", r.Y / (float)Content.Thick.height);
+                SetValue("spritesizex", r.Width / (float)Content.Thick.width);
+                SetValue("spritesizey", r.Height / (float)Content.Thick.height);
+
+                SetValue("goldxoffset", r2.X / (float)Content.Thick.width);
+                SetValue("goldyoffset", r2.Y / (float)Content.Thick.height);
+                SetValue("goldsizex", r2.Width / (float)Content.Thick.width);
+                SetValue("goldsizey", r2.Height / (float)Content.Thick.height);
             }
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)_goldTexture;
+            //DuckGame.Graphics.device.Textures[1] = (Texture2D)_goldTexture;
+            
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
             foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();

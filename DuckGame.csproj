@@ -12,6 +12,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <Nullable>disable</Nullable>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,7 +25,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.1.8175.33388</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -84,7 +84,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|AnyCPU'">
     <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DuckGame</DefineConstants>
+    <DefineConstants>DEBUG;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>false</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -95,6 +95,7 @@
     </DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|x86'">
     <AssemblyName>DuckGame</AssemblyName>
@@ -223,10 +224,20 @@
     <Compile Include="DuckGame\AddedContent\NiK0\ShatterDuck.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\TheDishes.cs" />
     <Compile Include="DuckGame\AddedContent\klof44\DiscordRichPresence.cs" />
-	<Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\HashCode.cs" />
+    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\HashCode.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\PackingHints.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\PackingRectangle.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\RectanglePacker.cs" />
+    <Compile Include="Properties\Resources1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Clear.cs" />
@@ -1935,11 +1946,26 @@
   <ItemGroup>
     <EmbeddedResource Include="DuckGame\Properties\Resources.resx" />
     <EmbeddedResource Include="DuckGame\src\MonoTime\Console\NetworkConsole.resx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DuckGame.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
+    <Folder Include="shaders_source\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DuckGame.ico" />
@@ -1956,24 +1982,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="DuckGame.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\MonoTime\Console\Commands\Default\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo $(DevEnvDir)..\..\VC\bin\editbin.exe</PostBuildEvent>
