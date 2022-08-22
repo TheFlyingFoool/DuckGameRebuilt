@@ -226,15 +226,9 @@ namespace DuckGame
                 this.graphic.angle = this.angle;
                 this.graphic.depth = base.depth + 1;
                 this.graphic.scale = base.scale;
-<<<<<<< Updated upstream
                 float ypos = level * (float)this.graphic.height;
                 this.graphic.center = this.center - new Vec2(0f, (float)((int)ypos));
                 Graphics.Draw(this.graphic, base.x, base.y, new Rectangle(0f, (float)((int)ypos), (float)this.graphic.w, (float)((int)((float)this.graphic.h - ypos))));
-=======
-                float ypos = level * graphic.height;
-                this.graphic.center = this.center - new Vec2(0f, (int)ypos);
-                Graphics.Draw(this.graphic, base.x, base.y, new Rectangle(0f, (int)ypos, graphic.w, (int)(graphic.h - ypos)));
->>>>>>> Stashed changes
             }
         }
     }

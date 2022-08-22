@@ -50,11 +50,8 @@ namespace DuckGame
           : base()
         {
             _sprite = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(RebuiltSprite))), "title"));
-<<<<<<< Updated upstream
-=======
             _sprite.Namebase = "Rebuilttitle";
             Content.textures[_sprite.Namebase] = _sprite.texture;
->>>>>>> Stashed changes
             _demo = new Sprite("demoPro");
             graphic = _sprite;
             depth = (Depth)0.6f;

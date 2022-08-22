@@ -400,11 +400,7 @@ namespace DuckGame
             hasUnsavedChanges = true;
             if (obj == null)
                 return;
-<<<<<<< Updated upstream
-            if (obj.maxPlaceable >= 0 && things[obj.GetType()].Count() >= obj.maxPlaceable)
-=======
             switch (obj)
->>>>>>> Stashed changes
             {
                 case ThingContainer _:
                     ThingContainer thingContainer = obj as ThingContainer;
@@ -414,22 +410,10 @@ namespace DuckGame
                         {
                             while (enumerator.MoveNext())
                             {
-<<<<<<< Updated upstream
-                                while (enumerator.MoveNext())
-                                {
-                                    Thing current = enumerator.Current;
-                                    if (!Thing.CheckForBozoData(current))
-                                        AddObject(current);
-                                }
-
-                                return;
-=======
                                 Thing current = enumerator.Current;
                                 if (!Thing.CheckForBozoData(current))
                                     AddObject(current);
->>>>>>> Stashed changes
                             }
-
                             return;
                         }
                     }
@@ -451,75 +435,9 @@ namespace DuckGame
                             History.Add(() => RemoveObject(t), () => AddObject(t));
                             --index;
                         }
-<<<<<<< Updated upstream
-
-                        break;
-                }
-
-                obj.active = false;
-                AddThing(obj);
-                _levelThings.Add(obj);
-                if (!_loadingLevel && obj is IDontMove)
-                    _placeObjects.Add(obj);
-                placementTotalCost += CalculatePlacementCost(obj);
-                if (_sizeRestriction.x > 0.0)
-                    AdjustSizeLimits(obj);
-                if (_loadingLevel)
-                    return;
-                if (!_isPaste)
-                    obj.EditorAdded();
-                if (obj is MirrorMode || processingMirror || obj is BackgroundUpdater)
-                    return;
-                processingMirror = true;
-                foreach (MirrorMode mirrorMode in things[typeof(MirrorMode)])
-                {
-                    if (((MirrorMode.Setting) mirrorMode.mode == MirrorMode.Setting.Both ||
-                         (MirrorMode.Setting) mirrorMode.mode == MirrorMode.Setting.Vertical) &&
-                        Math.Abs(mirrorMode.position.x - obj.position.x) > 2.0)
-                    {
-                        Vec2 vec2 = obj.position -
-                                    new Vec2((float) ((obj.position.x - mirrorMode.position.x) * 2.0), 0f);
-                        Thing thing = Thing.LoadThing(obj.Serialize());
-                        thing.position = vec2;
-                        thing.flipHorizontal = !obj.flipHorizontal;
-                        AddObject(thing);
-                        thing.EditorFlip(false);
                     }
-
-                    if (((MirrorMode.Setting) mirrorMode.mode == MirrorMode.Setting.Both ||
-                         (MirrorMode.Setting) mirrorMode.mode == MirrorMode.Setting.Horizontal) &&
-                        Math.Abs(mirrorMode.position.y - obj.position.y) > 2.0)
-                    {
-                        Vec2 vec2 = obj.position -
-                                    new Vec2(0f, (float) ((obj.position.y - mirrorMode.position.y) * 2.0));
-                        Thing thing = Thing.LoadThing(obj.Serialize());
-                        thing.position = vec2;
-                        AddObject(thing);
-                        thing.EditorFlip(true);
-                    }
-
-                    if ((MirrorMode.Setting) mirrorMode.mode == MirrorMode.Setting.Both &&
-                        Math.Abs(mirrorMode.position.x - obj.position.x) > 2.0 &&
-                        Math.Abs(mirrorMode.position.y - obj.position.y) > 2.0)
-                    {
-                        Vec2 vec2 = obj.position - new Vec2((float) ((obj.position.x - mirrorMode.position.x) * 2.0),
-                            (float) ((obj.position.y - mirrorMode.position.y) * 2.0));
-                        Thing thing = Thing.LoadThing(obj.Serialize());
-                        thing.position = vec2;
-                        thing.flipHorizontal = !obj.flipHorizontal;
-                        AddObject(thing);
-                        thing.EditorFlip(false);
-                        thing.EditorFlip(true);
-                    }
-                }
-
-                processingMirror = false;
-=======
-                    }
-
                     break;
             }
-
             obj.active = false;
             AddThing(obj);
             _levelThings.Add(obj);
@@ -575,7 +493,6 @@ namespace DuckGame
                     thing.EditorFlip(false);
                     thing.EditorFlip(true);
                 }
->>>>>>> Stashed changes
             }
 
             processingMirror = false;

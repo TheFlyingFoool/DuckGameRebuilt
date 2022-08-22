@@ -541,16 +541,12 @@ namespace DuckGame
                     Level.Remove(this);
                 }
             }
-<<<<<<< Updated upstream
             if (needsRefresh)
             {
                 PlaceBlock();
                 needsRefresh = false;
                 //this.neededRefresh = true;
             }
-=======
-            
->>>>>>> Stashed changes
             //if (setLayer)
             //    layer = Layer.Blocks;
             base.Update();
@@ -719,14 +715,7 @@ namespace DuckGame
                     _brokenSprite.angleDegrees = 90f;
                     Graphics.Draw(_brokenSprite, x, y + 16f);
                 }
-            }
-<<<<<<< Updated upstream
-            if (cheap && !Editor.editorDraw)
-                graphic.UltraCheapStaticDraw(flipHorizontal);
-            else
-                base.Draw();
-=======
-            
+            }   
             if (graphic.position != position)
             {
                 (graphic as SpriteMap).ClearCache();
@@ -739,10 +728,8 @@ namespace DuckGame
             graphic.angle = angle;
             graphic.cheapmaterial = this.material;
             (graphic as SpriteMap).UpdateFrame();
-            
             graphic.UltraCheapStaticDraw(flipHorizontal);
             //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 
->>>>>>> Stashed changes
         }
 
         public void UpdateCollision()

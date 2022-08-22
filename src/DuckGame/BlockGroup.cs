@@ -108,10 +108,7 @@ namespace DuckGame
         }
         public override void Initialize()
         {
-<<<<<<< Updated upstream
-=======
             needsRefresh = true;
->>>>>>> Stashed changes
             _level.AddUpdateOnce(this);
             shouldbeinupdateloop = false;
             //base.Initialize();

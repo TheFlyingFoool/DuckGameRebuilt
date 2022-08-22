@@ -144,15 +144,9 @@ namespace DuckGame
                     Level.core.currentLevel.lowestPoint = 100000f;
                 }
                 else
-<<<<<<< Updated upstream
-                    Level.current = !MonoMain.startInEditor ? (!(!Program.intro || MonoMain.noIntro) ? new BIOSScreen() : new TitleScreen()) : Main.editor;
-=======
                 {
                     Level.current = !MonoMain.startInEditor ? (!(!Program.intro || MonoMain.noIntro) ? new BIOSScreen() : new TitleScreen()) : Main.editor;
-                    
                 }
-                   
->>>>>>> Stashed changes
             }
             _font = new BitmapFont("biosFont", 8);
             if (MonoMain.useRPC)

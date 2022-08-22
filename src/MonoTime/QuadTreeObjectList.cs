@@ -10,13 +10,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
-<<<<<<< Updated upstream
-=======
 using System.Drawing;
 using Microsoft.Xna.Framework;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
->>>>>>> Stashed changes
 namespace DuckGame
 {
     public class QuadTreeObjectList : IEnumerable<Thing>, IEnumerable
@@ -230,18 +227,11 @@ namespace DuckGame
             }
             return Chunk;
         }
-<<<<<<< Updated upstream
-        private Vec2[] GetIdForObj(Vec2 Position, float width, float height)
-        {
-            height = height * 0.5f;
-            width = width * 0.5f;
-=======
         private Vec2[] GetIdForObj(Vec2 Position, float width, float height) // rect
         {
             height = height * 0.5f;
             width = width * 0.5f;
 
->>>>>>> Stashed changes
             int top = (int)((Position.y + height + offset) / cellsize);
             int bottom = (int)((Position.y - height + offset) / cellsize);
             int right = (int)((Position.x + width + offset) / cellsize);
@@ -302,11 +292,6 @@ namespace DuckGame
             }
             Vec2[] usedids = new Vec2[ids.Length];
             List<Thing> objects = new List<Thing>();
-<<<<<<< Updated upstream
-            int n = -1;
-
-=======
->>>>>>> Stashed changes
             for (int i = 0; i < ids.Length; i++)
             {
                 Vec2 bucket = ids[i];
@@ -331,9 +316,6 @@ namespace DuckGame
             }
             return objects;
         }
-<<<<<<< Updated upstream
-
-=======
         public ICollection<Thing> GetThings(Vec2 p1, Vec2 p2, Type t) //Line
         {
             Vec2[] ids = GetIdForLine(p1, p2);
@@ -375,7 +357,6 @@ namespace DuckGame
             }
             return objects;
         }
->>>>>>> Stashed changes
         // public Dictionary<Vec2, List<Thing>> Buckets = new Dictionary<Vec2, List<Thing>>();
         public Dictionary<Vec2, Dictionary<int, List<Thing>>> Buckets = new Dictionary<Vec2, Dictionary<int, List<Thing>>>();
         public void UpdateObject(Thing thing)  //float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
@@ -404,14 +385,10 @@ namespace DuckGame
                         }
                         //_allObjectsByType.Add(key, obj);
                     }
-<<<<<<< Updated upstream
-                    //output[typeof(Thing)].Add(thing);
-=======
                     if (output.TryGetValue(typeof(Thing).GetHashCode(), out List<Thing> output3))
                     {
                         output[typeof(Thing).GetHashCode()].Remove(thing);
                     }
->>>>>>> Stashed changes
                     continue;
                 }
                 output = new Dictionary<int, List<Thing>>();
@@ -543,8 +520,6 @@ namespace DuckGame
             Vec2 position = new Vec2(p1.x + (Width / 2), p1.y + (Height / 2));
             return GetThings(position, Width, Height, t);
         }
-<<<<<<< Updated upstream
-=======
         public ICollection<Thing> CollisionLineAll(Vec2 p1, Vec2 p2, Type t)
         {
             return GetThings(p1, p2, t);
@@ -598,7 +573,6 @@ namespace DuckGame
             ////}
             //return Chunk.ToArray();
         }
->>>>>>> Stashed changes
         public ICollection<Thing> CollisionCircleAll(Vec2 position, float radius, Type t)
         {
             return GetThings(position, radius * 2, radius * 2, t);

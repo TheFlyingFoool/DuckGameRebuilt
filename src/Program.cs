@@ -25,12 +25,8 @@ namespace DuckGame
     /// <summary>The main class.</summary>
     public static class Program
     {
-<<<<<<< Updated upstream
-        public static string GameDirectory;
-=======
         public static string StartinEditorLevelName = "";
         public static string GameDirectory = "";
->>>>>>> Stashed changes
         public static string FileName = "";
         public static string FilePath = "";
         public static bool IsLinuxD;
@@ -175,8 +171,6 @@ namespace DuckGame
                         if (args.Count<string>() > index)
                             MonoMain.lobbyPassword = args[index];
                         break;
-<<<<<<< Updated upstream
-=======
                     case "+editortest":
                         MonoMain.startInEditor = true;
                         ++index;
@@ -185,7 +179,6 @@ namespace DuckGame
                             StartinEditorLevelName = args[index];
                         }
                         break;
->>>>>>> Stashed changes
                     case "-intro":
                         intro = true;
                         break;

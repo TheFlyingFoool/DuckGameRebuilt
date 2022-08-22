@@ -24,16 +24,11 @@ namespace DuckGame
             collisionSize = new Vec2(16);
             center = new Vec2(8);
             _collisionOffset = new Vec2(-8);
-
             collideSounds.Add("glassBump");
-<<<<<<< Updated upstream
-
-=======
             bubbles.Namebase = "bouble";
             dirty.Namebase = "dirty";
             Content.textures[dirty.Namebase] = dirty.texture;
             Content.textures[bubbles.Namebase] = bubbles.texture;
->>>>>>> Stashed changes
             _editorName = "Dishes";
             editorTooltip = "DO THE FUCKING DISHES COLLIN";
         }

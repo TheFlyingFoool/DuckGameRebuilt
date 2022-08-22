@@ -15,13 +15,10 @@ namespace DuckGame
         {
             graphic = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(PizzaSprite))), "pizer"));
             oven = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(OvenSprite))), "ovensprite"));
-<<<<<<< Updated upstream
-=======
             graphic.Namebase = "pizer";
             oven.Namebase = "ovensprite";
             Content.textures[graphic.Namebase] = graphic.texture;
             Content.textures[oven.Namebase] = oven.texture;
->>>>>>> Stashed changes
             oven.center = new Vec2(8.5f, 10);
             center = new Vec2(14.5f, 8.5f);
             collisionSize = new Vec2(27, 17);

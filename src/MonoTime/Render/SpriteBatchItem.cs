@@ -13,10 +13,7 @@ namespace DuckGame
 {
     public class MTSpriteBatchItem : IComparable<MTSpriteBatchItem>
     {
-<<<<<<< Updated upstream
-=======
         public Vec2 Offsets = Vec2.Zero;
->>>>>>> Stashed changes
         public float DepthIndex;
         public MTSpriteBatchItemMetaData MetaData;
         public bool inPool = false;
@@ -56,13 +53,10 @@ namespace DuckGame
           Vec2 texCoordTL,
           Vec2 texCoordBR)
         {
-<<<<<<< Updated upstream
-=======
             prevx = x;
             prevy = y;
             prevw = w;
             prevh = h;
->>>>>>> Stashed changes
             Microsoft.Xna.Framework.Color msc = (Microsoft.Xna.Framework.Color)color;
             vertexTL.Position.X = x;
             vertexTL.Position.Y = y;
@@ -166,8 +160,6 @@ namespace DuckGame
           Vec2 texCoordTL,
           Vec2 texCoordBR)
         {
-<<<<<<< Updated upstream
-=======
             prevx = x;
             prevy = y;
             prevdx = dx;
@@ -176,7 +168,6 @@ namespace DuckGame
             prevh = h;
             prevsin = sin;
             prevcos = cos;
->>>>>>> Stashed changes
             Microsoft.Xna.Framework.Color msc = (Microsoft.Xna.Framework.Color)color;
             vertexTL.Position.X = (float)(x + dx * cos - dy * sin);
             vertexTL.Position.Y = (float)(y + dx * sin + dy * cos);

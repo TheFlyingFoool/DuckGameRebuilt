@@ -557,11 +557,7 @@ namespace DuckGame
                                             break;
                                         }
                                     }
-<<<<<<< Updated upstream
-                                    if ((flag || thing.Buckets.Length == 0) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
-=======
                                     if ((flag || thing.Buckets.Length == 0 || thing.owner != null) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
->>>>>>> Stashed changes
                                     {
                                         if (_perspective)
                                         {
@@ -588,13 +584,10 @@ namespace DuckGame
                                             thing.DoDraw();
                                         Graphics.material = null;
                                     }
-<<<<<<< Updated upstream
-=======
                                     else
                                     {
 
                                     }
->>>>>>> Stashed changes
                                 }
                             }
                             else
@@ -628,13 +621,6 @@ namespace DuckGame
                                             thing.DoDraw();
                                         Graphics.material = null;
                                     }
-<<<<<<< Updated upstream
-=======
-                                    else
-                                    {
-
-                                    }
->>>>>>> Stashed changes
                                 }
                             }
                         }
@@ -674,11 +660,7 @@ namespace DuckGame
                                             break;
                                         }
                                     }
-<<<<<<< Updated upstream
-                                    if ((flag || thing.Buckets.Length == 0) && flag && thing.visible)
-=======
                                     if ((flag || thing.Buckets.Length == 0 || thing.owner != null) && thing.visible)
->>>>>>> Stashed changes
                                     {
                                         if (_perspective)
                                         {
@@ -707,10 +689,6 @@ namespace DuckGame
                                     }
 
                                 }
-<<<<<<< Updated upstream
-=======
-                                
->>>>>>> Stashed changes
                             }
                             else
                             {

@@ -57,12 +57,6 @@ namespace DuckGame
         public override void Draw()
         {
             flipHorizontal = false;
-<<<<<<< Updated upstream
-            if (cheap && !Editor.editorDraw)
-                graphic.UltraCheapStaticDraw(flipHorizontal);
-            else
-                base.Draw();
-=======
             //if (cheap && !Editor.editorDraw)
             //    graphic.UltraCheapStaticDraw(flipHorizontal);
             //else
@@ -81,7 +75,6 @@ namespace DuckGame
             (graphic as SpriteMap).UpdateFrame();
             graphic.UltraCheapStaticDraw(flipHorizontal);
             //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 
->>>>>>> Stashed changes
         }
 
         public bool pathed

@@ -324,10 +324,6 @@ namespace DuckGame
         {
             if (_batchItem == null)
             {
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
                 //if (!valid)
                 //    return;
                 UpdateFrame();

@@ -71,10 +71,7 @@ namespace DuckGame
             _editorCanModify = false;
             UpdateCustomTileset();
             shouldbeinupdateloop = false;
-<<<<<<< Updated upstream
-=======
             cheap = true;
->>>>>>> Stashed changes
         }
 
         public override void Terminate()
@@ -84,11 +81,7 @@ namespace DuckGame
         public virtual void DoPositioning()
         {
             //if (Level.current is Editor || graphic == null)
-<<<<<<< Updated upstream
            //     return;
-=======
-            //     return;
->>>>>>> Stashed changes
             graphic.position = position;
             graphic.scale = scale;
             graphic.center = center;
@@ -101,12 +94,6 @@ namespace DuckGame
 
         public override void Draw()
         {
-<<<<<<< Updated upstream
-            if (cheap && !Editor.editorDraw)
-                graphic.UltraCheapStaticDraw(flipHorizontal);
-            else
-                base.Draw();
-=======
             //if (cheap && !Editor.editorDraw)
             //{
             //    DoPositioning();
@@ -134,7 +121,6 @@ namespace DuckGame
             (graphic as SpriteMap).UpdateFrame();
             graphic.UltraCheapStaticDraw(flipHorizontal);
             //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 
->>>>>>> Stashed changes
         }
     }
 }

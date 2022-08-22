@@ -58,11 +58,7 @@ namespace DuckGame
 					int keyboardNote = Keyboard.CurrentNote(d.inputProfile, this);
 					if (keyboardNote >= 0)
 					{
-<<<<<<< Updated upstream
 						this.notePitch = (float)keyboardNote / 12f + 0.01f;
-=======
-						this.notePitch = keyboardNote / 12f + 0.01f;
->>>>>>> Stashed changes
 						this.handPitch = this.notePitch;
 						if (this.notePitch != this.prevNotePitch)
 						{
@@ -125,12 +121,8 @@ namespace DuckGame
 				else
 				{
 					this.handOffset = new Vec2(6f + (1f - this.handPitch) * 4f, -4f + (1f - this.handPitch) * 4f);
-<<<<<<< Updated upstream
-					this.handAngle = (1f - this.handPitch) * 0.4f * (float)this.offDir;
-=======
-					this.handAngle = (1f - this.handPitch) * 0.4f * offDir;
->>>>>>> Stashed changes
-					this._holdOffset = new Vec2(5f + this.handPitch * 2f, -9f + this.handPitch * 2f);
+                    this.handAngle = (1f - this.handPitch) * 0.4f * (float)this.offDir;
+                    this._holdOffset = new Vec2(5f + this.handPitch * 2f, -9f + this.handPitch * 2f);
 					this.collisionOffset = new Vec2(-4f, -7f);
 					this.collisionSize = new Vec2(2f, 16f);
 					this._slideVal = 1f - this.handPitch;
