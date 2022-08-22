@@ -84,11 +84,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|AnyCPU'">
     <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>bin\</OutputPath>
-<<<<<<< Updated upstream
-    <DefineConstants>TRACE;DuckGame</DefineConstants>
-=======
     <DefineConstants>DuckGame</DefineConstants>
->>>>>>> Stashed changes
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>false</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -115,48 +111,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>DuckGame.ico</ApplicationIcon>
-  </PropertyGroup>
-<<<<<<< Updated upstream
-  <PropertyGroup>
-    <ApplicationIcon>DuckGame.ico</ApplicationIcon>
-=======
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;Debug</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>latestmajor</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGameTurbo|x64'">
-    <OutputPath>bin\x64\DuckGameTurbo\</OutputPath>
-    <DefineConstants>TRACE;DuckGameTurbo</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>latestmajor</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|x64'">
-    <OutputPath>bin\x64\DuckGame\</OutputPath>
-    <DefineConstants>TRACE;DuckGame</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>latestmajor</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
-    <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
->>>>>>> Stashed changes
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrashWindow">
@@ -265,13 +219,10 @@
     <Compile Include="DuckGame\AddedContent\NiK0\ShatterDuck.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\TheDishes.cs" />
     <Compile Include="DuckGame\AddedContent\klof44\DiscordRichPresence.cs" />
-<<<<<<< Updated upstream
-=======
-    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\HashCode.cs" />
+	<Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\HashCode.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\PackingHints.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\PackingRectangle.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\RectanglePacker.cs" />
->>>>>>> Stashed changes
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Clear.cs" />
@@ -1974,7 +1925,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< Updated upstream
     <Content Include="DuckGame.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -1990,17 +1940,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-=======
->>>>>>> Stashed changes
     <Folder Include="src\MonoTime\Console\Commands\Default\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-<<<<<<< Updated upstream
-    <PostBuildEvent>
-    </PostBuildEvent>
-=======
     <PostBuildEvent>echo $(DevEnvDir)..\..\VC\bin\editbin.exe</PostBuildEvent>
->>>>>>> Stashed changes
   </PropertyGroup>
 </Project>
