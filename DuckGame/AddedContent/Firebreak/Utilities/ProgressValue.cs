@@ -16,7 +16,9 @@ public struct ProgressValue
     public double MinimumValue = 0;
     public double IncrementSize = 0.05;
 
-    public ProgressValue() : this(0) { }
+    public bool Completed => NormalizedValue >= 1;
+
+    public ProgressValue() : this(0D) { }
 
     public ProgressValue(ProgressValue p) : this(p.Value, p.IncrementSize, p.MinimumValue, p.MaximumValue) { }
 
@@ -37,8 +39,8 @@ public struct ProgressValue
         
         double fillPercentage = NormalizedValue * characterCount;
 
-        string whiteBar = $"{(fillPercentage > 0 ? new string(filled, (int)fillPercentage) : "")}";
-        string blackBar = $"{new string(empty, (int)(characterCount - fillPercentage))}";
+        string whiteBar = new (filled, (int)fillPercentage);
+        string blackBar = new (empty, (int)(characterCount - fillPercentage));
         
         string fullBar = $"{whiteBar}{blackBar}";
         fullBar = fullBar.Length == characterCount - 1 
@@ -60,7 +62,7 @@ public struct ProgressValue
     
     // Positive/Negative
     public static ProgressValue operator +(ProgressValue f) => f;
-    public static ProgressValue operator -(ProgressValue f) => f *= -1;
+    public static ProgressValue operator -(ProgressValue f) => f * -1;
     
     // Arithmetic
     public static ProgressValue operator +(ProgressValue a, ProgressValue b) => a with { Value = a.Value + b.Value };
@@ -89,7 +91,7 @@ public struct ProgressValue
     // Method Overrides
     public override bool Equals(object obj)
     {
-        return obj is ProgressValue p && p.Value == Value;
+        return obj is ProgressValue p && p.Equals(this);
     }
 
     public bool Equals(ProgressValue other)
