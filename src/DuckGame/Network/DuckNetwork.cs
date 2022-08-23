@@ -1921,20 +1921,20 @@ namespace DuckGame
                         _core.enteringText = false;
                         _core.stopEnteringText = false;
                     }
-                    if (!DevConsole.open)
+                    if (!DevConsole.open && LockMovementQueue.Empty)
                     {
                         bool enteringText = _core.enteringText;
                         _core.enteringText = false;
                         int num2 = !(Input.Down("CHAT") && !WasDownLastFrame) ? 0 : (!Keyboard.alt ? 1 : (!Keyboard.Pressed(Keys.Enter) ? 1 : 0)); // Replaced !(Input.Pressed("CHAT")) ? with that because Press can cause issues with it auto trying to close 
                         WasDownLastFrame = Input.Down("CHAT");
                         _core.enteringText = enteringText;
-                        if (num2 != 0)
+                        if (num2 != 0) 
                         {
                             if (!_core.enteringText)
                             {
                                 _core.enteringText = true;
                                 _core.currentEnterText = "";
-                                Keyboard.keyString = "";
+                                Keyboard.KeyString = "";
                             }
                             else
                             {
@@ -1995,10 +1995,10 @@ namespace DuckGame
                     if (_core.enteringText)
                     {
                         Input._imeAllowed = true;
-                        if (Keyboard.keyString.Length > 90)
-                            Keyboard.keyString = Keyboard.keyString.Substring(0, 90);
-                        Keyboard.keyString = Keyboard.keyString.Replace("\n", "");
-                        _core.currentEnterText = Keyboard.keyString;
+                        if (Keyboard.KeyString.Length > 90)
+                            Keyboard.KeyString = Keyboard.KeyString.Substring(0, 90);
+                        Keyboard.KeyString = Keyboard.KeyString.Replace("\n", "");
+                        _core.currentEnterText = Keyboard.KeyString;
                     }
                 }
                 bool flag3 = false;

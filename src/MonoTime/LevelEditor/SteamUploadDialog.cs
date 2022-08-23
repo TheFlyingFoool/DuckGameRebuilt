@@ -222,7 +222,7 @@ namespace DuckGame
             else if (!opened || _opening || _confirm.opened || _upload.opened || _deathmatchTest.opened || _arcadeTest.opened || _testSuccess.opened)
             {
                 if (opened)
-                    Keyboard.keyString = "";
+                    Keyboard.KeyString = "";
                 if (opened)
                     Editor.lockInput = this;
                 _opening = false;
@@ -239,7 +239,7 @@ namespace DuckGame
             }
             else if (_testing)
             {
-                Keyboard.keyString = "";
+                Keyboard.KeyString = "";
                 if (DeathmatchTestDialogue.success)
                 {
                     _testSuccess.Open("Test success! The level can now be published as a deathmatch level!");

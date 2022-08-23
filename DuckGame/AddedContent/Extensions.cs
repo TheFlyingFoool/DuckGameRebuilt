@@ -45,6 +45,12 @@ namespace DuckGame
 
             return split;
         }
+        
+        public static Vec2 GetStringSize(string text, float fontSize = 1f) => new()
+        {
+            x = Graphics.GetStringWidth(text, false, fontSize),
+            y = Graphics.GetStringHeight(text) * fontSize
+        };
 
         private static readonly Regex _defaultWordLineBreakRegex = new(@"(.{0,30})(?:\s+|$)", RegexOptions.Compiled);
         

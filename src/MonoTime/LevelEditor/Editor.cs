@@ -1419,7 +1419,7 @@ namespace DuckGame
                                     if (!clearedKeyboardStringForSearch)
                                     {
                                         clearedKeyboardStringForSearch = true;
-                                        Keyboard.keyString = "";
+                                        Keyboard.KeyString = "";
                                     }
 
                                     if (searchItems != null && searchItems.Count > 0)
@@ -1465,10 +1465,10 @@ namespace DuckGame
                                         _searchHoverIndex = -1;
                                     }
 
-                                    if (_prevSearchString != Keyboard.keyString)
+                                    if (_prevSearchString != Keyboard.KeyString)
                                     {
-                                        searchItems = _objectMenu.Search(Keyboard.keyString);
-                                        _prevSearchString = Keyboard.keyString;
+                                        searchItems = _objectMenu.Search(Keyboard.KeyString);
+                                        _prevSearchString = Keyboard.KeyString;
                                     }
 
                                     if (_placementMenu == null)
@@ -3640,11 +3640,11 @@ namespace DuckGame
                             0.9f);
                         Vec2 position = new Vec2(8f, layer.height - 26f);
                         Graphics.DrawString("@searchiconwhitebig@", position, Color.White, 0.95f);
-                        if (Keyboard.keyString == "")
+                        if (Keyboard.KeyString == "")
                             Graphics.DrawString("|GRAY|Type to search...", position + new Vec2(26f, 7f),
                                 Color.White, 0.95f);
                         else
-                            Graphics.DrawString(Keyboard.keyString + "_", position + new Vec2(26f, 7f),
+                            Graphics.DrawString(Keyboard.KeyString + "_", position + new Vec2(26f, 7f),
                                 Color.White, 0.95f);
                         if (inputMode == EditorInput.Mouse)
                             _searchHoverIndex = -1;
