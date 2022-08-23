@@ -35,6 +35,7 @@ namespace DuckGame
         public static bool debugOrigin;
         public static bool debugBounds;
         private static RasterFont _raster;
+        public static RasterFont RasterFont => _raster;
         public static Dictionary<string, List<CMD>> commands = new();
         public static CMD lastCommand;
         public static bool wagnusDebug;
@@ -2019,7 +2020,7 @@ namespace DuckGame
                 Send.Message(msg, msg.connection);
             }
 
-            if (num1 != 0 && !DuckNetwork.core.enteringText && NetworkDebugger.hoveringInstance)
+            if (num1 != 0 && !DuckNetwork.core.enteringText && LockMovementQueue.Empty && NetworkDebugger.hoveringInstance)
             {
                 if (_tray == null)
                 {
@@ -2028,7 +2029,7 @@ namespace DuckGame
                 }
 
                 _core.open = !_core.open;
-                Keyboard.keyString = "";
+                Keyboard.KeyString = "";
                 _core.cursorPosition = _core.typing.Length;
                 _core.lastCommandIndex = -1;
                 _core.viewOffset = 0;
@@ -2059,7 +2060,7 @@ namespace DuckGame
                 if (_core.cursorPosition > _core.typing.Length)
                     _core.cursorPosition = _core.typing.Length;
                 _core.typing = _core.typing.Insert(_core.cursorPosition,
-                    Keyboard.keyString.Replace("`", "")); // added the Replace because the fix to the input makes it possible to do this if holding it down
+                    Keyboard.KeyString.Replace("`", "")); // added the Replace because the fix to the input makes it possible to do this if holding it down
                 if (_core.typing != "" && _pendingCommandQueue.Count > 0)
                 {
                     _pendingCommandQueue.Clear();
@@ -2070,13 +2071,13 @@ namespace DuckGame
                     });
                 }
 
-                if (Keyboard.keyString.Length > 0)
+                if (Keyboard.KeyString.Length > 0)
                 {
-                    _core.cursorPosition += Keyboard.keyString.Length;
+                    _core.cursorPosition += Keyboard.KeyString.Length;
                     _core.lastCommandIndex = -1;
                 }
 
-                Keyboard.keyString = "";
+                Keyboard.KeyString = "";
                 if (Keyboard.control)
                 {
                     if (Keyboard.Pressed(Keys.C))
@@ -2164,7 +2165,7 @@ namespace DuckGame
                     RunCommand(_core.typing);
                     _core.previousLines.Add(_core.typing);
                     _core.typing = "";
-                    Keyboard.keyString = "";
+                    Keyboard.KeyString = "";
                     _core.lastCommandIndex = -1;
                     _core.viewOffset = 0;
                 }

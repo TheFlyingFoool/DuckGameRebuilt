@@ -88,7 +88,7 @@ namespace DuckGame
             {
                 _text = text;
                 _default = startingText;
-                Keyboard.keyString = "";
+                Keyboard.KeyString = "";
                 Editor.enteringText = true;
                 _maxChars = maxChars;
                 Editor.PushFocus(this);

@@ -18,10 +18,13 @@ namespace DuckGame
     {
         private static KeyboardState _keyState;
         private static KeyboardState _keyStatePrev;
+        public static KeyboardState KeyState => _keyState;
+        public static KeyboardState KeyStatePrev => _keyStatePrev;
         private static bool _keyboardPress = false;
         private static int _lastKeyCount = 0;
         private static int _flipper = 0;
-        public static string keyString = "";
+
+        public static string KeyString = "";
         private bool _fakeDisconnect;
         private Dictionary<int, string> _triggerNames;
         private static Dictionary<int, Sprite> _triggerImages;
@@ -35,7 +38,7 @@ namespace DuckGame
         private static Thing _registerSetThing;
         private static bool _registerLock = false;
         //private static int _currentNote = 0;
-
+        
         public static bool NothingPressed() => Keyboard._keyState.GetPressedKeys().Length == 0 && Keyboard._keyStatePrev.GetPressedKeys().Length == 0;
 
         public override bool isConnected => !_fakeDisconnect;
@@ -727,7 +730,7 @@ namespace DuckGame
                 Keyboard._lastKeyCount = num;
                 updateKeyboardString();
                 Keyboard._flipper = 1;
-                if (Keyboard._registerLock && (Keyboard._registerSetThing == null || Keyboard._registerSetThing.removeFromLevel || Keyboard._registerSetThing.owner == null || DevConsole.open || DuckNetwork.core.enteringText))
+                if (Keyboard._registerLock && (Keyboard._registerSetThing == null || Keyboard._registerSetThing.removeFromLevel || Keyboard._registerSetThing.owner == null || DevConsole.open || DuckNetwork.core.enteringText || !LockMovementQueue.Empty))
                 {
                     Keyboard._registerLock = false;
                     //Keyboard._currentNote = 0;
@@ -821,7 +824,7 @@ namespace DuckGame
 
         public static void IMECharEnteredHandler(object sender, CharacterEventArgs e)
         {
-            Keyboard.keyString = e.Character != '　' ? Keyboard.keyString + e.Character.ToString() : Keyboard.keyString + " ";
+            Keyboard.KeyString = e.Character != '　' ? Keyboard.KeyString + e.Character.ToString() : Keyboard.KeyString + " ";
             Keyboard.ignoreEnter = 4;
         }
 
@@ -830,9 +833,9 @@ namespace DuckGame
             if (!e.ExtendedKey)
                 return;
             if (e.Character == '　')
-                Keyboard.keyString += " ";
+                Keyboard.KeyString += " ";
             else
-                Keyboard.keyString += e.Character.ToString();
+                Keyboard.KeyString += e.Character.ToString();
         }
 
         private void updateKeyboardString()
@@ -851,9 +854,9 @@ namespace DuckGame
                         switch (keys)
                         {
                             case Microsoft.Xna.Framework.Input.Keys.Back:
-                                if (Keyboard.keyString.Length > 0)
+                                if (Keyboard.KeyString.Length > 0)
                                 {
-                                    Keyboard.keyString = Keyboard.keyString.Remove(Keyboard.keyString.Length - 1, 1);
+                                    Keyboard.KeyString = Keyboard.KeyString.Remove(Keyboard.KeyString.Length - 1, 1);
                                     continue;
                                 }
                                 continue;
@@ -861,13 +864,13 @@ namespace DuckGame
                             case Microsoft.Xna.Framework.Input.Keys.Escape:
                                 continue;
                             case Microsoft.Xna.Framework.Input.Keys.Space:
-                                Keyboard.keyString = Keyboard.keyString.Insert(Keyboard.keyString.Length, " ");
+                                Keyboard.KeyString = Keyboard.KeyString.Insert(Keyboard.KeyString.Length, " ");
                                 continue;
                             default:
                                 char charFromKey = Keyboard.GetCharFromKey((Keys)keys);
                                 if (charFromKey != ' ')
                                 {
-                                    Keyboard.keyString += charFromKey.ToString();
+                                    Keyboard.KeyString += charFromKey.ToString();
                                     continue;
                                 }
                                 continue;
@@ -929,7 +932,7 @@ namespace DuckGame
 
         public override bool MapPressed(int mapping, bool any = false)
         {
-            if (!Keyboard.ignoreCore && (DevConsole.open || DuckNetwork.enteringText || Editor.enteringText))
+            if (!Keyboard.ignoreCore && (DevConsole.open || DuckNetwork.enteringText || Editor.enteringText || !LockMovementQueue.Empty))
                 return false;
             Keys key = (Keys)mapping;
             return Keyboard.Pressed(key, any) || Keyboard._repeatList.Contains(key);
@@ -954,7 +957,7 @@ namespace DuckGame
             return Keyboard._keyState.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key) && !Keyboard._keyStatePrev.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key) || Keyboard._repeatList.Contains(key);
         }
 
-        public override bool MapReleased(int mapping) => (Keyboard.ignoreCore || !DevConsole.open && !DuckNetwork.enteringText && !Editor.enteringText) && Keyboard.Released((Keys)mapping);
+        public override bool MapReleased(int mapping) => (Keyboard.ignoreCore || !DevConsole.open && !DuckNetwork.enteringText && !Editor.enteringText && LockMovementQueue.Empty) && Keyboard.Released((Keys)mapping);
 
         public static bool Released(Keys key)
         {
@@ -971,7 +974,7 @@ namespace DuckGame
             return !Keyboard._keyState.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key) && Keyboard._keyStatePrev.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key);
         }
 
-        public override bool MapDown(int mapping, bool any = false) => (Keyboard.ignoreCore || !DevConsole.open && !DuckNetwork.enteringText && !Editor.enteringText) && Keyboard.Down((Keys)mapping);
+        public override bool MapDown(int mapping, bool any = false) => (Keyboard.ignoreCore || !DevConsole.open && !DuckNetwork.enteringText && !Editor.enteringText && LockMovementQueue.Empty) && Keyboard.Down((Keys)mapping);
 
         public static bool control => Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl);
 
