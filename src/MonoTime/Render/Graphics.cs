@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using DuckGame.AddedContent.Drake.PolyRender;
@@ -164,7 +165,7 @@ namespace DuckGame
             }
             set => DuckGame.Graphics._base = value;
         }
-
+        
         public static MTSpriteBatch screen
         {
             get => DuckGame.Graphics._currentBatch;
@@ -300,6 +301,13 @@ namespace DuckGame
                 DuckGame.Graphics._biosFont.Draw(text, position.x, position.y, color, depth, pro);
                 DuckGame.Graphics._biosFont.scale = new Vec2(1f);
             }
+        }
+
+        public static Texture2D Texture2DFromBase64String(string base64String, GraphicsDevice? graphicsDevice = null)
+        {
+            graphicsDevice ??= device;
+            byte[] buffer = Convert.FromBase64String(base64String);
+            return Texture2D.FromStream(graphicsDevice, new MemoryStream(buffer));
         }
 
         public static void DrawPassword(
