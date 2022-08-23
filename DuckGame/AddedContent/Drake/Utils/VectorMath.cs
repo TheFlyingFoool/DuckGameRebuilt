@@ -161,12 +161,12 @@ public static class VectorMath
 
         public static Vector2 ZeroX(this Vector2 self)
         {
-            return self * Vector2.UnitY;
+            return new Vector2(0f, self.Y);
         }
 
         public static Vector2 ZeroY(this Vector2 self)
         {
-            return self * Vector2.UnitX;
+            return new Vector2(self.X, 0f);
         }
 
         public static Vector2 ReplaceX(this Vector2 self, float x)
@@ -208,8 +208,7 @@ public static class VectorMath
         {
             return new Vector2(self.X, self.Y * amount);
         }
-
-
+        
         public static Vector2 XX(this Vector2 self)
         {
             return new Vector2(self.X, self.X);
@@ -218,5 +217,25 @@ public static class VectorMath
         public static Vector2 YY(this Vector2 self)
         {
             return new Vector2(self.Y, self.Y);
+        }
+
+        public static Vector2 XY(this Vec3 self)
+        {
+            return new Vector2(self.x, self.y);
+        }
+
+        public static Vector2 XY(this Vector3 self)
+        {
+            return new Vector2(self.X, self.Y);
+        }
+
+        public static Vector2 XY(this Vector4 self)
+        {
+            return new Vector2(self.X, self.Y);
+        }
+
+        public static Vector2 ZW(this Vector4 self)
+        {
+            return new Vector2(self.Z, self.W);
         }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -68,7 +69,7 @@ public sealed class DrawingContextAttribute : Attribute
     {
         Layer = layer;
     }
-
+    
     static DrawingContextAttribute()
     {
         MemberAttributePair<MethodInfo, DrawingContextAttribute>.RequestSearch(all =>

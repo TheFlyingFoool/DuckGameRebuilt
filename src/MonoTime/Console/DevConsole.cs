@@ -2048,11 +2048,6 @@ namespace DuckGame
                 }
             }
 
-            if (Mouse.isScrolling)
-            {
-                ConsoleLineOffset = Maths.Clamp(ConsoleLineOffset + Mouse.discreteScroll, -core.lines.Count, 0);
-            }
-
             if (_core.open && NetworkDebugger.hoveringInstance)
             {
                 Input._imeAllowed = true;
@@ -2218,6 +2213,13 @@ namespace DuckGame
                     _core.viewOffset -= Keyboard.shift ? 10 : 1;
                     if (_core.viewOffset < 0)
                         _core.viewOffset = 0;
+                }
+
+                if (Mouse.isScrolling)
+                {
+                    _core.viewOffset -= (Keyboard.shift ? 10 : 1) * Mouse.discreteScroll;
+                    if (_core.viewOffset < 0) _core.viewOffset = 0;
+                    if (_core.viewOffset > core.lines.Count - 1) _core.viewOffset = core.lines.Count - 1;
                 }
 
                 if (Keyboard.Pressed(Keys.Up) && _core.previousLines.Count > 0)
