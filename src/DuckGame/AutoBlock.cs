@@ -675,7 +675,6 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Graphics.DrawCircle(new Vec2(-336f, 32f), 10f,Color.Green);
             if (DevConsole.showCollision)
             {
                 if (leftBlock != null)

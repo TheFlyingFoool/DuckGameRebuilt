@@ -38,17 +38,29 @@ namespace DuckGame
                 SetValue("height", _thing.graphic.texture.frameHeight / (float)_thing.graphic.texture.height);
                 SetValue("xpos", _thing.x);
                 SetValue("ypos", _thing.y);
+
+
+                //SetValue("xoffset", r.X);
+                //SetValue("yoffset", r.Y);
+                //SetValue("spritesizex", r.Width);
+                //SetValue("spritesizey", r.Height;
+
+                //SetValue("goldxoffset", r2.X);
+                //SetValue("goldyoffset", r2.Y);
+                //SetValue("goldsizex", r2.Width);
+                //SetValue("goldsizey", r2.Height);
+
+                SetValue("sasize", new Vec2(Content.Thick.width, Content.Thick.height));
                 SetValue("xoffset", r.X / (float)Content.Thick.width);
                 SetValue("yoffset", r.Y / (float)Content.Thick.height);
                 SetValue("spritesizex", r.Width / (float)Content.Thick.width);
                 SetValue("spritesizey", r.Height / (float)Content.Thick.height);
-
-                SetValue("goldxoffset", r2.X / (float)Content.Thick.width);
-                SetValue("goldyoffset", r2.Y / (float)Content.Thick.height);
-                SetValue("goldsizex", r2.Width / (float)Content.Thick.width);
-                SetValue("goldsizey", r2.Height / (float)Content.Thick.height);
+                SetValue("goldxoffset", r2.X);
+                SetValue("goldyoffset", r2.Y);
+                SetValue("goldsizex", r2.Width);
+                SetValue("goldsizey", r2.Height);
             }
-            //DuckGame.Graphics.device.Textures[1] = (Texture2D)_goldTexture;
+            DuckGame.Graphics.device.Textures[1] = (Texture2D)_goldTexture;
             
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
             foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)

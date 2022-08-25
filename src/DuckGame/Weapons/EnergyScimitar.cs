@@ -51,6 +51,7 @@ namespace DuckGame
         private Platform _platform;
         private Sprite _whiteGlow;
         private Sprite _warpLine;
+        public Color properBladeColor = Color.White;
         public Color properColor = new Color(178, 220, 239);
         public Color swordColor;
         private LoopingSound _hum;
@@ -480,6 +481,7 @@ namespace DuckGame
             thickness = 0.01f;
             _impactThreshold = 0.5f;
             _bladeMaterial = new MaterialEnergyBlade(this);
+           
             swordColor = properColor;
             _warpLine = new Sprite("warpLine2");
             editorTooltip = "How do you invent a sword? It uses modern technology.";
@@ -489,6 +491,13 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            if (this.material is MaterialGold)
+            {
+                // _blade.color = Color.Lerp(properBladeColor, Color.Red, heat);
+                //swordColor = Color.Lerp(properColor, Color.Red, heat);
+                properBladeColor = new Color(255, 216, 0);
+                properColor = new Color(255, 216, 0); //255, 216, 24
+            }
             _platform = new EnergyScimitar.ScimiPlatform(0f, 0f, 20f, 8f, this);
             _platform.solid = false;
             _platform.enablePhysics = false;
@@ -1249,7 +1258,7 @@ namespace DuckGame
             _blade.flipH = _swordFlip;
             _bladeTrail.flipH = _blade.flipH;
             _blade.alpha = alpha;
-            _blade.color = Color.Lerp(Color.White, Color.Red, heat);
+            _blade.color = Color.Lerp(properBladeColor, Color.Red, heat);
             swordColor = Color.Lerp(properColor, Color.Red, heat);
             if (_glow > 1f)
                 _blade.scale = new Vec2((1f + (_glow - 1f) * 0.03f), 1f);

@@ -534,7 +534,7 @@ namespace DuckGame
                     {
                         if (Network.isActive)
                         {
-                            if (this != Layer.Parallax && DevConsoleCommands.GraphicsCulling)
+                            if (this != Layer.Parallax && DevConsoleCommands.GraphicsCulling && !(Level.current is RockScoreboard))
                             {
                                 Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));
                                 Vec2 Bottomright = this.camera.transformInverse(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));
@@ -637,7 +637,7 @@ namespace DuckGame
                         }
                         else
                         {
-                            if (this != Layer.Parallax && DevConsoleCommands.GraphicsCulling)
+                            if (this != Layer.Parallax && DevConsoleCommands.GraphicsCulling && !(Level.current is RockScoreboard))
                             {
                                 Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));
                                 Vec2 Bottomright = this.camera.transformInverse(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));

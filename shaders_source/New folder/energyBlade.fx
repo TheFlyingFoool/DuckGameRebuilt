@@ -21,16 +21,16 @@ float goldyoffset;
 float goldsizex;
 float goldsizey;
 
-//float4 sampleAtlasWrap(float2 uv, float2 TexOffset, float2 TexSize)
-//{
-//    float2 scale = TexSize / sasize;
-//    TexOffset /= sasize;
-//    uv = frac(uv);
-//    uv *= scale.yx;
-//    uv += TexOffset;
-//    return tex2D(sprite, uv);
-//}
 float4 sampleAtlasWrap(float2 uv, float2 TexOffset, float2 TexSize)
+{
+    float2 scale = TexSize / sasize;
+    TexOffset /= sasize;
+    uv = frac(uv);
+    uv *= scale.yx;
+    uv += TexOffset;
+    return tex2D(sprite, uv);
+}
+float4 sampleAtlasWrap2(float2 uv, float2 TexOffset, float2 TexSize)
 {
     float2 scale = TexSize / sasize;
     TexOffset /= sasize;
@@ -54,10 +54,10 @@ float4 PixelShaderFunction(float2 uv : TEXCOORD0, float4 c : COLOR0) : COLOR0 //
     float4 bladeColor2 = bladeColor; //  float2(spritesizey * sasize.y, spritesizex * sasize.x);
     float2 offset = float2(sin((time * 12.0f) + (realuv.y * 12.0f)) * 0.05f, 0) * glow;
     float2 offset2 = float2(sin((time * 22.0f) + (realuv.y * 18.0f)) * 0.04f, offset.x * 0.5f);
-    float4 col = sampleAtlasWrap(realuv + offset, float2(xoffset * sasize.x, yoffset * sasize.y), float2(spritesizey * sasize.y, spritesizex * sasize.x)) * c; // float2(xoffset * sasize.x, yoffset * sasize.y),
+    float4 col = sampleAtlasWrap2(realuv + offset, float2(xoffset * sasize.x, yoffset * sasize.y), float2(spritesizey * sasize.y, spritesizex * sasize.x)) * c; // float2(xoffset * sasize.x, yoffset * sasize.y),
     float4 origCol = col;
-    float4 col2 = sampleAtlasWrap(realuv + float2(0.02f, 0.02f) + offset2, float2(xoffset * sasize.x, yoffset * sasize.y), float2(spritesizey * sasize.y, spritesizex * sasize.x));
-    float4 col3 = sampleAtlasWrap(realuv - float2(0.02f, 0.02f) - offset2, float2(xoffset * sasize.x, yoffset * sasize.y), float2(spritesizey * sasize.y, spritesizex * sasize.x));
+    float4 col2 = sampleAtlasWrap2(realuv + float2(0.02f, 0.02f) + offset2, float2(xoffset * sasize.x, yoffset * sasize.y), float2(spritesizey * sasize.y, spritesizex * sasize.x));
+    float4 col3 = sampleAtlasWrap2(realuv - float2(0.02f, 0.02f) - offset2, float2(xoffset * sasize.x, yoffset * sasize.y), float2(spritesizey * sasize.y, spritesizex * sasize.x));
     float2 goldUv = float2((((realuv.x % width)) / width) + (xpos * 0.01f), (((realuv.y % width)) / height) + (ypos * 0.01f));
     float4 goldCol = sampleAtlasWrap(goldUv, float2(goldxoffset, goldyoffset), float2(goldsizey, goldsizex)) * bladeColor2;
     col = (col + col2 + col3) / 3.0f;

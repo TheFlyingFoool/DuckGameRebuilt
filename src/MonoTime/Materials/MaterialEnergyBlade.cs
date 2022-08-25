@@ -6,7 +6,9 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.Xna.Framework.Graphics;
+using System.Windows.Documents;
 using static DuckGame.CMD;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace DuckGame
 {
@@ -40,6 +42,13 @@ namespace DuckGame
                 Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
                 if (_thing != null)
                 {
+                   
+                    if (!DuckGame.Content.offests.ContainsKey("energyTex") || !DuckGame.Content.offests.ContainsKey(_thing._blade.texture.Namebase))
+                    {
+                        return;
+                    }
+                    Microsoft.Xna.Framework.Rectangle r = DuckGame.Content.offests[_thing._blade.texture.Namebase];
+                    Microsoft.Xna.Framework.Rectangle r2 = DuckGame.Content.offests["energyTex"]; //_thing2._blade.texture
                     SetValue("width", _thing.graphic.texture.frameWidth / _thing.graphic.texture.width);
                     SetValue("height", _thing.graphic.texture.frameHeight / _thing.graphic.texture.height);
                     SetValue("xpos", _thing.x);
@@ -47,6 +56,15 @@ namespace DuckGame
                     SetValue("time", _time);
                     SetValue("glow", glow);
                     SetValue("bladeColor", _thing.swordColor);
+                    SetValue("sasize", new Vec2(Content.Thick.width, Content.Thick.height));
+                    SetValue("xoffset", r.X / (float)Content.Thick.width);
+                    SetValue("yoffset", r.Y / (float)Content.Thick.height);
+                    SetValue("spritesizex", r.Width / (float)Content.Thick.width);
+                    SetValue("spritesizey", r.Height / (float)Content.Thick.height);
+                    SetValue("goldxoffset", r2.X);
+                    SetValue("goldyoffset", r2.Y);
+                    SetValue("goldsizex", r2.Width);
+                    SetValue("goldsizey", r2.Height);
                 }
                 else
                 {
@@ -60,19 +78,21 @@ namespace DuckGame
                     SetValue("height", _thing2._blade.texture.frameHeight / _thing2._blade.texture.height); // / _thing2._blade.texture.height
                     SetValue("xpos", _thing2.x);
                     SetValue("ypos", _thing2.y);
-                    SetValue("time", _time);
+                    SetValue("time",_time); // _time
                     SetValue("glow", glow);
                     SetValue("bladeColor", _thing2.swordColor);
-
+                    SetValue("sasize", new Vec2(Content.Thick.width,Content.Thick.height));
                     SetValue("xoffset", r.X / (float)Content.Thick.width);
                     SetValue("yoffset", r.Y / (float)Content.Thick.height);
                     SetValue("spritesizex", r.Width / (float)Content.Thick.width);
                     SetValue("spritesizey", r.Height / (float)Content.Thick.height);
+                    SetValue("goldxoffset", r2.X);
+                    SetValue("goldyoffset", r2.Y);
+                    SetValue("goldsizex", r2.Width);
+                    SetValue("goldsizey", r2.Height);
 
-                    SetValue("goldxoffset", r2.X / (float)Content.Thick.width);
-                    SetValue("goldyoffset", r2.Y / (float)Content.Thick.height);
-                    SetValue("goldsizex", r2.Width / (float)Content.Thick.width);
-                    SetValue("goldsizey", r2.Height / (float)Content.Thick.height);
+
+
                 }
             }
             DuckGame.Graphics.device.Textures[1] = (Texture2D)_energyTexture;

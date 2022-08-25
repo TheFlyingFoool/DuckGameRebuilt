@@ -30,19 +30,6 @@ namespace DuckGame
             BitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
             Bitmap = new Bitmap(width, height, width * 4, PixelFormat.Format32bppPArgb, BitsHandle.AddrOfPinnedObject());
         }
-        public DirectBitmap(int Width, int Height, Color[] data)
-        {
-            Bits = new Int32[Width * Height];
-            BitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
-            Bitmap = new Bitmap(Width, Height, Width * 4, PixelFormat.Format32bppPArgb, BitsHandle.AddrOfPinnedObject());
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Height; y++)
-                {
-                    // this.SetPixel(x, y, data[x + y * Width]);
-                }
-            }
-        }
         private static int MakeArgb(byte alpha, byte red, byte green, byte blue)
         {
             return ((int)((ulong)((int)red << 16 | (int)green << 8 | (int)blue | (int)alpha << 24)) & -1);
@@ -239,38 +226,38 @@ namespace DuckGame
             //Level.CheckRectAllDan<MaterialThing>(new Vec2(-1100.6f, -414.2592f), new Vec2(800.3334f, 497.3408f));
             // runv2 = !runv2;
             //DevConsole.Log(runv2.ToString());
-            Vec2 vec = Vec2.Zero;
-            Vec2 vec2 = Vec2.Zero;
-            foreach (Duck d in Level.current.things[typeof(Duck)])
-            {
-                vec = d.topLeft + new Vec2(0f, 0.5f);
-                vec2 = d.bottomRight + new Vec2(0f, -0.5f);
-                break;
-            }
-            int count = Level.current.CollisionRectAll<MaterialThing>(vec, vec2, null).Count;
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-            for (int i = 0; i < 10000; i++)
-            {
-                Level.current.CollisionRectAll<MaterialThing>(vec, vec2, null);
-            }
-            stopWatch.Stop();
-            TimeSpan ts = stopWatch.Elapsed;
+            //Vec2 vec = Vec2.Zero;
+            //Vec2 vec2 = Vec2.Zero;
+            //foreach (Duck d in Level.current.things[typeof(Duck)])
+            //{
+            //    vec = d.topLeft + new Vec2(0f, 0.5f);
+            //    vec2 = d.bottomRight + new Vec2(0f, -0.5f);
+            //    break;
+            //}
+            //int count = Level.current.CollisionRectAll<MaterialThing>(vec, vec2, null).Count;
+            //Stopwatch stopWatch = new Stopwatch();
+            //stopWatch.Start();
+            //for (int i = 0; i < 10000; i++)
+            //{
+            //    Level.current.CollisionRectAll<MaterialThing>(vec, vec2, null);
+            //}
+            //stopWatch.Stop();
+            //TimeSpan ts = stopWatch.Elapsed;
 
-            string elapsedTime = ts.TotalMilliseconds.ToString();
-            DevConsole.Log("RunTime  " + count.ToString() + " " + elapsedTime);
-            count = Level.CheckRectAll<MaterialThing>(vec, vec2, null).Count;
-            stopWatch = new Stopwatch();
-            stopWatch.Start();
-            for (int i = 0; i < 10000; i++)
-            {//CollisionRectAllDan
+            //string elapsedTime = ts.TotalMilliseconds.ToString();
+            //DevConsole.Log("RunTime  " + count.ToString() + " " + elapsedTime);
+            //count = Level.CheckRectAll<MaterialThing>(vec, vec2, null).Count;
+            //stopWatch = new Stopwatch();
+            //stopWatch.Start();
+            //for (int i = 0; i < 10000; i++)
+            //{//CollisionRectAllDan
 
-                Level.CheckRectAllDan<MaterialThing>(vec, vec2);
-            }
-            stopWatch.Stop();
-            ts = stopWatch.Elapsed;
-            elapsedTime = ts.TotalMilliseconds.ToString();
-            DevConsole.Log("RunTime2 " + count.ToString() + " " + elapsedTime);
+            //    Level.CheckRectAllDan<MaterialThing>(vec, vec2);
+            //}
+            //stopWatch.Stop();
+            //ts = stopWatch.Elapsed;
+            //elapsedTime = ts.TotalMilliseconds.ToString();
+            //DevConsole.Log("RunTime2 " + count.ToString() + " " + elapsedTime);
         }
         public static unsafe void Test2()
         {

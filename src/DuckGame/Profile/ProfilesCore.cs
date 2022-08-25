@@ -111,16 +111,16 @@ namespace DuckGame
         public void Initialize()
         {
             _profiles = new List<Profile>()
-      {
-        new Profile("Player1", InputProfile.Get("MPPlayer1"), Teams.Player1, Persona.Duck1, false, "PLAYER1", true),
-        new Profile("Player2", InputProfile.Get("MPPlayer2"), Teams.Player2, Persona.Duck2, false, "PLAYER2", true),
-        new Profile("Player3", InputProfile.Get("MPPlayer3"), Teams.Player3, Persona.Duck3, false, "PLAYER3", true),
-        new Profile("Player4", InputProfile.Get("MPPlayer4"), Teams.Player4, Persona.Duck4, false, "PLAYER4", true),
-        new Profile("Player5", InputProfile.Get("MPPlayer5"), Teams.Player5, Persona.Duck5, false, "PLAYER5", true),
-        new Profile("Player6", InputProfile.Get("MPPlayer6"), Teams.Player6, Persona.Duck6, false, "PLAYER6", true),
-        new Profile("Player7", InputProfile.Get("MPPlayer7"), Teams.Player7, Persona.Duck7, false, "PLAYER7", true),
-        new Profile("Player8", InputProfile.Get("MPPlayer8"), Teams.Player8, Persona.Duck8, false, "PLAYER8", true)
-      };
+            {
+                new Profile("Player1", InputProfile.Get("MPPlayer1"), Teams.Player1, Persona.Duck1, false, "PLAYER1", true),
+                new Profile("Player2", InputProfile.Get("MPPlayer2"), Teams.Player2, Persona.Duck2, false, "PLAYER2", true),
+                new Profile("Player3", InputProfile.Get("MPPlayer3"), Teams.Player3, Persona.Duck3, false, "PLAYER3", true),
+                new Profile("Player4", InputProfile.Get("MPPlayer4"), Teams.Player4, Persona.Duck4, false, "PLAYER4", true),
+                new Profile("Player5", InputProfile.Get("MPPlayer5"), Teams.Player5, Persona.Duck5, false, "PLAYER5", true),
+                new Profile("Player6", InputProfile.Get("MPPlayer6"), Teams.Player6, Persona.Duck6, false, "PLAYER6", true),
+                new Profile("Player7", InputProfile.Get("MPPlayer7"), Teams.Player7, Persona.Duck7, false, "PLAYER7", true),
+                new Profile("Player8", InputProfile.Get("MPPlayer8"), Teams.Player8, Persona.Duck8, false, "PLAYER8", true)
+            };
             Profile.defaultProfileMappings[0] = _profiles[0];
             Profile.defaultProfileMappings[1] = _profiles[1];
             Profile.defaultProfileMappings[2] = _profiles[2];
@@ -131,7 +131,7 @@ namespace DuckGame
             Profile.defaultProfileMappings[7] = _profiles[7];
             Profile.loading = true;
             DevConsole.Log(DCSection.General, "Loading profiles from (" + DuckFile.profileDirectory + ")");
-            string[] files = DuckFile.GetFiles(DuckFile.profileDirectory); // NO YOU FUCKING DUMBASS IT NEEDS TO LOOP OVER ALL THE FILES TO FUCKING WORK -NiK0
+            string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, "*.pro"); // NO YOU NICE GUY NIKO, I JUST DID IT WRONG AND FORGOT THE * -Dan
             //string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, ".pro"); // added ".pro" so it doesnt just loop over all files
             DevConsole.Log(DCSection.General, "Found (" + files.Count<string>().ToString() + ") profiles.");
             List<Profile> profileList = new List<Profile>();
