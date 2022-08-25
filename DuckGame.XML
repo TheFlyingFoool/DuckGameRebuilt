@@ -1,0 +1,2007 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DuckGame</name>
+    </assembly>
+    <members>
+        <member name="T:DuckGame.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:DuckGame.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:DuckGame.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="M:DuckGame.Holdable.BecomeTapedMonster(DuckGame.TapedGun)">
+            <summary>
+            Override this to define a special taped object that two taped objects should turn into
+            </summary>
+            <param name="pTaped">The taped gun responsible. Make sure you check gun1 and gun2 to make sure it's the combination you're expecting (two swords = long sword for example)</param>
+            <returns></returns>
+        </member>
+        <member name="T:DuckGame.IContainThings">
+            <summary>
+            Defines an object which contains, or may contain, these type of objects.
+            </summary>
+        </member>
+        <member name="T:DuckGame.IContainAThing">
+            <summary>
+            Defines an object which contain, or may contain, an object of a specific type
+            </summary>
+        </member>
+        <member name="T:DuckGame.IFilterLSItems">
+            <summary>
+            Represents an interface for filtering level select items from the list based on
+            conditions.
+            </summary>
+        </member>
+        <member name="M:DuckGame.IFilterLSItems.Filter(System.String,DuckGame.LevelLocation)">
+            <summary>
+            Filters the specified level.
+            </summary>
+            <param name="level">The level.</param>
+            <param name="location">The location.</param>
+            <returns>true to keep, false to remove</returns>
+        </member>
+        <member name="M:DuckGame.MaterialThing.Sprung(DuckGame.Thing)">
+            <summary>
+            Called when the object hits a spring.
+            </summary>
+            <param name="pSpringer">The spring what which sprung</param>
+            <returns>Return 'true' to continue running regular spring logic. 'False' to ignore it.</returns>
+        </member>
+        <member name="T:DuckGame.NetworkAction">
+            <summary>
+            Declares which group this Thing is in the editor
+            </summary>
+        </member>
+        <member name="M:DuckGame.GhostObject.FillStateData(DuckGame.GhostConnectionData,System.Boolean)">
+            <summary>
+            Fills a bit buffer with this objects network state data
+            </summary>
+            <param name="pConnectionData">The connection data object of the NetworkConnection this data is being sent to</param>
+            <param name="pForceFull">If true, the buffer will be filled with all data instead of delta data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DuckGame.NCNetworkImplementation.SearchForLobby">
+            <summary>
+            Begin searching for lobby games. (Abstracted during Switch port)
+            </summary>
+        </member>
+        <member name="M:DuckGame.NCNetworkImplementation.IsLobbySearchComplete">
+            <summary>
+            Update the search for lobby games. (Abstracted during Switch port)
+            </summary>
+            <returns>True when lobby search has completed</returns>
+        </member>
+        <member name="M:DuckGame.ConditionalMessage.Update">
+            <summary>
+            Return true when the message is ready to be activated.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:DuckGame.NetworkConnection.packetsEvery">
+             <summary>
+            DON'T set this variable in realtime! It's used to determine how many input states to
+            synchronize and that data will be read incorrectly if this is changed while the game runs. It can
+            be changed only at the start of the game.
+             </summary>
+        </member>
+        <member name="M:DuckGame.Send.ImmediateUnreliableBroadcast(DuckGame.NetMessage)">
+            <summary>
+            Use this for emergency disconnect broadcasts and the like. It's mostly meant for sending one more message
+            before disconnects or crashes.
+            </summary>
+            <param name="msg">Oh, it's a NetMessage!</param>
+        </member>
+        <member name="T:DuckGame.PhysicsMaterial">
+            <summary>
+            Represents a material type given to physics objects, and changes
+            how they interact with the world (metal objects become too hot to hold under heat,
+            paper/wood burns, etc).
+            </summary>
+        </member>
+        <member name="M:DuckGame.PhysicsObject.Ejected(DuckGame.Thing)">
+            <summary>
+            Called when the object is shot out of a pipe/cannon/etc
+            </summary>
+            <param name="pFrom">The thing this object was ejected from</param>
+        </member>
+        <member name="M:DuckGame.ProfileNetData.GetElementList">
+            <summary>
+            This is just for iterating, Don't go modifying it.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DuckGame.ProfileNetData.Get``1(System.String)">
+            <summary>
+            Returns a property value based on a string. These values are synchronized over the network!
+            </summary>
+            <typeparam name="T">The type of the value you're getting.</typeparam>
+            <param name="pKey">The name of the property you're getting.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DuckGame.ProfileNetData.Get``1(System.String,``0)">
+            <summary>
+            Returns a property value based on a string. These values are synchronized over the network!
+            </summary>
+            <typeparam name="T">The type of the value you're getting.</typeparam>
+            <param name="pKey">The name of the property you're getting.</param>
+            <param name="pDefault">The value to return if no key is found.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DuckGame.ProfileNetData.Set``1(System.String,``0)">
+            <summary>
+            Set a property to a value. This property will be synchronized over the network
+            and accessible from this profile on other computers!
+            </summary>
+            <typeparam name="T">The type of the value you're setting</typeparam>
+            <param name="pKey">A unique name for the property. This runs through string.GetHashCode, so try to make it pretty unique.</param>
+            <param name="pValue">The value!</param>
+        </member>
+        <member name="T:DuckGame.Thing">
+            <summary>
+            The base class for everything in Duck Game. Things can be added to the world
+            with Level.Add and they will be drawn and updated automatically.
+            </summary>
+        </member>
+        <member name="M:DuckGame.Thing.GetPath(System.String)">
+            <summary>
+            Gets the path to an asset that the mod that this Thing is a part of.
+            </summary>
+            <param name="asset">The asset name, relative to the mods' Content folder.</param>
+            <returns>The path.</returns>
+        </member>
+        <member name="M:DuckGame.Thing.GetPath``1(System.String)">
+            <summary>
+            Gets the path to an asset from a mod.
+            </summary>
+            <typeparam name="T">The mod type to fetch from</typeparam>
+            <param name="asset">The asset name, relative to the mods' Content folder.</param>
+            <returns>The path.</returns>
+        </member>
+        <member name="F:DuckGame.Thing._contextMenuFilter">
+            <summary>
+            Adding context menu item names to this filters out 'EditorProperty' values with the same name. 
+            This is useful for removing undesired inherited EditorProperty members from the right click menu.
+            </summary>
+        </member>
+        <member name="P:DuckGame.Thing.shouldRunUpdateLocally">
+            <summary>
+            If true, this object's Update function is run via Level.UpdateThings. Otherwise, it's run via GhostManager.UpdateGhostLerp
+            </summary>
+        </member>
+        <member name="M:DuckGame.Touch.Check(DuckGame.Rectangle,DuckGame.Camera)">
+            <summary>
+            Does a collision check between the current touch and a rectangle. pCamera tells 
+            the function which camera space to transform the touch into
+            </summary>
+            <param name="pRect">Rectangle to collide with</param>
+            <param name="pCamera">Camera coordinate space to transform touch into</param>
+            <returns></returns>
+        </member>
+        <member name="M:DuckGame.Touch.CheckGrid(DuckGame.Rectangle,System.Single,DuckGame.Camera)">
+            <summary>
+            Does a collision check between the current touch and a rectangle. pCamera tells 
+            the function which camera space to transform the touch into
+            </summary>
+            <param name="pRect">Rectangle to collide with</param>
+            <param name="pCellSize">Grid snap to apply to touch point</param>
+            <param name="pCamera">Camera coordinate space to transform touch into</param>
+            <returns></returns>
+        </member>
+        <member name="M:DuckGame.TouchScreen.GetTap">
+            <summary>
+            GetTap returns a touch if a single finger has just touched and released a place on the screen
+            </summary>
+            <returns>The Touch in question</returns>
+        </member>
+        <member name="M:DuckGame.TouchScreen.GetPress">
+            <summary>
+            GetPress returns a touch if a single finger has just touched a place on the screen
+            </summary>
+            <returns>The Touch in question</returns>
+        </member>
+        <member name="M:DuckGame.TouchScreen.GetDrag">
+            <summary>
+            GetDrag returns a touch if a single finger is dragging along the screen
+            </summary>
+            <returns>The Touch in question</returns>
+        </member>
+        <member name="M:DuckGame.TouchScreen.GetTouch">
+            <summary>
+            GetTouch returns a touch if a single finger is currently placed on the screen
+            </summary>
+            <returns>The Touch in question</returns>
+        </member>
+        <member name="M:DuckGame.TouchScreen.GetRelease">
+            <summary>
+            GetRelease returns a touch if a single finger has just pulled itself from the screen.
+            it also grants the TouchScreen class some sweet release, though this has no visible or actual effect
+            </summary>
+            <returns>The Touch in question</returns>
+        </member>
+        <member name="M:DuckGame.TouchScreen.GetTouches">
+            <summary>
+            GetTouches returns a list of fingers currently on the screen
+            </summary>
+            <returns>Touches!</returns>
+        </member>
+        <member name="M:DuckGame.TouchScreen.GetAverageOfTouches">
+            <summary>
+            Gets a touch that represents the average position of all touches
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DuckGame.Map`2">
+            <summary>
+            Maps a key and value to each other.
+            </summary>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TValue">The type of the value.</typeparam>
+        </member>
+        <member name="T:DuckGame.MultiMap`3">
+            <summary>
+            A map of key -> collection&lt;element&gt;
+            </summary>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TElement">The type of the element.</typeparam>
+            <typeparam name="TList">The type collection to use as backing storage.</typeparam>
+        </member>
+        <member name="T:DuckGame.MultiMap`2">
+            <summary>
+            Type alias for MultiMap
+            </summary>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TElement">The type of the element.</typeparam>
+        </member>
+        <member name="M:DuckGame.ContentPack.PreloadContent">
+            <summary>
+            Called when the mod is loaded to preload content. This is only called if preload is set to true.
+            </summary>
+        </member>
+        <member name="M:DuckGame.ContentPack.PreloadContentPaths">
+            <summary>
+            Called when the mod is loaded to preload the paths to all content. Does not actually load content, and is only called if PreloadContent is disabled (looks like that's a lie, this function loads the content).
+            </summary>
+        </member>
+        <member name="M:DuckGame.ContentPack.Load``1(System.String)">
+            <summary>
+            Loads content from the content pack. Currently supports Texture2D(png) and SoundEffect(wav) in
+            "mySound" "customSounds/mySound" path format. You should usually use Content.Load&lt;&gt;().
+            </summary>
+        </member>
+        <member name="M:DuckGame.EditorProperty`1.op_Implicit(`0)~DuckGame.EditorProperty{`0}">
+            <summary>
+            This is left here for legacy mod support, DON'T USE IT IT BREAKS PROPERTIES!
+            </summary>
+            <param name="val"></param>
+        </member>
+        <member name="P:DuckGame.BitBuffer.buffer">
+            <summary>
+            This BitBuffers internal buffer. This may have zeroes at the end, as the buffer size is doubled whenever it's filled.
+            </summary>
+        </member>
+        <member name="P:DuckGame.BitBuffer.data">
+            <summary>
+            A byte[] representation of all data in the buffer.
+            </summary>
+        </member>
+        <member name="P:DuckGame.CloudFile.cloudDate">
+            <summary>
+            The last time the file was saved to the cloud. If cloudDate == DateTime.MinValue, the file is not indexed.
+            </summary>
+        </member>
+        <member name="P:DuckGame.CloudFile.steamTimestamp">
+            <summary>
+            The last time steam uploaded the file.  If steamTimestamp == DateTime.MinValue, the file does not exist on the cloud.
+            </summary>
+        </member>
+        <member name="P:DuckGame.CloudFile.localDate">
+            <summary>
+            The last time the file was modified locally. If localData == DateTime.MinValue, a local version of this file does not exist.
+            </summary>            
+        </member>
+        <member name="P:DuckGame.DGPath.directory">
+            <summary>
+            Gets the current directory represented by the path
+            </summary>
+        </member>
+        <member name="P:DuckGame.DGPath.name">
+            <summary>
+            Returns directoryName if this is a directory, otherwise returns fileName.
+            </summary>
+        </member>
+        <member name="M:DuckGame.DGPath.Unroot(DuckGame.DGPath)">
+            <summary>
+            Removes the root path from the current path
+            </summary>
+            <param name="pRoot">The current root to remove.</param>
+            <returns>The unrooted path.</returns>
+        </member>
+        <member name="T:DuckGame.ICloneable`1">
+            <summary>
+            Represents an object that can be cloned into a specific type.
+            </summary>
+            <typeparam name="T">The type it can be cloned into.</typeparam>
+        </member>
+        <member name="M:DuckGame.ICloneable`1.Clone">
+            <summary>
+            Clones this instance.
+            </summary>
+            <returns>The new instance.</returns>
+        </member>
+        <member name="T:DuckGame.IFactory">
+            <summary>
+            Indicates that this Thing can be factory'd
+            </summary>
+        </member>
+        <member name="T:DuckGame.RumbleType">
+            <summary>
+            Gameplay type rumbles will be paused when the game is paused during a LOCAL game
+            Menu type rumbles will always be evaluated.
+            </summary>
+        </member>
+        <member name="T:DuckGame.RumbleEvent">
+            <summary>
+            Create a RumbleEvent and call RumbleManager.AddRumbleEvent with the event to add a rumble.
+            </summary>
+        </member>
+        <member name="M:DuckGame.RumbleEvent.#ctor(DuckGame.RumbleIntensity,DuckGame.RumbleDuration,DuckGame.RumbleFalloff,DuckGame.RumbleType)">
+            <summary>
+            Create a RumbleEvent using only enum definitions
+            </summary>
+        </member>
+        <member name="M:DuckGame.RumbleEvent.#ctor(System.Single,System.Single,System.Single,DuckGame.RumbleType)">
+            <summary>
+            Create a RumbleEvent with float-specified intensity, duration, and falloff
+            </summary>
+        </member>
+        <member name="M:DuckGame.RumbleEvent.FallOffLinear">
+            <summary>
+            Updates the intensity of a RumbleEvent based on the time remaining in the falloff portion of the full duration.
+            </summary> 
+        </member>
+        <member name="M:DuckGame.RumbleEvent.Update">
+            <summary>
+            Updates the elapsed time and updates the intensity for any falloff. Returns false if the rumble is completed and should be cleaned up by RumbleManager
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DuckGame.RumbleManager">
+            <summary>
+            The RumbleManager keeps a list of RumbleEvents added through AddRumbleEvent calls, and each frame evaluates each event, 
+            looking for profiles it should effect. 
+            
+            The intensity of a rumble is affected by duration or distance, depending on the type.
+            
+            The modified intensity of every rumble affecting a Profile is added to that Profile's active controller, and then each controller
+            is Rumbled at the intensity specified in this accumulated value.
+            
+            RumbleEvents can be added as :
+            - positional (find all Profiles with ducks nearby to the rumble's position and rumble them, modifying the intensity by distance falloff
+            - profile (rumble the specified profile. If no profile is set, rumble all active profiles)
+            </summary>
+        </member>
+        <member name="M:DuckGame.RumbleManager.isInGameForRumble">
+            <summary>
+            Evaluates whether we're in a "game" setting, in regards to rumble
+            Either in an actual match level, or in team select 2
+            </summary>        
+        </member>
+        <member name="M:DuckGame.RumbleManager.AddRumbleEvent(DuckGame.RumbleEvent)">
+            <summary>
+             Add a Rumble Event after all properties have been set.
+            </summary>        
+        </member>
+        <member name="M:DuckGame.RumbleManager.AddRumbleEvent(DuckGame.Vec2,DuckGame.RumbleEvent)">
+            <summary>
+            Add a Rumble that will affect all Profiles whose duck is near the rumble's position (with distance attenuation)
+            Positional rumbles are always type Gameplay.
+            </summary>
+        </member>
+        <member name="M:DuckGame.RumbleManager.AddRumbleEvent(DuckGame.Profile,DuckGame.RumbleEvent)">
+            <summary>
+            Add a Rumble for a specific profile.
+            </summary>        
+        </member>
+        <member name="M:DuckGame.RumbleManager.AddRumbleEventForAll(DuckGame.RumbleEvent)">
+            <summary>
+            Add a rumble for all profiles 
+            </summary>      
+        </member>
+        <member name="M:DuckGame.RumbleManager.AddIntensityToDevice(DuckGame.InputDevice,System.Single)">
+            <summary>
+            Each frame we total up the intensities from various rumbles and add them to a device for a total intensity to rumble the controller by.
+            </summary>        
+        </member>
+        <member name="M:DuckGame.Input.ApplyDefaultMapping(DuckGame.InputProfile,DuckGame.Profile)">
+            <summary>
+            This function resets an InputProfile to it's default control settings. If duckProfile is defined, it will use the profile's mapping.
+            Otherwise, it will use the global mapping. If none exist, it will use the built in defaults.
+            </summary>
+            <param name="p">InputProfile to reset</param>
+            <param name="duckProfile">Optional duck profile to take controls from</param>
+        </member>
+        <member name="T:DuckGame.PadButton">
+            <summary>
+            A pad button collection.
+            </summary>
+        </member>
+        <member name="T:DuckGame.PadState">
+            <summary>
+            The state of a pad.
+            </summary>
+        </member>
+        <member name="M:DuckGame.ContextMenu.CalculateSimilarity(System.String,System.String)">
+            <summary>
+            Calculate percentage similarity of two strings
+            <param name="source">Source String to Compare with</param>
+            <param name="target">Targeted String to Compare</param>
+            <returns>Return Similarity between two strings from 0 to 1.0</returns>
+            </summary>
+        </member>
+        <member name="M:DuckGame.ContextMenu.ComputeLevenshteinDistance(System.String,System.String)">
+            <summary>
+            Returns the number of steps required to transform the source string
+            into the target string.
+            </summary>
+        </member>
+        <member name="T:DuckGame.EditorGroupAttribute">
+            <summary>
+            Declares which group this Thing is in the editor
+            </summary>
+        </member>
+        <member name="M:DuckGame.EditorGroupAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:DuckGame.EditorGroupAttribute"/> class.
+            </summary>
+            <param name="group">The editor group, in the format of "root|sub|sub|sub..."</param>
+        </member>
+        <member name="T:DuckGame.MagicNumberAttribute">
+            <summary>
+            Declares a magic number to be written for identifying a BinaryClassChunk
+            </summary>
+        </member>
+        <member name="T:DuckGame.ChunkVersionAttribute">
+            <summary>
+            Declares a version number to be written for identifying the version of a BinaryClassChunk
+            </summary>
+        </member>
+        <member name="T:DuckGame.StateBinding">
+            <summary>
+            A state binding allows a Thing to communicate the state of a field over the network during multiplayer.
+            These are generally private members of your Thing.
+            </summary>
+        </member>
+        <member name="T:DuckGame.Color">
+            <summary>
+            An RGBA color.
+            </summary>
+        </member>
+        <member name="T:DuckGame.MathHelper">
+            <summary>
+            Contains commonly used precalculated values and mathematical operations.
+            </summary>
+        </member>
+        <member name="F:DuckGame.MathHelper.E">
+            <summary>
+            Represents the mathematical constant e(2.71828175).
+            </summary>
+        </member>
+        <member name="F:DuckGame.MathHelper.Log10E">
+            <summary>
+            Represents the log base ten of e(0.4342945).
+            </summary>
+        </member>
+        <member name="F:DuckGame.MathHelper.Log2E">
+            <summary>
+            Represents the log base two of e(1.442695).
+            </summary>
+        </member>
+        <member name="F:DuckGame.MathHelper.Pi">
+            <summary>
+            Represents the value of pi(3.14159274).
+            </summary>
+        </member>
+        <member name="F:DuckGame.MathHelper.PiOver2">
+            <summary>
+            Represents the value of pi divided by two(1.57079637).
+            </summary>
+        </member>
+        <member name="F:DuckGame.MathHelper.PiOver4">
+            <summary>
+            Represents the value of pi divided by four(0.7853982).
+            </summary>
+        </member>
+        <member name="F:DuckGame.MathHelper.TwoPi">
+            <summary>
+            Represents the value of pi times two(6.28318548).
+            </summary>
+        </member>
+        <member name="M:DuckGame.MathHelper.Barycentric(System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Returns the Cartesian coordinate for one axis of a point that is defined by a given triangle and two normalized barycentric (areal) coordinates.
+            </summary>
+            <param name="value1">The coordinate on one axis of vertex 1 of the defining triangle.</param>
+            <param name="value2">The coordinate on the same axis of vertex 2 of the defining triangle.</param>
+            <param name="value3">The coordinate on the same axis of vertex 3 of the defining triangle.</param>
+            <param name="amount1">The normalized barycentric (areal) coordinate b2, equal to the weighting factor for vertex 2, the coordinate of which is specified in value2.</param>
+            <param name="amount2">The normalized barycentric (areal) coordinate b3, equal to the weighting factor for vertex 3, the coordinate of which is specified in value3.</param>
+            <returns>Cartesian coordinate of the specified point with respect to the axis being used.</returns>
+        </member>
+        <member name="M:DuckGame.MathHelper.CatmullRom(System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Performs a Catmull-Rom interpolation using the specified positions.
+            </summary>
+            <param name="value1">The first position in the interpolation.</param>
+            <param name="value2">The second position in the interpolation.</param>
+            <param name="value3">The third position in the interpolation.</param>
+            <param name="value4">The fourth position in the interpolation.</param>
+            <param name="amount">Weighting factor.</param>
+            <returns>A position that is the result of the Catmull-Rom interpolation.</returns>
+        </member>
+        <member name="M:DuckGame.MathHelper.Clamp(System.Single,System.Single,System.Single)">
+            <summary>
+            Restricts a value to be within a specified range.
+            </summary>
+            <param name="value">The value to clamp.</param>
+            <param name="min">The minimum value. If <c>value</c> is less than <c>min</c>, <c>min</c> will be returned.</param>
+            <param name="max">The maximum value. If <c>value</c> is greater than <c>max</c>, <c>max</c> will be returned.</param>
+            <returns>The clamped value.</returns>
+        </member>
+        <member name="M:DuckGame.MathHelper.Clamp(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Restricts a value to be within a specified range.
+            </summary>
+            <param name="value">The value to clamp.</param>
+            <param name="min">The minimum value. If <c>value</c> is less than <c>min</c>, <c>min</c> will be returned.</param>
+            <param name="max">The maximum value. If <c>value</c> is greater than <c>max</c>, <c>max</c> will be returned.</param>
+            <returns>The clamped value.</returns>
+        </member>
+        <member name="M:DuckGame.MathHelper.Distance(System.Single,System.Single)">
+            <summary>
+            Calculates the absolute value of the difference of two values.
+            </summary>
+            <param name="value1">Source value.</param>
+            <param name="value2">Source value.</param>
+            <returns>Distance between the two values.</returns>
+        </member>
+        <member name="M:DuckGame.MathHelper.Hermite(System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Performs a Hermite spline interpolation.
+            </summary>
+            <param name="value1">Source position.</param>
+            <param name="tangent1">Source tangent.</param>
+            <param name="value2">Source position.</param>
+            <param name="tangent2">Source tangent.</param>
+            <param name="amount">Weighting factor.</param>
+            <returns>The result of the Hermite spline interpolation.</returns>
+        </member>
+        <member name="M:DuckGame.MathHelper.Lerp(System.Single,System.Single,System.Single)">
+            <summary>
+            Linearly interpolates between two values.
+            </summary>
+            <param name="value1">Source value.</param>
+            <param name="value2">Source value.</param>
+            <param name="amount">Value between 0 and 1 indicating the weight of value2.</param>
+            <returns>Interpolated value.</returns> 
+            <remarks>This method performs the linear interpolation based on the following formula.
+            <c>value1 + (value2 - value1) * amount</c>
+            Passing amount a value of 0 will cause value1 to be returned, a value of 1 will cause value2 to be returned.
+            </remarks>
+        </member>
+        <member name="M:DuckGame.MathHelper.Max(System.Single,System.Single)">
+            <summary>
+            Returns the greater of two values.
+            </summary>
+            <param name="value1">Source value.</param>
+            <param name="value2">Source value.</param>
+            <returns>The greater value.</returns>
+        </member>
+        <member name="M:DuckGame.MathHelper.Min(System.Single,System.Single)">
+            <summary>
+            Returns the lesser of two values.
+            </summary>
+            <param name="value1">Source value.</param>
+            <param name="value2">Source value.</param>
+            <returns>The lesser value.</returns>
+        </member>
+        <member name="M:DuckGame.MathHelper.SmoothStep(System.Single,System.Single,System.Single)">
+            <summary>
+            Interpolates between two values using a cubic equation.
+            </summary>
+            <param name="value1">Source value.</param>
+            <param name="value2">Source value.</param>
+            <param name="amount">Weighting value.</param>
+            <returns>Interpolated value.</returns>
+        </member>
+        <member name="M:DuckGame.MathHelper.ToDegrees(System.Single)">
+            <summary>
+            Converts radians to degrees.
+            </summary>
+            <param name="radians">The angle in radians.</param>
+            <returns>The angle in degrees.</returns>
+            <remarks>
+            This method uses double precission internally,
+            though it returns single float
+            Factor = 180 / pi
+            </remarks>
+        </member>
+        <member name="M:DuckGame.MathHelper.ToRadians(System.Single)">
+            <summary>
+            Converts degrees to radians.
+            </summary>
+            <param name="degrees">The angle in degrees.</param>
+            <returns>The angle in radians.</returns>
+            <remarks>
+            This method uses double precission internally,
+            though it returns single float
+            Factor = pi / 180
+            </remarks>
+        </member>
+        <member name="M:DuckGame.MathHelper.WrapAngle(System.Single)">
+            <summary>
+            Reduces a given angle to a value between π and -π.
+            </summary>
+            <param name="angle">The angle to reduce, in radians.</param>
+            <returns>The new angle, in radians.</returns>
+        </member>
+        <member name="M:DuckGame.MathHelper.IsPowerOfTwo(System.Int32)">
+            <summary>
+            Determines if value is powered by two.
+            </summary>
+            <param name="value">A value.</param>
+            <returns><c>true</c> if <c>value</c> is powered by two; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:DuckGame.Matrix.#ctor(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Constructor for 4x4 Matrix
+            </summary>
+            <param name="m11">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m12">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m13">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m14">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m21">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m22">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m23">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m24">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m31">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m32">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m33">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m34">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m41">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m42">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m43">
+            A <see cref="T:System.Single"/>
+            </param>
+            <param name="m44">
+            A <see cref="T:System.Single"/>
+            </param>
+        </member>
+        <member name="M:DuckGame.Matrix.Add(DuckGame.Matrix,DuckGame.Matrix)">
+            <summary>
+            Adds second matrix to the first.
+            </summary>
+            <param name="matrix1">
+            A <see cref="T:DuckGame.Matrix"/>
+            </param>
+            <param name="matrix2">
+            A <see cref="T:DuckGame.Matrix"/>
+            </param>
+            <returns>
+            A <see cref="T:DuckGame.Matrix"/>
+            </returns>
+        </member>
+        <member name="M:DuckGame.Matrix.Add(DuckGame.Matrix@,DuckGame.Matrix@,DuckGame.Matrix@)">
+            <summary>
+            Adds two Matrix and save to the result Matrix
+            </summary>
+            <param name="matrix1">
+            A <see cref="T:DuckGame.Matrix"/>
+            </param>
+            <param name="matrix2">
+            A <see cref="T:DuckGame.Matrix"/>
+            </param>
+            <param name="result">
+            A <see cref="T:DuckGame.Matrix"/>
+            </param>
+        </member>
+        <member name="T:DuckGame.Noise">
+            <summary>
+            Implementation of the Perlin simplex noise, an improved Perlin noise algorithm.
+            Based loosely on SimplexNoise1234 by Stefan Gustavson http://staffwww.itn.liu.se/~stegu/aqsis/aqsis-newnoise/
+            
+            </summary>
+        </member>
+        <member name="M:DuckGame.Noise.Generate(System.Single)">
+            <summary>
+            1D simplex noise
+            </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DuckGame.Noise.Generate(System.Single,System.Single)">
+            <summary>
+            2D simplex noise
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DuckGame.Transform">
+            <summary>
+            Represents a transformable component.
+            </summary>
+        </member>
+        <member name="T:DuckGame.CoreMod">
+            <summary>
+            The core "mod", for consistency sake.
+            </summary>
+        </member>
+        <member name="P:DuckGame.CoreMod.coreMod">
+            <summary>
+            The core mod instance, for quick comparisons.
+            </summary>
+        </member>
+        <member name="T:DuckGame.DisabledMod">
+            <summary>
+            Dummy Mod class used to store disabled mods.
+            </summary>
+        </member>
+        <member name="T:DuckGame.ErrorMod">
+            <summary>
+            Dummy Mod class used to store failed to load mods.
+            </summary>
+        </member>
+        <member name="T:DuckGame.BaggedPropertyAttribute">
+            <summary>
+            Mark a property to be added to the initial property bag for this class.
+            </summary>
+        </member>
+        <member name="M:DuckGame.BaggedPropertyAttribute.#ctor(System.String,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:DuckGame.BaggedPropertyAttribute"/> class.
+            </summary>
+            <param name="prop">The property.</param>
+            <param name="val">The value.</param>
+        </member>
+        <member name="T:DuckGame.ContentManagers">
+            <summary>
+            The class that stores content managers.
+            </summary>
+        </member>
+        <member name="T:DuckGame.ContentProperties">
+            <summary>
+            A class for retrieving property bags associated with Types.
+            </summary>
+        </member>
+        <member name="M:DuckGame.ContentProperties.InitializeBag(System.Type)">
+            <summary>
+            Initializes the bag of a single type.
+            </summary>
+            <param name="type">The type.</param>
+        </member>
+        <member name="M:DuckGame.ContentProperties.InitializeBags(System.Collections.Generic.IEnumerable{System.Type})">
+            <summary>
+            Initializes the bags of multiple types.
+            </summary>
+            <param name="types">The types.</param>
+        </member>
+        <member name="M:DuckGame.ContentProperties.GetBag(System.Type)">
+            <summary>
+            Gets a read-only property bag associated with the type.
+            </summary>
+            <param name="t">The type to get the bag from.</param>
+            <returns>The property bag</returns>
+        </member>
+        <member name="M:DuckGame.ContentProperties.GetBag``1">
+            <summary>
+            Gets a read-only property bag associated with the type.
+            </summary>
+            <typeparam name="T">The type to get the bag from</typeparam>
+            <returns>The property bag</returns>
+        </member>
+        <member name="T:DuckGame.DefaultContentManager">
+            <summary>
+            The quick and easy default implementation. Pulls all exported types
+            that are subclassed by the requested Type.
+            </summary>
+        </member>
+        <member name="T:DuckGame.IManageContent">
+            <summary>
+            The interface with which a mod provides loadable types to
+            the main assembly. If your mod does not provide a content manager,
+            it will use the default content manager.
+            </summary>
+        </member>
+        <member name="M:DuckGame.IManageContent.Compile``1(DuckGame.Mod)">
+            <summary>
+            Provide a list of types that are subclasses of T.
+            </summary>
+            <typeparam name="T">The type the game requires subclasses of.</typeparam>
+            <param name="mod">A reference to this mod's Mod object.</param>
+            <returns>An enumerable Type list.</returns>
+            
+        </member>
+        <member name="T:DuckGame.IPropertyBag">
+            <summary>
+            An interface allowing access to a key/value pair of keys mapped to
+            values of any type.
+            </summary>
+        </member>
+        <member name="M:DuckGame.IPropertyBag.Set``1(System.String,``0)">
+            <summary>
+            Set a property's value in the bag
+            </summary>
+            <typeparam name="T">The type of value to set.</typeparam>
+            <param name="property">The property key</param>
+            <param name="value">The value</param>
+        </member>
+        <member name="M:DuckGame.IPropertyBag.Remove(System.String)">
+            <summary>
+            Remove a property value from the bag.
+            </summary>
+            <param name="property">The value to remove.</param>
+        </member>
+        <member name="M:DuckGame.IPropertyBag.Set(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Set multiple property values in the bag at once.
+            </summary>
+            <param name="properties">Enumerable set of properties</param>
+        </member>
+        <member name="T:DuckGame.IReadOnlyPropertyBag">
+            <summary>
+            An interface allowing read-only access to a key/value pair of keys mapped to
+            values of any type.
+            </summary>
+        </member>
+        <member name="P:DuckGame.IReadOnlyPropertyBag.Properties">
+            <summary>
+            An enumerator to iterate over property keys.
+            </summary>
+        </member>
+        <member name="M:DuckGame.IReadOnlyPropertyBag.TypeOf(System.String)">
+            <summary>
+            Get the type of a property contained in the bag.
+            </summary>
+            <param name="property">The property key.</param>
+            <returns>The type of this property.</returns>
+            <exception cref="T:DuckGame.PropertyNotFoundException">The property key is not in this property bag.</exception>
+        </member>
+        <member name="M:DuckGame.IReadOnlyPropertyBag.IsOfType``1(System.String)">
+            <summary>
+            Check if a property in this bag is of, or assignable to, a certain type.
+            </summary>
+            <typeparam name="T">The type to check for.</typeparam>
+            <param name="property">The property key.</param>
+            <returns>true if the property is this type or is assignable to this type; false if not; null if the key does not exist or if the property value is null</returns>
+        </member>
+        <member name="M:DuckGame.IReadOnlyPropertyBag.Contains(System.String)">
+            <summary>
+            Check if a property is in this bag.
+            </summary>
+            <param name="property">The property key.</param>
+            <returns>true if the property is in this bag; false if not</returns>
+        </member>
+        <member name="M:DuckGame.IReadOnlyPropertyBag.Get(System.String)">
+            <summary>
+            Get an untyped property value from the bag.
+            </summary>
+            <param name="property">The property name.</param>
+            <returns>The object, if it is in the bag</returns>
+            <exception cref="T:DuckGame.PropertyNotFoundException">The property key is not in this property bag.</exception>
+        </member>
+        <member name="M:DuckGame.IReadOnlyPropertyBag.Get``1(System.String)">
+            <summary>
+            Get a property value from the bag.
+            </summary>
+            <typeparam name="T">The type to unbox to.</typeparam>
+            <param name="property">The property name.</param>
+            <returns>The object casted to T if it is in the bag and can be converted to the requested type</returns>
+            <exception cref="T:DuckGame.PropertyNotFoundException">The property key is not in this property bag.</exception>
+        </member>
+        <member name="M:DuckGame.IReadOnlyPropertyBag.TryGet``1(System.String)">
+            <summary>
+            Tries to get a property value from a bag; does not throw, but returns null if the property is not there.
+            </summary>
+            <typeparam name="T">The type to unbox to. Must be a value type.</typeparam>
+            <param name="property">The property name.</param>
+            <returns>null if it does not exist, otherwise the property value</returns>
+        </member>
+        <member name="M:DuckGame.IReadOnlyPropertyBag.TryGet``1(System.String,``0@)">
+            <summary>
+            Tries to get a property value from a bag; does not throw.
+            </summary>
+            <typeparam name="T">The type to unbox to.</typeparam>
+            <param name="property">The property name.</param>
+            <param name="value">The output value.</param>
+            <returns>true if it was in the property bag</returns>
+        </member>
+        <member name="M:DuckGame.IReadOnlyPropertyBag.GetOrDefault``1(System.String,``0)">
+            <summary>
+            Get a property value from the bag. Does not throw, returns defaultValue if the key does not exist.
+            </summary>
+            <typeparam name="T">The type to unbox to.</typeparam>
+            <param name="property">The property name.</param>
+            <param name="defaultValue">The default value to use if the key is not in the bag.</param>
+            <returns>The object casted to T if it is in the bag and can be converted to the requested type</returns>
+        </member>
+        <member name="T:DuckGame.LockedContentAttribute">
+            <summary>
+            Indicates that this type is locked in the content list and cannot be modified.
+            </summary>
+        </member>
+        <member name="T:DuckGame.ManagedContentList`1">
+            <summary>
+            Represents a list of mod-managed content of T's
+            </summary>
+            <typeparam name="T">The base type of content to store</typeparam>
+        </member>
+        <member name="P:DuckGame.ManagedContentList`1.Types">
+            <summary>
+            Gets the registered types.
+            </summary>
+            <value>
+            The types registered.
+            </value>
+        </member>
+        <member name="M:DuckGame.ManagedContentList`1.Remove(System.Type)">
+            <summary>
+            Removes a type from the type pool.
+            </summary>
+            <param name="type">The type.</param>
+        </member>
+        <member name="M:DuckGame.ManagedContentList`1.Remove``1">
+            <summary>
+            Removes a generic type from the type pool.
+            </summary>
+            <typeparam name="E">The type to remove</typeparam>
+        </member>
+        <member name="M:DuckGame.ManagedContentList`1.Redirect(System.Type,System.Type)">
+            <summary>
+            Redirects the a type to another type. Attempts to create an Old
+            will result in a New being created instead.
+            </summary>
+            <param name="oldType">Old type, being redirected.</param>
+            <param name="newType">The new type to redirect to.</param>
+        </member>
+        <member name="M:DuckGame.ManagedContentList`1.Redirect``2">
+            <summary>
+            Redirects the generic Old type to the New type. Attempts to create an Old
+            will result in a New being created instead.
+            </summary>
+            <typeparam name="Old">Old type, being redirected.</typeparam>
+            <typeparam name="New">The new type to redirect to.</typeparam>
+        </member>
+        <member name="T:DuckGame.Mod">
+            <summary>
+            The base class for mod information. Each mod has a custom instance of this class.
+            </summary>
+        </member>
+        <member name="P:DuckGame.Mod.dataHash">
+            <summary>
+            A hash of all the Thing type names + NetMessage type names in this mod
+            </summary>
+        </member>
+        <member name="P:DuckGame.Mod.thingHash">
+            <summary>
+            A hash of all the Thing type names in this mod
+            </summary>
+        </member>
+        <member name="P:DuckGame.Mod.netMessageHash">
+            <summary>
+            A hash of all the NetMessage type names in this mod
+            </summary>
+        </member>
+        <member name="P:DuckGame.Mod.workshopData">
+            <summary>
+            Used by the mod upload window, you shouldn't need this.
+            </summary>
+        </member>
+        <member name="M:DuckGame.Mod.GetPath``1(System.String)">
+            <summary>
+            Returns a formatted path that leads to the "asset" parameter in a given mod.
+            </summary>
+        </member>
+        <member name="M:DuckGame.Mod.GetPath(System.String)">
+            <summary>
+            Returns a formatted path that leads to the "asset" parameter in this mod.
+            </summary>
+        </member>
+        <member name="F:DuckGame.Mod._properties">
+            <summary>
+            The property bag for this mod. Other mods may view and read from this collection.
+            You must not edit this bag while the game is running, only during mod initialization.
+            </summary>
+        </member>
+        <member name="P:DuckGame.Mod.properties">
+            <summary>
+            The read-only property bag that this mod was initialized with.
+            </summary>
+        </member>
+        <member name="P:DuckGame.Mod.configuration">
+            <summary>
+            The configuration class for this mod
+            </summary>
+        </member>
+        <member name="P:DuckGame.Mod.priority">
+            <summary>
+            The priority of this mod as compared to other mods.
+            </summary>
+            <value>
+            The priority.
+            </value>
+        </member>
+        <member name="P:DuckGame.Mod.workshopIDFacade">
+            <summary>
+            The workshop IDs of this mods parent mod. This is useful for DEV versions of mods, and will allow the parent mod's levels to be played in this mod and vice-versa.
+            </summary>
+        </member>
+        <member name="P:DuckGame.Mod.namespaceFacade">
+            <summary>
+            All objects serialized and deserialized from this mod will use the namsepaceFacade instead of their actual namespace if this is set.
+            For example, if your namespace is 'MyModDev', you could say namespaceFacade = 'MyModDev:MyMod' to drop the 'Dev' part during serialization.
+            Therefore the format is 'MYNAMESPACENAME:FAKENAMESPACENAME'
+            </summary>
+        </member>
+        <member name="P:DuckGame.Mod.assemblyNameFacade">
+            <summary>
+             All objects serialized and deserialized from this mod will use the assemblyNameFacade instead of the actual name of this assembly.
+            For example, if your Assembly is named 'MyModDEV', you could say assemblyNameFacade = 'MyMod' to drop the 'DEV' part during serialization.
+            </summary>
+        </member>
+        <member name="P:DuckGame.Mod.previewTexture">
+            <summary>
+            Gets the preview texture for this mod.
+            </summary>
+            <value>
+            The preview texture.
+            </value>
+        </member>
+        <member name="P:DuckGame.Mod.screenshot">
+            <summary>
+            Gets path for screenshot.png from Content folder.
+            </summary>
+            <value>
+            Path for mod screenshot.png from Content folder.
+            </value>
+        </member>
+        <member name="M:DuckGame.Mod.#ctor">
+            <summary>
+            The constructor for the Mod. Do not call any functions or use Reflection in here, as the core and mods
+            may not be ready to use yet. Use the proper callbacks.
+            </summary>
+        </member>
+        <member name="M:DuckGame.Mod.OnPreInitialize">
+            <summary>
+            Called on a mod when all mods and the core are finished being created
+            and are ready to be initialized. You may use game functions and Reflection
+            in here safely. Note that during this method, not all mods may have ran
+            their pre-initialization routines and may not have sent their content to
+            the core. Ideally, you will want to set up your properties here.
+            </summary>
+        </member>
+        <member name="M:DuckGame.Mod.OnPostInitialize">
+            <summary>
+            Called on a mod after all mods have finished their pre-initialization
+            and have sent their content to the core.
+            </summary>
+        </member>
+        <member name="M:DuckGame.Mod.OnStart">
+            <summary>
+            Called on a mod after everything has been loaded and the first Level has been set
+            </summary>
+        </member>
+        <member name="T:DuckGame.Mod.Debug">
+            <summary>
+            Provides some mod debugging logic
+            </summary>
+        </member>
+        <member name="M:DuckGame.Mod.Debug.Log(System.String,System.Object[])">
+            <summary>
+            Logs the specified line to any attached debuggers.
+            If "-moddebug" is specified this will also output
+            to the dev console in ~
+            </summary>
+            <param name="format">The format.</param>
+            <param name="objs">The format parameters.</param>
+        </member>
+        <member name="T:DuckGame.ModConfiguration">
+            <summary>
+            An entry of mod configuration data contained in the mod and
+            stored during the loading of a mod.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.modType">
+            <summary>
+            The type of mod this is.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.directory">
+            <summary>
+            The full path to the root directory of this mod.
+            </summary>
+        </member>
+        <member name="F:DuckGame.ModConfiguration._contentDirectory">
+            <summary>
+            The full path to the content directory of this mod.
+            </summary>
+            
+        </member>
+        <member name="P:DuckGame.ModConfiguration.name">
+            <summary>
+            The isolated mod folder name; will be unique, obviously, and is how the
+            mod will be referenced by other mods.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.displayName">
+            <summary>
+            The display name of this mod. Does not have to be unique.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.version">
+            <summary>
+            The version of this mod.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.author">
+            <summary>
+            The name of the author.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.description">
+            <summary>
+            A descriptive piece of text about the mod.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.softDependencies">
+            <summary>
+            A list of mod Name's that this mod may interact with via reflection, but
+            does not require the mod to be loaded to properly run.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.hardDependencies">
+            <summary>
+            A list of mod Name's that this mod requires to load. It may use hard-linked
+            references to classes contained in the mod.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.workshopID">
+            <summary>
+            Gets the Steam workshop identifier.
+            </summary>
+            <value>
+            The Steam workshop identifier.
+            </value>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.isWorkshop">
+            <summary>
+            Gets a value indicating whether this mod is a local mod.
+            </summary>
+            <value>
+            <c>true</c> if this instance is a Workshop mod; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.content">
+            <summary>
+            The content manager for this mod. Stores references to any assets used.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.disabled">
+            <summary>
+            Gets a value indicating whether this <see cref="T:DuckGame.Mod"/> is disabled.
+            </summary>
+            <value>
+              <c>true</c> if disabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.loaded">
+            <summary>
+            Gets a value indicating whether this <see cref="T:DuckGame.ModConfiguration"/> is loaded.
+            </summary>
+            <value>
+              <c>true</c> if loaded; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.error">
+            <summary>
+            Gets an error message string for when <see cref="T:DuckGame.ModConfiguration"/> fails to load.
+            </summary>
+            <value>
+              A string representing the error, or 'null' if no error.
+            </value>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.forceHarmonyLegacyLoad">
+            <summary>
+            If true, this mod will load regardless of old Duck Game version Harmony related crashes
+            </summary>
+            <value>
+              <c>true</c> if mod will continue to load, even if it's for an old version of Duck Game and it uses Harmony code patching; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.majorSupportedRevision">
+            <summary>
+            The major revision of Duck Game that this mod supports. Pre 2020 is 0, Post 2020 is 1. If Duck Game is automatically disabling your
+            mod due to incompatibility, you should add a MajorSupportedRevision tag to your mod.conf with a value of 1.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.linuxFix">
+            <summary>
+            If your mod has been flagged as incompatible in DG, set this to true after fixing the issues to bypass the compatibility check.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.noCompilation">
+            <summary>
+            Gets a value indicating whether this <see cref="T:DuckGame.Mod"/> should not try to compile itself
+            </summary>
+            <value>
+              <c>true</c> if mod will not try to compile itself; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.preloadContent">
+            <summary>
+            Gets a value indicating whether this mod will preload its content.
+            With preloading enabled, the content in this mod will be loaded at the start of the game. This will
+            increase load times, but will prevent stuttering when loading custom content in game. preloadContent is true by default.
+            </summary>
+            <value>
+              <c>true</c> if this mod will preload its content; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.processPinkTransparency">
+            <summary>
+            When this is set to true, the color (255, 0, 255) will be replaced with transparency in any textures.
+            This will affect performance when loading, turn it off for better performance. processPinkTransparency is true by default.
+            </summary>
+            <value>
+              <c>true</c> if this mod will perform this; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.isDynamic">
+            <summary>
+            Gets a value indicating whether this mod was compiled dynamically.
+            </summary>
+            <value>
+            <c>true</c> if this instance was compiled dynamically; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:DuckGame.ModConfiguration.assembly">
+            <summary>
+            The Assembly that this mod was loaded from.
+            </summary>
+        </member>
+        <member name="T:DuckGame.ModLoader">
+            <summary>
+            The class that handles mods to load, and allows mods to retrieve Mod objects.
+            </summary>
+        </member>
+        <member name="P:DuckGame.ModLoader.accessibleMods">
+            <summary>
+            Get an iterable list of Mods
+            </summary>
+        </member>
+        <member name="F:DuckGame.ModLoader._numModsEnabled">
+            <summary>
+            Returns whether or not any mods are present and not disabled.
+            </summary>
+        </member>
+        <member name="M:DuckGame.ModLoader.GetMod``1">
+            <summary>
+            Get a loaded Mod instance from its unique name.
+            </summary>
+            <typeparam name="T">The special Mod subclass to cast to.</typeparam>
+            <returns>The Mod instance, or null.</returns>
+        </member>
+        <member name="M:DuckGame.ModLoader.GetMod(System.String)">
+            <summary>
+            Get a loaded Mod instance from its unique name.
+            </summary>
+            <param name="name">The name of the mod.</param>
+            <returns>The Mod instance, or null.</returns>
+        </member>
+        <member name="M:DuckGame.ModLoader.GetType(System.String)">
+            <summary>
+            Searches core and mods for a fully qualified or short type name.
+            </summary>
+            <param name="typeName">Fully qualified, or short, name of the type.</param>
+            <returns>The type, or null.</returns>
+        </member>
+        <member name="M:DuckGame.ModLoader.GetModFromType(System.Type)">
+            <summary>
+            Gets a mod from a type.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>The mod</returns>
+        </member>
+        <member name="M:DuckGame.ModLoader.GetModFromTypeIgnoreCore(System.Type)">
+            <summary>
+            Gets a mod from a type.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>The mod</returns>
+        </member>
+        <member name="M:DuckGame.ModLoader.GetModFromHash(System.UInt32)">
+            <summary>
+            Gets a mod from a hash value.
+            </summary>
+            <param name="pHash">A 'Mod.identifierHash' value.</param>
+            <returns>The mod</returns>
+        </member>
+        <member name="M:DuckGame.ModLoader.GetModFromWorkshopID(System.UInt64)">
+            <summary>
+            Gets a mod from a workshopID value.
+            </summary>
+            <param name="pHash">A 'Mod.configuration.workshopID' value.</param>
+            <returns>The mod</returns>
+        </member>
+        <member name="T:DuckGame.Priority">
+            <summary>
+            A priority listing for measuring a priority compared to something else.
+            Higher priorities take priority over lower ones (are executed last, basically)
+            </summary>
+        </member>
+        <member name="F:DuckGame.Priority.Inconsequential">
+            <summary>
+            Has no side-effects and will not conflict with other content
+            </summary>
+        </member>
+        <member name="F:DuckGame.Priority.Lowest">
+            <summary>
+            Lowest
+            </summary>
+        </member>
+        <member name="F:DuckGame.Priority.Lower">
+            <summary>
+            Lower
+            </summary>
+        </member>
+        <member name="F:DuckGame.Priority.Low">
+            <summary>
+            Low
+            </summary>
+        </member>
+        <member name="F:DuckGame.Priority.Normal">
+            <summary>
+            Normal
+            </summary>
+        </member>
+        <member name="F:DuckGame.Priority.High">
+            <summary>
+            High
+            </summary>
+        </member>
+        <member name="F:DuckGame.Priority.Higher">
+            <summary>
+            Higher
+            </summary>
+        </member>
+        <member name="F:DuckGame.Priority.Highest">
+            <summary>
+            Highest
+            </summary>
+        </member>
+        <member name="F:DuckGame.Priority.Monitor">
+            <summary>
+            Requires everything else to be done first before this one
+            </summary>
+        </member>
+        <member name="T:DuckGame.PriorityAttribute">
+            <summary>
+            An attribute to mark the priority of something.
+            </summary>
+        </member>
+        <member name="P:DuckGame.PriorityAttribute.Priority">
+            <summary>
+            Gets the priority of this target.
+            </summary>
+            <value>
+            The priority.
+            </value>
+        </member>
+        <member name="M:DuckGame.PriorityAttribute.#ctor(DuckGame.Priority)">
+            <summary>
+            Initializes a new instance of the <see cref="T:DuckGame.PriorityAttribute"/> class.
+            </summary>
+            <param name="priority">The priority.</param>
+        </member>
+        <member name="T:DuckGame.PropertyBag">
+            <summary>
+            Implementation of property bag
+            </summary>
+        </member>
+        <member name="P:DuckGame.PropertyBag.Properties">
+            <summary>
+            An enumerator to iterate over property keys.
+            </summary>
+        </member>
+        <member name="M:DuckGame.PropertyBag.Contains(System.String)">
+            <summary>
+            Check if a property is in this bag.
+            </summary>
+            <param name="property">The property key.</param>
+            <returns>
+            true if the property is in this bag; false if not
+            </returns>
+        </member>
+        <member name="M:DuckGame.PropertyBag.Get(System.String)">
+            <summary>
+            Get an untyped property value from the bag.
+            </summary>
+            <param name="property">The property name.</param>
+            <returns>
+            The object, if it is in the bag
+            </returns>
+            <exception cref="T:DuckGame.PropertyNotFoundException">The property key is not in this property bag.</exception>
+        </member>
+        <member name="M:DuckGame.PropertyBag.Get``1(System.String)">
+            <summary>
+            Get a property value from the bag.
+            </summary>
+            <typeparam name="T">The type to unbox to.</typeparam>
+            <param name="property">The property name.</param>
+            <returns>
+            The object casted to T if it is in the bag and can be converted to the requested type
+            </returns>
+            <exception cref="T:DuckGame.PropertyNotFoundException">The property key is not in this property bag.</exception>
+        </member>
+        <member name="M:DuckGame.PropertyBag.IsOfType``1(System.String)">
+            <summary>
+            Check if a property in this bag is of, or assignable to, a certain type.
+            </summary>
+            <typeparam name="T">The type to check for.</typeparam>
+            <param name="property">The property key.</param>
+            <returns>
+            true if the property is this type or is assignable to this type; false if not; null if the key does not exist or if the property value is null
+            </returns>
+        </member>
+        <member name="M:DuckGame.PropertyBag.TypeOf(System.String)">
+            <summary>
+            Get the type of a property contained in the bag.
+            </summary>
+            <param name="property">The property key.</param>
+            <returns>
+            The type of this property.
+            </returns>
+        </member>
+        <member name="M:DuckGame.PropertyBag.Set``1(System.String,``0)">
+            <summary>
+            Set a property's value in the bag
+            </summary>
+            <typeparam name="T">The type of value to set.</typeparam>
+            <param name="property">The property key</param>
+            <param name="value">The value</param>
+        </member>
+        <member name="M:DuckGame.PropertyBag.Remove(System.String)">
+            <summary>
+            Remove a property value from the bag.
+            </summary>
+            <param name="property">The value to remove.</param>
+        </member>
+        <member name="M:DuckGame.PropertyBag.Set(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Set multiple property values in the bag at once.
+            </summary>
+            <param name="properties">Enumerable set of properties</param>
+        </member>
+        <member name="M:DuckGame.PropertyBag.TryGet``1(System.String)">
+            <summary>
+            Tries to get a property value from a bag; does not throw, but returns null if the property is not there.
+            </summary>
+            <typeparam name="T">The type to unbox to. Must be a value type.</typeparam>
+            <param name="property">The property name.</param>
+            <returns>null if it does not exist, otherwise the property value</returns>
+        </member>
+        <member name="M:DuckGame.PropertyBag.TryGet``1(System.String,``0@)">
+            <summary>
+            Tries to get a property value from a bag; does not throw.
+            </summary>
+            <typeparam name="T">The type to unbox to.</typeparam>
+            <param name="property">The property name.</param>
+            <param name="value">The output value.</param>
+            <returns>true if it was in the property bag</returns>
+        </member>
+        <member name="M:DuckGame.PropertyBag.GetOrDefault``1(System.String,``0)">
+            <summary>
+            Get a property value from the bag. Does not throw, returns defaultValue if the key does not exist.
+            </summary>
+            <typeparam name="T">The type to unbox to.</typeparam>
+            <param name="property">The property name.</param>
+            <param name="defaultValue">The default value to use if the key is not in the bag.</param>
+            <returns>The object casted to T if it is in the bag and can be converted to the requested type</returns>
+        </member>
+        <member name="T:DuckGame.PropertyNotFoundException">
+            <summary>
+            This exception is thrown when a property was not found in a PropertyBag.
+            </summary>
+        </member>
+        <member name="M:DuckGame.PropertyNotFoundException.#ctor">
+            <summary>
+            Initialize a new instance of this exception.
+            </summary>
+        </member>
+        <member name="M:DuckGame.PropertyNotFoundException.#ctor(System.String)">
+            <summary>
+            Initialize a new instance of this exception with the specified message.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:DuckGame.PropertyNotFoundException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initialize a new instance of this exception with the specified message and inner exception.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="inner">The inner exception.</param>
+        </member>
+        <member name="M:DuckGame.PropertyNotFoundException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initialize a new instance of this exception for deserialization.
+            </summary>
+            <param name="info">Serialized info</param>
+            <param name="context">Serialization context</param>
+        </member>
+        <member name="M:DuckGame.MonoMain.GetLocalTime">
+            <summary>
+            Gives the local time zone's time. Unfortunately, MonoGame/Brute does not completely account for time zones on Switch for DateTime.Now.
+            </summary>
+            <returns>Time zone adjusted for local time.</returns>
+        </member>
+        <member name="F:DuckGame.MonoMain.cloudNoSave">
+            <summary>
+            deprecated- this variable does nothing.
+            </summary>
+        </member>
+        <member name="F:DuckGame.MonoMain.cloudNoLoad">
+            <summary>
+            deprecated- this variable does nothing.
+            </summary>
+        </member>
+        <member name="F:DuckGame.MonoMain.disableCloud">
+            <summary>
+            deprecated- this variable does nothing.
+            </summary>
+        </member>
+        <member name="F:DuckGame.MonoMain.alternateAudioMode">
+            <summary>
+            deprecated
+            </summary>
+        </member>
+        <member name="F:DuckGame.MonoMain.directAudio">
+            <summary>
+            deprecated
+            </summary>
+        </member>
+        <member name="M:DuckGame.MonoMain.GetCurrentResolution">
+            <summary>
+            Returns the current timer resolution in 100ns units
+            </summary>
+        </member>
+        <member name="M:DuckGame.MonoMain.SleepForNoMoreThan(System.Double)">
+            <summary>
+            Sleeps as long as possible without exceeding the specified period
+            </summary>
+        </member>
+        <member name="M:DuckGame.MTSpriteBatch.Draw(DuckGame.Tex2D,System.Nullable{DuckGame.Vec2},System.Nullable{DuckGame.Rectangle},System.Nullable{DuckGame.Rectangle},System.Nullable{DuckGame.Vec2},System.Single,System.Nullable{DuckGame.Vec2},System.Nullable{DuckGame.Color},Microsoft.Xna.Framework.Graphics.SpriteEffects,System.Single)">
+            <summary>
+            This is a MonoGame Extension method for calling Draw() using named parameters.  It is not available in the standard XNA Framework.
+            </summary>
+            <param name='texture'>
+            The Texture2D to draw.  Required.
+            </param>
+            <param name='position'>
+            The position to draw at.  If left empty, the method will draw at drawRectangle instead.
+            </param>
+            <param name='drawRectangle'>
+            The rectangle to draw at.  If left empty, the method will draw at position instead.
+            </param>
+            <param name='sourceRectangle'>
+            The source rectangle of the texture.  Default is null
+            </param>
+            <param name='origin'>
+            Origin of the texture.  Default is Vector2.Zero
+            </param>
+            <param name='rotation'>
+            Rotation of the texture.  Default is 0f
+            </param>
+            <param name='scale'>
+            The scale of the texture as a Vector2.  Default is Vector2.One
+            </param>
+            <param name='color'>
+            Color of the texture.  Default is Color.White
+            </param>
+            <param name='effect'>
+            SpriteEffect to draw with.  Default is SpriteEffects.None
+            </param>
+            <param name='depth'>
+            Draw depth.  Default is 0f.
+            </param>
+        </member>
+        <member name="M:DuckGame.MTSpriteBatch.DoDrawInternalTex2D(DuckGame.Tex2D,DuckGame.Vec4,System.Nullable{DuckGame.Rectangle},DuckGame.Color,System.Single,DuckGame.Vec2,Microsoft.Xna.Framework.Graphics.SpriteEffects,System.Single,System.Boolean,DuckGame.Material)">
+            <summary>
+            Obsolete, use DoDrawInternal()
+            </summary>
+            <param name="texture"></param>
+            <param name="destinationRectangle"></param>
+            <param name="sourceRectangle"></param>
+            <param name="color"></param>
+            <param name="rotation"></param>
+            <param name="origin"></param>
+            <param name="effect"></param>
+            <param name="depth"></param>
+            <param name="autoFlush"></param>
+            <param name="fx"></param>
+        </member>
+        <member name="T:DuckGame.MTSpriteBatcher">
+            <summary>
+            This class handles the queueing of batch items into the GPU by creating the triangle tesselations
+            that are used to draw the sprite textures. This class supports int.MaxValue number of sprites to be
+            batched and will process them into short.MaxValue groups (strided by 6 for the number of vertices
+            sent to the GPU). 
+            </summary>
+        </member>
+        <member name="F:DuckGame.MTSpriteBatcher.InitialBatchSize">
+            <summary>
+            Initialization size for the batch item list and queue.
+            </summary>
+        </member>
+        <member name="F:DuckGame.MTSpriteBatcher.MaxBatchSize">
+            <summary>
+            The maximum number of batch items that can be processed per iteration
+            </summary>
+        </member>
+        <member name="F:DuckGame.MTSpriteBatcher.InitialVertexArraySize">
+            <summary>
+            Initialization size for the vertex array, in batch units.
+            </summary>
+        </member>
+        <member name="F:DuckGame.MTSpriteBatcher._batchItemList">
+            <summary>
+            The list of batch items to process.
+            </summary>
+        </member>
+        <member name="F:DuckGame.MTSpriteBatcher._freeBatchItemQueue">
+            <summary>
+            The available MTSpriteBatchItem queue so that we reuse these objects when we can.
+            </summary>
+        </member>
+        <member name="F:DuckGame.MTSpriteBatcher._device">
+            <summary>
+            The target graphics device.
+            </summary>
+        </member>
+        <member name="F:DuckGame.MTSpriteBatcher._index">
+            <summary>
+            Vertex index array. The values in this array never change.
+            </summary>
+        </member>
+        <member name="M:DuckGame.MTSpriteBatcher.CreateBatchItem">
+            <summary>
+            Create an instance of MTSpriteBatchItem if there is none available in the free item queue. Otherwise,
+            a previously allocated MTSpriteBatchItem is reused.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DuckGame.MTSpriteBatcher.EnsureArrayCapacity(System.Int32)">
+            <summary>
+            Resize and recreate the missing indices for the index and vertex position color buffers.
+            </summary>
+            <param name="numBatchItems"></param>
+        </member>
+        <member name="M:DuckGame.MTSpriteBatcher.CompareTextureFunc(DuckGame.MTSpriteBatchItem,DuckGame.MTSpriteBatchItem)">
+            <summary>
+            Reference comparison of the underlying Texture objects for each given MTSpriteBatchitem.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns>0 if they are not reference equal, and 1 if so.</returns>
+        </member>
+        <member name="M:DuckGame.MTSpriteBatcher.CompareDepthFunc(DuckGame.MTSpriteBatchItem,DuckGame.MTSpriteBatchItem)">
+            <summary>
+            Compares the Depth of a against b returning -1 if a is less than b, 
+            0 if equal, and 1 if a is greater than b. The test uses float.CompareTo(float)
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns>-1 if a is less than b, 0 if equal, and 1 if a is greater than b</returns>
+        </member>
+        <member name="M:DuckGame.MTSpriteBatcher.CompareReverseDepthFunc(DuckGame.MTSpriteBatchItem,DuckGame.MTSpriteBatchItem)">
+            <summary>
+            Implements the opposite of CompareDepth, where b is compared against a.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns>-1 if b is less than a, 0 if equal, and 1 if b is greater than a</returns>
+        </member>
+        <member name="M:DuckGame.MTSpriteBatcher.DrawBatch(Microsoft.Xna.Framework.Graphics.SpriteSortMode)">
+            <summary>
+            Sorts the batch items and then groups batch drawing into maximal allowed batch sets that do not
+            overflow the 16 bit array indices for vertices.
+            </summary>
+            <param name="sortMode">The type of depth sorting desired for the rendering.</param>
+        </member>
+        <member name="M:DuckGame.MTSpriteBatcher.FlushVertexArray(System.Int32,System.Int32)">
+            <summary>
+            Sends the triangle list to the graphics device. Here is where the actual drawing starts.
+            </summary>
+            <param name="start">Start index of vertices to draw. Not used except to compute the count of vertices to draw.</param>
+            <param name="end">End index of vertices to draw. Not used except to compute the count of vertices to draw.</param>
+        </member>
+        <member name="T:DuckGame.WdlResampler">
+            <summary>
+            Fully managed resampler, based on Cockos WDL Resampler
+            </summary>
+        </member>
+        <member name="M:DuckGame.WdlResampler.#ctor">
+            <summary>
+            Creates a new Resampler
+            </summary>
+        </member>
+        <member name="M:DuckGame.WdlResampler.SetMode(System.Boolean,System.Int32,System.Boolean,System.Int32,System.Int32)">
+            <summary>
+            sets the mode
+            if sinc set, it overrides interp or filtercnt
+            </summary>
+        </member>
+        <member name="M:DuckGame.WdlResampler.SetFilterParms(System.Single,System.Single)">
+            <summary>
+            Sets the filter parameters
+            used for filtercnt>0 but not sinc
+            </summary>
+        </member>
+        <member name="M:DuckGame.WdlResampler.SetFeedMode(System.Boolean)">
+            <summary>
+            Set feed mode
+            </summary>
+            <param name="wantInputDriven">if true, that means the first parameter to ResamplePrepare will specify however much input you have, not how much you want</param>
+        </member>
+        <member name="M:DuckGame.WdlResampler.Reset(System.Double)">
+            <summary>
+            Reset
+            </summary>
+        </member>
+        <member name="M:DuckGame.WdlResampler.ResamplePrepare(System.Int32,System.Int32,System.Single[]@,System.Int32@)">
+            <summary>
+            Prepare
+            note that it is safe to call ResamplePrepare without calling ResampleOut (the next call of ResamplePrepare will function as normal)
+            nb inbuffer was WDL_ResampleSample **, returning a place to put the in buffer, so we return a buffer and offset
+            </summary>
+            <param name="out_samples">req_samples is output samples desired if !wantInputDriven, or if wantInputDriven is input samples that we have</param>
+            <param name="nch"></param>
+            <param name="inbuffer"></param>
+            <param name="inbufferOffset"></param>
+            <returns>returns number of samples desired (put these into *inbuffer)</returns>
+        </member>
+        <member name="T:DuckGame.WdlResamplingSampleProvider">
+            <summary>
+            Fully managed resampling sample provider, based on the WDL Resampler
+            </summary>
+        </member>
+        <member name="M:DuckGame.WdlResamplingSampleProvider.Read(System.Single[],System.Int32,System.Int32)">
+            <summary>
+            Reads from this sample provider
+            </summary>
+        </member>
+        <member name="P:DuckGame.WdlResamplingSampleProvider.WaveFormat">
+            <summary>
+            Output WaveFormat
+            </summary>
+        </member>
+        <member name="M:DuckGame.SFX.PlaySynchronized(System.String,System.Single,System.Single,System.Single,System.Boolean)">
+            <summary>
+            Plays a sound effect, synchronized over the network (if the network is active)
+            </summary>
+        </member>
+        <member name="M:DuckGame.SFX.PlaySynchronized(System.String,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Plays a sound effect, synchronized over the network (if the network is active)
+            </summary>
+        </member>
+        <member name="M:DuckGame.Windows_Audio.RegisterEndpointNotificationCallback(NAudio.CoreAudioApi.Interfaces.IMMNotificationClient)">
+            <summary>
+            Registers a call back for Device Events
+            </summary>
+            <param name="client">Object implementing IMMNotificationClient type casted as IMMNotificationClient interface</param>
+            <returns></returns>
+        </member>
+        <member name="M:DuckGame.Windows_Audio.UnRegisterEndpointNotificationCallback(NAudio.CoreAudioApi.Interfaces.IMMNotificationClient)">
+            <summary>
+            UnRegisters a call back for Device Events
+            </summary>
+            <param name="client">Object implementing IMMNotificationClient type casted as IMMNotificationClient interface </param>
+            <returns></returns>
+        </member>
+        <member name="T:DuckGame.Program">
+            <summary>
+            The main class.
+            </summary>
+        </member>
+        <member name="M:DuckGame.Program.Main(System.String[])">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="T:DbMon.NET.OnOutputDebugStringHandler">
+            <summary>
+            Delegate used when firing DebugMonitor.OnOutputDebug event
+            </summary>
+        </member>
+        <member name="T:DbMon.NET.DebugMonitor">
+            <summary>
+            This class captures all strings passed to <c>OutputDebugString</c> when
+            the application is not debugged.	
+            </summary>
+            <remarks>	
+            This class is a port of Microsofts Visual Studio's C++ example "dbmon", which
+            can be found at <c>http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vcsample98/html/vcsmpdbmon.asp</c>.
+            </remarks>
+            <remarks>
+            	<code>
+            		public static void Main(string[] args) {
+            			DebugMonitor.Start();
+            			DebugMonitor.OnOutputDebugString += new OnOutputDebugStringHandler(OnOutputDebugString);
+            			Console.WriteLine("Press 'Enter' to exit.");
+            			Console.ReadLine();
+            			DebugMonitor.Stop();
+            		}
+            		
+            		private static void OnOutputDebugString(int pid, string text) {
+            			Console.WriteLine(DateTime.Now + ": " + text);
+            		}
+            	</code>
+            </remarks>
+        </member>
+        <member name="M:DbMon.NET.DebugMonitor.#ctor">
+            <summary>
+            Private constructor so no one can create a instance
+            of this static class
+            </summary>
+        </member>
+        <member name="E:DbMon.NET.DebugMonitor.OnOutputDebugString">
+            <summary>
+            Fired if an application calls <c>OutputDebugString</c>
+            </summary>
+        </member>
+        <member name="F:DbMon.NET.DebugMonitor.m_AckEvent">
+            <summary>
+            Event handle for slot 'DBWIN_BUFFER_READY'
+            </summary>
+        </member>
+        <member name="F:DbMon.NET.DebugMonitor.m_ReadyEvent">
+            <summary>
+            Event handle for slot 'DBWIN_DATA_READY'
+            </summary>
+        </member>
+        <member name="F:DbMon.NET.DebugMonitor.m_SharedFile">
+            <summary>
+            Handle for our shared file
+            </summary>
+        </member>
+        <member name="F:DbMon.NET.DebugMonitor.m_SharedMem">
+            <summary>
+            Handle for our shared memory
+            </summary>
+        </member>
+        <member name="F:DbMon.NET.DebugMonitor.m_Capturer">
+            <summary>
+            Our capturing thread
+            </summary>
+        </member>
+        <member name="F:DbMon.NET.DebugMonitor.m_SyncRoot">
+            <summary>
+            Our synchronization root
+            </summary>
+        </member>
+        <member name="F:DbMon.NET.DebugMonitor.m_Mutex">
+            <summary>
+            Mutex for singleton check
+            </summary>
+        </member>
+        <member name="M:DbMon.NET.DebugMonitor.Start">
+            <summary>
+            Starts this debug monitor
+            </summary>
+        </member>
+        <member name="M:DbMon.NET.DebugMonitor.Capture">
+            <summary>
+            Captures 
+            </summary>
+        </member>
+        <member name="M:DbMon.NET.DebugMonitor.Dispose">
+            <summary>
+            Dispose all resources
+            </summary>
+        </member>
+        <member name="M:DbMon.NET.DebugMonitor.Stop">
+            <summary>
+            Stops this debug monitor. This call we block the executing thread
+            until this debug monitor is stopped.
+            </summary>
+        </member>
+        <member name="M:DbMon.NET.DebugMonitor.CreateApplicationException(System.String)">
+            <summary>
+            Helper to create a new application exception, which has automaticly the 
+            last win 32 error code appended.
+            </summary>
+            <param name="text">text</param>
+        </member>
+        <member name="T:WinFormsGraphicsDevice.ServiceContainer">
+            <summary>
+            Container class implements the IServiceProvider interface. This is used
+            to pass shared services between different components, for instance the
+            ContentManager uses it to locate the IGraphicsDeviceService implementation.
+            </summary>
+        </member>
+        <member name="M:WinFormsGraphicsDevice.ServiceContainer.AddService``1(``0)">
+            <summary>
+            Adds a new service to the collection.
+            </summary>
+        </member>
+        <member name="M:WinFormsGraphicsDevice.ServiceContainer.GetService(System.Type)">
+            <summary>
+            Looks up the specified service.
+            </summary>
+        </member>
+        <member name="E:Microsoft.Xna.Framework.Input.InputSystem.IMECharEntered">
+            <summary>
+            Event raised when a character has been entered.
+            </summary>
+        </member>
+        <member name="E:Microsoft.Xna.Framework.Input.InputSystem.CharEntered">
+            <summary>
+            Event raised when a character has been entered.
+            </summary>
+        </member>
+        <member name="E:Microsoft.Xna.Framework.Input.InputSystem.KeyDown">
+            <summary>
+            Event raised when a key has been pressed down. May fire multiple times due to keyboard repeat.
+            </summary>
+        </member>
+        <member name="E:Microsoft.Xna.Framework.Input.InputSystem.KeyUp">
+            <summary>
+            Event raised when a key has been released.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xna.Framework.Input.InputSystem.Initialize(Microsoft.Xna.Framework.GameWindow)">
+            <summary>
+            Initialize the TextInput with the given GameWindow.
+            </summary>
+            <param name="window">The XNA window to which text input should be linked.</param>
+        </member>
+    </members>
+</doc>
