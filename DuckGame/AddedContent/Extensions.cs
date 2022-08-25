@@ -18,7 +18,11 @@ namespace DuckGame
 
             action(dic[requestedKey]);
         }
-
+        public static Vec2 stopPoint(Vec2 v, AmmoType at, float ang)
+        {
+            Bullet b = new Bullet(v.x, v.y, at, ang, null, false, -1, true);
+            return b.end;
+        }
         public static bool TryFirst<T>(this IEnumerable<T> collection, Func<T, bool> condition, out T first)
         {
             first = default;
