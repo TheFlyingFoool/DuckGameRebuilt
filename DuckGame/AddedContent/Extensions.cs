@@ -9,8 +9,10 @@ using System.Text.RegularExpressions;
 
 namespace DuckGame
 {
+    public record struct IntVec2(int X, int Y);
     public static class Extensions
     {
+        
         public static void TryUse<T1, T2>(this Dictionary<T1, T2> dic, T1 requestedKey, T2 defaultValue, Action<T2> action)
         {
             if (!dic.ContainsKey(requestedKey))

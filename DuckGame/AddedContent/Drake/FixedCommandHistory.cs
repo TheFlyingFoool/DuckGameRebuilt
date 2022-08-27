@@ -18,7 +18,7 @@ public static class FixedCommandHistory
         }
     }
 
-    private static List<string> FastTakeFromEnd(this IReadOnlyList<string> list, int limit)
+    public static List<string> FastTakeFromEnd(this IReadOnlyList<string> list, int limit)
     {
         int smartLimit = Math.Min(list.Count, limit);
         List<string> result = new(smartLimit);

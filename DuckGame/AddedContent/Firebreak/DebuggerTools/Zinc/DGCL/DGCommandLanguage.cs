@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace DuckGame;
 
-public static class DGCommandLanguage
+public static partial class DGCommandLanguage
 {
     public static class FontColors
     {
@@ -19,31 +19,6 @@ public static class DGCommandLanguage
         public const string ORANGE = "|245,151,098|";
         public const string WHITE  = "|252,252,250|";
         public const string YELLOW = "|255,216,102|";
-    }
-
-    [DevConsoleCommand]
-    public static string Highlight(string str)
-    {
-        var tokens = Tokenize(str);
-        StringBuilder stringBuilder = new();
-        string? lastColor = null;
-
-        foreach (SyntaxToken token in tokens)
-        {
-            string color = token.TokenType.GetColor();
-            if (token.TokenType != TokenType.Whitespace && color != lastColor)
-            {
-                stringBuilder.Append(color);
-                lastColor = color;
-            }
-
-            if (token.Id == TokenId.NewLine)
-                lastColor = null;
-
-            stringBuilder.Append(token.Token);
-        }
-
-        return stringBuilder.ToString();
     }
 
     public static List<SyntaxToken> Tokenize(string str)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DuckGame.AddedContent.Drake;
 using DuckGame.AddedContent.Drake.PolyRender;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,6 +36,9 @@ public static class DebugTablet
     [DrawingContext(CustomID = "tablet")]
     public static void Draw()
     {
+        if (!MonoMain.firebreak)
+            return;
+
         Graphics.polyBatcher.BlendState = BlendState.Opaque;
 
         if (CustomKeyBinds.CheckInput(Keys.NumPad9))
@@ -47,9 +51,10 @@ public static class DebugTablet
         UpdateInputs();
 
         // -- draw --
-        Rectangle drawRect = new(new Vec2(16, 16), new Vec2(Layer.HUD.width - 16, Layer.HUD.height - 16));
+        Rectangle drawRect = new(new Vec2(16, 16), new Vec2(Layer.HUD.width - 16, Layer.HUD.height * 0.7f));
 
-        Graphics.DrawRect(drawRect, Color.Black, 1.1f, false, 2);
+        // text editor
+        Graphics.DrawRect(drawRect with { height = Layer.HUD.height - 32 }, Color.Black, 1.1f, false, 2);
         Graphics.DrawRect(drawRect, new Color(45, 42, 46), 1f);
 
         Vec2 stringDrawPos = drawRect.tl.ButBoth(6f, true).ButX(8f, true);
@@ -63,20 +68,34 @@ public static class DebugTablet
             var drawPos = stringDrawPos.ButY(i * (size.y + 1f), true);
 
             Graphics.DrawString($"{i + 1}", drawPos.ButX(-8f, true), new Color(91, 81, 92), 1.2f, scale: scale);
-            Graphics.DrawString(Lines.FirstOrDefault() == "highlight=true" && i > 0
-                    ? DGCommandLanguage.Highlight(Lines[i]) 
-                    : Lines[i], drawPos,
-                Color.White, 1.2f, scale: scale);
+            Graphics.DrawString(DGCommandLanguage.Highlight(Lines[i]), drawPos, Color.White, 1.2f, scale: scale);
         }
 
         Graphics.DrawString($"{CaretPosition.Y}:{CaretPosition.X}", drawRect.br - new Vec2(10, 6), Color.Gray, 1.4f, scale: 0.3f);
 
         DrawCaret(stringDrawPos, scale);
+        
+        // console
+        var consoleRect = drawRect with { Top = drawRect.Bottom, height = Layer.HUD.height * 0.3f - 16};
+        
+        stringDrawPos = consoleRect.tl.ButBoth(6f, true);
+
+        var drawnOutput = Output.FastTakeFromEnd(7);
+        
+        for (int i = 0; i < Math.Min(drawnOutput.Count, 7); i++)
+        {
+            var drawPos = stringDrawPos.ButY(i * (size.y + 1f), true);
+
+            Graphics.DrawString(drawnOutput[i], drawPos, Color.White, 1.2f, scale: scale);
+        }
+        
+        Graphics.DrawRect(consoleRect, new Color(34, 31, 34), 1f);
     }
 
     private static ProgressValue _caretBlink = new();
     private static bool _caretState = true;
-    private static List<string> Lines = new() {""};
+    public static List<string> Lines = new() {""};
+    public static List<string> Output = new();
     public static IntVec2 CaretPosition = new();
     public const int TAB_SPACE_WIDTH = 4;
 
@@ -119,6 +138,14 @@ public static class DebugTablet
             color * fade, 1.3f);
     }
 
+    public static void LogOutput(string message)
+    {
+        foreach (string s in message.Split('\n'))
+        {
+            Output.Add(s);
+        }
+    }
+
     private static void UpdateInputs()
     { 
         if (!Open)
@@ -134,6 +161,12 @@ public static class DebugTablet
             {
                 case Microsoft.Xna.Framework.Input.Keys.Escape:
                     break;
+                case Microsoft.Xna.Framework.Input.Keys.F5:
+                {
+                    LogOutput("Running Code...");
+                    LogOutput(/*DGCommandLanguage.Run(*/string.Join("\n", Lines)/*).ToString()*/);
+                    break;
+                }
                 case Microsoft.Xna.Framework.Input.Keys.Space:
                 {
                     Lines[CaretPosition.Y] = Lines[CaretPosition.Y].Insert(CaretPosition.X, " ");
@@ -142,8 +175,8 @@ public static class DebugTablet
                 }
                 case Microsoft.Xna.Framework.Input.Keys.Tab:
                 {
-                    Lines[CaretPosition.Y] = Lines[CaretPosition.Y].Insert(CaretPosition.X, "    ");
-                    CaretPosition.X += 4;
+                    Lines[CaretPosition.Y] = Lines[CaretPosition.Y].Insert(CaretPosition.X, new string(' ', TAB_SPACE_WIDTH));
+                    CaretPosition.X += TAB_SPACE_WIDTH;
                     break;
                 }
                 case Microsoft.Xna.Framework.Input.Keys.Enter:
@@ -237,6 +270,4 @@ public static class DebugTablet
             }
         }
     }
-
-    public record struct IntVec2(int X, int Y);
 }

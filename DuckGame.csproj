@@ -188,6 +188,8 @@
     <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Levels\TestLev.FireBlock.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Levels\TestLev.SelectionPad.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DebugTablet\DebugTablet.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DGCL\DGCLSyntaxHighlighter.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DGCL\DGCLSyntaxRunner.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DGCL\DGCommandLanguage.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DGCL\SyntaxToken.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DGCL\TokenId.cs" />
