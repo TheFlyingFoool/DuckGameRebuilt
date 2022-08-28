@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialSecretOutline : Material
+    public class MaterialSecretOutline : Material // seems fine double check alter
     {
         public MaterialSecretOutline() => _effect = Content.Load<MTEffect>("Shaders/secret_outline");
 

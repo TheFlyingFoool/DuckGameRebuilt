@@ -13,6 +13,8 @@ namespace DuckGame
 {
     public class MTSpriteBatchItem : IComparable<MTSpriteBatchItem>
     {
+        public bool usingspriteatlas;
+        public Tex2D NormalTexture;
         public Vec2 Offsets = Vec2.Zero;
         public float DepthIndex;
         public MTSpriteBatchItemMetaData MetaData;

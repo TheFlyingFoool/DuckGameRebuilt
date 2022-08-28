@@ -998,6 +998,9 @@ namespace DuckGame
                 {
                     DevConsole.Log("Loading Level " + filepath, Color.Green);
                     Main.editor.LoadLevel(filepath);
+                    Main.editor.DoUpdate();
+                    Main.editor.DoUpdate();
+                    Main.editor.DoUpdate();
                     Main.editor.Play();
                 }
                 else
@@ -2893,6 +2896,7 @@ namespace DuckGame
                             thing.SetTranslation(new Vec2((float) (-(thing.position.x - vec2.x) * 2.0), 0f));
                             thing.EditorFlip(false);
                             thing.flipHorizontal = !thing.flipHorizontal;
+                            Level.current.things.UpdateObject(thing);
                         }
                     }
                     else
@@ -2911,6 +2915,7 @@ namespace DuckGame
                                     return;
                                 current.things.quadTree.Remove(t);
                                 current.things.quadTree.Add(t);
+                                Level.current.things.UpdateObject(t);
                             }, () =>
                             {
                                 t.SetTranslation(new Vec2(dif * 2f, 0f));
@@ -2920,6 +2925,7 @@ namespace DuckGame
                                     return;
                                 current.things.quadTree.Remove(t);
                                 current.things.quadTree.Add(t);
+                                Level.current.things.UpdateObject(t);
                             });
                         }
 
@@ -3036,6 +3042,7 @@ namespace DuckGame
                                 return;
                             current.things.quadTree.Remove(t);
                             current.things.quadTree.Add(t);
+                            Level.current.things.UpdateObject(t);
                         }, () =>
                         {
                             t.SetTranslation(-offset);
@@ -3043,6 +3050,8 @@ namespace DuckGame
                                 return;
                             current.things.quadTree.Remove(t);
                             current.things.quadTree.Add(t);
+                            Level.current.things.UpdateObject(t);
+
                         });
                     }
 

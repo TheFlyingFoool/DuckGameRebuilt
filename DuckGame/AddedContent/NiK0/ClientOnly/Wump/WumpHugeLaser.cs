@@ -450,7 +450,7 @@ namespace DuckGame
 			}
 		}
 
-		public StateBinding _laserStateBinding = new HugeLaserFlagBinding(GhostPriority.Normal);
+	//	public StateBinding _laserStateBinding = new HugeLaserFlagBinding(GhostPriority.Normal);
 
 		public StateBinding _animationIndexBinding = new StateBinding("netAnimationIndex", 4, false, false);
 

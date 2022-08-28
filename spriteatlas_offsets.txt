@@ -1,2487 +1,2513 @@
-kanji_font 0 0 1024 1024
-flags/flags 0 1024 738 976
-rockThrow/lightRays 1024 0 450 1200
-vincentwip 976 1024 1006 339
-vincentNoYo 1315 1024 1006 339
-vincent 1654 1024 1006 339
-rockThrow/boardOverlayLarge 1024 450 412 740
-citywall 0 1762 768 350
-rockWall 350 1762 768 350
-newsDuck 1993 1024 200 840
-newsDuckBeak 1993 1224 200 840
-dc5 1993 1424 512 512
-arcade/plasma 1993 1936 512 512
-arcade/plasma2 2224 0 512 512
-rockThrow/moonShine 2224 512 512 512
-sun 1993 2448 512 512
-_quackSprite2 700 1762 768 192
-_quackSprite3 976 2030 768 192
-_quackSprite6 1315 2030 768 192
-_quackSprite5 1654 2030 768 192
-_quackSprite4 2505 2448 768 192
-quackduck_m 0 2530 768 192
-_quackSprite7 192 2530 768 192
-_quackSprite0 384 2530 768 192
-_quackSprite1 576 2530 768 192
-arcade/topFloor 2505 1424 240 720
-arcade/bottomFloor 2505 1936 240 720
-quackduck 768 2530 768 192
-arcade/schooly_sibling 1764 450 500 400
-aslogo 2697 2448 432 432
-devScan 1024 862 158 664
-arcade/schooly 2736 0 400 400
-schoolySports 2736 400 400 400
-arcade/schooly_progress 2697 2880 400 400
-hatCollection 976 2798 512 256
-arcade/arcadeOuya 1993 2960 280 487
-gachaEgg 1168 2030 576 132
-intermissionFont 2505 1664 223 384
-background/virtual 1654 2798 280 320
-sprite0_strip36 2505 2176 16 576
-background/rocksUnderground 2505 2192 256 320
-bionicArm 1315 2798 384 192
-rockThrow/boardOverlay 2736 800 206 370
-background/kingdomSky 2825 2192 240 320
-background/snowSky 2889 1664 240 320
-background/forest4 1654 3078 240 320
-background/industrial 3097 2880 240 320
-background/office 3097 3120 240 320
-background/forest5 3129 2448 240 320
-background/city 3136 0 240 320
-background/forest3 3136 240 240 320
-background/forest 3136 480 240 320
-background/spaceTransparent 3136 720 240 320
-background/space 1315 3182 240 320
-background/forest2 3225 1424 240 320
-background/forestNight 3225 1936 240 320
-background/underground 3225 1664 212 320
-online/eggSymbols 2833 1024 16 512
-background/starField 2833 1224 200 320
-bigTV 3153 1224 200 320
-sumsnow 3225 2176 200 320
-background/pyramid 1993 3240 200 320
-survival/crryyyyoooo 2697 3280 200 320
-background/starField 0 3298 200 320
-arcade/gradient 976 3310 256 256
-background/donuroids 1654 3318 256 256
-thickBiosNum 3097 3360 256 256
-glitchMap 3353 3360 256 256
-plasma2 1315 3422 256 256
-glitchMap2 1993 3440 256 256
-playBook 2833 1040 180 320
-arcade/gotcha 3129 2688 180 320
-arcade/rainbow 320 3298 180 320
-shiny 640 3298 180 320
-mainBackground 3345 1024 180 320
-defaultMod 3417 2880 180 320
-album 3417 3120 180 320
-rainbow 3449 2448 180 320
-title/background 3449 2628 168 320
-littleMan 892 1762 392 80
-playBookPageOffset 3456 0 138 320
-duckChannelBackground 3456 138 150 300
-Image13 2249 3440 192 256
-explosion 3456 288 192 256
-explode 1764 950 64 384
-sandwichCard 3456 480 216 230
-furni/characters/letters_blue 1846 2030 416 21
-furni/characters/letters_red 1507 2030 416 21
-furni/characters/letters_white 1867 2030 416 21
-furni/characters/letters_purp 1888 2030 416 21
-challengeTrophy 2697 3480 58 360
-devTray 0 3498 80 332
-arcade/unlockIcons 3456 696 200 200
-_controlledSprite5 2505 3216 192 192
-biosFont 1846 2446 256 128
-castleBackground 3456 896 128 256
-spaceBackground 3545 1424 128 256
-quackduckOverlay 2313 3240 192 192
-_controlledSprite6 2505 3408 192 192
-_sprite6 3473 1224 192 192
-_controlledSprite4 2697 3538 192 192
-_sprite7 2889 3538 192 192
-_controlledSprite7 3545 1936 192 192
-boots 3545 1552 192 192
-_controlledSprite3 3545 2128 192 192
-_controlledSprite0 3545 1744 192 192
-_controlledSprite2 976 3566 192 192
-_sprite2 1654 3574 192 192
-_controlledSprite1 0 3578 192 192
-jimduck 192 3578 192 192
-duck 384 3578 192 192
-_sprite0 576 3578 192 192
-controlledDuck 768 3578 192 192
-controlledDuck_m 3609 3360 192 192
-_sprite3 2505 3600 192 192
-_sprite5 3609 3552 192 192
-chestPlateAnim 3097 3616 192 192
-chestPlateAnimOver 3353 3616 192 192
-walljumpBoots 3665 1024 192 192
-bionicArmHook 3665 1224 192 192
-_sprite1 1315 3678 192 192
-_sprite4 1993 3696 192 192
-duck_m 2185 3696 192 192
-title/wideScreen 3136 960 58 320
-gettingXP 2697 3730 120 252
-interviewDuck 3737 2880 128 240
-pyramidEdge 3737 3120 160 208
-rockThrow/scoreBoard 3737 1936 154 203
-tutorialScreens 2505 1887 30 318
-fieldWall 3225 1876 48 300
-fieldNoise 3225 2376 48 300
-fieldNoiseRain 3417 3060 48 300
-fieldNoiseSnow 3417 3300 48 300
-tutorialScreensPC 2889 1904 30 318
-arcade/gotcha/glass 1507 2446 200 146
-interviewBox 3609 3744 94 252
-billboard 3756 138 126 217
-newsTable 3449 2796 42 300
-unlitDoor 3153 1040 180 161
-smallFont 1507 2798 211 130
-litDoor 3737 2090 180 161
-smallFontChat 3756 264 211 130
-smallFontGacha 3756 475 211 130
-weekDays 1909 2030 248 81
-duckGameTitleOutline 3737 3008 109 218
-duckGameTitleOutlineBlack 976 3758 109 218
-arcade/gotcha/door 1168 2606 180 146
-arcade/gotcha/machine 1168 3566 180 146
-levWindow_lev6 3737 2270 131 189
-arcadeBackground 1846 3574 192 128
-duckGameTitleOutline - Copy 1654 3766 107 210
-online/easelPic 2505 1917 12 304
-Rebuilttitle 3769 2448 134 182
-bleacherSeats 3449 2838 25 288
-arcade/challengePaperTall 3769 2582 138 174
-title/controls 2736 1006 11 300
-rockThrow/intermission 3225 2424 23 288
-title/controlsPC 2825 2432 11 300
-arcade/challengeThumbnails 3769 2720 156 152
-rockThrow/boardMiddle 0 3770 105 203
-barback 3545 2320 128 176
-laserCharge 1507 3678 176 128
-online/chalkFont 332 3498 80 220
-levWindow_lev5 203 3770 109 189
-levWindow_lev4 392 3770 109 189
-levWindow 581 3770 109 189
-shittyCorptron 552 3498 38 256
-corptron 552 3536 38 256
-arcade/plug 1507 3009 160 133
-verticalDoor 2377 3696 160 128
-verticalDoorNoSensor 3756 686 160 128
-pyramidDoor 3756 846 160 128
-wireTrapDoorArmBig 1528 2030 208 71
-arcade/challengePaper 770 3770 102 174
-pressStart 3345 1204 13 262
-blank_door 1507 2646 134 141
-duckGameTitle - Copy 3776 0 91 182
-online/levelWindow 3801 1424 84 189
-statusBar 3449 2863 13 260
-duckGameTitle 3801 3552 91 182
-duckGameTitle2 3801 1508 91 182
-biosFontUIArrows 3801 1599 140 128
-biosFontUI 2505 3792 140 128
-background/bigBerg1 3737 3280 75 190
-arcade/arcadeMachines2 1528 2238 144 116
-arcade/arcadeMachines 3801 3360 144 116
-rockThrow/moon 3801 1739 129 131
-levWindow_lev3 3801 1868 68 189
-furni/widefont 3097 3808 128 128
-biosFontSideways 3353 3808 128 128
-japaneseFont 3225 3808 128 128
-flimsyDoor 3481 3808 128 128
-duckGame_japanese 3609 3838 128 128
-drumz 3737 3838 128 128
-doorFucked 2697 3850 128 128
-biosFontSidewaysCrossout 2825 3850 128 128
-biosFontDescriptions 2953 3850 128 128
-lockDoor 3857 1024 128 128
-bigGold 3857 1224 128 128
-badTileset 3865 3838 128 128
-badParallax 976 3867 128 128
-badArcade 1104 3867 128 128
-backgroundTiles01 1315 3870 128 128
-flimsyDoorDamaged 1443 3870 128 128
-wireTileset 1654 3873 128 128
-lampLight 1782 3873 128 128
-woodDuck 2249 3632 64 192
-biosFontDegree 0 3875 128 128
-lampLight2 203 3879 128 128
-furni/italFont 331 3879 128 128
-moneyFont 459 3879 128 128
-concrete 587 3879 128 128
-cityBackground 715 3879 128 128
-bathroom 843 3879 128 128
-biosFontCaseSensitive 3886 264 128 128
-energyTex 3886 392 128 128
-treeTileset 3886 520 128 128
-foregroundNature 3886 648 128 128
-industrialTileset 3886 776 128 128
-natureTileset 1993 3888 128 128
-nublessIceTileset 2121 3888 128 128
-industrialBackground 2249 3888 128 128
-snowIceTileset 2377 3888 128 128
-mallards 3917 3360 128 128
-cloudTileset 2505 3932 128 128
-buildingFrame 3097 3936 128 128
-snowTileset 3353 3936 128 128
-donutTileset 3481 3936 128 128
-nublessSnow 3225 3936 128 128
-officeTileset2 3940 1936 128 128
-pineTreeTileset 3940 2064 128 128
-pyramidTileset 3940 2192 128 128
-door 3940 2320 128 128
-spaceTileset 3945 3120 128 128
-scaffolding 3951 2448 128 128
-spookyTileset 3951 2576 128 128
-pyramidBackground 3951 2704 128 128
-caveTileset 3958 0 128 128
-officeSubBackground 3609 3966 128 128
-ornateFont 3865 3966 128 128
-priceFontRightways 3737 3966 128 128
-redHot 3977 2880 128 128
-furni/biosFont 2697 3978 128 128
-furni/handstandFont 2825 3978 128 128
-castle 2953 3978 128 128
-furni/ornateFont 3983 3552 128 128
-furni/quietFont 3985 1024 128 128
-survival/robot 3985 1224 128 128
-woodScaffolding 3990 1424 128 128
-furni/tinyFont 3990 1552 128 128
-undergroundTileset 3990 1680 128 128
-officeBackground 3990 1808 128 128
-cityTree 3993 3838 128 128
-natureBackground 3993 3966 128 128
-blueprintTileset 976 3995 128 128
-cityTileset 1104 3995 128 128
-online/matchmaking_mk2 2949 3730 113 142
-background/bigBerg1_reflection 3861 3744 64 189
-furni/everyday/heightchart 3973 138 34 216
-dome 1315 3998 146 103
-background/donut 1418 3998 109 139
-levWindow_lev2 3973 172 58 189
-rockThrow/boardBottom 3737 2401 42 203
-rockThrow/boardBottomSnow 1654 4001 42 203
-payScreen 3801 3643 64 180
-background/planet 0 4003 88 156
-background/planet4 331 4007 88 156
-calanderDays 892 2154 163 81
-background/planet2 487 4007 88 156
-background/planet3 643 4007 88 156
-beverages 320 3478 18 224
-_armSprite3 3656 696 144 96
-duckArms_m 1557 3998 144 96
-arcadeFrame01 203 4007 144 96
-_armSprite7 4014 392 144 96
-_armSprite6 4014 536 144 96
-duckArms 4014 680 144 96
-_armSprite0 4014 824 144 96
-_armSprite1 1993 4016 144 96
-_armSprite5 2089 4016 144 96
-_armSprite4 2185 4016 144 96
-_armSprite2 2281 4016 144 96
-levWindow_lev1 4014 264 48 189
-levWindow_lev0 4014 312 48 189
-rockThrow/lighting 1654 4043 46 191
-ready 3973 230 24 208
-smallBiosFont 3886 904 120 112
-selectBorder 1846 2702 90 142
-selectBorder2 4045 3360 90 142
-smallBiosFont_m 2377 4016 120 112
-furni/fancy/leftRoomFG_opulent 799 4007 87 141
-bottomWedge 640 3478 16 212
-furni/office/leftRoomBG_office 4045 3450 87 141
-furni/fancy/leftRoomBG_opulent 4050 3744 87 141
-furni/freezer/leftRoomBG_freezer 2505 4060 87 141
-furni/leftRoomBG_oldstone 3097 4064 87 141
-furni/leftRoomFG_oldstone 3353 4064 87 141
-furni/bar/leftRoomBG_bar 4068 1936 87 141
-furni/bar/leftRoomFG_bar 4068 2023 87 141
-furni/bathroom/leftRoomBG_tiled 4068 2110 87 141
-furni/bathroom/leftRoomFG_tiles 4068 2197 87 141
-furni/cheap/leftRoomBG_oldwood 4068 2284 87 141
-furni/cheap/leftRoomFG_oldwood 4073 3120 87 141
-furni/default/biosBG 4073 3207 87 141
-furni/default/biosFG 4079 2448 87 141
-furni/everyday/leftRoomBG_basic 4079 2535 87 141
-furni/flowers/leftRoomFG_greenhouse 4079 2622 87 141
-furni/everyday/leftRoomFG_basic 4079 2709 87 141
-furni/flowers/leftRoomBG_greenhouse 4086 0 87 141
-furni/stone/leftRoomFG_oldstone 1654 4089 87 141
-furni/stone/leftRoomBG_oldstone 1795 4089 87 141
-furni/ship/leftRoomBG_ship 0 4091 87 141
-furni/outdoor/leftRoomFG_tree 3993 4094 87 141
-furni/outdoor/leftRoomBG_tree 331 4095 87 141
-furni/office/leftRoomFG_office 487 4095 87 141
-furni/ship/leftRoomFG_ship 628 4095 87 141
-furni/music/leftRoomFG_music 769 4095 87 141
-furni/music/leftRoomBG_music 4105 2880 87 141
-furni/freezer/leftRoomFG_freezer 4105 2967 87 141
-leftRoomForeground 2697 4106 87 141
-rightRoomForeground 2838 4106 87 141
-rockThrow/boardTop 4110 392 22 203
-arcade/lights2 808 3498 57 168
-rockThrow/boardTopSnow 4110 536 22 203
-arcade/lights 4110 414 57 168
-buttons/styleTray 1688 862 161 64
-sledgeHammer 1864 3766 96 128
-ghost 3945 3248 96 128
-coilGun 3977 3008 96 128
-chaingunTip2 4110 558 56 168
-chaingunTip 4110 471 56 168
-chaingun 4110 614 56 168
-unlockFrame 3737 4094 92 125
-unlockFrameWrapped 3609 4094 92 125
-online/matchmaking 3865 4094 92 125
-online/matchmakingBeta 4110 670 92 125
-rockThrow/showdown 4111 3552 23 191
-_crowdSprite0 4111 3575 23 190
-_crowdSprite5 4111 3598 23 190
-seatDuck 4111 3621 23 190
-_crowdSprite7 4111 3644 23 190
-_crowdSprite3 4111 3667 23 190
-_crowdSprite6 4111 3690 23 190
-seatDuck_m 4111 3713 23 190
-_crowdSprite4 4113 1024 23 190
-_crowdSprite2 4113 1224 23 190
-_crowdSprite1 4113 1047 23 190
-smallBiosFontUI_m 1194 3758 100 112
-rockThrow/winnerBanner 3861 3808 28 184
-smallBiosFontUI 4110 762 100 112
-background/bigBerg2 4113 1070 68 143
-background/bigBerg2_reflection 4113 1247 65 142
-rightRoomBackground 4068 2371 68 137
-leftRoomBackground 4079 2796 68 137
-furni/outdoor/poptent 3776 91 28 176
-doorSpinner 4110 862 100 100
-rockThrow/placePedastals 4113 1138 45 152
-deathFrame 4113 1312 77 120
-aslogopix 4118 1424 90 106
-connectionArrow 3801 3707 26 168
-bigItemCrate 3857 1152 66 128
-tutorial/guncrouchjump 4118 1514 96 96
-editorButtons 1909 2278 128 64
-sledgeSwing 3857 1352 64 128
-tutorial/fly 4118 1610 96 96
-tutorial/walk 4118 1706 96 96
-tutorial/slideUnder 4118 1802 96 96
-tutorial/jump 4121 3838 96 96
-tutorial/jumpThrough 4121 3966 96 96
-tutorial/groundPound 976 4123 96 96
-tutorial/gunjump 1072 4123 96 96
-tutorial/fallThrough 1168 4123 96 96
-duckFont 3917 3488 64 128
-furni/freezer/IceCreamPail 4014 360 30 160
-arcade/plug_machine 4113 1183 36 152
-quackLoader 1528 2382 62 124
-wireTrapDoorArm 892 2317 112 71
-survival/cryoBackground 3494 4064 82 100
-travelPipesGreen 1232 2798 108 72
-travelPipes 1232 2906 108 72
-demoPro 3985 1152 66 114
-travelPipesBlue 1232 3014 108 72
-title/upperMonitor 1845 4043 44 135
-levs 3985 1352 70 108
-grenadecannon 3238 4064 72 104
-furni/characters/numbers 1599 2030 160 16
-arcade/stickers 4134 4094 29 145
-selectDoorLeftPC 892 2429 88 84
-selectDoorLeft 4134 4123 88 84
-selectDoorLeftBlank 1315 4144 88 84
-online/xpAddBar 808 3555 21 148
-turbochainsaw 3983 3680 52 116
-chainsaw 4073 3294 52 116
-furni/music/organ 1857 4001 36 132
-arcade/egg 3951 2832 46 120
-arcade/bigLightCone 4105 3054 57 107
-flameBurst 1232 3122 84 80
-arcade/prizeLights 2979 4106 55 107
-arcade/prizeLights2 4110 962 55 107
-arcade/gotcha/balls 4086 87 42 120
-furni/outdoor/bike 1615 2030 125 37
-selectDoorRightBlank 3145 2192 88 73
-selectDoorRight 3145 2280 88 73
-slip 2377 3856 32 128
-online/xpToilet 1399 4144 49 111
-duckSpawn 1418 4107 32 128
-campduck 1510 4144 64 96
-scoreRock 1507 2780 16 144
-spawnSheet 3081 2176 16 144
-arcade/unlockBox 2505 4147 40 117
-furni/bathroom/showercombo 2164 450 120 36
-rockThrow/placePedastalsSmall 3801 3504 45 108
-pineTilesetSnow 2164 570 96 56
-pineTileset 2164 666 96 56
-newscast/blueBar 2377 4136 24 128
-newscast/redBar 3776 119 13 138
-dartchain 203 4151 36 114
-dartchain_tip 3097 4151 36 114
-trafficLight 3353 4151 23 126
-furni/everyday/vacuum 2164 762 120 24
-grenadePin 3756 1006 16 128
-online/eggOuter 1507 3854 16 128
-magnumShell 3945 3344 16 128
-pistolShell 3977 3104 16 128
-shotgunShell 4079 2864 16 128
-sniperShell 3211 4151 16 128
-online/eggBorder 3479 4151 16 128
-online/eggShine 1993 4160 16 128
-online/eggWhite 2121 4160 16 128
-newscast/hotness 2148 950 72 72
-challenge/goody 3145 2368 80 64
-wallDoor 3353 4174 60 84
-_fingerPositionSprite3 3656 840 48 96
-newscast/numberfont 3437 4174 44 100
-_fingerPositionSprite6 4014 968 48 96
-_fingerPositionSprite5 1654 4176 48 96
-_fingerPositionSprite4 1993 4176 48 96
-fingerPositions_m 1750 4176 48 96
-_fingerPositionSprite7 1846 4176 48 96
-_fingerPositionSprite0 2089 4176 48 96
-_fingerPositionSprite1 2185 4176 48 96
-fingerPositions 2281 4176 48 96
-_fingerPositionSprite2 2377 4176 48 96
-domeBleachers 0 4178 40 100
-title/rightPlatform 1232 3206 74 65
-furni/fancy/portrait 2188 762 112 27
-ties 3993 4181 42 96
-magBlaster 100 4178 38 100
-arcade/pencil 1764 1014 9 128
-arcade/medalRibbon 4113 1389 27 108
-furni/music/grand 331 4182 34 99
-elevator 4118 1898 37 96
-trophiesHighlight 3017 3280 57 75
-rockThrow/winnerPost 1752 862 121 11
-title/leftPlatform 1232 3310 67 65
-furni/fancy/grandfatherclock 487 4182 44 88
-arcade/eggBorder 1910 3318 65 66
-arcade/completeStamp 852 3478 20 110
-gold 3017 3337 64 64
-swordSwipe 4121 3934 32 96
-bdaycake 1232 3377 64 64
-lavaLight 1910 3383 64 64
-survival/cryoMonitor 575 4182 44 84
-milk 1571 3422 88 40
-lightFlash 3017 3401 64 64
-frozen 1232 3441 64 64
-noAvatar 1910 3447 64 64
-furni/whiteCircle 1571 3510 64 64
-tinySmokeTestFront 1571 3574 64 64
-rockThrow/edgeOverlay 2979 4161 24 104
-rockThrow/headGradient2 659 4182 24 104
-rockThrow/headGradient 763 4182 24 104
-tinySmokeTestBack 3289 3616 64 64
-teddy 3545 3616 64 64
-countdown 4121 4062 32 96
-plasmaFlare 867 4182 32 96
-newWaterFlow 2441 3632 64 64
-keyInDoor 3686 480 64 64
-presents 3545 3680 64 64
-hats/royalty 3609 4186 32 96
-iconSheet 3289 3680 64 64
-lagturtle 3686 544 96 32
-hats/devhat 3865 4186 32 96
-noClippingSign 3737 4186 32 96
-hats/brick 3737 1744 64 64
-cursors 3737 1808 64 64
-hugeLaser 3737 1872 64 64
-hats/moonwalker 4187 3360 32 96
-levelJet 203 4187 32 96
-cantPlaceLarge 3737 1552 64 64
-hats/waffles 3097 4187 32 96
-title/libraryPlatform 1232 3505 61 65
-title/optionsPlatform 1910 3511 61 65
-arcade/tape 1892 1014 10 115
-rhythmBar 2007 1014 9 114
-arcade/paperclips 1232 3867 45 78
-_skipSprite5 3211 4167 18 104
-skipSign_m 2505 4187 18 104
-_skipSprite4 3193 4187 18 104
-_skipSprite1 4189 138 18 104
-_skipSprite3 4189 156 18 104
-_skipSprite6 4189 174 18 104
-_skipSprite7 4189 192 18 104
-skipSign 4189 210 18 104
-_skipSprite2 4189 228 18 104
-furni/music/harp 4187 3392 32 90
-_skipSprite0 4189 246 18 104
-deathcrate 3737 1616 57 64
-joyousman 2164 882 60 60
-furni/everyday/framewindow 4187 3424 24 96
-hostTable 1168 2786 10 110
-happyman 3737 1673 60 60
-background/officeBuilding01 1611 3422 79 40
-arcade/tapePaper 1507 3169 13 105
-arcade/gotcha/coinSlot 3686 640 52 65
-rockThrow/edgeOverlayShort 3129 2868 12 104
-rockThrow/cornerWedge 2249 4160 16 100
-furniHov 3289 3744 54 61
-newsTitleChannel 4187 3448 23 92
-background/scanbeam 3712 896 80 35
-arcade/lightCone 3545 3744 57 56
-arcade/lightSphere 2633 3792 57 56
-furni/bar/pooltablelighting 3712 288 80 33
-challengeTrophyIcons 544 3478 16 96
-warpgun 4187 3471 17 95
-furni/office/drinkvendingmachine 1909 2406 34 78
-furni/cheap/broken window 2200 450 88 24
-circle 1571 3638 31 81
-waterCoolerJugLine 2823 1887 48 64
-waterCoolerJug 2633 3849 48 64
-furniFill 1571 3870 52 59
-furniFrame 1910 3873 52 59
-cheapTape 128 3875 52 59
-background/berg1_reflection 1232 3912 43 67
-pump 1571 3922 54 55
-menuBox 1910 3925 54 54
-furni/freezer/FrozenVeggie 1232 3280 28 80
-camping 4045 3537 15 92
-furniTag 128 3927 51 56
-title/editorBench 2633 3932 45 62
-title/beamPlatform 4187 3488 22 84
-icicles 2633 3977 42 64
-newcolors 1232 3955 29 77
-furni/everyday/TV 2480 2960 80 24
-necro 2349 4160 16 88
-title/optionsTV 1232 3995 42 62
-arcade/prizeCounterOutline 1232 4037 31 71
-shrug 1232 4068 24 78
-arcade/challengePhoto 3929 1599 51 51
-title/libraryBookcase 3929 1650 49 52
-arcade/bigFixture 1232 4092 29 71
-tinyNumbers 2633 4019 36 64
-furni/everyday/big boy table 3712 368 64 36
-background/berg1 910 4095 37 63
-redHotGlow 3932 1739 50 50
-furni/fancy/vanity 2622 4147 31 69
-arcade/prizeCounter 3537 4174 30 69
-moji 910 4132 33 66
-scribble 4187 3510 21 78
-tutorialTV 3929 1699 38 61
-furni/office/locker 2633 3897 34 64
-furni/fancy/fancychair 1973 2278 80 18
-furni/everyday/chair 1974 2446 80 18
-blind 1300 2030 87 11
-furni/music/snaredrum 1974 2526 80 17
-DuckGame.PyramidBackground DuckGame48 48 1599 2190 48 48
-DuckGame.OfficeTileset DuckGame48 48 3932 1789 48 48
-DuckGame.OfficeLight DuckGame48 48 2646 4060 48 48
-DuckGame.PyramidBLight DuckGame48 48 1936 4089 48 48
-DuckGame.RCController DuckGame48 48 141 4091 48 48
-DuckGame.SawsLeft DuckGame48 48 1264 4123 48 48
-DuckGame.SawsDown DuckGame48 48 1606 4144 48 48
-boardHighlight 1936 4137 39 57
-DuckGame.Saws DuckGame48 48 1264 4171 48 48
-DuckGame.MallardBillboard DuckGame48 48 1942 4176 48 48
-DuckGame.Matchbox DuckGame48 48 4191 3744 48 48
-DuckGame.RockWall DuckGame48 48 2697 4193 48 48
-DuckGame.MindControlRay DuckGame48 48 2745 4193 48 48
-DuckGame.Rock DuckGame48 48 2793 4193 48 48
-DuckGame.RandomControllerNew DuckGame48 48 2841 4193 48 48
-DuckGame.RomanCandle DuckGame48 48 2889 4193 48 48
-DuckGame.OldPistol DuckGame48 48 2937 4193 48 48
-DuckGame.PelletGun DuckGame48 48 2985 4193 48 48
-DuckGame.PewPewLaser DuckGame48 48 3033 4193 48 48
-hats/retros 1399 4193 32 64
-hats/fridge 4203 264 32 64
-hats/gents 4203 296 32 64
-hats/witchtime 4203 328 32 64
-hats/tube 4203 360 32 64
-hats/valet 2505 4205 32 64
-hats/eggy 2569 4205 32 64
-hats/guac 2633 4205 32 64
-hats/sensei 4209 1936 32 64
-DuckGame.SpikeHelm DuckGame48 48 4209 2023 48 48
-DuckGame.PineTreeSnowTileset DuckGame48 48 4209 1968 48 48
-DuckGame.PhysicsRope DuckGame48 48 4209 2071 48 48
-DuckGame.PhysicsChain DuckGame48 48 4209 2119 48 48
-hats/wizbiz 4134 4211 32 64
-DuckGame.Phaser DuckGame48 48 4209 2167 48 48
-DuckGame.Saxaphone DuckGame48 48 4209 2215 48 48
-DuckGame.NatureBackground DuckGame48 48 4209 2263 48 48
-DuckGame.RaceSign DuckGame48 48 4209 2311 48 48
-DuckGame.PyramidWallLight DuckGame48 48 4209 2359 48 48
-DuckGame.SnowDrift DuckGame48 48 4198 4211 48 48
-DuckGame.SnowGenerator DuckGame48 48 4214 3120 48 48
-DuckGame.SnowIceTileset DuckGame48 48 4214 3168 48 48
-DuckGame.NetGun DuckGame48 48 4214 3216 48 48
-DuckGame.SnowPile DuckGame48 48 4214 3264 48 48
-DuckGame.NublessSnowIceTileset DuckGame48 48 4214 3312 48 48
-DuckGame.SnowBackground DuckGame48 48 4214 1514 48 48
-DuckGame.NublessSnowTileset DuckGame48 48 4214 1562 48 48
-DuckGame.SnubbyPistol DuckGame48 48 4214 1610 48 48
-DuckGame.SpaceBackground DuckGame48 48 4214 1658 48 48
-DuckGame.SpaceTileset DuckGame48 48 4214 1706 48 48
-DuckGame.OfficeBackground DuckGame48 48 4214 1754 48 48
-DuckGame.PyramidBrick DuckGame48 48 4214 1802 48 48
-DuckGame.Magnum DuckGame48 48 4214 1850 48 48
-DuckGame.SnowTileset DuckGame48 48 331 4216 48 48
-DuckGame.NatureTileset DuckGame48 48 379 4216 48 48
-DuckGame.Sniper DuckGame48 48 427 4216 48 48
-DuckGame.SMG DuckGame48 48 4217 3838 48 48
-DuckGame.PyramidTileset DuckGame48 48 4217 3966 48 48
-DuckGame.PyramidLightRoof DuckGame48 48 4217 4014 48 48
-DuckGame.PyramidDoor DuckGame48 48 4217 3886 48 48
-DuckGame.SawsRight DuckGame48 48 4218 4123 48 48
-DuckGame.Sharpshot DuckGame48 48 0 4218 48 48
-DuckGame.Mine DuckGame48 48 48 4218 48 48
-DuckGame.MirrorMode DuckGame48 48 96 4218 48 48
-DuckGame.ScaffoldingTileset DuckGame48 48 144 4218 48 48
-DuckGame.Musket DuckGame48 48 3609 4218 48 48
-DuckGame.Shotgun DuckGame48 48 3657 4218 48 48
-DuckGame.PurpleBlock DuckGame48 48 3865 4218 48 48
-DuckGame.MysteryGun DuckGame48 48 3913 4218 48 48
-DuckGame.Slag DuckGame48 48 3737 4218 48 48
-DuckGame.SledgeHammer DuckGame48 48 3785 4218 48 48
-DuckGame.NatureBackgroundNight DuckGame48 48 976 4219 48 48
-DuckGame.QuadLaser DuckGame48 48 203 4219 48 48
-hats/handy 3097 4219 32 64
-hats/ponycap 251 4219 32 64
-hats/chancy 3161 4219 32 64
-hats/twintail 3225 4219 32 64
-hats/tricorne 3289 4219 32 64
-hats/oldrobo 1024 4219 32 64
-hats/newrobo 1088 4219 32 64
-oldPistol 1152 4219 32 64
-steamPuff 1216 4219 32 64
-raceSign 4220 2448 32 64
-furni/flowers/Yucca Branch 4220 2480 32 64
-stuff/conveyorRight 4220 2512 32 64
-stuff/conveyorLeft 4220 2544 32 64
-hats/cyclops 4220 2576 32 64
-hats/scurvies 4220 2608 32 64
-hats/officemen 4220 2640 32 64
-hats/mobby 4220 2672 32 64
-hats/katanaman_lightmap 4220 2704 32 64
-upSign 4220 2736 32 64
-smallFire 4220 2768 32 64
-hats/mailbox 4220 2800 32 64
-hats/ufos 4220 2832 32 64
-hats/johnnys 3993 4223 32 64
-hats/werewolves 4057 4223 32 64
-DuckGame.PipeBlue DuckGame48 48 4224 1424 48 48
-iceBlock 2609 4187 16 80
-angryFace 4187 3531 16 80
-happyFace 659 4206 16 80
-furni/everyday/fridge 2480 3040 72 24
-mindControlHelmet 2089 4224 32 64
-knightHelmet 1654 4224 32 64
-banana 3718 544 64 32
-scratches 2153 4224 32 64
-itemBox 944 3770 64 32
-hardSign 2217 4224 32 64
-funBeam 2281 4224 32 64
-easySign 2345 4224 32 64
-dartgun 2409 4224 32 64
-dangerSign 1993 4224 32 64
-backgroundIcons 1718 4224 32 64
-jetpack 1782 4224 32 64
-directionSign 1846 4224 32 64
-helmet 1910 4224 32 64
-rcBody 487 4226 32 64
-heartpuff 575 4226 32 64
-waterFall 639 4226 32 64
-hats/default_m 703 4226 32 64
-_defaultHead3 767 4226 32 64
-_defaultHead2 831 4226 32 64
-_defaultHead1 895 4226 32 64
-_defaultHead0 4227 0 32 64
-hats/bigearls 4227 32 32 64
-hats/uglies 4227 64 32 64
-hats/default 4227 96 32 64
-_defaultHead4 1315 4232 32 64
-hats/burgers 1379 4232 32 64
-hats/toeboys 1443 4232 32 64
-hats/highfives 1507 4232 32 64
-hats/turing 1571 4232 32 64
-hats/clams 4233 1312 32 64
-hats/master 4233 1344 32 64
-hats/gross 4233 1376 32 64
-hats/broduck 3353 4234 32 64
-hats/toomany 3417 4234 32 64
-hats/FunnyMan 3481 4234 32 64
-hats/Dumplin 3545 4234 32 64
-_defaultHead5 4235 670 32 64
-_defaultHead7 4235 702 32 64
-veryHardSign 4235 734 32 64
-hats/motherduck 4235 766 32 64
-hats/WELDER 4235 798 32 64
-hats/katanaman 4235 830 32 64
-hats/dinos 4235 862 32 64
-hats/divers 4235 894 32 64
-hats/jazzducks 4235 926 32 64
-hats/locked 4235 958 32 64
-_defaultHead6 4235 990 32 64
-hats/hearts 2505 4237 32 64
-hats/pulpy 2569 4237 32 64
-hats/astrobud 2633 4237 32 64
-hats/sailors 4239 3744 32 64
-hats/ballhead 4239 3776 32 64
-hats/joey 2745 4241 32 64
-hats/frogs 2809 4241 32 64
-hats/reallife 2873 4241 32 64
-hats/frank 2937 4241 32 64
-hats/skelly 3001 4241 32 64
-DuckGame.PipeGreen DuckGame48 48 2697 4241 48 48
-DuckGame.ClippingSign DuckGame48 48 4134 4243 48 48
-DuckGame.Pistol DuckGame48 48 4246 2880 48 48
-DuckGame.BackgroundBathroom DuckGame48 48 4246 4211 48 48
-DuckGame.BackgroundCastle DuckGame48 48 4246 2928 48 48
-DuckGame.BackgroundCity DuckGame48 48 4246 2976 48 48
-DuckGame.BackgroundConcrete DuckGame48 48 4246 3024 48 48
-DuckGame.BackgroundIndustrial DuckGame48 48 4246 3072 48 48
-DuckGame.BackgroundJets DuckGame48 48 3097 4251 48 48
-DuckGame.BackgroundNature DuckGame48 48 3145 4251 48 48
-DuckGame.BackgroundOffice DuckGame48 48 3193 4251 48 48
-DuckGame.CustomBackground DuckGame48 48 3241 4251 48 48
-DuckGame.LavaBarrel DuckGame48 48 3289 4251 48 48
-DuckGame.CustomBackground3 DuckGame48 48 4255 1247 48 48
-DuckGame.GreyBlock DuckGame48 48 3993 4255 48 48
-DuckGame.IceBlock DuckGame48 48 4041 4255 48 48
-DuckGame.HugeLaser DuckGame48 48 2153 4256 48 48
-DuckGame.Holster DuckGame48 48 1993 4256 48 48
-DuckGame.Helmet DuckGame48 48 1654 4256 48 48
-DuckGame.HardLeft DuckGame48 48 2041 4256 48 48
-DuckGame.HangingCityLight DuckGame48 48 1702 4256 48 48
-DuckGame.GrenadeLauncher DuckGame48 48 2089 4256 48 48
-DuckGame.FunBeam DuckGame48 48 1750 4256 48 48
-DuckGame.GrenadeCannon DuckGame48 48 1798 4256 48 48
-DuckGame.Grenade DuckGame48 48 1846 4256 48 48
-DuckGame.Grapple DuckGame48 48 1894 4256 48 48
-DuckGame.BackgroundBar DuckGame48 48 1942 4256 48 48
-DuckGame.GoodyNew DuckGame48 48 2201 4256 48 48
-DuckGame.BackgroundArcade DuckGame48 48 2249 4256 48 48
-DuckGame.Altar DuckGame48 48 2297 4256 48 48
-DuckGame.CityRamp DuckGame48 48 2345 4256 48 48
-DuckGame.CityBackground DuckGame48 48 2393 4256 48 48
-DuckGame.ChokeCollar DuckGame48 48 2441 4256 48 48
-DuckGame.ChestPlate DuckGame48 48 4257 2023 48 48
-DuckGame.ChallengeModeNew DuckGame48 48 4257 2119 48 48
-DuckGame.BananaCluster DuckGame48 48 4257 2167 48 48
-DuckGame.Banana DuckGame48 48 4257 2215 48 48
-DuckGame.BackgroundSpace DuckGame48 48 4257 2263 48 48
-arcade/customOverlay 4257 2311 48 48
-treeTopOutside 4257 2359 48 48
-castleTorch 4257 2071 48 48
-consoleFlash 487 4258 48 48
-treeTopInsideDead 575 4258 48 48
-DuckGame.BackgroundPyramid DuckGame48 48 639 4258 48 48
-treeTopDead 687 4258 48 48
-treeTopInside 735 4258 48 48
-treeTop 783 4258 48 48
-mineFlash 831 4258 48 48
-fireCrackers 879 4258 48 48
-altar 927 4258 48 48
-treeTopOutsideDead 4198 4259 48 48
-arcade/userMachine 4246 4259 48 48
-DuckGame.AK47 DuckGame48 48 4262 3120 48 48
-DuckGame.ArrowSign DuckGame48 48 4262 1610 48 48
-DuckGame.GoodBook DuckGame48 48 4262 1514 48 48
-DuckGame.GoalType DuckGame48 48 4262 3168 48 48
-DuckGame.IceWedge DuckGame48 48 4262 3216 48 48
-DuckGame.CustomTileset2 DuckGame48 48 4262 3264 48 48
-DuckGame.CustomTileset DuckGame48 48 4262 3312 48 48
-DuckGame.CustomPlatform3 DuckGame48 48 4262 1658 48 48
-DuckGame.CustomPlatform2 DuckGame48 48 4262 1562 48 48
-DuckGame.CustomPlatform DuckGame48 48 4262 1706 48 48
-DuckGame.CustomParallaxSegment DuckGame48 48 4262 1754 48 48
-DuckGame.Door DuckGame48 48 4262 1802 48 48
-DuckGame.CustomTileset3 DuckGame48 48 4262 1850 48 48
-DuckGame.DuelingPistol DuckGame48 48 331 4264 48 48
-DuckGame.FancyShoes DuckGame48 48 1315 4264 48 48
-DuckGame.Flower DuckGame48 48 379 4264 48 48
-DuckGame.FlimsyDoor DuckGame48 48 427 4264 48 48
-DuckGame.PipeRed DuckGame48 48 1363 4264 48 48
-DuckGame.FlameThrower DuckGame48 48 1411 4264 48 48
-DuckGame.FishinSign DuckGame48 48 1459 4264 48 48
-DuckGame.FireExtinguisher DuckGame48 48 1507 4264 48 48
-DuckGame.FireCrackers DuckGame48 48 1555 4264 48 48
-DuckGame.ExplosiveBarrel DuckGame48 48 1603 4264 48 48
-DuckGame.Equipper DuckGame48 48 4265 3838 48 48
-DuckGame.EnergyScimitar DuckGame48 48 4265 3966 48 48
-DuckGame.EightPlayer DuckGame48 48 4265 3886 48 48
-DuckGame.ECrate DuckGame48 48 4265 4014 48 48
-DuckGame.EasySign DuckGame48 48 4266 4123 48 48
-DuckGame.DuctTape DuckGame48 48 3609 4266 48 48
-DuckGame.ForegroundNature DuckGame48 48 3657 4266 48 48
-DuckGame.DartGun DuckGame48 48 3865 4266 48 48
-DuckGame.DeathCrate DuckGame48 48 3913 4266 48 48
-DuckGame.Icicles DuckGame48 48 3353 4266 48 48
-DuckGame.IndustrialBackground DuckGame48 48 3401 4266 48 48
-DuckGame.IndustrialTileset DuckGame48 48 3449 4266 48 48
-DuckGame.ItemBox DuckGame48 48 3497 4266 48 48
-DuckGame.ItemBoxOneTime DuckGame48 48 3545 4266 48 48
-DuckGame.ItemBoxRandom DuckGame48 48 3737 4266 48 48
-DuckGame.ItemCrate DuckGame48 48 3785 4266 48 48
-DuckGame.ItemSpawner DuckGame48 48 0 4266 48 48
-DuckGame.Jetpack DuckGame48 48 48 4266 48 48
-DuckGame.Key DuckGame48 48 96 4266 48 48
-DuckGame.Keytar DuckGame48 48 144 4266 48 48
-DuckGame.CityTileset DuckGame48 48 4267 264 48 48
-DuckGame.KingdomBackground DuckGame48 48 976 4267 48 48
-DuckGame.Lamp DuckGame48 48 203 4267 48 48
-DuckGame.LaserRifle DuckGame48 48 4267 312 48 48
-DuckGame.LaserSpawner DuckGame48 48 251 4267 48 48
-DuckGame.G18 DuckGame48 48 1024 4267 48 48
-DuckGame.CustomParallax DuckGame48 48 1072 4267 48 48
-DuckGame.FreeSpawn DuckGame48 48 1120 4267 48 48
-DuckGame.DangerSign DuckGame48 48 1168 4267 48 48
-DuckGame.DonutTileset DuckGame48 48 1216 4267 48 48
-DuckGame.DonutSpaceBackground DuckGame48 48 1264 4267 48 48
-DuckGame.Desk DuckGame48 48 2505 4269 48 48
-DuckGame.DemoCrate DuckGame48 48 2553 4269 48 48
-DuckGame.KnightHelmet DuckGame48 48 2601 4269 48 48
-DuckGame.Chainsaw DuckGame48 48 2649 4269 48 48
-DuckGame.FlareGun DuckGame48 48 4272 1424 48 48
-DuckGame.DartGrenade DuckGame48 48 4273 1936 48 48
-DuckGame.PinkBox DuckGame48 48 2745 4273 48 48
-DuckGame.VirtualBackground DuckGame48 48 2793 4273 48 48
-DuckGame.YellowBarrel DuckGame48 48 2841 4273 48 48
-DuckGame.WireTrapDoor DuckGame48 48 2889 4273 48 48
-DuckGame.WaterFallTile DuckGame48 48 2937 4273 48 48
-DuckGame.WireTileset DuckGame48 48 2985 4273 48 48
-DuckGame.WireMount DuckGame48 48 3033 4273 48 48
-DuckGame.WireFlipper DuckGame48 48 4278 614 48 48
-DuckGame.WireButton DuckGame48 48 4278 558 48 48
-DuckGame.WireActivator DuckGame48 48 4283 3360 48 48
-DuckGame.WaterFlow DuckGame48 48 4283 3408 48 48
-DuckGame.TutorialSign05 DuckGame48 48 4283 3456 48 48
-DuckGame.TutorialSign04 DuckGame48 48 4283 3504 48 48
-DuckGame.TutorialSign03 DuckGame48 48 4284 2576 48 48
-DuckGame.SpringLeft DuckGame48 48 4284 2624 48 48
-DuckGame.Sun DuckGame48 48 4284 2672 48 48
-DuckGame.SuicidePistol DuckGame48 48 4284 2720 48 48
-DuckGame.StreetLight DuckGame48 48 4284 2768 48 48
-DuckGame.SpringUpRight DuckGame48 48 4284 2816 48 48
-DuckGame.SpringUpLeft DuckGame48 48 4291 0 48 48
-DuckGame.SpringRight DuckGame48 48 2697 4289 48 48
-DuckGame.SpringDownRight DuckGame48 48 4134 4291 48 48
-DuckGame.TutorialSign02 DuckGame48 48 4291 48 48 48
-DuckGame.PizzaLauncher DuckGame48 48 4293 138 48 48
-DuckGame.SpringDownLeft DuckGame48 48 4293 186 48 48
-DuckGame.TheDishes DuckGame48 48 4294 2880 48 48
-DuckGame.WoodScaffoldingTileset DuckGame48 48 4294 4259 48 48
-DuckGame.WaterCooler DuckGame48 48 4294 4211 48 48
-DuckGame.Warpgun DuckGame48 48 4294 2928 48 48
-DuckGame.WallLightRight DuckGame48 48 4294 2976 48 48
-DuckGame.PineTrunkTileset DuckGame48 48 4294 3024 48 48
-DuckGame.SpawnCannon DuckGame48 48 4294 3072 48 48
-DuckGame.WallLightLeft DuckGame48 48 4299 734 48 48
-DuckGame.WallBoots DuckGame48 48 3097 4299 48 48
-DuckGame.PlasmaBlaster DuckGame48 48 3145 4299 48 48
-DuckGame.VirtualShotgun DuckGame48 48 3193 4299 48 48
-DuckGame.VeryHardSign DuckGame48 48 3241 4299 48 48
-DuckGame.WaterFallEdge DuckGame48 48 3289 4299 48 48
-DuckGame.CityTreeTileset DuckGame48 48 4299 782 48 48
-DuckGame.VerticalFunBeam DuckGame48 48 4299 830 48 48
-DuckGame.VerticalDoor DuckGame48 48 4299 878 48 48
-DuckGame.UpSign DuckGame48 48 4299 926 48 48
-DuckGame.UndergroundTileset DuckGame48 48 4299 974 48 48
-DuckGame.UndergroundBackground DuckGame48 48 4302 3552 48 48
-DuckGame.Present DuckGame48 48 4302 3600 48 48
-DuckGame.TV DuckGame48 48 4302 3648 48 48
-DuckGame.PowerHolster DuckGame48 48 4302 3696 48 48
-DuckGame.WaterFall DuckGame48 48 4303 1024 48 48
-DuckGame.WaterFallEdgeTop DuckGame48 48 4303 3744 48 48
-DuckGame.SpikesDown DuckGame48 48 4303 1072 48 48
-DuckGame.MagBlaster DuckGame48 48 4303 1120 48 48
-DuckGame.SpringDown DuckGame48 48 4303 1168 48 48
-DuckGame.Spikes DuckGame48 48 3993 4303 48 48
-DuckGame.SpookyTileset DuckGame48 48 4041 4303 48 48
-DuckGame.PineTreeTileset DuckGame48 48 4303 1224 48 48
-DuckGame.MaceCollar DuckGame48 48 4303 1272 48 48
-DuckGame.Bulb DuckGame48 48 4303 1320 48 48
-DuckGame.CastleTileset DuckGame48 48 4303 1368 48 48
-DuckGame.CampingRifle DuckGame48 48 2153 4304 48 48
-DuckGame.CameraZoomNew DuckGame48 48 2201 4304 48 48
-DuckGame.CameraMover DuckGame48 48 1654 4304 48 48
-DuckGame.CameraFixed DuckGame48 48 1702 4304 48 48
-DuckGame.Spring DuckGame48 48 2249 4304 48 48
-DuckGame.BuildingFramework DuckGame48 48 2089 4304 48 48
-DuckGame.Chaindart DuckGame48 48 2297 4304 48 48
-DuckGame.Boots DuckGame48 48 2345 4304 48 48
-DuckGame.MagnetGun DuckGame48 48 2393 4304 48 48
-DuckGame.Blunderbuss DuckGame48 48 2441 4304 48 48
-DuckGame.BlueBarrel DuckGame48 48 1993 4304 48 48
-DuckGame.Bazooka DuckGame48 48 1750 4304 48 48
-DuckGame.Basketball DuckGame48 48 1798 4304 48 48
-DuckGame.CaveTileset DuckGame48 48 1846 4304 48 48
-DuckGame.Chaingun DuckGame48 48 1894 4304 48 48
-DuckGame.CustomBackground2 DuckGame48 48 1942 4304 48 48
-DuckGame.CityWall DuckGame48 48 2041 4304 48 48
-DuckGame.Crate DuckGame48 48 4305 2167 48 48
-DuckGame.CowboyPistol DuckGame48 48 4305 2215 48 48
-DuckGame.CombatShotgun DuckGame48 48 4305 2263 48 48
-DuckGame.CoilGun DuckGame48 48 4305 2311 48 48
-DuckGame.CloudTileset DuckGame48 48 4305 2359 48 48
-DuckGame.BlueprintTileset DuckGame48 48 687 4306 48 48
-DuckGame.TutorialSign01 DuckGame48 48 735 4306 48 48
-DuckGame.CameraBoundsNew DuckGame48 48 783 4306 48 48
-DuckGame.Tombstone DuckGame48 48 831 4306 48 48
-DuckGame.TroubleLight DuckGame48 48 879 4306 48 48
-DuckGame.TutorialSign00 DuckGame48 48 927 4306 48 48
-DuckGame.Trophy DuckGame48 48 4294 4307 48 48
-DuckGame.Trombone DuckGame48 48 1315 4312 48 48
-DuckGame.TriggerVolume DuckGame48 48 1363 4312 48 48
-DuckGame.TreeTopDead DuckGame48 48 1411 4312 48 48
-DuckGame.TreeTop DuckGame48 48 4313 392 48 48
-DuckGame.TreeTileset DuckGame48 48 4313 3838 48 48
-DuckGame.TinfoilHat DuckGame48 48 4313 3966 48 48
-DuckGame.Trumpet DuckGame48 48 4310 1514 48 48
-DuckGame.TargetDuckNew DuckGame48 48 4305 2071 48 48
-DuckGame.Sword DuckGame48 48 4305 2023 48 48
-DuckGame.SpikesLeft DuckGame48 48 4305 2119 48 48
-DuckGame.SpikesRight DuckGame48 48 487 4306 48 48
-DuckGame.TutorialGunCrouchJump DuckGame48 48 575 4306 48 48
-DuckGame.TutorialGunJump DuckGame48 48 639 4306 48 48
-DuckGame.TeamSpawn DuckGame48 48 4246 4307 48 48
-furni/bar/round table 3314 1040 64 31
-furni/music/electricG2 4284 2448 31 64
-furni/everyday/Floor Lamp 141 4139 35 60
-arcade/prizes 4310 3120 38 56
-newscast/hotnessImage 4310 1658 40 54
-furni/stone/mausoleum 3898 2090 60 33
-editingRoom 3537 4204 30 63
-arcade/boommachine 3057 3480 54 39
-fancyBanner 3106 800 70 23
-furni/eggpedestal 4239 3808 28 64
-furni/everyday/couches 3898 2150 57 35
-furni/momento/eggpedestal 4279 4094 28 64
-cannon 128 3978 18 72
-cannonTimer 763 4206 18 72
-domePillar 3106 870 63 27
-furni/stone/candelabra 1974 2606 72 17
-domeSmall 2646 4108 38 51
-desk 892 2517 12 76
-outPipe 1510 4208 16 72
-streetLight 3106 933 60 28
-furni/everyday/tiny table 2480 3112 64 23
-furni/stone/casket 3932 1837 30 57
-furni/office/filecabinet 430 4182 33 54
-title/airlock 4310 1562 33 54
-bigBanner 2480 3176 64 23
-arcade/led_strip 1024 1020 3 84
-keytar 156 4003 40 46
-mine 3297 4187 32 54
-background/officeBuilding02 3898 2207 54 32
-smoke 3712 976 42 44
-furni/flowers/pelargonium 4284 2480 22 64
-furni/flowers/verbascum 4284 2512 22 64
-smokeBack 3712 432 42 44
-furni/flowers/agapanthus 4284 2544 22 64
-furni/flowers/arum lily 4299 670 22 64
-furni/flowers/astilbe 4299 702 22 64
-furni/flowers/gloxinia 4310 1698 22 64
-furni/flowers/narcissus 4310 1720 22 64
-furni/flowers/orchid 4310 1742 22 64
-newSticker 4310 1764 28 58
-furni/music/acousticG 4310 3158 30 56
-furni/music/electricG 4310 3188 30 56
-furni/music/electricG3 4310 3218 30 56
-rareSticker 4310 1792 28 58
-furni/flowers/tulip 4310 1820 22 64
-furni/flowers/trachelium 4310 1842 22 64
-furni/flowers/statice 4310 1864 22 64
-furni/flowers/salvia 4310 1886 22 64
-furni/flowers/vallota 4310 1908 22 64
-furni/everyday/armchair 3314 1104 57 28
-corptronConsoleText 1108 1020 3 82
-newsTitleDuck 4310 1610 23 61
-waterFallEdgeTop 331 4312 20 64
-buttons 3036 1006 14 70
-furni/flowers/sunflower 4310 3248 30 54
-bleacherBack 940 4007 46 36
-pistol 3225 1924 10 72
-bleacherBackSnow 156 4043 46 36
-furni/office/officechair 1459 4312 18 64
-furni/stone/stone bench 4212 3054 48 34
-pyramidBackgroundLight 3233 2868 12 70
-pyramidWallLight 3297 1924 12 70
-furni/outdoor/drinkcooler 395 4312 19 63
-furni/ship/barrel 4191 3792 34 48
-drifts 910 4165 17 64
-sucksSign 1523 4312 21 60
-rockThrow/mons 4089 4181 41 40
-furni/music/upright 1280 4219 46 35
-suckSign 1583 4312 21 60
-waterFallEdge 2437 4160 16 64
-lava 3437 4218 16 64
-Image41 4220 2864 16 64
-gasSplash 4233 1408 16 64
-gas 1216 4251 16 64
-fluid 1024 4251 16 64
-colorableLiquid 1088 4251 16 64
-crate 1152 4251 16 64
-clickPuff 251 4251 16 64
-metalRebound 4313 536 16 64
-whiteSplash 4314 4123 16 64
-smallSmokeTestBack 3737 4314 16 64
-saws 0 4314 16 64
-wetParticle 3865 4314 16 64
-smallSmokeAnim 4314 4139 16 64
-smallSmokeFront 4314 4155 16 64
-waterSplash 4314 4171 16 64
-smallSmokeTestFront 4314 4187 16 64
-water 3929 4314 16 64
-lavaSplash 3353 4314 16 64
-waterFallTile 3801 4314 16 64
-waterFlow 3417 4314 16 64
-combatShotgunAmmo 1606 4192 32 48
-redGlowWide 4209 2407 32 48
-selectConsole 4310 1633 19 60
-furni/everyday/oven 4214 1898 30 48
-furni/fancy/velvetrope 3314 1161 48 30
-taxi 3607 1204 20 57
-furni/everyday/countercabinet 299 4007 46 31
-furni/everyday/lamp 1300 2117 64 13
-furni/everyday/broom 4310 3278 25 52
-furni/bathroom/toilet 1637 2798 60 17
-furni/stone/pillar table 3481 4314 16 60
-furni/bar/stool 3541 4314 16 60
-rockThrow/tableTop 1571 3976 22 54
-furni/cheap/matress 1463 4193 36 40
-furni/bar/neon 3921 2720 48 28
-furni/ship/captainswheel 4310 3303 26 50
-furni/stone/brokepillar 3609 4314 16 60
-stuff/conveyor 4310 3329 20 56
-furni/stone/candlestick 3017 3465 15 60
-furni/stone/graves 4217 4062 30 45
-movingSpikes 3737 2838 42 32
-furni/stone/vase 4073 3346 14 60
-furni/fancy/fancytable 944 3834 42 32
-arcade/coveredMachine 4218 4171 37 37
-loveSign 1910 3979 21 53
-surfaceFire 3303 2868 10 64
-furni/cheap/inflatablepalmtree 1630 3870 50 24
-arcade/wagnustrainer 940 4053 38 35
-arcade/medalNoRibbon 4315 264 18 54
-arcade/gotcha/twisterShadow 203 4315 18 54
-arcade/gotcha/twister 4315 282 18 54
-furni/momento/YOYO 1615 2155 32 39
-levelBrowserArrow 1969 3873 47 24
-furni/everyday/footstool 3367 2868 11 60
-furni/everyday/cabinets 299 4053 40 31
-furni/outdoor/lantern 1300 2181 60 11
-furni/freezer/airconditioner 4315 300 18 52
-exBox 3367 1924 10 60
-furni/everyday/fatLamp 1024 4315 18 52
-furni/momento/jukebox 299 4093 38 32
-furni/bigScren 4217 3934 28 41
-keytarKeybedBlue 1300 2241 56 13
-keytarKeybed 1300 2297 56 13
-furni/flowers/braided ficus 4224 1472 29 40
-furni/everyday/kitchenphone 4257 2407 21 48
-furni/everyday/strawbroom 4089 4255 25 44
-arcade/arcadeMachineOutline 2473 4176 38 31
-furni/bar/dartboard 3921 2768 42 27
-furni/outdoor/cooler 3921 2810 42 26
-springAnglePurple 4257 2428 20 48
-springAngle 4262 1898 20 48
-furni/outdoor/lawnchair 4315 318 17 51
-furni/momento/duckdoll 3669 4314 16 52
-furni/flowers/achimenes 4256 1070 22 45
-arcade/gotcha/coin 4256 1092 22 44
-furni/freezer/icecream 4262 1918 18 48
-furni/everyday/window 4256 1114 22 44
-lavaGlowLine 972 1762 64 1
-arcade/customMachine 1964 3925 36 29
-furni/office/deskphone 1973 2358 48 17
-hats/noHat 3718 608 32 32
-hats/cluehat 3833 4186 32 32
-hats/moonCape 3705 4186 32 32
-hats/dapper 3961 4186 32 32
-hats/dicks 299 4187 32 32
-hats/drunks 3705 4218 32 32
-DuckGame.CombatShotgun DuckGame32 32 3961 4218 32 32
-hats/cowboys 3833 4218 32 32
-hats/waffleCape 2473 4224 32 32
-hats/agents 2057 4224 32 32
-hats/caps 3065 4241 32 32
-hats/log 535 4258 32 32
-hats/sombrero 4265 1138 32 32
-rcController 4265 1183 32 32
-hats/kerchief 4265 3934 32 32
-hats/wahhs 4265 4062 32 32
-hats/b52s 3705 4266 32 32
-hats/suit 3961 4266 32 32
-steamIcon 3833 4266 32 32
-discordIcon 4266 4171 32 32
-tinyIcons 4267 360 32 32
-barrelSmoke 299 4267 32 32
-ak47 4272 1472 32 32
-hats/bawb 4273 1984 32 32
-levelJetIdle 4278 414 32 32
-virtualShotgun 4278 471 32 32
-tinyGun 4278 503 32 32
-whiteGlow 4291 96 32 32
-warpLine2 4303 3792 32 32
-goneFishin 4089 4303 32 32
-flamethrower 4305 2407 32 32
-flamethrowerCan 535 4306 32 32
-halo 4313 4014 32 32
-combatShotgun 4198 4307 32 32
-hats/pilots 4313 440 32 32
-hats/pompadour 4313 3886 32 32
-hats/pots 4313 472 32 32
-hardRight 4313 504 32 32
-harpoonGun 4313 3918 32 32
-Image4 4313 4046 32 32
-bigDrift 976 4315 32 32
-shotgun 4315 335 32 32
-lavaGlowEdge 2505 4317 32 32
-lavaGlowEdgeVert 2537 4317 32 32
-burn 2569 4317 32 32
-bulletHoles 2601 4317 32 32
-magnum 2633 4317 32 32
-suicidePistol 2665 4317 32 32
-mysteryGun 4320 1424 32 32
-netGun 4320 1456 32 32
-officeLight 4321 1936 32 32
-pewpewLaser 2793 4321 32 32
-sheeld 2745 4321 32 32
-hats/cyborgs 4321 1968 32 32
-bigFolder 2825 4321 32 32
-grid 2857 4321 32 32
-hats/ski 2889 4321 32 32
-hats/devCape 2921 4321 32 32
-saxaphone 2953 4321 32 32
-hats/super 2985 4321 32 32
-grenadeLauncher 3017 4321 32 32
-laserRifle 3049 4321 32 32
-magnetGun 4326 614 32 32
-glitchMap3 4326 558 32 32
-tromboneSlide 0 4330 32 32
-easyLeft 3609 4330 32 32
-easyRight 3865 4330 32 32
-flavourLines 32 4330 32 32
-tromboneBody 64 4330 32 32
-tinfoilHat 96 4330 32 32
-gereCape 128 4330 32 32
-bulletHoles2 160 4330 32 32
-hardLeft 3353 4330 32 32
-DuckGame.CameraBoundsNew DuckGame32 32 3641 4330 32 32
-plaque 3673 4330 32 32
-hats/funhat 3705 4330 32 32
-hats/senpaiStar 3737 4330 32 32
-survival/cryoTube 3769 4330 32 32
-flags/full_aabooks 3801 4330 32 32
-flags/full_aaeggs 3833 4330 32 32
-Editor/sideArrow 3897 4330 32 32
-DuckGame.Altar DuckGame32 32 3929 4330 32 32
-rainbowCarp 3961 4330 32 32
-redGlow 3385 4330 32 32
-returnFolder 3417 4330 32 32
-server_default 3449 4330 32 32
-server_default_lan 3481 4330 32 32
-wumpNet 3513 4330 32 32
-smokeBacks 3545 4330 32 32
-smokeFronts 3577 4330 32 32
-spikeRing 4331 3360 32 32
-windowDebris 4331 3392 32 32
-hats/chancee 4331 3424 32 32
-DuckGame.AK47 DuckGame32 32 4331 3456 32 32
-hats/angrys 4331 3488 32 32
-furni/flagpole 4331 3520 32 32
-romanCandle 4255 1295 16 48
-mirrorMode 4284 2864 16 48
-jet 4293 234 16 48
-snowFall 4315 367 24 40
-furni/fancy/tub 1459 4330 24 40
-flags/full_zzpansexual 4332 2576 32 32
-flags/full_aagraves 4332 2624 32 32
-flags/full_aarocks 4332 2656 32 32
-flags/full_aasax 331 4332 32 32
-flags/full_aatv 363 4332 32 32
-flags/full_zzasexual 395 4332 32 32
-flags/full_zzbisexual 427 4332 32 32
-flags/full_zzlesbian 4332 2688 32 32
-flags/full_zznonbinary 4332 2720 32 32
-plainCape 4332 2752 32 32
-flags/full_zzpride 4332 2784 32 32
-flags/full_zztrans 4332 2816 32 32
-furni/default/cantPlaceLarge 4332 2848 32 32
-DuckGame.BackgroundSpace DuckGame32 32 203 4333 32 32
-DuckGame.ArrowSign DuckGame32 32 235 4333 32 32
-DuckGame.Chainsaw DuckGame32 32 267 4333 32 32
-DuckGame.BackgroundBathroom DuckGame32 32 299 4333 32 32
-DuckGame.BackgroundCastle DuckGame32 32 1024 4333 32 32
-DuckGame.BackgroundCity DuckGame32 32 1056 4333 32 32
-DuckGame.BackgroundConcrete DuckGame32 32 1088 4333 32 32
-DuckGame.BackgroundIndustrial DuckGame32 32 1120 4333 32 32
-DuckGame.BackgroundJets DuckGame32 32 1152 4333 32 32
-DuckGame.BackgroundNature DuckGame32 32 1184 4333 32 32
-DuckGame.BackgroundPyramid DuckGame32 32 1216 4333 32 32
-DuckGame.BuildingFramework DuckGame32 32 1248 4333 32 32
-DuckGame.Banana DuckGame32 32 1280 4333 32 32
-DuckGame.BananaCluster DuckGame32 32 4339 0 32 32
-DuckGame.Basketball DuckGame32 32 4198 4339 32 32
-DuckGame.Bazooka DuckGame32 32 4134 4339 32 32
-DuckGame.BlueBarrel DuckGame32 32 2697 4337 32 32
-DuckGame.BlueprintTileset DuckGame32 32 4339 32 32 32
-DuckGame.Blunderbuss DuckGame32 32 4339 64 32 32
-DuckGame.Boots DuckGame32 32 4339 96 32 32
-DuckGame.BackgroundBar DuckGame32 32 4166 4339 32 32
-DuckGame.BackgroundOffice DuckGame32 32 4341 138 32 32
-DuckGame.BackgroundArcade DuckGame32 32 4341 170 32 32
-DuckGame.Bulb DuckGame32 32 4341 202 32 32
-DuckGame.CameraFixed DuckGame32 32 4342 4211 32 32
-DuckGame.CameraMover DuckGame32 32 4342 2880 32 32
-DuckGame.CameraZoomNew DuckGame32 32 4342 2912 32 32
-DuckGame.CampingRifle DuckGame32 32 4342 4259 32 32
-DuckGame.CastleTileset DuckGame32 32 4342 2944 32 32
-DuckGame.CaveTileset DuckGame32 32 4342 2976 32 32
-DuckGame.Chaindart DuckGame32 32 4342 3008 32 32
-DuckGame.Chaingun DuckGame32 32 4342 3040 32 32
-hats/royalCape 4342 3072 32 32
-DuckGame.ChallengeModeNew DuckGame32 32 4342 4307 32 32
-DuckGame.ChestPlate DuckGame32 32 4342 4339 32 32
-DuckGame.ChokeCollar DuckGame32 32 4347 734 32 32
-DuckGame.CityBackground DuckGame32 32 4347 782 32 32
-DuckGame.CityRamp DuckGame32 32 3097 4347 32 32
-DuckGame.CityTileset DuckGame32 32 976 4347 32 32
-DuckGame.CityTreeTileset DuckGame32 32 4347 814 32 32
-DuckGame.CityWall DuckGame32 32 4347 846 32 32
-DuckGame.ClippingSign DuckGame32 32 4347 878 32 32
-DuckGame.CloudTileset DuckGame32 32 4347 910 32 32
-airFire 4313 4078 16 48
-DuckGame.CowboyPistol DuckGame32 32 4347 942 32 32
-DuckGame.CoilGun DuckGame32 32 4347 974 32 32
-DuckGame.Equipper DuckGame32 32 3129 4347 32 32
-DuckGame.EnergyScimitar DuckGame32 32 3161 4347 32 32
-DuckGame.EightPlayer DuckGame32 32 3193 4347 32 32
-DuckGame.CustomBackground DuckGame32 32 3225 4347 32 32
-DuckGame.CustomBackground2 DuckGame32 32 3257 4347 32 32
-DuckGame.CustomBackground3 DuckGame32 32 3289 4347 32 32
-DuckGame.CustomParallax DuckGame32 32 3321 4347 32 32
-DuckGame.CustomParallaxSegment DuckGame32 32 4348 2448 32 32
-DuckGame.CustomPlatform DuckGame32 32 4348 2544 32 32
-DuckGame.CustomPlatform2 DuckGame32 32 4348 2512 32 32
-DuckGame.CustomPlatform3 DuckGame32 32 4348 2480 32 32
-DuckGame.CustomTileset DuckGame32 32 2505 4349 32 32
-DuckGame.CustomTileset2 DuckGame32 32 2537 4349 32 32
-DuckGame.CustomTileset3 DuckGame32 32 2569 4349 32 32
-DuckGame.DangerSign DuckGame32 32 2601 4349 32 32
-DuckGame.DartGun DuckGame32 32 2633 4349 32 32
-DuckGame.DeathCrate DuckGame32 32 2665 4349 32 32
-DuckGame.DemoCrate DuckGame32 32 4350 3552 32 32
-DuckGame.Desk DuckGame32 32 4350 3584 32 32
-DuckGame.DonutTileset DuckGame32 32 4350 3616 32 32
-DuckGame.Door DuckGame32 32 4350 3648 32 32
-DuckGame.DuctTape DuckGame32 32 4350 3680 32 32
-DuckGame.DuelingPistol DuckGame32 32 4350 3712 32 32
-DuckGame.ExplosiveBarrel DuckGame32 32 4351 1024 32 32
-DuckGame.EasySign DuckGame32 32 4351 1224 32 32
-DuckGame.Holster DuckGame32 32 4351 1056 32 32
-DuckGame.HardLeft DuckGame32 32 4351 1088 32 32
-DuckGame.PowerHolster DuckGame32 32 4351 1120 32 32
-DuckGame.G18 DuckGame32 32 4351 1152 32 32
-DuckGame.FancyShoes DuckGame32 32 4351 1184 32 32
-DuckGame.FireCrackers DuckGame32 32 3993 4351 32 32
-DuckGame.FireExtinguisher DuckGame32 32 4025 4351 32 32
-DuckGame.PlasmaBlaster DuckGame32 32 4057 4351 32 32
-DuckGame.FlameThrower DuckGame32 32 4089 4351 32 32
-DuckGame.FlareGun DuckGame32 32 4351 1256 32 32
-DuckGame.FlimsyDoor DuckGame32 32 4351 1288 32 32
-DuckGame.Flower DuckGame32 32 4351 1320 32 32
-DuckGame.ForegroundNature DuckGame32 32 4351 1352 32 32
-DuckGame.FreeSpawn DuckGame32 32 4351 1384 32 32
-DuckGame.FunBeam DuckGame32 32 4351 3744 32 32
-DuckGame.GoalType DuckGame32 32 4351 3776 32 32
-DuckGame.IceBlock DuckGame32 32 1654 4352 32 32
-DuckGame.GoodBook DuckGame32 32 2089 4352 32 32
-DuckGame.GoodyNew DuckGame32 32 1993 4352 32 32
-DuckGame.Grapple DuckGame32 32 1750 4352 32 32
-DuckGame.Grenade DuckGame32 32 1702 4352 32 32
-DuckGame.GrenadeCannon DuckGame32 32 2121 4352 32 32
-DuckGame.GrenadeLauncher DuckGame32 32 4352 1424 32 32
-DuckGame.GreyBlock DuckGame32 32 4352 1456 32 32
-DuckGame.HangingCityLight DuckGame32 32 2025 4352 32 32
-DuckGame.Helmet DuckGame32 32 2057 4352 32 32
-DuckGame.ECrate DuckGame32 32 1782 4352 32 32
-DuckGame.HugeLaser DuckGame32 32 1814 4352 32 32
-DuckGame.FishinSign DuckGame32 32 1846 4352 32 32
-DuckGame.KnightHelmet DuckGame32 32 1878 4352 32 32
-DuckGame.IndustrialBackground DuckGame32 32 1910 4352 32 32
-DuckGame.IndustrialTileset DuckGame32 32 1942 4352 32 32
-DuckGame.ItemBox DuckGame32 32 2249 4352 32 32
-DuckGame.ItemBoxOneTime DuckGame32 32 2281 4352 32 32
-DuckGame.ItemBoxRandom DuckGame32 32 2313 4352 32 32
-DuckGame.ItemCrate DuckGame32 32 2345 4352 32 32
-DuckGame.ItemSpawner DuckGame32 32 2377 4352 32 32
-DuckGame.MindControlRay DuckGame32 32 2409 4352 32 32
-DuckGame.Key DuckGame32 32 2441 4352 32 32
-DuckGame.Keytar DuckGame32 32 2473 4352 32 32
-DuckGame.KingdomBackground DuckGame32 32 2153 4352 32 32
-DuckGame.Jetpack DuckGame32 32 2201 4352 32 32
-DuckGame.Lamp DuckGame32 32 4353 2023 32 32
-DuckGame.MagnetGun DuckGame32 32 2857 4353 32 32
-DuckGame.LaserRifle DuckGame32 32 4353 2119 32 32
-DuckGame.MallardBillboard DuckGame32 32 4353 1936 32 32
-DuckGame.Magnum DuckGame32 32 2793 4353 32 32
-DuckGame.Matchbox DuckGame32 32 2745 4353 32 32
-DuckGame.MagBlaster DuckGame32 32 4353 1968 32 32
-DuckGame.MaceCollar DuckGame32 32 2889 4353 32 32
-DuckGame.LavaBarrel DuckGame32 32 2921 4353 32 32
-DuckGame.LaserSpawner DuckGame32 32 2953 4353 32 32
-DuckGame.Mine DuckGame32 32 2985 4353 32 32
-DuckGame.PipeBlue DuckGame32 32 3017 4353 32 32
-DuckGame.Musket DuckGame32 32 3049 4353 32 32
-DuckGame.Pistol DuckGame32 32 2825 4353 32 32
-DuckGame.IceWedge DuckGame32 32 4353 2071 32 32
-DuckGame.MirrorMode DuckGame32 32 4353 2167 32 32
-DuckGame.MysteryGun DuckGame32 32 4353 2215 32 32
-DuckGame.NatureBackground DuckGame32 32 4353 2247 32 32
-DuckGame.NatureBackgroundNight DuckGame32 32 4353 2279 32 32
-DuckGame.NatureTileset DuckGame32 32 4353 2311 32 32
-DuckGame.NetGun DuckGame32 32 4353 2343 32 32
-DuckGame.NublessSnowIceTileset DuckGame32 32 4353 2375 32 32
-DuckGame.NublessSnowTileset DuckGame32 32 4353 2407 32 32
-DuckGame.OfficeBackground DuckGame32 32 687 4354 32 32
-DuckGame.OfficeLight DuckGame32 32 735 4354 32 32
-DuckGame.Sharpshot DuckGame32 32 767 4354 32 32
-DuckGame.OfficeTileset DuckGame32 32 639 4354 32 32
-DuckGame.PelletGun DuckGame32 32 799 4354 32 32
-DuckGame.PewPewLaser DuckGame32 32 831 4354 32 32
-DuckGame.Phaser DuckGame32 32 863 4354 32 32
-DuckGame.PhysicsChain DuckGame32 32 895 4354 32 32
-DuckGame.PhysicsRope DuckGame32 32 927 4354 32 32
-DuckGame.PineTreeSnowTileset DuckGame32 32 487 4354 32 32
-DuckGame.PineTreeTileset DuckGame32 32 575 4354 32 32
-DuckGame.PineTrunkTileset DuckGame32 32 519 4354 32 32
-DuckGame.Icicles DuckGame32 32 607 4354 32 32
-DuckGame.PipeGreen DuckGame32 32 4246 4355 32 32
-DuckGame.PipeRed DuckGame32 32 4294 4355 32 32
-DuckGame.OldPistol DuckGame32 32 4358 614 32 32
-DuckGame.PurpleBlock DuckGame32 32 4358 558 32 32
-DuckGame.DonutSpaceBackground DuckGame32 32 1315 4360 32 32
-DuckGame.UndergroundTileset DuckGame32 32 4358 1514 32 32
-DuckGame.Sun DuckGame32 32 1411 4360 32 32
-DuckGame.SMG DuckGame32 32 1363 4360 32 32
-DuckGame.PyramidBackground DuckGame32 32 1443 4360 32 32
-DuckGame.PyramidBLight DuckGame32 32 1475 4360 32 32
-DuckGame.PyramidBrick DuckGame32 32 1507 4360 32 32
-DuckGame.PyramidDoor DuckGame32 32 1539 4360 32 32
-DuckGame.PyramidLightRoof DuckGame32 32 1571 4360 32 32
-DuckGame.PyramidTileset DuckGame32 32 1603 4360 32 32
-DuckGame.PyramidWallLight DuckGame32 32 4361 392 32 32
-DuckGame.QuadLaser DuckGame32 32 4361 3966 32 32
-DuckGame.RaceSign DuckGame32 32 4361 424 32 32
-DuckGame.RandomControllerNew DuckGame32 32 4361 456 32 32
-DuckGame.RCController DuckGame32 32 4361 488 32 32
-DuckGame.Rock DuckGame32 32 4361 3838 32 32
-DuckGame.RockWall DuckGame32 32 4361 3870 32 32
-DuckGame.RomanCandle DuckGame32 32 4361 3902 32 32
-DuckGame.Saws DuckGame32 32 4361 3934 32 32
-DuckGame.SawsDown DuckGame32 32 4361 3998 32 32
-DuckGame.SawsLeft DuckGame32 32 4361 4030 32 32
-DuckGame.SawsRight DuckGame32 32 4361 4062 32 32
-DuckGame.Saxaphone DuckGame32 32 3353 4362 32 32
-DuckGame.ScaffoldingTileset DuckGame32 32 3737 4362 32 32
-DuckGame.Shotgun DuckGame32 32 3385 4362 32 32
-DuckGame.Sniper DuckGame32 32 3609 4362 32 32
-DuckGame.SnowDrift DuckGame32 32 3641 4362 32 32
-DuckGame.StreetLight DuckGame32 32 3673 4362 32 32
-DuckGame.SpringUpRight DuckGame32 32 3705 4362 32 32
-selectBeam 3865 4362 32 32
-DuckGame.SpikesDown DuckGame32 32 0 4362 32 32
-DuckGame.SnowBackground DuckGame32 32 32 4362 32 32
-DuckGame.SnowGenerator DuckGame32 32 64 4362 32 32
-DuckGame.SnowIceTileset DuckGame32 32 96 4362 32 32
-DuckGame.SnowPile DuckGame32 32 128 4362 32 32
-DuckGame.SnowTileset DuckGame32 32 160 4362 32 32
-DuckGame.SnubbyPistol DuckGame32 32 3897 4362 32 32
-DuckGame.SpaceBackground DuckGame32 32 3929 4362 32 32
-DuckGame.SpaceTileset DuckGame32 32 3961 4362 32 32
-DuckGame.SpawnCannon DuckGame32 32 3769 4362 32 32
-DuckGame.Slag DuckGame32 32 3801 4362 32 32
-DuckGame.SpikeHelm DuckGame32 32 3833 4362 32 32
-DuckGame.Crate DuckGame32 32 3417 4362 32 32
-DuckGame.UpSign DuckGame32 32 3449 4362 32 32
-DuckGame.SpikesRight DuckGame32 32 3481 4362 32 32
-DuckGame.SpookyTileset DuckGame32 32 3513 4362 32 32
-DuckGame.Spring DuckGame32 32 3545 4362 32 32
-DuckGame.SpringDown DuckGame32 32 3577 4362 32 32
-DuckGame.SpringDownLeft DuckGame32 32 4363 670 32 32
-DuckGame.SpringDownRight DuckGame32 32 4363 702 32 32
-DuckGame.SpringLeft DuckGame32 32 4363 3360 32 32
-DuckGame.SpringRight DuckGame32 32 4363 3392 32 32
-DuckGame.SpringUpLeft DuckGame32 32 4363 3424 32 32
-DuckGame.Spikes DuckGame32 32 4363 3456 32 32
-DuckGame.SledgeHammer DuckGame32 32 4363 3488 32 32
-DuckGame.SpikesLeft DuckGame32 32 4363 3520 32 32
-DuckGame.Sword DuckGame32 32 4364 1658 32 32
-DuckGame.VerticalFunBeam DuckGame32 32 4364 2656 32 32
-DuckGame.TargetDuckNew DuckGame32 32 331 4364 32 32
-DuckGame.VerticalDoor DuckGame32 32 4364 2688 32 32
-DuckGame.TeamSpawn DuckGame32 32 4364 2576 32 32
-DuckGame.TinfoilHat DuckGame32 32 363 4364 32 32
-DuckGame.Tombstone DuckGame32 32 395 4364 32 32
-DuckGame.TreeTileset DuckGame32 32 427 4364 32 32
-DuckGame.TutorialSign03 DuckGame32 32 4364 2624 32 32
-DuckGame.TreeTopDead DuckGame32 32 4364 2720 32 32
-DuckGame.TriggerVolume DuckGame32 32 4364 2752 32 32
-DuckGame.Trombone DuckGame32 32 4364 2784 32 32
-DuckGame.VirtualBackground DuckGame32 32 4364 2816 32 32
-DuckGame.Trophy DuckGame32 32 4364 2848 32 32
-DuckGame.Trumpet DuckGame32 32 4364 1562 32 32
-DuckGame.TutorialGunCrouchJump DuckGame32 32 1024 4365 32 32
-DuckGame.TutorialGunJump DuckGame32 32 1056 4365 32 32
-DuckGame.TutorialSign00 DuckGame32 32 1088 4365 32 32
-DuckGame.UndergroundBackground DuckGame32 32 1120 4365 32 32
-DuckGame.SuicidePistol DuckGame32 32 1152 4365 32 32
-DuckGame.TV DuckGame32 32 1184 4365 32 32
-DuckGame.TutorialSign05 DuckGame32 32 1216 4365 32 32
-DuckGame.TutorialSign04 DuckGame32 32 1248 4365 32 32
-DuckGame.TutorialSign01 DuckGame32 32 1280 4365 32 32
-DuckGame.TutorialSign02 DuckGame32 32 203 4365 32 32
-DuckGame.TroubleLight DuckGame32 32 235 4365 32 32
-DuckGame.TheDishes DuckGame32 32 267 4365 32 32
-DuckGame.TreeTop DuckGame32 32 299 4365 32 32
-DuckGame.PizzaLauncher DuckGame32 32 4366 3120 32 32
-DuckGame.WallLightRight DuckGame32 32 4366 3152 32 32
-DuckGame.WallLightLeft DuckGame32 32 4366 3184 32 32
-DuckGame.WaterCooler DuckGame32 32 4366 3216 32 32
-DuckGame.WaterFall DuckGame32 32 4366 3248 32 32
-DuckGame.WallBoots DuckGame32 32 4366 3280 32 32
-DuckGame.VirtualShotgun DuckGame32 32 4366 3312 32 32
-DuckGame.VeryHardSign DuckGame32 32 4369 264 32 32
-DuckGame.Present DuckGame32 32 2697 4369 32 32
-DuckGame.WaterFallEdge DuckGame32 32 4369 296 32 32
-DuckGame.WaterFallEdgeTop DuckGame32 32 4369 328 32 32
-DuckGame.WaterFallTile DuckGame32 32 4369 360 32 32
-DuckGame.WaterFlow DuckGame32 32 4371 1610 32 32
-DuckGame.WireActivator DuckGame32 32 4198 4371 32 32
-DuckGame.WireButton DuckGame32 32 4134 4371 32 32
-DuckGame.Warpgun DuckGame32 32 4371 0 32 32
-DuckGame.PinkBox DuckGame32 32 4371 32 32 32
-DuckGame.WireMount DuckGame32 32 4371 64 32 32
-DuckGame.WireTileset DuckGame32 32 4371 96 32 32
-DuckGame.DartGrenade DuckGame32 32 4166 4371 32 32
-DuckGame.YellowBarrel DuckGame32 32 4342 4371 32 32
-DuckGame.WireTrapDoor DuckGame32 32 4373 138 32 32
-DuckGame.WoodScaffoldingTileset DuckGame32 32 4373 170 32 32
-DuckGame.WireFlipper DuckGame32 32 4373 202 32 32
-furni/fancy/bust 1523 4333 24 39
-lightSpring 3238 4136 15 48
-furni/cheap/fusebox 1626 3922 40 23
-spring 3286 4136 15 48
-furni/cheap/diploma 257 4315 17 46
-newsTitle5 4374 2912 31 31
-rockThrow/tableBottomBack 4133 3346 13 48
-rockThrow/tableBottom 4137 3537 13 48
-furni/fancy/chandelier 1583 4333 26 34
-uiBox 3106 993 30 30
-moneyTypes 3914 119 18 42
-furni/cheap/garbo 1626 3962 32 27
-furni/ship/periscope 1964 3961 36 23
-furni/everyday/shelf 960 2530 42 16
-arcade/tinyStars 2164 942 8 50
-gunSpawner 4174 360 30 28
-furni/office/coffeevendingmachine 4162 172 34 24
-furni/outdoor/backboard 1617 4333 27 31
-furni/outdoor/soda_pop 4089 4280 17 40
-furni/outdoor/gasstove 3193 4205 13 44
-background/cloud5 3417 3108 8 49
-demoBlaster 3315 4167 19 38
-furni/bar/CCTV 963 2317 44 13
-selectProjector 3417 3348 8 49
-background/berg2_reflection 4343 4094 19 38
-dartchain_burned 1076 4315 18 38
-furni/freezer/snowfa 4278 446 21 35
-spikehelm 4374 1698 22 34
-spikehelmWorn 4374 4371 22 34
-furni/flowers/lachenalia 4374 2943 22 34
-furni/freezer/ancestor 2200 538 32 24
-sandwichStamp 3921 2852 28 28
-furni/scren 459 4332 28 28
-furni/bar/pooltable 535 4290 16 40
-background/cloud1 3427 1924 12 43
-furni/bar/cuerack 1974 2798 36 19
-furni/office/printer 4341 234 29 26
-furni/cheap/famous_elf 4189 3294 30 25
-furni/ship/jollyroger 4374 4259 22 33
-duckCoin 1114 4315 18 36
-furni/ship/porthole 1150 4315 18 36
-furni/bathroom/urinal 4351 3808 28 26
-tapedSword 2215 762 46 8
-background/cloud4 2505 1929 7 47
-furni/outdoor/bbq 3513 2424 22 32
-signal 1909 2440 5 48
-pauseIcons 4320 1488 21 32
-redGlowWideLeft 3955 3008 32 21
-furni/ship/anchor 4189 3324 28 25
-redGlowWideRight 3955 3040 32 21
-itemCrate 1186 4315 17 36
-ctf/present 1222 4315 17 36
-soldStamp 4313 3950 16 37
-_featherSprite4 1190 1020 4 48
-selectPlatform 1238 1020 3 49
-_featherSprite7 1287 1020 4 48
-musket 3466 3108 11 41
-_featherSprite6 1335 1020 4 48
-feather 1383 1020 4 48
-_featherSprite3 1431 1020 4 48
-_featherSprite5 1479 1020 4 48
-_featherSprite1 1527 1020 4 48
-_featherSprite0 1575 1020 4 48
-_featherSprite2 1623 1020 4 48
-feather_m 2552 1929 4 48
-arcade/monitorFlashWagnus 4321 2000 22 30
-furni/bathroom/papertowel 4212 3102 17 34
-furni/momento/junk 4326 646 23 28
-furni/ship/life_preserver 1258 4315 17 34
-Editor/sideArrowHover 4374 4307 17 34
-furni/momento/easel 3955 3072 30 21
-xboxController 4326 590 22 29
-furni/music/cello 1300 2353 36 15
-wireButton 299 4131 19 32
-buttons/mouse 3501 4218 15 36
-keyboard 4352 1488 21 29
-furni/bathroom/bigsink 4210 862 26 24
-readyLeft 2600 1929 7 43
-furni/cheap/hobofire 835 4206 18 32
-readyRight 2643 1929 7 43
-plane 3237 4205 13 36
-furni/default/flagpole 960 2572 33 16
-nikoextraButton 4162 206 24 25
-buttons/styleBubble 4353 2000 22 27
-furni/fancy/fancyFlagpole 960 2605 33 16
-Editor/regenBlock 3833 4250 16 32
-highPowerRifle 1278 2786 12 36
-background/berg3_reflection 4293 250 14 34
-Editor/dieBlockRed 3961 4250 16 32
-Editor/moveBlock 3705 4250 16 32
-Editor/dieBlock 3833 4298 16 32
-Editor/checkBox 3961 4298 16 32
-Editor/editBlock 3705 4298 16 32
-survival/cryoPlug 299 4299 16 32
-Editor/numBlock 64 4314 16 32
-Editor/radioButton 96 4314 16 32
-Editor/resizeBlock 128 4314 16 32
-laserFlareOrange 160 4314 16 32
-rockThrow/scoreCard 4332 2608 16 32
-grenade 4089 4335 16 32
-drinks 535 4338 16 32
-furni/everyday/default 1582 4208 24 24
-furni/everyday/wallclock 4342 4243 16 32
-furni/fontIcon 4210 888 24 24
-furni/stone/stone 4210 912 24 24
-furni/ship/ship 4210 936 24 24
-furni/outdoor/forest 551 4226 24 24
-mindControlGun 4342 3104 16 32
-furni/stone 1499 4330 24 24
-furni/music/music 551 4354 24 24
-furni/freezer/freezer 4358 646 24 24
-furni/flowers/greenhouse 4358 590 24 24
-furni/fancy/fancy 459 4364 24 24
-furni/bathroom/tiles 4373 234 24 24
-furni/everyday/basic 4374 4339 24 24
-furni/cheap/shabby 4374 1720 24 24
-furni/default/default 4374 2965 24 24
-furni/office/office 4374 4211 24 24
-laserFlare 4342 4291 16 32
-furni/bar/bar 4374 4281 24 24
-dart 4347 766 16 32
-wireFlipper 4347 1006 16 32
-wireMount 4353 2151 16 32
-wireBlock 4353 2055 16 32
-dartgrenade 4353 2103 16 32
-activatorBlock 4353 2199 16 32
-pinkbox 4358 1546 16 32
-genderIcons 4361 520 16 32
-candleBall 4364 1594 16 32
-wetEnter 4364 2608 16 32
-arcadeLight 3525 1876 27 20
-arcade/chancyHover 1974 2834 28 19
-furni/outdoor/flamingo 4347 335 25 22
-title/bigStartButtonSwitch 3466 3348 12 35
-energyScimiBlade 963 2361 33 13
-furni/freezer/IceTable 4366 3344 16 30
-pizer 458 4312 17 29
-arcade/plug_hover 1974 2862 28 18
-arcade/monitorFlashLarge 4374 1744 20 26
-energyScimiHilt 1300 2389 33 13
-furni/bathroom/cleaner 4303 3824 14 32
-energyScimiBladeTrail 1300 2422 33 13
-goodBook 3470 1924 12 34
-furni/freezer/snowduck 4374 4235 21 24
-pyramidDoorFrame 1752 983 35 10
-arcade/fixture 3525 1903 25 20
-blueBarrelToreUp 3709 2863 17 28
-doorFrame 1644 2238 35 10
-yellowBarrelToreUp 303 4315 17 28
-pelletGun 3314 1209 14 31
-background/berg2 3501 3348 10 35
-furni/everyday/vent 1974 2890 26 18
-blunderbuss 3507 3108 11 33
-windowFrame 1644 2273 34 10
-g18 4371 1642 16 28
-bleacherSeat 1974 2916 25 19
-lampShade 1300 2455 29 14
-lamp 1300 2484 29 14
-arcade/chancy 1637 2858 26 17
-numbers 2313 3432 8 35
-bazooka 4224 1501 13 30
-boardLoader 4310 1595 14 28
-arcade/plug_duck 960 2638 26 16
-furni/everyday/umbrella 1974 2678 24 18
-title/bigUButtonPC 1294 3995 21 21
-title/bigUButton 1294 4016 21 21
-sniper 1611 3501 9 33
-furni/stone/stoneFlagpole 2215 808 33 8
-sledgeForce 963 2394 29 12
-furni/outdoor/naturalFlagpole 2215 841 33 8
-chatBust3 1612 3169 13 28
-chatBust4 4265 1170 13 28
-chatBust7 4374 4324 13 28
-chatBust2 4374 2989 13 28
-chatBust5 4374 3002 13 28
-chatBust_m 4374 3015 13 28
-furni/music/mic stand 1974 2941 22 19
-furni/momento/giftbasket 739 4206 19 22
-furni/flowers/spiderplant 1974 2963 22 19
-furni/default/proximityDefenseTurret 4374 1764 16 25
-chatBust1 4374 3028 13 28
-chatBust0 4374 2880 13 28
-chatBust 4374 2893 13 28
-chatBust6 4374 3041 13 28
-_arrowSprite3 4374 3054 16 24
-_arrowSprite6 4374 3070 16 24
-_arrowSprite7 4374 3086 16 24
-_arrowSprite4 4374 3102 16 24
-furni/freezer/icicle 4374 1780 16 24
-startArrow_m 4374 1796 16 24
-rainSplash 2348 3432 8 32
-_arrowSprite2 4374 1812 16 24
-iceSculpture 960 2664 24 16
-_arrowSprite5 4374 1828 16 24
-_arrowSprite1 4374 1844 16 24
-passwordFont 2380 3432 8 32
-netGunGuage 2412 3432 8 32
-_arrowSprite0 4374 1860 16 24
-woodDebris 2444 3432 8 32
-positronShooter 3536 3348 12 28
-powerHolster 3540 3108 12 28
-startArrow 4374 1876 16 24
-arcade/monitorFlash 3955 3102 18 22
-furni/default/voodooVincent 1974 2985 21 19
-demoCrate 3525 2376 20 20
-waterGun 4338 1595 14 25
-singleDuck 960 2688 23 16
-background/berg3 3564 3348 9 30
-furni/outdoor/pot 1974 3006 20 19
-consoleHighlight 3525 2396 19 20
-hostCrown 956 3555 19 20
-furni/ship/seaweed 4206 87 18 21
-window 1647 2190 32 6
-arcade/plug_machine_monitor 1292 4315 16 22
-maceBall 1974 3026 19 19
-furni/outdoor/stopsign 1974 3078 19 19
-rockThrow/chairBottomBack 960 2711 22 16
-furni/outdoor/pan 4374 1892 15 23
-campingMelted 4374 1907 15 23
-snubby 3568 3108 10 28
-ovensprite 1637 2884 20 17
-furni/everyday/boombox 4206 105 16 21
-furni/fancy/fancylamp 1300 2513 22 15
-trophy 1637 2904 20 17
-dieHover 1974 3045 18 18
-corkGun 2121 1014 10 26
-ctf/spawner 1957 2440 4 32
-funeralPic 1637 2924 19 17
-adjusterHand 1974 3097 17 18
-spikes 960 2733 19 16
-turretHead 3594 3348 10 25
-furni/everyday/coathanger 3273 4205 14 21
-trumpet 3596 3108 10 24
-rockThrow/chairSeat 960 2752 18 16
-cityWedge 1637 2943 17 17
-plainWedge 1637 2960 17 17
-furni/music/amp 1974 3114 16 18
-furni/eggpillow 960 2770 18 16
-crowdDuck 1300 2535 20 14
-iceWedge 1637 2977 17 17
-cowboyPistol 3427 2868 11 22
-redGlowWideSharp 973 1762 32 1
-arcade/unlockLock 1300 2555 18 15
-purpleBlock 960 2788 17 16
-rockThrow/rockSmudgeMud 3619 3348 10 23
-rockThrow/rockSmudge 3620 3108 10 23
-colorStarLarge 3125 2432 16 17
-rockThrow/rockSmudgeSnow 3642 3348 10 23
-distanceSign 3717 3060 13 20
-arcade/goldUnlockLock 1300 2573 18 15
-furni/fancy/globe 960 2805 18 15
-furni/fancy/mirror 1974 3130 16 17
-DuckGame.TutorialSign01 DuckGame16 16 960 2823 16 16
-DuckGame.TutorialSign00 DuckGame16 16 960 2839 16 16
-DuckGame.TutorialGunJump DuckGame16 16 960 2855 16 16
-DuckGame.TutorialGunCrouchJump DuckGame16 16 960 2871 16 16
-DuckGame.Trumpet DuckGame16 16 960 2887 16 16
-DuckGame.TroubleLight DuckGame16 16 960 2903 16 16
-DuckGame.Trophy DuckGame16 16 960 2919 16 16
-DuckGame.VirtualShotgun DuckGame16 16 960 2935 16 16
-DuckGame.TriggerVolume DuckGame16 16 960 2951 16 16
-DuckGame.WallBoots DuckGame16 16 960 2967 16 16
-DuckGame.WallLightLeft DuckGame16 16 960 2983 16 16
-DuckGame.TreeTop DuckGame16 16 960 2999 16 16
-DuckGame.WireMount DuckGame16 16 960 3015 16 16
-DuckGame.ECrate DuckGame16 16 960 3031 16 16
-DuckGame.TheDishes DuckGame16 16 960 3047 16 16
-DuckGame.PizzaLauncher DuckGame16 16 960 3063 16 16
-DuckGame.PinkBox DuckGame16 16 960 3079 16 16
-DuckGame.Trombone DuckGame16 16 960 3095 16 16
-DuckGame.TutorialSign02 DuckGame16 16 960 3111 16 16
-DuckGame.SpringRight DuckGame16 16 960 3127 16 16
-DuckGame.TutorialSign05 DuckGame16 16 1974 3146 16 16
-DuckGame.IceWedge DuckGame16 16 960 3143 16 16
-DuckGame.IceBlock DuckGame16 16 1974 3162 16 16
-DuckGame.HugeLaser DuckGame16 16 960 3159 16 16
-DuckGame.Holster DuckGame16 16 960 3175 16 16
-DuckGame.TargetDuckNew DuckGame16 16 1974 3178 16 16
-DuckGame.EnergyScimitar DuckGame16 16 1635 3182 16 16
-DuckGame.Helmet DuckGame16 16 1974 3194 16 16
-DuckGame.RandomControllerNew DuckGame16 16 1297 3206 16 16
-DuckGame.VeryHardSign DuckGame16 16 960 3191 16 16
-DuckGame.Rock DuckGame16 16 1635 3198 16 16
-DuckGame.TutorialSign03 DuckGame16 16 960 3207 16 16
-DuckGame.VirtualBackground DuckGame16 16 3207 1904 16 16
-DuckGame.VerticalFunBeam DuckGame16 16 3207 1920 16 16
-DuckGame.VerticalDoor DuckGame16 16 3209 2368 16 16
-DuckGame.UpSign DuckGame16 16 3209 2384 16 16
-DuckGame.UndergroundTileset DuckGame16 16 3209 2400 16 16
-DuckGame.UndergroundBackground DuckGame16 16 3209 2416 16 16
-DuckGame.TV DuckGame16 16 3209 2432 16 16
-DuckGame.DartGrenade DuckGame16 16 3209 1664 16 16
-DuckGame.TutorialSign04 DuckGame16 16 3209 1680 16 16
-DuckGame.YellowBarrel DuckGame16 16 3209 1696 16 16
-DuckGame.WallLightRight DuckGame16 16 3209 1712 16 16
-DuckGame.WireTrapDoor DuckGame16 16 3209 1728 16 16
-DuckGame.SMG DuckGame16 16 3209 1744 16 16
-DuckGame.Slag DuckGame16 16 3209 1760 16 16
-DuckGame.SpaceTileset DuckGame16 16 3209 1776 16 16
-DuckGame.Icicles DuckGame16 16 3209 1792 16 16
-DuckGame.Shotgun DuckGame16 16 3209 1808 16 16
-DuckGame.Sharpshot DuckGame16 16 3209 1824 16 16
-DuckGame.ScaffoldingTileset DuckGame16 16 3209 1840 16 16
-DuckGame.Saxaphone DuckGame16 16 3209 1856 16 16
-DuckGame.Sniper DuckGame16 16 3209 1872 16 16
-DuckGame.SawsRight DuckGame16 16 3209 1888 16 16
-DuckGame.SawsDown DuckGame16 16 1974 3210 16 16
-DuckGame.Saws DuckGame16 16 1635 3214 16 16
-DuckGame.RomanCandle DuckGame16 16 1297 3222 16 16
-DuckGame.SpaceBackground DuckGame16 16 960 3223 16 16
-DuckGame.SpawnCannon DuckGame16 16 1974 3226 16 16
-DuckGame.Tombstone DuckGame16 16 1635 3230 16 16
-DuckGame.TeamSpawn DuckGame16 16 1297 3238 16 16
-DuckGame.TinfoilHat DuckGame16 16 1297 3254 16 16
-DuckGame.SawsLeft DuckGame16 16 960 3239 16 16
-DuckGame.SnowBackground DuckGame16 16 1974 3242 16 16
-DuckGame.SnowDrift DuckGame16 16 1635 3246 16 16
-DuckGame.SnowGenerator DuckGame16 16 1974 3258 16 16
-DuckGame.WireTileset DuckGame16 16 1635 3262 16 16
-DuckGame.WireFlipper DuckGame16 16 960 3255 16 16
-DuckGame.WireButton DuckGame16 16 1974 3274 16 16
-DuckGame.WireActivator DuckGame16 16 960 3271 16 16
-DuckGame.WaterFlow DuckGame16 16 1635 3278 16 16
-DuckGame.WaterFallTile DuckGame16 16 1974 3290 16 16
-DuckGame.WaterFallEdgeTop DuckGame16 16 1635 3294 16 16
-DuckGame.WaterFallEdge DuckGame16 16 960 3298 16 16
-DuckGame.WaterFall DuckGame16 16 1297 3310 16 16
-DuckGame.WaterCooler DuckGame16 16 1635 3310 16 16
-DuckGame.Warpgun DuckGame16 16 960 3314 16 16
-DuckGame.TreeTopDead DuckGame16 16 1976 3318 16 16
-DuckGame.TreeTileset DuckGame16 16 1297 3326 16 16
-DuckGame.RockWall DuckGame16 16 1635 3326 16 16
-DuckGame.SledgeHammer DuckGame16 16 3081 3337 16 16
-DuckGame.SnubbyPistol DuckGame16 16 960 3330 16 16
-DuckGame.SnowTileset DuckGame16 16 1976 3334 16 16
-DuckGame.SnowPile DuckGame16 16 1635 3342 16 16
-DuckGame.SnowIceTileset DuckGame16 16 1297 3342 16 16
-DuckGame.WoodScaffoldingTileset DuckGame16 16 1976 3350 16 16
-DuckGame.IndustrialBackground DuckGame16 16 1296 3377 16 16
-DuckGame.MysteryGun DuckGame16 16 960 3346 16 16
-DuckGame.HardLeft DuckGame16 16 3081 3353 16 16
-DuckGame.MallardBillboard DuckGame16 16 1635 3358 16 16
-DuckGame.Phaser DuckGame16 16 1297 3358 16 16
-DuckGame.MagnetGun DuckGame16 16 1976 3366 16 16
-DuckGame.PewPewLaser DuckGame16 16 960 3362 16 16
-DuckGame.Pistol DuckGame16 16 1635 3374 16 16
-DuckGame.PhysicsChain DuckGame16 16 3081 3369 16 16
-DuckGame.PurpleBlock DuckGame16 16 960 3378 16 16
-DuckGame.RaceSign DuckGame16 16 1974 3383 16 16
-DuckGame.QuadLaser DuckGame16 16 1635 3390 16 16
-DuckGame.PyramidWallLight DuckGame16 16 3081 3385 16 16
-DuckGame.PyramidTileset DuckGame16 16 1296 3393 16 16
-DuckGame.PyramidLightRoof DuckGame16 16 1974 3399 16 16
-DuckGame.PyramidDoor DuckGame16 16 3081 3401 16 16
-DuckGame.PyramidBrick DuckGame16 16 960 3394 16 16
-DuckGame.PyramidBLight DuckGame16 16 1635 3406 16 16
-DuckGame.PyramidBackground DuckGame16 16 1296 3409 16 16
-DuckGame.Present DuckGame16 16 1974 3415 16 16
-DuckGame.PhysicsRope DuckGame16 16 960 3410 16 16
-DuckGame.PowerHolster DuckGame16 16 3081 3417 16 16
-DuckGame.Matchbox DuckGame16 16 1296 3425 16 16
-DuckGame.PlasmaBlaster DuckGame16 16 960 3426 16 16
-DuckGame.MindControlRay DuckGame16 16 1974 3431 16 16
-DuckGame.MirrorMode DuckGame16 16 1296 3441 16 16
-DuckGame.Sword DuckGame16 16 3081 3433 16 16
-bigGlob 2188 874 8 24
-powerHolsterUnder 3643 3108 10 22
-furni/fancy/platter 3504 1924 11 21
-buttons/keyboard/shift 1974 3063 14 18
-sandwich 1974 3447 14 18
-DuckGame.NatureBackgroundNight DuckGame16 16 960 3442 16 16
-DuckGame.OldPistol DuckGame16 16 3081 3449 16 16
-DuckGame.OfficeTileset DuckGame16 16 1296 3457 16 16
-DuckGame.OfficeLight DuckGame16 16 1974 3461 16 16
-DuckGame.OfficeBackground DuckGame16 16 960 3458 16 16
-DuckGame.NublessSnowTileset DuckGame16 16 1296 3473 16 16
-DuckGame.NublessSnowIceTileset DuckGame16 16 1974 3477 16 16
-DuckGame.PelletGun DuckGame16 16 1296 3489 16 16
-DuckGame.NetGun DuckGame16 16 1974 3493 16 16
-DuckGame.NatureTileset DuckGame16 16 1297 3505 16 16
-DuckGame.Magnum DuckGame16 16 1635 3510 16 16
-DuckGame.NatureBackground DuckGame16 16 1975 3511 16 16
-DuckGame.Musket DuckGame16 16 1297 3521 16 16
-DuckGame.Mine DuckGame16 16 1635 3526 16 16
-DuckGame.IndustrialTileset DuckGame16 16 1975 3527 16 16
-DuckGame.MaceCollar DuckGame16 16 1297 3537 16 16
-DuckGame.PipeGreen DuckGame16 16 3081 3538 16 16
-DuckGame.FireCrackers DuckGame16 16 1635 3542 16 16
-DuckGame.FancyShoes DuckGame16 16 1975 3543 16 16
-DuckGame.ExplosiveBarrel DuckGame16 16 1635 3558 16 16
-DuckGame.Equipper DuckGame16 16 3081 3554 16 16
-DuckGame.RCController DuckGame16 16 3081 3570 16 16
-DuckGame.GrenadeLauncher DuckGame16 16 1974 3574 16 16
-DuckGame.HangingCityLight DuckGame16 16 1635 3574 16 16
-DuckGame.LaserSpawner DuckGame16 16 960 3578 16 16
-DuckGame.ItemBoxOneTime DuckGame16 16 3081 3586 16 16
-DuckGame.LaserRifle DuckGame16 16 1974 3590 16 16
-DuckGame.Lamp DuckGame16 16 1635 3590 16 16
-DuckGame.KnightHelmet DuckGame16 16 960 3594 16 16
-DuckGame.KingdomBackground DuckGame16 16 1974 3606 16 16
-DuckGame.Keytar DuckGame16 16 3081 3602 16 16
-DuckGame.Key DuckGame16 16 1635 3606 16 16
-DuckGame.Jetpack DuckGame16 16 3081 3618 16 16
-DuckGame.ItemCrate DuckGame16 16 960 3610 16 16
-DuckGame.ItemBoxRandom DuckGame16 16 1974 3622 16 16
-DuckGame.ItemBox DuckGame16 16 1635 3622 16 16
-DuckGame.FireExtinguisher DuckGame16 16 960 3626 16 16
-DuckGame.PipeRed DuckGame16 16 3081 3634 16 16
-DuckGame.FishinSign DuckGame16 16 1974 3638 16 16
-DuckGame.FlareGun DuckGame16 16 960 3642 16 16
-DuckGame.PipeBlue DuckGame16 16 1974 3654 16 16
-DuckGame.PineTrunkTileset DuckGame16 16 3081 3650 16 16
-DuckGame.PineTreeTileset DuckGame16 16 960 3658 16 16
-DuckGame.PineTreeSnowTileset DuckGame16 16 3081 3666 16 16
-DuckGame.MagBlaster DuckGame16 16 1974 3670 16 16
-DuckGame.ItemSpawner DuckGame16 16 1635 3678 16 16
-DuckGame.LavaBarrel DuckGame16 16 960 3674 16 16
-DuckGame.ForegroundNature DuckGame16 16 1974 3686 16 16
-DuckGame.GrenadeCannon DuckGame16 16 3081 3682 16 16
-DuckGame.Grenade DuckGame16 16 1635 3694 16 16
-DuckGame.Grapple DuckGame16 16 960 3690 16 16
-DuckGame.GoodyNew DuckGame16 16 1974 3702 16 16
-DuckGame.GoodBook DuckGame16 16 3081 3698 16 16
-DuckGame.GoalType DuckGame16 16 960 3706 16 16
-DuckGame.G18 DuckGame16 16 1635 3710 16 16
-DuckGame.FunBeam DuckGame16 16 3717 3073 16 16
-DuckGame.FreeSpawn DuckGame16 16 3081 3714 16 16
-DuckGame.Flower DuckGame16 16 3717 3300 16 16
-DuckGame.GreyBlock DuckGame16 16 3717 3089 16 16
-DuckGame.FlameThrower DuckGame16 16 3717 3316 16 16
-DuckGame.Sun DuckGame16 16 3717 3332 16 16
-tv2 1974 3718 16 16
-DuckGame.StreetLight DuckGame16 16 3721 2320 16 16
-DuckGame.CameraFixed DuckGame16 16 3721 2336 16 16
-DuckGame.CameraBoundsNew DuckGame16 16 3721 2352 16 16
-DuckGame.CoilGun DuckGame16 16 3721 2368 16 16
-DuckGame.CombatShotgun DuckGame16 16 3721 2384 16 16
-DuckGame.CowboyPistol DuckGame16 16 3721 2400 16 16
-DuckGame.Crate DuckGame16 16 3721 2416 16 16
-DuckGame.Door DuckGame16 16 3721 2432 16 16
-DuckGame.DonutTileset DuckGame16 16 960 3722 16 16
-DuckGame.DonutSpaceBackground DuckGame16 16 1635 3726 16 16
-DuckGame.Desk DuckGame16 16 1974 3734 16 16
-DuckGame.DemoCrate DuckGame16 16 960 3738 16 16
-DuckGame.DeathCrate DuckGame16 16 1635 3742 16 16
-DuckGame.DartGun DuckGame16 16 3749 2796 16 16
-DuckGame.DangerSign DuckGame16 16 3749 2812 16 16
-DuckGame.CustomTileset3 DuckGame16 16 1974 3750 16 16
-DuckGame.CustomTileset2 DuckGame16 16 960 3754 16 16
-DuckGame.CustomTileset DuckGame16 16 1635 3758 16 16
-DuckGame.CustomPlatform3 DuckGame16 16 1635 3774 16 16
-DuckGame.CustomPlatform2 DuckGame16 16 1635 3790 16 16
-DuckGame.CustomPlatform DuckGame16 16 1635 3806 16 16
-DuckGame.CustomParallaxSegment DuckGame16 16 1635 3822 16 16
-DuckGame.CameraMover DuckGame16 16 1635 3838 16 16
-DuckGame.CameraZoomNew DuckGame16 16 3081 3850 16 16
-DuckGame.CampingRifle DuckGame16 16 1635 3854 16 16
-DuckGame.CastleTileset DuckGame16 16 3081 3866 16 16
-eCrate 187 3875 16 16
-tape 3081 3882 16 16
-drumsIcon 187 3891 16 16
-lock 187 3907 16 16
-popLine 3081 3898 16 16
-extinguisher 1299 3912 16 16
-rcBolt 3081 3914 16 16
-DuckGame.ChestPlate DuckGame16 16 3927 3280 16 16
-DuckGame.CloudTileset DuckGame16 16 184 3927 16 16
-DuckGame.ClippingSign DuckGame16 16 3927 3296 16 16
-DuckGame.CustomParallax DuckGame16 16 3927 3312 16 16
-DuckGame.CityWall DuckGame16 16 3927 3328 16 16
-DuckGame.CityTileset DuckGame16 16 3927 3344 16 16
-DuckGame.CityRamp DuckGame16 16 1299 3928 16 16
-DuckGame.DuctTape DuckGame16 16 3081 3930 16 16
-DuckGame.CityBackground DuckGame16 16 184 3943 16 16
-DuckGame.ChokeCollar DuckGame16 16 3081 3946 16 16
-DuckGame.ChallengeModeNew DuckGame16 16 184 3959 16 16
-DuckGame.BuildingFramework DuckGame16 16 3081 3962 16 16
-DuckGame.Chainsaw DuckGame16 16 3081 3978 16 16
-DuckGame.Chaingun DuckGame16 16 3081 3994 16 16
-DuckGame.CaveTileset DuckGame16 16 3998 904 16 16
-DuckGame.CityTreeTileset DuckGame16 16 3998 920 16 16
-eight_player 3998 936 16 16
-DuckGame.CustomBackground3 DuckGame16 16 3998 952 16 16
-DuckGame.CustomBackground DuckGame16 16 3998 968 16 16
-DuckGame.BlueprintTileset DuckGame16 16 3998 984 16 16
-DuckGame.BlueBarrel DuckGame16 16 3998 1000 16 16
-DuckGame.Altar DuckGame16 16 3081 4010 16 16
-DuckGame.Basketball DuckGame16 16 2489 4016 16 16
-DuckGame.BananaCluster DuckGame16 16 2489 4032 16 16
-DuckGame.BackgroundCity DuckGame16 16 3081 4026 16 16
-DuckGame.BackgroundConcrete DuckGame16 16 3081 4042 16 16
-DuckGame.BackgroundCastle DuckGame16 16 2489 4048 16 16
-selectButton 3081 4058 16 16
-DuckGame.BackgroundBar DuckGame16 16 2489 4064 16 16
-DuckGame.BackgroundArcade DuckGame16 16 2489 4080 16 16
-DuckGame.ArrowSign DuckGame16 16 3081 4074 16 16
-DuckGame.BackgroundIndustrial DuckGame16 16 3081 4090 16 16
-DuckGame.BackgroundBathroom DuckGame16 16 4093 1352 16 16
-DuckGame.BackgroundJets DuckGame16 16 4093 1368 16 16
-DuckGame.Bazooka DuckGame16 16 4093 1384 16 16
-DuckGame.BackgroundOffice DuckGame16 16 4093 1400 16 16
-DuckGame.BackgroundPyramid DuckGame16 16 2489 4096 16 16
-DuckGame.BackgroundSpace DuckGame16 16 2489 4112 16 16
-DuckGame.Banana DuckGame16 16 3081 4193 16 16
-DuckGame.SuicidePistol DuckGame16 16 4206 121 16 16
-DuckGame.BackgroundNature DuckGame16 16 3081 4209 16 16
-DuckGame.AK47 DuckGame16 16 4217 962 16 16
-Editor/canMirror 4217 978 16 16
-furni/momento/littlemanpic 4217 994 16 16
-DuckGame.Bulb DuckGame16 16 315 4219 16 16
-DuckGame.Chaindart DuckGame16 16 1974 4224 16 16
-DuckGame.Boots DuckGame16 16 3081 4225 16 16
-furni/fancy/moneybag 959 4226 16 16
-furni/cheap/tire 1635 4232 16 16
-Editor/singleplayerBlock 315 4235 16 16
-Editor/openAir 1974 4240 16 16
-Editor/multiplayerBlock 959 4242 16 16
-Editor/isMirrored 4182 4243 16 16
-drumset/bassDrum 1635 4248 16 16
-DuckGame.CustomBackground2 DuckGame16 16 3337 4251 16 16
-arcade/furnCursor 315 4251 16 16
-survival/cryoSocket 2489 4256 16 16
-warpLine 2137 4256 16 16
-vineEnd 4257 1968 16 16
-tv 4257 1984 16 16
-tinyBubbles 4257 2000 16 16
-tinyBlueBubbles 623 4258 16 16
-timeCubeFrame 4182 4259 16 16
-teevee 4265 3510 16 16
-tapePiece 3593 4266 16 16
-selectButtonAssembly 3337 4267 16 16
-weightBall 4267 3531 16 16
-equipper 2489 4272 16 16
-DuckGame.Blunderbuss DuckGame16 16 2137 4272 16 16
-flareGun 3081 4273 16 16
-standingFluidIcon 4182 4275 16 16
-snowGenerator 623 4274 16 16
-slag 3593 4282 16 16
-rock01 3337 4283 16 16
-quadLaser 4182 4291 16 16
-pyramidBrick 623 4290 16 16
-projectorGlitch 2137 4288 16 16
-none 2489 4288 16 16
-purpleProjector 3081 4289 16 16
-plasmaBlaster 4297 3934 16 16
-modloadError 4297 3950 16 16
-DuckGame.SpringUpRight DuckGame16 16 4297 4062 16 16
-aButton 4297 4078 16 16
-gradientLine 3337 4299 16 16
-oButton 3593 4298 16 16
-notes 4298 4171 16 16
-net 4298 4187 16 16
-mindBolt 4299 360 16 16
-levelUpArrow 4299 376 16 16
-lanIconSmall 4304 1472 16 16
-Image5 4304 1488 16 16
-teleporterIcon 2489 4304 16 16
-upArrow 2137 4304 16 16
-tvBroken 4305 1984 16 16
-wallLight 4305 2000 16 16
-DuckGame.EasySign DuckGame16 16 3081 4305 16 16
-DuckGame.FlimsyDoor DuckGame16 16 623 4306 16 16
-DuckGame.EightPlayer DuckGame16 16 4182 4307 16 16
-DuckGame.Spikes DuckGame16 16 4230 4307 16 16
-DuckGame.SpikesDown DuckGame16 16 3721 4314 16 16
-DuckGame.SpikesLeft DuckGame16 16 3337 4315 16 16
-DuckGame.SpikesRight DuckGame16 16 1008 4315 16 16
-walljumpBootsPickup 2137 4320 16 16
-DuckGame.SpookyTileset DuckGame16 16 2489 4320 16 16
-steamIconSmall 3081 4321 16 16
-harpoon 2777 4321 16 16
-DuckGame.Spring DuckGame16 16 4230 4323 16 16
-DuckGame.SpringDownLeft DuckGame16 16 4323 96 16 16
-DuckGame.SpringDownRight DuckGame16 16 4323 112 16 16
-DuckGame.SpikeHelm DuckGame16 16 623 4322 16 16
-DuckGame.SpringLeft DuckGame16 16 4182 4323 16 16
-DuckGame.SpringUpLeft DuckGame16 16 3337 4331 16 16
-letterSign 1008 4331 16 16
-arcadeIcon 1562 4333 16 16
-dirty 4335 3792 16 16
-furni/momento/plate 4335 3808 16 16
-waterCoolerBottom 4337 2407 16 16
-DuckGame.SpringDown DuckGame16 16 4337 2423 16 16
-grappleWire 2489 4336 16 16
-settingsWrench 2137 4336 16 16
-ball 3081 4337 16 16
-windowIconVertical 2777 4337 16 16
-cookedDuck 2729 4337 16 16
-flower 623 4338 16 16
-vanillaIcon 4230 4339 16 16
-flower_burned 4345 4014 16 16
-funBeamer 4345 4030 16 16
-grappleArm 4345 504 16 16
-launcherGrenade 4345 520 16 16
-greyBlock 4345 472 16 16
-gameServerWireless 4345 488 16 16
-helmetPickup 4345 3918 16 16
-key 4345 3934 16 16
-knightHelmetPickup 4345 4046 16 16
-windowIconHorizontal 4345 4062 16 16
-magnet 4345 440 16 16
-laserSpawner 4345 456 16 16
-arcade/ticket 4345 3886 16 16
-challenge/reticule 4345 3902 16 16
-dropShadow 1008 4347 16 16
-tounge 1734 4352 16 16
-challengeIcon 1974 4352 16 16
-combatShotgunLoader 2185 4352 16 16
-DuckGame.DuelingPistol DuckGame16 16 1686 4352 16 16
-chestPlatePickup 2233 4352 16 16
-filterOff 2729 4353 16 16
-gameServerOnline 2777 4353 16 16
-die 3081 4353 16 16
-corpseRight 719 4354 16 16
-corpseLeft 959 4354 16 16
-controlWave 671 4354 16 16
-chestPlate 4278 4355 16 16
-cantPlace 4326 4355 16 16
-brokeEdge 4230 4355 16 16
-boxingGlove 1395 4360 16 16
-chain 1635 4360 16 16
-searchicon 1347 4360 16 16
-notexture 1008 4363 16 16
-matchbox 2233 4368 16 16
-filterOn 1734 4368 16 16
-cameraMover 2185 4368 16 16
-cameraIcon 1686 4368 16 16
-swirl 1974 4368 16 16
-bulb 3081 4369 16 16
-bootsPickup 2777 4369 16 16
-basketBall 2729 4369 16 16
-cloudIcon 671 4370 16 16
-searchiconwhite 719 4370 16 16
-vine 959 4370 16 16
-furni/momento/giftwine 1304 2798 20 11
-sword 1644 2307 23 8
-furni/cheap/lampNoShade 1644 2330 22 9
-blueBarrel 2809 1917 17 14
-rockThrow/keg 1640 3009 19 12
-bigLaserCone 1644 2352 21 10
-arcade/celebrateStar 1637 2994 15 16
-prettyStar 3081 3465 15 16
-grave 3594 4064 16 15
-challenge/goal 1975 3559 15 16
-challenge/suitcase 3717 3105 15 16
-challenge/star 3334 4136 15 16
-online/easelWhite 1974 3306 12 19
-furni/cheap/barrel_old 3594 4080 16 15
-blueBarrelMelting 1640 3028 17 14
-explosiveBarrel 1640 3045 17 14
-yellowBarrelMelting 1640 3062 17 14
-buttons/keyboard/home 4217 1010 14 17
-buttons/keyboard/control 4374 1922 14 17
-redBarrel 1640 3079 17 14
-furni/fancy/sink 4377 536 14 17
-lavaBarrel 1640 3096 17 14
-yellowBarrel 1640 3113 17 14
-background/cloud2 3665 3348 10 21
-tvnoise 2686 1929 6 24
-channels 2710 1929 6 24
-buttons/mousewheel 1640 3130 18 12
-buttons/keyboard/pgdown 4335 3824 14 16
-popEffect 1300 2591 15 15
-speedrunClock 472 4095 15 15
-arcade/bubbleTail 3594 4096 15 15
-buttons/keyboard/pgup 4278 4371 14 16
-buttons/keyboard/back 4326 4371 14 16
-hostChair 4230 4371 14 16
-furni/everyday/clockradio 1297 3553 12 18
-buttons/keyboard/f4 472 4110 14 15
-buttons/keyboard/f2 3594 4111 14 15
-buttons/keyboard/f1 3594 4125 14 15
-buttons/keyboard/insert 472 4124 14 15
-buttons/keyboard/end 472 4138 14 15
-buttons/keyboard/space 472 4152 14 15
-buttons/keyboard/enter 472 4166 14 15
-buttons/keyboard/delete 1395 4376 14 15
-buttons/keyboard/tilde 1347 4376 14 15
-buttons/keyboard/f5 1635 4376 14 15
-buttons/keyboard/arrows 4378 4123 14 15
-buttons/keyboard/wasd 4378 4137 14 15
-buttons/keyboard/f12 4378 4151 14 15
-buttons/keyboard/alt 4378 4165 14 15
-buttons/keyboard/f10 4378 4179 14 15
-buttons/keyboard/f9 4378 4193 14 15
-buttons/keyboard/f8 4379 734 14 15
-buttons/keyboard/f6 976 4379 14 15
-buttons/keyboard/f11 4379 814 14 15
-buttons/keyboard/f7 3129 4379 14 15
-buttons/keyboard/f3 3097 4379 14 15
-buttons/keyboard/tab 3112 4379 14 15
-buttons/keyboard/escape 4379 748 14 15
-buttons/switch/left/leftBumper 1640 3148 14 14
-buttons/switch/pro/leftTrigger 1640 3162 14 14
-buttons/switch/right/startButton 962 3478 14 14
-buttons/switch/dual/yButton 3926 2270 14 14
-buttons/oButton 3926 2284 14 14
-buttons/switch/joyconButtonLeft 3926 2298 14 14
-buttons/startButton 3926 2312 14 14
-buttons/switch/genericStick 3926 2326 14 14
-buttons/uButton 3926 2340 14 14
-buttons/yButton 3926 2354 14 14
-buttons/switch/joyconButtonDown 3926 2368 14 14
-buttons/switch/left/leftStick 3926 2382 14 14
-buttons/SNES/blankSNESPink 3969 3707 14 14
-buttons/rb 3969 3721 14 14
-buttons/switch/pro/rightStick 189 4091 14 14
-buttons/switch/right/leftBumper 4099 1152 14 14
-buttons/switch/pro/selectButton 4099 1166 14 14
-buttons/switch/pro/oButton 4099 1180 14 14
-buttons/switch/pro/rightBumper 4099 1194 14 14
-buttons/switch/right/yButton 4099 1208 14 14
-buttons/switch/right/uButton 189 4105 14 14
-buttons/switch/right/rightTrigger 189 4119 14 14
-buttons/switch/right/rightBumper 3339 4151 14 14
-buttons/switch/pro/rightTrigger 317 4151 14 14
-buttons/switch/right/oButton 3083 4161 14 14
-buttons/lb 317 4165 14 14
-buttons/switch/right/leftStick 3083 4175 14 14
-buttons/switch/right/aButton 4327 250 14 14
-buttons/switch/pro/yButton 4355 367 14 14
-buttons/switch/pro/uButton 4379 762 14 14
-buttons/switch/pro/startButton 3144 4379 14 14
-buttons/switch/right/leftTrigger 3158 4379 14 14
-buttons/dPadUp 3172 4379 14 14
-buttons/switch/dual/oButton 3186 4379 14 14
-buttons/dPadLeft 3200 4379 14 14
-online/matchmakingStar 2734 1929 7 21
-drumset/crashStand 1304 2818 21 7
-title/editorBenchPaint 2736 1017 7 21
-onlineStatusIcons 2755 1929 7 21
-icicleBig 1304 2839 18 10
-respawner 1297 3270 10 18
-background/officeBuilding01Porch 3665 3108 12 16
-cape 1303 4037 16 12
-littleTrophy 1980 4043 15 13
-furni/office/coffeemaker 1980 4058 15 13
-buttons/switch/dual/leftTrigger 3214 4379 14 14
-buttons/switch/dual/aButton 3228 4379 14 14
-buttons/switch/dual/dPad 3242 4379 14 14
-buttons/switch/dual/dPadDown 3256 4379 14 14
-buttons/switch/dual/dPadLeft 3270 4379 14 14
-buttons/switch/dual/dPadRight 3284 4379 14 14
-buttons/switch/dual/dPadUp 3298 4379 14 14
-buttons/dPadDown 3312 4379 14 14
-buttons/switch/left/aButton 3326 4379 14 14
-buttons/switch/joyconButtonRight 4379 782 14 14
-buttons/switch/joyconButtonUp 4379 796 14 14
-buttons/aButton 991 4379 14 14
-buttons/switch/sr 1005 4379 14 14
-buttons/dPadRight 4379 828 14 14
-buttons/switch/dual/uButton 4379 842 14 14
-buttons/switch/dual/selectButton 4379 856 14 14
-buttons/switch/sl 4379 870 14 14
-buttons/switch/dual/rightStick 4379 884 14 14
-buttons/switch/dual/rightBumper 4379 898 14 14
-buttons/switch/dual/rightTrigger 4379 912 14 14
-buttons/switch/dual/leftStick 4379 926 14 14
-buttons/switch/dual/startButton 4379 940 14 14
-buttons/switch/left/yButton 4379 954 14 14
-unplugRect 4379 968 14 14
-buttons/switch/left/oButton 4379 982 14 14
-buttons/ps4/leftBumper 4379 996 14 14
-buttons/ps4/dPadDown 4379 1010 14 14
-buttons/ps4/dPadUp 4380 2512 14 14
-buttons/ps4/dPadRight 4380 2480 14 14
-buttons/ps4/dPadLeft 4380 2544 14 14
-buttons/ps4/startButton 4380 2526 14 14
-buttons/ps4/triangle 4380 2494 14 14
-buttons/ps4/circle 4380 2448 14 14
-buttons/ps4/rightBumper 4380 2462 14 14
-buttons/ps4/x 4380 2558 14 14
-buttons/keyboard/upKey 2505 4381 14 14
-buttons/SNES/x 2519 4381 14 14
-buttons/xbox/leftTrigger 2533 4381 14 14
-buttons/SNES/a 2547 4381 14 14
-buttons/xbox/leftStick 2561 4381 14 14
-buttons/xbox/rightTrigger 2575 4381 14 14
-buttons/xbox/rightBumper 2589 4381 14 14
-buttons/xbox/leftBumper 2603 4381 14 14
-buttons/keyboard/downKey 2617 4381 14 14
-buttons/xbox/dPadDown 2631 4381 14 14
-buttons/ps4/rightTrigger 2645 4381 14 14
-buttons/SNES/y 2659 4381 14 14
-buttons/playstation/blank 2673 4381 14 14
-buttons/ps4/rightStick 4381 4094 14 14
-buttons/genesis/start 4381 4108 14 14
-buttons/genesis/c 4382 3552 14 14
-buttons/genesis/b 4382 3566 14 14
-buttons/genesis/a 4382 3580 14 14
-buttons/SNES/xFami 4382 3594 14 14
-buttons/SNES/leftTrigger 4382 3608 14 14
-buttons/ps4/leftStick 4382 3622 14 14
-buttons/SNES/selectButton 4382 3636 14 14
-buttons/SNES/yFami 4382 3650 14 14
-buttons/genericButton 4382 3664 14 14
-buttons/SNES/bFami 4382 3678 14 14
-buttons/SNES/aFami 4382 3692 14 14
-buttons/SNES/rightTrigger 4382 3706 14 14
-buttons/keyboard/leftKey 4382 3720 14 14
-buttons/ps4/square 4383 1024 14 14
-buttons/keyboard/rightKey 4383 3744 14 14
-buttons/SNES/startButton 3993 4383 14 14
-buttons/xbox/dPadUp 4383 1038 14 14
-buttons/ps4/leftTrigger 4383 3758 14 14
-buttons/xbox/dPadRight 4383 3772 14 14
-skipIcon 4383 3786 14 14
-clipcopy 4383 3800 14 14
-buttons/SNES/b 4383 3814 14 14
-buttons/ps4/dPad 4007 4383 14 14
-buttons/switch/dual/leftBumper 4021 4383 14 14
-buttons/dPad 4035 4383 14 14
-buttons/switch/pro/leftBumper 4049 4383 14 14
-buttons/switch/pro/dPadUp 4063 4383 14 14
-buttons/switch/pro/dPadRight 4077 4383 14 14
-buttons/xbox/rightStick 4091 4383 14 14
-buttons/switch/pro/dPadLeft 4105 4383 14 14
-buttons/switch/pro/dPadDown 4119 4383 14 14
-buttons/switch/pro/dPad 4383 1224 14 14
-buttons/switch/pro/leftStick 4383 1052 14 14
-buttons/switch/pro/aButton 4383 1066 14 14
-buttons/switch/left/uButton 4383 1080 14 14
-buttons/switch/left/startButton 4383 1094 14 14
-buttons/switch/left/rightTrigger 4383 1108 14 14
-buttons/switch/left/rightBumper 4383 1122 14 14
-wrenchRect 4383 1136 14 14
-accessIcon 4383 1150 14 14
-buttons/switch/left/leftTrigger 4383 1164 14 14
-buttons/playstation/rightTrigger 4383 1178 14 14
-buttons/xbox/dPadLeft 4383 1192 14 14
-buttons/xbox/oButton 4383 1206 14 14
-buttons/xbox/startButton 4383 1238 14 14
-buttons/xbox/aButton 4383 1252 14 14
-buttons/keyboard/key 4383 1266 14 14
-buttons/xbox/uButton 4383 1280 14 14
-buttons/xbox/yButton 4383 1294 14 14
-buttons/xbox/selectButton 4383 1308 14 14
-plugRect 4383 1322 14 14
-buttons/playstation/leftTrigger 4383 1336 14 14
-buttons/xbox/dPad 4383 1350 14 14
-buttons/playstation/leftBumper 4383 1364 14 14
-buttons/playstation/selectButton 4383 1378 14 14
-buttons/playstation/startButton 4383 1392 14 14
-buttons/playstation/x 4383 1406 14 14
-buttons/playstation/triangle 2153 4384 14 14
-buttons/playstation/square 2167 4384 14 14
-buttons/playstation/o 2181 4384 14 14
-buttons/playstation/rightBumper 2201 4384 14 14
-buttons/wheelUp 1304 2857 17 10
-furni/everyday/kettle 4254 1501 13 14
-tinfoilHatPickup 3681 3108 10 17
-rockThrow/rockSmearSnow 2757 1017 7 20
-rockThrow/rockSmear 2776 1929 7 20
-rockThrow/chairBottom 2215 4384 13 14
-rockThrow/rockSmearMud 2777 1017 7 20
-buttons/wheelDown 1304 2874 17 10
-pyramidRoofLight 3686 3348 12 14
-hangingCityLight 960 3287 10 16
-arcade/wagnusOverlay 3698 3108 10 16
-itemBoxRandom 1303 4053 14 12
-troubleLight 3700 3348 12 14
-pyramidRoofLightShade 3717 3348 12 14
-connectionX 1980 4073 13 13
-connectionWall 963 4182 13 13
-smg 3525 2415 9 17
-drumset/hatStand 1304 2906 18 7
-waterLighting 1763 862 24 1
-hatConsoleBase 3737 1733 11 14
-online/signalCross 1846 2792 5 20
-furni/everyday/wastebasket 1168 3746 11 14
-background/cloud3 1615 2187 3 22
-littleTeleBottom 2476 3432 8 16
-littleTeleTop 3473 1416 8 16
-teleporterBottom 3489 1416 8 16
-furni/flowers/wateringcan 3505 1416 8 16
-arcade/confetti 1304 2924 16 8
-fileBrowserScrollArrow 3521 1416 8 16
-talkBubble 1182 3746 12 12
-teleporterTop 3525 1928 8 16
-shotgunLoader 3537 1416 8 16
-pyramidDoorTop 3553 1416 8 16
-pyramidDoorBottom 3569 1416 8 16
-verticalDoorTop 3585 1416 8 16
-verticalDoorBottom 3601 1416 8 16
-phaserCharge 3617 1416 8 16
-tampingHand 1304 2940 16 8
-deleteFlag 3633 1416 8 16
-phaser 1571 3669 9 15
-holster 1194 3746 12 12
-virtualShotgunLoader 3656 888 8 16
-furni/outdoor/condiment 1304 2891 15 8
-furni/outdoor/redcondiment 1304 2956 15 8
-furni/outdoor/yellowcondiment 1304 2971 15 8
-turretBase 1586 3669 9 14
-crownIcon 1206 3746 10 13
-holsterChain 1866 2792 5 17
-hugeBeam 1763 886 21 1
-drumset/snareDrum 1304 2986 11 11
-drumset/mediumTom 1304 2997 11 11
-drumset/hat 1304 3014 11 11
-missile 3649 1416 8 14
-drumset/largeTom 1304 3025 11 11
-arcade/titleWing 2797 1017 7 14
-online/matchmakingSignal 1600 3669 9 12
-muteIcon 1304 3036 10 11
-smallFlare 1304 3046 10 11
-cannonMount 1304 3056 10 10
-redEight 1304 3066 10 10
-rockThrow/chairFront 1671 1020 4 16
-drumset/smallTom 1304 3076 10 10
-blockIcon 1304 3086 10 10
-laserSightHit 1304 3096 10 10
-drumset/crashCymbal 1304 3106 10 10
-popupPad 1637 2187 3 16
-tinyTrophy 3745 288 10 9
-chanceIcon 1644 2373 9 10
-roomSwitchRight 1883 2792 5 14
-roomSwitch 1897 2792 5 14
-iconGradient 2214 942 8 10
-bouble 1644 3501 9 9
-drumset/snareStand 1647 2222 11 7
-online/barFront 1752 1018 6 11
-networkReceived 2215 874 8 9
-holster_under 968 2517 9 8
-networkDrop 2492 3432 8 9
-camping_ball 1612 3669 9 8
-networkDisconnect 3665 1216 8 9
-exclamationMoji 3665 1416 8 9
-networkSent 1620 3669 8 9
-logEvent 1629 3669 8 9
-tinyUpArrow 1638 3669 8 8
-tagPlus 1646 3669 8 8
-spinnerArrows 3672 888 8 8
-spectatorCrown 3674 1416 8 8
-scratch 3674 1216 8 8
-rcWheel 3682 1216 8 8
-pyWallCorner2 3682 1416 8 8
-pinIcon 3680 888 8 8
-workshopTag 3688 888 8 8
-namedServer 3690 1416 8 8
-moveArrow 3690 1216 8 8
-lockedServer 3696 888 8 8
-hook 3698 1216 8 8
-dandiSpring 3129 800 9 7
-dizzyStar 2796 1929 7 9
-colorStar 2811 1017 7 9
-pinIconPinned 3698 1416 8 8
-hats/master_glow 3706 1416 8 8
-pyWallCorner 3706 1216 8 8
-online/xpPlusOutline 3704 888 8 8
-purpleScanner 3712 888 8 8
-arrowHead 3714 1416 8 8
-online/xpPlus 3714 1216 8 8
-chainBullet 3720 888 8 8
-blackSquare 3722 1216 8 8
-chainStretch 3722 1416 8 8
-default_mappack_icon 3730 1416 8 8
-moreArrow 3730 1216 8 8
-fireCracker 3728 888 8 8
-iconEight 3736 888 8 8
-cloudDown 3738 1216 8 8
-blacklistX 3738 1416 8 8
-skipSpin 3744 888 8 8
-spectatorIcon 3601 3744 8 8
-subPlus 3745 298 8 8
-checkIcon 3745 306 8 8
-tinyLock 3745 314 8 8
-eCrateLight 3745 322 8 8
-laserRebound 3745 330 8 8
-chainStretchEnd 3745 338 8 8
-chokeCollar 3745 346 8 8
-heart 3745 354 8 8
-drumset/highTomStand 963 2423 6 9
-titleWrench 2820 1017 7 8
-contextArrowRight 2828 1017 7 8
-wireBulge 3129 809 8 7
-drumset/drumStick 973 1794 12 3
-titleScrewdriver 2836 1017 7 8
-normalIcon 3129 817 8 7
-rainbowIcon 3129 825 8 7
-holsterLock 3129 833 8 7
-randomIcons 3129 841 8 7
-rockThrow/cup 2844 1017 7 8
-editorCurrency 3129 849 8 7
-customIcon 3129 857 8 7
-smallArena 2852 1017 7 7
-rhythmBall 2859 1017 7 7
-keytarSettingStrip 1911 2792 5 9
-smallEarth 2866 1017 7 7
-smallMoon 2873 1017 7 7
-woodWing 1920 2792 6 8
-vineStretchEnd 1928 2792 6 8
-vineStretch 1936 2792 6 8
-drumset/lowTomStand 1944 2792 5 9
-online/xpBar 1953 2792 6 7
-littleContextArrowRight 1960 2792 5 8
-rainbowCape 1024 1023 1 12
-holster_over 2552 1933 3 10
-powerHolsterOver 2562 1933 3 10
-chainLink 1647 2233 5 7
-cork 1987 2406 5 6
-positronWinder 972 1826 8 3
-camping_loader 1987 2411 4 6
-online/sandwichBar 968 2526 3 7
-online/gachaBar 2572 1933 3 7
-magBeam 1763 907 8 1
-lightBar 1108 1023 1 8
-laserBeemOrange 1763 915 8 1
-laserBeamPurple 1763 923 8 1
-laserBeam 1763 931 8 1
-windowBars 1036 1023 1 8
-workshopTagMiddle 1763 939 8 1
-rainbowGradient 1763 947 7 1
-lightningBeem 1763 954 7 1
-spawnerBall 972 1834 4 4
-window32border 1238 1023 1 6
-window32 1044 1023 1 6
-bulletGlow 1763 961 5 1
-pointerLaser 1763 966 5 1
-pellet 973 1806 2 2
-bigLaserTip 973 1808 2 2
-sparkLine 1763 971 3 1
-_blank2tex2d 1116 1023 1 1
-_blanktex2d 1050 1023 1 1
+rockThrow/lightRays 0 0 450 1200
+kanji_font 0 450 1024 1024
+flags/flags 1024 450 738 976
+vincentwip 1024 1188 1006 339
+vincentNoYo 1363 1188 1006 339
+vincent 0 1474 1006 339
+newsDuck 1200 0 200 840
+newsDuckBeak 1200 200 200 840
+_quackSprite1 339 1474 768 192
+quackduck 531 1474 768 192
+_quackSprite0 723 1474 768 192
+_quackSprite6 1702 1188 768 192
+quackduck_m 1894 1188 768 192
+_quackSprite2 1702 1956 768 192
+_quackSprite5 1894 1956 768 192
+_quackSprite4 2086 1188 768 192
+_quackSprite3 2086 1956 768 192
+_quackSprite7 1024 2194 768 192
+citywall 2278 1956 768 350
+rockWall 0 2480 768 350
+arcade/topFloor 2000 450 240 720
+arcade/bottomFloor 2000 690 240 720
+devScan 2000 930 158 664
+sprite0_strip36 1200 400 16 576
+rockThrow/boardOverlayLarge 2040 0 412 740
+gachaEgg 1363 2194 576 132
+rockThrow/moonShine 2278 1188 512 512
+dc5 350 2480 512 512
+hatCollection 2628 1956 512 256
+online/eggSymbols 1200 416 16 512
+sun 2628 2468 512 512
+arcade/schooly_sibling 2720 450 500 400
+aslogo 2780 0 432 432
+furni/characters/letters_purp 915 1474 416 21
+furni/characters/letters_red 936 1474 416 21
+furni/characters/letters_blue 957 1474 416 21
+furni/characters/letters_white 978 1474 416 21
+arcade/schooly_progress 2790 1188 400 400
+arcade/schooly 2884 1956 400 400
+schoolySports 2628 2980 400 400
+bionicArm 1495 2194 384 192
+explode 2000 1088 64 384
+arcade/arcadeOuya 3028 2980 280 487
+littleMan 1216 2194 392 80
+challengeTrophy 2278 1700 58 360
+devTray 2278 1758 80 332
+tutorialScreens 2000 1152 30 318
+tutorialScreensPC 2040 412 30 318
+title/wideScreen 2278 1838 58 320
+online/easelPic 1200 432 12 304
+duckChannelBackground 723 2242 150 300
+background/virtual 2278 2724 280 320
+title/controlsPC 2278 1896 11 300
+title/controls 2278 1907 11 300
+playBookPageOffset 2720 950 138 320
+newsTable 2384 1088 42 300
+fieldWall 2384 1130 48 300
+fieldNoiseSnow 723 2392 48 300
+fieldNoiseRain 2720 1088 48 300
+fieldNoise 2720 1136 48 300
+intermissionFont 2790 1588 223 384
+background/rocksUnderground 1363 2770 256 320
+rockThrow/intermission 2278 1918 23 288
+bleacherSeats 2358 412 25 288
+background/forest5 1024 2962 240 320
+background/industrial 350 2992 240 320
+background/kingdomSky 670 2992 240 320
+background/office 2278 3004 240 320
+background/spaceTransparent 1363 3026 240 320
+background/forest4 3120 450 240 320
+background/forest 3120 690 240 320
+background/forest3 3120 930 240 320
+background/forest2 3140 2468 240 320
+background/city 3140 2708 240 320
+background/space 3190 1188 240 320
+background/forestNight 3190 1428 240 320
+background/snowSky 3190 1668 240 320
+rockThrow/boardOverlay 3212 0 206 370
+pressStart 1776 400 13 262
+background/underground 1024 3202 212 320
+statusBar 1776 413 13 260
+glitchMap2 2278 3244 256 256
+glitchMap 0 3248 256 256
+plasma2 256 3248 256 256
+thickBiosNum 512 3248 256 256
+background/donuroids 768 3248 256 256
+biosFont 862 2480 256 128
+castleBackground 2790 1811 128 256
+spaceBackground 3212 206 128 256
+background/starfield 3028 3260 200 320
+background/starfield 1363 3266 200 320
+survival/crryyyyoooo 3284 1956 200 320
+background/pyramid 3284 2156 200 320
+sumsnow 3348 3260 200 320
+bigTV 2628 3380 200 320
+gettingXP 1024 3414 120 252
+weekDays 915 1890 248 81
+shittyCorptron 723 2440 38 256
+corptron 2884 2356 38 256
+playBook 3440 450 180 320
+arcade/rainbow 3440 630 180 320
+shiny 3440 810 180 320
+arcade/gotcha 3440 990 180 320
+album 3460 2468 180 320
+defaultMod 3028 3460 180 320
+mainBackground 3460 2648 180 320
+rainbow 3348 3460 180 320
+title/background 1363 3466 168 320
+sandwichCard 2278 3500 216 230
+explosion 0 3504 192 256
+Image13 256 3504 192 256
+beverages 1776 426 18 224
+duckGameTitleOutlineBlack 3212 334 109 218
+duckGameTitleOutline 3284 2356 109 218
+interviewBox 3460 2828 94 252
+bottomWedge 2780 432 16 212
+furni/everyday/heightchart 2884 2394 34 216
+rockThrow/boardTopSnow 1495 2578 22 203
+rockThrow/boardTop 1495 2600 22 203
+arcade/unlockIcons 3510 1188 200 200
+ready 2884 2428 24 208
+woodDuck 339 2242 64 192
+_controlledSprite2 531 2242 192 192
+_sprite5 1702 2724 192 192
+_controlledSprite4 2086 2724 192 192
+_controlledSprite6 1894 2724 192 192
+chestPlateAnim 1894 2916 192 192
+duck_m 2086 2916 192 192
+_controlledSprite0 1702 2916 192 192
+_sprite2 2086 3108 192 192
+_controlledSprite1 1702 3108 192 192
+boots 1894 3108 192 192
+quackduckOverlay 1894 3300 192 192
+_sprite0 1702 3300 192 192
+controlledDuck 2086 3300 192 192
+duck 2086 3492 192 192
+_controlledSprite5 1702 3492 192 192
+_sprite3 1894 3492 192 192
+_sprite7 512 3504 192 192
+_sprite1 704 3504 192 192
+controlledDuck_m 3510 1388 192 192
+jimduck 3510 1580 192 192
+bionicArmHook 3515 2980 192 192
+_sprite6 1024 3534 192 192
+chestPlateAnimOver 2628 3580 192 192
+_sprite4 2820 3580 192 192
+_controlledSprite3 3582 0 192 192
+_controlledSprite7 3582 192 192 192
+walljumpBoots 3604 1956 192 192
+online/chalkFont 1363 3634 80 220
+rockThrow/lighting 339 2306 46 191
+rockThrow/showdown 339 2352 23 191
+seatDuck 339 2375 23 190
+_crowdSprite0 339 2398 23 190
+_crowdSprite7 339 2421 23 190
+_crowdSprite1 531 2434 23 190
+seatDuck_m 339 2444 23 190
+_crowdSprite6 531 2457 23 190
+_crowdSprite2 1495 2622 23 190
+_crowdSprite4 1495 2645 23 190
+_crowdSprite5 1495 2668 23 190
+_crowdSprite3 1495 2691 23 190
+rockThrow/boardBottom 1495 2714 42 203
+rockThrow/boardBottomSnow 3190 1908 42 203
+wumphugelasercharge 2610 1758 192 175
+pyramidEdge 3668 3260 160 208
+duckGameTitle - Copy 3510 1772 91 182
+duckGameTitle2 3510 1863 91 182
+duckGameTitle 3604 2148 91 182
+levWindow_lev2 3460 2922 58 189
+online/levelWindow 3515 3172 84 189
+rockThrow/scoreBoard 3028 3640 154 203
+rockThrow/winnerBanner 3140 2948 28 184
+interviewDuck 3348 3640 128 240
+furni/outdoor/poptent 3582 384 28 176
+wireTrapDoorArmBig 1216 2586 208 71
+arcade/gotcha/glass 862 2736 200 146
+unlitDoor 3604 2239 180 161
+litDoor 3588 3640 180 161
+background/bigBerg1 3668 3460 75 190
+chaingun 3668 3535 56 168
+chaingunTip2 0 3696 56 168
+chaingunTip 1702 3684 56 168
+smallFont 1894 3684 211 130
+smallFontChat 2086 3684 211 130
+smallFontGacha 256 3696 211 130
+billboard 386 3696 126 217
+levWindow_lev1 3604 2419 48 189
+levWindow_lev0 3668 3591 48 189
+calanderDays 1216 2794 163 81
+arcade/gotcha/door 1216 3534 180 146
+arcade/gotcha/machine 3707 2980 180 146
+connectionArrow 3582 412 26 168
+levWindow_lev3 603 3696 68 189
+wumppistol 862 2936 32 160
+furni/characters/numbers 999 1474 160 16
+levWindow_lev6 3710 1188 131 189
+arcadeBackground 896 3504 192 128
+Rebuilttitle 3710 1319 134 182
+background/bigBerg1_reflection 792 3696 64 189
+arcade/challengePaperTall 3710 1453 138 174
+furni/freezer/IceCreamPail 3668 3420 30 160
+arcade/challengeThumbnails 3710 1591 156 152
+payScreen 1363 3714 64 180
+barback 2278 3716 128 176
+laserCharge 3710 1747 176 128
+duckGameTitleOutline - Copy 1024 3726 107 210
+arcade/plug_machine 2638 1700 36 152
+online/xpAddBar 2638 1736 21 148
+rockThrow/boardMiddle 3749 3640 105 203
+arcade/plug 1702 3740 160 133
+arcade/stickers 3430 334 29 145
+spawnSheet 1504 432 16 144
+scoreRock 2790 1939 16 144
+buttons/styleTray 1296 2194 161 64
+levWindow_lev5 3749 3745 109 189
+levWindow_lev4 0 3752 109 189
+levWindow 3760 450 109 189
+rockThrow/placePedastals 3430 363 45 152
+verticalDoor 3760 559 160 128
+verticalDoorNoSensor 3760 719 160 128
+pyramidDoor 3760 879 160 128
+background/bigBerg2 3046 1811 68 143
+arcade/lights2 2454 3716 57 168
+arcade/lights 792 3760 57 168
+blank_door 3348 3768 134 141
+rightRoomBackground 3046 1879 68 137
+leftRoomBackground 3140 2356 68 137
+background/bigBerg2_reflection 3707 3160 65 142
+newscast/redBar 2278 1941 13 138
+biosFontUIArrows 3760 1039 140 128
+biosFontUI 2628 3772 140 128
+title/upperMonitor 3140 2424 44 135
+arcade/challengePaper 2756 3772 102 174
+rockThrow/moon 3774 0 129 131
+arcade/arcadeMachines 2508 3500 144 116
+arcade/arcadeMachines2 3231 3640 144 116
+sniperShell 2646 412 16 128
+grenadePin 2646 428 16 128
+online/eggShine 2884 2452 16 128
+magnumShell 862 2968 16 128
+shotgunShell 2992 432 16 128
+pistolShell 3120 1170 16 128
+online/eggWhite 350 3232 16 128
+editorButtons 1296 2355 128 64
+duckFont 1543 3714 64 128
+sledgeSwing 1234 3726 64 128
+duckSpawn 3324 2948 32 128
+slip 3430 408 32 128
+online/eggBorder 478 3232 16 128
+online/eggOuter 670 3232 16 128
+cityTileset 3774 129 128 128
+castle 3774 257 128 128
+furni/ornateFont 1363 3778 128 128
+door 1491 3778 128 128
+treeTileset 3780 2468 128 128
+energyTex 3780 2596 128 128
+foregroundNature 3780 2724 128 128
+industrialTileset 3780 2852 128 128
+natureTileset 3028 3794 128 128
+nublessIceTileset 3156 3794 128 128
+snowIceTileset 3796 1956 128 128
+cloudTileset 3796 2084 128 128
+pyramidBackground 3796 2212 128 128
+biosFontCaseSensitive 3796 2340 128 128
+snowTileset 3588 3820 128 128
+nublessSnow 386 3822 128 128
+officeTileset2 514 3822 128 128
+pineTreeTileset 642 3822 128 128
+pyramidTileset 770 3822 128 128
+spaceTileset 1024 3833 128 128
+mallards 1152 3833 128 128
+scaffolding 2278 3844 128 128
+spookyTileset 2406 3844 128 128
+blueprintTileset 3853 2980 128 128
+caveTileset 3853 3108 128 128
+donutTileset 3749 3854 128 128
+bathroom 3858 3460 128 128
+cityBackground 0 3861 128 128
+concrete 128 3861 128 128
+furni/widefont 3876 3260 128 128
+biosFontSidewaysCrossout 3877 3854 128 128
+lampLight 3884 1453 128 128
+flimsyDoorDamaged 3884 1581 128 128
+flimsyDoor 3884 1709 128 128
+duckGame_japanese 3888 559 128 128
+drumz 3888 719 128 128
+doorFucked 3888 847 128 128
+biosFontSideways 3888 975 128 128
+backgroundTiles01 3892 1319 128 128
+biosFontDegree 1894 3895 128 128
+bigGold 2086 3895 128 128
+badTileset 3899 1188 128 128
+badParallax 1702 3900 128 128
+badArcade 3348 3902 128 128
+japaneseFont 3905 0 128 128
+wireTileset 3905 128 128 128
+lampLight2 3905 256 128 128
+biosFontDescriptions 1363 3906 128 128
+lockDoor 1491 3906 128 128
+buildingFrame 256 3907 128 128
+survival/robot 3908 2468 128 128
+moneyFont 3908 2596 128 128
+officeSubBackground 3908 2724 128 128
+ornateFont 3908 2852 128 128
+industrialBackground 2628 3912 128 128
+furni/tinyFont 2756 3912 128 128
+redHot 2884 3912 128 128
+undergroundTileset 3028 3922 128 128
+furni/quietFont 3156 3922 128 128
+woodScaffolding 3924 1956 128 128
+officeBackground 3924 2084 128 128
+furni/italFont 3924 2212 128 128
+cityTree 3924 2340 128 128
+priceFontRightways 3588 3948 128 128
+furni/biosFont 386 3950 128 128
+natureBackground 514 3950 128 128
+furni/handstandFont 642 3950 128 128
+arcade/pencil 2358 437 9 128
+online/matchmaking_mk2 770 3950 113 142
+quackLoader 2454 3773 62 124
+newscast/blueBar 3707 3225 24 128
+background/donut 3938 3745 109 139
+dome 1024 3961 146 103
+rockThrow/winnerPost 999 1634 121 11
+trafficLight 3710 1923 23 126
+furni/everyday/vacuum 999 1755 120 24
+furni/music/organ 603 3764 36 132
+furni/outdoor/bike 1287 2586 125 37
+_armSprite2 1127 3961 144 96
+_armSprite4 1223 3961 144 96
+_armSprite5 2278 3972 144 96
+_armSprite1 2374 3972 144 96
+_armSprite3 2470 3972 144 96
+duckArms 3981 2980 144 96
+_armSprite6 3749 3982 144 96
+_armSprite7 3877 3982 144 96
+arcadeFrame01 3973 3982 144 96
+duckArms_m 3986 3460 144 96
+_armSprite0 0 3989 144 96
+background/planet 3949 450 88 156
+background/planet2 3952 3640 88 156
+background/planet3 96 3989 88 156
+background/planet4 4004 3260 88 156
+smallBiosFont_m 3468 206 120 112
+smallBiosFont 898 3822 120 112
+furni/bathroom/showercombo 1324 2586 120 36
+selectBorder 4004 3348 90 142
+selectBorder2 4005 3854 90 142
+arcade/tape 2384 1178 10 115
+rhythmBar 2416 1941 9 114
+dartchain_tip 3393 1908 36 114
+dartchain 1583 3634 36 114
+sledgeHammer 3884 1837 96 128
+ghost 4012 1453 96 128
+coilGun 4012 1581 96 128
+furni/cheap/leftRoomFG_oldwood 4012 1677 87 141
+furni/default/biosBG 4012 1764 87 141
+furni/default/biosFG 4012 1851 87 141
+furni/everyday/leftRoomBG_basic 4016 559 87 141
+furni/flowers/leftRoomFG_greenhouse 4016 847 87 141
+rightRoomForeground 4016 719 87 141
+leftRoomForeground 4016 934 87 141
+furni/freezer/leftRoomFG_freezer 4016 1021 87 141
+furni/music/leftRoomFG_music 4020 1319 87 141
+furni/ship/leftRoomFG_ship 1894 4023 87 141
+furni/office/leftRoomFG_office 2086 4023 87 141
+furni/outdoor/leftRoomBG_tree 4027 1188 87 141
+furni/outdoor/leftRoomFG_tree 1702 4028 87 141
+furni/ship/leftRoomBG_ship 3348 4030 87 141
+furni/stone/leftRoomBG_oldstone 4033 0 87 141
+furni/stone/leftRoomFG_oldstone 4033 128 87 141
+furni/music/leftRoomBG_music 4033 215 87 141
+furni/cheap/leftRoomBG_oldwood 4033 302 87 141
+furni/flowers/leftRoomBG_greenhouse 1363 4034 87 141
+furni/bathroom/leftRoomBG_tiled 1504 4034 87 141
+furni/fancy/leftRoomFG_opulent 4036 2468 87 141
+furni/office/leftRoomBG_office 4036 2596 87 141
+furni/fancy/leftRoomBG_opulent 4036 2683 87 141
+furni/bathroom/leftRoomFG_tiles 4036 2770 87 141
+furni/leftRoomBG_oldstone 4036 2857 87 141
+furni/leftRoomFG_oldstone 2628 4040 87 141
+furni/bar/leftRoomBG_bar 2769 4040 87 141
+furni/bar/leftRoomFG_bar 3028 4050 87 141
+furni/freezer/leftRoomBG_freezer 3169 4050 87 141
+furni/everyday/leftRoomFG_basic 4052 1956 87 141
+hostTable 339 2467 10 110
+furni/fancy/portrait 996 1890 112 27
+chainsaw 2508 3644 52 116
+turbochainsaw 3774 385 52 116
+arcade/medalRibbon 915 2138 27 108
+unlockFrameWrapped 256 4035 92 125
+online/matchmaking 4052 2084 92 125
+online/matchmakingBeta 4052 2176 92 125
+unlockFrame 4052 2268 92 125
+smallBiosFontUI 3476 3902 100 112
+smallBiosFontUI_m 912 3950 100 112
+arcade/egg 3858 3588 46 120
+arcade/completeStamp 1583 3670 20 110
+arcade/tapePaper 915 2165 13 105
+online/xpToilet 3876 3388 49 111
+arcade/gotcha/balls 1234 3790 42 120
+doorSpinner 3020 1088 100 100
+rockThrow/edgeOverlay 915 2178 24 104
+rockThrow/headGradient2 915 2202 24 104
+rockThrow/edgeOverlayShort 915 2226 12 104
+rockThrow/headGradient 1583 3690 24 104
+rockThrow/placePedastalsSmall 3888 1103 45 108
+rockThrow/cornerWedge 2934 1939 16 100
+aslogopix 4052 2360 90 106
+_skipSprite5 3248 1170 18 104
+_skipSprite6 3440 1170 18 104
+_skipSprite7 3544 1170 18 104
+_skipSprite1 3648 1170 18 104
+skipSign 2508 3696 18 104
+_skipSprite0 603 3800 18 104
+_skipSprite4 3853 3236 18 104
+skipSign_m 2756 3874 18 104
+arcade/unlockBox 3888 1148 40 117
+_skipSprite3 3876 3437 18 104
+_skipSprite2 3884 1933 18 104
+deathFrame 4016 1108 77 120
+_fingerPositionSprite3 3502 2356 48 96
+_fingerPositionSprite5 3502 2404 48 96
+fingerPositions 3489 3768 48 96
+lagturtle 990 2480 96 32
+noClippingSign 2930 3772 32 96
+hats/devhat 2930 3804 32 96
+countdown 3489 3816 32 96
+hats/moonwalker 2930 3836 32 96
+hats/royalty 3489 3848 32 96
+swordSwipe 2930 3868 32 96
+plasmaFlare 3888 687 32 96
+levelJet 3905 384 32 96
+hats/waffles 3905 416 32 96
+furni/everyday/framewindow 3981 3124 24 96
+_fingerPositionSprite2 3981 3148 48 96
+tutorial/slideUnder 4069 3982 96 96
+challengeTrophyIcons 798 3232 16 96
+tutorial/fly 3588 4076 96 96
+tutorial/jump 386 4078 96 96
+tutorial/gunjump 4077 3745 96 96
+tutorial/fallThrough 4077 2980 96 96
+tutorial/groundPound 4077 3076 96 96
+tutorial/walk 642 4078 96 96
+fingerPositions_m 3981 3196 48 96
+_fingerPositionSprite4 4016 646 48 96
+_fingerPositionSprite1 3489 4030 48 96
+tutorial/jumpThrough 4069 4078 96 96
+tutorial/guncrouchjump 738 4078 96 96
+_fingerPositionSprite6 4033 389 48 96
+_fingerPositionSprite0 2910 4040 48 96
+_fingerPositionSprite7 96 4077 48 96
+newscast/numberfont 4020 1406 44 100
+newsTitleChannel 2534 3244 23 92
+bigItemCrate 514 4078 66 128
+camping 3120 432 15 92
+survival/cryoBackground 834 4078 82 100
+warpgun 3489 3880 17 95
+ties 4027 1275 42 96
+domeBleachers 4016 806 40 100
+wireTrapDoorArm 3040 950 112 71
+travelPipesGreen 2534 3267 108 72
+travelPipesBlue 2534 3375 108 72
+travelPipes 2948 3380 108 72
+furni/fancy/grandfatherclock 168 3696 44 88
+magBlaster 4005 3944 38 100
+levs 4082 3460 70 108
+demoPro 4105 450 66 114
+grenadecannon 4082 3530 72 104
+selectDoorLeftPC 1276 3414 88 84
+selectDoorLeftBlank 2534 3844 88 84
+selectDoorLeft 4077 3172 88 84
+elevator 4033 87 37 96
+arcade/led_strip 1200 444 3 84
+milk 1296 2483 88 40
+necro 894 3232 16 88
+furni/music/grand 4036 2555 34 99
+flameBurst 2948 3488 84 80
+blind 1010 1634 87 11
+corptronConsoleText 1200 447 3 82
+selectDoorRight 1619 3778 88 73
+selectDoorRightBlank 1280 3833 88 73
+happyFace 3012 2452 16 80
+iceBlock 3040 1062 16 80
+angryFace 3352 1170 16 80
+furni/cheap/broken window 996 2002 88 24
+campduck 1024 4107 64 96
+arcade/bigLightCone 1120 4107 57 107
+arcade/prizeLights2 1227 4107 55 107
+arcade/prizeLights 4108 3640 55 107
+furni/music/harp 2534 3932 32 90
+furni/everyday/TV 1336 2483 80 24
+furni/fancy/fancychair 990 2576 80 18
+furni/everyday/chair 990 2656 80 18
+shrug 1276 3502 24 78
+background/scanbeam 2664 930 80 35
+title/beamPlatform 3986 3604 22 84
+desk 449 2467 12 76
+furni/music/snaredrum 2699 930 80 17
+pineTileset 1297 2794 96 56
+pineTilesetSnow 2024 3684 96 56
+furni/office/drinkvendingmachine 1619 3866 34 78
+furni/bar/pooltablelighting 1287 2711 80 33
+cannonTimer 2756 3892 18 72
+newscast/hotness 1619 3906 72 72
+furni/everyday/fridge 2664 1010 72 24
+cannon 1280 3921 18 72
+challenge/goody 3712 2828 80 64
+wallDoor 934 4078 60 84
+pistol 2486 437 10 72
+circle 1619 3978 31 81
+scribble 1280 3939 21 78
+buttons 1495 2756 14 70
+furni/stone/candelabra 2688 1010 72 17
+fancyBanner 1320 2711 70 23
+title/rightPlatform 189 3752 74 65
+outPipe 2534 3483 16 72
+furni/freezer/FrozenVeggie 3476 4002 28 80
+newcolors 4012 1549 29 77
+arcade/prizeCounterOutline 4036 2944 31 71
+moji 2318 1152 33 66
+title/leftPlatform 1297 2890 67 65
+arcade/eggBorder 3712 2908 65 66
+furni/fancy/vanity 2860 3874 31 69
+trophiesHighlight 1894 4110 57 75
+pyramidWallLight 2558 437 12 70
+pyramidBackgroundLight 1565 2756 12 70
+arcade/prizeCounter 4052 2043 30 69
+arcade/bigFixture 3489 4078 29 71
+stuff/conveyorRight 1712 416 32 64
+banana 990 2992 64 32
+jetpack 960 3760 32 64
+Image41 1648 432 16 64
+water 606 3232 16 64
+hats/retros 3284 3794 32 64
+waterSplash 3502 2452 16 64
+whiteSplash 960 3792 16 64
+hats/johnnys 3284 3826 32 64
+crate 189 3826 16 64
+mindControlHelmet 3284 3858 32 64
+hardSign 3284 3890 32 64
+funBeam 2022 3895 32 64
+easySign 2214 3895 32 64
+dartgun 1830 3900 32 64
+dangerSign 3284 3922 32 64
+wetParticle 189 3842 16 64
+hats/tricorne 1830 3932 32 64
+hats/werewolves 2214 3927 32 64
+hats/handy 2022 3927 32 64
+furni/flowers/Yucca Branch 3284 3954 32 64
+raceSign 2022 3959 32 64
+backgroundIcons 2214 3959 32 64
+hats/cyclops 1830 3964 32 64
+hats/scurvies 3284 3986 32 64
+hats/officemen 2214 3991 32 64
+hats/mobby 2022 3991 32 64
+hats/katanaman_lightmap 1830 3996 32 64
+upSign 3284 4018 32 64
+hats/mailbox 3684 4076 32 64
+steamPuff 192 4077 32 64
+scratches 4082 3602 32 64
+oldPistol 2910 4088 32 64
+stuff/conveyorLeft 4105 516 32 64
+hats/newrobo 4107 2944 32 64
+hats/WELDER 4108 3695 32 64
+hats/ponycap 3684 4108 32 64
+rcBody 2086 4110 32 64
+hats/twintail 1969 4110 32 64
+hats/ufos 2150 4110 32 64
+smallFire 2214 4110 32 64
+itemBox 990 3056 64 32
+hugeLaser 1702 4115 64 64
+helmet 1766 4115 32 64
+hats/motherduck 1830 4115 32 64
+hats/oldrobo 2278 4116 32 64
+hats/katanaman 2374 4116 32 64
+hats/dinos 2438 4116 32 64
+hats/divers 2502 4116 32 64
+hats/jazzducks 3348 4117 32 64
+hats/locked 3412 4117 32 64
+hats/hearts 3476 4117 32 64
+hats/skelly 1363 4121 32 64
+hats/pulpy 4121 2043 32 64
+hats/astrobud 1427 4121 32 64
+hats/sailors 1491 4121 32 64
+hats/ballhead 1555 4121 32 64
+hats/joey 1619 4121 32 64
+hats/frogs 3749 4126 32 64
+hats/reallife 3973 4126 32 64
+hats/frank 3877 4126 32 64
+_defaultHead7 3813 4126 32 64
+_defaultHead6 2628 4127 32 64
+hats/wizbiz 256 4127 32 64
+presents 2769 4127 64 64
+_defaultHead5 320 4127 32 64
+_defaultHead4 2833 4127 32 64
+hats/default_m 2692 4127 32 64
+hats/turing 2897 4127 32 64
+heartpuff 2961 4127 32 64
+waterFall 0 4133 32 64
+veryHardSign 64 4133 32 64
+_defaultHead2 128 4133 32 64
+_defaultHead1 192 4133 32 64
+_defaultHead0 3028 4137 32 64
+hats/bigearls 3092 4137 32 64
+hats/uglies 3156 4137 32 64
+hats/default 3220 4137 32 64
+waterFlow 3949 538 16 64
+directionSign 3284 4137 32 64
+hats/burgers 4140 1453 32 64
+_defaultHead3 3684 4140 32 64
+hats/toeboys 4140 1581 32 64
+hats/highfives 4140 1613 32 64
+hats/clams 4140 1645 32 64
+hats/master 4140 1485 32 64
+hats/gross 4140 1517 32 64
+hats/broduck 4140 1549 32 64
+hats/toomany 2086 4142 32 64
+hats/chancy 2150 4142 32 64
+hats/Dumplin 2214 4142 32 64
+hats/FunnyMan 514 4144 32 64
+clickPuff 3952 3728 16 64
+knightHelmet 578 4144 32 64
+waterFallEdge 3981 3244 16 64
+hats/tube 4147 3854 32 64
+lavaGlowLine 1015 1474 64 1
+hats/brick 4147 3886 64 64
+hats/valet 1830 4147 32 64
+bdaycake 2278 4148 64 64
+hats/sensei 1766 4147 32 64
+hats/guac 4147 3950 32 64
+hats/gents 2374 4148 32 64
+waterFallTile 4004 3438 16 64
+hats/witchtime 2438 4148 32 64
+cantPlaceLarge 3348 4149 64 64
+frozen 3412 4149 64 64
+tinySmokeTestFront 3476 4149 64 64
+tinySmokeTestBack 4153 1677 64 64
+teddy 1363 4153 64 64
+furni/whiteCircle 4153 1741 64 64
+noAvatar 1427 4153 64 64
+newWaterFlow 1491 4153 64 64
+lightFlash 4153 1805 64 64
+iconSheet 1555 4153 64 64
+lavaLight 4153 1869 64 64
+cursors 1619 4153 64 64
+hats/eggy 2502 4148 32 64
+gold 4157 559 64 64
+metalRebound 1619 4009 16 64
+hats/fridge 4157 719 32 64
+lava 4012 1938 16 64
+lavaSplash 4013 538 16 64
+gas 4016 694 16 64
+gasSplash 4016 3728 16 64
+smallSmokeTestFront 912 4050 16 64
+smallSmokeAnim 4052 2450 16 64
+smallSmokeFront 4068 3438 16 64
+keyInDoor 4157 623 64 64
+colorableLiquid 4076 1938 16 64
+smallSmokeTestBack 4108 3727 16 64
+fluid 192 4109 16 64
+saws 934 4138 16 64
+furni/music/electricG2 4157 687 31 64
+furni/bar/round table 990 3120 64 31
+title/optionsPlatform 4157 934 61 65
+title/libraryPlatform 4157 847 61 65
+waterFallEdgeTop 1969 4142 20 64
+surfaceFire 2499 1178 10 64
+editingRoom 3649 2922 30 63
+survival/cryoMonitor 4157 995 44 84
+deathcrate 4157 1039 57 64
+furni/stone/candlestick 3649 2952 15 60
+happyman 2216 3684 60 60
+joyousman 2216 3744 60 60
+exBox 2563 1178 10 60
+furni/outdoor/drinkcooler 4153 1933 19 63
+furni/eggpedestal 4157 1096 28 64
+furni/momento/eggpedestal 4157 1124 28 64
+arcade/paperclips 3973 4158 45 78
+furni/office/officechair 4157 908 18 64
+selectConsole 2024 3780 19 60
+domePillar 2598 2724 63 27
+arcade/gotcha/coinSlot 3877 4158 52 65
+streetLight 2598 2787 60 28
+furni/stone/vase 1635 2756 14 60
+furni/everyday/lamp 1687 2194 64 13
+furni/everyday/footstool 3393 1944 11 60
+furni/outdoor/lantern 1687 2258 60 11
+furniHov 2024 3799 54 61
+drifts 4157 1152 17 64
+rareSticker 1835 3740 28 58
+newSticker 1835 3768 28 58
+arcade/lightCone 735 3764 57 56
+arcade/lightSphere 1835 3796 57 56
+furni/everyday/armchair 2684 1130 57 28
+background/officeBuilding01 2216 3804 79 40
+waterCoolerJug 4157 751 48 64
+waterCoolerJugLine 4157 799 48 64
+furniFrame 2566 3972 52 59
+furniFill 2566 4024 52 59
+cheapTape 3749 4158 52 59
+furni/bathroom/toilet 1343 2711 60 17
+pump 1645 4034 54 55
+bigBanner 2598 2847 64 23
+furni/everyday/tiny table 2598 2911 64 23
+arcade/gotcha/twisterShadow 1835 3853 18 54
+menuBox 2628 4159 54 54
+arcade/gotcha/twister 2024 3853 18 54
+arcade/medalNoRibbon 1835 3871 18 54
+keytarKeybed 1687 2318 56 13
+keytarKeybedBlue 1687 2374 56 13
+background/berg1_reflection 3808 4158 43 67
+furni/stone/brokepillar 2024 3871 16 60
+furni/bar/stool 2566 4076 16 60
+furni/stone/pillar table 2566 4092 16 60
+furniTag 2833 4159 51 56
+furni/flowers/gloxinia 256 4159 22 64
+furni/flowers/arum lily 2682 4159 22 64
+furni/flowers/agapanthus 2889 4159 22 64
+furni/flowers/astilbe 320 4159 22 64
+furni/flowers/narcissus 2953 4159 22 64
+furni/flowers/pelargonium 4160 3260 22 64
+furni/flowers/statice 834 4160 22 64
+furni/flowers/trachelium 4160 3282 22 64
+furni/flowers/verbascum 898 4160 22 64
+furni/flowers/orchid 4160 3304 22 64
+furni/flowers/tulip 4160 3326 22 64
+furni/flowers/salvia 4160 3348 22 64
+furni/flowers/vallota 4160 3370 22 64
+newsTitleDuck 2566 4116 23 61
+title/editorBench 4160 3392 45 62
+icicles 4161 1319 42 64
+title/optionsTV 4161 1361 42 62
+arcade/challengePhoto 2035 4023 51 51
+furni/outdoor/lawnchair 2227 4023 17 51
+furni/everyday/broom 2974 4088 25 52
+title/libraryBookcase 2033 4110 49 52
+sucksSign 2566 4148 21 60
+suckSign 962 4160 21 60
+redHotGlow 2578 3773 50 50
+furni/momento/duckdoll 1645 4088 16 52
+furni/cheap/inflatablepalmtree 2598 3004 50 24
+arcade/tinyStars 2040 442 8 50
+rockThrow/tableTop 4160 3437 22 54
+background/cloud5 2090 442 8 49
+selectPlatform 1284 444 3 49
+selectProjector 2139 442 8 49
+background/berg1 4161 1403 37 63
+tutorialTV 1120 4164 38 61
+DuckGame.VerticalDoor DuckGame48 48 1843 4028 48 48
+DuckGame.UpSign DuckGame48 48 2227 4040 48 48
+DuckGame.UndergroundTileset DuckGame48 48 3540 4149 48 48
+DuckGame.WaterFallTile DuckGame48 48 1181 4164 48 48
+DuckGame.WaterFlow DuckGame48 48 1229 4164 48 48
+DuckGame.WireActivator DuckGame48 48 1277 4164 48 48
+DuckGame.YellowBarrel DuckGame48 48 4165 3982 48 48
+DuckGame.VerticalFunBeam DuckGame48 48 4165 4030 48 48
+DuckGame.Chaindart DuckGame48 48 64 4165 48 48
+DuckGame.VirtualShotgun DuckGame48 48 112 4165 48 48
+DuckGame.Spring DuckGame48 48 0 4165 48 48
+DuckGame.Warpgun DuckGame48 48 160 4165 48 48
+DuckGame.SpikesRight DuckGame48 48 208 4165 48 48
+DuckGame.VeryHardSign DuckGame48 48 4165 4078 48 48
+DuckGame.CaveTileset DuckGame48 48 4165 4126 48 48
+DuckGame.CastleTileset DuckGame48 48 1894 4167 48 48
+DuckGame.CampingRifle DuckGame48 48 1942 4167 48 48
+DuckGame.CameraZoomNew DuckGame48 48 1990 4167 48 48
+DuckGame.CameraMover DuckGame48 48 2038 4167 48 48
+DuckGame.CameraFixed DuckGame48 48 4168 1188 48 48
+DuckGame.CameraBoundsNew DuckGame48 48 4168 1236 48 48
+DuckGame.MarineSpace.WumpBlunderbuss DuckGame48 48 3156 4169 48 48
+DuckGame.VirtualBackground DuckGame48 48 3028 4169 48 48
+DuckGame.SpikesLeft DuckGame48 48 3204 4169 48 48
+DuckGame.SpringDown DuckGame48 48 3252 4169 48 48
+DuckGame.SuicidePistol DuckGame48 48 3300 4169 48 48
+DuckGame.StreetLight DuckGame48 48 3092 4169 48 48
+DuckGame.SpringUpRight DuckGame48 48 1024 4171 48 48
+DuckGame.SpringUpLeft DuckGame48 48 1072 4171 48 48
+DuckGame.SpringLeft DuckGame48 48 3588 4172 48 48
+DuckGame.TeamSpawn DuckGame48 48 3636 4172 48 48
+DuckGame.SpringDownRight DuckGame48 48 3684 4172 48 48
+DuckGame.SpringDownLeft DuckGame48 48 4173 3745 48 48
+DuckGame.NetGun2 DuckGame48 48 4173 3076 48 48
+DuckGame.PinkBox DuckGame48 48 4173 3793 48 48
+DuckGame.PizzaLauncher DuckGame48 48 4173 3124 48 48
+DuckGame.TheDishes DuckGame48 48 4173 3172 48 48
+DuckGame.SpikeHelm DuckGame48 48 4173 2980 48 48
+DuckGame.CityWall DuckGame48 48 4173 3028 48 48
+DuckGame.PhysicsChain DuckGame48 48 4174 0 48 48
+DuckGame.SpikesDown DuckGame48 48 386 4174 48 48
+DuckGame.Bulb DuckGame48 48 642 4174 48 48
+DuckGame.WaterFallEdgeTop DuckGame48 48 4174 48 48 48
+DuckGame.WaterFallEdge DuckGame48 48 434 4174 48 48
+DuckGame.WaterFall DuckGame48 48 4165 4174 48 48
+DuckGame.WaterCooler DuckGame48 48 690 4174 48 48
+DuckGame.WallLightRight DuckGame48 48 4069 4174 48 48
+DuckGame.WallLightLeft DuckGame48 48 2086 4174 48 48
+DuckGame.WallBoots DuckGame48 48 738 4174 48 48
+DuckGame.BuildingFramework DuckGame48 48 4117 4174 48 48
+DuckGame.CustomBackground3 DuckGame48 48 2134 4174 48 48
+DuckGame.Blunderbuss DuckGame48 48 2182 4174 48 48
+DuckGame.TutorialSign03 DuckGame48 48 2230 4174 48 48
+DuckGame.TinfoilHat DuckGame48 48 4174 215 48 48
+DuckGame.TutorialSign04 DuckGame48 48 4174 263 48 48
+DuckGame.Phaser DuckGame48 48 4174 128 48 48
+DuckGame.MarineSpace.WumpPistol DuckGame48 48 4174 311 48 48
+DuckGame.TreeTileset DuckGame48 48 4174 359 48 48
+DuckGame.Trumpet DuckGame48 48 786 4174 48 48
+feather_m 1333 444 4 48
+DuckGame.Sun DuckGame48 48 514 4176 48 48
+_featherSprite0 1381 444 4 48
+DuckGame.TargetDuckNew DuckGame48 48 562 4176 48 48
+_featherSprite1 1429 444 4 48
+_featherSprite3 1776 444 4 48
+_featherSprite4 1824 444 4 48
+_featherSprite6 1872 444 4 48
+_featherSprite5 1920 444 4 48
+_featherSprite2 2000 1182 4 48
+_featherSprite7 2048 1182 4 48
+mirrorMode 3092 2428 16 48
+jet 3092 2444 16 48
+romanCandle 2578 3823 16 48
+airFire 3828 3420 16 48
+feather 2096 1182 4 48
+DuckGame.TutorialSign02 DuckGame48 48 4177 2468 48 48
+DuckGame.TutorialSign00 DuckGame48 48 4177 2084 48 48
+DuckGame.TutorialGunJump DuckGame48 48 4177 2176 48 48
+DuckGame.BlueprintTileset DuckGame48 48 4177 2268 48 48
+DuckGame.Bazooka DuckGame48 48 4177 2770 48 48
+DuckGame.Chaingun DuckGame48 48 4177 2516 48 48
+DuckGame.Chainsaw DuckGame48 48 4177 2683 48 48
+DuckGame.ChallengeModeNew DuckGame48 48 4177 2316 48 48
+DuckGame.CoilGun DuckGame48 48 4177 2364 48 48
+DuckGame.CustomBackground2 DuckGame48 48 4177 2412 48 48
+DuckGame.SpookyTileset DuckGame48 48 4177 2596 48 48
+DuckGame.CowboyPistol DuckGame48 48 4177 2818 48 48
+DuckGame.CombatShotgun DuckGame48 48 4177 2866 48 48
+DuckGame.ClippingSign DuckGame48 48 4177 2914 48 48
+DuckGame.CustomParallaxSegment DuckGame48 48 1702 4179 48 48
+DuckGame.MallardBillboard DuckGame48 48 1750 4179 48 48
+DuckGame.Crate DuckGame48 48 1798 4179 48 48
+DuckGame.TutorialSign01 DuckGame48 48 1846 4179 48 48
+DuckGame.Trophy DuckGame48 48 2374 4180 48 48
+DuckGame.Trombone DuckGame48 48 2438 4180 48 48
+DuckGame.TriggerVolume DuckGame48 48 2486 4180 48 48
+DuckGame.TreeTopDead DuckGame48 48 2534 4180 48 48
+DuckGame.Tombstone DuckGame48 48 256 4181 48 48
+DuckGame.TreeTop DuckGame48 48 304 4181 48 48
+DuckGame.TroubleLight DuckGame48 48 2889 4181 48 48
+DuckGame.TutorialGunCrouchJump DuckGame48 48 2937 4181 48 48
+DuckGame.Boots DuckGame48 48 834 4182 48 48
+DuckGame.Sword DuckGame48 48 882 4182 48 48
+DuckGame.BlueBarrel DuckGame48 48 930 4182 48 48
+DuckGame.TutorialSign05 DuckGame48 48 4190 3460 48 48
+DuckGame.BackgroundBathroom DuckGame48 48 4190 3508 48 48
+DuckGame.PewPewLaser DuckGame48 48 4190 3556 48 48
+DuckGame.CustomBackground DuckGame48 48 2769 4191 48 48
+DuckGame.PhysicsRope DuckGame48 48 4193 1956 48 48
+tinyNumbers 3973 4203 36 64
+furni/everyday/big boy table 981 3696 64 36
+DuckGame.PineTreeSnowTileset DuckGame48 48 4193 2004 48 48
+DuckGame.MysteryGun DuckGame48 48 1120 4202 48 48
+DuckGame.NatureTileset DuckGame48 48 4204 1453 48 48
+DuckGame.NetGun DuckGame48 48 4204 1581 48 48
+DuckGame.NublessSnowIceTileset DuckGame48 48 4204 1501 48 48
+DuckGame.NublessSnowTileset DuckGame48 48 4204 1629 48 48
+DuckGame.OfficeBackground DuckGame48 48 3877 4210 48 48
+DuckGame.NatureBackground DuckGame48 48 3749 4210 48 48
+DuckGame.PyramidBLight DuckGame48 48 3925 4210 48 48
+DuckGame.MarineSpace.WumpQuadLaser DuckGame48 48 3797 4210 48 48
+DuckGame.PyramidDoor DuckGame48 48 2833 4210 48 48
+DuckGame.SpawnCannon DuckGame48 48 4211 3854 48 48
+DuckGame.SpaceTileset DuckGame48 48 4211 3902 48 48
+DuckGame.SpaceBackground DuckGame48 48 2278 4212 48 48
+DuckGame.SnubbyPistol DuckGame48 48 1181 4212 48 48
+DuckGame.BackgroundBar DuckGame48 48 2326 4212 48 48
+DuckGame.SnowTileset DuckGame48 48 1229 4212 48 48
+DuckGame.BackgroundArcade DuckGame48 48 1277 4212 48 48
+DuckGame.Altar DuckGame48 48 3348 4213 48 48
+DuckGame.BackgroundIndustrial DuckGame48 48 4213 4126 48 48
+DuckGame.BackgroundConcrete DuckGame48 48 4213 4174 48 48
+DuckGame.BackgroundCastle DuckGame48 48 64 4213 48 48
+DuckGame.GrenadeCannon DuckGame48 48 112 4213 48 48
+DuckGame.GrenadeLauncher DuckGame48 48 0 4213 48 48
+DuckGame.GreyBlock DuckGame48 48 3412 4213 48 48
+DuckGame.HangingCityLight DuckGame48 48 3460 4213 48 48
+DuckGame.CustomPlatform2 DuckGame48 48 4213 3982 48 48
+DuckGame.Helmet DuckGame48 48 2628 4213 48 48
+DuckGame.Holster DuckGame48 48 3508 4213 48 48
+DuckGame.HugeLaser DuckGame48 48 160 4213 48 48
+DuckGame.IceBlock DuckGame48 48 4213 4030 48 48
+DuckGame.IceWedge DuckGame48 48 2676 4213 48 48
+DuckGame.SpringRight DuckGame48 48 208 4213 48 48
+DuckGame.Icicles DuckGame48 48 4213 4078 48 48
+DuckGame.IndustrialBackground DuckGame48 48 4215 3640 48 48
+DuckGame.GoodBook DuckGame48 48 1894 4215 48 48
+DuckGame.CustomPlatform DuckGame48 48 4215 3688 48 48
+DuckGame.CloudTileset DuckGame48 48 1942 4215 48 48
+DuckGame.CustomParallax DuckGame48 48 1990 4215 48 48
+DuckGame.AK47 DuckGame48 48 2038 4215 48 48
+DuckGame.ArrowSign DuckGame48 48 4216 1188 48 48
+DuckGame.BackgroundJets DuckGame48 48 4216 1236 48 48
+DuckGame.SnowPile DuckGame48 48 1363 4217 48 48
+DuckGame.SnowGenerator DuckGame48 48 1427 4217 48 48
+DuckGame.PyramidWallLight DuckGame48 48 1491 4217 48 48
+DuckGame.MindControlRay DuckGame48 48 4217 1805 48 48
+DuckGame.QuadLaser DuckGame48 48 4217 1853 48 48
+DuckGame.Mine DuckGame48 48 1555 4217 48 48
+DuckGame.MirrorMode DuckGame48 48 4217 1901 48 48
+DuckGame.Sniper DuckGame48 48 1603 4217 48 48
+DuckGame.PipeBlue DuckGame48 48 4217 1677 48 48
+DuckGame.SledgeHammer DuckGame48 48 3156 4217 48 48
+DuckGame.RaceSign DuckGame48 48 1651 4217 48 48
+DuckGame.Sharpshot DuckGame48 48 3028 4217 48 48
+DuckGame.Shotgun DuckGame48 48 3204 4217 48 48
+DuckGame.RomanCandle DuckGame48 48 3092 4217 48 48
+DuckGame.RandomControllerNew DuckGame48 48 3252 4217 48 48
+DuckGame.ScaffoldingTileset DuckGame48 48 3300 4217 48 48
+DuckGame.PyramidBrick DuckGame48 48 4217 1741 48 48
+DuckGame.Rock DuckGame48 48 4219 450 48 48
+DuckGame.RCController DuckGame48 48 1024 4219 48 48
+DuckGame.SawsRight DuckGame48 48 1072 4219 48 48
+DuckGame.RockWall DuckGame48 48 4219 498 48 48
+DuckGame.Saws DuckGame48 48 3588 4220 48 48
+DuckGame.SawsDown DuckGame48 48 3636 4220 48 48
+DuckGame.Matchbox DuckGame48 48 3684 4220 48 48
+DuckGame.SnowIceTileset DuckGame48 48 4221 559 48 48
+DuckGame.MarineSpace.WumpSniper DuckGame48 48 4221 2980 48 48
+DuckGame.Slag DuckGame48 48 4221 719 48 48
+DuckGame.SnowDrift DuckGame48 48 4221 607 48 48
+DuckGame.SnowBackground DuckGame48 48 4221 3745 48 48
+DuckGame.NatureBackgroundNight DuckGame48 48 4221 3028 48 48
+DuckGame.OfficeTileset DuckGame48 48 4221 767 48 48
+DuckGame.SMG DuckGame48 48 4221 3076 48 48
+DuckGame.Musket DuckGame48 48 4221 3124 48 48
+DuckGame.PineTreeTileset DuckGame48 48 4221 655 48 48
+DuckGame.PineTrunkTileset DuckGame48 48 4221 3172 48 48
+DuckGame.PelletGun DuckGame48 48 4221 1039 48 48
+DuckGame.PipeRed DuckGame48 48 4221 3793 48 48
+DuckGame.Pistol DuckGame48 48 4221 1087 48 48
+DuckGame.Saxaphone DuckGame48 48 4221 1135 48 48
+DuckGame.PlasmaBlaster DuckGame48 48 4222 934 48 48
+DuckGame.PowerHolster DuckGame48 48 738 4222 48 48
+DuckGame.Present DuckGame48 48 2134 4222 48 48
+DuckGame.PyramidLightRoof DuckGame48 48 4222 215 48 48
+DuckGame.PurpleBlock DuckGame48 48 4222 263 48 48
+DuckGame.PipeGreen DuckGame48 48 4222 128 48 48
+DuckGame.PyramidBackground DuckGame48 48 4213 4222 48 48
+DuckGame.OldPistol DuckGame48 48 4222 311 48 48
+DuckGame.PyramidTileset DuckGame48 48 4222 847 48 48
+DuckGame.OfficeLight DuckGame48 48 4222 0 48 48
+DuckGame.CityRamp DuckGame48 48 4222 359 48 48
+DuckGame.Magnum DuckGame48 48 4222 48 48 48
+DuckGame.Flower DuckGame48 48 386 4222 48 48
+DuckGame.KnightHelmet DuckGame48 48 434 4222 48 48
+DuckGame.LaserRifle DuckGame48 48 786 4222 48 48
+DuckGame.LaserSpawner DuckGame48 48 2182 4222 48 48
+DuckGame.LavaBarrel DuckGame48 48 2230 4222 48 48
+DuckGame.MaceCollar DuckGame48 48 642 4222 48 48
+DuckGame.MagBlaster DuckGame48 48 690 4222 48 48
+DuckGame.MagnetGun DuckGame48 48 4165 4222 48 48
+DuckGame.Lamp DuckGame48 48 4069 4222 48 48
+DuckGame.ItemBoxOneTime DuckGame48 48 4117 4222 48 48
+DuckGame.DonutSpaceBackground DuckGame48 48 2086 4222 48 48
+DuckGame.Desk DuckGame48 48 514 4224 48 48
+DuckGame.G18 DuckGame48 48 562 4224 48 48
+DuckGame.ECrate DuckGame48 48 4224 3326 48 48
+DuckGame.FunBeam DuckGame48 48 4224 3374 48 48
+DuckGame.FreeSpawn DuckGame48 48 4225 1319 48 48
+DuckGame.ForegroundNature DuckGame48 48 4225 2818 48 48
+DuckGame.CityBackground DuckGame48 48 4225 2268 48 48
+DuckGame.FlimsyDoor DuckGame48 48 4225 2866 48 48
+DuckGame.FlareGun DuckGame48 48 4225 2770 48 48
+DuckGame.EnergyScimitar DuckGame48 48 4225 2683 48 48
+DuckGame.FlameThrower DuckGame48 48 4225 2316 48 48
+DuckGame.FishinSign DuckGame48 48 4225 2914 48 48
+DuckGame.FireExtinguisher DuckGame48 48 4225 1367 48 48
+DuckGame.Spikes DuckGame48 48 4225 2364 48 48
+DuckGame.FancyShoes DuckGame48 48 4225 2596 48 48
+DuckGame.ItemBoxRandom DuckGame48 48 4225 2084 48 48
+DuckGame.KingdomBackground DuckGame48 48 4225 2176 48 48
+DuckGame.IndustrialTileset DuckGame48 48 4225 2412 48 48
+DuckGame.Keytar DuckGame48 48 4225 2468 48 48
+DuckGame.TV DuckGame48 48 4225 2516 48 48
+DuckGame.UndergroundBackground DuckGame48 48 1702 4227 48 48
+DuckGame.WireFlipper DuckGame48 48 1750 4227 48 48
+DuckGame.WireMount DuckGame48 48 1798 4227 48 48
+DuckGame.WireTileset DuckGame48 48 1846 4227 48 48
+DuckGame.WireTrapDoor DuckGame48 48 2374 4228 48 48
+DuckGame.WoodScaffoldingTileset DuckGame48 48 2486 4228 48 48
+DuckGame.WumpAK47 DuckGame48 48 2534 4228 48 48
+DuckGame.WireButton DuckGame48 48 2438 4228 48 48
+DuckGame.WumpHugeLaser DuckGame48 48 256 4229 48 48
+DuckGame.DartGrenade DuckGame48 48 2889 4229 48 48
+DuckGame.ChestPlate DuckGame48 48 304 4229 48 48
+DuckGame.ExplosiveBarrel DuckGame48 48 2937 4229 48 48
+DuckGame.FireCrackers DuckGame48 48 834 4230 48 48
+DuckGame.Key DuckGame48 48 882 4230 48 48
+DuckGame.DonutTileset DuckGame48 48 930 4230 48 48
+DuckGame.Door DuckGame48 48 4238 3460 48 48
+DuckGame.DuctTape DuckGame48 48 4238 3508 48 48
+DuckGame.DuelingPistol DuckGame48 48 4238 3556 48 48
+DuckGame.DemoCrate DuckGame48 48 2769 4239 48 48
+DuckGame.GoalType DuckGame48 48 3973 4239 48 48
+DuckGame.HardLeft DuckGame48 48 4021 4239 48 48
+DuckGame.GoodyNew DuckGame48 48 4241 1956 48 48
+DuckGame.ItemCrate DuckGame48 48 4241 2004 48 48
+DuckGame.ItemSpawner DuckGame48 48 1120 4250 48 48
+DuckGame.Jetpack DuckGame48 48 4252 1453 48 48
+DuckGame.CityTreeTileset DuckGame48 48 4252 1581 48 48
+DuckGame.Equipper DuckGame48 48 4252 1501 48 48
+DuckGame.SawsLeft DuckGame48 48 4252 1629 48 48
+DuckGame.DeathCrate DuckGame48 48 2833 4258 48 48
+DuckGame.BackgroundSpace DuckGame48 48 3877 4258 48 48
+treeTopOutsideDead 3749 4258 48 48
+altar 3797 4258 48 48
+DuckGame.EightPlayer DuckGame48 48 3925 4258 48 48
+mineFlash 4259 3854 48 48
+treeTop 4259 3902 48 48
+treeTopInside 1229 4260 48 48
+arcade/userMachine 2278 4260 48 48
+DuckGame.BackgroundCity DuckGame48 48 2326 4260 48 48
+DuckGame.Grenade DuckGame48 48 1181 4260 48 48
+consoleFlash 1277 4260 48 48
+arcade/customOverlay 4261 4126 48 48
+treeTopOutside 160 4261 48 48
+castleTorch 2676 4261 48 48
+DuckGame.Banana DuckGame48 48 0 4261 48 48
+DuckGame.BananaCluster DuckGame48 48 3412 4261 48 48
+DuckGame.Basketball DuckGame48 48 4261 4222 48 48
+DuckGame.ChokeCollar DuckGame48 48 4261 4078 48 48
+treeTopInsideDead 3460 4261 48 48
+DuckGame.BackgroundPyramid DuckGame48 48 3508 4261 48 48
+fireCrackers 4261 3982 48 48
+DuckGame.CustomTileset2 DuckGame48 48 4261 4030 48 48
+DuckGame.DartGun DuckGame48 48 2628 4261 48 48
+DuckGame.ItemBox DuckGame48 48 64 4261 48 48
+DuckGame.Grapple DuckGame48 48 208 4261 48 48
+DuckGame.CityTileset DuckGame48 48 112 4261 48 48
+treeTopDead 4261 4174 48 48
+DuckGame.CustomTileset DuckGame48 48 3348 4261 48 48
+DuckGame.DangerSign DuckGame48 48 1894 4263 48 48
+DuckGame.BackgroundOffice DuckGame48 48 1990 4263 48 48
+DuckGame.BackgroundNature DuckGame48 48 1942 4263 48 48
+DuckGame.CustomPlatform3 DuckGame48 48 2038 4263 48 48
+DuckGame.EasySign DuckGame48 48 4263 3640 48 48
+DuckGame.CustomTileset3 DuckGame48 48 4263 3688 48 48
+taxi 2682 4181 20 57
+stuff/conveyor 4224 3260 20 56
+loveSign 4224 3304 21 53
+boardHighlight 4241 995 39 57
+furni/office/locker 4264 1188 34 64
+spring 3828 3436 15 48
+newscast/hotnessImage 4264 1236 40 54
+lightSpring 976 4050 15 48
+signal 2144 1182 5 48
+arcade/prizes 4264 1276 38 56
+arcade/boommachine 3838 1747 54 39
+furni/everyday/Floor Lamp 3092 4265 35 60
+furni/everyday/kitchenphone 2035 4074 21 48
+furni/everyday/couches 3838 1801 57 35
+furni/stone/mausoleum 990 3184 60 33
+furni/flowers/achimenes 979 2440 22 45
+background/cloud4 2188 442 7 47
+domeSmall 1843 4076 38 51
+furni/everyday/window 2566 1918 22 44
+arcade/gotcha/coin 3838 1858 22 44
+springAngle 2227 4088 20 48
+springAnglePurple 4089 1549 20 48
+furni/freezer/airconditioner 4157 1169 18 52
+furni/everyday/fatLamp 4224 3282 18 52
+rockThrow/tableBottomBack 3649 2967 13 48
+rockThrow/tableBottom 3774 437 13 48
+smoke 3838 1880 42 44
+smokeBack 1319 3961 42 44
+tapedSword 1016 1474 46 8
+keytar 4169 516 40 46
+readyLeft 2235 442 7 43
+readyRight 2278 442 7 43
+title/airlock 3252 4265 33 54
+furni/office/filecabinet 1363 4265 33 54
+furni/freezer/icecream 3540 4117 18 48
+background/officeBuilding02 3716 3820 54 32
+mine 4265 1741 32 54
+furni/bar/CCTV 996 2090 44 13
+furni/outdoor/gasstove 979 2462 13 44
+furni/stone/casket 4265 1773 30 57
+furni/music/electricG3 1603 4265 30 56
+furni/music/electricG 4265 1677 30 56
+furni/music/acousticG 4265 1707 30 56
+bleacherBack 1319 4003 46 36
+bleacherBackSnow 1319 4049 46 36
+rockThrow/mons 4112 646 41 40
+furni/office/deskphone 1683 2770 48 17
+furni/ship/barrel 4168 1284 34 48
+furni/stone/stone bench 3310 4050 48 34
+furni/flowers/sunflower 3028 4265 30 54
+furni/music/upright 4120 1406 46 35
+furni/cheap/diploma 3838 1922 17 46
+background/cloud1 2566 1940 12 43
+redGlowWide 4173 3220 32 48
+combatShotgunAmmo 4174 96 32 48
+moneyTypes 4105 3944 18 42
+background/berg2_reflection 2000 426 19 38
+demoBlaster 3100 2394 19 38
+furni/everyday/oven 4174 176 30 48
+furni/fancy/velvetrope 2598 3054 48 30
+furni/cheap/matress 4116 806 36 40
+furni/everyday/countercabinet 1671 3714 46 31
+arcade/coveredMachine 3310 4098 37 37
+dartchain_burned 4105 3962 18 38
+furni/outdoor/soda_pop 3838 1939 17 40
+musket 3453 1944 11 41
+furni/stone/graves 4112 687 30 45
+movingSpikes 2684 1088 42 32
+furni/fancy/fancytable 3716 3874 42 32
+furni/everyday/shelf 1008 2576 42 16
+furni/bar/neon 2598 3102 48 28
+arcade/wagnustrainer 4123 1275 38 35
+furni/ship/captainswheel 4265 1805 26 50
+highPowerRifle 2530 1941 12 36
+furni/ship/porthole 4116 2450 18 36
+duckCoin 4129 389 18 36
+furni/bar/pooltable 1645 4104 16 40
+furni/momento/YOYO 4129 87 32 39
+furni/everyday/cabinets 3765 2239 40 31
+ctf/present 4129 407 17 36
+itemCrate 4129 424 17 36
+furni/momento/jukebox 3716 3948 38 32
+soldStamp 3566 2452 16 37
+arcade/arcadeMachineOutline 3765 2279 38 31
+furni/flowers/braided ficus 4135 2555 29 40
+furni/ship/life_preserver 990 2968 17 34
+furni/bathroom/papertowel 4146 3602 17 34
+Editor/sideArrowHover 4146 3619 17 34
+furni/bigScren 4172 3695 28 41
+furni/bar/dartboard 2598 3150 42 27
+levelBrowserArrow 2598 3192 47 24
+numbers 2321 442 8 35
+furni/everyday/strawbroom 4174 407 25 44
+furni/outdoor/cooler 3765 2317 42 26
+blunderbuss 1296 2571 11 33
+buttons/mouse 3100 2413 15 36
+furni/music/cello 1009 2090 36 15
+furni/fancy/fancyFlagpole 1008 2618 33 16
+furni/default/flagpole 1008 2656 33 16
+furni/stone/stoneFlagpole 1015 1538 33 8
+furni/outdoor/naturalFlagpole 1015 1571 33 8
+doorFrame 1687 2430 35 10
+pyramidDoorFrame 1687 2465 35 10
+background/berg2 2623 1178 10 35
+arcade/customMachine 3765 2359 36 29
+DuckGame.SpringDownRight DuckGame32 32 3716 3916 32 32
+DuckGame.SpringLeft DuckGame32 32 3845 3982 32 32
+DuckGame.SpringRight DuckGame32 32 3984 687 32 32
+DuckGame.SpringUpLeft DuckGame32 32 3716 3986 32 32
+DuckGame.SawsDown DuckGame32 32 4001 384 32 32
+DuckGame.SawsLeft DuckGame32 32 4001 416 32 32
+DuckGame.Saws DuckGame32 32 3845 4014 32 32
+DuckGame.Present DuckGame32 32 3716 4018 32 32
+DuckGame.RockWall DuckGame32 32 3845 4046 32 32
+DuckGame.SMG DuckGame32 32 3845 4078 32 32
+DuckGame.Rock DuckGame32 32 482 4078 32 32
+DuckGame.RandomControllerNew DuckGame32 32 482 4110 32 32
+DuckGame.RaceSign DuckGame32 32 2342 4116 32 32
+DuckGame.StreetLight DuckGame32 32 4037 4126 32 32
+DuckGame.QuadLaser DuckGame32 32 3941 4126 32 32
+DuckGame.SpringUpRight DuckGame32 32 482 4142 32 32
+DuckGame.SpringDownLeft DuckGame32 32 2342 4148 32 32
+DuckGame.SpookyTileset DuckGame32 32 1325 4164 32 32
+DuckGame.Spring DuckGame32 32 482 4174 32 32
+DuckGame.ScaffoldingTileset DuckGame32 32 610 4176 32 32
+DuckGame.Sharpshot DuckGame32 32 4177 2564 32 32
+DuckGame.Shotgun DuckGame32 32 4177 2644 32 32
+DuckGame.Slag DuckGame32 32 4177 2132 32 32
+DuckGame.RCController DuckGame32 32 4177 2224 32 32
+DuckGame.Sword DuckGame32 32 4177 2731 32 32
+DuckGame.Sniper DuckGame32 32 2582 4180 32 32
+DuckGame.SnowDrift DuckGame32 32 2342 4180 32 32
+DuckGame.SnowGenerator DuckGame32 32 352 4181 32 32
+DuckGame.SnowIceTileset DuckGame32 32 2985 4181 32 32
+DuckGame.SpringDown DuckGame32 32 978 4182 32 32
+DuckGame.SnowPile DuckGame32 32 4190 3604 32 32
+DuckGame.SnubbyPistol DuckGame32 32 4193 2052 32 32
+DuckGame.SpaceBackground DuckGame32 32 4037 4203 32 32
+DuckGame.SpaceTileset DuckGame32 32 4204 1549 32 32
+DuckGame.SpawnCannon DuckGame32 32 3845 4210 32 32
+DuckGame.Crate DuckGame32 32 4211 3950 32 32
+DuckGame.Spikes DuckGame32 32 1325 4212 32 32
+DuckGame.SpikesDown DuckGame32 32 3556 4213 32 32
+DuckGame.SledgeHammer DuckGame32 32 2724 4213 32 32
+DuckGame.SpikesRight DuckGame32 32 4216 1284 32 32
+DuckGame.SawsRight DuckGame32 32 4221 3220 32 32
+DuckGame.SnowTileset DuckGame32 32 4221 815 32 32
+DuckGame.PyramidWallLight DuckGame32 32 4222 96 32 32
+ctf/spawner 1968 444 4 32
+DuckGame.PyramidLightRoof DuckGame32 32 482 4222 32 32
+DuckGame.NublessSnowTileset DuckGame32 32 4222 895 32 32
+DuckGame.NublessSnowIceTileset DuckGame32 32 4222 407 32 32
+DuckGame.NetGun DuckGame32 32 4222 176 32 32
+DuckGame.NatureTileset DuckGame32 32 4224 3422 32 32
+DuckGame.NatureBackgroundNight DuckGame32 32 610 4224 32 32
+DuckGame.NatureBackground DuckGame32 32 4225 2731 32 32
+DuckGame.MysteryGun DuckGame32 32 4225 1415 32 32
+DuckGame.Musket DuckGame32 32 4225 2132 32 32
+DuckGame.Mine DuckGame32 32 4225 2224 32 32
+DuckGame.MirrorMode DuckGame32 32 4225 2564 32 32
+DuckGame.Icicles DuckGame32 32 4225 2644 32 32
+DuckGame.PipeRed DuckGame32 32 2582 4228 32 32
+DuckGame.PineTreeSnowTileset DuckGame32 32 352 4229 32 32
+DuckGame.PlasmaBlaster DuckGame32 32 2985 4229 32 32
+DuckGame.KnightHelmet DuckGame32 32 978 4230 32 32
+DuckGame.LavaBarrel DuckGame32 32 4238 3604 32 32
+DuckGame.MallardBillboard DuckGame32 32 4241 2052 32 32
+DuckGame.MarineSpace.WumpQuadLaser DuckGame32 32 4252 1549 32 32
+DuckGame.OfficeTileset DuckGame32 32 3845 4258 32 32
+DuckGame.OfficeBackground DuckGame32 32 4259 3950 32 32
+DuckGame.OldPistol DuckGame32 32 1325 4260 32 32
+DuckGame.MindControlRay DuckGame32 32 3556 4261 32 32
+DuckGame.PyramidDoor DuckGame32 32 2724 4261 32 32
+DuckGame.PyramidBrick DuckGame32 32 3156 4265 32 32
+DuckGame.PyramidBLight DuckGame32 32 3306 4265 32 32
+DuckGame.PyramidBackground DuckGame32 32 1555 4265 32 32
+DuckGame.PurpleBlock DuckGame32 32 3204 4265 32 32
+DuckGame.VerticalFunBeam DuckGame32 32 4265 1853 32 32
+DuckGame.ForegroundNature DuckGame32 32 4265 1885 32 32
+DuckGame.Saxaphone DuckGame32 32 4265 1917 32 32
+DuckGame.OfficeLight DuckGame32 32 1491 4265 32 32
+DuckGame.SuicidePistol DuckGame32 32 1523 4265 32 32
+DuckGame.PipeGreen DuckGame32 32 1427 4265 32 32
+DuckGame.PipeBlue DuckGame32 32 1459 4265 32 32
+DuckGame.PineTrunkTileset DuckGame32 32 4267 450 32 32
+DuckGame.PineTreeTileset DuckGame32 32 4267 482 32 32
+DuckGame.IndustrialBackground DuckGame32 32 1024 4267 32 32
+DuckGame.PhysicsRope DuckGame32 32 4267 514 32 32
+DuckGame.PhysicsChain DuckGame32 32 1056 4267 32 32
+DuckGame.PewPewLaser DuckGame32 32 1088 4267 32 32
+DuckGame.PelletGun DuckGame32 32 3588 4268 32 32
+DuckGame.PyramidTileset DuckGame32 32 3636 4268 32 32
+DuckGame.SnowBackground DuckGame32 32 3668 4268 32 32
+DuckGame.WallBoots DuckGame32 32 3700 4268 32 32
+DuckGame.RomanCandle DuckGame32 32 4269 559 32 32
+Editor/radioButton 2828 3892 16 32
+Editor/moveBlock 3556 4002 16 32
+Editor/checkBox 4045 3244 16 32
+Editor/dieBlockRed 3716 4050 16 32
+Editor/numBlock 4080 694 16 32
+laserFlareOrange 3845 4110 16 32
+survival/cryoPlug 4172 3723 16 32
+Editor/editBlock 4174 432 16 32
+Editor/dieBlock 4177 2962 16 32
+DuckGame.WireActivator DuckGame32 32 4269 607 32 32
+DuckGame.PizzaLauncher DuckGame32 32 4269 3124 32 32
+DuckGame.PinkBox DuckGame32 32 4269 3172 32 32
+DuckGame.NetGun2 DuckGame32 32 4269 3204 32 32
+DuckGame.DartGrenade DuckGame32 32 4269 1039 32 32
+DuckGame.WireFlipper DuckGame32 32 4269 1087 32 32
+DuckGame.YellowBarrel DuckGame32 32 4269 1119 32 32
+DuckGame.WumpHugeLaser DuckGame32 32 4269 3076 32 32
+DuckGame.MarineSpace.WumpBlunderbuss DuckGame32 32 4269 639 32 32
+DuckGame.Warpgun DuckGame32 32 4269 1151 32 32
+Editor/regenBlock 1325 4196 16 32
+laserFlare 3540 4197 16 32
+furni/everyday/wallclock 482 4206 16 32
+rainSplash 2578 1896 8 32
+netGunGuage 2578 1907 8 32
+passwordFont 862 2984 8 32
+woodDebris 894 2984 8 32
+pinkbox 610 4208 16 32
+activatorBlock 2582 4212 16 32
+rockThrow/scoreCard 352 4213 16 32
+wetEnter 2985 4213 16 32
+mindControlGun 978 4214 16 32
+genderIcons 4217 1789 16 32
+dartgrenade 4217 1725 16 32
+wireBlock 4221 703 16 32
+wireFlipper 4225 2962 16 32
+wireMount 3845 4242 16 32
+dart 1325 4244 16 32
+candleBall 2724 4245 16 32
+grenade 3556 4245 16 32
+drinks 482 4254 16 32
+Editor/resizeBlock 610 4256 16 32
+DuckGame.WallLightLeft DuckGame32 32 4269 3745 32 32
+DuckGame.Sun DuckGame32 32 4269 671 32 32
+DuckGame.WallLightRight DuckGame32 32 4269 767 32 32
+DuckGame.WireButton DuckGame32 32 4269 799 32 32
+DuckGame.TutorialSign02 DuckGame32 32 4269 719 32 32
+DuckGame.TutorialSign01 DuckGame32 32 4269 2980 32 32
+DuckGame.VeryHardSign DuckGame32 32 4269 3012 32 32
+DuckGame.TutorialSign00 DuckGame32 32 4269 3044 32 32
+DuckGame.TutorialGunCrouchJump DuckGame32 32 4269 3777 32 32
+DuckGame.Trumpet DuckGame32 32 4269 3809 32 32
+DuckGame.TroubleLight DuckGame32 32 4270 263 32 32
+DuckGame.Trophy DuckGame32 32 4165 4270 32 32
+DuckGame.TutorialSign03 DuckGame32 32 4270 48 32 32
+DuckGame.Trombone DuckGame32 32 2086 4270 32 32
+DuckGame.TreeTopDead DuckGame32 32 4270 80 32 32
+DuckGame.TreeTop DuckGame32 32 386 4270 32 32
+DuckGame.TreeTileset DuckGame32 32 434 4270 32 32
+DuckGame.TargetDuckNew DuckGame32 32 4213 4270 32 32
+DuckGame.TinfoilHat DuckGame32 32 2182 4270 32 32
+DuckGame.TutorialGunJump DuckGame32 32 466 4270 32 32
+DuckGame.TeamSpawn DuckGame32 32 642 4270 32 32
+DuckGame.PowerHolster DuckGame32 32 2214 4270 32 32
+DuckGame.TriggerVolume DuckGame32 32 4069 4270 32 32
+DuckGame.TutorialSign04 DuckGame32 32 4270 311 32 32
+DuckGame.TutorialSign05 DuckGame32 32 674 4270 32 32
+DuckGame.TV DuckGame32 32 2246 4270 32 32
+DuckGame.WaterCooler DuckGame32 32 4101 4270 32 32
+DuckGame.WaterFall DuckGame32 32 4270 847 32 32
+DuckGame.WaterFallEdge DuckGame32 32 4270 0 32 32
+DuckGame.WoodScaffoldingTileset DuckGame32 32 4270 359 32 32
+DuckGame.WireTrapDoor DuckGame32 32 706 4270 32 32
+DuckGame.WaterFallEdgeTop DuckGame32 32 4261 4270 32 32
+DuckGame.WireTileset DuckGame32 32 4133 4270 32 32
+DuckGame.WaterFallTile DuckGame32 32 4270 879 32 32
+DuckGame.VirtualShotgun DuckGame32 32 4270 934 32 32
+DuckGame.TheDishes DuckGame32 32 4270 391 32 32
+DuckGame.WaterFlow DuckGame32 32 4270 215 32 32
+DuckGame.WireMount DuckGame32 32 4270 128 32 32
+DuckGame.Tombstone DuckGame32 32 4270 160 32 32
+redGlowWideSharp 1023 1538 32 1
+DuckGame.VirtualBackground DuckGame32 32 2134 4270 32 32
+DuckGame.VerticalDoor DuckGame32 32 738 4270 32 32
+DuckGame.UpSign DuckGame32 32 770 4270 32 32
+DuckGame.UndergroundTileset DuckGame32 32 802 4270 32 32
+DuckGame.UndergroundBackground DuckGame32 32 514 4272 32 32
+DuckGame.WumpAK47 DuckGame32 32 4272 3374 32 32
+DuckGame.Magnum DuckGame32 32 4272 3406 32 32
+DuckGame.Phaser DuckGame32 32 4272 3326 32 32
+DuckGame.SpikesLeft DuckGame32 32 562 4272 32 32
+returnFolder 594 4272 32 32
+hats/chancee 4273 2770 32 32
+redGlow 4273 2176 32 32
+DuckGame.Altar DuckGame32 32 4273 2468 32 32
+Editor/sideArrow 4273 2516 32 32
+flags/full_aaeggs 4273 2316 32 32
+flags/full_aabooks 4273 1367 32 32
+survival/cryoTube 4273 2364 32 32
+hats/senpaiStar 4273 2596 32 32
+hats/funhat 4273 2084 32 32
+hats/waffleCape 4273 2208 32 32
+server_default 4273 2268 32 32
+Image4 4273 2866 32 32
+hats/sombrero 4273 2898 32 32
+hardRight 4273 2930 32 32
+hats/drunks 4273 2548 32 32
+hardLeft 4273 2116 32 32
+hats/agents 4273 2683 32 32
+hats/noHat 4273 2715 32 32
+hats/cluehat 4273 1399 32 32
+hats/caps 4273 1319 32 32
+hats/log 4273 2396 32 32
+glitchMap3 4273 2428 32 32
+gereCape 4273 2818 32 32
+hats/dicks 4273 2628 32 32
+server_default_lan 1702 4275 32 32
+wumpNet 1798 4275 32 32
+smokeBacks 1830 4275 32 32
+DuckGame.CameraFixed DuckGame32 32 1862 4275 32 32
+DuckGame.ArrowSign DuckGame32 32 1750 4275 32 32
+plainCape 2374 4276 32 32
+flags/full_aasax 2438 4276 32 32
+flags/full_zztrans 2406 4276 32 32
+flags/full_zzpride 2534 4276 32 32
+plaque 2566 4276 32 32
+flags/full_zznonbinary 2486 4276 32 32
+flags/full_zzlesbian 256 4277 32 32
+flags/full_zzbisexual 2937 4277 32 32
+flags/full_zzasexual 2969 4277 32 32
+flags/full_aatv 304 4277 32 32
+flags/full_aarocks 336 4277 32 32
+furni/default/cantPlaceLarge 2889 4277 32 32
+combatShotgun 834 4278 32 32
+flags/full_zzpansexual 930 4278 32 32
+DuckGame.CoilGun DuckGame32 32 962 4278 32 32
+furni/flagpole 882 4278 32 32
+hats/angrys 4286 3460 32 32
+DuckGame.BackgroundSpace DuckGame32 32 4286 3556 32 32
+selectBeam 4286 3588 32 32
+DuckGame.AK47 DuckGame32 32 4286 3508 32 32
+windowDebris 2769 4287 32 32
+spikeRing 3973 4287 32 32
+smokeFronts 4005 4287 32 32
+tromboneSlide 2801 4287 32 32
+virtualShotgun 4037 4287 32 32
+flavourLines 4289 1956 32 32
+bigFolder 4289 2004 32 32
+lavaGlowEdge 4289 2036 32 32
+tinfoilHat 1603 4295 32 32
+hats/wahhs 4293 4270 32 32
+hats/devCape 2724 4293 32 32
+grenadeLauncher 3028 4295 32 32
+hats/pots 1635 4295 32 32
+tinyGun 3060 4295 32 32
+hats/cyborgs 1667 4295 32 32
+hats/kerchief 3156 4297 32 32
+halo 1555 4297 32 32
+flamethrowerCan 3204 4297 32 32
+flamethrower 4297 1853 32 32
+hats/moonCape 4297 1885 32 32
+hats/royalCape 4297 1917 32 32
+goneFishin 1491 4297 32 32
+hats/b52s 1523 4297 32 32
+hats/suit 1427 4297 32 32
+steamIcon 1459 4297 32 32
+discordIcon 1120 4298 32 32
+tinyIcons 3252 4298 32 32
+barrelSmoke 1363 4298 32 32
+ak47 4298 995 32 32
+levelJetIdle 1395 4298 32 32
+warpLine2 3284 4298 32 32
+hats/cowboys 3316 4298 32 32
+lavaGlowEdgeVert 4299 450 32 32
+DuckGame.BackgroundBathroom DuckGame32 32 1024 4299 32 32
+bulletHoles 1056 4299 32 32
+shotgun 4299 482 32 32
+hats/bawb 4299 514 32 32
+easyRight 1088 4299 32 32
+easyLeft 4300 1629 32 32
+grid 3092 4300 32 32
+magnetGun 3588 4300 32 32
+laserRifle 3636 4300 32 32
+bigDrift 3668 4300 32 32
+hats/super 3700 4300 32 32
+hats/pompadour 3124 4300 32 32
+burn 4300 1453 32 32
+harpoonGun 4300 1501 32 32
+hats/ski 4300 1533 32 32
+tromboneBody 4300 1581 32 32
+saxaphone 4301 559 32 32
+rcController 4301 767 32 32
+pewpewLaser 4301 799 32 32
+officeLight 4301 719 32 32
+DuckGame.CombatShotgun DuckGame32 32 4301 2980 32 32
+hats/pilots 4301 3012 32 32
+netGun 4301 3777 32 32
+mysteryGun 4301 3809 32 32
+suicidePistol 4301 1039 32 32
+magnum 4301 1087 32 32
+hats/dapper 4301 1119 32 32
+bulletHoles2 4301 3076 32 32
+sheeld 4301 1151 32 32
+DuckGame.BackgroundCastle DuckGame32 32 4301 3745 32 32
+flags/full_aagraves 4301 671 32 32
+DuckGame.BackgroundConcrete DuckGame32 32 4301 639 32 32
+DuckGame.ECrate DuckGame32 32 4301 3124 32 32
+DuckGame.FunBeam DuckGame32 32 4301 3172 32 32
+DuckGame.FreeSpawn DuckGame32 32 4301 3204 32 32
+DuckGame.MarineSpace.WumpPistol DuckGame32 32 4301 607 32 32
+DuckGame.Flower DuckGame32 32 4301 3044 32 32
+DuckGame.Pistol DuckGame32 32 4302 263 32 32
+DuckGame.FlareGun DuckGame32 32 4302 311 32 32
+DuckGame.FlameThrower DuckGame32 32 674 4302 32 32
+DuckGame.FishinSign DuckGame32 32 434 4302 32 32
+DuckGame.FireExtinguisher DuckGame32 32 4101 4302 32 32
+DuckGame.FireCrackers DuckGame32 32 4302 847 32 32
+DuckGame.GoalType DuckGame32 32 4302 0 32 32
+DuckGame.HugeLaser DuckGame32 32 4302 359 32 32
+DuckGame.FancyShoes DuckGame32 32 4213 4302 32 32
+DuckGame.Equipper DuckGame32 32 4261 4302 32 32
+DuckGame.IceWedge DuckGame32 32 2182 4302 32 32
+DuckGame.EasySign DuckGame32 32 4302 879 32 32
+DuckGame.DuelingPistol DuckGame32 32 4302 934 32 32
+DuckGame.DuctTape DuckGame32 32 4302 391 32 32
+DuckGame.Door DuckGame32 32 4302 128 32 32
+DuckGame.DonutTileset DuckGame32 32 706 4302 32 32
+DuckGame.DonutSpaceBackground DuckGame32 32 4302 160 32 32
+DuckGame.Desk DuckGame32 32 2134 4302 32 32
+DuckGame.BackgroundCity DuckGame32 32 4133 4302 32 32
+DuckGame.DeathCrate DuckGame32 32 738 4302 32 32
+DuckGame.EnergyScimitar DuckGame32 32 770 4302 32 32
+DuckGame.DartGun DuckGame32 32 4293 4302 32 32
+DuckGame.CustomTileset3 DuckGame32 32 4302 215 32 32
+DuckGame.CustomTileset2 DuckGame32 32 466 4302 32 32
+DuckGame.G18 DuckGame32 32 642 4302 32 32
+DuckGame.CustomTileset DuckGame32 32 2214 4302 32 32
+DuckGame.ExplosiveBarrel DuckGame32 32 4069 4302 32 32
+DuckGame.Grapple DuckGame32 32 2246 4302 32 32
+DuckGame.MagnetGun DuckGame32 32 2086 4302 32 32
+DuckGame.LaserSpawner DuckGame32 32 4302 80 32 32
+DuckGame.KingdomBackground DuckGame32 32 386 4302 32 32
+DuckGame.Lamp DuckGame32 32 4165 4302 32 32
+DuckGame.MagBlaster DuckGame32 32 802 4302 32 32
+DuckGame.Matchbox DuckGame32 32 4302 48 32 32
+DuckGame.MaceCollar DuckGame32 32 514 4304 32 32
+DuckGame.Keytar DuckGame32 32 562 4304 32 32
+DuckGame.Key DuckGame32 32 594 4304 32 32
+DuckGame.Jetpack DuckGame32 32 4304 3406 32 32
+DuckGame.ItemSpawner DuckGame32 32 4304 3326 32 32
+DuckGame.ItemCrate DuckGame32 32 4304 3374 32 32
+DuckGame.ItemBoxRandom DuckGame32 32 4305 2770 32 32
+DuckGame.ItemBoxOneTime DuckGame32 32 4305 2116 32 32
+DuckGame.ItemBox DuckGame32 32 4305 2683 32 32
+DuckGame.IndustrialTileset DuckGame32 32 4305 2715 32 32
+DuckGame.LaserRifle DuckGame32 32 4305 1399 32 32
+DuckGame.FlimsyDoor DuckGame32 32 4305 1319 32 32
+DuckGame.IceBlock DuckGame32 32 4305 2818 32 32
+DuckGame.EightPlayer DuckGame32 32 4305 2628 32 32
+DuckGame.GoodBook DuckGame32 32 4305 2396 32 32
+DuckGame.Holster DuckGame32 32 4305 2316 32 32
+DuckGame.Helmet DuckGame32 32 4305 2468 32 32
+DuckGame.HardLeft DuckGame32 32 4305 2516 32 32
+DuckGame.HangingCityLight DuckGame32 32 4305 2176 32 32
+DuckGame.GreyBlock DuckGame32 32 4305 1367 32 32
+DuckGame.GrenadeLauncher DuckGame32 32 4305 2364 32 32
+DuckGame.GrenadeCannon DuckGame32 32 4305 2596 32 32
+DuckGame.Grenade DuckGame32 32 4305 2084 32 32
+DuckGame.GoodyNew DuckGame32 32 4305 2428 32 32
+DuckGame.CustomPlatform3 DuckGame32 32 4305 2208 32 32
+DuckGame.DemoCrate DuckGame32 32 4305 2268 32 32
+DuckGame.CustomPlatform DuckGame32 32 4305 2866 32 32
+DuckGame.ChokeCollar DuckGame32 32 4305 2898 32 32
+DuckGame.CustomPlatform2 DuckGame32 32 4305 2930 32 32
+DuckGame.BackgroundArcade DuckGame32 32 4305 2548 32 32
+DuckGame.ChallengeModeNew DuckGame32 32 2833 4306 32 32
+DuckGame.Chaingun DuckGame32 32 3925 4306 32 32
+DuckGame.Chaindart DuckGame32 32 3797 4306 32 32
+DuckGame.CaveTileset DuckGame32 32 3749 4306 32 32
+DuckGame.CastleTileset DuckGame32 32 3877 4306 32 32
+DuckGame.CampingRifle DuckGame32 32 3829 4306 32 32
+DuckGame.CameraZoomNew DuckGame32 32 4307 3854 32 32
+DuckGame.CameraMover DuckGame32 32 1702 4307 32 32
+DuckGame.Bulb DuckGame32 32 1798 4307 32 32
+DuckGame.BackgroundOffice DuckGame32 32 1830 4307 32 32
+DuckGame.Chainsaw DuckGame32 32 1750 4307 32 32
+DuckGame.Banana DuckGame32 32 1862 4307 32 32
+rainbowCarp 4307 3902 32 32
+DuckGame.Boots DuckGame32 32 4307 3934 32 32
+DuckGame.Blunderbuss DuckGame32 32 1181 4308 32 32
+DuckGame.BlueprintTileset DuckGame32 32 2326 4308 32 32
+DuckGame.BlueBarrel DuckGame32 32 2534 4308 32 32
+DuckGame.Bazooka DuckGame32 32 2566 4308 32 32
+DuckGame.Basketball DuckGame32 32 2486 4308 32 32
+DuckGame.BananaCluster DuckGame32 32 1277 4308 32 32
+DuckGame.BuildingFramework DuckGame32 32 1309 4308 32 32
+DuckGame.BackgroundBar DuckGame32 32 2374 4308 32 32
+DuckGame.BackgroundPyramid DuckGame32 32 2406 4308 32 32
+DuckGame.BackgroundNature DuckGame32 32 2438 4308 32 32
+DuckGame.BackgroundJets DuckGame32 32 1229 4308 32 32
+DuckGame.BackgroundIndustrial DuckGame32 32 2278 4308 32 32
+DuckGame.CityBackground DuckGame32 32 4309 4126 32 32
+DuckGame.CityRamp DuckGame32 32 4309 4030 32 32
+DuckGame.CameraBoundsNew DuckGame32 32 256 4309 32 32
+whiteGlow 2937 4309 32 32
+DuckGame.CustomParallaxSegment DuckGame32 32 2969 4309 32 32
+DuckGame.CustomParallax DuckGame32 32 304 4309 32 32
+DuckGame.CustomBackground3 DuckGame32 32 336 4309 32 32
+DuckGame.CustomBackground2 DuckGame32 32 2889 4309 32 32
+DuckGame.CustomBackground DuckGame32 32 2628 4309 32 32
+DuckGame.DangerSign DuckGame32 32 64 4309 32 32
+DuckGame.MarineSpace.WumpSniper DuckGame32 32 208 4309 32 32
+DuckGame.CowboyPistol DuckGame32 32 3348 4309 32 32
+DuckGame.SpikeHelm DuckGame32 32 112 4309 32 32
+DuckGame.CityTileset DuckGame32 32 4309 4174 32 32
+DuckGame.CityTreeTileset DuckGame32 32 4309 4078 32 32
+DuckGame.ChestPlate DuckGame32 32 3460 4309 32 32
+DuckGame.CloudTileset DuckGame32 32 3508 4309 32 32
+DuckGame.ClippingSign DuckGame32 32 3380 4309 32 32
+DuckGame.CityWall DuckGame32 32 4309 3982 32 32
+windowFrame 1010 1721 34 10
+newsTitle5 3942 4158 31 31
+snowFall 1659 4265 24 40
+furni/fancy/tub 4301 3236 24 40
+window 1687 2500 32 6
+background/berg3_reflection 960 3808 14 34
+wumpblunderbuss 3986 3626 14 34
+plane 3822 437 13 36
+furni/fancy/bust 4302 966 24 39
+furni/cheap/fusebox 3558 408 40 23
+uiBox 2739 4181 30 30
+wumpak47 4020 3626 14 32
+furni/bathroom/cleaner 770 4063 14 32
+sniper 3040 1078 9 33
+furni/fancy/chandelier 4302 423 26 34
+pelletGun 1671 3760 14 31
+furni/cheap/garbo 3560 4078 32 27
+energyScimiBladeTrail 1687 2532 33 13
+energyScimiHilt 1008 2689 33 13
+energyScimiBlade 2705 1010 33 13
+wumphugelaser 4305 2148 24 35
+title/bigStartButtonSwitch 3582 438 12 35
+gunSpawner 1334 4107 30 28
+furni/outdoor/backboard 4270 966 27 31
+furni/ship/periscope 1870 3684 36 23
+furni/office/coffeevendingmachine 3750 412 34 24
+goodBook 3617 438 12 34
+lampShade 2705 1043 29 14
+wumpsniper 2598 2975 14 29
+lamp 1008 2736 29 14
+background/berg3 2598 2989 9 30
+sandwichStamp 4273 2240 28 28
+furni/scren 4273 2148 28 28
+boardLoader 3765 2395 14 28
+bazooka 994 3808 13 30
+furni/freezer/ancestor 2598 4276 32 24
+furni/office/printer 3001 4277 29 26
+furni/cheap/famous_elf 994 4278 30 25
+spikehelm 4265 1831 22 34
+spikehelmWorn 4276 3282 22 34
+furni/flowers/lachenalia 4277 3304 22 34
+furni/freezer/snowfa 4280 3260 21 35
+chatBust_m 707 3800 13 28
+chatBust3 3858 437 13 28
+chatBust6 4033 437 13 28
+chatBust7 4052 3626 13 28
+chatBust0 802 4063 13 28
+chatBust4 4061 437 13 28
+chatBust2 830 4063 13 28
+chatBust1 858 4063 13 28
+chatBust 976 4065 13 28
+chatBust5 4077 3841 13 28
+furni/bathroom/urinal 1152 4298 28 26
+furni/ship/jollyroger 4302 911 22 33
+furni/outdoor/bbq 4269 3236 22 32
+furni/ship/anchor 4305 2240 28 25
+sledgeForce 2598 1838 29 12
+furni/bar/cuerack 1683 2818 36 19
+positronShooter 3651 438 12 28
+redGlowWideLeft 2606 3267 32 21
+redGlowWideRight 2606 3299 32 21
+powerHolster 3679 438 12 28
+pauseIcons 4270 911 21 32
+arcade/monitorFlashWagnus 4270 423 22 30
+furni/momento/junk 1334 4137 23 28
+xboxController 4270 192 22 29
+furni/momento/easel 2606 3331 30 21
+furni/bathroom/bigsink 2865 4306 26 24
+keyboard 3942 4189 21 29
+wireButton 4272 3438 19 32
+nikoextraButton 2598 4308 24 25
+buttons/styleBubble 1336 2563 22 27
+furni/ship/ship 3957 3236 24 24
+furni/outdoor/forest 3001 4309 24 24
+furni/flowers/greenhouse 3412 4309 24 24
+furni/everyday/basic 3436 4309 24 24
+furni/cheap/shabby 0 4309 24 24
+furni/office/office 24 4309 24 24
+furni/default/default 4309 4222 24 24
+bigGlob 999 1875 8 24
+furni/stone/stone 4309 4246 24 24
+furni/everyday/default 3540 4309 24 24
+waterLighting 1023 1571 24 1
+furni/freezer/freezer 3564 4309 24 24
+channels 1477 444 6 24
+tvnoise 999 1883 6 24
+furni/cheap/hobofire 4273 2962 18 32
+furni/fancy/fancy 2676 4309 24 24
+furni/stone 2700 4309 24 24
+furni/fontIcon 160 4309 24 24
+furni/bathroom/tiles 184 4309 24 24
+furni/bar/bar 834 4310 24 24
+furni/music/music 930 4310 24 24
+snubby 3073 1078 10 28
+furni/outdoor/flamingo 2606 3375 25 22
+arcadeLight 2606 3400 27 20
+arcade/chancyHover 1683 2854 28 19
+arcade/monitorFlashLarge 4077 538 20 26
+corkGun 2658 1178 10 26
+furni/freezer/snowduck 3980 3437 21 24
+arcade/plug_hover 1683 2882 28 18
+turretHead 3430 440 10 25
+arcade/fixture 2606 3427 25 20
+pizer 4273 2747 17 29
+cowboyPistol 1320 2781 11 22
+trumpet 3455 440 10 24
+furni/freezer/IceTable 2582 4260 16 30
+blueBarrelToreUp 4080 3728 17 28
+yellowBarrelToreUp 4132 3438 17 28
+bleacherSeat 1683 2910 25 19
+furni/everyday/vent 1683 2935 26 18
+background/cloud3 1284 447 3 22
+rockThrow/rockSmudge 3479 440 10 23
+rockThrow/rockSmudgeSnow 3502 440 10 23
+rockThrow/rockSmudgeMud 3525 440 10 23
+g18 2985 4261 16 28
+arcade/chancy 1683 2961 26 17
+drumset/crashStand 1015 1604 21 7
+title/editorBenchPaint 926 2984 7 21
+online/matchmakingStar 947 2984 7 21
+onlineStatusIcons 968 2984 7 21
+title/bigUButtonPC 2606 3452 21 21
+hugeBeam 1022 1604 21 1
+title/bigUButton 2606 3473 21 21
+powerHolsterUnder 2606 3361 10 22
+furni/everyday/umbrella 1344 2962 24 18
+background/cloud2 3668 3450 10 21
+bigLaserCone 2598 1867 21 10
+furni/music/mic stand 1343 2771 22 19
+furni/flowers/spiderplant 1344 2986 22 19
+furni/momento/giftbasket 1870 3720 19 22
+arcade/plug_duck 1008 2765 26 16
+furni/default/proximityDefenseTurret 998 4138 16 25
+online/signalCross 2000 445 5 20
+demoCrate 2256 3804 20 20
+furni/default/voodooVincent 1683 2987 21 19
+arcade/monitorFlash 2256 3824 18 22
+furni/cheap/lampNoShade 1693 2500 22 9
+_arrowSprite3 3988 1933 16 24
+iceSculpture 1008 2791 24 16
+furni/freezer/icicle 352 4261 16 24
+_arrowSprite7 978 4262 16 24
+startArrow_m 4269 591 16 24
+_arrowSprite2 4269 3156 16 24
+_arrowSprite4 4269 1071 16 24
+_arrowSprite1 4269 703 16 24
+_arrowSprite0 4269 751 16 24
+startArrow 4269 831 16 24
+_arrowSprite6 4269 3108 16 24
+_arrowSprite5 4270 295 16 24
+furni/outdoor/pot 1344 3008 20 19
+hostCrown 3836 3535 19 20
+consoleHighlight 3836 3554 19 20
+furni/ship/seaweed 3836 3573 18 21
+singleDuck 1685 2622 23 16
+sword 1685 2645 23 8
+furni/outdoor/stopsign 1683 3026 19 19
+maceBall 1344 3028 19 19
+rockThrow/chairBottomBack 1685 2668 22 16
+arcade/plug_machine_monitor 2256 3842 16 22
+waterGun 886 4063 14 25
+furni/outdoor/pan 2035 4095 15 23
+campingMelted 2058 4095 15 23
+ovensprite 1685 2691 20 17
+trophy 1683 3045 20 17
+furni/everyday/boombox 2256 3858 16 21
+furni/fancy/fancylamp 1008 2815 22 15
+dieHover 1683 3008 18 18
+funeralPic 1344 3047 19 17
+adjusterHand 1683 3065 17 18
+spikes 1008 2837 19 16
+furni/everyday/coathanger 3862 1591 14 21
+iceWedge 1344 3066 17 17
+plainWedge 1683 3082 17 17
+cityWedge 1344 3083 17 17
+furni/music/amp 1683 3099 16 18
+rockThrow/chairSeat 1008 2856 18 16
+furni/eggpillow 1008 2874 18 16
+rockThrow/rockSmearMud 990 2985 7 20
+rockThrow/rockSmearSnow 3046 1947 7 20
+rockThrow/rockSmear 3066 1947 7 20
+crowdDuck 1008 2892 20 14
+colorStarLarge 1344 3100 16 17
+purpleBlock 1008 2912 17 16
+furni/fancy/mirror 1683 3115 16 17
+arcade/goldUnlockLock 1344 3116 18 15
+furni/fancy/globe 1683 3131 18 15
+arcade/unlockLock 1344 3134 18 15
+distanceSign 3862 1605 13 20
+warpLine 1683 3149 16 16
+vineEnd 1344 3152 16 16
+tv 1683 3165 16 16
+tinyBubbles 1344 3168 16 16
+tinyBlueBubbles 3174 1588 16 16
+timeCubeFrame 3174 1604 16 16
+DuckGame.CustomBackground3 DuckGame16 16 3174 1620 16 16
+DuckGame.AK47 DuckGame16 16 3174 1636 16 16
+drumset/bassDrum 3174 1652 16 16
+Editor/canMirror 3174 1668 16 16
+Editor/multiplayerBlock 3174 1684 16 16
+tapePiece 3174 1700 16 16
+Editor/openAir 3174 1716 16 16
+Editor/singleplayerBlock 3174 1732 16 16
+furni/fancy/moneybag 3174 1748 16 16
+furni/momento/littlemanpic 3174 1764 16 16
+arcade/furnCursor 3174 1780 16 16
+DuckGame.Bulb DuckGame16 16 1683 3181 16 16
+DuckGame.Chaingun DuckGame16 16 1344 3184 16 16
+DuckGame.CameraFixed DuckGame16 16 1683 3197 16 16
+weightBall 1344 3202 16 16
+DuckGame.BuildingFramework DuckGame16 16 1683 3213 16 16
+slag 1344 3218 16 16
+furni/cheap/tire 1683 3229 16 16
+popLine 1344 3234 16 16
+rcBolt 1683 3245 16 16
+letterSign 1683 3266 16 16
+chestPlate 1344 3250 16 16
+cantPlace 1344 3266 16 16
+DuckGame.Sword DuckGame16 16 1683 3282 16 16
+brokeEdge 1344 3282 16 16
+projectorGlitch 1683 3298 16 16
+waterCoolerBottom 1344 3298 16 16
+flareGun 1683 3314 16 16
+pyramidBrick 1344 3314 16 16
+rock01 1683 3330 16 16
+DuckGame.CustomParallax DuckGame16 16 1344 3330 16 16
+snowGenerator 1683 3346 16 16
+standingFluidIcon 1344 3346 16 16
+DuckGame.BackgroundArcade DuckGame16 16 1683 3362 16 16
+tv2 1344 3362 16 16
+tvBroken 1683 3378 16 16
+wallLight 1344 3378 16 16
+lock 1683 3394 16 16
+quadLaser 1344 3394 16 16
+teevee 1683 3410 16 16
+DuckGame.CustomParallaxSegment DuckGame16 16 1683 3426 16 16
+DuckGame.CustomPlatform DuckGame16 16 1683 3442 16 16
+walljumpBootsPickup 1683 3466 16 16
+DuckGame.CloudTileset DuckGame16 16 1683 3482 16 16
+DuckGame.ChallengeModeNew DuckGame16 16 1683 3498 16 16
+drumsIcon 1683 3514 16 16
+DuckGame.ChestPlate DuckGame16 16 1683 3530 16 16
+DuckGame.ChokeCollar DuckGame16 16 1683 3546 16 16
+DuckGame.CityBackground DuckGame16 16 1683 3562 16 16
+DuckGame.CityRamp DuckGame16 16 1683 3578 16 16
+DuckGame.CityTileset DuckGame16 16 3012 3580 16 16
+rockThrow/chairFront 2020 445 4 16
+DuckGame.CityTreeTileset DuckGame16 16 1683 3594 16 16
+DuckGame.CityWall DuckGame16 16 3012 3596 16 16
+DuckGame.ClippingSign DuckGame16 16 1683 3610 16 16
+DuckGame.CoilGun DuckGame16 16 3012 3612 16 16
+steamIconSmall 3012 3628 16 16
+DuckGame.CombatShotgun DuckGame16 16 3012 3644 16 16
+DuckGame.CameraBoundsNew DuckGame16 16 3012 3660 16 16
+settingsWrench 3012 3676 16 16
+extinguisher 3692 1772 16 16
+selectButton 3012 3692 16 16
+DuckGame.ECrate DuckGame16 16 3692 1788 16 16
+DuckGame.CustomPlatform2 DuckGame16 16 3692 1863 16 16
+DuckGame.Altar DuckGame16 16 3692 1804 16 16
+DuckGame.BackgroundPyramid DuckGame16 16 3692 1879 16 16
+DuckGame.BackgroundIndustrial DuckGame16 16 3692 1820 16 16
+DuckGame.TeamSpawn DuckGame16 16 3692 1895 16 16
+DuckGame.Bazooka DuckGame16 16 3692 1836 16 16
+DuckGame.Basketball DuckGame16 16 3692 1911 16 16
+DuckGame.BananaCluster DuckGame16 16 3692 1927 16 16
+DuckGame.Banana DuckGame16 16 2612 3696 16 16
+DuckGame.BackgroundSpace DuckGame16 16 3012 3708 16 16
+DuckGame.BlueprintTileset DuckGame16 16 3012 3724 16 16
+DuckGame.BackgroundOffice DuckGame16 16 3012 3740 16 16
+DuckGame.BackgroundNature DuckGame16 16 3758 384 16 16
+DuckGame.BackgroundJets DuckGame16 16 3012 3756 16 16
+DuckGame.BackgroundConcrete DuckGame16 16 3835 3225 16 16
+Editor/isMirrored 3835 3241 16 16
+DuckGame.BackgroundCity DuckGame16 16 3862 1618 16 16
+DuckGame.BackgroundCastle DuckGame16 16 3862 1634 16 16
+DuckGame.BackgroundBathroom DuckGame16 16 3862 1650 16 16
+DuckGame.BackgroundBar DuckGame16 16 3862 1666 16 16
+DuckGame.BlueBarrel DuckGame16 16 3862 1682 16 16
+DuckGame.ArrowSign DuckGame16 16 3862 1698 16 16
+DuckGame.Blunderbuss DuckGame16 16 3862 1714 16 16
+DuckGame.Boots DuckGame16 16 3862 1730 16 16
+survival/cryoSocket 2256 3874 16 16
+oButton 3012 3912 16 16
+cameraIcon 3012 3928 16 16
+net 3012 3944 16 16
+selectButtonAssembly 3012 3960 16 16
+vine 3012 3976 16 16
+tounge 3987 3388 16 16
+searchiconwhite 3987 3404 16 16
+corpseLeft 3987 3420 16 16
+corpseRight 3996 1103 16 16
+die 3012 3992 16 16
+gameServerOnline 3996 1119 16 16
+gameServerWireless 1683 4009 16 16
+matchbox 3012 4008 16 16
+gradientLine 3012 4024 16 16
+harpoon 3006 4040 16 16
+Image5 3006 4056 16 16
+controlWave 3006 4072 16 16
+cloudIcon 1685 4104 16 16
+filterOn 1683 4121 16 16
+filterOff 4136 1108 16 16
+knightHelmetPickup 4136 1124 16 16
+DuckGame.EightPlayer DuckGame16 16 4136 1140 16 16
+dropShadow 4136 1156 16 16
+grappleWire 4136 1172 16 16
+challengeIcon 1683 4137 16 16
+cameraMover 1683 4153 16 16
+swirl 4158 2360 16 16
+tape 4051 4158 16 16
+virtualShotgunLoader 2628 437 8 16
+deleteFlag 1008 2722 8 16
+tampingHand 1016 1520 16 8
+phaserCharge 3086 1947 8 16
+verticalDoorBottom 3092 2460 8 16
+verticalDoorTop 3101 1078 8 16
+pyramidDoorBottom 3102 1947 8 16
+shotgunLoader 3108 2460 8 16
+teleporterTop 3118 1947 8 16
+pyramidDoorTop 3124 2460 8 16
+fileBrowserScrollArrow 3134 1947 8 16
+littleTeleBottom 3150 1947 8 16
+arcade/confetti 1693 2645 16 8
+furni/flowers/wateringcan 3166 1947 8 16
+teleporterBottom 3174 1796 8 16
+littleTeleTop 1683 3458 8 16
+plasmaBlaster 4158 2376 16 16
+basketBall 4158 2392 16 16
+bootsPickup 4158 2408 16 16
+bulb 4158 2424 16 16
+challenge/reticule 4158 2440 16 16
+arcade/ticket 2746 4159 16 16
+vanillaIcon 48 4165 16 16
+chestPlatePickup 3140 4169 16 16
+DuckGame.Sun DuckGame16 16 3076 4169 16 16
+DuckGame.SuicidePistol DuckGame16 16 1683 4169 16 16
+DuckGame.StreetLight DuckGame16 16 3732 4172 16 16
+DuckGame.SpringUpLeft DuckGame16 16 4051 4174 16 16
+DuckGame.SpikesDown DuckGame16 16 2422 4180 16 16
+DuckGame.SpringLeft DuckGame16 16 48 4181 16 16
+dirty 3076 4185 16 16
+DuckGame.G18 DuckGame16 16 1683 4185 16 16
+windowIconVertical 3140 4185 16 16
+DuckGame.SpringDownRight DuckGame16 16 3732 4188 16 16
+DuckGame.SpringDownLeft DuckGame16 16 2817 4191 16 16
+DuckGame.SpringDown DuckGame16 16 2422 4196 16 16
+DuckGame.Spring DuckGame16 16 48 4197 16 16
+DuckGame.SpookyTileset DuckGame16 16 3572 4197 16 16
+DuckGame.SpikesRight DuckGame16 16 3076 4201 16 16
+DuckGame.SpikesLeft DuckGame16 16 1683 4201 16 16
+DuckGame.ExplosiveBarrel DuckGame16 16 3140 4201 16 16
+arcadeIcon 3732 4204 16 16
+furni/momento/plate 4206 432 16 16
+modloadError 4209 2564 16 16
+none 4209 2580 16 16
+DuckGame.EnergyScimitar DuckGame16 16 2817 4207 16 16
+notes 4209 2644 16 16
+chain 4209 2660 16 16
+ball 4209 2962 16 16
+laserSpawner 4209 2224 16 16
+combatShotgunLoader 4209 2240 16 16
+flower 4209 2731 16 16
+magnet 4209 2747 16 16
+key 4209 2132 16 16
+notexture 4209 2148 16 16
+levelUpArrow 2422 4212 16 16
+helmetPickup 48 4213 16 16
+greyBlock 3396 4213 16 16
+launcherGrenade 1411 4217 16 16
+grappleArm 1475 4217 16 16
+cookedDuck 1539 4217 16 16
+searchicon 3076 4217 16 16
+funBeamer 3140 4217 16 16
+flower_burned 3732 4220 16 16
+windowIconHorizontal 4222 3604 16 16
+lanIconSmall 4222 3620 16 16
+purpleProjector 2817 4223 16 16
+mindBolt 4225 2052 16 16
+DuckGame.SpringRight DuckGame16 16 4225 2068 16 16
+aButton 2422 4228 16 16
+boxingGlove 48 4229 16 16
+eCrate 3396 4229 16 16
+DuckGame.Crate DuckGame16 16 3140 4233 16 16
+equipper 3076 4233 16 16
+DuckGame.WireButton DuckGame16 16 1539 4233 16 16
+DuckGame.WireFlipper DuckGame16 16 1475 4233 16 16
+DuckGame.WireMount DuckGame16 16 1411 4233 16 16
+DuckGame.WireTileset DuckGame16 16 3732 4236 16 16
+DuckGame.WaterFall DuckGame16 16 2817 4239 16 16
+DuckGame.WireTrapDoor DuckGame16 16 4236 1549 16 16
+DuckGame.WumpAK47 DuckGame16 16 4236 1565 16 16
+DuckGame.SnubbyPistol DuckGame16 16 4249 1725 16 16
+DuckGame.SnowPile DuckGame16 16 4243 3950 16 16
+DuckGame.DartGrenade DuckGame16 16 4243 3966 16 16
+DuckGame.WireActivator DuckGame16 16 2422 4244 16 16
+DuckGame.SnowIceTileset DuckGame16 16 48 4245 16 16
+DuckGame.SpringUpRight DuckGame16 16 3396 4245 16 16
+DuckGame.SpawnCannon DuckGame16 16 4248 1284 16 16
+DuckGame.Saws DuckGame16 16 4248 1300 16 16
+DuckGame.SawsDown DuckGame16 16 4253 815 16 16
+DuckGame.TreeTileset DuckGame16 16 4253 831 16 16
+DuckGame.SawsLeft DuckGame16 16 3140 4249 16 16
+DuckGame.SawsRight DuckGame16 16 3076 4249 16 16
+DuckGame.Saxaphone DuckGame16 16 1539 4249 16 16
+DuckGame.ScaffoldingTileset DuckGame16 16 1475 4249 16 16
+DuckGame.Sharpshot DuckGame16 16 1411 4249 16 16
+DuckGame.SpikeHelm DuckGame16 16 4249 1789 16 16
+DuckGame.WaterFlow DuckGame16 16 3732 4252 16 16
+DuckGame.WaterFallTile DuckGame16 16 4253 703 16 16
+DuckGame.WaterFallEdgeTop DuckGame16 16 4253 3220 16 16
+DuckGame.QuadLaser DuckGame16 16 4253 3236 16 16
+DuckGame.RaceSign DuckGame16 16 4254 407 16 16
+DuckGame.RandomControllerNew DuckGame16 16 4254 423 16 16
+DuckGame.PhysicsRope DuckGame16 16 4254 176 16 16
+DuckGame.PhysicsChain DuckGame16 16 4254 192 16 16
+DuckGame.PlasmaBlaster DuckGame16 16 4256 3422 16 16
+DuckGame.PewPewLaser DuckGame16 16 4256 3438 16 16
+DuckGame.MarineSpace.WumpPistol DuckGame16 16 2817 4255 16 16
+DuckGame.Phaser DuckGame16 16 4257 2731 16 16
+DuckGame.MarineSpace.WumpSniper DuckGame16 16 4257 2747 16 16
+DuckGame.Matchbox DuckGame16 16 4257 2224 16 16
+DuckGame.Key DuckGame16 16 4257 2240 16 16
+upArrow 4257 2644 16 16
+DuckGame.IceBlock DuckGame16 16 4257 2660 16 16
+DuckGame.SnowTileset DuckGame16 16 4257 2132 16 16
+DuckGame.SpaceBackground DuckGame16 16 4257 2148 16 16
+DuckGame.SpaceTileset DuckGame16 16 4257 1415 16 16
+DuckGame.TreeTop DuckGame16 16 4257 1431 16 16
+DuckGame.RomanCandle DuckGame16 16 4254 895 16 16
+DuckGame.ItemCrate DuckGame16 16 4254 911 16 16
+DuckGame.TreeTopDead DuckGame16 16 4254 96 16 16
+DuckGame.Trombone DuckGame16 16 4254 112 16 16
+DuckGame.WaterFallEdge DuckGame16 16 4257 2564 16 16
+DuckGame.Shotgun DuckGame16 16 4257 2580 16 16
+DuckGame.PyramidWallLight DuckGame16 16 4257 2962 16 16
+DuckGame.Slag DuckGame16 16 2422 4260 16 16
+DuckGame.SMG DuckGame16 16 2612 4260 16 16
+DuckGame.TutorialSign04 DuckGame16 16 48 4261 16 16
+DuckGame.TutorialSign01 DuckGame16 16 3396 4261 16 16
+DuckGame.Spikes DuckGame16 16 1002 4262 16 16
+DuckGame.WallLightRight DuckGame16 16 3188 4265 16 16
+DuckGame.Trophy DuckGame16 16 3236 4265 16 16
+DuckGame.TutorialSign05 DuckGame16 16 1587 4265 16 16
+DuckGame.Warpgun DuckGame16 16 3620 4268 16 16
+DuckGame.WaterCooler DuckGame16 16 3732 4268 16 16
+DuckGame.WoodScaffoldingTileset DuckGame16 16 4197 4270 16 16
+DuckGame.Equipper DuckGame16 16 2118 4270 16 16
+DuckGame.Trumpet DuckGame16 16 4270 112 16 16
+DuckGame.TheDishes DuckGame16 16 418 4270 16 16
+DuckGame.TroubleLight DuckGame16 16 4270 247 16 16
+DuckGame.TV DuckGame16 16 2166 4270 16 16
+DuckGame.VerticalDoor DuckGame16 16 4245 4270 16 16
+DuckGame.UndergroundTileset DuckGame16 16 498 4270 16 16
+DuckGame.ItemBoxRandom DuckGame16 16 4270 343 16 16
+DuckGame.IndustrialBackground DuckGame16 16 4270 3604 16 16
+DuckGame.IndustrialTileset DuckGame16 16 4270 3620 16 16
+DuckGame.ItemBox DuckGame16 16 4270 32 16 16
+DuckGame.ItemBoxOneTime DuckGame16 16 2817 4271 16 16
+eight_player 546 4272 16 16
+DuckGame.PizzaLauncher DuckGame16 16 626 4272 16 16
+DuckGame.TutorialSign02 DuckGame16 16 4272 3358 16 16
+DuckGame.TutorialSign03 DuckGame16 16 4273 2052 16 16
+DuckGame.TutorialSign00 DuckGame16 16 4273 2068 16 16
+DuckGame.Sniper DuckGame16 16 4273 2300 16 16
+DuckGame.SnowBackground DuckGame16 16 4273 2802 16 16
+DuckGame.SnowDrift DuckGame16 16 4273 2580 16 16
+DuckGame.YellowBarrel DuckGame16 16 4273 2500 16 16
+DuckGame.WumpHugeLaser DuckGame16 16 4273 1431 16 16
+DuckGame.NetGun2 DuckGame16 16 4273 2850 16 16
+DuckGame.UndergroundBackground DuckGame16 16 4273 2660 16 16
+DuckGame.UpSign DuckGame16 16 4273 1351 16 16
+DuckGame.PinkBox DuckGame16 16 4273 2348 16 16
+DuckGame.VerticalFunBeam DuckGame16 16 1782 4275 16 16
+DuckGame.VeryHardSign DuckGame16 16 1734 4275 16 16
+DuckGame.VirtualBackground DuckGame16 16 2470 4276 16 16
+DuckGame.WallBoots DuckGame16 16 2518 4276 16 16
+DuckGame.WallLightLeft DuckGame16 16 48 4277 16 16
+DuckGame.TriggerVolume DuckGame16 16 288 4277 16 16
+DuckGame.RockWall DuckGame16 16 368 4277 16 16
+DuckGame.VirtualShotgun DuckGame16 16 3396 4277 16 16
+DuckGame.RCController DuckGame16 16 2921 4277 16 16
+DuckGame.IceWedge DuckGame16 16 866 4278 16 16
+DuckGame.FancyShoes DuckGame16 16 914 4278 16 16
+DuckGame.Icicles DuckGame16 16 4284 1549 16 16
+DuckGame.TutorialGunCrouchJump DuckGame16 16 4284 1565 16 16
+DuckGame.TutorialGunJump DuckGame16 16 3732 4284 16 16
+DuckGame.SledgeHammer DuckGame16 16 3236 4281 16 16
+DuckGame.PyramidTileset DuckGame16 16 1587 4281 16 16
+DuckGame.SnowGenerator DuckGame16 16 3188 4281 16 16
+DuckGame.PyramidDoor DuckGame16 16 4286 247 16 16
+DuckGame.HardLeft DuckGame16 16 2166 4286 16 16
+DuckGame.GoalType DuckGame16 16 4245 4286 16 16
+DuckGame.GoodBook DuckGame16 16 498 4286 16 16
+DuckGame.GoodyNew DuckGame16 16 4286 3492 16 16
+DuckGame.Grapple DuckGame16 16 3620 4284 16 16
+DuckGame.Grenade DuckGame16 16 2118 4286 16 16
+DuckGame.GrenadeCannon DuckGame16 16 4286 32 16 16
+DuckGame.GrenadeLauncher DuckGame16 16 4286 112 16 16
+DuckGame.CastleTileset DuckGame16 16 418 4286 16 16
+DuckGame.HangingCityLight DuckGame16 16 4197 4286 16 16
+DuckGame.Chaindart DuckGame16 16 4286 3540 16 16
+DuckGame.MagnetGun DuckGame16 16 4286 343 16 16
+DuckGame.Magnum DuckGame16 16 4286 3620 16 16
+DuckGame.KingdomBackground DuckGame16 16 4289 2802 16 16
+DuckGame.MarineSpace.WumpBlunderbuss DuckGame16 16 4289 2660 16 16
+DuckGame.PineTreeSnowTileset DuckGame16 16 4289 1988 16 16
+DuckGame.PineTreeTileset DuckGame16 16 626 4288 16 16
+DuckGame.PineTrunkTileset DuckGame16 16 4288 3358 16 16
+DuckGame.Chainsaw DuckGame16 16 546 4288 16 16
+DuckGame.PipeBlue DuckGame16 16 4289 1351 16 16
+DuckGame.PipeGreen DuckGame16 16 4289 2850 16 16
+DuckGame.PipeRed DuckGame16 16 4289 2348 16 16
+DuckGame.MallardBillboard DuckGame16 16 4289 2580 16 16
+DuckGame.FunBeam DuckGame16 16 4289 2500 16 16
+DuckGame.CustomPlatform3 DuckGame16 16 4289 2300 16 16
+DuckGame.CustomTileset DuckGame16 16 4289 1431 16 16
+DuckGame.TargetDuckNew DuckGame16 16 4289 2068 16 16
+teleporterIcon 2518 4292 16 16
+DuckGame.TinfoilHat DuckGame16 16 1325 4292 16 16
+DuckGame.CameraZoomNew DuckGame16 16 1341 4292 16 16
+DuckGame.CameraMover DuckGame16 16 1734 4291 16 16
+DuckGame.CowboyPistol DuckGame16 16 1782 4291 16 16
+DuckGame.CustomBackground DuckGame16 16 3396 4293 16 16
+DuckGame.DartGun DuckGame16 16 2921 4293 16 16
+DuckGame.EasySign DuckGame16 16 2470 4292 16 16
+DuckGame.DuelingPistol DuckGame16 16 3556 4293 16 16
+DuckGame.Door DuckGame16 16 3572 4293 16 16
+DuckGame.CaveTileset DuckGame16 16 4291 3950 16 16
+DuckGame.DonutTileset DuckGame16 16 4291 3966 16 16
+DuckGame.DonutSpaceBackground DuckGame16 16 3845 4290 16 16
+DuckGame.Desk DuckGame16 16 3861 4290 16 16
+DuckGame.DemoCrate DuckGame16 16 368 4293 16 16
+DuckGame.DeathCrate DuckGame16 16 48 4293 16 16
+DuckGame.DangerSign DuckGame16 16 288 4293 16 16
+DuckGame.CustomBackground2 DuckGame16 16 914 4294 16 16
+DuckGame.CustomTileset3 DuckGame16 16 866 4294 16 16
+DuckGame.PyramidLightRoof DuckGame16 16 3188 4297 16 16
+DuckGame.CustomTileset2 DuckGame16 16 1587 4297 16 16
+DuckGame.DuctTape DuckGame16 16 3236 4297 16 16
+DuckGame.FreeSpawn DuckGame16 16 4299 1831 16 16
+DuckGame.GreyBlock DuckGame16 16 4300 1661 16 16
+DuckGame.Flower DuckGame16 16 4300 1565 16 16
+DuckGame.OfficeLight DuckGame16 16 4300 1613 16 16
+DuckGame.MysteryGun DuckGame16 16 3732 4300 16 16
+DuckGame.NatureBackground DuckGame16 16 3620 4300 16 16
+DuckGame.MarineSpace.WumpQuadLaser DuckGame16 16 4300 1485 16 16
+DuckGame.NatureTileset DuckGame16 16 4301 1071 16 16
+DuckGame.NetGun DuckGame16 16 4301 3108 16 16
+DuckGame.PelletGun DuckGame16 16 4301 591 16 16
+DuckGame.NublessSnowIceTileset DuckGame16 16 4301 703 16 16
+DuckGame.NublessSnowTileset DuckGame16 16 4301 3156 16 16
+DuckGame.OfficeBackground DuckGame16 16 4301 831 16 16
+DuckGame.OfficeTileset DuckGame16 16 4301 751 16 16
+DuckGame.Present DuckGame16 16 4302 295 16 16
+DuckGame.OldPistol DuckGame16 16 4302 343 16 16
+DuckGame.NatureBackgroundNight DuckGame16 16 4302 32 16 16
+DuckGame.Tombstone DuckGame16 16 4245 4302 16 16
+DuckGame.Musket DuckGame16 16 498 4302 16 16
+DuckGame.MirrorMode DuckGame16 16 2118 4302 16 16
+DuckGame.Mine DuckGame16 16 4302 3620 16 16
+DuckGame.MindControlRay DuckGame16 16 4302 3492 16 16
+DuckGame.PurpleBlock DuckGame16 16 4302 3540 16 16
+DuckGame.PyramidBackground DuckGame16 16 4302 112 16 16
+DuckGame.PyramidBLight DuckGame16 16 418 4302 16 16
+DuckGame.PyramidBrick DuckGame16 16 4197 4302 16 16
+DuckGame.ItemSpawner DuckGame16 16 4302 192 16 16
+DuckGame.ForegroundNature DuckGame16 16 2166 4302 16 16
+DuckGame.PowerHolster DuckGame16 16 4302 247 16 16
+DuckGame.FlimsyDoor DuckGame16 16 546 4304 16 16
+DuckGame.FishinSign DuckGame16 16 4304 3358 16 16
+DuckGame.FireExtinguisher DuckGame16 16 626 4304 16 16
+DuckGame.FireCrackers DuckGame16 16 4304 3438 16 16
+DuckGame.Rock DuckGame16 16 4305 2802 16 16
+DuckGame.Helmet DuckGame16 16 4305 2300 16 16
+DuckGame.Holster DuckGame16 16 4305 2962 16 16
+DuckGame.HugeLaser DuckGame16 16 4305 2580 16 16
+DuckGame.FlameThrower DuckGame16 16 4305 2747 16 16
+DuckGame.Jetpack DuckGame16 16 4305 2068 16 16
+DuckGame.MaceCollar DuckGame16 16 4305 1431 16 16
+DuckGame.LavaBarrel DuckGame16 16 4305 1351 16 16
+DuckGame.LaserSpawner DuckGame16 16 4305 2850 16 16
+DuckGame.LaserRifle DuckGame16 16 4305 2660 16 16
+DuckGame.Lamp DuckGame16 16 4305 2348 16 16
+DuckGame.KnightHelmet DuckGame16 16 4305 1988 16 16
+DuckGame.Keytar DuckGame16 16 4305 2500 16 16
+DuckGame.MagBlaster DuckGame16 16 3781 4306 16 16
+DuckGame.FlareGun DuckGame16 16 3861 4306 16 16
+DuckGame.CampingRifle DuckGame16 16 3909 4306 16 16
+DuckGame.Pistol DuckGame16 16 3957 4306 16 16
+holsterChain 2192 1182 5 17
+sandwich 2974 4113 14 18
+drumset/hatStand 2712 1130 18 7
+buttons/keyboard/shift 2992 4113 14 18
+wumpquadlaser 3996 1135 13 19
+arcade/celebrateStar 4307 3886 15 16
+furni/cheap/barrel_old 2705 1072 16 15
+grave 1687 3690 16 15
+popupPad 1306 447 3 16
+challenge/star 4307 3966 15 16
+challenge/suitcase 1734 4307 15 16
+challenge/goal 1782 4307 15 16
+prettyStar 2518 4308 15 16
+explosiveBarrel 1010 3822 17 14
+buttons/keyboard/home 3010 4113 14 17
+buttons/keyboard/control 3540 4135 14 17
+blueBarrelMelting 1010 3839 17 14
+blueBarrel 1010 3856 17 14
+furni/fancy/sink 3557 4135 14 17
+lavaBarrel 1010 3873 17 14
+yellowBarrel 1010 3890 17 14
+redBarrel 3890 385 17 14
+yellowBarrelMelting 3890 402 17 14
+furni/fancy/platter 3707 438 11 21
+rockThrow/keg 3890 419 19 12
+online/easelWhite 1216 3714 12 19
+arcade/bubbleTail 3013 4261 15 15
+popEffect 1341 4308 15 15
+speedrunClock 1213 4308 15 15
+hostChair 4264 1222 14 16
+buttons/keyboard/back 4280 1222 14 16
+buttons/keyboard/pgup 4296 1222 14 16
+buttons/keyboard/pgdown 2470 4308 14 16
+furni/momento/giftwine 3873 1801 20 11
+buttons/mousewheel 1010 3907 18 12
+furni/everyday/clockradio 3692 1943 12 18
+buttons/keyboard/space 2310 4308 14 15
+buttons/keyboard/tab 1261 4308 14 15
+buttons/keyboard/f4 2358 4308 14 15
+buttons/keyboard/f2 4309 4158 14 15
+buttons/keyboard/f1 4309 4062 14 15
+buttons/keyboard/insert 288 4309 14 15
+buttons/keyboard/enter 368 4309 14 15
+buttons/keyboard/delete 2921 4309 14 15
+buttons/keyboard/f7 2660 4309 14 15
+buttons/keyboard/f8 96 4309 14 15
+buttons/keyboard/alt 240 4309 14 15
+buttons/keyboard/f12 48 4309 14 15
+buttons/keyboard/end 144 4309 14 15
+buttons/keyboard/f11 4309 4206 14 15
+buttons/keyboard/wasd 4309 4110 14 15
+buttons/keyboard/f3 3492 4309 14 15
+buttons/keyboard/f9 4309 4014 14 15
+buttons/keyboard/f10 962 4310 14 15
+buttons/keyboard/f5 858 4310 14 15
+buttons/keyboard/tilde 4310 3282 14 15
+buttons/keyboard/f6 977 4310 14 15
+buttons/keyboard/arrows 992 4310 14 15
+buttons/keyboard/escape 1007 4310 14 15
+buttons/ps4/circle 1010 3925 14 14
+buttons/xbox/dPadRight 3574 4135 14 14
+skipIcon 4146 3348 14 14
+clipcopy 4146 3362 14 14
+buttons/switch/dual/leftTrigger 4146 3376 14 14
+buttons/ps4/dPadLeft 4146 3390 14 14
+buttons/ps4/dPadUp 4146 3404 14 14
+buttons/switch/pro/leftBumper 4146 3418 14 14
+buttons/switch/pro/dPadUp 2614 4180 14 14
+buttons/switch/pro/dPadRight 1010 4182 14 14
+buttons/xbox/rightStick 1010 4196 14 14
+buttons/xbox/dPadUp 2614 4194 14 14
+buttons/SNES/b 2614 4212 14 14
+buttons/SNES/startButton 1010 4214 14 14
+buttons/genericButton 2614 4228 14 14
+buttons/dPadDown 1010 4230 14 14
+buttons/keyboard/leftKey 1010 4244 14 14
+buttons/ps4/dPadDown 2614 4242 14 14
+buttons/SNES/aFami 882 4310 14 14
+buttons/SNES/bFami 896 4310 14 14
+buttons/switch/pro/dPadLeft 910 4310 14 14
+buttons/SNES/yFami 2038 4311 14 14
+buttons/SNES/selectButton 1942 4311 14 14
+buttons/ps4/dPad 4311 3304 14 14
+buttons/SNES/leftTrigger 4311 3640 14 14
+buttons/SNES/xFami 2052 4311 14 14
+buttons/SNES/rightTrigger 4311 3688 14 14
+buttons/genesis/b 1956 4311 14 14
+buttons/keyboard/rightKey 2066 4311 14 14
+buttons/switch/pro/dPadDown 4311 3702 14 14
+buttons/keyboard/key 1894 4311 14 14
+buttons/switch/pro/leftStick 1990 4311 14 14
+buttons/playstation/rightBumper 1970 4311 14 14
+buttons/playstation/o 4311 3716 14 14
+buttons/playstation/square 4311 3730 14 14
+buttons/playstation/triangle 1908 4311 14 14
+buttons/playstation/x 1922 4311 14 14
+buttons/playstation/startButton 2004 4311 14 14
+buttons/playstation/selectButton 2018 4311 14 14
+buttons/playstation/leftBumper 4311 3654 14 14
+plugRect 4311 3668 14 14
+buttons/playstation/leftTrigger 4315 1805 14 14
+unplugRect 4312 1222 14 14
+buttons/xbox/selectButton 3236 4313 14 14
+buttons/xbox/startButton 1587 4313 14 14
+buttons/playstation/rightTrigger 3188 4313 14 14
+buttons/xbox/yButton 4315 3260 14 14
+buttons/xbox/uButton 4315 1819 14 14
+buttons/xbox/aButton 4315 1833 14 14
+buttons/xbox/oButton 4318 1236 14 14
+buttons/genesis/c 3620 4316 14 14
+buttons/xbox/dPadLeft 4316 1485 14 14
+arcade/titleWing 1009 2126 7 14
+buttons/switch/left/leftTrigger 4316 1613 14 14
+accessIcon 4316 1565 14 14
+wrenchRect 4316 1661 14 14
+buttons/switch/left/rightBumper 3732 4316 14 14
+buttons/switch/left/rightTrigger 4197 4318 14 14
+buttons/switch/left/startButton 4318 3556 14 14
+buttons/switch/left/uButton 4317 703 14 14
+buttons/switch/pro/aButton 4317 3156 14 14
+buttons/switch/pro/dPad 4317 591 14 14
+buttons/genesis/start 4317 831 14 14
+buttons/switch/dual/dPadLeft 4317 751 14 14
+buttons/playstation/blank 4317 3108 14 14
+buttons/switch/right/rightBumper 4317 1071 14 14
+buttons/switch/right/oButton 4318 112 14 14
+buttons/switch/pro/rightStick 418 4318 14 14
+buttons/switch/right/leftTrigger 4318 192 14 14
+buttons/switch/right/leftStick 4318 32 14 14
+buttons/switch/right/aButton 4318 1250 14 14
+buttons/switch/pro/yButton 2166 4318 14 14
+buttons/switch/pro/uButton 4245 4318 14 14
+buttons/switch/pro/startButton 498 4318 14 14
+buttons/switch/pro/selectButton 4318 295 14 14
+buttons/ps4/rightBumper 4318 247 14 14
+buttons/switch/pro/leftTrigger 2118 4318 14 14
+buttons/switch/dual/oButton 4318 3570 14 14
+buttons/ps4/leftStick 4318 343 14 14
+buttons/switch/dual/leftStick 4318 3588 14 14
+buttons/switch/dual/aButton 4318 3602 14 14
+buttons/switch/dual/dPad 4318 3616 14 14
+buttons/switch/right/rightTrigger 4318 3508 14 14
+buttons/switch/dual/dPadDown 4318 3522 14 14
+buttons/switch/right/uButton 4318 3536 14 14
+buttons/switch/pro/rightBumper 4318 3460 14 14
+buttons/switch/joyconButtonLeft 4318 3474 14 14
+buttons/genesis/a 4318 3488 14 14
+buttons/switch/right/startButton 4319 1741 14 14
+buttons/switch/joyconButtonDown 4005 4319 14 14
+buttons/switch/pro/oButton 4319 1755 14 14
+buttons/switch/left/leftBumper 2801 4319 14 14
+buttons/SNES/blankSNESPink 4019 4319 14 14
+buttons/ps4/x 4037 4319 14 14
+buttons/ps4/triangle 2769 4319 14 14
+buttons/ps4/startButton 2783 4319 14 14
+buttons/ps4/square 2815 4319 14 14
+buttons/ps4/rightTrigger 3973 4319 14 14
+buttons/ps4/rightStick 3987 4319 14 14
+buttons/switch/genericStick 4051 4319 14 14
+buttons/switch/left/leftStick 626 4320 14 14
+buttons/switch/right/leftBumper 546 4320 14 14
+buttons/switch/pro/rightTrigger 4320 3438 14 14
+buttons/switch/right/yButton 4320 3358 14 14
+buttons/switch/dual/dPadRight 4320 1276 14 14
+buttons/switch/dual/yButton 4320 1290 14 14
+buttons/ps4/leftBumper 4320 1304 14 14
+buttons/switch/left/oButton 4321 2802 14 14
+buttons/startButton 4321 2300 14 14
+buttons/rb 4321 1677 14 14
+buttons/oButton 4321 1691 14 14
+buttons/lb 4321 2580 14 14
+buttons/dPadUp 4321 1956 14 14
+buttons/dPadRight 4321 2004 14 14
+buttons/dPadLeft 4321 1970 14 14
+buttons/dPad 4321 2962 14 14
+buttons/aButton 4321 2018 14 14
+buttons/xbox/dPad 4321 2747 14 14
+buttons/keyboard/upKey 4321 1984 14 14
+buttons/xbox/leftTrigger 4321 1351 14 14
+buttons/SNES/a 4321 2850 14 14
+buttons/xbox/leftStick 4321 2660 14 14
+buttons/xbox/rightTrigger 4321 2348 14 14
+buttons/xbox/rightBumper 4321 1431 14 14
+buttons/xbox/leftBumper 4321 2500 14 14
+buttons/keyboard/downKey 4321 2036 14 14
+buttons/xbox/dPadDown 4321 2050 14 14
+buttons/yButton 4321 1707 14 14
+buttons/SNES/y 4321 1721 14 14
+buttons/SNES/x 4321 2064 14 14
+buttons/switch/left/yButton 1734 4322 14 14
+buttons/uButton 3909 4322 14 14
+buttons/switch/dual/dPadUp 1782 4322 14 14
+buttons/switch/sl 2470 4322 14 14
+buttons/switch/dual/rightStick 3957 4322 14 14
+buttons/switch/dual/rightBumper 3781 4322 14 14
+buttons/switch/dual/rightTrigger 3861 4322 14 14
+buttons/ps4/leftTrigger 2310 4322 14 14
+buttons/switch/sr 1261 4322 14 14
+buttons/switch/dual/selectButton 2358 4322 14 14
+buttons/switch/dual/leftBumper 4322 1773 14 14
+buttons/switch/dual/startButton 4322 1787 14 14
+buttons/ps4/dPadRight 2518 4323 14 14
+buttons/switch/joyconButtonUp 288 4323 14 14
+buttons/switch/joyconButtonRight 368 4323 14 14
+buttons/switch/left/aButton 2660 4323 14 14
+buttons/switch/dual/uButton 96 4323 14 14
+littleTrophy 2756 4127 15 13
+furni/office/coffeemaker 4140 1938 15 13
+background/officeBuilding01Porch 3494 1944 12 16
+cape 3034 1939 16 12
+rockThrow/chairBottom 1687 2565 13 14
+furni/everyday/kettle 3697 2967 13 14
+respawner 3689 3450 10 18
+icicleBig 1353 2794 18 10
+buttons/wheelDown 1353 2812 17 10
+buttons/wheelUp 1353 2829 17 10
+tinfoilHatPickup 3692 1852 10 17
+connectionX 1004 4065 13 13
+connectionWall 4089 437 13 13
+pyramidRoofLightShade 1235 3714 12 14
+troubleLight 1249 3714 12 14
+pyramidRoofLight 1263 3714 12 14
+itemBoxRandom 4070 3604 14 12
+hangingCityLight 3707 3450 10 16
+arcade/wagnusOverlay 3707 3249 10 16
+furni/everyday/wastebasket 1277 3714 11 14
+hatConsoleBase 1291 3714 11 14
+smg 3710 1946 9 17
+rainbowCape 1333 448 1 12
+holster 1305 3714 12 12
+talkBubble 1317 3714 12 12
+drumset/drumStick 1021 1634 12 3
+roomSwitchRight 1009 2133 5 14
+roomSwitch 2209 1182 5 14
+phaser 1329 3714 9 15
+crownIcon 1344 3714 10 13
+turretBase 3723 3249 9 14
+drumset/largeTom 3728 438 11 11
+drumset/hat 3737 3249 11 11
+drumset/snareDrum 3739 438 11 11
+drumset/mediumTom 168 3740 11 11
+furni/outdoor/redcondiment 2712 1148 15 8
+furni/outdoor/condiment 2712 1163 15 8
+furni/outdoor/yellowcondiment 1353 2846 15 8
+missile 3468 326 8 14
+smallFlare 3723 3450 10 11
+muteIcon 3727 1946 10 11
+online/matchmakingSignal 3734 3450 9 12
+drumset/smallTom 1353 2861 10 10
+blockIcon 1353 2871 10 10
+laserSightHit 3548 440 10 10
+cannonMount 3738 1946 10 10
+redEight 179 3740 10 10
+drumset/crashCymbal 189 3740 10 10
+tinyTrophy 1693 2522 10 9
+powerHolsterOver 1322 447 3 10
+holster_over 996 2134 3 10
+chanceIcon 1353 2881 9 10
+bouble 1015 1625 9 9
+iconGradient 2598 1888 8 10
+drumset/snareStand 1329 2571 11 7
+networkReceived 3111 950 8 9
+networkDrop 3111 958 8 9
+holster_under 2712 1178 9 8
+camping_ball 3111 966 9 8
+exclamationMoji 3111 975 8 9
+networkSent 3111 983 8 9
+logEvent 3111 991 8 9
+networkDisconnect 3111 999 8 9
+online/barFront 2223 1182 6 11
+laserBeamPurple 1023 1595 8 1
+chainStretch 3111 1007 8 8
+iconEight 3111 1015 8 8
+arrowHead 3111 1023 8 8
+blacklistX 3111 1031 8 8
+skipSpin 3111 1039 8 8
+spectatorIcon 3111 1047 8 8
+subPlus 3182 1947 8 8
+checkIcon 982 3232 8 8
+tinyLock 982 3240 8 8
+chainStretchEnd 3275 2424 8 8
+online/xpPlusOutline 3275 2432 8 8
+chokeCollar 3275 2440 8 8
+cloudDown 3275 2448 8 8
+eCrateLight 3275 2456 8 8
+workshopTagMiddle 1023 1604 8 1
+lightBar 1333 449 1 8
+magBeam 1023 1612 8 1
+laserBeemOrange 1021 1646 8 1
+windowBars 1345 448 1 8
+laserBeam 1022 1646 8 1
+hook 3020 3380 8 8
+chainBullet 3020 3388 8 8
+blackSquare 3020 3396 8 8
+pyWallCorner2 3020 3404 8 8
+tagPlus 3020 3412 8 8
+spinnerArrows 3020 3420 8 8
+spectatorCrown 3432 1170 8 8
+laserRebound 3432 1178 8 8
+rcWheel 3020 3428 8 8
+lockedServer 3020 3436 8 8
+pinIcon 3020 3444 8 8
+namedServer 3020 3452 8 8
+moveArrow 3452 2948 8 8
+moreArrow 3452 2956 8 8
+fireCracker 3452 2964 8 8
+scratch 3452 2972 8 8
+tinyUpArrow 3020 3460 8 8
+pinIconPinned 3020 3468 8 8
+workshopTag 3482 326 8 8
+pyWallCorner 3020 3476 8 8
+online/xpPlus 3490 326 8 8
+heart 3498 326 8 8
+purpleScanner 1354 3502 8 8
+hats/master_glow 3506 326 8 8
+default_mappack_icon 1354 3510 8 8
+dizzyStar 1693 2661 7 9
+colorStar 1008 2929 7 9
+dandiSpring 1695 2756 9 7
+holsterLock 2621 2847 8 7
+wireBulge 2621 2855 8 7
+normalIcon 2621 2863 8 7
+randomIcons 2621 2871 8 7
+customIcon 2621 2879 8 7
+titleScrewdriver 1010 2985 7 8
+contextArrowRight 3111 1055 7 8
+titleWrench 3174 1804 7 8
+rockThrow/cup 3182 1804 7 8
+rainbowIcon 2621 2911 8 7
+editorCurrency 2621 2887 8 7
+drumset/highTomStand 2234 1182 6 9
+rhythmBall 2621 2895 7 7
+smallMoon 2621 2919 7 7
+rainbowGradient 1023 1646 7 1
+lightningBeem 1021 1654 7 1
+smallArena 2621 2902 7 7
+smallEarth 1017 2929 7 7
+positronWinder 1021 1661 8 3
+vineStretchEnd 2243 1182 6 8
+woodWing 2251 1182 6 8
+vineStretch 2259 1182 6 8
+keytarSettingStrip 2267 1182 5 9
+drumset/lowTomStand 2276 1182 5 9
+online/gachaBar 915 2238 3 7
+online/xpBar 2285 1182 6 7
+online/sandwichBar 922 2238 3 7
+littleContextArrowRight 2292 1182 5 8
+window32border 1353 448 1 6
+window32 1381 448 1 6
+chainLink 2300 1182 5 7
+cork 2307 1182 5 6
+pointerLaser 1501 444 5 1
+bulletGlow 1502 444 5 1
+camping_loader 929 2238 4 6
+wumpnub 1020 1721 5 4
+spawnerBall 1020 1726 4 4
+sparkLine 1282 447 3 1
+bigLaserTip 1429 448 2 2
+pellet 1359 448 2 2
+_blank2tex2d 1283 447 1 1
+_blanktex2d 1283 448 1 1

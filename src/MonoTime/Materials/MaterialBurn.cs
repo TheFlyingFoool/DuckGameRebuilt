@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialBurn : Material
+    public class MaterialBurn : Material // unused
     {
         private Tex2D _burnTexture;
         private float _burnVal;

@@ -42,7 +42,13 @@ namespace DuckGame
         {
             return _batcher.StealSpriteBatchItems();
         }
-
+        public int batchlistCount
+        {
+            get
+            {
+                return _batcher.batchlistCount;
+            }
+        }
         public MTSpriteBatchItem StealLastSpriteBatchItem() => _batcher.StealLastBatchItem();
 
         public bool transitionEffect => Layer.basicWireframeEffect != null && _effect == Layer.basicWireframeEffect.effect;
@@ -390,6 +396,8 @@ namespace DuckGame
 
             if (texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
             {
+                batchItem.usingspriteatlas = true;
+                batchItem.NormalTexture = texture;
                 batchItem.Texture = Content.Thick.Texbase;
 
                 //float sizeoffsetx = (float)offset.Left / (float)Content.Thick.width;
@@ -413,16 +421,17 @@ namespace DuckGame
             }
             else
             {
-                batchItem.Texture = texture.nativeObject as Texture2D;
+                batchItem.NormalTexture = texture;
+                batchItem.Texture = texture.Texbase;//texture.nativeObject as Texture2D;
             }
-            if (!MTSpriteBatcher.Texidonthave.Contains(batchItem.Texture) && (batchItem.Texture == null || batchItem.Texture.Name == null || batchItem.Texture.Name != "SpriteAtlas"))
-            {
-                if (batchItem.Texture != null && batchItem.Texture.Name != null)
-                {
-                    DevConsole.Log("DrawQuad " + batchItem.Texture.Name);
-                }
-                MTSpriteBatcher.Texidonthave.Add(batchItem.Texture);
-            }
+            //if (!MTSpriteBatcher.Texidonthave.Contains(batchItem.Texture) && (batchItem.Texture == null || batchItem.Texture.Name == null || batchItem.Texture.Name != "SpriteAtlas"))
+            //{
+            //    if (batchItem.Texture != null && batchItem.Texture.Name != null)
+            //    {
+            //        DevConsole.Log("DrawQuad " + batchItem.Texture.Name);
+            //    }
+            //    MTSpriteBatcher.Texidonthave.Add(batchItem.Texture);
+            //}
 
 
             
@@ -459,6 +468,8 @@ namespace DuckGame
             }
             if (texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
             {
+                batchItem.NormalTexture = texture;
+                batchItem.usingspriteatlas = true;
                 batchItem.Texture = Content.Thick.Texbase;
                 batchItem.Material = fx;
                 //offset
@@ -501,7 +512,8 @@ namespace DuckGame
                 return;
 
             }
-            batchItem.Texture = texture.nativeObject as Texture2D;
+            batchItem.NormalTexture = texture;
+            batchItem.Texture = texture.Texbase;
             batchItem.Material = fx;
             _texCoordTL.x = _tempRect.x / texture.width + MTSpriteBatch.edgeBias;
             _texCoordTL.y = _tempRect.y / texture.height + MTSpriteBatch.edgeBias;
@@ -519,43 +531,43 @@ namespace DuckGame
                 _texCoordBR.x = _texCoordTL.x;
                 _texCoordTL.x = x;
             }
-            if (!MTSpriteBatcher.Texidonthave.Contains(batchItem.Texture) && (batchItem.Texture == null || batchItem.Texture.Name == null || batchItem.Texture.Name != "SpriteAtlas"))
-            {
-                StackTrace st = new StackTrace(true);
-                if (batchItem.Texture != null && batchItem.Texture.Name != null)
-                {
-                    DevConsole.Log("DoDrawInternal " + batchItem.Texture.Name);
-                }
-                string stacktracepath = "";
-                List<string> keepgoingback = new List<string>() { "MTSpriteBatch", "Graphics", "SpriteMap", "Sprite", "Thing" };
-                for (int i = 0; i < st.FrameCount; i++)
-                {
-                    string classname = st.GetFrame(i).GetMethod().DeclaringType.Name;
-                    if (classname == "HatSelector")
-                    {
-                        DevConsole.Log("fuck");
-                    }
-                    if (!keepgoingback.Contains(classname))
-                    {
-                        string path = st.GetFrame(i).GetMethod().GetFullName();
-                        int index = 1;
-                        while (usednames.Contains(path + " " + index.ToString()))
-                        {
-                            index += 1;
-                        }
-                        path += " " + index.ToString();
-                        usednames.Add(path);
-                        if (batchItem.Texture.Name == null)
-                        {
-                            batchItem.Texture.Name = "unnamed" + " " + stacktracepath + path.Replace("DuckGame.", "").Replace(":", ".");
-                        }
-                        break;
-                    }
-                    stacktracepath += st.GetFrame(i).GetMethod().GetFullName().Replace("DuckGame.", "").Replace(":", ".") + "*";
-                }
-                //st.GetFrame(0).GetMethod().DeclaringType.Name
-                MTSpriteBatcher.Texidonthave.Add(batchItem.Texture);
-            }
+            //if (!MTSpriteBatcher.Texidonthave.Contains(batchItem.Texture) && (batchItem.Texture == null || batchItem.Texture.Name == null || batchItem.Texture.Name != "SpriteAtlas"))
+            //{
+            //    StackTrace st = new StackTrace(true);
+            //    if (batchItem.Texture != null && batchItem.Texture.Name != null)
+            //    {
+            //        DevConsole.Log("DoDrawInternal " + batchItem.Texture.Name);
+            //    }
+            //    string stacktracepath = "";
+            //    List<string> keepgoingback = new List<string>() { "MTSpriteBatch", "Graphics", "SpriteMap", "Sprite", "Thing" };
+            //    for (int i = 0; i < st.FrameCount; i++)
+            //    {
+            //        string classname = st.GetFrame(i).GetMethod().DeclaringType.Name;
+            //        if (classname == "HatSelector")
+            //        {
+            //            DevConsole.Log("fuck");
+            //        }
+            //        if (!keepgoingback.Contains(classname))
+            //        {
+            //            string path = st.GetFrame(i).GetMethod().GetFullName();
+            //            int index = 1;
+            //            while (usednames.Contains(path + " " + index.ToString()))
+            //            {
+            //                index += 1;
+            //            }
+            //            path += " " + index.ToString();
+            //            usednames.Add(path);
+            //            if (batchItem.Texture.Name == null)
+            //            {
+            //                batchItem.Texture.Name = "unnamed" + " " + stacktracepath + path.Replace("DuckGame.", "").Replace(":", ".");
+            //            }
+            //            break;
+            //        }
+            //        stacktracepath += st.GetFrame(i).GetMethod().GetFullName().Replace("DuckGame.", "").Replace(":", ".") + "*";
+            //    }
+            //    //st.GetFrame(0).GetMethod().DeclaringType.Name
+            //    MTSpriteBatcher.Texidonthave.Add(batchItem.Texture);
+            //}
             batchItem.Set(destinationRectangle.x, destinationRectangle.y, -origin.x, -origin.y, destinationRectangle.z, destinationRectangle.w, (float)Math.Sin(rotation), (float)Math.Cos(rotation), color, _texCoordTL, _texCoordBR);
             if (DuckGame.Graphics.recordMetadata)
             {
@@ -591,14 +603,14 @@ namespace DuckGame
         {
             ++DuckGame.Graphics.currentDrawIndex;
             _batcher.SqueezeInItem(item);
-            if (!MTSpriteBatcher.Texidonthave.Contains(item.Texture) && (item.Texture == null || item.Texture.Name == null || item.Texture.Name != "SpriteAtlas"))
-            {
-                if (item.Texture != null && item.Texture.Name != null)
-                {
-                    DevConsole.Log("DrawExistingBatchItem " + item.Texture.Name);
-                }
-                MTSpriteBatcher.Texidonthave.Add(item.Texture);
-            }
+            //if (!MTSpriteBatcher.Texidonthave.Contains(item.Texture) && (item.Texture == null || item.Texture.Name == null || item.Texture.Name != "SpriteAtlas"))
+            //{
+            //    if (item.Texture != null && item.Texture.Name != null)
+            //    {
+            //        DevConsole.Log("DrawExistingBatchItem " + item.Texture.Name);
+            //    }
+            //    MTSpriteBatcher.Texidonthave.Add(item.Texture);
+            //}
             //  if (Recorder.currentRecording == null)
             //      return;
             //  Recorder.currentRecording.LogDraw(item.MetaData.texture.textureIndex, new Vec2(item.vertexTL.Position.X, item.vertexTL.Position.Y), new Vec2(item.vertexBR.Position.X, item.vertexBR.Position.Y), item.MetaData.rotation, item.MetaData.color, (short)item.MetaData.tempRect.x, (short)item.MetaData.tempRect.y, (short)(item.MetaData.tempRect.width * ((item.MetaData.effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)(item.MetaData.tempRect.height * ((item.MetaData.effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), item.MetaData.depth);

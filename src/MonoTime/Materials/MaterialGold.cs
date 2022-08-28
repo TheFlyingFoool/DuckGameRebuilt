@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialGold : Material
+    public class MaterialGold : Material  //todo make non sprite batch version, works with Spriteatlas
     {
         private Tex2D _goldTexture;
         private Thing _thing;
@@ -20,21 +20,19 @@ namespace DuckGame
             _goldTexture = Content.Load<Tex2D>("bigGold");
             _thing = t;
         }
-        //float xoffset;
-        //float yoffset;
         public override void Apply()
         {
-            if (_thing.graphic != null && _thing.graphic.texture != null)
+            if (this.batchItem != null && this.batchItem.NormalTexture != null)
             {
-                if (!DuckGame.Content.offests.ContainsKey("bigGold") || !DuckGame.Content.offests.ContainsKey(_thing.graphic.texture.Namebase))
+                if (!DuckGame.Content.offests.ContainsKey("bigGold") || !DuckGame.Content.offests.ContainsKey(this.batchItem.NormalTexture.Namebase))
                 {
                     return;
                 }
-                Microsoft.Xna.Framework.Rectangle r = DuckGame.Content.offests[_thing.graphic.texture.Namebase];
+                Microsoft.Xna.Framework.Rectangle r = DuckGame.Content.offests[this.batchItem.NormalTexture.Namebase];
                 Microsoft.Xna.Framework.Rectangle r2 = DuckGame.Content.offests["bigGold"];
                 //bigGold
-                SetValue("width", _thing.graphic.texture.frameWidth / (float)_thing.graphic.texture.width);
-                SetValue("height", _thing.graphic.texture.frameHeight / (float)_thing.graphic.texture.height);
+                SetValue("width", this.batchItem.NormalTexture.frameWidth / (float)this.batchItem.NormalTexture.width);
+                SetValue("height", this.batchItem.NormalTexture.frameHeight / (float)this.batchItem.NormalTexture.height);
                 SetValue("xpos", _thing.x);
                 SetValue("ypos", _thing.y);
 
@@ -58,6 +56,10 @@ namespace DuckGame
                 SetValue("goldyoffset", r2.Y);
                 SetValue("goldsizex", r2.Width);
                 SetValue("goldsizey", r2.Height);
+            }
+            else
+            {
+                DevConsole.Log("fck");
             }
             DuckGame.Graphics.device.Textures[1] = (Texture2D)_goldTexture;
             

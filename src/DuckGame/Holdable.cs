@@ -83,6 +83,10 @@ namespace DuckGame
                     _prevHoverPos = position;
                     initemspawner = true;
                 }
+                if (this is RagdollPart)
+                {
+                    initemspawner = false;
+                }
                 _hoverSpawner = value;
             }
         }

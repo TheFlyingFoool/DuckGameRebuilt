@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialSunshineBare : Material
+    public class MaterialSunshineBare : Material // to test
     {
         public MaterialSunshineBare() => _effect = Content.Load<MTEffect>("Shaders/baresunshine");
 

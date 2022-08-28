@@ -56,6 +56,7 @@ namespace DuckGame
         public static Assembly crashAssembly;
         public static bool gameLoadedSuccessfully = false;
 
+        public static bool lanjoiner;
         public static Assembly gameAssembly; // added dan this for changes to ModLoader GetType and for general use then trying to get the games assembly
         public static string gameAssemblyName = ""; // added dan
         /// <summary>The main entry point for the application.</summary>
@@ -184,6 +185,10 @@ namespace DuckGame
                         break;
                     case "-debug":
                         flag = true;
+                        break;
+                    case "-lanjoiner":
+                        Network.lanMode = true;
+                        lanjoiner = true;
                         break;
                     case "-windowedFullscreen":
                         MonoMain.forceFullscreenMode = 1;

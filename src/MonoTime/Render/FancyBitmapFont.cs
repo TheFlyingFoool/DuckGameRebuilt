@@ -945,6 +945,7 @@ namespace DuckGame
           Depth deep = default(Depth),
           bool colorSymbols = false)
         {
+            Color color2 = c;
             _previousColor = c;
             if (string.IsNullOrWhiteSpace(text))
                 return;
@@ -1011,10 +1012,13 @@ namespace DuckGame
                 else if (text[_letterIndex] == '|')
                 {
                     int letterIndex = _letterIndex;
-                    Color color2 = ParseColor(text);
                     if (color2 != Colors.Transparent)
                     {
-                        _previousColor = c;
+                        _previousColor = color2;
+                    }
+                    color2 = ParseColor(text);
+                    if (color2 != Colors.Transparent)
+                    {
                         if (!_drawingOutline)
                         {
                             float w = c.ToVector4().w;
@@ -1133,7 +1137,7 @@ namespace DuckGame
         public RichTextBox MakeRTF(string text)
         {
             RichTextBox richTextBox = new RichTextBox();
-            Color color1 = Color.Black;
+            Color color2 = Color.Black;
             string text1 = "";
             richTextBox.SelectionColor = System.Drawing.Color.Black;
             for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
@@ -1142,11 +1146,13 @@ namespace DuckGame
                 if (text[_letterIndex] == '|')
                 {
                     int letterIndex = _letterIndex;
-                    Color color2 = ParseColor(text);
                     if (color2 != Colors.Transparent)
                     {
-                        _previousColor = color1;
-                        color1 = color2;
+                        _previousColor = color2;
+                    }
+                    color2 = ParseColor(text);
+                    if (color2 != Colors.Transparent)
+                    {
                         if (color2 == Color.White)
                             color2 = Color.Black;
                         richTextBox.AppendText(text1);

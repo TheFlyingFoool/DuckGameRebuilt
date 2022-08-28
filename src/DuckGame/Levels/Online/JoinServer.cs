@@ -16,7 +16,7 @@ namespace DuckGame
         private bool _teamSelect;
         private string password = "";
         private bool _startedJoining;
-
+        private string _lobbyIP = "";
         public JoinServer(ulong lobbyAddress)
         {
             _lobbyID = lobbyAddress;
@@ -29,7 +29,11 @@ namespace DuckGame
         {
             password = pPassword;
         }
-
+        public JoinServer(string ip)
+          : this(0UL)
+        {
+            _lobbyIP = ip;
+        }
         public override void Initialize()
         {
             if (Network.isActive)
@@ -58,13 +62,19 @@ namespace DuckGame
                     }
                 }
                 TeamSelect2.FillMatchmakingProfiles();
-                if (_lobbyID == 0UL || NetworkDebugger.enabled)
+                if (_lobbyIP != "")
+                {
+                    DuckNetwork.Join(_lobbyIP, _lobbyIP, password);
+                }
+                else if (_lobbyID == 0UL || NetworkDebugger.enabled)
                 {
                     DuckNetwork.joinPort = (int)_lobbyID;
                     DuckNetwork.Join("joinTest");
                 }
                 else
+                {
                     DuckNetwork.Join(_lobbyID.ToString(), "localhost", password);
+                }
                 //this._attemptedConnection = true;
                 _startedJoining = true;
                 _timeout = 0UL;

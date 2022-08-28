@@ -362,7 +362,6 @@ namespace DuckGame
         public void UpdateObject(Thing thing)  //float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
         {
             Vec2[] buckets = GetIdForObj(thing.topLeft, thing.bottomRight);//GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);
-            thing.oldposition = thing.position;
             if (thing.Buckets.SequenceEqual(buckets))
             {
                 return;
@@ -460,7 +459,10 @@ namespace DuckGame
             //    DevConsole.Log(thing.ToString());
             //}
 
-
+            if (thing is Fluid)
+            {
+                return;
+            }
 
             thing.Buckets = GetIdForObj(thing.topLeft, thing.bottomRight); // float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
             thing.oldposition = thing.position;

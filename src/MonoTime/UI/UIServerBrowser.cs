@@ -257,8 +257,15 @@ namespace DuckGame
         public void RefreshLobbySearch(params UIServerBrowser.SearchMode[] pParts)
         {
             _modeQueue.Clear();
+            bool SteamIsInitialized = Steam.IsInitialized();
             foreach (UIServerBrowser.SearchMode pPart in pParts)
+            {
+                if (!SteamIsInitialized && pPart != UIServerBrowser.SearchMode.LAN)
+                {
+                    continue;
+                }
                 _modeQueue.Enqueue(pPart);
+            }
             _lobbies.Clear();
             UIServerBrowser._selectedLobby = null;
         }

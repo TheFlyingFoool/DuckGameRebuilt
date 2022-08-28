@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialPlasma : Material
+    public class MaterialPlasma : Material // did not setup for spriteatlas just left it out of the atlas
     {
         public float offset;
         public float offset2;

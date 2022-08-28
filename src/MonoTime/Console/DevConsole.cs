@@ -206,7 +206,7 @@ namespace DuckGame
 
         public static bool showCollision
         {
-            get => _core.showCollision && !Network.isActive;
+            get => _core.showCollision;// && !Network.isActive;
             set => _core.showCollision = value;
         }
 
@@ -574,21 +574,6 @@ namespace DuckGame
                         lastCommand = null;
                         switch (pKeyword)
                         {
-                            case "gun":
-                            {
-                                if (Level.current != null)
-                                {
-                                    foreach(Duck d in Level.current.things[typeof(Duck)])
-                                    {
-                                        PistolTwo p = new PistolTwo(d.x, d.y);
-                                        Level.Add(p);
-                                        p.x = d.x;
-                                        p.y = d.y;
-                                    }
-                                }
-
-                                break;
-                            }
                             case "spawn" when CheckCheats():
                                 return;
                             case "spawn":

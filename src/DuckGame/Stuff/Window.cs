@@ -195,18 +195,18 @@ namespace DuckGame
             if (!_hasGlass)
                 return base.Hit(bullet, hitPos);
             _enter = hitPos + bullet.travelDirNormalized;
-            if (_enter.x < x && _enter.x < left + 2.0)
+            if (_enter.x < x && _enter.x < left + 2.0f)
                 _enter.x = left;
-            else if (_enter.x > x && _enter.x > right - 2.0)
+            else if (_enter.x > x && _enter.x > right - 2.0f)
                 _enter.x = right;
-            if (_enter.y < y && _enter.y < top + 2.0)
+            if (_enter.y < y && _enter.y < top + 2.0f)
                 _enter.y = top;
-            else if (_enter.y > y && _enter.y > bottom - 2.0)
+            else if (_enter.y > y && _enter.y > bottom - 2.0f)
                 _enter.y = bottom;
             if (hitPoints <= 0.0)
                 return false;
             hitPos -= bullet.travelDirNormalized;
-            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+            for (int index = 0; index < 1.0f + damageMultiplier / 2.0f; ++index)
                 Level.Add(new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized, tint.value));
             SFX.Play("glassHit", 0.5f);
             if (isServerForObject && bullet.isLocal)
@@ -223,17 +223,17 @@ namespace DuckGame
                 return;
             _hits.Add(_enter);
             Vec2 vec2 = exitPos - bullet.travelDirNormalized;
-            if (vec2.x < x && vec2.x < left + 2.0)
+            if (vec2.x < x && vec2.x < left + 2.0f)
                 vec2.x = left;
-            else if (vec2.x > x && vec2.x > right - 2.0)
+            else if (vec2.x > x && vec2.x > right - 2.0f)
                 vec2.x = right;
-            if (vec2.y < y && vec2.y < top + 2.0)
+            if (vec2.y < y && vec2.y < top + 2.0f)
                 vec2.y = top;
-            else if (vec2.y > y && vec2.y > bottom - 2.0)
+            else if (vec2.y > y && vec2.y > bottom - 2.0f)
                 vec2.y = bottom;
             _hits.Add(vec2);
             exitPos += bullet.travelDirNormalized;
-            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+            for (int index = 0; index < 1.0f + damageMultiplier / 2.0f; ++index)
                 Level.Add(new GlassParticle(exitPos.x, exitPos.y, -bullet.travelDirNormalized, tint.value));
         }
 
@@ -241,13 +241,13 @@ namespace DuckGame
         {
             if (_hasGlass)
                 SFX.Play("glassBump", 0.7f);
-            _shakeVal = 3.141593f;
+            _shakeVal = 3.1415927f;
         }
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
             with.Fondle(this);
-            if (floor && with.top > top && CalculateImpactPower(with, from) > 2.79999995231628 && with.isServerForObject)
+            if (floor && with.top > top && CalculateImpactPower(with, from) > 2.8f && with.isServerForObject)
             {
                 if (with is Duck duck)
                     RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
@@ -256,10 +256,10 @@ namespace DuckGame
             else
             {
                 float num = Math.Abs(with.hSpeed) + Math.Abs(with.vSpeed);
-                if (!destroyed && num > 1.5)
+                if (!destroyed && num > 1.5f)
                 {
                     ++shakeTimes;
-                    if (isServerForObject && Level.current is TeamSelect2 && with is PhysicsObject && (with as PhysicsObject).gravMultiplier < 0.100000001490116)
+                    if (isServerForObject && Level.current is TeamSelect2 && with is PhysicsObject && (with as PhysicsObject).gravMultiplier < 0.1f)
                         Destroy(new DTImpact(with));
                 }
                 if (!destroyed || !(with is Duck duck))

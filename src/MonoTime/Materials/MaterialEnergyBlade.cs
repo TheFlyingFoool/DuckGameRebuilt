@@ -12,7 +12,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace DuckGame
 {
-    public class MaterialEnergyBlade : Material
+    public class MaterialEnergyBlade : Material //todo make non sprite batch version, works with Spriteatlas
     {
         private Tex2D _energyTexture;
         private OldEnergyScimi _thing;

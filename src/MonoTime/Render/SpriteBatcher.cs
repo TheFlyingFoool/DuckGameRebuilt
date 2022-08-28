@@ -228,7 +228,7 @@ namespace DuckGame
 
         Dictionary<float, List<MTSpriteBatchItem>> _batchItemListv2 = new Dictionary<float, List<MTSpriteBatchItem>>();
         MTSpriteBatchItem LastSpriteBatchItem;
-        int batchlistCount = 0;
+        public int batchlistCount = 0;
         public float depthmod = 1f;
         public MTSpriteBatchItem CreateBatchItem()
         {
@@ -562,6 +562,7 @@ namespace DuckGame
             {
                 int start = 0;
                 int end = 0;
+                Tex2D Realtex2D = null;
                 Texture2D texture2D = null;
                 Material material = null;
                 numBatchItems = count;
@@ -578,12 +579,13 @@ namespace DuckGame
                         mTSpriteBatchItems = _batchItemListv2[keys[keyindex]];
                     }
                     MTSpriteBatchItem batchItem = mTSpriteBatchItems[index1];//_batchItemListv2[keys[pagenumber]][index1];//_subbatchItemList[index1];
-                    if ((batchItem.Texture != texture2D ? 1 : (batchItem.Material != material ? 1 : 0)) != 0)
+                    if (batchItem.Texture != texture2D || (batchItem.Material != null && batchItem.NormalTexture != Realtex2D) || batchItem.Material != material)//(batchItem.Texture != texture2D ? 1 : (batchItem.Material != material ? 1 : 0)) != 0
                     {
                         FlushVertexArray(start, end);
                         if (material != null && batchItem.Material == null)
                             _batch.Setup();
                         material = _batch.transitionEffect ? null : batchItem.Material;
+                        Realtex2D = batchItem.NormalTexture;
                         texture2D = batchItem.Texture;
                         start = end = 0;
                         if (batchItem.Texture != null && batchItem.Texture.Name != null && texture2D != null && texture2D.Name == batchItem.Texture.Name && batchItem.Texture.Name == "SpriteAtlas" && _device.Textures[0] != null && _device.Textures[0].Name == "SpriteAtlas")
@@ -595,6 +597,7 @@ namespace DuckGame
                         }
                         if (material != null)
                         {
+                            material.batchItem = batchItem;
                             material.SetValue("MatrixTransform", _batch.fullMatrix);
                             material.Apply();
                         }

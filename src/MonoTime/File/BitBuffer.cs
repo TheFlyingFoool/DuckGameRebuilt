@@ -148,7 +148,7 @@ namespace DuckGame
 
         public uint positionInBits
         {
-            get => (uint)(position * 8 + bitOffset);
+            get => (uint)(position * 8 + _bitOffsetPosition);
             set
             {
                 position = (int)(value / 8U);
@@ -265,38 +265,38 @@ namespace DuckGame
             if (bits == 0)
                 return 0;
             int num1 = 0;
-            if (bits <= 8 - bitOffset)
+            if (bits <= 8 - _bitOffsetPosition)
             {
-                num1 = _buffer[position] >> bitOffset & BitBuffer._readMasks[bits - 1];
-                bitOffset += bits;
+                num1 = _buffer[position] >> _bitOffsetPosition & BitBuffer._readMasks[bits - 1];
+                bitOffset = _bitOffsetPosition + bits;
             }
             else
             {
                 int num2 = 0;
                 while (true)
                 {
-                    if (bitOffset > 7)
+                    if (_bitOffsetPosition > 7)
                     {
                         bitOffset = 0;
                         ++position;
                     }
                     if (bits > 0)
                     {
-                        int num3 = 8 - bitOffset;
+                        int num3 = 8 - _bitOffsetPosition;
                         if (num3 > bits)
                             num3 = bits;
-                        int num4 = _buffer[position] >> bitOffset & BitBuffer._readMasks[num3 - 1];
+                        int num4 = _buffer[position] >> _bitOffsetPosition & BitBuffer._readMasks[num3 - 1];
                         bits -= num3;
                         int num5 = num4 << num2;
                         num1 |= num5;
-                        bitOffset += num3;
+                        bitOffset = _bitOffsetPosition + num3;
                         num2 += num3;
                     }
                     else
                         break;
                 }
             }
-            if (bitOffset > 7)
+            if (_bitOffsetPosition > 7)
             {
                 bitOffset = 0;
                 ++position;
@@ -321,11 +321,11 @@ namespace DuckGame
                 //this.currentBit = 0;
                 while (bits > 0)
                 {
-                    _buffer[position] |= (byte)((number & 1) << bitOffset);
+                    _buffer[position] |= (byte)((number & 1) << _bitOffsetPosition);
                     number >>= 1;
-                    ++bitOffset;
+                    bitOffset = _bitOffsetPosition + 1;
                     --bits;
-                    if (bitOffset == 8)
+                    if (_bitOffsetPosition == 8)
                     {
                         ++position;
                         bitOffset = 0;
@@ -421,7 +421,7 @@ namespace DuckGame
             int num = ReadUShort();
             if (num == ushort.MaxValue)
             {
-                int bitOffset = this.bitOffset;
+                int bitOffset = this._bitOffsetPosition;
                 int position = this.position;
                 if (ReadUShort() == 42252)
                 {
@@ -433,7 +433,7 @@ namespace DuckGame
                     this.bitOffset = bitOffset;
                 }
             }
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
                 return Encoding.UTF8.GetString(ReadPacked(num));
             string str = Encoding.UTF8.GetString(_buffer, position, num);
             position += num;
@@ -442,7 +442,7 @@ namespace DuckGame
 
         public long ReadLong()
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
                 return BitConverter.ToInt64(ReadPacked(8), 0);
             long int64 = BitConverter.ToInt64(_buffer, position);
             position += 8;
@@ -451,7 +451,7 @@ namespace DuckGame
 
         public ulong ReadULong()
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
                 return BitConverter.ToUInt64(ReadPacked(8), 0);
             long uint64 = (long)BitConverter.ToUInt64(_buffer, position);
             position += 8;
@@ -460,7 +460,7 @@ namespace DuckGame
 
         public int ReadInt()
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
                 return BitConverter.ToInt32(ReadPacked(4), 0);
             int int32 = BitConverter.ToInt32(_buffer, position);
             position += 4;
@@ -469,7 +469,7 @@ namespace DuckGame
 
         public uint ReadUInt()
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
                 return BitConverter.ToUInt32(ReadPacked(4), 0);
             int uint32 = (int)BitConverter.ToUInt32(_buffer, position);
             position += 4;
@@ -478,7 +478,7 @@ namespace DuckGame
 
         public short ReadShort()
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
                 return BitConverter.ToInt16(ReadPacked(2), 0);
             int int16 = BitConverter.ToInt16(_buffer, position);
             position += 2;
@@ -487,7 +487,7 @@ namespace DuckGame
 
         public ushort ReadUShort()
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
                 return BitConverter.ToUInt16(ReadPacked(2), 0);
             int uint16 = BitConverter.ToUInt16(_buffer, position);
             position += 2;
@@ -496,7 +496,7 @@ namespace DuckGame
 
         public float ReadFloat()
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
                 return BitConverter.ToSingle(ReadPacked(4), 0);
             double single = BitConverter.ToSingle(_buffer, position);
             position += 4;
@@ -527,7 +527,7 @@ namespace DuckGame
 
         public double ReadDouble()
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
                 return BitConverter.ToDouble(ReadPacked(8), 0);
             double num = BitConverter.ToDouble(_buffer, position);
             position += 8;
@@ -536,7 +536,7 @@ namespace DuckGame
 
         public char ReadChar()
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
                 return BitConverter.ToChar(ReadPacked(2), 0);
             int num = BitConverter.ToChar(_buffer, position);
             position += 2;
@@ -545,7 +545,7 @@ namespace DuckGame
 
         public byte ReadByte()
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
                 return ReadPacked(1)[0];
             int num = _buffer[position];
             ++position;
@@ -563,7 +563,7 @@ namespace DuckGame
 
         public sbyte ReadSByte()
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
                 return (sbyte)ReadPacked(1)[0];
             int num = (sbyte)_buffer[position];
             ++position;
@@ -723,7 +723,7 @@ namespace DuckGame
 
         public void AlignToByte()
         {
-            if (bitOffset <= 0)
+            if (_bitOffsetPosition <= 0)
                 return;
             ++position;
             bitOffset = 0;
@@ -770,7 +770,7 @@ namespace DuckGame
 
         public void Write(byte[] data, int offset = 0, int length = -1)
         {
-            if (!isPacked || bitOffset == 0)
+            if (!isPacked || _bitOffsetPosition == 0)
             {
                 if (length < 0)
                     length = data.Length;
@@ -792,7 +792,7 @@ namespace DuckGame
             else
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(val);
-                if (bitOffset != 0)
+                if (_bitOffsetPosition != 0)
                 {
                     Write((ushort)bytes.Count<byte>());
                     WritePacked(bytes);
@@ -820,7 +820,7 @@ namespace DuckGame
         public void Write(long val)
         {
             byte[] bytes = BitConverter.GetBytes(val);
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
             {
                 WritePacked(bytes);
             }
@@ -837,7 +837,7 @@ namespace DuckGame
         public void Write(ulong val)
         {
             byte[] bytes = BitConverter.GetBytes(val);
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
             {
                 WritePacked(bytes);
             }
@@ -854,7 +854,7 @@ namespace DuckGame
         public void Write(int val)
         {
             byte[] bytes = BitConverter.GetBytes(val);
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
             {
                 WritePacked(bytes);
             }
@@ -871,7 +871,7 @@ namespace DuckGame
         public void Write(uint val)
         {
             byte[] bytes = BitConverter.GetBytes(val);
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
             {
                 WritePacked(bytes);
             }
@@ -888,7 +888,7 @@ namespace DuckGame
         public void Write(short val)
         {
             byte[] bytes = BitConverter.GetBytes(val);
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
             {
                 WritePacked(bytes);
             }
@@ -905,7 +905,7 @@ namespace DuckGame
         public void Write(ushort val)
         {
             byte[] bytes = BitConverter.GetBytes(val);
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
             {
                 WritePacked(bytes);
             }
@@ -922,7 +922,7 @@ namespace DuckGame
         public void Write(float val)
         {
             byte[] bytes = BitConverter.GetBytes(val);
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
             {
                 WritePacked(bytes);
             }
@@ -960,7 +960,7 @@ namespace DuckGame
         public void Write(double val)
         {
             byte[] bytes = BitConverter.GetBytes(val);
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
             {
                 WritePacked(bytes);
             }
@@ -977,7 +977,7 @@ namespace DuckGame
         public void Write(char val)
         {
             byte[] bytes = BitConverter.GetBytes(val);
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
             {
                 WritePacked(bytes);
             }
@@ -993,7 +993,7 @@ namespace DuckGame
 
         public void Write(byte val)
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
             {
                 WritePacked(val, 8);
             }
@@ -1008,7 +1008,7 @@ namespace DuckGame
 
         public void Write(sbyte val)
         {
-            if (bitOffset != 0)
+            if (_bitOffsetPosition != 0)
             {
                 WritePacked(val, 8);
             }

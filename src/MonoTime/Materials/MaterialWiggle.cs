@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialWiggle : Material
+    public class MaterialWiggle : Material // seems fine double check later
     {
         private Sprite _sprite;
 

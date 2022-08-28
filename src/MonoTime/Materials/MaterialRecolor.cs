@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace DuckGame
 {
-    public class MaterialRecolor : Material
+    public class MaterialRecolor : Material // works? i mean it would have to i assume
     {
         public Vec3 color;
 

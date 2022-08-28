@@ -220,7 +220,7 @@ namespace DuckGame
             keyboard1PlayerIndex = 0;
             keyboard2PlayerIndex = 1;
             rumbleIntensity = 1f;
-            powerUser = false;
+            powerUser = true; //set to true
             defaultAccountMerged = false;
             didAutoMerge = false;
             cloud = true;

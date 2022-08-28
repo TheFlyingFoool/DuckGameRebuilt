@@ -19,7 +19,7 @@ namespace DuckGame
         public Material()
         {
         }
-
+        public MTSpriteBatchItem batchItem;
         public Material(string mat) => _effect = Content.Load<MTEffect>(mat);
 
         public Material(Effect e) => _effect = (MTEffect)e;

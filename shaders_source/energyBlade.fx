@@ -37,8 +37,8 @@ float4 sampleAtlasWrap(float2 uv, float2 TexOffset, float2 TexSize)
     //uv = (uv + 0.002) % 0.998;
     //uv = frac(uv - 0.001);
    // uv = clamp(uv, float2(0.002, 0.002),);
-    uv.y = clamp(uv.y, 0.001f, 0.999f);
-    uv.x = clamp(uv.x, 0.001f, 0.999f);
+    //uv.y = clamp(uv.y, 0.001f, 0.999f);
+    //uv.x = clamp(uv.x, 0.001f, 0.999f);
     uv = frac(uv);
     uv *= scale.yx;
     uv += TexOffset;

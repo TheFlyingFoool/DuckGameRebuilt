@@ -257,7 +257,12 @@ namespace DuckGame
                 _coll.Clear();
                 Level.CheckRectAll<PhysicsObject>(topLeft, bottomRight, _coll);
                 foreach (PhysicsObject physicsObject in _coll)
-                    physicsObject.sleeping = false;
+                {
+                    if (physicsObject.buoyancy > 0f)
+                    {
+                        physicsObject.sleeping = false;
+                    }
+                }
             }
             FluidPuddle fluidPuddle = Level.CheckLine<FluidPuddle>(new Vec2(left, y), new Vec2(right, y), this);
             if (fluidPuddle != null && fluidPuddle.data.amount < data.amount)

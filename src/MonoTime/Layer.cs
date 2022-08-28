@@ -557,7 +557,7 @@ namespace DuckGame
                                             break;
                                         }
                                     }
-                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
+                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null || thing is FunBeam || thing is Door) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
                                     {
                                         if (_perspective)
                                         {
@@ -623,6 +623,14 @@ namespace DuckGame
                                     }
                                 }
                             }
+                            if (DevConsole.showCollision)
+                            {
+                                foreach (Thing thing in transparent1)
+                                {
+                                    if (thing.visible)
+                                        thing.DrawCollision();
+                                }
+                            }
                         }
                         else if (this == Layer.Lighting)
                         {
@@ -660,7 +668,7 @@ namespace DuckGame
                                             break;
                                         }
                                     }
-                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null) && thing.visible)
+                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null || thing is FunBeam || thing is Door) && thing.visible)
                                     {
                                         if (_perspective)
                                         {

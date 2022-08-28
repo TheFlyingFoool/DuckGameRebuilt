@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialPause : Material
+    public class MaterialPause : Material // works with base & Spriteatlas
     {
         private Tex2D _watermark;
         private float _fade;

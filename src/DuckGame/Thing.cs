@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -22,7 +23,9 @@ namespace DuckGame
     {
         public bool shouldbeinupdateloop = true;
         public int hashcodeindex; // dont touch :)
-        public Vec2 oldposition = Vec2.Zero; 
+        public Vec2 oldposition = Vec2.Zero;
+        public Vec2 oldcollisionOffset = Vec2.Zero;
+        public Vec2 oldcollisionSize = Vec2.Zero;
         public Vec2[] Buckets = new Vec2[0];
         public int maxPlaceable = -1;
         public GhostPriority syncPriority;
@@ -309,7 +312,11 @@ namespace DuckGame
 
         public bool isClientWhoCreatedObject => _ghostObject == null || Thing.loadingLevel != null || _ghostObject.ghostObjectIndex._index / GhostManager.kGhostIndexMax == DuckNetwork.localProfile.fixedGhostIndex;
 
-        public virtual void SetTranslation(Vec2 translation) => position += translation;
+        public virtual void SetTranslation(Vec2 translation)
+        {
+            position += translation;
+            //Level.current.things.UpdateObject(this);
+        }
 
         public virtual Vec2 cameraPosition => position;
 
@@ -1495,8 +1502,11 @@ namespace DuckGame
             if (_anchor != null)
                 position = _anchor.position;
             Update();
-            if (Buckets.Length > 0 && ((oldposition - position)).length > 10 && Level.current != null) //((oldposition - position)).length > 10
+            if (Buckets.Length > 0 && ((oldcollisionOffset != collisionOffset || oldcollisionSize != collisionSize) || (oldposition - position).LengthSquared() > 100f) && Level.current != null) //((oldposition - position)).length > 10
             {
+                oldcollisionOffset = collisionOffset;
+                oldcollisionSize = collisionSize;
+                oldposition = position;
                 Level.current.things.UpdateObject(this);
             }
             //_topQuick = top;
@@ -1617,26 +1627,44 @@ namespace DuckGame
 
         public void DrawCollision()
         {
-            
-           
-            PhysicsObject d = this as PhysicsObject;
-            if (d == null)
-                return;
-            if (d.sleeping)
+            if (this is PhysicsObject)
             {
-                DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.LightBlue * 0.8f, (Depth)1f, false, 0.5f);
-            }
-            else
-            {
-                DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Red * 0.8f, (Depth)1f, false, 0.5f);
-            }
-            //     return;
-            // int num = (this as PhysicsObject).sleeping ? 1 : 0;
+                if ((this as PhysicsObject).sleeping)
+                {
+                    DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.LightBlue * 0.8f, (Depth)1f, false, 0.5f);
+                }
+                else
+                {
+                    DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Red * 0.8f, (Depth)1f, false, 0.5f);
+                }
 
-            // if (!(this is PhysicsObject))
-            //     return;
-            // int num = (this as PhysicsObject).sleeping ? 1 : 0;
-        }
+            }
+            else if (this is PhysicsParticle)
+            {
+                if ((this as PhysicsParticle)._grounded)
+                {
+                    DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.LightBlue * 0.8f, (Depth)1f, false, 0.5f);
+                }
+                else
+                {
+                    DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Red * 0.8f, (Depth)1f, false, 0.5f);
+                }
+            }
+            else if (this is FluidPuddle)
+            {
+                DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+            }
+                //else
+                //{
+                //    DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Purple * 0.8f, (Depth)1f, false, 0.5f);
+                //}
+                //     return;
+                // int num = (this as PhysicsObject).sleeping ? 1 : 0;
+
+                // if (!(this is PhysicsObject))
+                //     return;
+                // int num = (this as PhysicsObject).sleeping ? 1 : 0;
+            }
 
         public void Draw(Sprite spr, float xpos, float ypos, int d = 1) => Draw(spr, new Vec2(xpos, ypos), d);
 

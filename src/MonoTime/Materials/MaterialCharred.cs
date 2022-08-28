@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialCharred : Material
+    public class MaterialCharred : Material // works with base & Spriteatlas
     {
         public MaterialCharred() => _effect = Content.Load<MTEffect>("Shaders/charred");
 

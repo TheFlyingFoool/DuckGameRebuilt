@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialSelection : Material
+    public class MaterialSelection : Material // seems good to me
     {
         public float fade = 1f;
 

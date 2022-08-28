@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialGlitch : Material
+    public class MaterialGlitch : Material //unused
     {
         private Tex2D _goldTexture;
         private Thing _thing;

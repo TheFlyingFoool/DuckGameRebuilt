@@ -10,7 +10,7 @@ using System;
 
 namespace DuckGame
 {
-    public class MaterialGrid : Material
+    public class MaterialGrid : Material // works with base & Spriteatlas
     {
         private Thing _thing;
         private float transWave = 0.2f;

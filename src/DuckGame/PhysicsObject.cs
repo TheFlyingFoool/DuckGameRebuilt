@@ -77,7 +77,7 @@ namespace DuckGame
         private Predicate<MaterialThing> _collisionPred;
         //private bool firstCheck;
         private bool _awaken = true;
-        private bool modifiedGravForFloat;
+        public bool modifiedGravForFloat;
         public bool modFric;
         public bool updatePhysics = true;
         public bool didSpawn;
@@ -343,7 +343,7 @@ namespace DuckGame
                 }
                 if (_sleeping)
                 {//(_collideBottom is PhysicsObject)
-                    if (hSpeed == 0.0 && this.vSpeed == 0.0 && heat <= 0.0 && !_awaken && (this._lastrealcollideBottom is PhysicsObject && !this._lastrealcollideBottom.removeFromLevel && (int)(this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0 && (int)(this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0))
+                    if (hSpeed == 0.0 && this.vSpeed == 0.0 && heat <= 0.0 && !_awaken && (!(this._lastrealcollideBottom is PhysicsObject) || (!this._lastrealcollideBottom.removeFromLevel && (int)(this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0 && (int)(this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0 && this._lastrealcollideBottom.grounded && (this._lastrealcollideBottom as PhysicsObject).sleeping)))
                         return;
                     _sleeping = false;
                     _awaken = false;
@@ -577,9 +577,13 @@ namespace DuckGame
                                     if (this.vSpeed > 0.0)
                                     {
                                         //EnergyScimitar energyScimitar = this as EnergyScimitar;
-                                        _collideBottom = hitThing;
-                                        _lastrealcollidepos = hitThing.position;
-                                        _lastrealcollideBottom = hitThing;
+                                        if (!(hitThing is FluidPuddle) || this.buoyancy > 0f)
+                                        {
+                                            _collideBottom = hitThing;
+                                            _lastrealcollidepos = hitThing.position;
+                                            _lastrealcollideBottom = hitThing;
+                                        }
+                                         
                                         hitThing.Impact(this, ImpactedFrom.Top, true);
                                         Impact(hitThing, ImpactedFrom.Bottom, true);
                                     }
@@ -600,9 +604,13 @@ namespace DuckGame
                 }
                 if (grounded || initemspawner)
                 {
-                   // lastGrounded = DateTime.Now;
-                    framesSinceGrounded = 0;// mmmm remove i shall !(_collideBottom is PhysicsObject)
-                    if (!doFloat && hSpeed == 0.0 && this.vSpeed == 0.0 && (((_collideBottom is Block || _collideBottom is IPlatform) && (!(_collideBottom is ItemBox) || (_collideBottom as ItemBox).canBounce)) || initemspawner))
+                    //(!(_collideBottom is PhysicsObject) || (!(_collideBottom as PhysicsObject).modifiedGravForFloat && _collideBottom.grounded && (!((this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom is PhysicsObject) || (!((this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom as PhysicsObject).modifiedGravForFloat && ((this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom as PhysicsObject).groun
+ //))))) 
+                    //!(this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom is PhysicsObject || !((this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom as PhysicsObject).modifiedGravForFloat
+                    // lastGrounded = DateTime.Now;
+                    framesSinceGrounded = 0;// mmmm remove i shall !(_collideBottom is PhysicsObject) // !doFloat &&  !doFloat && 
+                    if ((!doFloat || this.buoyancy <= 0f) && hSpeed == 0.0 && this.vSpeed == 0.0 && (((_collideBottom is Block || _collideBottom is IPlatform) && (!(_collideBottom is ItemBox) || (_collideBottom as ItemBox).canBounce)) || initemspawner) && (!(_collideBottom is PhysicsObject) || (    (_collideBottom as PhysicsObject).sleeping))) // !(_collideBottom as PhysicsObject).modifiedGravForFloat && _collideBottom.grounded && 
+                        // (this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom is PhysicsObject
                         _sleeping = true;
                 }
                 if (num5 > -999.0)

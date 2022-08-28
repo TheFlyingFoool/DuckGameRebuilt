@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialSunshine : Material
+    public class MaterialSunshine : Material // to test
     {
         private RenderTarget2D _colorMap;
 

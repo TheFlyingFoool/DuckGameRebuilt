@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialDustSparkle : Material
+    public class MaterialDustSparkle : Material //test
     {
         private Tex2D _cone;
         public Vec2 position;

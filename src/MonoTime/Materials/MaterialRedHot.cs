@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialRedHot : Material
+    public class MaterialRedHot : Material // to fix remeber both
     {
         private Tex2D _goldTexture;
         private Thing _thing;

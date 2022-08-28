@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace DuckGame
 {
-    public class MaterialPersona : Material
+    public class MaterialPersona : Material// works? i mean it would have to i assume
     {
         private DuckPersona persona;
 
