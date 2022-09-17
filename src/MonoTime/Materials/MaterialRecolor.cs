@@ -9,12 +9,13 @@ using Microsoft.Xna.Framework;
 
 namespace DuckGame
 {
-    public class MaterialRecolor : Material // works? i mean it would have to i assume
+    public class MaterialRecolor : Material
     {
         public Vec3 color;
 
         public MaterialRecolor(Vec3 col)
         {
+            spsupport = true;
             color = col;
             _effect = Content.Load<MTEffect>("Shaders/recolor");
         }

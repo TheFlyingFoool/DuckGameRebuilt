@@ -9,11 +9,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialSelection : Material // seems good to me
+    public class MaterialSelection : Material
     {
         public float fade = 1f;
 
-        public MaterialSelection() => _effect = Content.Load<MTEffect>("Shaders/selection");
+        public MaterialSelection()
+        {
+            spsupport = true;
+            _effect = Content.Load<MTEffect>("Shaders/selection");
+        }
 
         public override void Apply()
         {

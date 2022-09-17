@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace DuckGame
 {
+    [ClientOnly]
     public class IceSpike : PhysicsObject
     {
         public StateBinding _alphaBinding = new StateBinding("alpha");

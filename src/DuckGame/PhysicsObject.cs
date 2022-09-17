@@ -51,6 +51,8 @@ namespace DuckGame
         private MaterialThing _wallCollideRight;
         private MaterialThing _lastrealcollideBottom;
         private Vec2 _lastrealcollidepos;
+        private Vec2 _lastrealcollidesize;
+        private Vec2 _lastrealcollideoffset;
         protected bool _inPhysicsLoop;
         protected Vec2 _lastPosition = Vec2.Zero;
         protected Vec2 _lastVelocity = Vec2.Zero;
@@ -343,7 +345,8 @@ namespace DuckGame
                 }
                 if (_sleeping)
                 {//(_collideBottom is PhysicsObject)
-                    if (hSpeed == 0.0 && this.vSpeed == 0.0 && heat <= 0.0 && !_awaken && (!(this._lastrealcollideBottom is PhysicsObject) || (!this._lastrealcollideBottom.removeFromLevel && (int)(this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0 && (int)(this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0 && this._lastrealcollideBottom.grounded && (this._lastrealcollideBottom as PhysicsObject).sleeping)))
+                    if (hSpeed == 0.0 && this.vSpeed == 0.0 && heat <= 0.0 && !_awaken && (!(this._lastrealcollideBottom is PhysicsObject) || (!this._lastrealcollideBottom.removeFromLevel && (this._lastrealcollideBottom.position.x - this._lastrealcollidepos.x) == 0 && (this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0 && _lastrealcollidesize == _lastrealcollideBottom.collisionSize && _lastrealcollideoffset == _lastrealcollideBottom.collisionOffset
+                        && this._lastrealcollideBottom.grounded && (this._lastrealcollideBottom as PhysicsObject).sleeping)))
                         return;
                     _sleeping = false;
                     _awaken = false;
@@ -581,6 +584,8 @@ namespace DuckGame
                                         {
                                             _collideBottom = hitThing;
                                             _lastrealcollidepos = hitThing.position;
+                                            _lastrealcollidesize = hitThing.collisionSize;
+                                            _lastrealcollideoffset = hitThing.collisionOffset;
                                             _lastrealcollideBottom = hitThing;
                                         }
                                          

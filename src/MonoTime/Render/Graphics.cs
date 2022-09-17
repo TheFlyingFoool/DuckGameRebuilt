@@ -1050,32 +1050,40 @@ namespace DuckGame
 
         public static Viewport viewport
         {
-            get => device == null || device.IsDisposed ? _lastViewport : device.Viewport;
+            get
+            {
+                if (Graphics.device == null || Graphics.device.IsDisposed)
+                {
+                    return Graphics._lastViewport;
+                }
+                return Graphics.device.Viewport;
+            }
             set
             {
-                if (!_lastViewportSet)
+                if (!Graphics._lastViewportSet)
                 {
-                    _lastViewport = value;
-                    _lastViewportSet = true;
+                    Graphics._lastViewport = value;
+                    Graphics._lastViewportSet = true;
                 }
-                Viewport viewport = device.Viewport;
-                if (viewport.Width != _lastViewport.Width)
+                if (Graphics.device.Viewport.Width != Graphics._lastViewport.Width || Graphics.device.Viewport.Height != Graphics._lastViewport.Height)
+                {
                     return;
-                viewport = device.Viewport;
-                if (viewport.Height != _lastViewport.Height)
-                    return;
-                Rectangle bounds = (Rectangle)value.Bounds;
-                if (_currentRenderTarget != null)
-                    ClipRectangle(bounds, new Rectangle(0f, 0f, _currentRenderTarget.width, _currentRenderTarget.height));
+                }
+                Rectangle r = value.Bounds;
+                if (Graphics._currentRenderTarget != null)
+                {
+                    Graphics.ClipRectangle(r, new Rectangle(0f, 0f, (float)Graphics._currentRenderTarget.width, (float)Graphics._currentRenderTarget.height));
+                }
                 else
-                    ClipRectangle(bounds, (Rectangle)device.PresentationParameters.Bounds);
-                value.X = (int)bounds.x;
-                value.Y = (int)bounds.y;
-                value.Width = (int)bounds.width;
-                value.Height = (int)bounds.height;
-                Internal_ViewportSet(value);
-                _lastViewport = value;
-                
+                {
+                    Graphics.ClipRectangle(r, Graphics.device.PresentationParameters.Bounds);
+                }
+                value.X = (int)r.x;
+                value.Y = (int)r.y;
+                value.Width = (int)r.width;
+                value.Height = (int)r.height;
+                Graphics.Internal_ViewportSet(value);
+                Graphics._lastViewport = value;
             }
         }
 

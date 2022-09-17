@@ -10,7 +10,7 @@ using System;
 
 namespace DuckGame
 {
-    public class MaterialGrid : Material // works with base & Spriteatlas
+    public class MaterialGrid : Material
     {
         private Thing _thing;
         private float transWave = 0.2f;
@@ -20,6 +20,7 @@ namespace DuckGame
 
         public MaterialGrid(Thing t)
         {
+            spsupport = true;
             _effect = Content.Load<MTEffect>("Shaders/wireframeTexOuya");
             _thing = t;
         }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DuckGame
 {
+    [ClientOnly]
     public class ShatterDuck : PhysicsParticle
     {
         public ShatterDuck(float xpos, float ypos, Sprite s, Vec2 impact = default(Vec2)) : base(xpos, ypos)

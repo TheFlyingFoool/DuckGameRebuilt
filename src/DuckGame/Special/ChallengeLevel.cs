@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DuckGame
 {
@@ -553,7 +555,7 @@ namespace DuckGame
                             ChallengeLevel.random = _challenge.random.value;
                             _challenge.duck = pendingSpawn;
                             ChallengeLevel._timer.maxTime = TimeSpan.FromSeconds(_challenge.challenge.trophies[0].timeRequirement);
-                            HUD.AddCornerTimer(HUDCorner.BottomRight, "", _timer);
+                            HUD.core._cornerDisplays.Add(new CornerDisplay() { corner = HUDCorner.BottomRight, text = "", timer = _timer, ischallenge = true }); //       HUD.AddCornerTimer(HUDCorner.BottomRight, "", _timer);
                             if (_challenge.challenge.countTargets)
                             {
                                 int num = _challenge.challenge.trophies[0].targets;
@@ -563,7 +565,9 @@ namespace DuckGame
                                     foreach (GoalType goalType in _challenge.goalTypes)
                                         num += goalType.numObjectsRemaining;
                                 }
-                                HUD.AddCornerCounter(HUDCorner.BottomLeft, "@RETICULE@", new FieldBinding(this, "targetsShot"), num > 0 ? num : 0);
+                                FieldBinding _counter = new FieldBinding(this, "targetsShot");
+                                HUD.core._cornerDisplays.Add(new CornerDisplay() { corner = HUDCorner.BottomLeft, text = "@RETICULE@", counter = _counter, maxCount = num > 0 ? num : 0, animateCount = false, curCount = (int)_counter.value, realCount = (int)_counter.value, ischallenge = true }); // HUD.AddCornerCounter(HUDCorner.BottomLeft, "@RETICULE@", new FieldBinding(this, "targetsShot"), num > 0 ? num : 0);
+
                             }
                             if (_challenge.challenge.countGoodies)
                             {
@@ -605,7 +609,9 @@ namespace DuckGame
                                             break;
                                     }
                                     int goodies = _challenge.challenge.trophies[0].goodies;
-                                    HUD.AddCornerCounter(HUDCorner.BottomLeft, text, new FieldBinding(this, "goodiesGot"), goodies > 0 ? goodies : 0);
+                                    FieldBinding _counter = new FieldBinding(this, "goodiesGot");
+                                    HUD.core._cornerDisplays.Add(new CornerDisplay() { corner = HUDCorner.BottomLeft, text = text, counter = _counter, maxCount = goodies > 0 ? goodies : 0, animateCount = false, curCount = (int)_counter.value, realCount = (int)_counter.value , ischallenge = true}); //                    HUD.AddCornerCounter(HUDCorner.BottomLeft, text, new FieldBinding(this, "goodiesGot"), goodies > 0 ? goodies : 0);
+
                                 }
                             }
                             if (_firstStart)

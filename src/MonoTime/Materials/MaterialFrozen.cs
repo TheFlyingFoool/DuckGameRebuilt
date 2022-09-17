@@ -17,6 +17,7 @@ namespace DuckGame
 
         public MaterialFrozen(Thing t)
         {
+            spsupport = false;
             _effect = Content.Load<MTEffect>("Shaders/frozen");
             _frozenTexture = Content.Load<Tex2D>("frozen");
             _thing = t;

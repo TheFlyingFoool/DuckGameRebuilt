@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-
+    [ClientOnly]
     [EditorGroup("Wump|Machine Guns")]
     public class WumpAK47 : Gun
     {

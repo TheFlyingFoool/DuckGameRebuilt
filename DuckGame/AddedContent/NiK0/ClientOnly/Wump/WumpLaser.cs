@@ -2,7 +2,8 @@
 
 namespace DuckGame
 {
-	public class WumpBeam : Thing
+    [ClientOnly]
+    public class WumpBeam : Thing
 	{
 		public WumpBeam(Vec2 pos, Vec2 target, WumpHugeLaser blastOwner) : base(pos.x, pos.y, null)
 		{

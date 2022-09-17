@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialPlasma : Material // did not setup for spriteatlas just left it out of the atlas
+    public class MaterialPlasma : Material
     {
         public float offset;
         public float offset2;
@@ -25,6 +25,7 @@ namespace DuckGame
 
         public MaterialPlasma()
         {
+            spsupport = false;
             _effect = Content.Load<MTEffect>("Shaders/plasma");
             _gradient = Content.Load<Texture2D>("arcade/gradient");
             _plasma2 = Content.Load<Texture2D>("arcade/plasma2");

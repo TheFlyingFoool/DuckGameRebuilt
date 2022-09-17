@@ -1439,7 +1439,7 @@ namespace DuckGame
                         string text = "@SELECT@EDITOR";
                         _font.Draw(text, Level.current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
                     }
-                    Graphics.Draw(_editorBenchPaint, 45f, 168f);
+                    //Graphics.Draw(_editorBenchPaint, 45f, 168f);
                 }
                 else
                 {
@@ -1470,6 +1470,7 @@ namespace DuckGame
             } 
             else if (layer == Layer.Game)
             {
+                Graphics.Draw(_editorBenchPaint, 45f, 168f);
                 Graphics.Draw(_leftPlatform, 0f, 61f);
                 Graphics.Draw(_airlock, 266f, 135f);
                 Graphics.Draw(_rightPlatform, byte.MaxValue, 61f);

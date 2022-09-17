@@ -1974,7 +1974,6 @@
     <Content Include="DuckGame.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NewFolder1\" />
     <Folder Include="shaders_source\" />
   </ItemGroup>
   <ItemGroup>

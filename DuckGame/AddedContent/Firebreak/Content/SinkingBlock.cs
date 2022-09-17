@@ -3,7 +3,7 @@ using System.Linq;
 using DuckGame.AddedContent.Drake.PolyRender;
 
 namespace DuckGame;
-
+[ClientOnly]
 public class SinkingBlock : Block
 {
     protected Rectangle _collisionRect => new(

@@ -7,6 +7,7 @@ namespace DuckGame;
 
 public partial class TestLev
 {
+    [ClientOnly]
     public class SelectionPad : SinkingBlock
     {
         public IEnumerable<Duck> CapturedDucks => CheckRectAll<Duck>(_collisionRect.tl, _collisionRect.br);

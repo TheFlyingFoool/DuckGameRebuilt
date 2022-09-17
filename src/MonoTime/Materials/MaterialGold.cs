@@ -13,21 +13,22 @@ namespace DuckGame
     {
         private Tex2D _goldTexture;
         private Thing _thing;
-
+        private MTEffect _spritebatcheffect;
+        private MTEffect _baseeffect;
         public MaterialGold(Thing t)
         {
-            _effect = Content.Load<MTEffect>("Shaders/gold");
+            spsupport = true;
+            _baseeffect = Content.Load<MTEffect>("Shaders/gold");
+            _spritebatcheffect = Content.Load<MTEffect>("Shaders/sbgold");
             _goldTexture = Content.Load<Tex2D>("bigGold");
+            _effect = _baseeffect;
             _thing = t;
         }
         public override void Apply()
         {
-            if (this.batchItem != null && this.batchItem.NormalTexture != null)
+            if (this.batchItem != null && this.batchItem.NormalTexture != null && DuckGame.Content.offests.ContainsKey("bigGold") && DuckGame.Content.offests.ContainsKey(this.batchItem.NormalTexture.Namebase))
             {
-                if (!DuckGame.Content.offests.ContainsKey("bigGold") || !DuckGame.Content.offests.ContainsKey(this.batchItem.NormalTexture.Namebase))
-                {
-                    return;
-                }
+                _effect = _spritebatcheffect;
                 Microsoft.Xna.Framework.Rectangle r = DuckGame.Content.offests[this.batchItem.NormalTexture.Namebase];
                 Microsoft.Xna.Framework.Rectangle r2 = DuckGame.Content.offests["bigGold"];
                 //bigGold
@@ -35,17 +36,6 @@ namespace DuckGame
                 SetValue("height", this.batchItem.NormalTexture.frameHeight / (float)this.batchItem.NormalTexture.height);
                 SetValue("xpos", _thing.x);
                 SetValue("ypos", _thing.y);
-
-
-                //SetValue("xoffset", r.X);
-                //SetValue("yoffset", r.Y);
-                //SetValue("spritesizex", r.Width);
-                //SetValue("spritesizey", r.Height;
-
-                //SetValue("goldxoffset", r2.X);
-                //SetValue("goldyoffset", r2.Y);
-                //SetValue("goldsizex", r2.Width);
-                //SetValue("goldsizey", r2.Height);
 
                 SetValue("sasize", new Vec2(Content.Thick.width, Content.Thick.height));
                 SetValue("xoffset", r.X / (float)Content.Thick.width);
@@ -55,16 +45,21 @@ namespace DuckGame
                 SetValue("goldxoffset", r2.X);
                 SetValue("goldyoffset", r2.Y);
                 SetValue("goldsizex", r2.Width);
+
                 SetValue("goldsizey", r2.Height);
             }
-            else
+            else if (Graphics.device.Textures[0] != null)
             {
-                DevConsole.Log("fck");
+                _effect = _baseeffect;
+                Tex2D texture = Graphics.device.Textures[0] as Texture2D;
+                this.SetValue("width", texture.frameWidth / (float)texture.width);
+                this.SetValue("height", texture.frameHeight / (float)texture.height);
+                this.SetValue("xpos", this._thing.x);
+                this.SetValue("ypos", this._thing.y);
             }
             DuckGame.Graphics.device.Textures[1] = (Texture2D)_goldTexture;
-            
             DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }
     }

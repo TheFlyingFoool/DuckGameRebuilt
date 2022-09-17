@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialPause : Material // works with base & Spriteatlas
+    public class MaterialPause : Material
     {
         private Tex2D _watermark;
         private float _fade;
@@ -27,6 +27,7 @@ namespace DuckGame
 
         public MaterialPause()
         {
+            spsupport = true;
             _effect = Content.Load<MTEffect>("Shaders/pause");
             _watermark = Content.Load<Tex2D>("dc5");
         }

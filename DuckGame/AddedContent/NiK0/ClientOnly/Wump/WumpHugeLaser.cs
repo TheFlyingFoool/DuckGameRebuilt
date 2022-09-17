@@ -5,7 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-	[EditorGroup("Wump|Lasers")]
+    [ClientOnly]
+    [EditorGroup("Wump|Lasers")]
 	public class WumpHugeLaser : Gun
 	{
 		public byte netAnimationIndex

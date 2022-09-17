@@ -51,18 +51,18 @@ namespace DuckGame
         public int _adapterW;
         public int _adapterH;
         private static List<Func<string>> _extraExceptionDetails = new List<Func<string>>()
-    {
-       () => "Date: " + DateTime.UtcNow.ToString( DateTimeFormatInfo.InvariantInfo),
-       () => "Version: " + DG.version,
-       () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")(" + (SFX.NoSoundcard ? "NO SFX" : "SFX") + ")",
-       () => GetOnlineString(),
-       () => "Mods: " + ModLoader.modHash,
-       () => "Time Played: " + TimeString(DateTime.Now - startTime) + " (" + Graphics.frame.ToString() + ")",
-       () => "Special Code: " + Main.SpecialCode + " " + Main.SpecialCode2,
-       () => "Resolution: (A)" + Resolution.adapterResolution.x.ToString() + "x" + Resolution.adapterResolution.y.ToString() + " (G)" + Resolution.current.x.ToString() + "x" + Resolution.current.y.ToString() + (Options.Data.fullscreen ? " (Fullscreen(" + (Options.Data.windowedFullscreen ? "W" : "H") + "))" : " (Windowed)") + "(RF " + framesSinceFocusChange.ToString() + ")",
-       () => "Level: " + GetLevelString(),
-       () => "Command Line: " + Program.commandLine
-    };
+        {
+           () => "Date: " + DateTime.UtcNow.ToString( DateTimeFormatInfo.InvariantInfo),
+           () => "Version: " + DG.version,
+           () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")(" + (SFX.NoSoundcard ? "NO SFX" : "SFX") + ")",
+           () => GetOnlineString(),
+           () => "Mods: " + ModLoader.modHash,
+           () => "Time Played: " + TimeString(DateTime.Now - startTime) + " (" + Graphics.frame.ToString() + ")",
+           () => "Special Code: " + Main.SpecialCode + " " + Main.SpecialCode2,
+           () => "Resolution: (A)" + Resolution.adapterResolution.x.ToString() + "x" + Resolution.adapterResolution.y.ToString() + " (G)" + Resolution.current.x.ToString() + "x" + Resolution.current.y.ToString() + (Options.Data.fullscreen ? " (Fullscreen(" + (Options.Data.windowedFullscreen ? "W" : "H") + "))" : " (Windowed)") + "(RF " + framesSinceFocusChange.ToString() + ")",
+           () => "Level: " + GetLevelString(),
+           () => "Command Line: " + Program.commandLine
+        };
         private static string kCleanupString = "C:\\gamedev\\duckgame_try2\\duckgame\\DuckGame\\src\\";
         public static int timeInMatches;
         public static int timeInArcade;
@@ -1495,7 +1495,7 @@ namespace DuckGame
                 Graphics.DrawString(text, p1 + new Vec2(0f, -24f), Color.White, (Depth)1f, scale: 2f);
                 _duckRun.speed = 0.15f;
                 _duckRun.scale = new Vec2(4f, 4f);
-                _duckRun.depth = (Depth)0.7f;
+                _duckRun.depth = 0.7f;
                 _duckRun.color = new Color(80, 80, 80);
                 if (_timeSinceLastLoadFrame.elapsed.Milliseconds > 16)
                     ++_duckRun.frame;
@@ -1503,7 +1503,7 @@ namespace DuckGame
                 Graphics.Draw(_duckRun, vec2_2.x, vec2_2.y);
                 _duckArm.frame = _duckRun.imageIndex;
                 _duckArm.scale = new Vec2(4f, 4f);
-                _duckArm.depth = (Depth)0.6f;
+                _duckArm.depth = 0.8f;
                 _duckArm.color = new Color(80, 80, 80);
                 Graphics.Draw(_duckArm, vec2_2.x + 20f, vec2_2.y + 56f);
                 Graphics.screen.End();

@@ -975,7 +975,17 @@ namespace DuckGame
                 }
             }
 
-            public int userCount => lobby != null ? lobby.users.Count : _userCount;
+            public int userCount
+            {
+                get
+                {
+                    if (lobby != null)
+                    {
+                        return lobby.users.Count;
+                    }
+                    return _userCount;
+                }
+            }
 
             public int CompareTo(UIServerBrowser.LobbyData other)
             {

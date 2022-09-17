@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialRedHot : Material // to fix remeber both
+    public class MaterialRedHot : Material
     {
         private Tex2D _goldTexture;
         private Thing _thing;
@@ -17,6 +17,7 @@ namespace DuckGame
 
         public MaterialRedHot(Thing t)
         {
+            spsupport = false;
             _effect = Content.Load<MTEffect>("Shaders/redhot");
             _goldTexture = Content.Load<Tex2D>("redHot");
             _thing = t;

@@ -4,7 +4,8 @@ using System.IO;
 
 namespace DuckGame.MarineSpace
 {
-	[EditorGroup("Wump|Rifles")]
+    [ClientOnly]
+    [EditorGroup("Wump|Rifles")]
 	public class WumpSniper : Gun
 	{
 		public const string wumpsniper = "iVBORw0KGgoAAAANSUhEUgAAAB0AAAAOCAMAAADkD+cIAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAhUExURQAAAABXhLLc752dnTGi8v///2B3fC9IThsmMkk8KwAAAAwpv/QAAAALdFJOU/////////////8ASk8B8gAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAH5JREFUKFN9jtEWwyAIQ4M4df7/By9B2vKw7Z7WIwkRsG9wyCqorjW3/tP9myVRlaZvrlvLAcU9mYsjxRloKzfjd5LZVjHLC9BeOnpA2X34CCb4Um90u/oUmWLNtSRIk9PBIPB+5sQWOdcIBanw8WyJRSHIupp0+Odd3G3J3h8BtwkTsyWw+AAAAABJRU5ErkJggg==";

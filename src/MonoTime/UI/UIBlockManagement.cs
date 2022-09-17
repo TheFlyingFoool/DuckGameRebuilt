@@ -67,7 +67,7 @@ namespace DuckGame
 
         public override void Close()
         {
-            HUD.CloseAllCorners();
+            HUD.CloseAllCorners(true);
             base.Close();
         }
 

@@ -180,6 +180,9 @@ namespace DuckGame
                             StartinEditorLevelName = args[index];
                         }
                         break;
+                    case "-crash":
+                        throw new Exception("you threw it idk");
+                        break;
                     case "-intro":
                         intro = true;
                         break;

@@ -1,6 +1,7 @@
 ﻿namespace DuckGame.MarineSpace
 {
-	public class WumpQuadLaserBullet : Thing, ITeleport, IDrawToDifferentLayers
+    [ClientOnly]
+    public class WumpQuadLaserBullet : Thing, ITeleport, IDrawToDifferentLayers
 	{
 		public Vec2 travel
 		{

@@ -9,12 +9,13 @@ using Microsoft.Xna.Framework;
 
 namespace DuckGame
 {
-    public class MaterialPersona : Material// works? i mean it would have to i assume
+    public class MaterialPersona : Material
     {
         private DuckPersona persona;
 
         public MaterialPersona(DuckPersona pPersona)
         {
+            spsupport = true;
             persona = pPersona;
             _effect = Content.Load<MTEffect>("Shaders/recolor_duo");
         }

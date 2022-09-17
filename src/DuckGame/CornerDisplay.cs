@@ -9,6 +9,7 @@ namespace DuckGame
 {
     public class CornerDisplay
     {
+        public bool ischallenge;
         public HUDCorner corner;
         public float slide;
         public string text;

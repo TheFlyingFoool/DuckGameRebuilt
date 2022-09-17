@@ -484,12 +484,16 @@ namespace DuckGame
 
         public void Flush(bool sendUnacknowledged, bool pSkipUnacknowledged = false)
         {
+            List<NetMessage> _unacknowledgedMessages2 = new List<NetMessage>();
+            List<NetMessage> _freshMessages2 = new List<NetMessage>();
             if (_unacknowledgedMessages.Count == 0 && _freshMessages.Count == 0 || _freshMessages.Count == 0 && !sendUnacknowledged)
                 return;
             lock (_unacknowledgedMessages)
             {
                 lock (_freshMessages)
                 {
+                    _unacknowledgedMessages2 = new List<NetMessage>(_unacknowledgedMessages);
+                    _freshMessages2 = new List<NetMessage>(_freshMessages);
                     if (!pSkipUnacknowledged)
                     {
                         ++_retransmitCycle;
@@ -500,6 +504,7 @@ namespace DuckGame
                                 DevConsole.Log(DCSection.DuckNet, "@error |DGRED|Large retransmit! (" + currentPacket.data.lengthInBytes.ToString() + ")", connection);
                                 break;
                             }
+                            DevConsole.Log("Sending unacknowledged " + unacknowledgedMessage.GetType().Name);
                             if (unacknowledgedMessage.priority != NetMessagePriority.Urgent || unacknowledgedMessage.timesRetransmitted >= 2)
                             {
                                 int num = (int)(MathHelper.Clamp(ping, 0.064f, 1f) * 60.0) + 1;
@@ -520,6 +525,13 @@ namespace DuckGame
                         if (true)//if (currentPacket.data.lengthInBytes <= 1000)
                         {
                             NetMessage freshMessage = _freshMessages[index];
+                            DevConsole.Log("Sending " + _freshMessages[index].GetType().Name);
+                            //if (_freshMessages[index].GetType() == typeof(NMConnect))
+                            //{
+                            //    //kill
+                            //    _freshMessages.Remove(freshMessage);
+                            //    --index;
+                            //}
                             if (connection.status != ConnectionStatus.Connected && !(freshMessage is IConnectionMessage))
                             {
                                 if (_prevSendStatus != connection.status)

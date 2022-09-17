@@ -12,6 +12,7 @@ namespace DuckGame
 {
     public class Material
     {
+        public bool spsupport;
         protected MTEffect _effect;
 
         public MTEffect effect => _effect;

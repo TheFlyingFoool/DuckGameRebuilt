@@ -9,12 +9,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialWiggle : Material // seems fine double check later
+    public class MaterialWiggle : Material
     {
         private Sprite _sprite;
 
         public MaterialWiggle(Sprite t)
         {
+            spsupport = true;
             _effect = Content.Load<MTEffect>("Shaders/wiggle");
             _sprite = t;
         }
