@@ -525,13 +525,6 @@ namespace DuckGame
                         if (true)//if (currentPacket.data.lengthInBytes <= 1000)
                         {
                             NetMessage freshMessage = _freshMessages[index];
-                            DevConsole.Log("Sending " + _freshMessages[index].GetType().Name);
-                            //if (_freshMessages[index].GetType() == typeof(NMConnect))
-                            //{
-                            //    //kill
-                            //    _freshMessages.Remove(freshMessage);
-                            //    --index;
-                            //}
                             if (connection.status != ConnectionStatus.Connected && !(freshMessage is IConnectionMessage))
                             {
                                 if (_prevSendStatus != connection.status)

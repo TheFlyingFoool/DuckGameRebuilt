@@ -37,10 +37,6 @@ namespace DuckGame
 
         public override NCError OnSendPacket(byte[] data, int length, object connection)
         {
-            if ((uint)length == 9)
-            {
-                return null;
-            }
             if (length < 1200)
                 Steam.SendPacket(connection as User, data, (uint)length, P2PDataSendType.Unreliable);
             else
