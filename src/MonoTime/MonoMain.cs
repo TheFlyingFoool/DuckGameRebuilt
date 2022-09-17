@@ -16,7 +16,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -956,6 +958,7 @@ namespace DuckGame
         {
             get => (SDL.SDL_GetWindowFlags(this.Window.Handle) & (uint)SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS) > 0;
         }
+        [HandleProcessCorruptedStateExceptions, SecurityCritical]
         protected override void Update(GameTime gameTime)
         {
             if (showingSaveTool && saveTool == null && File.Exists("SaveTool.dll"))
@@ -1368,7 +1371,7 @@ namespace DuckGame
                 return DateTime.Now.Hour < 1 && num > 13.0 && num < 17.0;
             }
         }
-
+        [HandleProcessCorruptedStateExceptions, SecurityCritical]
         protected override void Draw(GameTime gameTime)
         {
             int num = started ? 1 : 0;
@@ -1454,6 +1457,7 @@ namespace DuckGame
                     DuckGame.Content.offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();
                     if (File.Exists(@"..\spriteatlas.png"))
                     {
+                        DevConsole.Log("loading spriteatlass.png");
                         DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(@"..\spriteatlas.png", Graphics.device);
                         DuckGame.Content.Thick.Namebase = "SpriteAtlas";
                         

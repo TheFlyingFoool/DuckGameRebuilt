@@ -11,51 +11,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 namespace DuckGame
 {
-    public class DirectBitmap : IDisposable
-    {
-        public Bitmap Bitmap { get; private set; }
-        public Int32[] Bits { get; private set; }
-        public bool Disposed { get; private set; }
-        public int Height { get; private set; }
-        public int Width { get; private set; }
-        protected GCHandle BitsHandle { get; private set; }
-        public DirectBitmap(int width, int height)
-        {
-            Width = width;
-            Height = height;
-            Bits = new Int32[width * height];
-            BitsHandle = GCHandle.Alloc(Bits, GCHandleType.Pinned);
-            Bitmap = new Bitmap(width, height, width * 4, PixelFormat.Format32bppPArgb, BitsHandle.AddrOfPinnedObject());
-        }
-        private static int MakeArgb(byte alpha, byte red, byte green, byte blue)
-        {
-            return ((int)((ulong)((int)red << 16 | (int)green << 8 | (int)blue | (int)alpha << 24)) & -1);
-        }
-        private static Color FromArgb(long Value)
-        {
-            return new Color() { r = (byte)(Value >> 16 & 255L), g = (byte)(Value >> 8 & 255L), b = (byte)(Value & 255L), a = (byte)(Value >> 24 & 255L) };
-        }
-        public void SetPixel(int x, int y, Color colour)
-        {
-            int index = x + (y * Width);
-            int col = MakeArgb(colour.a, colour.r, colour.g, colour.b);
-            Bits[index] = col;
-        }
-        public Color GetPixel(int x, int y)
-        {
-            int index = x + (y * Width);
-            int col = Bits[index];
-            //System.Drawing.Color result = System.Drawing.Color.FromArgb(col);
-            return FromArgb(col);
-        }
-        public void Dispose()
-        {
-            if (Disposed) return;
-            Disposed = true;
-            Bitmap.Dispose();
-            BitsHandle.Free();
-        }
-    }
+   
     public static partial class DevConsoleCommands
     {
         public static Vec2 topleft = new Vec2(0f, 0f);
@@ -70,7 +26,7 @@ namespace DuckGame
             {
                 for (int y = 0; y < bigimage.Height; y++)
                 {
-                    bigimage.SetPixel(x, y, Color.DarkRed);
+                    bigimage.SetPixelDG(x, y, Color.DarkRed);
                 }
             }
             List<string> strings = new List<string>();
@@ -88,7 +44,7 @@ namespace DuckGame
                     {
                         for (int y = 0; y < r.Height; y++)
                         {
-                            bigimage.SetPixel(x + (int)r.X, y + (int)r.Y, data[x + y * tex.Width]);
+                            bigimage.SetPixelDG(x + (int)r.X, y + (int)r.Y, data[x + y * tex.Width]);
                         }
                     }
                     if (file == "unsaved")

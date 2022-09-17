@@ -15,7 +15,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -45,12 +47,13 @@ namespace DuckGame
         //private const uint WM_CLOSE = 16;
         public static bool isLinux = false;
         public static string wineVersion = null;
-        private static List<Func<string>> _extraExceptionDetailsMinimal = new List<Func<string>>() {
-      () => "Date: " + DateTime.UtcNow.ToString(DateTimeFormatInfo.InvariantInfo),
-        () => "Version: " + DG.version,
-        () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")",
-        () => "Command Line: " + Program.commandLine
-    };
+        private static List<Func<string>> _extraExceptionDetailsMinimal = new List<Func<string>>() 
+        {
+            () => "Date: " + DateTime.UtcNow.ToString(DateTimeFormatInfo.InvariantInfo),
+            () => "Version: " + DG.version,
+            () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")",
+            () => "Command Line: " + Program.commandLine
+        };
         private static string kCleanupString = "C:\\gamedev\\duckgame_try2\\duckgame\\DuckGame\\src\\";
         public static bool crashed = false;
         public static Assembly crashAssembly;
@@ -60,6 +63,7 @@ namespace DuckGame
         public static Assembly gameAssembly; // added dan this for changes to ModLoader GetType and for general use then trying to get the games assembly
         public static string gameAssemblyName = ""; // added dan
         /// <summary>The main entry point for the application.</summary>
+        [HandleProcessCorruptedStateExceptions, SecurityCritical]
         public static void Main(string[] args)
         {
             int p = (int)Environment.OSVersion.Platform;
@@ -396,10 +400,16 @@ namespace DuckGame
           uint Msg,
           IntPtr wParam,
           IntPtr lParam);
-
-        public static void UnhandledThreadExceptionTrapper(object sender, ThreadExceptionEventArgs e) => Program.HandleGameCrash(e.Exception);
-
-        public static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e) => Program.HandleGameCrash(e.ExceptionObject as Exception);
+        [HandleProcessCorruptedStateExceptions, SecurityCritical]
+        public static void UnhandledThreadExceptionTrapper(object sender, ThreadExceptionEventArgs e)
+        {
+            Program.HandleGameCrash(e.Exception);
+        }
+        [HandleProcessCorruptedStateExceptions, SecurityCritical]
+        public static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
+        {
+            Program.HandleGameCrash(e.ExceptionObject as Exception);
+        }
 
         public static string ProcessExceptionString(Exception e)
         {

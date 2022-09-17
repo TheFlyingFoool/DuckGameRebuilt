@@ -981,7 +981,7 @@ namespace DuckGame
                 {
                     if (lobby != null)
                     {
-                        return lobby.users.Count;
+                        return lobby.users.Count; // is slower than i would like
                     }
                     return _userCount;
                 }
@@ -993,9 +993,11 @@ namespace DuckGame
                     return 10000;
                 if (!isGlobalLobby && other.isGlobalLobby)
                     return -10000;
-                if (canJoin && !other.canJoin)
+                bool canjoinl = canJoin;
+                bool othercanjoin = other.canJoin;
+                if (canjoinl && !othercanjoin)
                     return -500;
-                if (!canJoin && other.canJoin)
+                if (!canjoinl && othercanjoin)
                     return 500;
                 if (hasFriends && !other.hasFriends)
                     return -100;

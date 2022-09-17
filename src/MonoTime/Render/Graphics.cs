@@ -159,8 +159,8 @@ namespace DuckGame
         {
             get
             {
-                if (Thread.CurrentThread != MonoMain.mainThread && Thread.CurrentThread != MonoMain.initializeThread && Thread.CurrentThread != MonoMain.lazyLoadThread)
-                    throw new Exception("accessing graphics device from thread other than main thread.");
+               // if (Thread.CurrentThread != MonoMain.mainThread && Thread.CurrentThread != MonoMain.initializeThread && Thread.CurrentThread != MonoMain.lazyLoadThread)
+                   // throw new Exception("accessing graphics device from thread other than main thread.");
                 return DuckGame.Graphics._base;
             }
             set => DuckGame.Graphics._base = value;

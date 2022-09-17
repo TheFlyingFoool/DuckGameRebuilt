@@ -11,7 +11,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using System.Windows.Forms;
 
@@ -246,7 +248,7 @@ namespace DGWindows
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(WindowsPlatformStartup.UnhandledExceptionTrapper);
             DuckGame.Program.Main(args);
         }
-
+        [HandleProcessCorruptedStateExceptions, SecurityCritical]
         public static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
         {
             if (!System.IO.File.Exists("CrashWindow.exe"))

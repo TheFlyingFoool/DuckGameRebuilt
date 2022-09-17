@@ -222,6 +222,10 @@ namespace DuckGame
         public static Sound Play(int sound, float vol = 1f, float pitch = 0f, float pan = 0f, bool looped = false)
         {
             string key;
+            if (SFX.NoSoundcard)
+            {
+                return new InvalidSound("", vol, pitch, pan, looped);
+            }
             return SFX._soundHashmap.TryGetKey(sound, out key) ? SFX.Play(key, vol, pitch, pan, looped) : new Sound(SFX._sounds.FirstOrDefault<KeyValuePair<string, SoundEffect>>().Key, 0f, 0f, 0f, false);
         }
 
