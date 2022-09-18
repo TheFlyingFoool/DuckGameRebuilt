@@ -78,7 +78,7 @@ namespace DuckGame
                 return;
             try
             {
-                if (Program.isLinux || !Options.Data.textToSpeech)
+                if (Program.IsLinuxD || Program.isLinux || !Options.Data.textToSpeech)
                     return;
                 (speech as SpeechSynthesizer).SpeakAsyncCancelAll();
                 List<InstalledVoice> list = (speech as SpeechSynthesizer).GetInstalledVoices().ToList<InstalledVoice>();

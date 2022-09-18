@@ -12,6 +12,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
+using XnaToFna;
 
 namespace DuckGame
 {
@@ -231,6 +232,10 @@ namespace DuckGame
           string fileName,
           bool process)
         {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                fileName = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(fileName), true);
+            }
             using (Bitmap bitmap = new Bitmap(fileName))
                 return TextureConverter.LoadPNGWithPinkAwesomeness(device, bitmap, process);
         }
@@ -241,6 +246,10 @@ namespace DuckGame
           bool process,
           Vec2 maxDimensions)
         {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                fileName = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(fileName), true);
+            }
             using (Bitmap bitmap = new Bitmap(fileName))
                 return TextureConverter.LoadPNGWithPinkAwesomenessAndMaxDimensions(device, bitmap, process, maxDimensions);
         }
@@ -250,6 +259,10 @@ namespace DuckGame
           string fileName,
           bool process)
         {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                fileName = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(fileName), true);
+            }
             using (Bitmap bitmap = new Bitmap(fileName))
                 return TextureConverter.LoadPNGDataWithPinkAwesomeness(bitmap, process);
         }

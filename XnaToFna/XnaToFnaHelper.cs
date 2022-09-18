@@ -289,7 +289,7 @@ namespace XnaToFna
         }
         public static string GetActualCaseForFileName(string pathAndFileName, bool CanBeEmpty = false)
         {
-            
+
             string ogpathAndFileName = pathAndFileName;
             if (!Path.IsPathRooted(pathAndFileName) || File.Exists(pathAndFileName))
             {
@@ -304,20 +304,23 @@ namespace XnaToFna
             string directory = Path.GetDirectoryName(pathAndFileName);
             pathAndFileName = pathAndFileName.ToLower();
             bool didfind = false;
-            foreach(string file in Directory.GetFiles(directory))
+            if (Directory.Exists(directory))
             {
-                if (file.Length >= pathAndFileName.Length)
+                foreach (string file in Directory.GetFiles(directory))
                 {
-                    string filename = file;
-                    if (didnothaveex)
+                    if (file.Length >= pathAndFileName.Length)
                     {
-                        filename = filename.Substring(0, filename.LastIndexOf("."));
-                    }
-                    if (filename.ToLower() == pathAndFileName)
-                    {
-                        pathAndFileName = file;
-                        didfind = true;
-                        break;
+                        string filename = file;
+                        if (didnothaveex)
+                        {
+                            filename = filename.Substring(0, filename.LastIndexOf("."));
+                        }
+                        if (filename.ToLower() == pathAndFileName)
+                        {
+                            pathAndFileName = file;
+                            didfind = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -328,7 +331,7 @@ namespace XnaToFna
                     throw new FileNotFoundException("File not found" + pathAndFileName, pathAndFileName);
                 }
                 return ogpathAndFileName;
-            }    
+            }
             if (didnothaveex)
             {
                 pathAndFileName = pathAndFileName.Substring(0, pathAndFileName.LastIndexOf("."));

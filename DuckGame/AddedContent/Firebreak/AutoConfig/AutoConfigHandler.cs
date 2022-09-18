@@ -116,7 +116,7 @@ public static class AutoConfigHandler
         {
             for (int i = 0; i < all.Count; i++)
             {
-                (MemberInfo field, _) = all[i];
+                (MemberInfo field, AutoConfigFieldAttribute _) = all[i];
                 Type type = field switch
                 {
                     FieldInfo fi => fi.FieldType,

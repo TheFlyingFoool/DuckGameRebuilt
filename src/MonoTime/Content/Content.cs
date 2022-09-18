@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using XnaToFna;
 
 namespace DuckGame
 {
@@ -622,6 +623,11 @@ namespace DuckGame
         private static LevelData LoadLevelData(string pPath, LevelLocation pLocation)
         {
             pPath = pPath.Replace('\\', '/');
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                pPath = pPath.Replace('\\', '/');
+                pPath = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(pPath), true);
+            }
             LevelData dat = pLocation != LevelLocation.Content ? DuckFile.LoadLevel(pPath) : DuckFile.LoadLevel(DuckFile.ReadEntireStream(DuckFile.OpenStream(pPath)));
             if (dat == null)
                 return null;
@@ -902,6 +908,18 @@ namespace DuckGame
 
         public static T Load<T>(string name)
         {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                name = name.Replace("//", "/").Replace("\\", "/");
+                try
+                {
+                    name = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(name));
+                }
+                catch
+                {
+                    DevConsole.Log("couldnt fix path mabye file isnt real " + name);
+                }
+            }
             if (ReskinPack.active.Count > 0)
             {
                 try

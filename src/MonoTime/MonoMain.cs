@@ -968,8 +968,22 @@ namespace DuckGame
                 int num = (int)saveTool.ShowDialog();
                 Program.crashed = true;
                 Application.Exit();
+                Program.main.KillEverything();
             }
             if (Program.isLinux)
+            {
+                if (IsActive)
+                {
+                    ++framesBackInFocus;
+                    Graphics.mouseVisible = showingSaveTool;
+                }
+                else
+                {
+                    framesBackInFocus = 0L;
+                    Graphics.mouseVisible = true;
+                }
+            }
+            else if (Program.IsLinuxD)
             {
                 if (IsActive)
                 {
@@ -1455,14 +1469,41 @@ namespace DuckGame
                 {
                     DuckGame.Content.didsetbigboi = true;
                     DuckGame.Content.offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();
-                    if (File.Exists(@"..\spriteatlas.png"))
+                    if (File.Exists(@"../spriteatlas.png"))
                     {
-                        DevConsole.Log("loading spriteatlass.png");
-                        DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(@"..\spriteatlas.png", Graphics.device);
+                        DevConsole.Log("loading ../spriteatlass.png");
+                        DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(@"../spriteatlas.png", Graphics.device);
                         DuckGame.Content.Thick.Namebase = "SpriteAtlas";
                         
                         //RSplit("de mo", ' ', -1);
-                        string[] lines = System.IO.File.ReadAllLines(@"..\spriteatlas_offsets.txt");
+                        string[] lines = System.IO.File.ReadAllLines(@"../spriteatlas_offsets.txt");
+                        foreach (string line in lines)
+                        {
+                            try
+                            {
+                                List<string> texturedetails = DuckGame.Content.RSplit(line, ' ', 4);
+                                string texturename = texturedetails[0];
+                                int x = Int32.Parse(texturedetails[1]);
+                                int y = Int32.Parse(texturedetails[2]);
+                                int height = Int32.Parse(texturedetails[3]);
+                                int width = Int32.Parse(texturedetails[4]);
+
+                                DuckGame.Content.offests.Add(texturename, new Microsoft.Xna.Framework.Rectangle(x, y, width, height));
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                    }
+                    else if (Directory.Exists("/spriteatlas") && File.Exists(@"/spriteatlas/spriteatlas.png"))
+                    {
+                        DevConsole.Log("loading /spriteatlas/spriteatlas.png");
+                        DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(@"/spriteatlas/spriteatlas.png", Graphics.device);
+                        DuckGame.Content.Thick.Namebase = "SpriteAtlas";
+
+                        //RSplit("de mo", ' ', -1);
+                        string[] lines = System.IO.File.ReadAllLines(@"/spriteatlas/spriteatlas_offsets.txt");
                         foreach (string line in lines)
                         {
                             try

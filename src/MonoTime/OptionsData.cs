@@ -116,7 +116,7 @@ namespace DuckGame
             get => _textToSpeech;
             set
             {
-                if (!Program.isLinux && _textToSpeech != value && value)
+                if (!Program.IsLinuxD && !Program.isLinux && _textToSpeech != value && value)
                 {
                     SFX.ApplyTTSSettings();
                     if (MonoMain.started)

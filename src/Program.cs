@@ -8,6 +8,7 @@
 using DbMon.NET;
 using DGWindows;
 using Microsoft.Xna.Framework;
+using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -646,6 +647,7 @@ namespace DuckGame
                     }
                 }
                 Environment.Exit(1);
+                Program.main.KillEverything();
             }
             catch (Exception ex3)
             {

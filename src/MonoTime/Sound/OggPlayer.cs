@@ -8,11 +8,13 @@
 using Microsoft.Xna.Framework.Audio;
 using NVorbis;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows.Documents;
 
 namespace DuckGame
 {
@@ -41,8 +43,15 @@ namespace DuckGame
         private int _decodedSamplePosition;
         //private const int kDecoderChunkSize = 176400;
 
-        public SoundState state => _instance == null || !_valid || _iSaidStop ? SoundState.Stopped : _instance.State;
+        private float _pitch; //dan
+        private float _pan; //dan
 
+        public SoundState state => _instance == null || !_valid || _iSaidStop ? SoundState.Stopped : _instance.State;
+        public DynamicSoundEffectInstance instance
+        {
+            get { return _instance; }
+            set { _instance = value; }
+        }
         public float volume
         {
             get => _volume;
@@ -61,6 +70,53 @@ namespace DuckGame
             if (!_valid || _instance == null || _instance.State != SoundState.Playing)
                 return;
             _instance.Volume = MathHelper.Clamp(_volume, 0f, 1f) * _replaygainModifier;
+        }
+
+
+        private void ApplyPitch() //dan
+        {
+            if (!this._valid || this._instance == null || this._instance.State != SoundState.Playing)
+                return;
+            this._instance.Pitch = _pitch;
+        }
+        private void ApplyPan() //dan
+        {
+            if (!this._valid || this._instance == null || this._instance.State != SoundState.Playing)
+                return;
+            this._instance.Pan = _pan;
+        }
+        public float pitch //dan
+        {
+            get => this._pitch;
+            set
+            {
+                bool changed = this._pitch != value;
+                this._pitch = value;
+                if (this._instance == null)
+                    return;
+                if (changed)
+                {
+                    lock (this._instance)
+                        this.ApplyPitch();
+                }
+
+            }
+        }
+        public float pan //dan
+        {
+            get => this._pan;
+            set
+            {
+                bool changed = this._pan != value;
+                this._pan = value;
+                if (this._instance == null)
+                    return;
+                if (changed)
+                {
+                    lock (this._instance)
+                        this.ApplyPan();
+                }
+            }
         }
 
         public bool looped

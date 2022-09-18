@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 
 namespace DuckGame
 {
-    public class Windows_Audio
+    public class Windows_Audio // also Linux but not going to change the name :P 
     {
         private static IWavePlayer _output;
         private static MixingSampleProvider _mixer;
@@ -32,6 +32,20 @@ namespace DuckGame
 
         public void Platform_Initialize()
         {
+            if (Program.IsLinuxD)
+            {
+                try
+                {
+                    float n = Microsoft.Xna.Framework.Audio.SoundEffect.SpeedOfSound;
+                }
+                catch (Exception)
+                {
+                    Windows_Audio.initialized = false;
+                    return;
+                }
+                Windows_Audio.initialized = true;
+                return;
+            }
             try
             {
                 if (WaveOut.DeviceCount == 0)
@@ -50,6 +64,10 @@ namespace DuckGame
 
         public void Update()
         {
+            if (Program.IsLinuxD) // mabye come back to this later
+            {
+                return;
+            }
             if (!Windows_Audio.initialized || SFX._audio == null || Windows_Audio._losingDevice <= 0 || Windows_Audio._output != null && Windows_Audio._output.PlaybackState != PlaybackState.Stopped)
                 return;
             if (Windows_Audio._output != null)
@@ -65,6 +83,10 @@ namespace DuckGame
 
         public void LoseDevice()
         {
+            if (Program.IsLinuxD) // mabye come back to this later
+            {
+                return;
+            }
             if (!Windows_Audio.initialized || Windows_Audio._output == null)
                 return;
             Windows_Audio._output.Stop();
@@ -77,6 +99,10 @@ namespace DuckGame
             set
             {
                 Windows_Audio._forceMode = value;
+                if (Program.IsLinuxD) // mabye come back to this later
+                {
+                    return;
+                }
                 if (SFX._audio == null)
                     return;
                 Windows_Audio.ResetDevice();
@@ -86,6 +112,10 @@ namespace DuckGame
         public static void ResetDevice()
         {
             Windows_Audio._mode = MonoMain.audioModeOverride == AudioMode.None ? (AudioMode)Options.Data.audioMode : MonoMain.audioModeOverride;
+            if (Program.IsLinuxD) // mabye come back to this later
+            {
+                return;
+            }
             if (Windows_Audio._output != null)
                 SFX._audio.LoseDevice();
             else
@@ -94,6 +124,10 @@ namespace DuckGame
 
         private void RecreateDevice()
         {
+            if (Program.IsLinuxD) // mabye come back to this later
+            {
+                return;
+            }
             try
             {
                 if (Windows_Audio._output != null)
@@ -179,6 +213,10 @@ namespace DuckGame
 
         public static void AddSound(ISampleProvider pSound, bool pIsMusic)
         {
+            if (Program.IsLinuxD) // mabye come back to this later
+            {
+                return;
+            }
             if (!Windows_Audio.initialized || pSound == null || Windows_Audio._mixer.MixerInputs == null || Windows_Audio._mixer == null || Windows_Audio._output == null)
                 return;
             if (Windows_Audio._mixer.MixerInputs.Count<ISampleProvider>() > 32)
@@ -199,6 +237,10 @@ namespace DuckGame
 
         public static void RemoveSound(ISampleProvider pSound)
         {
+            if (Program.IsLinuxD) // mabye come back to this later
+            {
+                return;
+            }
             if (!Windows_Audio.initialized || Windows_Audio._mixer == null)
                 return;
             Windows_Audio._mixer.RemoveMixerInput(pSound);
@@ -206,6 +248,10 @@ namespace DuckGame
 
         public void Dispose()
         {
+            if (Program.IsLinuxD) // mabye come back to this later
+            {
+                return;
+            }
             if (!Windows_Audio.initialized || notificationClient == null)
                 return;
             UnRegisterEndpointNotificationCallback(notificationClient);
@@ -217,6 +263,10 @@ namespace DuckGame
         /// <returns></returns>
         public int RegisterEndpointNotificationCallback([MarshalAs(UnmanagedType.Interface), In] IMMNotificationClient client)
         {
+            if (Program.IsLinuxD) // mabye come back to this later
+            {
+                return 0;
+            }
             if (deviceEnum == null)
                 deviceEnum = new MMDeviceEnumerator();
             return deviceEnum.RegisterEndpointNotificationCallback(client);
@@ -227,6 +277,10 @@ namespace DuckGame
         /// <returns></returns>
         public int UnRegisterEndpointNotificationCallback([MarshalAs(UnmanagedType.Interface), In] IMMNotificationClient client)
         {
+            if (Program.IsLinuxD) // mabye come back to this later
+            {
+                return 0;
+            }
             if (deviceEnum == null)
                 deviceEnum = new MMDeviceEnumerator();
             return deviceEnum.UnregisterEndpointNotificationCallback(client);

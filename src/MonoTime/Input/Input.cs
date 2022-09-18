@@ -1736,12 +1736,13 @@ namespace DuckGame
 
         public static void Update()
         {
-            if (!DuckGame.Input._initializedMessageHook)
+            bool notlinux = !(Program.IsLinuxD || Program.isLinux);
+            if (notlinux && !DuckGame.Input._initializedMessageHook)
             {
                 InputSystem.Initialize(MonoMain.instance.Window);
                 DuckGame.Input._initializedMessageHook = true;
             }
-            if (Options.Data.imeSupport && !DuckGame.Input._initializedIME)
+            if (notlinux && Options.Data.imeSupport && !DuckGame.Input._initializedIME)
             {
                 InputSystem.InitializeIme(MonoMain.instance.Window);
                 InputSystem.IMECharEntered += new CharEnteredHandler(Keyboard.IMECharEnteredHandler);
@@ -1749,7 +1750,7 @@ namespace DuckGame
             }
             InputSystem.CharEntered += new CharEnteredHandler(Keyboard.ALTCharEnteredHandler);
             bool flag = Options.Data.imeSupport && DuckGame.Input._imeAllowed;
-            if (flag != DuckGame.Input._prevImeAllowed)
+            if (notlinux && flag != DuckGame.Input._prevImeAllowed)
             {
                 if (flag)
                     InputSystem.StartIME();
@@ -1760,7 +1761,7 @@ namespace DuckGame
                 DuckGame.Input.InitializeDInputAsync();
             DuckGame.Input._prevImeAllowed = flag;
             DuckGame.Input._imeAllowed = false;
-            if (DuckGame.Input._prevForceMode != DInput.ForceDirectInputMode())
+            if (notlinux && DuckGame.Input._prevForceMode != DInput.ForceDirectInputMode())
             {
                 foreach (InputDevice device in DuckGame.Input._devices)
                 {
