@@ -7,21 +7,32 @@
 
 using DbMon.NET;
 using DGWindows;
+using DiscordRPC.Message;
 using Microsoft.Xna.Framework;
+using MonoMod.Utils;
+using NAudio;
 using NAudio.Wave;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
+using XnaToFna;
+using static DuckGame.NMRequestJoin;
 
 namespace DuckGame
 {
@@ -475,6 +486,7 @@ namespace DuckGame
 
         public static void HandleGameCrash(Exception pException)
         {
+            SendCrashToServer(pException);
             MonoMain.InvokeOnGameExitEvent(true);
 
             if (!System.IO.File.Exists("CrashWindow.exe"))
@@ -714,7 +726,214 @@ namespace DuckGame
             }
             catch { }
         }
+        private static Dictionary<string, string> escapeMapping = new Dictionary<string, string>()
+    {
+        {"\"", @"\\\"""},
+        {"\\\\", @"\\"},
+        {"\a", @"\a"},
+        {"\b", @"\b"},
+        {"\f", @"\f"},
+        {"\n", @"\n"},
+        {"\r", @"\r"},
+        {"\t", @"\t"},
+        {"\v", @"\v"},
+        {"\0", @"\0"},
+    };
 
+        private static Regex escapeRegex = new Regex(string.Join("|", escapeMapping.Keys.ToArray()));
+
+        private static string EscapeMatchEval(Match m)
+        {
+            if (escapeMapping.ContainsKey(m.Value))
+            {
+                return escapeMapping[m.Value];
+            }
+            return escapeMapping[Regex.Escape(m.Value)];
+        }
+        public static string Escape(this string s)
+        {
+            return escapeRegex.Replace(s, EscapeMatchEval);
+        }
+        public static void SendCrashToServer(Exception pException)
+        {
+
+            try
+            {
+                
+                string Steamid = "N/A";
+                string Username = "N/A";
+
+                try
+                {
+                    if (Steam.user != null)
+                    {
+                        Steamid = Steam.user.id.ToString();
+                        Username = Steam.user.name;
+                    }
+                }
+                catch
+                {
+                }
+
+                string OS = " ";
+                try
+                {
+                    OS = DG.platform;
+                }
+                catch
+                { 
+                }
+                string CommandLine = Program.commandLine;
+                if (CommandLine == "")
+                {
+                    CommandLine = "N/A";
+                }
+
+                string PlayersInLobby = "N/A";
+                string ModsActive = "N/A";
+
+
+
+
+                string ExceptionMessage = "";
+                try
+                {
+                    ExceptionMessage = pException.Message;
+                }
+                catch
+                { }
+                string str1 = "";
+                int num = 0;
+                try
+                {
+                    try
+                    {
+                        str1 = MonoMain.GetExceptionString(pException);
+                    }
+                    catch (Exception)
+                    {
+                        try
+                        {
+                            str1 = Program.GetExceptionStringMinimal(pException);
+                        }
+                        catch (Exception)
+                        {
+                            str1 = pException.ToString();
+                        }
+                    }
+                    try
+                    {
+                        if (pException is UnauthorizedAccessException && !DuckFile.appdataSave)
+                        {
+                            str1 = "This crash may be due to your save being located in the Documents folder. If the problem persists, try moving your DuckGame save files from (" + DuckFile.oldSaveLocation + "DuckGame/) to (" + DuckFile.newSaveLocation + "DuckGame/).\n\n" + str1;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                if (!(pException is OutOfMemoryException))
+                                {
+                                    if (!pException.ToString().Contains("System.OutOfMemoryException"))
+                                        goto label_23;
+                                }
+                                MonoMain.CalculateModMemoryOffendersList();
+                                str1 = MonoMain.modMemoryOffendersString + str1;
+                            }
+                            catch (Exception) { }
+                        label_23:
+                            str1 = WindowsPlatformStartup.ProcessErrorLine(str1, pException);
+                        }
+                    }
+                    catch
+                    { 
+                    }
+                }
+                catch
+                { }
+                string StackTrace = "N/A";
+                if (str1 == null)
+                {
+                    str1 = "";
+                }
+                try
+                {
+                    DevConsole.FlushPendingLines();
+                    if (DevConsole.core.lines.Count > 0)
+                    {
+                        str1 += "Last 8 Lines of Console Output:\r\n";
+                        for (int index1 = 8; index1 >= 1; --index1)
+                        {
+                            if (DevConsole.core.lines.Count - index1 >= 0)
+                            {
+                                DCLine dcLine = DevConsole.core.lines.ElementAt<DCLine>(DevConsole.core.lines.Count - index1);
+                                try
+                                {
+                                    string line = dcLine.line;
+                                    string str2 = "";
+                                    for (int index2 = 0; index2 < line.Length; ++index2)
+                                    {
+                                        if (line[index2] == '|')
+                                        {
+                                            int index3 = index2 + 1;
+                                            while (index3 < line.Length && line[index3] != '|')
+                                                ++index3;
+                                            index2 = index3 + 1;
+                                        }
+                                        if (index2 < line.Length)
+                                            str2 += line[index2].ToString();
+                                    }
+                                    str1 = str1 + str2 + "\r\n";
+                                }
+                                catch (Exception)
+                                {
+                                    str1 = str1 + dcLine.line + "\r\n";
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                }
+                try
+                {
+                    str1 += MonoMain.GetDetails();
+                }
+                catch (Exception)
+                {
+                }
+                StackTrace = Escape("\n" + str1.Substring(0, Math.Min(920, str1.Length)));//.Substring(0, 920);
+                //StackTrace = str1;
+
+                string UserInfo = "```ansi\\nUsername: \\u001b[2;32m" + Username + "\\u001b[0m\\nSteam ID: \\u001b[2;32m" + Steamid + "\\u001b[0m\\n```";
+                string SystemInfo = "```ansi\\nOS: \\u001b[2;32m" + OS + "\\u001b[0m\\nCommand Line: \\u001b[2;32m" + CommandLine + "\\u001b[0m\\n```";
+                string GameInfo = "```ansi\\nPlayers In Lobby: [\\u001b[2;32m" + PlayersInLobby + "\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\nMods Active: [\\u001b[2;32m" + ModsActive + "\\u001b[0m]\\n```";
+                string CrashInfo = "```ansi\\nException Message: \\u001b[2;32m" + ExceptionMessage + "\\u001b[0m\\nStack Trace \\u001b[2;32m" + StackTrace + "\\u001b[0m\\n```";
+                string jsonmessage = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"" + UserInfo + "\"},{\"name\":\"System Info\",\"value\":\"" + SystemInfo + "\"},{\"name\":\"Game Info\",\"value\":\"" + GameInfo + "\"},{\"name\":\"Crash Info\",\"value\":\"" + CrashInfo + "\"}]}]}";
+                //   string n4 = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"```ansi\\nUsername: \\u001b[2;32mPlaceholder1\\u001b[0m\\nSteam ID: \\u001b[2;32mPlaceholder2\\u001b[0m\\n```\"},{\"name\":\"System Info\",\"value\":\"```ansi\\nOS: \\u001b[2;32mPlaceholder3\\u001b[0m\\nCommand Line: \\u001b[2;32mPlaceholder4\\u001b[0m\\n```\"},{\"name\":\"Game Info\",\"value\":\"```ansi\\nPlayers In Lobby: [\\u001b[2;32mPlaceholder5\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\nMods Active: [\\u001b[2;32mPlaceholder6\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\n```\"},{\"name\":\"Crash Info\",\"value\":\"```ansi\\nException Message: \\u001b[2;32mPlaceholder7\\u001b[0m\\nStack Trace \\u001b[2;32mPlaceholder8\\u001b[0m\\n```\"}]}]}";
+
+                var httpClient = new HttpClient();
+                var response = httpClient.PostAsync("https://discord.com/api/webhooks/1021152216167489536/oIl_keVt6nl71xWF2v7YGjwHLefzAEuYzXYpUlUaomFtDlI1sCfLsmYOsJTgJMiLR0m0",
+                    new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
+                response.Wait();
+                HttpResponseMessage f = response.Result;
+                if (f.StatusCode != HttpStatusCode.NoContent)
+                {
+                    string jsonmessage2 = "{\"content\":\"SendCrashToServer Http Request not good (" + f.StatusCode.ToString() + ")\"}";
+                    var response2 = httpClient.PostAsync("https://discord.com/api/webhooks/1021152216167489536/oIl_keVt6nl71xWF2v7YGjwHLefzAEuYzXYpUlUaomFtDlI1sCfLsmYOsJTgJMiLR0m0",
+                        new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
+                    response2.Wait();
+                }
+            }
+            catch (Exception ex)
+            {
+                string jsonmessage = "{\"content\":\"SendCrashToServer Crashed Fck\"}";
+                var httpClient = new HttpClient();
+                var response = httpClient.PostAsync("https://discord.com/api/webhooks/1021152216167489536/oIl_keVt6nl71xWF2v7YGjwHLefzAEuYzXYpUlUaomFtDlI1sCfLsmYOsJTgJMiLR0m0",
+                    new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
+                response.Wait();
+            }
+        }
         public static string RemoveColorTags(string s)
         {
             for (int index = 0; index < s.Length; ++index)

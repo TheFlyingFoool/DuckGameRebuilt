@@ -1516,12 +1516,18 @@ namespace DuckGame
                 if (NetworkDebugger.enabled)
                 {
                     lock (debuggerLines)
+                    {
+                        Console.WriteLine(text);
                         debuggerLines.Add(dcLine);
+                    }
                 }
                 else
                 {
                     lock (_core.pendingLines)
+                    {
+                        Console.WriteLine(text);
                         _core.pendingLines.Add(dcLine);
+                    }
                 }
             }
         }
@@ -1552,12 +1558,18 @@ namespace DuckGame
             if (NetworkDebugger.enabled)
             {
                 lock (debuggerLines)
+                {
+                    Console.WriteLine(text);
                     debuggerLines.Add(dcLine);
+                }
             }
             else
             {
                 lock (_core.pendingLines)
+                {
+                    Console.WriteLine(text);
                     _core.pendingLines.Add(dcLine);
+                }
             }
         }
 
@@ -1607,12 +1619,18 @@ namespace DuckGame
             if (NetworkDebugger.enabled)
             {
                 lock (debuggerLines)
+                {
+                    Console.WriteLine(text);
                     debuggerLines.Add(dcLine);
+                }   
             }
             else
             {
                 lock (_core.pendingLines)
+                {
+                    Console.WriteLine(text);
                     _core.pendingLines.Add(dcLine);
+                }
             }
         }
 
