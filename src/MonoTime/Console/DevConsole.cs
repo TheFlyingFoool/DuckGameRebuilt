@@ -574,6 +574,12 @@ namespace DuckGame
                         lastCommand = null;
                         switch (pKeyword)
                         {
+                            case "crash":
+                            {
+                                flag1 = true;
+                                throw new Exception("you threw it idk");
+                                break;
+                            }
                             case "spawn" when CheckCheats():
                                 return;
                             case "spawn":

@@ -733,7 +733,7 @@ namespace DuckGame
                             }
                             if (this == Layer.Game)
                             {
-                                DevConsoleCommands.drawthething();
+                                DansTestArea.drawthething();
                             }
                             if (DevConsole.showCollision)
                             {

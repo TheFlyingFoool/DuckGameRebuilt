@@ -832,7 +832,7 @@ namespace DuckGame
            };
             _thingsToLoad.Enqueue(steamLoad);
         }
-
+        private void AddNamedLoadingAction(Action pAction) => _thingsToLoad.Enqueue((LoadingAction)pAction);
         private void AddLoadingAction(Action pAction) => _thingsToLoad.Enqueue((LoadingAction)pAction);
 
         private void StartThreadedLoading()
@@ -854,7 +854,11 @@ namespace DuckGame
            });
             AddLoadingAction(Input.Initialize);
             if (downloadWorkshopMods)
+            {
+                DevConsole.Log("DDownloadWorkshopItems");
                 DownloadWorkshopItems();
+            }
+               
             AddLoadingAction(ManagedContent.InitializeMods);
             AddLoadingAction(Network.InitializeMessageTypes);
             AddLoadingAction(DeathCrate.InitializeDeathCrateSettings);

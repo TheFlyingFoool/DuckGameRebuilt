@@ -12,7 +12,7 @@ using System.Windows.Forms;
 namespace DuckGame
 {
    
-    public static partial class DevConsoleCommands
+    public static class DansTestArea
     {
         public static Vec2 topleft = new Vec2(0f, 0f);
         public static Vec2 bottomright = new Vec2(100f, 100f);

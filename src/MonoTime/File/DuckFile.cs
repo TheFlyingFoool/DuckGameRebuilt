@@ -1139,7 +1139,7 @@ namespace DuckGame
             {
                 pPath = char.ToUpper(pPath[0]).ToString() + pPath.Substring(1, pPath.Length - 1);
             }
-            DevConsole.Log("do create path " + pCreatePath.ToString() + " " + pPath + " " + Path.GetDirectoryName(pPath), Color.Green);
+            //DevConsole.Log("do create path " + pCreatePath.ToString() + " " + pPath + " " + Path.GetDirectoryName(pPath), Color.Green);
             if (pCreatePath)
             {
                 DuckFile.CreatePath(Path.GetDirectoryName(pPath));

@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 
 namespace DuckGame
@@ -126,7 +127,36 @@ namespace DuckGame
                 //    //operatingSystem += " " + getOSArchitecture().ToString() + "-bit";
                 if (operatingSystem == "")
                 {
-                    operatingSystem = os.ToString(); // fall back for unhandled we do want something other that "Windows Mystery Edition" Landon
+                    string linuxsysteminfo = "/etc/os-release";
+                    if (Program.IsLinuxD && File.Exists(linuxsysteminfo))
+                    {
+                        string[] lines = File.ReadAllLines(linuxsysteminfo);
+                        DevConsole.Log(lines.Length);
+                        string prettyname = "";
+                        string name = "";
+                        foreach (string line in lines)
+                        {
+                            if (line.StartsWith("PRETTY_NAME="))
+                            {
+                                prettyname = line.Substring(13);
+                                prettyname = prettyname.Substring(0, prettyname.Length - 1);
+                            }
+                            else if (line.StartsWith("NAME="))
+                            {
+                                name = line.Substring(6);
+                                name = name.Substring(0, name.Length - 1);
+                            }
+                        }
+                        if (prettyname == "" && name != "")
+                        {
+                            operatingSystem += name + " ";
+                        }
+                        else if (prettyname != "")
+                        {
+                            operatingSystem += prettyname + " ";
+                        }
+                    }
+                    operatingSystem += os.ToString(); // fall back for unhandled we do want something other that "Windows Mystery Edition" Landon
                 }
                 return operatingSystem;
             }
