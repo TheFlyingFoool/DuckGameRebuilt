@@ -2,6 +2,8 @@
 using System.Linq;
 using DiscordRPC;
 using System.IO;
+using Microsoft.Xna.Framework.Input;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace DuckGame
 {
@@ -80,8 +82,9 @@ namespace DuckGame
 				SmallImageKey = "icon",
 				SmallImageText = "Duck Game Rebuilt",
 			};
-
-			switch (Level.current)
+			Profile ActiveProfile = Profiles.active.FirstOrDefault();
+			Level CurrentLevel = Level.current;
+            switch (CurrentLevel)
 			{
 				case TitleScreen:
 					rpc.Details = "Main Menu";
@@ -93,7 +96,7 @@ namespace DuckGame
 					rpc.Details = "In Arcade";
 					int devs = 0;
 					int total = 0;
-					foreach (ChallengeSaveData cData in Profiles.active.FirstOrDefault().challengeData.Values)
+					foreach (ChallengeSaveData cData in ActiveProfile.challengeData.Values)
 					{
 						if (cData.trophy == TrophyType.Developer)
 							devs++;
@@ -105,34 +108,35 @@ namespace DuckGame
 					assets.LargeImageKey = "arcade";
 					assets.LargeImageText = $"Arcade";
 					assets.SmallImageKey = "ticket";
-					assets.SmallImageText = $"{Profiles.active.FirstOrDefault().ticketCount} Tickets";
+					assets.SmallImageText = $"{ActiveProfile.ticketCount} Tickets";
 					break;
 
 				case ChallengeLevel:
-					rpc.Details = "Playing Arcade Level";
-					if ((Level.current as ChallengeLevel)._challenge != null)
+                    ChallengeLevel challengeLevel = CurrentLevel as ChallengeLevel;
+                    rpc.Details = "Playing Arcade Level";
+                    if (challengeLevel._challenge != null)
 					{
-						rpc.State = (Level.current as ChallengeLevel)._challenge.challenge.GetNameForDisplay();
+						rpc.State = challengeLevel._challenge.challenge.GetNameForDisplay();
 					}
 					else
 					{
 						rpc.State = "";
 					}
 					assets.LargeImageKey = "arcade";
-					assets.LargeImageText = $"Trophy: {Profiles.active.FirstOrDefault().challengeData[(Level.current as ChallengeLevel)._challenge.challenge.name].trophy}";
+					assets.LargeImageText = $"Trophy: {ActiveProfile.challengeData[Level.current.level].trophy}";
 					assets.SmallImageKey = "ticket";
-					assets.SmallImageText = $"{Profiles.active.FirstOrDefault().ticketCount} Tickets";
+					assets.SmallImageText = $"{ActiveProfile.ticketCount} Tickets";
 					break;
-
 				case Editor:
-					rpc.Details = "In Editor";
-					if (Path.GetFileNameWithoutExtension((Level.current as Editor).saveName) == "")
+                    Editor editorLevel = CurrentLevel as Editor;
+                    rpc.Details = "In Editor";
+					if (Path.GetFileNameWithoutExtension(editorLevel.saveName) == "")
 					{
 						rpc.State = "Editing Unnamed Level";
 					}
 					else
 					{
-						rpc.State = $"Editing {Path.GetFileNameWithoutExtension((Level.current as Editor).saveName)}";
+						rpc.State = $"Editing {Path.GetFileNameWithoutExtension(editorLevel.saveName)}";
 					}
 					assets.LargeImageKey = "editor";
 					break;
@@ -142,22 +146,18 @@ namespace DuckGame
                     {
 						rpc.Details = $"Local Game";
                     }
-
 					int spectators = 0;
 					foreach (Profile p in Profiles.active)
 					{
 						if (p.spectator)
 							spectators++;
 					}
-
 					string playersAndSpecCount;
 					playersAndSpecCount = $" ({Profiles.active.Count - spectators} Players)";
 					if (spectators > 0)
 					{
 						playersAndSpecCount = $" ({Profiles.active.Count - spectators} Players - {spectators} Spectators)";
 					}
-
-
 					if (Level.current is GameLevel)
 					{
 						if ((Level.current as GameLevel).displayName == null)
@@ -181,14 +181,14 @@ namespace DuckGame
 							rpc.State = "In Lobby";
 						}
 
-						if (Network.isActive && Network.lanMode == false)
+						if (Network.isActive && !Network.lanMode)
                         {
 							Button[] joinButton = new Button[1]
 							{						
 								new Button()
 								{
-									Label = "Join Game",
-									Url = $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}"
+									Label = "testing", //"Join Game",
+									Url = "https://www.google.com/"//$"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}"
 								}
 							};
 							rpc.Buttons = joinButton;
@@ -198,7 +198,6 @@ namespace DuckGame
                     {
 						rpc.State = "In Rock Throw";
                     }
-
 					if (Network.isActive && DuckNetwork.localProfile != null)
 					{
 						if (DuckNetwork.localProfile.spectator)
@@ -211,19 +210,112 @@ namespace DuckGame
 							assets.SmallImageKey = "hostcrown";
 							assets.SmallImageText = "Is Host";
 						}
-
 						rpc.Details = $"Online Game";
 						assets.LargeImageText = $"{DuckNetwork.localProfile.team.score} Points";
 					}
-
 					rpc.Details += playersAndSpecCount;
 					break;
 			}
-
-			rpc.Assets = assets;
-
-			client.SetPresence(rpc);
-			client.Invoke();
+            rpc.Assets = assets;
+			if (!DiscordRichPresence.Matches(rpc, client.CurrentPresence))
+			{
+                client.SetPresence(rpc);
+                client.Invoke();
+            }
 		}
-	}
+        public static bool Matches(RichPresence Presence, RichPresence other)
+        {
+            if (!DiscordRichPresence.MatchesBase(Presence, other))
+            {
+                return false;
+            }
+
+            if ((Presence.Buttons == null) ^ (other.Buttons == null))
+            {
+                return false;
+            }
+
+            if (Presence.Buttons != null)
+            {
+                if (Presence.Buttons.Length != other.Buttons.Length)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < Presence.Buttons.Length; i++)
+                {
+                    Button button = Presence.Buttons[i];
+                    Button button2 = other.Buttons[i];
+                    if (button.Label != button2.Label || button.Url != button2.Url)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+        public static bool MatchesBase(RichPresence Presence, RichPresence other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            if (Presence.State != other.State || Presence.Details != other.Details)
+            {
+                return false;
+            }
+
+            if (Presence.Timestamps != null)
+            {
+                if (other.Timestamps == null || other.Timestamps.StartUnixMilliseconds != Presence.Timestamps.StartUnixMilliseconds || other.Timestamps.EndUnixMilliseconds != Presence.Timestamps.EndUnixMilliseconds)
+                {
+                    return false;
+                }
+            }
+            else if (other.Timestamps != null)
+            {
+                return false;
+            }
+
+            if (Presence.Secrets != null)
+            {
+                if (other.Secrets == null || other.Secrets.JoinSecret != Presence.Secrets.JoinSecret || other.Secrets.MatchSecret != Presence.Secrets.MatchSecret || other.Secrets.SpectateSecret != Presence.Secrets.SpectateSecret)
+                {
+                    return false;
+                }
+            }
+            else if (other.Secrets != null)
+            {
+                return false;
+            }
+
+            if (Presence.Party != null)
+            {
+                if (other.Party == null || other.Party.ID != Presence.Party.ID || other.Party.Max != Presence.Party.Max || other.Party.Size != Presence.Party.Size || other.Party.Privacy != Presence.Party.Privacy)
+                {
+                    return false;
+                }
+            }
+            else if (other.Party != null)
+            {
+                return false;
+            }
+
+            if (Presence.Assets != null)
+            {
+                if (other.Assets == null || other.Assets.LargeImageKey != Presence.Assets.LargeImageKey || other.Assets.LargeImageText != Presence.Assets.LargeImageText || other.Assets.SmallImageKey != Presence.Assets.SmallImageKey || other.Assets.SmallImageText != Presence.Assets.SmallImageText)
+                {
+                    return false;
+                }
+            }
+            else if (other.Assets != null)
+            {
+                return false;
+            }
+
+            return true;//Presence.Instance == other.Instance;
+        }
+    }
 }

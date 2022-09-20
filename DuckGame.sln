@@ -19,9 +19,6 @@ Global
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		DuckGame|Any CPU = DuckGame|Any CPU
-		DuckGame|x64 = DuckGame|x64
-		DuckGame|x86 = DuckGame|x86
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
@@ -33,12 +30,6 @@ Global
 		{A63C7222-EEE1-4BCD-844D-F6AC1501A655}.Debug|x64.Build.0 = Debug|Any CPU
 		{A63C7222-EEE1-4BCD-844D-F6AC1501A655}.Debug|x86.ActiveCfg = Debug|x86
 		{A63C7222-EEE1-4BCD-844D-F6AC1501A655}.Debug|x86.Build.0 = Debug|x86
-		{A63C7222-EEE1-4BCD-844D-F6AC1501A655}.DuckGame|Any CPU.ActiveCfg = DuckGame|Any CPU
-		{A63C7222-EEE1-4BCD-844D-F6AC1501A655}.DuckGame|Any CPU.Build.0 = DuckGame|Any CPU
-		{A63C7222-EEE1-4BCD-844D-F6AC1501A655}.DuckGame|x64.ActiveCfg = DuckGame|x64
-		{A63C7222-EEE1-4BCD-844D-F6AC1501A655}.DuckGame|x64.Build.0 = DuckGame|x64
-		{A63C7222-EEE1-4BCD-844D-F6AC1501A655}.DuckGame|x86.ActiveCfg = DuckGame|x86
-		{A63C7222-EEE1-4BCD-844D-F6AC1501A655}.DuckGame|x86.Build.0 = DuckGame|x86
 		{A63C7222-EEE1-4BCD-844D-F6AC1501A655}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{A63C7222-EEE1-4BCD-844D-F6AC1501A655}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{A63C7222-EEE1-4BCD-844D-F6AC1501A655}.Release|x64.ActiveCfg = DuckGame|x64
@@ -51,12 +42,6 @@ Global
 		{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}.Debug|x64.Build.0 = Debug|x64
 		{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}.Debug|x86.Build.0 = Debug|Any CPU
-		{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}.DuckGame|Any CPU.ActiveCfg = Debug|Any CPU
-		{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}.DuckGame|Any CPU.Build.0 = Debug|Any CPU
-		{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}.DuckGame|x64.ActiveCfg = Debug|x64
-		{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}.DuckGame|x64.Build.0 = Debug|x64
-		{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}.DuckGame|x86.ActiveCfg = Debug|Any CPU
-		{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}.DuckGame|x86.Build.0 = Debug|Any CPU
 		{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}.Release|x64.ActiveCfg = Release|x64
