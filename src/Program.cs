@@ -81,11 +81,11 @@ namespace DuckGame
         public static Assembly gameAssembly; // added dan this for changes to ModLoader GetType and for general use then trying to get the games assembly
         public static string gameAssemblyName = ""; // added dan
         /// <summary>The main entry point for the application.</summary>\
-        public delegate Int32 CallBack(ref long a);
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        private delegate int FilterDelegate(IntPtr exceptionPointers);
-        [DllImport("kernel32.dll")]
-        private static extern FilterDelegate SetUnhandledExceptionFilter(FilterDelegate lpTopLevelExceptionFilter);
+        //public delegate Int32 CallBack(ref long a);
+        //[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        //private delegate int FilterDelegate(IntPtr exceptionPointers);
+        //[DllImport("kernel32.dll")]
+        //private static extern FilterDelegate SetUnhandledExceptionFilter(FilterDelegate lpTopLevelExceptionFilter);
       //  private static volatile bool _insideFirstChanceExceptionHandler;
         //private static void OnFirstChanceException(object sender, FirstChanceExceptionEventArgs args)
         //{
@@ -115,22 +115,40 @@ namespace DuckGame
         //        _insideFirstChanceExceptionHandler = false;
         //    }
        // }
+        public static void MessageDiscordChannel(string text)
+        {
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                //DevConsole.Log("SetUnhandledExceptionFilter Work!");
+                //LogHelper.WriteErrorLog("SetUnhandledExceptionFilter Work!");
+                text = Escape(text);
+                string jsonmessage2 = "{\"content\":\"" + text + "\"}";
+                Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl,new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
+                response2.Wait();
+            }
+            catch
+            { }
+        }
+        //static void DoSomeAccessViolation()
+        //{
+        //    // if you have any questions about why this throws,
+        //    // the answer is "42", of course
+
+        //    var ptr = new IntPtr(42);
+        //    Marshal.StructureToPtr(42, ptr, true);
+        //}
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
-        static void DoSomeAccessViolation()
-        {
-            // if you have any questions about why this throws,
-            // the answer is "42", of course
-
-            var ptr = new IntPtr(42);
-            Marshal.StructureToPtr(42, ptr, true);
-        }
         public static void Main(string[] args)
         {
             //SetUnhandledExceptionFilter(newexceptionfilter);
-           //AppDomain.CurrentDomain.FirstChanceException += OnFirstChanceException;
+            //AppDomain.CurrentDomain.FirstChanceException += OnFirstChanceException;
+            // MessageDiscordChannel("test1");
+            DevConsole.Log("Version 69.0.0.0.5");
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
+            DevConsole.Log(IsLinuxD.ToString() + " " + p.ToString());
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = Program.gameAssembly.GetName().Name;
             FilePath = Program.gameAssembly.Location;
@@ -168,17 +186,17 @@ namespace DuckGame
                 Program.HandleGameCrash(ex);
             }
         }
-        public static Int32 newexceptionfilter(IntPtr a)
-        {
-             HttpClient httpClient = new HttpClient();
-            //DevConsole.Log("SetUnhandledExceptionFilter Work!");
-            //LogHelper.WriteErrorLog("SetUnhandledExceptionFilter Work!");
-            string jsonmessage2 = "{\"content\":\"SendCrashToServer Http Request not good (" + 0.ToString() + ")\"}";
-            Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl,
-                new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
-            response2.Wait();
-            return 1;
-        }
+        //public static Int32 newexceptionfilter(IntPtr a)
+        //{
+        //     HttpClient httpClient = new HttpClient();
+        //    //DevConsole.Log("SetUnhandledExceptionFilter Work!");
+        //    //LogHelper.WriteErrorLog("SetUnhandledExceptionFilter Work!");
+        //    string jsonmessage2 = "{\"content\":\"SendCrashToServer Http Request not good (" + 0.ToString() + ")\"}";
+        //    Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl,
+        //        new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
+        //    response2.Wait();
+        //    return 1;
+        //}
 
         public static Assembly ModResolve(object sender, ResolveEventArgs args) => ManagedContent.ResolveModAssembly(sender, args);
 

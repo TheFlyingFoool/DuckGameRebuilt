@@ -44,7 +44,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;Debug</DefineConstants>
+    <DefineConstants>Debug</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -84,9 +84,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|AnyCPU'">
     <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;DuckGame</DefineConstants>
+    <DefineConstants>DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
