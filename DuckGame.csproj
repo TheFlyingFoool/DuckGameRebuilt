@@ -145,6 +145,9 @@
     <Reference Include="NAudio">
       <HintPath>lib\NAudio.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NVorbis">
       <HintPath>lib\NVorbis.dll</HintPath>
     </Reference>
