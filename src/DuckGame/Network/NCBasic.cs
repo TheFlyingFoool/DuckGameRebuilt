@@ -96,7 +96,10 @@ namespace DuckGame
             _socket = new UdpClient();
             _socket.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             _socket.Client.Bind(new IPEndPoint(IPAddress.Any, port));
-            _socket.AllowNatTraversal(true);
+            if (!Program.IsLinuxD)
+            {
+                _socket.AllowNatTraversal(true); //i forget what this does but also doesnt seem super imporant
+            }
             localEndPoint = !NetworkDebugger.enabled ? new IPEndPoint(IPAddress.Parse("127.0.0.1"), _port) : new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1330 + NetworkDebugger.currentIndex);
             _port = port;
             _socket.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
