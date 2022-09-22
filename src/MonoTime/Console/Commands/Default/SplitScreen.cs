@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Toggles Split-Screen")]
-    public static bool SplitScreen()
+
+    public static partial class DevConsoleCommands
     {
-        return DevConsole.splitScreen ^= true;
+        [DevConsoleCommand(Description = "Toggles Split-Screen")]
+        public static bool SplitScreen()
+        {
+            return DevConsole.splitScreen ^= true;
+        }
     }
 }

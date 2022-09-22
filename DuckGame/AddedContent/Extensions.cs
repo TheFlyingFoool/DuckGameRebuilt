@@ -27,7 +27,7 @@ namespace DuckGame
         {
             first = default;
             
-            foreach (var item in collection)
+            foreach (T item in collection)
             {
                 if (!condition(item)) 
                     continue;
@@ -203,7 +203,7 @@ namespace DuckGame
                 .FirstOrDefault(x => x != GetMe()),
             _ => Profiles.active.TryFirst(
                 x => x.name.CleanFormatting().CaselessEquals(playerName.CleanFormatting()),
-                out var prof)
+                out Profile prof)
                 ? prof
                 : null,
         };

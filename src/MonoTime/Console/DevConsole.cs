@@ -1545,7 +1545,7 @@ namespace DuckGame
             string objstring = "";
             if (obj != null)
             {
-                for (var i = 0; i < obj.Length; i++)
+                for (int i = 0; i < obj.Length; i++)
                 {
                     objstring += " " + obj[i]?.ToString() ?? "null";
                 }
@@ -1990,7 +1990,7 @@ namespace DuckGame
             // checks if its not null and if it's length is greater than 0
             if (DevConsoleCommands.Binds is { Count: > 0 })
             {
-                foreach (var bind in DevConsoleCommands.Binds)
+                foreach (DevConsoleCommands.ConsoleBind bind in DevConsoleCommands.Binds)
                 {
                     bind?.TryExecute();
                 }

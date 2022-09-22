@@ -912,7 +912,7 @@ namespace DuckGame
             this.IsFixedTimeStep = true; // UNZOOOM
             Program.SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
             // post init
-            foreach (var methodInfo in PostInitializeAttribute.All)
+            foreach (MethodInfo methodInfo in PostInitializeAttribute.All)
             {
                 methodInfo.Invoke(null, null);
             }
@@ -1500,14 +1500,14 @@ namespace DuckGame
                             }
                         }
                     }
-                    else if (Directory.Exists("/spriteatlas") && File.Exists(@"/spriteatlas/spriteatlas.png"))
+                    else if (Directory.Exists(Program.GameDirectory + "spriteatlas") && File.Exists(Program.GameDirectory + "spriteatlas/spriteatlas.png"))
                     {
-                        DevConsole.Log("loading /spriteatlas/spriteatlas.png");
-                        DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(@"/spriteatlas/spriteatlas.png", Graphics.device);
+                        DevConsole.Log("loading " + Program.GameDirectory + "spriteatlas/spriteatlas.png");
+                        DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(Program.GameDirectory + "spriteatlas/spriteatlas.png", Graphics.device);
                         DuckGame.Content.Thick.Namebase = "SpriteAtlas";
 
                         //RSplit("de mo", ' ', -1);
-                        string[] lines = System.IO.File.ReadAllLines(@"/spriteatlas/spriteatlas_offsets.txt");
+                        string[] lines = System.IO.File.ReadAllLines(Program.GameDirectory + "spriteatlas/spriteatlas_offsets.txt");
                         foreach (string line in lines)
                         {
                             try

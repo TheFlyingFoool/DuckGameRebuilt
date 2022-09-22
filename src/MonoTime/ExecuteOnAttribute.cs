@@ -1,26 +1,28 @@
 ﻿using System;
 
-namespace DuckGame;
-
-[AttributeUsage(AttributeTargets.Method)]
-public class ExecuteOnAttribute : Attribute
+namespace DuckGame
 {
-    public ExecuteOnAttribute(ExecutionTime executionTime)
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class ExecuteOnAttribute : Attribute
     {
-        ExecutionTime = executionTime;
+        public ExecuteOnAttribute(ExecutionTime executionTime)
+        {
+            ExecutionTime = executionTime;
+        }
+
+        public ExecutionTime ExecutionTime;
     }
 
-    public ExecutionTime ExecutionTime;
-}
-
-public enum ExecutionTime
-{
-    PreInitialize,
-    Initialize,
-    PostInitialize,
-    PreUpdate,
-    Update,
-    PostUpdate,
-    Draw,
-    PostDraw,
+    public enum ExecutionTime
+    {
+        PreInitialize,
+        Initialize,
+        PostInitialize,
+        PreUpdate,
+        Update,
+        PostUpdate,
+        Draw,
+        PostDraw,
+    }
 }

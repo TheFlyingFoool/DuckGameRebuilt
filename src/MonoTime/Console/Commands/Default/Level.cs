@@ -2,16 +2,18 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(
-        Name = "Level",
-        Description = "Changes the current level",
-        Aliases = new[] { "lev" })]
-    public static void LevelCommand(Level level)
+
+    public static partial class DevConsoleCommands
     {
-        Level.current = level;
+        [DevConsoleCommand(
+            Name = "Level",
+            Description = "Changes the current level",
+            Aliases = new[] { "lev" })]
+        public static void LevelCommand(Level level)
+        {
+            Level.current = level;
+        }
     }
 }

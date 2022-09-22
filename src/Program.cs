@@ -16,6 +16,7 @@ using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -138,17 +139,56 @@ namespace DuckGame
         //    var ptr = new IntPtr(42);
         //    Marshal.StructureToPtr(42, ptr, true);
         //}
+
+        [DllImport("libdl.so.2")]
+        private static extern IntPtr dlopen(string path, int flags);
+        /*
+        dlopen: {
+        RTLD_LAZY: 1,
+        RTLD_NOW: 2,
+        RTLD_GLOBAL: 8,
+        RTLD_LOCAL: 4
+        }, */
+
+        [DllImport("libX11")] // libX11 or libX11.so.6 doesnt matter
+        private static extern IntPtr dlsym(IntPtr handle, string symbol);
+
+        [DllImport("libX11", CharSet = CharSet.Ansi)]
+        static extern int XChangeProperty(IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, IntPtr mode, string data, int elements);
+
+
+        [DllImport("libX11", EntryPoint = "XInternAtom")]
+        internal extern static IntPtr XInternAtom(IntPtr display, string atom_name, bool only_if_exists);
+
+        [DllImport("libX11")]
+        private static extern IntPtr XOpenDisplay(IntPtr display);
+
+
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
         {
+
+            Thread.Sleep(4000);
+
+            //DevConsole.Log(LoadLibrary("kernel32").ToString());
+            //DevConsole.Log(LoadLibrary("libX11.so.6").ToString());
+
             //SetUnhandledExceptionFilter(newexceptionfilter);
             //AppDomain.CurrentDomain.FirstChanceException += OnFirstChanceException;
             // MessageDiscordChannel("test1");
+            Console.WriteLine("test1 uh");
             DevConsole.Log("Version 69.0.0.0.5");
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
             DevConsole.Log(IsLinuxD.ToString() + " " + p.ToString());
+            if (IsLinuxD)
+            {
+                IntPtr Display = XOpenDisplay(IntPtr.Zero);
+                IntPtr property = XInternAtom(Display, "_NET_WM_ICON", false);
+                // IntPtr n = dlopen("libX11.so.6", 1);
+                // DevConsole.Log(n.ToString());
+            }
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = Program.gameAssembly.GetName().Name;
             FilePath = Program.gameAssembly.Location;
@@ -197,7 +237,48 @@ namespace DuckGame
         //    response2.Wait();
         //    return 1;
         //}
+        //public static void SetIcon(Hwnd hwnd, Icon icon)
+        //{
+        //    if (icon == null)
+        //    {
+        //        // XXX
 
+        //        // This really needs to do whatever it
+        //        // takes to remove the window manager
+        //        // menu, not just delete the ICON
+        //        // property.  This will cause metacity
+        //        // to use the "no icon set" icon, and
+        //        // we'll still have an icon.
+        //        XDeleteProperty(DisplayHandle, hwnd.whole_window, _NET_WM_ICON);
+        //    }
+        //    else
+        //    {
+        //        Bitmap bitmap;
+        //        int size;
+        //        IntPtr[] data;
+        //        int index;
+
+        //        bitmap = icon.ToBitmap();
+        //        index = 0;
+        //        size = bitmap.Width * bitmap.Height + 2;
+        //        data = new IntPtr[size];
+
+        //        data[index++] = (IntPtr)bitmap.Width;
+        //        data[index++] = (IntPtr)bitmap.Height;
+
+        //        for (int y = 0; y < bitmap.Height; y++)
+        //        {
+        //            for (int x = 0; x < bitmap.Width; x++)
+        //            {
+        //                data[index++] = (IntPtr)bitmap.GetPixel(x, y).ToArgb();
+        //            }
+        //        }
+
+        //        XChangeProperty(DisplayHandle, hwnd.whole_window,
+        //                 _NET_WM_ICON, (IntPtr)Atom.XA_CARDINAL, 32,
+        //                 PropertyMode.Replace, data, size);
+        //    }
+        //}
         public static Assembly ModResolve(object sender, ResolveEventArgs args) => ManagedContent.ResolveModAssembly(sender, args);
 
         public static Assembly Resolve(object sender, ResolveEventArgs args)

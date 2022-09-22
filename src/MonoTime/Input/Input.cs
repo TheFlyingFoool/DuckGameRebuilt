@@ -1748,7 +1748,7 @@ namespace DuckGame
                 InputSystem.IMECharEntered += new CharEnteredHandler(Keyboard.IMECharEnteredHandler);
                 DuckGame.Input._initializedIME = true;
             }
-            InputSystem.CharEntered += new CharEnteredHandler(Keyboard.ALTCharEnteredHandler);
+            //InputSystem.CharEntered += new CharEnteredHandler(Keyboard.ALTCharEnteredHandler); removed because it does nothing on target platforms
             bool flag = Options.Data.imeSupport && DuckGame.Input._imeAllowed;
             if (notlinux && flag != DuckGame.Input._prevImeAllowed)
             {

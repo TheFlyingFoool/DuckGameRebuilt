@@ -2,27 +2,29 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Wipes your main Duck Game profile of all data")]
-    public static void ClearMainProfile()
+
+    public static partial class DevConsoleCommands
     {
-        DevConsole.Log("Your main account has been R U I N E D !", Color.Red);
-        
-        ulong steamId = Profiles.experienceProfile.steamID;
-        string varName = steamId.ToString();
-        
-        steamId = Profiles.experienceProfile.steamID;
-        string varID = steamId.ToString();
-        
-        Profile p = new(varName, varID: varID)
+        [DevConsoleCommand(Description = "Wipes your main Duck Game profile of all data")]
+        public static void ClearMainProfile()
         {
-            steamID = Profiles.experienceProfile.steamID
-        };
-        
-        Profiles.Remove(Profiles.experienceProfile);
-        Profiles.Add(p);
+            DevConsole.Log("Your main account has been R U I N E D !", Color.Red);
+
+            ulong steamId = Profiles.experienceProfile.steamID;
+            string varName = steamId.ToString();
+
+            steamId = Profiles.experienceProfile.steamID;
+            string varID = steamId.ToString();
+
+            Profile p = new(varName, varID: varID)
+            {
+                steamID = Profiles.experienceProfile.steamID
+            };
+
+            Profiles.Remove(Profiles.experienceProfile);
+            Profiles.Add(p);
+        }
     }
 }

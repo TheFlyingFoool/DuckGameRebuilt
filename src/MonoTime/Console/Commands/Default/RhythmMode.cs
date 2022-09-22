@@ -2,22 +2,24 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Toggles rhythm mode (groovy)")]
-    public static bool RhythmMode()
+
+    public static partial class DevConsoleCommands
     {
-        if (!DevConsole.core.rhythmMode)
-            Music.Stop();
-        DevConsole.core.rhythmMode ^= true;
-        if (!DevConsole.core.rhythmMode)
-            return false;
-        Music.Play(Music.RandomTrack("i can write whatever i want here because for some reason" +
-                                     "landon decided to hardcode the music for rhythm mode but" +
-                                     "still decided to use the general method regardless... :I"));
-        
-        return true;
+        [DevConsoleCommand(Description = "Toggles rhythm mode (groovy)")]
+        public static bool RhythmMode()
+        {
+            if (!DevConsole.core.rhythmMode)
+                Music.Stop();
+            DevConsole.core.rhythmMode ^= true;
+            if (!DevConsole.core.rhythmMode)
+                return false;
+            Music.Play(Music.RandomTrack("i can write whatever i want here because for some reason" +
+                                         "landon decided to hardcode the music for rhythm mode but" +
+                                         "still decided to use the general method regardless... :I"));
+
+            return true;
+        }
     }
 }

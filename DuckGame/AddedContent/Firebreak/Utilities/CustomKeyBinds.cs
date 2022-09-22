@@ -13,7 +13,7 @@ namespace DuckGame
 		public static readonly Dictionary<string, Keys> KeyDict = new();
 		static CustomKeyBinds()
         {
-			foreach (var key in (Keys[])Enum.GetValues(typeof(Keys)))
+			foreach (Keys key in (Keys[])Enum.GetValues(typeof(Keys)))
 			{
 				KeyDict.Add(key.ToString().ToLower(), key);
 			}
@@ -26,7 +26,7 @@ namespace DuckGame
 		/// <returns>the corresponding Keys value of said keyboard character</returns>
 		public static Keys CharToKeys(string character)
 		{
-			if (KeyDict.TryGetValue(character.ToLower(), out var key))
+			if (KeyDict.TryGetValue(character.ToLower(), out Keys key))
 			{
 				return key;
 			}

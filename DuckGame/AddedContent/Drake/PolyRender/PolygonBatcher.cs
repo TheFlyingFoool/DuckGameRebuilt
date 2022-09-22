@@ -165,14 +165,14 @@ namespace DuckGame.AddedContent.Drake.PolyRender
         public void DrawArrays(Vector3[] positions, Color color, PrimitiveType type)
         {
             ResetBuffer();
-            foreach (var t in positions) Vert(t).Col(color);
+            foreach (Vector3 t in positions) Vert(t).Col(color);
             Draw(type);
         }
 
         public void DrawArrays(Vector3[] positions, PrimitiveType type)
         {
             ResetBuffer();
-            foreach (var t in positions) Vert(t);
+            foreach (Vector3 t in positions) Vert(t);
             Draw(type);
         }
 

@@ -3,31 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DuckGame;
-
-[AttributeUsage(AttributeTargets.Class)]
-public class FireSerializerModuleAttribute : Attribute
+namespace DuckGame
 {
-    public static List<IFireSerializerModule> Serializers;
-
-    static FireSerializerModuleAttribute()
+    [AttributeUsage(AttributeTargets.Class)]
+    public class FireSerializerModuleAttribute : Attribute
     {
-        MemberAttributePair<TypeInfo, FireSerializerModuleAttribute>.RequestSearch(all =>
+        public static List<IFireSerializerModule> Serializers;
+
+        static FireSerializerModuleAttribute()
         {
-            List<IFireSerializerModule> serializerModules = new();
-
-            foreach (var (memberInfo, _) in all)
+            MemberAttributePair<TypeInfo, FireSerializerModuleAttribute>.RequestSearch(all =>
             {
-                Type type = memberInfo.AsType();
+                List<IFireSerializerModule> serializerModules = new();
 
-                if (type.GetInterfaces().All(x => x.Name != $"{nameof(IFireSerializerModule<object>)}`1"))
-                    throw new Exception($"{memberInfo.Name} is using the {nameof(FireSerializerModuleAttribute)} attribute" +
-                                        $"without implementing the {nameof(IFireSerializerModule<object>)} interface");
-                
-                serializerModules.Add((IFireSerializerModule) Activator.CreateInstance(type));
-            }
+                foreach ((TypeInfo memberInfo, FireSerializerModuleAttribute _) in all)
+                {
+                    Type type = memberInfo.AsType();
 
-            Serializers = serializerModules;
-        });
+                    if (type.GetInterfaces().All(x => x.Name != $"{nameof(IFireSerializerModule<object>)}`1"))
+                        throw new Exception($"{memberInfo.Name} is using the {nameof(FireSerializerModuleAttribute)} attribute" +
+                                            $"without implementing the {nameof(IFireSerializerModule<object>)} interface");
+
+                    serializerModules.Add((IFireSerializerModule)Activator.CreateInstance(type));
+                }
+
+                Serializers = serializerModules;
+            });
+        }
     }
 }

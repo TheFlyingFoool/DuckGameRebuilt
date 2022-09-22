@@ -3,31 +3,32 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace DuckGame.AddedContent.Drake;
-
-public static class FixedCommandHistory
+namespace DuckGame.AddedContent.Drake
 {
-    [AutoConfigField(External = "CommandHistory")]
-    public static List<string> SavedCommandHistory
+    public static class FixedCommandHistory
     {
-        get => DevConsole.core.previousLines.FastTakeFromEnd(25);
-        set
+        [AutoConfigField(External = "CommandHistory")]
+        public static List<string> SavedCommandHistory
         {
-            DevConsole.core.previousLines.AddRange(value);
-            DevConsole.core.lastCommandIndex += value.Count;
-        }
-    }
-
-    private static List<string> FastTakeFromEnd(this IReadOnlyList<string> list, int limit)
-    {
-        int smartLimit = Math.Min(list.Count, limit);
-        List<string> result = new(smartLimit);
-        
-        for (int i = list.Count - smartLimit; i < list.Count; i++)
-        {
-            result.Add(list[i]);
+            get => DevConsole.core.previousLines.FastTakeFromEnd(25);
+            set
+            {
+                DevConsole.core.previousLines.AddRange(value);
+                DevConsole.core.lastCommandIndex += value.Count;
+            }
         }
 
-        return result;
+        private static List<string> FastTakeFromEnd(this IReadOnlyList<string> list, int limit)
+        {
+            int smartLimit = Math.Min(list.Count, limit);
+            List<string> result = new(smartLimit);
+
+            for (int i = list.Count - smartLimit; i < list.Count; i++)
+            {
+                result.Add(list[i]);
+            }
+
+            return result;
+        }
     }
 }

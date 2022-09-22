@@ -2,10 +2,10 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.Utils;
-
-public static class VectorMath
+namespace DuckGame.AddedContent.Drake.Utils
 {
+    public static class VectorMath
+    {
         public const float DegToRad = 0.0174533f;
 
         public const float RadToDeg = 57.2958f;
@@ -19,10 +19,10 @@ public static class VectorMath
             CalcIntersection(start, end, thing.bottomRight, thing.bottomLeft)
             };
 
-            var nearest = end;
+            Vector2 nearest = end;
             float distance = (end - start).Length();
 
-            foreach (var vec in intersects)
+            foreach (Vector2 vec in intersects)
             {
                 if (float.IsNaN(vec.X) || float.IsNaN(vec.Y))
                 {
@@ -56,7 +56,7 @@ public static class VectorMath
                 return Vec2.Zero;
             }
 
-            var intersect = new Vec2((b2 * c1 - b1 * c2) / delta, (a1 * c2 - a2 * c1) / delta);
+            Vec2 intersect = new Vec2((b2 * c1 - b1 * c2) / delta, (a1 * c2 - a2 * c1) / delta);
 
             if (!zeroIfNotOnLine)
             {
@@ -103,7 +103,7 @@ public static class VectorMath
         }
 
 
-        public static Vector2[] CalcClosestPoints(this Vector2 origin, Vector2[] points,  int number)
+        public static Vector2[] CalcClosestPoints(this Vector2 origin, Vector2[] points, int number)
         {
             if (number > points.Length)
             {
@@ -133,13 +133,13 @@ public static class VectorMath
 
             return index != -1 ? points[index] : origin;
         }
-        
-        
+
+
 
         public static float CalcRadians(this Vector2 vec) => (float)(Math.Tan(vec.X / vec.Y) * -1);
 
         public static float CalcDegreesBetween(this Vec2 start, Vec2 end) => CalcRadians(start - end) * RadToDeg;
-        
+
         public static bool IsInsideRect(this Vector2 point, Vector2 rectOrigin, Vector2 rectSize)
         {
             return point.X > rectOrigin.X && point.X < (rectOrigin + rectSize).X && point.Y > rectOrigin.Y &&
@@ -148,7 +148,7 @@ public static class VectorMath
 
         private static Vector2 _negateX = new Vector2(-1, 1);
         private static Vector2 _negateY = new Vector2(1, -1);
-        
+
         public static Vector2 NegateX(this Vector2 self)
         {
             return self * _negateX;
@@ -219,4 +219,5 @@ public static class VectorMath
         {
             return new Vector2(self.Y, self.Y);
         }
+    }
 }

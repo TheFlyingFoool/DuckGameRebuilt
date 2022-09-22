@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Toggles constant sync")]
-    public static bool ConstantSync()
+
+    public static partial class DevConsoleCommands
     {
-        return DevConsole.core.constantSync ^= true;
+        [DevConsoleCommand(Description = "Toggles constant sync")]
+        public static bool ConstantSync()
+        {
+            return DevConsole.core.constantSync ^= true;
+        }
     }
 }

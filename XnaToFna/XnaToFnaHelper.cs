@@ -204,7 +204,7 @@ namespace XnaToFna
                     pathindex.Add(i);
                 }
             }
-            for (var k = 0; k < pathindex.Count; k++)
+            for (int k = 0; k < pathindex.Count; k++)
             {
                 string folderpath = path.Substring(0, pathindex[k]);
                 if (folderpath == "")

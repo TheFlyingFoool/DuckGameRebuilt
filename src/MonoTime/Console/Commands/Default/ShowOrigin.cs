@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Visualizes the center point of the current map")]
-    public static bool ShowOrigin()
+
+    public static partial class DevConsoleCommands
     {
-        return DevConsole.debugOrigin ^= true;
+        [DevConsoleCommand(Description = "Visualizes the center point of the current map")]
+        public static bool ShowOrigin()
+        {
+            return DevConsole.debugOrigin ^= true;
+        }
     }
 }

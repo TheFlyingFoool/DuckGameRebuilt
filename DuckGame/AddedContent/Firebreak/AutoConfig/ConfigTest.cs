@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DuckGame;
-
-public static class ConfigTest
+namespace DuckGame
 {
-    // [AutoConfigField]
-    public static string Test
+    public static class ConfigTest
     {
-        get => "test value";
-        set => DevConsole.Log(value);
+        // [AutoConfigField]
+        public static string Test
+        {
+            get => "test value";
+            set => DevConsole.Log(value);
+        }
     }
 }
