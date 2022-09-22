@@ -82,113 +82,14 @@ namespace DuckGame
         public static Assembly gameAssembly; // added dan this for changes to ModLoader GetType and for general use then trying to get the games assembly
         public static string gameAssemblyName = ""; // added dan
         /// <summary>The main entry point for the application.</summary>\
-        //public delegate Int32 CallBack(ref long a);
-        //[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        //private delegate int FilterDelegate(IntPtr exceptionPointers);
-        //[DllImport("kernel32.dll")]
-        //private static extern FilterDelegate SetUnhandledExceptionFilter(FilterDelegate lpTopLevelExceptionFilter);
-      //  private static volatile bool _insideFirstChanceExceptionHandler;
-        //private static void OnFirstChanceException(object sender, FirstChanceExceptionEventArgs args)
-        //{
-        //    if (_insideFirstChanceExceptionHandler)
-        //    {
-        //        // Prevent recursion if an exception is thrown inside this method
-        //        return;
-        //    }
-
-        //    _insideFirstChanceExceptionHandler = true;
-        //    try
-        //    {
-        //        HttpClient httpClient = new HttpClient();
-        //        //DevConsole.Log("SetUnhandledExceptionFilter Work!");
-        //        //LogHelper.WriteErrorLog("SetUnhandledExceptionFilter Work!");
-        //        string jsonmessage2 = "{\"content\":\"OnFirstChanceException (" + 0.ToString() + ")\"}";
-        //        Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl,
-        //            new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
-        //        response2.Wait();
-        //    }
-        //    catch
-        //    {
-        //        // You have to catch all exceptions inside this method
-        //    }
-        //    finally
-        //    {
-        //        _insideFirstChanceExceptionHandler = false;
-        //    }
-       // }
-        public static void MessageDiscordChannel(string text)
-        {
-            try
-            {
-                HttpClient httpClient = new HttpClient();
-                //DevConsole.Log("SetUnhandledExceptionFilter Work!");
-                //LogHelper.WriteErrorLog("SetUnhandledExceptionFilter Work!");
-                text = Escape(text);
-                string jsonmessage2 = "{\"content\":\"" + text + "\"}";
-                Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl,new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
-                response2.Wait();
-            }
-            catch
-            { }
-        }
-        //static void DoSomeAccessViolation()
-        //{
-        //    // if you have any questions about why this throws,
-        //    // the answer is "42", of course
-
-        //    var ptr = new IntPtr(42);
-        //    Marshal.StructureToPtr(42, ptr, true);
-        //}
-
-        [DllImport("libdl.so.2")]
-        private static extern IntPtr dlopen(string path, int flags);
-        /*
-        dlopen: {
-        RTLD_LAZY: 1,
-        RTLD_NOW: 2,
-        RTLD_GLOBAL: 8,
-        RTLD_LOCAL: 4
-        }, */
-
-        [DllImport("libX11")] // libX11 or libX11.so.6 doesnt matter
-        private static extern IntPtr dlsym(IntPtr handle, string symbol);
-
-        [DllImport("libX11", CharSet = CharSet.Ansi)]
-        static extern int XChangeProperty(IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, IntPtr mode, string data, int elements);
-
-
-        [DllImport("libX11", EntryPoint = "XInternAtom")]
-        internal extern static IntPtr XInternAtom(IntPtr display, string atom_name, bool only_if_exists);
-
-        [DllImport("libX11")]
-        private static extern IntPtr XOpenDisplay(IntPtr display);
-
-
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
         {
-
-            Thread.Sleep(4000);
-
-            //DevConsole.Log(LoadLibrary("kernel32").ToString());
-            //DevConsole.Log(LoadLibrary("libX11.so.6").ToString());
-
-            //SetUnhandledExceptionFilter(newexceptionfilter);
-            //AppDomain.CurrentDomain.FirstChanceException += OnFirstChanceException;
-            // MessageDiscordChannel("test1");
-            Console.WriteLine("test1 uh");
-            DevConsole.Log("Version 69.0.0.0.5");
+            DevConsole.Log("Version 69.10.0.0.1");
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
             DevConsole.Log(IsLinuxD.ToString() + " " + p.ToString());
-            if (IsLinuxD)
-            {
-                IntPtr Display = XOpenDisplay(IntPtr.Zero);
-                IntPtr property = XInternAtom(Display, "_NET_WM_ICON", false);
-                // IntPtr n = dlopen("libX11.so.6", 1);
-                // DevConsole.Log(n.ToString());
-            }
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = Program.gameAssembly.GetName().Name;
             FilePath = Program.gameAssembly.Location;
@@ -204,18 +105,10 @@ namespace DuckGame
             else
                 AppDomain.CurrentDomain.AssemblyLoad += new AssemblyLoadEventHandler(WindowsPlatformStartup.AssemblyLoad);
             Application.ThreadException += new ThreadExceptionEventHandler(Program.UnhandledThreadExceptionTrapper);
-
-
-            // Handler for unhandled exceptions.
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(WindowsPlatformStartup.UnhandledExceptionTrapper);
             TaskScheduler.UnobservedTaskException += UnhandledExceptionUnobserved;
-            //  currentDomain.UnhandledException += GlobalUnhandledExceptionHandler;
-            // Handler for exceptions in threads behind forms.
-            //   System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(Program.UnhandledThreadExceptionTrapper); ;
-
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(Program.OnProcessExit);
-            
             try
             {
                 //DoSomeAccessViolation();
@@ -236,48 +129,6 @@ namespace DuckGame
         //        new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
         //    response2.Wait();
         //    return 1;
-        //}
-        //public static void SetIcon(Hwnd hwnd, Icon icon)
-        //{
-        //    if (icon == null)
-        //    {
-        //        // XXX
-
-        //        // This really needs to do whatever it
-        //        // takes to remove the window manager
-        //        // menu, not just delete the ICON
-        //        // property.  This will cause metacity
-        //        // to use the "no icon set" icon, and
-        //        // we'll still have an icon.
-        //        XDeleteProperty(DisplayHandle, hwnd.whole_window, _NET_WM_ICON);
-        //    }
-        //    else
-        //    {
-        //        Bitmap bitmap;
-        //        int size;
-        //        IntPtr[] data;
-        //        int index;
-
-        //        bitmap = icon.ToBitmap();
-        //        index = 0;
-        //        size = bitmap.Width * bitmap.Height + 2;
-        //        data = new IntPtr[size];
-
-        //        data[index++] = (IntPtr)bitmap.Width;
-        //        data[index++] = (IntPtr)bitmap.Height;
-
-        //        for (int y = 0; y < bitmap.Height; y++)
-        //        {
-        //            for (int x = 0; x < bitmap.Width; x++)
-        //            {
-        //                data[index++] = (IntPtr)bitmap.GetPixel(x, y).ToArgb();
-        //            }
-        //        }
-
-        //        XChangeProperty(DisplayHandle, hwnd.whole_window,
-        //                 _NET_WM_ICON, (IntPtr)Atom.XA_CARDINAL, 32,
-        //                 PropertyMode.Replace, data, size);
-        //    }
         //}
         public static Assembly ModResolve(object sender, ResolveEventArgs args) => ManagedContent.ResolveModAssembly(sender, args);
 
@@ -889,7 +740,21 @@ namespace DuckGame
             streamWriter.WriteLine("\n");
             streamWriter.Close();
         }
-
+        public static void MessageDiscordChannel(string text)
+        {
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                //DevConsole.Log("SetUnhandledExceptionFilter Work!");
+                //LogHelper.WriteErrorLog("SetUnhandledExceptionFilter Work!");
+                text = Escape(text);
+                string jsonmessage2 = "{\"content\":\"" + text + "\"}";
+                Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
+                response2.Wait();
+            }
+            catch
+            { }
+        }
         //private static void UnhandledExceptionTrapperTestServer(
         //  object sender,
         //  UnhandledExceptionEventArgs e)
@@ -912,18 +777,18 @@ namespace DuckGame
             catch { }
         }
         private static Dictionary<string, string> escapeMapping = new Dictionary<string, string>()
-    {
-        {"\"", @"\\\"""},
-        {"\\\\", @"\\"},
-        {"\a", @"\a"},
-        {"\b", @"\b"},
-        {"\f", @"\f"},
-        {"\n", @"\n"},
-        {"\r", @"\r"},
-        {"\t", @"\t"},
-        {"\v", @"\v"},
-        {"\0", @"\0"},
-    };
+        {
+            {"\"", @"\\\"""},
+            {"\\\\", @"\\"},
+            {"\a", @"\a"},
+            {"\b", @"\b"},
+            {"\f", @"\f"},
+            {"\n", @"\n"},
+            {"\r", @"\r"},
+            {"\t", @"\t"},
+            {"\v", @"\v"},
+            {"\0", @"\0"},
+        };
 
         private static Regex escapeRegex = new Regex(string.Join("|", escapeMapping.Keys.ToArray()));
 

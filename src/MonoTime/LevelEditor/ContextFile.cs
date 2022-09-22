@@ -5,6 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System.IO;
+
 namespace DuckGame
 {
     public class ContextFile : ContextMenu
@@ -106,7 +108,16 @@ namespace DuckGame
                     _field.value = levelData == null ? current.fileDialog.result.Substring(1, current.fileDialog.result.Length - 5) : (object)levelData.metaData.guid;
                 }
                 else
-                    _field.value = !current.fileDialog.result.StartsWith("/") ? current.fileDialog.result.Substring(0, current.fileDialog.result.Length - 4) : (object)current.fileDialog.result.Substring(1, current.fileDialog.result.Length - 5);
+                {
+                    if (!(current.fileDialog.result.StartsWith("/") && (!Program.IsLinuxD || !Path.IsPathRooted(current.fileDialog.result))) )
+                    {
+                        _field.value = current.fileDialog.result.Substring(0, current.fileDialog.result.Length - 4);
+                    }
+                    else
+                    {
+                        _field.value = (object)current.fileDialog.result.Substring(1, current.fileDialog.result.Length - 5);
+                    }
+                }
                 Editor.hasUnsavedChanges = true;
                 current.fileDialog.result = null;
             }

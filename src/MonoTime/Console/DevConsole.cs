@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using DuckGame.AddedContent.Drake;
+using SDL2;
 
 namespace DuckGame
 {
@@ -2092,7 +2093,7 @@ namespace DuckGame
                     {
                         if (!string.IsNullOrWhiteSpace(_core.typing))
                         {
-                            Thread thread = new(() => Clipboard.SetText(_core.typing));
+                            Thread thread = new(() => SDL.SDL_SetClipboardText(_core.typing));
                             thread.SetApartmentState(ApartmentState.STA);
                             thread.Start();
                             thread.Join();
@@ -2102,7 +2103,7 @@ namespace DuckGame
                     else if (Keyboard.Pressed(Keys.V))
                     {
                         string paste = "";
-                        Thread thread = new(() => paste = Clipboard.GetText());
+                        Thread thread = new(() => paste = SDL.SDL_GetClipboardText());
                         thread.SetApartmentState(ApartmentState.STA);
                         thread.Start();
                         thread.Join();

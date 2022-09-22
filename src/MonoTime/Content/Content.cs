@@ -807,7 +807,17 @@ namespace DuckGame
         public static string[] GetFiles(string path, string filter = "*.*")
         {
             path = path.Replace('\\', '/');
-            path = path.Trim('/');
+            if (Path.IsPathRooted(path) && Program.IsLinuxD)
+            {
+                while (path.EndsWith("/"))
+                {
+                    path = path.Substring(0, path.Length - 1);
+                }
+            }
+            else
+            {
+                path = path.Trim('/');
+            }
             string str1 = (Directory.GetCurrentDirectory() + "/").Replace('\\', '/');
             List<string> stringList = new List<string>();
             foreach (string path1 in DuckFile.GetFilesNoCloud(path, filter))
@@ -827,7 +837,17 @@ namespace DuckGame
         public static string[] GetDirectories(string path, string filter = "*.*")
         {
             path = path.Replace('\\', '/');
-            path = path.Trim('/');
+            if (Path.IsPathRooted(path) && Program.IsLinuxD)
+            {
+                while (path.EndsWith("/"))
+                {
+                    path = path.Substring(0, path.Length - 1);
+                }
+            }
+            else
+            {
+                path = path.Trim('/');
+            }
             List<string> stringList = new List<string>();
             foreach (string path1 in DuckFile.GetDirectoriesNoCloud(path))
             {

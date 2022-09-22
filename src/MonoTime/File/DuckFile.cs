@@ -845,7 +845,17 @@ namespace DuckGame
         {
             path = path.Replace('\\', '/');
             List<string> stringList = new List<string>();
-            path = path.Trim('/');
+            if (Path.IsPathRooted(path) && Program.IsLinuxD)
+            {
+                while (path.EndsWith("/"))
+                {
+                    path = path.Substring(0, path.Length - 1);
+                }
+            }
+            else
+            {
+                path = path.Trim('/');
+            }
             if (Directory.Exists(path))
             {
                 foreach (string path1 in DuckFile.GetDirectoriesNoCloud(path))
@@ -1130,14 +1140,17 @@ namespace DuckGame
         {
             pPath = pPath.Replace("//", "/");
             pPath = pPath.Replace('\\', '/');
-            if (Program.IsLinuxD || Program.isLinux)
+            if (Program.IsLinuxD)
             {
                 pPath = pPath.Replace("//", "/").Replace("\\", "/");
                 pPath = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(pPath), true);
             }
-            if (pPath.Length > 1 && pPath[1] == ':')
+            else
             {
-                pPath = char.ToUpper(pPath[0]).ToString() + pPath.Substring(1, pPath.Length - 1);
+                if (pPath.Length > 1 && pPath[1] == ':')
+                {
+                    pPath = char.ToUpper(pPath[0]).ToString() + pPath.Substring(1, pPath.Length - 1);
+                }
             }
             //DevConsole.Log("do create path " + pCreatePath.ToString() + " " + pPath + " " + Path.GetDirectoryName(pPath), Color.Green);
             if (pCreatePath)
@@ -1205,11 +1218,11 @@ namespace DuckGame
             BitBuffer data = null;
             data = doc.Serialize();
             DuckFile.TryFileOperation(() =>
-           {
+            {
                FileStream fileStream = System.IO.File.Create(path);
                fileStream.Write(data.buffer, 0, data.lengthInBytes);
                fileStream.Close();
-           }, "SaveChunk(" + path + ")");
+            }, "SaveChunk(" + path + ")");
             DuckFile.Commit(path);
             return true;
         }

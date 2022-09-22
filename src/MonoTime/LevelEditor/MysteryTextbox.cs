@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using SDL2;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -117,9 +118,9 @@ namespace DuckGame
         public void ReadClipboardText()
         {
             _clipboardText = "";
-            if (!Clipboard.ContainsText())
+            if (!(SDL.SDL_HasClipboardText() == SDL.SDL_bool.SDL_TRUE))
                 return;
-            _clipboardText = Clipboard.GetText();
+            _clipboardText = SDL.SDL_GetClipboardText();
         }
 
         public void Update(int page = 0, int rowsPerPage = -1, int firstPageRows = 0)
@@ -161,7 +162,7 @@ namespace DuckGame
                     copyText = _font._highlightStart >= _font._highlightEnd ? this.text.Substring(_font._highlightEnd, _font._highlightStart - _font._highlightEnd) : this.text.Substring(_font._highlightStart, _font._highlightEnd - _font._highlightStart);
                     if (copyText != "")
                     {
-                        Thread thread = new Thread(() => Clipboard.SetText(copyText));
+                        Thread thread = new Thread(() => SDL.SDL_SetClipboardText(copyText));
                         thread.SetApartmentState(ApartmentState.STA);
                         thread.Start();
                         thread.Join();

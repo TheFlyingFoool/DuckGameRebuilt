@@ -3876,7 +3876,7 @@ namespace DuckGame
         public void LoadLevel(string load)
         {
             load = load.Replace('\\', '/');
-            while (load.StartsWith("/"))
+            while (load.StartsWith("/") && (!Program.IsLinuxD || !Path.IsPathRooted(load)))
                 load = load.Substring(1);
             ClearEverything();
             _saveName = load;
@@ -3998,7 +3998,7 @@ namespace DuckGame
         public void LegacyLoadLevel(string load)
         {
             load = load.Replace('\\', '/');
-            while (load.StartsWith("/"))
+            while (load.StartsWith("/") && (!Program.IsLinuxD || !Path.IsPathRooted(load)))
                 load = load.Substring(1);
             DuckXML doc = _additionalSaveDirectory != null ? DuckXML.Load(load) : DuckFile.LoadDuckXML(load);
             _saveName = load;
@@ -4780,7 +4780,7 @@ namespace DuckGame
         public static void Delete(string file)
         {
             file = file.Replace('\\', '/');
-            while (file.StartsWith("/"))
+            while (file.StartsWith("/") && (!Program.IsLinuxD || !Path.IsPathRooted(file)))
                 file = file.Substring(1);
             string path = "";
             LevelMetaData data = ReadLevelMetadata(file);

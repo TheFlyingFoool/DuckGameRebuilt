@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SDL2;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace DuckGame
                 // currentPart.Append('\n');
             }
 
-            Thread thread = new(() => Clipboard.SetText(currentPart.ToString()));
+            Thread thread = new(() => SDL.SDL_SetClipboardText(currentPart.ToString()));
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
             thread.Join();

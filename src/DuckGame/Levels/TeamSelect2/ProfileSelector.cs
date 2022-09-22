@@ -623,6 +623,10 @@ namespace DuckGame
                     if (_inputProfile.Pressed("SELECT") || _autoSelect)
                     {
                         _autoSelect = false;
+                        if (_profiles.Count == 0 || _selectorPosition < -1 || _selectorPosition >= _profiles.Count)
+                        {
+                            _selectorPosition = -1;
+                        }
                         if (_selectorPosition == -1)
                         {
                             _desiredMode = PSMode.CreateProfile;

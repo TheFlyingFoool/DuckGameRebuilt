@@ -149,7 +149,7 @@ namespace DuckGame
         private string FixPath(string pPath)
         {
             string str = Path.GetFullPath(pPath).Replace('\\', '/');
-            while (str.StartsWith("/"))
+            while (str.StartsWith("/") && (!Program.IsLinuxD || !Path.IsPathRooted(str)))
                 str = str.Substring(1);
             if (str.EndsWith("/"))
                 str = str.Substring(0, str.Length - 1);
@@ -460,7 +460,7 @@ namespace DuckGame
                             str1 = _currentDirectory.Remove(startIndex, _rootFolder.Length);
                         if (str1 != "" && !str1.EndsWith("/"))
                             str1 += "/";
-                        if (str1.StartsWith("/"))
+                        if (str1.StartsWith("/") && (!Program.IsLinuxD || !Path.IsPathRooted(str1)))
                             str1 = str1.Substring(1, str1.Length - 1);
                         string str2 = _rootFolder + "/" + str1 + contextMenu.data;
                         if (contextMenu.isModPath)
