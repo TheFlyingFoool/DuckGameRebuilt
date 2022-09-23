@@ -29,3 +29,13 @@ dotnet build
 * \[OPTIONAL FOR BETTER DEBUGGING\] Set Startup program to the exe produced in the bin
 
 <img src="https://user-images.githubusercontent.com/22122579/182766499-9b46ee7a-1291-4fbc-8c3e-7d7467ab8411.png" width="500">
+
+### Building on GNU/Linux
+
+* add official up to date mono repos from monoproject: https://www.mono-project.com/
+
+* if needed install `mono-complete msbuild nuget`
+
+* TODO FIX for now just temporarily add the Presentationframework nuget (you may need dotent sdk from microsoft (or you may need to download it fom questionable sources)): https://www.nuget.org/packages/PresentationFramework/ So pretty much just download the DLL and put it in the bin folder.
+
+* FINISH ME LATER
