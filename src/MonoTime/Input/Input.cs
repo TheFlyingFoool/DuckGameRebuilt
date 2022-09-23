@@ -1667,6 +1667,10 @@ namespace DuckGame
 
         public static void EnumerateGamepads()
         {
+            if (Program.IsLinuxD)//FIX ME LATER DAN PLLZ
+            {
+                return;
+            }
             foreach (GenericController gamePad in DuckGame.Input._gamePads)
             {
                 InputDevice device1 = gamePad.device;
