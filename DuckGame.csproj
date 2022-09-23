@@ -7,7 +7,7 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <WarningLevel>4</WarningLevel>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
