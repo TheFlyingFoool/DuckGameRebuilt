@@ -101,6 +101,7 @@ public class UiBasic : IAmUi
 
     protected Vector2 _position;
     protected Vector2 _size;
+    protected AtlasedFont _font;
 
 
     private bool _dragging;
@@ -233,26 +234,26 @@ public class UiBasic : IAmUi
     
     protected virtual void HandleClicked(MouseAction action)
     {
-        if (Closeable && InputChecker.MouseGamePos.IsInsideRect(Position, InteractBarSize.YY()))
+        if (Closeable && InputData.MouseProjectedPosition.IsInsideRect(Position, InteractBarSize.YY()))
         {
             Kill();
             return;
         }
 
-        if (Resizeable && InputChecker.MouseGamePos.IsInsideRect(Position + Size.ZeroY().SubtractX(InteractBarSize.Y), InteractBarSize.YY()))
+        if (Resizeable && InputData.MouseProjectedPosition.IsInsideRect(Position + Size.ZeroY().SubtractX(InteractBarSize.Y), InteractBarSize.YY()))
         {
             _resizing = true;
             _originalPosition = Position;
             _originalSize = Size;
-            _mouseOffset = InputChecker.MouseGamePos - Position;
+            _mouseOffset = InputData.MouseProjectedPosition - Position;
             return;
         }
 
-        if (Draggable && InputChecker.MouseGamePos.IsInsideRect(Position, Size.ReplaceY(InteractBarSize.Y)))
+        if (Draggable && InputData.MouseProjectedPosition.IsInsideRect(Position, Size.ReplaceY(InteractBarSize.Y)))
         {
             _dragging = true;
             _originalPosition = Position;
-            _mouseOffset = InputChecker.MouseGamePos - Position;
+            _mouseOffset = InputData.MouseProjectedPosition - Position;
             return;
         }
     }
@@ -264,14 +265,14 @@ public class UiBasic : IAmUi
     
     protected virtual void DoDragging()
     {
-        PositionInternal = Vector2.Clamp(InputChecker.MouseGamePos, InputChecker.CurrentLayerScreenMin + _mouseOffset, InputChecker.CurrentLayerScreenMax - (Size - _mouseOffset)) - _mouseOffset;
+        PositionInternal = Vector2.Clamp(InputData.MouseProjectedPosition, InputData.CurrentLayerScreenMin + _mouseOffset, InputData.CurrentLayerScreenMax - (Size - _mouseOffset)) - _mouseOffset;
     }
     protected virtual void DoResizing()
     {
         Vector2 mouseDiff = Vector2.Clamp(
-                                InputChecker.MouseGamePos, 
-                                InputChecker.CurrentLayerScreenMin + _mouseOffset.ZeroX(),
-                                InputChecker.CurrentLayerScreenMax - _originalSize.SubtractX(_mouseOffset.X).ReplaceY(_mouseOffset.Y)
+                                InputData.MouseProjectedPosition, 
+                                InputData.CurrentLayerScreenMin + _mouseOffset.ZeroX(),
+                                InputData.CurrentLayerScreenMax - _originalSize.SubtractX(_mouseOffset.X).ReplaceY(_mouseOffset.Y)
                                 ) - _mouseOffset;
         
         PositionInternal = new Vector2(_originalPosition.X, Math.Min(_originalPosition.Y + _originalSize.Y - MinSize.Y, mouseDiff.Y));

@@ -173,6 +173,17 @@ public static class PolyRenderer
             .Vert(lowR).Tex(Vector2.One)
             .DrawTriStrip();
     }
+
+    public static void TexRect(Vector2 topL, Vector2 lowR, Vector2 uvTopL, Vector2 uvLowR, Color c)
+    {
+        Graphics.polyBatcher.ResetBuffer();
+        Graphics.polyBatcher
+            .Vert(topL).Col(c).Tex(uvTopL)
+            .Vert(new Vector2(lowR.X, topL.Y)).Tex(new Vector2(uvLowR.X, uvTopL.Y))
+            .Vert(new Vector2(topL.X, lowR.Y)).Tex(new Vector2(uvTopL.X, uvLowR.Y))
+            .Vert(lowR).Tex(uvLowR)
+            .DrawTriStrip();
+    }
     
     public static void Line(Vector2 v1, Vector2 v2, float thickness, Color v1c1, Color v1c2, Color v2c1, Color v2c2)
     {

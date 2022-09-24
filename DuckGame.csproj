@@ -170,9 +170,11 @@
     <Compile Include="DuckGame\AddedContent\Drake\DebugUI\UiTabber.cs" />
     <Compile Include="DuckGame\AddedContent\Drake\DrakeTests.cs" />
     <Compile Include="DuckGame\AddedContent\Drake\FixedCommandHistory.cs" />
+    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\AtlasedFont.cs" />
+    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\StaticFont.cs" />
     <Compile Include="DuckGame\AddedContent\Drake\PolyRender\PolygonBatcher.cs" />
     <Compile Include="DuckGame\AddedContent\Drake\PolyRender\PolyRenderer.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\Utils\InputChecker.cs" />
+    <Compile Include="DuckGame\AddedContent\Drake\Utils\InputData.cs" />
     <Compile Include="DuckGame\AddedContent\Drake\Utils\VectorMath.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />

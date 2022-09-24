@@ -47,7 +47,7 @@ public static class DrakeTests
     }
     
     
-    [DrawingContext(DrawingLayer.HUD, DoDraw = false)]
+    [DrawingContext(DrawingLayer.HUD, DoDraw = true)]
     public static void PolyDrawTest()
     {
         if(uiDead) return;
@@ -65,6 +65,7 @@ public static class DrakeTests
         Graphics.mouseVisible = true;
         Graphics.polyBatcher.BlendState = BlendState.NonPremultiplied;
         Graphics.polyBatcher.ScissorMode = ScissorStackMode.Intersect;
+        Graphics.polyBatcher.SetScreenView();
 
         //if(Graphics.frame % 240 == 0) testUI.SetCol(UiCols.Main, Color.Random());
         //if (Graphics.frame % 300 == 0) testUI.SetCol(UiCols.Alternate, Color.RandomGray(0, 100));
@@ -73,56 +74,26 @@ public static class DrakeTests
         testUI.UpdateContent();
         testUI.DrawContent();
         
-        if(InputChecker.MouseLeftPressed()) testUI.OnMouseAction(MouseAction.LeftClick);
-        if(InputChecker.MouseLeftReleased()) testUI.OnMouseAction(MouseAction.LeftRelease);
-        if(InputChecker.MouseScroll != 0f) testUI.OnMouseAction(MouseAction.Scrolled, InputChecker.MouseScroll * 0.1f);
+        if(InputData.MouseLeftPressed()) testUI.OnMouseAction(MouseAction.LeftClick);
+        if(InputData.MouseLeftReleased()) testUI.OnMouseAction(MouseAction.LeftRelease);
+        if(InputData.MouseScroll != 0f) testUI.OnMouseAction(MouseAction.Scrolled, InputData.MouseScroll * 0.1f);
 
+        DevConsole.Log(InputData.MouseProjectedPosition);
 
         Graphics.SetRenderTarget(Graphics.defaultRenderTarget);
         float xscale = Graphics.currentLayer.width / Graphics.viewport.Width;
         float yscale = Graphics.currentLayer.height / Graphics.viewport.Height;
         Graphics.Draw(target, 0, 0, xscale, yscale);
     }
-
-    private static Texture2D tex;
+    
     
     [DrawingContext(DrawingLayer.HUD, DoDraw = true)]
     public static void TexTest()
     {
-        if (tex == null) return;
-
         Graphics.polyBatcher.BlendState = BlendState.NonPremultiplied;
-        Graphics.polyBatcher.Texture = tex;
-        PolyRenderer.TexRect(Vector2.Zero, Vector2.One * 300);
-        
-    }
-    
-    [DevConsoleCommand]
-    public static void GDT()
-    {
-        Font font = new Font("Jetbrains Mono", 127, FontStyle.Regular, GraphicsUnit.Pixel);
-        Bitmap img = new Bitmap(1024, 1024, PixelFormat.Format32bppArgb);
-        using System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(img);
-        {
-            graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-            graphics.SmoothingMode = SmoothingMode.HighQuality;
-            graphics.DrawString("TestText", font, new SolidBrush(System.Drawing.Color.White), 0, 0);
-        }
-        var data = BmpToColors(img);
-        tex = new Tex2D(1024, 1024);
-        tex.SetData(data);
-    }
-
-    private static Color[] BmpToColors(Bitmap bmp)
-    {
-        using var ms = new MemoryStream();
-        bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-        bmp.Save(ms, ImageFormat.Bmp);
-        byte[] bmpBytes = ms.GetBuffer();
-        var length = bmpBytes.Length / 4;
-        Color[] cols = new Color[length];
-        //offset by 2 - buffer seems to have 2 empty bytes at the start?
-        for (int i = 0; i < length; i++) cols[i] = new Color(bmpBytes[i * 4 + 4], bmpBytes[i * 4 + 3], bmpBytes[i * 4 + 2], bmpBytes[i * 4 + 5]);
-        return cols;
+        Graphics.device.SamplerStates[0] = SamplerState.AnisotropicClamp;
+        Graphics.polyBatcher.SetScreenView();
+        PolyRenderer.Rect(Vector2.One * 50, Vector2.One * 250, Color.PaleTurquoise);
+        StaticFont.DrawString("XYZ:", Vector2.One * 150, Color.Blue);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DuckGame.AddedContent.Drake.PolyRender;
 using Microsoft.Xna.Framework;
 
 namespace DuckGame.AddedContent.Drake.DebugUI;
@@ -8,11 +9,8 @@ public interface IAmUi
 {
     public Vector2 Position { get; set; }
     public Vector2 Size { get; set; }
-
     public Vector4 Expansion { get; }
-
     public string Name { get; set; }
-
     public event Action<IAmUi, Vector2> OnPositioned;
 
     public event Action<IAmUi, Vector2> OnResized;

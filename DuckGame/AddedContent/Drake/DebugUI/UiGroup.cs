@@ -62,7 +62,7 @@ public class UiGroup : UiBasic
     public virtual void AddContent(IAmUi content)
     {
         _contentToAdd.Add(content);
-        content.OnKilled += RemoveContent;
+        content.OnKilled += OnSubContentKilled;
         content.OnResized += OnSubContentResized;
         content.OnPositioned += OnSubContentPositioned;
         content.OnColoured += OnSubContentColoured;
@@ -79,7 +79,7 @@ public class UiGroup : UiBasic
     protected virtual void SendSubContentMouseAction(MouseAction action, float scroll = 0)
     {
         if ((action & MouseAction.AnyClick) != 0 || action == MouseAction.Scrolled)
-            SubContent.Find(content => content.IsOverlapping(InputChecker.MouseGamePos))?.OnMouseAction(action, scroll);
+            SubContent.Find(content => content.IsOverlapping(InputData.MouseProjectedPosition))?.OnMouseAction(action, scroll);
         else
             foreach (var ui in SubContent)
                 ui.OnMouseAction(action, scroll);
@@ -108,4 +108,9 @@ public class UiGroup : UiBasic
 
     protected virtual void OnSubContentColoured(IAmUi subContent, UiCols type, Color old)
     { }
+
+    protected virtual void OnSubContentKilled(IAmUi subContent)
+    {
+        RemoveContent(subContent);
+    }
 }

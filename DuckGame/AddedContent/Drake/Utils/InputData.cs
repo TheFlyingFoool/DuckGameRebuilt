@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace DuckGame.AddedContent.Drake.Utils;
 
-public static class InputChecker
+public static class InputData
 {
     public static bool KeyPressed(Keys key) => Keyboard.Pressed(key);
     public static bool KeyReleased(Keys key) => Keyboard.Released(key);
@@ -24,8 +24,12 @@ public static class InputChecker
     public static float MouseScroll => Mouse.scroll;
 
     public static Vector2 MouseScreenPos => Mouse.mousePos;
-    public static Vector2 MouseGamePos => Mouse.positionScreen;
 
+    public static Vector2 MouseGamePos => Mouse.positionScreen;
+    
+    public static Vector2 MouseProjectedPosition => Graphics.polyBatcher.TransformVector(MouseScreenPos);
+
+    public static Vector2 ViewportSize => new Vec2(Graphics.device.Viewport.Width, Graphics.device.Viewport.Height);
     public static Vector2 CurrentLayerScreenMax => Graphics.currentLayer.camera.transformScreenVector(new Vec2(Graphics.device.Viewport.Width, Graphics.device.Viewport.Height));
     public static Vector2 CurrentLayerScreenMin => Graphics.currentLayer.camera.transformScreenVector(new Vec2(0));
     public static Keys[] KeysPressedThisFrame => Microsoft.Xna.Framework.Input.Keyboard.GetState().GetPressedKeys().Cast<Keys>().ToArray();

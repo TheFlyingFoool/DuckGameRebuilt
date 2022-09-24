@@ -12,7 +12,7 @@ public class UiTabber : UiList
 {
     protected IAmUi _currentTab;
 
-    public override Vector4 Expansion => new Vector4(0f, InteractBarSize.Y, 0f, 0f);
+    public override Vector4 Expansion => new Vector4(0f, InteractBarSize.Y + _accentLineWidth, 0f, 0f);
     
     public UiTabber(Vector2 position, Vector2 size, Color color, List<IAmUi> content, string name = "UiList") : base(position, size, color, content, name)
     {
@@ -51,7 +51,7 @@ public class UiTabber : UiList
     protected virtual void DrawTabs()
     {
         float width = Size.X / SubContent.Count;
-        Vector2 pos = Position;
+        Vector2 pos = Position - new Vector2(0f, _accentLineWidth);
         foreach (IAmUi content in SubContent)
         {
             DrawTab(pos, width, content);
@@ -61,20 +61,21 @@ public class UiTabber : UiList
 
     protected virtual void DrawTab(Vector2 pos, float width, IAmUi ui)
     {
-
         Vector2 off = new Vector2(InteractBarSize.Y / 5f, 0f);
         Vector2 size = new Vector2(width, InteractBarSize.Y);
-        PolyRenderer.Quad(pos - size.ZeroX() + off, pos + size.NegateY() - off, pos, pos + size.ZeroY(), ui.GetCol(UiCols.Main));
+        Color col = ui.GetCol(UiCols.Main);
+        if (ui == _currentTab) col = col.Brighter();
+        PolyRenderer.Quad(pos - size.ZeroX() + off, pos + size.NegateY() - off, pos, pos + size.ZeroY(), col);
     
-        //TODO: Draw Name!
+        StaticFont.DrawStringSized("$B"+ui.Name, pos - size.ZeroX() + off, Color.Black, 4);
     }
     
     protected override void HandleClicked(MouseAction action)
     {
         base.HandleClicked(action);
-
-        if (!InputChecker.MouseGamePos.IsInsideRect(Position - new Vector2(0f, InteractBarSize.Y), new Vector2(Size.X, InteractBarSize.Y))) return;
-        float offset = InputChecker.MouseGamePos.X - Position.X;
+        if(SubContent.Count == 0) return;
+        if (!InputData.MouseProjectedPosition.IsInsideRect(Position - new Vector2(0f, InteractBarSize.Y), new Vector2(Size.X, InteractBarSize.Y))) return;
+        float offset = InputData.MouseProjectedPosition.X - Position.X;
         int index = (int)((offset / Size.X) * SubContent.Count);
         _currentTab = SubContent[index];
         ArrangeContent();
@@ -82,12 +83,18 @@ public class UiTabber : UiList
     
     protected override void SendSubContentMouseAction(MouseAction action, float scroll = 0)
     {
-        if ((action & MouseAction.AnyClick) != 0 || action == MouseAction.Scrolled && _currentTab.IsOverlapping(InputChecker.MouseGamePos)) _currentTab.OnMouseAction(action, scroll);
-        else _currentTab.OnMouseAction(action, scroll);
+        if ((action & MouseAction.AnyClick) != 0 || action == MouseAction.Scrolled && _currentTab.IsOverlapping(InputData.MouseProjectedPosition)) _currentTab?.OnMouseAction(action, scroll);
+        else _currentTab?.OnMouseAction(action, scroll);
     }
     
     protected override void SendSubContentKeyPressed(Keys keycode, char value)
     {
-        _currentTab.OnKeyPressed(keycode, value);
+        _currentTab?.OnKeyPressed(keycode, value);
+    }
+    
+    protected override void OnSubContentKilled(IAmUi subContent)
+    {
+        base.OnSubContentKilled(subContent);
+        _currentTab = SubContent.Count > 0 ? SubContent[0] : null;
     }
 }

@@ -64,6 +64,9 @@ namespace DuckGame.AddedContent.Drake.PolyRender
 
         public void ResetMatrices() => UpdateMatricesForCurrentLayer();
 
+        public Vector3 TransformVector(Vector3 vec) => Vector3.Transform(vec, Matrix.Invert(_effect.View));
+        public Vector2 TransformVector(Vector2 vec) => Vector2.Transform(vec, Matrix.Invert(_effect.View));
+        
         public void ResetDrawParams()
         {
             ClearScissorStack();

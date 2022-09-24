@@ -168,7 +168,7 @@ namespace DuckGame
         
         public static float Distance(this Vec2 pos1, Vec2 pos2)
         {
-            return Math.Abs(pos1.x - pos2.x) + Math.Abs(pos1.y - pos2.y);
+            return Math.Abs(pos1.x - pos2.x) + Math.Abs(pos1.y - pos2.y); 
         }
         
         public static Profile? GetProfSafe(string playerName) => playerName switch

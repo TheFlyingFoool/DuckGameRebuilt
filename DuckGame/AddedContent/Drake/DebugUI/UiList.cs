@@ -89,7 +89,7 @@ public class UiList : UiGroup
 
     protected override void HandleScrolled(float scroll)
     {
-        if (!IsOverlapping(InputChecker.MouseGamePos)) return;
+        if (!IsOverlapping(InputData.MouseProjectedPosition)) return;
         base.HandleScrolled(scroll);
         _scrollOffset = Maths.Clamp(_scrollOffset + scroll, 0, _maxScrollOffset);
         ArrangeContent();
