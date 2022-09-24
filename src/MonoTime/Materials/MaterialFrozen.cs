@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialFrozen : Material
+    public class MaterialFrozen : Material // to fix remeber both
     {
         private Tex2D _frozenTexture;
         private Thing _thing;
@@ -17,6 +17,7 @@ namespace DuckGame
 
         public MaterialFrozen(Thing t)
         {
+            spsupport = false;
             _effect = Content.Load<MTEffect>("Shaders/frozen");
             _frozenTexture = Content.Load<Tex2D>("frozen");
             _thing = t;
@@ -27,8 +28,8 @@ namespace DuckGame
             if (DuckGame.Graphics.device.Textures[0] != null)
             {
                 Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-                SetValue("width", texture.frameWidth / (texture.width * 0.75f));
-                SetValue("height", texture.frameHeight / (texture.height * 0.75f));
+                SetValue("width", _thing.graphic.texture.frameWidth / (_thing.graphic.texture.width * 0.75f));
+                SetValue("height", _thing.graphic.texture.frameHeight / (_thing.graphic.texture.height * 0.75f));
                 SetValue("xpos", _thing.x);
                 SetValue("ypos", _thing.y);
                 SetValue("intensity", intensity);

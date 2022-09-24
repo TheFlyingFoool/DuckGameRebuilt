@@ -80,7 +80,10 @@ namespace DuckGame
         public Vec2 end
         {
             get => _realEnd;
-            set => _realEnd = value;
+            set
+            {
+                _realEnd = value;
+            }
         }
 
         public bool gravityAffected
@@ -151,7 +154,9 @@ namespace DuckGame
             if (!traced)
             {
                 if (randomDir)
+                {
                     angle = Rando.Float(360f);
+                }
                 angle += (Rando.Float(30f) - 15f) * (1f - ammo.accuracy);
                 travel.x = (float)Math.Cos(Maths.DegToRad(angle)) * range;
                 travel.y = (float)-Math.Sin(Maths.DegToRad(angle)) * range;

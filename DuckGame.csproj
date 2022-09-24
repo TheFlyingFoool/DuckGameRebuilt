@@ -7,11 +7,12 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <LangVersion>latestmajor</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <WarningLevel>4</WarningLevel>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <Nullable>disable</Nullable>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,7 +25,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.1.8175.33388</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -42,8 +42,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>.\</OutputPath>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE;DEBUG;Debug</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -59,44 +59,23 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGameTurbo|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <AssemblyName>DuckGame</AssemblyName>
-    <OutputPath>.\</OutputPath>
-    <DefineConstants>TRACE;DuckGameTurbo</DefineConstants>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGameTurbo|x86'">
-    <AssemblyName>DuckGame</AssemblyName>
-    <OutputPath>.\</OutputPath>
-    <DefineConstants>TRACE;DuckGameTurbo</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|AnyCPU'">
-    <AssemblyName>DuckGame</AssemblyName>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;DuckGame</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>false</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
     <DocumentationFile>
     </DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DuckGame|x86'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>.\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
@@ -110,10 +89,13 @@
     </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <ApplicationIcon>DuckGame.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>DuckGame.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrashWindow">
@@ -122,7 +104,8 @@
     <Reference Include="DGInput">
       <HintPath>lib\DGInput.dll</HintPath>
     </Reference>
-    <Reference Include="DGSteam">
+    <Reference Include="DGSteam, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\DGSteam.dll</HintPath>
     </Reference>
     <Reference Include="DiscordRPC, Version=1.0.175.0, Culture=neutral, processorArchitecture=MSIL">
@@ -143,8 +126,7 @@
     <Reference Include="NAudio">
       <HintPath>lib\NAudio.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Newtonsoft.Json">
       <HintPath>lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NVorbis">
@@ -153,11 +135,32 @@
     <Reference Include="NVorbis.NAudioSupport">
       <HintPath>lib\NVorbis.NAudioSupport.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Steamworks.NET, Version=20.1.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Steamworks.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Speech" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -204,22 +207,47 @@
     <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\MemberAttributePairHandler.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\ProgressValue.cs" />
     <Compile Include="DuckGame\AddedContent\klof44\DartGrenade.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\Bubble.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Bubble.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ChangePlus.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\FreezeSmoke.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\IceSpike.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpAK47.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpBlunderbuss.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpHugeLaser.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpLaser.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpPistol.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaser.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaserBullet.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\MathParser.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\PizzaLauncher.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\PizzaLauncher.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\RoomEditorExtra.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Extensions.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\NMDuckShatter.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\NMPinkCollision.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\NMPinkExplode.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\PinkBox.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\NMDuckShatter.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\NMPinkCollision.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\NMPinkExplode.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\PinkBox.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\PistolTwo.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\NMSetScale.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ShatterDuck.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\TheDishes.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\NMSetScale.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\ShatterDuck.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\TheDishes.cs" />
     <Compile Include="DuckGame\AddedContent\klof44\DiscordRichPresence.cs" />
+    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\HashCode.cs" />
+    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\PackingHints.cs" />
+    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\PackingRectangle.cs" />
+    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\RectanglePacker.cs" />
+    <Compile Include="Properties\Resources1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="src\DuckGame\DirectBitmap.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Clear.cs" />
@@ -260,7 +288,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Help.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />
-    <Compile Include="src\MonoTime\Console\Commands\Test.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\DansTestArea.cs" />
     <Compile Include="src\MonoTime\ExecuteOnAttribute.cs" />
     <Compile Include="src\MonoTime\Input\InputMan.cs" />
     <Compile Include="src\MonoTime\Input\1InputMan.cs" />
@@ -1928,9 +1956,26 @@
   <ItemGroup>
     <EmbeddedResource Include="DuckGame\Properties\Resources.resx" />
     <EmbeddedResource Include="DuckGame\src\MonoTime\Console\NetworkConsole.resx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="app.config" />
+    <None Include="app.manifest" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DuckGame.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="shaders_source\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DuckGame.ico" />
@@ -1947,12 +1992,10 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\MonoTime\Console\Commands\Default\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>Xcopy $(SolutionDir)\deps $(SolutionDir)\bin /E /H /C /I /Y
+call "$(SolutionDir)shaders_source\buildshaders.bat</PostBuildEvent>
   </PropertyGroup>
 </Project>

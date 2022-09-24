@@ -159,8 +159,8 @@ namespace DuckGame
         {
             get
             {
-                if (Thread.CurrentThread != MonoMain.mainThread && Thread.CurrentThread != MonoMain.initializeThread && Thread.CurrentThread != MonoMain.lazyLoadThread)
-                    throw new Exception("accessing graphics device from thread other than main thread.");
+               // if (Thread.CurrentThread != MonoMain.mainThread && Thread.CurrentThread != MonoMain.initializeThread && Thread.CurrentThread != MonoMain.lazyLoadThread)
+                   // throw new Exception("accessing graphics device from thread other than main thread.");
                 return DuckGame.Graphics._base;
             }
             set => DuckGame.Graphics._base = value;
@@ -593,8 +593,8 @@ namespace DuckGame
         public static void DrawLine(Vec2 p1, Vec2 p2, Color col, float width = 1f, Depth depth = default(Depth))
         {
             ++DuckGame.Graphics.currentDrawIndex;
-            p1 = new Vec2(p1.x, p1.y);
-            p2 = new Vec2(p2.x, p2.y);
+           //p1 = new Vec2(p1.x, p1.y);
+            //p2 = new Vec2(p2.x, p2.y);
             float rotation = (float)Math.Atan2(p2.y - p1.y, p2.x - p1.x);
             float length = (p1 - p2).length;
             DuckGame.Graphics.Draw(DuckGame.Graphics._blank, p1, new Rectangle?(), col, rotation, new Vec2(0f, 0.5f), new Vec2(length, width), SpriteEffects.None, depth);
@@ -891,15 +891,21 @@ namespace DuckGame
             Graphics._defaultBatch = new MTSpriteBatch(Graphics._base);
             Graphics.screen = Graphics._defaultBatch;
             Graphics._blank = new Tex2D(1, 1);
+           
             Graphics._blank.SetData(new Color[1]
             {
-        Color.White
+                    Color.White
             });
+           
             Graphics._blank2 = new Tex2D(1, 1);
             Graphics._blank2.SetData(new Color[1]
             {
-        Color.White
+                    Color.White
             });
+            Graphics._blank.Namebase = "_blanktex2d";
+            Graphics._blank2.Namebase = "_blank2tex2d";
+            Content.textures[Graphics._blank.Namebase] = Graphics._blank; //spriteatlas stuff
+            Content.textures[Graphics._blank2.Namebase] = Graphics._blank2; //spriteatlas stuff
             Graphics._biosFont = new BitmapFont("biosFont", 8);
             Graphics._biosFontCaseSensitive = new BitmapFont("biosFontCaseSensitive", 8);
             Graphics._fancyBiosFont = new FancyBitmapFont("smallFont");
@@ -1049,32 +1055,40 @@ namespace DuckGame
 
         public static Viewport viewport
         {
-            get => device == null || device.IsDisposed ? _lastViewport : device.Viewport;
+            get
+            {
+                if (Graphics.device == null || Graphics.device.IsDisposed)
+                {
+                    return Graphics._lastViewport;
+                }
+                return Graphics.device.Viewport;
+            }
             set
             {
-                if (!_lastViewportSet)
+                if (!Graphics._lastViewportSet)
                 {
-                    _lastViewport = value;
-                    _lastViewportSet = true;
+                    Graphics._lastViewport = value;
+                    Graphics._lastViewportSet = true;
                 }
-                Viewport viewport = device.Viewport;
-                if (viewport.Width != _lastViewport.Width)
+                if (Graphics.device.Viewport.Width != Graphics._lastViewport.Width || Graphics.device.Viewport.Height != Graphics._lastViewport.Height)
+                {
                     return;
-                viewport = device.Viewport;
-                if (viewport.Height != _lastViewport.Height)
-                    return;
-                Rectangle bounds = (Rectangle)value.Bounds;
-                if (_currentRenderTarget != null)
-                    ClipRectangle(bounds, new Rectangle(0f, 0f, _currentRenderTarget.width, _currentRenderTarget.height));
+                }
+                Rectangle r = value.Bounds;
+                if (Graphics._currentRenderTarget != null)
+                {
+                    Graphics.ClipRectangle(r, new Rectangle(0f, 0f, (float)Graphics._currentRenderTarget.width, (float)Graphics._currentRenderTarget.height));
+                }
                 else
-                    ClipRectangle(bounds, (Rectangle)device.PresentationParameters.Bounds);
-                value.X = (int)bounds.x;
-                value.Y = (int)bounds.y;
-                value.Width = (int)bounds.width;
-                value.Height = (int)bounds.height;
-                Internal_ViewportSet(value);
-                _lastViewport = value;
-                
+                {
+                    Graphics.ClipRectangle(r, Graphics.device.PresentationParameters.Bounds);
+                }
+                value.X = (int)r.x;
+                value.Y = (int)r.y;
+                value.Width = (int)r.width;
+                value.Height = (int)r.height;
+                Graphics.Internal_ViewportSet(value);
+                Graphics._lastViewport = value;
             }
         }
 

@@ -163,13 +163,25 @@ namespace DuckGame
             foreach (CornerDisplay cornerDisplay in HUD._core._cornerDisplays)
                 cornerDisplay.closing = true;
         }
+        public static void CloseAllCorners(bool notarcade)
+        {
+            foreach (CornerDisplay cornerDisplay in HUD._core._cornerDisplays)
+            {
+                if (cornerDisplay.ischallenge)
+                {
+                    continue;
+                }
+                cornerDisplay.closing = true;
+            }
+                
+        }
 
         public static void CloseCorner(HUDCorner corner)
         {
             foreach (CornerDisplay cornerDisplay in HUD._core._cornerDisplays)
             {
                 if (cornerDisplay.corner == corner)
-                    cornerDisplay.closing = true;
+                     cornerDisplay.closing = true;
             }
         }
 

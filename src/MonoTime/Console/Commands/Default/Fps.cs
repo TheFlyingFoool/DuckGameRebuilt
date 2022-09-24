@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Displays your current Frames Per Second for Duck Game")]
-    public static bool Fps()
+
+    public static partial class DevConsoleCommands
     {
-        return DevConsole.showFPS ^= true;
+        [DevConsoleCommand(Description = "Displays your current Frames Per Second for Duck Game")]
+        public static bool Fps()
+        {
+            return DevConsole.showFPS ^= true;
+        }
     }
 }

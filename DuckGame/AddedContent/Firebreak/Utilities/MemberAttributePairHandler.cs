@@ -4,20 +4,21 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace DuckGame;
-
-public static class MemberAttributePairHandler
+namespace DuckGame
 {
-    public static Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>> LookupTable = new();
-    
-    /// <summary>This is a list of attribute types btw</summary>
-    public static List<Type> AttributeLookupRequests = new();
-    
-    public static event Action<Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>>> GlobalOnSearchComplete = default;
 
-    public static void Init()
+    public static class MemberAttributePairHandler
     {
-        List<Type> TargetCustomAttributes = new List<Type>()
+        public static Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>> LookupTable = new();
+
+        /// <summary>This is a list of attribute types btw</summary>
+        public static List<Type> AttributeLookupRequests = new();
+
+        public static event Action<Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>>> GlobalOnSearchComplete = default;
+
+        public static void Init()
+        {
+            List<Type> TargetCustomAttributes = new List<Type>()
         {
             typeof(AutoConfigFieldAttribute),
             typeof(FireSerializerModuleAttribute),
@@ -25,76 +26,77 @@ public static class MemberAttributePairHandler
             typeof(DrawingContextAttribute),
             typeof(PostInitializeAttribute)
         };
-        foreach(Type CustomAttribute in TargetCustomAttributes)
-        {
-            RuntimeHelpers.RunClassConstructor(CustomAttribute.TypeHandle);
-        }
-        var types = Assembly.GetExecutingAssembly().GetTypes();
-        
-        List<MemberInfo> memberInfos = new();
-        for (int i = 0; i < types.Length; i++)
-        {
-            Type type = types[i];
-            
-            memberInfos.Add(type);
-            memberInfos.AddRange(type.GetMembers());
-        }
-        foreach (var memberInfo2 in memberInfos)
-        {
-            // dont worry about the casting, it was casted to IEnumerable<Attribute>
-            // from a Attribute[] in the first place, so im just utilizing that
-           // var attributes = (Attribute[]) memberInfo.GetCustomAttributes();
-            if (memberInfo2.CustomAttributes.Count() == 0)
-                continue;
-            //  if (attributes.Length == 0)
-            //     continue;
-            bool breakall = false;
-            foreach(CustomAttributeData CustomAttribute in memberInfo2.CustomAttributes)
+            foreach (Type CustomAttribute in TargetCustomAttributes)
             {
-                for (int i = 0; i < TargetCustomAttributes.Count; i++)
+                RuntimeHelpers.RunClassConstructor(CustomAttribute.TypeHandle);
+            }
+            Type[] types = Assembly.GetExecutingAssembly().GetTypes();
+
+            List<MemberInfo> memberInfos = new();
+            for (int i = 0; i < types.Length; i++)
+            {
+                Type type = types[i];
+
+                memberInfos.Add(type);
+                memberInfos.AddRange(type.GetMembers());
+            }
+            foreach (MemberInfo memberInfo2 in memberInfos)
+            {
+                // dont worry about the casting, it was casted to IEnumerable<Attribute>
+                // from a Attribute[] in the first place, so im just utilizing that
+                // var attributes = (Attribute[]) memberInfo.GetCustomAttributes();
+                if (memberInfo2.CustomAttributes.Count() == 0)
+                    continue;
+                //  if (attributes.Length == 0)
+                //     continue;
+                bool breakall = false;
+                foreach (CustomAttributeData CustomAttribute in memberInfo2.CustomAttributes)
                 {
-                    Type TargetCustomAttribute = TargetCustomAttributes[i];
-                    if (TargetCustomAttribute == CustomAttribute.AttributeType)
+                    for (int i = 0; i < TargetCustomAttributes.Count; i++)
                     {
-                        Attribute attribute = Attribute.GetCustomAttribute(memberInfo2, TargetCustomAttribute);
-                        LookupTable.TryUse(TargetCustomAttribute, new List<(MemberInfo, Attribute)>(), relatedList =>
+                        Type TargetCustomAttribute = TargetCustomAttributes[i];
+                        if (TargetCustomAttribute == CustomAttribute.AttributeType)
                         {
-                            relatedList.Add((memberInfo2, attribute));
-                        });
-                        breakall = true;
+                            Attribute attribute = Attribute.GetCustomAttribute(memberInfo2, TargetCustomAttribute);
+                            LookupTable.TryUse(TargetCustomAttribute, new List<(MemberInfo, Attribute)>(), relatedList =>
+                            {
+                                relatedList.Add((memberInfo2, attribute));
+                            });
+                            breakall = true;
+                            break;
+                        }
+                    }
+                    if (breakall)
+                    {
                         break;
                     }
                 }
-                if (breakall)
-                {
-                    break;
-                }
+                //foreach(Type CustomAttribute in CustomAttributes)
+                //{
+                //    if (memberInfo2.IsDefined(CustomAttribute))
+                //    {
+                //        Attribute attribute = Attribute.GetCustomAttribute(memberInfo2, CustomAttribute);
+                //        LookupTable.TryUse(attribute.GetType(), new List<(MemberInfo, Attribute)>(), relatedList =>
+                //        {
+                //            relatedList.Add((memberInfo2, attribute));
+                //        });
+                //        //relatedList.Add((memberInfo, attribute));
+                //        break;
+                //    }
+                //}
+                // if this MemberInfo contains an attribute that is requested, use it
+                //if (attributes.TryFirst(attr => AttributeLookupRequests.Contains(attr.GetType()), out var attribute))
+                //{
+                //    // if the lookup table contains the wanted attribute KeyValue pair, add a
+                //    // new (MemberInfo, Attribute) tuple to it, otherwise add the key and do the same
+                //    LookupTable.TryUse(attribute.GetType(), new List<(MemberInfo, Attribute)>(), relatedList =>
+                //    {
+                //        relatedList.Add((memberInfo, attribute));
+                //    });
+                //}
             }
-            //foreach(Type CustomAttribute in CustomAttributes)
-            //{
-            //    if (memberInfo2.IsDefined(CustomAttribute))
-            //    {
-            //        Attribute attribute = Attribute.GetCustomAttribute(memberInfo2, CustomAttribute);
-            //        LookupTable.TryUse(attribute.GetType(), new List<(MemberInfo, Attribute)>(), relatedList =>
-            //        {
-            //            relatedList.Add((memberInfo2, attribute));
-            //        });
-            //        //relatedList.Add((memberInfo, attribute));
-            //        break;
-            //    }
-            //}
-            // if this MemberInfo contains an attribute that is requested, use it
-            //if (attributes.TryFirst(attr => AttributeLookupRequests.Contains(attr.GetType()), out var attribute))
-            //{
-            //    // if the lookup table contains the wanted attribute KeyValue pair, add a
-            //    // new (MemberInfo, Attribute) tuple to it, otherwise add the key and do the same
-            //    LookupTable.TryUse(attribute.GetType(), new List<(MemberInfo, Attribute)>(), relatedList =>
-            //    {
-            //        relatedList.Add((memberInfo, attribute));
-            //    });
-            //}
-        }
 
-        GlobalOnSearchComplete.Invoke(LookupTable);
+            GlobalOnSearchComplete.Invoke(LookupTable);
+        }
     }
 }

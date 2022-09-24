@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using XnaToFna;
 
 namespace DuckGame
 {
@@ -83,6 +84,7 @@ namespace DuckGame
         public static object _loadLock = new object();
         public static Exception lastException = null;
         private static Dictionary<string, ParallaxBackground.Definition> _parallaxDefinitions = new Dictionary<string, ParallaxBackground.Definition>();
+
 
         public static LevelData GetLevel(string guid, LevelLocation location = LevelLocation.Any)
         {
@@ -621,6 +623,11 @@ namespace DuckGame
         private static LevelData LoadLevelData(string pPath, LevelLocation pLocation)
         {
             pPath = pPath.Replace('\\', '/');
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                pPath = pPath.Replace('\\', '/');
+                pPath = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(pPath), true);
+            }
             LevelData dat = pLocation != LevelLocation.Content ? DuckFile.LoadLevel(pPath) : DuckFile.LoadLevel(DuckFile.ReadEntireStream(DuckFile.OpenStream(pPath)));
             if (dat == null)
                 return null;
@@ -691,29 +698,29 @@ namespace DuckGame
             DuckGame.Content.SearchDirLevels("Content/levels", LevelLocation.Content);
             if (!Steam.IsInitialized())
                 return;
-            LoadingAction steamLoad = new LoadingAction();
-            steamLoad.action = () =>
-           {
-               WorkshopQueryUser queryUser = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
-               queryUser.requiredTags.Add("Map");
-               queryUser.onlyQueryIDs = true;
-               queryUser.QueryFinished += sender => steamLoad.flag = true;
-               queryUser.ResultFetched += (sender, result) =>
-         {
-             WorkshopItem publishedFile = result.details.publishedFile;
-             if ((publishedFile.stateFlags & WorkshopItemState.Installed) == WorkshopItemState.None)
-                 return;
-             DuckGame.Content.SearchDirLevels(publishedFile.path, LevelLocation.Workshop);
-         };
-               queryUser.Request();
-               Steam.Update();
-           };
-            steamLoad.waitAction = () =>
-           {
-               Steam.Update();
-               return steamLoad.flag;
-           };
-            MonoMain.currentActionQueue.Enqueue(steamLoad);
+         //   LoadingAction steamLoad = new LoadingAction();
+         //   steamLoad.action = () =>
+         //  {
+         //      WorkshopQueryUser queryUser = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
+         //      queryUser.requiredTags.Add("Map");
+         //      queryUser.onlyQueryIDs = true;
+         //      queryUser.QueryFinished += sender => steamLoad.flag = true;
+         //      queryUser.ResultFetched += (sender, result) =>
+         //{
+         //    WorkshopItem publishedFile = result.details.publishedFile;
+         //    if ((publishedFile.stateFlags & WorkshopItemState.Installed) == WorkshopItemState.None)
+         //        return;
+         //    DuckGame.Content.SearchDirLevels(publishedFile.path, LevelLocation.Workshop);
+         //};
+         //      queryUser.Request();
+         //      Steam.Update();
+         //  };
+         //   steamLoad.waitAction = () =>
+         //  {
+         //      Steam.Update();
+         //      return steamLoad.flag;
+         //  };
+         //   MonoMain.currentActionQueue.Enqueue(steamLoad);
         }
 
         public static Vec2 GetTextureSize(string pName)
@@ -741,10 +748,51 @@ namespace DuckGame
                 DevConsole.Log(DCSection.General, "|DGRED|" + ex.Message);
             }
         }
+        public static Color FromNonPremultiplied(int r, int g, int b, int a)
+        {
+            return new Color(r * a / 255, g * a / 255, b * a / 255, a);
+        }
 
+        public static Texture2D SpriteAtlasTextureFromStream(string FilePath, GraphicsDevice device)
+        {
+            Texture2D texture;
+            FileStream titleStream = File.OpenRead(FilePath);
+            texture = Texture2D.FromStream(device, titleStream);
+            titleStream.Close();
+            Color[] buffer = new Color[texture.Width * texture.Height];
+            texture.GetData(buffer);
+            for (int i = 0; i < buffer.Length; i++)
+                buffer[i] = FromNonPremultiplied(buffer[i].r, buffer[i].g, buffer[i].b, buffer[i].a); // Needs to handle transparent textures that use other types of draw calls
+            texture.SetData(buffer);
+            return texture;
+        }
+        public static List<string> RSplit(string stringInput, char target, int maxsplits = -1)
+        {
+            int splitcount = 0;
+            List<string> split = new List<string>();
+            int lastindex = stringInput.Length;
+            for (int i = stringInput.Length; i-- > 0;)
+            {
+
+                if (stringInput[i] == target && (maxsplits > splitcount || maxsplits == -1))
+                {
+                    string s = stringInput.Substring(i + 1, lastindex - i - 1);
+                    split.Add(s);
+                    lastindex = i;
+                    splitcount += 1;
+                }
+            }
+            split.Add(stringInput.Substring(0, lastindex));
+            split.Reverse();
+            return split;
+        }
+        public static bool didsetbigboi;
+        public static Tex2D Thick;
+        public static Dictionary<string, Microsoft.Xna.Framework.Rectangle> offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();
         public static void Initialize(bool reverse)
         {
             MonoMain.loadMessage = "Loading Textures";
+           
             DuckGame.Content.SearchDirTextures("Content/", reverse);
         }
 
@@ -759,7 +807,17 @@ namespace DuckGame
         public static string[] GetFiles(string path, string filter = "*.*")
         {
             path = path.Replace('\\', '/');
-            path = path.Trim('/');
+            if (Path.IsPathRooted(path) && Program.IsLinuxD)
+            {
+                while (path.EndsWith("/"))
+                {
+                    path = path.Substring(0, path.Length - 1);
+                }
+            }
+            else
+            {
+                path = path.Trim('/');
+            }
             string str1 = (Directory.GetCurrentDirectory() + "/").Replace('\\', '/');
             List<string> stringList = new List<string>();
             foreach (string path1 in DuckFile.GetFilesNoCloud(path, filter))
@@ -779,7 +837,17 @@ namespace DuckGame
         public static string[] GetDirectories(string path, string filter = "*.*")
         {
             path = path.Replace('\\', '/');
-            path = path.Trim('/');
+            if (Path.IsPathRooted(path) && Program.IsLinuxD)
+            {
+                while (path.EndsWith("/"))
+                {
+                    path = path.Substring(0, path.Length - 1);
+                }
+            }
+            else
+            {
+                path = path.Trim('/');
+            }
             List<string> stringList = new List<string>();
             foreach (string path1 in DuckFile.GetDirectoriesNoCloud(path))
             {
@@ -860,6 +928,18 @@ namespace DuckGame
 
         public static T Load<T>(string name)
         {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                name = name.Replace("//", "/").Replace("\\", "/");
+                try
+                {
+                    name = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(name));
+                }
+                catch
+                {
+                    DevConsole.Log("couldnt fix path mabye file isnt real " + name);
+                }
+            }
             if (ReskinPack.active.Count > 0)
             {
                 try

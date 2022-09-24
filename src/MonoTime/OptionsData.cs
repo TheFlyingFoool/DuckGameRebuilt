@@ -116,7 +116,7 @@ namespace DuckGame
             get => _textToSpeech;
             set
             {
-                if (!Program.isLinux && _textToSpeech != value && value)
+                if (!Program.IsLinuxD && !Program.isLinux && _textToSpeech != value && value)
                 {
                     SFX.ApplyTTSSettings();
                     if (MonoMain.started)
@@ -220,7 +220,7 @@ namespace DuckGame
             keyboard1PlayerIndex = 0;
             keyboard2PlayerIndex = 1;
             rumbleIntensity = 1f;
-            powerUser = false;
+            powerUser = true; //set to true
             defaultAccountMerged = false;
             didAutoMerge = false;
             cloud = true;

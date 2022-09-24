@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Toggles QWOP mode, similar to the modifier of the same name")]
-    public static bool QwopMode()
+
+    public static partial class DevConsoleCommands
     {
-        return DevConsole.qwopMode ^= true;
+        [DevConsoleCommand(Description = "Toggles QWOP mode, similar to the modifier of the same name")]
+        public static bool QwopMode()
+        {
+            return DevConsole.qwopMode ^= true;
+        }
     }
 }

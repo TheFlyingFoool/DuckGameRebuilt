@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -308,19 +309,62 @@ namespace DuckGame
             }
             Level.Remove(f);
         }
-
+        private static AutoBlock CheckBlockGroup(BlockGroup blockGroup,Block Ignore, Vec2 Point)
+        {
+            AutoBlock block = null;
+            if (blockGroup.blocks == null)
+            {
+                return null;
+            }
+            foreach (Block thing in blockGroup.blocks)
+            {
+                AutoBlock autoBlock = thing as AutoBlock;
+                if (autoBlock != null && !thing.removeFromLevel && thing != Ignore && Collision.Point(Point, thing))
+                {
+                    block = autoBlock;
+                    break;
+                }
+            }
+            return block;
+        }
         protected override bool OnDestroy(DestroyType type = null)
         {
             if (!(type is DTRocketExplosion))
+            {
                 return false;
+            }
             if (up == null)
+            {
                 up = Level.CheckPoint<AutoBlock>(x, y - 16f, this);
+            }
+            else if (up is BlockGroup)
+            {
+                up = CheckBlockGroup((up as BlockGroup), this, new Vec2(x, y - 16f));
+            }
             if (down == null)
+            {
                 down = Level.CheckPoint<AutoBlock>(x, y + 16f, this);
+            }
+            else if (down is BlockGroup)
+            {
+                down = CheckBlockGroup((down as BlockGroup), this, new Vec2(x, y + 16f));
+            }
             if (bLeft == null)
+            {
                 bLeft = Level.CheckPoint<AutoBlock>(x - 16f, y, this);
+            }
+            else if (bLeft is BlockGroup)
+            {
+                bLeft = CheckBlockGroup((bLeft as BlockGroup), this, new Vec2(x - 16f, y));
+            }
             if (bRight == null)
+            {
                 bRight = Level.CheckPoint<AutoBlock>(x + 16f, y, this);
+            }
+            else if (bRight is BlockGroup)
+            {
+                bRight = CheckBlockGroup((bRight as BlockGroup), this, new Vec2(x + 16f, y));
+            }
             if (up != null && up._tileset == _tileset)
             {
                 up.brokeDown = true;
@@ -609,9 +653,10 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            if (_groupedWithNeighbors && !shouldWreck)
-                return;
-            TerminateNubs();
+            if (!this._groupedWithNeighbors && this.shouldWreck || Level.current is Editor)
+            {
+                this.TerminateNubs();
+            }
         }
 
         private void TerminateNubs()
@@ -621,10 +666,11 @@ namespace DuckGame
                 Level.Remove(_bLeftNub);
                 _bLeftNub = null;
             }
-            if (_bRightNub == null)
-                return;
-            Level.Remove(_bRightNub);
-            _bRightNub = null;
+            if (_bRightNub != null)
+            {
+                Level.Remove(_bRightNub);
+                _bRightNub = null;
+            }
         }
 
         public override void Draw()
@@ -668,11 +714,21 @@ namespace DuckGame
                     _brokenSprite.angleDegrees = 90f;
                     Graphics.Draw(_brokenSprite, x, y + 16f);
                 }
+            }   
+            if (graphic.position != position)
+            {
+                (graphic as SpriteMap).ClearCache();
             }
-            if (cheap && !Editor.editorDraw)
-                graphic.UltraCheapStaticDraw(flipHorizontal);
-            else
-                base.Draw();
+            graphic.position = position;
+            graphic.scale = scale;
+            graphic.center = center;
+            graphic.depth = depth;
+            graphic.alpha = alpha;
+            graphic.angle = angle;
+            graphic.cheapmaterial = this.material;
+            (graphic as SpriteMap).UpdateFrame();
+            graphic.UltraCheapStaticDraw(flipHorizontal);
+            //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 
         }
 
         public void UpdateCollision()

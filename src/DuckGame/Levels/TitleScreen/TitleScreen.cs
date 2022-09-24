@@ -511,12 +511,12 @@ namespace DuckGame
             _optionsGroup.Add(_cloudDeleteConfirmMenu, false);
             _optionsGroup.Close();
             Level.Add(_optionsGroup);
-            _betaMenu = new UIMenu("@WRENCH@WELCOME TO BETA!@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@OK!");
-            _betaMenu.Add(new UIImage(new Sprite("message"), UIAlign.Center, 0.25f, 51f), true);
-            _betaMenu.Close();
-            _betaMenu._backButton = new UIMenuItem("BACK", new UIMenuActionCloseMenu(_betaMenu), backButton: true);
-            _betaMenu._isMenu = true;
-            Level.Add(_betaMenu);
+            //_betaMenu = new UIMenu("@WRENCH@WELCOME TO BETA!@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@OK!");
+            //_betaMenu.Add(new UIImage(new Sprite("message"), UIAlign.Center, 0.25f, 51f), true);
+            //_betaMenu.Close();
+            //_betaMenu._backButton = new UIMenuItem("BACK", new UIMenuActionCloseMenu(_betaMenu), backButton: true);
+            //_betaMenu._isMenu = true;
+            //Level.Add(_betaMenu);
             _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f)
             {
                 isPauseMenu = true
@@ -1439,7 +1439,7 @@ namespace DuckGame
                         string text = "@SELECT@EDITOR";
                         _font.Draw(text, Level.current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
                     }
-                    Graphics.Draw(_editorBenchPaint, 45f, 168f);
+                    //Graphics.Draw(_editorBenchPaint, 45f, 168f);
                 }
                 else
                 {
@@ -1470,6 +1470,7 @@ namespace DuckGame
             } 
             else if (layer == Layer.Game)
             {
+                Graphics.Draw(_editorBenchPaint, 45f, 168f);
                 Graphics.Draw(_leftPlatform, 0f, 61f);
                 Graphics.Draw(_airlock, 266f, 135f);
                 Graphics.Draw(_rightPlatform, byte.MaxValue, 61f);

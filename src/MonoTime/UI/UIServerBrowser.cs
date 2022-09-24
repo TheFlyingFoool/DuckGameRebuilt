@@ -257,8 +257,15 @@ namespace DuckGame
         public void RefreshLobbySearch(params UIServerBrowser.SearchMode[] pParts)
         {
             _modeQueue.Clear();
+            bool SteamIsInitialized = Steam.IsInitialized();
             foreach (UIServerBrowser.SearchMode pPart in pParts)
+            {
+                if (!SteamIsInitialized && pPart != UIServerBrowser.SearchMode.LAN)
+                {
+                    continue;
+                }
                 _modeQueue.Enqueue(pPart);
+            }
             _lobbies.Clear();
             UIServerBrowser._selectedLobby = null;
         }
@@ -968,7 +975,17 @@ namespace DuckGame
                 }
             }
 
-            public int userCount => lobby != null ? lobby.users.Count : _userCount;
+            public int userCount
+            {
+                get
+                {
+                    if (lobby != null)
+                    {
+                        return lobby.users.Count; // is slower than i would like
+                    }
+                    return _userCount;
+                }
+            }
 
             public int CompareTo(UIServerBrowser.LobbyData other)
             {
@@ -976,9 +993,11 @@ namespace DuckGame
                     return 10000;
                 if (!isGlobalLobby && other.isGlobalLobby)
                     return -10000;
-                if (canJoin && !other.canJoin)
+                bool canjoinl = canJoin;
+                bool othercanjoin = other.canJoin;
+                if (canjoinl && !othercanjoin)
                     return -500;
-                if (!canJoin && other.canJoin)
+                if (!canjoinl && othercanjoin)
                     return 500;
                 if (hasFriends && !other.hasFriends)
                     return -100;

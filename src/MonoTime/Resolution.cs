@@ -151,11 +151,7 @@ namespace DuckGame
 
         public static Matrix getTransformationMatrix()
         {
-            Viewport viewport = DuckGame.Graphics.viewport;
-            double xScale = viewport.Width / MonoMain.screenWidth;
-            viewport = DuckGame.Graphics.viewport;
-            double yScale = viewport.Height / MonoMain.screenHeight;
-            return Matrix.CreateScale((float)xScale, (float)yScale, 1f);
+            return Matrix.CreateScale((float)Graphics.viewport.Width / (float)MonoMain.screenWidth, (float)Graphics.viewport.Height / (float)MonoMain.screenHeight, 1f);
         }
 
         public float aspect => dimensions.x / dimensions.y;

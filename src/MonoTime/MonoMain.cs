@@ -16,7 +16,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -51,18 +53,18 @@ namespace DuckGame
         public int _adapterW;
         public int _adapterH;
         private static List<Func<string>> _extraExceptionDetails = new List<Func<string>>()
-    {
-       () => "Date: " + DateTime.UtcNow.ToString( DateTimeFormatInfo.InvariantInfo),
-       () => "Version: " + DG.version,
-       () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")(" + (SFX.NoSoundcard ? "NO SFX" : "SFX") + ")",
-       () => GetOnlineString(),
-       () => "Mods: " + ModLoader.modHash,
-       () => "Time Played: " + TimeString(DateTime.Now - startTime) + " (" + Graphics.frame.ToString() + ")",
-       () => "Special Code: " + Main.SpecialCode + " " + Main.SpecialCode2,
-       () => "Resolution: (A)" + Resolution.adapterResolution.x.ToString() + "x" + Resolution.adapterResolution.y.ToString() + " (G)" + Resolution.current.x.ToString() + "x" + Resolution.current.y.ToString() + (Options.Data.fullscreen ? " (Fullscreen(" + (Options.Data.windowedFullscreen ? "W" : "H") + "))" : " (Windowed)") + "(RF " + framesSinceFocusChange.ToString() + ")",
-       () => "Level: " + GetLevelString(),
-       () => "Command Line: " + Program.commandLine
-    };
+        {
+           () => "Date: " + DateTime.UtcNow.ToString( DateTimeFormatInfo.InvariantInfo),
+           () => "Version: " + DG.version,
+           () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")(" + (SFX.NoSoundcard ? "NO SFX" : "SFX") + ")",
+           () => GetOnlineString(),
+           () => "Mods: " + ModLoader.modHash,
+           () => "Time Played: " + TimeString(DateTime.Now - startTime) + " (" + Graphics.frame.ToString() + ")",
+           () => "Special Code: " + Main.SpecialCode + " " + Main.SpecialCode2,
+           () => "Resolution: (A)" + Resolution.adapterResolution.x.ToString() + "x" + Resolution.adapterResolution.y.ToString() + " (G)" + Resolution.current.x.ToString() + "x" + Resolution.current.y.ToString() + (Options.Data.fullscreen ? " (Fullscreen(" + (Options.Data.windowedFullscreen ? "W" : "H") + "))" : " (Windowed)") + "(RF " + framesSinceFocusChange.ToString() + ")",
+           () => "Level: " + GetLevelString(),
+           () => "Command Line: " + Program.commandLine
+        };
         private static string kCleanupString = "C:\\gamedev\\duckgame_try2\\duckgame\\DuckGame\\src\\";
         public static int timeInMatches;
         public static int timeInArcade;
@@ -510,7 +512,7 @@ namespace DuckGame
             if (_adapterW > 1920)
                 num1 = 1920;
             // I'm not messing with this
-            float num2 = (float)_adapterH / (float)_adapterW;
+            float num2 = _adapterH / (float)_adapterW;
             if (num2 < 0.56f)
             {
                 num2 = 9f / 16f;
@@ -830,7 +832,7 @@ namespace DuckGame
            };
             _thingsToLoad.Enqueue(steamLoad);
         }
-
+        private void AddNamedLoadingAction(Action pAction) => _thingsToLoad.Enqueue((LoadingAction)pAction);
         private void AddLoadingAction(Action pAction) => _thingsToLoad.Enqueue((LoadingAction)pAction);
 
         private void StartThreadedLoading()
@@ -844,15 +846,19 @@ namespace DuckGame
                Network.Initialize();
                Teams.Initialize();
                Chancy.Initialize();
-               _watermarkEffect = DuckGame.Content.Load<MTEffect>("Shaders/basicWatermark");
-               _watermarkTexture = DuckGame.Content.Load<Tex2D>("looptex");
+              // _watermarkEffect = DuckGame.Content.Load<MTEffect>("Shaders/basicWatermark");
+              // _watermarkTexture = DuckGame.Content.Load<Tex2D>("looptex");
                DuckNetwork.Initialize();
                Persona.Initialize();
                DuckRig.Initialize();
            });
             AddLoadingAction(Input.Initialize);
             if (downloadWorkshopMods)
+            {
+                DevConsole.Log("DDownloadWorkshopItems");
                 DownloadWorkshopItems();
+            }
+               
             AddLoadingAction(ManagedContent.InitializeMods);
             AddLoadingAction(Network.InitializeMessageTypes);
             AddLoadingAction(DeathCrate.InitializeDeathCrateSettings);
@@ -906,7 +912,7 @@ namespace DuckGame
             this.IsFixedTimeStep = true; // UNZOOOM
             Program.SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
             // post init
-            foreach (var methodInfo in PostInitializeAttribute.All)
+            foreach (MethodInfo methodInfo in PostInitializeAttribute.All)
             {
                 methodInfo.Invoke(null, null);
             }
@@ -956,6 +962,7 @@ namespace DuckGame
         {
             get => (SDL.SDL_GetWindowFlags(this.Window.Handle) & (uint)SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS) > 0;
         }
+        [HandleProcessCorruptedStateExceptions, SecurityCritical]
         protected override void Update(GameTime gameTime)
         {
             if (showingSaveTool && saveTool == null && File.Exists("SaveTool.dll"))
@@ -965,8 +972,22 @@ namespace DuckGame
                 int num = (int)saveTool.ShowDialog();
                 Program.crashed = true;
                 Application.Exit();
+                Program.main.KillEverything();
             }
             if (Program.isLinux)
+            {
+                if (IsActive)
+                {
+                    ++framesBackInFocus;
+                    Graphics.mouseVisible = showingSaveTool;
+                }
+                else
+                {
+                    framesBackInFocus = 0L;
+                    Graphics.mouseVisible = true;
+                }
+            }
+            else if (Program.IsLinuxD)
             {
                 if (IsActive)
                 {
@@ -1368,7 +1389,7 @@ namespace DuckGame
                 return DateTime.Now.Hour < 1 && num > 13.0 && num < 17.0;
             }
         }
-
+        [HandleProcessCorruptedStateExceptions, SecurityCritical]
         protected override void Draw(GameTime gameTime)
         {
             int num = started ? 1 : 0;
@@ -1410,7 +1431,7 @@ namespace DuckGame
                             Graphics.Clear(Color.Black);
                             Camera camera = new Camera(0f, 0f, Graphics._screenBufferTarget.width, Graphics._screenBufferTarget.height);
                             Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
-                            Graphics.Draw(Graphics._screenBufferTarget, 0f, 0f);
+                            Graphics.Draw(Graphics._screenBufferTarget, 0f, 0f, 1f, 1f);
                             Graphics.screen.End();
                             Recorder.currentRecording = _tempRecordingReference;
                         }
@@ -1448,6 +1469,66 @@ namespace DuckGame
                     _setCulture = true;
                 }
                 Graphics.Clear(new Color(0, 0, 0));
+                if (!DuckGame.Content.didsetbigboi)
+                {
+                    DuckGame.Content.didsetbigboi = true;
+                    DuckGame.Content.offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();
+                    if (File.Exists(@"../spriteatlas.png"))
+                    {
+                        DevConsole.Log("loading ../spriteatlass.png");
+                        DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(@"../spriteatlas.png", Graphics.device);
+                        DuckGame.Content.Thick.Namebase = "SpriteAtlas";
+                        
+                        //RSplit("de mo", ' ', -1);
+                        string[] lines = System.IO.File.ReadAllLines(@"../spriteatlas_offsets.txt");
+                        foreach (string line in lines)
+                        {
+                            try
+                            {
+                                List<string> texturedetails = DuckGame.Content.RSplit(line, ' ', 4);
+                                string texturename = texturedetails[0];
+                                int x = Int32.Parse(texturedetails[1]);
+                                int y = Int32.Parse(texturedetails[2]);
+                                int height = Int32.Parse(texturedetails[3]);
+                                int width = Int32.Parse(texturedetails[4]);
+
+                                DuckGame.Content.offests.Add(texturename, new Microsoft.Xna.Framework.Rectangle(x, y, width, height));
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                    }
+                    else if (Directory.Exists(Program.GameDirectory + "spriteatlas") && File.Exists(Program.GameDirectory + "spriteatlas/spriteatlas.png"))
+                    {
+                        DevConsole.Log("loading " + Program.GameDirectory + "spriteatlas/spriteatlas.png");
+                        DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(Program.GameDirectory + "spriteatlas/spriteatlas.png", Graphics.device);
+                        DuckGame.Content.Thick.Namebase = "SpriteAtlas";
+
+                        //RSplit("de mo", ' ', -1);
+                        string[] lines = System.IO.File.ReadAllLines(Program.GameDirectory + "spriteatlas/spriteatlas_offsets.txt");
+                        foreach (string line in lines)
+                        {
+                            try
+                            {
+                                List<string> texturedetails = DuckGame.Content.RSplit(line, ' ', 4);
+                                string texturename = texturedetails[0];
+                                int x = Int32.Parse(texturedetails[1]);
+                                int y = Int32.Parse(texturedetails[2]);
+                                int height = Int32.Parse(texturedetails[3]);
+                                int width = Int32.Parse(texturedetails[4]);
+
+                                DuckGame.Content.offests.Add(texturename, new Microsoft.Xna.Framework.Rectangle(x, y, width, height));
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                    }
+                    
+                }
                 Camera camera = new Camera(0f, 0f, Graphics.width, Graphics.height);
                 Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
                 Vec2 p1 = new Vec2(50f, Graphics.height - 50);
@@ -1463,7 +1544,7 @@ namespace DuckGame
                 Graphics.DrawString(text, p1 + new Vec2(0f, -24f), Color.White, (Depth)1f, scale: 2f);
                 _duckRun.speed = 0.15f;
                 _duckRun.scale = new Vec2(4f, 4f);
-                _duckRun.depth = (Depth)0.7f;
+                _duckRun.depth = 0.7f;
                 _duckRun.color = new Color(80, 80, 80);
                 if (_timeSinceLastLoadFrame.elapsed.Milliseconds > 16)
                     ++_duckRun.frame;
@@ -1471,7 +1552,7 @@ namespace DuckGame
                 Graphics.Draw(_duckRun, vec2_2.x, vec2_2.y);
                 _duckArm.frame = _duckRun.imageIndex;
                 _duckArm.scale = new Vec2(4f, 4f);
-                _duckArm.depth = (Depth)0.6f;
+                _duckArm.depth = 0.8f;
                 _duckArm.color = new Color(80, 80, 80);
                 Graphics.Draw(_duckArm, vec2_2.x + 20f, vec2_2.y + 56f);
                 Graphics.screen.End();

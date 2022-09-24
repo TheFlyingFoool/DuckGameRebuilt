@@ -224,6 +224,8 @@ namespace DuckGame
             _collisionSize = new Vec2(141f, 89f);
             extraButton = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(ButtonSprite))), "button"));
             extraButton.center = new Vec2(12.5f, 12);
+            extraButton.Namebase = "nikoextraButton";
+            Content.textures[extraButton.Namebase] = extraButton.texture;
             _oButton = new Sprite("oButton");
             _demoBox = new SpriteMap("demoCrate", 20, 20);
             _demoBox.CenterOrigin();

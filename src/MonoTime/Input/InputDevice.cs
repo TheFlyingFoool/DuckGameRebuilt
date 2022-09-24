@@ -80,7 +80,10 @@ namespace DuckGame
 
         public virtual bool isConnected => true;
 
-        public InputDevice(int idx = 0) => _index = idx;
+        public InputDevice(int idx = 0)
+        {
+            _index = idx;
+        }
 
         public virtual Dictionary<int, string> GetTriggerNames() => null;
 

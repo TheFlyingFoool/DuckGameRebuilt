@@ -96,7 +96,14 @@ namespace DuckGame
             _socket = new UdpClient();
             _socket.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             _socket.Client.Bind(new IPEndPoint(IPAddress.Any, port));
-            _socket.AllowNatTraversal(true);
+            try
+            {
+                _socket.AllowNatTraversal(true); //There are rare cases this just cases a crash like, proton, Linux, etc so im just going catch it, as it seems fine when it doesnt run, and im unsure what it even does
+            }
+            catch (Exception ex)
+            {
+                DevConsole.Log("AllowNatTraversal didnt want to work should be fine still :)");
+            }
             localEndPoint = !NetworkDebugger.enabled ? new IPEndPoint(IPAddress.Parse("127.0.0.1"), _port) : new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1330 + NetworkDebugger.currentIndex);
             _port = port;
             _socket.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
@@ -149,7 +156,14 @@ namespace DuckGame
                     else
                         localEndPoint = new IPEndPoint(IPAddress.Any, port1);
                     _socket.Client.Bind(localEndPoint);
-                    _socket.AllowNatTraversal(true);
+                    try
+                    {
+                        _socket.AllowNatTraversal(true); //There are rare cases this just cases a crash like, proton, Linux, etc so im just going catch it, as it seems fine when it doesnt run, and im unsure what it even does
+                    }
+                    catch(Exception ex)
+                    {
+                        DevConsole.Log("AllowNatTraversal didnt want to work should be fine still :)");
+                    }
                     MakeConnection(endPoint, true);
                     StartClientThread();
                     return null;

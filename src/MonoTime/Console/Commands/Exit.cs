@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Exits the game")]
-    public static void Exit()
+
+    public static partial class DevConsoleCommands
     {
-        MonoMain.exit = true;
+        [DevConsoleCommand(Description = "Exits the game")]
+        public static void Exit()
+        {
+            MonoMain.exit = true;
+        }
     }
 }

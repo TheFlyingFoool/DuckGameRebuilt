@@ -1667,6 +1667,10 @@ namespace DuckGame
 
         public static void EnumerateGamepads()
         {
+            if (Program.IsLinuxD)//FIX ME LATER DAN PLLZ
+            {
+                return;
+            }
             foreach (GenericController gamePad in DuckGame.Input._gamePads)
             {
                 InputDevice device1 = gamePad.device;
@@ -1736,20 +1740,21 @@ namespace DuckGame
 
         public static void Update()
         {
-            if (!DuckGame.Input._initializedMessageHook)
+            bool notlinux = !(Program.IsLinuxD || Program.isLinux);
+            if (notlinux && !DuckGame.Input._initializedMessageHook)
             {
                 InputSystem.Initialize(MonoMain.instance.Window);
                 DuckGame.Input._initializedMessageHook = true;
             }
-            if (Options.Data.imeSupport && !DuckGame.Input._initializedIME)
+            if (notlinux && Options.Data.imeSupport && !DuckGame.Input._initializedIME)
             {
                 InputSystem.InitializeIme(MonoMain.instance.Window);
                 InputSystem.IMECharEntered += new CharEnteredHandler(Keyboard.IMECharEnteredHandler);
                 DuckGame.Input._initializedIME = true;
             }
-            InputSystem.CharEntered += new CharEnteredHandler(Keyboard.ALTCharEnteredHandler);
+            //InputSystem.CharEntered += new CharEnteredHandler(Keyboard.ALTCharEnteredHandler); removed because it does nothing on target platforms
             bool flag = Options.Data.imeSupport && DuckGame.Input._imeAllowed;
-            if (flag != DuckGame.Input._prevImeAllowed)
+            if (notlinux && flag != DuckGame.Input._prevImeAllowed)
             {
                 if (flag)
                     InputSystem.StartIME();
@@ -1760,7 +1765,7 @@ namespace DuckGame
                 DuckGame.Input.InitializeDInputAsync();
             DuckGame.Input._prevImeAllowed = flag;
             DuckGame.Input._imeAllowed = false;
-            if (DuckGame.Input._prevForceMode != DInput.ForceDirectInputMode())
+            if (notlinux && DuckGame.Input._prevForceMode != DInput.ForceDirectInputMode())
             {
                 foreach (InputDevice device in DuckGame.Input._devices)
                 {

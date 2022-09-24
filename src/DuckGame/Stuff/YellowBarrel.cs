@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.YellowBarrel
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -13,205 +7,198 @@ namespace DuckGame
     [BaggedProperty("noRandomSpawningOnline", true)]
     public class YellowBarrel : Holdable, IPlatform, ISequenceItem
     {
-        public EditorProperty<bool> valid;
-        protected float damageMultiplier = 1f;
-        protected SpriteMap _sprite;
-        protected float _fluidLevel = 1f;
-        protected int _alternate;
-        private List<FluidStream> _holes = new List<FluidStream>();
-        protected FluidData _fluid;
-        protected Sprite _melting;
-        protected SpriteMap _toreUp;
-        private bool _bottomHoles;
-        private float _lossAccum;
-
-        public YellowBarrel(float xpos, float ypos)
-          : base(xpos, ypos)
+        public YellowBarrel(float xpos, float ypos) : base(xpos, ypos)
         {
-            valid = new EditorProperty<bool>(false, this);
-            _maxHealth = 15f;
-            _hitPoints = 15f;
-            graphic = new Sprite("yellowBarrel");
-            center = new Vec2(7f, 8f);
-            _melting = new Sprite("yellowBarrelMelting");
-            _toreUp = new SpriteMap("yellowBarrelToreUp", 14, 17)
-            {
-                frame = 1,
-                center = new Vec2(0f, -6f)
-            };
-            sequence = new SequenceItem(this)
-            {
-                type = SequenceItemType.Goody
-            };
-            collisionOffset = new Vec2(-7f, -8f);
-            collisionSize = new Vec2(14f, 16f);
-            depth = -0.1f;
-            _editorName = "Barrel (Gasoline)";
-            editorTooltip = "Do not smoke near this barrel. In fact, don't smoke at all. It's not cool, kids!";
-            thickness = 4f;
-            weight = 5f;
-            physicsMaterial = PhysicsMaterial.Metal;
-            collideSounds.Add("barrelThud");
-            _holdOffset = new Vec2(1f, 0f);
-            flammable = 0.3f;
-            _fluid = Fluid.Gas;
-            sequence.isValid = valid.value;
-            _placementCost += 6;
+            this.valid = new EditorProperty<bool>(false, this, 0f, 1f, 0.1f, null, false, false);
+            this._maxHealth = 15f;
+            this._hitPoints = 15f;
+            this.graphic = new Sprite("yellowBarrel", 0f, 0f);
+            this.center = new Vec2(7f, 8f);
+            this._melting = new Sprite("yellowBarrelMelting", 0f, 0f);
+            this._toreUp = new SpriteMap("yellowBarrelToreUp", 14, 17, false);
+            this._toreUp.frame = 1;
+            this._toreUp.center = new Vec2(0f, -6f);
+            base.sequence = new SequenceItem(this);
+            base.sequence.type = SequenceItemType.Goody;
+            this.collisionOffset = new Vec2(-7f, -8f);
+            this.collisionSize = new Vec2(14f, 16f);
+            base.depth = -0.1f;
+            this._editorName = "Barrel (Gasoline)";
+            this.editorTooltip = "Do not smoke near this barrel. In fact, don't smoke at all. It's not cool, kids!";
+            this.thickness = 4f;
+            this.weight = 5f;
+            this.physicsMaterial = PhysicsMaterial.Metal;
+            base.collideSounds.Add("barrelThud");
+            this._holdOffset = new Vec2(1f, 0f);
+            this.flammable = 0.3f;
+            this._fluid = Fluid.Gas;
+            base.sequence.isValid = this.valid.value;
+            this._placementCost += 6;
         }
 
         public override void Initialize()
         {
-            sequence.isValid = valid.value;
+            base.sequence.isValid = this.valid.value;
             base.Initialize();
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (_hitPoints <= 0.0)
-                return false;
-            hitPos += bullet.travelDirNormalized * 2f;
-            if (1.0 - (hitPos.y - top) / (bottom - top) < _fluidLevel)
+            if (this._hitPoints <= 0f)
             {
-                thickness = 2f;
-                MakeHole(hitPos, bullet.travelDirNormalized);
-                SFX.Play("bulletHitWater", pitch: Rando.Float(-0.2f, 0.2f));
+                return false;
+            }
+            hitPos += bullet.travelDirNormalized * 2f;
+            if (1f - (hitPos.y - base.top) / (base.bottom - base.top) < this._fluidLevel)
+            {
+                this.thickness = 2f;
+                this.MakeHole(hitPos, bullet.travelDirNormalized);
+                SFX.Play("bulletHitWater", 1f, Rando.Float(-0.2f, 0.2f), 0f, false);
                 return base.Hit(bullet, hitPos);
             }
-            thickness = 1f;
+            this.thickness = 1f;
             return base.Hit(bullet, hitPos);
         }
 
         public void MakeHole(Vec2 pPos, Vec2 pImpaleDirection)
         {
-            Vec2 off = pPos - position;
-            bool flag = false;
-            foreach (FluidStream hole in _holes)
+            Vec2 offset = pPos - this.position;
+            bool found = false;
+            foreach (FluidStream hole in this._holes)
             {
-                if ((hole.offset - off).length < 2.0)
+                if ((hole.offset - offset).length < 2f)
                 {
-                    hole.offset = off;
+                    hole.offset = offset;
                     hole.holeThickness += 0.5f;
-                    flag = true;
+                    found = true;
                     break;
                 }
             }
-            if (flag)
-                return;
-            _holes.Add(new FluidStream(0f, 0f, (-pImpaleDirection).Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero), 1f, off));
+            if (!found)
+            {
+                Vec2 holeVec = (-pImpaleDirection).Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero);
+                this._holes.Add(new FluidStream(0f, 0f, holeVec, 1f, offset));
+            }
         }
 
         public override void ExitHit(Bullet bullet, Vec2 exitPos)
         {
             exitPos -= bullet.travelDirNormalized * 2f;
-            Vec2 off = exitPos - position;
-            bool flag = false;
-            foreach (FluidStream hole in _holes)
+            Vec2 offset = exitPos - this.position;
+            bool found = false;
+            foreach (FluidStream hole in this._holes)
             {
-                if ((hole.offset - off).length < 2.0)
+                if ((hole.offset - offset).length < 2f)
                 {
-                    hole.offset = off;
+                    hole.offset = offset;
                     hole.holeThickness += 0.5f;
-                    flag = true;
+                    found = true;
                     break;
                 }
             }
-            if (flag)
-                return;
-            _holes.Add(new FluidStream(0f, 0f, bullet.travelDirNormalized.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero), 1f, off));
+            if (!found)
+            {
+                Vec2 holeVec = bullet.travelDirNormalized;
+                holeVec = holeVec.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero);
+                this._holes.Add(new FluidStream(0f, 0f, holeVec, 1f, offset));
+            }
         }
 
         public override void Update()
         {
             base.Update();
-            offDir = 1;
-            if (_hitPoints <= 0.0)
+            this.offDir = 1;
+            if (this._hitPoints <= 0f)
             {
-                if (graphic != _toreUp)
+                if (this.graphic != this._toreUp)
                 {
-                    float num1 = _fluidLevel * 0.5f;
-                    float num2 = _fluidLevel * 0.5f;
-                    FluidData fluid = _fluid;
-                    fluid.amount = num1 / 20f;
-                    for (int index = 0; index < 20; ++index)
-                        Level.Add(new Fluid(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), new Vec2(Rando.Float(-4f, 4f), Rando.Float(-4f, 0f)), fluid));
-                    fluid.amount = num2;
-                    Level.Add(new Fluid(x, y - 8f, new Vec2(0f, -1f), fluid));
-                    Level.Add(SmallSmoke.New(x, y));
-                    SFX.Play("bulletHitWater");
-                    SFX.Play("crateDestroy");
-                }
-                graphic = _toreUp;
-                _onFire = false;
-                burnt = 0f;
-                _fluidLevel = 0f;
-                _weight = 0.1f;
-                _collisionSize.y = 10f;
-                _collisionOffset.y = -2f;
-            }
-            burnSpeed = 0.0015f;
-            if (_onFire && burnt < 0.9f)
-            {
-                if (burnt > 0.3f)
-                    graphic = _melting;
-                yscale = (float)(0.5 + (1.0 - burnt) * 0.5);
-                centery = (float)(8.0 - burnt * 7.0);
-                _collisionOffset.y = (float)(burnt * 7.0 - 8.0);
-                _collisionSize.y = (float)(16.0 - burnt * 7.0);
-            }
-            if (!_bottomHoles && burnt > 0.6f)
-            {
-                _bottomHoles = true;
-                _holes.Add(new FluidStream(0f, 0f, new Vec2(-1f, -1f), 1f, new Vec2(-7f, 8f))
-                {
-                    holeThickness = 2f
-                });
-                _holes.Add(new FluidStream(0f, 0f, new Vec2(1f, -1f), 1f, new Vec2(7f, 8f))
-                {
-                    holeThickness = 2f
-                });
-            }
-            if (_owner != null)
-            {
-                hSpeed = owner.hSpeed;
-                vSpeed = owner.vSpeed;
-            }
-            if (_fluidLevel > 0.0 && _alternate == 0)
-            {
-                foreach (FluidStream hole in _holes)
-                {
-                    hole.onFire = onFire;
-                    hole.hSpeed = hSpeed;
-                    hole.vSpeed = vSpeed;
-                    hole.DoUpdate();
-                    hole.position = Offset(hole.offset);
-                    hole.sprayAngle = OffsetLocal(hole.startSprayAngle);
-                    float num3 = (float)(1.0 - (hole.offset.y - topLocal) / (bottomLocal - topLocal));
-                    if (hole.x > left - 2.0 && hole.x < right + 2.0 && num3 < _fluidLevel)
+                    float spray = this._fluidLevel * 0.5f;
+                    float glob = this._fluidLevel * 0.5f;
+                    FluidData dat = this._fluid;
+                    dat.amount = spray / 20f;
+                    for (int i = 0; i < 20; i++)
                     {
-                        float num4 = Maths.Clamp(_fluidLevel - num3, 0.1f, 1f);
-                        FluidData fluid = _fluid;
-                        float num5 = num4 * 0.008f * hole.holeThickness;
-                        fluid.amount = num5;
-                        hole.Feed(fluid);
-                        _fluidLevel -= num5;
-                        _lossAccum += num5;
-                        while (_lossAccum > 0.05f)
+                        Level.Add(new Fluid(base.x + Rando.Float(-4f, 4f), base.y + Rando.Float(-4f, 4f), new Vec2(Rando.Float(-4f, 4f), Rando.Float(-4f, 0f)), dat, null, 1f));
+                    }
+                    dat.amount = glob;
+                    Level.Add(new Fluid(base.x, base.y - 8f, new Vec2(0f, -1f), dat, null, 1f));
+                    Level.Add(SmallSmoke.New(base.x, base.y));
+                    SFX.Play("bulletHitWater", 1f, 0f, 0f, false);
+                    SFX.Play("crateDestroy", 1f, 0f, 0f, false);
+                }
+                this.graphic = this._toreUp;
+                this._onFire = false;
+                this.burnt = 0f;
+                this._fluidLevel = 0f;
+                this._weight = 0.1f;
+                this._collisionSize.y = 10f;
+                this._collisionOffset.y = -2f;
+            }
+            this.burnSpeed = 0.0015f;
+            if (this._onFire && this.burnt < 0.9f)
+            {
+                if (this.burnt > 0.3f)
+                {
+                    this.graphic = this._melting;
+                }
+                base.yscale = 0.5f + (1f - this.burnt) * 0.5f;
+                base.centery = 8f - this.burnt * 7f;
+                this._collisionOffset.y = -8f + this.burnt * 7f;
+                this._collisionSize.y = 16f - this.burnt * 7f;
+            }
+            if (!this._bottomHoles && this.burnt > 0.6f)
+            {
+                this._bottomHoles = true;
+                FluidStream hole = new FluidStream(0f, 0f, new Vec2(-1f, -1f), 1f, new Vec2(-7f, 8f));
+                hole.holeThickness = 2f;
+                this._holes.Add(hole);
+                hole = new FluidStream(0f, 0f, new Vec2(1f, -1f), 1f, new Vec2(7f, 8f));
+                hole.holeThickness = 2f;
+                this._holes.Add(hole);
+            }
+            if (this._owner != null)
+            {
+                this.hSpeed = this.owner.hSpeed;
+                this.vSpeed = this.owner.vSpeed;
+            }
+            if (this._fluidLevel > 0f && this._alternate == 0)
+            {
+                foreach (FluidStream hole2 in this._holes)
+                {
+                    hole2.onFire = base.onFire;
+                    hole2.hSpeed = this.hSpeed;
+                    hole2.vSpeed = this.vSpeed;
+                    hole2.DoUpdate();
+                    hole2.position = this.Offset(hole2.offset);
+                    hole2.sprayAngle = this.OffsetLocal(hole2.startSprayAngle);
+                    float level = 1f - (hole2.offset.y - base.topLocal) / (base.bottomLocal - base.topLocal);
+                    if (hole2.x > base.left - 2f && hole2.x < base.right + 2f && level < this._fluidLevel)
+                    {
+                        level = Maths.Clamp(this._fluidLevel - level, 0.1f, 1f);
+                        FluidData f = this._fluid;
+                        float loss = level * 0.008f * hole2.holeThickness;
+                        f.amount = loss;
+                        hole2.Feed(f);
+                        this._fluidLevel -= loss;
+                        this._lossAccum += loss;
+                        while (this._lossAccum > 0.05f)
                         {
-                            _lossAccum -= 0.05f;
-                            if (sequence != null && sequence.isValid && ChallengeLevel.running)
+                            this._lossAccum -= 0.05f;
+                            if (base.sequence != null && base.sequence.isValid && ChallengeLevel.running)
                             {
-                                ++ChallengeLevel.goodiesGot;
-                                SFX.Play("tinyTick");
+                                ChallengeLevel.goodiesGot++;
+                                SFX.Play("tinyTick", 1f, 0f, 0f, false);
                             }
                         }
                     }
                 }
             }
-            weight = _fluidLevel * 10f;
-            ++_alternate;
-            if (_alternate <= 4)
-                return;
-            _alternate = 0;
+            this.weight = this._fluidLevel * 10f;
+            this._alternate++;
+            if (this._alternate > 4)
+            {
+                this._alternate = 0;
+            }
         }
 
         public override void Draw()
@@ -231,5 +218,27 @@ namespace DuckGame
                 Graphics.Draw(this.graphic, base.x, base.y, new Rectangle(0f, (float)((int)ypos), (float)this.graphic.w, (float)((int)((float)this.graphic.h - ypos))));
             }
         }
+
+        public EditorProperty<bool> valid;
+
+        protected float damageMultiplier = 1f;
+
+        protected SpriteMap _sprite;
+
+        protected float _fluidLevel = 1f;
+
+        protected int _alternate;
+
+        private List<FluidStream> _holes = new List<FluidStream>();
+
+        protected FluidData _fluid;
+
+        protected Sprite _melting;
+
+        protected SpriteMap _toreUp;
+
+        private bool _bottomHoles;
+
+        private float _lossAccum;
     }
 }

@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Toggles guides in editor for Wagnus teleport ranges")]
-    public static bool Wagnus()
+
+    public static partial class DevConsoleCommands
     {
-        return DevConsole.wagnusDebug ^= true;
+        [DevConsoleCommand(Description = "Toggles guides in editor for Wagnus teleport ranges")]
+        public static bool Wagnus()
+        {
+            return DevConsole.wagnusDebug ^= true;
+        }
     }
 }

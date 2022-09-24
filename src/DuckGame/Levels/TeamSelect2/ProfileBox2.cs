@@ -828,10 +828,10 @@ namespace DuckGame
                     Sprite doorRightBlank = _doorRightBlank;
                     if (rightRoom)
                     {
-                        Rectangle sourceRectangle1 = new Rectangle((int)_doorX, 0f, doorLeftBlank.width, _doorLeft.height);
+                        Rectangle sourceRectangle1 = new Rectangle(_doorX, 0f, doorLeftBlank.width - _doorX, _doorLeft.height);
                         Graphics.Draw(doorLeftBlank, x - 1f, y, sourceRectangle1);
-                        Rectangle sourceRectangle2 = new Rectangle((int)-_doorX, 0f, _doorRight.width, _doorRight.height);
-                        Graphics.Draw(doorRightBlank, (float)(x - 1f + 68f), y, sourceRectangle2);
+                        Rectangle sourceRectangle2 = new Rectangle(0f, 0f, _doorRight.width + _doorX, _doorRight.height);
+                        Graphics.Draw(doorRightBlank, (x - 1f + 68f) + _doorX, y, sourceRectangle2);
                         if (_doorX == 0.0)
                         {
                             _fontSmall.depth = doorLeftBlank.depth + 10;
@@ -905,11 +905,12 @@ namespace DuckGame
                     }
                     else
                     {
-                        Rectangle sourceRectangle3 = new Rectangle((int)_doorX, 0f, _doorLeft.width, _doorLeft.height);
+                        Rectangle sourceRectangle3 = new Rectangle(_doorX, 0f, _doorLeft.width - _doorX, _doorLeft.height);
                         Graphics.Draw(doorLeftBlank, x, y, sourceRectangle3);
-                        Rectangle sourceRectangle4 = new Rectangle((int)-_doorX, 0f, _doorRight.width, _doorRight.height);
-                        Graphics.Draw(doorRightBlank, x + 68f, y, sourceRectangle4);
+                        Rectangle sourceRectangle4 = new Rectangle(0f, 0f, _doorRight.width - _doorX, _doorRight.height); //-_doorX + 
+                        Graphics.Draw(doorRightBlank, x + 68f + _doorX, y, sourceRectangle4);
                         if (_doorX == 0.0)
+                            if (_doorX == 0.0)
                         {
                             _fontSmall.depth = doorLeftBlank.depth + 10;
                             if (!Network.isActive || flag6 && Network.isServer)

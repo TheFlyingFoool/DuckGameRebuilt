@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Logs something? (not even the devs know)")]
-    public static void Log(string? description = null)
+
+    public static partial class DevConsoleCommands
     {
-        DevConsole.LogEvent(description, DuckNetwork.localConnection);
+        [DevConsoleCommand(Description = "Logs something? (not even the devs know)")]
+        public static void Log(string? description = null)
+        {
+            DevConsole.LogEvent(description, DuckNetwork.localConnection);
+        }
     }
 }

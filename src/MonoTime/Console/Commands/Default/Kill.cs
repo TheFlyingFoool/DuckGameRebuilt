@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Kills a player")]
-    public static void Kill(Duck duck)
+
+    public static partial class DevConsoleCommands
     {
-        duck.Kill(new DTIncinerate(null));
+        [DevConsoleCommand(Description = "Kills a player")]
+        public static void Kill(Duck duck)
+        {
+            duck.Kill(new DTIncinerate(null));
+        }
     }
 }

@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DuckGame;
-
-[AttributeUsage(AttributeTargets.Method)]
-public class PostInitializeAttribute : Attribute
+namespace DuckGame
 {
-    public static IEnumerable<MethodInfo> All;
 
-    static PostInitializeAttribute()
+    [AttributeUsage(AttributeTargets.Method)]
+    public class PostInitializeAttribute : Attribute
     {
-        MemberAttributePair<MethodInfo, PostInitializeAttribute>.RequestSearch(all =>
+        public static IEnumerable<MethodInfo> All;
+
+        static PostInitializeAttribute()
         {
-            All = all.Select(x => x.MemberInfo);
-        });
+            MemberAttributePair<MethodInfo, PostInitializeAttribute>.RequestSearch(all =>
+            {
+                All = all.Select(x => x.MemberInfo);
+            });
+        }
     }
 }

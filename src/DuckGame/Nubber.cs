@@ -5,6 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using static DuckGame.CMD;
+
 namespace DuckGame
 {
     public class Nubber : MaterialThing, IPlatform, IDontMove, IDontUpdate
@@ -69,6 +71,7 @@ namespace DuckGame
             _editorCanModify = false;
             UpdateCustomTileset();
             shouldbeinupdateloop = false;
+            cheap = true;
         }
 
         public override void Terminate()
@@ -91,10 +94,33 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (cheap && !Editor.editorDraw)
-                graphic.UltraCheapStaticDraw(flipHorizontal);
-            else
-                base.Draw();
+            //if (cheap && !Editor.editorDraw)
+            //{
+            //    DoPositioning();
+            //    graphic.UltraCheapStaticDraw(flipHorizontal);
+            //}
+            //else
+            //{
+            //    base.Draw();
+            //}  
+            if (this.removeFromLevel && this.layer != null)
+            {
+                this.layer.RemoveSoon(this);
+            }
+            if (graphic.position != position)
+            {
+                (graphic as SpriteMap).ClearCache();
+            }
+            graphic.position = position;
+            graphic.scale = scale;
+            graphic.center = center;
+            graphic.depth = depth;
+            graphic.alpha = alpha;
+            graphic.angle = angle;
+            graphic.cheapmaterial = this.material;
+            (graphic as SpriteMap).UpdateFrame();
+            graphic.UltraCheapStaticDraw(flipHorizontal);
+            //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 
         }
     }
 }

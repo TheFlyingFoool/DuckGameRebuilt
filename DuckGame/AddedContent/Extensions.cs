@@ -18,12 +18,16 @@ namespace DuckGame
 
             action(dic[requestedKey]);
         }
-
+        public static Vec2 stopPoint(Vec2 v, AmmoType at, float ang)
+        {
+            Bullet b = new Bullet(v.x, v.y, at, ang, null, false, -1, true);
+            return b.end;
+        }
         public static bool TryFirst<T>(this IEnumerable<T> collection, Func<T, bool> condition, out T first)
         {
             first = default;
             
-            foreach (var item in collection)
+            foreach (T item in collection)
             {
                 if (!condition(item)) 
                     continue;
@@ -199,7 +203,7 @@ namespace DuckGame
                 .FirstOrDefault(x => x != GetMe()),
             _ => Profiles.active.TryFirst(
                 x => x.name.CleanFormatting().CaselessEquals(playerName.CleanFormatting()),
-                out var prof)
+                out Profile prof)
                 ? prof
                 : null,
         };

@@ -6,11 +6,16 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.Xna.Framework.Graphics;
+using System.Threading;
+using System;
 
 namespace DuckGame
 {
-    public class MTSpriteBatchItem
+    public class MTSpriteBatchItem : IComparable<MTSpriteBatchItem>
     {
+        public bool usingspriteatlas;
+        public Tex2D NormalTexture;
+        public Vec2 Offsets = Vec2.Zero;
         public float DepthIndex;
         public MTSpriteBatchItemMetaData MetaData;
         public bool inPool = false;
@@ -21,6 +26,14 @@ namespace DuckGame
         public VertexPositionColorTexture vertexTR;
         public VertexPositionColorTexture vertexBL;
         public VertexPositionColorTexture vertexBR;
+        public float prevx;
+        public float prevy;
+        private float prevdx;
+        private float prevdy;
+        private float prevw;
+        private float prevh;
+        private float prevsin;
+        private float prevcos;
 
         public MTSpriteBatchItem()
         {
@@ -29,7 +42,10 @@ namespace DuckGame
             vertexBL = new VertexPositionColorTexture();
             vertexBR = new VertexPositionColorTexture();
         }
-
+        public int CompareTo(MTSpriteBatchItem other)
+        {
+            return Depth.CompareTo(other.Depth);
+        }
         public void Set(
           float x,
           float y,
@@ -39,6 +55,10 @@ namespace DuckGame
           Vec2 texCoordTL,
           Vec2 texCoordBR)
         {
+            prevx = x;
+            prevy = y;
+            prevw = w;
+            prevh = h;
             Microsoft.Xna.Framework.Color msc = (Microsoft.Xna.Framework.Color)color;
             vertexTL.Position.X = x;
             vertexTL.Position.Y = y;
@@ -103,7 +123,32 @@ namespace DuckGame
             vertexBR.TextureCoordinate.X = t4.x;
             vertexBR.TextureCoordinate.Y = t4.y;
         }
-
+        public void ChangePosition(float x = -1f,
+          float y = -1f,
+          float dx = -1f,
+          float dy = -1f,
+          float w = -1f,
+          float h = -1f,
+          float sin = -1f,
+          float cos = -1f) // dan i might come back to this :))))))
+        {
+            if (x   == -1)   { x = prevx; };
+            if (y   == -1)   { y = prevy; };
+            if (dx  == -1)   { dx = prevdx; };
+            if (dy  == -1)   { dy = prevdy; };
+            if (w   == -1)   { w = prevw; };
+            if (h   == -1)   { h = prevh; };
+            if (sin == -1)   { sin = prevsin; };
+            if (cos == -1)   { cos = prevcos; };
+            vertexTL.Position.X = x + dx * cos - dy * sin;
+            vertexTL.Position.Y = y + dx * sin + dy * cos;
+            vertexTR.Position.X = x + (dx + w) * cos - dy * sin;
+            vertexTR.Position.Y = y + (dx + w) * sin + dy * cos;
+            vertexBL.Position.X = x + dx * cos - (dy + h) * sin;
+            vertexBL.Position.Y = y + dx * sin + (dy + h) * cos;
+            vertexBR.Position.X = x + (dx + w) * cos - (dy + h) * sin;
+            vertexBR.Position.Y = y + (dx + w) * sin + (dy + h) * cos;
+        }
         public void Set(
           float x,
           float y,
@@ -117,6 +162,14 @@ namespace DuckGame
           Vec2 texCoordTL,
           Vec2 texCoordBR)
         {
+            prevx = x;
+            prevy = y;
+            prevdx = dx;
+            prevdy = dy;
+            prevw = w;
+            prevh = h;
+            prevsin = sin;
+            prevcos = cos;
             Microsoft.Xna.Framework.Color msc = (Microsoft.Xna.Framework.Color)color;
             vertexTL.Position.X = (float)(x + dx * cos - dy * sin);
             vertexTL.Position.Y = (float)(y + dx * sin + dy * cos);

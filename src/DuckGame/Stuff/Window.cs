@@ -1,6 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.Window
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
+// Assembly: DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
@@ -144,7 +144,6 @@ namespace DuckGame
             if (!floor && !noframe)
             {
                 _frame = new WindowFrame(x, y, floor);
-                _frame.shouldbeinupdateloop = false;
                 Level.Add(_frame);
             }
             UpdateHeight();
@@ -196,18 +195,18 @@ namespace DuckGame
             if (!_hasGlass)
                 return base.Hit(bullet, hitPos);
             _enter = hitPos + bullet.travelDirNormalized;
-            if (_enter.x < x && _enter.x < left + 2.0)
+            if (_enter.x < x && _enter.x < left + 2.0f)
                 _enter.x = left;
-            else if (_enter.x > x && _enter.x > right - 2.0)
+            else if (_enter.x > x && _enter.x > right - 2.0f)
                 _enter.x = right;
-            if (_enter.y < y && _enter.y < top + 2.0)
+            if (_enter.y < y && _enter.y < top + 2.0f)
                 _enter.y = top;
-            else if (_enter.y > y && _enter.y > bottom - 2.0)
+            else if (_enter.y > y && _enter.y > bottom - 2.0f)
                 _enter.y = bottom;
             if (hitPoints <= 0.0)
                 return false;
             hitPos -= bullet.travelDirNormalized;
-            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+            for (int index = 0; index < 1.0f + damageMultiplier / 2.0f; ++index)
                 Level.Add(new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized, tint.value));
             SFX.Play("glassHit", 0.5f);
             if (isServerForObject && bullet.isLocal)
@@ -224,13 +223,13 @@ namespace DuckGame
                 return;
             _hits.Add(_enter);
             Vec2 vec2 = exitPos - bullet.travelDirNormalized;
-            if (vec2.x < x && vec2.x < left + 2.0)
+            if (vec2.x < x && vec2.x < left + 2.0f)
                 vec2.x = left;
-            else if (vec2.x > x && vec2.x > right - 2.0)
+            else if (vec2.x > x && vec2.x > right - 2.0f)
                 vec2.x = right;
-            if (vec2.y < y && vec2.y < top + 2.0)
+            if (vec2.y < y && vec2.y < top + 2.0f)
                 vec2.y = top;
-            else if (vec2.y > y && vec2.y > bottom - 2.0)
+            else if (vec2.y > y && vec2.y > bottom - 2.0f)
                 vec2.y = bottom;
             _hits.Add(vec2);
             exitPos += bullet.travelDirNormalized;
@@ -242,7 +241,7 @@ namespace DuckGame
         {
             if (_hasGlass)
                 SFX.Play("glassBump", 0.7f);
-            _shakeVal = 3.141593f;
+            _shakeVal = 3.1415927f;
         }
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
@@ -309,7 +308,7 @@ namespace DuckGame
         public override void Draw()
         {
             Vec2 zero = Vec2.Zero;
-            float num1 = (float)((float)_shake * _shakeVal * 0.8);
+            float num1 = (float)((float)_shake * _shakeVal * 0.800000011920929);
             if (floor)
                 zero.y = num1;
             else

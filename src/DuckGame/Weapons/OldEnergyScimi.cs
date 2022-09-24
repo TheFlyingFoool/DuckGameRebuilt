@@ -16,7 +16,7 @@ namespace DuckGame
     {
         public StateBinding _glowBinding = new StateBinding(nameof(_glow));
         private MaterialEnergyBlade _bladeMaterial;
-        private Sprite _blade;
+        public Sprite _blade;
         private Sprite _bladeTrail;
         private List<EnergyBlocker> _walls = new List<EnergyBlocker>();
         private Platform _platform;

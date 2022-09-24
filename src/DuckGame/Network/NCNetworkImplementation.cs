@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading;
 
 namespace DuckGame
@@ -508,6 +509,16 @@ namespace DuckGame
                     else
                     {
                         //this._discardMessagePlayed = false;
+                        try
+                        {
+                            networkPacket.Unpack();
+                        }
+                        catch (Exception)
+                        {
+                            DevConsole.Log(DCSection.NetCore, "|DGRED|Message unpack failure, possible corruption");
+                            Program.LogLine("Message unpack failure, possible corruption.");
+                            return;
+                        }
                         lock (_pendingPackets)
                             _pendingPackets.Enqueue(networkPacket);
                     }

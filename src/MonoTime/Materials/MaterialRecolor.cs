@@ -15,6 +15,7 @@ namespace DuckGame
 
         public MaterialRecolor(Vec3 col)
         {
+            spsupport = true;
             color = col;
             _effect = Content.Load<MTEffect>("Shaders/recolor");
         }

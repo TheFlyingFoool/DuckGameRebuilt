@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.Xna.Framework.Graphics;
+using SDL2;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -865,7 +866,7 @@ namespace DuckGame
                string str1 = id.ToString();
                id = Steam.user.id;
                string str2 = id.ToString();
-               Clipboard.SetText("steam://joinlobby/312530/" + str1 + "/" + str2);
+               SDL.SDL_SetClipboardText("steam://joinlobby/312530/" + str1 + "/" + str2);
            });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();

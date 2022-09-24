@@ -62,6 +62,7 @@ namespace DuckGame
         public static void InitializeMods()
         {
             MonoMain.loadMessage = "Loading Mods";
+            DevConsole.Log("DLoading Mods");
             if (MonoMain.moddingEnabled)
                 ModLoader.LoadMods(DuckFile.modsDirectory);
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() =>

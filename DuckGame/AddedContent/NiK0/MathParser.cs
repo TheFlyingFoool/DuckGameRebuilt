@@ -295,8 +295,8 @@ namespace DuckGame
 
         private List<string> Lexer(string expr)
         {
-            var token = "";
-            var tokens = new List<string>();
+            string token = "";
+            List<string> tokens = new List<string>();
 
             expr = expr.Replace("+-", "-");
             expr = expr.Replace("-+", "-");
@@ -306,9 +306,9 @@ namespace DuckGame
             expr = expr.Replace("<=", "" + LeqSign);
             expr = expr.Replace("!=", "" + NeqSign);
 
-            for (var i = 0; i < expr.Length; i++)
+            for (int i = 0; i < expr.Length; i++)
             {
-                var ch = expr[i];
+                char ch = expr[i];
 
                 if (char.IsWhiteSpace(ch))
                 {
@@ -412,7 +412,7 @@ namespace DuckGame
         private double MathParserLogic(List<string> tokens)
         {
             // get vars
-            for (var i = 0; i < tokens.Count; i++)
+            for (int i = 0; i < tokens.Count; i++)
             {
                 if (LocalVariables.Keys.Contains(tokens[i]))
                 {
@@ -423,35 +423,35 @@ namespace DuckGame
             while (tokens.IndexOf("(") != -1)
             {
                 // getting data between "(" and ")"
-                var open = tokens.LastIndexOf("(");
-                var close = tokens.IndexOf(")", open);
+                int open = tokens.LastIndexOf("(");
+                int close = tokens.IndexOf(")", open);
 
                 if (open >= close)
                 {
                     throw new ArithmeticException("No closing bracket/parenthesis. Token: " + open.ToString());
                 }
 
-                var roughExpr = new List<string>();
+                List<string> roughExpr = new List<string>();
 
-                for (var i = open + 1; i < close; i++)
+                for (int i = open + 1; i < close; i++)
                 {
                     roughExpr.Add(tokens[i]);
                 }
 
                 double tmpResult;
 
-                var args = new List<double>();
-                var functionName = tokens[open == 0 ? 0 : open - 1];
+                List<double> args = new List<double>();
+                string functionName = tokens[open == 0 ? 0 : open - 1];
 
                 if (LocalFunctions.Keys.Contains(functionName))
                 {
                     if (roughExpr.Contains(","))
                     {
                         // converting all arguments into a double array
-                        for (var i = 0; i < roughExpr.Count; i++)
+                        for (int i = 0; i < roughExpr.Count; i++)
                         {
-                            var defaultExpr = new List<string>();
-                            var firstCommaOrEndOfExpression =
+                            List<string> defaultExpr = new List<string>();
+                            int firstCommaOrEndOfExpression =
                                 roughExpr.IndexOf(",", i) != -1
                                     ? roughExpr.IndexOf(",", i)
                                     : roughExpr.Count;
@@ -524,11 +524,11 @@ namespace DuckGame
 
                     return token0;
                 case 2:
-                    var op = tokens[0];
+                    string op = tokens[0];
 
                     if (op == "-" || op == "+")
                     {
-                        var first = op == "+" ? "" : (tokens[1].Substring(0, 1) == "-" ? "" : "-");
+                        string first = op == "+" ? "" : (tokens[1].Substring(0, 1) == "-" ? "" : "-");
 
                         if (!double.TryParse(first + tokens[1], out token1))
                         {
@@ -553,7 +553,7 @@ namespace DuckGame
                     return 0;
             }
 
-            foreach (var op in Operators)
+            foreach (KeyValuePair<string, Func<double, double, double>> op in Operators)
             {
                 int opPlace;
 
@@ -568,7 +568,7 @@ namespace DuckGame
 
                     if (op.Key == "-" && opPlace == 0)
                     {
-                        var result = op.Value(0.0, rhs);
+                        double result = op.Value(0.0, rhs);
                         tokens[0] = result.ToString();
                         tokens.RemoveRange(opPlace + 1, 1);
                     }
@@ -581,7 +581,7 @@ namespace DuckGame
                             throw new Exception("local variable " + tokens[opPlace - 1] + " is undefined");
                         }
 
-                        var result = op.Value(lhs, rhs);
+                        double result = op.Value(lhs, rhs);
                         tokens[opPlace - 1] = result.ToString();
                         tokens.RemoveRange(opPlace, 2);
                     }

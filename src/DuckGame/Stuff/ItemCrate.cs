@@ -258,7 +258,7 @@ namespace DuckGame
                 {
                     if (_onFire)
                         physicsObject.heat = 0.8f;
-                    physicsObject.position = position + new Vec2(-4f + (float)index * 2.6666667f, 0f);
+                    physicsObject.position = position + new Vec2(-4f + index * 2.6666667f, 0f);
                     switch (index)
                     {
                         case 0:

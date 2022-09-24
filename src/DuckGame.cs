@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 
 namespace DuckGame
@@ -51,27 +52,113 @@ namespace DuckGame
         {
             get
             {
-                string str = Environment.OSVersion.ToString();
-                string platform = "Windows Mystery Edition";
-                if (str.Contains("5.0"))
-                    platform = "Windows 2000";
-                else if (str.Contains("5.1"))
-                    platform = "Windows XP";
-                else if (str.Contains("5.2"))
-                    platform = "Windows XP 64-Bit Edition";
-                else if (str.Contains("6.0"))
-                    platform = "Windows Vista";
-                else if (str.Contains("6.1"))
-                    platform = "Windows 7";
-                else if (str.Contains("6.2"))
-                    platform = "Windows 8";
-                else if (str.Contains("6.3"))
-                    platform = "Windows 8.1";
-                else if (str.Contains("10.0"))
-                    platform = "Windows 10";
+                //Get Operating system information.
+                OperatingSystem os = Environment.OSVersion;
+                //Get version information about the os.
+                Version vs = os.Version;
+                //Variable to hold our return value
+                string operatingSystem = ""; //OS Mystery Edition
+
+                if (os.Platform == PlatformID.Win32Windows)
+                {
+                    //This is a pre-NT version of Windows
+                    switch (vs.Minor)
+                    {
+                        case 0:
+                            operatingSystem = "Windows 95";
+                            break;
+                        case 10:
+                            if (vs.Revision.ToString() == "2222A")
+                                operatingSystem = "Windows 98SE";
+                            else
+                                operatingSystem = "Windows 98";
+                            break;
+                        case 90:
+                            operatingSystem = "Windows Me";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else if (os.Platform == PlatformID.Win32NT)
+                {
+                    switch (vs.Major)
+                    {
+                        case 3:
+                            operatingSystem = "Windows NT 3.51";
+                            break;
+                        case 4:
+                            operatingSystem = "Windows NT 4.0";
+                            break;
+                        case 5:
+                            if (vs.Minor == 0)
+                                operatingSystem = "Windows 2000";
+                            else if (vs.Minor == 2)
+                                operatingSystem = "Windows XP 64-Bit Edition";
+                            else
+                                operatingSystem = "Windows XP";
+                            break;
+                        case 6:
+                            if (vs.Minor == 0)
+                                operatingSystem = "Windows Vista";
+                            else if (vs.Minor == 1)
+                                operatingSystem = "Windows 7";
+                            else if (vs.Minor == 2)
+                                operatingSystem = "Windows 8";
+                            else
+                                operatingSystem = "Windows 8.1";
+                            break;
+                        case 10:
+                            operatingSystem = "Windows 10";
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 if (Program.wineVersion != null)
-                    platform = platform + " (Linux Wine v" + Program.wineVersion + ")";
-                return platform;
+                    operatingSystem = operatingSystem + " (Linux Wine v" + Program.wineVersion + ")";
+                //    //See if there's a service pack installed. extra info? later mabye
+                //    if (os.ServicePack != "")
+                //    {
+                //        //Append it to the OS name.  i.e. "Windows XP Service Pack 3"
+                //        operatingSystem += " " + os.ServicePack;
+                //    }
+                //    //Append the OS architecture.  i.e. "Windows XP Service Pack 3 32-bit"
+                //    //operatingSystem += " " + getOSArchitecture().ToString() + "-bit";
+                if (operatingSystem == "")
+                {
+                    string linuxsysteminfo = "/etc/os-release";
+                    if (Program.IsLinuxD && File.Exists(linuxsysteminfo))
+                    {
+                        string[] lines = File.ReadAllLines(linuxsysteminfo);
+                        DevConsole.Log(lines.Length);
+                        string prettyname = "";
+                        string name = "";
+                        foreach (string line in lines)
+                        {
+                            if (line.StartsWith("PRETTY_NAME="))
+                            {
+                                prettyname = line.Substring(13);
+                                prettyname = prettyname.Substring(0, prettyname.Length - 1);
+                            }
+                            else if (line.StartsWith("NAME="))
+                            {
+                                name = line.Substring(6);
+                                name = name.Substring(0, name.Length - 1);
+                            }
+                        }
+                        if (prettyname == "" && name != "")
+                        {
+                            operatingSystem += name + " ";
+                        }
+                        else if (prettyname != "")
+                        {
+                            operatingSystem += prettyname + " ";
+                        }
+                    }
+                    operatingSystem += os.ToString(); // fall back for unhandled we do want something other that "Windows Mystery Edition" Landon
+                }
+                return operatingSystem;
             }
         }
 

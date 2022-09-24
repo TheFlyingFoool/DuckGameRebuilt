@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using XnaToFna;
 
 namespace DuckGame
 {
@@ -31,6 +32,10 @@ namespace DuckGame
         {
             try
             {
+                if (Program.IsLinuxD || Program.isLinux)
+                {
+                    path = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(path), true);
+                }
                 string str = path.Substring(0, path.Length - 4);
                 if (path.EndsWith(".png"))
                 {
@@ -139,6 +144,10 @@ namespace DuckGame
 
         public static Texture2D LoadTexture2D(string name, bool processPink = true)
         {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                name = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(name), true);
+            }
             Texture2D texture2D = null;
             if (!name.EndsWith(".png"))
                 name += ".png";
@@ -173,6 +182,10 @@ namespace DuckGame
 
         internal SoundEffect LoadSoundEffect(string name)
         {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                name = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(name), true);
+            }
             SoundEffect soundEffect = null;
             if (Path.GetExtension(name) == "")
                 name += ".wav";
@@ -198,6 +211,10 @@ namespace DuckGame
 
         internal Song LoadSong(string name)
         {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                name = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(name), true);
+            }
             Song song = null;
             if (!name.EndsWith(".ogg"))
                 name += ".ogg";

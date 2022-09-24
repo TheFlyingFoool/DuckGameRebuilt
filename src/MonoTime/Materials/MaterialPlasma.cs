@@ -25,6 +25,7 @@ namespace DuckGame
 
         public MaterialPlasma()
         {
+            spsupport = false;
             _effect = Content.Load<MTEffect>("Shaders/plasma");
             _gradient = Content.Load<Texture2D>("arcade/gradient");
             _plasma2 = Content.Load<Texture2D>("arcade/plasma2");

@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialSpawn : Material
+    public class MaterialSpawn : Material // unused
     {
         public MaterialSpawn() => _effect = Content.Load<MTEffect>("Shaders/wireframeTex");
 

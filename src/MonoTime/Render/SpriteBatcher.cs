@@ -5,9 +5,11 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace DuckGame
@@ -67,9 +69,9 @@ namespace DuckGame
         private static Comparison<MTSimpleSpriteBatchItem> CompareSimpleReverseDepth = new Comparison<MTSimpleSpriteBatchItem>(MTSpriteBatcher.CompareSimpleReverseDepthFunc);
         private static Comparison<GeometryItem> CompareGeometryReverseDepth = new Comparison<GeometryItem>(MTSpriteBatcher.CompareGeometryReverseDepthFunc);
         private static Comparison<GeometryItemTexture> CompareTexturedGeometryReverseDepth = new Comparison<GeometryItemTexture>(MTSpriteBatcher.CompareTexturedGeometryReverseDepthFunc);
-
         public MTSpriteBatcher(GraphicsDevice device, MTSpriteBatch batch)
         {
+
             _device = device;
             _batch = batch;
             _batchItemList = new List<MTSpriteBatchItem>(256);
@@ -98,9 +100,6 @@ namespace DuckGame
         /// </summary>
         /// <returns></returns>
         /// 
-
-
-
         public static void IntroSort(ref int[] data)
         {
             int partitionSize = Partition(ref data, 0, data.Length - 1);
@@ -229,7 +228,7 @@ namespace DuckGame
 
         Dictionary<float, List<MTSpriteBatchItem>> _batchItemListv2 = new Dictionary<float, List<MTSpriteBatchItem>>();
         MTSpriteBatchItem LastSpriteBatchItem;
-        int batchlistCount = 0;
+        public int batchlistCount = 0;
         public float depthmod = 1f;
         public MTSpriteBatchItem CreateBatchItem()
         {
@@ -255,11 +254,22 @@ namespace DuckGame
                 _batchItemListv2.Add(Depth, new List<MTSpriteBatchItem> { batchItem });
                 return batchItem;
             }
+
             LbatchItemList.Add(batchItem);
             return batchItem;
         }
 
+        public IEnumerable<MTSpriteBatchItem> StealSpriteBatchItems()
+        {
 
+            foreach(List<MTSpriteBatchItem> depthcolleciton in _batchItemListv2.Values)
+            {
+                for (int i = 0; i < depthcolleciton.Count; i++)
+                {
+                    yield return depthcolleciton[i];
+                }
+            }
+        }
         public MTSpriteBatchItem StealLastBatchItem()
         {
             MTSpriteBatchItem batchItem = LastSpriteBatchItem;//_batchItemList[_batchItemList.Count - 1];
@@ -269,6 +279,10 @@ namespace DuckGame
 
         public void SqueezeInItem(MTSpriteBatchItem item)
         {
+            //if (item.Texture.Bounds == new Microsoft.Xna.Framework.Rectangle(0, 0, 128, 48))
+            //{
+            //    DevConsole.Log("uhh");
+            //}
             batchlistCount += 1;
             float ndepth = item.Depth * depthmod;
             if (!_batchItemListv2.TryGetValue(ndepth, out List<MTSpriteBatchItem> LbatchItemList))
@@ -526,12 +540,19 @@ namespace DuckGame
             }
             return new int[] { listindex, index };
         }
+        public static List<Tex2D> Texidonthave = new List<Tex2D>();
+        public int biggestcount;
         public void DrawBatch(SpriteSortMode sortMode)
         {
             if (batchlistCount == 0)
                 return;
             //IEnumerator<KeyValuePair<float, List<MTSpriteBatchItem>>> enumerator = _batchItemListv2.GetEnumerator();
             //enumerator.MoveNext();
+            //if (batchlistCount > biggestcount)
+            //{
+            //    biggestcount = batchlistCount;
+            //    DevConsole.Log(biggestcount, "SpriteBatcher Count");
+            //}
             keys.Sort();
             int keyindex = 0;
             int index1 = 0;
@@ -541,6 +562,7 @@ namespace DuckGame
             {
                 int start = 0;
                 int end = 0;
+                Tex2D Realtex2D = null;
                 Texture2D texture2D = null;
                 Material material = null;
                 numBatchItems = count;
@@ -557,21 +579,30 @@ namespace DuckGame
                         mTSpriteBatchItems = _batchItemListv2[keys[keyindex]];
                     }
                     MTSpriteBatchItem batchItem = mTSpriteBatchItems[index1];//_batchItemListv2[keys[pagenumber]][index1];//_subbatchItemList[index1];
-                    if ((batchItem.Texture != texture2D ? 1 : (batchItem.Material != material ? 1 : 0)) != 0)
+                    if (batchItem.Texture != texture2D || (batchItem.Material != null && batchItem.NormalTexture != Realtex2D) || batchItem.Material != material)//(batchItem.Texture != texture2D ? 1 : (batchItem.Material != material ? 1 : 0)) != 0
                     {
                         FlushVertexArray(start, end);
                         if (material != null && batchItem.Material == null)
                             _batch.Setup();
                         material = _batch.transitionEffect ? null : batchItem.Material;
+                        Realtex2D = batchItem.NormalTexture;
                         texture2D = batchItem.Texture;
                         start = end = 0;
-                        _device.Textures[0] = texture2D;
+                        if (batchItem.Texture != null && batchItem.Texture.Name != null && texture2D != null && texture2D.Name == batchItem.Texture.Name && batchItem.Texture.Name == "SpriteAtlas" && _device.Textures[0] != null && _device.Textures[0].Name == "SpriteAtlas")
+                        {
+                        }
+                        else
+                        {
+                            _device.Textures[0] = texture2D;
+                        }
                         if (material != null)
                         {
+                            material.batchItem = batchItem;
                             material.SetValue("MatrixTransform", _batch.fullMatrix);
                             material.Apply();
                         }
                     }
+                   
                     VertexPositionColorTexture[] vertexArray1 = _vertexArray;
                     int index2 = end;
                     int num2 = index2 + 1;
@@ -737,6 +768,7 @@ namespace DuckGame
         {
             if (_geometryBatch.Count == 0)
                 return;
+            //_device.Textures[0] = null
             switch (sortMode)
             {
                 case SpriteSortMode.BackToFront:

@@ -2,13 +2,14 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Toggles whether or not a layer is visible. Some options include 'game', 'background', 'blocks' and 'parallax'")]
-    public static bool Toggle(Layer layer)
+    public static partial class DevConsoleCommands
     {
-        return layer.visible ^= true;
+        [DevConsoleCommand(Description = "Toggles whether or not a layer is visible. Some options include 'game', 'background', 'blocks' and 'parallax'")]
+        public static bool Toggle(Layer layer)
+        {
+            return layer.visible ^= true;
+        }
     }
 }

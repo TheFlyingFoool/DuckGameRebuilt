@@ -3,41 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DuckGame;
-
-public record MemberAttributePair<TMemberInfo, TAttribute>(TMemberInfo MemberInfo, TAttribute Attribute)
-    where TMemberInfo : MemberInfo where TAttribute : Attribute
+namespace DuckGame
 {
-    public TMemberInfo MemberInfo = MemberInfo;
-    public TAttribute Attribute = Attribute;
-
-    public static void RequestSearch(Action<List<MemberAttributePair<TMemberInfo, TAttribute>>>? onSearchComplete = null)
+    public class MemberAttributePair<TMemberInfo , TAttribute>
     {
-        var attributeType = typeof(TAttribute);
-        if (!MemberAttributePairHandler.AttributeLookupRequests.Contains(attributeType))
-            MemberAttributePairHandler.AttributeLookupRequests.Add(attributeType);
-
-        MemberAttributePairHandler.GlobalOnSearchComplete += dic =>
+        public MemberAttributePair(TMemberInfo  pMemberInfo, TAttribute pAttribute) // public static void TryUse<TMemberInfo , TAttribute>(this Dictionary<TMemberInfo , TAttribute> dic, TMemberInfo  requestedKey, TAttribute defaultValue, Action<TAttribute> action)
         {
-            List<MemberAttributePair<TMemberInfo, TAttribute>> pairsUsing = new();
-            
-            foreach (var (memberInfo, attribute) in dic[typeof(TAttribute)])
+            MemberInfo = pMemberInfo;
+            Attribute = pAttribute;
+        }
+        public TMemberInfo  MemberInfo;// = MemberInfo;
+        public TAttribute Attribute;// = Attribute;
+        public static void RequestSearch(Action<List<MemberAttributePair<TMemberInfo , TAttribute>>>? onSearchComplete = null)
+        {
+            Type attributeType = typeof(TAttribute);
+            if (!MemberAttributePairHandler.AttributeLookupRequests.Contains(attributeType))
+                MemberAttributePairHandler.AttributeLookupRequests.Add(attributeType);
+
+            MemberAttributePairHandler.GlobalOnSearchComplete += dic =>
             {
-                pairsUsing.Add(new ( (TMemberInfo) memberInfo, (TAttribute) attribute) );
-            }
-            
-            OnSearchComplete.Invoke(pairsUsing);
-        };
+                List<MemberAttributePair<TMemberInfo , TAttribute>> pairsUsing = new();
 
-        if (onSearchComplete is not null)
-            OnSearchComplete += onSearchComplete;
-    }
+                foreach ((MemberInfo memberInfo, Attribute attribute) in dic[typeof(TAttribute)])
+                {
+                    pairsUsing.Add(new((TMemberInfo )((object)memberInfo), (TAttribute)((object)attribute)));
+                }
 
-    public static event Action<List<MemberAttributePair<TMemberInfo, TAttribute>>> OnSearchComplete = default;
+                OnSearchComplete.Invoke(pairsUsing);
+            };
 
-    public void Deconstruct(out TMemberInfo memberInfo, out TAttribute attribute)
-    {
-        memberInfo = MemberInfo;
-        attribute = Attribute;
+            if (onSearchComplete is not null)
+                OnSearchComplete += onSearchComplete;
+        }
+
+        public static event Action<List<MemberAttributePair<TMemberInfo , TAttribute>>> OnSearchComplete = default;
+
+        public void Deconstruct(out TMemberInfo  memberInfo, out TAttribute attribute)
+        {
+            memberInfo = MemberInfo;
+            attribute = Attribute;
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace DuckGame
 
         public MaterialWiggle(Sprite t)
         {
+            spsupport = true;
             _effect = Content.Load<MTEffect>("Shaders/wiggle");
             _sprite = t;
         }

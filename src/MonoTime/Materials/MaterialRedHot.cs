@@ -17,6 +17,7 @@ namespace DuckGame
 
         public MaterialRedHot(Thing t)
         {
+            spsupport = false;
             _effect = Content.Load<MTEffect>("Shaders/redhot");
             _goldTexture = Content.Load<Tex2D>("redHot");
             _thing = t;
@@ -26,9 +27,9 @@ namespace DuckGame
         {
             if (DuckGame.Graphics.device.Textures[0] != null)
             {
-                Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-                SetValue("width", texture.frameWidth / texture.width);
-                SetValue("height", texture.frameHeight / texture.height);
+                //Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
+                SetValue("width", _thing.graphic.texture.frameWidth / _thing.graphic.texture.width);
+                SetValue("height", _thing.graphic.texture.frameHeight / _thing.graphic.texture.height);
                 SetValue("xpos", _thing.x);
                 SetValue("ypos", _thing.y);
                 SetValue("intensity", intensity);

@@ -32,7 +32,7 @@ namespace DuckGame
         {
             get
             {
-                if (Program.isLinux)
+                if (Program.IsLinuxD || Program.isLinux)
                     return null;
                 if (SFX._speech == null)
                 {
@@ -45,25 +45,31 @@ namespace DuckGame
             }
         }
 
-        public static bool hasTTS => !Program.isLinux && SFX.speech != null && SFX.speech.GetSayVoices().Count > 0;
+        public static bool hasTTS
+        {
+            get
+            {
+                return !Program.IsLinuxD && !Program.isLinux && SFX.speech != null && SFX.speech.GetSayVoices().Count > 0;
+            }
+        }
 
         public static void Say(string pString)
         {
-            if (Program.isLinux || SFX.speech == null)
+            if (Program.IsLinuxD || Program.isLinux || SFX.speech == null)
                 return;
             SFX.speech.Say(pString);
         }
 
         public static void StopSaying()
         {
-            if (Program.isLinux || SFX.speech == null)
+            if (Program.IsLinuxD || Program.isLinux || SFX.speech == null)
                 return;
             SFX.speech.StopSaying();
         }
 
         public static void SetSayVoice(string pName)
         {
-            if (Program.isLinux)
+            if (Program.IsLinuxD || Program.isLinux)
                 return;
             if (SFX.speech == null)
                 return;
@@ -81,7 +87,7 @@ namespace DuckGame
 
         public static void ApplyTTSSettings()
         {
-            if (Program.isLinux || SFX.speech == null)
+            if (Program.IsLinuxD || Program.isLinux || SFX.speech == null)
                 return;
             SFX.speech.ApplyTTSSettings();
         }
@@ -138,6 +144,7 @@ namespace DuckGame
                 SFX.SearchDir("Content/Audio/SFX");
                 NetSoundEffect.Initialize();
             }
+
         }
 
         public static void Terminate() => SFX._audio.Dispose();
@@ -222,6 +229,10 @@ namespace DuckGame
         public static Sound Play(int sound, float vol = 1f, float pitch = 0f, float pan = 0f, bool looped = false)
         {
             string key;
+            if (SFX.NoSoundcard)
+            {
+                return new InvalidSound("", vol, pitch, pan, looped);
+            }
             return SFX._soundHashmap.TryGetKey(sound, out key) ? SFX.Play(key, vol, pitch, pan, looped) : new Sound(SFX._sounds.FirstOrDefault<KeyValuePair<string, SoundEffect>>().Key, 0f, 0f, 0f, false);
         }
 

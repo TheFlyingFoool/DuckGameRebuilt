@@ -7,25 +7,47 @@
 
 using DbMon.NET;
 using DGWindows;
+using DiscordRPC.Message;
 using Microsoft.Xna.Framework;
+using MonoMod.Utils;
+using NAudio;
+using NAudio.Wave;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using System.Security;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
+using System.Windows.Shapes;
+using XnaToFna;
+using static DuckGame.GoalType;
+using static DuckGame.NMRequestJoin;
 
 namespace DuckGame
 {
     /// <summary>The main class.</summary>
     public static class Program
     {
-        public static string GameDirectory;
+        // This has to be an own non generic delegate because generic delegates cannot be marshalled to unmanaged code.
+        private delegate uint Callback(IntPtr ptrToExceptionInfo);
+
+        public static string StartinEditorLevelName = "";
+        public static string GameDirectory = "";
         public static string FileName = "";
         public static string FilePath = "";
         public static bool IsLinuxD;
@@ -44,28 +66,35 @@ namespace DuckGame
         //private const uint WM_CLOSE = 16;
         public static bool isLinux = false;
         public static string wineVersion = null;
-        private static List<Func<string>> _extraExceptionDetailsMinimal = new List<Func<string>>() {
-      () => "Date: " + DateTime.UtcNow.ToString(DateTimeFormatInfo.InvariantInfo),
-        () => "Version: " + DG.version,
-        () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")",
-        () => "Command Line: " + Program.commandLine
-    };
+        private static List<Func<string>> _extraExceptionDetailsMinimal = new List<Func<string>>() 
+        {
+            () => "Date: " + DateTime.UtcNow.ToString(DateTimeFormatInfo.InvariantInfo),
+            () => "Version: " + DG.version,
+            () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")",
+            () => "Command Line: " + Program.commandLine
+        };
         private static string kCleanupString = "C:\\gamedev\\duckgame_try2\\duckgame\\DuckGame\\src\\";
         public static bool crashed = false;
         public static Assembly crashAssembly;
         public static bool gameLoadedSuccessfully = false;
 
+        public static bool someprivacy;
+        public static bool lanjoiner;
         public static Assembly gameAssembly; // added dan this for changes to ModLoader GetType and for general use then trying to get the games assembly
         public static string gameAssemblyName = ""; // added dan
-        /// <summary>The main entry point for the application.</summary>
+        /// <summary>The main entry point for the application.</summary>\
+        [HandleProcessCorruptedStateExceptions]
+        [SecurityCritical]
         public static void Main(string[] args)
         {
+            DevConsole.Log("Version 69.10.0.0.1");
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
+            DevConsole.Log(IsLinuxD.ToString() + " " + p.ToString());
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = Program.gameAssembly.GetName().Name;
             FilePath = Program.gameAssembly.Location;
-            FileName = Path.GetFileName(FilePath);
+            FileName = System.IO.Path.GetFileName(FilePath);
             GameDirectory = FilePath.Substring(0, FilePath.Length - FileName.Length);
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(Program.Resolve);
             if (args.Contains<string>("-linux") || WindowsPlatformStartup.isRunningWine && !args.Contains<string>("-nolinux"))
@@ -77,10 +106,13 @@ namespace DuckGame
             else
                 AppDomain.CurrentDomain.AssemblyLoad += new AssemblyLoadEventHandler(WindowsPlatformStartup.AssemblyLoad);
             Application.ThreadException += new ThreadExceptionEventHandler(Program.UnhandledThreadExceptionTrapper);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(WindowsPlatformStartup.UnhandledExceptionTrapper);
+            TaskScheduler.UnobservedTaskException += UnhandledExceptionUnobserved;
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(Program.OnProcessExit);
             try
             {
+                //DoSomeAccessViolation();
                 Program.DoMain(args);
             }
             catch (Exception ex)
@@ -88,7 +120,17 @@ namespace DuckGame
                 Program.HandleGameCrash(ex);
             }
         }
-
+        //public static Int32 newexceptionfilter(IntPtr a)
+        //{
+        //     HttpClient httpClient = new HttpClient();
+        //    //DevConsole.Log("SetUnhandledExceptionFilter Work!");
+        //    //LogHelper.WriteErrorLog("SetUnhandledExceptionFilter Work!");
+        //    string jsonmessage2 = "{\"content\":\"SendCrashToServer Http Request not good (" + 0.ToString() + ")\"}";
+        //    Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl,
+        //        new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
+        //    response2.Wait();
+        //    return 1;
+        //}
         public static Assembly ModResolve(object sender, ResolveEventArgs args) => ManagedContent.ResolveModAssembly(sender, args);
 
         public static Assembly Resolve(object sender, ResolveEventArgs args)
@@ -170,11 +212,26 @@ namespace DuckGame
                         if (args.Count<string>() > index)
                             MonoMain.lobbyPassword = args[index];
                         break;
+                    case "+editortest":
+                        MonoMain.startInEditor = true;
+                        ++index;
+                        if (args.Count<string>() > index)
+                        {
+                            StartinEditorLevelName = args[index];
+                        }
+                        break;
+                    case "-crash":
+                        throw new Exception("you threw it idk");
+                        break;
                     case "-intro":
                         intro = true;
                         break;
                     case "-debug":
                         flag = true;
+                        break;
+                    case "-lanjoiner":
+                        Network.lanMode = true;
+                        lanjoiner = true;
                         break;
                     case "-windowedFullscreen":
                         MonoMain.forceFullscreenMode = 1;
@@ -253,6 +310,9 @@ namespace DuckGame
                         break;
                     case "-nocloud":
                         Cloud.nocloud = true;
+                        break;
+                    case "-privacy":
+                        someprivacy = true;
                         break;
                     case "-cloudnoload":
                         Cloud.downloadEnabled = false;
@@ -379,11 +439,32 @@ namespace DuckGame
           uint Msg,
           IntPtr wParam,
           IntPtr lParam);
-
-        public static void UnhandledThreadExceptionTrapper(object sender, ThreadExceptionEventArgs e) => Program.HandleGameCrash(e.Exception);
-
-        public static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e) => Program.HandleGameCrash(e.ExceptionObject as Exception);
-
+        [HandleProcessCorruptedStateExceptions, SecurityCritical]
+        public static void UnhandledThreadExceptionTrapper(object sender, ThreadExceptionEventArgs e)
+        {
+            Program.HandleGameCrash(e.Exception);
+        }
+        [HandleProcessCorruptedStateExceptions, SecurityCritical]
+        public static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
+        {
+            Program.HandleGameCrash(e.ExceptionObject as Exception);
+        }
+        [HandleProcessCorruptedStateExceptions, SecurityCritical]
+        public static void UnhandledExceptionUnobserved(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            try
+            {
+                DuckGame.Program.HandleGameCrash(e.Exception as Exception);
+            }
+            catch (Exception ex)
+            {
+                string pLogMessage = WindowsPlatformStartup.ProcessErrorLine(e.Exception.ToString(), e.Exception as Exception);
+                StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
+                streamWriter.WriteLine(pLogMessage);
+                streamWriter.Close();
+                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + (e.Exception as Exception).Source + " -commandLine \"none\" -executable \"" + Application.ExecutablePath + "\" " + WindowsPlatformStartup.GetCrashWindowString(ex, null, pLogMessage));
+            }
+        }
         public static string ProcessExceptionString(Exception e)
         {
             string str1;
@@ -447,10 +528,9 @@ namespace DuckGame
 
         public static void HandleGameCrash(Exception pException)
         {
+            SendCrashToServer(pException);
             MonoMain.InvokeOnGameExitEvent(true);
 
-            if (!System.IO.File.Exists("CrashWindow.exe"))
-                return;
             if (pException is ThreadAbortException)
             {
                 ThreadAbortException threadAbortException = pException as ThreadAbortException;
@@ -619,6 +699,7 @@ namespace DuckGame
                     }
                 }
                 Environment.Exit(1);
+                Program.main.KillEverything();
             }
             catch (Exception ex3)
             {
@@ -663,7 +744,21 @@ namespace DuckGame
             streamWriter.WriteLine("\n");
             streamWriter.Close();
         }
-
+        public static void MessageDiscordChannel(string text)
+        {
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                //DevConsole.Log("SetUnhandledExceptionFilter Work!");
+                //LogHelper.WriteErrorLog("SetUnhandledExceptionFilter Work!");
+                text = Escape(text);
+                string jsonmessage2 = "{\"content\":\"" + text + "\"}";
+                Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
+                response2.Wait();
+            }
+            catch
+            { }
+        }
         //private static void UnhandledExceptionTrapperTestServer(
         //  object sender,
         //  UnhandledExceptionEventArgs e)
@@ -685,7 +780,214 @@ namespace DuckGame
             }
             catch { }
         }
+        private static Dictionary<string, string> escapeMapping = new Dictionary<string, string>()
+        {
+            {"\"", @"\\\"""},
+            {"\\\\", @"\\"},
+            {"\a", @"\a"},
+            {"\b", @"\b"},
+            {"\f", @"\f"},
+            {"\n", @"\n"},
+            {"\r", @"\r"},
+            {"\t", @"\t"},
+            {"\v", @"\v"},
+            {"\0", @"\0"},
+        };
 
+        private static Regex escapeRegex = new Regex(string.Join("|", escapeMapping.Keys.ToArray()));
+
+        private static string EscapeMatchEval(Match m)
+        {
+            if (escapeMapping.ContainsKey(m.Value))
+            {
+                return escapeMapping[m.Value];
+            }
+            return escapeMapping[Regex.Escape(m.Value)];
+        }
+        public static string Escape(this string s)
+        {
+            return escapeRegex.Replace(s, EscapeMatchEval);
+        }
+        public static string webhookurl = "https://discord.com/api/webhooks/1021152216167489536/oIl_keVt6nl71xWF2v7YGjwHLefzAEuYzXYpUlUaomFtDlI1sCfLsmYOsJTgJMiLR0m0";
+        public static void SendCrashToServer(Exception pException)
+        {
+            HttpClient httpClient = new HttpClient();
+            try
+            {
+                
+                string Steamid = "N/A";
+                string Username = "N/A";
+
+                try
+                {
+                    if (Steam.user != null)
+                    {
+                        Steamid = Steam.user.id.ToString();
+                        Username = Steam.user.name;
+                    }
+                }
+                catch
+                {
+                }
+
+                string OS = " ";
+                try
+                {
+                    OS = DG.platform;
+                }
+                catch
+                { 
+                }
+                string CommandLine = Program.commandLine;
+                if (CommandLine == "")
+                {
+                    CommandLine = "N/A";
+                }
+
+                string PlayersInLobby = "N/A";
+                string ModsActive = "N/A";
+
+
+
+
+
+                string ExceptionMessage = "";
+                try
+                {
+                    ExceptionMessage = pException.Message;
+                }
+                catch
+                { }
+                string str1 = "";
+                int num = 0;
+                try
+                {
+                    try
+                    {
+                        str1 = MonoMain.GetExceptionString(pException);
+                    }
+                    catch (Exception)
+                    {
+                        try
+                        {
+                            str1 = Program.GetExceptionStringMinimal(pException);
+                        }
+                        catch (Exception)
+                        {
+                            str1 = pException.ToString();
+                        }
+                    }
+                    try
+                    {
+                        if (pException is UnauthorizedAccessException && !DuckFile.appdataSave)
+                        {
+                            str1 = "This crash may be due to your save being located in the Documents folder. If the problem persists, try moving your DuckGame save files from (" + DuckFile.oldSaveLocation + "DuckGame/) to (" + DuckFile.newSaveLocation + "DuckGame/).\n\n" + str1;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                if (!(pException is OutOfMemoryException))
+                                {
+                                    if (!pException.ToString().Contains("System.OutOfMemoryException"))
+                                        goto label_23;
+                                }
+                                MonoMain.CalculateModMemoryOffendersList();
+                                str1 = MonoMain.modMemoryOffendersString + str1;
+                            }
+                            catch (Exception) { }
+                        label_23:
+                            str1 = WindowsPlatformStartup.ProcessErrorLine(str1, pException);
+                        }
+                    }
+                    catch
+                    { 
+                    }
+                }
+                catch
+                { }
+                string StackTrace = "N/A";
+                if (str1 == null)
+                {
+                    str1 = "";
+                }
+                try
+                {
+                    DateTime Now = DateTime.UtcNow;
+                    string url = "https://dateful.com/time-zone-converter?t=" + Now.ToString("hhmmtt", DateTimeFormatInfo.InvariantInfo).ToLower() + "&d=" + Now.ToString(@"yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo) + "&tz2=UTC";
+                    //"154am&"
+                    //d=2022-09-18
+                    //&tz2=UTC
+                    //Now.ToString("hhmmtt").ToLower()
+                    //
+                    str1 += "\nEasyDateTime: " + url;
+                }
+                catch
+                {
+
+                }
+
+                Steamid = Escape(Steamid);
+                Username = Escape(Username);
+                CommandLine = Escape(CommandLine);
+
+
+                string OSName = "#Privacy";
+                if (!Program.someprivacy)
+                {
+                    OSName = Environment.UserName;
+                }
+                OS = Escape(OS);
+                OS += "\\u001b[0m\\nUsername : \\u001b[2;32m" + Escape(OSName) + "\\u001b[0m\\nMachineName : \\u001b[2;32m" + Escape(Environment.MachineName);
+                ModsActive = Escape(ModsActive);
+                PlayersInLobby = Escape(PlayersInLobby);
+                ExceptionMessage = Escape(ExceptionMessage.Substring(0, Math.Min(840, ExceptionMessage.Length))); //str1.Substring(0, Math.Min(920, str1.Length))
+                StackTrace = Escape(": Below");//.Substring(0, 920);
+                //StackTrace = str1;
+                //string k = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"```ansi\nUsername: \u001b[2;32mN/A\u001b[0m\nSteam ID: \u001b[2;32mN/A\u001b[0m\n```\"},{\"name\":\"System Info\",\"value\":\"```ansi\nOS: \u001b[2;32mUnix 5.15.65.1\u001b[0m\nCommand Line: \u001b[2;32m-nothreading\u001b[0m\n```\"},{\"name\":\"Game Info\",\"value\":\"```ansi\nPlayers In Lobby: [\u001b[2;32mN/A\u001b[0m]\nMods Active: [\u001b[2;32mN/A\u001b[0m]\n```\"},{\"name\":\"Crash Info\",\"value\":\"```ansi\nException Message: \u001b[2;32mIndex was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index\u001b[0m\nStack Trace \u001b[2;32m\nSystem.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index\n  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <282c4228012f4f3d96bdf0f2b2dea837>:0 \n  at DuckGame.ProfileSelector.Update () [0x0046d] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Thing.DoUpdate () [0x0003d] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.UpdateThings () [0x0023f] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.DoUpdate () [0x001b3] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.UpdateCurrentLevel () [0x0001e] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.MonoMain.RunUpdate (Microsoft.Xna.Framework.GameTime gameTime) [0x00615] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.MonoMain.Update (Microsoft.Xna.Framework.GameTime gameTime) [0x00187] in \u001b[0m\n```\"}]}]}";
+
+
+                                                              
+                string UserInfo = "```ansi\\nUsername: \\u001b[2;32m" + Username + "\\u001b[0m\\nSteam ID: \\u001b[2;32m" + Steamid + "\\u001b[0m\\n```";// "\\u001b[0m\\nPCUserName: \\u001b[2;32m" + Environment.UserName + "\\u001b[0m\\MachineName: \\u001b[2;32m" + Environment.MachineName + "\\u001b[0m]\\n```";
+                string SystemInfo = "```ansi\\nOS: \\u001b[2;32m" + OS + "\\u001b[0m\\nCommand Line: \\u001b[2;32m" + CommandLine + "\\u001b[0m\\n```";
+                string GameInfo = "```ansi\\nPlayers In Lobby: [\\u001b[2;32m" + PlayersInLobby + "\\u001b[0m]\\nMods Active: [\\u001b[2;32m" + ModsActive + "\\u001b[0m]\\n```";
+                string CrashInfo = "```ansi\\nException Message: \\u001b[2;32m" + ExceptionMessage + "\\u001b[0m\\nStack Trace \\u001b[2;32m" + StackTrace + "\\u001b[0m\\n```";
+                string jsonmessage = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"" + UserInfo + "\"},{\"name\":\"System Info\",\"value\":\"" + SystemInfo + "\"},{\"name\":\"Game Info\",\"value\":\"" + GameInfo + "\"},{\"name\":\"Crash Info\",\"value\":\"" + CrashInfo + "\"}]}]}";
+                //   string n4 = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"```ansi\\nUsername: \\u001b[2;32mPlaceholder1\\u001b[0m\\nSteam ID: \\u001b[2;32mPlaceholder2\\u001b[0m\\n```\"},{\"name\":\"System Info\",\"value\":\"```ansi\\nOS: \\u001b[2;32mPlaceholder3\\u001b[0m\\nCommand Line: \\u001b[2;32mPlaceholder4\\u001b[0m\\n```\"},{\"name\":\"Game Info\",\"value\":\"```ansi\\nPlayers In Lobby: [\\u001b[2;32mPlaceholder5\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\nMods Active: [\\u001b[2;32mPlaceholder6\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\n```\"},{\"name\":\"Crash Info\",\"value\":\"```ansi\\nException Message: \\u001b[2;32mPlaceholder7\\u001b[0m\\nStack Trace \\u001b[2;32mPlaceholder8\\u001b[0m\\n```\"}]}]}";
+                if (Program.someprivacy)
+                {
+                    jsonmessage = jsonmessage.Replace(Environment.UserName, "#Privacy");
+                }
+                Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl,new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
+                response.Wait();
+                HttpResponseMessage Result = response.Result;
+                if (Result.StatusCode != HttpStatusCode.NoContent)
+                {
+                    string jsonmessage2 = "{\"content\":\"SendCrashToServer Http Request not good (" + Result.StatusCode.ToString() + ")\"}";
+                    Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl,
+                        new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
+                    response2.Wait();
+
+                    HttpRequestMessage req4 = new HttpRequestMessage(new HttpMethod("POST"), webhookurl);
+                    MultipartFormDataContent content4 = new MultipartFormDataContent();
+                    content4.Add(new StringContent(jsonmessage), "file", "failedrequest.txt");
+                    req4.Content = content4;
+                    httpClient.SendAsync(req4).Wait();
+                }
+                HttpRequestMessage req = new HttpRequestMessage(new HttpMethod("POST"), webhookurl);
+                MultipartFormDataContent content = new MultipartFormDataContent();
+                content.Add(new StringContent(str1), "file", "crashlog.txt");
+                req.Content = content;
+                httpClient.SendAsync(req).Wait();
+
+            }
+            catch (Exception ex)
+            {
+                string jsonmessage = "{\"content\":\"SendCrashToServer Crashed Fck " + Escape(ex.Message) + "\"}";
+                Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl,new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
+                response.Wait();
+            }
+        }
         public static string RemoveColorTags(string s)
         {
             for (int index = 0; index < s.Length; ++index)

@@ -67,10 +67,10 @@ namespace DuckGame
             graphic = _sprite;
             _rested = false;
         }
-
+        private Thing lastthing;
         public override void Update()
         {
-            if (_rested)
+            if (_rested && this.lastthing != null & !this.lastthing.removeFromLevel)
                 return;
             if (hSpeed > 0f)
                 hSpeed -= 0.1f;
@@ -83,11 +83,15 @@ namespace DuckGame
             if (vSpeed < 0f)
             {
                 _sprite.speed = 0f;
-                if (Level.CheckPoint<Block>(x, y - 7f) != null)
+                if (Level.CheckPoint<Block>(x, y - 7f) is Thing thing && thing.solid && thing.y >= this.top)
+                {
                     vSpeed = 0f;
+                    lastthing = thing;
+                }
             }
-            else if (Level.CheckPoint<IPlatform>(x, y + 3f) is Thing thing)
+            else if (Level.CheckPoint<IPlatform>(x, y + 3f) is Thing thing && thing.solid && thing.y >= this.top)
             {
+                lastthing = thing;
                 vSpeed = 0f;
                 _sprite.speed = 0f;
                 if (thing is Block)

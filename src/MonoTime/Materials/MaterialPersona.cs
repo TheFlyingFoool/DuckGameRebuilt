@@ -15,6 +15,7 @@ namespace DuckGame
 
         public MaterialPersona(DuckPersona pPersona)
         {
+            spsupport = true;
             persona = pPersona;
             _effect = Content.Load<MTEffect>("Shaders/recolor_duo");
         }

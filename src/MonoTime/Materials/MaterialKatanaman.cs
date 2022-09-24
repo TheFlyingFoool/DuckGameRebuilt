@@ -9,13 +9,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialKatanaman : Material
+    public class MaterialKatanaman : Material // to fix remeber both
     {
         private Tex2D _lighting;
         public TeamHat _hat;
 
         public MaterialKatanaman(TeamHat hat)
         {
+            spsupport = false;
             _effect = Content.Load<MTEffect>("shaders/katanaman");
             _lighting = Content.Load<Tex2D>("hats/katanaman_lightmap");
             _hat = hat;

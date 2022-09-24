@@ -2,20 +2,22 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Request the logs of (god knows) from everyone in the lobby")]
-    public static void RequestLogs()
+
+    public static partial class DevConsoleCommands
     {
-        Send.Message(new NMRequestLogs());
-        
-        foreach (NetworkConnection connection in Network.connections)
+        [DevConsoleCommand(Description = "Request the logs of (god knows) from everyone in the lobby")]
+        public static void RequestLogs()
         {
-            DevConsole.core.requestingLogs.Add(connection);
+            Send.Message(new NMRequestLogs());
+
+            foreach (NetworkConnection connection in Network.connections)
+            {
+                DevConsole.core.requestingLogs.Add(connection);
+            }
+
+            DevConsole.SaveNetLog();
         }
-        
-        DevConsole.SaveNetLog();
     }
 }

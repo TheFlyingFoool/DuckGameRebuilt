@@ -27,6 +27,7 @@ namespace DuckGame
 
         public MaterialPause()
         {
+            spsupport = true;
             _effect = Content.Load<MTEffect>("Shaders/pause");
             _watermark = Content.Load<Tex2D>("dc5");
         }

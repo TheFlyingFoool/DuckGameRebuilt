@@ -1634,7 +1634,7 @@ namespace DuckGame
         public T CollisionLine<T>(Vec2 p1, Vec2 p2)
         {
             System.Type key = typeof(T);
-            foreach (Thing thing in this.things.CollisionRectAll(p1, p2, key))
+            foreach (Thing thing in this.things.CollisionLineAll(p1, p2, key))
             {
                 if (!thing.removeFromLevel && Collision.Line(p1, p2, thing))
                     return (T)(object)thing;

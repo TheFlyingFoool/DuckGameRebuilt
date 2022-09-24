@@ -72,7 +72,10 @@ namespace DuckGame
         public void Wreck()
         {
             foreach (Thing block in _blocks)
+            {
                 Level.Add(block);
+                //_level.AddUpdateOnce(block);
+            }
             Level.Remove(this);
         }
 
@@ -81,7 +84,11 @@ namespace DuckGame
             if (_wreck)
             {
                 foreach (Thing block in _blocks)
+                {
                     Level.Add(block);
+                   // _level.AddUpdateOnce(block);
+                }
+                    
                 Level.Remove(this);
                 _wreck = false;
             }
@@ -90,7 +97,10 @@ namespace DuckGame
                 foreach (Block block in _blocks)
                 {
                     if (block is AutoBlock)
+                    {
                         (block as AutoBlock).PlaceBlock();
+                       // _level.AddUpdateOnce(block);
+                    }
                 }
                 needsRefresh = false;
             }
@@ -98,6 +108,7 @@ namespace DuckGame
         }
         public override void Initialize()
         {
+            needsRefresh = true;
             _level.AddUpdateOnce(this);
             shouldbeinupdateloop = false;
             //base.Initialize();
@@ -110,7 +121,17 @@ namespace DuckGame
         public override void Draw()
         {
             foreach (Thing block in _blocks)
-                block.Draw();
+            {
+                
+                if (block is AutoBlock)
+                {
+                    (block as AutoBlock).Draw();
+                }
+                else
+                {
+                    block.Draw();
+                }
+            }
             if (!DevConsole.showCollision)
                 return;
             Graphics.DrawRect(topLeft + new Vec2(-0.5f, 0.5f), bottomRight + new Vec2(0.5f, -0.5f), Color.Green * 0.5f, (Depth)1f);

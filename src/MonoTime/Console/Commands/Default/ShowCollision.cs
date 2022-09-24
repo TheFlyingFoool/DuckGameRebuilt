@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Visualizes the hitboxes of things in the level")]
-    public static bool ShowCollision()
+
+    public static partial class DevConsoleCommands
     {
-        return DevConsole.core.showCollision ^= true;
+        [DevConsoleCommand(Description = "Visualizes the hitboxes of things in the level")]
+        public static bool ShowCollision()
+        {
+            return DevConsole.core.showCollision ^= true;
+        }
     }
 }

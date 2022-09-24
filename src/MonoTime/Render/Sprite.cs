@@ -19,15 +19,24 @@ namespace DuckGame
         protected bool _flipV;
         public bool moji;
         protected Color _color = Color.White;
-
+        private MTSpriteBatchItem _batchItem;
+        private int _waitFrames;
         public int globalIndex => _globalIndex;
-
+        public Material cheapmaterial;
         public Tex2D texture
         {
             get => _texture;
             set => _texture = value;
         }
-
+        public Texture2D texturebase
+        {
+            get => _texture.Texbase;
+        }
+        public string Namebase
+        {
+            get => _texture.Namebase;
+            set => _texture.Namebase = value;
+        }
         public RenderTarget2D renderTexture
         {
             get => _renderTexture;
@@ -130,6 +139,7 @@ namespace DuckGame
 
         public virtual void UltraCheapStaticDraw(bool flipH)
         {
+            //empty. i might make this later for other things:Dan
         }
 
         object ICloneable.Clone() => Clone();

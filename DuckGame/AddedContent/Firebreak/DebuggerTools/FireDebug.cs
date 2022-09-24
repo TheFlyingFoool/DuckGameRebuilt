@@ -1,6 +1,7 @@
-﻿namespace DuckGame;
-
-public static class FireDebug
+﻿namespace DuckGame
 {
-    public static bool Debugging => MonoMain.firebreak;
+    public static class FireDebug
+    {
+        public static bool Debugging => MonoMain.firebreak;
+    }
 }

@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using DuckGame.AddedContent.Drake;
+using SDL2;
 
 namespace DuckGame
 {
@@ -206,7 +207,7 @@ namespace DuckGame
 
         public static bool showCollision
         {
-            get => _core.showCollision && !Network.isActive;
+            get => _core.showCollision;// && !Network.isActive;
             set => _core.showCollision = value;
         }
 
@@ -574,19 +575,10 @@ namespace DuckGame
                         lastCommand = null;
                         switch (pKeyword)
                         {
-                            case "gun":
+                            case "crash":
                             {
-                                if (Level.current != null)
-                                {
-                                    foreach(Duck d in Level.current.things[typeof(Duck)])
-                                    {
-                                        PistolTwo p = new PistolTwo(d.x, d.y);
-                                        Level.Add(p);
-                                        p.x = d.x;
-                                        p.y = d.y;
-                                    }
-                                }
-
+                                flag1 = true;
+                                throw new Exception("you threw it idk");
                                 break;
                             }
                             case "spawn" when CheckCheats():
@@ -1531,12 +1523,18 @@ namespace DuckGame
                 if (NetworkDebugger.enabled)
                 {
                     lock (debuggerLines)
+                    {
+                        Console.WriteLine(text);
                         debuggerLines.Add(dcLine);
+                    }
                 }
                 else
                 {
                     lock (_core.pendingLines)
+                    {
+                        Console.WriteLine(text);
                         _core.pendingLines.Add(dcLine);
+                    }
                 }
             }
         }
@@ -1548,7 +1546,7 @@ namespace DuckGame
             string objstring = "";
             if (obj != null)
             {
-                for (var i = 0; i < obj.Length; i++)
+                for (int i = 0; i < obj.Length; i++)
                 {
                     objstring += " " + obj[i]?.ToString() ?? "null";
                 }
@@ -1567,12 +1565,18 @@ namespace DuckGame
             if (NetworkDebugger.enabled)
             {
                 lock (debuggerLines)
+                {
+                    Console.WriteLine(text);
                     debuggerLines.Add(dcLine);
+                }
             }
             else
             {
                 lock (_core.pendingLines)
+                {
+                    Console.WriteLine(text);
                     _core.pendingLines.Add(dcLine);
+                }
             }
         }
 
@@ -1622,12 +1626,18 @@ namespace DuckGame
             if (NetworkDebugger.enabled)
             {
                 lock (debuggerLines)
+                {
+                    Console.WriteLine(text);
                     debuggerLines.Add(dcLine);
+                }   
             }
             else
             {
                 lock (_core.pendingLines)
+                {
+                    Console.WriteLine(text);
                     _core.pendingLines.Add(dcLine);
+                }
             }
         }
 
@@ -1981,7 +1991,7 @@ namespace DuckGame
             // checks if its not null and if it's length is greater than 0
             if (DevConsoleCommands.Binds is { Count: > 0 })
             {
-                foreach (var bind in DevConsoleCommands.Binds)
+                foreach (DevConsoleCommands.ConsoleBind bind in DevConsoleCommands.Binds)
                 {
                     bind?.TryExecute();
                 }
@@ -2078,7 +2088,7 @@ namespace DuckGame
                     {
                         if (!string.IsNullOrWhiteSpace(_core.typing))
                         {
-                            Thread thread = new(() => Clipboard.SetText(_core.typing));
+                            Thread thread = new(() => SDL.SDL_SetClipboardText(_core.typing));
                             thread.SetApartmentState(ApartmentState.STA);
                             thread.Start();
                             thread.Join();
@@ -2088,7 +2098,7 @@ namespace DuckGame
                     else if (Keyboard.Pressed(Keys.V))
                     {
                         string paste = "";
-                        Thread thread = new(() => paste = Clipboard.GetText());
+                        Thread thread = new(() => paste = SDL.SDL_GetClipboardText());
                         thread.SetApartmentState(ApartmentState.STA);
                         thread.Start();
                         thread.Join();

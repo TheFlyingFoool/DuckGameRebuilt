@@ -512,9 +512,11 @@ namespace DuckGame
           InputProfile input = null,
           bool colorSymbols = false)
         {
+           
             if (colorOverride != new Color())
                 c = colorOverride;
             _previousColor = c;
+            Color color = c;
             if (input == null)
             {
                 if (!MonoMain.started)
@@ -581,12 +583,15 @@ namespace DuckGame
                 else if (text[_letterIndex] == '|')
                 {
                     int letterIndex = _letterIndex;
-                    Color color = ParseColor(text);
+                    if (color != Colors.Transparent)
+                    {
+                        _previousColor = color;
+                    }
+                    color = ParseColor(text);
                     if (colorOverride != new Color())
                         color = colorOverride;
                     if (color != Colors.Transparent)
                     {
-                        _previousColor = c;
                         float w = c.ToVector4().w;
                         c = color;
                         c *= w;

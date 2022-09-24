@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
+using XnaToFna;
 
 namespace DuckGame
 {
@@ -408,13 +409,20 @@ namespace DuckGame
                 DuckFile.waitTry = 60;
                 try
                 {
-                    string fileName = DuckFile.customMojiDirectory + moji + ".png";
+
+                    string basefilepath = DuckFile.customMojiDirectory + moji;
+                    if (Program.IsLinuxD || Program.isLinux)
+                    {
+                        basefilepath = basefilepath.Replace("//", "/").Replace("\\", "/");
+                        basefilepath = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(basefilepath), true);
+                    }
+                    string fileName = basefilepath + ".png";
                     if (!System.IO.File.Exists(fileName))
-                        fileName = DuckFile.customMojiDirectory + moji + ".jpg";
+                        fileName = basefilepath + ".jpg";
                     if (!System.IO.File.Exists(fileName))
-                        fileName = DuckFile.customMojiDirectory + moji + ".jpeg";
+                        fileName = basefilepath + ".jpeg";
                     if (!System.IO.File.Exists(fileName))
-                        fileName = DuckFile.customMojiDirectory + moji + ".bmp";
+                        fileName = basefilepath + ".bmp";
                     if (System.IO.File.Exists(fileName))
                     {
                         Texture2D t = TextureConverter.LoadPNGWithPinkAwesomenessAndMaxDimensions(DuckGame.Graphics.device, fileName, true, new Vec2(28f, 28f));
@@ -429,17 +437,17 @@ namespace DuckGame
                                     try
                                     {
                                         DuckFile.TryFileOperation(() =>
-                                       {
-                                           string str = fileName;
-                                           DuckFile.Delete(str);
-                                           if (str.EndsWith(".jpg"))
-                                               str = str.Replace(".jpg", ".png");
-                                           if (str.EndsWith(".bmp"))
-                                               str = str.Replace(".bmp", ".png");
-                                           if (str.EndsWith(".jpeg"))
-                                               str = str.Replace(".jpeg", ".png");
-                                           t.SaveAsPng(System.IO.File.Create(str), t.Width, t.Height);
-                                       }, "InitializeMojis.Resize");
+                                        {
+                                            string str = fileName;
+                                            DuckFile.Delete(str);
+                                            if (str.EndsWith(".jpg"))
+                                                str = str.Replace(".jpg", ".png");
+                                            if (str.EndsWith(".bmp"))
+                                                str = str.Replace(".bmp", ".png");
+                                            if (str.EndsWith(".jpeg"))
+                                                str = str.Replace(".jpeg", ".png");
+                                            t.SaveAsPng(System.IO.File.Create(str), t.Width, t.Height);
+                                        }, "InitializeMojis.Resize");
                                     }
                                     catch (Exception)
                                     {
@@ -453,6 +461,11 @@ namespace DuckGame
                     else
                     {
                         fileName = DuckFile.customMojiDirectory + moji + ".moj";
+                        if (Program.IsLinuxD || Program.isLinux)
+                        {
+                            fileName = fileName.Replace("//", "/").Replace("\\", "/");
+                            fileName = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(fileName), true);
+                        }
                         if (System.IO.File.Exists(fileName))
                         {
                             Texture2D texture = Editor.StringToTexture(DuckFile.ReadAllText(fileName));
@@ -613,6 +626,10 @@ namespace DuckGame
             pathString = pathString.Replace('\\', '/');
             string[] source = pathString.Split('/');
             string str = "";
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                str = "/";
+            }
             for (int index = 0; index < source.Count<string>(); ++index)
             {
                 if (!(source[index] == "") && !(source[index] == "/") && (!(source[index].Contains<char>('.') | ignoreLast) || index != source.Count<string>() - 1))
@@ -828,7 +845,17 @@ namespace DuckGame
         {
             path = path.Replace('\\', '/');
             List<string> stringList = new List<string>();
-            path = path.Trim('/');
+            if (Path.IsPathRooted(path) && Program.IsLinuxD)
+            {
+                while (path.EndsWith("/"))
+                {
+                    path = path.Substring(0, path.Length - 1);
+                }
+            }
+            else
+            {
+                path = path.Trim('/');
+            }
             if (Directory.Exists(path))
             {
                 foreach (string path1 in DuckFile.GetDirectoriesNoCloud(path))
@@ -872,12 +899,25 @@ namespace DuckGame
 
         public static LevelData LoadLevel(string path) => DuckFile.LoadLevel(path, false);
 
-        public static bool FileExists(string pPath) => System.IO.File.Exists(pPath);
+        public static bool FileExists(string pPath)
+        {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                pPath = pPath.Replace("//", "/").Replace("\\", "/");
+                pPath = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(pPath), true);
+            }
+            return System.IO.File.Exists(pPath);
+        }
 
         public static bool DirectoryExists(string pPath) => Directory.Exists(pPath);
 
         public static LevelData LoadLevel(string path, bool pHeaderOnly)
         {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                path = path.Replace("//", "/").Replace("\\", "/");
+                path = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(path), true);
+            }
             Cloud.ReplaceLocalFileWithCloudFile(path);
             if (!System.IO.File.Exists(path))
                 return null;
@@ -1001,6 +1041,11 @@ namespace DuckGame
         {
             try
             {
+                if (Program.IsLinuxD || Program.isLinux)
+                {
+                    pFilename = pFilename.Replace("//", "/").Replace("\\", "/");
+                    pFilename = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(pFilename), true);
+                }
                 if (!System.IO.File.Exists(pFilename))
                     return;
                 System.IO.File.SetAttributes(pFilename, FileAttributes.Normal);
@@ -1095,10 +1140,23 @@ namespace DuckGame
         {
             pPath = pPath.Replace("//", "/");
             pPath = pPath.Replace('\\', '/');
-            if (pPath.Length > 1 && pPath[1] == ':')
-                pPath = char.ToUpper(pPath[0]).ToString() + pPath.Substring(1, pPath.Length - 1);
+            if (Program.IsLinuxD)
+            {
+                pPath = pPath.Replace("//", "/").Replace("\\", "/");
+                pPath = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(pPath), true);
+            }
+            else
+            {
+                if (pPath.Length > 1 && pPath[1] == ':')
+                {
+                    pPath = char.ToUpper(pPath[0]).ToString() + pPath.Substring(1, pPath.Length - 1);
+                }
+            }
+            //DevConsole.Log("do create path " + pCreatePath.ToString() + " " + pPath + " " + Path.GetDirectoryName(pPath), Color.Green);
             if (pCreatePath)
+            {
                 DuckFile.CreatePath(Path.GetDirectoryName(pPath));
+            }
             try
             {
                 if (System.IO.File.Exists(pPath))
@@ -1160,11 +1218,11 @@ namespace DuckGame
             BitBuffer data = null;
             data = doc.Serialize();
             DuckFile.TryFileOperation(() =>
-           {
+            {
                FileStream fileStream = System.IO.File.Create(path);
                fileStream.Write(data.buffer, 0, data.lengthInBytes);
                fileStream.Close();
-           }, "SaveChunk(" + path + ")");
+            }, "SaveChunk(" + path + ")");
             DuckFile.Commit(path);
             return true;
         }

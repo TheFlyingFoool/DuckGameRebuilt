@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Toggles fancy mode. You spawn with FancyShoes every round")]
-    public static bool FancyMode()
+
+    public static partial class DevConsoleCommands
     {
-        return DevConsole.fancyMode ^= true;
+        [DevConsoleCommand(Description = "Toggles fancy mode. You spawn with FancyShoes every round")]
+        public static bool FancyMode()
+        {
+            return DevConsole.fancyMode ^= true;
+        }
     }
 }

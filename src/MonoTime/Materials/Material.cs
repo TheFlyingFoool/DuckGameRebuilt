@@ -12,6 +12,7 @@ namespace DuckGame
 {
     public class Material
     {
+        public bool spsupport;
         protected MTEffect _effect;
 
         public MTEffect effect => _effect;
@@ -19,7 +20,7 @@ namespace DuckGame
         public Material()
         {
         }
-
+        public MTSpriteBatchItem batchItem;
         public Material(string mat) => _effect = Content.Load<MTEffect>(mat);
 
         public Material(Effect e) => _effect = (MTEffect)e;

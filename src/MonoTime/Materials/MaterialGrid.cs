@@ -20,6 +20,7 @@ namespace DuckGame
 
         public MaterialGrid(Thing t)
         {
+            spsupport = true;
             _effect = Content.Load<MTEffect>("Shaders/wireframeTexOuya");
             _thing = t;
         }

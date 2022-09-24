@@ -132,6 +132,13 @@ namespace DuckGame
                 NCSteam.inviteLobbyID = Main.connectID;
                 Level.current = new JoinServer(Main.connectID, MonoMain.lobbyPassword);
             }
+            else if (Program.lanjoiner)
+            {
+                Main.SpecialCode = "Joining lobby on startup (127.0.0.1:1337)";
+                NCSteam.PrepareProfilesForJoin();
+                //NCSteam.inviteLobbyID = Main.connectID;
+                Level.current = new JoinServer("127.0.0.1:1337");
+            }
             else if (Level.current == null)
             {
                 if (MonoMain.networkDebugger)
@@ -144,7 +151,9 @@ namespace DuckGame
                     Level.core.currentLevel.lowestPoint = 100000f;
                 }
                 else
+                {
                     Level.current = !MonoMain.startInEditor ? (!(!Program.intro || MonoMain.noIntro) ? new BIOSScreen() : new TitleScreen()) : Main.editor;
+                }
             }
             _font = new BitmapFont("biosFont", 8);
             if (MonoMain.useRPC)
@@ -184,7 +193,22 @@ namespace DuckGame
                 Steam.SearchForLobby(who);
             }
         }
-
+        protected override void EndDraw()
+        {
+            try
+            {
+                base.EndDraw();
+            }
+            catch (System.InvalidOperationException Ex) // weird steam overlay sht calls a method it shouldnt doesnt really break anything but does cause a crash, handling it seems fine and FNA discord said the same
+            {
+                /*  DevConsole.Log("error log " + Ex.Message);
+                    error log GL_INVALID_ENUM in glMatrixMode
+	                Source: GL_DEBUG_SOURCE_API
+	                Type: GL_DEBUG_TYPE_ERROR
+	                Severity: GL_DEBUG_SEVERITY_HIGH
+                */
+            }
+        }
         protected override void OnDraw()
         {
         }

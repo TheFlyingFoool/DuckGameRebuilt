@@ -13,7 +13,11 @@ namespace DuckGame
     {
         public float fade = 1f;
 
-        public MaterialSelection() => _effect = Content.Load<MTEffect>("Shaders/selection");
+        public MaterialSelection()
+        {
+            spsupport = true;
+            _effect = Content.Load<MTEffect>("Shaders/selection");
+        }
 
         public override void Apply()
         {

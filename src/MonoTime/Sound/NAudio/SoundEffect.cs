@@ -18,6 +18,10 @@ namespace DuckGame
 {
     public class SoundEffect
     {
+        public bool IsOgg;//dan
+        public OggPlayer oggPlayer;//dan
+        public Microsoft.Xna.Framework.Audio.SoundEffect soundEffect;//dan
+
         public string file;
         public bool streaming;
         public static float[] _songBuffer;
@@ -50,9 +54,23 @@ namespace DuckGame
         public string Name { get; set; }
 
         public static SoundEffect FromStream(Stream stream) => SoundEffect.FromStream(stream, "wav");
-
+        public SoundEffect(Stream stream)
+        {
+            soundEffect = Microsoft.Xna.Framework.Audio.SoundEffect.FromStream(stream);
+        }
         public static SoundEffect FromStream(Stream stream, string extension)
         {
+            if (Program.IsLinuxD)
+            {
+                try
+                {
+                    return new SoundEffect(stream);
+                }
+                catch (Exception)
+                { }
+                DevConsole.Log(DCSection.General, "|DGRED|SoundEffect.FromStream Failed!", -1);
+                return null;
+            }
             SoundEffect soundEffect = new SoundEffect();
             if (soundEffect.Platform_Construct(stream, extension))
                 return soundEffect;
@@ -265,6 +283,23 @@ namespace DuckGame
 
         public void Platform_Construct(string pPath)
         {
+            if (Program.IsLinuxD)
+            {
+                int index = pPath.LastIndexOf(".");
+                byte[] data = File.ReadAllBytes(pPath);
+                if (index != -1 && pPath.Substring(index + 1).ToLower() == "ogg")
+                {
+                    IsOgg = true;
+                    oggPlayer = new OggPlayer();
+                    oggPlayer.SetOgg(new MemoryStream(data));
+                }
+                else
+                {
+
+                    soundEffect = Microsoft.Xna.Framework.Audio.SoundEffect.FromStream(new MemoryStream(data));
+                }
+                return;
+            }
             byte[] buffer = System.IO.File.ReadAllBytes(pPath);
             if (buffer == null)
             {

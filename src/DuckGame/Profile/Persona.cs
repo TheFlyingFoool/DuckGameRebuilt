@@ -14,31 +14,16 @@ namespace DuckGame
     public static class Persona
     {
         private static List<DuckPersona> _personasOriginalOrder = new List<DuckPersona>()
-    {
-      new DuckPersona(new Vec3( byte.MaxValue,  byte.MaxValue,  byte.MaxValue))
-      {
-        index = 0
-      },
-      new DuckPersona(new Vec3(125f, 125f, 125f)) { index = 1 },
-      new DuckPersona(new Vec3(247f, 224f, 90f)) { index = 2 },
-      new DuckPersona(new Vec3(205f, 107f, 29f)) { index = 3 },
-      new DuckPersona(new Vec3(0f, 133f, 74f), new Vec3(0f, 102f, 57f), new Vec3(0f, 173f, 97f))
-      {
-        index = 4
-      },
-      new DuckPersona(new Vec3( byte.MaxValue, 105f, 117f), new Vec3(207f, 84f, 94f), new Vec3( byte.MaxValue, 158f, 166f))
-      {
-        index = 5
-      },
-      new DuckPersona(new Vec3(49f, 162f, 242f), new Vec3(13f, 123f, 181f), new Vec3(148f, 207f, 245f))
-      {
-        index = 6
-      },
-      new DuckPersona(new Vec3(175f, 85f, 221f), new Vec3(141f, 36f, 194f), new Vec3(213f, 165f, 238f))
-      {
-        index = 7
-      }
-    };
+        {
+          new DuckPersona(new Vec3( byte.MaxValue,  byte.MaxValue,  byte.MaxValue),0),
+          new DuckPersona(new Vec3(125f, 125f, 125f),1),
+          new DuckPersona(new Vec3(247f, 224f, 90f),2),
+          new DuckPersona(new Vec3(205f, 107f, 29f),3),
+          new DuckPersona(new Vec3(0f, 133f, 74f), new Vec3(0f, 102f, 57f), new Vec3(0f, 173f, 97f),4),
+          new DuckPersona(new Vec3( byte.MaxValue, 105f, 117f), new Vec3(207f, 84f, 94f), new Vec3( byte.MaxValue, 158f, 166f),5),
+          new DuckPersona(new Vec3(49f, 162f, 242f), new Vec3(13f, 123f, 181f), new Vec3(148f, 207f, 245f),6),
+          new DuckPersona(new Vec3(175f, 85f, 221f), new Vec3(141f, 36f, 194f), new Vec3(213f, 165f, 238f),7)
+        };
         private static List<DuckPersona> _personasShuffled;
         public static int seed;
 

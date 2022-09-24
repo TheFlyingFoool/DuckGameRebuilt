@@ -149,7 +149,10 @@ namespace DuckGame
             OnClose();
         }
 
-        public override void DoUpdate() => base.DoUpdate();
+        public override void DoUpdate()
+        {
+            base.DoUpdate();
+        }
 
         public virtual void OnClose()
         {
@@ -199,7 +202,7 @@ namespace DuckGame
                 SizeChildren();
                 foreach (UIComponent component in _components)
                 {
-                    if (component.condition == null || component.condition())
+                    if (component != this && component.condition == null || component.condition())
                     {
                         component.DoUpdate();
                         if (component._didResize)

@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialRainbow : Material
+    public class MaterialRainbow : Material// test
     {
         public float offset;
         public float offset2;

@@ -57,10 +57,24 @@ namespace DuckGame
         public override void Draw()
         {
             flipHorizontal = false;
-            if (cheap && !Editor.editorDraw)
-                graphic.UltraCheapStaticDraw(flipHorizontal);
-            else
-                base.Draw();
+            //if (cheap && !Editor.editorDraw)
+            //    graphic.UltraCheapStaticDraw(flipHorizontal);
+            //else
+            //    base.Draw();
+            if (graphic.position != position)
+            {
+                (graphic as SpriteMap).ClearCache();
+            }
+            graphic.position = position;
+            graphic.scale = scale;
+            graphic.center = center;
+            graphic.depth = depth;
+            graphic.alpha = alpha;
+            graphic.angle = angle;
+            graphic.cheapmaterial = this.material;
+            (graphic as SpriteMap).UpdateFrame();
+            graphic.UltraCheapStaticDraw(flipHorizontal);
+            //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 
         }
 
         public bool pathed
@@ -242,7 +256,7 @@ namespace DuckGame
                 case 18:
                 case 26:
                     _collisionSize.x = verticalWidthThick;
-                    _collisionOffset.x = (float)(16f - verticalWidthThick - 8f);
+                    _collisionOffset.x = 16f - verticalWidthThick - 8f;
                     break;
                 case 4:
                 case 5:

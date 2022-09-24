@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Visualizes the outer bounds of the current map")]
-    public static bool ShowBounds()
+
+    public static partial class DevConsoleCommands
     {
-        return DevConsole.debugBounds ^= true;
+        [DevConsoleCommand(Description = "Visualizes the outer bounds of the current map")]
+        public static bool ShowBounds()
+        {
+            return DevConsole.debugBounds ^= true;
+        }
     }
 }

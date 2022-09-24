@@ -205,15 +205,20 @@ namespace DuckGame
         public override int numSticks => 2;
 
         public override int numTriggers => 2;
-
+        public static PadButton[] PadButtons;
+        static XInputPad()
+        {
+            PadButtons = (PadButton[])Enum.GetValues(typeof(PadButton));
+        }
         public XInputPad(int idx)
           : base(idx)
         {
+            playerIndex = (PlayerIndex)idx; // made this a preset because nothing changes idx after the fact
             _name = "xbox" + idx.ToString();
             _productName = "XBOX GAMEPAD";
             _productGUID = "";
         }
-
+        public PlayerIndex playerIndex;
         public override Dictionary<int, string> GetTriggerNames() => _triggerNames;
 
         public override Sprite GetMapImage(int map)
@@ -227,12 +232,12 @@ namespace DuckGame
 
         protected override PadState GetState(int index)
         {
-            GamePadState state1 = GamePad.GetState((PlayerIndex)index, GamePadDeadZone.Circular);
+            GamePadState state1 = GamePad.GetState(playerIndex, GamePadDeadZone.Circular);
             PadState state2 = new PadState();
-            foreach (object button in Enum.GetValues(typeof(PadButton)))
+            foreach (PadButton button in PadButtons)
             {
                 if (state1.IsButtonDown((Buttons)button))
-                    state2.buttons |= (PadButton)button;
+                    state2.buttons |= button;
             }
             ref PadState.StickStates local1 = ref state2.sticks;
             GamePadThumbSticks thumbSticks = state1.ThumbSticks;

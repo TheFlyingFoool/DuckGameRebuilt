@@ -29,6 +29,8 @@ namespace DuckGame
         public DartGrenade(float xpos, float ypos) : base (xpos, ypos)
         {
             _sprite = new SpriteMap(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(dartGrenade))), "dartgrenade"), 16, 16);
+            _sprite.Namebase = "dartgrenade";
+            Content.textures[_sprite.Namebase] = _sprite.texture;
             ammo = 1;
             _type = "gun";
             graphic = _sprite;

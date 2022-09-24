@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace DuckGame;
-
-public static partial class DevConsoleCommands
+namespace DuckGame
 {
-    [DevConsoleCommand(Description = "Toggles shield mode. You now have health in Duck Game")]
-    public static bool ShieldMode()
+
+    public static partial class DevConsoleCommands
     {
-        return DevConsole.shieldMode ^= true;
+        [DevConsoleCommand(Description = "Toggles shield mode. You now have health in Duck Game")]
+        public static bool ShieldMode()
+        {
+            return DevConsole.shieldMode ^= true;
+        }
     }
 }

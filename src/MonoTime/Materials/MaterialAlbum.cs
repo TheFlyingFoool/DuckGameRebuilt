@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
-    public class MaterialAlbum : Material
+    public class MaterialAlbum : Material //unused
     {
         private Tex2D _albumTexture;
 

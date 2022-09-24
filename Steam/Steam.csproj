@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Steam</RootNamespace>
+    <AssemblyName>DGSteam</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>..\bin\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>..\bin\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>..\bin\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Steamworks.NET">
+      <HintPath>..\bin\WinSteam\Steamworks.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\FriendRelationship.cs" />
+    <Compile Include="src\ItemUpdateStatus.cs" />
+    <Compile Include="src\Lobby.cs" />
+    <Compile Include="src\Lock.cs" />
+    <Compile Include="src\P2PDataSendType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\RemoteStoragePublishedFileVisibility.cs" />
+    <Compile Include="src\SessionState.cs" />
+    <Compile Include="src\SharpSteam.cs" />
+    <Compile Include="src\Steam.cs" />
+    <Compile Include="src\SteamLobbyComparison.cs" />
+    <Compile Include="src\SteamLobbyJoinResult.cs" />
+    <Compile Include="src\SteamLobbyType.cs" />
+    <Compile Include="src\SteamLobbyUserStatusFlags.cs" />
+    <Compile Include="src\SteamPacket.cs" />
+    <Compile Include="src\SteamResult.cs" />
+    <Compile Include="src\SteamUserState.cs" />
+    <Compile Include="src\TransferProgress.cs" />
+    <Compile Include="src\OfflineSelfUser.cs" />
+    <Compile Include="src\User.cs" />
+    <Compile Include="src\UserInfo.cs" />
+    <Compile Include="src\WorkshopItem.cs" />
+    <Compile Include="src\WorkshopItemData.cs" />
+    <Compile Include="src\WorkshopItemState.cs" />
+    <Compile Include="src\WorkshopList.cs" />
+    <Compile Include="src\WorkshopQueryAll.cs" />
+    <Compile Include="src\WorkshopQueryBase.cs" />
+    <Compile Include="src\WorkshopQueryData.cs" />
+    <Compile Include="src\WorkshopQueryFileDetails.cs" />
+    <Compile Include="src\WorkshopQueryFilterOrder.cs" />
+    <Compile Include="src\WorkshopQueryResult.cs" />
+    <Compile Include="src\WorkshopQueryResultAdditionalPreview.cs" />
+    <Compile Include="src\WorkshopQueryResultDetails.cs" />
+    <Compile Include="src\WorkshopQueryUGC.cs" />
+    <Compile Include="src\WorkshopQueryUser.cs" />
+    <Compile Include="src\WorkshopResultStatistic.cs" />
+    <Compile Include="src\WorkshopSortOrder.cs" />
+    <Compile Include="src\WorkshopType.cs" />
+    <Compile Include="src\_.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

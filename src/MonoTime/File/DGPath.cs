@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using XnaToFna;
 
 namespace DuckGame
 {
@@ -208,7 +209,24 @@ namespace DuckGame
             _specialData = null;
             int index = 0;
             DGPath.kBuilder.Clear();
-            if (pPath.Length > 1 && pPath[1] == ':')
+            if (Program.IsLinuxD)// idk if any mods use the this class but becaue i dont super care atm i just guess at how this works functionally and applied linux :PP 
+            {
+                if (Path.IsPathRooted(pPath))
+                {
+                    _rooted = true;
+                    pPath = pPath.Replace('\\', '/');
+                    _path = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(pPath), true);
+                    if (_path.Contains("."))
+                    {
+                        _file = true;
+                    }
+                    if (_file || _path[pPath.Length - 1] == '/')
+                        return;
+                    _path += "/";
+                    return;
+                }
+            }
+            else if (pPath.Length > 1 && pPath[1] == ':')
             {
                 _rooted = true;
                 DGPath.kBuilder.Append(char.ToUpper(pPath[0]));
