@@ -7,7 +7,7 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>default</LangVersion>
     <WarningLevel>4</WarningLevel>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -1955,7 +1955,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DuckGame\Properties\Resources.resx" />
-    <EmbeddedResource Include="DuckGame\src\MonoTime\Console\NetworkConsole.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
@@ -1975,6 +1974,7 @@
     <Content Include="DuckGame.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DuckGame\src\MonoTime\Console" />
     <Folder Include="shaders_source\" />
   </ItemGroup>
   <ItemGroup>

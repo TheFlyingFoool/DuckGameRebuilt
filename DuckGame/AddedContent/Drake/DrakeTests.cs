@@ -15,7 +15,7 @@ using Point = System.Drawing.Point;
 
 namespace DuckGame.AddedContent.Drake
 {
-    public static class DrakeTest
+    public static class DrakeTests
     {
 
         private static UiBasic testUI;
@@ -49,7 +49,7 @@ namespace DuckGame.AddedContent.Drake
         }
 
 
-        [DrawingContext(DrawingLayer.HUD, DoDraw = true)]
+        [DrawingContext(DrawingLayer.HUD, DoDraw = false)]
         public static void PolyDrawTest()
         {
             if (uiDead) return;
@@ -90,7 +90,7 @@ namespace DuckGame.AddedContent.Drake
         }
 
 
-        [DrawingContext(DrawingLayer.HUD, DoDraw = true)]
+        [DrawingContext(DrawingLayer.HUD, DoDraw = false)]
         public static void TexTest()
         {
             Graphics.polyBatcher.BlendState = BlendState.NonPremultiplied;
