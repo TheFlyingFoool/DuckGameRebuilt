@@ -126,7 +126,7 @@ namespace DuckGame
             if (layer is null)
                 return;
 
-            foreach ((object ActionOrMethodInfo, DrawingContextAttribute Attribute) pair in ReflectionMethodsUsing
+            foreach (var pair in ReflectionMethodsUsing
                          .Select<MemberAttributePair<MethodInfo, DrawingContextAttribute>,
                              (object ActionOrMethodInfo, DrawingContextAttribute Attribute)>(x => (x.MemberInfo, x.Attribute))
                          .Concat(PrecompiledMethodsUsing

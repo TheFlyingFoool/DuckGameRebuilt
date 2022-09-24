@@ -54,35 +54,35 @@ namespace DuckGame
     };
         public InputCode konamiCode = new InputCode()
         {
-            triggers = new List<string>()
-      {
-        "UP",
-        "UP",
-        "DOWN",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "LEFT",
-        "RIGHT",
-        "QUACK",
-        "JUMP"
-      }
+          triggers = new List<string>()
+          {
+            "UP",
+            "UP",
+            "DOWN",
+            "DOWN",
+            "LEFT",
+            "RIGHT",
+            "LEFT",
+            "RIGHT",
+            "QUACK",
+            "JUMP"
+          }
         };
         public InputCode konamiCodeAlternate = new InputCode()
         {
-            triggers = new List<string>()
-      {
-        "UP|JUMP",
-        "UP|JUMP",
-        "DOWN",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "LEFT",
-        "RIGHT",
-        "QUACK",
-        "UP|JUMP"
-      }
+          triggers = new List<string>()
+          {
+            "UP|JUMP",
+            "UP|JUMP",
+            "DOWN",
+            "DOWN",
+            "LEFT",
+            "RIGHT",
+            "LEFT",
+            "RIGHT",
+            "QUACK",
+            "UP|JUMP"
+          }
         };
 
         public Level nextLevel

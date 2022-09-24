@@ -57,6 +57,10 @@ namespace DuckGame
             status.breakTimer -= breakSpeed;
             if (status.breakTimer <= 0.0)
                 status.Break();
+            if (status.currentIndex > triggers.Count || status.currentIndex < 0)//dan check into later, caused a crash on weird linux machine ArgumentOutOfRangeException triggers
+            {
+                return false;
+            }
             string trigger1 = triggers[status.currentIndex];
             int num = 0;
             if (hasDoubleInputs && trigger1.Contains("|"))

@@ -86,7 +86,8 @@ public class Steam : IDisposable {
         return SteamRemoteStorage.IsCloudEnabledForAccount() && SteamRemoteStorage.IsCloudEnabledForApp();
     }
     public static bool InitializeCore() {
-        return _initialized = SteamAPI.Init();
+        _initialized = SteamAPI.Init();
+        return _initialized;
     }
     public unsafe static bool IsLoggedIn()
     {
@@ -225,11 +226,19 @@ public class Steam : IDisposable {
    
     public unsafe static int EstimatePing(string pingstring)
     {
+        if (!_initialized)
+        {
+            return 0;
+        }
         SteamNetworkingUtils.ParsePingLocationString(pingstring, out SteamNetworkPingLocation_t pingL);
         return SteamNetworkingUtils.EstimatePingTimeFromLocalHost(ref pingL);
     }
     public unsafe static string GetLocalPingString()
     {
+        if (!_initialized)
+        {
+            return "";
+        }
         SteamNetworkingUtils.GetLocalPingLocation(out SteamNetworkPingLocation_t pingL);
         SteamNetworkingUtils.ConvertPingLocationToString(ref pingL, out string pszbuff, 4096);
         return pszbuff;
@@ -250,7 +259,7 @@ public class Steam : IDisposable {
         return hasAchievement;
     }
     public static bool IsInitialized() {
-        return _initialized || _offline;
+        return _initialized; //|| _offline; unsure why he had this here so i killed it
     }
 
     public unsafe static void Terminate() {

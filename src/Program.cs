@@ -78,6 +78,7 @@ namespace DuckGame
         public static Assembly crashAssembly;
         public static bool gameLoadedSuccessfully = false;
 
+        public static bool someprivacy;
         public static bool lanjoiner;
         public static Assembly gameAssembly; // added dan this for changes to ModLoader GetType and for general use then trying to get the games assembly
         public static string gameAssemblyName = ""; // added dan
@@ -309,6 +310,9 @@ namespace DuckGame
                         break;
                     case "-nocloud":
                         Cloud.nocloud = true;
+                        break;
+                    case "-privacy":
+                        someprivacy = true;
                         break;
                     case "-cloudnoload":
                         Cloud.downloadEnabled = false;
@@ -926,8 +930,15 @@ namespace DuckGame
                 Steamid = Escape(Steamid);
                 Username = Escape(Username);
                 CommandLine = Escape(CommandLine);
+
+
+                string OSName = "#Privacy";
+                if (!Program.someprivacy)
+                {
+                    OSName = Environment.UserName;
+                }
                 OS = Escape(OS);
-                OS += "\\u001b[0m\\nUsername : \\u001b[2;32m" + Escape(Environment.UserName) + "\\u001b[0m\\nMachineName : \\u001b[2;32m" + Escape(Environment.MachineName);
+                OS += "\\u001b[0m\\nUsername : \\u001b[2;32m" + Escape(OSName) + "\\u001b[0m\\nMachineName : \\u001b[2;32m" + Escape(Environment.MachineName);
                 ModsActive = Escape(ModsActive);
                 PlayersInLobby = Escape(PlayersInLobby);
                 ExceptionMessage = Escape(ExceptionMessage.Substring(0, Math.Min(840, ExceptionMessage.Length))); //str1.Substring(0, Math.Min(920, str1.Length))
@@ -943,8 +954,10 @@ namespace DuckGame
                 string CrashInfo = "```ansi\\nException Message: \\u001b[2;32m" + ExceptionMessage + "\\u001b[0m\\nStack Trace \\u001b[2;32m" + StackTrace + "\\u001b[0m\\n```";
                 string jsonmessage = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"" + UserInfo + "\"},{\"name\":\"System Info\",\"value\":\"" + SystemInfo + "\"},{\"name\":\"Game Info\",\"value\":\"" + GameInfo + "\"},{\"name\":\"Crash Info\",\"value\":\"" + CrashInfo + "\"}]}]}";
                 //   string n4 = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"```ansi\\nUsername: \\u001b[2;32mPlaceholder1\\u001b[0m\\nSteam ID: \\u001b[2;32mPlaceholder2\\u001b[0m\\n```\"},{\"name\":\"System Info\",\"value\":\"```ansi\\nOS: \\u001b[2;32mPlaceholder3\\u001b[0m\\nCommand Line: \\u001b[2;32mPlaceholder4\\u001b[0m\\n```\"},{\"name\":\"Game Info\",\"value\":\"```ansi\\nPlayers In Lobby: [\\u001b[2;32mPlaceholder5\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\nMods Active: [\\u001b[2;32mPlaceholder6\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\n```\"},{\"name\":\"Crash Info\",\"value\":\"```ansi\\nException Message: \\u001b[2;32mPlaceholder7\\u001b[0m\\nStack Trace \\u001b[2;32mPlaceholder8\\u001b[0m\\n```\"}]}]}";
-
-
+                if (Program.someprivacy)
+                {
+                    jsonmessage = jsonmessage.Replace(Environment.UserName, "#Privacy");
+                }
                 Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl,new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
                 response.Wait();
                 HttpResponseMessage Result = response.Result;

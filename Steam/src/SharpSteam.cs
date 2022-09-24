@@ -103,7 +103,8 @@ public class SharpSteam : IDisposable {
         // SteamUserStats.UploadLeaderboardScore(/*... this requires a SteamLeaderboard_t!*/, ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodKeepBest, score, /*???*/, /*???*/);
     }
 
-    public void RunCallbacks() {
+    public void RunCallbacks() 
+    {
         SteamAPI.RunCallbacks();
     }
 
