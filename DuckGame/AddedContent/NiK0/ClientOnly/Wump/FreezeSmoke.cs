@@ -1,6 +1,6 @@
 ﻿namespace DuckGame
 {
-    [ClientOnly]
+    [ClientOnly]//It is client only :D
     public class FreezeSmoke : Thing
     {
         private float _angleInc;
