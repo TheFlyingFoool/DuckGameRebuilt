@@ -34,8 +34,24 @@ dotnet build
 
 * add official up to date mono repos from monoproject: https://www.mono-project.com/
 
-* if needed install `mono-complete msbuild nuget`
+* Install the packages `mono-complete` and `msbuild`
 
-* TODO FIX for now just temporarily add the Presentationframework nuget (you may need dotent sdk from microsoft (or you may need to download it fom questionable sources)): https://www.nuget.org/packages/PresentationFramework/ So pretty much just download the DLL and put it in the bin folder.
+<!--* TODO FIX for now just temporarily add the Presentationframework nuget (you may need dotent sdk from microsoft (or you may need to download it fom questionable sources)): https://www.nuget.org/packages/PresentationFramework/ So pretty much just download the DLL and put it in the bin folder.-->
 
-* FINISH ME LATER
+* Copy the following DLLs from root into the bin folder like so:
+  ```
+  cp System.Memory.dll bin/
+  cp System.Buffers.dll bin/
+  cp System.Runtime.CompilerServices.Unsafe.dll bin/
+  cp System.Speech.dll bin/
+  cp PresentationFramework.dll bin/
+  ```
+  
+* In `DuckGame.csproj`, comment out or delete this line (near the bottom) `<PostBuildEvent>Xcopy $(SolutionDir)\deps $(SolutionDir)\bin /E /H /C /I /Y
+call "$(SolutionDir)shaders_source\buildshaders.bat</PostBuildEvent>`
+
+* Copy some stuff `cp -rv deps/* bin/`
+
+* Now finally you can run the build command, `msbuild`
+
+_Note: you may get over 200 warnings, but don't worry about those. give yourself a pat on the back. you did it._
