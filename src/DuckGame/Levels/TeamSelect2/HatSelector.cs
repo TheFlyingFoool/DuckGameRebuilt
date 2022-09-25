@@ -324,6 +324,7 @@ namespace DuckGame
             {
                 if (_box.duck != null)
                 {
+                    if (isArcadeHatSelector) RoomEditorExtra.arcadeHat = team.name;
                     Hat equipment = _box.duck.GetEquipment(typeof(Hat)) as Hat;
                     Hat hat = new TeamHat(0f, 0f, team, _box.duck.profile);
                     Level.Add(hat);

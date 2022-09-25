@@ -58,6 +58,18 @@ namespace DuckGame
             };
             _profileBox._hatSelector.layer = Layer.HUD;
             _profileBox._hatSelector.isArcadeHatSelector = true;
+            if (RoomEditorExtra.arcadeHat != "")
+            {
+                Team t = Teams.all.Find(t => t.name == RoomEditorExtra.arcadeHat);
+                if (t != null)
+                {
+                    Hat equipment = d.GetEquipment(typeof(Hat)) as Hat;
+                    Hat hat = new TeamHat(0f, 0f, t, d.profile);
+                    Level.Add(hat);
+                    d.Equip(hat, false);
+                    if (equipment != null) Level.Remove(equipment);
+                }
+            }
             _profile = d.profile;
             _duck = d;
             Level.Add(_profileBox);

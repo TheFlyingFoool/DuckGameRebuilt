@@ -17,6 +17,8 @@ namespace DuckGame
 
         [AutoConfigField]
         public static List<string> favoriteHats = new List<string>();
+        [AutoConfigField]
+        public static string arcadeHat = "";
 
         [PostInitialize]
         public static void Initialize()
