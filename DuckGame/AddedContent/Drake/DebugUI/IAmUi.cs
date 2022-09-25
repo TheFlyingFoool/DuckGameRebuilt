@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using DuckGame.AddedContent.Drake.PolyRender;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.DebugUI;
-
+namespace DuckGame.AddedContent.Drake.DebugUI
+{
 public interface IAmUi
 {
     public Vector2 Position { get; set; }
@@ -43,4 +43,5 @@ public enum MouseAction
 public enum UiCols
 {
     Main, Text, Accent, Alternate, Data
+}
 }

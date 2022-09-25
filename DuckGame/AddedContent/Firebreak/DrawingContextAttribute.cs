@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace DuckGame;
-
+namespace DuckGame
+{
 /// <summary>
 /// Makes the method using this attribute a DrawingContext. This
 /// means that whatever is inside the method will be executed in
@@ -172,4 +172,5 @@ public enum DrawingLayer
     Foreground = 256,
     HUD = 512,
     Console = 1024,
+}
 }

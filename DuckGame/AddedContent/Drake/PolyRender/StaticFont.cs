@@ -4,8 +4,8 @@ using System.Drawing.Text;
 using System.IO;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.PolyRender;
-
+namespace DuckGame.AddedContent.Drake.PolyRender
+{
 public static class StaticFont
 {
 
@@ -23,4 +23,5 @@ public static class StaticFont
     public static void DrawRawString(string text, Vector2 pos, Color col, float scale = 1f, float margin = 0.5f) =>
         Font?.DrawRawString(text, pos, col, scale, margin);
     public static void DrawStringSized(string text, Vector2 pos, Color col, float cWidth, float margin = 0.5f) => Font?.DrawStringSized(text, pos, col, cWidth, margin);
+}
 }

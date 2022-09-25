@@ -6,8 +6,8 @@ using DuckGame.AddedContent.Drake.PolyRender;
 using DuckGame.AddedContent.Drake.Utils;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.DebugUI;
-
+namespace DuckGame.AddedContent.Drake.DebugUI
+{
 public class UiTabber : UiList
 {
     protected IAmUi _currentTab;
@@ -97,4 +97,5 @@ public class UiTabber : UiList
         base.OnSubContentKilled(subContent);
         _currentTab = SubContent.Count > 0 ? SubContent[0] : null;
     }
+}
 }

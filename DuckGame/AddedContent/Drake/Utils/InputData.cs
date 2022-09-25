@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.Utils;
-
+namespace DuckGame.AddedContent.Drake.Utils
+{
 public static class InputData
 {
     public static bool KeyPressed(Keys key) => Keyboard.Pressed(key);
@@ -34,4 +34,5 @@ public static class InputData
     public static Vector2 CurrentLayerScreenMin => Graphics.currentLayer.camera.transformScreenVector(new Vec2(0));
     public static Keys[] KeysPressedThisFrame => Microsoft.Xna.Framework.Input.Keyboard.GetState().GetPressedKeys().Cast<Keys>().ToArray();
     private static char[] CharsPressedThisFrame => KeysPressedThisFrame.Select(key => Keyboard.KeyToChar(key)).ToArray();
+}
 }

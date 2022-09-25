@@ -4,8 +4,8 @@ using DuckGame.AddedContent.Drake.PolyRender;
 using DuckGame.AddedContent.Drake.Utils;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.DebugUI;
-
+namespace DuckGame.AddedContent.Drake.DebugUI
+{
 public class UiBasic : IAmUi
 {
     public event Action<IAmUi, Vector2> OnPositioned;
@@ -297,4 +297,5 @@ public class UiBasic : IAmUi
 
 
     protected virtual void HandleScrolled(float scroll) { }
+}
 }

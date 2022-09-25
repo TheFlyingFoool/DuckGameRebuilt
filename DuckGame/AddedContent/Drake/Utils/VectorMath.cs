@@ -2,8 +2,8 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.Utils;
-
+namespace DuckGame.AddedContent.Drake.Utils
+{
 public static class VectorMath
 {
         public const float DegToRad = 0.0174533f;
@@ -238,4 +238,5 @@ public static class VectorMath
         {
             return new Vector2(self.Z, self.W);
         }
+}
 }

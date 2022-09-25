@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using DuckGame.AddedContent.Drake.Utils;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.DebugUI;
-
+namespace DuckGame.AddedContent.Drake.DebugUI
+{
 public class UiGroup : UiBasic
 {
     public readonly List<IAmUi> SubContent = new();
@@ -113,4 +113,5 @@ public class UiGroup : UiBasic
     {
         RemoveContent(subContent);
     }
+}
 }

@@ -9,8 +9,8 @@ using System.Runtime.InteropServices;
 using DuckGame.AddedContent.Drake.Utils;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.PolyRender;
-
+namespace DuckGame.AddedContent.Drake.PolyRender
+{
 public class AtlasedFont
 {
     public const char Invoker = '$';
@@ -276,4 +276,5 @@ public enum AtlasFontStyle
     
     RegBolItal = 1 | 2 | 4,
     All = 1 | 2 | 4 | 8 | 16,
+}
 }
