@@ -74,6 +74,7 @@ namespace DuckGame
           int index = -1,
           string label = "FPS")
         {
+            Color bgcolor = Color.Black;
             if (index == -1)
                 FPSCounter.Tick(index);
             if (!FPSCounter._initialized)
@@ -82,6 +83,10 @@ namespace DuckGame
             if (FPSCounter._fpsValue.ContainsKey(index))
                 num = FPSCounter._fpsValue[index];
             FPSCounter._batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+            FPSCounter._biosFont.Draw(FPSCounter._batch, Convert.ToString(num, CultureInfo.InvariantCulture) + " " + label, xpos + 1, ypos + 1, bgcolor);
+            FPSCounter._biosFont.Draw(FPSCounter._batch, Convert.ToString(num, CultureInfo.InvariantCulture) + " " + label, xpos - 1, ypos - 1, bgcolor);
+            FPSCounter._biosFont.Draw(FPSCounter._batch, Convert.ToString(num, CultureInfo.InvariantCulture) + " " + label, xpos - 1, ypos + 1, bgcolor);
+            FPSCounter._biosFont.Draw(FPSCounter._batch, Convert.ToString(num, CultureInfo.InvariantCulture) + " " + label, xpos + 1, ypos - 1, bgcolor);
             FPSCounter._biosFont.Draw(FPSCounter._batch, Convert.ToString(num, CultureInfo.InvariantCulture) + " " + label, xpos, ypos, color);
             FPSCounter._batch.End();
         }
