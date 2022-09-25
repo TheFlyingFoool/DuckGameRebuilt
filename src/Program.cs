@@ -7,16 +7,10 @@
 
 using DbMon.NET;
 using DGWindows;
-using DiscordRPC.Message;
 using Microsoft.Xna.Framework;
-using MonoMod.Utils;
-using NAudio;
-using NAudio.Wave;
-using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -30,13 +24,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.UI.WebControls;
 using System.Windows.Forms;
-using System.Windows.Shapes;
-using XnaToFna;
-using static DuckGame.GoalType;
-using static DuckGame.NMRequestJoin;
 
 namespace DuckGame
 {

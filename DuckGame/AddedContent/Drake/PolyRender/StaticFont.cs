@@ -1,12 +1,10 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Text;
-using System.IO;
 using Microsoft.Xna.Framework;
 
 namespace DuckGame.AddedContent.Drake.PolyRender
 {
-public static class StaticFont
+    public static class StaticFont
 {
 
     public static AtlasedFont Font;

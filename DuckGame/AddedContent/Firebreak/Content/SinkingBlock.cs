@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using DuckGame.AddedContent.Drake.PolyRender;
+﻿using System.Linq;
 
 namespace DuckGame
 {

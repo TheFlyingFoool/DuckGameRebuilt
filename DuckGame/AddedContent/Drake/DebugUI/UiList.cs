@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DuckGame.AddedContent.Drake.PolyRender;
 using DuckGame.AddedContent.Drake.Utils;
 using Microsoft.Xna.Framework;
 
 namespace DuckGame.AddedContent.Drake.DebugUI
 {
-public class UiList : UiGroup
+    public class UiList : UiGroup
 {
     public Vector2 Padding
     {

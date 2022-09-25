@@ -6,7 +6,6 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.Xna.Framework.Graphics;
-using System.Threading;
 using System;
 
 namespace DuckGame

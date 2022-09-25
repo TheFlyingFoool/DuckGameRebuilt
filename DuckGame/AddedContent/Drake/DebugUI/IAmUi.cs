@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using DuckGame.AddedContent.Drake.PolyRender;
 using Microsoft.Xna.Framework;
 
 namespace DuckGame.AddedContent.Drake.DebugUI
 {
-public interface IAmUi
+    public interface IAmUi
 {
     public Vector2 Position { get; set; }
     public Vector2 Size { get; set; }

@@ -3,15 +3,13 @@ using RectpackSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 namespace DuckGame
 {
-   
+
     public static class DansTestArea
     {
         public static Vec2 topleft = new Vec2(0f, 0f);

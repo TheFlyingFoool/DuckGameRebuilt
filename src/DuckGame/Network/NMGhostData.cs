@@ -6,8 +6,6 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
 
 namespace DuckGame
 {

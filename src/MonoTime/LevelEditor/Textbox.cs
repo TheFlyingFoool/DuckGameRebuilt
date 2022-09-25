@@ -7,7 +7,6 @@
 
 using SDL2;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace DuckGame
 {

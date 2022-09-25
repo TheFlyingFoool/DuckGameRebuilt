@@ -3,15 +3,13 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using DuckGame.AddedContent.Drake.Utils;
 using Microsoft.Xna.Framework;
 
 namespace DuckGame.AddedContent.Drake.PolyRender
 {
-public class AtlasedFont
+    public class AtlasedFont
 {
     public const char Invoker = '$';
     public const string Options = "$RBIUSC";

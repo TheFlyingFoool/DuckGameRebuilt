@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using XnaToFna.ProxyForms;
-using System.Linq;
 using System.Text;
 
 namespace XnaToFna

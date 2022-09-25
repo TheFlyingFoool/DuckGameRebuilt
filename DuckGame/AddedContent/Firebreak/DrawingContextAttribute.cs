@@ -1,32 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 
 namespace DuckGame
 {
-/// <summary>
-/// Makes the method using this attribute a DrawingContext. This
-/// means that whatever is inside the method will be executed in
-/// a global drawing method using the selected layer
-/// </summary>
-/// <example>
-/// <code lang='cs'>
-/// // Will draw "DEBUG MODE" at the coordinates (x:16, y:16)
-/// // on the HUD layer and the Foreground layer.
-/// [DrawingContext(DrawLayer.HUD | DrawLayer.Foreground)]
-/// public static void Foo()
-/// {
-///     Graphics.DrawString("DEBUG MODE", new Vec2(16, 16), Color.White);
-/// }
-/// </code>
-/// </example>
-/// <remarks>
-/// This attribute will not work well if you add parameters to
-/// the method. Please just keep it parameter-less, thanks.
-/// </remarks>
-[AttributeUsage(AttributeTargets.Method, Inherited = false)]
+    /// <summary>
+    /// Makes the method using this attribute a DrawingContext. This
+    /// means that whatever is inside the method will be executed in
+    /// a global drawing method using the selected layer
+    /// </summary>
+    /// <example>
+    /// <code lang='cs'>
+    /// // Will draw "DEBUG MODE" at the coordinates (x:16, y:16)
+    /// // on the HUD layer and the Foreground layer.
+    /// [DrawingContext(DrawLayer.HUD | DrawLayer.Foreground)]
+    /// public static void Foo()
+    /// {
+    ///     Graphics.DrawString("DEBUG MODE", new Vec2(16, 16), Color.White);
+    /// }
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// This attribute will not work well if you add parameters to
+    /// the method. Please just keep it parameter-less, thanks.
+    /// </remarks>
+    [AttributeUsage(AttributeTargets.Method, Inherited = false)]
 public sealed class DrawingContextAttribute : Attribute
 {
     public static List<MemberAttributePair<MethodInfo, DrawingContextAttribute>> ReflectionMethodsUsing = new();

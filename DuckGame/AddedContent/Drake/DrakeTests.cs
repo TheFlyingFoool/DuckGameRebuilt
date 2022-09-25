@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Drawing.Text;
-using System.IO;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 using DuckGame.AddedContent.Drake.DebugUI;
 using DuckGame.AddedContent.Drake.PolyRender;
 using DuckGame.AddedContent.Drake.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Point = System.Drawing.Point;
 
 namespace DuckGame.AddedContent.Drake
 {

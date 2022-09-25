@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace DuckGame
 {

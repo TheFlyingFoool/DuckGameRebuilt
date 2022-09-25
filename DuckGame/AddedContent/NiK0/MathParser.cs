@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net.Security;
-using System.Text;
 
 //Direct port from HiK0Client
 //Includes ChangePlus.cs

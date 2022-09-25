@@ -6,10 +6,6 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.Xna.Framework.Graphics;
-using NAudio.CoreAudioApi;
-using System.Windows.Documents;
-using static DuckGame.CMD;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace DuckGame
 {

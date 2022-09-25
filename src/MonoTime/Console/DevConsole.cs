@@ -18,7 +18,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using DuckGame.AddedContent.Drake;
 using SDL2;
 
 namespace DuckGame

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DuckGame.AddedContent.Drake.Utils;
 using Microsoft.Xna.Framework;
 
 namespace DuckGame.AddedContent.Drake.DebugUI
 {
-public class UiGroup : UiBasic
+    public class UiGroup : UiBasic
 {
     public readonly List<IAmUi> SubContent = new();
     protected readonly List<IAmUi> _contentToRemove = new();

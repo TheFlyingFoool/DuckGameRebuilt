@@ -1,14 +1,10 @@
-﻿using System.Drawing;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
-using DuckGame;
-using System.Text.RegularExpressions;
 
 namespace DuckGame
 {
-	public static class CustomKeyBinds
+    public static class CustomKeyBinds
 	{
 		public static readonly Dictionary<string, Keys> KeyDict = new();
 		static CustomKeyBinds()

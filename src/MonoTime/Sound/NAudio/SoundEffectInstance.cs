@@ -339,7 +339,7 @@ namespace DuckGame
                 this._volume = value;
                 if (!Program.IsLinuxD)
                 {
-                    if (_volume != 1.0 && _volumeChain == null)
+                    if (_volume != 1.0f && _volumeChain == null)
                         RebuildChain();
                     if (_volumeChain == null || _data == null)
                         return;
@@ -419,103 +419,121 @@ namespace DuckGame
                 return this.soundEffectInstance.State;
             }
         }
-
         public virtual int Read(float[] buffer, int offset, int count)
         {
-            if (!Program.IsLinuxD  || _data == null || !_inMixer)
+            if (Program.IsLinuxD || this._data == null || !this._inMixer)
+            {
                 return 0;
-            int length = 0;
+            }
+            int samplesToCopy = 0;
             lock (this)
             {
-                int val1 = _data.dataSize - _position;
-                if (_data.data == null)
+                int availableSamples = this._data.dataSize - this._position;
+                if (this._data.data == null)
                 {
-                    length = _data.Decode(buffer, offset, count);
+                    samplesToCopy = this._data.Decode(buffer, offset, count);
                 }
                 else
                 {
-                    length = Math.Min(val1, count);
-                    Array.Copy(_data.data, _position, buffer, offset, length);
+                    samplesToCopy = Math.Min(availableSamples, count);
+                    Array.Copy(this._data.data, this._position, buffer, offset, samplesToCopy);
                 }
-                _position += length;
-                if (length != count)
+                this._position += samplesToCopy;
+                if (samplesToCopy != count)
                 {
-                    if (SoundEndEvent != null)
-                        SoundEndEvent();
-                    if (_loop)
+                    if (this.SoundEndEvent != null)
                     {
-                        _position = 0;
-                        offset += length;
-                        if (_data.data == null)
+                        this.SoundEndEvent();
+                    }
+                    if (this._loop)
+                    {
+                        this._position = 0;
+                        offset += samplesToCopy;
+                        if (this._data.data == null)
                         {
-                            _data.Rewind();
-                            length = _data.Decode(buffer, offset, count);
+                            this._data.Rewind();
+                            samplesToCopy = this._data.Decode(buffer, offset, count);
                         }
                         else
                         {
-                            length = Math.Min(_data.dataSize - _position, count - length);
-                            Array.Copy(_data.data, _position, buffer, offset, length);
+                            availableSamples = this._data.dataSize - this._position;
+                            samplesToCopy = Math.Min(availableSamples, count - samplesToCopy);
+                            Array.Copy(this._data.data, this._position, buffer, offset, samplesToCopy);
                         }
-                        _position += length;
-                        length = count;
+                        this._position += samplesToCopy;
+                        samplesToCopy = count;
                     }
                 }
             }
-            _inMixer = _inMixer && length == count;
-            return length;
+            this._inMixer = (this._inMixer && samplesToCopy == count);
+            return samplesToCopy;
         }
-
         protected void HandleLoop()
         {
         }
-
         public void Platform_SetProgress(float pProgress)
         {
-            if (Program.IsLinuxD)
+            if (Program.IsLinuxD || this._data == null)
+            {
                 return;
-            if (_data == null)
-                return;
+            }
             pProgress = Maths.Clamp(pProgress, 0f, 1f);
-            _position = (int)(pProgress * _data.data.Length);
+            this._position = (int)(pProgress * (float)this._data.data.Length);
         }
-
         public float Platform_GetProgress()
         {
             if (Program.IsLinuxD)
+            {
                 return 0f;
-            return _data == null ? 1f : _position / (float)_data.data.Length;
+            }
+            if (this._data == null)
+            {
+                return 1f;
+            }
+            return (float)this._position / (float)this._data.data.Length;
         }
-
         public int Platform_GetLengthInMilliseconds()
         {
-            if (Program.IsLinuxD)
+            if (Program.IsLinuxD || this._data == null)
+            {
                 return 0;
-            return _data == null ? 0 : (int)(_data.data.Length * 4 / WaveFormat.AverageBytesPerSecond) * 500;
+            }
+            return (int)((float)(this._data.data.Length * 4) / (float)this.WaveFormat.AverageBytesPerSecond) * 500;
         }
-
         public class PitchShiftProvider : ISampleProvider
         {
-            private ISampleProvider _chain;
-            public float pitch;
-            public SoundEffectInstance instance;
-            private WdlResamplingSampleProvider _resampler;
-
-            public WaveFormat WaveFormat => _chain.WaveFormat;
+            public WaveFormat WaveFormat
+            {
+                get
+                {
+                    return this._chain.WaveFormat;
+                }
+            }
 
             public PitchShiftProvider(ISampleProvider pChain)
             {
-                _chain = pChain;
-                _resampler = new WdlResamplingSampleProvider(pChain);
+                this._chain = pChain;
+                this._resampler = new WdlResamplingSampleProvider(pChain);
             }
 
             public int Read(float[] buffer, int offset, int count)
             {
-                if (pitch < 0.0)
-                {
-                }
-                _resampler.sampleRate = (int)(44100.0 * Math.Pow(2.0, -pitch));
-                return _resampler.Read(buffer, offset, count);
+                //float num = this.pitch;
+                //if (this.pitch < 0f)
+                //{
+                //    float num2 = this.pitch;
+                //}
+                this._resampler.sampleRate = (int)(44100.0 * Math.Pow(2.0, (double)(-(double)this.pitch)));
+                return this._resampler.Read(buffer, offset, count);
             }
+
+            private ISampleProvider _chain;
+
+            public float pitch;
+
+            public SoundEffectInstance instance;
+
+            private WdlResamplingSampleProvider _resampler;
         }
     }
 }

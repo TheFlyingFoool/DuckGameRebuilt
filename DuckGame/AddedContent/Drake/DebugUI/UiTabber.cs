@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 using DuckGame.AddedContent.Drake.PolyRender;
 using DuckGame.AddedContent.Drake.Utils;
 using Microsoft.Xna.Framework;
 
 namespace DuckGame.AddedContent.Drake.DebugUI
 {
-public class UiTabber : UiList
+    public class UiTabber : UiList
 {
     protected IAmUi _currentTab;
 
