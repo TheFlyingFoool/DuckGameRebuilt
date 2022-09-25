@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -9,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace DuckGame
 {
-	public class ChangePlus
+    public class ChangePlus
 	{
 		public static float ToSingle(object value)
 		{

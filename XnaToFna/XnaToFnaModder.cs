@@ -7,7 +7,6 @@
 using Mono.Cecil;
 using MonoMod;
 using MonoMod.Utils;
-using System;
 
 namespace XnaToFna
 {

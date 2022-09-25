@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
 
     public static partial class DevConsoleCommands

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
 
     public static partial class DevConsoleCommands

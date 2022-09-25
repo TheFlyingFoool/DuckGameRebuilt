@@ -2,12 +2,10 @@
 using System.Linq;
 using DiscordRPC;
 using System.IO;
-using Microsoft.Xna.Framework.Input;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace DuckGame
 {
-	internal class DiscordRichPresence
+    internal class DiscordRichPresence
 	{
 		static DateTime whenGameStarted;
 

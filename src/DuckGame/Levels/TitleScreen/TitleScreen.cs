@@ -101,6 +101,7 @@ namespace DuckGame
         private float switchWait = 1f;
         private float creditsScroll;
         private bool shownPrompt;
+        private bool shownPromptF;
         private bool startStars = true;
         private int cpick;
         private bool quittingCredits;
@@ -260,6 +261,7 @@ namespace DuckGame
             AddCreditLine("Collin");
             AddCreditLine("|RED|Fire|WHITE|break|CREDITSGRAY|");
             AddCreditLine("Landon Podbielski");
+            AddCreditLine("|DGBLUE|othello|PURPLE|7");
             AddCreditLine("|GREEN|klof44|CREDITSGRAY|");
             AddCreditLine("");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@ROOM FURNITURE@RWINGGRAY@");
@@ -1123,7 +1125,21 @@ namespace DuckGame
                                     shownPrompt = true;
                                     HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@Exit");
                                 }
-                                creditsScroll += 0.25f;
+                                if (creditsScroll < 100.0 && !shownPromptF)
+                                {
+                                    HUD.AddCornerControl(HUDCorner.BottomRight, "@SHOOT@Fast");
+                                    shownPromptF = true;
+                                }
+                                else if (creditsScroll > 100.0 && shownPromptF)
+                                {
+                                    HUD.CloseCorner(HUDCorner.BottomRight);
+                                    shownPromptF = false;
+                                }
+
+                                if (Input.Down("SHOOT"))
+                                    creditsScroll += 2f;
+                                else
+                                    creditsScroll += 0.25f;
                             }
                         }
                     }
@@ -1157,6 +1173,7 @@ namespace DuckGame
                     startStars = true;
                     quittingCredits = false;
                     shownPrompt = false;
+                    shownPromptF = false;
                     HUD.CloseAllCorners();
                     _duck.immobilized = false;
                     Music.Play("Title");

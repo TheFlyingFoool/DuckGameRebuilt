@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using DuckGame.AddedContent.Drake.PolyRender;
 
 namespace DuckGame
@@ -274,10 +273,7 @@ namespace DuckGame
 
         public static float AdjustDepth(Depth depth)
         {
-            float DDepth = (depth.value + 1f) / 2f * (1f - Depth.kDepthSpanMax) + depth.span;//(depth.value + 1f) / 2f;//(depth.value + 1f) / 2f * (1f - Depth.kDepthSpanMax) + depth.span;
-            float FDepth = 1.0f - DDepth;
-
-            return FDepth;
+            return 1f - ((depth.value + 1f) / 2f * (1f - Depth.kDepthSpanMax) + depth.span);//(depth.value + 1f) / 2f;//(depth.value + 1f) / 2f * (1f - Depth.kDepthSpanMax) + depth.span;
         }
 
         public static void ResetDepthBias()

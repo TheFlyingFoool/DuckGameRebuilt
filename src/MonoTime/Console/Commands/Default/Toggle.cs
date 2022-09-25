@@ -1,8 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public static partial class DevConsoleCommands
     {

@@ -7,10 +7,49 @@ namespace DuckGame.AddedContent.Drake.PolyRender
 {
     public static class PolyRenderer
     {
-        public static Vector3[] Convert2DArray(Vector2[] array, float z = 0f)
-        {
-            return array.Select(t => new Vector3(t, z)).ToArray();
-        }
+        
+
+    public static void TexRect(Vector2 topL, Vector2 lowR, Vector2 uvTopL, Vector2 uvLowR, Color c)
+    {
+        Graphics.polyBatcher.ResetBuffer();
+        Graphics.polyBatcher
+            .Vert(topL).Col(c).Tex(uvTopL)
+            .Vert(new Vector2(lowR.X, topL.Y)).Tex(new Vector2(uvLowR.X, uvTopL.Y))
+            .Vert(new Vector2(topL.X, lowR.Y)).Tex(new Vector2(uvTopL.X, uvLowR.Y))
+            .Vert(lowR).Tex(uvLowR)
+            .DrawTriStrip();
+    }
+    
+    public static void Line(Vector2 v1, Vector2 v2, float thickness, Color v1c1, Color v1c2, Color v2c1, Color v2c2)
+    {
+        float halfThick = thickness / 2f;
+        var offset = Vector2.Normalize(VectorMath.PerpCw(v1, v2)) * halfThick;
+        Quad(v1 - offset, v2 - offset, v1 + offset, v2 + offset, v1c1, v2c1, v1c2, v2c2);
+    }
+    
+
+    public static Vector3[] Convert2DArray(Vector2[] array, float z = 0f)
+    {
+        return array.Select(t => new Vector3(t, z)).ToArray();
+    }
+        
+    public static void Edge(Vector2 v1, Vector2 v2, float thickness, Color c)
+    {
+        Line(v1, v2, thickness, c, Color.Transparent, c, Color.Transparent);
+    }
+
+    public static void EdgeRect(Vector2 topL, Vector2 lowR, float edgeThickness, Color c)
+    {
+        Vector2 topR = new Vector2(lowR.X, topL.Y);
+        Vector2 lowL = new Vector2(topL.X, lowR.Y);
+        
+        Rect(topL, lowR, c);
+        Edge(topL, topR, edgeThickness, c);
+        Edge(topR, lowR, edgeThickness, c);
+        Edge(lowR, lowL, edgeThickness, c);
+        Edge(lowL, topL, edgeThickness, c);
+    }
+
 
         public static void Tri(Vector3 v1, Vector3 v2, Vector3 v3, Color c1, Color c2, Color c3)
         {

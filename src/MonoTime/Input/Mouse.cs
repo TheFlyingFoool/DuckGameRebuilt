@@ -126,14 +126,11 @@ namespace DuckGame
 
         public static Vec2 mousePos => Mouse._mousePos;
 
-        public static Vec2 positionScreen
-        {
-            get
-            {
-                return Level.current.camera.transformScreenVector(Mouse._mousePos);//(Mouse._mousePos
-            }
-            
-        }
+        /// <summary>
+        /// This mouse position variable is literally transformed to be NOT the screen position, and instead is the current layer in-game position
+        /// "mousePos" is the ACTUAL screen-space position, if you need it. ~ Hyeve ~
+        /// </summary>
+        public static Vec2 positionScreen => Level.current.camera.transformScreenVector(Mouse._mousePos);
 
         public static Vec2 positionConsole => Layer.Console.camera.transformScreenVector(Mouse._mousePos);
 

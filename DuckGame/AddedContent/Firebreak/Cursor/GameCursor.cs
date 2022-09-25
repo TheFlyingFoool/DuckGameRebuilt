@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public abstract class GameCursor
     {

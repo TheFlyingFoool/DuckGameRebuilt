@@ -296,5 +296,76 @@ namespace DuckGame
         public static implicit operator Microsoft.Xna.Framework.Color(Color c) => new Microsoft.Xna.Framework.Color(c.r, c.g, c.b, c.a);
 
         public static implicit operator Color(Microsoft.Xna.Framework.Color c) => new Color(c.R, c.G, c.B, c.A);
+
+        private const float AdjFactor = 0.7f;
+        
+        public Color Brighter(float factor = AdjFactor)
+        {
+            //Stolen from Java's Color.
+            
+            /*
+             * 1. black.brighter() should return grey
+             * 2. applying brighter to blue will always return blue, brighter
+             * 3. non pure color (non zero rgb) will eventually return white
+             */
+            
+            int i = (int)(1.0 / (1.0 - factor));
+            switch (r)
+            {
+                case 0 when g == 0 && b == 0:
+                    return new Color(i, i, i, a);
+                case > 0 when r < i:
+                    r = (byte)i;
+                    break;
+            }
+
+            if (g > 0 && g < i) g = (byte)i;
+            if (b > 0 && b < i) b = (byte)i;
+
+            return new Color((byte)Math.Min(r / factor, 255),
+                (byte)Math.Min(g / factor, 255),
+                (byte)Math.Min(b / factor, 255),
+                a); 
+        }
+
+        public Color Lighter(float factor = AdjFactor)
+        {
+            float diff = 255 * factor;
+            return new Color((byte)Math.Min(r + diff, 255),
+                (byte)Math.Min(g + diff, 255),
+                (byte)Math.Min(b + diff, 255),
+                a); 
+        }
+
+        public Color Dimmer(float factor = AdjFactor)
+        {
+            var darker = Darker(factor);
+            byte luma = (byte)(0.21f * darker.r + 0.72f * darker.g + 0.07 * darker.b);
+            return Lerp(new Color(luma, luma, luma, a), darker, factor);
+        }
+        
+        public Color Darker(float factor = AdjFactor)
+        {
+            float diff = 255 * (1 - factor);
+            return new Color((byte)Math.Max(r - diff, 0),
+                (byte)Math.Max(g - diff, 0),
+                (byte)Math.Max(b - diff, 0),
+                a);
+        }
+
+        private static Random _random = new Random();
+        
+        public static Color Random() => new Color(_random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255), 255);
+
+        public static Color RandomAlpha() => new Color(_random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255));
+
+        public static Color RandomGray(int gMin = 0, int gMax = 255, int aMin = 255, int aMax = 255)
+        {
+            var luma = _random.Next(gMin, gMax);
+            return new Color(luma, luma, luma, _random.Next(aMin, aMax));
+        }
+
+        public static Color RandomRanged(int rMin, int rMax, int gMin, int gMax, int bMin, int bMax, int aMin = 255, int aMax = 255) => new Color(_random.Next(rMin, rMax), _random.Next(gMin, gMax), _random.Next(bMin, bMax), _random.Next(aMin, aMax));
+
     }
 }

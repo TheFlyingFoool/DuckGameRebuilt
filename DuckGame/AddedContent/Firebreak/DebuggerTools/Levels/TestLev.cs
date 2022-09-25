@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DuckGame.AddedContent.Drake.PolyRender;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System.Linq;
 
 namespace DuckGame
 {
