@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using DuckGame.AddedContent.Drake.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,8 +12,8 @@ namespace DuckGame.AddedContent.Drake.PolyRender
         private readonly GraphicsDevice _device;
         private readonly GraphicsDeviceManager _manager;
         private readonly BasicEffect _effect;
-        private readonly RasterizerState _rasterState;
         private readonly VertexPositionColorTexture[] _vertices;
+        private readonly Stack<Rectangle> _scissorStack;
 
         private Vector3 _currentOffset;
         private int _bufferPos;
@@ -22,11 +24,10 @@ namespace DuckGame.AddedContent.Drake.PolyRender
             _manager = graphics;
             _device = _manager?.GraphicsDevice ?? throw new InvalidOperationException("Cannot create a polygon batcher will a null graphics device!!");
             _vertices = new VertexPositionColorTexture[bufferSize];
-            _rasterState = new RasterizerState();
+            _scissorStack = new Stack<Rectangle>();
             _effect = new BasicEffect(_device);
             _effect.LightingEnabled = false;
             _effect.VertexColorEnabled = true;
-            _rasterState.MultiSampleAntiAlias = false;
             _manager.ApplyChanges();
             ResetDrawParams();
             UpdateMatricesForCurrentLayer();
@@ -63,9 +64,13 @@ namespace DuckGame.AddedContent.Drake.PolyRender
 
         public void ResetMatrices() => UpdateMatricesForCurrentLayer();
 
+        public Vector3 TransformVector(Vector3 vec) => Vector3.Transform(vec, Matrix.Invert(_effect.View));
+        public Vector2 TransformVector(Vector2 vec) => Vector2.Transform(vec, Matrix.Invert(_effect.View));
+        
         public void ResetDrawParams()
         {
-            ScissorTest = false;
+            ClearScissorStack();
+            ScissorMode = ScissorStackMode.Intersect;
             CullMode = CullMode.None;
             FillMode = FillMode.Solid;
             GlobalAlpha = 1.0f;
@@ -73,15 +78,29 @@ namespace DuckGame.AddedContent.Drake.PolyRender
             Texture = null;
             BlendState = BlendState.Opaque;
         }
-
-
         
-        public bool ScissorTest { set => _rasterState.ScissorTestEnable = value; }
-        public Rectangle ScissorRect { set => _device.ScissorRectangle = value; }
-        public CullMode CullMode { set => _rasterState.CullMode = value; }
-        public FillMode FillMode { set => _rasterState.FillMode = value; }
-        public float DepthBias { set => _rasterState.DepthBias = value; }
+        public Viewport Viewport
+        {
+            get => _device.Viewport;
+        }
+
+        public ScissorStackMode ScissorMode { get; set; }
+        public CullMode CullMode { set => _device.RasterizerState.CullMode = value; }
+        public FillMode FillMode { set => _device.RasterizerState.FillMode = value; }
+        public float DepthBias { set => _device.RasterizerState.DepthBias = value; }
         public float GlobalAlpha { set => _effect.Alpha = value; }
+        
+        
+        /// <summary>
+        /// Useful key for blend states:
+        /// BlendState.Opaque => Alpha is ignored, colours overwrite.
+        /// BlendState.Additive => Alpha is ignored, colours are added.
+        /// BlendState.AlphaBlend => Alpha is used, pre-multiplied assumed. (any opacity white = white)
+        /// BlendState.NonPreMultiplied => This will do the kind of alpha blending you'd normally expect. (half opacity white = gray)
+        ///
+        /// Pre-Multiplied alpha is where the colour channels are multiplied by the alpha channel before being drawn,
+        /// which allows the rasterizer to skip some of the calculations needed for blending
+        /// </summary>
         public BlendState BlendState { set => _device.BlendState = value; }
         public Texture2D Texture
         {
@@ -97,8 +116,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
         {
             set
             {
-                if (_rasterState.MultiSampleAntiAlias == value) return;
-                _rasterState.MultiSampleAntiAlias = value;
+                _device.RasterizerState.MultiSampleAntiAlias = value;
                 _manager.PreferMultiSampling = value;
                 _manager.ApplyChanges();
             }
@@ -110,10 +128,48 @@ namespace DuckGame.AddedContent.Drake.PolyRender
             set
             {
                 _device.PresentationParameters.MultiSampleCount = value;
-                if(_rasterState.MultiSampleAntiAlias) _manager.ApplyChanges();
+                if(_device.RasterizerState.MultiSampleAntiAlias) _manager.ApplyChanges();
             }
         }
 
+        public void ClearScissorStack()
+        {
+            _scissorStack.Clear();
+            _device.RasterizerState.ScissorTestEnable = false;
+        }
+        
+        public void PushScissor(Rectangle scissorRect)
+        {
+            var offset = new Vec2(Viewport.X, Viewport.Y);
+            var tl = Vec3.Transform(new Vec3(scissorRect.tl + offset, 0f), _effect.View);
+            var br = Vec3.Transform(new Vec3(scissorRect.br + offset, 0f), _effect.View);
+            var rect = new Rectangle(tl.XY(), br.XY());
+
+            if (_scissorStack.Count > 0)
+            {
+                switch (ScissorMode)
+                {
+                    case ScissorStackMode.Intersect:
+                        rect = Microsoft.Xna.Framework.Rectangle.Intersect(rect, _scissorStack.Peek());
+                        break;
+                    case ScissorStackMode.Union:
+                        rect = Microsoft.Xna.Framework.Rectangle.Union(rect, _scissorStack.Peek());
+                        break;
+                }
+            }
+            
+            _scissorStack.Push(rect);
+            _device.ScissorRectangle = rect;
+            _device.RasterizerState.ScissorTestEnable = true;
+        }
+
+        public void PopScissor()
+        {
+            if(_scissorStack.Count > 0) _scissorStack.Pop();
+            if (_scissorStack.Count <= 0) ClearScissorStack();
+            else _device.ScissorRectangle = _scissorStack.Peek();
+        }
+        
         //Reset buffer is automatically called after each draw, so you should only need it if a draw has been left in progress for some reason.
         public void ResetBuffer()
         {
@@ -259,5 +315,10 @@ namespace DuckGame.AddedContent.Drake.PolyRender
         {
             Draw(PrimitiveType.LineList);
         }
+    }
+
+    public enum ScissorStackMode
+    {
+        Replace, Intersect, Union,
     }
 }

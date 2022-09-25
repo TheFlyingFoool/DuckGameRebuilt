@@ -2,10 +2,10 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.Utils
+namespace DuckGame.AddedContent.Drake.Utils;
+
+public static class VectorMath
 {
-    public static class VectorMath
-    {
         public const float DegToRad = 0.0174533f;
 
         public const float RadToDeg = 57.2958f;
@@ -19,10 +19,10 @@ namespace DuckGame.AddedContent.Drake.Utils
             CalcIntersection(start, end, thing.bottomRight, thing.bottomLeft)
             };
 
-            Vector2 nearest = end;
+            var nearest = end;
             float distance = (end - start).Length();
 
-            foreach (Vector2 vec in intersects)
+            foreach (var vec in intersects)
             {
                 if (float.IsNaN(vec.X) || float.IsNaN(vec.Y))
                 {
@@ -56,7 +56,7 @@ namespace DuckGame.AddedContent.Drake.Utils
                 return Vec2.Zero;
             }
 
-            Vec2 intersect = new Vec2((b2 * c1 - b1 * c2) / delta, (a1 * c2 - a2 * c1) / delta);
+            var intersect = new Vec2((b2 * c1 - b1 * c2) / delta, (a1 * c2 - a2 * c1) / delta);
 
             if (!zeroIfNotOnLine)
             {
@@ -103,7 +103,7 @@ namespace DuckGame.AddedContent.Drake.Utils
         }
 
 
-        public static Vector2[] CalcClosestPoints(this Vector2 origin, Vector2[] points, int number)
+        public static Vector2[] CalcClosestPoints(this Vector2 origin, Vector2[] points,  int number)
         {
             if (number > points.Length)
             {
@@ -133,13 +133,13 @@ namespace DuckGame.AddedContent.Drake.Utils
 
             return index != -1 ? points[index] : origin;
         }
-
-
+        
+        
 
         public static float CalcRadians(this Vector2 vec) => (float)(Math.Tan(vec.X / vec.Y) * -1);
 
         public static float CalcDegreesBetween(this Vec2 start, Vec2 end) => CalcRadians(start - end) * RadToDeg;
-
+        
         public static bool IsInsideRect(this Vector2 point, Vector2 rectOrigin, Vector2 rectSize)
         {
             return point.X > rectOrigin.X && point.X < (rectOrigin + rectSize).X && point.Y > rectOrigin.Y &&
@@ -148,7 +148,7 @@ namespace DuckGame.AddedContent.Drake.Utils
 
         private static Vector2 _negateX = new Vector2(-1, 1);
         private static Vector2 _negateY = new Vector2(1, -1);
-
+        
         public static Vector2 NegateX(this Vector2 self)
         {
             return self * _negateX;
@@ -161,12 +161,12 @@ namespace DuckGame.AddedContent.Drake.Utils
 
         public static Vector2 ZeroX(this Vector2 self)
         {
-            return self * Vector2.UnitY;
+            return new Vector2(0f, self.Y);
         }
 
         public static Vector2 ZeroY(this Vector2 self)
         {
-            return self * Vector2.UnitX;
+            return new Vector2(self.X, 0f);
         }
 
         public static Vector2 ReplaceX(this Vector2 self, float x)
@@ -208,8 +208,7 @@ namespace DuckGame.AddedContent.Drake.Utils
         {
             return new Vector2(self.X, self.Y * amount);
         }
-
-
+        
         public static Vector2 XX(this Vector2 self)
         {
             return new Vector2(self.X, self.X);
@@ -219,5 +218,24 @@ namespace DuckGame.AddedContent.Drake.Utils
         {
             return new Vector2(self.Y, self.Y);
         }
-    }
+
+        public static Vector2 XY(this Vec3 self)
+        {
+            return new Vector2(self.x, self.y);
+        }
+
+        public static Vector2 XY(this Vector3 self)
+        {
+            return new Vector2(self.X, self.Y);
+        }
+
+        public static Vector2 XY(this Vector4 self)
+        {
+            return new Vector2(self.X, self.Y);
+        }
+
+        public static Vector2 ZW(this Vector4 self)
+        {
+            return new Vector2(self.Z, self.W);
+        }
 }
