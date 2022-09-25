@@ -52,6 +52,9 @@ call "$(SolutionDir)shaders_source\buildshaders.bat</PostBuildEvent>`
 
 * Copy some stuff `cp -rv deps/* bin/`
 
-* Now finally you can run the build command, `msbuild`
+* Copy some more stuff from your own DG steam from somewhee like `~/.steam/steam/steamapps/common/Duck Game/` and copy the Content folder to the `bin/` directory.
 
+* Now finally you can run the build command, `msbuild`  
 _Note: you may get over 200 warnings, but don't worry about those. give yourself a pat on the back. you did it._
+
+* When you are finished and want to use the output build for release `msbuild -p:Configuration=Release`
