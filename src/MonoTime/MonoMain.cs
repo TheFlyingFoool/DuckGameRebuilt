@@ -1448,6 +1448,9 @@ namespace DuckGame
             }
         }
 
+        Stack<string> loadMessages = new();
+        string lastLoadMessage = "";
+
         protected void RunDraw(GameTime gameTime)
         {
             FPSCounter.Tick(1);
@@ -1539,9 +1542,23 @@ namespace DuckGame
                     num = 1f;
                 Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * num, vec2_1.y), Color.White * 0.1f, (Depth)0.6f);
                 string text = loadMessage;
+                if(loadMessage != lastLoadMessage)
+                {
+                    loadMessages.Push(lastLoadMessage = loadMessage);
+                }
                 if (Cloud.processing && Cloud.progress != 0.0 && Cloud.progress != 1.0)
                     text = "Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100.0)).ToString() + "%)";
-                Graphics.DrawString(text, p1 + new Vec2(0f, -24f), Color.White, (Depth)1f, scale: 2f);
+                float textPadding = -24f;
+                if(text != loadMessage)
+                {
+                    Graphics.DrawString(text, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
+                    textPadding -= 20;
+                }
+                foreach(string i in loadMessages)
+                {
+                    Graphics.DrawString(i, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
+                    textPadding -= 20;
+                }
                 _duckRun.speed = 0.15f;
                 _duckRun.scale = new Vec2(4f, 4f);
                 _duckRun.depth = 0.7f;
