@@ -75,7 +75,8 @@ namespace DuckGame
         [SecurityCritical]
         public static void Main(string[] args)
         {
-            DevConsole.Log("Version 69.10.0.0.1");
+            //File.Delete(Path.GetFullPath("DGInput.dll"));
+            DevConsole.Log("Version 69.21.0.0.1");
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
             DevConsole.Log(IsLinuxD.ToString() + " " + p.ToString());

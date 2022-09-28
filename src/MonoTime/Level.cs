@@ -376,11 +376,11 @@ namespace DuckGame
                         DuckNetwork.compressedLevelData = null;
                         string[] strArray = new string[5]
                         {
-              "|DGYELLOW|Incrementing level index (",
-              ( DuckNetwork.levelIndex - 1).ToString(),
-              "->",
-              null,
-              null
+                          "|DGYELLOW|Incrementing level index (",
+                          ( DuckNetwork.levelIndex - 1).ToString(),
+                          "->",
+                          null,
+                          null
                         };
                         levelIndex = DuckNetwork.levelIndex;
                         strArray[3] = levelIndex.ToString();

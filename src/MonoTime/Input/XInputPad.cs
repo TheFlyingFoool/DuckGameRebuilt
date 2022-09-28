@@ -7,8 +7,10 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using SDL2;
 using System;
 using System.Collections.Generic;
+using static SDL2.SDL;
 
 namespace DuckGame
 {
@@ -196,8 +198,83 @@ namespace DuckGame
         new Sprite("buttons/xbox/dPad")
       }
     };
+        private Dictionary<int, Sprite> _triggerImagesPS = new Dictionary<int, Sprite>()
+    {
+      {
+        4096,
+        new Sprite("buttons/ps4/x")
+      },
+      {
+        8192,
+        new Sprite("buttons/ps4/circle")
+      },
+      {
+        16384,
+        new Sprite("buttons/ps4/square")
+      },
+      {
+        32768,
+        new Sprite("buttons/ps4/triangle")
+      },
+      {
+        16,
+        new Sprite("buttons/ps4/startButton")
+      },
+      {
+        32,
+        new Sprite("buttons/ps4/startButton")
+      },
+      {
+        4,
+        new Sprite("buttons/ps4/dPadLeft")
+      },
+      {
+        8,
+        new Sprite("buttons/ps4/dPadRight")
+      },
+      {
+        1,
+        new Sprite("buttons/ps4/dPadUp")
+      },
+      {
+        2,
+        new Sprite("buttons/ps4/dPadDown")
+      },
+      {
+        256,
+        new Sprite("buttons/ps4/leftBumper")
+      },
+      {
+        512,
+        new Sprite("buttons/ps4/rightBumper")
+      },
+      {
+        8388608,
+        new Sprite("buttons/ps4/leftTrigger")
+      },
+      {
+        4194304,
+        new Sprite("buttons/ps4/rightTrigger")
+      },
+      {
+        64,
+        new Sprite("buttons/ps4/leftStick")
+      },
+      {
+        128,
+        new Sprite("buttons/ps4/rightStick")
+      },
+      {
+        9999,
+        new Sprite("buttons/ps4/dPad")
+      },
+      {
+        9998,
+        new Sprite("buttons/ps4/dPad")
+      }
+    };
         private bool _connectedState;
-
+        public SDL.SDL_GameControllerType SDLControllerType = SDL_GameControllerType.SDL_CONTROLLER_TYPE_XBOX360;
         public override bool isConnected => _connectedState;
 
         public override bool allowStartRemap => true;
@@ -224,7 +301,14 @@ namespace DuckGame
         public override Sprite GetMapImage(int map)
         {
             Sprite mapImage;
-            _triggerImages.TryGetValue(map, out mapImage);
+            if (SDLControllerType == SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
+            {
+                _triggerImagesPS.TryGetValue(map, out mapImage);
+            }
+            else
+            {
+                _triggerImages.TryGetValue(map, out mapImage);
+            }
             return mapImage;
         }
 
@@ -232,7 +316,17 @@ namespace DuckGame
 
         protected override PadState GetState(int index)
         {
-            GamePadState state1 = GamePad.GetState(playerIndex, GamePadDeadZone.Circular);
+           // GamePadState F = FNAPlatform.GetGamePadState(index, GamePadDeadZone.IndependentAxes);
+            GamePadState state1 = GamePad.GetState((PlayerIndex)index, GamePadDeadZone.Circular);
+            if (_connectedState != state1.IsConnected)
+            {
+                string productname = SDL_GameControllerNameForIndex(index);
+                SDLControllerType = SDL_GameControllerTypeForIndex(index);
+                if (productname != null && productname != "")
+                {
+                    _productName = productname;
+                }
+            }
             PadState state2 = new PadState();
             foreach (PadButton button in PadButtons)
             {

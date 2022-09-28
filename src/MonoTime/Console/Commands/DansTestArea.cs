@@ -158,7 +158,13 @@ namespace DuckGame
 
 
 
-
+    [DevConsoleCommand(Name = "random")]
+    public static void randomnesstest()
+    {
+        Random rand = new Random(42069);
+        double d = rand.NextDouble();
+        DevConsole.Log(d.ToString() + " random");
+    }
     [DevConsoleCommand(Name = "testdg")]
     public static void starttestdg()
     {

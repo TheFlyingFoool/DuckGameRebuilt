@@ -1664,22 +1664,39 @@ namespace DuckGame
             --DuckGame.Input.timesToEnumerateGamepads;
             Task.Run(() => DInput.Thread_EnumGamepads());
         }
-
+        public static bool ForceDirectInputMode()
+        {
+            if (MonoMain.disableDirectInput)
+            {
+                return false;
+            }
+            //return DInput.ForceDirectInputMode(); PUTBACK
+            return false;
+        }
+        public static bool DInputUpdate()
+        {
+            if (MonoMain.disableDirectInput)
+            {
+                return false;
+            }
+            //return DInput.Update(); PUTBACK
+            return false;
+        }
         public static void EnumerateGamepads()
         {
-            if (Program.IsLinuxD)//FIX ME LATER DAN PLLZ
-            {
-                return;
-            }
+            //if (Program.IsLinuxD)//FIX ME LATER DAN PLLZ
+            //{
+            //    return;
+            //}
             foreach (GenericController gamePad in DuckGame.Input._gamePads)
             {
                 InputDevice device1 = gamePad.device;
-                if (!(device1 is XInputPad) || !DInput.ForceDirectInputMode())
+                if (!(device1 is XInputPad) || !Input.ForceDirectInputMode())
                 {
                     if (device1 is DInputPad && DuckGame.Input._dinputEnabled)
                     {
                         DInputPad dinputPad = device1 as DInputPad;
-                        if (!dinputPad.isXInput || DInput.ForceDirectInputMode())
+                        if (!dinputPad.isXInput || Input.ForceDirectInputMode())
                         {
                             if (dinputPad.isConnected != dinputPad.prevIsConnected)
                             {
@@ -1709,7 +1726,7 @@ namespace DuckGame
                         {
                             if (!(device2 is GenericController) && device2.isConnected && device2.genericController == null)
                             {
-                                if (device2 is XInputPad && !DInput.ForceDirectInputMode())
+                                if (device2 is XInputPad && !Input.ForceDirectInputMode())
                                 {
                                     gamePad.device = device2 as AnalogGamePad;
                                     DuckGame.Input._gamepadsChanged = true;
@@ -1740,99 +1757,107 @@ namespace DuckGame
 
         public static void Update()
         {
-            bool notlinux = !(Program.IsLinuxD || Program.isLinux);
-            if (notlinux && !DuckGame.Input._initializedMessageHook)
+            try
             {
-                InputSystem.Initialize(MonoMain.instance.Window);
-                DuckGame.Input._initializedMessageHook = true;
-            }
-            if (notlinux && Options.Data.imeSupport && !DuckGame.Input._initializedIME)
-            {
-                InputSystem.InitializeIme(MonoMain.instance.Window);
-                InputSystem.IMECharEntered += new CharEnteredHandler(Keyboard.IMECharEnteredHandler);
-                DuckGame.Input._initializedIME = true;
-            }
-            //InputSystem.CharEntered += new CharEnteredHandler(Keyboard.ALTCharEnteredHandler); removed because it does nothing on target platforms
-            bool flag = Options.Data.imeSupport && DuckGame.Input._imeAllowed;
-            if (notlinux && flag != DuckGame.Input._prevImeAllowed)
-            {
-                if (flag)
-                    InputSystem.StartIME();
+                bool notlinux = !(Program.IsLinuxD || Program.isLinux);
+                if (notlinux && !DuckGame.Input._initializedMessageHook)
+                {
+                    InputSystem.Initialize(MonoMain.instance.Window);
+                    DuckGame.Input._initializedMessageHook = true;
+                }
+                if (notlinux && Options.Data.imeSupport && !DuckGame.Input._initializedIME)
+                {
+                    InputSystem.InitializeIme(MonoMain.instance.Window);
+                    InputSystem.IMECharEntered += new CharEnteredHandler(Keyboard.IMECharEnteredHandler);
+                    DuckGame.Input._initializedIME = true;
+                }
+                //InputSystem.CharEntered += new CharEnteredHandler(Keyboard.ALTCharEnteredHandler); removed because it does nothing on target platforms
+                bool flag = Options.Data.imeSupport && DuckGame.Input._imeAllowed;
+                if (notlinux && flag != DuckGame.Input._prevImeAllowed)
+                {
+                    if (flag)
+                        InputSystem.StartIME();
+                    else
+                        InputSystem.EndIME();
+                }
+                if (!MonoMain.disableDirectInput && !DuckGame.Input._dinputEnabled)
+                    DuckGame.Input.InitializeDInputAsync();
+                DuckGame.Input._prevImeAllowed = flag;
+                DuckGame.Input._imeAllowed = false;
+                if (DuckGame.Input._prevForceMode != Input.ForceDirectInputMode())
+                {
+                    foreach (InputDevice device in DuckGame.Input._devices)
+                    {
+                        if (device is GenericController)
+                            (device as GenericController).device = null;
+                        DuckGame.Input.devicesChanged = true;
+                    }
+                    DuckGame.Input._prevForceMode = Input.ForceDirectInputMode();
+                }
+                DuckGame.Input.devicesChanged = true;
+                if (DuckGame.Input.devicesChanged)
+                {
+                    ++DuckGame.Input._deviceUpdateWait;
+                    if (DuckGame.Input._deviceUpdateWait > 120)
+                    {
+                        DuckGame.Input._deviceUpdateWait = 0;
+                        DuckGame.Input.devicesChanged = false;
+                        ++DuckGame.Input.timesToEnumerateGamepads;
+                        if (!DuckGame.Input._dinputEnabled)
+                            DuckGame.Input.EnumerateGamepads();
+                    }
+                }
+                if (DuckGame.Input._dinputEnabled && DuckGame.Input.timesToEnumerateGamepads > 0 && !DuckGame.Input.enumeratingGamepads)
+                    DuckGame.Input.RunGamepadEnumerationThread();
+                if (DuckGame.Input._gamepadsChanged)
+                {
+                    DuckGame.Input.ApplyDefaultMappings();
+                    TeamSelect2.ControllerLayoutsChanged();
+                    DuckGame.Input._gamepadsChanged = false;
+                    DuckGame.Input.uiDevicesHaveChanged = true;
+                }
+                if (DuckGame.Input._updateWaitFrames > 0)
+                {
+                    --DuckGame.Input._updateWaitFrames;
+                }
                 else
-                    InputSystem.EndIME();
-            }
-            if (!MonoMain.disableDirectInput && !DuckGame.Input._dinputEnabled)
-                DuckGame.Input.InitializeDInputAsync();
-            DuckGame.Input._prevImeAllowed = flag;
-            DuckGame.Input._imeAllowed = false;
-            if (notlinux && DuckGame.Input._prevForceMode != DInput.ForceDirectInputMode())
-            {
-                foreach (InputDevice device in DuckGame.Input._devices)
                 {
-                    if (device is GenericController)
-                        (device as GenericController).device = null;
-                    DuckGame.Input.devicesChanged = true;
-                }
-                DuckGame.Input._prevForceMode = DInput.ForceDirectInputMode();
-            }
-            if (DuckGame.Input.devicesChanged)
-            {
-                ++DuckGame.Input._deviceUpdateWait;
-                if (DuckGame.Input._deviceUpdateWait > 120)
-                {
-                    DuckGame.Input._deviceUpdateWait = 0;
-                    DuckGame.Input.devicesChanged = false;
-                    ++DuckGame.Input.timesToEnumerateGamepads;
-                    if (!DuckGame.Input._dinputEnabled)
-                        DuckGame.Input.EnumerateGamepads();
-                }
-            }
-            if (DuckGame.Input._dinputEnabled && DuckGame.Input.timesToEnumerateGamepads > 0 && !DuckGame.Input.enumeratingGamepads)
-                DuckGame.Input.RunGamepadEnumerationThread();
-            if (DuckGame.Input._gamepadsChanged)
-            {
-                DuckGame.Input.ApplyDefaultMappings();
-                TeamSelect2.ControllerLayoutsChanged();
-                DuckGame.Input._gamepadsChanged = false;
-                DuckGame.Input.uiDevicesHaveChanged = true;
-            }
-            if (DuckGame.Input._updateWaitFrames > 0)
-            {
-                --DuckGame.Input._updateWaitFrames;
-            }
-            else
-            {
-                if (DuckGame.Input._dinputEnabled)
-                {
-                    if (DInput.Update())
+                    if (DuckGame.Input._dinputEnabled)
                     {
-                        DuckGame.Input.enumeratingGamepads = false;
-                        DuckGame.Input.EnumerateGamepads();
+                        if (DInputUpdate())
+                        {
+                            DuckGame.Input.enumeratingGamepads = false;
+                            DuckGame.Input.EnumerateGamepads();
+                        }
+                        DuckGame.Input.CheckDInputChanges();
                     }
-                    DuckGame.Input.CheckDInputChanges();
-                }
-                if (DuckGame.Input._padConnectionChange)
-                {
-                    DuckGame.Input._padConnectionChange = false;
-                    if (MonoMain.started && !DuckGame.Input._ignoreFirstInputChange && DuckGame.Input._suppressInputChangeMessages <= 0)
+                    if (DuckGame.Input._padConnectionChange)
                     {
-                        DuckGame.Input._changeName = DuckGame.Input._changeName.Trim();
-                        if (DuckGame.Input._changeName.Length > 25)
-                            DuckGame.Input._changeName = DuckGame.Input._changeName.Substring(0, 25) + "...";
-                        string str = "@PLUG@|LIME|";
-                        if (!DuckGame.Input._changePluggedIn)
-                            str = "@UNPLUG@|RED|";
-                        HUD.AddInputChangeDisplay(str + DuckGame.Input._changeName);
+                        DuckGame.Input._padConnectionChange = false;
+                        if (MonoMain.started && !DuckGame.Input._ignoreFirstInputChange && DuckGame.Input._suppressInputChangeMessages <= 0)
+                        {
+                            DuckGame.Input._changeName = DuckGame.Input._changeName.Trim();
+                            if (DuckGame.Input._changeName.Length > 25)
+                                DuckGame.Input._changeName = DuckGame.Input._changeName.Substring(0, 25) + "...";
+                            string str = "@PLUG@|LIME|";
+                            if (!DuckGame.Input._changePluggedIn)
+                                str = "@UNPLUG@|RED|";
+                            HUD.AddInputChangeDisplay(str + DuckGame.Input._changeName);
+                        }
                     }
+                    foreach (InputDevice device in DuckGame.Input._devices)
+                        device.Update();
                 }
-                foreach (InputDevice device in DuckGame.Input._devices)
-                    device.Update();
+                if (MonoMain.started)
+                    DuckGame.Input._ignoreFirstInputChange = false;
+                if (DuckGame.Input._suppressInputChangeMessages <= 0)
+                    return;
+                --DuckGame.Input._suppressInputChangeMessages;
             }
-            if (MonoMain.started)
-                DuckGame.Input._ignoreFirstInputChange = false;
-            if (DuckGame.Input._suppressInputChangeMessages <= 0)
-                return;
-            --DuckGame.Input._suppressInputChangeMessages;
+            catch(Exception e)
+            {
+                DevConsole.Log(e.Message);
+            }
         }
 
         public static void Terminate()
