@@ -157,10 +157,20 @@ namespace DuckGame
 
 
 
-
+        [DevConsoleCommand(Name = "rlevel")]
+        public static void randomnesstest2()
+        {//Content.GetLevels("pyramid", LevelLocation.Content)
+            List<string> levels = Content.GetLevels("pyramid", LevelLocation.Content);
+            foreach(string GUID in levels)
+            {
+                LevelData LevelData = Content.GetLevel(GUID, LevelLocation.Content);
+                DevConsole.Log(LevelData.GetPath().ToString() + " level");
+            }
+            DevConsole.Log(levels.Count.ToString() + " rlevel");
+        }
     [DevConsoleCommand(Name = "random")]
     public static void randomnesstest()
-    {
+    {//Content.GetLevels("pyramid", LevelLocation.Content)
         Random rand = new Random(42069);
         double d = rand.NextDouble();
         DevConsole.Log(d.ToString() + " random");

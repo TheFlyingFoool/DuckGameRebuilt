@@ -761,6 +761,7 @@ namespace DuckGame
                 {
                 }
             }
+            filesNoCloud1.Sort();
             return filesNoCloud1;
         }
 
@@ -838,6 +839,7 @@ namespace DuckGame
                 for (int index = 0; index < stringList.Count; ++index)
                     stringList[index] = stringList[index].Replace('\\', '/');
             }
+            stringList.Sort();
             return stringList.ToArray();
         }
 
