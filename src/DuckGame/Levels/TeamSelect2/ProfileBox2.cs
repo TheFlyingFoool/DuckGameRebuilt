@@ -755,10 +755,10 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (profile != null && profile.isUsingRebuilt)
+            if (profile != null && profile.isUsingRebuilt && profile.duck != null)
             {
                 Vec2 v = profile.duck.position;
-                if (profile.duck.ragdoll != null) v = profile.duck.ragdoll.part2.position;
+                if (profile.duck.ragdoll != null && profile.duck.ragdoll.part2 != null) v = profile.duck.ragdoll.part2.position;
                 else if (profile.duck.crouch) v.y += 5;
                 Graphics.DrawString("♥", v - new Vec2(14 + 4 * sin), Color.Red * 0.2f, 0, null, 4 + sin);
                 Graphics.DrawString("♥", v - new Vec2(12 + 4 * sin), Color.Red * 0.2f, 0, null, 3.5f + sin);
