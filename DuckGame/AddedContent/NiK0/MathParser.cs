@@ -239,6 +239,10 @@ namespace DuckGame
                 LocalVariables = new Dictionary<string, double>
                 {
                     {
+                        "nan",
+                        double.NaN
+                    },
+                    {
                         "mx", //mouse x
                         Mouse.positionScreen.x
                     },

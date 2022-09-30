@@ -4,7 +4,7 @@ namespace DuckGame
 {
     public class RoomEditorExtra
     {
-        [AutoConfigField]
+        [AutoConfigField]//TODO: this eventually
         public static List<byte> room1 = new List<byte>();
         [AutoConfigField]
         public static List<byte> room2 = new List<byte>();
