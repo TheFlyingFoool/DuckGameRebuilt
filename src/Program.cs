@@ -25,24 +25,26 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace DuckGame
 {
     /// <summary>The main class.</summary>
     public static class Program
     {
+        public static bool Prestart = DirtyPreStart();
         // This has to be an own non generic delegate because generic delegates cannot be marshalled to unmanaged code.
         private delegate uint Callback(IntPtr ptrToExceptionInfo);
 
-        public static string StartinEditorLevelName = "";
-        public static string GameDirectory = "";
-        public static string FileName = "";
-        public static string FilePath = "";
+        public static string StartinEditorLevelName;
+        public static string GameDirectory;
+        public static string FileName;
+        public static string FilePath;
         public static bool IsLinuxD;
         public static bool intro = false;
         public static bool testServer = false;
         public static DuckGame.Main main;
-        public static string commandLine = "";
+        public static string commandLine;
         private static bool _attemptingResolve = false;
         private static bool _showedError = false;
         public static bool alternateSaveLocation;
@@ -69,7 +71,7 @@ namespace DuckGame
         public static bool someprivacy;
         public static bool lanjoiner;
         public static Assembly gameAssembly; // added dan this for changes to ModLoader GetType and for general use then trying to get the games assembly
-        public static string gameAssemblyName = ""; // added dan
+        public static string gameAssemblyName; // added dan
         /// <summary>The main entry point for the application.</summary>\
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
@@ -120,14 +122,56 @@ namespace DuckGame
         //    response2.Wait();
         //    return 1;
         //}
+        public static bool DirtyPreStart()
+        {
+            int p = (int)Environment.OSVersion.Platform;
+            IsLinuxD = (p == 4) || (p == 6) || (p == 128);
+           // DevConsole.Log(IsLinuxD.ToString() + " " + p.ToString());
+            int tries = 10;
+            gameAssembly = Assembly.GetExecutingAssembly();
+            gameAssemblyName = Program.gameAssembly.GetName().Name;
+            FilePath = Program.gameAssembly.Location;
+            FileName = System.IO.Path.GetFileName(FilePath);
+            GameDirectory = FilePath.Substring(0, FilePath.Length - FileName.Length);
+           
+            while (tries > 0)
+            {
+                if (File.Exists(GameDirectory + "Steamworks.NET.dll"))
+                {
+                    File.Delete(GameDirectory + "Steamworks.NET.dll");
+                    tries -= 1;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if (IsLinuxD)
+            {
+                DevConsole.Log("setting dll to linux steam");
+                File.Copy(GameDirectory + "OSX-Linux-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
+                return true;
+            }
+            DevConsole.Log("setting dll to windows steam");
+            File.Copy(GameDirectory + "Windows-x86//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
+            return true;
+        }
         public static Assembly ModResolve(object sender, ResolveEventArgs args) => ManagedContent.ResolveModAssembly(sender, args);
 
         public static Assembly Resolve(object sender, ResolveEventArgs args)
         {
+            //if (args.Name.StartsWith("Steamworks.NET,"))
+            //{
+            //    byte[] assemblyBuff = File.ReadAllBytes(Path.GetFullPath("Windows-x86\\Steamworks.NET.dll"));
+            //    Assembly assembly = Assembly.Load(assemblyBuff);
+            //    return assembly;
+            //}
             if (!Program.enteredMain)
                 return null;
             if (args.Name.StartsWith("Steam,"))
+            {
                 return Assembly.GetAssembly(typeof(Steam));
+            }
             if (!Program._attemptingResolve)
             {
                 bool flag = false;

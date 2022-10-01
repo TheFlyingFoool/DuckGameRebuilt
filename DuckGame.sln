@@ -10,9 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steam", "Steam\Steam.csproj", "{D63AD3FC-DCF0-4DB6-B944-5D828A10CCB8}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A63C7222-EEE1-4BCD-844D-F6AC1501A655} = {A63C7222-EEE1-4BCD-844D-F6AC1501A655}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

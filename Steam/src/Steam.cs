@@ -259,7 +259,7 @@ public class Steam : IDisposable {
         return hasAchievement;
     }
     public static bool IsInitialized() {
-        return _initialized; //|| _offline; unsure why he had this here so i killed it
+        return _initialized|| _offline;
     }
 
     public unsafe static void Terminate() {
