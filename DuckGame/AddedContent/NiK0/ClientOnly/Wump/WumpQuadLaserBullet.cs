@@ -1,4 +1,4 @@
-﻿namespace DuckGame.MarineSpace
+﻿namespace DuckGame
 {
     [ClientOnly]
     public class WumpQuadLaserBullet : Thing, ITeleport, IDrawToDifferentLayers

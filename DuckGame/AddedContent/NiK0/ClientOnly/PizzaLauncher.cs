@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -47,4 +47,4 @@ namespace DuckGame
             base.Update();
         }
     }
-}
+}*/

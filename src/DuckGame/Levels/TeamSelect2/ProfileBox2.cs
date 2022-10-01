@@ -652,34 +652,6 @@ namespace DuckGame
                     _hatSelector.hat.alpha = 1f;
                     _duck.Equip(_hatSelector.hat, false);
                 }
-                if (profile != null && profile.isUsingRebuilt)
-                {
-                    if (rightRoom)
-                    {
-                        if (sin > 0)
-                        {
-                            _readySign.angle = Lerp.FloatSmooth(_readySign.angle, 3.14f, 0.2f);
-                        }
-                        else if (_readySign.angle > 0)
-                        {
-                            _readySign.angle = Lerp.FloatSmooth(_readySign.angle, 6.28f, 0.2f);
-                            if (_readySign.angle > 6.27f) _readySign.angle = 0;
-                        }
-                    }
-                    else
-                    {
-                        if (sin > 0)
-                        {
-                            _readySign.angle = Lerp.FloatSmooth(_readySign.angle, -3.14f, 0.2f);
-                        }
-                        else if (_readySign.angle < 0)
-                        {
-                            _readySign.angle = Lerp.FloatSmooth(_readySign.angle, -6.28f, 0.2f);
-                            if (_readySign.angle < -6.27f) _readySign.angle = 0;
-                        }
-                    }
-                    //_readySign.yscale -= sin2 / 100;
-                }
                 if (ready)
                 {
                     _currentMessage = 3;
@@ -783,6 +755,16 @@ namespace DuckGame
 
         public override void Draw()
         {
+            if (profile != null && profile.isUsingRebuilt && profile.duck != null)
+            {
+                Vec2 v = profile.duck.position;
+                if (profile.duck.ragdoll != null && profile.duck.ragdoll.part2 != null) v = profile.duck.ragdoll.part2.position;
+                else if (profile.duck.crouch) v.y += 5;
+                Graphics.DrawString("♥", v - new Vec2(14 + 4 * sin), Color.Red * 0.2f, 0, null, 4 + sin);
+                Graphics.DrawString("♥", v - new Vec2(12 + 4 * sin), Color.Red * 0.2f, 0, null, 3.5f + sin);
+                Graphics.DrawString("♥", v - new Vec2(9 + 4 * sin), Color.DarkRed * 0.2f, 0, null, 2.6f + sin);
+                //_readySign.yscale -= sin2 / 100;
+            }
             if (_hatSelector != null && _hatSelector.fadeVal > 0.9f && _hatSelector._roomEditor._mode != REMode.Place)
             {
                 _projector.visible = false;

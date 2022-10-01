@@ -2,10 +2,10 @@
 using System;
 using System.IO;
 
-namespace DuckGame.MarineSpace
+namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Wump|Shotguns")]
+    [EditorGroup("Rebuilt|Wump|Shotguns")]
 	public class WumpBlunderbuss : TampingWeapon
 	{
 		public const string wumpblunderbuss = "iVBORw0KGgoAAAANSUhEUgAAACIAAAAOCAMAAAB99z69AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAhUExURQAAALLc7zGi8kk8KwBXhJ2dnWB3fP///6RkIhsmMgAAAF36UEkAAAALdFJOU/////////////8ASk8B8gAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAJ9JREFUKFN9kVkSgzAMQ+XgmCb3P3AlmxTCR8UyjvzGC2Au4Q53lc807C+CZjA+6eyiJxtmjYg6vSkcrJ9BAs5T3xjwfKwZOYkYWk/F2bsQxVlITA9iSwQSQWvqAncEQsJnKS6Es/J2N/XaFWSyipm5D1483Bu27F7jchsSY1Q+x9eC9ZVqaYhQATn5plXlFMrknFfmp/1nMP3KSw9rzi+10Qq4R1ULpwAAAABJRU5ErkJggg==";

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Wump|Machine Guns")]
+    [EditorGroup("Rebuilt|Wump|Machine Guns")]
     public class WumpAK47 : Gun
     {
         public const string nubspr = "iVBORw0KGgoAAAANSUhEUgAAAAQAAAAFCAYAAABirU3bAAAAAXNSR0IArs4c6QAAADtJREFUGFdjZGBg+M+AAIyMIIFNd94z1B9jZjgfx8cAFjBc9AnMYWBggKhgCG9hYFhZAxcAMUDmgCQZAMSSDwW3UIchAAAAAElFTkSuQmCC";
