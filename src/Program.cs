@@ -126,7 +126,11 @@ namespace DuckGame
         {
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
-           // DevConsole.Log(IsLinuxD.ToString() + " " + p.ToString());
+            if (IsLinuxD)
+            {
+                MonoMain.enableThreadedLoading = false;
+            }
+            DevConsole.Log("Is Linux "+ IsLinuxD.ToString() + " PlatformID " + p.ToString());
             int tries = 10;
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = Program.gameAssembly.GetName().Name;

@@ -12,7 +12,13 @@ public class Steam : IDisposable {
     private static CallResult<T> GetCallResult<T>() => (CallResult<T>)_callResults[typeof(T)];
     private static void SetCallResult<T>(CallResult<T>.APIDispatchDelegate func) => _callResults.Add(typeof(T), new CallResult<T>(func));
     private static void SetCallResult<T>(SteamAPICall_t call) => ((CallResult<T>)_callResults[typeof(T)]).Set(call);
-
+    public static bool initialized
+    {
+        get
+        {
+            return _initialized;
+        }
+    }
     private static bool _initialized;
     private static bool _offline;
     private static bool _runningInitializeProcedures;

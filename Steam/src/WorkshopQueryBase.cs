@@ -48,14 +48,20 @@ public abstract class WorkshopQueryBase : IDisposable {
 
     internal abstract void Create();
 
-    internal unsafe virtual void Destroy() {
+    internal unsafe virtual void Destroy() 
+    {
+        if (!Steam.initialized)
+            return;
         if (_handle.m_UGCQueryHandle != 0) {
             SteamUGC.ReleaseQueryUGCRequest(_handle);
             _handle = new UGCQueryHandle_t();
         }
     }
 
-    internal unsafe virtual void SetQueryData() {
+    internal unsafe virtual void SetQueryData() 
+    {
+        if (!Steam.initialized)
+            return;
         WorkshopQueryData dataToFetch = fetchedData;
         if (dataToFetch == WorkshopQueryData.TotalOnly) {
             SteamUGC.SetReturnTotalOnly(_handle, true);
@@ -75,12 +81,14 @@ public abstract class WorkshopQueryBase : IDisposable {
             }
     }
 
-    internal unsafe void SetQueryData_SetReturnOnlyIDs(UGCQueryHandle_t handle, bool bReturnOnlyIDs) {
+    internal unsafe void SetQueryData_SetReturnOnlyIDs(UGCQueryHandle_t handle, bool bReturnOnlyIDs) 
+    {
         SteamUGC.SetReturnOnlyIDs(_handle, true);
     }
 
     public unsafe void Request() {
-        try {
+        try 
+        {
             _Request();
         } catch (TypeLoadException) {
             // We're definitely using the stubbed Steamworks.NET now... unless someone dropped in an outdated version? But why?
@@ -88,7 +96,10 @@ public abstract class WorkshopQueryBase : IDisposable {
         }
     }
 
-    protected unsafe virtual void _Request() {
+    protected unsafe virtual void _Request() 
+    {
+        if (!Steam.initialized)
+            return;
         if (handle == 0)
             Create();
         SetQueryData();
@@ -99,7 +110,10 @@ public abstract class WorkshopQueryBase : IDisposable {
             _completedCallResult.Set(call);
     }
 
-    private unsafe void OnSteamUGCQueryCompleted(SteamUGCQueryCompleted_t queryCompleted, bool ioFailure) {
+    private unsafe void OnSteamUGCQueryCompleted(SteamUGCQueryCompleted_t queryCompleted, bool ioFailure) 
+    {
+        if (!Steam.initialized)
+            return;
         UGCQueryHandle_t handle = queryCompleted.m_handle;
         if (_handle.m_UGCQueryHandle == 0 || ioFailure)
             goto Finish;
