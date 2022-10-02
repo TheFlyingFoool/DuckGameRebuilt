@@ -973,6 +973,7 @@ namespace DuckGame
                 Program.crashed = true;
                 Application.Exit();
                 Program.main.KillEverything();
+                Program.main.Exit();
             }
             if (Program.isLinux)
             {

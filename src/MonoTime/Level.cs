@@ -1363,7 +1363,7 @@ namespace DuckGame
             return thing1 == null ? default(T) : (T)(object)thing1;
         }
 
-        public T NearestThingFilter<T>(Vec2 point, Predicate<Thing> filter, float maxDistance)
+        public T NearestThingFilter<T>(Vec2 point, Predicate<Thing> filter, float maxDistance) // IMPROVEME Yea this just checks an ok sized area instead of being related to the maxdistance ¯\_(ツ)_/¯
         {
             maxDistance *= maxDistance;
             int hashcode = typeof(T).GetHashCode();
@@ -1398,7 +1398,7 @@ namespace DuckGame
             }
             return thing1 == null ? default(T) : (T)(object)thing1;
         }
-        public T NearestThing<T>(Vec2 point, float maxDistance)
+        public T NearestThing<T>(Vec2 point, float maxDistance) // IMPROVEME Yea this just checks an ok sized area instead of being related to the maxdistance ¯\_(ツ)_/¯
         {
             maxDistance *= maxDistance;
             int hashcode = typeof(T).GetHashCode();
@@ -1432,7 +1432,7 @@ namespace DuckGame
             }
             return thing1 == null ? default(T) : (T)(object)thing1;
         }
-        public T NearestThing<T>(Vec2 point, float maxDistance, Thing ignore)
+        public T NearestThing<T>(Vec2 point, float maxDistance, Thing ignore) // IMPROVEME Yea this just checks an ok sized area instead of being related to the maxdistance ¯\_(ツ)_/¯
         {
             maxDistance *= maxDistance;
             int hashcode = typeof(T).GetHashCode();

@@ -133,27 +133,32 @@ namespace DuckGame
             FilePath = Program.gameAssembly.Location;
             FileName = System.IO.Path.GetFileName(FilePath);
             GameDirectory = FilePath.Substring(0, FilePath.Length - FileName.Length);
-           
-            while (tries > 0)
-            {
-                if (File.Exists(GameDirectory + "Steamworks.NET.dll"))
+            try // IMPROVEME, i try catch this because when restarting with the ingame restarting thing, it would crash because this was still in use
+            {   // also this should really be doing some kind of like cache thing so it doesnt do this everytime
+                while (tries > 0)
                 {
-                    File.Delete(GameDirectory + "Steamworks.NET.dll");
-                    tries -= 1;
+                    if (File.Exists(GameDirectory + "Steamworks.NET.dll"))
+                    {
+                        File.Delete(GameDirectory + "Steamworks.NET.dll");
+                        tries -= 1;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                else
+                if (IsLinuxD)
                 {
-                    break;
+                    DevConsole.Log("setting dll to linux steam");
+                    File.Copy(GameDirectory + "OSX-Linux-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
+                    return true;
                 }
+                DevConsole.Log("setting dll to windows steam");
+                File.Copy(GameDirectory + "Windows-x86//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
             }
-            if (IsLinuxD)
-            {
-                DevConsole.Log("setting dll to linux steam");
-                File.Copy(GameDirectory + "OSX-Linux-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
-                return true;
+            catch
+            { 
             }
-            DevConsole.Log("setting dll to windows steam");
-            File.Copy(GameDirectory + "Windows-x86//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
             return true;
         }
         public static Assembly ModResolve(object sender, ResolveEventArgs args) => ManagedContent.ResolveModAssembly(sender, args);
@@ -209,6 +214,7 @@ namespace DuckGame
             if (Program.main == null)
                 return;
             Program.main.KillEverything();
+            Program.main.Exit();
         }
 
         private static void DoMain(string[] args)
@@ -733,6 +739,7 @@ namespace DuckGame
                 }
                 Environment.Exit(1);
                 Program.main.KillEverything();
+                Program.main.Exit();
             }
             catch (Exception ex3)
             {

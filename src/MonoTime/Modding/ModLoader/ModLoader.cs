@@ -140,6 +140,7 @@ namespace DuckGame
             Process.Start(Application.ExecutablePath, Program.commandLine);
             Application.Exit();
             Program.main.KillEverything();
+            Program.main.Exit();
         }
 
         internal static void AddMod(Mod mod)

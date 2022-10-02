@@ -12,7 +12,7 @@ namespace DuckGame
 {
     [BaggedProperty("canSpawn", false)]
     [BaggedProperty("isFatal", false)]
-    public class TapedGun : Gun
+    public class TapedGun : Gun // There are alot of Ghost Sync Issue with these and other clients but i guess they will stay for now
     {
         public StateBinding _gun1Binding = new StateBinding(nameof(gun1));
         public StateBinding _gun2Binding = new StateBinding(nameof(gun2));

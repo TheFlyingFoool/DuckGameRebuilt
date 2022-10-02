@@ -72,7 +72,6 @@ public class Steam : IDisposable {
     public static bool NeedsRestartForSteam() {
         return SteamAPI.RestartAppIfNecessary(SteamUtils.GetAppID());
     }
-
     public unsafe static bool Authorize() {
         if (!_initialized)
             return false;
@@ -266,6 +265,7 @@ public class Steam : IDisposable {
         if (!_initialized)
             return;
         SteamAPI.Shutdown();
+        _initialized = false;
     }
 
     public static void Update() {
