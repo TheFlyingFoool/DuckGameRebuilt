@@ -336,10 +336,14 @@ public class Steam : IDisposable {
     public unsafe static double GetDailyGlobalStat(string id) {
         if (!_initialized)
             return 0D;
-        // FIXME: This feels wrong for GetDailyGlobalStat.
-        double val;
-        SteamUserStats.GetGlobalStat(id, out val);
-        return val;
+        long[] data = { 0 };
+        if (SteamUserStats.GetGlobalStatHistory(id, data, 8) == 1) //Mabye this is right ill find out later
+        {
+            return (double)data[0];
+        }
+        double[] fData = { 0.0f };
+        SteamUserStats.GetGlobalStatHistory(id, fData, 8);
+        return fData[0];
     }
 
     public static WorkshopItem CreateItem() {
@@ -362,21 +366,29 @@ public class Steam : IDisposable {
         SetCallResult<SubmitItemUpdateResult_t>(SteamUGC.SubmitItemUpdate(new UGCUpdateHandle_t(item.updateHandle), item.data.changeNotes));
     }
 
-    public unsafe static List<WorkshopItem> GetAllWorkshopItems() {
+    public unsafe static List<WorkshopItem> GetAllWorkshopItems() 
+    {
+        List<WorkshopItem> items = new List<WorkshopItem>();
         if (!_initialized)
-            return new List<WorkshopItem>();
-        // FIXME: This seems wrong, but the original basically just does this.
+            return items;
         PublishedFileId_t[] tmp = new PublishedFileId_t[GetNumWorkshopItems()];
-        SteamUGC.GetSubscribedItems(tmp, (uint) tmp.Length);
-        List<WorkshopItem> list = _.GetList(tmp.Length, i => WorkshopItem.GetItem(tmp[i].m_PublishedFileId));
-        RequestWorkshopInfo(list);
-        return list;
+        int numReturned = (int)SteamUGC.GetSubscribedItems(tmp, (uint) tmp.Length);
+        for (int i = 0; i < numReturned; i++)
+        {
+            WorkshopItem item = WorkshopItem.GetItem(tmp[i]);
+
+            if (item != null)
+            {
+                items.Add(item);
+            }
+        }
+        RequestWorkshopInfo(items);
+        return items;
     }
 
     public unsafe static int GetNumWorkshopItems() {
         if (!_initialized)
             return 0;
-        // FIXME: This seems wrong, but the original just calls a single function... this is the closest match.
         return (int) SteamUGC.GetNumSubscribedItems();
     }
 

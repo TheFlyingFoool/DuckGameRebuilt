@@ -80,7 +80,13 @@ namespace DuckGame
             bitBuffer.Write((bool)TeamSelect2.GetOnlineSetting("dedicated").value);
             bitBuffer.Write(true);
             bitBuffer.Write(Network.gameDataHash);
-            _socket.Send(bitBuffer.buffer, bitBuffer.lengthInBytes, "255.255.255.255", _port);
+            try // im not a big fan of doing this but man erik network is weird so im roll with it for now
+            {
+                _socket.Send(bitBuffer.buffer, bitBuffer.lengthInBytes, "255.255.255.255", _port);
+                //IMPROVEME find some better way to do networking broadcasting for people who cant just do
+            }
+            catch
+            { }
         }
 
         public override NCError OnHostServer(
@@ -113,6 +119,10 @@ namespace DuckGame
 
         public static IPEndPoint CreateIPEndPoint(string endPoint)
         {
+            if (!endPoint.Contains(":"))
+            {
+                endPoint += ":1337";
+            }
             string[] strArray = endPoint.Split(':');
             if (strArray.Length < 2)
                 throw new FormatException("Invalid endpoint format");

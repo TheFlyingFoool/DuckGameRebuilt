@@ -33,8 +33,7 @@ namespace DuckGame
     public static class Program
     {
         public static bool Prestart = DirtyPreStart();
-        // This has to be an own non generic delegate because generic delegates cannot be marshalled to unmanaged code.
-        private delegate uint Callback(IntPtr ptrToExceptionInfo);
+
 
         public static string StartinEditorLevelName;
         public static string GameDirectory;
@@ -68,10 +67,11 @@ namespace DuckGame
         public static Assembly crashAssembly;
         public static bool gameLoadedSuccessfully = false;
 
+        public static bool shouldusespriteatlas = true;
         public static bool someprivacy;
         public static bool lanjoiner;
-        public static Assembly gameAssembly; // added dan this for changes to ModLoader GetType and for general use then trying to get the games assembly
-        public static string gameAssemblyName; // added dan
+        public static Assembly gameAssembly;
+        public static string gameAssemblyName;
         /// <summary>The main entry point for the application.</summary>\
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
@@ -262,6 +262,9 @@ namespace DuckGame
                         {
                             StartinEditorLevelName = args[index];
                         }
+                        break;
+                    case "-nosa":
+                        shouldusespriteatlas = false;
                         break;
                     case "-crash":
                         throw new Exception("you threw it idk");

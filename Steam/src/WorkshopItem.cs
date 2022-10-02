@@ -47,22 +47,18 @@ public class WorkshopItem : IDisposable {
     public unsafe WorkshopItemState stateFlags => (WorkshopItemState) SteamUGC.GetItemState(_id);
 
     public bool needsLegal { get; private set; }
-    private string _path;
     public unsafe string path {
-        get {
-            // FIXME: What even is the WorkshopItem.path meant to point to?
-            /*
-            sbyte* ptr = < Module>.new[](256u);
-            int num = *(<Module>.SteamInternal_ContextInit((void*)(&<Module>.?s_CallbackCounterAndContext@?1??SteamInternal_ModuleContext@@YAAAVCSteamAPIContext@@XZ@4PAPAXA)) + 56);
-            ulong num2;
-            uint num3;
-            if (calli(System.Byte modopt(System.Runtime.CompilerServices.CompilerMarshalOverride) modopt(System.Runtime.CompilerServices.CallConvThiscall)(System.IntPtr,System.UInt64,System.UInt64*,System.SByte modopt(System.Runtime.CompilerServices.IsSignUnspecifiedByte)*,System.UInt32,System.UInt32*), num, _id, ref num2, ptr, 256, ref num3, *(*num + 240)))
+        get 
+        {
+            ulong SizeOnDisk;
+            string Folder;
+            uint punTimeStamp;
+            bool can = SteamUGC.GetItemInstallInfo(_id, out SizeOnDisk, out Folder, 256, out punTimeStamp);
+            if (can)
             {
-                return new string((sbyte*)ptr);
+                return Folder;
             }
-            */
-
-            return _path; //"";
+            return "";
         }
     }
 
@@ -74,11 +70,11 @@ public class WorkshopItem : IDisposable {
 
     internal WorkshopItem(PublishedFileId_t id) {
         _id = id;
-        ulong SizeOnDisk;
-        string Folder;
-        uint punTimeStamp;
-        bool ret = SteamUGC.GetItemInstallInfo(_id, out SizeOnDisk, out Folder, 1024, out punTimeStamp);
-        _path = Folder;
+        //ulong SizeOnDisk;
+        //string Folder;
+        //uint punTimeStamp;
+        //bool ret = SteamUGC.GetItemInstallInfo(_id, out SizeOnDisk, out Folder, 1024, out punTimeStamp);
+        //_path = Folder;
         finishedProcessing = true;
         result = SteamResult.OK;
     }

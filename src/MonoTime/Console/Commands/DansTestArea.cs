@@ -183,7 +183,7 @@ namespace DuckGame
             
         }
 
-        [DevConsoleCommand(Name = "joinsteam")]
+        [DevConsoleCommand(Name = "steamjoin")]
         public static void Join(string id) 
         {
             ulong id2 = 0;
@@ -199,6 +199,12 @@ namespace DuckGame
             }
             DevConsole.Log("joining");
             Level.current = new JoinServer(id2);
+        }
+        [DevConsoleCommand(Name = "lanjoin")]
+        public static void LanJoin(string id)
+        {
+            DevConsole.Log("Trying to join " + id);
+            Level.current = new JoinServer(id);
         }
 
         [DevConsoleCommand(Name = "rlevel")]

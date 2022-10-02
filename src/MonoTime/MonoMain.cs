@@ -1473,7 +1473,7 @@ namespace DuckGame
                     _setCulture = true;
                 }
                 Graphics.Clear(new Color(0, 0, 0));
-                if (!DuckGame.Content.didsetbigboi)
+                if (!DuckGame.Content.didsetbigboi && Program.shouldusespriteatlas)
                 {
                     DuckGame.Content.didsetbigboi = true;
                     DuckGame.Content.offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();
