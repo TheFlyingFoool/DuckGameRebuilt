@@ -11,11 +11,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-
+using Microsoft.Xna.Framework;
 namespace DuckGame
 {
     public class Keyboard : InputDevice
     {
+        static Keyboard()
+        {
+            TextInputEXT.TextInput += new Action<char>(FNACharEnteredHandler);
+            if (Environment.GetEnvironmentVariable("FNADROID") != "1")
+                TextInputEXT.StartTextInput();
+        }
         private static KeyboardState _keyState;
         private static KeyboardState _keyStatePrev;
         private static bool _keyboardPress = false;
@@ -912,49 +918,65 @@ namespace DuckGame
             else
                 Keyboard.keyString += e.Character.ToString();
         }
-
-        private void updateKeyboardString()
+        public static List<char> TextInputCharacters = new List<char>(FNAPlatform.TextInputCharacters);
+        public static void FNACharEnteredHandler(char c) // FNA SDL call back for key char pressed sht
         {
-            Keyboard.ignoreCore = true;
-            int num1 = Keyboard.Down(Keys.LeftShift) ? 1 : (Keyboard.Down(Keys.RightShift) ? 1 : 0);
-            int num2 = Keyboard.Down(Keys.LeftControl) ? 1 : (Keyboard.Down(Keys.RightControl) ? 1 : 0);
-            int num3 = Console.CapsLock ? 1 : 0;
-            Microsoft.Xna.Framework.Input.Keys[] pressedKeys = Keyboard._keyState.GetPressedKeys();
-            if (!Keyboard.isComposing)
+            if (TextInputCharacters.Contains(c)) // Not Chars
             {
-                foreach (Microsoft.Xna.Framework.Input.Keys keys in pressedKeys)
+                if (c == '\b') // Keys.Back
                 {
-                    if (MapPressed((int)keys, false))
+                    if (Keyboard.keyString.Length > 0)
                     {
-                        switch (keys)
-                        {
-                            case Microsoft.Xna.Framework.Input.Keys.Back:
-                                if (Keyboard.keyString.Length > 0)
-                                {
-                                    Keyboard.keyString = Keyboard.keyString.Remove(Keyboard.keyString.Length - 1, 1);
-                                    continue;
-                                }
-                                continue;
-                            case Microsoft.Xna.Framework.Input.Keys.Enter:
-                            case Microsoft.Xna.Framework.Input.Keys.Escape:
-                                continue;
-                            case Microsoft.Xna.Framework.Input.Keys.Space:
-                                Keyboard.keyString = Keyboard.keyString.Insert(Keyboard.keyString.Length, " ");
-                                continue;
-                            default:
-                                char charFromKey = Keyboard.GetCharFromKey((Keys)keys);
-                                if (charFromKey != ' ')
-                                {
-                                    Keyboard.keyString += charFromKey.ToString();
-                                    continue;
-                                }
-                                continue;
-                        }
+                        Keyboard.keyString = Keyboard.keyString.Remove(Keyboard.keyString.Length - 1, 1);
                     }
                 }
+                return;
             }
-            Keyboard.ignoreCore = false;
-            Keyboard.isComposing = false;
+            Keyboard.keyString += c.ToString();
+        }
+
+        private void updateKeyboardString() // old way to get keyboard inputs, idk maby implementing it optionally? idk man
+        {
+            //Keyboard.ignoreCore = true;
+            //int num1 = Keyboard.Down(Keys.LeftShift) ? 1 : (Keyboard.Down(Keys.RightShift) ? 1 : 0);
+            //int num2 = Keyboard.Down(Keys.LeftControl) ? 1 : (Keyboard.Down(Keys.RightControl) ? 1 : 0);
+            //int num3 = Console.CapsLock ? 1 : 0;
+            //Microsoft.Xna.Framework.Input.Keys[] pressedKeys = Keyboard._keyState.GetPressedKeys();
+            //if (!Keyboard.isComposing)
+            //{
+            //    foreach (Microsoft.Xna.Framework.Input.Keys keys in pressedKeys)
+            //    {
+            //        if (MapPressed((int)keys, false))
+            //        {
+            //            switch (keys)
+            //            {
+            //                case Microsoft.Xna.Framework.Input.Keys.Back:
+            //                    if (Keyboard.keyString.Length > 0)
+            //                    {
+            //                        Keyboard.keyString = Keyboard.keyString.Remove(Keyboard.keyString.Length - 1, 1);
+            //                        continue;
+            //                    }
+            //                    continue;
+            //                case Microsoft.Xna.Framework.Input.Keys.Enter:
+            //                case Microsoft.Xna.Framework.Input.Keys.Escape:
+            //                    continue;
+            //                case Microsoft.Xna.Framework.Input.Keys.Space:
+            //                    Keyboard.keyString = Keyboard.keyString.Insert(Keyboard.keyString.Length, " ");
+            //                    continue;
+            //                default:
+            //                    char charFromKey = Keyboard.GetCharFromKey((Keys)keys);
+            //                    if (charFromKey != ' ')
+            //                    {
+            //                        Keyboard.keyString += charFromKey.ToString();
+            //                        continue;
+            //                    }
+            //                    continue;
+            //            }
+            //        }
+            //    }
+            //}
+            //Keyboard.ignoreCore = false;
+            //Keyboard.isComposing = false;
         }
 
         private static bool IsKeyNote(Keys pKey) => pKey == Keys.D1 || pKey == Keys.D2 || pKey == Keys.D3 || pKey == Keys.D4 || pKey == Keys.D5 || pKey == Keys.D6 || pKey == Keys.D7 || pKey == Keys.D8 || pKey == Keys.D9 || pKey == Keys.D0 || pKey == Keys.OemPlus || pKey == Keys.OemMinus || pKey == Keys.Back;

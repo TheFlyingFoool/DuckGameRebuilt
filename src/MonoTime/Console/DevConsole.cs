@@ -2111,8 +2111,9 @@ namespace DuckGame
 
                         if (stringList.Count == 1)
                         {
-                            _core.typing = stringList[0].Trim();
-                            _core.cursorPosition = _core.typing.Length;
+                            string value = stringList[0].Trim();
+                            _core.typing = _core.typing.Insert(Math.Min(_core.typing.Length, _core.cursorPosition), value);
+                            _core.cursorPosition = _core.cursorPosition + value.Length;
                         }
                         else
                         {

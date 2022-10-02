@@ -44,7 +44,7 @@ namespace DuckGame
         public static bool intro = false;
         public static bool testServer = false;
         public static DuckGame.Main main;
-        public static string commandLine;
+        public static string commandLine = "";
         private static bool _attemptingResolve = false;
         private static bool _showedError = false;
         public static bool alternateSaveLocation;
@@ -872,7 +872,7 @@ namespace DuckGame
                 { 
                 }
                 string CommandLine = Program.commandLine;
-                if (CommandLine == "")
+                if (CommandLine == "" || CommandLine == null)
                 {
                     CommandLine = "N/A";
                 }
