@@ -257,7 +257,6 @@ namespace DuckGame
                         }
                         break;
                     case "+controllercount":
-                        MonoMain.startInEditor = true;
                         ++index;
                         if (args.Count<string>() > index)
                         {
