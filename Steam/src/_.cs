@@ -1,8 +1,6 @@
 ﻿using Steamworks;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 // Common helper class that turns out to be used ~ 2 times per function...
 public static class _ {

@@ -1,6 +1,4 @@
-﻿using System;
-
-public class WorkshopQueryResult {
+﻿public class WorkshopQueryResult {
     public WorkshopQueryResult() {
     }
 

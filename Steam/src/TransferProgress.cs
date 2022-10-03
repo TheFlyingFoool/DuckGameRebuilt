@@ -1,6 +1,4 @@
-﻿using System;
-
-public class TransferProgress {
+﻿public class TransferProgress {
     public TransferProgress() {
     }
 

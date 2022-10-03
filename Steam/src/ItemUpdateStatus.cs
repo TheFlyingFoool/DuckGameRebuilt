@@ -1,6 +1,4 @@
-﻿using System;
-
-public enum ItemUpdateStatus {
+﻿public enum ItemUpdateStatus {
     CommittingChanges = 5,
     UploadingPreviewFile = 4,
     UploadingContent = 3,

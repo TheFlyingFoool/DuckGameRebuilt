@@ -1,5 +1,4 @@
-﻿using System;
-using Steamworks;
+﻿using Steamworks;
 
 public class WorkshopQueryUser : WorkshopQueryUGC {
 

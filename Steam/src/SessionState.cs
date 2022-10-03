@@ -1,6 +1,4 @@
-﻿using System;
-
-public class SessionState
+﻿public class SessionState
 {
 	public SessionState()
 	{

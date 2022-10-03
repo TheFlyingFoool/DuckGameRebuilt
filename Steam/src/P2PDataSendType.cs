@@ -1,6 +1,4 @@
-﻿using System;
-
-public enum P2PDataSendType {
+﻿public enum P2PDataSendType {
     ReliableWithBuffering = 3,
     Reliable = 2,
     UnreliableNoDelay = 1,

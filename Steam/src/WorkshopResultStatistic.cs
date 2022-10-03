@@ -1,6 +1,4 @@
-﻿using System;
-
-public enum WorkshopResultStatistic {
+﻿public enum WorkshopResultStatistic {
     Total = 8,
     ReportScore = 7,
     NumUniqueWebsiteViews = 6,

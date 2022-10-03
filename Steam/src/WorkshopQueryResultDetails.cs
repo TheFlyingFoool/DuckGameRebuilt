@@ -1,5 +1,4 @@
 ﻿using Steamworks;
-using System;
 
 public class WorkshopQueryResultDetails {
     public WorkshopQueryResultDetails() {

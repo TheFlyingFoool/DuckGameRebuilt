@@ -1,6 +1,4 @@
-﻿using System;
-
-public class SteamPacket {
+﻿public class SteamPacket {
     public SteamPacket() {
     }
 

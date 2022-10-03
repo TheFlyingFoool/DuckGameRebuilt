@@ -1,6 +1,4 @@
-﻿using System;
-
-public class UserInfo {
+﻿public class UserInfo {
     public UserInfo() {
     }
 

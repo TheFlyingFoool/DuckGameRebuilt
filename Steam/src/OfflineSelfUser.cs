@@ -1,7 +1,4 @@
 ﻿using Steamworks;
-using System;
-using System.Collections.Generic;
-using System.Runtime.ExceptionServices;
 
 // THIS TYPE DOESN'T EXIST IN THE ORIGINAL Steam.dll!
 public class OfflineSelfUser : User {

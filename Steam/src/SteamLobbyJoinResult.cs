@@ -1,6 +1,4 @@
-﻿using System;
-
-public enum SteamLobbyJoinResult {
+﻿public enum SteamLobbyJoinResult {
     YouBlockedMember = 11,
     MemberBlockedYou = 10,
     CommunityBan = 9,

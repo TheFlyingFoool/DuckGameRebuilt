@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using Steamworks;
-using System.Runtime.CompilerServices;
 
 public delegate void WorkshopQueryFinished(object sender);
 public delegate void WorkshopQueryResultFetched(object sender, WorkshopQueryResult result);
