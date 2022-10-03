@@ -408,6 +408,7 @@ namespace DuckGame
                         break;
                 }
             }
+
             try
             {
                 if (MonoMain.audioModeOverride == AudioMode.None)
@@ -456,6 +457,9 @@ namespace DuckGame
             catch (Exception) { }
         label_109:
             DeviceChangeNotifier.Start();
+            string environmentVariable = Environment.GetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS");
+            if (string.IsNullOrEmpty(environmentVariable) || !int.TryParse(environmentVariable, out MonoMain.MaximumGamepadCount) || MonoMain.MaximumGamepadCount < 0)
+                MonoMain.MaximumGamepadCount = Enum.GetNames(typeof(PlayerIndex)).Length;
             DevConsole.Log("Starting Duck Game (" + DG.platform + ")...");
             Program.main = new DuckGame.Main();
             // Program.main.TargetElapsedTime = TimeSpan.FromTicks(1000L);

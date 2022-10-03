@@ -161,7 +161,7 @@ namespace DuckGame
 
         protected override PadState GetState(int index)
         {
-            GamePadState state1 = GamePad.GetState((PlayerIndex)index, GamePadDeadZone.Circular);
+            GamePadState state1 = FNAPlatform.GetGamePadState(index, GamePadDeadZone.Circular);
             PadState state2 = new PadState();
             if (state1.IsButtonDown(Buttons.DPadUp))
                 state2.buttons |= PadButton.DPadUp;

@@ -30,6 +30,7 @@ namespace DuckGame
     {
         //private Effect myEffect;
         private static MonoMainCore _core = new MonoMainCore();
+        public static int MaximumGamepadCount = 4;
         public static TransitionDirection transitionDirection = TransitionDirection.None;
         public static Level transitionLevel = null;
         public static float transitionWait;

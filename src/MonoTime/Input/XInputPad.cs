@@ -290,12 +290,10 @@ namespace DuckGame
         public XInputPad(int idx)
           : base(idx)
         {
-            playerIndex = (PlayerIndex)idx; // made this a preset because nothing changes idx after the fact
             _name = "xbox" + idx.ToString();
             _productName = "XBOX GAMEPAD";
             _productGUID = "";
         }
-        public PlayerIndex playerIndex;
         public override Dictionary<int, string> GetTriggerNames() => _triggerNames;
 
         public override Sprite GetMapImage(int map)
@@ -316,8 +314,7 @@ namespace DuckGame
 
         protected override PadState GetState(int index)
         {
-           // GamePadState F = FNAPlatform.GetGamePadState(index, GamePadDeadZone.IndependentAxes);
-            GamePadState state1 = GamePad.GetState((PlayerIndex)index, GamePadDeadZone.Circular);
+            GamePadState state1 = FNAPlatform.GetGamePadState(index, GamePadDeadZone.Circular);
             if (_connectedState != state1.IsConnected)
             {
                 string productname = SDL_GameControllerNameForIndex(index);

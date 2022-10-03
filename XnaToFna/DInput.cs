@@ -43,7 +43,7 @@ namespace XnaToFna.ProxyDInput
     {
       for (int index = 0; index < DInput.States.Length; ++index)
       {
-        GamePadState state1 = GamePad.GetState((PlayerIndex) index);
+        GamePadState state1 = FNAPlatform.GetGamePadState(index, GamePadDeadZone.IndependentAxes);
         DInputState state2 = DInput.States[index];
         state2.connected = state1.IsConnected;
         if (state2.connected)
@@ -91,6 +91,6 @@ namespace XnaToFna.ProxyDInput
 
     public static string GetProductName(int player) => player >= DInput.States.Length ? string.Empty : string.Format("ProxyDInput #{0}", (object) (player + 1));
 
-    public static string GetProductGUID(int player) => player < DInput.States.Length ? GamePad.GetGUIDEXT((PlayerIndex) player) : string.Empty;
+    public static string GetProductGUID(int player) => player < DInput.States.Length ? FNAPlatform.GetGamePadGUID(player) : string.Empty;
   }
 }

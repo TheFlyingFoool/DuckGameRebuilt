@@ -75,7 +75,7 @@ namespace DuckGame
 
         private void RumbleNow(float pLeft, float pRight)
         {
-            GamePad.SetVibration((PlayerIndex)index, pLeft, pRight);
+            FNAPlatform.SetGamePadVibration(index, pLeft, pRight);
             _prevRumble = new Vec2(pLeft, pRight);
             _rumble = _prevRumble;
             _highestRumble = Vec2.Zero;

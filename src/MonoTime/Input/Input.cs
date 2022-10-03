@@ -1866,19 +1866,12 @@ namespace DuckGame
                 DuckGame.Input._gamepadThread.Abort();
             DuckGame.Input._gamepadThread = null;
             InputSystem.Terminate();
-            GamePadState state = GamePad.GetState(PlayerIndex.One);
-            if (state.IsConnected)
-                GamePad.SetVibration(PlayerIndex.One, 0f, 0f);
-            state = GamePad.GetState(PlayerIndex.Two);
-            if (state.IsConnected)
-                GamePad.SetVibration(PlayerIndex.Two, 0f, 0f);
-            state = GamePad.GetState(PlayerIndex.Three);
-            if (state.IsConnected)
-                GamePad.SetVibration(PlayerIndex.Three, 0f, 0f);
-            state = GamePad.GetState(PlayerIndex.Four);
-            if (!state.IsConnected)
-                return;
-            GamePad.SetVibration(PlayerIndex.Four, 0f, 0f);
+            for (int index = 0; index < MonoMain.MaximumGamepadCount; index++)
+            {
+                GamePadState state = FNAPlatform.GetGamePadState(index, GamePadDeadZone.IndependentAxes);
+                if (state.IsConnected)
+                    FNAPlatform.SetGamePadVibration(index, 0f, 0f);
+            }
         }
 
         public static bool CheckCode(InputCode code)

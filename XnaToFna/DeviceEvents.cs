@@ -7,6 +7,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Reflection;
 using XnaToFna.ProxyForms;
 
 namespace XnaToFna
@@ -25,7 +26,7 @@ namespace XnaToFna
     {
       for (int i = 0; i < DeviceEvents.IsGamepadConnected.Length; ++i)
       {
-        bool isConnected = GamePad.GetState((PlayerIndex) i).IsConnected;
+                bool isConnected = FNAPlatform.GetGamePadState(i, GamePadDeadZone.IndependentAxes).IsConnected;
         if (isConnected && !DeviceEvents.IsGamepadConnected[i])
           DeviceEvents.GamepadConnected(i);
         else if (!isConnected && DeviceEvents.IsGamepadConnected[i])
