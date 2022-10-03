@@ -119,6 +119,7 @@ namespace DuckGame
             _pendingSpawns = new Deathmatch(this).SpawnPlayers(false);
             foreach (Duck pendingSpawn in _pendingSpawns)
             {
+                SpawnPosition = pendingSpawn.position;
                 followCam.Add(pendingSpawn);
                 Level.First<ArcadeHatConsole>()?.MakeHatSelector(pendingSpawn);
             }
@@ -208,14 +209,14 @@ namespace DuckGame
             _advancedMenu.Add(new UIText("deterministic.", Colors.DGBlue), true);
             _advancedMenu.Add(new UIMenuItemToggle("SPEEDRUN MODE", field: new FieldBinding(DuckNetwork.core, "speedrunMode")), true);
             _advancedMenu.Add(new UIMenuItemToggle("MAX TROPHY", field: new FieldBinding(DuckNetwork.core, "speedrunMaxTrophy", max: 5f), multi: new List<string>()
-      {
-        "OFF",
-        "@BRONZE@",
-        "@SILVER@",
-        "@GOLD@",
-        "@PLATINUM@",
-        "@DEVELOPER@"
-      }, compressedMulti: true), true);
+            {
+                "OFF",
+                "@BRONZE@",
+                "@SILVER@",
+                "@GOLD@",
+                "@PLATINUM@",
+                "@DEVELOPER@"
+            }, compressedMulti: true), true);
             _advancedMenu.Add(new UIText("", Color.White), true);
             _advancedMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_advancedMenu, _pauseMenu), backButton: true), true);
             _advancedMenu.Close();
@@ -241,6 +242,7 @@ namespace DuckGame
         public override void Terminate()
         {
         }
+        public Vec2 SpawnPosition = Vec2.Zero;
 
         public override void Update()
         {
@@ -272,6 +274,14 @@ namespace DuckGame
                         break;
                     }
                 }
+            }
+            if (_duck != null && _duck.dead)
+            {
+                followCam.Clear();
+                _duck = new Duck(SpawnPosition.x, SpawnPosition.y, _duck.profile);
+                followCam.Add(_duck);
+                Level.Add(_duck);
+                HUD.AddInputChangeDisplay(" Cmon Now That Was Dumb, Dont You Agree? ");
             }
             if (spawnKey)
             {

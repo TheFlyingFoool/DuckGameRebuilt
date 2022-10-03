@@ -8,6 +8,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Profile;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -1381,6 +1383,28 @@ namespace DuckGame
                     _fadeInFull = true;
                     _title.fade = true;
                     Level.Add(_duck);
+                }
+            }
+            else if (_duck != null)
+            {
+                if (_duck.dead)
+                {
+                    _duck = new Duck(160f, 60f, _duck.profile);
+                    Level.Add(_duck);
+                    HUD.AddInputChangeDisplay(" Cmon Now That Was Dumb, Dont You Agree? ");
+                }
+                foreach (Profile defaultProfile in Profiles.defaultProfiles)
+                {
+                    foreach(string trigger in Triggers.TriggerList)
+                    {
+                        if (defaultProfile.inputProfile.Pressed(trigger, false))
+                        {
+                            _duck.profile = defaultProfile;
+                            InputProfile.active = _duck.profile.inputProfile;
+                            DevConsole.Log("change " + defaultProfile.name);
+                            break;
+                        }
+                    }
                 }
             }
             _space.parallax.y = -80f;
