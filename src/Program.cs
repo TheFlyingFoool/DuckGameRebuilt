@@ -25,7 +25,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace DuckGame
 {
@@ -169,12 +168,6 @@ namespace DuckGame
 
         public static Assembly Resolve(object sender, ResolveEventArgs args)
         {
-            //if (args.Name.StartsWith("Steamworks.NET,"))
-            //{
-            //    byte[] assemblyBuff = File.ReadAllBytes(Path.GetFullPath("Windows-x86\\Steamworks.NET.dll"));
-            //    Assembly assembly = Assembly.Load(assemblyBuff);
-            //    return assembly;
-            //}
             if (!Program.enteredMain)
                 return null;
             if (args.Name.StartsWith("Steam,"))

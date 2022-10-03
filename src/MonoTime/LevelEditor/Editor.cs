@@ -1597,8 +1597,7 @@ namespace DuckGame
                                             _saveName = "";
                                         }
                                         else
-                                            LoadLevel(Directory.GetCurrentDirectory() +
-                                                      "\\..\\..\\..\\assets\\levels\\" + data.file + ".lev");
+                                            LoadLevel(Directory.GetCurrentDirectory() +"/../../../assets/levels/" + data.file + ".lev");
 
                                         _procXPos = (int) _editTilePos.x;
                                         _procYPos = (int) _editTilePos.y;
@@ -4815,7 +4814,7 @@ namespace DuckGame
         public string SaveTempVersion()
         {
             string saveName = _saveName;
-            string str = Directory.GetCurrentDirectory() + "\\Content\\_tempPlayLevel.lev";
+            string str = Directory.GetCurrentDirectory() + "/Content/_tempPlayLevel.lev";
             _saveName = str;
             Save(true);
             _saveName = saveName;

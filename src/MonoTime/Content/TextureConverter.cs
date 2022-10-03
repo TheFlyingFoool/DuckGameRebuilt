@@ -22,6 +22,10 @@ namespace DuckGame
         private const int _toColor = 0;
         public static bool lastLoadResultedInResize = false;
         private static Vec2 _maxDimensions = Vec2.Zero;
+        public static Color FromNonPremultiplied(int r, int g, int b, int a)
+        {
+            return new Color(r * a / 255, g * a / 255, b * a / 255, a);
+        }
         internal static Texture2D MemLoadPNGDataWithPinkAwesomeness(GraphicsDevice device,
           Bitmap bitmap,
           bool process)
@@ -67,6 +71,11 @@ namespace DuckGame
                 DB.Bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                 ms.Seek(0, SeekOrigin.Begin);
                 Tex = Texture2D.FromStream(device, ms);
+                Color[] buffer = new Color[Tex.Width * Tex.Height];
+                Tex.GetData(buffer);
+                for (int i = 0; i < buffer.Length; i++)
+                    buffer[i] = FromNonPremultiplied(buffer[i].r, buffer[i].g, buffer[i].b, buffer[i].a); // Needs to handle transparent textures that use other types of draw calls
+                Tex.SetData(buffer);
             }
             return Tex;
 

@@ -968,7 +968,7 @@ namespace DuckGame
         {
             if (showingSaveTool && saveTool == null && File.Exists("SaveTool.dll"))
             {
-                saveTool = Activator.CreateInstance(Assembly.Load(File.ReadAllBytes(Directory.GetCurrentDirectory() + "\\SaveTool.dll")).GetType("SaveRecovery.SaveTool")) as Form;
+                saveTool = Activator.CreateInstance(Assembly.Load(File.ReadAllBytes(Directory.GetCurrentDirectory() + "/SaveTool.dll")).GetType("SaveRecovery.SaveTool")) as Form;
                 Graphics.mouseVisible = true;
                 int num = (int)saveTool.ShowDialog();
                 Program.crashed = true;
