@@ -20,18 +20,18 @@ namespace DuckGame
         public static InputCode konamiCode = new InputCode()
         {
             triggers = new List<string>()
-      {
-        "UP",
-        "UP",
-        "DOWN",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "LEFT",
-        "RIGHT",
-        "QUACK",
-        "JUMP"
-      }
+          {
+            "UP",
+            "UP",
+            "DOWN",
+            "DOWN",
+            "LEFT",
+            "RIGHT",
+            "LEFT",
+            "RIGHT",
+            "QUACK",
+            "JUMP"
+          }
         };
         public static InputCode konamiCodeAlternate = new InputCode()
         {
@@ -1450,18 +1450,13 @@ namespace DuckGame
             DuckGame.Input._devices.Add(inputDevice1);
             InputDevice inputDevice2 = new Mouse();
             DuckGame.Input._devices.Add(inputDevice2);
-            InputDevice inputDevice3 = new XInputPad(0);
-            DuckGame.Input._devices.Add(inputDevice3);
-            (inputDevice3 as XInputPad).InitializeState();
-            InputDevice inputDevice4 = new XInputPad(1);
-            DuckGame.Input._devices.Add(inputDevice4);
-            (inputDevice4 as XInputPad).InitializeState();
-            InputDevice inputDevice5 = new XInputPad(2);
-            DuckGame.Input._devices.Add(inputDevice5);
-            (inputDevice5 as XInputPad).InitializeState();
-            InputDevice inputDevice6 = new XInputPad(3);
-            DuckGame.Input._devices.Add(inputDevice6);
-            (inputDevice6 as XInputPad).InitializeState();
+
+            for (int index = 0; index < MonoMain.MaximumGamepadCount; index++)
+            {
+                XInputPad XInputDevice = new XInputPad(index);
+                DuckGame.Input._devices.Add(XInputDevice);
+                XInputDevice.InitializeState();
+            }
             GenericController genericController1 = new GenericController(0);
             DuckGame.Input._gamePads.Add(genericController1);
             GenericController genericController2 = new GenericController(1);

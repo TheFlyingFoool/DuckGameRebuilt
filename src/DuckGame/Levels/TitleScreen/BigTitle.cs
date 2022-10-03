@@ -49,10 +49,8 @@ namespace DuckGame
         {
             using (FileStream fileStream = System.IO.File.Open(Program.GameDirectory + "Content//title//logo.png", FileMode.Open))
                 _sprite = new Sprite((Tex2D)Texture2D.FromStream(DuckGame.Graphics.device, fileStream));
-
-            //_sprite = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(RebuiltSprite))), "title"));
-            _sprite.Namebase = "Rebuilttitle";
-            Content.textures[_sprite.Namebase] = _sprite.texture;
+            //_sprite.Namebase = "Rebuilttitle";
+            //Content.textures[_sprite.Namebase] = _sprite.texture;
             _demo = new Sprite("demoPro");
             scale = new Vec2(0.833333335f, 0.833333335f);
             graphic = _sprite;

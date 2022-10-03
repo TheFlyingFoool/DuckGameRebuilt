@@ -213,7 +213,6 @@ namespace DuckGame
             Program.main.KillEverything();
             Program.main.Exit();
         }
-
         private static void DoMain(string[] args)
         {
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
@@ -224,6 +223,7 @@ namespace DuckGame
                 if (index != args.Length - 1)
                     Program.commandLine += " ";
             }
+            int Controllers = 4;
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)
             {
@@ -254,6 +254,19 @@ namespace DuckGame
                         if (args.Count<string>() > index)
                         {
                             StartinEditorLevelName = args[index];
+                        }
+                        break;
+                    case "+controllercount":
+                        MonoMain.startInEditor = true;
+                        ++index;
+                        if (args.Count<string>() > index)
+                        {
+                            try
+                            {
+                                Controllers = Convert.ToInt32(args[index]);
+                            }
+                            catch
+                            { }
                         }
                         break;
                     case "-nosa":
@@ -457,10 +470,17 @@ namespace DuckGame
             catch (Exception) { }
         label_109:
             DeviceChangeNotifier.Start();
+            DevConsole.Log("Starting Duck Game (" + DG.platform + ")...");
+            if (Controllers > 4)
+            {
+                string controllerstring = Controllers.ToString();
+                DevConsole.Log("Setting Max Controller Count " + controllerstring);
+                Environment.SetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS", controllerstring);
+            }
             string environmentVariable = Environment.GetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS");
             if (string.IsNullOrEmpty(environmentVariable) || !int.TryParse(environmentVariable, out MonoMain.MaximumGamepadCount) || MonoMain.MaximumGamepadCount < 0)
                 MonoMain.MaximumGamepadCount = Enum.GetNames(typeof(PlayerIndex)).Length;
-            DevConsole.Log("Starting Duck Game (" + DG.platform + ")...");
+            
             Program.main = new DuckGame.Main();
             // Program.main.TargetElapsedTime = TimeSpan.FromTicks(1000L);
             accumulatedElapsedTimefieldinfo = typeof(Game).GetField("accumulatedElapsedTime", BindingFlags.NonPublic | BindingFlags.Instance);
