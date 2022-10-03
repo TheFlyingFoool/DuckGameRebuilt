@@ -185,6 +185,7 @@ namespace DuckGame
         public static volatile int loadyBits = 0;
         public static volatile int totalLoadyBits = 365;
         private Timer _timeSinceLastLoadFrame = new Timer();
+        public static bool logLoading;
 
         //private int deviceLostWait;
 

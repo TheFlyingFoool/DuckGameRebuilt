@@ -80,20 +80,31 @@ namespace DuckGame
             bitBuffer.Write((bool)TeamSelect2.GetOnlineSetting("dedicated").value);
             bitBuffer.Write(true);
             bitBuffer.Write(Network.gameDataHash);
-            try // im not a big fan of doing this but man erik network is weird so im roll with it for now
+            if (!TrySend(bitBuffer, "255.255.255.255"))
             {
-                _socket.Send(bitBuffer.buffer, bitBuffer.lengthInBytes, "255.255.255.255", _port);
-                //IMPROVEME find some better way to do networking broadcasting for people who cant just do
+                List<IPAddress> ips = Dns.GetHostAddresses(Dns.GetHostName())
+                .Where(x => x.AddressFamily == AddressFamily.InterNetwork).ToList();
+                foreach (IPAddress ip in ips)
+                {
+                    if (TrySend(bitBuffer, ip.ToString())) break;
+                }
             }
-            catch
-            { }
         }
 
-        public override NCError OnHostServer(
-          string identifier,
-          int port,
-          NetworkLobbyType lobbyType,
-          int maxConnections)
+        bool TrySend(BitBuffer bitBuffer, string endpoint)
+        {
+            try
+            {
+                _socket.Send(bitBuffer.buffer, bitBuffer.lengthInBytes, endpoint, _port);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public override NCError OnHostServer(string identifier, int port, NetworkLobbyType lobbyType, int maxConnections)
         {
             if (_socket != null)
                 return new NCError("server is already started...", NCErrorType.Error);
@@ -170,7 +181,7 @@ namespace DuckGame
                     {
                         _socket.AllowNatTraversal(true); //There are rare cases this just cases a crash like, proton, Linux, etc so im just going catch it, as it seems fine when it doesnt run, and im unsure what it even does
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         DevConsole.Log("AllowNatTraversal didnt want to work should be fine still :)");
                     }
@@ -377,76 +388,97 @@ namespace DuckGame
             lock (lobbyLock)
             {
                 _threadLobbies = new List<UIServerBrowser.LobbyData>();
-                using (UdpClient udpClient = new UdpClient())
+                SearchForLobbyClient(null);
+                if (_threadLobbies.Count > 0)
                 {
-                    udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                    udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, NCBasic.lobbySearchPort));
-                    udpClient.Client.ReceiveTimeout = 100;
-                    IPEndPoint remoteEP = new IPEndPoint(0L, 0);
-                    for (int index = 0; index < 15; ++index)
+                    _lobbyThreadRunning = false;
+                    return;
+                }
+                List<IPAddress> ips = Dns.GetHostAddresses(Dns.GetHostName())
+                .Where(x => x.AddressFamily == AddressFamily.InterNetwork).ToList();
+                foreach (IPAddress ip in ips)
+                {
+                    SearchForLobbyClient(ip);
+                    if (_threadLobbies.Count > 0)
                     {
-                        if (udpClient.Client.Available == 0) // added this because can. prevent crashs when possible :)
-                        {
-                            Thread.Sleep(100);
-                        }
-                        if (udpClient.Client.Available == 0)
-                        {
-                            continue;
-                        }//
-                        try
-                        {
-                            byte[] data = udpClient.Receive(ref remoteEP);
-                            if (data != null)
-                            {
-                                BitBuffer bitBuffer = new BitBuffer(data);
-                                long num1 = bitBuffer.ReadLong();
-                                string address = remoteEP.ToString();
-                                if (num1 == 5892070176735L)
-                                {
-                                    if (_threadLobbies.FirstOrDefault<UIServerBrowser.LobbyData>(x => x.lanAddress == address) == null)
-                                    {
-                                        UIServerBrowser.LobbyData lobbyData1 = new UIServerBrowser.LobbyData
-                                        {
-                                            lanAddress = address
-                                        };
-                                        int pMajor = bitBuffer.ReadInt();
-                                        int pHigh = bitBuffer.ReadInt();
-                                        int pLow = bitBuffer.ReadInt();
-                                        lobbyData1.version = DG.MakeVersionString(pMajor, pHigh, pLow);
-                                        lobbyData1._userCount = bitBuffer.ReadByte();
-                                        lobbyData1.name = bitBuffer.ReadString();
-                                        lobbyData1.modHash = bitBuffer.ReadString();
-                                        lobbyData1.requiredWins = bitBuffer.ReadByte().ToString();
-                                        lobbyData1.restsEvery = bitBuffer.ReadByte().ToString();
-                                        lobbyData1.wallMode = bitBuffer.ReadBool() ? "true" : "false";
-                                        UIServerBrowser.LobbyData lobbyData2 = lobbyData1;
-                                        int num2 = bitBuffer.ReadInt();
-                                        string str = num2.ToString();
-                                        lobbyData2.customLevels = str;
-                                        lobbyData1.started = bitBuffer.ReadBool() ? "true" : "false";
-                                        lobbyData1.hasModifiers = bitBuffer.ReadBool() ? "true" : "false";
-                                        UIServerBrowser.LobbyData lobbyData3 = lobbyData1;
-                                        lobbyData1.maxPlayers = num2 = bitBuffer.ReadInt();
-                                        int num3 = num2;
-                                        lobbyData3.numSlots = num3;
-                                        lobbyData1.hasPassword = bitBuffer.ReadBool();
-                                        lobbyData1.dedicated = bitBuffer.ReadBool();
-                                        if (bitBuffer.positionInBits != bitBuffer.lengthInBits && bitBuffer.ReadBool())
-                                            lobbyData1.datahash = bitBuffer.ReadLong();
-                                        _threadLobbies.Add(lobbyData1);
-                                        --index;
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception)
-                        {
-                        }
+                        _lobbyThreadRunning = false;
+                        return;
                     }
-                    udpClient.Close();
                 }
             }
             _lobbyThreadRunning = false;
+        }
+
+        void SearchForLobbyClient(IPAddress endpoint = null)
+        {
+            using (UdpClient udpClient = new UdpClient())
+            {
+                udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                udpClient.Client.Bind(new IPEndPoint(endpoint == null ? IPAddress.Any : endpoint, NCBasic.lobbySearchPort));
+                udpClient.Client.ReceiveTimeout = 100;
+                IPEndPoint remoteEP = new IPEndPoint(0L, 0);
+                for (int index = 0; index < 15; ++index)
+                {
+                    if (udpClient.Client.Available == 0) // added this because can. prevent crashs when possible :)
+                    {
+                        Thread.Sleep(100);
+                    }
+                    if (udpClient.Client.Available == 0)
+                    {
+                        continue;
+                    }//
+                    try
+                    {
+                        byte[] data = udpClient.Receive(ref remoteEP);
+                        if (data != null)
+                        {
+                            BitBuffer bitBuffer = new BitBuffer(data);
+                            long num1 = bitBuffer.ReadLong();
+                            string address = remoteEP.ToString();
+                            if (num1 == 5892070176735L)
+                            {
+                                if (_threadLobbies.FirstOrDefault<UIServerBrowser.LobbyData>(x => x.lanAddress == address) == null)
+                                {
+                                    UIServerBrowser.LobbyData lobbyData1 = new UIServerBrowser.LobbyData
+                                    {
+                                        lanAddress = address
+                                    };
+                                    int pMajor = bitBuffer.ReadInt();
+                                    int pHigh = bitBuffer.ReadInt();
+                                    int pLow = bitBuffer.ReadInt();
+                                    lobbyData1.version = DG.MakeVersionString(pMajor, pHigh, pLow);
+                                    lobbyData1._userCount = bitBuffer.ReadByte();
+                                    lobbyData1.name = bitBuffer.ReadString();
+                                    lobbyData1.modHash = bitBuffer.ReadString();
+                                    lobbyData1.requiredWins = bitBuffer.ReadByte().ToString();
+                                    lobbyData1.restsEvery = bitBuffer.ReadByte().ToString();
+                                    lobbyData1.wallMode = bitBuffer.ReadBool() ? "true" : "false";
+                                    UIServerBrowser.LobbyData lobbyData2 = lobbyData1;
+                                    int num2 = bitBuffer.ReadInt();
+                                    string str = num2.ToString();
+                                    lobbyData2.customLevels = str;
+                                    lobbyData1.started = bitBuffer.ReadBool() ? "true" : "false";
+                                    lobbyData1.hasModifiers = bitBuffer.ReadBool() ? "true" : "false";
+                                    UIServerBrowser.LobbyData lobbyData3 = lobbyData1;
+                                    lobbyData1.maxPlayers = num2 = bitBuffer.ReadInt();
+                                    int num3 = num2;
+                                    lobbyData3.numSlots = num3;
+                                    lobbyData1.hasPassword = bitBuffer.ReadBool();
+                                    lobbyData1.dedicated = bitBuffer.ReadBool();
+                                    if (bitBuffer.positionInBits != bitBuffer.lengthInBits && bitBuffer.ReadBool())
+                                        lobbyData1.datahash = bitBuffer.ReadLong();
+                                    _threadLobbies.Add(lobbyData1);
+                                    --index;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                udpClient.Close();
+            }
         }
 
         public override void SearchForLobby()

@@ -36,16 +36,16 @@ namespace DuckGame
             if (!actionInvoked)
             {
                 actionInvoked = true;
-                string methodfullname = "";
-                if (action.Method != null)
+                if (MonoMain.logLoading && action.Method != null)
                 {
+                    string methodfullname = "";
                     methodfullname = action.Method.Name;
                     if (action.Method.DeclaringType != null)
                     {
                         methodfullname = action.Method.DeclaringType.FullName + "." + methodfullname;
                     }
+                    DevConsole.Log("LoadingAction Invoke " + methodfullname);
                 }
-                DevConsole.Log("LoadingAction Invoke " + methodfullname);
                 action();
             }
             if (actions.Count > 0)

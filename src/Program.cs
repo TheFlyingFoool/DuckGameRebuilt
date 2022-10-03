@@ -401,6 +401,9 @@ namespace DuckGame
                     case "-useRPC":
                         MonoMain.useRPC = true;
                         break;
+                    case "-logLoading":
+                        MonoMain.logLoading = true;
+                        break;
                     default:
                         if (args[index] == "-nolaunch")
                         {
