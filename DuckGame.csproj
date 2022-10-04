@@ -49,6 +49,17 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <AssemblyName>DuckGame</AssemblyName>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <AssemblyName>DuckGame</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
@@ -86,6 +97,18 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <AssemblyName>DuckGame</AssemblyName>
+    <OutputPath>.\</OutputPath>
+    <DefineConstants>TRACE;DuckGame</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>false</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
     <DocumentationFile>
     </DocumentationFile>
   </PropertyGroup>
@@ -1991,7 +2014,8 @@
     <PostBuildEvent>Xcopy $(SolutionDir)\deps $(SolutionDir)\bin /E /H /C /I /Y
 call "$(SolutionDir)shaders_source\buildshaders.bat</PostBuildEvent>
   </PropertyGroup>
-    <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
-    <PostBuildEvent></PostBuildEvent>
+  <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

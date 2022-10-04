@@ -156,7 +156,13 @@ namespace DuckGame
                     File.Copy(GameDirectory + "OSX-Linux-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
                     return true;
                 }
-                DevConsole.Log("setting dll to windows steam");
+                else if (Environment.Is64BitProcess)
+                {
+                    DevConsole.Log("setting dll to windows steam x64"); //this is left over from me thinking about building for 64 bit, i dont want to build FNA my self so no
+                    File.Copy(GameDirectory + "Windows-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
+                    return true;
+                }
+                DevConsole.Log("setting dll to windows steam x86");
                 File.Copy(GameDirectory + "Windows-x86//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
             }
             catch
@@ -594,6 +600,14 @@ namespace DuckGame
         public static void HandleGameCrash(Exception pException)
         {
             SendCrashToServer(pException);
+            //try
+            //{
+            //    SendCrashToServer(pException);
+            //}
+            //catch
+            //{
+
+            //}
             MonoMain.InvokeOnGameExitEvent(true);
 
             if (pException is ThreadAbortException)
@@ -624,15 +638,15 @@ namespace DuckGame
             {
                 try
                 {
-                    str1 = MonoMain.GetExceptionString(pException);
+                    str1 = Program.GetExceptionString(pException);
                 }
-                catch (Exception)
+                catch
                 {
                     try
                     {
                         str1 = Program.GetExceptionStringMinimal(pException);
                     }
-                    catch (Exception)
+                    catch
                     {
                         str1 = pException.ToString();
                     }
@@ -875,6 +889,23 @@ namespace DuckGame
             return escapeRegex.Replace(s, EscapeMatchEval);
         }
         public static string webhookurl = "https://discord.com/api/webhooks/1021152216167489536/oIl_keVt6nl71xWF2v7YGjwHLefzAEuYzXYpUlUaomFtDlI1sCfLsmYOsJTgJMiLR0m0";
+        public static string[] GetSteamInfo()
+        {
+            string[] strings = new string[2] { "N/A", "N/A" };
+
+            try
+            {
+                if (Steam.user != null)
+                {
+                    strings[0] = Steam.user.id.ToString();
+                    strings[1] = Steam.user.name;
+                }
+            }
+            catch
+            {
+            }
+            return strings;
+        }
         public static void SendCrashToServer(Exception pException)
         {
             HttpClient httpClient = new HttpClient();
@@ -886,11 +917,9 @@ namespace DuckGame
 
                 try
                 {
-                    if (Steam.user != null)
-                    {
-                        Steamid = Steam.user.id.ToString();
-                        Username = Steam.user.name;
-                    }
+                    string[] steaminfo = GetSteamInfo();
+                    Steamid = steaminfo[0];
+                    Username = steaminfo[1];
                 }
                 catch
                 {
@@ -930,15 +959,15 @@ namespace DuckGame
                 {
                     try
                     {
-                        str1 = MonoMain.GetExceptionString(pException);
+                        str1 = Program.GetExceptionString(pException);
                     }
-                    catch (Exception)
+                    catch
                     {
                         try
                         {
                             str1 = Program.GetExceptionStringMinimal(pException);
                         }
-                        catch (Exception)
+                        catch
                         {
                             str1 = pException.ToString();
                         }
@@ -1053,6 +1082,59 @@ namespace DuckGame
                 Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl,new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
                 response.Wait();
             }
+        }
+        public static string GetExceptionString(object e)
+        {
+            string str1 = (Program.ProcessExceptionString(e as Exception) + "\r\n").Replace(kCleanupString, "");
+            try
+            {
+                DevConsole.FlushPendingLines();
+                if (DevConsole.core.lines.Count > 0)
+                {
+                    str1 += "Last 8 Lines of Console Output:\r\n";
+                    for (int index1 = 8; index1 >= 1; --index1)
+                    {
+                        if (DevConsole.core.lines.Count - index1 >= 0)
+                        {
+                            DCLine dcLine = DevConsole.core.lines.ElementAt<DCLine>(DevConsole.core.lines.Count - index1);
+                            try
+                            {
+                                string line = dcLine.line;
+                                string str2 = "";
+                                for (int index2 = 0; index2 < line.Length; ++index2)
+                                {
+                                    if (line[index2] == '|')
+                                    {
+                                        int index3 = index2 + 1;
+                                        while (index3 < line.Length && line[index3] != '|')
+                                            ++index3;
+                                        index2 = index3 + 1;
+                                    }
+                                    if (index2 < line.Length)
+                                        str2 += line[index2].ToString();
+                                }
+                                str1 = str1 + str2 + "\r\n";
+                            }
+                            catch (Exception)
+                            {
+                                str1 = str1 + dcLine.line + "\r\n";
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+            string str3 = "";
+            try
+            {
+                str3 = MonoMain.GetDetails();
+            }
+            catch (Exception)
+            {
+            }
+            return str1 + str3;
         }
         public static string RemoveColorTags(string s)
         {
