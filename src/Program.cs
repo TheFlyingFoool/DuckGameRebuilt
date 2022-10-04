@@ -223,7 +223,7 @@ namespace DuckGame
                 if (index != args.Length - 1)
                     Program.commandLine += " ";
             }
-            int Controllers = 4;
+            int Controllers = 8;
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)
             {
