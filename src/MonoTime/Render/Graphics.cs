@@ -1076,7 +1076,7 @@ namespace DuckGame
                 Rectangle r = value.Bounds;
                 if (Graphics._currentRenderTarget != null)
                 {
-                    Graphics.ClipRectangle(r, new Rectangle(0f, 0f, (float)Graphics._currentRenderTarget.width, (float)Graphics._currentRenderTarget.height));
+                    Graphics.ClipRectangle(r, new Rectangle(0f, 0f, _currentRenderTarget.width, _currentRenderTarget.height));
                 }
                 else
                 {

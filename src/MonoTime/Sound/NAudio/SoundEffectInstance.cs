@@ -478,7 +478,7 @@ namespace DuckGame
                 return;
             }
             pProgress = Maths.Clamp(pProgress, 0f, 1f);
-            this._position = (int)(pProgress * (float)this._data.data.Length);
+            this._position = (int)(pProgress * _data.data.Length);
         }
         public float Platform_GetProgress()
         {
@@ -490,7 +490,7 @@ namespace DuckGame
             {
                 return 1f;
             }
-            return (float)this._position / (float)this._data.data.Length;
+            return _position / (float)this._data.data.Length;
         }
         public int Platform_GetLengthInMilliseconds()
         {
@@ -498,7 +498,7 @@ namespace DuckGame
             {
                 return 0;
             }
-            return (int)((float)(this._data.data.Length * 4) / (float)this.WaveFormat.AverageBytesPerSecond) * 500;
+            return (int)(this._data.data.Length * 4 / (float)this.WaveFormat.AverageBytesPerSecond) * 500;
         }
         public class PitchShiftProvider : ISampleProvider
         {

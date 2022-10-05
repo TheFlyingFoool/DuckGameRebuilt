@@ -51,11 +51,11 @@ namespace XnaToFna.ProxyForms
     {
       FormClosingEventArgs e1 = new FormClosingEventArgs(CloseReason.None, false);
       this.OnFormClosing(e1);
-      this.FormClosing((object) this, e1);
+      this.FormClosing(this, e1);
       this._Close();
       FormClosedEventArgs e2 = new FormClosedEventArgs(CloseReason.None);
       this.OnFormClosed(e2);
-      this.FormClosed((object) this, e2);
+      this.FormClosed(this, e2);
     }
 
     protected override void WndProc(ref Message msg)
@@ -64,9 +64,9 @@ namespace XnaToFna.ProxyForms
       Delegate windowHook = this.WindowHook;
       object obj;
       if ((object) windowHook == null)
-        obj = (object) null;
+        obj = null;
       else
-        obj = windowHook.DynamicInvoke((object) msg.HWnd, (object) msg.Msg, (object) msg.WParam, (object) msg.LParam);
+        obj = windowHook.DynamicInvoke(msg.HWnd, msg.Msg, msg.WParam, msg.LParam);
       IntPtr num = (IntPtr) obj;
       local.Result = num;
     }

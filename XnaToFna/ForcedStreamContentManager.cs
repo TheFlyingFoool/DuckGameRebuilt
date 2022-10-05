@@ -25,7 +25,7 @@ namespace XnaToFna
       if (this.Stream != null)
       {
         stream = this.Stream;
-        this.Stream = (Stream) null;
+        this.Stream = null;
       }
       else
         stream = base.OpenStream(assetName);

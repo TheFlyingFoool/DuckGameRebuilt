@@ -41,7 +41,7 @@ namespace XnaToFna
           KeyboardEvents.KeyUp(key);
       }
       KeyboardEvents.LastDown.Clear();
-      KeyboardEvents.LastDown.UnionWith((IEnumerable<Keys>) KeyboardEvents.Down);
+      KeyboardEvents.LastDown.UnionWith(Down);
     }
   }
 }

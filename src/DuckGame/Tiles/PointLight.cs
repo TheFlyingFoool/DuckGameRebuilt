@@ -117,7 +117,7 @@ namespace DuckGame
             for (int i = 0; i <= loops; i++)
             {
                 Color farColor = Color.Black;
-                float a = (float)i / (float)loops * 360f;
+                float a = i / (float)loops * 360f;
                 Vec2 dir = new Vec2((float)Math.Cos((double)Maths.DegToRad(a)), -(float)Math.Sin((double)Maths.DegToRad(a)));
                 Vec2 rayPos = Vec2.Zero;
                 Vec2 castTo = this.position + dir * this._range;
@@ -192,8 +192,8 @@ namespace DuckGame
                 {
                     if (!Layer.lightingTwoPointOh)
                     {
-                        rayPos.x = (float)Math.Round((double)rayPos.x);
-                        rayPos.y = (float)Math.Round((double)rayPos.y);
+                        rayPos.x = (float)Math.Round(rayPos.x);
+                        rayPos.y = (float)Math.Round(rayPos.y);
                     }
                     this._geo.AddTriangle(this.position, rayPos, prevPos, nearColor, farColor, farColPrev);
                 }

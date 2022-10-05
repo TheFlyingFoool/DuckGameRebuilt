@@ -30,7 +30,7 @@ namespace XnaToFna.ProxyDrawing
     }
 
     public Point(int dw)
-      : this(dw & (int) ushort.MaxValue, dw >> 16)
+      : this(dw & ushort.MaxValue, dw >> 16)
     {
     }
 
@@ -56,6 +56,6 @@ namespace XnaToFna.ProxyDrawing
 
     public override int GetHashCode() => this.x ^ this.y;
 
-    public override string ToString() => string.Format("{{X={0},Y={1}}}", (object) this.x, (object) this.y);
+    public override string ToString() => string.Format("{{X={0},Y={1}}}", x, y);
   }
 }

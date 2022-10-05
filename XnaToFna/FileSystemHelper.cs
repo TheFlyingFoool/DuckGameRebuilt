@@ -35,7 +35,7 @@ namespace XnaToFna
       }
       catch
       {
-        directories2 = (string[]) null;
+        directories2 = null;
       }
       FileSystemHelper._CachedDirectories[path] = directories2;
       return directories2;
@@ -53,7 +53,7 @@ namespace XnaToFna
       }
       catch
       {
-        targets2 = (string[]) null;
+        targets2 = null;
       }
       FileSystemHelper._CachedTargets[path] = targets2;
       return targets2;
@@ -66,14 +66,14 @@ namespace XnaToFna
     public static string GetNext(string[] possible, string next)
     {
       if (possible == null)
-        return (string) null;
+        return null;
       for (int index = 0; index < possible.Length; ++index)
       {
         string fileName = Path.GetFileName(possible[index]);
         if (string.Equals(next, fileName, StringComparison.InvariantCultureIgnoreCase))
           return fileName;
       }
-      return (string) null;
+      return null;
     }
 
     public static string FixPath(string path) => FileSystemHelper.ChangePath(path, Path.DirectorySeparatorChar);

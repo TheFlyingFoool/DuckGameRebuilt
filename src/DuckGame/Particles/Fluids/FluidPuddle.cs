@@ -212,7 +212,7 @@ namespace DuckGame
             }
             _wide = FeedAmountToDistance(data.amount);
             float num2 = _wide + 4f;
-            _collisionOffset.x = (float)-(num2 / 2f);
+            _collisionOffset.x = -(num2 / 2f);
             _collisionSize.x = num2;
         }
 

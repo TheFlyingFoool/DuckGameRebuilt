@@ -21,7 +21,7 @@ namespace XnaToFna
     {
       if (StackOpHelper.Current == null)
         StackOpHelper.Current = new Stack<object>();
-      StackOpHelper.Current.Push((object) value);
+      StackOpHelper.Current.Push(value);
     }
 
     public static T Pop<T>() => (T) StackOpHelper.Current.Pop();

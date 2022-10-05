@@ -268,7 +268,7 @@ namespace DuckGame
                 _highlightDrag = false;
             _cursorPos = _font.GetCharacterPosition(_drawText, _cursorPosition);
             _drawText = this.text;
-            _blink = (float)((_blink + 0.02f) % 1f);
+            _blink = (_blink + 0.02f) % 1f;
         }
 
         public float textWidth => _font.GetWidth(_drawText);

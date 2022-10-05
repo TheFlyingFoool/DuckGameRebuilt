@@ -20,7 +20,7 @@ namespace DuckGame
         public static Color AliceBlue = new Color(240, 248, (int)byte.MaxValue, (int)byte.MaxValue);
         public static Color AntiqueWhite = new Color(250, 235, 215, (int)byte.MaxValue);
         public static Color Aqua = new Color(0, (int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue);
-        public static Color Aquamarine = new Color(sbyte.MaxValue, (int)byte.MaxValue, 212, (int)byte.MaxValue);
+        public static Color Aquamarine = new Color(sbyte.MaxValue, byte.MaxValue, 212, byte.MaxValue);
         public static Color Azure = new Color(240, (int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue);
         public static Color Beige = new Color(245, 245, 220, (int)byte.MaxValue);
         public static Color Bisque = new Color((int)byte.MaxValue, 228, 196, (int)byte.MaxValue);
@@ -31,9 +31,9 @@ namespace DuckGame
         public static Color Brown = new Color(165, 42, 42, (int)byte.MaxValue);
         public static Color BurlyWood = new Color(222, 184, 135, (int)byte.MaxValue);
         public static Color CadetBlue = new Color(95, 158, 160, (int)byte.MaxValue);
-        public static Color Chartreuse = new Color(sbyte.MaxValue, (int)byte.MaxValue, 0, (int)byte.MaxValue);
+        public static Color Chartreuse = new Color(sbyte.MaxValue, byte.MaxValue, 0, byte.MaxValue);
         public static Color Chocolate = new Color(210, 105, 30, (int)byte.MaxValue);
-        public static Color Coral = new Color((int)byte.MaxValue, sbyte.MaxValue, 80, (int)byte.MaxValue);
+        public static Color Coral = new Color(byte.MaxValue, sbyte.MaxValue, 80, byte.MaxValue);
         public static Color CornflowerBlue = new Color(100, 149, 237, (int)byte.MaxValue);
         public static Color Cornsilk = new Color((int)byte.MaxValue, 248, 220, (int)byte.MaxValue);
         public static Color Crimson = new Color(220, 20, 60, (int)byte.MaxValue);
@@ -143,7 +143,7 @@ namespace DuckGame
         public static Color SlateBlue = new Color(106, 90, 205, (int)byte.MaxValue);
         public static Color SlateGray = new Color(112, 128, 144, (int)byte.MaxValue);
         public static Color Snow = new Color((int)byte.MaxValue, 250, 250, (int)byte.MaxValue);
-        public static Color SpringGreen = new Color(0, (int)byte.MaxValue, sbyte.MaxValue, (int)byte.MaxValue);
+        public static Color SpringGreen = new Color(0, byte.MaxValue, sbyte.MaxValue, byte.MaxValue);
         public static Color SteelBlue = new Color(70, 130, 180, (int)byte.MaxValue);
         public static Color Tan = new Color(210, 180, 140, (int)byte.MaxValue);
         public static Color Teal = new Color(0, 128, 128, (int)byte.MaxValue);

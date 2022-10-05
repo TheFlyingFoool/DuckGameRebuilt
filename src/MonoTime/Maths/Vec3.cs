@@ -136,17 +136,17 @@ namespace DuckGame
         public static Vec3 Cross(Vec3 vector1, Vec3 Vec2)
         {
             Vec3 vec3;
-            vec3.x = (float)(vector1.y * Vec2.z - Vec2.y * vector1.z);
-            vec3.y = (float)(Vec2.x * vector1.z - vector1.x * Vec2.z);
-            vec3.z = (float)(vector1.x * Vec2.y - Vec2.x * vector1.y);
+            vec3.x = vector1.y * Vec2.z - Vec2.y * vector1.z;
+            vec3.y = Vec2.x * vector1.z - vector1.x * Vec2.z;
+            vec3.z = vector1.x * Vec2.y - Vec2.x * vector1.y;
             return vec3;
         }
 
         public static void Cross(ref Vec3 vector1, ref Vec3 Vec2, out Vec3 result)
         {
-            result.x = (float)(vector1.y * Vec2.z - Vec2.y * vector1.z);
-            result.y = (float)(Vec2.x * vector1.z - vector1.x * Vec2.z);
-            result.z = (float)(vector1.x * Vec2.y - Vec2.x * vector1.y);
+            result.x = vector1.y * Vec2.z - Vec2.y * vector1.z;
+            result.y = Vec2.x * vector1.z - vector1.x * Vec2.z;
+            result.z = vector1.x * Vec2.y - Vec2.x * vector1.y;
         }
 
         public static float Distance(Vec3 value1, Vec3 value2) => (float)Math.Sqrt((value1.x - value2.x) * (value1.x - value2.x) + (value1.y - value2.y) * (value1.y - value2.y) + (value1.z - value2.z) * (value1.z - value2.z));

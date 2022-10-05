@@ -24,17 +24,17 @@ namespace XnaToFna.StubXDK.GamerServices
     [MonoModHook("Microsoft.Xna.Framework.GamerServices.PropertyDictionary XnaToFna.StubXDK.GamerServices.GamerPresenceExtensions::GetProperties(Microsoft.Xna.Framework.GamerServices.GamerPresence)")]
     public static object GetProperties(object presence)
     {
-      if (GamerPresenceExtensions.t_PropertyDictionary == (Type) null)
+      if (GamerPresenceExtensions.t_PropertyDictionary == null)
       {
         GamerPresenceExtensions.t_PropertyDictionary = StubXDKHelper.GamerServicesAsm.GetType("Microsoft.Xna.Framework.GamerServices.PropertyDictionary");
-        GamerPresenceExtensions.ctor_PropertyDictionary = GamerPresenceExtensions.t_PropertyDictionary.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, (Binder) null, new Type[1]
+        GamerPresenceExtensions.ctor_PropertyDictionary = GamerPresenceExtensions.t_PropertyDictionary.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[1]
         {
           typeof (Dictionary<string, object>)
-        }, (ParameterModifier[]) null);
+        }, null);
       }
       return GamerPresenceExtensions.ctor_PropertyDictionary.Invoke(new object[1]
       {
-        (object) new Dictionary<string, object>()
+         new Dictionary<string, object>()
       });
     }
   }

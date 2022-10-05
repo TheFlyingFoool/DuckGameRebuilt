@@ -101,8 +101,8 @@ namespace DuckGame
                 else
                 {
                     Tex2D texture = Graphics.device.Textures[0] as Texture2D;
-                    this.SetValue("width", texture.frameWidth / (float)texture.width);
-                    this.SetValue("height", texture.frameHeight / (float)texture.height);
+                    this.SetValue("width", texture.frameWidth / texture.width);
+                    this.SetValue("height", texture.frameHeight / texture.height);
                     if (this._thing != null)
                     {
                         this.SetValue("xpos", this._thing.x);

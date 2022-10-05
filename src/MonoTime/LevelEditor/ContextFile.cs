@@ -115,7 +115,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        _field.value = (object)current.fileDialog.result.Substring(1, current.fileDialog.result.Length - 5);
+                        _field.value = current.fileDialog.result.Substring(1, current.fileDialog.result.Length - 5);
                     }
                 }
                 Editor.hasUnsavedChanges = true;

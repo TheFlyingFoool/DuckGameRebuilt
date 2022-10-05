@@ -57,20 +57,20 @@ namespace DuckGame
           Vec2 texCoordTL,
           Vec2 texCoordBR)
         {
-            vertexTL.Position.X = (float)(x + dx * cos - dy * sin);
-            vertexTL.Position.Y = (float)(y + dx * sin + dy * cos);
+            vertexTL.Position.X = x + dx * cos - dy * sin;
+            vertexTL.Position.Y = y + dx * sin + dy * cos;
             vertexTL.Position.Z = 0f;
             vertexTL.Color = color;
-            vertexTR.Position.X = (float)(x + (dx + w) * cos - dy * sin);
-            vertexTR.Position.Y = (float)(y + (dx + w) * sin + dy * cos);
+            vertexTR.Position.X = x + (dx + w) * cos - dy * sin;
+            vertexTR.Position.Y = y + (dx + w) * sin + dy * cos;
             vertexTR.Position.Z = 0f;
             vertexTR.Color = color;
-            vertexBL.Position.X = (float)(x + dx * cos - (dy + h) * sin);
-            vertexBL.Position.Y = (float)(y + dx * sin + (dy + h) * cos);
+            vertexBL.Position.X = x + dx * cos - (dy + h) * sin;
+            vertexBL.Position.Y = y + dx * sin + (dy + h) * cos;
             vertexBL.Position.Z = 0f;
             vertexBL.Color = color;
-            vertexBR.Position.X = (float)(x + (dx + w) * cos - (dy + h) * sin);
-            vertexBR.Position.Y = (float)(y + (dx + w) * sin + (dy + h) * cos);
+            vertexBR.Position.X = x + (dx + w) * cos - (dy + h) * sin;
+            vertexBR.Position.Y = y + (dx + w) * sin + (dy + h) * cos;
             vertexBR.Position.Z = 0f;
             vertexBR.Color = color;
         }

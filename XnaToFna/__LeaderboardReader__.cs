@@ -24,22 +24,22 @@ namespace XnaToFna.StubXDK.GamerServices
     [MonoModHook("System.Collections.ObjectModel.ReadOnlyCollection`1<Microsoft.Xna.Framework.GamerServices.LeaderboardEntry> Microsoft.Xna.Framework.GamerServices.LeaderboardReader::get_Entries()")]
     public static object get_Entries(object reader)
     {
-      if (__LeaderboardReader__.t_LeaderboardEntry == (Type) null)
+      if (__LeaderboardReader__.t_LeaderboardEntry == null)
         __LeaderboardReader__.t_LeaderboardEntry = StubXDKHelper.GamerServicesAsm.GetType("Microsoft.Xna.Framework.GamerServices.LeaderboardEntry");
-      if (__LeaderboardReader__.t_IList == (Type) null)
+      if (__LeaderboardReader__.t_IList == null)
         __LeaderboardReader__.t_IList = typeof (IList<>).MakeGenericType(__LeaderboardReader__.t_LeaderboardEntry);
-      if (__LeaderboardReader__.t_List == (Type) null)
+      if (__LeaderboardReader__.t_List == null)
       {
         __LeaderboardReader__.t_List = typeof (List<>).MakeGenericType(__LeaderboardReader__.t_LeaderboardEntry);
-        __LeaderboardReader__.ctor_List = __LeaderboardReader__.t_List.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, (Binder) null, new Type[0], (ParameterModifier[]) null);
+        __LeaderboardReader__.ctor_List = __LeaderboardReader__.t_List.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
       }
-      if (__LeaderboardReader__.t_ReadOnlyCollection == (Type) null)
+      if (__LeaderboardReader__.t_ReadOnlyCollection == null)
       {
         __LeaderboardReader__.t_ReadOnlyCollection = typeof (ReadOnlyCollection<>).MakeGenericType(__LeaderboardReader__.t_LeaderboardEntry);
-        __LeaderboardReader__.ctor_ReadOnlyCollection = __LeaderboardReader__.t_List.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, (Binder) null, new Type[1]
+        __LeaderboardReader__.ctor_ReadOnlyCollection = __LeaderboardReader__.t_List.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[1]
         {
           __LeaderboardReader__.t_IList
-        }, (ParameterModifier[]) null);
+        }, null);
       }
       return __LeaderboardReader__.ctor_ReadOnlyCollection.Invoke(new object[1]
       {
@@ -48,7 +48,7 @@ namespace XnaToFna.StubXDK.GamerServices
     }
 
     [MonoModHook("System.IAsyncResult Microsoft.Xna.Framework.GamerServices.LeaderboardReader::BeginPageUp(System.AsyncCallback,System.Object)")]
-    public static IAsyncResult BeginPageUp(object reader, AsyncCallback cb, object obj) => (IAsyncResult) null;
+    public static IAsyncResult BeginPageUp(object reader, AsyncCallback cb, object obj) => null;
 
     [MonoModHook("System.IAsyncResult Microsoft.Xna.Framework.GamerServices.LeaderboardReader::BeginPageDown(System.AsyncCallback,System.Object)")]
     public static IAsyncResult BeginPageDown(
@@ -56,7 +56,7 @@ namespace XnaToFna.StubXDK.GamerServices
       AsyncCallback cb,
       object obj)
     {
-      return (IAsyncResult) null;
+      return null;
     }
 
     [MonoModHook("System.IAsyncResult Microsoft.Xna.Framework.GamerServices.LeaderboardReader::BeginRead(Microsoft.Xna.Framework.GamerServices.LeaderboardIdentity,System.Int32,System.Int32,System.AsyncCallback,System.Object)")]
@@ -67,7 +67,7 @@ namespace XnaToFna.StubXDK.GamerServices
       AsyncCallback cb,
       object obj)
     {
-      return (IAsyncResult) null;
+      return null;
     }
 
     [MonoModHook("System.Void Microsoft.Xna.Framework.GamerServices.LeaderboardReader::EndPageUp(System.IAsyncResult)")]
@@ -81,6 +81,6 @@ namespace XnaToFna.StubXDK.GamerServices
     }
 
     [MonoModHook("Microsoft.Xna.Framework.GamerServices.LeaderboardReader Microsoft.Xna.Framework.GamerServices.LeaderboardReader::EndRead(System.IAsyncResult)")]
-    public static object EndRead(IAsyncResult result) => (object) null;
+    public static object EndRead(IAsyncResult result) => null;
   }
 }

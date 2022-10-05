@@ -85,7 +85,7 @@ namespace DuckGame
             position.y += num1;
             _p2.y += num1;
             position.y += (float)(num4 * _capeWaveMult * (thing.velocity.x * 0.5));
-            position.x += (float)(num4 * _capeWaveMult * (thing.velocity.y * 0.2f));
+            position.x += num4 * _capeWaveMult * (thing.velocity.y * 0.2f);
             if (capePeices.Count > 0)
                 _p2 = capePeices[capePeices.Count - 1].p1;
             capePeices.Add(new TrailPiece(thing.x - offDir * -10, thing.y + 6f, 0.5f, position, _p2));

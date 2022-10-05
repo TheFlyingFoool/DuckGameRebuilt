@@ -150,7 +150,7 @@ namespace DuckGame
 
         public static Matrix getTransformationMatrix()
         {
-            return Matrix.CreateScale((float)Graphics.viewport.Width / (float)MonoMain.screenWidth, (float)Graphics.viewport.Height / (float)MonoMain.screenHeight, 1f);
+            return Matrix.CreateScale(Graphics.viewport.Width / (float)MonoMain.screenWidth, Graphics.viewport.Height / (float)MonoMain.screenHeight, 1f);
         }
 
         public float aspect => dimensions.x / dimensions.y;

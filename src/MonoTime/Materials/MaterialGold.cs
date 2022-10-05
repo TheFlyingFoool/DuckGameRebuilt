@@ -32,8 +32,8 @@ namespace DuckGame
                 Microsoft.Xna.Framework.Rectangle r = DuckGame.Content.offests[this.batchItem.NormalTexture.Namebase];
                 Microsoft.Xna.Framework.Rectangle r2 = DuckGame.Content.offests["bigGold"];
                 //bigGold
-                SetValue("width", this.batchItem.NormalTexture.frameWidth / (float)this.batchItem.NormalTexture.width);
-                SetValue("height", this.batchItem.NormalTexture.frameHeight / (float)this.batchItem.NormalTexture.height);
+                SetValue("width", this.batchItem.NormalTexture.frameWidth / batchItem.NormalTexture.width);
+                SetValue("height", this.batchItem.NormalTexture.frameHeight / batchItem.NormalTexture.height);
                 SetValue("xpos", _thing.x);
                 SetValue("ypos", _thing.y);
 
@@ -52,8 +52,8 @@ namespace DuckGame
             {
                 _effect = _baseeffect;
                 Tex2D texture = Graphics.device.Textures[0] as Texture2D;
-                this.SetValue("width", texture.frameWidth / (float)texture.width);
-                this.SetValue("height", texture.frameHeight / (float)texture.height);
+                this.SetValue("width", texture.frameWidth / texture.width);
+                this.SetValue("height", texture.frameHeight / texture.height);
                 this.SetValue("xpos", this._thing.x);
                 this.SetValue("ypos", this._thing.y);
             }

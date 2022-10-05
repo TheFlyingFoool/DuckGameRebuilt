@@ -41,20 +41,20 @@ namespace XnaToFna
       bool hasSelf = true)
     {
       Type[] array = argTypes.ToArray();
-      MethodBase method = (MethodBase) type.GetMethod(name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, (Binder) null, array, (ParameterModifier[]) null);
-      if (method != (MethodBase) null)
+      MethodBase method = type.GetMethod(name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, array, null);
+      if (method != null)
         return method;
       if (name.StartsWith("ctor_"))
       {
-        MethodBase constructor = (MethodBase) type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, (Binder) null, array, (ParameterModifier[]) null);
-        if (constructor != (MethodBase) null)
+        MethodBase constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, array, null);
+        if (constructor != null)
           return constructor;
       }
       if (name.StartsWith("get_") || name.StartsWith("set_"))
       {
         PropertyInfo property = type.GetProperty(name.Substring(4), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-        MethodBase methodBase = name[0] != 'g' ? (MethodBase) property.GetSetMethod(true) : (MethodBase) property.GetGetMethod(true);
-        if (methodBase != (MethodBase) null)
+        MethodBase methodBase = name[0] != 'g' ? property.GetSetMethod(true) : (MethodBase) property.GetGetMethod(true);
+        if (methodBase != null)
           return methodBase;
       }
       argTypes.RemoveAt(0);
@@ -79,13 +79,13 @@ namespace XnaToFna
       char platform,
       Action<IDisposable> recordDisposableObject)
     {
-      Stream output = (Stream) File.OpenWrite(originalAssetName + ".tmp");
+      Stream output = File.OpenWrite(originalAssetName + ".tmp");
       long position = xnbReader.BaseStream.Position;
       xnbReader.BaseStream.Seek(0L, SeekOrigin.Begin);
       using (BinaryWriter binaryWriter = new BinaryWriter(output, Encoding.ASCII, true))
       {
         binaryWriter.Write(xnbReader.ReadBytes(5));
-        byte num = (byte) ((uint) xnbReader.ReadByte() & 4294967167U);
+        byte num = (byte) (xnbReader.ReadByte() & 4294967167U);
         binaryWriter.Write(num);
         binaryWriter.Write(0);
       }
@@ -105,7 +105,7 @@ namespace XnaToFna
       char platform,
       Action<IDisposable> recordDisposableObject)
     {
-      stream = (Stream) new CopyingStream(stream, (Stream) null);
+      stream = new CopyingStream(stream, null);
       FNAHooks.orig_ctor_ContentReader(self, manager, stream, graphicsDevice, assetName, version, platform, recordDisposableObject);
     }
 

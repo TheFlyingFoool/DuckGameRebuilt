@@ -12,6 +12,6 @@ namespace XnaToFna.StubXDK.GamerServices
 {
   public class FindServicesCompletedArgs : EventArgs
   {
-    public ReadOnlyCollection<TitleServiceDescription> Services => new ReadOnlyCollection<TitleServiceDescription>((IList<TitleServiceDescription>) new List<TitleServiceDescription>());
+    public ReadOnlyCollection<TitleServiceDescription> Services => new ReadOnlyCollection<TitleServiceDescription>(new List<TitleServiceDescription>());
   }
 }
