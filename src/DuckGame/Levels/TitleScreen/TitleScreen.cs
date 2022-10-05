@@ -68,6 +68,7 @@ namespace DuckGame
         private UIMenu _optionsMenu;
         private UIMenu _controlConfigMenu;
         private UIMenu _graphicsMenu;
+        private UIMenu _dgrMenu;
         private UIMenu _audioMenu;
         private UIMenu _flagMenu;
         private UIMenu _parentalControlsMenu;
@@ -439,7 +440,9 @@ namespace DuckGame
             _flagMenu = new UIFlagSelection(_optionsMenu, "FLAG", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f);
             _optionsMenu.Add(new UIMenuItemSlider("SFX Volume", field: new FieldBinding(Options.Data, "sfxVolume"), step: 0.06666667f), true);
             _optionsMenu.Add(new UIMenuItemSlider("Music Volume", field: new FieldBinding(Options.Data, "musicVolume"), step: 0.06666667f), true);
+
             _graphicsMenu = Options.CreateGraphicsMenu(_optionsMenu);
+            _dgrMenu = Options.CreateDGRMenu(_optionsMenu);
             _audioMenu = Options.CreateAudioMenu(_optionsMenu);
             _accessibilityMenu = Options.CreateAccessibilityMenu(_optionsMenu);
             _ttsMenu = Options.tempTTSMenu;
@@ -448,6 +451,7 @@ namespace DuckGame
             _optionsMenu.Add(new UIText(" ", Color.White), true);
             _optionsMenu.Add(new UIMenuItemToggle("SHENANIGANS", field: new FieldBinding(Options.Data, "shennanigans")), true);
             _optionsMenu.Add(new UIText(" ", Color.White), true);
+            _optionsMenu.Add(new UIMenuItem("REBUILT", new UIMenuActionOpenMenu(_optionsMenu, _dgrMenu), backButton: true), true);
             _optionsMenu.Add(new UIMenuItem("EDIT CONTROLS", new UIMenuActionOpenMenuCallFunction(_optionsMenu, _controlConfigMenu, new UIMenuActionOpenMenuCallFunction.Function(UIControlConfig.ResetWarning)), backButton: true), true);
             _optionsMenu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(_optionsMenu, _graphicsMenu), backButton: true), true);
             _optionsMenu.Add(new UIMenuItem("AUDIO", new UIMenuActionOpenMenu(_optionsMenu, _audioMenu), backButton: true), true);
@@ -495,6 +499,7 @@ namespace DuckGame
             _optionsGroup.Add((_controlConfigMenu as UIControlConfig)._warningMenu, false);
             _optionsGroup.Add(_flagMenu, false);
             _optionsGroup.Add(_graphicsMenu, false);
+            _optionsGroup.Add(_dgrMenu, false);
             _optionsGroup.Add(_audioMenu, false);
             if (_accessibilityMenu != null)
                 _optionsGroup.Add(_accessibilityMenu, false);

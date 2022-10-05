@@ -72,6 +72,7 @@ namespace DuckGame
 
         public static UIMenu controllerWarning => Options._controllerWarning;
 
+        public static DGRSettings dGRSettings = new DGRSettings();
         public static OptionsData Data
         {
             get => Options._data;
@@ -276,7 +277,18 @@ namespace DuckGame
             else
                 Options.LocalData.windowedResolution = Options.LocalData.currentResolution;
         }
+        public static UIMenu CreateDGRMenu(UIMenu pOptionsMenu)
+        {
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|REBUILT|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
+            menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(dGRSettings, "SpriteAtlas")), true);
+            menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC")), true);
+
+
+            menu.Add(new UIText(" ", Color.White), true);
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true), true);
+            return menu;
+        }
         public static UIMenu CreateGraphicsMenu(UIMenu pOptionsMenu)
         {
             UIMenu menu = new UIMenu("@WRENCH@GRAPHICS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
