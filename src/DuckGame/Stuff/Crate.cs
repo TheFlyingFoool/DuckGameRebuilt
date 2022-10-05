@@ -50,14 +50,14 @@ namespace DuckGame
             Vec2 vec2 = Vec2.Zero;
             if (type is DTShot)
                 vec2 = (type as DTShot).bullet.travelDirNormalized;
-            for (int index = 0; index < 6; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(x - 8f + Rando.Float(16f), y - 8f + Rando.Float(16f));
                 woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
                 woodDebris.vSpeed = -Rando.Float(1f);
                 Level.Add(woodDebris);
             }
-            for (int index = 0; index < 5; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 5; ++index)
             {
                 SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-6f, 6f), y + Rando.Float(-6f, 6f));
                 smallSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
@@ -100,7 +100,7 @@ namespace DuckGame
                 return base.Hit(bullet, hitPos);
             if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
-            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
                 woodDebris.hSpeed = -bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f);
@@ -129,7 +129,7 @@ namespace DuckGame
 
         public override void ExitHit(Bullet bullet, Vec2 exitPos)
         {
-            for (int index = 0; index < 1f + damageMultiplier / 2f; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(exitPos.x, exitPos.y);
                 woodDebris.hSpeed = (bullet.travelDirNormalized.x * 3f * (Rando.Float(1f) + 0.3f));

@@ -342,10 +342,10 @@ namespace DuckGame
             }
             if (localAttachIndex < attachIndex)
             {
-                for (int index = 0; index < 2; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
                     Level.Add(SmallSmoke.New(p1_1.x + Rando.Float(-1f, 1f), p1_1.y + Rando.Float(-1f, 1f)));
                 SFX.Play("grappleHook");
-                for (int index = 0; index < 6; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
                     Level.Add(Spark.New(p1_1.x - barrelVector.x * 2f + Rando.Float(-1f, 1f), p1_1.y - barrelVector.y * 2f + Rando.Float(-1f, 1f), barrelVector + new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
                 localAttachIndex = attachIndex;
             }

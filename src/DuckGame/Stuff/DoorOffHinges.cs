@@ -37,15 +37,19 @@ namespace DuckGame
         {
             if (sounded)
                 return;
-            Level.Add(SmallSmoke.New(x, y + 2f));
-            Level.Add(SmallSmoke.New(x, y - 16f));
             SFX.Play("doorBreak");
-            for (int index = 0; index < 8; ++index)
+            if (DGRSettings.S_ParticleMultiplier != 0)
             {
-                WoodDebris woodDebris = WoodDebris.New(x - 8f + Rando.Float(16f), y - 8f + Rando.Float(16f));
-                woodDebris.hSpeed = (Rando.Float(1f) > 0.5 ? 1f : -1f) * Rando.Float(3f);
-                woodDebris.vSpeed = -Rando.Float(1f);
-                Level.Add(woodDebris);
+                Level.Add(SmallSmoke.New(x, y + 2f));
+                Level.Add(SmallSmoke.New(x, y - 16f));
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
+                {
+                    WoodDebris woodDebris = WoodDebris.New(x - 8f + Rando.Float(16f), y - 8f + Rando.Float(16f));
+                    woodDebris.hSpeed = (Rando.Float(1f) > 0.5 ? 1f : -1f) * Rando.Float(3f);
+                    woodDebris.vSpeed = -Rando.Float(1f);
+                    Level.Add(woodDebris);
+                }
+
             }
             sounded = true;
         }

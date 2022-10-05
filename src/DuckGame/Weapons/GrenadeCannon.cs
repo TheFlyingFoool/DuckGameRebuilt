@@ -94,7 +94,7 @@ namespace DuckGame
                     Vec2 vec = Maths.AngleToVec(barrelAngle + Rando.Float(-0.1f, 0.1f));
                     for (int index = 0; index < 12; ++index)
                         Level.Add(SmallFire.New(vec2.x, vec2.y, vec.x * Rando.Float(3.5f, 5f) + Rando.Float(-2f, 2f), vec.y * Rando.Float(3.5f, 5f) + Rando.Float(-2f, 2f)));
-                    for (int index = 0; index < 6; ++index)
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
                         Level.Add(SmallSmoke.New(vec2.x + Rando.Float(-2f, 2f), vec2.y + Rando.Float(-2f, 2f)));
                     _sprite.SetAnimation("idle" + Math.Min(ammo, 4).ToString());
                     kick = 1f;

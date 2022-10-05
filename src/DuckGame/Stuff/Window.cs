@@ -154,7 +154,7 @@ namespace DuckGame
             if (!(Level.current is Editor) && !_wrecked && !lobbyRemoving)
             {
                 _wrecked = true;
-                for (int index = 0; index < 8; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
                 {
                     GlassParticle glassParticle = new GlassParticle(x - 4f + Rando.Float(8f), y - 16f + Rando.Float(32f), Vec2.Zero, tint.value)
                     {
@@ -165,7 +165,7 @@ namespace DuckGame
                 }
                 if (this is FloorWindow)
                 {
-                    for (int index = 0; index < 8; ++index)
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
                         Level.Add(new GlassDebris(false, left + index * 4, y, -Rando.Float(2f), -Rando.Float(2f), 1));
                     foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(topLeft + new Vec2(-2f, -3f), topRight + new Vec2(2f, -3f)))
                     {
@@ -175,7 +175,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    for (int index = 0; index < 8; ++index)
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
                         Level.Add(new GlassDebris(false, x, top + index * 4, -Rando.Float(2f), -Rando.Float(2f), 1, tint.value));
                 }
                 SFX.Play("glassBreak");
@@ -206,8 +206,15 @@ namespace DuckGame
             if (hitPoints <= 0.0)
                 return false;
             hitPos -= bullet.travelDirNormalized;
-            for (int index = 0; index < 1.0f + damageMultiplier / 2.0f; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
+            {
                 Level.Add(new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized, tint.value));
+                if (index > 32) break;
+                //Anticrash measure, since damagemultiplier is synced you can make it an insanely high number to spawn infinite particles on someone elses side
+                //this still doesn't completely solve the problem but its a good enough bandaid since the particles will remove themselves from the cap, making it
+                //only a lag exploit rather than a softlock/crash like it is in base dg
+                //-NiK0
+            }
             SFX.Play("glassHit", 0.5f);
             if (isServerForObject && bullet.isLocal)
             {

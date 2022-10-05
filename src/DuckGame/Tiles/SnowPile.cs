@@ -58,7 +58,7 @@ namespace DuckGame
                     num2 = 6f;
                 if (num1 < 2.0)
                     num1 = 2f;
-                for (int index = 0; index < 20; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 20; ++index)
                 {
                     float num3 = 1f;
                     if (index < 10)

@@ -283,6 +283,16 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(dGRSettings, "SpriteAtlas")), true);
             menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC")), true);
+            menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(dGRSettings, "ParticleMultiplier", 0, 6, 1), valStrings: new List<string>()
+      {
+        "None",
+        "Minimum",
+        "Low",
+        "Default",
+        "Many",
+        "EXTREME",
+        "UNCOUNTABLE"
+      }), true);
 
 
             menu.Add(new UIText(" ", Color.White), true);

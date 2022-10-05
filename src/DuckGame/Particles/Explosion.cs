@@ -57,7 +57,7 @@ namespace DuckGame
             if (_sprite.frame > _smokeFrame && !_smoked)
             {
                 int num1 = Graphics.effectsLevel == 2 ? Rando.Int(1, 4) : 1;
-                for (int index = 0; index < num1; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * num1; ++index)
                 {
                     SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-5f, 5f), y + Rando.Float(-5f, 5f));
                     smallSmoke.vSpeed = Rando.Float(0f, -0.5f);

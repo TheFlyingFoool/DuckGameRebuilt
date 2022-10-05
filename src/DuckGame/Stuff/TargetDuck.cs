@@ -232,14 +232,14 @@ namespace DuckGame
                 Vec2 vec2 = Vec2.Zero;
                 if (type is DTShot)
                     vec2 = (type as DTShot).bullet.travelDirNormalized;
-                for (int index = 0; index < 4; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
                 {
                     WoodDebris woodDebris = WoodDebris.New(x - 8f + Rando.Float(16f), y - 20f + Rando.Float(16f));
                     woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
                     woodDebris.vSpeed = -Rando.Float(1f);
                     Level.Add(woodDebris);
                 }
-                for (int index = 0; index < 2; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
                     Level.Add(Feather.New(x, y - 16f, persona));
                 PopDown();
             }
@@ -252,7 +252,7 @@ namespace DuckGame
         {
             if (!_up || _popup)
                 return;
-            for (int index = 0; index < 2; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
                 woodDebris.hSpeed = (float)(-bullet.travelDirNormalized.x * 2.0 * (Rando.Float(1f) + 0.3f));
@@ -388,8 +388,11 @@ namespace DuckGame
                     _upSpeed = 0f;
                     _up = true;
                     SFX.Play("grappleHook", 0.7f, Rando.Float(-0.2f, 0.2f));
-                    Level.Add(SmallSmoke.New(x - 4f, y));
-                    Level.Add(SmallSmoke.New(x + 4f, y));
+                    if (DGRSettings.S_ParticleMultiplier != 0)
+                    {
+                        Level.Add(SmallSmoke.New(x - 4f, y));
+                        Level.Add(SmallSmoke.New(x + 4f, y));
+                    }
                     SpawnHoldObject();
                     if (helmet)
                     {
@@ -412,8 +415,11 @@ namespace DuckGame
                     _upSpeed = 0f;
                     _up = true;
                     SFX.Play("grappleHook", 0.7f, Rando.Float(-0.2f, 0.2f));
-                    Level.Add(SmallSmoke.New(x - 4f, y));
-                    Level.Add(SmallSmoke.New(x + 4f, y));
+                    if (DGRSettings.S_ParticleMultiplier != 0)
+                    {
+                        Level.Add(SmallSmoke.New(x - 4f, y));
+                        Level.Add(SmallSmoke.New(x + 4f, y));
+                    }
                     if (helmet)
                     {
                         Helmet e = new Helmet(x, y);
@@ -448,8 +454,11 @@ namespace DuckGame
                         _upSpeed = 0f;
                         _up = false;
                         SFX.Play("grappleHook", 0.2f, Rando.Float(-0.2f, 0.2f));
-                        Level.Add(SmallSmoke.New(x - 4f, y));
-                        Level.Add(SmallSmoke.New(x + 4f, y));
+                        if (DGRSettings.S_ParticleMultiplier != 0)
+                        {
+                            Level.Add(SmallSmoke.New(x - 4f, y));
+                            Level.Add(SmallSmoke.New(x + 4f, y));
+                        }
                         _hitPoints = _maxHealth = 0.1f;
                     }
                     else
@@ -461,8 +470,11 @@ namespace DuckGame
                         _upSpeed = 0f;
                         _up = false;
                         SFX.Play("grappleHook", 0.2f, Rando.Float(-0.2f, 0.2f));
-                        Level.Add(SmallSmoke.New(x - 4f, y));
-                        Level.Add(SmallSmoke.New(x + 4f, y));
+                        if (DGRSettings.S_ParticleMultiplier != 0)
+                        {
+                            Level.Add(SmallSmoke.New(x - 4f, y));
+                            Level.Add(SmallSmoke.New(x + 4f, y));
+                        }
                         _hitPoints = _maxHealth = 0.1f;
                     }
                 }

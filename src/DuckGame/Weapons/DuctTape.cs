@@ -50,8 +50,11 @@ namespace DuckGame
                 }, 16.0f);
                 if (Distance(holdable) >= 16.0f)
                     return;
-                Level.Add(SmallSmoke.New(position.x, position.y));
-                Level.Add(SmallSmoke.New(position.x, position.y));
+                if (DGRSettings.S_ParticleMultiplier != 0)
+                {
+                    Level.Add(SmallSmoke.New(position.x, position.y));
+                    Level.Add(SmallSmoke.New(position.x, position.y));
+                }
                 SFX.PlaySynchronized("equip", 0.8f);
                 TapedGun h = new TapedGun(0f, 0f);
                 Thing.ExtraFondle(holdable, connection);

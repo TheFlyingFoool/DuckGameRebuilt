@@ -87,7 +87,7 @@ namespace DuckGame
                 case DTImpale _:
                 case DTImpact _:
                     SFX.Play("smallDestroy", 0.8f, Rando.Float(-0.1f, 0.1f));
-                    for (int index = 0; index < 3; ++index)
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
                         Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
                     break;
             }
@@ -147,7 +147,7 @@ namespace DuckGame
             }
             if (localEquipIndex < equipIndex)
             {
-                for (int index = 0; index < 2; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
                     Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
                 SFX.Play("equip", 0.8f);
                 localEquipIndex = equipIndex;
@@ -266,7 +266,7 @@ namespace DuckGame
                 NetSoundEffect.Play("equipmentTing");
             bullet.hitArmor = true;
             Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0.0 ? 1 : -1));
-            for (int index = 0; index < 6; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
                 Level.Add(Spark.New(x, y, bullet.travelDirNormalized));
             return base.Hit(bullet, hitPos);
         }

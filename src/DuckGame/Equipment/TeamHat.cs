@@ -263,7 +263,7 @@ namespace DuckGame
                     anchor = (Anchor)this
                 };
                 Level.Add(heartPuff);
-                for (int index = 0; index < 2; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
                 {
                     SmallSmoke smallSmoke = SmallSmoke.New(x, y);
                     smallSmoke.sprite.color = Color.Green * (0.4f + Rando.Float(0.3f));

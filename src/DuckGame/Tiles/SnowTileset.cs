@@ -108,6 +108,7 @@ namespace DuckGame
                     num = 4;
                 if (num < 2)
                     num = 2;
+                num = (int)(DGRSettings.ActualParticleMultiplier * num);
                 switch (from)
                 {
                     case ImpactedFrom.Left:

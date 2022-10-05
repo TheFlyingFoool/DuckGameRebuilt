@@ -70,7 +70,7 @@ namespace DuckGame
 				SFX.Play("glassBreak");
 				broken = true;
 				_sprite.SetAnimation("broken");
-				for (int i = 0; i < 14; i++)
+				for (int i = 0; i < DGRSettings.ActualParticleMultiplier * 14; i++)
 				{
 					Level.Add(new GlassParticle(x, y, new Vec2(Rando.Float(-1, 1), Rando.Float(-1, 1))));
 				}
@@ -156,7 +156,7 @@ namespace DuckGame
 			if (ammo > 0)
 			{
 				_sprite.SetAnimation("fire");
-				for (int i = 0; i < 3; i++)
+				for (int i = 0; i < DGRSettings.ActualParticleMultiplier * 3; i++)
 				{
 					Vec2 vec = Offset(new Vec2(-9f, 0f));
 					Vec2 hitAngle = barrelVector.Rotate(Rando.Float(1f), Vec2.Zero);

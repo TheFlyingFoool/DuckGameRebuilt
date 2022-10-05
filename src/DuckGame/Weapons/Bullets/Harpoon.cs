@@ -81,9 +81,9 @@ namespace DuckGame
             if (!noisy)
                 return;
             SFX.Play("grappleHook", 0.5f);
-            for (int index = 0; index < 6; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
                 Level.Add(Spark.New(point.x - travel.x * 2f, point.y - travel.y * 2f, travel));
-            for (int index = 0; index < 1; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier; ++index)
                 Level.Add(SmallSmoke.New(point.x + Rando.Float(-2f, 2f), point.y + Rando.Float(-2f, 2f)));
         }
 

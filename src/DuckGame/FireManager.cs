@@ -59,9 +59,12 @@ namespace DuckGame
                                 Duck duck = materialThing as Duck;
                                 if (duck != null && (duck.slideBuildup > 0.0 && duck.sliding || duck.holdObject is Sword && (duck.holdObject as Sword)._slamStance))
                                 {
-                                    SmallSmoke smallSmoke = SmallSmoke.New(litBy.x + Rando.Float(-1f, 1f), litBy.y + Rando.Float(-1f, 1f));
-                                    smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
-                                    Level.Add(smallSmoke);
+                                    if (DGRSettings.S_ParticleMultiplier != 0)
+                                    {
+                                        SmallSmoke smallSmoke = SmallSmoke.New(litBy.x + Rando.Float(-1f, 1f), litBy.y + Rando.Float(-1f, 1f));
+                                        smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
+                                        Level.Add(smallSmoke);
+                                    }
                                     Level.Remove(litBy);
                                 }
                                 else if (Rando.Float(1000f) < materialThing.flammable * 1000.0 && (litBy.whoWait == null || duck != litBy.whoWait))

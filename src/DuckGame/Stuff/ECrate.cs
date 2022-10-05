@@ -42,9 +42,9 @@ namespace DuckGame
         protected override bool OnDestroy(DestroyType type = null)
         {
             _hitPoints = 0f;
-            for (int index = 0; index < 6; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
                 Level.Add(new GlassParticle(x - 8f + Rando.Float(16f), y - 8f + Rando.Float(16f), new Vec2(Rando.Float(-2f, 2f), Rando.Float(-2f, 2f))));
-            for (int index = 0; index < 5; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 5; ++index)
             {
                 SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-6f, 6f), y + Rando.Float(-6f, 6f));
                 smallSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
@@ -62,7 +62,7 @@ namespace DuckGame
                 return false;
             if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
-            for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
                 Level.Add(new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized));
             SFX.Play("woodHit");
             if (isServerForObject && TeamSelect2.Enabled("EXPLODEYCRATES"))
@@ -86,7 +86,7 @@ namespace DuckGame
 
         public override void ExitHit(Bullet bullet, Vec2 exitPos)
         {
-            for (int index = 0; index < 1f + damageMultiplier / 2f; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
                 Level.Add(new GlassParticle(exitPos.x, exitPos.y, -bullet.travelDirNormalized));
         }
 

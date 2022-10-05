@@ -235,14 +235,14 @@ namespace DuckGame
         protected override bool OnDestroy(DestroyType type = null)
         {
             _hitPoints = 0f;
-            for (int index = 0; index < 10; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 10; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(x - 10f + Rando.Float(20f), y - 10f + Rando.Float(20f));
                 woodDebris.hSpeed = Rando.Float(-4f, 4f);
                 woodDebris.vSpeed = Rando.Float(-4f, 4f);
                 Level.Add(woodDebris);
             }
-            for (int index = 0; index < 3; ++index)
+            for (int index = 0; index < 3 * Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 10000); ++index)
             {
                 MusketSmoke musketSmoke = new MusketSmoke(x + Rando.Float(-10f, 10f), y + Rando.Float(-10f, 10f));
                 musketSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
@@ -299,7 +299,7 @@ namespace DuckGame
                 return base.Hit(bullet, hitPos);
             if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
-            for (int index = 0; index < 1f + damageMultiplier / 2f; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
                 woodDebris.hSpeed = (-bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f));

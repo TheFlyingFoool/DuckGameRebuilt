@@ -139,7 +139,7 @@ namespace DuckGame
             }
             Vec2 normalized = (position - this.barrelPosition).normalized;
             Vec2 barrelPosition = this.barrelPosition;
-            for (int index = 0; index < 6; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
             {
                 Level.Add(Spark.New(barrelPosition.x, barrelPosition.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
                 barrelPosition += normalized * 4f;
@@ -193,7 +193,7 @@ namespace DuckGame
                 SFX.Play("chainsawFire");
                 _started = true;
                 _engineSpin = 1.5f;
-                for (int index = 0; index < 2; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
                     Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f));
                 _flooded = false;
                 _flood = 0f;
@@ -223,7 +223,7 @@ namespace DuckGame
             if (_gas <= 0f)
                 return;
             int num = _flooded ? 4 : 2;
-            for (int index = 0; index < num; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * num; ++index)
                 Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f));
         }
 
@@ -284,7 +284,7 @@ namespace DuckGame
                     _skipSmoke = !_skipSmoke;
                     if (_throttle || !_skipSmoke)
                     {
-                        Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f, _smokeFlipper ? -0.1f : 0.8f, 0.7f));
+                        if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f, _smokeFlipper ? -0.1f : 0.8f, 0.7f));
                         _smokeFlipper = !_smokeFlipper;
                         _puffClick = true;
                     }
@@ -555,9 +555,12 @@ namespace DuckGame
                     {
                         _skipSpark = 1;
                         Vec2 vec2 = position + barrelVector * 5f;
-                        for (int index = 0; index < 2; ++index)
+                        for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
                         {
                             Level.Add(Spark.New(vec2.x, vec2.y, new Vec2(offDir * Rando.Float(0f, 2f), Rando.Float(0.5f, 1.5f))));
+                        }
+                        for (int index = 0; index < 2; ++index)
+                        {
                             vec2 += barrelVector * 2f;
                             _fireTrailWait -= 0.5f;
                             if ((bool)souped && _fireTrailWait <= 0.0)
@@ -655,28 +658,31 @@ namespace DuckGame
                                     {
                                         Vec2 vec2_2 = vec2_1 + barrelVector * Rando.Float(0f, 3f);
                                         Vec2 vec2_3 = -barrelVector.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero);
-                                        if (materialThing.physicsMaterial == PhysicsMaterial.Wood)
+                                        if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0)
                                         {
-                                            WoodDebris woodDebris = WoodDebris.New(vec2_2.x, vec2_2.y);
-                                            woodDebris.hSpeed = vec2_3.x * 3f;
-                                            woodDebris.vSpeed = vec2_3.y * 3f;
-                                            Level.Add(woodDebris);
-                                        }
-                                        else if (materialThing.physicsMaterial == PhysicsMaterial.Metal)
-                                        {
-                                            Spark spark = Spark.New(vec2_2.x, vec2_2.y, Vec2.Zero);
-                                            spark.hSpeed = vec2_3.x * 3f;
-                                            spark.vSpeed = vec2_3.y * 3f;
-                                            Level.Add(spark);
-                                        }
-                                        else if (materialThing.physicsMaterial == PhysicsMaterial.Glass)
-                                        {
-                                            GlassParticle glassParticle = new GlassParticle(vec2_2.x, vec2_2.y, Vec2.Zero)
+                                            if (materialThing.physicsMaterial == PhysicsMaterial.Wood)
                                             {
-                                                hSpeed = vec2_3.x * 3f,
-                                                vSpeed = vec2_3.y * 3f
-                                            };
-                                            Level.Add(glassParticle);
+                                                WoodDebris woodDebris = WoodDebris.New(vec2_2.x, vec2_2.y);
+                                                woodDebris.hSpeed = vec2_3.x * 3f;
+                                                woodDebris.vSpeed = vec2_3.y * 3f;
+                                                Level.Add(woodDebris);
+                                            }
+                                            else if (materialThing.physicsMaterial == PhysicsMaterial.Metal)
+                                            {
+                                                Spark spark = Spark.New(vec2_2.x, vec2_2.y, Vec2.Zero);
+                                                spark.hSpeed = vec2_3.x * 3f;
+                                                spark.vSpeed = vec2_3.y * 3f;
+                                                Level.Add(spark);
+                                            }
+                                            else if (materialThing.physicsMaterial == PhysicsMaterial.Glass)
+                                            {
+                                                GlassParticle glassParticle = new GlassParticle(vec2_2.x, vec2_2.y, Vec2.Zero)
+                                                {
+                                                    hSpeed = vec2_3.x * 3f,
+                                                    vSpeed = vec2_3.y * 3f
+                                                };
+                                                Level.Add(glassParticle);
+                                            }
                                         }
                                     }
                                 }

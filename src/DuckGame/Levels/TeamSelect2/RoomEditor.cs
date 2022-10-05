@@ -664,7 +664,7 @@ namespace DuckGame
                             {
                                 _selector.profile.furniturePositions.Remove(furniturePosition);
                                 SmallSmoke.shortlife = true;
-                                for (int index = 0; index < 5; ++index)
+                                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 5; ++index)
                                 {
                                     float scaleMul = Rando.Float(0.9f, 1.2f);
                                     SmallSmoke smallSmoke = SmallSmoke.New(position.x + furniturePosition.x + Rando.Float(-2f, 2f), position.y + furniturePosition.y + Rando.Float(-4f, 4f), scaleMul: scaleMul);
@@ -727,7 +727,7 @@ namespace DuckGame
                                         if (availableFurni.type == FurnitureType.Prop)
                                         {
                                             SmallSmoke.shortlife = true;
-                                            for (int index = 0; index < 5; ++index)
+                                            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 5; ++index)
                                             {
                                                 float scaleMul = Rando.Float(0.9f, 1.2f);
                                                 SmallSmoke smallSmoke = SmallSmoke.New(_furniPos.x - (availableFurni.sprite.width - 4) / 2 + index * ((availableFurni.sprite.width - 4) / 4) + Rando.Float(-2f, 2f), _furniPos.y + availableFurni.sprite.height / 4 + Rando.Float(-4f, 4f), scaleMul: scaleMul);
@@ -735,7 +735,7 @@ namespace DuckGame
                                                 smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
                                                 Level.Add(smallSmoke);
                                             }
-                                            for (int index = 0; index < 5; ++index)
+                                            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 5; ++index)
                                             {
                                                 float scaleMul = Rando.Float(0.9f, 1.2f);
                                                 SmallSmoke smallSmoke = SmallSmoke.New(_furniPos.x - (availableFurni.sprite.width - 4) / 2 + index * ((availableFurni.sprite.width - 4) / 4) + Rando.Float(-2f, 2f), _furniPos.y - availableFurni.sprite.height / 4 + Rando.Float(-4f, 4f), scaleMul: scaleMul);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 
 namespace DuckGame
 {
@@ -35,5 +36,36 @@ namespace DuckGame
         }
         [AutoConfigField]
         public static bool S_RPC = false;
+        public int ParticleMultiplier
+        {
+            get
+            {
+                return S_ParticleMultiplier;
+            }
+            set
+            {
+                S_ParticleMultiplier = value;
+            }
+        }
+        [AutoConfigField]
+        public static int S_ParticleMultiplier = 3;
+        //listen if you wanna make better code go for it i cant bother to personally
+        //-NiK0
+        public static float ActualParticleMultiplier
+        {
+            get
+            {
+                return S_ParticleMultiplier switch
+                {
+                    1 => 0.3f, //MINIMUM 
+                    2 => 0.6f, //LOW
+                    3 => 1, //DEFAULT
+                    4 => 2, //MANY
+                    5 => 4, //EXTREME
+                    6 => 8, //UNCONTAUNBLE
+                    _ => 0, //NONE
+                };
+            }
+        }
     }
 }

@@ -273,7 +273,7 @@ namespace DuckGame
                     _stance = EnergyScimitar.Stance.Drag;
                 if (Math.Abs(duck.hSpeed) > 1.0)
                 {
-                    if (dragSpeedBonus)
+                    if (dragSpeedBonus && Rando.Int(DGRSettings.S_ParticleMultiplier) > 0)
                     {
                         Spark spark = Spark.New(barrelPosition.x, barrelPosition.y - 6f, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f)));
                         spark._color = swordColor;
@@ -537,7 +537,7 @@ namespace DuckGame
             _glow = 12f;
             Vec2 normalized = (position - this.barrelPosition).normalized;
             Vec2 barrelPosition = this.barrelPosition;
-            for (int index = 0; index < 6; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
             {
                 Spark spark = Spark.New(barrelPosition.x, barrelPosition.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f)));
                 spark._color = swordColor;

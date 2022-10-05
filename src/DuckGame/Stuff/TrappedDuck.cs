@@ -94,7 +94,7 @@ namespace DuckGame
                     _duckOwner.vSpeed = flag ? vSpeed - 1f : -3f;
                 _duckOwner.x = x;
                 _duckOwner.y = y - 10f;
-                for (int index = 0; index < 4; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
                 {
                     SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f));
                     smallSmoke.hSpeed += hSpeed * Rando.Float(0.3f, 0.5f);
@@ -159,7 +159,7 @@ namespace DuckGame
         {
             if (Network.isActive && _prevVisible && !visible)
             {
-                for (int index = 0; index < 4; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
                 {
                     SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f));
                     smallSmoke.hSpeed += hSpeed * Rando.Float(0.3f, 0.5f);

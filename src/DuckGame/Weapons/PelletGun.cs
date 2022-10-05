@@ -200,9 +200,12 @@ namespace DuckGame
         private void RunFireCode()
         {
             base.OnPressAction();
-            for (int index = 0; index < 4; ++index)
-                Level.Add(SmallSmoke.New(barrelPosition.x + offDir * 4f, barrelPosition.y));
-            Level.Add(SmallSmoke.New(position.x, position.y));
+            if (DGRSettings.S_ParticleMultiplier != 0)
+            {
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
+                    Level.Add(SmallSmoke.New(barrelPosition.x + offDir * 4f, barrelPosition.y));
+                Level.Add(SmallSmoke.New(position.x, position.y));
+            }
         }
 
         public override void OnReleaseAction()

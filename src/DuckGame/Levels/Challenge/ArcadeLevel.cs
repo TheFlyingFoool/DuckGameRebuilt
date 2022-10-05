@@ -71,9 +71,9 @@ namespace DuckGame
 
         public void UpdateDefault()
         {
-            if (Level.current == null)
+            if (current == null)
                 return;
-            foreach (Door door in Level.current.things[typeof(Door)])
+            foreach (Door door in current.things[typeof(Door)])
             {
                 if (door._lockDoor)
                     door.locked = !Unlocks.IsUnlocked("BASEMENTKEY", Profiles.active[0]);
@@ -121,7 +121,7 @@ namespace DuckGame
             {
                 SpawnPosition = pendingSpawn.position;
                 followCam.Add(pendingSpawn);
-                Level.First<ArcadeHatConsole>()?.MakeHatSelector(pendingSpawn);
+                First<ArcadeHatConsole>()?.MakeHatSelector(pendingSpawn);
             }
             UpdateDefault();
             followCam.Adjust();
@@ -139,8 +139,8 @@ namespace DuckGame
                                 if (Thing.LoadThing(levelData.objects.objects.FirstOrDefault<BinaryClassChunk>()) is ImportMachine importMachine)
                                 {
                                     importMachine.position = arcadeMachine1.position;
-                                    Level.Remove(arcadeMachine1);
-                                    Level.Add(importMachine);
+                                    Remove(arcadeMachine1);
+                                    Add(importMachine);
                                     things.RefreshState();
                                     _challenges.Add(importMachine);
                                 }
@@ -176,12 +176,12 @@ namespace DuckGame
             {
                 alpha = 0f
             };
-            Level.Add(_hud);
+            Add(_hud);
             _unlockScreen = new UnlockScreen
             {
                 alpha = 0f
             };
-            Level.Add(_unlockScreen);
+            Add(_unlockScreen);
             _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             _pauseMenu = new UIMenu("@LWING@ARCADE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE  @SELECT@SELECT");
             _confirmMenu = new UIMenu("EXIT ARCADE?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
@@ -223,7 +223,7 @@ namespace DuckGame
             _pauseGroup.Add(_advancedMenu, false);
             _pauseGroup.isPauseMenu = true;
             _pauseGroup.Close();
-            Level.Add(_pauseGroup);
+            Add(_pauseGroup);
             _prizeTable = things[typeof(PrizeTable)].FirstOrDefault<Thing>() as PrizeTable;
             _plugMachine = things[typeof(PlugMachine)].FirstOrDefault<Thing>() as PlugMachine;
             if (_prizeTable == null)
@@ -232,10 +232,10 @@ namespace DuckGame
             Chancy.atCounter = true;
             Chancy.lookingAtChallenge = false;
             basementWasUnlocked = Unlocks.IsUnlocked("BASEMENTKEY", Profiles.active[0]);
-            Level.Add(_prizeTable);
+            Add(_prizeTable);
             Music.Play("Arcade");
             _exitDoor = new MetroidDoor(-192f, 320f);
-            Level.Add(_exitDoor);
+            Add(_exitDoor);
             _followCam.hardLimitLeft = -192f;
         }
 
@@ -280,7 +280,7 @@ namespace DuckGame
                 followCam.Clear();
                 _duck = new Duck(SpawnPosition.x, SpawnPosition.y, _duck.profile);
                 followCam.Add(_duck);
-                Level.Add(_duck);
+                Add(_duck);
                 HUD.AddInputChangeDisplay(" Cmon Now That Was Dumb, Dont You Agree? ");
             }
             if (spawnKey)
@@ -298,11 +298,14 @@ namespace DuckGame
                         vSpeed = -4f,
                         depth = _duck.depth + 50
                     };
-                    Level.Add(SmallSmoke.New(key.x + Rando.Float(-4f, 4f), key.y + Rando.Float(-4f, 4f)));
-                    Level.Add(SmallSmoke.New(key.x + Rando.Float(-4f, 4f), key.y + Rando.Float(-4f, 4f)));
-                    Level.Add(SmallSmoke.New(key.x + Rando.Float(-4f, 4f), key.y + Rando.Float(-4f, 4f)));
-                    Level.Add(SmallSmoke.New(key.x + Rando.Float(-4f, 4f), key.y + Rando.Float(-4f, 4f)));
-                    Level.Add(key);
+                    if (DGRSettings.S_ParticleMultiplier != 0)
+                    {
+                        Add(SmallSmoke.New(key.x + Rando.Float(-4f, 4f), key.y + Rando.Float(-4f, 4f)));
+                        Add(SmallSmoke.New(key.x + Rando.Float(-4f, 4f), key.y + Rando.Float(-4f, 4f)));
+                        Add(SmallSmoke.New(key.x + Rando.Float(-4f, 4f), key.y + Rando.Float(-4f, 4f)));
+                        Add(SmallSmoke.New(key.x + Rando.Float(-4f, 4f), key.y + Rando.Float(-4f, 4f)));
+                    }
+                    Add(key);
                 }
             }
             Chancy.Update();
@@ -340,7 +343,7 @@ namespace DuckGame
             {
                 if (!_quitting)
                 {
-                    ArcadeHatConsole arcadeHatConsole = Level.First<ArcadeHatConsole>();
+                    ArcadeHatConsole arcadeHatConsole = First<ArcadeHatConsole>();
                     if (Input.Pressed("START") && (arcadeHatConsole == null || !arcadeHatConsole.IsOpen()))
                     {
                         _pauseGroup.Open();
@@ -380,10 +383,10 @@ namespace DuckGame
                     Chancy.StopShowingChallengeList();
                     if (editor != null)
                     {
-                        Level.current = editor;
+                        current = editor;
                         return;
                     }
-                    Level.current = new TitleScreen();
+                    current = new TitleScreen();
                     return;
                 }
             }
@@ -521,18 +524,18 @@ namespace DuckGame
                             _afterChallenge = false;
                         }
                         _hud.MakeActive();
-                        Level.Add(_hud);
+                        Add(_hud);
                         _duck.active = false;
                     }
                     else
                     {
                         if (_state == ArcadeState.LaunchChallenge)
                         {
-                            ArcadeLevel.currentArcade = this;
+                            currentArcade = this;
                             foreach (Thing thing in things[typeof(ChallengeConfetti)])
-                                Level.Remove(thing);
+                                Remove(thing);
                             Music.Stop();
-                            Level.current = new ChallengeLevel(_hud.selected.challenge.fileName);
+                            current = new ChallengeLevel(_hud.selected.challenge.fileName);
                             if (!launchSpecialChallenge)
                             {
                                 _desiredState = ArcadeState.ViewChallenge;
@@ -592,7 +595,7 @@ namespace DuckGame
                             else if (_state == ArcadeState.ViewProfileSelector)
                             {
                                 _duck.active = false;
-                                ArcadeHatConsole arcadeHatConsole = Level.First<ArcadeHatConsole>();
+                                ArcadeHatConsole arcadeHatConsole = First<ArcadeHatConsole>();
                                 if (arcadeHatConsole != null)
                                 {
                                     HUD.CloseAllCorners();
@@ -691,7 +694,7 @@ namespace DuckGame
                         Chancy.OpenChallengeView();
                         return;
                     }
-                    ArcadeHatConsole arcadeHatConsole = Level.First<ArcadeHatConsole>();
+                    ArcadeHatConsole arcadeHatConsole = First<ArcadeHatConsole>();
                     if (arcadeHatConsole != null && Input.Pressed("SHOOT") && arcadeHatConsole.hover)
                     {
                         _desiredState = ArcadeState.ViewProfileSelector;
@@ -834,7 +837,7 @@ namespace DuckGame
                         if (chancyChallenges.Count > 0)
                         {
                             Vec2 position = _duck.position;
-                            ArcadeMachine arcadeMachine = Level.Nearest<ArcadeMachine>(_duck.x, _duck.y);
+                            ArcadeMachine arcadeMachine = Nearest<ArcadeMachine>(_duck.x, _duck.y);
                             if (arcadeMachine != null)
                                 position = arcadeMachine.position;
                             chancyChallenges.OrderBy<ChallengeData, int>(v => v.GetRequirementValue());
@@ -918,7 +921,7 @@ namespace DuckGame
             else if (_state == ArcadeState.ViewProfileSelector)
             {
                 Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.05f);
-                ArcadeHatConsole arcadeHatConsole = Level.First<ArcadeHatConsole>();
+                ArcadeHatConsole arcadeHatConsole = First<ArcadeHatConsole>();
                 if (arcadeHatConsole != null && !arcadeHatConsole.IsOpen())
                 {
                     foreach (ArcadeMachine challenge in _challenges)

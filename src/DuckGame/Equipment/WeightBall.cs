@@ -175,7 +175,7 @@ namespace DuckGame
             if (_sparkWait != 0.0 || !grounded || Math.Abs(hSpeed) <= 1.0)
                 return;
             _sparkWait = 0.25f;
-            Level.Add(Spark.New(x + (hSpeed > 0.0 ? -2f : 2f), y + 7f, new Vec2(0f, 0.5f)));
+            if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(Spark.New(x + (hSpeed > 0.0 ? -2f : 2f), y + 7f, new Vec2(0f, 0.5f)));
         }
     }
 }

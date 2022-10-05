@@ -128,8 +128,11 @@ namespace DuckGame
                 thing.vSpeed = vec2.y;
                 Level.Add(thing);
                 thing.Ejected(this);
-                Level.Add(SmallSmoke.New(thing.x, thing.y));
-                Level.Add(SmallSmoke.New(thing.x, thing.y));
+                if (DGRSettings.S_ParticleMultiplier != 0)
+                {
+                    Level.Add(SmallSmoke.New(thing.x, thing.y));
+                    Level.Add(SmallSmoke.New(thing.x, thing.y));
+                }
                 SFX.Play("netGunFire", Rando.Float(0.9f, 1f), Rando.Float(-0.1f, 0.1f));
                 if (thing is Equipment)
                     (thing as Equipment).autoEquipTime = 0.5f;

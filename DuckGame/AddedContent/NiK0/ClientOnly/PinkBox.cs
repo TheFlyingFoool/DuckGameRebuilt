@@ -131,14 +131,14 @@ namespace DuckGame
 		}
 		public static void ExplodeEffect(Vec2 pPosition)
         {
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DGRSettings.ActualParticleMultiplier * 16; i++)
 			{
 				SmallSmoke sm = SmallSmoke.New(pPosition.x, pPosition.y);
 				sm.hSpeed = Rando.Float(-3, 3);
 				sm.vSpeed = Rando.Float(-3, 3);
 				Level.Add(sm);
 			}
-			for (int i = 0; i < 24; i++)
+			for (int i = 0; i < DGRSettings.ActualParticleMultiplier * 24; i++)
 			{
 				ConfettiParticle confettiParticle = new ConfettiParticle();
 				confettiParticle.Init(pPosition.x + Rando.Float(-4f, 0f), pPosition.y + Rando.Float(-4f, 6f), new Vec2(Rando.Float(-1f, 0f), Rando.Float(-1f, 1f)), 0.01f);

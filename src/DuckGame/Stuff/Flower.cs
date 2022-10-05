@@ -39,14 +39,14 @@ namespace DuckGame
 
         public static void PoofEffect(Vec2 pPosition)
         {
-            for (int index = 0; index < 4; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
             {
                 ConfettiParticle confettiParticle = new ConfettiParticle();
                 confettiParticle.Init(pPosition.x + Rando.Float(-4f, 0f), pPosition.y + Rando.Float(-4f, 6f), new Vec2(Rando.Float(-1f, 0f), Rando.Float(-1f, 1f)));
                 confettiParticle._color = new Color(49, 163, 242);
                 Level.Add(confettiParticle);
             }
-            for (int index = 0; index < 2; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
             {
                 ConfettiParticle confettiParticle = new ConfettiParticle();
                 confettiParticle.Init(pPosition.x + Rando.Float(-4f, 0f), pPosition.y + Rando.Float(-4f, 6f), new Vec2(Rando.Float(-1f, 0f), Rando.Float(-1f, 1f)));
@@ -64,7 +64,7 @@ namespace DuckGame
                     SFX.Play("flameExplode");
                     Level.Add(SmallFire.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f), Rando.Float(2f) - 1f, Rando.Float(2f) - 1f, firedFrom: this));
                     Level.Add(SmallFire.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f), Rando.Float(2f) - 1f, Rando.Float(2f) - 1f, firedFrom: this));
-                    for (int index = 0; index < 3; ++index)
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
                         Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
                 }
                 graphic = _burnt;

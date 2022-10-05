@@ -55,7 +55,7 @@ namespace DuckGame
                     duck.Netted(this);
                     if (duck._trapped != null)
                     {
-                        for (int index = 0; index < 4; ++index)
+                        for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
                         {
                             SmallSmoke smallSmoke = SmallSmoke.New(duck._trapped.x + Rando.Float(-4f, 4f), duck._trapped.y + Rando.Float(-4f, 4f));
                             smallSmoke.hSpeed += duck._trapped.hSpeed * Rando.Float(0.3f, 0.5f);
@@ -74,7 +74,7 @@ namespace DuckGame
                     captureDuck.Netted(this);
                     if (captureDuck._trapped != null)
                     {
-                        for (int index = 0; index < 4; ++index)
+                        for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
                         {
                             SmallSmoke smallSmoke = SmallSmoke.New(captureDuck._trapped.x + Rando.Float(-4f, 4f), captureDuck._trapped.y + Rando.Float(-4f, 4f));
                             smallSmoke.hSpeed += captureDuck._trapped.hSpeed * Rando.Float(0.3f, 0.5f);

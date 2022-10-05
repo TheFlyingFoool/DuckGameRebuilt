@@ -121,7 +121,7 @@ namespace DuckGame
                     }
                     dat.amount = glob;
                     Level.Add(new Fluid(base.x, base.y - 8f, new Vec2(0f, -1f), dat, null, 1f));
-                    Level.Add(SmallSmoke.New(base.x, base.y));
+                    if (DGRSettings.S_ParticleMultiplier != 0) Level.Add(SmallSmoke.New(base.x, base.y));
                     SFX.Play("bulletHitWater", 1f, 0f, 0f, false);
                     SFX.Play("crateDestroy", 1f, 0f, 0f, false);
                 }
