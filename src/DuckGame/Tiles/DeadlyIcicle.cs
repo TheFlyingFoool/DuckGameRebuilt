@@ -37,7 +37,7 @@ namespace DuckGame
         {
             if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
-            for (int index = 0; index < 4; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
             {
                 GlassParticle glassParticle = new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized);
                 Level.Add(glassParticle);

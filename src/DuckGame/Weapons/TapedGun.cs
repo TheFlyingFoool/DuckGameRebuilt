@@ -388,8 +388,11 @@ namespace DuckGame
                                    });
                                     if (Distance(holdable1) < 16.0)
                                     {
-                                        Level.Add(SmallSmoke.New(position.x, position.y));
-                                        Level.Add(SmallSmoke.New(position.x, position.y));
+                                        if (DGRSettings.S_ParticleMultiplier != 0)
+                                        {
+                                            Level.Add(SmallSmoke.New(position.x, position.y));
+                                            Level.Add(SmallSmoke.New(position.x, position.y));
+                                        }
                                         SFX.PlaySynchronized("equip", 0.8f);
                                         Thing.ExtraFondle(holdable1, connection);
                                         gun2 = holdable1;

@@ -188,7 +188,7 @@ namespace DuckGame
             hitPos -= bullet.travelDirNormalized;
             if (physicsMaterial == PhysicsMaterial.Wood)
             {
-                for (int index = 0; index < 1.0 + damageMultiplier / 2.0; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
                 {
                     WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
                     woodDebris.hSpeed = (-bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f));
@@ -210,7 +210,7 @@ namespace DuckGame
         public override void ExitHit(Bullet bullet, Vec2 exitPos)
         {
             exitPos += bullet.travelDirNormalized;
-            for (int index = 0; index < 1f + damageMultiplier / 2f; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(exitPos.x, exitPos.y);
                 woodDebris.hSpeed = (bullet.travelDirNormalized.x * 3f * (Rando.Float(1f) + 0.3f));
@@ -251,9 +251,12 @@ namespace DuckGame
         public void DoUnlock(Vec2 keyPos)
         {
             SFX.Play("deedleBeep");
-            Level.Add(SmallSmoke.New(keyPos.x, keyPos.y));
-            for (int index = 0; index < 3; ++index)
-                Level.Add(SmallSmoke.New(x + Rando.Float(-3f, 3f), y + Rando.Float(-3f, 3f)));
+            if (DGRSettings.S_ParticleMultiplier != 0)
+            {
+                Level.Add(SmallSmoke.New(keyPos.x, keyPos.y));
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
+                    Level.Add(SmallSmoke.New(x + Rando.Float(-3f, 3f), y + Rando.Float(-3f, 3f)));
+            }
             didUnlock = true;
         }
 

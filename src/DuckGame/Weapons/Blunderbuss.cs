@@ -42,7 +42,7 @@ namespace DuckGame
             {
                 base.OnPressAction();
                 int num = 0;
-                for (int index = 0; index < 14; ++index)
+                for (int index = 0; index < 14 * Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 100000); ++index)
                 {
                     MusketSmoke musketSmoke = new MusketSmoke(barrelPosition.x - 16f + Rando.Float(32f), barrelPosition.y - 16f + Rando.Float(32f))
                     {

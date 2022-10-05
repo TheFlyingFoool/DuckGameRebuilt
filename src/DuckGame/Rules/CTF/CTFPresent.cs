@@ -38,7 +38,7 @@ namespace DuckGame
             if (type is DTIncinerate)
             {
                 Level.Remove(this);
-                Level.Add(SmallSmoke.New(x, y));
+                if (DGRSettings.S_ParticleMultiplier != 0) Level.Add(SmallSmoke.New(x, y));
             }
             return false;
         }

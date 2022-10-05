@@ -82,7 +82,7 @@ namespace DuckGame
                         t.ragdoll.sleepingBagHealth = 60;
                         if (onFire)
                             t.ragdoll.LightOnFire();
-                        for (int index = 0; index < 4; ++index)
+                        for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
                         {
                             SmallSmoke smallSmoke = SmallSmoke.New(t.ragdoll.x + Rando.Float(-4f, 4f), t.ragdoll.y + Rando.Float(-4f, 4f));
                             smallSmoke.hSpeed += t.ragdoll.hSpeed * Rando.Float(0.3f, 0.5f);
@@ -107,7 +107,7 @@ namespace DuckGame
                         ragdollPart.doll.part1.hSpeed = hSpeed * 0.75f;
                         ragdollPart.doll.part1.vSpeed = vSpeed * 0.75f;
                     }
-                    for (int index = 0; index < 4; ++index)
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
                     {
                         SmallSmoke smallSmoke = SmallSmoke.New(ragdollPart.doll.x + Rando.Float(-4f, 4f), ragdollPart.doll.y + Rando.Float(-4f, 4f));
                         smallSmoke.hSpeed += ragdollPart.doll.hSpeed * Rando.Float(0.3f, 0.5f);

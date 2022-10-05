@@ -35,9 +35,12 @@ namespace DuckGame
 
         public static void ExplodeEffect(Vec2 position)
         {
-            Level.Add(SmallSmoke.New(position.x, position.y));
-            Level.Add(SmallSmoke.New(position.x, position.y));
-            for (int index = 0; index < 8; ++index)
+            if (DGRSettings.S_ParticleMultiplier != 0)
+            {
+                Level.Add(SmallSmoke.New(position.x, position.y));
+                Level.Add(SmallSmoke.New(position.x, position.y));
+            }
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
                 Level.Add(Spark.New(position.x + Rando.Float(-3f, 3f), position.y + Rando.Float(-3f, 3f), new Vec2(Rando.Float(-3f, 3f), -Rando.Float(-3f, 3f)), 0.05f));
             SFX.Play("shotgun", pitch: 0.3f);
         }

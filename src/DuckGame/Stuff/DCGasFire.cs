@@ -31,7 +31,7 @@ namespace DuckGame
                 Level.Add(grenade2);
                 Level.Remove(c);
             }
-            Level.Add(new MusketSmoke(c.x, c.y));
+            for (int i = 0; i < Maths.Clamp(DGRSettings.ActualParticleMultiplier, 0, 100000); i++) Level.Add(new MusketSmoke(c.x, c.y));
         }
     }
 }

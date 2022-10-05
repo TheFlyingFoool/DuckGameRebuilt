@@ -66,7 +66,7 @@ namespace DuckGame
         {
             if (!(with is IPlatform))
                 return;
-            for (int index = 0; index < 4; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
                 Level.Add(Spark.New(barrelPosition.x + Rando.Float(-6f, 6f), barrelPosition.y + Rando.Float(-3f, 3f), -MaterialThing.ImpactVector(from)));
         }
 
@@ -171,16 +171,16 @@ namespace DuckGame
                 _sparkWait -= 0.1f;
             else
                 _sparkWait = 0f;
-            if (owner != null && held && _sparkWait == 0.0 && _swing == 0.0 && owner.Held(this, true))
+            if (owner != null && held && _sparkWait == 0.0 && _swing == 0.0 && owner.Held(this, true) && DGRSettings.S_ParticleMultiplier != 0)
             {
                 if (owner.grounded && owner.offDir > 0 && owner.hSpeed > 1.0)
                 {
-                    _sparkWait = 0.25f;
+                    _sparkWait = 0.25f / DGRSettings.ActualParticleMultiplier;
                     Level.Add(Spark.New(x - 22f, y + 6f, new Vec2(0f, 0.5f)));
                 }
                 else if (owner.grounded && owner.offDir < 0 && owner.hSpeed < -1.0)
                 {
-                    _sparkWait = 0.25f;
+                    _sparkWait = 0.25f / DGRSettings.ActualParticleMultiplier;
                     Level.Add(Spark.New(x + 22f, y + 6f, new Vec2(0f, 0.5f)));
                 }
             }

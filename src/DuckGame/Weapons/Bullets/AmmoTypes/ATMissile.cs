@@ -63,8 +63,11 @@ namespace DuckGame
                     };
                     varBullets.Add(bullet);
                     Level.Add(bullet);
-                    Level.Add(Spark.New(b.x + Rando.Float(-8f, 8f), b.y + Rando.Float(-8f, 8f), vec2 + new Vec2(Rando.Float(-0.1f, 0.1f), Rando.Float(-0.1f, 0.1f))));
-                    Level.Add(SmallSmoke.New(b.x + vec2.x * 8f + Rando.Float(-8f, 8f), b.y + vec2.y * 8f + Rando.Float(-8f, 8f)));
+                    if (DGRSettings.S_ParticleMultiplier != 0)
+                    {
+                        Level.Add(Spark.New(b.x + Rando.Float(-8f, 8f), b.y + Rando.Float(-8f, 8f), vec2 + new Vec2(Rando.Float(-0.1f, 0.1f), Rando.Float(-0.1f, 0.1f))));
+                        Level.Add(SmallSmoke.New(b.x + vec2.x * 8f + Rando.Float(-8f, 8f), b.y + vec2.y * 8f + Rando.Float(-8f, 8f)));
+                    }
                 }
                 if (Network.isActive && b.isLocal)
                 {

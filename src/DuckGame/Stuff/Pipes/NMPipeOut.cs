@@ -24,7 +24,7 @@ namespace DuckGame
 
         public override void Activate()
         {
-            for (int index = 0; index < 6; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
             {
                 SmallSmoke smallSmoke = SmallSmoke.New(position.x + Rando.Float(-4f, 4f), position.y + Rando.Float(-4f, 4f));
                 if (direction == 0)

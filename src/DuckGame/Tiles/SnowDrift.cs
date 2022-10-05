@@ -73,7 +73,7 @@ namespace DuckGame
                 {
                     hPower = 6f;
                 }
-                for (int i = 0; i < 12; i++)
+                for (int i = 0; i < DGRSettings.ActualParticleMultiplier * 12; i++)
                 {
                     float mul = 1f;
                     if (i < 10)

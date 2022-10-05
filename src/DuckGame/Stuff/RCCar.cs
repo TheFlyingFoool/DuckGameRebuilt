@@ -170,7 +170,7 @@ namespace DuckGame
             if (_idleSpeed > 0.1f)
             {
                 _inc = 0;
-                Level.Add(SmallSmoke.New(x - offDir * 10, y));
+                if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(x - offDir * 10, y));
             }
             if (!moveLeft && !moveRight)
                 _idleSpeed -= 0.03f;

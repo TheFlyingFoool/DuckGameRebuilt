@@ -86,7 +86,7 @@ namespace DuckGame
             _ruined = true;
             graphic = _damaged;
             SFX.Play("breakTV");
-            for (int index = 0; index < 8; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
                 Level.Add(new GlassParticle(x + Rando.Float(-8f, 8f), y + Rando.Float(-8f, 8f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
             collideSounds.Clear();
             collideSounds.Add("deadTVLand");
@@ -125,7 +125,7 @@ namespace DuckGame
                     if (!_madeGhost)
                     {
                         Level.Add(new EscapingGhost(x, y - 6f));
-                        for (int index = 0; index < 8; ++index)
+                        for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
                             Level.Add(Spark.New(x + Rando.Float(-8f, 8f), y + Rando.Float(-8f, 8f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
                     }
                     _madeGhost = true;

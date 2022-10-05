@@ -62,7 +62,7 @@ namespace DuckGame
             if (!burntOut && burnt >= 1.0)
             {
                 _sprite = new SpriteMap("campingMelted", 23, 15);
-                for (int index = 0; index < 4; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
                     Level.Add(SmallSmoke.New(Rando.Float(-4f, 4f), Rando.Float(-4f, 4f)));
                 _onFire = false;
                 flammable = 0f;
@@ -129,7 +129,7 @@ namespace DuckGame
                     SFX.Play("campingThwoom");
                     ApplyKick();
                     Vec2 vec2 = Offset(barrelOffset);
-                    for (int index = 0; index < 6; ++index)
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
                     {
                         CampingSmoke campingSmoke = new CampingSmoke((barrelPosition.x - 8f + Rando.Float(8f) + offDir * 8f), barrelPosition.y - 8f + Rando.Float(8f))
                         {

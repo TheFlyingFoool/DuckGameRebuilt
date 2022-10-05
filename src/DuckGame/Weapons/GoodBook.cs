@@ -303,7 +303,7 @@ namespace DuckGame
                 {
                     if (duck1 is TargetDuck && (duck1 as TargetDuck).stanceSetting == 3)
                     {
-                        for (int index = 0; index < 3; ++index)
+                        for (int index = 0; index < 3 * Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 100000); ++index)
                             Level.Add(new MusketSmoke(duck1.x - 5f + Rando.Float(10f), (float)(duck1.y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
                             {
                                 move = {

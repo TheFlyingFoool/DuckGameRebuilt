@@ -173,7 +173,7 @@ namespace DuckGame
             {
                 Thing thing1 = _teleporting[index1] as Thing;
                 _teleporting.RemoveAt(index1);
-                for (int index2 = 0; index2 < 2; ++index2)
+                for (int index2 = 0; index2 < DGRSettings.ActualParticleMultiplier * 2; ++index2)
                     Level.Add(SmallSmoke.New(thing1.position.x + Rando.Float(-8f, 8f), thing1.position.y + Rando.Float(-8f, 8f)));
                 Vec2 position1 = thing1.position;
                 float num2 = 0f;
@@ -273,7 +273,7 @@ namespace DuckGame
                         }
                     }
                 }
-                for (int index3 = 0; index3 < 2; ++index3)
+                for (int index3 = 0; index3 < DGRSettings.ActualParticleMultiplier * 2; ++index3)
                     Level.Add(SmallSmoke.New(thing1.position.x + Rando.Float(-8f, 8f), thing1.position.y + Rando.Float(-8f, 8f)));
                 num1 = index1 - 1;
                 Vec2 vec2 = position1;

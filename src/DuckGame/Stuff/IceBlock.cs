@@ -151,7 +151,7 @@ namespace DuckGame
         {
             if (bullet.isLocal && owner == null)
                 Thing.Fondle(this, DuckNetwork.localConnection);
-            for (int index = 0; index < 4; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
             {
                 GlassParticle glassParticle = new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized);
                 Level.Add(glassParticle);
@@ -196,7 +196,7 @@ namespace DuckGame
             Vec2 hitAngle = Vec2.Zero;
             if (type is DTShot)
                 hitAngle = (type as DTShot).bullet.travelDirNormalized;
-            for (int index = 0; index < 8; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
             {
                 GlassParticle glassParticle = new GlassParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), hitAngle);
                 Level.Add(glassParticle);
@@ -204,7 +204,7 @@ namespace DuckGame
                 glassParticle.vSpeed = (hitAngle.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
                 Level.Add(glassParticle);
             }
-            for (int index = 0; index < 5; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 5; ++index)
             {
                 SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-6f, 6f), y + Rando.Float(-6f, 6f));
                 smallSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
@@ -217,7 +217,7 @@ namespace DuckGame
 
         public override void ExitHit(Bullet bullet, Vec2 exitPos)
         {
-            for (int index = 0; index < 4; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
             {
                 GlassParticle glassParticle = new GlassParticle(exitPos.x, exitPos.y, bullet.travelDirNormalized);
                 Level.Add(glassParticle);
@@ -358,7 +358,7 @@ namespace DuckGame
                     _sprite = new SpriteMap("iceSculpture", 16, 24);
                     graphic = _sprite;
                     center = new Vec2(8f, 15f);
-                    for (int index = 0; index < 12; ++index)
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 12; ++index)
                     {
                         SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-9f, 9f), y + Rando.Float(-9f, 9f));
                         smallSmoke._sprite.color = Color.White;

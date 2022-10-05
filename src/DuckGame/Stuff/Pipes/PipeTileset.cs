@@ -160,7 +160,7 @@ namespace DuckGame
                 d.vSpeed = -6f;
                 if (d is RagdollPart)
                     d.hSpeed += Rando.Float(-1f, 1f);
-                for (int index = 0; index < 6; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
                 {
                     SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f));
                     smallSmoke.velocity = new Vec2(Rando.Float(-0.5f, 0.5f), Rando.Float(0f, -0.5f));
@@ -187,7 +187,7 @@ namespace DuckGame
                     d.hSpeed = 6f;
                 else
                     d.hSpeed = -6f;
-                for (int index = 0; index < 6; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
                 {
                     SmallSmoke smallSmoke = SmallSmoke.New(x + (Left() != null ? 12f : -12f) + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f));
                     if (Left() != null)
@@ -218,7 +218,7 @@ namespace DuckGame
             {
                 d.position = position + new Vec2(0f, 4f);
                 d.vSpeed = 5f;
-                for (int index = 0; index < 6; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
                 {
                     SmallSmoke smallSmoke = SmallSmoke.New(x + Rando.Float(-4f, 4f), y + 12f + Rando.Float(-4f, 4f));
                     smallSmoke.velocity = new Vec2(Rando.Float(-0.5f, 0.5f), Rando.Float(0.2f, 0.7f));

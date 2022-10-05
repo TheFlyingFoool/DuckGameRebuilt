@@ -43,9 +43,9 @@ namespace DuckGame
             }
             else if (with is Block && CalculateImpactPower(with, from) > 1)
             {
-                SFX.Play("glassBreak");
                 Level.Remove(this);
-                for (int i = 0; i < 3; i++)
+                SFX.Play("glassBreak");
+                for (int i = 0; i < DGRSettings.ActualParticleMultiplier * 3; i++)
                 {
                     Level.Add(new GlassParticle(x, y, velocity.normalized));
                 }

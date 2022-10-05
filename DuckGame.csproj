@@ -2017,8 +2017,7 @@
 call "$(SolutionDir)shaders_source\buildshaders.bat</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>cp -rv $(SolutionDir)deps/* $(SolutionDir)bin/</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>git describe  --always --dirty --abbrev=40 &gt; "$(ProjectDir)\version.txt"</PreBuildEvent>

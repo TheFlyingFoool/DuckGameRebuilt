@@ -113,7 +113,7 @@ namespace DuckGame
         {
             if ((graphic as SpriteMap).frame >= 4)
                 return;
-            for (int index = 0; index < 4; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
             {
                 GlassParticle glassParticle = new GlassParticle(x + Rando.Int(-3, 3), y + Rando.Int(-3, 3), Vec2.Zero);
                 Level.Add(glassParticle);

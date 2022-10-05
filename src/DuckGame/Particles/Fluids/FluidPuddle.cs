@@ -244,15 +244,18 @@ namespace DuckGame
                 Level.Remove(this);
             if (collisionSize.y > 10f)
             {
-                ++bubbleWait;
-                if (bubbleWait > Rando.Int(15, 25))
+                if (DGRSettings.S_ParticleMultiplier != 0)
                 {
-                    for (int index = 0; index < (int)Math.Floor(collisionSize.x / 16f); ++index)
+                    ++bubbleWait;
+                    if (bubbleWait > Rando.Int(15, 25) / DGRSettings.ActualParticleMultiplier)
                     {
-                        if (Rando.Float(1f) > 0.85f)
-                            Level.Add(new TinyBubble(left + index * 16 + Rando.Float(-4f, 4f), bottom + Rando.Float(-4f), 0f, top + 10f));
+                        for (int index = 0; index < (int)Math.Floor(collisionSize.x / 16f); ++index)
+                        {
+                            if (Rando.Float(1f) > 0.85f)
+                                Level.Add(new TinyBubble(left + index * 16 + Rando.Float(-4f, 4f), bottom + Rando.Float(-4f), 0f, top + 10f));
+                        }
+                        bubbleWait = 0;
                     }
-                    bubbleWait = 0;
                 }
                 _coll.Clear();
                 Level.CheckRectAll<PhysicsObject>(topLeft, bottomRight, _coll);

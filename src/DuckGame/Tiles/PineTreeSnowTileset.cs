@@ -47,7 +47,7 @@ namespace DuckGame
                     pineTree2.KnockOffSnow(dir, vertShake);
                 if (num == 0)
                 {
-                    for (int index = 0; index < 2; ++index)
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
                         Level.Add(new SnowFallParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), dir * Rando.Float(1f) + new Vec2(Rando.Float(-0.1f, -0.1f), Rando.Float(-0.1f, -0.1f) - Rando.Float(0.1f, 0.3f))));
                 }
             }
@@ -67,7 +67,7 @@ namespace DuckGame
                 if (snowWait <= 0.0)
                 {
                     snowWait = Rando.Float(2f, 3f);
-                    if (Rando.Float(1f) > 0.92)
+                    if (Rando.Float(1f) > 0.92 && Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) //bad code lol but idc as of now -NiK0
                         Level.Add(new SnowFallParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), new Vec2(0f, 0f)));
                 }
             }

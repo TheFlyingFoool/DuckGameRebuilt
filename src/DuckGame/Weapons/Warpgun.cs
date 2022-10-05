@@ -133,7 +133,7 @@ namespace DuckGame
                         {
                             pos = position
                         });
-                        for (int index2 = 0; index2 < 4; ++index2)
+                        for (int index2 = 0; index2 < DGRSettings.ActualParticleMultiplier * 4; ++index2)
                             Level.Add(WagnusChargeParticle.New(position.x + Rando.Float(-4f, 4f), position.y + Rando.Float(-4f, 4f), this));
                     }
                 }

@@ -248,7 +248,7 @@ namespace DuckGame
                     SFX.Play("cutOffQuack2", 0.9f, Rando.Float(-0.1f, 0.1f));
                 else
                     SFX.Play("cutOffQuack", 0.9f, Rando.Float(-0.1f, 0.1f));
-                Level.Add(SmallSmoke.New(x + 6f, y - 35f));
+                if (DGRSettings.S_ParticleMultiplier != 0) Level.Add(SmallSmoke.New(x + 6f, y - 35f));
                 _hatThrowTime = -1f;
             }
         }

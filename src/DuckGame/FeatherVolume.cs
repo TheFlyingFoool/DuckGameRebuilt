@@ -28,11 +28,14 @@ namespace DuckGame
             Gun owner = bullet.owner as Gun;
             if (bullet.owner != null && (bullet.owner == _duckOwner || owner != null && owner.owner == _duckOwner))
                 return false;
-            Feather feather = Feather.New(0f, 0f, _duckOwner.persona);
-            feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1.0 + Rando.Float(1f)));
-            feather.vSpeed = -Rando.Float(2f);
-            feather.position = hitPos;
-            Level.Add(feather);
+            if (DGRSettings.ActualParticleMultiplier != 0)
+            {
+                Feather feather = Feather.New(0f, 0f, _duckOwner.persona);
+                feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1.0 + Rando.Float(1f)));
+                feather.vSpeed = -Rando.Float(2f);
+                feather.position = hitPos;
+                Level.Add(feather);
+            }
             Vec2 point = hitPos + bullet.travelDirNormalized * 3f;
             if (bullet.isLocal && _duckOwner.sliding && _duckOwner.ragdoll == null && point.x > left + 2.0 && point.x < right - 2.0 && point.y > top + 2.0 && point.y < bottom - 2.0)
             {
@@ -49,7 +52,7 @@ namespace DuckGame
         public override void ExitHit(Bullet bullet, Vec2 exitPos)
         {
             Gun owner = bullet.owner as Gun;
-            if (bullet.owner != null && (bullet.owner == _duckOwner || owner != null && owner.owner == _duckOwner))
+            if (DGRSettings.ActualParticleMultiplier == 0 || (bullet.owner != null && (bullet.owner == _duckOwner || owner != null && owner.owner == _duckOwner)))
                 return;
             Feather feather = Feather.New(0f, 0f, _duckOwner.persona);
             feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1.0 + Rando.Float(1f)));

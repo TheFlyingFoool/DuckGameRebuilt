@@ -182,7 +182,7 @@ namespace DuckGame
             _barrelHeat = 0f;
             _barrelSmoke.SetAnimation("finish");
             SFX.Play(_clickSound);
-            for (int index = 0; index < 2; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
             {
                 SmallSmoke smallSmoke = SmallSmoke.New(barrelPosition.x, barrelPosition.y);
                 smallSmoke.scale = new Vec2(0.3f, 0.3f);
@@ -372,7 +372,7 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            if (!(Level.current is Editor))
+            if (!(Level.current is Editor) && DGRSettings.S_ParticleMultiplier != 0)
             {
                 Level.Add(SmallSmoke.New(x, y));
                 Level.Add(SmallSmoke.New(x + 4f, y));

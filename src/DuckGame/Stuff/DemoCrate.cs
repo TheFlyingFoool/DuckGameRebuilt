@@ -54,14 +54,14 @@ namespace DuckGame
                 float num2 = Rando.Float(12f, 20f);
                 Level.Add(new ExplosionPart(pPosition.x + (float)Math.Cos(Maths.DegToRad(deg)) * num2, pPosition.y - (float)Math.Sin(Maths.DegToRad(deg)) * num2));
             }
-            for (int index = 0; index < 5; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 5; ++index)
             {
                 SmallSmoke smallSmoke = SmallSmoke.New(pPosition.x + Rando.Float(-6f, 6f), pPosition.y + Rando.Float(-6f, 6f));
                 smallSmoke.hSpeed += Rando.Float(-0.3f, 0.3f);
                 smallSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
                 Level.Add(smallSmoke);
             }
-            for (int index = 0; index < 3; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
                 Level.Add(new CampingSmoke(pPosition.x - 5f + Rando.Float(10f), (float)(pPosition.y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
                 {
                     move = {
@@ -69,7 +69,7 @@ namespace DuckGame
             y = (Rando.Float(1f) - 0.5f)
           }
                 });
-            for (int index = 0; index < 6; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(pPosition.x - 8f + Rando.Float(16f), pPosition.y - 8f + Rando.Float(16f));
                 woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(pFlyX) * 0.5);

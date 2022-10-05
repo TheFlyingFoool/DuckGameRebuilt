@@ -42,7 +42,7 @@
             if (ammo > 0)
             {
                 _sprite.SetAnimation("fire");
-                for (int index = 0; index < 3; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
                 {
                     Vec2 vec2 = Offset(new Vec2(-9f, 0f));
                     Vec2 hitAngle = barrelVector.Rotate(Rando.Float(1f), Vec2.Zero);

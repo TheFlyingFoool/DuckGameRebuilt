@@ -375,13 +375,13 @@ namespace DuckGame
             {
                 Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0f ? 1 : -1));
                 hitPos -= bullet.travelDirNormalized;
-                for (int index = 0; index < 3; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
                     Level.Add(Spark.New(hitPos.x, hitPos.y, bullet.travelDirNormalized));
             }
             else if (physicsMaterial == PhysicsMaterial.Wood)
             {
                 hitPos -= bullet.travelDirNormalized;
-                for (int index = 0; index < 3; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
                 {
                     WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
                     woodDebris.hSpeed = -bullet.travelDirNormalized.x + Rando.Float(-1f, 1f);

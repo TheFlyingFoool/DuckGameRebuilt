@@ -50,7 +50,7 @@ namespace DuckGame
                 if (ctfPresent2.duck != null)
                     ctfPresent2.duck.ThrowItem();
                 Level.Remove(ctfPresent2);
-                Level.Add(SmallSmoke.New(ctfPresent2.x, ctfPresent2.y));
+                if (DGRSettings.S_ParticleMultiplier != 0) Level.Add(SmallSmoke.New(ctfPresent2.x, ctfPresent2.y));
                 CTF.CaptureFlag((bool)team);
                 SFX.Play("equip");
             }

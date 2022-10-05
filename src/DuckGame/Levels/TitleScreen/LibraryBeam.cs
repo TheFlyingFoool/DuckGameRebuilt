@@ -146,7 +146,7 @@ namespace DuckGame
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            for (int index = 0; index < 6; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
                 Level.Add(new GlassParticle(hitPos.x, hitPos.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
             _flash = 1f;
             return true;

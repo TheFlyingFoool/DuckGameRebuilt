@@ -1068,7 +1068,7 @@ namespace DuckGame
             {
                 Vec2 pos = GetEdgePos();
                 Vec2 dir = (pos - GetPos()).normalized;
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < DGRSettings.ActualParticleMultiplier * 8; i++)
                 {
                     Feather feather = Feather.New(pos.x - dir.x * 16f, pos.y - dir.y * 16f, persona);
                     feather.hSpeed += dir.x * 1f;
@@ -1620,7 +1620,7 @@ namespace DuckGame
                 SFX.Play("death");
                 SFX.Play("pierce");
             }
-            for (int index = 0; index < 8; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
                 Level.Add(Feather.New(cameraPosition.x, cameraPosition.y, persona));
             if (!(Level.current is ChallengeLevel))
                 Global.data.kills += 1;
@@ -1721,13 +1721,16 @@ namespace DuckGame
         {
             if (dead || inputProfile == null || Level.current == null)
                 return;
-            if (breath <= 0)
+            if (DGRSettings.S_ParticleMultiplier != 0)
             {
-                if (breath == 0 && Level.current.cold && !underwater)
-                    Breath();
-                breath = Rando.Int(70, 220);
+                if (breath <= 0)
+                {
+                    if (breath == 0 && Level.current.cold && !underwater)
+                        Breath();
+                    breath = (int)(Rando.Int(70, 220) / DGRSettings.ActualParticleMultiplier);
+                }
+                --breath;
             }
-            --breath;
             if (inputProfile.Pressed("QUACK"))
             {
                 float leftTrigger = inputProfile.leftTrigger;
@@ -1948,7 +1951,7 @@ namespace DuckGame
                         if (equipment.chained.value)
                         {
                             SFX.PlaySynchronized("equip");
-                            for (int index = 0; index > 3; ++index)
+                            for (int index = 0; index > DGRSettings.ActualParticleMultiplier * 3; ++index)
                                 Level.Add(SmallSmoke.New(holdObject.x + Rando.Float(-3f, 3f), holdObject.y + Rando.Float(-3f, 3f)));
                         }
                         holdObject = null;
@@ -2126,7 +2129,7 @@ namespace DuckGame
 
         public static void ResurrectEffect(Vec2 pPosition)
         {
-            for (int index = 0; index < 6; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
                 Level.Add(new CampingSmoke(pPosition.x - 5f + Rando.Float(10f), (float)(pPosition.y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
                 {
                     move = {
@@ -2733,7 +2736,7 @@ namespace DuckGame
                 tvHat.jumpReady = false;
                 flag = true;
             }
-            if (flag)
+            if (DGRSettings.S_ParticleMultiplier != 0 && flag)
             {
                 Level.Add(new ColorStar(x + hSpeed * 2f, y + 4f, new Vec2(-1.5f, -2.5f) + new Vec2((float)((hSpeed + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f)), new Color(237, 94, 238)));
                 Level.Add(new ColorStar(x + hSpeed * 2f, y + 4f, new Vec2(-0.9f, -1.5f) + new Vec2((float)((hSpeed + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f)), new Color(49, 162, 242)));
@@ -3060,7 +3063,7 @@ namespace DuckGame
                                 {
                                     onWall = true;
                                     SFX.Play("wallTouch", pitch: Rando.Float(-0.1f, 0.1f));
-                                    for (int index = 0; index < 2; ++index)
+                                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
                                     {
                                         Feather feather1 = Feather.New(x + (!leftWall ? -4f : 4f) + Rando.Float(-1f, 1f), y + Rando.Float(-4f, 4f), persona);
                                         Feather feather2 = feather1;
@@ -3101,7 +3104,7 @@ namespace DuckGame
                         if (onWall && _atWallFrames != num5)
                         {
                             SFX.Play("wallLeave", pitch: Rando.Float(-0.1f, 0.1f));
-                            for (int index = 0; index < 2; ++index)
+                            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
                             {
                                 Feather feather5 = Feather.New(x + (!leftWall ? -4f : 4f) + Rando.Float(-1f, 1f), y + Rando.Float(-4f, 4f), persona);
                                 feather5.vSpeed = Rando.Float(-2f, 1.5f);
@@ -3424,6 +3427,7 @@ namespace DuckGame
 
         public void MakeStars()
         {
+            if (DGRSettings.ActualParticleMultiplier == 0) return;
             Level.Add(new DizzyStar(x + offDir * -3, y - 9f, new Vec2(Rando.Float(-0.8f, -1.5f), Rando.Float(0.5f, -1f))));
             Level.Add(new DizzyStar(x + offDir * -3, y - 9f, new Vec2(Rando.Float(-0.8f, -1.5f), Rando.Float(0.5f, -1f))));
             Level.Add(new DizzyStar(x + offDir * -3, y - 9f, new Vec2(Rando.Float(0.8f, 1.5f), Rando.Float(0.5f, -1f))));
@@ -3433,6 +3437,7 @@ namespace DuckGame
 
         public static void MakeStars(Vec2 pPosition, Vec2 pVelocity)
         {
+            if (DGRSettings.ActualParticleMultiplier == 0) return;
             Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(-1.7f, -1f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
             Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(-0.7f, -0.5f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
             Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(0.7f, -0.5f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
@@ -3764,19 +3769,22 @@ namespace DuckGame
                     _framesUnderwater = 0;
                     ++Global.data.secondsUnderwater.valueInt;
                 }
-                _bubbleWait += Rando.Float(0.015f, 0.017f);
-                if (Rando.Float(1f) > 0.99f)
-                    _bubbleWait += 0.5f;
-                if (_bubbleWait > 1f)
+                if (DGRSettings.S_ParticleMultiplier != 0)
                 {
-                    _bubbleWait = Rando.Float(0.2f);
-                    EmitBubbles(1, 1f);
+                    _bubbleWait += Rando.Float(0.015f, 0.017f) * DGRSettings.ActualParticleMultiplier;
+                    if (Rando.Float(1f) > 0.99f)
+                        _bubbleWait += 0.5f;
+                    if (_bubbleWait > 1f)
+                    {
+                        _bubbleWait = Rando.Float(0.2f) * DGRSettings.ActualParticleMultiplier;
+                        EmitBubbles(1, 1f);
+                    }
                 }
             }
             if (!quackStart && quack > 0)
             {
                 quackStart = true;
-                EmitBubbles(Rando.Int(3, 6), 1.2f);
+                EmitBubbles((int)(Rando.Int(3, 6) * DGRSettings.ActualParticleMultiplier), 1.2f);
                 if (Level.current.cold && !underwater)
                     Breath();
             }
@@ -3942,7 +3950,7 @@ namespace DuckGame
                 centerOffset = 24f;
             if (ragdoll == null && isServerForObject)
                 base.Update();
-            if (ragdoll == null && _prevRagdoll != null)
+            if (ragdoll == null && _prevRagdoll != null && DGRSettings.S_ParticleMultiplier != 0)
             {
                 Level.Add(SmallSmoke.New(x - Rando.Float(2f, 5f), (float)(y + Rando.Float(-3f, 3f) + 16.0)));
                 Level.Add(SmallSmoke.New(x + Rando.Float(2f, 5f), (float)(y + Rando.Float(-3f, 3f) + 16.0)));
@@ -4070,7 +4078,7 @@ namespace DuckGame
                 {
                     if (_sizzle == null) _sizzle = SFX.Play("sizzle", 0.6f, looped: true);
                     _handHeat += 0.016f;
-                    if (_handHeat > 0.4f)
+                    if (_handHeat > 0.4f && DGRSettings.S_ParticleMultiplier != 0)
                     {
                         if (handSmokeWait <= 0)
                         {
@@ -4214,7 +4222,7 @@ namespace DuckGame
                     Equip(e, false);
                 }
             }
-            for (int index = 0; index < 3; ++index)
+            for (int index = 0; index < 3 * Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 10000); ++index)
                 Level.Add(new MusketSmoke(x - 5f + Rando.Float(10f), (float)(y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
                 {
                     move = {
@@ -4231,7 +4239,7 @@ namespace DuckGame
         public void DoFuneralStuff()
         {
             if (ragdoll != null) position = ragdoll.position;
-            for (int index = 0; index < 3; ++index)
+            for (int index = 0; index < 3 * Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 10000); ++index)
                 Level.Add(new MusketSmoke(position.x - 5f + Rando.Float(10f), (float)(position.y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
                 {
                   move = {

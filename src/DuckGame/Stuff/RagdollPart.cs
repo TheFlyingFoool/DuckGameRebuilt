@@ -283,11 +283,14 @@ namespace DuckGame
                     return true;
                 }
             }
-            Feather feather = Feather.New(0f, 0f, _persona);
-            feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1.0 + Rando.Float(1f)));
-            feather.vSpeed = -Rando.Float(2f);
-            feather.position = hitPos;
-            Level.Add(feather);
+            if (DGRSettings.ActualParticleMultiplier != 0)
+            {
+                Feather feather = Feather.New(0f, 0f, _persona);
+                feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1.0 + Rando.Float(1f)));
+                feather.vSpeed = -Rando.Float(2f);
+                feather.position = hitPos;
+                Level.Add(feather);
+            }
             if (bullet.isLocal)
             {
                 hSpeed += bullet.travelDirNormalized.x * bullet.ammo.impactPower;
@@ -307,9 +310,12 @@ namespace DuckGame
                 if (!_doll.removeFromLevel && _doll.captureDuck != null && _doll.captureDuck.dead)
                 {
                     CookedDuck t = new CookedDuck(_doll.x, _doll.y);
-                    Level.Add(SmallSmoke.New(_doll.x + Rando.Float(-4f, 4f), _doll.y + Rando.Float(-4f, 4f)));
-                    Level.Add(SmallSmoke.New(_doll.x + Rando.Float(-4f, 4f), _doll.y + Rando.Float(-4f, 4f)));
-                    Level.Add(SmallSmoke.New(_doll.x + Rando.Float(-4f, 4f), _doll.y + Rando.Float(-4f, 4f)));
+                    if (DGRSettings.S_ParticleMultiplier != 0)
+                    {
+                        Level.Add(SmallSmoke.New(_doll.x + Rando.Float(-4f, 4f), _doll.y + Rando.Float(-4f, 4f)));
+                        Level.Add(SmallSmoke.New(_doll.x + Rando.Float(-4f, 4f), _doll.y + Rando.Float(-4f, 4f)));
+                        Level.Add(SmallSmoke.New(_doll.x + Rando.Float(-4f, 4f), _doll.y + Rando.Float(-4f, 4f)));
+                    }
                     ReturnItemToWorld(t);
                     t.vSpeed = vSpeed - 2f;
                     t.hSpeed = hSpeed;

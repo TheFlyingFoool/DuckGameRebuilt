@@ -369,4 +369,6 @@ unnamedtexs/unnamed MTSpriteBatch.DoDrawInternal^MTSpriteBatch.DrawWithMaterial^
 *.png
 *.txt
 
+dottrace/
+
 version.txt

@@ -143,9 +143,9 @@ namespace DuckGame
             if (loaded && ammo > 1)
             {
                 base.OnPressAction();
-                for (int index = 0; index < 4; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
                     Level.Add(Spark.New(offDir > 0 ? x - 9f : x + 9f, y - 6f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.05f));
-                for (int index = 0; index < 4; ++index)
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
                     Level.Add(SmallSmoke.New(barrelPosition.x + offDir * 4f, barrelPosition.y));
                 ammo = 1;
             }
