@@ -368,3 +368,5 @@ DuckGame.exe.CodeAnalysisLog.xml
 unnamedtexs/unnamed MTSpriteBatch.DoDrawInternal^MTSpriteBatch.DrawWithMaterial^Graphics.Draw^MonoMain.RunDraw 1.png
 *.png
 *.txt
+
+dottrace/

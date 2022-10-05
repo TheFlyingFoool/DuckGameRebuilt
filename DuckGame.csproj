@@ -2016,7 +2016,6 @@
 call "$(SolutionDir)shaders_source\buildshaders.bat</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>cp -rv $(SolutionDir)deps/* $(SolutionDir)bin/</PostBuildEvent>
   </PropertyGroup>
 </Project>
