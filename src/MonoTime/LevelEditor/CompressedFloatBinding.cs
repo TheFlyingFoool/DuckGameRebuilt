@@ -38,16 +38,16 @@ namespace DuckGame
 
         public override object ReadNetValue(object val)
         {
-            float num = (float)((int)val);
+            float num = (int)val;
             long num2 = BitBuffer.GetMaxValue(this._bits) / 2L;
-            return num / (float)num2 * this._range;
+            return num / num2 * this._range;
         }
 
         public override object ReadNetValue(BitBuffer pData)
         {
-            float num = (float)((int)pData.ReadBits(this.type, this.bits));
+            float num = (int)pData.ReadBits(this.type, this.bits);
             long num2 = BitBuffer.GetMaxValue(this._bits) / 2L;
-            return num / (float)num2 * this._range;
+            return num / num2 * this._range;
         }
 
         public CompressedFloatBinding(string field, float range = 1f, int bits = 16, bool isRot = false, bool doLerp = false)

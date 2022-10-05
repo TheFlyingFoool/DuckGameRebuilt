@@ -18,10 +18,10 @@ namespace XnaToFna.ProxyForms
       get
       {
         Assembly entryAssembly = Assembly.GetEntryAssembly();
-        if (entryAssembly == (Assembly) null)
-          return (string) null;
+        if (entryAssembly == null)
+          return null;
         Module manifestModule = entryAssembly.ManifestModule;
-        if (manifestModule != (Module) null)
+        if (manifestModule != null)
         {
           AssemblyInformationalVersionAttribute customAttribute1 = manifestModule.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
           if (customAttribute1 != null)

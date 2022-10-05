@@ -35,7 +35,7 @@ namespace XnaToFna
       get
       {
         if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-          return (ulong) PInvokeHelper.GetCurrentThreadId();
+          return PInvokeHelper.GetCurrentThreadId();
         PInvokeHelper.d_pthread_self dPthreadSelf;
         PInvokeHelper.pthread_self = dPthreadSelf = PInvokeHelper.pthread_self ?? PInvokeHelper.PThread.GetFunction("pthread_self").AsDelegate<PInvokeHelper.d_pthread_self>();
         return dPthreadSelf == null ? 0UL : dPthreadSelf();

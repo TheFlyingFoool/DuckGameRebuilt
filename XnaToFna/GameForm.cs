@@ -154,7 +154,7 @@ namespace XnaToFna.ProxyForms
       string screenDeviceName,
       ref string resultDeviceName)
     {
-      this.SDLWindowSizeChanged((object) null, (EventArgs) null);
+      this.SDLWindowSizeChanged(null, null);
     }
 
     protected override void _Close() => XnaToFnaHelper.Game.Exit();
@@ -172,13 +172,13 @@ namespace XnaToFna.ProxyForms
       bool fullscreenWindow = this.FakeFullscreenWindow;
       this.FakeFullscreenWindow = flag2 & flag1;
       XnaToFnaHelper.Log("[ProxyForms] Applying changes from ProxyForms.Form to SDL window");
-      XnaToFnaHelper.Log(string.Format("[ProxyForms] Currently fullscreen: {0}; Fake fullscreen window: {1}; Border: {2}; State: {3}", (object) isFullScreen, (object) this.FakeFullscreenWindow, (object) this.FormBorderStyle, (object) this.WindowState));
+      XnaToFnaHelper.Log(string.Format("[ProxyForms] Currently fullscreen: {0}; Fake fullscreen window: {1}; Border: {2}; State: {3}", isFullScreen, FakeFullscreenWindow, FormBorderStyle, WindowState));
       if (this.FakeFullscreenWindow)
       {
         XnaToFnaHelper.Log("[ProxyForms] Game expects borderless fullscreen... give it proper fullscreen instead.");
         if (!isFullScreen)
           this._WindowedBounds = this.SDLBounds;
-        XnaToFnaHelper.Log(string.Format("[ProxyForms] Last window size: {0} x {1}", (object) this._WindowedBounds.Width, (object) this._WindowedBounds.Height));
+        XnaToFnaHelper.Log(string.Format("[ProxyForms] Last window size: {0} x {1}", _WindowedBounds.Width, _WindowedBounds.Height));
         DisplayMode displayMode = service.GraphicsDevice.DisplayMode;
         service.PreferredBackBufferWidth = displayMode.Width;
         service.PreferredBackBufferHeight = displayMode.Height;
@@ -204,7 +204,7 @@ namespace XnaToFna.ProxyForms
           SDL.SDL_RestoreWindow(handle);
           this.SDLBounds = this._Bounds = this._WindowedBounds;
         }
-        XnaToFnaHelper.Log(string.Format("[ProxyForms] New window size: {0} x {1}", (object) this._Bounds.Width, (object) this._Bounds.Height));
+        XnaToFnaHelper.Log(string.Format("[ProxyForms] New window size: {0} x {1}", _Bounds.Width, _Bounds.Height));
         service.PreferredBackBufferWidth = this._Bounds.Width;
         service.PreferredBackBufferHeight = this._Bounds.Height;
         service.ApplyChanges();

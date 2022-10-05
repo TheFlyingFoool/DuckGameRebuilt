@@ -228,7 +228,7 @@ namespace DuckGame
                                 if (gachaSpeed > 0.8f)
                                     SFX.Play("gachaBounce", pitch: 0.2f);
                                 gachaY = 50f;
-                                gachaSpeed = (float)(-gachaSpeed * 0.04f);
+                                gachaSpeed = -gachaSpeed * 0.04f;
                             }
                             _openWait += 0.019f;
                             if (_openWait >= 1.0)

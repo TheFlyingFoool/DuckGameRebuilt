@@ -283,8 +283,8 @@ namespace XnaToFna
             Type type = typeof(XnaToFnaHelper);
             Assembly assembly = Assembly.GetAssembly(typeof(Microsoft.Xna.Framework.Game));
             FieldInfo field = assembly.GetType("Microsoft.Xna.Framework.FNAPlatform").GetField(name);
-            type.GetField(string.Format("fna_{0}", (object)name)).SetValue((object)null, field.GetValue((object)null));
-            field.SetValue((object)null, (object)Delegate.CreateDelegate(assembly.GetType(string.Format("Microsoft.Xna.Framework.FNAPlatform+{0}Func", (object)name)), type.GetMethod(name)));
+            type.GetField(string.Format("fna_{0}", name)).SetValue(null, field.GetValue(null));
+            field.SetValue(null, Delegate.CreateDelegate(assembly.GetType(string.Format("Microsoft.Xna.Framework.FNAPlatform+{0}Func", name)), type.GetMethod(name)));
         }
         public static string GetActualCaseForFileName(string pathAndFileName, bool CanBeEmpty = false)
         {
@@ -348,12 +348,12 @@ namespace XnaToFna
           ref string resultDeviceName)
         {
             object[] objArray = new object[6] {
-        (object) window,
-        (object) clientWidth,
-        (object) clientHeight,
-        (object) wantsFullscreen,
-        (object) screenDeviceName,
-        (object) resultDeviceName
+         window,
+         clientWidth,
+         clientHeight,
+         wantsFullscreen,
+         screenDeviceName,
+         resultDeviceName
       };
             XnaToFnaHelper.fna_ApplyWindowChanges.DynamicInvoke(objArray);
             resultDeviceName = (string)objArray[5];

@@ -15,7 +15,7 @@ namespace XnaToFna
 
     public object AsyncState => this._AsyncState;
 
-    public WaitHandle AsyncWaitHandle => (WaitHandle) null;
+    public WaitHandle AsyncWaitHandle => null;
 
     public bool CompletedSynchronously => true;
 

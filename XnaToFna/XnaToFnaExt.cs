@@ -35,38 +35,38 @@ namespace XnaToFna
       Thread thread;
       if (!nullify)
       {
-        thread = new Thread((ThreadStart) (() =>
+        thread = new Thread(() =>
         {
-          try
-          {
-            StreamReader standardError = p.StandardError;
-            while (!p.HasExited)
-              Console.WriteLine(standardError.ReadLine());
-          }
-          catch
-          {
-          }
-        }))
+            try
+            {
+                StreamReader standardError = p.StandardError;
+                while (!p.HasExited)
+                    Console.WriteLine(standardError.ReadLine());
+            }
+            catch
+            {
+            }
+        })
         {
-          Name = string.Format("STDERR pipe thread for {0}", (object) p.ProcessName),
+          Name = string.Format("STDERR pipe thread for {0}", p.ProcessName),
           IsBackground = true
         };
       }
       else
       {
-        thread = new Thread((ThreadStart) (() =>
+        thread = new Thread(() =>
         {
-          try
-          {
-            StreamReader standardError = p.StandardError;
-            while (!p.HasExited)
-              standardError.ReadLine();
-          }
-          catch
-          {
-          }
-        }));
-        thread.Name = string.Format("STDERR pipe thread for {0}", (object) p.ProcessName);
+            try
+            {
+                StreamReader standardError = p.StandardError;
+                while (!p.HasExited)
+                    standardError.ReadLine();
+            }
+            catch
+            {
+            }
+        });
+        thread.Name = string.Format("STDERR pipe thread for {0}", p.ProcessName);
         thread.IsBackground = true;
       }
       thread.Start();
@@ -78,38 +78,38 @@ namespace XnaToFna
       Thread thread;
       if (!nullify)
       {
-        thread = new Thread((ThreadStart) (() =>
+        thread = new Thread(() =>
         {
-          try
-          {
-            StreamReader standardOutput = p.StandardOutput;
-            while (!p.HasExited)
-              Console.WriteLine(standardOutput.ReadLine());
-          }
-          catch
-          {
-          }
-        }))
+            try
+            {
+                StreamReader standardOutput = p.StandardOutput;
+                while (!p.HasExited)
+                    Console.WriteLine(standardOutput.ReadLine());
+            }
+            catch
+            {
+            }
+        })
         {
-          Name = string.Format("STDOUT pipe thread for {0}", (object) p.ProcessName),
+          Name = string.Format("STDOUT pipe thread for {0}", p.ProcessName),
           IsBackground = true
         };
       }
       else
       {
-        thread = new Thread((ThreadStart) (() =>
+        thread = new Thread(() =>
         {
-          try
-          {
-            StreamReader standardOutput = p.StandardOutput;
-            while (!p.HasExited)
-              standardOutput.ReadLine();
-          }
-          catch
-          {
-          }
-        }));
-        thread.Name = string.Format("STDOUT pipe thread for {0}", (object) p.ProcessName);
+            try
+            {
+                StreamReader standardOutput = p.StandardOutput;
+                while (!p.HasExited)
+                    standardOutput.ReadLine();
+            }
+            catch
+            {
+            }
+        });
+        thread.Name = string.Format("STDOUT pipe thread for {0}", p.ProcessName);
         thread.IsBackground = true;
       }
       thread.Start();

@@ -126,6 +126,6 @@ namespace XnaToFna.ProxyDrawing
 
     public override int GetHashCode() => this.height + this.width ^ this.x + this.y;
 
-    public override string ToString() => string.Format("{{X={0},Y={1},Width={2},Height={3}}}", (object) this.x, (object) this.y, (object) this.width, (object) this.height);
+    public override string ToString() => string.Format("{{X={0},Y={1},Width={2},Height={3}}}", x, y, width, height);
   }
 }

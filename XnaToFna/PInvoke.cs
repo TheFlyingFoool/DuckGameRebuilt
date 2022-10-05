@@ -99,9 +99,9 @@ namespace XnaToFna
           PInvoke.CurrentHookIndex.Value = index;
           object[] objArray = new object[3]
           {
-            (object) 0,
-            (object) wParam,
-            (object) lParamMsg
+             0,
+             wParam,
+             lParamMsg
           };
           object obj = @delegate.DynamicInvoke(objArray);
           lParamMsg = (Message) objArray[2];
@@ -120,7 +120,7 @@ namespace XnaToFna
         if ((object) @delegate != null)
         {
           PInvoke.CurrentHookIndex.Value = index;
-          return (IntPtr) @delegate.DynamicInvoke((object) (nCode < 0 ? nCode + 1 : 0), (object) wParam, (object) lParam);
+          return (IntPtr) @delegate.DynamicInvoke(nCode < 0 ? nCode + 1 : 0, wParam, lParam);
         }
       }
       return IntPtr.Zero;
@@ -145,7 +145,7 @@ namespace XnaToFna
     {
       if (!(Control.FromHandle(hWnd) is Form form) || form.WindowHookPtr == IntPtr.Zero)
         return IntPtr.Zero;
-      return (IntPtr) form.WindowHook.DynamicInvoke((object) hWnd, (object) Msg, (object) wParam, (object) lParam);
+      return (IntPtr) form.WindowHook.DynamicInvoke(hWnd, Msg, wParam, lParam);
     }
   }
 }

@@ -74,7 +74,7 @@ namespace XnaToFna
       IntPtr windowHookPtr = form.WindowHookPtr;
       form.WindowHookPtr = (IntPtr) dwNewLong;
       form.WindowHook = Marshal.GetDelegateForFunctionPointer(form.WindowHookPtr, typeof (WndProc));
-      XnaToFnaHelper.Log(string.Format("[PInvokeHooks] Window hook set on ProxyForms.Form #{0}", (object) form.GlobalIndex));
+      XnaToFnaHelper.Log(string.Format("[PInvokeHooks] Window hook set on ProxyForms.Form #{0}", form.GlobalIndex));
       return (int) windowHookPtr;
     }
 
@@ -87,7 +87,7 @@ namespace XnaToFna
     {
       if (lpPrevWndFunc == IntPtr.Zero)
         return IntPtr.Zero;
-      return (IntPtr) Marshal.GetDelegateForFunctionPointer(lpPrevWndFunc, typeof (MulticastDelegate)).DynamicInvoke((object) hWnd, (object) Msg, (object) wParam, (object) lParam);
+      return (IntPtr) Marshal.GetDelegateForFunctionPointer(lpPrevWndFunc, typeof (MulticastDelegate)).DynamicInvoke(hWnd, Msg, wParam, lParam);
     }
 
     public static IntPtr SetWindowsHookEx(
@@ -98,9 +98,9 @@ namespace XnaToFna
     {
       int num = PInvoke.AllHooks.Count + 1;
       List<Delegate> hook = PInvoke.Hooks[hookType];
-      PInvoke.AllHooks.Add(Tuple.Create<HookType, Delegate, int>(hookType, (Delegate) lpfn, hook.Count));
-      hook.Add((Delegate) lpfn);
-      XnaToFnaHelper.Log(string.Format("[PInvokeHooks] Added global hook #{0} of type {1}", (object) num, (object) hookType));
+      PInvoke.AllHooks.Add(Tuple.Create<HookType, Delegate, int>(hookType, lpfn, hook.Count));
+      hook.Add(lpfn);
+      XnaToFnaHelper.Log(string.Format("[PInvokeHooks] Added global hook #{0} of type {1}", num, hookType));
       return (IntPtr) num;
     }
 
@@ -110,7 +110,7 @@ namespace XnaToFna
       if (index < 0 || PInvoke.Hooks.Count <= index || PInvoke.AllHooks[index] == null)
         return true;
       Tuple<HookType, Delegate, int> allHook = PInvoke.AllHooks[index];
-      PInvoke.AllHooks[index] = (Tuple<HookType, Delegate, int>) null;
+      PInvoke.AllHooks[index] = null;
       PInvoke.Hooks[allHook.Item1].RemoveAt(allHook.Item3);
       return true;
     }
@@ -123,8 +123,8 @@ namespace XnaToFna
     {
       if (!(Control.FromHandle(hWnd) is Form form))
       {
-        XnaToFnaHelper.Log(string.Format("[PInvokeHooks] Called GetWindowThreadProcessId for non-existing hWnd {0}", (object) hWnd));
-        form = (Form) GameForm.Instance;
+        XnaToFnaHelper.Log(string.Format("[PInvokeHooks] Called GetWindowThreadProcessId for non-existing hWnd {0}", hWnd));
+        form = GameForm.Instance;
       }
       fixed (uint* numPtr = &lpdwProcessId)
       {
@@ -142,8 +142,8 @@ namespace XnaToFna
     {
       if (!(Control.FromHandle(hWnd) is Form form))
       {
-        XnaToFnaHelper.Log(string.Format("[PInvokeHooks] Called GetWindowThreadProcessId for non-existing hWnd {0}", (object) hWnd));
-        form = (Form) GameForm.Instance;
+        XnaToFnaHelper.Log(string.Format("[PInvokeHooks] Called GetWindowThreadProcessId for non-existing hWnd {0}", hWnd));
+        form = GameForm.Instance;
       }
       if (Msg != 16U)
         return IntPtr.Zero;

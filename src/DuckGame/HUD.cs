@@ -460,8 +460,8 @@ namespace DuckGame
                 }
                 if (cornerDisplay.corner == HUDCorner.BottomMiddle)
                 {
-                    vec2_10.y += (float)(24f * (1f - cornerDisplay.slide));
-                    vec2_11.y += (float)(24f * (1f - cornerDisplay.slide));
+                    vec2_10.y += 24f * (1f - cornerDisplay.slide);
+                    vec2_11.y += 24f * (1f - cornerDisplay.slide);
                 }
                 float num14 = Layer.HUD.camera.width / 32f;
                 Vec2 vec2_12 = Vec2.Zero;

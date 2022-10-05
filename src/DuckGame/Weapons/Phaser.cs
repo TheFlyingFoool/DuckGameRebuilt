@@ -99,10 +99,10 @@ namespace DuckGame
             if (owner != null)
             {
                 _ammoType.range = _chargeLevel * 80f;
-                _ammoType.bulletThickness = (float)(0.2f + _charge * 0.4f);
+                _ammoType.bulletThickness = 0.2f + _charge * 0.4f;
                 _ammoType.penetration = _chargeLevel;
-                _ammoType.accuracy = (float)(0.4f + _charge * 0.5f);
-                _ammoType.bulletSpeed = (float)(8f + _charge * 10f);
+                _ammoType.accuracy = 0.4f + _charge * 0.5f;
+                _ammoType.bulletSpeed = 8f + _charge * 10f;
                 if (_chargeLevel == 1)
                 {
                     if (duck != null)

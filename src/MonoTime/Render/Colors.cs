@@ -213,13 +213,13 @@ namespace DuckGame
 
         public static long GetHash(byte alpha, byte red, byte green, byte blue)
         {
-            return (long) (((int) red << 16 | (int) green << 8 | (int) blue | (int) alpha << 24) & -1); //& (ulong)-1);
+            return (red << 16 | green << 8 | blue | alpha << 24) & -1; //& (ulong)-1);
         }
 
         public static long GetHash(Color color)
         {
-            return (long) (((int) color.r << 16 | (int) color.g << 8 | (int) color.b | (int) color.a << 24) &
-                           -1); //& (ulong)-1); 
+            return (color.r << 16 | color.g << 8 | color.b | color.a << 24) &
+                           -1; //& (ulong)-1); 
         }
 
         public static Color ParseColor(string color)

@@ -13,6 +13,7 @@ using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -20,6 +21,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using XnaToFna;
 
 namespace DuckGame
@@ -159,12 +161,37 @@ namespace DuckGame
         }
         public static Assembly FixLoadAssembly(string path)
         {
+            path = path.Replace("\\", "/");
+            string pathprimer = path.Replace(".dll", "");
+            string RebuiltDataPath = (pathprimer + "RebuiltData.txt");
+            string RebuiltAssemblyPath = (pathprimer + "Rebuilt.dll");
+            string modificationdatetime = File.GetLastWriteTime(path).ToString();
+            if (File.Exists(RebuiltDataPath))
+            {
+                if (File.Exists(RebuiltAssemblyPath))
+                {
+                    if (File.ReadAllText(RebuiltDataPath) == modificationdatetime)
+                    {
+                        return Assembly.LoadFile(RebuiltAssemblyPath);
+                    }
+                    File.Delete(RebuiltAssemblyPath);
+                }
+                File.Delete(RebuiltDataPath);
+            }
+            if (File.Exists(RebuiltAssemblyPath))
+            {
+                File.Delete(RebuiltAssemblyPath);
+            }
+            File.WriteAllText(RebuiltDataPath, modificationdatetime);
+            MonoMain.loadMessage = "REMAPPING/LOADING MOD " + ModLoader.currentModLoadString;
+            string folderpath = Path.GetDirectoryName(path);
             xnaToFnaUtil = new XnaToFnaUtil();
             //xnaToFnaUtil.ScanPath(Program.GameDirectory + "DGSteamref.dll");
             xnaToFnaUtil.ScanPath(Program.GameDirectory + "FNA.dll");
             xnaToFnaUtil.ScanPath(Program.FilePath);
             xnaToFnaUtil.RelinkAll();
-            string folderpath = Path.GetDirectoryName(path);
+          
+
             really really = new really();
             really.name = AssemblyName.GetAssemblyName(path);
             ReaderParameters rp = xnaToFnaUtil.Modder.GenReaderParameters(false);
@@ -172,7 +199,7 @@ namespace DuckGame
             rp.ReadWrite = path != XnaToFnaUtil.ThisAssembly.Location && !xnaToFnaUtil.Mappings.Exists(new Predicate<XnaToFnaMapping>(really.ScanPath));
             rp.ReadSymbols = false;
             ModuleDefinition mod = MonoModExt.ReadModule(path, rp);
-            Assembly assembly = xnaToFnaUtil.RelinkToAssembly(mod);
+            Assembly assembly = xnaToFnaUtil.RelinkToAssemblyToFile(mod, RebuiltAssemblyPath);
             (xnaToFnaUtil.Modder.AssemblyResolver as DefaultAssemblyResolver).RemoveSearchDirectory(folderpath);
             xnaToFnaUtil.Dispose();
             return assembly;

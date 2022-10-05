@@ -60,10 +60,10 @@ namespace DuckGame
         public static Quaternion Concatenate(Quaternion value1, Quaternion value2)
         {
             Quaternion quaternion;
-            quaternion.x = (float)(value2.x * value1.w + value1.x * value2.w + value2.y * value1.z - value2.z * value1.y);
-            quaternion.y = (float)(value2.y * value1.w + value1.y * value2.w + value2.z * value1.x - value2.x * value1.z);
-            quaternion.z = (float)(value2.z * value1.w + value1.z * value2.w + value2.x * value1.y - value2.y * value1.x);
-            quaternion.w = (float)(value2.w * value1.w - (value2.x * value1.x + value2.y * value1.y) + value2.z * value1.z);
+            quaternion.x = value2.x * value1.w + value1.x * value2.w + value2.y * value1.z - value2.z * value1.y;
+            quaternion.y = value2.y * value1.w + value1.y * value2.w + value2.z * value1.x - value2.x * value1.z;
+            quaternion.z = value2.z * value1.w + value1.z * value2.w + value2.x * value1.y - value2.y * value1.x;
+            quaternion.w = value2.w * value1.w - (value2.x * value1.x + value2.y * value1.y) + value2.z * value1.z;
             return quaternion;
         }
 
@@ -97,10 +97,10 @@ namespace DuckGame
           ref Quaternion value2,
           out Quaternion result)
         {
-            result.x = (float)(value2.x * value1.w + value1.x * value2.w + value2.y * value1.z - value2.z * value1.y);
-            result.y = (float)(value2.y * value1.w + value1.y * value2.w + value2.z * value1.x - value2.x * value1.z);
-            result.z = (float)(value2.z * value1.w + value1.z * value2.w + value2.x * value1.y - value2.y * value1.x);
-            result.w = (float)(value2.w * value1.w - (value2.x * value1.x + value2.y * value1.y) + value2.z * value1.z);
+            result.x = value2.x * value1.w + value1.x * value2.w + value2.y * value1.z - value2.z * value1.y;
+            result.y = value2.y * value1.w + value1.y * value2.w + value2.z * value1.x - value2.x * value1.z;
+            result.z = value2.z * value1.w + value1.z * value2.w + value2.x * value1.y - value2.y * value1.x;
+            result.w = value2.w * value1.w - (value2.x * value1.x + value2.y * value1.y) + value2.z * value1.z;
         }
 
         public static Quaternion CreateFromYawPitchRoll(float yaw, float pitch, float roll)
@@ -233,10 +233,10 @@ namespace DuckGame
             float num4 = -quaternion2.z * num1;
             float num5 = quaternion2.w * num1;
             Quaternion quaternion;
-            quaternion.x = (float)(quaternion1.x * num5 + num2 * quaternion1.w + (quaternion1.y * num4 - quaternion1.z * num3));
-            quaternion.y = (float)(quaternion1.y * num5 + num3 * quaternion1.w + (quaternion1.z * num2 - quaternion1.x * num4));
-            quaternion.z = (float)(quaternion1.z * num5 + num4 * quaternion1.w + (quaternion1.x * num3 - quaternion1.y * num2));
-            quaternion.w = (float)(quaternion1.w * quaternion2.w * num1 - (quaternion1.x * num2 + quaternion1.y * num3 + quaternion1.z * num4));
+            quaternion.x = quaternion1.x * num5 + num2 * quaternion1.w + (quaternion1.y * num4 - quaternion1.z * num3);
+            quaternion.y = quaternion1.y * num5 + num3 * quaternion1.w + (quaternion1.z * num2 - quaternion1.x * num4);
+            quaternion.z = quaternion1.z * num5 + num4 * quaternion1.w + (quaternion1.x * num3 - quaternion1.y * num2);
+            quaternion.w = quaternion1.w * quaternion2.w * num1 - (quaternion1.x * num2 + quaternion1.y * num3 + quaternion1.z * num4);
             return quaternion;
         }
 
@@ -250,10 +250,10 @@ namespace DuckGame
             float num3 = -quaternion2.y * num1;
             float num4 = -quaternion2.z * num1;
             float num5 = quaternion2.w * num1;
-            result.x = (float)(quaternion1.x * num5 + num2 * quaternion1.w + (quaternion1.y * num4 - quaternion1.z * num3));
-            result.y = (float)(quaternion1.y * num5 + num3 * quaternion1.w + (quaternion1.z * num2 - quaternion1.x * num4));
-            result.z = (float)(quaternion1.z * num5 + num4 * quaternion1.w + (quaternion1.x * num3 - quaternion1.y * num2));
-            result.w = (float)(quaternion1.w * quaternion2.w * num1 - (quaternion1.x * num2 + quaternion1.y * num3 + quaternion1.z * num4));
+            result.x = quaternion1.x * num5 + num2 * quaternion1.w + (quaternion1.y * num4 - quaternion1.z * num3);
+            result.y = quaternion1.y * num5 + num3 * quaternion1.w + (quaternion1.z * num2 - quaternion1.x * num4);
+            result.z = quaternion1.z * num5 + num4 * quaternion1.w + (quaternion1.x * num3 - quaternion1.y * num2);
+            result.w = quaternion1.w * quaternion2.w * num1 - (quaternion1.x * num2 + quaternion1.y * num3 + quaternion1.z * num4);
         }
 
         public static float Dot(Quaternion quaternion1, Quaternion quaternion2) => (float)(quaternion1.x * quaternion2.x + quaternion1.y * quaternion2.y + quaternion1.z * quaternion2.z + quaternion1.w * quaternion2.w);
@@ -305,17 +305,17 @@ namespace DuckGame
             Quaternion quaternion;
             if (quaternion1.x * quaternion2.x + quaternion1.y * quaternion2.y + quaternion1.z * quaternion2.z + quaternion1.w * quaternion2.w >= 0.0)
             {
-                quaternion.x = (float)(num1 * quaternion1.x + amount * quaternion2.x);
-                quaternion.y = (float)(num1 * quaternion1.y + amount * quaternion2.y);
-                quaternion.z = (float)(num1 * quaternion1.z + amount * quaternion2.z);
-                quaternion.w = (float)(num1 * quaternion1.w + amount * quaternion2.w);
+                quaternion.x = num1 * quaternion1.x + amount * quaternion2.x;
+                quaternion.y = num1 * quaternion1.y + amount * quaternion2.y;
+                quaternion.z = num1 * quaternion1.z + amount * quaternion2.z;
+                quaternion.w = num1 * quaternion1.w + amount * quaternion2.w;
             }
             else
             {
-                quaternion.x = (float)(num1 * quaternion1.x - amount * quaternion2.x);
-                quaternion.y = (float)(num1 * quaternion1.y - amount * quaternion2.y);
-                quaternion.z = (float)(num1 * quaternion1.z - amount * quaternion2.z);
-                quaternion.w = (float)(num1 * quaternion1.w - amount * quaternion2.w);
+                quaternion.x = num1 * quaternion1.x - amount * quaternion2.x;
+                quaternion.y = num1 * quaternion1.y - amount * quaternion2.y;
+                quaternion.z = num1 * quaternion1.z - amount * quaternion2.z;
+                quaternion.w = num1 * quaternion1.w - amount * quaternion2.w;
             }
             float num2 = 1f / (float)Math.Sqrt(quaternion.x * quaternion.x + quaternion.y * quaternion.y + quaternion.z * quaternion.z + quaternion.w * quaternion.w);
             quaternion.x *= num2;
@@ -334,17 +334,17 @@ namespace DuckGame
             float num1 = 1f - amount;
             if (quaternion1.x * quaternion2.x + quaternion1.y * quaternion2.y + quaternion1.z * quaternion2.z + quaternion1.w * quaternion2.w >= 0.0)
             {
-                result.x = (float)(num1 * quaternion1.x + amount * quaternion2.x);
-                result.y = (float)(num1 * quaternion1.y + amount * quaternion2.y);
-                result.z = (float)(num1 * quaternion1.z + amount * quaternion2.z);
-                result.w = (float)(num1 * quaternion1.w + amount * quaternion2.w);
+                result.x = num1 * quaternion1.x + amount * quaternion2.x;
+                result.y = num1 * quaternion1.y + amount * quaternion2.y;
+                result.z = num1 * quaternion1.z + amount * quaternion2.z;
+                result.w = num1 * quaternion1.w + amount * quaternion2.w;
             }
             else
             {
-                result.x = (float)(num1 * quaternion1.x - amount * quaternion2.x);
-                result.y = (float)(num1 * quaternion1.y - amount * quaternion2.y);
-                result.z = (float)(num1 * quaternion1.z - amount * quaternion2.z);
-                result.w = (float)(num1 * quaternion1.w - amount * quaternion2.w);
+                result.x = num1 * quaternion1.x - amount * quaternion2.x;
+                result.y = num1 * quaternion1.y - amount * quaternion2.y;
+                result.z = num1 * quaternion1.z - amount * quaternion2.z;
+                result.w = num1 * quaternion1.w - amount * quaternion2.w;
             }
             float num2 = 1f / (float)Math.Sqrt(result.x * result.x + result.y * result.y + result.z * result.z + result.w * result.w);
             result.x *= num2;
@@ -380,10 +380,10 @@ namespace DuckGame
                 num2 = flag ? (float)-Math.Sin(amount * a) * num3 : (float)Math.Sin(amount * a) * num3;
             }
             Quaternion quaternion;
-            quaternion.x = (float)(num1 * quaternion1.x + num2 * quaternion2.x);
-            quaternion.y = (float)(num1 * quaternion1.y + num2 * quaternion2.y);
-            quaternion.z = (float)(num1 * quaternion1.z + num2 * quaternion2.z);
-            quaternion.w = (float)(num1 * quaternion1.w + num2 * quaternion2.w);
+            quaternion.x = num1 * quaternion1.x + num2 * quaternion2.x;
+            quaternion.y = num1 * quaternion1.y + num2 * quaternion2.y;
+            quaternion.z = num1 * quaternion1.z + num2 * quaternion2.z;
+            quaternion.w = num1 * quaternion1.w + num2 * quaternion2.w;
             return quaternion;
         }
 
@@ -414,10 +414,10 @@ namespace DuckGame
                 num1 = (float)Math.Sin((1.0 - amount) * a) * num3;
                 num2 = flag ? (float)-Math.Sin(amount * a) * num3 : (float)Math.Sin(amount * a) * num3;
             }
-            result.x = (float)(num1 * quaternion1.x + num2 * quaternion2.x);
-            result.y = (float)(num1 * quaternion1.y + num2 * quaternion2.y);
-            result.z = (float)(num1 * quaternion1.z + num2 * quaternion2.z);
-            result.w = (float)(num1 * quaternion1.w + num2 * quaternion2.w);
+            result.x = num1 * quaternion1.x + num2 * quaternion2.x;
+            result.y = num1 * quaternion1.y + num2 * quaternion2.y;
+            result.z = num1 * quaternion1.z + num2 * quaternion2.z;
+            result.w = num1 * quaternion1.w + num2 * quaternion2.w;
         }
 
         public static Quaternion Subtract(Quaternion quaternion1, Quaternion quaternion2)
@@ -553,10 +553,10 @@ namespace DuckGame
             float num4 = -quaternion2.z * num1;
             float num5 = quaternion2.w * num1;
             Quaternion quaternion;
-            quaternion.x = (float)(quaternion1.x * num5 + num2 * quaternion1.w + (quaternion1.y * num4 - quaternion1.z * num3));
-            quaternion.y = (float)(quaternion1.y * num5 + num3 * quaternion1.w + (quaternion1.z * num2 - quaternion1.x * num4));
-            quaternion.z = (float)(quaternion1.z * num5 + num4 * quaternion1.w + (quaternion1.x * num3 - quaternion1.y * num2));
-            quaternion.w = (float)(quaternion1.w * quaternion2.w * num1 - (quaternion1.x * num2 + quaternion1.y * num3 + quaternion1.z * num4));
+            quaternion.x = quaternion1.x * num5 + num2 * quaternion1.w + (quaternion1.y * num4 - quaternion1.z * num3);
+            quaternion.y = quaternion1.y * num5 + num3 * quaternion1.w + (quaternion1.z * num2 - quaternion1.x * num4);
+            quaternion.z = quaternion1.z * num5 + num4 * quaternion1.w + (quaternion1.x * num3 - quaternion1.y * num2);
+            quaternion.w = quaternion1.w * quaternion2.w * num1 - (quaternion1.x * num2 + quaternion1.y * num3 + quaternion1.z * num4);
             return quaternion;
         }
 

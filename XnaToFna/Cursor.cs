@@ -65,7 +65,7 @@ namespace XnaToFna.ProxyForms
     private Cursor()
     {
       this.GlobalIndex = Cursor.AllCursors.Count + 1;
-      XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating null cursor, globally #{0}", (object) this.GlobalIndex));
+      XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating null cursor, globally #{0}", GlobalIndex));
       this.INTERNAL_IsNullCursor = true;
       Cursor.AllCursors.Add(new WeakReference<Cursor>(this));
     }
@@ -75,7 +75,7 @@ namespace XnaToFna.ProxyForms
     public Cursor(IntPtr handle)
     {
       this.GlobalIndex = Cursor.AllCursors.Count + 1;
-      XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating reapplied cursor from #{0}, globally #{1}", (object) handle, (object) this.GlobalIndex));
+      XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating reapplied cursor from #{0}, globally #{1}", handle, GlobalIndex));
       this._Apply(Cursor._FromHandle(handle));
       Cursor.AllCursors.Add(new WeakReference<Cursor>(this));
     }
@@ -83,8 +83,8 @@ namespace XnaToFna.ProxyForms
     public Cursor(string fileName)
     {
       this.GlobalIndex = Cursor.AllCursors.Count + 1;
-      XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating cursor from file, globally #{0}", (object) this.GlobalIndex));
-      using (Stream stream = (Stream) File.OpenRead(fileName))
+      XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating cursor from file, globally #{0}", GlobalIndex));
+      using (Stream stream = File.OpenRead(fileName))
         this._Load(stream);
       Cursor.AllCursors.Add(new WeakReference<Cursor>(this));
     }
@@ -92,7 +92,7 @@ namespace XnaToFna.ProxyForms
     public Cursor(Stream stream)
     {
       this.GlobalIndex = Cursor.AllCursors.Count + 1;
-      XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating cursor from stream, globally #{0}", (object) this.GlobalIndex));
+      XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating cursor from stream, globally #{0}", GlobalIndex));
       this._Load(stream);
       Cursor.AllCursors.Add(new WeakReference<Cursor>(this));
     }
@@ -101,13 +101,13 @@ namespace XnaToFna.ProxyForms
     {
       int index = (int) ptr - 1;
       if (index < 0 || Cursor.AllCursors.Count <= index)
-        return (Cursor) null;
+        return null;
       WeakReference<Cursor> allCursor = Cursor.AllCursors[index];
       Cursor target;
       if (allCursor != null && allCursor.TryGetTarget(out target))
         return target;
-      Cursor.AllCursors[index] = (WeakReference<Cursor>) null;
-      return (Cursor) null;
+      Cursor.AllCursors[index] = null;
+      return null;
     }
 
     private void _Apply(Cursor other)

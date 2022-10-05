@@ -343,7 +343,7 @@ namespace DuckGame
                     if (index + 1 > _hits.Count)
                         return;
 
-                    Color col = new Color((byte)((float)windowColor.r * 0.5f), (byte)((float)windowColor.g * 0.5f), (byte)((float)windowColor.b * 0.8f), (byte)178);
+                    Color col = new Color((byte)(windowColor.r * 0.5f), (byte)(windowColor.g * 0.5f), (byte)(windowColor.b * 0.8f), (byte)178);
                     Graphics.DrawLine(this._hits[index] + zero, this._hits[index + 1] + zero, col, 1f, default(Depth));
                 }
             }

@@ -18,7 +18,7 @@ namespace XnaToFna
 
     public Thread GameThread { get; protected set; }
 
-    public ContentHelperGame() => this.GraphicsDeviceManager = new GraphicsDeviceManager((Game) this);
+    public ContentHelperGame() => this.GraphicsDeviceManager = new GraphicsDeviceManager(this);
 
     protected override void Initialize()
     {
@@ -37,7 +37,7 @@ namespace XnaToFna
       }
       catch (Exception ex)
       {
-        Console.WriteLine(this.GetType().FullName + " failed disposing: " + (object) ex);
+        Console.WriteLine(this.GetType().FullName + " failed disposing: " + ex);
       }
     }
   }

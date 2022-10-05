@@ -377,7 +377,7 @@ namespace DuckGame
                 for (int index2 = 0; index2 < BitmapFont._characters.Length; ++index2)
                 {
                     char ch = BitmapFont._characters[index2];
-                    BitmapFont._characterMap[(int)ch] = index2;
+                    BitmapFont._characterMap[ch] = index2;
                 }
                 BitmapFont._mapInitialized = true;
             }

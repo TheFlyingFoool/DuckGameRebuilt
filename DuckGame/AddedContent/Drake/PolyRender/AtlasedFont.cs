@@ -212,7 +212,7 @@ internal class DirectBitmap : IDisposable
 
     private static int MakeArgb(byte alpha, byte red, byte green, byte blue)
     {
-        return ((int)((ulong)((int)red << 16 | (int)green << 8 | (int)blue | (int)alpha << 24)) & -1);
+        return ((int)((ulong)(red << 16 | green << 8 | blue | alpha << 24)) & -1);
     }
 
     private static Color FromArgb(long Value)

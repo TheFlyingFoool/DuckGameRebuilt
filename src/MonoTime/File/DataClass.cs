@@ -374,7 +374,7 @@ namespace DuckGame
                 {
                     float num3 = (float)property.GetValue(value1, null);
                     float num4 = (float)property.GetValue(value2, null);
-                    property.SetValue(instance, (float)(num3 - num4), null);
+                    property.SetValue(instance, num3 - num4, null);
                 }
                 else if (property.PropertyType == typeof(DateTime))
                 {
@@ -403,7 +403,7 @@ namespace DuckGame
                 {
                     float num3 = (float)property.GetValue(value1, null);
                     float num4 = (float)property.GetValue(value2, null);
-                    property.SetValue(instance, (float)(num3 + num4), null);
+                    property.SetValue(instance, num3 + num4, null);
                 }
                 else if (property.PropertyType == typeof(DateTime))
                 {

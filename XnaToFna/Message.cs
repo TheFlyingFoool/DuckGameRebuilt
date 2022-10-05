@@ -37,9 +37,9 @@ namespace XnaToFna.ProxyForms
 
     public override bool Equals(object o) => o is Message message && this.HWnd == message.HWnd && this.Msg == message.Msg && this.WParam == message.WParam && this.LParam == message.LParam && this.Result == message.Result;
 
-    public static bool operator !=(Message a, Message b) => !a.Equals((object) b);
+    public static bool operator !=(Message a, Message b) => !a.Equals(b);
 
-    public static bool operator ==(Message a, Message b) => a.Equals((object) b);
+    public static bool operator ==(Message a, Message b) => a.Equals(b);
 
     public override int GetHashCode() => (int) this.HWnd << 4 | this.Msg;
 

@@ -155,9 +155,9 @@ namespace DuckGame
                     float num3 = Math.Abs(owner.hSpeed - _hPull);
                     owner.frictionMod = 0f;
                     if (owner.hSpeed > 0.0 && _hPull > owner.hSpeed)
-                        owner.frictionMod = (float)(-num3 * 1.8f);
+                        owner.frictionMod = -num3 * 1.8f;
                     if (owner.hSpeed < 0.0 && _hPull < owner.hSpeed)
-                        owner.frictionMod = (float)(-num3 * 1.8f);
+                        owner.frictionMod = -num3 * 1.8f;
                     _lastDir = owner.offDir;
                     _lastSpeed = hSpeed;
                     if (_swing != 0.0 && num1 > 0.0)

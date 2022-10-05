@@ -18,7 +18,7 @@ namespace XnaToFna
 
     public static BinaryFormatter Create() => new BinaryFormatter()
     {
-      Binder = (SerializationBinder) new BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper((SerializationBinder) null)
+      Binder = new BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper(null)
     };
 
     public static BinaryFormatter Create(
@@ -27,13 +27,13 @@ namespace XnaToFna
     {
       return new BinaryFormatter(selector, context)
       {
-        Binder = (SerializationBinder) new BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper((SerializationBinder) null)
+        Binder = new BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper(null)
       };
     }
 
-    public static SerializationBinder get_Binder(this BinaryFormatter self) => (self.Binder is BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper binder ? binder.Inner : (SerializationBinder) null) ?? self.Binder;
+    public static SerializationBinder get_Binder(this BinaryFormatter self) => (self.Binder is BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper binder ? binder.Inner : null) ?? self.Binder;
 
-    public static void set_Binder(this BinaryFormatter self, SerializationBinder binder) => self.Binder = (SerializationBinder) new BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper(binder);
+    public static void set_Binder(this BinaryFormatter self, SerializationBinder binder) => self.Binder = new BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper(binder);
 
     public class XnaToFnaSerializationBinderWrapper : SerializationBinder
     {

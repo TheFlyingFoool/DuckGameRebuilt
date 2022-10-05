@@ -52,7 +52,7 @@ namespace XnaToFna.ProxyForms
     public Control()
     {
       this.GlobalIndex = Control.AllControls.Count + 1;
-      XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating control {0}, globally #{1}", (object) this.GetType().Name, (object) this.GlobalIndex));
+      XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating control {0}, globally #{1}", GetType().Name, GlobalIndex));
       Control.AllControls.Add(new WeakReference<Control>(this));
     }
 
@@ -60,16 +60,16 @@ namespace XnaToFna.ProxyForms
     {
       int index = (int) ptr - 1;
       if (index < 0 || Control.AllControls.Count <= index)
-        return (Control) null;
+        return null;
       WeakReference<Control> allControl = Control.AllControls[index];
       Control target;
       if (allControl != null && allControl.TryGetTarget(out target))
         return target;
-      Control.AllControls[index] = (WeakReference<Control>) null;
-      return (Control) null;
+      Control.AllControls[index] = null;
+      return null;
     }
 
-    public Form FindForm() => this.Form ?? (Form) GameForm.Instance;
+    public Form FindForm() => this.Form ?? GameForm.Instance;
 
     public void SetBounds(int x, int y, int w, int h) => this.Bounds = new Rectangle(x, y, w, h);
 
@@ -81,9 +81,9 @@ namespace XnaToFna.ProxyForms
 
     public object Invoke(Delegate method, params object[] args) => method.DynamicInvoke(args);
 
-    public IAsyncResult BeginInvoke(Delegate method) => (IAsyncResult) new SyncResult(method.DynamicInvoke());
+    public IAsyncResult BeginInvoke(Delegate method) => new SyncResult(method.DynamicInvoke());
 
-    public IAsyncResult BeginInvoke(Delegate method, params object[] args) => (IAsyncResult) new SyncResult(method.DynamicInvoke(args));
+    public IAsyncResult BeginInvoke(Delegate method, params object[] args) => new SyncResult(method.DynamicInvoke(args));
 
     public object EndInvoke(IAsyncResult result) => result.AsyncState;
 

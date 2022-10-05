@@ -42,7 +42,7 @@ namespace DuckGame
         }
         private static int MakeArgb(byte alpha, byte red, byte green, byte blue)
         {
-            return ((int)((ulong)((int)red << 16 | (int)green << 8 | (int)blue | (int)alpha << 24)) & -1);
+            return ((int)((ulong)(red << 16 | green << 8 | blue | alpha << 24)) & -1);
         }
         private static Color FromArgbDG(long Value)
         {
@@ -74,7 +74,7 @@ namespace DuckGame
                 for (int x = 0; x < Bitmap.Width; x++)
                 {
                     System.Drawing.Color PixelColor = Bitmap.GetPixel(x, y);
-                    if (PixelColor.R == 255 && PixelColor.B == 255 && PixelColor.G == 0 && (int)PixelColor.A == 255)
+                    if (PixelColor.R == 255 && PixelColor.B == 255 && PixelColor.G == 0 && PixelColor.A == 255)
                     {
                         Bitmap.SetPixel(x, y, System.Drawing.Color.Transparent);
                     }

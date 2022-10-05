@@ -525,15 +525,15 @@ namespace DuckGame
         {
             try
             {
-                DuckGame.Program.HandleGameCrash(e.Exception as Exception);
+                DuckGame.Program.HandleGameCrash(e.Exception);
             }
             catch (Exception ex)
             {
-                string pLogMessage = WindowsPlatformStartup.ProcessErrorLine(e.Exception.ToString(), e.Exception as Exception);
+                string pLogMessage = WindowsPlatformStartup.ProcessErrorLine(e.Exception.ToString(), e.Exception);
                 StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
                 streamWriter.WriteLine(pLogMessage);
                 streamWriter.Close();
-                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + (e.Exception as Exception).Source + " -commandLine \"none\" -executable \"" + Application.ExecutablePath + "\" " + WindowsPlatformStartup.GetCrashWindowString(ex, null, pLogMessage));
+                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + e.Exception.Source + " -commandLine \"none\" -executable \"" + Application.ExecutablePath + "\" " + WindowsPlatformStartup.GetCrashWindowString(ex, null, pLogMessage));
             }
         }
         public static string ProcessExceptionString(Exception e)

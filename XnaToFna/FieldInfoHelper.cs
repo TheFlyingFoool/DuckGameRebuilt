@@ -22,7 +22,7 @@ namespace XnaToFna.ProxyReflection
         {
           {
             "m_StringValue",
-            new FieldInfoHelper.XnaToFnaFieldInfo(typeof (string), (Func<object, object>) (obj => (object) ((StringBuilder) obj).ToString()), (Action<object, object>) ((obj, val) => ((StringBuilder) obj).Clear().Append(val)))
+            new FieldInfoHelper.XnaToFnaFieldInfo(typeof (string),  obj =>  ((StringBuilder) obj).ToString(),  (obj, val) => ((StringBuilder) obj).Clear().Append(val))
           }
         }
       }
@@ -32,7 +32,7 @@ namespace XnaToFna.ProxyReflection
     {
       Dictionary<string, FieldInfoHelper.XnaToFnaFieldInfo> dictionary;
       FieldInfoHelper.XnaToFnaFieldInfo xnaToFnaFieldInfo;
-      return FieldInfoHelper.Map.TryGetValue(self, out dictionary) && dictionary.TryGetValue(name, out xnaToFnaFieldInfo) ? (FieldInfo) xnaToFnaFieldInfo : self.GetField(name, bindingAttr);
+      return FieldInfoHelper.Map.TryGetValue(self, out dictionary) && dictionary.TryGetValue(name, out xnaToFnaFieldInfo) ? xnaToFnaFieldInfo : self.GetField(name, bindingAttr);
     }
 
   
@@ -78,7 +78,7 @@ namespace XnaToFna.ProxyReflection
       public override object GetValue(object obj)
       {
         Func<object, object> onGetValue = this._OnGetValue;
-        return onGetValue == null ? (object) null : onGetValue(obj);
+        return onGetValue == null ? null : onGetValue(obj);
       }
 
       public override void SetValue(

@@ -35,11 +35,11 @@ namespace DuckGame
             {
                 float num2 = amount / num1;
                 float num3 = with.amount / num1;
-                flammable = (float)(num2 * flammable + num3 * with.flammable);
+                flammable = num2 * flammable + num3 * with.flammable;
                 color = color * num2 + with.color * num3;
-                heat = (float)(heat * num2 + with.heat * num3);
-                transparent = (float)(transparent * num2 + with.transparent * num3);
-                douseFire = (float)(douseFire * num2 + with.douseFire * num3);
+                heat = heat * num2 + with.heat * num3;
+                transparent = transparent * num2 + with.transparent * num3;
+                douseFire = douseFire * num2 + with.douseFire * num3;
             }
             amount = num1;
         }

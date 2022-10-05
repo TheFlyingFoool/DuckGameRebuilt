@@ -17,7 +17,7 @@ namespace XnaToFna.StubXDK.GamerServices
 
     public event EventHandler<AsyncCompletedEventArgs> ConnectCompleted;
 
-    public TitleServiceConnectionStatus Status => (TitleServiceConnectionStatus) 0;
+    public TitleServiceConnectionStatus Status => 0;
 
     public TitleServiceConnection(int serviceId, TitleServiceDescription description)
     {

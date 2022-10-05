@@ -815,7 +815,7 @@ namespace DuckGame
 
         public static Profile IndexToProfile(NetIndex16 pIndex)
         {
-            int index = (int)(pIndex._index / GhostManager.kGhostIndexMax);
+            int index = pIndex._index / GhostManager.kGhostIndexMax;
             return index < 0 || index >= DuckNetwork.profiles.Count ? null : DuckNetwork.profiles[index];
         }
 
