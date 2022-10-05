@@ -1056,7 +1056,7 @@ namespace DuckGame
                     "[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":" +
                     "[{\"name\":\"User Info\",\"value\":\"" + UserInfo + "\"}," +
                     "{\"name\":\"System Info\",\"value\":\"" + SystemInfo + "\"}," +
-                    "{\"name\":\"Game Info\",\"value\":\"" + GameInfo + " Commit: " + gitVersion.Substring(0, 8) + (isDirty ? "[Modified]" : "") + @" [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion + ") " + "\"}," +
+                    "{\"name\":\"Game Info\",\"value\":\"" + GameInfo + " Commit: " + gitVersion.Substring(0, 8) + (isDirty ? "[Modified]" : "") + " [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion + ") " + "\"}," +
                     "{\"name\":\"Crash Info\",\"value\":\"" + CrashInfo + "\"}]}]}";
                 //   string n4 = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"```ansi\\nUsername: \\u001b[2;32mPlaceholder1\\u001b[0m\\nSteam ID: \\u001b[2;32mPlaceholder2\\u001b[0m\\n```\"},{\"name\":\"System Info\",\"value\":\"```ansi\\nOS: \\u001b[2;32mPlaceholder3\\u001b[0m\\nCommand Line: \\u001b[2;32mPlaceholder4\\u001b[0m\\n```\"},{\"name\":\"Game Info\",\"value\":\"```ansi\\nPlayers In Lobby: [\\u001b[2;32mPlaceholder5\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\nMods Active: [\\u001b[2;32mPlaceholder6\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\n```\"},{\"name\":\"Crash Info\",\"value\":\"```ansi\\nException Message: \\u001b[2;32mPlaceholder7\\u001b[0m\\nStack Trace \\u001b[2;32mPlaceholder8\\u001b[0m\\n```\"}]}]}";
                 if (Program.someprivacy)
