@@ -70,7 +70,8 @@ namespace DuckGame
             {
                 _sprite.frame = 1;
                 Vec2 vec2 = Offset(new Vec2(10f, 0f));
-                if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
+                if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
+                else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
                 _onFire = false;
                 flammable = 0f;
                 burntOut = true;

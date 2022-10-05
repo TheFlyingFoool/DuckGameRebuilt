@@ -47,8 +47,11 @@ namespace DuckGame
             if (_sprite == null)
                 return;
             Vec2 vec2_1 = Offset(new Vec2(-6f, -4f));
-            if (_lit && (bool)_timer && Rando.Int(DGRSettings.S_ParticleMultiplier) > 0)
-                Level.Add(Spark.New(vec2_1.x, vec2_1.y, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
+            if (_lit && (bool)_timer)
+            {
+                if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(Spark.New(vec2_1.x, vec2_1.y, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
+                else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(Spark.New(vec2_1.x, vec2_1.y, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
+            }
             if (_lit && _litTimer != null && (bool)_litTimer && _litStartTimer != null && (bool)_litStartTimer)
             {
                 if (_sprite.frame == 0)

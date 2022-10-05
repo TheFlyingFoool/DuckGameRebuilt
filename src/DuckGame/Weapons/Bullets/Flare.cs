@@ -56,7 +56,8 @@ namespace DuckGame
                 vSpeed += Rando.Float(4f) - 5f;
             if (Rando.Float(25f) < 0.1f)
                 vSpeed += Rando.Float(6f) - 7f;
-            if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(x, y));
+            if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(x, y));
+            else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(x, y));
             if (hSpeed > 0f)
                 _sprite.angleDegrees = 90f;
             else if (hSpeed < 0f)

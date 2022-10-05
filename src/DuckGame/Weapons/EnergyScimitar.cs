@@ -273,13 +273,27 @@ namespace DuckGame
                     _stance = EnergyScimitar.Stance.Drag;
                 if (Math.Abs(duck.hSpeed) > 1.0)
                 {
-                    if (dragSpeedBonus && Rando.Int(DGRSettings.S_ParticleMultiplier) > 0)
+                    if (dragSpeedBonus)
                     {
-                        Spark spark = Spark.New(barrelPosition.x, barrelPosition.y - 6f, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f)));
-                        spark._color = swordColor;
-                        spark._width = 1f;
-                        _glow = 0.3f;
-                        Level.Add(spark);
+                        if (DGRSettings.S_ParticleMultiplier >= 1)
+                        {
+                            for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++)
+                            {
+                                Spark spark = Spark.New(barrelPosition.x, barrelPosition.y - 6f, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f)));
+                                spark._color = swordColor;
+                                spark._width = 1f;
+                                _glow = 0.3f;
+                                Level.Add(spark);
+                            }
+                        }
+                        else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0)
+                        {
+                            Spark spark = Spark.New(barrelPosition.x, barrelPosition.y - 6f, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f)));
+                            spark._color = swordColor;
+                            spark._width = 1f;
+                            _glow = 0.3f;
+                            Level.Add(spark);
+                        }
                     }
                     if (_stance == EnergyScimitar.Stance.Drag && duck.grounded)
                     {
