@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using System;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -67,7 +68,8 @@ namespace DuckGame
                             if (tampPos < -1.0 && !_puffed)
                             {
                                 Vec2 vec2 = Offset(barrelOffset) - barrelVector * 8f;
-                                if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
+                                if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
+                                else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
                                 _puffed = true;
                             }
                             if (tampPos > -1.0)
@@ -102,7 +104,8 @@ namespace DuckGame
                             if (tampPos < -1.0 && !_puffed)
                             {
                                 Vec2 vec2 = Offset(barrelOffset) - barrelVector * 8f;
-                                if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
+                                if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
+                                else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
                                 _puffed = true;
                             }
                             if (tampPos > -1.0)

@@ -72,8 +72,11 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((bool)_sparkTimer && Rando.Int(DGRSettings.S_ParticleMultiplier) > 0)
-                Level.Add(Spark.New(x, y - 2f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
+            if ((bool)_sparkTimer )
+            {
+                if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(Spark.New(x, y - 2f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
+                else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(Spark.New(x, y - 2f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
+            }
             _life = 1f;
             angleDegrees = _spinAngle;
             base.Update();
@@ -97,7 +100,8 @@ namespace DuckGame
             }
             if (Network.isActive)
                 Send.Message(new NMFireGun(null, varBullets, 0, false), NetMessagePriority.ReliableOrdered);
-            if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(x, y));
+            if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(x, y));
+            else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(x, y));
             if (Rando.Float(1f) < 0.1f)
                 Level.Add(SmallFire.New(x, y, 0f, 0f, firedFrom: this));
             Level.Remove(this);
