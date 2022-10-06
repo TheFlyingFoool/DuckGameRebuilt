@@ -67,5 +67,34 @@ namespace DuckGame
                 };
             }
         }
+
+        public bool GraphicsCulling
+        {
+            get
+            {
+                return S_GraphicsCulling;
+            }
+            set
+            {
+                S_GraphicsCulling = value;
+            }
+        }
+        [AutoConfigField]
+        public static bool S_GraphicsCulling = true;
+
+
+        public int RebuiltEffect
+        {
+            get
+            {
+                return S_RebuiltEffect;
+            }
+            set
+            {
+                S_RebuiltEffect = value;
+            }
+        }
+        [AutoConfigField]
+        public static int S_RebuiltEffect = 1;
     }
 }

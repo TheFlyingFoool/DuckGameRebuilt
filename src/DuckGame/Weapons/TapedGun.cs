@@ -211,7 +211,7 @@ namespace DuckGame
                 gun1.vSpeed = vSpeed;
                 gun1.lastGrounded = lastGrounded;
                 gun1.clip = new HashSet<MaterialThing>(clip);
-                if (gun1 is TapedGun)
+                if (gun1 is TapedGun && gun1 != this) //If a thing is taped to itself somehow its just gonna softlock
                 {
                     (gun1 as TapedGun).tapeDepth = tapeDepth + 1;
                     (gun1 as TapedGun).UpdatePositioning();
@@ -252,7 +252,7 @@ namespace DuckGame
                 gun2.vSpeed = vSpeed;
                 gun2.lastGrounded = lastGrounded;
                 gun2.clip = new HashSet<MaterialThing>(clip);
-                if (gun2 is TapedGun)
+                if (gun2 is TapedGun && gun2 != this)
                 {
                     (gun2 as TapedGun).tapeDepth = tapeDepth + 1;
                     (gun2 as TapedGun).UpdatePositioning();

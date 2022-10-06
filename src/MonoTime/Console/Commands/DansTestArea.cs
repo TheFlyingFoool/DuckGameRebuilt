@@ -245,13 +245,6 @@ namespace DuckGame
             SaveTextures();
             DevConsole.Log("wasnt in spriteatlas " + MTSpriteBatcher.Texidonthave.Count.ToString());
         }
-        public static bool graphicculling = true;
-        [DevConsoleCommand(Name = "graphiccull")]
-        public static void GraphiCullToggle()
-        {
-            graphicculling = !graphicculling;
-            DevConsole.Log("Graphi Cull " + graphicculling.ToString());
-        }
         public static bool runv2;
         [DevConsoleCommand(Name = "dantest")]
         public static void DanTest()

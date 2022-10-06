@@ -297,7 +297,6 @@
     <Compile Include="src\MonoTime\Console\Commands\DoDraw.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Exit.cs" />
     <Compile Include="src\MonoTime\Console\Commands\For.cs" />
-    <Compile Include="src\MonoTime\Console\Commands\GraphicCull.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Help.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />

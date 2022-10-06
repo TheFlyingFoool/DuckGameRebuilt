@@ -642,6 +642,7 @@ namespace DuckGame
                 string nameUi = name;
                 if (muteName)
                     nameUi = "Player " + (networkIndex + 1).ToString();
+                if (isUsingRebuilt && DGRSettings.S_RebuiltEffect == 1) nameUi += "|PINK|♥";
                 return nameUi;
             }
         }

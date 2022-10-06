@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Windows.Controls.Primitives;
+
 namespace DuckGame
 {
     public class Layer : DrawList
@@ -533,7 +535,7 @@ namespace DuckGame
                     {
                         if (Network.isActive)
                         {
-                            if (this != Layer.Parallax && DevConsoleCommands.GraphicsCulling && !(Level.current is RockScoreboard))
+                            if (this != Layer.Parallax && DGRSettings.S_GraphicsCulling && !(Level.current is RockScoreboard))
                             {
                                 Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));
                                 Vec2 Bottomright = this.camera.transformInverse(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));
@@ -644,7 +646,7 @@ namespace DuckGame
                         }
                         else
                         {
-                            if (this != Layer.Parallax && DevConsoleCommands.GraphicsCulling && !(Level.current is RockScoreboard))
+                            if (this != Layer.Parallax && DGRSettings.S_GraphicsCulling && !(Level.current is RockScoreboard))
                             {
                                 Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));
                                 Vec2 Bottomright = this.camera.transformInverse(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));

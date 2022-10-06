@@ -755,7 +755,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (profile != null && profile.isUsingRebuilt && profile.duck != null)
+            if (DGRSettings.S_RebuiltEffect == 0 && profile != null && profile.isUsingRebuilt && profile.duck != null)
             {
                 Vec2 v = profile.duck.position;
                 if (profile.duck.ragdoll != null && profile.duck.ragdoll.part2 != null) v = profile.duck.ragdoll.part2.position;
