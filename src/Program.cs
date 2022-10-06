@@ -128,6 +128,7 @@ namespace DuckGame
             if (IsLinuxD)
             {
                 MonoMain.enableThreadedLoading = false;
+                MonoMain.disableDirectInput = true;
             }
             DevConsole.Log("Is Linux "+ IsLinuxD.ToString() + " PlatformID " + p.ToString());
             int tries = 10;
