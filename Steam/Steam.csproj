@@ -44,7 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Steamworks.NET">
-      <HintPath>..\bin\WinSteam\Steamworks.NET.dll</HintPath>
+      <HintPath>..\deps\Steamworks.NET.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System" />
