@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace DuckGame
@@ -19,37 +18,10 @@ namespace DuckGame
     public sealed class AutoConfigFieldAttribute : Attribute
     {
         public static IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> All;
-        public static IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> AllLate;
-        public static IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> AllEarly;
 
         static AutoConfigFieldAttribute()
         {
-            MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>.RequestSearch(all =>
-            {
-                var allEarly = new List<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>>();
-                var allLate = new List<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>>();
-                var everything = new List<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>>();
-
-                for (int i = 0; i < all.Count; i++)
-                {
-                    var item = all[i];
-                    
-                    if (item.Attribute.EarlyLoad)
-                    {
-                        allEarly.Add(item);
-                    }
-                    else
-                    {
-                        allLate.Add(item);
-                    }
-                    
-                    everything.Add(item);
-                }
-
-                AllLate = allLate;
-                AllEarly = allEarly;
-                All = everything;
-            });
+            MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>.RequestSearch(all => All = all);
         }
 
         public string? ShortName { get; set; } = null;
@@ -72,10 +44,5 @@ namespace DuckGame
         /// the main file as usual
         /// </remarks>
         public string? External { get; set; } = null;
-
-        /// <summary>
-        /// Loads this configuration before literally everything else (Program.Main)
-        /// </summary>
-        public bool EarlyLoad { get; set; } = false;
     }
 }

@@ -26,7 +26,7 @@ namespace DuckGame
                     AutoConfigHandler.SaveAll(false);
                     return null;
                 case "%LOAD":
-                    AutoConfigHandler.LoadAll(AutoConfigHandler.LoadFrequency.All);
+                    AutoConfigHandler.LoadAll();
                     return null;
                 case "%LIST":
                     return AutoConfigFieldAttribute.All

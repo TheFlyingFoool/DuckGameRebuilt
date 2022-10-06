@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -16,13 +15,6 @@ namespace DuckGame
         public static string SaveDirPath => DuckFile.userDirectory + SaveDirName;
         public static string MainSaveFilePath => SaveDirPath + MainSaveFileName;
 
-        [OnProgramStart]
-        public static void PreInitialize()
-        {
-            if (!LoadAll(LoadFrequency.EarlyOnly))
-                throw new Exception("Failed to load early config");
-        }
-
         [PostInitialize]
         public static void Initialize()
         {
@@ -34,7 +26,7 @@ namespace DuckGame
             if (!File.Exists(MainSaveFilePath))
                 SaveAll(false);
 
-            if (!LoadAll(LoadFrequency.LateOnly))
+            if (!LoadAll())
                 DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS");
 
             MonoMain.OnGameExit += SaveAllClosing;
@@ -140,24 +132,9 @@ namespace DuckGame
             File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
             //DevConsole.Log("|240,164,65|ACFG|DGGREEN| SAVED ALL CUSTOM CONFIG SUCCESSFULLY!"); did i make another one just to removed this log to stop and error related to some closing stuff on linux, the answer is yes //
         }
-
-        public enum LoadFrequency
+        public static bool LoadAll()
         {
-            LateOnly,
-            EarlyOnly,
-            All
-        }
-
-        public static bool LoadAll(LoadFrequency frequency)
-        {
-            IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> all = frequency switch
-            {
-                LoadFrequency.All => AutoConfigFieldAttribute.All,
-                LoadFrequency.EarlyOnly => AutoConfigFieldAttribute.AllEarly,
-                LoadFrequency.LateOnly => AutoConfigFieldAttribute.AllLate,
-                _ => throw new Exception("The fuck?")
-            };
-            
+            IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> all = AutoConfigFieldAttribute.All;
             Extensions.Try(() => File.ReadAllLines(MainSaveFilePath), out string[] lines);
 
             if (lines is null || lines.Length == 0)

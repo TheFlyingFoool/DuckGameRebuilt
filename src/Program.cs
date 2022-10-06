@@ -76,17 +76,6 @@ namespace DuckGame
         [SecurityCritical]
         public static void Main(string[] args)
         {
-            // this is basically the lifeline of all attributes so i cant
-            // use the PostInitialize attribute for it since it wont even
-            // work without this lol
-            FirebreakReflectionsht.Wait();
-            
-            // pre init
-            foreach (MethodInfo methodInfo in OnProgramStartAttribute.All)
-            {
-                methodInfo.Invoke(null, null);
-            }
-            
             //File.Delete(Path.GetFullPath("DGInput.dll"));
             DevConsole.Log("Version 69.21.0.0.1");
             int p = (int)Environment.OSVersion.Platform;
