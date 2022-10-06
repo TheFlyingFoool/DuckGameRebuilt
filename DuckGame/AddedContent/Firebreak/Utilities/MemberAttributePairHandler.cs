@@ -18,17 +18,19 @@ namespace DuckGame
 
         public static void Init()
         {
-            List<Type> TargetCustomAttributes = new List<Type>()
-        {
-            typeof(AutoConfigFieldAttribute),
-            typeof(FireSerializerModuleAttribute),
-            typeof(DevConsoleCommandAttribute),
-            typeof(DrawingContextAttribute),
-            typeof(PostInitializeAttribute)
-        };
-            foreach (Type CustomAttribute in TargetCustomAttributes)
+            List<Type> targetCustomAttributes = new List<Type>()
             {
-                RuntimeHelpers.RunClassConstructor(CustomAttribute.TypeHandle);
+                typeof(AutoConfigFieldAttribute),
+                typeof(FireSerializerModuleAttribute),
+                typeof(DevConsoleCommandAttribute),
+                typeof(DrawingContextAttribute),
+                typeof(PostInitializeAttribute),
+                typeof(OnProgramStartAttribute)
+            };
+            
+            foreach (Type customAttribute in targetCustomAttributes)
+            {
+                RuntimeHelpers.RunClassConstructor(customAttribute.TypeHandle);
             }
             Type[] types = Assembly.GetExecutingAssembly().GetTypes();
 
@@ -52,9 +54,9 @@ namespace DuckGame
                 bool breakall = false;
                 foreach (CustomAttributeData CustomAttribute in memberInfo2.CustomAttributes)
                 {
-                    for (int i = 0; i < TargetCustomAttributes.Count; i++)
+                    for (int i = 0; i < targetCustomAttributes.Count; i++)
                     {
-                        Type TargetCustomAttribute = TargetCustomAttributes[i];
+                        Type TargetCustomAttribute = targetCustomAttributes[i];
                         if (TargetCustomAttribute == CustomAttribute.AttributeType)
                         {
                             Attribute attribute = Attribute.GetCustomAttribute(memberInfo2, TargetCustomAttribute);
