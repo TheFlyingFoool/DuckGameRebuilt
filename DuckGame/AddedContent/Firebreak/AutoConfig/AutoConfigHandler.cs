@@ -12,10 +12,9 @@ namespace DuckGame
         private const string SaveDirName = "Data/";
         private const string MainSaveFileName = "Config" + FileExtension;
         private const string FileExtension = ".quack";
-        public static string SaveDirPath => DuckFile.userDirectory + SaveDirName;
+        public static string SaveDirPath => DuckFile.oldSaveLocation + "DuckGame/" + SaveDirName;
         public static string MainSaveFilePath => SaveDirPath + MainSaveFileName;
 
-        [PostInitialize]
         public static void Initialize()
         {
             DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING TO LOAD CONFIG FIELD DATA...");
@@ -34,32 +33,45 @@ namespace DuckGame
 
         public static void SaveAll(bool isDangerous)
         {
-            IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> all = AutoConfigFieldAttribute.All;
-            int length = all.Count;
             StringBuilder stringBuilder = new StringBuilder();
-
+            int length = AutoConfigFieldAttribute.All.Count;
             for (int i = 0; i < length; i++)
             {
-                (MemberInfo field, AutoConfigFieldAttribute attribute) = all[i];
-                Type fieldType = field switch
+                AutoConfigFieldAttribute attribute = AutoConfigFieldAttribute.All[i];
+                MemberInfo field = attribute.field;
+                bool isfield = true;
+                Type fieldType;
+                PropertyInfo pi = null;
+                FieldInfo fi = field as FieldInfo;
+                if (fi == null)
                 {
-                    FieldInfo fi => fi.FieldType,
-                    PropertyInfo pi => pi.PropertyType,
-                    _ => throw new Exception("Unsupported AutoConfig field type")
-                };
+                    pi = field as PropertyInfo;
+                    if (pi == null)
+                    {
+                        throw new Exception("Unsupported AutoConfig field type");
+                    }
+                    isfield = false;
+                    fieldType = pi.PropertyType;
+                }
+                else
+                {
+                    fieldType = fi.FieldType;
+                }
 
                 if (isDangerous && attribute.PotentiallyDangerous)
                     continue;
 
                 if (!FireSerializer.IsSerializable(fieldType))
                     continue;
-
-                object fieldValue = field switch
+                object fieldValue;
+                if (isfield)
                 {
-                    FieldInfo fi => fi.GetValue(null),
-                    PropertyInfo pi => pi.GetMethod?.Invoke(null, null),
-                    _ => throw new Exception("Unsupported AutoConfig field type")
-                };
+                    fieldValue = fi.GetValue(null);
+                }
+                else
+                {
+                    fieldValue = pi.GetMethod?.Invoke(null, null);
+                }
                 string fullName = attribute.Id ?? field.GetFullName();
 
                 string writtenValue = FireSerializer.Serialize(fieldValue);
@@ -84,32 +96,47 @@ namespace DuckGame
         }
         public static void SaveAllClosing(bool isDangerous)
         {
-            IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> all = AutoConfigFieldAttribute.All;
-            int length = all.Count;
+            int length = AutoConfigFieldAttribute.All.Count;
             StringBuilder stringBuilder = new StringBuilder();
 
             for (int i = 0; i < length; i++)
             {
-                (MemberInfo field, AutoConfigFieldAttribute attribute) = all[i];
-                Type fieldType = field switch
-                {
-                    FieldInfo fi => fi.FieldType,
-                    PropertyInfo pi => pi.PropertyType,
-                    _ => throw new Exception("Unsupported AutoConfig field type")
-                };
+                AutoConfigFieldAttribute attribute = AutoConfigFieldAttribute.All[i];
+                MemberInfo field = attribute.field;
 
+                bool isfield = true;
+                PropertyInfo pi = null;
+                FieldInfo fi = field as FieldInfo;
+                Type fieldType;
+                if (fi == null)
+                {
+                    pi = field as PropertyInfo;
+                    if (pi == null)
+                    {
+                        throw new Exception("Unsupported AutoConfig field type");
+                    }
+                    isfield = false;
+                    fieldType = pi.PropertyType;
+                }
+                else
+                {
+                    fieldType = fi.FieldType;
+                }
                 if (isDangerous && attribute.PotentiallyDangerous)
                     continue;
 
                 if (!FireSerializer.IsSerializable(fieldType))
                     continue;
 
-                object fieldValue = field switch
+                object fieldValue;
+                if (isfield)
                 {
-                    FieldInfo fi => fi.GetValue(null),
-                    PropertyInfo pi => pi.GetMethod?.Invoke(null, null),
-                    _ => throw new Exception("Unsupported AutoConfig field type")
-                };
+                    fieldValue = fi.GetValue(null);
+                }
+                else
+                {
+                    fieldValue = pi.GetMethod?.Invoke(null, null);
+                }
                 string fullName = attribute.Id ?? field.GetFullName();
 
                 string writtenValue = FireSerializer.Serialize(fieldValue);
@@ -129,12 +156,19 @@ namespace DuckGame
                 if (i != length)
                     stringBuilder.Append("\n");
             }
-            File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
+            try
+            {
+                File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
+            }
+            catch(Exception ex)
+            {
+                DevConsole.Log("e");
+            }
             //DevConsole.Log("|240,164,65|ACFG|DGGREEN| SAVED ALL CUSTOM CONFIG SUCCESSFULLY!"); did i make another one just to removed this log to stop and error related to some closing stuff on linux, the answer is yes //
         }
         public static bool LoadAll()
         {
-            IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> all = AutoConfigFieldAttribute.All;
+            IReadOnlyList<AutoConfigFieldAttribute> all = AutoConfigFieldAttribute.All;
             Extensions.Try(() => File.ReadAllLines(MainSaveFilePath), out string[] lines);
 
             if (lines is null || lines.Length == 0)
@@ -152,7 +186,7 @@ namespace DuckGame
             return false;
         }
 
-        private static bool LoadAllIndex(IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> all, string[] lines)
+        private static bool LoadAllIndex(IReadOnlyList<AutoConfigFieldAttribute> all, string[] lines)
         {
             DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING CONFIG INDEX LOADING...");
             lines = lines.Where(Enumerable.Any).ToArray();
@@ -164,13 +198,23 @@ namespace DuckGame
             {
                 for (int i = 0; i < all.Count; i++)
                 {
-                    (MemberInfo field, AutoConfigFieldAttribute _) = all[i];
-                    Type type = field switch
+                    AutoConfigFieldAttribute _ = all[i];
+                    PropertyInfo pi = null;
+                    FieldInfo fi = _.field as FieldInfo;
+                    Type type;
+                    if (fi == null)
                     {
-                        FieldInfo fi => fi.FieldType,
-                        PropertyInfo pi => pi.PropertyType,
-                        _ => throw new Exception("Unsupported AutoConfig field type")
-                    };
+                        pi = _.field as PropertyInfo;
+                        if (pi == null)
+                        {
+                            throw new Exception("Unsupported AutoConfig field type");
+                        }
+                        type = pi.PropertyType;
+                    }
+                    else
+                    {
+                        type = fi.FieldType;
+                    }
                     string[] sides = lines[i].Split('=');
 
                     if (sides[0] != type.GetFullName())
@@ -193,15 +237,15 @@ namespace DuckGame
             }
         }
 
-        private static bool LoadAllSearch(IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> all, string[] lines)
+        private static bool LoadAllSearch(IReadOnlyList<AutoConfigFieldAttribute> all, string[] lines)
         {
             DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING CONFIG SEARCH LOADING...");
             try
             {
                 for (int i = 0; i < all.Count; i++)
                 {
-                    (MemberInfo field, AutoConfigFieldAttribute attribute) = all[i];
-                    string fullName = attribute.Id ?? field.GetFullName();
+                    AutoConfigFieldAttribute attribute = all[i];
+                    string fullName = attribute.Id ?? attribute.field.GetFullName();
 
                     if (!lines.TryFirst(x => fullName == x.Split('=')[0], out string line))
                         continue;
@@ -220,32 +264,35 @@ namespace DuckGame
             return true;
         }
 
-        private static void SetFieldValue(MemberAttributePair<MemberInfo, AutoConfigFieldAttribute> pair, string newValue)
+        private static void SetFieldValue(AutoConfigFieldAttribute pair, string newValue)
         {
-            (MemberInfo field, AutoConfigFieldAttribute attribute) = pair;
-            Type type = field switch
+            MemberInfo field = pair.field;
+            Type type;
+            PropertyInfo pi = null;
+            FieldInfo fi = field as FieldInfo;
+            bool isfield = true;
+            if (fi == null)
             {
-                FieldInfo fi => fi.FieldType,
-                PropertyInfo pi => pi.PropertyType,
-                _ => throw new Exception("Unsupported AutoConfig field type")
-            };
-
-            object val = FireSerializer.Deserialize(type, attribute.External is not null
-                ? File.ReadAllText(SaveDirPath + newValue)
-                : newValue);
-
-            switch (field)
+                pi = field as PropertyInfo;
+                if (pi == null)
+                {
+                    throw new Exception("Unsupported AutoConfig field type");
+                }
+                isfield = false;
+                type = pi.PropertyType;
+            }
+            else
             {
-                case FieldInfo fi:
-                    {
-                        fi.SetValue(null, val);
-                        break;
-                    }
-                case PropertyInfo pi:
-                    {
-                        pi.SetMethod?.Invoke(null, new[] { val });
-                        break;
-                    }
+                type = fi.FieldType;
+            }
+            object val = FireSerializer.Deserialize(type, pair.External is not null ? File.ReadAllText(SaveDirPath + newValue) : newValue);
+            if (isfield)
+            {
+                fi.SetValue(null, val);
+            }
+            else
+            {
+                pi.SetMethod?.Invoke(null, new[] { val });
             }
         }
     }

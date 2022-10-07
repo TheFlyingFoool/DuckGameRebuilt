@@ -40,8 +40,8 @@ namespace DuckGame.AddedContent.Drake.DebugUI
     
     protected virtual void ArrangeContent()
     {
-        var subContentPosition = Position + InteractBarSize.ZeroX() + Padding + new Vector2(0f, -_scrollOffset);
-        foreach (var ui in SubContent)
+            Vector2 subContentPosition = Position + InteractBarSize.ZeroX() + Padding + new Vector2(0f, -_scrollOffset);
+        foreach (IAmUi ui in SubContent)
         {
             ui.Position = subContentPosition + ui.Expansion.XY();
             ui.Size = ui.Size.ReplaceX(Size.X - Padding.X * 2 - ui.Expansion.Y - ui.Expansion.Z);
@@ -59,7 +59,7 @@ namespace DuckGame.AddedContent.Drake.DebugUI
     protected override void HandleColoured(UiCols type, Color old)
     {
         base.HandleColoured(type, old);
-        foreach (var ui in SubContent) ui.SetCol(type, GetCol(type));
+        foreach (IAmUi ui in SubContent) ui.SetCol(type, GetCol(type));
     }
     
     protected override void HandleResized(Vector2 old)
@@ -70,8 +70,8 @@ namespace DuckGame.AddedContent.Drake.DebugUI
     protected override void HandlePositioned(Vector2 old)
     {
         base.HandlePositioned(old);
-        var change = Position - old;
-        foreach (var ui in SubContent) ui.Position += change;
+            Vector2 change = Position - old;
+        foreach (IAmUi ui in SubContent) ui.Position += change;
     }
     
     protected override void OnSubContentResized(IAmUi subContent, Vector2 old)
@@ -96,7 +96,7 @@ namespace DuckGame.AddedContent.Drake.DebugUI
     
     protected virtual void HandleDeath(IAmUi self)
     {
-        foreach (var ui in SubContent) ui.Kill();
+        foreach (IAmUi ui in SubContent) ui.Kill();
     }
 }
 }

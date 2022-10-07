@@ -908,12 +908,12 @@ namespace DuckGame
             // this is basically the lifeline of all attributes so i cant
             // use the PostInitialize attribute for it since it wont even
             // work without this lol
-            Program.FirebreakReflectionsht.Wait();
+            //Program.FirebreakReflectionsht.Wait();
 
             //Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667L);
             this.IsFixedTimeStep = true; // UNZOOOM
             Program.SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
-            // post init
+
             foreach (MethodInfo methodInfo in PostInitializeAttribute.All)
             {
                 methodInfo.Invoke(null, null);

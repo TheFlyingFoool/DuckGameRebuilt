@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Xml.Linq;
 
 namespace DuckGame
 {
@@ -28,9 +30,13 @@ namespace DuckGame
     [AttributeUsage(AttributeTargets.Method, Inherited = false)]
 public sealed class DrawingContextAttribute : Attribute
 {
-    public static List<MemberAttributePair<MethodInfo, DrawingContextAttribute>> ReflectionMethodsUsing = new();
-    public static List<(Action Action, DrawingContextAttribute Attribute, string Name)> PrecompiledMethodsUsing = new();
-    
+    public static List<DrawingContextAttribute> ReflectionMethodsUsing = new();
+    public static List<DrawingContextAttribute> PrecompiledMethodsUsing = new();
+
+    public MethodInfo method;
+    public Action action;
+    public string Name;
+
     /// <summary>
     /// The layer this method will be invoked at for drawing
     /// </summary>
@@ -71,27 +77,31 @@ public sealed class DrawingContextAttribute : Attribute
     
     static DrawingContextAttribute()
     {
-        MemberAttributePair<MethodInfo, DrawingContextAttribute>.RequestSearch(all =>
-        {
-            for (int i = 0; i < all.Count; i++)
+      
+    }
+    public static void OnResults(Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>> all)
+    {
+            foreach ((MemberInfo vMemberInfo, Attribute vAttribute) in all[typeof(DrawingContextAttribute)])
             {
-                var item = all[i];
-                if (!item.Attribute.UsePrecompiledLambda)
+                DrawingContextAttribute item = vAttribute as DrawingContextAttribute;
+                item.method = vMemberInfo as MethodInfo;
+                if (!item.UsePrecompiledLambda)
                 {
                     ReflectionMethodsUsing.Add(item);
                 }
                 else
                 {
-                    var precompiled = (Action) Delegate.CreateDelegate(typeof(Action), item.MemberInfo);
-
-                    item.Attribute.CustomID ??= item.MemberInfo.Name;
-                
-                    PrecompiledMethodsUsing.Add((precompiled, item.Attribute, item.MemberInfo.Name));
+                    Action precompiled = (Action)Delegate.CreateDelegate(typeof(Action), item.method);
+                    if (item.CustomID == null)
+                    {
+                        item.CustomID = item.method.Name;
+                    }
+                    item.action = precompiled;
+                    item.Name = item.method.Name;
+                    PrecompiledMethodsUsing.Add(item);
                 }
             }
-        });
     }
-
     public static DrawingLayer? DrawingLayerFromLayer(Layer layer)
     {
         DrawingLayer? dLayer = null;
@@ -125,36 +135,22 @@ public sealed class DrawingContextAttribute : Attribute
     {
         if (layer is null)
             return;
-
-        foreach (var pair in ReflectionMethodsUsing
-                     .Select<MemberAttributePair<MethodInfo, DrawingContextAttribute>, 
-                         (object ActionOrMethodInfo, DrawingContextAttribute Attribute)>(x => (x.MemberInfo, x.Attribute))
-                     .Concat(PrecompiledMethodsUsing
-                         .Select<(Action Action, DrawingContextAttribute Attribute, string), 
-                             (object ActionOrMethodInfo, DrawingContextAttribute Attribute)>(x => (x.Action, x.Attribute)))
-                     .OrderByDescending(x => x.Attribute.Priority)
-                     .ToArray())
+        foreach(DrawingContextAttribute pair in ReflectionMethodsUsing.Concat(PrecompiledMethodsUsing).OrderByDescending(x => x.Priority))
         {
-            if (!pair.Attribute.DoDraw)
-                continue;
-            
-            if (pair.Attribute.Layer.HasFlag(layer))
+            if (pair.DoDraw && pair.Layer.HasFlag(layer))
             {
-                switch (pair.ActionOrMethodInfo)
+                if (pair.method != null)
                 {
-                    case MethodInfo mi:
-                        mi.Invoke(null, null);
-                        break;
-                    case Action a:
-                        a.Invoke();
-                        break;
+                    pair.method.Invoke(null, null);
+                }
+                else if (pair.action != null)
+                {
+                    pair.action();
                 }
             }
         }
     }
 }
-
-
 //FIIIIRREBREAAAAK learn how flags work pls thanks :(
 // SORRY
 [Flags]

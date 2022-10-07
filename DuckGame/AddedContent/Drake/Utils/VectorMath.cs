@@ -19,10 +19,10 @@ public static class VectorMath
             CalcIntersection(start, end, thing.bottomRight, thing.bottomLeft)
             };
 
-            var nearest = end;
+            Vector2 nearest = end;
             float distance = (end - start).Length();
 
-            foreach (var vec in intersects)
+            foreach (Vector2 vec in intersects)
             {
                 if (float.IsNaN(vec.X) || float.IsNaN(vec.Y))
                 {
@@ -56,7 +56,7 @@ public static class VectorMath
                 return Vec2.Zero;
             }
 
-            var intersect = new Vec2((b2 * c1 - b1 * c2) / delta, (a1 * c2 - a2 * c1) / delta);
+            Vec2 intersect = new Vec2((b2 * c1 - b1 * c2) / delta, (a1 * c2 - a2 * c1) / delta);
 
             if (!zeroIfNotOnLine)
             {

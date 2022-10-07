@@ -9,14 +9,18 @@ namespace DuckGame
     [AttributeUsage(AttributeTargets.Method)]
     public class PostInitializeAttribute : Attribute
     {
-        public static IEnumerable<MethodInfo> All;
-
+        public static List<MethodInfo> All = new List<MethodInfo>();
+        public MethodInfo MethodInfo;
         static PostInitializeAttribute()
         {
-            MemberAttributePair<MethodInfo, PostInitializeAttribute>.RequestSearch(all =>
+        }
+        public static void OnResults(Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>> all)
+        {
+            foreach ((MemberInfo MemberInfo, Attribute vAttribute) in all[typeof(PostInitializeAttribute)])
             {
-                All = all.Select(x => x.MemberInfo);
-            });
+                All.Add(MemberInfo as MethodInfo);
+
+            }
         }
     }
 }

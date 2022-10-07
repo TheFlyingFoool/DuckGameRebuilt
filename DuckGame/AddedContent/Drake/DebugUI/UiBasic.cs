@@ -21,7 +21,7 @@ public class UiBasic : IAmUi
         get => _position;
         set
         {
-            var old = _position;
+                Vector2 old = _position;
             _position = value;
             HandlePositioned(old);
         }
@@ -31,7 +31,7 @@ public class UiBasic : IAmUi
     {
         set
         {
-            var old = _position;
+                Vector2 old = _position;
             _position = value;
             OnPositioned?.Invoke(this, old);
             HandlePositioned(old);
@@ -43,7 +43,7 @@ public class UiBasic : IAmUi
         get => _size;
         set
         {
-            var old = _size;
+                Vector2 old = _size;
             _size = Vector2.Clamp(value, MinSize, MaxSize);
             HandleResized(old);
         }
@@ -55,7 +55,7 @@ public class UiBasic : IAmUi
     {
         set
         {
-            var old = _size;
+                Vector2 old = _size;
             _size = Vector2.Clamp(value, MinSize, MaxSize);
             OnResized?.Invoke(this, old);
             HandleResized(old);
@@ -132,7 +132,7 @@ public class UiBasic : IAmUi
     {
         if (Draggable || Closeable || Resizeable)
         {
-            var offset = new Vector2(_accentLineWidth);
+                Vector2 offset = new Vector2(_accentLineWidth);
             PolyRenderer.Rect(Position - offset, Position + Size + offset, MainColor);
             PolyRenderer.Rect(Position, Position + Size, AlternateColor);
             DrawInteractBar();
@@ -146,11 +146,11 @@ public class UiBasic : IAmUi
     protected virtual void DrawInteractBar()
     {
         Graphics.polyBatcher.PushScissor(new Rectangle(Position, Position + Size));
-        var crossSize = new Vector2(InteractBarSize.Y);
-        var upRightPosition = Position + Size.ZeroY();
-        var crossZeroY = crossSize.ZeroY();
-        var crossZeroX = crossSize.ZeroX();
-        var crossNegateX = crossSize.NegateX();
+            Vector2 crossSize = new Vector2(InteractBarSize.Y);
+            Vector2 upRightPosition = Position + Size.ZeroY();
+            Vector2 crossZeroY = crossSize.ZeroY();
+            Vector2 crossZeroX = crossSize.ZeroX();
+            Vector2 crossNegateX = crossSize.NegateX();
         
         if (Draggable)
         {
@@ -222,7 +222,7 @@ public class UiBasic : IAmUi
     }
     public void SetCol(UiCols type, Color col)
     {
-        var old = GetCol(type);
+            Color old = GetCol(type);
         if(Colors.ContainsKey(type)) Colors[type] = col;
         else Colors.Add(type, col);
         HandleColoured(type, old);

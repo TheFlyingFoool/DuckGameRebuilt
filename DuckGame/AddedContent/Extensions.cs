@@ -173,40 +173,60 @@ namespace DuckGame
         {
             return Math.Abs(pos1.x - pos2.x) + Math.Abs(pos1.y - pos2.y); 
         }
-        
-        public static Profile? GetProfSafe(string playerName) => playerName switch
+
+        public static Profile GetProfSafe(string playerName)
         {
-            "p1" or "player1" => Profiles.DefaultPlayer1,
-            "p2" or "player2" => Profiles.DefaultPlayer2,
-            "p3" or "player3" => Profiles.DefaultPlayer3,
-            "p4" or "player4" => Profiles.DefaultPlayer4,
-            "p5" or "player5" => Profiles.DefaultPlayer5,
-            "p6" or "player6" => Profiles.DefaultPlayer6,
-            "p7" or "player7" => Profiles.DefaultPlayer7,
-            "p8" or "player8" => Profiles.DefaultPlayer8,
-            "o1" or "observer1" => Profiles.all.ElementAt(8),
-            "o2" or "observer2" => Profiles.all.ElementAt(9),
-            "o3" or "observer3" => Profiles.all.ElementAt(10),
-            "o4" or "observer4" => Profiles.all.ElementAt(11),
-            "white" => Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 0),
-            "gray" or "grey" => Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 1),
-            "yellow" => Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 2),
-            "orange" or "brown" => Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 3),
-            "green" => Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 4),
-            "pink" => Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 5),
-            "blue" => Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 6),
-            "purple" => Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 7),
-            "me" => GetMe(),
-            "nearest" => Profiles.activeNonSpectators
-                .OrderBy(x => Vec2.Distance(x.duck.position, GetMe().duck.position))
-                .FirstOrDefault(x => x != GetMe()),
-            _ => Profiles.active.TryFirst(
-                x => x.name.CleanFormatting().CaselessEquals(playerName.CleanFormatting()),
-                out Profile prof)
-                ? prof
-                : null,
-        };
-        
+            switch (playerName)
+            {
+                case "p1": case "player1":
+                    return Profiles.DefaultPlayer1;
+                case "p2": case "player2":
+                    return Profiles.DefaultPlayer2;
+                case "p3": case "player3":
+                    return Profiles.DefaultPlayer3;
+                case "p4": case "player4":
+                    return Profiles.DefaultPlayer4;
+                case "p5": case "player5":
+                    return Profiles.DefaultPlayer5;
+                case "p6": case "player6":
+                    return Profiles.DefaultPlayer6;
+                case "p7": case "player7":
+                    return Profiles.DefaultPlayer7;
+                case "p8": case "player8":
+                    return Profiles.DefaultPlayer8;
+                case "o1": case "observer1":
+                    return Profiles.all.ElementAt(8);
+                case "o2": case "observer2":
+                    return Profiles.all.ElementAt(9);
+                case "o3": case "observer3":
+                    return Profiles.all.ElementAt(10);
+                case "o4": case "observer4":
+                    return Profiles.all.ElementAt(11);
+                case "white":
+                    return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 0);
+                case "gray": case "grey":
+                    return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 1);
+                case "yellow":
+                    return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 2);
+                case "orange": case "brown":
+                    return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 3);
+                case "green":
+                    return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 4);
+                case "pink":
+                    return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 5);
+                case "blue":
+                    return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 6);
+                case "purple":
+                    return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 7);
+                case "me":
+                    return GetMe();
+                case "nearest":
+                    return Profiles.activeNonSpectators.OrderBy(x => Vec2.Distance(x.duck.position, GetMe().duck.position)).FirstOrDefault(x => x != GetMe());
+                default:
+                    return Profiles.active.TryFirst(x => x.name.CleanFormatting().CaselessEquals(playerName.CleanFormatting()), out Profile prof) ? prof : null;
+            }
+        }
+
         public static Profile GetProf(string playerName) => GetProfSafe(playerName) ?? throw new($"No profile with name {playerName} found");
         
         public enum PlayerName

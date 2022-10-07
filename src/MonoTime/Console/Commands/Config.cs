@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -12,12 +13,18 @@ namespace DuckGame
         {
             object getValue(MemberInfo mi)
             {
-                return mi switch
+                PropertyInfo pi = null;
+                FieldInfo fi = mi as FieldInfo;
+                if (fi == null)
                 {
-                    FieldInfo fi => fi.GetValue(null),
-                    PropertyInfo pi => pi.GetMethod?.Invoke(null, null),
-                    _ => throw new Exception("Unsupported AutoConfig field type")
-                };
+                    pi = mi as PropertyInfo;
+                    if (pi == null)
+                    {
+                        throw new Exception("Unsupported AutoConfig field type");
+                    }
+                    return pi.GetMethod?.Invoke(null, null);
+                }
+                return fi.GetValue(null);
             }
 
             switch (fieldId)
@@ -30,42 +37,37 @@ namespace DuckGame
                     return null;
                 case "%LIST":
                     return AutoConfigFieldAttribute.All
-                        .Select(x => $"{x.MemberInfo.Name}: |DGBLUE|{getValue(x.MemberInfo)}|PREV|");
+                        .Select(x => $"{x.field.Name}: |DGBLUE|{getValue(x.field)}|PREV|");
             }
 
-            System.Collections.Generic.IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> all = AutoConfigFieldAttribute.All;
+            IReadOnlyList<AutoConfigFieldAttribute> all = AutoConfigFieldAttribute.All;
 
-            if (!all.TryFirst(x => (x.Attribute.ShortName ?? x.Attribute.Id ?? x.MemberInfo.Name).CaselessEquals(fieldId), out MemberAttributePair<MemberInfo, AutoConfigFieldAttribute> field))
+            if (!all.TryFirst(x => (x.ShortName ?? x.Id ?? x.field.Name).CaselessEquals(fieldId), out AutoConfigFieldAttribute AutoConfigField))
                 throw new Exception($"No configuration field found with ID: {fieldId}");
 
-            object val = getValue(field.MemberInfo);
+            object val = getValue(AutoConfigField.field);
 
             if (serializedValue is null)
                 return val;
 
-            object newVal = FireSerializer.Deserialize(field.MemberInfo switch
+            object newVal = FireSerializer.Deserialize((Type)AutoConfigField.field, serializedValue); ;
+            PropertyInfo pi = null;
+            FieldInfo fi = AutoConfigField.field as FieldInfo;
+            if (fi == null)
             {
-                FieldInfo fi => fi.FieldType,
-                PropertyInfo pi => pi.PropertyType,
-                _ => throw new Exception("Unsupported AutoConfig field type")
-            }, serializedValue);
-
-            switch (field.MemberInfo)
-            {
-                case FieldInfo fi:
-                    {
-                        fi.SetValue(null, val);
-                        break;
-                    }
-                case PropertyInfo pi:
-                    {
-                        pi.SetMethod?.Invoke(null, new[] { val });
-                        break;
-                    }
-                default:
+                pi = AutoConfigField.field as PropertyInfo;
+                if (pi == null)
+                {
                     throw new Exception("Unsupported AutoConfig field type");
+                }
+                pi.SetMethod?.Invoke(null, new[] { val });
             }
-            return $"|DGBLUE|Modified value of field [|PINK|{field.MemberInfo.Name}|DGBLUE|] from [|GREEN|{val}|DGBLUE|] to [|GREEN|{newVal}|DGBLUE|]";
+            else
+            {
+
+                fi.SetValue(null, val);
+            }
+            return $"|DGBLUE|Modified value of field [|PINK|{AutoConfigField.field.Name}|DGBLUE|] from [|GREEN|{val}|DGBLUE|] to [|GREEN|{newVal}|DGBLUE|]";
         }
     }
 }

@@ -23,7 +23,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
     public static void Line(Vector2 v1, Vector2 v2, float thickness, Color v1c1, Color v1c2, Color v2c1, Color v2c2)
     {
         float halfThick = thickness / 2f;
-        var offset = Vector2.Normalize(VectorMath.PerpCw(v1, v2)) * halfThick;
+            Vector2 offset = Vector2.Normalize(VectorMath.PerpCw(v1, v2)) * halfThick;
         Quad(v1 - offset, v2 - offset, v1 + offset, v2 + offset, v1c1, v2c1, v1c2, v2c2);
     }
     

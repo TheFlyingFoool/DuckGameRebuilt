@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -25,6 +26,7 @@ namespace DuckGame
     [AttributeUsage(AttributeTargets.Method, Inherited = false)]
     public class DevConsoleCommandAttribute : Attribute
     {
+        public MethodInfo method;
         public string? Name { get; set; } = null;
         public string? Description { get; set; } = null;
         public bool IsCheat { get; set; }
@@ -32,68 +34,69 @@ namespace DuckGame
 
         static DevConsoleCommandAttribute()
         {
-            MemberAttributePair<MethodInfo, DevConsoleCommandAttribute>.RequestSearch(all =>
+        }
+        private static string getRealName(MethodInfo methodInfo, DevConsoleCommandAttribute attribute)
+        {
+            return (attribute.Name ?? methodInfo.Name).ToLower().Replace(" ", "");
+        }
+        public static void OnResults(Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>> all)
+        {
+            foreach ((MemberInfo MemberInfo, Attribute vAttribute) in all[typeof(DevConsoleCommandAttribute)])
             {
-                foreach ((MethodInfo method, DevConsoleCommandAttribute attribute) in all)
-                {
-                    ParameterInfo[] parameters = method.GetParameters();
-                    string realName = getRealName(method, attribute);
+                DevConsoleCommandAttribute Module = vAttribute as DevConsoleCommandAttribute;
+                Module.method = MemberInfo as MethodInfo;
+                ParameterInfo[] parameters = Module.method.GetParameters();
+                string realName = getRealName(Module.method, Module);
 
-                // if (!parameters.Any())
-                // {
-                //     DevConsole.AddCommand(new CMD(realName, (Action) Delegate.CreateDelegate(typeof(Action), method)));
-                //     continue;
-                // }
+                if (!parameters.Any())
+                {
+                    DevConsole.AddCommand(new CMD(realName, delegate() { Module.method.Invoke(null, null); }));
+                    continue;
+                }
 
                 CMD.Argument[] arguments = new CMD.Argument[parameters.Length];
-                    for (int i = 0; i < arguments.Length; i++)
-                    {
-                        arguments[i] = ParameterInfoToCmdArgument(parameters[i], i == arguments.Length - 1);
-                    }
+                for (int i = 0; i < arguments.Length; i++)
+                {
+                    arguments[i] = ParameterInfoToCmdArgument(parameters[i], i == arguments.Length - 1);
+                }
 
-                    DevConsole.AddCommand(new CMD(realName, arguments, cmd =>
-                    {
+                DevConsole.AddCommand(new CMD(realName, arguments, cmd =>
+                {
                     // gets the parameters by fetching them through the command
                     // using the previously defined variable names, which are
                     // also the parameter names
                     object[] objectParameters = new object[arguments.Length];
-                        for (int i = 0; i < arguments.Length; i++)
-                        {
-                            objectParameters[i] = cmd.Arg<object>(parameters[i].Name);
-                        }
+                    for (int i = 0; i < arguments.Length; i++)
+                    {
+                        objectParameters[i] = cmd.Arg<object>(parameters[i].Name);
+                    }
 
-                        try
-                        {
+                    try
+                    {
                         // invokes the method. if it returns a value, logs it
-                        if (method.Invoke(null, objectParameters) is { } result)
-                                DevConsole.LogComplexMessage(result switch
-                                {
-                                    IEnumerable ie and not string => ie.Cast<object>().ToReadableString(),
-                                    _ => result.ToString()
-                                }, Color.White);
-                        }
-                        catch (Exception e)
-                        {
+                        if (Module.method.Invoke(null, objectParameters) is { } result)
+                            DevConsole.LogComplexMessage(result switch
+                            {
+                                IEnumerable ie and not string => ie.Cast<object>().ToReadableString(),
+                                _ => result.ToString()
+                            }, Color.White);
+                    }
+                    catch (Exception e)
+                    {
                         // using this try catch i can get the inner exception
                         // and log that instead of logging an ambigious message
                         // telling me that the target of invocation threw an error
                         throw e.InnerException ?? e;
-                        }
-                    })
-                    {
-                        description = attribute.Description ?? "",
-                        cheat = attribute.IsCheat,
-                        aliases = attribute.Aliases.ToList()
-                    });
-                }
-
-                string getRealName(MethodInfo methodInfo, DevConsoleCommandAttribute attribute)
+                    }
+                })
                 {
-                    return (attribute.Name ?? methodInfo.Name).ToLower().Replace(" ", "");
-                }
-            });
+                    description = Module.Description ?? "",
+                    cheat = Module.IsCheat,
+                    aliases = Module.Aliases.ToList()
+                });
+            }
         }
-
+        
         private static CMD.Argument ParameterInfoToCmdArgument(ParameterInfo parameter, bool isLast)
         {
             CMD.Argument arg;

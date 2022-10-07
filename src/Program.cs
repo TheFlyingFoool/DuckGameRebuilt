@@ -230,6 +230,9 @@ namespace DuckGame
                 if (index != args.Length - 1)
                     Program.commandLine += " ";
             }
+            MemberAttributePairHandler.Init();
+            AutoConfigHandler.Initialize(); //settings are loaded :sunglass:
+
             int Controllers = 8;
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)
@@ -492,7 +495,7 @@ namespace DuckGame
             accumulatedElapsedTimefieldinfo = typeof(Game).GetField("accumulatedElapsedTime", BindingFlags.NonPublic | BindingFlags.Instance);
             SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
             Program.main.IsFixedTimeStep = false; // ZOOOM
-            FirebreakReflectionsht = Task.Factory.StartNew(() => { MemberAttributePairHandler.Init(); });
+            //FirebreakReflectionsht = Task.Factory.StartNew(() => { MemberAttributePairHandler.Init(); });
             Program.main.Run();
         }
         public static Task FirebreakReflectionsht;

@@ -55,11 +55,11 @@ namespace DuckGame.AddedContent.Drake.PolyRender
     private void DrawStringInternal(string text, Vector2 pos, Color col, float scale, float margin, bool formatting)
     {
         Graphics.polyBatcher.Texture = _regularAtlas;
-        var charData = _regularData;
-        for (var index = 0; index < text.Length; index++)
+            CharData[] charData = _regularData;
+        for (int index = 0; index < text.Length; index++)
         {
             if (index > _regularData.Length) continue;
-            var character = text[index];
+                char character = text[index];
 
             if (formatting)
             {
@@ -153,26 +153,26 @@ namespace DuckGame.AddedContent.Drake.PolyRender
     private void Setup(out CharData[] charData, out Tex2D atlas, string fontName, int fontSize, int charCount, FontStyle style, FontFamily memFont = null)
     {
         Font font = memFont == null ? new Font(fontName, fontSize, style, GraphicsUnit.Pixel) : new Font(memFont, fontSize, style, GraphicsUnit.Pixel);
-        var verticalPad = fontSize / 4;
-        var atlasWidth = fontSize * charCount;
-        var atlasHeight = fontSize + verticalPad * 2;
+            int verticalPad = fontSize / 4;
+            int atlasWidth = fontSize * charCount;
+            int atlasHeight = fontSize + verticalPad * 2;
         
         _charBounds = new Vector2(fontSize, fontSize + verticalPad * 2);
         
         charData = new CharData[charCount];
 
-        using var image = new DirectBitmap(atlasWidth, atlasHeight);
+        using DirectBitmap image = new DirectBitmap(atlasWidth, atlasHeight);
         {
-            using var graphics = System.Drawing.Graphics.FromImage(image.Bitmap);
+            using System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(image.Bitmap);
             {
                 graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
 
-                var charAtlasWidth = 1f / charCount;
-                var charAtlasSize = new Vector2(charAtlasWidth, 1f);
+                    float charAtlasWidth = 1f / charCount;
+                    Vector2 charAtlasSize = new Vector2(charAtlasWidth, 1f);
 
-                var x = 0;
-                var y = verticalPad;
+                    int x = 0;
+                    int y = verticalPad;
 
                 for (int i = 0; i < charCount; i++)
                 {

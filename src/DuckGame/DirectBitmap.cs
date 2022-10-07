@@ -73,7 +73,7 @@ namespace DuckGame
             for (int y = 0; y < Bitmap.Height; y++)
                 for (int x = 0; x < Bitmap.Width; x++)
                 {
-                    System.Drawing.Color PixelColor = Bitmap.GetPixel(x, y);
+                    System.Drawing.Color PixelColor = this.GetPixel(x, y);
                     if (PixelColor.R == 255 && PixelColor.B == 255 && PixelColor.G == 0 && PixelColor.A == 255)
                     {
                         Bitmap.SetPixel(x, y, System.Drawing.Color.Transparent);

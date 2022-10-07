@@ -22,9 +22,9 @@ namespace DuckGame.AddedContent.Drake.DebugUI
         if (SubContent.Count <= 0) _currentTab = null;
         if (_currentTab == null && SubContent.Count > 0) _currentTab = SubContent[0];
         if (_currentTab == null) return;
-        
-        var subContentPosition = Position + InteractBarSize.ZeroX() + Padding + new Vector2(0f, -_scrollOffset);
-        foreach (var ui in SubContent)
+
+            Vector2 subContentPosition = Position + InteractBarSize.ZeroX() + Padding + new Vector2(0f, -_scrollOffset);
+        foreach (IAmUi ui in SubContent)
         {
             ui.Position = subContentPosition + ui.Expansion.XY();
             ui.Size = ui.Size.ReplaceX(Size.X - Padding.X * 2 - ui.Expansion.Y - ui.Expansion.Z);

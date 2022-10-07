@@ -140,10 +140,10 @@ namespace DuckGame.AddedContent.Drake.PolyRender
         
         public void PushScissor(Rectangle scissorRect)
         {
-            var offset = new Vec2(Viewport.X, Viewport.Y);
-            var tl = Vec3.Transform(new Vec3(scissorRect.tl + offset, 0f), _effect.View);
-            var br = Vec3.Transform(new Vec3(scissorRect.br + offset, 0f), _effect.View);
-            var rect = new Rectangle(tl.XY(), br.XY());
+            Vec2 offset = new Vec2(Viewport.X, Viewport.Y);
+            Vec3 tl = Vec3.Transform(new Vec3(scissorRect.tl + offset, 0f), _effect.View);
+            Vec3 br = Vec3.Transform(new Vec3(scissorRect.br + offset, 0f), _effect.View);
+            Rectangle rect = new Rectangle(tl.XY(), br.XY());
 
             if (_scissorStack.Count > 0)
             {

@@ -339,7 +339,7 @@ namespace DuckGame
 
         public Color Dimmer(float factor = AdjFactor)
         {
-            var darker = Darker(factor);
+            Color darker = Darker(factor);
             byte luma = (byte)(0.21f * darker.r + 0.72f * darker.g + 0.07 * darker.b);
             return Lerp(new Color(luma, luma, luma, a), darker, factor);
         }
@@ -361,7 +361,7 @@ namespace DuckGame
 
         public static Color RandomGray(int gMin = 0, int gMax = 255, int aMin = 255, int aMax = 255)
         {
-            var luma = _random.Next(gMin, gMax);
+            int luma = _random.Next(gMin, gMax);
             return new Color(luma, luma, luma, _random.Next(aMin, aMax));
         }
 

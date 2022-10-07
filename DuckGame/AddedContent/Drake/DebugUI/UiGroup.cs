@@ -55,7 +55,7 @@ namespace DuckGame.AddedContent.Drake.DebugUI
 
     protected virtual void UpdateSubContent()
     {
-        foreach (var ui in SubContent) ui.UpdateContent();
+        foreach (IAmUi ui in SubContent) ui.UpdateContent();
     }
 
     public virtual void AddContent(IAmUi content)
@@ -80,7 +80,7 @@ namespace DuckGame.AddedContent.Drake.DebugUI
         if ((action & MouseAction.AnyClick) != 0 || action == MouseAction.Scrolled)
             SubContent.Find(content => content.IsOverlapping(InputData.MouseProjectedPosition))?.OnMouseAction(action, scroll);
         else
-            foreach (var ui in SubContent)
+            foreach (IAmUi ui in SubContent)
                 ui.OnMouseAction(action, scroll);
     }
     
@@ -92,7 +92,7 @@ namespace DuckGame.AddedContent.Drake.DebugUI
 
     protected virtual void SendSubContentKeyPressed(Keys keycode, char value)
     {
-        foreach (var ui in SubContent) ui.OnKeyPressed(keycode, value);
+        foreach (IAmUi ui in SubContent) ui.OnKeyPressed(keycode, value);
     }
 
     protected virtual Rectangle CalcScissor()

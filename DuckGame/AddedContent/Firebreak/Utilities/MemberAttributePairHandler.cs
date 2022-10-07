@@ -15,17 +15,16 @@ namespace DuckGame
         public static List<Type> AttributeLookupRequests = new();
 
         public static event Action<Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>>> GlobalOnSearchComplete = default;
-
         public static void Init()
         {
             List<Type> TargetCustomAttributes = new List<Type>()
-        {
-            typeof(AutoConfigFieldAttribute),
-            typeof(FireSerializerModuleAttribute),
-            typeof(DevConsoleCommandAttribute),
-            typeof(DrawingContextAttribute),
-            typeof(PostInitializeAttribute)
-        };
+            {
+                typeof(AutoConfigFieldAttribute),
+                typeof(FireSerializerModuleAttribute),
+                typeof(DevConsoleCommandAttribute),
+                typeof(DrawingContextAttribute),
+                typeof(PostInitializeAttribute)
+            };
             foreach (Type CustomAttribute in TargetCustomAttributes)
             {
                 RuntimeHelpers.RunClassConstructor(CustomAttribute.TypeHandle);
@@ -58,10 +57,9 @@ namespace DuckGame
                         if (TargetCustomAttribute == CustomAttribute.AttributeType)
                         {
                             Attribute attribute = Attribute.GetCustomAttribute(memberInfo2, TargetCustomAttribute);
-                            LookupTable.TryUse(TargetCustomAttribute, new List<(MemberInfo, Attribute)>(), relatedList =>
-                            {
-                                relatedList.Add((memberInfo2, attribute));
-                            });
+                            if (!LookupTable.ContainsKey(TargetCustomAttribute))
+                                LookupTable.Add(TargetCustomAttribute, new List<(MemberInfo, Attribute)>());
+                            LookupTable[TargetCustomAttribute].Add((memberInfo2, attribute));
                             breakall = true;
                             break;
                         }
@@ -71,32 +69,13 @@ namespace DuckGame
                         break;
                     }
                 }
-                //foreach(Type CustomAttribute in CustomAttributes)
-                //{
-                //    if (memberInfo2.IsDefined(CustomAttribute))
-                //    {
-                //        Attribute attribute = Attribute.GetCustomAttribute(memberInfo2, CustomAttribute);
-                //        LookupTable.TryUse(attribute.GetType(), new List<(MemberInfo, Attribute)>(), relatedList =>
-                //        {
-                //            relatedList.Add((memberInfo2, attribute));
-                //        });
-                //        //relatedList.Add((memberInfo, attribute));
-                //        break;
-                //    }
-                //}
-                // if this MemberInfo contains an attribute that is requested, use it
-                //if (attributes.TryFirst(attr => AttributeLookupRequests.Contains(attr.GetType()), out var attribute))
-                //{
-                //    // if the lookup table contains the wanted attribute KeyValue pair, add a
-                //    // new (MemberInfo, Attribute) tuple to it, otherwise add the key and do the same
-                //    LookupTable.TryUse(attribute.GetType(), new List<(MemberInfo, Attribute)>(), relatedList =>
-                //    {
-                //        relatedList.Add((memberInfo, attribute));
-                //    });
-                //}
             }
-
-            GlobalOnSearchComplete.Invoke(LookupTable);
+            //GlobalOnSearchComplete.Invoke(LookupTable);
+            AutoConfigFieldAttribute.OnResults(LookupTable);
+            FireSerializerModuleAttribute.OnResults(LookupTable);
+            DevConsoleCommandAttribute.OnResults(LookupTable);
+            DrawingContextAttribute.OnResults(LookupTable);
+            PostInitializeAttribute.OnResults(LookupTable);
         }
     }
 }

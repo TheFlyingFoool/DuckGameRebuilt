@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace DuckGame
@@ -17,13 +18,22 @@ namespace DuckGame
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class AutoConfigFieldAttribute : Attribute
     {
-        public static IReadOnlyList<MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>> All;
-
+        public static List<AutoConfigFieldAttribute> All;
+        public MemberInfo field;
         static AutoConfigFieldAttribute()
         {
-            MemberAttributePair<MemberInfo, AutoConfigFieldAttribute>.RequestSearch(all => All = all);
+           // MemberAttribute<AutoConfigFieldAttribute>.RequestSearch(all => All = all);
         }
-
+        public static void OnResults(Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>> all)
+        {
+            All = new List<AutoConfigFieldAttribute>();
+            foreach ((MemberInfo MemberInfo, Attribute vAttribute) in all[typeof(AutoConfigFieldAttribute)])
+            {
+                AutoConfigFieldAttribute FireSerializerModule = vAttribute as AutoConfigFieldAttribute;
+                FireSerializerModule.field = MemberInfo;
+                All.Add(FireSerializerModule);
+            }
+        }
         public string? ShortName { get; set; } = null;
         /// <summary>
         /// Whether or not this field will be saved in the event of a crash.

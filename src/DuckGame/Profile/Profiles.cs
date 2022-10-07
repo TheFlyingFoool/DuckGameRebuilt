@@ -26,16 +26,16 @@ namespace DuckGame
         public static IEnumerable<Profile> universalProfileList => Profiles._core.universalProfileList;
 
         public static List<Profile> defaultProfiles => new List<Profile>()
-    {
-      Profiles.DefaultPlayer1,
-      Profiles.DefaultPlayer2,
-      Profiles.DefaultPlayer3,
-      Profiles.DefaultPlayer4,
-      Profiles.DefaultPlayer5,
-      Profiles.DefaultPlayer6,
-      Profiles.DefaultPlayer7,
-      Profiles.DefaultPlayer8
-    };
+        {
+          Profiles.DefaultPlayer1,
+          Profiles.DefaultPlayer2,
+          Profiles.DefaultPlayer3,
+          Profiles.DefaultPlayer4,
+          Profiles.DefaultPlayer5,
+          Profiles.DefaultPlayer6,
+          Profiles.DefaultPlayer7,
+          Profiles.DefaultPlayer8
+        };
 
         public static Profile DefaultPlayer1 => Profiles._core.DefaultPlayer1;
 

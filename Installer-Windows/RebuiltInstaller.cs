@@ -74,7 +74,7 @@ namespace Installer_Windows
             client.Dispose();
             Stream memStream = new MemoryStream(data);
             ZipArchive zip = new ZipArchive(memStream);
-            foreach (var entry in zip.Entries)
+            foreach (ZipArchiveEntry entry in zip.Entries)
             {
                 switch (entry.Name)
                 {

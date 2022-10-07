@@ -10,18 +10,18 @@ namespace DuckGame
         [DevConsoleCommand(Description = "Toggle the activity of a Drawing Context from it's ID")]
         public static string DoDraw(string id)
         {
-            foreach ((string Name, DrawingContextAttribute Attribute) item in AllDrawingContexts)
-            {
-                string lookupName = item.Attribute.CustomID ?? item.Name;
+            //foreach ((string Name, DrawingContextAttribute Attribute) item in AllDrawingContexts)
+            //{
+            //    string lookupName = item.Attribute.CustomID ?? item.Name;
 
-                if (!lookupName.CaselessEquals(id))
-                    continue;
+            //    if (!lookupName.CaselessEquals(id))
+            //        continue;
 
-                bool prevState = item.Attribute.DoDraw;
-                item.Attribute.DoDraw ^= true;
+            //    bool prevState = item.Attribute.DoDraw;
+            //    item.Attribute.DoDraw ^= true;
 
-                return $"|DGBLUE|Drawing Context [{id}] toggled ({prevState} -> {!prevState})";
-            }
+            //    return $"|DGBLUE|Drawing Context [{id}] toggled ({prevState} -> {!prevState})";
+            //}
 
             return $"|DGRED|No Drawing Context matches id of [{id}]";
         }
@@ -45,24 +45,24 @@ namespace DuckGame
             PolyRenderer.Tri(center, center.ButX(-length, true), center.ButY(-length, true), colors[3]);
         }
 
-        private static readonly List<(string Name, DrawingContextAttribute Attribute)> AllDrawingContexts =
-            new Func<List<(string, DrawingContextAttribute)>>(() =>
-            {
-                List<(string Name, DrawingContextAttribute Attribute)> bigList = new();
+        //private static readonly List<(string Name, DrawingContextAttribute Attribute)> AllDrawingContexts =
+        //    new Func<List<(string, DrawingContextAttribute)>>(() =>
+        //    {
+        //        List<(string Name, DrawingContextAttribute Attribute)> bigList = new();
 
-                foreach (MemberAttributePair<System.Reflection.MethodInfo, DrawingContextAttribute> item in DrawingContextAttribute.ReflectionMethodsUsing)
-                {
-                    string name = item.Attribute.CustomID ?? item.MemberInfo.Name;
-                    bigList.Add((name, item.Attribute));
-                }
+        //        foreach (DrawingContextAttribute item in DrawingContextAttribute.ReflectionMethodsUsing)
+        //        {
+        //            string name = item.CustomID ?? item.method.Name;
+        //            bigList.Add((name, item));
+        //        }
 
-                foreach ((Action Action, DrawingContextAttribute Attribute, string Name) item in DrawingContextAttribute.PrecompiledMethodsUsing)
-                {
-                    string name = item.Attribute.CustomID ?? item.Name;
-                    bigList.Add((name, item.Attribute));
-                }
+        //        foreach (DrawingContextAttribute item in DrawingContextAttribute.PrecompiledMethodsUsing)
+        //        {
+        //            string name = item.CustomID ?? item.Name;
+        //            bigList.Add((name, item));
+        //        }
 
-                return bigList;
-            })();
+        //        return bigList;
+        //    })();
     }
 }

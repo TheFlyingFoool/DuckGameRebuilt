@@ -19,7 +19,7 @@ namespace DuckGame.AddedContent.Drake
             UiTabber ui = new UiTabber(Vector2.One * 80, Vector2.One * 50, Color.Coral, new List<IAmUi>());
             for (int i = 0; i < 3; i++)
             {
-                var subUi = new UiList(Vector2.Zero, Vector2.One * 30, Color.Coral, new List<IAmUi>());
+                UiList subUi = new UiList(Vector2.Zero, Vector2.One * 30, Color.Coral, new List<IAmUi>());
                 subUi.Draggable = Rando.Int(10) > 3;
                 subUi.Closeable = Rando.Int(10) > 3;
                 subUi.Resizeable = true;
