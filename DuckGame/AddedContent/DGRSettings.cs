@@ -89,6 +89,19 @@ namespace DuckGame
                 };
             }
         }
+        public float WeatherMultiplier
+        {
+            get
+            {
+                return S_WeatherMultiplier;
+            }
+            set
+            {
+                S_WeatherMultiplier = value;
+            }
+        }
+        [AutoConfigField]
+        public static float S_WeatherMultiplier = 1;
 
         public bool GraphicsCulling
         {

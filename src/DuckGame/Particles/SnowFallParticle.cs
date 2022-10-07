@@ -47,7 +47,6 @@ namespace DuckGame
 
         public override void Draw()
         {
-            double num = z / 200.0;
             float size = _size;
             Graphics.DrawRect(position + new Vec2(-size, -size), position + new Vec2(size, size), Color.White * alpha, (Depth)0.1f);
         }

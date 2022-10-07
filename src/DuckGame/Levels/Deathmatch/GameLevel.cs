@@ -33,7 +33,7 @@ namespace DuckGame
 
         public bool isRandom => _randomLevel != null;
 
-        public static bool Raining;
+        public bool Raining;
         public float rainwind;
         public bool Snowing;
         public void SkipMatch()
@@ -170,11 +170,14 @@ namespace DuckGame
             Vec2 vec2_2 = zero / num;
             followCam.Adjust();
 
-            if (level != "RANDOM" && !customLevel && DGRSettings.S_RandomWeather)
+            if (level != "RANDOM" && DGRSettings.S_RandomWeather)
             {
                 if (Rando.Int(2) == 0)
                 {
-                    if (cold) Snowing = true;
+                    if (cold)
+                    {
+                        Snowing = true;
+                    }
                     else if (First<NatureTileset>() != null)
                     {
                         Raining = true;
@@ -218,17 +221,32 @@ namespace DuckGame
             base.OnAllClientsReady();
         }
 
+        public float snowTimer;
+        public float rainTimer;
         public override void Update()
         {
             if (Raining)
             {
-                int f = DGRSettings.S_ParticleMultiplier;
-                if (f > 2 || Rando.Int(f) > 0)
+                rainTimer += DGRSettings.S_WeatherMultiplier / 2;
+                if (rainTimer > 1)
                 {
-                    f = Maths.Clamp(f - 2, 1, 100);
-                    for (int i = 0; i < f; i++)
+                    for (int i = 0; i < rainTimer; i++)
                     {
+                        rainTimer -= 1;
                         Level.Add(new RainParticel(new Vec2(Rando.Float(topLeft.x - 400, bottomRight.x + 400), topLeft.y - 200), rainwind));
+                    }
+                }
+            }
+            if (Snowing)
+            {
+                snowTimer += 0.15f * DGRSettings.S_WeatherMultiplier;
+                if (snowTimer > 1)//lol
+                {
+                    for (int i = 0; i < snowTimer; i++)
+                    {
+                        snowTimer -= 1;
+                        Vec2 v = new Vec2(Rando.Float(topLeft.x - 64, bottomRight.x + 64), topLeft.y - 100);
+                        Level.Add(new SnowFallParticle(v.x, v.y, new Vec2(0, 1), Rando.Int(2) == 0));
                     }
                 }
             }
