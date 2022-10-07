@@ -185,8 +185,8 @@ namespace DuckGame
                             {
                                 new Button()
                                 {
-                                    Label = "testing", //"Join Game",
-									Url = "https://www.google.com/"//$"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}"
+                                    Label = "Join Game", //"Join Game",
+									Url = $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}"
 								}
                             };
                             rpc.Buttons = joinButton;
