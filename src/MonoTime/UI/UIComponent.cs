@@ -181,9 +181,6 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (lastframeupdate == Graphics.frame)
-                return;
-            lastframeupdate = Graphics.frame;
             if (!_startInitialized)
             {
                 _startInitialized = true;
@@ -241,9 +238,8 @@ namespace DuckGame
         public long lastframedraw = -1;
         public override void Draw()
         {
-            if (HUD.hide || lastframedraw == Graphics.frame)
+            if (HUD.hide)
                 return;
-            lastframedraw = Graphics.frame;
             foreach (UIComponent component in _components)
             {
                 if (component.condition == null || component.condition())

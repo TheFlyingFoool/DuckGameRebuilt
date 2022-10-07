@@ -5,8 +5,10 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Linq;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -75,9 +77,18 @@ namespace DuckGame
                return false;
            return val.condition == null || val.condition();
        }).ToList<UIComponent>().Count - 1;
-
+        public UIMenu UIParentMenu;
         public override void Open()
         {
+            UIComponent UIComponent = this.parent;
+            while (UIComponent != null) // IMPROVEME idk man coded a system that pass down the main uimenu i guess
+            {
+                UIComponent = UIComponent.parent;
+                if (UIComponent is UIMenu)
+                {
+                    UIParentMenu = UIComponent as UIMenu;
+                }
+            }
             Graphics.fade = 1f;
             if (!MonoMain.dontResetSelection)
             {
@@ -204,6 +215,59 @@ namespace DuckGame
         public static bool dubberspeed;
         public override void Update()
         {
+            if (UIParentMenu != null && UIParentMenu.domouse && !UIParentMenu.gamepadMode && _currentMenuItemSelection != null && Mouse.available)
+            {
+                for (int i = 0; i < _currentMenuItemSelection.Count; i++)
+                {
+                    UIComponent uIComponent = _currentMenuItemSelection[i];
+                    Rectangle r = new Rectangle(uIComponent.position + new Vec2(-(this.width / 2f), uIComponent.height / 2f), uIComponent.position + new Vec2(-(this.width / 2f) + uIComponent.width, -(uIComponent.height / 2f)));
+                    if (Collision.Point(Mouse.position, r))
+                    {
+                        if (!_animating && uIComponent is UIMenuItem)
+                        {
+                            UIMenuItem uIMenuItem = uIComponent as UIMenuItem;
+                            //UIMenuItemSlider
+                            if (uIMenuItem is UIMenuItemSlider)
+                            {
+                                if (Mouse.left == InputState.Pressed)
+                                {
+                                    uIMenuItem.Activate(Triggers.MenuRight);
+                                    _selection = i;
+                                    break;
+                                }
+                                else if (Mouse.right == InputState.Pressed)
+                                {
+                                    uIMenuItem.Activate(Triggers.MenuLeft);
+                                    _selection = i;
+                                    break;
+                                }
+
+                            }
+                            else
+                            {
+                                if (Mouse.left == InputState.Pressed)
+                                {
+                                    uIMenuItem.Activate(Triggers.Select);
+                                    _selection = i;
+                                    break;
+                                }
+                            }
+                            if (Mouse.prevScrollDown)
+                            {
+                                uIMenuItem.Activate(Triggers.MenuLeft);
+                            }
+                            else if (Mouse.prevScrollUp)
+                            {
+                                uIMenuItem.Activate(Triggers.MenuRight);
+
+                            }
+
+                        }
+                        _selection = i;
+                        break;
+                    }
+                }
+            }
             if (!UIMenu.globalUILock && !_close && !_inputLock)
             {
                 if (Input.Pressed("CANCEL") && allowBackButton)

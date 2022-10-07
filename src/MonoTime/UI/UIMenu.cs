@@ -16,7 +16,8 @@ namespace DuckGame
         private UIText _controlText;
         protected string _controlString;
         private InputProfile _controlProfile;
-        private bool _gamepadMode = true;
+        public bool gamepadMode = true;
+        public bool domouse = true;
         private Vec2 _oldPos;
         private SpriteMap _cursor;
         public void SetBackFunction(UIMenuAction pAction)
@@ -99,29 +100,44 @@ namespace DuckGame
             _section.Insert(component, position, doAnchor);
             _dirty = true;
         }
+        private InputState previnputState;
+        private InputState storeinputState;
         public override void Update()
         {
             if (_controlText != null)
                 _controlText.text = _section._hoverControlString != null ? _section._hoverControlString : _controlString;
-            if (Input.Pressed("ANY"))
+            previnputState = storeinputState;
+            if (domouse)
             {
-                _gamepadMode = true;
-                _oldPos = Mouse.positionScreen;
-            }
-            if (_gamepadMode)
-            {
-                if ((_oldPos - Mouse.positionScreen).lengthSq > 200.0)
-                    _gamepadMode = false;
+                if (Input.Pressed("ANY"))
+                {
+                    gamepadMode = true;
+                    _oldPos = Mouse.positionScreen;
+                    storeinputState = Mouse.left;
+                }
+                if (gamepadMode)
+                {
+                    if ((_oldPos - Mouse.positionScreen).lengthSq > 120.0)
+                    {
+                        storeinputState = Mouse.left;
+                        gamepadMode = false;
+                    }
+                }
+                if (!gamepadMode)
+                {
+                    storeinputState = Mouse.left;
+                    //Mouse.left previnputState == InputState.Pressed
+                }
             }
             base.Update();
         }
-
         public override void Draw()
         {
             if (!open && !animating)
                 return;
-            if (Mouse.available && !_gamepadMode) //
+            if (Mouse.available && !gamepadMode) //
             {
+
                 _cursor.depth = (Depth)1f;
                 _cursor.scale = new Vec2(0.5f, 0.5f);
                 _cursor.position = Mouse.position;
