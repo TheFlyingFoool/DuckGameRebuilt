@@ -6,5 +6,5 @@
 
 namespace XnaToFna.ProxyForms
 {
-  public delegate void FormClosingEventHandler(object sender, FormClosingEventArgs e);
+    public delegate void FormClosingEventHandler(object sender, FormClosingEventArgs e);
 }

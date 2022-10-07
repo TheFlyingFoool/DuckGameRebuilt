@@ -495,10 +495,10 @@ namespace DuckGame
                 DuckGame.Graphics.currentFrameCalls = new List<DrawCall>();
             Level.activeLevel.InitializeDraw(this);
             DuckGame.Graphics.currentLayer = this;
-            
+
             Graphics.polyBatcher.UpdateMatricesForCurrentLayer();
-            
-            
+
+
             Begin(transparent, isTargetDraw);
             if (target != null && !isTargetDraw)
             {

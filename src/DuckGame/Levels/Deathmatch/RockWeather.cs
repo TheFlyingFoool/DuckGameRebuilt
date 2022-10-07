@@ -887,7 +887,7 @@ namespace DuckGame
                         particle.position.y = -362f;
                         break;
                 }
-                if (particle.alpha <  0.01f)
+                if (particle.alpha < 0.01f)
                     weatherParticleList.Add(particle);
             }
             foreach (WeatherParticle weatherParticle in weatherParticleList)

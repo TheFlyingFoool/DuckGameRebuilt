@@ -76,7 +76,7 @@ namespace DuckGame
         private static Viewport _lastViewport;
         private static bool _lastViewportSet = false;
         private static Stack<Rectangle> _scissorStack = new Stack<Rectangle>();
-        
+
         public static PolygonBatcher polyBatcher;
 
         public static void GarbageDisposal(bool pLevelTransition)
@@ -158,13 +158,13 @@ namespace DuckGame
         {
             get
             {
-               // if (Thread.CurrentThread != MonoMain.mainThread && Thread.CurrentThread != MonoMain.initializeThread && Thread.CurrentThread != MonoMain.lazyLoadThread)
-                   // throw new Exception("accessing graphics device from thread other than main thread.");
+                // if (Thread.CurrentThread != MonoMain.mainThread && Thread.CurrentThread != MonoMain.initializeThread && Thread.CurrentThread != MonoMain.lazyLoadThread)
+                // throw new Exception("accessing graphics device from thread other than main thread.");
                 return DuckGame.Graphics._base;
             }
             set => DuckGame.Graphics._base = value;
         }
-        
+
         public static MTSpriteBatch screen
         {
             get => DuckGame.Graphics._currentBatch;
@@ -592,7 +592,7 @@ namespace DuckGame
         public static void DrawLine(Vec2 p1, Vec2 p2, Color col, float width = 1f, Depth depth = default(Depth))
         {
             ++DuckGame.Graphics.currentDrawIndex;
-           //p1 = new Vec2(p1.x, p1.y);
+            //p1 = new Vec2(p1.x, p1.y);
             //p2 = new Vec2(p2.x, p2.y);
             float rotation = (float)Math.Atan2(p2.y - p1.y, p2.x - p1.x);
             float length = (p1 - p2).length;
@@ -825,7 +825,7 @@ namespace DuckGame
             Color[] data = sprite.GetData();
             for (int index = 0; index < data.Length; ++index)
             {
-                switch(data[index].GetHashCode())
+                switch (data[index].GetHashCode())
                 {
                     case -6188414: //new Color(161, 146, 130); 
                         data[index] = color1;
@@ -848,7 +848,7 @@ namespace DuckGame
                     case -1280964: //  new Color(236, 116, 60);
                         data[index] = color14;
                         break;
-                } 
+                }
             }
             Tex2D tex2D = new Tex2D(sprite.w, sprite.h);
             tex2D.SetData(data);
@@ -890,12 +890,12 @@ namespace DuckGame
             Graphics._defaultBatch = new MTSpriteBatch(Graphics._base);
             Graphics.screen = Graphics._defaultBatch;
             Graphics._blank = new Tex2D(1, 1);
-           
+
             Graphics._blank.SetData(new Color[1]
             {
                     Color.White
             });
-           
+
             Graphics._blank2 = new Tex2D(1, 1);
             Graphics._blank2.SetData(new Color[1]
             {

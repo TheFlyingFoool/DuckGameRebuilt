@@ -13,14 +13,14 @@ namespace DuckGame
     {
         //private Stack<AIState> _state = new Stack<AIState>();
         private Dictionary<string, InputState> _inputState = new Dictionary<string, InputState>();
-       // private AILocomotion _locomotion = new AILocomotion();
+        // private AILocomotion _locomotion = new AILocomotion();
         //public bool canRefresh;
         public InputProfile _manualQuack;
         //private int quackWait = 10;
         //private int jumpWait = 10;
         public bool virtualQuack;
 
-       // public AILocomotion locomotion => this._locomotion;
+        // public AILocomotion locomotion => this._locomotion;
 
         public void Press(string trigger) => _inputState[trigger] = InputState.Pressed;
 

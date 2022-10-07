@@ -159,5 +159,5 @@ namespace DuckGame
                 ? $"{Value}/{MaximumValue}"
                 : $"{MinimumValue}/{Value}/{MaximumValue}";
         }
-    } 
+    }
 }

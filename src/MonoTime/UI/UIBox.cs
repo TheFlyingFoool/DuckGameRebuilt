@@ -253,11 +253,11 @@ namespace DuckGame
                             if (Keyboard.Pressed(keysOfInterest[i]) && i < c)
                             {
                                 SFX.Play("rockHitGround");
-                                ((UIMenuItem) _currentMenuItemSelection[i]).Activate(Triggers.Select);
+                                ((UIMenuItem)_currentMenuItemSelection[i]).Activate(Triggers.Select);
                             }
                         }
                     }
-                    
+
                     _currentMenuItemSelection = _components.Where<UIComponent>(val =>
                    {
                        if (!(val is UIMenuItem))

@@ -1192,7 +1192,7 @@ namespace DuckGame
             Texture2D tex = new Texture2D(DuckGame.Graphics.device, target.width, target.height);
             tex.SetData<Color>(target.GetData());
             List<string> text = DuckGame.Content.RSplit(this.GetType().AssemblyQualifiedName, ',', -1);
-            string texname = text[0] + text[1] + wide.ToString() + " "+ high.ToString();
+            string texname = text[0] + text[1] + wide.ToString() + " " + high.ToString();
             tex.Name = texname;
             Content.textures[texname] = tex; //spritea las stuff
             Sprite preview = new Sprite((Tex2D)tex);
@@ -1600,7 +1600,7 @@ namespace DuckGame
         public virtual void DoDraw()
         {
             //if (NetworkDebugger.currentIndex >= 0 && NetworkDebugger.currentIndex != _networkDrawIndex)
-           //     return;
+            //     return;
             DuckGame.Graphics.material = _material;
             if (_material != null)
                 _material.Update();
@@ -1653,17 +1653,17 @@ namespace DuckGame
             {
                 DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
             }
-                //else
-                //{
-                //    DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Purple * 0.8f, (Depth)1f, false, 0.5f);
-                //}
-                //     return;
-                // int num = (this as PhysicsObject).sleeping ? 1 : 0;
+            //else
+            //{
+            //    DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Purple * 0.8f, (Depth)1f, false, 0.5f);
+            //}
+            //     return;
+            // int num = (this as PhysicsObject).sleeping ? 1 : 0;
 
-                // if (!(this is PhysicsObject))
-                //     return;
-                // int num = (this as PhysicsObject).sleeping ? 1 : 0;
-            }
+            // if (!(this is PhysicsObject))
+            //     return;
+            // int num = (this as PhysicsObject).sleeping ? 1 : 0;
+        }
 
         public void Draw(Sprite spr, float xpos, float ypos, int d = 1) => Draw(spr, new Vec2(xpos, ypos), d);
 

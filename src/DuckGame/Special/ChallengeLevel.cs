@@ -608,7 +608,7 @@ namespace DuckGame
                                     }
                                     int goodies = _challenge.challenge.trophies[0].goodies;
                                     FieldBinding _counter = new FieldBinding(this, "goodiesGot");
-                                    HUD.core._cornerDisplays.Add(new CornerDisplay() { corner = HUDCorner.BottomLeft, text = text, counter = _counter, maxCount = goodies > 0 ? goodies : 0, animateCount = false, curCount = (int)_counter.value, realCount = (int)_counter.value , ischallenge = true}); //                    HUD.AddCornerCounter(HUDCorner.BottomLeft, text, new FieldBinding(this, "goodiesGot"), goodies > 0 ? goodies : 0);
+                                    HUD.core._cornerDisplays.Add(new CornerDisplay() { corner = HUDCorner.BottomLeft, text = text, counter = _counter, maxCount = goodies > 0 ? goodies : 0, animateCount = false, curCount = (int)_counter.value, realCount = (int)_counter.value, ischallenge = true }); //                    HUD.AddCornerCounter(HUDCorner.BottomLeft, text, new FieldBinding(this, "goodiesGot"), goodies > 0 ? goodies : 0);
 
                                 }
                             }

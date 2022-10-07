@@ -588,7 +588,7 @@ namespace DuckGame
                                             _lastrealcollideoffset = hitThing.collisionOffset;
                                             _lastrealcollideBottom = hitThing;
                                         }
-                                         
+
                                         hitThing.Impact(this, ImpactedFrom.Top, true);
                                         Impact(hitThing, ImpactedFrom.Bottom, true);
                                     }
@@ -610,11 +610,11 @@ namespace DuckGame
                 if (grounded || initemspawner)
                 {
                     //(!(_collideBottom is PhysicsObject) || (!(_collideBottom as PhysicsObject).modifiedGravForFloat && _collideBottom.grounded && (!((this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom is PhysicsObject) || (!((this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom as PhysicsObject).modifiedGravForFloat && ((this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom as PhysicsObject).groun
- //))))) 
+                    //))))) 
                     //!(this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom is PhysicsObject || !((this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom as PhysicsObject).modifiedGravForFloat
                     // lastGrounded = DateTime.Now;
                     framesSinceGrounded = 0;// mmmm remove i shall !(_collideBottom is PhysicsObject) // !doFloat &&  !doFloat && 
-                    if ((!doFloat || this.buoyancy <= 0f) && hSpeed == 0.0 && this.vSpeed == 0.0 && (((_collideBottom is Block || _collideBottom is IPlatform) && (!(_collideBottom is ItemBox) || (_collideBottom as ItemBox).canBounce)) || initemspawner) && (!(_collideBottom is PhysicsObject) || (    (_collideBottom as PhysicsObject).sleeping))) // !(_collideBottom as PhysicsObject).modifiedGravForFloat && _collideBottom.grounded && 
+                    if ((!doFloat || this.buoyancy <= 0f) && hSpeed == 0.0 && this.vSpeed == 0.0 && (((_collideBottom is Block || _collideBottom is IPlatform) && (!(_collideBottom is ItemBox) || (_collideBottom as ItemBox).canBounce)) || initemspawner) && (!(_collideBottom is PhysicsObject) || ((_collideBottom as PhysicsObject).sleeping))) // !(_collideBottom as PhysicsObject).modifiedGravForFloat && _collideBottom.grounded && 
                         // (this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom is PhysicsObject
                         _sleeping = true;
                 }

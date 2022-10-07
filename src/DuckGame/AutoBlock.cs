@@ -308,7 +308,7 @@ namespace DuckGame
             }
             Level.Remove(f);
         }
-        private static AutoBlock CheckBlockGroup(BlockGroup blockGroup,Block Ignore, Vec2 Point)
+        private static AutoBlock CheckBlockGroup(BlockGroup blockGroup, Block Ignore, Vec2 Point)
         {
             AutoBlock block = null;
             if (blockGroup.blocks == null)
@@ -534,7 +534,7 @@ namespace DuckGame
             }
             else
             {
-                 if (shouldWreck)
+                if (shouldWreck)
                 {
                     Destroy(new DTRocketExplosion(null));
                     Level.Remove(this);
@@ -636,7 +636,7 @@ namespace DuckGame
 
         public virtual void DoPositioning()
         {
-          //  if (Level.current is Editor || graphic == null)
+            //  if (Level.current is Editor || graphic == null)
             //    return;
             //if (!RandomLevelNode.editorLoad)
             cheap = true;
@@ -713,7 +713,7 @@ namespace DuckGame
                     _brokenSprite.angleDegrees = 90f;
                     Graphics.Draw(_brokenSprite, x, y + 16f);
                 }
-            }   
+            }
             if (graphic.position != position)
             {
                 (graphic as SpriteMap).ClearCache();

@@ -319,7 +319,7 @@ namespace DuckGame
             Vec2 vec2_2 = new Vec2((float)-(_fancyFont.GetWidth(text2) / 2.0), -25f);
             _fancyFont.DrawOutline(text2, position + vec2_2, _rare || _swapped && _rareCapsule ? Colors.DGYellow : Color.White, Color.Black, depth + 2);
             _fancyFont.scale = new Vec2(0.5f, 0.5f);
-            if (_insertCoin >  0.01f)
+            if (_insertCoin > 0.01f)
             {
                 _duckCoin.frame = _rare ? 1 : 0;
                 _duckCoin.depth = -0.8f;

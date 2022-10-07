@@ -88,7 +88,7 @@ namespace DuckGame
             {
                 _duckOwner.hSpeed = hSpeed;
                 bool flag = type != null;
-                if (!flag && jumpCountdown >  0.01f)
+                if (!flag && jumpCountdown > 0.01f)
                     _duckOwner.vSpeed = Duck.JumpSpeed;
                 else
                     _duckOwner.vSpeed = flag ? vSpeed - 1f : -3f;

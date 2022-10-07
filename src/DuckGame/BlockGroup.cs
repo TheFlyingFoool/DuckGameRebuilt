@@ -86,9 +86,9 @@ namespace DuckGame
                 foreach (Thing block in _blocks)
                 {
                     Level.Add(block);
-                   // _level.AddUpdateOnce(block);
+                    // _level.AddUpdateOnce(block);
                 }
-                    
+
                 Level.Remove(this);
                 _wreck = false;
             }
@@ -99,7 +99,7 @@ namespace DuckGame
                     if (block is AutoBlock)
                     {
                         (block as AutoBlock).PlaceBlock();
-                       // _level.AddUpdateOnce(block);
+                        // _level.AddUpdateOnce(block);
                     }
                 }
                 needsRefresh = false;
@@ -122,7 +122,7 @@ namespace DuckGame
         {
             foreach (Thing block in _blocks)
             {
-                
+
                 if (block is AutoBlock)
                 {
                     (block as AutoBlock).Draw();

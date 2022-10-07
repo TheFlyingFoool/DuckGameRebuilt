@@ -254,7 +254,7 @@ namespace DuckGame
             Network.activeNetwork.core.DisconnectClient(p.connection, new DuckNetErrorInfo(DuckNetError.Banned, ""), true);
         }
 
-        private static bool ShouldKickForCustomContent() 
+        private static bool ShouldKickForCustomContent()
         {
             bool isActive = Network.isActive;
             return false;
@@ -934,7 +934,7 @@ namespace DuckGame
                 foreach (MatchSetting matchSetting in TeamSelect2.matchSettings) // removed ParentalControls.AreParentalControlsActive bs
                 {
                     if (!(matchSetting.id == "workshopmaps") || Network.available)
-                    { 
+                    {
                         if (matchSetting.id != "partymode")
                         {
                             _core._matchSettingMenu.AddMatchSetting(matchSetting, false, true);

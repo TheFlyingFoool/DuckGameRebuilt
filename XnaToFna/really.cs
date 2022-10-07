@@ -8,10 +8,10 @@ using System.Reflection;
 
 namespace XnaToFna
 {
-  public class really
-  {
-    public AssemblyName name;
+    public class really
+    {
+        public AssemblyName name;
 
-    internal bool ScanPath(XnaToFnaMapping mappings) => this.name.Name == mappings.Target;
-  }
+        internal bool ScanPath(XnaToFnaMapping mappings) => this.name.Name == mappings.Target;
+    }
 }

@@ -283,7 +283,7 @@ namespace DuckGame
                     {
                         UpdateStick();
                         stick.UpdateFirePosition(this);
-                        if (!_stick.onFire || _stick.removeFromLevel || _stick.alpha <  0.01f)
+                        if (!_stick.onFire || _stick.removeFromLevel || _stick.alpha < 0.01f)
                         {
                             if (DGRSettings.S_ParticleMultiplier != 0) Level.Add(SmallSmoke.New(x, y));
                             Level.Remove(this);

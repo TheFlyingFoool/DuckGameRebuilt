@@ -791,7 +791,7 @@ namespace DuckGame
                         if (_unSlide)
                         {
                             _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 0f, 0.45f);
-                            if (_intermissionSlide >  0.01f)
+                            if (_intermissionSlide > 0.01f)
                                 return;
                             playedSound = false;
                             _unSlide = false;
@@ -848,7 +848,7 @@ namespace DuckGame
                 else
                 {
                     Graphics.fadeAdd = Lerp.Float(Graphics.fadeAdd, 0f, 0.1f);
-                    if (Graphics.fadeAdd >  0.01f)
+                    if (Graphics.fadeAdd > 0.01f)
                         return;
                 }
                 if (!_talking)
@@ -1005,7 +1005,7 @@ namespace DuckGame
                     _hearts.RemoveAll(t => t.alpha <= 0.0);
                     _coinLerp2 = Lerp.Float(_coinLerp2, 1f, 0.08f);
                     _stampWobble = Lerp.Float(_stampWobble, 0f, 0.08f);
-                    if (_stampCard || _stampCardLerp >  0.01f)
+                    if (_stampCard || _stampCardLerp > 0.01f)
                     {
                         if (!_showCard)
                         {
@@ -1873,7 +1873,7 @@ namespace DuckGame
                     Graphics.DrawString(talkLine, vec2_8 + new Vec2(6f, 2f), Color.Black, (Depth)0.95f);
                 }
             }
-            if (_stampCardLerp >  0.01f)
+            if (_stampCardLerp > 0.01f)
             {
                 float num24 = (float)(-((1.0 - _stampCardLerp) * 200.0) + Math.Sin(_stampWobbleSin) * _stampWobble * 4.0);
                 Graphics.DrawRect(new Vec2(-1000f, -1000f), new Vec2(1000f, 1000f), Color.Black * 0.5f * _stampCardLerp, (Depth)0.96f);
@@ -2020,7 +2020,7 @@ namespace DuckGame
                     Graphics.Draw(_littleMan, vec2_13.x - 16f, vec2_13.y - 8f, new Rectangle(0f, 0f, 16f, 6f));
                 }
             }
-            if (_intermissionSlide >  0.01f)
+            if (_intermissionSlide > 0.01f)
             {
                 float x4 = (float)(_intermissionSlide * 320.0 - 320.0);
                 float y3 = 60f;

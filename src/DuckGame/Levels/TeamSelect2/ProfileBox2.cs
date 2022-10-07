@@ -79,7 +79,7 @@ namespace DuckGame
         {
             if (p == null)
             {
-                SetProfile(Profiles.all.ElementAt<Profile>(controllerIndex));
+                SetProfile(Profiles.all[controllerIndex]);
             }
             else
             {
@@ -893,75 +893,75 @@ namespace DuckGame
                         Graphics.Draw(doorRightBlank, x + 68f + _doorX, y, sourceRectangle4);
                         if (_doorX == 0.0)
                             if (_doorX == 0.0)
-                        {
-                            _fontSmall.depth = doorLeftBlank.depth + 10;
-                            if (!Network.isActive || flag6 && Network.isServer)
                             {
-                                _doorIcon.depth = doorLeftBlank.depth + 10;
-                                _doorIcon.frame = 10;
-                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                _fontSmall.DrawOutline("PRESS", new Vec2(x + 20f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                _fontSmall.DrawOutline("START", new Vec2(x + 86f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _fontSmall.depth = doorLeftBlank.depth + 10;
+                                if (!Network.isActive || flag6 && Network.isServer)
+                                {
+                                    _doorIcon.depth = doorLeftBlank.depth + 10;
+                                    _doorIcon.frame = 10;
+                                    Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                    _fontSmall.DrawOutline("PRESS", new Vec2(x + 20f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("START", new Vec2(x + 86f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
+                                else if (flag2)
+                                {
+                                    _doorIcon.depth = doorLeftBlank.depth + 10;
+                                    _doorIcon.frame = 8;
+                                    Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                }
+                                else if (flag1)
+                                {
+                                    _doorSpinner.depth = doorLeftBlank.depth + 10;
+                                    Graphics.Draw(_doorSpinner, (int)x + 58, y + 31f);
+                                }
+                                else if (flag3)
+                                {
+                                    _doorIcon.depth = doorLeftBlank.depth + 10;
+                                    _doorIcon.frame = 11;
+                                    Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                    _fontSmall.DrawOutline("PALS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
+                                else if (flag4)
+                                {
+                                    _doorIcon.depth = doorLeftBlank.depth + 10;
+                                    _doorIcon.frame = 12;
+                                    Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                    _fontSmall.DrawOutline("VIPS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
+                                else if (flag5 && profile.reservedUser != null)
+                                {
+                                    _doorIcon.depth = doorLeftBlank.depth + 10;
+                                    _doorIcon.frame = 12;
+                                    Graphics.Draw(_doorIcon, (int)this.x + 58, y + 31f);
+                                    float num = 120f;
+                                    float x = this.x + 10f;
+                                    Graphics.DrawRect(new Vec2(x, y + 35f), new Vec2(x + num, y + 52f), Color.Black, doorLeftBlank.depth + 20);
+                                    string text3 = "WAITING FOR";
+                                    _fontSmall.Draw(text3, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text3) / 2.0), y + 36f), Color.White, doorLeftBlank.depth + 30);
+                                    string text4 = profile.nameUI;
+                                    if (text4.Length > 16)
+                                        text4 = text4.Substring(0, 16);
+                                    _fontSmall.Draw(text4, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text4) / 2.0), y + 44f), Color.White, doorLeftBlank.depth + 30);
+                                }
+                                else if (flag6)
+                                {
+                                    _doorIcon.depth = doorLeftBlank.depth + 10;
+                                    _doorIcon.frame = 13;
+                                    Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                    _fontSmall.DrawOutline("HOST", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
+                                else
+                                {
+                                    _doorIcon.depth = doorLeftBlank.depth + 10;
+                                    _doorIcon.frame = 9;
+                                    Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                    _fontSmall.DrawOutline("OPEN", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
                             }
-                            else if (flag2)
-                            {
-                                _doorIcon.depth = doorLeftBlank.depth + 10;
-                                _doorIcon.frame = 8;
-                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                            }
-                            else if (flag1)
-                            {
-                                _doorSpinner.depth = doorLeftBlank.depth + 10;
-                                Graphics.Draw(_doorSpinner, (int)x + 58, y + 31f);
-                            }
-                            else if (flag3)
-                            {
-                                _doorIcon.depth = doorLeftBlank.depth + 10;
-                                _doorIcon.frame = 11;
-                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                _fontSmall.DrawOutline("PALS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
-                            }
-                            else if (flag4)
-                            {
-                                _doorIcon.depth = doorLeftBlank.depth + 10;
-                                _doorIcon.frame = 12;
-                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                _fontSmall.DrawOutline("VIPS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
-                            }
-                            else if (flag5 && profile.reservedUser != null)
-                            {
-                                _doorIcon.depth = doorLeftBlank.depth + 10;
-                                _doorIcon.frame = 12;
-                                Graphics.Draw(_doorIcon, (int)this.x + 58, y + 31f);
-                                float num = 120f;
-                                float x = this.x + 10f;
-                                Graphics.DrawRect(new Vec2(x, y + 35f), new Vec2(x + num, y + 52f), Color.Black, doorLeftBlank.depth + 20);
-                                string text3 = "WAITING FOR";
-                                _fontSmall.Draw(text3, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text3) / 2.0), y + 36f), Color.White, doorLeftBlank.depth + 30);
-                                string text4 = profile.nameUI;
-                                if (text4.Length > 16)
-                                    text4 = text4.Substring(0, 16);
-                                _fontSmall.Draw(text4, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text4) / 2.0), y + 44f), Color.White, doorLeftBlank.depth + 30);
-                            }
-                            else if (flag6)
-                            {
-                                _doorIcon.depth = doorLeftBlank.depth + 10;
-                                _doorIcon.frame = 13;
-                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                _fontSmall.DrawOutline("HOST", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
-                            }
-                            else
-                            {
-                                _doorIcon.depth = doorLeftBlank.depth + 10;
-                                _doorIcon.frame = 9;
-                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                _fontSmall.DrawOutline("OPEN", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
-                            }
-                        }
                     }
                 }
                 if (_playerProfile.team == null || _doorX <= 0.0)

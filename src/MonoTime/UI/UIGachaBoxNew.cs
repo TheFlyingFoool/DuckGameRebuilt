@@ -446,7 +446,7 @@ namespace DuckGame
             for (int index = 0; index < numGenerate + numGenerateRare - (_prizesGiven + 1); ++index)
             {
                 _coin.frame = numGenerate - (_prizesGiven + 1) <= 0 || index >= numGenerate - (_prizesGiven + 1) ? 1 : 0;
-                _coin.depth = (Depth)(float)(0.9f - index *  0.01f);
+                _coin.depth = (Depth)(float)(0.9f - index * 0.01f);
                 Graphics.Draw(_coin, 16 + index * 4, 16f);
             }
             _coin.frame = !_contains.rareGen ? 0 : 1;
@@ -571,7 +571,7 @@ namespace DuckGame
                 _fancyFont.DrawOutline(text2, position + vec2_6, _rare || _swapped && _rareCapsule ? Colors.DGYellow : Color.White, Color.Black, depth + 2);
                 Graphics.DrawRect(position + new Vec2((float)-(_fancyFont.GetWidth(text2) / 2.0 + 4.0), -26f), position + new Vec2((float)(_fancyFont.GetWidth(text2) / 2.0 + 4.0), -14f), Color.Black, depth - 4);
                 _fancyFont.scale = new Vec2(0.5f, 0.5f);
-                if (_insertCoin >  0.01f)
+                if (_insertCoin > 0.01f)
                 {
                     _duckCoin.frame = _rare ? 1 : 0;
                     _duckCoin.depth = -0.8f;

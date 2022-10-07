@@ -34,19 +34,19 @@ namespace DuckGame
                     return;
                 Holdable holdable = Level.current.NearestThingFilter<Holdable>(position, t =>
                 {
-                   if (t.owner == null && t != this)
-                   {
-                       switch (t)
-                       {
-                           case Equipment _:
-                           case RagdollPart _:
-                           case TapedGun _:
-                               break;
-                           default:
-                               return (t as Holdable).tapeable;
-                       }
-                   }
-                   return false;
+                    if (t.owner == null && t != this)
+                    {
+                        switch (t)
+                        {
+                            case Equipment _:
+                            case RagdollPart _:
+                            case TapedGun _:
+                                break;
+                            default:
+                                return (t as Holdable).tapeable;
+                        }
+                    }
+                    return false;
                 }, 16.0f);
                 if (Distance(holdable) >= 16.0f)
                     return;

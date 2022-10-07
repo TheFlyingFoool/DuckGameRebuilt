@@ -200,7 +200,7 @@ namespace DuckGame
                     _defaultHead.CenterOrigin();
                     chatBust = new SpriteMap(DuckGame.Graphics.RecolorM(Content.Load<Tex2D>("chatBust_m"), color1, color2, color3), 14, 13);
                     chatBust.CenterOrigin();
-                    
+
                 }
                 else
                 {

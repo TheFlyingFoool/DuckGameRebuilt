@@ -63,11 +63,11 @@ namespace DuckGame
                     for (int file = 0; file < count; ++file)
                     {
                         string name = Steam.FileGetName(file);
-                        if (name.EndsWith(".lev") || name.EndsWith(".png") || name.EndsWith(".play")) 
+                        if (name.EndsWith(".lev") || name.EndsWith(".png") || name.EndsWith(".play"))
                             continue;
 
                         using Stream stream = zipArchive.CreateEntry(name).Open();
-                        
+
                         byte[] buffer = Steam.FileRead(name);
                         stream.Write(buffer, 0, buffer.Length);
                     }
@@ -139,9 +139,9 @@ namespace DuckGame
 
             if (array == null)
                 return;
-            
+
             HttpWebRequest httpWebRequest =
-                (HttpWebRequest) WebRequest.Create("http://www.wonthelp.info/DuckWeb/submitSave.php");
+                (HttpWebRequest)WebRequest.Create("http://www.wonthelp.info/DuckWeb/submitSave.php");
             httpWebRequest.Method = "POST";
             string str =
                 $"sendRequest=DGBugLogger&steamID={CrashWindow.CrashWindow.SQLEncode(Steam.user.id.ToString())}";
@@ -152,7 +152,7 @@ namespace DuckGame
             Stream requestStream = httpWebRequest.GetRequestStream();
             requestStream.Write(bytes, 0, bytes.Length);
             requestStream.Close();
-            HttpWebResponse response = (HttpWebResponse) httpWebRequest.GetResponse();
+            HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse();
             LogComplexMessage(response.StatusDescription, Colors.DGBlue);
             using (Stream responseStream = response.GetResponseStream())
                 LogComplexMessage(new StreamReader(responseStream).ReadToEnd(), Colors.DGBlue);
@@ -252,7 +252,7 @@ namespace DuckGame
         {
             // Graphics.DrawString(ConsoleLineOffset.ToString(), new Vec2(16, 16), Color.White, 2f);
             // Graphics.DrawString($"{core.lines.Count + ConsoleLineOffset}", new Vec2(16, 32), Color.White, 2f);
-            
+
             if (Layer.core._console != null)
             {
                 Layer.core._console.camera.width = Resolution.current.x / 2;
@@ -410,7 +410,7 @@ namespace DuckGame
 
                 _core.font.scale = new Vec2(2f);
             }
-            
+
         }
 
         public static Vec2 dimensions => new(Options.Data.consoleWidth / 100f, Options.Data.consoleHeight / 100f);
@@ -425,9 +425,9 @@ namespace DuckGame
         {
             foreach (Profile profile in Profiles.all)
             {
-                if (profile.team == null) 
+                if (profile.team == null)
                     continue;
-                
+
                 string str = profile.name.ToLower();
                 switch (findName)
                 {
@@ -488,7 +488,7 @@ namespace DuckGame
                 bool flag1 = false;
                 ConsoleCommand consoleCommand1 = new(command);
                 string pKeyword = consoleCommand1.NextWord();
-                
+
                 if (writeExecutedCommand)
                 {
                     _core.lines.Enqueue(new DCLine
@@ -512,7 +512,7 @@ namespace DuckGame
                         consoleCommand2.NextWord();
                     if (cmd.cheat && !NetworkDebugger.enabled)
                     {
-                        bool flag2 = Steam.user is 
+                        bool flag2 = Steam.user is
                         {
                             id: 76561197996786074UL
                             or 76561198885030822UL
@@ -520,7 +520,7 @@ namespace DuckGame
                             or 76561198104352795UL
                             or 76561198114791325UL
                         };
-                        
+
                         if (!flag2 && (Network.isActive || Level.current is ChallengeLevel or ArcadeLevel))
                         {
                             _core.lines.Enqueue(new DCLine
@@ -549,9 +549,9 @@ namespace DuckGame
                         break;
                     }
 
-                    if (cmd.priority < num || (str2 != "" && cmd.fullCommandName.Length < str2.Length)) 
+                    if (cmd.priority < num || (str2 != "" && cmd.fullCommandName.Length < str2.Length))
                         continue;
-                    
+
                     lastCommand = null;
                     str1 = cmd.logMessage;
                     num = cmd.priority;
@@ -575,346 +575,25 @@ namespace DuckGame
                         switch (pKeyword)
                         {
                             case "crash":
-                            {
-                                flag1 = true;
-                                throw new Exception("you threw it idk");
-                                break;
-                            }
+                                {
+                                    flag1 = true;
+                                    throw new Exception("you threw it idk");
+                                    break;
+                                }
                             case "spawn" when CheckCheats():
                                 return;
                             case "spawn":
-                            {
-                                flag1 = true;
-                                string str5 = consoleCommand1.NextWord();
-                                float single1;
-                                float single2;
-                                try
                                 {
-                                    single1 = Change.ToSingle(consoleCommand1.NextWord());
-                                    single2 = Change.ToSingle(consoleCommand1.NextWord());
-                                }
-                                catch
-                                {
-                                    _core.lines.Enqueue(new DCLine
-                                    {
-                                        line = "Parameters in wrong format.",
-                                        color = Color.Red
-                                    });
-                                    return;
-                                }
-
-                                if (consoleCommand1.NextWord() != "")
-                                {
-                                    _core.lines.Enqueue(new DCLine
-                                    {
-                                        line = "Too many parameters!",
-                                        color = Color.Red
-                                    });
-                                    return;
-                                }
-
-                                Type t = null;
-                                foreach (Type thingType in Editor.ThingTypes)
-                                {
-                                    if (thingType.Name.ToLower(currentCulture) == str5)
-                                    {
-                                        t = thingType;
-                                        break;
-                                    }
-                                }
-
-                                if (t == null)
-                                {
-                                    _core.lines.Enqueue(new DCLine
-                                    {
-                                        line = $"The type {str5} does not exist!",
-                                        color = Color.Red
-                                    });
-                                    return;
-                                }
-
-                                if (!Editor.HasConstructorParameter(t))
-                                {
-                                    _core.lines.Enqueue(new DCLine
-                                    {
-                                        line = $"{str5} can not be spawned this way.",
-                                        color = Color.Red
-                                    });
-                                    return;
-                                }
-
-                                Thing thing = Editor.CreateThing(t) as PhysicsObject;
-                                if (thing != null)
-                                {
-                                    thing.x = single1;
-                                    thing.y = single2;
-                                    Level.Add(thing);
-                                    SFX.Play("hitBox");
-                                }
-
-                                break;
-                            }
-                            case "netdebug" when CheckCheats():
-                                return;
-                            case "netdebug":
-                                _enableNetworkDebugging = !_enableNetworkDebugging;
-                                _core.lines.Enqueue(new DCLine
-                                {
-                                    line = "Network Debugging Enabled",
-                                    color = Color.Green
-                                });
-                                return;
-                            case "close":
-                                _core.open = !_core.open;
-                                break;
-                            case "console":
-                            {
-                                flag1 = true;
-                                string lower1 = consoleCommand1.NextWord().ToLower(currentCulture);
-                                if (lower1 == "")
-                                {
-                                    _core.lines.Enqueue(new DCLine
-                                    {
-                                        line = "Parameters in wrong format.",
-                                        color = Color.Red
-                                    });
-                                    return;
-                                }
-
-                                if (lower1 == "width")
-                                {
-                                    string lower2 = consoleCommand1.NextWord().ToLower(currentCulture);
-                                    if (lower2 == "")
-                                    {
-                                        _core.lines.Enqueue(new DCLine
-                                        {
-                                            line = "You must provide a value.",
-                                            color = Color.Red
-                                        });
-                                        return;
-                                    }
-
-                                    if (consoleCommand1.NextWord() != "")
-                                    {
-                                        _core.lines.Enqueue(new DCLine
-                                        {
-                                            line = "Too many parameters!",
-                                            color = Color.Red
-                                        });
-                                        return;
-                                    }
-
+                                    flag1 = true;
+                                    string str5 = consoleCommand1.NextWord();
+                                    float single1;
+                                    float single2;
                                     try
                                     {
-                                        Options.Data.consoleWidth = Math.Min(Math.Max(Convert.ToInt32(lower2), 25), 100);
-                                        Options.Save();
+                                        single1 = Change.ToSingle(consoleCommand1.NextWord());
+                                        single2 = Change.ToSingle(consoleCommand1.NextWord());
                                     }
-                                    catch (Exception)
-                                    {
-                                        try
-                                        {
-                                            Options.Data.consoleWidth =
-                                                (int) Math.Min(Math.Max(Convert.ToSingle(lower2), 0.25f), 1f) * 100;
-                                            Options.Save();
-                                        }
-                                        catch (Exception)
-                                        {
-                                        }
-                                    }
-                                }
-                                else if (lower1 == "height")
-                                {
-                                    string lower3 = consoleCommand1.NextWord().ToLower(currentCulture);
-                                    if (lower3 == "")
-                                    {
-                                        _core.lines.Enqueue(new DCLine
-                                        {
-                                            line = "You must provide a value.",
-                                            color = Color.Red
-                                        });
-                                        return;
-                                    }
-
-                                    if (consoleCommand1.NextWord() != "")
-                                    {
-                                        _core.lines.Enqueue(new DCLine
-                                        {
-                                            line = "Too many parameters!",
-                                            color = Color.Red
-                                        });
-                                        return;
-                                    }
-
-                                    try
-                                    {
-                                        Options.Data.consoleHeight = Math.Min(Math.Max(Convert.ToInt32(lower3), 25), 100);
-                                        Options.Save();
-                                    }
-                                    catch (Exception)
-                                    {
-                                        try
-                                        {
-                                            Options.Data.consoleHeight =
-                                                (int) Math.Min(Math.Max(Convert.ToSingle(lower3), 0.25f), 1f) * 100;
-                                            Options.Save();
-                                        }
-                                        catch (Exception)
-                                        {
-                                        }
-                                    }
-                                }
-                                else if (lower1 == "scale")
-                                {
-                                    string lower4 = consoleCommand1.NextWord().ToLower(currentCulture);
-                                    if (lower4 == "")
-                                    {
-                                        _core.lines.Enqueue(new DCLine
-                                        {
-                                            line = "You must provide a value.",
-                                            color = Color.Red
-                                        });
-                                        return;
-                                    }
-
-                                    if (consoleCommand1.NextWord() != "")
-                                    {
-                                        _core.lines.Enqueue(new DCLine
-                                        {
-                                            line = "Too many parameters!",
-                                            color = Color.Red
-                                        });
-                                        return;
-                                    }
-
-                                    try
-                                    {
-                                        Options.Data.consoleScale = Math.Min(Math.Max(Convert.ToInt32(lower4), 1), 5);
-                                        Options.Save();
-                                    }
-                                    catch (Exception)
-                                    {
-                                    }
-                                }
-                                else if (lower1 == "font")
-                                {
-                                    string pFont = consoleCommand1.NextWord();
-                                    if (pFont == "")
-                                    {
-                                        _core.lines.Enqueue(new DCLine
-                                        {
-                                            line = "You must provide a value.",
-                                            color = Color.Red
-                                        });
-                                        return;
-                                    }
-
-                                    try
-                                    {
-                                        if (pFont == "size")
-                                        {
-                                            string lower5 = consoleCommand1.NextWord().ToLower(currentCulture);
-                                            if (lower5 == "")
-                                            {
-                                                _core.lines.Enqueue(new DCLine
-                                                {
-                                                    line = "You must provide a size value.",
-                                                    color = Color.Red
-                                                });
-                                                return;
-                                            }
-
-                                            if (consoleCommand1.NextWord() != "")
-                                            {
-                                                _core.lines.Enqueue(new DCLine
-                                                {
-                                                    line = "Too many parameters!",
-                                                    color = Color.Red
-                                                });
-                                                return;
-                                            }
-
-                                            try
-                                            {
-                                                int int32 = Convert.ToInt32(lower5);
-                                                _raster = new RasterFont(fontName, int32);
-                                                Options.Data.consoleFontSize = int32;
-                                                _raster.scale = new Vec2(0.5f);
-                                                Options.Save();
-                                            }
-                                            catch (Exception)
-                                            {
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (consoleCommand1.Remainder().Count() > 0)
-                                                pFont = $"{pFont} {consoleCommand1.Remainder()}";
-                                            if (pFont is "clear" or "default" or "none")
-                                            {
-                                                Options.Data.consoleFont = "";
-                                                Options.Save();
-                                                Log(DCSection.General, "|DGGREEN|Console font reset.");
-                                            }
-                                            else
-                                            {
-                                                if (pFont == "comic sans")
-                                                    pFont = "comic sans ms";
-                                                if (RasterFont.GetName(pFont) != null)
-                                                {
-                                                    _raster = new RasterFont(pFont, fontPoints);
-                                                    Options.Data.consoleFont = pFont;
-                                                    _raster.scale = new Vec2(0.5f);
-                                                    Options.Save();
-                                                    if (_raster.data.name == "Comic Sans MS")
-                                                        Log(DCSection.General,
-                                                            $"|DGGREEN|Font is now {_raster.data.name}! What a laugh!");
-                                                    else
-                                                        Log(DCSection.General,
-                                                            $"|DGGREEN|Font is now {_raster.data.name}!");
-                                                }
-                                                else
-                                                    Log(DCSection.General,
-                                                        $"|DGRED|Could not find font ({pFont})!");
-                                            }
-                                        }
-                                    }
-                                    catch (Exception)
-                                    {
-                                    }
-                                }
-
-                                break;
-                            }
-                            case "record" when NetworkDebugger.enabled:
-                            {
-                                flag1 = true;
-                                string pLevel = consoleCommand1.NextWord();
-                                if (pLevel.Length < 3)
-                                {
-                                    try
-                                    {
-                                        NetworkDebugger.StartRecording(Convert.ToInt32(pLevel));
-                                    }
-                                    catch (Exception)
-                                    {
-                                    }
-                                }
-                                else
-                                    NetworkDebugger.StartRecording(pLevel);
-
-                                break;
-                            }
-                            case "team" when CheckCheats():
-                                return;
-                            case "team":
-                            {
-                                flag1 = true;
-                                string findName = consoleCommand1.NextWord();
-                                Profile profile = ProfileByName(findName);
-                                if (profile != null)
-                                {
-                                    string str6 = consoleCommand1.NextWord();
-                                    if (str6 == "")
+                                    catch
                                     {
                                         _core.lines.Enqueue(new DCLine
                                         {
@@ -934,308 +613,497 @@ namespace DuckGame
                                         return;
                                     }
 
-                                    string lower = str6.ToLower();
-                                    bool flag3 = false;
-                                    foreach (Team team in Teams.all)
+                                    Type t = null;
+                                    foreach (Type thingType in Editor.ThingTypes)
                                     {
-                                        if (team.name.ToLower() == lower)
+                                        if (thingType.Name.ToLower(currentCulture) == str5)
                                         {
-                                            flag3 = true;
-                                            profile.team = team;
+                                            t = thingType;
                                             break;
                                         }
                                     }
 
-                                    if (!flag3)
+                                    if (t == null)
                                     {
                                         _core.lines.Enqueue(new DCLine
                                         {
-                                            line = $"No team named {lower}.",
+                                            line = $"The type {str5} does not exist!",
                                             color = Color.Red
                                         });
                                         return;
                                     }
-                                }
-                                else
-                                {
-                                    _core.lines.Enqueue(new DCLine
-                                    {
-                                        line = $"No profile named {findName}.",
-                                        color = Color.Red
-                                    });
-                                    return;
-                                }
 
-                                break;
-                            }
-                            case "call" when CheckCheats():
-                                return;
-                            case "call":
-                            {
-                                flag1 = true;
-                                string str7 = consoleCommand1.NextWord();
-                                bool flag4 = false;
-                                foreach (Profile profile in Profiles.all)
-                                {
-                                    if (profile.name.ToLower(currentCulture) == str7)
+                                    if (!Editor.HasConstructorParameter(t))
                                     {
-                                        if (profile.duck != null)
+                                        _core.lines.Enqueue(new DCLine
                                         {
-                                            flag4 = true;
-                                            string str8 = consoleCommand1.NextWord();
-                                            if (str8 == "")
-                                            {
-                                                _core.lines.Enqueue(new DCLine
-                                                {
-                                                    line = "Parameters in wrong format.",
-                                                    color = Color.Red
-                                                });
-                                                return;
-                                            }
+                                            line = $"{str5} can not be spawned this way.",
+                                            color = Color.Red
+                                        });
+                                        return;
+                                    }
 
-                                            if (consoleCommand1.NextWord() != "")
-                                            {
-                                                _core.lines.Enqueue(new DCLine
-                                                {
-                                                    line = "Too many parameters!",
-                                                    color = Color.Red
-                                                });
-                                                return;
-                                            }
+                                    Thing thing = Editor.CreateThing(t) as PhysicsObject;
+                                    if (thing != null)
+                                    {
+                                        thing.x = single1;
+                                        thing.y = single2;
+                                        Level.Add(thing);
+                                        SFX.Play("hitBox");
+                                    }
 
-                                            MethodInfo[] methods = typeof(Duck).GetMethods();
-                                            bool flag5 = false;
-                                            foreach (MethodInfo methodInfo in methods)
-                                            {
-                                                if (methodInfo.Name.ToLower(currentCulture) == str8)
-                                                {
-                                                    flag5 = true;
-                                                    if (methodInfo.GetParameters().Count() > 0)
-                                                    {
-                                                        _core.lines.Enqueue(new DCLine
-                                                        {
-                                                            line = "You can only call functions with no parameters.",
-                                                            color = Color.Red
-                                                        });
-                                                        return;
-                                                    }
+                                    break;
+                                }
+                            case "netdebug" when CheckCheats():
+                                return;
+                            case "netdebug":
+                                _enableNetworkDebugging = !_enableNetworkDebugging;
+                                _core.lines.Enqueue(new DCLine
+                                {
+                                    line = "Network Debugging Enabled",
+                                    color = Color.Green
+                                });
+                                return;
+                            case "close":
+                                _core.open = !_core.open;
+                                break;
+                            case "console":
+                                {
+                                    flag1 = true;
+                                    string lower1 = consoleCommand1.NextWord().ToLower(currentCulture);
+                                    if (lower1 == "")
+                                    {
+                                        _core.lines.Enqueue(new DCLine
+                                        {
+                                            line = "Parameters in wrong format.",
+                                            color = Color.Red
+                                        });
+                                        return;
+                                    }
 
-                                                    try
-                                                    {
-                                                        methodInfo.Invoke(profile.duck, null);
-                                                    }
-                                                    catch
-                                                    {
-                                                        _core.lines.Enqueue(new DCLine
-                                                        {
-                                                            line = "The function threw an exception.",
-                                                            color = Color.Red
-                                                        });
-                                                        return;
-                                                    }
-                                                }
-                                            }
-
-                                            if (!flag5)
-                                            {
-                                                _core.lines.Enqueue(new DCLine
-                                                {
-                                                    line = $"Duck has no function called {str8}.",
-                                                    color = Color.Red
-                                                });
-                                                return;
-                                            }
-                                        }
-                                        else
+                                    if (lower1 == "width")
+                                    {
+                                        string lower2 = consoleCommand1.NextWord().ToLower(currentCulture);
+                                        if (lower2 == "")
                                         {
                                             _core.lines.Enqueue(new DCLine
                                             {
-                                                line = $"{str7} is not in the game!",
+                                                line = "You must provide a value.",
+                                                color = Color.Red
+                                            });
+                                            return;
+                                        }
+
+                                        if (consoleCommand1.NextWord() != "")
+                                        {
+                                            _core.lines.Enqueue(new DCLine
+                                            {
+                                                line = "Too many parameters!",
+                                                color = Color.Red
+                                            });
+                                            return;
+                                        }
+
+                                        try
+                                        {
+                                            Options.Data.consoleWidth = Math.Min(Math.Max(Convert.ToInt32(lower2), 25), 100);
+                                            Options.Save();
+                                        }
+                                        catch (Exception)
+                                        {
+                                            try
+                                            {
+                                                Options.Data.consoleWidth =
+                                                    (int)Math.Min(Math.Max(Convert.ToSingle(lower2), 0.25f), 1f) * 100;
+                                                Options.Save();
+                                            }
+                                            catch (Exception)
+                                            {
+                                            }
+                                        }
+                                    }
+                                    else if (lower1 == "height")
+                                    {
+                                        string lower3 = consoleCommand1.NextWord().ToLower(currentCulture);
+                                        if (lower3 == "")
+                                        {
+                                            _core.lines.Enqueue(new DCLine
+                                            {
+                                                line = "You must provide a value.",
+                                                color = Color.Red
+                                            });
+                                            return;
+                                        }
+
+                                        if (consoleCommand1.NextWord() != "")
+                                        {
+                                            _core.lines.Enqueue(new DCLine
+                                            {
+                                                line = "Too many parameters!",
+                                                color = Color.Red
+                                            });
+                                            return;
+                                        }
+
+                                        try
+                                        {
+                                            Options.Data.consoleHeight = Math.Min(Math.Max(Convert.ToInt32(lower3), 25), 100);
+                                            Options.Save();
+                                        }
+                                        catch (Exception)
+                                        {
+                                            try
+                                            {
+                                                Options.Data.consoleHeight =
+                                                    (int)Math.Min(Math.Max(Convert.ToSingle(lower3), 0.25f), 1f) * 100;
+                                                Options.Save();
+                                            }
+                                            catch (Exception)
+                                            {
+                                            }
+                                        }
+                                    }
+                                    else if (lower1 == "scale")
+                                    {
+                                        string lower4 = consoleCommand1.NextWord().ToLower(currentCulture);
+                                        if (lower4 == "")
+                                        {
+                                            _core.lines.Enqueue(new DCLine
+                                            {
+                                                line = "You must provide a value.",
+                                                color = Color.Red
+                                            });
+                                            return;
+                                        }
+
+                                        if (consoleCommand1.NextWord() != "")
+                                        {
+                                            _core.lines.Enqueue(new DCLine
+                                            {
+                                                line = "Too many parameters!",
+                                                color = Color.Red
+                                            });
+                                            return;
+                                        }
+
+                                        try
+                                        {
+                                            Options.Data.consoleScale = Math.Min(Math.Max(Convert.ToInt32(lower4), 1), 5);
+                                            Options.Save();
+                                        }
+                                        catch (Exception)
+                                        {
+                                        }
+                                    }
+                                    else if (lower1 == "font")
+                                    {
+                                        string pFont = consoleCommand1.NextWord();
+                                        if (pFont == "")
+                                        {
+                                            _core.lines.Enqueue(new DCLine
+                                            {
+                                                line = "You must provide a value.",
+                                                color = Color.Red
+                                            });
+                                            return;
+                                        }
+
+                                        try
+                                        {
+                                            if (pFont == "size")
+                                            {
+                                                string lower5 = consoleCommand1.NextWord().ToLower(currentCulture);
+                                                if (lower5 == "")
+                                                {
+                                                    _core.lines.Enqueue(new DCLine
+                                                    {
+                                                        line = "You must provide a size value.",
+                                                        color = Color.Red
+                                                    });
+                                                    return;
+                                                }
+
+                                                if (consoleCommand1.NextWord() != "")
+                                                {
+                                                    _core.lines.Enqueue(new DCLine
+                                                    {
+                                                        line = "Too many parameters!",
+                                                        color = Color.Red
+                                                    });
+                                                    return;
+                                                }
+
+                                                try
+                                                {
+                                                    int int32 = Convert.ToInt32(lower5);
+                                                    _raster = new RasterFont(fontName, int32);
+                                                    Options.Data.consoleFontSize = int32;
+                                                    _raster.scale = new Vec2(0.5f);
+                                                    Options.Save();
+                                                }
+                                                catch (Exception)
+                                                {
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (consoleCommand1.Remainder().Count() > 0)
+                                                    pFont = $"{pFont} {consoleCommand1.Remainder()}";
+                                                if (pFont is "clear" or "default" or "none")
+                                                {
+                                                    Options.Data.consoleFont = "";
+                                                    Options.Save();
+                                                    Log(DCSection.General, "|DGGREEN|Console font reset.");
+                                                }
+                                                else
+                                                {
+                                                    if (pFont == "comic sans")
+                                                        pFont = "comic sans ms";
+                                                    if (RasterFont.GetName(pFont) != null)
+                                                    {
+                                                        _raster = new RasterFont(pFont, fontPoints);
+                                                        Options.Data.consoleFont = pFont;
+                                                        _raster.scale = new Vec2(0.5f);
+                                                        Options.Save();
+                                                        if (_raster.data.name == "Comic Sans MS")
+                                                            Log(DCSection.General,
+                                                                $"|DGGREEN|Font is now {_raster.data.name}! What a laugh!");
+                                                        else
+                                                            Log(DCSection.General,
+                                                                $"|DGGREEN|Font is now {_raster.data.name}!");
+                                                    }
+                                                    else
+                                                        Log(DCSection.General,
+                                                            $"|DGRED|Could not find font ({pFont})!");
+                                                }
+                                            }
+                                        }
+                                        catch (Exception)
+                                        {
+                                        }
+                                    }
+
+                                    break;
+                                }
+                            case "record" when NetworkDebugger.enabled:
+                                {
+                                    flag1 = true;
+                                    string pLevel = consoleCommand1.NextWord();
+                                    if (pLevel.Length < 3)
+                                    {
+                                        try
+                                        {
+                                            NetworkDebugger.StartRecording(Convert.ToInt32(pLevel));
+                                        }
+                                        catch (Exception)
+                                        {
+                                        }
+                                    }
+                                    else
+                                        NetworkDebugger.StartRecording(pLevel);
+
+                                    break;
+                                }
+                            case "team" when CheckCheats():
+                                return;
+                            case "team":
+                                {
+                                    flag1 = true;
+                                    string findName = consoleCommand1.NextWord();
+                                    Profile profile = ProfileByName(findName);
+                                    if (profile != null)
+                                    {
+                                        string str6 = consoleCommand1.NextWord();
+                                        if (str6 == "")
+                                        {
+                                            _core.lines.Enqueue(new DCLine
+                                            {
+                                                line = "Parameters in wrong format.",
+                                                color = Color.Red
+                                            });
+                                            return;
+                                        }
+
+                                        if (consoleCommand1.NextWord() != "")
+                                        {
+                                            _core.lines.Enqueue(new DCLine
+                                            {
+                                                line = "Too many parameters!",
+                                                color = Color.Red
+                                            });
+                                            return;
+                                        }
+
+                                        string lower = str6.ToLower();
+                                        bool flag3 = false;
+                                        foreach (Team team in Teams.all)
+                                        {
+                                            if (team.name.ToLower() == lower)
+                                            {
+                                                flag3 = true;
+                                                profile.team = team;
+                                                break;
+                                            }
+                                        }
+
+                                        if (!flag3)
+                                        {
+                                            _core.lines.Enqueue(new DCLine
+                                            {
+                                                line = $"No team named {lower}.",
                                                 color = Color.Red
                                             });
                                             return;
                                         }
                                     }
-                                }
-
-                                if (!flag4)
-                                {
-                                    _core.lines.Enqueue(new DCLine
+                                    else
                                     {
-                                        line = $"No profile named {str7}.",
-                                        color = Color.Red
-                                    });
-                                    return;
-                                }
-
-                                break;
-                            }
-                            case "set" when CheckCheats():
-                                return;
-                            case "set":
-                            {
-                                flag1 = true;
-                                string str9 = consoleCommand1.NextWord();
-                                bool flag6 = false;
-                                foreach (Profile profile in Profiles.all)
-                                {
-                                    if (profile.name.ToLower(currentCulture) == str9)
-                                    {
-                                        if (profile.duck != null)
+                                        _core.lines.Enqueue(new DCLine
                                         {
-                                            flag6 = true;
-                                            string str10 = consoleCommand1.NextWord();
-                                            if (str10 == "")
+                                            line = $"No profile named {findName}.",
+                                            color = Color.Red
+                                        });
+                                        return;
+                                    }
+
+                                    break;
+                                }
+                            case "call" when CheckCheats():
+                                return;
+                            case "call":
+                                {
+                                    flag1 = true;
+                                    string str7 = consoleCommand1.NextWord();
+                                    bool flag4 = false;
+                                    foreach (Profile profile in Profiles.all)
+                                    {
+                                        if (profile.name.ToLower(currentCulture) == str7)
+                                        {
+                                            if (profile.duck != null)
+                                            {
+                                                flag4 = true;
+                                                string str8 = consoleCommand1.NextWord();
+                                                if (str8 == "")
+                                                {
+                                                    _core.lines.Enqueue(new DCLine
+                                                    {
+                                                        line = "Parameters in wrong format.",
+                                                        color = Color.Red
+                                                    });
+                                                    return;
+                                                }
+
+                                                if (consoleCommand1.NextWord() != "")
+                                                {
+                                                    _core.lines.Enqueue(new DCLine
+                                                    {
+                                                        line = "Too many parameters!",
+                                                        color = Color.Red
+                                                    });
+                                                    return;
+                                                }
+
+                                                MethodInfo[] methods = typeof(Duck).GetMethods();
+                                                bool flag5 = false;
+                                                foreach (MethodInfo methodInfo in methods)
+                                                {
+                                                    if (methodInfo.Name.ToLower(currentCulture) == str8)
+                                                    {
+                                                        flag5 = true;
+                                                        if (methodInfo.GetParameters().Count() > 0)
+                                                        {
+                                                            _core.lines.Enqueue(new DCLine
+                                                            {
+                                                                line = "You can only call functions with no parameters.",
+                                                                color = Color.Red
+                                                            });
+                                                            return;
+                                                        }
+
+                                                        try
+                                                        {
+                                                            methodInfo.Invoke(profile.duck, null);
+                                                        }
+                                                        catch
+                                                        {
+                                                            _core.lines.Enqueue(new DCLine
+                                                            {
+                                                                line = "The function threw an exception.",
+                                                                color = Color.Red
+                                                            });
+                                                            return;
+                                                        }
+                                                    }
+                                                }
+
+                                                if (!flag5)
+                                                {
+                                                    _core.lines.Enqueue(new DCLine
+                                                    {
+                                                        line = $"Duck has no function called {str8}.",
+                                                        color = Color.Red
+                                                    });
+                                                    return;
+                                                }
+                                            }
+                                            else
                                             {
                                                 _core.lines.Enqueue(new DCLine
                                                 {
-                                                    line = "Parameters in wrong format.",
+                                                    line = $"{str7} is not in the game!",
                                                     color = Color.Red
                                                 });
                                                 return;
                                             }
+                                        }
+                                    }
 
-                                            Type type = typeof(Duck);
-                                            PropertyInfo[] properties = type.GetProperties();
-                                            bool flag7 = false;
-                                            foreach (PropertyInfo propertyInfo in properties)
+                                    if (!flag4)
+                                    {
+                                        _core.lines.Enqueue(new DCLine
+                                        {
+                                            line = $"No profile named {str7}.",
+                                            color = Color.Red
+                                        });
+                                        return;
+                                    }
+
+                                    break;
+                                }
+                            case "set" when CheckCheats():
+                                return;
+                            case "set":
+                                {
+                                    flag1 = true;
+                                    string str9 = consoleCommand1.NextWord();
+                                    bool flag6 = false;
+                                    foreach (Profile profile in Profiles.all)
+                                    {
+                                        if (profile.name.ToLower(currentCulture) == str9)
+                                        {
+                                            if (profile.duck != null)
                                             {
-                                                if (propertyInfo.Name.ToLower(currentCulture) == str10)
+                                                flag6 = true;
+                                                string str10 = consoleCommand1.NextWord();
+                                                if (str10 == "")
                                                 {
-                                                    flag7 = true;
-                                                    if (propertyInfo.PropertyType == typeof(float))
+                                                    _core.lines.Enqueue(new DCLine
                                                     {
-                                                        float single;
-                                                        try
-                                                        {
-                                                            single = Change.ToSingle(consoleCommand1.NextWord());
-                                                        }
-                                                        catch
-                                                        {
-                                                            _core.lines.Enqueue(new DCLine
-                                                            {
-                                                                line = "Parameters in wrong format.",
-                                                                color = Color.Red
-                                                            });
-                                                            return;
-                                                        }
-
-                                                        if (consoleCommand1.NextWord() != "")
-                                                        {
-                                                            _core.lines.Enqueue(new DCLine
-                                                            {
-                                                                line = "Too many parameters!",
-                                                                color = Color.Red
-                                                            });
-                                                            return;
-                                                        }
-
-                                                        propertyInfo.SetValue(profile.duck, single, null);
-                                                    }
-
-                                                    if (propertyInfo.PropertyType == typeof(bool))
-                                                    {
-                                                        bool boolean;
-                                                        try
-                                                        {
-                                                            boolean = Convert.ToBoolean(consoleCommand1.NextWord());
-                                                        }
-                                                        catch
-                                                        {
-                                                            _core.lines.Enqueue(new DCLine
-                                                            {
-                                                                line = "Parameters in wrong format.",
-                                                                color = Color.Red
-                                                            });
-                                                            return;
-                                                        }
-
-                                                        if (consoleCommand1.NextWord() != "")
-                                                        {
-                                                            _core.lines.Enqueue(new DCLine
-                                                            {
-                                                                line = "Too many parameters!",
-                                                                color = Color.Red
-                                                            });
-                                                            return;
-                                                        }
-
-                                                        propertyInfo.SetValue(profile.duck, boolean, null);
-                                                    }
-
-                                                    if (propertyInfo.PropertyType == typeof(int))
-                                                    {
-                                                        int int32;
-                                                        try
-                                                        {
-                                                            int32 = Convert.ToInt32(consoleCommand1.NextWord());
-                                                        }
-                                                        catch
-                                                        {
-                                                            _core.lines.Enqueue(new DCLine
-                                                            {
-                                                                line = "Parameters in wrong format.",
-                                                                color = Color.Red
-                                                            });
-                                                            return;
-                                                        }
-
-                                                        if (consoleCommand1.NextWord() != "")
-                                                        {
-                                                            _core.lines.Enqueue(new DCLine
-                                                            {
-                                                                line = "Too many parameters!",
-                                                                color = Color.Red
-                                                            });
-                                                            return;
-                                                        }
-
-                                                        propertyInfo.SetValue(profile.duck, int32, null);
-                                                    }
-
-                                                    if (propertyInfo.PropertyType == typeof(Vec2))
-                                                    {
-                                                        float single3;
-                                                        float single4;
-                                                        try
-                                                        {
-                                                            single3 = Change.ToSingle(consoleCommand1.NextWord());
-                                                            single4 = Change.ToSingle(consoleCommand1.NextWord());
-                                                        }
-                                                        catch
-                                                        {
-                                                            _core.lines.Enqueue(new DCLine
-                                                            {
-                                                                line = "Parameters in wrong format.",
-                                                                color = Color.Red
-                                                            });
-                                                            return;
-                                                        }
-
-                                                        if (consoleCommand1.NextWord() != "")
-                                                        {
-                                                            _core.lines.Enqueue(new DCLine
-                                                            {
-                                                                line = "Too many parameters!",
-                                                                color = Color.Red
-                                                            });
-                                                            return;
-                                                        }
-
-                                                        propertyInfo.SetValue(profile.duck, new Vec2(single3, single4),
-                                                            null);
-                                                    }
+                                                        line = "Parameters in wrong format.",
+                                                        color = Color.Red
+                                                    });
+                                                    return;
                                                 }
-                                            }
 
-                                            if (!flag7)
-                                            {
-                                                foreach (FieldInfo field in type.GetFields())
+                                                Type type = typeof(Duck);
+                                                PropertyInfo[] properties = type.GetProperties();
+                                                bool flag7 = false;
+                                                foreach (PropertyInfo propertyInfo in properties)
                                                 {
-                                                    if (field.Name.ToLower(currentCulture) == str10)
+                                                    if (propertyInfo.Name.ToLower(currentCulture) == str10)
                                                     {
                                                         flag7 = true;
-                                                        if (field.FieldType == typeof(float))
+                                                        if (propertyInfo.PropertyType == typeof(float))
                                                         {
                                                             float single;
                                                             try
@@ -1262,10 +1130,10 @@ namespace DuckGame
                                                                 return;
                                                             }
 
-                                                            field.SetValue(profile.duck, single);
+                                                            propertyInfo.SetValue(profile.duck, single, null);
                                                         }
 
-                                                        if (field.FieldType == typeof(bool))
+                                                        if (propertyInfo.PropertyType == typeof(bool))
                                                         {
                                                             bool boolean;
                                                             try
@@ -1292,10 +1160,10 @@ namespace DuckGame
                                                                 return;
                                                             }
 
-                                                            field.SetValue(profile.duck, boolean);
+                                                            propertyInfo.SetValue(profile.duck, boolean, null);
                                                         }
 
-                                                        if (field.FieldType == typeof(int))
+                                                        if (propertyInfo.PropertyType == typeof(int))
                                                         {
                                                             int int32;
                                                             try
@@ -1322,17 +1190,17 @@ namespace DuckGame
                                                                 return;
                                                             }
 
-                                                            field.SetValue(profile.duck, int32);
+                                                            propertyInfo.SetValue(profile.duck, int32, null);
                                                         }
 
-                                                        if (field.FieldType == typeof(Vec2))
+                                                        if (propertyInfo.PropertyType == typeof(Vec2))
                                                         {
-                                                            float single5;
-                                                            float single6;
+                                                            float single3;
+                                                            float single4;
                                                             try
                                                             {
-                                                                single5 = Change.ToSingle(consoleCommand1.NextWord());
-                                                                single6 = Change.ToSingle(consoleCommand1.NextWord());
+                                                                single3 = Change.ToSingle(consoleCommand1.NextWord());
+                                                                single4 = Change.ToSingle(consoleCommand1.NextWord());
                                                             }
                                                             catch
                                                             {
@@ -1354,108 +1222,240 @@ namespace DuckGame
                                                                 return;
                                                             }
 
-                                                            field.SetValue(profile.duck, new Vec2(single5, single6));
+                                                            propertyInfo.SetValue(profile.duck, new Vec2(single3, single4),
+                                                                null);
                                                         }
                                                     }
                                                 }
 
                                                 if (!flag7)
                                                 {
-                                                    _core.lines.Enqueue(new DCLine
+                                                    foreach (FieldInfo field in type.GetFields())
                                                     {
-                                                        line = $"Duck has no variable called {str10}.",
-                                                        color = Color.Red
-                                                    });
-                                                    return;
+                                                        if (field.Name.ToLower(currentCulture) == str10)
+                                                        {
+                                                            flag7 = true;
+                                                            if (field.FieldType == typeof(float))
+                                                            {
+                                                                float single;
+                                                                try
+                                                                {
+                                                                    single = Change.ToSingle(consoleCommand1.NextWord());
+                                                                }
+                                                                catch
+                                                                {
+                                                                    _core.lines.Enqueue(new DCLine
+                                                                    {
+                                                                        line = "Parameters in wrong format.",
+                                                                        color = Color.Red
+                                                                    });
+                                                                    return;
+                                                                }
+
+                                                                if (consoleCommand1.NextWord() != "")
+                                                                {
+                                                                    _core.lines.Enqueue(new DCLine
+                                                                    {
+                                                                        line = "Too many parameters!",
+                                                                        color = Color.Red
+                                                                    });
+                                                                    return;
+                                                                }
+
+                                                                field.SetValue(profile.duck, single);
+                                                            }
+
+                                                            if (field.FieldType == typeof(bool))
+                                                            {
+                                                                bool boolean;
+                                                                try
+                                                                {
+                                                                    boolean = Convert.ToBoolean(consoleCommand1.NextWord());
+                                                                }
+                                                                catch
+                                                                {
+                                                                    _core.lines.Enqueue(new DCLine
+                                                                    {
+                                                                        line = "Parameters in wrong format.",
+                                                                        color = Color.Red
+                                                                    });
+                                                                    return;
+                                                                }
+
+                                                                if (consoleCommand1.NextWord() != "")
+                                                                {
+                                                                    _core.lines.Enqueue(new DCLine
+                                                                    {
+                                                                        line = "Too many parameters!",
+                                                                        color = Color.Red
+                                                                    });
+                                                                    return;
+                                                                }
+
+                                                                field.SetValue(profile.duck, boolean);
+                                                            }
+
+                                                            if (field.FieldType == typeof(int))
+                                                            {
+                                                                int int32;
+                                                                try
+                                                                {
+                                                                    int32 = Convert.ToInt32(consoleCommand1.NextWord());
+                                                                }
+                                                                catch
+                                                                {
+                                                                    _core.lines.Enqueue(new DCLine
+                                                                    {
+                                                                        line = "Parameters in wrong format.",
+                                                                        color = Color.Red
+                                                                    });
+                                                                    return;
+                                                                }
+
+                                                                if (consoleCommand1.NextWord() != "")
+                                                                {
+                                                                    _core.lines.Enqueue(new DCLine
+                                                                    {
+                                                                        line = "Too many parameters!",
+                                                                        color = Color.Red
+                                                                    });
+                                                                    return;
+                                                                }
+
+                                                                field.SetValue(profile.duck, int32);
+                                                            }
+
+                                                            if (field.FieldType == typeof(Vec2))
+                                                            {
+                                                                float single5;
+                                                                float single6;
+                                                                try
+                                                                {
+                                                                    single5 = Change.ToSingle(consoleCommand1.NextWord());
+                                                                    single6 = Change.ToSingle(consoleCommand1.NextWord());
+                                                                }
+                                                                catch
+                                                                {
+                                                                    _core.lines.Enqueue(new DCLine
+                                                                    {
+                                                                        line = "Parameters in wrong format.",
+                                                                        color = Color.Red
+                                                                    });
+                                                                    return;
+                                                                }
+
+                                                                if (consoleCommand1.NextWord() != "")
+                                                                {
+                                                                    _core.lines.Enqueue(new DCLine
+                                                                    {
+                                                                        line = "Too many parameters!",
+                                                                        color = Color.Red
+                                                                    });
+                                                                    return;
+                                                                }
+
+                                                                field.SetValue(profile.duck, new Vec2(single5, single6));
+                                                            }
+                                                        }
+                                                    }
+
+                                                    if (!flag7)
+                                                    {
+                                                        _core.lines.Enqueue(new DCLine
+                                                        {
+                                                            line = $"Duck has no variable called {str10}.",
+                                                            color = Color.Red
+                                                        });
+                                                        return;
+                                                    }
                                                 }
                                             }
-                                        }
-                                        else
-                                        {
-                                            _core.lines.Enqueue(new DCLine
+                                            else
                                             {
-                                                line = $"{str9} is not in the game!",
-                                                color = Color.Red
-                                            });
-                                            return;
+                                                _core.lines.Enqueue(new DCLine
+                                                {
+                                                    line = $"{str9} is not in the game!",
+                                                    color = Color.Red
+                                                });
+                                                return;
+                                            }
                                         }
                                     }
-                                }
 
-                                if (!flag6)
-                                {
-                                    _core.lines.Enqueue(new DCLine
+                                    if (!flag6)
                                     {
-                                        line = $"No profile named {str9}.",
-                                        color = Color.Red
-                                    });
-                                    return;
-                                }
+                                        _core.lines.Enqueue(new DCLine
+                                        {
+                                            line = $"No profile named {str9}.",
+                                            color = Color.Red
+                                        });
+                                        return;
+                                    }
 
-                                break;
-                            }
+                                    break;
+                                }
                             case "globalscores" when CheckCheats():
                                 return;
                             case "globalscores":
-                            {
-                                flag1 = true;
-                                using List<Profile>.Enumerator enumerator = Profiles.active.GetEnumerator();
-                                if (enumerator.MoveNext())
                                 {
-                                    Profile current = enumerator.Current;
-                                    _core.lines.Enqueue(new DCLine
+                                    flag1 = true;
+                                    using List<Profile>.Enumerator enumerator = Profiles.active.GetEnumerator();
+                                    if (enumerator.MoveNext())
                                     {
-                                        line = $"{current.name}: {current.stats.CalculateProfileScore():0.000}",
-                                        color = Color.Red
-                                    });
-                                }
+                                        Profile current = enumerator.Current;
+                                        _core.lines.Enqueue(new DCLine
+                                        {
+                                            line = $"{current.name}: {current.stats.CalculateProfileScore():0.000}",
+                                            color = Color.Red
+                                        });
+                                    }
 
-                                break;
-                            }
+                                    break;
+                                }
                             case "scorelog" when CheckCheats():
                                 return;
                             case "scorelog":
-                            {
-                                flag1 = true;
-                                string str11 = consoleCommand1.NextWord();
-                                if (consoleCommand1.NextWord() != "")
                                 {
-                                    _core.lines.Enqueue(new DCLine
+                                    flag1 = true;
+                                    string str11 = consoleCommand1.NextWord();
+                                    if (consoleCommand1.NextWord() != "")
                                     {
-                                        line = "Too many parameters!",
-                                        color = Color.Red
-                                    });
-                                    return;
-                                }
+                                        _core.lines.Enqueue(new DCLine
+                                        {
+                                            line = "Too many parameters!",
+                                            color = Color.Red
+                                        });
+                                        return;
+                                    }
 
-                                if (str11 == "")
-                                {
-                                    _core.lines.Enqueue(new DCLine
+                                    if (str11 == "")
                                     {
-                                        line = "You need to provide a player number.",
-                                        color = Color.Red
-                                    });
-                                    return;
-                                }
+                                        _core.lines.Enqueue(new DCLine
+                                        {
+                                            line = "You need to provide a player number.",
+                                            color = Color.Red
+                                        });
+                                        return;
+                                    }
 
-                                int int32;
-                                try
-                                {
-                                    int32 = Convert.ToInt32(str11);
-                                }
-                                catch
-                                {
-                                    _core.lines.Enqueue(new DCLine
+                                    int int32;
+                                    try
                                     {
-                                        line = "Parameters in wrong format.",
-                                        color = Color.Red
-                                    });
-                                    return;
-                                }
+                                        int32 = Convert.ToInt32(str11);
+                                    }
+                                    catch
+                                    {
+                                        _core.lines.Enqueue(new DCLine
+                                        {
+                                            line = "Parameters in wrong format.",
+                                            color = Color.Red
+                                        });
+                                        return;
+                                    }
 
-                                _core.logScores = int32;
-                                break;
-                            }
+                                    _core.logScores = int32;
+                                    break;
+                                }
                         }
                     }
 
@@ -1497,7 +1497,7 @@ namespace DuckGame
                 return true;
             }
 
-            label_8:
+        label_8:
             return false;
         }
 
@@ -1506,7 +1506,7 @@ namespace DuckGame
             if (text.Contains('\n'))
             {
                 string str = text;
-                char[] chArray = new char[1] {'\n'};
+                char[] chArray = new char[1] { '\n' };
                 foreach (string text1 in str.Split(chArray))
                     Log(text1, c, scale, index);
             }
@@ -1589,7 +1589,7 @@ namespace DuckGame
         {
             if (pDescription == null)
                 pDescription = "No Description.";
-                
+
             Log($"@LOGEVENT@|AQUA|LOGEVENT!-----------{pConnection}|AQUA|signalled a log event!-----------!LOGEVENT", Color.White);
             Log($"@LOGEVENT@|AQUA|LOGEVENT!---{pDescription}|AQUA|---!LOGEVENT", Color.White);
             if (!Network.isActive || pConnection != DuckNetwork.localConnection)
@@ -1628,7 +1628,7 @@ namespace DuckGame
                 {
                     Console.WriteLine(text);
                     debuggerLines.Add(dcLine);
-                }   
+                }
             }
             else
             {
@@ -1734,7 +1734,7 @@ namespace DuckGame
         public static void UpdateGraph(int index, NetGraph target)
         {
         }
-        
+
 
         public static void InitializeCommands()
         {
@@ -1787,7 +1787,7 @@ namespace DuckGame
             });
             AddCommand(new CMD("downpour", cmd =>
             {
-                float num1 = (float) (Level.current.bottomRight.x - (double) Level.current.topLeft.x + 128.0);
+                float num1 = (float)(Level.current.bottomRight.x - (double)Level.current.topLeft.x + 128.0);
                 int num2 = 10;
                 for (int index1 = 0; index1 < 10; ++index1)
                 {
@@ -1796,7 +1796,7 @@ namespace DuckGame
                         PhysicsObject randomItem = ItemBoxRandom.GetRandomItem();
                         randomItem.position = Level.current.topLeft +
                                               new Vec2(
-                                                  (float) ((double) num1 / num2 * index2 +
+                                                  (float)((double)num1 / num2 * index2 +
                                                       Rando.Float(sbyte.MinValue, 128f) - 64.0),
                                                   Level.current.topLeft.y - 2000f - 512 * index1 +
                                                   Rando.Float(-256f, 256f));
@@ -1859,7 +1859,7 @@ namespace DuckGame
                 hidden = true,
                 cheat = true
             });
-            
+
             AddCommand(new CMD("savedir", () =>
             {
                 Process.Start(DuckFile.saveDirectory);
@@ -1995,7 +1995,7 @@ namespace DuckGame
                     bind?.TryExecute();
                 }
             }
-        
+
             if (_core == null)
                 return;
             if (_doDataSubmission && _dataSubmissionMessage != null)

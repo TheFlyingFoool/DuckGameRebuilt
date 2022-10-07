@@ -94,7 +94,7 @@ namespace DuckGame
                             currentPitch = -1;
                         rightPressed = false;
                     }
-                    notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3.0 +  0.01f);
+                    notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3.0 + 0.01f);
                 }
                 if (notePitch != prevNotePitch)
                 {
@@ -117,7 +117,7 @@ namespace DuckGame
                             Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
                         }
                         else
-                            noteSound.Pitch = Maths.Clamp((float)((notePitch - hitPitch) *  0.01f), -1f, 1f);
+                            noteSound.Pitch = Maths.Clamp((float)((notePitch - hitPitch) * 0.01f), -1f, 1f);
                     }
                     else if (noteSound != null)
                     {

@@ -12,148 +12,148 @@ namespace DuckGame
 {
     public static class DansTestArea
     {
-            public static Vec2 topleft = new Vec2(0f, 0f);
-            public static Vec2 bottomright = new Vec2(100f, 100f);
-            //private static float offset = 4000000.0f;
-            //public static float cellsize = 100f;
-            static void SaveAsImage(List<KeyValuePair<Texture2D, string>> texs, PackingRectangle[] rectangles, in PackingRectangle bounds, string file)
+        public static Vec2 topleft = new Vec2(0f, 0f);
+        public static Vec2 bottomright = new Vec2(100f, 100f);
+        //private static float offset = 4000000.0f;
+        //public static float cellsize = 100f;
+        static void SaveAsImage(List<KeyValuePair<Texture2D, string>> texs, PackingRectangle[] rectangles, in PackingRectangle bounds, string file)
+        {
+            int size = Math.Max((int)bounds.Width, (int)bounds.Height);
+            DirectBitmap bigimage = new DirectBitmap(size, size);
+            for (int x = 0; x < bigimage.Width; x++)
             {
-                int size = Math.Max((int)bounds.Width, (int)bounds.Height);
-                DirectBitmap bigimage = new DirectBitmap(size, size);
-                for (int x = 0; x < bigimage.Width; x++)
+                for (int y = 0; y < bigimage.Height; y++)
                 {
-                    for (int y = 0; y < bigimage.Height; y++)
-                    {
-                        bigimage.SetPixelDG(x, y, Color.DarkRed);
-                    }
+                    bigimage.SetPixelDG(x, y, Color.DarkRed);
                 }
-                List<string> strings = new List<string>();
-                for (int i = 0; i < rectangles.Length; i++)
-                {
-                    string texturename = "";
-                    try
-                    {
-                        PackingRectangle r = rectangles[i];
-                        texturename = texs[r.Id].Value;
-                        Texture2D tex = texs[r.Id].Key;
-                        Color[] data = new Color[tex.Width * tex.Height];
-                        texs[r.Id].Key.GetData<Color>(data);
-                        for (int x = 0; x < r.Width; x++)
-                        {
-                            for (int y = 0; y < r.Height; y++)
-                            {
-                                bigimage.SetPixelDG(x + (int)r.X, y + (int)r.Y, data[x + y * tex.Width]);
-                            }
-                        }
-                        if (file == "unsaved")
-                        {
-                            Stream stream = File.Create(@"..\unnamedtexs\" + texs[r.Id].Value.Replace("/", "__") + ".png");
-                            tex.SaveAsPng(stream, (int)r.Width, (int)r.Height);
-                            stream.Dispose();
-                        }
-
-                        strings.Add(texs[r.Id].Value + " " + r.X.ToString() + " " + r.Y.ToString() + " " + r.Height.ToString() + " " + r.Width.ToString());
-                    }
-                    catch (Exception ex)
-                    {
-
-                        DevConsole.Log("Error handling Texture " + texturename + " " + file + " " + ex.Message, Color.Red);
-                    }
-                }
-                System.IO.File.WriteAllLines(@"..\" + file + "_offsets.txt", strings);
-                bigimage.Bitmap.Save(@"..\" + file + ".png", ImageFormat.Png);
-                bigimage.Dispose();
             }
-            public static bool dothing = true;
-            public static void PackTextures(List<Tex2D> Textures, List<string> skip = null, string filename = "")
+            List<string> strings = new List<string>();
+            for (int i = 0; i < rectangles.Length; i++)
             {
-                if (skip == null)
+                string texturename = "";
+                try
                 {
-                    skip = new List<string>();
-                }
-                List<PackingRectangle> rectangles = new List<PackingRectangle>();
-                List<KeyValuePair<Texture2D, string>> texs = new List<KeyValuePair<Texture2D, string>>();
-                List<Texture2D> inlist = new List<Texture2D>();
-                int n = -1;
-                foreach (Texture2D thing in Textures)
-                {
-                    Texture2D t = thing;
-                    if (t.Name != null)
+                    PackingRectangle r = rectangles[i];
+                    texturename = texs[r.Id].Value;
+                    Texture2D tex = texs[r.Id].Key;
+                    Color[] data = new Color[tex.Width * tex.Height];
+                    texs[r.Id].Key.GetData<Color>(data);
+                    for (int x = 0; x < r.Width; x++)
                     {
-                        if (skip.Contains(t.Name))
+                        for (int y = 0; y < r.Height; y++)
                         {
-                            continue;
+                            bigimage.SetPixelDG(x + (int)r.X, y + (int)r.Y, data[x + y * tex.Width]);
                         }
                     }
-                    n += 1;
-                    inlist.Add(t);
-                    string texname = "empty" + n.ToString();
-                    if (t.Name != null)
+                    if (file == "unsaved")
                     {
-                        texname = t.Name;
+                        Stream stream = File.Create(@"..\unnamedtexs\" + texs[r.Id].Value.Replace("/", "__") + ".png");
+                        tex.SaveAsPng(stream, (int)r.Width, (int)r.Height);
+                        stream.Dispose();
                     }
-                    texs.Add(new KeyValuePair<Texture2D, string>(t, texname));
-                    rectangles.Add(new PackingRectangle(0, 0, (uint)t.Width, (uint)t.Height, n));
 
+                    strings.Add(texs[r.Id].Value + " " + r.X.ToString() + " " + r.Y.ToString() + " " + r.Height.ToString() + " " + r.Width.ToString());
                 }
-                PackingRectangle[] arrayrecs = rectangles.OrderBy(p => p.Area).ToArray();
-                if (rectangles.Count > 0)
+                catch (Exception ex)
                 {
 
-                    RectanglePacker.Pack(arrayrecs, out PackingRectangle bounds);
-                    SaveAsImage(texs, arrayrecs, in bounds, filename);
+                    DevConsole.Log("Error handling Texture " + texturename + " " + file + " " + ex.Message, Color.Red);
                 }
             }
-            public static void TextureInit()
+            System.IO.File.WriteAllLines(@"..\" + file + "_offsets.txt", strings);
+            bigimage.Bitmap.Save(@"..\" + file + ".png", ImageFormat.Png);
+            bigimage.Dispose();
+        }
+        public static bool dothing = true;
+        public static void PackTextures(List<Tex2D> Textures, List<string> skip = null, string filename = "")
+        {
+            if (skip == null)
             {
-                Tex2D extraButton = new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(HatSelector.ButtonSprite))), "button");
-                extraButton.Namebase = "nikoextraButton";
-                Content.textures[extraButton.Namebase] = extraButton;
-                foreach (Thing thing in Editor.thingMap.Values) // those texures get created on the fly so we just going to make them here to save
+                skip = new List<string>();
+            }
+            List<PackingRectangle> rectangles = new List<PackingRectangle>();
+            List<KeyValuePair<Texture2D, string>> texs = new List<KeyValuePair<Texture2D, string>>();
+            List<Texture2D> inlist = new List<Texture2D>();
+            int n = -1;
+            foreach (Texture2D thing in Textures)
+            {
+                Texture2D t = thing;
+                if (t.Name != null)
                 {
-                    thing.GeneratePreview(48, 48, true); // IceBlock
-                    thing.GeneratePreview(32, 32, true); // ItemSpawner
-                    thing.GeneratePreview(16, 16, true); // menus
+                    if (skip.Contains(t.Name))
+                    {
+                        continue;
+                    }
                 }
+                n += 1;
+                inlist.Add(t);
+                string texname = "empty" + n.ToString();
+                if (t.Name != null)
+                {
+                    texname = t.Name;
+                }
+                texs.Add(new KeyValuePair<Texture2D, string>(t, texname));
+                rectangles.Add(new PackingRectangle(0, 0, (uint)t.Width, (uint)t.Height, n));
+
             }
-            public static void SaveTextures()
+            PackingRectangle[] arrayrecs = rectangles.OrderBy(p => p.Area).ToArray();
+            if (rectangles.Count > 0)
             {
-                List<string> unneeedtexs = new List<string>() { "shot01", "message", "screen05", "albumpic", "gym", "furni", "ginormoScore", "logo_armature", "arcade/arcadeBackground", "looptex", "civ/desertTileset", "civ/grassTileset", "civ/snowTileset", "civ/grass" };
-                List<string> issuestexs = new List<string>() { "arcade/gradient", "arcade/plasma2", "arcade/plasma" };
-                unneeedtexs.AddRange(issuestexs);
-                TextureInit();
-                PackTextures(MTSpriteBatcher.Texidonthave, null, "unsaved"); ;
-                PackTextures(Content.textures.Values.ToList(), unneeedtexs, "spriteatlas");
+
+                RectanglePacker.Pack(arrayrecs, out PackingRectangle bounds);
+                SaveAsImage(texs, arrayrecs, in bounds, filename);
             }
-            public static void drawthething()
+        }
+        public static void TextureInit()
+        {
+            Tex2D extraButton = new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(HatSelector.ButtonSprite))), "button");
+            extraButton.Namebase = "nikoextraButton";
+            Content.textures[extraButton.Namebase] = extraButton;
+            foreach (Thing thing in Editor.thingMap.Values) // those texures get created on the fly so we just going to make them here to save
             {
-                //Buckets.Keys
-                //if (Level.current != null)
-                //{
-
-
-                //    //Vec2 offset = new Vec2(0f, 0f);
-                //    //for (int x = 0; x < 21; x++)
-                //    //{
-                //    //    for (int y = 0; y < 21; y++)
-                //    //    {
-                //    //        DuckGame.Graphics.DrawRect(new Vec2(bottomright.x * x, bottomright.y * y), new Vec2(bottomright.x * (x + 1), bottomright.y * (y + 1)), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
-                //    //    }
-                //    //}
-                //    float offset = QuadTreeObjectList.offset / QuadTreeObjectList.cellsize;
-                //    float suboffset = QuadTreeObjectList.cellsize / 4;
-                //    foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
-                //    {
-                //        //foreach (Thing t in Level.current.things.Buckets[bucket][typeof(Thing)])
-                //        //{
-                //        //    DuckGame.Graphics.DrawRect(t.topLeft, t.bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
-                //        //}
-                //        Graphics.DrawString(bucket.x.ToString() + " " + bucket.y.ToString(), new Vec2(((bucket.x - offset) * QuadTreeObjectList.cellsize) + suboffset, ((bucket.y - offset) * QuadTreeObjectList.cellsize) + suboffset), Color.Green, default(Depth), null, 0.8f);
-                //        DuckGame.Graphics.DrawRect(new Vec2((bucket.x - offset) * QuadTreeObjectList.cellsize, (bucket.y - offset) * QuadTreeObjectList.cellsize), new Vec2((bucket.x - offset + 1) * QuadTreeObjectList.cellsize, (bucket.y - offset + 1) * QuadTreeObjectList.cellsize), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
-                //    }
-                //}
-
+                thing.GeneratePreview(48, 48, true); // IceBlock
+                thing.GeneratePreview(32, 32, true); // ItemSpawner
+                thing.GeneratePreview(16, 16, true); // menus
             }
+        }
+        public static void SaveTextures()
+        {
+            List<string> unneeedtexs = new List<string>() { "shot01", "message", "screen05", "albumpic", "gym", "furni", "ginormoScore", "logo_armature", "arcade/arcadeBackground", "looptex", "civ/desertTileset", "civ/grassTileset", "civ/snowTileset", "civ/grass" };
+            List<string> issuestexs = new List<string>() { "arcade/gradient", "arcade/plasma2", "arcade/plasma" };
+            unneeedtexs.AddRange(issuestexs);
+            TextureInit();
+            PackTextures(MTSpriteBatcher.Texidonthave, null, "unsaved"); ;
+            PackTextures(Content.textures.Values.ToList(), unneeedtexs, "spriteatlas");
+        }
+        public static void drawthething()
+        {
+            //Buckets.Keys
+            //if (Level.current != null)
+            //{
+
+
+            //    //Vec2 offset = new Vec2(0f, 0f);
+            //    //for (int x = 0; x < 21; x++)
+            //    //{
+            //    //    for (int y = 0; y < 21; y++)
+            //    //    {
+            //    //        DuckGame.Graphics.DrawRect(new Vec2(bottomright.x * x, bottomright.y * y), new Vec2(bottomright.x * (x + 1), bottomright.y * (y + 1)), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+            //    //    }
+            //    //}
+            //    float offset = QuadTreeObjectList.offset / QuadTreeObjectList.cellsize;
+            //    float suboffset = QuadTreeObjectList.cellsize / 4;
+            //    foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
+            //    {
+            //        //foreach (Thing t in Level.current.things.Buckets[bucket][typeof(Thing)])
+            //        //{
+            //        //    DuckGame.Graphics.DrawRect(t.topLeft, t.bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+            //        //}
+            //        Graphics.DrawString(bucket.x.ToString() + " " + bucket.y.ToString(), new Vec2(((bucket.x - offset) * QuadTreeObjectList.cellsize) + suboffset, ((bucket.y - offset) * QuadTreeObjectList.cellsize) + suboffset), Color.Green, default(Depth), null, 0.8f);
+            //        DuckGame.Graphics.DrawRect(new Vec2((bucket.x - offset) * QuadTreeObjectList.cellsize, (bucket.y - offset) * QuadTreeObjectList.cellsize), new Vec2((bucket.x - offset + 1) * QuadTreeObjectList.cellsize, (bucket.y - offset + 1) * QuadTreeObjectList.cellsize), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+            //    }
+            //}
+
+        }
 
 
         public static bool looking;
@@ -179,11 +179,11 @@ namespace DuckGame
             {
                 looking = false;
             }
-            
+
         }
 
         [DevConsoleCommand(Name = "steamjoin")]
-        public static void Join(string id) 
+        public static void Join(string id)
         {
             ulong id2 = 0;
             try
@@ -230,15 +230,15 @@ namespace DuckGame
             Process.Start(Application.ExecutablePath, Program.commandLine + " -lanjoiner");
             DevConsole.Log("Starting Lan Test bud");
         }
-            //RandomSkySay();
+        //RandomSkySay();
         [DevConsoleCommand(Name = "dr")]
         public static void debugrandom()
         {
-                if (Level.current == null || !(Level.current.things[typeof(CityBackground)].FirstOrDefault<Thing>() is CityBackground cityBackground))
-                    return;
-                cityBackground.RandomSkySay();
-                DevConsole.Log("random test");
-            }
+            if (Level.current == null || !(Level.current.things[typeof(CityBackground)].FirstOrDefault<Thing>() is CityBackground cityBackground))
+                return;
+            cityBackground.RandomSkySay();
+            DevConsole.Log("random test");
+        }
         [DevConsoleCommand(Name = "savegraphic")]
         public static void seetheunseen()
         {

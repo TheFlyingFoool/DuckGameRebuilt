@@ -5,13 +5,18 @@ namespace DuckGame
     [ClientOnly]
     public class SinkingBlock : Block
     {
-        protected Rectangle _collisionRect => new(
-            topLeft
-                .ButY(-1, true)
-                .ButX(1f, true),
-            topRight
-                .ButX(-1f, true)
-        );
+        protected Rectangle _collisionRect
+        {
+            get
+            {
+                return new Rectangle(new Vec2(topLeft.x + 1f, topLeft.y - 1f), new Vec2(topRight.x - 1f, topRight.y));
+            }
+        }
+        //topLeft
+        //    .ButY(-1, true)
+        //    .ButX(1f, true),
+        //topRight
+        //    .ButX(-1f, true)
 
         protected virtual bool ShouldSink => Level.CheckRectAll<Duck>(_collisionRect.tl, _collisionRect.br).Any();
 
@@ -34,7 +39,8 @@ namespace DuckGame
                 _movementProgress++;
             else _movementProgress--;
 
-            position = _initialPosition.ButY((float)Ease.Out.Cubic(_movementProgress) * SinkMultiplier, true);
+         
+            position = new Vec2(_initialPosition.x, _initialPosition.y + (float)Ease.Out.Cubic(_movementProgress) * SinkMultiplier);
 
             base.Update();
         }

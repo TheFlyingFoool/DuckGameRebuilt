@@ -53,7 +53,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
             _effect.View = Graphics.currentLayer?.camera?.getMatrix() ?? Matrix.Identity;
             _effect.Projection = Matrix.CreateOrthographicOffCenter(0f, _device.Viewport.Width, _device.Viewport.Height, 0f, 100f, -100f);
         }
-        
+
         public void SetOrthographicProjection() => _effect.Projection = Matrix.CreateOrthographicOffCenter(0f, _device.Viewport.Width, _device.Viewport.Height, 0f, 100f, -100f);
 
         public void SetPerspectiveProjection() => _effect.Projection = Matrix.CreatePerspectiveOffCenter(0f, _device.Viewport.Width, _device.Viewport.Height, 0f, 100f, -100f);
@@ -66,7 +66,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
 
         public Vector3 TransformVector(Vector3 vec) => Vector3.Transform(vec, Matrix.Invert(_effect.View));
         public Vector2 TransformVector(Vector2 vec) => Vector2.Transform(vec, Matrix.Invert(_effect.View));
-        
+
         public void ResetDrawParams()
         {
             ClearScissorStack();
@@ -78,7 +78,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
             Texture = null;
             BlendState = BlendState.Opaque;
         }
-        
+
         public Viewport Viewport
         {
             get => _device.Viewport;
@@ -89,8 +89,8 @@ namespace DuckGame.AddedContent.Drake.PolyRender
         public FillMode FillMode { set => _device.RasterizerState.FillMode = value; }
         public float DepthBias { set => _device.RasterizerState.DepthBias = value; }
         public float GlobalAlpha { set => _effect.Alpha = value; }
-        
-        
+
+
         /// <summary>
         /// Useful key for blend states:
         /// BlendState.Opaque => Alpha is ignored, colours overwrite.
@@ -128,7 +128,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
             set
             {
                 _device.PresentationParameters.MultiSampleCount = value;
-                if(_device.RasterizerState.MultiSampleAntiAlias) _manager.ApplyChanges();
+                if (_device.RasterizerState.MultiSampleAntiAlias) _manager.ApplyChanges();
             }
         }
 
@@ -137,7 +137,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
             _scissorStack.Clear();
             _device.RasterizerState.ScissorTestEnable = false;
         }
-        
+
         public void PushScissor(Rectangle scissorRect)
         {
             Vec2 offset = new Vec2(Viewport.X, Viewport.Y);
@@ -157,7 +157,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
                         break;
                 }
             }
-            
+
             _scissorStack.Push(rect);
             _device.ScissorRectangle = rect;
             _device.RasterizerState.ScissorTestEnable = true;
@@ -165,11 +165,11 @@ namespace DuckGame.AddedContent.Drake.PolyRender
 
         public void PopScissor()
         {
-            if(_scissorStack.Count > 0) _scissorStack.Pop();
+            if (_scissorStack.Count > 0) _scissorStack.Pop();
             if (_scissorStack.Count <= 0) ClearScissorStack();
             else _device.ScissorRectangle = _scissorStack.Peek();
         }
-        
+
         //Reset buffer is automatically called after each draw, so you should only need it if a draw has been left in progress for some reason.
         public void ResetBuffer()
         {
@@ -184,7 +184,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
                 throw new ArgumentException("Primitive arrays are not all the same length!");
 
             ResetBuffer();
-            for(int i = 0; i < positions.Length; i++)
+            for (int i = 0; i < positions.Length; i++)
             {
                 Vert(positions[i]).Col(colors[i]).Tex(texCoords[i]);
             }
@@ -264,15 +264,15 @@ namespace DuckGame.AddedContent.Drake.PolyRender
             _currentOffset = offset;
             return this;
         }
-        
+
         public void Draw(PrimitiveType type)
         {
             if (_bufferPos == 0 || _isDisposed) return;
-            
+
             _effect.CurrentTechnique.Passes[0].Apply();
 
             _bufferPos++;
-            
+
             int primitiveCount = 0;
 
             switch (type)
@@ -295,7 +295,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
 
             ResetBuffer();
         }
-        
+
         public void DrawTriStrip()
         {
             Draw(PrimitiveType.TriangleStrip);

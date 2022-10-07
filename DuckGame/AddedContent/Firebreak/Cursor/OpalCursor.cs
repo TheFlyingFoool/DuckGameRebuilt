@@ -1,4 +1,5 @@
 ﻿using DuckGame.AddedContent.Drake.PolyRender;
+using System.Windows;
 
 namespace DuckGame
 {
@@ -9,8 +10,8 @@ namespace DuckGame
         public override string Id => "opal";
         public override void DrawCursor()
         {
-            PolyRenderer.Line(Mouse.position.ButX(-2, true), Mouse.position.ButX(2, true), 0.5f, Color.White);
-            PolyRenderer.Line(Mouse.position.ButY(-2, true), Mouse.position.ButY(2, true), 0.5f, Color.White);
+            PolyRenderer.Line(new Vec2(Mouse.position.x - 2f, Mouse.position.y), new Vec2(Mouse.position.x + 2f, Mouse.position.y), 0.5f, Color.White);
+            PolyRenderer.Line(new Vec2(Mouse.position.x, Mouse.position.y - 2f), new Vec2(Mouse.position.x, Mouse.position.y + 2), 0.5f, Color.White);
 
             if (DotFollow)
                 PolyRenderer.Circle(Mouse.position, 4f, 24, Color.Red);

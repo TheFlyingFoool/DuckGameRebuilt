@@ -9,23 +9,23 @@ using System.Reflection;
 
 namespace XnaToFna.StubXDK
 {
-  public static class StubXDKHelper
-  {
-    private static Assembly _GamerServicesAsm;
-
-    public static Assembly GamerServicesAsm
+    public static class StubXDKHelper
     {
-      get
-      {
-        if (StubXDKHelper._GamerServicesAsm != null)
-          return StubXDKHelper._GamerServicesAsm;
-        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+        private static Assembly _GamerServicesAsm;
+
+        public static Assembly GamerServicesAsm
         {
-          if (assembly.GetType("Microsoft.Xna.Framework.GamerServices.GamerPresence") != null)
-            return StubXDKHelper._GamerServicesAsm = assembly;
+            get
+            {
+                if (StubXDKHelper._GamerServicesAsm != null)
+                    return StubXDKHelper._GamerServicesAsm;
+                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    if (assembly.GetType("Microsoft.Xna.Framework.GamerServices.GamerPresence") != null)
+                        return StubXDKHelper._GamerServicesAsm = assembly;
+                }
+                return null;
+            }
         }
-        return null;
-      }
     }
-  }
 }

@@ -10,16 +10,16 @@ using System.Reflection;
 
 namespace XnaToFna.StubXDK.Net
 {
-  public static class __NetworkSession__
-  {
-    private static Type t_NetworkNotAvailableException;
-    private static ConstructorInfo ctor_NetworkNotAvailableException;
+    public static class __NetworkSession__
+    {
+        private static Type t_NetworkNotAvailableException;
+        private static ConstructorInfo ctor_NetworkNotAvailableException;
 
-    [MonoModHook("System.Int32 Microsoft.Xna.Framework.Net.NetworkSession::get_BytesPerSecondSent()")]
-    public static int get_BytesPerSecondSent(object session) => 0;
+        [MonoModHook("System.Int32 Microsoft.Xna.Framework.Net.NetworkSession::get_BytesPerSecondSent()")]
+        public static int get_BytesPerSecondSent(object session) => 0;
 
-    [MonoModHook("System.Int32 Microsoft.Xna.Framework.Net.NetworkSession::get_BytesPerSecondReceived()")]
-    public static int get_BytesPerSecondReceived(object session) => 0;
+        [MonoModHook("System.Int32 Microsoft.Xna.Framework.Net.NetworkSession::get_BytesPerSecondReceived()")]
+        public static int get_BytesPerSecondReceived(object session) => 0;
 
         [MonoModHook("System.IAsyncResult Microsoft.Xna.Framework.Net.NetworkSession::BeginJoinInvited(System.Collections.Generic.IEnumerable`1<Microsoft.Xna.Framework.GamerServices.SignedInGamer>,System.AsyncCallback,System.Object)")]
         public static IAsyncResult BeginJoinInvited(object gamers, AsyncCallback cb, object obj)

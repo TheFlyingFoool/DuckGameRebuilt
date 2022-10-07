@@ -585,8 +585,8 @@ namespace DuckGame
                                 --index;
                             }
                         }
-                       // else
-                      //      break;
+                        // else
+                        //      break;
                     }
                 }
             }

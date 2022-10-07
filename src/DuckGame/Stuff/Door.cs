@@ -329,7 +329,7 @@ namespace DuckGame
                 bool flag2 = false;
                 Duck search2 = null;
                 Thing thing = null;//Level.CheckRectFilter<Duck>(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f), d => !(d is TargetDuck));
-                foreach(Duck d in Level.CheckRectAll<Duck>(_topLeft - new Vec2(32f, 0f), _bottomRight + new Vec2(32f, 0f)))
+                foreach (Duck d in Level.CheckRectAll<Duck>(_topLeft - new Vec2(32f, 0f), _bottomRight + new Vec2(32f, 0f)))
                 {
                     if (!(d is TargetDuck))
                     {
@@ -492,7 +492,7 @@ namespace DuckGame
                     }
                 }
             }
-            
+
             _jiggle = Maths.CountDown(_jiggle, 0.08f);
             if (!flag1)
             {

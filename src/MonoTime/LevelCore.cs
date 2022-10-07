@@ -54,7 +54,7 @@ namespace DuckGame
         };
         public InputCode konamiCode = new InputCode()
         {
-          triggers = new List<string>()
+            triggers = new List<string>()
           {
             "UP",
             "UP",
@@ -70,7 +70,7 @@ namespace DuckGame
         };
         public InputCode konamiCodeAlternate = new InputCode()
         {
-          triggers = new List<string>()
+            triggers = new List<string>()
           {
             "UP|JUMP",
             "UP|JUMP",

@@ -109,7 +109,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-             _sound = new LoopingSound("chainsawIdle", multiSound: "chainsawIdleMulti");
+            _sound = new LoopingSound("chainsawIdle", multiSound: "chainsawIdleMulti");
             _bladeSound = new LoopingSound("chainsawBladeLoop", multiSound: "chainsawBladeLoopMulti");
             _bladeSoundLow = new LoopingSound("chainsawBladeLoopLow", multiSound: "chainsawBladeLoopLowMulti");
             _sprite = new SpriteMap("chainsaw", 29, 13);

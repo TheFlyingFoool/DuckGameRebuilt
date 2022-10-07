@@ -55,7 +55,7 @@ namespace DuckGame
         //    //FontGDIContext._dirty = true;
         //}
 
-       // public static int numCharactersToRender => FontGDIContext._numCharactersToRender;
+        // public static int numCharactersToRender => FontGDIContext._numCharactersToRender;
 
         //public void SetNumCharactersToRender(int pNum)
         //{

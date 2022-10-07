@@ -263,7 +263,7 @@ namespace DuckGame
 
         private static void MuteOnBackground()
         {
-            
+
         }
 
         private static void ApplyResolution()
@@ -534,7 +534,7 @@ namespace DuckGame
                 if (MonoMain.logFileOperations)
                     DevConsole.Log(DCSection.General, "Options.MergeDefault()");
                 Profile experienceProfile = Profiles.experienceProfile;
-                Profile p = Profiles.all.ElementAt<Profile>(0);
+                Profile p = Profiles.all[0];
                 Profiles.Save(experienceProfile, "__backup_");
                 Profiles.Save(p, "__backup_");
                 experienceProfile.numSandwiches += p.numSandwiches;

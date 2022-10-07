@@ -60,8 +60,8 @@ namespace DuckGame
             float lengthSq = vec2.lengthSq;
             if (lengthSq < 64.0 || lengthSq > 4096.0)
                 alpha -= 0.08f;
-            hSpeed = Lerp.Float(hSpeed, (float)(-vec2.x *  0.7f), 0.15f);
-            vSpeed = Lerp.Float(vSpeed, (float)(-vec2.y *  0.7f), 0.15f);
+            hSpeed = Lerp.Float(hSpeed, (float)(-vec2.x * 0.7f), 0.15f);
+            vSpeed = Lerp.Float(vSpeed, (float)(-vec2.y * 0.7f), 0.15f);
             position.x += hSpeed;
             position.y += vSpeed;
             position.x = Lerp.Float(position.x, _target.x, 0.16f);

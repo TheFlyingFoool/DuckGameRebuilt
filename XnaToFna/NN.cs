@@ -8,10 +8,10 @@ using Mono.Cecil;
 
 namespace XnaToFna
 {
-  public class NN
-  {
-    public ModuleDefinition mod;
+    public class NN
+    {
+        public ModuleDefinition mod;
 
-    public bool Relinkthing(XnaToFnaMapping mappings) => this.mod.Assembly.Name.Name == mappings.Target;
-  }
+        public bool Relinkthing(XnaToFnaMapping mappings) => this.mod.Assembly.Name.Name == mappings.Target;
+    }
 }

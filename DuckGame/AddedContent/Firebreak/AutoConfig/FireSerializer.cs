@@ -105,12 +105,7 @@ namespace DuckGame
             return builder.ToString();
         }
 
-        public static readonly char[] BadChars = new[]
-        {
-        '[',
-        ']',
-        ';',
-    };
+        public static readonly char[] BadChars = new[] { '[', ']', ';', };
 
         public static string EscapeBadStringCharacters(string str)
         {

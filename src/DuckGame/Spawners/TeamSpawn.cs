@@ -22,7 +22,7 @@ namespace DuckGame
             {
                 SpriteMap graphic = new SpriteMap("duck", 32, 32);
                 graphic.CenterOrigin();
-                graphic.depth = (Depth)(float)(0.9f +  0.01f * index);
+                graphic.depth = (Depth)(float)(0.9f + 0.01f * index);
                 graphic.position = new Vec2((float)(index * 9.411764f - 16.0 + 16.0), -2f);
                 graphicList.Add(graphic);
             }

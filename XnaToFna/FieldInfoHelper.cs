@@ -12,9 +12,9 @@ using System.Text;
 
 namespace XnaToFna.ProxyReflection
 {
-  public static class FieldInfoHelper
-  {
-    private static readonly Dictionary<Type, Dictionary<string, FieldInfoHelper.XnaToFnaFieldInfo>> Map = new Dictionary<Type, Dictionary<string, FieldInfoHelper.XnaToFnaFieldInfo>>()
+    public static class FieldInfoHelper
+    {
+        private static readonly Dictionary<Type, Dictionary<string, FieldInfoHelper.XnaToFnaFieldInfo>> Map = new Dictionary<Type, Dictionary<string, FieldInfoHelper.XnaToFnaFieldInfo>>()
     {
       {
         typeof (StringBuilder),
@@ -28,71 +28,71 @@ namespace XnaToFna.ProxyReflection
       }
     };
 
-    public static FieldInfo GetField(Type self, string name, BindingFlags bindingAttr)
-    {
-      Dictionary<string, FieldInfoHelper.XnaToFnaFieldInfo> dictionary;
-      FieldInfoHelper.XnaToFnaFieldInfo xnaToFnaFieldInfo;
-      return FieldInfoHelper.Map.TryGetValue(self, out dictionary) && dictionary.TryGetValue(name, out xnaToFnaFieldInfo) ? xnaToFnaFieldInfo : self.GetField(name, bindingAttr);
+        public static FieldInfo GetField(Type self, string name, BindingFlags bindingAttr)
+        {
+            Dictionary<string, FieldInfoHelper.XnaToFnaFieldInfo> dictionary;
+            FieldInfoHelper.XnaToFnaFieldInfo xnaToFnaFieldInfo;
+            return FieldInfoHelper.Map.TryGetValue(self, out dictionary) && dictionary.TryGetValue(name, out xnaToFnaFieldInfo) ? xnaToFnaFieldInfo : self.GetField(name, bindingAttr);
+        }
+
+
+
+        public static FieldInfo GetField(Type self, string name) => FieldInfoHelper.GetField(self, name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
+
+        public class XnaToFnaFieldInfo : FieldInfo
+        {
+            internal Type _DeclaringType;
+            internal readonly Type _FieldType;
+            internal string _Name;
+            internal readonly Func<object, object> _OnGetValue;
+            internal readonly Action<object, object> _OnSetValue;
+
+            public override FieldAttributes Attributes => throw new NotSupportedException();
+
+            public override Type DeclaringType => this._DeclaringType;
+
+            public override RuntimeFieldHandle FieldHandle => throw new NotSupportedException();
+
+            public override Type FieldType => this._FieldType;
+
+            public override string Name => this._Name;
+
+            public override Type ReflectedType => throw new NotSupportedException();
+
+            public XnaToFnaFieldInfo(
+              Type fieldType,
+              Func<object, object> onGetValue = null,
+              Action<object, object> onSetValue = null)
+            {
+                this._FieldType = fieldType;
+                this._OnGetValue = onGetValue;
+                this._OnSetValue = onSetValue;
+            }
+
+            public override object[] GetCustomAttributes(bool inherit) => throw new NotSupportedException();
+
+            public override object[] GetCustomAttributes(Type attributeType, bool inherit) => throw new NotSupportedException();
+
+            public override bool IsDefined(Type attributeType, bool inherit) => throw new NotSupportedException();
+
+            public override object GetValue(object obj)
+            {
+                Func<object, object> onGetValue = this._OnGetValue;
+                return onGetValue == null ? null : onGetValue(obj);
+            }
+
+            public override void SetValue(
+              object obj,
+              object value,
+              BindingFlags invokeAttr,
+              Binder binder,
+              CultureInfo culture)
+            {
+                Action<object, object> onSetValue = this._OnSetValue;
+                if (onSetValue == null)
+                    return;
+                onSetValue(obj, value);
+            }
+        }
     }
-
-  
-
-    public static FieldInfo GetField(Type self, string name) => FieldInfoHelper.GetField(self, name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
-
-    public class XnaToFnaFieldInfo : FieldInfo
-    {
-      internal Type _DeclaringType;
-      internal readonly Type _FieldType;
-      internal string _Name;
-      internal readonly Func<object, object> _OnGetValue;
-      internal readonly Action<object, object> _OnSetValue;
-
-      public override FieldAttributes Attributes => throw new NotSupportedException();
-
-      public override Type DeclaringType => this._DeclaringType;
-
-      public override RuntimeFieldHandle FieldHandle => throw new NotSupportedException();
-
-      public override Type FieldType => this._FieldType;
-
-      public override string Name => this._Name;
-
-      public override Type ReflectedType => throw new NotSupportedException();
-
-      public XnaToFnaFieldInfo(
-        Type fieldType,
-        Func<object, object> onGetValue = null,
-        Action<object, object> onSetValue = null)
-      {
-        this._FieldType = fieldType;
-        this._OnGetValue = onGetValue;
-        this._OnSetValue = onSetValue;
-      }
-
-      public override object[] GetCustomAttributes(bool inherit) => throw new NotSupportedException();
-
-      public override object[] GetCustomAttributes(Type attributeType, bool inherit) => throw new NotSupportedException();
-
-      public override bool IsDefined(Type attributeType, bool inherit) => throw new NotSupportedException();
-
-      public override object GetValue(object obj)
-      {
-        Func<object, object> onGetValue = this._OnGetValue;
-        return onGetValue == null ? null : onGetValue(obj);
-      }
-
-      public override void SetValue(
-        object obj,
-        object value,
-        BindingFlags invokeAttr,
-        Binder binder,
-        CultureInfo culture)
-      {
-        Action<object, object> onSetValue = this._OnSetValue;
-        if (onSetValue == null)
-          return;
-        onSetValue(obj, value);
-      }
-    }
-  }
 }

@@ -11,31 +11,31 @@ using System.Text;
 
 namespace XnaToFna.ProxyForms
 {
-  public static class ProxyMessageHelper
-  {
-    public static readonly CodeAccessPermission UnmanagedCode = new SecurityPermission(SecurityPermissionFlag.UnmanagedCode);
-
-    public static string MsgToString(int msg)
+    public static class ProxyMessageHelper
     {
-      if (Enum.IsDefined(typeof (Messages), msg))
-        return Enum.GetName(typeof (Messages), msg);
-      return (msg & 8192) == 8192 ? "WM_REFLECT + " + (ProxyMessageHelper.MsgToString(msg & -8193) ?? "???") : null;
+        public static readonly CodeAccessPermission UnmanagedCode = new SecurityPermission(SecurityPermissionFlag.UnmanagedCode);
+
+        public static string MsgToString(int msg)
+        {
+            if (Enum.IsDefined(typeof(Messages), msg))
+                return Enum.GetName(typeof(Messages), msg);
+            return (msg & 8192) == 8192 ? "WM_REFLECT + " + (ProxyMessageHelper.MsgToString(msg & -8193) ?? "???") : null;
+        }
+
+        public static StringBuilder Parenthesize(this StringBuilder builder, string input) => string.IsNullOrEmpty(input) ? builder : builder.Append(" (").Append(input).Append(")");
+
+        public static string ToString(Message message) => ProxyMessageHelper.ToString(message.HWnd, message.Msg, message.WParam, message.LParam, message.Result);
+
+        public static string ToString(
+          IntPtr hWnd,
+          int msg,
+          IntPtr wparam,
+          IntPtr lparam,
+          IntPtr result)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("msg=0x").Append(Convert.ToString(msg, 16)).Parenthesize(ProxyMessageHelper.MsgToString(msg)).Append(" hwnd=0x").Append(Convert.ToString((long)hWnd, 16)).Append(" wparam=0x").Append(Convert.ToString((long)wparam, 16)).Append(" lparam=0x").Append(Convert.ToString((long)lparam, 16)).Parenthesize(msg == 528 ? ProxyMessageHelper.MsgToString((int)wparam & ushort.MaxValue) : null).Append(" result=0x").Append(Convert.ToString((long)result, 16));
+            return stringBuilder.ToString();
+        }
     }
-
-    public static StringBuilder Parenthesize(this StringBuilder builder, string input) => string.IsNullOrEmpty(input) ? builder : builder.Append(" (").Append(input).Append(")");
-
-    public static string ToString(Message message) => ProxyMessageHelper.ToString(message.HWnd, message.Msg, message.WParam, message.LParam, message.Result);
-
-    public static string ToString(
-      IntPtr hWnd,
-      int msg,
-      IntPtr wparam,
-      IntPtr lparam,
-      IntPtr result)
-    {
-      StringBuilder stringBuilder = new StringBuilder();
-      stringBuilder.Append("msg=0x").Append(Convert.ToString(msg, 16)).Parenthesize(ProxyMessageHelper.MsgToString(msg)).Append(" hwnd=0x").Append(Convert.ToString((long) hWnd, 16)).Append(" wparam=0x").Append(Convert.ToString((long) wparam, 16)).Append(" lparam=0x").Append(Convert.ToString((long) lparam, 16)).Parenthesize(msg == 528 ? ProxyMessageHelper.MsgToString((int) wparam & ushort.MaxValue) : null).Append(" result=0x").Append(Convert.ToString((long) result, 16));
-      return stringBuilder.ToString();
-    }
-  }
 }

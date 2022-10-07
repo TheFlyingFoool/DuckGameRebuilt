@@ -79,7 +79,7 @@ namespace DuckGame
         public virtual void DoPositioning()
         {
             //if (Level.current is Editor || graphic == null)
-           //     return;
+            //     return;
             graphic.position = position;
             graphic.scale = scale;
             graphic.center = center;

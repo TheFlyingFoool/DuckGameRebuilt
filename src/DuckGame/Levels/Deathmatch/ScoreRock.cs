@@ -36,7 +36,7 @@ namespace DuckGame
             set
             {
                 _netProfileIndex = value;
-                _profile = Profiles.all.ElementAt<Profile>(_netProfileIndex);
+                _profile = Profiles.all[_netProfileIndex];
                 RefreshProfile(_profile);
             }
         }

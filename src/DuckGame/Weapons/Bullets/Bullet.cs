@@ -622,7 +622,7 @@ namespace DuckGame
                 for (int index = 0; index < num; ++index)
                 {
                     Vec2 pointOnArc = GetPointOnArc(index * 8);
-                
+
                     //Keep the float casting here the same, it breaks for some reason if its any other way
                     Graphics.DrawLine(pointOnArc, p2, color * (1f - (float)index / num) * alpha, ammo.bulletThickness, (Depth)0.9f);
                     if (pointOnArc == prev.First<Vec2>())

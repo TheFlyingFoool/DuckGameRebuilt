@@ -70,7 +70,7 @@ namespace DuckGame
 
                     //old bad code was changed for a better solution -NiK0 again
                     snowWait = Rando.Float(2f, 3f) / DGRSettings.S_ParticleMultiplier;
-                    if (Rando.Float(1f) > 0.92 )
+                    if (Rando.Float(1f) > 0.92)
                         Level.Add(new SnowFallParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), new Vec2(0f, 0f)));
                 }
             }

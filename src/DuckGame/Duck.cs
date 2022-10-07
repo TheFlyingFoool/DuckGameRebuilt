@@ -364,7 +364,7 @@ namespace DuckGame
         {
             DevConsole.Log(DCSection.General, "Assigning net profile index (" + pIndex.ToString() + "\\" + Profiles.all.Count<Profile>().ToString() + ")");
             _netProfileIndex = pIndex;
-            Profile profile = Profiles.all.ElementAt<Profile>(_netProfileIndex);
+            Profile profile = Profiles.all[_netProfileIndex];
             if (Network.isClient && Network.InLobby())
                 (Level.current as TeamSelect2).OpenDoor(_netProfileIndex, this);
             this.profile = profile;
@@ -2875,7 +2875,7 @@ namespace DuckGame
                         profile.stats.airTime += Maths.IncFrameTimer();
                     if (isServerForObject && !sliding && inputProfile.Pressed("UP"))
                     {
-                        Desk t = Level.Nearest<Desk>(position,22f);
+                        Desk t = Level.Nearest<Desk>(position, 22f);
                         if (t != null && Level.CheckLine<Block>(position, t.position) == null)
                         {
                             Fondle(t);
@@ -3129,7 +3129,7 @@ namespace DuckGame
                         {
                             PhysicsRopeSection section = null;
                             if (_vine == null)
-                                section = Level.Nearest<PhysicsRopeSection>(this.position,18.0f);
+                                section = Level.Nearest<PhysicsRopeSection>(this.position, 18.0f);
                             if (section != null && (position - section.position).length < 18.0)
                             {
                                 _vine = section.rope.LatchOn(section, this);
@@ -4242,7 +4242,7 @@ namespace DuckGame
             for (int index = 0; index < 3 * Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 10000); ++index)
                 Level.Add(new MusketSmoke(position.x - 5f + Rando.Float(10f), (float)(position.y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
                 {
-                  move = {
+                    move = {
                     x = Rando.Float(0.4f) - 0.2f,
                     y = Rando.Float(0.4f) - 0.2f
                   }
@@ -4916,9 +4916,9 @@ namespace DuckGame
                 Vec2 vec2_2 = Vec2.Zero;
                 foreach (Indicator indicator in _indicators)
                 {
-                    if (!indicator.visible) 
+                    if (!indicator.visible)
                         continue;
-                    
+
                     double deg = -num2 / 2f + num4 * num1;
                     float x = (float)-(Math.Sin(Maths.DegToRad((float)deg)) * num5);
                     float y = (float)Math.Cos(Maths.DegToRad((float)deg)) * num5;
@@ -4947,9 +4947,9 @@ namespace DuckGame
                 public bool _prevActive;
                 private Vec2 drawPos = Vec2.Zero;
 
-                public bool noWait => problem 
-                    is ConnectionTrouble.Chatting 
-                    or ConnectionTrouble.AFK 
+                public bool noWait => problem
+                    is ConnectionTrouble.Chatting
+                    or ConnectionTrouble.AFK
                     or ConnectionTrouble.Minimized;
 
                 public bool active
@@ -4986,12 +4986,12 @@ namespace DuckGame
                         _prevActive = active;
                         if (active)
                             bloop = 1f;
-                        
-                        if (problem 
-                            is ConnectionTrouble.Chatting 
-                            or ConnectionTrouble.Minimized 
-                            or ConnectionTrouble.Paused 
-                            or ConnectionTrouble.DevConsole 
+
+                        if (problem
+                            is ConnectionTrouble.Chatting
+                            or ConnectionTrouble.Minimized
+                            or ConnectionTrouble.Paused
+                            or ConnectionTrouble.DevConsole
                             or ConnectionTrouble.AFK)
                             SFX.Play("rainpop", 0.65f, Rando.Float(-0.1f, 0.1f));
                     }

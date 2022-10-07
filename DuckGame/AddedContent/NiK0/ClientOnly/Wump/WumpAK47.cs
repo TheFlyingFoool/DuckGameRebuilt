@@ -13,10 +13,10 @@ namespace DuckGame
         public Sprite nub;
         public WumpAK47(float xpos, float ypos) : base(xpos, ypos)
         {
-			ammo = 30;
-			_ammoType = new ATHighCalMachinegun();
-			_ammoType.bulletColor = new Color(0, 205, 255);
-			_type = "gun";
+            ammo = 30;
+            _ammoType = new ATHighCalMachinegun();
+            _ammoType.bulletColor = new Color(0, 205, 255);
+            _type = "gun";
 
             nub = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(nubspr))), "wumpnub"));
             nub.Namebase = "wumpnub";
@@ -27,20 +27,20 @@ namespace DuckGame
             graphic.Namebase = "wumpak47";
             Content.textures[graphic.Namebase] = graphic.texture;
             center = new Vec2(16f, 4f);
-			collisionOffset = new Vec2(-8f, -3f);
-			collisionSize = new Vec2(18f, 10f);
-			_barrelOffsetTL = new Vec2(32f, 4f);
+            collisionOffset = new Vec2(-8f, -3f);
+            collisionSize = new Vec2(18f, 10f);
+            _barrelOffsetTL = new Vec2(32f, 4f);
             _holdOffset = new Vec2(2, 0);
-			_fireSound = "deepMachineGun2";
-			_fullAuto = true;
-			_fireWait = 1.2f;
-			_kickForce = 3.5f;
-			_fireRumble = RumbleIntensity.Kick;
-			loseAccuracy = 0.2f;
-			maxAccuracyLost = 0.8f;
+            _fireSound = "deepMachineGun2";
+            _fullAuto = true;
+            _fireWait = 1.2f;
+            _kickForce = 3.5f;
+            _fireRumble = RumbleIntensity.Kick;
+            loseAccuracy = 0.2f;
+            maxAccuracyLost = 0.8f;
             _editorName = "AK47";
             editorTooltip = "This aint no normal gun, charge up a barrage of bullets and watch out for the recoil.";
-		}
+        }
         public override void Update()
         {
             if (fires > 0 && !charge && isServerForObject)
@@ -86,7 +86,7 @@ namespace DuckGame
         public int inp;
         public override void OnHoldAction()
         {
-            if (charge && fires < (infiniteAmmoVal?12:7))
+            if (charge && fires < (infiniteAmmoVal ? 12 : 7))
             {
                 del++;
                 if (infiniteAmmoVal) del++;

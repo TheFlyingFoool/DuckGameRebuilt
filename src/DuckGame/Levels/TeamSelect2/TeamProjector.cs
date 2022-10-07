@@ -80,18 +80,18 @@ namespace DuckGame
             {
                 Color color = new Color(0.35f, 0.5f, 0.6f);
                 profile.persona.sprite.alpha = Maths.Clamp(_swapFade, 0f, 1f);
-                profile.persona.sprite.color = color * (float)( 0.7f + _projectorSin.normalized * 0.1f);
+                profile.persona.sprite.color = color * (float)(0.7f + _projectorSin.normalized * 0.1f);
                 profile.persona.sprite.color = new Color(profile.persona.sprite.color.r, profile.persona.sprite.color.g, profile.persona.sprite.color.b);
                 profile.persona.sprite.flipH = false;
                 profile.persona.armSprite.alpha = Maths.Clamp(_swapFade, 0f, 1f);
-                profile.persona.armSprite.color = color * (float)( 0.7f + _projectorSin.normalized * 0.1f);
+                profile.persona.armSprite.color = color * (float)(0.7f + _projectorSin.normalized * 0.1f);
                 profile.persona.armSprite.color = new Color(profile.persona.armSprite.color.r, profile.persona.armSprite.color.g, profile.persona.armSprite.color.b);
                 profile.persona.armSprite.flipH = false;
                 profile.persona.sprite.scale = new Vec2(1f, 1f);
                 profile.persona.armSprite.scale = new Vec2(1f, 1f);
                 float num3 = 12f;
                 float num4 = (float)(x - (count - 1) * num3 / 2.0 + num2 * num3);
-                profile.persona.sprite.depth = (Depth)(float)(num1 +  0.01f + num2 * (1.0 / 1000.0));
+                profile.persona.sprite.depth = (Depth)(float)(num1 + 0.01f + num2 * (1.0 / 1000.0));
                 profile.persona.armSprite.depth = (Depth)(float)(num1 + 0.02f + num2 * (1.0 / 1000.0));
                 Graphics.Draw(profile.persona.sprite, num4 + 1f, y - 17f);
                 Graphics.Draw(profile.persona.armSprite, (float)(num4 + 1.0 - 3.0), (float)(y - 17.0 + 6.0));

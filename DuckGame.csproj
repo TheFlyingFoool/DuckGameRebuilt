@@ -194,7 +194,6 @@
     <Compile Include="DuckGame\AddedContent\Drake\Utils\VectorMath.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\ConfigTest.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\FireSerializer.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\FireSerializerModuleAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\IFireSerializerModule.cs" />

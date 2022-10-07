@@ -22,7 +22,7 @@ namespace DuckGame
         public MemberInfo field;
         static AutoConfigFieldAttribute()
         {
-           // MemberAttribute<AutoConfigFieldAttribute>.RequestSearch(all => All = all);
+            // MemberAttribute<AutoConfigFieldAttribute>.RequestSearch(all => All = all);
         }
         public static void OnResults(Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>> all)
         {

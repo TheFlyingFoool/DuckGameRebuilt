@@ -54,7 +54,7 @@ namespace DuckGame
         //private const uint WM_CLOSE = 16;
         public static bool isLinux = false;
         public static string wineVersion = null;
-        private static List<Func<string>> _extraExceptionDetailsMinimal = new List<Func<string>>() 
+        private static List<Func<string>> _extraExceptionDetailsMinimal = new List<Func<string>>()
         {
             () => "Date: " + DateTime.UtcNow.ToString(DateTimeFormatInfo.InvariantInfo),
             () => "Version: " + DG.version,
@@ -130,7 +130,7 @@ namespace DuckGame
                 MonoMain.enableThreadedLoading = false;
                 MonoMain.disableDirectInput = true;
             }
-            DevConsole.Log("Is Linux "+ IsLinuxD.ToString() + " PlatformID " + p.ToString());
+            DevConsole.Log("Is Linux " + IsLinuxD.ToString() + " PlatformID " + p.ToString());
             int tries = 10;
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = Program.gameAssembly.GetName().Name;
@@ -167,7 +167,7 @@ namespace DuckGame
                 File.Copy(GameDirectory + "Windows-x86//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
             }
             catch
-            { 
+            {
             }
             return true;
         }
@@ -326,7 +326,7 @@ namespace DuckGame
                         break;
                     case "-nomods":
                         MonoMain.nomodsMode = true;
-                       // MonoMain.moddingEnabled = false; fcked for klof
+                        // MonoMain.moddingEnabled = false; fcked for klof
                         break;
                     case "-linux":
                         if (MonoMain.audioModeOverride == AudioMode.None)
@@ -489,7 +489,7 @@ namespace DuckGame
             string environmentVariable = Environment.GetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS");
             if (string.IsNullOrEmpty(environmentVariable) || !int.TryParse(environmentVariable, out MonoMain.MaximumGamepadCount) || MonoMain.MaximumGamepadCount < 0)
                 MonoMain.MaximumGamepadCount = Enum.GetNames(typeof(PlayerIndex)).Length;
-            
+
             Program.main = new DuckGame.Main();
             // Program.main.TargetElapsedTime = TimeSpan.FromTicks(1000L);
             accumulatedElapsedTimefieldinfo = typeof(Game).GetField("accumulatedElapsedTime", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -499,7 +499,7 @@ namespace DuckGame
             Program.main.Run();
         }
         public static Task FirebreakReflectionsht;
-        private static FieldInfo accumulatedElapsedTimefieldinfo; 
+        private static FieldInfo accumulatedElapsedTimefieldinfo;
         public static void SetAccumulatedElapsedTime(Game g, TimeSpan t)
         {
             accumulatedElapsedTimefieldinfo.SetValue(g, t);
@@ -1052,7 +1052,7 @@ namespace DuckGame
                     gitVersion = gitVersion.Substring(0, 40);
                 }
 
-                    string UserInfo = "```ansi\\nUsername: \\u001b[2;32m" + Username + "\\u001b[0m\\nSteam ID: \\u001b[2;32m" + Steamid + "\\u001b[0m\\n```";// "\\u001b[0m\\nPCUserName: \\u001b[2;32m" + Environment.UserName + "\\u001b[0m\\MachineName: \\u001b[2;32m" + Environment.MachineName + "\\u001b[0m]\\n```";
+                string UserInfo = "```ansi\\nUsername: \\u001b[2;32m" + Username + "\\u001b[0m\\nSteam ID: \\u001b[2;32m" + Steamid + "\\u001b[0m\\n```";// "\\u001b[0m\\nPCUserName: \\u001b[2;32m" + Environment.UserName + "\\u001b[0m\\MachineName: \\u001b[2;32m" + Environment.MachineName + "\\u001b[0m]\\n```";
                 string SystemInfo = "```ansi\\nOS: \\u001b[2;32m" + OS + "\\u001b[0m\\nCommand Line: \\u001b[2;32m" + CommandLine + "\\u001b[0m\\n```";
                 string GameInfo = "```ansi\\nPlayers In Lobby: [\\u001b[2;32m" + PlayersInLobby + "\\u001b[0m]\\nMods Active: [\\u001b[2;32m" + ModsActive + "\\u001b[0m]\\n```";
                 string CrashInfo = "```ansi\\nException Message: \\u001b[2;32m" + ExceptionMessage + "\\u001b[0m\\nStack Trace \\u001b[2;32m" + StackTrace + "\\u001b[0m\\n```";
@@ -1067,7 +1067,7 @@ namespace DuckGame
                 {
                     jsonmessage = jsonmessage.Replace(Environment.UserName, "#Privacy");
                 }
-                Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl,new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
+                Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
                 response.Wait();
                 HttpResponseMessage Result = response.Result;
                 if (Result.StatusCode != HttpStatusCode.NoContent)
@@ -1093,7 +1093,7 @@ namespace DuckGame
             catch (Exception ex)
             {
                 string jsonmessage = "{\"content\":\"SendCrashToServer Crashed Fck " + Escape(ex.Message) + "\"}";
-                Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl,new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
+                Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
                 response.Wait();
             }
         }

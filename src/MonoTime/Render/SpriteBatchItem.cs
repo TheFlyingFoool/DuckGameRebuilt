@@ -131,14 +131,14 @@ namespace DuckGame
           float sin = -1f,
           float cos = -1f) // dan i might come back to this :))))))
         {
-            if (x   == -1)   { x = prevx; };
-            if (y   == -1)   { y = prevy; };
-            if (dx  == -1)   { dx = prevdx; };
-            if (dy  == -1)   { dy = prevdy; };
-            if (w   == -1)   { w = prevw; };
-            if (h   == -1)   { h = prevh; };
-            if (sin == -1)   { sin = prevsin; };
-            if (cos == -1)   { cos = prevcos; };
+            if (x == -1) { x = prevx; };
+            if (y == -1) { y = prevy; };
+            if (dx == -1) { dx = prevdx; };
+            if (dy == -1) { dy = prevdy; };
+            if (w == -1) { w = prevw; };
+            if (h == -1) { h = prevh; };
+            if (sin == -1) { sin = prevsin; };
+            if (cos == -1) { cos = prevcos; };
             vertexTL.Position.X = x + dx * cos - dy * sin;
             vertexTL.Position.Y = y + dx * sin + dy * cos;
             vertexTR.Position.X = x + (dx + w) * cos - dy * sin;

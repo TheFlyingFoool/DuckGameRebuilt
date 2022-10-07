@@ -9,20 +9,20 @@ using XnaToFna.ProxyForms;
 
 namespace XnaToFna
 {
-  public class XnaToFnaGame : Game
-  {
-    public XnaToFnaGame() => XnaToFnaHelper.Initialize(this);
-
-    protected override void Initialize()
+    public class XnaToFnaGame : Game
     {
-      base.Initialize();
-      XnaToFnaHelper.ApplyChanges((GraphicsDeviceManager) this.Services.GetService(typeof (IGraphicsDeviceManager)));
-    }
+        public XnaToFnaGame() => XnaToFnaHelper.Initialize(this);
 
-    protected override void EndDraw()
-    {
-      base.EndDraw();
-      GameForm.Instance?.ApplyChanges();
+        protected override void Initialize()
+        {
+            base.Initialize();
+            XnaToFnaHelper.ApplyChanges((GraphicsDeviceManager)this.Services.GetService(typeof(IGraphicsDeviceManager)));
+        }
+
+        protected override void EndDraw()
+        {
+            base.EndDraw();
+            GameForm.Instance?.ApplyChanges();
+        }
     }
-  }
 }

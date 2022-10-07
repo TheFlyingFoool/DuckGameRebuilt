@@ -50,7 +50,7 @@ namespace DuckGame
 
                 if (!parameters.Any())
                 {
-                    DevConsole.AddCommand(new CMD(realName, delegate() { Module.method.Invoke(null, null); }));
+                    DevConsole.AddCommand(new CMD(realName, delegate () { Module.method.Invoke(null, null); }));
                     continue;
                 }
 
@@ -96,7 +96,7 @@ namespace DuckGame
                 });
             }
         }
-        
+
         private static CMD.Argument ParameterInfoToCmdArgument(ParameterInfo parameter, bool isLast)
         {
             CMD.Argument arg;

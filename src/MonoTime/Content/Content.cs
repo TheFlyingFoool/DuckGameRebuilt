@@ -698,29 +698,29 @@ namespace DuckGame
             DuckGame.Content.SearchDirLevels("Content/levels", LevelLocation.Content);
             if (!Steam.IsInitialized())
                 return;
-         //   LoadingAction steamLoad = new LoadingAction();
-         //   steamLoad.action = () =>
-         //  {
-         //      WorkshopQueryUser queryUser = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
-         //      queryUser.requiredTags.Add("Map");
-         //      queryUser.onlyQueryIDs = true;
-         //      queryUser.QueryFinished += sender => steamLoad.flag = true;
-         //      queryUser.ResultFetched += (sender, result) =>
-         //{
-         //    WorkshopItem publishedFile = result.details.publishedFile;
-         //    if ((publishedFile.stateFlags & WorkshopItemState.Installed) == WorkshopItemState.None)
-         //        return;
-         //    DuckGame.Content.SearchDirLevels(publishedFile.path, LevelLocation.Workshop);
-         //};
-         //      queryUser.Request();
-         //      Steam.Update();
-         //  };
-         //   steamLoad.waitAction = () =>
-         //  {
-         //      Steam.Update();
-         //      return steamLoad.flag;
-         //  };
-         //   MonoMain.currentActionQueue.Enqueue(steamLoad);
+            //   LoadingAction steamLoad = new LoadingAction();
+            //   steamLoad.action = () =>
+            //  {
+            //      WorkshopQueryUser queryUser = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
+            //      queryUser.requiredTags.Add("Map");
+            //      queryUser.onlyQueryIDs = true;
+            //      queryUser.QueryFinished += sender => steamLoad.flag = true;
+            //      queryUser.ResultFetched += (sender, result) =>
+            //{
+            //    WorkshopItem publishedFile = result.details.publishedFile;
+            //    if ((publishedFile.stateFlags & WorkshopItemState.Installed) == WorkshopItemState.None)
+            //        return;
+            //    DuckGame.Content.SearchDirLevels(publishedFile.path, LevelLocation.Workshop);
+            //};
+            //      queryUser.Request();
+            //      Steam.Update();
+            //  };
+            //   steamLoad.waitAction = () =>
+            //  {
+            //      Steam.Update();
+            //      return steamLoad.flag;
+            //  };
+            //   MonoMain.currentActionQueue.Enqueue(steamLoad);
         }
 
         public static Vec2 GetTextureSize(string pName)
@@ -792,7 +792,7 @@ namespace DuckGame
         public static void Initialize(bool reverse)
         {
             MonoMain.loadMessage = "Loading Textures";
-           
+
             DuckGame.Content.SearchDirTextures("Content/", reverse);
         }
 

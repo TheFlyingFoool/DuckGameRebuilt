@@ -10,34 +10,34 @@ using System.Net;
 
 namespace XnaToFna.StubXDK.GamerServices
 {
-  public class TitleServiceConnection : IDisposable
-  {
-    private readonly int ServiceId;
-    private readonly TitleServiceDescription Description;
-
-    public event EventHandler<AsyncCompletedEventArgs> ConnectCompleted;
-
-    public TitleServiceConnectionStatus Status => 0;
-
-    public TitleServiceConnection(int serviceId, TitleServiceDescription description)
+    public class TitleServiceConnection : IDisposable
     {
-      this.ServiceId = serviceId;
-      this.Description = description;
-    }
+        private readonly int ServiceId;
+        private readonly TitleServiceDescription Description;
 
-    public void ConnectAsync()
-    {
-    }
+        public event EventHandler<AsyncCompletedEventArgs> ConnectCompleted;
 
-    public HttpWebRequest CreateWebRequest(int port, Uri uri)
-    {
-      if (port != 80)
-        throw new NotSupportedException("Creating HTTP requests for port != 80 not supported");
-      return WebRequest.CreateHttp(uri);
-    }
+        public TitleServiceConnectionStatus Status => 0;
 
-    public void Dispose()
-    {
+        public TitleServiceConnection(int serviceId, TitleServiceDescription description)
+        {
+            this.ServiceId = serviceId;
+            this.Description = description;
+        }
+
+        public void ConnectAsync()
+        {
+        }
+
+        public HttpWebRequest CreateWebRequest(int port, Uri uri)
+        {
+            if (port != 80)
+                throw new NotSupportedException("Creating HTTP requests for port != 80 not supported");
+            return WebRequest.CreateHttp(uri);
+        }
+
+        public void Dispose()
+        {
+        }
     }
-  }
 }

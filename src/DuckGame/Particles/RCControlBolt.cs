@@ -35,7 +35,7 @@ namespace DuckGame
             if (length < 48.0 || _control.destroyed || !_control.receivingSignal)
                 _fade = true;
             alpha = Lerp.Float(alpha, _fade ? 0f : 1f, 0.1f);
-            if (alpha <  0.01f && _fade)
+            if (alpha < 0.01f && _fade)
                 Level.Remove(this);
             base.Update();
         }

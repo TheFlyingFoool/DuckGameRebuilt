@@ -63,7 +63,7 @@ namespace DuckGame
                     int num = Keyboard.CurrentNote(owner.inputProfile, this);
                     if (num >= 0)
                     {
-                        notePitch = (float)(num / 12.0 +  0.01f);
+                        notePitch = (float)(num / 12.0 + 0.01f);
                         handPitch = notePitch;
                         if (notePitch != prevNotePitch)
                         {

@@ -314,7 +314,7 @@ namespace DuckGame
         public override DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = base.LegacySerialize();
-            dxmlNode.Add(new DXMLNode("contains", contains != null ? contains.AssemblyQualifiedName : (object) ""));
+            dxmlNode.Add(new DXMLNode("contains", contains != null ? contains.AssemblyQualifiedName : (object)""));
             return dxmlNode;
         }
 
@@ -348,7 +348,7 @@ namespace DuckGame
             string text = "EMPTY";
             if (contains != null)
                 text = contains.Name;
-            Graphics.DrawString(text, position + new Vec2((float) (-Graphics.GetStringWidth(text) / 2.0), -16f),
+            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f),
                 Color.White, 0.9f);
         }
     }

@@ -259,7 +259,7 @@ namespace DuckGame
         public IEnumerable<MTSpriteBatchItem> StealSpriteBatchItems()
         {
 
-            foreach(List<MTSpriteBatchItem> depthcolleciton in _batchItemListv2.Values)
+            foreach (List<MTSpriteBatchItem> depthcolleciton in _batchItemListv2.Values)
             {
                 for (int i = 0; i < depthcolleciton.Count; i++)
                 {
@@ -599,7 +599,7 @@ namespace DuckGame
                             material.Apply();
                         }
                     }
-                   
+
                     VertexPositionColorTexture[] vertexArray1 = _vertexArray;
                     int index2 = end;
                     int num2 = index2 + 1;
@@ -693,7 +693,7 @@ namespace DuckGame
             //    }
             //    flushvertexarray(start, end);
             //}
-          
+
             batchlistCount = 0;
             _batchItemListv2.Clear();
             //foreach(float key in keys)

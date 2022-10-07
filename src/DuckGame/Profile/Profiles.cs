@@ -19,7 +19,7 @@ namespace DuckGame
             set => Profiles._core = value;
         }
 
-        public static IEnumerable<Profile> all => Profiles._core.all;
+        public static List<Profile> all => Profiles._core.all;
 
         public static List<Profile> allCustomProfiles => Profiles._core.allCustomProfiles;
 

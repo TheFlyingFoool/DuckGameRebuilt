@@ -9,18 +9,18 @@ using System.Threading;
 
 namespace XnaToFna
 {
-  public sealed class SyncResult : IAsyncResult
-  {
-    private object _AsyncState;
+    public sealed class SyncResult : IAsyncResult
+    {
+        private object _AsyncState;
 
-    public object AsyncState => this._AsyncState;
+        public object AsyncState => this._AsyncState;
 
-    public WaitHandle AsyncWaitHandle => null;
+        public WaitHandle AsyncWaitHandle => null;
 
-    public bool CompletedSynchronously => true;
+        public bool CompletedSynchronously => true;
 
-    public bool IsCompleted => true;
+        public bool IsCompleted => true;
 
-    public SyncResult(object state) => this._AsyncState = state;
-  }
+        public SyncResult(object state) => this._AsyncState = state;
+    }
 }

@@ -205,7 +205,7 @@ namespace DuckGame
 
         public static float offset = 4000000.0f;
         public static float cellsize = 100f;
-        private Vec2[] GetIdForObj(Vec2 Topleft , Vec2 Bottomright)
+        private Vec2[] GetIdForObj(Vec2 Topleft, Vec2 Bottomright)
         {
             int top = (int)((Bottomright.y + offset) / cellsize);
             int left = (int)((Topleft.x + offset) / cellsize);
@@ -263,14 +263,14 @@ namespace DuckGame
             int num = startIndex + count;
             for (int i = startIndex; i < num; i++)
             {
-                if (ValueinList(value,array[i], value.Length))
+                if (ValueinList(value, array[i], value.Length))
                 {
                     return false;
                 }
             }
             return true;
         }
-       
+
         public ICollection<Thing> GetThings(Vec2 Position, float width, float height, Type t)
         {
             Vec2[] ids = GetIdForObj(Position, width, height);
@@ -428,7 +428,7 @@ namespace DuckGame
                     continue;
                 }
                 output = new Dictionary<int, List<Thing>>();
-                output[typeof(Thing).GetHashCode()] = new List<Thing>() {thing };
+                output[typeof(Thing).GetHashCode()] = new List<Thing>() { thing };
                 foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
                 {
                     //output[key].Add(thing);
@@ -497,7 +497,7 @@ namespace DuckGame
                     {
                         TypeList[hashcode] = new List<Thing>() { thing };
                     }
-                    
+
                     //_allObjectsByType.Add(key, obj);
                 }
                 Buckets[item] = TypeList;
@@ -505,9 +505,9 @@ namespace DuckGame
             }
         }
         // HashSet<int> objects;
-        public ICollection<Thing> GetNearby(Thing thing,Type t)
+        public ICollection<Thing> GetNearby(Thing thing, Type t)
         {
-            return GetThings(thing.position, thing.right - thing.left, thing.bottom - thing.top,t);
+            return GetThings(thing.position, thing.right - thing.left, thing.bottom - thing.top, t);
         }
         public ICollection<Thing> CollisionRectAll(Vec2 p1, Vec2 p2, Type t)
         {
@@ -522,7 +522,7 @@ namespace DuckGame
         {
             return GetThings(p1, p2, t);
         }
-        
+
         private Vec2[] GetIdForLine(Vec2 p1, Vec2 p2)
         {
             //Vec2[] Chunk = new Vec2[0];
@@ -535,7 +535,7 @@ namespace DuckGame
             int bottom = y0 < y1 ? y1 : y0;
             int left = x1 < x0 ? x1 : x0;
             int right = x0 < x1 ? x1 : x0;
-            foreach(Vec2 Bucket in Buckets.Keys)
+            foreach (Vec2 Bucket in Buckets.Keys)
             {
                 if (left <= Bucket.x && right >= Bucket.x && top <= Bucket.y && bottom >= Bucket.y)
                 {
@@ -577,12 +577,12 @@ namespace DuckGame
         }
         public ICollection<Thing> CollisionPointAll(Vec2 point, Type t)
         {
-            if (Buckets.TryGetValue(new Vec2((int)((point.x + offset )/ cellsize), (int)((point.y + offset) / cellsize)), out Dictionary<int, List<Thing>> output))
+            if (Buckets.TryGetValue(new Vec2((int)((point.x + offset) / cellsize), (int)((point.y + offset) / cellsize)), out Dictionary<int, List<Thing>> output))
             {
                 if (output.TryGetValue(t.GetHashCode(), out List<Thing> output2))
                 {
                     return output2;
-                }   
+                }
             }
             return new List<Thing>();
         }

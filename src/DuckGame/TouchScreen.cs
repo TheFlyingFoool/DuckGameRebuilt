@@ -185,7 +185,7 @@ namespace DuckGame
                         {
                             fingerId = 1,
                             touchXY = new Vec2(Mouse.xConsole + TouchScreen._spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin((double)(TouchScreen._spoofFinger2Waver * 1.5f)), (float)Math.Cos((double)(TouchScreen._spoofFinger2Waver * 0.3f))) * 3f
-                        
+
                         });
                     if (Mouse.middle == InputState.Down)
                         TouchScreen.System_MapTouch(new TSData(0)

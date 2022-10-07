@@ -25,7 +25,7 @@ namespace DuckGame
 
         public float cookTimeOnThrow => _cookTimeOnThrow;
 
-        public DartGrenade(float xpos, float ypos) : base (xpos, ypos)
+        public DartGrenade(float xpos, float ypos) : base(xpos, ypos)
         {
             _sprite = new SpriteMap(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(dartGrenade))), "dartgrenade"), 16, 16);
             _sprite.Namebase = "dartgrenade";

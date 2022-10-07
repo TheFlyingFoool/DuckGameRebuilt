@@ -156,14 +156,7 @@ namespace DuckGame
                 if (i != length)
                     stringBuilder.Append("\n");
             }
-            try
-            {
-                File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
-            }
-            catch(Exception ex)
-            {
-                DevConsole.Log("e");
-            }
+            File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
             //DevConsole.Log("|240,164,65|ACFG|DGGREEN| SAVED ALL CUSTOM CONFIG SUCCESSFULLY!"); did i make another one just to removed this log to stop and error related to some closing stuff on linux, the answer is yes //
         }
         public static bool LoadAll()
@@ -192,7 +185,8 @@ namespace DuckGame
             lines = lines.Where(Enumerable.Any).ToArray();
 
             if (all.Count != lines.Length)
-                goto Fail;
+                DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS VIA INDEX");
+            return false;
 
             try
             {
@@ -218,23 +212,18 @@ namespace DuckGame
                     string[] sides = lines[i].Split('=');
 
                     if (sides[0] != type.GetFullName())
-                        goto Fail;
+                        DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS VIA INDEX");
+                    return false;
 
                     SetFieldValue(all[i], sides[1]);
                 }
             }
             catch
             {
-                goto Fail;
-            }
-
-            return true;
-
-        Fail:
-            {
                 DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS VIA INDEX");
                 return false;
             }
+            return true;
         }
 
         private static bool LoadAllSearch(IReadOnlyList<AutoConfigFieldAttribute> all, string[] lines)

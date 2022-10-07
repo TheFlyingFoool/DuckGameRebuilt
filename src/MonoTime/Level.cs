@@ -840,7 +840,7 @@ namespace DuckGame
             DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
             Draw();
             things.Draw();
-            
+
             DuckGame.Graphics.screen.End();
             if (DevConsole.splitScreen && this is GameLevel)
                 SplitScreen.Draw();
@@ -890,9 +890,9 @@ namespace DuckGame
                 engineUpdatable.OnDrawLayer(layer);
             foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
                 toDifferentLayers.OnDrawLayer(layer);
-            
+
             DrawingContextAttribute.ExecuteAll(DrawingContextAttribute.DrawingLayerFromLayer(layer));
-            
+
             if (layer == Layer.Console)
             {
                 DevConsole.Draw();
@@ -1469,11 +1469,11 @@ namespace DuckGame
 
         public T CollisionCircle<T>(Vec2 p1, float radius, Thing ignore)
         {
-            foreach (Thing thing in this.things.CollisionCircleAll(p1, radius,typeof(T)))
+            foreach (Thing thing in this.things.CollisionCircleAll(p1, radius, typeof(T)))
             {
                 if (!thing.removeFromLevel && thing != ignore && Collision.Circle(p1, radius, thing))
                 {
-                    return(T)(object)thing;
+                    return (T)(object)thing;
                 }
             }
             return default(T);
@@ -1915,10 +1915,10 @@ namespace DuckGame
         {
             List<object> nextCollisionList = Level.GetNextCollisionList();
             foreach (Thing thing in things.CollisionPointAll(point, typeof(T)))
-            {      
+            {
                 if (!thing.removeFromLevel && Collision.Point(point, thing))
                     nextCollisionList.Add(thing);
-                
+
             }
             return nextCollisionList.AsEnumerable<object>().Cast<T>();
         }

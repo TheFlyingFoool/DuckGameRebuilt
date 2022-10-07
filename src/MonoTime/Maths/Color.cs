@@ -298,17 +298,17 @@ namespace DuckGame
         public static implicit operator Color(Microsoft.Xna.Framework.Color c) => new Color(c.R, c.G, c.B, c.A);
 
         private const float AdjFactor = 0.7f;
-        
+
         public Color Brighter(float factor = AdjFactor)
         {
             //Stolen from Java's Color.
-            
+
             /*
              * 1. black.brighter() should return grey
              * 2. applying brighter to blue will always return blue, brighter
              * 3. non pure color (non zero rgb) will eventually return white
              */
-            
+
             int i = (int)(1.0 / (1.0 - factor));
             switch (r)
             {
@@ -325,7 +325,7 @@ namespace DuckGame
             return new Color((byte)Math.Min(r / factor, 255),
                 (byte)Math.Min(g / factor, 255),
                 (byte)Math.Min(b / factor, 255),
-                a); 
+                a);
         }
 
         public Color Lighter(float factor = AdjFactor)
@@ -334,7 +334,7 @@ namespace DuckGame
             return new Color((byte)Math.Min(r + diff, 255),
                 (byte)Math.Min(g + diff, 255),
                 (byte)Math.Min(b + diff, 255),
-                a); 
+                a);
         }
 
         public Color Dimmer(float factor = AdjFactor)
@@ -343,7 +343,7 @@ namespace DuckGame
             byte luma = (byte)(0.21f * darker.r + 0.72f * darker.g + 0.07 * darker.b);
             return Lerp(new Color(luma, luma, luma, a), darker, factor);
         }
-        
+
         public Color Darker(float factor = AdjFactor)
         {
             float diff = 255 * (1 - factor);
@@ -354,7 +354,7 @@ namespace DuckGame
         }
 
         private static Random _random = new Random();
-        
+
         public static Color Random() => new Color(_random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255), 255);
 
         public static Color RandomAlpha() => new Color(_random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255));

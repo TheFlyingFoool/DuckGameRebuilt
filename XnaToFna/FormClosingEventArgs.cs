@@ -8,14 +8,14 @@ using System.ComponentModel;
 
 namespace XnaToFna.ProxyForms
 {
-  public class FormClosingEventArgs : CancelEventArgs
-  {
-    public CloseReason CloseReason { get; private set; }
-
-    public FormClosingEventArgs(CloseReason closeReason, bool cancel)
-      : base(cancel)
+    public class FormClosingEventArgs : CancelEventArgs
     {
-      this.CloseReason = closeReason;
+        public CloseReason CloseReason { get; private set; }
+
+        public FormClosingEventArgs(CloseReason closeReason, bool cancel)
+          : base(cancel)
+        {
+            this.CloseReason = closeReason;
+        }
     }
-  }
 }

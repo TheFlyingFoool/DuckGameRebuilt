@@ -11,34 +11,34 @@ using System.Threading;
 
 namespace XnaToFna
 {
-  public class ContentHelperGame : Game
-  {
-    public readonly GraphicsDeviceManager GraphicsDeviceManager;
-    public readonly Queue<Action> ActionQueue = new Queue<Action>();
-
-    public Thread GameThread { get; protected set; }
-
-    public ContentHelperGame() => this.GraphicsDeviceManager = new GraphicsDeviceManager(this);
-
-    protected override void Initialize()
+    public class ContentHelperGame : Game
     {
-      this.Window.Title = "XnaToFna ContentHelper Game (ignore me!)";
-      base.Initialize();
-      while (this.ActionQueue.Count > 0)
-        this.ActionQueue.Dequeue()();
-      this.Exit();
-    }
+        public readonly GraphicsDeviceManager GraphicsDeviceManager;
+        public readonly Queue<Action> ActionQueue = new Queue<Action>();
 
-    protected override void Dispose(bool disposing)
-    {
-      try
-      {
-        base.Dispose(disposing);
-      }
-      catch (Exception ex)
-      {
-        Console.WriteLine(this.GetType().FullName + " failed disposing: " + ex);
-      }
+        public Thread GameThread { get; protected set; }
+
+        public ContentHelperGame() => this.GraphicsDeviceManager = new GraphicsDeviceManager(this);
+
+        protected override void Initialize()
+        {
+            this.Window.Title = "XnaToFna ContentHelper Game (ignore me!)";
+            base.Initialize();
+            while (this.ActionQueue.Count > 0)
+                this.ActionQueue.Dequeue()();
+            this.Exit();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                base.Dispose(disposing);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(this.GetType().FullName + " failed disposing: " + ex);
+            }
+        }
     }
-  }
 }

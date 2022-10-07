@@ -32,17 +32,17 @@ namespace DuckGame
         {
             return arguments.Select((x, i) => x.Parse(stringValues[i])).ToArray();
         }
-        
+
         public bool HasArg(string pName)
         {
             Argument obj = arguments.FirstOrDefault(x => x.name == pName);
-            return obj is {value: { }};
+            return obj is { value: { } };
         }
 
         public T Arg<T>(string pName)
         {
             Argument obj = arguments.FirstOrDefault(x => x.name == pName);
-            return obj is {value: { }} ? (T)obj.value : default;
+            return obj is { value: { } } ? (T)obj.value : default;
         }
 
         public string fullCommandName => parent != null ? $"{parent.fullCommandName} {keyword}" : keyword;
@@ -152,7 +152,7 @@ namespace DuckGame
                     ++index1;
                 }
             }
-            
+
             try
             {
                 if (action != null)
@@ -165,7 +165,7 @@ namespace DuckGame
                 FinishExecution();
                 return Error($"|DGRED|Error: {ex.Message}");
             }
-            
+
             FinishExecution();
             return true;
         }
@@ -327,7 +327,7 @@ namespace DuckGame
             }
 
             public override object Parse(string pValue) =>
-                System.Enum.Parse(type, pValue, true) 
+                System.Enum.Parse(type, pValue, true)
                 ?? Error("Argument value must be an floating point number.");
         }
 
@@ -398,18 +398,18 @@ namespace DuckGame
                 if (pValue == "pyramid" || pValue.StartsWith("pyramid") && pValue.Contains("|"))
                 {
                     int seedVal = 0;
-                    
-                    if (pValue.Contains("|") 
+
+                    if (pValue.Contains("|")
                         && int.TryParse(pValue.Split('|')[1], out seedVal)) ;
-                    
+
                     return new GameLevel("RANDOM", seedVal);
                 }
                 switch (pValue)
                 {
                     case "fb":
                         return new TestLev();
-                   // case "fb":
-                       // return new TestLev();
+                    // case "fb":
+                    // return new TestLev();
                     case "title":
                         return new TitleScreen();
                     case "rockintro":
@@ -440,7 +440,7 @@ namespace DuckGame
                     return new GameLevel(levelData2.metaData.guid);
                 foreach (Mod accessibleMod in ModLoader.accessibleMods)
                 {
-                    if (accessibleMod.configuration.content == null) 
+                    if (accessibleMod.configuration.content == null)
                         continue;
 
                     foreach (string level in accessibleMod.configuration.content.levels
@@ -474,7 +474,7 @@ namespace DuckGame
                     return t != null ? new TeamHat(0f, 0f, t) : Error(
                         $"Argument ({pValue}) should be the name of a team");
                 }
-                
+
                 foreach (Type thingType in Editor.ThingTypes
                              .Where(thingType => thingType.Name.ToLowerInvariant() == pValue))
                 {
@@ -483,7 +483,7 @@ namespace DuckGame
                     return !typeof(T).IsAssignableFrom(thingType) ? Error(
                         $"Wrong object type (requires {typeof(T).Name}).") : Editor.CreateThing(thingType) as T;
                 }
-                
+
                 return Error($"{typeof(T).Name} of type ({pValue}) was not found.");
             }
         }

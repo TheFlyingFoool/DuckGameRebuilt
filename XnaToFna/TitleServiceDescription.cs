@@ -6,7 +6,7 @@
 
 namespace XnaToFna.StubXDK.GamerServices
 {
-  public class TitleServiceDescription
-  {
-  }
+    public class TitleServiceDescription
+    {
+    }
 }

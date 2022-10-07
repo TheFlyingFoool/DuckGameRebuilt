@@ -6,7 +6,7 @@
 
 namespace XnaToFna.StubXDK.GamerServices
 {
-  public enum TitleServiceConnectionStatus
-  {
-  }
+    public enum TitleServiceConnectionStatus
+    {
+    }
 }

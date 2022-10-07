@@ -207,7 +207,7 @@ namespace DuckGame
 
         //public static bool isDemo() => Main.isDemo;
 
-       // public static bool isNotDemo() => !Main.isDemo;
+        // public static bool isNotDemo() => !Main.isDemo;
 
         public static float greatest(string val)
         {

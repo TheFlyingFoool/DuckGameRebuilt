@@ -8,20 +8,20 @@ using System;
 
 namespace XnaToFna.StubXDK.GamerServices
 {
-  public class TitleServiceDirectory
-  {
-    private EventHandler<FindServicesCompletedArgs> _FindServicesCompleted;
-
-    public event EventHandler<FindServicesCompletedArgs> FindServicesCompleted
+    public class TitleServiceDirectory
     {
-      add => this._FindServicesCompleted += value;
-      remove => this._FindServicesCompleted -= value;
-    }
+        private EventHandler<FindServicesCompletedArgs> _FindServicesCompleted;
 
-    public bool IsBusy => false;
+        public event EventHandler<FindServicesCompletedArgs> FindServicesCompleted
+        {
+            add => this._FindServicesCompleted += value;
+            remove => this._FindServicesCompleted -= value;
+        }
 
-    public void FindServicesAsync()
-    {
+        public bool IsBusy => false;
+
+        public void FindServicesAsync()
+        {
+        }
     }
-  }
 }

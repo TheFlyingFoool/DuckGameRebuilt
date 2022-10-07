@@ -10,21 +10,21 @@ using System.IO.Compression;
 
 namespace XnaToFna.ContentTransformers
 {
-  public class GZipContentReader<ContentType> : ContentTypeReader<ContentType>
-  {
-    private ForcedStreamContentManager WrappedContentManager;
-
-    protected override ContentType Read(ContentReader input, ContentType existing)
+    public class GZipContentReader<ContentType> : ContentTypeReader<ContentType>
     {
-      if (this.WrappedContentManager == null)
-        this.WrappedContentManager = new ForcedStreamContentManager(input.ContentManager.ServiceProvider);
-      this.WrappedContentManager.RootDirectory = input.ContentManager.RootDirectory;
-      this.WrappedContentManager.Stream = new GZipStream(input.BaseStream, CompressionMode.Decompress, true);
-      bool enabled = FNAHooks.Enabled;
-      FNAHooks.Enabled = false;
-      ContentType contentType = this.WrappedContentManager.Load<ContentType>(input.AssetName);
-      FNAHooks.Enabled = enabled;
-      return contentType;
+        private ForcedStreamContentManager WrappedContentManager;
+
+        protected override ContentType Read(ContentReader input, ContentType existing)
+        {
+            if (this.WrappedContentManager == null)
+                this.WrappedContentManager = new ForcedStreamContentManager(input.ContentManager.ServiceProvider);
+            this.WrappedContentManager.RootDirectory = input.ContentManager.RootDirectory;
+            this.WrappedContentManager.Stream = new GZipStream(input.BaseStream, CompressionMode.Decompress, true);
+            bool enabled = FNAHooks.Enabled;
+            FNAHooks.Enabled = false;
+            ContentType contentType = this.WrappedContentManager.Load<ContentType>(input.AssetName);
+            FNAHooks.Enabled = enabled;
+            return contentType;
+        }
     }
-  }
 }

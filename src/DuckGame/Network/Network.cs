@@ -415,7 +415,7 @@ namespace DuckGame
             {
                 return Network.messageTypeHash + Editor.thingTypesHash;
             }
-            
+
         }
 
         public static void InitializeMessageTypes()

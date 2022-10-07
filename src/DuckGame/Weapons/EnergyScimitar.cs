@@ -495,7 +495,7 @@ namespace DuckGame
             thickness = 0.01f;
             _impactThreshold = 0.5f;
             _bladeMaterial = new MaterialEnergyBlade(this);
-           
+
             swordColor = properColor;
             _warpLine = new Sprite("warpLine2");
             editorTooltip = "How do you invent a sword? It uses modern technology.";

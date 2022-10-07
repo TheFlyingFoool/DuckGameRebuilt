@@ -422,7 +422,7 @@ namespace DuckGame
             _takenFlash = Lerp.Float(_takenFlash, 0f, 0.02f);
             if (!_open)
             {
-                if (_fade >=  0.01f || !_closing)
+                if (_fade >= 0.01f || !_closing)
                     return;
                 _closing = false;
             }
@@ -826,7 +826,7 @@ namespace DuckGame
                                 SpriteMap spriteMap = g;
                                 spriteMap.scale *= 0.25f;
                             }
-                            if (_fade >  0.01f)
+                            if (_fade > 0.01f)
                             {
                                 if (availableFurni.group == sel.group)
                                 {
@@ -985,7 +985,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (_fade <  0.01f)
+            if (_fade < 0.01f)
                 return;
             if (_mode == REMode.Main)
             {

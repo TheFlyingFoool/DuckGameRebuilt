@@ -265,7 +265,7 @@ namespace DuckGame
                 };
                 for (int i = 0; i < Profiles.all.Count(); i++)
                 {
-                    Duck d = Profiles.all.ElementAt(i).duck;
+                    Duck d = Profiles.all[i].duck;
                     if (d != null)
                     {
                         LocalVariables.Add("x" + i, d.x);

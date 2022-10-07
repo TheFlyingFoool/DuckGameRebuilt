@@ -1221,9 +1221,9 @@ namespace DuckGame
             data = doc.Serialize();
             DuckFile.TryFileOperation(() =>
             {
-               FileStream fileStream = System.IO.File.Create(path);
-               fileStream.Write(data.buffer, 0, data.lengthInBytes);
-               fileStream.Close();
+                FileStream fileStream = System.IO.File.Create(path);
+                fileStream.Write(data.buffer, 0, data.lengthInBytes);
+                fileStream.Close();
             }, "SaveChunk(" + path + ")");
             DuckFile.Commit(path);
             return true;

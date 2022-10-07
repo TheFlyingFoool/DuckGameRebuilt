@@ -89,7 +89,7 @@ namespace XnaToFna
                 path = path.Replace("//", "/").Replace("\\", "/");
                 path = FixPath(path);
             }
-           Directory.Delete(path);
+            Directory.Delete(path);
         }
         public static void FileDelete(string path)
         {
@@ -132,7 +132,7 @@ namespace XnaToFna
             if (Program.IsLinuxD || Program.isLinux)
             {
                 path = path.Replace("//", "/").Replace("\\", "/");
-                path = GetActualCaseForFileName(FixPath(path),true);
+                path = GetActualCaseForFileName(FixPath(path), true);
             }
             File.WriteAllText(path, contents);
         }
@@ -163,7 +163,7 @@ namespace XnaToFna
                 path = path.Replace("//", "/").Replace("\\", "/");
                 path = GetActualCaseForFileName(FixPath(path));
             }
-            return File.ReadAllText(path);   
+            return File.ReadAllText(path);
         }
         public static void FileSetAttributes(string path, FileAttributes fileAttributes)
         {
@@ -185,7 +185,7 @@ namespace XnaToFna
         }
         public static string FixPath(string path)
         {
-           // Console.WriteLine(path);
+            // Console.WriteLine(path);
             path = path.Replace("\\", "/");
             while (path.Contains("//"))
             {

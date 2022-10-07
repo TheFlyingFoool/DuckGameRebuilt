@@ -92,7 +92,7 @@ namespace DuckGame
         /// scrolling but min/maxed so you dont get values that change based on how much you're scrolling
         /// </summary>
         public static int discreteScroll => scrollingUp ? -1 : scrollingDown ? 1 : 0;
-        
+
         public static bool isScrolling => scroll != 0;
         public static bool scrollingDown => scroll > 0;
         public static bool scrollingUp => scroll < 0;

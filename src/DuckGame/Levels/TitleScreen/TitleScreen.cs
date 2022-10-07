@@ -1400,13 +1400,12 @@ namespace DuckGame
                 }
                 foreach (Profile defaultProfile in Profiles.defaultProfiles)
                 {
-                    foreach(string trigger in Triggers.TriggerList)
+                    foreach (string trigger in Triggers.TriggerList)
                     {
                         if (defaultProfile.inputProfile.Pressed(trigger, false))
                         {
                             _duck.profile = defaultProfile;
                             InputProfile.active = _duck.profile.inputProfile;
-                            DevConsole.Log("change " + defaultProfile.name);
                             break;
                         }
                     }
@@ -1513,7 +1512,7 @@ namespace DuckGame
                         _font.Draw(text3, Level.current.camera.PercentW(50f) - _font.GetWidth(text3) / 2f + 1.5f, 27f, Color.White, (Depth)0.95f, profileWithDevice);
                     }
                 }
-            } 
+            }
             else if (layer == Layer.Game)
             {
                 Graphics.Draw(_editorBenchPaint, 45f, 168f);
@@ -1568,7 +1567,7 @@ namespace DuckGame
                     float num4 = 0.2f;
                     if (camera.y > 0.0)
                         num4 += camera.y / 52f;
-                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.6f) * (0.3f + (1.0 - extraFade) *  0.7f)), -0.3f);
+                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.6f) * (0.3f + (1.0 - extraFade) * 0.7f)), -0.3f);
                     float num5 = 0.1f;
                     if (camera.y > 0.0)
                         num5 += camera.y / 52f;
@@ -1577,7 +1576,7 @@ namespace DuckGame
                     for (int index = 0; index < num6; ++index)
                     {
                         float num7 = particle.speed.x * 8f;
-                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1.0 - index / num6) * num5) * (float)(0.3f + (1.0 - extraFade) *  0.7f), depth: (-0.4f));
+                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1.0 - index / num6) * num5) * (float)(0.3f + (1.0 - extraFade) * 0.7f), depth: (-0.4f));
                         pos.x -= num7;
                     }
                 }

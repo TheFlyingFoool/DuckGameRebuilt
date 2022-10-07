@@ -61,7 +61,7 @@ namespace DuckGame
             layer = Layer.HUD;
             _currentColor = _lerpColors[0];
         }
-       
+
         public override void Initialize()
         {
             this.position = new Vec2(this.x + 12.16f, this.y + 1.5f);

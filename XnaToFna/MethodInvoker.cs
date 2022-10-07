@@ -6,5 +6,5 @@
 
 namespace XnaToFna.ProxyForms
 {
-  public delegate void MethodInvoker();
+    public delegate void MethodInvoker();
 }

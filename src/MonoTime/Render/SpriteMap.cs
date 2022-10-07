@@ -32,7 +32,7 @@ namespace DuckGame
         private bool _flipFlop = true;
         private MTSpriteBatchItem _batchItem;
         private int _waitFrames;
-        
+
         public new int globalIndex
         {
             get => _globalIndex;
@@ -308,7 +308,7 @@ namespace DuckGame
 
         public override void CheapDraw(bool flipH = false)
         {
-           // if (!valid)
+            // if (!valid)
             //    return;
             _texture.currentObjectIndex = _globalIndex;
             DuckGame.Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);

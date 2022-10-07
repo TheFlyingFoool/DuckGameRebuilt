@@ -12,43 +12,43 @@ using XnaToFna.ProxyForms;
 
 namespace XnaToFna
 {
-  public static class DeviceEvents
-  {
-    public static bool[] IsGamepadConnected = new bool[0];
-
-    public static void DeviceChange(DeviceEvents.Events e, IntPtr data) => PInvoke.CallHooks(Messages.WM_DEVICECHANGE, (IntPtr) (int) e, data, allWindows: true);
-
-    public static void GamepadConnected(int i) => DeviceEvents.DeviceChange(DeviceEvents.Events.DBT_DEVICEARRIVAL, IntPtr.Zero);
-
-    public static void GamepadDisconnected(int i) => DeviceEvents.DeviceChange(DeviceEvents.Events.DBT_DEVICEREMOVECOMPLETE, IntPtr.Zero);
-
-    public static void Update()
+    public static class DeviceEvents
     {
-      for (int i = 0; i < DeviceEvents.IsGamepadConnected.Length; ++i)
-      {
+        public static bool[] IsGamepadConnected = new bool[0];
+
+        public static void DeviceChange(DeviceEvents.Events e, IntPtr data) => PInvoke.CallHooks(Messages.WM_DEVICECHANGE, (IntPtr)(int)e, data, allWindows: true);
+
+        public static void GamepadConnected(int i) => DeviceEvents.DeviceChange(DeviceEvents.Events.DBT_DEVICEARRIVAL, IntPtr.Zero);
+
+        public static void GamepadDisconnected(int i) => DeviceEvents.DeviceChange(DeviceEvents.Events.DBT_DEVICEREMOVECOMPLETE, IntPtr.Zero);
+
+        public static void Update()
+        {
+            for (int i = 0; i < DeviceEvents.IsGamepadConnected.Length; ++i)
+            {
                 bool isConnected = FNAPlatform.GetGamePadState(i, GamePadDeadZone.IndependentAxes).IsConnected;
-        if (isConnected && !DeviceEvents.IsGamepadConnected[i])
-          DeviceEvents.GamepadConnected(i);
-        else if (!isConnected && DeviceEvents.IsGamepadConnected[i])
-          DeviceEvents.GamepadDisconnected(i);
-        DeviceEvents.IsGamepadConnected[i] = isConnected;
-      }
-    }
+                if (isConnected && !DeviceEvents.IsGamepadConnected[i])
+                    DeviceEvents.GamepadConnected(i);
+                else if (!isConnected && DeviceEvents.IsGamepadConnected[i])
+                    DeviceEvents.GamepadDisconnected(i);
+                DeviceEvents.IsGamepadConnected[i] = isConnected;
+            }
+        }
 
-    public enum Events
-    {
-      DBT_DEVNODES_CHANGED = 7,
-      DBT_QUERYCHANGECONFIG = 23, // 0x00000017
-      DBT_CONFIGCHANGED = 24, // 0x00000018
-      DBT_CONFIGCHANGECANCELED = 25, // 0x00000019
-      DBT_DEVICEARRIVAL = 32768, // 0x00008000
-      DBT_DEVICEQUERYREMOVE = 32769, // 0x00008001
-      DBT_DEVICEQUERYREMOVEFAILED = 32770, // 0x00008002
-      DBT_DEVICEREMOVEPENDING = 32771, // 0x00008003
-      DBT_DEVICEREMOVECOMPLETE = 32772, // 0x00008004
-      DBT_DEVICETYPESPECIFIC = 32773, // 0x00008005
-      DBT_CUSTOMEVENT = 32774, // 0x00008006
-      DBT_USERDEFINED = 65535, // 0x0000FFFF
+        public enum Events
+        {
+            DBT_DEVNODES_CHANGED = 7,
+            DBT_QUERYCHANGECONFIG = 23, // 0x00000017
+            DBT_CONFIGCHANGED = 24, // 0x00000018
+            DBT_CONFIGCHANGECANCELED = 25, // 0x00000019
+            DBT_DEVICEARRIVAL = 32768, // 0x00008000
+            DBT_DEVICEQUERYREMOVE = 32769, // 0x00008001
+            DBT_DEVICEQUERYREMOVEFAILED = 32770, // 0x00008002
+            DBT_DEVICEREMOVEPENDING = 32771, // 0x00008003
+            DBT_DEVICEREMOVECOMPLETE = 32772, // 0x00008004
+            DBT_DEVICETYPESPECIFIC = 32773, // 0x00008005
+            DBT_CUSTOMEVENT = 32774, // 0x00008006
+            DBT_USERDEFINED = 65535, // 0x0000FFFF
+        }
     }
-  }
 }

@@ -512,7 +512,7 @@ namespace DuckGame
           InputProfile input = null,
           bool colorSymbols = false)
         {
-           
+
             if (colorOverride != new Color())
                 c = colorOverride;
             _previousColor = c;
@@ -643,7 +643,7 @@ namespace DuckGame
                             {
                                 num4 = 91;
                             }
-                        } 
+                        }
                         if (fallbackIndex != 0 && num4 >= fallbackIndex)
                         {
                             if (_fallbackFont == null)

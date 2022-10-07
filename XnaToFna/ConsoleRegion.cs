@@ -6,7 +6,7 @@
 
 namespace XnaToFna.StubXDK.GamerServices
 {
-  public enum ConsoleRegion
-  {
-  }
+    public enum ConsoleRegion
+    {
+    }
 }

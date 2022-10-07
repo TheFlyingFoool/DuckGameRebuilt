@@ -72,7 +72,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((bool)_sparkTimer )
+            if ((bool)_sparkTimer)
             {
                 if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(Spark.New(x, y - 2f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
                 else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(Spark.New(x, y - 2f, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));

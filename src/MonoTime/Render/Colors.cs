@@ -27,9 +27,9 @@ namespace DuckGame
         public static Color BlueGray = new Color(47, 73, 79);
         public static Color DGPurple = new Color(179, 54, 242);
         public static Color Transparent = new Color(0, 0, 0, 0);
-        public static Color TransparentPink = new Color((int) byte.MaxValue, 0, (int) byte.MaxValue, 0);
-        public static Color DGVanilla = new Color((int) byte.MaxValue, 246, 214);
-        public static Color Duck1 = new Color((int) byte.MaxValue, (int) byte.MaxValue, (int) byte.MaxValue);
+        public static Color TransparentPink = new Color((int)byte.MaxValue, 0, (int)byte.MaxValue, 0);
+        public static Color DGVanilla = new Color((int)byte.MaxValue, 246, 214);
+        public static Color Duck1 = new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue);
         public static Color Duck2 = new Color(125, 125, 125);
         public static Color Duck3 = new Color(247, 224, 90);
         public static Color Duck4 = new Color(205, 107, 29);
@@ -227,13 +227,13 @@ namespace DuckGame
             if (!_colorMap.TryGetValue(color, out Color parseColor))
             {
                 string[] strArray = color.TrimSplit(',');
-                
-                if (strArray.Length != 3 
-                    || !byte.TryParse(strArray[0], out byte r) 
-                    || !byte.TryParse(strArray[1], out byte g) 
-                    || !byte.TryParse(strArray[2], out byte b)) 
+
+                if (strArray.Length != 3
+                    || !byte.TryParse(strArray[0], out byte r)
+                    || !byte.TryParse(strArray[1], out byte g)
+                    || !byte.TryParse(strArray[2], out byte b))
                     return parseColor;
-                
+
                 return new Color(r, g, b);
             }
 

@@ -109,7 +109,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (!(current.fileDialog.result.StartsWith("/") && (!Program.IsLinuxD || !Path.IsPathRooted(current.fileDialog.result))) )
+                    if (!(current.fileDialog.result.StartsWith("/") && (!Program.IsLinuxD || !Path.IsPathRooted(current.fileDialog.result))))
                     {
                         _field.value = current.fileDialog.result.Substring(0, current.fileDialog.result.Length - 4);
                     }

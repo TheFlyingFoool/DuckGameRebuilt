@@ -2,7 +2,7 @@
 
 namespace DuckGame
 {
-   
+
     /// <summary>
     /// Marks the class using the attribute as ClientOnly. This
     /// means that if there is a player present in the lobby

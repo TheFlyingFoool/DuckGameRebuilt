@@ -408,17 +408,17 @@ namespace DuckGame
 
         public static Vec2 Parse(string s)
         {
-            if (s.Split(',') is {Length: 2} values
+            if (s.Split(',') is { Length: 2 } values
                 && float.TryParse(values[0], out float x)
                 && float.TryParse(values[1], out float y))
                 return new Vec2(x, y);
 
             throw new Exception($"Cannot parse [{s}] as a {nameof(Vec2)}");
         }
-        
+
         public static bool TryParse(string s, out Vec2 result)
         {
-            if (s.Split(',') is {Length: 2} values
+            if (s.Split(',') is { Length: 2 } values
                 && float.TryParse(values[0], out float x)
                 && float.TryParse(values[1], out float y))
             {
@@ -435,7 +435,7 @@ namespace DuckGame
             x = this.x;
             y = this.y;
         }
-        
+
         public override string ToString()
         {
             CultureInfo currentCulture = CultureInfo.CurrentCulture;

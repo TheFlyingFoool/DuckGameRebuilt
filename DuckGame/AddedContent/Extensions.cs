@@ -5,6 +5,7 @@ using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -25,12 +26,12 @@ namespace DuckGame
         public static bool TryFirst<T>(this IEnumerable<T> collection, Func<T, bool> condition, out T first)
         {
             first = default;
-            
+
             foreach (T item in collection)
             {
-                if (!condition(item)) 
+                if (!condition(item))
                     continue;
-                
+
                 first = item;
                 return true;
             }
@@ -50,16 +51,16 @@ namespace DuckGame
         }
 
         private static readonly Regex _defaultWordLineBreakRegex = new(@"(.{0,30})(?:\s+|$)", RegexOptions.Compiled);
-        
+
         public static string[] SplitByLength(this string str, int maxLength = 30, bool breakAtWordEnding = true)
         {
             if (breakAtWordEnding)
             {
-                return (maxLength == 30 
-                        ? _defaultWordLineBreakRegex 
+                return (maxLength == 30
+                        ? _defaultWordLineBreakRegex
                         : new Regex($@"(.{{0,{maxLength}}})(?:\s+|$)")).Matches(str)
                     .Cast<Match>()
-                    .SelectMany(x => x.Groups[1].Value.Split(new[] {'\n'}, StringSplitOptions.RemoveEmptyEntries))
+                    .SelectMany(x => x.Groups[1].Value.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
                     .ToArray();
             }
 
@@ -83,16 +84,6 @@ namespace DuckGame
         public static string GetFullName(this MemberInfo mi) => $"{mi.DeclaringType}:{mi.Name}";
 
         public static bool InheritsFrom(this Type t1, Type t2) => t2.IsAssignableFrom(t1);
-
-        public static Vec2 ButX(this Vec2 vec2, Func<float, float> function) => new(function(vec2.x), vec2.y);
-        public static Vec2 ButX(this Vec2 vec2, float newX, bool add = false) => vec2.ButX(x => add ? x + newX : newX);
-
-        public static Vec2 ButY(this Vec2 vec2, Func<float, float> function) => new(vec2.x, function(vec2.y));
-        public static Vec2 ButY(this Vec2 vec2, float newY, bool add = false) => vec2.ButY(y => add ? y + newY : newY);
-
-        public static Vec2 ButBoth(this Vec2 vec2, Func<float, float> function) => vec2.ButX(function).ButY(function);
-        public static Vec2 ButBoth(this Vec2 vec2, float newValue, bool add = false) => vec2.ButX(newValue, add).ButY(newValue, add);
-
         public static bool CaselessEquals(this string str, string str2) =>
             string.Equals(str, str2, StringComparison.CurrentCultureIgnoreCase);
 
@@ -153,7 +144,7 @@ namespace DuckGame
 
             return true;
         }
-        
+
         public static T GetPrivateFieldValue<T>(this object obj, string propName)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
@@ -164,51 +155,65 @@ namespace DuckGame
                 fi = t.GetField(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 t = t.BaseType;
             }
-            if (fi == null) 
+            if (fi == null)
                 throw new ArgumentOutOfRangeException(nameof(propName), $"Field {propName} was not found in Type {obj.GetType().FullName}");
             return (T)fi.GetValue(obj);
         }
-        
+
         public static float Distance(this Vec2 pos1, Vec2 pos2)
         {
-            return Math.Abs(pos1.x - pos2.x) + Math.Abs(pos1.y - pos2.y); 
+            return Math.Abs(pos1.x - pos2.x) + Math.Abs(pos1.y - pos2.y);
         }
 
         public static Profile GetProfSafe(string playerName)
         {
             switch (playerName)
             {
-                case "p1": case "player1":
+                case "p1":
+                case "player1":
                     return Profiles.DefaultPlayer1;
-                case "p2": case "player2":
+                case "p2":
+                case "player2":
                     return Profiles.DefaultPlayer2;
-                case "p3": case "player3":
+                case "p3":
+                case "player3":
                     return Profiles.DefaultPlayer3;
-                case "p4": case "player4":
+                case "p4":
+                case "player4":
                     return Profiles.DefaultPlayer4;
-                case "p5": case "player5":
+                case "p5":
+                case "player5":
                     return Profiles.DefaultPlayer5;
-                case "p6": case "player6":
+                case "p6":
+                case "player6":
                     return Profiles.DefaultPlayer6;
-                case "p7": case "player7":
+                case "p7":
+                case "player7":
                     return Profiles.DefaultPlayer7;
-                case "p8": case "player8":
+                case "p8":
+                case "player8":
                     return Profiles.DefaultPlayer8;
-                case "o1": case "observer1":
-                    return Profiles.all.ElementAt(8);
-                case "o2": case "observer2":
-                    return Profiles.all.ElementAt(9);
-                case "o3": case "observer3":
-                    return Profiles.all.ElementAt(10);
-                case "o4": case "observer4":
-                    return Profiles.all.ElementAt(11);
+                case "o1":
+                case "observer1":
+                    return Profiles.all[8];
+                case "o2":
+                case "observer2":
+                    return Profiles.all[9];
+                case "o3":
+                case "observer3":
+                    return Profiles.all[10];
+                case "o4":
+                case "observer4":
+                    return Profiles.all[11];
                 case "white":
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 0);
-                case "gray": case "grey":
+                case "gray":
+                case "grey":
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 1);
                 case "yellow":
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 2);
-                case "orange": case "brown":
+                case "orange":
+                case "brown":
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 3);
                 case "green":
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 4);
@@ -228,7 +233,7 @@ namespace DuckGame
         }
 
         public static Profile GetProf(string playerName) => GetProfSafe(playerName) ?? throw new($"No profile with name {playerName} found");
-        
+
         public enum PlayerName
         {
             Player1,
@@ -245,37 +250,23 @@ namespace DuckGame
             Observer4,
             Me,
         }
-        
+
         public static Profile GetProf(PlayerName playerName)
         {
-            return playerName switch
+            if (PlayerName.Me == playerName)
             {
-                PlayerName.Player1 => Profiles.DefaultPlayer1,
-                PlayerName.Player2 => Profiles.DefaultPlayer2,
-                PlayerName.Player3 => Profiles.DefaultPlayer3,
-                PlayerName.Player4 => Profiles.DefaultPlayer4,
-                PlayerName.Player5 => Profiles.DefaultPlayer5,
-                PlayerName.Player6 => Profiles.DefaultPlayer6,
-                PlayerName.Player7 => Profiles.DefaultPlayer7,
-                PlayerName.Player8 => Profiles.DefaultPlayer8,
-                PlayerName.Observer1 => Profiles.all.ToList()[08],
-                PlayerName.Observer2 => Profiles.all.ToList()[09],
-                PlayerName.Observer3 => Profiles.all.ToList()[10],
-                PlayerName.Observer4 => Profiles.all.ToList()[11],
-                PlayerName.Me => GetMe(),
-                _ => null,
-            };
+                return GetMe();
+            }
+            return Profiles.all[(int)playerName];
         }
-        
+
         public static Profile GetMe()
         {
             if (Level.current != null)
             {
-                return Network.isActive 
-                    ? DuckNetwork.localProfile
-                    : GetProf(PlayerName.Player1);
+                return Network.isActive ? DuckNetwork.localProfile : GetProf(PlayerName.Player1);
             }
-            
+
             return null;
         }
         public static string[] ProfileKeywords = {
@@ -316,7 +307,7 @@ namespace DuckGame
             "me",
             "nearest"
         };
-        
+
         public static string[] BooleanKeywords = {
             "true",
             "false",
@@ -329,15 +320,15 @@ namespace DuckGame
             "y",
             "n",
         };
-        
+
         public enum CleanMethod { Color, Mojis, Both }
-        
+
         // :D
         public static readonly Regex ColorFormattingRegex = new(@"\|(?:(?:(?:([0-9]{1,2}|1[0-9]{1,2}|2[0-4][0-9]|25[0-5]),)(?:([0-9]{1,2}|1[0-9]{1,2}|2[0-4][0-9]|25[0-5]),)(?:([0-9]{1,2}|1[0-9]{1,2}|2[0-4][0-9]|25[0-5])))|(?:AQUA)|(?:RED)|(?:WHITE)|(?:BLACK)|(?:DARKNESS)|(?:BLUE)|(?:DGBLUE)|(?:DGRED)|(?:DGREDDD)|(?:DGGREEN)|(?:DGGREENN)|(?:DGYELLOW)|(?:DGYELLO)|(?:DGORANGE)|(?:ORANGE)|(?:MENUORANGE)|(?:YELLOW)|(?:GREEN)|(?:LIME)|(?:TIMELIME)|(?:GRAY)|(?:LIGHTGRAY)|(?:CREDITSGRAY)|(?:BLUEGRAY)|(?:PINK)|(?:PURPLE)|(?:DGPURPLE)|(?:CBRONZE)|(?:CSILVER)|(?:CGOLD)|(?:CPLATINUM)|(?:CDEV)|(?:DUCKCOLOR1)|(?:DUCKCOLOR2)|(?:DUCKCOLOR3)|(?:DUCKCOLOR4)|(?:RBOW_1)|(?:RBOW_2)|(?:RBOW_3)|(?:RBOW_4)|(?:RBOW_5)|(?:RBOW_6)|(?:RBOW_7))\|");
-        
+
         public static MatchCollection GetStringColorFormatting(string text) =>
             ColorFormattingRegex.Matches(text);
-        
+
         public static string CleanStringFormatting(string str, CleanMethod cleanMethod = CleanMethod.Both) => cleanMethod switch
         {
             CleanMethod.Color => ColorFormattingRegex.Replace(str, ""),
@@ -345,7 +336,7 @@ namespace DuckGame
             CleanMethod.Both => CleanStringFormatting(CleanStringFormatting(str, CleanMethod.Color), CleanMethod.Mojis),
             _ => throw new NotImplementedException()
         };
-        
+
         public static string CleanFormatting(this string String, CleanMethod cleanMethod = CleanMethod.Both) => CleanStringFormatting(String, cleanMethod);
     }
 }

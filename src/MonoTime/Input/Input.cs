@@ -1849,7 +1849,7 @@ namespace DuckGame
                     return;
                 --DuckGame.Input._suppressInputChangeMessages;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 DevConsole.Log(e.Message);
             }

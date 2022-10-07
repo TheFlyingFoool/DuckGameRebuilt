@@ -369,7 +369,7 @@ namespace DuckGame
             InitializeNeighbors();
             base.DoInitialize();
         }
-      
+
         public virtual void InitializeNeighbors()
         {
         }

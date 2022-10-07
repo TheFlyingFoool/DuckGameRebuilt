@@ -10,20 +10,20 @@ using System.Reflection;
 
 namespace XnaToFna
 {
-  public static class StackOpHelper
-  {
-    [ThreadStatic]
-    private static Stack<object> Current;
-    public static readonly MethodInfo m_Push = typeof (StackOpHelper).GetMethod("Push");
-    public static readonly MethodInfo m_Pop = typeof (StackOpHelper).GetMethod("Pop");
-
-    public static void Push<T>(T value)
+    public static class StackOpHelper
     {
-      if (StackOpHelper.Current == null)
-        StackOpHelper.Current = new Stack<object>();
-      StackOpHelper.Current.Push(value);
-    }
+        [ThreadStatic]
+        private static Stack<object> Current;
+        public static readonly MethodInfo m_Push = typeof(StackOpHelper).GetMethod("Push");
+        public static readonly MethodInfo m_Pop = typeof(StackOpHelper).GetMethod("Pop");
 
-    public static T Pop<T>() => (T) StackOpHelper.Current.Pop();
-  }
+        public static void Push<T>(T value)
+        {
+            if (StackOpHelper.Current == null)
+                StackOpHelper.Current = new Stack<object>();
+            StackOpHelper.Current.Push(value);
+        }
+
+        public static T Pop<T>() => (T)StackOpHelper.Current.Pop();
+    }
 }

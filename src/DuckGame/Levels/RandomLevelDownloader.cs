@@ -78,7 +78,7 @@ namespace DuckGame
                     num %= 30;
             }
             RandomLevelDownloader._orderMode = RandomLevelDownloader.numSinceLowRating != 2 ? WorkshopQueryFilterOrder.RankedByVote : WorkshopQueryFilterOrder.RankedByTrend;
-            if (Rando.Float(1f) >  0.7f)
+            if (Rando.Float(1f) > 0.7f)
             {
                 switch (Rando.Int(5))
                 {

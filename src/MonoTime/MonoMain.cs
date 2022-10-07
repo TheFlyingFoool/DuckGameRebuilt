@@ -733,7 +733,7 @@ namespace DuckGame
         public static event Action<bool> OnGameExit;
 
         public static void InvokeOnGameExitEvent(bool isDangerous) => OnGameExit?.Invoke(isDangerous);
-        
+
         protected override void OnExiting(object sender, EventArgs args)
         {
             InvokeOnGameExitEvent(false);
@@ -848,8 +848,8 @@ namespace DuckGame
                Network.Initialize();
                Teams.Initialize();
                Chancy.Initialize();
-              // _watermarkEffect = DuckGame.Content.Load<MTEffect>("Shaders/basicWatermark");
-              // _watermarkTexture = DuckGame.Content.Load<Tex2D>("looptex");
+               // _watermarkEffect = DuckGame.Content.Load<MTEffect>("Shaders/basicWatermark");
+               // _watermarkTexture = DuckGame.Content.Load<Tex2D>("looptex");
                DuckNetwork.Initialize();
                Persona.Initialize();
                DuckRig.Initialize();
@@ -860,7 +860,7 @@ namespace DuckGame
                 DevConsole.Log("DDownloadWorkshopItems");
                 DownloadWorkshopItems();
             }
-               
+
             AddLoadingAction(ManagedContent.InitializeMods);
             AddLoadingAction(Network.InitializeMessageTypes);
             AddLoadingAction(DeathCrate.InitializeDeathCrateSettings);
@@ -1166,7 +1166,7 @@ namespace DuckGame
                         break;
                 }
             }
-            label_19:
+        label_19:
             if (_doStart && !_started)
             {
                 _doStart = false;
@@ -1484,7 +1484,7 @@ namespace DuckGame
                         DevConsole.Log("loading ../spriteatlass.png");
                         DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(@"../spriteatlas.png", Graphics.device);
                         DuckGame.Content.Thick.Namebase = "SpriteAtlas";
-                        
+
                         //RSplit("de mo", ' ', -1);
                         string[] lines = System.IO.File.ReadAllLines(@"../spriteatlas_offsets.txt");
                         foreach (string line in lines)
@@ -1533,7 +1533,7 @@ namespace DuckGame
                             }
                         }
                     }
-                    
+
                 }
                 Camera camera = new Camera(0f, 0f, Graphics.width, Graphics.height);
                 Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
@@ -1545,19 +1545,19 @@ namespace DuckGame
                     num = 1f;
                 Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * num, vec2_1.y), Color.White * 0.1f, (Depth)0.6f);
                 string text = loadMessage;
-                if(loadMessage != lastLoadMessage)
+                if (loadMessage != lastLoadMessage)
                 {
                     loadMessages.Push(lastLoadMessage = loadMessage);
                 }
                 if (Cloud.processing && Cloud.progress != 0.0 && Cloud.progress != 1.0)
                     text = "Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100.0)).ToString() + "%)";
                 float textPadding = -24f;
-                if(text != loadMessage)
+                if (text != loadMessage)
                 {
                     Graphics.DrawString(text, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
                     textPadding -= 20;
                 }
-                foreach(string i in loadMessages)
+                foreach (string i in loadMessages)
                 {
                     Graphics.DrawString(i, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
                     textPadding -= 20;

@@ -92,7 +92,7 @@ namespace DuckGame
                 Graphics.DrawLine(position + vec2 * distOut, position + vec2 * (distOut + distLen * aimerScale), _color * alpha, _thickness * aimerScale, (Depth)0.9f);
                 Graphics.DrawLine(position + vec2 * (distOut - 1f * aimerScale), position + vec2 * (float)(distOut + 1.0 * aimerScale + distLen * aimerScale), Color.Black, (_thickness + 2f) * aimerScale, (Depth)0.8f);
             }
-            if (streamAlpha <=  0.01f)
+            if (streamAlpha <= 0.01f)
                 return;
             int num2 = 0;
             Vec2 vec2_1 = Vec2.Zero;

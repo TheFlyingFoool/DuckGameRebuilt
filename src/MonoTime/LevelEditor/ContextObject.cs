@@ -22,7 +22,7 @@ namespace DuckGame
         {
             _placement = placement;
             _thing = thing;
-            _image = thing.GeneratePreview(16,16,true);
+            _image = thing.GeneratePreview(16, 16, true);
             itemSize.y = 16f;
             _text = thing.editorName;
             itemSize.x = Graphics.GetFancyStringWidth(_text) + 26f;

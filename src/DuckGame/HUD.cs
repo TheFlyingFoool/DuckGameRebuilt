@@ -173,7 +173,7 @@ namespace DuckGame
                 }
                 cornerDisplay.closing = true;
             }
-                
+
         }
 
         public static void CloseCorner(HUDCorner corner)
@@ -181,7 +181,7 @@ namespace DuckGame
             foreach (CornerDisplay cornerDisplay in HUD._core._cornerDisplays)
             {
                 if (cornerDisplay.corner == corner)
-                     cornerDisplay.closing = true;
+                    cornerDisplay.closing = true;
             }
         }
 

@@ -100,7 +100,7 @@ namespace DuckGame
                 vote.slide = Lerp.FloatSmooth(vote.slide, vote.open ? 1f : -0.1f, 0.1f, 1.1f);
                 vote.wobble = Lerp.Float(vote.wobble, 0f, 0.05f);
                 vote.wobbleInc += 0.5f;
-                if (!vote.open && vote.slide <  0.01f)
+                if (!vote.open && vote.slide < 0.01f)
                     vote.vote = VoteType.None;
             }
         }

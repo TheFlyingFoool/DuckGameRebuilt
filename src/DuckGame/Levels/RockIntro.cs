@@ -66,7 +66,7 @@ namespace DuckGame
             if (_panWait >= 0.0)
                 return;
             _yScrollVel += _yScroll < 0.04f ? -0.0001f : 0.0008f;
-            if (_yScrollVel >  0.01f)
+            if (_yScrollVel > 0.01f)
                 _yScrollVel = 0.01f;
             if (_yScrollVel < 0.0)
                 _yScrollVel = 0f;
@@ -125,7 +125,7 @@ namespace DuckGame
             {
                 _cornerWedge.flipH = false;
                 _cornerWedge.depth = (Depth)0.7f;
-                if (_intermissionSlide >  0.01f)
+                if (_intermissionSlide > 0.01f)
                 {
                     float x1 = (float)(_intermissionSlide * 320.0 - 320.0);
                     float y = 60f;

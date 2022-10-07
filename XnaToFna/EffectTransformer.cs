@@ -11,14 +11,14 @@ using System.Runtime.Serialization;
 
 namespace XnaToFna.ContentTransformers
 {
-  public class EffectTransformer : ContentTypeReader<Effect>
-  {
-    private Type t_Effect = typeof (Effect);
-
-    protected override Effect Read(ContentReader input, Effect existing)
+    public class EffectTransformer : ContentTypeReader<Effect>
     {
-      input.ReadBytes(input.ReadInt32());
-      return (Effect) FormatterServices.GetUninitializedObject(this.t_Effect);
+        private Type t_Effect = typeof(Effect);
+
+        protected override Effect Read(ContentReader input, Effect existing)
+        {
+            input.ReadBytes(input.ReadInt32());
+            return (Effect)FormatterServices.GetUninitializedObject(this.t_Effect);
+        }
     }
-  }
 }

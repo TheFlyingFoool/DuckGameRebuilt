@@ -431,7 +431,7 @@ namespace DuckGame
             //}
 
 
-            
+
             batchItem.Material = null;
             batchItem.Set(p1, p2, p3, p4, t1, t2, t3, t4, c);
         }
@@ -451,7 +451,7 @@ namespace DuckGame
             ++DuckGame.Graphics.currentDrawIndex;
             MTSpriteBatchItem batchItem = _batcher.CreateBatchItemDepth(depth);
             batchItem.Depth = depth;
-           
+
             if (sourceRectangle.HasValue)
             {
                 _tempRect = sourceRectangle.Value;

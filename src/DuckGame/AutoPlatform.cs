@@ -155,7 +155,7 @@ namespace DuckGame
         }
         public override void PreLevelInitialize()
         {
-           // this.UpdatePlatform();
+            // this.UpdatePlatform();
         }
         public override void EditorObjectsChanged() => PlaceBlock();
 

@@ -75,12 +75,8 @@ namespace DuckGame
                 Color lightColor = Color.Yellow * _movementProgress * 0.4f * Graphics.fade;
 
                 PolyRenderer.Quad(
-                    topLeft
-                        .ButY(-shineHeight, true)
-                        .ButX(-shineWidth, true),
-                    topRight
-                        .ButY(-shineHeight, true)
-                        .ButX(shineWidth, true),
+                    new Vec2(topLeft.x - shineWidth, topLeft.y - shineHeight),
+                    new Vec2(topLeft.x - shineWidth, topLeft.y + shineHeight),
                     topLeft,
                     topRight,
                     Color.Transparent,

@@ -41,7 +41,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-           // if (Level.current is Editor)
+            // if (Level.current is Editor)
             //    cheap = false;
             //else
             DoPositioning();
