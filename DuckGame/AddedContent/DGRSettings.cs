@@ -36,7 +36,7 @@ namespace DuckGame
         }
         [AutoConfigField]
         public static bool S_RPC = false;
-        public ParticleMultiplierFrequency ParticleMultiplier
+        public int ParticleMultiplier
         {
             get
             {
@@ -47,22 +47,25 @@ namespace DuckGame
                 S_ParticleMultiplier = value;
             }
         }
-        
         [AutoConfigField]
-        public static ParticleMultiplierFrequency S_ParticleMultiplier = ParticleMultiplierFrequency.Default;
-        
-        public static float ActualParticleMultiplier => (float) S_ParticleMultiplier * 0.01f;
-
-        public enum ParticleMultiplierFrequency
+        public static int S_ParticleMultiplier = 3;
+        //listen if you wanna make better code go for it i cant bother to personally
+        //-NiK0
+        public static float ActualParticleMultiplier
         {
-            // multipler percentage
-            None = 0,
-            Minimum = 30,
-            Low = 60,
-            Default = 100,
-            Many = 200,
-            Extreme = 400,
-            Uncountable = 800,
+            get
+            {
+                return S_ParticleMultiplier switch
+                {
+                    1 => 0.3f, //MINIMUM 
+                    2 => 0.6f, //LOW
+                    3 => 1, //DEFAULT
+                    4 => 2, //MANY
+                    5 => 4, //EXTREME
+                    6 => 8, //UNCONTAUNBLE
+                    _ => 0, //NONE
+                };
+            }
         }
 
         public bool GraphicsCulling
