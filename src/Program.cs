@@ -341,13 +341,6 @@ namespace DuckGame
                     case "-firebreak":
                         MonoMain.firebreak = true;
                         break;
-                    case "-speedruntypingthisstartupparameterformaximumdubberspeed":
-                    case "-dubberspeed":
-                    case "-vimuser":
-                    case "-neovim":
-                    case "-vim":
-                        UIBox.dubberspeed = true;
-                        break;
                     case "-startineditor":
                         MonoMain.startInEditor = true;
                         break;

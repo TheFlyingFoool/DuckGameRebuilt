@@ -27,13 +27,13 @@ namespace DuckGame
         //private bool _startedMatch;
         private static int _numberOfDucksSpawned;
         private int wait;
-
         public override string networkIdentifier => level;
 
         public FollowCam followCam => _followCam;
 
         public bool isRandom => _randomLevel != null;
 
+        public bool Raining;
         public void SkipMatch()
         {
             if (Network.isActive && Network.isServer)
@@ -80,6 +80,7 @@ namespace DuckGame
                 _randomLevel = LevelGenerator.MakeLevel(seed: seed);
                 seed = _randomLevel.seed;
             }
+            else if (Rando.Int(3) == 0) Raining = true;
             base.Initialize();
             if (Network.isActive)
                 Level.core.gameInProgress = true;
@@ -204,6 +205,18 @@ namespace DuckGame
 
         public override void Update()
         {
+            if (Raining)
+            {
+                int f = DGRSettings.S_ParticleMultiplier;
+                if (f > 2 || Rando.Int(f) > 0)
+                {
+                    f = Maths.Clamp(f - 2, 1, 100);
+                    for (int i = 0; i < f; i++)
+                    {
+                        Level.Add(new RainParticel(new Vec2(Rando.Float(topLeft.x - 400, bottomRight.x + 300), topLeft.y - 200)));
+                    }
+                }
+            }
             ++MonoMain.timeInMatches;
             if (_mode != null)
                 _mode.DoUpdate();

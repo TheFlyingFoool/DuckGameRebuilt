@@ -233,6 +233,7 @@
     <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\MathParser.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\PizzaLauncher.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\RainParticel.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\RoomEditorExtra.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Extensions.cs" />
