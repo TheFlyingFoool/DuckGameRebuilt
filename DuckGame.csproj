@@ -207,6 +207,7 @@
     <Compile Include="DuckGame\AddedContent\Firebreak\Cursor\GameCursor.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\Cursor\OpalCursor.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\FireDebug.cs" />
+    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\DynamicDCLine.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Levels\TestLev.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Levels\TestLev.FireBlock.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Levels\TestLev.SelectionPad.cs" />
