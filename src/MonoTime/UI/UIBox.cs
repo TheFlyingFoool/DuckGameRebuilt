@@ -227,7 +227,7 @@ namespace DuckGame
                         {
                             UIMenuItem uIMenuItem = uIComponent as UIMenuItem;
                             //UIMenuItemSlider
-                            if (uIMenuItem is UIMenuItemSlider)
+                            if (uIMenuItem is UIMenuItemSlider || uIMenuItem is UIMenuItemNumber || uIMenuItem is UIMenuItemToggle)
                             {
                                 if (Mouse.left == InputState.Pressed)
                                 {

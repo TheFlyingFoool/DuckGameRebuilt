@@ -319,11 +319,21 @@ namespace DuckGame
                         modConfig.error = "!This mod does not currently work on Linux!";
                         mod = new DisabledMod();
                     }
-                    if (Debugger.IsAttached && modConfig.name == "QOL")
+                    //Patchs in these mods Dont Like the Debugger
+                    if (Debugger.IsAttached)
                     {
-                        modConfig.Disable();
-                        modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
-                        mod = new DisabledMod();
+                        if (modConfig.name == "QOL")
+                        {
+                            modConfig.Disable();
+                            modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
+                            mod = new DisabledMod();
+                        }
+                        else if (modConfig.workshopID == 2411996803UL)
+                        {
+                            modConfig.Disable();
+                            modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
+                            mod = new DisabledMod();
+                        }
                     }
                 }
                 if (mod == null)
