@@ -281,6 +281,7 @@ namespace DuckGame
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|REBUILT|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
+            menu.Add(new UIMenuItemToggle("Dubber speed", field: new FieldBinding(dGRSettings, "dubberspeed")), true);
             menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(dGRSettings, "SpriteAtlas")), true);
             menu.Add(new UIMenuItemToggle("Graphics Culling", field: new FieldBinding(dGRSettings, "GraphicsCulling")), true);
             menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC")), true);

@@ -212,7 +212,19 @@ namespace DuckGame
             while (_currentMenuItemSelection[_selection].mode != MenuItemMode.Normal && selection != _selection);
             SFX.Play("textLetter", 0.7f);
         }
-        public static bool dubberspeed;
+        public static Keys[] keysOfInterest =
+                        {
+                            Keys.D1,
+                            Keys.D2,
+                            Keys.D3,
+                            Keys.D4,
+                            Keys.D5,
+                            Keys.D6,
+                            Keys.D7,
+                            Keys.D8,
+                            Keys.D9,
+                            Keys.D0
+                        };
         public override void Update()
         {
             if (UIParentMenu != null && UIParentMenu.domouse && !UIParentMenu.gamepadMode && _currentMenuItemSelection != null && Mouse.available)
@@ -295,22 +307,8 @@ namespace DuckGame
                 }
                 if (_isMenu)
                 {
-                    if (dubberspeed && _currentMenuItemSelection != null)
+                    if (DGRSettings.s_dubberspeed && _currentMenuItemSelection != null)
                     {
-                        Keys[] keysOfInterest =
-                        {
-                            Keys.D1,
-                            Keys.D2,
-                            Keys.D3,
-                            Keys.D4,
-                            Keys.D5,
-                            Keys.D6,
-                            Keys.D7,
-                            Keys.D8,
-                            Keys.D9,
-                            Keys.D0
-                        };
-
                         int c = _currentMenuItemSelection.Count;
                         for (int i = 0; i < keysOfInterest.Length; i++)
                         {

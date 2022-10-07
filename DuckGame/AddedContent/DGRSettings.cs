@@ -83,6 +83,19 @@ namespace DuckGame
         public static bool S_GraphicsCulling = true;
 
 
+        public bool dubberspeed
+        {
+            get
+            {
+                return s_dubberspeed;
+            }
+            set
+            {
+                s_dubberspeed = value;
+            }
+        }
+        [AutoConfigField]
+        public static bool s_dubberspeed = false;
         public int RebuiltEffect
         {
             get
