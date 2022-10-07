@@ -23,6 +23,8 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using XnaToFna;
+using static System.Net.WebRequestMethods;
+using File = System.IO.File;
 
 namespace DuckGame
 {
@@ -292,10 +294,35 @@ namespace DuckGame
                         modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel!";
                         mod = new DisabledMod();
                     }
-                    if (Program.isLinux && !modConfig.linuxFix && modConfig.workshopID == 1439906266UL)
+                    /* rebuild mod issues */
+                    //if (modConfig.workshopID == 2548159573UL) // custom arcade
+                    //{
+                    //    modConfig.Disable();
+                    //    modConfig.error = "!This mod does not currently work on Rebuilt!";
+                    //    mod = new DisabledMod();
+                    //}
+                    if (modConfig.workshopID == 2320709295UL) // Better Chat
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
+                        mod = new DisabledMod();
+                    }
+                    else if (modConfig.workshopID == 267491120UL) // BROWSE GAMES+ has a harmony resolve issue with remapper, but also scuffed issues that exist sepreatly
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!This mod does not currently work on Rebuilt, Patching & Resolving Issues!";
+                        mod = new DisabledMod();
+                    }
+                    else if (modConfig.workshopID == 1439906266UL && Program.isLinux && !modConfig.linuxFix) // Reskins
                     {
                         modConfig.Disable();
                         modConfig.error = "!This mod does not currently work on Linux!";
+                        mod = new DisabledMod();
+                    }
+                    if (Debugger.IsAttached && modConfig.name == "QOL")
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
                         mod = new DisabledMod();
                     }
                 }
@@ -316,6 +343,7 @@ namespace DuckGame
                     else if (!ModLoader._preloading)
                     {
                         MonoMain.loadMessage = "LOADING MOD " + ModLoader.currentModLoadString;
+                        LoadedMods.Add(modConfig.workshopID);
                         try
                         {
                             foreach (string hardDependency in modConfig.hardDependencies)
@@ -661,7 +689,7 @@ namespace DuckGame
             if (!ModLoader.loadingOldMod.configuration.forceHarmonyLegacyLoad || ModLoader.ignoreLegacyLoad)
                 throw new OldModUsesHarmonyException("Mod is for an old version of Duck Game, and appears to use Harmony patching. This could be risky! Use 'Force Legacy Load' and restart to load it anyway.");
         }
-
+        public static List<ulong> LoadedMods = new List<ulong>();
         public static void PreLoadMods(string dir)
         {
             ModLoader.modDirectory = dir;

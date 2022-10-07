@@ -79,7 +79,7 @@ namespace DuckGame
         {
             if (p == null)
             {
-                SetProfile(Profiles.all[controllerIndex]);
+                SetProfile(Profiles.alllist[controllerIndex]);
             }
             else
             {

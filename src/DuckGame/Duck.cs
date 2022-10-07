@@ -362,9 +362,9 @@ namespace DuckGame
 
         private void AssignNetProfileIndex(byte pIndex)
         {
-            DevConsole.Log(DCSection.General, "Assigning net profile index (" + pIndex.ToString() + "\\" + Profiles.all.Count<Profile>().ToString() + ")");
+            DevConsole.Log(DCSection.General, "Assigning net profile index (" + pIndex.ToString() + "\\" + Profiles.alllist.Count<Profile>().ToString() + ")");
             _netProfileIndex = pIndex;
-            Profile profile = Profiles.all[_netProfileIndex];
+            Profile profile = Profiles.alllist[_netProfileIndex];
             if (Network.isClient && Network.InLobby())
                 (Level.current as TeamSelect2).OpenDoor(_netProfileIndex, this);
             this.profile = profile;

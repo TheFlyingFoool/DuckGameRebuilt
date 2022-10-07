@@ -181,6 +181,9 @@ namespace DuckGame
 
         public override void Update()
         {
+            if (lastframeupdate == Graphics.frame)
+                return;
+            lastframeupdate = Graphics.frame;
             if (!_startInitialized)
             {
                 _startInitialized = true;
@@ -234,11 +237,13 @@ namespace DuckGame
                 return;
             base.DoDraw();
         }
-
+        public long lastframeupdate = -1;
+        public long lastframedraw = -1;
         public override void Draw()
         {
-            if (HUD.hide)
+            if (HUD.hide || lastframedraw == Graphics.frame)
                 return;
+            lastframedraw = Graphics.frame;
             foreach (UIComponent component in _components)
             {
                 if (component.condition == null || component.condition())
@@ -247,7 +252,9 @@ namespace DuckGame
                         UIMenu.disabledDraw = component.mode == MenuItemMode.Disabled;
                     component.depth = depth + 10;
                     if (component.visible && component.mode != MenuItemMode.Hidden)
+                    {
                         component.Draw();
+                    }
                     if (component is UIMenuItem)
                         UIMenu.disabledDraw = false;
                 }

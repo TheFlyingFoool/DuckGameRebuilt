@@ -33,7 +33,7 @@ public class User : IDisposable {
 
     public virtual unsafe string name {
         get {
-            if (id == 0)
+            if (id == 0 || !Steam.initialized)
                 return "";
             return SteamFriends.GetFriendPersonaName(_id);
         }
@@ -42,7 +42,7 @@ public class User : IDisposable {
     private byte[] _avatarDataSmall;
     public virtual unsafe byte[] avatarSmall {
         get {
-            if (id == 0)
+            if (id == 0 || !Steam.initialized)
                 return null;
             if (_avatarDataSmall != null)
                 return _avatarDataSmall;
@@ -53,7 +53,7 @@ public class User : IDisposable {
     private byte[] _avatarDataMedium;
     public virtual unsafe byte[] avatarMedium {
         get {
-            if (id == 0)
+            if (id == 0 || !Steam.initialized)
                 return null;
             if (_avatarDataMedium != null)
                 return _avatarDataMedium;
@@ -63,7 +63,7 @@ public class User : IDisposable {
 
     public virtual unsafe bool inGame {
         get {
-            if (id == 0)
+            if (id == 0 || !Steam.initialized)
                 return false;
             FriendGameInfo_t game;
             return SteamFriends.GetFriendGamePlayed(_id, out game);
@@ -72,7 +72,7 @@ public class User : IDisposable {
 
     public virtual unsafe bool inCurrentGame {
         get {
-            if (id == 0)
+            if (id == 0 || !Steam.initialized)
                 return false;
             FriendGameInfo_t game;
             return SteamFriends.GetFriendGamePlayed(_id, out game) && game.m_gameID.AppID() == SteamUtils.GetAppID();
@@ -81,7 +81,7 @@ public class User : IDisposable {
 
     protected virtual unsafe bool inLobby {
         get {
-            if (id == 0)
+            if (id == 0 || !Steam.initialized)
                 return false;
             FriendGameInfo_t game;
             return SteamFriends.GetFriendGamePlayed(_id, out game) && game.m_steamIDLobby.m_SteamID != 0;
@@ -90,7 +90,7 @@ public class User : IDisposable {
 
     public virtual unsafe bool inCurrentLobby {
         get {
-            if (id == 0 || Steam.lobby == null)
+            if (id == 0 || Steam.lobby == null || !Steam.initialized)
                 return false;
             FriendGameInfo_t game;
             return SteamFriends.GetFriendGamePlayed(_id, out game) && game.m_steamIDLobby.m_SteamID != Steam.lobby.id;
@@ -112,7 +112,7 @@ public class User : IDisposable {
 
     public virtual unsafe SteamUserState state {
         get {
-            if (id == 0)
+            if (id == 0 || !Steam.initialized)
                 return SteamUserState.Offline;
             return (SteamUserState) SteamFriends.GetFriendPersonaState(_id);
         }
@@ -120,7 +120,7 @@ public class User : IDisposable {
 
     public virtual unsafe FriendRelationship relationship {
         get {
-            if (id == 0)
+            if (id == 0 || !Steam.initialized)
                 return FriendRelationship.None;
             return (FriendRelationship) SteamFriends.GetFriendRelationship(_id);
         }

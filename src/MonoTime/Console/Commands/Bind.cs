@@ -87,7 +87,8 @@ namespace DuckGame
                 if (!Activated)
                     return false;
 
-                DevConsole.RunCommand(command, false);
+                DevConsole.core.writeExecutedCommand = false;
+                DevConsole.RunCommand(command);
                 return true;
             }
         }

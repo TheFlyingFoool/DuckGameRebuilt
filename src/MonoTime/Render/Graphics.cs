@@ -21,8 +21,8 @@ namespace DuckGame
         public static bool disposingObjects = false;
         private static List<Action>[] _renderTasks = new List<Action>[2]
         {
-      new List<Action>(),
-      new List<Action>()
+          new List<Action>(),
+          new List<Action>()
         };
         private static int _targetFlip = 0;
         private static int _currentStateIndex = 0;
@@ -138,7 +138,13 @@ namespace DuckGame
             set => DuckGame.Graphics._currentDrawIndex = value;
         }
 
-        public static int fps => FPSCounter.GetFPS(0);
+        public static int fps
+        {
+            get
+            {
+                return FPSCounter.GetFPS(0);
+            }
+        }
 
         public static RenderTarget2D screenTarget
         {

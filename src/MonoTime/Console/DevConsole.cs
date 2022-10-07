@@ -466,7 +466,7 @@ namespace DuckGame
             return commands;
         }
 
-        public static void RunCommand(string command, bool writeExecutedCommand = true)
+        public static void RunCommand(string command)
         {
             if (DG.buildExpired)
                 return;
@@ -489,7 +489,7 @@ namespace DuckGame
                 ConsoleCommand consoleCommand1 = new(command);
                 string pKeyword = consoleCommand1.NextWord();
 
-                if (writeExecutedCommand)
+                if (_core.writeExecutedCommand)
                 {
                     _core.lines.Enqueue(new DCLine
                     {
@@ -497,7 +497,7 @@ namespace DuckGame
                         color = Color.White
                     });
                 }
-
+                _core.writeExecutedCommand = true;
                 string str1 = null;
                 int num = int.MinValue;
                 string str2 = "";

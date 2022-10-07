@@ -32,8 +32,8 @@ namespace DuckGame
         public bool initialized;
         private static int numExperienceProfiles;
 
-        public List<Profile> all => DuckNetwork.active ? DuckNetwork.profiles : _profiles;
-
+        public IEnumerable<Profile> all => DuckNetwork.active ? DuckNetwork.profiles : _profiles;
+        public List<Profile> alllist => DuckNetwork.active ? DuckNetwork.profiles : _profiles;
         public List<Profile> allCustomProfiles
         {
             get

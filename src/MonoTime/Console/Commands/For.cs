@@ -10,7 +10,8 @@
         {
             for (int i = 0; i < times; i++)
             {
-                DevConsole.RunCommand(command.Replace(variableName, i.ToString()), false);
+                DevConsole.core.writeExecutedCommand = false;
+                DevConsole.RunCommand(command.Replace(variableName, i.ToString()));
             }
 
             return $"|DGBLUE|Repeated the command [{command}], [{times}] times!";

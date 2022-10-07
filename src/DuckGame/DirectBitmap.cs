@@ -7,13 +7,13 @@ namespace DuckGame
 {
     public class DirectBitmap : IDisposable
     {
-        public Bitmap Bitmap { get; set; }
-        public int[] Bits { get; set; }
-        public bool Disposed { get; private set; }
-        public int Height { get; private set; }
-        public int Width { get; private set; }
+        public Bitmap Bitmap;
+        public int[] Bits;
+        public bool Disposed;
+        public int Height;
+        public int Width;
 
-        protected GCHandle BitsHandle { get; private set; }
+        protected GCHandle BitsHandle;
 
         public DirectBitmap(int width, int height)
         {
@@ -70,8 +70,8 @@ namespace DuckGame
         }
         public void UnPink()
         {
-            for (int y = 0; y < Bitmap.Height; y++)
-                for (int x = 0; x < Bitmap.Width; x++)
+            for (int y = 0; y < Height; y++)
+                for (int x = 0; x < Width; x++)
                 {
                     System.Drawing.Color PixelColor = this.GetPixel(x, y);
                     if (PixelColor.R == 255 && PixelColor.B == 255 && PixelColor.G == 0 && PixelColor.A == 255)

@@ -8,7 +8,8 @@
         {
             for (int i = 0; i < times; i++)
             {
-                DevConsole.RunCommand(command, false);
+                DevConsole.core.writeExecutedCommand = false;
+                DevConsole.RunCommand(command);
             }
 
             return $"|DGBLUE|Repeated the command [{command}], [{times}] times!";

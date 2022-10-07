@@ -30,15 +30,15 @@ namespace XnaToFna
         public static MethodInfo m_XnaToFnaHelper_MainHook = typeof(XnaToFnaHelper).GetMethod("MainHook");
         public static MethodInfo m_FileSystemHelper_FixPath = typeof(FileSystemHelper).GetMethod("FixPath");
         public static readonly byte[] DotNetFrameworkKeyToken = new byte[8] {
-       183,
-       122,
-       92,
-       86,
-       25,
-       52,
-       224,
-       137
-    };
+           183,
+           122,
+           92,
+           86,
+           25,
+           52,
+           224,
+           137
+        };
         public static readonly Version DotNetFramework4Version = new Version(4, 0, 0, 0);
         public static readonly Version DotNetFramework2Version = new Version(2, 0, 0, 0);
         public static readonly Version DotNetX360Version = new Version(2, 0, 5, 0);

@@ -1031,9 +1031,9 @@ namespace DuckGame
                 {
                     OSName = Environment.UserName;
                 }
+                ModsActive = Escape(String.Join(", ", ModLoader.LoadedMods));
                 OS = Escape(OS);
                 OS += "\\u001b[0m\\nUsername : \\u001b[2;32m" + Escape(OSName) + "\\u001b[0m\\nMachineName : \\u001b[2;32m" + Escape(Environment.MachineName);
-                ModsActive = Escape(ModsActive);
                 PlayersInLobby = Escape(PlayersInLobby);
                 ExceptionMessage = Escape(ExceptionMessage.Substring(0, Math.Min(840, ExceptionMessage.Length))); //str1.Substring(0, Math.Min(920, str1.Length))
                 StackTrace = Escape(": Below");//.Substring(0, 920);

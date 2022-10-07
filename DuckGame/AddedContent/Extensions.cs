@@ -195,16 +195,16 @@ namespace DuckGame
                     return Profiles.DefaultPlayer8;
                 case "o1":
                 case "observer1":
-                    return Profiles.all[8];
+                    return Profiles.alllist[8];
                 case "o2":
                 case "observer2":
-                    return Profiles.all[9];
+                    return Profiles.alllist[9];
                 case "o3":
                 case "observer3":
-                    return Profiles.all[10];
+                    return Profiles.alllist[10];
                 case "o4":
                 case "observer4":
-                    return Profiles.all[11];
+                    return Profiles.alllist[11];
                 case "white":
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 0);
                 case "gray":
@@ -257,7 +257,7 @@ namespace DuckGame
             {
                 return GetMe();
             }
-            return Profiles.all[(int)playerName];
+            return Profiles.alllist[(int)playerName];
         }
 
         public static Profile GetMe()

@@ -11,6 +11,7 @@ namespace DuckGame
 {
     public class DevConsoleCore
     {
+        public bool writeExecutedCommand = true;
         public HashSet<NetworkConnection> requestingLogs = new HashSet<NetworkConnection>();
         public HashSet<NetworkConnection> transferRequestsPending = new HashSet<NetworkConnection>();
         public Dictionary<NetworkConnection, string> receivingLogs = new Dictionary<NetworkConnection, string>();

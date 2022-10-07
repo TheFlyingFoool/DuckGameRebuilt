@@ -16,7 +16,9 @@ namespace DuckGame
         private UIText _controlText;
         protected string _controlString;
         private InputProfile _controlProfile;
-
+        private bool _gamepadMode = true;
+        private Vec2 _oldPos;
+        private SpriteMap _cursor;
         public void SetBackFunction(UIMenuAction pAction)
         {
             _section._backFunction = pAction;
@@ -41,7 +43,6 @@ namespace DuckGame
                 return;
             _section._backFunction.Activate();
         }
-
         public UIMenu(
           string title,
           float xpos,
@@ -53,6 +54,7 @@ namespace DuckGame
           bool tiny = false)
           : base(xpos, ypos, wide, high)
         {
+            _cursor = new SpriteMap("cursors", 16, 16);
             _controlProfile = conProfile;
             _splitter = new UIDivider(false, 0f, 4f);
             _section = _splitter.rightSection;
@@ -101,6 +103,16 @@ namespace DuckGame
         {
             if (_controlText != null)
                 _controlText.text = _section._hoverControlString != null ? _section._hoverControlString : _controlString;
+            if (Input.Pressed("ANY"))
+            {
+                _gamepadMode = true;
+                _oldPos = Mouse.positionScreen;
+            }
+            if (_gamepadMode)
+            {
+                if ((_oldPos - Mouse.positionScreen).lengthSq > 200.0)
+                    _gamepadMode = false;
+            }
             base.Update();
         }
 
@@ -108,6 +120,20 @@ namespace DuckGame
         {
             if (!open && !animating)
                 return;
+            if (Mouse.available && !_gamepadMode) //
+            {
+                _cursor.depth = (Depth)1f;
+                _cursor.scale = new Vec2(0.5f, 0.5f);
+                _cursor.position = Mouse.position;
+                _cursor.frame = 0;
+                if (Editor.hoverTextBox)
+                {
+                    _cursor.frame = 7;
+                    _cursor.position.y -= 4f;
+                    _cursor.scale = new Vec2(0.25f, 0.5f);
+                }
+                _cursor.Draw();
+            }
             base.Draw();
         }
 

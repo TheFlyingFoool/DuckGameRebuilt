@@ -47,7 +47,7 @@ namespace DuckGame
         public static string compressedLevelName = null;
         public static int numSlots = 4;
         private static UIMenuActionCloseMenuCallFunction.Function _modsAcceptFunction;
-        //private static UIMenu _ducknetMenu;
+        private static UIMenu _ducknetMenu;
         private static UIComponent _uhOhGroup;
         private static UIMenu _uhOhMenu;
         public static bool invited;
@@ -886,7 +886,7 @@ namespace DuckGame
                 isPauseMenu = true
             };
             core._ducknetMenu = new UIMenu("@LWING@MULTIPLAYER@RWING@", num1 / 2f, num2 / 2f, 210f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
-            //DuckNetwork._ducknetMenu = DuckNetwork.core._ducknetMenu;
+            DuckNetwork._ducknetMenu = DuckNetwork.core._ducknetMenu;
             core._confirmMenu = whoOpen.slotType != SlotType.Local ? new UIMenu("REALLY QUIT?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT") : new UIMenu("REALLY BACK OUT?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", num1 / 2f, num2 / 2f, 10f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._confirmKick = new UIMenu("REALLY KICK?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");

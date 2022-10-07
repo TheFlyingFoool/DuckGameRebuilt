@@ -534,7 +534,7 @@ namespace DuckGame
                 if (MonoMain.logFileOperations)
                     DevConsole.Log(DCSection.General, "Options.MergeDefault()");
                 Profile experienceProfile = Profiles.experienceProfile;
-                Profile p = Profiles.all[0];
+                Profile p = Profiles.alllist[0];
                 Profiles.Save(experienceProfile, "__backup_");
                 Profiles.Save(p, "__backup_");
                 experienceProfile.numSandwiches += p.numSandwiches;
