@@ -9,8 +9,8 @@ namespace DuckGame
 {
     public class WoodDebris : PhysicsParticle
     {
-        private static int kMaxObjects = 64;
-        private static WoodDebris[] _objects = new WoodDebris[WoodDebris.kMaxObjects];
+        public static int kMaxObjects = 64;
+        public static WoodDebris[] _objects = new WoodDebris[WoodDebris.kMaxObjects];
         private static int _lastActiveObject = 0;
         private SpriteMap _sprite;
 

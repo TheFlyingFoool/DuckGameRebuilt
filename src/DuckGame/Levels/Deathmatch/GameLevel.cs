@@ -33,7 +33,9 @@ namespace DuckGame
 
         public bool isRandom => _randomLevel != null;
 
-        public bool Raining;
+        public static bool Raining;
+        public float rainwind;
+        public bool Snowing;
         public void SkipMatch()
         {
             if (Network.isActive && Network.isServer)
@@ -80,7 +82,6 @@ namespace DuckGame
                 _randomLevel = LevelGenerator.MakeLevel(seed: seed);
                 seed = _randomLevel.seed;
             }
-            else if (Rando.Int(3) == 0) Raining = true;
             base.Initialize();
             if (Network.isActive)
                 Level.core.gameInProgress = true;
@@ -168,6 +169,20 @@ namespace DuckGame
             }
             Vec2 vec2_2 = zero / num;
             followCam.Adjust();
+
+            if (level != "RANDOM" && !customLevel && DGRSettings.S_RandomWeather)
+            {
+                if (Rando.Int(2) == 0)
+                {
+                    if (cold) Snowing = true;
+                    else if (First<NatureTileset>() != null)
+                    {
+                        Raining = true;
+                        rainwind = Rando.Float(-2, 2);
+                        if (Rando.Int(1) == 0) rainwind *= 2;
+                    }
+                }
+            }
         }
 
         protected override void OnTransferComplete(NetworkConnection c)
@@ -213,7 +228,7 @@ namespace DuckGame
                     f = Maths.Clamp(f - 2, 1, 100);
                     for (int i = 0; i < f; i++)
                     {
-                        Level.Add(new RainParticel(new Vec2(Rando.Float(topLeft.x - 400, bottomRight.x + 300), topLeft.y - 200)));
+                        Level.Add(new RainParticel(new Vec2(Rando.Float(topLeft.x - 400, bottomRight.x + 400), topLeft.y - 200), rainwind));
                     }
                 }
             }

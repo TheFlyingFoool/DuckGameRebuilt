@@ -285,15 +285,18 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(dGRSettings, "SpriteAtlas")), true);
             menu.Add(new UIMenuItemToggle("Graphics Culling", field: new FieldBinding(dGRSettings, "GraphicsCulling")), true);
             menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC")), true);
-            menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(dGRSettings, "ParticleMultiplier", 0, 6, 1), valStrings: new List<string>()
+            menu.Add(new UIMenuItemToggle("Random Weather", field: new FieldBinding(dGRSettings, "RandomWeather")), true);
+            menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse")), true);
+            menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(dGRSettings, "ParticleMultiplier", 0, 7, 1), valStrings: new List<string>()
             {
-                "None",
-                "Minimum",
-                "Low",
-                "Default",
-                "Many",
-                "EXTREME",
-                "UNCOUNTABLE"
+                "None     ",
+                "Minimum     ",
+                "Low     ",
+                "Default     ",
+                "Many     ",
+                "EXTREME     ",
+                "OMEGA     ",
+                "|RED|UNCOUNTABLE"
             }), true);
             menu.Add(new UIMenuItemNumber("Rebuilt Effect", field: new FieldBinding(dGRSettings, "RebuiltEffect", 0, 2, 1), valStrings: new List<string>()
             {

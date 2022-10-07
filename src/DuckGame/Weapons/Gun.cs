@@ -581,11 +581,13 @@ namespace DuckGame
 
         public void PopShell(bool isMessage = false)
         {
-            if (!(isServerForObject | isMessage) || _ammoType == null)
-                return;
-            _ammoType.PopShell(x, y, -offDir);
-            if (isMessage)
-                return;
+            if (!(isServerForObject | isMessage) || _ammoType == null) return;
+            int iters = (int)Math.Ceiling(DGRSettings.ActualParticleMultiplier);
+            for (int i = 0; i < iters; i++)
+            {
+                _ammoType.PopShell(x, y, -offDir);
+            }
+            if (isMessage) return;
             Send.Message(new NMPopShell(this), NetMessagePriority.UnreliableUnordered);
         }
 

@@ -9,8 +9,8 @@ namespace DuckGame
 {
     public class Spark : PhysicsParticle, IFactory
     {
-        private static int kMaxSparks = 64;
-        private static Spark[] _sparks = new Spark[Spark.kMaxSparks];
+        public static int kMaxSparks = 64;
+        public static Spark[] _sparks = new Spark[Spark.kMaxSparks];
         private static int _lastActiveSpark = 0;
         private float _killSpeed = 0.03f;
         public Color _color;

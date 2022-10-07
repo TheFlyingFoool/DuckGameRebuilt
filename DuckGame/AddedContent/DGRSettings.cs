@@ -45,6 +45,27 @@ namespace DuckGame
             set
             {
                 S_ParticleMultiplier = value;
+                //HELL INCOMING
+                BreathSmoke.kMaxObjects = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
+                BreathSmoke._objects = new BreathSmoke[BreathSmoke.kMaxObjects];
+
+                ConfettiParticle.kMaxSparks = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
+                ConfettiParticle._sparks = new ConfettiParticle[ConfettiParticle.kMaxSparks];
+
+                Feather.kMaxObjects = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
+                Feather._objects = new Feather[Feather.kMaxObjects];
+
+                MetalRebound.kMaxObjects = (int)Maths.Clamp(32f * ActualParticleMultiplier, 32, 5120);
+                MetalRebound._objects = new MetalRebound[MetalRebound.kMaxObjects];
+
+                Spark.kMaxSparks = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
+                Spark._sparks = new Spark[Spark.kMaxSparks];
+
+                WagnusChargeParticle.kMaxWagCharge = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
+                WagnusChargeParticle._sparks = new WagnusChargeParticle[WagnusChargeParticle.kMaxWagCharge];
+
+                WoodDebris.kMaxObjects = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
+                WoodDebris._objects = new WoodDebris[WoodDebris.kMaxObjects];
             }
         }
         [AutoConfigField]
@@ -62,7 +83,8 @@ namespace DuckGame
                     3 => 1, //DEFAULT
                     4 => 2, //MANY
                     5 => 4, //EXTREME
-                    6 => 8, //UNCONTAUNBLE
+                    6 => 8, //OMEGA
+                    7 => 16, //UNCONTAUNBLE
                     _ => 0, //NONE
                 };
             }
@@ -96,6 +118,33 @@ namespace DuckGame
         }
         [AutoConfigField]
         public static bool s_dubberspeed = false;
+
+        public bool RandomWeather
+        {
+            get
+            {
+                return S_RandomWeather;
+            }
+            set
+            {
+                S_RandomWeather = value;
+            }
+        }
+        [AutoConfigField]
+        public static bool S_RandomWeather = true;
+        public bool MenuMouse
+        {
+            get
+            {
+                return S_MenuMouse;
+            }
+            set
+            {
+                S_MenuMouse = value;
+            }
+        }
+        [AutoConfigField]
+        public static bool S_MenuMouse = true;
         public int RebuiltEffect
         {
             get

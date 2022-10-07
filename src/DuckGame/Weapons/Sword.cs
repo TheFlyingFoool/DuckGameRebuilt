@@ -186,7 +186,9 @@ namespace DuckGame
             }
             Vec2 normalized = (position - this.barrelPosition).normalized;
             Vec2 barrelPosition = this.barrelPosition;
-            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
+            int ix = (int)(DGRSettings.ActualParticleMultiplier * 6);
+            float f = 24f / ix;
+            for (int index = 0; index < ix; ++index)
             {
                 Spark spark = Spark.New(barrelPosition.x, barrelPosition.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f)));
                 if (this is OldEnergyScimi)
@@ -195,7 +197,7 @@ namespace DuckGame
                     spark._width = 1f;
                 }
                 Level.Add(spark);
-                barrelPosition += normalized * 4f;
+                barrelPosition += normalized * f;
             }
             if (duck != null)
                 RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));

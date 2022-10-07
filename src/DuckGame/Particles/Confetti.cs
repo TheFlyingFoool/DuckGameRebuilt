@@ -11,8 +11,8 @@ namespace DuckGame
 {
     public class ConfettiParticle : PhysicsParticle, IFactory
     {
-        private static int kMaxSparks = 64;
-        private static ConfettiParticle[] _sparks = new ConfettiParticle[ConfettiParticle.kMaxSparks];
+        public static int kMaxSparks = 64;
+        public static ConfettiParticle[] _sparks = new ConfettiParticle[ConfettiParticle.kMaxSparks];
         private static int _lastActiveSpark = 0;
         private float _killSpeed = 0.03f;
         public Color _color;

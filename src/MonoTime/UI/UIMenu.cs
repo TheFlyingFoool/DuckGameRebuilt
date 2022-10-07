@@ -17,7 +17,20 @@ namespace DuckGame
         protected string _controlString;
         private InputProfile _controlProfile;
         public bool gamepadMode = true;
-        public bool domouse = true;
+        public bool domouse
+        {
+            get
+            {
+                if (!DGRSettings.S_MenuMouse) return false;
+                return _domouse;
+            }
+            set
+            {
+                _domouse = value;
+            }
+        }
+
+        public bool _domouse = true;
         private Vec2 _oldPos;
         private SpriteMap _cursor;
         public void SetBackFunction(UIMenuAction pAction)

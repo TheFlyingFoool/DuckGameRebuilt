@@ -8,36 +8,39 @@ namespace DuckGame
 {
     public class RainParticel : Thing
     {
-        public RainParticel(Vec2 v)
+        public RainParticel(Vec2 v, float mult = 1)
         {
             lPos = v;
-            pos = v;
-            rY = Rando.Float(5, 7);
-            rX = Rando.Float(1, 2);
-            c = new Color(0, 112, 168);
-            c.a = (byte)Rando.Int(127, 255);
+            position = v;
+            rY = Rando.Float(6, 10);
+            rX = Rando.Float(1, 2) * mult;
+            Level.CheckRay<Block>(position, position + new Vec2(rX, rY) * 10000, null, out yEnd);
         }
         public override void Update()
         {
-            pos.x += rX;
-            pos.y += rY;
-            Block b = Level.CheckPoint<Block>(pos);
-            if (b != null)
+            x += rX;
+            y += rY;
+            if (position.y > yEnd.y)
             {
-                Level.Add(new WaterSplash(pos.x, b.top, Fluid.Water));
+                Level.Add(new WaterSplash(position.x, yEnd.y, Fluid.Water));
                 Level.Remove(this);
             }
-            else if (pos.y > Level.current.bottomRight.y + 200) Level.Remove(this);
+            else if (position.y > Level.current.bottomRight.y + 200) Level.Remove(this);
         }
         public override void Draw()
         {
-            Graphics.DrawLine(lPos, pos, c, 1.6f, 1.1f);
-            lPos = pos;
+            if (x < Level.current.camera.left || x > Level.current.camera.right)
+            {
+                lPos = position;
+                return;
+            }
+            Graphics.DrawLine(lPos, position, c, 1.6f, 1.1f);
+            lPos = position;
         }
-        public Color c;
+        public Vec2 yEnd;
+        public static Color c = new Color(0, 112, 168);
         public float rY;
         public float rX;
         public Vec2 lPos;
-        public Vec2 pos;
     }
 }

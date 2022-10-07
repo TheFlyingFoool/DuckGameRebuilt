@@ -11,8 +11,8 @@ namespace DuckGame
 {
     public class WagnusChargeParticle : Thing, IFactory
     {
-        private static int kMaxWagCharge = 64;
-        private static WagnusChargeParticle[] _sparks = new WagnusChargeParticle[WagnusChargeParticle.kMaxWagCharge];
+        public static int kMaxWagCharge = 64;
+        public static WagnusChargeParticle[] _sparks = new WagnusChargeParticle[WagnusChargeParticle.kMaxWagCharge];
         private static int _lastActiveWagCharge = 0;
         private Thing _target;
         private float life = 1f;

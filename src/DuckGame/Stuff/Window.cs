@@ -165,8 +165,12 @@ namespace DuckGame
                 }
                 if (this is FloorWindow)
                 {
-                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
-                        Level.Add(new GlassDebris(false, left + index * 4, y, -Rando.Float(2f), -Rando.Float(2f), 1));
+                    int ix = (int)(DGRSettings.ActualParticleMultiplier * 8);
+                    float fr = 32f / ix;
+                    for (int index = 0; index < ix; ++index)
+                    {
+                        Level.Add(new GlassDebris(false, left + index * fr, y, -Rando.Float(2f), -Rando.Float(2f), 1));
+                    }
                     foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(topLeft + new Vec2(-2f, -3f), topRight + new Vec2(2f, -3f)))
                     {
                         physicsObject._sleeping = false;
@@ -175,8 +179,12 @@ namespace DuckGame
                 }
                 else
                 {
-                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
-                        Level.Add(new GlassDebris(false, x, top + index * 4, -Rando.Float(2f), -Rando.Float(2f), 1, tint.value));
+                    int ix = (int)(DGRSettings.ActualParticleMultiplier * 8);
+                    float fr = 32f / ix;
+                    for (int index = 0; index < ix; ++index)
+                    {
+                        Level.Add(new GlassDebris(false, x, top + index * fr, -Rando.Float(2f), -Rando.Float(2f), 1, tint.value));
+                    }
                 }
                 SFX.Play("glassBreak");
             }
