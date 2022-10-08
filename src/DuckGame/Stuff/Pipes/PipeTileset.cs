@@ -56,6 +56,7 @@ namespace DuckGame
         public PipeTileset(float x, float y, string pSprite)
           : base(x, y)
         {
+            shouldbegraphicculled = false; // this his here because background pipes dont play well with graphic culling, mabye look into doing it better in this case
             _editorName = "Pipe";
             editorTooltip = "Travel through pipes!";
             layer = Layer.Game;
@@ -754,7 +755,7 @@ namespace DuckGame
             Color color = graphic.color;
             if (IsBackground())
             {
-                depth = (Depth)(pipeDepth - 1.8f);
+                depth = pipeDepth - 1.8f;
                 graphic.color = color * 0.5f;
                 graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, byte.MaxValue);
             }

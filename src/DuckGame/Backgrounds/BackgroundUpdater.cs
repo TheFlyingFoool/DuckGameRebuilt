@@ -40,6 +40,7 @@ namespace DuckGame
         public BackgroundUpdater(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            shouldbegraphicculled = false;
             _isStatic = true;
             _opaque = true;
             editorTooltip = "Adds a parallaxing background visual to the level (limit 1 per level)";

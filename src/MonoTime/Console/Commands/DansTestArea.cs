@@ -155,8 +155,13 @@ namespace DuckGame
             //}
 
         }
+        [DevConsoleCommand]
+        public static void graphiccull()
+        {
+            DGRSettings.S_GraphicsCulling = !DGRSettings.S_GraphicsCulling;
+            DevConsole.Log("grahpic culling " + DGRSettings.S_GraphicsCulling.ToString());
 
-
+        }
         public static bool looking;
         [DevConsoleCommand(Name = "search")]
         public static void Search()

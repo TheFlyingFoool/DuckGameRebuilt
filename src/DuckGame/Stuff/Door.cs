@@ -73,6 +73,7 @@ namespace DuckGame
         public Door(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            shouldbegraphicculled = false;
             objective = new EditorProperty<bool>(false, this);
             _maxHealth = 50f;
             _hitPoints = 50f;

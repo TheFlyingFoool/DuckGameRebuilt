@@ -20,6 +20,7 @@ namespace DuckGame
         public FunBeam(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            shouldbegraphicculled = false;
             _beam = new SpriteMap("funBeam", 16, 16);
             _beam.ClearAnimations();
             _beam.AddAnimation("idle", 1f, true, 0, 1, 2, 3, 4, 5, 6, 7);

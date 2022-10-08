@@ -20,6 +20,7 @@ namespace DuckGame
     /// </summary>
     public abstract class Thing : Transform
     {
+        public bool shouldbegraphicculled = true;
         public bool shouldbeinupdateloop = true;
         public int hashcodeindex; // dont touch :)
         public Vec2 oldposition = Vec2.Zero;

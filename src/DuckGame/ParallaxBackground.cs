@@ -25,6 +25,7 @@ namespace DuckGame
         public ParallaxBackground(string image, float vx, float vdepth, int hRepeat = 1)
           : base()
         {
+            shouldbegraphicculled = false;
             _sprite = new Sprite(image);
             graphic = _sprite;
             x = vx;
@@ -44,6 +45,7 @@ namespace DuckGame
         public ParallaxBackground(Texture2D t)
           : base()
         {
+            shouldbegraphicculled = false;
             _sprite = new Sprite((Tex2D)t);
             graphic = _sprite;
             x = 0f;
