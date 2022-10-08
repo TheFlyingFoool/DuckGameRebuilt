@@ -220,6 +220,7 @@
     <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\MemberAttributePairHandler.cs" />
     <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\ProgressValue.cs" />
     <Compile Include="DuckGame\AddedContent\klof44\DartGrenade.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Bubble.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ChangePlus.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\FreezeSmoke.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\PizzaLauncher.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\RainParticel.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\RoomEditorExtra.cs" />
+    <Compile Include="DuckGame\AddedContent\NiK0\SnowLayer.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
     <Compile Include="DuckGame\AddedContent\Extensions.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\NMDuckShatter.cs" />

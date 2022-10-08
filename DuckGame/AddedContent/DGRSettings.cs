@@ -132,7 +132,7 @@ namespace DuckGame
         [AutoConfigField]
         public static bool s_dubberspeed = false;
 
-        public bool RandomWeather
+        public float RandomWeather
         {
             get
             {
@@ -144,7 +144,7 @@ namespace DuckGame
             }
         }
         [AutoConfigField]
-        public static bool S_RandomWeather = true;
+        public static float S_RandomWeather = 0.3f;
         public bool MenuMouse
         {
             get

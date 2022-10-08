@@ -15,8 +15,8 @@ namespace DuckGame
         private float _moveSpeed = 0.1f;
         private float _sinSize = 0.1f;
         //private float _drift;
-        private float _size;
-
+        public float _size;
+        public bool slowDis;
         public SnowFallParticle(float xpos, float ypos, Vec2 startVel, bool big = false)
           : base(xpos, ypos)
         {
@@ -38,7 +38,17 @@ namespace DuckGame
             if (vSpeed > 1.0)
                 vSpeed = 1f;
             if (_grounded)
+            {
+                if (slowDis)
+                {
+                    alpha -= 0.001f;
+                    if (alpha <= 0)
+                    {
+                        Level.Remove(this);
+                    }
+                }
                 return;
+            }
             float num = (float)Math.Sin(_sin) * _sinSize;
             _sin += _moveSpeed;
             x += Rando.Float(-0.3f, 0.3f);

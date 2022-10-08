@@ -22,7 +22,7 @@ namespace DuckGame
             y += rY;
             if (position.y > yEnd.y)
             {
-                Level.Add(new WaterSplash(position.x, yEnd.y, Fluid.Water));
+                Level.Add(new WaterSplash(position.x, yEnd.y, flud));
                 Level.Remove(this);
             }
             else if (position.y > Level.current.bottomRight.y + 200) Level.Remove(this);
@@ -34,10 +34,11 @@ namespace DuckGame
                 lPos = position;
                 return;
             }
-            Graphics.DrawLine(lPos, position, c, 1.6f, 1.1f);
+            Graphics.DrawLine(lPos, position, c, 2f, 1.1f);
             lPos = position;
         }
         public Vec2 yEnd;
+        public static FluidData flud = Fluid.Water;
         public static Color c = new Color(0, 112, 168);
         public float rY;
         public float rX;

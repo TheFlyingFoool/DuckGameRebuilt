@@ -815,6 +815,7 @@ namespace DuckGame
             {
                 a = backgroundColor.a
             };
+            color *= Layer.Parallax.fade;
             if (clearScreen)
             {
                 if (!Options.Data.fillBackground)

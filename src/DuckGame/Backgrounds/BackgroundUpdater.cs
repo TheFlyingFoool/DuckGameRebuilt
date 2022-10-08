@@ -9,7 +9,7 @@ namespace DuckGame
 {
     public class BackgroundUpdater : Thing
     {
-        protected ParallaxBackground _parallax;
+        public ParallaxBackground _parallax;
         protected float _lastCameraX;
         protected bool _update = true;
         protected bool _yParallax = true;

@@ -14,7 +14,7 @@ namespace DuckGame
     {
         protected bool _killed;
         protected bool _cannotBeCancelled;
-        protected SoundEffectInstance _instance;
+        public SoundEffectInstance _instance;
         protected bool _pooled;
         protected string _name = "";
         protected float _volume = 1f;

@@ -14,7 +14,7 @@ namespace DuckGame
     {
         public float FUCKINGYOFFSET;
         public Color color = Color.White;
-        private Sprite _sprite;
+        public Sprite _sprite;
         private Dictionary<int, ParallaxZone> _zones = new Dictionary<int, ParallaxZone>();
         private int _hRepeat = 1;
         public float xmove;

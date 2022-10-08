@@ -11,7 +11,7 @@ namespace DuckGame
 {
     public class LoopingSound
     {
-        private Sound _effect;
+        public Sound _effect;
         private float _lerpVolume;
         private float _lerpSpeed = 0.1f;
         private bool _killSound;
