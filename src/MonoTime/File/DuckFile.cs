@@ -899,8 +899,10 @@ namespace DuckGame
             return levelData;
         }
 
-        public static LevelData LoadLevel(string path) => DuckFile.LoadLevel(path, false);
-
+        public static LevelData LoadLevel(string path)
+        {
+            return DuckFile.LoadLevel(path, false);
+        }
         public static bool FileExists(string pPath)
         {
             if (Program.IsLinuxD || Program.isLinux)

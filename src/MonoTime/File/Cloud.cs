@@ -151,7 +151,7 @@ namespace DuckGame
                 if (MonoMain.logFileOperations)
                     DevConsole.Log(DCSection.General, "Cloud.ReplaceLocalFileWithCloudFile(" + pFile.cloudPath + ")");
                 byte[] data = Steam.FileRead(pFile.cloudPath);
-                if (data == null)
+                if (data == null || data.Length == 0)
                     return;
                 DuckFile.TryFileOperation(() =>
                {

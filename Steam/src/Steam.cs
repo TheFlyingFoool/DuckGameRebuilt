@@ -434,6 +434,10 @@ public class Steam : IDisposable {
         int size = SteamRemoteStorage.GetFileSize(name);
         byte[] data = new byte[size];
         int rv = SteamRemoteStorage.FileRead(name, data, size);
+        if (data != null || data.Length == 0)
+        {
+            data = null;
+        }
         return data;
     }
 

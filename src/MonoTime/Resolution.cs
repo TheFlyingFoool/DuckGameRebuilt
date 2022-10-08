@@ -46,7 +46,10 @@ namespace DuckGame
             graphics.Dispose();
             return dpiX;
         }
-
+        public static GraphicsDeviceManager GetGraphics()
+        {
+            return Resolution._device;
+        }
         public static void Set(Resolution pResolution)
         {
             Resolution._pendingResolution = pResolution;
@@ -235,13 +238,13 @@ namespace DuckGame
             Resolution.SortDisplaySizes();
             string[] strArray = new string[7]
             {
-        "Finished sorting display modes (F(",
-        Resolution.supportedDisplaySizes[ScreenMode.Fullscreen].Count.ToString(),
-        ") W(",
-        null,
-        null,
-        null,
-        null
+                "Finished sorting display modes (F(",
+                Resolution.supportedDisplaySizes[ScreenMode.Fullscreen].Count.ToString(),
+                ") W(",
+                null,
+                null,
+                null,
+                null
             };
             int count = Resolution.supportedDisplaySizes[ScreenMode.Windowed].Count;
             strArray[3] = count.ToString();

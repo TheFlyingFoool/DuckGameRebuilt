@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RectpackSharp;
 using System;
@@ -205,7 +206,28 @@ namespace DuckGame
             DevConsole.Log("Trying to join " + id);
             Level.current = new JoinServer(id);
         }
-
+        [DevConsoleCommand(Name = "res")]
+        public static void Res(int width, int height, int screenmode)
+        {
+            Resolution r = new Resolution()
+            {
+                dimensions = new Vec2(width, height)
+            };
+            if (screenmode < 1 && screenmode > 4)
+            {
+                DevConsole.Log("Invalid input 1 - 4 = Windowed, Fullscreen, Borderless, Max", Color.Red);
+                return;
+            }
+            ScreenMode mode = (ScreenMode)screenmode;
+            r.mode = mode;
+            Resolution.Set(r);
+            Resolution.Apply();
+            //GraphicsDeviceManager device = Resolution.GetGraphics();
+            //device.PreferredBackBufferWidth = width;
+            //device.PreferredBackBufferHeight = height;
+            //device.IsFullScreen = fullscreen;
+            //device.ApplyChanges();
+        }
         [DevConsoleCommand(Name = "rlevel")]
         public static void randomnesstest2()
         {//Content.GetLevels("pyramid", LevelLocation.Content)
