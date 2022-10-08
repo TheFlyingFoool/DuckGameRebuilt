@@ -22,6 +22,7 @@ using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
 namespace DuckGame
@@ -605,6 +606,18 @@ namespace DuckGame
             Graphics.Initialize(GraphicsDevice);
             Resolution.Set(Options.LocalData.currentResolution);
             Resolution.Apply();
+            if (Program.doscreentileing)
+            {
+                Resolution r = new Resolution()
+                {
+                    dimensions = new Vec2(321, 181)
+                };
+                r.mode = ScreenMode.Windowed;
+                Resolution.Set(r);
+                Resolution.Apply();
+                SDL.SDL_SetWindowBordered(Resolution.GetWindow(), SDL.SDL_bool.SDL_FALSE);
+                SDL.SDL_SetWindowPosition(Resolution.GetWindow(), (int)Program.StartPos.x, (int)Program.StartPos.y);
+            }
             _screenCapture = new RenderTarget2D(Resolution.current.x, Resolution.current.y, true);
             _duckRun = new SpriteMap("duck", 32, 32);
             _duckRun.AddAnimation("run", 1f, true, 1, 2, 3, 4, 5, 6);

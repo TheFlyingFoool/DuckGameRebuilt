@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RectpackSharp;
+using SDL2;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -214,16 +215,16 @@ namespace DuckGame
         [DevConsoleCommand(Name = "res")]
         public static void Res(int width, int height, int screenmode)
         {
-            Resolution r = new Resolution()
-            {
-                dimensions = new Vec2(width, height)
-            };
-            if (screenmode < 1 && screenmode > 4)
+            if (screenmode < 1 || screenmode > 4)
             {
                 DevConsole.Log("Invalid input 1 - 4 = Windowed, Fullscreen, Borderless, Max", Color.Red);
                 return;
             }
-            ScreenMode mode = (ScreenMode)screenmode;
+            Resolution r = new Resolution()
+            {
+                dimensions = new Vec2(width, height)
+            };
+            ScreenMode mode = (ScreenMode)(screenmode - 1);
             r.mode = mode;
             Resolution.Set(r);
             Resolution.Apply();
@@ -233,6 +234,43 @@ namespace DuckGame
             //device.IsFullScreen = fullscreen;
             //device.ApplyChanges();
         }
+        [DevConsoleCommand(Name = "windowtoggle")]
+        public static void windowtoggle()
+        {
+            windowed = !windowed;
+            SDL.SDL_SetWindowBordered(Resolution.GetWindow(), windowed ? SDL.SDL_bool.SDL_TRUE : SDL.SDL_bool.SDL_FALSE);
+            DevConsole.Log("Windowed Mode is " + windowed.ToString());
+        }
+        public static bool windowed = true;// SDL.SDL_SetWindowPosition(Resolution._window, 0, 0);
+
+
+        [DevConsoleCommand(Name = "windowpos")]
+        public static void windowtoggle(int x, int y)
+        {
+            SDL.SDL_SetWindowPosition(Resolution.GetWindow(), x, y);
+            DevConsole.Log("Set Window Pos is " + x.ToString() + " " + y.ToString());
+        }
+        [DevConsoleCommand(Name = "tilescreen")]
+        public static void tilescreen()
+        {
+            int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            int height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            string tileinfo = "+screentile";
+            for (int x = 0; x < width; x += 321)
+            {
+                for (int y = 0; y < height; y += 181)
+                {
+                    Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile " + x.ToString() + " " + y.ToString());
+                }
+            }
+            //Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile 0 0");
+            //Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile 321 0"); //+screentile 0 0
+            DevConsole.Log("Tiling with DGs" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width.ToString() + " " + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height.ToString());
+            Application.Exit();
+            Program.main.KillEverything();
+            Program.main.Exit();
+        }
+        // SDL.SDL_SetWindowBordered(Resolution._window, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); 
         [DevConsoleCommand(Name = "rlevel")]
         public static void randomnesstest2()
         {//Content.GetLevels("pyramid", LevelLocation.Content)

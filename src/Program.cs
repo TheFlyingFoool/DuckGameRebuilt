@@ -71,7 +71,9 @@ namespace DuckGame
         public static bool lanjoiner;
         public static Assembly gameAssembly;
         public static string gameAssemblyName;
+        public static bool doscreentileing; //just a fun showing off thing
         /// <summary>The main entry point for the application.</summary>\
+        public static Vec2 StartPos = Vec2.Zero;
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
@@ -277,6 +279,37 @@ namespace DuckGame
                             catch
                             { }
                         }
+                        break;
+                    case "+screentile":
+                        doscreentileing = true;
+                        ++index;
+                        if (args.Count<string>() > index)
+                        {
+                            try
+                            {
+                                StartPos = new Vec2(Convert.ToInt32(args[index]), StartPos.y);
+                            }
+                            catch
+                            {
+                                doscreentileing = false;
+                                break;
+                            }
+
+                        }
+                         ++index;
+                        if (args.Count<string>() > index)
+                        {
+                            try
+                            {
+                                StartPos = new Vec2(StartPos.x, Convert.ToInt32(args[index]));
+                            }
+                            catch
+                            {
+                                doscreentileing = false;
+                                break;
+                            }
+                        }
+                        DevConsole.Log(StartPos.x.ToString() + " " + StartPos.y.ToString() + " " + doscreentileing.ToString());
                         break;
                     case "-nosa":
                         shouldusespriteatlas = false;

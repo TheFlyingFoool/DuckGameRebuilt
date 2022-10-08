@@ -39,20 +39,20 @@ namespace DuckGame
         public EditorProperty<bool> valid;
         public EditorProperty<bool> bars = new EditorProperty<bool>(false);
         public static List<Color> windowColors = new List<Color>()
-    {
-      new Color(102, 186, 245),
-      Color.Red,
-      Color.Orange,
-      Color.Yellow,
-      Color.Pink,
-      Color.Purple,
-      Color.Green,
-      Color.Lime,
-      Color.Maroon,
-      Color.Magenta,
-      Color.Cyan,
-      Color.DarkGoldenrod
-    };
+        {
+          new Color(102, 186, 245),
+          Color.Red,
+          Color.Orange,
+          Color.Yellow,
+          Color.Pink,
+          Color.Purple,
+          Color.Green,
+          Color.Lime,
+          Color.Maroon,
+          Color.Magenta,
+          Color.Cyan,
+          Color.DarkGoldenrod
+        };
         public bool noframe;
         public bool lobbyRemoving;
         private Vec2 _enter;

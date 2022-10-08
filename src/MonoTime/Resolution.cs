@@ -50,6 +50,10 @@ namespace DuckGame
         {
             return Resolution._device;
         }
+        public static IntPtr GetWindow()
+        {
+            return _window;
+        }
         public static void Set(Resolution pResolution)
         {
             Resolution._pendingResolution = pResolution;
