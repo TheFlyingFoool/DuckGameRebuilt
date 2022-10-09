@@ -1073,7 +1073,6 @@ namespace DuckGame
                 bool isDirty = false;
                 try
                 {
-                    throw new Exception("hi");
                     using (StreamReader st = new(Program.gameAssembly.GetManifestResourceStream("version.txt")))
                     {
                         gitVersion = st.ReadToEnd();
