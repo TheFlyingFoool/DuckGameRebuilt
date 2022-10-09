@@ -132,16 +132,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\DiscordRPC.dll</HintPath>
     </Reference>
-    <Reference Include="FNA">
-      <HintPath>.\FNA.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
+    <Reference Include="FNA, Version=22.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Mono.Cecil.dll</HintPath>
+      <HintPath>lib\FNA.dll</HintPath>
     </Reference>
-    <Reference Include="MonoMod, Version=22.5.1.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Mono.Cecil, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\MonoMod.exe</HintPath>
+      <HintPath>lib\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMod, Version=18.5.0.42592, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\MonoMod.exe</HintPath>
     </Reference>
     <Reference Include="NAudio">
       <HintPath>lib\NAudio.dll</HintPath>
@@ -1383,7 +1384,7 @@
     <Compile Include="src\DuckGame\Weapons\CorkObject.cs" />
     <Compile Include="src\DuckGame\Weapons\CorkBullet.cs" />
     <Compile Include="src\DuckGame\Weapons\CorkGun.cs" />
-	<Compile Include="DuckGame\AddedContent\YupDanielThatsMe\bat.cs" />
+    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\bat.cs" />
     <Compile Include="src\DuckGame\Weapons\SwordTaped.cs" />
     <Compile Include="src\DuckGame\Weapons\TapedGun.cs" />
     <Compile Include="src\DuckGame\Weapons\DuctTape.cs" />
