@@ -100,6 +100,7 @@ namespace DuckGame
                 }
                 Resolution._device.IsFullScreen = Resolution._pendingResolution.mode == ScreenMode.Fullscreen;
                 Resolution._device.ApplyChanges();
+                break;
             }
             if (!flag)
             {

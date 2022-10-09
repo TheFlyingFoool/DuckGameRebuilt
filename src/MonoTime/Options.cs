@@ -248,8 +248,8 @@ namespace DuckGame
                     GraphicsAdapter currentdisplay = GraphicsAdapter.Adapters[windowindex];
                     Options.LocalData.windowedFullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
                     Options.LocalData.windowedFullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
-                    //Options.LocalData.fullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
-                    //Options.LocalData.fullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
+                    Options.LocalData.fullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
+                    Options.LocalData.fullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
                 }
                 Resolution.Set(Options.Data.windowedFullscreen ? Options.LocalData.windowedFullscreenResolution : Options.LocalData.fullscreenResolution);
             }
