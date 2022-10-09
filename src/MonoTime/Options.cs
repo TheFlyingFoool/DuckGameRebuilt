@@ -294,13 +294,41 @@ namespace DuckGame
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|REBUILT|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
-            menu.Add(new UIMenuItemToggle("Dubber speed", field: new FieldBinding(dGRSettings, "dubberspeed")), true);
-            menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(dGRSettings, "SpriteAtlas")), true);
-            menu.Add(new UIMenuItemToggle("Graphics Culling", field: new FieldBinding(dGRSettings, "GraphicsCulling")), true);
-            menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC")), true);
-            menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse")), true);
-            menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(dGRSettings, "RandomWeather", 0, 10, 1), step: 1f));
-            menu.Add(new UIMenuItemSlider("Weather Particle Level", field: new FieldBinding(dGRSettings, "WeatherMultiplier", 0, 16, 1), step: 1f));
+            menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+
+            menu.Add(new UIMenuItemToggle("Graphics Culling", field: new FieldBinding(dGRSettings, "GraphicsCulling"))
+            {
+                dgrDescription = "Toggles stuff not rendering when outside the camera"
+            }, true);
+            menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(dGRSettings, "SpriteAtlas"))
+            {
+                dgrDescription = "Lowers render times using an atlas so buffer doesn't\n    constantly switch sprites (Requires restart)"
+            }, true);
+            menu.Add(new UIMenuItemToggle("Camera unfollow", field: new FieldBinding(dGRSettings, "CameraUnfollow"))
+            {
+                dgrDescription = "When the camera is big enough it stops\n     following distant players"
+            }, true);
+            menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC")) 
+            {
+                dgrDescription = "Toggles discord rich presence showing current level,\n if you're in the editor, etc (Requires restart)" 
+            }, true);
+            menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse")) 
+            {
+                dgrDescription = "Toggles the menu mouse"
+            }, true);
+            menu.Add(new UIMenuItemToggle("Dubber speed", field: new FieldBinding(dGRSettings, "dubberspeed")) 
+            {
+                dgrDescription = "For true vim users, adds keybinds from 1-9\n     for faster menu browsing" 
+            }, true);
+            menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(dGRSettings, "RandomWeather", 0, 10, 1), step: 1f) 
+            {
+                dgrDescription = "Chance for random weather to occur in levels 0% to 100%"
+            });
+            menu.Add(new UIMenuItemSlider("Weather Particle Level", field: new FieldBinding(dGRSettings, "WeatherMultiplier", 0, 16, 1), step: 1f) 
+            {
+                dgrDescription = "Particle multiplier for weather events" 
+            });
             menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(dGRSettings, "ParticleMultiplier", 0, 7, 1), valStrings: new List<string>()
             {
                 "None     ",
@@ -309,15 +337,21 @@ namespace DuckGame
                 "Default     ",
                 "Many     ",
                 "EXTREME     ",
-                "OMEGA     ",
+                "WUMBO     ",
                 "|RED|UNCOUNTABLE"
-            }), true);
+            })
+            {
+                dgrDescription = "Global particle multiplier from x0 to x16"
+            }, true);
             menu.Add(new UIMenuItemNumber("Rebuilt Effect", field: new FieldBinding(dGRSettings, "RebuiltEffect", 0, 2, 1), valStrings: new List<string>()
             {
                 "HEART",
                 "NAME",
                 "NONE :(",
-            }), true);
+            })
+            {
+                dgrDescription = "The effect displayed for other rebuilt users"
+            }, true);
 
 
             menu.Add(new UIText(" ", Color.White), true);

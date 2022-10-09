@@ -15,6 +15,7 @@ namespace DuckGame
         public MenuItemMode mode;
         public bool debug;
         public Func<bool> condition;
+        public string dgrDescription = "";
         protected UIComponent _parent;
         public bool isEnabled = true;
         protected bool _didResize;

@@ -17,7 +17,7 @@ namespace DuckGame
         protected Func<string> _textFunc;
         public int minLength;
         private float _heightAdd;
-        private InputProfile _controlProfile;
+        public InputProfile _controlProfile;
         public float specialScale;
 
         public virtual string text

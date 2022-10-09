@@ -203,11 +203,20 @@ namespace DuckGame
             float num4 = -99999f;
             Vec2 zero = Vec2.Zero;
             _removeList.Clear();
+            Profile p = DuckNetwork.localProfile;
+            Vec2 ver = Vec2.Zero;
+            if (DGRSettings.S_CameraUnfollow && p != null && p.duck != null && !p.duck.dead)
+            {
+                ver = p.duck.position;
+                if (p.duck.ragdoll != null) ver = p.duck.ragdoll.part2.position;
+                else if (p.duck._trapped != null) ver = p.duck._trapped.position;
+            }
             foreach (Thing key in _follow)
             {
                 Vec2 current = key.cameraPosition;
                 if (key.removeFromLevel)
                     _removeList.Add(key);
+                if (ver != Vec2.Zero && key is IAmADuck && !key.isServerForObject && key.position.Distance(ver) > 2222) continue;
                 if (_prevPositions.ContainsKey(key))
                 {
                     Vec2 prevPosition = _prevPositions[key];

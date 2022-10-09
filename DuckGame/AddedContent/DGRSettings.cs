@@ -46,26 +46,27 @@ namespace DuckGame
             {
                 S_ParticleMultiplier = value;
                 //HELL INCOMING
-                BreathSmoke.kMaxObjects = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
-                BreathSmoke._objects = new BreathSmoke[BreathSmoke.kMaxObjects];
+                int sixtyd = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
+                BreathSmoke.kMaxObjects = sixtyd;
+                BreathSmoke._objects = new BreathSmoke[sixtyd];
 
-                ConfettiParticle.kMaxSparks = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
-                ConfettiParticle._sparks = new ConfettiParticle[ConfettiParticle.kMaxSparks];
+                ConfettiParticle.kMaxSparks = sixtyd;
+                ConfettiParticle._sparks = new ConfettiParticle[sixtyd];
 
-                Feather.kMaxObjects = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
-                Feather._objects = new Feather[Feather.kMaxObjects];
+                Feather.kMaxObjects = sixtyd;
+                Feather._objects = new Feather[sixtyd];
 
-                MetalRebound.kMaxObjects = (int)Maths.Clamp(32f * ActualParticleMultiplier, 32, 5120);
+                MetalRebound.kMaxObjects = sixtyd / 2;
                 MetalRebound._objects = new MetalRebound[MetalRebound.kMaxObjects];
 
-                Spark.kMaxSparks = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
-                Spark._sparks = new Spark[Spark.kMaxSparks];
+                Spark.kMaxSparks = sixtyd;
+                Spark._sparks = new Spark[sixtyd];
 
-                WagnusChargeParticle.kMaxWagCharge = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
-                WagnusChargeParticle._sparks = new WagnusChargeParticle[WagnusChargeParticle.kMaxWagCharge];
+                WagnusChargeParticle.kMaxWagCharge = sixtyd;
+                WagnusChargeParticle._sparks = new WagnusChargeParticle[sixtyd];
 
-                WoodDebris.kMaxObjects = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
-                WoodDebris._objects = new WoodDebris[WoodDebris.kMaxObjects];
+                WoodDebris.kMaxObjects = sixtyd;
+                WoodDebris._objects = new WoodDebris[sixtyd];
             }
         }
         [AutoConfigField]
@@ -83,7 +84,7 @@ namespace DuckGame
                     3 => 1, //DEFAULT
                     4 => 2, //MANY
                     5 => 4, //EXTREME
-                    6 => 8, //OMEGA
+                    6 => 8, //WUMBO
                     7 => 16, //UNCONTAUNBLE
                     _ => 0, //NONE
                 };
@@ -116,6 +117,20 @@ namespace DuckGame
         }
         [AutoConfigField]
         public static bool S_GraphicsCulling = true;
+
+        public bool CameraUnfollow
+        {
+            get
+            {
+                return S_CameraUnfollow;
+            }
+            set
+            {
+                S_CameraUnfollow = value;
+            }
+        }
+        [AutoConfigField]
+        public static bool S_CameraUnfollow = true;
 
 
         public bool dubberspeed
