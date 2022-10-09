@@ -142,13 +142,17 @@ namespace DuckGame
                     //Mouse.left previnputState == InputState.Pressed
                 }
             }
+            else
+            {
+                gamepadMode = false;
+            }
             base.Update();
         }
         public override void Draw()
         {
             if (!open && !animating)
                 return;
-            if (Mouse.available && !gamepadMode) //
+            if (domouse && Mouse.available && !gamepadMode) //
             {
 
                 _cursor.depth = (Depth)1f;
