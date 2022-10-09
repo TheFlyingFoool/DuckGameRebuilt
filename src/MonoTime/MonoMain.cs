@@ -615,8 +615,8 @@ namespace DuckGame
                 r.mode = ScreenMode.Windowed;
                 Resolution.Set(r);
                 Resolution.Apply();
-                SDL.SDL_SetWindowBordered(Resolution.GetWindow(), SDL.SDL_bool.SDL_FALSE);
-                SDL.SDL_SetWindowPosition(Resolution.GetWindow(), (int)Program.StartPos.x, (int)Program.StartPos.y);
+                SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, SDL.SDL_bool.SDL_FALSE);
+                SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, (int)Program.StartPos.x, (int)Program.StartPos.y);
             }
             _screenCapture = new RenderTarget2D(Resolution.current.x, Resolution.current.y, true);
             _duckRun = new SpriteMap("duck", 32, 32);

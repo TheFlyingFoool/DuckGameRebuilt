@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -239,7 +240,19 @@ namespace DuckGame
         public static void ScreenModeChanged(string pMode)
         {
             if (pMode == "Fullscreen")
+            {
+                // From dan Auto Resize Window in cases of fullscreening, as if not it uses incorrect res
+                int windowindex = SDL2.SDL.SDL_GetWindowDisplayIndex(MonoMain.instance.Window.Handle);
+                if (windowindex >= 0 && windowindex < GraphicsAdapter.Adapters.Count)
+                {
+                    GraphicsAdapter currentdisplay = GraphicsAdapter.Adapters[windowindex];
+                    Options.LocalData.windowedFullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
+                    Options.LocalData.windowedFullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
+                    //Options.LocalData.fullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
+                    //Options.LocalData.fullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
+                }
                 Resolution.Set(Options.Data.windowedFullscreen ? Options.LocalData.windowedFullscreenResolution : Options.LocalData.fullscreenResolution);
+            }
             else
                 Resolution.Set(Options.LocalData.windowedResolution);
         }

@@ -27,6 +27,7 @@ namespace DuckGame
         public bool isDefault;
         public ScreenMode mode;
         public Vec2 dimensions;
+        public Vec2 pos = Vec2.Zero;
         public static Dictionary<ScreenMode, List<Resolution>> supportedDisplaySizes;
 
         public static Resolution adapterResolution => Resolution.GetDefault(ScreenMode.Fullscreen);
@@ -50,9 +51,9 @@ namespace DuckGame
         {
             return Resolution._device;
         }
-        public static IntPtr GetWindow()
+        public static void SetWindow(IntPtr windowhandler)
         {
-            return _window;
+             _window = windowhandler;       
         }
         public static void Set(Resolution pResolution)
         {
@@ -99,9 +100,10 @@ namespace DuckGame
                     case ScreenMode.Windowed:
                         DuckGame.Graphics.mouseVisible = false;
                         DuckGame.Graphics._screenBufferTarget = null;
-                        SDL.SDL_SetWindowBordered(Resolution._window, false ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE);// Resolution._window.FormBorderStyle = FormBorderStyle.FixedSingle;
-                        SDL.SDL_SetWindowPosition(Resolution._window, Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
+                        SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, false ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE);// Resolution._window.FormBorderStyle = FormBorderStyle.FixedSingle;
+                        //SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
                         // Resolution._window.Location = new System.Drawing.Point(Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
+                        // removed window positioning as it seems to auto center on size change atm ¯\_(ツ)_/¯, Dan
                         break;
                     case ScreenMode.Fullscreen:
                         DuckGame.Graphics.mouseVisible = false;
@@ -110,8 +112,9 @@ namespace DuckGame
                     case ScreenMode.Borderless:
                         DuckGame.Graphics.mouseVisible = false;
                         DuckGame.Graphics._screenBufferTarget = new RenderTarget2D(Options.LocalData.currentResolution.x, Options.LocalData.currentResolution.y, true, RenderTargetUsage.PreserveContents);
-                        SDL.SDL_SetWindowBordered(Resolution._window, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); //  Resolution._window.FormBorderStyle = FormBorderStyle.None;
-                        SDL.SDL_SetWindowPosition(Resolution._window, 0, 0); //Resolution._window.Location = new System.Drawing.Point(0, 0);
+                        SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); //  Resolution._window.FormBorderStyle = FormBorderStyle.None;
+                        //SDL.SDL_SetWindowPosition(Resolution._window, (int)Options.LocalData.currentResolution.pos.x, (int)Options.LocalData.currentResolution.pos.y); //Resolution._window.Location = new System.Drawing.Point(0, 0);
+                        // removed window positioning as it seems to auto center on size change atm ¯\_(ツ)_/¯, Dan
                         if (DuckGame.Graphics._screenBufferTarget.width < 400)
                         {
                             DuckGame.Graphics.snap = 1f;
@@ -145,8 +148,8 @@ namespace DuckGame
             {
                 --Resolution._takeFocus;
                 if (Resolution._takeFocus == 0)
-                    SDL.SDL_RaiseWindow(Resolution._window);
-                SDL.SDL_SetWindowInputFocus(Resolution._window);
+                    SDL.SDL_RaiseWindow(MonoMain.instance.Window.Handle);
+                SDL.SDL_SetWindowInputFocus(MonoMain.instance.Window.Handle);
                 //Resolution._window.Focus();
             }
             if (Resolution._pendingResolution == null)

@@ -228,17 +228,12 @@ namespace DuckGame
             r.mode = mode;
             Resolution.Set(r);
             Resolution.Apply();
-            //GraphicsDeviceManager device = Resolution.GetGraphics();
-            //device.PreferredBackBufferWidth = width;
-            //device.PreferredBackBufferHeight = height;
-            //device.IsFullScreen = fullscreen;
-            //device.ApplyChanges();
         }
         [DevConsoleCommand(Name = "windowtoggle")]
         public static void windowtoggle()
         {
             windowed = !windowed;
-            SDL.SDL_SetWindowBordered(Resolution.GetWindow(), windowed ? SDL.SDL_bool.SDL_TRUE : SDL.SDL_bool.SDL_FALSE);
+            SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, windowed ? SDL.SDL_bool.SDL_TRUE : SDL.SDL_bool.SDL_FALSE);
             DevConsole.Log("Windowed Mode is " + windowed.ToString());
         }
         public static bool windowed = true;// SDL.SDL_SetWindowPosition(Resolution._window, 0, 0);
@@ -247,7 +242,7 @@ namespace DuckGame
         [DevConsoleCommand(Name = "windowpos")]
         public static void windowtoggle(int x, int y)
         {
-            SDL.SDL_SetWindowPosition(Resolution.GetWindow(), x, y);
+            SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, x, y);
             DevConsole.Log("Set Window Pos is " + x.ToString() + " " + y.ToString());
         }
         [DevConsoleCommand(Name = "tilescreen")]

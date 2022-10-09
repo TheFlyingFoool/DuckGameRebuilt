@@ -1383,6 +1383,7 @@
     <Compile Include="src\DuckGame\Weapons\CorkObject.cs" />
     <Compile Include="src\DuckGame\Weapons\CorkBullet.cs" />
     <Compile Include="src\DuckGame\Weapons\CorkGun.cs" />
+	<Compile Include="DuckGame\AddedContent\YupDanielThatsMe\bat.cs" />
     <Compile Include="src\DuckGame\Weapons\SwordTaped.cs" />
     <Compile Include="src\DuckGame\Weapons\TapedGun.cs" />
     <Compile Include="src\DuckGame\Weapons\DuctTape.cs" />
