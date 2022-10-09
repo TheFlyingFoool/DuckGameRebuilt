@@ -168,13 +168,19 @@ namespace DuckGame
             string RebuiltDataPath = (pathprimer + "RebuiltData.txt");
             string RebuiltAssemblyPath = (pathprimer + "Rebuilt.dll");
             string modificationdatetime = File.GetLastWriteTime(path).ToString();
+            string saveddata = "";
             if (File.Exists(RebuiltDataPath))
             {
                 if (File.Exists(RebuiltAssemblyPath))
                 {
-                    if (File.ReadAllText(RebuiltDataPath) == modificationdatetime)
+                    saveddata = File.ReadAllText(RebuiltDataPath);
+                    if (saveddata.Contains("|"))
                     {
-                        return Assembly.LoadFile(RebuiltAssemblyPath);
+                        string[] splitdata = saveddata.Split('|');
+                        if (splitdata.Length > 1 && splitdata[0] == modificationdatetime && splitdata[1] == XnaToFnaUtil.RemapVersion.ToString())
+                        {
+                            return Assembly.LoadFile(RebuiltAssemblyPath);
+                        }
                     }
                     File.Delete(RebuiltAssemblyPath);
                 }
@@ -184,8 +190,9 @@ namespace DuckGame
             {
                 File.Delete(RebuiltAssemblyPath);
             }
-            File.WriteAllText(RebuiltDataPath, modificationdatetime);
-            MonoMain.loadMessage = "REMAPPING/LOADING MOD " + ModLoader.currentModLoadString;
+            //(modificationdatetime + " | " + XnaToFnaUtil.RemapVersion.ToString())
+            File.WriteAllText(RebuiltDataPath, (modificationdatetime + "|" + XnaToFnaUtil.RemapVersion.ToString()));
+            MonoMain.loadMessage = "REMAPPING/LOADING MOD " + ModLoader.currentModLoadString + " " + saveddata;
             string folderpath = Path.GetDirectoryName(path);
             xnaToFnaUtil = new XnaToFnaUtil();
             //xnaToFnaUtil.ScanPath(Program.GameDirectory + "DGSteamref.dll");
@@ -301,12 +308,12 @@ namespace DuckGame
                     //    modConfig.error = "!This mod does not currently work on Rebuilt!";
                     //    mod = new DisabledMod();
                     //}
-                    if (modConfig.workshopID == 2320709295UL) // Better Chat
-                    {
-                        modConfig.Disable();
-                        modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
-                        mod = new DisabledMod();
-                    }
+                    //if (modConfig.workshopID == 2320709295UL) // Better Chat the issue with this mod was its transpiler of Devconsole.Update which we kill now
+                    //{
+                    //    modConfig.Disable();
+                    //    modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
+                    //    mod = new DisabledMod();
+                    //}
                     else if (modConfig.workshopID == 267491120UL) // BROWSE GAMES+ has a harmony resolve issue with remapper, but also scuffed issues that exist sepreatly
                     {
                         modConfig.Disable();

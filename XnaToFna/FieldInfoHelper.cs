@@ -4,6 +4,7 @@
 // MVID: C1D3521D-C7E9-4C43-B430-D28CC69450A3
 // Assembly location: C:\Users\daniel\Desktop\Release\XnaToFna.exe
 
+using DuckGame;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -35,9 +36,22 @@ namespace XnaToFna.ProxyReflection
             return FieldInfoHelper.Map.TryGetValue(self, out dictionary) && dictionary.TryGetValue(name, out xnaToFnaFieldInfo) ? xnaToFnaFieldInfo : self.GetField(name, bindingAttr);
         }
 
+        public static MethodInfo GetMethod(Type self, string name, BindingFlags bindingAttr)
+        {
+            FieldInfoHelper.XnaToFnaFieldInfo xnaToFnaFieldInfo;
+            DevConsole.Log("GetMethod " + name);
+            if (name == "DuckNetworkUpdate_Transpiler" && self.FullName == "DuckGame.BetterChat.HarmonyPatches")
+            {
+                return null;
+            }
+            return self.GetMethod(name, bindingAttr);
+        }
 
 
-        public static FieldInfo GetField(Type self, string name) => FieldInfoHelper.GetField(self, name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
+        public static FieldInfo GetField(Type self, string name)
+        {
+            return FieldInfoHelper.GetField(self, name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
+        }
 
         public class XnaToFnaFieldInfo : FieldInfo
         {
