@@ -141,11 +141,11 @@ namespace XnaToFna
             this.Modder.RelinkMap["System.Void Microsoft.Xna.Framework.GraphicsDeviceManager::ApplyChanges()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void ApplyChanges(Microsoft.Xna.Framework.GraphicsDeviceManager)");
             foreach (System.Type type in typeof(Form).Assembly.GetTypes())
             {
+                 //else if (fullName.StartsWith("XnaToFna.ProxyDrawing."))
+                 //   this.Modder.RelinkMap["System.Drawing." + fullName.Substring(22)] = fullName;
                 string fullName = type.FullName;
                 if (fullName.StartsWith("XnaToFna.ProxyForms."))
                     this.Modder.RelinkMap["System.Windows.Forms." + fullName.Substring(20)] = fullName;
-                else if (fullName.StartsWith("XnaToFna.ProxyDrawing."))
-                    this.Modder.RelinkMap["System.Drawing." + fullName.Substring(22)] = fullName;
                 else if (fullName.StartsWith("XnaToFna.ProxyDInput."))
                     this.Modder.RelinkMap[fullName.Substring(21)] = fullName;
                 else if (fullName.StartsWith("XnaToFna.StubXDK."))

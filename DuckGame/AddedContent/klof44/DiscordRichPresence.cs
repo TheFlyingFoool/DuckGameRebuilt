@@ -2,7 +2,7 @@
 using System.Linq;
 using DiscordRPC;
 using System.IO;
-
+using System.Globalization;
 namespace DuckGame
 {
     internal class DiscordRichPresence
@@ -66,7 +66,12 @@ namespace DuckGame
 
             updatePresence.Start();
         }
+        public static string ToTitleCase(string str)
+        {
 
+            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+            return textInfo.ToTitleCase(str);
+        }
         public static void TriggerRPCUpdate()
         {
             RichPresence rpc = new RichPresence()
@@ -114,7 +119,7 @@ namespace DuckGame
                     rpc.Details = "Playing Arcade Level";
                     if (challengeLevel._challenge != null)
                     {
-                        rpc.State = challengeLevel._challenge.challenge.GetNameForDisplay();
+                        rpc.State = ToTitleCase(challengeLevel._challenge.challenge.name);
                     }
                     else
                     {

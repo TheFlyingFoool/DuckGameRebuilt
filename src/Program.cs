@@ -1038,11 +1038,6 @@ namespace DuckGame
                 {
                     DateTime Now = DateTime.UtcNow;
                     string url = "https://dateful.com/time-zone-converter?t=" + Now.ToString("hhmmtt", DateTimeFormatInfo.InvariantInfo).ToLower() + "&d=" + Now.ToString(@"yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo) + "&tz2=UTC";
-                    //"154am&"
-                    //d=2022-09-18
-                    //&tz2=UTC
-                    //Now.ToString("hhmmtt").ToLower()
-                    //
                     str1 += "\nEasyDateTime: " + url;
                 }
                 catch
