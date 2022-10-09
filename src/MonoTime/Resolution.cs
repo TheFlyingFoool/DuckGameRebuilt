@@ -70,23 +70,36 @@ namespace DuckGame
             bool flag = false;
             foreach (DisplayMode supportedDisplayMode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
             {
-                if (Resolution._pendingResolution.x <= supportedDisplayMode.Width && Resolution._pendingResolution.y <= supportedDisplayMode.Height)
+                //if (Resolution._pendingResolution.x <= supportedDisplayMode.Width && Resolution._pendingResolution.y <= supportedDisplayMode.Height)
+                //{
+                //    flag = true;
+                //    if (Resolution._pendingResolution.mode == ScreenMode.Borderless)
+                //    {
+                //        Resolution._device.PreferredBackBufferWidth = Resolution.adapterResolution.x;
+                //        Resolution._device.PreferredBackBufferHeight = Resolution.adapterResolution.y;
+                //    }
+                //    else
+                //    {
+                //        Resolution._device.PreferredBackBufferWidth = Resolution._pendingResolution.x;
+                //        Resolution._device.PreferredBackBufferHeight = Resolution._pendingResolution.y;
+                //    }
+                //    Resolution._device.IsFullScreen = Resolution._pendingResolution.mode == ScreenMode.Fullscreen;
+                //    Resolution._device.ApplyChanges();
+                //    break;
+                //}
+                flag = true;
+                if (Resolution._pendingResolution.mode == ScreenMode.Borderless)
                 {
-                    flag = true;
-                    if (Resolution._pendingResolution.mode == ScreenMode.Borderless)
-                    {
-                        Resolution._device.PreferredBackBufferWidth = Resolution.adapterResolution.x;
-                        Resolution._device.PreferredBackBufferHeight = Resolution.adapterResolution.y;
-                    }
-                    else
-                    {
-                        Resolution._device.PreferredBackBufferWidth = Resolution._pendingResolution.x;
-                        Resolution._device.PreferredBackBufferHeight = Resolution._pendingResolution.y;
-                    }
-                    Resolution._device.IsFullScreen = Resolution._pendingResolution.mode == ScreenMode.Fullscreen;
-                    Resolution._device.ApplyChanges();
-                    break;
+                    Resolution._device.PreferredBackBufferWidth = Resolution.adapterResolution.x;
+                    Resolution._device.PreferredBackBufferHeight = Resolution.adapterResolution.y;
                 }
+                else
+                {
+                    Resolution._device.PreferredBackBufferWidth = Resolution._pendingResolution.x;
+                    Resolution._device.PreferredBackBufferHeight = Resolution._pendingResolution.y;
+                }
+                Resolution._device.IsFullScreen = Resolution._pendingResolution.mode == ScreenMode.Fullscreen;
+                Resolution._device.ApplyChanges();
             }
             if (!flag)
             {
