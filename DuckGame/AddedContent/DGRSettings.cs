@@ -9,6 +9,8 @@ namespace DuckGame
 {
     public class DGRSettings
     {
+        [AutoConfigField]
+        public static string PreferredLevel = "";
         public bool SpriteAtlas
         {
             get

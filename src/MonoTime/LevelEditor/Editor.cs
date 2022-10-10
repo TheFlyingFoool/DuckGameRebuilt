@@ -759,8 +759,9 @@ namespace DuckGame
             active = true;
             isTesting = false;
             inputMode = EditorInput.Gamepad;
+            shoulddo = true;
         }
-
+        public bool shoulddo;
         public void Quit() => _quitting = true;
 
         public override void DoInitialize()
@@ -1200,6 +1201,23 @@ namespace DuckGame
 
         public override void Update()
         {
+            if (shoulddo)
+            {
+                if (DGRSettings.PreferredLevel != "" && _currentLevelData.objects.objects.Count == 0)
+                {
+                    string filepath = DGRSettings.PreferredLevel;
+                    if (File.Exists(filepath))
+                    {
+                        DevConsole.Log("Loading Level " + filepath, Color.Green);
+                        Main.editor.LoadLevel(filepath);
+                    }
+                    else
+                    {
+                        DevConsole.Log("Level Not Found " + filepath, Color.Red);
+                    }
+                }
+                shoulddo = false;
+            }
             if (!Graphics.inFocus)
                 focusWait = 5;
             else if (focusWait > 0)
@@ -3581,10 +3599,10 @@ namespace DuckGame
                             ? text1 + "@LEFTMOUSE@PASTE  " + "@RIGHTMOUSE@CANCEL  "
                             : text1 + "@SELECT@PASTE  " + "@CANCEL@CANCEL  ";
                     else if (_fileDialog.opened)
-                        text1 = "@WASD@MOVE  " + str2 + "SELECT  @MENU2@DELETE  " + str1 +
+                        text1 = "@SHOOT@SET DEFAULT  @WASD@MOVE  " + str2 + "SELECT  @MENU2@DELETE  " + str1 +
                                 "CANCEL  @STRAFE@+@RAGDOLL@BROWSE..";
                     else if (_menuOpen && inputMode == EditorInput.Gamepad)
-                        text1 = "@WASD@MOVE  " + str2 + "SELECT  @RIGHT@EXPAND  " + str1 + "CLOSE";
+                        text1 = "@SHOOT@SET DEFAULT  @WASD@MOVE  " + str2 + "SELECT  @RIGHT@EXPAND  " + str1 + "CLOSE";
                     else if (inputMode == EditorInput.Gamepad || inputMode == EditorInput.Mouse)
                     {
                         int num = _secondaryHover != null ? 1 : (_hover != null ? 1 : 0);

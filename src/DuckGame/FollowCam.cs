@@ -216,7 +216,16 @@ namespace DuckGame
                 Vec2 current = key.cameraPosition;
                 if (key.removeFromLevel)
                     _removeList.Add(key);
-                if (ver != Vec2.Zero && key is IAmADuck && !key.isServerForObject && key.position.Distance(ver) > 2222) continue;
+                if (ver != Vec2.Zero && !key.isServerForObject)
+                {
+                    Duck d = key as Duck;
+                    bool zed = key.position.Distance(ver) > 2222;
+                    if (d == null)
+                    {
+                        if (zed) continue;
+                    }
+                    else if ((d.ragdoll != null && d.ragdoll.part2.position.Distance(ver) > 2222) || (d._trapped != null && d._trapped.position.Distance(ver) > 2222) || zed) continue;
+                }
                 if (_prevPositions.ContainsKey(key))
                 {
                     Vec2 prevPosition = _prevPositions[key];

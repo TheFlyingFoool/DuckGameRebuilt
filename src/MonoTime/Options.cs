@@ -299,7 +299,7 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemToggle("Graphics Culling", field: new FieldBinding(dGRSettings, "GraphicsCulling"))
             {
-                dgrDescription = "Toggles stuff not rendering when outside the camera"
+                dgrDescription = "If on, anything outside the camera wont render"
             }, true);
             menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(dGRSettings, "SpriteAtlas"))
             {

@@ -321,14 +321,15 @@ namespace DuckGame
             int num5 = 0;
             for (int index = 0; index < _items.Count; ++index)
             {
+                ContextMenu cm = _items[index];
                 if (index < num4 || index > num4 + _maxItems)
                 {
-                    _items[index].visible = false;
+                    cm.visible = false;
                 }
                 else
                 {
-                    _items[index].visible = true;
-                    _items[index].position = new Vec2(_items[index].position.x, (float)(y + 3.0 + num5 * (_items[index].itemSize.y + 1.0)));
+                    cm.visible = true;
+                    cm.position = new Vec2(_items[index].position.x, (float)(y + 3.0 + num5 * (_items[index].itemSize.y + 1.0)));
                     ++num5;
                 }
             }
@@ -610,6 +611,30 @@ namespace DuckGame
                         }
                     }
                 }
+                if (Input.Pressed("SHOOT"))
+                {
+                    ContextMenu cm = _items[_selectedIndex];
+                    if (cm.text.Contains("@"))
+                    {
+                        SFX.Play("consoleError");
+
+                    }
+                    else
+                    {
+                        if (DGRSettings.PreferredLevel == _currentDirectory + cm.data)
+                        {
+                            SFX.Play("cutOffQuack2", 0.5f);
+                            DGRSettings.PreferredLevel = "";
+
+                        }
+                        else
+                        {
+                            SFX.Play("preach3", 0.5f, Rando.Float(0.2f));
+                            DGRSettings.PreferredLevel = _currentDirectory + cm.data;
+                            DevConsole.Log(_currentDirectory + cm.data);
+                        }
+                    }
+                }
                 if (!_selectLevels && Input.Pressed("MENU2"))
                 {
                     _deleteDialog.Open("CONFIRM DELETE");
@@ -727,6 +752,7 @@ namespace DuckGame
                 str2 = _type != ContextFileType.Block ? (_type != ContextFileType.Platform ? (_type != ContextFileType.Background ? (_type != ContextFileType.Parallax ? (_type != ContextFileType.ArcadeStyle ? "LEVELS" : "Custom/Arcade") : "Custom/Parallax") : "Custom/Background") : "Custom/Platform") : "Custom/Blocks";
             string str3 = !_save ? (!_selectLevels ? (_type != ContextFileType.Block ? (_type != ContextFileType.Platform ? (_type != ContextFileType.Background ? (_type != ContextFileType.Parallax ? (_type != ContextFileType.ArcadeStyle ? "@LOADICON@Load Level" : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "Select Active Levels") : "@SAVEICON@Save Level";
             string str4 = str2;
+
             DuckGame.Graphics.DrawString(str3 + (str4 == "" ? "" : " - " + str4), p1_1 + new Vec2(5f, 7f), Color.White, depth + 8);
             Vec2 p1_4 = new Vec2(p2_1.x + 2f, p1_1.y);
             Vec2 p2_4 = p1_4 + new Vec2(164f, 120f);
