@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -197,35 +198,33 @@ namespace DuckGame
             border += ((_lerpBorder - border) * (lerpSpeed * 16f * _lerpMult)) * _speed;
             if (immediate)
                 border = _lerpBorder;
-            float num1 = 99999f;
-            float num2 = -99999f;
-            float num3 = 99999f;
-            float num4 = -99999f;
+            float right = 99999f; // right
+            float left = -99999f; // left
+            float up = 99999f; // up
+            float down = -99999f; // down
             Vec2 zero = Vec2.Zero;
             _removeList.Clear();
-            Profile p = DuckNetwork.localProfile;
-            Vec2 ver = Vec2.Zero;
-            if (DGRSettings.S_CameraUnfollow && p != null && p.duck != null && !p.duck.dead)
+            Vec2? areposition = null;
+            if (DGRSettings.S_CameraUnfollow)
             {
-                ver = p.duck.position;
-                if (p.duck.ragdoll != null) ver = p.duck.ragdoll.part2.position;
-                else if (p.duck._trapped != null) ver = p.duck._trapped.position;
+                foreach (Thing thing1 in _follow)
+                {
+                    if (thing1.connection == DuckNetwork.localConnection && thing1 is Duck)
+                    {
+                        areposition = thing1.cameraPosition;
+                        break;
+                    }
+                }
             }
             foreach (Thing key in _follow)
             {
                 Vec2 current = key.cameraPosition;
+                if (areposition != null && key.connection != DuckNetwork.localConnection && Vec2.Distance((Vec2)areposition, current) > 2222)//2222
+                {
+                    continue;
+                }
                 if (key.removeFromLevel)
                     _removeList.Add(key);
-                if (ver != Vec2.Zero && !key.isServerForObject)
-                {
-                    Duck d = key as Duck;
-                    bool zed = key.position.Distance(ver) > 2222;
-                    if (d == null)
-                    {
-                        if (zed) continue;
-                    }
-                    else if ((d.ragdoll != null && d.ragdoll.part2.position.Distance(ver) > 2222) || (d._trapped != null && d._trapped.position.Distance(ver) > 2222) || zed) continue;
-                }
                 if (_prevPositions.ContainsKey(key))
                 {
                     Vec2 prevPosition = _prevPositions[key];
@@ -250,14 +249,14 @@ namespace DuckGame
                 }
                 else
                     _prevPositions[key] = key.cameraPosition;
-                if (current.x < num1)
-                    num1 = current.x;
-                if (current.x > num2)
-                    num2 = current.x;
-                if (current.y < num3)
-                    num3 = current.y;
-                if (current.y > num4)
-                    num4 = current.y;
+                if (current.x < right)
+                    right = current.x;
+                if (current.x > left)
+                    left = current.x;
+                if (current.y < up)
+                    up = current.y;
+                if (current.y > down)
+                    down = current.y;
                 zero += current;
             }
             foreach (Thing remove in _removeList)
@@ -267,76 +266,76 @@ namespace DuckGame
             float y = Level.current.bottomRight.y;
             float x1 = Level.current.topLeft.x;
             float x2 = Level.current.bottomRight.x;
-            if (num4 > y)
+            if (down > y)
             {
-                num4 = y;
-                if (num3 > num4)
-                    num3 = num4;
+                down = y;
+                if (up > down)
+                    up = down;
             }
-            if (num3 < num5)
+            if (up < num5)
             {
-                num3 = num5;
-                if (num4 < num3)
-                    num4 = num3;
+                up = num5;
+                if (down < up)
+                    down = up;
             }
-            if (num1 < x1)
+            if (right < x1)
             {
-                num1 = x1;
-                if (num2 < num1)
-                    num2 = num1;
+                right = x1;
+                if (left < right)
+                    left = right;
             }
-            if (num2 > x2)
+            if (left > x2)
             {
-                num2 = x2;
-                if (num1 > num2)
-                    num1 = num2;
+                left = x2;
+                if (right > left)
+                    right = left;
             }
-            float num6 = num3 - border;
-            float num7 = num4 + border;
-            float num8 = num1 - border;
-            float num9 = num2 + border;
-            float num10 = ((num8 + num9) / 2f);
-            float num11 = ((num6 + num7) / 2f);
-            float num12 = Resolution.current.x / (float)Resolution.current.y;
-            float num13 = Math.Abs(num8 - num9);
-            float num14 = Math.Abs(num6 - num7);
+            float num6 = up - border;
+            float num7 = down + border;
+            float num8 = right - border;
+            float num9 = left + border;
+            float right0 = ((num8 + num9) / 2f);
+            float right1 = ((num6 + num7) / 2f);
+            float right2 = Resolution.current.x / (float)Resolution.current.y;
+            float right3 = Math.Abs(num8 - num9);
+            float right4 = Math.Abs(num6 - num7);
             if (lerpSpeed > 0.9f)
             {
-                num13 = Level.current.bottomRight.x - Level.current.topLeft.x;
-                num14 = Level.current.bottomRight.y - Level.current.topLeft.y;
+                right3 = Level.current.bottomRight.x - Level.current.topLeft.x;
+                right4 = Level.current.bottomRight.y - Level.current.topLeft.y;
             }
-            float num15 = num14 <= num13 / num12 ? num13 / num12 : num14;
+            float right5 = right4 <= right3 / right2 ? right3 / right2 : right4;
             if (!flag && woteFrame)
-                num15 = _prevViewSize;
+                right5 = _prevViewSize;
             else
-                _prevViewSize = num15;
-            _viewSize += ((num15 - _viewSize) * (lerpSpeed * _lerpMult * _speed));
+                _prevViewSize = right5;
+            _viewSize += ((right5 - _viewSize) * (lerpSpeed * _lerpMult * _speed));
             if (immediate)
-                _viewSize = num15;
-            float num16 = _viewSize;
+                _viewSize = right5;
+            float right6 = _viewSize;
             if (manualViewSize > 0.0)
-                num16 = manualViewSize;
-            width = num16 * num12;
-            height = num16;
+                right6 = manualViewSize;
+            width = right6 * right2;
+            height = right6;
             _lerpBorder = Maths.Clamp((float)(Math.Min(width, 740f) / 740f * (90f * _zoomMult)), minSize * _zoomMult, 90f * _zoomMult);
             if (!flag && woteFrame)
             {
-                num10 = _prevCenterMoveX;
-                num11 = _prevCenterMoveY;
+                right0 = _prevCenterMoveX;
+                right1 = _prevCenterMoveY;
             }
             else
             {
-                _prevCenterMoveX = num10;
-                _prevCenterMoveY = num11;
+                _prevCenterMoveX = right0;
+                _prevCenterMoveY = right1;
             }
             if (!flag)
                 woteFrame = true;
-            _center.x += ((num10 - _center.x) * (lerpSpeed * _lerpMult));
-            _center.y += ((num11 - _center.y) * (lerpSpeed * _lerpMult));
+            _center.x += ((right0 - _center.x) * (lerpSpeed * _lerpMult));
+            _center.y += ((right1 - _center.y) * (lerpSpeed * _lerpMult));
             if (immediate)
             {
-                _center.x = num10;
-                _center.y = num11;
+                _center.x = right0;
+                _center.y = right1;
             }
             if (lerpSpeed > 0.9f && _startCentered)
             {
