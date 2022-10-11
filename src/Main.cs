@@ -158,6 +158,10 @@ namespace DuckGame
                 }
             }
             _font = new BitmapFont("biosFont", 8);
+            if (DGRSettings.S_RPC)
+            {
+                DiscordRichPresence.Initialize();
+            }
             ModLoader.Start();
         }
 

@@ -456,10 +456,6 @@ namespace DuckGame
                         break;
                 }
             }
-            if (DGRSettings.S_RPC)
-            {
-                DiscordRichPresence.Initialize();
-            }
             try
             {
                 if (MonoMain.audioModeOverride == AudioMode.None)
