@@ -122,9 +122,6 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CrashWindow">
-      <HintPath>lib\CrashWindow.exe</HintPath>
-    </Reference>
     <Reference Include="DGInput">
       <HintPath>lib\DGInput.dll</HintPath>
     </Reference>
@@ -244,6 +241,7 @@
     <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\NMPinkCollision.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\NMPinkExplode.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\PinkBox.cs" />
+    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\CrashWindow.cs" />
     <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\PistolTwo.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\NMSetScale.cs" />
     <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\ShatterDuck.cs" />
