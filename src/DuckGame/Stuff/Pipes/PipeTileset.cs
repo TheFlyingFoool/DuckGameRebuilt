@@ -1072,60 +1072,52 @@ namespace DuckGame
             }
             else
                 _foregroundDraw = false;
-            if (frame == 0)
+            switch (frame) // switched
             {
-                collisionSize = new Vec2(14f, 14f);
-                collisionOffset = new Vec2(-7f, -7f);
-            }
-            else if (frame == 1)
-            {
-                collisionSize = new Vec2(15f, 15f);
-                collisionOffset = new Vec2(-7f, -7f);
-            }
-            else if (frame == 2)
-            {
-                collisionSize = new Vec2(15f, 15f);
-                collisionOffset = new Vec2(-8f, -7f);
-            }
-            else if (frame == 3)
-            {
-                collisionSize = new Vec2(16f, 14f);
-                collisionOffset = new Vec2(-8f, -7f);
-            }
-            else if (frame == 5)
-            {
-                collisionSize = new Vec2(15f, 15f);
-                collisionOffset = new Vec2(-7f, -8f);
-            }
-            else if (frame == 6)
-            {
-                collisionSize = new Vec2(15f, 15f);
-                collisionOffset = new Vec2(-8f, -8f);
-            }
-            else if (frame == 7)
-            {
-                collisionSize = new Vec2(14f, 16f);
-                collisionOffset = new Vec2(-7f, -8f);
-            }
-            else if (frame == 8)
-            {
-                collisionSize = new Vec2(14f, 15f);
-                collisionOffset = new Vec2(-7f, -7f);
-            }
-            else if (frame == 9)
-            {
-                collisionSize = new Vec2(14f, 15f);
-                collisionOffset = new Vec2(-7f, -8f);
-            }
-            else if (frame == 10)
-            {
-                collisionSize = new Vec2(15f, 14f);
-                collisionOffset = new Vec2(-7f, -7f);
-            }
-            else if (frame == 11)
-            {
-                collisionSize = new Vec2(15f, 14f);
-                collisionOffset = new Vec2(-8f, -7f);
+                case 0:
+                    collisionSize = new Vec2(14f, 14f);
+                    collisionOffset = new Vec2(-7f, -7f);
+                    break;
+                case 1:
+                    collisionSize = new Vec2(15f, 15f);
+                    collisionOffset = new Vec2(-7f, -7f);
+                    break;
+                case 2:
+                    collisionSize = new Vec2(15f, 15f);
+                    collisionOffset = new Vec2(-8f, -7f);
+                    break;
+                case 3:
+                    collisionSize = new Vec2(16f, 14f);
+                    collisionOffset = new Vec2(-8f, -7f);
+                    break;
+                case 5:
+                    collisionSize = new Vec2(15f, 15f);
+                    collisionOffset = new Vec2(-7f, -8f);
+                    break;
+                case 6:
+                    collisionSize = new Vec2(15f, 15f);
+                    collisionOffset = new Vec2(-8f, -8f);
+                    break;
+                case 7:
+                    collisionSize = new Vec2(14f, 16f);
+                    collisionOffset = new Vec2(-7f, -8f);
+                    break;
+                case 8:
+                    collisionSize = new Vec2(14f, 15f);
+                    collisionOffset = new Vec2(-7f, -7f);
+                    break;
+                case 9:
+                    collisionSize = new Vec2(14f, 15f);
+                    collisionOffset = new Vec2(-7f, -8f);
+                    break;
+                case 10:
+                    collisionSize = new Vec2(15f, 14f);
+                    collisionOffset = new Vec2(-7f, -7f);
+                    break;
+                case 11:
+                    collisionSize = new Vec2(15f, 14f);
+                    collisionOffset = new Vec2(-8f, -7f);
+                    break;
             }
             if (IsBackground())
             {

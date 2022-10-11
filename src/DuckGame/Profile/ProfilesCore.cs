@@ -184,137 +184,164 @@ namespace DuckGame
                         {
                             foreach (DXMLNode element1 in source.Elements<DXMLNode>())
                             {
-                                if (element1.Name == "ID" && !Profiles.IsDefault(p))
-                                    p.SetID(element1.Value);
-                                else if (element1.Name == "Name")
-                                    p.name = element1.Value;
-                                else if (element1.Name == "Mood")
-                                    p.funslider = Change.ToSingle(element1.Value);
-                                else if (element1.Name == "PreferredColor" && !Profiles.IsDefault(p))
-                                    p.preferredColor = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "NS")
-                                    p.numSandwiches = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "MF")
-                                    p.milkFill = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "LML")
-                                    p.littleManLevel = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "NLM")
-                                    p.numLittleMen = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "LMB")
-                                    p.littleManBucks = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "RSXP")
-                                    p.roundsSinceXP = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "TimesMet")
-                                    p.timesMetVincent = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "TimesMet2")
-                                    p.timesMetVincentSale = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "TimesMet3")
-                                    p.timesMetVincentSell = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "TimesMet4")
-                                    p.timesMetVincentImport = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "TimesMet5")
-                                    p.timesMetVincentHint = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "TimeOfDay")
-                                    p.timeOfDay = Change.ToSingle(element1.Value);
-                                else if (element1.Name == "CD")
-                                    p.currentDay = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "Punished")
-                                    p.punished = Change.ToInt32(element1.Value);
-                                else if (element1.Name == "XtraPoints")
+                                switch (element1.Name) // still looks nasty but better than the if else tree
                                 {
-                                    p.xp = Change.ToInt32(element1.Value);
-                                    if (MonoMain.logFileOperations)
-                                        DevConsole.Log(DCSection.General, "Profile(" + name != null ? name : ").loadXP(" + p.xp.ToString() + ")");
-                                }
-                                else if (element1.Name == "FurniPositions")
-                                {
-                                    p.furniturePositionData = BitBuffer.FromString(element1.Value);
-                                    p.prevFurniPositionData = p.furniturePositionData.ToString();
-                                }
-                                else if (element1.Name == "Fowner")
-                                    p.furnitureOwnershipData = BitBuffer.FromString(element1.Value);
-                                else if (element1.Name == "SteamID")
-                                {
-                                    try
-                                    {
-                                        p.steamID = Change.ToUInt64(element1.Value.Trim());
-                                    }
-                                    catch (Exception)
-                                    {
-                                        p.steamID = 0UL;
-                                    }
-                                    if (p.steamID != 0UL && !(Path.GetFileNameWithoutExtension(path) != p.steamID.ToString()))
-                                        profileList.Add(p);
-                                }
-                                else if (element1.Name == "LastKnownName")
-                                    p.lastKnownName = element1.Value;
-                                else if (element1.Name == "Stats")
-                                    p.stats.Deserialize(element1);
-                                else if (element1.Name == "Unlocks")
-                                {
-                                    string[] strArray = element1.Value.Split('|');
-                                    int num = Math.Min(strArray.Length, 100);
-                                    for (int index = 0; index < num; ++index)
-                                    {
-                                        if (strArray[index] != "" && !p.unlocks.Contains(strArray[index]))
-                                            p.unlocks.Add(strArray[index]);
-                                    }
-                                }
-                                else if (element1.Name == "Tickets")
-                                    p.ticketCount = Convert.ToInt32(element1.Value);
-                                else if (element1.Name == "ChallengeData")
-                                {
-                                    try
-                                    {
-                                        byte[] bytes = Editor.StringToBytes(element1.Value);
-                                        BitBuffer bitBuffer = new BitBuffer(bytes, false)
+                                    case "ID":
+                                        if (Profiles.IsDefault(p))
+                                            break;
+                                        p.SetID(element1.Value);
+                                        break;
+                                    case "Name":
+                                        p.name = element1.Value;
+                                        break;
+                                    case "Mood":
+                                        p.funslider = Change.ToSingle(element1.Value);
+                                        break;
+                                    case "PreferredColor":
+                                        if (Profiles.IsDefault(p))
+                                            break;
+                                        p.preferredColor = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "NS":
+                                        p.numSandwiches = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "MF":
+                                        p.milkFill = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "LML":
+                                        p.littleManLevel = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "NLM":
+                                        p.numLittleMen = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "LMB":
+                                        p.littleManBucks = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "RSXP":
+                                        p.roundsSinceXP = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "TimesMet":
+                                        p.timesMetVincent = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "TimesMet2":
+                                        p.timesMetVincentSale = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "TimesMet3":
+                                        p.timesMetVincentSell = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "TimesMet4":
+                                        p.timesMetVincentImport = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "TimesMet5":
+                                        p.timesMetVincentHint = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "TimeOfDay":
+                                        p.timeOfDay = Change.ToSingle(element1.Value);
+                                        break;
+                                    case "CD":
+                                        p.currentDay = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "Punished":
+                                        p.punished = Change.ToInt32(element1.Value);
+                                        break;
+                                    case "XtraPoints":
+                                        p.xp = Change.ToInt32(element1.Value);
+                                        if (MonoMain.logFileOperations)
+                                            DevConsole.Log(DCSection.General, "Profile(" + name != null ? name : ").loadXP(" + p.xp.ToString() + ")");
+                                        break;
+                                    case "FurniPositions":
+                                        p.furniturePositionData = BitBuffer.FromString(element1.Value);
+                                        p.prevFurniPositionData = p.furniturePositionData.ToString();
+                                        break;
+                                    case "Fowner":
+                                        p.furnitureOwnershipData = BitBuffer.FromString(element1.Value);
+                                        break;
+                                    case "SteamID":
+                                        try
                                         {
-                                            lengthInBytes = bytes.Length
-                                        };
-                                        while (bitBuffer.position < bitBuffer.lengthInBytes)
-                                        {
-                                            ChallengeSaveData challengeSaveData = ChallengeSaveData.FromBuffer(bitBuffer.ReadBitBuffer(false));
-                                            if (challengeSaveData.trophy != TrophyType.Baseline || challengeSaveData.bestTime != 0)
-                                            {
-                                                challengeSaveData.profileID = p.id;
-                                                if (challengeSaveData.trophy == TrophyType.Developer)
-                                                    Options.Data.gotDevMedal = true;
-                                                p.challengeData.Add(challengeSaveData.challenge, challengeSaveData);
-                                            }
+                                            p.steamID = Change.ToUInt64(element1.Value.Trim());
                                         }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        DevConsole.Log(DCSection.General, "Profile (" + path + ") failed to load ChallengeData:" + ex.Message);
-                                    }
-                                }
-                                else if (element1.Name == "Mappings" && !MonoMain.defaultControls)
-                                {
-                                    p.inputMappingOverrides.Clear();
-                                    foreach (DXMLNode element2 in element1.Elements())
-                                    {
-                                        if (element2.Name == "InputMapping")
+                                        catch (Exception)
                                         {
-                                            DeviceInputMapping deviceInputMapping = new DeviceInputMapping();
-                                            deviceInputMapping.Deserialize(element2);
-                                            try
+                                            p.steamID = 0UL;
+                                        }
+                                        if (p.steamID != 0UL && !(Path.GetFileNameWithoutExtension(path) != p.steamID.ToString()))
+                                            profileList.Add(p);
+                                        break;
+                                    case "LastKnownName":
+                                        p.lastKnownName = element1.Value;
+                                        break;
+                                    case "Stats":
+                                        p.stats.Deserialize(element1);
+                                        break;
+                                    case "Unlocks":
+                                        string[] strArray = element1.Value.Split('|');
+                                        int num = Math.Min(strArray.Length, 100);
+                                        for (int index = 0; index < num; ++index)
+                                        {
+                                            if (strArray[index] != "" && !p.unlocks.Contains(strArray[index]))
+                                                p.unlocks.Add(strArray[index]);
+                                        }
+                                        break;
+                                    case "Tickets":
+                                        p.ticketCount = Convert.ToInt32(element1.Value);
+                                        break;
+                                    case "ChallengeData":
+                                        try
+                                        {
+                                            byte[] bytes = Editor.StringToBytes(element1.Value);
+                                            BitBuffer bitBuffer = new BitBuffer(bytes, false)
                                             {
-                                                DeviceInputMapping defaultMapping = Input.GetDefaultMapping(deviceInputMapping.deviceName, deviceInputMapping.deviceGUID);
-                                                if (defaultMapping != null)
+                                                lengthInBytes = bytes.Length
+                                            };
+                                            while (bitBuffer.position < bitBuffer.lengthInBytes)
+                                            {
+                                                ChallengeSaveData challengeSaveData = ChallengeSaveData.FromBuffer(bitBuffer.ReadBitBuffer(false));
+                                                if (challengeSaveData.trophy != TrophyType.Baseline || challengeSaveData.bestTime != 0)
                                                 {
-                                                    foreach (KeyValuePair<string, int> keyValuePair in defaultMapping.map)
-                                                    {
-                                                        if (!deviceInputMapping.map.ContainsKey(keyValuePair.Key))
-                                                            deviceInputMapping.MapInput(keyValuePair.Key, keyValuePair.Value);
-                                                    }
+                                                    challengeSaveData.profileID = p.id;
+                                                    if (challengeSaveData.trophy == TrophyType.Developer)
+                                                        Options.Data.gotDevMedal = true;
+                                                    p.challengeData.Add(challengeSaveData.challenge, challengeSaveData);
                                                 }
                                             }
-                                            catch (Exception)
-                                            {
-                                            }
-                                            p.inputMappingOverrides.Add(deviceInputMapping);
                                         }
-                                    }
+                                        catch (Exception ex)
+                                        {
+                                            DevConsole.Log(DCSection.General, "Profile (" + path + ") failed to load ChallengeData:" + ex.Message);
+                                        }
+                                        break;
+                                    case "Mappings":
+                                        if (MonoMain.defaultControls)
+                                        {
+                                            break;
+                                        }
+                                        p.inputMappingOverrides.Clear();
+                                        foreach (DXMLNode element2 in element1.Elements())
+                                        {
+                                            if (element2.Name == "InputMapping")
+                                            {
+                                                DeviceInputMapping deviceInputMapping = new DeviceInputMapping();
+                                                deviceInputMapping.Deserialize(element2);
+                                                try
+                                                {
+                                                    DeviceInputMapping defaultMapping = Input.GetDefaultMapping(deviceInputMapping.deviceName, deviceInputMapping.deviceGUID);
+                                                    if (defaultMapping != null)
+                                                    {
+                                                        foreach (KeyValuePair<string, int> keyValuePair in defaultMapping.map)
+                                                        {
+                                                            if (!deviceInputMapping.map.ContainsKey(keyValuePair.Key))
+                                                                deviceInputMapping.MapInput(keyValuePair.Key, keyValuePair.Value);
+                                                        }
+                                                    }
+                                                }
+                                                catch (Exception)
+                                                {
+                                                }
+                                                p.inputMappingOverrides.Add(deviceInputMapping);
+                                            }
+                                        }
+                                        break;
                                 }
                             }
                         }

@@ -301,383 +301,375 @@ namespace DuckGame
             leftTile = Level.CheckPoint<AutoTile>(x - 16f, y, this);
             rightTile = Level.CheckPoint<AutoTile>(x + 16f, y, this);
             _connections.Clear();
-            if (_sprite.frame == 32 || _sprite.frame == 41)
+            WireConnection wireConnection;
+            switch (_sprite.frame) // still nasty but better than that else if tree
             {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -4f)
-                };
-                WireConnection wireConnection = new WireConnection()
-                {
-                    position = position + new Vec2(8f, -4f),
-                    left = _centerWire,
-                    wireRight = true
-                };
-                _centerWire.right = wireConnection;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection);
-            }
-            else if (_sprite.frame == 37 || _sprite.frame == 43)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -4f)
-                };
-                WireConnection wireConnection = new WireConnection()
-                {
-                    position = position + new Vec2(-8f, -4f),
-                    right = _centerWire,
-                    wireLeft = true
-                };
-                _centerWire.left = wireConnection;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection);
-            }
-            else if (_sprite.frame == 33 || _sprite.frame == 35 || _sprite.frame == 36 || _sprite.frame == 59)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -4f)
-                };
-                WireConnection wireConnection1 = new WireConnection()
-                {
-                    position = position + new Vec2(8f, -4f),
-                    left = _centerWire,
-                    wireRight = true
-                };
-                WireConnection wireConnection2 = new WireConnection()
-                {
-                    position = position + new Vec2(-8f, -4f),
-                    right = _centerWire,
-                    wireLeft = true
-                };
-                _centerWire.right = wireConnection1;
-                _centerWire.left = wireConnection2;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection1);
-                _connections.Add(wireConnection2);
-            }
-            else if (_sprite.frame == 34)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -4f)
-                };
-                WireConnection wireConnection3 = new WireConnection()
-                {
-                    position = position + new Vec2(8f, -4f),
-                    left = _centerWire,
-                    wireRight = true
-                };
-                WireConnection wireConnection4 = new WireConnection()
-                {
-                    position = position + new Vec2(-8f, -4f),
-                    right = _centerWire,
-                    wireLeft = true
-                };
-                WireConnection wireConnection5 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, 8f),
-                    up = _centerWire,
-                    wireDown = true
-                };
-                _centerWire.right = wireConnection3;
-                _centerWire.left = wireConnection4;
-                _centerWire.down = wireConnection5;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection3);
-                _connections.Add(wireConnection4);
-                _connections.Add(wireConnection5);
-            }
-            else if (_sprite.frame == 42)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -4f)
-                };
-                WireConnection wireConnection6 = new WireConnection()
-                {
-                    position = position + new Vec2(8f, -4f),
-                    left = _centerWire,
-                    wireRight = true
-                };
-                WireConnection wireConnection7 = new WireConnection()
-                {
-                    position = position + new Vec2(-8f, -4f),
-                    right = _centerWire,
-                    wireLeft = true
-                };
-                WireConnection wireConnection8 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, 8f),
-                    up = _centerWire,
-                    wireDown = true
-                };
-                WireConnection wireConnection9 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -8f),
-                    down = _centerWire,
-                    wireUp = true
-                };
-                _centerWire.right = wireConnection6;
-                _centerWire.left = wireConnection7;
-                _centerWire.down = wireConnection8;
-                _centerWire.up = wireConnection9;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection6);
-                _connections.Add(wireConnection7);
-                _connections.Add(wireConnection8);
-                _connections.Add(wireConnection9);
-            }
-            else if (_sprite.frame == 44)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, 0f)
-                };
-                WireConnection wireConnection = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -8f),
-                    down = _centerWire,
-                    wireUp = true
-                };
-                _centerWire.up = wireConnection;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection);
-            }
-            else if (_sprite.frame == 45)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -4f)
-                };
-                WireConnection wireConnection10 = new WireConnection()
-                {
-                    position = position + new Vec2(-8f, -4f),
-                    right = _centerWire,
-                    wireLeft = true
-                };
-                WireConnection wireConnection11 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, 8f),
-                    up = _centerWire,
-                    wireDown = true
-                };
-                WireConnection wireConnection12 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -8f),
-                    down = _centerWire,
-                    wireUp = true
-                };
-                _centerWire.left = wireConnection10;
-                _centerWire.down = wireConnection11;
-                _centerWire.up = wireConnection12;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection10);
-                _connections.Add(wireConnection11);
-                _connections.Add(wireConnection12);
-            }
-            else if (_sprite.frame == 49)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, 0f)
-                };
-                WireConnection wireConnection = new WireConnection()
-                {
-                    position = position + new Vec2(0f, 8f),
-                    up = _centerWire,
-                    wireDown = true
-                };
-                _centerWire.down = wireConnection;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection);
-            }
-            else if (_sprite.frame == 50)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, 0f)
-                };
-                WireConnection wireConnection13 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, 8f),
-                    up = _centerWire,
-                    wireDown = true
-                };
-                WireConnection wireConnection14 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -8f),
-                    down = _centerWire,
-                    wireUp = true
-                };
-                _centerWire.down = wireConnection13;
-                _centerWire.up = wireConnection14;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection13);
-                _connections.Add(wireConnection14);
-            }
-            else if (_sprite.frame == 51)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -4f)
-                };
-                WireConnection wireConnection15 = new WireConnection()
-                {
-                    position = position + new Vec2(8f, -4f),
-                    left = _centerWire,
-                    wireRight = true
-                };
-                WireConnection wireConnection16 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, 8f),
-                    up = _centerWire,
-                    wireDown = true
-                };
-                _centerWire.right = wireConnection15;
-                _centerWire.down = wireConnection16;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection15);
-                _connections.Add(wireConnection16);
-            }
-            else if (_sprite.frame == 52)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -4f)
-                };
-                WireConnection wireConnection17 = new WireConnection()
-                {
-                    position = position + new Vec2(-8f, -4f),
-                    right = _centerWire,
-                    wireLeft = true
-                };
-                WireConnection wireConnection18 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, 8f),
-                    up = _centerWire,
-                    wireDown = true
-                };
-                _centerWire.left = wireConnection17;
-                _centerWire.down = wireConnection18;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection17);
-                _connections.Add(wireConnection18);
-            }
-            else if (_sprite.frame == 53)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -4f)
-                };
-                WireConnection wireConnection19 = new WireConnection()
-                {
-                    position = position + new Vec2(8f, -4f),
-                    left = _centerWire,
-                    wireRight = true
-                };
-                WireConnection wireConnection20 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, 8f),
-                    up = _centerWire,
-                    wireDown = true
-                };
-                WireConnection wireConnection21 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -8f),
-                    down = _centerWire,
-                    wireUp = true
-                };
-                _centerWire.right = wireConnection19;
-                _centerWire.down = wireConnection20;
-                _centerWire.up = wireConnection21;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection19);
-                _connections.Add(wireConnection20);
-                _connections.Add(wireConnection21);
-            }
-            else if (_sprite.frame == 57)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -4f)
-                };
-                WireConnection wireConnection22 = new WireConnection()
-                {
-                    position = position + new Vec2(8f, -4f),
-                    left = _centerWire,
-                    wireRight = true
-                };
-                WireConnection wireConnection23 = new WireConnection()
-                {
-                    position = position + new Vec2(-8f, -4f),
-                    right = _centerWire,
-                    wireLeft = true
-                };
-                WireConnection wireConnection24 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -8f),
-                    down = _centerWire,
-                    wireUp = true
-                };
-                _centerWire.right = wireConnection22;
-                _centerWire.left = wireConnection23;
-                _centerWire.up = wireConnection24;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection22);
-                _connections.Add(wireConnection23);
-                _connections.Add(wireConnection24);
-            }
-            else if (_sprite.frame == 58)
-            {
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -4f)
-                };
-                WireConnection wireConnection25 = new WireConnection()
-                {
-                    position = position + new Vec2(8f, -4f),
-                    left = _centerWire,
-                    wireRight = true
-                };
-                WireConnection wireConnection26 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -8f),
-                    down = _centerWire,
-                    wireUp = true
-                };
-                _centerWire.right = wireConnection25;
-                _centerWire.up = wireConnection26;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection25);
-                _connections.Add(wireConnection26);
-            }
-            else
-            {
-                if (_sprite.frame != 60)
-                    return;
-                _centerWire = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -4f)
-                };
-                WireConnection wireConnection27 = new WireConnection()
-                {
-                    position = position + new Vec2(-8f, -4f),
-                    right = _centerWire,
-                    wireLeft = true
-                };
-                WireConnection wireConnection28 = new WireConnection()
-                {
-                    position = position + new Vec2(0f, -8f),
-                    down = _centerWire,
-                    wireUp = true
-                };
-                _centerWire.left = wireConnection27;
-                _centerWire.up = wireConnection28;
-                _connections.Add(_centerWire);
-                _connections.Add(wireConnection27);
-                _connections.Add(wireConnection28);
+                case 32: 
+                case 41:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -4f)
+                    };
+                    wireConnection = new WireConnection()
+                    {
+                        position = position + new Vec2(8f, -4f),
+                        left = _centerWire,
+                        wireRight = true
+                    };
+                    _centerWire.right = wireConnection;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection);
+                    break;
+                case 37:
+                case 43:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -4f)
+                    };
+                    wireConnection = new WireConnection()
+                    {
+                        position = position + new Vec2(-8f, -4f),
+                        right = _centerWire,
+                        wireLeft = true
+                    };
+                    _centerWire.left = wireConnection;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection);
+                    break;
+                case 33:
+                case 35:
+                case 36:
+                case 59:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -4f)
+                    };
+                    WireConnection wireConnection1 = new WireConnection()
+                    {
+                        position = position + new Vec2(8f, -4f),
+                        left = _centerWire,
+                        wireRight = true
+                    };
+                    WireConnection wireConnection2 = new WireConnection()
+                    {
+                        position = position + new Vec2(-8f, -4f),
+                        right = _centerWire,
+                        wireLeft = true
+                    };
+                    _centerWire.right = wireConnection1;
+                    _centerWire.left = wireConnection2;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection1);
+                    _connections.Add(wireConnection2);
+                    break;
+                case 34:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -4f)
+                    };
+                    WireConnection wireConnection3 = new WireConnection()
+                    {
+                        position = position + new Vec2(8f, -4f),
+                        left = _centerWire,
+                        wireRight = true
+                    };
+                    WireConnection wireConnection4 = new WireConnection()
+                    {
+                        position = position + new Vec2(-8f, -4f),
+                        right = _centerWire,
+                        wireLeft = true
+                    };
+                    WireConnection wireConnection5 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, 8f),
+                        up = _centerWire,
+                        wireDown = true
+                    };
+                    _centerWire.right = wireConnection3;
+                    _centerWire.left = wireConnection4;
+                    _centerWire.down = wireConnection5;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection3);
+                    _connections.Add(wireConnection4);
+                    _connections.Add(wireConnection5);
+                    break;
+                case 47:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -4f)
+                    };
+                    WireConnection wireConnection6 = new WireConnection()
+                    {
+                        position = position + new Vec2(8f, -4f),
+                        left = _centerWire,
+                        wireRight = true
+                    };
+                    WireConnection wireConnection7 = new WireConnection()
+                    {
+                        position = position + new Vec2(-8f, -4f),
+                        right = _centerWire,
+                        wireLeft = true
+                    };
+                    WireConnection wireConnection8 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, 8f),
+                        up = _centerWire,
+                        wireDown = true
+                    };
+                    WireConnection wireConnection9 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -8f),
+                        down = _centerWire,
+                        wireUp = true
+                    };
+                    _centerWire.right = wireConnection6;
+                    _centerWire.left = wireConnection7;
+                    _centerWire.down = wireConnection8;
+                    _centerWire.up = wireConnection9;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection6);
+                    _connections.Add(wireConnection7);
+                    _connections.Add(wireConnection8);
+                    _connections.Add(wireConnection9);
+                    break;
+                case 44:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, 0f)
+                    };
+                    wireConnection = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -8f),
+                        down = _centerWire,
+                        wireUp = true
+                    };
+                    _centerWire.up = wireConnection;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection);
+                    break;
+                case 45:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -4f)
+                    };
+                    WireConnection wireConnection10 = new WireConnection()
+                    {
+                        position = position + new Vec2(-8f, -4f),
+                        right = _centerWire,
+                        wireLeft = true
+                    };
+                    WireConnection wireConnection11 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, 8f),
+                        up = _centerWire,
+                        wireDown = true
+                    };
+                    WireConnection wireConnection12 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -8f),
+                        down = _centerWire,
+                        wireUp = true
+                    };
+                    _centerWire.left = wireConnection10;
+                    _centerWire.down = wireConnection11;
+                    _centerWire.up = wireConnection12;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection10);
+                    _connections.Add(wireConnection11);
+                    _connections.Add(wireConnection12);
+                    break;
+                case 49:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, 0f)
+                    };
+                    wireConnection = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, 8f),
+                        up = _centerWire,
+                        wireDown = true
+                    };
+                    _centerWire.down = wireConnection;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection);
+                    break;
+                case 50:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, 0f)
+                    };
+                    WireConnection wireConnection13 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, 8f),
+                        up = _centerWire,
+                        wireDown = true
+                    };
+                    WireConnection wireConnection14 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -8f),
+                        down = _centerWire,
+                        wireUp = true
+                    };
+                    _centerWire.down = wireConnection13;
+                    _centerWire.up = wireConnection14;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection13);
+                    _connections.Add(wireConnection14);
+                    break;
+                case 51:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -4f)
+                    };
+                    WireConnection wireConnection15 = new WireConnection()
+                    {
+                        position = position + new Vec2(8f, -4f),
+                        left = _centerWire,
+                        wireRight = true
+                    };
+                    WireConnection wireConnection16 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, 8f),
+                        up = _centerWire,
+                        wireDown = true
+                    };
+                    _centerWire.right = wireConnection15;
+                    _centerWire.down = wireConnection16;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection15);
+                    _connections.Add(wireConnection16);
+                    break;
+                case 52:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -4f)
+                    };
+                    WireConnection wireConnection17 = new WireConnection()
+                    {
+                        position = position + new Vec2(-8f, -4f),
+                        right = _centerWire,
+                        wireLeft = true
+                    };
+                    WireConnection wireConnection18 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, 8f),
+                        up = _centerWire,
+                        wireDown = true
+                    };
+                    _centerWire.left = wireConnection17;
+                    _centerWire.down = wireConnection18;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection17);
+                    _connections.Add(wireConnection18);
+                    break;
+                case 53:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -4f)
+                    };
+                    WireConnection wireConnection19 = new WireConnection()
+                    {
+                        position = position + new Vec2(8f, -4f),
+                        left = _centerWire,
+                        wireRight = true
+                    };
+                    WireConnection wireConnection20 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, 8f),
+                        up = _centerWire,
+                        wireDown = true
+                    };
+                    WireConnection wireConnection21 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -8f),
+                        down = _centerWire,
+                        wireUp = true
+                    };
+                    _centerWire.right = wireConnection19;
+                    _centerWire.down = wireConnection20;
+                    _centerWire.up = wireConnection21;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection19);
+                    _connections.Add(wireConnection20);
+                    _connections.Add(wireConnection21);
+                    break;
+                case 57:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -4f)
+                    };
+                    WireConnection wireConnection22 = new WireConnection()
+                    {
+                        position = position + new Vec2(8f, -4f),
+                        left = _centerWire,
+                        wireRight = true
+                    };
+                    WireConnection wireConnection23 = new WireConnection()
+                    {
+                        position = position + new Vec2(-8f, -4f),
+                        right = _centerWire,
+                        wireLeft = true
+                    };
+                    WireConnection wireConnection24 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -8f),
+                        down = _centerWire,
+                        wireUp = true
+                    };
+                    _centerWire.right = wireConnection22;
+                    _centerWire.left = wireConnection23;
+                    _centerWire.up = wireConnection24;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection22);
+                    _connections.Add(wireConnection23);
+                    _connections.Add(wireConnection24);
+                    break;
+                case 58:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -4f)
+                    };
+                    WireConnection wireConnection25 = new WireConnection()
+                    {
+                        position = position + new Vec2(8f, -4f),
+                        left = _centerWire,
+                        wireRight = true
+                    };
+                    WireConnection wireConnection26 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -8f),
+                        down = _centerWire,
+                        wireUp = true
+                    };
+                    _centerWire.right = wireConnection25;
+                    _centerWire.up = wireConnection26;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection25);
+                    _connections.Add(wireConnection26);
+                    break;
+                case 60:
+                    _centerWire = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -4f)
+                    };
+                    WireConnection wireConnection27 = new WireConnection()
+                    {
+                        position = position + new Vec2(-8f, -4f),
+                        right = _centerWire,
+                        wireLeft = true
+                    };
+                    WireConnection wireConnection28 = new WireConnection()
+                    {
+                        position = position + new Vec2(0f, -8f),
+                        down = _centerWire,
+                        wireUp = true
+                    };
+                    _centerWire.left = wireConnection27;
+                    _centerWire.up = wireConnection28;
+                    _connections.Add(_centerWire);
+                    _connections.Add(wireConnection27);
+                    _connections.Add(wireConnection28);
+                    break;
             }
         }
 
