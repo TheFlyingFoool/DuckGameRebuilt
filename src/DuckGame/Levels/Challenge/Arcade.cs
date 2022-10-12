@@ -440,7 +440,7 @@ namespace DuckGame
                     object obj = null;
                     foreach (ArcadeMachine challenge in _challenges)
                     {
-                        double length = (_duck.position - challenge.position).length;
+                        float length = (_duck.position - challenge.position).length;
                         if (challenge.hover)
                         {
                             obj = challenge;

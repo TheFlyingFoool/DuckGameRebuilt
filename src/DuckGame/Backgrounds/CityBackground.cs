@@ -163,6 +163,8 @@ namespace DuckGame
                 text = "WHERE IS JOHN MALLARD";
             else if (Rando.Int(1000) == 1)
                 text = "I SEE YOU";
+            else if (Rando.Int(100000) == 1)
+                text = "WHO MUST GO? THE ONE THAT DID NOT DO THE DISHES.";
             else if (Rando.Int(200) == 1)
                 text = "LET'S DANCE";
             else if (Global.data.timesSpawned > 300 && Rando.Int(200) == 1)
@@ -245,7 +247,7 @@ namespace DuckGame
                 {
                     position = Vec2.Zero
                 };
-                DuckGame.Graphics.SetRenderTarget(bannerTarget);
+                Graphics.SetRenderTarget(bannerTarget);
                 DepthStencilState depthStencilState = new DepthStencilState()
                 {
                     StencilEnable = true,
@@ -254,12 +256,12 @@ namespace DuckGame
                     ReferenceStencil = 1,
                     DepthBufferEnable = false
                 };
-                DuckGame.Graphics.Clear(Color.Transparent);
-                DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
-                DuckGame.Graphics.DrawRect(new Vec2(0f, 2f), new Vec2(bannerTarget.width - 8, bannerTarget.height - 2), Color.Black);
+                Graphics.Clear(Color.Transparent);
+                Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
+                Graphics.DrawRect(new Vec2(0f, 2f), new Vec2(bannerTarget.width - 8, bannerTarget.height - 2), Color.Black);
                 _font.Draw(text, new Vec2(1f, 3f), new Color(47, 0, 66), (Depth)1f);
-                DuckGame.Graphics.screen.End();
-                DuckGame.Graphics.SetRenderTarget(null);
+                Graphics.screen.End();
+                Graphics.SetRenderTarget(null);
             }
 
             public void UpdateFlying()
@@ -267,7 +269,6 @@ namespace DuckGame
                 position.x += _flyLeft ? -0.25f : 0.25f;
                 if (bannerTarget != null && (_flyLeft && x < -(400 + bannerTarget.width) || !_flyLeft && x > 400 + bannerTarget.width))
                     finished = true;
-                double num = -(Level.current.bottomRight.y + Level.current.topLeft.y) / 2f;
             }
 
             public override void Draw()
@@ -279,16 +280,16 @@ namespace DuckGame
                 {
                     flipH = true;
                     base.Draw();
-                    DuckGame.Graphics.material = _wiggle;
-                    DuckGame.Graphics.Draw(bannerTarget, x + 4f, y, 0.5f, 0.5f, (Depth)1f);
-                    DuckGame.Graphics.material = null;
+                    Graphics.material = _wiggle;
+                    Graphics.Draw(bannerTarget, x + 4f, y, 0.5f, 0.5f, (Depth)1f);
+                    Graphics.material = null;
                 }
                 else
                 {
                     base.Draw();
-                    DuckGame.Graphics.material = _wiggle;
-                    DuckGame.Graphics.Draw(bannerTarget, x - (bannerTarget.width / 2 + 4), y, 0.5f, 0.5f, (Depth)1f);
-                    DuckGame.Graphics.material = null;
+                    Graphics.material = _wiggle;
+                    Graphics.Draw(bannerTarget, x - (bannerTarget.width / 2 + 4), y, 0.5f, 0.5f, (Depth)1f);
+                    Graphics.material = null;
                 }
             }
         }

@@ -194,17 +194,17 @@ namespace DuckGame
                     rainSound = new LoopingSound("sizzle", 1, -3);
                     rainSound.volume = 0.2f;
                     darkenRainer = 0.8f;
-                    rainDarken = darkenRainer;
                     rainwind = Rando.Float(-2, 2);
                     lightningRNG = Rando.Int(1200, 2400);
                     if (Rando.Int(2) == 0)
                     {
-                        darkenRainer = 0.4f;
+                        darkenRainer = 0.6f;
                         rainSound.volume = 0.5f;
                         rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
                         lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
                         heavyRain = true;
                     }
+                    rainDarken = darkenRainer;
                     rainwindto = rainwind;
                 }
                 else if (First<OfficeTileset>() != null && (Rando.Int(1) == 1 || DGRSettings.S_RandomWeather > 9.9f))
@@ -212,18 +212,18 @@ namespace DuckGame
                     rainSound = new LoopingSound("sizzle", 1, -3);
                     rainSound.volume = 0.2f;
                     darkenRainer = 0.8f;
-                    rainDarken = darkenRainer;
                     Raining = true;
                     rainwind = Rando.Float(-2, 2);
                     lightningRNG = Rando.Int(2400, 4800);
                     if (Rando.Int(2) == 0)
                     {
-                        darkenRainer = 0.5f;
+                        darkenRainer = 0.6f;
                         rainSound.volume = 0.5f;
                         rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
                         lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
                         heavyRain = true;
                     }
+                    rainDarken = darkenRainer;
                     rainwindto = rainwind;
                 }
                 else if (First<CityTileset>() != null)
@@ -235,14 +235,13 @@ namespace DuckGame
                         rainSound = new LoopingSound("sizzle", 1, -3);
                         rainSound.volume = 0.2f;
                         darkenRainer = 0.8f;
-                        rainDarken = darkenRainer;
                         cityRaining = true;
                         rainwind = Rando.Float(-2, 2);
                         lightningRNG = Rando.Int(1200, 2400);
                         if (Rando.Int(2) == 0)
                         {
                             forecast = "HEAVY RAIN";
-                            darkenRainer = 0.4f;
+                            darkenRainer = 0.6f;
                             rainSound.volume = 0.5f;
                             rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
                             lightningRNG = (int)Math.Floor(0.4f * lightningRNG);
@@ -250,9 +249,11 @@ namespace DuckGame
                             {
                                 lightningRNG = (int)Math.Floor(0.3f * lightningRNG);
                                 forecast = "THUNDERSTORM";
+                                darkenRainer = 0.55f;
                             }
                             heavyRain = true;
                         }
+                        rainDarken = darkenRainer;
                     }
                     else
                     {
@@ -335,7 +336,7 @@ namespace DuckGame
                     if (!heavyRain && Rando.Int(1) == 0)
                     {
                         rainwindto *= 2;
-                        darkenRainer = 0.4f;
+                        darkenRainer = 0.6f;
                         heavyRain = true;
                         lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
                     }
@@ -404,7 +405,7 @@ namespace DuckGame
                     if (!heavyRain && Rando.Int(1) == 0)
                     {
                         rainwindto *= 2;
-                        darkenRainer = 0.4f;
+                        darkenRainer = 0.6f;
                         heavyRain = true;
                         lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
                     }

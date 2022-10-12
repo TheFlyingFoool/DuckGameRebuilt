@@ -281,8 +281,7 @@ namespace DuckGame
 
         public virtual void AddThing(Thing t)
         {
-            if (Thread.CurrentThread == Content.previewThread && this != Content.previewLevel)
-                Content.previewLevel.AddThing(t);
+            if (Thread.CurrentThread == Content.previewThread && this != Content.previewLevel) Content.previewLevel.AddThing(t);
             else if (t is ThingContainer)
             {
                 ThingContainer thingContainer = t as ThingContainer;
