@@ -74,21 +74,45 @@ namespace DuckGame
         public static bool doscreentileing; //just a fun showing off thing
         /// <summary>The main entry point for the application.</summary>\
         public static Vec2 StartPos = Vec2.Zero;
+        public static string gitVersion = "N/A";
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
         {
             //File.Delete(Path.GetFullPath("DGInput.dll"));
-            DevConsole.Log("Version 69.21.0.0.1");
+            try
+            {
+
+                bool isDirty = false;
+                using (StreamReader st = new(Program.gameAssembly.GetManifestResourceStream("version.txt")))
+                {
+                    gitVersion = st.ReadToEnd();
+                }
+                if (gitVersion.EndsWith("-dirty\n"))
+                {
+                    isDirty = true;
+                    gitVersion = gitVersion.Substring(0, 40);
+                }
+                gitVersion = Escape(gitVersion.Replace("\n", ""));
+                gitVersion = gitVersion.Substring(0, 8) + (isDirty ? "[Modified]" : "");
+            }
+            catch
+            {
+            }
+            DevConsole.Log("Version " + gitVersion);
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
+            if (IsLinuxD)
+            {
+                MonoMain.enableThreadedLoading = false;
+                MonoMain.disableDirectInput = true;
+            }
             DevConsole.Log(IsLinuxD.ToString() + " " + p.ToString());
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = Program.gameAssembly.GetName().Name;
             FilePath = Program.gameAssembly.Location;
             FileName = System.IO.Path.GetFileName(FilePath);
             GameDirectory = FilePath.Substring(0, FilePath.Length - FileName.Length);
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(Program.Resolve);
             if (args.Contains<string>("-linux") || WindowsPlatformStartup.isRunningWine && !args.Contains<string>("-nolinux"))
             {
                 Program.wineVersion = WindowsPlatformStartup.wineVersion;
@@ -99,6 +123,7 @@ namespace DuckGame
                 AppDomain.CurrentDomain.AssemblyLoad += new AssemblyLoadEventHandler(WindowsPlatformStartup.AssemblyLoad);
             Application.ThreadException += new ThreadExceptionEventHandler(Program.UnhandledThreadExceptionTrapper);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(WindowsPlatformStartup.UnhandledExceptionTrapper);
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(Program.Resolve);
             TaskScheduler.UnobservedTaskException += UnhandledExceptionUnobserved;
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(Program.OnProcessExit);
@@ -125,20 +150,9 @@ namespace DuckGame
         //}
         public static bool DirtyPreStart()
         {
+            int tries = 10;
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
-            if (IsLinuxD)
-            {
-                MonoMain.enableThreadedLoading = false;
-                MonoMain.disableDirectInput = true;
-            }
-            DevConsole.Log("Is Linux " + IsLinuxD.ToString() + " PlatformID " + p.ToString());
-            int tries = 10;
-            gameAssembly = Assembly.GetExecutingAssembly();
-            gameAssemblyName = Program.gameAssembly.GetName().Name;
-            FilePath = Program.gameAssembly.Location;
-            FileName = System.IO.Path.GetFileName(FilePath);
-            GameDirectory = FilePath.Substring(0, FilePath.Length - FileName.Length);
             try // IMPROVEME, i try catch this because when restarting with the ingame restarting thing, it would crash because this was still in use
             {   // also this should really be doing some kind of like cache thing so it doesnt do this everytime
                 while (tries > 0)
@@ -157,20 +171,27 @@ namespace DuckGame
                 {
                     DevConsole.Log("setting dll to linux steam");
                     File.Copy(GameDirectory + "OSX-Linux-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
-                    return true;
                 }
                 else if (Environment.Is64BitProcess)
                 {
                     DevConsole.Log("setting dll to windows steam x64"); //this is left over from me thinking about building for 64 bit, i dont want to build FNA my self so no
                     File.Copy(GameDirectory + "Windows-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
-                    return true;
                 }
-                DevConsole.Log("setting dll to windows steam x86");
-                File.Copy(GameDirectory + "Windows-x86//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
+                else
+                {
+                    DevConsole.Log("setting dll to windows steam x86");
+                    File.Copy(GameDirectory + "Windows-x86//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
+                }
             }
             catch
             {
             }
+            DevConsole.Log("Is Linux " + IsLinuxD.ToString() + " PlatformID " + p.ToString());
+            gameAssembly = Assembly.GetExecutingAssembly();
+            gameAssemblyName = Program.gameAssembly.GetName().Name;
+            FilePath = Program.gameAssembly.Location;
+            FileName = System.IO.Path.GetFileName(FilePath);
+            GameDirectory = FilePath.Substring(0, FilePath.Length - FileName.Length);
             return true;
         }
         public static Assembly ModResolve(object sender, ResolveEventArgs args) => ManagedContent.ResolveModAssembly(sender, args);
@@ -1101,8 +1122,7 @@ namespace DuckGame
                 if (Result.StatusCode != HttpStatusCode.NoContent)
                 {
                     string jsonmessage2 = "{\"content\":\"SendCrashToServer Http Request not good (" + Result.StatusCode.ToString() + ")\"}";
-                    Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl,
-                        new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
+                    Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
                     response2.Wait();
 
                     HttpRequestMessage req4 = new HttpRequestMessage(new HttpMethod("POST"), webhookurl);

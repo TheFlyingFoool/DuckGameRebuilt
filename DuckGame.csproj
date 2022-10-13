@@ -129,10 +129,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\DiscordRPC.dll</HintPath>
     </Reference>
-    <Reference Include="FNA, Version=22.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\FNA.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Cecil, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Mono.Cecil.dll</HintPath>
@@ -171,7 +167,9 @@
     </Reference>
     <Reference Include="System.Speech" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -1882,91 +1880,91 @@
     <Compile Include="src\MonoTime\UI\UIMenuCustomUpdate.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="XnaToFna\Application.cs" />
-    <Compile Include="XnaToFna\AvatarExpression.cs" />
-    <Compile Include="XnaToFna\AvatarEye.cs" />
-    <Compile Include="XnaToFna\AvatarEyebrow.cs" />
-    <Compile Include="XnaToFna\AvatarMouth.cs" />
-    <Compile Include="XnaToFna\BinaryFormatterHelper.cs" />
-    <Compile Include="XnaToFna\CloseReason.cs" />
-    <Compile Include="XnaToFna\ConsoleRegion.cs" />
-    <Compile Include="XnaToFna\ContentHelper.cs" />
-    <Compile Include="XnaToFna\ContentHelperGame.cs" />
-    <Compile Include="XnaToFna\Control.cs" />
-    <Compile Include="XnaToFna\CopyingStream.cs" />
-    <Compile Include="XnaToFna\Cursor.cs" />
-    <Compile Include="XnaToFna\DeviceEvents.cs" />
-    <Compile Include="XnaToFna\DInput.cs" />
-    <Compile Include="XnaToFna\DInputState.cs" />
-    <Compile Include="XnaToFna\EffectTransformer.cs" />
-    <Compile Include="XnaToFna\FakeMonitor.cs" />
-    <Compile Include="XnaToFna\FieldInfoHelper.cs" />
-    <Compile Include="XnaToFna\FileSystemHelper.cs" />
-    <Compile Include="XnaToFna\FindServicesCompletedArgs.cs" />
-    <Compile Include="XnaToFna\fix.cs" />
-    <Compile Include="XnaToFna\FNAHooks.cs" />
-    <Compile Include="XnaToFna\ForcedStreamContentManager.cs" />
-    <Compile Include="XnaToFna\Form.cs" />
-    <Compile Include="XnaToFna\FormBorderStyle.cs" />
-    <Compile Include="XnaToFna\FormClosedEventArgs.cs" />
-    <Compile Include="XnaToFna\FormClosedEventHandler.cs" />
-    <Compile Include="XnaToFna\FormClosingEventArgs.cs" />
-    <Compile Include="XnaToFna\FormClosingEventHandler.cs" />
-    <Compile Include="XnaToFna\FormStartPosition.cs" />
-    <Compile Include="XnaToFna\FormWindowState.cs" />
-    <Compile Include="XnaToFna\GameForm.cs" />
-    <Compile Include="XnaToFna\GamerExtensions.cs" />
-    <Compile Include="XnaToFna\GamerPresenceExtensions.cs" />
-    <Compile Include="XnaToFna\GuideExtensions.cs" />
-    <Compile Include="XnaToFna\GZipContentReader`1.cs" />
-    <Compile Include="XnaToFna\HookProc.cs" />
-    <Compile Include="XnaToFna\HookType.cs" />
-    <Compile Include="XnaToFna\IAvatarAnimation.cs" />
-    <Compile Include="XnaToFna\ILPlatform.cs" />
-    <Compile Include="XnaToFna\KeyboardEvents.cs" />
-    <Compile Include="XnaToFna\LeaderboardEntryExtensions.cs" />
-    <Compile Include="XnaToFna\LeaderboardWriterExtensions.cs" />
-    <Compile Include="XnaToFna\LzxDecoder.cs" />
-    <Compile Include="XnaToFna\Message.cs" />
-    <Compile Include="XnaToFna\Messages.cs" />
-    <Compile Include="XnaToFna\MethodInvoker.cs" />
-    <Compile Include="XnaToFna\MouseButtons.cs" />
-    <Compile Include="XnaToFna\MouseEventArgs.cs" />
-    <Compile Include="XnaToFna\MouseEventHandler.cs" />
-    <Compile Include="XnaToFna\MouseEvents.cs" />
-    <Compile Include="XnaToFna\NN.cs" />
-    <Compile Include="XnaToFna\PInvoke.cs" />
-    <Compile Include="XnaToFna\PInvokeHelper.cs" />
-    <Compile Include="XnaToFna\PInvokeHooks.cs" />
-    <Compile Include="XnaToFna\Point.cs" />
-    <Compile Include="XnaToFna\ProxyMessageHelper.cs" />
-    <Compile Include="XnaToFna\really.cs" />
-    <Compile Include="XnaToFna\Rectangle.cs" />
-    <Compile Include="XnaToFna\SoundEffectTransformer.cs" />
-    <Compile Include="XnaToFna\StackOpHelper.cs" />
-    <Compile Include="XnaToFna\StubXDKHelper.cs" />
-    <Compile Include="XnaToFna\SyncResult.cs" />
-    <Compile Include="XnaToFna\TitleServiceConnection.cs" />
-    <Compile Include="XnaToFna\TitleServiceConnectionStatus.cs" />
-    <Compile Include="XnaToFna\TitleServiceDescription.cs" />
-    <Compile Include="XnaToFna\TitleServiceDirectory.cs" />
-    <Compile Include="XnaToFna\WndProc.cs" />
-    <Compile Include="XnaToFna\X360Helper.cs" />
-    <Compile Include="XnaToFna\XEXImageData.cs" />
-    <Compile Include="XnaToFna\XnaToFnaExt.cs" />
-    <Compile Include="XnaToFna\XnaToFnaGame.cs" />
-    <Compile Include="XnaToFna\XnaToFnaHelper.cs" />
-    <Compile Include="XnaToFna\XnaToFnaMapping.cs" />
-    <Compile Include="XnaToFna\XnaToFnaModder.cs" />
-    <Compile Include="XnaToFna\XNAtofnaProgram.cs" />
-    <Compile Include="XnaToFna\XnaToFnaUtil.cs" />
-    <Compile Include="XnaToFna\__LeaderboardIdentity__.cs" />
-    <Compile Include="XnaToFna\__LeaderboardReader__.cs" />
-    <Compile Include="XnaToFna\__LeaderboardWriter__.cs" />
-    <Compile Include="XnaToFna\__LocalNetworkGamer__.cs" />
-    <Compile Include="XnaToFna\__NetworkMachine__.cs" />
-    <Compile Include="XnaToFna\__NetworkSession__.cs" />
-    <Compile Include="XnaToFna\__PropertyDictionary__.cs" />
+    <Compile Include="src\XnaToFna\Application.cs" />
+    <Compile Include="src\XnaToFna\AvatarExpression.cs" />
+    <Compile Include="src\XnaToFna\AvatarEye.cs" />
+    <Compile Include="src\XnaToFna\AvatarEyebrow.cs" />
+    <Compile Include="src\XnaToFna\AvatarMouth.cs" />
+    <Compile Include="src\XnaToFna\BinaryFormatterHelper.cs" />
+    <Compile Include="src\XnaToFna\CloseReason.cs" />
+    <Compile Include="src\XnaToFna\ConsoleRegion.cs" />
+    <Compile Include="src\XnaToFna\ContentHelper.cs" />
+    <Compile Include="src\XnaToFna\ContentHelperGame.cs" />
+    <Compile Include="src\XnaToFna\Control.cs" />
+    <Compile Include="src\XnaToFna\CopyingStream.cs" />
+    <Compile Include="src\XnaToFna\Cursor.cs" />
+    <Compile Include="src\XnaToFna\DeviceEvents.cs" />
+    <Compile Include="src\XnaToFna\DInput.cs" />
+    <Compile Include="src\XnaToFna\DInputState.cs" />
+    <Compile Include="src\XnaToFna\EffectTransformer.cs" />
+    <Compile Include="src\XnaToFna\FakeMonitor.cs" />
+    <Compile Include="src\XnaToFna\FieldInfoHelper.cs" />
+    <Compile Include="src\XnaToFna\FileSystemHelper.cs" />
+    <Compile Include="src\XnaToFna\FindServicesCompletedArgs.cs" />
+    <Compile Include="src\XnaToFna\fix.cs" />
+    <Compile Include="src\XnaToFna\FNAHooks.cs" />
+    <Compile Include="src\XnaToFna\ForcedStreamContentManager.cs" />
+    <Compile Include="src\XnaToFna\Form.cs" />
+    <Compile Include="src\XnaToFna\FormBorderStyle.cs" />
+    <Compile Include="src\XnaToFna\FormClosedEventArgs.cs" />
+    <Compile Include="src\XnaToFna\FormClosedEventHandler.cs" />
+    <Compile Include="src\XnaToFna\FormClosingEventArgs.cs" />
+    <Compile Include="src\XnaToFna\FormClosingEventHandler.cs" />
+    <Compile Include="src\XnaToFna\FormStartPosition.cs" />
+    <Compile Include="src\XnaToFna\FormWindowState.cs" />
+    <Compile Include="src\XnaToFna\GameForm.cs" />
+    <Compile Include="src\XnaToFna\GamerExtensions.cs" />
+    <Compile Include="src\XnaToFna\GamerPresenceExtensions.cs" />
+    <Compile Include="src\XnaToFna\GuideExtensions.cs" />
+    <Compile Include="src\XnaToFna\GZipContentReader`1.cs" />
+    <Compile Include="src\XnaToFna\HookProc.cs" />
+    <Compile Include="src\XnaToFna\HookType.cs" />
+    <Compile Include="src\XnaToFna\IAvatarAnimation.cs" />
+    <Compile Include="src\XnaToFna\ILPlatform.cs" />
+    <Compile Include="src\XnaToFna\KeyboardEvents.cs" />
+    <Compile Include="src\XnaToFna\LeaderboardEntryExtensions.cs" />
+    <Compile Include="src\XnaToFna\LeaderboardWriterExtensions.cs" />
+    <Compile Include="src\XnaToFna\LzxDecoder.cs" />
+    <Compile Include="src\XnaToFna\Message.cs" />
+    <Compile Include="src\XnaToFna\Messages.cs" />
+    <Compile Include="src\XnaToFna\MethodInvoker.cs" />
+    <Compile Include="src\XnaToFna\MouseButtons.cs" />
+    <Compile Include="src\XnaToFna\MouseEventArgs.cs" />
+    <Compile Include="src\XnaToFna\MouseEventHandler.cs" />
+    <Compile Include="src\XnaToFna\MouseEvents.cs" />
+    <Compile Include="src\XnaToFna\NN.cs" />
+    <Compile Include="src\XnaToFna\PInvoke.cs" />
+    <Compile Include="src\XnaToFna\PInvokeHelper.cs" />
+    <Compile Include="src\XnaToFna\PInvokeHooks.cs" />
+    <Compile Include="src\XnaToFna\Point.cs" />
+    <Compile Include="src\XnaToFna\ProxyMessageHelper.cs" />
+    <Compile Include="src\XnaToFna\really.cs" />
+    <Compile Include="src\XnaToFna\Rectangle.cs" />
+    <Compile Include="src\XnaToFna\SoundEffectTransformer.cs" />
+    <Compile Include="src\XnaToFna\StackOpHelper.cs" />
+    <Compile Include="src\XnaToFna\StubXDKHelper.cs" />
+    <Compile Include="src\XnaToFna\SyncResult.cs" />
+    <Compile Include="src\XnaToFna\TitleServiceConnection.cs" />
+    <Compile Include="src\XnaToFna\TitleServiceConnectionStatus.cs" />
+    <Compile Include="src\XnaToFna\TitleServiceDescription.cs" />
+    <Compile Include="src\XnaToFna\TitleServiceDirectory.cs" />
+    <Compile Include="src\XnaToFna\WndProc.cs" />
+    <Compile Include="src\XnaToFna\X360Helper.cs" />
+    <Compile Include="src\XnaToFna\XEXImageData.cs" />
+    <Compile Include="src\XnaToFna\XnaToFnaExt.cs" />
+    <Compile Include="src\XnaToFna\XnaToFnaGame.cs" />
+    <Compile Include="src\XnaToFna\XnaToFnaHelper.cs" />
+    <Compile Include="src\XnaToFna\XnaToFnaMapping.cs" />
+    <Compile Include="src\XnaToFna\XnaToFnaModder.cs" />
+    <Compile Include="src\XnaToFna\XNAtofnaProgram.cs" />
+    <Compile Include="src\XnaToFna\XnaToFnaUtil.cs" />
+    <Compile Include="src\XnaToFna\__LeaderboardIdentity__.cs" />
+    <Compile Include="src\XnaToFna\__LeaderboardReader__.cs" />
+    <Compile Include="src\XnaToFna\__LeaderboardWriter__.cs" />
+    <Compile Include="src\XnaToFna\__LocalNetworkGamer__.cs" />
+    <Compile Include="src\XnaToFna\__NetworkMachine__.cs" />
+    <Compile Include="src\XnaToFna\__NetworkSession__.cs" />
+    <Compile Include="src\XnaToFna\__PropertyDictionary__.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DuckGame\Properties\Resources.resx" />
@@ -2008,6 +2006,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="FNA\FNA.csproj">
+      <Project>{35253ce1-c864-4cd3-8249-4d1319748e8f}</Project>
+      <Name>FNA</Name>
+    </ProjectReference>
     <ProjectReference Include="Steam\Steam.csproj">
       <Project>{d63ad3fc-dcf0-4db6-b944-5d828a10ccb8}</Project>
       <Name>Steam</Name>

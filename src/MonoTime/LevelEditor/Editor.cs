@@ -13,9 +13,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
-using System.Windows.Forms;
 using Microsoft.Xna.Framework.Graphics;
-
+//using System.Windows.Forms;
 namespace DuckGame
 {
     public class Editor : Level
@@ -53,8 +52,8 @@ namespace DuckGame
         protected List<Thing> _levelThingsAlternate = new List<Thing>();
         public static string placementItemDetails = "";
         private string _saveName = "";
-        private SaveFileDialog _saveForm = new SaveFileDialog();
-        private OpenFileDialog _loadForm = new OpenFileDialog();
+        //private SaveFileDialog _saveForm = new SaveFileDialog(); wasnt used and created other issues
+       // private OpenFileDialog _loadForm = new OpenFileDialog(); wasnt used and created other issues
         public static bool enteringText = false;
         private static ContextMenu _lockInput;
         private static ContextMenu _lockInputChange;
