@@ -36,8 +36,6 @@ dotnet build
 
 * Install the packages `mono-complete` and `msbuild`
 
-<!--* TODO FIX for now just temporarily add the Presentationframework nuget (you may need dotent sdk from microsoft (or you may need to download it fom questionable sources)): https://www.nuget.org/packages/PresentationFramework/ So pretty much just download the DLL and put it in the bin folder.-->
-
 * Copy the following DLLs from root into the bin folder like so:
   ```
   cp System.Memory.dll bin/
@@ -46,15 +44,12 @@ dotnet build
   cp System.Speech.dll bin/
   cp PresentationFramework.dll bin/
   ```
-  
-* In `DuckGame.csproj`, comment out or delete this line (near the bottom) `<PostBuildEvent>Xcopy $(SolutionDir)\deps $(SolutionDir)\bin /E /H /C /I /Y
-call "$(SolutionDir)shaders_source\buildshaders.bat</PostBuildEvent>`
 
-* Copy some stuff `cp -rv deps/* bin/`
-
-* Copy some more stuff from your own DG steam from somewhee like `~/.steam/steam/steamapps/common/Duck Game/` and copy the Content folder to the `bin/` directory.
+* Go to your own DG steam somewhere like `~/.steam/steam/steamapps/common/Duck Game/` and copy the Content folder to the `bin/` directory.
 
 * Now finally you can run the build command, `msbuild`  
 _Note: you may get over 200 warnings, but don't worry about those. give yourself a pat on the back. you did it._
 
 * When you are finished and want to use the output build for release `msbuild -p:Configuration=Release`
+
+* \[Optional\] You may wish to use an IDE such as [MonoDevelop](https://www.monodevelop.com/) for working on the project.
