@@ -537,10 +537,11 @@ namespace DuckGame
                     DGList.Sort<MaterialThing>(_hitThings, PhysicsObject.YVspeedNegative);
                 double top = this.top;
                 double bottom = this.bottom;
-                if (this is Duck duck)
-                {
-                    int num6 = !duck.inputProfile.Down("DOWN") ? 0 : (duck._jumpValid > 0 ? 1 : 0);
-                }
+                //Whats the point of this?? -NiK0
+                //if (this is Duck duck)
+                //{
+                //    int num6 = !duck.inputProfile.Down("DOWN") ? 0 : (duck._jumpValid > 0 ? 1 : 0);
+                //}
                 int num7 = (int)Math.Ceiling(Math.Abs(this.vSpeed) / 4.0);
                 for (int index1 = 0; index1 < num7; ++index1)
                 {

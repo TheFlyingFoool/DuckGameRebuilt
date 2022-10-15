@@ -263,7 +263,7 @@ namespace DuckGame
             {
                 Gun gun = t as Gun;
                 if (gun.CanSpin())
-                    gun.angleDegrees = 180f;
+                    gun.angle = 3.14159f;
             }
 
             Block block1 = Level.CheckPoint<Block>(position + new Vec2(-16f, 0f));

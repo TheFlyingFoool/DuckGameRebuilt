@@ -24,7 +24,7 @@ namespace DuckGame
                     center = new Vec2(8f, 7f);
                     collisionOffset = new Vec2(-8f, -8f);
                     collisionSize = new Vec2(8f, 16f);
-                    angleDegrees = 90f;
+                    angle = 1.5708f;
                     hugWalls = WallHug.Left;
                 }
                 else
@@ -32,7 +32,7 @@ namespace DuckGame
                     center = new Vec2(8f, 7f);
                     collisionOffset = new Vec2(0f, -8f);
                     collisionSize = new Vec2(8f, 16f);
-                    angleDegrees = -90f;
+                    angle = -1.5708f;
                     hugWalls = WallHug.Right;
                 }
             }
@@ -50,7 +50,7 @@ namespace DuckGame
             editorTooltip = "Can't reach a high platform or want to get somewhere fast? That's why we built springs.";
             physicsMaterial = PhysicsMaterial.Metal;
             editorCycleType = typeof(SpringDownRight);
-            angleDegrees = 90f;
+            angle = 1.5708f;
             hugWalls = WallHug.Left;
         }
 

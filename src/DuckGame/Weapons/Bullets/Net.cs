@@ -31,12 +31,9 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 0.1f)
-                angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(hSpeed, vSpeed));
-            if (grounded && Math.Abs(vSpeed) + Math.Abs(hSpeed) <= 0f)
-                alpha -= 0.2f;
-            if (alpha <= 0f)
-                Level.Remove(this);
+            if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 0.1f) angle = -Maths.PointDirectionRad(Vec2.Zero, velocity);
+            if (grounded && Math.Abs(vSpeed) + Math.Abs(hSpeed) <= 0f) alpha -= 0.2f;
+            if (alpha <= 0f) Level.Remove(this);
             if (!onFire && Level.CheckRect<SmallFire>(position + new Vec2(-4f, -4f), position + new Vec2(4f, 4f), this) != null)
             {
                 onFire = true;

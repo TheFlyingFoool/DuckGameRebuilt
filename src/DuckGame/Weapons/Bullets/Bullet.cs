@@ -8,6 +8,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI.WebControls;
+using System.Windows.Controls.Primitives;
 
 namespace DuckGame
 {
@@ -128,7 +130,7 @@ namespace DuckGame
             gravityMultiplier = type.gravityMultiplier;
             _bulletLength = type.bulletLength;
             depth = -0.1f;
-            if (owner is Duck && (Math.Abs((owner as Duck).holdAngle) > 0.1f || (owner as Duck).holdObject is Gun && Math.Abs(((owner as Duck).holdObject as Gun).angleDegrees) > 20f && !_gravityAffected))
+            if (owner is Duck && (Math.Abs((owner as Duck).holdAngle) > 0.1f || (owner as Duck).holdObject is Gun && Math.Abs(((owner as Duck).holdObject as Gun).angle) > 0.349066f && !_gravityAffected))
                 trickshot = true;
             if (!tracer)
             {
@@ -267,18 +269,17 @@ namespace DuckGame
                     }
                 }
                 Duck owner = _owner as Duck;
-                for (int index1 = 0; index1 < 2; ++index1)
+                for (int i = 0; i < 2; ++i)
                 {
-                    bool flag1 = index1 == 1;
                     for (int index2 = 0; index2 < Bullet.bulletImpactList.Count; ++index2)
                     {
                         MaterialThing bulletImpact = Bullet.bulletImpactList[index2];
-                        if (flag1 == bulletImpact is IAmADuck && (bulletImpact != _owner && (!(_owner is Duck) || !(_owner as Duck).ExtendsTo(bulletImpact)) || ammo.immediatelyDeadly) && (owner == null || bulletImpact != owner.holdObject) && bulletImpact != _teleporter && (!(bulletImpact is Teleporter) || !_tracer && ammo.canTeleport) && (ammo.ownerSafety <= 0 || _travelTime / Maths.IncFrameTimer() >= ammo.ownerSafety || firedFrom == null || bulletImpact != firedFrom.owner))
+                        if (i == 1 == bulletImpact is IAmADuck && (bulletImpact != _owner && (!(_owner is Duck) || !(_owner as Duck).ExtendsTo(bulletImpact)) || ammo.immediatelyDeadly) && (owner == null || bulletImpact != owner.holdObject) && bulletImpact != _teleporter && (!(bulletImpact is Teleporter) || !_tracer && ammo.canTeleport) && (ammo.ownerSafety <= 0 || _travelTime / Maths.IncFrameTimer() >= ammo.ownerSafety || firedFrom == null || bulletImpact != firedFrom.owner))
                         {
-                            bool flag2 = false;
+                            bool shield = false;
                             if (DevConsole.shieldMode && bulletImpact is Duck && (bulletImpact as Duck)._shieldCharge > 0.6f)
                             {
-                                flag2 = true;
+                                shield = true;
                                 willBeStopped = true;
                             }
                             if (bulletImpact is Duck && !_tracer && _contributeToAccuracy != null)
@@ -287,7 +288,7 @@ namespace DuckGame
                                     ++_contributeToAccuracy.stats.bulletsThatHit;
                                 _contributeToAccuracy = null;
                             }
-                            if (!flag2 && bulletImpact.thickness >= 0f && !_currentlyImpacting.Contains(bulletImpact))
+                            if (!shield && bulletImpact.thickness >= 0f && !_currentlyImpacting.Contains(bulletImpact))
                             {
                                 if (!_tracer && !_tracePhase)
                                 {
@@ -313,16 +314,14 @@ namespace DuckGame
                                         velocity = _physicalBullet.velocity;
                                         willBeStopped = bulletImpact.thickness > ammo.penetration;
                                     }
-                                    else
-                                        willBeStopped = bulletImpact.thickness > ammo.penetration;
+                                    else willBeStopped = bulletImpact.thickness > ammo.penetration;
                                     if (Recorder.currentRecording != null && hitsLogged < 1)
                                     {
                                         Recorder.currentRecording.LogAction();
                                         ++hitsLogged;
                                     }
                                 }
-                                else
-                                    willBeStopped = bulletImpact.thickness > ammo.penetration;
+                                else willBeStopped = bulletImpact.thickness > ammo.penetration;
                                 OnCollide(currentTravel, bulletImpact, willBeStopped);
                                 _currentlyImpacting.Add(bulletImpact);
                                 if (bulletImpact.thickness > 1.5f && ammo.penetration >= bulletImpact.thickness)
@@ -459,7 +458,7 @@ namespace DuckGame
                                 OnHit(!flag3);
                                 if (hitArmor)
                                 {
-                                    index1 = 1;
+                                    i = 1;
                                     break;
                                 }
                                 break;
@@ -617,21 +616,28 @@ namespace DuckGame
             {
                 if (prev.Count < 1)
                     return;
-                int num = (int)Math.Ceiling((drawdist - startpoint) / 8f);
+
+                //Fixed some shit here no touchy as for it is very fragile <3
+                //-NiK0
+                float num = (int)Math.Ceiling((drawdist - startpoint) / 8f);
                 Vec2 p2 = prev.Last<Vec2>();
                 for (int index = 0; index < num; ++index)
                 {
                     Vec2 pointOnArc = GetPointOnArc(index * 8);
 
-                    //Keep the float casting here the same, it breaks for some reason if its any other way
-                    Graphics.DrawLine(pointOnArc, p2, color * (1f - (float)index / num) * alpha, ammo.bulletThickness, (Depth)0.9f);
+                    Graphics.DrawLine(pointOnArc, p2, color * (1f - index / num) * alpha, ammo.bulletThickness, (Depth)0.9f);
                     if (pointOnArc == prev.First<Vec2>())
                         break;
                     p2 = pointOnArc;
                     if (index == 0 && ammo.sprite != null && !doneTravelling)
                     {
                         ammo.sprite.depth = (Depth)1f;
-                        ammo.sprite.angleDegrees = -Maths.PointDirection(Vec2.Zero, travelDirNormalized);
+
+                        //very slight optimization here, before it was setting ammo.sprite.angleDegrees 
+                        //to Maths.PointDirection making it do extra operations when it
+                        //could just be setting the angle direction skipping two operations 
+                        //-NiK0
+                        ammo.sprite.angle = -Maths.PointDirectionRad(Vec2.Zero, travelDirNormalized);
                         Graphics.Draw(ammo.sprite, p2.x, p2.y);
                     }
                 }
@@ -640,8 +646,9 @@ namespace DuckGame
             {
                 if (ammo.sprite != null && !doneTravelling)
                 {
+                    //same optimization here
                     ammo.sprite.depth = depth + 10;
-                    ammo.sprite.angleDegrees = -Maths.PointDirection(Vec2.Zero, travelDirNormalized);
+                    ammo.sprite.angle = -Maths.PointDirectionRad(Vec2.Zero, travelDirNormalized);
                     Graphics.Draw(ammo.sprite, drawEnd.x, drawEnd.y);
                 }
                 float length = (drawStart - drawEnd).length;

@@ -49,8 +49,8 @@ namespace DuckGame
             position.x = xpos;
             position.y = ypos;
             _sprite.SetAnimation("idle");
-            _sprite.angleDegrees = Rando.Float(360f);
-            _orbiter.angleDegrees = Rando.Float(360f);
+            _sprite.angle = Rando.Float(6.28319f);
+            _orbiter.angle = Rando.Float(6.28319f);
             s1 = Rando.Float(0.8f, 1.1f);
             s2 = Rando.Float(0.8f, 1.1f);
             hSpeed = Rando.Float(0.8f) - 0.4f;

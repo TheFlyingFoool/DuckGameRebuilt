@@ -24,7 +24,7 @@ namespace DuckGame
             editorTooltip = "Can't reach a high platform or want to get somewhere fast? That's why we built springs.";
             physicsMaterial = PhysicsMaterial.Metal;
             editorCycleType = typeof(SpringDownLeft);
-            angleDegrees = 180f;
+            angle = 3.14159f;
             hugWalls = WallHug.Ceiling;
         }
 

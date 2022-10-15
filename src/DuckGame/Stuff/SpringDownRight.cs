@@ -23,7 +23,7 @@ namespace DuckGame
             editorTooltip = "Can't reach a low platform or want to get falling fast? That's why we built (down) springs.";
             physicsMaterial = PhysicsMaterial.Metal;
             editorCycleType = typeof(SpringDown);
-            angleDegrees = 135f;
+            angle = 2.35619f;
         }
 
         public override void Touch(MaterialThing with)
@@ -62,9 +62,9 @@ namespace DuckGame
         public override void UpdateAngle()
         {
             if (flipHorizontal)
-                angleDegrees = 225f;
+                angle = 3.92699f;
             else
-                angleDegrees = 135f;
+                angle = 2.35619f;
         }
 
         public override void Draw() => base.Draw();

@@ -60,7 +60,7 @@ namespace DuckGame
             {
                 _thrown = false;
                 if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 0.4f)
-                    angleDegrees = 180f;
+                    angle = 3.14159f;
             }
             if (!_pin && owner == null && !_fade)
             {
@@ -91,7 +91,7 @@ namespace DuckGame
                     else
                         SFX.Play("smallSplat", pitch: Rando.Float(-0.2f, 0.2f));
                 }
-                angleDegrees = 0f;
+                angle = 0;
                 canPickUp = false;
                 foreach (Duck duck in Level.CheckLineAll<Duck>(new Vec2(x - 5f, y + 2f), new Vec2(x + 5f, y + 2f)))
                 {

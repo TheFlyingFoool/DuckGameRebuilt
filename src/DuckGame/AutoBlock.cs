@@ -695,22 +695,22 @@ namespace DuckGame
                 }
                 if (brokeLeft)
                 {
-                    _brokenSprite.angleDegrees = 180f;
+                    _brokenSprite.angle = 3.14159f;
                     Graphics.Draw(_brokenSprite, x - 16f, y);
                 }
                 if (brokeRight)
                 {
-                    _brokenSprite.angleDegrees = 0f;
+                    _brokenSprite.angle = 0f;
                     Graphics.Draw(_brokenSprite, x + 16f, y);
                 }
                 if (brokeUp)
                 {
-                    _brokenSprite.angleDegrees = 270f;
+                    _brokenSprite.angle = 4.71239f;
                     Graphics.Draw(_brokenSprite, x, y - 16f);
                 }
                 if (brokeDown)
                 {
-                    _brokenSprite.angleDegrees = 90f;
+                    _brokenSprite.angle = 1.57079f;
                     Graphics.Draw(_brokenSprite, x, y + 16f);
                 }
             }

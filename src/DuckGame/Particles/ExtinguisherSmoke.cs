@@ -37,7 +37,7 @@ namespace DuckGame
             hSpeed = Rando.Float(-0.2f, 0.2f);
             vSpeed = Rando.Float(-0.2f, 0.2f);
             _life += Rando.Float(0.2f);
-            angleDegrees = Rando.Float(360f);
+            angle = Rando.Float(6.28319f);
             _gravMult = 0.8f;
             _sticky = 0.2f;
             _life = 3f;
@@ -63,8 +63,8 @@ namespace DuckGame
             isLocal = !network;
             _orbitInc += 0.2f;
             _sprite.SetAnimation("idle");
-            _sprite.angleDegrees = Rando.Float(360f);
-            _orbiter.angleDegrees = Rando.Float(360f);
+            _sprite.angle = Rando.Float(6.28319f);
+            _orbiter.angle = Rando.Float(6.28319f);
             s1 = Rando.Float(0.8f, 1.1f);
             s2 = Rando.Float(0.8f, 1.1f);
             float num3 = 0.6f - Rando.Float(0.2f);

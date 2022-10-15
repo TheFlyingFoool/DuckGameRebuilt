@@ -251,7 +251,7 @@ namespace DuckGame
                 if (_equippedDuck != null && _equippedDuck.inputProfile != null && _equippedDuck.inputProfile.Down("UP"))
                     netRaise = true;
                 if (owner == null && equippedDuck == null)
-                    angleDegrees = 0f;
+                    angle = 0;
                 Vec2 vec2_1;
                 if (containedObject != null)
                 {
