@@ -1400,7 +1400,7 @@ namespace DuckGame
                 }
                 foreach (Profile defaultProfile in Profiles.defaultProfiles)
                 {
-                    foreach (string trigger in Triggers.TriggerList)
+                    foreach (string trigger in Triggers.SimpleTriggerList)
                     {
                         if (defaultProfile.inputProfile.Pressed(trigger, false))
                         {

@@ -41,6 +41,22 @@ namespace DuckGame
         public const string LeftBumper = "LBUMPER";
         public const string RightBumper = "RBUMPER";
         public const string KeyboardF = "KBDF";
+        public static List<string> SimpleTriggerList = new List<string>()
+        {
+            "LEFT",
+            "RIGHT",
+            "UP",
+            "DOWN",
+            "JUMP",
+            "QUACK",
+            "SHOOT",
+            "GRAB",
+            "RAGDOLL",
+            "STRAFE",
+            "START",
+            "SELECT",
+            "CANCEL",
+        };
         public static List<string> TriggerList = new List<string>()
         {
             "LEFT",
