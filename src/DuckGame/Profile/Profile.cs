@@ -1474,7 +1474,13 @@ namespace DuckGame
 
         public void SetInputProfileLink(InputProfile pLink) => _inputProfile = pLink;
 
-        public static List<Profile> defaultProfileMappings => Profiles.core.defaultProfileMappings;
+        public static List<Profile> defaultProfileMappings
+        {
+            get
+            {
+                return Profiles.core.defaultProfileMappings;
+            }
+        }
 
         public InputProfile inputProfile
         {

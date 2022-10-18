@@ -52,7 +52,7 @@ namespace DuckGame
         //private static float _depthBias = 0f;
         private static Matrix _projectionMatrix;
         public static float kSpanIncrement = 0.0001f;
-        public static bool caseSensitiveStringDrawing = false;
+        public static bool caseSensitiveStringDrawing = false; // obsolete from old DG before text sentivity
         public static Vec2 topLeft;
         public static Vec2 bottomRight;
         public static bool didCalc = false;
@@ -294,18 +294,9 @@ namespace DuckGame
           InputProfile pro = null,
           float scale = 1f)
         {
-            if (DuckGame.Graphics.caseSensitiveStringDrawing)
-            {
-                DuckGame.Graphics._biosFontCaseSensitive.scale = new Vec2(scale);
-                DuckGame.Graphics._biosFontCaseSensitive.Draw(text, position.x, position.y, color, depth, pro);
-                DuckGame.Graphics._biosFontCaseSensitive.scale = new Vec2(1f);
-            }
-            else
-            {
-                DuckGame.Graphics._biosFont.scale = new Vec2(scale);
-                DuckGame.Graphics._biosFont.Draw(text, position.x, position.y, color, depth, pro);
-                DuckGame.Graphics._biosFont.scale = new Vec2(1f);
-            }
+            DuckGame.Graphics._biosFont.scale = new Vec2(scale);
+            DuckGame.Graphics._biosFont.Draw(text, position.x, position.y, color, depth, pro);
+            DuckGame.Graphics._biosFont.scale = new Vec2(1f);
         }
 
         public static Texture2D Texture2DFromBase64String(string base64String, GraphicsDevice? graphicsDevice = null)
@@ -348,18 +339,9 @@ namespace DuckGame
           InputProfile pro = null,
           float scale = 1f)
         {
-            if (DuckGame.Graphics.caseSensitiveStringDrawing)
-            {
-                DuckGame.Graphics._biosFontCaseSensitive.scale = new Vec2(scale);
-                DuckGame.Graphics._biosFontCaseSensitive.Draw(text, position.x, position.y, color, depth, pro, true);
-                DuckGame.Graphics._biosFontCaseSensitive.scale = new Vec2(1f);
-            }
-            else
-            {
-                DuckGame.Graphics._biosFont.scale = new Vec2(scale);
-                DuckGame.Graphics._biosFont.Draw(text, position.x, position.y, color, depth, pro, true);
-                DuckGame.Graphics._biosFont.scale = new Vec2(1f);
-            }
+            DuckGame.Graphics._biosFont.scale = new Vec2(scale);
+            DuckGame.Graphics._biosFont.Draw(text, position.x, position.y, color, depth, pro, true);
+            DuckGame.Graphics._biosFont.scale = new Vec2(1f);
         }
 
         public static void DrawStringOutline(

@@ -141,7 +141,10 @@ namespace DuckGame
 
         public static bool hasMenusOpen => TitleScreen._hasMenusOpen;
 
-        private void AddCreditLine(params string[] s) => creditsRoll.Add(new List<string>(s));
+        private void AddCreditLine(params string[] line)
+        {
+            creditsRoll.Add(new List<string>(line));
+        }
 
         public override void Initialize()
         {
@@ -1394,6 +1397,7 @@ namespace DuckGame
             {
                 if (_duck.dead)
                 {
+                    Level.Remove(_duck);
                     _duck = new Duck(160f, 60f, _duck.profile);
                     Level.Add(_duck);
                     HUD.AddInputChangeDisplay(" Cmon Now That Was Dumb, Dont You Agree? ");
@@ -1525,7 +1529,6 @@ namespace DuckGame
                 Graphics.Draw(_editorBench, 1f, 130f);
                 if (creditsScroll > 0.1)
                 {
-                    Graphics.caseSensitiveStringDrawing = true;
                     float num1 = 0f;
                     foreach (List<string> stringList in creditsRoll)
                     {
@@ -1547,7 +1550,6 @@ namespace DuckGame
                         }
                         num1 += 11f;
                     }
-                    Graphics.caseSensitiveStringDrawing = false;
                 }
             }
             else if (layer == Layer.Parallax)

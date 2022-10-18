@@ -278,6 +278,8 @@ namespace DuckGame
             if (_duck != null && _duck.dead)
             {
                 followCam.Clear();
+                Remove(_duck);
+                followCam.Remove(_duck);
                 _duck = new Duck(SpawnPosition.x, SpawnPosition.y, _duck.profile);
                 followCam.Add(_duck);
                 Add(_duck);

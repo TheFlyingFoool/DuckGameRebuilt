@@ -60,6 +60,7 @@ namespace DuckGame
           InputProfile controlProfile = null)
           : base(0f, 0f, 0f, 0f)
         {
+            textVal = LangHandler.Convert(textVal);
             _heightAdd = heightAdd;
             _font = new BitmapFont("biosFontUI", 8, 7);
             text = textVal;

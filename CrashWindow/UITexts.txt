@@ -1,0 +1,308 @@
+@WRENCH@OPTIONS@SCREWDRIVER@
+@CANCEL@BACK @SELECT@SELECT
+SFX Volume
+Music Volume
+Rumble Intensity
+ 
+SHENANIGANS
+ON OFF
+@WRENCH@GRAPHICS@SCREWDRIVER@
+Fullscreen
+Resolution
+ON OFF  
+Windowed Fullscreen
+Fire Glow
+Lighting
+Backfill Fix
+Explosion Flashes
+Console Width
+0
+Console Height
+Console Scale
+BACK
+USABILITY
+@SELECT@SELECT
+IME Support
+Chat Settings
+Custom MOJIs
+Custom Hats
+BLOCKED USERS
+Manage Block List
+Chat Font
+Chat Font Size
+Chat Head Size
+Chat Opacity
+TTS SETTINGS
+Text To Speech
+TTS Voice
+TTS Volume
+TTS Speed
+TTS Read Names
+@WRENCH@Audio@SCREWDRIVER@
+Exclusive Mode can reduce
+audio latency, but will
+stop all other programs from
+making sound while Duck Game
+is running!
+Exclusive Mode
+Audio Engine
+Mute If In The Background
+GRAPHICS
+AUDIO
+Is that a PS4 Controller?
+
+It seems you may have a |DGBLUE|PS4 Controller
+plugged in! If so, and if you are running
+|DGBLUE|DS4Windows|PREV| or a |DGBLUE|3rd party PS4 Controller Driver|PREV|,
+you may need to |DGRED|disable|PREV| it.
+If everything works okay, you can ignore
+this message. If you're controlling 2 ducks
+at once, then this message is for you!
+|DGORANGE|OK THEN
+|DGRED|DON'T SHOW THIS AGAIN
+@WRENCH@DEVICE DEFAULTS@SCREWDRIVER@
+@WASD@@SELECT@ADJUST @CANCEL@BACK
+AAAAAAAAA
+|DGBLUE|{LEFT
+|DGBLUE|/RIGHT
+|DGBLUE|}UP
+|DGBLUE|~DOWN
+|DGBLUE|JUMP
+|DGBLUE|FIRE
+|DGBLUE|GRAB
+|DGBLUE|QUACK
+|DGBLUE|STRAFE
+|DGBLUE|RAGDOLL
+|DGPURPLE|{MENU LEFT
+|DGPURPLE|/MENU RIGHT
+|DGPURPLE|}MENU UP
+|DGPURPLE|~MENU DOWN
+|DGPURPLE|ACCEPT
+|DGPURPLE|MENU 1
+|DGPURPLE|MENU 2
+|DGPURPLE|CANCEL
+|DGPURPLE|START
+|DGGREEN|MOVE STICK
+|DGGREEN|LICK STICK
+|DGGREEN|QUACK PITCH
+|DGGREEN|ZOOM   
+|RED|REVERT TO DEFAULT
+Personal controls can be
+set in profile screen.
+SAVE CHANGES?
+@SELECT@SELECT @CANCEL@BACK
+YES!
+NO!
+WARNING!
+@SELECT@ I see...
+One or more profiles have
+|DGBLUE|custom controls|PREV| defined, which will
+|DGRED|override|PREV| any controls set here!
+If these controls are not working,
+enter the hat console in the lobby
+and press |DGORANGE|EDIT|PREV| on your profile name.
+Select |DGORANGE|CONTROLS|PREV|, select your desired
+input device, go to |DGORANGE|PAGE 2|PREV|
+and select |DGORANGE|RESET|PREV|.
+FLAG SELECT
+|PINK|♥|WHITE|REBUILT|PINK|♥
+Graphics Culling
+Use sprite atlas
+Camera unfollow
+Discord RPC
+Menu Mouse
+Dubber speed
+Weather Chance
+Weather Particle Level
+Particle Level
+Rebuilt Effect
+REBUILT
+EDIT CONTROLS
+@WRENCH@SAVE DATA@SCREWDRIVER@
+CLEAR SAVE DATA?
+MANAGE CLOUD
+ARE YOU SURE?
+@WASD@ADJUST @CANCEL@EXIT
+The selected files will be
+|DGRED|permenantly deleted|DGBLUE| from
+everywhere, |DGRED|forever!
+|DGRED|DELETE
+|DGGREEN|CANCEL
+Enable Steam Cloud
+Manage Save Data
+|DGRED|CLEAR ALL SAVE DATA
+This will DELETE all data
+(Profiles, Options, Levels)
+from your Duck Game save!
+Do not do this, unless you're
+absolutely sure!
+|DGRED|DELETE AND RESTART.
+|DGGREEN|CANCEL!
+@WRENCH@MANAGE MODS@SCREWDRIVER@
+@WASD@@SELECT@ADJUST @MENU1@TOGGLE @CANCEL@BACK
+<mod name>
+DISABLE
+DELETE
+UPLOAD
+VISIT PAGE
+YES
+NO
+@WRENCH@MOD SETTINGS@SCREWDRIVER@
+If CRASH DISABLE is ON,
+a mod will automatically be
+ disabled if it causes
+the game to crash.
+CRASH DISABLE
+LOAD FAILURE DISABLE
+SHOW NETWORK WARNING
+MANAGE MODS
+SELECT FLAG
+@LWING@DUCK GAME@RWING@
+@CANCEL@CLOSE @SELECT@SELECT
+REALLY QUIT?
+PARENTAL CONTROLS
+Certain online features have been
+disabled by Parental Controls.
+OK
+DUCK GAME 1.5!
+@SELECT@OK!
+Duck Game has received a major update!
+Some of the biggest changes include:
+-Support for up to 8 players and 4 spectators     
+-New hats, weapons, equipment and furniture       
+-New city themed levels                           
+-Custom font support for chat                     
+-4K and custom resolution support                 
+-Host Migration, Invite Links, LAN play           
+-Major online synchronization improvements        
+-Major performance improvements                   
+-Hundreds and hundreds of bug fixes               
+Thank you for all your support!
+Steam Not Connected!
+It seems that either you're not logged in
+to Steam, or Steam failed to authenticate.
+You can still play- but realtime
+features like Online Play and the Workshop
+will be |DGRED|unavailable|PREV|.
+MODS CHANGED!
+@SELECT@I see...
+To ensure a smooth update, all enabled
+mods have been temporarily set to |DGRED|disabled|PREV|.
+Mod compatibility has been a high priority, and
+most mods should work no problem with the new version.
+They can be re-enabled through the |DGORANGE|MANAGE MODS|PREV| menu
+accessible via the top left options console.
+Some older mods may |DGRED|not|PREV| work...
+Please be mindful of any crashes caused by
+re-enabling specific mods, and use the '|DGBLUE|-nomods|PREV|'
+launch option if you run into trouble!
+RESUME
+OPTIONS
+CREDITS
+|DGRED|QUIT
+DELETE PROFILE!?
+@SELECT@SELECT @CANCEL@OH NO!
+WHAT? NO!
+YEAH!
+@LWING@MATCH SETTINGS@RWING@
+MODIFIERS
+@TINYLOCK@LOCKED
+Required Wins
+Rests Every
+Wall Mode
+@NORMALICON@|DGBLUE|Normal Levels
+@RANDOMICON@|DGBLUE|Random Levels
+@CUSTOMICON@|DGBLUE|Custom Levels
+@RAINBOWICON@|DGBLUE|Internet Levels
+CUSTOM LEVELS
+@PLANET@PLAY ONLINE@PLANET@
+@LWING@CREATE GAME@RWING@
+@LWING@HOST SETTINGS@RWING@
+PLAYING ONLINE
+There are many tools of expression
+in Duck Game. Please use them for
+|PINK|love|WHITE| and not for |DGRED|hate...|WHITE|
+Things every Duck aught to remember:
+-Trolling and hate appear exactly the same online.
+-Please! be kind to one another.                  
+-Please! don't use hate speech or strong words.   
+-Please! don't use hacks in public lobbies.       
+-Please! keep custom content tasteful.            
+-Angle shots are neat (and are not hacks).        
+If anyone is hacking or being unkind, please
+hover their name in the pause menu
+and go 'Mute -> Block'.
+SERVER BROWSER
+@WASD@@SELECT@JOIN @MENU1@REFRESH @CANCEL@BACK
+MODS REQUIRED!
+You're missing the mods required
+to join this game. Would you
+like to automatically subscribe to
+all required mods, restart and
+join the game?
+ENTER PASSWORD
+@ENTERKEY@ACCEPT @ESCAPEKEY@
+ENTER PORT
+@LWING@FIND GAME@RWING@
+@LWING@FILTERS@RWING@
+@SELECT@SELECT  @MENU2@TYPE
+@LWING@FILTER MODIFIERS@RWING@
+FIND GAME
+CREATE GAME
+BROWSE GAMES
+Max Players
+Type
+Name
+SET Name
+Password
+SET Password
+Port
+SET Port
+Dedicated
+Teams
+Client Maps
+|DGBLUE|SETTINGS
+|DGBLUE|MATCH SETTINGS
+|DGGREEN|CREATE GAME
+Custom Levels
+Modifiers
+Ping
+|DGGREEN|FIND GAME
+|DGBLUE|CLEAR FILTERS
+MOON GRAVITY
+START WITH HELMET
+EXPLODING PROPS
+INFINITE AMMO
+EMPTY GUNS EXPLODE
+PRESENTS FOR WINNERS
+START WITH SHOES
+QWOP MODE
+START WITH JETPACK
+GRENADE ON DEATH
+@LWING@MULTIPLAYER@RWING@
+INVITE FRIENDS
+BACK OUT
+|DGRED|MAIN MENU
+|DGGREEN|SHOW 8 PLAYER
+|DGGREEN|INVITE FRIENDS
+|DGGREEN|COPY INVITE LINK
+MULTIPLAYER
+@LWING@ARCADE@RWING@
+@CANCEL@CLOSE  @SELECT@SELECT
+EXIT ARCADE?
+@CANCEL@BACK  @SELECT@SELECT
+@LWING@ADVANCED@RWING@
+|DGRED|EXIT ARCADE
+|DGBLUE|SPEEDRUN SETTINGS
+If enabled, Speedrun Mode
+will fix the random generator
+to make target spawns
+deterministic.
+SPEEDRUN MODE
+MAX TROPHY
+RESET STATS?
+@LWING@PAUSE@RWING@
+TEST MODE
+RESTART
+PLAYERS
+START

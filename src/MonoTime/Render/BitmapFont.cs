@@ -422,6 +422,7 @@ namespace DuckGame
 
         public float GetWidth(string text, bool thinButtons = false, InputProfile input = null)
         {
+            text = LangHandler.Convert(text);
             bool flag1 = false;
             if (input == null)
             {
@@ -512,7 +513,11 @@ namespace DuckGame
           InputProfile input = null,
           bool colorSymbols = false)
         {
-
+            //if (!LangHandler.drawnstrings.Contains(text) && !LangHandler.langmap["en"].ContainsKey(text))
+            //{
+            //    LangHandler.drawnstrings.Add(text);
+            //}
+            text = LangHandler.Convert(text);
             if (colorOverride != new Color())
                 c = colorOverride;
             _previousColor = c;

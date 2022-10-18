@@ -1,0 +1,1123 @@
+<supported>en,ru,es</supported>
+<unsupported>aa,af,agq,ak,am,ar,arn,as,asa,ast,az,ba,bas,be,bem,bez,bg,bin,bm,bn,bo,br,brx,bs,byn,ca,ccp,ce,ceb,cgg,chr,co,cs,cu,cy,da,dav,de,dje,dsb,dua,dv,dyo,dz,ebu,ee,el,eo,et,eu,ewo,fa,ff,fi,fil,fo,fr,fur,fy,ga,gd,gl,gn,gsw,gu,guz,gv,ha,haw,he,hi,hr,hsb,hu,hy,ia,ibb,id,ig,ii,is,it,iu,ja,jgo,jmc,jv,ka,kab,kam,kde,kea,khq,ki,kk,kkj,kl,kln,km,kn,ko,kok,kr,ks,ksb,ksf,ksh,ku,kw,ky,la,lag,lb,lg,lkt,ln,lo,lrc,lt,lu,luo,luy,lv,mas,mer,mfe,mg,mgh,mgo,mi,mk,ml,mn,mni,moh,mr,ms,mt,mua,my,mzn,naq,nb,nd,nds,ne,nl,nmg,nn,nnh,no,nqo,nr,nso,nus,nyn,oc,om,or,os,pa,pap,pl,prg,prs,ps,pt,quc,quz,rm,rn,ro,rof,rw,rwk,sa,sah,saq,sbp,sd,se,seh,ses,sg,shi,si,sk,sl,sma,smj,smn,sms,sn,so,sq,sr,ss,ssy,st,sv,sw,syr,ta,te,teo,tg,th,ti,tig,tk,tn,to,tr,ts,tt,twq,tzm,ug,uk,ur,uz,vai,ve,vi,vo,vun,wae,wal,wo,xh,xog,yav,yi,yo,zgh,zh,zu</unsupported>
+<en>|CREDITSGRAY|@LWINGGRAY@COMMUNITY HERO@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@ГЕРОЙ СООБЩЕСТВА@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@HEROE DE LA COMUNIDAD@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@LEAD TESTERS@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@ВЕДУЩИЕ ТЕСТИРОВЩИКИ@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@TESTERS PRINCIPALES@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@MIGHTY HELPFUL FRIEND@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@ОЧЕНЬ ПОЛЕЗНЫЙ ДРУГ@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@AMIGO UTIL BUENO@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@HEROS OF MOD@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@ГЕРОИ МОДА@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@HEROES DE LOS MODS@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@TESTERS@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@ТЕСТИРОВЩИКИ@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@PRBADORE@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@EDITOR SEARCH IDEA@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@ОБЛАСТЬ ПОИСКА В РЕДАКТОРЕ@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@IDEA DEL BUSCADOR DE EDITOR@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@A DUCK GAME COSPLAYER@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@КОСПЛЕЕР DUCK GAME@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@UN COSPLAYER DE DUCK GAME@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@SLEEPY AND FRIENDS@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@SLEEPY И ДРУЗЬЯ@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@AMIGOS Y SLEEPY@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@FEATHERS WILL FLY CREW@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@БАНДА FEATHERS WILL FLY@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@EL GRUPO DE FEATHERS WILL FLY@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@RUSS MONEY@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@RUSS MONEY@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@RUSS MONEY@RWINGGRAY@</es>
+<en>AS HIMSELF</en>
+<ru>СОБСТВЕННОЙ ПЕРСОНОЙ</ru>
+<es>COMO SI MISMO</es>
+<en>DEVELOPMENT TEAM</en>
+<ru>КОМАНДА РАЗРАБОТЧИКОВ</ru>
+<es>EQUIPO DE PROGRAMACIÓN</es>
+<en>|CREDITSGRAY|@LWINGGRAY@ART, PROGRAMMING, MUSIC@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@ХУДОЖЕСТВО, ПРОГРАММИРОВАНИЕ, МУЗЫКА@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LARTE, PROGRAMACIÓN, MUSICA</es>
+<en>|CREDITSGRAY|@LWINGGRAY@ROOM FURNITURE@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@МЕБЕЛЬ ДЛЯ КОМНАТ@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LDECORACIÓN DE SALA</es>
+<en>|CREDITSGRAY|@LWINGGRAY@HOME UPDATE HAT ART@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@ХУДОЖНИК ШАПКИ НА ОБНОВЛЕНИЕ 'ДОМ'@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LARTE DE LA ACTUALIZACIÓN HOME</es>
+<en>|CREDITSGRAY|@LWINGGRAY@MOD SUPPORT PROGRAMMER@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@ПРОГРАММИСТ ПОДДЕРЖКИ МОДОВ@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LPROGRAMADOR DEL SOPORTE DE MODS</es>
+<en>|CREDITSGRAY|@LWINGGRAY@EGGPAL, BRAD HATS@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@EGGPAL, BRAD ШАПКИ@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@EGGPAL, BRAD GORROS@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@KERCHIEFS, POSTALS, WAHHS HAT@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@KERCHIEFS, POSTALS, WAHHS ШАПКА@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@KERCHIEFS, POSTALS, WAHHS GORRO@RWINGGRAY@</es>
+<en>NINTENDO SWITCH PORT</en>
+<ru>ПОРТ НА NINTENDO SWITCH</ru>
+<es>PUERTO DE NINTENDO SWITCH</es>
+<en>DEFINITIVE EDITION</en>
+<ru>ЗАВЕРШЕННОЕ ИЗДАНИЕ</ru>
+<es>EDIFICIÓN DEFINITIVA</es>
+<en>|CREDITSGRAY|@LWINGGRAY@ENGINEERING@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@ИНЖЕНЕРИЯ@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@INGENIERIA@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@DIRECTOR OF PRODUCTION@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@EДИРЕКТОР ПРОДАКШНА@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@DIRECTOR DE PRODUCCIÓN@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@PRODUCTION@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@EПРОДАКШН@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@PRODUCCIÓN@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@QUALITY ASSURANCE@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@EКОНТРОЛЬ КАЧЕСТВА@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@ASEGURADOR DE CALIDAD@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@ARMATURE OPERATIONS@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@EОПЕРАЦИИ ARMATURE@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@OPERACIONES ARMATURE@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@BUSINESS DEVELOPMENT@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@EБИЗНЕС РАЗРАБОТКА@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@DESAROLLO DE NEGOCIOS@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@STUDIO EXECUTIVES@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@EРУКОВОДИТЕЛИ СТУДИИ@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@EJECUTIVOS DEL ESTUDIO@RWINGGRAY@</es>
+<en>|CREDITSGRAY|@LWINGGRAY@SPECIAL THANKS@RWINGGRAY@</en>
+<ru>|CREDITSGRAY|@LWINGGRAY@EОСОБАЯ БЛАГОДАРНОСТЬ@RWINGGRAY@</ru>
+<es>|CREDITSGRAY|@LWINGGRAY@GRACIAS ESPECIALES A@RWINGGRAY@</es>
+<en>Thank you OUYA for publishing</en>
+<ru>Спасибо, OUYA, за публикацию</ru>
+<es>Gracias OUYA por publicar la</es>
+<en>the original version of Duck Game.</en>
+<ru>Оригинальной версии Duck Game.</ru>
+<es>version original de Duck Game.</es>
+<en>Especially Bob Mills, who</en>
+<ru>В частности, Bob'у Mills'у,</ru>
+<es>Especialmente Bob Mills, quien</es>
+<en>made it all happen.</en>
+<ru>позволившему этому случиться.</ru>
+<es>hizo que todo ocurriera.</es>
+<en>We need to go camping again.</en>
+<ru>Нам снова нужно сходить на кемпинг</ru>
+<es>Tenemos que ir de camping denuevo.</es>
+<en>Thank you ADULT SWIM GAMES</en>
+<ru>Спасибо ADULT SWIM GAMES</ru>
+<es>Gracias ADULT SWIM GAMES</es>
+<en>for publishing Duck Game, and</en>
+<ru>за публикацию Duck Game, и</ru>
+<es>por publicar Duck Game, y</es>
+<en>for doing so much promotion and</en>
+<ru>за такое количество продвижения</ru>
+<es>por hacer tanta promoción y</es>
+<en>testing.</en>
+<ru>и тестирования.</ru>
+<es>testing.</es>
+<en>Thank you Paril for</en>
+<ru>Спасибо тебе, Paril, за</ru>
+<es>Gracias Paril por programar</es>
+<en>writing the mod support for Duck Game.</en>
+<ru>написание поддержки модов.</ru>
+<es>el soporte de Mods para Duck Game.</es>
+<en>Mods wouldn't have been possible</en>
+<ru>Без тебя они никогда</ru>
+<es>Los mods no serian posibles</es>
+<en>without you.</en>
+<ru>не были бы возможны.</ru>
+<es>sin ti.</es>
+<en>BroDuck you've been a huge help</en>
+<ru>BroDuck, ты был сильно помог</ru>
+<es>BroDuck has sido de gran ayuda</es>
+<en>keeping the community running,</en>
+<ru>продолжая вести сообщество,</ru>
+<es>manteniendo la comunidad,</es>
+<en>I don't know what would have happened</en>
+<ru>Не знаю чтобы произошло,</ru>
+<es>No se que hubiera ocurrido sin</es>
+<en>without your help.</en>
+<ru>если бы не твоя помощь.</ru>
+<es>tu ayuda.</es>
+<en>DORD your weapons mod is absolutely</en>
+<ru>DORD твой мод на оружия абсолютно</ru>
+<es>DORD tu Mod de armas es</es>
+<en>amazing and beautiful.</en>
+<ru>восхитителен и прекрасен.</ru>
+<es>absolutamente increible.</es>
+<en>Thank you everyone for playing</en>
+<ru>Спасибо всем за то, что играете</ru>
+<es>Gracias a todos por jugar</es>
+<en>Duck Game, for all your support,</en>
+<ru>в Duck Game, за вашу поддержку</ru>
+<es>Duck Game, por todo tu soporte,</es>
+<en>and for being so kind.</en>
+<ru>и доброту.</ru>
+<es>y por ser tan amables.</es>
+<en>The End</en>
+<ru>Конец</ru>
+<es>El Fin</es>
+<en>@WRENCH@OPTIONS@SCREWDRIVER@</en>
+<ru>@WRENCH@НАСТРОЙКИ@SCREWDRIVER@</ru>
+<es>OPCIONES</es>
+<en>@CANCEL@BACK @SELECT@SELECT</en>
+<ru>@CANCEL@НАЗАД @SELECT@ВЫБРАТЬ</ru>
+<es>ATRAS</es>
+<en>SFX Volume</en>
+<ru>Громкость звуков</ru>
+<es>Volumen del sonido</es>
+<en>Music Volume</en>
+<ru>Громкость музыки</ru>
+<es>Volumen de musica</es>
+<en>Rumble Intensity</en>
+<ru>Мощность вибрации</ru>
+<es>Intensidad de vibración</es>
+<en>SHENANIGANS</en>
+<ru>ПРИКОЛЮХИ</ru>
+<es>SHENANIGANS</es>
+<en>ON OFF</en>
+<ru>ВКЛ ВЫКЛ</ru>
+<es>ON OFF</es>
+<en>@WRENCH@GRAPHICS@SCREWDRIVER@</en>
+<ru>@WRENCH@ГРАФКИА@SCREWDRIVER@</ru>
+<es>GRAFICOS</es>
+<en>Fullscreen</en>
+<ru>Полный экран</ru>
+<es>Pantalla completa</es>
+<en>Resolution</en>
+<ru>Разрешение</ru>
+<es>Resolución</es>
+<en>ON OFF  </en>
+<ru>ВКЛ ВЫКЛ</ru>
+<es>ON OFF  </es>
+<en>Windowed Fullscreen</en>
+<ru>Оконный без рамок</ru>
+<es>Pantalla completa en ventana</es>
+<en>Fire Glow</en>
+<ru>Свет от огня</ru>
+<es>Brillo de fuego</es>
+<en>Lighting</en>
+<ru>Освещение</ru>
+<es>Iluminación</es>
+<en>Backfill Fix</en>
+<ru>Исправление фона</ru>
+<es>Backfill Fix</es>
+<en>Explosion Flashes</en>
+<ru>Вспышки от взрывов</ru>
+<es>Flash de explosiones</es>
+<en>Console Width</en>
+<ru>Ширина консоли</ru>
+<es>Ancho de Consola</es>
+<en>0</en>
+<ru>0</ru>
+<es>0</es>
+<en>Console Height</en>
+<ru>Высота консоли</ru>
+<es>Altura de Consola</es>
+<en>Console Scale</en>
+<ru>Размер консоли</ru>
+<es>Escala de Consola</es>
+<en>BACK</en>
+<ru>НАЗАД</ru>
+<es>ATRAS</es>
+<en>USABILITY</en>
+<ru>ДОСТУПНОСТЬ</ru>
+<es>USABILIDAD</es>
+<en>@SELECT@SELECT</en>
+<ru>@SELECT@ВЫБРАТЬ</ru>
+<es>SELECCIONAR</es>
+<en>IME Support</en>
+<ru>Поддержка РМВ</ru>
+<es>Soporte IME</es>
+<en>Chat Settings</en>
+<ru>Настройки чата</ru>
+<es>Opciones de Chat</es>
+<en>Custom MOJIs</en>
+<ru>Польз-е Эмодзи</ru>
+<es>MOJIs Custom</es>
+<en>Custom Hats</en>
+<ru>Польз-е шапки</ru>
+<es>Gorros Custom</es>
+<en>BLOCKED USERS</en>
+<ru>ЗАБЛОКИРОВАННЫЕ ИГРОКИ</ru>
+<es>USUARIOS BLOCKEADOS</es>
+<en>Manage Block List</en>
+<ru>Управлять списком</ru>
+<es>Gestionar lista de blockeo</es>
+<en>Chat Font</en>
+<ru>Шрифт чата</ru>
+<es>Fuente de Chat</es>
+<en>Chat Font Size</en>
+<ru>Размер шрифта чата</ru>
+<es>Tamaño de Chat</es>
+<en>Chat Head Size</en>
+<ru>Размер головы чата</ru>
+<es>Tamaño de Cabeza de Chat</es>
+<en>Chat Opacity</en>
+<ru>Прозрачность чата</ru>
+<es>Opacidad del Chat</es>
+<en>TTS SETTINGS</en>
+<ru>НАСТРОЙКИ ТвР</ru>
+<es>OPCIONES DE TTS</es>
+<en>Text To Speech</en>
+<ru>Текст в речь</ru>
+<es>Texto a Voz</es>
+<en>TTS Voice</en>
+<ru>Голос ТвР</ru>
+<es>Voz TTS</es>
+<en>TTS Volume</en>
+<ru>Громкость ТвР</ru>
+<es>Volumen de TTS</es>
+<en>TTS Speed</en>
+<ru>Скорость ТвР</ru>
+<es>Velocidad de TTS</es>
+<en>TTS Read Names</en>
+<ru>Озвучивать имена</ru>
+<es>Leer nombres TTS</es>
+<en>@WRENCH@Audio@SCREWDRIVER@</en>
+<ru>@WRENCH@Аудио@SCREWDRIVER@</ru>
+<es>Audio</es>
+<en>Exclusive Mode can reduce</en>
+<ru>Эксклюзивный режим, может умень.</ru>
+<es>El modo exclusivo puede</es>
+<en>audio latency, but will</en>
+<ru>аудио задержку, но приостановит</ru>
+<es>recudir latencia de audio</es>
+<en>stop all other programs from</en>
+<ru>вывод звуков у других программ</ru>
+<es>pero otros programas no </es>
+<en>making sound while Duck Game</en>
+<ru>пока запущен DuckGame!</ru>
+<es>podran hacer sonido mientras</es>
+<en>Exclusive Mode</en>
+<ru>Эксклюзивный режим</ru>
+<es>Modo Exclusivo</es>
+<en>Audio Engine</en>
+<ru>Аудио движок</ru>
+<es>Motor de Audio</es>
+<en>Mute If In The Background</en>
+<ru>Заглушить при скрытии</ru>
+<es>Silenciar si en segundo plano</es>
+<en>GRAPHICS</en>
+<ru>ГРАФИКА</ru>
+<es>GRAFICOS</es>
+<en>AUDIO</en>
+<ru>АУДИО</ru>
+<es>AUDIO</es>
+<en>Is that a PS4 Controller?</en>
+<ru>Это PS4 Контроллер?</ru>
+<es>Es eso un mando de PS4?</es>
+<en>It seems you may have a |DGBLUE|PS4 Controller</en>
+<ru>Похожу, что у вас подключен</ru>
+<es>Parece que tienes un |DGBLUE|mando de PS4</es>
+<en>plugged in! If so, and if you are running</en>
+<ru>|DGBLUE|PS4 Контроллер! Если так, и если вы используете</ru>
+<es>enchufado! Si este es el caso, y usas</es>
+<en>|DGBLUE|DS4Windows|PREV| or a |DGBLUE|3rd party PS4 Controller Driver|PREV|,</en>
+<ru>|DGBLUE|DS4Windows|PREV| и |DGBLUE|сторонний драйвер контроллера PS4|PREV|,</ru>
+<es>|DGBLUE|DS4Windows|PREV| o un |DGBLUE|Driver desconocido de PS4|PREV|,</es>
+<en>you may need to |DGRED|disable|PREV| it.</en>
+<ru>вам стоит |DGRED|отключить|PREV| его.</ru>
+<es>quizas tengas que |DGRED|desactivarlo|PREV|.</es>
+<en>If everything works okay, you can ignore</en>
+<ru>Если у вас всё в порядке, то можете пропустить</ru>
+<es>Si todo funciona bien puedes ignorar</es>
+<en>this message. If you're controlling 2 ducks</en>
+<ru>данное сообщение. Если вы управляете 2 утками</ru>
+<es>este mensaje. Si estas controlando 2</es>
+<en>at once, then this message is for you!</en>
+<ru>одновременно, то это сообщение для вас!</ru>
+<es>jugadores entonces esto es para ti!</es>
+<en>|DGORANGE|OK THEN</en>
+<ru>|DGORANGE|НУ ЛАДНО</ru>
+<es>|DGORANGE|ESTA BIEN</es>
+<en>|DGRED|DON'T SHOW THIS AGAIN</en>
+<ru>|DGRED|БОЛЬШЕ НЕ ПОКАЗЫВАЙСЯ</ru>
+<es>|DGRED|NO MOSTRAR DENUEVO</es>
+<en>@WRENCH@DEVICE DEFAULTS@SCREWDRIVER@</en>
+<ru>@WRENCH@УСТРОЙСТВО ПО УМОЛЧАНИЮ@SCREWDRIVER@</ru>
+<es>@WRENCH@DISPOSITIVO PREDETERMINADO@SCREWDRIVER@</es>
+<en>@WASD@@SELECT@ADJUST @CANCEL@BACK</en>
+<ru>@WASD@@SELECT@ПРИНЯТЬ @CANCEL@НАЗАД</ru>
+<es>@WASD@@SELECT@AJUSTAR @CANCEL@BACK</es>
+<en>AAAAAAAAA</en>
+<ru>AAAAAAAAA</ru>
+<es>AAAAAAAAA</es>
+<en>|DGBLUE|{LEFT</en>
+<ru>|DGBLUE|{ВЛЕВО</ru>
+<es>|DGBLUE|{IZQUIERDA</es>
+<en>|DGBLUE|/RIGHT</en>
+<ru>|DGBLUE|/ВПРАВО</ru>
+<es>|DGBLUE|/DERECHA</es>
+<en>|DGBLUE|}UP</en>
+<ru>|DGBLUE|}ВВЕРХ</ru>
+<es>|DGBLUE|}ARRIBA</es>
+<en>|DGBLUE|~DOWN</en>
+<ru>|DGBLUE|~ВНИЗ</ru>
+<es>|DGBLUE|~ABAJO</es>
+<en>|DGBLUE|JUMP</en>
+<ru>|DGBLUE|ПРЫЖОК</ru>
+<es>|DGBLUE|SALTO</es>
+<en>|DGBLUE|FIRE</en>
+<ru>|DGBLUE|СТРЕЛЯТЬ</ru>
+<es>|DGBLUE|DISPARO</es>
+<en>|DGBLUE|GRAB</en>
+<ru>|DGBLUE|ПОДОБРАТЬ</ru>
+<es>|DGBLUE|AGARRAR</es>
+<en>|DGBLUE|QUACK</en>
+<ru>|DGBLUE|КРЯКНУТЬ</ru>
+<es>|DGBLUE|QUACK</es>
+<en>|DGBLUE|STRAFE</en>
+<ru>|DGBLUE|СТРЕЙФ</ru>
+<es>|DGBLUE|LOCKEAR</es>
+<en>|DGBLUE|RAGDOLL</en>
+<ru>|DGBLUE|РЭГДОЛ</ru>
+<es>|DGBLUE|TIRARSE</es>
+<en>|DGPURPLE|{MENU LEFT</en>
+<ru>|DGPURPLE|{МЕНЮ ВЛЕВО</ru>
+<es>|DGPURPLE|{IZQUIERDA MENU</es>
+<en>|DGPURPLE|/MENU RIGHT</en>
+<ru>|DGPURPLE|/МЕНЮ ВПРАВО</ru>
+<es>|DGPURPLE|/DERECHA MENU</es>
+<en>|DGPURPLE|}MENU UP</en>
+<ru>|DGPURPLE|}МЕНЮ ВВЕРХ</ru>
+<es>|DGPURPLE|}ARRIBA MENU</es>
+<en>|DGPURPLE|~MENU DOWN</en>
+<ru>|DGPURPLE|~МЕНЮ ВНИЗ</ru>
+<es>|DGPURPLE|~ABAJO MENU</es>
+<en>|DGPURPLE|ACCEPT</en>
+<ru>|DGPURPLE|ПРИНЯТЬ</ru>
+<es>|DGPURPLE|ACEPTAR</es>
+<en>|DGPURPLE|MENU 1</en>
+<ru>|DGPURPLE|МЕНЮ 1</ru>
+<es>|DGPURPLE|MENU 1</es>
+<en>|DGPURPLE|MENU 2</en>
+<ru>|DGPURPLE|МЕНЮ 2</ru>
+<es>|DGPURPLE|MENU 2</es>
+<en>|DGPURPLE|CANCEL</en>
+<ru>|DGPURPLE|ОТМЕНА</ru>
+<es>|DGPURPLE|CANCELAR</es>
+<en>|DGPURPLE|START</en>
+<ru>|DGPURPLE|НАЧАТЬ</ru>
+<es>|DGPURPLE|EMPEZAR</es>
+<en>|DGGREEN|MOVE STICK</en>
+<ru>|DGGREEN|СТИК ДВИЖЕНИЯ</ru>
+<es>|DGGREEN|EJE DE MOVIMIENTO</es>
+<en>|DGGREEN|LICK STICK</en>
+<ru>|DGGREEN|СТИК ЛИЗАНИЯ</ru>
+<es>|DGGREEN|EJE DE LENGUA</es>
+<en>|DGGREEN|QUACK PITCH</en>
+<ru>|DGGREEN|ВЫСОТА КРЯКА</ru>
+<es>|DGGREEN|TONO DE QUACK</es>
+<en>|DGGREEN|ZOOM   </en>
+<ru>|DGGREEN|ПРИБЛИЖЕНИЕ </ru>
+<es>|DGGREEN|ZOOM   </es>
+<en>|RED|REVERT TO DEFAULT</en>
+<ru>|RED|ОТКТАТИТЬ ПО УМОЛЧАНИЮ</ru>
+<es>|RED|VOLVER A DEFECTO</es>
+<en>Personal controls can be</en>
+<ru>Личное управление устанавливается</ru>
+<es>Los controles personales pueden</es>
+<en>set in profile screen.</en>
+<ru>на экране профиля.</ru>
+<es>ajustarse en el perfil.</es>
+<en>SAVE CHANGES?</en>
+<ru>СОХРАНИТЬ ИЗМЕНЕНИЯ?</ru>
+<es>GUARDAR CAMBIOS?</es>
+<en>@SELECT@SELECT @CANCEL@BACK</en>
+<ru>@SELECT@ВЫБРАТЬ @CANCEL@НАЗАД</ru>
+<es>@SELECT@SELECT @CANCELAR@BACK</es>
+<en>YES!</en>
+<ru>ДА!</ru>
+<es>Sí!</es>
+<en>NO!</en>
+<ru>НЕТ!</ru>
+<es>NO!</es>
+<en>WARNING!</en>
+<ru>ВНИМАНИЕ!</ru>
+<es>ALERTA!</es>
+<en>@SELECT@ I see...</en>
+<ru>@SELECT@ Я понял...</ru>
+<es>@SELECT@ Ya veo...</es>
+<en>One or more profiles have</en>
+<ru>У одного или более профилей</ru>
+<es>Uno o más perfiles tienen</es>
+<en>|DGBLUE|custom controls|PREV| defined, which will</en>
+<ru>определены |DGBLUE|польз. управление|PREV|, что</ru>
+<es>|DGBLUE|controles personalizados|PREV| definidos, lo que</es>
+<en>|DGRED|override|PREV| any controls set here!</en>
+<ru>|DGRED|перезапишет|PREV| клавиши, указанные тут!</ru>
+<es>|DGRED|remplaza|PREV| los controles definidos aqui!!</es>
+<en>If these controls are not working,</en>
+<ru>Если это управление не работает,</ru>
+<es>Si estos controles no funcionan,</es>
+<en>enter the hat console in the lobby</en>
+<ru>зайдите в консоль в лобби и нажмите</ru>
+<es>entra a tu perfil en el lobby</es>
+<en>and press |DGORANGE|EDIT|PREV| on your profile name.</en>
+<ru>|DGORANGE|ИЗМЕНИТЬ|PREV| на имени вашего профиля.</ru>
+<es>y pulsa |DGORANGE|EDITAR|PREV| en tu perfil.</es>
+<en>Select |DGORANGE|CONTROLS|PREV|, select your desired</en>
+<ru>Выберите |DGORANGE|УПРАВЛЕНИЕ|PREV|, и поставьте</ru>
+<es>Selecciona |DGORANGE|CONTROLES|PREV|, selecciona tu</es>
+<en>input device, go to |DGORANGE|PAGE 2|PREV|</en>
+<ru>девайс ввода, пройдите на |DGORANGE|2 СТР.|PREV|</ru>
+<es>dispositivo de entra preferido, ve a la |DGORANGE|PAGINA 2|PREV|</es>
+<en>and select |DGORANGE|RESET|PREV|.</en>
+<ru>и выберите |DGORANGE|СБРОСИТЬ|PREV|.</ru>
+<es>y selecciona|DGORANGE|RESETEAT|PREV|.</es>
+<en>FLAG SELECT</en>
+<ru>ВЫБОР ФЛАГА</ru>
+<es>ELEGIR BANDERA</es>
+<en>|PINK|♥|WHITE|REBUILT|PINK|♥</en>
+<ru>|PINK|♥|WHITE|REBUILT|PINK|♥</ru>
+<es>|PINK|♥|WHITE|REBUILT|PINK|♥</es>
+<en>Graphics Culling</en>
+<ru>Графическая отбраковка</ru>
+<es>Graphics Culling</es>
+<en>Use sprite atlas</en>
+<ru>Использовать атлас спрайтов</ru>
+<es>Usar atlas de sprites</es>
+<en>Camera unfollow</en>
+<ru>Неследование камеры</ru>
+<es>Camera unfollow</es>
+<en>Discord RPC</en>
+<ru>Статус в дискорде</ru>
+<es>RPC de Discord</es>
+<en>Menu Mouse</en>
+<ru>Меню Мышки</ru>
+<es>Mouse en el menu</es>
+<en>Dubber speed</en>
+<ru>Дупер скорость</ru>
+<es>Velocidad de dubber</es>
+<en>Weather Chance</en>
+<ru>Шанс погоды</ru>
+<es>Probabilidad de Clima</es>
+<en>Weather Particle Level</en>
+<ru>Уровень частиц погоды</ru>
+<es>Nivel de particulas climaticas</es>
+<en>Particle Level</en>
+<ru>Уровень частиц</ru>
+<es>Nivel de particulas</es>
+<en>Rebuilt Effect</en>
+<ru>Эффект Rebuilt'а</ru>
+<es>Effecto de REBUILT</es>
+<en>REBUILT</en>
+<ru>REBUILT</ru>
+<es>REBUILT</es>
+<en>EDIT CONTROLS</en>
+<ru>РЕДАКТИРОВАТЬ УПРАВЛЕНИЕ</ru>
+<es>EDITAR CONTROLES</es>
+<en>@WRENCH@SAVE DATA@SCREWDRIVER@</en>
+<ru>@WRENCH@СОХРАНИТЬ ДАННЫЕ@SCREWDRIVER@</ru>
+<es>DATOS GUARDADOS</es>
+<en>CLEAR SAVE DATA?</en>
+<ru>ОЧИСТИТЬ ДАННЫЕ СОХРАНЕНИЯ?</ru>
+<es>BORRAR DATOS GUARDADOS?</es>
+<en>MANAGE CLOUD</en>
+<ru>УПРАВЛЕНИЕ ОБЛАКОМ</ru>
+<es>GESTIONAR LA NUBE</es>
+<en>ARE YOU SURE?</en>
+<ru>ВЫ УВЕРЕННЫ?</ru>
+<es>ESTAS SEGURO?</es>
+<en>@WASD@ADJUST @CANCEL@EXIT</en>
+<ru>@WASD@ПРИМЕНИТЬ @CANCEL@ВЫХОД</ru>
+<es>@WASD@AJUSTAR @CANCEL@EXIT</es>
+<en>The selected files will be</en>
+<ru>Выбранные файлы будут</ru>
+<es>Los archivos seleccionados van</es>
+<en>|DGRED|permenantly deleted|DGBLUE| from</en>
+<ru>|DGRED|навечно удалены|DGBLUE|</ru>
+<es>a ser |DGRED|borrados permanentemente|DGBLUE| del</es>
+<en>everywhere, |DGRED|forever!</en>
+<ru>отовсюду, |DGRED|навсегда!</ru>
+<es>mundo, |DGRED|por siempre!</es>
+<en>|DGRED|DELETE</en>
+<ru>|DGRED|УДАЛИТЬ</ru>
+<es>|DGRED|BORRAR</es>
+<en>|DGGREEN|CANCEL</en>
+<ru>|DGGREEN|НЕ НАДО</ru>
+<es>|DGGREEN|CANCELAR</es>
+<en>Enable Steam Cloud</en>
+<ru>Включить облако Steam</ru>
+<es>Activar nube de Steam</es>
+<en>Manage Save Data</en>
+<ru>Управлять данными сохранений</ru>
+<es>Gestionar Datos Guardados</es>
+<en>|DGRED|CLEAR ALL SAVE DATA</en>
+<ru>|DGRED|ОЧИСТИТЬ ВСЕ ДАННЫЕ СОХРАНЕНИЯ</ru>
+<es>|DGRED|BORRAR DATOS GUARDADOS</es>
+<en>This will DELETE all data</en>
+<ru>Это удалит ВСЕ данные</ru>
+<es>Esto borrara todos los datos</es>
+<en>(Profiles, Options, Levels)</en>
+<ru>(Профили, Настройки, Уровни)</ru>
+<es>(Perfiles, Opciones, Niveles)</es>
+<en>from your Duck Game save!</en>
+<ru>из вашей папки DuckGame!</ru>
+<es>de tu Duck Game!</es>
+<en>Do not do this, unless you're</en>
+<ru>Не делайте этого, пока не будете</ru>
+<es>No hagas esto a menos que estes</es>
+<en>absolutely sure!</en>
+<ru>абсолютно точно уверены!</ru>
+<es>completamente seguro!</es>
+<en>|DGRED|DELETE AND RESTART.</en>
+<ru>|DGRED|УДАЛИТЬ И ПЕРЕЗАГРУЗИТЬ.</ru>
+<es>|DGRED|BORRAR Y REINICIAR.</es>
+<en>|DGGREEN|CANCEL!</en>
+<ru>|DGGREEN|ОТМЕНА!</ru>
+<es>|DGGREEN|CANCELAR!</es>
+<en>@WRENCH@MANAGE MODS@SCREWDRIVER@</en>
+<ru>@WRENCH@УПРАВЛЕНИЕ МОДАМИ@SCREWDRIVER@</ru>
+<es>@WRENCH@GESTIONAR MODS@SCREWDRIVER@</es>
+<en>@WASD@@SELECT@ADJUST @MENU1@TOGGLE @CANCEL@BACK</en>
+<ru>@WASD@@SELECT@ПРИМЕНИТЬ @MENU1@ВКЛЮЧИТЬ @CANCEL@НАЗАД</ru>
+<es>@WASD@@SELECT@AJUSTAR @MENU1@TOGGLE @CANCEL@BACK</es>
+<en><mod name></en>
+<ru><mod name></ru>
+<es><mod name></es>
+<en>DISABLE</en>
+<ru>ОТКЛЮЧИТЬ</ru>
+<es>DESACTIVAR</es>
+<en>DELETE</en>
+<ru>УДАЛИТЬ</ru>
+<es>BORRAR</es>
+<en>UPLOAD</en>
+<ru>ЗАГРУЗИТЬ</ru>
+<es>SUBIR</es>
+<en>VISIT PAGE</en>
+<ru>ПОСЕТИТЬ СТРАНИЦУ</ru>
+<es>VISITAR PAGINA</es>
+<en>YES</en>
+<ru>ДА</ru>
+<es>SI</es>
+<en>NO</en>
+<ru>НЕТ</ru>
+<es>NO</es>
+<en>@WRENCH@MOD SETTINGS@SCREWDRIVER@</en>
+<ru>@WRENCH@НАСТРОЙКИ МОДА@SCREWDRIVER@</ru>
+<es>@WRENCH@CONFIGURACIÓN DE MOD@SCREWDRIVER@</es>
+<en>If CRASH DISABLE is ON,</en>
+<ru>Если ОТКЛЮЧЕНИЕ ПРИ КРАШЕ включено,</ru>
+<es>Si ANTI DESACTIVACIÓN esta activado,</es>
+<en>a mod will automatically be</en>
+<ru>мод автоматически будет выключне</ru>
+<es>el mod sera automaticamente</es>
+<en> disabled if it causes</en>
+<ru>если он создаст ошибку и</ru>
+<es>desactivado si causa que el</es>
+<en>the game to crash.</en>
+<ru>вызовет краш.</ru>
+<es>juego crashee.</es>
+<en>CRASH DISABLE</en>
+<ru>ОТКЛЮЧЕНИЕ ПРИ КРАШЕ</ru>
+<es>ANTI DESACTIVACIÓN</es>
+<en>LOAD FAILURE DISABLE</en>
+<ru>ОТКЛЮЧЕНИЕ ОШИБКИ ЗАГРУЗКИ</ru>
+<es>DESACTIVAR EN FALLO</es>
+<en>SHOW NETWORK WARNING</en>
+<ru>ПОКАЗЫВАТЬ ПРЕДУПРЕЖДЕНИЕ СЕТИ</ru>
+<es>MOSTRAR ALERTA DE WEB</es>
+<en>MANAGE MODS</en>
+<ru>УПРАВЛЯТЬ МОДАМИ</ru>
+<es>GESTIONAR MODS</es>
+<en>SELECT FLAG</en>
+<ru>ВЫБРАТЬ ФЛАГ</ru>
+<es>SELECIONAR BANDERA</es>
+<en>@LWING@DUCK GAME@RWING@</en>
+<ru>@LWING@DUCK GAME@RWING@</ru>
+<es>@LWING@DUCK GAME@RWING@</es>
+<en>@CANCEL@CLOSE @SELECT@SELECT</en>
+<ru>@CANCEL@ЗАКРЫТЬ @SELECT@ВЫБРАТЬ</ru>
+<es>@CANCEL@CERRAR @SELECT@SELECT</es>
+<en>REALLY QUIT?</en>
+<ru>ТОЧНО ВЫЙТИ?</ru>
+<es>SALIR DE VERDAD?</es>
+<en>PARENTAL CONTROLS</en>
+<ru>РОДИТЕЛЬСКИЙ КОНТРОЛЬ</ru>
+<es>CONTROLES PARENTALES</es>
+<en>Certain online features have been</en>
+<ru>Определённые функции в онлайне</ru>
+<es>Ciertas caracteristicas online fueron</es>
+<en>disabled by Parental Controls.</en>
+<ru>будут отключены род.контролем.</ru>
+<es>desactivadas por controles parentales.</es>
+<en>OK</en>
+<ru>СОГЛ</ru>
+<es>OK</es>
+<en>DUCK GAME 1.5!</en>
+<ru>DUCK GAME 1.5!</ru>
+<es>DUCK GAME 1.5!</es>
+<en>@SELECT@OK!</en>
+<ru>@SELECT@СОГЛ!</ru>
+<es>@SELECT@OK!</es>
+<en>Duck Game has received a major update!</en>
+<ru>Duck Game получил крупное обновление!</ru>
+<es>Duck Game a recivido una gran actualización!</es>
+<en>Some of the biggest changes include:</en>
+<ru>Некоторые крупные изменения включают:</ru>
+<es>Los cambios más grandes incluyendo:</es>
+<en>-Support for up to 8 players and 4 spectators     </en>
+<ru>-Поддержку до 8 игроков и 4 наблюдателей     </ru>
+<es>-Apoyo para 8 jugadores y 4 espectadores</es>
+<en>-New hats, weapons, equipment and furniture       </en>
+<ru>-Новые шапки, оружия, снаряжение и мебель       </ru>
+<es>-Nuevos gorros, armas, equipamiento y cosmeticos</es>
+<en>-New city themed levels                           </en>
+<ru>-Тематические уровни "Город"                           </ru>
+<es>-Nuevos niveles centrados en una ciudad                           </es>
+<en>-Custom font support for chat                     </en>
+<ru>-Поддержка пользовательских шрифтов чата                     </ru>
+<es>-Soporte de texto customizable para el chat                     </es>
+<en>-4K and custom resolution support                 </en>
+<ru>-4K и поддержка пользовательского разрешения                 </ru>
+<es>-Resolución 4K y customizable                 </es>
+<en>-Host Migration, Invite Links, LAN play           </en>
+<ru>-Миграция хоста, Ссылки Приглашения, Игра По Локали           </ru>
+<es>-Migración de host y modo LAN           </es>
+<en>-Major online synchronization improvements        </en>
+<ru>-Крупные улучшения синхронизации в онлайне        </ru>
+<es>-Gran optimización al modo online        </es>
+<en>-Major performance improvements                   </en>
+<ru>-Крупные улучшения производительности                   </ru>
+<es>-Gran optimización al rendimiento                   </es>
+<en>-Hundreds and hundreds of bug fixes               </en>
+<ru>-Сотни и тысячи исправлений ошибок                </ru>
+<es>-Cientos y cientos de bugs arreglados               </es>
+<en>Thank you for all your support!</en>
+<ru>Спасибо вам всем за поддержку!</ru>
+<es>Muchas gracias por tu apoyo!</es>
+<en>Steam Not Connected!</en>
+<ru>Steam Не Подключен!</ru>
+<es>No Estas Conectado A Steam!</es>
+<en>It seems that either you're not logged in</en>
+<ru>Похоже, что вы не зашли в аккаунт в Steam, </ru>
+<es>Parece que no te has logeado a steam o steam</es>
+<en>to Steam, or Steam failed to authenticate.</en>
+<ru>или не смог завершить аутентификацию Steam.</ru>
+<es>a fallado en autenticarte. Todavia puedes</es>
+<en>You can still play- but realtime</en>
+<ru>Вы можете играть... - но функции</ru>
+<es>jugar pero algunas caracteristicas como </es>
+<en>features like Online Play and the Workshop</en>
+<ru>по типу Игры в Онлайне или Мастерской</ru>
+<es>online y la Workshop de steam no seran</es>
+<en>will be |DGRED|unavailable|PREV|.</en>
+<ru>будут |DGRED|недоступны|PREV|.</ru>
+<es>|DGRED|Disponibles|PREV|.</es>
+<en>MODS CHANGED!</en>
+<ru>МОДЫ ИЗМЕНЕНЫ!</ru>
+<es>MODS CAMBIADOS!</es>
+<en>@SELECT@I see...</en>
+<ru>@SELECT@Понятно...</ru>
+<es>@SELECT@Ya veo...</es>
+<en>To ensure a smooth update, all enabled</en>
+<ru>Чтобы убедиться в успешном обновлении</ru>
+<es>Para asegurarse de una actualización segura</es>
+<en>mods have been temporarily set to |DGRED|disabled|PREV|.</en>
+<ru>все моды были временно |DGRED|отключен|PREV|.</ru>
+<es>todos los mods han sido |DGRED|desactivados|PREV|.</es>
+<en>Mod compatibility has been a high priority, and</en>
+<ru>Совместимость модов имеет высокий приоритет, и</ru>
+<es>La compatabilidad de mods a sido gran prioridad,</es>
+<en>most mods should work no problem with the new version.</en>
+<ru>большинство должно работать без проблем.</ru>
+<es>y la mayoria de mods todavia funcionan sin problemas.</es>
+<en>They can be re-enabled through the |DGORANGE|MANAGE MODS|PREV| menu</en>
+<ru>Можете включить их снова в меню |DGORANGE|УПРАВЛЕНИЕ МОДАМИ|PREV|</ru>
+<es>Pueden ser activados denuevo en el menu arriba a la izquierda</es>
+<en>accessible via the top left options console.</en>
+<ru>доступное через консоль в левом верхнем углу.</ru>
+<es>en el menu |DGORANGE|GESTIONAR MODS|PREV| accesible en la consola</es>
+<en>Some older mods may |DGRED|not|PREV| work...</en>
+<ru>Некоторые старые моды могут |DGRED|не|PREV| рабоать...</ru>
+<es>de opciones. Algunos mods viejos pueden |DGRED|no|PREV| funcionar...</es>
+<en>Please be mindful of any crashes caused by</en>
+<ru>Будьте сознательны в случае крашей связанных</ru>
+<es>Porfavor ten cuidado de crashes causados por </es>
+<en>re-enabling specific mods, and use the '|DGBLUE|-nomods|PREV|'</en>
+<ru>с включением модов, и используйте '|DGBLUE|-nomods|PREV|'</ru>
+<es>re-activar mods especificos, y usa el parametro de inicio</es>
+<en>launch option if you run into trouble!</en>
+<ru>параметр запуска, если попадёте в беду!</ru>
+<es>'|DGBLUE|-nomods|PREV|' si tienes problemas!</es>
+<en>RESUME</en>
+<ru>ПРОДОЛЖИТЬ</ru>
+<es>RESUMIR</es>
+<en>OPTIONS</en>
+<ru>НАСТРОЙКИ</ru>
+<es>OPCIONES</es>
+<en>CREDITS</en>
+<ru>АВТОРЫ</ru>
+<es>CREDITOS</es>
+<en>|DGRED|QUIT</en>
+<ru>|DGRED|ВЫЙТИ</ru>
+<es>|DGRED|SALIR</es>
+<en>DELETE PROFILE!?</en>
+<ru>УДАЛИТЬ ПРОФИЛЬ!?</ru>
+<es>BORRAR PERFIL!?</es>
+<en>@SELECT@SELECT @CANCEL@OH NO!</en>
+<ru>@SELECT@ВЫБРАТЬ @CANCEL@НЕ НАДО!</ru>
+<es>@SELECT@SELECT @CANCEL@OH NO!</es>
+<en>WHAT? NO!</en>
+<ru>ЧЕГО? НЕТ!</ru>
+<es>QUÉ? NO!</es>
+<en>YEAH!</en>
+<ru>БЛИН, ДА!</ru>
+<es>Sí!</es>
+<en>@LWING@MATCH SETTINGS@RWING@</en>
+<ru>@LWING@НАСТРОЙКИ МАТЧА@RWING@</ru>
+<es>@LWING@CONFIGURACIÓN DE PARTIDA@RWING@</es>
+<en>MODIFIERS</en>
+<ru>МОДИФИКАТОРЫ</ru>
+<es>MODIFICADORES</es>
+<en>@TINYLOCK@LOCKED</en>
+<ru>@TINYLOCK@ЗАБЛОКИРОВАНО</ru>
+<es>@TINYLOCK@BLOQUEADO</es>
+<en>Required Wins</en>
+<ru>Требуется побед</ru>
+<es>Victorias Requeridas</es>
+<en>Rests Every</en>
+<ru>Перерыв после</ru>
+<es>Descansos Cada</es>
+<en>Wall Mode</en>
+<ru>Режим стенки</ru>
+<es>Modo de Pared</es>
+<en>@NORMALICON@|DGBLUE|Normal Levels</en>
+<ru>@NORMALICON@|DGBLUE|Обычные уровни</ru>
+<es>@NORMALICON@|DGBLUE|Niveles Normales</es>
+<en>@RANDOMICON@|DGBLUE|Random Levels</en>
+<ru>@RANDOMICON@|DGBLUE|Случайные уровни</ru>
+<es>@RANDOMICON@|DGBLUE|Niveles Randoms</es>
+<en>@CUSTOMICON@|DGBLUE|Custom Levels</en>
+<ru>@CUSTOMICON@|DGBLUE|Польз. уровни</ru>
+<es>@CUSTOMICON@|DGBLUE|Niveles Personalizados</es>
+<en>@RAINBOWICON@|DGBLUE|Internet Levels</en>
+<ru>@RAINBOWICON@|DGBLUE|Интернет уровни</ru>
+<es>@RAINBOWICON@|DGBLUE|Niveles Internet </es>
+<en>CUSTOM LEVELS</en>
+<ru>ПОЛЬЗ. УРОВНИ</ru>
+<es>NIVELES PERSONALIZADOS</es>
+<en>@PLANET@PLAY ONLINE@PLANET@</en>
+<ru>@PLANET@ИГРАТЬ ОНЛАЙН@PLANET@</ru>
+<es>@PLANET@JUGAR ONLINE@PLANET@</es>
+<en>@LWING@CREATE GAME@RWING@</en>
+<ru>@LWING@СОЗДАТЬ ИГРУ@RWING@</ru>
+<es>@LWING@CREAR JUEGO@RWING@</es>
+<en>@LWING@HOST SETTINGS@RWING@</en>
+<ru>@LWING@ПАРАМЕТРЫ ХОСТА@RWING@</ru>
+<es>@LWING@OPCIONES DE HOST@RWING@</es>
+<en>PLAYING ONLINE</en>
+<ru>ИГРА В ОНЛАЙНЕ</ru>
+<es>JUGANDO ONLINE</es>
+<en>There are many tools of expression</en>
+<ru>Есть множество средств самовыражения</ru>
+<es>Hay varias herramientas de expresion</es>
+<en>in Duck Game. Please use them for</en>
+<ru>в Duck Game. Пожалуйста, используйте их</ru>
+<es>en Duck Game. Porfavor usalas para el</es>
+<en>|PINK|love|WHITE| and not for |DGRED|hate...|WHITE|</en>
+<ru>|PINK|с любовью|WHITE|, а не во |DGRED|зло...|WHITE|</ru>
+<es>|PINK|amor|WHITE| y no el |DGRED|odio...|WHITE|</es>
+<en>Things every Duck aught to remember:</en>
+<ru>Каждая Утка клянётся запомнить:</ru>
+<es>Cosas que cada PATO e de recordar:</es>
+<en>-Trolling and hate appear exactly the same online.</en>
+<ru>-Троллинг и ненависть в онлайне значат одно и тоже.</ru>
+<es>-Odio y Trolleos se ven lo mismo online.</es>
+<en>-Please! be kind to one another.                  </en>
+<ru>-Пожалуйста! будьте добры друг к другу.                  </ru>
+<es>-Porfavor! seanse buenos unos a los otros.                  </es>
+<en>-Please! don't use hate speech or strong words.   </en>
+<ru>-Пожалуйста! не используйте вульгарную речь.   </ru>
+<es>-Porfavor! no uses malas palabras.   </es>
+<en>-Please! don't use hacks in public lobbies.       </en>
+<ru>-Пожалуйста! не пользуйтесь читами в публичных лобби.       </ru>
+<es>-Porfavor! no uses hacks en juegos publicos.       </es>
+<en>-Please! keep custom content tasteful.            </en>
+<ru>-Пожалуйста! делайте интересный контент.            </ru>
+<es>-Porfavor! usa contenido personalizado de buen gusto.            </es>
+<en>-Angle shots are neat (and are not hacks).        </en>
+<ru>-Выстрелы под углом - тема (а не читы).        </ru>
+<es>-Los disparos angulos son cool (y no hacks).        </es>
+<en>If anyone is hacking or being unkind, please</en>
+<ru>Если кто-то читерит или злодейничает, пожалуйста</ru>
+<es>Si alguien esta hackeando o siendo brusco</es>
+<en>hover their name in the pause menu</en>
+<ru>наведите на их имя в меню паузы</ru>
+<es>ve a su nombre en el menu de pausa</es>
+<en>and go 'Mute -> Block'.</en>
+<ru>и нажмите 'Заглушить -> Заблокировать'.</ru>
+<es>y ve 'Mute -> Block'.</es>
+<en>SERVER BROWSER</en>
+<ru>БРАУЗЕР СЕРВЕРОВ</ru>
+<es>NAVEGADOR DE SERVIDORES</es>
+<en>@WASD@@SELECT@JOIN @MENU1@REFRESH @CANCEL@BACK</en>
+<ru>@WASD@@SELECT@ПРИСОЕДИНИТЬСЯ @MENU1@REFRESH @CANCEL@НАЗАД</ru>
+<es>@WASD@@SELECT@UNIRSE @MENU1@ACTUALIZAR @CANCEL@ATRAS</es>
+<en>MODS REQUIRED!</en>
+<ru>ТРЕБУЮТСЯ МОДЫ!</ru>
+<es>MODS REQUERIDOS!</es>
+<en>You're missing the mods required</en>
+<ru>У вас нет модов, необходимых</ru>
+<es>No tienes los mods requeridos </es>
+<en>to join this game. Would you</en>
+<ru>для присоединения к этой игре.</ru>
+<es>para unirte a este juego, Quieres</es>
+<en>like to automatically subscribe to</en>
+<ru>Хотите автоматически подписаться</ru>
+<es>subscribirte automaticamente a los</es>
+<en>all required mods, restart and</en>
+<ru>на все требуемые моды, перезапустить</ru>
+<es>mods requeridos, reiniciar y</es>
+<en>join the game?</en>
+<ru>и подключиться к игре?</ru>
+<es>unirte al juego?</es>
+<en>ENTER PASSWORD</en>
+<ru>ВВЕДИТЕ ПАРОЛЬ</ru>
+<es>PON CONTRASEÑA</es>
+<en>@ENTERKEY@ACCEPT @ESCAPEKEY@</en>
+<ru>@ENTERKEY@ПРИНЯТЬ @ESCAPEKEY@</ru>
+<es>@ENTERKEY@ACEPTAR @ESCAPEKEY@</es>
+<en>ENTER PORT</en>
+<ru>ВВЕДИТЕ ПОРТ</ru>
+<es>PON PUERTO</es>
+<en>@LWING@FIND GAME@RWING@</en>
+<ru>@LWING@НАЙТИ ИГРУ@RWING@</ru>
+<es>@LWING@BUSCAR JUEGO@RWING@</es>
+<en>@LWING@FILTERS@RWING@</en>
+<ru>@LWING@ФИЛЬТРЫ@RWING@</ru>
+<es>@LWING@FILTROS@RWING@</es>
+<en>@SELECT@SELECT  @MENU2@TYPE</en>
+<ru>@SELECT@ВЫБРАТЬ  @MENU2@ТИП</ru>
+<es>@SELECT@SELECCIONAR  @MENU2@TYPE</es>
+<en>@LWING@FILTER MODIFIERS@RWING@</en>
+<ru>@LWING@МОДИФИКАТОРЫ ФИЛЬТРА@RWING@</ru>
+<es>@LWING@FILTRAR MODIFICADORES@RWING@</es>
+<en>FIND GAME</en>
+<ru>НАЙТИ ИГРУ</ru>
+<es>BUSCAR JUEGO</es>
+<en>CREATE GAME</en>
+<ru>СОЗДАТЬ ИГРУ</ru>
+<es>CREAR JUEGO</es>
+<en>BROWSE GAMES</en>
+<ru>ПОСМОТРЕТЬ ИГРЫ</ru>
+<es>NAVEGADOR DE JUEGOS</es>
+<en>Max Players</en>
+<ru>Максимум игроков</ru>
+<es>Jugadores Maximos</es>
+<en>Type</en>
+<ru>Тип</ru>
+<es>Tipo</es>
+<en>Name</en>
+<ru>Имя</ru>
+<es>Nombre</es>
+<en>SET Name</en>
+<ru>ПОСТАВИТЬ Имя</ru>
+<es>PONER Nombre</es>
+<en>Password</en>
+<ru>Пароль</ru>
+<es>Contraseña</es>
+<en>SET Password</en>
+<ru>ПОСТАВИТЬ Пароль</ru>
+<es>PONER Contraseña</es>
+<en>Port</en>
+<ru>Порт</ru>
+<es>Puerto</es>
+<en>SET Port</en>
+<ru>ПОСТАВИТЬ Порт</ru>
+<es>PONER Puerto</es>
+<en>Dedicated</en>
+<ru>Выделенный</ru>
+<es>Dedicado</es>
+<en>Teams</en>
+<ru>Команды</ru>
+<es>Equipos</es>
+<en>Client Maps</en>
+<ru>Польз. карты</ru>
+<es>Niveles Clientes</es>
+<en>|DGBLUE|SETTINGS</en>
+<ru>|DGBLUE|НАСТРОЙКИ</ru>
+<es>|DGBLUE|OPCIONES</es>
+<en>|DGBLUE|MATCH SETTINGS</en>
+<ru>|DGBLUE|НАСТРОЙКИ МАТЧА</ru>
+<es>|DGBLUE|OPCIONES DE JUEGO</es>
+<en>|DGGREEN|CREATE GAME</en>
+<ru>|DGGREEN|СОЗДАТЬ ИГРУ</ru>
+<es>|DGGREEN|CREAR JUEGO</es>
+<en>Custom Levels</en>
+<ru>Польз. уровни</ru>
+<es>Niveles Custom</es>
+<en>Modifiers</en>
+<ru>Модификаторы</ru>
+<es>Modificadores</es>
+<en>Ping</en>
+<ru>Пинг</ru>
+<es>Latencia</es>
+<en>|DGGREEN|FIND GAME</en>
+<ru>|DGGREEN|НАЙТИ ИГРУ</ru>
+<es>|DGGREEN|BUSCAR JUEGO</es>
+<en>|DGBLUE|CLEAR FILTERS</en>
+<ru>|DGBLUE|ОЧИСТИТЬ ФИЛЬТРЫ</ru>
+<es>|DGBLUE|REINICIAR FILTROS</es>
+<en>MOON GRAVITY</en>
+<ru>ЛУННАЯ ГРАВИТАЦИЯ</ru>
+<es>GRAVEDAD DE LUNA</es>
+<en>START WITH HELMET</en>
+<ru>НАЧАЛО С ШЛЕМОМ</ru>
+<es>CASCO DE EMPEZAR</es>
+<en>EXPLODING PROPS</en>
+<ru>ВЗРЫВНЫЕ ПРОПЫ</ru>
+<es>OBJETOS EXPLOSIVOS</es>
+<en>INFINITE AMMO</en>
+<ru>БЕСКОНЕЧНЫЕ ПАТРОНЫ</ru>
+<es>MUNICIÓN INFINITA</es>
+<en>EMPTY GUNS EXPLODE</en>
+<ru>ПУСТЫЕ ПУШКИ ВЗРЫВАЮТСЯ</ru>
+<es>ARMAS VACIAS EXPLOTAN</es>
+<en>PRESENTS FOR WINNERS</en>
+<ru>ПОДАРКИ ПОБЕДИТЕЛЮ</ru>
+<es>REGALOS PARA GANADORES</es>
+<en>START WITH SHOES</en>
+<ru>НАЧАЛО С БОТИНКАМИ</ru>
+<es>BOTAS DE EMPEZAR</es>
+<en>QWOP MODE</en>
+<ru>РЕЖИМ QWOP</ru>
+<es>MODO QWOP</es>
+<en>START WITH JETPACK</en>
+<ru>НАЧАЛО С ДЖЕТПАКОМ</ru>
+<es>JETPACK DE EMPEZAR</es>
+<en>GRENADE ON DEATH</en>
+<ru>ГРАНАТА ПРИ СМЕРТИ</ru>
+<es>GRANADA EN MUERTE</es>
+<en>@LWING@MULTIPLAYER@RWING@</en>
+<ru>@LWING@МНОГОПОЛЬЗОВАТЕЛЬСКАЯ@RWING@</ru>
+<es>@LWING@MULTIJUGADOR@RWING@</es>
+<en>INVITE FRIENDS</en>
+<ru>ПРИГЛАСИТЬ ДРУЗЕЙ</ru>
+<es>INVITAR AMIGOS</es>
+<en>BACK OUT</en>
+<ru>ОТОЙТИ</ru>
+<es>RETIRARSE</es>
+<en>|DGRED|MAIN MENU</en>
+<ru>|DGRED|ГЛАВНОЕ МЕНЮ</ru>
+<es>|DGRED|MENU PRINCIPAL</es>
+<en>|DGGREEN|SHOW 8 PLAYER</en>
+<ru>|DGGREEN|ПОКАЗАТЬ 8 ИГРОКОВ</ru>
+<es>|DGGREEN|MOSTRAR 8 JUGADORES</es>
+<en>|DGGREEN|INVITE FRIENDS</en>
+<ru>|DGGREEN|ПРИГЛАСИТЬ ДРУЗЕЙ</ru>
+<es>|DGGREEN|INVITAR AMIGOS</es>
+<en>|DGGREEN|COPY INVITE LINK</en>
+<ru>|DGGREEN|СКОПИРОВАТЬ ПРИГЛАШЕНИЕ</ru>
+<es>|DGGREEN|COPIAR LINK DE INVITACIÓN</es>
+<en>MULTIPLAYER</en>
+<ru>МНОГОПОЛЬЗОВАТЕЛЬСКАЯ</ru>
+<es>MULTIJUGADOR</es>
+<en>@LWING@ARCADE@RWING@</en>
+<ru>@LWING@АРКАДА@RWING@</ru>
+<es>@LWING@ARCADE@RWING@</es>
+<en>@CANCEL@CLOSE  @SELECT@SELECT</en>
+<ru>@CANCEL@ЗАКРЫТЬ  @SELECT@ВЫБРАТЬ</ru>
+<es>@CANCEL@CERRAR  @SELECT@SELECCIONAR</es>
+<en>EXIT ARCADE?</en>
+<ru>ПОКИНУТЬ АРКАДУ?</ru>
+<es>SALIR DEL ARCADE?</es>
+<en>@CANCEL@BACK  @SELECT@SELECT</en>
+<ru>@CANCEL@ЗАКРЫТЬ  @SELECT@ВЫБРАТЬ</ru>
+<es>@CANCEL@ATRAS  @SELECT@SELECCIONAR</es>
+<en>@LWING@ADVANCED@RWING@</en>
+<ru>@LWING@ПРОДВИНУТЫЕ@RWING@</ru>
+<es>@LWING@AVANZADO@RWING@</es>
+<en>|DGRED|EXIT ARCADE</en>
+<ru>|DGRED|ПОКИНУТЬ АРКАДУ</ru>
+<es>|DGRED|SALIR DEL ARCADE</es>
+<en>|DGBLUE|SPEEDRUN SETTINGS</en>
+<ru>|DGBLUE|НАСТРОЙКИ СПИДРАНА</ru>
+<es>|DGBLUE|OPCIONES DE SPEEDRUN</es>
+<en>If enabled, Speedrun Mode</en>
+<ru>Если включен, Режим Спидрана</ru>
+<es>Si activado, el modo speedrun</es>
+<en>will fix the random generator</en>
+<ru>зафиксирует рандомизатор, чтобы</ru>
+<es>hara que la semilla aleatoria</es>
+<en>to make target spawns</en>
+<ru>цели появлялись предсказуемым</ru>
+<es>siempre sea la misma para hacer</es>
+<en>deterministic.</en>
+<ru>образом.</ru>
+<es>el arcade deterministico.</es>
+<en>SPEEDRUN MODE</en>
+<ru>РЕЖИМ СПИДРАНА</ru>
+<es>MODO SPEEDRUN</es>
+<en>MAX TROPHY</en>
+<ru>МАКС. ТРОФЕЕВ</ru>
+<es>TROFEO MAXIMO</es>
+<en>RESET STATS?</en>
+<ru>СБРОСИТЬ СТАТИСТИКУ?</ru>
+<es>REINICIAR STATS?</es>
+<en>@LWING@PAUSE@RWING@</en>
+<ru>@LWING@ПАУЗА@RWING@</ru>
+<es>@LWING@PAUSAR@RWING@</es>
+<en>TEST MODE</en>
+<ru>РЕЖИМ ТЕСТА</ru>
+<es>MODO TEST</es>
+<en>RESTART</en>
+<ru>ПЕРЕЗАПУСК</ru>
+<es>REINICAR</es>
+<en>PLAYERS</en>
+<ru>ИГРОКИ</ru>
+<es>JUGADORES</es>
+<en>START</en>
+<ru>НАЧАТЬ</ru>
+<es>EMPEZAR</es>
+<en>VIPS</en>
+<ru>ВИПЫ</ru>
+<es>VIPS</es>
+<en>ONLY</en>
+<ru>ТОЛЬКО</ru>
+<es>SOLO</es>
+<en>VIP</en>
+<ru>ВИП</ru>
+<es>VIP</es>
+<en>PRESS</en>
+<ru>НАЖМИ</ru>
+<es>APRETA</es>
+<en>WAITING FOR</en>
+<ru>ОЖИДАНИЕ</ru>
+<es>ESPERANDO AL</es>
+<en>HOST</en>
+<ru>ХОСТА</ru>
+<es>HOST</es>
+<en>SLOT</en>
+<ru>СЛОТ</ru>
+<es>SLOT</es>
+<en>OPEN</en>
+<ru>ОТКРЫТЬ</ru>
+<es>ABIERTO</es>
+<en>PALS</en>
+<ru>ДРУЗЬЯ</ru>
+<es>AMIGOS</es>
+<en>CANCEL</en>
+<ru>ОТМЕНА</ru>
+<es>CANCELAR</es>
+<en>PICKUP</en>
+<ru>ПОДОБРАТЬ</ru>
+<es>AGARRAR</es>
+<en>@WASD@MOVE</en>
+<ru>@WASD@ДВИЖЕНИЕ</ru>
+<es>@WASD@MOVERSE</es>
+<en>@DPAD@MOVE</en>
+<ru>@DPAD@ДВИЖЕНИЕ</ru>
+<es>@DPAD@MOVERSE</es>
+<en>@JUMP@JUMP</en>
+<ru>@JUMP@ПРЫЖОК</ru>
+<es>@JUMP@SALTAR</es>
+<en>@GRAB@TOSS</en>
+<ru>@GRAB@БРОСИТЬ</ru>
+<es>@GRAB@TIRAR</es>
+<en>@SHOOT@FIRE</en>
+<ru>@SHOOT@СТРЕЛЬБА</ru>
+<es>@SHOOT@DISPARAR</es>
+<en>@SHOOT@TEAM</en>
+<ru>@SHOOT@КОМАНДА</ru>
+<es>@SHOOT@EQUIPO</es>
+
+

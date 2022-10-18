@@ -216,28 +216,28 @@ namespace DuckGame
             Chancy.Clear();
             float challengeSkillIndex = Challenges.GetChallengeSkillIndex();
             List<string> stringList = new List<string>()
-      {
-        "You interested in a little challenge?",
-        "Bet you can't finish this one!",
-        "You look up for a challenge."
-      };
+              {
+                "You interested in a little challenge?",
+                "Bet you can't finish this one!",
+                "You look up for a challenge."
+              };
             if (Chancy._save == null)
             {
                 if (challengeSkillIndex > 0.75f)
                     stringList = new List<string>()
-          {
-            "You could do this one easy.",
-            "This should be no problem for you!",
-            "This one's gonna be a breeze.",
-            "Hot off the grill, just for you."
-          };
+                  {
+                    "You could do this one easy.",
+                    "This should be no problem for you!",
+                    "This one's gonna be a breeze.",
+                    "Hot off the grill, just for you."
+                  };
                 else if (challengeSkillIndex > 0.3f)
                     stringList = new List<string>()
-          {
-            "Wanna try something different?",
-            "Hey, check this out.",
-            "I've been playin with this new thing."
-          };
+                  {
+                    "Wanna try something different?",
+                    "Hey, check this out.",
+                    "I've been playin with this new thing."
+                  };
             }
             else if (Chancy._save != null && Chancy._save.trophy > TrophyType.Gold)
             {

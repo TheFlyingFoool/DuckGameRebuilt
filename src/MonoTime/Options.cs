@@ -377,13 +377,13 @@ namespace DuckGame
             menu.Add(new UIMenuItemNumber("Console Width", field: new FieldBinding(Data, "consoleWidth", 25f, 100f), step: 10), true);
             menu.Add(new UIMenuItemNumber("Console Height", field: new FieldBinding(Data, "consoleHeight", 10f, 100f), step: 10), true);
             menu.Add(new UIMenuItemNumber("Console Scale", field: new FieldBinding(Data, "consoleScale", max: 4f), valStrings: new List<string>()
-      {
-        "Tiny",
-        "Regular",
-        "Large",
-        "Gigantic",
-        "WUMBO"
-      }), true);
+              {
+                "Tiny",
+                "Regular",
+                "Large",
+                "Gigantic",
+                "WUMBO"
+              }), true);
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true), true);
             return menu;
@@ -400,12 +400,12 @@ namespace DuckGame
             menu.Add(new UIText(" ", Colors.DGBlue), true);
             menu.Add(new UIMenuItemToggle("Exclusive Mode", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(Options.ExclusiveAudioModeChanged)), new FieldBinding(Data, "audioExclusiveMode")), true);
             menu.Add(new UIMenuItemNumber("Audio Engine", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(Options.AudioEngineChanged)), new FieldBinding(Data, "audioMode", 1f, 3f), valStrings: new List<string>()
-      {
-        "None",
-        "WaveOut",
-        "Wasapi",
-        "DirectSound"
-      }), true);
+          {
+            "None",
+            "WaveOut",
+            "Wasapi",
+            "DirectSound"
+          }), true);
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItemToggle("Mute If In The Background", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(Options.MuteOnBackground)), new FieldBinding(Data, "muteOnBackground")), true);
             menu.Add(new UIText(" ", Color.White), true);

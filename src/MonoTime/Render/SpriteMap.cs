@@ -32,7 +32,7 @@ namespace DuckGame
         private bool _flipFlop = true;
         private MTSpriteBatchItem _batchItem;
         private int _waitFrames;
-
+        public int frames;
         public new int globalIndex
         {
             get => _globalIndex;
@@ -175,6 +175,7 @@ namespace DuckGame
                 if (animation.name == name)
                 {
                     _currentAnimation = new Animation?(animation);
+                    frames = _currentAnimation.Value.frames.Length;
                     _frameInc = 0f;
                     frame = 0;
                     return;

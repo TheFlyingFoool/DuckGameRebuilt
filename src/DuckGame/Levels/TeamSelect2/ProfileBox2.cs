@@ -817,6 +817,7 @@ namespace DuckGame
                         if (_doorX == 0.0)
                         {
                             _fontSmall.depth = doorLeftBlank.depth + 10;
+
                             if (!Network.isActive || flag6 && Network.isServer)
                             {
                                 _doorIcon.depth = doorLeftBlank.depth + 10;
@@ -841,16 +842,32 @@ namespace DuckGame
                                 _doorIcon.depth = doorLeftBlank.depth + 10;
                                 _doorIcon.frame = 11;
                                 Graphics.Draw(_doorIcon, (int)x + 57, y + 31f);
-                                _fontSmall.DrawOutline("PALS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                if (LangHandler.reverse)
+                                {
+                                    _fontSmall.DrawOutline("ONLY", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("PALS", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
+                                else
+                                {
+                                    _fontSmall.DrawOutline("PALS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
                             }
                             else if (flag4)
                             {
                                 _doorIcon.depth = doorLeftBlank.depth + 10;
                                 _doorIcon.frame = 12;
                                 Graphics.Draw(_doorIcon, (int)x + 57, y + 31f);
-                                _fontSmall.DrawOutline("VIPS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                if (LangHandler.reverse)
+                                {
+                                    _fontSmall.DrawOutline("ONLY", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("VIPS", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
+                                else
+                                {
+                                    _fontSmall.DrawOutline("VIPS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
                             }
                             else if (flag5 && profile.reservedUser != null)
                             {
@@ -872,8 +889,16 @@ namespace DuckGame
                                 _doorIcon.depth = doorLeftBlank.depth + 10;
                                 _doorIcon.frame = 13;
                                 Graphics.Draw(_doorIcon, (int)x + 57, y + 31f);
-                                _fontSmall.DrawOutline("HOST", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                if (LangHandler.reverse)
+                                {
+                                    _fontSmall.DrawOutline("SLOT", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("HOST", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
+                                else
+                                {
+                                    _fontSmall.DrawOutline("HOST", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
                             }
                             else
                             {
@@ -919,16 +944,33 @@ namespace DuckGame
                                     _doorIcon.depth = doorLeftBlank.depth + 10;
                                     _doorIcon.frame = 11;
                                     Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                    _fontSmall.DrawOutline("PALS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                    _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                    if (LangHandler.reverse)
+                                    {
+                                        _fontSmall.DrawOutline("ONLY", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                        _fontSmall.DrawOutline("PALS", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                    }
+                                    else
+                                    {
+                                        _fontSmall.DrawOutline("PALS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                        _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                    }
+                                   
                                 }
                                 else if (flag4)
                                 {
                                     _doorIcon.depth = doorLeftBlank.depth + 10;
                                     _doorIcon.frame = 12;
                                     Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                    _fontSmall.DrawOutline("VIPS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                    _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                    if (LangHandler.reverse)
+                                    {
+                                        _fontSmall.DrawOutline("ONLY", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                        _fontSmall.DrawOutline("VIPS", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                    }
+                                    else
+                                    {
+                                        _fontSmall.DrawOutline("VIPS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                        _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                    }
                                 }
                                 else if (flag5 && profile.reservedUser != null)
                                 {
@@ -950,8 +992,16 @@ namespace DuckGame
                                     _doorIcon.depth = doorLeftBlank.depth + 10;
                                     _doorIcon.frame = 13;
                                     Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                    _fontSmall.DrawOutline("HOST", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                    _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                    if (LangHandler.reverse)
+                                    {
+                                        _fontSmall.DrawOutline("SLOT", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                        _fontSmall.DrawOutline("HOST", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                    }
+                                    else
+                                    {
+                                        _fontSmall.DrawOutline("HOST", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                        _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                    }
                                 }
                                 else
                                 {

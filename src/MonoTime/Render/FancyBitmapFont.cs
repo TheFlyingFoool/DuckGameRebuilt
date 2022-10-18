@@ -587,6 +587,7 @@ namespace DuckGame
 
         public float GetWidth(string text, bool thinButtons = false)
         {
+            text = LangHandler.Convert(text);
             float num1 = 0f;
             float width1 = 0f;
             for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
@@ -945,6 +946,11 @@ namespace DuckGame
           Depth deep = default(Depth),
           bool colorSymbols = false)
         {
+            //if (!LangHandler.drawnstrings.Contains(text) && !LangHandler.langmap["en"].ContainsKey(text))
+            //{
+            //    LangHandler.drawnstrings.Add(text);
+            //}
+            text = LangHandler.Convert(text);
             Color color2 = c;
             _previousColor = c;
             if (string.IsNullOrWhiteSpace(text))

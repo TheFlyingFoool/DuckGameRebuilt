@@ -91,7 +91,7 @@ namespace DuckGame
                 if (gitVersion.EndsWith("-dirty\n"))
                 {
                     isDirty = true;
-                    gitVersion = gitVersion.Substring(0, 40);
+                    gitVersion = gitVersion.Substring(0, Math.Min(40, gitVersion.Length));
                 }
                 gitVersion = Escape(gitVersion.Replace("\n", ""));
                 gitVersion = gitVersion.Substring(0, 8) + (isDirty ? "[Modified]" : "");
@@ -544,6 +544,7 @@ namespace DuckGame
             //FirebreakReflectionsht = Task.Factory.StartNew(() => { MemberAttributePairHandler.Init(); });
             Program.main.Run();
         }
+        public static List<string> words = new List<string>();
         public static Task FirebreakReflectionsht;
         private static FieldInfo accumulatedElapsedTimefieldinfo;
         public static void SetAccumulatedElapsedTime(Game g, TimeSpan t)
@@ -999,7 +1000,6 @@ namespace DuckGame
                 catch
                 { }
                 string str1 = "";
-                int num = 0;
                 try
                 {
                     try
@@ -1081,26 +1081,9 @@ namespace DuckGame
                 //StackTrace = str1;
                 //string k = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"```ansi\nUsername: \u001b[2;32mN/A\u001b[0m\nSteam ID: \u001b[2;32mN/A\u001b[0m\n```\"},{\"name\":\"System Info\",\"value\":\"```ansi\nOS: \u001b[2;32mUnix 5.15.65.1\u001b[0m\nCommand Line: \u001b[2;32m-nothreading\u001b[0m\n```\"},{\"name\":\"Game Info\",\"value\":\"```ansi\nPlayers In Lobby: [\u001b[2;32mN/A\u001b[0m]\nMods Active: [\u001b[2;32mN/A\u001b[0m]\n```\"},{\"name\":\"Crash Info\",\"value\":\"```ansi\nException Message: \u001b[2;32mIndex was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index\u001b[0m\nStack Trace \u001b[2;32m\nSystem.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index\n  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <282c4228012f4f3d96bdf0f2b2dea837>:0 \n  at DuckGame.ProfileSelector.Update () [0x0046d] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Thing.DoUpdate () [0x0003d] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.UpdateThings () [0x0023f] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.DoUpdate () [0x001b3] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.UpdateCurrentLevel () [0x0001e] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.MonoMain.RunUpdate (Microsoft.Xna.Framework.GameTime gameTime) [0x00615] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.MonoMain.Update (Microsoft.Xna.Framework.GameTime gameTime) [0x00187] in \u001b[0m\n```\"}]}]}";
                 string Commit = "N/A";
-                string gitVersion = "N/A";
-                bool isDirty = false;
-                try
-                {
-                    using (StreamReader st = new(Program.gameAssembly.GetManifestResourceStream("version.txt")))
-                    {
-                        gitVersion = st.ReadToEnd();
-                    }
-                    if (gitVersion.EndsWith("-dirty\n"))
-                    {
-                        isDirty = true;
-                        gitVersion = gitVersion.Substring(0, 40);
-                    }
-                    gitVersion = Escape(gitVersion.Replace("\n", ""));
-                    Commit = gitVersion.Substring(0, 8) + (isDirty ? "[Modified]" : "") + @" [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion + ") ";
-                }
-                catch 
-                { 
-                }
-               
+                gitVersion = Escape(gitVersion.Replace("\n", ""));
+                Commit = gitVersion + @" [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion + ") ";
+
                 string UserInfo = "```ansi\\nUsername: \\u001b[2;32m" + Username + "\\u001b[0m\\nSteam ID: \\u001b[2;32m" + Steamid + "\\u001b[0m\\n```";// "\\u001b[0m\\nPCUserName: \\u001b[2;32m" + Environment.UserName + "\\u001b[0m\\MachineName: \\u001b[2;32m" + Environment.MachineName + "\\u001b[0m]\\n```";
                 string SystemInfo = "```ansi\\nOS: \\u001b[2;32m" + OS + "\\u001b[0m\\nCommand Line: \\u001b[2;32m" + CommandLine + "\\u001b[0m\\n```";
                 string GameInfo = "```ansi\\nPlayers In Lobby: [\\u001b[2;32m" + PlayersInLobby + "\\u001b[0m]\\nMods Active: [\\u001b[2;32m" + ModsActive + "\\u001b[0m]\\n```";
