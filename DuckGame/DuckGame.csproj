@@ -43,7 +43,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE;DEBUG;Debug</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -52,7 +52,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <AssemblyName>DuckGame</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>full</DebugType>
@@ -73,7 +73,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <AssemblyName>DuckGame</AssemblyName>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
@@ -89,7 +89,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <AssemblyName>DuckGame</AssemblyName>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>false</Optimize>
@@ -102,7 +102,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <AssemblyName>DuckGame</AssemblyName>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>false</Optimize>
@@ -250,81 +250,6 @@
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\PackingHints.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\PackingRectangle.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\RectanglePacker.cs" />
-    <Compile Include="DuckGame\AddedContent\DGRSettings.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\DebugUI\UiBasic.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\DebugUI\IAmUi.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\DebugUI\UiList.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\DebugUI\UiGroup.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\DebugUI\UiTabber.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\DrakeTests.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\FixedCommandHistory.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\AtlasedFont.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\StaticFont.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\PolygonBatcher.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\PolyRenderer.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\Utils\InputData.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\Utils\VectorMath.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\FireSerializer.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\FireSerializerModuleAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\IFireSerializerModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\ColorSerializerModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\ConsoleBindSerializerModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\DateTimeSerializeModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\StringSerializerModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\Vec2SerializerModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Content\SinkingBlock.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Cursor\CursorHandler.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Cursor\GameCursor.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Cursor\OpalCursor.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\FireDebug.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\DynamicDCLine.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Levels\TestLev.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Levels\TestLev.FireBlock.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Levels\TestLev.SelectionPad.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DevConsoleCommandAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DrawingContextAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\PostInitializeAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\CustomKeyBinds.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\EasingHelper.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\MemberAttributePair.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\MemberAttributePairHandler.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\ProgressValue.cs" />
-    <Compile Include="DuckGame\AddedContent\klof44\DartGrenade.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\BGLightning.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Bubble.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ChangePlus.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\FreezeSmoke.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\IceSpike.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpAK47.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpBlunderbuss.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpHugeLaser.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpLaser.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpPistol.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaser.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaserBullet.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\MathParser.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\PizzaLauncher.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\RainParticel.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\RoomEditorExtra.cs" />
-    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Extensions.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\NMDuckShatter.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\NMPinkCollision.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\NMPinkExplode.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\PinkBox.cs" />
-    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\CrashWindow.cs" />
-    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\PistolTwo.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\NMSetScale.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\ShatterDuck.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ClientOnly\TheDishes.cs" />
-    <Compile Include="DuckGame\AddedContent\klof44\DiscordRichPresence.cs" />
-    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\HashCode.cs" />
-    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\PackingHints.cs" />
-    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\PackingRectangle.cs" />
-    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\RectPackSharp\RectanglePacker.cs" />
     <Compile Include="Properties\Resources1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1458,7 +1383,6 @@
     <Compile Include="src\DuckGame\Weapons\CorkObject.cs" />
     <Compile Include="src\DuckGame\Weapons\CorkBullet.cs" />
     <Compile Include="src\DuckGame\Weapons\CorkGun.cs" />
-    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\bat.cs" />
     <Compile Include="src\DuckGame\Weapons\SwordTaped.cs" />
     <Compile Include="src\DuckGame\Weapons\TapedGun.cs" />
     <Compile Include="src\DuckGame\Weapons\DuctTape.cs" />
@@ -2044,7 +1968,6 @@
     <Compile Include="src\XnaToFna\__PropertyDictionary__.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DuckGame\Properties\Resources.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
@@ -2064,7 +1987,6 @@
     <EmbeddedResource Include="version.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DuckGame\src\MonoTime\Console\" />
     <Folder Include="shaders_source\" />
   </ItemGroup>
   <ItemGroup>
@@ -2102,9 +2024,5 @@ call "$(SolutionDir)shaders_source\buildshaders.bat</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>git describe  --always --dirty --abbrev=40 &gt; "$(ProjectDir)\version.txt"</PreBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>Xcopy $(SolutionDir)\,,\deps $(SolutionDir)\bin /E /H /C /I /Y
-call "$(SolutionDir)shaders_source\buildshaders.bat</PostBuildEvent>
   </PropertyGroup>
 </Project>

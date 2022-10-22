@@ -145,6 +145,10 @@ namespace DuckGame
             Sort();
         }
 
-        public bool GroupIsAllowed(EditorItemType pType) => Options.Data.powerUser || pType != EditorItemType.Arcade && pType != EditorItemType.Debug;
+        public bool GroupIsAllowed(EditorItemType pType) // who needs to be a power user lets all be power users :)
+        {
+            return true;
+            //return Options.Data.powerUser || pType != EditorItemType.Arcade && pType != EditorItemType.Debug;
+        }
     }
 }
