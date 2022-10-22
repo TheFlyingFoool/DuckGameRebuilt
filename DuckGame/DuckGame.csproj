@@ -63,7 +63,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <AssemblyName>DuckGame</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>full</DebugType>
@@ -174,6 +174,82 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedContent\DGRSettings.cs" />
+    <Compile Include="AddedContent\Drake\DebugUI\IAmUi.cs" />
+    <Compile Include="AddedContent\Drake\DebugUI\UiBasic.cs" />
+    <Compile Include="AddedContent\Drake\DebugUI\UiGroup.cs" />
+    <Compile Include="AddedContent\Drake\DebugUI\UiList.cs" />
+    <Compile Include="AddedContent\Drake\DebugUI\UiTabber.cs" />
+    <Compile Include="AddedContent\Drake\DrakeTests.cs" />
+    <Compile Include="AddedContent\Drake\FixedCommandHistory.cs" />
+    <Compile Include="AddedContent\Drake\PolyRender\AtlasedFont.cs" />
+    <Compile Include="AddedContent\Drake\PolyRender\PolygonBatcher.cs" />
+    <Compile Include="AddedContent\Drake\PolyRender\PolyRenderer.cs" />
+    <Compile Include="AddedContent\Drake\PolyRender\StaticFont.cs" />
+    <Compile Include="AddedContent\Drake\Utils\InputData.cs" />
+    <Compile Include="AddedContent\Drake\Utils\VectorMath.cs" />
+    <Compile Include="AddedContent\Extensions.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\FireSerializer.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\FireSerializerModuleAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\IFireSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\ColorSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\ConsoleBindSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\DateTimeSerializeModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\StringSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\Vec2SerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\Content\SinkingBlock.cs" />
+    <Compile Include="AddedContent\Firebreak\Cursor\CursorHandler.cs" />
+    <Compile Include="AddedContent\Firebreak\Cursor\GameCursor.cs" />
+    <Compile Include="AddedContent\Firebreak\Cursor\OpalCursor.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\DynamicDCLine.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\FireDebug.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.FireBlock.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.SelectionPad.cs" />
+    <Compile Include="AddedContent\Firebreak\DevConsoleCommandAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\DrawingContextAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\PostInitializeAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\CustomKeyBinds.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\EasingHelper.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\MemberAttributePair.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\MemberAttributePairHandler.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\ProgressValue.cs" />
+    <Compile Include="AddedContent\klof44\DartGrenade.cs" />
+    <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
+    <Compile Include="AddedContent\NiK0\BGLightning.cs" />
+    <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Bubble.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\NMDuckShatter.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\NMPinkCollision.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\NMPinkExplode.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\NMSetScale.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\PinkBox.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\PizzaLauncher.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\ShatterDuck.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\TheDishes.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\FreezeSmoke.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\IceSpike.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpAK47.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpBlunderbuss.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpHugeLaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpLaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpPistol.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaserBullet.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
+    <Compile Include="AddedContent\NiK0\MathParser.cs" />
+    <Compile Include="AddedContent\NiK0\RainParticel.cs" />
+    <Compile Include="AddedContent\NiK0\RoomEditorExtra.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\bat.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\CrashWindow.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\PistolTwo.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\HashCode.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\PackingHints.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\PackingRectangle.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\RectanglePacker.cs" />
     <Compile Include="DuckGame\AddedContent\DGRSettings.cs" />
     <Compile Include="DuckGame\AddedContent\Drake\DebugUI\UiBasic.cs" />
     <Compile Include="DuckGame\AddedContent\Drake\DebugUI\IAmUi.cs" />
@@ -2007,11 +2083,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="FNA\FNA.csproj">
+    <ProjectReference Include="..\FNA\FNA.csproj">
       <Project>{35253ce1-c864-4cd3-8249-4d1319748e8f}</Project>
       <Name>FNA</Name>
     </ProjectReference>
-    <ProjectReference Include="Steam\Steam.csproj">
+    <ProjectReference Include="..\Steam\Steam.csproj">
       <Project>{d63ad3fc-dcf0-4db6-b944-5d828a10ccb8}</Project>
       <Name>Steam</Name>
     </ProjectReference>
@@ -2026,5 +2102,9 @@ call "$(SolutionDir)shaders_source\buildshaders.bat</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>git describe  --always --dirty --abbrev=40 &gt; "$(ProjectDir)\version.txt"</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>Xcopy $(SolutionDir)\,,\deps $(SolutionDir)\bin /E /H /C /I /Y
+call "$(SolutionDir)shaders_source\buildshaders.bat</PostBuildEvent>
   </PropertyGroup>
 </Project>
