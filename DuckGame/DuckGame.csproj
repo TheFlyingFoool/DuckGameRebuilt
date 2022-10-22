@@ -2014,15 +2014,15 @@
       <Name>Steam</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <DepsFolder Include="$(SolutionDir)\deps\**\*.*"/>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'">
-    <PostBuildEvent>Xcopy $(SolutionDir)\deps $(SolutionDir)\bin /E /H /C /I /Y
-call "$(SolutionDir)shaders_source\buildshaders.bat</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
-    <PostBuildEvent>cp -rv $(SolutionDir)deps/* $(SolutionDir)bin/</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>git describe  --always --dirty --abbrev=40 &gt; "$(ProjectDir)\version.txt"</PreBuildEvent>
-  </PropertyGroup>
+  <Target Name="BeforeBuild">
+    <Exec Command='git describe  --always --dirty --abbrev=40 &gt; "$(ProjectDir)version.txt"'/>
+  </Target>
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="@(DepsFolder)" DestinationFolder="$(SolutionDir)\bin"/>
+    <Exec Command='call "$(SolutionDir)shaders_source\buildshaders.bat"' Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'"/>
+  </Target>
 </Project>
