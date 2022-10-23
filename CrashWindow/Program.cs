@@ -5,14 +5,17 @@ using System.Windows.Forms;
 using DuckGame.src.MonoTime.Console;
 namespace CrashWindow
 {
-    static class Program
+    public static class Program
     {
+        public static bool IsLinux;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main(string[] args)
         {
+            int p = (int)Environment.OSVersion.Platform;
+            IsLinux = (p == 4) || (p == 6) || (p == 128);
             for (int i = 0; i < args.Length; i++)
             {
                 if (args[i] == "-modResponsible")

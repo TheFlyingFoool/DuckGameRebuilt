@@ -33,6 +33,34 @@ namespace DuckGame.src.MonoTime.Console
         public ExceptionForm()
         {
             InitializeComponent();
+
+            // Program is linux
+            //  this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            //  this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(571, 424);
+            // sets color as the default is wrong for linux etc
+            Color DefaultBackground = Color.FromArgb(240, 240, 240);
+            this.BackColor = DefaultBackground;
+            this.richTextBox2.BackColor = DefaultBackground;
+            this.checkBox1.BackColor = DefaultBackground;
+            this.richTextBox1.BackColor = DefaultBackground;
+            this.restartButton.BackColor = DefaultBackground;
+            this.button2.BackColor = DefaultBackground;
+            this.button1.BackColor = DefaultBackground;
+            this.modDesc.BackColor = DefaultBackground;
+            this.forumLink.BackColor = DefaultBackground;
+            this.crashSourceLabel.BackColor = DefaultBackground;
+            this.pictureBox1.BackColor = DefaultBackground;
+            this.crashDescription.BackColor = DefaultBackground;
+
+
+            Bitmap b = (Bitmap)pictureBox1.Image; // sets icon
+            IntPtr pIcon = b.GetHicon();
+            Icon i = Icon.FromHandle(pIcon);
+            this.Icon = i;
+            i.Dispose(); //
+
             if (modResponsible)
             {
                 string descText;
@@ -151,6 +179,11 @@ namespace DuckGame.src.MonoTime.Console
 
         private void richTextBox2_TextChanged(object sender, EventArgs e)
         {
+        }
+
+        private void crashDescription_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

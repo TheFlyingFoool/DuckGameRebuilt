@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using CrashWindow;
+using System;
+using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 namespace DuckGame.src.MonoTime.Console
 {
@@ -89,6 +92,7 @@ namespace DuckGame.src.MonoTime.Console
             this.crashDescription.TabIndex = 0;
             this.crashDescription.Text = "";
             this.crashDescription.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.crashDescription_LinkClicked);
+            this.crashDescription.TextChanged += new System.EventHandler(this.crashDescription_TextChanged);
             // 
             // pictureBox1
             // 
@@ -188,7 +192,6 @@ namespace DuckGame.src.MonoTime.Console
             // 
             // richTextBox2
             // 
-            this.richTextBox2.BackColor = System.Drawing.SystemColors.Control;
             this.richTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox2.Cursor = System.Windows.Forms.Cursors.Default;
             this.richTextBox2.Location = new System.Drawing.Point(75, 8);
@@ -202,9 +205,20 @@ namespace DuckGame.src.MonoTime.Console
             // 
             // ExceptionForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(571, 424);
+            Color DefaultBackground = Color.FromArgb(240, 240, 240);
+            this.BackColor = DefaultBackground;
+            this.richTextBox2.BackColor = DefaultBackground;
+            this.checkBox1.BackColor = DefaultBackground;
+            this.richTextBox1.BackColor = DefaultBackground;
+            this.restartButton.BackColor = DefaultBackground;
+            this.button2.BackColor = DefaultBackground;
+            this.button1.BackColor = DefaultBackground;
+            this.modDesc.BackColor = DefaultBackground;
+            this.forumLink.BackColor = DefaultBackground;
+            this.crashSourceLabel.BackColor = DefaultBackground;
+            this.pictureBox1.BackColor = DefaultBackground;
+            this.crashDescription.BackColor = DefaultBackground;
+
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.richTextBox1);
@@ -217,6 +231,7 @@ namespace DuckGame.src.MonoTime.Console
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.crashDescription);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "ExceptionForm";
             this.Text = "Duck Game Crash Report";
             this.Load += new System.EventHandler(this.ExceptionForm_Load);
