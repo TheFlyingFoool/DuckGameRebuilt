@@ -192,13 +192,23 @@ namespace DuckGame.src.MonoTime.Console
             // 
             // richTextBox2
             // 
+            this.richTextBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.richTextBox2.AutoSize = true;
+            if (Program.IsLinux)
+            {
+                this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.50F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            }
+            else
+            {
+                this.richTextBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            }
             this.richTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox2.Cursor = System.Windows.Forms.Cursors.Default;
             this.richTextBox2.Location = new System.Drawing.Point(75, 8);
             this.richTextBox2.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.Selectable = false;
-            this.richTextBox2.Size = new System.Drawing.Size(493, 65);
+            this.richTextBox2.Size = new System.Drawing.Size(493, 75);//new System.Drawing.Size(493, 65);
             this.richTextBox2.TabIndex = 12;
             this.richTextBox2.Text = resources.GetString("richTextBox2.Text");
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);

@@ -32,13 +32,14 @@ namespace DuckGame.src.MonoTime.Console
 
         public ExceptionForm()
         {
+           // this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(571, 424);
             InitializeComponent();
 
             // Program is linux
             //  this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             //  this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(571, 424);
+
             // sets color as the default is wrong for linux etc
             Color DefaultBackground = Color.FromArgb(240, 240, 240);
             this.BackColor = DefaultBackground;
@@ -143,6 +144,10 @@ namespace DuckGame.src.MonoTime.Console
                 {
                     if(!crashDescription.Text.Contains("XNA Framework is not installed"))
                     {
+                        if (pVersion == null && pMods == null && pAssembly == null && pException == null && pLogMessage == null && crashComments == null)
+                        {
+                            return;
+                        }
                         CrashWindow.CrashWindow.SendBugReport(pVersion, pMods, pAssembly, pException, pLogMessage, crashComments != null ? crashComments : "");
                     }
                     if (crashComments != null)
