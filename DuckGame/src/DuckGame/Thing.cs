@@ -392,7 +392,11 @@ namespace DuckGame
             set => _lastTeleportDirection = value;
         }
 
-        public bool removeFromLevel => _removeFromLevel;
+        public bool removeFromLevel
+        {
+            get => _removeFromLevel;
+            set => _removeFromLevel = value;
+        }
 
         public virtual int frame
         {

@@ -226,10 +226,299 @@ namespace DuckGame
                 GhostManager.receivingDestroyMessage = false;
             }
         }
-
+        private bool CheckCreationKill(GhostObject obj, Vec2 position, Type t, NMGhostState pState)
+        {
+            bool flag = false;
+            foreach (ItemBoxRandom itemBoxRandom in Level.CheckPointAll<ItemBoxRandom>(position))
+            {
+                if (itemBoxRandom.position.x == position.x && itemBoxRandom.position.y == position.y)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            bool flag2 = false;
+            foreach (ItemBoxOneTime itemBoxOneTime in Level.CheckPointAll<ItemBoxOneTime>(position))
+            {
+                if (itemBoxOneTime.position.x == position.x && itemBoxOneTime.position.y == position.y)
+                {
+                    flag2 = true;
+                    break;
+                }
+            }
+            bool flag3 = false;
+            foreach (ItemBox itemBox in Level.CheckPointAll<ItemBox>(position))
+            {
+                if (itemBox.position.x == position.x && itemBox.position.y == position.y)
+                {
+                    flag3 = true;
+                    break;
+                }
+            }
+            bool flag4 = false;
+            foreach (PurpleBlock purpleBlock in Level.CheckPointAll<PurpleBlock>(position.x, position.y + 10f))
+            {
+                if (purpleBlock.position.x == position.x && purpleBlock.position.y == position.y + 12f)
+                {
+                    flag4 = true;
+                    break;
+                }
+                DevConsole.Log("purple " + purpleBlock.position.x.ToString() + " " + purpleBlock.position.y.ToString(), Color.Green, 2f, -1);
+            }
+            if (position.x == -10000f && position.y == -8999f)
+            {
+                DevConsole.Log("present ?", Color.Green, 2f, -1);
+            }
+            else if (flag)
+            {
+                DevConsole.Log("redbox ?", Color.Green, 2f, -1);
+            }
+            else if (flag2)
+            {
+                DevConsole.Log("ItemBoxOneTime ?", Color.Green, 2f, -1);
+            }
+            else if (flag4)
+            {
+                DevConsole.Log("PurpleBlock ?", Color.Green, 2f, -1);
+            }
+            else if (flag3)
+            {
+                DevConsole.Log("ItemBox ?", Color.Green, 2f, -1);
+            }
+            else if (!typeof(Mine).IsAssignableFrom(t) && !typeof(DeadlyIcicle).IsAssignableFrom(t) && !typeof(CampingBall).IsAssignableFrom(t) && !typeof(Dart).IsAssignableFrom(t) && !typeof(QuadLaserBullet).IsAssignableFrom(t) && !typeof(ForceWave).IsAssignableFrom(t) && !typeof(Flare).IsAssignableFrom(t) && !typeof(Net).IsAssignableFrom(t))
+            {
+                obj.thing.removeFromLevel = true;
+                obj.ClearStateMask(pState.connection);
+                this._destroyedGhosts.Add(obj);
+                DevConsole.Log(string.Concat(new string[]
+                {
+                    "that sht anti bustin ",
+                    t.Name,
+                    " ",
+                    position.x.ToString(),
+                    " ",
+                    position.y.ToString()
+                }), Color.Green, 2f, -1);
+                return false;
+            }
+            return true;
+        }
+        private static BufferedGhostProperty MakeBufferedProperty(StateBinding state, object value, int index = 0, NetIndex16 tick = default(NetIndex16)) // from old anticheat system
+        {
+            if (state.type == typeof(float))
+            {
+                return new BufferedGhostProperty<float>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            if (state.type == typeof(bool))
+            {
+                return new BufferedGhostProperty<bool>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            if (state.type == typeof(byte))
+            {
+                return new BufferedGhostProperty<byte>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            if (state.type == typeof(ushort))
+            {
+                return new BufferedGhostProperty<ushort>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            if (state.type == typeof(short))
+            {
+                return new BufferedGhostProperty<short>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            if (state is CompressedVec2Binding || state is InterpolatedVec2Binding)
+            {
+                return new BufferedGhostProperty<Vec2>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            if (state is CompressedFloatBinding)
+            {
+                return new BufferedGhostProperty<float>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            if (state.type == typeof(int))
+            {
+                return new BufferedGhostProperty<int>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            if (state.type == typeof(Vec2))
+            {
+                return new BufferedGhostProperty<Vec2>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            if (state.type == typeof(NetIndex4))
+            {
+                return new BufferedGhostProperty<NetIndex4>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            if (state.type == typeof(NetIndex8))
+            {
+                return new BufferedGhostProperty<NetIndex8>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            if (state.type == typeof(NetIndex16))
+            {
+                return new BufferedGhostProperty<NetIndex16>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            if (state.type == typeof(sbyte))
+            {
+                return new BufferedGhostProperty<sbyte>
+                {
+                    binding = state,
+                    value = value,
+                    index = index,
+                    tick = tick
+                };
+            }
+            return new BufferedGhostProperty<object>
+            {
+                binding = state,
+                value = value,
+                index = index,
+                tick = tick
+            };
+        }
+        public static Vec2 ReadNetworkPosition(GhostObject ghost, Type t, NMGhostState ghostState, long mask, NetworkConnection c, bool constructed)
+        {
+            Vec2 result = new Vec2(0f, 0f);
+            BitBuffer data = ghostState.data.Instance();
+            NetworkDebugger.ghostsReceived[NetworkDebugger.currentIndex]++;
+            GhostConnectionData connectionData = ghost.GetConnectionData(c);
+            ghostState.mask = mask;
+            ghostState.ghost = ghost;
+            BufferedGhostState bufferedGhostState = new BufferedGhostState();
+            bufferedGhostState.tick = ghostState.tick;
+            bufferedGhostState.mask = mask;
+            bufferedGhostState.authority = ghostState.authority;
+            if (ghostState.header.delta && ghostState.data.ReadBool())
+            {
+                bufferedGhostState.inputStates.Clear();
+                for (int i = 0; i < NetworkConnection.packetsEvery; i++)
+                {
+                    bufferedGhostState.inputStates.Add(ghostState.data.ReadUShort());
+                }
+            }
+            short num = 0;
+            foreach (StateBinding stateBinding in ghost.fields)
+            {
+                long num2 = 1L << (int)num;
+                if ((ghostState.mask & num2) != 0L)
+                {
+                    bufferedGhostState.properties.Add(MakeBufferedProperty(stateBinding, stateBinding.ReadNetValue(ghostState.data), (int)num, bufferedGhostState.tick));
+                    stateBinding.initialized = true;
+                }
+                else
+                {
+                    bufferedGhostState.properties.Add(ghost.networkState.properties[(int)num]);
+                }
+                num += 1;
+            }
+            foreach (BufferedGhostProperty bufferedGhostProperty in bufferedGhostState.properties)
+            {
+                if (bufferedGhostProperty.binding.name == "netPosition")
+                {
+                    Vec2 vec = (Vec2)bufferedGhostProperty.value;
+                    result = vec;
+                    DevConsole.Log(string.Concat(new string[]
+                    {
+                        t.Name,
+                        " ",
+                        vec.x.ToString(),
+                        " ",
+                        vec.y.ToString()
+                    }));
+                }
+            }
+            ghostState.data = data;
+            return result;
+        }
         private void ProcessGhostState(NMGhostState pState)
         {
+            bool flag = false;
+            foreach (Thing thing in Level.current.things)
+            {
+                if (thing is PurpleBlock || thing is ItemBox || thing is Present || thing is ItemCrate || thing is DeathCrate || thing is BananaCluster)
+                {
+                    flag = true;
+                    break;
+                }
+                else if (thing is IceBlock)
+                {
+                    IceBlock iceBlock = thing as IceBlock;
+                    if (iceBlock != null && iceBlock.contains != null)
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
             Profile profile = GhostObject.IndexToProfile(pState.id);
+            Type type = Editor.IDToType[pState.classID];
             if (profile != null && profile.removedGhosts.TryGetValue(pState.id, out GhostObject removedGhost))
             {
                 if (removedGhost != null)
@@ -267,11 +556,56 @@ namespace DuckGame
                     }
                     if (ghostObject == null)
                     {
+                        if (Level.current is TeamSelect2)
+                        {
+                            if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type))
+                            {
+                                DevConsole.Log("blocked Ghost1T " + type.Name, Color.Red, 2f, -1);
+                                Thing thing2 = Editor.CreateThing(type);
+                                thing2.position = new Vec2(-2000f, -2000f);
+                                thing2.removeFromLevel = true;
+                                ghostObject = new GhostObject(thing2, this, pState.id, false);
+                                ghostObject.ClearStateMask(pState.connection);
+                                this._destroyedGhosts.Add(ghostObject);
+                                return;
+                            }
+                        }
+                        else if (!flag)
+                        {
+                            if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(CampingBall).IsAssignableFrom(type) && !typeof(Dart).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
+                            {
+                                DevConsole.Log("blocked Ghost1N " + type.Name, Color.Red, 2f, -1);
+                                Thing thing3 = Editor.CreateThing(type);
+                                thing3.position = new Vec2(-2000f, -2000f);
+                                thing3.removeFromLevel = true;
+                                ghostObject = new GhostObject(thing3, this, pState.id, false);
+                                ghostObject.ClearStateMask(pState.connection);
+                                this._destroyedGhosts.Add(ghostObject);
+                                return;
+                            }
+                        }
+                        else if (!typeof(Holdable).IsAssignableFrom(type) && !typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(CampingBall).IsAssignableFrom(type) && !typeof(Dart).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
+                        {
+                            DevConsole.Log("blocked Ghost1A " + type.Name, Color.Red, 2f, -1);
+                            Thing thing4 = Editor.CreateThing(type);
+                            thing4.position = new Vec2(-2000f, -2000f);
+                            thing4.removeFromLevel = true;
+                            ghostObject = new GhostObject(thing4, this, pState.id, false);
+                            ghostObject.ClearStateMask(pState.connection);
+                            this._destroyedGhosts.Add(ghostObject);
+                            return;
+                        }
                         Thing thing = Editor.CreateThing(t);
+                        DevConsole.Log(type.Name);
                         thing.position = new Vec2(-2000f, -2000f);
-                        Level.Add(thing);
                         thing.connection = pState.connection;
                         ghostObject = new GhostObject(thing, this, (int)pState.id);
+                        Vec2 position = ReadNetworkPosition(ghostObject, type, pState, mask, pState.connection, false);
+                        if (!CheckCreationKill(ghostObject, position, type, pState))
+                        {
+                            return;
+                        }
+                        Level.Add(thing);
                         ghostObject.ClearStateMask(pState.connection);
                         pState.ghost = ghostObject;
                         AddGhost(ghostObject);
@@ -289,6 +623,41 @@ namespace DuckGame
                         {
                             ghostObject.thing.isBitBufferCreatedGhostThing = false;
                             ghostObject.thing.level = null;
+                            if (Level.current is TeamSelect2)
+                            {
+                                if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type))
+                                {
+                                    DevConsole.Log("blocked Ghost2T " + type.Name, Color.Red, 2f, -1);
+                                    ghostObject.thing.removeFromLevel = true;
+                                    ghostObject.ClearStateMask(pState.connection);
+                                    this._destroyedGhosts.Add(ghostObject);
+                                    return;
+                                }
+                            }
+                            else if (!flag)
+                            {
+                                if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
+                                {
+                                    DevConsole.Log("blocked Ghost2N " + type.Name, Color.Red, 2f, -1);
+                                    ghostObject.thing.removeFromLevel = true;
+                                    ghostObject.ClearStateMask(pState.connection);
+                                    this._destroyedGhosts.Add(ghostObject);
+                                    return;
+                                }
+                            }
+                            else if (!typeof(Holdable).IsAssignableFrom(type) && !typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
+                            {
+                                DevConsole.Log("blocked Ghost2A " + type.Name, Color.Red, 2f, -1);
+                                ghostObject.thing.removeFromLevel = true;
+                                ghostObject.ClearStateMask(pState.connection);
+                                this._destroyedGhosts.Add(ghostObject);
+                                return;
+                            }
+                            Vec2 position2 = ReadNetworkPosition(ghostObject, type, pState, mask, pState.connection, false);
+                            if (!CheckCreationKill(ghostObject, position2, type, pState))
+                            {
+                                return;
+                            }
                             Level.Add(ghostObject.thing);
                         }
                         if (pState.header.connection != null)
@@ -394,45 +763,50 @@ namespace DuckGame
 
         public void PostUpdate() => particleManager.Update();
 
-        public void UpdateGhostLerp()
+        public void UpdateGhostLerp() //anticrash
         {
-            ++_framesSinceClear;
-            GhostManager.inGhostLoop = true;
-            inGhostLerpLoop = true;
-            int num = 0;
-            foreach (GhostObject ghost in _ghosts)
+            try
             {
-                if (ghost.thing is IComplexUpdate)
-                {
-                    if (ghost.IsInitialized())
-                        (ghost.thing as IComplexUpdate).OnPreUpdate();
-                    ++num;
-                }
-            }
-            foreach (GhostObject ghost in _ghosts)
-            {
-                if (ghost.thing.connection != DuckNetwork.localConnection)
-                {
-                    for (int index = 0; index < ghost.constipation; ++index)
-                        ghost.UpdateState();
-                    ghost.Update();
-                }
-                else
-                    ghost.UpdateTick();
-            }
-            if (num > 0)
-            {
+                ++_framesSinceClear;
+                GhostManager.inGhostLoop = true;
+                inGhostLerpLoop = true;
+                int num = 0;
                 foreach (GhostObject ghost in _ghosts)
                 {
-                    if (ghost.thing is IComplexUpdate && ghost.IsInitialized())
-                        (ghost.thing as IComplexUpdate).OnPostUpdate();
+                    if (ghost.thing is IComplexUpdate)
+                    {
+                        if (ghost.IsInitialized())
+                            (ghost.thing as IComplexUpdate).OnPreUpdate();
+                        ++num;
+                    }
                 }
+                foreach (GhostObject ghost in _ghosts)
+                {
+                    if (ghost.thing.connection != DuckNetwork.localConnection)
+                    {
+                        for (int index = 0; index < ghost.constipation; ++index)
+                            ghost.UpdateState();
+                        ghost.Update();
+                    }
+                    else
+                        ghost.UpdateTick();
+                }
+                if (num > 0)
+                {
+                    foreach (GhostObject ghost in _ghosts)
+                    {
+                        if (ghost.thing is IComplexUpdate && ghost.IsInitialized())
+                            (ghost.thing as IComplexUpdate).OnPostUpdate();
+                    }
+                }
+                inGhostLerpLoop = false;
+                foreach (GhostObject tempGhost in _tempGhosts)
+                    _ghosts.Add(tempGhost);
+                _tempGhosts.Clear();
+                GhostManager.inGhostLoop = false;
             }
-            inGhostLerpLoop = false;
-            foreach (GhostObject tempGhost in _tempGhosts)
-                _ghosts.Add(tempGhost);
-            _tempGhosts.Clear();
-            GhostManager.inGhostLoop = false;
+            catch
+            { }
         }
 
         public void PostDraw()

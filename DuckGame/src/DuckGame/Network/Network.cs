@@ -192,6 +192,7 @@ namespace DuckGame
         {
             get
             {
+                return true;
                 if (DuckNetwork.isDedicatedServer)
                     return false;
                 bool canSetObservers = Network.isServer && Network.lanMode;

@@ -7,6 +7,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 
@@ -401,15 +403,234 @@ namespace DuckGame
             Network.activeNetwork.core.DisconnectClient(this, new DuckNetErrorInfo(DuckNetError.ConnectionLost, "Connection was lost."));
         }
 
-        public void OnAnyMessage(NetMessage pMessage)
+        public static List<Type> bannedmessages = new List<Type>
         {
-            if ((int)pMessage.session == (int)sessionID)
-                BecomeConnected(sessionID);
-            _lastReceivedTime = _personalTick;
-            if (pMessage is NMNetworkCoreMessage)
-                OnMessage(pMessage as NMNetworkCoreMessage);
-            else
-                OnNonConnectionMessage(pMessage);
+            typeof(NMTransferScores),
+            typeof(NMPlusOne),
+            typeof(NMClientCrashed),
+            typeof(NMClientClosedGame),
+            typeof(NMChangeWeather),
+            typeof(NMAssignDraw),
+            typeof(NMConsoleMessage),
+            typeof(NMKick),
+            typeof(NMKicked),
+            typeof(NMBan),
+            typeof(NMBanned),
+            typeof(NMErrorEmptyJoinMessage),
+            typeof(NMLevelDataChunk),
+            typeof(NMRightOnManNiceJob),
+            typeof(NMMatchSettings),
+            typeof(NMLevel),
+            typeof(NMItemSpawned),
+            typeof(NMAssignWin),
+            typeof(NMChangeSlots),
+            typeof(NMAssignKill)
+        };
+        public static Dictionary<ulong, int> scoreplayerdic = new Dictionary<ulong, int>();
+
+        public static Stopwatch Stopwatch = new Stopwatch();
+        public static Dictionary<string, int> connectmessages = new Dictionary<string, int>();
+        public void OnAnyMessage(NetMessage pMessage) //anticrash
+        {
+            try
+            {
+                if (pMessage.connection == null)
+                {
+                    return;
+                }
+                if (!Stopwatch.IsRunning)
+                {
+                    Stopwatch.Restart();
+                    connectmessages = new Dictionary<string, int>();
+                }
+                else if (Stopwatch.ElapsedMilliseconds > 1000L)
+                {
+                    Stopwatch.Restart();
+                    connectmessages = new Dictionary<string, int>();
+                }
+                if (!connectmessages.ContainsKey(pMessage.connection.identifier))
+                {
+                    connectmessages[pMessage.connection.identifier] = 0;
+                }
+                Dictionary<string, int> connectmessages = connectmessages;
+                string identifier = pMessage.connection.identifier;
+                connectmessages[identifier]++;
+                if (connectmessages[pMessage.connection.identifier] > 1000)
+                {
+                    NMVersionMismatch msg = new NMVersionMismatch(NMVersionMismatch.Type.Older, new string(' ', 37) + "|DGRED|Thats To Many Messages Bro" + new string(' ', 34) + " 0.0.0.0");
+                    Send.Message(msg, pMessage.connection);
+                    Send.Message(new NMKick(), pMessage.connection);
+                    if (pMessage.connection.profile != null)
+                    {
+                        Send.Message(new NMKicked(pMessage.connection.profile));
+                    }
+                    pMessage.connection.kicking = true;
+                    Network.activeNetwork.core.DisconnectClient(pMessage.connection, new DuckNetErrorInfo(DuckNetError.Kicked, ""), true);
+                    if (pMessage.connection.profile != null)
+                    {
+                        DuckNetwork.Kick(pMessage.connection.profile);
+                    }
+                    return;
+                }
+                if (bannedmessages.Contains(pMessage.GetType()))
+                {
+                    DevConsole.Log("blocked Messsage2 " + pMessage.GetType().Name, Color.Red, 2f, -1);
+                    return;
+                }
+                if (pMessage is NMDisconnect && (pMessage.connection == null || pMessage.connection == DuckNetwork.localConnection))
+                {
+                    DevConsole.Log("blocked Messsage2 " + pMessage.GetType().Name, Color.Red, 2f, -1);
+                    return ;
+                }
+                if (pMessage is NMDisconnect)
+                {
+                    try
+                    {
+                        Profile profile = null;
+                        foreach (Profile profile2 in Profiles.all)
+                        {
+                            if (pMessage.connection == profile2.connection && DuckNetwork.core != null && profile2.connection != DuckNetwork.localConnection)
+                            {
+                                profile = profile2;
+                                break;
+                            }
+                        }
+                        if (profile != null && profile.team != null)
+                        {
+                            DevConsole.Log("save NMDisconnect score " + profile.team.score.ToString(), Color.Red, 2f, -1);
+                            if (!scoreplayerdic.ContainsKey(profile.steamID))
+                            {
+                                scoreplayerdic[profile.steamID] = 0;
+                            }
+                            if (profile.team.score != 0)
+                            {
+                                scoreplayerdic[profile.steamID] = profile.team.score;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+                if (pMessage is NMConnect)
+                {
+                    try
+                    {
+                        Profile profile3 = null;
+                        foreach (Profile profile4 in Profiles.all)
+                        {
+                            if (pMessage.connection == profile4.connection && DuckNetwork.core != null && profile4.connection != DuckNetwork.localConnection)
+                            {
+                                profile3 = profile4;
+                                break;
+                            }
+                        }
+                        if (profile3 != null && profile3.team != null)
+                        {
+                            DevConsole.Log("set NMconnect score " + scoreplayerdic[profile3.steamID].ToString(), Color.Red, 2f, -1);
+                            profile3.team.score = scoreplayerdic[profile3.steamID];
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+                if (pMessage is NMSetTeam)
+                {
+                    try
+                    {
+                        Profile profile5 = null;
+                        foreach (Profile profile6 in Profiles.all)
+                        {
+                            if (pMessage.connection == profile6.connection && DuckNetwork.core != null && profile6.connection != DuckNetwork.localConnection)
+                            {
+                                profile5 = profile6;
+                                break;
+                            }
+                        }
+                        if (profile5 != null && profile5.team != null)
+                        {
+                            DevConsole.Log("set NMconnect score " + scoreplayerdic[profile5.steamID].ToString(), Color.Red, 2f, -1);
+                            profile5.team.score = scoreplayerdic[profile5.steamID];
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+                if (pMessage is NMBeginCountdown)
+                {
+                    try
+                    {
+                        Profile profile7 = null;
+                        foreach (Profile profile8 in Profiles.all)
+                        {
+                            if (pMessage.connection == profile8.connection && DuckNetwork.core != null && profile8.connection != DuckNetwork.localConnection)
+                            {
+                                profile7 = profile8;
+                                break;
+                            }
+                        }
+                        if (profile7 != null && profile7.team != null)
+                        {
+                            DevConsole.Log("set NMBeginCountdown score " + scoreplayerdic[profile7.steamID].ToString(), Color.Red, 2f, -1);
+                            profile7.team.score = scoreplayerdic[profile7.steamID];
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+                if (pMessage is NMFireGun)
+                {
+                    NMFireGun nmfireGun = pMessage as NMFireGun;
+                    string text = "no name7";
+                    if (nmfireGun.gun != null)
+                    {
+                        text = nmfireGun.gun.editorName + nmfireGun.gun.removeFromLevel.ToString();
+                    }
+                    DevConsole.Log(text, Color.Red, 2f, -1);
+                }
+                if (pMessage is NMKillDuck)
+                {
+                    NMKillDuck nmkillDuck = pMessage as NMKillDuck;
+                    if ((int)nmkillDuck.index < DuckNetwork.profiles.Count && (int)nmkillDuck.index > -1)
+                    {
+                        Profile profile9 = DuckNetwork.profiles[(int)nmkillDuck.index];
+                        if (profile9.duck != null && nmkillDuck.cook && !profile9.duck.onFire)
+                        {
+                            return;
+                        }
+                    }
+                }
+                if (pMessage is NMDeathBeam && Level.current.things[typeof(HugeLaser)].Count<Thing>() == 0)
+                {
+                    return;
+                }
+                if (pMessage is NMEnergyScimitarBlast && Level.current.things[typeof(EnergyScimitar)].Count<Thing>() == 0 && Level.current.things[typeof(OldEnergyScimi)].Count<Thing>() == 0)
+                {
+                    return;
+                }
+            }
+            catch
+            {
+                DevConsole.Log("pre anticheat crash", Color.Green, 2f, -1);
+                return;
+            }
+            try
+            {
+                if ((int)pMessage.session == (int)sessionID)
+                    BecomeConnected(sessionID);
+                _lastReceivedTime = _personalTick;
+                if (pMessage is NMNetworkCoreMessage)
+                    OnMessage(pMessage as NMNetworkCoreMessage);
+                else
+                    OnNonConnectionMessage(pMessage);
+            }
+            catch
+            {
+                DevConsole.Log("Network Connection OnAnyMessage catch", Color.Green, 2f, -1);
+            }
         }
 
         public void OnMessage(NMNetworkCoreMessage message)

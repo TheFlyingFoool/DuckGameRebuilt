@@ -179,8 +179,9 @@ namespace DuckGame
             DevConsole.Log(DCSection.Steam, "|DGYELLOW|" + GetDrawString(responsible) + " kicked " + GetDrawString(who) + ".");
         }
 
-        public void OnChatMessage(User who, byte[] data)
+        public void OnChatMessage(User who, byte[] data) // aw hell naw
         {
+            return; // yea no thanks for running this
             Steam_LobbyMessage steamLobbyMessage = Steam_LobbyMessage.Receive(who, data);
             if (steamLobbyMessage == null)
                 return;
@@ -301,22 +302,30 @@ namespace DuckGame
             base.Disconnect(c);
         }
 
-        protected override void KillConnection()
+        protected override void KillConnection() //anticrash?
         {
-            if (_lobby != null)
+            try
             {
-                if (_lobby.owner == Steam.user && DuckNetwork.potentialHostObject is User potentialHostObject && _lobby.users.Contains(potentialHostObject))
-                    _lobby.owner = potentialHostObject;
-                Steam_LobbyMessage.Send("IM_OUTTAHERE", null);
-                Steam.LeaveLobby(_lobby);
-                UnhookLobbyUserStatusChange(_lobby, new Lobby.UserStatusChangeDelegate(OnUserStatusChange));
-                UnhookLobbyChatMessage(_lobby, new Lobby.ChatMessageDelegate(OnChatMessage));
-                DevConsole.Log(DCSection.Steam, "|DGYELLOW|Leaving lobby to host new lobby.");
+                if (_lobby != null)
+                {
+                    if (_lobby.owner == Steam.user && DuckNetwork.potentialHostObject is User potentialHostObject && _lobby.users.Contains(potentialHostObject))
+                        _lobby.owner = potentialHostObject;
+                    Steam_LobbyMessage.Send("IM_OUTTAHERE", null);
+                    Steam.LeaveLobby(_lobby);
+                    UnhookLobbyUserStatusChange(_lobby, new Lobby.UserStatusChangeDelegate(OnUserStatusChange));
+                    UnhookLobbyChatMessage(_lobby, new Lobby.ChatMessageDelegate(OnChatMessage));
+                    DevConsole.Log(DCSection.Steam, "|DGYELLOW|Leaving lobby to host new lobby.");
+                }
+                _lobby = null;
+                _lobbyCreationComplete = false;
+                _initializedSettings = false;
+                base.KillConnection();
             }
-            _lobby = null;
-            _lobbyCreationComplete = false;
-            _initializedSettings = false;
-            base.KillConnection();
+            catch
+            {
+                DevConsole.Log("NCSteam KillConnection Catch", Color.Green, 2f, -1);
+            }
+            return;
         }
 
         public override void ApplyLobbyData()

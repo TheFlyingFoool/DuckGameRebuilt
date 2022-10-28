@@ -258,20 +258,111 @@ namespace DuckGame
             ProcessReceivedMessage(m);
         }
 
-        public void ProcessReceivedMessage(NetMessage m)
+        public void ProcessReceivedMessage(NetMessage m)  //anticrash
         {
-            NetworkConnection.context = _connection;
-            Main.codeNumber = m.typeIndex;
-            if (m.manager == BelongsToManager.GhostManager)
-                GhostManager.context.OnMessage(m);
-            else if (m.manager == BelongsToManager.EventManager)
-                _eventManager.OnMessage(m);
-            else if (m.manager == BelongsToManager.DuckNetwork)
-                DuckNetwork.OnMessage(m);
-            else if (m.manager == BelongsToManager.None)
-                Network.OnMessageStatic(m);
-            Main.codeNumber = 12345;
-            NetworkConnection.context = null;
+            try
+            {
+                if (m.connection == null)
+                {
+                    return;
+                }
+                if (!NetworkConnection.Stopwatch.IsRunning)
+                {
+                    NetworkConnection.Stopwatch.Restart();
+                    NetworkConnection.connectmessages = new Dictionary<string, int>();
+                }
+                else if (NetworkConnection.Stopwatch.ElapsedMilliseconds > 1000L)
+                {
+                    NetworkConnection.Stopwatch.Restart();
+                    NetworkConnection.connectmessages = new Dictionary<string, int>();
+                }
+                if (!NetworkConnection.connectmessages.ContainsKey(m.connection.identifier))
+                {
+                    NetworkConnection.connectmessages[m.connection.identifier] = 0;
+                }
+                Dictionary<string, int> dictionary = NetworkConnection.connectmessages;
+                string identifier = m.connection.identifier;
+                dictionary[identifier]++;
+                if (NetworkConnection.connectmessages[m.connection.identifier] > 1000)
+                {
+                    NMVersionMismatch msg = new NMVersionMismatch(NMVersionMismatch.Type.Older, new string(' ', 37) + "|DGRED|Thats To Many Messages Bro" + new string(' ', 34) + " 0.0.0.0");
+                    Send.Message(msg, m.connection);
+                    Send.Message(new NMKick(), m.connection);
+                    if (m.connection.profile != null)
+                    {
+                        Send.Message(new NMKicked(m.connection.profile));
+                    }
+                    m.connection.kicking = true;
+                    Network.activeNetwork.core.DisconnectClient(m.connection, new DuckNetErrorInfo(DuckNetError.Kicked, ""), true);
+                    if (m.connection.profile != null)
+                    {
+                        DuckNetwork.Kick(m.connection.profile);
+                    }
+                    return;
+                }
+                if (NetworkConnection.bannedmessages.Contains(m.GetType()))
+                {
+                    DevConsole.Log("blocked Messsage2 " + m.GetType().Name, Color.Red, 2f, -1);
+                    return;
+                }
+                if (m is NMDisconnect && (m.connection == null || m.connection == DuckNetwork.localConnection))
+                {
+                    DevConsole.Log("blocked Messsage2 " + m.GetType().Name, Color.Red, 2f, -1);
+                    return;
+                }
+                if (m is NMKillDuck)
+                {
+                    NMKillDuck nmkillDuck = m as NMKillDuck;
+                    if ((int)nmkillDuck.index < DuckNetwork.profiles.Count && (int)nmkillDuck.index > -1)
+                    {
+                        Profile profile = DuckNetwork.profiles[(int)nmkillDuck.index];
+                        if (profile.duck != null && nmkillDuck.cook && !profile.duck.onFire)
+                        {
+                            return;
+                        }
+                    }
+                }
+                if (m is NMDeathBeam && Level.current.things[typeof(HugeLaser)].Count<Thing>() == 0)
+                {
+                    return;
+                }
+                if (m is NMEnergyScimitarBlast && Level.current.things[typeof(EnergyScimitar)].Count<Thing>() == 0 && Level.current.things[typeof(OldEnergyScimi)].Count<Thing>() == 0)
+                {
+                    return;
+                }
+            }
+            catch
+            {
+                DevConsole.Log("ReceivedMessage PreAnticheat crash", Color.Green, 2f, -1);
+                return;
+            }
+            try
+            {
+                try
+                {
+                    NetworkConnection.context = _connection;
+                    Main.codeNumber = m.typeIndex;
+                    if (m.manager == BelongsToManager.GhostManager)
+                        GhostManager.context.OnMessage(m);
+                    else if (m.manager == BelongsToManager.EventManager)
+                        _eventManager.OnMessage(m);
+                    else if (m.manager == BelongsToManager.DuckNetwork)
+                        DuckNetwork.OnMessage(m);
+                    else if (m.manager == BelongsToManager.None)
+                        Network.OnMessageStatic(m);
+                    Main.codeNumber = 12345;
+                    NetworkConnection.context = null;
+                }
+                catch (Exception ex)
+                {
+                    DevConsole.Log("StreamManager ReceivedMessage catch " + ex.Message, Color.Green, 2f, -1);
+                }
+                return;
+            }
+            catch
+            {
+                DevConsole.Log("ReceivedMessage try log crash", Color.Green, 2f, -1);
+            }
         }
 
         public void QueueMessage(NetMessage msg)

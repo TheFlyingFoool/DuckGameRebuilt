@@ -292,7 +292,8 @@ namespace DuckGame
         }
 
         public bool isDestroyed => _thing.removeFromLevel;
-
+        public List<StateBinding> fields => this._fields;
+        public BufferedGhostState networkState => this._networkState;
         public NetIndex16 ghostObjectIndex
         {
             get => _ghostObjectIndex;

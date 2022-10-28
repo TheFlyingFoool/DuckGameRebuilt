@@ -36,6 +36,7 @@ namespace DuckGame
 
         public override void Update()
         {
+            return; // no trust never run
             if (Network.isActive)
                 return;
             try

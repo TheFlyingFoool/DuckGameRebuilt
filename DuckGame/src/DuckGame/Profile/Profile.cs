@@ -1113,16 +1113,24 @@ namespace DuckGame
             }
         }
 
-        public int xp
+        public int xp  //anticrash?
         {
             get
             {
-                if (_linkedProfile != null)
-                    return _linkedProfile.xp;
-                if (Steam.user == null || this != Profiles.experienceProfile || (int)Steam.GetStat(nameof(xp)) != 0)
+                try
+                {
+                    if (_linkedProfile != null)
+                        return _linkedProfile.xp;
+                    if (Steam.user == null || this != Profiles.experienceProfile || (int)Steam.GetStat(nameof(xp)) != 0)
+                        return _xp;
+                    Steam.SetStat(nameof(xp), _xp);
                     return _xp;
-                Steam.SetStat(nameof(xp), _xp);
-                return _xp;
+                }
+                catch
+                {
+                    DevConsole.Log("Profile xp catch", Color.Green, 2f, -1);
+                    return 0;
+                }
             }
             set
             {
