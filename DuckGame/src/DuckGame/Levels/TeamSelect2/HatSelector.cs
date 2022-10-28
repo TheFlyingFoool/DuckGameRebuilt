@@ -127,14 +127,32 @@ namespace DuckGame
 
         public bool flashTransition
         {
-            get => _screen._flashTransition;
-            set => _screen._flashTransition = value;
+            get
+            {
+                if (_screen != null)
+                    return _screen._flashTransition;
+                return false;
+            }
+            set
+            {
+                if (_screen != null)
+                    _screen._flashTransition = value;
+            }
         }
 
         public float darken
         {
-            get => _screen._darken;
-            set => _screen._darken = value;
+            get
+            {
+                if (_screen != null)
+                    return _screen._darken;
+                return 1f;
+            }
+            set
+            {
+                if (_screen != null)
+                    _screen._darken = value;
+            }
         }
 
         public float fade

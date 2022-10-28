@@ -604,22 +604,40 @@ namespace DuckGame
                                     return;
                                 }
                             }
-                            Thing thing = Editor.CreateThing(t);
-                            DevConsole.Log(type.Name);
-                            thing.position = new Vec2(-2000f, -2000f);
-                            thing.connection = pState.connection;
-                            ghostObject = new GhostObject(thing, this, (int)pState.id);
-                            Vec2 position = ReadNetworkPosition(ghostObject, type, pState, mask, pState.connection, false);
-                            if (!CheckCreationKill(ghostObject, position, type, pState))
+                            if (Network.isServer)
                             {
-                                return;
+                                Thing thing = Editor.CreateThing(t);
+                                DevConsole.Log(type.Name);
+                                thing.position = new Vec2(-2000f, -2000f);
+                                thing.connection = pState.connection;
+                                ghostObject = new GhostObject(thing, this, (int)pState.id);
+                                Vec2 position = ReadNetworkPosition(ghostObject, type, pState, mask, pState.connection, false);
+                                if (!CheckCreationKill(ghostObject, position, type, pState))
+                                {
+                                    return;
+                                }
+                                Level.Add(thing);
+                                ghostObject.ClearStateMask(pState.connection);
+                                pState.ghost = ghostObject;
+                                AddGhost(ghostObject);
+                                if (pState.connection.profile != null && pState.id > pState.connection.profile.latestGhostIndex)
+                                    pState.connection.profile.latestGhostIndex = pState.id;
                             }
-                            Level.Add(thing);
-                            ghostObject.ClearStateMask(pState.connection);
-                            pState.ghost = ghostObject;
-                            AddGhost(ghostObject);
-                            if (pState.connection.profile != null && pState.id > pState.connection.profile.latestGhostIndex)
-                                pState.connection.profile.latestGhostIndex = pState.id;
+                            else
+                            {
+                                Thing thing = Editor.CreateThing(t);
+                                thing.position = new Vec2(-2000f, -2000f);
+                                Level.Add(thing);
+                                thing.connection = pState.connection;
+                                ghostObject = new GhostObject(thing, this, pState.id, false);
+                                ghostObject.ClearStateMask(pState.connection);
+                                pState.ghost = ghostObject;
+                                this.AddGhost(ghostObject);
+                                if (pState.connection.profile != null && pState.id > pState.connection.profile.latestGhostIndex)
+                                {
+                                    pState.connection.profile.latestGhostIndex = pState.id;
+                                }
+                            }
                         }
                         else
                         {
@@ -695,7 +713,7 @@ namespace DuckGame
                     }
                 }
             }
-            catch
+            catch(Exception e)
             {
                 DevConsole.Log("GhostManager ProcessGhostState Catch", Color.Green, 2f, -1);
             }

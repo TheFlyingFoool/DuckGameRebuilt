@@ -181,7 +181,8 @@ namespace DuckGame
 
         public void OnChatMessage(User who, byte[] data) // aw hell naw
         {
-            return; // yea no thanks for running this
+            if (Network.isServer)
+                return; // yea no thanks for running this
             Steam_LobbyMessage steamLobbyMessage = Steam_LobbyMessage.Receive(who, data);
             if (steamLobbyMessage == null)
                 return;

@@ -54,11 +54,7 @@ namespace DuckGame
         private GhostManager _manager;
         public ITakeInput _inputObject;
 
-        private static BufferedGhostProperty MakeBufferedProperty(
-          StateBinding state,
-          object value,
-          int index = 0,
-          NetIndex16 tick = default(NetIndex16))
+        private static BufferedGhostProperty MakeBufferedProperty(StateBinding state, object value, int index = 0, NetIndex16 tick = default(NetIndex16))
         {
             if (value is Vec2)
             {
