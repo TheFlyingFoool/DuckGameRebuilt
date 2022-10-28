@@ -728,15 +728,22 @@ namespace DuckGame
                 }
                 foreach (Thing update in _things.RealupdateList)//_things.updateList)
                 {
-                    if (update.active)
+                    try // scary //anticrash?
                     {
-                        if (update.shouldRunUpdateLocally)
-                            update.DoUpdate();
+                        if (update.active)
+                        {
+                            if (update.shouldRunUpdateLocally)
+                                update.DoUpdate();
+                        }
+                        else
+                            update.InactiveUpdate();
+                        if (Level._core.nextLevel != null)
+                            break;
                     }
-                    else
-                        update.InactiveUpdate();
-                    if (Level._core.nextLevel != null)
-                        break;
+                    catch
+                    {
+                        DevConsole.Log("Level UpdateThings, foreach loop catch", Color.Green, 2f, -1);
+                    }
                 }
                 occasionalupdatethings = new List<Thing>(occasionalupdatethingspending);
                 occasionalupdatethingspending.Clear();

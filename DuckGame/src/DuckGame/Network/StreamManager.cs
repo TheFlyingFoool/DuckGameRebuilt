@@ -262,73 +262,76 @@ namespace DuckGame
         {
             try
             {
-                if (m.connection == null)
+                if (Network.isServer)
                 {
-                    return;
-                }
-                if (!NetworkConnection.Stopwatch.IsRunning)
-                {
-                    NetworkConnection.Stopwatch.Restart();
-                    NetworkConnection.connectmessages = new Dictionary<string, int>();
-                }
-                else if (NetworkConnection.Stopwatch.ElapsedMilliseconds > 1000L)
-                {
-                    NetworkConnection.Stopwatch.Restart();
-                    NetworkConnection.connectmessages = new Dictionary<string, int>();
-                }
-                if (!NetworkConnection.connectmessages.ContainsKey(m.connection.identifier))
-                {
-                    NetworkConnection.connectmessages[m.connection.identifier] = 0;
-                }
-                Dictionary<string, int> dictionary = NetworkConnection.connectmessages;
-                string identifier = m.connection.identifier;
-                dictionary[identifier]++;
-                if (NetworkConnection.connectmessages[m.connection.identifier] > 1000)
-                {
-                    NMVersionMismatch msg = new NMVersionMismatch(NMVersionMismatch.Type.Older, new string(' ', 37) + "|DGRED|Thats To Many Messages Bro" + new string(' ', 34) + " 0.0.0.0");
-                    Send.Message(msg, m.connection);
-                    Send.Message(new NMKick(), m.connection);
-                    if (m.connection.profile != null)
+                    if (m.connection == null)
                     {
-                        Send.Message(new NMKicked(m.connection.profile));
+                        return;
                     }
-                    m.connection.kicking = true;
-                    Network.activeNetwork.core.DisconnectClient(m.connection, new DuckNetErrorInfo(DuckNetError.Kicked, ""), true);
-                    if (m.connection.profile != null)
+                    if (!NetworkConnection.Stopwatch.IsRunning)
                     {
-                        DuckNetwork.Kick(m.connection.profile);
+                        NetworkConnection.Stopwatch.Restart();
+                        NetworkConnection.connectmessages = new Dictionary<string, int>();
                     }
-                    return;
-                }
-                if (NetworkConnection.bannedmessages.Contains(m.GetType()))
-                {
-                    DevConsole.Log("blocked Messsage2 " + m.GetType().Name, Color.Red, 2f, -1);
-                    return;
-                }
-                if (m is NMDisconnect && (m.connection == null || m.connection == DuckNetwork.localConnection))
-                {
-                    DevConsole.Log("blocked Messsage2 " + m.GetType().Name, Color.Red, 2f, -1);
-                    return;
-                }
-                if (m is NMKillDuck)
-                {
-                    NMKillDuck nmkillDuck = m as NMKillDuck;
-                    if ((int)nmkillDuck.index < DuckNetwork.profiles.Count && (int)nmkillDuck.index > -1)
+                    else if (NetworkConnection.Stopwatch.ElapsedMilliseconds > 1000L)
                     {
-                        Profile profile = DuckNetwork.profiles[(int)nmkillDuck.index];
-                        if (profile.duck != null && nmkillDuck.cook && !profile.duck.onFire)
+                        NetworkConnection.Stopwatch.Restart();
+                        NetworkConnection.connectmessages = new Dictionary<string, int>();
+                    }
+                    if (!NetworkConnection.connectmessages.ContainsKey(m.connection.identifier))
+                    {
+                        NetworkConnection.connectmessages[m.connection.identifier] = 0;
+                    }
+                    Dictionary<string, int> dictionary = NetworkConnection.connectmessages;
+                    string identifier = m.connection.identifier;
+                    dictionary[identifier]++;
+                    if (NetworkConnection.connectmessages[m.connection.identifier] > 1000)
+                    {
+                        NMVersionMismatch msg = new NMVersionMismatch(NMVersionMismatch.Type.Older, new string(' ', 37) + "|DGRED|Thats To Many Messages Bro" + new string(' ', 34) + " 0.0.0.0");
+                        Send.Message(msg, m.connection);
+                        Send.Message(new NMKick(), m.connection);
+                        if (m.connection.profile != null)
                         {
-                            return;
+                            Send.Message(new NMKicked(m.connection.profile));
+                        }
+                        m.connection.kicking = true;
+                        Network.activeNetwork.core.DisconnectClient(m.connection, new DuckNetErrorInfo(DuckNetError.Kicked, ""), true);
+                        if (m.connection.profile != null)
+                        {
+                            DuckNetwork.Kick(m.connection.profile);
+                        }
+                        return;
+                    }
+                    if (NetworkConnection.bannedmessages.Contains(m.GetType()))
+                    {
+                        DevConsole.Log("blocked Messsage2 " + m.GetType().Name, Color.Red, 2f, -1);
+                        return;
+                    }
+                    if (m is NMDisconnect && (m.connection == null || m.connection == DuckNetwork.localConnection))
+                    {
+                        DevConsole.Log("blocked Messsage2 " + m.GetType().Name, Color.Red, 2f, -1);
+                        return;
+                    }
+                    if (m is NMKillDuck)
+                    {
+                        NMKillDuck nmkillDuck = m as NMKillDuck;
+                        if ((int)nmkillDuck.index < DuckNetwork.profiles.Count && (int)nmkillDuck.index > -1)
+                        {
+                            Profile profile = DuckNetwork.profiles[(int)nmkillDuck.index];
+                            if (profile.duck != null && nmkillDuck.cook && !profile.duck.onFire)
+                            {
+                                return;
+                            }
                         }
                     }
-                }
-                if (m is NMDeathBeam && Level.current.things[typeof(HugeLaser)].Count<Thing>() == 0)
-                {
-                    return;
-                }
-                if (m is NMEnergyScimitarBlast && Level.current.things[typeof(EnergyScimitar)].Count<Thing>() == 0 && Level.current.things[typeof(OldEnergyScimi)].Count<Thing>() == 0)
-                {
-                    return;
+                    if (m is NMDeathBeam && Level.current.things[typeof(HugeLaser)].Count<Thing>() == 0)
+                    {
+                        return;
+                    }
+                    if (m is NMEnergyScimitarBlast && Level.current.things[typeof(EnergyScimitar)].Count<Thing>() == 0 && Level.current.things[typeof(OldEnergyScimi)].Count<Thing>() == 0)
+                    {
+                        return;
+                    }
                 }
             }
             catch
@@ -428,13 +431,13 @@ namespace DuckGame
                         orderedPacket.timeout = 1000f;
                         string[] strArray = new string[7]
                         {
-              "@disconnect Ordered message |WHITE|",
-              orderedPacket.ToString(),
-              "|PREV| (",
-              orderedPacket.order.ToString(),
-              "->",
-              null,
-              null
+                          "@disconnect Ordered message |WHITE|",
+                          orderedPacket.ToString(),
+                          "|PREV| (",
+                          orderedPacket.order.ToString(),
+                          "->",
+                          null,
+                          null
                         };
                         expectedReliableOrder = this.expectedReliableOrder;
                         strArray[5] = expectedReliableOrder.ToString();

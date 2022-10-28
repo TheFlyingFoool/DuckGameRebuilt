@@ -228,6 +228,10 @@ namespace DuckGame
         }
         private bool CheckCreationKill(GhostObject obj, Vec2 position, Type t, NMGhostState pState)
         {
+            if (!Network.isServer)
+            {
+                return true;
+            }
             bool flag = false;
             foreach (ItemBoxRandom itemBoxRandom in Level.CheckPointAll<ItemBoxRandom>(position))
             {
@@ -497,191 +501,205 @@ namespace DuckGame
             ghostState.data = data;
             return result;
         }
-        private void ProcessGhostState(NMGhostState pState)
+        private void ProcessGhostState(NMGhostState pState) //anticheat & //anticrash
         {
-            bool flag = false;
-            foreach (Thing thing in Level.current.things)
+            try
             {
-                if (thing is PurpleBlock || thing is ItemBox || thing is Present || thing is ItemCrate || thing is DeathCrate || thing is BananaCluster)
+                bool flag = false;
+                foreach (Thing thing in Level.current.things)
                 {
-                    flag = true;
-                    break;
-                }
-                else if (thing is IceBlock)
-                {
-                    IceBlock iceBlock = thing as IceBlock;
-                    if (iceBlock != null && iceBlock.contains != null)
+                    if (thing is PurpleBlock || thing is ItemBox || thing is Present || thing is ItemCrate || thing is DeathCrate || thing is BananaCluster)
                     {
                         flag = true;
                         break;
                     }
-                }
-            }
-            Profile profile = GhostObject.IndexToProfile(pState.id);
-            Type type = Editor.IDToType[pState.classID];
-            if (profile != null && profile.removedGhosts.TryGetValue(pState.id, out GhostObject removedGhost))
-            {
-                if (removedGhost != null)
-                {
-                    if (removedGhost.removeLogCooldown == 0)
+                    else if (thing is IceBlock)
                     {
-                        DevConsole.Log(DCSection.GhostMan, "Ignoring removed ghost(" + removedGhost.ToString() + ")", pState.connection);
-                        removedGhost.removeLogCooldown = 5;
+                        IceBlock iceBlock = thing as IceBlock;
+                        if (iceBlock != null && iceBlock.contains != null)
+                        {
+                            flag = true;
+                            break;
+                        }
                     }
-                    else
-                        --removedGhost.removeLogCooldown;
                 }
-                else
-                    DevConsole.Log(DCSection.GhostMan, "Ignoring removed ghost(" + pState.ToString() + ")", pState.connection);
-            }
-            else
-            {
-                GhostObject ghostObject = GetGhost(pState.id);
-                if (pState.classID == 0)
+                Profile profile = GhostObject.IndexToProfile(pState.id);
+                Type type = Editor.IDToType[pState.classID];
+                if (profile != null && profile.removedGhosts.TryGetValue(pState.id, out GhostObject removedGhost))
                 {
-                    RemoveGhost(ghostObject, pState.id);
-                }
-                else
-                {
-                    System.Type t = Editor.IDToType[pState.classID];
-                    long mask = pState.header.delta ? GhostObject.ReadMask(t, pState.data) : long.MaxValue;
-                    if (ghostObject != null && (t != ghostObject.thing.GetType() || ghostObject.isDestroyed && mask == long.MaxValue))
+                    if (removedGhost != null)
                     {
-                        GhostManager.receivingDestroyMessage = true;
-                        GhostManager.changingGhostType = true;
-                        RemoveGhost(ghostObject, ghostObject.ghostObjectIndex);
-                        ghostObject = null;
-                        GhostManager.receivingDestroyMessage = false;
-                        GhostManager.changingGhostType = false;
-                    }
-                    if (ghostObject == null)
-                    {
-                        if (Level.current is TeamSelect2)
+                        if (removedGhost.removeLogCooldown == 0)
                         {
-                            if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type))
-                            {
-                                DevConsole.Log("blocked Ghost1T " + type.Name, Color.Red, 2f, -1);
-                                Thing thing2 = Editor.CreateThing(type);
-                                thing2.position = new Vec2(-2000f, -2000f);
-                                thing2.removeFromLevel = true;
-                                ghostObject = new GhostObject(thing2, this, pState.id, false);
-                                ghostObject.ClearStateMask(pState.connection);
-                                this._destroyedGhosts.Add(ghostObject);
-                                return;
-                            }
+                            DevConsole.Log(DCSection.GhostMan, "Ignoring removed ghost(" + removedGhost.ToString() + ")", pState.connection);
+                            removedGhost.removeLogCooldown = 5;
                         }
-                        else if (!flag)
-                        {
-                            if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(CampingBall).IsAssignableFrom(type) && !typeof(Dart).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
-                            {
-                                DevConsole.Log("blocked Ghost1N " + type.Name, Color.Red, 2f, -1);
-                                Thing thing3 = Editor.CreateThing(type);
-                                thing3.position = new Vec2(-2000f, -2000f);
-                                thing3.removeFromLevel = true;
-                                ghostObject = new GhostObject(thing3, this, pState.id, false);
-                                ghostObject.ClearStateMask(pState.connection);
-                                this._destroyedGhosts.Add(ghostObject);
-                                return;
-                            }
-                        }
-                        else if (!typeof(Holdable).IsAssignableFrom(type) && !typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(CampingBall).IsAssignableFrom(type) && !typeof(Dart).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
-                        {
-                            DevConsole.Log("blocked Ghost1A " + type.Name, Color.Red, 2f, -1);
-                            Thing thing4 = Editor.CreateThing(type);
-                            thing4.position = new Vec2(-2000f, -2000f);
-                            thing4.removeFromLevel = true;
-                            ghostObject = new GhostObject(thing4, this, pState.id, false);
-                            ghostObject.ClearStateMask(pState.connection);
-                            this._destroyedGhosts.Add(ghostObject);
-                            return;
-                        }
-                        Thing thing = Editor.CreateThing(t);
-                        DevConsole.Log(type.Name);
-                        thing.position = new Vec2(-2000f, -2000f);
-                        thing.connection = pState.connection;
-                        ghostObject = new GhostObject(thing, this, (int)pState.id);
-                        Vec2 position = ReadNetworkPosition(ghostObject, type, pState, mask, pState.connection, false);
-                        if (!CheckCreationKill(ghostObject, position, type, pState))
-                        {
-                            return;
-                        }
-                        Level.Add(thing);
-                        ghostObject.ClearStateMask(pState.connection);
-                        pState.ghost = ghostObject;
-                        AddGhost(ghostObject);
-                        if (pState.connection.profile != null && pState.id > pState.connection.profile.latestGhostIndex)
-                            pState.connection.profile.latestGhostIndex = pState.id;
-                    }
-                    else
-                    {
-                        if (ghostObject.isDestroyed)
-                        {
-                            DevConsole.Log(DCSection.GhostMan, "Skipped ghost data (DESTROYED)(" + ghostObject.ghostObjectIndex.ToString() + ")", pState.connection);
-                            return;
-                        }
-                        if (ghostObject.thing.isBitBufferCreatedGhostThing)
-                        {
-                            ghostObject.thing.isBitBufferCreatedGhostThing = false;
-                            ghostObject.thing.level = null;
-                            if (Level.current is TeamSelect2)
-                            {
-                                if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type))
-                                {
-                                    DevConsole.Log("blocked Ghost2T " + type.Name, Color.Red, 2f, -1);
-                                    ghostObject.thing.removeFromLevel = true;
-                                    ghostObject.ClearStateMask(pState.connection);
-                                    this._destroyedGhosts.Add(ghostObject);
-                                    return;
-                                }
-                            }
-                            else if (!flag)
-                            {
-                                if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
-                                {
-                                    DevConsole.Log("blocked Ghost2N " + type.Name, Color.Red, 2f, -1);
-                                    ghostObject.thing.removeFromLevel = true;
-                                    ghostObject.ClearStateMask(pState.connection);
-                                    this._destroyedGhosts.Add(ghostObject);
-                                    return;
-                                }
-                            }
-                            else if (!typeof(Holdable).IsAssignableFrom(type) && !typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
-                            {
-                                DevConsole.Log("blocked Ghost2A " + type.Name, Color.Red, 2f, -1);
-                                ghostObject.thing.removeFromLevel = true;
-                                ghostObject.ClearStateMask(pState.connection);
-                                this._destroyedGhosts.Add(ghostObject);
-                                return;
-                            }
-                            Vec2 position2 = ReadNetworkPosition(ghostObject, type, pState, mask, pState.connection, false);
-                            if (!CheckCreationKill(ghostObject, position2, type, pState))
-                            {
-                                return;
-                            }
-                            Level.Add(ghostObject.thing);
-                        }
-                        if (pState.header.connection != null)
-                            ghostObject.thing.TransferControl(pState.header.connection, pState.authority);
                         else
-                            ghostObject.thing.TransferControl(pState.connection, pState.authority);
+                            --removedGhost.removeLogCooldown;
                     }
-                    if (NetworkDebugger.enabled && pState.connection.profile != null)
-                        NetworkDebugger.GetGhost(ghostObject).dataReceivedFrames[pState.connection.profile.persona] = Graphics.frame;
-                    if (ghostObject.thing.connection == pState.connection || ghostObject.thing.connection == pState.header.connection)
+                    else
+                        DevConsole.Log(DCSection.GhostMan, "Ignoring removed ghost(" + pState.ToString() + ")", pState.connection);
+                }
+                else
+                {
+                    GhostObject ghostObject = GetGhost(pState.id);
+                    if (pState.classID == 0)
                     {
-                        ghostObject.ReadInNetworkData(pState, mask, pState.connection, false);
+                        RemoveGhost(ghostObject, pState.id);
                     }
                     else
                     {
-                        for (int index = 0; index < Network.connections.Count; ++index)
+                        System.Type t = Editor.IDToType[pState.classID];
+                        long mask = pState.header.delta ? GhostObject.ReadMask(t, pState.data) : long.MaxValue;
+                        if (ghostObject != null && (t != ghostObject.thing.GetType() || ghostObject.isDestroyed && mask == long.MaxValue))
                         {
-                            NetworkConnection connection = Network.connections[index];
-                            ghostObject.DirtyStateMask(mask, connection);
+                            GhostManager.receivingDestroyMessage = true;
+                            GhostManager.changingGhostType = true;
+                            RemoveGhost(ghostObject, ghostObject.ghostObjectIndex);
+                            ghostObject = null;
+                            GhostManager.receivingDestroyMessage = false;
+                            GhostManager.changingGhostType = false;
                         }
+                        if (ghostObject == null)
+                        {
+                            if (Network.isServer)
+                            {
+                                if (Level.current is TeamSelect2)
+                                {
+                                    if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type))
+                                    {
+                                        DevConsole.Log("blocked Ghost1T " + type.Name, Color.Red, 2f, -1);
+                                        Thing thing2 = Editor.CreateThing(type);
+                                        thing2.position = new Vec2(-2000f, -2000f);
+                                        thing2.removeFromLevel = true;
+                                        ghostObject = new GhostObject(thing2, this, pState.id, false);
+                                        ghostObject.ClearStateMask(pState.connection);
+                                        this._destroyedGhosts.Add(ghostObject);
+                                        return;
+                                    }
+                                }
+                                else if (!flag)
+                                {
+                                    if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(CampingBall).IsAssignableFrom(type) && !typeof(Dart).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
+                                    {
+                                        DevConsole.Log("blocked Ghost1N " + type.Name, Color.Red, 2f, -1);
+                                        Thing thing3 = Editor.CreateThing(type);
+                                        thing3.position = new Vec2(-2000f, -2000f);
+                                        thing3.removeFromLevel = true;
+                                        ghostObject = new GhostObject(thing3, this, pState.id, false);
+                                        ghostObject.ClearStateMask(pState.connection);
+                                        this._destroyedGhosts.Add(ghostObject);
+                                        return;
+                                    }
+                                }
+                                else if (!typeof(Holdable).IsAssignableFrom(type) && !typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(CampingBall).IsAssignableFrom(type) && !typeof(Dart).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
+                                {
+                                    DevConsole.Log("blocked Ghost1A " + type.Name, Color.Red, 2f, -1);
+                                    Thing thing4 = Editor.CreateThing(type);
+                                    thing4.position = new Vec2(-2000f, -2000f);
+                                    thing4.removeFromLevel = true;
+                                    ghostObject = new GhostObject(thing4, this, pState.id, false);
+                                    ghostObject.ClearStateMask(pState.connection);
+                                    this._destroyedGhosts.Add(ghostObject);
+                                    return;
+                                }
+                            }
+                            Thing thing = Editor.CreateThing(t);
+                            DevConsole.Log(type.Name);
+                            thing.position = new Vec2(-2000f, -2000f);
+                            thing.connection = pState.connection;
+                            ghostObject = new GhostObject(thing, this, (int)pState.id);
+                            Vec2 position = ReadNetworkPosition(ghostObject, type, pState, mask, pState.connection, false);
+                            if (!CheckCreationKill(ghostObject, position, type, pState))
+                            {
+                                return;
+                            }
+                            Level.Add(thing);
+                            ghostObject.ClearStateMask(pState.connection);
+                            pState.ghost = ghostObject;
+                            AddGhost(ghostObject);
+                            if (pState.connection.profile != null && pState.id > pState.connection.profile.latestGhostIndex)
+                                pState.connection.profile.latestGhostIndex = pState.id;
+                        }
+                        else
+                        {
+                            if (ghostObject.isDestroyed)
+                            {
+                                DevConsole.Log(DCSection.GhostMan, "Skipped ghost data (DESTROYED)(" + ghostObject.ghostObjectIndex.ToString() + ")", pState.connection);
+                                return;
+                            }
+                            if (ghostObject.thing.isBitBufferCreatedGhostThing)
+                            {
+                                ghostObject.thing.isBitBufferCreatedGhostThing = false;
+                                ghostObject.thing.level = null;
+                                if (Network.isServer)
+                                {
+                                    if (Level.current is TeamSelect2)
+                                    {
+                                        if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type))
+                                        {
+                                            DevConsole.Log("blocked Ghost2T " + type.Name, Color.Red, 2f, -1);
+                                            ghostObject.thing.removeFromLevel = true;
+                                            ghostObject.ClearStateMask(pState.connection);
+                                            this._destroyedGhosts.Add(ghostObject);
+                                            return;
+                                        }
+                                    }
+                                    else if (!flag)
+                                    {
+                                        if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
+                                        {
+                                            DevConsole.Log("blocked Ghost2N " + type.Name, Color.Red, 2f, -1);
+                                            ghostObject.thing.removeFromLevel = true;
+                                            ghostObject.ClearStateMask(pState.connection);
+                                            this._destroyedGhosts.Add(ghostObject);
+                                            return;
+                                        }
+                                    }
+                                    else if (!typeof(Holdable).IsAssignableFrom(type) && !typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
+                                    {
+                                        DevConsole.Log("blocked Ghost2A " + type.Name, Color.Red, 2f, -1);
+                                        ghostObject.thing.removeFromLevel = true;
+                                        ghostObject.ClearStateMask(pState.connection);
+                                        this._destroyedGhosts.Add(ghostObject);
+                                        return;
+                                    }
+                                }
+                                Vec2 position2 = ReadNetworkPosition(ghostObject, type, pState, mask, pState.connection, false);
+                                if (!CheckCreationKill(ghostObject, position2, type, pState))
+                                {
+                                    return;
+                                }
+                                Level.Add(ghostObject.thing);
+                            }
+                            if (pState.header.connection != null)
+                                ghostObject.thing.TransferControl(pState.header.connection, pState.authority);
+                            else
+                                ghostObject.thing.TransferControl(pState.connection, pState.authority);
+                        }
+                        if (NetworkDebugger.enabled && pState.connection.profile != null)
+                            NetworkDebugger.GetGhost(ghostObject).dataReceivedFrames[pState.connection.profile.persona] = Graphics.frame;
+                        if (ghostObject.thing.connection == pState.connection || ghostObject.thing.connection == pState.header.connection)
+                        {
+                            ghostObject.ReadInNetworkData(pState, mask, pState.connection, false);
+                        }
+                        else
+                        {
+                            for (int index = 0; index < Network.connections.Count; ++index)
+                            {
+                                NetworkConnection connection = Network.connections[index];
+                                ghostObject.DirtyStateMask(mask, connection);
+                            }
+                        }
+                        double x = ghostObject.thing.position.x;
                     }
-                    double x = ghostObject.thing.position.x;
                 }
             }
+            catch
+            {
+                DevConsole.Log("GhostManager ProcessGhostState Catch", Color.Green, 2f, -1);
+            }
+           
         }
 
         public void Notify(StreamManager pManager, NetMessage pMessage, bool pDropped)

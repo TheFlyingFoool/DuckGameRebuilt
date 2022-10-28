@@ -60,8 +60,54 @@ namespace DuckGame
           int index = 0,
           NetIndex16 tick = default(NetIndex16))
         {
+            if (value is Vec2)
+            {
+                Vec2 vec2v = (Vec2)value;
+                if (float.IsNaN(vec2v.x))
+                {
+                    vec2v.x = 0f;
+                }
+                else if (float.IsInfinity(vec2v.x))
+                {
+                    vec2v.x = 0f;
+                }
+                if (float.IsNaN(vec2v.y))
+                {
+                    vec2v.y = 0f;
+                }
+                else if (float.IsInfinity(vec2v.y))
+                {
+                    vec2v.y = 0f;
+                }
+                value = vec2v;
+            }
+            else if (value is float)
+            {
+                float floatv = (float)value;
+                if (float.IsNaN(floatv))
+                {
+                    value = 0f;
+                }
+                else if (float.IsInfinity(floatv))
+                {
+                    value = 0f;
+                }
+            }
+            else if (value is Double)
+            {
+                Double doublev = (Double)value;
+                if (Double.IsNaN(doublev))
+                {
+                    value = 0.0;
+                }
+                else if (Double.IsInfinity(doublev))
+                {
+                    value = 0.0;
+                }
+            }
             if (state.type == typeof(float))
             {
+               
                 return new BufferedGhostProperty<float>
                 {
                     binding = state,
@@ -292,6 +338,7 @@ namespace DuckGame
         }
 
         public bool isDestroyed => _thing.removeFromLevel;
+
         public List<StateBinding> fields => this._fields;
         public BufferedGhostState networkState => this._networkState;
         public NetIndex16 ghostObjectIndex
