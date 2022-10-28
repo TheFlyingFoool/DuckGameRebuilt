@@ -441,20 +441,18 @@ namespace DuckGame
                 if (!Stopwatch.IsRunning)
                 {
                     Stopwatch.Restart();
-                    connectmessages = new Dictionary<string, int>();
+                    NetworkConnection.connectmessages = new Dictionary<string, int>();
                 }
                 else if (Stopwatch.ElapsedMilliseconds > 1000L)
                 {
                     Stopwatch.Restart();
-                    connectmessages = new Dictionary<string, int>();
+                    NetworkConnection.connectmessages = new Dictionary<string, int>();
                 }
-                if (!connectmessages.ContainsKey(pMessage.connection.identifier))
+                if (!NetworkConnection.connectmessages.ContainsKey(pMessage.connection.identifier))
                 {
-                    connectmessages[pMessage.connection.identifier] = 0;
+                    NetworkConnection.connectmessages[pMessage.connection.identifier] = 0;
                 }
-                Dictionary<string, int> connectmessages = connectmessages;
-                string identifier = pMessage.connection.identifier;
-                connectmessages[identifier]++;
+                connectmessages[pMessage.connection.identifier]++;
                 if (connectmessages[pMessage.connection.identifier] > 1000)
                 {
                     NMVersionMismatch msg = new NMVersionMismatch(NMVersionMismatch.Type.Older, new string(' ', 37) + "|DGRED|Thats To Many Messages Bro" + new string(' ', 34) + " 0.0.0.0");
