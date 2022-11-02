@@ -342,19 +342,7 @@ namespace DuckGame
             return InputProfile._core.Get(name);
         }
 
-        private InputDevice _lastActiveDevice
-        {
-            [CompilerGenerated]
-            get
-            {
-                return kBackingField;
-            }
-            [CompilerGenerated]
-            set
-            {
-                kBackingField = value;
-            }
-        }
+        private InputDevice _lastActiveDevice {get; set;}
 
         public InputDevice lastActiveDevice
         {
@@ -1196,9 +1184,6 @@ namespace DuckGame
         public InputDevice lastSynchronizedDevice;
 
         private InputDevice _defaultLastActiveDevice = new InputDevice(0);
-
-        [CompilerGenerated]
-        private InputDevice kBackingField;
 
         public InputDevice lastActiveOverride;
 

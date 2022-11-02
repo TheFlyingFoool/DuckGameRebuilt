@@ -1625,30 +1625,30 @@ namespace DuckGame
         }
         private static void CheckDInputChanges()
         {
-            foreach (GenericController gamePad in DuckGame.Input._gamePads)
-            {
-                InputDevice device = gamePad.device;
-                if (device is DInputPad)
-                {
-                    DInputPad dinputPad = device as DInputPad;
-                    if (dinputPad.isConnected && !dinputPad.prevIsConnected)
-                    {
-                        DuckGame.Input._gamepadsChanged = true;
-                        DuckGame.Input._changePluggedIn = true;
-                        DuckGame.Input._changeName = gamePad.device.productName;
-                        DuckGame.Input._padConnectionChange = true;
-                    }
-                    if (!dinputPad.isConnected && dinputPad.prevIsConnected)
-                    {
-                        DuckGame.Input._gamepadsChanged = true;
-                        DuckGame.Input._changePluggedIn = false;
-                        DuckGame.Input._changeName = gamePad.device.productName;
-                        DuckGame.Input._padConnectionChange = true;
-                        gamePad.device = null;
-                    }
-                    dinputPad.prevIsConnected = dinputPad.isConnected;
-                }
-            }
+            //foreach (GenericController gamePad in DuckGame.Input._gamePads)
+            //{
+            //    InputDevice device = gamePad.device;
+            //    if (device is DInputPad)
+            //    {
+            //        DInputPad dinputPad = device as DInputPad;
+            //        if (dinputPad.isConnected && !dinputPad.prevIsConnected)
+            //        {
+            //            DuckGame.Input._gamepadsChanged = true;
+            //            DuckGame.Input._changePluggedIn = true;
+            //            DuckGame.Input._changeName = gamePad.device.productName;
+            //            DuckGame.Input._padConnectionChange = true;
+            //        }
+            //        if (!dinputPad.isConnected && dinputPad.prevIsConnected)
+            //        {
+            //            DuckGame.Input._gamepadsChanged = true;
+            //            DuckGame.Input._changePluggedIn = false;
+            //            DuckGame.Input._changeName = gamePad.device.productName;
+            //            DuckGame.Input._padConnectionChange = true;
+            //            gamePad.device = null;
+            //        }
+            //        dinputPad.prevIsConnected = dinputPad.isConnected;
+            //    }
+            //}
         }
 
         public static void InvalidateDirectInputDeviceIndex(int pIndex)
