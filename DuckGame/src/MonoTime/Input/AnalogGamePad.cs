@@ -7,6 +7,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using NAudio.CoreAudioApi;
 using System;
 using System.Collections.Generic;
 
@@ -71,6 +72,10 @@ namespace DuckGame
                     return;
                 _highestRumble.y = _rumble.y;
             }
+        }
+        public override void SetLightBar(Color color)
+        {
+            FNAPlatform.SetGamePadLightBar(index, (Microsoft.Xna.Framework.Color)color);
         }
 
         private void RumbleNow(float pLeft, float pRight)

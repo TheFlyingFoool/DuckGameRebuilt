@@ -390,6 +390,7 @@ namespace DuckGame
         private float _moodVal = 0.5f;
         private int _preferredColor;
 
+        public int preferredColor => _preferredColor;
         public float fade => _fade;
 
         public bool open => _open;
@@ -417,6 +418,10 @@ namespace DuckGame
             {
                 scale = new Vec2(1f)
             };
+            if (sel.profile != null)
+            {
+                _preferredColor = sel.profile.preferredColor;
+            }
         }
 
         public override void Initialize()
@@ -850,11 +855,19 @@ namespace DuckGame
                         {
                             if (_inputProfile.Pressed("MENULEFT"))
                             {
+                                if (_preferredColor == -1)
+                                {
+                                    _preferredColor = DG.MaxPlayers;
+                                }
                                 _preferredColor = Maths.Clamp(_preferredColor - 1, -1, DG.MaxPlayers - 1);
                                 SFX.Play("consoleTick");
                             }
                             if (_inputProfile.Pressed("MENURIGHT"))
                             {
+                                if (_preferredColor == DG.MaxPlayers - 1)
+                                {
+                                    _preferredColor = -2;
+                                }
                                 _preferredColor = Maths.Clamp(_preferredColor + 1, -1, DG.MaxPlayers - 1);
                                 SFX.Play("consoleTick");
                             }

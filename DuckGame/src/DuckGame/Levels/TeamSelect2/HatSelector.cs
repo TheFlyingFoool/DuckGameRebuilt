@@ -172,6 +172,14 @@ namespace DuckGame
             set => _secondWord = value;
         }
 
+        public ProfileSelector profileSelector
+        {
+            get
+            {
+                return _profileSelector;
+            }
+        }
+
         public InputProfile profileInput => _profile != null ? _profile.inputProfile : inputProfile;
 
         public InputProfile inputProfile
@@ -403,6 +411,10 @@ namespace DuckGame
         public void Reset()
         {
             _netHoveringTeam = null;
+            if (_profile != null)
+            {
+                _profile.hatSelector = null;
+            }
             _open = false;
             _closing = true;
             _selection = HSSelection.Main;
@@ -530,6 +542,10 @@ namespace DuckGame
                 _experienceProfileCheck = null;
                 _gettingXP = false;
                 _open = false;
+                if (_profile != null)
+                {
+                    _profile.hatSelector = null;
+                }
             }
             _fade = Lerp.Float(_fade, !_open || _profileSelector.open || _roomEditor.open ? 0f : 1f, 0.1f);
             _blackFade = Lerp.Float(_blackFade, _open ? 1f : 0f, 0.1f);
@@ -1010,6 +1026,10 @@ namespace DuckGame
                             }
                             else if (_mainSelection == (flag1 ? 3 : 2))
                             {
+                                if (_profile != null)
+                                {
+                                    _profile.hatSelector = null;
+                                }
                                 _open = false;
                                 _closing = true;
                                 SFX.Play("consoleCancel", 0.4f);
@@ -1033,6 +1053,10 @@ namespace DuckGame
                         }
                         else if (inputProfile.Pressed("CANCEL"))
                         {
+                            if (_profile != null)
+                            {
+                                _profile.hatSelector = null;
+                            }
                             _open = false;
                             _closing = true;
                             SFX.Play("consoleCancel", 0.4f);
@@ -1077,6 +1101,7 @@ namespace DuckGame
 
         public void Open(Profile p)
         {
+            p.hatSelector = this;
             _profile = p;
             _startingTeam = _profile.team;
             _open = true;

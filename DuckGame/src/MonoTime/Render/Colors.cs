@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -210,7 +211,25 @@ namespace DuckGame
                 new Color(235, 137, 49)
             }
         };
+        private static float HueToRGB(float v1, float v2, float vH)
+        {
+            if (vH < 0)
+                vH += 1;
 
+            if (vH > 1)
+                vH -= 1;
+
+            if ((6 * vH) < 1)
+                return (v1 + (v2 - v1) * 6 * vH);
+
+            if ((2 * vH) < 1)
+                return v2;
+
+            if ((3 * vH) < 2)
+                return (v1 + (v2 - v1) * ((2.0f / 3) - vH) * 6);
+
+            return v1;
+        }
         public static long GetHash(byte alpha, byte red, byte green, byte blue)
         {
             return (red << 16 | green << 8 | blue | alpha << 24) & -1; //& (ulong)-1);
@@ -238,6 +257,130 @@ namespace DuckGame
             }
 
             return parseColor;
+        }
+
+        public static Color ColorFromHSL(float H, float S, float L)
+        {
+            byte r = 0;
+            byte g = 0;
+            byte b = 0;
+
+            if (S == 0)
+            {
+                r = g = b = (byte)(L * 255);
+            }
+            else
+            {
+                float v1, v2;
+                float hue = (float)H / 360;
+
+                v2 = (L < 0.5) ? (L * (1 + S)) : ((L + S) - (L * S));
+                v1 = 2 * L - v2;
+
+                r = (byte)(255 * HueToRGB(v1, v2, hue + (1.0f / 3)));
+                g = (byte)(255 * HueToRGB(v1, v2, hue));
+                b = (byte)(255 * HueToRGB(v1, v2, hue - (1.0f / 3)));
+            }
+            return new Color(r, g, b);
+        }
+        public static Vec3 HSLFromColor(Color color)
+        {
+            float R = (color.r / 255f);
+            float G = (color.g / 255f);
+            float B = (color.b / 255f);
+
+            float Min = Math.Min(Math.Min(R, G), B);
+            float Max = Math.Max(Math.Max(R, G), B);
+            float Delta = Max - Min;
+
+            float H = 0;
+            float S = 0;
+            float L = (float)((Max + Min) / 2.0f);
+
+            if (Delta != 0)
+            {
+                if (L < 0.5f)
+                {
+                    S = (float)(Delta / (Max + Min));
+                }
+                else
+                {
+                    S = (float)(Delta / (2.0f - Max - Min));
+                }
+
+                float Delta_R = (float)(((Max - R) / 6.0f + (Delta / 2.0f)) / Delta);
+                float Delta_G = (float)(((Max - G) / 6.0f + (Delta / 2.0f)) / Delta);
+                float Delta_B = (float)(((Max - B) / 6.0f + (Delta / 2.0f)) / Delta);
+
+                if (R == Max)
+                {
+                    H = Delta_B - Delta_G;
+                }
+                else if (G == Max)
+                {
+                    H = (1.0f / 3.0f) + Delta_R - Delta_B;
+                }
+                else if (B == Max)
+                {
+                    H = (2.0f / 3.0f) + Delta_G - Delta_R;
+                }
+
+                if (H < 0) H += 1.0f;
+                if (H > 1) H -= 1.0f;
+            }
+
+            return new Vec3(H * 360f, S, L);
+        }
+    }
+    public static class ColorExtensions
+    {
+        public static Vec3 GetHSL(this Color color)
+        {
+            float R = (color.r / 255f);
+            float G = (color.g / 255f);
+            float B = (color.b / 255f);
+
+            float Min = Math.Min(Math.Min(R, G), B);
+            float Max = Math.Max(Math.Max(R, G), B);
+            float Delta = Max - Min;
+
+            float H = 0;
+            float S = 0;
+            float L = (float)((Max + Min) / 2.0f);
+
+            if (Delta != 0)
+            {
+                if (L < 0.5f)
+                {
+                    S = (float)(Delta / (Max + Min));
+                }
+                else
+                {
+                    S = (float)(Delta / (2.0f - Max - Min));
+                }
+
+                float Delta_R = (float)(((Max - R) / 6.0f + (Delta / 2.0f)) / Delta);
+                float Delta_G = (float)(((Max - G) / 6.0f + (Delta / 2.0f)) / Delta);
+                float Delta_B = (float)(((Max - B) / 6.0f + (Delta / 2.0f)) / Delta);
+
+                if (R == Max)
+                {
+                    H = Delta_B - Delta_G;
+                }
+                else if (G == Max)
+                {
+                    H = (1.0f / 3.0f) + Delta_R - Delta_B;
+                }
+                else if (B == Max)
+                {
+                    H = (2.0f / 3.0f) + Delta_G - Delta_R;
+                }
+
+                if (H < 0) H += 1.0f;
+                if (H > 1) H -= 1.0f;
+            }
+
+            return new Vec3(H * 360f, S, L);
         }
     }
 }

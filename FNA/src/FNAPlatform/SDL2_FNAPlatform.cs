@@ -2179,6 +2179,7 @@ namespace Microsoft.Xna.Framework
 			{
 				deviceInfo = "Mapping: " + mapping;
 			}
+			FNAPlatform.OnDeviceChange(dev, false);
 			FNALoggerEXT.LogInfo(
 				"Controller " + which.ToString() + ": " +
 				SDL.SDL_GameControllerName(INTERNAL_devices[which]) + ", " +
@@ -2204,6 +2205,7 @@ namespace Microsoft.Xna.Framework
 			// A lot of errors can happen here, but honestly, they can be ignored...
 			SDL.SDL_ClearError();
 
+			FNAPlatform.OnDeviceChange(dev, true);
 			FNALoggerEXT.LogInfo("Removed device, player: " + output.ToString());
 		}
 

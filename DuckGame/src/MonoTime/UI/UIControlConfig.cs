@@ -44,27 +44,27 @@ namespace DuckGame
                     break;
                 }
             }
-            if (Input._dinputEnabled)
-            {
-                List<string> stringList = new List<string>();
-                for (int index = 0; index < 8; ++index)
-                {
-                    if (DInput.GetState(index) != null)
-                    {
-                        string productName = DInput.GetProductName(index);
-                        string productGuid = DInput.GetProductGUID(index);
-                        string str = productName + productGuid;
-                        if (!stringList.Contains(str))
-                        {
-                            stringList.Add(str);
-                            inputMaps.Add(Input.GetDefaultMapping(productName, productGuid).Clone());
-                            if (productName.Length > 24)
-                                productName = productName.Substring(0, 24);
-                            inputTypes.Add(productName);
-                        }
-                    }
-                }
-            }
+            //if (Input._dinputEnabled)
+            //{
+            //    List<string> stringList = new List<string>();
+            //    for (int index = 0; index < 8; ++index)
+            //    {
+            //        if (DInput.GetState(index) != null)
+            //        {
+            //            string productName = DInput.GetProductName(index);
+            //            string productGuid = DInput.GetProductGUID(index);
+            //            string str = productName + productGuid;
+            //            if (!stringList.Contains(str))
+            //            {
+            //                stringList.Add(str);
+            //                inputMaps.Add(Input.GetDefaultMapping(productName, productGuid).Clone());
+            //                if (productName.Length > 24)
+            //                    productName = productName.Substring(0, 24);
+            //                inputTypes.Add(productName);
+            //            }
+            //        }
+            //    }
+            //}
             inputTypes.Add("KEYBOARD P1");
             inputMaps.Add(Input.GetDefaultMapping("KEYBOARD P1", "").Clone());
             inputTypes.Add("KEYBOARD P2");

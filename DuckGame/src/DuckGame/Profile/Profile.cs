@@ -22,7 +22,7 @@ namespace DuckGame
                 return netData.Get("REBUILT", false);
             }
         }
-
+        public HatSelector hatSelector;
         public int prevXPsave;
         public string prevFurniPositionData;
         public Dictionary<NetworkConnection, int> connectionTrouble = new Dictionary<NetworkConnection, int>();
@@ -1445,7 +1445,10 @@ namespace DuckGame
             }
         }
 
-        public void UpdatePersona() => DuckNetwork.RequestPersona(this, desiredPersona);
+        public void UpdatePersona()
+        {
+            DuckNetwork.RequestPersona(this, desiredPersona);
+        }
 
         public void PersonaRequestResult(DuckPersona pPersona) => persona = pPersona;
 

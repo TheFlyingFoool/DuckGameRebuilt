@@ -72,27 +72,27 @@ namespace DuckGame
                         stream.Write(buffer, 0, buffer.Length);
                     }
 
-                    string str1 = "DirectInputDevices:\n===================================\n";
-                    for (int index = 0; index < 32; ++index)
-                    {
-                        try
-                        {
-                            if (DInput.GetState(index) != null)
-                            {
-                                string str2 =
-                                    $"{DInput.GetProductName(index)}{DInput.GetProductGUID(index)} {DInput.IsXInput(index)}";
-                                str1 = $"{str1}{str2}\n";
-                            }
-                            else
-                                break;
-                        }
-                        catch (Exception ex)
-                        {
-                            str1 = $"{str1}\n{ex}\n";
-                        }
-                    }
+                    //string str1 = "DirectInputDevices:\n===================================\n";
+                    //for (int index = 0; index < 32; ++index)
+                    //{
+                    //    try
+                    //    {
+                    //        if (DInput.GetState(index) != null)
+                    //        {
+                    //            string str2 =
+                    //                $"{DInput.GetProductName(index)}{DInput.GetProductGUID(index)} {DInput.IsXInput(index)}";
+                    //            str1 = $"{str1}{str2}\n";
+                    //        }
+                    //        else
+                    //            break;
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        str1 = $"{str1}\n{ex}\n";
+                    //    }
+                    //}
 
-                    string str3 = $"{str1}\nEnumerated Input Devices:\n===================================\n";
+                    string str3 = $"Enumerated Input Devices:\n===================================\n";
                     foreach (InputDevice inputDevice in Input.GetInputDevices()
                                  .Where(inputDevice => inputDevice.isConnected))
                     {

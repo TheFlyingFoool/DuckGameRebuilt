@@ -11,6 +11,7 @@ using SDL2;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -1130,6 +1131,38 @@ namespace DuckGame
             ++Graphics.frame;
             Tasker.RunTasks();
             Graphics.GarbageDisposal(false);
+            //foreach(Profile profile in Profiles.active)
+            //{
+            //    if (profile != null && profile.localPlayer && profile.inputProfile != null && profile.inputProfile.lastActiveDevice != null && profile.team != null)
+            //    {
+            //        Vec3 vec3 = Vec3.Zero;
+            //        if (profile.hatSelector != null && profile.hatSelector.profileSelector != null && profile.hatSelector.profileSelector.open)
+            //        {
+            //            int n = profile.hatSelector.profileSelector.preferredColor;
+            //            if (n > -1 && n < Persona.alllist.Count)
+            //            {
+            //                vec3 = Persona.alllist[n].colorUsable.GetHSL();
+            //            }
+            //            else
+            //            {
+            //                vec3 = Persona.alllist[0].colorUsable.GetHSL();
+            //            }
+            //            // DevConsole.Log(n.ToString());
+            //        }
+            //        else
+            //        {
+            //            vec3 = profile.persona.colorUsable.GetHSL();
+            //        }
+            //        if (vec3.z > 0.50)
+            //        {
+            //            vec3.z = Lerp.Float(vec3.z, 0.50f, 0.17f);
+            //        }
+            //        vec3.y = Lerp.Float(vec3.y, 1f, 0.20f);
+            //        Color f = Colors.ColorFromHSL(vec3.x,vec3.y, vec3.z);
+            //        profile.inputProfile.lastActiveDevice.SetLightBar(f);
+            //      //#  DevConsole.Log("E");
+            //    }
+            //}
             if (!disableSteam && !_started)
             {
                 if (Cloud.processing)

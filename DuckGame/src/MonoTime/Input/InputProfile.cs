@@ -368,6 +368,26 @@ namespace DuckGame
                 {
                     return new InputDevice(0);
                 }
+                if (_lastActiveDevice != null && !_lastActiveDevice.isConnected)
+                {
+                    InputDevice _locallastActiveDevice = null;
+                    foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in _mappings)
+                    {
+                        if (_locallastActiveDevice == null && pair.Key is Keyboard)
+                        {
+                            _locallastActiveDevice = pair.Key;
+                        }
+                        else if (pair.Key is GenericController && (pair.Key as GenericController).device is XInputPad)
+                        {
+                            _locallastActiveDevice = pair.Key;
+                        }
+                    }
+                    if (_locallastActiveDevice == null)
+                    {
+                        return _defaultLastActiveDevice;
+                    }
+                    return _locallastActiveDevice;
+                }
                 if (_lastActiveDevice == null)
                 {
                     foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in _mappings)
@@ -886,15 +906,27 @@ namespace DuckGame
                             List<int> mappings;
                             if (!map.Value.TryGetValue("LSTICK", out mappings) || mappings.Count <= 0)
                             {
+                                if (pad.leftStick != Vec2.Zero)
+                                {
+                                    _lastActiveDevice = map.Key;
+                                }
                                 return pad.leftStick;
                             }
                             int mapping = mappings[0];
                             if (mapping == 64)
                             {
+                                if (pad.leftStick != Vec2.Zero)
+                                {
+                                    _lastActiveDevice = map.Key;
+                                }
                                 return pad.leftStick;
                             }
                             if (mapping == 128)
                             {
+                                if (pad.rightStick != Vec2.Zero)
+                                {
+                                    _lastActiveDevice = map.Key;
+                                }
                                 return pad.rightStick;
                             }
                         }

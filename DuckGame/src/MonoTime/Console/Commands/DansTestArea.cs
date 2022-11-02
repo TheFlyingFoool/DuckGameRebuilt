@@ -1,13 +1,16 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using RectpackSharp;
 using SDL2;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace DuckGame
@@ -291,13 +294,26 @@ namespace DuckGame
             DevConsole.Log("Starting Lan Test bud");
         }
         //RandomSkySay();
+
+        public static void SetControllerLightBar(int index, DuckGame.Color color)
+        {
+            GamePadState state = FNAPlatform.GetGamePadState(index, GamePadDeadZone.IndependentAxes);
+            if (state.IsConnected)
+                FNAPlatform.SetGamePadLightBar(index, (Microsoft.Xna.Framework.Color)color);
+        }
+
         [DevConsoleCommand(Name = "dr")]
         public static void debugrandom()
         {
-            if (Level.current == null || !(Level.current.things[typeof(CityBackground)].FirstOrDefault<Thing>() is CityBackground cityBackground))
-                return;
-            cityBackground.RandomSkySay();
-            DevConsole.Log("random test");
+            for (int index = 0; index < MonoMain.MaximumGamepadCount; index++)
+            {
+                SetControllerLightBar(index, DuckGame.Color.Magenta);
+            }
+           
+            //if (Level.current == null || !(Level.current.things[typeof(CityBackground)].FirstOrDefault<Thing>() is CityBackground cityBackground))
+            //    return;
+            //cityBackground.RandomSkySay();
+            //DevConsole.Log("random test");
         }
         [DevConsoleCommand(Name = "savegraphic")]
         public static void seetheunseen()

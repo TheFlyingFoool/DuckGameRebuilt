@@ -55,6 +55,7 @@ namespace DuckGame
 
         public static IEnumerable<DuckPersona> all => _personas;
 
+        public static List<DuckPersona> alllist => _personas;
         public static void Initialize()
         {
         }

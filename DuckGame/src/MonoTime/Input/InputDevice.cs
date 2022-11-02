@@ -109,6 +109,9 @@ namespace DuckGame
             return _framesRumbled > 120 ? 0f : Options.Data.rumbleIntensity;
         }
 
+        public virtual void SetLightBar(Color color)
+        { }
+
         public virtual void Rumble(float leftIntensity = 0f, float rightIntensity = 0f)
         {
         }

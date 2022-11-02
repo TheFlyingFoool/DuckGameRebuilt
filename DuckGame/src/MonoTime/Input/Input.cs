@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -1437,9 +1438,9 @@ namespace DuckGame
             DuckGame.Input.ApplyDefaultMappings();
             InputProfile.Add("Blank");
         }
-
         public static void Initialize()
         {
+            FNAPlatform.DeviceChangeEvent += OnDeviceChange;
             MonoMain.loadMessage = "Initializing Input System...";
             DevConsole.Log(DCSection.General, "Initializing Input...");
             foreach (DeviceInputMapping inputMappingPreset in DuckGame.Input._defaultInputMappingPresets)
@@ -1474,7 +1475,7 @@ namespace DuckGame
             GenericController genericController8 = new GenericController(7);
             DuckGame.Input._gamePads.Add(genericController8);
             InputProfile.Default = new InputProfile("Default");
-            DuckGame.Input.InitializeDInputAsync();
+            //DuckGame.Input.InitializeDInputAsync();
             DuckGame.Input._devices.Add(genericController1);
             DuckGame.Input._devices.Add(genericController2);
             DuckGame.Input._devices.Add(genericController3);
@@ -1529,73 +1530,73 @@ namespace DuckGame
 
         private static void InitializeDInputAsync()
         {
-            ++DuckGame.Input._dinputInitTimesCalled;
-            if (DuckGame.Input._dinputInitException != null)
-            {
-                DevConsole.Log(DCSection.General, "DInput Initialization failed with exception: " + DuckGame.Input._dinputInitException.Message);
-                DevConsole.Log(DCSection.General, "DInput has been disabled.");
-                DuckGame.Input._dinputEnabled = false;
-                DuckGame.Input._dinputInitException = null;
-            }
-            else
-            {
-                switch (DuckGame.Input._dinputInitializeStatus)
-                {
-                    case int.MinValue:
-                        DuckGame.Input._dinputInitializeStatus = int.MaxValue;
-                        if (MonoMain.disableDirectInput)
-                        {
-                            DuckGame.Input._dinputEnabled = false;
-                            DevConsole.Log(DCSection.General, "MonoMain.disableDirectInput is true, skipping DInput initialize.");
-                            return;
-                        }
-                        DevConsole.Log(DCSection.General, "Starting DInput Async Init...");
-                        Task.Run(() =>
-                       {
-                           try
-                           {
-                               DuckGame.Input._dinputInitializeStatus = DInput.Initialize();
-                           }
-                           catch (Exception ex)
-                           {
-                               DuckGame.Input._dinputInitException = ex;
-                           }
-                       });
-                        return;
-                    case 0:
-                        InputDevice inputDevice1 = new DInputPad(0);
-                        DuckGame.Input._devices.Add(inputDevice1);
-                        InputDevice inputDevice2 = new DInputPad(1);
-                        DuckGame.Input._devices.Add(inputDevice2);
-                        InputDevice inputDevice3 = new DInputPad(2);
-                        DuckGame.Input._devices.Add(inputDevice3);
-                        InputDevice inputDevice4 = new DInputPad(3);
-                        DuckGame.Input._devices.Add(inputDevice4);
-                        InputDevice inputDevice5 = new DInputPad(4);
-                        DuckGame.Input._devices.Add(inputDevice5);
-                        InputDevice inputDevice6 = new DInputPad(5);
-                        DuckGame.Input._devices.Add(inputDevice6);
-                        InputDevice inputDevice7 = new DInputPad(6);
-                        DuckGame.Input._devices.Add(inputDevice7);
-                        InputDevice inputDevice8 = new DInputPad(7);
-                        DuckGame.Input._devices.Add(inputDevice8);
-                        if (DuckGame.Input._dinputInitTimesCalled < 60)
-                            DuckGame.Input._suppressInputChangeMessages = 300;
-                        DuckGame.Input._dinputEnabled = true;
-                        DuckGame.Input.devicesChanged = true;
-                        break;
-                    case int.MaxValue:
-                        return;
-                    default:
-                        if (MonoMain.disableDirectInput)
-                            DevConsole.Log(DCSection.General, "MonoMain.disableDirectInput was true, DInput has been disabled.");
-                        else
-                            DevConsole.Log(DCSection.General, "DInput.Initialize() failed with code " + DuckGame.Input._dinputInitializeStatus.ToString() + ". DInput has been disabled.");
-                        DuckGame.Input._dinputEnabled = false;
-                        break;
-                }
-                DuckGame.Input._dinputInitializeStatus = int.MaxValue;
-            }
+            //++DuckGame.Input._dinputInitTimesCalled;
+            //if (DuckGame.Input._dinputInitException != null)
+            //{
+            //    DevConsole.Log(DCSection.General, "DInput Initialization failed with exception: " + DuckGame.Input._dinputInitException.Message);
+            //    DevConsole.Log(DCSection.General, "DInput has been disabled.");
+            //    DuckGame.Input._dinputEnabled = false;
+            //    DuckGame.Input._dinputInitException = null;
+            //}
+            //else
+            //{
+            //    switch (DuckGame.Input._dinputInitializeStatus)
+            //    {
+            //        case int.MinValue:
+            //            DuckGame.Input._dinputInitializeStatus = int.MaxValue;
+            //            if (MonoMain.disableDirectInput)
+            //            {
+            //                DuckGame.Input._dinputEnabled = false;
+            //                DevConsole.Log(DCSection.General, "MonoMain.disableDirectInput is true, skipping DInput initialize.");
+            //                return;
+            //            }
+            //            DevConsole.Log(DCSection.General, "Starting DInput Async Init...");
+            //            Task.Run(() =>
+            //           {
+            //               try
+            //               {
+            //                   DuckGame.Input._dinputInitializeStatus = DInput.Initialize();
+            //               }
+            //               catch (Exception ex)
+            //               {
+            //                   DuckGame.Input._dinputInitException = ex;
+            //               }
+            //           });
+            //            return;
+            //        case 0:
+            //            InputDevice inputDevice1 = new DInputPad(0);
+            //            DuckGame.Input._devices.Add(inputDevice1);
+            //            InputDevice inputDevice2 = new DInputPad(1);
+            //            DuckGame.Input._devices.Add(inputDevice2);
+            //            InputDevice inputDevice3 = new DInputPad(2);
+            //            DuckGame.Input._devices.Add(inputDevice3);
+            //            InputDevice inputDevice4 = new DInputPad(3);
+            //            DuckGame.Input._devices.Add(inputDevice4);
+            //            InputDevice inputDevice5 = new DInputPad(4);
+            //            DuckGame.Input._devices.Add(inputDevice5);
+            //            InputDevice inputDevice6 = new DInputPad(5);
+            //            DuckGame.Input._devices.Add(inputDevice6);
+            //            InputDevice inputDevice7 = new DInputPad(6);
+            //            DuckGame.Input._devices.Add(inputDevice7);
+            //            InputDevice inputDevice8 = new DInputPad(7);
+            //            DuckGame.Input._devices.Add(inputDevice8);
+            //            if (DuckGame.Input._dinputInitTimesCalled < 60)
+            //                DuckGame.Input._suppressInputChangeMessages = 300;
+            //            DuckGame.Input._dinputEnabled = true;
+            //            DuckGame.Input.devicesChanged = true;
+            //            break;
+            //        case int.MaxValue:
+            //            return;
+            //        default:
+            //            if (MonoMain.disableDirectInput)
+            //                DevConsole.Log(DCSection.General, "MonoMain.disableDirectInput was true, DInput has been disabled.");
+            //            else
+            //                DevConsole.Log(DCSection.General, "DInput.Initialize() failed with code " + DuckGame.Input._dinputInitializeStatus.ToString() + ". DInput has been disabled.");
+            //            DuckGame.Input._dinputEnabled = false;
+            //            break;
+            //    }
+            //    DuckGame.Input._dinputInitializeStatus = int.MaxValue;
+            //}
         }
 
         public static T GetDevice<T>(int index = 0) where T : InputDevice
@@ -1618,7 +1619,10 @@ namespace DuckGame
             }
             return null;
         }
-
+        public static void OnDeviceChange(int dev, bool removed)
+        {
+            DuckGame.Input.devicesChanged = true;
+        }
         private static void CheckDInputChanges()
         {
             foreach (GenericController gamePad in DuckGame.Input._gamePads)
@@ -1653,11 +1657,11 @@ namespace DuckGame
 
         private static void RunGamepadEnumerationThread()
         {
-            if (DuckGame.Input.enumeratingGamepads)
-                return;
-            DuckGame.Input.enumeratingGamepads = true;
-            --DuckGame.Input.timesToEnumerateGamepads;
-            Task.Run(() => DInput.Thread_EnumGamepads());
+            //if (DuckGame.Input.enumeratingGamepads)
+            //    return;
+            //DuckGame.Input.enumeratingGamepads = true;
+            //--DuckGame.Input.timesToEnumerateGamepads;
+            //Task.Run(() => DInput.Thread_EnumGamepads());
         }
         public static bool ForceDirectInputMode()
         {
@@ -1665,7 +1669,7 @@ namespace DuckGame
             {
                 return false;
             }
-            //return DInput.ForceDirectInputMode(); PUTBACK
+            //return DInput.ForceDirectInputMode();
             return false;
         }
         public static bool DInputUpdate()
@@ -1674,7 +1678,7 @@ namespace DuckGame
             {
                 return false;
             }
-            //return DInput.Update(); PUTBACK
+            //return DInput.Update();
             return false;
         }
         public static void EnumerateGamepads()
@@ -1686,64 +1690,66 @@ namespace DuckGame
             foreach (GenericController gamePad in DuckGame.Input._gamePads)
             {
                 InputDevice device1 = gamePad.device;
-                if (!(device1 is XInputPad) || !Input.ForceDirectInputMode())
+                //if (device1 is XInputPad && Input.ForceDirectInputMode())
+                //{
+                //    continue;
+                //}
+                //if (device1 is DInputPad && DuckGame.Input._dinputEnabled)
+                //{
+                //    DInputPad dinputPad = device1 as DInputPad;
+                //    if (!dinputPad.isXInput || Input.ForceDirectInputMode())
+                //    {
+                //        if (dinputPad.isConnected != dinputPad.prevIsConnected)
+                //        {
+                //            DuckGame.Input._gamepadsChanged = true;
+                //            DuckGame.Input._changePluggedIn = dinputPad.isConnected;
+                //            DuckGame.Input._changeName = gamePad.device.productName;
+                //            DuckGame.Input._padConnectionChange = true;
+                //            if (!dinputPad.isConnected)
+                //                gamePad.device = null;
+                //        }
+                //        dinputPad.prevIsConnected = dinputPad.isConnected;
+                //    }
+                //    else
+                //        continue;
+                //}
+                //else
+                if (device1 != null && !device1.isConnected)
                 {
-                    if (device1 is DInputPad && DuckGame.Input._dinputEnabled)
+                    DuckGame.Input._changePluggedIn = false;
+                    DuckGame.Input._changeName = device1.productName;
+                    DuckGame.Input._padConnectionChange = true;
+                    DuckGame.Input._gamepadsChanged = true;
+                    gamePad.device = null;
+                }
+                if (gamePad.device == null)
+                {
+                    foreach (InputDevice device2 in DuckGame.Input._devices)
                     {
-                        DInputPad dinputPad = device1 as DInputPad;
-                        if (!dinputPad.isXInput || Input.ForceDirectInputMode())
+                        if (!(device2 is GenericController) && device2.isConnected && device2.genericController == null)
                         {
-                            if (dinputPad.isConnected != dinputPad.prevIsConnected)
+                            if (device2 is XInputPad) // && !Input.ForceDirectInputMode()
                             {
+                                gamePad.device = device2 as AnalogGamePad;
                                 DuckGame.Input._gamepadsChanged = true;
-                                DuckGame.Input._changePluggedIn = dinputPad.isConnected;
+                                DuckGame.Input._changePluggedIn = true;
                                 DuckGame.Input._changeName = gamePad.device.productName;
                                 DuckGame.Input._padConnectionChange = true;
-                                if (!dinputPad.isConnected)
-                                    gamePad.device = null;
+                                break;
                             }
-                            dinputPad.prevIsConnected = dinputPad.isConnected;
-                        }
-                        else
-                            continue;
-                    }
-                    else if (device1 != null && !device1.isConnected)
-                    {
-                        DuckGame.Input._changePluggedIn = false;
-                        DuckGame.Input._changeName = device1.productName;
-                        DuckGame.Input._padConnectionChange = true;
-                        DuckGame.Input._gamepadsChanged = true;
-                        gamePad.device = null;
-                    }
-                    if (gamePad.device == null)
-                    {
-                        foreach (InputDevice device2 in DuckGame.Input._devices)
-                        {
-                            if (!(device2 is GenericController) && device2.isConnected && device2.genericController == null)
-                            {
-                                if (device2 is XInputPad && !Input.ForceDirectInputMode())
-                                {
-                                    gamePad.device = device2 as AnalogGamePad;
-                                    DuckGame.Input._gamepadsChanged = true;
-                                    DuckGame.Input._changePluggedIn = true;
-                                    DuckGame.Input._changeName = gamePad.device.productName;
-                                    DuckGame.Input._padConnectionChange = true;
-                                    break;
-                                }
-                                if (device2 is DInputPad && DuckGame.Input._dinputEnabled)
-                                {
-                                    gamePad.device = device2 as AnalogGamePad;
-                                    DuckGame.Input._gamepadsChanged = true;
-                                    DuckGame.Input._changePluggedIn = true;
-                                    DuckGame.Input._changeName = gamePad.device.productName;
-                                    if (device2.productName == "Wireless Controller")
-                                    {
-                                        DuckGame.Input.mightHavePlaystationController = true;
-                                        break;
-                                    }
-                                    break;
-                                }
-                            }
+                            //if (device2 is DInputPad && DuckGame.Input._dinputEnabled)
+                            //{
+                            //    gamePad.device = device2 as AnalogGamePad;
+                            //    DuckGame.Input._gamepadsChanged = true;
+                            //    DuckGame.Input._changePluggedIn = true;
+                            //    DuckGame.Input._changeName = gamePad.device.productName;
+                            //    if (device2.productName == "Wireless Controller")
+                            //    {
+                            //        DuckGame.Input.mightHavePlaystationController = true;
+                            //        break;
+                            //    }
+                            //    break;
+                            //}
                         }
                     }
                 }
@@ -1775,35 +1781,34 @@ namespace DuckGame
                     else
                         InputSystem.EndIME();
                 }
-                if (!MonoMain.disableDirectInput && !DuckGame.Input._dinputEnabled)
-                    DuckGame.Input.InitializeDInputAsync();
+                //if (!MonoMain.disableDirectInput && !DuckGame.Input._dinputEnabled)
+                    //DuckGame.Input.InitializeDInputAsync();
                 DuckGame.Input._prevImeAllowed = flag;
                 DuckGame.Input._imeAllowed = false;
-                if (DuckGame.Input._prevForceMode != Input.ForceDirectInputMode())
-                {
-                    foreach (InputDevice device in DuckGame.Input._devices)
-                    {
-                        if (device is GenericController)
-                            (device as GenericController).device = null;
-                        DuckGame.Input.devicesChanged = true;
-                    }
-                    DuckGame.Input._prevForceMode = Input.ForceDirectInputMode();
-                }
-                DuckGame.Input.devicesChanged = true;
+                //if (DuckGame.Input._prevForceMode != Input.ForceDirectInputMode())
+                //{
+                //    foreach (InputDevice device in DuckGame.Input._devices)
+                //    {
+                //        if (device is GenericController)
+                //            (device as GenericController).device = null;
+                //        DuckGame.Input.devicesChanged = true;
+                //    }
+                //    DuckGame.Input._prevForceMode = Input.ForceDirectInputMode();
+                //}
                 if (DuckGame.Input.devicesChanged)
                 {
                     ++DuckGame.Input._deviceUpdateWait;
-                    if (DuckGame.Input._deviceUpdateWait > 120)
+                    if (DuckGame.Input._deviceUpdateWait > 90) // 1.5 second instead of the old 2 seconds
                     {
                         DuckGame.Input._deviceUpdateWait = 0;
                         DuckGame.Input.devicesChanged = false;
                         ++DuckGame.Input.timesToEnumerateGamepads;
-                        if (!DuckGame.Input._dinputEnabled)
-                            DuckGame.Input.EnumerateGamepads();
+                        //if (!DuckGame.Input._dinputEnabled)
+                        DuckGame.Input.EnumerateGamepads();
                     }
                 }
-                if (DuckGame.Input._dinputEnabled && DuckGame.Input.timesToEnumerateGamepads > 0 && !DuckGame.Input.enumeratingGamepads)
-                    DuckGame.Input.RunGamepadEnumerationThread();
+                //if (DuckGame.Input._dinputEnabled && DuckGame.Input.timesToEnumerateGamepads > 0 && !DuckGame.Input.enumeratingGamepads)
+                //    DuckGame.Input.RunGamepadEnumerationThread();
                 if (DuckGame.Input._gamepadsChanged)
                 {
                     DuckGame.Input.ApplyDefaultMappings();
@@ -1817,15 +1822,15 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (DuckGame.Input._dinputEnabled)
-                    {
-                        if (DInputUpdate())
-                        {
-                            DuckGame.Input.enumeratingGamepads = false;
-                            DuckGame.Input.EnumerateGamepads();
-                        }
-                        DuckGame.Input.CheckDInputChanges();
-                    }
+                    //if (DuckGame.Input._dinputEnabled)
+                    //{
+                    //    if (DInputUpdate())
+                    //    {
+                    //        DuckGame.Input.enumeratingGamepads = false;
+                    //        DuckGame.Input.EnumerateGamepads();
+                    //    }
+                    //    DuckGame.Input.CheckDInputChanges();
+                    //}
                     if (DuckGame.Input._padConnectionChange)
                     {
                         DuckGame.Input._padConnectionChange = false;

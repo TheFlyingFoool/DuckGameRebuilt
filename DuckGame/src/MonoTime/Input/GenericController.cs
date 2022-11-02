@@ -77,5 +77,11 @@ namespace DuckGame
                 return;
             (device as XInputPad).Rumble(Math.Min(leftIntensity * 1.5f, 1f), Math.Min(rightIntensity * 1.5f, 1f));
         }
+        public override void SetLightBar(Color color)
+        {
+            if (!(device is XInputPad))
+                return;
+            (device as XInputPad).SetLightBar(color);
+        }
     }
 }
