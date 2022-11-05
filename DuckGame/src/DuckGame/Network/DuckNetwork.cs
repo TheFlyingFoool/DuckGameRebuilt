@@ -2009,8 +2009,8 @@ namespace DuckGame
                 {
                     if (profile2.pendingSpectatorMode != SlotType.Max && Network.isServer && (Level.current is TeamSelect2 || VirtualTransition.active))
                         _spectatorSwaps.Add(profile2);
-                    //if (NetworkDebugger.enabled && profile2.inputProfile is BullshitInput)
-                    //    profile2.inputProfile.UpdateExtraInput();
+                    if (NetworkDebugger.enabled && profile2.inputProfile is BullshitInput)
+                        profile2.inputProfile.UpdateExtraInput();
                     profile2.TickConnectionTrouble();
                     if (profile2.connection == localConnection && profile2.inputProfile != null)
                     {
