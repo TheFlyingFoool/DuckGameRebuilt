@@ -59,7 +59,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Steamworks.NET">
-      <HintPath>..\bin\Windows-x86\Steamworks.NET.dll</HintPath>
+      <HintPath>.\Steamworks.NET.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System" />

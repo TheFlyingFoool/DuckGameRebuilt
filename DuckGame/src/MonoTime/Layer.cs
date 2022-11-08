@@ -558,7 +558,7 @@ namespace DuckGame
                                             break;
                                         }
                                     }
-                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
+                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Layer.Foreground) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
                                     {
                                         if (_perspective)
                                         {
@@ -669,7 +669,7 @@ namespace DuckGame
                                             break;
                                         }
                                     }
-                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled) && thing.visible)
+                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Layer.Foreground) && thing.visible)
                                     {
                                         if (_perspective)
                                         {
