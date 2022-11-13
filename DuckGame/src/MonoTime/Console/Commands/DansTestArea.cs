@@ -14,6 +14,7 @@ namespace DuckGame
 {
     public static class DansTestArea
     {
+        public static bool drawowner;
         public static Vec2 topleft = new Vec2(0f, 0f);
         public static Vec2 bottomright = new Vec2(100f, 100f);
         //private static float offset = 4000000.0f;
@@ -188,7 +189,38 @@ namespace DuckGame
             }
 
         }
-
+        [DevConsoleCommand(Name = "showowner")]
+        public static void showowner()
+        {
+            drawowner = !drawowner;
+            DevConsole.Log("draw owner " + drawowner.ToString());
+        }
+        [DevConsoleCommand(Name = "take")]
+        public static void take()
+        {
+            foreach(Duck duck in Level.current.things[typeof(Duck)]) 
+            {
+                if (duck.connection != DuckNetwork.localConnection && duck.connection != null)
+                {
+                    DevConsole.Log("fondle " + duck.persona.index.ToString());
+                    Thing.SuperFondle(duck, DuckNetwork.localConnection);
+                    duck.position.x += 20f;
+                    duck.position.y += 20f;
+                }
+                //if (this._trappedInstance != null)
+                //{
+                //    Thing.SuperFondle(this._trappedInstance, DuckNetwork.localConnection);
+                //}
+                //if (this.holdObject != null)
+                //{
+                //    Thing.SuperFondle(this.holdObject, DuckNetwork.localConnection);
+                //}
+                //if (this.ragdoll != null && !this.isKillMessage)
+                //{
+                //    Thing.SuperFondle(this.ragdoll, DuckNetwork.localConnection);
+                //}
+            }
+        }
         [DevConsoleCommand(Name = "steamjoin")]
         public static void Join(string id)
         {

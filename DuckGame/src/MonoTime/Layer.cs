@@ -632,6 +632,14 @@ namespace DuckGame
                                         thing.DrawCollision();
                                 }
                             }
+                            if (DansTestArea.drawowner)
+                            {
+                                foreach (Thing thing in transparent1)
+                                {
+                                    if (thing.visible)
+                                        thing.DrawOwner();
+                                }
+                            }
                         }
                         else if (this == Layer.Lighting)
                         {
@@ -742,6 +750,14 @@ namespace DuckGame
                                 {
                                     if (thing.visible)
                                         thing.DrawCollision();
+                                }
+                            }
+                            if (DansTestArea.drawowner)
+                            {
+                                foreach (Thing thing in transparent1)
+                                {
+                                    if (thing.visible)
+                                        thing.DrawOwner();
                                 }
                             }
                         }

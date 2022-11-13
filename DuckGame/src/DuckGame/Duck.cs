@@ -4301,8 +4301,15 @@ namespace DuckGame
             hat.depth = depth + hat.equippedDepth;
             hat.angle = angle;
             hat.Draw();
-            if (!DevConsole.showCollision) return;
-            hat.DrawCollision();
+            if (DevConsole.showCollision)
+            {
+                hat.DrawCollision();
+            }
+            if (DansTestArea.drawowner)
+            {
+                hat.DrawOwner();
+            }
+           
         }
 
         public Vec2 GetPos()

@@ -1628,7 +1628,17 @@ namespace DuckGame
             }
             _graphic.Draw();
         }
-
+        public void DrawOwner()
+        {
+            if (this.connection == null || this.connection.profile == null)
+            {
+                DuckGame.Graphics.DrawRect(topLeft, bottomRight, Colors.Duck1, (Depth)1f, false, 0.5f);
+            }
+            else
+            {
+                DuckGame.Graphics.DrawRect(topLeft, bottomRight, this.connection.profile.persona.colorUsable, (Depth)1f, false, 0.5f);
+            }
+        }
         public void DrawCollision()
         {
             if (this is PhysicsObject)

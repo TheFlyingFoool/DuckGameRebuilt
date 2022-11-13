@@ -1529,73 +1529,73 @@ namespace DuckGame
 
         private static void InitializeDInputAsync()
         {
-            ++DuckGame.Input._dinputInitTimesCalled;
-            if (DuckGame.Input._dinputInitException != null)
-            {
-                DevConsole.Log(DCSection.General, "DInput Initialization failed with exception: " + DuckGame.Input._dinputInitException.Message);
-                DevConsole.Log(DCSection.General, "DInput has been disabled.");
-                DuckGame.Input._dinputEnabled = false;
-                DuckGame.Input._dinputInitException = null;
-            }
-            else
-            {
-                switch (DuckGame.Input._dinputInitializeStatus)
-                {
-                    case int.MinValue:
-                        DuckGame.Input._dinputInitializeStatus = int.MaxValue;
-                        if (MonoMain.disableDirectInput)
-                        {
-                            DuckGame.Input._dinputEnabled = false;
-                            DevConsole.Log(DCSection.General, "MonoMain.disableDirectInput is true, skipping DInput initialize.");
-                            return;
-                        }
-                        DevConsole.Log(DCSection.General, "Starting DInput Async Init...");
-                        Task.Run(() =>
-                       {
-                           try
-                           {
-                               DuckGame.Input._dinputInitializeStatus = DInput.Initialize();
-                           }
-                           catch (Exception ex)
-                           {
-                               DuckGame.Input._dinputInitException = ex;
-                           }
-                       });
-                        return;
-                    case 0:
-                        InputDevice inputDevice1 = new DInputPad(0);
-                        DuckGame.Input._devices.Add(inputDevice1);
-                        InputDevice inputDevice2 = new DInputPad(1);
-                        DuckGame.Input._devices.Add(inputDevice2);
-                        InputDevice inputDevice3 = new DInputPad(2);
-                        DuckGame.Input._devices.Add(inputDevice3);
-                        InputDevice inputDevice4 = new DInputPad(3);
-                        DuckGame.Input._devices.Add(inputDevice4);
-                        InputDevice inputDevice5 = new DInputPad(4);
-                        DuckGame.Input._devices.Add(inputDevice5);
-                        InputDevice inputDevice6 = new DInputPad(5);
-                        DuckGame.Input._devices.Add(inputDevice6);
-                        InputDevice inputDevice7 = new DInputPad(6);
-                        DuckGame.Input._devices.Add(inputDevice7);
-                        InputDevice inputDevice8 = new DInputPad(7);
-                        DuckGame.Input._devices.Add(inputDevice8);
-                        if (DuckGame.Input._dinputInitTimesCalled < 60)
-                            DuckGame.Input._suppressInputChangeMessages = 300;
-                        DuckGame.Input._dinputEnabled = true;
-                        DuckGame.Input.devicesChanged = true;
-                        break;
-                    case int.MaxValue:
-                        return;
-                    default:
-                        if (MonoMain.disableDirectInput)
-                            DevConsole.Log(DCSection.General, "MonoMain.disableDirectInput was true, DInput has been disabled.");
-                        else
-                            DevConsole.Log(DCSection.General, "DInput.Initialize() failed with code " + DuckGame.Input._dinputInitializeStatus.ToString() + ". DInput has been disabled.");
-                        DuckGame.Input._dinputEnabled = false;
-                        break;
-                }
-                DuckGame.Input._dinputInitializeStatus = int.MaxValue;
-            }
+            //++DuckGame.Input._dinputInitTimesCalled;
+            //if (DuckGame.Input._dinputInitException != null)
+            //{
+            //    DevConsole.Log(DCSection.General, "DInput Initialization failed with exception: " + DuckGame.Input._dinputInitException.Message);
+            //    DevConsole.Log(DCSection.General, "DInput has been disabled.");
+            //    DuckGame.Input._dinputEnabled = false;
+            //    DuckGame.Input._dinputInitException = null;
+            //}
+            //else
+            //{
+            //    switch (DuckGame.Input._dinputInitializeStatus)
+            //    {
+            //        case int.MinValue:
+            //            DuckGame.Input._dinputInitializeStatus = int.MaxValue;
+            //            if (MonoMain.disableDirectInput)
+            //            {
+            //                DuckGame.Input._dinputEnabled = false;
+            //                DevConsole.Log(DCSection.General, "MonoMain.disableDirectInput is true, skipping DInput initialize.");
+            //                return;
+            //            }
+            //            DevConsole.Log(DCSection.General, "Starting DInput Async Init...");
+            //            Task.Run(() =>
+            //           {
+            //               try
+            //               {
+            //                   DuckGame.Input._dinputInitializeStatus = DInput.Initialize();
+            //               }
+            //               catch (Exception ex)
+            //               {
+            //                   DuckGame.Input._dinputInitException = ex;
+            //               }
+            //           });
+            //            return;
+            //        case 0:
+            //            InputDevice inputDevice1 = new DInputPad(0);
+            //            DuckGame.Input._devices.Add(inputDevice1);
+            //            InputDevice inputDevice2 = new DInputPad(1);
+            //            DuckGame.Input._devices.Add(inputDevice2);
+            //            InputDevice inputDevice3 = new DInputPad(2);
+            //            DuckGame.Input._devices.Add(inputDevice3);
+            //            InputDevice inputDevice4 = new DInputPad(3);
+            //            DuckGame.Input._devices.Add(inputDevice4);
+            //            InputDevice inputDevice5 = new DInputPad(4);
+            //            DuckGame.Input._devices.Add(inputDevice5);
+            //            InputDevice inputDevice6 = new DInputPad(5);
+            //            DuckGame.Input._devices.Add(inputDevice6);
+            //            InputDevice inputDevice7 = new DInputPad(6);
+            //            DuckGame.Input._devices.Add(inputDevice7);
+            //            InputDevice inputDevice8 = new DInputPad(7);
+            //            DuckGame.Input._devices.Add(inputDevice8);
+            //            if (DuckGame.Input._dinputInitTimesCalled < 60)
+            //                DuckGame.Input._suppressInputChangeMessages = 300;
+            //            DuckGame.Input._dinputEnabled = true;
+            //            DuckGame.Input.devicesChanged = true;
+            //            break;
+            //        case int.MaxValue:
+            //            return;
+            //        default:
+            //            if (MonoMain.disableDirectInput)
+            //                DevConsole.Log(DCSection.General, "MonoMain.disableDirectInput was true, DInput has been disabled.");
+            //            else
+            //                DevConsole.Log(DCSection.General, "DInput.Initialize() failed with code " + DuckGame.Input._dinputInitializeStatus.ToString() + ". DInput has been disabled.");
+            //            DuckGame.Input._dinputEnabled = false;
+            //            break;
+            //    }
+            //    DuckGame.Input._dinputInitializeStatus = int.MaxValue;
+            //}
         }
 
         public static T GetDevice<T>(int index = 0) where T : InputDevice

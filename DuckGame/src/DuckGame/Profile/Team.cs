@@ -270,22 +270,22 @@ namespace DuckGame
                 RijndaelManaged rijndaelManaged = new RijndaelManaged();
                 byte[] numArray = new byte[16]
                 {
-           243,
-           22,
-           152,
-           32,
-           1,
-           244,
-           122,
-           111,
-           97,
-           42,
-           13,
-           2,
-           19,
-           15,
-           45,
-           230
+                   243,
+                   22,
+                   152,
+                   32,
+                   1,
+                   244,
+                   122,
+                   111,
+                   97,
+                   42,
+                   13,
+                   2,
+                   19,
+                   15,
+                   45,
+                   230
                 };
                 rijndaelManaged.Key = numArray;
                 rijndaelManaged.IV = Team.ReadByteArray(memoryStream);
