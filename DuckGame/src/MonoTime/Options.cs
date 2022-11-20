@@ -33,6 +33,9 @@ namespace DuckGame
         public static UIMenu _lastCreatedTTSMenu;
         public static UIMenu _lastCreatedBlockMenu;
         public static UIMenu _lastCreatedControlsMenu;
+        public static UIMenu _lastCreatedDGRMenu;
+        public static UIMenu _lastCreatedDGRMiscMenu;
+        public static UIMenu _lastCreatedDGRGraphicsMenu;
         public static int flagForSave = 0;
         private static bool _doingResolutionRestart = false;
         private static List<string> chatFonts = new List<string>()
@@ -105,6 +108,11 @@ namespace DuckGame
             to.Add(optionsMenu, false);
             to.Add(graphicsMenu, false);
             to.Add(audioMenu, false);
+            to.Add(_lastCreatedDGRMenu, false);
+            to.Add(_lastCreatedDGRMiscMenu, false);
+            to.Add(_lastCreatedDGRGraphicsMenu, false);
+
+
             if (Options.accessibilityMenu != null)
                 to.Add(accessibilityMenu, false);
             if (Options.ttsMenu != null)
@@ -139,7 +147,16 @@ namespace DuckGame
             Options._lastCreatedTTSMenu = Options.tempTTSMenu;
             Options._lastCreatedBlockMenu = Options.tempBlockMenu;
             Options._lastCreatedAudioMenu = Options.CreateAudioMenu(optionsMenu);
+            Options._lastCreatedDGRMenu = Options.CreateDGRMenu(optionsMenu);
+            Options._lastCreatedDGRMiscMenu = Options._DGRMiscMenu;
+            Options._lastCreatedDGRGraphicsMenu = Options._DGRGraphicsMenu;
+            //DGR OPTIONS GUI HELL BEGINS HERE -NiK0
+
+
             optionsMenu.Add(new UIText(" ", Color.White), true);
+
+
+            optionsMenu.Add(new UIMenuItem("REBUILT", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedDGRMenu), backButton: true), true);
             optionsMenu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedGraphicsMenu), backButton: true), true);
             optionsMenu.Add(new UIMenuItem("AUDIO", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedAudioMenu), backButton: true), true);
             optionsMenu.Add(new UIText(" ", Color.White), true);
@@ -158,6 +175,9 @@ namespace DuckGame
             Options._audioMenu = Options._lastCreatedAudioMenu;
             Options._ttsMenu = Options._lastCreatedTTSMenu;
             Options._blockMenu = Options._lastCreatedBlockMenu;
+            Options._DGRMenu = Options._lastCreatedDGRMenu;
+            Options._DGRMiscMenu = Options._lastCreatedDGRMenu;
+            Options._DGRGraphicsMenu = Options._lastCreatedDGRMenu;
         }
 
         public static UIMenu CreateControllerWarning()
@@ -290,9 +310,12 @@ namespace DuckGame
             else
                 Options.LocalData.windowedResolution = Options.LocalData.currentResolution;
         }
-        public static UIMenu CreateDGRMenu(UIMenu pOptionsMenu)
+        public static UIMenu _DGRMenu;
+        public static UIMenu _DGRGraphicsMenu;
+        public static UIMenu _DGRMiscMenu;
+        public static UIMenu CreateDGRGraphicsMenu(UIMenu pPrev)
         {
-            UIMenu menu = new UIMenu("|PINK|♥|WHITE|REBUILT|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|GRAPHICS|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
@@ -305,30 +328,26 @@ namespace DuckGame
             {
                 dgrDescription = "Lowers render times using an atlas so buffer doesn't\n    constantly switch sprites (Requires restart)"
             }, true);
-            menu.Add(new UIMenuItemToggle("Camera unfollow", field: new FieldBinding(dGRSettings, "CameraUnfollow"))
-            {
-                dgrDescription = "When the camera is big enough it stops\n     following distant players"
-            }, true);
-            menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC")) 
-            {
-                dgrDescription = "Toggles discord rich presence showing current level,\n if you're in the editor, etc (Requires restart)" 
-            }, true);
-            menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse")) 
-            {
-                dgrDescription = "Toggles the menu mouse"
-            }, true);
-            menu.Add(new UIMenuItemToggle("Dubber speed", field: new FieldBinding(dGRSettings, "dubberspeed")) 
-            {
-                dgrDescription = "For true vim users, adds keybinds from 1-9\n     for faster menu browsing" 
-            }, true);
-            menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(dGRSettings, "RandomWeather", 0, 10, 1), step: 1f) 
+
+
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+
+            menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(dGRSettings, "RandomWeather", 0, 10, 1), step: 1f)
             {
                 dgrDescription = "Chance for random weather to occur in levels 0% to 100%"
             });
-            menu.Add(new UIMenuItemSlider("Weather Particle Level", field: new FieldBinding(dGRSettings, "WeatherMultiplier", 0, 16, 1), step: 1f) 
+            menu.Add(new UIMenuItemSlider("Weather Particle Level", field: new FieldBinding(dGRSettings, "WeatherMultiplier", 0, 16, 1), step: 1f)
             {
-                dgrDescription = "Particle multiplier for weather events" 
+                dgrDescription = "Particle multiplier for weather events"
             });
+            menu.Add(new UIMenuItemSlider("Weather Thunder Chance", field: new FieldBinding(dGRSettings, "WeatherLighting", 0, 16, 1), step: 1f)
+            {
+                dgrDescription = "Chance for thunder to occur in levels from x0 to x16"
+            });
+
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+
+
             menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(dGRSettings, "ParticleMultiplier", 0, 7, 1), valStrings: new List<string>()
             {
                 "None     ",
@@ -352,6 +371,54 @@ namespace DuckGame
             {
                 dgrDescription = "The effect displayed for other rebuilt users"
             }, true);
+
+
+            menu.Add(new UIText(" ", Color.White), true);
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
+            return menu;
+        }
+
+        public static UIMenu CreateDGRMiscMenu(UIMenu pPrev)
+        {
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|MISC|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+
+            menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+
+            menu.Add(new UIMenuItemToggle("Camera unfollow", field: new FieldBinding(dGRSettings, "CameraUnfollow"))
+            {
+                dgrDescription = "When the camera is big enough it stops\n     following distant players"
+            }, true);
+            menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC"))
+            {
+                dgrDescription = "Toggles discord rich presence showing current level,\n if you're in the editor, etc (Requires restart)"
+            }, true);
+            menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse"))
+            {
+                dgrDescription = "Toggles the menu mouse"
+            }, true);
+            menu.Add(new UIMenuItemToggle("Dubber speed", field: new FieldBinding(dGRSettings, "dubberspeed"))
+            {
+                dgrDescription = "For true vim users, adds keybinds from 1-9\n     for faster menu browsing"
+            }, true);
+
+
+            menu.Add(new UIText(" ", Color.White), true);
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
+            return menu;
+        }
+        public static UIMenu CreateDGRMenu(UIMenu pOptionsMenu)
+        {
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|REBUILT|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+
+            _DGRMenu = menu;
+
+            _DGRGraphicsMenu = CreateDGRGraphicsMenu(menu);
+            menu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(menu, _DGRGraphicsMenu), backButton: true), true);
+
+            _DGRMiscMenu = CreateDGRMiscMenu(menu);
+            menu.Add(new UIMenuItem("MISC", new UIMenuActionOpenMenu(menu, _DGRMiscMenu), backButton: true), true);
+
 
 
             menu.Add(new UIText(" ", Color.White), true);

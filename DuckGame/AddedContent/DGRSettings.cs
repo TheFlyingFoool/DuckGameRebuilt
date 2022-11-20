@@ -92,6 +92,7 @@ namespace DuckGame
                 };
             }
         }
+
         public float WeatherMultiplier
         {
             get
@@ -119,6 +120,20 @@ namespace DuckGame
         }
         [AutoConfigField]
         public static bool S_GraphicsCulling = true;
+
+        public float WeatherLighting
+        {
+            get
+            {
+                return S_WeatherLighting;
+            }
+            set
+            {
+                S_WeatherLighting = value;
+            }
+        }
+        [AutoConfigField]
+        public static float S_WeatherLighting = 1;
 
         public bool CameraUnfollow
         {

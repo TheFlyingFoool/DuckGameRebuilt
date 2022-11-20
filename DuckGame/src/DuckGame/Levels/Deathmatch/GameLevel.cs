@@ -198,7 +198,7 @@ namespace DuckGame
                     lightningRNG = Rando.Int(1200, 2400);
                     if (Rando.Int(2) == 0)
                     {
-                        darkenRainer = 0.6f;
+                        darkenRainer = 0.8f;
                         rainSound.volume = 0.5f;
                         rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
                         lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
@@ -217,7 +217,7 @@ namespace DuckGame
                     lightningRNG = Rando.Int(2400, 4800);
                     if (Rando.Int(2) == 0)
                     {
-                        darkenRainer = 0.6f;
+                        darkenRainer = 0.8f;
                         rainSound.volume = 0.5f;
                         rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
                         lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
@@ -241,7 +241,7 @@ namespace DuckGame
                         if (Rando.Int(2) == 0)
                         {
                             forecast = "HEAVY RAIN";
-                            darkenRainer = 0.6f;
+                            darkenRainer = 0.8f;
                             rainSound.volume = 0.5f;
                             rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
                             lightningRNG = (int)Math.Floor(0.4f * lightningRNG);
@@ -336,7 +336,7 @@ namespace DuckGame
                     if (!heavyRain && Rando.Int(1) == 0)
                     {
                         rainwindto *= 2;
-                        darkenRainer = 0.6f;
+                        darkenRainer = 0.8f;
                         heavyRain = true;
                         lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
                     }
@@ -351,11 +351,12 @@ namespace DuckGame
 
                 if (rainSound._effect._instance.Platform_GetProgress() > 0.5f) rainSound._effect._instance._position = 0;
 
-
-                if (Rando.Int(lightningRNG) == 0)
+                //ignore this mess im just quickly assembling this if you wanna make it better go ahead
+                //-NiK0
+                if (DGRSettings.S_WeatherLighting > 0 && (int)Math.Round((float)Rando.Int(lightningRNG) / DGRSettings.S_WeatherLighting) == 0)
                 {
                     rainDarken = 1.2f;
-                    Level.Add(new BGLightning(Rando.Float(80, 240), 0));
+                    Level.Add(new BGLightning(Rando.Float(-30, 270), 0));
                     SFX.Play("balloonPop", 1, Rando.Float(-3, -4));
                 }
                 rainDarken = Lerp.Float(rainDarken, darkenRainer, 0.005f);
@@ -379,7 +380,7 @@ namespace DuckGame
             else if (cityRaining)
             {
                 rainwind = Lerp.Float(rainwind, rainwindto, 0.1f);
-                if (Rando.Int(60000) == 0 && !acider)
+                if (Rando.Int(100000) == 0 && !acider)
                 {
                     CityBackground cbg = Level.First<CityBackground>();
                     if (cbg != null)
@@ -400,12 +401,12 @@ namespace DuckGame
                         rainwindto *= 1.01f;
                     }
                 }
-                if (Rando.Int(6000) == 0)
+                if (Rando.Int(10000) == 0)
                 {
                     if (!heavyRain && Rando.Int(1) == 0)
                     {
                         rainwindto *= 2;
-                        darkenRainer = 0.6f;
+                        darkenRainer = 0.8f;
                         heavyRain = true;
                         lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
                     }
@@ -420,11 +421,12 @@ namespace DuckGame
 
                 if (rainSound._effect._instance.Platform_GetProgress() > 0.5f) rainSound._effect._instance._position = 0;
 
-
-                if (Rando.Int(lightningRNG) == 0)
+                //ignore this mess im just quickly assembling this if you wanna make it better go ahead
+                //-NiK0
+                if (DGRSettings.S_WeatherLighting > 0 && (int)Math.Round((float)Rando.Int(lightningRNG) / DGRSettings.S_WeatherLighting) == 0)
                 {
                     rainDarken = 1.2f;
-                    Level.Add(new BGLightning(Rando.Float(80, 240), 0));
+                    Level.Add(new BGLightning(Rando.Float(-30, 270), 0));
                     SFX.Play("balloonPop", 1, Rando.Float(-3, -4));
                 }
                 rainDarken = Lerp.Float(rainDarken, darkenRainer, 0.005f);
