@@ -14,6 +14,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -283,17 +284,29 @@ namespace DuckGame
                 if (path.StartsWith("|"))
                     path = path.Substring(1, path.Length - 1);
                 string fileName = Path.GetFileName(path);
+                bool heart = false;
+                if (DGRSettings.PreferredLevel != "" && path == DGRSettings.PreferredLevel)
+                {
+                    heart = true;
+                    DevConsole.Log(fileName);
+                    DevConsole.Log(path);
+                }
                 if (!_selectLevels)
                 {
                     if (fileName.EndsWith(TypeExtension()))
                     {
+                        string TOXT = fileName;
+                        if (heart)
+                        {
+                            TOXT = TOXT.Insert(0, "|PINK|♥|WHITE|");
+                        }
                         ContextMenu contextMenu = new ContextMenu(this)
                         {
                             layer = layer,
                             fancy = true,
-                            text = fileName
+                            text = TOXT
                         };
-                        contextMenu.text = fileName.Substring(0, fileName.Length - 4);
+                        contextMenu.text = TOXT.Substring(0, TOXT.Length - 4);
                         contextMenu.data = !pIsModPath ? fileName : path;
                         contextMenu.itemSize = new Vec2(x, 16f);
                         contextMenu.isModPath = pIsModPath;
@@ -624,14 +637,22 @@ namespace DuckGame
                         if (DGRSettings.PreferredLevel == _currentDirectory + cm.data)
                         {
                             SFX.Play("cutOffQuack2", 0.5f);
+                            cm.text = cm.text.Remove(0, 14);
                             DGRSettings.PreferredLevel = "";
 
                         }
                         else
                         {
+                            if (DGRSettings.PreferredLevel != "")
+                            {
+                                ContextMenu cl = _items.Find(cl => _currentDirectory + cl.data == DGRSettings.PreferredLevel);
+                                if (cl != null) cl.text = cl.text.Remove(0, 14);
+                            }
                             SFX.Play("preach3", 0.5f, Rando.Float(0.2f));
+                            DevConsole.Log(cm.text);
+                            cm.text = cm.text.Insert(0, "|PINK|♥|WHITE|");
+                            DevConsole.Log(cm.text);
                             DGRSettings.PreferredLevel = _currentDirectory + cm.data;
-                            DevConsole.Log(_currentDirectory + cm.data);
                         }
                     }
                 }

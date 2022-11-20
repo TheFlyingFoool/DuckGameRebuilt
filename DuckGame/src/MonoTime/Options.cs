@@ -334,7 +334,7 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(dGRSettings, "RandomWeather", 0, 10, 1), step: 1f)
             {
-                dgrDescription = "Chance for random weather to occur in levels 0% to 100%"
+                dgrDescription = "Chance for random weather to occur in levels\n               from 0% to 100%"
             });
             menu.Add(new UIMenuItemSlider("Weather Particle Level", field: new FieldBinding(dGRSettings, "WeatherMultiplier", 0, 16, 1), step: 1f)
             {

@@ -589,6 +589,9 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            //DGR SETTINGS STUFF :D -NiK0
+            RoomEditorExtra.Initialize();
+
             Program.gameLoadedSuccessfully = true;
             Vote.ClearVotes();
             TeamSelect2.ControllerLayoutsChanged();
