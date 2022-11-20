@@ -1672,9 +1672,6 @@ namespace DuckGame
             if (_currentLevel > 0)
                 num5 = DuckNetwork.GetLevel(_currentLevel).xpRequired;
 
-            DevConsole.Log(xpRequired1);
-            DevConsole.Log(_xpValue);
-
             //keep these casts the same or else the math goes south and returns only 0
             //-NiK0
             int num6 = (int)Math.Round((double)((float)xpRequired1 * ((float)_xpValue / (float)xpRequired1)));
