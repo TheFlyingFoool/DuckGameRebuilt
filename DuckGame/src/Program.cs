@@ -347,6 +347,9 @@ namespace DuckGame
                         Network.lanMode = true;
                         lanjoiner = true;
                         break;
+                    case "-startinlobby":
+                        DuckGame.Main.startInLobby = true;
+                        break;
                     case "-windowedFullscreen":
                         MonoMain.forceFullscreenMode = 1;
                         break;
