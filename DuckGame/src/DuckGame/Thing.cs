@@ -1630,6 +1630,10 @@ namespace DuckGame
         }
         public void DrawOwner()
         {
+            if (this.ghostObject == null)
+            {
+                return;
+            }
             if (this.connection == null || this.connection.profile == null)
             {
                 DuckGame.Graphics.DrawRect(topLeft, bottomRight, Colors.Duck1, (Depth)1f, false, 0.5f);

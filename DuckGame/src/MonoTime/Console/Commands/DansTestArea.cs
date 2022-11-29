@@ -189,13 +189,54 @@ namespace DuckGame
             }
 
         }
+        //[DevConsoleCommand(Name = "b3")]
+        //public static void b3()
+        //{
+        //    //GhostMesser.Test();
+        //}
+        [DevConsoleCommand(Name = "b1")]
+        public static void b1()
+        {
+            foreach(Duck duck in Level.current.things[typeof(Duck)])
+            {
+                if (duck != null)
+                {
+                    Level.Add(new Crate(duck.x, duck.y));
+                }
+            }
+        }
         [DevConsoleCommand(Name = "showowner")]
         public static void showowner()
         {
             drawowner = !drawowner;
             DevConsole.Log("draw owner " + drawowner.ToString());
         }
-        [DevConsoleCommand(Name = "take")]
+        public static bool notakeb = false;
+        [DevConsoleCommand(Name = "notake")]
+        public static void notake()
+        {
+            notakeb = !notakeb;
+            DevConsole.Log("notake owner " + notakeb.ToString());
+        }
+
+        [DevConsoleCommand(Name = "bettertake")]
+        public static void bettertake()
+        {
+            foreach (Duck duck in Level.current.things[typeof(Duck)])
+            {
+                if (duck.connection != DuckNetwork.localConnection && duck.connection != null)
+                {
+                    DevConsole.Log("fondle " + duck.persona.index.ToString());
+                    Thing.SuperFondle(duck, DuckNetwork.localConnection);
+                    duck.position.x += 20f;
+                    duck.position.y += 20f;
+                }
+            }
+        }
+
+
+
+            [DevConsoleCommand(Name = "take")]
         public static void take()
         {
             foreach(Duck duck in Level.current.things[typeof(Duck)]) 

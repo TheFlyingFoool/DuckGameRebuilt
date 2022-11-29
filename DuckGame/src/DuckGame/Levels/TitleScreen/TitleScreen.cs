@@ -132,6 +132,11 @@ namespace DuckGame
         }
 
         public bool menuOpen => Options.menuOpen || _enterMultiplayer;
+        public bool enterMultiplayer
+        {
+            get { return _enterMultiplayer; }
+            set { _enterMultiplayer = value; }
+        }
 
         private void CloudDelete()
         {

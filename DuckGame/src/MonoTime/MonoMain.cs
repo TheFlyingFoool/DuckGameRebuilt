@@ -188,7 +188,7 @@ namespace DuckGame
         public static volatile int totalLoadyBits = 365;
         private Timer _timeSinceLastLoadFrame = new Timer();
         public static bool logLoading;
-
+        public static bool startInLobby = false;
         //private int deviceLostWait;
 
         public static MonoMainCore core
@@ -1559,6 +1559,13 @@ namespace DuckGame
                 if (num > 1.0)
                     num = 1f;
                 Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * num, vec2_1.y), Color.White * 0.1f, (Depth)0.6f);
+                if (Debugger.IsAttached)
+                {
+                    if (!loadMessage.StartsWith("|16,144,13|"))
+                    {
+                        loadMessage = "|16,144,13|" + loadMessage;
+                    }
+                }
                 string text = loadMessage;
                 if (loadMessage != lastLoadMessage)
                 {

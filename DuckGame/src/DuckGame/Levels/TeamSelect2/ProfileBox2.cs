@@ -594,18 +594,26 @@ namespace DuckGame
                     virtualShotgun.vSpeed = -1f;
                 }
             }
-            bool flag1 = false;
-            if (_teamSelect != null && (!Network.isActive || _hatSelector.connection == DuckNetwork.localConnection) && !Network.isActive && _inputProfile.JoinGamePressed() && !_hatSelector.open && (!NetworkDebugger.enabled || NetworkDebugger._instances[NetworkDebugger.currentIndex].hover && (Input.Down("SHOOT") || Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift)) || NetworkDebugger.letJoin))
+            bool flag1 = false; //  
+            if (_teamSelect != null && (!Network.isActive || _hatSelector.connection == DuckNetwork.localConnection) && !Network.isActive)
             {
-                if (!_playerActive)
+                if (!_playerActive && (Program.testServer || Main.startInLobby) && _playerProfile == Profiles.DefaultPlayer1)
                 {
                     OpenDoor();
                     flag1 = true;
                 }
-                if (NetworkDebugger.letJoin && !Input.Down("SHOOT") && !Keyboard.Down(Keys.LeftShift) && !Keyboard.Down(Keys.RightShift))
+                if (_inputProfile.JoinGamePressed() && !_hatSelector.open && (!NetworkDebugger.enabled || NetworkDebugger._instances[NetworkDebugger.currentIndex].hover && (Input.Down("SHOOT") || Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift)) || NetworkDebugger.letJoin))
                 {
-                    NetworkDebugger.letJoin = false;
-                    hostFrames = 2;
+                    if (!_playerActive)
+                    {
+                        OpenDoor();
+                        flag1 = true;
+                    }
+                    if (NetworkDebugger.letJoin && !Input.Down("SHOOT") && !Keyboard.Down(Keys.LeftShift) && !Keyboard.Down(Keys.RightShift))
+                    {
+                        NetworkDebugger.letJoin = false;
+                        hostFrames = 2;
+                    }
                 }
             }
             if (_teamSelect != null && !ready && !Network.isActive && _inputProfile.Pressed("START") && !flag1)

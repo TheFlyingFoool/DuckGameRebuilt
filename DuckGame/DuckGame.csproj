@@ -2015,14 +2015,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <DepsFolder Include="$(SolutionDir)\deps\**\*.*"/>
+    <DepsFolder Include="$(SolutionDir)\deps\**\*.*" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
-    <Exec Command='git describe  --always --dirty --abbrev=40 &gt; "$(ProjectDir)version.txt"'/>
+    <Exec Command="git describe  --always --dirty --abbrev=40 &gt; &quot;$(ProjectDir)version.txt&quot;" />
   </Target>
   <Target Name="AfterBuild">
-    <Copy SourceFiles="@(DepsFolder)" DestinationFolder="$(SolutionDir)\bin"/>
-    <Exec Command='call "$(SolutionDir)shaders_source\buildshaders.bat"' Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'"/>
+    <Copy SourceFiles="@(DepsFolder)" DestinationFolder="$(SolutionDir)\bin" />
+    <Exec Command="call &quot;$(SolutionDir)shaders_source\buildshaders.bat&quot;" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
   </Target>
 </Project>

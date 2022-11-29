@@ -13,6 +13,7 @@ namespace DuckGame
 {
     public class TeamSelect2 : Level, IHaveAVirtualTransition
     {
+        public static bool didcreatelanlobby;
         public static bool KillsForPoints = false;
         public static bool QUACK3;
         private float dim;
@@ -1087,6 +1088,13 @@ namespace DuckGame
             {
                 _findGame.value = false;
                 int num = Network.isActive ? 1 : 0;
+            }
+            if (Program.testServer && !didcreatelanlobby)
+            {
+                didcreatelanlobby = true;
+                _createGame.value = true;
+                _hostGame.value = true;
+                TeamSelect2.GetOnlineSetting("type").value = 3;
             }
             if (_createGame.value || _hostGame.value)
             {

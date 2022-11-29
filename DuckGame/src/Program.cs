@@ -255,7 +255,6 @@ namespace DuckGame
             }
             MemberAttributePairHandler.Init();
             AutoConfigHandler.Initialize(); //settings are loaded :sunglass:
-
             int Controllers = 8;
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)
@@ -355,7 +354,16 @@ namespace DuckGame
                         MonoMain.forceFullscreenMode = 2;
                         break;
                     case "-testserver":
+                        Process.Start(Application.ExecutablePath, Program.commandLine.Replace("-testserver", " -lanjoiner"));
                         Program.testServer = true;
+                        break;
+                    case "-testserver2":
+                        Program.testServer = true;
+                        break;
+                    case "-testserverclient":
+                        Process.Start(Application.ExecutablePath, Program.commandLine.Replace("-testserverclient", " -testserver2"));
+                        Network.lanMode = true;
+                        lanjoiner = true;
                         break;
                     case "-nothreading":
                         MonoMain.enableThreadedLoading = false;
@@ -537,6 +545,11 @@ namespace DuckGame
                 MonoMain.MaximumGamepadCount = Enum.GetNames(typeof(PlayerIndex)).Length;
 
             Program.main = new DuckGame.Main();
+            if (Debugger.IsAttached)
+            {
+                string title = GetDefaultWindowTitle();
+                Program.main.Window.Title = title + " Debugging";
+            }
             // Program.main.TargetElapsedTime = TimeSpan.FromTicks(1000L);
             accumulatedElapsedTimefieldinfo = typeof(Game).GetField("accumulatedElapsedTime", BindingFlags.NonPublic | BindingFlags.Instance);
             SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
@@ -550,6 +563,27 @@ namespace DuckGame
         public static void SetAccumulatedElapsedTime(Game g, TimeSpan t)
         {
             accumulatedElapsedTimefieldinfo.SetValue(g, t);
+        }
+        public static string GetDefaultWindowTitle()
+        {
+            string windowTitle = string.Empty;
+            var assembly = Assembly.GetEntryAssembly();
+            if (assembly != null)
+            {
+                try
+                {
+                    var assemblyTitleAtt = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyTitleAttribute)));
+                    if (assemblyTitleAtt != null)
+                        windowTitle = assemblyTitleAtt.Title;
+                }
+                catch
+                {
+                }
+                if (string.IsNullOrEmpty(windowTitle))
+                    windowTitle = assembly.GetName().Name;
+            }
+
+            return windowTitle;
         }
         private static void OnOutputDebugStringHandler(int pid, string text) => Program.steamInitializeError = Program.steamInitializeError + text + "\n";
 
