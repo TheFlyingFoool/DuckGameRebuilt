@@ -1555,10 +1555,12 @@ namespace DuckGame
                 Vec2 p1 = new Vec2(50f, Graphics.height - 50);
                 Vec2 vec2_1 = new Vec2(Graphics.width - 100, 20f);
                 Graphics.DrawRect(p1, p1 + vec2_1, Color.DarkGray * 0.1f, (Depth)0.5f);
-                float num = loadyBits / (float)totalLoadyBits;
-                if (num > 1.0)
-                    num = 1f;
-                Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * num, vec2_1.y), Color.White * 0.1f, (Depth)0.6f);
+                float loaded = (float)MonoMain.loadyBits / (float)MonoMain.totalLoadyBits;
+				if (loaded > 1f)
+				{
+					loaded = 1f;
+				}
+                Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.White * 0.1f, (Depth)0.6f);
                 if (Debugger.IsAttached)
                 {
                     if (!loadMessage.StartsWith("|16,144,13|"))
