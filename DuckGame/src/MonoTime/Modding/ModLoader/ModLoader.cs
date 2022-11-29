@@ -378,7 +378,15 @@ namespace DuckGame
                                 if (dependency != null && !dependency.disabled)
                                     ModLoader.GetOrLoad(dependency, ref modLoadStack, ref loadableMods);
                             }
-                            modConfig.assembly = FixLoadAssembly(modConfig.isDynamic ? modConfig.tempAssemblyPath : modConfig.assemblyPath);
+                            string assemblypath = modConfig.isDynamic ? modConfig.tempAssemblyPath : modConfig.assemblyPath;
+                            if (modConfig.noRecompilation)
+                            {
+                                modConfig.assembly = Assembly.Load(File.ReadAllBytes(assemblypath));
+                            }
+                            else
+                            {
+                                modConfig.assembly = FixLoadAssembly(assemblypath);
+                            }
                             MonoMain.loadedModsWithAssemblies.Add(modConfig);
                             System.Type[] array1 = modConfig.assembly.GetExportedTypes().Where<System.Type>(type => type.IsSubclassOf(typeof(IManageContent)) && type.IsPublic && type.IsClass && !type.IsAbstract).ToArray<System.Type>();
                             modConfig.contentManager = array1.Length <= 1 ? ContentManagers.GetContentManager(array1.Length == 1 ? array1[0] : null) : throw new ModTypeMissingException(modConfig.uniqueID + " has more than one content manager class");
