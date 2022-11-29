@@ -508,6 +508,8 @@ namespace DuckGame
             _optionsGroup.Add(_flagMenu, false);
             _optionsGroup.Add(_graphicsMenu, false);
             _optionsGroup.Add(_dgrMenu, false);
+            _optionsGroup.Add(Options._DGRGraphicsMenu, false);
+            _optionsGroup.Add(Options._DGRMiscMenu, false);
             _optionsGroup.Add(_audioMenu, false);
             if (_accessibilityMenu != null)
                 _optionsGroup.Add(_accessibilityMenu, false);
