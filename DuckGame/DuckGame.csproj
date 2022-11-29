@@ -2016,11 +2016,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
-    <Exec Command='git describe  --always --dirty --abbrev=40 &gt; "$(ProjectDir)version.txt"'/>
+    <Exec Command="git describe  --always --dirty --abbrev=40 &gt; &quot;$(ProjectDir)version.txt&quot;" />
   </Target>
   <Target Name="AfterBuild">
-	<Exec Command='cp -rv $(SolutionDir)deps/* $(SolutionDir)bin/' Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'"/>
-	<Exec Command='Xcopy $(SolutionDir)\deps $(SolutionDir)\bin /E /H /C /I /Y' Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'"/>
-    <Exec Command='call "$(SolutionDir)shaders_source\buildshaders.bat"' Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'"/>
+    <Exec Command="cp -rv $(SolutionDir)deps/* $(SolutionDir)bin/" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" />
+    <Exec Command="Xcopy $(SolutionDir)\deps $(SolutionDir)\bin /E /H /C /I /Y" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
+    <Exec Command="call &quot;$(SolutionDir)shaders_source\buildshaders.bat&quot;" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
   </Target>
 </Project>

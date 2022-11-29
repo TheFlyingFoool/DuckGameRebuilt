@@ -7,7 +7,9 @@
 
 using Microsoft.Xna.Framework;
 using System;
+using System.Diagnostics;
 using System.Globalization;
+using System.Windows.Forms;
 using XnaToFna;
 
 namespace DuckGame
@@ -154,7 +156,31 @@ namespace DuckGame
                 }
                 else
                 {
-                    Level.current = !MonoMain.startInEditor ? (!(!Program.intro || MonoMain.noIntro) ? new BIOSScreen() : new TitleScreen()) : Main.editor;
+                    if (startInEditor)
+                    {
+                        Level.current = Main.editor;
+                    }
+                    else if (Program.testServer)
+                    {
+                        TitleScreen ts = new TitleScreen();
+                        Level.current = ts;
+                        ts.enterMultiplayer = true;
+                    }
+                    else if (MonoMain.startInLobby)
+                    {
+                        TitleScreen ts = new TitleScreen();
+                        Level.current = ts;
+                        ts.enterMultiplayer = true;
+                    }
+                    else if (!Program.intro || MonoMain.noIntro)
+                    {
+                        Level.current = (new TitleScreen());
+                    }
+                    else
+                    {
+                        Level.current = (new BIOSScreen());
+                    }
+
                 }
             }
             _font = new BitmapFont("biosFont", 8);
@@ -180,7 +206,7 @@ namespace DuckGame
             DamageManager.Update();
             if (!Network.isActive)
                 NetRand.generator = Rando.generator;
-            if (joinedLobby || !Program.testServer || Network.isActive || !Steam.lobbySearchComplete)
+            if (joinedLobby || Network.isActive || !Steam.lobbySearchComplete)
                 return;
             if (Steam.lobbySearchResult != null)
             {

@@ -132,6 +132,11 @@ namespace DuckGame
         }
 
         public bool menuOpen => Options.menuOpen || _enterMultiplayer;
+        public bool enterMultiplayer
+        {
+            get { return _enterMultiplayer; }
+            set { _enterMultiplayer = value; }
+        }
 
         private void CloudDelete()
         {
@@ -446,7 +451,6 @@ namespace DuckGame
 
             _graphicsMenu = Options.CreateGraphicsMenu(_optionsMenu);
             _dgrMenu = Options.CreateDGRMenu(_optionsMenu);
-
             _audioMenu = Options.CreateAudioMenu(_optionsMenu);
             _accessibilityMenu = Options.CreateAccessibilityMenu(_optionsMenu);
             _ttsMenu = Options.tempTTSMenu;
@@ -504,9 +508,6 @@ namespace DuckGame
             _optionsGroup.Add(_flagMenu, false);
             _optionsGroup.Add(_graphicsMenu, false);
             _optionsGroup.Add(_dgrMenu, false);
-            _optionsGroup.Add(Options._DGRGraphicsMenu, false);
-            _optionsGroup.Add(Options._DGRMiscMenu, false);
-
             _optionsGroup.Add(_audioMenu, false);
             if (_accessibilityMenu != null)
                 _optionsGroup.Add(_accessibilityMenu, false);
