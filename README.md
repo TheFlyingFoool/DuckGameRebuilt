@@ -1,8 +1,14 @@
 # Duck Game Rebuilt
-Private decompilation of DG source to fix bugs, improve compatability, archive source, and add quality of life features for devs and users.
+Decompilation of DG source to fix bugs, improve compatability, archive source, and add quality of life features for devs and users.  
+🖥️ To view hardware and software compatibility check the [wiki](https://github.com/TheFlyingFoool/DuckGameRebuilt/wiki/Architectures-and-Devices)
+
+📥 For average users go to the [releases](https://github.com/TheFlyingFoool/DuckGameRebuilt/releases) page and download the latest release.
+
+🐧 On Linux you need to install `mono` (from your package manager is fine)
+
+## For Developers
 
 Welcome to the repo, enjoy your stay, please unfuck the code. thanks
-
 
 ### Building on Windows
 
