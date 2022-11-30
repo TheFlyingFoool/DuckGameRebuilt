@@ -17,7 +17,7 @@ namespace DuckGame
     public class Main : MonoMain
     {
 
-        //public static bool isDemo = false;
+        public static bool isDemo = false;
         public static DuckGameEditor editor;
         public static string lastLevel = "";
         public static string SpecialCode = "";

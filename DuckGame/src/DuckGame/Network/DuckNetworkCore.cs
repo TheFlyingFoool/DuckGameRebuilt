@@ -274,34 +274,34 @@ namespace DuckGame
         private int swearCharOffset;
         private string[] swearChars = new string[7]
         {
-      "%",
-      "+",
-      "{",
-      "}",
-      "$",
-      "!",
-      "Z"
+          "%",
+          "+",
+          "{",
+          "}",
+          "$",
+          "!",
+          "Z"
         };
         private string[] swearChars2 = new string[7]
         {
-      "%",
-      "+",
-      "#",
-      "$",
-      "~",
-      "!",
-      "Z"
+          "%",
+          "+",
+          "#",
+          "$",
+          "~",
+          "!",
+          "Z"
         };
         private int rainbowIndex;
         private string[] swearColors = new string[7]
         {
-      "|RBOW_1|",
-      "|RBOW_2|",
-      "|RBOW_3|",
-      "|RBOW_4|",
-      "|RBOW_5|",
-      "|RBOW_6|",
-      "|RBOW_7|"
+          "|RBOW_1|",
+          "|RBOW_2|",
+          "|RBOW_3|",
+          "|RBOW_4|",
+          "|RBOW_5|",
+          "|RBOW_6|",
+          "|RBOW_7|"
         };
         public static string filteredSpeech;
         public UIMenu _ducknetMenu;

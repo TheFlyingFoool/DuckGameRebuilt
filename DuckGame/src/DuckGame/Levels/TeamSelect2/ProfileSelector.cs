@@ -19,341 +19,341 @@ namespace DuckGame
         private int _controlPage;
         private ControlSetting _selectedSetting;
         private List<List<ControlSetting>> _controlSettingPages = new List<List<ControlSetting>>()
-    {
-      new List<ControlSetting>()
-      {
-        new ControlSetting()
         {
-          name = "{",
-          trigger = "LEFT",
-          position = new Vec2(0f, 0f),
-          column = 0,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "/",
-          trigger = "RIGHT",
-          position = new Vec2(35f, 0f),
-          column = 0,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "}",
-          trigger = "UP",
-          position = new Vec2(70f, 0f),
-          column = 1,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "~",
-          trigger = "DOWN",
-          position = new Vec2(105f, 0f),
-          column = 1,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "JUMP  ",
-          trigger = "JUMP",
-          position = new Vec2(0f, 12f),
-          column = 0
-        },
-        new ControlSetting()
-        {
-          name = "GRAB  ",
-          trigger = "GRAB",
-          position = new Vec2(0f, 24f),
-          column = 0
-        },
-        new ControlSetting()
-        {
-          name = "STRAFE",
-          trigger = "STRAFE",
-          position = new Vec2(0f, 36f),
-          column = 0
-        },
-        new ControlSetting()
-        {
-          name = "USE   ",
-          trigger = "SHOOT",
-          position = new Vec2(70f, 12f),
-          column = 1
-        },
-        new ControlSetting()
-        {
-          name = "QUACK ",
-          trigger = "QUACK",
-          position = new Vec2(70f, 24f),
-          column = 1
-        },
-        new ControlSetting()
-        {
-          name = "FALL  ",
-          trigger = "RAGDOLL",
-          position = new Vec2(70f, 36f),
-          column = 1
-        },
-        new ControlSetting()
-        {
-          name = "START ",
-          trigger = "START",
-          position = new Vec2(0f, 48f),
-          column = 0,
-          condition =  x => x.allowStartRemap
-        },
-        new ControlSetting()
-        {
-          name = "PAGE 2>",
-          trigger = "ANY",
-          position = new Vec2(70f, 48f),
-          column = 1,
-          condition =  x => !(x is Keyboard),
-          action =  x =>
+          new List<ControlSetting>()
           {
-            ++x._controlPage;
-            x._selectedSetting =  null;
-            SFX.Play("page");
-          }
-        },
-        new ControlSetting()
-        {
-          name = "PAGE 2>",
-          trigger = "ANY",
-          position = new Vec2(70f, 48f),
-          column = 1,
-          condition =  x => x is Keyboard,
-          action =  x =>
+            new ControlSetting()
+            {
+              name = "{",
+              trigger = "LEFT",
+              position = new Vec2(0f, 0f),
+              column = 0,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "/",
+              trigger = "RIGHT",
+              position = new Vec2(35f, 0f),
+              column = 0,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "}",
+              trigger = "UP",
+              position = new Vec2(70f, 0f),
+              column = 1,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "~",
+              trigger = "DOWN",
+              position = new Vec2(105f, 0f),
+              column = 1,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "JUMP  ",
+              trigger = "JUMP",
+              position = new Vec2(0f, 12f),
+              column = 0
+            },
+            new ControlSetting()
+            {
+              name = "GRAB  ",
+              trigger = "GRAB",
+              position = new Vec2(0f, 24f),
+              column = 0
+            },
+            new ControlSetting()
+            {
+              name = "STRAFE",
+              trigger = "STRAFE",
+              position = new Vec2(0f, 36f),
+              column = 0
+            },
+            new ControlSetting()
+            {
+              name = "USE   ",
+              trigger = "SHOOT",
+              position = new Vec2(70f, 12f),
+              column = 1
+            },
+            new ControlSetting()
+            {
+              name = "QUACK ",
+              trigger = "QUACK",
+              position = new Vec2(70f, 24f),
+              column = 1
+            },
+            new ControlSetting()
+            {
+              name = "FALL  ",
+              trigger = "RAGDOLL",
+              position = new Vec2(70f, 36f),
+              column = 1
+            },
+            new ControlSetting()
+            {
+              name = "START ",
+              trigger = "START",
+              position = new Vec2(0f, 48f),
+              column = 0,
+              condition =  x => x.allowStartRemap
+            },
+            new ControlSetting()
+            {
+              name = "PAGE 2>",
+              trigger = "ANY",
+              position = new Vec2(70f, 48f),
+              column = 1,
+              condition =  x => !(x is Keyboard),
+              action =  x =>
+              {
+                ++x._controlPage;
+                x._selectedSetting =  null;
+                SFX.Play("page");
+              }
+            },
+            new ControlSetting()
+            {
+              name = "PAGE 2>",
+              trigger = "ANY",
+              position = new Vec2(70f, 48f),
+              column = 1,
+              condition =  x => x is Keyboard,
+              action =  x =>
+              {
+                x._controlPage += 2;
+                x._selectedSetting =  null;
+                SFX.Play("page");
+              }
+            }
+          },
+          new List<ControlSetting>()
           {
-            x._controlPage += 2;
-            x._selectedSetting =  null;
-            SFX.Play("page");
-          }
-        }
-      },
-      new List<ControlSetting>()
-      {
-        new ControlSetting()
-        {
-          name = "MOVE  ",
-          trigger = "LSTICK",
-          position = new Vec2(0f, 12f),
-          column = 0,
-          condition =  x => x.numSticks > 1
-        },
-        new ControlSetting()
-        {
-          name = "PITCH ",
-          trigger = "LTRIGGER",
-          position = new Vec2(0f, 24f),
-          column = 0,
-          condition =  x => x.numTriggers > 1
-        },
-        new ControlSetting()
-        {
-          name = "LICK  ",
-          trigger = "RSTICK",
-          position = new Vec2(70f, 12f),
-          column = 1,
-          condition =  x => x.numSticks > 1
-        },
-        new ControlSetting()
-        {
-          name = "ZOOM  ",
-          trigger = "RTRIGGER",
-          position = new Vec2(70f, 24f),
-          column = 1,
-          condition =  x => x.numTriggers > 1
-        },
-        new ControlSetting()
-        {
-          name = "<PAGE 1",
-          trigger = "ANY",
-          position = new Vec2(0f, 60f),
-          column = 0,
-          action =  x =>
+            new ControlSetting()
+            {
+              name = "MOVE  ",
+              trigger = "LSTICK",
+              position = new Vec2(0f, 12f),
+              column = 0,
+              condition =  x => x.numSticks > 1
+            },
+            new ControlSetting()
+            {
+              name = "PITCH ",
+              trigger = "LTRIGGER",
+              position = new Vec2(0f, 24f),
+              column = 0,
+              condition =  x => x.numTriggers > 1
+            },
+            new ControlSetting()
+            {
+              name = "LICK  ",
+              trigger = "RSTICK",
+              position = new Vec2(70f, 12f),
+              column = 1,
+              condition =  x => x.numSticks > 1
+            },
+            new ControlSetting()
+            {
+              name = "ZOOM  ",
+              trigger = "RTRIGGER",
+              position = new Vec2(70f, 24f),
+              column = 1,
+              condition =  x => x.numTriggers > 1
+            },
+            new ControlSetting()
+            {
+              name = "<PAGE 1",
+              trigger = "ANY",
+              position = new Vec2(0f, 60f),
+              column = 0,
+              action =  x =>
+              {
+                --x._controlPage;
+                x._selectedSetting =  null;
+                SFX.Play("page");
+              }
+            },
+            new ControlSetting()
+            {
+              name = "PAGE 3>",
+              trigger = "ANY",
+              position = new Vec2(70f, 60f),
+              column = 1,
+              action =  x =>
+              {
+                ++x._controlPage;
+                x._selectedSetting =  null;
+                SFX.Play("page");
+              }
+            }
+          },
+          new List<ControlSetting>()
           {
-            --x._controlPage;
-            x._selectedSetting =  null;
-            SFX.Play("page");
+            new ControlSetting()
+            {
+              name = "UI CONTROLS...",
+              trigger = "ANY",
+              position = new Vec2(0f, 0f),
+              column = 0,
+              caption = true
+            },
+            new ControlSetting()
+            {
+              name = "{",
+              trigger = "MENULEFT",
+              position = new Vec2(0f, 12f),
+              column = 0,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "/",
+              trigger = "MENURIGHT",
+              position = new Vec2(35f, 12f),
+              column = 0,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "}",
+              trigger = "MENUUP",
+              position = new Vec2(70f, 12f),
+              column = 1,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "~",
+              trigger = "MENUDOWN",
+              position = new Vec2(105f, 12f),
+              column = 1,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "SELECT",
+              trigger = "SELECT",
+              position = new Vec2(0f, 24f),
+              column = 0
+            },
+            new ControlSetting()
+            {
+              name = "MENU 1",
+              trigger = "MENU1",
+              position = new Vec2(0f, 36f),
+              column = 0
+            },
+            new ControlSetting()
+            {
+              name = "CANCEL",
+              trigger = "CANCEL",
+              position = new Vec2(70f, 24f),
+              column = 1
+            },
+            new ControlSetting()
+            {
+              name = "MENU 2",
+              trigger = "MENU2",
+              position = new Vec2(70f, 36f),
+              column = 1
+            },
+            new ControlSetting()
+            {
+              name = "<PAGE 2",
+              trigger = "ANY",
+              position = new Vec2(0f, 48f),
+              column = 0,
+              condition =  x => !(x is Keyboard),
+              action =  x =>
+              {
+                --x._controlPage;
+                x._selectedSetting =  null;
+                SFX.Play("page");
+              }
+            },
+            new ControlSetting()
+            {
+              name = "<PAGE 1",
+              trigger = "ANY",
+              position = new Vec2(0f, 48f),
+              column = 0,
+              condition =  x => x is Keyboard,
+              action =  x =>
+              {
+                x._controlPage -= 2;
+                x._selectedSetting =  null;
+                SFX.Play("page");
+              }
+            },
+            new ControlSetting()
+            {
+              name = "RESET ",
+              trigger = "ANY",
+              position = new Vec2(70f, 48f),
+              column = 1,
+              action =  x =>
+              {
+                ProfileSelector._madeControlChanges = true;
+                x._configInputMapping = Input.GetDefaultMapping(x._inputProfile.lastActiveDevice.productName, x._inputProfile.lastActiveDevice.productGUID).Clone();
+                SFX.Play("consoleSelect");
+              }
+            }
           }
-        },
-        new ControlSetting()
-        {
-          name = "PAGE 3>",
-          trigger = "ANY",
-          position = new Vec2(70f, 60f),
-          column = 1,
-          action =  x =>
-          {
-            ++x._controlPage;
-            x._selectedSetting =  null;
-            SFX.Play("page");
-          }
-        }
-      },
-      new List<ControlSetting>()
-      {
-        new ControlSetting()
-        {
-          name = "UI CONTROLS...",
-          trigger = "ANY",
-          position = new Vec2(0f, 0f),
-          column = 0,
-          caption = true
-        },
-        new ControlSetting()
-        {
-          name = "{",
-          trigger = "MENULEFT",
-          position = new Vec2(0f, 12f),
-          column = 0,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "/",
-          trigger = "MENURIGHT",
-          position = new Vec2(35f, 12f),
-          column = 0,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "}",
-          trigger = "MENUUP",
-          position = new Vec2(70f, 12f),
-          column = 1,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "~",
-          trigger = "MENUDOWN",
-          position = new Vec2(105f, 12f),
-          column = 1,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "SELECT",
-          trigger = "SELECT",
-          position = new Vec2(0f, 24f),
-          column = 0
-        },
-        new ControlSetting()
-        {
-          name = "MENU 1",
-          trigger = "MENU1",
-          position = new Vec2(0f, 36f),
-          column = 0
-        },
-        new ControlSetting()
-        {
-          name = "CANCEL",
-          trigger = "CANCEL",
-          position = new Vec2(70f, 24f),
-          column = 1
-        },
-        new ControlSetting()
-        {
-          name = "MENU 2",
-          trigger = "MENU2",
-          position = new Vec2(70f, 36f),
-          column = 1
-        },
-        new ControlSetting()
-        {
-          name = "<PAGE 2",
-          trigger = "ANY",
-          position = new Vec2(0f, 48f),
-          column = 0,
-          condition =  x => !(x is Keyboard),
-          action =  x =>
-          {
-            --x._controlPage;
-            x._selectedSetting =  null;
-            SFX.Play("page");
-          }
-        },
-        new ControlSetting()
-        {
-          name = "<PAGE 1",
-          trigger = "ANY",
-          position = new Vec2(0f, 48f),
-          column = 0,
-          condition =  x => x is Keyboard,
-          action =  x =>
-          {
-            x._controlPage -= 2;
-            x._selectedSetting =  null;
-            SFX.Play("page");
-          }
-        },
-        new ControlSetting()
-        {
-          name = "RESET ",
-          trigger = "ANY",
-          position = new Vec2(70f, 48f),
-          column = 1,
-          action =  x =>
-          {
-            ProfileSelector._madeControlChanges = true;
-            x._configInputMapping = Input.GetDefaultMapping(x._inputProfile.lastActiveDevice.productName, x._inputProfile.lastActiveDevice.productGUID).Clone();
-            SFX.Play("consoleSelect");
-          }
-        }
-      }
-    };
+        };
         private float _takenFlash;
         private string _name = "";
         private string _maskName = "aaaaaaaaa";
         private List<char> _characters = new List<char>()
-    {
-      'a',
-      'b',
-      'c',
-      'd',
-      'e',
-      'f',
-      'g',
-      'h',
-      'i',
-      'j',
-      'k',
-      'l',
-      'm',
-      'n',
-      'o',
-      'p',
-      'q',
-      'r',
-      's',
-      't',
-      'u',
-      'v',
-      'w',
-      'x',
-      'y',
-      'z',
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '{',
-      '}',
-      ' ',
-      '-',
-      '!'
-    };
+        {
+          'a',
+          'b',
+          'c',
+          'd',
+          'e',
+          'f',
+          'g',
+          'h',
+          'i',
+          'j',
+          'k',
+          'l',
+          'm',
+          'n',
+          'o',
+          'p',
+          'q',
+          'r',
+          's',
+          't',
+          'u',
+          'v',
+          'w',
+          'x',
+          'y',
+          'z',
+          '0',
+          '1',
+          '2',
+          '3',
+          '4',
+          '5',
+          '6',
+          '7',
+          '8',
+          '9',
+          '{',
+          '}',
+          ' ',
+          '-',
+          '!'
+        };
         private float _slide;
         private float _slideTo;
         private int _editControlSelection;
