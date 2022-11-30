@@ -213,13 +213,13 @@ namespace DuckGame
             DamageManager.Update();
             if (!Network.isActive)
                 NetRand.generator = Rando.generator;
-            if (joinedLobby || Network.isActive || !Steam.lobbySearchComplete)
-                return;
-            if (Steam.lobbySearchResult != null)
-            {
-                Network.JoinServer("", 0, Steam.lobbySearchResult.id.ToString());
-                joinedLobby = true;
-            }
+            //if (joinedLobby || Network.isActive || !Steam.lobbySearchComplete)
+            //    return;
+            //if (Steam.lobbySearchResult != null)
+            //{
+            //    Network.JoinServer("", 0, Steam.lobbySearchResult.id.ToString());
+            //    joinedLobby = true;
+            //}
             //else
             //{
             //    User who = Steam.friends.Find(x => x.name == "superjoebob");

@@ -1038,6 +1038,7 @@ namespace DuckGame
             }
             if (lastestversion == currentversion)
             {
+                DevConsole.Log("up to date Verison : " + lastestversion);
                 return;
             }
             fullstop = true;
