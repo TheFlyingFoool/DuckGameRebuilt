@@ -13,7 +13,7 @@ namespace DuckGame
     {
         public static int kMaxObjects = 64;
         public static BreathSmoke[] _objects = new BreathSmoke[BreathSmoke.kMaxObjects];
-        private static int _lastActiveObject = 0;
+        public static int _lastActiveObject = 0;
         public static bool shortlife = false;
         private float _orbitInc = Rando.Float(5f);
         private SpriteMap _sprite2;

@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public static int kMaxObjects = 32;
         public static MetalRebound[] _objects = new MetalRebound[MetalRebound.kMaxObjects];
-        private static int _lastActiveObject = 0;
+        public static int _lastActiveObject = 0;
         private SpriteMap _sprite;
 
         public static MetalRebound New(float xpos, float ypos, int offDir)

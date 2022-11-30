@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public static int kMaxObjects = 64;
         public static WoodDebris[] _objects = new WoodDebris[WoodDebris.kMaxObjects];
-        private static int _lastActiveObject = 0;
+        public static int _lastActiveObject = 0;
         private SpriteMap _sprite;
 
         public static WoodDebris New(float xpos, float ypos)

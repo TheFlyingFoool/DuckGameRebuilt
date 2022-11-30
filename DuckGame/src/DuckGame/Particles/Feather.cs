@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public static int kMaxObjects = 64;
         public static Feather[] _objects = new Feather[Feather.kMaxObjects];
-        private static int _lastActiveObject = 0;
+        public static int _lastActiveObject = 0;
         private SpriteMap _sprite;
         private bool _rested;
 

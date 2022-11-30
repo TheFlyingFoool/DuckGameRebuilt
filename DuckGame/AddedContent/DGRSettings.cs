@@ -51,24 +51,31 @@ namespace DuckGame
                 int sixtyd = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
                 BreathSmoke.kMaxObjects = sixtyd;
                 BreathSmoke._objects = new BreathSmoke[sixtyd];
+                BreathSmoke._lastActiveObject = (BreathSmoke._lastActiveObject) % BreathSmoke.kMaxObjects;
 
                 ConfettiParticle.kMaxSparks = sixtyd;
                 ConfettiParticle._sparks = new ConfettiParticle[sixtyd];
+                ConfettiParticle._lastActiveSpark = (ConfettiParticle._lastActiveSpark) % ConfettiParticle.kMaxSparks;
 
                 Feather.kMaxObjects = sixtyd;
                 Feather._objects = new Feather[sixtyd];
+                Feather._lastActiveObject = (Feather._lastActiveObject) % Feather.kMaxObjects;
 
                 MetalRebound.kMaxObjects = sixtyd / 2;
                 MetalRebound._objects = new MetalRebound[MetalRebound.kMaxObjects];
+                MetalRebound._lastActiveObject = (MetalRebound._lastActiveObject) % MetalRebound.kMaxObjects;
 
                 Spark.kMaxSparks = sixtyd;
                 Spark._sparks = new Spark[sixtyd];
+                Spark._lastActiveSpark = (Spark._lastActiveSpark) % Spark.kMaxSparks;
 
                 WagnusChargeParticle.kMaxWagCharge = sixtyd;
                 WagnusChargeParticle._sparks = new WagnusChargeParticle[sixtyd];
+                WagnusChargeParticle._lastActiveWagCharge = (WagnusChargeParticle._lastActiveWagCharge) % WagnusChargeParticle.kMaxWagCharge;
 
                 WoodDebris.kMaxObjects = sixtyd;
                 WoodDebris._objects = new WoodDebris[sixtyd];
+                WoodDebris._lastActiveObject = (WoodDebris._lastActiveObject) % WoodDebris.kMaxObjects;
             }
         }
         [AutoConfigField]
