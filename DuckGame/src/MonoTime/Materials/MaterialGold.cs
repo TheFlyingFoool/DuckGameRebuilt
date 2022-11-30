@@ -26,7 +26,7 @@ namespace DuckGame
         }
         public override void Apply()
         {
-            if (this.batchItem != null && this.batchItem.NormalTexture != null && DuckGame.Content.offests.ContainsKey("bigGold") && DuckGame.Content.offests.ContainsKey(this.batchItem.NormalTexture.Namebase))
+            if (this.batchItem != null && this.batchItem.NormalTexture != null && this.batchItem.NormalTexture.Namebase != null && DuckGame.Content.offests.ContainsKey("bigGold") && DuckGame.Content.offests.ContainsKey(this.batchItem.NormalTexture.Namebase))
             {
                 _effect = _spritebatcheffect;
                 Microsoft.Xna.Framework.Rectangle r = DuckGame.Content.offests[this.batchItem.NormalTexture.Namebase];

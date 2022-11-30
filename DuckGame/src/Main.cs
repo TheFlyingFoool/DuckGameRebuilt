@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Forms;
 using XnaToFna;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -162,15 +163,21 @@ namespace DuckGame
                     }
                     else if (Program.testServer)
                     {
-                        TitleScreen ts = new TitleScreen();
-                        Level.current = ts;
-                        ts.enterMultiplayer = true;
+                        new TitleScreen().Initialize();
+                        for (int i = 1; i < Teams.all.Count; i++)
+                        {
+                            Teams.all[i].ClearProfiles();
+                        }
+                        Level.current = new TeamSelect2();
                     }
                     else if (MonoMain.startInLobby)
                     {
-                        TitleScreen ts = new TitleScreen();
-                        Level.current = ts;
-                        ts.enterMultiplayer = true;
+                        new TitleScreen().Initialize();
+                        for (int i = 1; i < Teams.all.Count; i++)
+                        {
+                            Teams.all[i].ClearProfiles();
+                        }
+                        Level.current = new TeamSelect2();
                     }
                     else if (!Program.intro || MonoMain.noIntro)
                     {
@@ -213,13 +220,13 @@ namespace DuckGame
                 Network.JoinServer("", 0, Steam.lobbySearchResult.id.ToString());
                 joinedLobby = true;
             }
-            else
-            {
-                User who = Steam.friends.Find(x => x.name == "superjoebob");
-                if (who == null)
-                    return;
-                Steam.SearchForLobby(who);
-            }
+            //else
+            //{
+            //    User who = Steam.friends.Find(x => x.name == "superjoebob");
+            //    if (who == null)
+            //        return;
+            //    Steam.SearchForLobby(who);
+            //}
         }
         protected override void EndDraw()
         {

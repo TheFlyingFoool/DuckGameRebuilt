@@ -926,7 +926,11 @@ namespace DuckGame
             //Program.FirebreakReflectionsht.Wait();
 
             //Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667L);
-            this.IsFixedTimeStep = true; // UNZOOOM
+            if (!(MonoMain.startInLobby || Program.testServer))
+            {
+                this.IsFixedTimeStep = true; // UNZOOOM
+            }
+           
             Program.SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
 
             foreach (MethodInfo methodInfo in PostInitializeAttribute.All)

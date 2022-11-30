@@ -750,7 +750,7 @@ namespace DuckGame
         }
         public static Color FromNonPremultiplied(int r, int g, int b, int a)
         {
-            return new Color(r * a / 255, g * a / 255, b * a / 255, a);
+            return new Color((byte)(r * a / 255), (byte)(g * a / 255), (byte)(b * a / 255), (byte)(a));
         }
 
         public static Texture2D SpriteAtlasTextureFromStream(string FilePath, GraphicsDevice device)

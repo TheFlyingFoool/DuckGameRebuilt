@@ -116,7 +116,19 @@ namespace DuckGame
 
         public static List<MatchSetting> onlineSettings => DuckNetwork.core.onlineSettings;
 
-        public static string DefaultGameName() => TeamSelect2.GetSettingInt("type") >= 3 && Profiles.active.Count > 0 ? Profiles.active[0].name + "'s LAN Game" : Profiles.experienceProfile.name + "'s Game";
+        public static string DefaultGameName()
+        {
+            if (TeamSelect2.GetSettingInt("type") >= 3)
+            {
+                List<Profile> activep = Profiles.active;
+                if (activep.Count > 0)
+                {
+                    return activep[0].name + "'s LAN Game";
+                }
+            }
+            return Profiles.experienceProfile.name + "'s Game";
+            
+        }
 
         public static void DefaultSettings(bool resetMatchSettings = true)
         {
@@ -590,6 +602,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            Program.main.IsFixedTimeStep = true;
             Program.gameLoadedSuccessfully = true;
             Vote.ClearVotes();
             TeamSelect2.ControllerLayoutsChanged();

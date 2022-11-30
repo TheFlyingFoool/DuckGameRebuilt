@@ -433,8 +433,14 @@ namespace DuckGame
                 else
                 {
                     input = _inputProfile != null ? _inputProfile : Input.lastActiveProfile;
-                    if (_inputProfile == null && Profiles.active.Count > 0 && !Network.isActive)
-                        input = Profiles.GetLastProfileWithInput().inputProfile;
+                    if (_inputProfile == null && !Network.isActive)
+                    {
+                        Profile profileWithInput = Profiles.GetLastProfileWithInput();
+                        if (profileWithInput != null)
+                        {
+                            input = profileWithInput.inputProfile;
+                        }
+                    }
                 }
             }
             float num = 0f;
@@ -531,8 +537,14 @@ namespace DuckGame
                 else
                 {
                     input = _inputProfile != null ? _inputProfile : Input.lastActiveProfile;
-                    if (_inputProfile == null && Profiles.active.Count > 0 && !Network.isActive)
-                        input = Profiles.GetLastProfileWithInput().inputProfile;
+                    if (_inputProfile == null && !Network.isActive)
+                    {
+                        Profile profileWithInput = Profiles.GetLastProfileWithInput();
+                        if (profileWithInput != null)
+                        {
+                            input = profileWithInput.inputProfile;
+                        }
+                    }
                 }
             }
             float num1 = 0f;

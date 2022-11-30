@@ -42,7 +42,7 @@ namespace DuckGame
         {
             _time += 0.016f;
             bool isspritebatch = false;
-            if (this.batchItem != null && this.batchItem.NormalTexture != null && DuckGame.Content.offests.ContainsKey("energyTex") && DuckGame.Content.offests.ContainsKey(this.batchItem.NormalTexture.Namebase))
+            if (this.batchItem != null && this.batchItem.NormalTexture != null && this.batchItem.NormalTexture.Namebase != null && DuckGame.Content.offests.ContainsKey("energyTex") && DuckGame.Content.offests.ContainsKey(this.batchItem.NormalTexture.Namebase))
             {
                 _effect = _sbeffect;
                 isspritebatch = true;
