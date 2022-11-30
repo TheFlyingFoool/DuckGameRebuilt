@@ -502,7 +502,13 @@ namespace DuckGame
                 _lanCore = new NCBasic(Network.activeNetwork, _networkIndex);
         }
 
-        public static void Terminate() => Network.activeNetwork.core.Terminate();
+        public static void Terminate()
+        {
+            if (Network.activeNetwork.core != null)
+            {
+                Network.activeNetwork.core.Terminate();
+            }
+        }
 
         public void Reset()
         {

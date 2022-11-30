@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -31,6 +32,7 @@ namespace DuckGame
     /// <summary>The main class.</summary>
     public static class Program
     {
+        public static bool fullstop;
         public static bool Prestart = DirtyPreStart();
 
 
@@ -79,6 +81,10 @@ namespace DuckGame
         [SecurityCritical]
         public static void Main(string[] args)
         {
+            if (fullstop)
+            {
+                return;
+            }
             //File.Delete(Path.GetFullPath("DGInput.dll"));
             try
             {
@@ -153,6 +159,13 @@ namespace DuckGame
             int tries = 10;
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
+#if AutoUpdater
+            AutoUpdater();
+#endif
+            if (fullstop)
+            {
+                return false;
+            }
             try // IMPROVEME, i try catch this because when restarting with the ingame restarting thing, it would crash because this was still in use
             {   // also this should really be doing some kind of like cache thing so it doesnt do this everytime
                 while (tries > 0)
@@ -994,6 +1007,129 @@ namespace DuckGame
             }
             return strings;
         }
+        public static void AutoUpdater()
+        {
+            string path = System.Reflection.Assembly.GetEntryAssembly().Location;
+            string DGdirectory = Path.GetDirectoryName(path);
+            string[] rename_and_delete_tmp = new string[] { path, DGdirectory + "//" + "FNA.dll", DGdirectory + "//" + "DGSteam.dll" };//files that need to be renamed because still inuse
+            foreach (string filepath in rename_and_delete_tmp)
+            {
+                if (File.Exists(path + ".tmp"))
+                {
+                    File.Delete(path + ".tmp");
+                }
+            }
+            string url = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
+            WebRequest myWebRequest = WebRequest.Create(url);
+            WebResponse myWebResponse;
+            try
+            {
+                myWebResponse = myWebRequest.GetResponse();
+            }
+            catch(Exception e)
+            {
+                return;
+            }
+            string lastestversion = myWebResponse.ResponseUri.OriginalString.Split('/').Last();
+            string currentversion = "";
+            if (File.Exists("buildversion.txt"))
+            {
+                currentversion = System.IO.File.ReadAllText("buildversion.txt").Replace("\n", "");
+            }
+            if (lastestversion == currentversion)
+            {
+                return;
+            }
+            fullstop = true;
+            foreach (string filepath in rename_and_delete_tmp)
+            {
+                if (File.Exists(path))
+                {
+                    File.Move(path, path + ".tmp");
+                }
+            }
+            string zippath = DGdirectory + "//DuckGameRebuilt.zip";
+            FileStream saveFileStream = downloadFile("https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip", zippath);
+            using (ZipArchive archive = new ZipArchive(saveFileStream))
+            {
+                archive.ExtractToDirectoryOverride(Path.GetDirectoryName(path));
+            }
+            File.Delete(zippath);
+            Process.Start(Application.ExecutablePath, Program.commandLine);
+        }
+        public static void ExtractToDirectoryOverride(this ZipArchive archive, string destinationDirectoryName)
+        {
+            DirectoryInfo di = Directory.CreateDirectory(destinationDirectoryName);
+            string destinationDirectoryFullPath = di.FullName;
+
+            foreach (ZipArchiveEntry file in archive.Entries)
+            {
+                string completeFileName = Path.GetFullPath(Path.Combine(destinationDirectoryFullPath, file.FullName));
+
+                if (!completeFileName.StartsWith(destinationDirectoryFullPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new IOException("Trying to extract file outside of destination directory. See this link for more info: https://snyk.io/research/zip-slip-vulnerability");
+                }
+
+                if (file.Name == "")
+                {// Assuming Empty for Directory
+                    Directory.CreateDirectory(Path.GetDirectoryName(completeFileName));
+                    continue;
+                }
+                try
+                {
+                    file.ExtractToFile(completeFileName, true);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(completeFileName + " " + ex.Message);
+                }
+            }
+        }
+        public static void ExtractToFile(this ZipArchiveEntry source, string destinationFileName, bool overwrite)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+            if (destinationFileName == null)
+            {
+                throw new ArgumentNullException("destinationFileName");
+            }
+            FileMode mode = overwrite ? FileMode.Create : FileMode.CreateNew;
+            using (Stream stream = File.Open(destinationFileName, mode, FileAccess.Write, FileShare.None))
+            {
+                using (Stream stream2 = source.Open())
+                {
+                    stream2.CopyTo(stream);
+                }
+            }
+            File.SetLastWriteTime(destinationFileName, source.LastWriteTime.DateTime);
+        }
+        public static FileStream downloadFile(string sourceURL, string destinationPath)
+        {
+            int bufferSize = 1024;
+            bufferSize *= 1000;
+            FileStream saveFileStream;
+            saveFileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+            System.Net.HttpWebRequest httpReq;
+            System.Net.HttpWebResponse httpRes;
+            httpReq = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(sourceURL);
+            Stream resStream;
+            httpRes = (System.Net.HttpWebResponse)httpReq.GetResponse();
+            resStream = httpRes.GetResponseStream();
+
+            int byteSize;
+            byte[] downBuffer = new byte[bufferSize];
+
+            while ((byteSize = resStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
+            {
+                saveFileStream.Write(downBuffer, 0, byteSize);
+            }
+            return saveFileStream;
+        }
+    
+
         public static void SendCrashToServer(Exception pException)
         {
             HttpClient httpClient = new HttpClient();
@@ -1119,8 +1255,7 @@ namespace DuckGame
                 //string k = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"```ansi\nUsername: \u001b[2;32mN/A\u001b[0m\nSteam ID: \u001b[2;32mN/A\u001b[0m\n```\"},{\"name\":\"System Info\",\"value\":\"```ansi\nOS: \u001b[2;32mUnix 5.15.65.1\u001b[0m\nCommand Line: \u001b[2;32m-nothreading\u001b[0m\n```\"},{\"name\":\"Game Info\",\"value\":\"```ansi\nPlayers In Lobby: [\u001b[2;32mN/A\u001b[0m]\nMods Active: [\u001b[2;32mN/A\u001b[0m]\n```\"},{\"name\":\"Crash Info\",\"value\":\"```ansi\nException Message: \u001b[2;32mIndex was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index\u001b[0m\nStack Trace \u001b[2;32m\nSystem.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index\n  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <282c4228012f4f3d96bdf0f2b2dea837>:0 \n  at DuckGame.ProfileSelector.Update () [0x0046d] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Thing.DoUpdate () [0x0003d] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.UpdateThings () [0x0023f] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.DoUpdate () [0x001b3] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.UpdateCurrentLevel () [0x0001e] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.MonoMain.RunUpdate (Microsoft.Xna.Framework.GameTime gameTime) [0x00615] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.MonoMain.Update (Microsoft.Xna.Framework.GameTime gameTime) [0x00187] in \u001b[0m\n```\"}]}]}";
                 string Commit = "N/A";
                 gitVersion = Escape(gitVersion.Replace("\n", ""));
-                Commit = gitVersion + @" [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion + ") ";
-
+                Commit = gitVersion + @" [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]","") + ") ";
                 string UserInfo = "```ansi\\nUsername: \\u001b[2;32m" + Username + "\\u001b[0m\\nSteam ID: \\u001b[2;32m" + Steamid + "\\u001b[0m\\n```";// "\\u001b[0m\\nPCUserName: \\u001b[2;32m" + Environment.UserName + "\\u001b[0m\\MachineName: \\u001b[2;32m" + Environment.MachineName + "\\u001b[0m]\\n```";
                 string SystemInfo = "```ansi\\nOS: \\u001b[2;32m" + OS + "\\u001b[0m\\nCommand Line: \\u001b[2;32m" + CommandLine + "\\u001b[0m\\n```";
                 string GameInfo = "```ansi\\nPlayers In Lobby: [\\u001b[2;32m" + PlayersInLobby + "\\u001b[0m]\\nMods Active: [\\u001b[2;32m" + ModsActive + "\\u001b[0m]\\n```";
