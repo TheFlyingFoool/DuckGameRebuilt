@@ -1042,6 +1042,8 @@ namespace DuckGame
                 return;
             }
             fullstop = true;
+            string zippath = DGdirectory + "//DuckGameRebuilt.zip";
+            FileStream saveFileStream = downloadFile("https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip", zippath);
             foreach (string filepath in rename_and_delete_tmp)
             {
                 if (File.Exists(path))
@@ -1049,13 +1051,12 @@ namespace DuckGame
                     File.Move(path, path + ".tmp");
                 }
             }
-            string zippath = DGdirectory + "//DuckGameRebuilt.zip";
-            FileStream saveFileStream = downloadFile("https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip", zippath);
             using (ZipArchive archive = new ZipArchive(saveFileStream))
             {
                 archive.ExtractToDirectoryOverride(Path.GetDirectoryName(path));
             }
             File.Delete(zippath);
+            Thread.Sleep(2000);
             Process.Start(Application.ExecutablePath, Program.commandLine);
         }
         public static void ExtractToDirectoryOverride(this ZipArchive archive, string destinationDirectoryName)
