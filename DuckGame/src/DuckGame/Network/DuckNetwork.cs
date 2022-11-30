@@ -2417,7 +2417,7 @@ namespace DuckGame
                                     NMRequestJoin nmRequestJoin = m as NMRequestJoin;
                                     if (nmRequestJoin.names == null || nmRequestJoin.names.Count == 0)
                                         return new NMErrorEmptyJoinMessage();
-                                    DevConsole.Log(DCSection.DuckNet, "Join attempt from " + nmRequestJoin.names.First<string>());
+                                    DevConsole.Log(DCSection.DuckNet, "Join attempt from " + nmRequestJoin.names[0]);
                                     if (GetOpenProfiles(m.connection, nmRequestJoin.wasInvited, false, false).Count<Profile>() < nmRequestJoin.names.Count)
                                     {
                                         DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, server is full.@error");

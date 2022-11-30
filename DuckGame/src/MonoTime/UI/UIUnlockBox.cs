@@ -38,7 +38,7 @@ namespace DuckGame
             _font = new BitmapFont("biosFontUI", 8, 7);
             _fancyFont = new FancyBitmapFont("smallFont");
             _unlocks = unlocks;
-            _unlock = _unlocks.First<Unlockable>();
+            _unlock = _unlocks[0];
         }
 
         public override void Open() => base.Open();
@@ -64,7 +64,7 @@ namespace DuckGame
                         _openWait = 1f;
                         _wrapped = true;
                         _downWait = 1f;
-                        _unlock = _unlocks.First<Unlockable>();
+                        _unlock = _unlocks[0];
                         _unlocks.RemoveAt(0);
                         down = false;
                         SFX.Play("pause", 0.6f);

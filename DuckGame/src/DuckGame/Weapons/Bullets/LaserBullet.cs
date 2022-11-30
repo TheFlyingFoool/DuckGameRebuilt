@@ -46,7 +46,7 @@ namespace DuckGame
                 {
                     Vec2 pointOnArc = GetPointOnArc(index * 8);
                     DuckGame.Graphics.DrawTexturedLine((Tex2D)_beem, pointOnArc, p2, color * (1f - index / num) * alpha, ammo.bulletThickness, (Depth)0.9f);
-                    if (pointOnArc == prev.First<Vec2>())
+                    if (pointOnArc == prev[0])
                         break;
                     p2 = pointOnArc;
                     if (index == 0 && ammo.sprite != null && !doneTravelling)

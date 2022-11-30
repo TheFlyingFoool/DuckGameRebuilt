@@ -905,8 +905,7 @@ namespace DuckGame
                 {
                     _talking = true;
                     _talkLine = "";
-                    _feedLine = sayQueue.First<string>();
-                    sayQueue.RemoveAt(0);
+                    _feedLine = sayQueue[0];
                     _startFeedLine = _feedLine;
                 }
                 if (_littleManLeave)

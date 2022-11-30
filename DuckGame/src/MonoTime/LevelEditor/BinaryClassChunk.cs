@@ -112,7 +112,7 @@ namespace DuckGame
                 return default(T);
             List<object> list;
             _extraProperties.TryGetValue(id, out list);
-            return list != null ? (T)list.First<object>() : default(T);
+            return list != null ? (T)list[0] : default(T);
         }
 
         public void SetData(BitBuffer data) => SetData(data, false);

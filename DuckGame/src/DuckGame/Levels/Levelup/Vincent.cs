@@ -259,7 +259,7 @@ namespace DuckGame
                         VincentProduct vincentProduct = new VincentProduct()
                         {
                             type = VPType.Furniture,
-                            furnitureData = list2.First<Furniture>()
+                            furnitureData = list2[0];
                         };
                         vincentProduct.originalCost = vincentProduct.furnitureData.price;
                         vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 2.5);

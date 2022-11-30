@@ -73,7 +73,7 @@ namespace DuckGame
         {
             if (i.things.Count != 0)
             {
-                i.owner = i.things.First<MaterialThing>();
+                i.owner = i.things[0].First<MaterialThing>();
                 for (int index = 0; index < i.things.Count; ++index)
                 {
                     MaterialThing materialThing = i.things.ElementAt<MaterialThing>(index);

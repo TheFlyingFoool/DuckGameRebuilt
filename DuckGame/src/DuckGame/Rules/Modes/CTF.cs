@@ -159,7 +159,7 @@ namespace DuckGame
                 }
                 if (Network.isActive && Network.isServer)
                     Send.Message(new NMAssignWin(pProfiles, null));
-                ++source.First<Team>().score;
+                ++source[0].score;
             }
             return pProfiles;
         }

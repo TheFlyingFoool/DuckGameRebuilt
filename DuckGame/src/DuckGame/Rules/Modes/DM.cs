@@ -125,7 +125,7 @@ namespace DuckGame
                 }
                 if (Network.isActive && Network.isServer)
                     Send.Message(new NMAssignWin(GameMode.lastWinners, pTheRealWinnerHere));
-                ++source.First<Team>().score;
+                ++source[0].score;
             }
             return profileList;
         }

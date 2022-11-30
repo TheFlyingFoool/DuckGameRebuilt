@@ -29,12 +29,12 @@ namespace DuckGame
         {
             if (RandomLevelDownloader._readyLevels.Count == 0)
                 return null;
-            LevelData nextLevel = RandomLevelDownloader._readyLevels.First<LevelData>();
+            LevelData nextLevel = RandomLevelDownloader._readyLevels[0];
             RandomLevelDownloader._readyLevels.RemoveAt(0);
             return nextLevel;
         }
 
-        public static LevelData PeekNextLevel() => RandomLevelDownloader._readyLevels.Count == 0 ? null : RandomLevelDownloader._readyLevels.First<LevelData>();
+        public static LevelData PeekNextLevel() => RandomLevelDownloader._readyLevels.Count == 0 ? null : RandomLevelDownloader._readyLevels[0];
 
         private static void Fetched(object sender, WorkshopQueryResult result)
         {

@@ -91,7 +91,7 @@ namespace DuckGame
                         {
                             if (flag)
                                 return tile1;
-                            tile2 = tiles.First<RandomLevelData>();
+                            tile2 = tiles[0];
                         }
                         else if (tile2.chance != 1f && Rando.Float(1f) > chance)
                         {

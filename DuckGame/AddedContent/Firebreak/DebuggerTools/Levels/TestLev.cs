@@ -21,7 +21,7 @@ namespace DuckGame
             // Add(new SelectionPad(spawnPlatform.width * 0.5f - 24F, spawnPlatform.top - 2f, 48, 16f));
 
             // duck
-            Add(new Duck(spawnPlatform.width * 0.5f, spawnPlatform.top, Profiles.active.First()));
+            Add(new Duck(spawnPlatform.width * 0.5f, spawnPlatform.top, Profiles.active[0]));
 
             base.Initialize();
         }

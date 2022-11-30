@@ -27,12 +27,12 @@ namespace DuckGame
         {
             if (RandomChallengeDownloader._readyChallenges.Count == 0)
                 return null;
-            LevelData nextChallenge = RandomChallengeDownloader._readyChallenges.First<LevelData>();
+            LevelData nextChallenge = RandomChallengeDownloader._readyChallenges[0];
             RandomChallengeDownloader._readyChallenges.RemoveAt(0);
             return nextChallenge;
         }
 
-        public static LevelData PeekNextChallenge() => RandomChallengeDownloader._readyChallenges.Count == 0 ? null : RandomChallengeDownloader._readyChallenges.First<LevelData>();
+        public static LevelData PeekNextChallenge() => RandomChallengeDownloader._readyChallenges.Count == 0 ? null : RandomChallengeDownloader._readyChallenges[0];
 
         private static void Fetched(object sender, WorkshopQueryResult result)
         {
