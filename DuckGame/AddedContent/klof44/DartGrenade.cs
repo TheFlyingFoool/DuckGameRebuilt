@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt")]
+    [EditorGroup("Rebuilt|Guns")]
     internal class DartGrenade : Gun // All this code is taken from normal grenades but changed as to not create shrapnel
     {
         public StateBinding _timerBinding = new StateBinding(nameof(_timer));
@@ -102,8 +102,8 @@ namespace DuckGame
                                 float fireAngle = (index * 45);
                                 Dart dart = new Dart(x + (float)(Math.Cos(Maths.DegToRad(fireAngle)) * 15.0), y - (float)(Math.Sin(Maths.DegToRad(fireAngle)) * 15.0), owner as Duck, fireAngle);
                                 Vec2 vec = Maths.AngleToVec(fireAngle);
-                                dart.hSpeed = vec.x * 10f;
-                                dart.vSpeed = vec.y * 10f;
+                                dart.hSpeed = vec.x * 14f;
+                                dart.vSpeed = vec.y * 14f;
                                 Level.Add(dart);
                             }
                         }

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt")]
+    [EditorGroup("Rebuilt|Stuff")]
     public class PinkBox : Block
     {
         public bool canBounce

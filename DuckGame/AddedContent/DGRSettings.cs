@@ -127,7 +127,19 @@ namespace DuckGame
         }
         [AutoConfigField]
         public static bool S_GraphicsCulling = true;
-
+        public int StartIn
+        {
+            get
+            {
+                return S_StartIn;
+            }
+            set
+            {
+                S_StartIn = value;
+            }
+        }
+        [AutoConfigField]
+        public static int S_StartIn = 0;
         public float WeatherLighting
         {
             get

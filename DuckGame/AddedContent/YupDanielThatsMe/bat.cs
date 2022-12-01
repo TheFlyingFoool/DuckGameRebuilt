@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace DuckGame
 {
-    [EditorGroup("Guns|Melee")] //idk man ill come back here later im rusty with making items
+    //[EditorGroup("Guns|Melee")] //idk man ill come back here later im rusty with making items
     [ClientOnly]
     public class Bat : Gun
     {

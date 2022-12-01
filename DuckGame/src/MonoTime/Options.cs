@@ -399,7 +399,17 @@ namespace DuckGame
             }, true);
             menu.Add(new UIMenuItemToggle("Dubber speed", field: new FieldBinding(dGRSettings, "dubberspeed"))
             {
-                dgrDescription = "For true vim users, adds keybinds from 1-9\n     for faster menu browsing"
+                dgrDescription = "For true vim users, adds keybinds from 1-9\n       for faster menu browsing"
+            }, true);
+            menu.Add(new UIMenuItemNumber("Start in", field: new FieldBinding(dGRSettings, "StartIn", 0, 3), valStrings: new List<string>
+            {
+                "TITLE",
+                "LOBBY",
+                "EDITOR",
+                "ARCADE"
+            })
+            {
+                dgrDescription = "When starting up the game you'll\n  spawn into the selected level"
             }, true);
 
 

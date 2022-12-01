@@ -190,6 +190,7 @@ namespace DuckGame
         private Timer _timeSinceLastLoadFrame = new Timer();
         public static bool logLoading;
         public static bool startInLobby = false;
+        public static bool startInArcade = false;
         //private int deviceLostWait;
 
         public static MonoMainCore core

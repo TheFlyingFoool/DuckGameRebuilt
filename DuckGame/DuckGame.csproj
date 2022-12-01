@@ -276,6 +276,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaser.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaserBullet.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpTeleporter.cs" />
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
     <Compile Include="AddedContent\NiK0\RoomEditorExtra.cs" />

@@ -15,19 +15,19 @@ namespace DuckGame
     public class Teleporter : MaterialThing
     {
         public List<WarpLine> warpLines = new List<WarpLine>();
-        private Sprite _bottom;
-        private Sprite _top;
-        private SinWaveManualUpdate _pulse = (SinWaveManualUpdate)0.1f;
-        private SinWaveManualUpdate _float = (SinWaveManualUpdate)0.2f;
-        private Sprite _arrow;
+        protected Sprite _bottom;
+        protected Sprite _top;
+        protected SinWaveManualUpdate _pulse = (SinWaveManualUpdate)0.1f;
+        protected SinWaveManualUpdate _float = (SinWaveManualUpdate)0.2f;
+        protected Sprite _arrow;
         public Teleporter _link;
-        public EditorProperty<bool> noduck = new EditorProperty<bool>(false);
+        public EditorProperty<bool> noduck;
         public EditorProperty<int> teleHeight;
         public EditorProperty<bool> horizontal;
-        private Sprite _warpLine;
-        private bool _initLinks;
-        private List<ITeleport> _teleporting = new List<ITeleport>();
-        private List<ITeleport> _teleported = new List<ITeleport>();
+        public Sprite _warpLine;
+        protected bool _initLinks;
+        protected List<ITeleport> _teleporting = new List<ITeleport>();
+        public List<ITeleport> _teleported = new List<ITeleport>();
         public Vec2 _dir;
         public int direction;
         public bool newVersion = true;
@@ -41,6 +41,7 @@ namespace DuckGame
             {
                 name = "height"
             };
+            noduck = new EditorProperty<bool>(false, this);
             horizontal = new EditorProperty<bool>(false, this);
             center = new Vec2(8f, 24f);
             collisionSize = new Vec2(6f, 32f);
@@ -59,9 +60,26 @@ namespace DuckGame
             _placementCost += 2;
         }
 
-        public override void EditorPropertyChanged(object property) => UpdateHeight();
+        public override void EditorPropertyChanged(object property)
+        {
+            UpdateHeight();
+            if (noduck.value)
+            {
+                _bottom = new Sprite("littleTeleBottom");
+                _bottom.CenterOrigin();
+                _top = new Sprite("littleTeleTop");
+                _top.CenterOrigin();
+            }
+            else
+            {
+                _bottom = new Sprite("teleporterBottom");
+                _bottom.CenterOrigin();
+                _top = new Sprite("teleporterTop");
+                _top.CenterOrigin();
+            }
+        }
 
-        private void UpdateHeight()
+        protected void UpdateHeight()
         {
             if ((bool)horizontal)
             {
@@ -315,7 +333,11 @@ namespace DuckGame
             }
             warpLines.RemoveAll(v => v.lerp >= 1.0);
         }
-
+        //REBUILT STUFF
+        public void BasedDraw()
+        {
+            base.Draw();
+        }
         public override void Draw()
         {
             base.Draw();

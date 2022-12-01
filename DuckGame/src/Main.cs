@@ -179,6 +179,15 @@ namespace DuckGame
                         }
                         Level.current = new TeamSelect2();
                     }
+                    else if (MonoMain.startInArcade)
+                    {
+                        new TitleScreen().Initialize();
+                        for (int i = 1; i < Teams.all.Count; i++)
+                        {
+                            Teams.all[i].ClearProfiles();
+                        }
+                        Level.current = new ArcadeLevel(DuckGame.Content.GetLevelID("arcade", LevelLocation.Content));
+                    }
                     else if (!Program.intro || MonoMain.noIntro)
                     {
                         Level.current = (new TitleScreen());

@@ -49,7 +49,7 @@ namespace DuckGame
             else lastCrouch = false;
             if (awesome)
             {
-                _ammoType.range = infiniteAmmoVal ? 400 : 200;
+                _ammoType.range = infiniteAmmoVal ? 400 : 150;
                 _ammoType.penetration = 10;
                 _ammoType.bulletThickness = 3;
                 _ammoType.bulletSpeed = 96;
@@ -58,7 +58,7 @@ namespace DuckGame
             else
             {
                 _ammoType.bulletThickness = 1;
-                _ammoType.range = infiniteAmmoVal ? 800 : 400;
+                _ammoType.range = infiniteAmmoVal ? 800 : 300;
                 _ammoType.penetration = 5;
                 _ammoType.bulletSpeed = 48;
                 _kickForce = 3;
