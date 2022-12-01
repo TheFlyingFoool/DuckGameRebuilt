@@ -31,7 +31,7 @@ git clone https://www.github.com/nikled/duckgames
 
 * Find the repo folder and launch the .sln file
 
-* In `C:\Program Files (x86)\Steam\steamapps\common`: Do `ctrl+A` to select all files, then deselect `DuckGame.exe` by holding `ctrl` and left clicking the file, then copy the files with ctrl+C. Then, in `DuckGames\bin` paste the files with `ctrl+V`
+* In `C:\Program Files (x86)\Steam\steamapps\common\Duck Game`: Do `ctrl+A` to select all files, then deselect `DuckGame.exe` by holding `ctrl` and left clicking the file, then copy the files with ctrl+C. Then, in `DuckGames\bin` paste the files with `ctrl+V`
 
 * Build the project
 ```
