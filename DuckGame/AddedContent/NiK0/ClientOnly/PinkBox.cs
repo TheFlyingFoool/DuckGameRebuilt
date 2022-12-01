@@ -181,11 +181,13 @@ namespace DuckGame
                 }
                 if (D.dead)
                 {
-                    UnstoppableFondle(D, DuckNetwork.localConnection);
                     Fondle(this);
+                    UnstoppableFondle(D, DuckNetwork.localConnection);
                     D.position = position;
                     D.Ressurect();
+                    D.dead = false;
                     D.position = position;
+                    UnstoppableFondle(D, DuckNetwork.localConnection);
                     Explode();
                 }
                 lD = D;
