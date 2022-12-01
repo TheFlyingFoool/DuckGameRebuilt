@@ -1567,7 +1567,7 @@ namespace DuckGame
 				{
 					loaded = 1f;
 				}
-                Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.White * 0.1f, (Depth)0.6f);
+                Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Red, (Depth)0.6f);
                 if (Debugger.IsAttached)
                 {
                     if (!loadMessage.StartsWith("|16,144,13|"))

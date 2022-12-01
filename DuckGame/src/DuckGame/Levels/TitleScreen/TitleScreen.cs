@@ -271,6 +271,7 @@ namespace DuckGame
             AddCreditLine("Dan");
             AddCreditLine("Collin");
             AddCreditLine("|RED|Fire|WHITE|break|CREDITSGRAY|");
+            AddCreditLine("|BLACK|Erik|GRAY|7302");
             AddCreditLine("Landon Podbielski");
             AddCreditLine("|DGBLUE|othello|PURPLE|7");
             AddCreditLine("|GREEN|klof44|CREDITSGRAY|");
