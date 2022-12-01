@@ -314,6 +314,12 @@ namespace DuckGame
                     //    modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
                     //    mod = new DisabledMod();
                     //}
+                    else if (modConfig.workshopID == 2758180905UL) // Bug Fixes harmony issue patching menu elements stuff
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
+                        mod = new DisabledMod();
+                    }
                     else if (modConfig.workshopID == 267491120UL) // BROWSE GAMES+ has a harmony resolve issue with remapper, but also scuffed issues that exist sepreatly
                     {
                         modConfig.Disable();
