@@ -5,6 +5,8 @@ Duck Game Rebuilt is a decompilation of Duck Game source with massive improvemen
 
 🖥️ To view hardware and software compatibility check the [wiki](https://github.com/TheFlyingFoool/DuckGameRebuilt/wiki/Architectures-and-Devices)
 
+### Make sure to join the [Discord](https://discord.gg/XkAjt744hz)!
+
 ## Installation
 
 📥 For average users go to the [releases](https://github.com/TheFlyingFoool/DuckGameRebuilt/releases) page and download the latest release.
