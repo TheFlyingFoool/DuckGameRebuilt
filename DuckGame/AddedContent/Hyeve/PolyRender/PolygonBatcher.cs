@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using DuckGame.AddedContent.Drake.Utils;
+using AddedContent.Hyeve.Utils;
+using DuckGame;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Color = DuckGame.Color;
+using Matrix = DuckGame.Matrix;
+using Rectangle = DuckGame.Rectangle;
 
-namespace DuckGame.AddedContent.Drake.PolyRender
+namespace AddedContent.Hyeve.PolyRender
 {
 
     public sealed class PolygonBatcher : IDisposable
@@ -101,7 +105,12 @@ namespace DuckGame.AddedContent.Drake.PolyRender
         /// Pre-Multiplied alpha is where the colour channels are multiplied by the alpha channel before being drawn,
         /// which allows the rasterizer to skip some of the calculations needed for blending
         /// </summary>
-        public BlendState BlendState { set => _device.BlendState = value; }
+        public BlendState BlendState
+        {
+            set => _device.BlendState = value;
+            get => _device.BlendState;
+        }
+    
         public Texture2D Texture
         {
             set

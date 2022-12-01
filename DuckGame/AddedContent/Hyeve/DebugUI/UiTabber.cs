@@ -1,27 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using DuckGame.AddedContent.Drake.PolyRender;
-using DuckGame.AddedContent.Drake.Utils;
+using AddedContent.Hyeve.PolyRender;
+using AddedContent.Hyeve.Utils;
+using DuckGame;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Color = DuckGame.Color;
+using Rectangle = DuckGame.Rectangle;
 
-namespace DuckGame.AddedContent.Drake.DebugUI
+namespace AddedContent.Hyeve.DebugUI
 {
     public class UiTabber : UiList
     {
-        protected IAmUi _currentTab;
+        protected IAmUi CurrentTab;
+
+        protected int CharSize;
 
         public override Vector4 Expansion => new Vector4(0f, InteractBarSize.Y + _accentLineWidth, 0f, 0f);
 
-        public UiTabber(Vector2 position, Vector2 size, Color color, List<IAmUi> content, string name = "UiList") : base(position, size, color, content, name)
+        public UiTabber(Vector2 position, Vector2 size, Color color, List<IAmUi> content, string name = "UiList", float scale = 1f) : base(position, size, color, content, name, scale)
         {
-            _currentTab = content.Count > 0 ? content[0] : null;
+            CurrentTab = content.Count > 0 ? content[0] : null;
+            CharSize = (int)(4 * scale);
         }
 
         protected override void ArrangeContent()
         {
-            if (SubContent.Count <= 0) _currentTab = null;
-            if (_currentTab == null && SubContent.Count > 0) _currentTab = SubContent[0];
-            if (_currentTab == null) return;
+            if (SubContent.Count <= 0) CurrentTab = null;
+            if (CurrentTab == null && SubContent.Count > 0) CurrentTab = SubContent[0];
+            if (CurrentTab == null) return;
 
             Vector2 subContentPosition = Position + InteractBarSize.ZeroX() + Padding + new Vector2(0f, -_scrollOffset);
             foreach (IAmUi ui in SubContent)
@@ -29,7 +36,7 @@ namespace DuckGame.AddedContent.Drake.DebugUI
                 ui.Position = subContentPosition + ui.Expansion.XY();
                 ui.Size = ui.Size.ReplaceX(Size.X - Padding.X * 2 - ui.Expansion.Y - ui.Expansion.Z);
             }
-            _maxScrollOffset = Math.Max(_currentTab.Size.Y + _currentTab.Expansion.Y + _currentTab.Expansion.W + Padding.Y * 2f - Size.Y, _scrollOffset);
+            _maxScrollOffset = Math.Max(CurrentTab.Size.Y + CurrentTab.Expansion.Y + CurrentTab.Expansion.W + Padding.Y * 2f - Size.Y, _scrollOffset);
             ContentChanged = false;
         }
 
@@ -42,7 +49,7 @@ namespace DuckGame.AddedContent.Drake.DebugUI
         protected override void DrawSubContent()
         {
             Graphics.polyBatcher.PushScissor(CalcScissor());
-            _currentTab?.DrawContent();
+            CurrentTab?.DrawContent();
             Graphics.polyBatcher.PopScissor();
         }
 
@@ -59,13 +66,15 @@ namespace DuckGame.AddedContent.Drake.DebugUI
 
         protected virtual void DrawTab(Vector2 pos, float width, IAmUi ui)
         {
-            Vector2 off = new Vector2(InteractBarSize.Y / 5f, 0f);
-            Vector2 size = new Vector2(width, InteractBarSize.Y);
+            Vector2 off = new(InteractBarSize.Y / 5f, 0f);
+            Vector2 size = new(width, InteractBarSize.Y);
             Color col = ui.GetCol(UiCols.Main);
-            if (ui == _currentTab) col = col.Brighter();
+            if (ui == CurrentTab) col = col.Brighter();
             PolyRenderer.Quad(pos - size.ZeroX() + off, pos + size.NegateY() - off, pos, pos + size.ZeroY(), col);
 
-            StaticFont.DrawStringSized("$B" + ui.Name, pos - size.ZeroX() + off, Color.Black, 4);
+            Graphics.polyBatcher.PushScissor(new Rectangle(pos - size.ZeroX() + off, pos + size.ZeroY() - off));
+            FontDatabase.DrawString("$B" + ui.Name, pos + off, Color.White, CharSize);
+            Graphics.polyBatcher.PopScissor();
         }
 
         protected override void HandleClicked(MouseAction action)
@@ -75,25 +84,25 @@ namespace DuckGame.AddedContent.Drake.DebugUI
             if (!InputData.MouseProjectedPosition.IsInsideRect(Position - new Vector2(0f, InteractBarSize.Y), new Vector2(Size.X, InteractBarSize.Y))) return;
             float offset = InputData.MouseProjectedPosition.X - Position.X;
             int index = (int)((offset / Size.X) * SubContent.Count);
-            _currentTab = SubContent[index];
+            CurrentTab = SubContent[index];
             ArrangeContent();
         }
 
         protected override void SendSubContentMouseAction(MouseAction action, float scroll = 0)
         {
-            if ((action & MouseAction.AnyClick) != 0 || action == MouseAction.Scrolled && _currentTab.IsOverlapping(InputData.MouseProjectedPosition)) _currentTab?.OnMouseAction(action, scroll);
-            else _currentTab?.OnMouseAction(action, scroll);
+            if ((action & MouseAction.AnyClick) != 0 || action == MouseAction.Scrolled && CurrentTab.IsOverlapping(InputData.MouseProjectedPosition)) CurrentTab?.OnMouseAction(action, scroll);
+            else CurrentTab?.OnMouseAction(action, scroll);
         }
 
         protected override void SendSubContentKeyPressed(Keys keycode, char value)
         {
-            _currentTab?.OnKeyPressed(keycode, value);
+            CurrentTab?.OnKeyPressed(keycode, value);
         }
 
         protected override void OnSubContentKilled(IAmUi subContent)
         {
             base.OnSubContentKilled(subContent);
-            _currentTab = SubContent.Count > 0 ? SubContent[0] : null;
+            CurrentTab = SubContent.Count > 0 ? SubContent[0] : null;
         }
     }
 }

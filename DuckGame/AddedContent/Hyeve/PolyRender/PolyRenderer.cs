@@ -1,9 +1,12 @@
 ﻿using System.Linq;
-using DuckGame.AddedContent.Drake.Utils;
+using AddedContent.Hyeve.Utils;
+using DuckGame;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Color = DuckGame.Color;
+using Rectangle = DuckGame.Rectangle;
 
-namespace DuckGame.AddedContent.Drake.PolyRender
+namespace AddedContent.Hyeve.PolyRender
 {
     public static class PolyRenderer
     {

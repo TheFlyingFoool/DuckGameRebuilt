@@ -24,6 +24,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
+using AddedContent.Hyeve;
 
 namespace DuckGame
 {
@@ -1480,6 +1481,7 @@ namespace DuckGame
             Graphics.frameFlipFlop = !Graphics.frameFlipFlop;
             if (Graphics.device.IsDisposed)
                 return;
+
             Graphics.SetScissorRectangle(new Rectangle(0f, 0f, Graphics.width, Graphics.height));
             if (Recorder.currentRecording != null)
                 Recorder.currentRecording.NextFrame();
@@ -1655,6 +1657,8 @@ namespace DuckGame
                 }
                 if (Graphics.screenTarget != null)
                 {
+                    RenderDelegates.BeforeScreen?.Invoke();
+                    
                     int width = Graphics.width;
                     int height = Graphics.height;
                     Graphics.SetRenderTarget(Graphics.screenTarget);
@@ -1671,6 +1675,8 @@ namespace DuckGame
                     Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
                     Graphics.Draw(Graphics.screenTarget, Vec2.Zero, new Rectangle?(), Color.White, 0f, Vec2.Zero, Vec2.One, SpriteEffects.None);
                     Graphics.screen.End();
+                    
+                    RenderDelegates.AfterScreen?.Invoke();
                 }
                 else
                 {

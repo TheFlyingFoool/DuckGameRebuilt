@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
+using DuckGame;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.Utils
+namespace AddedContent.Hyeve.Utils
 {
     public static class VectorMath
     {
@@ -146,97 +147,45 @@ namespace DuckGame.AddedContent.Drake.Utils
                    point.Y < (rectOrigin + rectSize).Y;
         }
 
-        private static Vector2 _negateX = new Vector2(-1, 1);
-        private static Vector2 _negateY = new Vector2(1, -1);
+        private static readonly Vector2 _negateX = new Vector2(-1, 1);
+        private static readonly Vector2 _negateY = new Vector2(1, -1);
 
-        public static Vector2 NegateX(this Vector2 self)
-        {
-            return self * _negateX;
-        }
+        public static Vector2 NegateX(this Vector2 self) => self * _negateX;
 
-        public static Vector2 NegateY(this Vector2 self)
-        {
-            return self * _negateY;
-        }
+        public static Vector2 NegateY(this Vector2 self) => self * _negateY;
 
-        public static Vector2 ZeroX(this Vector2 self)
-        {
-            return new Vector2(0f, self.Y);
-        }
+        public static Vector2 ZeroX(this Vector2 self) => new Vector2(0f, self.Y);
 
-        public static Vector2 ZeroY(this Vector2 self)
-        {
-            return new Vector2(self.X, 0f);
-        }
+        public static Vector2 ZeroY(this Vector2 self) => new Vector2(self.X, 0f);
 
-        public static Vector2 ReplaceX(this Vector2 self, float x)
-        {
-            return new Vector2(x, self.Y);
-        }
+        public static Vector2 ReplaceX(this Vector2 self, float x) => new Vector2(x, self.Y);
 
-        public static Vector2 ReplaceY(this Vector2 self, float y)
-        {
-            return new Vector2(self.X, y);
-        }
+        public static Vector2 ReplaceY(this Vector2 self, float y) => new Vector2(self.X, y);
 
-        public static Vector2 SubtractX(this Vector2 self, float amount)
-        {
-            return new Vector2(self.X - amount, self.Y);
-        }
+        public static Vector2 SubtractX(this Vector2 self, float amount) => new Vector2(self.X - amount, self.Y);
 
-        public static Vector2 SubtractY(this Vector2 self, float amount)
-        {
-            return new Vector2(self.X, self.Y - amount);
-        }
+        public static Vector2 SubtractY(this Vector2 self, float amount) => new Vector2(self.X, self.Y - amount);
 
-        public static Vector2 AddX(this Vector2 self, float amount)
-        {
-            return new Vector2(self.X + amount, self.Y);
-        }
+        public static Vector2 AddX(this Vector2 self, float amount) => new Vector2(self.X + amount, self.Y);
 
-        public static Vector2 AddY(this Vector2 self, float amount)
-        {
-            return new Vector2(self.X, self.Y + amount);
-        }
+        public static Vector2 AddY(this Vector2 self, float amount) => new Vector2(self.X, self.Y + amount);
 
-        public static Vector2 MultiplyX(this Vector2 self, float amount)
-        {
-            return new Vector2(self.X * amount, self.Y);
-        }
+        public static Vector2 MultiplyX(this Vector2 self, float amount) => new Vector2(self.X * amount, self.Y);
 
-        public static Vector2 MultiplyY(this Vector2 self, float amount)
-        {
-            return new Vector2(self.X, self.Y * amount);
-        }
+        public static Vector2 MultiplyY(this Vector2 self, float amount) => new Vector2(self.X, self.Y * amount);
 
-        public static Vector2 XX(this Vector2 self)
-        {
-            return new Vector2(self.X, self.X);
-        }
+        public static Vector2 XX(this Vector2 self) => new Vector2(self.X, self.X);
 
-        public static Vector2 YY(this Vector2 self)
-        {
-            return new Vector2(self.Y, self.Y);
-        }
+        public static Vector2 YY(this Vector2 self) => new Vector2(self.Y, self.Y);
 
-        public static Vector2 XY(this Vec3 self)
-        {
-            return new Vector2(self.x, self.y);
-        }
+        public static Vector2 XY(this Vec3 self) => new Vector2(self.x, self.y);
 
-        public static Vector2 XY(this Vector3 self)
-        {
-            return new Vector2(self.X, self.Y);
-        }
+        public static Vector2 XY(this Vector3 self) => new Vector2(self.X, self.Y);
 
-        public static Vector2 XY(this Vector4 self)
-        {
-            return new Vector2(self.X, self.Y);
-        }
+        public static Vector2 XY(this Vector4 self) => new Vector2(self.X, self.Y);
 
-        public static Vector2 ZW(this Vector4 self)
-        {
-            return new Vector2(self.Z, self.W);
-        }
+        public static Vector2 ZW(this Vector4 self) => new (self.Z, self.W);
+
+        public static Vector2 Rounded(this Vector2 self) => new((float)Math.Round(self.X), (float)Math.Round(self.Y));
     }
 }

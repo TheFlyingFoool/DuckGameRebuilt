@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
-using DuckGame.AddedContent.Drake.Utils;
+using AddedContent.Hyeve.Utils;
+using DuckGame;
 using Microsoft.Xna.Framework;
+using Color = DuckGame.Color;
+using Rectangle = DuckGame.Rectangle;
 
-namespace DuckGame.AddedContent.Drake.DebugUI
+namespace AddedContent.Hyeve.DebugUI
 {
     public class UiGroup : UiBasic
     {
@@ -14,7 +17,7 @@ namespace DuckGame.AddedContent.Drake.DebugUI
 
         protected virtual bool DrawSelf { get => false; }
 
-        public UiGroup(Vector2 position, Vector2 size, Color color, List<IAmUi> content, string name = "UiGroup") : base(position, size, color, name)
+        public UiGroup(Vector2 position, Vector2 size, Color color, List<IAmUi> content, string name = "UiGroup", float scale = 1f) : base(position, size, color, name, scale)
         {
             foreach (IAmUi ui in content) AddContent(ui);
         }

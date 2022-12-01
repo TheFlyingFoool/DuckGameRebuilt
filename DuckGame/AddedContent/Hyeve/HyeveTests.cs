@@ -1,28 +1,47 @@
 ﻿using System.Collections.Generic;
-using DuckGame.AddedContent.Drake.DebugUI;
-using DuckGame.AddedContent.Drake.PolyRender;
-using DuckGame.AddedContent.Drake.Utils;
+using AddedContent.Hyeve.DebugUI;
+using AddedContent.Hyeve.PolyRender;
+using AddedContent.Hyeve.Utils;
+using DuckGame;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Color = DuckGame.Color;
+using RenderTarget2D = DuckGame.RenderTarget2D;
 
-namespace DuckGame.AddedContent.Drake
+namespace AddedContent.Hyeve
 {
-    public static class DrakeTests
+    public static class HyeveTests
     {
 
         private static UiBasic testUI;
 
         private static RenderTarget2D target = new(Graphics.viewport.Width, Graphics.viewport.Height, false, false, 8, RenderTargetUsage.DiscardContents);
 
-        static DrakeTests()
+        static HyeveTests()
         {
-            UiTabber ui = new UiTabber(Vector2.One * 80, Vector2.One * 50, Color.Coral, new List<IAmUi>());
+            RegenUI();
+        }
+
+        private static bool _uiDead = false;
+
+        private static void OnUiKilled(IAmUi ui)
+        {
+            _uiDead = true;
+        }
+
+        private static void RegenUI()
+        {
+            FontDatabase.GenerateFontSize(20);
+            UiTabber ui = new(Vector2.One * 80, Vector2.One * 50, Color.Coral, new List<IAmUi>(), "name", 5f);
             for (int i = 0; i < 3; i++)
             {
-                UiList subUi = new UiList(Vector2.Zero, Vector2.One * 30, Color.Coral, new List<IAmUi>());
-                subUi.Draggable = Rando.Int(10) > 3;
-                subUi.Closeable = Rando.Int(10) > 3;
-                subUi.Resizeable = true;
+                UiList subUi = new(Vector2.Zero, Vector2.One * 30, Color.Coral, new List<IAmUi>(), "name", 5f)
+                {
+                    Draggable = Rando.Int(10) > 3,
+                    Closeable = Rando.Int(10) > 3,
+                    Resizeable = true
+                };
+                
                 ui.AddContent(subUi);
             }
 
@@ -33,18 +52,13 @@ namespace DuckGame.AddedContent.Drake
             testUI.OnKilled += OnUiKilled;
         }
 
-        private static bool uiDead = false;
-
-        private static void OnUiKilled(IAmUi ui)
-        {
-            uiDead = true;
-        }
-
 
         [DrawingContext(DrawingLayer.HUD, DoDraw = false)]
         public static void PolyDrawTest()
         {
-            if (uiDead) return;
+            if (_uiDead) return;
+            
+            if(InputData.KeyPressed(Keys.F10)) RegenUI();
 
             if (target.width != Graphics.viewport.Width || target.height != Graphics.viewport.Height)
             {
@@ -58,14 +72,12 @@ namespace DuckGame.AddedContent.Drake
 
 
             Graphics.mouseVisible = true;
-            Graphics.polyBatcher.BlendState = BlendState.NonPremultiplied;
+            Graphics.polyBatcher.BlendState = BlendState.AlphaBlend;
+            Graphics.device.SamplerStates[0] = SamplerState.AnisotropicClamp;
             Graphics.polyBatcher.ScissorMode = ScissorStackMode.Intersect;
             Graphics.polyBatcher.SetScreenView();
 
-            //if(Graphics.frame % 240 == 0) testUI.SetCol(UiCols.Main, Color.Random());
-            //if (Graphics.frame % 300 == 0) testUI.SetCol(UiCols.Alternate, Color.RandomGray(0, 100));
-
-            ((UiList)testUI).Padding = new Vector2(2f, 2f);
+            
             testUI.UpdateContent();
             testUI.DrawContent();
 
@@ -76,20 +88,18 @@ namespace DuckGame.AddedContent.Drake
             DevConsole.Log(InputData.MouseProjectedPosition);
 
             Graphics.SetRenderTarget(Graphics.defaultRenderTarget);
-            float xscale = Graphics.currentLayer.width / Graphics.viewport.Width;
-            float yscale = Graphics.currentLayer.height / Graphics.viewport.Height;
-            Graphics.Draw(target, 0, 0, xscale, yscale);
+            
+            Graphics.polyBatcher.Texture = target;
+            PolyRenderer.TexRect(Vector2.Zero, InputData.ViewportSize);
+            Graphics.polyBatcher.Texture = null;
         }
 
 
         [DrawingContext(DrawingLayer.HUD, DoDraw = false)]
         public static void TexTest()
         {
-            Graphics.polyBatcher.BlendState = BlendState.NonPremultiplied;
-            Graphics.device.SamplerStates[0] = SamplerState.AnisotropicClamp;
-            Graphics.polyBatcher.SetScreenView();
-            PolyRenderer.Rect(Vector2.One * 50, Vector2.One * 250, Color.PaleTurquoise);
-            StaticFont.DrawString("XYZ:", Vector2.One * 150, Color.Blue);
+            PolyRenderer.Rect(Vector2.Zero, Vector2.One * 50, Color.Aqua);
+            FontDatabase.DrawString("G", Vector2.One * 30, Color.White, 35);
         }
     }
 }

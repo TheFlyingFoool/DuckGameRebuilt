@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using AddedContent.Hyeve;
 
 namespace DuckGame
 {
@@ -892,7 +893,9 @@ namespace DuckGame
                 toDifferentLayers.OnDrawLayer(layer);
 
             DrawingContextAttribute.ExecuteAll(DrawingContextAttribute.DrawingLayerFromLayer(layer));
-
+            RenderDelegates.Layers.InvokeFor(layer);
+            
+            
             if (layer == Layer.Console)
             {
                 DevConsole.Draw();

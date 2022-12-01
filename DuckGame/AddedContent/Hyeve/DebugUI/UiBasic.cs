@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using DuckGame.AddedContent.Drake.PolyRender;
-using DuckGame.AddedContent.Drake.Utils;
+using AddedContent.Hyeve.PolyRender;
+using AddedContent.Hyeve.Utils;
+using DuckGame;
 using Microsoft.Xna.Framework;
+using Color = DuckGame.Color;
+using Rectangle = DuckGame.Rectangle;
 
-namespace DuckGame.AddedContent.Drake.DebugUI
+namespace AddedContent.Hyeve.DebugUI
 {
     public class UiBasic : IAmUi
     {
@@ -109,17 +112,19 @@ namespace DuckGame.AddedContent.Drake.DebugUI
         private Vector2 _originalSize;
         private Vector2 _originalPosition;
         private Vector2 _mouseOffset;
-        protected float _accentLineWidth = 0.4f;
+        protected float _accentLineWidth;
 
         protected readonly Dictionary<UiCols, Color> Colors = new();
 
-        public UiBasic(Vector2 position, Vector2 size, Color color, string name = "UiBasic")
+        public UiBasic(Vector2 position, Vector2 size, Color color, string name = "UiBasic", float scale = 1f)
         {
+            size *= scale;
             PositionInternal = position;
-            InteractBarSize = new Vector2(size.X, 3f);
+            InteractBarSize = new Vector2(size.X, 3f * scale);
             MinSize = InteractBarSize.YY() * 5f;
             MaxSize = new Vector2(float.PositiveInfinity);
             SizeInternal = size;
+            _accentLineWidth = 0.4f * scale;
             SetColInternal(UiCols.Main, color);
             SetColInternal(UiCols.Alternate, new Color(30, 30, 30));
             Draggable = true;
@@ -265,14 +270,14 @@ namespace DuckGame.AddedContent.Drake.DebugUI
 
         protected virtual void DoDragging()
         {
-            PositionInternal = Vector2.Clamp(InputData.MouseProjectedPosition, InputData.CurrentLayerScreenMin + _mouseOffset, InputData.CurrentLayerScreenMax - (Size - _mouseOffset)) - _mouseOffset;
+            PositionInternal = Vector2.Clamp(InputData.MouseProjectedPosition, _mouseOffset, InputData.ViewportSize - (Size - _mouseOffset)) - _mouseOffset;
         }
         protected virtual void DoResizing()
         {
             Vector2 mouseDiff = Vector2.Clamp(
                                     InputData.MouseProjectedPosition,
-                                    InputData.CurrentLayerScreenMin + _mouseOffset.ZeroX(),
-                                    InputData.CurrentLayerScreenMax - _originalSize.SubtractX(_mouseOffset.X).ReplaceY(_mouseOffset.Y)
+                                    _mouseOffset.ZeroX(),
+                                    InputData.ViewportSize - _originalSize.SubtractX(_mouseOffset.X).ReplaceY(_mouseOffset.Y)
                                     ) - _mouseOffset;
 
             PositionInternal = new Vector2(_originalPosition.X, Math.Min(_originalPosition.Y + _originalSize.Y - MinSize.Y, mouseDiff.Y));

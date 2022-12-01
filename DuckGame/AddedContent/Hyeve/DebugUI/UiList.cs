@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DuckGame.AddedContent.Drake.Utils;
+using AddedContent.Hyeve.Utils;
+using DuckGame;
 using Microsoft.Xna.Framework;
+using Color = DuckGame.Color;
+using Rectangle = DuckGame.Rectangle;
 
-namespace DuckGame.AddedContent.Drake.DebugUI
+namespace AddedContent.Hyeve.DebugUI
 {
     public class UiList : UiGroup
     {
@@ -24,9 +27,9 @@ namespace DuckGame.AddedContent.Drake.DebugUI
         protected float _maxScrollOffset;
         protected float _scrollOffset = 0f;
 
-        public UiList(Vector2 position, Vector2 size, Color color, List<IAmUi> content, string name = "UiList") : base(position, size, color, content, name)
+        public UiList(Vector2 position, Vector2 size, Color color, List<IAmUi> content, string name = "UiList", float scale = 1f) : base(position, size, color, content, name, scale)
         {
-            Padding = new Vector2(2f);
+            Padding = new Vector2(2f) * scale;
             Resizeable = false;
             ArrangeContent();
             OnKilled += HandleDeath;

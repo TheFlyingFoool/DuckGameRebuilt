@@ -5,9 +5,15 @@ using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Linq;
 using System.Runtime.InteropServices;
+using AddedContent.Hyeve.Utils;
+using DuckGame;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Blend = Microsoft.Xna.Framework.Graphics.Blend;
+using Color = DuckGame.Color;
+using Graphics = DuckGame.Graphics;
 
-namespace DuckGame.AddedContent.Drake.PolyRender
+namespace AddedContent.Hyeve.PolyRender
 {
     public class AtlasedFont
     {
@@ -16,13 +22,13 @@ namespace DuckGame.AddedContent.Drake.PolyRender
 
         private Vector2 _charBounds;
 
-        private CharData[] _regularData;
+        public CharData[] _regularData;
         private CharData[] _boldData;
         private CharData[] _italicsData;
         private CharData[] _underlineData;
         private CharData[] _strikethroughData;
 
-        private Tex2D _regularAtlas;
+        public Tex2D _regularAtlas;
         private Tex2D _boldAtlas;
         private Tex2D _italicsAtlas;
         private Tex2D _underlineAtlas;
@@ -55,6 +61,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
         private void DrawStringInternal(string text, Vector2 pos, Color col, float scale, float margin, bool formatting)
         {
             Graphics.polyBatcher.Texture = _regularAtlas;
+            Graphics.polyBatcher.BlendState.AlphaDestinationBlend = Blend.One;
             CharData[] charData = _regularData;
             for (int index = 0; index < text.Length; index++)
             {
@@ -135,9 +142,12 @@ namespace DuckGame.AddedContent.Drake.PolyRender
                 }
 
                 CharData data = charData[character];
-                PolyRenderer.TexRect(pos, pos + _charBounds * scale, data.AtlasPos, data.AtlasPos + data.AtlasSize, col);
+                Vector2 offY = (_charBounds * scale).ZeroX();
+                PolyRenderer.TexRect(pos - offY, pos + _charBounds * scale - offY, data.AtlasPos, data.AtlasPos + data.AtlasSize, col);
                 pos.X += _charBounds.X * margin * scale;
             }
+
+            Graphics.polyBatcher.BlendState.AlphaDestinationBlend = Blend.InverseSourceAlpha;
             Graphics.polyBatcher.Texture = null;
         }
 
@@ -153,15 +163,14 @@ namespace DuckGame.AddedContent.Drake.PolyRender
         private void Setup(out CharData[] charData, out Tex2D atlas, string fontName, int fontSize, int charCount, FontStyle style, FontFamily memFont = null)
         {
             Font font = memFont == null ? new Font(fontName, fontSize, style, GraphicsUnit.Pixel) : new Font(memFont, fontSize, style, GraphicsUnit.Pixel);
-            int verticalPad = fontSize / 4;
             int atlasWidth = fontSize * charCount;
-            int atlasHeight = fontSize + verticalPad * 2;
+            int atlasHeight = fontSize;
 
-            _charBounds = new Vector2(fontSize, fontSize + verticalPad * 2);
+            _charBounds = new Vector2(fontSize, fontSize);
 
             charData = new CharData[charCount];
 
-            using DirectBitmap image = new DirectBitmap(atlasWidth, atlasHeight);
+            using DirectBitmap image = new(atlasWidth, atlasHeight);
             {
                 using System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(image.Bitmap);
                 {
@@ -172,13 +181,12 @@ namespace DuckGame.AddedContent.Drake.PolyRender
                     Vector2 charAtlasSize = new Vector2(charAtlasWidth, 1f);
 
                     int x = 0;
-                    int y = verticalPad;
 
                     for (int i = 0; i < charCount; i++)
                     {
                         char character = (char)i;
-                        graphics.DrawString("" + character, font, new SolidBrush(System.Drawing.Color.White), x, y);
-                        Vector2 charAtlasPos = new Vector2(charAtlasWidth * i, 0f);
+                        graphics.DrawString("" + character, font, new SolidBrush(System.Drawing.Color.White), x, 0);
+                        Vector2 charAtlasPos = new Vector2(charAtlasWidth * i, 0);
                         CharData data = new CharData(character, charAtlasPos, charAtlasSize);
                         charData[i] = data;
                         x += fontSize;
@@ -217,13 +225,12 @@ namespace DuckGame.AddedContent.Drake.PolyRender
 
         private static Color FromArgb(long Value)
         {
-            return new Color()
-            {
-                r = (byte)(Value >> 16 & 255L),
-                g = (byte)(Value >> 8 & 255L),
-                b = (byte)(Value & 255L),
-                a = (byte)(Value >> 24 & 255L)
-            };
+            var a = (byte)(Value >> 24 & 255L) / 255f;
+            var r = (byte)(Value >> 16 & 255L) / 255f;
+            var g = (byte)(Value >> 8 & 255L) / 255f;
+            var b = (byte)(Value & 255L) / 255f;
+
+            return new Color(r*a, g*a, b*a, a);
         }
 
         public void SetPixel(int x, int y, Color colour)
@@ -240,8 +247,8 @@ namespace DuckGame.AddedContent.Drake.PolyRender
             return FromArgb(col);
         }
 
-        public Color[] GetData() => Bits.Select(bit => new Color((byte)((bit >> 16) & 0xFF), (byte)((bit >> 8) & 0xFF), (byte)(bit & 0xFF), (byte)((bit >> 24) & 0xFF))).ToArray();
-
+        public Color[] GetData() => Bits.Select(bit => FromArgb(bit)).ToArray();
+    
         public void Dispose()
         {
             if (Disposed) return;
@@ -251,7 +258,7 @@ namespace DuckGame.AddedContent.Drake.PolyRender
         }
     }
 
-    internal struct CharData
+    public struct CharData
     {
         public readonly char Character;
 

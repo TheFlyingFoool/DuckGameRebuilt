@@ -1,7 +1,9 @@
 ﻿using System;
+using DuckGame;
 using Microsoft.Xna.Framework;
+using Color = DuckGame.Color;
 
-namespace DuckGame.AddedContent.Drake.DebugUI
+namespace AddedContent.Hyeve.DebugUI
 {
     public interface IAmUi
     {

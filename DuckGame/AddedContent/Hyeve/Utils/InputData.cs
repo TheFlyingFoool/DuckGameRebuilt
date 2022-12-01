@@ -1,7 +1,8 @@
 ﻿using System.Linq;
+using DuckGame;
 using Microsoft.Xna.Framework;
 
-namespace DuckGame.AddedContent.Drake.Utils
+namespace AddedContent.Hyeve.Utils
 {
     public static class InputData
     {

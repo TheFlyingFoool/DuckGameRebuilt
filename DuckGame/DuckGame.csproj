@@ -44,7 +44,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;Debug AutoUpdater</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
@@ -211,19 +211,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddedContent\DGRSettings.cs" />
-    <Compile Include="AddedContent\Drake\DebugUI\IAmUi.cs" />
-    <Compile Include="AddedContent\Drake\DebugUI\UiBasic.cs" />
-    <Compile Include="AddedContent\Drake\DebugUI\UiGroup.cs" />
-    <Compile Include="AddedContent\Drake\DebugUI\UiList.cs" />
-    <Compile Include="AddedContent\Drake\DebugUI\UiTabber.cs" />
-    <Compile Include="AddedContent\Drake\DrakeTests.cs" />
-    <Compile Include="AddedContent\Drake\FixedCommandHistory.cs" />
-    <Compile Include="AddedContent\Drake\PolyRender\AtlasedFont.cs" />
-    <Compile Include="AddedContent\Drake\PolyRender\PolygonBatcher.cs" />
-    <Compile Include="AddedContent\Drake\PolyRender\PolyRenderer.cs" />
-    <Compile Include="AddedContent\Drake\PolyRender\StaticFont.cs" />
-    <Compile Include="AddedContent\Drake\Utils\InputData.cs" />
-    <Compile Include="AddedContent\Drake\Utils\VectorMath.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\IAmUi.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\UiBasic.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\UiGroup.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\UiList.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\UiTabber.cs" />
+    <Compile Include="AddedContent\Hyeve\HyeveTests.cs" />
+    <Compile Include="AddedContent\Hyeve\FixedCommandHistory.cs" />
+    <Compile Include="AddedContent\Hyeve\PolyRender\AtlasedFont.cs" />
+    <Compile Include="AddedContent\Hyeve\PolyRender\PolygonBatcher.cs" />
+    <Compile Include="AddedContent\Hyeve\PolyRender\PolyRenderer.cs" />
+    <Compile Include="AddedContent\Hyeve\PolyRender\FontDatabase.cs" />
+    <Compile Include="AddedContent\Hyeve\RenderDelegates.cs" />
+    <Compile Include="AddedContent\Hyeve\Utils\InputData.cs" />
+    <Compile Include="AddedContent\Hyeve\Utils\VectorMath.cs" />
     <Compile Include="AddedContent\Extensions.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />

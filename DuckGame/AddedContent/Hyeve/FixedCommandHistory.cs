@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using DuckGame;
 
-namespace DuckGame.AddedContent.Drake
+namespace AddedContent.Hyeve
 {
     public static class FixedCommandHistory
     {
