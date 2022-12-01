@@ -122,7 +122,7 @@ namespace DuckGame
                 text = "HAPPY 25TH!";
             else if (DateTime.Now.Day == 1 && DateTime.Now.Month == 1)
                 text = "HAPPY NEW YEARS";
-            else if (Rando.Int(10) == 0) //:)
+            else if (Rando.Int(100) == 0) //:)
             {
                 bool rebuilt = true;
                 if (Network.isActive)

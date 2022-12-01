@@ -19,6 +19,8 @@
             base.Initialize();
         }
         public Sound destroy;
+        public StateBinding _positionBinding = new StateBinding("position");
+        public StateBinding _targetBinding = new StateBinding("_target");
         public override void Update()
         {
             if (isLocal)
@@ -99,7 +101,7 @@
             float num3 = Maths.NormalizeSection(_blast, 0.75f, 1f);
             float num4 = Maths.NormalizeSection(_blast, 0.9f, 1f);
             float num5 = Maths.NormalizeSection(_blast, 0.8f, 1f) * 0.5f;
-
+            
             Vec2 p = position;
             Vec2 p2 = position + _target;
             Graphics.DrawLine(p, p2, new Color(_blast * 0.7f + 0.3f, _blast, _blast) * (0.3f + num5), 1f + num2 * 12f, default(Depth));

@@ -97,14 +97,20 @@ namespace DuckGame
                         float y = this.y;
                         if (isServerForObject)
                         {
-                            for (int index = 0; index < 6; ++index)
+                            for (int index = 0; index < 10; ++index)
                             {
                                 float fireAngle = (index * 45);
                                 Dart dart = new Dart(x + (float)(Math.Cos(Maths.DegToRad(fireAngle)) * 15.0), y - (float)(Math.Sin(Maths.DegToRad(fireAngle)) * 15.0), owner as Duck, fireAngle);
                                 Vec2 vec = Maths.AngleToVec(fireAngle);
                                 dart.hSpeed = vec.x * 14f;
+                                dart.hMax = 30;
+                                dart.vMax = 30;
                                 dart.vSpeed = vec.y * 14f;
                                 Level.Add(dart);
+                            }
+                            if (owner != null && owner.isServerForObject)
+                            {
+
                             }
                         }
                         Level.Remove(this);

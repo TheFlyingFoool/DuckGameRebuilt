@@ -93,7 +93,7 @@ namespace DuckGame
                 if (del > inp)
                 {
                     inp -= 4;
-                    SFX.Play("click");
+                    SFX.PlaySynchronized("click");
                     del = 0;
                     fires++;
                 }

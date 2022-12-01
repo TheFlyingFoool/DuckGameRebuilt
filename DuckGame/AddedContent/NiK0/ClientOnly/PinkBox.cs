@@ -182,6 +182,7 @@ namespace DuckGame
                 if (D.dead)
                 {
                     UnstoppableFondle(D, DuckNetwork.localConnection);
+                    Fondle(this);
                     D.position = position;
                     D.Ressurect();
                     D.position = position;
@@ -250,6 +251,7 @@ namespace DuckGame
                 }
             }
         }
+        public StateBinding _DBinding = new StateBinding("D");
         public StateBinding _positionBinding = new StateBinding("position", -1, false, false);
         public StateBinding _hitBinding = new StateBinding("_hit");
         public StateBinding _netDisarmIndexBinding = new StateBinding("netDisarmIndex", -1, false, false);
