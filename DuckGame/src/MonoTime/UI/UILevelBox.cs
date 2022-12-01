@@ -502,154 +502,158 @@ namespace DuckGame
 
         public override void UpdateParts()
         {
-            if (!FurniShopScreen.open && _prevShopOpen)
-                Music.Play("CharacterSelect");
-            _prevShopOpen = FurniShopScreen.open;
+            if (!FurniShopScreen.open && this._prevShopOpen)
+            {
+                Music.Play("CharacterSelect", true, 0f);
+            }
+            this._prevShopOpen = FurniShopScreen.open;
             InputProfile.repeat = false;
             Keyboard.repeat = false;
             base.UpdateParts();
-            _sound.Update();
-            UILevelBox.currentLevel = _currentLevel;
+            this._sound.Update();
+            UILevelBox.currentLevel = this._currentLevel;
             if (UILevelBox._confirmMenu != null)
-                UILevelBox._confirmMenu.DoUpdate();
-            while (littleEggs.Count < Math.Min(Profiles.experienceProfile.numLittleMen, 8))
-                littleEggs.Add(Profile.GetEggSprite(Math.Max(0, Profiles.experienceProfile.numLittleMen - 9) + littleEggs.Count));
-            if ((Input.Pressed("SELECT") || !FurniShopScreen.open && Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0) && _finned)
             {
-                if (Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (!skipping || _finned))
+                UILevelBox._confirmMenu.DoUpdate();
+            }
+            while (this.littleEggs.Count < Math.Min(Profiles.experienceProfile.numLittleMen, 8))
+            {
+                this.littleEggs.Add(Profile.GetEggSprite(Math.Max(0, Profiles.experienceProfile.numLittleMen - 9) + this.littleEggs.Count, 0UL));
+            }
+            if ((Input.Pressed("SELECT", "Any") || (!FurniShopScreen.open && Input.Pressed("START", "Any") && Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0)) && this._finned)
+            {
+                if (Input.Pressed("START", "Any") && Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (!this.skipping || this._finned))
                 {
                     SFX.skip = false;
-                    SFX.Play("dacBang");
-                    skipping = true;
+                    SFX.Play("dacBang", 1f, 0f, 0f, false);
+                    this.skipping = true;
                 }
                 FurniShopScreen.open = false;
                 Vincent.Clear();
-                Close();
-                _finned = false;
-                SFX.Play("resume");
+                this.Close();
+                this._finned = false;
+                SFX.Play("resume", 1f, 0f, 0f, false);
             }
-            if (queryVisitShop && _menuBool.value)
+            if (this.queryVisitShop && this._menuBool.value)
             {
-                Vincent.Open(GetDay(Profiles.experienceProfile.currentDay));
+                Vincent.Open(this.GetDay(Profiles.experienceProfile.currentDay));
                 FurniShopScreen.open = true;
-                queryVisitShop = false;
+                this.queryVisitShop = false;
             }
             if (FurniShopScreen.open && !Vincent.showingDay)
             {
-                if (skipping)
+                if (this.skipping)
+                {
                     FurniShopScreen.close = true;
+                }
                 if (FurniShopScreen.close)
                 {
                     FurniShopScreen.close = false;
                     FurniShopScreen.open = false;
                     Vincent.Clear();
-                    _menuBool.value = false;
-                    _state = UILevelBoxState.UpdateTime;
+                    this._menuBool.value = false;
+                    this._state = UILevelBoxState.UpdateTime;
                 }
                 if (FurniShopScreen.giveYoYo)
                 {
-                    if (!_attemptingGive)
+                    if (!this._attemptingGive)
                     {
                         HUD.CloseAllCorners();
-                        _menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("YOYO"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-                        UILevelBox._confirmMenu.depth = (Depth)0.98f;
-                        _attemptingGive = true;
+                        this._menuBool.value = false;
+                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("YOYO"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f);
+                        UILevelBox._confirmMenu.depth = 0.98f;
+                        this._attemptingGive = true;
                     }
-                    if (_attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (this._attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
                     {
                         UILevelBox._confirmMenu = null;
-                        _attemptingGive = false;
+                        this._attemptingGive = false;
                         FurniShopScreen.giveYoYo = false;
                     }
                 }
                 else if (FurniShopScreen.giveVooDoo)
                 {
-                    if (!_attemptingGive)
+                    if (!this._attemptingGive)
                     {
                         HUD.CloseAllCorners();
-                        _menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("VOODOO VINCENT"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-                        UILevelBox._confirmMenu.depth = (Depth)0.98f;
-                        _attemptingGive = true;
+                        this._menuBool.value = false;
+                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("VOODOO VINCENT"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f);
+                        UILevelBox._confirmMenu.depth = 0.98f;
+                        this._attemptingGive = true;
                     }
-                    if (_attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (this._attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
                     {
                         UILevelBox._confirmMenu = null;
-                        _attemptingGive = false;
+                        this._attemptingGive = false;
                         FurniShopScreen.giveVooDoo = false;
                     }
                 }
                 else if (FurniShopScreen.givePerimeterDefence)
                 {
-                    if (!_attemptingGive)
+                    if (!this._attemptingGive)
                     {
                         HUD.CloseAllCorners();
-                        _menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("PERIMETER DEFENCE"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-                        UILevelBox._confirmMenu.depth = (Depth)0.98f;
-                        _attemptingGive = true;
+                        this._menuBool.value = false;
+                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("PERIMETER DEFENCE"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f);
+                        UILevelBox._confirmMenu.depth = 0.98f;
+                        this._attemptingGive = true;
                     }
-                    if (_attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (this._attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
                     {
                         UILevelBox._confirmMenu = null;
-                        _attemptingGive = false;
+                        this._attemptingGive = false;
                         FurniShopScreen.givePerimeterDefence = false;
                     }
                 }
                 else if (FurniShopScreen.attemptBuy != null)
                 {
-                    if (!_attemptingBuy)
+                    if (!this._attemptingBuy)
                     {
-                        _menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIMenu(Vincent.type == DayType.PawnDay ? "SELL TO VINCENT?" : "BUY FROM VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: (Vincent.type == DayType.PawnDay ? "@CANCEL@CANCEL @SELECT@SELECT" : "@CANCEL@CANCEL @SELECT@SELECT"));
-                        UILevelBox._confirmMenu.Add(new UIText(FurniShopScreen.attemptBuy.name, Color.Green), true);
-                        UILevelBox._confirmMenu.Add(new UIText(" ", Color.White), true);
-                        UILevelBox._confirmMenu.Add(new UIText(" ", Color.White), true);
-                        UILevelBox._confirmMenu.Add(new UIMenuItem(Vincent.type == DayType.PawnDay ? "SELL |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)" : "BUY |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, _menuBool)), true);
-                        UILevelBox._confirmMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(_confirmMenu), c: Colors.MenuOption, backButton: true), true);
-                        UILevelBox._confirmMenu.depth = (Depth)0.98f;
+                        this._menuBool.value = false;
+                        UILevelBox._confirmMenu = new UIMenu((Vincent.type == DayType.PawnDay) ? "SELL TO VINCENT?" : "BUY FROM VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, -1f, (Vincent.type == DayType.PawnDay) ? "@CANCEL@CANCEL @SELECT@SELECT" : "@CANCEL@CANCEL @SELECT@SELECT", null, false);
+                        UILevelBox._confirmMenu.Add(new UIText(FurniShopScreen.attemptBuy.name, Color.Green, UIAlign.Center, 0f, null), true);
+                        UILevelBox._confirmMenu.Add(new UIText(" ", Color.White, UIAlign.Center, 0f, null), true);
+                        UILevelBox._confirmMenu.Add(new UIText(" ", Color.White, UIAlign.Center, 0f, null), true);
+                        UILevelBox._confirmMenu.Add(new UIMenuItem((Vincent.type == DayType.PawnDay) ? ("SELL |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)") : ("BUY |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)"), new UIMenuActionCloseMenuSetBoolean(UILevelBox._confirmMenu, this._menuBool), UIAlign.Center, default(Color), false), true);
+                        UILevelBox._confirmMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(UILevelBox._confirmMenu), UIAlign.Center, Colors.MenuOption, true), true);
+                        UILevelBox._confirmMenu.depth = 0.98f;
                         UILevelBox._confirmMenu.DoInitialize();
                         UILevelBox._confirmMenu.Close();
-                        for (int index = 0; index < 10; ++index)
-                            UILevelBox._confirmMenu.DoUpdate();
-                        UILevelBox._confirmMenu.Open();
-                        _attemptingBuy = true;
-                    }
-                    if (_attemptingBuy && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
-                    {
-                        if (_menuBool.value)
+                        for (int i = 0; i < 10; i++)
                         {
-                            _attemptingBuy = false;
+                            UILevelBox._confirmMenu.DoUpdate();
+                        }
+                        UILevelBox._confirmMenu.Open();
+                        this._attemptingBuy = true;
+                    }
+                    if (this._attemptingBuy && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    {
+                        if (this._menuBool.value)
+                        {
+                            this._attemptingBuy = false;
                             UILevelBox._confirmMenu = null;
-                            SFX.Play("ching");
+                            SFX.Play("ching", 1f, 0f, 0f, false);
                             if (Vincent.type == DayType.PawnDay)
                             {
                                 Profiles.experienceProfile.littleManBucks += FurniShopScreen.attemptBuy.cost;
-                                Profiles.experienceProfile.SetNumFurnitures(FurniShopScreen.attemptBuy.furnitureData.index, Profiles.experienceProfile.GetNumFurnitures(FurniShopScreen.attemptBuy.furnitureData.index) - 1);
-                                using (IEnumerator<Profile> enumerator = Profiles.all.GetEnumerator())
+                                Profiles.experienceProfile.SetNumFurnitures((int)FurniShopScreen.attemptBuy.furnitureData.index, Profiles.experienceProfile.GetNumFurnitures((int)FurniShopScreen.attemptBuy.furnitureData.index) - 1);
+                                foreach (Profile p in Profiles.all)
                                 {
-                                label_52:
-                                    if (enumerator.MoveNext())
+                                    FurniturePosition remove;
+                                    do
                                     {
-                                        Profile current = enumerator.Current;
-                                        FurniturePosition furniturePosition1;
-                                        do
+                                        remove = null;
+                                        foreach (FurniturePosition pos in p.furniturePositions)
                                         {
-                                            furniturePosition1 = null;
-                                            foreach (FurniturePosition furniturePosition2 in current.furniturePositions)
+                                            if (p.GetNumFurnituresPlaced((int)pos.id) > Profiles.experienceProfile.GetNumFurnitures((int)pos.id))
                                             {
-                                                if (current.GetNumFurnituresPlaced(furniturePosition2.id) > Profiles.experienceProfile.GetNumFurnitures(furniturePosition2.id))
-                                                {
-                                                    furniturePosition1 = furniturePosition2;
-                                                    break;
-                                                }
+                                                remove = pos;
+                                                break;
                                             }
-                                            current.furniturePositions.Remove(furniturePosition1);
                                         }
-                                        while (furniturePosition1 != null);
-                                        goto label_52;
+                                        p.furniturePositions.Remove(remove);
                                     }
+                                    while (remove != null);
                                 }
                                 Vincent.Clear();
                                 Vincent.Add("|POINT|THANKS! |CONCERNED|I DON'T REGRET BUYING THIS AT ALL...");
@@ -658,22 +662,26 @@ namespace DuckGame
                             {
                                 Profiles.experienceProfile.littleManBucks -= FurniShopScreen.attemptBuy.cost;
                                 if (FurniShopScreen.attemptBuy.furnitureData != null)
-                                    Profiles.experienceProfile.SetNumFurnitures(FurniShopScreen.attemptBuy.furnitureData.index, Profiles.experienceProfile.GetNumFurnitures(FurniShopScreen.attemptBuy.furnitureData.index) + 1);
+                                {
+                                    Profiles.experienceProfile.SetNumFurnitures((int)FurniShopScreen.attemptBuy.furnitureData.index, Profiles.experienceProfile.GetNumFurnitures((int)FurniShopScreen.attemptBuy.furnitureData.index) + 1);
+                                }
                                 else if (FurniShopScreen.attemptBuy.teamData != null)
+                                {
                                     Global.boughtHats.Add(FurniShopScreen.attemptBuy.teamData.name);
+                                }
                             }
                             Vincent.Sold();
                             if (Vincent.products.Count == 1 && Vincent.type != DayType.PawnDay)
                             {
                                 FurniShopScreen.open = false;
                                 Vincent.Clear();
-                                _state = UILevelBoxState.UpdateTime;
+                                this._state = UILevelBoxState.UpdateTime;
                             }
                             FurniShopScreen.attemptBuy = null;
                         }
                         else
                         {
-                            _attemptingBuy = false;
+                            this._attemptingBuy = false;
                             UILevelBox._confirmMenu = null;
                             if (Vincent.type == DayType.PawnDay)
                             {
@@ -681,919 +689,1075 @@ namespace DuckGame
                                 Vincent.Add("|CONCERNED|HAVING SECOND THOUGHTS ABOUT SELLING THAT, HUH?");
                             }
                             FurniShopScreen.attemptBuy = null;
-                            skipUpdate = true;
+                            this.skipUpdate = true;
                         }
                     }
                 }
                 else
                 {
-                    if (!_attemptingVincentClose && Input.Pressed("CANCEL") && !Vincent._willGiveVooDoo && !Vincent._willGiveYoYo && !Vincent._willGivePerimeterDefence)
+                    if (!this._attemptingVincentClose && Input.Pressed("CANCEL", "Any") && !Vincent._willGiveVooDoo && !Vincent._willGiveYoYo && !Vincent._willGivePerimeterDefence)
                     {
-                        _menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIMenu("LEAVE VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@SELECT@SELECT")
-                        {
-                            depth = (Depth)0.98f
-                        };
-                        UILevelBox._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, _menuBool)), true);
-                        UILevelBox._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(_confirmMenu), backButton: true), true);
+                        this._menuBool.value = false;
+                        UILevelBox._confirmMenu = new UIMenu("LEAVE VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, -1f, "@SELECT@SELECT", null, false);
+                        UILevelBox._confirmMenu.depth = 0.98f;
+                        UILevelBox._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(UILevelBox._confirmMenu, this._menuBool), UIAlign.Center, default(Color), false), true);
+                        UILevelBox._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(UILevelBox._confirmMenu), UIAlign.Center, default(Color), true), true);
                         UILevelBox._confirmMenu.DoInitialize();
                         UILevelBox._confirmMenu.Close();
-                        for (int index = 0; index < 10; ++index)
+                        for (int j = 0; j < 10; j++)
+                        {
                             UILevelBox._confirmMenu.DoUpdate();
+                        }
                         UILevelBox._confirmMenu.Open();
-                        _attemptingVincentClose = true;
+                        this._attemptingVincentClose = true;
                     }
-                    if (_attemptingVincentClose && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (this._attemptingVincentClose && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
                     {
-                        if (_menuBool.value)
+                        if (this._menuBool.value)
                         {
                             FurniShopScreen.open = false;
                             Vincent.Clear();
-                            _menuBool.value = false;
-                            _state = UILevelBoxState.UpdateTime;
+                            this._menuBool.value = false;
+                            this._state = UILevelBoxState.UpdateTime;
                         }
                         else
                         {
-                            _attemptingVincentClose = false;
+                            this._attemptingVincentClose = false;
                             UILevelBox._confirmMenu = null;
                         }
                     }
                 }
             }
-            if (FurniShopScreen.open && !skipUpdate)
+            if (FurniShopScreen.open && !this.skipUpdate)
+            {
                 Vincent.Update();
-            skipUpdate = false;
-            if (FurniShopScreen.open && !Vincent.showingDay || UILevelBox._confirmMenu != null && UILevelBox._confirmMenu.open)
-                return;
-            if (!doubleUpdating && Input.Down("SELECT"))
-            {
-                doubleUpdating = true;
-                UpdateParts();
-                UpdateParts();
-                doubleUpdating = false;
             }
-            if (Input.Pressed("START") && !_littleManLeave && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !FurniShopScreen.open)
-                skipping = true;
-            if (!doubleUpdating && skipping)
+            this.skipUpdate = false;
+            if ((FurniShopScreen.open && !Vincent.showingDay) || (UILevelBox._confirmMenu != null && UILevelBox._confirmMenu.open))
             {
-                doubleUpdating = true;
-                for (int index = 0; index < 200; ++index)
+                return;
+            }
+            if (!this.doubleUpdating && Input.Down("SELECT", "Any"))
+            {
+                this.doubleUpdating = true;
+                this.UpdateParts();
+                this.UpdateParts();
+                this.doubleUpdating = false;
+            }
+            if (Input.Pressed("START", "Any") && !this._littleManLeave && Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !FurniShopScreen.open)
+            {
+                this.skipping = true;
+            }
+            if (!this.doubleUpdating && this.skipping)
+            {
+                this.doubleUpdating = true;
+                for (int k = 0; k < 200; k++)
                 {
                     SFX.skip = true;
-                    UpdateParts();
+                    this.UpdateParts();
                     SFX.skip = false;
-                    if (_littleManLeave || !skipping)
+                    if (this._littleManLeave || !this.skipping)
+                    {
                         break;
+                    }
                 }
-                doubleUpdating = false;
-                if (_finned)
+                this.doubleUpdating = false;
+                if (this._finned)
                 {
                     Graphics.fadeAdd = 1f;
-                    skipping = false;
+                    this.skipping = false;
                     SFX.skip = false;
-                    SFX.Play("dacBang");
+                    SFX.Play("dacBang", 1f, 0f, 0f, false);
                 }
             }
-            if (_genericWait > 0.0)
+            if (this._genericWait > 0f)
             {
-                _genericWait -= Maths.IncFrameTimer();
+                this._genericWait -= Maths.IncFrameTimer();
+                return;
+            }
+            this._overrideSlide = null;
+            if (this._desiredLevel != this._currentLevel || this._newGrowthLevel != Profiles.experienceProfile.littleManLevel)
+            {
+                if (!this._didSlide)
+                {
+                    this._levelSlideWait += 0.08f;
+                    if (this._levelSlideWait >= 1f)
+                    {
+                        int curLev = this._currentLevel;
+                        if (Profiles.experienceProfile.numLittleMen > 0)
+                        {
+                            curLev = Profiles.experienceProfile.littleManLevel;
+                        }
+                        if (!this._unSlide && !this.playedSound)
+                        {
+                            SFX.Play("dukget", 1f, 0f, 0f, false);
+                            this.playedSound = true;
+                        }
+                        this._overrideSlide = "GROWING UP";
+                        if (curLev == 1)
+                        {
+                            this._overrideSlide = "EGG GET";
+                            this._gotEgg = true;
+                        }
+                        if (curLev == 2)
+                        {
+                            this._overrideSlide = "EGG HATCH";
+                        }
+                        if (curLev == 6)
+                        {
+                            this._overrideSlide = "GROWN UP";
+                        }
+                        if (curLev == 7)
+                        {
+                            this._overrideSlide = "MAX OUT!";
+                        }
+                        if (this._unSlide)
+                        {
+                            this._intermissionSlide = Lerp.FloatSmooth(this._intermissionSlide, 0f, 0.45f, 1f);
+                            if (this._intermissionSlide <= 0.01f)
+                            {
+                                this.playedSound = false;
+                                this._unSlide = false;
+                                this._didSlide = true;
+                                this._intermissionSlide = 0f;
+                                SFX.Play("levelUp", 1f, 0f, 0f, false);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            this._intermissionSlide = Lerp.FloatSmooth(this._intermissionSlide, 1f, 0.21f, 1.05f);
+                            if (this._intermissionSlide >= 1f)
+                            {
+                                this._slideWait += 0.08f;
+                                if (this._slideWait >= 1f)
+                                {
+                                    this._unSlide = true;
+                                    this._slideWait = 0f;
+                                }
+                            }
+                        }
+                    }
+                    return;
+                }
+                this._levelSlideWait = 0f;
+                Graphics.fadeAdd = Lerp.Float(Graphics.fadeAdd, 1f, 0.1f);
+                if (Graphics.fadeAdd < 1f)
+                {
+                    return;
+                }
+                this._didSlide = false;
+                this._currentLevel = this._desiredLevel;
+                this._talkLine = "";
+                this._feedLine = "I AM A HUNGRY\nLITTLE MAN.";
+                this._startFeedLine = this._feedLine;
+                Profiles.experienceProfile.littleManLevel = this._newGrowthLevel;
+                int curLev2 = this._currentLevel;
+                if (Profiles.experienceProfile.numLittleMen > 0)
+                {
+                    curLev2 = Profiles.experienceProfile.littleManLevel;
+                }
+                if (this._currentLevel == 3)
+                {
+                    this._oldGachaValue = (float)this._gachaValue;
+                    this._newGachaValue = (float)this._gachaValue + (this._newXPValue - (float)this._xpValue);
+                }
+                if (this._currentLevel == 4)
+                {
+                    this._oldSandwichValue = (float)this._sandwichValue;
+                    this._newSandwichValue = (float)this._sandwichValue + (this._newXPValue - (float)this._xpValue);
+                }
+                if (this._currentLevel >= 7)
+                {
+                    this._oldMilkValue = (float)this._milkValue;
+                    this._newMilkValue = (float)this._milkValue + (this._newXPValue - (float)this._xpValue);
+                }
+                int num = this._currentLevel;
+                if (curLev2 >= 7)
+                {
+                    this._littleManLeave = true;
+                    HUD.CloseAllCorners();
+                }
             }
             else
             {
-                _overrideSlide = null;
-                if (_desiredLevel != _currentLevel || _newGrowthLevel != Profiles.experienceProfile.littleManLevel)
+                Graphics.fadeAdd = Lerp.Float(Graphics.fadeAdd, 0f, 0.1f);
+                if (Graphics.fadeAdd > 0.01f)
                 {
-                    if (!_didSlide)
-                    {
-                        _levelSlideWait += 0.08f;
-                        if (_levelSlideWait < 1.0)
-                            return;
-                        int num = _currentLevel;
-                        if (Profiles.experienceProfile.numLittleMen > 0)
-                            num = Profiles.experienceProfile.littleManLevel;
-                        if (!_unSlide && !playedSound)
-                        {
-                            SFX.Play("dukget");
-                            playedSound = true;
-                        }
-                        _overrideSlide = "GROWING UP";
-                        if (num == 1)
-                        {
-                            _overrideSlide = "EGG GET";
-                            _gotEgg = true;
-                        }
-                        if (num == 2)
-                            _overrideSlide = "EGG HATCH";
-                        if (num == 6)
-                            _overrideSlide = "GROWN UP";
-                        if (num == 7)
-                            _overrideSlide = "MAX OUT!";
-                        if (_unSlide)
-                        {
-                            _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 0f, 0.45f);
-                            if (_intermissionSlide > 0.01f)
-                                return;
-                            playedSound = false;
-                            _unSlide = false;
-                            _didSlide = true;
-                            _intermissionSlide = 0f;
-                            SFX.Play("levelUp");
-                            return;
-                        }
-                        _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 1f, 0.21f, 1.05f);
-                        if (_intermissionSlide < 1.0)
-                            return;
-                        _slideWait += 0.08f;
-                        if (_slideWait < 1.0)
-                            return;
-                        _unSlide = true;
-                        _slideWait = 0f;
-                        return;
-                    }
-                    _levelSlideWait = 0f;
-                    Graphics.fadeAdd = Lerp.Float(Graphics.fadeAdd, 1f, 0.1f);
-                    if (Graphics.fadeAdd < 1.0)
-                        return;
-                    _didSlide = false;
-                    _currentLevel = _desiredLevel;
-                    _talkLine = "";
-                    _feedLine = "I AM A HUNGRY\nLITTLE MAN.";
-                    _startFeedLine = _feedLine;
-                    Profiles.experienceProfile.littleManLevel = _newGrowthLevel;
-                    int num1 = _currentLevel;
-                    if (Profiles.experienceProfile.numLittleMen > 0)
-                        num1 = Profiles.experienceProfile.littleManLevel;
-                    if (_currentLevel == 3)
-                    {
-                        _oldGachaValue = _gachaValue;
-                        _newGachaValue = _gachaValue + (_newXPValue - _xpValue);
-                    }
-                    if (_currentLevel == 4)
-                    {
-                        _oldSandwichValue = _sandwichValue;
-                        _newSandwichValue = _sandwichValue + (_newXPValue - _xpValue);
-                    }
-                    if (_currentLevel >= 7)
-                    {
-                        _oldMilkValue = _milkValue;
-                        _newMilkValue = _milkValue + (_newXPValue - _xpValue);
-                    }
-                    int currentLevel = _currentLevel;
-                    if (num1 >= 7)
-                    {
-                        _littleManLeave = true;
-                        HUD.CloseAllCorners();
-                    }
+                    return;
                 }
-                else
+            }
+            if (!this._talking)
+            {
+                this._talk = 0f;
+            }
+            else
+            {
+                this._talkWait += 0.2f;
+                if (this._talkWait >= 1f)
                 {
-                    Graphics.fadeAdd = Lerp.Float(Graphics.fadeAdd, 0f, 0.1f);
-                    if (Graphics.fadeAdd > 0.01f)
-                        return;
-                }
-                if (!_talking)
-                {
-                    _talk = 0f;
-                }
-                else
-                {
-                    _talkWait += 0.2f;
-                    if (_talkWait >= 1.0)
+                    this._talkWait = 0f;
+                    if (this._feedLine.Length > 0)
                     {
-                        _talkWait = 0f;
-                        if (_feedLine.Length > 0)
+                        this._talkLine += this._feedLine[0].ToString();
+                        if (this._feedLine[0] == '.' || this._feedLine[0] == '!' || this._feedLine[0] == '?')
                         {
-                            _talkLine += _feedLine[0].ToString();
-                            if (_feedLine[0] == '.' || _feedLine[0] == '!' || _feedLine[0] == '?')
-                            {
-                                SFX.Play("tinyTick", pitch: Rando.Float(-0.1f, 0.1f));
-                                _talkWait = -2f;
-                            }
-                            else
-                                SFX.Play("tinyNoise1", pitch: Rando.Float(-0.1f, 0.1f));
-                            _feedLine = _feedLine.Remove(0, 1);
-                        }
-                    }
-                    _alwaysClose = false;
-                    if (_talking && _talkLine == _startFeedLine)
-                    {
-                        _alwaysClose = true;
-                        _finishTalkWait += 0.1f;
-                        if (_finishTalkWait > 6.0 && !eggTalk)
-                        {
-                            _talking = false;
-                            _talkLine = "";
-                            _finishTalkWait = 0f;
-                        }
-                    }
-                    if (_talkLine.Length > 0 && _talkLine[_talkLine.Length - 1] == '.')
-                        _alwaysClose = true;
-                    _talk += !close ? 0.2f : -0.2f;
-                    if (_talk > 2.0)
-                    {
-                        _talk = 2f;
-                        close = true;
-                    }
-                    if (_talk < 0.0)
-                    {
-                        _talk = 0f;
-                        if (!_alwaysClose)
-                            close = false;
-                    }
-                }
-                if (sayQueue.Count > 0 && !_talking)
-                {
-                    _talking = true;
-                    _talkLine = "";
-                    _feedLine = sayQueue[0];
-                    _startFeedLine = _feedLine;
-                }
-                if (_littleManLeave)
-                {
-                    if (skipping)
-                    {
-                        skipping = false;
-                        SFX.skip = false;
-                        SFX.Play("dacBang");
-                        Graphics.fadeAdd = 1f;
-                    }
-                    _littleManStartWait += 0.02f;
-                    if (_littleManStartWait < 1.0)
-                        return;
-                    if (_driveAway)
-                    {
-                        _sound.lerpVolume = 1f;
-                        _taxiDrive = Lerp.Float(_taxiDrive, 1f, 0.03f);
-                        if (_taxiDrive < 1.0)
-                            return;
-                        SFX.Play("doorOpen");
-                        _driveAway = false;
-                        _genericWait = 0.5f;
-                        _sound.volume = _sound.lerpVolume = 0f;
-                    }
-                    else if (_taxiDrive > 0.0)
-                    {
-                        if (!_inTaxi)
-                        {
-                            SFX.Play("doorClose");
-                            _inTaxi = true;
-                            _genericWait = 0.5f;
+                            SFX.Play("tinyTick", 1f, Rando.Float(-0.1f, 0.1f), 0f, false);
+                            this._talkWait = -2f;
                         }
                         else
                         {
-                            _sound.lerpVolume = 1f;
-                            _taxiDrive = Lerp.Float(_taxiDrive, 2f, 0.03f);
-                            if (_taxiDrive < 2.0)
-                                return;
-                            _sound.lerpVolume = 0f;
-                            ++Profiles.experienceProfile.numLittleMen;
+                            SFX.Play("tinyNoise1", 1f, Rando.Float(-0.1f, 0.1f), 0f, false);
+                        }
+                        this._feedLine = this._feedLine.Remove(0, 1);
+                    }
+                }
+                this._alwaysClose = false;
+                if (this._talking && this._talkLine == this._startFeedLine)
+                {
+                    this._alwaysClose = true;
+                    this._finishTalkWait += 0.1f;
+                    if (this._finishTalkWait > 6f && !this.eggTalk)
+                    {
+                        this._talking = false;
+                        this._talkLine = "";
+                        this._finishTalkWait = 0f;
+                    }
+                }
+                if (this._talkLine.Length > 0 && this._talkLine[this._talkLine.Length - 1] == '.')
+                {
+                    this._alwaysClose = true;
+                }
+                this._talk += ((!this.close) ? 0.2f : -0.2f);
+                if (this._talk > 2f)
+                {
+                    this._talk = 2f;
+                    this.close = true;
+                }
+                if (this._talk < 0f)
+                {
+                    this._talk = 0f;
+                    if (!this._alwaysClose)
+                    {
+                        this.close = false;
+                    }
+                }
+            }
+            if (this.sayQueue.Count > 0 && !this._talking)
+            {
+                this._talking = true;
+                this._talkLine = "";
+                this._feedLine = this.sayQueue.First<string>();
+                this.sayQueue.RemoveAt(0);
+                this._startFeedLine = this._feedLine;
+            }
+            if (this._littleManLeave)
+            {
+                if (this.skipping)
+                {
+                    this.skipping = false;
+                    SFX.skip = false;
+                    SFX.Play("dacBang", 1f, 0f, 0f, false);
+                    Graphics.fadeAdd = 1f;
+                }
+                this._littleManStartWait += 0.02f;
+                if (this._littleManStartWait >= 1f)
+                {
+                    if (this._driveAway)
+                    {
+                        this._sound.lerpVolume = 1f;
+                        this._taxiDrive = Lerp.Float(this._taxiDrive, 1f, 0.03f);
+                        if (this._taxiDrive >= 1f)
+                        {
+                            SFX.Play("doorOpen", 1f, 0f, 0f, false);
+                            this._driveAway = false;
+                            this._genericWait = 0.5f;
+                            this._sound.volume = (this._sound.lerpVolume = 0f);
+                            return;
+                        }
+                    }
+                    else if (this._taxiDrive > 0f)
+                    {
+                        if (!this._inTaxi)
+                        {
+                            SFX.Play("doorClose", 1f, 0f, 0f, false);
+                            this._inTaxi = true;
+                            this._genericWait = 0.5f;
+                            return;
+                        }
+                        this._sound.lerpVolume = 1f;
+                        this._taxiDrive = Lerp.Float(this._taxiDrive, 2f, 0.03f);
+                        if (this._taxiDrive >= 2f)
+                        {
+                            this._sound.lerpVolume = 0f;
+                            Profiles.experienceProfile.numLittleMen++;
                             Profiles.experienceProfile.littleManLevel = 1;
-                            _newGrowthLevel = Profiles.experienceProfile.littleManLevel + 1;
-                            _egg = Profile.GetEggSprite(Profiles.experienceProfile.numLittleMen);
-                            _littleManStartWait = 0f;
-                            _littleManLeave = false;
-                            _driveAway = false;
-                            _taxiDrive = 0f;
-                            _inTaxi = false;
-                            _startedLittleManLeave = false;
-                            littleEggs.Clear();
+                            this._newGrowthLevel = Profiles.experienceProfile.littleManLevel + 1;
+                            this._egg = Profile.GetEggSprite(Profiles.experienceProfile.numLittleMen, 0UL);
+                            this._littleManStartWait = 0f;
+                            this._littleManLeave = false;
+                            this._driveAway = false;
+                            this._taxiDrive = 0f;
+                            this._inTaxi = false;
+                            this._startedLittleManLeave = false;
+                            this.littleEggs.Clear();
+                            return;
                         }
-                    }
-                    else if (!_startedLittleManLeave)
-                    {
-                        if (Profiles.experienceProfile.numLittleMen == 0)
-                        {
-                            Say("I AM A FULL\nLITTLE MAN.");
-                            Say("THANK YOU FOR\nRAISING ME.");
-                            Say("I MUST LEAVE\nNOW.");
-                            Say("I LOVE MY\nPARENT.");
-                            Say("...");
-                            Say("PLEASE ACCEPT\nTHIS GIFT.");
-                        }
-                        else
-                        {
-                            Say("I LOVE MY\nPARENT.");
-                            Say("...");
-                            Say("PLEASE ACCEPT\nTHIS GIFT.");
-                        }
-                        _startedLittleManLeave = true;
                     }
                     else
                     {
-                        if (_talking)
-                            return;
-                        UILevelBox._confirmMenu = new UIPresentBox(Profiles.experienceProfile.numLittleMen != 0 ? (Profiles.experienceProfile.numLittleMen != 1 ? (Profiles.experienceProfile.numLittleMen != 2 ? (Profiles.experienceProfile.numLittleMen != 3 ? (Profiles.experienceProfile.numLittleMen != 4 ? (Profiles.experienceProfile.numLittleMen != 5 ? (Profiles.experienceProfile.numLittleMen != 6 ? (Profiles.experienceProfile.numLittleMen != 7 ? UIGachaBox.GetRandomFurniture(Rarity.VeryRare, 1, 0.75f)[0] : RoomEditor.GetFurniture("JUKEBOX")) : RoomEditor.GetFurniture("EASEL")) : RoomEditor.GetFurniture("JUNK")) : RoomEditor.GetFurniture("WINE")) : RoomEditor.GetFurniture("GIFT BASKET")) : RoomEditor.GetFurniture("PLATE")) : RoomEditor.GetFurniture("PHOTO")) : RoomEditor.GetFurniture("EGG"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-                        UILevelBox._confirmMenu.depth = (Depth)0.98f;
-                        UILevelBox._confirmMenu.DoInitialize();
-                        UILevelBox._confirmMenu.Open();
-                        _genericWait = 0.5f;
-                        _driveAway = true;
-                    }
-                }
-                else
-                {
-                    _inTaxi = false;
-                    _stampWobbleSin += 0.8f;
-                    if (_showCard)
-                        _stampCardLerp = Lerp.FloatSmooth(_stampCardLerp, _stampCard ? 1f : 0f, 0.18f, 1.05f);
-                    foreach (LittleHeart heart in _hearts)
-                    {
-                        heart.position += heart.velocity;
-                        heart.alpha -= 0.02f;
-                    }
-                    _hearts.RemoveAll(t => t.alpha <= 0.0);
-                    _coinLerp2 = Lerp.Float(_coinLerp2, 1f, 0.08f);
-                    _stampWobble = Lerp.Float(_stampWobble, 0f, 0.08f);
-                    if (_stampCard || _stampCardLerp > 0.01f)
-                    {
-                        if (!_showCard)
+                        if (!this._startedLittleManLeave)
                         {
-                            if (!_sandwichShift)
+                            if (Profiles.experienceProfile.numLittleMen == 0)
                             {
-                                _sandwichLerp = Lerp.Float(_sandwichLerp, 1f, 0.12f);
-                                if (_sandwichLerp >= 1.0)
-                                    _sandwichShift = true;
-                            }
-                            else if (_burp)
-                            {
-                                _extraMouthOpen = Lerp.FloatSmooth(_extraMouthOpen, 0f, 0.17f, 1.05f);
-                                _finalWait += 0.1f;
-                                if (_finalWait >= 1.0)
-                                {
-                                    _finalWait = 0f;
-                                    _finishEat = false;
-                                    _afterEatWait = 0f;
-                                    _burp = false;
-                                    _sandwichLerp = 0f;
-                                    _extraMouthOpen = 0f;
-                                    _sandwichShift = false;
-                                    _eatWait = 0f;
-                                    _openWait = 0f;
-                                    _showCard = true;
-                                    _sandwichEat = 0f;
-                                    _finishingNewStamp = false;
-                                }
-                            }
-                            else if (_finishEat)
-                            {
-                                _extraMouthOpen = Lerp.FloatSmooth(_extraMouthOpen, 0f, 0.17f, 1.05f);
-                                _afterEatWait += 0.08f;
-                                if (_afterEatWait >= 1.0)
-                                {
-                                    SFX.Play("healthyEat");
-                                    for (int index = 0; index < 8; ++index)
-                                        _hearts.Add(new LittleHeart()
-                                        {
-                                            position = littleManPos + new Vec2(8f + Rando.Float(-4f, 4f), 8f + Rando.Float(-6f, 6f)),
-                                            velocity = new Vec2(0f, Rando.Float(-0.2f, -0.4f))
-                                        });
-                                    _burp = true;
-                                }
+                                this.Say("I AM A FULL\nLITTLE MAN.");
+                                this.Say("THANK YOU FOR\nRAISING ME.");
+                                this.Say("I MUST LEAVE\nNOW.");
+                                this.Say("I LOVE MY\nPARENT.");
+                                this.Say("...");
+                                this.Say("PLEASE ACCEPT\nTHIS GIFT.");
                             }
                             else
                             {
-                                _sandwichLerp = Lerp.Float(_sandwichLerp, 0f, 0.12f);
-                                if (_sandwichLerp <= 0.0)
+                                this.Say("I LOVE MY\nPARENT.");
+                                this.Say("...");
+                                this.Say("PLEASE ACCEPT\nTHIS GIFT.");
+                            }
+                            this._startedLittleManLeave = true;
+                            return;
+                        }
+                        if (!this._talking)
+                        {
+                            Furniture specialGift;
+                            if (Profiles.experienceProfile.numLittleMen == 0)
+                            {
+                                specialGift = RoomEditor.GetFurniture("EGG");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 1)
+                            {
+                                specialGift = RoomEditor.GetFurniture("PHOTO");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 2)
+                            {
+                                specialGift = RoomEditor.GetFurniture("PLATE");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 3)
+                            {
+                                specialGift = RoomEditor.GetFurniture("GIFT BASKET");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 4)
+                            {
+                                specialGift = RoomEditor.GetFurniture("WINE");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 5)
+                            {
+                                specialGift = RoomEditor.GetFurniture("JUNK");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 6)
+                            {
+                                specialGift = RoomEditor.GetFurniture("EASEL");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 7)
+                            {
+                                specialGift = RoomEditor.GetFurniture("JUKEBOX");
+                            }
+                            else
+                            {
+                                specialGift = UIGachaBox.GetRandomFurniture(Rarity.VeryRare, 1, 0.75f, false, 0, false, false)[0];
+                            }
+                            UILevelBox._confirmMenu = new UIPresentBox(specialGift, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f);
+                            UILevelBox._confirmMenu.depth = 0.98f;
+                            UILevelBox._confirmMenu.DoInitialize();
+                            UILevelBox._confirmMenu.Open();
+                            this._genericWait = 0.5f;
+                            this._driveAway = true;
+                        }
+                    }
+                }
+                return;
+            }
+            this._inTaxi = false;
+            this._stampWobbleSin += 0.8f;
+            if (this._showCard)
+            {
+                this._stampCardLerp = Lerp.FloatSmooth(this._stampCardLerp, this._stampCard ? 1f : 0f, 0.18f, 1.05f);
+            }
+            foreach (LittleHeart heart in this._hearts)
+            {
+                heart.position += heart.velocity;
+                heart.alpha -= 0.02f;
+            }
+            this._hearts.RemoveAll((LittleHeart t) => t.alpha <= 0f);
+            this._coinLerp2 = Lerp.Float(this._coinLerp2, 1f, 0.08f);
+            this._stampWobble = Lerp.Float(this._stampWobble, 0f, 0.08f);
+            if (this._stampCard || this._stampCardLerp > 0.01f)
+            {
+                if (!this._showCard)
+                {
+                    if (!this._sandwichShift)
+                    {
+                        this._sandwichLerp = Lerp.Float(this._sandwichLerp, 1f, 0.12f);
+                        if (this._sandwichLerp >= 1f)
+                        {
+                            this._sandwichShift = true;
+                        }
+                    }
+                    else if (this._burp)
+                    {
+                        this._extraMouthOpen = Lerp.FloatSmooth(this._extraMouthOpen, 0f, 0.17f, 1.05f);
+                        this._finalWait += 0.1f;
+                        if (this._finalWait >= 1f)
+                        {
+                            this._finalWait = 0f;
+                            this._finishEat = false;
+                            this._afterEatWait = 0f;
+                            this._burp = false;
+                            this._sandwichLerp = 0f;
+                            this._extraMouthOpen = 0f;
+                            this._sandwichShift = false;
+                            this._eatWait = 0f;
+                            this._openWait = 0f;
+                            this._showCard = true;
+                            this._sandwichEat = 0f;
+                            this._finishingNewStamp = false;
+                        }
+                    }
+                    else if (this._finishEat)
+                    {
+                        this._extraMouthOpen = Lerp.FloatSmooth(this._extraMouthOpen, 0f, 0.17f, 1.05f);
+                        this._afterEatWait += 0.08f;
+                        if (this._afterEatWait >= 1f)
+                        {
+                            SFX.Play("healthyEat", 1f, 0f, 0f, false);
+                            for (int l = 0; l < 8; l++)
+                            {
+                                this._hearts.Add(new LittleHeart
                                 {
-                                    _extraMouthOpen = Lerp.FloatSmooth(_extraMouthOpen, 15f, 0.18f, 1.05f);
-                                    if (_extraMouthOpen >= 1.0)
+                                    position = this.littleManPos + new Vec2(8f + Rando.Float(-4f, 4f), 8f + Rando.Float(-6f, 6f)),
+                                    velocity = new Vec2(0f, Rando.Float(-0.2f, -0.4f))
+                                });
+                            }
+                            this._burp = true;
+                        }
+                    }
+                    else
+                    {
+                        this._sandwichLerp = Lerp.Float(this._sandwichLerp, 0f, 0.12f);
+                        if (this._sandwichLerp <= 0f)
+                        {
+                            this._extraMouthOpen = Lerp.FloatSmooth(this._extraMouthOpen, 15f, 0.18f, 1.05f);
+                            if (this._extraMouthOpen >= 1f)
+                            {
+                                this._openWait += 0.08f;
+                                if (this._openWait >= 1f)
+                                {
+                                    this._sandwichEat = Lerp.Float(this._sandwichEat, 1f, 0.08f);
+                                    if (this._sandwichEat >= 1f)
                                     {
-                                        _openWait += 0.08f;
-                                        if (_openWait >= 1.0)
+                                        if (this._eatWait == 0f)
                                         {
-                                            _sandwichEat = Lerp.Float(_sandwichEat, 1f, 0.08f);
-                                            if (_sandwichEat >= 1.0)
-                                            {
-                                                if (_eatWait == 0.0)
-                                                    SFX.Play("swallow");
-                                                _eatWait += 0.08f;
-                                                if (_eatWait >= 1.0)
-                                                    _finishEat = true;
-                                            }
+                                            SFX.Play("swallow", 1f, 0f, 0f, false);
+                                        }
+                                        this._eatWait += 0.08f;
+                                        if (this._eatWait >= 1f)
+                                        {
+                                            this._finishEat = true;
                                         }
                                     }
                                 }
                             }
                         }
-                        if (_stampCardLerp < 0.99f)
-                            return;
-                        _stampWait += 0.2f;
-                        if (_stampWait < 1.0)
-                            return;
-                        if (_stampWait2 == 0.0)
-                        {
-                            ++Profiles.experienceProfile.numSandwiches;
-                            _finishingNewStamp = true;
-                            _stampWobble = 1f;
-                            SFX.Play("dacBang");
-                        }
-                        _stampWait2 += 0.06f;
-                        if (_stampWait2 < 1.0)
-                            return;
-                        if (Profiles.experienceProfile.numSandwiches > 0 && Profiles.experienceProfile.numSandwiches % 6 == 0 && _coin2Wait == 0.0)
-                        {
-                            _coinLerp2 = 0f;
-                            _coin2Wait = 1f;
-                            SFX.Play("ching", pitch: 0.2f);
-                            ++UILevelBox.rareGachas;
-                        }
-                        _coin2Wait -= 0.08f;
-                        if (_coin2Wait > 0.0)
-                            return;
-                        _stampCard = false;
-                        _stampWait2 = 0f;
-                        _stampWait = 0f;
-                        _coin2Wait = 0f;
                     }
-                    else
+                }
+                if (this._stampCardLerp >= 0.99f)
+                {
+                    this._stampWait += 0.2f;
+                    if (this._stampWait >= 1f)
                     {
-                        _showCard = false;
-                        Vec2 vec2 = new Vec2(x - 80f, y - 10f);
-                        if (!open)
-                            return;
-                        if (_currentLevel == _desiredLevel)
+                        if (this._stampWait2 == 0f)
                         {
-                            if (_currentLevel > 3 && _finned && Input.Pressed("MENU2"))
+                            Profiles.experienceProfile.numSandwiches++;
+                            this._finishingNewStamp = true;
+                            this._stampWobble = 1f;
+                            SFX.Play("dacBang", 1f, 0f, 0f, false);
+                        }
+                        this._stampWait2 += 0.06f;
+                        if (this._stampWait2 >= 1f)
+                        {
+                            if (Profiles.experienceProfile.numSandwiches > 0 && Profiles.experienceProfile.numSandwiches % 6 == 0 && this._coin2Wait == 0f)
                             {
-                                _talking = true;
-                                _finishTalkWait = 0f;
-                                _talkLine = "";
-                                if (Profiles.experienceProfile.littleManLevel <= 2 && _currentLevel > 6)
+                                this._coinLerp2 = 0f;
+                                this._coin2Wait = 1f;
+                                SFX.Play("ching", 1f, 0.2f, 0f, false);
+                                UILevelBox.rareGachas++;
+                            }
+                            this._coin2Wait -= 0.08f;
+                            if (this._coin2Wait <= 0f)
+                            {
+                                this._stampCard = false;
+                                this._stampWait2 = 0f;
+                                this._stampWait = 0f;
+                                this._coin2Wait = 0f;
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+            this._showCard = false;
+            Vec2 target = new Vec2(base.x - 80f, base.y - 10f);
+            if (base.open)
+            {
+                if (this._currentLevel == this._desiredLevel)
+                {
+                    if (this._currentLevel > 3 && this._finned && Input.Pressed("MENU2", "Any"))
+                    {
+                        this._talking = true;
+                        this._finishTalkWait = 0f;
+                        this._talkLine = "";
+                        if (Profiles.experienceProfile.littleManLevel <= 2 && this._currentLevel > 6)
+                        {
+                            this._feedLine = "";
+                            if (!Global.data.hadTalk)
+                            {
+                                if (this._eggFeedIndex < this._eggFeedLines.Count)
                                 {
-                                    _feedLine = "";
-                                    if (!Global.data.hadTalk)
+                                    if (this._eggFeedIndex > 2)
                                     {
-                                        if (_eggFeedIndex < _eggFeedLines.Count)
+                                        this.eggTalk = true;
+                                    }
+                                    this._feedLine = this._eggFeedLines[this._eggFeedIndex];
+                                    this._eggFeedIndex++;
+                                    if (this._eggFeedIndex >= this._eggFeedLines.Count)
+                                    {
+                                        Global.data.hadTalk = true;
+                                        HUD.CloseAllCorners();
+                                        this.eggTalk = false;
+                                        this._finned = false;
+                                    }
+                                }
+                                else
+                                {
+                                    this._feedLine = "...";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            this._feedLine = "I AM A HUNGRY\nLITTLE MAN.";
+                            if (Rando.Int(1000) == 1)
+                            {
+                                this._feedLine = "I... AM A HUNGRY\nLITTLE MAN.";
+                            }
+                            DateTime now = MonoMain.GetLocalTime();
+                            if (!UILevelBox.saidSpecial)
+                            {
+                                if (now.Month == 4 && now.Day == 20)
+                                {
+                                    this._feedLine = "HAPPY BIRTHDAY!";
+                                }
+                                else if (now.Month == 3 && now.Day == 9)
+                                {
+                                    this._feedLine = "HAPPY BIRTHDAY!!";
+                                }
+                                else if (now.Month == 1 && now.Day == 1)
+                                {
+                                    this._feedLine = "HAPPY NEW YEAR!";
+                                }
+                                else if (now.Month == 6 && now.Day == 4)
+                                {
+                                    this._feedLine = "HAPPY BIRTHDAY\nDUCK GAME!";
+                                }
+                                else if (Rando.Int(190000) == 1)
+                                {
+                                    this._feedLine = "LET'S DANCE!";
+                                }
+                                else if (Rando.Int(80000) == 1)
+                                {
+                                    this._feedLine = "HAPPY BIRTHDAY!";
+                                }
+                                UILevelBox.saidSpecial = true;
+                            }
+                            if (Rando.Int(100000) == 1)
+                            {
+                                this._feedLine = "I AM A HANGRY\nLITTLE MAN.";
+                            }
+                            else if (Rando.Int(150000) == 1)
+                            {
+                                this._feedLine = "I AM A HAPPY\nLITTLE MAN.";
+                            }
+                        }
+                        this._startFeedLine = this._feedLine;
+                    }
+                    if (this._state == UILevelBoxState.LogWinLoss)
+                    {
+                        if (Input.Pressed("SELECT", "Any"))
+                        {
+                            if (Profiles.experienceProfile != null)
+                            {
+                                Profiles.experienceProfile.xp = this._xpValue;
+                            }
+                            SFX.Play("rockHitGround2", 1f, 0.5f, 0f, false);
+                            this.Close();
+                        }
+                    }
+                    else if (this._state == UILevelBoxState.Wait)
+                    {
+                        this._startWait -= 0.09f;
+                        if (this._startWait < 0f)
+                        {
+                            this._startWait = 1f;
+                            this._state = UILevelBoxState.ShowXPBar;
+                            SFX.Play("rockHitGround2", 1f, 0.5f, 0f, false);
+                        }
+                    }
+                    else if (this._state == UILevelBoxState.UpdateTime)
+                    {
+                        this._advancedDay = false;
+                        this._fallVel = 0f;
+                        this._finned = false;
+                        //this._updateTime = false;
+                        this._markedNewDay = false;
+                        this._advanceDayWait = 0f;
+                        this._dayFallAway = 0f;
+                        this._dayScroll = 0f;
+                        this._newCircleLerp = 0f;
+                        this._popDay = false;
+                        this._slideWait = 0f;
+                        this._unSlide = false;
+                        this._intermissionSlide = 0f;
+                        this._intermissionWait = 0f;
+                        this._gaveToy = false;
+                        if (this._roundsPlayed > 0)
+                        {
+                            this._updateTimeWait += 0.08f;
+                            if (this._updateTimeWait >= 1f)
+                            {
+                                this._dayTake += 0.8f;
+                                if (this._dayTake >= 1f)
+                                {
+                                    this._dayTake = 0f;
+                                    this._roundsPlayed--;
+                                }
+                                this._dayProgress = 1f - (float)this._roundsPlayed / (float)this._startRoundsPlayed;
+                                this.time += 0.08f;
+                            }
+                            if (this.time >= 1f)
+                            {
+                                this.time -= 1f;
+                                this._state = UILevelBoxState.AdvanceDay;
+                                this._updateTimeWait = 0f;
+                                this._dayTake = 0f;
+                            }
+                        }
+                        else
+                        {
+                            this._state = UILevelBoxState.Finished;
+                        }
+                    }
+                    else if (this._state == UILevelBoxState.RunDay)
+                    {
+                        DayType t4 = this.GetDay(Profiles.experienceProfile.currentDay);
+                        if (t4 == DayType.Allowance)
+                        {
+                            if (this._giveMoney == 0)
+                            {
+                                this._giveMoney = 200;
+                                Profiles.experienceProfile.littleManBucks += this._giveMoney;
+                                SFX.Play("ching", 1f, 0f, 0f, false);
+                            }
+                            this._giveMoneyRise = Lerp.Float(this._giveMoneyRise, 1f, 0.05f);
+                            this._finishDayWait += 0.04f;
+                            if (this._finishDayWait >= 1f)
+                            {
+                                this._giveMoneyRise = 1f;
+                                this._giveMoney = 0;
+                                this._state = UILevelBoxState.UpdateTime;
+                            }
+                        }
+                        else if (t4 == DayType.PayDay)
+                        {
+                            if (this._giveMoney == 0)
+                            {
+                                int wage = 75;
+                                if (this._currentLevel > 5)
+                                {
+                                    wage = 100;
+                                }
+                                if (this._currentLevel > 6)
+                                {
+                                    wage = 125;
+                                }
+                                this._giveMoney = wage + Profiles.experienceProfile.numLittleMen * 25;
+                                Profiles.experienceProfile.littleManBucks += this._giveMoney;
+                                SFX.Play("ching", 1f, 0f, 0f, false);
+                            }
+                            this._giveMoneyRise = Lerp.Float(this._giveMoneyRise, 1f, 0.05f);
+                            this._finishDayWait += 0.04f;
+                            if (this._finishDayWait >= 1f)
+                            {
+                                this._giveMoneyRise = 1f;
+                                this._giveMoney = 0;
+                                this._state = UILevelBoxState.UpdateTime;
+                            }
+                        }
+                        else if (t4 == DayType.ToyDay)
+                        {
+                            if (!this._gaveToy)
+                            {
+                                this._gaveToy = true;
+                                UILevelBox.gachas++;
+                                this._coinLerp = 0f;
+                                SFX.Play("ching", 1f, 0.2f, 0f, false);
+                            }
+                            this._finishDayWait += 0.04f;
+                            if (this._finishDayWait >= 1f)
+                            {
+                                this._state = UILevelBoxState.UpdateTime;
+                            }
+                        }
+                        else if (t4 == DayType.Sandwich)
+                        {
+                            if (!this._gaveToy)
+                            {
+                                this._stampCard = true;
+                                this._state = UILevelBoxState.UpdateTime;
+                            }
+                        }
+                        else if (t4 == DayType.FreeXP)
+                        {
+                           // this._didXPDay = true;
+                            DuckNetwork.GiveXP("FREE XP DAY", 0, 75, 4, 9999999, 9999999, 9999999);
+                            this._state = UILevelBoxState.Wait;
+                        }
+                        else if (t4 == DayType.Empty)
+                        {
+                            this._state = UILevelBoxState.UpdateTime;
+                        }
+                        else if (this.IsVinceDay(t4) && !Input.Down("SELECT", "Any"))
+                        {
+                            this._state = UILevelBoxState.UpdateTime;
+                            Vincent.showingDay = false;
+                            FurniShopScreen.close = true;
+                        }
+                    }
+                    else if (this._state == UILevelBoxState.AdvanceDay)
+                    {
+                        if (!this._advancedDay)
+                        {
+                            if (!this._popDay)
+                            {
+                                this._popDay = true;
+                                this._fallVel = -0.025f;
+                                this._ranRot = Rando.Float(-0.3f, 0.3f);
+                            }
+                            if (this._dayFallAway < 1f)
+                            {
+                                this._dayFallAway += this._fallVel;
+                                this._fallVel += 0.005f;
+                            }
+                            else if (this._dayScroll < 1f)
+                            {
+                                this._dayScroll = Lerp.Float(this._dayScroll, 1f, 0.1f);
+                            }
+                            else
+                            {
+                                this._advancedDay = true;
+                                Profiles.experienceProfile.currentDay++;
+                                this._dayFallAway = 0f;
+                                this._dayScroll = 0f;
+                            }
+                        }
+                        else
+                        {
+                            this._advanceDayWait += 0.1f;
+                            if (this._advanceDayWait >= 1f)
+                            {
+                                if (!this._markedNewDay)
+                                {
+                                    SFX.Play("chalk", 1f, 0f, 0f, false);
+                                    this._currentDay = Profiles.experienceProfile.currentDay;
+                                    this._markedNewDay = true;
+                                    DayType t2 = this.GetDay(Profiles.experienceProfile.currentDay);
+                                    if (this.IsVinceDay(t2))
+                                    {
+                                        this.skipping = false;
+                                        SFX.skip = false;
+                                        SFX.Play("dacBang", 1f, 0f, 0f, false);
+                                        Graphics.fadeAdd = 1f;
+                                    }
+                                }
+                                if (this._markedNewDay)
+                                {
+                                    this._intermissionWait += 0.15f;
+                                    if (this._intermissionWait >= 1f)
+                                    {
+                                        if (this._unSlide)
                                         {
-                                            if (_eggFeedIndex > 2)
-                                                eggTalk = true;
-                                            _feedLine = _eggFeedLines[_eggFeedIndex];
-                                            ++_eggFeedIndex;
-                                            if (_eggFeedIndex >= _eggFeedLines.Count)
+                                            this._intermissionSlide = Lerp.FloatSmooth(this._intermissionSlide, 0f, 0.42f, 1f);
+                                            if (this._intermissionSlide <= 0.02f)
                                             {
-                                                Global.data.hadTalk = true;
-                                                HUD.CloseAllCorners();
-                                                eggTalk = false;
-                                                _finned = false;
+                                                this._intermissionSlide = 0f;
+                                                this._dayStartWait += 0.11f;
+                                                if (this._dayStartWait >= 1f)
+                                                {
+                                                    this.AdvanceDay();
+                                                    this._state = UILevelBoxState.RunDay;
+                                                }
+                                                if (this.IsVinceDay(this.GetDay(Profiles.experienceProfile.currentDay)))
+                                                {
+                                                    Vincent.showingDay = false;
+                                                }
                                             }
                                         }
                                         else
-                                            _feedLine = "...";
-                                    }
-                                }
-                                else
-                                {
-                                    _feedLine = "I AM A HUNGRY\nLITTLE MAN.";
-                                    if (Rando.Int(1000) == 1)
-                                        _feedLine = "I... AM A HUNGRY\nLITTLE MAN.";
-                                    DateTime localTime = MonoMain.GetLocalTime();
-                                    if (!UILevelBox.saidSpecial)
-                                    {
-                                        if (localTime.Month == 4 && localTime.Day == 20)
-                                            _feedLine = "HAPPY BIRTHDAY!";
-                                        else if (localTime.Month == 3 && localTime.Day == 9)
-                                            _feedLine = "HAPPY BIRTHDAY!!";
-                                        else if (localTime.Month == 1 && localTime.Day == 1)
-                                            _feedLine = "HAPPY NEW YEAR!";
-                                        else if (localTime.Month == 6 && localTime.Day == 4)
-                                            _feedLine = "HAPPY BIRTHDAY\nDUCK GAME!";
-                                        else if (Rando.Int(190000) == 1)
-                                            _feedLine = "LET'S DANCE!";
-                                        else if (Rando.Int(80000) == 1)
-                                            _feedLine = "HAPPY BIRTHDAY!";
-                                        UILevelBox.saidSpecial = true;
-                                    }
-                                    if (Rando.Int(100000) == 1)
-                                        _feedLine = "I AM A HANGRY\nLITTLE MAN.";
-                                    else if (Rando.Int(150000) == 1)
-                                        _feedLine = "I AM A HAPPY\nLITTLE MAN.";
-                                }
-                                _startFeedLine = _feedLine;
-                            }
-                            if (_state == UILevelBoxState.LogWinLoss)
-                            {
-                                if (Input.Pressed("SELECT"))
-                                {
-                                    if (Profiles.experienceProfile != null)
-                                        Profiles.experienceProfile.xp = _xpValue;
-                                    SFX.Play("rockHitGround2", pitch: 0.5f);
-                                    Close();
-                                }
-                            }
-                            else if (_state == UILevelBoxState.Wait)
-                            {
-                                _startWait -= 0.09f;
-                                if (_startWait < 0.0)
-                                {
-                                    _startWait = 1f;
-                                    _state = UILevelBoxState.ShowXPBar;
-                                    SFX.Play("rockHitGround2", pitch: 0.5f);
-                                }
-                            }
-                            else if (_state == UILevelBoxState.UpdateTime)
-                            {
-                                _advancedDay = false;
-                                _fallVel = 0f;
-                                _finned = false;
-                                //this._updateTime = false;
-                                _markedNewDay = false;
-                                _advanceDayWait = 0f;
-                                _dayFallAway = 0f;
-                                _dayScroll = 0f;
-                                _newCircleLerp = 0f;
-                                _popDay = false;
-                                _slideWait = 0f;
-                                _unSlide = false;
-                                _intermissionSlide = 0f;
-                                _intermissionWait = 0f;
-                                _gaveToy = false;
-                                if (_roundsPlayed > 0)
-                                {
-                                    _updateTimeWait += 0.08f;
-                                    if (_updateTimeWait >= 1.0)
-                                    {
-                                        _dayTake += 0.8f;
-                                        if (_dayTake >= 1.0)
                                         {
-                                            _dayTake = 0f;
-                                            --_roundsPlayed;
-                                        }
-                                        _dayProgress = (float)(1.0 - _roundsPlayed / _startRoundsPlayed);
-                                        time += 0.08f;
-                                    }
-                                    if (time >= 1.0)
-                                    {
-                                        --time;
-                                        _state = UILevelBoxState.AdvanceDay;
-                                        _updateTimeWait = 0f;
-                                        _dayTake = 0f;
-                                    }
-                                }
-                                else
-                                    _state = UILevelBoxState.Finished;
-                            }
-                            else if (_state == UILevelBoxState.RunDay)
-                            {
-                                DayType day = GetDay(Profiles.experienceProfile.currentDay);
-                                switch (day)
-                                {
-                                    case DayType.Empty:
-                                        _state = UILevelBoxState.UpdateTime;
-                                        break;
-                                    case DayType.Sandwich:
-                                        if (!_gaveToy)
-                                        {
-                                            _stampCard = true;
-                                            _state = UILevelBoxState.UpdateTime;
-                                            break;
-                                        }
-                                        break;
-                                    case DayType.FreeXP:
-                                        //this._didXPDay = true;
-                                        DuckNetwork.GiveXP("FREE XP DAY", 0, 75);
-                                        _state = UILevelBoxState.Wait;
-                                        break;
-                                    case DayType.ToyDay:
-                                        if (!_gaveToy)
-                                        {
-                                            _gaveToy = true;
-                                            ++UILevelBox.gachas;
-                                            _coinLerp = 0f;
-                                            SFX.Play("ching", pitch: 0.2f);
-                                        }
-                                        _finishDayWait += 0.04f;
-                                        if (_finishDayWait >= 1.0)
-                                        {
-                                            _state = UILevelBoxState.UpdateTime;
-                                            break;
-                                        }
-                                        break;
-                                    case DayType.PayDay:
-                                        if (_giveMoney == 0)
-                                        {
-                                            int num = 75;
-                                            if (_currentLevel > 5)
-                                                num = 100;
-                                            if (_currentLevel > 6)
-                                                num = 125;
-                                            _giveMoney = num + Profiles.experienceProfile.numLittleMen * 25;
-                                            Profiles.experienceProfile.littleManBucks += _giveMoney;
-                                            SFX.Play("ching");
-                                        }
-                                        _giveMoneyRise = Lerp.Float(_giveMoneyRise, 1f, 0.05f);
-                                        _finishDayWait += 0.04f;
-                                        if (_finishDayWait >= 1.0)
-                                        {
-                                            _giveMoneyRise = 1f;
-                                            _giveMoney = 0;
-                                            _state = UILevelBoxState.UpdateTime;
-                                            break;
-                                        }
-                                        break;
-                                    case DayType.Allowance:
-                                        if (_giveMoney == 0)
-                                        {
-                                            _giveMoney = 200;
-                                            Profiles.experienceProfile.littleManBucks += _giveMoney;
-                                            SFX.Play("ching");
-                                        }
-                                        _giveMoneyRise = Lerp.Float(_giveMoneyRise, 1f, 0.05f);
-                                        _finishDayWait += 0.04f;
-                                        if (_finishDayWait >= 1.0)
-                                        {
-                                            _giveMoneyRise = 1f;
-                                            _giveMoney = 0;
-                                            _state = UILevelBoxState.UpdateTime;
-                                            break;
-                                        }
-                                        break;
-                                    default:
-                                        if (IsVinceDay(day) && !Input.Down("SELECT"))
-                                        {
-                                            _state = UILevelBoxState.UpdateTime;
-                                            Vincent.showingDay = false;
-                                            FurniShopScreen.close = true;
-                                            break;
-                                        }
-                                        break;
-                                }
-                            }
-                            else if (_state == UILevelBoxState.AdvanceDay)
-                            {
-                                if (!_advancedDay)
-                                {
-                                    if (!_popDay)
-                                    {
-                                        _popDay = true;
-                                        _fallVel = -0.025f;
-                                        _ranRot = Rando.Float(-0.3f, 0.3f);
-                                    }
-                                    if (_dayFallAway < 1.0)
-                                    {
-                                        _dayFallAway += _fallVel;
-                                        _fallVel += 0.005f;
-                                    }
-                                    else if (_dayScroll < 1.0)
-                                    {
-                                        _dayScroll = Lerp.Float(_dayScroll, 1f, 0.1f);
-                                    }
-                                    else
-                                    {
-                                        _advancedDay = true;
-                                        ++Profiles.experienceProfile.currentDay;
-                                        _dayFallAway = 0f;
-                                        _dayScroll = 0f;
-                                    }
-                                }
-                                else
-                                {
-                                    _advanceDayWait += 0.1f;
-                                    if (_advanceDayWait >= 1.0)
-                                    {
-                                        if (!_markedNewDay)
-                                        {
-                                            SFX.Play("chalk");
-                                            _currentDay = Profiles.experienceProfile.currentDay;
-                                            _markedNewDay = true;
-                                            if (IsVinceDay(GetDay(Profiles.experienceProfile.currentDay)))
+                                            this._intermissionSlide = Lerp.FloatSmooth(this._intermissionSlide, 1f, 0.2f, 1.05f);
+                                            if (this._intermissionSlide >= 1f)
                                             {
-                                                skipping = false;
-                                                SFX.skip = false;
-                                                SFX.Play("dacBang");
-                                                Graphics.fadeAdd = 1f;
-                                            }
-                                        }
-                                        if (_markedNewDay)
-                                        {
-                                            _intermissionWait += 0.15f;
-                                            if (_intermissionWait >= 1.0)
-                                            {
-                                                if (_unSlide)
+                                                DayType t3 = this.GetDay(Profiles.experienceProfile.currentDay);
+                                                if (this.IsVinceDay(t3) && !Vincent.showingDay)
                                                 {
-                                                    _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 0f, 0.42f);
-                                                    if (_intermissionSlide <= 0.02f)
-                                                    {
-                                                        _intermissionSlide = 0f;
-                                                        _dayStartWait += 0.11f;
-                                                        if (_dayStartWait >= 1.0)
-                                                        {
-                                                            AdvanceDay();
-                                                            _state = UILevelBoxState.RunDay;
-                                                        }
-                                                        if (IsVinceDay(GetDay(Profiles.experienceProfile.currentDay)))
-                                                            Vincent.showingDay = false;
-                                                    }
+                                                    Vincent.Clear();
+                                                    Vincent.showingDay = true;
+                                                    Vincent.Open(t3);
+                                                    FurniShopScreen.open = true;
+                                                    this._roundsPlayed = 0;
                                                 }
-                                                else
+                                                this._slideWait += 0.11f;
+                                                if (this._slideWait >= 1.8f)
                                                 {
-                                                    _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 1f, 0.2f, 1.05f);
-                                                    if (_intermissionSlide >= 1.0)
-                                                    {
-                                                        DayType day = GetDay(Profiles.experienceProfile.currentDay);
-                                                        if (IsVinceDay(day) && !Vincent.showingDay)
-                                                        {
-                                                            Vincent.Clear();
-                                                            Vincent.showingDay = true;
-                                                            Vincent.Open(day);
-                                                            FurniShopScreen.open = true;
-                                                            _roundsPlayed = 0;
-                                                        }
-                                                        _slideWait += 0.11f;
-                                                        if (_slideWait >= 1.8f)
-                                                            _unSlide = true;
-                                                    }
+                                                    this._unSlide = true;
                                                 }
                                             }
                                         }
-                                        _newCircleLerp = Lerp.Float(_newCircleLerp, 1f, 0.2f);
                                     }
                                 }
+                                this._newCircleLerp = Lerp.Float(this._newCircleLerp, 1f, 0.2f);
                             }
-                            else if (_state == UILevelBoxState.Finished)
+                        }
+                    }
+                    else if (this._state == UILevelBoxState.Finished)
+                    {
+                        if (!this._finned)
+                        {
+                            HUD.CloseAllCorners();
+                            HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE", null, false);
+                            if (this._currentLevel > 3 && (!Global.data.hadTalk || Profiles.experienceProfile.littleManLevel > 2))
                             {
-                                if (!_finned)
-                                {
-                                    HUD.CloseAllCorners();
-                                    HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
-                                    if (_currentLevel > 3 && (!Global.data.hadTalk || Profiles.experienceProfile.littleManLevel > 2))
-                                        HUD.AddCornerControl(HUDCorner.TopRight, "@MENU2@TALK");
-                                    if (Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (UILevelBox.rareGachas > 0 || UILevelBox.gachas > 0))
-                                        HUD.AddCornerControl(HUDCorner.BottomLeft, "@START@AUTO TOYS");
-                                    _finned = true;
-                                }
+                                HUD.AddCornerControl(HUDCorner.TopRight, "@MENU2@TALK", null, false);
                             }
-                            else if (_state == UILevelBoxState.ShowXPBar)
+                            if (Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (UILevelBox.rareGachas > 0 || UILevelBox.gachas > 0))
                             {
-                                _firstParticleIn = false;
-                                _drain = 1f;
-                                if (_currentStat.Key == null)
-                                    _currentStat = DuckNetwork.TakeXPStat();
-                                if (_currentStat.Key == null)
+                                HUD.AddCornerControl(HUDCorner.BottomLeft, "@START@AUTO TOYS", null, false);
+                            }
+                            this._finned = true;
+                        }
+                    }
+                    else if (this._state == UILevelBoxState.ShowXPBar)
+                    {
+                        this._firstParticleIn = false;
+                        this._drain = 1f;
+                        if (this._currentStat.Key == null)
+                        {
+                            this._currentStat = DuckNetwork.TakeXPStat();
+                        }
+                        if (this._currentStat.Key == null)
+                        {
+                            if (this._roundsPlayed > 0 && this._currentLevel >= 4)
+                            {
+                                this._state = UILevelBoxState.UpdateTime;
+                            }
+                            else
+                            {
+                                this._state = UILevelBoxState.Finished;
+                            }
+                        }
+                        else
+                        {
+                            this._slideXPBar = Lerp.FloatSmooth(this._slideXPBar, 1f, 0.18f, 1.1f);
+                            if (this._slideXPBar >= 1f)
+                            {
+                                this._oldXPValue = (float)this._xpValue;
+                                this._newXPValue = (float)(this._xpValue + this._currentStat.Value.xp);
+                                if (this._currentLevel > 2)
                                 {
-                                    _state = _roundsPlayed <= 0 || _currentLevel < 4 ? UILevelBoxState.Finished : UILevelBoxState.UpdateTime;
-                                }
-                                else
-                                {
-                                    _slideXPBar = Lerp.FloatSmooth(_slideXPBar, 1f, 0.18f, 1.1f);
-                                    if (_slideXPBar >= 1.0)
+                                    this._oldGachaValue = (float)this._gachaValue;
+                                    this._newGachaValue = (float)(this._gachaValue + this._currentStat.Value.xp);
+                                    if (this._currentLevel > 3)
                                     {
-                                        _oldXPValue = _xpValue;
-                                        _newXPValue = _xpValue + _currentStat.Value.xp;
-                                        if (_currentLevel > 2)
+                                        this._oldSandwichValue = (float)this._sandwichValue;
+                                        this._newSandwichValue = (float)(this._sandwichValue + this._currentStat.Value.xp);
+                                        if (this._currentLevel >= 7)
                                         {
-                                            _oldGachaValue = _gachaValue;
-                                            _newGachaValue = _gachaValue + _currentStat.Value.xp;
-                                            if (_currentLevel > 3)
-                                            {
-                                                _oldSandwichValue = _sandwichValue;
-                                                _newSandwichValue = _sandwichValue + _currentStat.Value.xp;
-                                                if (_currentLevel >= 7)
-                                                {
-                                                    _oldMilkValue = _milkValue;
-                                                    _newMilkValue = _milkValue + _currentStat.Value.xp;
-                                                }
-                                            }
+                                            this._oldMilkValue = (float)this._milkValue;
+                                            this._newMilkValue = (float)(this._milkValue + this._currentStat.Value.xp);
                                         }
-                                        _state = UILevelBoxState.WaitXPBar;
-                                        SFX.Play("scoreDing", pitch: 0.5f);
                                     }
                                 }
+                                this._state = UILevelBoxState.WaitXPBar;
+                                SFX.Play("scoreDing", 1f, 0.5f, 0f, false);
                             }
-                            else if (_state == UILevelBoxState.WaitXPBar)
+                        }
+                    }
+                    else if (this._state == UILevelBoxState.WaitXPBar)
+                    {
+                        this._startWait -= 0.15f;
+                        if (this._startWait < 0f)
+                        {
+                            this._startWait = 1f;
+                            this._state = UILevelBoxState.DrainXPBar;
+                        }
+                    }
+                    else if (this._state == UILevelBoxState.DrainXPBar)
+                    {
+                        this._drain -= 0.04f;
+                        if (this._drain > 0f)
+                        {
+                            this._particleWait -= 0.4f;
+                            if (this._particleWait < 0f)
                             {
-                                _startWait -= 0.15f;
-                                if (_startWait < 0.0)
+                                float fullYOffset = 30f;
+                                if (this._currentLevel == 3)
                                 {
-                                    _startWait = 1f;
-                                    _state = UILevelBoxState.DrainXPBar;
+                                    fullYOffset = 25f;
                                 }
-                            }
-                            else if (_state == UILevelBoxState.DrainXPBar)
-                            {
-                                _drain -= 0.04f;
-                                if (_drain > 0.0)
+                                if (this._currentLevel >= 4)
                                 {
-                                    _particleWait -= 0.4f;
-                                    if (_particleWait < 0.0)
+                                    fullYOffset = 20f;
+                                }
+                                if (this._currentLevel >= 4)
+                                {
+                                    fullYOffset = 0f;
+                                }
+                                if (this._currentLevel >= 7)
+                                {
+                                    fullYOffset = -12f;
+                                }
+                                if (this._currentStat.Value.type == 0 || this._currentStat.Value.type == 4)
+                                {
+                                    this._particles.Add(new XPPlus
                                     {
-                                        float y = 30f;
-                                        if (_currentLevel == 3)
-                                            y = 25f;
-                                        if (_currentLevel >= 4)
-                                            y = 20f;
-                                        if (_currentLevel >= 4)
-                                            y = 0f;
-                                        if (_currentLevel >= 7)
-                                            y = -12f;
-                                        if (_currentStat.Value.type == 0 || _currentStat.Value.type == 4)
-                                            _particles.Add(new XPPlus()
-                                            {
-                                                position = new Vec2(x - 72f, this.y - 58f),
-                                                velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
-                                                target = vec2 + new Vec2(0f, y),
-                                                color = Colors.DGGreen
-                                            });
-                                        if (_currentLevel >= 3 && (_currentStat.Value.type == 1 || _currentStat.Value.type == 4))
-                                            _particles.Add(new XPPlus()
-                                            {
-                                                position = new Vec2(x - 72f, this.y - 58f),
-                                                velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
-                                                target = vec2 + new Vec2(0f, 10f + y),
-                                                color = Colors.DGRed
-                                            });
-                                        if (_currentLevel >= 4 && (_currentStat.Value.type == 2 || _currentStat.Value.type == 4))
-                                            _particles.Add(new XPPlus()
-                                            {
-                                                position = new Vec2(x - 72f, this.y - 58f),
-                                                velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
-                                                target = vec2 + new Vec2(0f, 20f + y),
-                                                color = Colors.DGBlue
-                                            });
-                                        ++_xpLost;
-                                        SFX.Play("tinyTick");
-                                        _particleWait = 1f;
-                                    }
+                                        position = new Vec2(base.x - 72f, base.y - 58f),
+                                        velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
+                                        target = target + new Vec2(0f, fullYOffset),
+                                        color = Colors.DGGreen
+                                    });
                                 }
-                                if (_firstParticleIn)
+                                if (this._currentLevel >= 3 && (this._currentStat.Value.type == 1 || this._currentStat.Value.type == 4))
                                 {
-                                    _addLerp += 0.04f;
-                                    _xpValue = (int)Lerp.FloatSmooth(_oldXPValue, _newXPValue, _addLerp);
-                                    _gachaValue = (int)Lerp.FloatSmooth(_oldGachaValue, _newGachaValue, _addLerp);
-                                    _sandwichValue = (int)Lerp.FloatSmooth(_oldSandwichValue, _newSandwichValue, _addLerp);
-                                    _milkValue = (int)Lerp.FloatSmooth(_oldMilkValue, _newMilkValue, _addLerp);
-                                    _xpProgress = (_xpValue - _originalXP) / (float)_totalXP;
+                                    this._particles.Add(new XPPlus
+                                    {
+                                        position = new Vec2(base.x - 72f, base.y - 58f),
+                                        velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
+                                        target = target + new Vec2(0f, 10f + fullYOffset),
+                                        color = Colors.DGRed
+                                    });
                                 }
-                                if (_drain < 0.0)
-                                    _drain = 0f;
-                                if (_drain <= 0.0 && _addLerp >= 1.0)
+                                if (this._currentLevel >= 4 && (this._currentStat.Value.type == 2 || this._currentStat.Value.type == 4))
                                 {
-                                    _drain = 0f;
-                                    _addLerp = 0f;
-                                    _state = UILevelBoxState.HideXPBar;
+                                    this._particles.Add(new XPPlus
+                                    {
+                                        position = new Vec2(base.x - 72f, base.y - 58f),
+                                        velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
+                                        target = target + new Vec2(0f, 20f + fullYOffset),
+                                        color = Colors.DGBlue
+                                    });
                                 }
-                            }
-                            else if (_state == UILevelBoxState.HideXPBar)
-                            {
-                                _slideXPBar = Lerp.FloatSmooth(_slideXPBar, 0f, 0.2f, 1.1f);
-                                if (_slideXPBar <= 0.02f)
-                                {
-                                    _currentStat = new KeyValuePair<string, XPPair>();
-                                    _state = UILevelBoxState.ShowXPBar;
-                                    SFX.Play("rockHitGround2", pitch: 0.5f);
-                                    _slideXPBar = 0f;
-                                }
+                                this._xpLost += 1f;
+                                SFX.Play("tinyTick", 1f, 0f, 0f, false);
+                                this._particleWait = 1f;
                             }
                         }
-                        if (_currentLevel == _desiredLevel)
+                        if (this._firstParticleIn)
                         {
-                            _coinLerp = Lerp.Float(_coinLerp, 1f, 0.1f);
-                            foreach (XPPlus particle in _particles)
-                            {
-                                particle.position += particle.velocity;
-                                if (!particle.splash)
-                                {
-                                    particle.position = Lerp.Vec2Smooth(particle.position, particle.target, particle.time);
-                                    particle.time += 0.01f;
-                                }
-                                else
-                                {
-                                    particle.velocity.y += 0.2f;
-                                    particle.alpha -= 0.05f;
-                                }
-                            }
+                            this._addLerp += 0.04f;
+                            this._xpValue = (int)Lerp.FloatSmooth(this._oldXPValue, this._newXPValue, this._addLerp, 1f);
+                            this._gachaValue = (int)Lerp.FloatSmooth(this._oldGachaValue, this._newGachaValue, this._addLerp, 1f);
+                            this._sandwichValue = (int)Lerp.FloatSmooth(this._oldSandwichValue, this._newSandwichValue, this._addLerp, 1f);
+                            this._milkValue = (int)Lerp.FloatSmooth(this._oldMilkValue, this._newMilkValue, this._addLerp, 1f);
+                            this._xpProgress = (float)(this._xpValue - this._originalXP) / (float)this._totalXP;
                         }
-                        int count = _particles.Count;
-                        _particles.RemoveAll(part => (part.position - part.target).lengthSq < 64.0);
-                        if (_particles.Count != count)
-                            _firstParticleIn = true;
-                        if (_xpValue >= DuckNetwork.GetLevel(_desiredLevel + 1).xpRequired && _currentLevel != 20)
-                            ++_desiredLevel;
-                        if (_currentLevel <= 2)
-                            return;
-                        if (_gachaValue >= gachaNeed)
+                        if (this._drain < 0f)
                         {
-                            _gachaValue -= gachaNeed;
-                            _newGachaValue -= gachaNeed;
-                            _oldGachaValue -= gachaNeed;
-                            ++UILevelBox.gachas;
-                            _coinLerp = 0f;
-                            SFX.Play("ching", pitch: 0.2f);
+                            this._drain = 0f;
                         }
-                        if (_milkValue >= milkNeed)
+                        if (this._drain <= 0f && this._addLerp >= 1f)
                         {
-                            _milkValue -= milkNeed;
-                            _newMilkValue -= milkNeed;
-                            _oldMilkValue -= milkNeed;
-                            _newGrowthLevel = Profiles.experienceProfile.littleManLevel + 1;
-                            if (_newGrowthLevel > 7)
-                                _newGrowthLevel = 7;
+                            this._drain = 0f;
+                            this._addLerp = 0f;
+                            this._state = UILevelBoxState.HideXPBar;
                         }
-                        if (_currentLevel <= 3 || _sandwichValue < sandwichNeed)
-                            return;
-                        _sandwichValue -= sandwichNeed;
-                        _newSandwichValue -= sandwichNeed;
-                        _oldSandwichValue -= sandwichNeed;
-                        _stampCard = true;
+                    }
+                    else if (this._state == UILevelBoxState.HideXPBar)
+                    {
+                        this._slideXPBar = Lerp.FloatSmooth(this._slideXPBar, 0f, 0.2f, 1.1f);
+                        if (this._slideXPBar <= 0.02f)
+                        {
+                            this._currentStat = default(KeyValuePair<string, XPPair>);
+                            this._state = UILevelBoxState.ShowXPBar;
+                            SFX.Play("rockHitGround2", 1f, 0.5f, 0f, false);
+                            this._slideXPBar = 0f;
+                        }
+                    }
+                }
+                if (this._currentLevel == this._desiredLevel)
+                {
+                    this._coinLerp = Lerp.Float(this._coinLerp, 1f, 0.1f);
+                    foreach (XPPlus particle in this._particles)
+                    {
+                        particle.position += particle.velocity;
+                        if (!particle.splash)
+                        {
+                            particle.position = Lerp.Vec2Smooth(particle.position, particle.target, particle.time);
+                            particle.time += 0.01f;
+                        }
+                        else
+                        {
+                            XPPlus xpplus = particle;
+                            xpplus.velocity.y = xpplus.velocity.y + 0.2f;
+                            particle.alpha -= 0.05f;
+                        }
+                    }
+                }
+                int c = this._particles.Count;
+                this._particles.RemoveAll((XPPlus part) => (part.position - part.target).lengthSq < 64f);
+                if (this._particles.Count != c)
+                {
+                    this._firstParticleIn = true;
+                }
+                if (this._xpValue >= DuckNetwork.GetLevel(this._desiredLevel + 1).xpRequired && this._currentLevel != 20)
+                {
+                    this._desiredLevel++;
+                }
+                if (this._currentLevel > 2)
+                {
+                    if (this._gachaValue >= this.gachaNeed)
+                    {
+                        this._gachaValue -= this.gachaNeed;
+                        this._newGachaValue -= (float)this.gachaNeed;
+                        this._oldGachaValue -= (float)this.gachaNeed;
+                        UILevelBox.gachas++;
+                        this._coinLerp = 0f;
+                        SFX.Play("ching", 1f, 0.2f, 0f, false);
+                    }
+                    if (this._milkValue >= this.milkNeed)
+                    {
+                        this._milkValue -= this.milkNeed;
+                        this._newMilkValue -= (float)this.milkNeed;
+                        this._oldMilkValue -= (float)this.milkNeed;
+                        this._newGrowthLevel = Profiles.experienceProfile.littleManLevel + 1;
+                        if (this._newGrowthLevel > 7)
+                        {
+                            this._newGrowthLevel = 7;
+                        }
+                    }
+                    if (this._currentLevel > 3 && this._sandwichValue >= this.sandwichNeed)
+                    {
+                        this._sandwichValue -= this.sandwichNeed;
+                        this._newSandwichValue -= (float)this.sandwichNeed;
+                        this._oldSandwichValue -= (float)this.sandwichNeed;
+                        this._stampCard = true;
                     }
                 }
             }
