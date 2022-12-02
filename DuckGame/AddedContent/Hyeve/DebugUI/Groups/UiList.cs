@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AddedContent.Hyeve.DebugUI.Basic;
 using AddedContent.Hyeve.Utils;
 using DuckGame;
 using Microsoft.Xna.Framework;
-using Color = DuckGame.Color;
 using Rectangle = DuckGame.Rectangle;
 
-namespace AddedContent.Hyeve.DebugUI
+namespace AddedContent.Hyeve.DebugUI.Groups
 {
     public class UiList : UiGroup
     {
@@ -27,12 +27,11 @@ namespace AddedContent.Hyeve.DebugUI
         protected float _maxScrollOffset;
         protected float _scrollOffset = 0f;
 
-        public UiList(Vector2 position, Vector2 size, Color color, List<IAmUi> content, string name = "UiList", float scale = 1f) : base(position, size, color, content, name, scale)
+        public UiList(Vector2 position, Vector2 size, List<IAmUi> content, string name = "UiList", float scale = 1f) : base(position, size, content, name, scale)
         {
-            Padding = new Vector2(2f) * scale;
-            Resizeable = false;
+            Padding = new Vector2(10f) * scale;
             ArrangeContent();
-            OnKilled += HandleDeath;
+            OnDestroyed += HandleDeath;
         }
 
         protected override void UpdateSubContent()
@@ -57,12 +56,6 @@ namespace AddedContent.Hyeve.DebugUI
         protected override Rectangle CalcScissor()
         {
             return new Rectangle(Position + InteractBarSize.ZeroX() + new Vector2(0f, _accentLineWidth), Position + Size);
-        }
-
-        protected override void HandleColoured(UiCols type, Color old)
-        {
-            base.HandleColoured(type, old);
-            foreach (IAmUi ui in SubContent) ui.SetCol(type, GetCol(type));
         }
 
         protected override void HandleResized(Vector2 old)
@@ -91,7 +84,7 @@ namespace AddedContent.Hyeve.DebugUI
 
         protected override void HandleScrolled(float scroll)
         {
-            if (!IsOverlapping(InputData.MouseProjectedPosition)) return;
+            if (!Hovered()) return;
             base.HandleScrolled(scroll);
             _scrollOffset = Maths.Clamp(_scrollOffset + scroll, 0, _maxScrollOffset);
             ArrangeContent();

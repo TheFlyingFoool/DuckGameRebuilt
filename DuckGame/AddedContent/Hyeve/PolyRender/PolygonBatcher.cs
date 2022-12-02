@@ -141,6 +141,8 @@ namespace AddedContent.Hyeve.PolyRender
             }
         }
 
+        public Rectangle GetCurrentScissor() => _scissorStack.Count > 0 ? _scissorStack.Peek() : new Rectangle(Vec2.Zero, InputData.ViewportSize);
+
         public void ClearScissorStack()
         {
             _scissorStack.Clear();
@@ -149,10 +151,10 @@ namespace AddedContent.Hyeve.PolyRender
 
         public void PushScissor(Rectangle scissorRect)
         {
-            Vec2 offset = new Vec2(Viewport.X, Viewport.Y);
+            Vec2 offset = new(Viewport.X, Viewport.Y);
             Vec3 tl = Vec3.Transform(new Vec3(scissorRect.tl + offset, 0f), _effect.View);
             Vec3 br = Vec3.Transform(new Vec3(scissorRect.br + offset, 0f), _effect.View);
-            Rectangle rect = new Rectangle(tl.XY(), br.XY());
+            Rectangle rect = new(tl.XY(), br.XY());
 
             if (_scissorStack.Count > 0)
             {
