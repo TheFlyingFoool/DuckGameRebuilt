@@ -208,7 +208,7 @@ namespace DuckGame
                    if (team == null)
                        return;
                    Team.deserializedTeams.Add(team);
-               }));
+               },null, "Loading Custom Hats"));
             }
         }
 

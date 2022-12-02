@@ -92,7 +92,7 @@ namespace DuckGame
                    string str = s.Substring(0, s.Length - 4);
                    _sounds[str] = pEffect;
                    SFX.RegisterSound(str, pEffect);
-               }));
+               }, null, "Loading SoundEffect"));
             }
             string str1 = _modConfig.contentDirectory + "/Levels";
             if (DuckFile.DirectoryExists(str1))
@@ -103,7 +103,7 @@ namespace DuckGame
                if (kilobytesPreAllocated / 1000L <= 20L)
                    return;
                MonoMain.CalculateModMemoryOffendersList();
-           }));
+           }, null, "Memory stuff"));
         }
 
         private static Texture2D LoadTexture2DInternal(string file, bool processPink = true)

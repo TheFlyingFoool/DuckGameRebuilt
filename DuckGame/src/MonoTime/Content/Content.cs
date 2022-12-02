@@ -618,7 +618,7 @@ namespace DuckGame
            {
                DuckGame.Content.LogLevelFailure(ex.ToString());
            }
-       }));
+       },null, "Loading Level"));
 
         private static LevelData LoadLevelData(string pPath, LevelLocation pLocation)
         {

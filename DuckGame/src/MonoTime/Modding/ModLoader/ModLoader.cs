@@ -774,12 +774,12 @@ namespace DuckGame
                                     ModLoader.loadableMods.Remove(modConfiguration.uniqueID);
                                 }
                                 ModLoader.loadableMods.Add(modConfiguration.uniqueID, modConfiguration);
-                            }));
+                            }, null, "Loading Mods"));
                     }
                 };
             }
-            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => ReskinPack.InitializeReskins()));
-            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => MapPack.InitializeMapPacks()));
+            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => ReskinPack.InitializeReskins(),null, "Initialize Reskins"));
+            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => MapPack.InitializeMapPacks(), null, "Initialize MapPacks"));
             ModLoader.GetOrLoadMods(true);
         }
 
@@ -818,7 +818,7 @@ namespace DuckGame
                                 return;
                             loadable.Disable();
                         }
-                    }));
+                    }, null, "Loading Reskin stuff"));
                 }
             };
         }
@@ -837,7 +837,7 @@ namespace DuckGame
                     if (mod != null && mod.configuration != null)
                         ModLoader._loadedMods.Remove(mod.configuration.uniqueID);
                 }
-            }));
+            }, null, "ModLoader sorting Initialize stuff"));
             LoadingAction preInitializeMods = new LoadingAction();
             MonoMain.currentActionQueue.Enqueue(preInitializeMods);
             preInitializeMods.action = () =>
@@ -867,7 +867,7 @@ namespace DuckGame
                                 throw new ModException(mod.configuration.name + " OnPreInitialize failed with exception:", mod.configuration, ex);
                         }
                         ModLoader.loadingOldMod = null;
-                    }));
+                    }, null, "ModLoader InvokeOnPreInitialize"));
                 }
             };
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() =>
@@ -932,7 +932,7 @@ namespace DuckGame
                     }
                 }
                 ModLoader.runningModloadCode = false;
-            }));
+            }, null, "ModLoader Load Mod Types"));
         }
 
         private static void LogModFailure(string s)

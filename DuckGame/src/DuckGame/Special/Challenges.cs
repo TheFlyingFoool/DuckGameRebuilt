@@ -66,7 +66,7 @@ namespace DuckGame
             foreach (string level in Content.GetLevels("challenge", LevelLocation.Content, true, false, false))
             {
                 string challenge = level;
-                MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => Challenges.LoadChallengeData(challenge)));
+                MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => Challenges.LoadChallengeData(challenge),null, "Challenges LoadChallengeData"));
             }
         }
 

@@ -73,7 +73,7 @@ namespace DuckGame
                ManagedContent.InitializeContentSet<DeathCrateSetting>(ManagedContent.DeathCrateSettings);
                ManagedContent.InitializeContentSet<DestroyType>(ManagedContent.DestroyTypes);
                ContentProperties.InitializeBags(ManagedContent.Things.Types);
-           }));
+           }, null, "ModLoader Initializes"));
         }
     }
 }

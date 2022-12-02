@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using AddedContent.Hyeve;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -47,7 +48,27 @@ namespace DuckGame
         private static int _screenHeight = 720;
         public static bool _fullScreen = false;
         public static volatile int lazyLoadyBits = 0;
-        public static volatile string loadMessage = "HOLD ON...";
+        public static volatile string _loadMessage = "HOLD ON...";
+        public static string loadMessage
+        {
+            get
+            {
+                return _loadMessage;
+            }
+            set
+            {
+                string text = value;
+                if (Debugger.IsAttached)
+                {
+                    text = "|16,144,13|" + text;
+                }
+                if (!loadMessages.Contains(text))
+                {
+                    loadMessages.Push(text);
+                }
+                _loadMessage = text;
+            }
+        }
         private SpriteMap _duckRun;
         private SpriteMap _duckArm;
         public static Thing thing;
@@ -852,13 +873,18 @@ namespace DuckGame
             _thingsToLoad.Enqueue(steamLoad);
         }
         private void AddNamedLoadingAction(Action pAction) => _thingsToLoad.Enqueue((LoadingAction)pAction);
-        private void AddLoadingAction(Action pAction) => _thingsToLoad.Enqueue((LoadingAction)pAction);
+        private void AddLoadingAction(Action pAction, string label = "")
+        {
+            LoadingAction Loadaction = (LoadingAction)pAction;
+            Loadaction.label = label;
+            _thingsToLoad.Enqueue(Loadaction);
+        }
 
         private void StartThreadedLoading()
         {
             _threadedLoadingStarted = true;
             currentActionQueue = _thingsToLoad;
-            AddLoadingAction(ManagedContent.PreInitializeMods);
+            AddLoadingAction(ManagedContent.PreInitializeMods, "ManagedContent PreInitializeMods");
             AddLoadingAction(() =>
             {
                 DuckGame.Content.InitializeTextureSizeDictionary();
@@ -870,7 +896,7 @@ namespace DuckGame
                 DuckNetwork.Initialize();
                 Persona.Initialize();
                 DuckRig.Initialize();
-            });
+            }, "Cluster Initialize");
             AddLoadingAction(Input.Initialize);
             if (downloadWorkshopMods)
             {
@@ -878,25 +904,25 @@ namespace DuckGame
                 DownloadWorkshopItems();
             }
 
-            AddLoadingAction(ManagedContent.InitializeMods);
-            AddLoadingAction(Network.InitializeMessageTypes);
-            AddLoadingAction(DeathCrate.InitializeDeathCrateSettings);
-            AddLoadingAction(Editor.InitializeConstructorLists);
-            AddLoadingAction(Team.DeserializeCustomHats);
-            AddLoadingAction(DuckGame.Content.InitializeLevels);
-            AddLoadingAction(DuckGame.Content.InitializeEffects);
-            AddLoadingAction(Input.InitializeGraphics);
-            AddLoadingAction(Music.Initialize);
-            AddLoadingAction(DevConsole.InitializeFont);
-            AddLoadingAction(DevConsole.InitializeCommands);
-            AddLoadingAction(Editor.InitializePlaceableGroup);
-            AddLoadingAction(Challenges.Initialize);
-            AddLoadingAction(Collision.Initialize);
-            AddLoadingAction(Level.InitializeCollisionLists);
-            AddLoadingAction(Keyboard.InitTriggerImages);
-            AddLoadingAction(MapPack.RegeneratePreviewsIfNecessary);
-            AddLoadingAction(StartLazyLoad);
-            AddLoadingAction(SetStarted);
+            AddLoadingAction(ManagedContent.InitializeMods, "ManagedContent InitializeMods");
+            AddLoadingAction(Network.InitializeMessageTypes, "Network InitializeMessageTypes");
+            AddLoadingAction(DeathCrate.InitializeDeathCrateSettings, "DeathCrate InitializeDeathCrateSettings");
+            AddLoadingAction(Editor.InitializeConstructorLists, "Editor InitializeConstructorLists");
+            AddLoadingAction(Team.DeserializeCustomHats, "Team DeserializeCustomHats");
+            AddLoadingAction(DuckGame.Content.InitializeLevels, "Content InitializeLevels");
+            AddLoadingAction(DuckGame.Content.InitializeEffects, "Content InitializeEffects");
+            AddLoadingAction(Input.InitializeGraphics, "Input InitializeGraphics");
+            AddLoadingAction(Music.Initialize, "Music Initialize");
+            AddLoadingAction(DevConsole.InitializeFont, "DevConsole InitializeFont");
+            AddLoadingAction(DevConsole.InitializeCommands, "DevConsole InitializeCommands");
+            AddLoadingAction(Editor.InitializePlaceableGroup, "Editor InitializePlaceableGroup");
+            AddLoadingAction(Challenges.Initialize, "Challenges Initialize");
+            AddLoadingAction(Collision.Initialize, "Collision Initialize");
+            AddLoadingAction(Level.InitializeCollisionLists, "Level InitializeCollisionLists");
+            AddLoadingAction(Keyboard.InitTriggerImages, "Keyboard InitTriggerImages");
+            AddLoadingAction(MapPack.RegeneratePreviewsIfNecessary, "MapPack RegeneratePreviewsIfNecessary");
+            AddLoadingAction(StartLazyLoad, "StartLazyLoad");
+            AddLoadingAction(SetStarted, "SetStarted");
         }
 
         private void SetStarted()
@@ -1136,24 +1162,29 @@ namespace DuckGame
             ++Graphics.frame;
             Tasker.RunTasks();
             Graphics.GarbageDisposal(false);
-            if (!disableSteam && !_started)
+            if (!_started)
             {
-                if (Cloud.processing)
+                //Input.Update();
+                //DevConsole.Update();
+                if (!disableSteam)
                 {
-                    Cloud.Update();//return; unneded probly
-                }
-                if (steamConnectionCheckFail)
-                {
-                    if (_loggedConnectionCheckFailure)
+                    if (Cloud.processing)
                     {
-                        _loggedConnectionCheckFailure = true;
-                        DevConsole.Log("|DGRED|Failed to initialize a connection to Steam.");
+                        Cloud.Update();//return; unneded probly
                     }
-                }
-                else if (Steam.IsInitialized() && Steam.IsRunningInitializeProcedures())
-                {
-                    loadMessage = "Loading Steam";
-                    Steam.Update();//  why return lets just roll through itll be fine =);
+                    if (steamConnectionCheckFail)
+                    {
+                        if (_loggedConnectionCheckFailure)
+                        {
+                            _loggedConnectionCheckFailure = true;
+                            DevConsole.Log("|DGRED|Failed to initialize a connection to Steam.");
+                        }
+                    }
+                    else if (Steam.IsInitialized() && Steam.IsRunningInitializeProcedures())
+                    {
+                        loadMessage = "Loading Steam";
+                        Steam.Update();//  why return lets just roll through itll be fine =);
+                    }
                 }
             }
             if (_canStartLoading && !_threadedLoadingStarted && _didFirstDraw)
@@ -1171,17 +1202,26 @@ namespace DuckGame
                         goto label_19;
                 }
                 _loadTimer.Restart();
+               // MonoMain.loadMessage = "Things To Load " + _thingsToLoad.Count.ToString();
                 while (_thingsToLoad.Count > 0)
                 {
                     elapsed = _loadTimer.elapsed;
                     if (elapsed.TotalMilliseconds < 40.0)
                     {
+ 
                         currentActionQueue = _thingsToLoad;
                         LoadingAction loadingAction = _thingsToLoad.Peek();
+                        MonoMain.loadMessage = loadingAction.label;
                         if (loadingAction.Invoke())
+                        {
                             _thingsToLoad.Dequeue();
+                            //MonoMain.loadMessage = "Things To Load " + _thingsToLoad.Count.ToString();
+                            //DevConsole.Log("_thingsToLoad left " + _thingsToLoad.Count.ToString());
+                        }
                         else if (loadingAction.waiting)
+                        {
                             break;
+                        }
                     }
                     else
                         break;
@@ -1472,7 +1512,7 @@ namespace DuckGame
             }
         }
 
-        Stack<string> loadMessages = new();
+        static Stack<string> loadMessages = new();
         string lastLoadMessage = "";
 
         protected void RunDraw(GameTime gameTime)
@@ -1486,7 +1526,7 @@ namespace DuckGame
             Graphics.SetScissorRectangle(new Rectangle(0f, 0f, Graphics.width, Graphics.height));
             if (Recorder.currentRecording != null)
                 Recorder.currentRecording.NextFrame();
-            if (!_started)
+            if (!_started) 
             {
                 ++_loadingFramesRendered;
                 Graphics.SetRenderTarget(null);
@@ -1497,6 +1537,13 @@ namespace DuckGame
                     _setCulture = true;
                 }
                 Graphics.Clear(new Color(0, 0, 0));
+                //if (Layer.Console != null)
+                //{
+                //    Layer.Console.Begin(true);
+                //    DevConsole.Draw();
+                //    //Level.current.PostDrawLayer(Layer.Console);
+                //    Layer.Console.End(true);
+                //}
                 if (!DuckGame.Content.didsetbigboi && Program.shouldusespriteatlas)
                 {
                     DuckGame.Content.didsetbigboi = true;
@@ -1567,27 +1614,34 @@ namespace DuckGame
 				{
 					loaded = 1f;
 				}
-                Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Red, (Depth)0.6f);
                 if (Debugger.IsAttached)
                 {
                     if (!loadMessage.StartsWith("|16,144,13|"))
                     {
                         loadMessage = "|16,144,13|" + loadMessage;
                     }
+                    Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Green, (Depth)0.6f);
                 }
-                string text = loadMessage;
-                if (loadMessage != lastLoadMessage)
+                else
                 {
-                    loadMessages.Push(lastLoadMessage = loadMessage);
+                    Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Red, (Depth)0.6f);
                 }
-                if (Cloud.processing && Cloud.progress != 0.0 && Cloud.progress != 1.0)
-                    text = "Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100.0)).ToString() + "%)";
+                //string text = loadMessage;
+                //if (loadMessage != lastLoadMessage)
+                //{
+                //    loadMessages.Push(lastLoadMessage = loadMessage);
+                //}
                 float textPadding = -24f;
-                if (text != loadMessage)
+                if (Cloud.processing && Cloud.progress != 0.0 && Cloud.progress != 1.0)
                 {
-                    Graphics.DrawString(text, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
+                    Graphics.DrawString("Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100.0)).ToString() + "%)", p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
                     textPadding -= 20;
                 }
+                //if (text != loadMessage)
+                //{
+                //    Graphics.DrawString(text, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
+                //    textPadding -= 20;
+                //}
                 foreach (string i in loadMessages)
                 {
                     Graphics.DrawString(i, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
@@ -1608,6 +1662,13 @@ namespace DuckGame
                 Graphics.Draw(_duckArm, vec2_2.x + 20f, vec2_2.y + 56f);
                 Graphics.screen.End();
                 _timeSinceLastLoadFrame.Restart();
+                //if (Layer.Console != null)
+                //{
+                //    Layer.Console.Begin(true);
+                //    DevConsole.Draw();
+                //    //Level.current.PostDrawLayer(Layer.Console);
+                //    Layer.Console.End(true);
+                //}
             }
             else
             {

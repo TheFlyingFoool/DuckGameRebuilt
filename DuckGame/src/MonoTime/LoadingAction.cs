@@ -13,6 +13,7 @@ namespace DuckGame
     public class LoadingAction
     {
         private bool actionInvoked;
+        public string label = "";
         public bool flag;
         public bool waiting;
         public object context;
@@ -24,10 +25,11 @@ namespace DuckGame
         {
         }
 
-        public LoadingAction(Action pAction, Func<bool> pWaitAction = null)
+        public LoadingAction(Action pAction, Func<bool> pWaitAction = null, string label = "")
         {
             action = pAction;
             waitAction = pWaitAction;
+            this.label = label;
         }
 
         public bool Invoke()
