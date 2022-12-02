@@ -9,8 +9,39 @@ namespace DuckGame
 {
     public class DGRSettings
     {
+        public static void PrreloadLevels()
+        {
+            MonoMain.loadMessage = "Pre-Loading Custom Levels";
+
+            //steal code? we would never do such a thing -NiK0
+            try
+            {
+                HUD.hide = true;
+                //someone optimize the code later maybe lol
+                new LevelSelect("", null, null, false).Initialize();
+                HUD.CloseAllCorners();
+                HUD.hide = false;
+            }
+            catch (Exception ex)
+            {
+                DevConsole.Log("Failed to preload levels: " + ex.ToString(), Colors.DGRed);
+            }
+        }
         [AutoConfigField]
         public static string PreferredLevel = "";
+        public bool PreloadLevels
+        {
+            get
+            {
+                return S_PreloadLevels;
+            }
+            set
+            {
+                S_PreloadLevels = value;
+            }
+        }
+        [AutoConfigField]
+        public static bool S_PreloadLevels;
         public bool SpriteAtlas
         {
             get
@@ -208,7 +239,7 @@ namespace DuckGame
             }
         }
         [AutoConfigField]
-        public static bool S_MenuMouse = true;
+        public static bool S_MenuMouse = false;
         public int RebuiltEffect
         {
             get

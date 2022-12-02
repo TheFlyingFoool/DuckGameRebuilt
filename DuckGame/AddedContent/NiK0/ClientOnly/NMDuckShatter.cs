@@ -57,7 +57,11 @@ namespace DuckGame
                     using (MemoryStream ms = new MemoryStream())
                     {
                         Bitmap botmop = bm.Clone(new System.Drawing.Rectangle(8 * x, 8 * y, 8, 8), PixelFormat.DontCare);
-                        Level.Add(new ShatterDuck(v.x + 8 * x, v.y + 8 * y, new Sprite(new Tex2D(TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, botmop, false), "shatter")), speed * 0.5f));
+                        Sprite s = new Sprite(new Tex2D(TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, botmop, false), "shatter"));
+                        for (int i = 0; i < Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 64); i++)
+                        {
+                            Level.Add(new ShatterDuck(v.x + 8 * x, v.y + 8 * y, s, speed * 0.5f));
+                        }
                     }
                 }
             }

@@ -1,4 +1,7 @@
-﻿namespace DuckGame
+﻿using System.Diagnostics.SymbolStore;
+using System.Security.Cryptography.X509Certificates;
+
+namespace DuckGame
 {
     [ClientOnly]
     public class WumpQuadLaserBullet : Thing, ITeleport, IDrawToDifferentLayers
@@ -36,6 +39,17 @@
                 if (x < Level.current.topLeft.x - 200) x = Level.current.bottomRight.x + 200;
                 if (y > Level.current.bottomRight.y + 200) y = Level.current.topLeft.y - 200;
                 if (y < Level.current.topLeft.y - 200) y = Level.current.bottomRight.y + 200;
+                if (theholysee && safeFrames <= 0)
+                {
+                    Duck d = Level.CheckCircle<Duck>(position, 128);
+                    if (d != null)
+                    {
+                        float f = Maths.PointDirectionRad(Vec2.Zero, travel);
+                        float f2 = Maths.PointDirectionRad(position, d.position);
+                        f = Lerp.Float(f, f2, 0.05f);
+                        _travel = Maths.AngleToVec(f) * 16;
+                    }
+                }
             }
             foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(topLeft, bottomRight))
             {
@@ -102,13 +116,24 @@
         }
         public override void Draw()
         {
+            if (theholysee)
+            {
+                Graphics.DrawCircle(position, 128, Color.LightBlue * 0.5f);
+                Graphics.DrawCircle(position, 100 + sw * 28, Color.LightBlue * 0.3f);
+                Graphics.DrawCircle(position, 100 + sw * -17, Color.LightBlue * 0.3f);
+                Graphics.DrawCircle(position, 64 + swr * -64, Color.LightBlue * 0.1f);
+                Graphics.DrawCircle(position, 76 + swr * 45, Color.LightBlue * 0.1f);
+            }
             Graphics.DrawRect(position + new Vec2(-16), position + new Vec2(16), new Color(0, 200 + (int)(_wave.normalized * 50f), 200 - (int)(_wave.normalized * 50)), depth, true, 4f);
             Graphics.DrawRect(position + new Vec2(-16), position + new Vec2(16), new Color(0, 255 - (int)(_wave2.normalized * 50), 200 + (int)(_wave2.normalized * 50f)), depth + 1, false, 4f);
             base.Draw();
         }
-
+        public SinWave sw = new SinWave(0.1f);
+        public SinWave swr = new SinWave(0.05f);
+        public bool theholysee;
         public StateBinding _positionBinding = new CompressedVec2Binding("position", int.MaxValue, false, true);
         public StateBinding _travelBinding = new CompressedVec2Binding("travel", 20);
+        public StateBinding _theholysaw = new CompressedVec2Binding("theholysee", 20);
         private Vec2 _travel;
         private SinWaveManualUpdate _wave = 0.5f;
         private SinWaveManualUpdate _wave2 = 1f;

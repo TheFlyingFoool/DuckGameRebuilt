@@ -57,7 +57,7 @@ namespace DuckGame
         private Sprite _speedClock;
 
         public FollowCam followCam => _followCam;
-
+        public bool sign;
         public ArcadeLevel(string name)
           : base(name)
         {
@@ -114,6 +114,10 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            if (sign)
+            {
+                Level.Add(new VersionSign(-165, 256) { fadeTime = 300 });
+            }
             TeamSelect2.DefaultSettings();
             base.Initialize();
             _pendingSpawns = new Deathmatch(this).SpawnPlayers(false);

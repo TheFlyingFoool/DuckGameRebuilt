@@ -35,6 +35,7 @@ namespace DuckGame
         public static UIMenu _lastCreatedControlsMenu;
         public static UIMenu _lastCreatedDGRMenu;
         public static UIMenu _lastCreatedDGRMiscMenu;
+        public static UIMenu _lastCreatedOptimizationsMenu;
         public static UIMenu _lastCreatedDGRGraphicsMenu;
         public static int flagForSave = 0;
         private static bool _doingResolutionRestart = false;
@@ -111,6 +112,7 @@ namespace DuckGame
             to.Add(_lastCreatedDGRMenu, false);
             to.Add(_lastCreatedDGRMiscMenu, false);
             to.Add(_lastCreatedDGRGraphicsMenu, false);
+            to.Add(_lastCreatedOptimizationsMenu, false);
 
 
             if (Options.accessibilityMenu != null)
@@ -150,6 +152,7 @@ namespace DuckGame
             Options._lastCreatedDGRMenu = Options.CreateDGRMenu(optionsMenu);
             Options._lastCreatedDGRMiscMenu = Options._DGRMiscMenu;
             Options._lastCreatedDGRGraphicsMenu = Options._DGRGraphicsMenu;
+            Options._lastCreatedOptimizationsMenu = Options._DGROptimMenu;
             //DGR OPTIONS GUI HELL BEGINS HERE -NiK0
 
 
@@ -177,6 +180,7 @@ namespace DuckGame
             Options._blockMenu = Options._lastCreatedBlockMenu;
             Options._DGRMenu = Options._lastCreatedDGRMenu;
             Options._DGRMiscMenu = Options._lastCreatedDGRMenu;
+            Options._DGROptimMenu = Options._lastCreatedOptimizationsMenu;
             Options._DGRGraphicsMenu = Options._lastCreatedDGRMenu;
         }
 
@@ -312,24 +316,13 @@ namespace DuckGame
         }
         public static UIMenu _DGRMenu;
         public static UIMenu _DGRGraphicsMenu;
+        public static UIMenu _DGROptimMenu;
         public static UIMenu _DGRMiscMenu;
         public static UIMenu CreateDGRGraphicsMenu(UIMenu pPrev)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|GRAPHICS|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
-            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
-
-            menu.Add(new UIMenuItemToggle("Graphics Culling", field: new FieldBinding(dGRSettings, "GraphicsCulling"))
-            {
-                dgrDescription = "If on, anything outside the camera wont render"
-            }, true);
-            menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(dGRSettings, "SpriteAtlas"))
-            {
-                dgrDescription = "Lowers render times using an atlas so buffer doesn't\n    constantly switch sprites (Requires restart)"
-            }, true);
-
-
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
 
             menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(dGRSettings, "RandomWeather", 0, 10, 1), step: 1f)
@@ -380,7 +373,7 @@ namespace DuckGame
 
         public static UIMenu CreateDGRMiscMenu(UIMenu pPrev)
         {
-            UIMenu menu = new UIMenu("|PINK|♥|WHITE|MISC|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|QOL|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
@@ -417,19 +410,48 @@ namespace DuckGame
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
             return menu;
         }
+
+        public static UIMenu CreateDGROptimMenu(UIMenu pPrev)
+        {
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|OPTIMIZATIONS|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+
+            menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+
+            menu.Add(new UIMenuItemToggle("Graphics Culling", field: new FieldBinding(dGRSettings, "GraphicsCulling"))
+            {
+                dgrDescription = "If on, anything outside the camera wont render"
+            }, true);
+            menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(dGRSettings, "SpriteAtlas"))
+            {
+                dgrDescription = "Lowers render times using an atlas so buffer doesn't\n    constantly switch sprites (Requires restart)"
+            }, true);
+
+
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+
+            menu.Add(new UIMenuItemToggle("Pre-load levels", field: new FieldBinding(dGRSettings, "PreloadLevels"))
+            {
+                dgrDescription = "Loads custom levels on startup instead of when the level\n       folder is opened (Will increase load times)"
+            }, true);
+
+            menu.Add(new UIText(" ", Color.White), true);
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
+            return menu;
+        }
         public static UIMenu CreateDGRMenu(UIMenu pOptionsMenu)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|REBUILT|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
             _DGRMenu = menu;
+            _DGROptimMenu = CreateDGROptimMenu(menu);
+            menu.Add(new UIMenuItem("OPTIMIZATIONS", new UIMenuActionOpenMenu(menu, _DGROptimMenu), backButton: true), true);
 
             _DGRGraphicsMenu = CreateDGRGraphicsMenu(menu);
             menu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(menu, _DGRGraphicsMenu), backButton: true), true);
 
             _DGRMiscMenu = CreateDGRMiscMenu(menu);
-            menu.Add(new UIMenuItem("MISC", new UIMenuActionOpenMenu(menu, _DGRMiscMenu), backButton: true), true);
-
-
+            menu.Add(new UIMenuItem("QOL", new UIMenuActionOpenMenu(menu, _DGRMiscMenu), backButton: true), true);
 
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true), true);

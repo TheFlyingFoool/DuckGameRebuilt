@@ -511,6 +511,7 @@ namespace DuckGame
             _optionsGroup.Add(_dgrMenu, false);
             _optionsGroup.Add(Options._DGRGraphicsMenu, false);
             _optionsGroup.Add(Options._DGRMiscMenu, false);
+            _optionsGroup.Add(Options._DGROptimMenu, false);
             _optionsGroup.Add(_audioMenu, false);
             if (_accessibilityMenu != null)
                 _optionsGroup.Add(_accessibilityMenu, false);
@@ -881,6 +882,8 @@ namespace DuckGame
             Level.Add(_libraryBeam);
             _editorBeam = new EditorBeam(28f, 100f);
             Level.Add(_editorBeam);
+            VersionSign vs = new VersionSign(176f, 28f);
+            Level.Add(vs);
             for (int index = 0; index < 21; ++index)
             {
                 SpaceTileset t = new SpaceTileset(index * 16 - 6, 176f)

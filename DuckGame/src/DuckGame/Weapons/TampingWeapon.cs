@@ -23,6 +23,7 @@ namespace DuckGame
         public bool _rotating;
         public float _offsetY;
         public float _rotAngle;
+        public float _timeToTamp = 1f;
         public float _tampBoost = 1f;
         private Sprite _tampingHand;
         private bool _puffed;
@@ -76,7 +77,7 @@ namespace DuckGame
                                 _puffed = false;
                             _tampTime += 0.005f * _tampBoost;
                         }
-                        if (_tampTime >= 1.0)
+                        if (_tampTime >= _timeToTamp)
                         {
                             _rotAngle += 8f;
                             if (_offsetY > 0.0)
@@ -112,7 +113,7 @@ namespace DuckGame
                                 _puffed = false;
                             _tampTime += 0.005f * _tampBoost;
                         }
-                        if (_tampTime >= 1.0)
+                        if (_tampTime >= _timeToTamp)
                         {
                             _rotAngle -= 8f;
                             if (_offsetY > 0.0)
@@ -128,7 +129,7 @@ namespace DuckGame
                             }
                         }
                     }
-                    if (_offsetY >= 10.0)
+                    if (_offsetY >= 10f)
                         return;
                     ++_offsetY;
                 }
