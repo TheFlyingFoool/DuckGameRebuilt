@@ -998,7 +998,8 @@ namespace DuckGame
             Main.SpecialCode = "men10";
             if (Level.current is GameLevel && Level.current.isCustomLevel)
             {
-                if ((Level.current as GameLevel).data.metaData.workshopID != 0UL && Steam.IsInitialized())
+                GameLevel gameLevel = (Level.current as GameLevel);
+                if (gameLevel.data != null && gameLevel.data.metaData != null && gameLevel.data.metaData.workshopID != 0UL && Steam.IsInitialized())
                 {
                     Main.SpecialCode = "men11";
                     WorkshopItem workshopItem = WorkshopItem.GetItem((Level.current as GameLevel).data.metaData.workshopID);
