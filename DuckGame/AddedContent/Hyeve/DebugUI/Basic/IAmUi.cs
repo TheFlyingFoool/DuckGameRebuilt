@@ -1,32 +1,38 @@
 ﻿using System;
+using AddedContent.Hyeve.DebugUI.Components;
+using AddedContent.Hyeve.Utils;
 using DuckGame;
 using Microsoft.Xna.Framework;
-using Color = DuckGame.Color;
 
-namespace AddedContent.Hyeve.DebugUI
+namespace AddedContent.Hyeve.DebugUI.Basic
 {
     public interface IAmUi
     {
         public Vector2 Position { get; set; }
         public Vector2 Size { get; set; }
-        public Vector4 Expansion { get; }
+        
+        /// <summary>
+        /// X = LEFT, Y = TOP, Z = RIGHT, W = BOTTOM
+        /// </summary>
+        public Vector4 Expansion { get; } 
         public string Name { get; set; }
+
+        public UiColourHolder Colors { get; set; }
+
         public event Action<IAmUi, Vector2> OnPositioned;
 
         public event Action<IAmUi, Vector2> OnResized;
 
-        public event Action<IAmUi, UiCols, Color> OnColoured;
-
-        public event Action<IAmUi> OnKilled;
+        public event Action<IAmUi> OnDestroyed;
 
         abstract void DrawContent();
         abstract void UpdateContent();
         abstract void OnMouseAction(MouseAction action, float scroll = 0f);
         abstract void OnKeyPressed(Keys keycode, char value);
         abstract bool IsOverlapping(Vector2 pos);
+        abstract bool Hovered();
 
-        abstract void SetCol(UiCols type, Color col);
-        abstract Color GetCol(UiCols type);
+        abstract bool Visible();
         abstract void Kill();
     }
 
@@ -38,10 +44,5 @@ namespace AddedContent.Hyeve.DebugUI
         Scrolled = 64,
 
         AnyClick = 0 | 2 | 4, AnyRelease = 8 | 16 | 32,
-    }
-
-    public enum UiCols
-    {
-        Main, Text, Accent, Alternate, Data
     }
 }

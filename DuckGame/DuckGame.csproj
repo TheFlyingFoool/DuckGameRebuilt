@@ -211,11 +211,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddedContent\DGRSettings.cs" />
-    <Compile Include="AddedContent\Hyeve\DebugUI\IAmUi.cs" />
-    <Compile Include="AddedContent\Hyeve\DebugUI\UiBasic.cs" />
-    <Compile Include="AddedContent\Hyeve\DebugUI\UiGroup.cs" />
-    <Compile Include="AddedContent\Hyeve\DebugUI\UiList.cs" />
-    <Compile Include="AddedContent\Hyeve\DebugUI\UiTabber.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiBasic.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiGroup.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiSeamless.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Components\UiColourHolder.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Groups\UiList.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Groups\UiTabber.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\ReflectionValues\UiReflectionNumberBar.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\ReflectionValues\UiReflectionToggleButton.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\ReflectionValues\UiReflectionVector2Bar.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\UiManager.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Values\UiNumberBar.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Values\UiToggleButton.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Values\UiVector2Bar.cs" />
     <Compile Include="AddedContent\Hyeve\HyeveTests.cs" />
     <Compile Include="AddedContent\Hyeve\FixedCommandHistory.cs" />
     <Compile Include="AddedContent\Hyeve\PolyRender\AtlasedFont.cs" />

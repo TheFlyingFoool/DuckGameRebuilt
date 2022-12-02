@@ -20,6 +20,8 @@ namespace AddedContent.Hyeve.PolyRender
         public const char Invoker = '$';
         public const string Options = "$RBIUSC";
 
+        private const int VerticalPad = 8;
+        
         private Vector2 _charBounds;
 
         public CharData[] _regularData;
@@ -60,6 +62,7 @@ namespace AddedContent.Hyeve.PolyRender
 
         private void DrawStringInternal(string text, Vector2 pos, Color col, float scale, float margin, bool formatting)
         {
+            pos.Y += VerticalPad / 2f;
             Graphics.polyBatcher.Texture = _regularAtlas;
             Graphics.polyBatcher.BlendState.AlphaDestinationBlend = Blend.One;
             CharData[] charData = _regularData;
@@ -164,9 +167,10 @@ namespace AddedContent.Hyeve.PolyRender
         {
             Font font = memFont == null ? new Font(fontName, fontSize, style, GraphicsUnit.Pixel) : new Font(memFont, fontSize, style, GraphicsUnit.Pixel);
             int atlasWidth = fontSize * charCount;
-            int atlasHeight = fontSize;
-
-            _charBounds = new Vector2(fontSize, fontSize);
+            int atlasHeight = fontSize + VerticalPad;
+            _charBounds = new Vector2(fontSize, fontSize + VerticalPad);
+            
+            _charBounds = new Vector2(fontSize, fontSize + VerticalPad);
 
             charData = new CharData[charCount];
 
@@ -178,15 +182,15 @@ namespace AddedContent.Hyeve.PolyRender
                     graphics.SmoothingMode = SmoothingMode.HighQuality;
 
                     float charAtlasWidth = 1f / charCount;
-                    Vector2 charAtlasSize = new Vector2(charAtlasWidth, 1f);
+                    Vector2 charAtlasSize = new(charAtlasWidth, 1f);
 
                     int x = 0;
 
                     for (int i = 0; i < charCount; i++)
                     {
                         char character = (char)i;
-                        graphics.DrawString("" + character, font, new SolidBrush(System.Drawing.Color.White), x, 0);
-                        Vector2 charAtlasPos = new Vector2(charAtlasWidth * i, 0);
+                        graphics.DrawString("" + character, font, new SolidBrush(System.Drawing.Color.White), x, VerticalPad / 2f);
+                        Vector2 charAtlasPos = new(charAtlasWidth * i, 0f);
                         CharData data = new CharData(character, charAtlasPos, charAtlasSize);
                         charData[i] = data;
                         x += fontSize;

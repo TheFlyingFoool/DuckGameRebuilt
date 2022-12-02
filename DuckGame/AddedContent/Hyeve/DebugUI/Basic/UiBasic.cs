@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using AddedContent.Hyeve.DebugUI.Components;
 using AddedContent.Hyeve.PolyRender;
 using AddedContent.Hyeve.Utils;
 using DuckGame;
@@ -7,17 +7,15 @@ using Microsoft.Xna.Framework;
 using Color = DuckGame.Color;
 using Rectangle = DuckGame.Rectangle;
 
-namespace AddedContent.Hyeve.DebugUI
+namespace AddedContent.Hyeve.DebugUI.Basic
 {
     public class UiBasic : IAmUi
     {
         public event Action<IAmUi, Vector2> OnPositioned;
 
-        public event Action<IAmUi, UiCols, Color> OnColoured;
-
         public event Action<IAmUi, Vector2> OnResized;
 
-        public event Action<IAmUi> OnKilled;
+        public event Action<IAmUi> OnDestroyed;
 
         public virtual Vector2 Position
         {
@@ -64,36 +62,8 @@ namespace AddedContent.Hyeve.DebugUI
                 HandleResized(old);
             }
         }
-        protected Color MainColor
-        {
-            get => GetCol(UiCols.Main);
-            set => SetColInternal(UiCols.Main, value);
-        }
-
-        protected Color AccentColor
-        {
-            get => GetCol(UiCols.Accent);
-            set => SetColInternal(UiCols.Accent, value);
-        }
-
-        protected Color AlternateColor
-        {
-            get => GetCol(UiCols.Alternate);
-            set => SetColInternal(UiCols.Alternate, value);
-        }
-
-        protected Color TextColor
-        {
-            get => GetCol(UiCols.Text);
-            set => SetColInternal(UiCols.Text, value);
-        }
-
-        protected Color DataColor
-        {
-            get => GetCol(UiCols.Data);
-            set => SetColInternal(UiCols.Data, value);
-        }
-
+        
+        public virtual UiColourHolder Colors { get; set; }
         public virtual Vector2 MinSize { get; set; }
         public virtual Vector2 MaxSize { get; set; }
         public virtual Vector2 InteractBarSize { get; set; }
@@ -114,37 +84,36 @@ namespace AddedContent.Hyeve.DebugUI
         private Vector2 _mouseOffset;
         protected float _accentLineWidth;
 
-        protected readonly Dictionary<UiCols, Color> Colors = new();
-
-        public UiBasic(Vector2 position, Vector2 size, Color color, string name = "UiBasic", float scale = 1f)
+        public UiBasic(Vector2 position, Vector2 size, string name = "UiBasic", float scale = 1f)
         {
             size *= scale;
             PositionInternal = position;
-            InteractBarSize = new Vector2(size.X, 3f * scale);
+            InteractBarSize = new Vector2(size.X, 15f * scale);
             MinSize = InteractBarSize.YY() * 5f;
             MaxSize = new Vector2(float.PositiveInfinity);
             SizeInternal = size;
-            _accentLineWidth = 0.4f * scale;
-            SetColInternal(UiCols.Main, color);
-            SetColInternal(UiCols.Alternate, new Color(30, 30, 30));
+            _accentLineWidth = 2f * scale;
             Draggable = true;
             Resizeable = true;
             Closeable = true;
             Name = name;
+            Colors = new UiColourHolder();
         }
 
         public virtual void DrawContent()
         {
+            if (!Visible()) return;
+            
             if (Draggable || Closeable || Resizeable)
             {
                 Vector2 offset = new Vector2(_accentLineWidth);
-                PolyRenderer.Rect(Position - offset, Position + Size + offset, MainColor);
-                PolyRenderer.Rect(Position, Position + Size, AlternateColor);
+                PolyRenderer.Rect(Position - offset, Position + Size + offset, Colors.Accent);
+                PolyRenderer.Rect(Position, Position + Size, Colors.Main);
                 DrawInteractBar();
             }
             else
             {
-                PolyRenderer.Rect(Position, Position + Size, AlternateColor);
+                PolyRenderer.Rect(Position, Position + Size, Colors.Main);
             }
         }
 
@@ -159,27 +128,32 @@ namespace AddedContent.Hyeve.DebugUI
 
             if (Draggable)
             {
-                PolyRenderer.Line(Position + InteractBarSize.MultiplyX(0.3f), Position + InteractBarSize.MultiplyX(0.7f),
-                    _accentLineWidth, MainColor);
+                Color col = Colors.Accent;
+                if (_dragging || InputData.MouseProjectedPosition.IsInsideRect(Position + InteractBarSize.MultiplyX(0.3f).ZeroY(), InteractBarSize.MultiplyX(0.4f))) col = col.Brighter(0.4f);
+                PolyRenderer.Line(Position + InteractBarSize.MultiplyX(0.3f), Position + InteractBarSize.MultiplyX(0.7f), _accentLineWidth, col);
             }
 
             if (Closeable)
             {
-                PolyRenderer.Line(Position + crossZeroX, Position + crossZeroY, _accentLineWidth, MainColor);
+                Color col = Colors.Accent;
+                if (CloseButtonHovered()) col = col.Brighter(0.4f);
+                PolyRenderer.Line(Position + crossZeroX, Position + crossZeroY, _accentLineWidth, col);
                 PolyRenderer.Line(Position + new Vector2(0, crossSize.Y * 0.5f),
-                    Position + new Vector2(crossSize.X * 0.5f, 0), _accentLineWidth, MainColor);
+                    Position + new Vector2(crossSize.X * 0.5f, 0), _accentLineWidth, col);
             }
 
             if (Resizeable)
             {
+                Color col = Colors.Accent;
+                if ( _resizing || ResizeButtonHovered()) col = col.Brighter(0.4f);
                 PolyRenderer.Line(upRightPosition + crossNegateX + new Vector2(0f, _accentLineWidth * 0.5f), upRightPosition - crossZeroY, _accentLineWidth,
-                    MainColor);
+                    col);
                 PolyRenderer.Line(upRightPosition + crossNegateX, upRightPosition + crossZeroX, _accentLineWidth,
-                    MainColor);
+                    col);
                 PolyRenderer.Line(upRightPosition + crossNegateX * 0.5f + new Vector2(0f, _accentLineWidth * 0.5f), upRightPosition - crossZeroY * 0.5f,
-                    _accentLineWidth, MainColor);
+                    _accentLineWidth, col);
                 PolyRenderer.Line(upRightPosition + crossNegateX * 0.5f, upRightPosition + crossZeroX * 0.5f,
-                    _accentLineWidth, MainColor);
+                    _accentLineWidth, col);
             }
             Graphics.polyBatcher.PopScissor();
         }
@@ -218,34 +192,24 @@ namespace AddedContent.Hyeve.DebugUI
 
         public virtual bool IsOverlapping(Vector2 pos) => pos.IsInsideRect(Position, Size);
 
-
-        protected void SetColInternal(UiCols type, Color col)
+        public bool Visible()
         {
-            if (Colors.ContainsKey(type)) Colors[type] = col;
-            else Colors.Add(type, col);
-            OnColoured?.Invoke(this, type, col);
-        }
-        public void SetCol(UiCols type, Color col)
-        {
-            Color old = GetCol(type);
-            if (Colors.ContainsKey(type)) Colors[type] = col;
-            else Colors.Add(type, col);
-            HandleColoured(type, old);
+            Rectangle rect = Graphics.polyBatcher.GetCurrentScissor();
+            var sbr = Position + Size;
+            return rect.bl.x < sbr.X && rect.bl.y > Position.Y && rect.tr.x > Position.X && rect.tr.y < sbr.Y;
         }
 
-        public Color GetCol(UiCols type) => Colors.ContainsKey(type) ? Colors[type] : Color.Transparent;
-
-        public virtual void Kill() => OnKilled?.Invoke(this);
+        public virtual void Kill() => OnDestroyed?.Invoke(this);
 
         protected virtual void HandleClicked(MouseAction action)
         {
-            if (Closeable && InputData.MouseProjectedPosition.IsInsideRect(Position, InteractBarSize.YY()))
+            if (Closeable && CloseButtonHovered())
             {
                 Kill();
                 return;
             }
 
-            if (Resizeable && InputData.MouseProjectedPosition.IsInsideRect(Position + Size.ZeroY().SubtractX(InteractBarSize.Y), InteractBarSize.YY()))
+            if (Resizeable && ResizeButtonHovered())
             {
                 _resizing = true;
                 _originalPosition = Position;
@@ -254,7 +218,7 @@ namespace AddedContent.Hyeve.DebugUI
                 return;
             }
 
-            if (Draggable && InputData.MouseProjectedPosition.IsInsideRect(Position, Size.ReplaceY(InteractBarSize.Y)))
+            if (Draggable && DragBarHovered())
             {
                 _dragging = true;
                 _originalPosition = Position;
@@ -262,6 +226,13 @@ namespace AddedContent.Hyeve.DebugUI
                 return;
             }
         }
+
+        protected virtual bool CloseButtonHovered() => InputData.MouseProjectedPosition.IsInsideRect(Position, InteractBarSize.YY());
+
+        protected virtual bool ResizeButtonHovered() => InputData.MouseProjectedPosition.IsInsideRect(Position + Size.ZeroY().SubtractX(InteractBarSize.Y), InteractBarSize.YY());
+
+        protected virtual bool DragBarHovered() => InputData.MouseProjectedPosition.IsInsideRect(Position + InteractBarSize.YY().ZeroY(), Size.ReplaceY(InteractBarSize.Y).SubtractX(InteractBarSize.Y*2));
+        
         protected virtual void HandleUnClicked(MouseAction action)
         {
             _dragging = false;
@@ -290,17 +261,10 @@ namespace AddedContent.Hyeve.DebugUI
         {
 
         }
-        protected virtual void HandleResized(Vector2 old)
-        {
-            InteractBarSize = InteractBarSize.ReplaceX(Size.X);
-        }
-
-        protected virtual void HandleColoured(UiCols type, Color old)
-        {
-
-        }
-
+        protected virtual void HandleResized(Vector2 old) => InteractBarSize = InteractBarSize.ReplaceX(Size.X);
 
         protected virtual void HandleScrolled(float scroll) { }
+
+        public virtual bool Hovered() => IsOverlapping(InputData.MouseProjectedPosition);
     }
 }

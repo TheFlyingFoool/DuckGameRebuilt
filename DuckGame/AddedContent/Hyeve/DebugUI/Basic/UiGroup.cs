@@ -1,29 +1,45 @@
 ﻿using System.Collections.Generic;
+using AddedContent.Hyeve.DebugUI.Components;
 using AddedContent.Hyeve.Utils;
 using DuckGame;
 using Microsoft.Xna.Framework;
-using Color = DuckGame.Color;
 using Rectangle = DuckGame.Rectangle;
 
-namespace AddedContent.Hyeve.DebugUI
+namespace AddedContent.Hyeve.DebugUI.Basic
 {
     public class UiGroup : UiBasic
     {
         public readonly List<IAmUi> SubContent = new();
-        protected readonly List<IAmUi> _contentToRemove = new();
-        protected readonly List<IAmUi> _contentToAdd = new();
+        protected readonly List<IAmUi> ContentToRemove = new();
+        protected readonly List<IAmUi> ContentToAdd = new();
 
+        private UiColourHolder _colours;
+        
         protected bool ContentChanged = false;
 
         protected virtual bool DrawSelf { get => false; }
 
-        public UiGroup(Vector2 position, Vector2 size, Color color, List<IAmUi> content, string name = "UiGroup", float scale = 1f) : base(position, size, color, name, scale)
+        public bool UpdateSubColours = false;
+
+        public override UiColourHolder Colors
+        {
+            get => _colours;
+            set
+            {
+                _colours = value;
+                if (!UpdateSubColours) return;
+                foreach (IAmUi ui in SubContent) ui.Colors = value;
+            }
+        }
+
+        public UiGroup(Vector2 position, Vector2 size, List<IAmUi> content, string name = "UiGroup", float scale = 1f) : base(position, size, name, scale)
         {
             foreach (IAmUi ui in content) AddContent(ui);
         }
 
         public override void DrawContent()
         {
+            if (!Visible()) return;
             if (DrawSelf) base.DrawContent();
             DrawSubContent();
         }
@@ -31,17 +47,17 @@ namespace AddedContent.Hyeve.DebugUI
         public override void UpdateContent()
         {
             base.UpdateContent();
-            if (_contentToAdd.Count > 0)
+            if (ContentToAdd.Count > 0)
             {
-                SubContent.AddRange(_contentToAdd);
-                _contentToAdd.Clear();
+                SubContent.AddRange(ContentToAdd);
+                ContentToAdd.Clear();
                 ContentChanged = true;
             }
 
-            if (_contentToRemove.Count > 0)
+            if (ContentToRemove.Count > 0)
             {
-                _contentToRemove.ForEach(content => SubContent.Remove(content));
-                _contentToRemove.Clear();
+                ContentToRemove.ForEach(content => SubContent.Remove(content));
+                ContentToRemove.Clear();
                 ContentChanged = true;
             }
             UpdateSubContent();
@@ -63,15 +79,16 @@ namespace AddedContent.Hyeve.DebugUI
 
         public virtual void AddContent(IAmUi content)
         {
-            _contentToAdd.Add(content);
-            content.OnKilled += OnSubContentKilled;
+            ContentToAdd.Add(content);
+            content.OnDestroyed += OnSubContentDestroyed;
             content.OnResized += OnSubContentResized;
             content.OnPositioned += OnSubContentPositioned;
-            content.OnColoured += OnSubContentColoured;
         }
 
-        public virtual void RemoveContent(IAmUi content) => _contentToRemove.Add(content);
+        public virtual void RemoveContent(IAmUi content) => ContentToRemove.Add(content);
 
+        public virtual bool HasContent(IAmUi content) => SubContent.Contains(content);
+        
         public override void OnMouseAction(MouseAction action, float scroll = 0)
         {
             base.OnMouseAction(action, scroll);
@@ -81,7 +98,7 @@ namespace AddedContent.Hyeve.DebugUI
         protected virtual void SendSubContentMouseAction(MouseAction action, float scroll = 0)
         {
             if ((action & MouseAction.AnyClick) != 0 || action == MouseAction.Scrolled)
-                SubContent.Find(content => content.IsOverlapping(InputData.MouseProjectedPosition))?.OnMouseAction(action, scroll);
+                SubContent.Find(content => content.Hovered())?.OnMouseAction(action, scroll);
             else
                 foreach (IAmUi ui in SubContent)
                     ui.OnMouseAction(action, scroll);
@@ -108,10 +125,7 @@ namespace AddedContent.Hyeve.DebugUI
         protected virtual void OnSubContentPositioned(IAmUi subContent, Vector2 old)
         { }
 
-        protected virtual void OnSubContentColoured(IAmUi subContent, UiCols type, Color old)
-        { }
-
-        protected virtual void OnSubContentKilled(IAmUi subContent)
+        protected virtual void OnSubContentDestroyed(IAmUi subContent)
         {
             RemoveContent(subContent);
         }
