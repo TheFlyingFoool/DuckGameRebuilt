@@ -2078,7 +2078,7 @@ namespace DuckGame
                                     break;
                             }
                         }
-                        profile2.netData.Set<bool>("gamePaused", MonoMain.pauseMenu != null);
+                        profile2.netData.Set<bool>("gamePaused", MonoMain.pauseMenu != null); 
                         profile2.netData.Set<bool>("gameInFocus", Graphics.inFocus);
                         profile2.netData.SetFiltered<bool>("chatting", _core.enteringText);
                         profile2.netData.Set<bool>("consoleOpen", DevConsole.open);
