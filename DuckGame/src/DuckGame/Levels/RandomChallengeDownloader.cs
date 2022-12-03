@@ -37,7 +37,7 @@ namespace DuckGame
         private static void Fetched(object sender, WorkshopQueryResult result)
         {
             if (RandomChallengeDownloader._toFetchIndex == -1)
-                RandomChallengeDownloader._toFetchIndex = Rando.Int((int)(sender as WorkshopQueryAll).numResultsFetched);
+                RandomChallengeDownloader._toFetchIndex = Rando.Int((int)(sender as WorkshopQueryAll)._numResultsFetched);
             if (RandomChallengeDownloader._toFetchIndex == RandomChallengeDownloader._numFetch && Steam.DownloadWorkshopItem(result.details.publishedFile))
                 RandomChallengeDownloader._downloading = result.details.publishedFile;
             RandomChallengeDownloader._currentQuery = null;
@@ -47,9 +47,9 @@ namespace DuckGame
         private static void FinishedTotalQuery(object sender)
         {
             WorkshopQueryAll workshopQueryAll = sender as WorkshopQueryAll;
-            if (workshopQueryAll.numResultsTotal <= 0U)
+            if (workshopQueryAll._numResultsTotal <= 0U)
                 return;
-            int num = Rando.Int((int)(workshopQueryAll.numResultsTotal / 50U)) + 1;
+            int num = Rando.Int((int)(workshopQueryAll._numResultsTotal / 50U)) + 1;
             if (RandomChallengeDownloader.numSinceLowRating > 3)
                 RandomChallengeDownloader.numSinceLowRating = 0;
             else
@@ -61,7 +61,7 @@ namespace DuckGame
             WorkshopQueryAll queryAll = Steam.CreateQueryAll(RandomChallengeDownloader._orderMode, WorkshopType.Items);
             queryAll.requiredTags.Add("Arcade Machine");
             queryAll.ResultFetched += new WorkshopQueryResultFetched(RandomChallengeDownloader.Fetched);
-            queryAll.page = (uint)num;
+            queryAll._page = (uint)num;
             queryAll.justOnePage = true;
             queryAll.Request();
         }
@@ -141,7 +141,7 @@ namespace DuckGame
                 RandomChallengeDownloader._currentQuery = Steam.CreateQueryAll(RandomChallengeDownloader._orderMode, WorkshopType.Items);
                 RandomChallengeDownloader._currentQuery.requiredTags.Add("Arcade Machine");
                 RandomChallengeDownloader._currentQuery.QueryFinished += new WorkshopQueryFinished(RandomChallengeDownloader.FinishedTotalQuery);
-                RandomChallengeDownloader._currentQuery.fetchedData = WorkshopQueryData.TotalOnly;
+                RandomChallengeDownloader._currentQuery._dataToFetch = WorkshopQueryData.TotalOnly;
                 RandomChallengeDownloader._currentQuery.Request();
                 DevConsole.Log(DCSection.Steam, "Querying for random Challenges.");
             }

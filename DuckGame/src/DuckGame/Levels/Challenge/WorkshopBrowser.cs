@@ -227,7 +227,7 @@ namespace DuckGame
                 _currentQuery.justOnePage = true;
                 _currentQuery.QueryFinished += new WorkshopQueryFinished(FinishedQuery);
                 _currentQuery.ResultFetched += new WorkshopQueryResultFetched(Fetched);
-                _currentQuery.fetchedData = WorkshopQueryData.AdditionalPreviews | WorkshopQueryData.PreviewURL;
+                _currentQuery._dataToFetch = WorkshopQueryData.AdditionalPreviews | WorkshopQueryData.PreviewURL;
                 _currentQuery.Request();
             }
 

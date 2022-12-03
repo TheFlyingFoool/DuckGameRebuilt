@@ -42,7 +42,7 @@ namespace DuckGame
             if (RandomLevelDownloader._currentWorkshopLevelQuery == null || RandomLevelDownloader._currentWorkshopLevelQuery != sender)
             {
                 RandomLevelDownloader._numFetch = 0;
-                RandomLevelDownloader._toFetchIndex = Rando.Int((int)(sender as WorkshopQueryAll).numResultsFetched - 1);
+                RandomLevelDownloader._toFetchIndex = Rando.Int((int)(sender as WorkshopQueryAll)._numResultsFetched - 1);
                 RandomLevelDownloader._currentWorkshopLevelQuery = sender;
             }
             if (RandomLevelDownloader._toFetchIndex == RandomLevelDownloader._numFetch)
@@ -100,7 +100,7 @@ namespace DuckGame
             queryAll.requiredTags.Add("Deathmatch");
             queryAll.excludedTags.Add("Exclude From Random");
             queryAll.ResultFetched += new WorkshopQueryResultFetched(RandomLevelDownloader.Fetched);
-            queryAll.page = (uint)num;
+            queryAll._page = (uint)num;
             queryAll.justOnePage = true;
             queryAll.Request();
             RandomLevelDownloader._fetchDelay = 5f;
@@ -109,9 +109,9 @@ namespace DuckGame
         private static void FinishedTotalQuery(object sender)
         {
             WorkshopQueryAll workshopQueryAll = sender as WorkshopQueryAll;
-            if (workshopQueryAll.numResultsTotal <= 0U)
+            if (workshopQueryAll._numResultsTotal <= 0U)
                 return;
-            RandomLevelDownloader._totalMaps = (int)workshopQueryAll.numResultsTotal;
+            RandomLevelDownloader._totalMaps = (int)workshopQueryAll._numResultsTotal;
         }
 
         private static void ProcessLevel(string path)
@@ -204,7 +204,7 @@ namespace DuckGame
                     queryAll.requiredTags.Add("Deathmatch");
                     queryAll.excludedTags.Add("Exclude From Random");
                     queryAll.QueryFinished += new WorkshopQueryFinished(RandomLevelDownloader.FinishedTotalQuery);
-                    queryAll.fetchedData = WorkshopQueryData.TotalOnly;
+                    queryAll._dataToFetch = WorkshopQueryData.TotalOnly;
                     queryAll.Request();
                     RandomLevelDownloader._totalMaps = -1;
                     DevConsole.Log(DCSection.Steam, "Querying for random levels.");

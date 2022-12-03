@@ -733,7 +733,7 @@ namespace DuckGame
                     LoadingAction steamLoad = new LoadingAction();
                     steamLoad.action = () =>
                     {
-                        ModLoader.runningModloadCode = true;
+                        ModLoader.runningModloadCode = true;//WorkshopList.Subscribed
                         WorkshopQueryUser queryUser = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
                         queryUser.requiredTags.Add("Mod");
                         queryUser.onlyQueryIDs = true;

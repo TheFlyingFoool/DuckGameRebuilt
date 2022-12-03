@@ -206,14 +206,16 @@ public class Steam : IDisposable {
         SetCallResult<LobbyCreated_t>(OnCreateLobby);
         SetCallResult<LobbyEnter_t>(OnJoinLobby);
         SetCallResult<LobbyMatchList_t>(OnSearchForLobby);
-
+        Steam._runningInitializeProcedures = true;
         _packetData = new byte[kPacketBufferSize];
         Steam._currentTextboxLength = 0;
         // THIS IS A HORRIBLE HACK to get this to comply when using a stubbed Steamworks.NET.dll.
         if (_initialized)
             _initialized = SteamUser.GetSteamID().m_SteamID != 0;
 
-        if (_initialized) {
+        if (_initialized) 
+        {
+
             user = User.GetUser(SteamUser.GetSteamID());
             //  Steam._runningInitializeProcedures = true;
             // TODO: The original Steam.dll would call something now, but I can't identify what.
