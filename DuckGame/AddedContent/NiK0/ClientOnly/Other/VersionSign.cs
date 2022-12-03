@@ -52,7 +52,7 @@ namespace DuckGame
         public override void Draw()
         {
             Color c = Color.White;
-            string s = "v" + Program.currentversion;
+            string s = Program.currentversion.Replace("-beta","b");
             if (Debugger.IsAttached)
             {
                 s = "DEBUG";
