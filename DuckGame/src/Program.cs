@@ -561,6 +561,7 @@ namespace DuckGame
                 DevConsole.Log("Setting Max Controller Count " + controllerstring);
                 Environment.SetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS", controllerstring);
             }
+            Environment.SetEnvironmentVariable( "FNA_KEYBOARD_USE_SCANCODES","1");
             string environmentVariable = Environment.GetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS");
             if (string.IsNullOrEmpty(environmentVariable) || !int.TryParse(environmentVariable, out MonoMain.MaximumGamepadCount) || MonoMain.MaximumGamepadCount < 0)
                 MonoMain.MaximumGamepadCount = Enum.GetNames(typeof(PlayerIndex)).Length;
