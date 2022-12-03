@@ -882,7 +882,7 @@ namespace DuckGame
             Level.Add(_libraryBeam);
             _editorBeam = new EditorBeam(28f, 100f);
             Level.Add(_editorBeam);
-            VersionSign vs = new VersionSign(176f, 28f);
+            VersionSign vs = new VersionSign(176f, 18f);
             Level.Add(vs);
             for (int index = 0; index < 21; ++index)
             {

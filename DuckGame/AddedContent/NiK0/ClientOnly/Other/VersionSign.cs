@@ -13,9 +13,13 @@ namespace DuckGame
     {
         public VersionSign(float xpos, float ypos) : base(xpos, ypos)
         {
+            lined = Content.Load<Tex2D>("vLine");
+            vend = new Sprite("vEnd");
             graphic = new Sprite("vMachiner");
             depth = 0.9f;
         }
+        public Tex2D lined;
+        public Sprite vend;
         public int vis;
         public int fadeTime = -1;
         public bool go;
@@ -47,18 +51,26 @@ namespace DuckGame
         }
         public override void Draw()
         {
+            Color c = Color.White;
+            string s = "v" + Program.currentversion;
             if (Debugger.IsAttached)
             {
-                Graphics.DrawString("DEBUG", position + new Vec2(9, 32), Color.Green * Rando.Float(0.3f, 1f), depth + 1, null, 0.85f);
+                s = "DEBUG";
+                c = Color.Green * Rando.Float(0.3f, 1f);
             }
             else if (Program.currentversion == "")
             {
-                Graphics.DrawString("DEV♥VER", position + new Vec2(9, 33), Color.DeepPink, depth + 1, null, 0.6f);
+                s = "DEV♥VER";
+                c = Color.DeepPink;
             }
-            else
-            {
-                Graphics.DrawString("v" + Program.currentversion, position + new Vec2(9, 32), Color.White, depth + 1, null, 0.7f);
-            }
+            Vec2 v = new Vec2(x + 8, y + 35);
+
+            float xs = s.Length * 6f;
+
+            Graphics.DrawTexturedLine(lined, v, v + new Vec2(xs, 0), Color.White, 1, depth + 1);
+            Graphics.Draw(vend, v.x + xs, y + 27, depth + 2);
+
+            Graphics.DrawString(s, position + new Vec2(9, 32.5f), c, depth + 3, null, 0.7f);
             base.Draw();
         }
     }
