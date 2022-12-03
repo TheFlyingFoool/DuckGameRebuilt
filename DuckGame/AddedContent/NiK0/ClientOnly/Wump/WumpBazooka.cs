@@ -23,13 +23,12 @@ namespace DuckGame
             collisionSize = new Vec2(30f, 10f);
             _barrelOffsetTL = new Vec2(29f, 9f);
             _fireSound = "missile";
-            _kickForce = 4f;
+            _kickForce = 6f;
             _fireRumble = RumbleIntensity.Light;
             _holdOffset = new Vec2(-2f, -3.5f);
             loseAccuracy = 0.1f;
             maxAccuracyLost = 0.6f;
-            _bio = "Old faithful, the 9MM pistol.";
-            _editorName = nameof(WumpBazooka);
+            _editorName = "Wump Bazooka";
             editorTooltip = "Funnier name, the missiles this gun are greatly explosive and volatile. Woudln't recommend.";
             physicsMaterial = PhysicsMaterial.Metal;
             _numBulletsPerFire = 2;

@@ -266,6 +266,7 @@
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
     <Compile Include="AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMagnum.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Bubble.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMDuckShatter.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMPinkCollision.cs" />
@@ -277,6 +278,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\TheDishes.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\VersionSign.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMissile.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpMagnum.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpBazooka.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\FreezeSmoke.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\IceSpike.cs" />
@@ -284,6 +286,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpBlunderbuss.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpHugeLaser.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpLaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpMagnumbullet.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpMissile.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpPistol.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaser.cs" />
