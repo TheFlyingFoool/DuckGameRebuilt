@@ -168,7 +168,7 @@ namespace DuckGame
                         {
                             Teams.all[i].ClearProfiles();
                         }
-                        Level.current = new TeamSelect2();
+                        Level.current = new TeamSelect2() { sign = true };
                     }
                     else if (MonoMain.startInLobby)
                     {
@@ -177,7 +177,8 @@ namespace DuckGame
                         {
                             Teams.all[i].ClearProfiles();
                         }
-                        Level.current = new TeamSelect2();
+                        Level.current = new TeamSelect2() { sign = true };
+
                     }
                     else if (MonoMain.startInArcade)
                     {
@@ -186,7 +187,7 @@ namespace DuckGame
                         {
                             Teams.all[i].ClearProfiles();
                         }
-                        Level.current = new ArcadeLevel(DuckGame.Content.GetLevelID("arcade", LevelLocation.Content));
+                        Level.current = new ArcadeLevel(DuckGame.Content.GetLevelID("arcade", LevelLocation.Content)) { sign = true };
                     }
                     else if (!Program.intro || MonoMain.noIntro)
                     {

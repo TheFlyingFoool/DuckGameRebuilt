@@ -211,7 +211,7 @@ namespace DuckGame
                 return 1337;
             }
         }
-
+        public bool sign;
         public TeamSelect2()
         {
             _centeredView = true;
@@ -602,6 +602,10 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            if (sign)
+            {
+                Level.Add(new VersionSign(32, -20) { fadeTime = 300 });
+            }
             Program.main.IsFixedTimeStep = true;
             Program.gameLoadedSuccessfully = true;
             Vote.ClearVotes();

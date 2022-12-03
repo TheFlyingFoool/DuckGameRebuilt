@@ -37,14 +37,15 @@ namespace DuckGame
                 {
                     WumpQuadLaserBullet quadLaserBullet = new WumpQuadLaserBullet(vec.x, vec.y, barrelVector * 16);
                     quadLaserBullet.killThingType = GetType();
+                    if (infiniteAmmoVal) quadLaserBullet.theholysee = true;
                     Level.Add(quadLaserBullet);
                     if (duck != null)
                     {
                         RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None, RumbleType.Gameplay));
                         duck.hSpeed = -barrelVector.x * 20f;
                         duck.vSpeed = -barrelVector.y * 18f - 2f;
-                        duck.hMax = 48;
-                        duck.vMax = 40;
+                        duck.hMax = 24;
+                        duck.vMax = 16;
                         quadLaserBullet.responsibleProfile = duck.profile;
                     }
                 }

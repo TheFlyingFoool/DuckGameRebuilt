@@ -149,7 +149,7 @@ namespace DuckGame
         }
         public void Explode()
         {
-            List<PhysicsObject> physicsObjects = Level.CheckCircleAll<PhysicsObject>(position, 128).ToList();
+            List<PhysicsObject> physicsObjects = Level.CheckCircleAll<PhysicsObject>(position, 64).ToList();
             for (int i = 0; i < physicsObjects.Count; i++)
             {
                 PhysicsObject po = physicsObjects[i];
@@ -170,7 +170,7 @@ namespace DuckGame
         public bool collision;
         public override void Update()
         {
-            if (D != null && D.isServerForObject)
+            if (D != null && isServerForObject)
             {
                 Fondle(this);
                 //Failsafe for if multiple people happen to hit the box it explodes

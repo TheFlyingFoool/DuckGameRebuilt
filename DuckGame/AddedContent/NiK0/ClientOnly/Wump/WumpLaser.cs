@@ -21,6 +21,7 @@
         public Sound destroy;
         public StateBinding _positionBinding = new StateBinding("position");
         public StateBinding _targetBinding = new StateBinding("_target");
+        public StateBinding _blastOwnerBinding = new StateBinding("_blastOwner");
         public override void Update()
         {
             if (isLocal)
@@ -76,8 +77,11 @@
             life++;
             if (life > 200 || _blastOwner.duck == null)
             {
-                _blastOwner.uncharge = false;
-                _blastOwner.weight = 5;
+                if (isServerForObject)
+                {
+                    _blastOwner.uncharge = false;
+                    _blastOwner.weight = 5;
+                }
                 _blast -= 0.02f;
                 destroy.Pitch -= 0.05f;
                 destroy.Volume -= 0.02f;
