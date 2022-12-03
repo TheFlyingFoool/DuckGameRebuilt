@@ -728,7 +728,7 @@ namespace DuckGame
             ModLoader.loadableMods = new Dictionary<string, ModConfiguration>();
             if (Directory.Exists(ModLoader.modDirectory))
             {
-                if (Steam.IsInitialized())
+                if (Steam.IsInitialized() && !Program.temptest1)
                 {
                     LoadingAction steamLoad = new LoadingAction();
                     steamLoad.action = () =>
@@ -747,6 +747,7 @@ namespace DuckGame
                         Steam.Update();
                         return steamLoad.flag;
                     };
+                    steamLoad.label = "Querying WorkShop";
                     MonoMain.currentActionQueue.Enqueue(steamLoad);
                 }
                 LoadingAction attemptLoadMods = new LoadingAction();
@@ -777,6 +778,7 @@ namespace DuckGame
                             }, null, "Loading Mods"));
                     }
                 };
+                attemptLoadMods.label = "Loading Mod stuff to load mod stuff";
             }
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => ReskinPack.InitializeReskins(),null, "Initialize Reskins"));
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => MapPack.InitializeMapPacks(), null, "Initialize MapPacks"));
@@ -821,6 +823,7 @@ namespace DuckGame
                     }, null, "Loading Reskin stuff"));
                 }
             };
+            getOrLoadMods.label = "Setting up Loading Reskin stuff";
         }
 
         internal static void LoadMods(string dir)
@@ -869,6 +872,7 @@ namespace DuckGame
                         ModLoader.loadingOldMod = null;
                     }, null, "ModLoader InvokeOnPreInitialize"));
                 }
+                preInitializeMods.label = "preInitializeMods setup";
             };
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() =>
             {

@@ -56,21 +56,28 @@ namespace DuckGame
                 if (loadingAction.Invoke())
                 {
                     actions.Dequeue();
+                    MonoMain.loadMessage = "invoke load action " + loadingAction.label;
                     return false;
                 }
                 if (loadingAction.waiting)
                 {
                     waiting = true;
+                    MonoMain.loadMessage = "invoke Load action waiting " + loadingAction.label; ;
                     return false;
                 }
             }
             if (actions.Count > 0)
+            {
+                MonoMain.loadMessage = "actions count " + actions.Count.ToString();
                 return false;
+            }
             if (waitAction != null)
             {
+                MonoMain.loadMessage = "invoke waitAction";
                 waiting = true;
                 return waitAction();
             }
+            MonoMain.loadMessage = "5 invoke";
             waiting = false;
             return true;
         }

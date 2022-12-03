@@ -20,7 +20,7 @@ public class WorkshopQueryUser : WorkshopQueryUGC {
     }
 
     internal unsafe override void Create() {
-        _handle = SteamUGC.CreateQueryUserUGCRequest(_accountID, _listType, _type, _sortOrder, SteamUtils.GetAppID(), SteamUtils.GetAppID(), page);
+        _handle = SteamUGC.CreateQueryUserUGCRequest(_accountID, _listType, _type, _sortOrder, (AppId_t)312530, (AppId_t)312530, page);
     }
 
     internal unsafe override void SetQueryData() {

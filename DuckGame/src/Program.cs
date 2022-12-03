@@ -35,6 +35,7 @@ namespace DuckGame
         public static bool fullstop;
         public static bool Prestart = DirtyPreStart();
 
+        public static bool temptest1;
         public static string currentversion;
         public static string StartinEditorLevelName;
         public static string GameDirectory;
@@ -425,6 +426,9 @@ namespace DuckGame
                         break;
                     case "-moddebug":
                         MonoMain.modDebugging = true;
+                        break;
+                    case "-tempf1":
+                        temptest1 = true;
                         break;
                     case "-downloadmods":
                         MonoMain.downloadWorkshopMods = true;

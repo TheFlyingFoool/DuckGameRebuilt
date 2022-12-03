@@ -48,12 +48,8 @@ public abstract class WorkshopQueryBase : IDisposable {
 
     internal unsafe virtual void Destroy() 
     {
-        if (!Steam.initialized)
-            return;
-        if (_handle.m_UGCQueryHandle != 0) {
-            SteamUGC.ReleaseQueryUGCRequest(_handle);
-            _handle = new UGCQueryHandle_t();
-        }
+        SteamUGC.ReleaseQueryUGCRequest(_handle);
+        _handle = new UGCQueryHandle_t();
     }
 
     internal unsafe virtual void SetQueryData() 
@@ -96,8 +92,6 @@ public abstract class WorkshopQueryBase : IDisposable {
 
     protected unsafe virtual void _Request() 
     {
-        if (!Steam.initialized)
-            return;
         if (handle == 0)
             Create();
         SetQueryData();
@@ -110,103 +104,100 @@ public abstract class WorkshopQueryBase : IDisposable {
 
     private unsafe void OnSteamUGCQueryCompleted(SteamUGCQueryCompleted_t queryCompleted, bool ioFailure) 
     {
-        if (!Steam.initialized)
-            return;
-        UGCQueryHandle_t handle = queryCompleted.m_handle;
-        if (_handle.m_UGCQueryHandle == 0 || ioFailure)
-            goto Finish;
-
         numResultsTotal = queryCompleted.m_unTotalMatchingResults;
-        uint results = queryCompleted.m_unNumResultsReturned;
-        if (results == 0 || fetchedData == WorkshopQueryData.TotalOnly)
-            goto Finish;
 
-        numResultsFetched += results;
-        for (uint resulti = 0; resulti < results; resulti++) {
+        if (queryCompleted.m_unNumResultsReturned == 0 || fetchedData == WorkshopQueryData.TotalOnly)
+        {
+            QueryFinished?.Invoke(this);
+            return;
+        }
+        numResultsFetched += queryCompleted.m_unNumResultsReturned;
+        for (uint resulti = 0; resulti < queryCompleted.m_unNumResultsReturned; resulti++)
+        {
             WorkshopQueryResult result = new WorkshopQueryResult();
-            SteamUGC.GetQueryUGCPreviewURL(handle, resulti, out result.previewURL, 260);
+            SteamUGC.GetQueryUGCPreviewURL(queryCompleted.m_handle, resulti, out result.previewURL, 260);
 
             SteamUGCDetails_t ugcDetails;
             SteamUGC.GetQueryUGCResult(queryCompleted.m_handle, resulti, out ugcDetails);
             WorkshopQueryResultDetails resultDetails = result.details = new WorkshopQueryResultDetails();
 
-            resultDetails.acceptedForUse = ugcDetails.m_bAcceptedForUse;
-            resultDetails.banned = ugcDetails.m_bBanned;
-
-            resultDetails.title = ugcDetails.m_rgchTitle;
+            resultDetails.acceptedForUse =ugcDetails.m_bAcceptedForUse;
+            resultDetails.banned =ugcDetails.m_bBanned;
             resultDetails.description = ugcDetails.m_rgchDescription;
-            resultDetails.steamIDOwner = ugcDetails.m_ulSteamIDOwner;
-            resultDetails.score = ugcDetails.m_flScore;
-            resultDetails.visibility = ugcDetails.m_eVisibility;
-            resultDetails.votesDown = ugcDetails.m_unVotesDown;
-            resultDetails.votesUp = ugcDetails.m_unVotesUp;
-
-            resultDetails.tags = ugcDetails.m_rgchTags.Split(',');
-            resultDetails.tagsTruncated = ugcDetails.m_bTagsTruncated;
-
-            resultDetails.timeAddedToUserList = ugcDetails.m_rtimeAddedToUserList;
-            resultDetails.timeCreated = ugcDetails.m_rtimeCreated;
-            resultDetails.timeUpdated = ugcDetails.m_rtimeUpdated;
 
             resultDetails.file = ugcDetails.m_hFile.m_UGCHandle;
             resultDetails.fileName = ugcDetails.m_pchFileName;
             resultDetails.fileSize = ugcDetails.m_nFileSize;
             resultDetails.fileType = ugcDetails.m_eFileType;
-
             resultDetails.numChildren = ugcDetails.m_unNumChildren;
-
             resultDetails.previewFile = ugcDetails.m_hPreviewFile.m_UGCHandle;
             resultDetails.previewFileSize = ugcDetails.m_nPreviewFileSize;
-
-            resultDetails.URL = ugcDetails.m_rgchURL;
-
             resultDetails.publishedFile = WorkshopItem.GetItem(ugcDetails.m_nPublishedFileId);
 
             resultDetails.result = ugcDetails.m_eResult;
+            resultDetails.score = ugcDetails.m_flScore;
+            resultDetails.steamIDOwner = ugcDetails.m_ulSteamIDOwner;
+            resultDetails.tags = ugcDetails.m_rgchTags.Split(',');
+            resultDetails.tagsTruncated = ugcDetails.m_bTagsTruncated;
+            resultDetails.timeAddedToUserList = ugcDetails.m_rtimeAddedToUserList;
+            resultDetails.timeCreated = ugcDetails.m_rtimeCreated;
+            resultDetails.timeUpdated = ugcDetails.m_rtimeUpdated;
+            resultDetails.title = ugcDetails.m_rgchTitle;
+            resultDetails.URL = ugcDetails.m_rgchURL;
+            resultDetails.visibility = ugcDetails.m_eVisibility;
+            resultDetails.votesDown = ugcDetails.m_unVotesDown;
+            resultDetails.votesUp = ugcDetails.m_unVotesUp;
 
-            if ((fetchedData & WorkshopQueryData.Children) != 0) {
+            if ((fetchedData & WorkshopQueryData.Children) != 0)
+            {
                 PublishedFileId_t[] children = new PublishedFileId_t[resultDetails.numChildren];
-                if (SteamUGC.GetQueryUGCChildren(handle, resulti, children, (uint) children.Length))
+                if (SteamUGC.GetQueryUGCChildren(queryCompleted.m_handle, resulti, children, (uint)children.Length))
                     result.fileList = _.GetArray(children, id => WorkshopItem.GetItem(id));
             }
 
-            if ((fetchedData & WorkshopQueryData.Metadata) != 0) {
-                SteamUGC.GetQueryUGCMetadata(handle, resulti, out result.metadata, 260);
+            if ((fetchedData & WorkshopQueryData.Metadata) != 0)
+            {
+                SteamUGC.GetQueryUGCMetadata(queryCompleted.m_handle, resulti, out result.metadata, 260);
             }
 
-            if ((fetchedData & WorkshopQueryData.AdditionalPreviews) != 0) {
-                WorkshopQueryResultAdditionalPreview[] previews = result.additionalPreviews = new WorkshopQueryResultAdditionalPreview[SteamUGC.GetQueryUGCNumAdditionalPreviews(handle, resulti)];
-                for (uint previewi = 0; previewi < previews.Length; previewi++) {
+            if ((fetchedData & WorkshopQueryData.AdditionalPreviews) != 0)
+            {
+                WorkshopQueryResultAdditionalPreview[] previews = result.additionalPreviews = new WorkshopQueryResultAdditionalPreview[SteamUGC.GetQueryUGCNumAdditionalPreviews(queryCompleted.m_handle, resulti)];
+                for (uint previewi = 0; previewi < previews.Length; previewi++)
+                {
                     string url;
                     string name;
                     EItemPreviewType type;
-                    if (SteamUGC.GetQueryUGCAdditionalPreview(handle, resulti, previewi, out url, 260, out name, 260, out type))
+                    if (SteamUGC.GetQueryUGCAdditionalPreview(queryCompleted.m_handle, resulti, previewi, out url, 260, out name, 260, out type))
                         previews[previewi] = new WorkshopQueryResultAdditionalPreview(type == EItemPreviewType.k_EItemPreviewType_Image, url);
                 }
             }
 
-            if ((fetchedData & WorkshopQueryData.Statistics) != 0) {
+            if ((fetchedData & WorkshopQueryData.Statistics) != 0)
+            {
                 uint[] stats = result.statistics = new uint[8];
-                for (WorkshopResultStatistic stat = WorkshopResultStatistic.NumSubscriptions; (int) stat < stats.Length; stat++) {
+                for (WorkshopResultStatistic stat = WorkshopResultStatistic.NumSubscriptions; (int)stat < stats.Length; stat++)
+                {
                     ulong val;
-                    if (SteamUGC.GetQueryUGCStatistic(handle, resulti, (EItemStatistic) stat, out val))
-                        stats[(int) stat] = (uint) val;
+                    if (SteamUGC.GetQueryUGCStatistic(queryCompleted.m_handle, resulti, (EItemStatistic)stat, out val))
+                        stats[(int)stat] = (uint)val;
                 }
             }
 
             ResultFetched?.Invoke(this, result);
         }
 
-        if (numResultsFetched != numResultsTotal && !justOnePage) {
+        if (numResultsFetched == numResultsTotal || justOnePage)
+        {
+            QueryFinished?.Invoke(this);
+        }
+        else
+        {
             Destroy();
             page++;
             Create();
             Request();
-            return;
         }
-
-        Finish:
-        QueryFinished?.Invoke(this);
     }
 
     protected virtual void Dispose(bool flag) {

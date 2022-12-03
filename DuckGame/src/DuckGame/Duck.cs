@@ -40,40 +40,40 @@ namespace DuckGame
         private byte _quackPitch;
         public NetSoundEffect _netQuack = new NetSoundEffect(new string[1]
         {
-      nameof (quack)
+            nameof (quack)
         });
         public NetSoundEffect _netJump = new NetSoundEffect(new string[1]
         {
-      "jump"
+            "jump"
         })
         {
             volume = 0.5f
         };
         public NetSoundEffect _netDisarm = new NetSoundEffect(new string[1]
         {
-      "disarm"
+            "disarm"
         })
         {
             volume = 0.3f
         };
         public NetSoundEffect _netTinyMotion = new NetSoundEffect(new string[1]
         {
-      "tinyMotion"
+            "tinyMotion"
         });
         public NetSoundEffect _netSwear = new NetSoundEffect(new List<string>()
-    {
-      "cutOffQuack",
-      "cutOffQuack2"
-    }, new List<string>() { "quackBleep" })
+        {
+            "cutOffQuack",
+            "cutOffQuack2"
+        }, new List<string>() { "quackBleep" })
         {
             pitchVariationLow = -0.05f,
             pitchVariationHigh = 0.05f
         };
         public NetSoundEffect _netScream = new NetSoundEffect(new string[3]
         {
-      "quackYell01",
-      "quackYell02",
-      "quackYell03"
+            "quackYell01",
+            "quackYell02",
+            "quackYell03"
         });
         public PlusOne currentPlusOne;
         public byte disarmIndex = 9;
@@ -736,6 +736,7 @@ namespace DuckGame
         public Duck(float xval, float yval, Profile pro)
           : base(xval, yval)
         {
+            shouldbegraphicculled = false;
             _featherVolume = new FeatherVolume(this)
             {
                 anchor = (Anchor)this

@@ -840,6 +840,7 @@ namespace DuckGame
                 Steam.Update();
                 return steamLoad.flag;
             };
+            steamLoad.label = "steamLoad query";
             _thingsToLoad.Enqueue(steamLoad);
             steamLoad = new LoadingAction();
             steamLoad.action = () =>
@@ -862,6 +863,7 @@ namespace DuckGame
                         Steam.Update();
                         return u == null || u.finishedProcessing;
                     };
+                    itemDownload.label = "Downloading workshop mods action / Steam.Update finishedProcessing waitAction";
                     steamLoad.actions.Enqueue(itemDownload);
                 }
             };
@@ -870,6 +872,7 @@ namespace DuckGame
                 Steam.Update();
                 return steamLoad.flag;
             };
+            steamLoad.label = "setup steam downloading workshop items";
             _thingsToLoad.Enqueue(steamLoad);
         }
         private void AddNamedLoadingAction(Action pAction) => _thingsToLoad.Enqueue((LoadingAction)pAction);
@@ -1614,12 +1617,12 @@ namespace DuckGame
 				{
 					loaded = 1f;
 				}
+                if (loadMessages.Count == 0)
+                {
+                    loadMessage = loadMessage;
+                }
                 if (Debugger.IsAttached)
                 {
-                    if (!loadMessage.StartsWith("|16,144,13|"))
-                    {
-                        loadMessage = "|16,144,13|" + loadMessage;
-                    }
                     Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Green, (Depth)0.6f);
                 }
                 else

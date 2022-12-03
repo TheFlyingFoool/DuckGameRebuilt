@@ -22,7 +22,7 @@ public class WorkshopQueryAll : WorkshopQueryUGC {
     }
 
     internal unsafe override void Create() {
-        _handle = SteamUGC.CreateQueryAllUGCRequest(_queryType, _fileType, SteamUtils.GetAppID(), SteamUtils.GetAppID(), page);
+        _handle = SteamUGC.CreateQueryAllUGCRequest(_queryType, _fileType, (AppId_t)312530, (AppId_t)312530, page);
     }
 
     internal unsafe override void SetQueryData() {
