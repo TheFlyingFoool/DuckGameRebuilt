@@ -245,8 +245,14 @@ namespace DuckGame
             {
                 fileName = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(fileName), true);
             }
-            using (Bitmap bitmap = new Bitmap(fileName))
-                return TextureConverter.LoadPNGWithPinkAwesomeness(device, bitmap, process);
+            try
+            {
+                using (Bitmap bitmap = new Bitmap(fileName))
+                    return TextureConverter.LoadPNGWithPinkAwesomeness(device, bitmap, process);
+            }
+            catch {
+                return null;
+            }
         }
 
         internal static Texture2D LoadPNGWithPinkAwesomenessAndMaxDimensions(

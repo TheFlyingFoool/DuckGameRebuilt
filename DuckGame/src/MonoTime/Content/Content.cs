@@ -658,7 +658,7 @@ namespace DuckGame
             if (path.StartsWith("Content/"))
                 path = path.Substring(8);
             path = path.Substring(0, path.Length - 4);
-            MonoMain.loadMessage = "Loading Textures (" + path + ")";
+            MonoMain.NloadMessage = "Loading Textures (" + path + ")";
             MonoMain.lazyLoadActions.Enqueue(() => DuckGame.Content.Load<Tex2D>(path));
             ++MonoMain.lazyLoadyBits;
         }
@@ -694,7 +694,7 @@ namespace DuckGame
 
         public static void InitializeLevels()
         {
-            MonoMain.loadMessage = "Loading Levels";
+            MonoMain.NloadMessage = "Loading Levels";
             DuckGame.Content.SearchDirLevels("Content/levels", LevelLocation.Content);
             if (!Steam.IsInitialized())
                 return;
@@ -791,7 +791,7 @@ namespace DuckGame
         public static Dictionary<string, Microsoft.Xna.Framework.Rectangle> offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();
         public static void Initialize(bool reverse)
         {
-            MonoMain.loadMessage = "Loading Textures";
+            MonoMain.NloadMessage = "Loading Textures";
 
             DuckGame.Content.SearchDirTextures("Content/", reverse);
         }
@@ -800,7 +800,7 @@ namespace DuckGame
 
         public static void InitializeEffects()
         {
-            MonoMain.loadMessage = "Loading Effects";
+            MonoMain.NloadMessage = "Loading Effects";
             DuckGame.Content.SearchDirEffects("Content/Shaders");
         }
 

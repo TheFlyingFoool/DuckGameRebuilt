@@ -26,6 +26,7 @@ using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using AddedContent.Hyeve;
 using static DuckGame.CMD;
+using XnaToFna;
 
 namespace DuckGame
 {
@@ -48,12 +49,12 @@ namespace DuckGame
         private static int _screenHeight = 720;
         public static bool _fullScreen = false;
         public static volatile int lazyLoadyBits = 0;
-        public static volatile string _loadMessage = "HOLD ON...";
-        public static string loadMessage
+        public static volatile string loadMessage = "HOLD ON...";
+        public static string NloadMessage
         {
             get
             {
-                return _loadMessage;
+                return loadMessage;
             }
             set
             {
@@ -66,7 +67,8 @@ namespace DuckGame
                 {
                     loadMessages.Push(text);
                 }
-                _loadMessage = text;
+                loadMessage = text;
+                lastLoadMessage = text;
             }
         }
         private SpriteMap _duckRun;
@@ -774,6 +776,10 @@ namespace DuckGame
 
         protected override void OnExiting(object sender, EventArgs args)
         {
+            if (XnaToFnaHelper.fillinform != null)
+            {
+                XnaToFnaHelper.fillinform.Close();
+            }
             InvokeOnGameExitEvent(false);
             KillEverything();
             Process.GetCurrentProcess().Kill();
@@ -821,7 +827,7 @@ namespace DuckGame
 
         private void DownloadWorkshopItems()
         {
-            loadMessage = "Downloading workshop mods...";
+            NloadMessage = "Downloading workshop mods...";
             if (!Steam.IsInitialized())
                 return;
             LoadingAction steamLoad = new LoadingAction();
@@ -853,7 +859,7 @@ namespace DuckGame
                     LoadingAction itemDownload = new LoadingAction();
                     itemDownload.action = () =>
                     {
-                        loadMessage = "Downloading workshop mods (" + loadyBits.ToString() + "/" + totalLoadyBits.ToString() + ")";
+                        NloadMessage = "Downloading workshop mods (" + loadyBits.ToString() + "/" + totalLoadyBits.ToString() + ")";
                         if (Steam.DownloadWorkshopItem(u))
                             itemDownload.context = u;
                         ++loadyBits;
@@ -1186,7 +1192,7 @@ namespace DuckGame
                     }
                     else if (Steam.IsInitialized() && Steam.IsRunningInitializeProcedures())
                     {
-                        loadMessage = "Loading Steam";
+                        NloadMessage = "Loading Steam";
                         Steam.Update();//  why return lets just roll through itll be fine =);
                     }
                 }
@@ -1215,7 +1221,7 @@ namespace DuckGame
  
                         currentActionQueue = _thingsToLoad;
                         LoadingAction loadingAction = _thingsToLoad.Peek();
-                        MonoMain.loadMessage = loadingAction.label;
+                        MonoMain.NloadMessage = loadingAction.label;
                         if (loadingAction.Invoke())
                         {
                             _thingsToLoad.Dequeue();
@@ -1517,7 +1523,7 @@ namespace DuckGame
         }
 
         static Stack<string> loadMessages = new();
-        string lastLoadMessage = "";
+        public static string lastLoadMessage = "";
 
         protected void RunDraw(GameTime gameTime)
         {
@@ -1620,7 +1626,7 @@ namespace DuckGame
 				}
                 if (loadMessages.Count == 0)
                 {
-                    loadMessage = loadMessage;
+                    NloadMessage = NloadMessage;
                 }
                 if (Debugger.IsAttached)
                 {
@@ -1640,6 +1646,10 @@ namespace DuckGame
                 {
                     Graphics.DrawString("Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100.0)).ToString() + "%)", p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
                     textPadding -= 20;
+                }
+                if (loadMessage != lastLoadMessage)
+                {
+                    NloadMessage = loadMessage;
                 }
                 //if (text != loadMessage)
                 //{

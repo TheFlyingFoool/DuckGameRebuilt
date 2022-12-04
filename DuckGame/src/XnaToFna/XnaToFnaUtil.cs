@@ -48,7 +48,7 @@ namespace XnaToFna
         public readonly ModuleDefinition ThisModule;
         public List<XnaToFnaMapping> Mappings;
         public XnaToFnaModder Modder;
-        public DefaultAssemblyResolver AssemblyResolver;
+        public CustomAssemblyResolver AssemblyResolver;
         public List<string> Directories;
         public List<string> ContentDirectoryNames;
         public List<string> ContentDirectories;
@@ -72,7 +72,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 1;
+        public static int RemapVersion = 15;
         public void Stub(ModuleDefinition mod)
         {
             this.Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -144,11 +144,11 @@ namespace XnaToFna
                  //else if (fullName.StartsWith("XnaToFna.ProxyDrawing."))
                  //   this.Modder.RelinkMap["System.Drawing." + fullName.Substring(22)] = fullName;
                 string fullName = type.FullName;
-                if (fullName.StartsWith("XnaToFna.ProxyForms."))
-                    this.Modder.RelinkMap["System.Windows.Forms." + fullName.Substring(20)] = fullName;
-                else if (fullName.StartsWith("XnaToFna.ProxyDInput."))
-                    this.Modder.RelinkMap[fullName.Substring(21)] = fullName;
-                else if (fullName.StartsWith("XnaToFna.StubXDK."))
+                //if (fullName.StartsWith("XnaToFna.ProxyForms."))
+                //    this.Modder.RelinkMap["System.Windows.Forms." + fullName.Substring(20)] = fullName;
+                //else if (fullName.StartsWith("XnaToFna.ProxyDInput."))
+                //    this.Modder.RelinkMap[fullName.Substring(21)] = fullName;
+                if (fullName.StartsWith("XnaToFna.StubXDK."))
                 {
                     this.Modder.RelinkMap["Microsoft.Xna.Framework." + fullName.Substring(17)] = fullName;
                     foreach (MethodInfo method in type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
@@ -165,6 +165,10 @@ namespace XnaToFna
                     }
                 }
             }
+            //this.Modder.RelinkMap["System.Windows.Forms.FormClosingEventHandler"] = "XnaToFna.ProxyForms.FormClosingEventHandler";
+            //this.Modder.RelinkMap["System.Windows.Forms.Form"] = "XnaToFna.ProxyForms.Form";
+            //this.Modder.RelinkMap["System.Windows.Forms.Control System.Windows.Forms.Control::FromHandle(System.IntPtr)"] = new RelinkMapEntry("XnaToFna.ProxyForms.Forms", "XnaToFna.ProxyForms.Forms.Control FromHandle(System.IntPtr)");
+            //// this.Modder.RelinkMap["System.Windows.Forms.Control"] = "XnaToFna.ProxyForms.Control";
             //Dans thing ReadAllLines 
 
             this.Modder.RelinkMap["System.IO.DirectoryInfo System.IO.Directory::CreateDirectory(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IO.DirectoryInfo DirectoryCreateDirectory(System.String)");
@@ -468,15 +472,7 @@ namespace XnaToFna
             }
             return ModuleDefinition.ReadModule(file, parameters).Assembly;
         }
-        public static AssemblyDefinition AssemblyResolveEventHandler(object sender, AssemblyNameReference reference)
-        {
-            if (reference != null && reference.FullName != null && reference.FullName.StartsWith("Steam,") || reference.FullName.StartsWith("Steam.Debug,"))
-            {
-                string path = DuckGame.Program.GameDirectory + "DGSteam.dll";
-                return GetAssembly(sender as IAssemblyResolver, path, new ReaderParameters()); //MonoModExt.ReadModule(path, (sender as DefaultAssemblyResolver).GetAssembly(path, new ReaderParameters()));
-            }
-            return null;
-        }
+
         public XnaToFnaUtil()
         {
             this.Mappings = new List<XnaToFnaMapping>() {
@@ -511,7 +507,7 @@ namespace XnaToFna
 
           }, new XnaToFnaMapping.SetupDelegate(XnaToFnaUtil.SetupGSRelinkMap2))
       };
-            this.AssemblyResolver = new DefaultAssemblyResolver();
+            this.AssemblyResolver = new CustomAssemblyResolver();
             this.Directories = new List<string>();
             this.ContentDirectoryNames = new List<string>() {
         "Content"
@@ -543,24 +539,28 @@ namespace XnaToFna
 
             this.Modder.ReadingMode = ReadingMode.Immediate;
             this.Modder.Strict = false;
-            this.Modder.DependencyCache.Add("DuckGame", MonoModExt.ReadModule(path, this.Modder.GenReaderParameters(false, path)));
-            this.AssemblyResolver.ResolveFailure += AssemblyResolveEventHandler;
             this.Modder.AssemblyResolver = AssemblyResolver;
             this.Modder.DependencyDirs = this.Directories;
             this.Modder.MissingDependencyResolver = new MonoMod.MissingDependencyResolver(this.MissingDependencyResolver);
+
             using (FileStream fileStream = new FileStream(Assembly.GetExecutingAssembly().Location, FileMode.Open, FileAccess.Read))
             {
                 this.ThisModule = MonoModExt.ReadModule(fileStream, new ReaderParameters(ReadingMode.Immediate));
             }
             this.Modder.DependencyCache[this.ThisModule.Assembly.Name.Name] = this.ThisModule;
             this.Modder.DependencyCache[this.ThisModule.Assembly.Name.FullName] = this.ThisModule;
+            //this.Modder.DependencyCache.Add("DuckGame", MonoModExt.ReadModule(path, this.Modder.GenReaderParameters(false, path)));
         }
-
-        public XnaToFnaUtil(params string[] paths) : this()
+        public string modpath = "";
+        public XnaToFnaUtil(string[] paths) : this()
         {
-            this.ScanPaths(paths);
+            //this.ScanPaths(paths);
         }
-
+        public XnaToFnaUtil(string path) : this()
+        {
+            CustomAssemblyResolver.searchdirectorpath = path;
+           // this.ScanPaths(path);
+        }
         public void Log(string txt)
         {
             Console.Write("[XnaToFna] ");

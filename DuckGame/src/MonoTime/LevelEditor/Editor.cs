@@ -5193,10 +5193,10 @@ namespace DuckGame
 
         public static void InitializeConstructorLists()
         {
-            MonoMain.loadMessage = "Loading Constructor Lists";
+            MonoMain.NloadMessage = "Loading Constructor Lists";
             if (MonoMain.moddingEnabled)
             {
-                MonoMain.loadMessage = "Loading Constructor Lists";
+                MonoMain.NloadMessage = "Loading Constructor Lists";
                 ThingTypes = ManagedContent.Things.AllSortedTypes.ToList();
             }
             else
@@ -5334,7 +5334,7 @@ namespace DuckGame
         public static void InitializePlaceableGroup()
         {
             AutoUpdatables.ignoreAdditions = true;
-            MonoMain.loadMessage = "Loading Editor Groups";
+            MonoMain.NloadMessage = "Loading Editor Groups";
             _placeables = new EditorGroup(null, null);
             AutoUpdatables.ignoreAdditions = false;
             if (!_clearOnce)

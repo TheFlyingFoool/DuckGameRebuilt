@@ -908,7 +908,7 @@ namespace DuckGame
 
         public static void InitializeGraphics()
         {
-            MonoMain.loadMessage = "Loading Input";
+            MonoMain.NloadMessage = "Loading Input";
             foreach (Keys key in DuckGame.Input._keys)
             {
                 char ch = KeyHelper.KeyToChar(key);
@@ -1441,7 +1441,7 @@ namespace DuckGame
         public static void Initialize()
         {
             FNAPlatform.DeviceChangeEvent += OnDeviceChange;
-            MonoMain.loadMessage = "Initializing Input System...";
+            MonoMain.NloadMessage = "Initializing Input System...";
             DevConsole.Log(DCSection.General, "Initializing Input...");
             foreach (DeviceInputMapping inputMappingPreset in DuckGame.Input._defaultInputMappingPresets)
                 DuckGame.Input._defaultInputMapping.Add(inputMappingPreset.Clone());

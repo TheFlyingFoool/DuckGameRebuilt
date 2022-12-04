@@ -16,7 +16,7 @@ namespace DuckGame
 
         public static void Initialize()
         {
-            MonoMain.loadMessage = "Loading Highlights";
+            MonoMain.NloadMessage = "Loading Highlights";
             for (int index = 0; index < 6; ++index)
                 Highlights._recordings.Add(new Recording());
         }

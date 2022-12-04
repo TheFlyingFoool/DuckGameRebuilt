@@ -1948,6 +1948,7 @@
     <Compile Include="src\XnaToFna\Control.cs" />
     <Compile Include="src\XnaToFna\CopyingStream.cs" />
     <Compile Include="src\XnaToFna\Cursor.cs" />
+    <Compile Include="src\XnaToFna\CustomAssemblyResolver.cs" />
     <Compile Include="src\XnaToFna\DeviceEvents.cs" />
     <Compile Include="src\XnaToFna\DInput.cs" />
     <Compile Include="src\XnaToFna\DInputState.cs" />

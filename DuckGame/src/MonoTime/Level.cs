@@ -83,7 +83,7 @@ namespace DuckGame
 
         public static void InitializeCollisionLists()
         {
-            MonoMain.loadMessage = "Loading Collision Lists";
+            MonoMain.NloadMessage = "Loading Collision Lists";
             for (int index = 0; index < 10; ++index)
                 Level._collisionLists.Enqueue(new List<object>());
         }

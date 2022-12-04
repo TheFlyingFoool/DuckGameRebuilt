@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public static void PrreloadLevels()
         {
-            MonoMain.loadMessage = "Pre-Loading Custom Levels";
+            MonoMain.NloadMessage = "Pre-Loading Custom Levels";
 
             //steal code? we would never do such a thing -NiK0
             try

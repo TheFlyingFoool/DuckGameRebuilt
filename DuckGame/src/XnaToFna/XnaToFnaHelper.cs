@@ -43,15 +43,16 @@ namespace XnaToFna
             Console.Write("[XnaToFnaHelper] ");
             Console.WriteLine(s);
         }
-
+        public static System.Windows.Forms.Form fillinform;
         public static IntPtr GetProxyFormHandle(this GameWindow window)
         {
             if (GameForm.Instance == null)
             {
+                fillinform = new System.Windows.Forms.Form();
                 XnaToFnaHelper.Log("[ProxyForms] Creating game ProxyForms.GameForm");
                 GameForm.Instance = new GameForm();
             }
-            return GameForm.Instance.Handle;
+            return fillinform.Handle;//GameForm.Instance.Handle;
         }
         public static DirectoryInfo DirectoryCreateDirectory(string path)
         {

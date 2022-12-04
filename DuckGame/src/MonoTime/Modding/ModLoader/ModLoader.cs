@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.CSharp;
+using Microsoft.Xna.Framework;
 using Mono.Cecil;
 using MonoMod.Utils;
 using System;
@@ -179,23 +180,31 @@ namespace DuckGame
                         string[] splitdata = saveddata.Split('|');
                         if (splitdata.Length > 1 && splitdata[0] == modificationdatetime && splitdata[1] == XnaToFnaUtil.RemapVersion.ToString())
                         {
-                            return Assembly.LoadFile(RebuiltAssemblyPath);
+                            byte[] filebytes = File.ReadAllBytes(RebuiltAssemblyPath);
+                            if (filebytes.Length != 0)
+                            {
+                                return Assembly.Load(filebytes);
+                            }
                         }
                     }
                     File.Delete(RebuiltAssemblyPath);
                 }
                 File.Delete(RebuiltDataPath);
             }
+            //assemblyDefinition = this.ResolveFailure(this, name);
             if (File.Exists(RebuiltAssemblyPath))
             {
                 File.Delete(RebuiltAssemblyPath);
             }
             //(modificationdatetime + " | " + XnaToFnaUtil.RemapVersion.ToString())
             File.WriteAllText(RebuiltDataPath, (modificationdatetime + "|" + XnaToFnaUtil.RemapVersion.ToString()));
-            MonoMain.loadMessage = "REMAPPING/LOADING MOD " + ModLoader.currentModLoadString + " " + saveddata;
+            MonoMain.NloadMessage = "REMAPPING/LOADING MOD " + ModLoader.currentModLoadString + " " + saveddata;
             string folderpath = Path.GetDirectoryName(path);
-            xnaToFnaUtil = new XnaToFnaUtil();
+            xnaToFnaUtil = new XnaToFnaUtil(folderpath); //Path.GetDirectoryName(path);
             //xnaToFnaUtil.ScanPath(Program.GameDirectory + "DGSteamref.dll");
+
+        //    xnaToFnaUtil.ScanPath("D:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\312530\\2674911202\\BrowseGamesPlus\\content\\0Harmony.dll");
+            
             xnaToFnaUtil.ScanPath(Program.GameDirectory + "FNA.dll");
             xnaToFnaUtil.ScanPath(Program.FilePath);
             xnaToFnaUtil.RelinkAll();
@@ -351,21 +360,25 @@ namespace DuckGame
                 }
                 if (mod == null)
                 {
+                    if (modConfig.workshopID == 2480332949UL) //Delta Duck
+                    {
+                        modConfig.noRecompilation = true;
+                    }
                     if (modConfig.disabled)
                         mod = new DisabledMod();
                     else if (modConfig.modType == ModConfiguration.Type.Reskin)
                     {
-                        MonoMain.loadMessage = "LOADING RESKIN " + ModLoader.currentModLoadString;
+                        MonoMain.NloadMessage = "LOADING RESKIN " + ModLoader.currentModLoadString;
                         mod = ReskinPack.LoadReskin(modConfig.directory, pExistingConfig: modConfig);
                     }
                     else if (modConfig.modType == ModConfiguration.Type.MapPack)
                     {
-                        MonoMain.loadMessage = "LOADING MAPPACK " + ModLoader.currentModLoadString;
+                        MonoMain.NloadMessage = "LOADING MAPPACK " + ModLoader.currentModLoadString;
                         mod = MapPack.LoadMapPack(modConfig.directory, pExistingConfig: modConfig);
                     }
                     else if (!ModLoader._preloading)
                     {
-                        MonoMain.loadMessage = "LOADING MOD " + ModLoader.currentModLoadString;
+                        MonoMain.NloadMessage = "LOADING MOD " + ModLoader.currentModLoadString;
                         LoadedMods.Add(modConfig.workshopID);
                         try
                         {
@@ -567,7 +580,7 @@ namespace DuckGame
                 {
                     if (!System.IO.File.Exists(modConfiguration.assemblyPath) && !MonoMain.nomodsMode)
                     {
-                        MonoMain.loadMessage = "COMPILING MOD " + ModLoader.currentModLoadString;
+                        MonoMain.NloadMessage = "COMPILING MOD " + ModLoader.currentModLoadString;
                         if (!ModLoader.AttemptCompile(modConfiguration))
                             modConfiguration.error = ModLoader._buildErrorText + "\n\nFile: " + ModLoader._buildErrorFile + "\nNote: Assembly (" + Path.GetFileName(modConfiguration.assemblyPath) + ") was not found, and a compile was attempted.";
                     }
