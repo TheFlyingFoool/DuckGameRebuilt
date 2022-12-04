@@ -32,6 +32,7 @@ namespace DuckGame
           bool vertical = false)
           : base(xpos, ypos)
         {
+            shouldbegraphicculled = false;
             layer = Layer.Lighting;
             _lightColor = c;
             _range = range;

@@ -8,6 +8,7 @@ namespace DuckGame
     {
         public PointLight(float xpos, float ypos, Color c, float range, List<LightOccluder> occluders = null, bool strangeFalloff = false) : base(xpos, ypos, null)
         {
+            shouldbegraphicculled = false;
             base.layer = Layer.Lighting;
             this._occluders = occluders;
             this._lightColor = c;

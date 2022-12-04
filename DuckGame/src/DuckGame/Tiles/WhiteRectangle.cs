@@ -18,6 +18,7 @@ namespace DuckGame
         public WhiteRectangle(float xpos, float ypos, float wide, float high, bool waterVal = false)
           : base(xpos, ypos)
         {
+            shouldbegraphicculled = false;
             size = new Vec2(wide, high);
             layer = Layer.Lighting;
             gradientLine = new Sprite("lavaGlowLine");

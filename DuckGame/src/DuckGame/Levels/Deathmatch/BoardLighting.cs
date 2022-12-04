@@ -14,6 +14,7 @@ namespace DuckGame
         public BoardLighting(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            shouldbegraphicculled = false;
             _lightRay = new Sprite("rockThrow/lightRays");
             center = new Vec2(305f, 0f);
             graphic = _lightRay;
