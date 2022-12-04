@@ -133,7 +133,7 @@ namespace DuckGame
         public bool theholysee;
         public StateBinding _positionBinding = new CompressedVec2Binding("position", int.MaxValue, false, true);
         public StateBinding _travelBinding = new CompressedVec2Binding("travel", 20);
-        public StateBinding _theholysaw = new CompressedVec2Binding("theholysee", 20);
+        public StateBinding _theholysaw = new StateBinding("theholysee");
         private Vec2 _travel;
         private SinWaveManualUpdate _wave = 0.5f;
         private SinWaveManualUpdate _wave2 = 1f;
