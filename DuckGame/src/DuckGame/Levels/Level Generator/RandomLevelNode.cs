@@ -109,7 +109,7 @@ namespace DuckGame
                 Rando.generator = new Random(seed);
             Level.InitChanceGroups();
             RandomLevelNode.processing = true;
-            RandomLevelNode.topLeft = new Vec2(-gridX * 192, -gridY * 144);
+            RandomLevelNode.topLeft = new Vec2((float)(-(float)this.gridX * 192), (float)(-(float)this.gridY * 144));
             RandomLevelNode._allPreparedThings = new HashSet<Thing>();
             PreparePartsRecurse(x, y, level);
             RandomLevelNode.processing = false;
@@ -167,17 +167,17 @@ namespace DuckGame
             Rando.generator = generator;
             if (!LevelGenerator.openAirMode)
             {
-                for (int index1 = -1; index1 < tilesWide + 1; ++index1)
+                for (int xpos = -1; xpos < tilesWide + 1; ++xpos)
                 {
-                    for (int index2 = -1; index2 < tilesHigh + 1; ++index2)
+                    for (int ypos = -1; ypos < tilesHigh + 1; ++ypos)
                     {
                         RandomLevelNode randomLevelNode = null;
-                        if (index1 >= 0 && index1 < tilesWide && index2 >= 0 && index2 < tilesHigh)
-                            randomLevelNode = tiles[index1, index2];
+                        if (xpos >= 0 && xpos < tilesWide && ypos >= 0 && ypos < tilesHigh)
+                            randomLevelNode = tiles[xpos, ypos];
                         if (randomLevelNode == null || randomLevelNode.data == null)
                         {
-                            Vec2 vec2 = new Vec2(index1 * 192 - 8, index2 * 144 - 8) + RandomLevelNode.topLeft;
-                            level.AddThing(new PyramidWall(vec2.x, vec2.y));
+                            Vec2 pyramidWallPos = new Vec2((float)(xpos * 192 - 8), (float)(ypos * 144 - 8)) + RandomLevelNode.topLeft;
+                            level.AddThing(new PyramidWall(pyramidWallPos.x, pyramidWallPos.y));
                         }
                     }
                 }
@@ -192,7 +192,7 @@ namespace DuckGame
                         randomLevelNode = tiles[index3, index4];
                     if (randomLevelNode != null && randomLevelNode.data != null)
                     {
-                        Vec2 vec2 = new Vec2(index3 * 192 + 96, index4 * 144 + 72) + RandomLevelNode.topLeft;
+                        Vec2 vec2 = new Vec2((float)(index3 * 192 + 96), (float)(index4 * 144 + 72)) + RandomLevelNode.topLeft;
                         PyramidWall pyramidWall1 = Level.CheckPoint<PyramidWall>(vec2 + new Vec2(-192f, 0f));
                         if (pyramidWall1 != null)
                             pyramidWall1.hasRight = true;
@@ -449,12 +449,12 @@ namespace DuckGame
                     down.mirror = mirror;
             }
             List<TileConnection> list = new List<TileConnection>()
-      {
-        TileConnection.Right,
-        TileConnection.Left,
-        TileConnection.Up,
-        TileConnection.Down
-      };
+            {
+            TileConnection.Right,
+            TileConnection.Left,
+            TileConnection.Up,
+            TileConnection.Down
+            };
             if (removeLeft)
                 list.Remove(TileConnection.Left);
             if (removeRight)

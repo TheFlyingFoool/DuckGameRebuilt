@@ -273,9 +273,9 @@ namespace DuckGame
                 flag = !flag;
             if (mainLoad && Level.symmetry && !(t is ThingContainer))
             {
-                if (Level.leftSymmetry && t.x > 88.0)
+                if (Level.leftSymmetry && t.x > 88f)
                     return null;
-                if (!Level.leftSymmetry && t.x < 88.0)
+                if (!Level.leftSymmetry && t.x < 88f)
                     return null;
             }
             if (flag)
@@ -303,7 +303,7 @@ namespace DuckGame
                         }
                         break;
                     default:
-                        t.SetTranslation(new Vec2((float)(-t.x + (192.0 - t.x) - 16.0), 0f));
+                        t.SetTranslation(new Vec2(-t.x + (192f - t.x) - 16f, 0f));
                         goto label_14;
                 }
             }
@@ -345,7 +345,7 @@ namespace DuckGame
                     Thing thing1 = ProcessThing(t1, x, y);
                     if (thing1 != null)
                     {
-                        if (!(thing1 is ThingContainer) && Level.symmetry && (posBeforeTranslate.x - 8.0 < 80.0 || posBeforeTranslate.x - 8.0 > 96.0))
+                        if (!(thing1 is ThingContainer) && Level.symmetry && (this.posBeforeTranslate.x - 8f < 80f || this.posBeforeTranslate.x - 8f > 96f))
                         {
                             Thing t2 = Thing.LoadThing(node, false);
                             if (t2 != null)
