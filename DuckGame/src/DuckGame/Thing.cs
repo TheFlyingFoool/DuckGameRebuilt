@@ -1627,6 +1627,11 @@ namespace DuckGame
 
         public void DrawCollision()
         {
+            Graphics.DrawRect(this.topLeft, this.bottomRight, Color.Orange * 0.8f, 1f, false, 0.5f);
+            if (this is PhysicsObject)
+            {
+                bool sleeping = (this as PhysicsObject).sleeping;
+            }
             if (this is PhysicsObject)
             {
                 if ((this as PhysicsObject).sleeping)
