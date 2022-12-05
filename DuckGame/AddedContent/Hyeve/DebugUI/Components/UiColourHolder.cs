@@ -3,7 +3,7 @@ using DuckGame;
 
 namespace AddedContent.Hyeve.DebugUI.Components
 {
-    public struct UiColourHolder
+    public class UiColourHolder
     {
         public Color Main = new(18, 18, 40);
         public Color Accent = new(80, 80, 200);
