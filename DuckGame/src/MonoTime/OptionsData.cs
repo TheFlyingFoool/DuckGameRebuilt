@@ -221,6 +221,7 @@ namespace DuckGame
             keyboard2PlayerIndex = 1;
             rumbleIntensity = 1f;
             powerUser = true; //set to true
+            mojiFilter = 2;
             defaultAccountMerged = false;
             didAutoMerge = false;
             cloud = true;

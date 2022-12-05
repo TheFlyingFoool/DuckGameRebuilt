@@ -40,14 +40,14 @@ namespace DuckGame
         public static int flagForSave = 0;
         private static bool _doingResolutionRestart = false;
         private static List<string> chatFonts = new List<string>()
-    {
-      "Duck Font",
-      "Arial",
-      "Calibri",
-      "Courier New",
-      "Comic Sans MS",
-      "Custom"
-    };
+        {
+          "Duck Font",
+          "Arial",
+          "Calibri",
+          "Courier New",
+          "Comic Sans MS",
+          "Custom"
+        };
         public static UIMenu tempTTSMenu;
         public static UIMenu tempBlockMenu;
         private static bool loadCalled = false;
@@ -618,17 +618,17 @@ namespace DuckGame
                 accessibilityMenu.Add(new UIText(" ", Color.White), true);
                 accessibilityMenu.Add(new UIText("Chat Settings", Color.White), true);
                 accessibilityMenu.Add(new UIMenuItemNumber("Custom MOJIs", field: new FieldBinding(typeof(Options), "mojiFilter", 0f, 2f, 0.1f), valStrings: new List<string>()
-        {
-          "|DGGREENN|@languageFilterOn@DISABLED",
-          "|DGYELLO|@languageFilterOn@FRIENDS ",
-          "|DGREDDD| @languageFilterOff@ENABLED"
-        }), true);
+                {
+                  "|DGGREENN|@languageFilterOn@DISABLED",
+                  "|DGYELLO|@languageFilterOn@FRIENDS ",
+                  "|DGREDDD| @languageFilterOff@ENABLED"
+                }), true);
                 accessibilityMenu.Add(new UIMenuItemNumber("Custom Hats", field: new FieldBinding(typeof(Options), "hatFilter", 0f, 2f, 0.1f), valStrings: new List<string>()
-        {
-          "|DGGREEN|   ENABLED",
-          "|DGYELLO|   FRIENDS",
-          "|DGRED|  DISABLED  "
-        }), true);
+                {
+                  "|DGGREEN|   ENABLED",
+                  "|DGYELLO|   FRIENDS",
+                  "|DGRED|  DISABLED  "
+                }), true);
                 Options.tempBlockMenu = Options.CreateBlockMenu(accessibilityMenu);
                 accessibilityMenu.Add(new UIMenuItem("Manage Block List", new UIMenuActionOpenMenu(accessibilityMenu, tempBlockMenu)), true);
                 accessibilityMenu.Add(new UIText(" ", Color.White), true);
