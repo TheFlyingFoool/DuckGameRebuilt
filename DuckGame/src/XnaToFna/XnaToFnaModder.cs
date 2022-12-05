@@ -4,9 +4,11 @@
 // MVID: C1D3521D-C7E9-4C43-B430-D28CC69450A3
 // Assembly location: C:\Users\daniel\Desktop\Release\XnaToFna.exe
 
+using DuckGame;
 using Mono.Cecil;
 using MonoMod;
 using MonoMod.Utils;
+using System;
 
 namespace XnaToFna
 {
@@ -38,7 +40,17 @@ namespace XnaToFna
             }
             return base.DefaultMissingDependencyResolver(mod, main, name, fullName);
         }
-
+        public override void PatchRefsInMethod(MethodDefinition method)
+        {
+            try
+            {
+                base.PatchRefsInMethod(method);
+            }
+            catch(Exception e)
+            {
+                DevConsole.Log("e");
+            }
+        }
 
     }
 }

@@ -7,6 +7,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration.Assemblies;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -45,6 +47,18 @@ namespace DuckGame
             Mod mod;
             if (ModLoader._modAssemblyNames.TryGetValue(args.Name, out mod))
                 return mod.configuration.assembly;
+            foreach(ModConfiguration modconfig in MonoMain.loadedModsWithAssemblies)
+            {
+                if (modconfig.assembly == args.RequestingAssembly)
+                {
+                    string[] dllmatchs = Directory.GetFiles(Path.GetDirectoryName(modconfig.assemblyPath), args.Name.Split(',')[0] + ".dll", SearchOption.AllDirectories);
+                    if (dllmatchs.Length > 0)
+                    {
+                        return Assembly.Load(File.ReadAllBytes(dllmatchs[0]));
+                    }
+                    break;
+                }
+            }
             return args.Name.StartsWith("Steam,") ? AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault<Assembly>(x => x.FullName.StartsWith("Steam,") || x.FullName.StartsWith("Steam.Debug,")) : null;
         }
 
