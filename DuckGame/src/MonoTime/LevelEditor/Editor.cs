@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
+using static DuckGame.CMD;
 //using System.Windows.Forms;
 namespace DuckGame
 {
@@ -2623,10 +2624,20 @@ namespace DuckGame
                 if (pObjectsChanged)
                     levelThing.EditorObjectsChanged();
                 levelThing.material = null;
+                if (levelThing is Holdable)
+                {
+                    (levelThing as Holdable).UpdateMaterial();
+                }
             }
 
             foreach (Thing thing in current.things)
+            {
                 thing.material = null;
+                if (thing is Holdable)
+                {
+                    (thing as Holdable).UpdateMaterial();
+                }
+            }
             foreach (Thing thing in _selection)
             {
                 switch (thing)
@@ -2677,7 +2688,18 @@ namespace DuckGame
             foreach (Thing thing in _currentDragSelectionHover)
                 thing.material = _selectionMaterial;
             foreach (Thing thing in _currentDragSelectionHoverAdd)
-                thing.material = !_currentDragSelectionHover.Contains(thing) ? _selectionMaterial : (Material)null;
+                if (!_currentDragSelectionHover.Contains(thing))
+                {
+                    thing.material = _selectionMaterial;
+                }
+                else
+                {
+                    thing.material = (Material)null;
+                    if (thing is Holdable)
+                    {
+                        (thing as Holdable).UpdateMaterial();
+                    }
+                }
         }
 
         private void RebuildPasteBatch()
