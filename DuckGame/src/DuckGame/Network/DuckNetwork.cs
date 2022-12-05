@@ -40,6 +40,8 @@ namespace DuckGame
           new OnlineLevel() { num = 19, xpRequired = 75000 },
           new OnlineLevel() { num = 20, xpRequired = 100000 }
         };
+        private static FancyBitmapFont _chatFont;
+        private static UIMenu _optionsMenu; // here becuase of old mod
         public static int kills;
         public static int deaths;
         public static bool finishedMatch = false;
@@ -215,6 +217,7 @@ namespace DuckGame
             {
                 chatFont = true
             };
+            _chatFont = _core._builtInChatFont;
             _core.initialized = true;
         }
 
@@ -896,6 +899,7 @@ namespace DuckGame
             core._confirmMatchSettings = new UIMenu("CHANGING SETTINGS", num1 / 2f, num2 / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._confirmEditSlots = new UIMenu("CHANGING SETTINGS", num1 / 2f, num2 / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._optionsMenu = Options.CreateOptionsMenu();
+            _optionsMenu = core._optionsMenu;
             _core._settingsBeforeOpen = TeamSelect2.GetMatchSettingString();
             Main.SpecialCode = "men0";
             foreach (Profile p in (IEnumerable<Profile>)profiles.OrderBy<Profile, bool>(x => x.slotType == SlotType.Spectator))
@@ -1509,6 +1513,7 @@ namespace DuckGame
                     _core.localProfile = pProfile;
                     pProfile.netData.Set("REBUILT", true);
                 }
+                _core.localDuckIndex = _core.localProfile == null ? 0 : _core.profiles.IndexOf(_core.localProfile);
                 if (Network.isServer && _core.hostProfile == null)
                     _core.hostProfile = pProfile;
                 pProfile.networkStatus = DuckNetStatus.Connected;
@@ -1555,6 +1560,7 @@ namespace DuckGame
             _core.RecreateProfiles();
             _core.hostProfile = null;
             _core.localProfile = null;
+            _core.localDuckIndex = 0;
             DataLayerDebug.BadConnection pContext = null;
             if (_core.localConnection != null)
                 pContext = _core.localConnection.debuggerContext;

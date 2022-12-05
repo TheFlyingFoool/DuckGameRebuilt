@@ -17,229 +17,231 @@ namespace DuckGame
         private static int kWinsStep = 5;
         private static int kWinsMin = 5;
         public List<MatchSetting> matchSettings = new List<MatchSetting>()
-    {
-      new MatchSetting()
-      {
-        id = "requiredwins",
-        name = "Required Wins",
-        value =  10,
-        min = DuckNetworkCore.kWinsMin,
-        max = 100,
-        step = DuckNetworkCore.kWinsStep,
-        stepMap = new Dictionary<int, int>()
         {
+
+            new MatchSetting()
           {
-            50,
-            DuckNetworkCore.kWinsStep
+            id = "requiredwins",
+            name = "Required Wins",
+            value =  10,
+            min = DuckNetworkCore.kWinsMin,
+            max = 100,
+            step = DuckNetworkCore.kWinsStep,
+            stepMap = new Dictionary<int, int>()
+            {
+              {
+                50,
+                DuckNetworkCore.kWinsStep
+              },
+              {
+                100,
+                10
+              },
+              {
+                500,
+                50
+              },
+              {
+                1000,
+                100
+              }
+            }
           },
+          new MatchSetting()
           {
-            100,
-            10
+            id = "restsevery",
+            name = "Rests Every",
+            value =  10,
+            min = DuckNetworkCore.kWinsMin,
+            max = 100,
+            step = DuckNetworkCore.kWinsStep,
+            stepMap = new Dictionary<int, int>()
+            {
+              {
+                50,
+                DuckNetworkCore.kWinsStep
+              },
+              {
+                100,
+                10
+              },
+              {
+                500,
+                50
+              },
+              {
+                1000,
+                100
+              }
+            }
           },
+          new MatchSetting()
           {
-            500,
-            50
+            id = "wallmode",
+            name = "Wall Mode",
+            value =  false
           },
+          new MatchSetting()
           {
-            1000,
-            100
+            id = "normalmaps",
+            name = "@NORMALICON@|DGBLUE|Normal Levels",
+            value =  90,
+            suffix = "%",
+            min = 0,
+            max = 100,
+            step = 5,
+            percentageLinks = new List<string>()
+            {
+              "randommaps",
+              "custommaps",
+              "workshopmaps"
+            }
+          },
+          new MatchSetting()
+          {
+            id = "randommaps",
+            name = "@RANDOMICON@|DGBLUE|Random Levels",
+            value =  10,
+            suffix = "%",
+            min = 0,
+            max = 100,
+            step = 5,
+            percentageLinks = new List<string>()
+            {
+              "normalmaps",
+              "workshopmaps",
+              "custommaps"
+            }
+          },
+          new MatchSetting()
+          {
+            id = "custommaps",
+            name = "@CUSTOMICON@|DGBLUE|Custom Levels",
+            value =  0,
+            suffix = "%",
+            min = 0,
+            max = 100,
+            step = 5,
+            percentageLinks = new List<string>()
+            {
+              "normalmaps",
+              "randommaps",
+              "workshopmaps"
+            }
+          },
+          new MatchSetting()
+          {
+            id = "workshopmaps",
+            name = "@RAINBOWICON@|DGBLUE|Internet Levels",
+            value =  0,
+            suffix = "%",
+            min = 0,
+            max = 100,
+            step = 5,
+            percentageLinks = new List<string>()
+            {
+              "normalmaps",
+              "custommaps",
+              "randommaps"
+            }
+          },
+          new MatchSetting()
+          {
+            id = "clientlevelsenabled",
+            name = "Client Maps",
+            value =  false
           }
-        }
-      },
-      new MatchSetting()
-      {
-        id = "restsevery",
-        name = "Rests Every",
-        value =  10,
-        min = DuckNetworkCore.kWinsMin,
-        max = 100,
-        step = DuckNetworkCore.kWinsStep,
-        stepMap = new Dictionary<int, int>()
-        {
-          {
-            50,
-            DuckNetworkCore.kWinsStep
-          },
-          {
-            100,
-            10
-          },
-          {
-            500,
-            50
-          },
-          {
-            1000,
-            100
-          }
-        }
-      },
-      new MatchSetting()
-      {
-        id = "wallmode",
-        name = "Wall Mode",
-        value =  false
-      },
-      new MatchSetting()
-      {
-        id = "normalmaps",
-        name = "@NORMALICON@|DGBLUE|Normal Levels",
-        value =  90,
-        suffix = "%",
-        min = 0,
-        max = 100,
-        step = 5,
-        percentageLinks = new List<string>()
-        {
-          "randommaps",
-          "custommaps",
-          "workshopmaps"
-        }
-      },
-      new MatchSetting()
-      {
-        id = "randommaps",
-        name = "@RANDOMICON@|DGBLUE|Random Levels",
-        value =  10,
-        suffix = "%",
-        min = 0,
-        max = 100,
-        step = 5,
-        percentageLinks = new List<string>()
-        {
-          "normalmaps",
-          "workshopmaps",
-          "custommaps"
-        }
-      },
-      new MatchSetting()
-      {
-        id = "custommaps",
-        name = "@CUSTOMICON@|DGBLUE|Custom Levels",
-        value =  0,
-        suffix = "%",
-        min = 0,
-        max = 100,
-        step = 5,
-        percentageLinks = new List<string>()
-        {
-          "normalmaps",
-          "randommaps",
-          "workshopmaps"
-        }
-      },
-      new MatchSetting()
-      {
-        id = "workshopmaps",
-        name = "@RAINBOWICON@|DGBLUE|Internet Levels",
-        value =  0,
-        suffix = "%",
-        min = 0,
-        max = 100,
-        step = 5,
-        percentageLinks = new List<string>()
-        {
-          "normalmaps",
-          "custommaps",
-          "randommaps"
-        }
-      },
-      new MatchSetting()
-      {
-        id = "clientlevelsenabled",
-        name = "Client Maps",
-        value =  false
-      }
-    };
+        };
         public List<MatchSetting> onlineSettings = new List<MatchSetting>()
-    {
-      new MatchSetting()
-      {
-        id = "maxplayers",
-        name = "Max Players",
-        value =  4,
-        min = 2,
-        max = 8,
-        step = 1
-      },
-      new MatchSetting()
-      {
-        id = "teams",
-        name = "Teams",
-        value =  false,
-        filtered = false,
-        filterOnly = true
-      },
-      new MatchSetting()
-      {
-        id = "customlevelsenabled",
-        name = "Custom Levels",
-        value =  false,
-        filtered = false,
-        filterOnly = true
-      },
-      new MatchSetting()
-      {
-        id = "modifiers",
-        name = "Modifiers",
-        value =  false,
-        filtered = true,
-        filterOnly = true
-      },
-      new MatchSetting()
-      {
-        id = "type",
-        name = "Type",
-        value =  2,
-        min = 0,
-        max = 3,
-        createOnly = true,
-        valueStrings = new List<string>()
         {
-          "PRIVATE",
-          "FRIENDS",
-          "PUBLIC",
-          "LAN"
-        }
-      },
-      new MatchSetting()
-      {
-        id = "name",
-        name = "Name",
-        value =  "",
-        filtered = false,
-        filterOnly = false,
-        createOnly = true
-      },
-      new MatchSetting()
-      {
-        id = "password",
-        name = "Password",
-        value =  "",
-        filtered = false,
-        filterOnly = false,
-        createOnly = true
-      },
-      new MatchSetting()
-      {
-        id = "port",
-        name = "Port",
-        value =  "1337",
-        filtered = false,
-        filterOnly = false,
-        condition =  () => (int) TeamSelect2.GetOnlineSetting("type").value == 3
-      },
-      new MatchSetting()
-      {
-        id = "dedicated",
-        name = "Dedicated",
-        value =  false,
-        filtered = false,
-        filterOnly = false,
-        createOnly = true
-      }
-    };
+          new MatchSetting()
+          {
+            id = "maxplayers",
+            name = "Max Players",
+            value =  4,
+            min = 2,
+            max = 8,
+            step = 1
+          },
+          new MatchSetting()
+          {
+            id = "teams",
+            name = "Teams",
+            value =  false,
+            filtered = false,
+            filterOnly = true
+          },
+          new MatchSetting()
+          {
+            id = "customlevelsenabled",
+            name = "Custom Levels",
+            value =  false,
+            filtered = false,
+            filterOnly = true
+          },
+          new MatchSetting()
+          {
+            id = "modifiers",
+            name = "Modifiers",
+            value =  false,
+            filtered = true,
+            filterOnly = true
+          },
+          new MatchSetting()
+          {
+            id = "type",
+            name = "Type",
+            value =  2,
+            min = 0,
+            max = 3,
+            createOnly = true,
+            valueStrings = new List<string>()
+            {
+              "PRIVATE",
+              "FRIENDS",
+              "PUBLIC",
+              "LAN"
+            }
+          },
+          new MatchSetting()
+          {
+            id = "name",
+            name = "Name",
+            value =  "",
+            filtered = false,
+            filterOnly = false,
+            createOnly = true
+          },
+          new MatchSetting()
+          {
+            id = "password",
+            name = "Password",
+            value =  "",
+            filtered = false,
+            filterOnly = false,
+            createOnly = true
+          },
+          new MatchSetting()
+          {
+            id = "port",
+            name = "Port",
+            value =  "1337",
+            filtered = false,
+            filterOnly = false,
+            condition =  () => (int) TeamSelect2.GetOnlineSetting("type").value == 3
+          },
+          new MatchSetting()
+          {
+            id = "dedicated",
+            name = "Dedicated",
+            value =  false,
+            filtered = false,
+            filterOnly = false,
+            createOnly = true
+          }
+        };
         public Dictionary<string, XPPair> _xpEarned = new Dictionary<string, XPPair>();
+        public int localDuckIndex; // for old mods
         public int levelTransferSize;
         public int levelTransferProgress;
         public int logTransferSize;

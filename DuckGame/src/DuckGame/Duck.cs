@@ -3451,8 +3451,12 @@ namespace DuckGame
             get => _active;
             set => _active = value;
         }
-
-        public bool chatting => profile != null && profile.netData.Get<bool>(nameof(chatting));
+        public bool get_chatting() //public bool chatting => profile != null && profile.netData.Get<bool>(nameof(chatting));
+        {
+            return profile != null && profile.netData.Get<bool>("chatting");
+            //oldchatting; // for old mods
+        }
+        public bool chatting;   // for old mods
 
         public virtual void DuckUpdate()
         {
@@ -4960,7 +4964,7 @@ namespace DuckGame
                         if (owner.duck.connection == null || owner.duck.profile == null)
                             return false;
                         if (problem == ConnectionTrouble.Chatting)
-                            return owner.duck.chatting;
+                            return owner.duck.get_chatting();
                         if (problem == ConnectionTrouble.AFK)
                             return owner.duck.afk;
                         if (problem == ConnectionTrouble.Disconnection)

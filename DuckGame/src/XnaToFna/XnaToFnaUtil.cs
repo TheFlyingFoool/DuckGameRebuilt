@@ -72,7 +72,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 15;
+        public static int RemapVersion = 16;
         public void Stub(ModuleDefinition mod)
         {
             this.Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -170,7 +170,6 @@ namespace XnaToFna
             //this.Modder.RelinkMap["System.Windows.Forms.Control System.Windows.Forms.Control::FromHandle(System.IntPtr)"] = new RelinkMapEntry("XnaToFna.ProxyForms.Forms", "XnaToFna.ProxyForms.Forms.Control FromHandle(System.IntPtr)");
             //// this.Modder.RelinkMap["System.Windows.Forms.Control"] = "XnaToFna.ProxyForms.Control";
             //Dans thing ReadAllLines 
-
             this.Modder.RelinkMap["System.IO.DirectoryInfo System.IO.Directory::CreateDirectory(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IO.DirectoryInfo DirectoryCreateDirectory(System.String)");
             this.Modder.RelinkMap["System.Boolean System.IO.Directory::Exists(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Boolean DirectoryExists(System.String)");
             this.Modder.RelinkMap["System.String[] System.IO.Directory::GetFiles(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String[] DirectoryGetFiles(System.String)");
@@ -510,17 +509,18 @@ namespace XnaToFna
             this.AssemblyResolver = new CustomAssemblyResolver();
             this.Directories = new List<string>();
             this.ContentDirectoryNames = new List<string>() {
-        "Content"
-      };
+                "Content"
+            };
             this.ContentDirectories = new List<string>();
             this.Modules = new List<ModuleDefinition>();
             this.ModulePaths = new Dictionary<ModuleDefinition, string>();
-            this.RemoveDeps = new HashSet<string>() {
-         null,
-        "",
-        "Microsoft.DirectX.DirectInput",
-        "Microsoft.VisualC"
-      };
+            this.RemoveDeps = new HashSet<string>() 
+            {
+                null,
+                "",
+                "Microsoft.DirectX.DirectInput",
+                "Microsoft.VisualC"
+            };
             this.ModulesToStub = new List<ModuleDefinition>();
             this.ExtractedXEX = new List<string>();
             this.HookEntryPoint = true;
