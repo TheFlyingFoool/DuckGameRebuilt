@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -1148,17 +1149,31 @@ namespace DuckGame
             }
             return saveFileStream;
         }
-    
-
+        public static string GetRegionExceptionMessage(this System.Exception Source)
+        {
+            string message = "";
+            try
+            {
+                System.Reflection.ConstructorInfo temp = Source.GetType().GetConstructor(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, new System.Type[] { }, null);
+                System.Exception exception = ((System.Exception)temp.Invoke(null));
+                message = exception.Message;
+            }
+            catch (Exception e) { }
+            return message;
+        }
         public static void SendCrashToServer(Exception pException)
         {
             // switch locale to american english so i can read exception messages
-            Thread.CurrentThread.CurrentUICulture = new("en-US");
-            
+            CultureInfo prevCurrentInfo = Thread.CurrentThread.CurrentUICulture;
+            string premessage = pException.Message;
             HttpClient httpClient = new HttpClient();
             try
             {
-
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); //en-US //_fileName  es-ES
+                string newmessage = GetRegionExceptionMessage(pException);
+                //string.Format(CultureInfo.CurrentCulture, "Attempted to divide by zero.", null);
+                typeof(Exception).GetField("_message", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(pException, newmessage);
+                //typeof(Exception).GetField("_fileName", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(pException, null);
                 string Steamid = "N/A";
                 string Username = "N/A";
 
@@ -1318,10 +1333,20 @@ namespace DuckGame
             }
             catch (Exception ex)
             {
-                string jsonmessage = "{\"content\":\"SendCrashToServer Crashed Fck " + Escape(ex.Message) + "\"}";
-                Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
-                response.Wait();
+                try
+                {
+                    string jsonmessage = "{\"content\":\"SendCrashToServer Crashed Fck " + Escape(ex.Message) + "\"}";
+                    Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
+                    response.Wait();
+                }
+                catch { }
             }
+            try
+            {
+                typeof(Exception).GetField("_message", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(pException, premessage);
+            }
+            catch { }
+            Thread.CurrentThread.CurrentUICulture = prevCurrentInfo;
         }
         public static string GetExceptionString(object e)
         {
