@@ -1152,6 +1152,9 @@ namespace DuckGame
 
         public static void SendCrashToServer(Exception pException)
         {
+            // switch locale to american english so i can read exception messages
+            Thread.CurrentThread.CurrentUICulture = new("en-US");
+            
             HttpClient httpClient = new HttpClient();
             try
             {
