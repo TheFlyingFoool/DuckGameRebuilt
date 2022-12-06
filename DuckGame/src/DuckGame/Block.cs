@@ -360,13 +360,12 @@ namespace DuckGame
 
         public override void Update()
         {
-            //InitializeNeighbors();
-            //_hit = false;
+            InitializeNeighbors();
+            _hit = false;
         }
 
         public override void DoInitialize()
         {
-            InitializeNeighbors();
             base.DoInitialize();
         }
 
