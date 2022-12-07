@@ -10,15 +10,13 @@ namespace DuckGame
     [EditorGroup("Rebuilt|Stuff")]
     public class TheDishes : Holdable
     {
-        public const string DirtySprite = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAKpJREFUOE9jZKAQMOLSXx8i///Vdz64tBjnJ4bGNQ8x1KMIZHrr/gcpBAFsirFZBjcAZCMpGmGG4fQCum24LCDKAFh4IIcDSAzkTbABMA6+AEX3Hii8pm+9TJwBsMBFDlgUA9AVgPggG3FFHbKrsXqBGANQYgE5hJHTAq5oRQ4zeCzA/AQzDF+awGsAoawBi1JQDIDUoqQDYlIjepQTnZlgNqK7kKiUiM9bALxWgBFUCrntAAAAAElFTkSuQmCC";
-        public const string BubblesSprite = "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAAXNSR0IArs4c6QAAAFtJREFUKFNjZEAChos+/Ydxz8fxMcLYYAZMElkCWQyuqNHqL1ijn4og3ASQQpBGRhhj0533YKuQFcFsgStCdhu6O7EqApkKMxFkE9xNyI6GmQR3E9G+Q9aJLZwAgwhFVjPCO4EAAAAASUVORK5CYIIA";
         public Sprite dirty;
         public Sprite bubbles;
         public TheDishes(float xpos, float ypos) : base(xpos, ypos)
         {
-            bubbles = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(BubblesSprite))), "bouble"));
+            bubbles = new Sprite("bouble");
             bubbles.center = new Vec2(4.5f);
-            dirty = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(DirtySprite))), "dirty"));
+            dirty = new Sprite("dirtydishoverlay");
             dirty.center = new Vec2(8);
             graphic = new Sprite("furni/momento/plate");
             collisionSize = new Vec2(16);

@@ -642,7 +642,19 @@ namespace DuckGame
                 string nameUi = name;
                 if (muteName)
                     nameUi = "Player " + (networkIndex + 1).ToString();
-                if (isUsingRebuilt && DGRSettings.S_RebuiltEffect == 1) nameUi += "|PINK|♥";
+                if (isUsingRebuilt && DGRSettings.S_RebuiltEffect == 1) nameUi += "@DGR@";
+                return nameUi;
+            }
+        }
+        //alright so hear me out, DUCK GAME FUCKING SUCKS
+        public string nameUIBodge
+        {
+            get
+            {
+                string nameUi = name;
+                if (muteName)
+                    nameUi = "Player " + (networkIndex + 1).ToString();
+                if (isUsingRebuilt && DGRSettings.S_RebuiltEffect == 1) nameUi += "@DGRBIG@";
                 return nameUi;
             }
         }

@@ -17,12 +17,9 @@ namespace DuckGame
                 return _canBounce;
             }
         }
-        public const string PinkBoxSpr = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAMAAABA3o1rAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAASUExURQAAAOOMutVMgYQeRvzJ5QAAAMoIbWIAAAAGdFJOU///////ALO/pL8AAAAJcEhZcwAADsIAAA7CARUoSoAAAACJSURBVChTfZELDsQgCES1yP2v3Plgpdl0X9KUGUbUODJHI0GVAirHbNCpUqA95tWIXw0jSqFQ4K21IuDx2xO6phFrRaxJ19pta45cYiKhAJeKvYUDOPPnGZhQ34GdeLbAn3em7YATpWUwYXNr90/AlzqBpmG4Bp+HPDwTCugc0eBjVSnQ/v/cmTe6ywO8M6DLhAAAAABJRU5ErkJggg==";
         public PinkBox(float xpos, float ypos) : base(xpos, ypos)
         {
-            _sprite = new SpriteMap(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(PinkBoxSpr))), "pinkbox"), 16, 16); // im cool with this box
-            _sprite.Namebase = "pinkbox";
-            Content.textures[_sprite.Namebase] = _sprite.texture;
+            _sprite = new SpriteMap("pinkbox", 16, 16); // im cool with this box
             graphic = _sprite;
             layer = Layer.Foreground;
             center = new Vec2(8f, 8f);

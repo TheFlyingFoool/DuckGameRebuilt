@@ -8,14 +8,11 @@ namespace DuckGame
     [EditorGroup("Rebuilt|Wump|Lasers")]
     public class WumpQuadLaser : Gun
     {
-        public const string wumpquadlaser = "iVBORw0KGgoAAAANSUhEUgAAABMAAAANCAMAAAB8UqUVAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAPUExURQAAALLc7zGi8i9ITgAAANMGmIMAAAAFdFJOU/////8A+7YOUwAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAFJJREFUKFOFj0kKwCAQBJ3l/29OLyNJQLAO0lNqo6vBIgzGLiLkvYEVES7J6yKKnFyVC1SfuR2hmapMGXBz/7tIaONA/IVxeghgoNOBQe4zd3c/AGcB9CKH9aUAAAAASUVORK5CYII=";
         public WumpQuadLaser(float xval, float yval) : base(xval, yval)
         {
             ammo = 1;
             _ammoType = new AT9mm();
-            graphic = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(wumpquadlaser))), "wumpquadlaser"));
-            graphic.Namebase = "wumpquadlaser";
-            Content.textures[graphic.Namebase] = graphic.texture;
+            graphic = new Sprite("wumpquadlaser");
             center = new Vec2(9.5f, 6.5f);
             collisionOffset = new Vec2(-9.5f, -6.5f);
             collisionSize = new Vec2(19, 13);

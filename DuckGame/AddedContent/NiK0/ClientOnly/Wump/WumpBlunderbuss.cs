@@ -8,7 +8,6 @@ namespace DuckGame
     [EditorGroup("Rebuilt|Wump|Shotguns")]
     public class WumpBlunderbuss : TampingWeapon
     {
-        public const string wumpblunderbuss = "iVBORw0KGgoAAAANSUhEUgAAACIAAAAOCAMAAAB99z69AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAhUExURQAAALLc7zGi8kk8KwBXhJ2dnWB3fP///6RkIhsmMgAAAF36UEkAAAALdFJOU/////////////8ASk8B8gAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAJ9JREFUKFN9kVkSgzAMQ+XgmCb3P3AlmxTCR8UyjvzGC2Au4Q53lc807C+CZjA+6eyiJxtmjYg6vSkcrJ9BAs5T3xjwfKwZOYkYWk/F2bsQxVlITA9iSwQSQWvqAncEQsJnKS6Es/J2N/XaFWSyipm5D1483Bu27F7jchsSY1Q+x9eC9ZVqaYhQATn5plXlFMrknFfmp/1nMP3KSw9rzi+10Qq4R1ULpwAAAABJRU5ErkJggg==";
         public WumpBlunderbuss(float xval, float yval) : base(xval, yval)
         {
             wideBarrel = true;
@@ -20,8 +19,7 @@ namespace DuckGame
             _numBulletsPerFire = 6;
             _ammoType.penetration = 1;
             _type = "gun";
-            graphic = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(wumpblunderbuss))), "wumpblunderbuss"));
-            graphic.Namebase = "wumpblunderbuss";
+            graphic = new Sprite("wumpblunderbuss");
             Content.textures[graphic.Namebase] = graphic.texture;
             center = new Vec2(19f, 8f);
             collisionOffset = new Vec2(-8f, -3f);

@@ -8,8 +8,8 @@ namespace DuckGame
     [EditorGroup("Rebuilt|Wump|Machine Guns")]
     public class WumpAK47 : Gun
     {
-        public const string nubspr = "iVBORw0KGgoAAAANSUhEUgAAAAQAAAAFCAYAAABirU3bAAAAAXNSR0IArs4c6QAAADtJREFUGFdjZGBg+M+AAIyMIIFNd94z1B9jZjgfx8cAFjBc9AnMYWBggKhgCG9hYFhZAxcAMUDmgCQZAMSSDwW3UIchAAAAAElFTkSuQmCC";
-        public const string wumpak47 = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAOCAMAAAB5Au6AAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAbUExURQAAALLc7wBXhDGi8mB3fC9IThsmMikZOwAAAO8bCiIAAAAJdFJOU///////////AFNPeBIAAAAJcEhZcwAADsIAAA7CARUoSoAAAACPSURBVChThY8JDsMgDATXNgb+/+KuD4KUSu0ggcMOmGAD2D8ARKQdLg8Zbi6AipWDAYU471STOjGigSmHycRwSr5CPaQQOcfEWrwhJqOP5cNdBi2NdNaJZKp2VcxMo+GCZed6Ytbxzv6m4CU0j9BEfjaDU16B77/bt3gEtoo5A/5GLMkVGoY3JV/Cmz/C3h/c8glFLgbCYQAAAABJRU5ErkJggg==";
+        public StateBinding _firesBinding = new StateBinding("fires");
+        public StateBinding _accuracyBinding = new StateBinding("_accuracyLost");
         public Sprite nub;
         public WumpAK47(float xpos, float ypos) : base(xpos, ypos)
         {
@@ -18,14 +18,11 @@ namespace DuckGame
             _ammoType.bulletColor = new Color(0, 205, 255);
             _type = "gun";
 
-            nub = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(nubspr))), "wumpnub"));
-            nub.Namebase = "wumpnub";
-            Content.textures[nub.Namebase] = nub.texture;
+            
+            nub = new Sprite("wumpak47snub");
             nub.center = new Vec2(2, 2.5f);
 
-            graphic = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(wumpak47))), "wumpak47"));
-            graphic.Namebase = "wumpak47";
-            Content.textures[graphic.Namebase] = graphic.texture;
+            graphic = new Sprite("wumpak47");
             center = new Vec2(16f, 4f);
             collisionOffset = new Vec2(-8f, -3f);
             collisionSize = new Vec2(18f, 10f);

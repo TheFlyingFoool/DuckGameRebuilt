@@ -934,6 +934,8 @@ namespace DuckGame
             DuckGame.Input._triggerImageMap.Add("RETICULE", new Sprite("challenge/reticule"));
             DuckGame.Input._triggerImageMap.Add("TICKET", new Sprite("arcade/ticket"));
             DuckGame.Input._triggerImageMap.Add("CHECK", new Sprite("checkIcon"));
+            DuckGame.Input._triggerImageMap.Add("DGR", new Sprite("DGR"));
+            DuckGame.Input._triggerImageMap.Add("DGRBIG", new Sprite("DGRBIG"));
             Dictionary<string, Sprite> triggerImageMap = DuckGame.Input._triggerImageMap;
             Sprite sprite1 = new Sprite("checkIcon")
             {

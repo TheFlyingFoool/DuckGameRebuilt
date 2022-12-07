@@ -8,7 +8,6 @@ namespace DuckGame
     [EditorGroup("Rebuilt|Wump|Rifles")]
     public class WumpSniper : Gun
     {
-        public const string wumpsniper = "iVBORw0KGgoAAAANSUhEUgAAAB0AAAAOCAMAAADkD+cIAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAhUExURQAAAABXhLLc752dnTGi8v///2B3fC9IThsmMkk8KwAAAAwpv/QAAAALdFJOU/////////////8ASk8B8gAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAH5JREFUKFN9jtEWwyAIQ4M4df7/By9B2vKw7Z7WIwkRsG9wyCqorjW3/tP9myVRlaZvrlvLAcU9mYsjxRloKzfjd5LZVjHLC9BeOnpA2X34CCb4Um90u/oUmWLNtSRIk9PBIPB+5sQWOdcIBanw8WyJRSHIupp0+Odd3G3J3h8BtwkTsyWw+AAAAABJRU5ErkJggg==";
         public WumpSniper(float xval, float yval) : base(xval, yval)
         {
             ammo = 3;
@@ -16,9 +15,7 @@ namespace DuckGame
             _ammoType.range = 500;
             _ammoType.penetration = 10;
             _type = "gun";
-            graphic = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(wumpsniper))), "wumpsniper"));
-            graphic.Namebase = "wumpsniper";
-            Content.textures[graphic.Namebase] = graphic.texture;
+            graphic = new Sprite("wumpsniper");
             center = new Vec2(16f, 8f);
             collisionOffset = new Vec2(-8f, -4f);
             collisionSize = new Vec2(16f, 8f);

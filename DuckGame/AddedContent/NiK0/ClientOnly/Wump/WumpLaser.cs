@@ -7,6 +7,7 @@
         {
             _target = target;
             _blastOwner = blastOwner;
+            layer = Layer.Foreground;
         }
 
         public WumpBeam(Vec2 pos, Vec2 target) : base(pos.x, pos.y, null)
@@ -24,14 +25,14 @@
         public StateBinding _blastOwnerBinding = new StateBinding("_blastOwner");
         public override void Update()
         {
+            if (destroy.State != Microsoft.Xna.Framework.Audio.SoundState.Playing)
+            {
+                destroy.Play();
+            }
             if (isLocal)
             {
-                if (destroy.State != Microsoft.Xna.Framework.Audio.SoundState.Playing)
-                {
-                    destroy.Play();
-                }
                 _blastOwner.uncharge = true;
-                _blastOwner.weight = 7;
+                _blastOwner.weight = 5;
                 position = _blastOwner.Offset(_blastOwner.barrelOffset);
                 _target = _blastOwner.Offset(_blastOwner.barrelOffset + new Vec2(1200f, 0f)) - position;
 
@@ -80,7 +81,7 @@
                 if (isServerForObject)
                 {
                     _blastOwner.uncharge = false;
-                    _blastOwner.weight = 5;
+                    _blastOwner.weight = 4;
                 }
                 _blast -= 0.02f;
                 destroy.Pitch -= 0.05f;

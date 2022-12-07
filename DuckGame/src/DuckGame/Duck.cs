@@ -3013,6 +3013,10 @@ namespace DuckGame
                     if (!_moveLock)
                     {
                         strafing = inputProfile.Down("STRAFE");
+                        if (offdirLocked)
+                        {
+                            strafing = true;
+                        }
                         if (num3 > 0.01f && !crouch | flag3)
                         {
                             if (hSpeed > -maxrun * num3)
@@ -3416,6 +3420,7 @@ namespace DuckGame
 
         public Thing followPart => _followPart == null ? this : _followPart;
 
+        public bool offdirLocked;
         public bool underwater => doFloat && _curPuddle != null && top + 2.0 > _curPuddle.top;
 
         public void EmitBubbles(int num, float hVel)

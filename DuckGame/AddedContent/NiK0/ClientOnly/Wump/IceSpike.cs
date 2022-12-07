@@ -10,11 +10,9 @@ namespace DuckGame
         public StateBinding _alphaBinding = new StateBinding("alpha");
         public SpriteMap sprite;
         public Duck ignore;
-        public const string blunderspike = "iVBORw0KGgoAAAANSUhEUgAAAA4AAAAMCAYAAABSgIzaAAAAAXNSR0IArs4c6QAAAKdJREFUKFNjZICA/wwMDIxQNjoFkgMBFHkQ57/hok8M5+P4MCRhco1Wfxn8VASRDWSEawSJQjUjG/B/0533DPXHmBlAmkE0TB1YI0gSBGAKkE1HlkM2GK4R3SkwvyN5A8UrMA8TChyMgEPWiC1wYCGOPVRhAYAtcEBOxRZwGIGDpAhFDhZ4MMMxJNEVYAlVsPfg8YgeT8hyWLwAT0awZAVLHcihiDXEAXXeXguIKNpAAAAAAElFTkSuQmCC";
         public IceSpike(float xpos, float ypos) : base(xpos, ypos)
         {
-            sprite = new SpriteMap(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(blunderspike))), "blunderspike"), 7, 6);
-            sprite.Namebase = "blunderspike";
+            sprite = new SpriteMap("blunderbussspike", 7, 6);
             Content.textures[sprite.Namebase] = sprite.texture;
             sprite.frame = Rando.Int(3);
             graphic = sprite;

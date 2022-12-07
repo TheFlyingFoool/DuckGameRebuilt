@@ -130,7 +130,7 @@ namespace DuckGame
         }
         public SinWave sw = new SinWave(0.1f);
         public SinWave swr = new SinWave(0.05f);
-        public bool theholysee;
+        public bool theholysee;//THE HOLY SEE
         public StateBinding _positionBinding = new CompressedVec2Binding("position", int.MaxValue, false, true);
         public StateBinding _travelBinding = new CompressedVec2Binding("travel", 20);
         public StateBinding _theholysaw = new StateBinding("theholysee");

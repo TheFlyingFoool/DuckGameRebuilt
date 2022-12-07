@@ -468,7 +468,7 @@ namespace DuckGame
             int num = pMessage.text.Count<char>(x => x == '\n');
             if (chatMessage != null && num == 0 && chatMessage.newlines < 3 && chatMessage.timeout > 2.0 && chatMessage.who == pMessage.who)
             {
-                pMessage.text = "|GRAY|" + pMessage.who.nameUI + ": |BLACK|" + pMessage.text;
+                pMessage.text = "|GRAY|" + pMessage.who.nameUIBodge + ": |BLACK|" + pMessage.text;
                 chatMessage.timeout = 10f;
                 chatMessage.text += "\n";
                 chatMessage.text += pMessage.text;
@@ -479,7 +479,7 @@ namespace DuckGame
             else
             {
                 pMessage.newlines = num + 1;
-                pMessage.text = "|WHITE|" + pMessage.who.nameUI + ": |BLACK|" + pMessage.text;
+                pMessage.text = "|WHITE|" + pMessage.who.nameUIBodge + ": |BLACK|" + pMessage.text;
                 chatMessages.Add(pMessage);
             }
             chatMessages = chatMessages.OrderBy<ChatMessage, int>(x => -x.index).ToList<ChatMessage>();
