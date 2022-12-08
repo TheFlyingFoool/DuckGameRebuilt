@@ -1,4 +1,4 @@
-﻿namespace DuckGame
+﻿/*namespace DuckGame
 {
     [ClientOnly]
     public class PistolTwo : Gun
@@ -53,4 +53,4 @@
             Fire();
         }
     }
-}
+}*/

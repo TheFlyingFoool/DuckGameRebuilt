@@ -7,6 +7,7 @@
 
 namespace DuckGame
 {
+    [ClientOnly]
     public class ATWumpMagnum : AmmoType
     {
         public float angle;

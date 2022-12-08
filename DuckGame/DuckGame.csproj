@@ -191,9 +191,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
-<!--    <Reference Include="System.Memory">-->
-<!--      <HintPath>lib\System.Memory.dll</HintPath>-->
-<!--    </Reference>-->
+    <!--    <Reference Include="System.Memory">-->
+    <!--      <HintPath>lib\System.Memory.dll</HintPath>-->
+    <!--    </Reference>-->
     <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\deps\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
@@ -269,6 +269,8 @@
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
     <Compile Include="AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\NMPush.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATDeathCaliber.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMagnum.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Bubble.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMDuckShatter.cs" />
@@ -281,6 +283,8 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\TheDishes.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\VersionSign.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMissile.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\DeathCaliber.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSharpshot.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpMagnum.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpBazooka.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\FreezeSmoke.cs" />

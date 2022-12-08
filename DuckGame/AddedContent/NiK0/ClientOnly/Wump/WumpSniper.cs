@@ -181,16 +181,6 @@ namespace DuckGame
             }
         }
         public SinWave sinner = new SinWave(0.1f);
-        public override void DoUpdate()
-        {
-            if (laserSight && _laserTex == null)
-            {
-                _laserTex = Content.Load<Tex2D>("pointerLaser");
-            }
-            base.DoUpdate();
-        }
-        public bool _laserInit;
-        private Tex2D _laserTex;
 
         public override void Draw()
         {

@@ -16,16 +16,8 @@
 
         public override void Activate()
         {
+            if (Level.current == null || t == null) return;
             t.scale = v;
-        }
-        protected override void OnSerialize()
-        {
-            base.OnSerialize();
-        }
-
-        public override void OnDeserialize(BitBuffer d)
-        {
-            base.OnDeserialize(d);
         }
     }
 }

@@ -144,7 +144,7 @@ namespace DuckGame
             _chargeSoundShort = SFX.Get("chaingunSpinUp", 0f, -2);
             _unchargeSound = SFX.Get("chaingunSpinDown", 0f, -2);
             _unchargeSoundShort = SFX.Get("chaingunSpinDown", 0, -2);
-        }
+        } 
 
         public void PostFireLogic()
         {

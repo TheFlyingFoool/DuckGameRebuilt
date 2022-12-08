@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 namespace DuckGame
 {
+    [ClientOnly]
     public class ATWumpMissile : AmmoType
     {
         public ATWumpMissile()
