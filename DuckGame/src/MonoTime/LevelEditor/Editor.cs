@@ -5338,11 +5338,17 @@ namespace DuckGame
         public static void EnableClientOnlyContent()
         {
             clientonlycontent = true;
+            AmmoType.InitializeTypes();
+            DestroyType.InitializeTypes();
+            DeathCrate.InitializeDeathCrateSettings();
         }
 
         public static void DisableClientOnlyContent()
         {
             clientonlycontent = false;
+            AmmoType.InitializeTypes();
+            DestroyType.InitializeTypes();
+            DeathCrate.InitializeDeathCrateSettings();
         }
 
         public static void InitializePlaceableList()

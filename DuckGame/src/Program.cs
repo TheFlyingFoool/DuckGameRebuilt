@@ -407,7 +407,6 @@ namespace DuckGame
                         break;
                     case "-nomods":
                         MonoMain.nomodsMode = true;
-                        // MonoMain.moddingEnabled = false; fcked for klof
                         break;
                     case "-linux":
                         if (MonoMain.audioModeOverride == AudioMode.None)
@@ -719,15 +718,11 @@ namespace DuckGame
 
         public static void HandleGameCrash(Exception pException)
         {
-            SendCrashToServer(pException);
-            //try
-            //{
-            //    SendCrashToServer(pException);
-            //}
-            //catch
-            //{
-
-            //}
+            try
+            {
+                SendCrashToServer(pException);
+            }
+            catch { }
             MonoMain.InvokeOnGameExitEvent(true);
 
             if (pException is ThreadAbortException)

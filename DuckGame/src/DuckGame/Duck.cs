@@ -2114,16 +2114,17 @@ namespace DuckGame
             _onFire = false;
             hSpeed = 0f;
             vSpeed = 0f;
-            if (Level.current.camera is FollowCam)
+            if (Level.current != null && Level.current.camera is FollowCam)
                 (Level.current.camera as FollowCam).Add(this);
             _cooked = null;
             ResurrectEffect(position);
             vSpeed = -3f;
             if (!Network.isActive || !isServerForObject)
                 return;
-            SuperFondle(_cookedInstance, DuckNetwork.localConnection);
-            _cookedInstance.visible = false;
-            _cookedInstance.active = false;
+            if (_cookedInstance != null)
+                SuperFondle(_cookedInstance, DuckNetwork.localConnection);
+                _cookedInstance.visible = false;
+                _cookedInstance.active = false;
             ++lastAppliedLifeChange;
             Send.Message(new NMRessurect(position, this, lastAppliedLifeChange));
         }
