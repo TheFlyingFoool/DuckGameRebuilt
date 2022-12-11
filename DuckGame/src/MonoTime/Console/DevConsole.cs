@@ -1626,7 +1626,7 @@ namespace DuckGame
             {
                 lock (debuggerLines)
                 {
-                    Console.WriteLine(text);
+                    //Console.WriteLine(text);
                     debuggerLines.Add(dcLine);
                 }
             }
@@ -1634,7 +1634,7 @@ namespace DuckGame
             {
                 lock (_core.pendingLines)
                 {
-                    Console.WriteLine(text);
+                    //Console.WriteLine(text);
                     _core.pendingLines.Add(dcLine);
                 }
             }
