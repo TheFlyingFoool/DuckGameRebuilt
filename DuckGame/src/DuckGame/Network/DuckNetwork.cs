@@ -2309,7 +2309,7 @@ namespace DuckGame
 
         public static void MakeSpectator_Swap(Profile pProfile, Profile pReplacementSlot)
         {
-            if (pProfile.slotType == SlotType.Spectator || pReplacementSlot.slotType != SlotType.Spectator || pProfile.networkIndex >= DG.MaxPlayers)
+            if (pProfile == null || pReplacementSlot == null || pProfile.slotType == SlotType.Spectator || pReplacementSlot.slotType != SlotType.Spectator || pProfile.networkIndex >= DG.MaxPlayers)
                 return;
             ++pProfile.spectatorChangeIndex;
             if (pProfile.connection == localConnection)
@@ -2328,7 +2328,8 @@ namespace DuckGame
             pReplacementSlot.duck = null;
             pReplacementSlot.persona = pReplacementSlot.networkDefaultPersona;
             pProfile.slotType = SlotType.Spectator;
-            pProfile.team.Leave(pProfile, false);
+            if (pProfile.team != null)
+                pProfile.team.Leave(pProfile, false);
             pProfile.duck = null;
         }
 
