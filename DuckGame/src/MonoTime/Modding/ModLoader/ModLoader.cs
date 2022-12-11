@@ -379,7 +379,7 @@ namespace DuckGame
                     else if (!ModLoader._preloading)
                     {
                         MonoMain.NloadMessage = "LOADING MOD " + ModLoader.currentModLoadString;
-                        LoadedMods.Add(modConfig.workshopID);
+                        LoadedMods.Add(modConfig);
                         try
                         {
                             foreach (string hardDependency in modConfig.hardDependencies)
@@ -733,7 +733,7 @@ namespace DuckGame
             if (!ModLoader.loadingOldMod.configuration.forceHarmonyLegacyLoad || ModLoader.ignoreLegacyLoad)
                 throw new OldModUsesHarmonyException("Mod is for an old version of Duck Game, and appears to use Harmony patching. This could be risky! Use 'Force Legacy Load' and restart to load it anyway.");
         }
-        public static List<ulong> LoadedMods = new List<ulong>();
+        public static List<ModConfiguration> LoadedMods = new();
         public static void PreLoadMods(string dir)
         {
             ModLoader.modDirectory = dir;

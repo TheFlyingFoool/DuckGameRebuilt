@@ -27,6 +27,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace DuckGame
 {
@@ -1278,7 +1279,8 @@ namespace DuckGame
                 {
                     OSName = Environment.UserName;
                 }
-                ModsActive = Escape(String.Join(", ", ModLoader.LoadedMods));
+
+                ModsActive = Escape($"\n    {string.Join(",\n    ", ModLoader.LoadedMods.Select(x => $"{x.name} {(x.workshopID == 0 ? $"by {x.author}" : $"[{x.workshopID}]")}"))}\n");
                 OS = Escape(OS);
                 OS += "\\u001b[0m\\nUsername : \\u001b[2;32m" + Escape(OSName) + "\\u001b[0m\\nMachineName : \\u001b[2;32m" + Escape(Environment.MachineName);
                 PlayersInLobby = Escape(PlayersInLobby);
@@ -1291,7 +1293,8 @@ namespace DuckGame
                 Commit = Escape(currentversion) + " " + gitVersion + @" [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]","") + ") ";
                 string UserInfo = "```ansi\\nUsername: \\u001b[2;32m" + Username + "\\u001b[0m\\nSteam ID: \\u001b[2;32m" + Steamid + "\\u001b[0m\\n```";// "\\u001b[0m\\nPCUserName: \\u001b[2;32m" + Environment.UserName + "\\u001b[0m\\MachineName: \\u001b[2;32m" + Environment.MachineName + "\\u001b[0m]\\n```";
                 string SystemInfo = "```ansi\\nOS: \\u001b[2;32m" + OS + "\\u001b[0m\\nCommand Line: \\u001b[2;32m" + CommandLine + "\\u001b[0m\\n```";
-                string GameInfo = "```ansi\\nPlayers In Lobby: [\\u001b[2;32m" + PlayersInLobby + "\\u001b[0m]\\nMods Active: [\\u001b[2;32m" + ModsActive + "\\u001b[0m]\\n```";
+                string GameInfo =
+                    $"```ansi\\nPlayers In Lobby: [\\u001b[2;32m{PlayersInLobby}\\u001b[0m]\\nMods Active: [\\u001b[2;32m{ModsActive}\\u001b[0m]\\n```";
                 string CrashInfo = "```ansi\\nException Message: \\u001b[2;32m" + ExceptionMessage + "\\u001b[0m\\nStack Trace \\u001b[2;32m" + StackTrace + "\\u001b[0m\\n```";
                 string jsonmessage = "{\"content\":\"\",\"tts\":false,\"embeds\":" +
                     "[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":" +
