@@ -138,6 +138,7 @@ namespace DuckGame
           int varColor = -1)
           : base(xpos, ypos)
         {
+            shouldbegraphicculled = false;
             distVal = dist;
             z = zpos;
             int totalFans = Crowd.totalFans;

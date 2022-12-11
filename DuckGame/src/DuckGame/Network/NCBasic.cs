@@ -17,7 +17,7 @@ namespace DuckGame
 {
     public class NCBasic : NCNetworkImplementation
     {
-        //private bool _initializedSettings = true;
+        private bool _initializedSettings = true;
         public const long kLanMessageHeader = 2449832521355936907;
         protected UdpClient _socket;
         //private byte[] _receiveBuffer = new byte[4096];

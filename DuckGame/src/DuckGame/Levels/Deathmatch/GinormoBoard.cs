@@ -34,6 +34,7 @@ namespace DuckGame
         public GinormoBoard(float xpos, float ypos, BoardMode mode, bool smallMode)
           : base(xpos, ypos)
         {
+            shouldbegraphicculled = false;
             _smallMode = smallMode;
             _board = new Sprite("rockThrow/boardMiddle");
             _board.center = new Vec2(_board.w / 2, _board.h / 2 - 30);

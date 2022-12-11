@@ -231,6 +231,7 @@ namespace DuckGame
                 this._sunLayer = new Layer("SUN LAYER", 99999, null, false, default(Vec2));
                 Layer.Add(this._sunLayer);
                 Thing tthing = new SpriteThing(150f, 120f, new Sprite("sun", 0f, 0f));
+                tthing.shouldbegraphicculled = false;
                 tthing.z = -9999f;
                 tthing.depth = -0.99f;
                 tthing.layer = this._sunLayer;
@@ -241,6 +242,7 @@ namespace DuckGame
                 Level.Add(tthing);
                 this.sunThing = tthing;
                 SpriteThing rbow = new SpriteThing(150f, 80f, new Sprite("rainbow", 0f, 0f));
+                rbow.shouldbegraphicculled = false;
                 rbow.alpha = 0.15f;
                 rbow.z = -9999f;
                 rbow.depth = -0.99f;
@@ -254,6 +256,7 @@ namespace DuckGame
                 this.rainbowThing = rbow;
                 this.rainbowThing.visible = false;
                 SpriteThing rbow2 = new SpriteThing(150f, 80f, new Sprite("rainbow", 0f, 0f));
+                rbow2.shouldbegraphicculled = false;
                 rbow2.z = -9999f;
                 rbow2.depth = -0.99f;
                 rbow2.layer = this._sunLayer;
@@ -435,6 +438,7 @@ namespace DuckGame
                             this._slots[this._slots.Count - 1].duck.derpMindControl = false;
                             this._slots[this._slots.Count - 1].duck.mindControl = this._slots[this._slots.Count - 1].ai;
                             this._slots[this._slots.Count - 1].rock = new ScoreRock(xpos + 18f + dif / (float)total * this._fieldWidth, ypos, p3);
+                            this._slots[this._slots.Count - 1].rock.shouldbegraphicculled = false;
                             this._slots[this._slots.Count - 1].rock.planeOfExistence = plane;
                             this._slots[this._slots.Count - 1].rock.ignoreGhosting = true;
                             Level.Add(this._slots[this._slots.Count - 1].rock);
@@ -808,6 +812,7 @@ namespace DuckGame
             for (int m = 0; m < 24; m++)
             {
                 SpriteThing spriteThing = new SpriteThing(100 + m * (cs.w + 13), cs.h + 15, cs);
+                spriteThing.shouldbegraphicculled = false;
                 spriteThing.center = new Vec2(cs.w / 2, cs.h - 1);
                 spriteThing.collisionOffset = new Vec2(spriteThing.collisionOffset.x, (float)(-(float)cs.h));
                 spriteThing.z = 0f;

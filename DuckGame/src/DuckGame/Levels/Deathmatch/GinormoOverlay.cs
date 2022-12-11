@@ -19,6 +19,7 @@ namespace DuckGame
         public GinormoOverlay(float xpos, float ypos, bool smallMode)
           : base(xpos, ypos)
         {
+            shouldbegraphicculled = false;
             depth = (Depth)0.9f;
             graphic = new Sprite("rockThrow/boardOverlay");
             _smallMode = smallMode;
