@@ -1148,6 +1148,10 @@ namespace DuckGame
             _core._ducknetMenu.Open();
             MonoMain.pauseMenu = _ducknetUIGroup;
             HUD.AddCornerControl(HUDCorner.BottomRight, "@CHAT@CHAT");
+            if (Level.current is GameLevel)
+                HUD.AddCornerControl(HUDCorner.BottomLeft, "@F1@PING");
+            else if (Network.isServer && (Level.current is TeamSelect2) && !DuckNetwork.TryPeacefulResolution(false))
+                HUD.AddCornerControl(HUDCorner.BottomLeft, "@F1@+@SELECT@FORCE START");
             _core._pauseOpen = true;
             SFX.Play("pause", 0.6f);
         }
@@ -1890,7 +1894,7 @@ namespace DuckGame
                     }
                     _core._menuClosed.value = false;
                 }
-                if (Keyboard.Pressed(Keys.F1) && !Keyboard.Down(Keys.LeftShift) && !Keyboard.Down(Keys.RightShift))
+                if (Keyboard.Pressed(Keys.F1) && !(Level.current is TeamSelect2))
                     ConnectionStatusUI.Show();
                 if (core.logTransferSize > 0)
                     ConnectionStatusUI.core.tempShow = 2;
