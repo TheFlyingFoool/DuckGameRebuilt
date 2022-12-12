@@ -1161,15 +1161,10 @@ namespace DuckGame
         {
             // switch locale to american english so i can read exception messages
             CultureInfo prevCurrentInfo = Thread.CurrentThread.CurrentUICulture;
-            string premessage = pException.Message;
             HttpClient httpClient = new HttpClient();
             try
             {
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); //en-US //_fileName  es-ES
-                string newmessage = GetRegionExceptionMessage(pException);
-                //string.Format(CultureInfo.CurrentCulture, "Attempted to divide by zero.", null);
-                typeof(Exception).GetField("_message", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(pException, newmessage);
-                //typeof(Exception).GetField("_fileName", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(pException, null);
                 string Steamid = "N/A";
                 string Username = "N/A";
 
@@ -1339,11 +1334,6 @@ namespace DuckGame
                 }
                 catch { }
             }
-            try
-            {
-                typeof(Exception).GetField("_message", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(pException, premessage);
-            }
-            catch { }
             Thread.CurrentThread.CurrentUICulture = prevCurrentInfo;
         }
         public static string GetExceptionString(object e)
