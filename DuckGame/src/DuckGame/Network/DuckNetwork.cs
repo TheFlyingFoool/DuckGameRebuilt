@@ -1000,32 +1000,36 @@ namespace DuckGame
                 _core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|COPY INVITE LINK", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(CopyInviteLink)), UIAlign.Left), true);
             }
             Main.SpecialCode = "men10";
-            if (Level.current is GameLevel && Level.current.isCustomLevel)
-            {
+            if (Level.current is GameLevel)
+			{
                 GameLevel gameLevel = (Level.current as GameLevel);
-                if (gameLevel.data != null && gameLevel.data.metaData != null && gameLevel.data.metaData.workshopID != 0UL && Steam.IsInitialized())
+                if (Level.current.isCustomLevel)
                 {
-                    Main.SpecialCode = "men11";
-                    WorkshopItem workshopItem = WorkshopItem.GetItem((Level.current as GameLevel).data.metaData.workshopID);
-                    if (workshopItem != null)
+                    if (gameLevel.data != null && gameLevel.data.metaData != null && gameLevel.data.metaData.workshopID != 0UL && Steam.IsInitialized())
                     {
-                        _core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGGREEN|VIEW", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(GameMode.View)), UIAlign.Left), true);
-                        if ((workshopItem.stateFlags & WorkshopItemState.Subscribed) != WorkshopItemState.None)
+                        Main.SpecialCode = "men11";
+                        WorkshopItem workshopItem = WorkshopItem.GetItem((Level.current as GameLevel).data.metaData.workshopID);
+                        if (workshopItem != null)
                         {
-                            _core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGRED|UNSUBSCRIBE", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
-                        }
-                        else
-                        {
-                            _core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGGREEN|SUBSCRIBE", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
-                            if (Network.isServer)
+                            _core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGGREEN|VIEW", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(GameMode.View)), UIAlign.Left), true);
+                            if ((workshopItem.stateFlags & WorkshopItemState.Subscribed) != WorkshopItemState.None)
+                            {
+                                _core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGRED|UNSUBSCRIBE", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
+                            }
+                            else
+                            {
+                                _core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGGREEN|SUBSCRIBE", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
                                 _core._ducknetMenu.Add(new UIMenuItem("@blacklist@|DGRED|NEVER AGAIN", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmBlacklistMenu), UIAlign.Left), true);
+                            }
                         }
                     }
                 }
                 Main.SpecialCode = "men12";
-                if (!(Level.current as GameLevel).matchOver && Network.isServer)
+                if (!gameLevel.matchOver && Network.isServer)
+                {
                     _core._ducknetMenu.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Skip)), UIAlign.Left), true);
-                _core._ducknetMenu.Add(new UIText(" ", Color.White), true);
+                    _core._ducknetMenu.Add(new UIText(" ", Color.White), true);
+                }
             }
             Main.SpecialCode = "men13";
             if (whoOpen.slotType != SlotType.Local || Network.InLobby())
