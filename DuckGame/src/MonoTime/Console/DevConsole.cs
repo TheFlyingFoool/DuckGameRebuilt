@@ -2177,8 +2177,7 @@ namespace DuckGame
                 {
                     if (_core.typing.Length > 0 && _core.cursorPosition > 0)
                     {
-                        _core.typing =
-                            _core.typing.Remove(_core.cursorPosition - 1, 1);
+                        _core.typing = _core.typing.Remove(_core.cursorPosition - 1, 1);
                         --_core.cursorPosition;
                     }
 
@@ -2186,8 +2185,7 @@ namespace DuckGame
                 }
                 else if (Keyboard.Pressed(Keys.Delete))
                 {
-                    if (_core.typing.Length > 0 &&
-                        _core.cursorPosition < _core.typing.Length)
+                    if (_core.typing.Length > 0 && _core.cursorPosition < _core.typing.Length)
                         _core.typing = _core.typing.Remove(_core.cursorPosition, 1);
                     _core.lastCommandIndex = -1;
                 }
