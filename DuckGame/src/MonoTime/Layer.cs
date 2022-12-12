@@ -585,10 +585,6 @@ namespace DuckGame
                                             thing.DoDraw();
                                         Graphics.material = null;
                                     }
-                                    else
-                                    {
-
-                                    }
                                 }
                             }
                             else
@@ -695,10 +691,6 @@ namespace DuckGame
                                         else
                                             thing.DoDraw();
                                         Graphics.material = null;
-                                    }
-                                    else
-                                    {
-                                        thing.DrawCollision();
                                     }
 
                                 }
