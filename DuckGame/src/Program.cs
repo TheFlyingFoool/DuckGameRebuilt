@@ -9,9 +9,9 @@ using DbMon.NET;
 using DGWindows;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -19,6 +19,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -27,7 +28,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Newtonsoft.Json;
 
 namespace DuckGame
 {
@@ -562,7 +562,7 @@ namespace DuckGame
                 DevConsole.Log("Setting Max Controller Count " + controllerstring);
                 Environment.SetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS", controllerstring);
             }
-            Environment.SetEnvironmentVariable( "FNA_KEYBOARD_USE_SCANCODES","1");
+            Environment.SetEnvironmentVariable("FNA_KEYBOARD_USE_SCANCODES", "1");
             string environmentVariable = Environment.GetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS");
             if (string.IsNullOrEmpty(environmentVariable) || !int.TryParse(environmentVariable, out MonoMain.MaximumGamepadCount) || MonoMain.MaximumGamepadCount < 0)
                 MonoMain.MaximumGamepadCount = Enum.GetNames(typeof(PlayerIndex)).Length;
@@ -884,9 +884,11 @@ namespace DuckGame
                     try
                     {
                         if (pModConfig != null)
-                            Process.Start("CrashWindow.exe", "-modResponsible " + (flag1 ? "1" : "0") + " -modDisabled " + (!Program.gameLoadedSuccessfully || Options.Data.disableModOnCrash ? (flag2 ? "1" : "0") : "2") + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + Program.commandLine + "\" -executable \"" + Application.ExecutablePath + "\" " + DG.GetCrashWindowString(pException, pModConfig, str1));
+                            Process.Start("CrashWindow.exe", "-modResponsible " + (flag1 ? "1" : "0") + " -modDisabled " + (!Program.gameLoadedSuccessfully || Options.Data.disableModOnCrash ? (flag2 ? "1" : "0") : "2")
+                                + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + Program.commandLine + "\" -executable \"" + Application.ExecutablePath + "\" " + DG.GetCrashWindowString(pException, pModConfig, str1));
                         else
-                            Process.Start("CrashWindow.exe", "-modResponsible " + (flag1 ? "1" : "0") + " -modDisabled " + (!Program.gameLoadedSuccessfully || Options.Data.disableModOnCrash ? (flag2 ? "1" : "0") : "2") + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + Program.commandLine + "\" -executable \"" + Application.ExecutablePath + "\" " + DG.GetCrashWindowString(pException, pAssembly, str1));
+                            Process.Start("CrashWindow.exe", "-modResponsible " + (flag1 ? "1" : "0") + " -modDisabled " + (!Program.gameLoadedSuccessfully || Options.Data.disableModOnCrash ? (flag2 ? "1" : "0") : "2")
+                                + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + Program.commandLine + "\" -executable \"" + Application.ExecutablePath + "\" " + DG.GetCrashWindowString(pException, pAssembly, str1));
                     }
                     catch (Exception ex)
                     {
@@ -1046,7 +1048,7 @@ namespace DuckGame
             {
                 myWebResponse = myWebRequest.GetResponse();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return;
             }
@@ -1150,17 +1152,70 @@ namespace DuckGame
             }
             return saveFileStream;
         }
-        public static string GetRegionExceptionMessage(this System.Exception Source)
+        public static string TranslateMessage(Exception exception)
         {
-            string message = "";
-            try
+            Assembly a = exception.GetType().Assembly;
+            ResourceManager rm = new ResourceManager(a.GetName().Name, a);
+            var rsOriginal = rm.GetResourceSet(Thread.CurrentThread.CurrentCulture, true, true).Cast<DictionaryEntry>().ToList();
+            ResourceSet rsTranslated = rm.GetResourceSet(new System.Globalization.CultureInfo("en-US"), true, true);
+
+            var msg = exception.Message;
+            var splOrig = msg.Replace("\r\n", "\n").Split('\n');
+            var spl = splOrig.ToList();
+            string result;
+            for (int i = 0; i < spl.Count; i++)
             {
-                System.Reflection.ConstructorInfo temp = Source.GetType().GetConstructor(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, new System.Type[] { }, null);
-                System.Exception exception = ((System.Exception)temp.Invoke(null));
-                message = exception.Message;
+                string s = spl[i];
+                foreach (DictionaryEntry item in rsOriginal)
+                {
+                    if (!(item.Value is string candidate))
+                        continue;
+                    string translated = rsTranslated.GetString(item.Key.ToString(), false);
+                    if (s == candidate)
+                    {
+                        spl[i] = translated;
+                        break;
+                    }
+                    var mats = Regex.Matches(candidate, @"{([0-9]+)}");
+                    var canSpl = Regex.Split(candidate, @"{[0-9]+}");
+                    for (int i1 = 0; i1 < canSpl.Length; i1++)
+                    {
+                        string c = canSpl[i1];
+                    }
+                    if (!(s.Length > candidate.Length))
+                        continue;
+                    string testCan = s;
+                    List<string> args = new List<string>();
+                    int newIdx = 0;
+                    bool notMatch = false;
+                    foreach (var c in canSpl)
+                    {
+                        if (c == "")
+                            continue;
+                        var ind = testCan.IndexOf(c, newIdx);
+                        if (ind != -1)
+                        {
+                            if (newIdx != 0)
+                            {
+                                args.Add(testCan.Substring(newIdx, ind));
+                            }
+                            newIdx = ind + c.Length;
+                            continue;
+                        }
+                        notMatch = true;
+                        break;
+                    }
+                    if (notMatch)
+                        continue;
+                    if (newIdx != testCan.Length)
+                    {
+                        args.Add(testCan.Substring(newIdx, testCan.Length - newIdx));
+                    }
+                    spl[i] = string.Format(translated, args.ToArray());
+                }
             }
-            catch (Exception e) { }
-            return message;
+            result = string.Join(Environment.NewLine, spl);
+            return result;
         }
         public static void SendCrashToServer(Exception pException)
         {
@@ -1207,7 +1262,17 @@ namespace DuckGame
                 string ExceptionMessage = "";
                 try
                 {
-                    ExceptionMessage = pException.Message;
+                    ExceptionMessage = pException.GetType().FullName + ": ";
+                    var tempMsg = pException.Message;
+                    var tempMsg2 = TranslateMessage(pException);
+                    if (tempMsg2 != "" && tempMsg2 != tempMsg)
+                    {
+                        ExceptionMessage += tempMsg2 + Environment.NewLine + tempMsg;
+                    }
+                    else
+                    {
+                        ExceptionMessage += tempMsg;
+                    }
                 }
                 catch
                 { }
@@ -1284,30 +1349,52 @@ namespace DuckGame
                 {
                     OSName = Environment.UserName;
                 }
-
-                ModsActive = Escape($"\n    {string.Join(",\n    ", ModLoader.LoadedMods.Select(x => $"{x.name} {(x.workshopID == 0 ? $"by {x.author}" : $"[{x.workshopID}]")}"))}\n");
+                string White = """\u001b[0m""";
+                string Green = """\u001b[0;32m""";
+                if (ModLoader.LoadedMods.Count == 0)
+                {
+                    ModsActive = "```ansi\\n[" + Green + "N/A" + White + "]```";
+                }
+                else
+                {
+                    ModsActive = "```ansi\\n[" + Green;
+                    int lIndex = 0;
+                    for (int i = 0; i < ModLoader.LoadedMods.Count; i++)
+                    {
+                        var mod = ModLoader.LoadedMods[i];
+                        var modstr = (i != 0 ? ", " : "") + Escape($"{mod.name} {(mod.workshopID == 0 ? $"by {mod.author}" : $"[{mod.workshopID}]")}");
+                        if (ModsActive.Length - lIndex + modstr.Length + 4 + Green.Length > 1024)
+                        {
+                            modstr = modstr.Substring((i + 1) % 2 == 0 ? 3 : 2);
+                            lIndex += ModsActive.Length + modstr.Length;
+                            ModsActive += """ ```"},{"name": "** **", "value": "```ansi\n""" + Green;
+                        }
+                        ModsActive += modstr;
+                    }
+                    ModsActive += White + "]```";
+                }
                 OS = Escape(OS);
-                OS += "\\u001b[0m\\nUsername : \\u001b[2;32m" + Escape(OSName) + "\\u001b[0m\\nMachineName : \\u001b[2;32m" + Escape(Environment.MachineName);
+                OS += White + "\\nUsername : " + Green + Escape(OSName) + White + "\\nMachineName : " + Green + Escape(Environment.MachineName);
                 PlayersInLobby = Escape(PlayersInLobby);
                 ExceptionMessage = Escape(ExceptionMessage.Substring(0, Math.Min(840, ExceptionMessage.Length))); //str1.Substring(0, Math.Min(920, str1.Length))
-                StackTrace = Escape(": Below");//.Substring(0, 920);
-                //StackTrace = str1;
-                //string k = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"```ansi\nUsername: \u001b[2;32mN/A\u001b[0m\nSteam ID: \u001b[2;32mN/A\u001b[0m\n```\"},{\"name\":\"System Info\",\"value\":\"```ansi\nOS: \u001b[2;32mUnix 5.15.65.1\u001b[0m\nCommand Line: \u001b[2;32m-nothreading\u001b[0m\n```\"},{\"name\":\"Game Info\",\"value\":\"```ansi\nPlayers In Lobby: [\u001b[2;32mN/A\u001b[0m]\nMods Active: [\u001b[2;32mN/A\u001b[0m]\n```\"},{\"name\":\"Crash Info\",\"value\":\"```ansi\nException Message: \u001b[2;32mIndex was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index\u001b[0m\nStack Trace \u001b[2;32m\nSystem.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index\n  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <282c4228012f4f3d96bdf0f2b2dea837>:0 \n  at DuckGame.ProfileSelector.Update () [0x0046d] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Thing.DoUpdate () [0x0003d] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.UpdateThings () [0x0023f] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.DoUpdate () [0x001b3] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.UpdateCurrentLevel () [0x0001e] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.MonoMain.RunUpdate (Microsoft.Xna.Framework.GameTime gameTime) [0x00615] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.MonoMain.Update (Microsoft.Xna.Framework.GameTime gameTime) [0x00187] in \u001b[0m\n```\"}]}]}";
+                StackTrace = Escape(": Below");
                 string Commit = "N/A";
                 gitVersion = Escape(gitVersion.Replace("\n", ""));
-                Commit = Escape(currentversion) + " " + gitVersion + @" [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]","") + ") ";
-                string UserInfo = "```ansi\\nUsername: \\u001b[2;32m" + Username + "\\u001b[0m\\nSteam ID: \\u001b[2;32m" + Steamid + "\\u001b[0m\\n```";// "\\u001b[0m\\nPCUserName: \\u001b[2;32m" + Environment.UserName + "\\u001b[0m\\MachineName: \\u001b[2;32m" + Environment.MachineName + "\\u001b[0m]\\n```";
-                string SystemInfo = "```ansi\\nOS: \\u001b[2;32m" + OS + "\\u001b[0m\\nCommand Line: \\u001b[2;32m" + CommandLine + "\\u001b[0m\\n```";
-                string GameInfo =
-                    $"```ansi\\nPlayers In Lobby: [\\u001b[2;32m{PlayersInLobby}\\u001b[0m]\\nMods Active: [\\u001b[2;32m{ModsActive}\\u001b[0m]\\n```";
-                string CrashInfo = "```ansi\\nException Message: \\u001b[2;32m" + ExceptionMessage + "\\u001b[0m\\nStack Trace \\u001b[2;32m" + StackTrace + "\\u001b[0m\\n```";
-                string jsonmessage = "{\"content\":\"\",\"tts\":false,\"embeds\":" +
-                    "[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":" +
-                    "[{\"name\":\"User Info\",\"value\":\"" + UserInfo + "\"}," +
-                    "{\"name\":\"System Info\",\"value\":\"" + SystemInfo + "\"}," +
-                    "{\"name\":\"Game Info\",\"value\":\"" + GameInfo + " Commit: " + Commit + "\"}," +
-                    "{\"name\":\"Crash Info\",\"value\":\"" + CrashInfo + "\"}]}]}";
-                //   string n4 = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"```ansi\\nUsername: \\u001b[2;32mPlaceholder1\\u001b[0m\\nSteam ID: \\u001b[2;32mPlaceholder2\\u001b[0m\\n```\"},{\"name\":\"System Info\",\"value\":\"```ansi\\nOS: \\u001b[2;32mPlaceholder3\\u001b[0m\\nCommand Line: \\u001b[2;32mPlaceholder4\\u001b[0m\\n```\"},{\"name\":\"Game Info\",\"value\":\"```ansi\\nPlayers In Lobby: [\\u001b[2;32mPlaceholder5\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\nMods Active: [\\u001b[2;32mPlaceholder6\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\n```\"},{\"name\":\"Crash Info\",\"value\":\"```ansi\\nException Message: \\u001b[2;32mPlaceholder7\\u001b[0m\\nStack Trace \\u001b[2;32mPlaceholder8\\u001b[0m\\n```\"}]}]}";
+                Commit = Escape(currentversion) + " " + gitVersion + @"``` [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]", "") + ") ";
+                string UserInfo = $$"""```ansi\nUsername: {{Green + Username + White}} \nSteam ID: {{Green + Steamid + White}}\n```""";
+                string SystemInfo = $$"""```ansi\nOS: {{Green + OS + White}} \nCommand Line:{{Green + CommandLine + White}}\n```""";
+                string GameInfo = $$"""```ansi\nPlayers In Lobby: [{{Green + PlayersInLobby + White}}]\nCommit: {{Green + Commit}}""";
+                string CrashInfo = $$"""```ansi\n{{Green + ExceptionMessage}}```""";
+                string jsonmessage = $$"""
+                    {"content": "", "tts": false, "embeds":
+                    [{"type": "rich", "description": "", "color": 9212569, "fields":[
+                        {"name": "User Info", "value": "{{UserInfo}}"},
+                        {"name": "System Info", "value": "{{SystemInfo}}"},
+                        {"name": "Game Info", "value": "{{GameInfo}}"},
+                        {"name": "Mods", "value": "{{ModsActive}}"},
+                        {"name": "Exception Message", "value": "{{CrashInfo}}"}
+                    ]}]}
+                    """;
                 if (Program.someprivacy)
                 {
                     jsonmessage = jsonmessage.Replace(Environment.UserName, "#Privacy");
