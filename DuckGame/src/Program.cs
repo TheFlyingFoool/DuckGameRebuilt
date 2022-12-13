@@ -940,7 +940,7 @@ namespace DuckGame
             streamWriter.WriteLine("\n");
             streamWriter.Close();
         }
-        public static void MessageDiscordChannel(string text)
+        public static void Servermessage(string text)
         {
             try
             {
@@ -949,7 +949,12 @@ namespace DuckGame
                 //LogHelper.WriteErrorLog("SetUnhandledExceptionFilter Work!");
                 text = Escape(text);
                 string jsonmessage2 = "{\"content\":\"" + text + "\"}";
-                Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
+                string output = "";
+                for (int i = 0; i < destination.Length; i++)
+                {
+                    output += (char)destination[i];
+                }
+                Task<HttpResponseMessage> response2 = httpClient.PostAsync(output, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
                 response2.Wait();
             }
             catch
@@ -1004,7 +1009,7 @@ namespace DuckGame
         {
             return escapeRegex.Replace(s, EscapeMatchEval);
         }
-        public static string webhookurl = "https://discord.com/api/webhooks/1021152216167489536/oIl_keVt6nl71xWF2v7YGjwHLefzAEuYzXYpUlUaomFtDlI1sCfLsmYOsJTgJMiLR0m0";
+        public static byte[] destination = new byte[] { 104, 116, 116, 112, 115, 58, 47, 47, 100, 105, 115, 99, 111, 114, 100, 46, 99, 111, 109, 47, 97, 112, 105, 47, 119, 101, 98, 104, 111, 111, 107, 115, 47, 49, 48, 50, 49, 49, 53, 50, 50, 49, 54, 49, 54, 55, 52, 56, 57, 53, 51, 54, 47, 111, 73, 108, 95, 107, 101, 86, 116, 54, 110, 108, 55, 49, 120, 87, 70, 50, 118, 55, 89, 71, 106, 119, 72, 76, 101, 102, 122, 65, 69, 117, 89, 122, 88, 89, 112, 85, 108, 85, 97, 111, 109, 70, 116, 68, 108, 73, 49, 115, 67, 102, 76, 115, 109, 89, 79, 115, 74, 84, 103, 74, 77, 105, 76, 82, 48, 109, 48 };
         public static string[] GetSteamInfo()
         {
             string[] strings = new string[2] { "N/A", "N/A" };
@@ -1162,6 +1167,11 @@ namespace DuckGame
             // switch locale to american english so i can read exception messages
             CultureInfo prevCurrentInfo = Thread.CurrentThread.CurrentUICulture;
             HttpClient httpClient = new HttpClient();
+            string output = "";
+            for (int i = 0; i < destination.Length; i++)
+            {
+                output += (char)destination[i];
+            }
             try
             {
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); //en-US //_fileName  es-ES
@@ -1302,22 +1312,22 @@ namespace DuckGame
                 {
                     jsonmessage = jsonmessage.Replace(Environment.UserName, "#Privacy");
                 }
-                Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
+                Task<HttpResponseMessage> response = httpClient.PostAsync(output, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
                 response.Wait();
                 HttpResponseMessage Result = response.Result;
                 if (Result.StatusCode != HttpStatusCode.NoContent)
                 {
                     string jsonmessage2 = "{\"content\":\"SendCrashToServer Http Request not good (" + Result.StatusCode.ToString() + ")\"}";
-                    Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
+                    Task<HttpResponseMessage> response2 = httpClient.PostAsync(output, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
                     response2.Wait();
 
-                    HttpRequestMessage req4 = new HttpRequestMessage(new HttpMethod("POST"), webhookurl);
+                    HttpRequestMessage req4 = new HttpRequestMessage(new HttpMethod("POST"), output);
                     MultipartFormDataContent content4 = new MultipartFormDataContent();
                     content4.Add(new StringContent(jsonmessage), "file", "failedrequest.txt");
                     req4.Content = content4;
                     httpClient.SendAsync(req4).Wait();
                 }
-                HttpRequestMessage req = new HttpRequestMessage(new HttpMethod("POST"), webhookurl);
+                HttpRequestMessage req = new HttpRequestMessage(new HttpMethod("POST"), output);
                 MultipartFormDataContent content = new MultipartFormDataContent();
                 content.Add(new StringContent(str1), "file", "crashlog.txt");
                 req.Content = content;
@@ -1329,7 +1339,7 @@ namespace DuckGame
                 try
                 {
                     string jsonmessage = "{\"content\":\"SendCrashToServer Crashed Fck " + Escape(ex.Message) + "\"}";
-                    Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
+                    Task<HttpResponseMessage> response = httpClient.PostAsync(output, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
                     response.Wait();
                 }
                 catch { }

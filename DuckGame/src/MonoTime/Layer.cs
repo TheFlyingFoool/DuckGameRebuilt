@@ -728,10 +728,6 @@ namespace DuckGame
                                     }
                                 }
                             }
-                            if (this == Layer.Game)
-                            {
-                                DansTestArea.drawthething();
-                            }
                             if (DevConsole.showCollision)
                             {
                                 foreach (Thing thing in transparent1)
