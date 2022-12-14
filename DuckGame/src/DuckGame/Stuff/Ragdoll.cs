@@ -656,9 +656,9 @@ namespace DuckGame
             }
             if (captureDuck != null && captureDuck.inputProfile != null && captureDuck.isServerForObject)
             {
-                if (captureDuck.inputProfile.Pressed("JUMP") && captureDuck.HasEquipment(typeof(Jetpack)))
+                if (captureDuck.inputProfile.Pressed(Triggers.Jump) && captureDuck.HasEquipment(typeof(Jetpack)))
                     captureDuck.GetEquipment(typeof(Jetpack)).PressAction();
-                if (captureDuck.inputProfile.Released("JUMP") && captureDuck.HasEquipment(typeof(Jetpack)))
+                if (captureDuck.inputProfile.Released(Triggers.Jump) && captureDuck.HasEquipment(typeof(Jetpack)))
                     captureDuck.GetEquipment(typeof(Jetpack)).ReleaseAction();
             }
             partSep = 6f;
@@ -757,7 +757,7 @@ namespace DuckGame
         {
             if (captureDuck == null)
                 return false;
-            return captureDuck.inputProfile.Pressed("LEFT") || captureDuck.inputProfile.Pressed("RIGHT") || captureDuck.inputProfile.Pressed("UP") || captureDuck.inputProfile.Pressed("RAGDOLL") || captureDuck.inputProfile.Pressed("JUMP");
+            return captureDuck.inputProfile.Pressed(Triggers.Left) || captureDuck.inputProfile.Pressed(Triggers.Right) || captureDuck.inputProfile.Pressed(Triggers.Up) || captureDuck.inputProfile.Pressed(Triggers.Ragdoll) || captureDuck.inputProfile.Pressed(Triggers.Jump);
         }
 
         public void UpdateInput()
@@ -772,28 +772,30 @@ namespace DuckGame
             {
                 if (_duck.HasEquipment(typeof(FancyShoes)) && !jetting)
                 {
-                    if (captureDuck.inputProfile.Pressed("RIGHT"))
+                    if (captureDuck.inputProfile.Pressed(Triggers.Right))
                     {
-                        Vec2 vec2_1 = (_part1.position - _part2.position).Rotate(1.570796f, Vec2.Zero);
-                        RagdollPart part1 = this.part1;
-                        part1.velocity += vec2_1 * 0.2f;
-                        Vec2 vec2_2 = (_part3.position - _part2.position).Rotate(1.570796f, Vec2.Zero);
-                        RagdollPart part3 = this.part3;
-                        part3.velocity += vec2_2 * 0.2f;
+                        Vec2 velVec = _part1.position - _part2.position;
+                        velVec = velVec.Rotate((float)Math.PI / 2, Vec2.Zero);
+                        part1.velocity += velVec * 0.2f;
+
+                        velVec = _part3.position - _part2.position;
+                        velVec = velVec.Rotate((float)Math.PI / 2, Vec2.Zero);
+                        part3.velocity += velVec * 0.2f;
                     }
-                    else if (captureDuck.inputProfile.Pressed("LEFT"))
+                    else if (captureDuck.inputProfile.Pressed(Triggers.Left))
                     {
-                        Vec2 vec2_3 = (_part1.position - _part2.position).Rotate(1.570796f, Vec2.Zero);
-                        RagdollPart part1 = this.part1;
-                        part1.velocity += vec2_3 * -0.2f;
-                        Vec2 vec2_4 = (_part3.position - _part2.position).Rotate(1.570796f, Vec2.Zero);
-                        RagdollPart part3 = this.part3;
-                        part3.velocity += vec2_4 * -0.2f;
+                        Vec2 velVec = _part1.position - _part2.position;
+                        velVec = velVec.Rotate((float)Math.PI / 2, Vec2.Zero);
+                        part1.velocity += velVec * -0.2f;
+
+                        velVec = _part3.position - _part2.position;
+                        velVec = velVec.Rotate((float)Math.PI / 2, Vec2.Zero);
+                        part3.velocity += velVec * -0.2f;
                     }
                 }
                 else if (_timeSinceNudge > 1.0 && !jetting)
                 {
-                    if (captureDuck.inputProfile.Pressed("LEFT"))
+                    if (captureDuck.inputProfile.Pressed(Triggers.Left))
                     {
                         _part1.vSpeed += NetRand.Float(-2f, 2f);
                         _part3.vSpeed += NetRand.Float(-2f, 2f);
@@ -802,7 +804,7 @@ namespace DuckGame
                         _timeSinceNudge = 0f;
                         ShakeOutOfSleepingBag();
                     }
-                    else if (captureDuck.inputProfile.Pressed("RIGHT"))
+                    else if (captureDuck.inputProfile.Pressed(Triggers.Right))
                     {
                         _part1.vSpeed += NetRand.Float(-2f, 2f);
                         _part3.vSpeed += NetRand.Float(-2f, 2f);
@@ -811,7 +813,7 @@ namespace DuckGame
                         _timeSinceNudge = 0f;
                         ShakeOutOfSleepingBag();
                     }
-                    else if (captureDuck.inputProfile.Pressed("UP"))
+                    else if (captureDuck.inputProfile.Pressed(Triggers.Up))
                     {
                         _part1.vSpeed += NetRand.Float(-2f, 1f);
                         _part3.vSpeed += NetRand.Float(-2f, 1f);
@@ -831,7 +833,7 @@ namespace DuckGame
                     Fondle(this, DuckNetwork.localConnection);
                 _makeActive = true;
             }
-            if (_duck.dead || !captureDuck.inputProfile.Pressed("RAGDOLL") && !captureDuck.inputProfile.Pressed("JUMP") || ((_part1.framesSinceGrounded < 5 || _part2.framesSinceGrounded < 5 || _part3.framesSinceGrounded < 5 ? 1 : (_part1.doFloat || part2.doFloat ? 1 : (_part3.doFloat ? 1 : 0))) | (flag ? 1 : 0)) == 0 && _part1.owner == null && _part2.owner == null && _part3.owner == null)
+            if (_duck.dead || !captureDuck.inputProfile.Pressed(Triggers.Ragdoll) && !captureDuck.inputProfile.Pressed(Triggers.Jump) || ((_part1.framesSinceGrounded < 5 || _part2.framesSinceGrounded < 5 || _part3.framesSinceGrounded < 5 ? 1 : (_part1.doFloat || part2.doFloat ? 1 : (_part3.doFloat ? 1 : 0))) | (flag ? 1 : 0)) == 0 && _part1.owner == null && _part2.owner == null && _part3.owner == null)
                 return;
             if (inSleepingBag)
             {

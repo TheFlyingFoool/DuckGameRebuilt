@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Framework.Content
 			}
 
 			// Box the type.
-			object  boxed = (object) obj;
+			object  boxed = obj;
 
 			foreach (ReadElement reader in readers)
 			{

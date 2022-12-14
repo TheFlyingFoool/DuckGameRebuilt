@@ -13,7 +13,7 @@ namespace XnaToFna
     {
         private object _AsyncState;
 
-        public object AsyncState => this._AsyncState;
+        public object AsyncState => _AsyncState;
 
         public WaitHandle AsyncWaitHandle => null;
 
@@ -21,6 +21,6 @@ namespace XnaToFna
 
         public bool IsCompleted => true;
 
-        public SyncResult(object state) => this._AsyncState = state;
+        public SyncResult(object state) => _AsyncState = state;
     }
 }

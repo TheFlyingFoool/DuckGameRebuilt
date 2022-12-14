@@ -156,7 +156,7 @@ namespace DuckGame
 
                     for (int i = 1; i < 4; i++)
                     {
-                        Graphics.DrawTexturedLine(_laserTex, vec3, vec3 + reNorm * ((float)Math.Cos((float)i + (float)z + (float)Math.Sin(fUp - other)) * 15), c * (1f - i * 0.2f), f, depth - 1);
+                        Graphics.DrawTexturedLine(_laserTex, vec3, vec3 + reNorm * ((float)Math.Cos(i + (float)z + (float)Math.Sin(fUp - other)) * 15), c * (1f - i * 0.2f), f, depth - 1);
                         vec3 += reNorm * ((float)Math.Cos(fUp * normalized.x * (Math.Sin(other * z / 12) + 1)) * 3);
                     }
                 }

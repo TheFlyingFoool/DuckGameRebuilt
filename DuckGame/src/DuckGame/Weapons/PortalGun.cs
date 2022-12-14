@@ -23,13 +23,15 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 99;
-            _ammoType = new ATPortal(this);
-            _ammoType.range = 600f;
-            _ammoType.accuracy = 1f;
-            _ammoType.rebound = false;
-            _ammoType.bulletSpeed = 10f;
-            _ammoType.bulletLength = 40f;
-            _ammoType.rangeVariation = 50f;
+            _ammoType = new ATPortal(this)
+            {
+                range = 600f,
+                accuracy = 1f,
+                rebound = false,
+                bulletSpeed = 10f,
+                bulletLength = 40f,
+                rangeVariation = 50f
+            };
             (_ammoType as ATPortal).angleShot = false;
             _type = "gun";
             graphic = new Sprite("phaser");

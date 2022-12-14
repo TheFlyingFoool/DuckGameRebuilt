@@ -145,7 +145,7 @@ namespace DuckGame
                 if (isServerForObject)
                 {
                     int hits1 = hits;
-                    if (duck.inputProfile.Pressed("UP"))
+                    if (duck.inputProfile.Pressed(Triggers.Up))
                     {
                         if (Network.isActive)
                             _netCrash.Play();
@@ -153,7 +153,7 @@ namespace DuckGame
                             _crash.Hit();
                         ++hits;
                     }
-                    if (duck.inputProfile.Pressed("SHOOT"))
+                    if (duck.inputProfile.Pressed(Triggers.Shoot))
                     {
                         if (Network.isActive)
                             _netSnare.Play();
@@ -161,7 +161,7 @@ namespace DuckGame
                             _snare.Hit();
                         ++hits;
                     }
-                    if (duck.inputProfile.Pressed("RIGHT"))
+                    if (duck.inputProfile.Pressed(Triggers.Right))
                     {
                         if (Network.isActive)
                             _netHighTom.Play();
@@ -169,7 +169,7 @@ namespace DuckGame
                             _highTom.Hit();
                         ++hits;
                     }
-                    if (duck.inputProfile.Pressed("DOWN"))
+                    if (duck.inputProfile.Pressed(Triggers.Down))
                     {
                         if (Network.isActive)
                             _netMediumTom.Play();
@@ -177,7 +177,7 @@ namespace DuckGame
                             _medTom.Hit();
                         ++hits;
                     }
-                    if (duck.inputProfile.Pressed("LEFT"))
+                    if (duck.inputProfile.Pressed(Triggers.Left))
                     {
                         if (Network.isActive)
                             _netLowTom.Play();
@@ -185,7 +185,7 @@ namespace DuckGame
                             _lowTom.Hit();
                         ++hits;
                     }
-                    if (duck.inputProfile.Pressed("JUMP"))
+                    if (duck.inputProfile.Pressed(Triggers.Jump))
                     {
                         if (Network.isActive)
                             _netHat.Play();
@@ -193,7 +193,7 @@ namespace DuckGame
                             _hat.Hit();
                         ++hits;
                     }
-                    if (duck.inputProfile.Pressed("LTRIGGER"))
+                    if (duck.inputProfile.Pressed(Triggers.LeftTrigger))
                     {
                         if (Network.isActive)
                             _netHat.Play();
@@ -201,7 +201,7 @@ namespace DuckGame
                             _hat.AlternateHit();
                         ++hits;
                     }
-                    if (duck.inputProfile.Pressed("RAGDOLL") || duck.inputProfile.Pressed("STRAFE"))
+                    if (duck.inputProfile.Pressed(Triggers.Ragdoll) || duck.inputProfile.Pressed(Triggers.Strafe))
                     {
                         if (Network.isActive)
                             _netBassDrum.Play();

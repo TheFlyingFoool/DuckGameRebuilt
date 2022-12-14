@@ -44,7 +44,7 @@
 //                Level.current = new TitleScreen();
 //            }
 //            this._wait -= 0.02f;
-//            if (DG.buildExpired || !this._drmSuccess || _wait >= 0.0 || !Input.Pressed("START"))
+//            if (DG.buildExpired || !this._drmSuccess || _wait >= 0.0 || !Input.Pressed(Triggers.Start))
 //                return;
 //            this._fading = true;
 //        }

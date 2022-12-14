@@ -177,28 +177,28 @@ namespace DuckGame
         {
             if (open && !_opening)
             {
-                if (Input.Pressed("MENUUP") && _selection > 0)
+                if (Input.Pressed(Triggers.MenuUp) && _selection > 0)
                 {
                     --_selection;
                     if (_selection < _topOffset)
                         --_topOffset;
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (Input.Pressed("MENUDOWN") && _selection < currentFolder.files.Count - 1)
+                if (Input.Pressed(Triggers.MenuDown) && _selection < currentFolder.files.Count - 1)
                 {
                     ++_selection;
                     if (_selection > _topOffset + kMaxInView)
                         ++_topOffset;
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (Input.Pressed("SELECT") && currentFolder.files.Count > 0)
+                if (Input.Pressed(Triggers.Select) && currentFolder.files.Count > 0)
                 {
                     if (currentFolder.files[_selection].name == "..")
                         SelectFolder(currentFolder.parent);
                     else if (currentFolder.files[_selection].files != null)
                         SelectFolder(currentFolder.files[_selection]);
                 }
-                if (Input.Pressed("MENU1") && currentFolder.files.Count > 0)
+                if (Input.Pressed(Triggers.Menu1) && currentFolder.files.Count > 0)
                 {
                     if (_flagged.Contains(currentFolder.files[_selection]))
                         _flagged.Remove(currentFolder.files[_selection]);
@@ -206,12 +206,12 @@ namespace DuckGame
                         _flagged.Add(currentFolder.files[_selection]);
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (Input.Pressed("MENU2") && _flagged.Count > 0)
+                if (Input.Pressed(Triggers.Menu2) && _flagged.Count > 0)
                 {
                     _deleteMenu.dirty = true;
                     new UIMenuActionOpenMenu(this, _deleteMenu).Activate();
                 }
-                if (Input.Pressed("CANCEL"))
+                if (Input.Pressed(Triggers.Cancel))
                 {
                     if (currentFolder.parent != null)
                         SelectFolder(currentFolder.parent);

@@ -350,7 +350,7 @@ namespace DuckGame
                 if (!_quitting)
                 {
                     ArcadeHatConsole arcadeHatConsole = First<ArcadeHatConsole>();
-                    if (Input.Pressed("START") && (arcadeHatConsole == null || !arcadeHatConsole.IsOpen()))
+                    if (Input.Pressed(Triggers.Start) && (arcadeHatConsole == null || !arcadeHatConsole.IsOpen()))
                     {
                         _pauseGroup.Open();
                         _pauseMenu.Open();
@@ -645,7 +645,7 @@ namespace DuckGame
                         if (challenge.hover)
                         {
                             obj = challenge;
-                            if (Input.Pressed("SHOOT"))
+                            if (Input.Pressed(Triggers.Shoot))
                             {
                                 _hud.activeChallengeGroup = challenge.data;
                                 _desiredState = ArcadeState.ViewChallenge;
@@ -661,7 +661,7 @@ namespace DuckGame
                         if (_prizeTable.hover)
                         {
                             obj = _prizeTable;
-                            if (Input.Pressed("SHOOT"))
+                            if (Input.Pressed(Triggers.Shoot))
                             {
                                 _desiredState = ArcadeState.UnlockScreen;
                                 _followCam.manualViewSize = _followCam.viewSize;
@@ -676,7 +676,7 @@ namespace DuckGame
                         else if (_plugMachine != null && _plugMachine.hover)
                         {
                             obj = _plugMachine;
-                            if (Input.Pressed("SHOOT"))
+                            if (Input.Pressed(Triggers.Shoot))
                             {
                                 _desiredState = ArcadeState.Plug;
                                 _followCam.manualViewSize = _followCam.viewSize;
@@ -689,7 +689,7 @@ namespace DuckGame
                             }
                         }
                     }
-                    if (Chancy.hover && Input.Pressed("SHOOT"))
+                    if (Chancy.hover && Input.Pressed(Triggers.Shoot))
                     {
                         _desiredState = ArcadeState.ViewSpecialChallenge;
                         HUD.CloseAllCorners();
@@ -701,7 +701,7 @@ namespace DuckGame
                         return;
                     }
                     ArcadeHatConsole arcadeHatConsole = First<ArcadeHatConsole>();
-                    if (arcadeHatConsole != null && Input.Pressed("SHOOT") && arcadeHatConsole.hover)
+                    if (arcadeHatConsole != null && Input.Pressed(Triggers.Shoot) && arcadeHatConsole.hover)
                     {
                         _desiredState = ArcadeState.ViewProfileSelector;
                         HUD.CloseAllCorners();
@@ -726,7 +726,7 @@ namespace DuckGame
                     else if (_prizeTable.hoverChancyChallenge)
                     {
                         obj = _arcade;
-                        if (Input.Pressed("SHOOT"))
+                        if (Input.Pressed(Triggers.Shoot))
                         {
                             _desiredState = ArcadeState.ViewChallengeList;
                             HUD.CloseAllCorners();
@@ -865,7 +865,7 @@ namespace DuckGame
                 if (!launchSpecialChallenge)
                 {
                     Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.05f);
-                    if (Input.Pressed("CANCEL"))
+                    if (Input.Pressed(Triggers.Cancel))
                     {
                         if (returnToChallengeList)
                         {
@@ -880,7 +880,7 @@ namespace DuckGame
                         SFX.Play("consoleCancel");
                         return;
                     }
-                    if (Input.Pressed("SELECT"))
+                    if (Input.Pressed(Triggers.Select))
                     {
                         launchSpecialChallenge = true;
                         SFX.Play("consoleSelect");
@@ -901,7 +901,7 @@ namespace DuckGame
             else if (_state == ArcadeState.ViewChallengeList)
             {
                 Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.05f);
-                if (Input.Pressed("CANCEL"))
+                if (Input.Pressed(Triggers.Cancel))
                 {
                     _desiredState = ArcadeState.Normal;
                     Chancy.lookingAtChallenge = false;
@@ -910,7 +910,7 @@ namespace DuckGame
                     SFX.Play("consoleCancel");
                     return;
                 }
-                if (Input.Pressed("SELECT"))
+                if (Input.Pressed(Triggers.Select))
                 {
                     Chancy.AddProposition(Chancy.selectedChallenge, Chancy.standingPosition);
                     returnToChallengeList = true;

@@ -21,12 +21,12 @@ namespace DuckGame
             if (duck.holdObject != null && duck.holdObject is Gun)
                 return null;
             duck.ThrowItem();
-            if (this._target == null)
+            if (_target == null)
             {
                 List<Thing> list1 = Level.current.things[typeof(Gun)].Where(x => (x as Gun).ammo > 0 && (x as Gun).owner == null).ToList();
                 if (AI.Nearest(duck.position, list1) is Gun gun)
                 {
-                    this._target = gun;
+                    _target = gun;
                     ai.SetTarget(gun.position);
                 }
                 else
@@ -34,30 +34,30 @@ namespace DuckGame
                     List<Thing> list2 = Level.current.things[typeof(ItemBox)].Where(x => !(x as ItemBox)._hit).ToList();
                     if (!(AI.Nearest(duck.position, list2) is ItemBox itemBox))
                         return new AIStateWait(Rando.Float(0.8f, 1f));
-                    this._target = itemBox;
+                    _target = itemBox;
                     ai.SetTarget(itemBox.position + new Vec2(0f, 32f));
                 }
             }
-            else if (this._target is ItemBox)
+            else if (_target is ItemBox)
             {
-                if (Math.Abs(this._target.x - duck.x) < 8f)
+                if (Math.Abs(_target.x - duck.x) < 8f)
                 {
                     ai.locomotion.Jump(15);
                     return new AIStateWait(Rando.Float(0.8f, 1f));
                 }
             }
-            else if (this._target.owner != null && this._target.owner != duck)
-                this._target = null;
-            else if ((this._target.position - duck.position).length < 18f)
+            else if (_target.owner != null && _target.owner != duck)
+                _target = null;
+            else if ((_target.position - duck.position).length < 18f)
             {
-                ai.Press("GRAB");
+                ai.Press(Triggers.Grab);
             }
             else
             {
-                ++this._refresh;
-                if (this._refresh > 10 && ai.canRefresh)
+                ++_refresh;
+                if (_refresh > 10 && ai.canRefresh)
                 {
-                    this._target = null;
+                    _target = null;
                     ai.canRefresh = false;
                 }
             }

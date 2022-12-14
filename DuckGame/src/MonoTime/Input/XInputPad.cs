@@ -36,7 +36,7 @@ namespace DuckGame
           },
           {
             16,
-            "START"
+            Triggers.Start
           },
           {
             32,
@@ -44,19 +44,19 @@ namespace DuckGame
           },
           {
             4,
-            "LEFT"
+            Triggers.Left
           },
           {
             8,
-            "RIGHT"
+            Triggers.Right
           },
           {
             1,
-            "UP"
+            Triggers.Up
           },
           {
             2,
-            "DOWN"
+            Triggers.Down
           },
           {
             2097152,

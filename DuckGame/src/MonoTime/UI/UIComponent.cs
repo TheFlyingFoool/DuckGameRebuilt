@@ -214,7 +214,7 @@ namespace DuckGame
             }
             if (_dirty)
                 Resize();
-            if (!UIMenu.globalUILock && !MonoMain.menuOpenedThisFrame && MonoMain.pauseMenu == this && (Input.Pressed("START") && isPauseMenu || MonoMain.closeMenus))
+            if (!UIMenu.globalUILock && !MonoMain.menuOpenedThisFrame && MonoMain.pauseMenu == this && (Input.Pressed(Triggers.Start) && isPauseMenu || MonoMain.closeMenus))
             {
                 MonoMain.closeMenus = false;
                 if (_closeFunction != null)

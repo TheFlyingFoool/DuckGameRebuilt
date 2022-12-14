@@ -19,14 +19,14 @@ namespace XnaToFna.ProxyDrawing
 
         public int X
         {
-            get => this.x;
-            set => this.x = value;
+            get => x;
+            set => x = value;
         }
 
         public int Y
         {
-            get => this.y;
-            set => this.y = value;
+            get => y;
+            set => y = value;
         }
 
         public Point(int dw)
@@ -40,7 +40,7 @@ namespace XnaToFna.ProxyDrawing
             this.y = y;
         }
 
-        public void Offset(Point p) => this.Offset(p.X, p.Y);
+        public void Offset(Point p) => Offset(p.X, p.Y);
 
         public void Offset(int x, int y)
         {
@@ -54,7 +54,7 @@ namespace XnaToFna.ProxyDrawing
 
         public override bool Equals(object obj) => obj is Point point && this == point;
 
-        public override int GetHashCode() => this.x ^ this.y;
+        public override int GetHashCode() => x ^ y;
 
         public override string ToString() => string.Format("{{X={0},Y={1}}}", x, y);
     }

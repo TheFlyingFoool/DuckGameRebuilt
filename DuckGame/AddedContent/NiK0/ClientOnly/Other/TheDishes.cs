@@ -14,10 +14,14 @@ namespace DuckGame
         public Sprite bubbles;
         public TheDishes(float xpos, float ypos) : base(xpos, ypos)
         {
-            bubbles = new Sprite("bouble");
-            bubbles.center = new Vec2(4.5f);
-            dirty = new Sprite("dirtydishoverlay");
-            dirty.center = new Vec2(8);
+            bubbles = new Sprite("bouble")
+            {
+                center = new Vec2(4.5f)
+            };
+            dirty = new Sprite("dirtydishoverlay")
+            {
+                center = new Vec2(8)
+            };
             graphic = new Sprite("furni/momento/plate");
             collisionSize = new Vec2(16);
             center = new Vec2(8);

@@ -140,7 +140,7 @@ namespace DuckGame
                 {
                     pad = (device as GenericController).device;
                 }
-                if (trigger == "LSTICK" || trigger == "RSTICK")
+                if (trigger == Triggers.LeftStick || trigger == Triggers.RightStick)
                 {
                     if (pad.leftStick.length > 0.1f)
                     {
@@ -156,7 +156,7 @@ namespace DuckGame
                     }
                     return finished;
                 }
-                else if (trigger == "LTRIGGER" || trigger == "RTRIGGER")
+                else if (trigger == Triggers.LeftTrigger || trigger == Triggers.RightTrigger)
                 {
                     if (pad.leftTrigger > 0.1f)
                     {

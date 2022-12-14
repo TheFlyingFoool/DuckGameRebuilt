@@ -73,7 +73,7 @@ namespace DuckGame
             _confirmMenu.Close();
             _pauseGroup.Add(_confirmMenu, false);
             _testMode.Add(new UIMenuItemNumber("PLAYERS", field: new FieldBinding(this, "numPlayers", 2f, 8f, 1f)), true);
-            _testMode.Add(new UIMenuItem("START", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _startTestMode)), true);
+            _testMode.Add(new UIMenuItem(Triggers.Start, new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _startTestMode)), true);
             _testMode.SetBackFunction(new UIMenuActionOpenMenu(_testMode, _pauseMenu));
             _testMode.Close();
             _pauseGroup.Add(_testMode, false);
@@ -161,7 +161,7 @@ namespace DuckGame
 
         public void PauseLogic()
         {
-            if (Input.Pressed("START"))
+            if (Input.Pressed(Triggers.Start))
             {
                 _pauseGroup.Open();
                 _pauseMenu.Open();
@@ -245,8 +245,10 @@ namespace DuckGame
                 EditorTestLevel t = null;
                 if (things[typeof(EditorTestLevel)].Count() > 0)
                     t = things[typeof(EditorTestLevel)].First() as EditorTestLevel;
-                current = new DuckGameTestArea(_editor, _levelValue, _seed, _center, _genType);
-                current.transitionSpeedMultiplier = 2f;
+                current = new DuckGameTestArea(_editor, _levelValue, _seed, _center, _genType)
+                {
+                    transitionSpeedMultiplier = 2f
+                };
                 if (t == null)
                     return;
                 current.AddThing(t);

@@ -71,7 +71,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if ((_downloadModsMenu == null || !_downloadModsMenu.open) && Input.Pressed("START"))
+            if ((_downloadModsMenu == null || !_downloadModsMenu.open) && Input.Pressed(Triggers.Start))
             {
                 current = new TitleScreen();
                 joinLobby = null;

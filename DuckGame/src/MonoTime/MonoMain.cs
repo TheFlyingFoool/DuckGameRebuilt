@@ -555,7 +555,7 @@ namespace DuckGame
             Options.Load();
             Cloud.Initialize();
             instance = this;
-            Resolution.Initialize(this.Window.Handle, this.graphics);
+            Resolution.Initialize(Window.Handle, graphics);
             Options.Load();
             Options.PostLoad();
             if (noFullscreen)
@@ -635,11 +635,11 @@ namespace DuckGame
             Resolution.Apply();
             if (Program.doscreentileing)
             {
-                Resolution r = new Resolution()
+                Resolution r = new Resolution
                 {
-                    dimensions = new Vec2(321, 181)
+                    dimensions = new Vec2(321, 181),
+                    mode = ScreenMode.Windowed
                 };
-                r.mode = ScreenMode.Windowed;
                 Resolution.Set(r);
                 Resolution.Apply();
                 SDL.SDL_SetWindowBordered(instance.Window.Handle, SDL.SDL_bool.SDL_FALSE);
@@ -966,7 +966,7 @@ namespace DuckGame
             //Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667L);
             if (!(startInLobby || Program.testServer))
             {
-                this.IsFixedTimeStep = true; // UNZOOOM
+                IsFixedTimeStep = true; // UNZOOOM
             }
            
             Program.SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
@@ -1019,7 +1019,7 @@ namespace DuckGame
         }
         public bool IsFocused
         {
-            get => (SDL.SDL_GetWindowFlags(this.Window.Handle) & (uint)SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS) > 0;
+            get => (SDL.SDL_GetWindowFlags(Window.Handle) & (uint)SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS) > 0;
         }
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
         protected override void Update(GameTime gameTime)
@@ -1619,7 +1619,7 @@ namespace DuckGame
                 Vec2 p1 = new Vec2(50f, Graphics.height - 50);
                 Vec2 vec2_1 = new Vec2(Graphics.width - 100, 20f);
                 Graphics.DrawRect(p1, p1 + vec2_1, Color.DarkGray * 0.1f, (Depth)0.5f);
-                float loaded = (float)loadyBits / (float)totalLoadyBits;
+                float loaded = loadyBits / (float)totalLoadyBits;
 				if (loaded > 1f)
 				{
 					loaded = 1f;

@@ -16,6 +16,6 @@ namespace DuckGame
         {
         }
 
-        public override extern bool isConnected { [MethodImpl(MethodImplOptions.InternalCall)] get; }
+        public extern override bool isConnected { [MethodImpl(MethodImplOptions.InternalCall)] get; }
     }
 }

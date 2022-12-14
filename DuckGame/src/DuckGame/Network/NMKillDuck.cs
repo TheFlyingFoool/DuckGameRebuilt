@@ -43,7 +43,7 @@ namespace DuckGame
             Profile profile = DuckNetwork.profiles[index];
             if (profile.duck == null || !profile.duck.WillAcceptLifeChange(lifeChange))
                 return;
-            DestroyType type = !crush ? (!this.fall ? new DTImpact(null) : new DTFall()) : new DTCrush(null);
+            DestroyType type = !crush ? (!fall ? new DTImpact(null) : new DTFall()) : new DTCrush(null);
             profile.duck.isKillMessage = true;
             if (profile.duck.Kill(type))
             {

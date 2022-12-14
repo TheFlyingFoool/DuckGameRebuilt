@@ -69,9 +69,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 4;
-            _ammoType = new ATLaser();
-            _ammoType.range = 170f;
-            _ammoType.accuracy = 0.8f;
+            _ammoType = new ATLaser
+            {
+                range = 170f,
+                accuracy = 0.8f
+            };
             _type = "gun";
             _sprite = new SpriteMap("keytar", 23, 8);
             graphic = _sprite;
@@ -187,7 +189,7 @@ namespace DuckGame
                 {
                     if (_ruined && Rando.Int(20) == 0)
                         _benderOffset += Rando.Float(-0.05f, 0.05f);
-                    if (owner.inputProfile.Pressed("STRAFE"))
+                    if (owner.inputProfile.Pressed(Triggers.Strafe))
                     {
                         ++preset;
                         if (preset >= presets.Length)
@@ -204,7 +206,7 @@ namespace DuckGame
                         handPitch = notePitch;
                     }
                     else
-                        notePitch = !owner.inputProfile.Down("SHOOT") ? 0f : handPitch + 0.01f;
+                        notePitch = !owner.inputProfile.Down(Triggers.Shoot) ? 0f : handPitch + 0.01f;
                 }
                 else
                     _benderOffset = 0f;

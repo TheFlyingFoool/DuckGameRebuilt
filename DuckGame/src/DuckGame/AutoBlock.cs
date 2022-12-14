@@ -399,7 +399,7 @@ namespace DuckGame
                     block.hit = false;
                     block.structure = null;
                 }
-                this.hit = false;
+                hit = false;
                 structure = null;
             }
             if (up == null)
@@ -652,9 +652,9 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            if (!this._groupedWithNeighbors && this.shouldWreck || Level.current is Editor)
+            if (!_groupedWithNeighbors && shouldWreck || Level.current is Editor)
             {
-                this.TerminateNubs();
+                TerminateNubs();
             }
         }
 
@@ -724,7 +724,7 @@ namespace DuckGame
             graphic.depth = depth;
             graphic.alpha = alpha;
             graphic.angle = angle;
-            graphic.cheapmaterial = this.material;
+            graphic.cheapmaterial = material;
             (graphic as SpriteMap).UpdateFrame();
             graphic.UltraCheapStaticDraw(flipHorizontal);
             //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 

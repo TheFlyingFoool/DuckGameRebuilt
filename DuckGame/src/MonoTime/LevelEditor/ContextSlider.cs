@@ -268,9 +268,9 @@ namespace DuckGame
             {
                 if (_hover || _adjust)
                 {
-                    if (Input.Pressed("SELECT"))
+                    if (Input.Pressed(Triggers.Select))
                         _adjust = true;
-                    if (Input.Released("SELECT"))
+                    if (Input.Released(Triggers.Select))
                         _adjust = false;
                 }
                 if (_adjust)
@@ -278,16 +278,16 @@ namespace DuckGame
                     Editor.tookInput = true;
                     int num = 1;
                     float step = _step;
-                    if (Input.Down("RAGDOLL"))
+                    if (Input.Down(Triggers.Ragdoll))
                         num = 5;
-                    if (Input.Down("STRAFE"))
+                    if (Input.Down(Triggers.Strafe))
                         _step *= 0.1f;
-                    if (Input.Pressed("MENULEFT"))
+                    if (Input.Pressed(Triggers.MenuLeft))
                     {
                         for (int index = 0; index < num; ++index)
                             Decrement();
                     }
-                    if (Input.Pressed("MENURIGHT"))
+                    if (Input.Pressed(Triggers.MenuRight))
                     {
                         for (int index = 0; index < num; ++index)
                             Increment();

@@ -145,7 +145,7 @@ namespace Microsoft.Xna.Framework.Input
 		/* Used by GamePadState public constructor, DO NOT USE! */
 		internal static GamePadButtons FromButtonArray(params Buttons[] buttons)
 		{
-			Buttons mask = (Buttons) 0;
+			Buttons mask = 0;
 			foreach (Buttons b in buttons)
 			{
 				mask |= b;

@@ -25,10 +25,10 @@ namespace XnaToFna.ProxyForms
 
         public Form()
         {
-            this.Form = this;
-            this.ThreadId = Thread.CurrentThread.ManagedThreadId;
-            this.StartPosition = FormStartPosition.WindowsDefaultLocation;
-            this.KeyPreview = false;
+            Form = this;
+            ThreadId = Thread.CurrentThread.ManagedThreadId;
+            StartPosition = FormStartPosition.WindowsDefaultLocation;
+            KeyPreview = false;
         }
 
         public event FormClosingEventHandler FormClosing;
@@ -50,18 +50,18 @@ namespace XnaToFna.ProxyForms
         public void Close()
         {
             FormClosingEventArgs e1 = new FormClosingEventArgs(CloseReason.None, false);
-            this.OnFormClosing(e1);
-            this.FormClosing(this, e1);
-            this._Close();
+            OnFormClosing(e1);
+            FormClosing(this, e1);
+            _Close();
             FormClosedEventArgs e2 = new FormClosedEventArgs(CloseReason.None);
-            this.OnFormClosed(e2);
-            this.FormClosed(this, e2);
+            OnFormClosed(e2);
+            FormClosed(this, e2);
         }
 
         protected override void WndProc(ref Message msg)
         {
             ref Message local = ref msg;
-            Delegate windowHook = this.WindowHook;
+            Delegate windowHook = WindowHook;
             object obj;
             if ((object)windowHook == null)
                 obj = null;

@@ -69,7 +69,7 @@ namespace DuckGame
         {
             if (_useBaseActivationLogic)
                 base.Activate(trigger);
-            else if (trigger == "SELECT")
+            else if (trigger == Triggers.Select)
             {
                 if (selectAction != null)
                     selectAction(currentValue);
@@ -78,9 +78,9 @@ namespace DuckGame
             else
             {
                 int currentIndex1 = currentIndex;
-                if (trigger == "MENULEFT")
+                if (trigger == Triggers.MenuLeft)
                     --currentIndex;
-                else if (trigger == "MENURIGHT")
+                else if (trigger == Triggers.MenuRight)
                     ++currentIndex;
                 if (currentIndex < 0)
                     currentIndex = 0;

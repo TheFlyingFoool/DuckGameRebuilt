@@ -96,14 +96,14 @@ namespace DuckGame
                 bool flag2 = false;
                 if (!_tried)
                 {
-                    if (Input.Pressed("MENU2"))
+                    if (Input.Pressed(Triggers.Menu2))
                     {
                         HUD.CloseAllCorners();
                         SFX.Play("rockHitGround", 0.9f);
                         flag1 = false;
                         _tried = true;
                     }
-                    if (Input.Pressed("SELECT"))
+                    if (Input.Pressed(Triggers.Select))
                     {
                         HUD.CloseAllCorners();
                         flag2 = true;

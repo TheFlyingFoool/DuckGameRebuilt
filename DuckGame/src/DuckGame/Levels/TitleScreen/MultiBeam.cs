@@ -115,14 +115,14 @@ namespace DuckGame
                 }
                 if (duck.duck.inputProfile != null)
                 {
-                    if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed("LEFT"))
+                    if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed(Triggers.Left))
                     {
                         duck.leaving = true;
                         _leaveLeft = true;
                         duck.duck.offDir = -1;
                         entered = false;
                     }
-                    else if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed("RIGHT"))
+                    else if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed(Triggers.Right))
                     {
                         duck.leaving = true;
                         _leaveLeft = false;

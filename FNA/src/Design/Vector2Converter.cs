@@ -73,10 +73,10 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return (object) new Vector2(
-				(float) propertyValues["X"],
-				(float) propertyValues["Y"]
-			);
+			return new Vector2(
+                (float)propertyValues["X"],
+                (float)propertyValues["Y"]
+            );
 		}
 
 		#endregion

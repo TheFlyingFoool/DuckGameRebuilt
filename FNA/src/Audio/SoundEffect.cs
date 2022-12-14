@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Audio
 			get
 			{
 				return TimeSpan.FromSeconds(
-					(double) handle.PlayLength /
+                     handle.PlayLength /
 					(double) sampleRate
 				);
 			}
@@ -237,15 +237,17 @@ namespace Microsoft.Xna.Framework.Audio
 			pcm->wBitsPerSample = wBitsPerSample;
 			pcm->cbSize = (ushort) ((extraData == null) ? 0 : extraData.Length);
 
-			/* Easy stuff */
-			handle = new FAudio.FAudioBuffer();
-			handle.Flags = FAudio.FAUDIO_END_OF_STREAM;
-			handle.pContext = IntPtr.Zero;
+            /* Easy stuff */
+            handle = new FAudio.FAudioBuffer
+            {
+                Flags = FAudio.FAUDIO_END_OF_STREAM,
+                pContext = IntPtr.Zero,
 
-			/* Buffer data */
-			handle.AudioBytes = (uint) count;
-			handle.pAudioData = Marshal.AllocHGlobal(count);
-			Marshal.Copy(
+                /* Buffer data */
+                AudioBytes = (uint)count,
+                pAudioData = Marshal.AllocHGlobal(count)
+            };
+            Marshal.Copy(
 				buffer,
 				offset,
 				handle.pAudioData,
@@ -333,11 +335,13 @@ namespace Microsoft.Xna.Framework.Audio
 
 		public bool Play(float volume, float pitch, float pan)
 		{
-			SoundEffectInstance instance = new SoundEffectInstance(this);
-			instance.Volume = volume;
-			instance.Pitch = pitch;
-			instance.Pan = pan;
-			instance.Play();
+            SoundEffectInstance instance = new SoundEffectInstance(this)
+            {
+                Volume = volume,
+                Pitch = pitch,
+                Pan = pan
+            };
+            instance.Play();
 			if (instance.State != SoundState.Playing)
 			{
 				// Ran out of AL sources, probably.
@@ -699,12 +703,14 @@ namespace Microsoft.Xna.Framework.Audio
 					);
 					Marshal.FreeHGlobal(rvbParamsPtr);
 
-					reverbSends = new FAudio.FAudioVoiceSends();
-					reverbSends.SendCount = 2;
-					reverbSends.pSends = Marshal.AllocHGlobal(
-						2 * Marshal.SizeOf(typeof(FAudio.FAudioSendDescriptor))
-					);
-					FAudio.FAudioSendDescriptor* sendDesc = (FAudio.FAudioSendDescriptor*) reverbSends.pSends;
+                    reverbSends = new FAudio.FAudioVoiceSends
+                    {
+                        SendCount = 2,
+                        pSends = Marshal.AllocHGlobal(
+                        2 * Marshal.SizeOf(typeof(FAudio.FAudioSendDescriptor))
+                    )
+                    };
+                    FAudio.FAudioSendDescriptor* sendDesc = (FAudio.FAudioSendDescriptor*) reverbSends.pSends;
 					sendDesc[0].Flags = 0;
 					sendDesc[0].pOutputVoice = MasterVoice;
 					sendDesc[1].Flags = 0;

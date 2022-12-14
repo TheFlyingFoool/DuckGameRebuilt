@@ -27,49 +27,49 @@ namespace DuckGame
                 duck.ThrowItem();
                 return new AIStateWait(1f);
             }
-            ++this._refresh;
-            if (this._refresh > 10 && ai.canRefresh)
+            ++_refresh;
+            if (_refresh > 10 && ai.canRefresh)
             {
-                this._refresh = 0;
-                this._target = null;
+                _refresh = 0;
+                _target = null;
                 ai.canRefresh = false;
             }
-            if (this._target == null)
+            if (_target == null)
             {
                 List<Thing> list = Level.current.things[typeof(Duck)].Where(x => x != duck && !(x as Duck).dead).ToList();
                 if (!(AI.Nearest(duck.position, list) is Duck duck1))
                     return new AIStateWait(Rando.Float(0.8f, 1f));
-                this._target = duck1;
+                _target = duck1;
                 ai.SetTarget(duck1.position);
             }
             else
             {
-                if ((duck.position - this._target.position).length < 10f)
+                if ((duck.position - _target.position).length < 10f)
                 {
-                    this._scatterWait -= 0.01f;
+                    _scatterWait -= 0.01f;
                     if (_scatterWait < 0.0)
                     {
                         List<Thing> list = Level.current.things[typeof(PathNode)].ToList();
                         ai.SetTarget(list[Rando.Int(list.Count - 1)].position);
-                        this._state.Push(new AIStateWait(1f + Rando.Float(1f)));
-                        this._scatterWait = 1f;
+                        _state.Push(new AIStateWait(1f + Rando.Float(1f)));
+                        _scatterWait = 1f;
                     }
                 }
-                if (Math.Abs(duck.y - this._target.y) < 16f && Math.Abs(duck.x - this._target.x) < 150.0 && Level.CheckRay<Duck>(duck.position + new Vec2(duck.offDir * 10, 0f), this._target.position) == this._target)
+                if (Math.Abs(duck.y - _target.y) < 16f && Math.Abs(duck.x - _target.x) < 150.0 && Level.CheckRay<Duck>(duck.position + new Vec2(duck.offDir * 10, 0f), _target.position) == _target)
                 {
-                    if (Level.CheckLine<Block>(duck.position, this._target.position) == null)
+                    if (Level.CheckLine<Block>(duck.position, _target.position) == null)
                     {
-                        this._targetWait -= 0.2f;
+                        _targetWait -= 0.2f;
                         if (_targetWait <= 0f && Rando.Float(1f) > 0.6f)
                         {
-                            ai.Press("SHOOT");
-                            this._state.Push(new AIStateWait(Rando.Float(0.2f, 0.3f)));
+                            ai.Press(Triggers.Shoot);
+                            _state.Push(new AIStateWait(Rando.Float(0.2f, 0.3f)));
                             return this;
                         }
                     }
                 }
                 else
-                    this._targetWait = 1f;
+                    _targetWait = 1f;
             }
             return this;
         }

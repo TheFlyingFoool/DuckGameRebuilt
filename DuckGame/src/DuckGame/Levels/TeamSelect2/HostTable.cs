@@ -78,11 +78,11 @@ namespace DuckGame
                     }
                     bool flag = spectator.netData.Get("quack", false);
                     if (flag && !data.quack)
-                        data.ai.Press("QUACK");
+                        data.ai.Press(Triggers.Quack);
                     else if (flag && data.quack)
-                        data.ai.HoldDown("QUACK");
+                        data.ai.HoldDown(Triggers.Quack);
                     else if (!flag && data.quack)
-                        data.ai.Release("QUACK");
+                        data.ai.Release(Triggers.Quack);
                     data.ai.virtualDevice.rightStick = spectator.netData.Get("spectatorTongue", Vec2.Zero);
                     data.ai.virtualDevice.leftTrigger = spectator.netData.Get("quackPitch", 0f);
                     if (spectator.team.hasHat && data.duck.hat == null)

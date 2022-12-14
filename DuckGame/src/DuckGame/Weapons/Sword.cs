@@ -92,9 +92,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 4;
-            _ammoType = new ATLaser();
-            _ammoType.range = 170f;
-            _ammoType.accuracy = 0.8f;
+            _ammoType = new ATLaser
+            {
+                range = 170f,
+                accuracy = 0.8f
+            };
             _type = "gun";
             graphic = new Sprite("sword");
             center = new Vec2(4f, 21f);
@@ -276,12 +278,12 @@ namespace DuckGame
 
         protected virtual void PerformAirSpin()
         {
-            if (this.hSpeed > 0f)
+            if (hSpeed > 0f)
             {
-                this._throwSpin += (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed)) * 2f + 4f;
+                _throwSpin += (Math.Abs(hSpeed) + Math.Abs(vSpeed)) * 2f + 4f;
                 return;
             }
-            this._throwSpin -= (Math.Abs(this.hSpeed) + Math.Abs(this.vSpeed)) * 2f + 4f;
+            _throwSpin -= (Math.Abs(hSpeed) + Math.Abs(vSpeed)) * 2f + 4f;
         }
 
         public new bool held => duck != null && duck.holdObject == this;
@@ -434,7 +436,7 @@ namespace DuckGame
                             if (vSpeed > 4.0f && !(this is OldEnergyScimi))
                                 _volatile = true;
                         }
-                        if (!flag2 && !_grounded && !this.initemspawner && (Level.CheckPoint<IPlatform>(position + new Vec2(0f, 8f)) == null || vSpeed < 0.0f))
+                        if (!flag2 && !_grounded && !initemspawner && (Level.CheckPoint<IPlatform>(position + new Vec2(0f, 8f)) == null || vSpeed < 0.0f))
                         {
                             PerformAirSpin();
                             flag1 = true;
@@ -513,7 +515,7 @@ namespace DuckGame
                                     ChestPlate chestPlate = Level.CheckLine<ChestPlate>(barrelStartPos, barrelPosition, null);
                                     if (chestPlate != null && chestPlate.equippedDuck != null && (chestPlate.owner != prevOwner || _framesSinceThrown > num))
                                     {
-                                        hSpeed = -this.hSpeed * 0.6f;
+                                        hSpeed = -hSpeed * 0.6f;
                                         Shing();
                                         flag3 = true;
                                         _hitWait = 4;
@@ -669,7 +671,7 @@ namespace DuckGame
                         _jabStance = false;
                         if (duck.crouch)
                         {
-                            if (!_pullBack && !_swinging && duck.inputProfile.Down(offDir > 0 ? "LEFT" : "RIGHT"))
+                            if (!_pullBack && !_swinging && duck.inputProfile.Down(offDir > 0 ? Triggers.Left : Triggers.Right))
                                 _jabStance = true;
                             _crouchStance = true;
                         }

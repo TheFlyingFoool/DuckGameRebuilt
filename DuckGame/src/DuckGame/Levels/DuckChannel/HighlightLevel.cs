@@ -163,7 +163,7 @@ namespace DuckGame
                 if (num != 0)
                     break;
             }
-            Vote.OpenVoting("SKIP", "START");
+            Vote.OpenVoting("SKIP", Triggers.Start);
             List<Team> teamList = new List<Team>();
             foreach (Team team in Teams.all)
             {

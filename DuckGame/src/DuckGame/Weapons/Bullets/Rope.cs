@@ -158,28 +158,32 @@ namespace DuckGame
         {
             if (!(_attach2.GetType() == typeof(Rope)) || !(cornerVector != Vec2.Zero))
                 return;
-            Rope attach2_1 = _attach2 as Rope;
-            bool flag = false;
+            Rope at2 = _attach2 as Rope;
+            bool regroup = false;
             if ((attach1Point - attach2Point).length < 4.0)
             {
-                flag = true;
+                regroup = true;
             }
             else
             {
-                float deg = cornerVector.x <= 0.0 ? attach2_1.linkDirectionNormalized + 90f : attach2_1.linkDirectionNormalized - 90f;
-                breakVector = Maths.AngleToVec(Maths.DegToRad(deg));
-                if (Math.Acos(Vec2.Dot(breakVector, cornerVector)) > Math.PI / 2.0) // the decompiler put Math.PI here not me dan :)
-                    breakVector = Maths.AngleToVec(Maths.DegToRad(deg + 180f));
+                float angleDir = 0.0f;
+                if (cornerVector.x > 0)
+                    angleDir = at2.linkDirectionNormalized - 90;
+                else
+                    angleDir = at2.linkDirectionNormalized + 90;
+                breakVector = Maths.AngleToVec(Maths.DegToRad(angleDir));
+                if (Math.Acos(Vec2.Dot(breakVector, cornerVector)) > Math.PI / 2) // the decompiler put Math.PI here not me dan :)
+                    breakVector = Maths.AngleToVec(Maths.DegToRad(angleDir + 180f));
                 dirLine = (attach1.position - attach2.position).normalized;
-                if (Math.Acos(Vec2.Dot(breakVector, dirLine)) < 1.52079632604984) //uhhhh i think this is just / 2 of pi
-                    flag = true;
+                if (Math.Acos(Vec2.Dot(breakVector, dirLine)) < ((Math.PI / 2) - 0.05f))
+                    regroup = true;
             }
-            if (!flag)
+            if (!regroup)
                 return;
-            _attach2 = attach2_1.attach2;
-            _properLength += attach2_1.properLength;
-            Level.Remove(attach2_1);
-            cornerVector = attach2_1.cornerVector;
+            _attach2 = at2.attach2;
+            _properLength += at2.properLength;
+            Level.Remove(at2);
+            cornerVector = at2.cornerVector;
         }
 
         public void AddLength(float length)
@@ -328,67 +332,74 @@ namespace DuckGame
                 Graphics.DrawLine(_attach2.position, _attach2.position + breakVector * 16f, Color.Blue);
                 Graphics.DrawLine(_attach2.position, _attach2.position + dirLine * 8f, Color.Orange);
             }
-            float num1 = length / properLength;
+            float amount = (length / properLength);
             if (!serverForObject)
-                num1 = 1f;
+                amount = 1.0f;
+
             if (_vine != null)
             {
-                Vec2 vec2_1 = attach2Point - attach1Point;
-                Vec2 normalized = vec2_1.normalized;
-                Vec2 vec2_2 = normalized;
-                vec2_2 = vec2_2.Rotate(Maths.DegToRad(90f), Vec2.Zero);
-                double length1 = vec2_1.length;
-                float num2 = 16f;
-                Vec2 vec2_3 = attach1Point + normalized * num2;
-                Vec2 p1 = attach1Point;
-                Depth depth = this.depth;
-                double num3 = num2;
-                int num4 = (int)Math.Ceiling(length1 / num3);
-                for (int index = 0; index < num4; ++index)
+                Vec2 travel = (attach2Point - attach1Point);
+                Vec2 travelNorm = travel.normalized;
+                Vec2 travelOffset = travelNorm;
+                travelOffset = travelOffset.Rotate(Maths.DegToRad(90.0f), Vec2.Zero);
+                float len = travel.length;
+                float stepSize = 16;
+                Vec2 drawStart = attach1Point + (travelNorm * stepSize);
+                Vec2 drawPrev = attach1Point;
+                Depth d = depth;
+                int num = (int)Math.Ceiling(len / stepSize);
+                for (int i = 0; i < num; i++)
                 {
-                    float a = 6.283185f / num4 * index;
-                    float num5 = (float)((1.0 - num1) * 16.0);
-                    Vec2 p2 = vec2_3 + vec2_2 * ((float)Math.Sin(a) * num5);
-                    if (index == num4 - 1)
-                        p2 = attach2Point;
-                    _vine.angleDegrees = (float)-(Maths.PointDirection(p1, p2) + 90.0);
-                    _vine.depth = depth;
-                    depth += 1;
-                    float length2 = (p2 - p1).length;
-                    if (index == num4 - 1)
+                    float sinVal = (((float)Math.PI * 2.0f) / num) * i;
+                    float sinMult = (1.0f - amount) * 16.0f;
+
+                    Vec2 toPos = drawStart + ((travelOffset * (float)(Math.Sin(sinVal) * sinMult)));
+                    if (i == num - 1)
+                        toPos = attach2Point;
+                    _vine.angleDegrees = -(Maths.PointDirection(drawPrev, toPos) + 90);
+                    _vine.depth = d;
+                    d += 1;
+                    float lent = (toPos - drawPrev).length;
+                    if (i == num - 1)
                     {
-                        _vine.yscale = 1f;
-                        Graphics.Draw(_vine, p1.x, p1.y, new Rectangle(0f, 0f, 16f, (int)(length2 % num2)));
+                        _vine.yscale = 1.0f;
+                        Graphics.Draw(_vine, drawPrev.x, drawPrev.y, new Rectangle(0, 0, 16, (int)(lent % stepSize)));
                     }
                     else
                     {
-                        _vine.yscale = length2 / 16f + 0.1f;
-                        Graphics.Draw(_vine, p1.x, p1.y);
+                        _vine.yscale = (lent / 16.0f) + 0.1f;
+                        Graphics.Draw(_vine, drawPrev.x, drawPrev.y);
                     }
-                    p1 = p2;
-                    vec2_3 += normalized * num2;
-                    float num6 = a + 6.283185f / num4;
-                }
-            }
-            else if (num1 < 0.95f && num1 > 0.0f)
-            {
-                Vec2 vec2_4 = attach2Point - attach1Point;
-                Vec2 vec2_5 = vec2_4.normalized;
-                vec2_5 = vec2_5.Rotate(Maths.DegToRad(90f), Vec2.Zero);
-                float a = 0.7853982f;
-                Vec2 vec2_6 = attach1Point + vec2_4 / 8f;
-                Vec2 p1 = attach1Point;
-                for (int index = 0; index < 8; ++index)
-                {
-                    float num7 = (float)((1.0 - num1) * 8.0);
-                    Graphics.DrawLine(p1, vec2_6 + vec2_5 * (float)Math.Sin(a) * num7, Color.White * 0.8f, depth: (depth - 1));
-                    p1 = vec2_6 + vec2_5 * (float)Math.Sin(a) * num7;
-                    vec2_6 += vec2_4 / 8f;
-                    a += 0.7853982f;
+                    drawPrev = toPos;
+                    drawStart += travelNorm * stepSize;
+                    //sinVal += (((float)Math.PI * 2.0f) / num);
                 }
             }
             else
-                Graphics.DrawLine(attach1Point, attach2Point, Color.White * 0.8f, depth: (depth - 1));
+            {
+
+                if (amount < 0.95f && amount > 0.0f)
+                {
+                    Vec2 travel = (attach2Point - attach1Point);
+                    Vec2 travelOffset = travel.normalized;
+                    travelOffset = travelOffset.Rotate(Maths.DegToRad(90.0f), Vec2.Zero);
+
+
+                    float sinVal = (((float)Math.PI * 2.0f) / 8.0f);
+                    Vec2 drawStart = attach1Point + (travel / 8);
+                    Vec2 drawPrev = attach1Point;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        float sinMult = (1.0f - amount) * 8.0f;
+                        Graphics.DrawLine(drawPrev, drawStart + ((travelOffset * (float)Math.Sin(sinVal)) * sinMult), Color.White * 0.8f, 1.0f, depth - 1);
+                        drawPrev = drawStart + ((travelOffset * (float)Math.Sin(sinVal)) * sinMult);
+                        drawStart += (travel / 8);
+                        sinVal += (((float)Math.PI * 2.0f) / 8.0f);
+                    }
+                }
+                else
+                    Graphics.DrawLine(attach1Point, attach2Point, Color.White * 0.8f, 1.0f, depth - 1);
+            }
         }
     }
 }

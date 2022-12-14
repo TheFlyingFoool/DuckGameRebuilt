@@ -207,7 +207,7 @@ namespace DuckGame
                         duck.duck.hSpeed = 0f;
                         duck.duck.gravMultiplier = 0f;
                     }
-                    if (duck.duck.inputProfile != null && duck.duck.inputProfile.Pressed("CANCEL") && Math.Abs(duck.duck.position.x - x) < 2.0)
+                    if (duck.duck.inputProfile != null && duck.duck.inputProfile.Pressed(Triggers.Cancel) && Math.Abs(duck.duck.position.x - x) < 2.0)
                         duck.leaving = true;
                     if (duck.duck.profile == null)
                         duck.leaving = true;

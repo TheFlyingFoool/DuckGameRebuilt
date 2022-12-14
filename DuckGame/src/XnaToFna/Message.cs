@@ -24,7 +24,7 @@ namespace XnaToFna.ProxyForms
 
         public IntPtr Result { get; set; }
 
-        public object GetLParam(Type cls) => Marshal.PtrToStructure(this.LParam, cls);
+        public object GetLParam(Type cls) => Marshal.PtrToStructure(LParam, cls);
 
         public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) => new Message()
         {
@@ -35,13 +35,13 @@ namespace XnaToFna.ProxyForms
             Result = IntPtr.Zero
         };
 
-        public override bool Equals(object o) => o is Message message && this.HWnd == message.HWnd && this.Msg == message.Msg && this.WParam == message.WParam && this.LParam == message.LParam && this.Result == message.Result;
+        public override bool Equals(object o) => o is Message message && HWnd == message.HWnd && Msg == message.Msg && WParam == message.WParam && LParam == message.LParam && Result == message.Result;
 
         public static bool operator !=(Message a, Message b) => !a.Equals(b);
 
         public static bool operator ==(Message a, Message b) => a.Equals(b);
 
-        public override int GetHashCode() => (int)this.HWnd << 4 | this.Msg;
+        public override int GetHashCode() => (int)HWnd << 4 | Msg;
 
         public override string ToString()
         {

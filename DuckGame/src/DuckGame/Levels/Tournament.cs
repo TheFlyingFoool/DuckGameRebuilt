@@ -70,7 +70,7 @@
 
 //        public override void Update()
 //        {
-//            if (InputProfile.DefaultPlayer1.Pressed("CANCEL"))
+//            if (InputProfile.DefaultPlayer1.Pressed(Triggers.Cancel))
 //            {
 //                this._groups.Clear();
 //                Rando.generator = new Random(30502);

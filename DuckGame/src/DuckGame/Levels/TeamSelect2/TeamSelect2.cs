@@ -1173,7 +1173,7 @@ namespace DuckGame
                             break;
                         }
                     }
-                    if (flag3 && defaultProfile.Pressed("START"))
+                    if (flag3 && defaultProfile.Pressed(Triggers.Start))
                     {
                         foreach (ProfileBox2 profile in _profiles)
                         {
@@ -1349,16 +1349,16 @@ namespace DuckGame
                     {
                         if (!Network.isActive)
                         {
-                            if (!_singlePlayer && !_starting && !menuOpen && Input.Pressed("MENU1"))
+                            if (!_singlePlayer && !_starting && !menuOpen && Input.Pressed(Triggers.Menu1))
                             {
                                 _configGroup.Open();
                                 _multiplayerMenu.Open();
                                 MonoMain.pauseMenu = _configGroup;
                             }
-                            if (!_starting && !menuOpen && Input.Pressed("MENU2"))
+                            if (!_starting && !menuOpen && Input.Pressed(Triggers.Menu2))
                                 PlayOnlineSinglePlayer();
                         }
-                        if (!menuOpen && Input.Pressed("SELECT") && (!_singlePlayer || Profiles.active.Count > 0 && !Profiles.IsDefault(Profiles.active[0])) || DuckNetwork.isDedicatedServer && !_sentDedicatedCountdown && !_spectatorCountdownStop)
+                        if (!menuOpen && Input.Pressed(Triggers.Select) && (!_singlePlayer || Profiles.active.Count > 0 && !Profiles.IsDefault(Profiles.active[0])) || DuckNetwork.isDedicatedServer && !_sentDedicatedCountdown && !_spectatorCountdownStop)
                         {
                             if (Network.isActive)
                             {
@@ -1369,7 +1369,7 @@ namespace DuckGame
                             else
                                 _starting = true;
                         }
-                        if (Network.isActive && DuckNetwork.isDedicatedServer && !_spectatorCountdownStop && Input.Pressed("CANCEL"))
+                        if (Network.isActive && DuckNetwork.isDedicatedServer && !_spectatorCountdownStop && Input.Pressed(Triggers.Cancel))
                         {
                             _spectatorCountdownStop = true;
                             _sentDedicatedCountdown = false;
@@ -1397,7 +1397,7 @@ namespace DuckGame
                     _afkTimeout += Maths.IncFrameTimer();
                     foreach (Profile profile in DuckNetwork.profiles)
                     {
-                        if (profile.localPlayer && profile.inputProfile != null && profile.inputProfile.Pressed("ANY", true))
+                        if (profile.localPlayer && profile.inputProfile != null && profile.inputProfile.Pressed(Triggers.Any, true))
                             _afkTimeout = 0f;
                     }
                     if (DuckNetwork.lobbyType == DuckNetwork.LobbyType.FriendsOnly || DuckNetwork.lobbyType == DuckNetwork.LobbyType.Private)

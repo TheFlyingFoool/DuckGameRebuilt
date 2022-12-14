@@ -80,7 +80,7 @@ namespace DuckGame
         public UIMenu UIParentMenu;
         public override void Open()
         {
-            UIComponent UIComponent = this.parent;
+            UIComponent UIComponent = parent;
             while (UIComponent != null) // IMPROVEME idk man coded a system that pass down the main uimenu i guess
             {
                 UIComponent = UIComponent.parent;
@@ -232,7 +232,7 @@ namespace DuckGame
                 for (int i = 0; i < _currentMenuItemSelection.Count; i++)
                 {
                     UIComponent uIComponent = _currentMenuItemSelection[i];
-                    Rectangle r = new Rectangle(uIComponent.position + new Vec2(-(this.width / 2f), uIComponent.height / 2f), uIComponent.position + new Vec2(-(this.width / 2f) + uIComponent.width, -(uIComponent.height / 2f)));
+                    Rectangle r = new Rectangle(uIComponent.position + new Vec2(-(width / 2f), uIComponent.height / 2f), uIComponent.position + new Vec2(-(width / 2f) + uIComponent.width, -(uIComponent.height / 2f)));
                     if (Collision.Point(Mouse.position, r))
                     {
                         if (!_animating && uIComponent is UIMenuItem)
@@ -282,7 +282,7 @@ namespace DuckGame
             }
             if (!UIMenu.globalUILock && !_close && !_inputLock)
             {
-                if (Input.Pressed("CANCEL") && allowBackButton)
+                if (Input.Pressed(Triggers.Cancel) && allowBackButton)
                 {
                     if (_backButton != null || _backFunction != null)
                     {
@@ -290,7 +290,7 @@ namespace DuckGame
                         {
                             MonoMain.dontResetSelection = true;
                             if (_backButton != null)
-                                _backButton.Activate("SELECT");
+                                _backButton.Activate(Triggers.Select);
                             else
                                 _backFunction.Activate();
                             MonoMain.menuOpenedThisFrame = true;
@@ -299,7 +299,7 @@ namespace DuckGame
                     else if (!MonoMain.menuOpenedThisFrame && _isMenu)
                         MonoMain.closeMenus = true;
                 }
-                else if (Input.Pressed("SELECT") && _acceptFunction != null && !_animating)
+                else if (Input.Pressed(Triggers.Select) && _acceptFunction != null && !_animating)
                 {
                     MonoMain.dontResetSelection = true;
                     _acceptFunction.Activate();
@@ -328,16 +328,16 @@ namespace DuckGame
                    }).ToList();
                     if (_vertical)
                     {
-                        if (!_animating && Input.Pressed("MENUUP"))
+                        if (!_animating && Input.Pressed(Triggers.MenuUp))
                             SelectPrevious();
-                        if (!_animating && Input.Pressed("MENUDOWN"))
+                        if (!_animating && Input.Pressed(Triggers.MenuDown))
                             SelectNext();
                     }
                     else
                     {
-                        if (!_animating && Input.Pressed("MENULEFT"))
+                        if (!_animating && Input.Pressed(Triggers.MenuLeft))
                             SelectPrevious();
-                        if (!_animating && Input.Pressed("MENURIGHT"))
+                        if (!_animating && Input.Pressed(Triggers.MenuRight))
                             SelectNext();
                     }
                     _hoverControlString = null;
@@ -350,23 +350,23 @@ namespace DuckGame
                             _hoverControlString = uiMenuItem.controlString;
                             if (uiMenuItem.isEnabled)
                             {
-                                if (!_animating && Input.Pressed("SELECT"))
+                                if (!_animating && Input.Pressed(Triggers.Select))
                                 {
-                                    uiMenuItem.Activate("SELECT");
+                                    uiMenuItem.Activate(Triggers.Select);
                                     SFX.Play("rockHitGround", 0.7f);
                                 }
-                                else if (!_animating && Input.Pressed("MENU1"))
-                                    uiMenuItem.Activate("MENU1");
-                                else if (!_animating && Input.Pressed("MENU2"))
-                                    uiMenuItem.Activate("MENU2");
-                                else if (!_animating && Input.Pressed("RAGDOLL"))
-                                    uiMenuItem.Activate("RAGDOLL");
-                                else if (!_animating && Input.Pressed("STRAFE"))
-                                    uiMenuItem.Activate("STRAFE");
-                                else if (!_animating && Input.Pressed("MENULEFT"))
-                                    uiMenuItem.Activate("MENULEFT");
-                                else if (!_animating && Input.Pressed("MENURIGHT"))
-                                    uiMenuItem.Activate("MENURIGHT");
+                                else if (!_animating && Input.Pressed(Triggers.Menu1))
+                                    uiMenuItem.Activate(Triggers.Menu1);
+                                else if (!_animating && Input.Pressed(Triggers.Menu2))
+                                    uiMenuItem.Activate(Triggers.Menu2);
+                                else if (!_animating && Input.Pressed(Triggers.Ragdoll))
+                                    uiMenuItem.Activate(Triggers.Ragdoll);
+                                else if (!_animating && Input.Pressed(Triggers.Strafe))
+                                    uiMenuItem.Activate(Triggers.Strafe);
+                                else if (!_animating && Input.Pressed(Triggers.MenuLeft))
+                                    uiMenuItem.Activate(Triggers.MenuLeft);
+                                else if (!_animating && Input.Pressed(Triggers.MenuRight))
+                                    uiMenuItem.Activate(Triggers.MenuRight);
                             }
                         }
                     }

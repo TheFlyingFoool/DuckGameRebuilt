@@ -84,8 +84,8 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 				((packedValue >> 10) & 0x1F) / 31.0f,
 				((packedValue >> 5) & 0x1F) / 31.0f,
 				(packedValue & 0x1F) / 31.0f,
-				(float) (packedValue >> 15)
-			);
+                 packedValue >> 15
+            );
 		}
 
 		#endregion

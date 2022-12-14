@@ -77,10 +77,12 @@ namespace DuckGame
             {
                 if ((graphic as SpriteMap).frame == 3 && _deadlyIcicleInstance == null && Network.isServer)
                 {
-                    _deadlyIcicleInstance = new DeadlyIcicle(x, y + 8f);
-                    _deadlyIcicleInstance.active = false;
-                    _deadlyIcicleInstance.visible = false;
-                    _deadlyIcicleInstance.solid = false;
+                    _deadlyIcicleInstance = new DeadlyIcicle(x, y + 8f)
+                    {
+                        active = false,
+                        visible = false,
+                        solid = false
+                    };
                     Level.Add(_deadlyIcicleInstance);
                 }
                 if ((graphic as SpriteMap).frame == 3 && _deadlyIcicleInstance != null && _deadlyIcicleInstance.visible)

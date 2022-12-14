@@ -35,9 +35,11 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 
 		internal static ushort Convert(float f)
 		{
-			uif uif = new uif();
-			uif.f = f;
-			return Convert(uif.i);
+            uif uif = new uif
+            {
+                f = f
+            };
+            return Convert(uif.i);
 		}
 
 		internal static ushort Convert(int i)
@@ -110,7 +112,7 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 						mantissa = mantissa << 1;
 					}
 					mantissa &= 0xfffffbff;
-					rst = ((uint) ((((uint) value & 0x8000) << 16) | ((exp + 127) << 23))) | (mantissa << 13);
+					rst = (((uint)value & 0x8000) << 16) | ((exp + 127) << 23) | (mantissa << 13);
 				}
 				else
 				{
@@ -119,12 +121,14 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 			}
 			else
 			{
-				rst = (uint) (((((uint) value & 0x8000) << 16) | ((((((uint) value >> 10) & 0x1f) - 15) + 127) << 23)) | (mantissa << 13));
+				rst = ((((uint)value & 0x8000) << 16) | ((((((uint)value >> 10) & 0x1f) - 15) + 127) << 23)) | (mantissa << 13);
 			}
 
-			uif uif = new uif();
-			uif.u = rst;
-			return uif.f;
+            uif uif = new uif
+            {
+                u = rst
+            };
+            return uif.f;
 		}
 
 		#endregion

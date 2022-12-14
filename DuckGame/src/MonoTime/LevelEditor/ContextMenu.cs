@@ -456,7 +456,7 @@ namespace DuckGame
                         }
                         if (!waitInputFrame && Editor.inputMode == EditorInput.Gamepad && drawControls)
                         {
-                            if (Input.Pressed("MENU1"))
+                            if (Input.Pressed(Triggers.Menu1))
                             {
                                 if (isPinnable && _root && pinned)
                                 {
@@ -478,7 +478,7 @@ namespace DuckGame
                                     _autoSelectItem = _selectedIndex;
                                 }
                             }
-                            else if (pinned && _owner != null && _owner is ContextMenu && (_owner as ContextMenu).pinOpened && Input.Pressed("MENULEFT"))
+                            else if (pinned && _owner != null && _owner is ContextMenu && (_owner as ContextMenu).pinOpened && Input.Pressed(Triggers.MenuLeft))
                             {
                                 bool flag2 = false;
                                 foreach (ContextMenu contextMenu in _items)
@@ -577,7 +577,7 @@ namespace DuckGame
                     if ((Editor.lockInput == null || IsPartOf(Editor.lockInput)) && !Editor.tookInput && Editor.inputMode == EditorInput.Gamepad)
                     {
                         bool flag4 = HasOpen();
-                        if (flag4 && Input.Pressed("MENULEFT") && _canExpand)
+                        if (flag4 && Input.Pressed(Triggers.MenuLeft) && _canExpand)
                         {
                             bool flag5 = false;
                             foreach (ContextMenu contextMenu in _items)
@@ -601,7 +601,7 @@ namespace DuckGame
                             {
                                 _takingInput = true;
                                 bool flag6 = false;
-                                if (Input.Pressed("MENUUP"))
+                                if (Input.Pressed(Triggers.MenuUp))
                                 {
                                     flag6 = true;
                                     if (_selectedIndex == _items.Count - 1 && _alwaysDrawLast)
@@ -636,7 +636,7 @@ namespace DuckGame
                                             break;
                                     }
                                 }
-                                else if (Input.Pressed("MENUDOWN"))
+                                else if (Input.Pressed(Triggers.MenuDown))
                                 {
                                     flag6 = true;
                                     ++_selectedIndex;
@@ -672,7 +672,7 @@ namespace DuckGame
                                 }
                             }
                             Rectangle rectangle = new Rectangle(x, y, itemSize.x, itemSize.y);
-                            if (_hover && (Input.Pressed("SELECT") || _canExpand && Input.Pressed("MENURIGHT") || scrollButtonDirection != 0))
+                            if (_hover && (Input.Pressed(Triggers.Select) || _canExpand && Input.Pressed(Triggers.MenuRight) || scrollButtonDirection != 0))
                             {
                                 if (this.owner is ContextMenu owner)
                                 {

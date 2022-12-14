@@ -86,7 +86,7 @@ namespace DuckGame
                         HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
                         _shown = true;
                     }
-                    if (Input.Pressed("SELECT"))
+                    if (Input.Pressed(Triggers.Select))
                     {
                         HUD.CloseAllCorners();
                         SFX.Play("resume", 0.6f);

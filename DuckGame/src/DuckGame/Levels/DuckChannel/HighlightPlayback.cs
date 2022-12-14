@@ -37,7 +37,7 @@ namespace DuckGame
         public override void Initialize()
         {
             _tv = new Sprite("bigTV");
-            Vote.OpenVoting("SKIP", "START");
+            Vote.OpenVoting("SKIP", Triggers.Start);
         }
 
         public override void Update()

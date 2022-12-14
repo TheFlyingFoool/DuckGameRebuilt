@@ -39,13 +39,13 @@ namespace XnaToFna
         {
             public readonly SerializationBinder Inner;
 
-            public XnaToFnaSerializationBinderWrapper(SerializationBinder inner) => this.Inner = inner;
+            public XnaToFnaSerializationBinderWrapper(SerializationBinder inner) => Inner = inner;
 
             public override Type BindToType(string assemblyName, string typeName)
             {
                 if (!(assemblyName != "Microsoft.Xna.Framework") || assemblyName.StartsWith("Microsoft.Xna.Framework,") || assemblyName.StartsWith("Microsoft.Xna.Framework."))
                     return FNA.GetType(typeName);
-                return this.Inner?.BindToType(assemblyName, typeName);
+                return Inner?.BindToType(assemblyName, typeName);
             }
 
             public override void BindToName(
@@ -53,8 +53,8 @@ namespace XnaToFna
               out string assemblyName,
               out string typeName)
             {
-                if (this.Inner != null)
-                    this.Inner.BindToName(serializedType, out assemblyName, out typeName);
+                if (Inner != null)
+                    Inner.BindToName(serializedType, out assemblyName, out typeName);
                 else
                     base.BindToName(serializedType, out assemblyName, out typeName);
             }

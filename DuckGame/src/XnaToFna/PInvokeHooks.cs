@@ -38,7 +38,7 @@ namespace XnaToFna
         }
 
 
-        public unsafe static bool ClipCursor(ref Rectangle rect)
+        public static unsafe bool ClipCursor(ref Rectangle rect)
         {
             fixed (Rectangle* rect_ = &rect)
             {

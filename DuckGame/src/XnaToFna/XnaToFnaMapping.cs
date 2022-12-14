@@ -18,9 +18,9 @@ namespace XnaToFna
 
         public XnaToFnaMapping(string target, string[] sources, SetupDelegate setup = null)
         {
-            this.Target = target;
-            this.Sources = sources;
-            this.Setup = setup;
+            Target = target;
+            Sources = sources;
+            Setup = setup;
         }
 
         public delegate void SetupDelegate(XnaToFnaUtil xtf, XnaToFnaMapping mapping);

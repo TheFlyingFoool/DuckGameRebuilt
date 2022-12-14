@@ -59,13 +59,13 @@ namespace DuckGame
                     SFX.Play("lightMatch", 0.5f, Rando.Float(0.2f) - 0.4f);
                     float num1 = 0f;
                     float num2 = 0f;
-                    if (owner.inputProfile.Down("LEFT"))
+                    if (owner.inputProfile.Down(Triggers.Left))
                         --num1;
-                    if (owner.inputProfile.Down("RIGHT"))
+                    if (owner.inputProfile.Down(Triggers.Right))
                         ++num1;
-                    if (owner.inputProfile.Down("UP"))
+                    if (owner.inputProfile.Down(Triggers.Up))
                         --num2;
-                    if (owner.inputProfile.Down("DOWN"))
+                    if (owner.inputProfile.Down(Triggers.Down))
                         ++num2;
                     if (receivingPress || !isServerForObject)
                         return;

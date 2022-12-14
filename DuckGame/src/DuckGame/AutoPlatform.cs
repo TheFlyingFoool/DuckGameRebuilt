@@ -71,7 +71,7 @@ namespace DuckGame
             graphic.depth = depth;
             graphic.alpha = alpha;
             graphic.angle = angle;
-            graphic.cheapmaterial = this.material;
+            graphic.cheapmaterial = material;
             (graphic as SpriteMap).UpdateFrame();
             graphic.UltraCheapStaticDraw(flipHorizontal);
             //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 

@@ -48,13 +48,13 @@ namespace DuckGame
         public override void Activate(string trigger)
         {
             float num;
-            if (trigger == "MENULEFT")
+            if (trigger == Triggers.MenuLeft)
             {
                 num = Maths.Clamp((float)_field.value - _step, _field.min, _field.max);
             }
             else
             {
-                if (!(trigger == "MENURIGHT"))
+                if (!(trigger == Triggers.MenuRight))
                     return;
                 num = Maths.Clamp((float)_field.value + _step, _field.min, _field.max);
             }

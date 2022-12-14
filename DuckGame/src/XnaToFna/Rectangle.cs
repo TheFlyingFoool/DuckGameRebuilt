@@ -21,35 +21,35 @@ namespace XnaToFna.ProxyDrawing
 
         public int X
         {
-            get => this.x;
-            set => this.x = value;
+            get => x;
+            set => x = value;
         }
 
         public int Y
         {
-            get => this.y;
-            set => this.y = value;
+            get => y;
+            set => y = value;
         }
 
         public int Width
         {
-            get => this.width;
-            set => this.width = value;
+            get => width;
+            set => width = value;
         }
 
         public int Height
         {
-            get => this.height;
-            set => this.height = value;
+            get => height;
+            set => height = value;
         }
 
-        public int Left => this.X;
+        public int Left => X;
 
-        public int Top => this.y;
+        public int Top => y;
 
-        public int Right => this.X + this.Width;
+        public int Right => X + Width;
 
-        public int Bottom => this.y + this.height;
+        public int Bottom => y + height;
 
         public Rectangle(int x, int y, int width, int height)
         {
@@ -61,38 +61,38 @@ namespace XnaToFna.ProxyDrawing
 
         public void Inflate(int width, int height)
         {
-            this.x -= width;
-            this.y -= height;
+            x -= width;
+            y -= height;
             this.width += width * 2;
             this.height += height * 2;
         }
 
         public void Intersect(Rectangle rect)
         {
-            if (!this.IntersectsWithInclusive(rect))
+            if (!IntersectsWithInclusive(rect))
             {
-                this.x = this.y = this.width = this.height = 0;
+                x = y = width = height = 0;
             }
             else
             {
-                this.x = Math.Max(this.Left, rect.Left);
-                this.y = Math.Max(this.Top, rect.Top);
-                this.width = Math.Min(this.Right, rect.Right) - this.x;
-                this.height = Math.Min(this.Bottom, rect.Bottom) - this.y;
+                x = Math.Max(Left, rect.Left);
+                y = Math.Max(Top, rect.Top);
+                width = Math.Min(Right, rect.Right) - x;
+                height = Math.Min(Bottom, rect.Bottom) - y;
             }
         }
 
-        public bool Contains(Point p) => this.Contains(p.X, p.Y);
+        public bool Contains(Point p) => Contains(p.X, p.Y);
 
-        public bool Contains(int x, int y) => x >= this.Left && x < this.Right && y >= this.Top && y < this.Bottom;
+        public bool Contains(int x, int y) => x >= Left && x < Right && y >= Top && y < Bottom;
 
         public bool Contains(Rectangle rect) => rect == Intersect(this, rect);
 
-        public bool IntersectsWith(Rectangle rect) => this.Left < rect.Right && this.Right > rect.Left && this.Top < rect.Bottom && this.Bottom > rect.Top;
+        public bool IntersectsWith(Rectangle rect) => Left < rect.Right && Right > rect.Left && Top < rect.Bottom && Bottom > rect.Top;
 
-        private bool IntersectsWithInclusive(Rectangle rect) => this.Left <= rect.Right && this.Right >= rect.Left && this.Top <= rect.Bottom && this.Bottom >= rect.Top;
+        private bool IntersectsWithInclusive(Rectangle rect) => Left <= rect.Right && Right >= rect.Left && Top <= rect.Bottom && Bottom >= rect.Top;
 
-        public void Offset(Point p) => this.Offset(p.X, p.Y);
+        public void Offset(Point p) => Offset(p.X, p.Y);
 
         public void Offset(int x, int y)
         {
@@ -124,7 +124,7 @@ namespace XnaToFna.ProxyDrawing
 
         public override bool Equals(object obj) => obj is Rectangle rectangle && this == rectangle;
 
-        public override int GetHashCode() => this.height + this.width ^ this.x + this.y;
+        public override int GetHashCode() => height + width ^ x + y;
 
         public override string ToString() => string.Format("{{X={0},Y={1},Width={2},Height={3}}}", x, y, width, height);
     }

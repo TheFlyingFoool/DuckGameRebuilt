@@ -95,22 +95,22 @@ namespace DuckGame
                 _fade = Lerp.Float(_fade, 1f, 0.06f);
                 if (_selectorPosition == _desiredSelectorPosition)
                 {
-                    if (InputProfile.active.Down("MENULEFT"))
+                    if (InputProfile.active.Down(Triggers.MenuLeft))
                         SelectUp();
-                    if (InputProfile.active.Down("MENURIGHT"))
+                    if (InputProfile.active.Down(Triggers.MenuRight))
                         SelectDown();
-                    if (InputProfile.active.Pressed("SELECT") && _profile != null)
+                    if (InputProfile.active.Pressed(Triggers.Select) && _profile != null)
                     {
                         _desiredTransition = DoorTransition.Profile;
                         HUD.CloseAllCorners();
                     }
                 }
-                if (InputProfile.active.Pressed("CANCEL"))
+                if (InputProfile.active.Pressed(Triggers.Cancel))
                 {
                     _desiredTransition = DoorTransition.Exit;
                     HUD.CloseAllCorners();
                 }
-                if (InputProfile.active.Pressed("MENU2"))
+                if (InputProfile.active.Pressed(Triggers.Menu2))
                 {
                     _desiredTransition = DoorTransition.Album;
                     HUD.CloseAllCorners();

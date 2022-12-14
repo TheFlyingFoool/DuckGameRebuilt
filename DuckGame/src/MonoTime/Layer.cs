@@ -537,8 +537,8 @@ namespace DuckGame
                         {
                             if (this != Parallax && DGRSettings.S_GraphicsCulling)
                             {
-                                Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));
-                                Vec2 Bottomright = this.camera.transformInverse(new Vec2(Graphics.viewport.Width, Graphics.viewport.Height));
+                                Vec2 Topleft = camera.transformInverse(new Vec2(0f, 0f));
+                                Vec2 Bottomright = camera.transformInverse(new Vec2(Graphics.viewport.Width, Graphics.viewport.Height));
                                 int top = (int)((Bottomright.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
                                 int left = (int)((Topleft.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
                                 int bottom = (int)((Topleft.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
@@ -644,8 +644,8 @@ namespace DuckGame
                         {
                             if (this != Parallax && DGRSettings.S_GraphicsCulling)
                             {
-                                Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));
-                                Vec2 Bottomright = this.camera.transformInverse(new Vec2(Graphics.viewport.Width, Graphics.viewport.Height));
+                                Vec2 Topleft = camera.transformInverse(new Vec2(0f, 0f));
+                                Vec2 Bottomright = camera.transformInverse(new Vec2(Graphics.viewport.Width, Graphics.viewport.Height));
                                 int top = (int)((Bottomright.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
                                 int left = (int)((Topleft.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
                                 int bottom = (int)((Topleft.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);

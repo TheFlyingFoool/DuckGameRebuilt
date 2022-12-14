@@ -451,13 +451,13 @@ namespace DuckGame
                     }
                     if (_desiredFurniSelection == _furniSelection && _slideTo == 0.0 && _upSlideTo == 0.0 && _mode == REMode.Main)
                     {
-                        if (_selector.inputProfile.Down("MENULEFT"))
+                        if (_selector.inputProfile.Down(Triggers.MenuLeft))
                         {
                             _desiredFurniSelection = (short)FurniIndexAdd(_desiredFurniSelection, -1);
                             _slideTo = -1f;
                             SFX.Play("consoleTick");
                         }
-                        if (_selector.inputProfile.Down("MENURIGHT"))
+                        if (_selector.inputProfile.Down(Triggers.MenuRight))
                         {
                             _desiredFurniSelection = (short)FurniIndexAdd(_desiredFurniSelection, 1);
                             _slideTo = 1f;
@@ -468,7 +468,7 @@ namespace DuckGame
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (_selector.inputProfile.Down("MENUUP"))
+                        if (_selector.inputProfile.Down(Triggers.MenuUp))
                         {
                             _desiredFurniSelection = (short)FurniIndexAdd(_desiredFurniSelection, -5);
                             _upSlideTo = -1f;
@@ -479,7 +479,7 @@ namespace DuckGame
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (_selector.inputProfile.Down("MENUDOWN"))
+                        if (_selector.inputProfile.Down(Triggers.MenuDown))
                         {
                             _desiredFurniSelection = (short)FurniIndexAdd(_desiredFurniSelection, 5);
                             _upSlideTo = 1f;
@@ -490,13 +490,13 @@ namespace DuckGame
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (_selector.inputProfile.Pressed("SELECT"))
+                        if (_selector.inputProfile.Pressed(Triggers.Select))
                         {
                             _placementVariation = 0;
                             SFX.Play("consoleSelect", 0.4f);
                             _desiredMode = REMode.Place;
                         }
-                        if (_selector.inputProfile.Pressed("CANCEL"))
+                        if (_selector.inputProfile.Pressed(Triggers.Cancel))
                         {
                             _desiredFurniSelection = 0;
                             _furniSelection = _desiredFurniSelection;
@@ -516,26 +516,26 @@ namespace DuckGame
                         position = _box.position;
                         if (_furniCursor.x < 0.0)
                             _furniCursor = position + new Vec2(30f, 30f);
-                        if (_selector.inputProfile.Down("RAGDOLL"))
+                        if (_selector.inputProfile.Down(Triggers.Ragdoll))
                         {
-                            if (_selector.inputProfile.Pressed("MENULEFT"))
+                            if (_selector.inputProfile.Pressed(Triggers.MenuLeft))
                                 --_furniCursor.x;
-                            if (_selector.inputProfile.Pressed("MENURIGHT"))
+                            if (_selector.inputProfile.Pressed(Triggers.MenuRight))
                                 ++_furniCursor.x;
-                            if (_selector.inputProfile.Pressed("MENUUP"))
+                            if (_selector.inputProfile.Pressed(Triggers.MenuUp))
                                 --_furniCursor.y;
-                            if (_selector.inputProfile.Pressed("MENUDOWN"))
+                            if (_selector.inputProfile.Pressed(Triggers.MenuDown))
                                 ++_furniCursor.y;
                         }
                         else
                         {
-                            if (_selector.inputProfile.Down("MENULEFT"))
+                            if (_selector.inputProfile.Down(Triggers.MenuLeft))
                                 --_furniCursor.x;
-                            if (_selector.inputProfile.Down("MENURIGHT"))
+                            if (_selector.inputProfile.Down(Triggers.MenuRight))
                                 ++_furniCursor.x;
-                            if (_selector.inputProfile.Down("MENUUP"))
+                            if (_selector.inputProfile.Down(Triggers.MenuUp))
                                 --_furniCursor.y;
-                            if (_selector.inputProfile.Down("MENUDOWN"))
+                            if (_selector.inputProfile.Down(Triggers.MenuDown))
                                 ++_furniCursor.y;
                         }
                         Vec2 vec2_1 = new Vec2(x + 6f, y);
@@ -621,7 +621,7 @@ namespace DuckGame
                                 }
                             }
                         }
-                        if (_selector.inputProfile.Pressed("MENU2"))
+                        if (_selector.inputProfile.Pressed(Triggers.Menu2))
                         {
                             if (_hover == null)
                             {
@@ -658,7 +658,7 @@ namespace DuckGame
                             invalidPlacement = true;
                             flag1 = true;
                         }
-                        if (_selector.inputProfile.Pressed("MENU2") && availableFurni.name == "CLEAR ROOM")
+                        if (_selector.inputProfile.Pressed(Triggers.Menu2) && availableFurni.name == "CLEAR ROOM")
                         {
                             foreach (FurniturePosition furniturePosition in new List<FurniturePosition>(_selector.profile.furniturePositions))
                             {
@@ -675,7 +675,7 @@ namespace DuckGame
                                 SmallSmoke.shortlife = false;
                             }
                         }
-                        if (_selector.inputProfile.Pressed("SELECT") && availableFurni.name != "CLEAR ROOM")
+                        if (_selector.inputProfile.Pressed(Triggers.Select) && availableFurni.name != "CLEAR ROOM")
                         {
                             if (availableFurni.type == FurnitureType.Prop && _hover != null)
                             {
@@ -756,7 +756,7 @@ namespace DuckGame
                                 }
                             }
                         }
-                        if (_selector.inputProfile.Pressed("CANCEL"))
+                        if (_selector.inputProfile.Pressed(Triggers.Cancel))
                         {
                             _placementFlip = false;
                             SFX.Play("consoleSelect", 0.4f);

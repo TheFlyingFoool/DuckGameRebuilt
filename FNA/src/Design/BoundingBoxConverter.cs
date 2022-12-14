@@ -53,10 +53,10 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return (object) new BoundingBox(
-				(Vector3) propertyValues["Min"],
-				(Vector3) propertyValues["Max"]
-			);
+			return new BoundingBox(
+                (Vector3)propertyValues["Min"],
+                (Vector3)propertyValues["Max"]
+            );
 		}
 
 		#endregion

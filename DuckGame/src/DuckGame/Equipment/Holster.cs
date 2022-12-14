@@ -248,7 +248,7 @@ namespace DuckGame
             if (isServerForObject)
             {
                 netRaise = false;
-                if (_equippedDuck != null && _equippedDuck.inputProfile != null && _equippedDuck.inputProfile.Down("UP"))
+                if (_equippedDuck != null && _equippedDuck.inputProfile != null && _equippedDuck.inputProfile.Down(Triggers.Up))
                     netRaise = true;
                 if (owner == null && equippedDuck == null)
                     angle = 0;

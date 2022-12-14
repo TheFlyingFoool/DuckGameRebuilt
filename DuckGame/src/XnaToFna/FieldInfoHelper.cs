@@ -63,13 +63,13 @@ namespace XnaToFna.ProxyReflection
 
             public override FieldAttributes Attributes => throw new NotSupportedException();
 
-            public override Type DeclaringType => this._DeclaringType;
+            public override Type DeclaringType => _DeclaringType;
 
             public override RuntimeFieldHandle FieldHandle => throw new NotSupportedException();
 
-            public override Type FieldType => this._FieldType;
+            public override Type FieldType => _FieldType;
 
-            public override string Name => this._Name;
+            public override string Name => _Name;
 
             public override Type ReflectedType => throw new NotSupportedException();
 
@@ -78,9 +78,9 @@ namespace XnaToFna.ProxyReflection
               Func<object, object> onGetValue = null,
               Action<object, object> onSetValue = null)
             {
-                this._FieldType = fieldType;
-                this._OnGetValue = onGetValue;
-                this._OnSetValue = onSetValue;
+                _FieldType = fieldType;
+                _OnGetValue = onGetValue;
+                _OnSetValue = onSetValue;
             }
 
             public override object[] GetCustomAttributes(bool inherit) => throw new NotSupportedException();
@@ -91,7 +91,7 @@ namespace XnaToFna.ProxyReflection
 
             public override object GetValue(object obj)
             {
-                Func<object, object> onGetValue = this._OnGetValue;
+                Func<object, object> onGetValue = _OnGetValue;
                 return onGetValue == null ? null : onGetValue(obj);
             }
 
@@ -102,7 +102,7 @@ namespace XnaToFna.ProxyReflection
               Binder binder,
               CultureInfo culture)
             {
-                Action<object, object> onSetValue = this._OnSetValue;
+                Action<object, object> onSetValue = _OnSetValue;
                 if (onSetValue == null)
                     return;
                 onSetValue(obj, value);

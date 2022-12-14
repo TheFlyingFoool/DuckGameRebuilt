@@ -17,7 +17,7 @@ namespace DuckGame
         public string name = "";
         public string suffix = "";
         public string prefix = "";
-        public string filterText = "ANY";
+        public string filterText = Triggers.Any;
         public FilterMode filterMode;
         private object _value;
         public object prevValue;

@@ -44,12 +44,12 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return (object) new Rectangle(
-				(int) propertyValues["X"],
-				(int) propertyValues["Y"],
-				(int) propertyValues["Width"],
-				(int) propertyValues["Height"]
-			);
+			return new Rectangle(
+                (int)propertyValues["X"],
+                (int)propertyValues["Y"],
+                (int)propertyValues["Width"],
+                (int)propertyValues["Height"]
+            );
 		}
 
 		#endregion

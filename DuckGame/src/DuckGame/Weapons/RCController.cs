@@ -27,9 +27,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 99;
-            _ammoType = new ATLaser();
-            _ammoType.range = 170f;
-            _ammoType.accuracy = 0.8f;
+            _ammoType = new ATLaser
+            {
+                range = 170f,
+                accuracy = 0.8f
+            };
             _type = "gun";
             _sprite = new SpriteMap("rcController", 32, 32);
             graphic = _sprite;
@@ -87,10 +89,10 @@ namespace DuckGame
                     {
                         if (_car.owner == null)
                             Fondle(_car);
-                        _car.moveLeft = owner.inputProfile.Down("LEFT");
-                        _car.moveRight = owner.inputProfile.Down("RIGHT");
-                        _car.jump = owner.inputProfile.Pressed("JUMP");
-                        if (owner.inputProfile.Pressed("GRAB"))
+                        _car.moveLeft = owner.inputProfile.Down(Triggers.Left);
+                        _car.moveRight = owner.inputProfile.Down(Triggers.Right);
+                        _car.jump = owner.inputProfile.Pressed(Triggers.Jump);
+                        if (owner.inputProfile.Pressed(Triggers.Grab))
                         {
                             Fondle(_car);
                             _car.Destroy();

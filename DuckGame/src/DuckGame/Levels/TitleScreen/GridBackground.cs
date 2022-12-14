@@ -7,6 +7,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace DuckGame
 {
@@ -24,18 +25,13 @@ namespace DuckGame
             float y = 230f;
             _effect = new BasicEffect(Graphics.device)
             {
-                View = (Microsoft.Xna.Framework.Matrix)Matrix.CreateLookAt(new Vec3(0f, 0f, 500f), new Vec3(0f, 0f, 0f), Vec3.Up)
+                View = (Microsoft.Xna.Framework.Matrix)Matrix.CreateLookAt(new Vec3(0f, 0f, 500f), new Vec3(0f, 0f, 0f), Vec3.Up),
+                Projection = Matrix.CreatePerspectiveFieldOfView((float)Math.PI / 4.0f, (float)Graphics.viewport.Width / (float)Graphics.viewport.Height, 0.01f, 100000),
+
+                Texture = (Texture2D)new Sprite("grid").texture,
+                TextureEnabled = true,
+                VertexColorEnabled = true
             };
-            BasicEffect effect = _effect;
-            Viewport viewport = Graphics.viewport;
-            double width = viewport.Width;
-            viewport = Graphics.viewport;
-            double height = viewport.Height;
-            Microsoft.Xna.Framework.Matrix perspectiveFieldOfView = (Microsoft.Xna.Framework.Matrix)Matrix.CreatePerspectiveFieldOfView(0.7853982f, (float)(width / height), 0.01f, 100000f);
-            effect.Projection = perspectiveFieldOfView;
-            _effect.Texture = (Texture2D)new Sprite("grid").texture;
-            _effect.TextureEnabled = true;
-            _effect.VertexColorEnabled = true;
             _vertices[0].Position = (Vector3)new Vec3(0f, y, 0f);
             _vertices[0].TextureCoordinate = (Vector2)new Vec2(0f, 0f);
             _vertices[0].Color = (Microsoft.Xna.Framework.Color)new Color(1f, 1f, 1f, 1f);

@@ -1942,8 +1942,8 @@ namespace DuckGame
                     {
                         bool enteringText = _core.enteringText;
                         _core.enteringText = false;
-                        int num2 = !(Input.Down("CHAT") && !WasDownLastFrame) ? 0 : (!Keyboard.alt ? 1 : (!Keyboard.Pressed(Keys.Enter) ? 1 : 0)); // Replaced !(Input.Pressed("CHAT")) ? with that because Press can cause issues with it auto trying to close 
-                        WasDownLastFrame = Input.Down("CHAT");
+                        int num2 = !(Input.Down(Triggers.Chat) && !WasDownLastFrame) ? 0 : (!Keyboard.alt ? 1 : (!Keyboard.Pressed(Keys.Enter) ? 1 : 0)); // Replaced !(Input.Pressed(Triggers.Chat)) ? with that because Press can cause issues with it auto trying to close 
+                        WasDownLastFrame = Input.Down(Triggers.Chat);
                         _core.enteringText = enteringText;
                         if (num2 != 0)
                         {
@@ -2033,9 +2033,9 @@ namespace DuckGame
                     {
                         if (profile2.duck == null || profile2.duck.dead)
                         {
-                            if (profile2.inputProfile.Pressed("QUACK"))
+                            if (profile2.inputProfile.Pressed(Triggers.Quack))
                                 profile2.netData.Set("quack", true);
-                            else if (profile2.inputProfile.Released("QUACK"))
+                            else if (profile2.inputProfile.Released(Triggers.Quack))
                                 profile2.netData.Set("quack", false);
                         }
                         if (profile2.slotType == SlotType.Spectator)
@@ -2050,11 +2050,11 @@ namespace DuckGame
                                         if (profile2.inputProfile.hasMotionAxis)
                                             leftTrigger += profile2.inputProfile.motionAxis;
                                         profile2.netData.Set("quackPitch", leftTrigger);
-                                        if (profile2.inputProfile.Pressed("RAGDOLL"))
+                                        if (profile2.inputProfile.Pressed(Triggers.Ragdoll))
                                             profile2.netData.Set("spectatorHat", !profile2.netData.Get("spectatorHat", true));
-                                        if (profile2.inputProfile.Pressed("STRAFE") && !profile2.inputProfile.Down("RAGDOLL"))
+                                        if (profile2.inputProfile.Pressed(Triggers.Strafe) && !profile2.inputProfile.Down(Triggers.Ragdoll))
                                             profile2.netData.Set("spectatorFlip", !profile2.netData.Get("spectatorFlip", false));
-                                        if (profile2.inputProfile.Pressed("GRAB"))
+                                        if (profile2.inputProfile.Pressed(Triggers.Grab))
                                         {
                                             profile2.netData.Set("spectatorBeverage", (sbyte)(profile2.netData.Get<sbyte>("spectatorBeverage", -1) + 1));
                                             if (profile2.netData.Get<sbyte>("spectatorBeverage", -1) > 13)
@@ -2062,7 +2062,7 @@ namespace DuckGame
                                         }
                                         if (profile2.netData.Get<sbyte>("spectatorPersona", -1) == -1)
                                             profile2.netData.Set("spectatorPersona", (sbyte)profile2.persona.index);
-                                        if (profile2.inputProfile.Down("RAGDOLL") && profile2.inputProfile.Pressed("STRAFE") || profile2.inputProfile.Down("STRAFE") && profile2.inputProfile.Pressed("RAGDOLL"))
+                                        if (profile2.inputProfile.Down(Triggers.Ragdoll) && profile2.inputProfile.Pressed(Triggers.Strafe) || profile2.inputProfile.Down(Triggers.Strafe) && profile2.inputProfile.Pressed(Triggers.Ragdoll))
                                         {
                                             profile2.netData.Set("spectatorPersona", (sbyte)(profile2.netData.Get<sbyte>("spectatorPersona", -1) + 1));
                                             if (profile2.netData.Get<sbyte>("spectatorPersona", 0) > 7)
@@ -2072,18 +2072,18 @@ namespace DuckGame
                                         Vec2 pValue = Vec2.Zero;
                                         if (profile2.inputProfile.leftStick.length < 0.05f)
                                         {
-                                            if (profile2.inputProfile.Down("LEFT"))
+                                            if (profile2.inputProfile.Down(Triggers.Left))
                                                 pValue += new Vec2(-1f, 0f);
-                                            if (profile2.inputProfile.Down("RIGHT"))
+                                            if (profile2.inputProfile.Down(Triggers.Right))
                                                 pValue += new Vec2(1f, 0f);
-                                            if (profile2.inputProfile.Down("DOWN"))
+                                            if (profile2.inputProfile.Down(Triggers.Down))
                                                 pValue += new Vec2(0f, -1f);
-                                            if (profile2.inputProfile.Down("UP"))
+                                            if (profile2.inputProfile.Down(Triggers.Up))
                                                 pValue += new Vec2(0f, 1f);
                                         }
                                         else
                                             pValue = profile2.inputProfile.leftStick;
-                                        if (profile2.inputProfile.Down("SHOOT"))
+                                        if (profile2.inputProfile.Down(Triggers.Shoot))
                                         {
                                             profile2.netData.Set("spectatorBob", pValue);
                                             break;
@@ -2098,7 +2098,7 @@ namespace DuckGame
                         profile2.netData.Set("gameInFocus", Graphics.inFocus);
                         profile2.netData.SetFiltered("chatting", _core.enteringText);
                         profile2.netData.Set("consoleOpen", DevConsole.open);
-                        if (MonoMain.pauseMenu == null && (_ducknetUIGroup == null || !_ducknetUIGroup.open) && profile2.inputProfile.Pressed("START") && !flag2 && !flag3 && (Network.InLobby() || Network.InGameLevel()) && (!(Level.current is TeamSelect2) || !(Level.current as TeamSelect2).HasBoxOpen(profile2)))
+                        if (MonoMain.pauseMenu == null && (_ducknetUIGroup == null || !_ducknetUIGroup.open) && profile2.inputProfile.Pressed(Triggers.Start) && !flag2 && !flag3 && (Network.InLobby() || Network.InGameLevel()) && (!(Level.current is TeamSelect2) || !(Level.current as TeamSelect2).HasBoxOpen(profile2)))
                         {
                             OpenMenu(profile2);
                             flag3 = true;

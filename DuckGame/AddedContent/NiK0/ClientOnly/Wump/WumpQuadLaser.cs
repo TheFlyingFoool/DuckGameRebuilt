@@ -32,8 +32,10 @@ namespace DuckGame
                 Vec2 vec = Offset(barrelOffset);
                 if (isServerForObject)
                 {
-                    WumpQuadLaserBullet quadLaserBullet = new WumpQuadLaserBullet(vec.x, vec.y, barrelVector * 16);
-                    quadLaserBullet.killThingType = GetType();
+                    WumpQuadLaserBullet quadLaserBullet = new WumpQuadLaserBullet(vec.x, vec.y, barrelVector * 16)
+                    {
+                        killThingType = GetType()
+                    };
                     if (infiniteAmmoVal) quadLaserBullet.theholysee = true;
                     Level.Add(quadLaserBullet);
                     if (duck != null)

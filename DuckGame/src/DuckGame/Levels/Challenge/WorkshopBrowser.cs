@@ -56,22 +56,22 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (Input.Pressed("UP") && _selectedGroup > 0)
+            if (Input.Pressed(Triggers.Up) && _selectedGroup > 0)
             {
                 SFX.Play("rainpop");
                 --_selectedGroup;
             }
-            if (Input.Pressed("DOWN") && _selectedGroup < groups.Count - 1)
+            if (Input.Pressed(Triggers.Down) && _selectedGroup < groups.Count - 1)
             {
                 SFX.Play("rainpop");
                 ++_selectedGroup;
             }
-            if (Input.Pressed("LEFT") && _selectedItem > 0)
+            if (Input.Pressed(Triggers.Left) && _selectedItem > 0)
             {
                 SFX.Play("rainpop");
                 --_selectedItem;
             }
-            if (Input.Pressed("RIGHT") && _selectedItem < 8)
+            if (Input.Pressed(Triggers.Right) && _selectedItem < 8)
             {
                 SFX.Play("rainpop");
                 ++_selectedItem;
@@ -80,9 +80,9 @@ namespace DuckGame
                 _selectedItem = groups[_selectedGroup].items.Count - 1;
             if (_selectedItem < 0)
                 _selectedItem = 0;
-            if (Input.Pressed("SELECT"))
+            if (Input.Pressed(Triggers.Select))
                 _openedItem = groups[_selectedGroup].items[_selectedItem];
-            if (Input.Pressed("CANCEL"))
+            if (Input.Pressed(Triggers.Cancel))
                 _openedItem = null;
             base.Update();
         }

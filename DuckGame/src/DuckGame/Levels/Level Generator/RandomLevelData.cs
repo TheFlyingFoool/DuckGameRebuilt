@@ -345,7 +345,7 @@ namespace DuckGame
                     Thing thing1 = ProcessThing(t1, x, y);
                     if (thing1 != null)
                     {
-                        if (!(thing1 is ThingContainer) && Level.symmetry && (this.posBeforeTranslate.x - 8f < 80f || this.posBeforeTranslate.x - 8f > 96f))
+                        if (!(thing1 is ThingContainer) && Level.symmetry && (posBeforeTranslate.x - 8f < 80f || posBeforeTranslate.x - 8f > 96f))
                         {
                             Thing t2 = Thing.LoadThing(node, false);
                             if (t2 != null)

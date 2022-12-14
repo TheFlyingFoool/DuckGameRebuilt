@@ -91,11 +91,11 @@ namespace DuckGame
         {
             if (_selected)
             {
-                if (InputProfile.active.Pressed("MENULEFT"))
+                if (InputProfile.active.Pressed(Triggers.MenuLeft))
                     --_selectedCardIndex;
-                else if (InputProfile.active.Pressed("MENURIGHT"))
+                else if (InputProfile.active.Pressed(Triggers.MenuRight))
                     ++_selectedCardIndex;
-                else if (InputProfile.active.Pressed("SELECT"))
+                else if (InputProfile.active.Pressed(Triggers.Select))
                     _listener.CardSelected(_cards[_selectedCardIndex]);
             }
             if (_selectedCardIndex >= _cards.Count())

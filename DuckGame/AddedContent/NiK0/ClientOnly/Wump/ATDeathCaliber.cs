@@ -22,7 +22,7 @@
         {
             Level.Add(new SniperShell(x, y)
             {
-                hSpeed = (float)dir * (1.5f + Rando.Float(1f))
+                hSpeed = dir * (1.5f + Rando.Float(1f))
             });
         }
     }

@@ -421,7 +421,7 @@ namespace DuckGame
             int num = ReadUShort();
             if (num == ushort.MaxValue)
             {
-                int bitOffset = this._bitOffsetPosition;
+                int bitOffset = _bitOffsetPosition;
                 int position = this.position;
                 if (ReadUShort() == 42252)
                 {

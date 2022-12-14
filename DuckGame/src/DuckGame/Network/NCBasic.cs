@@ -198,12 +198,12 @@ namespace DuckGame
                 NCBasicConnection ncBasicConnection1 = _basicConnections.FirstOrDefault(x => x.connection.ToString() == endPoint.ToString());
                 if (ncBasicConnection1 != null)
                     return ncBasicConnection1;
-                NCBasicConnection ncBasicConnection2 = new NCBasicConnection()
+                NCBasicConnection ncBasicConnection2 = new NCBasicConnection
                 {
                     connection = endPoint,
-                    status = NCBasicStatus.TryingToConnect
+                    status = NCBasicStatus.TryingToConnect,
+                    isHost = isHost
                 };
-                ncBasicConnection2.isHost = isHost;
                 _basicConnections.Add(ncBasicConnection2);
                 _pendingMessages.Enqueue(new NCError("client connecting to " + endPoint.ToString() + ".", NCErrorType.Message));
                 return ncBasicConnection2;

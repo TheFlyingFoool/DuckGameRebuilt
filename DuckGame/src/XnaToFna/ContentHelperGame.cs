@@ -18,15 +18,15 @@ namespace XnaToFna
 
         public Thread GameThread { get; protected set; }
 
-        public ContentHelperGame() => this.GraphicsDeviceManager = new GraphicsDeviceManager(this);
+        public ContentHelperGame() => GraphicsDeviceManager = new GraphicsDeviceManager(this);
 
         protected override void Initialize()
         {
-            this.Window.Title = "XnaToFna ContentHelper Game (ignore me!)";
+            Window.Title = "XnaToFna ContentHelper Game (ignore me!)";
             base.Initialize();
-            while (this.ActionQueue.Count > 0)
-                this.ActionQueue.Dequeue()();
-            this.Exit();
+            while (ActionQueue.Count > 0)
+                ActionQueue.Dequeue()();
+            Exit();
         }
 
         protected override void Dispose(bool disposing)
@@ -37,7 +37,7 @@ namespace XnaToFna
             }
             catch (Exception ex)
             {
-                Console.WriteLine(this.GetType().FullName + " failed disposing: " + ex);
+                Console.WriteLine(GetType().FullName + " failed disposing: " + ex);
             }
         }
     }

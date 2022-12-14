@@ -33,7 +33,7 @@ namespace DuckGame
         public Depth Add(int val)
         {
             // return ((int)((this.value + Depth.kSpanIncrement / 20f * (float)val) * 1000)) / 1000f; //idk man fck floating points
-            return new Depth(this.value + kSpanIncrement / 20f * val, this.span);
+            return new Depth(value + kSpanIncrement / 20f * val, span);
         }
 
         public static implicit operator Depth(float val) => new Depth(val);
