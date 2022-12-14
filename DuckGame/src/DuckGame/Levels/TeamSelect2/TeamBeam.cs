@@ -44,7 +44,7 @@ namespace DuckGame
 
         public void TakeDuck(Duck d)
         {
-            if (_ducks.Any<BeamDuck>(t => t.duck == d))
+            if (_ducks.Any(t => t.duck == d))
                 return;
             float num = d.y >= 100.0 ? (d.y >= 150.0 ? 220f : 130f) : 40f;
             SFX.Play("stepInBeam");

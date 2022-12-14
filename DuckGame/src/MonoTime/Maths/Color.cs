@@ -251,7 +251,7 @@ namespace DuckGame
             }
             catch (Exception)
             {
-                return Color.White;
+                return White;
             }
         }
 

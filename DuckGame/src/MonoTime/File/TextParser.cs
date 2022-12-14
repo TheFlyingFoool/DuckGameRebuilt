@@ -32,14 +32,14 @@ namespace DuckGame
         {
             if (index < s.Length && stop.HasValue && s[index] == stop.Value)
                 return null;
-            while (index < s.Length && TextParser._wordSeparators.Contains(s[index]))
+            while (index < s.Length && _wordSeparators.Contains(s[index]))
             {
                 if (stop.HasValue && s[index] == stop.Value)
                     return null;
                 ++index;
             }
             string str = "";
-            while (index < s.Length && !TextParser._wordSeparators.Contains(s[index]) && (!stop.HasValue || s[index] != stop.Value))
+            while (index < s.Length && !_wordSeparators.Contains(s[index]) && (!stop.HasValue || s[index] != stop.Value))
             {
                 str += s[index].ToString();
                 ++index;
@@ -62,15 +62,15 @@ namespace DuckGame
             return str;
         }
 
-        public static void SkipWord(string s, ref int index) => TextParser.ReadNextWord(s, ref index);
+        public static void SkipWord(string s, ref int index) => ReadNextWord(s, ref index);
 
         public static string ReverseReadWord(string s, ref int index)
         {
             --index;
-            while (index >= 0 && TextParser._wordSeparators.Contains(s[index]))
+            while (index >= 0 && _wordSeparators.Contains(s[index]))
                 --index;
             string str = "";
-            while (index >= 0 && !TextParser._wordSeparators.Contains(s[index]))
+            while (index >= 0 && !_wordSeparators.Contains(s[index]))
             {
                 str = str.Insert(0, s[index].ToString() ?? "");
                 --index;
@@ -79,11 +79,11 @@ namespace DuckGame
             return str;
         }
 
-        public static void StepBackWord(string s, ref int index) => TextParser.ReverseReadWord(s, ref index);
+        public static void StepBackWord(string s, ref int index) => ReverseReadWord(s, ref index);
 
         public static char ReadNextCharacter(string s, ref int index)
         {
-            while (index < s.Length && TextParser._wordSeparators.Contains(s[index]))
+            while (index < s.Length && _wordSeparators.Contains(s[index]))
                 ++index;
             return index < s.Length ? s[index] : ' ';
         }

@@ -119,13 +119,13 @@ namespace DuckGame
 
         public bool SetData(BitBuffer data, bool pHeaderOnly)
         {
-            BinaryClassChunk.DeserializeHeader(GetType(), data, this);
+            DeserializeHeader(GetType(), data, this);
             if (!pHeaderOnly && _result == DeserializeResult.HeaderDeserialized)
                 Deserialize();
             return _result == DeserializeResult.HeaderDeserialized;
         }
 
-        public static T FromData<T>(BitBuffer data) where T : BinaryClassChunk => BinaryClassChunk.FromData<T>(data, false);
+        public static T FromData<T>(BitBuffer data) where T : BinaryClassChunk => FromData<T>(data, false);
 
         public static T FromData<T>(BitBuffer data, bool pHeaderOnly) where T : BinaryClassChunk
         {
@@ -134,7 +134,7 @@ namespace DuckGame
             return (T)(object)instance;
         }
 
-        private Array DeserializeArray(System.Type type, System.Type arrayType, BitBuffer data)
+        private Array DeserializeArray(Type type, Type arrayType, BitBuffer data)
         {
             int length = _data.ReadInt();
             Array instance = Array.CreateInstance(arrayType, length);
@@ -146,7 +146,7 @@ namespace DuckGame
                 {
                     if (typeof(BinaryClassChunk).IsAssignableFrom(arrayType))
                     {
-                        BinaryClassChunk binaryClassChunk = BinaryClassChunk.DeserializeHeader(arrayType, _data, root: false, skipData: true);
+                        BinaryClassChunk binaryClassChunk = DeserializeHeader(arrayType, _data, root: false, skipData: true);
                         binaryClassChunk?.Deserialize();
                         obj = binaryClassChunk;
                     }
@@ -171,11 +171,11 @@ namespace DuckGame
             {
                 _data.position = (int)_offset;
                 ushort num1 = _data.ReadUShort();
-                System.Type type = GetType();
+                Type type = GetType();
                 for (int index = 0; index < num1; ++index)
                 {
                     string str = _data.ReadString();
-                    System.Type key = null;
+                    Type key = null;
                     ClassMember classMember = null;
                     byte num2 = 0;
                     if (str.StartsWith("@"))
@@ -223,8 +223,8 @@ namespace DuckGame
                                 int position = _data.position;
                                 if (typeof(BinaryClassChunk).IsAssignableFrom(key))
                                 {
-                                    BinaryClassChunk element = BinaryClassChunk.DeserializeHeader(key, _data, root: false);
-                                    if (BinaryClassChunk.fullDeserializeMode && element._result == DeserializeResult.HeaderDeserialized)
+                                    BinaryClassChunk element = DeserializeHeader(key, _data, root: false);
+                                    if (fullDeserializeMode && element._result == DeserializeResult.HeaderDeserialized)
                                         element.Deserialize();
                                     if (classMember == null)
                                         _extraProperties.Add(str, element);
@@ -289,7 +289,7 @@ namespace DuckGame
         }
 
         public static BinaryClassChunk DeserializeHeader(
-          System.Type t,
+          Type t,
           BitBuffer data,
           BinaryClassChunk target = null,
           bool root = true,
@@ -303,7 +303,7 @@ namespace DuckGame
                 if (root)
                 {
                     num1 = data.ReadLong();
-                    if (num1 != BinaryClassChunk.MagicNumber(t))
+                    if (num1 != MagicNumber(t))
                     {
                         target._result = DeserializeResult.InvalidMagicNumber;
                         return target;
@@ -311,7 +311,7 @@ namespace DuckGame
                     target._checksum = data.ReadUInt();
                 }
                 ushort num2 = data.ReadUShort();
-                ushort num3 = BinaryClassChunk.ChunkVersion(t);
+                ushort num3 = ChunkVersion(t);
                 bool flag = true;
                 if (num2 != num3)
                 {
@@ -332,8 +332,8 @@ namespace DuckGame
                 target._version = num2;
                 if (num2 > 1 && target is LevelData && data.ReadBool())
                 {
-                    System.Type type = Editor.GetType(data.ReadString());
-                    target.SetExtraHeaderInfo(BinaryClassChunk.DeserializeHeader(type, data, root: false));
+                    Type type = Editor.GetType(data.ReadString());
+                    target.SetExtraHeaderInfo(DeserializeHeader(type, data, root: false));
                     if (target.GetExtraHeaderInfo() != null && target.GetExtraHeaderInfo()._result == DeserializeResult.HeaderDeserialized)
                         target.GetExtraHeaderInfo().Deserialize();
                 }
@@ -375,7 +375,7 @@ namespace DuckGame
             return (T)(object)chunk;
         }
 
-        private void SerializeArray(Array array, System.Type arrayType, BitBuffer data)
+        private void SerializeArray(Array array, Type arrayType, BitBuffer data)
         {
             data.Write(array.Length);
             for (int index = 0; index < array.Length; ++index)
@@ -399,7 +399,7 @@ namespace DuckGame
             _serializedData = data;
             if (data.allowPacking)
                 throw new Exception("This class does not support serialization with a packed bit buffer. Construct the buffer with allowPacking set to false.");
-            System.Type type1 = GetType();
+            Type type1 = GetType();
             List<ClassMember> members = Editor.GetMembers(type1);
             List<BinaryClassMember> binaryClassMemberList = new List<BinaryClassMember>();
             foreach (ClassMember classMember in members)
@@ -444,12 +444,12 @@ namespace DuckGame
             }
             if (root)
             {
-                long val = BinaryClassChunk.MagicNumber(type1);
+                long val = MagicNumber(type1);
                 data.Write(val);
                 data.Write(0U);
             }
-            data.Write(BinaryClassChunk.ChunkVersion(type1));
-            if (BinaryClassChunk.ChunkVersion(type1) == 2)
+            data.Write(ChunkVersion(type1));
+            if (ChunkVersion(type1) == 2)
             {
                 if (GetExtraHeaderInfo() != null)
                 {
@@ -476,7 +476,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        System.Type type2 = binaryClassMember.data.GetType();
+                        Type type2 = binaryClassMember.data.GetType();
                         if (BinaryClassMember.typeMap.TryGetValue(type2, out val))
                             val = (byte)(val << 1 | 1);
                         data.Write(val);
@@ -535,17 +535,17 @@ namespace DuckGame
             return data;
         }
 
-        public static long MagicNumber<T>() => BinaryClassChunk.MagicNumber(typeof(T));
+        public static long MagicNumber<T>() => MagicNumber(typeof(T));
 
-        public static long MagicNumber(System.Type t)
+        public static long MagicNumber(Type t)
         {
             object[] customAttributes = t.GetCustomAttributes(typeof(MagicNumberAttribute), true);
             return customAttributes.Length != 0 ? (customAttributes[0] as MagicNumberAttribute).magicNumber : 0L;
         }
 
-        public static ushort ChunkVersion<T>() => BinaryClassChunk.ChunkVersion(typeof(T));
+        public static ushort ChunkVersion<T>() => ChunkVersion(typeof(T));
 
-        public static ushort ChunkVersion(System.Type t)
+        public static ushort ChunkVersion(Type t)
         {
             object[] customAttributes = t.GetCustomAttributes(typeof(ChunkVersionAttribute), true);
             return customAttributes.Length != 0 ? (customAttributes[0] as ChunkVersionAttribute).version : (ushort)0;

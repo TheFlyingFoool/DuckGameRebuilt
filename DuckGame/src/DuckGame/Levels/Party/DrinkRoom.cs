@@ -31,7 +31,7 @@ namespace DuckGame
                 _fade = true;
             Graphics.fade = Lerp.Float(Graphics.fade, _fade ? 0f : 1f, 0.1f);
             if (_fade && Graphics.fade < 0.01f)
-                Level.current = _next;
+                current = _next;
             base.Update();
         }
 

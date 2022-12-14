@@ -77,12 +77,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		#region IEnumerator Methods
 
-		IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return elements.GetEnumerator();
 		}
 
-		IEnumerator<EffectPass> System.Collections.Generic.IEnumerable<EffectPass>.GetEnumerator()
+		IEnumerator<EffectPass> IEnumerable<EffectPass>.GetEnumerator()
 		{
 			return elements.GetEnumerator();
 		}

@@ -35,7 +35,7 @@ namespace XnaToFna
         {
             if (fullName.StartsWith("Steam,") || fullName.StartsWith("Steam.Debug,"))
             {
-                string path = DuckGame.Program.GameDirectory + "DGSteam.dll";
+                string path = Program.GameDirectory + "DGSteam.dll";
                 return MonoModExt.ReadModule(path, this.GenReaderParameters(false, path));
             }
             return base.DefaultMissingDependencyResolver(mod, main, name, fullName);

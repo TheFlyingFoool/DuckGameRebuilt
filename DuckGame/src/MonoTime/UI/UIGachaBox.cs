@@ -58,7 +58,7 @@ namespace DuckGame
       "ten"
     };
 
-        public static Furniture GetRandomFurniture(int minRarity) => UIGachaBox.GetRandomFurniture(minRarity, 1)[0];
+        public static Furniture GetRandomFurniture(int minRarity) => GetRandomFurniture(minRarity, 1)[0];
 
         public static List<Furniture> GetRandomFurniture(
           int minRarity,
@@ -70,7 +70,7 @@ namespace DuckGame
           bool rareDupesChance = false)
         {
             List<Furniture> randomFurniture = new List<Furniture>();
-            IOrderedEnumerable<Furniture> source = RoomEditor.AllFurnis().Where<Furniture>(x => x.rarity >= minRarity).OrderBy<Furniture, int>(x => Rando.Int(999999));
+            IOrderedEnumerable<Furniture> source = RoomEditor.AllFurnis().Where(x => x.rarity >= minRarity).OrderBy(x => Rando.Int(999999));
             for (int index = 0; index < num; ++index)
             {
                 Furniture winner = null;
@@ -89,7 +89,7 @@ namespace DuckGame
                             _max = 25;
                         if (furniture3.rarity >= Rarity.SuperRare)
                             _max = 10;
-                        if (UIGachaBox.useNumGachas && Global.data.numGachas % 8 == 0)
+                        if (useNumGachas && Global.data.numGachas % 8 == 0)
                             _max *= 4;
                         if (avoidDupes)
                             _max *= 8;
@@ -122,7 +122,7 @@ namespace DuckGame
                     --numDupes;
                 randomFurniture.Add(winner);
                 if (index != num - 1)
-                    source = source.Where<Furniture>(x => x != winner).OrderBy<Furniture, int>(x => Rando.Int(999999));
+                    source = source.Where(x => x != winner).OrderBy(x => Rando.Int(999999));
             }
             return randomFurniture;
         }
@@ -153,7 +153,7 @@ namespace DuckGame
             bool flag = false;
             if (Rando.Int(10) == 5)
                 flag = true;
-            _contains = UIGachaBox.GetRandomFurniture(_rare ? Rarity.VeryVeryRare : Rarity.Common, 1, flag ? 0.75f : (_rare ? 0.75f : 1f), true)[0];
+            _contains = GetRandomFurniture(_rare ? Rarity.VeryVeryRare : Rarity.Common, 1, flag ? 0.75f : (_rare ? 0.75f : 1f), true)[0];
             _rareCapsule = _contains.rarity >= Rarity.VeryVeryRare;
             if (_rareCapsule)
             {

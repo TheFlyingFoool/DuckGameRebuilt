@@ -93,7 +93,7 @@ namespace DuckGame
         public override int numTriggers => 2;
 
         public SwitchJoyConDual(int idx)
-          : base(idx, "Dual Joy-Con", "Joy-Con", SwitchJoyConDual._dualJoyImages)
+          : base(idx, "Dual Joy-Con", "Joy-Con", _dualJoyImages)
         {
         }
 

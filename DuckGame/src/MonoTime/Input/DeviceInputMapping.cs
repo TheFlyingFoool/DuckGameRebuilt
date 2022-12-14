@@ -40,7 +40,7 @@ namespace DuckGame
             }
         }
 
-        public List<InputDevice> devices => deviceName == "XBOX GAMEPAD" ? Input.GetInputDevices().Where<InputDevice>(x => x is XInputPad).ToList<InputDevice>() : Input.GetInputDevices().Where<InputDevice>(x => x.productName == deviceName && x.productGUID == deviceGUID).ToList<InputDevice>();
+        public List<InputDevice> devices => deviceName == "XBOX GAMEPAD" ? Input.GetInputDevices().Where(x => x is XInputPad).ToList() : Input.GetInputDevices().Where(x => x.productName == deviceName && x.productGUID == deviceGUID).ToList();
 
         public Sprite GetSprite(int mapping)
         {

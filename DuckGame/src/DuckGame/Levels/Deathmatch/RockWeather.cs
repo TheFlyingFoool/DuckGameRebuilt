@@ -520,7 +520,7 @@ namespace DuckGame
         public static bool alwaysRainbow = false;
         public static bool neverRainbow = false;
 
-        public static Weather weather => RockWeather._weather;
+        public static Weather weather => _weather;
 
         private RockWeatherState GetWeatherState(float time, bool lerp = true)
         {
@@ -528,7 +528,7 @@ namespace DuckGame
             RockWeatherState rockWeatherState2 = null;
             float num1 = 0f;
             int index = 0;
-            switch (RockWeather._weather)
+            switch (_weather)
             {
                 case Weather.Sunny:
                     num1 = 1f / timeOfDayColorMultMap.Count;
@@ -555,7 +555,7 @@ namespace DuckGame
                     rockWeatherState2 = index + 1 <= timeOfDayColorMultMapRaining.Count - 1 ? timeOfDayColorMultMapRaining[index + 1] : timeOfDayColorMultMapRaining[0];
                     break;
             }
-            float num2 = Maths.NormalizeSection(RockWeather._timeOfDay, num1 * index, num1 * (index + 1));
+            float num2 = Maths.NormalizeSection(_timeOfDay, num1 * index, num1 * (index + 1));
             RockWeatherState weatherState = new RockWeatherState();
             if (_lastAppliedState == null)
                 _lastAppliedState = rockWeatherState1.Copy();
@@ -597,10 +597,10 @@ namespace DuckGame
             Layer.Background.colorAdd = state.add * Layer.Background.fade;
             _board.fieldAddColor = state.add * Layer.Game.fade;
             Level.current.backgroundColor = new Color(state.sky.x, state.sky.y, state.sky.z) * Layer.Game.fade;
-            RockWeather.lightOpacity = state.lightOpacity;
-            RockWeather.sunPos = state.sunPos;
-            RockWeather.sunGlow = state.sunGlow;
-            RockWeather.sunOpacity = state.sunOpacity;
+            lightOpacity = state.lightOpacity;
+            sunPos = state.sunPos;
+            sunGlow = state.sunGlow;
+            sunOpacity = state.sunOpacity;
             _lastAppliedState = state;
         }
 
@@ -609,7 +609,7 @@ namespace DuckGame
         {
             layer = Layer.Foreground;
             _board = board;
-            if (RockWeather._weather == Weather.Snowing)
+            if (_weather == Weather.Snowing)
             {
                 _skyColor = skyColor;
                 _enviroColor = winterColor;
@@ -622,67 +622,67 @@ namespace DuckGame
             RainParticle.splash = new SpriteMap("rainSplash", 8, 8);
         }
 
-        public void Start() => ApplyWeatherState(GetWeatherState(RockWeather._timeOfDay, false));
+        public void Start() => ApplyWeatherState(GetWeatherState(_timeOfDay, false));
 
         public BitBuffer NetSerialize()
         {
             BitBuffer bitBuffer = new BitBuffer();
-            bitBuffer.Write(RockWeather._timeOfDay);
-            bitBuffer.Write((byte)RockWeather._weather);
+            bitBuffer.Write(_timeOfDay);
+            bitBuffer.Write((byte)_weather);
             return bitBuffer;
         }
 
         public void NetDeserialize(BitBuffer data)
         {
-            RockWeather._timeOfDay = data.ReadFloat();
-            RockWeather._weather = (Weather)data.ReadByte();
+            _timeOfDay = data.ReadFloat();
+            _weather = (Weather)data.ReadByte();
         }
 
         public static void TickWeather()
         {
-            RockWeather._timeOfDay += 6.17284E-06f;
-            RockWeather._weatherTime += 6.17284E-06f;
-            if (RockWeather._weather == Weather.Raining)
-                RockWeather._timeRaining += Maths.IncFrameTimer();
+            _timeOfDay += 6.17284E-06f;
+            _weatherTime += 6.17284E-06f;
+            if (_weather == Weather.Raining)
+                _timeRaining += Maths.IncFrameTimer();
             if (_timeOfDay <= 1.0)
                 return;
-            RockWeather._timeOfDay = 0f;
+            _timeOfDay = 0f;
         }
 
         public static void Reset()
         {
-            RockWeather._timeOfDay = Rando.Float(0.35f, 0.42f);
-            RockWeather._weatherTime = 1f;
-            RockWeather._weather = Weather.Sunny;
-            RockWeather.alwaysRainbow = false;
-            RockWeather.neverRainbow = false;
+            _timeOfDay = Rando.Float(0.35f, 0.42f);
+            _weatherTime = 1f;
+            _weather = Weather.Sunny;
+            alwaysRainbow = false;
+            neverRainbow = false;
             DateTime localTime = MonoMain.GetLocalTime();
             if (localTime.Month < 3)
             {
-                RockWeather.snowChance = 0.1f;
+                snowChance = 0.1f;
                 if (localTime.Month < 2)
-                    RockWeather.snowChance = 0.05f;
-                RockWeather.rainChance = 3f / 500f;
+                    snowChance = 0.05f;
+                rainChance = 3f / 500f;
                 if (localTime.Month < 2)
-                    RockWeather.rainChance = 3f / 1000f;
+                    rainChance = 3f / 1000f;
             }
             else if (localTime.Month > 6)
             {
-                RockWeather.snowChance = 0.0001f;
+                snowChance = 0.0001f;
                 if (localTime.Month > 7)
                 {
-                    RockWeather.snowChance = 1f / 1000f;
+                    snowChance = 1f / 1000f;
                     if (localTime.Month > 8)
                     {
-                        RockWeather.snowChance = 0.01f;
+                        snowChance = 0.01f;
                         if (localTime.Month > 9)
                         {
-                            RockWeather.snowChance = 0.03f;
+                            snowChance = 0.03f;
                             if (localTime.Month > 10)
                             {
-                                RockWeather.snowChance = 0.08f;
+                                snowChance = 0.08f;
                                 if (localTime.Month == 12)
-                                    RockWeather.snowChance = 0.25f;
+                                    snowChance = 0.25f;
                             }
                         }
                     }
@@ -690,100 +690,100 @@ namespace DuckGame
             }
             if (localTime.Month > 3)
             {
-                RockWeather.rainChance = 0.08f;
+                rainChance = 0.08f;
                 if (localTime.Month > 5)
-                    RockWeather.rainChance = 0.02f;
+                    rainChance = 0.02f;
                 if (localTime.Month > 7)
-                    RockWeather.rainChance = 0.005f;
+                    rainChance = 0.005f;
                 if (localTime.Month > 8)
-                    RockWeather.rainChance = 1f / 1000f;
+                    rainChance = 1f / 1000f;
                 if (localTime.Month > 10)
-                    RockWeather.rainChance = 0f;
+                    rainChance = 0f;
             }
             if (localTime.Month == 12 && Rando.Float(1f) > 0.85f)
-                RockWeather._weather = Weather.Snowing;
+                _weather = Weather.Snowing;
             if (localTime.Month == 4 && Rando.Float(1f) > 0.92)
             {
-                RockWeather._weather = Weather.Raining;
-                RockWeather.rainChance = 0.2f;
+                _weather = Weather.Raining;
+                rainChance = 0.2f;
             }
             if (localTime.Month == 12 && localTime.Day == 25)
-                RockWeather._weather = Weather.Snowing;
+                _weather = Weather.Snowing;
             if (localTime.Month == 4 && localTime.Day == 20)
             {
-                RockWeather._weather = Weather.Raining;
-                RockWeather.neverRainbow = true;
+                _weather = Weather.Raining;
+                neverRainbow = true;
             }
             if (localTime.Month == 7 && Rando.Int(10000) == 1)
             {
-                RockWeather._weather = Weather.Snowing;
-                RockWeather.snowChance = 0.1f;
+                _weather = Weather.Snowing;
+                snowChance = 0.1f;
             }
             if (localTime.Month == 3 && localTime.Day == 9)
             {
-                RockWeather._weather = Weather.Sunny;
-                RockWeather.alwaysRainbow = true;
-                RockWeather.rainChance = 0f;
-                RockWeather.snowChance = 0f;
+                _weather = Weather.Sunny;
+                alwaysRainbow = true;
+                rainChance = 0f;
+                snowChance = 0f;
             }
             if (localTime.Month == 10 && localTime.Day == 24)
             {
-                RockWeather._weather = Weather.Sunny;
-                RockWeather.alwaysRainbow = true;
-                RockWeather.rainChance = 0f;
-                RockWeather.snowChance = 0f;
+                _weather = Weather.Sunny;
+                alwaysRainbow = true;
+                rainChance = 0f;
+                snowChance = 0f;
             }
             if (localTime.Year == 2030)
             {
-                RockWeather._weather = Weather.Snowing;
-                RockWeather.snowChance = 1f;
-                RockWeather.rainChance = 0f;
+                _weather = Weather.Snowing;
+                snowChance = 1f;
+                rainChance = 0f;
             }
             if (localTime.Year == 2031 && localTime.Month <= 3)
             {
-                RockWeather._weather = Weather.Raining;
-                RockWeather.snowChance = 0f;
-                RockWeather.rainChance = 1f;
+                _weather = Weather.Raining;
+                snowChance = 0f;
+                rainChance = 1f;
             }
             if (localTime.Year == 2031 && localTime.Month == 4)
             {
-                RockWeather.alwaysRainbow = true;
-                RockWeather.sunshowers = 999999f;
+                alwaysRainbow = true;
+                sunshowers = 999999f;
             }
             if (localTime.Year != 2031 || localTime.Month <= 4)
                 return;
-            RockWeather.snowChance = 0f;
-            if (RockWeather._weather != Weather.Snowing)
+            snowChance = 0f;
+            if (_weather != Weather.Snowing)
                 return;
-            RockWeather._weather = Weather.Raining;
+            _weather = Weather.Raining;
         }
 
         public void SetWeather(Weather w)
         {
-            RockWeather._weather = w;
-            RockWeather._weatherTime = 0f;
+            _weather = w;
+            _weatherTime = 0f;
         }
 
         public override void Update()
         {
-            if (RockWeather.alwaysRainbow)
+            if (alwaysRainbow)
             {
-                RockWeather.rainbowFade = 1f;
-                RockWeather.rainbowTime = 1f;
+                rainbowFade = 1f;
+                rainbowTime = 1f;
             }
-            RockWeather.rainbowFade = Lerp.Float(RockWeather.rainbowFade, rainbowTime > 0.0 ? 1f : 0f, 1f / 1000f);
-            RockWeather.rainbowTime -= Maths.IncFrameTimer();
-            if (RockWeather._weather != Weather.Sunny)
-                RockWeather.rainbowTime -= Maths.IncFrameTimer() * 8f;
+            rainbowFade = Lerp.Float(rainbowFade, rainbowTime > 0.0 ? 1f : 0f, 1f / 1000f);
+            rainbowTime -= Maths.IncFrameTimer();
+            if (_weather != Weather.Sunny)
+                rainbowTime -= Maths.IncFrameTimer() * 8f;
             if (rainbowTime < 0.0)
-                RockWeather.rainbowTime = 0f;
-            if (RockWeather.neverRainbow)
-                RockWeather.rainbowFade = 0f;
-            RockWeatherState weatherState = GetWeatherState(RockWeather._timeOfDay);
-            rainbowLight = weatherState.rainbowLight * RockWeather.rainbowFade;
-            rainbowLight2 = weatherState.rainbowLight2 * RockWeather.rainbowFade;
+                rainbowTime = 0f;
+            if (neverRainbow)
+                rainbowFade = 0f;
+            RockWeatherState weatherState = GetWeatherState(_timeOfDay);
+            rainbowLight = weatherState.rainbowLight * rainbowFade;
+            rainbowLight2 = weatherState.rainbowLight2 * rainbowFade;
             ApplyWeatherState(weatherState);
-            RockWeather._prevWeatherLerp = Lerp.Float(RockWeather._prevWeatherLerp, 0f, 0.05f);
+            _prevWeatherLerp = Lerp.Float(_prevWeatherLerp, 0f, 0.05f);
             if (Network.isServer)
             {
                 wait += 3f / 1000f;
@@ -792,50 +792,50 @@ namespace DuckGame
                     wait = 0f;
                     if (_weatherTime > 0.1f)
                     {
-                        if (snowChance > 0.0 && RockWeather._weather != Weather.Snowing && Rando.Float(1f) > 1.0 - snowChance)
+                        if (snowChance > 0.0 && _weather != Weather.Snowing && Rando.Float(1f) > 1.0 - snowChance)
                         {
-                            RockWeather._prevWeatherLerp = 1f;
-                            RockWeather.sunshowers = 0f;
-                            RockWeather._prevWeather = RockWeather._weather;
-                            RockWeather._weather = Weather.Snowing;
+                            _prevWeatherLerp = 1f;
+                            sunshowers = 0f;
+                            _prevWeather = _weather;
+                            _weather = Weather.Snowing;
                             if (Network.isActive)
-                                Send.Message(new NMChangeWeather((byte)RockWeather._weather));
-                            RockWeather._weatherTime = 0f;
+                                Send.Message(new NMChangeWeather((byte)_weather));
+                            _weatherTime = 0f;
                         }
-                        if (rainChance > 0.0 && RockWeather._weather != Weather.Raining && Rando.Float(1f) > 1.0 - rainChance)
+                        if (rainChance > 0.0 && _weather != Weather.Raining && Rando.Float(1f) > 1.0 - rainChance)
                         {
-                            RockWeather._prevWeatherLerp = 1f;
-                            RockWeather.sunshowers = 0f;
-                            RockWeather._prevWeather = RockWeather._weather;
-                            RockWeather._weather = Weather.Raining;
+                            _prevWeatherLerp = 1f;
+                            sunshowers = 0f;
+                            _prevWeather = _weather;
+                            _weather = Weather.Raining;
                             if (Network.isActive)
-                                Send.Message(new NMChangeWeather((byte)RockWeather._weather));
-                            RockWeather._weatherTime = 0f;
+                                Send.Message(new NMChangeWeather((byte)_weather));
+                            _weatherTime = 0f;
                         }
-                        if (RockWeather._weather != Weather.Sunny && Rando.Float(1f) > 0.98f)
+                        if (_weather != Weather.Sunny && Rando.Float(1f) > 0.98f)
                         {
-                            RockWeather._prevWeatherLerp = 1f;
-                            if (RockWeather._weather == Weather.Raining)
+                            _prevWeatherLerp = 1f;
+                            if (_weather == Weather.Raining)
                             {
                                 if (_timeRaining > 900.0 && Rando.Float(1f) > 0.45f || Rando.Float(1f) > 0.95f)
-                                    RockWeather.rainbowTime = Rando.Float(30f, 240f);
+                                    rainbowTime = Rando.Float(30f, 240f);
                                 if (Rando.Float(1f) > 0.04f)
-                                    RockWeather.sunshowers = Rando.Float(0.1f, 60f);
+                                    sunshowers = Rando.Float(0.1f, 60f);
                             }
-                            RockWeather._timeRaining = 0f;
-                            RockWeather._prevWeather = RockWeather._weather;
-                            RockWeather._weather = Weather.Sunny;
+                            _timeRaining = 0f;
+                            _prevWeather = _weather;
+                            _weather = Weather.Sunny;
                             if (Network.isActive)
-                                Send.Message(new NMChangeWeather((byte)RockWeather._weather));
-                            RockWeather._weatherTime = 0f;
+                                Send.Message(new NMChangeWeather((byte)_weather));
+                            _weatherTime = 0f;
                         }
                     }
                 }
             }
-            RockWeather.sunshowers -= Maths.IncFrameTimer();
+            sunshowers -= Maths.IncFrameTimer();
             if (sunshowers <= 0.0)
-                RockWeather.sunshowers = 0f;
-            switch (RockWeather._weather)
+                sunshowers = 0f;
+            switch (_weather)
             {
                 case Weather.Snowing:
                     while (_particleWait <= 0.0)

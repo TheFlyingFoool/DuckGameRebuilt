@@ -136,19 +136,19 @@ namespace Microsoft.Xna.Framework.Content
 					parts.Add(part);
 
 					int jj = (int) j;
-					reader.ReadSharedResource<VertexBuffer>(
+					reader.ReadSharedResource(
 						delegate (VertexBuffer v)
 						{
 							parts[jj].VertexBuffer = v;
 						}
 					);
-					reader.ReadSharedResource<IndexBuffer>(
+					reader.ReadSharedResource(
 						delegate (IndexBuffer v)
 						{
 							parts[jj].IndexBuffer = v;
 						}
 					);
-					reader.ReadSharedResource<Effect>(
+					reader.ReadSharedResource(
 						delegate (Effect v)
 						{
 							parts[jj].Effect = v;

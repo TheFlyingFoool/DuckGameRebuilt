@@ -108,7 +108,7 @@ namespace DuckGame
                 string directory = configuration.directory;
                 DuckFile.CreatePath(directory);
                 string path = directory + "screenshot.png";
-                if (!System.IO.File.Exists(path))
+                if (!File.Exists(path))
                 {
                     if (configuration.modType == ModConfiguration.Type.MapPack && configuration.mapPack != null)
                     {
@@ -123,9 +123,9 @@ namespace DuckGame
                 }
                 if (path == null)
                     return "";
-                if (!System.IO.File.Exists(path))
+                if (!File.Exists(path))
                 {
-                    System.IO.File.Delete(path);
+                    File.Delete(path);
                     Tex2D screenshot = this.screenshot;
                     Stream stream = DuckFile.Create(path);
                     ((Texture2D)screenshot.nativeObject).SaveAsPng(stream, screenshot.width, screenshot.height);
@@ -213,7 +213,7 @@ namespace DuckGame
                         if (configuration.contentDirectory != null)
                         {
                             string str = GetPath(nameof(screenshot)) + ".png";
-                            if (System.IO.File.Exists(str))
+                            if (File.Exists(str))
                                 _screenshot = Content.Load<Tex2D>(str);
                         }
                         if (_screenshot == null)

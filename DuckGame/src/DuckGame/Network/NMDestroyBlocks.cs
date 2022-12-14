@@ -31,7 +31,7 @@ namespace DuckGame
                 foreach (ushort block1 in blocks)
                 {
                     ushort u = block1;
-                    Block block2 = blockGroup.blocks.FirstOrDefault<Block>(x => x is AutoBlock && (x as AutoBlock).blockIndex == u);
+                    Block block2 = blockGroup.blocks.FirstOrDefault(x => x is AutoBlock && (x as AutoBlock).blockIndex == u);
                     if (block2 != null)
                     {
                         if (!block2.shouldbeinupdateloop)

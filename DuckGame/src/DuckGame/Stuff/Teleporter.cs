@@ -163,7 +163,7 @@ namespace DuckGame
             for (int index = 0; index < _teleported.Count; ++index)
             {
                 ITeleport teleport = _teleported[index];
-                if (!source.Contains<ITeleport>(teleport))
+                if (!source.Contains(teleport))
                 {
                     _teleported.RemoveAt(index);
                     --index;

@@ -24,26 +24,26 @@ namespace XnaToFna.StubXDK.GamerServices
         [MonoModHook("System.Collections.ObjectModel.ReadOnlyCollection`1<Microsoft.Xna.Framework.GamerServices.LeaderboardEntry> Microsoft.Xna.Framework.GamerServices.LeaderboardReader::get_Entries()")]
         public static object get_Entries(object reader)
         {
-            if (__LeaderboardReader__.t_LeaderboardEntry == null)
-                __LeaderboardReader__.t_LeaderboardEntry = StubXDKHelper.GamerServicesAsm.GetType("Microsoft.Xna.Framework.GamerServices.LeaderboardEntry");
-            if (__LeaderboardReader__.t_IList == null)
-                __LeaderboardReader__.t_IList = typeof(IList<>).MakeGenericType(__LeaderboardReader__.t_LeaderboardEntry);
-            if (__LeaderboardReader__.t_List == null)
+            if (t_LeaderboardEntry == null)
+                t_LeaderboardEntry = StubXDKHelper.GamerServicesAsm.GetType("Microsoft.Xna.Framework.GamerServices.LeaderboardEntry");
+            if (t_IList == null)
+                t_IList = typeof(IList<>).MakeGenericType(t_LeaderboardEntry);
+            if (t_List == null)
             {
-                __LeaderboardReader__.t_List = typeof(List<>).MakeGenericType(__LeaderboardReader__.t_LeaderboardEntry);
-                __LeaderboardReader__.ctor_List = __LeaderboardReader__.t_List.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
+                t_List = typeof(List<>).MakeGenericType(t_LeaderboardEntry);
+                ctor_List = t_List.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
             }
-            if (__LeaderboardReader__.t_ReadOnlyCollection == null)
+            if (t_ReadOnlyCollection == null)
             {
-                __LeaderboardReader__.t_ReadOnlyCollection = typeof(ReadOnlyCollection<>).MakeGenericType(__LeaderboardReader__.t_LeaderboardEntry);
-                __LeaderboardReader__.ctor_ReadOnlyCollection = __LeaderboardReader__.t_List.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[1]
+                t_ReadOnlyCollection = typeof(ReadOnlyCollection<>).MakeGenericType(t_LeaderboardEntry);
+                ctor_ReadOnlyCollection = t_List.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[1]
                 {
-          __LeaderboardReader__.t_IList
+          t_IList
                 }, null);
             }
-            return __LeaderboardReader__.ctor_ReadOnlyCollection.Invoke(new object[1]
+            return ctor_ReadOnlyCollection.Invoke(new object[1]
             {
-        __LeaderboardReader__.ctor_List.Invoke(new object[0])
+        ctor_List.Invoke(new object[0])
             });
         }
 

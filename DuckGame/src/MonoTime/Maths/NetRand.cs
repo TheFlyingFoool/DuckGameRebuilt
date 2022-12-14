@@ -16,31 +16,31 @@ namespace DuckGame
 
         public static Random generator
         {
-            get => NetRand._randomGenerator;
-            set => NetRand._randomGenerator = value;
+            get => _randomGenerator;
+            set => _randomGenerator = value;
         }
 
         public static void Initialize(int seed)
         {
-            NetRand.currentSeed = seed;
-            NetRand._randomGenerator = new Random(seed);
+            currentSeed = seed;
+            _randomGenerator = new Random(seed);
         }
 
         public static void Initialize()
         {
-            NetRand._randomGenerator = new Random();
-            NetRand.currentSeed = Rando.Int(2147483646);
+            _randomGenerator = new Random();
+            currentSeed = Rando.Int(2147483646);
         }
 
-        public static double Double() => NetRand._randomGenerator.NextDouble();
+        public static double Double() => _randomGenerator.NextDouble();
 
-        public static float Float(float max) => (float)NetRand._randomGenerator.NextDouble() * max;
+        public static float Float(float max) => (float)_randomGenerator.NextDouble() * max;
 
-        public static float Float(float min, float max) => min + (float)NetRand._randomGenerator.NextDouble() * (max - min);
+        public static float Float(float min, float max) => min + (float)_randomGenerator.NextDouble() * (max - min);
 
-        public static int Int(int _max) => NetRand._randomGenerator.Next(0, _max + 1);
+        public static int Int(int _max) => _randomGenerator.Next(0, _max + 1);
 
-        public static int Int(int min, int max) => NetRand._randomGenerator.Next(min, max + 1);
+        public static int Int(int min, int max) => _randomGenerator.Next(min, max + 1);
 
         public static int ChooseInt(params int[] _ints) => _ints[Rando.Int(_ints.Length - 1)];
 

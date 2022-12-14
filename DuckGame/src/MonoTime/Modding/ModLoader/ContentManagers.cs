@@ -13,21 +13,21 @@ namespace DuckGame
     /// <summary>The class that stores content managers.</summary>
     public static class ContentManagers
     {
-        private static Dictionary<System.Type, IManageContent> _contentManagers = new Dictionary<System.Type, IManageContent>();
+        private static Dictionary<Type, IManageContent> _contentManagers = new Dictionary<Type, IManageContent>();
 
-        private static IManageContent AddContentManager(System.Type t)
+        private static IManageContent AddContentManager(Type t)
         {
             IManageContent instance = (IManageContent)Activator.CreateInstance(t);
-            ContentManagers._contentManagers.Add(t, instance);
+            _contentManagers.Add(t, instance);
             return instance;
         }
 
-        internal static IManageContent GetContentManager(System.Type t)
+        internal static IManageContent GetContentManager(Type t)
         {
             if (t == null)
                 t = typeof(DefaultContentManager);
             IManageContent manageContent;
-            return ContentManagers._contentManagers.TryGetValue(t, out manageContent) ? manageContent : ContentManagers.AddContentManager(t);
+            return _contentManagers.TryGetValue(t, out manageContent) ? manageContent : AddContentManager(t);
         }
     }
 }

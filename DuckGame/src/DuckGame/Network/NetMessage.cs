@@ -62,7 +62,7 @@ namespace DuckGame
         {
             System.Type type = GetType();
             FieldInfo[] fields1;
-            if (NetMessage._messageFields.TryGetValue(type, out fields1))
+            if (_messageFields.TryGetValue(type, out fields1))
                 return fields1;
             FieldInfo[] fields2 = type.GetFields();
             List<FieldInfo> fieldInfoList = new List<FieldInfo>();
@@ -72,7 +72,7 @@ namespace DuckGame
                     fieldInfoList.Add(fieldInfo);
             }
             FieldInfo[] array = fieldInfoList.ToArray();
-            NetMessage._messageFields[type] = array;
+            _messageFields[type] = array;
             return array;
         }
 

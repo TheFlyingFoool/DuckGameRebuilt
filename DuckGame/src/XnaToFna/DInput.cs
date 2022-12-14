@@ -19,15 +19,15 @@ namespace XnaToFna.ProxyDInput
 
         public static bool Initialize()
         {
-            if (!DInput.IsProxy)
+            if (!IsProxy)
             {
                 XnaToFnaHelper.Log("[ProxyDInput] ProxyDInput disabled by default - 'export XTF_PROXY_DINPUT=1' to enable");
                 return false;
             }
             XnaToFnaHelper.Log("[ProxyDInput] Initializing ProxyDInput");
-            DInput.States = new DInputState[XnaToFnaHelper.MaximumGamepadCount];
-            for (int index = 0; index < DInput.States.Length; ++index)
-                DInput.States[index] = new DInputState();
+            States = new DInputState[XnaToFnaHelper.MaximumGamepadCount];
+            for (int index = 0; index < States.Length; ++index)
+                States[index] = new DInputState();
             return true;
         }
 
@@ -41,10 +41,10 @@ namespace XnaToFna.ProxyDInput
 
         public static void Update()
         {
-            for (int index = 0; index < DInput.States.Length; ++index)
+            for (int index = 0; index < States.Length; ++index)
             {
                 GamePadState state1 = FNAPlatform.GetGamePadState(index, GamePadDeadZone.IndependentAxes);
-                DInputState state2 = DInput.States[index];
+                DInputState state2 = States[index];
                 state2.connected = state1.IsConnected;
                 if (state2.connected)
                 {
@@ -87,10 +87,10 @@ namespace XnaToFna.ProxyDInput
             }
         }
 
-        public static DInputState GetState(int player) => player < DInput.States.Length ? DInput.States[player] : DInput.StateDefault;
+        public static DInputState GetState(int player) => player < States.Length ? States[player] : StateDefault;
 
-        public static string GetProductName(int player) => player >= DInput.States.Length ? string.Empty : string.Format("ProxyDInput #{0}", player + 1);
+        public static string GetProductName(int player) => player >= States.Length ? string.Empty : string.Format("ProxyDInput #{0}", player + 1);
 
-        public static string GetProductGUID(int player) => player < DInput.States.Length ? FNAPlatform.GetGamePadGUID(player) : string.Empty;
+        public static string GetProductGUID(int player) => player < States.Length ? FNAPlatform.GetGamePadGUID(player) : string.Empty;
     }
 }

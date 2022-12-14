@@ -62,8 +62,8 @@ namespace DuckGame
 
         public override void Begin(bool transparent, bool isTargetDraw = false)
         {
-            Vec3 vec3_1 = new Vec3((float)(DuckGame.Graphics.fade * _fade * (1.0 - _darken))) * colorMul;
-            Vec3 vec3_2 = _colorAdd + new Vec3(_fadeAdd) + new Vec3(DuckGame.Graphics.flashAddRenderValue) + new Vec3(DuckGame.Graphics.fadeAddRenderValue) - new Vec3(darken);
+            Vec3 vec3_1 = new Vec3((float)(Graphics.fade * _fade * (1.0 - _darken))) * colorMul;
+            Vec3 vec3_2 = _colorAdd + new Vec3(_fadeAdd) + new Vec3(Graphics.flashAddRenderValue) + new Vec3(Graphics.fadeAddRenderValue) - new Vec3(darken);
             vec3_2 = new Vec3(Maths.Clamp(vec3_2.x, -1f, 1f), Maths.Clamp(vec3_2.y, -1f, 1f), Maths.Clamp(vec3_2.z, -1f, 1f));
             if (_darken > 0.0)
                 _darken -= 0.15f;
@@ -74,21 +74,21 @@ namespace DuckGame
                 _fx.Parameters["fade"]?.SetValue((Vector3)vec3_1);
                 _fx.Parameters["add"]?.SetValue((Vector3)vec3_2);
             }
-            DuckGame.Graphics.screen = _batch;
+            Graphics.screen = _batch;
             if (_state.ScissorTestEnable)
-                DuckGame.Graphics.SetScissorRectangle(_scissor);
+                Graphics.SetScissorRectangle(_scissor);
             _batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, _state, (MTEffect)_fx, camera.getMatrix());
         }
 
         public override void Draw(bool transparent, bool isTargetDraw = false)
         {
-            DuckGame.Graphics.currentLayer = this;
+            Graphics.currentLayer = this;
             _fx.Parameters["WVP"].SetValue((Microsoft.Xna.Framework.Matrix)(Matrix.CreateRotationY(-1.570796f) * Matrix.CreateTranslation(new Vec3(625f, 20f, 0.1f)) * _view * _proj));
             Begin(transparent, false);
             foreach (Sprite wallSprite in _wallSprites)
             {
                 float x = wallSprite.x;
-                DuckGame.Graphics.Draw(wallSprite, wallSprite.x, wallSprite.y);
+                Graphics.Draw(wallSprite, wallSprite.x, wallSprite.y);
                 wallSprite.x = x;
             }
             _batch.End();
@@ -97,12 +97,12 @@ namespace DuckGame
             foreach (Sprite wallSprite in _wallSprites)
             {
                 float x = wallSprite.x;
-                DuckGame.Graphics.Draw(wallSprite, wallSprite.x, wallSprite.y);
+                Graphics.Draw(wallSprite, wallSprite.x, wallSprite.y);
                 wallSprite.x = x;
             }
             _batch.End();
-            DuckGame.Graphics.screen = null;
-            DuckGame.Graphics.currentLayer = null;
+            Graphics.screen = null;
+            Graphics.currentLayer = null;
         }
     }
 }

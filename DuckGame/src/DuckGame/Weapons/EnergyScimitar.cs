@@ -28,7 +28,7 @@ namespace DuckGame
         public bool dragSpeedBonus;
         protected Vec2 centerHeld = new Vec2(6f, 26f);
         protected Vec2 centerUnheld = new Vec2(4f, 22f);
-        public EnergyScimitar.Stance _stance = EnergyScimitar.Stance.SwingUp;
+        public Stance _stance = Stance.SwingUp;
         private bool _stanceReady;
         private float _dragAngle = -110f;
         private float _dragAngleDangle = -145f;
@@ -47,7 +47,7 @@ namespace DuckGame
         private MaterialEnergyBlade _bladeMaterial;
         public Sprite _blade;
         private Sprite _bladeTrail;
-        private List<EnergyScimitar.Blocker> _walls = new List<EnergyScimitar.Blocker>();
+        private List<Blocker> _walls = new List<Blocker>();
         private Platform _platform;
         private Sprite _whiteGlow;
         private Sprite _warpLine;
@@ -56,7 +56,7 @@ namespace DuckGame
         public Color swordColor;
         private LoopingSound _hum;
         private float _timeTillPulse;
-        private List<EnergyScimitar.RagdollDrag> _drag = new List<EnergyScimitar.RagdollDrag>();
+        private List<RagdollDrag> _drag = new List<RagdollDrag>();
         public float _throwSpin;
         public bool _airFly;
         public float _airFlyAngle;
@@ -100,7 +100,7 @@ namespace DuckGame
         public int stanceInt
         {
             get => (int)_stance;
-            set => _stance = (EnergyScimitar.Stance)value;
+            set => _stance = (Stance)value;
         }
 
         public override bool CanTapeTo(Thing pThing)
@@ -154,7 +154,7 @@ namespace DuckGame
             ++_timeSinceDragJump;
             if (duck == null || !held)
             {
-                _stance = EnergyScimitar.Stance.None;
+                _stance = Stance.None;
                 _swordAngle = 0f;
                 _lerpedAngle = owner != null ? 0f : (_wasLifted ? 90f : 0f);
                 _swordFlip = offDir < 0;
@@ -233,8 +233,8 @@ namespace DuckGame
             }
             else
             {
-                if (_stance == EnergyScimitar.Stance.None)
-                    _stance = EnergyScimitar.Stance.SwingUp;
+                if (_stance == Stance.None)
+                    _stance = Stance.SwingUp;
                 _framesSinceThrown = 0;
                 center = centerHeld;
                 collisionOffset = new Vec2(-4f, 0f);
@@ -242,8 +242,8 @@ namespace DuckGame
                 _throwSpin = 0f;
                 _wasLifted = true;
                 _blocking = duck.crouch && Math.Abs(duck.hSpeed) < 2.0;
-                if (duck.inputProfile.Pressed("UP") && !duck.inputProfile.Pressed("JUMP") && (_stance == EnergyScimitar.Stance.Drag || _stance == EnergyScimitar.Stance.Intermediate) && !duck.sliding)
-                    _stance = EnergyScimitar.Stance.SwingUp;
+                if (duck.inputProfile.Pressed("UP") && !duck.inputProfile.Pressed("JUMP") && (_stance == Stance.Drag || _stance == Stance.Intermediate) && !duck.sliding)
+                    _stance = Stance.SwingUp;
                 if (duck.crouch && !duck.sliding && duck.inputProfile.Pressed("LEFT"))
                     duck.offDir = -1;
                 else if (duck.crouch && !duck.sliding && duck.inputProfile.Pressed("RIGHT"))
@@ -253,24 +253,24 @@ namespace DuckGame
                 _dragRand = Lerp.FloatSmooth(_dragRand, 0f, 0.1f);
                 if (_dragRand > 1.0)
                     _dragRand = 1f;
-                dragSpeedBonus = _stance == EnergyScimitar.Stance.Drag && !flag && _stanceReady;
+                dragSpeedBonus = _stance == Stance.Drag && !flag && _stanceReady;
                 if (_spikeDrag && dragSpeedBonus)
                 {
                     _dragRand += Rando.Float(Math.Abs(duck.hSpeed)) * 0.1f;
                     if (Rando.Int(30) == 0 && _dragRand > 0.1f)
                         duck.Swear();
                 }
-                if (!duck.grounded && duck.inputProfile.Pressed("DOWN") && _stance != EnergyScimitar.Stance.Drag)
+                if (!duck.grounded && duck.inputProfile.Pressed("DOWN") && _stance != Stance.Drag)
                     _goIntermediate = true;
-                if (_stance == EnergyScimitar.Stance.Drag && duck._hovering)
+                if (_stance == Stance.Drag && duck._hovering)
                 {
-                    _stance = EnergyScimitar.Stance.SwingDown;
+                    _stance = Stance.SwingDown;
                     duck.vSpeed = -6f;
                     duck._hovering = false;
                     _timeSinceDragJump = 100;
                 }
                 if (duck.inputProfile.Pressed("DOWN") && duck.grounded)
-                    _stance = EnergyScimitar.Stance.Drag;
+                    _stance = Stance.Drag;
                 if (Math.Abs(duck.hSpeed) > 1.0)
                 {
                     if (dragSpeedBonus)
@@ -295,7 +295,7 @@ namespace DuckGame
                             Level.Add(spark);
                         }
                     }
-                    if (_stance == EnergyScimitar.Stance.Drag && duck.grounded)
+                    if (_stance == Stance.Drag && duck.grounded)
                     {
                         if (duck.sliding || duck.crouch)
                         {
@@ -312,27 +312,27 @@ namespace DuckGame
                         }
                     }
                 }
-                if (_stance == EnergyScimitar.Stance.SwingDown && duck.inputProfile.Pressed("JUMP"))
-                    _stance = EnergyScimitar.Stance.SwingUp;
+                if (_stance == Stance.SwingDown && duck.inputProfile.Pressed("JUMP"))
+                    _stance = Stance.SwingUp;
                 if (_goIntermediate && _stanceReady)
                 {
-                    _stance = EnergyScimitar.Stance.Intermediate;
+                    _stance = Stance.Intermediate;
                     _goIntermediate = false;
                 }
                 handAngle = 0f;
                 _holdOffset = new Vec2(0f, 0f);
                 handOffset = new Vec2(0f, 0f);
                 handFlip = false;
-                if (_stance == EnergyScimitar.Stance.Intermediate)
+                if (_stance == Stance.Intermediate)
                 {
                     _swordAngle = -60f;
                     handAngle = Maths.DegToRad(_swordAngle - 90f) * offDir;
                     _holdOffset = new Vec2(0f, 2f);
                     _swordFlip = offDir > 0;
                     if (duck.grounded)
-                        _stance = EnergyScimitar.Stance.Drag;
+                        _stance = Stance.Drag;
                 }
-                else if (_stance == EnergyScimitar.Stance.Drag)
+                else if (_stance == Stance.Drag)
                 {
                     if (duck._hovering)
                     {
@@ -353,7 +353,7 @@ namespace DuckGame
                         _swordFlip = offDir > 0;
                     }
                 }
-                else if (_stance == EnergyScimitar.Stance.SwingUp)
+                else if (_stance == Stance.SwingUp)
                 {
                     if (duck._hovering)
                     {
@@ -378,7 +378,7 @@ namespace DuckGame
                         _swordFlip = offDir < 0;
                     }
                 }
-                else if (_stance == EnergyScimitar.Stance.SwingDown)
+                else if (_stance == Stance.SwingDown)
                 {
                     if (duck._hovering)
                     {
@@ -442,27 +442,27 @@ namespace DuckGame
             _goIntermediate = false;
             if (_timeSincePress > 3)
                 _timeSincePress = 0;
-            if (_stance == EnergyScimitar.Stance.Intermediate)
-                _stance = EnergyScimitar.Stance.SwingDown;
+            if (_stance == Stance.Intermediate)
+                _stance = Stance.SwingDown;
             if (!_stanceReady)
                 return;
-            if (_stance == EnergyScimitar.Stance.Drag || _stance == EnergyScimitar.Stance.SwingUp)
+            if (_stance == Stance.Drag || _stance == Stance.SwingUp)
             {
-                if (_stance == EnergyScimitar.Stance.Drag && duck != null && (!duck.grounded || !duck.crouch && !duck.sliding))
+                if (_stance == Stance.Drag && duck != null && (!duck.grounded || !duck.crouch && !duck.sliding))
                 {
                     duck.hSpeed = duck.offDir * 9;
                     duck.vSpeed = -2f;
                     duck._disarmDisable = 5;
                 }
-                else if (_stance == EnergyScimitar.Stance.Drag && (duck.crouch || duck.sliding))
+                else if (_stance == Stance.Drag && (duck.crouch || duck.sliding))
                     _lerpBoost = 0.4f;
-                _stance = EnergyScimitar.Stance.SwingDown;
+                _stance = Stance.SwingDown;
             }
             else
             {
-                if (_stance != EnergyScimitar.Stance.SwingDown)
+                if (_stance != Stance.SwingDown)
                     return;
-                _stance = EnergyScimitar.Stance.SwingUp;
+                _stance = Stance.SwingUp;
             }
         }
 
@@ -512,7 +512,7 @@ namespace DuckGame
                 properBladeColor = new Color(255, 216, 0);
                 properColor = new Color(255, 216, 0); //255, 216, 24
             }
-            _platform = new EnergyScimitar.ScimiPlatform(0f, 0f, 20f, 8f, this);
+            _platform = new ScimiPlatform(0f, 0f, 20f, 8f, this);
             _platform.solid = false;
             _platform.enablePhysics = false;
             _platform.center = new Vec2(10f, 4f);
@@ -589,9 +589,9 @@ namespace DuckGame
             {
                 with.Destroy(new DTImpale(this));
                 Duck duck = with as Duck;
-                if (duck.ragdoll == null || duck.ragdoll.part2 == null || _drag.FirstOrDefault<EnergyScimitar.RagdollDrag>(x => x.part == with) != null)
+                if (duck.ragdoll == null || duck.ragdoll.part2 == null || _drag.FirstOrDefault(x => x.part == with) != null)
                     return;
-                _drag.Add(new EnergyScimitar.RagdollDrag()
+                _drag.Add(new RagdollDrag()
                 {
                     part = duck.ragdoll.part2,
                     offset = position - duck.ragdoll.part2.position
@@ -611,11 +611,11 @@ namespace DuckGame
                 if (!_airFly || !(with is RagdollPart))
                     return;
                 RagdollPart ragdollPart = with as RagdollPart;
-                if (ragdollPart.doll != null && ragdollPart.doll.captureDuck != null && ragdollPart.doll.captureDuck == _prevOwner && _framesSinceThrown <= 15 || _drag.FirstOrDefault<EnergyScimitar.RagdollDrag>(x => x.part == with) != null || ragdollPart.doll == null)
+                if (ragdollPart.doll != null && ragdollPart.doll.captureDuck != null && ragdollPart.doll.captureDuck == _prevOwner && _framesSinceThrown <= 15 || _drag.FirstOrDefault(x => x.part == with) != null || ragdollPart.doll == null)
                     return;
                 if (ragdollPart.doll.part1 != null)
                 {
-                    _drag.Add(new EnergyScimitar.RagdollDrag()
+                    _drag.Add(new RagdollDrag()
                     {
                         part = ragdollPart.doll.part1,
                         offset = position - ragdollPart.doll.part1.position
@@ -624,7 +624,7 @@ namespace DuckGame
                 }
                 if (ragdollPart.doll.part2 != null)
                 {
-                    _drag.Add(new EnergyScimitar.RagdollDrag()
+                    _drag.Add(new RagdollDrag()
                     {
                         part = ragdollPart.doll.part2,
                         offset = position - ragdollPart.doll.part2.position
@@ -633,7 +633,7 @@ namespace DuckGame
                 }
                 if (ragdollPart.doll.part3 == null)
                     return;
-                _drag.Add(new EnergyScimitar.RagdollDrag()
+                _drag.Add(new RagdollDrag()
                 {
                     part = ragdollPart.doll.part3,
                     offset = position - ragdollPart.doll.part3.position
@@ -765,7 +765,7 @@ namespace DuckGame
             if (duck.inputProfile.Down("LEFT") && duck.offDir < 0 || duck.inputProfile.Down("RIGHT") && duck.offDir > 0)
             {
                 y = duck.y;
-                if (_stance == EnergyScimitar.Stance.Drag)
+                if (_stance == Stance.Drag)
                     y += 6f;
                 skipThrowMove = true;
                 TileConnection pDirection = duck.inputProfile.Down("LEFT") ? TileConnection.Left : TileConnection.Right;
@@ -815,7 +815,7 @@ namespace DuckGame
                 MaterialThing materialThing = Level.CheckRay<Block>(position, position + vec2 * _airFlySpeed, out hitPos);
                 if (materialThing != _platform)
                 {
-                    if (materialThing is EnergyScimitar.ScimiPlatform)
+                    if (materialThing is ScimiPlatform)
                     {
                         hSpeed = lastHSpeed = (float)(-vec2.x * 3.0);
                         vSpeed = lastHSpeed = (float)(-vec2.y * 3.0);
@@ -874,7 +874,7 @@ namespace DuckGame
         public void ClearDrag()
         {
             int num = 1;
-            foreach (EnergyScimitar.RagdollDrag ragdollDrag in _drag)
+            foreach (RagdollDrag ragdollDrag in _drag)
             {
                 if (ragdollDrag.part.doll != null && ragdollDrag.part.doll.captureDuck != null && ragdollDrag.part.doll.captureDuck._cooked == null)
                 {
@@ -1014,14 +1014,14 @@ namespace DuckGame
                     }
                 }
                 handFlip = false;
-                foreach (EnergyScimitar.RagdollDrag ragdollDrag in _drag)
+                foreach (RagdollDrag ragdollDrag in _drag)
                 {
                     ragdollDrag.part.position = position - ragdollDrag.offset;
                     ragdollDrag.part.hSpeed = 0f;
                     ragdollDrag.part.vSpeed = 0f;
                 }
                 _timeSincePickedUp += Maths.IncFrameTimer();
-                if (_stance == EnergyScimitar.Stance.Drag && duck != null)
+                if (_stance == Stance.Drag && duck != null)
                     _glow = Math.Abs(duck.hSpeed) > 1.0 ? 0.35f : 0f;
                 if (grounded)
                     _canAirFly = true;
@@ -1097,7 +1097,7 @@ namespace DuckGame
                                             if (!(t is Duck) || (t as Duck).swordInvincibility <= 0)
                                             {
                                                 if (!t.isServerForObject)
-                                                    Thing.SuperFondle(t, DuckNetwork.localConnection);
+                                                    SuperFondle(t, DuckNetwork.localConnection);
                                                 t.Destroy(new DTIncinerate(this));
                                                 if (t is Duck && duck != null)
                                                 {
@@ -1125,7 +1125,7 @@ namespace DuckGame
                     }
                     float num2 = 24f + num1;
                     Vec2 vec2 = position + OffsetLocal(new Vec2(0f, 4f));
-                    foreach (EnergyScimitar.Blocker wall in _walls)
+                    foreach (Blocker wall in _walls)
                     {
                         vec2 += OffsetLocal(new Vec2(0f, -num2 / _walls.Count));
                         wall.position = vec2;
@@ -1139,7 +1139,7 @@ namespace DuckGame
                     if (stuck)
                         _didOwnerSwitchLogic = false;
                     Vec2 vec2 = position + OffsetLocal(new Vec2(0f, _stuckInto != null ? -25f : -14f));
-                    foreach (EnergyScimitar.Blocker wall in _walls)
+                    foreach (Blocker wall in _walls)
                     {
                         vec2 += OffsetLocal(new Vec2(0f, 18f / _walls.Count));
                         wall.position = vec2;
@@ -1193,7 +1193,7 @@ namespace DuckGame
                 }
                 else
                     to2 = 0f;
-                if (_stance == EnergyScimitar.Stance.Drag && duck != null)
+                if (_stance == Stance.Drag && duck != null)
                     _glow = Math.Abs(duck.hSpeed) > 1.0 ? 0.35f : 0f;
                 _glow = Lerp.Float(_glow, to2, 0.1f);
             }

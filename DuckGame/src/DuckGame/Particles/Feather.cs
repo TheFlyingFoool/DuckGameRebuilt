@@ -10,7 +10,7 @@ namespace DuckGame
     public class Feather : Thing
     {
         public static int kMaxObjects = 64;
-        public static Feather[] _objects = new Feather[Feather.kMaxObjects];
+        public static Feather[] _objects = new Feather[kMaxObjects];
         public static int _lastActiveObject = 0;
         private SpriteMap _sprite;
         private bool _rested;
@@ -22,19 +22,19 @@ namespace DuckGame
             Feather feather;
             if (NetworkDebugger.enabled)
                 feather = new Feather();
-            else if (Feather._objects[Feather._lastActiveObject] == null)
+            else if (_objects[_lastActiveObject] == null)
             {
                 feather = new Feather();
-                Feather._objects[Feather._lastActiveObject] = feather;
+                _objects[_lastActiveObject] = feather;
             }
             else
-                feather = Feather._objects[Feather._lastActiveObject];
+                feather = _objects[_lastActiveObject];
             Level.Remove(feather);
-            Feather._lastActiveObject = (Feather._lastActiveObject + 1) % Feather.kMaxObjects;
+            _lastActiveObject = (_lastActiveObject + 1) % kMaxObjects;
             feather.Init(xpos, ypos, who);
             feather.ResetProperties();
-            feather._sprite.globalIndex = Thing.GetGlobalIndex();
-            feather.globalIndex = Thing.GetGlobalIndex();
+            feather._sprite.globalIndex = GetGlobalIndex();
+            feather.globalIndex = GetGlobalIndex();
             return feather;
         }
 

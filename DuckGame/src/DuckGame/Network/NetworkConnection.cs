@@ -60,7 +60,7 @@ namespace DuckGame
         private uint _previousReceiveGap;
         public bool sentFilterMessage;
         public HashSet<ushort> acksReceived = new HashSet<ushort>();
-        public List<NetworkConnection.FailedGhost> failedGhosts = new List<NetworkConnection.FailedGhost>();
+        public List<FailedGhost> failedGhosts = new List<FailedGhost>();
         private static int kconnectionIDInc = 0;
         private int _connectionID;
         public ushort[] kAckOffsets;
@@ -122,8 +122,8 @@ namespace DuckGame
 
         public static NetworkConnection context
         {
-            get => NetworkConnection._context;
-            set => NetworkConnection._context = value;
+            get => _context;
+            set => _context = value;
         }
 
         public DataLayerDebug.BadConnection debuggerContext
@@ -245,7 +245,7 @@ namespace DuckGame
 
         public NetworkConnection(object dat, string id = null)
         {
-            _connectionID = NetworkConnection.kconnectionIDInc++;
+            _connectionID = kconnectionIDInc++;
             _identifier = dat == null ? "local" : Network.activeNetwork.core.GetConnectionIdentifier(dat);
             if (id != null)
                 _identifier = id;
@@ -288,7 +288,7 @@ namespace DuckGame
             _pingsSent = 0;
             kicking = false;
             recentlyReceivedPackets.Clear();
-            recentlyReceivedPacketsArray = new ushort[NetworkConnection.kMaxRecentlyReceivedPackets];
+            recentlyReceivedPacketsArray = new ushort[kMaxRecentlyReceivedPackets];
             failureNotificationCooldown = 0;
             if (_data != null && GhostManager.context != null)
                 GhostManager.context.Clear(this);
@@ -339,7 +339,7 @@ namespace DuckGame
         public void PacketReceived(NetworkPacket packet)
         {
             _lastReceivedTime = _personalTick;
-            if (NetworkConnection.PacketOrderGreater(packet.order, _lastReceivedPacketOrder))
+            if (PacketOrderGreater(packet.order, _lastReceivedPacketOrder))
                 _lastReceivedPacketOrder = packet.order;
             _packetHistory[_packetHistoryIndex % 17] = packet;
             ++_packetHistoryIndex;
@@ -634,10 +634,10 @@ namespace DuckGame
 
         public void PostUpdate(int frameCounter)
         {
-            NetworkConnection.ghostLerpDivisor = 1f / packetsEvery;
+            ghostLerpDivisor = 1f / packetsEvery;
             if (_status == ConnectionStatus.Disconnected)
                 return;
-            bool flag = (frameCounter + NetworkConnection.connectionLoopIndex) % NetworkConnection.packetsEvery == 0;
+            bool flag = (frameCounter + connectionLoopIndex) % packetsEvery == 0;
             if (DuckNetwork.levelIndex == levelIndex && levelIndex != byte.MaxValue && status == ConnectionStatus.Connected)
             {
                 foreach (Profile profile in DuckNetwork.profiles)

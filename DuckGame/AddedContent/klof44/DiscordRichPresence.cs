@@ -220,7 +220,7 @@ namespace DuckGame
                     break;
             }
             rpc.Assets = assets;
-            if (!DiscordRichPresence.Matches(rpc, client.CurrentPresence))
+            if (!Matches(rpc, client.CurrentPresence))
             {
                 client.SetPresence(rpc);
                 client.Invoke();
@@ -228,7 +228,7 @@ namespace DuckGame
         }
         public static bool Matches(RichPresence Presence, RichPresence other)
         {
-            if (!DiscordRichPresence.MatchesBase(Presence, other))
+            if (!MatchesBase(Presence, other))
             {
                 return false;
             }

@@ -26,7 +26,7 @@ namespace DuckGame
             target = pTarget;
             _method = pMethod;
             _parameters = pParameters;
-            if (pMethod.GetParameters().Count<ParameterInfo>() != pParameters.Count<object>())
+            if (pMethod.GetParameters().Count() != pParameters.Count())
                 throw new Exception("NMRunNetworkActionParameters.pParameters.Count() != MethodInfo.GetParameters().Count(). Are you including the correct parameters in your SyncNetworkAction call?");
         }
 
@@ -39,7 +39,7 @@ namespace DuckGame
             BitBuffer val = new BitBuffer();
             val.Write(target);
             val.Write(Editor.NetworkActionIndex(target.GetType(), _method));
-            for (int index = 0; index < _parameters.Count<object>(); ++index)
+            for (int index = 0; index < _parameters.Count(); ++index)
                 val.Write(_parameters[index]);
             _serializedData.Write(val, true);
         }

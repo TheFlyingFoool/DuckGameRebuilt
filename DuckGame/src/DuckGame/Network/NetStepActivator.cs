@@ -9,10 +9,10 @@ namespace DuckGame
 {
     public class NetStepActivator
     {
-        private NetStepActivator.Function _function;
+        private Function _function;
         private int _index;
 
-        public NetStepActivator(NetStepActivator.Function del) => _function = del;
+        public NetStepActivator(Function del) => _function = del;
 
         public int index
         {

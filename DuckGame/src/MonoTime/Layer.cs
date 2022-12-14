@@ -63,86 +63,86 @@ namespace DuckGame
 
         public static bool lighting
         {
-            get => Options.Data.lighting && Layer._lighting && !(Level.current is Editor);
-            set => Layer._lighting = value;
+            get => Options.Data.lighting && _lighting && !(Level.current is Editor);
+            set => _lighting = value;
         }
 
         public static LayerCore core
         {
-            get => Layer._core;
-            set => Layer._core = value;
+            get => _core;
+            set => _core = value;
         }
 
-        public static Layer PreDrawLayer => Layer._preDrawLayer;
+        public static Layer PreDrawLayer => _preDrawLayer;
 
-        public static Layer Parallax => Layer._core._parallax;
+        public static Layer Parallax => _core._parallax;
 
-        public static Layer Virtual => Layer._core._virtual;
+        public static Layer Virtual => _core._virtual;
 
-        public static Layer Background => Layer._core._background;
+        public static Layer Background => _core._background;
 
-        public static Layer Game => Layer._core._game;
+        public static Layer Game => _core._game;
 
-        public static Layer Blocks => Layer._core._blocks;
+        public static Layer Blocks => _core._blocks;
 
-        public static Layer Glow => Layer._core._glow;
+        public static Layer Glow => _core._glow;
 
-        public static Layer Lighting => Layer._core._lighting;
+        public static Layer Lighting => _core._lighting;
 
-        public static Layer Foreground => Layer._core._foreground;
+        public static Layer Foreground => _core._foreground;
 
         public static Layer HUD
         {
-            get => Layer._core._hud;
-            set => Layer._core._hud = value;
+            get => _core._hud;
+            set => _core._hud = value;
         }
 
-        public static Layer Console => Layer._core._console;
+        public static Layer Console => _core._console;
 
         public static bool doVirtualEffect
         {
-            get => Layer._core.doVirtualEffect;
-            set => Layer._core.doVirtualEffect = value;
+            get => _core.doVirtualEffect;
+            set => _core.doVirtualEffect = value;
         }
 
-        public static MTEffect basicWireframeEffect => Layer._core.basicWireframeEffect;
+        public static MTEffect basicWireframeEffect => _core.basicWireframeEffect;
 
         public static bool basicWireframeTex
         {
-            get => Layer._core.basicWireframeTex;
-            set => Layer._core.basicWireframeTex = value;
+            get => _core.basicWireframeTex;
+            set => _core.basicWireframeTex = value;
         }
 
-        public static MTEffect itemSpawnEffect => Layer._core._itemSpawnEffect;
+        public static MTEffect itemSpawnEffect => _core._itemSpawnEffect;
 
         public static bool allVisible
         {
-            set => Layer._core.allVisible = value;
+            set => _core.allVisible = value;
         }
 
-        public static MTEffect basicLayerEffect => Layer._core._basicEffectFadeAdd;
+        public static MTEffect basicLayerEffect => _core._basicEffectFadeAdd;
 
-        public static bool IsBasicLayerEffect(MTEffect e) => Layer._core.IsBasicLayerEffect(e);
+        public static bool IsBasicLayerEffect(MTEffect e) => _core.IsBasicLayerEffect(e);
 
-        public static void InitializeLayers() => Layer._core.InitializeLayers();
+        public static void InitializeLayers() => _core.InitializeLayers();
 
-        public static void ClearLayers() => Layer._core.ClearLayers();
+        public static void ClearLayers() => _core.ClearLayers();
 
-        public static void DrawLayers() => Layer._core.DrawLayers();
+        public static void DrawLayers() => _core.DrawLayers();
 
-        public static void DrawTargetLayers() => Layer._core.DrawTargetLayers();
+        public static void DrawTargetLayers() => _core.DrawTargetLayers();
 
-        public static void UpdateLayers() => Layer._core.UpdateLayers();
+        public static void UpdateLayers() => _core.UpdateLayers();
 
-        public static void ResetLayers() => Layer._core.ResetLayers();
+        public static void ResetLayers() => _core.ResetLayers();
 
-        public static Layer Get(string layer) => Layer._core.Get(layer);
+        public static Layer Get(string layer) => _core.Get(layer);
 
-        public static void Add(Layer l) => Layer._core.Add(l);
+        public static void Add(Layer l) => _core.Add(l);
 
-        public static void Remove(Layer l) => Layer._core.Remove(l);
+        public static void Remove(Layer l) => _core.Remove(l);
 
-        public static bool Contains(Layer l) => Layer._core.Contains(l);
+        public static bool Contains(Layer l) => _core.Contains(l);
 
         public Matrix fullMatrix => _batch.fullMatrix;
 
@@ -178,7 +178,7 @@ namespace DuckGame
             set => _blurEffect = value;
         }
 
-        public float barSize => (float)((camera.width * DuckGame.Graphics.aspect - camera.width * (9.0 / 16.0)) / 2.0);
+        public float barSize => (float)((camera.width * Graphics.aspect - camera.width * (9.0 / 16.0)) / 2.0);
 
         public Matrix projection { get; set; }
 
@@ -320,7 +320,7 @@ namespace DuckGame
         {
             _name = nameval;
             _depth = depthval;
-            _batch = new MTSpriteBatch(DuckGame.Graphics.device);
+            _batch = new MTSpriteBatch(Graphics.device);
             _state = new RasterizerState
             {
                 CullMode = CullMode.None
@@ -331,7 +331,7 @@ namespace DuckGame
             if (!targetLayer)
                 return;
             if (targetSize == new Vec2())
-                _target = new RenderTarget2D(DuckGame.Graphics.width, DuckGame.Graphics.height);
+                _target = new RenderTarget2D(Graphics.width, Graphics.height);
             else
                 _target = new RenderTarget2D((int)targetSize.x, (int)targetSize.y);
         }
@@ -349,24 +349,24 @@ namespace DuckGame
         public virtual void Begin(bool transparent, bool isTargetDraw = false)
         {
             int num1 = name == "LIGHTING" ? 1 : 0;
-            if (aspectReliesOnGameLayer && this.camera != Layer.Game.camera)
+            if (aspectReliesOnGameLayer && this.camera != Game.camera)
             {
                 this.camera.width = 320f;
-                this.camera.height = 320f / Layer.Game.camera.aspect;
+                this.camera.height = 320f / Game.camera.aspect;
             }
             if (allowTallAspect)
-                DuckGame.Graphics.SetFullViewport();
+                Graphics.SetFullViewport();
             try
             {
                 if (isTargetDraw & transparent && _target != null)
                 {
-                    _oldRenderTarget = DuckGame.Graphics.GetRenderTarget();
-                    _oldViewport = DuckGame.Graphics.viewport;
-                    DuckGame.Graphics.SetRenderTarget(_target);
+                    _oldRenderTarget = Graphics.GetRenderTarget();
+                    _oldViewport = Graphics.viewport;
+                    Graphics.SetRenderTarget(_target);
                     if (flashAddClearInfluence > 0.0)
-                        DuckGame.Graphics.Clear(new Color((byte)Math.Min(_targetClearColor.r + (float)(flashAddClearInfluence * DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.g + (float)(flashAddClearInfluence * DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.b + (float)(flashAddClearInfluence * DuckGame.Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), _targetClearColor.a));
+                        Graphics.Clear(new Color((byte)Math.Min(_targetClearColor.r + (float)(flashAddClearInfluence * Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.g + (float)(flashAddClearInfluence * Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.b + (float)(flashAddClearInfluence * Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), _targetClearColor.a));
                     else
-                        DuckGame.Graphics.Clear(_targetClearColor);
+                        Graphics.Clear(_targetClearColor);
                 }
                 if (!isTargetDraw)
                 {
@@ -384,15 +384,15 @@ namespace DuckGame
             }
         label_14:
             Graphics.ResetSpanAdjust();
-            Effect effect = (Effect)Layer._core._basicEffect;
+            Effect effect = (Effect)_core._basicEffect;
             Vec3 vec3_1 = new Vec3((Graphics.fade * _fade * (1f - _darken))) * colorMul;
             Vec3 vec3_2 = _colorAdd + new Vec3(_fadeAdd) + new Vec3(Graphics.flashAddRenderValue) * flashAddInfluence + new Vec3(Graphics.fadeAddRenderValue) - new Vec3(darken);
             vec3_2 = new Vec3(Maths.Clamp(vec3_2.x, -1f, 1f), Maths.Clamp(vec3_2.y, -1f, 1f), Maths.Clamp(vec3_2.z, -1f, 1f));
             vec3_2 *= vec3_1;
-            if (this == Layer.Game)
+            if (this == Game)
             {
-                Layer.kGameLayerFade = vec3_1;
-                Layer.kGameLayerAdd = vec3_2;
+                kGameLayerFade = vec3_1;
+                kGameLayerAdd = vec3_2;
             }
             if (_darken > 0f)
                 _darken -= 0.15f;
@@ -411,26 +411,26 @@ namespace DuckGame
                 float num2 = vec3_2.LengthSquared();
                 if (vec3_1 != Vec3.One && num2 > 1f / 1000f)
                 {
-                    effect = (Effect)Layer._core._basicEffectFadeAdd;
+                    effect = (Effect)_core._basicEffectFadeAdd;
                     effect.Parameters["fade"].SetValue((Vector3)vec3_1);
                     effect.Parameters["add"].SetValue((Vector3)vec3_2);
                 }
                 else if (vec3_1 != Vec3.One)
                 {
-                    effect = (Effect)Layer._core._basicEffectFade;
+                    effect = (Effect)_core._basicEffectFade;
                     effect.Parameters["fade"].SetValue((Vector3)vec3_1);
                 }
                 else if (num2 > 1f / 1000f)
                 {
-                    effect = (Effect)Layer._core._basicEffectAdd;
+                    effect = (Effect)_core._basicEffectAdd;
                     effect.Parameters["add"].SetValue((Vector3)vec3_2);
                 }
-                if (Layer.doVirtualEffect && (Layer.Game == this || Layer.Foreground == this || Layer.Blocks == this || Layer.Background == this))
-                    effect = !Layer.basicWireframeTex ? (Effect)Layer._core._basicWireframeEffect : (Effect)Layer._core._basicWireframeEffectTex;
+                if (doVirtualEffect && (Game == this || Foreground == this || Blocks == this || Background == this))
+                    effect = !basicWireframeTex ? (Effect)_core._basicWireframeEffect : (Effect)_core._basicWireframeEffectTex;
             }
             if (_state.ScissorTestEnable)
-                DuckGame.Graphics.SetScissorRectangle(_scissor);
-            DuckGame.Graphics.screen = _batch;
+                Graphics.SetScissorRectangle(_scissor);
+            Graphics.screen = _batch;
             Camera camera = this.camera;
             if (target != null & isTargetDraw && !targetOnly)
             {
@@ -457,7 +457,7 @@ namespace DuckGame
                 camera.position = position2;
                 camera.size = size2;
             }
-            else if (Layer.blurry || _blurEffect)
+            else if (blurry || _blurEffect)
             {
                 if (!transparent)
                     _batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.LinearClamp, DepthStencilState.Default, _state, (MTEffect)effect, camera.getMatrix());
@@ -489,12 +489,12 @@ namespace DuckGame
         {
             if (currentSpanOffset > 10000f)
                 currentSpanOffset = 0f;
-            if (!transparent && Layer.ignoreTransparent || isTargetDraw && slaveTarget != null || target != null && !isTargetDraw && targetOnly)
+            if (!transparent && ignoreTransparent || isTargetDraw && slaveTarget != null || target != null && !isTargetDraw && targetOnly)
                 return;
-            if (Network.isActive && this == Layer.Game)
-                DuckGame.Graphics.currentFrameCalls = new List<DrawCall>();
+            if (Network.isActive && this == Game)
+                Graphics.currentFrameCalls = new List<DrawCall>();
             Level.activeLevel.InitializeDraw(this);
-            DuckGame.Graphics.currentLayer = this;
+            Graphics.currentLayer = this;
 
             Graphics.polyBatcher.UpdateMatricesForCurrentLayer();
 
@@ -507,8 +507,8 @@ namespace DuckGame
                 position.y = (float)Math.Round(position.y);
                 Color color = new Color(1f * _targetFade, 1f * _targetFade, 1f * _targetFade, 1f);
                 Vec2 vec2 = new Vec2(Math.Max(camera.width, Graphics.width), Math.Max(camera.height, Graphics.height));
-                DuckGame.Graphics.skipReplayRender = true;
-                DuckGame.Graphics.Draw(target, position, new Rectangle?(), color, 0f, Vec2.Zero, new Vec2(vec2.x / target.width, vec2.y / target.height), SpriteEffects.None, (Depth)1f);
+                Graphics.skipReplayRender = true;
+                Graphics.Draw(target, position, new Rectangle?(), color, 0f, Vec2.Zero, new Vec2(vec2.x / target.width, vec2.y / target.height), SpriteEffects.None, (Depth)1f);
                 if (name == "LIGHTING")
                 {
                     if (VirtualTransition.core._scanStage == 1)
@@ -516,7 +516,7 @@ namespace DuckGame
                     else if (VirtualTransition.core._scanStage == 3)
                         targetClearColor = new Color(120, 120, 120, (int)byte.MaxValue);
                 }
-                DuckGame.Graphics.skipReplayRender = false;
+                Graphics.skipReplayRender = false;
             }
             else
             {
@@ -529,16 +529,16 @@ namespace DuckGame
                     transparent1 = _shareDrawObjects._transparent;
                     opaque = _shareDrawObjects._opaque;
                 }
-                if (!Layer.skipDrawing)
+                if (!skipDrawing)
                 {
                     if (transparent)
                     {
                         if (Network.isActive)
                         {
-                            if (this != Layer.Parallax && DGRSettings.S_GraphicsCulling)
+                            if (this != Parallax && DGRSettings.S_GraphicsCulling)
                             {
                                 Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));
-                                Vec2 Bottomright = this.camera.transformInverse(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));
+                                Vec2 Bottomright = this.camera.transformInverse(new Vec2(Graphics.viewport.Width, Graphics.viewport.Height));
                                 int top = (int)((Bottomright.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
                                 int left = (int)((Topleft.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
                                 int bottom = (int)((Topleft.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
@@ -558,7 +558,7 @@ namespace DuckGame
                                             break;
                                         }
                                     }
-                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Layer.Foreground) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
+                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Foreground) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
                                     {
                                         if (_perspective)
                                         {
@@ -629,7 +629,7 @@ namespace DuckGame
                                 }
                             }
                         }
-                        else if (this == Layer.Lighting)
+                        else if (this == Lighting)
                         {
                             foreach (Thing thing in transparent1)
                             {
@@ -642,10 +642,10 @@ namespace DuckGame
                         }
                         else
                         {
-                            if (this != Layer.Parallax && DGRSettings.S_GraphicsCulling)
+                            if (this != Parallax && DGRSettings.S_GraphicsCulling)
                             {
                                 Vec2 Topleft = this.camera.transformInverse(new Vec2(0f, 0f));
-                                Vec2 Bottomright = this.camera.transformInverse(new Vec2(DuckGame.Graphics.viewport.Width, DuckGame.Graphics.viewport.Height));
+                                Vec2 Bottomright = this.camera.transformInverse(new Vec2(Graphics.viewport.Width, Graphics.viewport.Height));
                                 int top = (int)((Bottomright.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
                                 int left = (int)((Topleft.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
                                 int bottom = (int)((Topleft.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
@@ -665,7 +665,7 @@ namespace DuckGame
                                             break;
                                         }
                                     }
-                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Layer.Foreground) && thing.visible)
+                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Foreground) && thing.visible)
                                     {
                                         if (_perspective)
                                         {
@@ -761,7 +761,7 @@ namespace DuckGame
                 if (transparent)
                     Level.activeLevel.PostDrawLayer(this);
             }
-            if (Network.isActive && Network.inputDelayFrames > 0 && this == Layer.Game)
+            if (Network.isActive && Network.inputDelayFrames > 0 && this == Game)
             {
                 Graphics.drawCalls.Enqueue(Graphics.currentFrameCalls);
                 if (Graphics.drawCalls.Count > 0)

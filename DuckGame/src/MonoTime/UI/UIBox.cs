@@ -71,12 +71,12 @@ namespace DuckGame
             base.Insert(component, position, doAnchor);
         }
 
-        public virtual void AssignDefaultSelection() => _defaultSelection = _components.Where<UIComponent>(val =>
+        public virtual void AssignDefaultSelection() => _defaultSelection = _components.Where(val =>
        {
            if (!(val is UIMenuItem))
                return false;
            return val.condition == null || val.condition();
-       }).ToList<UIComponent>().Count - 1;
+       }).ToList().Count - 1;
         public UIMenu UIParentMenu;
         public override void Open()
         {
@@ -94,7 +94,7 @@ namespace DuckGame
             {
                 _selection = _defaultSelection;
                 if (_willSelectLast)
-                    _selection = _components.Where<UIComponent>(val => val is UIMenuItem).ToList<UIComponent>().Count - 1;
+                    _selection = _components.Where(val => val is UIMenuItem).ToList().Count - 1;
             }
             base.Open();
         }
@@ -183,7 +183,7 @@ namespace DuckGame
 
         public virtual void SelectLastMenuItem()
         {
-            _selection = _components.Where<UIComponent>(val => val is UIMenuItem).ToList<UIComponent>().Count - 1;
+            _selection = _components.Where(val => val is UIMenuItem).ToList().Count - 1;
             _willSelectLast = true;
         }
 
@@ -320,12 +320,12 @@ namespace DuckGame
                         }
                     }
 
-                    _currentMenuItemSelection = _components.Where<UIComponent>(val =>
+                    _currentMenuItemSelection = _components.Where(val =>
                    {
                        if (!(val is UIMenuItem))
                            return false;
                        return val.condition == null || val.condition();
-                   }).ToList<UIComponent>();
+                   }).ToList();
                     if (_vertical)
                     {
                         if (!_animating && Input.Pressed("MENUUP"))

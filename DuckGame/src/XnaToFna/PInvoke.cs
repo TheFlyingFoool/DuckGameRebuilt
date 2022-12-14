@@ -23,7 +23,7 @@ namespace XnaToFna
         static PInvoke()
         {
             foreach (HookType key in Enum.GetValues(typeof(HookType)))
-                PInvoke.Hooks[key] = new List<Delegate>();
+                Hooks[key] = new List<Delegate>();
         }
 
         public static void CallHooks(
@@ -34,7 +34,7 @@ namespace XnaToFna
           bool window = true,
           bool allWindows = false)
         {
-            PInvoke.CallHooks(Msg, wParam, new Message()
+            CallHooks(Msg, wParam, new Message()
             {
                 HWnd = IntPtr.Zero,
                 Msg = (int)Msg,
@@ -51,9 +51,9 @@ namespace XnaToFna
           bool window = true,
           bool allWindows = false)
         {
-            IntPtr num = Marshal.AllocHGlobal(PInvoke.MessageSize);
+            IntPtr num = Marshal.AllocHGlobal(MessageSize);
             Marshal.StructureToPtr((object)lParamMsg, num, false);
-            PInvoke.CallHooks(Msg, wParam, num, ref lParamMsg, global, window, allWindows);
+            CallHooks(Msg, wParam, num, ref lParamMsg, global, window, allWindows);
             Marshal.FreeHGlobal(num);
         }
 
@@ -67,17 +67,17 @@ namespace XnaToFna
           bool allWindows = false)
         {
             if (global)
-                PInvoke.CallHookChain(HookType.WH_GETMESSAGE, (IntPtr)1, lParam, ref lParamMsg);
+                CallHookChain(HookType.WH_GETMESSAGE, (IntPtr)1, lParam, ref lParamMsg);
             if (allWindows)
             {
                 for (int index = 0; index < Control.AllControls.Count; ++index)
-                    lParamMsg.Result = PInvoke.CallWindowHook((IntPtr)(index + 1), Msg, wParam, lParam);
+                    lParamMsg.Result = CallWindowHook((IntPtr)(index + 1), Msg, wParam, lParam);
             }
             else
             {
                 if (!window)
                     return;
-                lParamMsg.Result = PInvoke.CallWindowHook(Msg, wParam, lParam);
+                lParamMsg.Result = CallWindowHook(Msg, wParam, lParam);
             }
         }
 
@@ -87,16 +87,16 @@ namespace XnaToFna
           IntPtr lParam,
           ref Message lParamMsg)
         {
-            List<Delegate> hook = PInvoke.Hooks[hookType];
+            List<Delegate> hook = Hooks[hookType];
             if (hook.Count == 0)
                 return IntPtr.Zero;
-            PInvoke.CurrentHookChain.Value = hook;
+            CurrentHookChain.Value = hook;
             for (int index = 0; index < hook.Count; ++index)
             {
                 Delegate @delegate = hook[index];
                 if ((object)@delegate != null)
                 {
-                    PInvoke.CurrentHookIndex.Value = index;
+                    CurrentHookIndex.Value = index;
                     object[] objArray = new object[3]
                     {
              0,
@@ -113,13 +113,13 @@ namespace XnaToFna
 
         public static IntPtr ContinueHookChain(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            List<Delegate> delegateList = PInvoke.CurrentHookChain.Value;
-            for (int index = PInvoke.CurrentHookIndex.Value + 1; index < delegateList.Count; ++index)
+            List<Delegate> delegateList = CurrentHookChain.Value;
+            for (int index = CurrentHookIndex.Value + 1; index < delegateList.Count; ++index)
             {
                 Delegate @delegate = delegateList[index];
                 if ((object)@delegate != null)
                 {
-                    PInvoke.CurrentHookIndex.Value = index;
+                    CurrentHookIndex.Value = index;
                     return (IntPtr)@delegate.DynamicInvoke(nCode < 0 ? nCode + 1 : 0, wParam, lParam);
                 }
             }
@@ -129,7 +129,7 @@ namespace XnaToFna
         public static IntPtr CallWindowHook(Messages Msg, IntPtr wParam, IntPtr lParam)
         {
             GameForm instance = GameForm.Instance;
-            return PInvoke.CallWindowHook(instance != null ? instance.Handle : IntPtr.Zero, (uint)Msg, wParam, lParam);
+            return CallWindowHook(instance != null ? instance.Handle : IntPtr.Zero, (uint)Msg, wParam, lParam);
         }
 
         public static IntPtr CallWindowHook(
@@ -138,7 +138,7 @@ namespace XnaToFna
           IntPtr wParam,
           IntPtr lParam)
         {
-            return PInvoke.CallWindowHook(hWnd, (uint)Msg, wParam, lParam);
+            return CallWindowHook(hWnd, (uint)Msg, wParam, lParam);
         }
 
         public static IntPtr CallWindowHook(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam)

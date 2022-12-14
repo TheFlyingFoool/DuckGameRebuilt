@@ -10,21 +10,21 @@ namespace DuckGame
     public class MetalRebound : Thing
     {
         public static int kMaxObjects = 32;
-        public static MetalRebound[] _objects = new MetalRebound[MetalRebound.kMaxObjects];
+        public static MetalRebound[] _objects = new MetalRebound[kMaxObjects];
         public static int _lastActiveObject = 0;
         private SpriteMap _sprite;
 
         public static MetalRebound New(float xpos, float ypos, int offDir)
         {
             MetalRebound metalRebound;
-            if (MetalRebound._objects[MetalRebound._lastActiveObject] == null)
+            if (_objects[_lastActiveObject] == null)
             {
                 metalRebound = new MetalRebound();
-                MetalRebound._objects[MetalRebound._lastActiveObject] = metalRebound;
+                _objects[_lastActiveObject] = metalRebound;
             }
             else
-                metalRebound = MetalRebound._objects[MetalRebound._lastActiveObject];
-            MetalRebound._lastActiveObject = (MetalRebound._lastActiveObject + 1) % MetalRebound.kMaxObjects;
+                metalRebound = _objects[_lastActiveObject];
+            _lastActiveObject = (_lastActiveObject + 1) % kMaxObjects;
             metalRebound.Init(xpos, ypos, offDir);
             metalRebound.ResetProperties();
             return metalRebound;

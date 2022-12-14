@@ -46,7 +46,7 @@ namespace DuckGame
                 center = new Vec2(13f, 13f)
             };
             _virtualBackground = new VirtualBackground(0f, 0f, null);
-            Level.Add(_virtualBackground);
+            Add(_virtualBackground);
             _cornerWedge = new Sprite("rockThrow/cornerWedge");
             _intermissionText = new Sprite("rockThrow/intermission");
             _subHUD = new Layer("SUBHUD", -85)
@@ -87,7 +87,7 @@ namespace DuckGame
             if (!Network.isServer || _subHUD.fade > 0.0 || _intermissionSlide < 0.99f || !ready)
                 return;
             Music.volume = 1f;
-            Level.current = new RockScoreboard(_next);
+            current = new RockScoreboard(_next);
         }
 
         public override void PostDrawLayer(Layer l)

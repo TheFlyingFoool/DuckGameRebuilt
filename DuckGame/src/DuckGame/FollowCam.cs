@@ -182,9 +182,9 @@ namespace DuckGame
                 {
                     for (int index = 0; index < _follow.Count; ++index)
                     {
-                        if (!_follow.ElementAt<Thing>(index).active)
+                        if (!_follow.ElementAt(index).active)
                         {
-                            _follow.Remove(_follow.ElementAt<Thing>(index));
+                            _follow.Remove(_follow.ElementAt(index));
                             --index;
                         }
                     }
@@ -228,7 +228,7 @@ namespace DuckGame
                 if (_prevPositions.ContainsKey(key))
                 {
                     Vec2 prevPosition = _prevPositions[key];
-                    if (_overFollow || FollowCam.boost || key.overfollow > 0f)
+                    if (_overFollow || boost || key.overfollow > 0f)
                     {
                         float amount = 0.3f;
                         if (key.overfollow > 0f)
@@ -355,7 +355,7 @@ namespace DuckGame
             if (_lerpSpeed > 0.9f)
                 _lerpSpeed = 0.05f;
             this.lerpMult = lerpMult;
-            FollowCam.boost = false;
+            boost = false;
         }
     }
 }

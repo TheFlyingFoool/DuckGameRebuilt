@@ -28,7 +28,7 @@ namespace DuckGame
                 IEnumerable<DXMLNode> source = DuckXML.Load(DuckFile.OpenStream(file)).Elements("Title");
                 if (source != null)
                 {
-                    DXMLAttribute dxmlAttribute1 = source.Attributes<DXMLNode>("name").FirstOrDefault<DXMLAttribute>();
+                    DXMLAttribute dxmlAttribute1 = source.Attributes("name").FirstOrDefault();
                     if (dxmlAttribute1 != null)
                     {
                         DuckTitle duckTitle = new DuckTitle
@@ -36,15 +36,15 @@ namespace DuckGame
                             _name = dxmlAttribute1.Value
                         };
                         bool flag = false;
-                        foreach (DXMLNode element in source.Elements<DXMLNode>())
+                        foreach (DXMLNode element in source.Elements())
                         {
                             if (element.Name == "StatRequirement")
                             {
-                                DXMLAttribute statNameAttrib = element.Attributes("name").FirstOrDefault<DXMLAttribute>();
-                                DXMLAttribute dxmlAttribute2 = element.Attributes("value").FirstOrDefault<DXMLAttribute>();
+                                DXMLAttribute statNameAttrib = element.Attributes("name").FirstOrDefault();
+                                DXMLAttribute dxmlAttribute2 = element.Attributes("value").FirstOrDefault();
                                 if (statNameAttrib != null && dxmlAttribute2 != null)
                                 {
-                                    PropertyInfo key = typeof(ProfileStats).GetProperties().FirstOrDefault<PropertyInfo>(x => x.Name == statNameAttrib.Value);
+                                    PropertyInfo key = typeof(ProfileStats).GetProperties().FirstOrDefault(x => x.Name == statNameAttrib.Value);
                                     if (key != null)
                                     {
                                         if (key.GetType() == typeof(float))
@@ -68,13 +68,13 @@ namespace DuckGame
                             }
                         }
                         if (!flag)
-                            DuckTitle._titles.Add(duckTitle);
+                            _titles.Add(duckTitle);
                     }
                 }
             }
         }
 
-        public static DuckTitle GetTitle(string title) => DuckTitle._titles.FirstOrDefault<DuckTitle>(x => x._name == title);
+        public static DuckTitle GetTitle(string title) => _titles.FirstOrDefault(x => x._name == title);
 
         public string previousOwner
         {
@@ -85,7 +85,7 @@ namespace DuckGame
         public static Dictionary<DuckTitle, float> ScoreTowardsTitles(Profile p)
         {
             Dictionary<DuckTitle, float> dictionary = new Dictionary<DuckTitle, float>();
-            foreach (DuckTitle title in DuckTitle._titles)
+            foreach (DuckTitle title in _titles)
                 dictionary[title] = title.ScoreTowardsTitle(p);
             return dictionary;
         }
@@ -119,7 +119,7 @@ namespace DuckGame
 
         public void UpdateTitles()
         {
-            foreach (DuckTitle title in DuckTitle._titles)
+            foreach (DuckTitle title in _titles)
                 ;
         }
     }

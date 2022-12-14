@@ -132,7 +132,7 @@ namespace DuckGame
                 BinaryClassChunk property1 = node.GetProperty<BinaryClassChunk>("north");
                 if (property1 != null)
                 {
-                    AutoBlock autoBlock = Thing.LoadThing(property1) as AutoBlock;
+                    AutoBlock autoBlock = LoadThing(property1) as AutoBlock;
                     _upBlock = autoBlock;
                     autoBlock._downBlock = this;
                     _additionalBlocks.Add(autoBlock);
@@ -140,7 +140,7 @@ namespace DuckGame
                 BinaryClassChunk property2 = node.GetProperty<BinaryClassChunk>("south");
                 if (property2 != null)
                 {
-                    AutoBlock autoBlock = Thing.LoadThing(property2) as AutoBlock;
+                    AutoBlock autoBlock = LoadThing(property2) as AutoBlock;
                     _downBlock = autoBlock;
                     autoBlock._upBlock = this;
                     _additionalBlocks.Add(autoBlock);
@@ -148,7 +148,7 @@ namespace DuckGame
                 BinaryClassChunk property3 = node.GetProperty<BinaryClassChunk>("east");
                 if (property3 != null)
                 {
-                    AutoBlock autoBlock = Thing.LoadThing(property3) as AutoBlock;
+                    AutoBlock autoBlock = LoadThing(property3) as AutoBlock;
                     _rightBlock = autoBlock;
                     autoBlock._leftBlock = this;
                     _additionalBlocks.Add(autoBlock);
@@ -156,7 +156,7 @@ namespace DuckGame
                 BinaryClassChunk property4 = node.GetProperty<BinaryClassChunk>("west");
                 if (property4 != null)
                 {
-                    AutoBlock autoBlock = Thing.LoadThing(property4) as AutoBlock;
+                    AutoBlock autoBlock = LoadThing(property4) as AutoBlock;
                     _leftBlock = autoBlock;
                     autoBlock._rightBlock = this;
                     _additionalBlocks.Add(autoBlock);
@@ -196,7 +196,7 @@ namespace DuckGame
                 DXMLNode node1 = node.Element("north");
                 if (node1 != null)
                 {
-                    AutoBlock autoBlock = Thing.LegacyLoadThing(node1) as AutoBlock;
+                    AutoBlock autoBlock = LegacyLoadThing(node1) as AutoBlock;
                     _upBlock = autoBlock;
                     autoBlock._downBlock = this;
                     _additionalBlocks.Add(autoBlock);
@@ -204,7 +204,7 @@ namespace DuckGame
                 DXMLNode node2 = node.Element("south");
                 if (node2 != null)
                 {
-                    AutoBlock autoBlock = Thing.LegacyLoadThing(node2) as AutoBlock;
+                    AutoBlock autoBlock = LegacyLoadThing(node2) as AutoBlock;
                     _downBlock = autoBlock;
                     autoBlock._upBlock = this;
                     _additionalBlocks.Add(autoBlock);
@@ -212,7 +212,7 @@ namespace DuckGame
                 DXMLNode node3 = node.Element("east");
                 if (node3 != null)
                 {
-                    AutoBlock autoBlock = Thing.LegacyLoadThing(node3) as AutoBlock;
+                    AutoBlock autoBlock = LegacyLoadThing(node3) as AutoBlock;
                     _rightBlock = autoBlock;
                     autoBlock._leftBlock = this;
                     _additionalBlocks.Add(autoBlock);
@@ -220,7 +220,7 @@ namespace DuckGame
                 DXMLNode node4 = node.Element("west");
                 if (node4 != null)
                 {
-                    AutoBlock autoBlock = Thing.LegacyLoadThing(node4) as AutoBlock;
+                    AutoBlock autoBlock = LegacyLoadThing(node4) as AutoBlock;
                     _leftBlock = autoBlock;
                     autoBlock._rightBlock = this;
                     _additionalBlocks.Add(autoBlock);
@@ -266,8 +266,8 @@ namespace DuckGame
             _canBeGrouped = true;
             layer = Layer.Blocks;
             _impactThreshold = 100f;
-            blockIndex = AutoBlock._kBlockIndex;
-            ++AutoBlock._kBlockIndex;
+            blockIndex = _kBlockIndex;
+            ++_kBlockIndex;
             _placementCost = 1;
         }
 

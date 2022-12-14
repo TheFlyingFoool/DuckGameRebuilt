@@ -18,7 +18,7 @@ namespace XnaToFna
 
         public static BinaryFormatter Create() => new BinaryFormatter()
         {
-            Binder = new BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper(null)
+            Binder = new XnaToFnaSerializationBinderWrapper(null)
         };
 
         public static BinaryFormatter Create(
@@ -27,13 +27,13 @@ namespace XnaToFna
         {
             return new BinaryFormatter(selector, context)
             {
-                Binder = new BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper(null)
+                Binder = new XnaToFnaSerializationBinderWrapper(null)
             };
         }
 
         public static SerializationBinder get_Binder(this BinaryFormatter self) => (self.Binder is BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper binder ? binder.Inner : null) ?? self.Binder;
 
-        public static void set_Binder(this BinaryFormatter self, SerializationBinder binder) => self.Binder = new BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper(binder);
+        public static void set_Binder(this BinaryFormatter self, SerializationBinder binder) => self.Binder = new XnaToFnaSerializationBinderWrapper(binder);
 
         public class XnaToFnaSerializationBinderWrapper : SerializationBinder
         {
@@ -44,7 +44,7 @@ namespace XnaToFna
             public override Type BindToType(string assemblyName, string typeName)
             {
                 if (!(assemblyName != "Microsoft.Xna.Framework") || assemblyName.StartsWith("Microsoft.Xna.Framework,") || assemblyName.StartsWith("Microsoft.Xna.Framework."))
-                    return BinaryFormatterHelper.FNA.GetType(typeName);
+                    return FNA.GetType(typeName);
                 return this.Inner?.BindToType(assemblyName, typeName);
             }
 

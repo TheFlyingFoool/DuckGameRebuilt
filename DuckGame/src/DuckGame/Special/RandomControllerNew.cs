@@ -68,7 +68,7 @@ namespace DuckGame
             {
                 if (!Ordered_Groups.value)
                 {
-                    List<Thing> list = Level.current.things[typeof(ISequenceItem)].ToList<Thing>();
+                    List<Thing> list = Level.current.things[typeof(ISequenceItem)].ToList();
                     if (list.Count > 0)
                         _sequenceNumber = list[ChallengeRando.Int(list.Count - 1)].sequence.order;
                 }
@@ -109,39 +109,39 @@ namespace DuckGame
                 num1 = 9999;
             while (_up.Count < num1)
             {
-                List<Thing> source1 = Group.value >= 0 ? (Type.value != SequenceItemType.ALL ? Level.current.things[typeof(ISequenceItem)].Where<Thing>(x => x.sequence.type == Type.value && x.sequence.order == Group.value).ToList<Thing>() : Level.current.things[typeof(ISequenceItem)].Where<Thing>(x => x.sequence.order == Group.value).ToList<Thing>()) : (Type.value != SequenceItemType.ALL ? Level.current.things[typeof(ISequenceItem)].Where<Thing>(x => x.sequence.type == Type.value).ToList<Thing>() : Level.current.things[typeof(ISequenceItem)].ToList<Thing>());
+                List<Thing> source1 = Group.value >= 0 ? (Type.value != SequenceItemType.ALL ? Level.current.things[typeof(ISequenceItem)].Where(x => x.sequence.type == Type.value && x.sequence.order == Group.value).ToList() : Level.current.things[typeof(ISequenceItem)].Where(x => x.sequence.order == Group.value).ToList()) : (Type.value != SequenceItemType.ALL ? Level.current.things[typeof(ISequenceItem)].Where(x => x.sequence.type == Type.value).ToList() : Level.current.things[typeof(ISequenceItem)].ToList());
                 IEnumerable<Thing> source2;
                 while (true)
                 {
-                    IEnumerable<Thing> source3 = source1.Where<Thing>(v => v.sequence.isValid && v.sequence.order != _sequenceNumber && v.sequence.timesActivated <= _activationCycle);
-                    source2 = source1.Where<Thing>(v => v.sequence.isValid && v.sequence.order == _sequenceNumber);
-                    if (source3.Count<Thing>() > 0)
+                    IEnumerable<Thing> source3 = source1.Where(v => v.sequence.isValid && v.sequence.order != _sequenceNumber && v.sequence.timesActivated <= _activationCycle);
+                    source2 = source1.Where(v => v.sequence.isValid && v.sequence.order == _sequenceNumber);
+                    if (source3.Count() > 0)
                         _hadFutureItems = true;
                     if (_hadFutureItems)
                     {
-                        source2 = source2.Where<Thing>(v => v.sequence.timesActivated == _activationCycle);
-                        if (source2.Count<Thing>() == 0)
+                        source2 = source2.Where(v => v.sequence.timesActivated == _activationCycle);
+                        if (source2.Count() == 0)
                         {
                             if (!Ordered_Groups.value)
                             {
-                                IEnumerable<Thing> source4 = source1.Where<Thing>(x => x.sequence.order != _sequenceNumber);
+                                IEnumerable<Thing> source4 = source1.Where(x => x.sequence.order != _sequenceNumber);
                                 if (!Continuous.value)
                                 {
-                                    source4 = source4.Where<Thing>(x => x.sequence.timesActivated <= _activationCycle);
+                                    source4 = source4.Where(x => x.sequence.timesActivated <= _activationCycle);
                                 }
                                 else
                                 {
                                     foreach (Thing thing in source4)
                                         thing.sequence.timesActivated = 0;
                                 }
-                                if (source4.Count<Thing>() > 0)
+                                if (source4.Count() > 0)
                                 {
-                                    _sequenceNumber = source4.OrderBy<Thing, int>(x => x.sequence.likelyhood + ChallengeRando.Int(8)).ElementAt<Thing>(0).sequence.order;
+                                    _sequenceNumber = source4.OrderBy(x => x.sequence.likelyhood + ChallengeRando.Int(8)).ElementAt(0).sequence.order;
                                     Max_Up.value = _originalMaxUp;
                                     continue;
                                 }
                             }
-                            if (source3.Count<Thing>() == 0)
+                            if (source3.Count() == 0)
                             {
                                 if (Continuous.value)
                                 {
@@ -170,13 +170,13 @@ namespace DuckGame
                 break;
             label_29:
                 if (Group_Wait.value && _up.Count == 0)
-                    Max_Up.value = source2.Count<Thing>();
+                    Max_Up.value = source2.Count();
                 label_31:
                 int num2 = 0;
                 List<SequenceItem> sequenceItemList = new List<SequenceItem>();
-                List<Thing> list = source2.ToList<Thing>();
+                List<Thing> list = source2.ToList();
                 bool flag2 = false;
-                while (list.Count<Thing>() > 0)
+                while (list.Count() > 0)
                 {
                     Thing thing = list[ChallengeRando.Int(0, list.Count - 1)];
                     list.Remove(thing);

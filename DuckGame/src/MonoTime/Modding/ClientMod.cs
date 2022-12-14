@@ -26,12 +26,12 @@ namespace DuckGame
             if (DuckFile.FileExists(pPath + pInfoFile))
             {
                 string[] source = DuckFile.ReadAllLines(pPath + pInfoFile);
-                if (source.Count<string>() >= 3)
+                if (source.Count() >= 3)
                 {
                     str1 = source[0];
                     str2 = source[1];
                     str3 = source[2];
-                    if (source.Count<string>() > 3 && source[3].Trim() == "hd")
+                    if (source.Count() > 3 && source[3].Trim() == "hd")
                         flag = true;
                 }
             }

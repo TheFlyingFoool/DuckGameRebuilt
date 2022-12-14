@@ -27,17 +27,17 @@ namespace DuckGame
 
         public float lengthSq => LengthSquared();
 
-        public static Vec2 Zero => Vec2.zeroVector;
+        public static Vec2 Zero => zeroVector;
 
-        public static Vec2 One => Vec2.unitVector;
+        public static Vec2 One => unitVector;
 
-        public static Vec2 MaxValue => Vec2.maxVector;
+        public static Vec2 MaxValue => maxVector;
 
-        public static Vec2 MinValue => Vec2.minVector;
+        public static Vec2 MinValue => minVector;
 
-        public static Vec2 Unitx => Vec2.unitxVector;
+        public static Vec2 Unitx => unitxVector;
 
-        public static Vec2 Unity => Vec2.unityVector;
+        public static Vec2 Unity => unityVector;
 
         public static Vec2 NetMin => new Vec2(-10000f, -10000f);
 
@@ -210,7 +210,7 @@ namespace DuckGame
           float amount)
         {
             Vec2 result = new Vec2();
-            Vec2.Hermite(ref value1, ref tangent1, ref value2, ref tangent2, amount, out result);
+            Hermite(ref value1, ref tangent1, ref value2, ref tangent2, amount, out result);
             return result;
         }
 
@@ -305,7 +305,7 @@ namespace DuckGame
             {
                 float num1 = (float)Math.Sqrt(x * x + y * y);
                 if (num1 == 0.0)
-                    return Vec2.Zero;
+                    return Zero;
                 float num2 = 1f / num1;
                 return new Vec2(x * num2, y * num2);
             }
@@ -333,7 +333,7 @@ namespace DuckGame
                 result.y = value.y * num2;
             }
             else
-                result = Vec2.Zero;
+                result = Zero;
         }
 
         public static Vec2 SmoothStep(Vec2 value1, Vec2 value2, float amount) => new Vec2(MathHelper.SmoothStep(value1.x, value2.x, amount), MathHelper.SmoothStep(value1.y, value2.y, amount));
@@ -355,7 +355,7 @@ namespace DuckGame
 
         public static Vec2 Transform(Vec2 position, Matrix matrix)
         {
-            Vec2.Transform(ref position, ref matrix, out position);
+            Transform(ref position, ref matrix, out position);
             return position;
         }
 
@@ -363,7 +363,7 @@ namespace DuckGame
 
         public static Vec2 Transform(Vec2 position, Quaternion quat)
         {
-            Vec2.Transform(ref position, ref quat, out position);
+            Transform(ref position, ref quat, out position);
             return position;
         }
 
@@ -378,7 +378,7 @@ namespace DuckGame
             result = new Vec2(result1.x, result1.y);
         }
 
-        public static void Transform(Vec2[] sourceArray, ref Matrix matrix, Vec2[] destinationArray) => Vec2.Transform(sourceArray, 0, ref matrix, destinationArray, 0, sourceArray.Length);
+        public static void Transform(Vec2[] sourceArray, ref Matrix matrix, Vec2[] destinationArray) => Transform(sourceArray, 0, ref matrix, destinationArray, 0, sourceArray.Length);
 
         public static void Transform(
           Vec2[] sourceArray,
@@ -400,7 +400,7 @@ namespace DuckGame
 
         public static Vec2 TransformNormal(Vec2 normal, Matrix matrix)
         {
-            Vec2.TransformNormal(ref normal, ref matrix, out normal);
+            TransformNormal(ref normal, ref matrix, out normal);
             return normal;
         }
 

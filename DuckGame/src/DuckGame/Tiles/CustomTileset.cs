@@ -17,10 +17,10 @@ namespace DuckGame
 
         public static string customTileset01
         {
-            get => Custom.data[CustomTileset._customType][0];
+            get => Custom.data[_customType][0];
             set
             {
-                Custom.data[CustomTileset._customType][0] = value;
+                Custom.data[_customType][0] = value;
                 Custom.Clear(CustomType.Block, value);
             }
         }
@@ -40,7 +40,7 @@ namespace DuckGame
 
         public void UpdateCurrentTileset()
         {
-            CustomTileData data = Custom.GetData(customIndex, CustomTileset._customType);
+            CustomTileData data = Custom.GetData(customIndex, _customType);
             int num = 0;
             if (_sprite != null)
                 num = _sprite.frame;
@@ -68,7 +68,7 @@ namespace DuckGame
                 verticalWidthThick = 16f;
             _sprite.frame = num;
             _tileset = "CUSTOM0" + (customIndex + 1).ToString();
-            _currentTileset = Custom.data[CustomTileset._customType][customIndex];
+            _currentTileset = Custom.data[_customType][customIndex];
             graphic = _sprite;
             UpdateNubbers();
         }
@@ -77,7 +77,7 @@ namespace DuckGame
 
         public override void EditorUpdate()
         {
-            if (!(Level.current is Editor) || !(_currentTileset != Custom.data[CustomTileset._customType][customIndex]))
+            if (!(Level.current is Editor) || !(_currentTileset != Custom.data[_customType][customIndex]))
                 return;
             UpdateCurrentTileset();
         }

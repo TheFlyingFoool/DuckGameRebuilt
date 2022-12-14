@@ -75,7 +75,7 @@ namespace DuckGame
                     string shortTimeString = now.ToShortTimeString();
                     _fileName = "funstream-" + (shortDateString + "-" + shortTimeString).Replace("/", "_").Replace(":", "-").Replace(" ", "");
                 }
-                _writer = new BinaryWriter(new GZipStream(System.IO.File.Open(_fileName + ".vid", FileMode.Create), CompressionMode.Compress));
+                _writer = new BinaryWriter(new GZipStream(File.Open(_fileName + ".vid", FileMode.Create), CompressionMode.Compress));
             }
             else
             {
@@ -93,7 +93,7 @@ namespace DuckGame
             if (file == "")
                 file = _fileName;
             _fileName = file;
-            BinaryReader binaryReader = new BinaryReader(System.IO.File.Open(file + ".dat", FileMode.Open));
+            BinaryReader binaryReader = new BinaryReader(File.Open(file + ".dat", FileMode.Open));
             while (binaryReader.BaseStream.Position != binaryReader.BaseStream.Length)
             {
                 int num = binaryReader.ReadByte();
@@ -107,7 +107,7 @@ namespace DuckGame
                         byte[] numArray = new byte[width * height * 4];
                         binaryReader.Read(numArray, 0, width * height * 4);
                         RenderTarget2D tex = new RenderTarget2D(width, height);
-                        tex.SetData<byte>(numArray);
+                        tex.SetData(numArray);
                         Content.SetTextureAtIndex(index, tex);
                     }
                     else
@@ -119,7 +119,7 @@ namespace DuckGame
                 else
                 {
                     string name = binaryReader.ReadString();
-                    Content.SetEffectAtIndex(index, name == "" ? (MTEffect)new BasicEffect(DuckGame.Graphics.device) : Content.Load<MTEffect>(name));
+                    Content.SetEffectAtIndex(index, name == "" ? (MTEffect)new BasicEffect(Graphics.device) : Content.Load<MTEffect>(name));
                 }
             }
         }
@@ -128,7 +128,7 @@ namespace DuckGame
         {
             if (_writer == null)
                 return;
-            BinaryWriter binaryWriter = new BinaryWriter(System.IO.File.Open(_fileName + ".dat", FileMode.OpenOrCreate));
+            BinaryWriter binaryWriter = new BinaryWriter(File.Open(_fileName + ".dat", FileMode.OpenOrCreate));
             binaryWriter.Seek(0, SeekOrigin.End);
             for (int textureWrittenIndex = _lastTextureWrittenIndex; textureWrittenIndex < Content.textureList.Count; ++textureWrittenIndex)
             {
@@ -142,7 +142,7 @@ namespace DuckGame
                     binaryWriter.Write(texture.height);
                     byte[] numArray = new byte[texture.width * texture.height * 4];
                     if (!texture.IsDisposed && !((GraphicsResource)texture.nativeObject).IsDisposed)
-                        texture.GetData<byte>(numArray);
+                        texture.GetData(numArray);
                     binaryWriter.Write(numArray);
                 }
                 else
@@ -171,7 +171,7 @@ namespace DuckGame
                 _writer = null;
             }
             if (_reader == null)
-                _reader = new BinaryReader(new GZipStream(System.IO.File.Open(_fileName + ".vid", FileMode.Open), CompressionMode.Decompress));
+                _reader = new BinaryReader(new GZipStream(File.Open(_fileName + ".vid", FileMode.Open), CompressionMode.Decompress));
             int num1 = 2;
             int num2 = 0;
             if (_loadedNextFrame)

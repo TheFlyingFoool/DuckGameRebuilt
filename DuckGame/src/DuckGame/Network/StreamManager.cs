@@ -220,7 +220,7 @@ namespace DuckGame
                 }
                 if (m.priority == NetMessagePriority.ReliableOrdered)
                 {
-                    if (m.order >= _expectedReliableOrder && _orderedPackets.FirstOrDefault<NetMessage>(x => x.order == m.order) == null)
+                    if (m.order >= _expectedReliableOrder && _orderedPackets.FirstOrDefault(x => x.order == m.order) == null)
                     {
                         int index = 0;
                         while (index < _orderedPackets.Count && _orderedPackets[index].order <= m.order)

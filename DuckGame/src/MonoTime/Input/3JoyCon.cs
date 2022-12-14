@@ -67,7 +67,7 @@ namespace DuckGame
         public override bool allowDirectionalMapping => false;
 
         public SwitchJoyConRight(int idx)
-          : base(idx, "Right Joy-Con", "Joy-Con (R)", SwitchJoyConRight._rightJoyImages)
+          : base(idx, "Right Joy-Con", "Joy-Con (R)", _rightJoyImages)
         {
         }
 

@@ -12,7 +12,7 @@ namespace DuckGame
     public class WagnusChargeParticle : Thing, IFactory
     {
         public static int kMaxWagCharge = 64;
-        public static WagnusChargeParticle[] _sparks = new WagnusChargeParticle[WagnusChargeParticle.kMaxWagCharge];
+        public static WagnusChargeParticle[] _sparks = new WagnusChargeParticle[kMaxWagCharge];
         public static int _lastActiveWagCharge = 0;
         private Thing _target;
         private float life = 1f;
@@ -23,17 +23,17 @@ namespace DuckGame
           Thing target)
         {
             WagnusChargeParticle wagnusChargeParticle;
-            if (WagnusChargeParticle._sparks[WagnusChargeParticle._lastActiveWagCharge] == null)
+            if (_sparks[_lastActiveWagCharge] == null)
             {
                 wagnusChargeParticle = new WagnusChargeParticle();
-                WagnusChargeParticle._sparks[WagnusChargeParticle._lastActiveWagCharge] = wagnusChargeParticle;
+                _sparks[_lastActiveWagCharge] = wagnusChargeParticle;
             }
             else
-                wagnusChargeParticle = WagnusChargeParticle._sparks[WagnusChargeParticle._lastActiveWagCharge];
-            WagnusChargeParticle._lastActiveWagCharge = (WagnusChargeParticle._lastActiveWagCharge + 1) % WagnusChargeParticle.kMaxWagCharge;
+                wagnusChargeParticle = _sparks[_lastActiveWagCharge];
+            _lastActiveWagCharge = (_lastActiveWagCharge + 1) % kMaxWagCharge;
             wagnusChargeParticle.ResetProperties();
             wagnusChargeParticle.Init(xpos, ypos, target);
-            wagnusChargeParticle.globalIndex = Thing.GetGlobalIndex();
+            wagnusChargeParticle.globalIndex = GetGlobalIndex();
             return wagnusChargeParticle;
         }
 

@@ -16,7 +16,7 @@ namespace DuckGame
         private static ushort kCurrentSfxIndex = 0;
         private static List<NetSoundEffect> _soundsPlayedThisFrame = new List<NetSoundEffect>();
         public ushort sfxIndex;
-        public NetSoundEffect.Function function;
+        public Function function;
         public FieldBinding pitchBinding;
         public FieldBinding appendBinding;
         private List<string> _sounds = new List<string>();
@@ -30,33 +30,33 @@ namespace DuckGame
 
         public static void Register(string pName, NetSoundEffect pEffect)
         {
-            pEffect.sfxIndex = NetSoundEffect.kCurrentSfxIndex;
-            NetSoundEffect._sfxDictionary[pName] = pEffect;
-            NetSoundEffect._sfxIndexDictionary[NetSoundEffect.kCurrentSfxIndex] = pEffect;
-            ++NetSoundEffect.kCurrentSfxIndex;
+            pEffect.sfxIndex = kCurrentSfxIndex;
+            _sfxDictionary[pName] = pEffect;
+            _sfxIndexDictionary[kCurrentSfxIndex] = pEffect;
+            ++kCurrentSfxIndex;
         }
 
         public static void Initialize()
         {
-            NetSoundEffect.Register("duckJump", new NetSoundEffect(new string[1]
+            Register("duckJump", new NetSoundEffect(new string[1]
             {
         "jump"
             })
             {
                 volume = 0.5f
             });
-            NetSoundEffect.Register("duckDisarm", new NetSoundEffect(new string[1]
+            Register("duckDisarm", new NetSoundEffect(new string[1]
             {
         "disarm"
             })
             {
                 volume = 0.3f
             });
-            NetSoundEffect.Register("duckTinyMotion", new NetSoundEffect(new string[1]
+            Register("duckTinyMotion", new NetSoundEffect(new string[1]
             {
         "tinyMotion"
             }));
-            NetSoundEffect.Register("duckSwear", new NetSoundEffect(new List<string>()
+            Register("duckSwear", new NetSoundEffect(new List<string>()
       {
         "cutOffQuack",
         "cutOffQuack2"
@@ -65,20 +65,20 @@ namespace DuckGame
                 pitchVariationLow = -0.05f,
                 pitchVariationHigh = 0.05f
             });
-            NetSoundEffect.Register("duckScream", new NetSoundEffect(new string[3]
+            Register("duckScream", new NetSoundEffect(new string[3]
             {
         "quackYell01",
         "quackYell02",
         "quackYell03"
             }));
-            NetSoundEffect.Register("itemBoxHit", new NetSoundEffect(new string[1]
+            Register("itemBoxHit", new NetSoundEffect(new string[1]
             {
         "hitBox"
             })
             {
                 volume = 1f
             });
-            NetSoundEffect.Register("bananaSplat", new NetSoundEffect(new string[1]
+            Register("bananaSplat", new NetSoundEffect(new string[1]
             {
         "smallSplat"
             })
@@ -86,7 +86,7 @@ namespace DuckGame
                 pitchVariationLow = -0.2f,
                 pitchVariationHigh = 0.2f
             });
-            NetSoundEffect.Register("bananaEat", new NetSoundEffect(new string[1]
+            Register("bananaEat", new NetSoundEffect(new string[1]
             {
         "smallSplat"
             })
@@ -94,7 +94,7 @@ namespace DuckGame
                 pitchVariationLow = -0.6f,
                 pitchVariationHigh = 0.6f
             });
-            NetSoundEffect.Register("bananaSlip", new NetSoundEffect(new string[1]
+            Register("bananaSlip", new NetSoundEffect(new string[1]
             {
         "slip"
             })
@@ -102,15 +102,15 @@ namespace DuckGame
                 pitchVariationLow = -0.2f,
                 pitchVariationHigh = 0.2f
             });
-            NetSoundEffect.Register("mineDoubleBeep", new NetSoundEffect(new string[1]
+            Register("mineDoubleBeep", new NetSoundEffect(new string[1]
             {
         "doubleBeep"
             }));
-            NetSoundEffect.Register("minePullPin", new NetSoundEffect(new string[1]
+            Register("minePullPin", new NetSoundEffect(new string[1]
             {
         "pullPin"
             }));
-            NetSoundEffect.Register("oldPistolClick", new NetSoundEffect(new string[1]
+            Register("oldPistolClick", new NetSoundEffect(new string[1]
             {
         "click"
             })
@@ -118,7 +118,7 @@ namespace DuckGame
                 volume = 1f,
                 pitch = 0.5f
             });
-            NetSoundEffect.Register("oldPistolSwipe", new NetSoundEffect(new string[1]
+            Register("oldPistolSwipe", new NetSoundEffect(new string[1]
             {
         "swipe"
             })
@@ -126,18 +126,18 @@ namespace DuckGame
                 volume = 0.6f,
                 pitch = -0.3f
             });
-            NetSoundEffect.Register("oldPistolSwipe2", new NetSoundEffect(new string[1]
+            Register("oldPistolSwipe2", new NetSoundEffect(new string[1]
             {
         "swipe"
             })
             {
                 volume = 0.7f
             });
-            NetSoundEffect.Register("oldPistolLoad", new NetSoundEffect(new string[1]
+            Register("oldPistolLoad", new NetSoundEffect(new string[1]
             {
         "shotgunLoad"
             }));
-            NetSoundEffect.Register("pelletGunClick", new NetSoundEffect(new string[1]
+            Register("pelletGunClick", new NetSoundEffect(new string[1]
             {
         "click"
             })
@@ -145,7 +145,7 @@ namespace DuckGame
                 volume = 1f,
                 pitch = 0.5f
             });
-            NetSoundEffect.Register("pelletGunSwipe", new NetSoundEffect(new string[1]
+            Register("pelletGunSwipe", new NetSoundEffect(new string[1]
             {
         "swipe"
             })
@@ -153,7 +153,7 @@ namespace DuckGame
                 volume = 0.4f,
                 pitch = 0.3f
             });
-            NetSoundEffect.Register("pelletGunSwipe2", new NetSoundEffect(new string[1]
+            Register("pelletGunSwipe2", new NetSoundEffect(new string[1]
             {
         "swipe"
             })
@@ -161,7 +161,7 @@ namespace DuckGame
                 volume = 0.5f,
                 pitch = 0.4f
             });
-            NetSoundEffect.Register("pelletGunLoad", new NetSoundEffect(new string[1]
+            Register("pelletGunLoad", new NetSoundEffect(new string[1]
             {
         "loadLow"
             })
@@ -170,11 +170,11 @@ namespace DuckGame
                 pitchVariationLow = -0.05f,
                 pitchVariationHigh = 0.05f
             });
-            NetSoundEffect.Register("sniperLoad", new NetSoundEffect(new string[1]
+            Register("sniperLoad", new NetSoundEffect(new string[1]
             {
         "loadSniper"
             }));
-            NetSoundEffect.Register("flowerHappyQuack", new NetSoundEffect(new string[1]
+            Register("flowerHappyQuack", new NetSoundEffect(new string[1]
             {
         "happyQuack01"
             })
@@ -182,7 +182,7 @@ namespace DuckGame
                 pitchVariationLow = -0.1f,
                 pitchVariationHigh = 0.1f
             });
-            NetSoundEffect.Register("equipmentTing", new NetSoundEffect(new string[1]
+            Register("equipmentTing", new NetSoundEffect(new string[1]
             {
         "ting2"
             }));
@@ -190,54 +190,54 @@ namespace DuckGame
 
         public static void Update()
         {
-            if (NetSoundEffect._soundsPlayedThisFrame.Count <= 0)
+            if (_soundsPlayedThisFrame.Count <= 0)
                 return;
-            Send.Message(new NMNetSoundEvents(NetSoundEffect._soundsPlayedThisFrame));
-            NetSoundEffect._soundsPlayedThisFrame.Clear();
+            Send.Message(new NMNetSoundEvents(_soundsPlayedThisFrame));
+            _soundsPlayedThisFrame.Clear();
         }
 
         public static NetSoundEffect Get(string pSound)
         {
             NetSoundEffect netSoundEffect;
-            NetSoundEffect._sfxDictionary.TryGetValue(pSound, out netSoundEffect);
+            _sfxDictionary.TryGetValue(pSound, out netSoundEffect);
             return netSoundEffect;
         }
 
         public static NetSoundEffect Get(ushort pSound)
         {
             NetSoundEffect netSoundEffect;
-            NetSoundEffect._sfxIndexDictionary.TryGetValue(pSound, out netSoundEffect);
+            _sfxIndexDictionary.TryGetValue(pSound, out netSoundEffect);
             return netSoundEffect;
         }
 
         public static void Play(string pSound)
         {
             NetSoundEffect pSound1;
-            if (!NetSoundEffect._sfxDictionary.TryGetValue(pSound, out pSound1))
+            if (!_sfxDictionary.TryGetValue(pSound, out pSound1))
                 return;
-            NetSoundEffect.PlayAndSynchronize(pSound1);
+            PlayAndSynchronize(pSound1);
         }
 
         public static void Play(string pSound, float pPitchOffset)
         {
             NetSoundEffect pSound1;
-            if (!NetSoundEffect._sfxDictionary.TryGetValue(pSound, out pSound1))
+            if (!_sfxDictionary.TryGetValue(pSound, out pSound1))
                 return;
-            NetSoundEffect.PlayAndSynchronize(pSound1, pPitchOffset);
+            PlayAndSynchronize(pSound1, pPitchOffset);
         }
 
         public static void Play(ushort pSound)
         {
             NetSoundEffect pSound1;
-            if (!NetSoundEffect._sfxIndexDictionary.TryGetValue(pSound, out pSound1))
+            if (!_sfxIndexDictionary.TryGetValue(pSound, out pSound1))
                 return;
-            NetSoundEffect.PlayAndSynchronize(pSound1);
+            PlayAndSynchronize(pSound1);
         }
 
         private static void PlayAndSynchronize(NetSoundEffect pSound, float pPitchOffset = 0f)
         {
             pSound.Play(pit: pPitchOffset);
-            NetSoundEffect._soundsPlayedThisFrame.Add(pSound);
+            _soundsPlayedThisFrame.Add(pSound);
         }
 
         public NetSoundEffect()

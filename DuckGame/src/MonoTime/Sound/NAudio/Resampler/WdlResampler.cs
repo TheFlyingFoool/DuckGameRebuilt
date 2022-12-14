@@ -26,7 +26,7 @@ namespace DuckGame
         private float m_filterpos;
         private float[] m_rsinbuf;
         private float[] m_filter_coeffs;
-        private WdlResampler.WDL_Resampler_IIRFilter m_iirfilter;
+        private WDL_Resampler_IIRFilter m_iirfilter;
         private int m_filter_coeffs_size;
         private int m_last_requested;
         private int m_filtlatency;
@@ -168,7 +168,7 @@ namespace DuckGame
             int num4;
             while (true)
             {
-                Array.Resize<float>(ref m_rsinbuf, (m_samples_in_rsinbuf + num3) * nch);
+                Array.Resize(ref m_rsinbuf, (m_samples_in_rsinbuf + num3) * nch);
                 num4 = m_rsinbuf.Length / (nch != 0 ? nch : 1) - m_samples_in_rsinbuf;
                 if (num4 != num3)
                 {
@@ -200,7 +200,7 @@ namespace DuckGame
             if (m_filtercnt > 0 && m_ratio > 1.0 && nsamples_in > 0)
             {
                 if (m_iirfilter == null)
-                    m_iirfilter = new WdlResampler.WDL_Resampler_IIRFilter();
+                    m_iirfilter = new WDL_Resampler_IIRFilter();
                 int filtercnt = m_filtercnt;
                 m_iirfilter.setParms(1.0 / m_ratio * m_filterpos, m_filterq);
                 int num1 = m_samples_in_rsinbuf * nch;
@@ -217,7 +217,7 @@ namespace DuckGame
             {
                 int num4 = (m_last_requested - nsamples_in) * 2 + m_sincsize * 2;
                 int newSize = (m_samples_in_rsinbuf + num4) * nch;
-                Array.Resize<float>(ref m_rsinbuf, newSize);
+                Array.Resize(ref m_rsinbuf, newSize);
                 if (m_rsinbuf.Length == newSize)
                 {
                     Array.Clear(m_rsinbuf, m_samples_in_rsinbuf * nch, num4 * nch);
@@ -409,7 +409,7 @@ namespace DuckGame
             if (m_filtercnt > 0 && m_ratio < 1.0 && ns > 0)
             {
                 if (m_iirfilter == null)
-                    m_iirfilter = new WdlResampler.WDL_Resampler_IIRFilter();
+                    m_iirfilter = new WDL_Resampler_IIRFilter();
                 int filtercnt = m_filtercnt;
                 m_iirfilter.setParms(m_ratio * m_filterpos, m_filterq);
                 int num25 = 0;
@@ -448,7 +448,7 @@ namespace DuckGame
             m_lp_oversize = sincoversize;
             m_filter_ratio = filtpos;
             int newSize = (sincsize + 1) * m_lp_oversize;
-            Array.Resize<float>(ref m_filter_coeffs, newSize);
+            Array.Resize(ref m_filter_coeffs, newSize);
             if (m_filter_coeffs.Length == newSize)
             {
                 m_filter_coeffs_size = sincsize;

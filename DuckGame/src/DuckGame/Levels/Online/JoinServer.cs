@@ -21,7 +21,7 @@ namespace DuckGame
         {
             _lobbyID = lobbyAddress;
             _centeredView = true;
-            _teamSelect = Level.current is TeamSelect2;
+            _teamSelect = current is TeamSelect2;
         }
 
         public JoinServer(ulong lobbyAddress, string pPassword)
@@ -38,7 +38,7 @@ namespace DuckGame
         {
             if (Network.isActive)
             {
-                Level.current = new DisconnectFromGame(_lobbyID);
+                current = new DisconnectFromGame(_lobbyID);
             }
             else
             {
@@ -87,7 +87,7 @@ namespace DuckGame
             if (_timeout++ > 1200UL)
             {
                 Network.DisconnectClient(DuckNetwork.localConnection, new DuckNetErrorInfo(DuckNetError.ConnectionTimeout, "Connection timeout!"));
-                Level.current = new ConnectionError("|RED|CONNECTION FAILED!");
+                current = new ConnectionError("|RED|CONNECTION FAILED!");
                 _timeout = 0UL;
             }
             base.Update();
@@ -98,9 +98,9 @@ namespace DuckGame
             if (!_startedJoining)
                 return;
             if (error != null)
-                Level.current = new ConnectionError(error.message);
+                current = new ConnectionError(error.message);
             else
-                Level.current = new ConnectionError("|RED|CONNECTION FAILED!");
+                current = new ConnectionError("|RED|CONNECTION FAILED!");
         }
 
         public override void Draw()

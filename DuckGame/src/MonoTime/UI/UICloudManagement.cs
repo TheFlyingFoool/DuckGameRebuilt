@@ -14,15 +14,15 @@ namespace DuckGame
 {
     public class UICloudManagement : UIMenu
     {
-        private List<UICloudManagement.File> _flagged = new List<UICloudManagement.File>();
+        private List<File> _flagged = new List<File>();
         private Sprite _downArrow;
         private BitmapFont _littleFont;
-        public UICloudManagement.File root = new UICloudManagement.File()
+        public File root = new File()
         {
-            files = new List<UICloudManagement.File>()
+            files = new List<File>()
         };
-        public UICloudManagement.File profileRoot;
-        public UICloudManagement.File currentFolder;
+        public File profileRoot;
+        public File currentFolder;
         public UIMenu _deleteMenu;
         private UIMenu _openOnClose;
         private bool _opening;
@@ -51,7 +51,7 @@ namespace DuckGame
 
         private void DeleteFiles()
         {
-            foreach (UICloudManagement.File pFolder in _flagged)
+            foreach (File pFolder in _flagged)
             {
                 if (pFolder.files != null)
                     DeleteFolder(pFolder);
@@ -60,9 +60,9 @@ namespace DuckGame
             }
         }
 
-        private void DeleteFolder(UICloudManagement.File pFolder)
+        private void DeleteFolder(File pFolder)
         {
-            foreach (UICloudManagement.File file in pFolder.files)
+            foreach (File file in pFolder.files)
             {
                 if (file.files != null)
                     DeleteFolder(file);
@@ -71,18 +71,18 @@ namespace DuckGame
             }
         }
 
-        private UICloudManagement.File GetFolder(string pPath, string pCloudPath)
+        private File GetFolder(string pPath, string pCloudPath)
         {
-            UICloudManagement.File folder = root;
+            File folder = root;
             if (pCloudPath.StartsWith("nq500000_"))
             {
                 if (profileRoot == null)
                 {
-                    profileRoot = new UICloudManagement.File()
+                    profileRoot = new File()
                     {
                         parent = root,
                         name = Steam.user.id.ToString(),
-                        files = new List<UICloudManagement.File>()
+                        files = new List<File>()
                     };
                     root.files.Add(profileRoot);
                 }
@@ -95,7 +95,7 @@ namespace DuckGame
                 if (!(str2 == ""))
                 {
                     bool flag = false;
-                    foreach (UICloudManagement.File file in folder.files)
+                    foreach (File file in folder.files)
                     {
                         if (file.name == str2)
                         {
@@ -106,15 +106,15 @@ namespace DuckGame
                     }
                     if (!flag)
                     {
-                        UICloudManagement.File file = new UICloudManagement.File()
+                        File file = new File()
                         {
                             name = str2,
-                            files = new List<UICloudManagement.File>()
+                            files = new List<File>()
               {
-                new UICloudManagement.File()
+                new File()
                 {
                   name = "..",
-                  files = new List<UICloudManagement.File>()
+                  files = new List<File>()
                 }
               },
                             parent = folder
@@ -129,12 +129,12 @@ namespace DuckGame
             return folder;
         }
 
-        private void SortFiles(UICloudManagement.File pRoot)
+        private void SortFiles(File pRoot)
         {
             if (pRoot.files == null)
                 return;
-            pRoot.files = pRoot.files.OrderBy<UICloudManagement.File, bool>(x => x.name != "..").ThenBy<UICloudManagement.File, bool>(x => x.files == null).ThenBy<UICloudManagement.File, string>(x => x.name).ToList<UICloudManagement.File>();
-            foreach (UICloudManagement.File file in pRoot.files)
+            pRoot.files = pRoot.files.OrderBy(x => x.name != "..").ThenBy(x => x.files == null).ThenBy(x => x.name).ToList();
+            foreach (File file in pRoot.files)
                 SortFiles(file);
         }
 
@@ -143,9 +143,9 @@ namespace DuckGame
             HUD.CloseAllCorners();
             _opening = true;
             _flagged.Clear();
-            root = new UICloudManagement.File()
+            root = new File()
             {
-                files = new List<UICloudManagement.File>()
+                files = new List<File>()
             };
             profileRoot = null;
             int count = Steam.FileGetCount();
@@ -155,7 +155,7 @@ namespace DuckGame
                 if (cloudFile != null)
                 {
                     string path = cloudFile.cloudPath.Substring(9, cloudFile.cloudPath.Length - 9);
-                    GetFolder(Path.GetDirectoryName(path).Replace('\\', '/'), cloudFile.cloudPath).files.Add(new UICloudManagement.File()
+                    GetFolder(Path.GetDirectoryName(path).Replace('\\', '/'), cloudFile.cloudPath).files.Add(new File()
                     {
                         name = Path.GetFileName(path),
                         fullPath = cloudFile.localPath
@@ -225,7 +225,7 @@ namespace DuckGame
             base.Update();
         }
 
-        private void SelectFolder(UICloudManagement.File pFolder)
+        private void SelectFolder(File pFolder)
         {
             currentFolder = pFolder;
             _selection = 0;
@@ -241,7 +241,7 @@ namespace DuckGame
                 float y = 0f;
                 int num1 = 0;
                 int num2 = 0;
-                foreach (UICloudManagement.File file in currentFolder.files)
+                foreach (File file in currentFolder.files)
                 {
                     if (num1 < _topOffset)
                     {
@@ -289,8 +289,8 @@ namespace DuckGame
         {
             public string name;
             public string fullPath;
-            public List<UICloudManagement.File> files;
-            public UICloudManagement.File parent;
+            public List<File> files;
+            public File parent;
         }
     }
 }

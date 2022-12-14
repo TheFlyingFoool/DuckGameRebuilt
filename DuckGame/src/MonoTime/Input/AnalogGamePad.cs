@@ -159,7 +159,7 @@ namespace DuckGame
         {
             if (any)
             {
-                foreach (PadButton xboxButton in AnalogGamePad._xboxButtons)
+                foreach (PadButton xboxButton in _xboxButtons)
                 {
                     if (_state.IsButtonDown(xboxButton))
                         return true;

@@ -64,8 +64,8 @@ namespace DuckGame
             _wait++;
             if (_wait == 3)
             {
-                _stream.sprayAngle = base.barrelVector * 2f;
-                _stream.position = base.barrelPosition;
+                _stream.sprayAngle = barrelVector * 2f;
+                _stream.position = barrelPosition;
                 FluidData dat = Fluid.Poo;
                 dat.amount = 0.01f;
                 _stream.Feed(dat);

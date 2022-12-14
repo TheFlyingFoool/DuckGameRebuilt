@@ -33,8 +33,8 @@ namespace DuckGame
             Graphics.DrawRect(position, position + new Vec2(width, height), new Color(25, 38, 41) * alpha, (Depth)0.9f);
             if (selected)
                 Graphics.DrawRect(position + new Vec2(-1f, 0f), position + new Vec2(width + 1f, height), Color.White * alpha, (Depth)0.97f, false);
-            Card._font.scale = new Vec2(0.5f, 0.5f);
-            Card._font.Draw(_specialText, position.x + 4f, position.y + 4f, Color.White * alpha, (Depth)0.98f);
+            _font.scale = new Vec2(0.5f, 0.5f);
+            _font.Draw(_specialText, position.x + 4f, position.y + 4f, Color.White * alpha, (Depth)0.98f);
         }
     }
 }

@@ -13,8 +13,8 @@ namespace DuckGame
 {
     public class RandomLevelData
     {
-        public Dictionary<System.Type, int> weapons = new Dictionary<System.Type, int>();
-        public Dictionary<System.Type, int> spawners = new Dictionary<System.Type, int>();
+        public Dictionary<Type, int> weapons = new Dictionary<Type, int>();
+        public Dictionary<Type, int> spawners = new Dictionary<Type, int>();
         public int numWeapons;
         public int numSuperWeapons;
         public int numFatalWeapons;
@@ -127,7 +127,7 @@ namespace DuckGame
                 {
                     try
                     {
-                        System.Type type = Editor.GetType(name);
+                        Type type = Editor.GetType(name);
                         if (!weapons.ContainsKey(type))
                             weapons[type] = 0;
                         weapons[type]++;
@@ -159,7 +159,7 @@ namespace DuckGame
                 {
                     try
                     {
-                        System.Type type = Editor.GetType(name);
+                        Type type = Editor.GetType(name);
                         if (!spawners.ContainsKey(type))
                             spawners[type] = 0;
                         spawners[type]++;
@@ -218,16 +218,16 @@ namespace DuckGame
                     field.SetValue(randomLevelData, (int)field.GetValue(this) + (int)field.GetValue(dat));
                 if (field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
                 {
-                    Dictionary<System.Type, int> dictionary1 = field.GetValue(this) as Dictionary<System.Type, int>;
-                    Dictionary<System.Type, int> dictionary2 = field.GetValue(dat) as Dictionary<System.Type, int>;
-                    Dictionary<System.Type, int> dictionary3 = new Dictionary<System.Type, int>();
-                    foreach (KeyValuePair<System.Type, int> keyValuePair in dictionary1)
+                    Dictionary<Type, int> dictionary1 = field.GetValue(this) as Dictionary<Type, int>;
+                    Dictionary<Type, int> dictionary2 = field.GetValue(dat) as Dictionary<Type, int>;
+                    Dictionary<Type, int> dictionary3 = new Dictionary<Type, int>();
+                    foreach (KeyValuePair<Type, int> keyValuePair in dictionary1)
                     {
                         if (!dictionary3.ContainsKey(keyValuePair.Key))
                             dictionary3[keyValuePair.Key] = 0;
                         dictionary3[keyValuePair.Key] += keyValuePair.Value;
                     }
-                    foreach (KeyValuePair<System.Type, int> keyValuePair in dictionary2)
+                    foreach (KeyValuePair<Type, int> keyValuePair in dictionary2)
                     {
                         if (!dictionary3.ContainsKey(keyValuePair.Key))
                             dictionary3[keyValuePair.Key] = 0;
@@ -319,7 +319,7 @@ namespace DuckGame
             return t;
         }
 
-        public List<RandomLevelData.PreparedThing> PrepareThings(
+        public List<PreparedThing> PrepareThings(
           bool symmetric,
           float x,
           float y)
@@ -330,7 +330,7 @@ namespace DuckGame
                 Level.flipH = true;
             if (symmetry | symmetric)
                 Level.symmetry = true;
-            List<RandomLevelData.PreparedThing> preparedThingList = new List<RandomLevelData.PreparedThing>();
+            List<PreparedThing> preparedThingList = new List<PreparedThing>();
             List<BinaryClassChunk> binaryClassChunkList = LevelGenerator.openAirMode ? alternateData : data;
             if (binaryClassChunkList == null || binaryClassChunkList.Count == 0)
                 binaryClassChunkList = data;
@@ -355,14 +355,14 @@ namespace DuckGame
                                 Level.loadingOppositeSymmetry = true;
                                 Thing thing2 = ProcessThing(t2, x, y);
                                 if (thing2 != null)
-                                    preparedThingList.Add(new RandomLevelData.PreparedThing()
+                                    preparedThingList.Add(new PreparedThing()
                                     {
                                         thing = thing2,
                                         mirror = true
                                     });
                             }
                         }
-                        preparedThingList.Add(new RandomLevelData.PreparedThing()
+                        preparedThingList.Add(new PreparedThing()
                         {
                             thing = thing1
                         });
@@ -379,7 +379,7 @@ namespace DuckGame
           float y,
           Level level,
           bool symmetric,
-          List<RandomLevelData.PreparedThing> pPreparedThings)
+          List<PreparedThing> pPreparedThings)
         {
             if (symmetric && isMirrored)
                 symmetric = false;
@@ -389,7 +389,7 @@ namespace DuckGame
                 Level.symmetry = true;
             if (data != null)
             {
-                foreach (RandomLevelData.PreparedThing pPreparedThing in pPreparedThings)
+                foreach (PreparedThing pPreparedThing in pPreparedThings)
                 {
                     Thing thing1 = pPreparedThing.thing;
                     if (thing1 != null && RandomLevelNode._allPreparedThings.Contains(thing1) && (ContentProperties.GetBag(thing1.GetType()).GetOrDefault("isOnlineCapable", true) || !Network.isActive))

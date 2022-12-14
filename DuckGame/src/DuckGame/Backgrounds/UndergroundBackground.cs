@@ -69,7 +69,7 @@ namespace DuckGame
             if (num1 > Resolution.current.y)
                 num1 = Resolution.current.y;
             float num2 = Resolution.current.y / (float)Graphics.height;
-            Vec2 wallScissor = BackgroundUpdater.GetWallScissor();
+            Vec2 wallScissor = GetWallScissor();
             _undergroundRocks.scissor = new Rectangle((int)wallScissor.x, num1 * num2, (int)wallScissor.y, Resolution.current.y - num1);
             int height = (int)(Vec2.Transform(new Vec2(0f, -10f), Level.current.camera.getMatrix()).y * num2);
             if (height < 0)

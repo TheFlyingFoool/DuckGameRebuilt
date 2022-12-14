@@ -96,7 +96,7 @@ namespace DuckGame
             Vec2 vec2 = Vec2.Zero;
             if (type is DTShot)
                 vec2 = (type as DTShot).bullet.travelDirNormalized;
-            SyncNetworkAction<Vec2, float>(new Action<Vec2, float>(BlowUp), position, vec2.x);
+            SyncNetworkAction(new Action<Vec2, float>(BlowUp), position, vec2.x);
             List<Bullet> varBullets = new List<Bullet>();
             for (int index = 0; index < 20; ++index)
             {
@@ -123,7 +123,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal && owner == null)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             if (_hitPoints <= 0f)
                 return base.Hit(bullet, hitPos);
             Destroy(new DTShot(bullet));

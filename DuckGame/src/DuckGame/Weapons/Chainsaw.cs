@@ -18,7 +18,7 @@ namespace DuckGame
         public StateBinding _throwSpinBinding = new StateBinding(nameof(_throwSpin));
         public StateBinding _gasBinding = new StateBinding(nameof(_gas));
         public StateBinding _floodBinding = new StateBinding(nameof(_flood));
-        public StateBinding _chainsawStateBinding = new Chainsaw.ChainsawFlagBinding();
+        public StateBinding _chainsawStateBinding = new ChainsawFlagBinding();
         public EditorProperty<bool> souped = new EditorProperty<bool>(false);
         private float _hold;
         private bool _shing;
@@ -132,9 +132,9 @@ namespace DuckGame
                 return;
             _struggling = true;
             _shing = true;
-            if (!Chainsaw._playedShing)
+            if (!_playedShing)
             {
-                Chainsaw._playedShing = true;
+                _playedShing = true;
                 SFX.Play("chainsawClash", Rando.Float(0.4f, 0.55f), Rando.Float(-0.2f, 0.2f), Rando.Float(-0.1f, 0.1f));
             }
             Vec2 normalized = (position - this.barrelPosition).normalized;
@@ -874,7 +874,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Chainsaw._playedShing = false;
+            _playedShing = false;
             if (_swordSwing.speed > 0f)
             {
                 if (duck != null)

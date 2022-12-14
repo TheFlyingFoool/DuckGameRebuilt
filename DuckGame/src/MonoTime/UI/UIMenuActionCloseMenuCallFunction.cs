@@ -10,11 +10,11 @@ namespace DuckGame
     public class UIMenuActionCloseMenuCallFunction : UIMenuAction
     {
         private UIComponent _menu;
-        private UIMenuActionCloseMenuCallFunction.Function _function;
+        private Function _function;
 
         public UIMenuActionCloseMenuCallFunction(
           UIComponent menu,
-          UIMenuActionCloseMenuCallFunction.Function f)
+          Function f)
         {
             _menu = menu;
             _function = f;

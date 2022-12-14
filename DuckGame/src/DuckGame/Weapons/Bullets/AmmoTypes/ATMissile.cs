@@ -76,7 +76,7 @@ namespace DuckGame
                 }
                 if (Network.isActive && b.isLocal)
                     Rando.generator = random;
-                ATMissile.DestroyRadius(b.position, 50f, b);
+                DestroyRadius(b.position, 50f, b);
             }
             base.OnHit(destroyed, b);
         }

@@ -41,7 +41,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal && owner == null)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             if (isServerForObject && bullet.isLocal && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
                 if (duck != null)

@@ -14,9 +14,9 @@ namespace DuckGame
     public class WireTileset : AutoTile
     {
         private List<WireConnection> _connections = new List<WireConnection>();
-        private List<WireTileset.WireSignal> _signals = new List<WireTileset.WireSignal>();
-        private List<WireTileset.WireSignal> _addSignals = new List<WireTileset.WireSignal>();
-        private List<WireTileset.WireSignal> _removeSignals = new List<WireTileset.WireSignal>();
+        private List<WireSignal> _signals = new List<WireSignal>();
+        private List<WireSignal> _addSignals = new List<WireSignal>();
+        private List<WireSignal> _removeSignals = new List<WireSignal>();
         private WireConnection _centerWire;
         private Sprite _signalSprite;
         public bool dullSignalLeft;
@@ -54,14 +54,14 @@ namespace DuckGame
             _signalSprite.CenterOrigin();
         }
 
-        public void Emit(WireTileset.WireSignal signal = null, float overshoot = 0f, int type = 0)
+        public void Emit(WireSignal signal = null, float overshoot = 0f, int type = 0)
         {
             if (_centerWire == null)
                 return;
             if (signal == null)
             {
                 if (_centerWire.up != null)
-                    _signals.Add(new WireTileset.WireSignal()
+                    _signals.Add(new WireSignal()
                     {
                         position = _centerWire.position,
                         prevPosition = _centerWire.position,
@@ -71,7 +71,7 @@ namespace DuckGame
                         signalType = type
                     });
                 if (_centerWire.down != null)
-                    _signals.Add(new WireTileset.WireSignal()
+                    _signals.Add(new WireSignal()
                     {
                         position = _centerWire.position,
                         prevPosition = _centerWire.position,
@@ -81,7 +81,7 @@ namespace DuckGame
                         signalType = type
                     });
                 if (_centerWire.left != null)
-                    _signals.Add(new WireTileset.WireSignal()
+                    _signals.Add(new WireSignal()
                     {
                         position = _centerWire.position,
                         prevPosition = _centerWire.position,
@@ -92,7 +92,7 @@ namespace DuckGame
                     });
                 if (_centerWire.right == null)
                     return;
-                _signals.Add(new WireTileset.WireSignal()
+                _signals.Add(new WireSignal()
                 {
                     position = _centerWire.position,
                     prevPosition = _centerWire.position,
@@ -111,7 +111,7 @@ namespace DuckGame
                     Level.CheckCircle<IWirePeripheral>(_centerWire.position, 3f)?.Pulse(signal.signalType, this);
                 if (travel.up != null && travel.up != signal.from && !dullSignalUp)
                 {
-                    WireTileset.WireSignal signal1 = new WireTileset.WireSignal()
+                    WireSignal signal1 = new WireSignal()
                     {
                         position = travel.position,
                         travel = travel.up,
@@ -127,7 +127,7 @@ namespace DuckGame
                 }
                 if (travel.down != null && travel.down != signal.from && !dullSignalDown)
                 {
-                    WireTileset.WireSignal signal2 = new WireTileset.WireSignal()
+                    WireSignal signal2 = new WireSignal()
                     {
                         position = travel.position,
                         travel = travel.down,
@@ -143,7 +143,7 @@ namespace DuckGame
                 }
                 if (travel.left != null && travel.left != signal.from && !dullSignalLeft)
                 {
-                    WireTileset.WireSignal signal3 = new WireTileset.WireSignal()
+                    WireSignal signal3 = new WireSignal()
                     {
                         position = travel.position,
                         travel = travel.left,
@@ -159,7 +159,7 @@ namespace DuckGame
                 }
                 if (travel.right != null && travel.right != signal.from && !dullSignalRight)
                 {
-                    WireTileset.WireSignal signal4 = new WireTileset.WireSignal()
+                    WireSignal signal4 = new WireSignal()
                     {
                         position = travel.position,
                         travel = travel.right,
@@ -201,7 +201,7 @@ namespace DuckGame
             }
         }
 
-        public void TravelSignal(WireTileset.WireSignal signal, float travelSpeed, bool updatePrev = true)
+        public void TravelSignal(WireSignal signal, float travelSpeed, bool updatePrev = true)
         {
             if (updatePrev)
                 signal.prevPosition = signal.position;
@@ -257,11 +257,11 @@ namespace DuckGame
             if (_centerWire == null)
                 UpdateConnections();
             float travelSpeed = 16f;
-            foreach (WireTileset.WireSignal signal in _signals)
+            foreach (WireSignal signal in _signals)
                 TravelSignal(signal, travelSpeed);
-            foreach (WireTileset.WireSignal removeSignal in _removeSignals)
+            foreach (WireSignal removeSignal in _removeSignals)
                 _signals.Remove(removeSignal);
-            foreach (WireTileset.WireSignal addSignal in _addSignals)
+            foreach (WireSignal addSignal in _addSignals)
                 _signals.Add(addSignal);
             _removeSignals.Clear();
             _addSignals.Clear();
@@ -270,7 +270,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            foreach (WireTileset.WireSignal signal in _signals)
+            foreach (WireSignal signal in _signals)
             {
                 _signalSprite.depth = -0.6f;
                 _signalSprite.alpha = signal.life;

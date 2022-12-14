@@ -29,27 +29,27 @@ namespace DuckGame
         public float y;
         public float z;
 
-        public static Vec3 Zero => Vec3.zero;
+        public static Vec3 Zero => zero;
 
-        public static Vec3 One => Vec3.one;
+        public static Vec3 One => one;
 
-        public static Vec3 UnitX => Vec3.unitX;
+        public static Vec3 UnitX => unitX;
 
-        public static Vec3 UnitY => Vec3.unitY;
+        public static Vec3 UnitY => unitY;
 
-        public static Vec3 UnitZ => Vec3.unitZ;
+        public static Vec3 UnitZ => unitZ;
 
-        public static Vec3 Up => Vec3.up;
+        public static Vec3 Up => up;
 
-        public static Vec3 Down => Vec3.down;
+        public static Vec3 Down => down;
 
-        public static Vec3 Right => Vec3.right;
+        public static Vec3 Right => right;
 
-        public static Vec3 Left => Vec3.left;
+        public static Vec3 Left => left;
 
-        public static Vec3 Forward => Vec3.forward;
+        public static Vec3 Forward => forward;
 
-        public static Vec3 Backward => Vec3.backward;
+        public static Vec3 Backward => backward;
 
         public Vec3(float x, float y, float z)
         {
@@ -313,7 +313,7 @@ namespace DuckGame
 
         public static Vec3 Reflect(Vec3 vector, Vec3 normal)
         {
-            float num = 2f * Vec3.Dot(vector, normal);
+            float num = 2f * Dot(vector, normal);
             vector.x -= num * normal.x;
             vector.y -= num * normal.y;
             vector.z -= num * normal.z;
@@ -322,7 +322,7 @@ namespace DuckGame
 
         public static void Reflect(ref Vec3 vector, ref Vec3 normal, out Vec3 result)
         {
-            float num = 2f * Vec3.Dot(vector, normal);
+            float num = 2f * Dot(vector, normal);
             result.x = vector.x - num * normal.x;
             result.y = vector.y - num * normal.y;
             result.z = vector.z - num * normal.z;
@@ -362,7 +362,7 @@ namespace DuckGame
 
         public static Vec3 Transform(Vec3 position, Matrix matrix)
         {
-            Vec3.Transform(ref position, ref matrix, out position);
+            Transform(ref position, ref matrix, out position);
             return position;
         }
 
@@ -425,7 +425,7 @@ namespace DuckGame
 
         public static Vec3 TransformNormal(Vec3 normal, Matrix matrix)
         {
-            Vec3.TransformNormal(ref normal, ref matrix, out normal);
+            TransformNormal(ref normal, ref matrix, out normal);
             return normal;
         }
 

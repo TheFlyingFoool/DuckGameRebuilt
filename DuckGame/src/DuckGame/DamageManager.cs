@@ -28,10 +28,10 @@ namespace DuckGame
         {
             for (int index = 0; index < 256; ++index)
             {
-                DamageManager._targets.Add(new RenderTarget2D(16, 16, true));
-                DamageManager._damageMaps.Add(new DamageMap());
+                _targets.Add(new RenderTarget2D(16, 16, true));
+                _damageMaps.Add(new DamageMap());
             }
-            DamageManager._blendState = new BlendState
+            _blendState = new BlendState
             {
                 ColorSourceBlend = Blend.Zero,
                 ColorDestinationBlend = Blend.SourceColor,
@@ -40,7 +40,7 @@ namespace DuckGame
                 AlphaDestinationBlend = Blend.SourceColor,
                 AlphaBlendFunction = BlendFunction.Add
             };
-            DamageManager._subtractiveBlend = new BlendState()
+            _subtractiveBlend = new BlendState()
             {
                 ColorSourceBlend = Blend.SourceAlpha,
                 ColorDestinationBlend = Blend.One,
@@ -49,29 +49,29 @@ namespace DuckGame
                 AlphaDestinationBlend = Blend.One,
                 AlphaBlendFunction = BlendFunction.ReverseSubtract
             };
-            DamageManager._burns = new SpriteMap("scratches", 16, 16);
-            DamageManager._burns.CenterOrigin();
-            DamageManager._bulletHoles = new SpriteMap("bulletHoles", 8, 8);
-            DamageManager._bulletHoles.CenterOrigin();
+            _burns = new SpriteMap("scratches", 16, 16);
+            _burns.CenterOrigin();
+            _bulletHoles = new SpriteMap("bulletHoles", 8, 8);
+            _bulletHoles.CenterOrigin();
         }
 
         public static RenderTarget2D Get16x16Target()
         {
-            DamageManager._nextTarget = (DamageManager._nextTarget + 1) % 256;
-            return DamageManager._targets[DamageManager._nextTarget];
+            _nextTarget = (_nextTarget + 1) % 256;
+            return _targets[_nextTarget];
         }
 
         public static DamageMap GetDamageMap()
         {
-            DamageManager._nextDamageMap = (DamageManager._nextDamageMap + 1) % 256;
-            DamageManager._damageMaps[DamageManager._nextDamageMap].Clear();
-            return DamageManager._damageMaps[DamageManager._nextDamageMap];
+            _nextDamageMap = (_nextDamageMap + 1) % 256;
+            _damageMaps[_nextDamageMap].Clear();
+            return _damageMaps[_nextDamageMap];
         }
 
         public static void RegisterHit(Vec2 pt, Thing t, DamageType tp)
         {
             bool flag = false;
-            foreach (DamageHit hit in DamageManager._hits)
+            foreach (DamageHit hit in _hits)
             {
                 if (hit.thing == t)
                 {
@@ -83,7 +83,7 @@ namespace DuckGame
             }
             if (flag)
                 return;
-            DamageManager._hits.Add(new DamageHit()
+            _hits.Add(new DamageHit()
             {
                 thing = t,
                 points = {
@@ -95,30 +95,30 @@ namespace DuckGame
             });
         }
 
-        public static void ClearHits() => DamageManager._hits.Clear();
+        public static void ClearHits() => _hits.Clear();
 
         public static void Update()
         {
-            int targetsPerFrame = DamageManager._targetsPerFrame;
+            int targetsPerFrame = _targetsPerFrame;
             int index = 0;
-            while (targetsPerFrame > 0 && DamageManager._hits.Count > 0 && index < DamageManager._hits.Count)
+            while (targetsPerFrame > 0 && _hits.Count > 0 && index < _hits.Count)
             {
-                DamageHit hit = DamageManager._hits[index];
+                DamageHit hit = _hits[index];
                 if (hit.thing.graphic.renderTexture == null)
                 {
-                    hit.thing.graphic = hit.thing.GetEditorImage(0, 0, true, target: DamageManager.Get16x16Target());
+                    hit.thing.graphic = hit.thing.GetEditorImage(0, 0, true, target: Get16x16Target());
                     ++index;
                     --targetsPerFrame;
                 }
                 else
                 {
-                    DamageManager._hits.RemoveAt(index);
+                    _hits.RemoveAt(index);
                     float num = hit.thing.graphic.width / (float)hit.thing.graphic.width;
                     Camera camera = new Camera(0f, 0f, hit.thing.graphic.width, hit.thing.graphic.height)
                     {
                         position = new Vec2(hit.thing.x - hit.thing.centerx * num, hit.thing.y - hit.thing.centery * num)
                     };
-                    DuckGame.Graphics.SetRenderTarget(hit.thing.graphic.renderTexture);
+                    Graphics.SetRenderTarget(hit.thing.graphic.renderTexture);
                     DepthStencilState depthStencilState = new DepthStencilState()
                     {
                         StencilEnable = true,
@@ -127,17 +127,17 @@ namespace DuckGame
                         ReferenceStencil = 1,
                         DepthBufferEnable = false
                     };
-                    DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, DamageManager._blendState, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
+                    Graphics.screen.Begin(SpriteSortMode.BackToFront, _blendState, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
                     foreach (Vec2 point in hit.points)
                     {
-                        DamageManager._bulletHoles.depth = (Depth)1f;
-                        DamageManager._bulletHoles.x = point.x + Rando.Float(-1f, 1f);
-                        DamageManager._bulletHoles.y = point.y + Rando.Float(-1f, 1f);
-                        DamageManager._bulletHoles.imageIndex = Rando.Int(4);
-                        DamageManager._bulletHoles.Draw();
+                        _bulletHoles.depth = (Depth)1f;
+                        _bulletHoles.x = point.x + Rando.Float(-1f, 1f);
+                        _bulletHoles.y = point.y + Rando.Float(-1f, 1f);
+                        _bulletHoles.imageIndex = Rando.Int(4);
+                        _bulletHoles.Draw();
                     }
-                    DuckGame.Graphics.screen.End();
-                    DuckGame.Graphics.device.SetRenderTarget(null);
+                    Graphics.screen.End();
+                    Graphics.device.SetRenderTarget(null);
                     --targetsPerFrame;
                 }
             }

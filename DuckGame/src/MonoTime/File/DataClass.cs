@@ -69,21 +69,21 @@ namespace DuckGame
                 else if (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
                 {
                     IDictionary dict = propertyInfo.GetValue(o, null) as IDictionary;
-                    DXMLNode node = DataClass.SerializeDict(propertyInfo.Name, dict);
+                    DXMLNode node = SerializeDict(propertyInfo.Name, dict);
                     if (node != null)
                         dxmlNode1.Add(node);
                 }
                 else if (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(IList<>))
                 {
                     IList coll = propertyInfo.GetValue(o, null) as IList;
-                    DXMLNode node = DataClass.SerializeCollection(propertyInfo.Name, coll);
+                    DXMLNode node = SerializeCollection(propertyInfo.Name, coll);
                     if (node != null)
                         dxmlNode1.Add(node);
                 }
                 else if (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(List<>))
                 {
                     IList coll = propertyInfo.GetValue(o, null) as IList;
-                    DXMLNode node = DataClass.SerializeCollection(propertyInfo.Name, coll);
+                    DXMLNode node = SerializeCollection(propertyInfo.Name, coll);
                     if (node != null)
                         dxmlNode1.Add(node);
                 }
@@ -126,21 +126,21 @@ namespace DuckGame
                     else if (fieldInfo.FieldType.IsGenericType && fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
                     {
                         IDictionary dict = fieldInfo.GetValue(o) as IDictionary;
-                        DXMLNode node = DataClass.SerializeDict(fieldInfo.Name, dict);
+                        DXMLNode node = SerializeDict(fieldInfo.Name, dict);
                         if (node != null)
                             dxmlNode1.Add(node);
                     }
                     else if (fieldInfo.FieldType.IsGenericType && fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(IList<>))
                     {
                         IList coll = fieldInfo.GetValue(o) as IList;
-                        DXMLNode node = DataClass.SerializeCollection(fieldInfo.Name, coll);
+                        DXMLNode node = SerializeCollection(fieldInfo.Name, coll);
                         if (node != null)
                             dxmlNode1.Add(node);
                     }
                     else if (fieldInfo.FieldType.IsGenericType && fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(List<>))
                     {
                         IList coll = fieldInfo.GetValue(o) as IList;
-                        DXMLNode node = DataClass.SerializeCollection(fieldInfo.Name, coll);
+                        DXMLNode node = SerializeCollection(fieldInfo.Name, coll);
                         if (node != null)
                             dxmlNode1.Add(node);
                     }
@@ -151,7 +151,7 @@ namespace DuckGame
             return dxmlNode1;
         }
 
-        public static object ReadValue(string value, System.Type t)
+        public static object ReadValue(string value, Type t)
         {
             if (t == typeof(string))
                 return value;
@@ -173,8 +173,8 @@ namespace DuckGame
         private static void DeserializeDict(
           IDictionary dict,
           DXMLNode element,
-          System.Type keyType,
-          System.Type valType)
+          Type keyType,
+          Type valType)
         {
             dict.Clear();
             DXMLNode dxmlNode = element.Element("valueString");
@@ -190,7 +190,7 @@ namespace DuckGame
                     {
                         try
                         {
-                            dict[DataClass.ReadValue(strArray[0].Trim(), keyType)] = DataClass.ReadValue(strArray[1].Trim(), valType);
+                            dict[ReadValue(strArray[0].Trim(), keyType)] = ReadValue(strArray[1].Trim(), valType);
                         }
                         catch (Exception)
                         {
@@ -202,10 +202,10 @@ namespace DuckGame
             {
                 foreach (DXMLNode element1 in element.Elements())
                 {
-                    if (element1.Elements().Count<DXMLNode>() == 2)
+                    if (element1.Elements().Count() == 2)
                     {
-                        object key = DataClass.ReadValue(element1.Elements().ElementAt<DXMLNode>(0).Value, keyType);
-                        object obj = DataClass.ReadValue(element1.Elements().ElementAt<DXMLNode>(1).Value, valType);
+                        object key = ReadValue(element1.Elements().ElementAt(0).Value, keyType);
+                        object obj = ReadValue(element1.Elements().ElementAt(1).Value, valType);
                         if (key != null && obj != null)
                             dict[key] = obj;
                     }
@@ -213,7 +213,7 @@ namespace DuckGame
             }
         }
 
-        private static void DeserializeCollection(IList dict, DXMLNode element, System.Type keyType)
+        private static void DeserializeCollection(IList dict, DXMLNode element, Type keyType)
         {
             dict.Clear();
             DXMLNode dxmlNode = element.Element("valueString");
@@ -225,7 +225,7 @@ namespace DuckGame
             {
                 try
                 {
-                    dict.Add(DataClass.ReadValue(str2.Trim(), keyType));
+                    dict.Add(ReadValue(str2.Trim(), keyType));
                 }
                 catch (Exception)
                 {
@@ -237,7 +237,7 @@ namespace DuckGame
         {
             if (output == null)
                 return;
-            System.Type type = output.GetType();
+            Type type = output.GetType();
             foreach (DXMLNode element in node.Elements())
             {
                 try
@@ -266,20 +266,20 @@ namespace DuckGame
                             property.SetValue(output, Resolution.Load(element.Value, property.Name));
                         else if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
                         {
-                            System.Type[] genericArguments = property.PropertyType.GetGenericArguments();
-                            System.Type keyType = genericArguments[0];
-                            System.Type valType = genericArguments[1];
-                            DataClass.DeserializeDict(property.GetValue(output, null) as IDictionary, element, keyType, valType);
+                            Type[] genericArguments = property.PropertyType.GetGenericArguments();
+                            Type keyType = genericArguments[0];
+                            Type valType = genericArguments[1];
+                            DeserializeDict(property.GetValue(output, null) as IDictionary, element, keyType, valType);
                         }
                         else if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(IList<>))
                         {
-                            System.Type genericArgument = property.PropertyType.GetGenericArguments()[0];
-                            DataClass.DeserializeCollection(property.GetValue(output, null) as IList, element, genericArgument);
+                            Type genericArgument = property.PropertyType.GetGenericArguments()[0];
+                            DeserializeCollection(property.GetValue(output, null) as IList, element, genericArgument);
                         }
                         else if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(List<>))
                         {
-                            System.Type genericArgument = property.PropertyType.GetGenericArguments()[0];
-                            DataClass.DeserializeCollection(property.GetValue(output, null) as IList, element, genericArgument);
+                            Type genericArgument = property.PropertyType.GetGenericArguments()[0];
+                            DeserializeCollection(property.GetValue(output, null) as IList, element, genericArgument);
                         }
                         else
                         {
@@ -317,20 +317,20 @@ namespace DuckGame
                                 field.SetValue(output, Resolution.Load(element.Value, property.Name));
                             else if (field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
                             {
-                                System.Type[] genericArguments = field.FieldType.GetGenericArguments();
-                                System.Type keyType = genericArguments[0];
-                                System.Type valType = genericArguments[1];
-                                DataClass.DeserializeDict(field.GetValue(output) as IDictionary, element, keyType, valType);
+                                Type[] genericArguments = field.FieldType.GetGenericArguments();
+                                Type keyType = genericArguments[0];
+                                Type valType = genericArguments[1];
+                                DeserializeDict(field.GetValue(output) as IDictionary, element, keyType, valType);
                             }
                             else if (field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(IList<>))
                             {
-                                System.Type genericArgument = field.FieldType.GetGenericArguments()[0];
-                                DataClass.DeserializeCollection(field.GetValue(output) as IList, element, genericArgument);
+                                Type genericArgument = field.FieldType.GetGenericArguments()[0];
+                                DeserializeCollection(field.GetValue(output) as IList, element, genericArgument);
                             }
                             else if (field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(List<>))
                             {
-                                System.Type genericArgument = field.FieldType.GetGenericArguments()[0];
-                                DataClass.DeserializeCollection(field.GetValue(output) as IList, element, genericArgument);
+                                Type genericArgument = field.FieldType.GetGenericArguments()[0];
+                                DeserializeCollection(field.GetValue(output) as IList, element, genericArgument);
                             }
                             else
                             {
@@ -351,11 +351,11 @@ namespace DuckGame
             }
         }
 
-        public virtual DXMLNode Serialize() => DataClass.SerializeClass(this, _nodeName);
+        public virtual DXMLNode Serialize() => SerializeClass(this, _nodeName);
 
         public virtual bool Deserialize(DXMLNode node)
         {
-            DataClass.DeserializeClass(this, node);
+            DeserializeClass(this, node);
             return true;
         }
 

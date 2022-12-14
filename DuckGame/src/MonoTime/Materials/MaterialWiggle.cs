@@ -22,9 +22,9 @@ namespace DuckGame
 
         public override void Apply()
         {
-            if (DuckGame.Graphics.device.Textures[0] != null)
+            if (Graphics.device.Textures[0] != null)
             {
-                Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
+                Tex2D texture = (Tex2D)(Graphics.device.Textures[0] as Texture2D);
                 SetValue("xpos", _sprite.x);
                 SetValue("ypos", _sprite.y);
             }

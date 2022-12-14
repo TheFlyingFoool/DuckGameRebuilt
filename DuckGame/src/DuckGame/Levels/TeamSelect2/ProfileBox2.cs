@@ -269,7 +269,7 @@ namespace DuckGame
                     for (int index = 0; index < Profile.defaultProfileMappings.Count; ++index)
                     {
                         if (Profile.defaultProfileMappings[index] == p)
-                            Profile.defaultProfileMappings[index] = Profiles.universalProfileList.ElementAt<Profile>(index);
+                            Profile.defaultProfileMappings[index] = Profiles.universalProfileList.ElementAt(index);
                     }
                     Profile.defaultProfileMappings[_controllerIndex] = p;
                     if (_teamSelect != null)
@@ -492,20 +492,20 @@ namespace DuckGame
                 return;
             if (_duck != null)
             {
-                Thing.Fondle(_duck, DuckNetwork.localConnection);
+                Fondle(_duck, DuckNetwork.localConnection);
                 Level.Remove(_duck);
                 if (!Network.isActive && _duck.ragdoll != null)
                     Level.Remove(_duck.ragdoll);
             }
             if (_gun != null)
             {
-                Thing.Fondle(_gun, DuckNetwork.localConnection);
+                Fondle(_gun, DuckNetwork.localConnection);
                 Level.Remove(_gun);
             }
             foreach (Window t in Level.CheckRectAll<Window>(topLeft, bottomRight))
             {
                 t.lobbyRemoving = true;
-                Thing.Fondle(t, DuckNetwork.localConnection);
+                Fondle(t, DuckNetwork.localConnection);
                 Level.Remove(t);
             }
             _window = null;
@@ -597,7 +597,7 @@ namespace DuckGame
             bool flag1 = false; //  
             if (_teamSelect != null && (!Network.isActive || _hatSelector.connection == DuckNetwork.localConnection) && !Network.isActive)
             {
-                if (!_playerActive && (Program.testServer || Main.startInLobby) && _playerProfile == Profiles.DefaultPlayer1)
+                if (!_playerActive && (Program.testServer || MonoMain.startInLobby) && _playerProfile == Profiles.DefaultPlayer1)
                 {
                     OpenDoor();
                     flag1 = true;
@@ -1078,14 +1078,14 @@ namespace DuckGame
                         }
                         if (source1.Count > 0)
                         {
-                            IOrderedEnumerable<FurniturePosition> source2 = source1.OrderBy<FurniturePosition, int>(furni => furni.x + furni.y * 100);
-                            IEnumerable<FurniturePosition> source3 = source1.OrderBy<FurniturePosition, int>(furni => -furni.x + furni.y * 100);
+                            IOrderedEnumerable<FurniturePosition> source2 = source1.OrderBy(furni => furni.x + furni.y * 100);
+                            IEnumerable<FurniturePosition> source3 = source1.OrderBy(furni => -furni.x + furni.y * 100);
                             int index1 = 0;
-                            for (int index2 = 0; index2 < source2.Count<FurniturePosition>(); ++index2)
+                            for (int index2 = 0; index2 < source2.Count(); ++index2)
                             {
-                                FurniturePosition furniturePosition1 = source2.ElementAt<FurniturePosition>(index2);
+                                FurniturePosition furniturePosition1 = source2.ElementAt(index2);
                                 Furniture furniMapping1 = furniturePosition1.furniMapping;
-                                FurniturePosition furniturePosition2 = source3.ElementAt<FurniturePosition>(index1);
+                                FurniturePosition furniturePosition2 = source3.ElementAt(index1);
                                 Furniture furniMapping2 = furniturePosition2.furniMapping;
                                 furniMapping1.sprite.depth = (Depth)(float)(furniMapping2.deep * (1.0 / 1000.0) - 0.56f);
                                 furniMapping1.sprite.frame = furniturePosition1.variation;
@@ -1107,14 +1107,14 @@ namespace DuckGame
                         }
                         if (furniturePositionList.Count > 0)
                         {
-                            IOrderedEnumerable<FurniturePosition> source4 = source1.OrderBy<FurniturePosition, int>(furni => -furni.x + furni.y * 100);
-                            IEnumerable<FurniturePosition> source5 = source1.OrderBy<FurniturePosition, int>(furni => furni.x + furni.y * 100);
+                            IOrderedEnumerable<FurniturePosition> source4 = source1.OrderBy(furni => -furni.x + furni.y * 100);
+                            IEnumerable<FurniturePosition> source5 = source1.OrderBy(furni => furni.x + furni.y * 100);
                             int index3 = 0;
-                            for (int index4 = 0; index4 < source4.Count<FurniturePosition>(); ++index4)
+                            for (int index4 = 0; index4 < source4.Count(); ++index4)
                             {
-                                FurniturePosition furniturePosition3 = source4.ElementAt<FurniturePosition>(index4);
+                                FurniturePosition furniturePosition3 = source4.ElementAt(index4);
                                 Furniture furniMapping3 = furniturePosition3.furniMapping;
-                                FurniturePosition furniturePosition4 = source5.ElementAt<FurniturePosition>(index3);
+                                FurniturePosition furniturePosition4 = source5.ElementAt(index3);
                                 Furniture furniMapping4 = furniturePosition4.furniMapping;
                                 furniMapping3.sprite.depth = (Depth)(float)(furniMapping4.deep * (1.0 / 1000.0) - 0.56f);
                                 furniMapping3.sprite.frame = furniturePosition4.variation;

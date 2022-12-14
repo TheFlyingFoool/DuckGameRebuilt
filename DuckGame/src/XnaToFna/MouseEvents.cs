@@ -39,12 +39,12 @@ namespace XnaToFna
         public static void Update()
         {
             MouseState state = Mouse.GetState();
-            if (MouseEvents.Clip.HasValue)
+            if (Clip.HasValue)
             {
                 Rectangle clientBounds = XnaToFnaHelper.Game.Window.ClientBounds;
                 int num1 = state.X + clientBounds.X;
                 int num2 = state.Y + clientBounds.Y;
-                Rectangle rectangle = MouseEvents.Clip.Value;
+                Rectangle rectangle = Clip.Value;
                 if (num1 < rectangle.Left)
                     num1 = rectangle.Left;
                 else if (rectangle.Right <= num1)
@@ -59,31 +59,31 @@ namespace XnaToFna
                     Mouse.SetPosition(x, y);
                 state = Mouse.GetState();
             }
-            if (state.X != MouseEvents.PreviousState.X || state.Y != MouseEvents.PreviousState.Y)
-                MouseEvents.Moved();
-            if (state.LeftButton == ButtonState.Pressed && MouseEvents.PreviousState.LeftButton == ButtonState.Released)
-                MouseEvents.LMBDown();
-            else if (state.LeftButton == ButtonState.Released && MouseEvents.PreviousState.LeftButton == ButtonState.Pressed)
-                MouseEvents.LMBUp();
-            if (state.RightButton == ButtonState.Pressed && MouseEvents.PreviousState.RightButton == ButtonState.Released)
-                MouseEvents.RMBDown();
-            else if (state.RightButton == ButtonState.Released && MouseEvents.PreviousState.RightButton == ButtonState.Pressed)
-                MouseEvents.RMBUp();
-            if (state.MiddleButton == ButtonState.Pressed && MouseEvents.PreviousState.MiddleButton == ButtonState.Released)
-                MouseEvents.MMBDown();
-            else if (state.MiddleButton == ButtonState.Released && MouseEvents.PreviousState.MiddleButton == ButtonState.Pressed)
-                MouseEvents.MMBUp();
-            if (state.XButton1 == ButtonState.Pressed && MouseEvents.PreviousState.XButton1 == ButtonState.Released)
-                MouseEvents.XMBDown(1);
-            else if (state.XButton1 == ButtonState.Released && MouseEvents.PreviousState.XButton1 == ButtonState.Pressed)
-                MouseEvents.XMBUp(1);
-            if (state.XButton2 == ButtonState.Pressed && MouseEvents.PreviousState.XButton2 == ButtonState.Released)
-                MouseEvents.XMBDown(2);
-            else if (state.XButton2 == ButtonState.Released && MouseEvents.PreviousState.XButton2 == ButtonState.Pressed)
-                MouseEvents.XMBUp(2);
-            if (state.ScrollWheelValue != MouseEvents.PreviousState.ScrollWheelValue)
-                MouseEvents.Wheel(state.ScrollWheelValue - MouseEvents.PreviousState.ScrollWheelValue);
-            MouseEvents.PreviousState = Mouse.GetState();
+            if (state.X != PreviousState.X || state.Y != PreviousState.Y)
+                Moved();
+            if (state.LeftButton == ButtonState.Pressed && PreviousState.LeftButton == ButtonState.Released)
+                LMBDown();
+            else if (state.LeftButton == ButtonState.Released && PreviousState.LeftButton == ButtonState.Pressed)
+                LMBUp();
+            if (state.RightButton == ButtonState.Pressed && PreviousState.RightButton == ButtonState.Released)
+                RMBDown();
+            else if (state.RightButton == ButtonState.Released && PreviousState.RightButton == ButtonState.Pressed)
+                RMBUp();
+            if (state.MiddleButton == ButtonState.Pressed && PreviousState.MiddleButton == ButtonState.Released)
+                MMBDown();
+            else if (state.MiddleButton == ButtonState.Released && PreviousState.MiddleButton == ButtonState.Pressed)
+                MMBUp();
+            if (state.XButton1 == ButtonState.Pressed && PreviousState.XButton1 == ButtonState.Released)
+                XMBDown(1);
+            else if (state.XButton1 == ButtonState.Released && PreviousState.XButton1 == ButtonState.Pressed)
+                XMBUp(1);
+            if (state.XButton2 == ButtonState.Pressed && PreviousState.XButton2 == ButtonState.Released)
+                XMBDown(2);
+            else if (state.XButton2 == ButtonState.Released && PreviousState.XButton2 == ButtonState.Pressed)
+                XMBUp(2);
+            if (state.ScrollWheelValue != PreviousState.ScrollWheelValue)
+                Wheel(state.ScrollWheelValue - PreviousState.ScrollWheelValue);
+            PreviousState = Mouse.GetState();
         }
     }
 }

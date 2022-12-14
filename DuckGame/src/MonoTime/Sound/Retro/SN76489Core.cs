@@ -237,7 +237,7 @@ namespace DuckGame
                     if (divA > 1)
                     {
                         volA ^= 16U;
-                        outA = SN76489Core.volumeTable[(int)volA];
+                        outA = volumeTable[(int)volA];
                     }
                     cntA = divA;
                 }
@@ -247,7 +247,7 @@ namespace DuckGame
                     if (divB > 1)
                     {
                         volB ^= 16U;
-                        outB = SN76489Core.volumeTable[(int)volB];
+                        outB = volumeTable[(int)volB];
                     }
                     cntB = divB;
                 }
@@ -257,7 +257,7 @@ namespace DuckGame
                     if (divC > 1)
                     {
                         volC ^= 16U;
-                        outC = SN76489Core.volumeTable[(int)volC];
+                        outC = volumeTable[(int)volC];
                     }
                     cntC = divC;
                 }
@@ -279,7 +279,7 @@ namespace DuckGame
                         num2 = noiseLFSR & 1U;
                     noiseLFSR = noiseLFSR >> 1 | num2 << 15;
                     volD = (uint)((int)volD & 15 | ((int)noiseLFSR & 1 ^ 1) << 4);
-                    outD = SN76489Core.volumeTable[(int)volD];
+                    outD = volumeTable[(int)volD];
                 }
             }
             ticksCount += ticksPerSample;

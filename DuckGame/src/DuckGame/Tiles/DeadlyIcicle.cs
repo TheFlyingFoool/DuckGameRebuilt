@@ -36,7 +36,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal && owner == null)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
             {
                 GlassParticle glassParticle = new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized);

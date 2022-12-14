@@ -42,7 +42,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            _selected = Unlocks.unlocks.FirstOrDefault<UnlockData>();
+            _selected = Unlocks.unlocks.FirstOrDefault();
             _screen.ChangeSpeech();
         }
 

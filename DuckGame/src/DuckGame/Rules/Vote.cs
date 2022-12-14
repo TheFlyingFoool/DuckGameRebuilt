@@ -21,22 +21,22 @@ namespace DuckGame
         {
             if (openCorners)
             {
-                Vote._voteButton = voteButton;
+                _voteButton = voteButton;
                 HUD.CloseAllCorners();
                 HUD.AddCornerControl(HUDCorner.BottomRight, "@" + voteButton + "@" + voteMessage);
             }
-            Vote._votingOpen = true;
+            _votingOpen = true;
         }
 
-        public static RegisteredVote GetVote(Profile who) => Vote._votes.FirstOrDefault<RegisteredVote>(x => x.who == who);
+        public static RegisteredVote GetVote(Profile who) => _votes.FirstOrDefault(x => x.who == who);
 
         public static void RegisterVote(Profile who, VoteType vote)
         {
-            if (!Vote._votingOpen && Network.isActive && vote != VoteType.None)
+            if (!_votingOpen && Network.isActive && vote != VoteType.None)
                 return;
-            RegisteredVote registeredVote = Vote._votes.FirstOrDefault<RegisteredVote>(x => x.who == who);
+            RegisteredVote registeredVote = _votes.FirstOrDefault(x => x.who == who);
             if (registeredVote == null)
-                Vote._votes.Add(new RegisteredVote()
+                _votes.Add(new RegisteredVote()
                 {
                     who = who,
                     vote = vote
@@ -55,45 +55,45 @@ namespace DuckGame
 
         public static void CloseVoting()
         {
-            foreach (RegisteredVote vote in Vote._votes)
+            foreach (RegisteredVote vote in _votes)
                 vote.doClose = true;
-            Vote._voteButton = "";
-            Vote._votingOpen = false;
+            _voteButton = "";
+            _votingOpen = false;
         }
 
-        public static void ClearVotes() => Vote._votes.Clear();
+        public static void ClearVotes() => _votes.Clear();
 
         public static bool Passed(VoteType type)
         {
             int num = 0;
-            foreach (RegisteredVote vote in Vote._votes)
+            foreach (RegisteredVote vote in _votes)
             {
                 if (vote.open && vote.vote == type && (vote.who == null || vote.who.slotType != SlotType.Spectator))
                     ++num;
             }
-            IEnumerable<Profile> source = Profiles.all.Where<Profile>(x => x.team != null && x.slotType != SlotType.Spectator);
-            return num >= source.Count<Profile>();
+            IEnumerable<Profile> source = Profiles.all.Where(x => x.team != null && x.slotType != SlotType.Spectator);
+            return num >= source.Count();
         }
 
         public static void Update()
         {
-            if (Vote._voteButton != "")
+            if (_voteButton != "")
             {
-                foreach (Profile who in Profiles.all.Where<Profile>(x => x.team != null))
+                foreach (Profile who in Profiles.all.Where(x => x.team != null))
                 {
-                    if (who.inputProfile != null && who.inputProfile.Pressed(Vote._voteButton))
-                        Vote.RegisterVote(who, VoteType.Skip);
+                    if (who.inputProfile != null && who.inputProfile.Pressed(_voteButton))
+                        RegisterVote(who, VoteType.Skip);
                 }
             }
-            if (!Vote._votes.Exists(x => x.open && x.slide < 0.9f))
+            if (!_votes.Exists(x => x.open && x.slide < 0.9f))
             {
-                foreach (RegisteredVote vote in Vote._votes)
+                foreach (RegisteredVote vote in _votes)
                 {
                     if (vote.doClose)
                         vote.open = false;
                 }
             }
-            foreach (RegisteredVote vote in Vote._votes)
+            foreach (RegisteredVote vote in _votes)
             {
                 if (vote.vote == VoteType.None)
                     vote.open = false;
@@ -108,7 +108,7 @@ namespace DuckGame
         public static void Draw()
         {
             int index = 0;
-            foreach (RegisteredVote vote in Vote._votes)
+            foreach (RegisteredVote vote in _votes)
             {
                 if (vote.who != null && vote.who.inputProfile != null)
                 {

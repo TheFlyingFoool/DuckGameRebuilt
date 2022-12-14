@@ -17,12 +17,12 @@ namespace XnaToFna.StubXDK
         {
             get
             {
-                if (StubXDKHelper._GamerServicesAsm != null)
-                    return StubXDKHelper._GamerServicesAsm;
+                if (_GamerServicesAsm != null)
+                    return _GamerServicesAsm;
                 foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
                     if (assembly.GetType("Microsoft.Xna.Framework.GamerServices.GamerPresence") != null)
-                        return StubXDKHelper._GamerServicesAsm = assembly;
+                        return _GamerServicesAsm = assembly;
                 }
                 return null;
             }

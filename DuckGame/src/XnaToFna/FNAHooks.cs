@@ -18,9 +18,9 @@ namespace XnaToFna
     {
         public static bool Enabled = true;
         private static bool Hooked = false;
-        public static FNAHooks.d_GetContentReaderFromXnb orig_GetContentReaderFromXnb;
+        public static d_GetContentReaderFromXnb orig_GetContentReaderFromXnb;
         //public static Detour h_ctor_ContentReader;
-        public static FNAHooks.d_ctor_ContentReader orig_ctor_ContentReader;
+        public static d_ctor_ContentReader orig_ctor_ContentReader;
 
         //public static void Hook()
         //{
@@ -58,7 +58,7 @@ namespace XnaToFna
                     return methodBase;
             }
             argTypes.RemoveAt(0);
-            return FNAHooks.Find(type, name, argTypes, false);
+            return Find(type, name, argTypes, false);
         }
 
         //internal static Detour Hook<T>(Type type, out T trampoline) where T : class
@@ -90,7 +90,7 @@ namespace XnaToFna
                 binaryWriter.Write(0);
             }
             xnbReader.BaseStream.Seek(position, SeekOrigin.Begin);
-            ContentReader contentReaderFromXnb = FNAHooks.orig_GetContentReaderFromXnb(self, originalAssetName, ref stream, xnbReader, platform, recordDisposableObject);
+            ContentReader contentReaderFromXnb = orig_GetContentReaderFromXnb(self, originalAssetName, ref stream, xnbReader, platform, recordDisposableObject);
             ((CopyingStream)contentReaderFromXnb.BaseStream).Output = output;
             return contentReaderFromXnb;
         }
@@ -106,7 +106,7 @@ namespace XnaToFna
           Action<IDisposable> recordDisposableObject)
         {
             stream = new CopyingStream(stream, null);
-            FNAHooks.orig_ctor_ContentReader(self, manager, stream, graphicsDevice, assetName, version, platform, recordDisposableObject);
+            orig_ctor_ContentReader(self, manager, stream, graphicsDevice, assetName, version, platform, recordDisposableObject);
         }
 
         public delegate ContentReader d_GetContentReaderFromXnb(

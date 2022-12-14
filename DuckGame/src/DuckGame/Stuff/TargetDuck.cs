@@ -23,7 +23,7 @@ namespace DuckGame
         protected float _upSpeed;
         protected bool _up;
         protected TargetStance _stance;
-        public System.Type contains;
+        public Type contains;
         public bool chestPlate;
         public bool helmet;
         private float _timeCount;
@@ -339,7 +339,7 @@ namespace DuckGame
             Vec2 vec2 = this.holdObject.Offset(new Vec2(num * this.holdObject.angleMul, 0f));
             if (_autoFireWait <= 0.0)
             {
-                foreach (Duck duck in Level.current.things[typeof(Duck)].Where<Thing>(d => !(d is TargetDuck)))
+                foreach (Duck duck in Level.current.things[typeof(Duck)].Where(d => !(d is TargetDuck)))
                 {
                     if ((Collision.Line(this.holdObject.position + new Vec2(0f, -5f), vec2 + new Vec2(0f, -5f), duck.rectangle) || Collision.Line(this.holdObject.position + new Vec2(0f, 5f), vec2 + new Vec2(0f, 5f), duck.rectangle)) && Level.CheckLine<Block>(this.holdObject.position, duck.position) == null)
                     {
@@ -504,9 +504,9 @@ namespace DuckGame
             if (position1.y > Level.current.camera.bottom - num)
                 position1.y = Level.current.camera.bottom - num;
             Vec2 position2 = Layer.HUD.camera.transformInverse(Level.current.camera.transform(position1));
-            DuckGame.Graphics.DrawRect(position2 + new Vec2(-5f, -5f), position2 + new Vec2(5f, 5f), Color.Black, (Depth)0.8f);
-            DuckGame.Graphics.DrawRect(position2 + new Vec2(-5f, -5f), position2 + new Vec2(5f, 5f), Color.White, (Depth)0.81f, false);
-            DuckGame.Graphics.Draw(_reticule.texture, position2, new Rectangle?(), Color.White, 0f, new Vec2(_reticule.width / 2, _reticule.height / 2), new Vec2(0.5f, 0.5f), SpriteEffects.None, (Depth)(0.9f + depth.span));
+            Graphics.DrawRect(position2 + new Vec2(-5f, -5f), position2 + new Vec2(5f, 5f), Color.Black, (Depth)0.8f);
+            Graphics.DrawRect(position2 + new Vec2(-5f, -5f), position2 + new Vec2(5f, 5f), Color.White, (Depth)0.81f, false);
+            Graphics.Draw(_reticule.texture, position2, new Rectangle?(), Color.White, 0f, new Vec2(_reticule.width / 2, _reticule.height / 2), new Vec2(0.5f, 0.5f), SpriteEffects.None, (Depth)(0.9f + depth.span));
         }
 
         public override void Draw()

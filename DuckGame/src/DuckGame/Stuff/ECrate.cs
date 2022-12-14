@@ -61,13 +61,13 @@ namespace DuckGame
             if (_hitPoints <= 0.0)
                 return false;
             if (bullet.isLocal && owner == null)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
                 Level.Add(new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized));
             SFX.Play("woodHit");
             if (isServerForObject && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
                 if (duck != null)
                     duck.ThrowItem();
                 Destroy(new DTShot(bullet));
@@ -78,7 +78,7 @@ namespace DuckGame
             if (_hitPoints <= 0.0)
             {
                 if (bullet.isLocal)
-                    Thing.SuperFondle(this, DuckNetwork.localConnection);
+                    SuperFondle(this, DuckNetwork.localConnection);
                 Destroy(new DTShot(bullet));
             }
             return base.Hit(bullet, hitPos);

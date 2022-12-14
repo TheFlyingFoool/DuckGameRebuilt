@@ -55,7 +55,7 @@ namespace DuckGame
         public override void Open()
         {
             HUD.CloseAllCorners();
-            UISlotEditor.editingSlots = true;
+            editingSlots = true;
             //this._showedWarning = false;
             _showWarning = false;
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@EXIT");
@@ -66,8 +66,8 @@ namespace DuckGame
         public override void Close()
         {
             HUD.CloseAllCorners();
-            UISlotEditor.editingSlots = false;
-            UISlotEditor.hoveringSlot = -1;
+            editingSlots = false;
+            hoveringSlot = -1;
             MonoMain.doPauseFade = true;
             base.Close();
         }
@@ -95,64 +95,64 @@ namespace DuckGame
                 }
                 else
                 {
-                    int slot = UISlotEditor._slot;
+                    int slot = _slot;
                     if (Input.Pressed("MENULEFT"))
                     {
-                        if (UISlotEditor._indexX == 2 && UISlotEditor._indexY == 2)
+                        if (_indexX == 2 && _indexY == 2)
                         {
-                            UISlotEditor._indexX = 0;
+                            _indexX = 0;
                         }
                         else
                         {
-                            --UISlotEditor._indexX;
-                            if (UISlotEditor._indexX < 0)
-                                UISlotEditor._indexX = 0;
+                            --_indexX;
+                            if (_indexX < 0)
+                                _indexX = 0;
                         }
                     }
                     if (Input.Pressed("MENURIGHT"))
                     {
-                        if (UISlotEditor._indexX == 0 && UISlotEditor._indexY == 2)
+                        if (_indexX == 0 && _indexY == 2)
                         {
-                            UISlotEditor._indexX = 2;
+                            _indexX = 2;
                         }
                         else
                         {
-                            ++UISlotEditor._indexX;
-                            if (UISlotEditor._indexX > 2)
-                                UISlotEditor._indexX = 2;
+                            ++_indexX;
+                            if (_indexX > 2)
+                                _indexX = 2;
                         }
                     }
                     if (Input.Pressed("MENUUP"))
                     {
-                        --UISlotEditor._indexY;
-                        if (UISlotEditor._indexY < 0)
-                            UISlotEditor._indexY = 0;
+                        --_indexY;
+                        if (_indexY < 0)
+                            _indexY = 0;
                     }
                     if (Input.Pressed("MENUDOWN"))
                     {
-                        if (UISlotEditor._indexX == 1 && UISlotEditor._indexY == 1)
+                        if (_indexX == 1 && _indexY == 1)
                         {
-                            UISlotEditor._indexY = 1;
+                            _indexY = 1;
                         }
                         else
                         {
-                            ++UISlotEditor._indexY;
-                            if (UISlotEditor._indexY > 2)
-                                UISlotEditor._indexY = 2;
+                            ++_indexY;
+                            if (_indexY > 2)
+                                _indexY = 2;
                         }
                     }
-                    UISlotEditor._slot = UISlotEditor.kIndexMap[UISlotEditor._indexY, UISlotEditor._indexX];
-                    UISlotEditor.hoveringSlot = UISlotEditor._slot;
-                    if (UISlotEditor._slot != slot)
+                    _slot = kIndexMap[_indexY, _indexX];
+                    hoveringSlot = _slot;
+                    if (_slot != slot)
                         _selectionChanged = true;
-                    if (UISlotEditor._slot >= 0)
+                    if (_slot >= 0)
                     {
                         if (_selectionChanged)
                         {
-                            if (DuckNetwork.profiles[UISlotEditor._slot].connection != null && DuckNetwork.profiles[UISlotEditor._slot] != DuckNetwork.hostProfile)
+                            if (DuckNetwork.profiles[_slot].connection != null && DuckNetwork.profiles[_slot] != DuckNetwork.hostProfile)
                             {
                                 HUD.CloseCorner(HUDCorner.BottomMiddle);
-                                if (DuckNetwork.profiles[UISlotEditor._slot].connection == DuckNetwork.localConnection)
+                                if (DuckNetwork.profiles[_slot].connection == DuckNetwork.localConnection)
                                     HUD.AddCornerControl(HUDCorner.BottomMiddle, "@MENU2@KICK");
                                 else
                                     HUD.AddCornerControl(HUDCorner.BottomMiddle, "@MENU2@KICK @RAGDOLL@BAN");
@@ -165,7 +165,7 @@ namespace DuckGame
                                 HUD.CloseCorner(HUDCorner.BottomMiddle);
                                 HUD.CloseCorner(HUDCorner.TopRight);
                             }
-                            if (DuckNetwork.profiles[UISlotEditor._slot].connection == null)
+                            if (DuckNetwork.profiles[_slot].connection == null)
                             {
                                 HUD.CloseCorner(HUDCorner.BottomRight);
                                 HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@TOGGLE");
@@ -174,27 +174,27 @@ namespace DuckGame
                                 HUD.CloseCorner(HUDCorner.BottomRight);
                             _selectionChanged = false;
                         }
-                        if (DuckNetwork.profiles[UISlotEditor._slot].readyForSpectatorChange && Network.canSetObservers && Input.Pressed("MENU1") && DuckNetwork.profiles[UISlotEditor._slot].connection != null)
+                        if (DuckNetwork.profiles[_slot].readyForSpectatorChange && Network.canSetObservers && Input.Pressed("MENU1") && DuckNetwork.profiles[_slot].connection != null)
                         {
                             _selectionChanged = true;
-                            DuckNetwork.MakeSpectator(DuckNetwork.profiles[UISlotEditor._slot]);
+                            DuckNetwork.MakeSpectator(DuckNetwork.profiles[_slot]);
                             SFX.Play("menuBlip01");
                         }
-                        else if (Input.Pressed("SELECT") && DuckNetwork.profiles[UISlotEditor._slot].connection == null)
+                        else if (Input.Pressed("SELECT") && DuckNetwork.profiles[_slot].connection == null)
                         {
-                            int num = (int)(DuckNetwork.profiles[UISlotEditor._slot].slotType + 1);
-                            if (DuckNetwork.profiles[UISlotEditor._slot].reservedUser != null && num == 5)
+                            int num = (int)(DuckNetwork.profiles[_slot].slotType + 1);
+                            if (DuckNetwork.profiles[_slot].reservedUser != null && num == 5)
                                 ++num;
-                            if (DuckNetwork.profiles[UISlotEditor._slot].reservedUser == null && num >= 5 || DuckNetwork.profiles[UISlotEditor._slot].reservedUser != null && num > 6)
+                            if (DuckNetwork.profiles[_slot].reservedUser == null && num >= 5 || DuckNetwork.profiles[_slot].reservedUser != null && num > 6)
                                 num = 0;
-                            DuckNetwork.profiles[UISlotEditor._slot].slotType = (SlotType)num;
+                            DuckNetwork.profiles[_slot].slotType = (SlotType)num;
                             DuckNetwork.ChangeSlotSettings();
                             SFX.Play("menuBlip01");
                         }
                         else if (Input.Pressed("MENU2"))
-                            DuckNetwork.Kick(DuckNetwork.profiles[UISlotEditor._slot]);
-                        else if (Input.Pressed("RAGDOLL") && DuckNetwork.profiles[UISlotEditor._slot].connection != DuckNetwork.localConnection)
-                            DuckNetwork.Ban(DuckNetwork.profiles[UISlotEditor._slot]);
+                            DuckNetwork.Kick(DuckNetwork.profiles[_slot]);
+                        else if (Input.Pressed("RAGDOLL") && DuckNetwork.profiles[_slot].connection != DuckNetwork.localConnection)
+                            DuckNetwork.Ban(DuckNetwork.profiles[_slot]);
                     }
                     if (Input.Pressed("CANCEL"))
                     {

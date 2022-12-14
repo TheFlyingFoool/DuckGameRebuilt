@@ -20,17 +20,17 @@ namespace DuckGame
         {
             get
             {
-                if (NCPacketBreakdown._dataTypes == null)
-                    NCPacketBreakdown._dataTypes = Enum.GetValues(typeof(NCPacketDataType)).Cast<NCPacketDataType>();
-                return NCPacketBreakdown._dataTypes;
+                if (_dataTypes == null)
+                    _dataTypes = Enum.GetValues(typeof(NCPacketDataType)).Cast<NCPacketDataType>();
+                return _dataTypes;
             }
         }
 
         public NCPacketBreakdown()
         {
-            if (NCPacketBreakdown._dataTypes == null)
-                NCPacketBreakdown._dataTypes = Enum.GetValues(typeof(NCPacketDataType)).Cast<NCPacketDataType>();
-            foreach (NCPacketDataType dataType in NCPacketBreakdown._dataTypes)
+            if (_dataTypes == null)
+                _dataTypes = Enum.GetValues(typeof(NCPacketDataType)).Cast<NCPacketDataType>();
+            foreach (NCPacketDataType dataType in _dataTypes)
                 _bitsPerType[dataType] = 0;
         }
 

@@ -15,10 +15,10 @@ namespace DuckGame
 
         public static string customBackground03
         {
-            get => Custom.data[CustomBackground3._customType][2];
+            get => Custom.data[_customType][2];
             set
             {
-                Custom.data[CustomBackground3._customType][2] = value;
+                Custom.data[_customType][2] = value;
                 Custom.Clear(CustomType.Background, value);
             }
         }

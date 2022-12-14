@@ -26,21 +26,21 @@ namespace DuckGame
             try
             {
                 LevelType levelType = LevelType.Invalid;
-                if (LSFilterLevelType._types.TryGetValue(lev, out levelType))
+                if (_types.TryGetValue(lev, out levelType))
                     return levelType == _type;
                 LevelData levelData = DuckFile.LoadLevelHeaderCached(lev);
                 if (levelData == null)
                 {
-                    LSFilterLevelType._types[lev] = LevelType.Invalid;
+                    _types[lev] = LevelType.Invalid;
                     return false;
                 }
                 LevelType type = levelData.metaData.type;
-                LSFilterLevelType._types[lev] = type;
+                _types[lev] = type;
                 return type == _type;
             }
             catch
             {
-                LSFilterLevelType._types[lev] = LevelType.Invalid;
+                _types[lev] = LevelType.Invalid;
                 return false;
             }
         }

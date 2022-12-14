@@ -186,14 +186,14 @@ namespace Microsoft.Xna.Framework
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public static bool operator ==(CurveKey a, CurveKey b)
 		{
-			if (object.Equals(a, null))
+			if (Equals(a, null))
 			{
-				return object.Equals(b, null);
+				return Equals(b, null);
 			}
 
-			if (object.Equals(b, null))
+			if (Equals(b, null))
 			{
-				return object.Equals(a, null);
+				return Equals(a, null);
 			}
 
 			return (	(a.Position == b.Position) &&

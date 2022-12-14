@@ -381,10 +381,10 @@ namespace DuckGame
             _part3.enablePhysics = true;
             if (Network.isActive)
             {
-                Thing.Fondle(this, DuckNetwork.localConnection);
-                Thing.Fondle(_part1, DuckNetwork.localConnection);
-                Thing.Fondle(_part2, DuckNetwork.localConnection);
-                Thing.Fondle(_part3, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
+                Fondle(_part1, DuckNetwork.localConnection);
+                Fondle(_part2, DuckNetwork.localConnection);
+                Fondle(_part3, DuckNetwork.localConnection);
             }
             if (_duck == null || !_duck.onFire)
                 return;
@@ -439,10 +439,10 @@ namespace DuckGame
                 _part3.owner = null;
                 if (_duck.isServerForObject)
                 {
-                    Thing.Fondle(this, _duck.connection);
-                    Thing.Fondle(_part1, _duck.connection);
-                    Thing.Fondle(_part2, _duck.connection);
-                    Thing.Fondle(_part3, _duck.connection);
+                    Fondle(this, _duck.connection);
+                    Fondle(_part1, _duck.connection);
+                    Fondle(_part2, _duck.connection);
+                    Fondle(_part3, _duck.connection);
                 }
             }
             else
@@ -828,7 +828,7 @@ namespace DuckGame
             {
                 tongueStuck = Vec2.Zero;
                 if (Network.isActive)
-                    Thing.Fondle(this, DuckNetwork.localConnection);
+                    Fondle(this, DuckNetwork.localConnection);
                 _makeActive = true;
             }
             if (_duck.dead || !captureDuck.inputProfile.Pressed("RAGDOLL") && !captureDuck.inputProfile.Pressed("JUMP") || ((_part1.framesSinceGrounded < 5 || _part2.framesSinceGrounded < 5 || _part3.framesSinceGrounded < 5 ? 1 : (_part1.doFloat || part2.doFloat ? 1 : (_part3.doFloat ? 1 : 0))) | (flag ? 1 : 0)) == 0 && _part1.owner == null && _part2.owner == null && _part3.owner == null)
@@ -849,7 +849,7 @@ namespace DuckGame
                     return;
                 tongueStuck = Vec2.Zero;
                 if (Network.isActive)
-                    Thing.Fondle(this, DuckNetwork.localConnection);
+                    Fondle(this, DuckNetwork.localConnection);
                 _makeActive = true;
             }
         }

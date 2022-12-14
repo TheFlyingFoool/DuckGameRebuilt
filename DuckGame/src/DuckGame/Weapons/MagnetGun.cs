@@ -216,7 +216,7 @@ namespace DuckGame
                                 {
                                     _grabbed.owner = this;
                                     _grabbed.offDir = offDir;
-                                    Thing.SuperFondle(_grabbed, DuckNetwork.localConnection);
+                                    SuperFondle(_grabbed, DuckNetwork.localConnection);
                                 }
                             }
                             else

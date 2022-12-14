@@ -12,9 +12,9 @@ namespace DuckGame
         public override void RunTestLevel(string name)
         {
             LevGenType genType = LevGenType.Any;
-            if (Editor._currentLevelData.proceduralData.enableSingle && !Editor._currentLevelData.proceduralData.enableMulti)
+            if (_currentLevelData.proceduralData.enableSingle && !_currentLevelData.proceduralData.enableMulti)
                 genType = LevGenType.SinglePlayer;
-            else if (!Editor._currentLevelData.proceduralData.enableSingle && Editor._currentLevelData.proceduralData.enableMulti)
+            else if (!_currentLevelData.proceduralData.enableSingle && _currentLevelData.proceduralData.enableMulti)
                 genType = LevGenType.Deathmatch;
             if (_levelThings.Exists(x => x is ChallengeMode))
             {
@@ -24,10 +24,10 @@ namespace DuckGame
                         prof.team.Leave(prof);
                 }
                 Profiles.experienceProfile.team = Teams.Player1;
-                Level.current = new ChallengeLevel(name);
+                current = new ChallengeLevel(name);
             }
             else if (_levelThings.Exists(x => x is ImportMachine))
-                Level.current = new ArcadeLevel(DuckFile.contentDirectory + "Levels/arcade_machine_preview.lev")
+                current = new ArcadeLevel(DuckFile.contentDirectory + "Levels/arcade_machine_preview.lev")
                 {
                     genType = LevGenType.CustomArcadeMachine,
                     customMachine = name,
@@ -41,7 +41,7 @@ namespace DuckGame
                         prof.team.Leave(prof);
                 }
                 Profiles.experienceProfile.team = Teams.Player1;
-                Level.current = new ArcadeLevel(name)
+                current = new ArcadeLevel(name)
                 {
                     editor = this
                 };
@@ -61,9 +61,9 @@ namespace DuckGame
                 Profiles.DefaultPlayer6.team = Teams.Player6;
                 Profiles.DefaultPlayer7.team = Teams.Player7;
                 Profiles.DefaultPlayer8.team = Teams.Player8;
-                Level.current = new DuckGameTestArea(this, name, _procSeed, _centerTile, genType);
+                current = new DuckGameTestArea(this, name, _procSeed, _centerTile, genType);
             }
-            Level.current.AddThing(new EditorTestLevel(this));
+            current.AddThing(new EditorTestLevel(this));
         }
 
         public override void Update() => base.Update();

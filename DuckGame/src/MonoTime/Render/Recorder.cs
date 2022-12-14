@@ -14,49 +14,49 @@ namespace DuckGame
 
         public static Recording currentRecording
         {
-            get => Recorder._currentRecording;
-            set => Recorder._currentRecording = value;
+            get => _currentRecording;
+            set => _currentRecording = value;
         }
 
         public static void LogVelocity(float velocity)
         {
-            if (Recorder._currentRecording == null)
+            if (_currentRecording == null)
                 return;
-            Recorder._currentRecording.LogVelocity(velocity);
+            _currentRecording.LogVelocity(velocity);
         }
 
         public static void LogCoolness(int val)
         {
-            if (Recorder._currentRecording == null)
+            if (_currentRecording == null)
                 return;
-            Recorder._currentRecording.LogCoolness(val);
+            _currentRecording.LogCoolness(val);
         }
 
         public static void LogDeath()
         {
-            if (Recorder._currentRecording == null)
+            if (_currentRecording == null)
                 return;
-            Recorder._currentRecording.LogDeath();
+            _currentRecording.LogDeath();
         }
 
         public static void LogAction(int num = 1)
         {
-            if (Recorder._currentRecording == null)
+            if (_currentRecording == null)
                 return;
-            Recorder._currentRecording.LogAction(num);
+            _currentRecording.LogAction(num);
         }
 
         public static void LogBonus()
         {
-            if (Recorder._currentRecording == null)
+            if (_currentRecording == null)
                 return;
-            Recorder._currentRecording.LogBonus();
+            _currentRecording.LogBonus();
         }
 
         public static FileRecording globalRecording
         {
-            get => Recorder._globalRecording;
-            set => Recorder._globalRecording = value;
+            get => _globalRecording;
+            set => _globalRecording = value;
         }
     }
 }

@@ -17,27 +17,27 @@ namespace DuckGame
             this._toreUp = new SpriteMap("yellowBarrelToreUp", 14, 17, false);
             this._toreUp.frame = 1;
             this._toreUp.center = new Vec2(0f, -6f);
-            base.sequence = new SequenceItem(this);
-            base.sequence.type = SequenceItemType.Goody;
+            sequence = new SequenceItem(this);
+            sequence.type = SequenceItemType.Goody;
             this.collisionOffset = new Vec2(-7f, -8f);
             this.collisionSize = new Vec2(14f, 16f);
-            base.depth = -0.1f;
+            depth = -0.1f;
             this._editorName = "Barrel (Gasoline)";
             this.editorTooltip = "Do not smoke near this barrel. In fact, don't smoke at all. It's not cool, kids!";
             this.thickness = 4f;
             this.weight = 5f;
             this.physicsMaterial = PhysicsMaterial.Metal;
-            base.collideSounds.Add("barrelThud");
+            collideSounds.Add("barrelThud");
             this._holdOffset = new Vec2(1f, 0f);
             this.flammable = 0.3f;
             this._fluid = Fluid.Gas;
-            base.sequence.isValid = this.valid.value;
+            sequence.isValid = this.valid.value;
             this._placementCost += 6;
         }
 
         public override void Initialize()
         {
-            base.sequence.isValid = this.valid.value;
+            sequence.isValid = this.valid.value;
             base.Initialize();
         }
 
@@ -48,7 +48,7 @@ namespace DuckGame
                 return false;
             }
             hitPos += bullet.travelDirNormalized * 2f;
-            if (1f - (hitPos.y - base.top) / (base.bottom - base.top) < this._fluidLevel)
+            if (1f - (hitPos.y - top) / (bottom - top) < this._fluidLevel)
             {
                 this.thickness = 2f;
                 this.MakeHole(hitPos, bullet.travelDirNormalized);
@@ -117,11 +117,11 @@ namespace DuckGame
                     dat.amount = spray / 20f;
                     for (int i = 0; i < 20; i++)
                     {
-                        Level.Add(new Fluid(base.x + Rando.Float(-4f, 4f), base.y + Rando.Float(-4f, 4f), new Vec2(Rando.Float(-4f, 4f), Rando.Float(-4f, 0f)), dat, null, 1f));
+                        Level.Add(new Fluid(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), new Vec2(Rando.Float(-4f, 4f), Rando.Float(-4f, 0f)), dat, null, 1f));
                     }
                     dat.amount = glob;
-                    Level.Add(new Fluid(base.x, base.y - 8f, new Vec2(0f, -1f), dat, null, 1f));
-                    if (DGRSettings.S_ParticleMultiplier != 0) Level.Add(SmallSmoke.New(base.x, base.y));
+                    Level.Add(new Fluid(x, y - 8f, new Vec2(0f, -1f), dat, null, 1f));
+                    if (DGRSettings.S_ParticleMultiplier != 0) Level.Add(SmallSmoke.New(x, y));
                     SFX.Play("bulletHitWater", 1f, 0f, 0f, false);
                     SFX.Play("crateDestroy", 1f, 0f, 0f, false);
                 }
@@ -140,8 +140,8 @@ namespace DuckGame
                 {
                     this.graphic = this._melting;
                 }
-                base.yscale = 0.5f + (1f - this.burnt) * 0.5f;
-                base.centery = 8f - this.burnt * 7f;
+                yscale = 0.5f + (1f - this.burnt) * 0.5f;
+                centery = 8f - this.burnt * 7f;
                 this._collisionOffset.y = -8f + this.burnt * 7f;
                 this._collisionSize.y = 16f - this.burnt * 7f;
             }
@@ -164,14 +164,14 @@ namespace DuckGame
             {
                 foreach (FluidStream hole2 in this._holes)
                 {
-                    hole2.onFire = base.onFire;
+                    hole2.onFire = onFire;
                     hole2.hSpeed = this.hSpeed;
                     hole2.vSpeed = this.vSpeed;
                     hole2.DoUpdate();
                     hole2.position = this.Offset(hole2.offset);
                     hole2.sprayAngle = this.OffsetLocal(hole2.startSprayAngle);
-                    float level = 1f - (hole2.offset.y - base.topLocal) / (base.bottomLocal - base.topLocal);
-                    if (hole2.x > base.left - 2f && hole2.x < base.right + 2f && level < this._fluidLevel)
+                    float level = 1f - (hole2.offset.y - topLocal) / (bottomLocal - topLocal);
+                    if (hole2.x > left - 2f && hole2.x < right + 2f && level < this._fluidLevel)
                     {
                         level = Maths.Clamp(this._fluidLevel - level, 0.1f, 1f);
                         FluidData f = this._fluid;
@@ -183,7 +183,7 @@ namespace DuckGame
                         while (this._lossAccum > 0.05f)
                         {
                             this._lossAccum -= 0.05f;
-                            if (base.sequence != null && base.sequence.isValid && ChallengeLevel.running)
+                            if (sequence != null && sequence.isValid && ChallengeLevel.running)
                             {
                                 ChallengeLevel.goodiesGot++;
                                 SFX.Play("tinyTick", 1f, 0f, 0f, false);
@@ -210,11 +210,11 @@ namespace DuckGame
             {
                 this.graphic.color = new Color((byte)(255f * darken), (byte)(255f * darken), (byte)(255f * darken));
                 this.graphic.angle = this.angle;
-                this.graphic.depth = base.depth + 1;
-                this.graphic.scale = base.scale;
+                this.graphic.depth = depth + 1;
+                this.graphic.scale = scale;
                 float ypos = level * graphic.height;
                 this.graphic.center = this.center - new Vec2(0f, (int)ypos);
-                Graphics.Draw(this.graphic, base.x, base.y, new Rectangle(0f, (int)ypos, graphic.w, (int)(graphic.h - ypos)));
+                Graphics.Draw(this.graphic, x, y, new Rectangle(0f, (int)ypos, graphic.w, (int)(graphic.h - ypos)));
             }
         }
 

@@ -274,7 +274,7 @@ namespace DuckGame
           }
         };
         private bool _connectedState;
-        public SDL.SDL_GameControllerType SDLControllerType = SDL_GameControllerType.SDL_CONTROLLER_TYPE_XBOX360;
+        public SDL_GameControllerType SDLControllerType = SDL_GameControllerType.SDL_CONTROLLER_TYPE_XBOX360;
         public override bool isConnected => _connectedState;
 
         public override bool allowStartRemap => true;

@@ -127,7 +127,7 @@ namespace DuckGame
                     }
                     if (c == '(')
                     {
-                        ScriptStatement innerStatement = ScriptStatement.Parse(statement, null, null, ScriptOperator.None, isWord ? currentWord : null, true);
+                        ScriptStatement innerStatement = Parse(statement, null, null, ScriptOperator.None, isWord ? currentWord : null, true);
                         statement = innerStatement.remainingStatementString;
                         if (innerStatement.error != null)
                         {
@@ -146,7 +146,7 @@ namespace DuckGame
                         newStatement.data = null;
                         if (currentOperator > ScriptOperator.COMPARATORS)
                         {
-                            ScriptStatement s = ScriptStatement.Parse(statement, dat, null, ScriptOperator.None, null, true);
+                            ScriptStatement s = Parse(statement, dat, null, ScriptOperator.None, null, true);
                             statement = s.remainingStatementString;
                             dat = s;
                         }
@@ -158,7 +158,7 @@ namespace DuckGame
                         {
                             if (newStatement.rightObject != null)
                             {
-                                return ScriptStatement.Parse(statement, newStatement, dat, currentOperator, null, true);
+                                return Parse(statement, newStatement, dat, currentOperator, null, true);
                             }
                             newStatement.rightObject = dat;
                         }

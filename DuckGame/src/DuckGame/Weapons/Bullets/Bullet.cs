@@ -251,16 +251,16 @@ namespace DuckGame
             reboundCalled = false;
             do
             {
-                Bullet.bulletImpactList.Clear();
+                bulletImpactList.Clear();
                 --num1;
                 --_totalSteps;
-                Level.current.CollisionBullet(currentTravel, Bullet.bulletImpactList);
+                Level.current.CollisionBullet(currentTravel, bulletImpactList);
                 if (!_tracer)
                 {
                     for (int index = 0; index < _currentlyImpacting.Count; ++index)
                     {
                         MaterialThing materialThing = _currentlyImpacting[index];
-                        if (!Bullet.bulletImpactList.Contains(materialThing))
+                        if (!bulletImpactList.Contains(materialThing))
                         {
                             if (ammo.deadly)
                                 materialThing.DoExitHit(this, currentTravel);
@@ -272,9 +272,9 @@ namespace DuckGame
                 Duck owner = _owner as Duck;
                 for (int i = 0; i < 2; ++i)
                 {
-                    for (int index2 = 0; index2 < Bullet.bulletImpactList.Count; ++index2)
+                    for (int index2 = 0; index2 < bulletImpactList.Count; ++index2)
                     {
-                        MaterialThing bulletImpact = Bullet.bulletImpactList[index2];
+                        MaterialThing bulletImpact = bulletImpactList[index2];
                         if (i == 1 == bulletImpact is IAmADuck && (bulletImpact != _owner && (!(_owner is Duck) || !(_owner as Duck).ExtendsTo(bulletImpact)) || ammo.immediatelyDeadly) && (owner == null || bulletImpact != owner.holdObject) && bulletImpact != _teleporter && (!(bulletImpact is Teleporter) || !_tracer && ammo.canTeleport) && (ammo.ownerSafety <= 0 || _travelTime / Maths.IncFrameTimer() >= ammo.ownerSafety || firedFrom == null || bulletImpact != firedFrom.owner))
                         {
                             bool shield = false;
@@ -608,7 +608,7 @@ namespace DuckGame
         public Vec2 GetPointOnArc(float distanceBack)
         {
             float num1 = 0f;
-            Vec2 pointOnArc = prev.Last<Vec2>();
+            Vec2 pointOnArc = prev.Last();
             for (int index = prev.Count - 1; index > 0; --index)
             {
                 if (index == 0)
@@ -639,7 +639,7 @@ namespace DuckGame
                 //Fixed some shit here no touchy as for it is very fragile <3
                 //-NiK0
                 float num = (int)Math.Ceiling((drawdist - startpoint) / 8f);
-                Vec2 p2 = prev.Last<Vec2>();
+                Vec2 p2 = prev.Last();
                 for (int index = 0; index < num; ++index)
                 {
                     Vec2 pointOnArc = GetPointOnArc(index * 8);

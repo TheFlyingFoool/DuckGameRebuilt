@@ -131,8 +131,8 @@ namespace DuckGame
                         _deadlyIcicleInstance.visible = true;
                         _deadlyIcicleInstance.active = true;
                         _deadlyIcicleInstance.solid = true;
-                        Thing.Fondle(this, DuckNetwork.localConnection);
-                        Thing.Fondle(_deadlyIcicleInstance, DuckNetwork.localConnection);
+                        Fondle(this, DuckNetwork.localConnection);
+                        Fondle(_deadlyIcicleInstance, DuckNetwork.localConnection);
                     }
                 }
                 else

@@ -289,7 +289,7 @@ namespace DuckGame
                     {
                         if (DevConsole.core.lines.Count - index1 >= 0)
                         {
-                            DCLine dcLine = DevConsole.core.lines.ElementAt<DCLine>(DevConsole.core.lines.Count - index1);
+                            DCLine dcLine = DevConsole.core.lines.ElementAt(DevConsole.core.lines.Count - index1);
                             try
                             {
                                 string line = dcLine.line;
@@ -386,7 +386,7 @@ namespace DuckGame
             return num - (num < 58 ? 48 : 55);
         }
 
-        public static byte[] StringToByteArray(string hex) => Enumerable.Range(0, hex.Length).Where<int>(x => x % 2 == 0).Select<int, byte>(x => Convert.ToByte(hex.Substring(x, 2), 16)).ToArray<byte>();
+        public static byte[] StringToByteArray(string hex) => Enumerable.Range(0, hex.Length).Where(x => x % 2 == 0).Select(x => Convert.ToByte(hex.Substring(x, 2), 16)).ToArray();
 
         public static Texture2D RequestRandomDoodle()
         {
@@ -420,7 +420,7 @@ namespace DuckGame
             return null;
         }
 
-        public static MonoMain.WebCharData RequestRandomCharacter()
+        public static WebCharData RequestRandomCharacter()
         {
             try
             {
@@ -444,7 +444,7 @@ namespace DuckGame
                             Tex2D tex2D = new Tex2D(128, 128);
                             Color[] colorArray = new Color[16384];
                             int index1 = 0;
-                            for (int index2 = 0; index2 < source.Count<byte>() && index1 < colorArray.Count<Color>(); ++index2)
+                            for (int index2 = 0; index2 < source.Count() && index1 < colorArray.Count(); ++index2)
                             {
                                 byte num2 = source[index2];
                                 for (int index3 = 0; index3 < 8; ++index3)
@@ -455,7 +455,7 @@ namespace DuckGame
                                 }
                             }
                             tex2D.SetData(colorArray);
-                            return new MonoMain.WebCharData()
+                            return new WebCharData()
                             {
                                 image = tex2D,
                                 name = str1,
@@ -520,7 +520,7 @@ namespace DuckGame
         {
             mainThread = Thread.CurrentThread;
             cultureCode = CultureInfo.CurrentCulture.LCID;
-            startupAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where<Assembly>(x => !x.IsDynamic).Select<Assembly, string>(assembly => assembly.Location).ToArray<string>();
+            startupAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(x => !x.IsDynamic).Select(assembly => assembly.Location).ToArray();
             Content = new SynchronizedContentManager(Services);
             DG.SetVersion(Assembly.GetExecutingAssembly().GetName().Version.ToString());
             graphics = new GraphicsDeviceManager(this);
@@ -642,8 +642,8 @@ namespace DuckGame
                 r.mode = ScreenMode.Windowed;
                 Resolution.Set(r);
                 Resolution.Apply();
-                SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, SDL.SDL_bool.SDL_FALSE);
-                SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, (int)Program.StartPos.x, (int)Program.StartPos.y);
+                SDL.SDL_SetWindowBordered(instance.Window.Handle, SDL.SDL_bool.SDL_FALSE);
+                SDL.SDL_SetWindowPosition(instance.Window.Handle, (int)Program.StartPos.x, (int)Program.StartPos.y);
             }
             _screenCapture = new RenderTarget2D(Resolution.current.x, Resolution.current.y, true);
             _duckRun = new SpriteMap("duck", 32, 32);
@@ -818,8 +818,8 @@ namespace DuckGame
             if (result == null || result.details == null)
                 return;
             WorkshopItem publishedFile = result.details.publishedFile;
-            int num1 = DuckFile.GetFiles(publishedFile.path).Count<string>();
-            int num2 = DuckFile.GetDirectories(publishedFile.path).Count<string>();
+            int num1 = DuckFile.GetFiles(publishedFile.path).Count();
+            int num2 = DuckFile.GetDirectories(publishedFile.path).Count();
             if ((num1 != 0 || num2 != 0) && (publishedFile.stateFlags & WorkshopItemState.Installed) != WorkshopItemState.None && (publishedFile.stateFlags & WorkshopItemState.NeedsUpdate) == WorkshopItemState.None)
                 return;
             availableModsToDownload.Add(publishedFile);
@@ -964,7 +964,7 @@ namespace DuckGame
             //Program.FirebreakReflectionsht.Wait();
 
             //Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667L);
-            if (!(MonoMain.startInLobby || Program.testServer))
+            if (!(startInLobby || Program.testServer))
             {
                 this.IsFixedTimeStep = true; // UNZOOOM
             }
@@ -1149,7 +1149,7 @@ namespace DuckGame
 
         public static void CalculateModMemoryOffendersList()
         {
-            List<ModConfiguration> list = loadedModsWithAssemblies.OrderByDescending<ModConfiguration, long>(x => x.content == null ? -1L : x.content.kilobytesPreAllocated).ToList<ModConfiguration>();
+            List<ModConfiguration> list = loadedModsWithAssemblies.OrderByDescending(x => x.content == null ? -1L : x.content.kilobytesPreAllocated).ToList();
             bool flag = false;
             modMemoryOffendersString = "Mods taking up the most memory:\n";
             foreach (ModConfiguration modConfiguration in list)
@@ -1221,7 +1221,7 @@ namespace DuckGame
  
                         currentActionQueue = _thingsToLoad;
                         LoadingAction loadingAction = _thingsToLoad.Peek();
-                        MonoMain.NloadMessage = loadingAction.label;
+                        NloadMessage = loadingAction.label;
                         if (loadingAction.Invoke())
                         {
                             _thingsToLoad.Dequeue();
@@ -1565,7 +1565,7 @@ namespace DuckGame
                         DuckGame.Content.Thick.Namebase = "SpriteAtlas";
 
                         //RSplit("de mo", ' ', -1);
-                        string[] lines = System.IO.File.ReadAllLines(@"../spriteatlas_offsets.txt");
+                        string[] lines = File.ReadAllLines(@"../spriteatlas_offsets.txt");
                         foreach (string line in lines)
                         {
                             try
@@ -1592,7 +1592,7 @@ namespace DuckGame
                         DuckGame.Content.Thick.Namebase = "SpriteAtlas";
 
                         //RSplit("de mo", ' ', -1);
-                        string[] lines = System.IO.File.ReadAllLines(Program.GameDirectory + "spriteatlas/spriteatlas_offsets.txt");
+                        string[] lines = File.ReadAllLines(Program.GameDirectory + "spriteatlas/spriteatlas_offsets.txt");
                         foreach (string line in lines)
                         {
                             try
@@ -1619,7 +1619,7 @@ namespace DuckGame
                 Vec2 p1 = new Vec2(50f, Graphics.height - 50);
                 Vec2 vec2_1 = new Vec2(Graphics.width - 100, 20f);
                 Graphics.DrawRect(p1, p1 + vec2_1, Color.DarkGray * 0.1f, (Depth)0.5f);
-                float loaded = (float)MonoMain.loadyBits / (float)MonoMain.totalLoadyBits;
+                float loaded = (float)loadyBits / (float)totalLoadyBits;
 				if (loaded > 1f)
 				{
 					loaded = 1f;

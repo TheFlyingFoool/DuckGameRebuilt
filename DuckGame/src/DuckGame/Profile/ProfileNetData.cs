@@ -13,7 +13,7 @@ namespace DuckGame
     public class ProfileNetData
     {
         public Dictionary<NetworkConnection, NetIndex16> syncIndex = new Dictionary<NetworkConnection, NetIndex16>();
-        private Dictionary<int, ProfileNetData.NetDataPair> _elements = new Dictionary<int, ProfileNetData.NetDataPair>();
+        private Dictionary<int, NetDataPair> _elements = new Dictionary<int, NetDataPair>();
         private bool _settingFiltered;
 
         public NetIndex16 GetAndIncrementSyncIndex(NetworkConnection pConnection)
@@ -28,11 +28,11 @@ namespace DuckGame
 
         /// <summary>This is just for iterating, Don't go modifying it.</summary>
         /// <returns></returns>
-        public Dictionary<int, ProfileNetData.NetDataPair> GetElementList() => _elements;
+        public Dictionary<int, NetDataPair> GetElementList() => _elements;
 
         public bool IsDirty(NetworkConnection pConnection)
         {
-            foreach (KeyValuePair<int, ProfileNetData.NetDataPair> element in _elements)
+            foreach (KeyValuePair<int, NetDataPair> element in _elements)
             {
                 if (element.Value.IsDirty(pConnection))
                     return true;
@@ -46,7 +46,7 @@ namespace DuckGame
         /// <typeparam name="T">The type of the value you're getting.</typeparam>
         /// <param name="pKey">The name of the property you're getting.</param>
         /// <returns></returns>
-        public T Get<T>(string pKey) => Get<T>(pKey, default(T));
+        public T Get<T>(string pKey) => Get(pKey, default(T));
 
         /// <summary>
         /// Returns a property value based on a string. These values are synchronized over the network!
@@ -75,14 +75,14 @@ namespace DuckGame
             NetDataPair netDataPair;
             if (!_elements.TryGetValue(hashCode, out netDataPair))
             {
-                _elements[hashCode] = netDataPair = new ProfileNetData.NetDataPair();
+                _elements[hashCode] = netDataPair = new NetDataPair();
                 netDataPair.MakeDirty();
                 if (_settingFiltered)
                     netDataPair.filtered = true;
             }
             if (netDataPair.id != null && netDataPair.id != pKey)
                 throw new Exception("Profile.netData.Set<" + typeof(T).Name + ">(" + pKey + ") error: GetHashCode for (" + pKey + ") is identical to GetHashCode for (" + netDataPair.id + "), a value already set in Profile.netData! Please use a more unique key name.");
-            if (object.Equals(netDataPair.data, pValue) && netDataPair.activeControllingConnection == DuckNetwork.localConnection)
+            if (Equals(netDataPair.data, pValue) && netDataPair.activeControllingConnection == DuckNetwork.localConnection)
                 return;
             netDataPair.data = pValue;
             netDataPair.id = pKey;
@@ -92,7 +92,7 @@ namespace DuckGame
         public void SetFiltered<T>(string pKey, T pValue)
         {
             _settingFiltered = true;
-            Set<T>(pKey, pValue);
+            Set(pKey, pValue);
             _settingFiltered = false;
         }
 
@@ -100,7 +100,7 @@ namespace DuckGame
         {
             if (pHash == int.MaxValue)
             {
-                foreach (KeyValuePair<int, ProfileNetData.NetDataPair> element in _elements)
+                foreach (KeyValuePair<int, NetDataPair> element in _elements)
                     element.Value.Clean(pConnection);
             }
             else
@@ -114,7 +114,7 @@ namespace DuckGame
 
         public void Clean(NetworkConnection pConnection)
         {
-            foreach (KeyValuePair<int, ProfileNetData.NetDataPair> element in _elements)
+            foreach (KeyValuePair<int, NetDataPair> element in _elements)
                 element.Value.SetConnectionDirty(pConnection, false);
         }
 
@@ -126,7 +126,7 @@ namespace DuckGame
         {
             NetDataPair netDataPair;
             if (!_elements.TryGetValue(pHash, out netDataPair))
-                _elements[pHash] = netDataPair = new ProfileNetData.NetDataPair();
+                _elements[pHash] = netDataPair = new NetDataPair();
             if (netDataPair.lastReceivedIndex > pSyncIndex && netDataPair.activeControllingConnection == pConnection)
                 return;
             netDataPair.lastReceivedIndex = pSyncIndex;
@@ -139,7 +139,7 @@ namespace DuckGame
             BitBuffer bitBuffer = new BitBuffer();
             NetIndex16 incrementSyncIndex = GetAndIncrementSyncIndex(pConnection);
             bitBuffer.Write((object)incrementSyncIndex);
-            foreach (KeyValuePair<int, ProfileNetData.NetDataPair> element in _elements)
+            foreach (KeyValuePair<int, NetDataPair> element in _elements)
             {
                 if (element.Value.IsDirty(pConnection))
                 {

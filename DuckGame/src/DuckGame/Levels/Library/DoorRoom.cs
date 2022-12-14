@@ -76,17 +76,17 @@ namespace DuckGame
                     if (_transition == DoorTransition.Profile)
                     {
                         Graphics.fade = 0f;
-                        Level.current = new LockerRoom(_profile);
+                        current = new LockerRoom(_profile);
                     }
                     else if (_transition == DoorTransition.Exit)
                     {
                         Graphics.fade = 0f;
-                        Level.current = new TitleScreen();
+                        current = new TitleScreen();
                     }
                     else if (_transition == DoorTransition.Album)
                     {
                         Graphics.fade = 0f;
-                        Level.current = new Album();
+                        current = new Album();
                     }
                 }
             }

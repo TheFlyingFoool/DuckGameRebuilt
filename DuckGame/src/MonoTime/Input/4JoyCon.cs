@@ -93,7 +93,7 @@ namespace DuckGame
         public override int numTriggers => 2;
 
         public SwitchProController(int idx)
-          : base(idx, "Pro Controller", "Pro Controller", SwitchProController._proControllerImages)
+          : base(idx, "Pro Controller", "Pro Controller", _proControllerImages)
         {
         }
 

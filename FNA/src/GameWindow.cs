@@ -64,13 +64,13 @@ namespace Microsoft.Xna.Framework
 			}
 		}
 
-		/// <summary>
-		/// Determines whether the border of the window is visible.
-		/// </summary>
-		/// <exception cref="System.NotImplementedException">
-		/// Thrown when trying to use this property on an unsupported platform.
-		/// </exception>
-		public virtual bool IsBorderlessEXT
+        /// <summary>
+        /// Determines whether the border of the window is visible.
+        /// </summary>
+        /// <exception cref="NotImplementedException">
+        /// Thrown when trying to use this property on an unsupported platform.
+        /// </exception>
+        public virtual bool IsBorderlessEXT
 		{
 			get
 			{

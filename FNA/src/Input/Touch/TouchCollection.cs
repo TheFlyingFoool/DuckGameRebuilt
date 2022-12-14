@@ -148,12 +148,12 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
 		#region IEnumerator Methods
 
-		IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return new Enumerator(this);
 		}
 
-		IEnumerator<TouchLocation> System.Collections.Generic.IEnumerable<TouchLocation>.GetEnumerator()
+		IEnumerator<TouchLocation> IEnumerable<TouchLocation>.GetEnumerator()
 		{
 			return new Enumerator(this);
 		}

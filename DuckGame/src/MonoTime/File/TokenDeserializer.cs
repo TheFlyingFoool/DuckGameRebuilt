@@ -18,16 +18,16 @@ namespace DuckGame
 
         public TokenDeserializer()
         {
-            if (TokenDeserializer.instance != null)
-                _prevInstance = TokenDeserializer.instance;
-            TokenDeserializer.instance = this;
+            if (instance != null)
+                _prevInstance = instance;
+            instance = this;
         }
 
         public void Dispose()
         {
-            if (TokenDeserializer.instance != this)
+            if (instance != this)
                 return;
-            TokenDeserializer.instance = _prevInstance;
+            instance = _prevInstance;
         }
 
         public int Token(string pString)
@@ -45,16 +45,16 @@ namespace DuckGame
         {
             if (pBuffer.ReadLong() != 13826924961947138L)
             {
-                TokenDeserializer.instance = _prevInstance;
+                instance = _prevInstance;
                 pBuffer.position = 0;
                 return pBuffer;
             }
-            TokenDeserializer.instance = null;
+            instance = null;
             int num = pBuffer.ReadInt();
             for (int index = 0; index < num; ++index)
                 _tokens.Add(pBuffer.ReadString());
             BitBuffer bitBuffer = pBuffer.ReadBitBuffer(false);
-            TokenDeserializer.instance = this;
+            instance = this;
             return bitBuffer;
         }
     }

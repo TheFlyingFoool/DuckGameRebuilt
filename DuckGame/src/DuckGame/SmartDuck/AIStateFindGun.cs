@@ -23,7 +23,7 @@ namespace DuckGame
             duck.ThrowItem();
             if (this._target == null)
             {
-                List<Thing> list1 = Level.current.things[typeof(Gun)].Where<Thing>(x => (x as Gun).ammo > 0 && (x as Gun).owner == null).ToList<Thing>();
+                List<Thing> list1 = Level.current.things[typeof(Gun)].Where(x => (x as Gun).ammo > 0 && (x as Gun).owner == null).ToList();
                 if (AI.Nearest(duck.position, list1) is Gun gun)
                 {
                     this._target = gun;
@@ -31,7 +31,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    List<Thing> list2 = Level.current.things[typeof(ItemBox)].Where<Thing>(x => !(x as ItemBox)._hit).ToList<Thing>();
+                    List<Thing> list2 = Level.current.things[typeof(ItemBox)].Where(x => !(x as ItemBox)._hit).ToList();
                     if (!(AI.Nearest(duck.position, list2) is ItemBox itemBox))
                         return new AIStateWait(Rando.Float(0.8f, 1f));
                     this._target = itemBox;

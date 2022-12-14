@@ -65,7 +65,7 @@ namespace DuckGame
 
         public AIPath GetPath(PathNode to) => _paths.ContainsKey(to) ? _paths[to] : null;
 
-        public PathNodeLink GetLink(PathNode with) => _links.FirstOrDefault<PathNodeLink>(node => node.link == with);
+        public PathNodeLink GetLink(PathNode with) => _links.FirstOrDefault(node => node.link == with);
 
         public void UninitializeLinks()
         {
@@ -133,7 +133,7 @@ namespace DuckGame
 
         public static bool CheckTraversalLimits(Vec2 from, Vec2 to) => from.y - to.y <= 64.0 && Math.Abs(from.x - to.x) <= 128.0 && (from.y - to.y <= 8.0 || Math.Abs(from.x - to.x) <= 64.0);
 
-        public static bool CanTraverse(Vec2 from, Vec2 to, Thing ignore) => PathNode.CheckTraversalLimits(from, to) && !PathNode.PathPhysicallyBlocked(from, to, ignore);
+        public static bool CanTraverse(Vec2 from, Vec2 to, Thing ignore) => CheckTraversalLimits(from, to) && !PathPhysicallyBlocked(from, to, ignore);
 
         public bool PathBlocked(PathNode to)
         {
@@ -197,7 +197,7 @@ namespace DuckGame
         {
             foreach (PathNode to in Level.current.things[typeof(PathNode)])
             {
-                if (to != this && PathNode.CheckTraversalLimits(position, to.position) && !PathBlocked(to))
+                if (to != this && CheckTraversalLimits(position, to.position) && !PathBlocked(to))
                 {
                     PathNodeLink pathNodeLink = new PathNodeLink
                     {
@@ -245,8 +245,8 @@ namespace DuckGame
 
         public static void CalculateNode(PathNode who, PathNode parent, PathNode end)
         {
-            who.cost = PathNode.CalculateCost(who, parent);
-            who.heuristic = PathNode.CalculateHeuristic(who, end);
+            who.cost = CalculateCost(who, parent);
+            who.heuristic = CalculateHeuristic(who, end);
         }
 
         public override void Draw()

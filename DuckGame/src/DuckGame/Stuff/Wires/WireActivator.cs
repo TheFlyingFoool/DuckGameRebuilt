@@ -90,7 +90,7 @@ namespace DuckGame
 
         public void Pulse(int type, WireTileset wire)
         {
-            Thing.Fondle(this, DuckNetwork.localConnection);
+            Fondle(this, DuckNetwork.localConnection);
             switch (type)
             {
                 case 0:

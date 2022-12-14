@@ -51,7 +51,7 @@ namespace DuckGame
             {
                 _kickForce = 3f;
                 ApplyKick();
-                DuelingPistol.ExplodeEffect(position);
+                ExplodeEffect(position);
                 if (Network.isActive)
                     Send.Message(new NMPistolExplode(position));
                 if (duck != null)

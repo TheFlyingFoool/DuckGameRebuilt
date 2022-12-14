@@ -58,51 +58,51 @@ namespace DuckGame
         public static string GetMuteSettings(Profile pProfile)
         {
             string str;
-            return Options.Data.muteSettings.TryGetValue(pProfile.steamID, out str) ? str : "";
+            return Data.muteSettings.TryGetValue(pProfile.steamID, out str) ? str : "";
         }
 
         public static void SetMuteSetting(Profile pProfile, string pSetting, bool pValue)
         {
             string str;
-            if (!Options.Data.muteSettings.TryGetValue(pProfile.steamID, out str))
-                str = Options.Data.muteSettings[pProfile.steamID] = "";
+            if (!Data.muteSettings.TryGetValue(pProfile.steamID, out str))
+                str = Data.muteSettings[pProfile.steamID] = "";
             if (pValue && !str.Contains(pSetting))
                 str += pSetting;
             else if (!pValue)
                 str = str.Replace(pSetting, "");
-            Options.Data.muteSettings[pProfile.steamID] = str;
+            Data.muteSettings[pProfile.steamID] = str;
         }
 
-        public static UIMenu optionsMenu => Options._optionsMenu;
+        public static UIMenu optionsMenu => _optionsMenu;
 
-        public static UIMenu controllerWarning => Options._controllerWarning;
+        public static UIMenu controllerWarning => _controllerWarning;
 
         public static DGRSettings dGRSettings = new DGRSettings();
         public static OptionsData Data
         {
-            get => Options._data;
-            set => Options._data = value;
+            get => _data;
+            set => _data = value;
         }
 
         public static OptionsDataLocal LocalData
         {
-            get => Options._localData;
-            set => Options._localData = value;
+            get => _localData;
+            set => _localData = value;
         }
 
-        public static bool menuOpen => Options._optionsMenu.open;
+        public static bool menuOpen => _optionsMenu.open;
 
-        public static UIMenu graphicsMenu => Options._graphicsMenu;
+        public static UIMenu graphicsMenu => _graphicsMenu;
 
-        public static UIMenu audioMenu => Options._audioMenu;
+        public static UIMenu audioMenu => _audioMenu;
 
-        public static UIMenu accessibilityMenu => Options._accessibilityMenu;
+        public static UIMenu accessibilityMenu => _accessibilityMenu;
 
-        public static UIMenu ttsMenu => Options._ttsMenu;
+        public static UIMenu ttsMenu => _ttsMenu;
 
-        public static UIMenu blockMenu => Options._blockMenu;
+        public static UIMenu blockMenu => _blockMenu;
 
-        public static UIMenu controlsMenu => Options._controlsMenu;
+        public static UIMenu controlsMenu => _controlsMenu;
 
         public static void AddMenus(UIComponent to)
         {
@@ -115,13 +115,13 @@ namespace DuckGame
             to.Add(_lastCreatedOptimizationsMenu, false);
 
 
-            if (Options.accessibilityMenu != null)
+            if (accessibilityMenu != null)
                 to.Add(accessibilityMenu, false);
-            if (Options.ttsMenu != null)
+            if (ttsMenu != null)
                 to.Add(ttsMenu, false);
-            if (Options.blockMenu != null)
+            if (blockMenu != null)
                 to.Add(blockMenu, false);
-            if (Options.controlsMenu != null)
+            if (controlsMenu != null)
             {
                 to.Add(controlsMenu, false);
                 to.Add((controlsMenu as UIControlConfig)._confirmMenu, false);
@@ -132,8 +132,8 @@ namespace DuckGame
 
         public static void QuitShowingControllerWarning()
         {
-            Options.Data.showControllerWarning = false;
-            Options.Save();
+            Data.showControllerWarning = false;
+            Save();
         }
 
         public static UIMenu CreateOptionsMenu()
@@ -144,15 +144,15 @@ namespace DuckGame
             optionsMenu.Add(new UIMenuItemSlider("Rumble Intensity", field: new FieldBinding(Data, "rumbleIntensity"), step: 0.06666667f), true);
             optionsMenu.Add(new UIText(" ", Color.White), true);
             optionsMenu.Add(new UIMenuItemToggle("SHENANIGANS", field: new FieldBinding(Data, "shennanigans")), true);
-            Options._lastCreatedGraphicsMenu = Options.CreateGraphicsMenu(optionsMenu);
-            Options._lastCreatedAccessibilityMenu = Options.CreateAccessibilityMenu(optionsMenu);
-            Options._lastCreatedTTSMenu = Options.tempTTSMenu;
-            Options._lastCreatedBlockMenu = Options.tempBlockMenu;
-            Options._lastCreatedAudioMenu = Options.CreateAudioMenu(optionsMenu);
-            Options._lastCreatedDGRMenu = Options.CreateDGRMenu(optionsMenu);
-            Options._lastCreatedDGRMiscMenu = Options._DGRMiscMenu;
-            Options._lastCreatedDGRGraphicsMenu = Options._DGRGraphicsMenu;
-            Options._lastCreatedOptimizationsMenu = Options._DGROptimMenu;
+            _lastCreatedGraphicsMenu = CreateGraphicsMenu(optionsMenu);
+            _lastCreatedAccessibilityMenu = CreateAccessibilityMenu(optionsMenu);
+            _lastCreatedTTSMenu = tempTTSMenu;
+            _lastCreatedBlockMenu = tempBlockMenu;
+            _lastCreatedAudioMenu = CreateAudioMenu(optionsMenu);
+            _lastCreatedDGRMenu = CreateDGRMenu(optionsMenu);
+            _lastCreatedDGRMiscMenu = _DGRMiscMenu;
+            _lastCreatedDGRGraphicsMenu = _DGRGraphicsMenu;
+            _lastCreatedOptimizationsMenu = _DGROptimMenu;
             //DGR OPTIONS GUI HELL BEGINS HERE -NiK0
 
 
@@ -164,24 +164,24 @@ namespace DuckGame
             optionsMenu.Add(new UIMenuItem("AUDIO", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedAudioMenu), backButton: true), true);
             optionsMenu.Add(new UIText(" ", Color.White), true);
             optionsMenu.Add(new UIMenuItem("USABILITY", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedAccessibilityMenu), backButton: true), true);
-            optionsMenu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(optionsMenu, new UIMenuActionCloseMenuCallFunction.Function(Options.OptionsMenuClosed)));
+            optionsMenu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(optionsMenu, new UIMenuActionCloseMenuCallFunction.Function(OptionsMenuClosed)));
             optionsMenu.Close();
             return optionsMenu;
         }
 
         public static void Initialize()
         {
-            Options._optionsMenu = Options.CreateOptionsMenu();
-            Options._controllerWarning = Options.CreateControllerWarning();
-            Options._graphicsMenu = Options._lastCreatedGraphicsMenu;
-            Options._accessibilityMenu = Options._lastCreatedAccessibilityMenu;
-            Options._audioMenu = Options._lastCreatedAudioMenu;
-            Options._ttsMenu = Options._lastCreatedTTSMenu;
-            Options._blockMenu = Options._lastCreatedBlockMenu;
-            Options._DGRMenu = Options._lastCreatedDGRMenu;
-            Options._DGRMiscMenu = Options._lastCreatedDGRMenu;
-            Options._DGROptimMenu = Options._lastCreatedOptimizationsMenu;
-            Options._DGRGraphicsMenu = Options._lastCreatedDGRMenu;
+            _optionsMenu = CreateOptionsMenu();
+            _controllerWarning = CreateControllerWarning();
+            _graphicsMenu = _lastCreatedGraphicsMenu;
+            _accessibilityMenu = _lastCreatedAccessibilityMenu;
+            _audioMenu = _lastCreatedAudioMenu;
+            _ttsMenu = _lastCreatedTTSMenu;
+            _blockMenu = _lastCreatedBlockMenu;
+            _DGRMenu = _lastCreatedDGRMenu;
+            _DGRMiscMenu = _lastCreatedDGRMenu;
+            _DGROptimMenu = _lastCreatedOptimizationsMenu;
+            _DGRGraphicsMenu = _lastCreatedDGRMenu;
         }
 
         public static UIMenu CreateControllerWarning()
@@ -248,7 +248,7 @@ namespace DuckGame
             };
             uiMenu10.Add(component10, true);
             menu.Add(new UIMenuItem("|DGORANGE|OK THEN", new UIMenuActionCloseMenu(menu), c: Color.White), true);
-            menu.Add(new UIMenuItem("|DGRED|DON'T SHOW THIS AGAIN", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(Options.QuitShowingControllerWarning)), c: Color.White), true);
+            menu.Add(new UIMenuItem("|DGRED|DON'T SHOW THIS AGAIN", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(QuitShowingControllerWarning)), c: Color.White), true);
             menu.SetBackFunction(new UIMenuActionCloseMenu(menu));
             menu.Close();
             return menu;
@@ -256,9 +256,9 @@ namespace DuckGame
 
         public static float GetWindowScaleMultiplier()
         {
-            if (Options.Data.windowScale == 0)
+            if (Data.windowScale == 0)
                 return 1f;
-            return Options.Data.windowScale == 1 ? 1.5f : 2f;
+            return Data.windowScale == 1 ? 1.5f : 2f;
         }
 
         public static void ScreenModeChanged(string pMode)
@@ -270,31 +270,31 @@ namespace DuckGame
                 if (windowindex >= 0 && windowindex < GraphicsAdapter.Adapters.Count)
                 {
                     GraphicsAdapter currentdisplay = GraphicsAdapter.Adapters[windowindex];
-                    Options.LocalData.windowedFullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
-                    Options.LocalData.windowedFullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
-                    Options.LocalData.fullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
-                    Options.LocalData.fullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
+                    LocalData.windowedFullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
+                    LocalData.windowedFullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
+                    LocalData.fullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
+                    LocalData.fullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
                 }
-                Resolution.Set(Options.Data.windowedFullscreen ? Options.LocalData.windowedFullscreenResolution : Options.LocalData.fullscreenResolution);
+                Resolution.Set(Data.windowedFullscreen ? LocalData.windowedFullscreenResolution : LocalData.fullscreenResolution);
             }
             else
-                Resolution.Set(Options.LocalData.windowedResolution);
+                Resolution.Set(LocalData.windowedResolution);
         }
 
         public static void WindowedFullscreenChanged()
         {
             if (Resolution.current.mode == ScreenMode.Windowed)
                 return;
-            Options.ScreenModeChanged("Fullscreen");
+            ScreenModeChanged("Fullscreen");
         }
 
-        public static void FullscreenChanged() => Options.ScreenModeChanged(Options.Data.fullscreen ? "Fullscreen" : "Windowed");
+        public static void FullscreenChanged() => ScreenModeChanged(Data.fullscreen ? "Fullscreen" : "Windowed");
 
         private static void ExclusiveAudioModeChanged() => SFX._audio.LoseDevice();
 
         private static void AudioEngineChanged()
         {
-            MonoMain.audioModeOverride = (AudioMode)Options.Data.audioMode;
+            MonoMain.audioModeOverride = (AudioMode)Data.audioMode;
             Windows_Audio.ResetDevice();
         }
 
@@ -305,14 +305,14 @@ namespace DuckGame
 
         private static void ApplyResolution()
         {
-            if (!Options._doingResolutionRestart)
-                Resolution.Set(Options.LocalData.currentResolution);
-            if (Options.LocalData.currentResolution.mode == ScreenMode.Fullscreen)
-                Options.LocalData.fullscreenResolution = Options.LocalData.currentResolution;
-            else if (Options.LocalData.currentResolution.mode == ScreenMode.Borderless)
-                Options.LocalData.windowedFullscreenResolution = Options.LocalData.currentResolution;
+            if (!_doingResolutionRestart)
+                Resolution.Set(LocalData.currentResolution);
+            if (LocalData.currentResolution.mode == ScreenMode.Fullscreen)
+                LocalData.fullscreenResolution = LocalData.currentResolution;
+            else if (LocalData.currentResolution.mode == ScreenMode.Borderless)
+                LocalData.windowedFullscreenResolution = LocalData.currentResolution;
             else
-                Options.LocalData.windowedResolution = Options.LocalData.currentResolution;
+                LocalData.windowedResolution = LocalData.currentResolution;
         }
         public static UIMenu _DGRMenu;
         public static UIMenu _DGRGraphicsMenu;
@@ -460,13 +460,13 @@ namespace DuckGame
         public static UIMenu CreateGraphicsMenu(UIMenu pOptionsMenu)
         {
             UIMenu menu = new UIMenu("@WRENCH@GRAPHICS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            menu.Add(new UIMenuItemToggle("Fullscreen", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(Options.FullscreenChanged)), new FieldBinding(Data, "fullscreen")), true);
+            menu.Add(new UIMenuItemToggle("Fullscreen", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(FullscreenChanged)), new FieldBinding(Data, "fullscreen")), true);
             menu.Add(new UIMenuItemResolution("Resolution", new FieldBinding(LocalData, "currentResolution", max: 0f))
             {
-                selectAction = new Action(Options.ApplyResolution)
+                selectAction = new Action(ApplyResolution)
             }, true);
             menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItemToggle("Windowed Fullscreen", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(Options.WindowedFullscreenChanged)), new FieldBinding(Data, "windowedFullscreen")), true);
+            menu.Add(new UIMenuItemToggle("Windowed Fullscreen", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(WindowedFullscreenChanged)), new FieldBinding(Data, "windowedFullscreen")), true);
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItemToggle("Fire Glow", field: new FieldBinding(Data, "fireGlow")), true);
             menu.Add(new UIMenuItemToggle("Lighting", field: new FieldBinding(Data, "lighting")), true);
@@ -497,8 +497,8 @@ namespace DuckGame
             menu.Add(new UIText("making sound while Duck Game", Colors.DGBlue), true);
             menu.Add(new UIText("is running!", Colors.DGBlue), true);
             menu.Add(new UIText(" ", Colors.DGBlue), true);
-            menu.Add(new UIMenuItemToggle("Exclusive Mode", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(Options.ExclusiveAudioModeChanged)), new FieldBinding(Data, "audioExclusiveMode")), true);
-            menu.Add(new UIMenuItemNumber("Audio Engine", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(Options.AudioEngineChanged)), new FieldBinding(Data, "audioMode", 1f, 3f), valStrings: new List<string>()
+            menu.Add(new UIMenuItemToggle("Exclusive Mode", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ExclusiveAudioModeChanged)), new FieldBinding(Data, "audioExclusiveMode")), true);
+            menu.Add(new UIMenuItemNumber("Audio Engine", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(AudioEngineChanged)), new FieldBinding(Data, "audioMode", 1f, 3f), valStrings: new List<string>()
           {
             "None",
             "WaveOut",
@@ -506,7 +506,7 @@ namespace DuckGame
             "DirectSound"
           }), true);
             menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItemToggle("Mute If In The Background", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(Options.MuteOnBackground)), new FieldBinding(Data, "muteOnBackground")), true);
+            menu.Add(new UIMenuItemToggle("Mute If In The Background", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(MuteOnBackground)), new FieldBinding(Data, "muteOnBackground")), true);
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true), true);
             return menu;
@@ -516,33 +516,33 @@ namespace DuckGame
         {
             get
             {
-                string chatFont = Options.Data.chatFont;
-                int num = Options.chatFonts.IndexOf(chatFont);
+                string chatFont = Data.chatFont;
+                int num = chatFonts.IndexOf(chatFont);
                 if (chatFont == "")
                     num = 0;
-                return num == -1 ? Options.chatFonts.Count - 1 : num;
+                return num == -1 ? chatFonts.Count - 1 : num;
             }
             set
             {
                 if (value < 0)
                     value = 0;
-                if (value >= Options.chatFonts.Count - 1)
-                    value = Options.chatFonts.Count - 2;
-                Options.Data.chatFont = value != 0 ? Options.chatFonts[value] : "";
+                if (value >= chatFonts.Count - 1)
+                    value = chatFonts.Count - 2;
+                Data.chatFont = value != 0 ? chatFonts[value] : "";
                 DuckNetwork.UpdateFont();
             }
         }
 
         public static int fontSize
         {
-            get => Options.Data.chatFontSize;
+            get => Data.chatFontSize;
             set
             {
                 if (value < 12)
                     value = 12;
                 if (value >= 80)
                     value = 80;
-                Options.Data.chatFontSize = value;
+                Data.chatFontSize = value;
                 DuckNetwork.UpdateFont();
             }
         }
@@ -551,20 +551,20 @@ namespace DuckGame
 
         public static int languageFilter
         {
-            get => !Options.Data.languageFilter ? 0 : 1;
-            set => Options.Data.languageFilter = value == 1;
+            get => !Data.languageFilter ? 0 : 1;
+            set => Data.languageFilter = value == 1;
         }
 
         public static int mojiFilter
         {
-            get => Options.Data.mojiFilter;
-            set => Options.Data.mojiFilter = value;
+            get => Data.mojiFilter;
+            set => Data.mojiFilter = value;
         }
 
         public static int hatFilter
         {
-            get => Options.Data.hatFilter;
-            set => Options.Data.hatFilter = value;
+            get => Data.hatFilter;
+            set => Data.hatFilter = value;
         }
 
         public static UIMenu CreateBlockMenu(UIMenu pAccessibilityMenu)
@@ -599,8 +599,8 @@ namespace DuckGame
                 menu.Add(new UIMenuItemSlider("TTS Speed", field: new FieldBinding(Data, "textToSpeechRate"), step: 0.04739336f), true);
                 menu.Add(new UIMenuItemToggle("TTS Read Names", field: new FieldBinding(Data, "textToSpeechReadNames")), true);
                 menu.Add(new UIText(" ", Color.White), true);
-                menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenuCallFunction(menu, pAccessibilityMenu, new UIMenuActionOpenMenuCallFunction.Function(Options.CloseMoreMenu))), true);
-                menu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(menu, pAccessibilityMenu, new UIMenuActionOpenMenuCallFunction.Function(Options.CloseMoreMenu)));
+                menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenuCallFunction(menu, pAccessibilityMenu, new UIMenuActionOpenMenuCallFunction.Function(CloseMoreMenu))), true);
+                menu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(menu, pAccessibilityMenu, new UIMenuActionOpenMenuCallFunction.Function(CloseMoreMenu)));
                 return menu;
             }
             catch (Exception)
@@ -629,10 +629,10 @@ namespace DuckGame
                   "|DGYELLO|   FRIENDS",
                   "|DGRED|  DISABLED  "
                 }), true);
-                Options.tempBlockMenu = Options.CreateBlockMenu(accessibilityMenu);
+                tempBlockMenu = CreateBlockMenu(accessibilityMenu);
                 accessibilityMenu.Add(new UIMenuItem("Manage Block List", new UIMenuActionOpenMenu(accessibilityMenu, tempBlockMenu)), true);
                 accessibilityMenu.Add(new UIText(" ", Color.White), true);
-                accessibilityMenu.Add(new UIMenuItemNumber("Chat Font", field: new FieldBinding(typeof(Options), "selectedFont", 0f, 6f, 0.1f), valStrings: Options.chatFonts), true);
+                accessibilityMenu.Add(new UIMenuItemNumber("Chat Font", field: new FieldBinding(typeof(Options), "selectedFont", 0f, 6f, 0.1f), valStrings: chatFonts), true);
                 accessibilityMenu.Add(new UIMenuItemNumber("Chat Font Size", field: new FieldBinding(typeof(Options), "fontSize", 12f, 30f, 0.1f)), true);
                 accessibilityMenu.Add(new UIMenuItemNumber("Chat Head Size", field: new FieldBinding(Data, "chatHeadScale"), valStrings: new List<string>()
         {
@@ -642,7 +642,7 @@ namespace DuckGame
                 accessibilityMenu.Add(new UIMenuItemNumber("Chat Opacity", field: new FieldBinding(Data, "chatOpacity", 20f, 100f), step: 10), true);
                 if (SFX.hasTTS)
                 {
-                    Options.tempTTSMenu = Options.CreateTTSMenu(accessibilityMenu);
+                    tempTTSMenu = CreateTTSMenu(accessibilityMenu);
                     accessibilityMenu.Add(new UIText(" ", Color.White), true);
                     accessibilityMenu.Add(new UIMenuItem("Text To Speech", new UIMenuActionOpenMenu(accessibilityMenu, tempTTSMenu), backButton: true), true);
                 }
@@ -652,8 +652,8 @@ namespace DuckGame
                     accessibilityMenu.Add(new UIText("|DGRED|Text To Speech Not Installed...", Color.White), true);
                 }
                 accessibilityMenu.Add(new UIText(" ", Color.White), true);
-                accessibilityMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenuCallFunction(accessibilityMenu, pOptionsMenu, new UIMenuActionOpenMenuCallFunction.Function(Options.CloseMoreMenu))), true);
-                accessibilityMenu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(accessibilityMenu, pOptionsMenu, new UIMenuActionOpenMenuCallFunction.Function(Options.CloseMoreMenu)));
+                accessibilityMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenuCallFunction(accessibilityMenu, pOptionsMenu, new UIMenuActionOpenMenuCallFunction.Function(CloseMoreMenu))), true);
+                accessibilityMenu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(accessibilityMenu, pOptionsMenu, new UIMenuActionOpenMenuCallFunction.Function(CloseMoreMenu)));
                 return accessibilityMenu;
             }
             catch (Exception ex)
@@ -663,18 +663,18 @@ namespace DuckGame
             }
         }
 
-        public static void MergeDefaultPreferDefault() => Options.MergeDefault(true);
+        public static void MergeDefaultPreferDefault() => MergeDefault(true);
 
-        public static void MergeDefaultPreferAccount() => Options.MergeDefault(false);
+        public static void MergeDefaultPreferAccount() => MergeDefault(false);
 
-        public static void CancelResolutionChange() => Options.LocalData.currentResolution = Resolution.lastApplied;
+        public static void CancelResolutionChange() => LocalData.currentResolution = Resolution.lastApplied;
 
         public static void RestartAndApplyResolution()
         {
-            Options._doingResolutionRestart = true;
-            Options.ApplyResolution();
-            Options.Save();
-            Options.SaveLocalData();
+            _doingResolutionRestart = true;
+            ApplyResolution();
+            Save();
+            SaveLocalData();
             ModLoader.RestartGame();
         }
 
@@ -730,14 +730,14 @@ namespace DuckGame
                 UIMenu menu = new UIMenu("@WRENCH@MERGE COMPLETE@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 260f, conString: "@CANCEL@BACK @SELECT@SELECT");
                 menu.Add(new UIText("Successfully merged profiles!", Colors.DGBlue), true);
                 menu.Add(new UIMenuItem("FINALLY!!", new UIMenuActionCloseMenu(menu)), true);
-                menu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(Options.OptionsMenuClosed)));
+                menu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(OptionsMenuClosed)));
                 menu.Close();
                 Level.Add(menu);
                 MonoMain.pauseMenu = menu;
                 menu.Open();
             }
-            Options.Data.defaultAccountMerged = true;
-            Options.Save();
+            Data.defaultAccountMerged = true;
+            Save();
         }
 
         public static UIMenu CreateProfileMergeMenu()
@@ -751,9 +751,9 @@ namespace DuckGame
             menu.Add(new UIText("into this one?", Colors.DGBlue), true);
             menu.Add(new UIText("", Colors.DGBlue), true);
             menu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(menu)), true);
-            menu.Add(new UIMenuItem("YES! (PREFER DEFAULT)", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(Options.MergeDefaultPreferDefault))), true);
-            menu.Add(new UIMenuItem("YES! (PREFER THIS ACCOUNT)", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(Options.MergeDefaultPreferAccount))), true);
-            menu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(Options.OptionsMenuClosed)));
+            menu.Add(new UIMenuItem("YES! (PREFER DEFAULT)", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(MergeDefaultPreferDefault))), true);
+            menu.Add(new UIMenuItem("YES! (PREFER THIS ACCOUNT)", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(MergeDefaultPreferAccount))), true);
+            menu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(OptionsMenuClosed)));
             menu.Close();
             return menu;
         }
@@ -768,28 +768,28 @@ namespace DuckGame
             menu.Add(new UIText("Would you like to restart", Colors.DGBlue), true);
             menu.Add(new UIText("and apply changes?", Colors.DGBlue), true);
             menu.Add(new UIText("", Colors.DGBlue), true);
-            menu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(Options.CancelResolutionChange))), true);
-            menu.Add(new UIMenuItem("YES! (Restart)", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(Options.RestartAndApplyResolution))), true);
-            menu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(Options.OptionsMenuClosed)));
+            menu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(CancelResolutionChange))), true);
+            menu.Add(new UIMenuItem("YES! (Restart)", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(RestartAndApplyResolution))), true);
+            menu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(OptionsMenuClosed)));
             menu.Close();
             return menu;
         }
 
         public static void OpenOptionsMenu()
         {
-            Options._removedOptionsMenu = false;
-            Options._openedOptionsMenu = true;
+            _removedOptionsMenu = false;
+            _openedOptionsMenu = true;
             Level.Add(_optionsMenu);
-            Options._optionsMenu.Open();
+            _optionsMenu.Open();
         }
 
         public static void OptionsMenuClosed()
         {
-            Options.Save();
-            Options.SaveLocalData();
-            if (Options.openOnClose == null)
+            Save();
+            SaveLocalData();
+            if (openOnClose == null)
                 return;
-            Options.openOnClose.Open();
+            openOnClose.Open();
         }
 
         public static string optionsFileName => DuckFile.optionsDirectory + "/options.dat";
@@ -798,7 +798,7 @@ namespace DuckGame
 
         public static void Save()
         {
-            if (!Options.loadCalled)
+            if (!loadCalled)
             {
                 if (!MonoMain.logFileOperations)
                     return;
@@ -810,15 +810,15 @@ namespace DuckGame
                     DevConsole.Log(DCSection.General, "Options.Save()");
                 DuckXML doc = new DuckXML();
                 DXMLNode node = new DXMLNode("Data");
-                node.Add(Options._data.Serialize());
+                node.Add(_data.Serialize());
                 doc.Add(node);
-                DuckFile.SaveDuckXML(doc, Options.optionsFileName);
+                DuckFile.SaveDuckXML(doc, optionsFileName);
             }
         }
 
         public static void SaveLocalData()
         {
-            if (!Options.loadCalled)
+            if (!loadCalled)
             {
                 if (!MonoMain.logFileOperations)
                     return;
@@ -830,9 +830,9 @@ namespace DuckGame
                     DevConsole.Log(DCSection.General, "Options.SaveLocalData()");
                 DuckXML doc = new DuckXML();
                 DXMLNode node = new DXMLNode("Data");
-                node.Add(Options._localData.Serialize());
+                node.Add(_localData.Serialize());
                 doc.Add(node);
-                DuckFile.SaveDuckXML(doc, Options.optionsFileLocalName);
+                DuckFile.SaveDuckXML(doc, optionsFileLocalName);
             }
         }
 
@@ -840,36 +840,36 @@ namespace DuckGame
         {
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "Options.Load()");
-            Options.loadCalled = true;
-            DuckXML duckXml1 = DuckFile.LoadDuckXML(Options.optionsFileName);
+            loadCalled = true;
+            DuckXML duckXml1 = DuckFile.LoadDuckXML(optionsFileName);
             if (duckXml1 != null)
             {
                 Profile profile = new Profile("");
                 IEnumerable<DXMLNode> source = duckXml1.Elements("Data") ?? duckXml1.Elements("OptionsData");
                 if (source != null)
                 {
-                    foreach (DXMLNode element in source.Elements<DXMLNode>())
+                    foreach (DXMLNode element in source.Elements())
                     {
                         if (element.Name == nameof(Options))
                         {
-                            Options._data.Deserialize(element);
+                            _data.Deserialize(element);
                             break;
                         }
                     }
                 }
             }
-            DuckXML duckXml2 = DuckFile.LoadDuckXML(Options.optionsFileLocalName);
+            DuckXML duckXml2 = DuckFile.LoadDuckXML(optionsFileLocalName);
             if (duckXml2 == null)
                 return;
             Profile profile1 = new Profile("");
             IEnumerable<DXMLNode> source1 = duckXml2.Elements("Data");
             if (source1 == null)
                 return;
-            foreach (DXMLNode element in source1.Elements<DXMLNode>())
+            foreach (DXMLNode element in source1.Elements())
             {
                 if (element.Name == nameof(Options))
                 {
-                    Options._localData.Deserialize(element);
+                    _localData.Deserialize(element);
                     break;
                 }
             }
@@ -877,92 +877,92 @@ namespace DuckGame
 
         public static void PostLoad()
         {
-            if (Options.Data.musicVolume > 1.0)
-                Options.Data.musicVolume /= 100f;
-            if (Options.Data.sfxVolume > 1.0)
-                Options.Data.sfxVolume /= 100f;
-            if (Options.Data.windowScale < 0)
-                Options.Data.windowScale = !MonoMain.fourK ? 0 : 1;
-            Options.Data.consoleWidth = Math.Min(100, Math.Max(Options.Data.consoleWidth, 25));
-            Options.Data.consoleHeight = Math.Min(100, Math.Max(Options.Data.consoleHeight, 10));
-            Options.Data.consoleScale = Math.Min(5, Math.Max(Options.Data.consoleScale, 1));
-            if (Options.Data.currentSaveVersion != -1)
+            if (Data.musicVolume > 1.0)
+                Data.musicVolume /= 100f;
+            if (Data.sfxVolume > 1.0)
+                Data.sfxVolume /= 100f;
+            if (Data.windowScale < 0)
+                Data.windowScale = !MonoMain.fourK ? 0 : 1;
+            Data.consoleWidth = Math.Min(100, Math.Max(Data.consoleWidth, 25));
+            Data.consoleHeight = Math.Min(100, Math.Max(Data.consoleHeight, 10));
+            Data.consoleScale = Math.Min(5, Math.Max(Data.consoleScale, 1));
+            if (Data.currentSaveVersion != -1)
             {
-                if (Options.Data.currentSaveVersion < 2)
-                    Options.Data.consoleScale = 1;
-                if (Options.Data.currentSaveVersion < 3)
-                    Options.Data.windowedFullscreen = true;
+                if (Data.currentSaveVersion < 2)
+                    Data.consoleScale = 1;
+                if (Data.currentSaveVersion < 3)
+                    Data.windowedFullscreen = true;
             }
-            if (Options.Data.currentSaveVersion < 4 || Options.Data.currentSaveVersion == -1)
+            if (Data.currentSaveVersion < 4 || Data.currentSaveVersion == -1)
                 DGSave.showOnePointFiveMessages = true;
-            if (Options.Data.currentSaveVersion < 5)
+            if (Data.currentSaveVersion < 5)
             {
-                if (Options.Data.keyboard1PlayerIndex > 0)
+                if (Data.keyboard1PlayerIndex > 0)
                 {
-                    Options.legacyPreferredColor = Options.Data.keyboard1PlayerIndex;
-                    Options.Data.keyboard1PlayerIndex = 0;
+                    legacyPreferredColor = Data.keyboard1PlayerIndex;
+                    Data.keyboard1PlayerIndex = 0;
                 }
-                Options.Data.windowedFullscreen = true;
+                Data.windowedFullscreen = true;
             }
-            if (Options.Data.audioMode == 0 || Options.Data.audioMode >= 4)
-                Options.Data.audioMode = 2;
-            Options.Data.UpdateCurrentVersion();
-            if (Options.LocalData.previousAdapterResolution == null || Resolution.adapterResolution != Options.LocalData.previousAdapterResolution)
+            if (Data.audioMode == 0 || Data.audioMode >= 4)
+                Data.audioMode = 2;
+            Data.UpdateCurrentVersion();
+            if (LocalData.previousAdapterResolution == null || Resolution.adapterResolution != LocalData.previousAdapterResolution)
             {
                 Resolution.RestoreDefaults();
-                Options.LocalData.previousAdapterResolution = Resolution.adapterResolution;
+                LocalData.previousAdapterResolution = Resolution.adapterResolution;
             }
-            if (Options.LocalData.windowedResolution.mode != ScreenMode.Windowed)
-                Options.LocalData.windowedResolution = Resolution.FindNearest(ScreenMode.Windowed, Options.LocalData.windowedResolution.x, Options.LocalData.windowedResolution.y);
-            if (Options.LocalData.fullscreenResolution.mode != ScreenMode.Fullscreen)
-                Options.LocalData.fullscreenResolution = Resolution.FindNearest(ScreenMode.Fullscreen, Options.LocalData.fullscreenResolution.x, Options.LocalData.fullscreenResolution.y);
-            if (Options.LocalData.windowedFullscreenResolution.mode != ScreenMode.Borderless)
-                Options.LocalData.windowedFullscreenResolution = Resolution.FindNearest(ScreenMode.Borderless, Options.LocalData.windowedFullscreenResolution.x, Options.LocalData.windowedFullscreenResolution.y);
-            Options.LocalData.currentResolution = !Options.Data.fullscreen ? Options.LocalData.windowedResolution : (Options.Data.windowedFullscreen ? Options.LocalData.windowedFullscreenResolution : Options.LocalData.fullscreenResolution);
+            if (LocalData.windowedResolution.mode != ScreenMode.Windowed)
+                LocalData.windowedResolution = Resolution.FindNearest(ScreenMode.Windowed, LocalData.windowedResolution.x, LocalData.windowedResolution.y);
+            if (LocalData.fullscreenResolution.mode != ScreenMode.Fullscreen)
+                LocalData.fullscreenResolution = Resolution.FindNearest(ScreenMode.Fullscreen, LocalData.fullscreenResolution.x, LocalData.fullscreenResolution.y);
+            if (LocalData.windowedFullscreenResolution.mode != ScreenMode.Borderless)
+                LocalData.windowedFullscreenResolution = Resolution.FindNearest(ScreenMode.Borderless, LocalData.windowedFullscreenResolution.x, LocalData.windowedFullscreenResolution.y);
+            LocalData.currentResolution = !Data.fullscreen ? LocalData.windowedResolution : (Data.windowedFullscreen ? LocalData.windowedFullscreenResolution : LocalData.fullscreenResolution);
             if (MonoMain.oldAngles)
-                Options.Data.oldAngleCode = true;
+                Data.oldAngleCode = true;
             if (!MonoMain.defaultControls)
                 return;
-            Options.Data.keyboard1PlayerIndex = 0;
-            Options.Data.keyboard2PlayerIndex = 1;
+            Data.keyboard1PlayerIndex = 0;
+            Data.keyboard2PlayerIndex = 1;
         }
 
         public static void Update()
         {
-            if (!Options.Data.muteOnBackground || MonoMain.instance.IsFocused)
+            if (!Data.muteOnBackground || MonoMain.instance.IsFocused)
             {
-                Music.masterVolume = Math.Min(1f, Math.Max(0f, Options.Data.musicVolume));
-                SFX.volume = Math.Min(1f, Math.Max(0f, Options.Data.sfxVolume));
+                Music.masterVolume = Math.Min(1f, Math.Max(0f, Data.musicVolume));
+                SFX.volume = Math.Min(1f, Math.Max(0f, Data.sfxVolume));
             }
-            else if (Options.Data.muteOnBackground && !MonoMain.instance.IsFocused)
+            else if (Data.muteOnBackground && !MonoMain.instance.IsFocused)
             {
                 Music.masterVolume = 0f;
                 SFX.volume = 0f;
             }
-            if (Options._openedOptionsMenu && !Options._removedOptionsMenu && Options._optionsMenu != null && !Options._optionsMenu.open && !Options._optionsMenu.animating)
+            if (_openedOptionsMenu && !_removedOptionsMenu && _optionsMenu != null && !_optionsMenu.open && !_optionsMenu.animating)
             {
-                Options._openedOptionsMenu = false;
-                Options._removedOptionsMenu = true;
+                _openedOptionsMenu = false;
+                _removedOptionsMenu = true;
                 Level.Remove(_optionsMenu);
             }
-            if (Options._resolutionChanged)
+            if (_resolutionChanged)
             {
-                Options._resolutionChanged = false;
-                Options.ResolutionChanged();
+                _resolutionChanged = false;
+                ResolutionChanged();
             }
-            if (Options.flagForSave <= 0)
+            if (flagForSave <= 0)
                 return;
-            --Options.flagForSave;
-            if (Options.flagForSave != 0)
+            --flagForSave;
+            if (flagForSave != 0)
                 return;
-            Options.Save();
+            Save();
         }
 
         public static void ResolutionChanged()
         {
             if (!MonoMain.started)
             {
-                Options._resolutionChanged = true;
+                _resolutionChanged = true;
             }
             else
             {

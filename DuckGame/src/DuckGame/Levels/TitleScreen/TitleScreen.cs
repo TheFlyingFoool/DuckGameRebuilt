@@ -119,7 +119,7 @@ namespace DuckGame
         }
         public static void SpargLogic()
         {
-            if (Input.Pressed("START") || Input.Pressed("SELECT")) Level.current = new TitleScreen();
+            if (Input.Pressed("START") || Input.Pressed("SELECT")) current = new TitleScreen();
         }
         public TitleScreen(bool returnFromArcade, Profile arcadeProfile)
         {
@@ -144,7 +144,7 @@ namespace DuckGame
             DuckFile.DeleteAllSaveData();
         }
 
-        public static bool hasMenusOpen => TitleScreen._hasMenusOpen;
+        public static bool hasMenusOpen => _hasMenusOpen;
 
         private void AddCreditLine(params string[] line)
         {
@@ -536,7 +536,7 @@ namespace DuckGame
             _optionsGroup.Add(_cloudConfigMenu, false);
             _optionsGroup.Add(_cloudDeleteConfirmMenu, false);
             _optionsGroup.Close();
-            Level.Add(_optionsGroup);
+            Add(_optionsGroup);
             //_betaMenu = new UIMenu("@WRENCH@WELCOME TO BETA!@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@OK!");
             //_betaMenu.Add(new UIImage(new Sprite("message"), UIAlign.Center, 0.25f, 51f), true);
             //_betaMenu.Close();
@@ -830,7 +830,7 @@ namespace DuckGame
             _mainPauseMenu.Close();
             _pauseGroup.Add(_mainPauseMenu, false);
             _pauseGroup.Close();
-            Level.Add(_pauseGroup);
+            Add(_pauseGroup);
             _font = new BitmapFont("biosFont", 8);
             _background = new Sprite("title/background");
             //this._optionsPlatform = new Sprite("title/optionsPlatform")
@@ -880,15 +880,15 @@ namespace DuckGame
             _controls.CenterOrigin();
             _controls.depth = (Depth)0.95f;
             _multiBeam = new MultiBeam(160f, -30f);
-            Level.Add(_multiBeam);
+            Add(_multiBeam);
             _optionsBeam = new OptionsBeam(28f, -110f);
-            Level.Add(_optionsBeam);
+            Add(_optionsBeam);
             _libraryBeam = new LibraryBeam(292f, -110f);
-            Level.Add(_libraryBeam);
+            Add(_libraryBeam);
             _editorBeam = new EditorBeam(28f, 100f);
-            Level.Add(_editorBeam);
+            Add(_editorBeam);
             VersionSign vs = new VersionSign(176f, 18f);
-            Level.Add(vs);
+            Add(vs);
             for (int index = 0; index < 21; ++index)
             {
                 SpaceTileset t = new SpaceTileset(index * 16 - 6, 176f)
@@ -904,17 +904,17 @@ namespace DuckGame
             {
                 update = false
             };
-            Level.Add(_space);
+            Add(_space);
             _things.RefreshState();
             Layer.Game.fade = 0f;
             Layer.Foreground.fade = 0f;
-            Level.Add(new Block(120f, 155f, 80f, 30f, PhysicsMaterial.Metal));
-            Level.Add(new Block(134f, 148f, 52f, 30f, PhysicsMaterial.Metal));
-            Level.Add(new Block(0f, 61f, 63f, 70f, PhysicsMaterial.Metal));
-            Level.Add(new Block(257f, 61f, 63f, 60f, PhysicsMaterial.Metal));
-            Level.Add(new Spring(90f, 160f, 0.32f));
-            Level.Add(new Spring(229f, 160f, 0.32f));
-            Level.Add(new VerticalDoor(270f, 160f)
+            Add(new Block(120f, 155f, 80f, 30f, PhysicsMaterial.Metal));
+            Add(new Block(134f, 148f, 52f, 30f, PhysicsMaterial.Metal));
+            Add(new Block(0f, 61f, 63f, 70f, PhysicsMaterial.Metal));
+            Add(new Block(257f, 61f, 63f, 60f, PhysicsMaterial.Metal));
+            Add(new Spring(90f, 160f, 0.32f));
+            Add(new Spring(229f, 160f, 0.32f));
+            Add(new VerticalDoor(270f, 160f)
             {
                 filterDefault = true
             });
@@ -947,7 +947,7 @@ namespace DuckGame
             }
             Input.lastActiveProfile = InputProfile.DefaultPlayer1;
             if (!DuckNetwork.ShowUserXPGain() && Unlockables.HasPendingUnlocks())
-                MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+                MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
             base.Initialize();
         }
 
@@ -1024,7 +1024,7 @@ namespace DuckGame
                 {
                     if (_enterEditor)
                     {
-                        Level.current = Main.editor;
+                        current = Main.editor;
                     }
                     _enterEditor = true;
                 }
@@ -1037,7 +1037,7 @@ namespace DuckGame
                             //if (Teams.all[i].activeProfiles.Find(p => p.inputProfile == profileWithDevice) != null) continue;
                             Teams.all[i].ClearProfiles();
                         }
-                        Level.current = new TeamSelect2();
+                        current = new TeamSelect2();
                     }
                     _fastMultiplayer = true;
                     _enterMultiplayer = true;
@@ -1097,8 +1097,8 @@ namespace DuckGame
                 Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
                 if (Graphics.fade < 0.01f)
                 {
-                    Level.current.Clear();
-                    Level.current = new ArcadeLevel(Content.GetLevelID("arcade"));
+                    current.Clear();
+                    current = new ArcadeLevel(Content.GetLevelID("arcade"));
                 }
             }
             else
@@ -1206,7 +1206,7 @@ namespace DuckGame
                 }
             }
             Music.volumeMult = 1f;
-            TitleScreen._hasMenusOpen = menuOpen;
+            _hasMenusOpen = menuOpen;
             if (!_enterMultiplayer && !_enterEditor && !_enterLibrary) // && !this._enterBuyScreen
             {
                 if (Graphics.fade < 1.0)
@@ -1236,12 +1236,12 @@ namespace DuckGame
                             foreach (Team team in Teams.all)
                                 team.ClearProfiles();
                         }
-                        Level.current = new TeamSelect2();
+                        current = new TeamSelect2();
                     }
                     else if (_enterEditor)
-                        Level.current = Main.editor;
+                        current = Main.editor;
                     else if (_enterLibrary)
-                        Level.current = new DoorRoom();
+                        current = new DoorRoom();
                     // else if (this._enterBuyScreen)
                     //  Level.current = new BuyScreen(Main.currencyType, Main.price);
                 }
@@ -1406,16 +1406,16 @@ namespace DuckGame
                     InputProfile.active = _duck.profile.inputProfile;
                     _fadeInFull = true;
                     _title.fade = true;
-                    Level.Add(_duck);
+                    Add(_duck);
                 }
             }
             else if (_duck != null)
             {
                 if (_duck.dead)
                 {
-                    Level.Remove(_duck);
+                    Remove(_duck);
                     _duck = new Duck(160f, 60f, _duck.profile);
-                    Level.Add(_duck);
+                    Add(_duck);
                     HUD.AddInputChangeDisplay(" Cmon Now That Was Dumb, Dont You Agree? ");
                 }
                 foreach (Profile defaultProfile in Profiles.defaultProfiles)
@@ -1479,30 +1479,30 @@ namespace DuckGame
                     if (_selection == TitleMenuSelection.None)
                     {
                         string text = "@WASD@MOVE @JUMP@JUMP";
-                        _font.Draw(text, Level.current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
                     }
                     else if (_selection == TitleMenuSelection.Play)
                     {
                         string text = "@SELECT@PLAY GAME";
-                        _font.Draw(text, Level.current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
                     }
                     else if (_selection == TitleMenuSelection.Stats)
                     {
                         if (Profiles.allCustomProfiles.Count > 0)
                         {
                             string text = "@SELECT@LIBRARY";
-                            _font.Draw(text, Level.current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                            _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
                         }
                     }
                     else if (_selection == TitleMenuSelection.Options)
                     {
                         string text = "@SELECT@OPTIONS";
-                        _font.Draw(text, Level.current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
                     }
                     else if (_selection == TitleMenuSelection.Editor)
                     {
                         string text = "@SELECT@EDITOR";
-                        _font.Draw(text, Level.current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
                     }
                     //Graphics.Draw(_editorBenchPaint, 45f, 168f);
                 }
@@ -1516,20 +1516,20 @@ namespace DuckGame
 
                     if (_pressStartBlink >= 0.5)
                     {
-                        _font.Draw(text, Level.current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 15f, Color.White, (Depth)0.95f);
+                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 15f, Color.White, (Depth)0.95f);
                         text2 = "GO TO EDITOR";
                         text3 = "GO TO LOBBY";
-                        _font.Draw(text2, Level.current.camera.PercentW(50f) - _font.GetWidth(text2) / 2f, 4f, Color.White, (Depth)0.95f, profileWithDevice);
-                        _font.Draw(text3, Level.current.camera.PercentW(50f) - _font.GetWidth(text3) / 2f, 26f, Color.White, (Depth)0.95f, profileWithDevice);
+                        _font.Draw(text2, current.camera.PercentW(50f) - _font.GetWidth(text2) / 2f, 4f, Color.White, (Depth)0.95f, profileWithDevice);
+                        _font.Draw(text3, current.camera.PercentW(50f) - _font.GetWidth(text3) / 2f, 26f, Color.White, (Depth)0.95f, profileWithDevice);
                     }
                     else
                     {
                         if (profileWithDevice != null && profileWithDevice.lastActiveDevice != null && profileWithDevice.lastActiveDevice is GenericController)
-                            Graphics.Draw(_bigUButton, Level.current.camera.PercentW(50f) - 1f, 18f);
+                            Graphics.Draw(_bigUButton, current.camera.PercentW(50f) - 1f, 18f);
                         else
-                            Graphics.DrawString("@START@", new Vec2(Level.current.camera.PercentW(50f) - 7f, 16f), Color.White, (Depth)0.9f, profileWithDevice);
-                        _font.Draw(text2, Level.current.camera.PercentW(50f) - _font.GetWidth(text2) / 2f + 1.5f, 3f, Color.White, (Depth)0.95f, profileWithDevice);
-                        _font.Draw(text3, Level.current.camera.PercentW(50f) - _font.GetWidth(text3) / 2f + 1.5f, 27f, Color.White, (Depth)0.95f, profileWithDevice);
+                            Graphics.DrawString("@START@", new Vec2(current.camera.PercentW(50f) - 7f, 16f), Color.White, (Depth)0.9f, profileWithDevice);
+                        _font.Draw(text2, current.camera.PercentW(50f) - _font.GetWidth(text2) / 2f + 1.5f, 3f, Color.White, (Depth)0.95f, profileWithDevice);
+                        _font.Draw(text3, current.camera.PercentW(50f) - _font.GetWidth(text3) / 2f + 1.5f, 27f, Color.White, (Depth)0.95f, profileWithDevice);
                     }
                 }
             }

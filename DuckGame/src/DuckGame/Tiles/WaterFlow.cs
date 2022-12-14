@@ -114,7 +114,7 @@ namespace DuckGame
             List<PhysicsObject> physicsObjectList = new List<PhysicsObject>();
             foreach (PhysicsObject physicsObject in _held)
             {
-                if (!source.Contains<PhysicsObject>(physicsObject))
+                if (!source.Contains(physicsObject))
                 {
                     physicsObjectList.Add(physicsObject);
                     physicsObject.frictionMult = 1f;

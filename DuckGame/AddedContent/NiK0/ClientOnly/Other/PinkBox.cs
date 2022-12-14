@@ -54,7 +54,7 @@ namespace DuckGame
                     netDisarmIndex += 1;
                     return;
                 }
-                _aboveList = Level.CheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, -12f)).ToList<PhysicsObject>();
+                _aboveList = Level.CheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, -12f)).ToList();
                 foreach (PhysicsObject p in _aboveList)
                 {
                     if (p.grounded || p.vSpeed > 0f || p.vSpeed == 0f)
@@ -198,7 +198,7 @@ namespace DuckGame
             if (netDisarmIndex != localNetDisarm)
             {
                 localNetDisarm = netDisarmIndex;
-                _aboveList = Level.CheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, -12f)).ToList<PhysicsObject>();
+                _aboveList = Level.CheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, -12f)).ToList();
                 foreach (PhysicsObject p in _aboveList)
                 {
                     if (isServerForObject && p.owner == null)

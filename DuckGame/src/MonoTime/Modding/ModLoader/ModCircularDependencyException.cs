@@ -42,7 +42,7 @@ namespace DuckGame
         }
 
         public ModCircularDependencyException(Stack<string> stack)
-          : base(ModCircularDependencyException.CompileStack(stack))
+          : base(CompileStack(stack))
         {
         }
     }

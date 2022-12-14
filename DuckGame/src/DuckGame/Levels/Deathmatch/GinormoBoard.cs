@@ -75,13 +75,13 @@ namespace DuckGame
             layer = Layer.Background;
             _pos = new Vec2(xpos, ypos);
             _mode = mode;
-            GinormoBoard.boardLayer = new Layer("BOARD", -85, targetLayer: true, targetSize: new Vec2(GinormoScreen.GetSize(_smallMode).x, GinormoScreen.GetSize(_smallMode).y))
+            boardLayer = new Layer("BOARD", -85, targetLayer: true, targetSize: new Vec2(GinormoScreen.GetSize(_smallMode).x, GinormoScreen.GetSize(_smallMode).y))
             {
                 camera = new Camera(0f, 0f, GinormoScreen.GetSize(_smallMode).x, GinormoScreen.GetSize(_smallMode).y),
                 targetOnly = true,
                 targetClearColor = new Color(0.05f, 0.05f, 0.05f)
             };
-            Layer.Add(GinormoBoard.boardLayer);
+            Layer.Add(boardLayer);
             overlayLayer = new Layer("OVERLAY", 10);
             Layer.Add(overlayLayer);
             GinormoOverlay ginormoOverlay = new GinormoOverlay(x - 182f, y - 65f, _smallMode)
@@ -114,12 +114,12 @@ namespace DuckGame
             boardLightingLayer.colorAdd = new Vec3(1f - RockWeather.lightOpacity);
             _lighting.frame = RockWeather.lightOpacity <= 0.01f ? 0 : 1;
             _board.depth = depth;
-            DuckGame.Graphics.Draw(_board, x, y - 12f);
-            DuckGame.Graphics.Draw(_boardBottom, x, y + 58f);
-            DuckGame.Graphics.Draw(_boardTop, x, y - 68f);
+            Graphics.Draw(_board, x, y - 12f);
+            Graphics.Draw(_boardBottom, x, y + 58f);
+            Graphics.Draw(_boardTop, x, y - 68f);
             if (!RockScoreboard._sunEnabled)
                 return;
-            DuckGame.Graphics.Draw(_lighting, x - 95f, y - 67f);
+            Graphics.Draw(_lighting, x - 95f, y - 67f);
         }
     }
 }

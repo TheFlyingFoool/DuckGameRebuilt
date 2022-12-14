@@ -124,7 +124,7 @@ namespace DuckGame
 			{
 				if (this.virtualQuack)
 				{
-					return base.virtualDevice.leftTrigger;
+					return virtualDevice.leftTrigger;
 				}
 				if (this._manualQuack != null)
 				{

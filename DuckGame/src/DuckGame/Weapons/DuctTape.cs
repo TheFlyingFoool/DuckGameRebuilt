@@ -57,7 +57,7 @@ namespace DuckGame
                 }
                 SFX.PlaySynchronized("equip", 0.8f);
                 TapedGun h = new TapedGun(0f, 0f);
-                Thing.ExtraFondle(holdable, connection);
+                ExtraFondle(holdable, connection);
                 h.gun1 = holdable;
                 holdable.owner = duck;
                 Level.Add(h);

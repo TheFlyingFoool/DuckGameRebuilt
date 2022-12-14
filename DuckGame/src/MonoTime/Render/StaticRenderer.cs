@@ -18,15 +18,15 @@ namespace DuckGame
 
         public static void InitializeLayer(Layer layer)
         {
-            if (StaticRenderer._targets.ContainsKey(layer))
+            if (_targets.ContainsKey(layer))
                 return;
-            for (int index1 = 0; index1 < StaticRenderer._numSections; ++index1)
+            for (int index1 = 0; index1 < _numSections; ++index1)
             {
-                for (int index2 = 0; index2 < StaticRenderer._numSections; ++index2)
-                    StaticRenderer._targets.Add(layer, new StaticRenderSection()
+                for (int index2 = 0; index2 < _numSections; ++index2)
+                    _targets.Add(layer, new StaticRenderSection()
                     {
-                        target = new RenderTarget2D(StaticRenderer._size, StaticRenderer._size),
-                        position = new Vec2(StaticRenderer._position.x + index2 * StaticRenderer._size, StaticRenderer._position.y + index1 * StaticRenderer._size)
+                        target = new RenderTarget2D(_size, _size),
+                        position = new Vec2(_position.x + index2 * _size, _position.y + index1 * _size)
                     });
             }
         }
@@ -34,21 +34,21 @@ namespace DuckGame
         public static void ProcessThing(Thing t)
         {
             Layer background = Layer.Background;
-            Vec2 vec2_1 = t.position - t.center - StaticRenderer._position;
-            int num1 = (int)Math.Floor(vec2_1.x / StaticRenderer._size);
-            int num2 = (int)Math.Floor(vec2_1.y / StaticRenderer._size);
-            StaticRenderer.InitializeLayer(background);
-            Vec2 vec2_2 = t.position - t.center + new Vec2(t.graphic.width, t.graphic.height) - StaticRenderer._position;
-            int num3 = (int)Math.Floor(vec2_2.x / StaticRenderer._size);
-            int num4 = (int)Math.Floor(vec2_2.y / StaticRenderer._size);
-            StaticRenderer._targets[background][num2 * StaticRenderer._numSections + num1].things.Add(t);
+            Vec2 vec2_1 = t.position - t.center - _position;
+            int num1 = (int)Math.Floor(vec2_1.x / _size);
+            int num2 = (int)Math.Floor(vec2_1.y / _size);
+            InitializeLayer(background);
+            Vec2 vec2_2 = t.position - t.center + new Vec2(t.graphic.width, t.graphic.height) - _position;
+            int num3 = (int)Math.Floor(vec2_2.x / _size);
+            int num4 = (int)Math.Floor(vec2_2.y / _size);
+            _targets[background][num2 * _numSections + num1].things.Add(t);
             if (num1 != num3)
-                StaticRenderer._targets[background][num2 * StaticRenderer._numSections + num3].things.Add(t);
+                _targets[background][num2 * _numSections + num3].things.Add(t);
             if (num2 != num4)
-                StaticRenderer._targets[background][num4 * StaticRenderer._numSections + num1].things.Add(t);
+                _targets[background][num4 * _numSections + num1].things.Add(t);
             if (num1 == num3 || num2 == num4)
                 return;
-            StaticRenderer._targets[background][num4 * StaticRenderer._numSections + num3].things.Add(t);
+            _targets[background][num4 * _numSections + num3].things.Add(t);
         }
 
         public static void Update()

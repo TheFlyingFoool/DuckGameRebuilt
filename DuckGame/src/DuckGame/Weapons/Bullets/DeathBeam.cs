@@ -54,7 +54,7 @@ namespace DuckGame
                                 if (materialThing is Duck && !(materialThing as Duck).dead)
                                     ++num;
                             }
-                            Thing.SuperFondle(materialThing, DuckNetwork.localConnection);
+                            SuperFondle(materialThing, DuckNetwork.localConnection);
                             materialThing.Destroy(new DTIncinerate(this));
                         }
                     }

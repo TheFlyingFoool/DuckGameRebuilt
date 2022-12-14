@@ -16,14 +16,14 @@ namespace DuckGame
 
         public static HUDCore core
         {
-            get => HUD._core;
-            set => HUD._core = value;
+            get => _core;
+            set => _core = value;
         }
 
         public static bool hide
         {
-            get => HUD._core._hide;
-            set => HUD._core._hide = value;
+            get => _core._hide;
+            set => _core._hide = value;
         }
 
         public static CornerDisplay FindDuplicateActiveCorner(
@@ -31,7 +31,7 @@ namespace DuckGame
           string text,
           bool allowStacking = false)
         {
-            foreach (CornerDisplay cornerDisplay in HUD._core._cornerDisplays)
+            foreach (CornerDisplay cornerDisplay in _core._cornerDisplays)
             {
                 if (cornerDisplay.corner == corner)
                 {
@@ -45,18 +45,18 @@ namespace DuckGame
                 }
             }
             if (!allowStacking)
-                HUD.CloseCorner(corner);
+                CloseCorner(corner);
             return null;
         }
 
-        public static CornerDisplay AddCornerMessage(HUDCorner corner, string text) => HUD.AddCornerMessage(corner, text, false);
+        public static CornerDisplay AddCornerMessage(HUDCorner corner, string text) => AddCornerMessage(corner, text, false);
 
         public static CornerDisplay AddCornerMessage(
           HUDCorner corner,
           string text,
           bool allowStacking)
         {
-            CornerDisplay cornerDisplay1 = HUD.FindDuplicateActiveCorner(corner, text, allowStacking);
+            CornerDisplay cornerDisplay1 = FindDuplicateActiveCorner(corner, text, allowStacking);
             if (cornerDisplay1 == null)
             {
                 cornerDisplay1 = new CornerDisplay
@@ -64,11 +64,11 @@ namespace DuckGame
                     corner = corner,
                     text = text
                 };
-                HUD._core._cornerDisplays.Add(cornerDisplay1);
+                _core._cornerDisplays.Add(cornerDisplay1);
             }
             if (!allowStacking)
             {
-                foreach (CornerDisplay cornerDisplay2 in HUD._core._cornerDisplays)
+                foreach (CornerDisplay cornerDisplay2 in _core._cornerDisplays)
                 {
                     if (cornerDisplay2.corner == corner && cornerDisplay2 != cornerDisplay1)
                         cornerDisplay2.closing = true;
@@ -82,7 +82,7 @@ namespace DuckGame
           string text,
           InputProfile pro)
         {
-            return HUD.AddCornerControl(corner, text, pro, false);
+            return AddCornerControl(corner, text, pro, false);
         }
 
         public static CornerDisplay AddCornerControl(
@@ -91,7 +91,7 @@ namespace DuckGame
           InputProfile pro = null,
           bool allowStacking = false)
         {
-            CornerDisplay cornerDisplay = HUD.FindDuplicateActiveCorner(corner, text, allowStacking);
+            CornerDisplay cornerDisplay = FindDuplicateActiveCorner(corner, text, allowStacking);
             if (cornerDisplay == null)
             {
                 cornerDisplay = new CornerDisplay
@@ -101,15 +101,15 @@ namespace DuckGame
                     isControl = true,
                     profile = pro
                 };
-                HUD._core._cornerDisplays.Add(cornerDisplay);
+                _core._cornerDisplays.Add(cornerDisplay);
             }
             return cornerDisplay;
         }
 
         public static void AddInputChangeDisplay(string text)
         {
-            HUD._core._inputChangeDisplays.Clear();
-            HUD._core._inputChangeDisplays.Add(new CornerDisplay()
+            _core._inputChangeDisplays.Clear();
+            _core._inputChangeDisplays.Add(new CornerDisplay()
             {
                 text = text,
                 isControl = true,
@@ -117,12 +117,12 @@ namespace DuckGame
             });
         }
 
-        public static void AddPlayerChangeDisplay(string text) => HUD.AddPlayerChangeDisplay(text, 4f);
+        public static void AddPlayerChangeDisplay(string text) => AddPlayerChangeDisplay(text, 4f);
 
         public static void AddPlayerChangeDisplay(string text, float life)
         {
-            HUD._core._playerChangeDisplays.Clear();
-            HUD._core._playerChangeDisplays.Add(new CornerDisplay()
+            _core._playerChangeDisplays.Clear();
+            _core._playerChangeDisplays.Add(new CornerDisplay()
             {
                 text = text,
                 isControl = true,
@@ -130,7 +130,7 @@ namespace DuckGame
             });
         }
 
-        public static void AddCornerTimer(HUDCorner corner, string text, Timer timer) => HUD._core._cornerDisplays.Add(new CornerDisplay()
+        public static void AddCornerTimer(HUDCorner corner, string text, Timer timer) => _core._cornerDisplays.Add(new CornerDisplay()
         {
             corner = corner,
             text = text,
@@ -144,7 +144,7 @@ namespace DuckGame
           int max = 0,
           bool animateCount = false)
         {
-            HUD._core._cornerDisplays.Add(new CornerDisplay()
+            _core._cornerDisplays.Add(new CornerDisplay()
             {
                 corner = corner,
                 text = text,
@@ -156,16 +156,16 @@ namespace DuckGame
             });
         }
 
-        public static void ClearPlayerChangeDisplays() => HUD._core._playerChangeDisplays.Clear();
+        public static void ClearPlayerChangeDisplays() => _core._playerChangeDisplays.Clear();
 
         public static void CloseAllCorners()
         {
-            foreach (CornerDisplay cornerDisplay in HUD._core._cornerDisplays)
+            foreach (CornerDisplay cornerDisplay in _core._cornerDisplays)
                 cornerDisplay.closing = true;
         }
         public static void CloseAllCorners(bool notarcade)
         {
-            foreach (CornerDisplay cornerDisplay in HUD._core._cornerDisplays)
+            foreach (CornerDisplay cornerDisplay in _core._cornerDisplays)
             {
                 if (cornerDisplay.ischallenge)
                 {
@@ -178,7 +178,7 @@ namespace DuckGame
 
         public static void CloseCorner(HUDCorner corner)
         {
-            foreach (CornerDisplay cornerDisplay in HUD._core._cornerDisplays)
+            foreach (CornerDisplay cornerDisplay in _core._cornerDisplays)
             {
                 if (cornerDisplay.corner == corner)
                     cornerDisplay.closing = true;
@@ -187,23 +187,23 @@ namespace DuckGame
 
         public static void CloseInputChangeDisplays()
         {
-            foreach (CornerDisplay inputChangeDisplay in HUD._core._inputChangeDisplays)
+            foreach (CornerDisplay inputChangeDisplay in _core._inputChangeDisplays)
                 inputChangeDisplay.closing = true;
         }
 
-        public static void ClearCorners() => HUD._core._cornerDisplays.Clear();
+        public static void ClearCorners() => _core._cornerDisplays.Clear();
 
         public static void Update()
         {
-            for (int index = 0; index < HUD._core._inputChangeDisplays.Count; ++index)
+            for (int index = 0; index < _core._inputChangeDisplays.Count; ++index)
             {
-                CornerDisplay inputChangeDisplay = HUD._core._inputChangeDisplays[index];
+                CornerDisplay inputChangeDisplay = _core._inputChangeDisplays[index];
                 if (inputChangeDisplay.closing)
                 {
                     inputChangeDisplay.slide = Lerp.FloatSmooth(inputChangeDisplay.slide, -0.3f, 0.15f);
                     if (inputChangeDisplay.slide < -0.15f)
                     {
-                        HUD._core._inputChangeDisplays.RemoveAt(index);
+                        _core._inputChangeDisplays.RemoveAt(index);
                         --index;
                     }
                 }
@@ -215,15 +215,15 @@ namespace DuckGame
                         inputChangeDisplay.closing = true;
                 }
             }
-            for (int index = 0; index < HUD._core._playerChangeDisplays.Count; ++index)
+            for (int index = 0; index < _core._playerChangeDisplays.Count; ++index)
             {
-                CornerDisplay playerChangeDisplay = HUD._core._playerChangeDisplays[index];
+                CornerDisplay playerChangeDisplay = _core._playerChangeDisplays[index];
                 if (playerChangeDisplay.closing)
                 {
                     playerChangeDisplay.slide = Lerp.FloatSmooth(playerChangeDisplay.slide, -0.3f, 0.15f);
                     if (playerChangeDisplay.slide < -0.15f)
                     {
-                        HUD._core._playerChangeDisplays.RemoveAt(index);
+                        _core._playerChangeDisplays.RemoveAt(index);
                         --index;
                     }
                 }
@@ -235,15 +235,15 @@ namespace DuckGame
                         playerChangeDisplay.closing = true;
                 }
             }
-            for (int index = 0; index < HUD._core._cornerDisplays.Count; ++index)
+            for (int index = 0; index < _core._cornerDisplays.Count; ++index)
             {
-                CornerDisplay d = HUD._core._cornerDisplays[index];
+                CornerDisplay d = _core._cornerDisplays[index];
                 if (d.closing)
                 {
                     d.slide = Lerp.FloatSmooth(d.slide, -0.3f, 0.15f);
                     if (d.slide < -0.15f)
                     {
-                        HUD._core._cornerDisplays.RemoveAt(index);
+                        _core._cornerDisplays.RemoveAt(index);
                         --index;
                     }
                 }
@@ -255,7 +255,7 @@ namespace DuckGame
                         if (d.life <= 0f)
                             d.closing = true;
                     }
-                    if (!HUD._core._cornerDisplays.Exists(v => v.corner == d.corner && v.closing))
+                    if (!_core._cornerDisplays.Exists(v => v.corner == d.corner && v.closing))
                     {
                         if (d.counter != null)
                         {
@@ -324,9 +324,9 @@ namespace DuckGame
 
         public static void Draw()
         {
-            if (HUD._core._hide)
+            if (_core._hide)
                 return;
-            foreach (CornerDisplay inputChangeDisplay in HUD._core._inputChangeDisplays)
+            foreach (CornerDisplay inputChangeDisplay in _core._inputChangeDisplays)
             {
                 Vec2 vec2_1 = new Vec2(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height);
                 string text = inputChangeDisplay.text ?? "";
@@ -345,7 +345,7 @@ namespace DuckGame
                 Graphics.DrawRect(vec2_3 + vec2_4 * inputChangeDisplay.slide, vec2_3 + new Vec2(x, num1 - 1f) + vec2_4 * inputChangeDisplay.slide, Color.Black, (Depth)0.95f);
                 Graphics.DrawString(text, vec2_2 + new Vec2(((x - stringWidth) / 2f), ((num1 - stringHeight) / 2f) + num2) + vec2_4 * inputChangeDisplay.slide, Color.White, (Depth)0.97f, inputChangeDisplay.profile);
             }
-            foreach (CornerDisplay playerChangeDisplay in HUD._core._playerChangeDisplays)
+            foreach (CornerDisplay playerChangeDisplay in _core._playerChangeDisplays)
             {
                 Vec2 vec2_5 = new Vec2(Layer.HUD.camera.width / 2f, 0f);
                 string text = playerChangeDisplay.text ?? "";
@@ -370,7 +370,7 @@ namespace DuckGame
             int num9 = 0;
             int num10 = 0;
             int num11 = 0;
-            foreach (CornerDisplay cornerDisplay in HUD._core._cornerDisplays)
+            foreach (CornerDisplay cornerDisplay in _core._cornerDisplays)
             {
                 Vec2 vec2_9 = new Vec2(0f, 0f);
                 switch (cornerDisplay.corner)

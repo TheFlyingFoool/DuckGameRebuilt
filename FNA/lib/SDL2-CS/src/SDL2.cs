@@ -128,7 +128,7 @@ namespace SDL2
 				return string.Empty;
 			}
 			char* chars = stackalloc char[len];
-			int strLen = System.Text.Encoding.UTF8.GetChars((byte*) s, len, chars, len);
+			int strLen = Encoding.UTF8.GetChars((byte*) s, len, chars, len);
 			string result = new string(chars, 0, strLen);
 #endif
 
@@ -1251,15 +1251,15 @@ namespace SDL2
 			{
 				return IntPtr.Zero;
 			}
-			byte[] bytes = System.Text.Encoding.UTF8.GetBytes(str + '\0');
-			IntPtr mem = SDL.SDL_malloc((IntPtr) bytes.Length);
+			byte[] bytes = Encoding.UTF8.GetBytes(str + '\0');
+			IntPtr mem = SDL_malloc((IntPtr) bytes.Length);
 			Marshal.Copy(bytes, 0, mem, bytes.Length);
 			return mem;
 		}
 
 		public static unsafe int SDL_ShowMessageBox([In()] ref SDL_MessageBoxData messageboxdata, out int buttonid)
 		{
-			var data = new INTERNAL_SDL_MessageBoxData()
+            INTERNAL_SDL_MessageBoxData data = new INTERNAL_SDL_MessageBoxData()
 			{
 				flags = messageboxdata.flags,
 				window = messageboxdata.window,
@@ -1268,7 +1268,7 @@ namespace SDL2
 				numbuttons = messageboxdata.numbuttons,
 			};
 
-			var buttons = new INTERNAL_SDL_MessageBoxButtonData[messageboxdata.numbuttons];
+            INTERNAL_SDL_MessageBoxButtonData[] buttons = new INTERNAL_SDL_MessageBoxButtonData[messageboxdata.numbuttons];
 			for (int i = 0; i < messageboxdata.numbuttons; i++)
 			{
 				buttons[i] = new INTERNAL_SDL_MessageBoxButtonData()

@@ -27,21 +27,21 @@ namespace XnaToFna
         public static void Update()
         {
             Keys[] pressedKeys = Keyboard.GetState().GetPressedKeys();
-            KeyboardEvents.Down.Clear();
+            Down.Clear();
             for (int index = 0; index < pressedKeys.Length; ++index)
             {
                 Keys key = pressedKeys[index];
-                if (!KeyboardEvents.LastDown.Contains(key))
-                    KeyboardEvents.KeyDown(key);
-                KeyboardEvents.Down.Add(key);
+                if (!LastDown.Contains(key))
+                    KeyDown(key);
+                Down.Add(key);
             }
-            foreach (Keys key in KeyboardEvents.LastDown)
+            foreach (Keys key in LastDown)
             {
-                if (!KeyboardEvents.Down.Contains(key))
-                    KeyboardEvents.KeyUp(key);
+                if (!Down.Contains(key))
+                    KeyUp(key);
             }
-            KeyboardEvents.LastDown.Clear();
-            KeyboardEvents.LastDown.UnionWith(Down);
+            LastDown.Clear();
+            LastDown.UnionWith(Down);
         }
     }
 }

@@ -188,7 +188,7 @@ namespace Microsoft.Xna.Framework
 		public static event OnDeviceChangeEvent DeviceChangeEvent;
 		public static void OnDeviceChange(int dev, bool removed)
 		{
-			FNAPlatform.DeviceChangeEvent?.Invoke(dev, removed);
+            DeviceChangeEvent?.Invoke(dev, removed);
 		}
 
 		public delegate GameWindow CreateWindowFunc();

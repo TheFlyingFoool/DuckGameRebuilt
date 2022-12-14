@@ -48,7 +48,7 @@ namespace DuckGame
                     flag = true;
                 }
                 num2 += num1;
-                DuckGame.Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * val, drawStart + travelDirNormalized * (val + num3), Color.White * num2, _thickness, (Depth)0.6f);
+                Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * val, drawStart + travelDirNormalized * (val + num3), Color.White * num2, _thickness, (Depth)0.6f);
                 if (!flag)
                     val += 8f;
                 else
@@ -72,7 +72,7 @@ namespace DuckGame
             {
                 if (t != owner)
                 {
-                    Thing.SuperFondle(t, DuckNetwork.localConnection);
+                    SuperFondle(t, DuckNetwork.localConnection);
                     t.Destroy(new DTShot(this));
                 }
             }

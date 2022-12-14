@@ -74,7 +74,7 @@ namespace DuckGame
                         foreach (KeyValuePair<int, string> graphic in deviceInputMapping.graphicMap)
                         {
                             KeyValuePair<int, string> pair = graphic;
-                            Sprite sprite = Input.buttonStyles.FirstOrDefault<Sprite>(x => x.texture != null && x.texture.textureName == pair.Value);
+                            Sprite sprite = Input.buttonStyles.FirstOrDefault(x => x.texture != null && x.texture.textureName == pair.Value);
                             byte val2 = 0;
                             if (sprite != null)
                                 val2 = (byte)Input.buttonStyles.IndexOf(sprite);

@@ -19,7 +19,7 @@ namespace DuckGame
 
         public override void Activate()
         {
-            NMPop.AmazingDisappearingParticles(position);
+            AmazingDisappearingParticles(position);
             base.Activate();
         }
 

@@ -27,11 +27,11 @@ namespace DuckGame
             bitBuffer.Write(2449832521355936907L);
             if (data != null)
                 bitBuffer.Write(data, length: length);
-            lock (NCNetDebug._socketData)
+            lock (_socketData)
             {
                 List<NCBasicPacket> ncBasicPacketList = null;
-                if (!NCNetDebug._socketData.TryGetValue(connection as IPEndPoint, out ncBasicPacketList))
-                    NCNetDebug._socketData[connection as IPEndPoint] = ncBasicPacketList = new List<NCBasicPacket>();
+                if (!_socketData.TryGetValue(connection as IPEndPoint, out ncBasicPacketList))
+                    _socketData[connection as IPEndPoint] = ncBasicPacketList = new List<NCBasicPacket>();
                 ncBasicPacketList.Add(new NCBasicPacket()
                 {
                     data = data1,
@@ -47,10 +47,10 @@ namespace DuckGame
         {
             try
             {
-                lock (NCNetDebug._socketData)
+                lock (_socketData)
                 {
                     List<NCBasicPacket> ncBasicPacketList = null;
-                    if (!NCNetDebug._socketData.TryGetValue(localEndPoint, out ncBasicPacketList))
+                    if (!_socketData.TryGetValue(localEndPoint, out ncBasicPacketList))
                         return;
                     foreach (NCBasicPacket ncBasicPacket in ncBasicPacketList)
                         packets.Enqueue(ncBasicPacket);

@@ -38,7 +38,7 @@ namespace DuckGame
             else
             {
                 Graphics.fade = 0f;
-                Level.current = !MonoMain.startInEditor ? new TitleScreen() : Main.editor;
+                current = !MonoMain.startInEditor ? new TitleScreen() : Main.editor;
             }
             _wait -= 0.06f;
             if (_wait >= 0f)

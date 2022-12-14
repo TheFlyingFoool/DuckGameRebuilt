@@ -31,14 +31,14 @@ namespace DuckGame
         {
             music.value = Music.value;
             base.Initialize();
-            ChallengeMode.showReticles = TargetReticles.value;
+            showReticles = TargetReticles.value;
         }
 
         public override void PrepareCounts()
         {
             base.PrepareCounts();
-            _challenge.countGoodies = Level.current.things[typeof(Goody)].Count<Thing>() > 0;
-            _challenge.countTargets = Level.current.things[typeof(TargetDuckNew)].Count<Thing>() > 0 || Level.current.things[typeof(GoalType)].Count<Thing>() > 0;
+            _challenge.countGoodies = Level.current.things[typeof(Goody)].Count() > 0;
+            _challenge.countTargets = Level.current.things[typeof(TargetDuckNew)].Count() > 0 || Level.current.things[typeof(GoalType)].Count() > 0;
         }
     }
 }

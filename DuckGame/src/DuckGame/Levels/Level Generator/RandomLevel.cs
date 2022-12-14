@@ -25,7 +25,7 @@ namespace DuckGame
             {
                 visible = false
             };
-            Level.Add(officeBackground);
+            Add(officeBackground);
             base.Initialize();
         }
 

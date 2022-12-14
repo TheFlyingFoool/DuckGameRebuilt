@@ -54,14 +54,14 @@ namespace DuckGame
 
         public static MatchmakingBoxCore core
         {
-            get => UIMatchmakingBox._core;
-            set => UIMatchmakingBox._core = value;
+            get => _core;
+            set => _core = value;
         }
 
         public List<MatchmakingPlayer> matchmakingProfiles
         {
-            get => UIMatchmakingBox.core.matchmakingProfiles;
-            set => UIMatchmakingBox.core.matchmakingProfiles = value;
+            get => core.matchmakingProfiles;
+            set => core.matchmakingProfiles = value;
         }
 
         public UIMatchmakingBox(UIMenu openOnClose, float xpos, float ypos, float wide = -1f, float high = -1f)
@@ -119,33 +119,33 @@ namespace DuckGame
             }
             else
             {
-                UIMatchmakingBox._core._state = MatchmakingState.Waiting;
+                _core._state = MatchmakingState.Waiting;
                 _pendingState = s;
                 _stateWait = wait;
             }
         }
 
-        public bool IsBlacklisted(ulong lobby) => _permenantBlacklist.FirstOrDefault<BlacklistServer>(x => (long)x.lobby == (long)lobby) != null || _failedAttempts.FirstOrDefault<BlacklistServer>(x => (long)x.lobby == (long)lobby) != null || UIMatchmakingBox.core.blacklist.Contains(lobby);
+        public bool IsBlacklisted(ulong lobby) => _permenantBlacklist.FirstOrDefault(x => (long)x.lobby == (long)lobby) != null || _failedAttempts.FirstOrDefault(x => (long)x.lobby == (long)lobby) != null || core.blacklist.Contains(lobby);
 
         private void OnStateChange(MatchmakingState s)
         {
-            UIMatchmakingBox._core._state = s;
+            _core._state = s;
             _stateWait = 0f;
-            if (UIMatchmakingBox._core._state == MatchmakingState.Disconnect)
+            if (_core._state == MatchmakingState.Disconnect)
             {
                 if (!Network.isActive)
                     OnSessionEnded(new DuckNetErrorInfo(DuckNetError.ControlledDisconnect, "Matchmaking disconnect."));
                 else
                     Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.ControlledDisconnect, "Matchmaking disconnect."));
             }
-            else if (UIMatchmakingBox._core._state == MatchmakingState.Searching)
+            else if (_core._state == MatchmakingState.Searching)
             {
                 Network.activeNetwork.core.SearchForLobby();
                 DevConsole.Log("|PURPLE|LOBBY    |DGYELLOW|Searching for lobbies.", Color.White);
             }
             else
             {
-                if (UIMatchmakingBox._core._state != MatchmakingState.Connecting)
+                if (_core._state != MatchmakingState.Connecting)
                     return;
                 _tryConnectTimeout = 9f + Rando.Float(2f);
                 DevConsole.Log("|PURPLE|LOBBY    |DGYELLOW|Attempting connection to server.", Color.White);
@@ -198,7 +198,7 @@ namespace DuckGame
 
         public void OnDisconnect(NetworkConnection n)
         {
-            if (!open || UIMatchmakingBox._core._state != MatchmakingState.Connecting || _tryHostingLobby == null || Network.connections.Count != 0)
+            if (!open || _core._state != MatchmakingState.Connecting || _tryHostingLobby == null || Network.connections.Count != 0)
                 return;
             ChangeState(MatchmakingState.SearchForLobbies);
             DevConsole.Log("|PURPLE|LOBBY    |DGGREEN|Client disconnect, continuing search.", Color.White);
@@ -300,7 +300,7 @@ namespace DuckGame
         {
             if (!open)
                 return;
-            if (UIMatchmakingBox._core._state == MatchmakingState.Disconnect)
+            if (_core._state == MatchmakingState.Disconnect)
             {
                 if (_tryHostingLobby != null)
                     _tries = 0;
@@ -337,29 +337,29 @@ namespace DuckGame
                 if (_searchingIsOver)
                 {
                     _signalCrossLocal.SetAnimation("idle");
-                    UIMatchmakingBox._core.pulseLocal = false;
+                    _core.pulseLocal = false;
                 }
                 else if (_signalCrossLocal.currentAnimation == "idle")
                 {
-                    if (UIMatchmakingBox._core.pulseLocal)
+                    if (_core.pulseLocal)
                     {
                         _signalCrossLocal.SetAnimation("flicker");
-                        UIMatchmakingBox._core.pulseLocal = false;
+                        _core.pulseLocal = false;
                     }
                 }
                 else if (_signalCrossLocal.finished)
                     _signalCrossLocal.SetAnimation("idle");
                 if (_signalCrossNetwork.currentAnimation == "idle")
                 {
-                    if (UIMatchmakingBox._core.pulseNetwork)
+                    if (_core.pulseNetwork)
                     {
                         _signalCrossNetwork.SetAnimation("flicker");
-                        UIMatchmakingBox._core.pulseNetwork = false;
+                        _core.pulseNetwork = false;
                     }
                 }
                 else if (_signalCrossNetwork.finished)
                     _signalCrossNetwork.SetAnimation("idle");
-                if (Network.connections.Count > 0 && UIMatchmakingBox._core._state != MatchmakingState.Connecting)
+                if (Network.connections.Count > 0 && _core._state != MatchmakingState.Connecting)
                 {
                     ChangeState(MatchmakingState.Connecting);
                     DevConsole.Log("|PURPLE|LOBBY    |DGGREEN|Network appears to be connecting...", Color.White);
@@ -380,7 +380,7 @@ namespace DuckGame
                     DevConsole.Log("|PURPLE|LOBBY    |DGGREEN|Finished! (CLIENT).", Color.White);
                     return;
                 }
-                if (UIMatchmakingBox._core._state == MatchmakingState.Waiting)
+                if (_core._state == MatchmakingState.Waiting)
                 {
                     _stateWait -= Maths.IncFrameTimer();
                     if (_stateWait <= 0.0)
@@ -389,15 +389,15 @@ namespace DuckGame
                         OnStateChange(_pendingState);
                     }
                 }
-                else if (UIMatchmakingBox._core._state == MatchmakingState.ConnectToMoon)
+                else if (_core._state == MatchmakingState.ConnectToMoon)
                 {
                     Network.activeNetwork.core.AddLobbyStringFilter("started", "true", LobbyFilterComparison.Equal);
                     Network.activeNetwork.core.SearchForLobby();
                     Network.activeNetwork.core.RequestGlobalStats();
-                    UIMatchmakingBox._core.pulseLocal = true;
+                    _core.pulseLocal = true;
                     ChangeState(MatchmakingState.ConnectingToMoon);
                 }
-                else if (UIMatchmakingBox._core._state == MatchmakingState.ConnectingToMoon)
+                else if (_core._state == MatchmakingState.ConnectingToMoon)
                 {
                     if (Network.activeNetwork.core.IsLobbySearchComplete())
                     {
@@ -412,7 +412,7 @@ namespace DuckGame
                         }
                         else
                         {
-                            UIMatchmakingBox._core.pulseNetwork = true;
+                            _core.pulseNetwork = true;
                             _totalLobbiesFound = Network.activeNetwork.core.NumLobbiesFound();
                             _newStatusList.Add("|DGGREEN|Connected to Moon!");
                             _newStatusList.Add("");
@@ -421,7 +421,7 @@ namespace DuckGame
                         }
                     }
                 }
-                else if (UIMatchmakingBox._core._state == MatchmakingState.CheckingTotalGames)
+                else if (_core._state == MatchmakingState.CheckingTotalGames)
                 {
                     if (Network.activeNetwork.core.IsLobbySearchComplete())
                     {
@@ -432,7 +432,7 @@ namespace DuckGame
                         _triesSinceSearch = 0;
                     }
                 }
-                else if (UIMatchmakingBox._core._state == MatchmakingState.SearchForLobbies)
+                else if (_core._state == MatchmakingState.SearchForLobbies)
                 {
                     if (_triesSinceSearch == 3)
                     {
@@ -463,12 +463,12 @@ namespace DuckGame
                     long numKills;
                     if (Network.activeNetwork.core.TryRequestDailyKills(out numKills))
                         _globalKills = numKills;
-                    UIMatchmakingBox._core.pulseLocal = true;
+                    _core.pulseLocal = true;
                     ChangeState(MatchmakingState.Searching);
                     ++_triesSinceSearch;
                     ++_tries;
                 }
-                else if (UIMatchmakingBox._core._state == MatchmakingState.Searching)
+                else if (_core._state == MatchmakingState.Searching)
                 {
                     if (Network.activeNetwork.core.IsLobbySearchComplete())
                     {
@@ -488,7 +488,7 @@ namespace DuckGame
                                         _failedAttempts.RemoveAll(x => x.cooldown <= 0.0);
                                     if (IsBlacklisted(lobby.id))
                                         DevConsole.Log("|PURPLE|LOBBY    |DGRED|Skipping " + lobby.id.ToString() + " (BLACKLISTED)", Color.White);
-                                    else if (UIMatchmakingBox._core.nonPreferredServers.Contains(lobby.id) && index1 == 0)
+                                    else if (_core.nonPreferredServers.Contains(lobby.id) && index1 == 0)
                                     {
                                         lobbyList.Add(lobby);
                                         DevConsole.Log("|PURPLE|LOBBY    |DGRED|Skipping " + lobby.id.ToString() + " (NOT PREFERRED)", Color.White);
@@ -554,7 +554,7 @@ namespace DuckGame
                         }
                     }
                 }
-                else if (UIMatchmakingBox._core._state == MatchmakingState.Connecting)
+                else if (_core._state == MatchmakingState.Connecting)
                 {
                     ++_connectTimeout;
                     if (!Network.connected && _connectTimeout > 120)
@@ -662,9 +662,9 @@ namespace DuckGame
                     if (!_searchingIsOver)
                     {
                         string str3 = ".";
-                        if (str1.Count<char>() > 0 && str1.Last<char>() == '!' || str1.Last<char>() == '.' || str1.Last<char>() == '?')
+                        if (str1.Count() > 0 && str1.Last() == '!' || str1.Last() == '.' || str1.Last() == '?')
                         {
-                            str3 = str1.Last<char>().ToString() ?? "";
+                            str3 = str1.Last().ToString() ?? "";
                             str1 = str1.Substring(0, str1.Length - 1);
                         }
                         for (int index = 0; index < 3; ++index)

@@ -14,67 +14,67 @@ namespace DuckGame
         private Stack<AIState> _state = new Stack<AIState>();
         private Dictionary<string, InputState> _inputState = new Dictionary<string, InputState>();
         private AILocomotion _locomotion = new AILocomotion();
-        private Dictionary<string, BullshitInput.CountdownPair> _bullshitTriggerStates = new Dictionary<string, BullshitInput.CountdownPair>()
+        private Dictionary<string, CountdownPair> _bullshitTriggerStates = new Dictionary<string, CountdownPair>()
     {
       {
         "LEFT",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "RIGHT",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "UP",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "DOWN",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "JUMP",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "QUACK",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "SHOOT",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "GRAB",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "RAGDOLL",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "STRAFE",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "SELECT",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "LTRIGGER",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "RTRIGGER",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "LSTICK",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       },
       {
         "RSTICK",
-        new BullshitInput.CountdownPair()
+        new CountdownPair()
       }
     };
 
@@ -93,7 +93,7 @@ namespace DuckGame
 
         public override void UpdateExtraInput()
         {
-            foreach (KeyValuePair<string, BullshitInput.CountdownPair> bullshitTriggerState in this._bullshitTriggerStates)
+            foreach (KeyValuePair<string, CountdownPair> bullshitTriggerState in this._bullshitTriggerStates)
             {
                 bullshitTriggerState.Value.previous = bullshitTriggerState.Value.current;
                 if (Rando.Int(100) == 0)

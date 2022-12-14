@@ -24,7 +24,7 @@ namespace DuckGame
         public static List<NMMessageFragment> BreakApart(NetMessage pMessage)
         {
             List<NMMessageFragment> nmMessageFragmentList = new List<NMMessageFragment>();
-            int num1 = NMMessageFragment.FragmentsRequired(pMessage);
+            int num1 = FragmentsRequired(pMessage);
             for (int index = 0; index < num1; ++index)
             {
                 NMMessageFragment nmMessageFragment = new NMMessageFragment();

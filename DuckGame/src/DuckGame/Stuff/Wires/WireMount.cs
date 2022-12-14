@@ -178,10 +178,10 @@ namespace DuckGame
 
         public void Pulse(int type, WireTileset wire)
         {
-            Thing.Fondle(this, DuckNetwork.localConnection);
+            Fondle(this, DuckNetwork.localConnection);
             if (!(_containedThing is Holdable containedThing))
                 return;
-            Thing.Fondle(containedThing, DuckNetwork.localConnection);
+            Fondle(containedThing, DuckNetwork.localConnection);
             switch (type)
             {
                 case 0:

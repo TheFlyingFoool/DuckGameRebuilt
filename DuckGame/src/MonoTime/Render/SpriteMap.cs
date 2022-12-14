@@ -206,7 +206,7 @@ namespace DuckGame
         {
             if (!valid)
                 return false;
-            if (_currentAnimation.HasValue && (ignoreFlipFlop || _flipFlop != DuckGame.Graphics.frameFlipFlop) && !VirtualTransition.doingVirtualTransition)
+            if (_currentAnimation.HasValue && (ignoreFlipFlop || _flipFlop != Graphics.frameFlipFlop) && !VirtualTransition.doingVirtualTransition)
             {
                 _frameInc += _currentAnimation.Value.speed * _speed;
                 if (_frameInc >= 1.0)
@@ -284,7 +284,7 @@ namespace DuckGame
             _texture.currentObjectIndex = _globalIndex;
             if (w <= 0)
                 return;
-            DuckGame.Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color * alpha, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
+            Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color * alpha, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public override void Draw(Rectangle r)
@@ -294,7 +294,7 @@ namespace DuckGame
             r.x += _spriteBox.x;
             r.y += _spriteBox.y;
             _texture.currentObjectIndex = _globalIndex;
-            DuckGame.Graphics.Draw(_texture, position, new Rectangle?(r), _color * alpha, angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
+            Graphics.Draw(_texture, position, new Rectangle?(r), _color * alpha, angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public void DrawWithoutUpdate()
@@ -304,7 +304,7 @@ namespace DuckGame
             _texture.currentObjectIndex = _globalIndex;
             if (w <= 0)
                 return;
-            DuckGame.Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color * alpha, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
+            Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color * alpha, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public override void CheapDraw(bool flipH = false)
@@ -312,7 +312,7 @@ namespace DuckGame
             if (!valid)
                 return;
             _texture.currentObjectIndex = _globalIndex;
-            DuckGame.Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
+            Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
         }
 
         public void ClearCache()
@@ -328,23 +328,23 @@ namespace DuckGame
                 if (!valid)
                     return;
                 UpdateFrame();
-                DuckGame.Graphics.recordMetadata = true;
+                Graphics.recordMetadata = true;
                 _texture.currentObjectIndex = _globalIndex;
-                DuckGame.Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
+                Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
                 if (_waitFrames == 1)
                 {
-                    _batchItem = DuckGame.Graphics.screen.StealLastSpriteBatchItem();
+                    _batchItem = Graphics.screen.StealLastSpriteBatchItem();
                     if (_batchItem.MetaData == null)
                         _batchItem = null;
                 }
                 ++_waitFrames;
-                DuckGame.Graphics.recordMetadata = false;
+                Graphics.recordMetadata = false;
             }
             else
             {
                 _batchItem.Material = cheapmaterial;
                 _texture.currentObjectIndex = _globalIndex;
-                DuckGame.Graphics.Draw(_batchItem);
+                Graphics.Draw(_batchItem);
             }
         }
 

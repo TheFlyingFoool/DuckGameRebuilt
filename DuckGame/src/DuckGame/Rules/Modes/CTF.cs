@@ -16,7 +16,7 @@ namespace DuckGame
         public static bool hasWinner;
         public static bool winner;
 
-        protected override void Initialize() => CTF.hasWinner = false;
+        protected override void Initialize() => hasWinner = false;
 
         protected override void Start()
         {
@@ -24,8 +24,8 @@ namespace DuckGame
 
         public static void CaptureFlag(bool team)
         {
-            CTF.hasWinner = true;
-            CTF.winner = team;
+            hasWinner = true;
+            winner = team;
         }
 
         protected override void Update()
@@ -36,7 +36,7 @@ namespace DuckGame
                 int num = 0;
                 foreach (Team team in Teams.all)
                 {
-                    if (team.activeProfiles.Count<Profile>() != 0)
+                    if (team.activeProfiles.Count() != 0)
                     {
                         foreach (Profile activeProfile in team.activeProfiles)
                         {
@@ -86,26 +86,26 @@ namespace DuckGame
                         ++num;
                     }
                 }
-                if (CTF.hasWinner)
+                if (hasWinner)
                     EndMatch();
             }
             base.Update();
         }
 
-        protected override List<Duck> AssignSpawns() => Spawn.SpawnCTF().OrderBy<Duck, float>(sp => sp.x).ToList<Duck>();
+        protected override List<Duck> AssignSpawns() => Spawn.SpawnCTF().OrderBy(sp => sp.x).ToList();
 
-        protected override Level GetNextLevel() => new CTFLevel(Deathmatch.RandomLevelString(GameMode.previousLevel, "ctf"));
+        protected override Level GetNextLevel() => new CTFLevel(Deathmatch.RandomLevelString(previousLevel, "ctf"));
 
         protected override List<Profile> AddPoints()
         {
             List<Profile> pProfiles = new List<Profile>();
             List<Team> collection = new List<Team>();
             List<Team> source = new List<Team>();
-            int num1 = CTF.winner ? 0 : 1;
+            int num1 = winner ? 0 : 1;
             int num2 = 0;
             foreach (Team team in Teams.all)
             {
-                if (team.activeProfiles.Count<Profile>() != 0)
+                if (team.activeProfiles.Count() != 0)
                 {
                     foreach (Profile activeProfile in team.activeProfiles)
                     {

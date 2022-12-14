@@ -372,14 +372,14 @@ namespace DuckGame
                 ysize = size;
             _texture = new SpriteMap(image, size, ysize);
             _tileSize = size;
-            if (!BitmapFont._mapInitialized)
+            if (!_mapInitialized)
             {
-                for (int index2 = 0; index2 < BitmapFont._characters.Length; ++index2)
+                for (int index2 = 0; index2 < _characters.Length; ++index2)
                 {
-                    char ch = BitmapFont._characters[index2];
-                    BitmapFont._characterMap[ch] = index2;
+                    char ch = _characters[index2];
+                    _characterMap[ch] = index2;
                 }
-                BitmapFont._mapInitialized = true;
+                _mapInitialized = true;
             }
             _titleWing = new Sprite("arcade/titleWing");
         }
@@ -623,14 +623,14 @@ namespace DuckGame
                     {
                         string source = "";
                         int letterIndex = _letterIndex;
-                        while (letterIndex < text.Count<char>() && text[letterIndex] != ' ' && text[letterIndex] != '|' && text[letterIndex] != '@')
+                        while (letterIndex < text.Count() && text[letterIndex] != ' ' && text[letterIndex] != '|' && text[letterIndex] != '@')
                         {
                             source += text[letterIndex].ToString();
                             ++letterIndex;
                             if (!enforceWidthByWord)
                                 break;
                         }
-                        if (num2 + source.Count<char>() * (_tileSize * scale.x) > maxWidth)
+                        if (num2 + source.Count() * (_tileSize * scale.x) > maxWidth)
                         {
                             num1 += _texture.height * scale.y;
                             num2 = 0f;
@@ -655,7 +655,7 @@ namespace DuckGame
                         }
                         else
                         {
-                            num4 = BitmapFont._characterMap[index];
+                            num4 = _characterMap[index];
                             if (num4 == 0 && index != ' ')
                             {
                                 num4 = 91;

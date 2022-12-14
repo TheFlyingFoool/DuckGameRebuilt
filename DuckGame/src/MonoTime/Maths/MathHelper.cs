@@ -161,8 +161,8 @@ namespace DuckGame
         /// <returns>Interpolated value.</returns>
         public static float SmoothStep(float value1, float value2, float amount)
         {
-            float amount1 = MathHelper.Clamp(amount, 0f, 1f);
-            return MathHelper.Hermite(value1, 0f, value2, 0f, amount1);
+            float amount1 = Clamp(amount, 0f, 1f);
+            return Hermite(value1, 0f, value2, 0f, amount1);
         }
 
         /// <summary>Converts radians to degrees.</summary>

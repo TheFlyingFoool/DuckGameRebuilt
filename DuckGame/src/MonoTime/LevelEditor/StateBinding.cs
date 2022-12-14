@@ -71,7 +71,7 @@ namespace DuckGame
         public virtual void setTyped<T>(T value)
         {
             if (_accessor.type == typeof(T))
-                _accessor.Set<T>(_thing, value);
+                _accessor.Set(_thing, value);
             else
                 classValue = value;
         }
@@ -82,7 +82,7 @@ namespace DuckGame
             set
             {
                 if (_accessor.type == typeof(byte))
-                    _accessor.Set<byte>(_thing, value);
+                    _accessor.Set(_thing, value);
                 else
                     classValue = value;
             }
@@ -94,7 +94,7 @@ namespace DuckGame
             set
             {
                 if (_accessor.type == typeof(ushort))
-                    _accessor.Set<ushort>(_thing, value);
+                    _accessor.Set(_thing, value);
                 else
                     classValue = value;
             }
@@ -106,13 +106,13 @@ namespace DuckGame
             set
             {
                 if (_accessor.type == typeof(int))
-                    _accessor.Set<int>(_thing, value);
+                    _accessor.Set(_thing, value);
                 else
                     classValue = value;
             }
         }
 
-        public virtual System.Type type => _accessor.type;
+        public virtual Type type => _accessor.type;
 
         public static bool CompareBase(object o1, object o2)
         {
@@ -126,14 +126,14 @@ namespace DuckGame
                 case BitBuffer _:
                     return false;
                 default:
-                    return object.Equals(o1, o2);
+                    return Equals(o1, o2);
             }
         }
 
         public bool Compare<T>(T f, out T newVal)
         {
             newVal = (T)classValue;
-            return StateBinding.CompareBase(f, newVal);
+            return CompareBase(f, newVal);
         }
 
         public virtual int bits => _bits;

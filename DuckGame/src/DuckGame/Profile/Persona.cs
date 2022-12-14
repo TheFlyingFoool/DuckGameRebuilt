@@ -31,27 +31,27 @@ namespace DuckGame
         {
             get
             {
-                if (Persona._personasShuffled == null)
-                    Persona.Shuffle();
-                return Persona._personasShuffled;
+                if (_personasShuffled == null)
+                    Shuffle();
+                return _personasShuffled;
             }
         }
 
-        public static DuckPersona Duck1 => Persona._personas[0];
+        public static DuckPersona Duck1 => _personas[0];
 
-        public static DuckPersona Duck2 => Persona._personas[1];
+        public static DuckPersona Duck2 => _personas[1];
 
-        public static DuckPersona Duck3 => Persona._personas[2];
+        public static DuckPersona Duck3 => _personas[2];
 
-        public static DuckPersona Duck4 => Persona._personas[3];
+        public static DuckPersona Duck4 => _personas[3];
 
-        public static DuckPersona Duck5 => Persona._personas[4];
+        public static DuckPersona Duck5 => _personas[4];
 
-        public static DuckPersona Duck6 => Persona._personas[5];
+        public static DuckPersona Duck6 => _personas[5];
 
-        public static DuckPersona Duck7 => Persona._personas[6];
+        public static DuckPersona Duck7 => _personas[6];
 
-        public static DuckPersona Duck8 => Persona._personas[7];
+        public static DuckPersona Duck8 => _personas[7];
 
         public static IEnumerable<DuckPersona> all => _personas;
 
@@ -62,13 +62,13 @@ namespace DuckGame
 
         public static void Shuffle(int pSeed = -1)
         {
-            Persona.seed = pSeed >= 0 ? pSeed : Rando.Int(2147483646);
+            seed = pSeed >= 0 ? pSeed : Rando.Int(2147483646);
             Random generator = Rando.generator;
-            Rando.generator = new Random(Persona.seed);
-            Persona._personasShuffled = Persona._personasOriginalOrder.ToList<DuckPersona>();
+            Rando.generator = new Random(seed);
+            _personasShuffled = _personasOriginalOrder.ToList();
             Rando.generator = generator;
         }
 
-        public static int Number(DuckPersona p) => Persona._personas.IndexOf(p);
+        public static int Number(DuckPersona p) => _personas.IndexOf(p);
     }
 }

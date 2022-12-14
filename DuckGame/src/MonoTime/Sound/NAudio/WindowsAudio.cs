@@ -27,7 +27,7 @@ namespace DuckGame
         private bool _recreateAlternateAudio;
         private static ISampleProvider _currentMusic;
         private MMDeviceEnumerator deviceEnum;
-        private Windows_Audio.NotificationClientImplementation notificationClient;
+        private NotificationClientImplementation notificationClient;
         private IMMNotificationClient notifyClient;
 
         public void Platform_Initialize()
@@ -40,26 +40,26 @@ namespace DuckGame
                 }
                 catch (Exception)
                 {
-                    Windows_Audio.initialized = false;
+                    initialized = false;
                     return;
                 }
-                Windows_Audio.initialized = true;
+                initialized = true;
                 return;
             }
             try
             {
                 if (WaveOut.DeviceCount == 0)
                 {
-                    Windows_Audio.initialized = false;
+                    initialized = false;
                     return;
                 }
             }
             catch (Exception)
             {
-                Windows_Audio.initialized = false;
+                initialized = false;
                 return;
             }
-            Windows_Audio.ResetDevice();
+            ResetDevice();
         }
 
         public void Update()
@@ -68,15 +68,15 @@ namespace DuckGame
             {
                 return;
             }
-            if (!Windows_Audio.initialized || SFX._audio == null || Windows_Audio._losingDevice <= 0 || Windows_Audio._output != null && Windows_Audio._output.PlaybackState != PlaybackState.Stopped)
+            if (!initialized || SFX._audio == null || _losingDevice <= 0 || _output != null && _output.PlaybackState != PlaybackState.Stopped)
                 return;
-            if (Windows_Audio._output != null)
+            if (_output != null)
             {
-                Windows_Audio._output.Dispose();
-                Windows_Audio._output = null;
+                _output.Dispose();
+                _output = null;
             }
-            --Windows_Audio._losingDevice;
-            if (Windows_Audio._losingDevice != 0)
+            --_losingDevice;
+            if (_losingDevice != 0)
                 return;
             RecreateDevice();
         }
@@ -87,36 +87,36 @@ namespace DuckGame
             {
                 return;
             }
-            if (!Windows_Audio.initialized || Windows_Audio._output == null)
+            if (!initialized || _output == null)
                 return;
-            Windows_Audio._output.Stop();
-            Windows_Audio._losingDevice = 60;
+            _output.Stop();
+            _losingDevice = 60;
         }
 
         public static AudioMode forceMode
         {
-            get => Windows_Audio._forceMode;
+            get => _forceMode;
             set
             {
-                Windows_Audio._forceMode = value;
+                _forceMode = value;
                 if (Program.IsLinuxD) // mabye come back to this later
                 {
                     return;
                 }
                 if (SFX._audio == null)
                     return;
-                Windows_Audio.ResetDevice();
+                ResetDevice();
             }
         }
 
         public static void ResetDevice()
         {
-            Windows_Audio._mode = MonoMain.audioModeOverride == AudioMode.None ? (AudioMode)Options.Data.audioMode : MonoMain.audioModeOverride;
+            _mode = MonoMain.audioModeOverride == AudioMode.None ? (AudioMode)Options.Data.audioMode : MonoMain.audioModeOverride;
             if (Program.IsLinuxD) // mabye come back to this later
             {
                 return;
             }
-            if (Windows_Audio._output != null)
+            if (_output != null)
                 SFX._audio.LoseDevice();
             else
                 SFX._audio.RecreateDevice();
@@ -130,60 +130,60 @@ namespace DuckGame
             }
             try
             {
-                if (Windows_Audio._output != null)
+                if (_output != null)
                 {
-                    Windows_Audio._output.Stop();
-                    Windows_Audio._output.Dispose();
-                    Windows_Audio._output = null;
+                    _output.Stop();
+                    _output.Dispose();
+                    _output = null;
                 }
-                if (Windows_Audio._forceMode != AudioMode.None && !_recreateAlternateAudio && !_recreateNonExclusive)
-                    Windows_Audio._mode = Windows_Audio._forceMode;
-                switch (Windows_Audio._mode)
+                if (_forceMode != AudioMode.None && !_recreateAlternateAudio && !_recreateNonExclusive)
+                    _mode = _forceMode;
+                switch (_mode)
                 {
                     case AudioMode.Wave:
                         int deviceCount = WaveOut.DeviceCount;
-                        Windows_Audio._output = new WaveOutEvent()
+                        _output = new WaveOutEvent()
                         {
                             DesiredLatency = 50,
                             NumberOfBuffers = 10
                         };
                         break;
                     case AudioMode.DirectSound:
-                        Windows_Audio._output = new DirectSoundOut();
+                        _output = new DirectSoundOut();
                         break;
                     default:
                         if (!_recreateAlternateAudio)
                         {
                             if (notificationClient == null)
                             {
-                                notificationClient = new Windows_Audio.NotificationClientImplementation(this);
+                                notificationClient = new NotificationClientImplementation(this);
                                 notifyClient = notificationClient;
                                 if (deviceEnum == null)
                                     deviceEnum = new MMDeviceEnumerator();
                                 deviceEnum.RegisterEndpointNotificationCallback(notifyClient);
                             }
                             new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
-                            Windows_Audio._output = new WasapiOut(_recreateNonExclusive || !Options.Data.audioExclusiveMode ? AudioClientShareMode.Shared : AudioClientShareMode.Exclusive, 20);
+                            _output = new WasapiOut(_recreateNonExclusive || !Options.Data.audioExclusiveMode ? AudioClientShareMode.Shared : AudioClientShareMode.Exclusive, 20);
                             break;
                         }
                         goto case AudioMode.Wave;
                 }
-                if (Windows_Audio._mixer == null)
+                if (_mixer == null)
                 {
-                    Windows_Audio._mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
+                    _mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
                     {
                         ReadFully = true
                     };
                 }
-                Windows_Audio._output.Init(_mixer);
+                _output.Init(_mixer);
             }
             catch (Exception ex)
             {
                 if (_recreateAlternateAudio)
                 {
-                    Windows_Audio.initialized = false;
-                    Windows_Audio._output = null;
-                    Windows_Audio._mixer = null;
+                    initialized = false;
+                    _output = null;
+                    _mixer = null;
                     return;
                 }
                 if (_recreateNonExclusive)
@@ -205,10 +205,10 @@ namespace DuckGame
                     return;
                 }
             }
-            if (Windows_Audio._output == null)
+            if (_output == null)
                 return;
-            Windows_Audio.initialized = true;
-            Windows_Audio._output.Play();
+            initialized = true;
+            _output.Play();
         }
 
         public static void AddSound(ISampleProvider pSound, bool pIsMusic)
@@ -217,22 +217,22 @@ namespace DuckGame
             {
                 return;
             }
-            if (!Windows_Audio.initialized || pSound == null || Windows_Audio._mixer.MixerInputs == null || Windows_Audio._mixer == null || Windows_Audio._output == null)
+            if (!initialized || pSound == null || _mixer.MixerInputs == null || _mixer == null || _output == null)
                 return;
-            if (Windows_Audio._mixer.MixerInputs.Count<ISampleProvider>() > 32)
+            if (_mixer.MixerInputs.Count() > 32)
             {
-                lock (Windows_Audio._mixer.MixerInputs)
+                lock (_mixer.MixerInputs)
                 {
-                    ISampleProvider mixerInput = Windows_Audio._mixer.MixerInputs.Where<ISampleProvider>(x => x != Windows_Audio._currentMusic).First<ISampleProvider>();
-                    Windows_Audio._mixer.RemoveMixerInput(mixerInput);
+                    ISampleProvider mixerInput = _mixer.MixerInputs.Where(x => x != _currentMusic).First();
+                    _mixer.RemoveMixerInput(mixerInput);
                 }
             }
-            Windows_Audio._mixer.AddMixerInput(pSound);
-            if (Windows_Audio._losingDevice <= 0)
-                Windows_Audio._output.Play();
+            _mixer.AddMixerInput(pSound);
+            if (_losingDevice <= 0)
+                _output.Play();
             if (!pIsMusic)
                 return;
-            Windows_Audio._currentMusic = pSound;
+            _currentMusic = pSound;
         }
 
         public static void RemoveSound(ISampleProvider pSound)
@@ -241,9 +241,9 @@ namespace DuckGame
             {
                 return;
             }
-            if (!Windows_Audio.initialized || Windows_Audio._mixer == null)
+            if (!initialized || _mixer == null)
                 return;
-            Windows_Audio._mixer.RemoveMixerInput(pSound);
+            _mixer.RemoveMixerInput(pSound);
         }
 
         public void Dispose()
@@ -252,10 +252,10 @@ namespace DuckGame
             {
                 return;
             }
-            if (!Windows_Audio.initialized || notificationClient == null)
+            if (!initialized || notificationClient == null)
                 return;
             UnRegisterEndpointNotificationCallback(notificationClient);
-            Windows_Audio._output.Dispose();
+            _output.Dispose();
         }
 
         /// <summary>Registers a call back for Device Events</summary>

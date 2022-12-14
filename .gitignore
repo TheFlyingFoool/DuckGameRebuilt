@@ -371,3 +371,5 @@ unnamedtexs/unnamed MTSpriteBatch.DoDrawInternal^MTSpriteBatch.DrawWithMaterial^
 dottrace/
 
 version.txt
+.editorconfig
+.editorconfig

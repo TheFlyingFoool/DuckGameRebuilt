@@ -509,7 +509,7 @@ namespace DuckGame
                 return;
             if (connection == DuckNetwork.localConnection && inputProfile.Pressed("ANY"))
             {
-                DuckGame.NetIndex8 authority = this.authority;
+                NetIndex8 authority = this.authority;
                 this.authority = ++authority;
             }
             if (Network.isActive && connection == DuckNetwork.localConnection && Profiles.experienceProfile != null && profile.linkedProfile == Profiles.experienceProfile)
@@ -1128,9 +1128,9 @@ namespace DuckGame
                         _blind.yscale = Math.Max(0f, Math.Min(this._blindLerp * 3f - i * 0.05f, 1f));
                         _blind.depth = 0.91f + i * 0.008f;
                         _blind.flipH = false;
-                        Graphics.Draw(_blind, base.x - 3f + i * (9f * this._blindLerp), base.y + 1f);
+                        Graphics.Draw(_blind, x - 3f + i * (9f * this._blindLerp), y + 1f);
                         _blind.flipH = true;
-                        Graphics.Draw(_blind, base.x + 4f + 140f - i * (9f * this._blindLerp), base.y + 1f);
+                        Graphics.Draw(_blind, x + 4f + 140f - i * (9f * this._blindLerp), y + 1f);
                     }
                     float num = Math.Max((this._blindLerp - 0.5f) * 2f, 0f);
                     if (num > 0.01f)

@@ -25,13 +25,13 @@ namespace DuckGame
         private static bool _betaBuild = true;
         private static bool _pressBuild = true;
 
-        public static string version => DG.MakeVersionString(DG._versionMajor, DG._versionHigh, DG._versionLow);
+        public static string version => MakeVersionString(_versionMajor, _versionHigh, _versionLow);
 
-        public static int versionHigh => DG._versionHigh;
+        public static int versionHigh => _versionHigh;
 
-        public static int versionLow => DG._versionLow;
+        public static int versionLow => _versionLow;
 
-        public static int versionMajor => DG._versionMajor;
+        public static int versionMajor => _versionMajor;
 
         public static string MakeVersionString(int pMajor, int pHigh, int pLow) => "1." + pMajor.ToString() + "." + pHigh.ToString() + "." + pLow.ToString();
 
@@ -168,21 +168,21 @@ namespace DuckGame
             {
                 if (NetworkDebugger.enabled)
                     return (ulong)(1330 + NetworkDebugger.currentIndex);
-                return Steam.user != null ? Steam.user.id : DG._localID;
+                return Steam.user != null ? Steam.user.id : _localID;
             }
         }
 
-        public static void SetVersion(string v) => DG._localID = (ulong)Rando.Long();
+        public static void SetVersion(string v) => _localID = (ulong)Rando.Long();
 
         //public static bool InitializeDRM() => true;
 
-        public static bool drmFailure => DG._drmFailure;
+        public static bool drmFailure => _drmFailure;
 
-        public static bool devBuild => DG._devBuild;
+        public static bool devBuild => _devBuild;
 
-        public static bool betaBuild => DG._betaBuild;
+        public static bool betaBuild => _betaBuild;
 
-        public static bool pressBuild => DG._pressBuild;
+        public static bool pressBuild => _pressBuild;
 
         public static bool buildExpired => false;
 
@@ -193,7 +193,7 @@ namespace DuckGame
           ModConfiguration pModConfig,
           string pLogMessage)
         {
-            return DG.GetCrashWindowString(pException, pModConfig.name, pLogMessage);
+            return GetCrashWindowString(pException, pModConfig.name, pLogMessage);
         }
 
         public static string GetCrashWindowString(
@@ -201,7 +201,7 @@ namespace DuckGame
           Assembly pAssembly,
           string pLogMessage)
         {
-            return DG.GetCrashWindowString(pException, pAssembly != null ? pAssembly.GetName().Name : null, pLogMessage);
+            return GetCrashWindowString(pException, pAssembly != null ? pAssembly.GetName().Name : null, pLogMessage);
         }
 
         public static string GetCrashWindowString(
@@ -209,11 +209,11 @@ namespace DuckGame
           string pAssemblyName,
           string pLogMessage)
         {
-            int num = DG.versionMajor;
+            int num = versionMajor;
             string str1 = num.ToString();
-            num = DG.versionHigh;
+            num = versionHigh;
             string str2 = num.ToString();
-            num = DG.versionLow;
+            num = versionLow;
             string str3 = num.ToString();
             string str4 = str1 + str2 + str3;
             string str5 = "";

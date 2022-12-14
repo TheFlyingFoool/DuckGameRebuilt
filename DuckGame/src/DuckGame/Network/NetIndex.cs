@@ -31,7 +31,7 @@ namespace DuckGame
         {
             _index = index;
             _zeroSpecial = zeroSpecial;
-            max = NetIndex16.MaxForBits(16);
+            max = MaxForBits(16);
             if (_zeroSpecial)
                 return;
             ++max;

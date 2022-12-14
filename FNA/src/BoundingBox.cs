@@ -327,12 +327,12 @@ namespace Microsoft.Xna.Framework
 			corners[7].Z = this.Min.Z;
 		}
 
-		public Nullable<float> Intersects(Ray ray)
+		public float? Intersects(Ray ray)
 		{
 			return ray.Intersects(this);
 		}
 
-		public void Intersects(ref Ray ray, out Nullable<float> result)
+		public void Intersects(ref Ray ray, out float? result)
 		{
 			result = Intersects(ray);
 		}
@@ -499,21 +499,21 @@ namespace Microsoft.Xna.Framework
 			return (this.Min == other.Min) && (this.Max == other.Max);
 		}
 
-		#endregion
+        #endregion
 
-		#region Public Static Methods
+        #region Public Static Methods
 
-		/// <summary>
-		/// Create a bounding box from the given list of points.
-		/// </summary>
-		/// <param name="points">
-		/// The list of Vector3 instances defining the point cloud to bound.
-		/// </param>
-		/// <returns>A bounding box that encapsulates the given point cloud.</returns>
-		/// <exception cref="System.ArgumentException">
-		/// Thrown if the given list has no points.
-		/// </exception>
-		public static BoundingBox CreateFromPoints(IEnumerable<Vector3> points)
+        /// <summary>
+        /// Create a bounding box from the given list of points.
+        /// </summary>
+        /// <param name="points">
+        /// The list of Vector3 instances defining the point cloud to bound.
+        /// </param>
+        /// <returns>A bounding box that encapsulates the given point cloud.</returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown if the given list has no points.
+        /// </exception>
+        public static BoundingBox CreateFromPoints(IEnumerable<Vector3> points)
 		{
 			if (points == null)
 			{

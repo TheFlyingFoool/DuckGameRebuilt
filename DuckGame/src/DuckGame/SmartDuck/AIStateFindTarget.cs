@@ -36,7 +36,7 @@ namespace DuckGame
             }
             if (this._target == null)
             {
-                List<Thing> list = Level.current.things[typeof(Duck)].Where<Thing>(x => x != duck && !(x as Duck).dead).ToList<Thing>();
+                List<Thing> list = Level.current.things[typeof(Duck)].Where(x => x != duck && !(x as Duck).dead).ToList();
                 if (!(AI.Nearest(duck.position, list) is Duck duck1))
                     return new AIStateWait(Rando.Float(0.8f, 1f));
                 this._target = duck1;
@@ -49,7 +49,7 @@ namespace DuckGame
                     this._scatterWait -= 0.01f;
                     if (_scatterWait < 0.0)
                     {
-                        List<Thing> list = Level.current.things[typeof(PathNode)].ToList<Thing>();
+                        List<Thing> list = Level.current.things[typeof(PathNode)].ToList();
                         ai.SetTarget(list[Rando.Int(list.Count - 1)].position);
                         this._state.Push(new AIStateWait(1f + Rando.Float(1f)));
                         this._scatterWait = 1f;

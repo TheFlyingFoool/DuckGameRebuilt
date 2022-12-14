@@ -27,8 +27,8 @@ namespace DuckGame
             {
                 foreach (Mod accessibleMod in (IEnumerable<Mod>)ModLoader.accessibleMods)
                 {
-                    List<System.Type> typeList = accessibleMod.GetTypeList(typeof(T));
-                    foreach (System.Type type in accessibleMod.configuration.contentManager.Compile<T>(accessibleMod))
+                    List<Type> typeList = accessibleMod.GetTypeList(typeof(T));
+                    foreach (Type type in accessibleMod.configuration.contentManager.Compile<T>(accessibleMod))
                     {
                         list.Add(type);
                         typeList.Add(type);
@@ -37,7 +37,7 @@ namespace DuckGame
             }
             else
             {
-                foreach (System.Type subclass in Editor.GetSubclasses(typeof(T)))
+                foreach (Type subclass in Editor.GetSubclasses(typeof(T)))
                     list.Add(subclass);
             }
         }
@@ -59,7 +59,7 @@ namespace DuckGame
                     break;
                 }
             }
-            return args.Name.StartsWith("Steam,") ? AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault<Assembly>(x => x.FullName.StartsWith("Steam,") || x.FullName.StartsWith("Steam.Debug,")) : null;
+            return args.Name.StartsWith("Steam,") ? AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.FullName.StartsWith("Steam,") || x.FullName.StartsWith("Steam.Debug,")) : null;
         }
 
         public static void PreInitializeMods()
@@ -67,7 +67,7 @@ namespace DuckGame
             if (!MonoMain.moddingEnabled)
                 return;
             ModLoader.AddMod(CoreMod.coreMod = new CoreMod());
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(ManagedContent.ResolveModAssembly);
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(ResolveModAssembly);
             DuckFile.CreatePath(DuckFile.modsDirectory);
             DuckFile.CreatePath(DuckFile.globalModsDirectory);
             ModLoader.PreLoadMods(DuckFile.modsDirectory);
@@ -82,11 +82,11 @@ namespace DuckGame
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() =>
            {
                ModLoader.InitializeAssemblyArray();
-               ManagedContent.InitializeContentSet<Thing>(ManagedContent.Things);
-               ManagedContent.InitializeContentSet<AmmoType>(ManagedContent.AmmoTypes);
-               ManagedContent.InitializeContentSet<DeathCrateSetting>(ManagedContent.DeathCrateSettings);
-               ManagedContent.InitializeContentSet<DestroyType>(ManagedContent.DestroyTypes);
-               ContentProperties.InitializeBags(ManagedContent.Things.Types);
+               InitializeContentSet(Things);
+               InitializeContentSet(AmmoTypes);
+               InitializeContentSet(DeathCrateSettings);
+               InitializeContentSet(DestroyTypes);
+               ContentProperties.InitializeBags(Things.Types);
            }, null, "ModLoader Initializes"));
         }
     }

@@ -43,7 +43,7 @@ namespace DuckGame
 
         public void Open(string text)
         {
-            ArcadeTestDialogue.tooSlow = false;
+            tooSlow = false;
             opened = true;
             _text = text;
             _caption = "Arcade Machine Validity Test!";

@@ -12,7 +12,7 @@ namespace DuckGame
     public class ConfettiParticle : PhysicsParticle, IFactory
     {
         public static int kMaxSparks = 64;
-        public static ConfettiParticle[] _sparks = new ConfettiParticle[ConfettiParticle.kMaxSparks];
+        public static ConfettiParticle[] _sparks = new ConfettiParticle[kMaxSparks];
         public static int _lastActiveSpark = 0;
         private float _killSpeed = 0.03f;
         public Color _color;
@@ -31,17 +31,17 @@ namespace DuckGame
           bool lineType = false)
         {
             ConfettiParticle confettiParticle;
-            if (ConfettiParticle._sparks[ConfettiParticle._lastActiveSpark] == null)
+            if (_sparks[_lastActiveSpark] == null)
             {
                 confettiParticle = new ConfettiParticle();
-                ConfettiParticle._sparks[ConfettiParticle._lastActiveSpark] = confettiParticle;
+                _sparks[_lastActiveSpark] = confettiParticle;
             }
             else
-                confettiParticle = ConfettiParticle._sparks[ConfettiParticle._lastActiveSpark];
-            ConfettiParticle._lastActiveSpark = (ConfettiParticle._lastActiveSpark + 1) % ConfettiParticle.kMaxSparks;
+                confettiParticle = _sparks[_lastActiveSpark];
+            _lastActiveSpark = (_lastActiveSpark + 1) % kMaxSparks;
             confettiParticle.ResetProperties();
             confettiParticle.Init(xpos, ypos, hitAngle, killSpeed);
-            confettiParticle.globalIndex = Thing.GetGlobalIndex();
+            confettiParticle.globalIndex = GetGlobalIndex();
             confettiParticle._stringConfetti = lineType;
             return confettiParticle;
         }
@@ -62,8 +62,8 @@ namespace DuckGame
             _bounceEfficiency = 0.1f;
             depth = (Depth)0.9f;
             _killSpeed = killSpeed;
-            _color = Color.RainbowColors[ConfettiParticle._confettiNumber % Color.RainbowColors.Count];
-            ++ConfettiParticle._confettiNumber;
+            _color = Color.RainbowColors[_confettiNumber % Color.RainbowColors.Count];
+            ++_confettiNumber;
             _width = 1f;
             life = Rando.Float(0.8f, 1f);
             sin = Rando.Float(3.14f);

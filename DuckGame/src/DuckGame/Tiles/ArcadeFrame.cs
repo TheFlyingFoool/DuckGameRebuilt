@@ -131,9 +131,9 @@ namespace DuckGame
                 Vec2 renderTargetSize = GetRenderTargetSize();
                 _image.depth = depth + 10;
                 _image.scale = new Vec2(0.1666667f);
-                DuckGame.Graphics.doSnap = false;
-                DuckGame.Graphics.Draw(_image, x - renderTargetSize.x / 2f, y - renderTargetSize.y / 2f);
-                DuckGame.Graphics.doSnap = true;
+                Graphics.doSnap = false;
+                Graphics.Draw(_image, x - renderTargetSize.x / 2f, y - renderTargetSize.y / 2f);
+                Graphics.doSnap = true;
             }
             base.Draw();
         }

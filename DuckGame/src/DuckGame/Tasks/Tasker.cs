@@ -18,12 +18,12 @@ namespace DuckGame
 
         public static void RunTasks(uint max = 4294967295)
         {
-            lock (Tasker._taskLock)
+            lock (_taskLock)
             {
-                while (Tasker._promises.Count != 0 && max > 0U)
+                while (_promises.Count != 0 && max > 0U)
                 {
                     --max;
-                    Tasker._promises.Dequeue().Execute();
+                    _promises.Dequeue().Execute();
                 }
             }
         }
@@ -32,26 +32,26 @@ namespace DuckGame
 
         public static Promise<T> Task<T>(Func<T> function)
         {
-            lock (Tasker._taskLock)
+            lock (_taskLock)
             {
                 Promise<T> promise = new Promise<T>(function);
-                if (Tasker.IsMainThread)
+                if (IsMainThread)
                     promise.Execute();
                 else
-                    Tasker._promises.Enqueue(promise);
+                    _promises.Enqueue(promise);
                 return promise;
             }
         }
 
         public static Promise Task(Action function)
         {
-            lock (Tasker._taskLock)
+            lock (_taskLock)
             {
                 Promise promise = new Promise(function);
-                if (Tasker.IsMainThread)
+                if (IsMainThread)
                     promise.Execute();
                 else
-                    Tasker._promises.Enqueue(promise);
+                    _promises.Enqueue(promise);
                 return promise;
             }
         }

@@ -40,10 +40,10 @@ namespace DuckGame
             allowHints = canHint;
             _teams = t;
             _showScreen = true;
-            _persona[0] = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
-            _persona[1] = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
-            _persona[2] = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
-            _persona[3] = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
+            _persona[0] = Persona.all.ElementAt(Rando.Int(3));
+            _persona[1] = Persona.all.ElementAt(Rando.Int(3));
+            _persona[2] = Persona.all.ElementAt(Rando.Int(3));
+            _persona[3] = Persona.all.ElementAt(Rando.Int(3));
         }
 
         public override void Initialize()

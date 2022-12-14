@@ -118,7 +118,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal && owner == null)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             if (bullet.isLocal)
                 Destroy(new DTShot(bullet));
             return false;

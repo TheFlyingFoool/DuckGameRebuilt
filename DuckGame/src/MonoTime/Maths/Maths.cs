@@ -71,7 +71,7 @@ namespace DuckGame
 
         public static float Ratio(int val1, int val2) => val2 == 0.0 ? val1 : val1 / (float)val2;
 
-        public static float NormalizeSection(float value, float sectionMin, float sectionMax) => Maths.Clamp(Maths.Clamp(value - sectionMin, 0f, sectionMax) / (sectionMax - sectionMin), 0f, 1f);
+        public static float NormalizeSection(float value, float sectionMin, float sectionMax) => Clamp(Clamp(value - sectionMin, 0f, sectionMax) / (sectionMax - sectionMin), 0f, 1f);
 
         public static float CountDown(float value, float amount, float min = 0f)
         {
@@ -123,13 +123,13 @@ namespace DuckGame
 
         public static float RadToDeg(float rad) => rad * 57.29578f;
 
-        public static float PointDirection(Vec2 p1, Vec2 p2) => Maths.RadToDeg((float)Math.Atan2(p1.y - p2.y, p2.x - p1.x));
+        public static float PointDirection(Vec2 p1, Vec2 p2) => RadToDeg((float)Math.Atan2(p1.y - p2.y, p2.x - p1.x));
 
         public static float PointDirectionRad(Vec2 p1, Vec2 p2) => (float)Math.Atan2(p1.y - p2.y, p2.x - p1.x);
 
         public static float PointDirection2(Vec2 p1, Vec2 p2) => (float)Math.Atan2(p2.y, p2.x) - (float)Math.Atan2(p1.y, p1.x);
 
-        public static float PointDirection(float x1, float y1, float x2, float y2) => Maths.RadToDeg((float)Math.Atan2(y1 - y2, x2 - x1));
+        public static float PointDirection(float x1, float y1, float x2, float y2) => RadToDeg((float)Math.Atan2(y1 - y2, x2 - x1));
 
         public static float Clamp(float val, float min, float max) => Math.Min(Math.Max(val, min), max);
         public static double Clamp(double val, double min, double max) => Math.Min(Math.Max(val, min), max);

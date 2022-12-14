@@ -77,19 +77,19 @@ namespace DbMon.NET
 
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool InitializeSecurityDescriptor(
-          ref DebugMonitor.SECURITY_DESCRIPTOR sd,
+          ref SECURITY_DESCRIPTOR sd,
           uint dwRevision);
 
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetSecurityDescriptorDacl(
-          ref DebugMonitor.SECURITY_DESCRIPTOR sd,
+          ref SECURITY_DESCRIPTOR sd,
           bool daclPresent,
           IntPtr dacl,
           bool daclDefaulted);
 
         [DllImport("kernel32.dll")]
         private static extern IntPtr CreateEvent(
-          ref DebugMonitor.SECURITY_ATTRIBUTES sa,
+          ref SECURITY_ATTRIBUTES sa,
           bool bManualReset,
           bool bInitialState,
           string lpName);
@@ -103,8 +103,8 @@ namespace DbMon.NET
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern IntPtr CreateFileMapping(
           IntPtr hFile,
-          ref DebugMonitor.SECURITY_ATTRIBUTES lpFileMappingAttributes,
-          DebugMonitor.PageProtection flProtect,
+          ref SECURITY_ATTRIBUTES lpFileMappingAttributes,
+          PageProtection flProtect,
           uint dwMaximumSizeHigh,
           uint dwMaximumSizeLow,
           string lpName);
@@ -123,34 +123,34 @@ namespace DbMon.NET
         /// <summary>Starts this debug monitor</summary>
         public static void Start()
         {
-            lock (DebugMonitor.m_SyncRoot)
+            lock (m_SyncRoot)
             {
-                if (DebugMonitor.m_Capturer != null)
+                if (m_Capturer != null)
                     throw new ApplicationException("This DebugMonitor is already started.");
                 if (Environment.OSVersion.ToString().IndexOf("Microsoft") == -1)
                     throw new NotSupportedException("This DebugMonitor is only supported on Microsoft operating systems.");
                 bool createdNew = false;
-                DebugMonitor.m_Mutex = new Mutex(false, typeof(DebugMonitor).Namespace, out createdNew);
+                m_Mutex = new Mutex(false, typeof(DebugMonitor).Namespace, out createdNew);
                 if (!createdNew)
                     throw new ApplicationException("There is already an instance of 'DbMon.NET' running.");
-                DebugMonitor.SECURITY_DESCRIPTOR sd = new DebugMonitor.SECURITY_DESCRIPTOR();
-                if (!DebugMonitor.InitializeSecurityDescriptor(ref sd, 1U))
-                    throw DebugMonitor.CreateApplicationException("Failed to initializes the security descriptor.");
-                if (!DebugMonitor.SetSecurityDescriptorDacl(ref sd, true, IntPtr.Zero, false))
-                    throw DebugMonitor.CreateApplicationException("Failed to initializes the security descriptor");
-                DebugMonitor.SECURITY_ATTRIBUTES securityAttributes = new DebugMonitor.SECURITY_ATTRIBUTES();
-                DebugMonitor.m_AckEvent = DebugMonitor.CreateEvent(ref securityAttributes, false, false, "DBWIN_BUFFER_READY");
-                if (DebugMonitor.m_AckEvent == IntPtr.Zero)
-                    throw DebugMonitor.CreateApplicationException("Failed to create event 'DBWIN_BUFFER_READY'");
-                DebugMonitor.m_ReadyEvent = DebugMonitor.CreateEvent(ref securityAttributes, false, false, "DBWIN_DATA_READY");
-                if (DebugMonitor.m_ReadyEvent == IntPtr.Zero)
-                    throw DebugMonitor.CreateApplicationException("Failed to create event 'DBWIN_DATA_READY'");
-                DebugMonitor.m_SharedFile = DebugMonitor.CreateFileMapping(new IntPtr(-1), ref securityAttributes, DebugMonitor.PageProtection.ReadWrite, 0U, 4096U, "DBWIN_BUFFER");
-                DebugMonitor.m_SharedMem = !(DebugMonitor.m_SharedFile == IntPtr.Zero) ? DebugMonitor.MapViewOfFile(DebugMonitor.m_SharedFile, 4U, 0U, 0U, 512U) : throw DebugMonitor.CreateApplicationException("Failed to create a file mapping to slot 'DBWIN_BUFFER'");
-                if (DebugMonitor.m_SharedMem == IntPtr.Zero)
-                    throw DebugMonitor.CreateApplicationException("Failed to create a mapping view for slot 'DBWIN_BUFFER'");
-                DebugMonitor.m_Capturer = new Thread(new ThreadStart(DebugMonitor.Capture));
-                DebugMonitor.m_Capturer.Start();
+                SECURITY_DESCRIPTOR sd = new SECURITY_DESCRIPTOR();
+                if (!InitializeSecurityDescriptor(ref sd, 1U))
+                    throw CreateApplicationException("Failed to initializes the security descriptor.");
+                if (!SetSecurityDescriptorDacl(ref sd, true, IntPtr.Zero, false))
+                    throw CreateApplicationException("Failed to initializes the security descriptor");
+                SECURITY_ATTRIBUTES securityAttributes = new SECURITY_ATTRIBUTES();
+                m_AckEvent = CreateEvent(ref securityAttributes, false, false, "DBWIN_BUFFER_READY");
+                if (m_AckEvent == IntPtr.Zero)
+                    throw CreateApplicationException("Failed to create event 'DBWIN_BUFFER_READY'");
+                m_ReadyEvent = CreateEvent(ref securityAttributes, false, false, "DBWIN_DATA_READY");
+                if (m_ReadyEvent == IntPtr.Zero)
+                    throw CreateApplicationException("Failed to create event 'DBWIN_DATA_READY'");
+                m_SharedFile = CreateFileMapping(new IntPtr(-1), ref securityAttributes, PageProtection.ReadWrite, 0U, 4096U, "DBWIN_BUFFER");
+                m_SharedMem = !(m_SharedFile == IntPtr.Zero) ? MapViewOfFile(m_SharedFile, 4U, 0U, 0U, 512U) : throw CreateApplicationException("Failed to create a file mapping to slot 'DBWIN_BUFFER'");
+                if (m_SharedMem == IntPtr.Zero)
+                    throw CreateApplicationException("Failed to create a mapping view for slot 'DBWIN_BUFFER'");
+                m_Capturer = new Thread(new ThreadStart(Capture));
+                m_Capturer.Start();
             }
         }
 
@@ -159,19 +159,19 @@ namespace DbMon.NET
         {
             try
             {
-                IntPtr ptr = new IntPtr(DebugMonitor.m_SharedMem.ToInt32() + Marshal.SizeOf(typeof(int)));
+                IntPtr ptr = new IntPtr(m_SharedMem.ToInt32() + Marshal.SizeOf(typeof(int)));
                 while (true)
                 {
                     int num;
                     do
                     {
-                        DebugMonitor.SetEvent(DebugMonitor.m_AckEvent);
-                        num = DebugMonitor.WaitForSingleObject(DebugMonitor.m_ReadyEvent, uint.MaxValue);
-                        if (DebugMonitor.m_Capturer == null)
+                        SetEvent(m_AckEvent);
+                        num = WaitForSingleObject(m_ReadyEvent, uint.MaxValue);
+                        if (m_Capturer == null)
                             goto label_4;
                     }
                     while (num != 0);
-                    DebugMonitor.FireOnOutputDebugString(Marshal.ReadInt32(DebugMonitor.m_SharedMem), Marshal.PtrToStringAnsi(ptr));
+                    FireOnOutputDebugString(Marshal.ReadInt32(m_SharedMem), Marshal.PtrToStringAnsi(ptr));
                 }
             label_4:;
             }
@@ -181,17 +181,17 @@ namespace DbMon.NET
             }
             finally
             {
-                DebugMonitor.Dispose();
+                Dispose();
             }
         }
 
         private static void FireOnOutputDebugString(int pid, string text)
         {
-            if (DebugMonitor.OnOutputDebugString == null)
+            if (OnOutputDebugString == null)
                 return;
             try
             {
-                DebugMonitor.OnOutputDebugString(pid, text);
+                OnOutputDebugString(pid, text);
             }
             catch (Exception ex)
             {
@@ -202,18 +202,18 @@ namespace DbMon.NET
         /// <summary>Dispose all resources</summary>
         private static void Dispose()
         {
-            if (DebugMonitor.m_AckEvent != IntPtr.Zero)
-                DebugMonitor.m_AckEvent = DebugMonitor.CloseHandle(DebugMonitor.m_AckEvent) ? IntPtr.Zero : throw DebugMonitor.CreateApplicationException("Failed to close handle for 'AckEvent'");
-            if (DebugMonitor.m_ReadyEvent != IntPtr.Zero)
-                DebugMonitor.m_ReadyEvent = DebugMonitor.CloseHandle(DebugMonitor.m_ReadyEvent) ? IntPtr.Zero : throw DebugMonitor.CreateApplicationException("Failed to close handle for 'ReadyEvent'");
-            if (DebugMonitor.m_SharedFile != IntPtr.Zero)
-                DebugMonitor.m_SharedFile = DebugMonitor.CloseHandle(DebugMonitor.m_SharedFile) ? IntPtr.Zero : throw DebugMonitor.CreateApplicationException("Failed to close handle for 'SharedFile'");
-            if (DebugMonitor.m_SharedMem != IntPtr.Zero)
-                DebugMonitor.m_SharedMem = DebugMonitor.UnmapViewOfFile(DebugMonitor.m_SharedMem) ? IntPtr.Zero : throw DebugMonitor.CreateApplicationException("Failed to unmap view for slot 'DBWIN_BUFFER'");
-            if (DebugMonitor.m_Mutex == null)
+            if (m_AckEvent != IntPtr.Zero)
+                m_AckEvent = CloseHandle(m_AckEvent) ? IntPtr.Zero : throw CreateApplicationException("Failed to close handle for 'AckEvent'");
+            if (m_ReadyEvent != IntPtr.Zero)
+                m_ReadyEvent = CloseHandle(m_ReadyEvent) ? IntPtr.Zero : throw CreateApplicationException("Failed to close handle for 'ReadyEvent'");
+            if (m_SharedFile != IntPtr.Zero)
+                m_SharedFile = CloseHandle(m_SharedFile) ? IntPtr.Zero : throw CreateApplicationException("Failed to close handle for 'SharedFile'");
+            if (m_SharedMem != IntPtr.Zero)
+                m_SharedMem = UnmapViewOfFile(m_SharedMem) ? IntPtr.Zero : throw CreateApplicationException("Failed to unmap view for slot 'DBWIN_BUFFER'");
+            if (m_Mutex == null)
                 return;
-            DebugMonitor.m_Mutex.Close();
-            DebugMonitor.m_Mutex = null;
+            m_Mutex.Close();
+            m_Mutex = null;
         }
 
         /// <summary>
@@ -222,13 +222,13 @@ namespace DbMon.NET
         /// </summary>
         public static void Stop()
         {
-            lock (DebugMonitor.m_SyncRoot)
+            lock (m_SyncRoot)
             {
-                DebugMonitor.m_Capturer = DebugMonitor.m_Capturer != null ? null : throw new ObjectDisposedException(nameof(DebugMonitor), "This DebugMonitor is not running.");
-                DebugMonitor.PulseEvent(DebugMonitor.m_ReadyEvent);
+                m_Capturer = m_Capturer != null ? null : throw new ObjectDisposedException(nameof(DebugMonitor), "This DebugMonitor is not running.");
+                PulseEvent(m_ReadyEvent);
                 do
                     ;
-                while (DebugMonitor.m_AckEvent != IntPtr.Zero);
+                while (m_AckEvent != IntPtr.Zero);
             }
         }
 
@@ -257,7 +257,7 @@ namespace DbMon.NET
             public int bInheritHandle;
         }
 
-        [System.Flags]
+        [Flags]
         private enum PageProtection : uint
         {
             NoAccess = 1,

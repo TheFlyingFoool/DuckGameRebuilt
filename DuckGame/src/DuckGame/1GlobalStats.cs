@@ -41,37 +41,37 @@ namespace DuckGame
         public static bool HasAchievement(string pAchievement)
         {
             bool flag;
-            return !Global._achievementStatus.TryGetValue(pAchievement, out flag) ? Steam.GetAchievement(pAchievement) : flag;
+            return !_achievementStatus.TryGetValue(pAchievement, out flag) ? Steam.GetAchievement(pAchievement) : flag;
         }
 
         public static void GiveAchievement(string pAchievement)
         {
-            if (Global.HasAchievement(pAchievement))
+            if (HasAchievement(pAchievement))
                 return;
             Steam.SetAchievement(pAchievement);
-            Global._achievementStatus[pAchievement] = true;
+            _achievementStatus[pAchievement] = true;
         }
 
         public static GlobalData data
         {
-            get => Global._data;
-            set => Global._data = value;
+            get => _data;
+            set => _data = value;
         }
 
         public static void Initialize()
         {
-            foreach (string achievement in Global._achievementList)
-                Global._achievementStatus[achievement] = Steam.GetAchievement(achievement);
-            Global.data.unlockListIndex = Rando.Int(500);
-            Global.data.flag = 0;
-            Global.Load();
+            foreach (string achievement in _achievementList)
+                _achievementStatus[achievement] = Steam.GetAchievement(achievement);
+            data.unlockListIndex = Rando.Int(500);
+            data.flag = 0;
+            Load();
         }
 
         public static void Kill(Duck d, DestroyType type)
         {
             if (d.team == null || !(d.team.name == "SWACK"))
                 return;
-            ++Global.data.killsAsSwack;
+            ++data.killsAsSwack;
         }
 
         public static void WinLevel(Team t)
@@ -80,27 +80,27 @@ namespace DuckGame
 
         public static void WinMatch(Team t)
         {
-            if (!Global._data.hatWins.TryGetValue(t.name, out int n))
+            if (!_data.hatWins.TryGetValue(t.name, out int n))
             {
-                Global._data.hatWins[t.name] = 1;
+                _data.hatWins[t.name] = 1;
                 return;
             }
-            Global._data.hatWins[t.name] = n + 1;
+            _data.hatWins[t.name] = n + 1;
         }
 
         public static void PlayCustomLevel(string lev)
         {
-            if (!Global._data.customMapPlayCount.TryGetValue(lev, out int n))
+            if (!_data.customMapPlayCount.TryGetValue(lev, out int n))
             {
-                Global._data.customMapPlayCount[lev] = 1;
+                _data.customMapPlayCount[lev] = 1;
                 return;
             }
-            Global._data.customMapPlayCount[lev] = n + 1;
+            _data.customMapPlayCount[lev] = n + 1;
         }
 
         public static void Save()
         {
-            if (!Global.loadCalled)
+            if (!loadCalled)
             {
                 if (!MonoMain.logFileOperations)
                     return;
@@ -112,13 +112,13 @@ namespace DuckGame
                     DevConsole.Log(DCSection.General, "Global.Save()");
                 DuckXML doc = new DuckXML();
                 DXMLNode node = new DXMLNode("GlobalData");
-                Global._data.boughtHats = "";
-                foreach (string boughtHat in Global.boughtHats)
+                _data.boughtHats = "";
+                foreach (string boughtHat in boughtHats)
                 {
-                    GlobalData data = Global._data;
+                    GlobalData data = _data;
                     data.boughtHats = data.boughtHats + boughtHat + "|";
                 }
-                node.Add(Global._data.Serialize());
+                node.Add(_data.Serialize());
                 doc.Add(node);
                 string globalFileName = Global.globalFileName;
                 DuckFile.SaveDuckXML(doc, globalFileName);
@@ -131,26 +131,26 @@ namespace DuckGame
         {
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "Global.Load()");
-            Global.loadCalled = true;
+            loadCalled = true;
             string globalFileName = Global.globalFileName;
-            DXMLNode dxmlNode = Global._customLoadDoc ?? DuckFile.LoadDuckXML(globalFileName);
+            DXMLNode dxmlNode = _customLoadDoc ?? DuckFile.LoadDuckXML(globalFileName);
             if (dxmlNode != null)
             {
                 Profile profile = new Profile("");
                 IEnumerable<DXMLNode> source = dxmlNode.Elements("GlobalData");
                 if (source != null)
                 {
-                    foreach (DXMLNode element in source.Elements<DXMLNode>())
+                    foreach (DXMLNode element in source.Elements())
                     {
                         if (element.Name == nameof(Global))
                         {
-                            Global._data.Deserialize(element);
+                            _data.Deserialize(element);
                             break;
                         }
                     }
                 }
             }
-            string boughtHats = Global._data.boughtHats;
+            string boughtHats = _data.boughtHats;
             char[] chArray = new char[1] { '|' };
             foreach (string str in boughtHats.Split(chArray))
             {

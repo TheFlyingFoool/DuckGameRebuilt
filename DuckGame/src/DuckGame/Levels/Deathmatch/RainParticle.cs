@@ -30,7 +30,7 @@ namespace DuckGame
                 int num1 = (int)_frame;
                 if (num1 > 3)
                     num1 = 3;
-                RainParticle.splash.frame = num1;
+                splash.frame = num1;
                 _frame += 0.3f;
                 if (_frame >= 3.9f)
                     alpha = 0f;
@@ -38,9 +38,9 @@ namespace DuckGame
                 Vec3 vec3 = new Viewport(0, 0, (int)Layer.HUD.width, (int)Layer.HUD.height).Project((Vector3)new Vec3(position.x, z, position.y), (Microsoft.Xna.Framework.Matrix)Layer.Game.projection, (Microsoft.Xna.Framework.Matrix)Layer.Game.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
                 this.position = new Vec2(vec3.x, vec3.y);
                 float num2 = z / 200f;
-                RainParticle.splash.depth = -0.02f + num2 * 0.1f;
-                RainParticle.splash.color = Color.White * 0.8f;
-                DuckGame.Graphics.Draw(splash, this.position.x - 6f, this.position.y - 6f);
+                splash.depth = -0.02f + num2 * 0.1f;
+                splash.color = Color.White * 0.8f;
+                Graphics.Draw(splash, this.position.x - 6f, this.position.y - 6f);
                 this.position = position;
             }
             else

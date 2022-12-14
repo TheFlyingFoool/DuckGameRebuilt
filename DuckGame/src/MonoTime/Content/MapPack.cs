@@ -46,13 +46,13 @@ namespace DuckGame
                 _name = Path.GetFileName(pDir),
                 path = pDir
             };
-            MapPack._mapPacks.Add(pPack);
+            _mapPacks.Add(pPack);
             if (pExistingMod == null && pExistingConfig == null)
             {
                 if (!DuckFile.FileExists(pDir + "/preview.png"))
-                    System.IO.File.Copy(DuckFile.contentDirectory + "/mappack_preview.pngfile", pDir + "/preview.png");
+                    File.Copy(DuckFile.contentDirectory + "/mappack_preview.pngfile", pDir + "/preview.png");
                 if (!DuckFile.FileExists(pDir + "/icon.png"))
-                    System.IO.File.Copy(DuckFile.contentDirectory + "/mappack_icon.pngfile", pDir + "/icon.png");
+                    File.Copy(DuckFile.contentDirectory + "/mappack_icon.pngfile", pDir + "/icon.png");
                 if (!DuckFile.FileExists(pDir + "/mappack_info.txt"))
                 {
                     string str = "Dan Rando";
@@ -76,7 +76,7 @@ namespace DuckGame
             {
                 try
                 {
-                    Tex2D tex = (Tex2D)ContentPack.LoadTexture2D(pDir + "/icon.png");
+                    Tex2D tex = (Tex2D)LoadTexture2D(pDir + "/icon.png");
                     pPack._icon = new Sprite(tex);
                 }
                 catch (Exception)
@@ -86,16 +86,16 @@ namespace DuckGame
             }
             if (!mod.configuration.disabled)
             {
-                MapPack.active.Add(pPack);
+                active.Add(pPack);
                 if (!DuckFile.FileExists(pDir + "/screenshot.png"))
                 {
                     if (DuckFile.FileExists(pDir + "/screenshot_autogen.png"))
-                        pPack._preview = (Tex2D)ContentPack.LoadTexture2D(pDir + "/screenshot_autogen.png");
+                        pPack._preview = (Tex2D)LoadTexture2D(pDir + "/screenshot_autogen.png");
                     else
                         pPack._needsPreviewGenerationDir = pDir;
                 }
                 else
-                    pPack._preview = (Tex2D)ContentPack.LoadTexture2D(pDir + "/screenshot.png");
+                    pPack._preview = (Tex2D)LoadTexture2D(pDir + "/screenshot.png");
             }
             return mod;
         }
@@ -103,18 +103,18 @@ namespace DuckGame
         public static void InitializeMapPacks()
         {
             foreach (string directory in DuckFile.GetDirectories(DuckFile.mappackDirectory))
-                MapPack.LoadMapPack(directory);
+                LoadMapPack(directory);
             if (Steam.user == null)
                 return;
             foreach (string directory in DuckFile.GetDirectories(DuckFile.globalMappackDirectory))
-                MapPack.LoadMapPack(directory);
+                LoadMapPack(directory);
         }
 
         public static void RegeneratePreviewsIfNecessary()
         {
             try
             {
-                foreach (MapPack mapPack in MapPack._mapPacks)
+                foreach (MapPack mapPack in _mapPacks)
                 {
                     if (mapPack._needsPreviewGenerationDir != null)
                         mapPack.RegeneratePreviewImage(mapPack._needsPreviewGenerationDir + "/screenshot_autogen.png");
@@ -136,17 +136,17 @@ namespace DuckGame
             int num1 = 1280;
             int num2 = 720;
             RenderTarget2D t = new RenderTarget2D(num1, num2);
-            Viewport viewport = DuckGame.Graphics.viewport;
-            RenderTarget2D renderTarget = DuckGame.Graphics.GetRenderTarget();
+            Viewport viewport = Graphics.viewport;
+            RenderTarget2D renderTarget = Graphics.GetRenderTarget();
             Sprite sprite = new Sprite("shiny");
-            DuckGame.Graphics.SetRenderTarget(t);
-            DuckGame.Graphics.viewport = new Viewport(0, 0, num1, num2);
+            Graphics.SetRenderTarget(t);
+            Graphics.viewport = new Viewport(0, 0, num1, num2);
             Camera camera = new Camera(0f, 0f, num1, num2);
-            DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
-            DuckGame.Graphics.Draw(sprite.texture, 0f, 0f, 4f, 4f, (Depth)0.1f);
+            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
+            Graphics.Draw(sprite.texture, 0f, 0f, 4f, 4f, (Depth)0.1f);
             string[] files = Directory.GetFiles(_mod.configuration.directory, "*.lev", SearchOption.AllDirectories);
             int num3 = 0;
-            int num4 = (int)Math.Ceiling(Math.Sqrt(files.Count<string>()));
+            int num4 = (int)Math.Ceiling(Math.Sqrt(files.Count()));
             float num5 = (float)(1280.0 / num4 / 1280.0 * 4.0);
             Vec2 zero = Vec2.Zero;
             foreach (string levelPath in files)
@@ -165,7 +165,7 @@ namespace DuckGame
                                     float num6 = 0.95f;
                                     Vec2 vec2_1 = new Vec2(preview.preview.Width * num5 * num6, preview.preview.Height * num5 * num6);
                                     Vec2 vec2_2 = new Vec2(preview.preview.Width * num5, preview.preview.Height * num5);
-                                    DuckGame.Graphics.Draw((Tex2D)preview.preview, new Vec2((float)(zero.x + vec2_2.x / 2.0 - vec2_1.x / 2.0), (float)(zero.y + vec2_2.y / 2.0 - vec2_1.y / 2.0)), new Rectangle?(new Rectangle(0f, 10f, 320f, 180f)), Color.White, 0f, Vec2.Zero, new Vec2(num6 * num5), SpriteEffects.None, (Depth)0.9f);
+                                    Graphics.Draw((Tex2D)preview.preview, new Vec2((float)(zero.x + vec2_2.x / 2.0 - vec2_1.x / 2.0), (float)(zero.y + vec2_2.y / 2.0 - vec2_1.y / 2.0)), new Rectangle?(new Rectangle(0f, 10f, 320f, 180f)), Color.White, 0f, Vec2.Zero, new Vec2(num6 * num5), SpriteEffects.None, (Depth)0.9f);
                                 }
                             }
                         }
@@ -185,11 +185,11 @@ namespace DuckGame
                 else
                     break;
             }
-            DuckGame.Graphics.screen.End();
-            DuckGame.Graphics.SetRenderTarget(renderTarget);
-            DuckGame.Graphics.viewport = viewport;
+            Graphics.screen.End();
+            Graphics.SetRenderTarget(renderTarget);
+            Graphics.viewport = viewport;
             _preview = t.ToTex2D();
-            FileStream fileStream = System.IO.File.Create(pPath);
+            FileStream fileStream = File.Create(pPath);
             (_preview.nativeObject as Texture2D).SaveAsPng(fileStream, _preview.width, _preview.height);
             fileStream.Close();
             return pPath;

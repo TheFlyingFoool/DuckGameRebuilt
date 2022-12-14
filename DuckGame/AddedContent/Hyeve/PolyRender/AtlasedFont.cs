@@ -229,10 +229,10 @@ namespace AddedContent.Hyeve.PolyRender
 
         private static Color FromArgb(long Value)
         {
-            var a = (byte)(Value >> 24 & 255L) / 255f;
-            var r = (byte)(Value >> 16 & 255L) / 255f;
-            var g = (byte)(Value >> 8 & 255L) / 255f;
-            var b = (byte)(Value & 255L) / 255f;
+            float a = (byte)(Value >> 24 & 255L) / 255f;
+            float r = (byte)(Value >> 16 & 255L) / 255f;
+            float g = (byte)(Value >> 8 & 255L) / 255f;
+            float b = (byte)(Value & 255L) / 255f;
 
             return new Color(r*a, g*a, b*a, a);
         }

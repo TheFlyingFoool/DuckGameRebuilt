@@ -29,8 +29,8 @@ namespace DuckGame
             _collisionSize = new Vec2(8f, 22f);
             _collisionOffset = new Vec2(-4f, -7f);
             center = new Vec2(16f, 16f);
-            wait = 0.1f + RoboDuck._waitDif;
-            RoboDuck._waitDif += 0.1f;
+            wait = 0.1f + _waitDif;
+            _waitDif += 0.1f;
             _visibleInGame = false;
         }
 

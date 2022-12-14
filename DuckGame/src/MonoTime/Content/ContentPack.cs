@@ -39,7 +39,7 @@ namespace DuckGame
                 string str = path.Substring(0, path.Length - 4);
                 if (path.EndsWith(".png"))
                 {
-                    Texture2D texture2D = TextureConverter.LoadPNGWithPinkAwesomeness(DuckGame.Graphics.device, new Bitmap(new MemoryStream(data)), true);
+                    Texture2D texture2D = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, new Bitmap(new MemoryStream(data)), true);
                     _textures[str] = texture2D;
                     Content.textures[str] = (Tex2D)texture2D;
                 }
@@ -77,7 +77,7 @@ namespace DuckGame
             int length = _modConfig.contentDirectory.Length;
             foreach (string file in files)
             {
-                Texture2D texture2D = ContentPack.LoadTexture2DInternal(file);
+                Texture2D texture2D = LoadTexture2DInternal(file);
                 string key = file.Substring(0, file.Length - 4);
                 _textures[key] = texture2D;
                 Content.textures[key] = (Tex2D)texture2D;
@@ -87,7 +87,7 @@ namespace DuckGame
                 string s = file;
                 MonoMain.currentActionQueue.Enqueue(new LoadingAction(() =>
                {
-                   ContentPack.currentPreloadPack = this;
+                   currentPreloadPack = this;
                    SoundEffect pEffect = LoadSoundInternal(s);
                    string str = s.Substring(0, s.Length - 4);
                    _sounds[str] = pEffect;
@@ -99,7 +99,7 @@ namespace DuckGame
                 levels = Content.GetFiles<Level>(str1);
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() =>
            {
-               ContentPack.currentPreloadPack = null;
+               currentPreloadPack = null;
                if (kilobytesPreAllocated / 1000L <= 20L)
                    return;
                MonoMain.CalculateModMemoryOffendersList();
@@ -110,7 +110,7 @@ namespace DuckGame
         {
             try
             {
-                return TextureConverter.LoadPNGWithPinkAwesomeness(DuckGame.Graphics.device, file, processPink);
+                return TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, file, processPink);
             }
             catch (Exception ex)
             {
@@ -122,7 +122,7 @@ namespace DuckGame
         {
             try
             {
-                return TextureConverter.LoadPNGWithPinkAwesomeness(DuckGame.Graphics.device, data, processPink);
+                return TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, data, processPink);
             }
             catch (Exception ex)
             {
@@ -151,11 +151,11 @@ namespace DuckGame
             Texture2D texture2D = null;
             if (!name.EndsWith(".png"))
                 name += ".png";
-            if (System.IO.File.Exists(name))
+            if (File.Exists(name))
             {
                 try
                 {
-                    texture2D = ContentPack.LoadTexture2DInternal(name);
+                    texture2D = LoadTexture2DInternal(name);
                 }
                 catch (Exception ex)
                 {
@@ -170,7 +170,7 @@ namespace DuckGame
             SoundEffect soundEffect = null;
             try
             {
-                soundEffect = new FileInfo(file).Length <= 5000000L ? SoundEffect.FromStream(new MemoryStream(System.IO.File.ReadAllBytes(file)), Path.GetExtension(file)) : SoundEffect.FromStream(new FileStream(file, FileMode.Open), Path.GetExtension(file));
+                soundEffect = new FileInfo(file).Length <= 5000000L ? SoundEffect.FromStream(new MemoryStream(File.ReadAllBytes(file)), Path.GetExtension(file)) : SoundEffect.FromStream(new FileStream(file, FileMode.Open), Path.GetExtension(file));
                 if (soundEffect != null)
                     soundEffect.file = file;
             }
@@ -189,7 +189,7 @@ namespace DuckGame
             SoundEffect soundEffect = null;
             if (Path.GetExtension(name) == "")
                 name += ".wav";
-            if (System.IO.File.Exists(name))
+            if (File.Exists(name))
                 soundEffect = LoadSoundInternal(name);
             return soundEffect;
         }
@@ -218,7 +218,7 @@ namespace DuckGame
             Song song = null;
             if (!name.EndsWith(".ogg"))
                 name += ".ogg";
-            if (System.IO.File.Exists(name))
+            if (File.Exists(name))
                 song = LoadSongInternal(name);
             return song;
         }
@@ -234,7 +234,7 @@ namespace DuckGame
                 Texture2D texture2D1;
                 if (_textures.TryGetValue(name, out texture2D1))
                     return (T)(object)texture2D1;
-                Texture2D texture2D2 = ContentPack.LoadTexture2D(name, _modConfig == null || _modConfig.processPinkTransparency);
+                Texture2D texture2D2 = LoadTexture2D(name, _modConfig == null || _modConfig.processPinkTransparency);
                 _textures[name] = texture2D2;
                 return (T)(object)texture2D2;
             }

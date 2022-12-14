@@ -111,7 +111,7 @@ namespace DuckGame
         {
             if (!_initializedFrame)
             {
-                if (Level.CheckRectAll<PhysicsObject>(_top.topLeft, _top.bottomRight).FirstOrDefault<PhysicsObject>(x => !(x is TeamHat)) != null)
+                if (Level.CheckRectAll<PhysicsObject>(_top.topLeft, _top.bottomRight).FirstOrDefault(x => !(x is TeamHat)) != null)
                     _sprite.frame = 1;
                 _initializedFrame = true;
             }
@@ -121,7 +121,7 @@ namespace DuckGame
                     Level.CheckRect<WireTileset>(topLeft + new Vec2(2f, 2f), bottomRight + new Vec2(-2f, -2f))?.Emit(type: 1);
                 if (_sprite.frame == 1)
                 {
-                    PhysicsObject physicsObject = Level.CheckRectAll<PhysicsObject>(_top.topLeft, _top.bottomRight).FirstOrDefault<PhysicsObject>(x => !(x is TeamHat));
+                    PhysicsObject physicsObject = Level.CheckRectAll<PhysicsObject>(_top.topLeft, _top.bottomRight).FirstOrDefault(x => !(x is TeamHat));
                     if (physicsObject == null)
                     {
                         SFX.Play("click");
@@ -132,7 +132,7 @@ namespace DuckGame
             }
             else if (_sprite.frame == 1)
             {
-                PhysicsObject physicsObject = Level.CheckRectAll<PhysicsObject>(_top.topLeft, _top.bottomRight).FirstOrDefault<PhysicsObject>(x => !(x is TeamHat));
+                PhysicsObject physicsObject = Level.CheckRectAll<PhysicsObject>(_top.topLeft, _top.bottomRight).FirstOrDefault(x => !(x is TeamHat));
                 if (physicsObject == null)
                 {
                     releaseHold += Maths.IncFrameTimer();

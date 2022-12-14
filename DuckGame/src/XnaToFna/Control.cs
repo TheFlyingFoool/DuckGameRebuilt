@@ -51,21 +51,21 @@ namespace XnaToFna.ProxyForms
 
         public Control()
         {
-            this.GlobalIndex = Control.AllControls.Count + 1;
+            this.GlobalIndex = AllControls.Count + 1;
             XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating control {0}, globally #{1}", GetType().Name, GlobalIndex));
-            Control.AllControls.Add(new WeakReference<Control>(this));
+            AllControls.Add(new WeakReference<Control>(this));
         }
 
         public static Control FromHandle(IntPtr ptr)
         {
             int index = (int)ptr - 1;
-            if (index < 0 || Control.AllControls.Count <= index)
+            if (index < 0 || AllControls.Count <= index)
                 return null;
-            WeakReference<Control> allControl = Control.AllControls[index];
+            WeakReference<Control> allControl = AllControls[index];
             Control target;
             if (allControl != null && allControl.TryGetTarget(out target))
                 return target;
-            Control.AllControls[index] = null;
+            AllControls[index] = null;
             return null;
         }
 

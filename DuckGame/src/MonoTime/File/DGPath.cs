@@ -35,7 +35,7 @@ namespace DuckGame
             {
                 if (_specialData != null)
                     return false;
-                return _file ? System.IO.File.Exists(_path) : Directory.Exists(_path);
+                return _file ? File.Exists(_path) : Directory.Exists(_path);
             }
         }
 
@@ -131,7 +131,7 @@ namespace DuckGame
             if (_directories == null)
             {
                 if (!isDirectory)
-                    throw new DGPath.DGPathException("DGPath.GetDirectories() does not work on file paths, only on directory paths.");
+                    throw new DGPathException("DGPath.GetDirectories() does not work on file paths, only on directory paths.");
                 if (!exists)
                 {
                     _directories = new DGPath[0];
@@ -158,7 +158,7 @@ namespace DuckGame
             if (!_files.TryGetValue(key, out files))
             {
                 if (!isDirectory)
-                    throw new DGPath.DGPathException("DGPath.GetFiles() does not work on file paths, only on directory paths.");
+                    throw new DGPathException("DGPath.GetFiles() does not work on file paths, only on directory paths.");
                 if (!exists)
                     files = new DGPath[0];
                 List<DGPath> dgPathList = new List<DGPath>();
@@ -191,11 +191,11 @@ namespace DuckGame
         internal void CheckFileValidity(bool pMustBeFile = true, bool pWriting = false)
         {
             if (pMustBeFile && !_file)
-                throw new DGPath.DGPathException("DGPath.ReadText(" + _path + ") failed: path is a directory, not a file.");
+                throw new DGPathException("DGPath.ReadText(" + _path + ") failed: path is a directory, not a file.");
             if (pWriting)
                 Directory.CreateDirectory((string)directory);
             else if (!exists)
-                throw new DGPath.DGPathException("DGPath.ReadText(" + _path + ") failed: file does not exist.");
+                throw new DGPathException("DGPath.ReadText(" + _path + ") failed: file does not exist.");
         }
 
         public DGPath(string pPath)
@@ -208,7 +208,7 @@ namespace DuckGame
             _filesAndDirectories = null;
             _specialData = null;
             int index = 0;
-            DGPath.kBuilder.Clear();
+            kBuilder.Clear();
             if (Program.IsLinuxD)// idk if any mods use the this class but becaue i dont super care atm i just guess at how this works functionally and applied linux :PP 
             {
                 if (Path.IsPathRooted(pPath))
@@ -229,7 +229,7 @@ namespace DuckGame
             else if (pPath.Length > 1 && pPath[1] == ':')
             {
                 _rooted = true;
-                DGPath.kBuilder.Append(char.ToUpper(pPath[0]));
+                kBuilder.Append(char.ToUpper(pPath[0]));
                 ++index;
             }
             for (; index < pPath.Length; ++index)
@@ -244,18 +244,18 @@ namespace DuckGame
                     case '\\':
                         if (!flag)
                         {
-                            DGPath.kBuilder.Append('/');
+                            kBuilder.Append('/');
                             flag = true;
                         }
                         _file = false;
                         break;
                     default:
-                        DGPath.kBuilder.Append(ch);
+                        kBuilder.Append(ch);
                         flag = false;
                         break;
                 }
             }
-            _path = DGPath.kBuilder.ToString();
+            _path = kBuilder.ToString();
             if (_file || _path[_path.Length - 1] == '/')
                 return;
             _path += "/";
@@ -297,9 +297,9 @@ namespace DuckGame
         public static DGPath operator +(DGPath value1, DGPath value2)
         {
             if (value2._rooted)
-                throw new DGPath.DGPathException("(DGPath1 + DGPath2) failed- DGPath2 must be a subfolder and not a fully rooted path (C:/ type paths are not allowed)");
+                throw new DGPathException("(DGPath1 + DGPath2) failed- DGPath2 must be a subfolder and not a fully rooted path (C:/ type paths are not allowed)");
             if (value1._file)
-                throw new DGPath.DGPathException("(DGPath1 + DGPath2) failed- DGPath1 must NOT be a file!");
+                throw new DGPathException("(DGPath1 + DGPath2) failed- DGPath1 must NOT be a file!");
             return new DGPath()
             {
                 _path = value1._path + value2._path,
@@ -331,7 +331,7 @@ namespace DuckGame
         {
             CheckFileValidity(false);
             if (_file)
-                System.IO.File.Delete(_path);
+                File.Delete(_path);
             else
                 Directory.Delete(_path);
         }
@@ -339,37 +339,37 @@ namespace DuckGame
         public string ReadText()
         {
             CheckFileValidity();
-            return System.IO.File.ReadAllText(_path);
+            return File.ReadAllText(_path);
         }
 
         public void WriteText(string pText)
         {
             CheckFileValidity(pWriting: true);
-            System.IO.File.WriteAllText(_path, pText);
+            File.WriteAllText(_path, pText);
         }
 
         public string[] ReadLines()
         {
             CheckFileValidity();
-            return System.IO.File.ReadAllLines(_path);
+            return File.ReadAllLines(_path);
         }
 
         public void WriteLines(string[] pLines)
         {
             CheckFileValidity(pWriting: true);
-            System.IO.File.WriteAllLines(_path, pLines);
+            File.WriteAllLines(_path, pLines);
         }
 
         public byte[] ReadBytes()
         {
             CheckFileValidity();
-            return System.IO.File.ReadAllBytes(_path);
+            return File.ReadAllBytes(_path);
         }
 
         public void WriteBytes(byte[] pBytes)
         {
             CheckFileValidity(pWriting: true);
-            System.IO.File.WriteAllBytes(_path, pBytes);
+            File.WriteAllBytes(_path, pBytes);
         }
 
         public void CreatePath() => CheckFileValidity(pWriting: true);

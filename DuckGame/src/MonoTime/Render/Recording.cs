@@ -14,7 +14,7 @@ namespace DuckGame
     public class Recording
     {
         private static int kNumFrames = 300;
-        protected RecorderFrame[] _frames = new RecorderFrame[Recording.kNumFrames];
+        protected RecorderFrame[] _frames = new RecorderFrame[kNumFrames];
         protected int _frame;
         private int _startFrame;
         private int _endFrame;
@@ -25,7 +25,7 @@ namespace DuckGame
         public int frame
         {
             get => _frame;
-            set => _frame = value % Recording.kNumFrames;
+            set => _frame = value % kNumFrames;
         }
 
         public int startFrame => _startFrame;
@@ -44,7 +44,7 @@ namespace DuckGame
 
         public void Initialize()
         {
-            for (int index = 0; index < _frames.Count<RecorderFrame>(); ++index)
+            for (int index = 0; index < _frames.Count(); ++index)
                 _frames[index].Initialize();
         }
 
@@ -64,9 +64,9 @@ namespace DuckGame
         public int GetFrame(int f)
         {
             if (f < 0)
-                f += Recording.kNumFrames - 1;
-            else if (f >= Recording.kNumFrames)
-                f -= Recording.kNumFrames;
+                f += kNumFrames - 1;
+            else if (f >= kNumFrames)
+                f -= kNumFrames;
             return f;
         }
 
@@ -76,7 +76,7 @@ namespace DuckGame
 
         public float GetFrameTotal()
         {
-            FrameAnalytics analytics = GetAnalytics(Recording._analytics);
+            FrameAnalytics analytics = GetAnalytics(_analytics);
             return 0f + analytics.deaths + analytics.coolness + analytics.bonus + analytics.actions + analytics.totalVelocity;
         }
 
@@ -88,12 +88,12 @@ namespace DuckGame
 
         public void UpdateFrame() => _frames[_frame].Update();
 
-        public virtual void IncrementFrame(float speed = 1f) => _frame = (_frame + 1) % Recording.kNumFrames;
+        public virtual void IncrementFrame(float speed = 1f) => _frame = (_frame + 1) % kNumFrames;
 
         public virtual void NextFrame()
         {
             ++_frame;
-            if (_frame >= Recording.kNumFrames)
+            if (_frame >= kNumFrames)
             {
                 _rolledOver = true;
                 _frame = 0;
@@ -105,12 +105,12 @@ namespace DuckGame
             _endFrame = _frame;
             if (!_rolledOver)
                 return;
-            _startFrame = (_frame + 1) % Recording.kNumFrames;
+            _startFrame = (_frame + 1) % kNumFrames;
         }
 
         public bool StepForward()
         {
-            _frame = (_frame + 1) % Recording.kNumFrames;
+            _frame = (_frame + 1) % kNumFrames;
             return _frame == _startFrame;
         }
 

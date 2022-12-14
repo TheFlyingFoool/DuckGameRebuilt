@@ -15,7 +15,7 @@ namespace XnaToFna.ProxyDrawing
         private int x;
         private int y;
 
-        public bool IsEmpty => this == Point.Empty;
+        public bool IsEmpty => this == Empty;
 
         public int X
         {

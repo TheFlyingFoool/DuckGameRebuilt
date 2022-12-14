@@ -15,10 +15,10 @@ namespace DuckGame
 
         public static string customTileset03
         {
-            get => Custom.data[CustomTileset3._customType][2];
+            get => Custom.data[_customType][2];
             set
             {
-                Custom.data[CustomTileset3._customType][2] = value;
+                Custom.data[_customType][2] = value;
                 Custom.Clear(CustomType.Block, value);
             }
         }

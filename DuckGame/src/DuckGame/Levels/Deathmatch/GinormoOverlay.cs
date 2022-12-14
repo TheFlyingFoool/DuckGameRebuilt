@@ -39,13 +39,13 @@ namespace DuckGame
         {
             if (!RockScoreboard.drawingNormalTarget && !NetworkDebugger.enabled)
                 return;
-            Material material = DuckGame.Graphics.material;
-            DuckGame.Graphics.material = _screenMaterial;
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)_overlaySprite;
-            DuckGame.Graphics.device.SamplerStates[1] = SamplerState.LinearClamp;
+            Material material = Graphics.material;
+            Graphics.material = _screenMaterial;
+            Graphics.device.Textures[1] = (Texture2D)_overlaySprite;
+            Graphics.device.SamplerStates[1] = SamplerState.LinearClamp;
             _targetSprite.depth = (Depth)0.9f;
-            DuckGame.Graphics.Draw(_targetSprite, x - 92f, y - 33f);
-            DuckGame.Graphics.material = material;
+            Graphics.Draw(_targetSprite, x - 92f, y - 33f);
+            Graphics.material = material;
         }
     }
 }

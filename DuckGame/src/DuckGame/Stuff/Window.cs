@@ -35,7 +35,7 @@ namespace DuckGame
         public bool doShake;
         protected WindowFrame _frame;
         public EditorProperty<int> windowHeight;
-        public EditorProperty<int> tint = new EditorProperty<int>(0, max: Window.windowColors.Count - 1, increment: 1f);
+        public EditorProperty<int> tint = new EditorProperty<int>(0, max: windowColors.Count - 1, increment: 1f);
         public EditorProperty<bool> valid;
         public EditorProperty<bool> bars = new EditorProperty<bool>(false);
         public static List<Color> windowColors = new List<Color>()
@@ -199,7 +199,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             if (!_hasGlass)
                 return base.Hit(bullet, hitPos);
             _enter = hitPos + bullet.travelDirNormalized;
@@ -339,7 +339,7 @@ namespace DuckGame
             _barSprite.angle = angle;
             if (_hasGlass)
             {
-                Color windowColor = Window.windowColors[tint.value];
+                Color windowColor = windowColors[tint.value];
                 windowColor.a = 51;
                 _sprite.color = windowColor;
                 alpha = 0.7f;

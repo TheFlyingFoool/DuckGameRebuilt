@@ -35,12 +35,12 @@ namespace DuckGame
         {
             DuckNetwork.ClosePauseMenu();
             ConnectionStatusUI.Hide();
-            if (ConnectionError.joinLobby != null)
+            if (joinLobby != null)
             {
-                string lobbyData = ConnectionError.joinLobby.GetLobbyData("mods");
+                string lobbyData = joinLobby.GetLobbyData("mods");
                 if (lobbyData != null && lobbyData != "")
                 {
-                    if (lobbyData.Split('|').Contains<string>("LOCAL"))
+                    if (lobbyData.Split('|').Contains("LOCAL"))
                     {
                         _text = "Host has non-workshop mods enabled!";
                         goto label_6;
@@ -63,7 +63,7 @@ namespace DuckGame
                 }
             }
         label_6:
-            Level.core.gameFinished = true;
+            core.gameFinished = true;
             _startCalled = true;
             HUD.AddCornerMessage(HUDCorner.BottomRight, "@START@CONTINUE");
             base.Initialize();
@@ -73,8 +73,8 @@ namespace DuckGame
         {
             if ((_downloadModsMenu == null || !_downloadModsMenu.open) && Input.Pressed("START"))
             {
-                Level.current = new TitleScreen();
-                ConnectionError.joinLobby = null;
+                current = new TitleScreen();
+                joinLobby = null;
             }
             base.Update();
         }
@@ -82,7 +82,7 @@ namespace DuckGame
         public override void Draw()
         {
             string[] source = _text.Split('{');
-            float num = -(source.Count<string>() - 1) * 8;
+            float num = -(source.Count() - 1) * 8;
             foreach (string text in source)
             {
                 float stringHeight = Graphics.GetStringHeight(text);

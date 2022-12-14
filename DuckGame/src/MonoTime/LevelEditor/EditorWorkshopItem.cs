@@ -31,10 +31,10 @@ namespace DuckGame
                     if (_mod != null)
                     {
                         string pathToScreenshot = _mod.generateAndGetPathToScreenshot;
-                        if (!System.IO.File.Exists(pathToScreenshot))
+                        if (!File.Exists(pathToScreenshot))
                             return null;
-                        using (FileStream fileStream = System.IO.File.Open(pathToScreenshot, FileMode.Open))
-                            _preview = (Tex2D)Texture2D.FromStream(DuckGame.Graphics.device, fileStream);
+                        using (FileStream fileStream = File.Open(pathToScreenshot, FileMode.Open))
+                            _preview = (Tex2D)Texture2D.FromStream(Graphics.device, fileStream);
                     }
                     else
                     {
@@ -52,9 +52,9 @@ namespace DuckGame
                         Content.customPreviewWidth = 0;
                         Content.customPreviewHeight = 0;
                         Content.customPreviewCenter = Vec2.Zero;
-                        _preview = (Tex2D)new Texture2D(DuckGame.Graphics.device, pCustomPreviewTarget.width, pCustomPreviewTarget.height);
+                        _preview = (Tex2D)new Texture2D(Graphics.device, pCustomPreviewTarget.width, pCustomPreviewTarget.height);
                         Color[] colorArray = new Color[pCustomPreviewTarget.width * pCustomPreviewTarget.height];
-                        pCustomPreviewTarget.GetData<Color>(colorArray);
+                        pCustomPreviewTarget.GetData(colorArray);
                         _preview.SetData<Color>(colorArray);
                     }
                 }
@@ -235,14 +235,14 @@ namespace DuckGame
             DuckFile.CreatePath(pathString2);
             string withoutExtension = Path.GetFileNameWithoutExtension(_level.GetPath());
             string str = pathString1 + Path.GetFileName(_level.GetPath());
-            if (System.IO.File.Exists(str))
-                System.IO.File.Delete(str);
-            System.IO.File.Copy(_level.GetPath(), str);
-            System.IO.File.SetAttributes(_level.GetPath(), FileAttributes.Normal);
+            if (File.Exists(str))
+                File.Delete(str);
+            File.Copy(_level.GetPath(), str);
+            File.SetAttributes(_level.GetPath(), FileAttributes.Normal);
             _item.data.contentFolder = pathString1;
             string path = pathString2 + withoutExtension + ".png";
-            if (System.IO.File.Exists(path))
-                System.IO.File.Delete(path);
+            if (File.Exists(path))
+                File.Delete(path);
             Stream stream = DuckFile.Create(path);
             ((Texture2D)preview.nativeObject).SaveAsPng(stream, preview.width, preview.height);
             stream.Dispose();

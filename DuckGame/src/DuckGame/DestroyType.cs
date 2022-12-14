@@ -15,7 +15,7 @@ namespace DuckGame
         private static Map<byte, System.Type> _types = new Map<byte, System.Type>();
         private Thing _thing;
 
-        public static Map<byte, System.Type> indexTypeMap => DestroyType._types;
+        public static Map<byte, System.Type> indexTypeMap => _types;
 
         public static void InitializeTypes()
         {
@@ -24,17 +24,17 @@ namespace DuckGame
                 byte key = 0;
                 foreach (System.Type sortedType in ManagedContent.DestroyTypes.SortedTypes)
                 {
-                    DestroyType._types.Add(key, sortedType);
+                    _types.Add(key, sortedType);
                     ++key;
                 }
             }
             else
             {
-                List<System.Type> list = Editor.GetSubclasses(typeof(DestroyType)).ToList<System.Type>();
+                List<System.Type> list = Editor.GetSubclasses(typeof(DestroyType)).ToList();
                 byte key = 0;
                 foreach (System.Type type in list)
                 {
-                    DestroyType._types.Add(key, type);
+                    _types.Add(key, type);
                     ++key;
                 }
             }

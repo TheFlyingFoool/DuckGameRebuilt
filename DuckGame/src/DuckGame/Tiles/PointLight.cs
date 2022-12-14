@@ -9,7 +9,7 @@ namespace DuckGame
         public PointLight(float xpos, float ypos, Color c, float range, List<LightOccluder> occluders = null, bool strangeFalloff = false) : base(xpos, ypos, null)
         {
             shouldbegraphicculled = false;
-            base.layer = Layer.Lighting;
+            layer = Layer.Lighting;
             this._occluders = occluders;
             this._lightColor = c;
             if (this._occluders == null)
@@ -112,7 +112,7 @@ namespace DuckGame
             bool hasPrev = false;
             if (this._objectsInRange == null)
             {
-                this._objectsInRange = Level.CheckCircleAll<Block>(this.position, this._range).ToList<Block>();
+                this._objectsInRange = Level.CheckCircleAll<Block>(this.position, this._range).ToList();
             }
             int loops = 64;
             for (int i = 0; i <= loops; i++)

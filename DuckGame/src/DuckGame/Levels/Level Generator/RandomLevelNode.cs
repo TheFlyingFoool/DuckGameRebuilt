@@ -108,11 +108,11 @@ namespace DuckGame
             if (seed != 0)
                 Rando.generator = new Random(seed);
             Level.InitChanceGroups();
-            RandomLevelNode.processing = true;
-            RandomLevelNode.topLeft = new Vec2((float)(-(float)this.gridX * 192), (float)(-(float)this.gridY * 144));
-            RandomLevelNode._allPreparedThings = new HashSet<Thing>();
+            processing = true;
+            topLeft = new Vec2((float)(-(float)this.gridX * 192), (float)(-(float)this.gridY * 144));
+            _allPreparedThings = new HashSet<Thing>();
             PreparePartsRecurse(x, y, level);
-            RandomLevelNode.processing = false;
+            processing = false;
             ClearFlags();
             if (null == null)
             {
@@ -123,11 +123,11 @@ namespace DuckGame
             bool flag = false;
             for (int index = 0; index < 4; ++index)
             {
-              if (NGeneratorRule.Count(RandomLevelNode._allPreparedThings,  thing =>
+              if (NGeneratorRule.Count(_allPreparedThings,  thing =>
               {
                 if (thing is IContainAThing)
                 {
-                  System.Type contains = (thing as IContainAThing).contains;
+                  Type contains = (thing as IContainAThing).contains;
                   if (contains !=  null)
                   {
                     Thing thing2 = Editor.GetThing(contains);
@@ -137,7 +137,7 @@ namespace DuckGame
                 return false;
               }) == 0)
               {
-                foreach (Thing thing in (IEnumerable<Thing>) RandomLevelNode._allPreparedThings.AsEnumerable<Thing>().OrderBy<Thing, float>( t => Rando.Float(1f)))
+                foreach (Thing thing in (IEnumerable<Thing>) _allPreparedThings.AsEnumerable().OrderBy( t => Rando.Float(1f)))
                 {
                   if (thing is IContainPossibleThings)
                     (thing as IContainPossibleThings).PreparePossibilities();
@@ -153,13 +153,13 @@ namespace DuckGame
           }),
           new NGeneratorRule( () =>
           {
-            int num1 = NGeneratorRule.Count(RandomLevelNode._allPreparedThings,  thing => thing is Door && (thing as Door).locked);
-            int num2 = NGeneratorRule.Count(RandomLevelNode._allPreparedThings,  thing => thing is Key);
+            int num1 = NGeneratorRule.Count(_allPreparedThings,  thing => thing is Door && (thing as Door).locked);
+            int num2 = NGeneratorRule.Count(_allPreparedThings,  thing => thing is Key);
             if (num1 > 0 && num2 == 0)
-              RandomLevelNode._allPreparedThings.RemoveWhere( v => v is Door && (v as Door).locked);
+              _allPreparedThings.RemoveWhere( v => v is Door && (v as Door).locked);
             return true;
           }),
-          new NGeneratorRule( () => NGeneratorRule.Count(RandomLevelNode._allPreparedThings,  thing => thing is Warpgun) > 0)
+          new NGeneratorRule( () => NGeneratorRule.Count(_allPreparedThings,  thing => thing is Warpgun) > 0)
         };
             }
             LoadPartsRecurse(x, y, level);
@@ -176,7 +176,7 @@ namespace DuckGame
                             randomLevelNode = tiles[xpos, ypos];
                         if (randomLevelNode == null || randomLevelNode.data == null)
                         {
-                            Vec2 pyramidWallPos = new Vec2((float)(xpos * 192 - 8), (float)(ypos * 144 - 8)) + RandomLevelNode.topLeft;
+                            Vec2 pyramidWallPos = new Vec2((float)(xpos * 192 - 8), (float)(ypos * 144 - 8)) + topLeft;
                             level.AddThing(new PyramidWall(pyramidWallPos.x, pyramidWallPos.y));
                         }
                     }
@@ -192,7 +192,7 @@ namespace DuckGame
                         randomLevelNode = tiles[index3, index4];
                     if (randomLevelNode != null && randomLevelNode.data != null)
                     {
-                        Vec2 vec2 = new Vec2((float)(index3 * 192 + 96), (float)(index4 * 144 + 72)) + RandomLevelNode.topLeft;
+                        Vec2 vec2 = new Vec2((float)(index3 * 192 + 96), (float)(index4 * 144 + 72)) + topLeft;
                         PyramidWall pyramidWall1 = Level.CheckPoint<PyramidWall>(vec2 + new Vec2(-192f, 0f));
                         if (pyramidWall1 != null)
                             pyramidWall1.hasRight = true;
@@ -266,7 +266,7 @@ namespace DuckGame
                     }
                 }
             }
-            if (RandomLevelNode.editorLoad)
+            if (editorLoad)
             {
                 level.things.RefreshState();
                 foreach (AutoBlock autoBlock in level.things[typeof(AutoBlock)])
@@ -296,7 +296,7 @@ namespace DuckGame
             {
                 _preparedThings = data.PrepareThings(mirror, x, y);
                 foreach (RandomLevelData.PreparedThing preparedThing in _preparedThings)
-                    RandomLevelNode._allPreparedThings.Add(preparedThing.thing);
+                    _allPreparedThings.Add(preparedThing.thing);
             }
             if (up != null && !up.visited)
                 up.PreparePartsRecurse(x, y - 144f, level);
@@ -327,7 +327,7 @@ namespace DuckGame
 
         public void GenerateTiles(RandomLevelData tile = null, LevGenType type = LevGenType.Any, bool symmetricVal = false)
         {
-            RandomLevelNode.firstGetRequiresMultiplePaths = false;
+            firstGetRequiresMultiplePaths = false;
             TileConnection requirement = TileConnection.None;
             if (symmetricVal && tilesWide == 3 && gridX == 1)
                 requirement = TileConnection.Left | TileConnection.Right;
@@ -355,7 +355,7 @@ namespace DuckGame
                 if (num <= 1)
                 {
                     symmetricVal = false;
-                    RandomLevelNode.firstGetRequiresMultiplePaths = true;
+                    firstGetRequiresMultiplePaths = true;
                 }
                 if (symmetricVal && !LevelGenerator.openAirMode)
                 {
@@ -459,7 +459,7 @@ namespace DuckGame
                 list.Remove(TileConnection.Left);
             if (removeRight)
                 list.Remove(TileConnection.Right);
-            foreach (TileConnection tileConnection in Utils.Shuffle<TileConnection>(list))
+            foreach (TileConnection tileConnection in Utils.Shuffle(list))
             {
                 switch (tileConnection)
                 {

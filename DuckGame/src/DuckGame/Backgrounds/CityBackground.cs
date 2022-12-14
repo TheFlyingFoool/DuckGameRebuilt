@@ -16,7 +16,7 @@ namespace DuckGame
     public class CityBackground : BackgroundUpdater
     {
         //private Vec2 backgroundPlanePos;
-        private List<CityBackground.Plane> _planes = new List<CityBackground.Plane>();
+        private List<Plane> _planes = new List<Plane>();
         private float timeSinceSkySay;
 
         public CityBackground(float xpos, float ypos)
@@ -106,7 +106,7 @@ namespace DuckGame
                 Send.Message(new NMSkySay(text, vec2, flag));
             foreach (string text1 in stringList)
             {
-                CityBackground.Plane plane = new CityBackground.Plane(vec2, text1, flag);
+                Plane plane = new Plane(vec2, text1, flag);
                 if (flag)
                     vec2.x += (plane.textWidth * 0.5f + 80f);
                 else
@@ -190,7 +190,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            foreach (CityBackground.Plane plane in _planes)
+            foreach (Plane plane in _planes)
                 plane.UpdateFlying();
             _planes.RemoveAll(x => x.finished);
             if (!Network.isActive || Network.isServer)
@@ -210,7 +210,7 @@ namespace DuckGame
         {
             if (Level.current is Editor)
                 base.Draw();
-            foreach (CityBackground.Plane plane in _planes)
+            foreach (Plane plane in _planes)
             {
                 plane.depth = (Depth)1f;
                 plane.Draw();

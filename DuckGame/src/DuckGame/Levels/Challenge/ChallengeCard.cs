@@ -63,7 +63,7 @@ namespace DuckGame
         {
             if (_preview == null && _challenge.preview != null)
             {
-                Texture2D tex = Texture2D.FromStream(DuckGame.Graphics.device, new MemoryStream(Convert.FromBase64String(_challenge.preview)));
+                Texture2D tex = Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(_challenge.preview)));
                 _preview = new SpriteMap((Tex2D)tex, tex.Width, tex.Height)
                 {
                     scale = new Vec2(0.25f)
@@ -142,7 +142,7 @@ namespace DuckGame
         {
             float num1 = alpha * (hover ? 1f : 0.6f) * _alphaMul;
             _font.alpha = num1;
-            DuckGame.Graphics.DrawRect(position, position + new Vec2(258f, _size), Color.White * num1, (Depth)(0.8f + num1 * 0.04f), false);
+            Graphics.DrawRect(position, position + new Vec2(258f, _size), Color.White * num1, (Depth)(0.8f + num1 * 0.04f), false);
             if (_save.trophy != TrophyType.Baseline)
             {
                 _medalRibbon.depth = (Depth)(0.81f + num1 * 0.04f);
@@ -158,14 +158,14 @@ namespace DuckGame
                     _medalRibbon.frame = 3;
                 else if (_save.trophy == TrophyType.Developer)
                     _medalRibbon.frame = 4;
-                DuckGame.Graphics.Draw(_medalRibbon, position.x, position.y);
+                Graphics.Draw(_medalRibbon, position.x, position.y);
             }
             else if (!_unlocked)
             {
                 _medalRibbon.depth = (Depth)(0.81f + num1 * 0.04f);
                 _medalRibbon.color = new Color(num1, num1, num1);
                 _medalRibbon.frame = 5;
-                DuckGame.Graphics.Draw(_medalRibbon, position.x, position.y);
+                Graphics.Draw(_medalRibbon, position.x, position.y);
             }
             _thumb.alpha = num1;
             _thumb.depth = (Depth)(0.8f + num1 * 0.04f);
@@ -174,10 +174,10 @@ namespace DuckGame
             {
                 _preview.alpha = num1;
                 _preview.depth = (Depth)(0.8f + num1 * 0.04f);
-                DuckGame.Graphics.Draw(_preview, this.x + 2f, y + 2f);
+                Graphics.Draw(_preview, this.x + 2f, y + 2f);
             }
             else
-                DuckGame.Graphics.Draw(_thumb, this.x + 2f, y + 2f);
+                Graphics.Draw(_thumb, this.x + 2f, y + 2f);
             _font.maxWidth = 200;
             string str1 = _challenge.GetNameForDisplay();
             if (!_unlocked)
@@ -194,8 +194,8 @@ namespace DuckGame
             if (_dataAlpha <= 0.01f)
                 return;
             float num2 = _dataAlpha * num1;
-            DuckGame.Graphics.DrawLine(position + new Vec2(0f, 42f), position + new Vec2(258f, 42f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
-            DuckGame.Graphics.DrawLine(position + new Vec2(0f, 64f), position + new Vec2(258f, 64f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
+            Graphics.DrawLine(position + new Vec2(0f, 42f), position + new Vec2(258f, 42f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
+            Graphics.DrawLine(position + new Vec2(0f, 64f), position + new Vec2(258f, 64f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
             _font.alpha = num2;
             Color color = new Color(245, 165, 36);
             Color c2 = Colors.DGRed;
@@ -217,10 +217,10 @@ namespace DuckGame
             _medalNoRibbon.frame = 2;
             float x = this.x + 6f;
             float num3 = y + 68f;
-            DuckGame.Graphics.Draw(_medalNoRibbon, x, num3);
+            Graphics.Draw(_medalNoRibbon, x, num3);
             Color c3 = new Color(245, 165, 36);
             _font.Draw("GOLD", x + 22f, num3, c3, (Depth)1f);
-            ChallengeTrophy challengeTrophy1 = _challenge.trophies.FirstOrDefault<ChallengeTrophy>(val => val.type == TrophyType.Gold);
+            ChallengeTrophy challengeTrophy1 = _challenge.trophies.FirstOrDefault(val => val.type == TrophyType.Gold);
             string text1 = "";
             bool flag2 = false;
             if (challengeTrophy1.timeRequirement > 0)
@@ -265,10 +265,10 @@ namespace DuckGame
             float num5 = (y + 68f + 20f);
             _medalNoRibbon.alpha = num2;
             _medalNoRibbon.frame = 1;
-            DuckGame.Graphics.Draw(_medalNoRibbon, x, num5);
+            Graphics.Draw(_medalNoRibbon, x, num5);
             c3 = new Color(173, 173, 173);
             _font.Draw("SILVER", x + 22f, num5, c3, (Depth)1f);
-            ChallengeTrophy challengeTrophy2 = _challenge.trophies.FirstOrDefault<ChallengeTrophy>(val => val.type == TrophyType.Silver);
+            ChallengeTrophy challengeTrophy2 = _challenge.trophies.FirstOrDefault(val => val.type == TrophyType.Silver);
             string text2 = "";
             if (flag2 && challengeTrophy2.timeRequirement == 0 && _challenge.trophies[0].timeRequirement != 0)
                 challengeTrophy2.timeRequirement = _challenge.trophies[0].timeRequirement;
@@ -315,10 +315,10 @@ namespace DuckGame
             float num6 = (y + 68f + 40f);
             _medalNoRibbon.alpha = num2;
             _medalNoRibbon.frame = 0;
-            DuckGame.Graphics.Draw(_medalNoRibbon, x, num6);
+            Graphics.Draw(_medalNoRibbon, x, num6);
             c3 = new Color(181, 86, 3);
             _font.Draw("BRONZE", x + 22f, num6, c3, (Depth)1f);
-            ChallengeTrophy challengeTrophy3 = _challenge.trophies.FirstOrDefault<ChallengeTrophy>(val => val.type == TrophyType.Bronze);
+            ChallengeTrophy challengeTrophy3 = _challenge.trophies.FirstOrDefault(val => val.type == TrophyType.Bronze);
             string text3 = "";
             if (flag2 && challengeTrophy3.timeRequirement == 0 && _challenge.trophies[0].timeRequirement != 0)
                 challengeTrophy3.timeRequirement = _challenge.trophies[0].timeRequirement;

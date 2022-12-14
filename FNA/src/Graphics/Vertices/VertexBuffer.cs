@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void GetData<T>(T[] data) where T : struct
 		{
-			GetData<T>(
+            GetData(
 				0,
 				data,
 				0,
@@ -145,7 +145,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			int startIndex,
 			int elementCount
 		) where T : struct {
-			GetData<T>(
+            GetData(
 				0,
 				data,
 				startIndex,

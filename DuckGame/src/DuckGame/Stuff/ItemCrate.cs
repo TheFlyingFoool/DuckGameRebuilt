@@ -37,7 +37,7 @@ namespace DuckGame
         private Sprite _containedSprite;
         private float damageMultiplier = 1f;
 
-        public System.Type contains { get; set; }
+        public Type contains { get; set; }
 
         public List<TypeProbPair> possible => _possible;
 
@@ -75,7 +75,7 @@ namespace DuckGame
                 return;
             if (randomSpawn)
             {
-                List<System.Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
+                List<Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
                 contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
             }
             else
@@ -181,7 +181,7 @@ namespace DuckGame
                 Vec2 vec2 = Offset(new Vec2(0f, -8f));
                 _randomMark.angle = angle;
                 _randomMark.flipH = offDir <= 0;
-                DuckGame.Graphics.Draw(_randomMark, vec2.x, vec2.y, depth + 10);
+                Graphics.Draw(_randomMark, vec2.x, vec2.y, depth + 10);
             }
             else if (_containedSprite != null)
             {
@@ -190,7 +190,7 @@ namespace DuckGame
                 Vec2 vec2 = Offset(new Vec2(0f, -8f));
                 _containedSprite.angle = angle;
                 _containedSprite.flipH = offDir <= 0;
-                DuckGame.Graphics.Draw(_containedSprite, vec2.x, vec2.y, depth + 10);
+                Graphics.Draw(_containedSprite, vec2.x, vec2.y, depth + 10);
             }
             else
                 _sprite.frame = 0;
@@ -298,7 +298,7 @@ namespace DuckGame
             if (_hitPoints <= 0f)
                 return base.Hit(bullet, hitPos);
             if (bullet.isLocal && owner == null)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
@@ -309,7 +309,7 @@ namespace DuckGame
             SFX.Play("woodHit");
             if (isServerForObject && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
                 Destroy(new DTShot(bullet));
                 Level.Add(new GrenadeExplosion(x, y));
             }
@@ -318,7 +318,7 @@ namespace DuckGame
             if (_hitPoints <= 0f)
             {
                 if (bullet.isLocal)
-                    Thing.SuperFondle(this, DuckNetwork.localConnection);
+                    SuperFondle(this, DuckNetwork.localConnection);
                 Destroy(new DTShot(bullet));
             }
             return base.Hit(bullet, hitPos);

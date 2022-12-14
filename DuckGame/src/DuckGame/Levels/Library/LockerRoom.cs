@@ -51,7 +51,7 @@ namespace DuckGame
             _confirmMenu.Close();
             _confirmGroup.Add(_confirmMenu, false);
             _confirmGroup.Close();
-            Level.Add(_confirmGroup);
+            Add(_confirmGroup);
             Profile profile = _profile;
             _stats.Add(new LockerStat("", Color.Red));
             _stats.Add(new LockerStat("QUACKS: " + Change.ToString(profile.stats.quacks), Color.Orange));
@@ -124,7 +124,7 @@ namespace DuckGame
                     else if (_screen == LockerScreen.Exit)
                     {
                         Graphics.fade = 0f;
-                        Level.current = new DoorRoom(_profile);
+                        current = new DoorRoom(_profile);
                     }
                 }
             }
@@ -189,7 +189,7 @@ namespace DuckGame
                         _clearStats.value = false;
                         _profile.stats = new ProfileStats();
                         Profiles.Save(_profile);
-                        Level.current = new LockerRoom(_profile);
+                        current = new LockerRoom(_profile);
                     }
                     if (InputProfile.active.Pressed("MENU2"))
                     {

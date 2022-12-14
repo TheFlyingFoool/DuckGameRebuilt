@@ -54,8 +54,8 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            gr = Grenade.grenade;
-            ++Grenade.grenade;
+            gr = grenade;
+            ++grenade;
         }
 
         public override void OnNetworkBulletsFired(Vec2 pos)

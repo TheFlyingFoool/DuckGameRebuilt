@@ -189,8 +189,8 @@ namespace DuckGame
             string[] directories = DuckFile.GetDirectories(_currentDirectory);
             string[] files = DuckFile.GetFiles(_currentDirectory);
             int num2 = num1 + (directories.Length + files.Length);
-            Array.Sort<string>(directories);
-            Array.Sort<string>(files);
+            Array.Sort(directories);
+            Array.Sort(files);
             float x = 338f;
             _scrollBar = false;
             _scrollPosition = 0f;
@@ -372,7 +372,7 @@ namespace DuckGame
             }
             MemoryStream memoryStream = new MemoryStream();
             bitmap.Save(memoryStream, ImageFormat.Png);
-            return (Tex2D)Texture2D.FromStream(DuckGame.Graphics.device, memoryStream);
+            return (Tex2D)Texture2D.FromStream(Graphics.device, memoryStream);
         }
 
         public override void Selected(ContextMenu item)
@@ -730,13 +730,13 @@ namespace DuckGame
             float num2 = _fdHeight + 22f;
             Vec2 p1_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0 + hOffset - 1.0), (float)(layer.height / 2.0 - num2 / 2.0 - 15.0));
             Vec2 p2_1 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0 + hOffset + 1.0), (float)(layer.height / 2.0 + num2 / 2.0 - 12.0));
-            DuckGame.Graphics.DrawRect(p1_1, p2_1, new Color(70, 70, 70), depth, false);
-            DuckGame.Graphics.DrawRect(p1_1, p2_1, new Color(30, 30, 30), depth - 8);
-            DuckGame.Graphics.DrawRect(p1_1 + new Vec2(3f, 23f), p2_1 + new Vec2(-18f, -4f), new Color(10, 10, 10), depth - 4);
+            Graphics.DrawRect(p1_1, p2_1, new Color(70, 70, 70), depth, false);
+            Graphics.DrawRect(p1_1, p2_1, new Color(30, 30, 30), depth - 8);
+            Graphics.DrawRect(p1_1 + new Vec2(3f, 23f), p2_1 + new Vec2(-18f, -4f), new Color(10, 10, 10), depth - 4);
             Vec2 p1_2 = new Vec2(p2_1.x - 16f, p1_1.y + 23f);
             Vec2 p2_2 = p2_1 + new Vec2(-3f, -4f);
-            DuckGame.Graphics.DrawRect(p1_2, p2_2, new Color(10, 10, 10), depth - 4);
-            DuckGame.Graphics.DrawRect(p1_1 + new Vec2(3f, 3f), new Vec2(p2_1.x - 3f, p1_1.y + 19f), new Color(70, 70, 70), depth - 4);
+            Graphics.DrawRect(p1_2, p2_2, new Color(10, 10, 10), depth - 4);
+            Graphics.DrawRect(p1_1 + new Vec2(3f, 3f), new Vec2(p2_1.x - 3f, p1_1.y + 19f), new Color(70, 70, 70), depth - 4);
             if (_scrollBar)
             {
                 _scrollLerp = Lerp.Float(_scrollLerp, _scrollPosition, 0.05f);
@@ -760,7 +760,7 @@ namespace DuckGame
                         _scrollPosition = 1f;
                     _scrollLerp = _scrollPosition;
                 }
-                DuckGame.Graphics.DrawRect(p1_3, p2_3, drag ? new Color(190, 190, 190) : (flag ? new Color(120, 120, 120) : new Color(70, 70, 70)), depth + 4);
+                Graphics.DrawRect(p1_3, p2_3, drag ? new Color(190, 190, 190) : (flag ? new Color(120, 120, 120) : new Color(70, 70, 70)), depth + 4);
             }
             string str1 = _currentDirectory;
             int startIndex1 = _currentDirectory.IndexOf(_rootFolder);
@@ -774,20 +774,20 @@ namespace DuckGame
             string str3 = !_save ? (!_selectLevels ? (_type != ContextFileType.Block ? (_type != ContextFileType.Platform ? (_type != ContextFileType.Background ? (_type != ContextFileType.Parallax ? (_type != ContextFileType.ArcadeStyle ? "@LOADICON@Load Level" : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "Select Active Levels") : "@SAVEICON@Save Level";
             string str4 = str2;
 
-            DuckGame.Graphics.DrawString(str3 + (str4 == "" ? "" : " - " + str4), p1_1 + new Vec2(5f, 7f), Color.White, depth + 8);
+            Graphics.DrawString(str3 + (str4 == "" ? "" : " - " + str4), p1_1 + new Vec2(5f, 7f), Color.White, depth + 8);
             Vec2 p1_4 = new Vec2(p2_1.x + 2f, p1_1.y);
             Vec2 p2_4 = p1_4 + new Vec2(164f, 120f);
             if (_previewSprite != null && _previewSprite.texture != null && (_type == ContextFileType.Block || _type == ContextFileType.Background || _type == ContextFileType.Platform || _type == ContextFileType.Parallax || _type == ContextFileType.ArcadeStyle || _type == ContextFileType.ArcadeAnimation))
                 p2_4 = _type != ContextFileType.Parallax ? p1_4 + new Vec2(_previewSprite.width + 4, _previewSprite.height + 4) : p1_4 + new Vec2(_previewSprite.width / 2 + 4, _previewSprite.height / 2 + 4);
-            DuckGame.Graphics.DrawRect(p1_4, p2_4, new Color(70, 70, 70), depth, false);
-            DuckGame.Graphics.DrawRect(p1_4, p2_4, new Color(30, 30, 30), depth - 8);
+            Graphics.DrawRect(p1_4, p2_4, new Color(70, 70, 70), depth, false);
+            Graphics.DrawRect(p1_4, p2_4, new Color(30, 30, 30), depth - 8);
             if (_previewSprite == null || _previewSprite.texture == null)
                 return;
             _previewSprite.depth = (Depth)0.95f;
             _previewSprite.scale = new Vec2(0.5f);
             if (_type == ContextFileType.Block || _type == ContextFileType.Background || _type == ContextFileType.Platform)
                 _previewSprite.scale = new Vec2(1f);
-            DuckGame.Graphics.Draw(_previewSprite, p1_4.x + 2f, p1_4.y + 2f);
+            Graphics.Draw(_previewSprite, p1_4.x + 2f, p1_4.y + 2f);
             if (_previewPair == null)
                 return;
             string str5 = _previewName;
@@ -802,24 +802,24 @@ namespace DuckGame
             string str7 = "";
             if (_previewPair.strange)
             {
-                DuckGame.Graphics.DrawString(str7 + "STRANGE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGPurple, depth + 8);
+                Graphics.DrawString(str7 + "STRANGE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGPurple, depth + 8);
                 Vec2 p1_5 = p1_4 + new Vec2(0f, 122f);
                 Vec2 p2_5 = p1_5 + new Vec2(166f, 36f);
-                DuckGame.Graphics.DrawRect(p1_5, p2_5, new Color(70, 70, 70), depth, false);
-                DuckGame.Graphics.DrawRect(p1_5, p2_5, new Color(30, 30, 30), depth - 8);
+                Graphics.DrawRect(p1_5, p2_5, new Color(70, 70, 70), depth, false);
+                Graphics.DrawRect(p1_5, p2_5, new Color(30, 30, 30), depth - 8);
                 _fancyFont.Draw("Must place at least one Duck Spawn Point to make a valid level.", p1_5.x + 4f, p1_5.y + 4f, Color.White, depth + 8);
             }
             else if (_previewPair.arcade)
-                DuckGame.Graphics.DrawString(str7 + "ARCADE LAYOUT", p1_4 + new Vec2(5f, 107f), Colors.DGYellow, depth + 8);
+                Graphics.DrawString(str7 + "ARCADE LAYOUT", p1_4 + new Vec2(5f, 107f), Colors.DGYellow, depth + 8);
             else if (_previewPair.challenge)
-                DuckGame.Graphics.DrawString(str7 + "CHALLENGE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGRed, depth + 8);
+                Graphics.DrawString(str7 + "CHALLENGE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGRed, depth + 8);
             else if (_previewPair.invalid == null || _previewPair.invalid.Count == 0)
             {
-                DuckGame.Graphics.DrawString(str7 + "ONLINE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGGreen, depth + 8);
+                Graphics.DrawString(str7 + "ONLINE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGGreen, depth + 8);
             }
             else
             {
-                DuckGame.Graphics.DrawString(str7 + "LOCAL LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGBlue, depth + 8);
+                Graphics.DrawString(str7 + "LOCAL LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGBlue, depth + 8);
                 Vec2 p1_6 = p1_4 + new Vec2(0f, 122f);
                 _fancyFont.Draw("Contains the following Local-Only objects:", p1_6.x + 4f, p1_6.y + 4f, Color.White, depth + 8);
                 int num3 = 22;
@@ -835,8 +835,8 @@ namespace DuckGame
                     }
                 }
                 Vec2 p2_6 = p1_6 + new Vec2(166f, 6 + num3);
-                DuckGame.Graphics.DrawRect(p1_6, p2_6, new Color(70, 70, 70), depth, false);
-                DuckGame.Graphics.DrawRect(p1_6, p2_6, new Color(30, 30, 30), depth - 8);
+                Graphics.DrawRect(p1_6, p2_6, new Color(70, 70, 70), depth, false);
+                Graphics.DrawRect(p1_6, p2_6, new Color(30, 30, 30), depth - 8);
             }
         }
     }

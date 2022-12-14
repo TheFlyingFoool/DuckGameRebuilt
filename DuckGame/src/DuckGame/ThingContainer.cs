@@ -14,7 +14,7 @@ namespace DuckGame
     public class ThingContainer : Thing
     {
         protected List<Thing> _things;
-        protected System.Type _type;
+        protected Type _type;
         public bool bozocheck;
         public bool quickSerialize;
 
@@ -27,7 +27,7 @@ namespace DuckGame
             base.SetTranslation(translation);
         }
 
-        public ThingContainer(List<Thing> things, System.Type t)
+        public ThingContainer(List<Thing> things, Type t)
           : base()
         {
             _things = things;
@@ -80,7 +80,7 @@ namespace DuckGame
                             bitBuffer3.Write(blockGroup.collisionOffset.y);
                             bitBuffer3.Write(blockGroup.collisionSize.x);
                             bitBuffer3.Write(blockGroup.collisionSize.y);
-                            bitBuffer3.Write(blockGroup.blocks.Count<Block>());
+                            bitBuffer3.Write(blockGroup.blocks.Count());
                             foreach (Block block in blockGroup.blocks)
                                 bitBuffer3.Write((short)_things.IndexOf(block));
                             ++val;
@@ -121,7 +121,7 @@ namespace DuckGame
 
         private bool DoDeserialize(BinaryClassChunk node)
         {
-            System.Type type = Editor.GetType(node.GetProperty<string>("blockType"));
+            Type type = Editor.GetType(node.GetProperty<string>("blockType"));
             if (type == null)
                 return false;
             bool flag1 = typeof(AutoBlock).IsAssignableFrom(type);
@@ -158,7 +158,7 @@ namespace DuckGame
                 else
                 {
                     num4 = property1.ReadByte();
-                    if (num4 == byte.MaxValue && (Thing.loadingLevel == null || Thing.loadingLevel.GetVersion() == 2))
+                    if (num4 == byte.MaxValue && (loadingLevel == null || loadingLevel.GetVersion() == 2))
                     {
                         flag3 = true;
                         num4 = property1.ReadByte();
@@ -380,7 +380,7 @@ namespace DuckGame
                         str2 = str2 + Change.ToString(blockGroup.collisionOffset.y) + ",";
                         str2 = str2 + Change.ToString(blockGroup.collisionSize.x) + ",";
                         str2 = str2 + Change.ToString(blockGroup.collisionSize.y) + ",";
-                        str2 = str2 + Change.ToString(blockGroup.blocks.Count<Block>()) + ",";
+                        str2 = str2 + Change.ToString(blockGroup.blocks.Count()) + ",";
                         foreach (Block block in blockGroup.blocks)
                             str2 = str2 + Change.ToString(_things.IndexOf(block)) + ",";
                     }
@@ -413,7 +413,7 @@ namespace DuckGame
 
         private bool LegacyDoDeserialize(DXMLNode node)
         {
-            System.Type type = Editor.GetType(node.Element("blockType").Value);
+            Type type = Editor.GetType(node.Element("blockType").Value);
             bool flag1 = typeof(AutoBlock).IsAssignableFrom(type);
             _things = new List<Thing>();
             string[] source1 = node.Element("data").Value.Split(',');
@@ -421,7 +421,7 @@ namespace DuckGame
             if (num1 == 0)
                 flag1 = false;
             List<AutoBlock> autoBlockList = new List<AutoBlock>();
-            for (int index = num1 != 0 ? 1 : 0; index < source1.Count<string>(); index += 3)
+            for (int index = num1 != 0 ? 1 : 0; index < source1.Count(); index += 3)
             {
                 float num2 = Change.ToSingle(source1[index]);
                 float single = Change.ToSingle(source1[index + 1]);
@@ -495,7 +495,7 @@ namespace DuckGame
                 {
                     string[] source2 = dxmlNode.Value.Split(',');
                     int num3;
-                    for (int index1 = 0; index1 < source2.Count<string>(); index1 = num3 + 7)
+                    for (int index1 = 0; index1 < source2.Count(); index1 = num3 + 7)
                     {
                         BlockGroup blockGroup = new BlockGroup
                         {

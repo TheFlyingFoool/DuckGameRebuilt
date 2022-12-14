@@ -98,7 +98,7 @@ namespace DuckGame
                             _prevBarrelHeat = _stuck._barrelHeat;
                         if (!isServerForObject || _stuck._barrelHeat <= _prevBarrelHeat + 0.01f)
                             return;
-                        Flower.PoofEffect(position);
+                        PoofEffect(position);
                         if (Network.isActive)
                             Send.Message(new NMFlowerPoof(position));
                         Level.Remove(this);

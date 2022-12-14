@@ -75,9 +75,9 @@ namespace DuckGame
             {
                 controlString = "@WASD@ADJUST @SELECT@APPLY @MENU2@ALL";
                 if (Resolution.current.mode == ScreenMode.Windowed)
-                    _values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where<Resolution>(x => x.recommended || x == Resolution.current).ToList<Resolution>();
+                    _values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where(x => x.recommended || x == Resolution.current).ToList();
                 else
-                    _values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where<Resolution>(x => Math.Abs(x.aspect - Resolution.adapterResolution.aspect) < 0.05f || x == Resolution.current).ToList<Resolution>();
+                    _values = Resolution.supportedDisplaySizes[Resolution.current.mode].Where(x => Math.Abs(x.aspect - Resolution.adapterResolution.aspect) < 0.05f || x == Resolution.current).ToList();
             }
         }
 

@@ -79,7 +79,7 @@ namespace DuckGame
                     _data = level1;
                     _customLoad = true;
                     if (Network.isServer)
-                        _compressedData = XMLLevel.GetCompressedLevelData(level1, level);
+                        _compressedData = GetCompressedLevelData(level1, level);
                 }
             }
             if (level == "WORKSHOP")
@@ -152,7 +152,7 @@ namespace DuckGame
                 if (NetworkDebugger.currentIndex != 0)
                     str2 = str2.Insert(str2.Length - 1, NetworkDebugger.currentIndex.ToString());
                 string path1 = str2 + str1 + ".lev";
-                if (System.IO.File.Exists(path1))
+                if (File.Exists(path1))
                     return path1;
                 flag = true;
             }
@@ -164,16 +164,16 @@ namespace DuckGame
                 if (NetworkDebugger.currentIndex != 0)
                     str4 = str4.Insert(str4.Length - 1, NetworkDebugger.currentIndex.ToString());
                 string path2 = str4 + str3 + ".lev";
-                return System.IO.File.Exists(path2) ? path2 : null;
+                return File.Exists(path2) ? path2 : null;
             }
             _data = Content.GetLevel(path);
             if (_data != null)
                 return path;
             string path3 = DuckFile.levelDirectory + path + ".lev";
-            if (System.IO.File.Exists(path3))
+            if (File.Exists(path3))
                 return path3;
             string path4 = Editor.initialDirectory + "/" + path + ".lev";
-            return System.IO.File.Exists(path4) ? path4 : null;
+            return File.Exists(path4) ? path4 : null;
         }
 
         private LevelData LoadLevelDoc()

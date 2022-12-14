@@ -27,7 +27,7 @@ namespace DuckGame
         public List<WarpLine> warpLines = new List<WarpLine>();
         private Vec2 warpPos;
         private bool onUpdate;
-        public List<Warpgun.BlockGlow> blockGlows = new List<Warpgun.BlockGlow>();
+        public List<BlockGlow> blockGlows = new List<BlockGlow>();
         private int shotsSinceDuckWasGrounded;
         private int framesSinceShot;
         private float lerpShut;
@@ -129,7 +129,7 @@ namespace DuckGame
                     Vec2 position;
                     if (Level.CheckLine<IPlatform>(this.position, this.position + new Vec2((float)Math.Cos(Maths.DegToRad(deg)), (float)Math.Sin(Maths.DegToRad(deg))) * 32f, out position) != null)
                     {
-                        blockGlows.Add(new Warpgun.BlockGlow()
+                        blockGlows.Add(new BlockGlow()
                         {
                             pos = position
                         });
@@ -407,7 +407,7 @@ namespace DuckGame
 
         public override void DrawGlow()
         {
-            foreach (Warpgun.BlockGlow blockGlow in blockGlows)
+            foreach (BlockGlow blockGlow in blockGlows)
             {
                 Graphics.DrawTexturedLine(_warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0f, -4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);
                 Graphics.DrawTexturedLine(_warpLine.texture, blockGlow.pos, blockGlow.pos + new Vec2(0f, 4f), Color.Purple * blockGlow.glow, 0.25f, (Depth)0.9f);

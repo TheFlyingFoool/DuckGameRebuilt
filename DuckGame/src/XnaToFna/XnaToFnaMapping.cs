@@ -14,9 +14,9 @@ namespace XnaToFna
         public ModuleDefinition Module;
         public string Target;
         public string[] Sources;
-        public XnaToFnaMapping.SetupDelegate Setup;
+        public SetupDelegate Setup;
 
-        public XnaToFnaMapping(string target, string[] sources, XnaToFnaMapping.SetupDelegate setup = null)
+        public XnaToFnaMapping(string target, string[] sources, SetupDelegate setup = null)
         {
             this.Target = target;
             this.Sources = sources;

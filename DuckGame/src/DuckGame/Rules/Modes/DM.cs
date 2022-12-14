@@ -58,9 +58,9 @@ namespace DuckGame
             base.Update();
         }
 
-        protected override List<Duck> AssignSpawns() => Spawn.SpawnPlayers().OrderBy<Duck, float>(sp => sp.x).ToList<Duck>();
+        protected override List<Duck> AssignSpawns() => Spawn.SpawnPlayers().OrderBy(sp => sp.x).ToList();
 
-        protected override Level GetNextLevel() => _editorTestMode ? new GameLevel((Level.current as GameLevel).levelInputString, editorTestMode: true) : (Level)new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
+        protected override Level GetNextLevel() => _editorTestMode ? new GameLevel((Level.current as GameLevel).levelInputString, editorTestMode: true) : (Level)new GameLevel(Deathmatch.RandomLevelString(previousLevel));
 
         protected override List<Profile> AddPoints()
         {
@@ -98,7 +98,7 @@ namespace DuckGame
             if (source.Count <= 1 && source.Count > 0)
             {
                 source.AddRange(collection);
-                GameMode.lastWinners.Clear();
+                lastWinners.Clear();
                 Profile pTheRealWinnerHere = null;
                 foreach (Team team in source)
                 {
@@ -110,7 +110,7 @@ namespace DuckGame
                             Profile p = activeProfile;
                             if (activeProfile.duck.converted != null)
                                 p = pTheRealWinnerHere = activeProfile.duck.converted.profile;
-                            GameMode.lastWinners.Add(activeProfile);
+                            lastWinners.Add(activeProfile);
                             if (p != null)
                             {
                                 PlusOne plusOne = new PlusOne(0f, 0f, p, testMode: _editorTestMode)
@@ -124,7 +124,7 @@ namespace DuckGame
                     }
                 }
                 if (Network.isActive && Network.isServer)
-                    Send.Message(new NMAssignWin(GameMode.lastWinners, pTheRealWinnerHere));
+                    Send.Message(new NMAssignWin(lastWinners, pTheRealWinnerHere));
                 ++source[0].score;
             }
             return profileList;

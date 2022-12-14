@@ -12,7 +12,7 @@ namespace DuckGame
         public string text = "";
         public NewsSection section;
 
-        public event DuckStory.OnStoryBeginDelegate OnStoryBegin;
+        public event OnStoryBeginDelegate OnStoryBegin;
 
         public void DoCallback()
         {

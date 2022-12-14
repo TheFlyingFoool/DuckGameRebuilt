@@ -42,7 +42,7 @@ namespace DuckGame
                     texturename = texs[r.Id].Value;
                     Texture2D tex = texs[r.Id].Key;
                     Color[] data = new Color[tex.Width * tex.Height];
-                    texs[r.Id].Key.GetData<Color>(data);
+                    texs[r.Id].Key.GetData(data);
                     for (int x = 0; x < r.Width; x++)
                     {
                         for (int y = 0; y < r.Height; y++)
@@ -65,7 +65,7 @@ namespace DuckGame
                     DevConsole.Log("Error handling Texture " + texturename + " " + file + " " + ex.Message, Color.Red);
                 }
             }
-            System.IO.File.WriteAllLines(@"..\" + file + "_offsets.txt", strings);
+            File.WriteAllLines(@"..\" + file + "_offsets.txt", strings);
             bigimage.Bitmap.Save(@"..\" + file + ".png", ImageFormat.Png);
             bigimage.Dispose();
         }
@@ -189,8 +189,13 @@ namespace DuckGame
             {
                 looking = false;
             }
-
         }
+        //public static int usedfornonsense = 0;
+        //[DevConsoleCommand(Name = "dividebyzero")]
+        //public static void mathexpection()
+        //{
+        //    usedfornonsense = 1 / usedfornonsense;
+        //}
 
         [DevConsoleCommand(Name = "steamjoin")]
         public static void Join(string id)
@@ -295,7 +300,7 @@ namespace DuckGame
         }
         //RandomSkySay();
 
-        public static void SetControllerLightBar(int index, DuckGame.Color color)
+        public static void SetControllerLightBar(int index, Color color)
         {
             GamePadState state = FNAPlatform.GetGamePadState(index, GamePadDeadZone.IndependentAxes);
             if (state.IsConnected)
@@ -307,7 +312,7 @@ namespace DuckGame
         {
             for (int index = 0; index < MonoMain.MaximumGamepadCount; index++)
             {
-                SetControllerLightBar(index, DuckGame.Color.Magenta);
+                SetControllerLightBar(index, Color.Magenta);
             }
            
             //if (Level.current == null || !(Level.current.things[typeof(CityBackground)].FirstOrDefault<Thing>() is CityBackground cityBackground))

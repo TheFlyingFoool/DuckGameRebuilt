@@ -362,7 +362,7 @@ namespace DuckGame
 
         private void AssignNetProfileIndex(byte pIndex)
         {
-            DevConsole.Log(DCSection.General, "Assigning net profile index (" + pIndex.ToString() + "\\" + Profiles.alllist.Count<Profile>().ToString() + ")");
+            DevConsole.Log(DCSection.General, "Assigning net profile index (" + pIndex.ToString() + "\\" + Profiles.alllist.Count().ToString() + ")");
             _netProfileIndex = pIndex;
             Profile profile = Profiles.alllist[_netProfileIndex];
             if (Network.isClient && Network.InLobby())
@@ -776,7 +776,7 @@ namespace DuckGame
                 Level.Remove(_trappedInstance);
                 Level.Remove(_cookedInstance);
             }
-            foreach (Thing thing in _equipment.ToList<Equipment>())
+            foreach (Thing thing in _equipment.ToList())
                 Level.Remove(thing);
         }
 
@@ -1891,7 +1891,7 @@ namespace DuckGame
 
         private void TryGrab()
         {
-            foreach (Holdable h in Level.CheckCircleAll<Holdable>(new Vec2(x, y + 4f), 18f).OrderBy<Holdable, Holdable>(h => h, new CompareHoldablePriorities(this)))
+            foreach (Holdable h in Level.CheckCircleAll<Holdable>(new Vec2(x, y + 4f), 18f).OrderBy(h => h, new CompareHoldablePriorities(this)))
             {
                 if (h.owner == null && h.canPickUp && (h != _lastHoldItem || _timeSinceThrow >= 30) && h.active && h.visible && Level.CheckLine<Block>(position, h.position) == null)
                 {
@@ -3868,7 +3868,7 @@ namespace DuckGame
                     if (!grounded && _lives > 0)
                     {
                         IEnumerable<Thing> thing = Level.current.things[typeof(SpawnPoint)];
-                        position = thing.ElementAt<Thing>(Rando.Int(thing.Count<Thing>() - 1)).position;
+                        position = thing.ElementAt(Rando.Int(thing.Count() - 1)).position;
                     }
                     if (profile != null && profile.localPlayer && Level.current is TeamSelect2)
                     {
@@ -4980,10 +4980,10 @@ namespace DuckGame
                         if (problem == ConnectionTrouble.Loss)
                             return owner.duck.connection != DuckNetwork.localConnection && owner.duck.connection.manager.accumulatedLoss > 10;
                         if (problem == ConnectionTrouble.Minimized)
-                            return !owner.duck.profile.netData.Get<bool>("gameInFocus", true);
+                            return !owner.duck.profile.netData.Get("gameInFocus", true);
                         if (problem == ConnectionTrouble.Paused)
-                            return owner.duck.profile.netData.Get<bool>("gamePaused", false);
-                        return problem == ConnectionTrouble.DevConsole && owner.duck.profile.netData.Get<bool>("consoleOpen", false);
+                            return owner.duck.profile.netData.Get("gamePaused", false);
+                        return problem == ConnectionTrouble.DevConsole && owner.duck.profile.netData.Get("consoleOpen", false);
                     }
                 }
 

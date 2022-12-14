@@ -149,7 +149,7 @@ namespace DuckGame
 
         public void Pulse(int type, WireTileset wire)
         {
-            Thing.Fondle(this, DuckNetwork.localConnection);
+            Fondle(this, DuckNetwork.localConnection);
             _open = !_open;
             SFX.Play("click");
         }

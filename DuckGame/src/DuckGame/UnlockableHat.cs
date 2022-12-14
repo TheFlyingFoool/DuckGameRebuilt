@@ -41,7 +41,7 @@ namespace DuckGame
         {
             allowHints = canHint;
             _team = t;
-            _persona = Persona.all.ElementAt<DuckPersona>(Rando.Int(3));
+            _persona = Persona.all.ElementAt(Rando.Int(3));
             _showScreen = true;
         }
 
@@ -75,15 +75,15 @@ namespace DuckGame
             float y1 = y + 8f;
             _persona.sprite.depth = depth;
             _persona.sprite.color = Color.White;
-            DuckGame.Graphics.Draw(_persona.sprite, 0, x1, y1);
+            Graphics.Draw(_persona.sprite, 0, x1, y1);
             _persona.armSprite.frame = _persona.sprite.imageIndex;
             _persona.armSprite.scale = new Vec2(1f, 1f);
             _persona.armSprite.depth = depth + 4;
-            DuckGame.Graphics.Draw(_persona.armSprite, x1 - 3f, y1 + 6f);
+            Graphics.Draw(_persona.armSprite, x1 - 3f, y1 + 6f);
             Vec2 hatPoint = DuckRig.GetHatPoint(_persona.sprite.imageIndex);
             _team.hat.depth = depth + 2;
             _team.hat.center = new Vec2(16f, 16f) + _team.hatOffset;
-            DuckGame.Graphics.Draw(_team.hat, _team.hat.frame, x1 + hatPoint.x, y1 + hatPoint.y);
+            Graphics.Draw(_team.hat, _team.hat.frame, x1 + hatPoint.x, y1 + hatPoint.y);
             if (_team.hat.texture.textureName == "hats/devhat" && _cape == null)
             {
                 _hat = new TeamHat(x1 + hatPoint.x, (float)(y1 + hatPoint.y + 5.0), Teams.GetTeam("CAPTAIN"));

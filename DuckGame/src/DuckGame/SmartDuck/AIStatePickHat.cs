@@ -27,7 +27,7 @@ namespace DuckGame
         {
             if (this._target == null)
             {
-                List<Thing> list = Level.current.things[typeof(HatConsole)].ToList<Thing>();
+                List<Thing> list = Level.current.things[typeof(HatConsole)].ToList();
                 if (!(AI.Nearest(duck.position, list) is HatConsole hatConsole))
                     return new AIStateWait(Rando.Float(0.8f, 1f));
                 this._target = hatConsole;

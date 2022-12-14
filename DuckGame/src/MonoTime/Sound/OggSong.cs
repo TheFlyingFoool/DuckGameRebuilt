@@ -14,9 +14,9 @@ namespace DuckGame
         public static MemoryStream Load(string oggFile, bool localContent = true)
         {
             oggFile = oggFile.TrimStart('/');
-            Stream input = !localContent ? System.IO.File.OpenRead(oggFile) : DuckFile.OpenStream(oggFile);
+            Stream input = !localContent ? File.OpenRead(oggFile) : DuckFile.OpenStream(oggFile);
             MemoryStream output = new MemoryStream();
-            OggSong.CopyStream(input, output);
+            CopyStream(input, output);
             input.Close();
             return output;
         }

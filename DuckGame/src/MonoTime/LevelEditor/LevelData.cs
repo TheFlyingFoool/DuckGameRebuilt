@@ -46,9 +46,9 @@ namespace DuckGame
 
         public LevelData Clone()
         {
-            BinaryClassChunk.fullDeserializeMode = true;
+            fullDeserializeMode = true;
             LevelData levelData = DuckFile.LoadLevel(Serialize().buffer);
-            BinaryClassChunk.fullDeserializeMode = false;
+            fullDeserializeMode = false;
             levelData._path = _path;
             levelData._location = _location;
             return levelData;

@@ -151,7 +151,7 @@ namespace DuckGame
             for (int index = 0; index < numGenerateRare; ++index)
             {
                 UIGachaBox.useNumGachas = true;
-                Furniture furniture = UIGachaBox.GetRandomFurniture(Rarity.VeryVeryRare, 1, 0.4f, true).OrderBy<Furniture, int>(x => -x.rarity).ElementAt<Furniture>(0);
+                Furniture furniture = UIGachaBox.GetRandomFurniture(Rarity.VeryVeryRare, 1, 0.4f, true).OrderBy(x => -x.rarity).ElementAt(0);
                 UIGachaBox.useNumGachas = false;
                 ++Global.data.numGachas;
                 furniture.ballRot = Rando.Float(360f);
@@ -168,7 +168,7 @@ namespace DuckGame
                 furniture.rareGen = false;
                 prizes.Add(furniture);
             }
-            if (UIGachaBoxNew.skipping)
+            if (skipping)
             {
                 while (prizes.Count > 3)
                 {
@@ -177,7 +177,7 @@ namespace DuckGame
                     prizes.RemoveAt(0);
                 }
                 SFX.Play("harp");
-                UIGachaBoxNew.skipping = false;
+                skipping = false;
             }
             LoadNextPrize();
             _gachaEgg.CenterOrigin();
@@ -192,7 +192,7 @@ namespace DuckGame
 
         public void LoadNextPrize()
         {
-            _contains = prizes.ElementAt<Furniture>(0);
+            _contains = prizes.ElementAt(0);
             _capsule.frame = FigureFrame(_contains);
         }
 
@@ -214,10 +214,10 @@ namespace DuckGame
         {
             if (Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && Input.Pressed("START"))
             {
-                UIGachaBoxNew.skipping = true;
+                skipping = true;
                 SFX.Play("dacBang");
             }
-            if (UIGachaBoxNew.skipping)
+            if (skipping)
             {
                 while (prizes.Count > 3)
                 {
@@ -225,7 +225,7 @@ namespace DuckGame
                     Profiles.experienceProfile.SetNumFurnitures(_contains.index, Profiles.experienceProfile.GetNumFurnitures(_contains.index) + 1);
                     prizes.RemoveAt(0);
                 }
-                UIGachaBoxNew.skipping = false;
+                skipping = false;
                 finished = true;
                 Close();
                 HUD.CloseAllCorners();

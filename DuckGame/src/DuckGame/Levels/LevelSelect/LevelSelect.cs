@@ -107,15 +107,15 @@ namespace DuckGame
                 levelsInside.Sort();
                 foreach (string PATH in levelsInside)
                     AddItem(new LSItem(0f, 0f, this, PATH));
-                _items = _items.OrderBy<LSItem, bool>(x => x.data != null && x.data.metaData.eightPlayer).ToList<LSItem>();
+                _items = _items.OrderBy(x => x.data != null && x.data.metaData.eightPlayer).ToList();
                 PositionItems();
             }
             else
             {
                 string[] directories = DuckFile.GetDirectories(folder);
                 string[] files = DuckFile.GetFiles(folder);
-                Array.Sort<string>(directories);
-                Array.Sort<string>(files);
+                Array.Sort(directories);
+                Array.Sort(files);
                 if (_currentDirectory == _rootDirectory)
                 {
                     foreach (Mod accessibleMod in (IEnumerable<Mod>)ModLoader.accessibleMods)
@@ -136,7 +136,7 @@ namespace DuckGame
                 }
                 foreach (string str in directories)
                 {
-                    if (DuckFile.GetFiles(str, "*.lev", SearchOption.AllDirectories).Count<string>() > 0)
+                    if (DuckFile.GetFiles(str, "*.lev", SearchOption.AllDirectories).Count() > 0)
                         AddItem(new LSItem(0f, 0f, this, str, pIsModPath: isModPath));
                 }
                 List<string> stringList = new List<string>();
@@ -187,7 +187,7 @@ namespace DuckGame
                 _confirmMenu.Add(new UIMenuItem("YEAH!", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, _deleteFile)), true);
             }
             _confirmMenu.Close();
-            Level.Add(_confirmMenu);
+            Add(_confirmMenu);
         }
 
         public void AddItem(LSItem item) => _items.Add(item);
@@ -338,7 +338,7 @@ namespace DuckGame
                         if (_selectedItem > 0)
                             --_selectedItem;
                         else
-                            _selectedItem = _items.Count<LSItem>() - 1;
+                            _selectedItem = _items.Count() - 1;
                         if (_selectedItem < _topIndex)
                             _topIndex = _selectedItem;
                         if (_selectedItem >= _topIndex + _maxItems)
@@ -346,7 +346,7 @@ namespace DuckGame
                     }
                     else if (Input.Pressed("MENUDOWN"))
                     {
-                        if (_selectedItem < _items.Count<LSItem>() - 1)
+                        if (_selectedItem < _items.Count() - 1)
                             ++_selectedItem;
                         else
                             _selectedItem = 0;
@@ -366,8 +366,8 @@ namespace DuckGame
                     else if (Input.Pressed("MENURIGHT"))
                     {
                         _selectedItem += _maxItems - 1;
-                        if (_selectedItem > _items.Count<LSItem>() - 1)
-                            _selectedItem = _items.Count<LSItem>() - 1;
+                        if (_selectedItem > _items.Count() - 1)
+                            _selectedItem = _items.Count() - 1;
                         if (_selectedItem >= _topIndex + _maxItems)
                             _topIndex = _selectedItem + 1 - _maxItems;
                     }
@@ -425,7 +425,7 @@ namespace DuckGame
                     }
                     else if (Input.Pressed("MENU2") && modRoot == null && _currentDirectory != "@VANILLA@" && _selectedLevel.path != "@VANILLA@" && _currentDirectory != "@WORKSHOP@" && mapPack == null && MonoMain.pauseMenu != _confirmMenu && _selectedLevel.itemType != LSItemType.UpFolder && _selectedLevel.itemType != LSItemType.Workshop && _selectedLevel.itemType != LSItemType.MapPack)
                     {
-                        LevelSelect._skipCompanionOpening = true;
+                        _skipCompanionOpening = true;
                         MonoMain.pauseMenu = _confirmMenu;
                         HUD.CloseAllCorners();
                         _confirmMenu.Open();
@@ -464,7 +464,7 @@ namespace DuckGame
         public void DrawThings(bool drawBack = false)
         {
             if (drawBack)
-                DuckGame.Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Layer.HUD.camera.width, Layer.HUD.camera.height), Color.Black, -0.8f);
+                Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Layer.HUD.camera.width, Layer.HUD.camera.height), Color.Black, -0.8f);
             foreach (LSItem lsItem in _items)
             {
                 if (lsItem.visible)
@@ -475,13 +475,13 @@ namespace DuckGame
             {
                 _previewSprite.scale = new Vec2(0.5f, 0.5f);
                 _previewSprite.depth = (Depth)0.9f;
-                DuckGame.Graphics.Draw(_previewSprite, 150f, 45f);
+                Graphics.Draw(_previewSprite, 150f, 45f);
             }
             else if (_selectedLevel.mapPack != null && _selectedLevel.mapPack.preview != null)
             {
                 Tex2D preview = _selectedLevel.mapPack.preview;
                 Vec2 vec2 = new Vec2(320f / preview.width, 180f / preview.height) * 0.5f;
-                DuckGame.Graphics.Draw(preview, 150f, 45f, vec2.x, vec2.y);
+                Graphics.Draw(preview, 150f, 45f, vec2.x, vec2.y);
             }
             _font.depth = depth;
             _font.Draw(mapPack == null ? (!(_currentDirectory == "@WORKSHOP@") ? (!(_currentDirectory == "@VANILLA@") ? "Levels" + _currentDirectory.Substring(_rootDirectory.Length, _currentDirectory.Length - _rootDirectory.Length) : "Levels/Deathmatch") : "Levels/Workshop") : mapPack.name, _leftPos, _topPos - 10f, Color.LimeGreen);

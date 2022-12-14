@@ -46,7 +46,7 @@ namespace DuckGame
         public MTEffect _basicWireframeEffectTex;
         public MTEffect _itemSpawnEffect;
         public bool basicWireframeTex;
-        private LayerCore.MapEntry[] _layerMap;
+        private MapEntry[] _layerMap;
         private int _lastDrawIndexCount;
 
         public bool allVisible
@@ -141,7 +141,7 @@ namespace DuckGame
                 AlphaSourceBlend = Blend.DestinationColor,
                 AlphaDestinationBlend = Blend.Zero
             };
-            _layers = _layers.OrderBy<Layer, int>(l => -l.depth).ToList<Layer>();
+            _layers = _layers.OrderBy(l => -l.depth).ToList();
             Layer.Parallax.flashAddInfluence = 1f;
             Layer.HUD.flashAddInfluence = 1f;
             if (_basicEffect == null)
@@ -158,7 +158,7 @@ namespace DuckGame
                 _basicEffectFadeAdd = Content.Load<MTEffect>("Shaders/basicFadeAdd");
                 _basicEffectFadeAdd.effect.Name = "Shaders/basicFadeAdd";
             }
-            LayerCore.ReinitializeLightingTargets();
+            ReinitializeLightingTargets();
             ResetLayers();
         }
 
@@ -179,7 +179,7 @@ namespace DuckGame
         private void SortLayers()
         {
             if (_layerMap == null || _layerMap.Length != _hybridList.Count)
-                _layerMap = new LayerCore.MapEntry[_hybridList.Count];
+                _layerMap = new MapEntry[_hybridList.Count];
             bool flag = true;
             int index = 0;
             int num1 = int.MinValue;
@@ -196,7 +196,7 @@ namespace DuckGame
             }
             if (flag)
                 return;
-            Array.Sort<LayerCore.MapEntry>(_layerMap, (x, y) => x.order.CompareTo(y.order));
+            Array.Sort(_layerMap, (x, y) => x.order.CompareTo(y.order));
         }
 
         public void DrawTargetLayers()
@@ -275,7 +275,7 @@ namespace DuckGame
             _hybridList.AddRange(_layers);
         }
 
-        public Layer Get(string layer) => _layers.FirstOrDefault<Layer>(x => x.name == layer);
+        public Layer Get(string layer) => _layers.FirstOrDefault(x => x.name == layer);
 
         public void Add(Layer l)
         {

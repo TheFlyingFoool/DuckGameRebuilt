@@ -70,8 +70,8 @@ namespace DuckGame
         public static T Generic<T>(T current, T to, float amount)
         {
             if ((object)current is Vec2)
-                return (T)(object)(ValueType)Lerp.Vec2Smooth((Vec2)(object)current, (Vec2)(object)to, amount);
-            return (object)current is float ? (T)(object)(ValueType)Lerp.FloatSmooth((float)(object)current, (float)(object)to, amount) : current;
+                return (T)(object)(ValueType)Vec2Smooth((Vec2)(object)current, (Vec2)(object)to, amount);
+            return (object)current is float ? (T)(object)(ValueType)FloatSmooth((float)(object)current, (float)(object)to, amount) : current;
         }
 
         public static Vec3 Vec3(Vec3 current, Vec3 to, float amount)

@@ -20,8 +20,8 @@ namespace DuckGame
             byte[] avatarSmall = friend.avatarSmall;
             if (avatarSmall != null)
             {
-                Texture2D tex = new Texture2D(DuckGame.Graphics.device, 32, 32);
-                tex.SetData<byte>(avatarSmall);
+                Texture2D tex = new Texture2D(Graphics.device, 32, 32);
+                tex.SetData(avatarSmall);
                 _avatar = new Sprite((Tex2D)tex);
                 _avatar.CenterOrigin();
             }
@@ -39,12 +39,12 @@ namespace DuckGame
 
         public override void Draw()
         {
-            DuckGame.Graphics.DrawRect(leftSection.topLeft, rightSection.bottomRight, Colors.BlueGray, depth - 1);
+            Graphics.DrawRect(leftSection.topLeft, rightSection.bottomRight, Colors.BlueGray, depth - 1);
             if (_avatar != null)
             {
                 _avatar.depth = depth + 2;
                 _avatar.scale = new Vec2(0.25f);
-                DuckGame.Graphics.Draw(_avatar, (float)(leftSection.left + _avatar.width * _avatar.scale.x / 2.0 + 6.0), y + 3f);
+                Graphics.Draw(_avatar, (float)(leftSection.left + _avatar.width * _avatar.scale.x / 2.0 + 6.0), y + 3f);
             }
             base.Draw();
         }

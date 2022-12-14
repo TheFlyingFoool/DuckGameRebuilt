@@ -26,7 +26,7 @@ namespace DuckGame
         private bool _allowPacking = true;
         //private int offset;
         //private int currentBit;
-        public static List<System.Type> kTypeIndexList = new List<System.Type>()
+        public static List<Type> kTypeIndexList = new List<Type>()
     {
       typeof (string),
       typeof (byte[]),
@@ -94,18 +94,18 @@ namespace DuckGame
 
         public static long GetMaxValue(int bits)
         {
-            if (BitBuffer._maxMasks == null)
+            if (_maxMasks == null)
             {
-                BitBuffer._maxMasks = new int[64];
+                _maxMasks = new int[64];
                 int num1 = 0;
                 for (int index = 0; index < 64; ++index)
                 {
                     int num2 = num1 | 1;
-                    BitBuffer._maxMasks[index] = num2;
+                    _maxMasks[index] = num2;
                     num1 = num2 << 1;
                 }
             }
-            return BitBuffer._maxMasks[bits];
+            return _maxMasks[bits];
         }
 
         /// <summary>
@@ -193,14 +193,14 @@ namespace DuckGame
 
         private void calculateReadMasks()
         {
-            if (BitBuffer._readMasks != null)
+            if (_readMasks != null)
                 return;
-            BitBuffer._readMasks = new int[64];
+            _readMasks = new int[64];
             int num1 = 0;
             for (int index = 0; index < 64; ++index)
             {
                 int num2 = num1 | 1;
-                BitBuffer._readMasks[index] = num2;
+                _readMasks[index] = num2;
                 num1 = num2 << 1;
             }
         }
@@ -267,7 +267,7 @@ namespace DuckGame
             int num1 = 0;
             if (bits <= 8 - _bitOffsetPosition)
             {
-                num1 = _buffer[position] >> _bitOffsetPosition & BitBuffer._readMasks[bits - 1];
+                num1 = _buffer[position] >> _bitOffsetPosition & _readMasks[bits - 1];
                 bitOffset = _bitOffsetPosition + bits;
             }
             else
@@ -285,7 +285,7 @@ namespace DuckGame
                         int num3 = 8 - _bitOffsetPosition;
                         if (num3 > bits)
                             num3 = bits;
-                        int num4 = _buffer[position] >> _bitOffsetPosition & BitBuffer._readMasks[num3 - 1];
+                        int num4 = _buffer[position] >> _bitOffsetPosition & _readMasks[num3 - 1];
                         bits -= num3;
                         int num5 = num4 << num2;
                         num1 |= num5;
@@ -591,7 +591,7 @@ namespace DuckGame
             return dst;
         }
 
-        public object Read(System.Type type, bool allowPacking = true)
+        public object Read(Type type, bool allowPacking = true)
         {
             if (type == typeof(string))
                 return ReadString();
@@ -634,7 +634,7 @@ namespace DuckGame
             return typeof(Thing).IsAssignableFrom(type) ? (object)ReadThing(type) : throw new Exception("Trying to read unsupported type " + type?.ToString() + " from BitBuffer!");
         }
 
-        public Thing ReadThing(System.Type pThingType)
+        public Thing ReadThing(Type pThingType)
         {
             byte num = ReadByte();
             ushort key = (ushort)ReadBits(typeof(ushort), 10);
@@ -647,7 +647,7 @@ namespace DuckGame
             Profile profile = GhostObject.IndexToProfile(netIndex16);
             if (profile != null && profile.removedGhosts.TryGetValue(netIndex16, out GhostObject removedGhost))
                 return removedGhost.thing;
-            System.Type type = Editor.IDToType[key];
+            Type type = Editor.IDToType[key];
             if (!pThingType.IsAssignableFrom(type))
             {
                 DevConsole.Log(DCSection.GhostMan, "@error Type mismatch, ignoring ghost (" + netIndex16.ToString() + "(" + type.GetType().Name + " vs. " + pThingType.Name + "))@error");
@@ -688,11 +688,11 @@ namespace DuckGame
             return ghost.thing;
         }
 
-        public object ReadBits(System.Type t, int bits) => bits == -1 ? Read(t) : ConvertType(ReadPackedBits(bits), t);
+        public object ReadBits(Type t, int bits) => bits == -1 ? Read(t) : ConvertType(ReadPackedBits(bits), t);
 
         public T ReadBits<T>(int bits) => bits < 1 ? default(T) : (T)ConvertType(ReadPackedBits(bits), typeof(T));
 
-        protected object ConvertType(int obj, System.Type type)
+        protected object ConvertType(int obj, Type type)
         {
             if (type == typeof(float))
                 return (float)obj;
@@ -794,12 +794,12 @@ namespace DuckGame
                 byte[] bytes = Encoding.UTF8.GetBytes(val);
                 if (_bitOffsetPosition != 0)
                 {
-                    Write((ushort)bytes.Count<byte>());
+                    Write((ushort)bytes.Count());
                     WritePacked(bytes);
                 }
                 else
                 {
-                    int val1 = bytes.Count<byte>();
+                    int val1 = bytes.Count();
                     if (val1 > ushort.MaxValue)
                     {
                         Write(ushort.MaxValue);
@@ -807,9 +807,9 @@ namespace DuckGame
                         Write(val1);
                     }
                     else
-                        Write((ushort)bytes.Count<byte>());
-                    int num = bytes.Count<byte>();
-                    if (position + num > _buffer.Count<byte>())
+                        Write((ushort)bytes.Count());
+                    int num = bytes.Count();
+                    if (position + num > _buffer.Count())
                         resize(position + num);
                     bytes.CopyTo(_buffer, position);
                     position += num;
@@ -826,11 +826,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)bytes.Count<byte>();
-                if (position + num > _buffer.Count<byte>())
+                byte num = (byte)bytes.Count();
+                if (position + num > _buffer.Count())
                     resize(position + num);
                 bytes.CopyTo(_buffer, position);
-                position += bytes.Count<byte>();
+                position += bytes.Count();
             }
         }
 
@@ -843,11 +843,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)bytes.Count<byte>();
-                if (position + num > _buffer.Count<byte>())
+                byte num = (byte)bytes.Count();
+                if (position + num > _buffer.Count())
                     resize(position + num);
                 bytes.CopyTo(_buffer, position);
-                position += bytes.Count<byte>();
+                position += bytes.Count();
             }
         }
 
@@ -860,11 +860,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)bytes.Count<byte>();
-                if (position + num > _buffer.Count<byte>())
+                byte num = (byte)bytes.Count();
+                if (position + num > _buffer.Count())
                     resize(position + num);
                 bytes.CopyTo(_buffer, position);
-                position += bytes.Count<byte>();
+                position += bytes.Count();
             }
         }
 
@@ -877,11 +877,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)bytes.Count<byte>();
-                if (position + num > _buffer.Count<byte>())
+                byte num = (byte)bytes.Count();
+                if (position + num > _buffer.Count())
                     resize(position + num);
                 bytes.CopyTo(_buffer, position);
-                position += bytes.Count<byte>();
+                position += bytes.Count();
             }
         }
 
@@ -894,11 +894,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)bytes.Count<byte>();
-                if (position + num > _buffer.Count<byte>())
+                byte num = (byte)bytes.Count();
+                if (position + num > _buffer.Count())
                     resize(position + num);
                 bytes.CopyTo(_buffer, position);
-                position += bytes.Count<byte>();
+                position += bytes.Count();
             }
         }
 
@@ -911,11 +911,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)bytes.Count<byte>();
-                if (position + num > _buffer.Count<byte>())
+                byte num = (byte)bytes.Count();
+                if (position + num > _buffer.Count())
                     resize(position + num);
                 bytes.CopyTo(_buffer, position);
-                position += bytes.Count<byte>();
+                position += bytes.Count();
             }
         }
 
@@ -928,11 +928,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)bytes.Count<byte>();
-                if (position + num > _buffer.Count<byte>())
+                byte num = (byte)bytes.Count();
+                if (position + num > _buffer.Count())
                     resize(position + num);
                 bytes.CopyTo(_buffer, position);
-                position += bytes.Count<byte>();
+                position += bytes.Count();
             }
         }
 
@@ -966,11 +966,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)bytes.Count<byte>();
-                if (position + num > _buffer.Count<byte>())
+                byte num = (byte)bytes.Count();
+                if (position + num > _buffer.Count())
                     resize(position + num);
                 bytes.CopyTo(_buffer, position);
-                position += bytes.Count<byte>();
+                position += bytes.Count();
             }
         }
 
@@ -983,11 +983,11 @@ namespace DuckGame
             }
             else
             {
-                byte num = (byte)bytes.Count<byte>();
-                if (position + num > _buffer.Count<byte>())
+                byte num = (byte)bytes.Count();
+                if (position + num > _buffer.Count())
                     resize(position + num);
                 bytes.CopyTo(_buffer, position);
-                position += bytes.Count<byte>();
+                position += bytes.Count();
             }
         }
 
@@ -999,7 +999,7 @@ namespace DuckGame
             }
             else
             {
-                if (position + 1 > _buffer.Count<byte>())
+                if (position + 1 > _buffer.Count())
                     resize(position + 1);
                 _buffer[position] = val;
                 ++position;
@@ -1014,7 +1014,7 @@ namespace DuckGame
             }
             else
             {
-                if (position + 1 > _buffer.Count<byte>())
+                if (position + 1 > _buffer.Count())
                     resize(position + 1);
                 _buffer[position] = (byte)val;
                 ++position;
@@ -1060,22 +1060,22 @@ namespace DuckGame
         {
             int val = byte.MaxValue;
             if (obj != null)
-                val = !(obj is Thing) ? BitBuffer.kTypeIndexList.IndexOf(obj.GetType()) : BitBuffer.kTypeIndexList.IndexOf(typeof(Thing));
+                val = !(obj is Thing) ? kTypeIndexList.IndexOf(obj.GetType()) : kTypeIndexList.IndexOf(typeof(Thing));
             if (val < 0)
                 throw new Exception("Trying to write unsupported type to BitBuffer through WriteObject!");
             Write((byte)val);
             Write(obj);
         }
 
-        public object ReadObject(out System.Type pTypeRead)
+        public object ReadObject(out Type pTypeRead)
         {
             byte index = ReadByte();
-            if (index == byte.MaxValue || index >= BitBuffer.kTypeIndexList.Count)
+            if (index == byte.MaxValue || index >= kTypeIndexList.Count)
             {
                 pTypeRead = typeof(Thing);
                 return null;
             }
-            pTypeRead = BitBuffer.kTypeIndexList[index];
+            pTypeRead = kTypeIndexList[index];
             return Read(pTypeRead);
         }
 
@@ -1192,7 +1192,7 @@ namespace DuckGame
 
         private void resize(int bytes)
         {
-            int length = _buffer.Count<byte>() * 2;
+            int length = _buffer.Count() * 2;
             while (length < bytes)
                 length *= 2;
             byte[] numArray = new byte[length];

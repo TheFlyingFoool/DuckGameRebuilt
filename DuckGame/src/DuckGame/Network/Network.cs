@@ -28,8 +28,8 @@ namespace DuckGame
         public NetIndex16 _synchronizedTime = new NetIndex16(1, true);
         private uint _currentTick;
         private static Map<ushort, ConstructorInfo> _constructorToMessageID = new Map<ushort, ConstructorInfo>();
-        private static Map<ushort, System.Type> _typeToMessageID = new Map<ushort, System.Type>();
-        private static Dictionary<System.Type, ushort> _allMessageTypesToID = new Dictionary<System.Type, ushort>();
+        private static Map<ushort, Type> _typeToMessageID = new Map<ushort, Type>();
+        private static Dictionary<Type, ushort> _allMessageTypesToID = new Dictionary<Type, ushort>();
         private static IEnumerable<NetMessagePriority> _netMessagePriorities;
         public static List<string> synchronizedTriggers = new List<string>()
     {
@@ -57,18 +57,18 @@ namespace DuckGame
 
         public static int simTick
         {
-            get => Network._simTick;
-            set => Network._simTick = value;
+            get => _simTick;
+            set => _simTick = value;
         }
 
         public static bool available => Steam.IsInitialized() && Steam.user != null;
 
         public NCNetworkImplementation core
         {
-            get => !Network.lanMode ? _core : _lanCore;
+            get => !lanMode ? _core : _lanCore;
             set
             {
-                if (Network.lanMode)
+                if (lanMode)
                     _lanCore = value;
                 else
                     _core = value;
@@ -79,20 +79,20 @@ namespace DuckGame
         {
             get
             {
-                if (Network._activeNetwork == null)
-                    Network._activeNetwork = new Network();
-                return Network._activeNetwork;
+                if (_activeNetwork == null)
+                    _activeNetwork = new Network();
+                return _activeNetwork;
             }
-            set => Network._activeNetwork = value;
+            set => _activeNetwork = value;
         }
 
         public static int frame
         {
-            get => Network.activeNetwork.core.frame;
-            set => Network.activeNetwork.core.frame = value;
+            get => activeNetwork.core.frame;
+            set => activeNetwork.core.frame = value;
         }
 
-        public static NetGraph netGraph => Network._activeNetwork.core.netGraph;
+        public static NetGraph netGraph => _activeNetwork.core.netGraph;
 
         public static void ContextSwitch(byte pLevelIndex)
         {
@@ -110,30 +110,30 @@ namespace DuckGame
 
         public NetIndex16 synchTime => !core.isServer ? _synchronizedTime : _tickSync;
 
-        public static NetIndex16 synchronizedTime => Network.activeNetwork.synchTime;
+        public static NetIndex16 synchronizedTime => activeNetwork.synchTime;
 
         public static void ReceiveHostTime(NetIndex16 pTime)
         {
-            if (!(Network.activeNetwork._lastReceivedTime < pTime))
+            if (!(activeNetwork._lastReceivedTime < pTime))
                 return;
-            Network.activeNetwork._synchronizedTime = pTime + (ushort)(Network.host.manager.ping / 2.0 / Maths.IncFrameTimer());
-            Network.activeNetwork._lastReceivedTime = pTime;
+            activeNetwork._synchronizedTime = pTime + (ushort)(host.manager.ping / 2.0 / Maths.IncFrameTimer());
+            activeNetwork._lastReceivedTime = pTime;
         }
 
         public static double Time => 0.0;
 
-        public static uint Tick => Network.activeNetwork._currentTick;
+        public static uint Tick => activeNetwork._currentTick;
 
-        public static NetIndex16 TickSync => Network.activeNetwork._tickSync;
+        public static NetIndex16 TickSync => activeNetwork._tickSync;
 
-        public static float ping => Network.activeNetwork.core.averagePing;
+        public static float ping => activeNetwork.core.averagePing;
 
         public static float highestPing
         {
             get
             {
                 float highestPing = 0f;
-                foreach (NetworkConnection connection in Network.connections)
+                foreach (NetworkConnection connection in connections)
                 {
                     if (connection.status == ConnectionStatus.Connected && connection.manager.ping > highestPing)
                         highestPing = connection.manager.ping;
@@ -150,7 +150,7 @@ namespace DuckGame
                     return DuckNetwork.hostProfile.connection;
                 if (DuckNetwork.localConnection.isHost)
                     return DuckNetwork.localConnection;
-                foreach (NetworkConnection connection in Network.connections)
+                foreach (NetworkConnection connection in connections)
                 {
                     if (connection.isHost)
                         return connection;
@@ -159,18 +159,18 @@ namespace DuckGame
             }
         }
 
-        public static Map<ushort, ConstructorInfo> constructorToMessageID => Network._constructorToMessageID;
+        public static Map<ushort, ConstructorInfo> constructorToMessageID => _constructorToMessageID;
 
-        public static Map<ushort, System.Type> typeToMessageID => Network._typeToMessageID;
+        public static Map<ushort, Type> typeToMessageID => _typeToMessageID;
 
-        public static Dictionary<System.Type, ushort> allMessageTypesToID => Network._allMessageTypesToID;
+        public static Dictionary<Type, ushort> allMessageTypesToID => _allMessageTypesToID;
 
-        public static IEnumerable<NetMessagePriority> netMessagePriorities => Network._netMessagePriorities;
+        public static IEnumerable<NetMessagePriority> netMessagePriorities => _netMessagePriorities;
 
         public static int inputDelayFrames
         {
-            get => Network._inputDelayFrames;
-            set => Network._inputDelayFrames = value;
+            get => _inputDelayFrames;
+            set => _inputDelayFrames = value;
         }
 
         public static bool hasHostConnection
@@ -179,7 +179,7 @@ namespace DuckGame
             {
                 if (DuckNetwork.localConnection.isHost)
                     return true;
-                foreach (NetworkConnection connection in Network.connections)
+                foreach (NetworkConnection connection in connections)
                 {
                     if (connection.isHost)
                         return true;
@@ -194,10 +194,10 @@ namespace DuckGame
             {
                 if (DuckNetwork.isDedicatedServer)
                     return false;
-                bool canSetObservers = Network.isServer && Network.lanMode;
-                if (Network.isServer && Steam.lobby != null && Steam.lobby.type != SteamLobbyType.Public)
+                bool canSetObservers = isServer && lanMode;
+                if (isServer && Steam.lobby != null && Steam.lobby.type != SteamLobbyType.Public)
                     canSetObservers = true;
-                if (!Network.InLobby())
+                if (!InLobby())
                     canSetObservers = false;
                 return canSetObservers;
             }
@@ -205,29 +205,29 @@ namespace DuckGame
 
         public static bool isServer
         {
-            get => Network.activeNetwork.core.isServer;
-            set => Network.activeNetwork.core.isServer = value;
+            get => activeNetwork.core.isServer;
+            set => activeNetwork.core.isServer = value;
         }
 
-        public static bool isClient => !Network.isServer;
+        public static bool isClient => !isServer;
 
-        public static void MakeActive() => Network.activeNetwork._networkActive = true;
+        public static void MakeActive() => activeNetwork._networkActive = true;
 
-        public static void MakeInactive() => Network.activeNetwork._networkActive = false;
+        public static void MakeInactive() => activeNetwork._networkActive = false;
 
-        public static bool isActive => Network.activeNetwork._networkActive;
+        public static bool isActive => activeNetwork._networkActive;
 
-        public static bool connected => Network.connections.Count > 0;
+        public static bool connected => connections.Count > 0;
 
-        public static List<NetworkConnection> connections => Network.activeNetwork.core.connections;
+        public static List<NetworkConnection> connections => activeNetwork.core.connections;
 
-        public System.Type GetClassType(string name)
+        public Type GetClassType(string name)
         {
             string fullName = typeof(Duck).Assembly.FullName;
             return Editor.GetType("DuckGame." + name + ", " + fullName);
         }
 
-        public static void JoinServer(string nameVal, int portVal = 1337, string ip = "localhost") => Network.activeNetwork.DoJoinServer(nameVal, portVal, ip);
+        public static void JoinServer(string nameVal, int portVal = 1337, string ip = "localhost") => activeNetwork.DoJoinServer(nameVal, portVal, ip);
 
         private void DoJoinServer(string nameVal, int portVal = 1337, string ip = "localhost") => core.JoinServer(nameVal, portVal, ip);
 
@@ -237,7 +237,7 @@ namespace DuckGame
           string nameVal = "duckGameServer",
           int portVal = 1337)
         {
-            Network.activeNetwork.DoHostServer(lobbyType, maxConnectionsVal, nameVal, portVal);
+            activeNetwork.DoHostServer(lobbyType, maxConnectionsVal, nameVal, portVal);
         }
 
         private void DoHostServer(
@@ -249,13 +249,13 @@ namespace DuckGame
             core.HostServer(nameVal, portVal, lobbyType, maxConnectionsVal);
         }
 
-        public static void OnMessageStatic(NetMessage m) => Network._activeNetwork.OnMessage(m);
+        public static void OnMessageStatic(NetMessage m) => _activeNetwork.OnMessage(m);
 
         private void OnMessage(NetMessage m)
         {
             if (m is NMConsoleMessage)
                 DevConsole.Log((m as NMConsoleMessage).message, Color.Lime);
-            else if (Network.isServer)
+            else if (isServer)
                 OnMessageServer(m);
             else
                 OnMessageClient(m);
@@ -269,11 +269,11 @@ namespace DuckGame
 
         public void ImmediateUnreliableBroadcast(NetMessage pMessage)
         {
-            if (!Network.isActive)
+            if (!isActive)
                 return;
             pMessage.Serialize();
             bool flag = false;
-            foreach (NetworkConnection connection in Network.connections)
+            foreach (NetworkConnection connection in connections)
             {
                 NetMessage pMessage1 = pMessage;
                 if (flag)
@@ -289,7 +289,7 @@ namespace DuckGame
 
         public void ImmediateUnreliableMessage(NetMessage pMessage, NetworkConnection pConnection)
         {
-            if (!Network.isActive)
+            if (!isActive)
                 return;
             pMessage.Serialize();
             pConnection.manager.SendImmediatelyUnreliable(pMessage);
@@ -297,11 +297,11 @@ namespace DuckGame
 
         public void QueueMessage(NetMessage msg, NetworkConnection who = null)
         {
-            if (!Network.isActive)
+            if (!isActive)
                 return;
             if (who == null)
             {
-                QueueMessage(msg, Network.connections);
+                QueueMessage(msg, connections);
             }
             else
             {
@@ -312,7 +312,7 @@ namespace DuckGame
 
         public void QueueMessage(NetMessage msg, List<NetworkConnection> pConnections)
         {
-            if (!Network.isActive)
+            if (!isActive)
                 return;
             if (msg is SynchronizedNetMessage synchronizedNetMessage)
                 GhostManager.context._synchronizedEvents.Add(synchronizedNetMessage);
@@ -338,11 +338,11 @@ namespace DuckGame
 
         public void QueueMessageForAllBut(NetMessage msg, NetworkConnection who)
         {
-            if (!Network.isActive)
+            if (!isActive)
                 return;
             msg.Serialize();
             bool flag = false;
-            foreach (NetworkConnection connection in Network.connections)
+            foreach (NetworkConnection connection in connections)
             {
                 if (connection.profile != null && who != connection)
                 {
@@ -399,32 +399,32 @@ namespace DuckGame
             }
         }
 
-        public static void EndNetworkingSession(DuckNetErrorInfo error) => Network.activeNetwork.core.DisconnectClient(DuckNetwork.localConnection, error);
+        public static void EndNetworkingSession(DuckNetErrorInfo error) => activeNetwork.core.DisconnectClient(DuckNetwork.localConnection, error);
 
-        public static void DisconnectClient(NetworkConnection c, DuckNetErrorInfo error) => Network.activeNetwork.core.DisconnectClient(c, error);
+        public static void DisconnectClient(NetworkConnection c, DuckNetErrorInfo error) => activeNetwork.core.DisconnectClient(c, error);
 
         public static void Initialize()
         {
-            Network._netMessagePriorities = Enum.GetValues(typeof(NetMessagePriority)).Cast<NetMessagePriority>();
-            Network.activeNetwork.DoInitialize();
+            _netMessagePriorities = Enum.GetValues(typeof(NetMessagePriority)).Cast<NetMessagePriority>();
+            activeNetwork.DoInitialize();
         }
 
         public static long gameDataHash
         {
             get
             {
-                return Network.messageTypeHash + Editor.thingTypesHash;
+                return messageTypeHash + Editor.thingTypesHash;
             }
 
         }
 
         public static void InitializeMessageTypes()
         {
-            IEnumerable<System.Type> subclasses = Editor.GetAllSubclasses(typeof(NetMessage));
-            Network._typeToMessageID.Clear();
-            Network._constructorToMessageID.Clear();
+            IEnumerable<Type> subclasses = Editor.GetAllSubclasses(typeof(NetMessage));
+            _typeToMessageID.Clear();
+            _constructorToMessageID.Clear();
             ushort key = 1;
-            foreach (System.Type type in subclasses)
+            foreach (Type type in subclasses)
             {
                 object[] Attributes = type.GetCustomAttributes(typeof(FixedNetworkID), false);
                 if (Attributes.Length != 0)
@@ -436,23 +436,23 @@ namespace DuckGame
                         if (fromTypeIgnoreCore != null && fromTypeIgnoreCore is DisabledMod)
                         {
                             fromTypeIgnoreCore.typeToMessageID.Add(type, customAttribute.FixedID);
-                            fromTypeIgnoreCore.constructorToMessageID.Add(type.GetConstructor(System.Type.EmptyTypes), customAttribute.FixedID);
+                            fromTypeIgnoreCore.constructorToMessageID.Add(type.GetConstructor(Type.EmptyTypes), customAttribute.FixedID);
                         }
                         else
                         {
-                            Network._typeToMessageID.Add(type, customAttribute.FixedID);
-                            Network._constructorToMessageID.Add(type.GetConstructor(System.Type.EmptyTypes), customAttribute.FixedID);
+                            _typeToMessageID.Add(type, customAttribute.FixedID);
+                            _constructorToMessageID.Add(type.GetConstructor(Type.EmptyTypes), customAttribute.FixedID);
                         }
-                        Network._allMessageTypesToID.Add(type, customAttribute.FixedID);
+                        _allMessageTypesToID.Add(type, customAttribute.FixedID);
                     }
                 }
             }
             string str = "";
-            foreach (System.Type type in subclasses)
+            foreach (Type type in subclasses)
             {
-                if (!Network._allMessageTypesToID.ContainsKey(type))
+                if (!_allMessageTypesToID.ContainsKey(type))
                 {
-                    ConstructorInfo constructor = type.GetConstructor(System.Type.EmptyTypes);
+                    ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
                     if (constructor == null)
                     {
                         string message = "NetMessage (" + type.Name + ") has no empty constructor! All NetMessages must allow 'new " + type.Name + "()'";
@@ -470,24 +470,24 @@ namespace DuckGame
                         while (fromTypeIgnoreCore.typeToMessageID.ContainsKey(fromTypeIgnoreCore.currentMessageIDIndex))
                             ++fromTypeIgnoreCore.currentMessageIDIndex;
                         fromTypeIgnoreCore.typeToMessageID.Add(type, fromTypeIgnoreCore.currentMessageIDIndex);
-                        fromTypeIgnoreCore.constructorToMessageID.Add(type.GetConstructor(System.Type.EmptyTypes), fromTypeIgnoreCore.currentMessageIDIndex);
-                        Network._allMessageTypesToID.Add(type, fromTypeIgnoreCore.currentMessageIDIndex);
+                        fromTypeIgnoreCore.constructorToMessageID.Add(type.GetConstructor(Type.EmptyTypes), fromTypeIgnoreCore.currentMessageIDIndex);
+                        _allMessageTypesToID.Add(type, fromTypeIgnoreCore.currentMessageIDIndex);
                         ++fromTypeIgnoreCore.currentMessageIDIndex;
                     }
                     else
                     {
-                        while (Network._typeToMessageID.ContainsKey(key))
+                        while (_typeToMessageID.ContainsKey(key))
                             ++key;
                         if (fromTypeIgnoreCore == null && !type.IsDefined(typeof(ClientOnlyAttribute), false))
                             str += type.Name;
-                        Network._typeToMessageID.Add(type, key);
-                        Network._constructorToMessageID.Add(constructor, key);
-                        Network._allMessageTypesToID.Add(type, key);
+                        _typeToMessageID.Add(type, key);
+                        _constructorToMessageID.Add(constructor, key);
+                        _allMessageTypesToID.Add(type, key);
                         ++key;
                     }
                 }
             }
-            Network.messageTypeHash = CRC32.Generate(str);
+            messageTypeHash = CRC32.Generate(str);
             PhysicsParticle.RegisterNetParticleType(typeof(SmallFire));
             PhysicsParticle.RegisterNetParticleType(typeof(ExtinguisherSmoke));
             PhysicsParticle.RegisterNetParticleType(typeof(Firecracker));
@@ -495,18 +495,18 @@ namespace DuckGame
 
         public void DoInitialize()
         {
-            _core = new NCSteam(Network.activeNetwork, _networkIndex);
+            _core = new NCSteam(activeNetwork, _networkIndex);
             if (NetworkDebugger.enabled)
-                _lanCore = new NCNetDebug(Network.activeNetwork, _networkIndex);
+                _lanCore = new NCNetDebug(activeNetwork, _networkIndex);
             else
-                _lanCore = new NCBasic(Network.activeNetwork, _networkIndex);
+                _lanCore = new NCBasic(activeNetwork, _networkIndex);
         }
 
         public static void Terminate()
         {
-            if (Network.activeNetwork.core != null)
+            if (activeNetwork.core != null)
             {
-                Network.activeNetwork.core.Terminate();
+                activeNetwork.core.Terminate();
             }
         }
 
@@ -519,8 +519,8 @@ namespace DuckGame
 
         public static void PreUpdate()
         {
-            Network.activeNetwork._networkActive = Network.activeNetwork.core.isActive;
-            Network.activeNetwork.DoPreUpdate();
+            activeNetwork._networkActive = activeNetwork.core.isActive;
+            activeNetwork.DoPreUpdate();
         }
 
         public void DoPreUpdate()
@@ -532,11 +532,11 @@ namespace DuckGame
             DuckNetwork.Update();
         }
 
-        public static void PostUpdate() => Network.activeNetwork.DoPostUpdate();
+        public static void PostUpdate() => activeNetwork.DoPostUpdate();
 
         public void DoPostUpdate() => core.PostUpdate();
 
-        public static void PostDraw() => Network.activeNetwork.DoPostDraw();
+        public static void PostDraw() => activeNetwork.DoPostDraw();
 
         public void DoPostDraw() => core.PostDraw();
     }

@@ -80,7 +80,7 @@ namespace DuckGame
             else
             {
                 string[] groupName = group.Split('|');
-                EditorGroup editorGroup = SubGroups.FirstOrDefault<EditorGroup>(x => x.Name == groupName[0]);
+                EditorGroup editorGroup = SubGroups.FirstOrDefault(x => x.Name == groupName[0]);
                 if (editorGroup == null)
                 {
                     editorGroup = new EditorGroup
@@ -90,7 +90,7 @@ namespace DuckGame
                     SubGroups.Add(editorGroup);
                 }
                 string str = group;
-                string group1 = groupName.Count<string>() <= 1 ? str.Remove(0, groupName[0].Length) : str.Remove(0, groupName[0].Length + 1);
+                string group1 = groupName.Count() <= 1 ? str.Remove(0, groupName[0].Length) : str.Remove(0, groupName[0].Length + 1);
                 editorGroup.AddType(t, group1);
             }
         }

@@ -293,12 +293,12 @@ namespace DuckGame
 
         public static void ResetWarning()
         {
-            UIControlConfig.showWarning = false;
+            showWarning = false;
             foreach (Profile profile in Profiles.active)
             {
                 if (profile.inputMappingOverrides != null && profile.inputMappingOverrides.Count > 0)
                 {
-                    UIControlConfig.showWarning = true;
+                    showWarning = true;
                     break;
                 }
             }
@@ -314,13 +314,13 @@ namespace DuckGame
         {
             if (open)
             {
-                if (!UIMenu.globalUILock && UIControlConfig.showWarning)
+                if (!globalUILock && showWarning)
                 {
                     new UIMenuActionOpenMenu(this, _warningMenu).Activate();
-                    UIControlConfig.showWarning = false;
+                    showWarning = false;
                     return;
                 }
-                if (!UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.OemTilde)))
+                if (!globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.OemTilde)))
                 {
                     new UIMenuActionOpenMenu(this, _confirmMenu).Activate();
                     return;

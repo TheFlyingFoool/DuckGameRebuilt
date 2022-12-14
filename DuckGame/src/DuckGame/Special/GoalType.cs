@@ -15,7 +15,7 @@ namespace DuckGame
     public class GoalType : Thing
     {
         public EditorProperty<bool> Penalize_Misses = new EditorProperty<bool>(false);
-        public EditorProperty<GoalType.Special> Mode = new EditorProperty<GoalType.Special>(GoalType.Special.None);
+        public EditorProperty<Special> Mode = new EditorProperty<Special>(Special.None);
         private HashSet<Thing> _trackedObjects = new HashSet<Thing>();
         private HashSet<Thing> _finishedObjects = new HashSet<Thing>();
         //private ChallengeMode challenge;
@@ -53,34 +53,34 @@ namespace DuckGame
             }
         }
 
-        public GoalType.Result Check()
+        public Result Check()
         {
-            if (Mode.value == GoalType.Special.Survival)
+            if (Mode.value == Special.Survival)
             {
                 foreach (Duck duck in Level.current.things[typeof(Duck)])
                 {
                     if (!(duck is TargetDuck) && duck.dead)
-                        return GoalType.Result.Lose;
+                        return Result.Lose;
                 }
-                return GoalType.Result.Win;
+                return Result.Win;
             }
-            if (Mode.value == GoalType.Special.Suicide)
+            if (Mode.value == Special.Suicide)
             {
                 foreach (Duck duck in Level.current.things[typeof(Duck)])
                 {
                     if (!(duck is TargetDuck) && duck.dead)
-                        return GoalType.Result.Win;
+                        return Result.Win;
                 }
-                return GoalType.Result.None;
+                return Result.None;
             }
-            if (Mode.value != GoalType.Special.Butterfingers)
-                return GoalType.Result.Win;
+            if (Mode.value != Special.Butterfingers)
+                return Result.Win;
             foreach (PhysicsObject physicsObject in Level.current.things[typeof(Duck)])
             {
                 if (physicsObject.holdObject == null)
-                    return GoalType.Result.Lose;
+                    return Result.Lose;
             }
-            return GoalType.Result.Win;
+            return Result.Win;
         }
 
         public override void Update()
@@ -90,7 +90,7 @@ namespace DuckGame
                 UpdateTrackedObjects();
                 for (int index = 0; index < _trackedObjects.Count; ++index)
                 {
-                    Thing thing = _trackedObjects.ElementAt<Thing>(index);
+                    Thing thing = _trackedObjects.ElementAt(index);
                     if (!_finishedObjects.Contains(thing) && thing is PhysicsObject && ChallengeLevel.running)
                     {
                         if ((thing as PhysicsObject).destroyed || (thing as PhysicsObject)._ruined)

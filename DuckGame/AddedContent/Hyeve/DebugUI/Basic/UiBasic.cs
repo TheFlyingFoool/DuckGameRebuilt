@@ -195,7 +195,7 @@ namespace AddedContent.Hyeve.DebugUI.Basic
         public bool Visible()
         {
             Rectangle rect = Graphics.polyBatcher.GetCurrentScissor();
-            var sbr = Position + Size;
+            Vector2 sbr = Position + Size;
             return rect.bl.x < sbr.X && rect.bl.y > Position.Y && rect.tr.x > Position.X && rect.tr.y < sbr.Y;
         }
 

@@ -17,7 +17,7 @@ namespace DuckGame
         protected bool _isMusic;
         public ISampleProvider _chainEnd;
         protected VolumeSampleProvider _volumeChain;
-        protected SoundEffectInstance.PitchShiftProvider _pitchChain;
+        protected PitchShiftProvider _pitchChain;
         protected PanningSampleProvider _panChain;
         protected SoundEffect _data;
         protected bool _inMixer;
@@ -97,7 +97,7 @@ namespace DuckGame
             }
             if (_pitch != 0.0)
             {
-                _pitchChain = new SoundEffectInstance.PitchShiftProvider(_chainEnd);
+                _pitchChain = new PitchShiftProvider(_chainEnd);
                 _chainEnd = _pitchChain;
                 _pitchChain.pitch = _pitch;
             }

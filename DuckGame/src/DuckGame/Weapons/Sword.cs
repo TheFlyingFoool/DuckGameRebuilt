@@ -179,9 +179,9 @@ namespace DuckGame
             _swinging = false;
             _shing = true;
             _swingPress = false;
-            if (!Sword._playedShing)
+            if (!_playedShing)
             {
-                Sword._playedShing = true;
+                _playedShing = true;
                 SFX.Play("swordClash", Rando.Float(0.6f, 0.7f), Rando.Float(-0.1f, 0.1f), Rando.Float(-0.1f, 0.1f));
             }
             Vec2 normalized = (position - this.barrelPosition).normalized;
@@ -895,7 +895,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Sword._playedShing = false;
+            _playedShing = false;
             if (owner != _prevHistoryOwner)
             {
                 _prevHistoryOwner = owner;

@@ -18,44 +18,44 @@ namespace DuckGame
 
         public static void AddDrink(Profile p, int num)
         {
-            if (!Party._drinks.ContainsKey(p))
-                Party._drinks[p] = 0;
-            Party._drinks[p] += num;
+            if (!_drinks.ContainsKey(p))
+                _drinks[p] = 0;
+            _drinks[p] += num;
         }
 
         public static void AddPerk(Profile p, PartyPerks perk)
         {
-            if (!Party._perks.ContainsKey(p))
-                Party._perks[p] = new List<PartyPerks>();
-            if (Party._perks[p].Contains(perk))
+            if (!_perks.ContainsKey(p))
+                _perks[p] = new List<PartyPerks>();
+            if (_perks[p].Contains(perk))
                 return;
-            Party._perks[p].Add(perk);
+            _perks[p].Add(perk);
         }
 
-        public static bool HasPerk(Profile p, PartyPerks perk) => TeamSelect2.partyMode && Party._perks.ContainsKey(p) && Party._perks[p].Contains(perk);
+        public static bool HasPerk(Profile p, PartyPerks perk) => TeamSelect2.partyMode && _perks.ContainsKey(p) && _perks[p].Contains(perk);
 
         public static void AddRandomPerk(Profile p)
         {
             IEnumerable<PartyPerks> source = Enum.GetValues(typeof(PartyPerks)).Cast<PartyPerks>();
-            Party.AddPerk(p, source.ElementAt<PartyPerks>(Rando.Int(source.Count<PartyPerks>() - 1)));
+            AddPerk(p, source.ElementAt(Rando.Int(source.Count() - 1)));
         }
 
-        public static int GetDrinks(Profile p) => Party._drinks.ContainsKey(p) ? Party._drinks[p] : 0;
+        public static int GetDrinks(Profile p) => _drinks.ContainsKey(p) ? _drinks[p] : 0;
 
-        public static List<PartyPerks> GetPerks(Profile p) => Party._perks.ContainsKey(p) ? Party._perks[p] : new List<PartyPerks>();
+        public static List<PartyPerks> GetPerks(Profile p) => _perks.ContainsKey(p) ? _perks[p] : new List<PartyPerks>();
 
         public static void Clear()
         {
             List<Profile> profileList = new List<Profile>();
-            foreach (KeyValuePair<Profile, int> drink in Party._drinks)
+            foreach (KeyValuePair<Profile, int> drink in _drinks)
                 profileList.Add(drink.Key);
             foreach (Profile key in profileList)
-                Party._drinks[key] = 0;
+                _drinks[key] = 0;
             profileList.Clear();
-            foreach (KeyValuePair<Profile, List<PartyPerks>> perk in Party._perks)
+            foreach (KeyValuePair<Profile, List<PartyPerks>> perk in _perks)
                 profileList.Add(perk.Key);
             foreach (Profile key in profileList)
-                Party._perks[key].Clear();
+                _perks[key].Clear();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace DuckGame
 {
     public class UIMatchmakerMark2 : UIMenu
     {
-        private static UIMatchmakerMark2.Core _core = new UIMatchmakerMark2.Core();
+        private static Core _core = new Core();
         public static bool pulseLocal;
         public static bool pulseNetwork;
         protected bool _continueSearchOnFail = true;
@@ -28,8 +28,8 @@ namespace DuckGame
         private bool playMusic = true;
         protected int _totalLobbies = -1;
         protected int _joinableLobbies = -1;
-        protected UIMatchmakerMark2.State _state;
-        protected UIMatchmakerMark2.State _previousState;
+        protected State _state;
+        protected State _previousState;
         protected int _timeInState;
         protected UIServerBrowser.LobbyData _directConnectLobby;
         private int _timeOpen;
@@ -49,17 +49,17 @@ namespace DuckGame
         private float _dots;
         protected string _caption = "MATCHMAKING";
 
-        public static UIMatchmakerMark2.Core core
+        public static Core core
         {
-            get => UIMatchmakerMark2._core;
-            set => UIMatchmakerMark2._core = value;
+            get => _core;
+            set => _core = value;
         }
 
-        protected void ChangeState(UIMatchmakerMark2.State pState)
+        protected void ChangeState(State pState)
         {
-            if (_directConnectLobby != null && (pState == UIMatchmakerMark2.State.TryJoiningLobbies || pState == UIMatchmakerMark2.State.SearchForLobbies))
-                pState = UIMatchmakerMark2.State.Failed;
-            if (pState == UIMatchmakerMark2.State.Failed && _previousState != UIMatchmakerMark2.State.Failed)
+            if (_directConnectLobby != null && (pState == State.TryJoiningLobbies || pState == State.SearchForLobbies))
+                pState = State.Failed;
+            if (pState == State.Failed && _previousState != State.Failed)
             {
                 HUD.CloseAllCorners();
                 HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@RETURN");
@@ -133,15 +133,15 @@ namespace DuckGame
 
         public override void Open()
         {
-            _state = UIMatchmakerMark2.State.InitializeMatchmaking;
+            _state = State.InitializeMatchmaking;
             Platform_Open();
             _timeOpen = 0;
-            UIMatchmakerMark2._currentLevel = Level.current;
-            UIMatchmakerMark2.instance = this;
+            _currentLevel = Level.current;
+            instance = this;
             _processing = null;
             messages.Clear();
             if (_directConnectLobby != null)
-                _state = UIMatchmakerMark2.State.TryJoiningLobbies;
+                _state = State.TryJoiningLobbies;
             else
                 messages.Add("|DGYELLOW|Connecting to servers on the Moon...");
             _totalLobbies = -1;
@@ -156,9 +156,9 @@ namespace DuckGame
 
         public override void Close()
         {
-            if (UIMatchmakerMark2.instance == this)
-                UIMatchmakerMark2.instance = null;
-            _state = UIMatchmakerMark2.State.Idle;
+            if (instance == this)
+                instance = null;
+            _state = State.Idle;
             base.Close();
         }
 
@@ -189,7 +189,7 @@ namespace DuckGame
         {
             _resetting = false;
             _framesSinceReset = 0;
-            if (_state != UIMatchmakerMark2.State.Aborting)
+            if (_state != State.Aborting)
             {
                 if (_hostedLobby == null)
                 {
@@ -202,7 +202,7 @@ namespace DuckGame
                     }
                     _wait += 60;
                 }
-                ChangeState(UIMatchmakerMark2.State.TryJoiningLobbies);
+                ChangeState(State.TryJoiningLobbies);
             }
             _processing = null;
             _hostedLobby = null;
@@ -311,11 +311,11 @@ namespace DuckGame
         {
             get
             {
-                if (UIMatchmakerMark2._currentLevel != Level.current)
-                    UIMatchmakerMark2._core.instance = null;
-                return UIMatchmakerMark2._core.instance;
+                if (_currentLevel != Level.current)
+                    _core.instance = null;
+                return _core.instance;
             }
-            set => UIMatchmakerMark2._core.instance = value;
+            set => _core.instance = value;
         }
 
         public virtual void Platform_Update()
@@ -331,7 +331,7 @@ namespace DuckGame
             if (!open)
                 return;
             ++_timeInState;
-            if (UIMatchmakerMark2.instance == null)
+            if (instance == null)
                 FinishAndClose();
             else if (_resetNetwork && Network.isActive)
             {
@@ -344,7 +344,7 @@ namespace DuckGame
                 {
                     Reset();
                     messages.Add("|DGRED|Aborting...");
-                    ChangeState(UIMatchmakerMark2.State.Aborting);
+                    ChangeState(State.Aborting);
                 }
                 if (_resetting)
                 {
@@ -352,8 +352,8 @@ namespace DuckGame
                     if (_framesSinceReset <= 120)
                         return;
                     Network.Terminate();
-                    if (_state != UIMatchmakerMark2.State.Aborting)
-                        ChangeState(UIMatchmakerMark2.State.TryJoiningLobbies);
+                    if (_state != State.Aborting)
+                        ChangeState(State.TryJoiningLobbies);
                     _processing = null;
                     _hostedLobby = null;
                 }
@@ -363,7 +363,7 @@ namespace DuckGame
                     if (_timeOpen > 7200)
                         attempted.Clear();
                     Platform_Update();
-                    if (_wait > 0 && _state != UIMatchmakerMark2.State.Aborting && _state != UIMatchmakerMark2.State.JoinLobby)
+                    if (_wait > 0 && _state != State.Aborting && _state != State.JoinLobby)
                         --_wait;
                     else
                         Platform_MatchmakerLogic();
@@ -385,33 +385,33 @@ namespace DuckGame
             _dots += 0.01f;
             if (_dots > 1.0)
                 _dots = 0f;
-            if (_state == UIMatchmakerMark2.State.Idle || _state == UIMatchmakerMark2.State.Failed)
+            if (_state == State.Idle || _state == State.Failed)
             {
                 _signalCrossLocal.SetAnimation("idle");
-                UIMatchmakerMark2.pulseLocal = false;
+                pulseLocal = false;
             }
             else if (_signalCrossLocal.currentAnimation == "idle")
             {
-                if (UIMatchmakerMark2.pulseLocal)
+                if (pulseLocal)
                 {
                     _signalCrossLocal.SetAnimation("flicker");
-                    UIMatchmakerMark2.pulseLocal = false;
+                    pulseLocal = false;
                 }
             }
             else if (_signalCrossLocal.finished)
                 _signalCrossLocal.SetAnimation("idle");
             if (_signalCrossNetwork.currentAnimation == "idle")
             {
-                if (UIMatchmakerMark2.pulseNetwork)
+                if (pulseNetwork)
                 {
                     _signalCrossNetwork.SetAnimation("flicker");
-                    UIMatchmakerMark2.pulseNetwork = false;
+                    pulseNetwork = false;
                 }
             }
             else if (_signalCrossNetwork.finished)
                 _signalCrossNetwork.SetAnimation("idle");
             float num1 = y - 10f;
-            if (_state != UIMatchmakerMark2.State.Failed)
+            if (_state != State.Failed)
             {
                 for (int index = 0; index < 7; ++index)
                 {
@@ -461,9 +461,9 @@ namespace DuckGame
                     {
                         string source = message.Substring(0, message.Length - 3);
                         string str2 = ".";
-                        if (source.Count<char>() > 0 && source.Last<char>() == '!' || source.Last<char>() == '.' || source.Last<char>() == '?')
+                        if (source.Count() > 0 && source.Last() == '!' || source.Last() == '.' || source.Last() == '?')
                         {
-                            str2 = source.Last<char>().ToString() ?? "";
+                            str2 = source.Last().ToString() ?? "";
                             source = source.Substring(0, source.Length - 1);
                         }
                         for (int index = 0; index < 3; ++index)

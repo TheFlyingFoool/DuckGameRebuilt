@@ -31,7 +31,7 @@ public class Steam : IDisposable {
 
     private unsafe static byte[] _packetData;
 
-    public static event Steam.TextEntryCompleteDelegate TextEntryComplete;
+    public static event TextEntryCompleteDelegate TextEntryComplete;
     public delegate void TextEntryCompleteDelegate(string pResult);
 
     public delegate void ConnectionRequestedDelegate(User remote);
@@ -94,7 +94,7 @@ public class Steam : IDisposable {
     }
     public unsafe static bool IsLoggedIn()
     {
-        if (!Steam._initialized)
+        if (!_initialized)
         {
             return false;
         }
@@ -115,7 +115,7 @@ public class Steam : IDisposable {
     public unsafe static void SendLobbyMessage(Lobby pLobby, byte[] pData, uint pSize)
     {
         
-        if (Steam._initialized && pLobby != null && pData != null)
+        if (_initialized && pLobby != null && pData != null)
         {
             SteamMatchmaking.SendLobbyChatMsg(new CSteamID(pLobby.id), pData, (int)pSize);
         }
@@ -135,18 +135,18 @@ public class Steam : IDisposable {
     public static DateTime FileTimestamp(string name)
     {
         long unix = SteamRemoteStorage.GetFileTimestamp(name);
-        DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+        DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         dtDateTime = dtDateTime.AddSeconds(unix).ToLocalTime();
         return dtDateTime;
     }
     private static int _currentTextboxLength;
     public unsafe static bool ShowOnscreenKeyboard([MarshalAs(UnmanagedType.U1)] bool multiline, string description, string existingText, int maxChars)
     {
-        if (!Steam._initialized)
+        if (!_initialized)
         {
             return false;
         }
-        Steam._currentTextboxLength = maxChars;
+        _currentTextboxLength = maxChars;
         EGamepadTextInputLineMode egamepadTextInputLineMode = multiline ? EGamepadTextInputLineMode.k_EGamepadTextInputLineModeMultipleLines : EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine;
         return SteamUtils.ShowGamepadTextInput(EGamepadTextInputMode.k_EGamepadTextInputModeNormal, egamepadTextInputLineMode, description, (uint)maxChars, existingText);
     }
@@ -206,9 +206,9 @@ public class Steam : IDisposable {
         SetCallResult<LobbyCreated_t>(OnCreateLobby);
         SetCallResult<LobbyEnter_t>(OnJoinLobby);
         SetCallResult<LobbyMatchList_t>(OnSearchForLobby);
-        Steam._runningInitializeProcedures = true;
+        _runningInitializeProcedures = true;
         _packetData = new byte[kPacketBufferSize];
-        Steam._currentTextboxLength = 0;
+        _currentTextboxLength = 0;
         // THIS IS A HORRIBLE HACK to get this to comply when using a stubbed Steamworks.NET.dll.
         if (_initialized)
             _initialized = SteamUser.GetSteamID().m_SteamID != 0;
@@ -250,7 +250,7 @@ public class Steam : IDisposable {
     }
     public unsafe static string FilterText(string pText, User pUser)
     {
-        if (Steam._initialized && Steam._textFilterEnabled)
+        if (_initialized && _textFilterEnabled)
         {
             //idk man that code is odd
         }
@@ -741,7 +741,7 @@ public class Steam : IDisposable {
        
         if (!pCallback.m_bSubmitted)
         {
-            Steam.TextEntryComplete(null);
+            TextEntryComplete(null);
             return;
         }
 
@@ -751,10 +751,10 @@ public class Steam : IDisposable {
         if (!success)
         {
             // Log an error. This should only ever happen if length is > MaxInputLength
-            Steam.TextEntryComplete(null);
+            TextEntryComplete(null);
             return;
         }
-        Steam.TextEntryComplete(szTextInput);
+        TextEntryComplete(szTextInput);
     }
     public unsafe static SessionState GetSessionState(User who)
     {

@@ -17,9 +17,9 @@ namespace DuckGame
         protected Profile _victim;
         protected Profile _dealer;
 
-        public static List<Event> events => Event._events;
+        public static List<Event> events => _events;
 
-        public static void Log(Event e) => Event._events.Add(e);
+        public static void Log(Event e) => _events.Add(e);
 
         public Event(Profile dealerVal, Profile victimVal)
         {

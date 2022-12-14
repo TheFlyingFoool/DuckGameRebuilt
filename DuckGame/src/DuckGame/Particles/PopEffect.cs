@@ -45,7 +45,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            foreach (PopEffect.PopEffectPart part in parts)
+            foreach (PopEffectPart part in parts)
             {
                 _sprite.angle = part.rot;
                 _sprite.xscale = _sprite.yscale = xscale * part.scale;

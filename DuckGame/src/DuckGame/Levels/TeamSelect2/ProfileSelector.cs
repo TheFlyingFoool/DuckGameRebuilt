@@ -300,7 +300,7 @@ namespace DuckGame
               column = 1,
               action =  x =>
               {
-                ProfileSelector._madeControlChanges = true;
+                _madeControlChanges = true;
                 x._configInputMapping = Input.GetDefaultMapping(x._inputProfile.lastActiveDevice.productName, x._inputProfile.lastActiveDevice.productGUID).Clone();
                 SFX.Play("consoleSelect");
               }
@@ -500,7 +500,7 @@ namespace DuckGame
         {
             _profiles = Profiles.allCustomProfiles;
             if (_box.controllerIndex != 0 || !Options.Data.defaultAccountMerged)
-                _profiles.Add(Profiles.universalProfileList.ElementAt<Profile>(_box.controllerIndex));
+                _profiles.Add(Profiles.universalProfileList.ElementAt(_box.controllerIndex));
             if (!Network.isActive)
                 return;
             _profiles.Remove(Profiles.experienceProfile);
@@ -782,7 +782,7 @@ namespace DuckGame
                         {
                             if (_inputProfile.Pressed("CANCEL"))
                             {
-                                if (ProfileSelector._madeControlChanges)
+                                if (_madeControlChanges)
                                 {
                                     _editControlSelection = 0;
                                     _desiredMode = PSMode.EditControlsConfirm;
@@ -817,7 +817,7 @@ namespace DuckGame
                         {
                             _editControl = false;
                             SFX.Play("consoleSelect");
-                            ProfileSelector._madeControlChanges = true;
+                            _madeControlChanges = true;
                             _configInputMapping.deviceOverride = null;
                             return;
                         }
@@ -833,7 +833,7 @@ namespace DuckGame
                             _desiredMode = PSMode.EditControls;
                             _selectedSetting = null;
                             _controlPage = 0;
-                            ProfileSelector._madeControlChanges = false;
+                            _madeControlChanges = false;
                             if (_configInputMapping == null)
                                 _configInputMapping = Input.GetDefaultMapping(_inputProfile.lastActiveDevice.productName, _inputProfile.lastActiveDevice.productGUID, p: (isEditing ? _profile : null)).Clone();
                             SFX.Play("consoleTick");
@@ -1163,7 +1163,7 @@ namespace DuckGame
                         float num5 = 0.2f;
                         float num6 = Maths.Clamp(num3 >= 0.3f ? (num3 >= 0.8f ? Maths.NormalizeSection(num3, 0.8f, 1f) + num5 : num5) : Maths.NormalizeSection(num3, 0f, 0.3f) * num5, 0f, 1f);
                         bool flag3 = false;
-                        if ((_selector == null || !_selector.isArcadeHatSelector) && index != -1 && (Profiles.active.Contains(_profiles[index]) || Profiles.active.FirstOrDefault<Profile>(x => x.linkedProfile == _profiles[index]) != null))
+                        if ((_selector == null || !_selector.isArcadeHatSelector) && index != -1 && (Profiles.active.Contains(_profiles[index]) || Profiles.active.FirstOrDefault(x => x.linkedProfile == _profiles[index]) != null))
                             flag3 = true;
                         if (flag3)
                             text2 = text2.Replace("|DGBLUE|", "");
@@ -1258,8 +1258,8 @@ namespace DuckGame
                         text7 = "< " + text7 + " >";
                     if (_preferredColor >= 0)
                     {
-                        Graphics.DrawRect(new Vec2(x + 20f, pos.y - 2f), new Vec2(x + (width - 20f), pos.y + 9f), Persona.all.ElementAt<DuckPersona>(_preferredColor).colorDark.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.93f, false);
-                        _font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text7) / 2.0), pos.y)), Persona.all.ElementAt<DuckPersona>(_preferredColor).color.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
+                        Graphics.DrawRect(new Vec2(x + 20f, pos.y - 2f), new Vec2(x + (width - 20f), pos.y + 9f), Persona.all.ElementAt(_preferredColor).colorDark.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.93f, false);
+                        _font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text7) / 2.0), pos.y)), Persona.all.ElementAt(_preferredColor).color.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
                     }
                     else
                     {
@@ -1340,7 +1340,7 @@ namespace DuckGame
             _fade = 1f;
         }
 
-        private bool ProfileAlreadySelected(Profile p) => _profile.linkedProfile != null ? p != null && Profiles.active.FirstOrDefault<Profile>(x => x.linkedProfile == p) != null && p != _profile.linkedProfile : p != null && Profiles.active.Contains(p) && p != _profile;
+        private bool ProfileAlreadySelected(Profile p) => _profile.linkedProfile != null ? p != null && Profiles.active.FirstOrDefault(x => x.linkedProfile == p) != null && p != _profile.linkedProfile : p != null && Profiles.active.Contains(p) && p != _profile;
 
         public void EditProfile(Profile p)
         {

@@ -24,7 +24,7 @@ namespace DuckGame
 
         public float direction => fireDirection + (flipHorizontal ? 180f : 0f);
 
-        public LaserSpawner(float xpos, float ypos, System.Type c = null)
+        public LaserSpawner(float xpos, float ypos, Type c = null)
           : base(xpos, ypos)
         {
             graphic = new Sprite("laserSpawner");

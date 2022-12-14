@@ -37,7 +37,7 @@ namespace DuckGame
 
         public static T Nearest<T>(Vec2 position, Thing ignore = null)
         {
-            PathNode pathNode = AI.NearestNode(position);
+            PathNode pathNode = NearestNode(position);
             if (pathNode == null)
                 return default(T);
             System.Type key = typeof(T);
@@ -47,7 +47,7 @@ namespace DuckGame
             {
                 if (thing != ignore)
                 {
-                    PathNode to = AI.NearestNode(thing.position);
+                    PathNode to = NearestNode(thing.position);
                     if (to != null)
                     {
                         AIPath path = pathNode.GetPath(to);
@@ -66,18 +66,18 @@ namespace DuckGame
 
         public static Thing Nearest(Vec2 position, List<Thing> things)
         {
-            PathNode pathNode = AI.NearestNode(position);
+            PathNode pathNode = NearestNode(position);
             if (pathNode == null)
                 return null;
             float num = 99999.9f;
             Thing thing1 = null;
             foreach (Thing thing2 in things)
             {
-                PathNode to = AI.NearestNode(thing2.position, thing2);
+                PathNode to = NearestNode(thing2.position, thing2);
                 if (to != null)
                 {
                     AIPath path = pathNode.GetPath(to);
-                    if (path != null && path.nodes.Count > 0 && path.length < num && AI.CanReach(path.nodes.Last<PathNode>(), thing2))
+                    if (path != null && path.nodes.Count > 0 && path.length < num && CanReach(path.nodes.Last(), thing2))
                     {
                         num = path.length;
                         thing1 = thing2;
@@ -89,7 +89,7 @@ namespace DuckGame
 
         public static PathNode NearestNode(Vec2 pos, Thing ignore = null)
         {
-            List<Thing> list = Level.current.things[typeof(PathNode)].ToList<Thing>();
+            List<Thing> list = Level.current.things[typeof(PathNode)].ToList();
             list.Sort((a, b) =>
            {
                Vec2 vec2 = a.position - pos;

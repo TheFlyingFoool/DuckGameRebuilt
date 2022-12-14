@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		/// </param>
 		public bool TryGetValue(string boneName, out ModelBone value)
 		{
-			foreach (ModelBone bone in base.Items)
+			foreach (ModelBone bone in Items)
 			{
 				if (bone.Name == boneName)
 				{

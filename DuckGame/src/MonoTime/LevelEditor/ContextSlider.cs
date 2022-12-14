@@ -20,7 +20,7 @@ namespace DuckGame
         private string _minSpecial;
         private bool _adjust;
         private bool _time;
-        private System.Type _myType;
+        private Type _myType;
 
         public bool adjust
         {
@@ -35,7 +35,7 @@ namespace DuckGame
           float step,
           string minSpecial,
           bool time,
-          System.Type myType,
+          Type myType,
           string valTooltip)
           : base(owner)
         {
@@ -63,7 +63,7 @@ namespace DuckGame
           float step = 0.25f,
           string minSpecial = null,
           bool time = false,
-          System.Type myType = null)
+          Type myType = null)
           : base(owner)
         {
             itemSize.x = 150f;
@@ -302,13 +302,13 @@ namespace DuckGame
                 {
                     Editor.didUIScroll = true;
                     Decrement();
-                    ContextMenu._didContextScroll = true;
+                    _didContextScroll = true;
                 }
                 if (Mouse.scroll < 0f)
                 {
                     Editor.didUIScroll = true;
                     Increment();
-                    ContextMenu._didContextScroll = true;
+                    _didContextScroll = true;
                 }
             }
             else

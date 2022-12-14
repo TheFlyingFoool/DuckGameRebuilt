@@ -12,72 +12,72 @@ namespace DuckGame
 {
     public static class AutoUpdatables
     {
-        private static AutoUpdatables.Core _core = new AutoUpdatables.Core();
+        private static Core _core = new Core();
 
-        public static AutoUpdatables.Core core
+        public static Core core
         {
-            get => AutoUpdatables._core;
-            set => AutoUpdatables._core = value;
+            get => _core;
+            set => _core = value;
         }
 
         private static List<WeakReference> _updateables
         {
-            get => AutoUpdatables._core._updateables;
-            set => AutoUpdatables._core._updateables = value;
+            get => _core._updateables;
+            set => _core._updateables = value;
         }
 
         public static bool ignoreAdditions
         {
-            get => AutoUpdatables._core.ignoreAdditions;
-            set => AutoUpdatables._core.ignoreAdditions = value;
+            get => _core.ignoreAdditions;
+            set => _core.ignoreAdditions = value;
         }
 
         public static void Add(IAutoUpdate update)
         {
-            if (AutoUpdatables.ignoreAdditions)
+            if (ignoreAdditions)
                 return;
-            AutoUpdatables._updateables.Add(new WeakReference(update));
+            _updateables.Add(new WeakReference(update));
         }
 
-        public static void Clear() => AutoUpdatables._updateables.Clear();
+        public static void Clear() => _updateables.Clear();
 
         public static void ClearSounds()
         {
-            for (int index = 0; index < AutoUpdatables._updateables.Count; ++index)
+            for (int index = 0; index < _updateables.Count; ++index)
             {
-                if (AutoUpdatables._updateables[index] != null && AutoUpdatables._updateables[index].Target != null && AutoUpdatables._updateables[index].Target is ConstantSound)
-                    (AutoUpdatables._updateables[index].Target as ConstantSound).Kill();
+                if (_updateables[index] != null && _updateables[index].Target != null && _updateables[index].Target is ConstantSound)
+                    (_updateables[index].Target as ConstantSound).Kill();
             }
         }
 
         public static void MuteSounds()
         {
-            for (int index = 0; index < AutoUpdatables._updateables.Count; ++index)
+            for (int index = 0; index < _updateables.Count; ++index)
             {
-                if (AutoUpdatables._updateables[index] != null && AutoUpdatables._updateables[index].Target != null && AutoUpdatables._updateables[index].Target is ConstantSound)
-                    (AutoUpdatables._updateables[index].Target as ConstantSound).Mute();
+                if (_updateables[index] != null && _updateables[index].Target != null && _updateables[index].Target is ConstantSound)
+                    (_updateables[index].Target as ConstantSound).Mute();
             }
         }
 
         public static void Update()
         {
             int num = 25;
-            for (int index = 0; index < AutoUpdatables._updateables.Count; ++index)
+            for (int index = 0; index < _updateables.Count; ++index)
             {
-                if (AutoUpdatables._updateables[index] == null)
+                if (_updateables[index] == null)
                 {
                     if (num > 0)
                     {
-                        AutoUpdatables._updateables.RemoveAt(index);
+                        _updateables.RemoveAt(index);
                         --index;
                         --num;
                     }
                 }
                 else
                 {
-                    IAutoUpdate target = AutoUpdatables._updateables[index].Target as IAutoUpdate;
-                    if (!AutoUpdatables._updateables[index].IsAlive || target == null)
-                        AutoUpdatables._updateables[index] = null;
+                    IAutoUpdate target = _updateables[index].Target as IAutoUpdate;
+                    if (!_updateables[index].IsAlive || target == null)
+                        _updateables[index] = null;
                     else
                         target.Update();
                 }

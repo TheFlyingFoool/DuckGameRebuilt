@@ -117,9 +117,9 @@ namespace DuckGame
                     _burstWait = 1f;
                     if (isServerForObject)
                     {
-                        PositronShooter.inFire = true;
+                        inFire = true;
                         Fire();
-                        PositronShooter.inFire = false;
+                        inFire = false;
                         if (Network.isActive)
                             Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false, duck != null ? duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
                         firedBullets.Clear();

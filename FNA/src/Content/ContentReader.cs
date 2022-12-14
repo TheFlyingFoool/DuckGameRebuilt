@@ -177,12 +177,12 @@ namespace Microsoft.Xna.Framework.Content
 
 		public T ReadRawObject<T>()
 		{
-			return (T) ReadRawObject<T>(default(T));
+			return (T)ReadRawObject(default(T));
 		}
 
 		public T ReadRawObject<T>(ContentTypeReader typeReader)
 		{
-			return (T) ReadRawObject<T>(typeReader, default(T));
+			return (T)ReadRawObject(typeReader, default(T));
 		}
 
 		public T ReadRawObject<T>(T existingInstance)
@@ -192,7 +192,7 @@ namespace Microsoft.Xna.Framework.Content
 			{
 				if (typeReader.TargetType == objectType)
 				{
-					return (T) ReadRawObject<T>(typeReader,existingInstance);
+					return (T)ReadRawObject(typeReader,existingInstance);
 				}
 			}
 			throw new NotSupportedException();

@@ -120,7 +120,7 @@ namespace DuckGame
                 this.duck.ThrowItem();
             }
             Level.Remove(this);
-            Present.OpenEffect(position, _sprite.frame, false);
+            OpenEffect(position, _sprite.frame, false);
             SpawnPresent(owner);
         }
     }

@@ -9,9 +9,9 @@ namespace DuckGame
 {
     public class UIMenuActionCallFunction : UIMenuAction
     {
-        private UIMenuActionCallFunction.Function _function;
+        private Function _function;
 
-        public UIMenuActionCallFunction(UIMenuActionCallFunction.Function f) => _function = f;
+        public UIMenuActionCallFunction(Function f) => _function = f;
 
         public override void Activate() => _function();
 

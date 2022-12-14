@@ -369,13 +369,13 @@ namespace DuckGame
 
         public static void InitializeKanjis()
         {
-            if (FancyBitmapFont._kanjiSprite != null)
+            if (_kanjiSprite != null)
                 return;
-            FancyBitmapFont._kanjiSprite = new SpriteMap("kanji_font", 8, 8);
+            _kanjiSprite = new SpriteMap("kanji_font", 8, 8);
             string str = DuckFile.ReadAllText(DuckFile.contentDirectory + "kanji_map.txt");
-            FancyBitmapFont._kanjiMap = new ushort[ushort.MaxValue];
+            _kanjiMap = new ushort[ushort.MaxValue];
             for (int index = 0; index < str.Length; ++index)
-                FancyBitmapFont._kanjiMap[str[index]] = (ushort)index;
+                _kanjiMap[str[index]] = (ushort)index;
         }
 
         public float height => _texture.height * scale.y;
@@ -404,9 +404,9 @@ namespace DuckGame
 
         protected void Construct(string image)
         {
-            FancyBitmapFont.InitializeKanjis();
+            InitializeKanjis();
             _texture = new Sprite(image);
-            if (!FancyBitmapFont.widthMap.TryGetValue(image, out _widths))
+            if (!widthMap.TryGetValue(image, out _widths))
             {
                 _widths = new List<Rectangle>();
                 Color[] data = _texture.texture.GetData();
@@ -445,25 +445,25 @@ namespace DuckGame
                         break;
                 }
             }
-            FancyBitmapFont.widthMap[image] = _widths;
+            widthMap[image] = _widths;
             if (_widths.Count > 0)
                 _charHeight = (int)_widths[0].height;
-            if (FancyBitmapFont._mapInitialized)
+            if (_mapInitialized)
                 return;
             for (int index3 = 0; index3 < ushort.MaxValue; ++index3)
             {
                 char ch = (char)index3;
-                FancyBitmapFont._characterMap[index3] = 91;
-                for (int index4 = 0; index4 < FancyBitmapFont._characters.Length; ++index4)
+                _characterMap[index3] = 91;
+                for (int index4 = 0; index4 < _characters.Length; ++index4)
                 {
-                    if (FancyBitmapFont._characters[index4] == ch)
+                    if (_characters[index4] == ch)
                     {
-                        FancyBitmapFont._characterMap[index3] = index4;
+                        _characterMap[index3] = index4;
                         break;
                     }
                 }
             }
-            FancyBitmapFont._mapInitialized = true;
+            _mapInitialized = true;
         }
 
         public Sprite ParseSprite(string text, InputProfile input)
@@ -566,7 +566,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        int character = FancyBitmapFont._characterMap[index];
+                        int character = _characterMap[index];
                         if (_characterInfos != null)
                         {
                             if (character < _characterInfos.Count)
@@ -645,7 +645,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        int index2 = FancyBitmapFont._characterMap[index1];
+                        int index2 = _characterMap[index1];
                         if (index2 >= _widths.Count)
                             index2 = _widths.Count - 1;
                         if (index2 < 0)
@@ -724,10 +724,10 @@ namespace DuckGame
                         {
                             int index1 = _letterIndex + 1;
                             float num5 = 0f;
-                            for (; index1 < text.Count<char>() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
+                            for (; index1 < text.Count() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                             {
-                                char index2 = (char)Maths.Clamp(text[index1], 0, FancyBitmapFont._characterMap.Length - 1);
-                                int character = FancyBitmapFont._characterMap[index2];
+                                char index2 = (char)Maths.Clamp(text[index1], 0, _characterMap.Length - 1);
+                                int character = _characterMap[index2];
                                 if (_characterInfos != null)
                                 {
                                     num5 += (_characterInfos[character].width + _characterInfos[character].trailing + _characterInfos[character].leading) * scale.x;
@@ -750,8 +750,8 @@ namespace DuckGame
                         }
                         else
                         {
-                            char index = (char)Maths.Clamp(text[_letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
-                            int character = FancyBitmapFont._characterMap[index];
+                            char index = (char)Maths.Clamp(text[_letterIndex], 0, _characterMap.Length - 1);
+                            int character = _characterMap[index];
                             if (_characterInfos != null)
                             {
                                 float num6 = (_characterInfos[character].width + _characterInfos[character].trailing + _characterInfos[character].leading) * scale.x;
@@ -786,8 +786,8 @@ namespace DuckGame
                         }
                         else
                         {
-                            char index = (char)Maths.Clamp(text[_letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
-                            int character = FancyBitmapFont._characterMap[index];
+                            char index = (char)Maths.Clamp(text[_letterIndex], 0, _characterMap.Length - 1);
+                            int character = _characterMap[index];
                             if (_characterInfos != null)
                             {
                                 if (character < _characterInfos.Count)
@@ -856,10 +856,10 @@ namespace DuckGame
                         {
                             int index1 = _letterIndex + 1;
                             float num2 = 0f;
-                            for (; index1 < text.Count<char>() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
+                            for (; index1 < text.Count() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                             {
-                                char index2 = (char)Maths.Clamp(text[index1], 0, FancyBitmapFont._characterMap.Length - 1);
-                                int character = FancyBitmapFont._characterMap[index2];
+                                char index2 = (char)Maths.Clamp(text[index1], 0, _characterMap.Length - 1);
+                                int character = _characterMap[index2];
                                 if (_characterInfos != null)
                                 {
                                     num2 += (_characterInfos[character].width + _characterInfos[character].trailing + _characterInfos[character].leading) * scale.x;
@@ -879,8 +879,8 @@ namespace DuckGame
                         }
                         else
                         {
-                            char index3 = (char)Maths.Clamp(text[_letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
-                            Rectangle width = _widths[FancyBitmapFont._characterMap[index3]];
+                            char index3 = (char)Maths.Clamp(text[_letterIndex], 0, _characterMap.Length - 1);
+                            Rectangle width = _widths[_characterMap[index3]];
                             if (x + width.width * scale.x > maxWidth)
                             {
                                 y += _charHeight * scale.y;
@@ -896,8 +896,8 @@ namespace DuckGame
                         }
                         else
                         {
-                            char index4 = (char)Maths.Clamp(text[_letterIndex], 0, FancyBitmapFont._characterMap.Length - 1);
-                            int character = FancyBitmapFont._characterMap[index4];
+                            char index4 = (char)Maths.Clamp(text[_letterIndex], 0, _characterMap.Length - 1);
+                            int character = _characterMap[index4];
                             if (_characterInfos != null)
                             {
                                 if (character < _characterInfos.Count)
@@ -1047,11 +1047,11 @@ namespace DuckGame
                             if (enforceWidthByWord)
                             {
                                 char index2 = ' ';
-                                float width1 = _widths[FancyBitmapFont._characterMap[(byte)index2]].width;
-                                for (; index1 < text.Count<char>() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
+                                float width1 = _widths[_characterMap[(byte)index2]].width;
+                                for (; index1 < text.Count() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                                 {
                                     byte index3 = (byte)Maths.Clamp(text[index1], 0, 254);
-                                    Rectangle width2 = _widths[FancyBitmapFont._characterMap[index3]];
+                                    Rectangle width2 = _widths[_characterMap[index3]];
                                     width1 += (width2.width - 1f) * scale.x;
                                 }
                                 if (num2 + width1 > maxWidth)
@@ -1068,7 +1068,7 @@ namespace DuckGame
                         else
                         {
                             byte index = (byte)Maths.Clamp(text[_letterIndex], 0, 254);
-                            Rectangle width = _widths[FancyBitmapFont._characterMap[index]];
+                            Rectangle width = _widths[_characterMap[index]];
                             if (num2 + width.width * scale.x > maxWidth)
                             {
                                 num1 += _charHeight * scale.y;
@@ -1094,17 +1094,17 @@ namespace DuckGame
                             char index4 = text[_letterIndex];
                             if (index4 >= 'ぁ')
                             {
-                                int kanji = FancyBitmapFont._kanjiMap[index4];
-                                FancyBitmapFont._kanjiSprite.frame = kanji;
-                                FancyBitmapFont._kanjiSprite.scale = scale;
-                                FancyBitmapFont._kanjiSprite.color = c;
-                                FancyBitmapFont._kanjiSprite.alpha = alpha;
+                                int kanji = _kanjiMap[index4];
+                                _kanjiSprite.frame = kanji;
+                                _kanjiSprite.scale = scale;
+                                _kanjiSprite.color = c;
+                                _kanjiSprite.alpha = alpha;
                                 Graphics.Draw(_kanjiSprite, (float)(xpos + num2 + 1.0), (float)(ypos + num1 + 1.0), deep);
                                 num2 += 8f * scale.x;
                             }
                             else
                             {
-                                int index5 = FancyBitmapFont._characterMap[index4];
+                                int index5 = _characterMap[index4];
                                 if (index5 >= _widths.Count)
                                     index5 = _widths.Count - 1;
                                 if (index5 < 0)

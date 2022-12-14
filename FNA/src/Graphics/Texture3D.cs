@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetData<T>(T[] data) where T : struct
 		{
-			SetData<T>(
+            SetData(
 				data,
 				0,
 				data.Length
@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			int startIndex,
 			int elementCount
 		) where T : struct {
-			SetData<T>(
+            SetData(
 				0,
 				0,
 				0,

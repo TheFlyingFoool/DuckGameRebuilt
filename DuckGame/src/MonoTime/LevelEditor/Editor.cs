@@ -603,7 +603,7 @@ namespace DuckGame
             placementTotalCost = 0;
             RecalculateSizeLimits();
             History.Clear();
-            foreach (Nubber nubber in Level.current.things[typeof(Nubber)])
+            foreach (Nubber nubber in current.things[typeof(Nubber)])
             {
                 current.RemoveThing(nubber);
             }
@@ -2934,7 +2934,7 @@ namespace DuckGame
                             thing.SetTranslation(new Vec2((float)(-(thing.position.x - vec2.x) * 2.0), 0f));
                             thing.EditorFlip(false);
                             thing.flipHorizontal = !thing.flipHorizontal;
-                            Level.current.things.UpdateObject(thing);
+                            current.things.UpdateObject(thing);
                         }
                     }
                     else
@@ -2953,7 +2953,7 @@ namespace DuckGame
                                     return;
                                 current.things.quadTree.Remove(t);
                                 current.things.quadTree.Add(t);
-                                Level.current.things.UpdateObject(t);
+                                current.things.UpdateObject(t);
                             }, () =>
                             {
                                 t.SetTranslation(new Vec2(dif * 2f, 0f));
@@ -2963,7 +2963,7 @@ namespace DuckGame
                                     return;
                                 current.things.quadTree.Remove(t);
                                 current.things.quadTree.Add(t);
-                                Level.current.things.UpdateObject(t);
+                                current.things.UpdateObject(t);
                             });
                         }
 
@@ -3080,7 +3080,7 @@ namespace DuckGame
                                 return;
                             current.things.quadTree.Remove(t);
                             current.things.quadTree.Add(t);
-                            Level.current.things.UpdateObject(t);
+                            current.things.UpdateObject(t);
                         }, () =>
                         {
                             t.SetTranslation(-offset);
@@ -3088,7 +3088,7 @@ namespace DuckGame
                                 return;
                             current.things.quadTree.Remove(t);
                             current.things.quadTree.Add(t);
-                            Level.current.things.UpdateObject(t);
+                            current.things.UpdateObject(t);
 
                         });
                     }

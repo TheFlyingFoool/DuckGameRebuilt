@@ -77,32 +77,32 @@ namespace DuckGame
         {
             get
             {
-                if (Vincent._mood == DealerMood.Concerned)
-                    return Vincent._dealer.frame - 6;
-                return Vincent._mood == DealerMood.Point ? Vincent._dealer.frame - 3 : Vincent._dealer.frame;
+                if (_mood == DealerMood.Concerned)
+                    return _dealer.frame - 6;
+                return _mood == DealerMood.Point ? _dealer.frame - 3 : _dealer.frame;
             }
             set
             {
-                if (Vincent._mood == DealerMood.Concerned)
-                    Vincent._dealer.frame = value + 6;
-                else if (Vincent._mood == DealerMood.Point)
-                    Vincent._dealer.frame = value + 3;
+                if (_mood == DealerMood.Concerned)
+                    _dealer.frame = value + 6;
+                else if (_mood == DealerMood.Point)
+                    _dealer.frame = value + 3;
                 else
-                    Vincent._dealer.frame = value;
+                    _dealer.frame = value;
             }
         }
 
         public static void Clear()
         {
-            Vincent._lines.Clear();
-            Vincent._lineProgress.Clear();
-            Vincent._waitLetter = 0f;
-            Vincent._waitAfterLine = 0f;
-            Vincent._currentLine = "";
-            Vincent._mood = DealerMood.Normal;
+            _lines.Clear();
+            _lineProgress.Clear();
+            _waitLetter = 0f;
+            _waitAfterLine = 0f;
+            _currentLine = "";
+            _mood = DealerMood.Normal;
         }
 
-        public static void Add(string line) => Vincent._lines.Add(line);
+        public static void Add(string line) => _lines.Add(line);
 
         public static int SortSaleDayFurniture(Furniture t1, Furniture t2)
         {
@@ -115,40 +115,40 @@ namespace DuckGame
 
         public static void Open(DayType t)
         {
-            Vincent._lineProgress.Clear();
-            Vincent.show = false;
-            Vincent._afterShowWait = 0f;
-            Vincent._showLerp = 0f;
-            Vincent._allowMovement = false;
-            Vincent._waitAfterLine = 1f;
-            Vincent._waitLetter = 1f;
-            Vincent._mood = DealerMood.Normal;
-            Vincent._chancyLerp = 0f;
-            Vincent.hasKid = false;
-            Vincent._allowMovement = false;
-            Vincent._afterShowWait = 0f;
-            Vincent.show = false;
+            _lineProgress.Clear();
+            show = false;
+            _afterShowWait = 0f;
+            _showLerp = 0f;
+            _allowMovement = false;
+            _waitAfterLine = 1f;
+            _waitLetter = 1f;
+            _mood = DealerMood.Normal;
+            _chancyLerp = 0f;
+            hasKid = false;
+            _allowMovement = false;
+            _afterShowWait = 0f;
+            show = false;
             if (Profiles.experienceProfile == null)
                 return;
-            Vincent.openedCorners = false;
+            openedCorners = false;
             Music.Play("vincent");
-            Vincent._dealer = Vincent._hasYoYo ? new SpriteMap("vincent", 113, 106) : new SpriteMap("vincentNoYo", 113, 106);
-            Vincent._selectDescIndex = -2;
-            Vincent._selectIndex = -1;
-            Vincent.hasKid = false;
-            Vincent.type = t;
+            _dealer = _hasYoYo ? new SpriteMap("vincent", 113, 106) : new SpriteMap("vincentNoYo", 113, 106);
+            _selectDescIndex = -2;
+            _selectIndex = -1;
+            hasKid = false;
+            type = t;
             switch (t)
             {
                 case DayType.Special:
-                    Vincent.Add("|CALM|I've got something special for you today, |SHOW||POINT|Check it out!");
+                    Add("|CALM|I've got something special for you today, |SHOW||POINT|Check it out!");
                     break;
                 case DayType.SaleDay:
                     if (Profiles.experienceProfile.timesMetVincentSale == 0)
                     {
-                        Vincent.Add("|CALM|Hey!|2| |POINT|You're new to this so let me explain.");
-                        Vincent.Add("|CALM|At the end of every month I have a super sale.");
-                        Vincent.Add("|CONCERNED|Where I sell stuff I can't move, |POINT|at WAY LOW PRICES!");
-                        Vincent.Add("|CALM||SHOW|Check it out!");
+                        Add("|CALM|Hey!|2| |POINT|You're new to this so let me explain.");
+                        Add("|CALM|At the end of every month I have a super sale.");
+                        Add("|CONCERNED|Where I sell stuff I can't move, |POINT|at WAY LOW PRICES!");
+                        Add("|CALM||SHOW|Check it out!");
                     }
                     else
                     {
@@ -170,9 +170,9 @@ namespace DuckGame
               "|CALM|Oh wow, now here's some |SHOW|quality stuff."
             });
                         foreach (string line in stringListList[Rando.Int(stringListList.Count - 1)])
-                            Vincent.Add(line);
+                            Add(line);
                     }
-                    Vincent.hasKid = new List<int>()
+                    hasKid = new List<int>()
           {
             0,
             1,
@@ -195,9 +195,9 @@ namespace DuckGame
                 case DayType.ImportDay:
                     if (Profiles.experienceProfile.timesMetVincentImport == 0)
                     {
-                        Vincent.Add("|CALM|OK. On the first day of every month I have a |POINT||GREEN|SPECIAL SALE|WHITE|!");
-                        Vincent.Add("|CALM|Today I sell only the |POINT||GREEN|FANCIEST IMPORTS|GREEN|.");
-                        Vincent.Add("|CONCERNED|This stuff aint cheap!|POINT||SHOW| See anything you like?");
+                        Add("|CALM|OK. On the first day of every month I have a |POINT||GREEN|SPECIAL SALE|WHITE|!");
+                        Add("|CALM|Today I sell only the |POINT||GREEN|FANCIEST IMPORTS|GREEN|.");
+                        Add("|CONCERNED|This stuff aint cheap!|POINT||SHOW| See anything you like?");
                     }
                     else
                     {
@@ -232,9 +232,9 @@ namespace DuckGame
                 "|POINT|But hey you're basically him so,|SHOW| have at 'er."
               });
                         foreach (string line in stringListList[Rando.Int(stringListList.Count - 1)])
-                            Vincent.Add(line);
+                            Add(line);
                     }
-                    Vincent.hasKid = new List<int>()
+                    hasKid = new List<int>()
           {
             3,
             6,
@@ -245,17 +245,17 @@ namespace DuckGame
                 case DayType.PawnDay:
                     if (Profiles.experienceProfile.timesMetVincentSell == 0)
                     {
-                        Vincent.Add("|CALM|I keep an eye out on all the furniture that goes around here.");
-                        Vincent.Add("|CALM|Every second Wednesday I'll come see |POINT|if you have anything I like!");
-                        Vincent.Add("|CONCERNED|If something catches my eye I'll try to buy it from you..");
-                        Vincent.Add("|POINT|So!");
+                        Add("|CALM|I keep an eye out on all the furniture that goes around here.");
+                        Add("|CALM|Every second Wednesday I'll come see |POINT|if you have anything I like!");
+                        Add("|CONCERNED|If something catches my eye I'll try to buy it from you..");
+                        Add("|POINT|So!");
                     }
-                    List<Furniture> list1 = Profiles.experienceProfile.GetAvailableFurnis().Where<Furniture>(x => Profiles.experienceProfile.GetNumFurnitures(x.index) > Profiles.experienceProfile.GetNumFurnituresPlaced(x.index) && x.group != Furniture.Momento && x.group != Furniture.Default).ToList<Furniture>();
-                    if (list1.Count<Furniture>() > 0)
+                    List<Furniture> list1 = Profiles.experienceProfile.GetAvailableFurnis().Where(x => Profiles.experienceProfile.GetNumFurnitures(x.index) > Profiles.experienceProfile.GetNumFurnituresPlaced(x.index) && x.group != Furniture.Momento && x.group != Furniture.Default).ToList();
+                    if (list1.Count() > 0)
                     {
-                        List<Furniture> list2 = list1.OrderBy<Furniture, float>(x => Rando.Float(1f) - Math.Min(Profiles.experienceProfile.GetNumFurnitures(x.index) / 10f, 1f) * 0.5f).ToList<Furniture>();
+                        List<Furniture> list2 = list1.OrderBy(x => Rando.Float(1f) - Math.Min(Profiles.experienceProfile.GetNumFurnitures(x.index) / 10f, 1f) * 0.5f).ToList();
                         int num = Rando.Int(3);
-                        Vincent.products.Clear();
+                        products.Clear();
                         VincentProduct vincentProduct = new VincentProduct()
                         {
                             type = VPType.Furniture,
@@ -267,35 +267,35 @@ namespace DuckGame
                             vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 4.0);
                         if (vincentProduct.furnitureData.name == "ROUND TABLE" && Rando.Float(1f) > 0.5)
                         {
-                            Vincent.Add("|POINT|Oh baby, is that one of them ROUND tables??");
-                            Vincent.Add("|CONCERNED| Can I buy it from you?|SHOW| I'm so tired of square tables...");
+                            Add("|POINT|Oh baby, is that one of them ROUND tables??");
+                            Add("|CONCERNED| Can I buy it from you?|SHOW| I'm so tired of square tables...");
                         }
                         else
                         {
                             switch (num)
                             {
                                 case 0:
-                                    Vincent.Add("|POINT|I like the look of this,|SHOW| you wanna sell it?");
+                                    Add("|POINT|I like the look of this,|SHOW| you wanna sell it?");
                                     break;
                                 case 1:
-                                    Vincent.Add("|POINT|This is pretty cool,|SHOW| ya still in love with it? Cause I am!");
+                                    Add("|POINT|This is pretty cool,|SHOW| ya still in love with it? Cause I am!");
                                     break;
                                 case 2:
-                                    Vincent.Add("|POINT|I haven't seen one of these in ages!|SHOW| Can I buy it from you?");
+                                    Add("|POINT|I haven't seen one of these in ages!|SHOW| Can I buy it from you?");
                                     break;
                                 case 3:
-                                    Vincent.Add("|POINT|I mean, why do you even have one of these!?|SHOW| I can take it off your hands..");
+                                    Add("|POINT|I mean, why do you even have one of these!?|SHOW| I can take it off your hands..");
                                     break;
                             }
                         }
-                        Vincent.products.Add(vincentProduct);
+                        products.Add(vincentProduct);
                     }
                     else
                     {
-                        Vincent.Add("|CALM|Let's see what I could buy from you...");
-                        Vincent.Add("|CONCERNED|Looks like you don't have anything I want, sorry!|SHOW|");
+                        Add("|CALM|Let's see what I could buy from you...");
+                        Add("|CONCERNED|Looks like you don't have anything I want, sorry!|SHOW|");
                     }
-                    Vincent.hasKid = new List<int>()
+                    hasKid = new List<int>()
           {
             4,
             8,
@@ -306,7 +306,7 @@ namespace DuckGame
                     ++Profiles.experienceProfile.timesMetVincentSell;
                     break;
                 case DayType.HintDay:
-                    Vincent.products.Clear();
+                    products.Clear();
                     List<List<string>> stringListList1 = new List<List<string>>()
           {
             new List<string>()
@@ -462,8 +462,8 @@ namespace DuckGame
                     foreach (string str in stringListList2[Rando.Int(stringListList2.Count - 1)])
                         stringList.Add(str);
                     foreach (string line in stringList)
-                        Vincent.Add(line);
-                    Vincent.hasKid = new List<int>()
+                        Add(line);
+                    hasKid = new List<int>()
           {
             3,
             5,
@@ -484,7 +484,7 @@ namespace DuckGame
                     ++Profiles.experienceProfile.timesMetVincentHint;
                     break;
                 default:
-                    Vincent.hasKid = new List<int>()
+                    hasKid = new List<int>()
           {
             1,
             3,
@@ -513,66 +513,66 @@ namespace DuckGame
           }.Contains(Profiles.experienceProfile.timesMetVincent);
                     if (Profiles.experienceProfile.timesMetVincent >= 19 && Profiles.experienceProfile.GetNumFurnitures(RoomEditor.GetFurniture("YOYO").index) <= 0)
                     {
-                        Vincent._willGiveYoYo = true;
-                        Vincent.Add("|CONCERNED|You know what? |CALM|You're my best customer.");
-                        Vincent.Add("|POINT|Hands down. You are awesome");
-                        Vincent.Add("|CONCERNED|I want you to have this...|2||GIVE|");
-                        Vincent.Add("|POINT|Now then, |SHOW|Here's what I got!");
-                        Vincent.hasKid = false;
+                        _willGiveYoYo = true;
+                        Add("|CONCERNED|You know what? |CALM|You're my best customer.");
+                        Add("|POINT|Hands down. You are awesome");
+                        Add("|CONCERNED|I want you to have this...|2||GIVE|");
+                        Add("|POINT|Now then, |SHOW|Here's what I got!");
+                        hasKid = false;
                     }
                     else if (Profiles.experienceProfile.numLittleMen > 0 && Profiles.experienceProfile.GetNumFurnitures(RoomEditor.GetFurniture("VOODOO VINCENT").index) <= 0)
                     {
-                        Vincent._willGiveVooDoo = true;
-                        Vincent.Add("|CONCERNED|Hey, I've got something special for you today..");
-                        Vincent.Add("|POINT|I'm required by Duck Game Law to give it to you.");
-                        Vincent.Add("|CONCERNED|Lets see here, I know I've got it around here somewhere.. |2||GIVE|");
-                        Vincent.Add("|POINT|If you put it in your room it'll give you the option to.. |CONCERNED|Er.. Well uh.. to make me go away.");
-                        Vincent.Add("|CALM|You'll still get new Furni and XP if you skip the level up screen, but you'll miss my handsome mug.");
-                        Vincent.Add("|POINT|Now then, |SHOW|Here's what I've got for today!");
-                        Vincent.hasKid = false;
+                        _willGiveVooDoo = true;
+                        Add("|CONCERNED|Hey, I've got something special for you today..");
+                        Add("|POINT|I'm required by Duck Game Law to give it to you.");
+                        Add("|CONCERNED|Lets see here, I know I've got it around here somewhere.. |2||GIVE|");
+                        Add("|POINT|If you put it in your room it'll give you the option to.. |CONCERNED|Er.. Well uh.. to make me go away.");
+                        Add("|CALM|You'll still get new Furni and XP if you skip the level up screen, but you'll miss my handsome mug.");
+                        Add("|POINT|Now then, |SHOW|Here's what I've got for today!");
+                        hasKid = false;
                     }
                     else if (UILevelBox.currentLevel > 2 && Profiles.experienceProfile.punished >= 10 && Profiles.experienceProfile.GetNumFurnitures(RoomEditor.GetFurniture("PERIMETER DEFENCE").index) <= 0)
                     {
-                        Vincent._willGivePerimeterDefence = true;
-                        Vincent.Add("|CONCERNED|Hey.. I noticed other Ducks have been comin' into your room and givin' you a hard time.");
-                        Vincent.Add("|CONCERNED|That's not cool, you got a little man's safety to worry about!");
-                        Vincent.Add("|POINT|I'm a bit of a pacifist, but I bought this thing on sale and I want you to have it.");
-                        Vincent.Add("|CONCERNED|Let's see here...|3||GIVE|");
-                        Vincent.Add("|CALM|That thing's just to protect the home room, okay? Be careful with it!");
-                        Vincent.Add("|POINT|Now then, |SHOW|Here's what I've got for today!");
-                        Vincent.hasKid = false;
+                        _willGivePerimeterDefence = true;
+                        Add("|CONCERNED|Hey.. I noticed other Ducks have been comin' into your room and givin' you a hard time.");
+                        Add("|CONCERNED|That's not cool, you got a little man's safety to worry about!");
+                        Add("|POINT|I'm a bit of a pacifist, but I bought this thing on sale and I want you to have it.");
+                        Add("|CONCERNED|Let's see here...|3||GIVE|");
+                        Add("|CALM|That thing's just to protect the home room, okay? Be careful with it!");
+                        Add("|POINT|Now then, |SHOW|Here's what I've got for today!");
+                        hasKid = false;
                     }
                     else if (Profiles.experienceProfile.timesMetVincent == 0)
                     {
-                        Vincent.Add("|POINT|Hey, I'm Vincent and I sell toys.");
-                        Vincent.Add("|CALM|I'm around every |GREEN|Friday|WHITE| and have new stuff every week.");
-                        Vincent.Add("|CONCERNED|My stuff is a sure thing too, no gambling here.|2|");
-                        Vincent.Add("|POINT|SO! |SHOW|See anything you like?");
+                        Add("|POINT|Hey, I'm Vincent and I sell toys.");
+                        Add("|CALM|I'm around every |GREEN|Friday|WHITE| and have new stuff every week.");
+                        Add("|CONCERNED|My stuff is a sure thing too, no gambling here.|2|");
+                        Add("|POINT|SO! |SHOW|See anything you like?");
                     }
                     else if (Profiles.experienceProfile.timesMetVincent == 1)
                     {
-                        Vincent.Add("|POINT|HEY!");
-                        Vincent.Add("|CALM|This is my son, |DGBLUE|Mini Vinny|WHITE|.");
-                        Vincent.Add("|CALM|He's helpin' me sell toys.");
-                        Vincent.Add("|POINT|His mom|3||CONCERNED| would|1| rather he |RED|didn't|WHITE|.|3|");
-                        Vincent.Add("|CONCERNED|But|2||CALM| this is |DGBLUE|our time|WHITE|. |SHOW|and ol' |DGBLUE|mini|WHITE| |GREEN|LOVES|WHITE| sellin' toys.");
+                        Add("|POINT|HEY!");
+                        Add("|CALM|This is my son, |DGBLUE|Mini Vinny|WHITE|.");
+                        Add("|CALM|He's helpin' me sell toys.");
+                        Add("|POINT|His mom|3||CONCERNED| would|1| rather he |RED|didn't|WHITE|.|3|");
+                        Add("|CONCERNED|But|2||CALM| this is |DGBLUE|our time|WHITE|. |SHOW|and ol' |DGBLUE|mini|WHITE| |GREEN|LOVES|WHITE| sellin' toys.");
                     }
                     else if (Profiles.experienceProfile.timesMetVincent == 7)
-                        Vincent.Add("|CONCERNED|Here|SHOW| you go...");
+                        Add("|CONCERNED|Here|SHOW| you go...");
                     else if (Profiles.experienceProfile.timesMetVincent == 8)
                     {
-                        Vincent.Add("|POINT|Dang, It's good to see you.");
-                        Vincent.Add("|CONCERNED|You're my best customer, |SHOW|you know that?");
+                        Add("|POINT|Dang, It's good to see you.");
+                        Add("|CONCERNED|You're my best customer, |SHOW|you know that?");
                     }
                     else if (Profiles.experienceProfile.timesMetVincent == 13)
                     {
-                        Vincent.Add("|CALM|Friday is my favourite day 'cause we get to hang out.");
-                        Vincent.Add("|POINT|I'm not just sayin' that|SHOW| cause you buy stuff!");
+                        Add("|CALM|Friday is my favourite day 'cause we get to hang out.");
+                        Add("|POINT|I'm not just sayin' that|SHOW| cause you buy stuff!");
                     }
                     else if (Profiles.experienceProfile.timesMetVincent == 22)
                     {
-                        Vincent.Add("|CONCERNED|Today was a dang mess, but this makes it all worthwhile.");
-                        Vincent.Add("|POINT|+Sellin' |SHOW|toys is THE BEST+");
+                        Add("|CONCERNED|Today was a dang mess, but this makes it all worthwhile.");
+                        Add("|POINT|+Sellin' |SHOW|toys is THE BEST+");
                     }
                     else
                     {
@@ -632,22 +632,22 @@ namespace DuckGame
                 "|CALM|+BACKSTREET'S BACK+ |SHOW|+ALRIGHT!!+"
               });
                         foreach (string line in stringListList3[Rando.Int(stringListList3.Count - 1)])
-                            Vincent.Add(line);
+                            Add(line);
                     }
                     ++Profiles.experienceProfile.timesMetVincent;
                     break;
             }
             if (Profiles.experienceProfile.timesMetVincent < 1)
-                Vincent.hasKid = false;
+                hasKid = false;
             if (t == DayType.PawnDay || t == DayType.HintDay)
                 return;
-            Vincent.GenerateProducts();
+            GenerateProducts();
         }
 
         public static void GenerateProducts()
         {
-            Vincent.products.Clear();
-            switch (Vincent.type)
+            products.Clear();
+            switch (type)
             {
                 case DayType.Shop:
                     using (List<Furniture>.Enumerator enumerator = UIGachaBox.GetRandomFurniture(Rarity.VeryRare, 4, 0.4f, numDupes: 1).GetEnumerator())
@@ -667,7 +667,7 @@ namespace DuckGame
                             }
                             else
                                 vincentProduct.cost = vincentProduct.originalCost = vincentProduct.furnitureData.price;
-                            Vincent.products.Add(vincentProduct);
+                            products.Add(vincentProduct);
                         }
                         break;
                     }
@@ -683,8 +683,8 @@ namespace DuckGame
             Teams.GetTeam("TWINTAIL"),
             Teams.GetTeam("HIGHFIVES"),
             Teams.GetTeam("MOTHERS")
-          }.Where<Team>(x => !Global.boughtHats.Contains(x.name));
-                    if (source.Count<Team>() <= 0)
+          }.Where(x => !Global.boughtHats.Contains(x.name));
+                    if (source.Count() <= 0)
                     {
                         using (List<Furniture>.Enumerator enumerator = UIGachaBox.GetRandomFurniture(Rarity.VeryVeryRare, 1, 0.4f).GetEnumerator())
                         {
@@ -698,7 +698,7 @@ namespace DuckGame
                                 };
                                 vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 0.5);
                                 vincentProduct.originalCost = vincentProduct.furnitureData.price;
-                                Vincent.products.Add(vincentProduct);
+                                products.Add(vincentProduct);
                             }
                             break;
                         }
@@ -710,8 +710,8 @@ namespace DuckGame
                             type = VPType.Hat
                         };
                         vincentProduct.cost = vincentProduct.originalCost = 150;
-                        vincentProduct.teamData = source.ElementAt<Team>(Rando.Int(source.Count<Team>() - 1));
-                        Vincent.products.Add(vincentProduct);
+                        vincentProduct.teamData = source.ElementAt(Rando.Int(source.Count() - 1));
+                        products.Add(vincentProduct);
                         break;
                     }
                 case DayType.SaleDay:
@@ -727,12 +727,12 @@ namespace DuckGame
                             };
                             vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 0.5);
                             vincentProduct.originalCost = vincentProduct.furnitureData.price;
-                            Vincent.products.Add(vincentProduct);
+                            products.Add(vincentProduct);
                         }
                         break;
                     }
                 case DayType.ImportDay:
-                    IOrderedEnumerable<Furniture> orderedEnumerable = UIGachaBox.GetRandomFurniture(Rarity.VeryVeryRare, 8, 0.4f, avoidDupes: true).OrderBy<Furniture, int>(x => -x.rarity);
+                    IOrderedEnumerable<Furniture> orderedEnumerable = UIGachaBox.GetRandomFurniture(Rarity.VeryVeryRare, 8, 0.4f, avoidDupes: true).OrderBy(x => -x.rarity);
                     int num = 0;
                     using (IEnumerator<Furniture> enumerator = orderedEnumerable.GetEnumerator())
                     {
@@ -755,7 +755,7 @@ namespace DuckGame
                                 vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 1.5);
                                 vincentProduct.originalCost = vincentProduct.furnitureData.price;
                             }
-                            Vincent.products.Add(vincentProduct);
+                            products.Add(vincentProduct);
                             ++num;
                             if (num == 4)
                                 break;
@@ -767,51 +767,51 @@ namespace DuckGame
 
         public static void Initialize()
         {
-            if (Vincent._tail != null)
+            if (_tail != null)
                 return;
-            Vincent._dealer = new SpriteMap("vincent", 113, 106);
-            Vincent._tail = new Sprite("arcade/bubbleTail");
-            Vincent._font = new FancyBitmapFont("smallFont");
-            Vincent._priceFont = new BitmapFont("biosFontSideways", 8);
-            Vincent._priceFontCrossout = new BitmapFont("biosFontSidewaysCrossout", 8);
-            Vincent._priceFontRightways = new BitmapFont("priceFontRightways", 8);
-            Vincent._descriptionFont = new BitmapFont("biosFontDescriptions", 8);
-            Vincent._photo = new Sprite("arcade/challengePhoto");
-            Vincent._furniFrame = new Sprite("furniFrame");
-            Vincent._furniFrame.CenterOrigin();
-            Vincent._furniFill = new Sprite("furniFill");
-            Vincent._furniFill.CenterOrigin();
-            Vincent._furniHov = new Sprite("furniHov");
-            Vincent._furniHov.CenterOrigin();
-            Vincent._soldSprite = new Sprite("soldStamp");
-            Vincent._soldSprite.CenterOrigin();
-            Vincent._newSticker = new SpriteMap("newSticker", 29, 28);
-            Vincent._newSticker.CenterOrigin();
-            Vincent._rareSticker = new SpriteMap("rareSticker", 29, 28);
-            Vincent._rareSticker.CenterOrigin();
-            Vincent._furniTag = new SpriteMap("furniTag", 14, 51);
-            Vincent._cheapTape = new Sprite("cheapTape");
-            Vincent._cheapTape.CenterOrigin();
-            Vincent._bigBanner = new Sprite("bigBanner");
-            Vincent._fancyBanner = new Sprite("fancyBanner");
-            Vincent._priceTargets.Add(new RenderTarget2D(64, 16));
-            Vincent._priceTargets.Add(new RenderTarget2D(64, 16));
-            Vincent._priceTargets.Add(new RenderTarget2D(64, 16));
-            Vincent._priceTargets.Add(new RenderTarget2D(64, 16));
+            _dealer = new SpriteMap("vincent", 113, 106);
+            _tail = new Sprite("arcade/bubbleTail");
+            _font = new FancyBitmapFont("smallFont");
+            _priceFont = new BitmapFont("biosFontSideways", 8);
+            _priceFontCrossout = new BitmapFont("biosFontSidewaysCrossout", 8);
+            _priceFontRightways = new BitmapFont("priceFontRightways", 8);
+            _descriptionFont = new BitmapFont("biosFontDescriptions", 8);
+            _photo = new Sprite("arcade/challengePhoto");
+            _furniFrame = new Sprite("furniFrame");
+            _furniFrame.CenterOrigin();
+            _furniFill = new Sprite("furniFill");
+            _furniFill.CenterOrigin();
+            _furniHov = new Sprite("furniHov");
+            _furniHov.CenterOrigin();
+            _soldSprite = new Sprite("soldStamp");
+            _soldSprite.CenterOrigin();
+            _newSticker = new SpriteMap("newSticker", 29, 28);
+            _newSticker.CenterOrigin();
+            _rareSticker = new SpriteMap("rareSticker", 29, 28);
+            _rareSticker.CenterOrigin();
+            _furniTag = new SpriteMap("furniTag", 14, 51);
+            _cheapTape = new Sprite("cheapTape");
+            _cheapTape.CenterOrigin();
+            _bigBanner = new Sprite("bigBanner");
+            _fancyBanner = new Sprite("fancyBanner");
+            _priceTargets.Add(new RenderTarget2D(64, 16));
+            _priceTargets.Add(new RenderTarget2D(64, 16));
+            _priceTargets.Add(new RenderTarget2D(64, 16));
+            _priceTargets.Add(new RenderTarget2D(64, 16));
         }
 
         public static void ChangeSpeech()
         {
-            Vincent.Clear();
-            Vincent._selectDescIndex = Vincent._selectIndex;
-            if (Vincent.products[Vincent._selectIndex].sold)
+            Clear();
+            _selectDescIndex = _selectIndex;
+            if (products[_selectIndex].sold)
             {
-                if (Vincent._soldSelectIndex == Vincent._selectIndex)
+                if (_soldSelectIndex == _selectIndex)
                 {
-                    if (Vincent.products.Where<VincentProduct>(x => !x.sold).Count<VincentProduct>() == 0)
+                    if (products.Where(x => !x.sold).Count() == 0)
                     {
-                        Vincent.Add("|CONCERNED|WOAH...");
-                        Vincent.Add("|POINT|YOU BOUGHT EVERYTHING!");
+                        Add("|CONCERNED|WOAH...");
+                        Add("|POINT|YOU BOUGHT EVERYTHING!");
                     }
                     else
                     {
@@ -834,70 +834,70 @@ namespace DuckGame
                             stringList.Add("|CONCERNED|HOPE YOU LIKE IT.");
                             stringList.Add("|POINT|NOW THAT'S GOOD TASTE!");
                         }
-                        Vincent.Add(stringList[Rando.Int(stringList.Count - 1)]);
+                        Add(stringList[Rando.Int(stringList.Count - 1)]);
                     }
-                    Vincent._soldSelectIndex = -1;
+                    _soldSelectIndex = -1;
                 }
                 else
                 {
-                    Vincent.Add("|CONCERNED|GONNA MISS THAT ONE.");
-                    Vincent._soldSelectIndex = -1;
+                    Add("|CONCERNED|GONNA MISS THAT ONE.");
+                    _soldSelectIndex = -1;
                 }
             }
             else
             {
-                string str = Vincent.products[Vincent._selectIndex].description;
+                string str = products[_selectIndex].description;
                 if (str == "")
-                    str = Vincent.products[Vincent._selectIndex].furnitureData != null ? "What a fine piece of furniture." : "What a fine hat.";
+                    str = products[_selectIndex].furnitureData != null ? "What a fine piece of furniture." : "What a fine hat.";
                 //int type = (int)Vincent.products[Vincent._selectIndex].type;
-                Vincent.Add(str + "^|ORANGE|Part of the '" + Vincent.products[Vincent._selectIndex].group + "' line.|WHITE| " + "|DGGREEN|$" + Convert.ToString(Vincent.products[Vincent._selectIndex].cost));
+                Add(str + "^|ORANGE|Part of the '" + products[_selectIndex].group + "' line.|WHITE| " + "|DGGREEN|$" + Convert.ToString(products[_selectIndex].cost));
             }
         }
 
         public static void Sold()
         {
-            Vincent.products[FurniShopScreen.attemptBuyIndex].sold = true;
-            Vincent._soldSelectIndex = FurniShopScreen.attemptBuyIndex;
+            products[FurniShopScreen.attemptBuyIndex].sold = true;
+            _soldSelectIndex = FurniShopScreen.attemptBuyIndex;
         }
 
         public static void Update()
         {
-            if (Vincent._hasYoYo && Profiles.experienceProfile.timesMetVincent > 19 && !FurniShopScreen.giveYoYo && !Vincent._willGiveYoYo)
+            if (_hasYoYo && Profiles.experienceProfile.timesMetVincent > 19 && !FurniShopScreen.giveYoYo && !_willGiveYoYo)
             {
-                Vincent._dealer = new SpriteMap("vincentNoYo", 113, 106);
-                Vincent._hasYoYo = false;
+                _dealer = new SpriteMap("vincentNoYo", 113, 106);
+                _hasYoYo = false;
             }
-            else if (!Vincent._hasYoYo && Profiles.experienceProfile.timesMetVincent < 20)
+            else if (!_hasYoYo && Profiles.experienceProfile.timesMetVincent < 20)
             {
-                Vincent._dealer = new SpriteMap("vincent", 113, 106);
-                Vincent._hasYoYo = true;
+                _dealer = new SpriteMap("vincent", 113, 106);
+                _hasYoYo = true;
             }
-            Vincent.Initialize();
+            Initialize();
             if (UILevelBox.menuOpen)
                 return;
-            Vincent._showLerp = Lerp.FloatSmooth(Vincent._showLerp, Vincent.show ? 1f : 0f, 0.09f, 1.05f);
-            bool flag1 = Vincent.lookingAtList && _challengeLerp < 0.3f;
-            bool flag2 = Vincent.lookingAtChallenge && _listLerp < 0.3f;
+            _showLerp = Lerp.FloatSmooth(_showLerp, show ? 1f : 0f, 0.09f, 1.05f);
+            bool flag1 = lookingAtList && _challengeLerp < 0.3f;
+            bool flag2 = lookingAtChallenge && _listLerp < 0.3f;
             bool flag3 = FurniShopScreen.open && _listLerp < 0.3f;
-            Vincent._listLerp = Lerp.FloatSmooth(Vincent._listLerp, flag1 ? 1f : 0f, 0.2f, 1.05f);
-            Vincent._challengeLerp = Lerp.FloatSmooth(Vincent._challengeLerp, flag2 ? 1f : 0f, 0.2f, 1.05f);
-            Vincent._chancyLerp = Lerp.FloatSmooth(Vincent._chancyLerp, flag3 ? 1f : 0f, 0.2f, 1.05f);
-            Vincent.alpha = !FurniShopScreen.open ? Lerp.Float(Vincent.alpha, 0f, 0.05f) : Lerp.Float(Vincent.alpha, 1f, 0.05f);
-            if (!FurniShopScreen.open || Vincent.showingDay)
+            _listLerp = Lerp.FloatSmooth(_listLerp, flag1 ? 1f : 0f, 0.2f, 1.05f);
+            _challengeLerp = Lerp.FloatSmooth(_challengeLerp, flag2 ? 1f : 0f, 0.2f, 1.05f);
+            _chancyLerp = Lerp.FloatSmooth(_chancyLerp, flag3 ? 1f : 0f, 0.2f, 1.05f);
+            alpha = !FurniShopScreen.open ? Lerp.Float(alpha, 0f, 0.05f) : Lerp.Float(alpha, 1f, 0.05f);
+            if (!FurniShopScreen.open || showingDay)
                 return;
-            if (!Vincent.openedCorners)
+            if (!openedCorners)
             {
-                Vincent.openedCorners = true;
+                openedCorners = true;
                 HUD.ClearCorners();
-                if (Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !Vincent._willGiveVooDoo && !Vincent._willGiveYoYo && !Vincent._willGivePerimeterDefence)
+                if (Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !_willGiveVooDoo && !_willGiveYoYo && !_willGivePerimeterDefence)
                 {
                     HUD.AddCornerControl(HUDCorner.TopLeft, "@START@SKIP");
                     HUD.AddCornerMessage(HUDCorner.BottomLeft, "@CANCEL@DITCH");
                 }
             }
-            if (Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !Vincent._willGiveVooDoo && !Vincent._willGiveYoYo && !Vincent._willGivePerimeterDefence)
+            if (Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !_willGiveVooDoo && !_willGiveYoYo && !_willGivePerimeterDefence)
             {
-                DuckGame.Graphics.fadeAdd = 1f;
+                Graphics.fadeAdd = 1f;
                 SFX.skip = false;
                 SFX.Play("dacBang");
                 FurniShopScreen.close = true;
@@ -905,116 +905,116 @@ namespace DuckGame
             else
             {
                 int num1;
-                if (Vincent._allowMovement)
+                if (_allowMovement)
                 {
-                    if ((Input.Pressed("ANY") || Vincent.type == DayType.PawnDay && Vincent.products.Count > 0) && Vincent._selectIndex == -1)
+                    if ((Input.Pressed("ANY") || type == DayType.PawnDay && products.Count > 0) && _selectIndex == -1)
                     {
-                        Vincent._selectIndex = 0;
-                        if (Vincent.products.Count != 0)
+                        _selectIndex = 0;
+                        if (products.Count != 0)
                             return;
                         FurniShopScreen.close = true;
                         return;
                     }
                     if (Input.Pressed("MENULEFT"))
                     {
-                        switch (Vincent._selectIndex)
+                        switch (_selectIndex)
                         {
                             case -1:
-                                Vincent._selectIndex = 0;
+                                _selectIndex = 0;
                                 break;
                             case 1:
-                                Vincent._selectIndex = 0;
+                                _selectIndex = 0;
                                 SFX.Play("textLetter", 0.7f);
                                 break;
                             case 3:
-                                Vincent._selectIndex = 2;
+                                _selectIndex = 2;
                                 SFX.Play("textLetter", 0.7f);
                                 break;
                         }
                     }
                     if (Input.Pressed("MENURIGHT"))
                     {
-                        switch (Vincent._selectIndex)
+                        switch (_selectIndex)
                         {
                             case -1:
-                                Vincent._selectIndex = 0;
+                                _selectIndex = 0;
                                 break;
                             case 0:
-                                Vincent._selectIndex = 1;
+                                _selectIndex = 1;
                                 SFX.Play("textLetter", 0.7f);
                                 break;
                             case 2:
-                                Vincent._selectIndex = 3;
+                                _selectIndex = 3;
                                 SFX.Play("textLetter", 0.7f);
                                 break;
                         }
                     }
                     if (Input.Pressed("MENUUP"))
                     {
-                        switch (Vincent._selectIndex)
+                        switch (_selectIndex)
                         {
                             case -1:
-                                Vincent._selectIndex = 0;
+                                _selectIndex = 0;
                                 break;
                             case 2:
-                                Vincent._selectIndex = 0;
+                                _selectIndex = 0;
                                 SFX.Play("textLetter", 0.7f);
                                 break;
                             case 3:
-                                Vincent._selectIndex = 1;
+                                _selectIndex = 1;
                                 SFX.Play("textLetter", 0.7f);
                                 break;
                         }
                     }
                     if (Input.Pressed("MENUDOWN"))
                     {
-                        switch (Vincent._selectIndex)
+                        switch (_selectIndex)
                         {
                             case -1:
-                                Vincent._selectIndex = 0;
+                                _selectIndex = 0;
                                 break;
                             case 0:
-                                Vincent._selectIndex = 2;
+                                _selectIndex = 2;
                                 SFX.Play("textLetter", 0.7f);
                                 break;
                             case 1:
-                                Vincent._selectIndex = 3;
+                                _selectIndex = 3;
                                 SFX.Play("textLetter", 0.7f);
                                 break;
                         }
                     }
-                    if (Vincent._selectIndex >= Vincent.products.Count)
-                        Vincent._selectIndex = Vincent.products.Count - 1;
-                    if (Input.Pressed("SELECT") && Vincent._selectIndex != -1 && !Vincent.products[Vincent._selectIndex].sold && (Vincent.type == DayType.PawnDay || Vincent.products[Vincent._selectIndex].cost <= Profiles.experienceProfile.littleManBucks))
+                    if (_selectIndex >= products.Count)
+                        _selectIndex = products.Count - 1;
+                    if (Input.Pressed("SELECT") && _selectIndex != -1 && !products[_selectIndex].sold && (type == DayType.PawnDay || products[_selectIndex].cost <= Profiles.experienceProfile.littleManBucks))
                     {
-                        FurniShopScreen.attemptBuy = Vincent.products[Vincent._selectIndex];
-                        Vincent._selectDescIndex = -1;
-                        FurniShopScreen.attemptBuyIndex = Vincent._selectIndex;
+                        FurniShopScreen.attemptBuy = products[_selectIndex];
+                        _selectDescIndex = -1;
+                        FurniShopScreen.attemptBuyIndex = _selectIndex;
                         HUD.CloseCorner(HUDCorner.BottomLeft);
                         HUD.AddCornerMessage(HUDCorner.BottomMiddle, "|YELLOW|$" + Profiles.experienceProfile.littleManBucks.ToString());
-                        if (Vincent.products[Vincent._selectIndex].furnitureData == null)
+                        if (products[_selectIndex].furnitureData == null)
                             return;
                         HUD.AddCornerMessage(HUDCorner.BottomRight, "|DGBLUE|HAVE " + Profiles.experienceProfile.GetNumFurnitures(products[_selectIndex].furnitureData.index).ToString());
                         return;
                     }
-                    if (Vincent._selectDescIndex != Vincent._selectIndex)
+                    if (_selectDescIndex != _selectIndex)
                     {
-                        if (Vincent._selectIndex == -1)
+                        if (_selectIndex == -1)
                         {
                             HUD.CloseAllCorners();
                             HUD.AddCornerMessage(HUDCorner.BottomRight, "@SELECT@CONTINUE");
-                            Vincent._selectDescIndex = Vincent._selectIndex;
+                            _selectDescIndex = _selectIndex;
                         }
                         else
                         {
-                            if (Vincent.type != DayType.PawnDay)
-                                Vincent.ChangeSpeech();
+                            if (type != DayType.PawnDay)
+                                ChangeSpeech();
                             num1 = Profiles.experienceProfile.littleManBucks;
                             HUD.AddCornerMessage(HUDCorner.BottomMiddle, "|YELLOW|$" + num1.ToString());
-                            int num2 = Vincent.products[Vincent._selectIndex].furnitureData != null ? Profiles.experienceProfile.GetNumFurnitures(products[_selectIndex].furnitureData.index) : 0;
-                            if (Vincent.type == DayType.PawnDay)
+                            int num2 = products[_selectIndex].furnitureData != null ? Profiles.experienceProfile.GetNumFurnitures(products[_selectIndex].furnitureData.index) : 0;
+                            if (type == DayType.PawnDay)
                             {
-                                if (Vincent.products[Vincent._selectIndex].sold)
+                                if (products[_selectIndex].sold)
                                 {
                                     HUD.AddCornerMessage(HUDCorner.BottomRight, "SOLD");
                                 }
@@ -1026,106 +1026,106 @@ namespace DuckGame
                                     HUD.AddCornerMessage(HUDCorner.BottomRight, text);
                                 }
                             }
-                            else if (Vincent.products[Vincent._selectIndex].sold)
+                            else if (products[_selectIndex].sold)
                             {
                                 HUD.AddCornerMessage(HUDCorner.BottomRight, "BOUGHT");
                             }
                             else
                             {
-                                string text = Vincent.products[Vincent._selectIndex].cost > Profiles.experienceProfile.littleManBucks ? "@SELECT@|RED|BUY" : "@SELECT@BUY";
+                                string text = products[_selectIndex].cost > Profiles.experienceProfile.littleManBucks ? "@SELECT@|RED|BUY" : "@SELECT@BUY";
                                 if (num2 > 1)
                                     text = text + "|DGBLUE|(HAVE " + num2.ToString() + ")";
                                 HUD.AddCornerMessage(HUDCorner.BottomRight, text);
                             }
                             HUD.AddCornerMessage(HUDCorner.BottomLeft, "@CANCEL@EXIT");
-                            Vincent._selectDescIndex = Vincent._selectIndex;
+                            _selectDescIndex = _selectIndex;
                         }
                     }
                 }
-                bool flag4 = !Vincent._allowMovement && Input.Down("SELECT");
-                if (Vincent._lines.Count > 0 && Vincent._currentLine == "")
+                bool flag4 = !_allowMovement && Input.Down("SELECT");
+                if (_lines.Count > 0 && _currentLine == "")
                 {
                     int num3 = _waitAfterLine <= 0.0 ? 1 : 0;
-                    Vincent._waitAfterLine -= 0.045f;
+                    _waitAfterLine -= 0.045f;
                     if (flag4)
-                        Vincent._waitAfterLine -= 0.045f;
-                    if (Vincent.killSkip)
-                        Vincent._waitAfterLine -= 0.1f;
-                    Vincent._talkMove += 0.75f;
+                        _waitAfterLine -= 0.045f;
+                    if (killSkip)
+                        _waitAfterLine -= 0.1f;
+                    _talkMove += 0.75f;
                     if (_talkMove > 1.0)
                     {
-                        Vincent.frame = 0;
-                        Vincent._talkMove = 0f;
+                        frame = 0;
+                        _talkMove = 0f;
                     }
                     if (num3 == 0 && _waitAfterLine <= 0.0)
                         HUD.AddCornerMessage(HUDCorner.BottomRight, "@SELECT@CONTINUE");
-                    if (Vincent._lineProgress.Count == 0 || Input.Pressed("SELECT"))
+                    if (_lineProgress.Count == 0 || Input.Pressed("SELECT"))
                     {
-                        Vincent._lineProgress.Clear();
-                        Vincent._currentLine = Vincent._lines[0];
-                        Vincent._lines.RemoveAt(0);
-                        Vincent._waitAfterLine = 1.3f;
-                        if (Vincent.show)
-                            Vincent._allowMovement = true;
-                        Vincent.killSkip = false;
+                        _lineProgress.Clear();
+                        _currentLine = _lines[0];
+                        _lines.RemoveAt(0);
+                        _waitAfterLine = 1.3f;
+                        if (show)
+                            _allowMovement = true;
+                        killSkip = false;
                     }
                 }
-                if (Vincent._currentLine != "")
+                if (_currentLine != "")
                 {
-                    Vincent._waitLetter -= 0.9f;
+                    _waitLetter -= 0.9f;
                     if (flag4)
-                        Vincent._waitLetter -= 1.8f;
+                        _waitLetter -= 1.8f;
                     if (_waitLetter < 0.0)
                     {
-                        Vincent._talkMove += 0.75f;
+                        _talkMove += 0.75f;
                         if (_talkMove > 1.0)
                         {
-                            Vincent.frame = Vincent._currentLine[0] == ' ' || Vincent.frame != 1 || _extraWait > 0.0 ? 1 : 2;
-                            Vincent._talkMove = 0f;
+                            frame = _currentLine[0] == ' ' || frame != 1 || _extraWait > 0.0 ? 1 : 2;
+                            _talkMove = 0f;
                         }
-                        Vincent._waitLetter = 1f;
+                        _waitLetter = 1f;
                         char ch1;
-                        while (Vincent._currentLine[0] == '@')
+                        while (_currentLine[0] == '@')
                         {
-                            ch1 = Vincent._currentLine[0];
+                            ch1 = _currentLine[0];
                             string str1 = ch1.ToString() ?? "";
-                            for (Vincent._currentLine = Vincent._currentLine.Remove(0, 1); Vincent._currentLine[0] != '@' && Vincent._currentLine.Length > 0; Vincent._currentLine = Vincent._currentLine.Remove(0, 1))
+                            for (_currentLine = _currentLine.Remove(0, 1); _currentLine[0] != '@' && _currentLine.Length > 0; _currentLine = _currentLine.Remove(0, 1))
                             {
                                 string str2 = str1;
-                                ch1 = Vincent._currentLine[0];
+                                ch1 = _currentLine[0];
                                 string str3 = ch1.ToString();
                                 str1 = str2 + str3;
                             }
-                            Vincent._currentLine = Vincent._currentLine.Remove(0, 1);
+                            _currentLine = _currentLine.Remove(0, 1);
                             string val = str1 + "@";
-                            Vincent._lineProgress[0].Add(val);
-                            Vincent._waitLetter = 3f;
-                            if (Vincent._currentLine.Length == 0)
+                            _lineProgress[0].Add(val);
+                            _waitLetter = 3f;
+                            if (_currentLine.Length == 0)
                             {
-                                Vincent._currentLine = "";
+                                _currentLine = "";
                                 return;
                             }
                         }
                         float num4 = 0f;
-                        while (Vincent._currentLine[0] == '|')
+                        while (_currentLine[0] == '|')
                         {
-                            Vincent._currentLine = Vincent._currentLine.Remove(0, 1);
+                            _currentLine = _currentLine.Remove(0, 1);
                             string str4 = "";
-                            for (; Vincent._currentLine[0] != '|' && Vincent._currentLine.Length > 0; Vincent._currentLine = Vincent._currentLine.Remove(0, 1))
+                            for (; _currentLine[0] != '|' && _currentLine.Length > 0; _currentLine = _currentLine.Remove(0, 1))
                             {
                                 string str5 = str4;
-                                ch1 = Vincent._currentLine[0];
+                                ch1 = _currentLine[0];
                                 string str6 = ch1.ToString();
                                 str4 = str5 + str6;
                             }
                             bool flag5 = false;
-                            if (Vincent._currentLine.Length <= 1)
+                            if (_currentLine.Length <= 1)
                             {
-                                Vincent._currentLine = "";
+                                _currentLine = "";
                                 flag5 = true;
                             }
                             else
-                                Vincent._currentLine = Vincent._currentLine.Remove(0, 1);
+                                _currentLine = _currentLine.Remove(0, 1);
                             Color c = Color.White;
                             bool flag6 = false;
                             if (str4 == "RED")
@@ -1160,41 +1160,41 @@ namespace DuckGame
                             }
                             else if (str4 == "CONCERNED")
                             {
-                                Vincent._mood = DealerMood.Concerned;
+                                _mood = DealerMood.Concerned;
                                 num4 = 2f;
                             }
                             else if (str4 == "POINT")
                             {
-                                Vincent._mood = DealerMood.Point;
+                                _mood = DealerMood.Point;
                                 num4 = 2f;
                             }
                             else if (str4 == "CALM")
                             {
-                                Vincent._mood = DealerMood.Normal;
+                                _mood = DealerMood.Normal;
                                 num4 = 2f;
                             }
                             else if (str4 == "SHOW")
-                                Vincent.show = true;
+                                show = true;
                             else if (str4 == "GIVE")
                             {
-                                if (Vincent._willGiveYoYo)
+                                if (_willGiveYoYo)
                                 {
-                                    Vincent._willGiveYoYo = false;
+                                    _willGiveYoYo = false;
                                     FurniShopScreen.giveYoYo = true;
                                 }
-                                else if (Vincent._willGiveVooDoo)
+                                else if (_willGiveVooDoo)
                                 {
-                                    Vincent._willGiveVooDoo = false;
+                                    _willGiveVooDoo = false;
                                     FurniShopScreen.giveVooDoo = true;
                                 }
-                                else if (Vincent._willGivePerimeterDefence)
+                                else if (_willGivePerimeterDefence)
                                 {
-                                    Vincent._willGivePerimeterDefence = false;
+                                    _willGivePerimeterDefence = false;
                                     FurniShopScreen.givePerimeterDefence = true;
                                 }
                             }
                             else if (str4 == "0")
-                                Vincent.killSkip = true;
+                                killSkip = true;
                             else if (str4 == "1")
                                 num4 = 5f;
                             else if (str4 == "2")
@@ -1203,115 +1203,115 @@ namespace DuckGame
                                 num4 = 15f;
                             if (flag6)
                             {
-                                if (Vincent._lineProgress.Count == 0)
-                                    Vincent._lineProgress.Insert(0, new TextLine()
+                                if (_lineProgress.Count == 0)
+                                    _lineProgress.Insert(0, new TextLine()
                                     {
                                         lineColor = c
                                     });
                                 else
-                                    Vincent._lineProgress[0].SwitchColor(c);
+                                    _lineProgress[0].SwitchColor(c);
                             }
                             if (flag5)
                                 return;
                         }
                         string str7 = "";
                         int index1 = 1;
-                        if (Vincent._currentLine[0] == ' ')
+                        if (_currentLine[0] == ' ')
                         {
-                            while (index1 < Vincent._currentLine.Length && Vincent._currentLine[index1] != ' ' && Vincent._currentLine[index1] != '^')
+                            while (index1 < _currentLine.Length && _currentLine[index1] != ' ' && _currentLine[index1] != '^')
                             {
-                                if (Vincent._currentLine[index1] == '|')
+                                if (_currentLine[index1] == '|')
                                 {
                                     int index2 = index1 + 1;
-                                    while (index2 < Vincent._currentLine.Length && Vincent._currentLine[index2] != '|')
+                                    while (index2 < _currentLine.Length && _currentLine[index2] != '|')
                                         ++index2;
                                     index1 = index2 + 1;
                                 }
-                                else if (Vincent._currentLine[index1] == '@')
+                                else if (_currentLine[index1] == '@')
                                 {
                                     int index3 = index1 + 1;
-                                    while (index3 < Vincent._currentLine.Length && Vincent._currentLine[index3] != '@')
+                                    while (index3 < _currentLine.Length && _currentLine[index3] != '@')
                                         ++index3;
                                     index1 = index3 + 1;
                                 }
                                 else
                                 {
                                     string str8 = str7;
-                                    ch1 = Vincent._currentLine[index1];
+                                    ch1 = _currentLine[index1];
                                     string str9 = ch1.ToString();
                                     str7 = str8 + str9;
                                     ++index1;
                                 }
                             }
                         }
-                        if (Vincent._lineProgress.Count == 0 || Vincent._currentLine[0] == '^' || Vincent._currentLine[0] == ' ' && Vincent._lineProgress[0].Length() + str7.Length > 34)
+                        if (_lineProgress.Count == 0 || _currentLine[0] == '^' || _currentLine[0] == ' ' && _lineProgress[0].Length() + str7.Length > 34)
                         {
                             Color color = Color.White;
-                            if (Vincent._lineProgress.Count > 0)
-                                color = Vincent._lineProgress[0].lineColor;
-                            Vincent._lineProgress.Insert(0, new TextLine()
+                            if (_lineProgress.Count > 0)
+                                color = _lineProgress[0].lineColor;
+                            _lineProgress.Insert(0, new TextLine()
                             {
                                 lineColor = color
                             });
-                            if (Vincent._currentLine[0] == ' ' || Vincent._currentLine[0] == '^')
-                                Vincent._currentLine = Vincent._currentLine.Remove(0, 1);
+                            if (_currentLine[0] == ' ' || _currentLine[0] == '^')
+                                _currentLine = _currentLine.Remove(0, 1);
                         }
                         else
                         {
-                            if (Vincent._currentLine[0] == '!' || Vincent._currentLine[0] == '?' || Vincent._currentLine[0] == '.')
-                                Vincent._waitLetter = 5f;
-                            else if (Vincent._currentLine[0] == ',')
-                                Vincent._waitLetter = 3f;
-                            Vincent._lineProgress[0].Add(Vincent._currentLine[0]);
-                            ch1 = Vincent._currentLine[0];
+                            if (_currentLine[0] == '!' || _currentLine[0] == '?' || _currentLine[0] == '.')
+                                _waitLetter = 5f;
+                            else if (_currentLine[0] == ',')
+                                _waitLetter = 3f;
+                            _lineProgress[0].Add(_currentLine[0]);
+                            ch1 = _currentLine[0];
                             char ch2 = ch1.ToString().ToLowerInvariant()[0];
-                            if (Vincent.wait > 0)
-                                --Vincent.wait;
-                            if ((ch2 < 'a' || ch2 > 'z') && (ch2 < '0' || ch2 > '9') && ch2 != '\'' && Vincent.lastWord != "")
+                            if (wait > 0)
+                                --wait;
+                            if ((ch2 < 'a' || ch2 > 'z') && (ch2 < '0' || ch2 > '9') && ch2 != '\'' && lastWord != "")
                             {
-                                int num5 = (int)CRC32.Generate(Vincent.lastWord.Trim());
-                                Vincent.lastWord = "";
+                                int num5 = (int)CRC32.Generate(lastWord.Trim());
+                                lastWord = "";
                             }
                             else
-                                Vincent.lastWord += ch2.ToString();
-                            if (Vincent.wait > 0)
+                                lastWord += ch2.ToString();
+                            if (wait > 0)
                             {
-                                --Vincent.wait;
+                                --wait;
                             }
                             else
                             {
-                                Vincent.wait = 2;
+                                wait = 2;
                                 SFX.Play("tinyTick", 0.4f, 0.2f);
                             }
-                            Vincent._currentLine = Vincent._currentLine.Remove(0, 1);
+                            _currentLine = _currentLine.Remove(0, 1);
                         }
-                        Vincent._waitLetter += num4;
+                        _waitLetter += num4;
                     }
                 }
                 else
                 {
-                    if (Vincent.show)
+                    if (show)
                     {
-                        Vincent._afterShowWait += 0.12f;
+                        _afterShowWait += 0.12f;
                         if (_afterShowWait >= 1.0)
-                            Vincent._allowMovement = true;
+                            _allowMovement = true;
                     }
-                    Vincent._talkMove += 0.75f;
+                    _talkMove += 0.75f;
                     if (_talkMove > 1.0)
                     {
-                        Vincent.frame = 0;
-                        Vincent._talkMove = 0f;
+                        frame = 0;
+                        _talkMove = 0f;
                     }
                 }
                 string str10 = "";
-                for (int index = 0; index < Vincent.products.Count; ++index)
+                for (int index = 0; index < products.Count; ++index)
                 {
                     string str11 = str10;
                     num1 = 9;
                     string str12 = num1.ToString();
                     str10 = str11 + str12;
                     Camera camera = new Camera(0f, 0f, 64f, 16f);
-                    DuckGame.Graphics.SetRenderTarget(Vincent._priceTargets[index]);
+                    Graphics.SetRenderTarget(_priceTargets[index]);
                     DepthStencilState depthStencilState = new DepthStencilState()
                     {
                         StencilEnable = true,
@@ -1320,14 +1320,14 @@ namespace DuckGame
                         ReferenceStencil = 1,
                         DepthBufferEnable = false
                     };
-                    DuckGame.Graphics.Clear(new Color(0, 0, 0, 0));
-                    DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
-                    num1 = Math.Min(Math.Max(Vincent.products[index].cost, 0), 9999);
+                    Graphics.Clear(new Color(0, 0, 0, 0));
+                    Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
+                    num1 = Math.Min(Math.Max(products[index].cost, 0), 9999);
                     string text = "$" + num1.ToString();
-                    Vincent._furniTag.frame = text.Length - 1;
-                    Vincent._priceFontRightways.Draw(text, new Vec2((float)((5 - text.Length) / 5.0 * 20.0), 0f), Vincent.products[index].cost > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : Color.Black, (Depth)0.97f);
-                    DuckGame.Graphics.screen.End();
-                    DuckGame.Graphics.SetRenderTarget(null);
+                    _furniTag.frame = text.Length - 1;
+                    _priceFontRightways.Draw(text, new Vec2((float)((5 - text.Length) / 5.0 * 20.0), 0f), products[index].cost > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : Color.Black, (Depth)0.97f);
+                    Graphics.screen.End();
+                    Graphics.SetRenderTarget(null);
                 }
             }
         }
@@ -1340,254 +1340,254 @@ namespace DuckGame
             Vec2 vec2_2 = new Vec2((float)(100.0 * (1.0 - _chancyLerp)), (float)(100.0 * (1.0 - _chancyLerp) - 4.0));
             Vec2 vec2_3 = new Vec2(280f, 30f);
             Vec2 vec2_4 = new Vec2(20f, 132f) + vec2_2;
-            DuckGame.Graphics.DrawRect(vec2_4 + new Vec2(-2f, 0f), vec2_4 + vec2_3 + new Vec2(2f, 0f), Color.Black, (Depth)0.96f);
+            Graphics.DrawRect(vec2_4 + new Vec2(-2f, 0f), vec2_4 + vec2_3 + new Vec2(2f, 0f), Color.Black, (Depth)0.96f);
             int num = 0;
-            for (int index1 = Vincent._lineProgress.Count - 1; index1 >= 0; --index1)
+            for (int index1 = _lineProgress.Count - 1; index1 >= 0; --index1)
             {
-                float stringWidth = DuckGame.Graphics.GetStringWidth(Vincent._lineProgress[index1].text);
+                float stringWidth = Graphics.GetStringWidth(_lineProgress[index1].text);
                 float y = vec2_4.y + 2f + num * 9;
                 float x = (float)(vec2_4.x + vec2_3.x / 2.0 - stringWidth / 2.0);
-                for (int index2 = Vincent._lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
+                for (int index2 = _lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
-                    Vincent._descriptionFont.Draw(Vincent._lineProgress[index1].segments[index2].text, new Vec2(x, y), Vincent._lineProgress[index1].segments[index2].color, (Depth)0.97f);
-                    x += Vincent._lineProgress[index1].segments[index2].text.Length * 8;
+                    _descriptionFont.Draw(_lineProgress[index1].segments[index2].text, new Vec2(x, y), _lineProgress[index1].segments[index2].color, (Depth)0.97f);
+                    x += _lineProgress[index1].segments[index2].text.Length * 8;
                 }
                 ++num;
             }
-            Vincent._tail.flipV = true;
-            DuckGame.Graphics.Draw(Vincent._tail, 222f + vec2_2.x, 117f + vec2_2.y);
-            if (Vincent.hasKid)
-                Vincent._dealer.frame += 9;
-            Vincent._dealer.depth = (Depth)0.96f;
-            Vincent._dealer.alpha = Vincent.alpha;
-            DuckGame.Graphics.Draw(_dealer, 200f + vec2_2.x, 26f + vec2_2.y);
-            switch (Vincent.type)
+            _tail.flipV = true;
+            Graphics.Draw(_tail, 222f + vec2_2.x, 117f + vec2_2.y);
+            if (hasKid)
+                _dealer.frame += 9;
+            _dealer.depth = (Depth)0.96f;
+            _dealer.alpha = alpha;
+            Graphics.Draw(_dealer, 200f + vec2_2.x, 26f + vec2_2.y);
+            switch (type)
             {
                 case DayType.SaleDay:
-                    Vincent._bigBanner.depth = (Depth)0.96f;
-                    DuckGame.Graphics.Draw(Vincent._bigBanner, 22f, (float)(_showLerp * 100.0 - 80.0));
-                    DuckGame.Graphics.Draw(Vincent._bigBanner, 194f, (float)(_showLerp * 100.0 - 80.0));
+                    _bigBanner.depth = (Depth)0.96f;
+                    Graphics.Draw(_bigBanner, 22f, (float)(_showLerp * 100.0 - 80.0));
+                    Graphics.Draw(_bigBanner, 194f, (float)(_showLerp * 100.0 - 80.0));
                     break;
                 case DayType.ImportDay:
-                    Vincent._fancyBanner.depth = (Depth)0.96f;
-                    DuckGame.Graphics.Draw(Vincent._fancyBanner, 22f, (float)(_showLerp * 100.0 - 80.0));
-                    DuckGame.Graphics.Draw(Vincent._fancyBanner, 194f, (float)(_showLerp * 100.0 - 80.0));
+                    _fancyBanner.depth = (Depth)0.96f;
+                    Graphics.Draw(_fancyBanner, 22f, (float)(_showLerp * 100.0 - 80.0));
+                    Graphics.Draw(_fancyBanner, 194f, (float)(_showLerp * 100.0 - 80.0));
                     break;
             }
-            Vincent._furniFrame.alpha = Vincent.alpha;
-            Vincent._cheapTape.alpha = Vincent.alpha * 0.9f;
-            Vincent._furniFill.alpha = Vincent.alpha;
-            Vincent._furniHov.alpha = Vincent.alpha;
-            Vincent._furniTag.alpha = Vincent.alpha;
-            Vincent._newSticker.alpha = Vincent.alpha;
-            Vincent._rareSticker.alpha = Vincent.alpha;
-            Vincent._soldSprite.alpha = Vincent.alpha;
+            _furniFrame.alpha = alpha;
+            _cheapTape.alpha = alpha * 0.9f;
+            _furniFill.alpha = alpha;
+            _furniHov.alpha = alpha;
+            _furniTag.alpha = alpha;
+            _newSticker.alpha = alpha;
+            _rareSticker.alpha = alpha;
+            _soldSprite.alpha = alpha;
             Vec2 vec2_5 = new Vec2(84f, 46f);
-            Vincent._cheapTape.depth = (Depth)0.968f;
-            Vincent._furniFrame.depth = (Depth)0.96f;
-            Vincent._furniFill.depth = (Depth)0.965f;
-            Vincent._furniHov.depth = (Depth)0.965f;
-            Vincent._furniTag.depth = (Depth)0.972f;
-            Vincent._newSticker.depth = (Depth)0.972f;
-            Vincent._rareSticker.depth = (Depth)0.972f;
-            Vincent._soldSprite.depth = (Depth)0.975f;
-            if (Vincent.products.Count > 0)
+            _cheapTape.depth = (Depth)0.968f;
+            _furniFrame.depth = (Depth)0.96f;
+            _furniFill.depth = (Depth)0.965f;
+            _furniHov.depth = (Depth)0.965f;
+            _furniTag.depth = (Depth)0.972f;
+            _newSticker.depth = (Depth)0.972f;
+            _rareSticker.depth = (Depth)0.972f;
+            _soldSprite.depth = (Depth)0.975f;
+            if (products.Count > 0)
             {
                 int index3 = 0;
-                Vec2 pos = new Vec2(vec2_5.x - 200f + Math.Min(Vincent._showLerp * (200 + 40 * index3), 200f), vec2_5.y);
-                if (Vincent.products.Count == 1)
-                    pos = new Vec2(vec2_5.x - 200f + Math.Min(Vincent._showLerp * 275f, 240f), vec2_5.y + 30f);
-                DuckGame.Graphics.Draw(Vincent._furniFrame, pos.x, pos.y);
-                int val1_1 = Vincent.products[0].cost;
+                Vec2 pos = new Vec2(vec2_5.x - 200f + Math.Min(_showLerp * (200 + 40 * index3), 200f), vec2_5.y);
+                if (products.Count == 1)
+                    pos = new Vec2(vec2_5.x - 200f + Math.Min(_showLerp * 275f, 240f), vec2_5.y + 30f);
+                Graphics.Draw(_furniFrame, pos.x, pos.y);
+                int val1_1 = products[0].cost;
                 bool flag1 = false;
-                if (Vincent.products[0].cost != Vincent.products[0].originalCost)
+                if (products[0].cost != products[0].originalCost)
                 {
                     flag1 = true;
-                    val1_1 = Vincent.products[0].originalCost;
-                    DuckGame.Graphics.Draw(Vincent._priceTargets[0], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
-                    DuckGame.Graphics.Draw(Vincent._cheapTape, pos.x, pos.y);
+                    val1_1 = products[0].originalCost;
+                    Graphics.Draw(_priceTargets[0], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
+                    Graphics.Draw(_cheapTape, pos.x, pos.y);
                 }
-                Vincent._furniFill.color = Vincent.products[index3].color;
-                DuckGame.Graphics.Draw(Vincent._furniFill, pos.x, pos.y);
-                Vincent.products[index3].Draw(pos, Vincent.alpha, 0.97f);
-                if (index3 == Vincent._selectIndex)
-                    DuckGame.Graphics.Draw(Vincent._furniHov, pos.x - 1f, pos.y);
-                if (Vincent.products[index3].type == VPType.Furniture && Vincent.products[index3].furnitureData.rarity >= Rarity.SuperRare)
+                _furniFill.color = products[index3].color;
+                Graphics.Draw(_furniFill, pos.x, pos.y);
+                products[index3].Draw(pos, alpha, 0.97f);
+                if (index3 == _selectIndex)
+                    Graphics.Draw(_furniHov, pos.x - 1f, pos.y);
+                if (products[index3].type == VPType.Furniture && products[index3].furnitureData.rarity >= Rarity.SuperRare)
                 {
-                    Vincent._rareSticker.frame = index3 == Vincent._selectIndex ? 1 : 0;
-                    DuckGame.Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
+                    _rareSticker.frame = index3 == _selectIndex ? 1 : 0;
+                    Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
                 }
-                else if (Vincent.products[index3].type == VPType.Hat || !Vincent.products[index3].sold && Profiles.experienceProfile.GetNumFurnitures(products[index3].furnitureData.index) <= 0)
+                else if (products[index3].type == VPType.Hat || !products[index3].sold && Profiles.experienceProfile.GetNumFurnitures(products[index3].furnitureData.index) <= 0)
                 {
-                    Vincent._newSticker.frame = index3 == Vincent._selectIndex ? 1 : 0;
-                    DuckGame.Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
+                    _newSticker.frame = index3 == _selectIndex ? 1 : 0;
+                    Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
                 }
-                if (Vincent.products[index3].sold)
+                if (products[index3].sold)
                 {
-                    DuckGame.Graphics.Draw(Vincent._soldSprite, pos.x, pos.y);
+                    Graphics.Draw(_soldSprite, pos.x, pos.y);
                 }
                 else
                 {
                     string str = Math.Min(Math.Max(val1_1, 0), 9999).ToString();
-                    Vincent._furniTag.frame = str.Length - 1;
-                    DuckGame.Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
+                    _furniTag.frame = str.Length - 1;
+                    Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
                     string text = "$\n";
                     foreach (char ch in str)
                         text = text + ch.ToString() + "\n";
-                    (!flag1 ? Vincent._priceFont : Vincent._priceFontCrossout).Draw(text, new Vec2(pos.x + 24f, pos.y - 16f), val1_1 > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : (!flag1 ? Color.Black : Color.White), (Depth)(275f * (float)Math.PI / 887f));
+                    (!flag1 ? _priceFont : _priceFontCrossout).Draw(text, new Vec2(pos.x + 24f, pos.y - 16f), val1_1 > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : (!flag1 ? Color.Black : Color.White), (Depth)(275f * (float)Math.PI / 887f));
                 }
-                if (Vincent.products.Count > 1)
+                if (products.Count > 1)
                 {
                     int index4 = 1;
-                    pos = new Vec2((float)(vec2_5.x + 70.0 - 200.0) + Math.Min(Vincent._showLerp * (200 + 40 * index4), 200f), vec2_5.y);
-                    DuckGame.Graphics.Draw(Vincent._furniFrame, pos.x, pos.y);
-                    int val1_2 = Vincent.products[1].cost;
+                    pos = new Vec2((float)(vec2_5.x + 70.0 - 200.0) + Math.Min(_showLerp * (200 + 40 * index4), 200f), vec2_5.y);
+                    Graphics.Draw(_furniFrame, pos.x, pos.y);
+                    int val1_2 = products[1].cost;
                     bool flag2 = false;
-                    if (Vincent.products[1].cost != Vincent.products[1].originalCost)
+                    if (products[1].cost != products[1].originalCost)
                     {
                         flag2 = true;
-                        val1_2 = Vincent.products[1].originalCost;
-                        DuckGame.Graphics.Draw(Vincent._priceTargets[1], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
-                        DuckGame.Graphics.Draw(Vincent._cheapTape, pos.x, pos.y);
+                        val1_2 = products[1].originalCost;
+                        Graphics.Draw(_priceTargets[1], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
+                        Graphics.Draw(_cheapTape, pos.x, pos.y);
                     }
-                    Vincent._furniFill.color = Vincent.products[index4].color;
-                    DuckGame.Graphics.Draw(Vincent._furniFill, pos.x, pos.y);
-                    Vincent.products[index4].Draw(pos, Vincent.alpha, 0.97f);
-                    if (index4 == Vincent._selectIndex)
-                        DuckGame.Graphics.Draw(Vincent._furniHov, pos.x - 1f, pos.y);
-                    if (Vincent.products[index4].type == VPType.Furniture && Vincent.products[index4].furnitureData.rarity >= Rarity.SuperRare)
+                    _furniFill.color = products[index4].color;
+                    Graphics.Draw(_furniFill, pos.x, pos.y);
+                    products[index4].Draw(pos, alpha, 0.97f);
+                    if (index4 == _selectIndex)
+                        Graphics.Draw(_furniHov, pos.x - 1f, pos.y);
+                    if (products[index4].type == VPType.Furniture && products[index4].furnitureData.rarity >= Rarity.SuperRare)
                     {
-                        Vincent._rareSticker.frame = index4 == Vincent._selectIndex ? 1 : 0;
-                        DuckGame.Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
+                        _rareSticker.frame = index4 == _selectIndex ? 1 : 0;
+                        Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
                     }
                     else if (Profiles.experienceProfile.GetNumFurnitures(products[index4].furnitureData.index) <= 0)
                     {
-                        Vincent._newSticker.frame = index4 == Vincent._selectIndex ? 1 : 0;
-                        DuckGame.Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
+                        _newSticker.frame = index4 == _selectIndex ? 1 : 0;
+                        Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
                     }
-                    if (Vincent.products[index4].sold)
+                    if (products[index4].sold)
                     {
-                        DuckGame.Graphics.Draw(Vincent._soldSprite, pos.x, pos.y);
+                        Graphics.Draw(_soldSprite, pos.x, pos.y);
                     }
                     else
                     {
                         string str = Math.Min(Math.Max(val1_2, 0), 9999).ToString();
-                        Vincent._furniTag.frame = str.Length - 1;
-                        DuckGame.Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
+                        _furniTag.frame = str.Length - 1;
+                        Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
                         string text = "$\n";
                         foreach (char ch in str)
                             text = text + ch.ToString() + "\n";
-                        (!flag2 ? Vincent._priceFont : Vincent._priceFontCrossout).Draw(text, new Vec2(pos.x + 24f, pos.y - 16f), val1_2 > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : (!flag2 ? Color.Black : Color.White), (Depth)(275f * (float)Math.PI / 887f));
+                        (!flag2 ? _priceFont : _priceFontCrossout).Draw(text, new Vec2(pos.x + 24f, pos.y - 16f), val1_2 > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : (!flag2 ? Color.Black : Color.White), (Depth)(275f * (float)Math.PI / 887f));
                     }
                 }
-                if (Vincent.products.Count > 2)
+                if (products.Count > 2)
                 {
                     int index5 = 2;
-                    pos = new Vec2(vec2_5.x - 200f + Math.Min(Vincent._showLerp * (200 + 40 * index5), 200f), vec2_5.y + 54f);
-                    DuckGame.Graphics.Draw(Vincent._furniFrame, pos.x, pos.y);
-                    int val1_3 = Vincent.products[2].cost;
+                    pos = new Vec2(vec2_5.x - 200f + Math.Min(_showLerp * (200 + 40 * index5), 200f), vec2_5.y + 54f);
+                    Graphics.Draw(_furniFrame, pos.x, pos.y);
+                    int val1_3 = products[2].cost;
                     bool flag3 = false;
-                    if (Vincent.products[2].cost != Vincent.products[2].originalCost)
+                    if (products[2].cost != products[2].originalCost)
                     {
                         flag3 = true;
-                        val1_3 = Vincent.products[2].originalCost;
-                        DuckGame.Graphics.Draw(Vincent._priceTargets[2], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
-                        DuckGame.Graphics.Draw(Vincent._cheapTape, pos.x, pos.y);
+                        val1_3 = products[2].originalCost;
+                        Graphics.Draw(_priceTargets[2], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
+                        Graphics.Draw(_cheapTape, pos.x, pos.y);
                     }
-                    Vincent._furniFill.color = Vincent.products[index5].color;
-                    DuckGame.Graphics.Draw(Vincent._furniFill, pos.x, pos.y);
-                    Vincent.products[index5].Draw(pos, Vincent.alpha, 0.97f);
-                    if (index5 == Vincent._selectIndex)
-                        DuckGame.Graphics.Draw(Vincent._furniHov, pos.x - 1f, pos.y);
-                    if (Vincent.products[index5].type == VPType.Furniture && Vincent.products[index5].furnitureData.rarity >= Rarity.SuperRare)
+                    _furniFill.color = products[index5].color;
+                    Graphics.Draw(_furniFill, pos.x, pos.y);
+                    products[index5].Draw(pos, alpha, 0.97f);
+                    if (index5 == _selectIndex)
+                        Graphics.Draw(_furniHov, pos.x - 1f, pos.y);
+                    if (products[index5].type == VPType.Furniture && products[index5].furnitureData.rarity >= Rarity.SuperRare)
                     {
-                        Vincent._rareSticker.frame = index5 == Vincent._selectIndex ? 1 : 0;
-                        DuckGame.Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
+                        _rareSticker.frame = index5 == _selectIndex ? 1 : 0;
+                        Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
                     }
                     else if (Profiles.experienceProfile.GetNumFurnitures(products[index5].furnitureData.index) <= 0)
                     {
-                        Vincent._newSticker.frame = index5 == Vincent._selectIndex ? 1 : 0;
-                        DuckGame.Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
+                        _newSticker.frame = index5 == _selectIndex ? 1 : 0;
+                        Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
                     }
-                    if (Vincent.products[index5].sold)
+                    if (products[index5].sold)
                     {
-                        DuckGame.Graphics.Draw(Vincent._soldSprite, pos.x, pos.y);
+                        Graphics.Draw(_soldSprite, pos.x, pos.y);
                     }
                     else
                     {
                         string str = Math.Min(Math.Max(val1_3, 0), 9999).ToString();
-                        Vincent._furniTag.frame = str.Length - 1;
-                        DuckGame.Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
+                        _furniTag.frame = str.Length - 1;
+                        Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
                         string text = "$\n";
                         foreach (char ch in str)
                             text = text + ch.ToString() + "\n";
-                        (!flag3 ? Vincent._priceFont : Vincent._priceFontCrossout).Draw(text, new Vec2(pos.x + 24f, pos.y - 16f), val1_3 > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : (!flag3 ? Color.Black : Color.White), (Depth)(275f * (float)Math.PI / 887f));
+                        (!flag3 ? _priceFont : _priceFontCrossout).Draw(text, new Vec2(pos.x + 24f, pos.y - 16f), val1_3 > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : (!flag3 ? Color.Black : Color.White), (Depth)(275f * (float)Math.PI / 887f));
                     }
                 }
-                if (Vincent.products.Count > 3)
+                if (products.Count > 3)
                 {
                     int index6 = 3;
-                    pos = new Vec2((float)(vec2_5.x + 70.0 - 200.0) + Math.Min(Vincent._showLerp * (200 + 40 * index6), 200f), vec2_5.y + 54f);
-                    DuckGame.Graphics.Draw(Vincent._furniFrame, pos.x, pos.y);
-                    int val1_4 = Vincent.products[3].cost;
+                    pos = new Vec2((float)(vec2_5.x + 70.0 - 200.0) + Math.Min(_showLerp * (200 + 40 * index6), 200f), vec2_5.y + 54f);
+                    Graphics.Draw(_furniFrame, pos.x, pos.y);
+                    int val1_4 = products[3].cost;
                     bool flag4 = false;
-                    if (Vincent.products[3].cost != Vincent.products[3].originalCost)
+                    if (products[3].cost != products[3].originalCost)
                     {
                         flag4 = true;
-                        val1_4 = Vincent.products[3].originalCost;
-                        DuckGame.Graphics.Draw(Vincent._priceTargets[3], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
-                        DuckGame.Graphics.Draw(Vincent._cheapTape, pos.x, pos.y);
+                        val1_4 = products[3].originalCost;
+                        Graphics.Draw(_priceTargets[3], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
+                        Graphics.Draw(_cheapTape, pos.x, pos.y);
                     }
-                    Vincent._furniFill.color = Vincent.products[index6].color;
-                    DuckGame.Graphics.Draw(Vincent._furniFill, pos.x, pos.y);
-                    Vincent.products[index6].Draw(pos, Vincent.alpha, 0.97f);
-                    if (index6 == Vincent._selectIndex)
-                        DuckGame.Graphics.Draw(Vincent._furniHov, pos.x - 1f, pos.y);
-                    if (Vincent.products[index6].type == VPType.Furniture && Vincent.products[index6].furnitureData.rarity >= Rarity.SuperRare)
+                    _furniFill.color = products[index6].color;
+                    Graphics.Draw(_furniFill, pos.x, pos.y);
+                    products[index6].Draw(pos, alpha, 0.97f);
+                    if (index6 == _selectIndex)
+                        Graphics.Draw(_furniHov, pos.x - 1f, pos.y);
+                    if (products[index6].type == VPType.Furniture && products[index6].furnitureData.rarity >= Rarity.SuperRare)
                     {
-                        Vincent._rareSticker.frame = index6 == Vincent._selectIndex ? 1 : 0;
-                        DuckGame.Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
+                        _rareSticker.frame = index6 == _selectIndex ? 1 : 0;
+                        Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
                     }
                     else if (Profiles.experienceProfile.GetNumFurnitures(products[index6].furnitureData.index) <= 0)
                     {
-                        Vincent._newSticker.frame = index6 == Vincent._selectIndex ? 1 : 0;
-                        DuckGame.Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
+                        _newSticker.frame = index6 == _selectIndex ? 1 : 0;
+                        Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
                     }
-                    if (Vincent.products[index6].sold)
+                    if (products[index6].sold)
                     {
-                        DuckGame.Graphics.Draw(Vincent._soldSprite, pos.x, pos.y);
+                        Graphics.Draw(_soldSprite, pos.x, pos.y);
                     }
                     else
                     {
                         string str = Math.Min(Math.Max(val1_4, 0), 9999).ToString();
-                        Vincent._furniTag.frame = str.Length - 1;
-                        DuckGame.Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
+                        _furniTag.frame = str.Length - 1;
+                        Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
                         string text = "$\n";
                         foreach (char ch in str)
                             text = text + ch.ToString() + "\n";
-                        (!flag4 ? Vincent._priceFont : Vincent._priceFontCrossout).Draw(text, new Vec2(pos.x + 24f, pos.y - 16f), val1_4 > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : (!flag4 ? Color.Black : Color.White), (Depth)(275f * (float)Math.PI / 887f));
+                        (!flag4 ? _priceFont : _priceFontCrossout).Draw(text, new Vec2(pos.x + 24f, pos.y - 16f), val1_4 > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : (!flag4 ? Color.Black : Color.White), (Depth)(275f * (float)Math.PI / 887f));
                     }
                 }
             }
-            if (Vincent.show && Vincent.products.Count > 0)
+            if (show && products.Count > 0)
             {
                 int index = 0;
-                if (Vincent._selectIndex >= 0)
-                    index = Vincent._selectIndex;
+                if (_selectIndex >= 0)
+                    index = _selectIndex;
                 Vec2 p1 = new Vec2(20f, 6f);
                 Vec2 vec2_6 = new Vec2(226f, 11f);
-                DuckGame.Graphics.DrawRect(p1, p1 + vec2_6, Color.Black, (Depth)0.96f);
-                string name = Vincent.products[index].name;
-                DuckGame.Graphics.DrawString(name, p1 + new Vec2((float)(vec2_6.x / 2.0 - DuckGame.Graphics.GetStringWidth(name) / 2.0), 2f), new Color(163, 206, 39) * Vincent.alpha, (Depth)0.97f);
-                Vincent._tail.depth = (Depth)0.5f;
-                Vincent._tail.alpha = Vincent.alpha;
-                Vincent._tail.flipH = false;
-                Vincent._tail.flipV = false;
-                DuckGame.Graphics.Draw(Vincent._tail, 222f, 17f);
+                Graphics.DrawRect(p1, p1 + vec2_6, Color.Black, (Depth)0.96f);
+                string name = products[index].name;
+                Graphics.DrawString(name, p1 + new Vec2((float)(vec2_6.x / 2.0 - Graphics.GetStringWidth(name) / 2.0), 2f), new Color(163, 206, 39) * alpha, (Depth)0.97f);
+                _tail.depth = (Depth)0.5f;
+                _tail.alpha = alpha;
+                _tail.flipH = false;
+                _tail.flipV = false;
+                Graphics.Draw(_tail, 222f, 17f);
             }
-            if (!Vincent.hasKid)
+            if (!hasKid)
                 return;
-            Vincent._dealer.frame -= 9;
+            _dealer.frame -= 9;
         }
     }
 }

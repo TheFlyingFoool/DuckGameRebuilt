@@ -97,22 +97,22 @@ namespace DuckGame
         }
 
         [DllImport("shell32.dll", CharSet = CharSet.Auto)]
-        private static extern int SHFileOperation(ref UIModManagement.SHFILEOPSTRUCT FileOp);
+        private static extern int SHFileOperation(ref SHFILEOPSTRUCT FileOp);
 
         private static void DeleteFileOrFolder(string path)
         {
-            UIModManagement.SHFILEOPSTRUCT fileop = default(UIModManagement.SHFILEOPSTRUCT);
+            SHFILEOPSTRUCT fileop = default(SHFILEOPSTRUCT);
             fileop.wFunc = 3;
             fileop.pFrom = path + "\0\0";
             fileop.fFlags = 80;
-            UIModManagement.SHFileOperation(ref fileop);
+            SHFileOperation(ref fileop);
         }
 
         private void DeleteMod() => ShowYesNo(_editModMenu, () =>
        {
            _awaitingChanges = true;
            if (_selectedMod.configuration.workshopID == 0UL)
-               UIModManagement.DeleteFileOrFolder(_selectedMod.configuration.directory);
+               DeleteFileOrFolder(_selectedMod.configuration.directory);
            else
                Steam.WorkshopUnsubscribe(_selectedMod.configuration.workshopID);
            _mods.Remove(_selectedMod);
@@ -170,14 +170,14 @@ namespace DuckGame
             {
                 string str = Path.Combine(destDirName, file.Name);
                 file.CopyTo(str, false);
-                System.IO.File.SetAttributes(str, FileAttributes.Normal);
+                File.SetAttributes(str, FileAttributes.Normal);
             }
             if (!copySubDirs)
                 return;
             foreach (DirectoryInfo directoryInfo2 in directories)
             {
                 string destDirName1 = Path.Combine(destDirName, directoryInfo2.Name);
-                UIModManagement.DirectoryCopy(directoryInfo2.FullName, destDirName1, copySubDirs);
+                DirectoryCopy(directoryInfo2.FullName, destDirName1, copySubDirs);
             }
         }
 
@@ -221,8 +221,8 @@ namespace DuckGame
                 scale = new Vec2(2f)
             };
             _cursor = new SpriteMap("cursors", 16, 16);
-            _mods = ModLoader.allMods.Where<Mod>(a => !(a is CoreMod)).ToList<Mod>();
-            _mods.Insert(0, new UIModManagement.UI_ModSettings());
+            _mods = ModLoader.allMods.Where(a => !(a is CoreMod)).ToList();
+            _mods.Insert(0, new UI_ModSettings());
             _mods.Add(null);
             _maxModsToShow = 8;
             _box = new UIBox(0f, 0f, high: _maxModsToShow * 36, isVisible: false);
@@ -303,7 +303,7 @@ namespace DuckGame
                 {
                     if (_editModMenu.open)
                     {
-                        if (!UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
+                        if (!globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
                         {
                             _editModMenu.Close();
                             Open();
@@ -312,7 +312,7 @@ namespace DuckGame
                     }
                     else if (_modSettingsMenu.open)
                     {
-                        if (!UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
+                        if (!globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
                         {
                             _modSettingsMenu.Close();
                             Open();
@@ -351,22 +351,22 @@ namespace DuckGame
                                     if (Directory.Exists(str))
                                         Directory.Delete(str, true);
                                     DuckFile.CreatePath(str);
-                                    UIModManagement.DirectoryCopy(_selectedMod.configuration.directory, str + "/" + _selectedMod.configuration.name, true);
+                                    DirectoryCopy(_selectedMod.configuration.directory, str + "/" + _selectedMod.configuration.name, true);
                                     if (Directory.Exists(str + _selectedMod.configuration.name + "/build"))
                                         Directory.Delete(str + _selectedMod.configuration.name + "/build", true);
                                     if (Directory.Exists(str + _selectedMod.configuration.name + "/.vs"))
                                         Directory.Delete(str + _selectedMod.configuration.name + "/.vs", true);
-                                    if (System.IO.File.Exists(str + _selectedMod.configuration.name + "/" + _selectedMod.configuration.name + "_compiled.dll"))
+                                    if (File.Exists(str + _selectedMod.configuration.name + "/" + _selectedMod.configuration.name + "_compiled.dll"))
                                     {
                                         string path = str + _selectedMod.configuration.name + "/" + _selectedMod.configuration.name + "_compiled.dll";
-                                        System.IO.File.SetAttributes(path, FileAttributes.Normal);
-                                        System.IO.File.Delete(path);
+                                        File.SetAttributes(path, FileAttributes.Normal);
+                                        File.Delete(path);
                                     }
-                                    if (System.IO.File.Exists(str + _selectedMod.configuration.name + "/" + _selectedMod.configuration.name + "_compiled.hash"))
+                                    if (File.Exists(str + _selectedMod.configuration.name + "/" + _selectedMod.configuration.name + "_compiled.hash"))
                                     {
                                         string path = str + _selectedMod.configuration.name + "/" + _selectedMod.configuration.name + "_compiled.hash";
-                                        System.IO.File.SetAttributes(path, FileAttributes.Normal);
-                                        System.IO.File.Delete(path);
+                                        File.SetAttributes(path, FileAttributes.Normal);
+                                        File.Delete(path);
                                     }
                                     dat.contentFolder = str;
                                     _transferItem.ApplyWorkshopData(dat);
@@ -434,7 +434,7 @@ namespace DuckGame
                         else if (_hoverIndex != -1)
                         {
                             _selectedMod = _mods[_hoverIndex];
-                            if (_selectedMod is UIModManagement.UI_ModSettings)
+                            if (_selectedMod is UI_ModSettings)
                                 _controlString = "@WASD@@SELECT@SETTINGS @CANCEL@BACK";
                             else if (_selectedMod != null && _selectedMod.configuration.error != null)
                             {
@@ -473,7 +473,7 @@ namespace DuckGame
                                 if (Input.Pressed("START") && _selectedMod != null && _selectedMod.configuration != null && _selectedMod.configuration.error != null)
                                 {
                                     string str = DuckFile.saveDirectory + "error_info.txt";
-                                    System.IO.File.WriteAllText(str, _selectedMod.configuration.error);
+                                    File.WriteAllText(str, _selectedMod.configuration.error);
                                     Process.Start(str);
                                     SFX.Play("rockHitGround", 0.8f);
                                     return;
@@ -482,7 +482,7 @@ namespace DuckGame
                                 {
                                     if (_selectedMod != null)
                                     {
-                                        if (_selectedMod is UIModManagement.UI_ModSettings)
+                                        if (_selectedMod is UI_ModSettings)
                                         {
                                             SFX.Play("rockHitGround", 0.8f);
                                             _modSettingsMenu.dirty = true;
@@ -592,7 +592,7 @@ namespace DuckGame
                         else if (_hoverIndex >= 0 && _hoverIndex < _scrollItemOffset)
                             _scrollItemOffset -= _scrollItemOffset - _hoverIndex;
                         scrollBarOffset = _scrollItemOffset == 0 ? 0 : (int)Lerp.FloatSmooth(0f, scrollBarScrollableHeight, _scrollItemOffset / (float)(_mods.Count - _maxModsToShow));
-                        if (!Editor.hoverTextBox && !UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
+                        if (!Editor.hoverTextBox && !globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
                         {
                             if (modsChanged)
                             {
@@ -689,7 +689,7 @@ namespace DuckGame
                             Mod mod = _mods[index2];
                             if (mod != null)
                             {
-                                if (mod is UIModManagement.UI_ModSettings)
+                                if (mod is UI_ModSettings)
                                 {
                                     Graphics.Draw(_settingsIcon, x + 2f, y + 1f, (Depth)0.5f);
                                     _fancyFont.scale = new Vec2(1.5f);

@@ -60,21 +60,21 @@ namespace DuckGame
 
         public Profile DefaultExperienceProfile => _experienceProfile;
 
-        public Profile DefaultPlayer1 => !Network.isActive ? Profile.defaultProfileMappings[0] : all.ElementAt<Profile>(0);
+        public Profile DefaultPlayer1 => !Network.isActive ? Profile.defaultProfileMappings[0] : all.ElementAt(0);
 
-        public Profile DefaultPlayer2 => !Network.isActive ? Profile.defaultProfileMappings[1] : all.ElementAt<Profile>(1);
+        public Profile DefaultPlayer2 => !Network.isActive ? Profile.defaultProfileMappings[1] : all.ElementAt(1);
 
-        public Profile DefaultPlayer3 => !Network.isActive ? Profile.defaultProfileMappings[2] : all.ElementAt<Profile>(2);
+        public Profile DefaultPlayer3 => !Network.isActive ? Profile.defaultProfileMappings[2] : all.ElementAt(2);
 
-        public Profile DefaultPlayer4 => !Network.isActive ? Profile.defaultProfileMappings[3] : all.ElementAt<Profile>(3);
+        public Profile DefaultPlayer4 => !Network.isActive ? Profile.defaultProfileMappings[3] : all.ElementAt(3);
 
-        public Profile DefaultPlayer5 => !Network.isActive ? Profile.defaultProfileMappings[4] : all.ElementAt<Profile>(4);
+        public Profile DefaultPlayer5 => !Network.isActive ? Profile.defaultProfileMappings[4] : all.ElementAt(4);
 
-        public Profile DefaultPlayer6 => !Network.isActive ? Profile.defaultProfileMappings[5] : all.ElementAt<Profile>(5);
+        public Profile DefaultPlayer6 => !Network.isActive ? Profile.defaultProfileMappings[5] : all.ElementAt(5);
 
-        public Profile DefaultPlayer7 => !Network.isActive ? Profile.defaultProfileMappings[6] : all.ElementAt<Profile>(6);
+        public Profile DefaultPlayer7 => !Network.isActive ? Profile.defaultProfileMappings[6] : all.ElementAt(6);
 
-        public Profile DefaultPlayer8 => !Network.isActive ? Profile.defaultProfileMappings[7] : all.ElementAt<Profile>(7);
+        public Profile DefaultPlayer8 => !Network.isActive ? Profile.defaultProfileMappings[7] : all.ElementAt(7);
 
         public ProfilesCore() => EnvironmentProfile = new Profile("Environment", InputProfile.Get("Blank"), EnvironmentTeam, Persona.Duck1);
 
@@ -133,7 +133,7 @@ namespace DuckGame
             DevConsole.Log(DCSection.General, "Loading profiles from (" + DuckFile.profileDirectory + ")");
             string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, "*.pro"); // NO YOU NICE GUY NIKO, I JUST DID IT WRONG AND FORGOT THE * -Dan
             //string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, ".pro"); // added ".pro" so it doesnt just loop over all files
-            DevConsole.Log(DCSection.General, "Found (" + files.Count<string>().ToString() + ") profiles.");
+            DevConsole.Log(DCSection.General, "Found (" + files.Count().ToString() + ") profiles.");
             List<Profile> profileList = new List<Profile>();
             foreach (string path in files)
             {
@@ -168,7 +168,7 @@ namespace DuckGame
                         {
                         }
                         bool flag = false;
-                        Profile p = _profiles.FirstOrDefault<Profile>(pro => pro.name == name);
+                        Profile p = _profiles.FirstOrDefault(pro => pro.name == name);
                         if (p == null || !Profiles.IsDefault(p))
                         {
                             p = new Profile("")
@@ -182,7 +182,7 @@ namespace DuckGame
                         IEnumerable<DXMLNode> source = duckXml.Elements("Profile");
                         if (source != null)
                         {
-                            foreach (DXMLNode element1 in source.Elements<DXMLNode>())
+                            foreach (DXMLNode element1 in source.Elements())
                             {
                                 if (element1.Name == "ID" && !Profiles.IsDefault(p))
                                     p.SetID(element1.Value);
@@ -325,7 +325,7 @@ namespace DuckGame
             }
             Profile p1 = null;
             ulong num1 = 0;
-            ProfilesCore.numExperienceProfiles = 0;
+            numExperienceProfiles = 0;
             if (Steam.user == null)
             {
                 p1 = Profiles.DefaultPlayer1;
@@ -338,12 +338,12 @@ namespace DuckGame
                 foreach (Profile profile in Profiles.all)
                 {
                     if (profile.steamID != 0UL)
-                        ++ProfilesCore.numExperienceProfiles;
+                        ++numExperienceProfiles;
                     if ((long)profile.steamID == (long)num1)
                         p1 = profile;
                 }
             }
-            if (ProfilesCore.numExperienceProfiles == 0)
+            if (numExperienceProfiles == 0)
             {
                 Options.Data.defaultAccountMerged = true;
                 Options.Data.didAutoMerge = true;
@@ -353,7 +353,7 @@ namespace DuckGame
             {
                 if (num1 != 0UL)
                 {
-                    Profile profile = _profiles.FirstOrDefault<Profile>(x => x.name == "experience_profile" && x.id == "replace_with_steam");
+                    Profile profile = _profiles.FirstOrDefault(x => x.name == "experience_profile" && x.id == "replace_with_steam");
                     if (profile != null)
                     {
                         foreach (KeyValuePair<string, ChallengeSaveData> keyValuePair in profile.challengeData)
@@ -370,12 +370,12 @@ namespace DuckGame
                         {
                             steamID = num1
                         };
-                        ++ProfilesCore.numExperienceProfiles;
+                        ++numExperienceProfiles;
                     }
                 }
                 else
                     p1 = new Profile("experience_profile", varID: "replace_with_steam");
-                if (!Profiles.all.Contains<Profile>(p1))
+                if (!Profiles.all.Contains(p1))
                     Profiles.Add(p1);
                 Save(p1);
                 if (file != null)
@@ -400,7 +400,7 @@ namespace DuckGame
 
         public static int CouldAutomerge()
         {
-            if (ProfilesCore.numExperienceProfiles == 1)
+            if (numExperienceProfiles == 1)
             {
                 bool flag1 = false;
                 foreach (KeyValuePair<string, ChallengeData> challenge in Challenges.challenges)
@@ -428,7 +428,7 @@ namespace DuckGame
 
         public static void TryAutomerge()
         {
-            int num = ProfilesCore.CouldAutomerge();
+            int num = CouldAutomerge();
             if (num <= 0 || Options.Data.didAutoMerge)
                 return;
             Options.MergeDefault(num == 1, false);

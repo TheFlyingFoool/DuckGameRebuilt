@@ -258,7 +258,7 @@ namespace DuckGame
                     }
                 }
                 _coll.Clear();
-                Level.CheckRectAll<PhysicsObject>(topLeft, bottomRight, _coll);
+                Level.CheckRectAll(topLeft, bottomRight, _coll);
                 foreach (PhysicsObject physicsObject in _coll)
                 {
                     if (physicsObject.buoyancy > 0f)
@@ -304,13 +304,13 @@ namespace DuckGame
                     if (data.amount <= 0f)
                     {
                         data.amount = 0f;
-                        base.alpha = Lerp.Float(base.alpha, 0f, 0.04f);
+                        alpha = Lerp.Float(alpha, 0f, 0.04f);
                     }
                     else
                     {
-                        base.alpha = Lerp.Float(base.alpha, 1f, 0.04f);
+                        alpha = Lerp.Float(alpha, 1f, 0.04f);
                     }
-                    if (base.alpha <= 0f)
+                    if (alpha <= 0f)
                     {
                         Level.Remove(this);
                     }

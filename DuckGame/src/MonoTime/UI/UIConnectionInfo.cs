@@ -70,7 +70,7 @@ namespace DuckGame
             if (profile.slotType == SlotType.Spectator)
                 str1 = "|DGPURPLE|";
             string source1 = profile.nameUI;
-            int num1 = source1.Count<char>();
+            int num1 = source1.Count();
             bool flag = false;
             if (profile.connection != null && profile.connection.isHost)
             {
@@ -99,7 +99,7 @@ namespace DuckGame
             _nameText = str1 + source1;
             int ping = GetPing();
             string source2 = ping.ToString() + "|WHITE|MS";
-            int num3 = source2.Count<char>();
+            int num3 = source2.Count();
             string str2 = ping >= 150 ? (ping >= 250 ? (_profile.connection == null ? "|DGRED|" + source2 + "@SIGNALDEAD@" : "|DGRED|" + source2 + "@SIGNALBAD@") : "|DGYELLOW|" + source2 + "@SIGNALNORMAL@") : "|DGGREEN|" + source2 + "@SIGNALGOOD@";
             for (; num3 < 5; ++num3)
                 str2 = " " + str2;
@@ -332,7 +332,7 @@ namespace DuckGame
             _littleFont.Draw(_nameText, position + new Vec2(-88f, -3f), Color.White, depth + 10);
             int ping = GetPing();
             string source = ping.ToString() + "|WHITE|MS";
-            source.Count<char>();
+            source.Count();
             string text = ping >= 150 ? (ping >= 250 ? (_profile.connection == null ? "|DGRED|" + source + "@SIGNALDEAD@" : "|DGRED|" + source + "@SIGNALBAD@") : "|DGYELLOW|" + source + "@SIGNALNORMAL@") : "|DGGREEN|" + source + "@SIGNALGOOD@";
             _littleFont.Draw(text, position + new Vec2(90f - _littleFont.GetWidth(text), -3f), Color.White, depth + 10);
             if (_showKickMenu)

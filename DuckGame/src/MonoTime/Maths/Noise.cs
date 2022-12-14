@@ -16,16 +16,16 @@ namespace DuckGame
         /// <returns></returns>
         public static float Generate(float x)
         {
-            int i0 = Noise.FastFloor(x);
+            int i0 = FastFloor(x);
             int i = i0 + 1;
             float x2 = x - i0;
             float x3 = x2 - 1f;
             float num = 1f - x2 * x2;
             float num2 = num * num;
-            float n0 = num2 * num2 * Noise.grad(Noise.perm[i0 & 255], x2);
+            float n0 = num2 * num2 * grad(perm[i0 & 255], x2);
             float num3 = 1f - x3 * x3;
             float num4 = num3 * num3;
-            float n = num4 * num4 * Noise.grad(Noise.perm[i & 255], x3);
+            float n = num4 * num4 * grad(perm[i & 255], x3);
             return 0.395f * (n0 + n);
         }
 
@@ -40,8 +40,8 @@ namespace DuckGame
             float s = (x + y) * 0.3660254f;
             float x5 = x + s;
             float ys = y + s;
-            int num = Noise.FastFloor(x5);
-            int i = Noise.FastFloor(ys);
+            int num = FastFloor(x5);
+            int i = FastFloor(ys);
             float t = (num + i) * 0.21132487f;
             float X0 = num - t;
             float Y0 = i - t;
@@ -74,7 +74,7 @@ namespace DuckGame
             else
             {
                 t2 *= t2;
-                n0 = t2 * t2 * Noise.grad(Noise.perm[ii + Noise.perm[jj]], x2, y2);
+                n0 = t2 * t2 * grad(perm[ii + perm[jj]], x2, y2);
             }
             float t3 = 0.5f - x3 * x3 - y3 * y3;
             float n;
@@ -85,7 +85,7 @@ namespace DuckGame
             else
             {
                 t3 *= t3;
-                n = t3 * t3 * Noise.grad(Noise.perm[ii + i2 + Noise.perm[jj + j]], x3, y3);
+                n = t3 * t3 * grad(perm[ii + i2 + perm[jj + j]], x3, y3);
             }
             float t4 = 0.5f - x4 * x4 - y4 * y4;
             float n2;
@@ -96,7 +96,7 @@ namespace DuckGame
             else
             {
                 t4 *= t4;
-                n2 = t4 * t4 * Noise.grad(Noise.perm[ii + 1 + Noise.perm[jj + 1]], x4, y4);
+                n2 = t4 * t4 * grad(perm[ii + 1 + perm[jj + 1]], x4, y4);
             }
             return 40f * (n0 + n + n2);
         }
@@ -107,9 +107,9 @@ namespace DuckGame
             float x6 = x + s;
             float ys = y + s;
             float zs = z + s;
-            int num = Noise.FastFloor(x6);
-            int i = Noise.FastFloor(ys);
-            int j = Noise.FastFloor(zs);
+            int num = FastFloor(x6);
+            int i = FastFloor(ys);
+            int j = FastFloor(zs);
             float t = (num + i + j) * 0.16666667f;
             float X0 = num - t;
             float Y0 = i - t;
@@ -189,9 +189,9 @@ namespace DuckGame
             float x5 = x2 - 1f + 0.5f;
             float y5 = y2 - 1f + 0.5f;
             float z5 = z2 - 1f + 0.5f;
-            int ii = Noise.Mod(num, 256);
-            int jj = Noise.Mod(i, 256);
-            int kk = Noise.Mod(j, 256);
+            int ii = Mod(num, 256);
+            int jj = Mod(i, 256);
+            int kk = Mod(j, 256);
             float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
             float n0;
             if (t2 < 0f)
@@ -201,7 +201,7 @@ namespace DuckGame
             else
             {
                 t2 *= t2;
-                n0 = t2 * t2 * Noise.grad(Noise.perm[ii + Noise.perm[jj + Noise.perm[kk]]], x2, y2, z2);
+                n0 = t2 * t2 * grad(perm[ii + perm[jj + perm[kk]]], x2, y2, z2);
             }
             float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
             float n;
@@ -212,7 +212,7 @@ namespace DuckGame
             else
             {
                 t3 *= t3;
-                n = t3 * t3 * Noise.grad(Noise.perm[ii + i2 + Noise.perm[jj + j2 + Noise.perm[kk + k]]], x3, y3, z3);
+                n = t3 * t3 * grad(perm[ii + i2 + perm[jj + j2 + perm[kk + k]]], x3, y3, z3);
             }
             float t4 = 0.6f - x4 * x4 - y4 * y4 - z4 * z4;
             float n2;
@@ -223,7 +223,7 @@ namespace DuckGame
             else
             {
                 t4 *= t4;
-                n2 = t4 * t4 * Noise.grad(Noise.perm[ii + i3 + Noise.perm[jj + j3 + Noise.perm[kk + k2]]], x4, y4, z4);
+                n2 = t4 * t4 * grad(perm[ii + i3 + perm[jj + j3 + perm[kk + k2]]], x4, y4, z4);
             }
             float t5 = 0.6f - x5 * x5 - y5 * y5 - z5 * z5;
             float n3;
@@ -234,7 +234,7 @@ namespace DuckGame
             else
             {
                 t5 *= t5;
-                n3 = t5 * t5 * Noise.grad(Noise.perm[ii + 1 + Noise.perm[jj + 1 + Noise.perm[kk + 1]]], x5, y5, z5);
+                n3 = t5 * t5 * grad(perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]], x5, y5, z5);
             }
             return 32f * (n0 + n + n2 + n3);
         }
@@ -244,7 +244,7 @@ namespace DuckGame
             Random r = new Random(value);
             for (int i = 0; i < 512; i++)
             {
-                Noise.perm[i] = (byte)Math.Round(r.NextDouble() * 255.0);
+                perm[i] = (byte)Math.Round(r.NextDouble() * 255.0);
             }
         }
 

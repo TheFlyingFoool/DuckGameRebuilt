@@ -19,14 +19,14 @@ namespace DuckGame
         public float carved;
         public bool didCarve;
         private SpriteMap _sprite;
-        private System.Type _previewType;
+        private Type _previewType;
         private Sprite _previewSprite;
         private float breakPoints = 15f;
         private Thing _containedThing;
         private float damageMultiplier;
         private MaterialFrozen _frozen;
 
-        public System.Type contains { get; set; }
+        public Type contains { get; set; }
 
         public override ContextMenu GetContextMenu()
         {
@@ -77,11 +77,11 @@ namespace DuckGame
                     {
                         intensity = 1f
                     };
-                Material material = DuckGame.Graphics.material;
-                DuckGame.Graphics.material = _frozen;
+                Material material = Graphics.material;
+                Graphics.material = _frozen;
                 _previewSprite.alpha = 0.5f;
-                DuckGame.Graphics.Draw(_previewSprite, x, y, depth + 10);
-                DuckGame.Graphics.material = material;
+                Graphics.Draw(_previewSprite, x, y, depth + 10);
+                Graphics.material = material;
             }
             base.EditorRender();
         }
@@ -150,7 +150,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal && owner == null)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
             {
                 GlassParticle glassParticle = new GlassParticle(hitPos.x, hitPos.y, bullet.travelDirNormalized);
@@ -162,7 +162,7 @@ namespace DuckGame
             SFX.Play("glassHit", 0.6f);
             if (bullet.isLocal && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
                 if (duck != null)
                     duck.ThrowItem();
                 Destroy(new DTShot(bullet));
@@ -287,15 +287,15 @@ namespace DuckGame
                         intensity = 1f
                     };
                 }
-                Material material = DuckGame.Graphics.material;
-                DuckGame.Graphics.material = _frozen;
+                Material material = Graphics.material;
+                Graphics.material = _frozen;
                 _containedThing.position = position;
                 _containedThing.alpha = 1f;
                 _containedThing.depth = depth - 4;
                 _containedThing.angle = angle;
                 _containedThing.offDir = offDir;
                 _containedThing.Draw();
-                DuckGame.Graphics.material = material;
+                Graphics.material = material;
                 this.depth = depth;
                 alpha = 0.5f;
                 base.Draw();
@@ -313,7 +313,7 @@ namespace DuckGame
                 _graphic.scale = scale;
                 _graphic.center = center;
                 int y2 = (int)((1.0 - _hitPoints) * 12.0);
-                DuckGame.Graphics.Draw(_graphic.texture, position + new Vec2(0f, y2), new Rectangle?(new Rectangle(0f, 0f, 16f, 24 - y2)), Color.White, angle, _graphic.center, scale, graphic.flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
+                Graphics.Draw(_graphic.texture, position + new Vec2(0f, y2), new Rectangle?(new Rectangle(0f, 0f, 16f, 24 - y2)), Color.White, angle, _graphic.center, scale, graphic.flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
                 y = y1;
             }
             else

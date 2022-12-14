@@ -15,10 +15,10 @@ namespace DuckGame
 
         public static string customPlatform02
         {
-            get => Custom.data[CustomPlatform2._customType][1];
+            get => Custom.data[_customType][1];
             set
             {
-                Custom.data[CustomPlatform2._customType][1] = value;
+                Custom.data[_customType][1] = value;
                 Custom.Clear(CustomType.Platform, value);
             }
         }

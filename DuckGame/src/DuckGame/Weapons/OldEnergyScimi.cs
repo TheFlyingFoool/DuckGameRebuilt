@@ -26,7 +26,7 @@ namespace DuckGame
         public Color swordColor;
         private ConstantSound _hum;
         private float _timeTillPulse;
-        private List<OldEnergyScimi.RagdollDrag> _drag = new List<OldEnergyScimi.RagdollDrag>();
+        private List<RagdollDrag> _drag = new List<RagdollDrag>();
         private bool _airFly;
         private float _airFlyDir;
         private bool _canAirFly = true;
@@ -179,26 +179,26 @@ namespace DuckGame
             }
             else
             {
-                if (!_airFly || !(with is RagdollPart) || _drag.FirstOrDefault<OldEnergyScimi.RagdollDrag>(x => x.part == with) != null)
+                if (!_airFly || !(with is RagdollPart) || _drag.FirstOrDefault(x => x.part == with) != null)
                     return;
                 RagdollPart ragdollPart = with as RagdollPart;
                 if (ragdollPart.doll == null)
                     return;
                 if (ragdollPart.doll.part1 != null)
-                    _drag.Add(new OldEnergyScimi.RagdollDrag()
+                    _drag.Add(new RagdollDrag()
                     {
                         part = ragdollPart.doll.part1,
                         offset = position - ragdollPart.doll.part1.position
                     });
                 if (ragdollPart.doll.part2 != null)
-                    _drag.Add(new OldEnergyScimi.RagdollDrag()
+                    _drag.Add(new RagdollDrag()
                     {
                         part = ragdollPart.doll.part2,
                         offset = position - ragdollPart.doll.part2.position
                     });
                 if (ragdollPart.doll.part3 == null)
                     return;
-                _drag.Add(new OldEnergyScimi.RagdollDrag()
+                _drag.Add(new RagdollDrag()
                 {
                     part = ragdollPart.doll.part3,
                     offset = position - ragdollPart.doll.part3.position
@@ -401,7 +401,7 @@ namespace DuckGame
         public void ClearDrag()
         {
             int num = 1;
-            foreach (OldEnergyScimi.RagdollDrag ragdollDrag in _drag)
+            foreach (RagdollDrag ragdollDrag in _drag)
             {
                 if (ragdollDrag.part.doll != null && ragdollDrag.part.doll.captureDuck != null && ragdollDrag.part.doll.captureDuck._cooked == null)
                 {
@@ -518,7 +518,7 @@ namespace DuckGame
                     }
                 }
                 handFlip = false;
-                foreach (OldEnergyScimi.RagdollDrag ragdollDrag in _drag)
+                foreach (RagdollDrag ragdollDrag in _drag)
                 {
                     ragdollDrag.part.position = position - ragdollDrag.offset;
                     ragdollDrag.part.hSpeed = 0f;
@@ -669,7 +669,7 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            Sword._playedShing = true;
+            _playedShing = true;
             int num1 = DevConsole.showCollision ? 1 : 0;
             float num2 = Math.Min(_angleWhoom, 0.5f) * 1.5f;
             Graphics.material = _bladeMaterial;

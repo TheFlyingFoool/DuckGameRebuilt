@@ -25,9 +25,9 @@ namespace DuckGame
 
         public override T Load<T>(string assetName)
         {
-            while (SynchronizedContentManager.blockLoading > 0 && Thread.CurrentThread != MonoMain.mainThread)
+            while (blockLoading > 0 && Thread.CurrentThread != MonoMain.mainThread)
                 Thread.Sleep(2);
-            lock (DuckGame.Content._loadLock)
+            lock (Content._loadLock)
             {
                 try
                 {
@@ -42,7 +42,7 @@ namespace DuckGame
 
         public Texture2D FromStream(Stream stream)
         {
-            lock (DuckGame.Content._loadLock)
+            lock (Content._loadLock)
             {
                 try
                 {

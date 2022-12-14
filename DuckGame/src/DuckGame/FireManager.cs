@@ -15,25 +15,25 @@ namespace DuckGame
 
         public static int GetFireID()
         {
-            ++FireManager._curFireID;
-            if (FireManager._curFireID > 20)
-                FireManager._curFireID = 0;
-            return FireManager._curFireID;
+            ++_curFireID;
+            if (_curFireID > 20)
+                _curFireID = 0;
+            return _curFireID;
         }
 
         public static int GetSmokeID()
         {
-            ++FireManager._curSmokeID;
-            if (FireManager._curSmokeID > 20)
-                FireManager._curSmokeID = 0;
-            return FireManager._curSmokeID;
+            ++_curSmokeID;
+            if (_curSmokeID > 20)
+                _curSmokeID = 0;
+            return _curSmokeID;
         }
 
         public static void Update()
         {
             foreach (SmallFire litBy in Level.current.things[typeof(SmallFire)])
             {
-                if (litBy.y >= -2000.0 && litBy.fireID == FireManager._curUpdateID && litBy.alpha > 0.5)
+                if (litBy.y >= -2000.0 && litBy.fireID == _curUpdateID && litBy.alpha > 0.5)
                 {
                     Thing thing = null;
                     if (litBy.stick != null && (litBy.stick is DartGun || litBy.stick is Chaindart))
@@ -105,7 +105,7 @@ namespace DuckGame
             }
             foreach (ExtinguisherSmoke extinguisherSmoke in Level.current.things[typeof(ExtinguisherSmoke)])
             {
-                if (extinguisherSmoke.smokeID == FireManager._curUpdateID)
+                if (extinguisherSmoke.smokeID == _curUpdateID)
                 {
                     foreach (SmallFire smallFire in Level.CheckCircleAll<SmallFire>(extinguisherSmoke.position + new Vec2(0f, -8f), 12f))
                     {
@@ -123,10 +123,10 @@ namespace DuckGame
                     }
                 }
             }
-            ++FireManager._curUpdateID;
-            if (FireManager._curUpdateID <= 20)
+            ++_curUpdateID;
+            if (_curUpdateID <= 20)
                 return;
-            FireManager._curUpdateID = 0;
+            _curUpdateID = 0;
         }
     }
 }

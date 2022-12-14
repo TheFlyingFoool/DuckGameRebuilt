@@ -30,7 +30,7 @@ namespace DuckGame
         public void Initialize()
         {
             currentObject = 0;
-            objects = new RecorderFrameItem[RecorderFrame.kMaxObjects];
+            objects = new RecorderFrameItem[kMaxObjects];
             _states = new Dictionary<int, RecorderFrameStateChange>();
             sortedObjects = new Dictionary<long, RecorderFrameItem>();
             sounds = new List<RecorderSoundItem>();
@@ -50,9 +50,9 @@ namespace DuckGame
             sortedObjects.Clear();
         }
 
-        public RecorderFrameStateChange GetStateWithIndex(int index) => _states.FirstOrDefault<KeyValuePair<int, RecorderFrameStateChange>>(x => x.Value.stateIndex == index).Value;
+        public RecorderFrameStateChange GetStateWithIndex(int index) => _states.FirstOrDefault(x => x.Value.stateIndex == index).Value;
 
-        public bool HasStateWithIndex(int index) => _states.Where<KeyValuePair<int, RecorderFrameStateChange>>(x => x.Value.stateIndex == index).Count<KeyValuePair<int, RecorderFrameStateChange>>() > 0;
+        public bool HasStateWithIndex(int index) => _states.Where(x => x.Value.stateIndex == index).Count() > 0;
 
         public void StateChange(
           SpriteSortMode sortModeVal,
@@ -73,7 +73,7 @@ namespace DuckGame
                 rasterizerState = rasterizerStateVal,
                 effectIndex = effectVal != null ? effectVal.effectIndex : (short)-1,
                 camera = cameraVal,
-                stateIndex = DuckGame.Graphics.currentStateIndex,
+                stateIndex = Graphics.currentStateIndex,
                 scissor = sciss
             };
         }
@@ -81,37 +81,37 @@ namespace DuckGame
         public void IncrementObject()
         {
             ++currentObject;
-            if (currentObject < RecorderFrame.kMaxObjects)
+            if (currentObject < kMaxObjects)
                 return;
-            currentObject = RecorderFrame.kMaxObjects - 1;
+            currentObject = kMaxObjects - 1;
         }
 
         public void Render()
         {
             bool flag = false;
-            DuckGame.Graphics.Clear(backgroundColor * DuckGame.Graphics.fade);
+            Graphics.Clear(backgroundColor * Graphics.fade);
             for (int key = 0; key < currentObject; ++key)
             {
                 if (_states.ContainsKey(key))
                 {
                     if (flag)
-                        DuckGame.Graphics.screen.End();
+                        Graphics.screen.End();
                     RecorderFrameStateChange state = _states[key];
                     flag = true;
                     MTEffect mtEffectFromIndex = Content.GetMTEffectFromIndex(state.effectIndex);
                     if (Layer.IsBasicLayerEffect(mtEffectFromIndex))
                     {
-                        mtEffectFromIndex.effect.Parameters["fade"].SetValue((Vector3)new Vec3(DuckGame.Graphics.fade));
-                        mtEffectFromIndex.effect.Parameters["add"].SetValue((Vector3)new Vec3(DuckGame.Graphics.fadeAddRenderValue));
+                        mtEffectFromIndex.effect.Parameters["fade"].SetValue((Vector3)new Vec3(Graphics.fade));
+                        mtEffectFromIndex.effect.Parameters["add"].SetValue((Vector3)new Vec3(Graphics.fadeAddRenderValue));
                     }
-                    DuckGame.Graphics.screen.Begin(state.sortMode, state.blendState, state.samplerState, state.depthStencilState, state.rasterizerState, Content.GetMTEffectFromIndex(state.effectIndex), state.camera);
-                    DuckGame.Graphics.SetScissorRectangle(state.scissor);
+                    Graphics.screen.Begin(state.sortMode, state.blendState, state.samplerState, state.depthStencilState, state.rasterizerState, Content.GetMTEffectFromIndex(state.effectIndex), state.camera);
+                    Graphics.SetScissorRectangle(state.scissor);
                 }
-                DuckGame.Graphics.DrawRecorderItem(ref objects[key]);
+                Graphics.DrawRecorderItem(ref objects[key]);
             }
             if (!flag)
                 return;
-            DuckGame.Graphics.screen.End();
+            Graphics.screen.End();
         }
 
         public void Update()

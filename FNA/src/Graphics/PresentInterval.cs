@@ -14,10 +14,10 @@ namespace Microsoft.Xna.Framework.Graphics
 	/// </summary>
 	public enum PresentInterval
 	{
-		/// <summary>
-		/// Equivalent to <see cref="PresentInterval.One"/>.
-		/// </summary>
-		Default = 0,
+        /// <summary>
+        /// Equivalent to <see cref="One"/>.
+        /// </summary>
+        Default = 0,
 		/// <summary>
 		/// The driver waits for the vertical retrace period, before updating window client area. Present operations are not affected more frequently than the screen refresh rate.
 		/// </summary>

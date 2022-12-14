@@ -68,7 +68,7 @@ namespace DuckGame
         public static Plane Normalize(Plane value)
         {
             Plane result;
-            Plane.Normalize(ref value, out result);
+            Normalize(ref value, out result);
             return result;
         }
 

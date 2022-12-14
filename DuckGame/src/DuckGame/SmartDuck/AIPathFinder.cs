@@ -67,7 +67,7 @@ namespace DuckGame
         {
             if (this._path == null)
                 return;
-            this.SetTarget(this._path.Last<PathNodeLink>());
+            this.SetTarget(this._path.Last());
         }
 
         public void SetTarget(Vec2 target)
@@ -89,7 +89,7 @@ namespace DuckGame
         {
             this._revert = null;
             this._path = null;
-            List<Thing> list = Level.current.things[typeof(PathNode)].ToList<Thing>();
+            List<Thing> list = Level.current.things[typeof(PathNode)].ToList();
             list.Sort((a, b) =>
            {
                Vec2 vec2 = a.position - position;
@@ -160,7 +160,7 @@ namespace DuckGame
             Thing thing1 = null;
             this._path.Add(new PathNodeLink()
             {
-                owner = this._path.Count <= 0 ? thing1 : this._path.Last<PathNodeLink>().link,
+                owner = this._path.Count <= 0 ? thing1 : this._path.Last().link,
                 link = thing1
             });
         }

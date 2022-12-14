@@ -18,13 +18,13 @@ namespace DuckGame
         {
             MonoMain.NloadMessage = "Loading Highlights";
             for (int index = 0; index < 6; ++index)
-                Highlights._recordings.Add(new Recording());
+                _recordings.Add(new Recording());
         }
 
         public static List<Recording> GetHighlights()
         {
             List<Recording> highlights = new List<Recording>();
-            foreach (Recording recording in Highlights._recordings)
+            foreach (Recording recording in _recordings)
             {
                 if (Recorder.currentRecording != recording && highlights.Count < 6)
                 {
@@ -37,7 +37,7 @@ namespace DuckGame
 
         public static void ClearHighlights()
         {
-            foreach (Recording recording in Highlights._recordings)
+            foreach (Recording recording in _recordings)
                 recording.Reset();
         }
 
@@ -45,9 +45,9 @@ namespace DuckGame
         {
             if (Network.isActive)
                 return;
-            if (Highlights._recordings.Count == 0)
-                Highlights.Initialize();
-            Highlights.highlightRatingMultiplier = 1f;
+            if (_recordings.Count == 0)
+                Initialize();
+            highlightRatingMultiplier = 1f;
             Recording currentRecording = Recorder.currentRecording;
             Recorder.currentRecording = null;
             if (currentRecording == null)
@@ -70,10 +70,10 @@ namespace DuckGame
         {
             if (Network.isActive)
                 return;
-            if (Highlights._recordings.Count == 0)
-                Highlights.Initialize();
-            Recording recording1 = Highlights._recordings[0];
-            foreach (Recording recording2 in Highlights._recordings)
+            if (_recordings.Count == 0)
+                Initialize();
+            Recording recording1 = _recordings[0];
+            foreach (Recording recording2 in _recordings)
             {
                 if (recording2.startFrame == recording2.endFrame)
                 {

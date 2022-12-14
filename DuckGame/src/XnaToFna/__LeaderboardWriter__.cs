@@ -18,12 +18,12 @@ namespace XnaToFna.StubXDK.GamerServices
         [MonoModHook("Microsoft.Xna.Framework.GamerServices.LeaderboardEntry Microsoft.Xna.Framework.GamerServices.LeaderboardWriter::GetLeaderboard(Microsoft.Xna.Framework.GamerServices.LeaderboardIdentity)")]
         public static object GetLeaderboard(object writer, object identity)
         {
-            if (__LeaderboardWriter__.t_LeaderboardEntry == null)
+            if (t_LeaderboardEntry == null)
             {
-                __LeaderboardWriter__.t_LeaderboardEntry = StubXDKHelper.GamerServicesAsm.GetType("Microsoft.Xna.Framework.GamerServices.LeaderboardEntry");
-                __LeaderboardWriter__.ctor_LeaderboardEntry = __LeaderboardWriter__.t_LeaderboardEntry.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
+                t_LeaderboardEntry = StubXDKHelper.GamerServicesAsm.GetType("Microsoft.Xna.Framework.GamerServices.LeaderboardEntry");
+                ctor_LeaderboardEntry = t_LeaderboardEntry.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
             }
-            return __LeaderboardWriter__.ctor_LeaderboardEntry.Invoke(new object[0]);
+            return ctor_LeaderboardEntry.Invoke(new object[0]);
         }
     }
 }

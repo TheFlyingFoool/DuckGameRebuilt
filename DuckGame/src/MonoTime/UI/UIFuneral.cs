@@ -81,7 +81,7 @@ namespace DuckGame
                 {
                     if (!_shown)
                     {
-                        UIFuneral.oldSong = Music.currentSong;
+                        oldSong = Music.currentSong;
                         Music.Play("littlesad", false);
                         HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
                         _shown = true;

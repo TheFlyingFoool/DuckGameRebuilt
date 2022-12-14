@@ -12,13 +12,13 @@ namespace DuckGame
         public byte byteCode;
         public string serverVersion;
 
-        public NMVersionMismatch.Type GetCode() => (NMVersionMismatch.Type)byteCode;
+        public Type GetCode() => (Type)byteCode;
 
         public NMVersionMismatch()
         {
         }
 
-        public NMVersionMismatch(NMVersionMismatch.Type code, string ver)
+        public NMVersionMismatch(Type code, string ver)
         {
             byteCode = (byte)code;
             serverVersion = ver;

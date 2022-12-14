@@ -24,14 +24,14 @@ namespace DuckGame
             id = "requiredwins",
             name = "Required Wins",
             value =  10,
-            min = DuckNetworkCore.kWinsMin,
+            min = kWinsMin,
             max = 100,
-            step = DuckNetworkCore.kWinsStep,
+            step = kWinsStep,
             stepMap = new Dictionary<int, int>()
             {
               {
                 50,
-                DuckNetworkCore.kWinsStep
+                kWinsStep
               },
               {
                 100,
@@ -52,14 +52,14 @@ namespace DuckGame
             id = "restsevery",
             name = "Rests Every",
             value =  10,
-            min = DuckNetworkCore.kWinsMin,
+            min = kWinsMin,
             max = 100,
-            step = DuckNetworkCore.kWinsStep,
+            step = kWinsStep,
             stepMap = new Dictionary<int, int>()
             {
               {
                 50,
-                DuckNetworkCore.kWinsStep
+                kWinsStep
               },
               {
                 100,
@@ -349,7 +349,7 @@ namespace DuckGame
             for (int index = 0; index < DG.MaxPlayers; ++index)
             {
                 num = index + 1;
-                Profile profile = new Profile("Netduck" + num.ToString(), InputProfile.GetVirtualInput(index), varDefaultPersona: Persona.all.ElementAt<DuckPersona>(index), network: true);
+                Profile profile = new Profile("Netduck" + num.ToString(), InputProfile.GetVirtualInput(index), varDefaultPersona: Persona.all.ElementAt(index), network: true);
                 profile.SetNetworkIndex((byte)index);
                 profile.SetFixedGhostIndex((byte)index);
                 if (index > 3)
@@ -360,7 +360,7 @@ namespace DuckGame
             for (int index = 0; index < DG.MaxSpectators; ++index)
             {
                 num = index + 1;
-                Profile profile = new Profile("Observer" + num.ToString(), InputProfile.GetVirtualInput(index + DG.MaxPlayers), varDefaultPersona: Persona.all.ElementAt<DuckPersona>(0), network: true);
+                Profile profile = new Profile("Observer" + num.ToString(), InputProfile.GetVirtualInput(index + DG.MaxPlayers), varDefaultPersona: Persona.all.ElementAt(0), network: true);
                 profile.SetNetworkIndex((byte)(index + DG.MaxPlayers));
                 profile.SetFixedGhostIndex((byte)(index + DG.MaxPlayers));
                 profile.slotType = SlotType.Spectator;
@@ -382,7 +382,7 @@ namespace DuckGame
             randomID = Rando.Int(2147483646);
         }
 
-        public void ReorderFixedList() => profilesFixedOrder = profiles.OrderBy<Profile, byte>(x => x.fixedGhostIndex).ToList<Profile>();
+        public void ReorderFixedList() => profilesFixedOrder = profiles.OrderBy(x => x.fixedGhostIndex).ToList();
 
         public FancyBitmapFont _chatFont => _rasterChatFont == null ? _builtInChatFont : _rasterChatFont;
 
@@ -390,7 +390,7 @@ namespace DuckGame
         {
             if (Options.Data.languageFilter)
             {
-                DuckNetworkCore.filteredSpeech = "";
+                filteredSpeech = "";
                 pText = pText.Replace("*", "@_sr_@");
                 pText = Steam.FilterText(pText, pUser);
                 swearCharOffset = 0;
@@ -403,7 +403,7 @@ namespace DuckGame
                         if (!flag)
                         {
                             flag = true;
-                            DuckNetworkCore.filteredSpeech += "quack";
+                            filteredSpeech += "quack";
                         }
                         string str2 = str1 + swearColors[rainbowIndex];
                         rainbowIndex = (rainbowIndex + 1) % swearColors.Length;
@@ -423,15 +423,15 @@ namespace DuckGame
                         flag = false;
                         swearCharOffset = 0;
                         str1 += pText[index].ToString();
-                        DuckNetworkCore.filteredSpeech += pText[index].ToString();
+                        filteredSpeech += pText[index].ToString();
                     }
                 }
                 pText = str1;
                 pText = pText.Replace("@_sr_@", "*");
-                DuckNetworkCore.filteredSpeech = DuckNetworkCore.filteredSpeech.Replace("@_sr_@", "*");
+                filteredSpeech = filteredSpeech.Replace("@_sr_@", "*");
             }
             else
-                DuckNetworkCore.filteredSpeech = pText;
+                filteredSpeech = pText;
             return pText;
         }
 
@@ -446,9 +446,9 @@ namespace DuckGame
             if (Options.Data.textToSpeech)
             {
                 if (Options.Data.textToSpeechReadNames)
-                    SFX.Say(pMessage.who.nameUI + " says " + DuckNetworkCore.filteredSpeech);
+                    SFX.Say(pMessage.who.nameUI + " says " + filteredSpeech);
                 else
-                    SFX.Say(DuckNetworkCore.filteredSpeech);
+                    SFX.Say(filteredSpeech);
             }
             float chatScale = DuckNetwork.chatScale;
             _chatFont.scale = new Vec2(2f * pMessage.scale * chatScale);
@@ -465,7 +465,7 @@ namespace DuckGame
             {
                 pMessage.text = "??????";
             }
-            int num = pMessage.text.Count<char>(x => x == '\n');
+            int num = pMessage.text.Count(x => x == '\n');
             if (chatMessage != null && num == 0 && chatMessage.newlines < 3 && chatMessage.timeout > 2.0 && chatMessage.who == pMessage.who)
             {
                 pMessage.text = "|GRAY|" + pMessage.who.nameUIBodge + ": |BLACK|" + pMessage.text;
@@ -482,7 +482,7 @@ namespace DuckGame
                 pMessage.text = "|WHITE|" + pMessage.who.nameUIBodge + ": |BLACK|" + pMessage.text;
                 chatMessages.Add(pMessage);
             }
-            chatMessages = chatMessages.OrderBy<ChatMessage, int>(x => -x.index).ToList<ChatMessage>();
+            chatMessages = chatMessages.OrderBy(x => -x.index).ToList();
         }
     }
 }

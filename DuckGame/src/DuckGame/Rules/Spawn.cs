@@ -60,7 +60,7 @@ namespace DuckGame
             List<SpawnPoint> spawnPointList = new List<SpawnPoint>();
             foreach (FreeSpawn freeSpawn in Level.current.things[typeof(FreeSpawn)])
             {
-                if (freeSpawn.secondSpawn.value == Spawn.runningSecondSpawn && !usedSpawns.Contains(freeSpawn) && (!freeSpawn.eightPlayerOnly.value || GameLevel.NumberOfDucks > 4))
+                if (freeSpawn.secondSpawn.value == runningSecondSpawn && !usedSpawns.Contains(freeSpawn) && (!freeSpawn.eightPlayerOnly.value || GameLevel.NumberOfDucks > 4))
                     spawnPointList.Add(freeSpawn);
             }
             if (spawnPointList.Count == 0)
@@ -80,7 +80,7 @@ namespace DuckGame
                 offDir = spawnPoint.offDir
             };
             spawned.Add(duck);
-            Spawn.runningSecondSpawn = !Spawn.runningSecondSpawn;
+            runningSecondSpawn = !runningSecondSpawn;
             return spawnPoint;
         }
 
@@ -136,7 +136,7 @@ namespace DuckGame
             return spawnPoint1;
         }
 
-        public static List<Duck> SpawnPlayers() => Spawn.SpawnPlayers(true);
+        public static List<Duck> SpawnPlayers() => SpawnPlayers(true);
 
         public static List<Duck> SpawnPlayers(bool recordStats)
         {
@@ -162,48 +162,48 @@ namespace DuckGame
             int num1 = 0;
             foreach (Team team in teamList1)
             {
-                if (team.activeProfiles.Count<Profile>() != 0)
+                if (team.activeProfiles.Count() != 0)
                     ++num1;
             }
             GameLevel.NumberOfDucks = num1;
             foreach (Team team in teamList1)
             {
-                if (team.activeProfiles.Count<Profile>() != 0)
+                if (team.activeProfiles.Count() != 0)
                 {
                     if (recordStats)
                     {
                         foreach (Profile activeProfile in team.activeProfiles)
                             ++activeProfile.stats.timesSpawned;
                     }
-                    if (team.activeProfiles.Count<Profile>() == 1)
+                    if (team.activeProfiles.Count() == 1)
                     {
-                        SpawnPoint spawnPoint = Spawn.AttemptFreeSpawn(team.activeProfiles[0], usedSpawns, duckList1);
+                        SpawnPoint spawnPoint = AttemptFreeSpawn(team.activeProfiles[0], usedSpawns, duckList1);
                         if (spawnPoint == null)
                         {
-                            spawnPoint = Spawn.AttemptTeamSpawn(team, usedSpawns, duckList1);
+                            spawnPoint = AttemptTeamSpawn(team, usedSpawns, duckList1);
                             if (spawnPoint == null)
                             {
                                 usedSpawns.Clear();
-                                spawnPoint = Spawn.AttemptFreeSpawn(team.activeProfiles[0], usedSpawns, duckList1);
+                                spawnPoint = AttemptFreeSpawn(team.activeProfiles[0], usedSpawns, duckList1);
                                 if (spawnPoint == null)
                                 {
                                     usedSpawns.Clear();
-                                    spawnPoint = Spawn.AttemptTeamSpawn(team, usedSpawns, duckList1);
+                                    spawnPoint = AttemptTeamSpawn(team, usedSpawns, duckList1);
                                 }
                             }
                         }
                         if (spawnPoint == null)
                             return duckList1;
                     }
-                    else if (Spawn.AttemptTeamSpawn(team, usedSpawns, duckList1) == null)
+                    else if (AttemptTeamSpawn(team, usedSpawns, duckList1) == null)
                     {
                         foreach (Profile activeProfile in team.activeProfiles)
                         {
-                            SpawnPoint spawnPoint = Spawn.AttemptFreeSpawn(activeProfile, usedSpawns, duckList1);
+                            SpawnPoint spawnPoint = AttemptFreeSpawn(activeProfile, usedSpawns, duckList1);
                             if (spawnPoint == null)
                             {
                                 usedSpawns.Clear();
-                                spawnPoint = Spawn.AttemptFreeSpawn(activeProfile, usedSpawns, duckList1);
+                                spawnPoint = AttemptFreeSpawn(activeProfile, usedSpawns, duckList1);
                             }
                             if (spawnPoint == null)
                                 return duckList1;
@@ -215,7 +215,7 @@ namespace DuckGame
             foreach (Duck duck1 in duckList1)
             {
                 Duck d = duck1;
-                Duck duck2 = duckList1.FirstOrDefault<Duck>(x => x != d && x.position == d.position);
+                Duck duck2 = duckList1.FirstOrDefault(x => x != d && x.position == d.position);
                 if (duck2 != null && !duckList2.Contains(duck2) && !duckList2.Contains(d))
                 {
                     d.x += 4f;
@@ -235,12 +235,12 @@ namespace DuckGame
             int num = 0;
             foreach (Team team in all)
             {
-                if (team.activeProfiles.Count<Profile>() != 0)
+                if (team.activeProfiles.Count() != 0)
                 {
                     foreach (Profile activeProfile in team.activeProfiles)
                         ++activeProfile.stats.timesSpawned;
                     foreach (Profile activeProfile in team.activeProfiles)
-                        Spawn.AttemptCTFSpawn(activeProfile, usedSpawns, spawned, num == 0);
+                        AttemptCTFSpawn(activeProfile, usedSpawns, spawned, num == 0);
                     ++num;
                 }
             }

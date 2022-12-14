@@ -77,24 +77,24 @@ namespace DuckGame
 
         public static LevelCore core
         {
-            get => Level._core;
-            set => Level._core = value;
+            get => _core;
+            set => _core = value;
         }
 
         public static void InitializeCollisionLists()
         {
             MonoMain.NloadMessage = "Loading Collision Lists";
             for (int index = 0; index < 10; ++index)
-                Level._collisionLists.Enqueue(new List<object>());
+                _collisionLists.Enqueue(new List<object>());
         }
 
         public static List<object> GetNextCollisionList() => new List<object>();
 
-        public static bool PassedChanceGroup(int group, float val) => group == -1 ? Rando.Float(1f) < val : Level._core._chanceGroups[group] < val;
+        public static bool PassedChanceGroup(int group, float val) => group == -1 ? Rando.Float(1f) < val : _core._chanceGroups[group] < val;
 
-        public static bool PassedChanceGroup2(int group, float val) => group == -1 ? Rando.Float(1f) < val : Level._core._chanceGroups2[group] < val;
+        public static bool PassedChanceGroup2(int group, float val) => group == -1 ? Rando.Float(1f) < val : _core._chanceGroups2[group] < val;
 
-        public static float GetChanceGroup2(int group) => group == -1 ? Rando.Float(1f) : Level._core._chanceGroups2[group];
+        public static float GetChanceGroup2(int group) => group == -1 ? Rando.Float(1f) : _core._chanceGroups2[group];
 
         public bool simulatePhysics
         {
@@ -104,20 +104,20 @@ namespace DuckGame
 
         public static bool sendCustomLevels
         {
-            get => Level._core.sendCustomLevels;
-            set => Level._core.sendCustomLevels = value;
+            get => _core.sendCustomLevels;
+            set => _core.sendCustomLevels = value;
         }
 
         public static Level current
         {
-            get => Level._core.nextLevel == null ? Level._core.currentLevel : Level._core.nextLevel;
-            set => Level._core.nextLevel = value;
+            get => _core.nextLevel == null ? _core.currentLevel : _core.nextLevel;
+            set => _core.nextLevel = value;
         }
 
         public static Level activeLevel
         {
-            get => Level._core.currentLevel;
-            set => Level._core.currentLevel = value;
+            get => _core.currentLevel;
+            set => _core.currentLevel = value;
         }
 
         public Color backgroundColor
@@ -128,49 +128,49 @@ namespace DuckGame
 
         public static void Add(Thing thing)
         {
-            if (Level._core.currentLevel == null)
+            if (_core.currentLevel == null)
                 return;
-            Level._core.currentLevel.AddThing(thing);
+            _core.currentLevel.AddThing(thing);
         }
 
         public static void Remove(Thing thing)
         {
-            if (Level._core.currentLevel == null)
+            if (_core.currentLevel == null)
                 return;
-            Level._core.currentLevel.RemoveThing(thing);
+            _core.currentLevel.RemoveThing(thing);
         }
 
         public static void ClearThings()
         {
-            if (Level._core.currentLevel == null)
+            if (_core.currentLevel == null)
                 return;
-            Level._core.currentLevel.Clear();
+            _core.currentLevel.Clear();
         }
 
         public static void UpdateCurrentLevel()
         {
-            if (Level._core.currentLevel == null)
+            if (_core.currentLevel == null)
                 return;
-            Level._core.currentLevel.DoUpdate();
+            _core.currentLevel.DoUpdate();
         }
 
         public static void DrawCurrentLevel()
         {
-            if (Level._core.currentLevel == null)
+            if (_core.currentLevel == null)
                 return;
-            Level._core.currentLevel.DoDraw();
+            _core.currentLevel.DoDraw();
         }
 
         public static T First<T>()
         {
-            IEnumerable<Thing> thing = Level.current.things[typeof(T)];
-            return thing.Count<Thing>() > 0 ? (T)(object)thing.First<Thing>() : default(T);
+            IEnumerable<Thing> thing = current.things[typeof(T)];
+            return thing.Count() > 0 ? (T)(object)thing.First() : default(T);
         }
 
         public T FirstOfType<T>()
         {
             IEnumerable<Thing> thing = things[typeof(T)];
-            return thing.Count<Thing>() > 0 ? (T)(object)thing.First<Thing>() : default(T);
+            return thing.Count() > 0 ? (T)(object)thing.First() : default(T);
         }
 
         public QuadTreeObjectList things => _things;
@@ -207,7 +207,7 @@ namespace DuckGame
                 GhostManager.context.TransferPendingGhosts();
                 Random generator = Rando.generator;
                 Rando.generator = new Random(seed + 2500);
-                Level.InitChanceGroups();
+                InitChanceGroups();
                 Rando.generator = generator;
                 Initialize();
                 if (!Network.isActive || Network.InLobby())
@@ -216,7 +216,7 @@ namespace DuckGame
                 CalculateBounds();
                 _initialized = true;
                 if (_centeredView)
-                    camera.centerY -= (float)(((DuckGame.Graphics.aspect * camera.width) - (9f / 16f * camera.width)) / 2.0);
+                    camera.centerY -= (float)(((Graphics.aspect * camera.width) - (9f / 16f * camera.width)) / 2.0);
                 if (!VirtualTransition.active)
                     StaticRenderer.Update();
                 foreach (BlockGroup block in _things[typeof(BlockGroup)])
@@ -305,7 +305,7 @@ namespace DuckGame
                 if (t.level != this)
                 {
                     _things.Add(t);
-                    if (!Level.skipInitialize)
+                    if (!skipInitialize)
                         t.Added(this, !bareInitialize, false);
                 }
                 if (!Network.isActive || t.connection != null)
@@ -340,10 +340,10 @@ namespace DuckGame
 
         public static void InitChanceGroups()
         {
-            for (int index = 0; index < Level._core._chanceGroups.Count; ++index)
-                Level._core._chanceGroups[index] = Rando.Float(1f);
-            for (int index = 0; index < Level._core._chanceGroups2.Count; ++index)
-                Level._core._chanceGroups2[index] = Rando.Float(1f);
+            for (int index = 0; index < _core._chanceGroups.Count; ++index)
+                _core._chanceGroups[index] = Rando.Float(1f);
+            for (int index = 0; index < _core._chanceGroups2.Count; ++index)
+                _core._chanceGroups2[index] = Rando.Float(1f);
         }
 
         public virtual string LevelNameData() => GetType().Name;
@@ -352,24 +352,24 @@ namespace DuckGame
 
         public static void UpdateLevelChange()
         {
-            if (Level._core.nextLevel != null)
+            if (_core.nextLevel != null)
             {
                 RumbleManager.ClearRumbles(new RumbleType?());
-                if (Level._core.currentLevel is IHaveAVirtualTransition && Level._core.nextLevel is IHaveAVirtualTransition && !(Level._core.nextLevel is TeamSelect2))
+                if (_core.currentLevel is IHaveAVirtualTransition && _core.nextLevel is IHaveAVirtualTransition && !(_core.nextLevel is TeamSelect2))
                     VirtualTransition.GoVirtual();
-                if (Network.isActive && Level.activeLevel != null && !Level._core.nextLevel._sentLevelChange)
+                if (Network.isActive && activeLevel != null && !_core.nextLevel._sentLevelChange)
                 {
                     byte levelIndex = DuckNetwork.levelIndex;
                     DevConsole.Log(DCSection.GhostMan, "|DGYELLOW|Performing level swap (" + levelIndex.ToString() + ")");
-                    if (Level._core.currentLevel is TeamSelect2 && !(Level._core.nextLevel is TeamSelect2))
+                    if (_core.currentLevel is TeamSelect2 && !(_core.nextLevel is TeamSelect2))
                         DuckNetwork.ClosePauseMenu();
-                    if (!(Level._core.currentLevel is TeamSelect2) && Level._core.nextLevel is TeamSelect2)
+                    if (!(_core.currentLevel is TeamSelect2) && _core.nextLevel is TeamSelect2)
                         DuckNetwork.ClosePauseMenu();
-                    if (Network.isServer && !(Level._core.nextLevel is IConnectionScreen))
+                    if (Network.isServer && !(_core.nextLevel is IConnectionScreen))
                     {
                         if (DuckNetwork.levelIndex > 250)
                             DuckNetwork.levelIndex = 1;
-                        if (Level._core.nextLevel is TeamSelect2)
+                        if (_core.nextLevel is TeamSelect2)
                             Network.ContextSwitch(0);
                         else
                             Network.ContextSwitch((byte)(DuckNetwork.levelIndex + 1U));
@@ -386,13 +386,13 @@ namespace DuckGame
                         strArray[3] = levelIndex.ToString();
                         strArray[4] = ")";
                         DevConsole.Log(DCSection.GhostMan, string.Concat(strArray));
-                        if (!Level._core.nextLevel.suppressLevelMessage)
-                            Send.Message(new NMLevel(Level._core.nextLevel));
-                        Level._core.nextLevel.networkIndex = DuckNetwork.levelIndex;
+                        if (!_core.nextLevel.suppressLevelMessage)
+                            Send.Message(new NMLevel(_core.nextLevel));
+                        _core.nextLevel.networkIndex = DuckNetwork.levelIndex;
                     }
-                    else if (Level._core.nextLevel is IConnectionScreen)
+                    else if (_core.nextLevel is IConnectionScreen)
                         Network.ContextSwitch(byte.MaxValue);
-                    Level._core.nextLevel._sentLevelChange = true;
+                    _core.nextLevel._sentLevelChange = true;
                 }
                 if (!VirtualTransition.active)
                 {
@@ -401,24 +401,24 @@ namespace DuckGame
                     DamageManager.ClearHits();
                     Layer.ResetLayers();
                     HUD.ClearCorners();
-                    if (Level._core.currentLevel != null)
-                        Level._core.currentLevel.Terminate();
-                    string str1 = Level._core.currentLevel != null ? Level._core.currentLevel.LevelNameData() : "null";
-                    string str2 = Level._core.nextLevel != null ? Level._core.nextLevel.LevelNameData() : "null";
-                    if (Level._core.nextLevel is XMLLevel && (Level._core.nextLevel as XMLLevel).level == "RANDOM")
-                        DevConsole.Log(DCSection.General, "Level Switch (" + str1 + " -> Random Level(" + (Level._core.nextLevel as XMLLevel).seed.ToString() + "))");
+                    if (_core.currentLevel != null)
+                        _core.currentLevel.Terminate();
+                    string str1 = _core.currentLevel != null ? _core.currentLevel.LevelNameData() : "null";
+                    string str2 = _core.nextLevel != null ? _core.nextLevel.LevelNameData() : "null";
+                    if (_core.nextLevel is XMLLevel && (_core.nextLevel as XMLLevel).level == "RANDOM")
+                        DevConsole.Log(DCSection.General, "Level Switch (" + str1 + " -> Random Level(" + (_core.nextLevel as XMLLevel).seed.ToString() + "))");
                     else
                         DevConsole.Log(DCSection.General, "Level Switch (" + str1 + " -> " + str2 + ")");
-                    Level._core.currentLevel = Level._core.nextLevel;
-                    Level._core.nextLevel = null;
+                    _core.currentLevel = _core.nextLevel;
+                    _core.nextLevel = null;
                     Layer.lighting = false;
                     VirtualTransition.core._transitionLevel = null;
                     AutoUpdatables.ClearSounds();
                     SequenceItem.sequenceItems.Clear();
-                    DuckGame.Graphics.GarbageDisposal(true);
+                    Graphics.GarbageDisposal(true);
                     GC.Collect(1, GCCollectionMode.Optimized);
-                    ++Level.collectionCount;
-                    if (!(Level._core.currentLevel is GameLevel))
+                    ++collectionCount;
+                    if (!(_core.currentLevel is GameLevel))
                     {
                         if (MonoMain.timeInMatches > 0)
                         {
@@ -435,44 +435,44 @@ namespace DuckGame
                             Global.data.timeInEditor.valueInt += MonoMain.timeInEditor / 60;
                             MonoMain.timeInEditor = 0;
                         }
-                        if (!(Level._core.currentLevel is HighlightLevel))
-                            DuckGame.Graphics.fadeAdd = 0f;
+                        if (!(_core.currentLevel is HighlightLevel))
+                            Graphics.fadeAdd = 0f;
                         Steam.StoreStats();
                     }
                     foreach (Profile profile in Profiles.active)
                         profile.duck = null;
                     SFX.StopAllSounds();
-                    Level._core.currentLevel.DoInitialize();
-                    if (Level._core.currentLevel is XMLLevel && (Level._core.currentLevel as XMLLevel).data != null)
+                    _core.currentLevel.DoInitialize();
+                    if (_core.currentLevel is XMLLevel && (_core.currentLevel as XMLLevel).data != null)
                     {
-                        string path = (Level._core.currentLevel as XMLLevel).data.GetPath();
+                        string path = (_core.currentLevel as XMLLevel).data.GetPath();
                         if (path != null)
                             DevConsole.Log(DCSection.General, "Level Initialized(" + path + ")");
                     }
                     if (MonoMain.pauseMenu != null && MonoMain.pauseMenu.inWorld)
-                        Level._core.currentLevel.AddThing(MonoMain.pauseMenu);
+                        _core.currentLevel.AddThing(MonoMain.pauseMenu);
                     if (Network.isActive && DuckNetwork.duckNetUIGroup != null && DuckNetwork.duckNetUIGroup.open)
-                        Level._core.currentLevel.AddThing(DuckNetwork.duckNetUIGroup);
-                    Level.current._networkStatus = NetLevelStatus.WaitingForDataTransfer;
-                    if (!(Level._core.currentLevel is IOnlyTransitionIn) && Level._core.currentLevel is IHaveAVirtualTransition && !(Level._core.currentLevel is TeamSelect2) && VirtualTransition.isVirtual)
+                        _core.currentLevel.AddThing(DuckNetwork.duckNetUIGroup);
+                    current._networkStatus = NetLevelStatus.WaitingForDataTransfer;
+                    if (!(_core.currentLevel is IOnlyTransitionIn) && _core.currentLevel is IHaveAVirtualTransition && !(_core.currentLevel is TeamSelect2) && VirtualTransition.isVirtual)
                     {
-                        if (Level.current._readyForTransition)
+                        if (current._readyForTransition)
                         {
                             VirtualTransition.GoUnVirtual();
-                            DuckGame.Graphics.fade = 1f;
+                            Graphics.fade = 1f;
                         }
                         else
                         {
-                            Level.current._waitingOnTransition = true;
+                            current._waitingOnTransition = true;
                             if (Network.isActive)
                                 ConnectionStatusUI.Show();
                         }
                     }
                 }
             }
-            if (!Level.current._waitingOnTransition || !Level.current._readyForTransition)
+            if (!current._waitingOnTransition || !current._readyForTransition)
                 return;
-            Level.current._waitingOnTransition = false;
+            current._waitingOnTransition = false;
             VirtualTransition.GoUnVirtual();
             if (!Network.isActive)
                 return;
@@ -497,7 +497,7 @@ namespace DuckGame
 
         public virtual void OnSessionEnded(DuckNetErrorInfo error)
         {
-            Level.current = error == null ? new ConnectionError("|RED|Disconnected from game.") : (Level)new ConnectionError(error.message);
+            current = error == null ? new ConnectionError("|RED|Disconnected from game.") : (Level)new ConnectionError(error.message);
             DuckNetwork.core.stopEnteringText = true;
         }
 
@@ -537,7 +537,7 @@ namespace DuckGame
         protected virtual void OnAllClientsReady()
         {
             _networkStatus = NetLevelStatus.Ready;
-            Level.current._readyForTransition = true;
+            current._readyForTransition = true;
             DoStart();
         }
 
@@ -621,7 +621,7 @@ namespace DuckGame
 
         public void ChecksumReplied(NetworkConnection pConnection) => checksumReplies[pConnection] = true;
 
-        public bool levelIsUpdating => Level._core.nextLevel == null && (!Network.isActive || _startCalled) && !_waitingOnTransition && transferCompleteCalled;
+        public bool levelIsUpdating => _core.nextLevel == null && (!Network.isActive || _startCalled) && !_waitingOnTransition && transferCompleteCalled;
 
         public virtual void DoUpdate()
         {
@@ -640,29 +640,29 @@ namespace DuckGame
             }
             else
             {
-                Level currentLevel = Level._core.currentLevel;
-                Level._core.currentLevel = this;
-                if (DuckGame.Graphics.flashAdd > 0.0)
-                    DuckGame.Graphics.flashAdd -= flashDissipationSpeed;
+                Level currentLevel = _core.currentLevel;
+                _core.currentLevel = this;
+                if (Graphics.flashAdd > 0.0)
+                    Graphics.flashAdd -= flashDissipationSpeed;
                 else
-                    DuckGame.Graphics.flashAdd = 0f;
+                    Graphics.flashAdd = 0f;
                 if (_levelStart)
                 {
-                    DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 1f, 0.05f);
-                    if (DuckGame.Graphics.fade == 1.0)
+                    Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.05f);
+                    if (Graphics.fade == 1.0)
                         _levelStart = false;
                 }
-                if (Level._core.nextLevel == null && initializeFunctionHasBeenRun && levelMessages.Count > 0)
+                if (_core.nextLevel == null && initializeFunctionHasBeenRun && levelMessages.Count > 0)
                 {
                     for (int index = 0; index < levelMessages.Count; ++index)
                     {
-                        Level.doingOnLoadedMessage = true;
+                        doingOnLoadedMessage = true;
                         if (levelMessages[index].OnLevelLoaded())
                         {
                             levelMessages.RemoveAt(index);
                             --index;
                         }
-                        Level.doingOnLoadedMessage = false;
+                        doingOnLoadedMessage = false;
                     }
                 }
                 if (levelIsUpdating)
@@ -699,7 +699,7 @@ namespace DuckGame
                 //}
                 if (skipCurrentLevelReset)
                     return;
-                Level._core.currentLevel = currentLevel;
+                _core.currentLevel = currentLevel;
             }
         }
 
@@ -736,7 +736,7 @@ namespace DuckGame
                     }
                     else
                         update.InactiveUpdate();
-                    if (Level._core.nextLevel != null)
+                    if (_core.nextLevel != null)
                         break;
                 }
                 occasionalupdatethings = new List<Thing>(occasionalupdatethingspending);
@@ -750,7 +750,7 @@ namespace DuckGame
                     }
                     else
                         update.InactiveUpdate();
-                    if (Level._core.nextLevel != null)
+                    if (_core.nextLevel != null)
                         break;
                 }
                 foreach (Thing thing3 in thing1)
@@ -767,7 +767,7 @@ namespace DuckGame
                 {
                     if (update.active && update.level != null)
                         update.DoUpdate();
-                    if (Level._core.nextLevel != null)
+                    if (_core.nextLevel != null)
                         break;
                 }
                 occasionalupdatethings = new List<Thing>(occasionalupdatethingspending);
@@ -776,7 +776,7 @@ namespace DuckGame
                 {
                     if (update.active && update.level != null)
                         update.DoUpdate();
-                    if (Level._core.nextLevel != null)
+                    if (_core.nextLevel != null)
                         break;
                 }
                 foreach (Thing thing5 in thing1)
@@ -806,11 +806,11 @@ namespace DuckGame
             foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
                 toDifferentLayers.OnDrawLayer(Layer.PreDrawLayer);
             Layer.DrawTargetLayers();
-            Vec3 vec = backgroundColor.ToVector3() * DuckGame.Graphics.fade;
-            vec.x += DuckGame.Graphics.flashAddRenderValue;
-            vec.y += DuckGame.Graphics.flashAddRenderValue;
-            vec.z += DuckGame.Graphics.flashAddRenderValue;
-            vec = new Vec3(vec.x + DuckGame.Graphics.fadeAddRenderValue, vec.y + DuckGame.Graphics.fadeAddRenderValue, vec.z + DuckGame.Graphics.fadeAddRenderValue);
+            Vec3 vec = backgroundColor.ToVector3() * Graphics.fade;
+            vec.x += Graphics.flashAddRenderValue;
+            vec.y += Graphics.flashAddRenderValue;
+            vec.z += Graphics.flashAddRenderValue;
+            vec = new Vec3(vec.x + Graphics.fadeAddRenderValue, vec.y + Graphics.fadeAddRenderValue, vec.z + Graphics.fadeAddRenderValue);
             Color color = new Color(vec)
             {
                 a = backgroundColor.a
@@ -820,38 +820,38 @@ namespace DuckGame
             {
                 if (!Options.Data.fillBackground)
                 {
-                    DuckGame.Graphics.Clear(color);
+                    Graphics.Clear(color);
                 }
                 else
                 {
-                    DuckGame.Graphics.Clear(Color.Black);
-                    DuckGame.Graphics.SetFullViewport();
-                    Material material = DuckGame.Graphics.material;
-                    DuckGame.Graphics.material = null;
-                    DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
-                    DuckGame.Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Resolution.current.x, Resolution.current.y), color, -1f);
-                    DuckGame.Graphics.screen.End();
-                    DuckGame.Graphics.material = material;
-                    DuckGame.Graphics.RestoreOldViewport();
+                    Graphics.Clear(Color.Black);
+                    Graphics.SetFullViewport();
+                    Material material = Graphics.material;
+                    Graphics.material = null;
+                    Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+                    Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Resolution.current.x, Resolution.current.y), color, -1f);
+                    Graphics.screen.End();
+                    Graphics.material = material;
+                    Graphics.RestoreOldViewport();
                 }
             }
             if (Recorder.currentRecording != null)
                 Recorder.currentRecording.LogBackgroundColor(backgroundColor);
             BeforeDraw();
-            DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
+            Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
             Draw();
             things.Draw();
 
-            DuckGame.Graphics.screen.End();
+            Graphics.screen.End();
             if (DevConsole.splitScreen && this is GameLevel)
                 SplitScreen.Draw();
             else
                 Layer.DrawLayers();
             if (DevConsole.rhythmMode && this is GameLevel)
             {
-                DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Layer.HUD.camera.getMatrix());
+                Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Layer.HUD.camera.getMatrix());
                 RhythmMode.Draw();
-                DuckGame.Graphics.screen.End();
+                Graphics.screen.End();
             }
             AfterDrawLayers();
         }
@@ -860,13 +860,13 @@ namespace DuckGame
         {
             if (l != Layer.HUD || !_centeredView)
                 return;
-            float num = (float)(Resolution.size.x * DuckGame.Graphics.aspect - Resolution.size.x * (9.0 / 16.0));
+            float num = (float)(Resolution.size.x * Graphics.aspect - Resolution.size.x * (9.0 / 16.0));
             if (num <= 0.0)
                 return;
-            DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
-            DuckGame.Graphics.DrawRect(Vec2.Zero, new Vec2(Resolution.size.x, num / 2f), Color.Black, (Depth)0.9f);
-            DuckGame.Graphics.DrawRect(new Vec2(0f, Resolution.size.y - num / 2f), new Vec2(Resolution.size.x, Resolution.size.y), Color.Black, (Depth)0.9f);
-            DuckGame.Graphics.screen.End();
+            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+            Graphics.DrawRect(Vec2.Zero, new Vec2(Resolution.size.x, num / 2f), Color.Black, (Depth)0.9f);
+            Graphics.DrawRect(new Vec2(0f, Resolution.size.y - num / 2f), new Vec2(Resolution.size.x, Resolution.size.y), Color.Black, (Depth)0.9f);
+            Graphics.screen.End();
         }
 
         public virtual void BeforeDraw()
@@ -936,8 +936,8 @@ namespace DuckGame
                                 _burnGlow.alpha = (Math.Min(materialThing.heat, 1f) / 1f - 0.2f);
                                 _burnGlow.scale = new Vec2((materialThing.width + 22f) / _burnGlow.width, (materialThing.height + 22f) / _burnGlow.height);
                                 Vec2 center = materialThing.rectangle.Center;
-                                DuckGame.Graphics.Draw(_burnGlow, center.x, center.y);
-                                DuckGame.Graphics.Draw(_burnGlow, center.x, center.y);
+                                Graphics.Draw(_burnGlow, center.x, center.y);
+                                Graphics.Draw(_burnGlow, center.x, center.y);
                                 break;
                             case FluidPuddle _:
                                 FluidPuddle fluidPuddle = materialThing as FluidPuddle;
@@ -967,11 +967,11 @@ namespace DuckGame
                                         {
                                             float x = (fluidPuddle.bottomLeft.x + index * num2 + 11f - 8f);
                                             float y = fluidPuddle.top - 1f + (float)Math.Sin(fluidPuddle.fluidWave + index * 0.7f);
-                                            DuckGame.Graphics.Draw(_burnGlowWide, x, y);
+                                            Graphics.Draw(_burnGlowWide, x, y);
                                             if (index == 0)
-                                                DuckGame.Graphics.Draw(_burnGlowWideLeft, x, y);
+                                                Graphics.Draw(_burnGlowWideLeft, x, y);
                                             else if (index == num4 - 1)
-                                                DuckGame.Graphics.Draw(_burnGlowWideRight, x + 16f, y);
+                                                Graphics.Draw(_burnGlowWideRight, x + 16f, y);
                                         }
                                         break;
                                     }
@@ -995,7 +995,7 @@ namespace DuckGame
                             _burnGlow.CenterOrigin();
                         }
                         _burnGlow.alpha = 0.65f * smallFire.alpha;
-                        DuckGame.Graphics.Draw(_burnGlow, smallFire.x, smallFire.y - 4f);
+                        Graphics.Draw(_burnGlow, smallFire.x, smallFire.y - 4f);
                     }
                 }
                 else if (layer == Layer.Virtual)
@@ -1011,63 +1011,63 @@ namespace DuckGame
             }
         }
 
-        public static T Nearest<T>(float x, float y, Thing ignore, Layer layer) => Level.current.NearestThing<T>(new Vec2(x, y), ignore, layer);
+        public static T Nearest<T>(float x, float y, Thing ignore, Layer layer) => current.NearestThing<T>(new Vec2(x, y), ignore, layer);
 
-        public static T Nearest<T>(float x, float y, Thing ignore) => Level.current.NearestThing<T>(new Vec2(x, y), ignore);
+        public static T Nearest<T>(float x, float y, Thing ignore) => current.NearestThing<T>(new Vec2(x, y), ignore);
 
-        public static T Nearest<T>(float x, float y) => Level.current.NearestThing<T>(new Vec2(x, y));
-        public static T Nearest<T>(Vec2 point, float maxdistance) => Level.current.NearestThing<T>(point, maxdistance);
+        public static T Nearest<T>(float x, float y) => current.NearestThing<T>(new Vec2(x, y));
+        public static T Nearest<T>(Vec2 point, float maxdistance) => current.NearestThing<T>(point, maxdistance);
 
-        public static T Nearest<T>(Vec2 point, float maxdistance, Thing ignore) => Level.current.NearestThing<T>(point, maxdistance, ignore);
-        public static T Nearest<T>(Vec2 p) => Level.current.NearestThing<T>(p);
+        public static T Nearest<T>(Vec2 point, float maxdistance, Thing ignore) => current.NearestThing<T>(point, maxdistance, ignore);
+        public static T Nearest<T>(Vec2 p) => current.NearestThing<T>(p);
 
-        public static T Nearest<T>(Vec2 point, Thing ignore, int nearIndex, Layer layer) => Level.current.NearestThing<T>(point, ignore, nearIndex, layer);
+        public static T Nearest<T>(Vec2 point, Thing ignore, int nearIndex, Layer layer) => current.NearestThing<T>(point, ignore, nearIndex, layer);
 
-        public static T Nearest<T>(Vec2 point, Thing ignore, int nearIndex) => Level.current.NearestThing<T>(point, ignore, nearIndex);
+        public static T Nearest<T>(Vec2 point, Thing ignore, int nearIndex) => current.NearestThing<T>(point, ignore, nearIndex);
 
-        public static T CheckCircle<T>(float p1x, float p1y, float radius, Thing ignore) => Level.current.CollisionCircle<T>(new Vec2(p1x, p1y), radius, ignore);
+        public static T CheckCircle<T>(float p1x, float p1y, float radius, Thing ignore) => current.CollisionCircle<T>(new Vec2(p1x, p1y), radius, ignore);
 
-        public static T CheckCircle<T>(float p1x, float p1y, float radius) => Level.current.CollisionCircle<T>(new Vec2(p1x, p1y), radius);
+        public static T CheckCircle<T>(float p1x, float p1y, float radius) => current.CollisionCircle<T>(new Vec2(p1x, p1y), radius);
 
-        public static T CheckCircle<T>(Vec2 p1, float radius, Thing ignore) => Level.current.CollisionCircle<T>(p1, radius, ignore);
+        public static T CheckCircle<T>(Vec2 p1, float radius, Thing ignore) => current.CollisionCircle<T>(p1, radius, ignore);
 
-        public static T CheckCircle<T>(Vec2 p1, float radius) => Level.current.CollisionCircle<T>(p1, radius);
+        public static T CheckCircle<T>(Vec2 p1, float radius) => current.CollisionCircle<T>(p1, radius);
 
-        public static IEnumerable<T> CheckCircleAll<T>(Vec2 p1, float radius) => Level.current.CollisionCircleAll<T>(p1, radius);
+        public static IEnumerable<T> CheckCircleAll<T>(Vec2 p1, float radius) => current.CollisionCircleAll<T>(p1, radius);
 
         public T CollisionCircle<T>(float p1x, float p1y, float radius, Thing ignore) => CollisionCircle<T>(new Vec2(p1x, p1y), radius, ignore);
 
         public T CollisionCircle<T>(float p1x, float p1y, float radius) => CollisionCircle<T>(new Vec2(p1x, p1y), radius);
 
-        public static T CheckRect<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => Level.current.CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
+        public static T CheckRect<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => current.CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
 
-        public static T CheckRect<T>(float p1x, float p1y, float p2x, float p2y) => Level.current.CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
+        public static T CheckRect<T>(float p1x, float p1y, float p2x, float p2y) => current.CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
 
-        public static T CheckRectFilter<T>(Vec2 p1, Vec2 p2, Predicate<T> filter) => Level.current.CollisionRectFilter<T>(p1, p2, filter);
+        public static T CheckRectFilter<T>(Vec2 p1, Vec2 p2, Predicate<T> filter) => current.CollisionRectFilter(p1, p2, filter);
 
-        public static T CheckRect<T>(Vec2 p1, Vec2 p2, Thing ignore) => Level.current.CollisionRect<T>(p1, p2, ignore);
+        public static T CheckRect<T>(Vec2 p1, Vec2 p2, Thing ignore) => current.CollisionRect<T>(p1, p2, ignore);
 
-        public static T CheckRect<T>(Vec2 p1, Vec2 p2) => Level.current.CollisionRect<T>(p1, p2);
+        public static T CheckRect<T>(Vec2 p1, Vec2 p2) => current.CollisionRect<T>(p1, p2);
 
-        public static List<T> CheckRectAll<T>(Vec2 p1, Vec2 p2, List<T> outList) => Level.current.CollisionRectAllDan<T>(p1, p2, outList);
+        public static List<T> CheckRectAll<T>(Vec2 p1, Vec2 p2, List<T> outList) => current.CollisionRectAllDan(p1, p2, outList);
 
         public static IEnumerable<T> CheckRectAll<T>(Vec2 p1, Vec2 p2)
         {
-            return Level.current.CollisionRectAllDan<T>(p1, p2, null); // spooky time
+            return current.CollisionRectAllDan<T>(p1, p2, null); // spooky time
             //return Level.current.CollisionRectAll<T>(p1, p2, null);
         }
         public static IEnumerable<T> CheckRectAllDan<T>(Vec2 p1, Vec2 p2)
         {
-            return Level.current.CollisionRectAllDan<T>(p1, p2, null);
+            return current.CollisionRectAllDan<T>(p1, p2, null);
         }
 
         public T CollisionRect<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
 
         public T CollisionRect<T>(float p1x, float p1y, float p2x, float p2y) => CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
 
-        public static T CheckLine<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => Level.current.CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
+        public static T CheckLine<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => current.CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
 
-        public static T CheckLine<T>(float p1x, float p1y, float p2x, float p2y) => Level.current.CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
+        public static T CheckLine<T>(float p1x, float p1y, float p2x, float p2y) => current.CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
 
         public static T CheckLine<T>(
           float p1x,
@@ -1077,52 +1077,52 @@ namespace DuckGame
           out Vec2 position,
           Thing ignore)
         {
-            return Level.current.CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), out position, ignore);
+            return current.CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), out position, ignore);
         }
 
-        public static T CheckLine<T>(float p1x, float p1y, float p2x, float p2y, out Vec2 position) => Level.current.CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), out position);
+        public static T CheckLine<T>(float p1x, float p1y, float p2x, float p2y, out Vec2 position) => current.CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), out position);
 
-        public static T CheckLine<T>(Vec2 p1, Vec2 p2, Thing ignore) => Level.current.CollisionLine<T>(p1, p2, ignore);
+        public static T CheckLine<T>(Vec2 p1, Vec2 p2, Thing ignore) => current.CollisionLine<T>(p1, p2, ignore);
 
-        public static T CheckLine<T>(Vec2 p1, Vec2 p2) => Level.current.CollisionLine<T>(p1, p2);
+        public static T CheckLine<T>(Vec2 p1, Vec2 p2) => current.CollisionLine<T>(p1, p2);
 
-        public static T CheckLine<T>(Vec2 p1, Vec2 p2, out Vec2 position, Thing ignore) => Level.current.CollisionLine<T>(p1, p2, out position, ignore);
+        public static T CheckLine<T>(Vec2 p1, Vec2 p2, out Vec2 position, Thing ignore) => current.CollisionLine<T>(p1, p2, out position, ignore);
 
-        public static T CheckLine<T>(Vec2 p1, Vec2 p2, out Vec2 position) => Level.current.CollisionLine<T>(p1, p2, out position);
+        public static T CheckLine<T>(Vec2 p1, Vec2 p2, out Vec2 position) => current.CollisionLine<T>(p1, p2, out position);
 
         public T CollisionLine<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
 
         public T CollisionLine<T>(float p1x, float p1y, float p2x, float p2y) => CollisionLine<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
 
-        public static IEnumerable<T> CheckLineAll<T>(Vec2 p1, Vec2 p2) => Level.current.CollisionLineAll<T>(p1, p2);
+        public static IEnumerable<T> CheckLineAll<T>(Vec2 p1, Vec2 p2) => current.CollisionLineAll<T>(p1, p2);
 
         public IEnumerable<T> CheckLineAll<T>(float p1x, float p1y, float p2x, float p2y) => CollisionLineAll<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y));
 
-        public static T CheckPoint<T>(float x, float y, Thing ignore, Layer layer) => Level.current.CollisionPoint<T>(new Vec2(x, y), ignore, layer);
+        public static T CheckPoint<T>(float x, float y, Thing ignore, Layer layer) => current.CollisionPoint<T>(new Vec2(x, y), ignore, layer);
 
-        public static T CheckPoint<T>(float x, float y, Thing ignore) => Level.current.CollisionPoint<T>(new Vec2(x, y), ignore);
+        public static T CheckPoint<T>(float x, float y, Thing ignore) => current.CollisionPoint<T>(new Vec2(x, y), ignore);
 
-        public static Thing CheckPoint(System.Type pType, float x, float y, Thing ignore) => Level.current.CollisionPoint(pType, new Vec2(x, y), ignore);
+        public static Thing CheckPoint(Type pType, float x, float y, Thing ignore) => current.CollisionPoint(pType, new Vec2(x, y), ignore);
 
-        public static T CheckPoint<T>(float x, float y) => Level.current.CollisionPoint<T>(new Vec2(x, y));
+        public static T CheckPoint<T>(float x, float y) => current.CollisionPoint<T>(new Vec2(x, y));
 
-        public static T CheckPointPlacementLayer<T>(float x, float y, Thing ignore = null, Layer layer = null) => Level.current.CollisionPointPlacementLayer<T>(new Vec2(x, y), ignore, layer);
+        public static T CheckPointPlacementLayer<T>(float x, float y, Thing ignore = null, Layer layer = null) => current.CollisionPointPlacementLayer<T>(new Vec2(x, y), ignore, layer);
 
-        public static T CheckPoint<T>(Vec2 point, Thing ignore, Layer layer) => Level.current.CollisionPoint<T>(point, ignore, layer);
+        public static T CheckPoint<T>(Vec2 point, Thing ignore, Layer layer) => current.CollisionPoint<T>(point, ignore, layer);
 
-        public static T CheckPoint<T>(Vec2 point, Thing ignore) => Level.current.CollisionPoint<T>(point, ignore);
+        public static T CheckPoint<T>(Vec2 point, Thing ignore) => current.CollisionPoint<T>(point, ignore);
 
-        public static T CheckPoint<T>(Vec2 point) => Level.current.CollisionPoint<T>(point);
+        public static T CheckPoint<T>(Vec2 point) => current.CollisionPoint<T>(point);
 
-        public static T CheckPointPlacementLayer<T>(Vec2 point, Thing ignore = null, Layer layer = null) => Level.current.CollisionPointPlacementLayer<T>(point, ignore, layer);
+        public static T CheckPointPlacementLayer<T>(Vec2 point, Thing ignore = null, Layer layer = null) => current.CollisionPointPlacementLayer<T>(point, ignore, layer);
 
-        public static IEnumerable<T> CheckPointAll<T>(float x, float y, Layer layer) => Level.current.CollisionPointAll<T>(new Vec2(x, y), layer);
+        public static IEnumerable<T> CheckPointAll<T>(float x, float y, Layer layer) => current.CollisionPointAll<T>(new Vec2(x, y), layer);
 
-        public static IEnumerable<T> CheckPointAll<T>(float x, float y) => Level.current.CollisionPointAll<T>(new Vec2(x, y));
+        public static IEnumerable<T> CheckPointAll<T>(float x, float y) => current.CollisionPointAll<T>(new Vec2(x, y));
 
-        public static IEnumerable<T> CheckPointAll<T>(Vec2 point, Layer layer) => Level.current.CollisionPointAll<T>(point, layer);
+        public static IEnumerable<T> CheckPointAll<T>(Vec2 point, Layer layer) => current.CollisionPointAll<T>(point, layer);
 
-        public static IEnumerable<T> CheckPointAll<T>(Vec2 point) => Level.current.CollisionPointAll<T>(point);
+        public static IEnumerable<T> CheckPointAll<T>(Vec2 point) => current.CollisionPointAll<T>(point);
 
         public T CollisionPoint<T>(float x, float y, Thing ignore, Layer layer) => CollisionPoint<T>(new Vec2(x, y), ignore, layer);
 
@@ -1302,28 +1302,28 @@ namespace DuckGame
 
         public T NearestThing<T>(Vec2 point, Thing ignore, Layer layer)
         {
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             Thing thing = !(key == typeof(Thing)) ? nearest_single(point, _things[key], ignore, layer) : nearest_single(point, _things[typeof(Thing)], ignore, layer);
             return thing == null ? default(T) : (T)(object)thing;
         }
 
         public T NearestThing<T>(Vec2 point, Thing ignore)
         {
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             Thing thing = !(key == typeof(Thing)) ? nearest_single(point, _things[key], ignore) : nearest_single(point, _things[typeof(Thing)], ignore);
             return thing == null ? default(T) : (T)(object)thing;
         }
 
         public T NearestThing<T>(Vec2 point)
         {
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             Thing thing = !(key == typeof(Thing)) ? nearest_single(point, _things[key]) : nearest_single(point, _things[typeof(Thing)]);
             return thing == null ? default(T) : (T)(object)thing;
         }
 
         public T NearestThing<T>(Vec2 point, Thing ignore, int nearIndex, Layer layer)
         {
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             if (key == typeof(Thing))
             {
                 List<KeyValuePair<float, Thing>> keyValuePairList = nearest(point, _things[typeof(Thing)], ignore, layer);
@@ -1336,7 +1336,7 @@ namespace DuckGame
 
         public T NearestThing<T>(Vec2 point, Thing ignore, int nearIndex)
         {
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             if (key == typeof(Thing))
             {
                 List<KeyValuePair<float, Thing>> keyValuePairList = nearest(point, _things[typeof(Thing)], ignore);
@@ -1532,7 +1532,7 @@ namespace DuckGame
 
         public T CollisionRectFilter<T>(Vec2 p1, Vec2 p2, Predicate<T> filter)
         {
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             //System.Type key = typeof(T);
             //foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             //{
@@ -1591,14 +1591,14 @@ namespace DuckGame
         public List<T> CollisionRectAll<T>(Vec2 p1, Vec2 p2, List<T> outList) // old DG
         {
             List<T> outList1 = outList == null ? new List<T>() : outList;
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Rect(p1, p2, dynamicObject))
                     outList1.Add((T)(object)dynamicObject);
             }
             if (_things.HasStaticObjects(key))
-                _things.quadTree.CheckRectangleAll<T>(p1, p2, outList1);
+                _things.quadTree.CheckRectangleAll(p1, p2, outList1);
             return outList1;
         }
         public List<T> CollisionRectAllDan<T>(Vec2 p1, Vec2 p2, List<T> outList)
@@ -1625,7 +1625,7 @@ namespace DuckGame
 
         public T CollisionLine<T>(Vec2 p1, Vec2 p2, Thing ignore)
         {
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && dynamicObject != ignore && Collision.Line(p1, p2, dynamicObject))
@@ -1636,7 +1636,7 @@ namespace DuckGame
 
         public T CollisionLine<T>(Vec2 p1, Vec2 p2)
         {
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             foreach (Thing thing in this.things.CollisionLineAll(p1, p2, key))
             {
                 if (!thing.removeFromLevel && Collision.Line(p1, p2, thing))
@@ -1649,7 +1649,7 @@ namespace DuckGame
         public T CollisionLine<T>(Vec2 p1, Vec2 p2, out Vec2 position, Thing ignore)
         {
             position = new Vec2(0f, 0f);
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && dynamicObject != ignore)
@@ -1668,7 +1668,7 @@ namespace DuckGame
         public T CollisionLine<T>(Vec2 p1, Vec2 p2, out Vec2 position)
         {
             position = new Vec2(0f, 0f);
-            System.Type key = typeof(T);
+            Type key = typeof(T);
 
             foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
@@ -1687,8 +1687,8 @@ namespace DuckGame
 
         public IEnumerable<T> CollisionLineAll<T>(Vec2 p1, Vec2 p2)
         {
-            List<object> nextCollisionList = Level.GetNextCollisionList();
-            System.Type key = typeof(T);
+            List<object> nextCollisionList = GetNextCollisionList();
+            Type key = typeof(T);
             foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Line(p1, p2, dynamicObject))
@@ -1699,12 +1699,12 @@ namespace DuckGame
                 List<T> source = _things.quadTree.CheckLineAll<T>(p1, p2);
                 nextCollisionList.AddRange(source.Cast<object>());
             }
-            return nextCollisionList.AsEnumerable<object>().Cast<T>();
+            return nextCollisionList.AsEnumerable().Cast<T>();
         }
 
         public T CollisionPoint<T>(Vec2 point, Thing ignore, Layer layer)
         {
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             if (key == typeof(Thing))
             {
                 foreach (Thing thing in _things)
@@ -1723,7 +1723,7 @@ namespace DuckGame
 
         public T CollisionPoint<T>(Vec2 point, Thing ignore)
         {
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             if (key == typeof(Thing))
             {
                 foreach (Thing thing in _things)
@@ -1740,7 +1740,7 @@ namespace DuckGame
             return _things.HasStaticObjects(key) ? _things.quadTree.CheckPoint<T>(point, ignore) : default(T);
         }
 
-        public Thing CollisionPoint(System.Type pType, Vec2 point, Thing ignore)
+        public Thing CollisionPoint(Type pType, Vec2 point, Thing ignore)
         {
             if (pType == typeof(Thing))
             {
@@ -1787,7 +1787,7 @@ namespace DuckGame
         }
         public T QuadTreePointFilter<T>(Vec2 point, Func<Thing, bool> pFilter) => _things.HasStaticObjects(typeof(T)) ? _things.quadTree.CheckPointFilter<T>(point, pFilter) : default(T);
 
-        public Thing CollisionPoint(Vec2 point, System.Type t, Thing ignore, Layer layer)
+        public Thing CollisionPoint(Vec2 point, Type t, Thing ignore, Layer layer)
         {
             if (t == typeof(Thing))
             {
@@ -1805,7 +1805,7 @@ namespace DuckGame
             return _things.HasStaticObjects(t) ? _things.quadTree.CheckPoint(point, t, ignore, layer) : null;
         }
 
-        public Thing CollisionPoint(Vec2 point, System.Type t, Thing ignore)
+        public Thing CollisionPoint(Vec2 point, Type t, Thing ignore)
         {
             if (t == typeof(Thing))
             {
@@ -1823,7 +1823,7 @@ namespace DuckGame
             return _things.HasStaticObjects(t) ? _things.quadTree.CheckPoint(point, t, ignore) : null;
         }
 
-        public Thing CollisionPoint(Vec2 point, System.Type t)
+        public Thing CollisionPoint(Vec2 point, Type t)
         {
             if (t == typeof(Thing))
             {
@@ -1843,7 +1843,7 @@ namespace DuckGame
 
         public T CollisionPointPlacementLayer<T>(Vec2 point, Thing ignore = null, Layer layer = null)
         {
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             if (key == typeof(Thing))
             {
                 foreach (Thing thing in _things)
@@ -1862,7 +1862,7 @@ namespace DuckGame
 
         public T CollisionPointFilter<T>(Vec2 point, Predicate<Thing> filter)
         {
-            System.Type key = typeof(T);
+            Type key = typeof(T);
             if (key == typeof(Thing))
             {
                 foreach (Thing thing in _things)
@@ -1881,8 +1881,8 @@ namespace DuckGame
 
         public IEnumerable<T> CollisionPointAll<T>(Vec2 point, Layer layer)
         {
-            List<object> nextCollisionList = Level.GetNextCollisionList();
-            System.Type key = typeof(T);
+            List<object> nextCollisionList = GetNextCollisionList();
+            Type key = typeof(T);
             foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Point(point, dynamicObject) && (layer == null || layer == dynamicObject.layer))
@@ -1894,7 +1894,7 @@ namespace DuckGame
                 if (obj != null)
                     nextCollisionList.Add(obj);
             }
-            return nextCollisionList.AsEnumerable<object>().Cast<T>();
+            return nextCollisionList.AsEnumerable().Cast<T>();
         }
 
         //public IEnumerable<T> CollisionPointAll<T>(Vec2 point)
@@ -1916,14 +1916,14 @@ namespace DuckGame
         //}
         public IEnumerable<T> CollisionPointAll<T>(Vec2 point)
         {
-            List<object> nextCollisionList = Level.GetNextCollisionList();
+            List<object> nextCollisionList = GetNextCollisionList();
             foreach (Thing thing in things.CollisionPointAll(point, typeof(T)))
             {
                 if (!thing.removeFromLevel && Collision.Point(point, thing))
                     nextCollisionList.Add(thing);
 
             }
-            return nextCollisionList.AsEnumerable<object>().Cast<T>();
+            return nextCollisionList.AsEnumerable().Cast<T>();
         }
         //public ICollection<Thing> CollisionPointAll(Vec2 point)
         //{
@@ -1943,13 +1943,13 @@ namespace DuckGame
             }
         }
 
-        public static T CheckRay<T>(Vec2 start, Vec2 end) => Level.current.CollisionRay<T>(start, end);
+        public static T CheckRay<T>(Vec2 start, Vec2 end) => current.CollisionRay<T>(start, end);
 
-        public T CollisionRay<T>(Vec2 start, Vec2 end) => Level.CheckRay<T>(start, end, out Vec2 _);
+        public T CollisionRay<T>(Vec2 start, Vec2 end) => CheckRay<T>(start, end, out Vec2 _);
 
-        public static T CheckRay<T>(Vec2 start, Vec2 end, out Vec2 hitPos) => Level.current.CollisionRay<T>(start, end, out hitPos);
+        public static T CheckRay<T>(Vec2 start, Vec2 end, out Vec2 hitPos) => current.CollisionRay<T>(start, end, out hitPos);
 
-        public static T CheckRay<T>(Vec2 start, Vec2 end, Thing ignore, out Vec2 hitPos) => Level.current.CollisionRay<T>(start, end, ignore, out hitPos);
+        public static T CheckRay<T>(Vec2 start, Vec2 end, Thing ignore, out Vec2 hitPos) => current.CollisionRay<T>(start, end, ignore, out hitPos);
 
         public T CollisionRay<T>(Vec2 start, Vec2 end, out Vec2 hitPos)
         {
@@ -1962,7 +1962,7 @@ namespace DuckGame
             while (travelInfoStack.Count > 0)
             {
                 TravelInfo travelInfo = travelInfoStack.Pop();
-                if (Level.current.CollisionLine<T>(travelInfo.p1, travelInfo.p2) != null)
+                if (current.CollisionLine<T>(travelInfo.p1, travelInfo.p2) != null)
                 {
                     if (travelInfo.length < 8.0)
                     {
@@ -1994,7 +1994,7 @@ namespace DuckGame
             while (travelInfoStack.Count > 0)
             {
                 TravelInfo travelInfo = travelInfoStack.Pop();
-                if (Level.current.CollisionLine<T>(travelInfo.p1, travelInfo.p2, ignore) != null)
+                if (current.CollisionLine<T>(travelInfo.p1, travelInfo.p2, ignore) != null)
                 {
                     if (travelInfo.length < 8.0)
                     {
@@ -2022,7 +2022,7 @@ namespace DuckGame
             do
             {
                 --num;
-                T obj = Level.current.CollisionPoint<T>(point);
+                T obj = current.CollisionPoint<T>(point);
                 if (obj != null)
                 {
                     hit = point;
@@ -2042,7 +2042,7 @@ namespace DuckGame
             do
             {
                 --num;
-                T obj = Level.current.CollisionPoint<T>(point, ignore);
+                T obj = current.CollisionPoint<T>(point, ignore);
                 if (obj != null)
                 {
                     hit = point;

@@ -16,10 +16,10 @@ namespace DuckGame
 
         public static string customBackground01
         {
-            get => Custom.data[CustomBackground._customType][0];
+            get => Custom.data[_customType][0];
             set
             {
-                Custom.data[CustomBackground._customType][0] = value;
+                Custom.data[_customType][0] = value;
                 Custom.Clear(CustomType.Background, value);
             }
         }
@@ -39,7 +39,7 @@ namespace DuckGame
 
         public void UpdateCurrentTileset()
         {
-            CustomTileData data = Custom.GetData(customIndex, CustomBackground._customType);
+            CustomTileData data = Custom.GetData(customIndex, _customType);
             int num = 0;
             if (graphic is SpriteMap)
                 num = _frame;
@@ -48,12 +48,12 @@ namespace DuckGame
             else
                 graphic = new SpriteMap("blueprintTileset", 16, 16);
             (graphic as SpriteMap).frame = num;
-            _currentTileset = Custom.data[CustomBackground._customType][customIndex];
+            _currentTileset = Custom.data[_customType][customIndex];
         }
 
         public override void Draw()
         {
-            if (Level.current is Editor && _currentTileset != Custom.data[CustomBackground._customType][customIndex])
+            if (Level.current is Editor && _currentTileset != Custom.data[_customType][customIndex])
                 UpdateCurrentTileset();
             base.Draw();
         }

@@ -17,12 +17,12 @@ namespace DuckGame
 {
     internal class WorkshopBrowser : Level
     {
-        private List<WorkshopBrowser.Group> groups = new List<WorkshopBrowser.Group>();
+        private List<Group> groups = new List<Group>();
         private SpriteMap _quackLoader;
         private FancyBitmapFont _font;
         private int _selectedGroup;
         private int _selectedItem;
-        private WorkshopBrowser.Item _openedItem;
+        private Item _openedItem;
 
         public override void Initialize()
         {
@@ -35,19 +35,19 @@ namespace DuckGame
             _font = new FancyBitmapFont("smallFont");
             Layer.HUD.camera.width *= 2f;
             Layer.HUD.camera.height *= 2f;
-            groups.Add(new WorkshopBrowser.Group("Subscribed", WorkshopQueryFilterOrder.RankedByVote, Steam.user.id, null, new string[1]
+            groups.Add(new Group("Subscribed", WorkshopQueryFilterOrder.RankedByVote, Steam.user.id, null, new string[1]
             {
         "Mod"
             }));
-            groups.Add(new WorkshopBrowser.Group("Hats", WorkshopQueryFilterOrder.RankedByVote, 0UL, "hat", new string[1]
+            groups.Add(new Group("Hats", WorkshopQueryFilterOrder.RankedByVote, 0UL, "hat", new string[1]
             {
         "Mod"
             }));
-            groups.Add(new WorkshopBrowser.Group("Mods", WorkshopQueryFilterOrder.RankedByVote, 0UL, null, new string[1]
+            groups.Add(new Group("Mods", WorkshopQueryFilterOrder.RankedByVote, 0UL, null, new string[1]
             {
         "Mod"
             }));
-            groups.Add(new WorkshopBrowser.Group("Maps", WorkshopQueryFilterOrder.RankedByVote, 0UL, null, new string[1]
+            groups.Add(new Group("Maps", WorkshopQueryFilterOrder.RankedByVote, 0UL, null, new string[1]
             {
         "Map"
             }));
@@ -96,7 +96,7 @@ namespace DuckGame
                     _font.scale = new Vec2(1f, 1f);
                     _font.Draw(_openedItem.name, new Vec2(16f, 16f), Color.White, (Depth)0.5f);
                     if (_openedItem.preview != null)
-                        DuckGame.Graphics.Draw(_openedItem.preview, 16f, 32f, (float)(256.0 / _openedItem.preview.height * 0.5), (float)(256.0 / _openedItem.preview.height * 0.5), (Depth)0.5f);
+                        Graphics.Draw(_openedItem.preview, 16f, 32f, (float)(256.0 / _openedItem.preview.height * 0.5), (float)(256.0 / _openedItem.preview.height * 0.5), (Depth)0.5f);
                     _font.maxWidth = 300;
                     _font.Draw(_openedItem.description, new Vec2(16f, 170f), Color.White, (Depth)0.5f);
                     _font.maxWidth = 0;
@@ -106,13 +106,13 @@ namespace DuckGame
                     Vec2 pos = new Vec2(32f, 16f);
                     Vec2 vec2_1 = new Vec2(64f, 64f);
                     int num1 = 0;
-                    foreach (WorkshopBrowser.Group group in groups)
+                    foreach (Group group in groups)
                     {
                         Vec2 vec2_2 = pos + new Vec2(0f, 12f);
                         _font.scale = new Vec2(1f, 1f);
                         _font.Draw(group.name, pos, Color.White, (Depth)0.5f);
                         int num2 = 0;
-                        foreach (WorkshopBrowser.Item obj in group.items)
+                        foreach (Item obj in group.items)
                         {
                             Vec2 vec2_3 = new Vec2(0f);
                             float num3 = 0.25f;
@@ -120,7 +120,7 @@ namespace DuckGame
                             if (num1 == _selectedGroup && num2 == _selectedItem)
                             {
                                 vec2_3 = new Vec2(-4f, -4f);
-                                DuckGame.Graphics.DrawRect(vec2_2 + vec2_3 + new Vec2(-1f, -1f), vec2_2 + vec2_3 + vec2_1 + new Vec2(8f, 8f) + new Vec2(1f, 1f), Color.White, (Depth)0.5f, false, 2f);
+                                Graphics.DrawRect(vec2_2 + vec2_3 + new Vec2(-1f, -1f), vec2_2 + vec2_3 + vec2_1 + new Vec2(8f, 8f) + new Vec2(1f, 1f), Color.White, (Depth)0.5f, false, 2f);
                                 num3 = 0.28f;
                                 num4 = 0.5f;
                             }
@@ -128,14 +128,14 @@ namespace DuckGame
                             {
                                 float num5 = 256f / obj.preview.height;
                                 float x = obj.preview.width / 2 - obj.preview.height / 2;
-                                DuckGame.Graphics.Draw(obj.preview, vec2_2 + vec2_3, new Rectangle?(new Rectangle(x, 0f, obj.preview.height, obj.preview.height)), Color.White, 0f, Vec2.Zero, new Vec2(num5 * num3, num5 * num3), SpriteEffects.None, (Depth)num4);
+                                Graphics.Draw(obj.preview, vec2_2 + vec2_3, new Rectangle?(new Rectangle(x, 0f, obj.preview.height, obj.preview.height)), Color.White, 0f, Vec2.Zero, new Vec2(num5 * num3, num5 * num3), SpriteEffects.None, (Depth)num4);
                             }
                             else
-                                DuckGame.Graphics.Draw(_quackLoader, vec2_2.x + vec2_1.x / 2f, vec2_2.y + vec2_1.y / 2f);
+                                Graphics.Draw(_quackLoader, vec2_2.x + vec2_1.x / 2f, vec2_2.y + vec2_1.y / 2f);
                             _font.scale = new Vec2(0.5f, 0.5f);
                             string text = obj.name.Reduced(21);
                             _font.Draw(text, vec2_2 + vec2_3 + new Vec2(2f, 2f), Color.White, (Depth)(num4 + 0.1f));
-                            DuckGame.Graphics.DrawRect(vec2_2 + vec2_3 + new Vec2(1f, 1f), vec2_2 + vec2_3 + new Vec2(_font.GetWidth(text) + 6f, 8f), Color.Black * 0.7f, (Depth)(num4 + 0.05f));
+                            Graphics.DrawRect(vec2_2 + vec2_3 + new Vec2(1f, 1f), vec2_2 + vec2_3 + new Vec2(_font.GetWidth(text) + 6f, 8f), Color.Black * 0.7f, (Depth)(num4 + 0.05f));
                             vec2_2.x += vec2_1.x;
                             if (vec2_2.x + vec2_1.x <= Layer.HUD.width)
                                 ++num2;
@@ -156,7 +156,7 @@ namespace DuckGame
             public WorkshopQueryResultDetails details;
             private Tex2D _preview;
             public PNGData _previewData;
-            private static Dictionary<ulong, WorkshopBrowser.Item> _items = new Dictionary<ulong, WorkshopBrowser.Item>();
+            private static Dictionary<ulong, Item> _items = new Dictionary<ulong, Item>();
 
             public string name => details.title;
 
@@ -167,17 +167,17 @@ namespace DuckGame
                     if (_preview == null && _previewData != null)
                     {
                         _preview = new Tex2D(_previewData.width, _previewData.height);
-                        _preview.SetData<int>(_previewData.data);
+                        _preview.SetData(_previewData.data);
                     }
                     return _preview;
                 }
             }
 
-            public static WorkshopBrowser.Item Get(ulong pID)
+            public static Item Get(ulong pID)
             {
                 Item obj;
-                if (!WorkshopBrowser.Item._items.TryGetValue(pID, out obj))
-                    obj = WorkshopBrowser.Item._items[pID] = new WorkshopBrowser.Item();
+                if (!_items.TryGetValue(pID, out obj))
+                    obj = _items[pID] = new Item();
                 return obj;
             }
 
@@ -189,7 +189,7 @@ namespace DuckGame
         private class Group
         {
             public string name;
-            public List<WorkshopBrowser.Item> items = new List<WorkshopBrowser.Item>();
+            public List<Item> items = new List<Item>();
             public List<string> tags;
             public string searchText;
             public ulong userID;
@@ -205,7 +205,7 @@ namespace DuckGame
             {
                 name = pName;
                 orderMode = pOrder;
-                tags = pTags.ToList<string>();
+                tags = pTags.ToList();
                 searchText = pSearchText;
                 userID = pUserID;
                 OpenPage(0);
@@ -233,7 +233,7 @@ namespace DuckGame
 
             private void Fetched(object sender, WorkshopQueryResult result)
             {
-                WorkshopBrowser.Item item = WorkshopBrowser.Item.Get(result.details.publishedFile.id);
+                Item item = Item.Get(result.details.publishedFile.id);
                 if (item.preview == null)
                 {
                     string previewUrl = result.previewURL;

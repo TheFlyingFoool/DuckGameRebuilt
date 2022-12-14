@@ -70,7 +70,7 @@ namespace DuckGame
             }
         }
 
-        public override float currentGravity => PhysicsObject.gravity * gravMultiplier * floatMultiplier * extraGravMultiplier;
+        public override float currentGravity => gravity * gravMultiplier * floatMultiplier * extraGravMultiplier;
 
         public byte netPart
         {
@@ -254,7 +254,7 @@ namespace DuckGame
             if (_doll == null)
                 return false;
             if (bullet.isLocal && owner == null)
-                Thing.Fondle(_doll, DuckNetwork.localConnection);
+                Fondle(_doll, DuckNetwork.localConnection);
             if (bullet.isLocal && _doll.captureDuck != null)
             {
                 Duck captureDuck = _doll.captureDuck;

@@ -24,7 +24,7 @@ namespace DuckGame
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("START", new UIMenuActionChangeLevel(menu, new TeamSelect2())), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionChangeLevel(menu, new TitleScreen())), true);
-            Level.Add(menu);
+            Add(menu);
             base.Initialize();
         }
 

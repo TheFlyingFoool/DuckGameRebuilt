@@ -13,7 +13,7 @@ namespace DuckGame
     {
         private float _range = 1f;
 
-        public override System.Type type => typeof(int);
+        public override Type type => typeof(int);
 
         public int GetCompressedFloat(float val)
         {

@@ -11,7 +11,7 @@ namespace DuckGame
 {
     public class SpawnerBall : Thing
     {
-        public System.Type contains;
+        public Type contains;
         protected SpriteMap _sprite;
         private bool _secondBall;
         private float _wave;

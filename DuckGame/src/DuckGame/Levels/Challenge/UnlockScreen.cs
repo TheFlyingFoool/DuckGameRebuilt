@@ -212,14 +212,14 @@ namespace DuckGame
             _tree.alpha = alpha;
             if (alpha > 0.9f)
             {
-                UnlockScreen.open = true;
+                open = true;
                 if (!Input.Pressed("CANCEL"))
                     return;
                 SFX.Play("menu_back");
                 quitOut = true;
             }
             else
-                UnlockScreen.open = false;
+                open = false;
         }
 
         public override void Draw()

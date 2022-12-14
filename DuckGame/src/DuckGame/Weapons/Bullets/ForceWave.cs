@@ -61,7 +61,7 @@ namespace DuckGame
                         else if (!isServerForObject)
                             continue;
                         if (_waveOwner != null)
-                            Thing.Fondle(materialThing, _waveOwner.connection);
+                            Fondle(materialThing, _waveOwner.connection);
                         if (materialThing is Grenade grenade)
                             grenade.PressAction();
                         if (materialThing is PhysicsObject)
@@ -80,14 +80,14 @@ namespace DuckGame
                     foreach (Door t in Level.CheckRectAll<Door>(topLeft, bottomRight))
                     {
                         if (_waveOwner != null)
-                            Thing.Fondle(t, _waveOwner.connection);
+                            Fondle(t, _waveOwner.connection);
                         if (!t.destroyed)
                             t.Destroy(new DTImpact(this));
                     }
                     foreach (Window t in Level.CheckRectAll<Window>(topLeft, bottomRight))
                     {
                         if (_waveOwner != null)
-                            Thing.Fondle(t, _waveOwner.connection);
+                            Fondle(t, _waveOwner.connection);
                         if (!t.destroyed)
                             t.Destroy(new DTImpact(this));
                     }

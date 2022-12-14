@@ -28,11 +28,11 @@ namespace DuckGame
         {
             get
             {
-                if (RockScoreboard._returnLevel == null)
+                if (_returnLevel == null)
                 {
-                    RockScoreboard._returnLevel = new GameLevel(Deathmatch.RandomLevelString("", "deathmatch"), 0, false, false);
+                    _returnLevel = new GameLevel(Deathmatch.RandomLevelString("", "deathmatch"), 0, false, false);
                 }
-                return RockScoreboard._returnLevel;
+                return _returnLevel;
             }
         }
 
@@ -53,7 +53,7 @@ namespace DuckGame
             this._afterHighlights = afterHighlights;
             if (Network.isServer)
             {
-                RockScoreboard._returnLevel = r;
+                _returnLevel = r;
             }
             this._mode = mode;
             if (mode == ScoreBoardMode.ShowWinner)
@@ -110,12 +110,12 @@ namespace DuckGame
         {
             get
             {
-                return base.camera.y;
+                return camera.y;
             }
             set
             {
-                base.camera.y = value;
-                this._field.ypos = base.camera.y * 1.4f;
+                camera.y = value;
+                this._field.ypos = camera.y * 1.4f;
             }
         }
 
@@ -204,7 +204,7 @@ namespace DuckGame
                     {
                         InputObject o = new InputObject();
                         o.profileNumber = (sbyte)idx;
-                        Level.Add(o);
+                        Add(o);
                         this._inputs.Add(o);
                         idx++;
                     }
@@ -217,12 +217,12 @@ namespace DuckGame
             }
             this._weather = new RockWeather(this);
             this._weather.Start();
-            Level.Add(this._weather);
+            Add(this._weather);
             for (int i = 0; i < 350; i++)
             {
                 this._weather.Update();
             }
-            if (RockScoreboard._sunEnabled)
+            if (_sunEnabled)
             {
                 float aspect = 0.5625f;
                 this._sunshineTarget = new RenderTarget2D(Graphics.width / 12, (int)(Graphics.width * aspect) / 12, false);
@@ -239,7 +239,7 @@ namespace DuckGame
                 tthing.yscale = 1f;
                 tthing.collisionSize = new Vec2(1f, 1f);
                 tthing.collisionOffset = new Vec2(0f, 0f);
-                Level.Add(tthing);
+                Add(tthing);
                 this.sunThing = tthing;
                 SpriteThing rbow = new SpriteThing(150f, 80f, new Sprite("rainbow", 0f, 0f));
                 rbow.shouldbegraphicculled = false;
@@ -252,7 +252,7 @@ namespace DuckGame
                 rbow.color = new Color(100, 100, 100);
                 rbow.collisionSize = new Vec2(1f, 1f);
                 rbow.collisionOffset = new Vec2(0f, 0f);
-                Level.Add(rbow);
+                Add(rbow);
                 this.rainbowThing = rbow;
                 this.rainbowThing.visible = false;
                 SpriteThing rbow2 = new SpriteThing(150f, 80f, new Sprite("rainbow", 0f, 0f));
@@ -265,12 +265,12 @@ namespace DuckGame
                 rbow2.color = new Color(255, 255, 255, 90);
                 rbow2.collisionSize = new Vec2(1f, 1f);
                 rbow2.collisionOffset = new Vec2(0f, 0f);
-                Level.Add(rbow2);
+                Add(rbow2);
                 this.rainbowThing2 = rbow2;
                 this.rainbowThing2.visible = false;
             }
             List<Team> random = Teams.allRandomized;
-            if (!Network.isActive && RockScoreboard.returnLevel == null)
+            if (!Network.isActive && returnLevel == null)
             {
                 random[0].Join(Profiles.DefaultPlayer1, true);
                 random[1].Join(Profiles.DefaultPlayer2, true);
@@ -280,7 +280,7 @@ namespace DuckGame
                 Teams.Player4.score = 4;
             }
             this._crowd = new Crowd();
-            Level.Add(this._crowd);
+            Add(this._crowd);
             Crowd.mood = Mood.Calm;
             this._field = new FieldBackground("FIELD", 9999);
             Layer.Add(this._field);
@@ -318,7 +318,7 @@ namespace DuckGame
             foreach (Team tea in teams)
             {
                 tea.rockScore = tea.score;
-                if (RockScoreboard.wallMode && this._mode == ScoreBoardMode.ShowScores)
+                if (wallMode && this._mode == ScoreBoardMode.ShowScores)
                 {
                     tea.score = Math.Min(tea.score, GameMode.winsPerSet);
                 }
@@ -332,7 +332,7 @@ namespace DuckGame
             }
             if (Network.isActive)
             {
-                Level.Add(new HostTable(160f, 170f));
+                Add(new HostTable(160f, 170f));
             }
             bool smallMode = teams.Count > 4;
             if (this._mode == ScoreBoardMode.ShowScores)
@@ -370,7 +370,7 @@ namespace DuckGame
                     int dif = t3.prevScoreboardScore;
                     int total = GameMode.winsPerSet * 2;
                     int rlScore = t3.score;
-                    if (RockScoreboard.wallMode && rlScore > GameMode.winsPerSet)
+                    if (wallMode && rlScore > GameMode.winsPerSet)
                     {
                         rlScore = GameMode.winsPerSet;
                     }
@@ -415,14 +415,14 @@ namespace DuckGame
                     {
                         if (p3 == activeThrower)
                         {
-                            RockScoreboard.initializingDucks = true;
+                            initializingDucks = true;
                             this._slots[plane].duck = new RockThrowDuck(xpos - duckPos * 10, ypos - 16f, p3);
                             this._slots[plane].duck.planeOfExistence = plane;
                             this._slots[plane].duck.ignoreGhosting = true;
                             this._slots[plane].duck.forceMindControl = true;
-                            Level.Add(this._slots[plane].duck);
+                            Add(this._slots[plane].duck);
                             this._slots[plane].duck.connection = DuckNetwork.localConnection;
-                            RockScoreboard.initializingDucks = false;
+                            initializingDucks = false;
                             TeamHat h = this._slots[this._slots.Count - 1].duck.GetEquipment(typeof(TeamHat)) as TeamHat;
                             if (h != null)
                             {
@@ -441,7 +441,7 @@ namespace DuckGame
                             this._slots[this._slots.Count - 1].rock.shouldbegraphicculled = false;
                             this._slots[this._slots.Count - 1].rock.planeOfExistence = plane;
                             this._slots[this._slots.Count - 1].rock.ignoreGhosting = true;
-                            Level.Add(this._slots[this._slots.Count - 1].rock);
+                            Add(this._slots[this._slots.Count - 1].rock);
                             this._slots[this._slots.Count - 1].rock.z = zpos;
                             this._slots[this._slots.Count - 1].rock.depth = this._slots[this._slots.Count - 1].duck.depth + 1;
                             this._slots[this._slots.Count - 1].rock.grounded = true;
@@ -449,13 +449,13 @@ namespace DuckGame
                         }
                         else
                         {
-                            RockScoreboard.initializingDucks = true;
+                            initializingDucks = true;
                             Duck d = new RockThrowDuck(xpos - duckPos * 12, ypos - 16f, p3);
                             d.forceMindControl = true;
                             d.planeOfExistence = plane;
                             d.ignoreGhosting = true;
-                            Level.Add(d);
-                            RockScoreboard.initializingDucks = false;
+                            Add(d);
+                            initializingDucks = false;
                             d.depth = deep;
                             d.z = zpos;
                             d.derpMindControl = false;
@@ -478,7 +478,7 @@ namespace DuckGame
                 }
                 for (int j = 0; j < DG.MaxPlayers; j++)
                 {
-                    Level.Add(new Block(-50f, 0f, 1200f, 32f, PhysicsMaterial.Default)
+                    Add(new Block(-50f, 0f, 1200f, 32f, PhysicsMaterial.Default)
                     {
                         planeOfExistence = (byte)j
                     });
@@ -494,9 +494,9 @@ namespace DuckGame
             }
             else if (this._mode == ScoreBoardMode.ShowWinner)
             {
-                Level.core.gameFinished = true;
+                core.gameFinished = true;
                 PurpleBlock.Reset();
-                Level.core.gameInProgress = false;
+                core.gameInProgress = false;
                 if (Teams.active.Count > 1 && !this._afterHighlights)
                 {
                     Global.data.matchesPlayed += 1;
@@ -514,7 +514,7 @@ namespace DuckGame
                                 }
                             }
                         }
-                        if (DuckNetwork.localProfile != null && DuckNetwork.localProfile.slotType == SlotType.Spectator && DuckNetwork.profiles.Where<Profile>(x => x.connection == DuckNetwork.localConnection).Count<Profile>() == 1 && DuckNetwork._xpEarned.Count == 0)
+                        if (DuckNetwork.localProfile != null && DuckNetwork.localProfile.slotType == SlotType.Spectator && DuckNetwork.profiles.Where(x => x.connection == DuckNetwork.localConnection).Count() == 1 && DuckNetwork._xpEarned.Count == 0)
                             DuckNetwork.GiveXP("Observer Bonus", 0, 50);
                     }
                     DuckNetwork.finishedMatch = true;
@@ -563,7 +563,7 @@ namespace DuckGame
                     if (!inserted)
                     {
                         positions.Add(new List<Team>());
-                        positions.Last<List<Team>>().Add(t4);
+                        positions.Last().Add(t4);
                     }
                 }
                 this._winningTeam = teams[0];
@@ -575,11 +575,11 @@ namespace DuckGame
                 {
                     if (Network.isServer)
                     {
-                        Level.Add(new FloorWindow(10f, -5f));
-                        Level.Add(new Trombone(10f, -15f));
-                        Level.Add(new Saxaphone(14f, -15f));
-                        Level.Add(new Trumpet(6f, -15f));
-                        Level.Add(new Trumpet(8f, -15f));
+                        Add(new FloorWindow(10f, -5f));
+                        Add(new Trombone(10f, -15f));
+                        Add(new Saxaphone(14f, -15f));
+                        Add(new Trumpet(6f, -15f));
+                        Add(new Trumpet(8f, -15f));
                     }
                     if (Network.isActive)
                     {
@@ -593,7 +593,7 @@ namespace DuckGame
                     {
                         foreach (Team t5 in list)
                         {
-                            Level.Add(new Pedestal(center + pedestalIndex * (smallMode ? 24 : 42), 150f, t5, placeIndex, smallMode));
+                            Add(new Pedestal(center + pedestalIndex * (smallMode ? 24 : 42), 150f, t5, placeIndex, smallMode));
                             pedestalIndex++;
                         }
                         placeIndex++;
@@ -661,8 +661,8 @@ namespace DuckGame
             this.lowestPoint = 1000f;
             this._scoreBoard = new GinormoBoard(300f, -320f, (this._mode == ScoreBoardMode.ShowScores) ? BoardMode.Points : BoardMode.Wins, teams.Count > 4);
             this._scoreBoard.z = -130f;
-            Level.Add(this._scoreBoard);
-            base.backgroundColor = new Color(0, 0, 0);
+            Add(this._scoreBoard);
+            backgroundColor = new Color(0, 0, 0);
             Music.volume = 1f;
             if (this._mode != ScoreBoardMode.ShowWinner && !this._afterHighlights)
             {
@@ -691,7 +691,7 @@ namespace DuckGame
             fieldWall.depth = 0.5f;
             fieldWall.y -= 16f;
             this._wall = new WallLayer("FIELDWALL", 80);
-            if (RockScoreboard.wallMode)
+            if (wallMode)
             {
                 this._wall.AddWallSprite(fieldWall);
             }
@@ -718,7 +718,7 @@ namespace DuckGame
                 this._fieldForeground2.AddSprite(teevee);
                 int ychange = -95;
                 Sprite c = new Sprite("rockThrow/chairBottomBack", 0f, 0f);
-                Level.Add(new SpriteThing(300f, -10f, c)
+                Add(new SpriteThing(300f, -10f, c)
                 {
                     center = new Vec2(c.w / 2, c.h / 2),
                     z = 106 + ychange,
@@ -726,7 +726,7 @@ namespace DuckGame
                     layer = Layer.Background
                 });
                 c = new Sprite("rockThrow/chairBottom", 0f, 0f);
-                Level.Add(new SpriteThing(300f, -6f, c)
+                Add(new SpriteThing(300f, -6f, c)
                 {
                     center = new Vec2(c.w / 2, c.h / 2),
                     z = 120 + ychange,
@@ -734,7 +734,7 @@ namespace DuckGame
                     layer = Layer.Background
                 });
                 c = new Sprite("rockThrow/chairFront", 0f, 0f);
-                Level.Add(new SpriteThing(300f, -9f, c)
+                Add(new SpriteThing(300f, -9f, c)
                 {
                     center = new Vec2(c.w / 2, c.h / 2),
                     z = 122 + ychange,
@@ -742,7 +742,7 @@ namespace DuckGame
                     layer = Layer.Background
                 });
                 c = new Sprite("rockThrow/tableBottomBack", 0f, 0f);
-                Level.Add(new SpriteThing(450f, -7f, c)
+                Add(new SpriteThing(450f, -7f, c)
                 {
                     center = new Vec2(c.w / 2, c.h / 2),
                     z = 106 + ychange,
@@ -750,7 +750,7 @@ namespace DuckGame
                     layer = Layer.Background
                 });
                 c = new Sprite("rockThrow/tableBottom", 0f, 0f);
-                Level.Add(new SpriteThing(450f, -7f, c)
+                Add(new SpriteThing(450f, -7f, c)
                 {
                     center = new Vec2(c.w / 2, c.h / 2),
                     z = 120 + ychange,
@@ -758,7 +758,7 @@ namespace DuckGame
                     layer = Layer.Background
                 });
                 c = new Sprite("rockThrow/keg", 0f, 0f);
-                Level.Add(new SpriteThing(460f, -24f, c)
+                Add(new SpriteThing(460f, -24f, c)
                 {
                     center = new Vec2(c.w / 2, c.h / 2),
                     z = 120 + ychange - 4,
@@ -766,7 +766,7 @@ namespace DuckGame
                     layer = Layer.Game
                 });
                 c = new Sprite("rockThrow/cup", 0f, 0f);
-                Level.Add(new SpriteThing(445f, -21f, c)
+                Add(new SpriteThing(445f, -21f, c)
                 {
                     center = new Vec2(c.w / 2, c.h / 2),
                     z = 120 + ychange - 6,
@@ -774,7 +774,7 @@ namespace DuckGame
                     layer = Layer.Game
                 });
                 c = new Sprite("rockThrow/cup", 0f, 0f);
-                Level.Add(new SpriteThing(437f, -20f, c)
+                Add(new SpriteThing(437f, -20f, c)
                 {
                     center = new Vec2(c.w / 2, c.h / 2),
                     z = 120 + ychange,
@@ -782,7 +782,7 @@ namespace DuckGame
                     layer = Layer.Game
                 });
                 c = new Sprite("rockThrow/cup", 0f, 0f);
-                Level.Add(new SpriteThing(472f, -20f, c)
+                Add(new SpriteThing(472f, -20f, c)
                 {
                     center = new Vec2(c.w / 2, c.h / 2),
                     z = 120 + ychange - 7,
@@ -793,7 +793,7 @@ namespace DuckGame
             }
             for (int l = 0; l < 3; l++)
             {
-                Level.Add(new DistanceMarker(230 + l * 175, -25f, (int)Math.Round((double)(l * GameMode.winsPerSet / 2f)))
+                Add(new DistanceMarker(230 + l * 175, -25f, (int)Math.Round((double)(l * GameMode.winsPerSet / 2f)))
                 {
                     z = 0f,
                     depth = 0.34f,
@@ -818,9 +818,9 @@ namespace DuckGame
                 spriteThing.z = 0f;
                 spriteThing.depth = 0.33f;
                 spriteThing.layer = Layer.Background;
-                Level.Add(spriteThing);
+                Add(spriteThing);
             }
-            Level.Add(new SpriteThing(600f, 0f, new Sprite("blackSquare", 0f, 0f))
+            Add(new SpriteThing(600f, 0f, new Sprite("blackSquare", 0f, 0f))
             {
                 z = -90f,
                 centery = 7f,
@@ -852,7 +852,7 @@ namespace DuckGame
         {
             get
             {
-                return RockScoreboard._drawingSunTarget;
+                return _drawingSunTarget;
             }
         }
 
@@ -860,7 +860,7 @@ namespace DuckGame
         {
             get
             {
-                return RockScoreboard._drawingLighting;
+                return _drawingLighting;
             }
         }
 
@@ -868,29 +868,29 @@ namespace DuckGame
         {
             get
             {
-                return RockScoreboard._drawingNormalTarget;
+                return _drawingNormalTarget;
             }
         }
 
         public void DoRender()
         {
-            Color backColor = base.backgroundColor;
+            Color backColor = backgroundColor;
             if (NetworkDebugger.enabled)
             {
-                RockScoreboard._drawingSunTarget = true;
+                _drawingSunTarget = true;
                 Layer.Game.camera.width = 320f;
                 Layer.Game.camera.height = 180f;
                 this._field.fade = Layer.Game.fade;
                 this._fieldForeground.fade = Layer.Game.fade;
                 this._wall.fade = Layer.Game.fade;
                 this._fieldForeground2.fade = Layer.Game.fade;
-                base.backgroundColor = backColor;
+                backgroundColor = backColor;
                 MonoMain.RenderGame(this._screenTarget);
-                RockScoreboard._drawingSunTarget = false;
+                _drawingSunTarget = false;
                 return;
             }
-            base.backgroundColor = Color.Black;
-            RockScoreboard._drawingSunTarget = true;
+            backgroundColor = Color.Black;
+            _drawingSunTarget = true;
             float hudFade = Layer.HUD.fade;
             float consoleFade = Layer.Console.fade;
             float gameFade = Layer.Game.fade;
@@ -917,9 +917,9 @@ namespace DuckGame
             Layer.blurry = true;
             this.sunThing.alpha = RockWeather.sunOpacity;
             ((SpriteThing)this.rainbowThing2).alpha = 0f;
-            RockScoreboard._drawingLighting = true;
+            _drawingLighting = true;
             MonoMain.RenderGame(this._sunshineTarget);
-            RockScoreboard._drawingLighting = false;
+            _drawingLighting = false;
             if (this._sunshineMaterialBare == null)
             {
                 this._sunshineMaterialBare = new MaterialSunshineBare();
@@ -939,7 +939,7 @@ namespace DuckGame
             Viewport viewport = Graphics.viewport;
             Graphics.SetRenderTarget(this._pixelTarget);
             Graphics.viewport = new Viewport(0, 0, this._pixelTarget.width, this._pixelTarget.height);
-            Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, base.camera.getMatrix());
+            Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
             Graphics.material = this._sunshineMaterialBare;
             float scale = this._pixelTarget.width * 2 / (float)this._sunshineTarget.width;
             Graphics.Draw(this._sunshineTarget, Vec2.Zero, null, Color.White, 0f, Vec2.Zero, new Vec2(scale), SpriteEffects.None, default(Depth));
@@ -963,7 +963,7 @@ namespace DuckGame
             Layer.Game.colorAdd = colorAdd;
             Layer.Background.colorAdd = colorAdd;
             this.fieldAddColor = colorAdd;
-            RockScoreboard._drawingSunTarget = false;
+            _drawingSunTarget = false;
             this.sunThing.x = 290f + RockWeather.sunPos.x * 8000f;
             this.sunThing.y = 10000f - RockWeather.sunPos.y * 8000f;
             this.rainbowThing.y = (this.rainbowThing2.y = 2000f + this._fieldScroll * 12f);
@@ -972,18 +972,18 @@ namespace DuckGame
             ((SpriteThing)this.rainbowThing2).alpha = this._weather.rainbowLight2;
             this.rainbowThing.visible = (this.rainbowThing.alpha > 0.01f);
             this.rainbowThing2.visible = (this.rainbowThing2.alpha > 0.01f);
-            RockScoreboard._drawingSunTarget = true;
+            _drawingSunTarget = true;
             Layer.Game.camera.width = 320f;
             Layer.Game.camera.height = 180f;
             this._field.fade = Layer.Game.fade;
             this._fieldForeground.fade = Layer.Game.fade;
             this._fieldForeground2.fade = Layer.Game.fade;
             this._wall.fade = Layer.Game.fade;
-            base.backgroundColor = backColor;
-            RockScoreboard._drawingNormalTarget = true;
+            backgroundColor = backColor;
+            _drawingNormalTarget = true;
             MonoMain.RenderGame(this._screenTarget);
-            RockScoreboard._drawingNormalTarget = false;
-            RockScoreboard._drawingSunTarget = false;
+            _drawingNormalTarget = false;
+            _drawingSunTarget = false;
         }
 
         public override void Update()
@@ -1002,12 +1002,12 @@ namespace DuckGame
                         {
                             this._netCountdown = new ContinueCountdown((this._mode == ScoreBoardMode.ShowScores) ? 5f : 15f);
                         }
-                        Level.Add(this._netCountdown);
+                        Add(this._netCountdown);
                     }
                     else
                     {
-                        IEnumerable<Thing> cd = Level.current.things[typeof(ContinueCountdown)];
-                        if (cd.Count<Thing>() > 0)
+                        IEnumerable<Thing> cd = current.things[typeof(ContinueCountdown)];
+                        if (cd.Count() > 0)
                         {
                             this._netCountdown = (cd.ElementAt(0) as ContinueCountdown);
                         }
@@ -1038,7 +1038,7 @@ namespace DuckGame
             }
             bool isServer = Network.isServer;
             Network.isServer = true;
-            base.backgroundColor = new Color(139, 204, 248) * this._backgroundFade;
+            backgroundColor = new Color(139, 204, 248) * this._backgroundFade;
             Layer.Game.fade = this._backgroundFade;
             Layer.Background.fade = this._backgroundFade;
             this._backgroundFade = Lerp.Float(this._backgroundFade, 1f, 0.02f);
@@ -1140,7 +1140,7 @@ namespace DuckGame
                                 this._droppedConfetti = true;
                                 for (int k = 0; k < 64; k++)
                                 {
-                                    Level.Add(new Confetti(this._confettiDrop + Rando.Float(-32f, 32f), this._highestSlot.rock.y - 220f - Rando.Float(50f)));
+                                    Add(new Confetti(this._confettiDrop + Rando.Float(-32f, 32f), this._highestSlot.rock.y - 220f - Rando.Float(50f)));
                                 }
                             }
                         }
@@ -1267,7 +1267,7 @@ namespace DuckGame
                                                 this._misfire = true;
                                             }
                                             slot.rock.hSpeed = reqSpeed * 0.88f;
-                                            if (RockScoreboard.wallMode && slot.duck.profile.team.rockScore > GameMode.winsPerSet)
+                                            if (wallMode && slot.duck.profile.team.rockScore > GameMode.winsPerSet)
                                             {
                                                 slot.rock.hSpeed += 1f;
                                             }
@@ -1355,7 +1355,7 @@ namespace DuckGame
                                         {
                                             slot.state = RockThrow.ShowScore;
                                             SFX.Play("scoreDing", 1f, 0f, 0f, false);
-                                            if (slot.duck.profile.team != null && RockScoreboard.wallMode && slot.duck.profile.team.rockScore > GameMode.winsPerSet)
+                                            if (slot.duck.profile.team != null && wallMode && slot.duck.profile.team.rockScore > GameMode.winsPerSet)
                                             {
                                                 slot.duck.profile.team.rockScore = GameMode.winsPerSet;
                                             }
@@ -1371,7 +1371,7 @@ namespace DuckGame
                                             if (!slot.showScore)
                                             {
                                                 slot.showScore = true;
-                                                Level.Add(new PointBoard(slot.rock, slot.duck.profile.team)
+                                                Add(new PointBoard(slot.rock, slot.duck.profile.team)
                                                 {
                                                     depth = slot.rock.depth + 1,
                                                     z = slot.rock.z
@@ -1566,7 +1566,7 @@ namespace DuckGame
                                         dif3 = total3 - 2 + Math.Min((slot2.duck.profile.team.rockScore - GameMode.winsPerSet * 2) / 16f, 1f);
                                     }
                                     slot2.rock.x = slot2.startX + 30f + dif3 / total3 * this._fieldWidth;
-                                    if (RockScoreboard.wallMode && slot2.duck.profile.team.rockScore >= GameMode.winsPerSet)
+                                    if (wallMode && slot2.duck.profile.team.rockScore >= GameMode.winsPerSet)
                                     {
                                         slot2.rock.x -= 10f;
                                     }
@@ -1586,11 +1586,11 @@ namespace DuckGame
                     }
                     else if (isServer && Network.isActive)
                     {
-                        Level.current = new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true);
+                        current = new RockScoreboard(returnLevel, ScoreBoardMode.ShowWinner, true);
                     }
                     else
                     {
-                        Level.current = new HighlightLevel(false, false);
+                        current = new HighlightLevel(false, false);
                     }
                 }
             }
@@ -1610,19 +1610,19 @@ namespace DuckGame
                         {
                             if (this._returnToScoreboard)
                             {
-                                Level.current = new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true);
+                                current = new RockScoreboard(returnLevel, ScoreBoardMode.ShowWinner, true);
                             }
                             else
                             {
                                 Main.ResetMatchStuff();
                                 if (this._hatSelect)
                                 {
-                                    Level.current = new TeamSelect2(true);
+                                    current = new TeamSelect2(true);
                                 }
                                 else if (!this._quit)
                                 {
                                     Music.Stop();
-                                    Level.current = RockScoreboard.returnLevel;
+                                    current = returnLevel;
                                     Graphics.fade = 1f;
                                 }
                                 else
@@ -1631,19 +1631,19 @@ namespace DuckGame
                                     {
                                         Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.ControlledDisconnect, "Game Over!"));
                                     }
-                                    Level.current = new TitleScreen();
+                                    current = new TitleScreen();
                                 }
                             }
                         }
                         else if (this._state != ScoreBoardState.MatchOver)
                         {
                             Music.Stop();
-                            Level.current = RockScoreboard.returnLevel;
+                            current = returnLevel;
                             Graphics.fade = 1f;
                         }
                         else
                         {
-                            Level.current = new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, false);
+                            current = new RockScoreboard(returnLevel, ScoreBoardMode.ShowWinner, false);
                         }
                     }
                 }
@@ -1711,33 +1711,33 @@ namespace DuckGame
                         {
                             int wide = Graphics.width;
                             int high = Graphics.height;
-                            if (!RockScoreboard._sunEnabled)
+                            if (!_sunEnabled)
                             {
                                 int yCut = Graphics.height / 4 * 3 + 30;
                                 Graphics.fadeAdd = 0f;
                                 Layer.Background.fade = 0.8f;
                                 this._flashSkipFrames++;
-                                RockScoreboard.finalImage = new RenderTarget2D(wide, high, false);
+                                finalImage = new RenderTarget2D(wide, high, false);
                                 Layer.Game.visible = false;
                                 Rectangle sciss = this._field.scissor;
                                 this._field.scissor = new Rectangle(0f, 0f, Resolution.size.x, yCut);
                                 this._field.visible = true;
-                                MonoMain.RenderGame(RockScoreboard.finalImage);
+                                MonoMain.RenderGame(finalImage);
                                 Layer.Game.visible = true;
-                                Color c = Level.current.backgroundColor;
-                                Level.current.backgroundColor = Color.Transparent;
-                                RockScoreboard.finalImage2 = new RenderTarget2D(wide, high, false);
+                                Color c = current.backgroundColor;
+                                current.backgroundColor = Color.Transparent;
+                                finalImage2 = new RenderTarget2D(wide, high, false);
                                 Layer.allVisible = false;
                                 Layer.Game.visible = true;
                                 yCut -= 5;
                                 this._field.scissor = new Rectangle(0f, yCut, wide, high - yCut);
                                 this._field.visible = true;
-                                MonoMain.RenderGame(RockScoreboard.finalImage2);
+                                MonoMain.RenderGame(finalImage2);
                                 this._field.scissor = sciss;
                                 Layer.allVisible = true;
-                                Level.current.backgroundColor = c;
+                                current.backgroundColor = c;
                                 this._getScreenshot = true;
-                                this._finalSprite = new Sprite(RockScoreboard.finalImage, 0f, 0f);
+                                this._finalSprite = new Sprite(finalImage, 0f, 0f);
                                 Stream stream = DuckFile.Create(DuckFile.albumDirectory + "album" + DateTime.Now.ToString("MM-dd-yy H;mm;ss") + ".png");
                                 ((Texture2D)this._finalSprite.texture.nativeObject).SaveAsPng(stream, wide, high);
                                 stream.Dispose();
@@ -1748,9 +1748,9 @@ namespace DuckGame
                                 Layer.Background.fade = 0.8f;
                                 this._weather.Update();
                                 this.DoRender();
-                                RockScoreboard.finalImage = new RenderTarget2D(wide, high, false);
-                                this.RenderFinalImage(RockScoreboard.finalImage, false);
-                                this._finalSprite = new Sprite(RockScoreboard.finalImage, 0f, 0f);
+                                finalImage = new RenderTarget2D(wide, high, false);
+                                this.RenderFinalImage(finalImage, false);
+                                this._finalSprite = new Sprite(finalImage, 0f, 0f);
                                 this._getScreenshot = true;
                                 Graphics.fadeAdd = 1f;
                                 wide = 320;
@@ -1767,7 +1767,7 @@ namespace DuckGame
                     }
                     if (this._getScreenshot && Graphics.screenCapture == null)
                     {
-                        Level.current.simulatePhysics = false;
+                        current.simulatePhysics = false;
                         this._flashSkipFrames++;
                         if (this._flashSkipFrames > 2)
                         {
@@ -1775,7 +1775,7 @@ namespace DuckGame
                         }
                         if (this._flashSkipFrames > 20)
                         {
-                            Level.current = new HighlightLevel(false, false);
+                            current = new HighlightLevel(false, false);
                         }
                     }
                 }
@@ -1831,7 +1831,7 @@ namespace DuckGame
                 this._sunshineMaterial = new MaterialSunshine(this._screenTarget);
             }
             Graphics.SetRenderTarget(image);
-            Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, base.camera.getMatrix());
+            Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
             Graphics.material = this._sunshineMaterial;
             float scale = Graphics.width / (_pixelTarget.width * (Graphics.width / 320f));
             if (shrink)
@@ -1851,12 +1851,12 @@ namespace DuckGame
                 base.DoDraw();
                 return;
             }
-            if (RockScoreboard._drawingSunTarget || !RockScoreboard._sunEnabled)
+            if (_drawingSunTarget || !_sunEnabled)
             {
                 base.DoDraw();
                 return;
             }
-            if (RockScoreboard._sunEnabled)
+            if (_sunEnabled)
             {
                 this.DoRender();
             }
@@ -1867,14 +1867,14 @@ namespace DuckGame
             }
             if (NetworkDebugger.enabled)
             {
-                Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, base.camera.getMatrix());
+                Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
                 float scale = Graphics.width / (_screenTarget.width * (Graphics.width / 320f));
                 Graphics.Draw(this._screenTarget, Vec2.Zero, null, Color.White, 0f, Vec2.Zero, new Vec2(scale), SpriteEffects.None, default(Depth));
                 Graphics.material = null;
                 Graphics.screen.End();
                 return;
             }
-            Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, base.camera.getMatrix());
+            Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
             Graphics.material = this._sunshineMaterial;
             float scale2 = Graphics.width / (_pixelTarget.width * (Graphics.width / 320f));
             Graphics.Draw(this._pixelTarget, Vec2.Zero, null, Color.White, 0f, Vec2.Zero, new Vec2(scale2), SpriteEffects.None, default(Depth));
@@ -1893,7 +1893,7 @@ namespace DuckGame
             Layer.Foreground.perspective = true;
             Layer.Foreground.projection = this._field.projection;
             Layer.Foreground.view = this._field.view;
-            if (RockScoreboard._sunEnabled)
+            if (_sunEnabled)
             {
                 this._sunLayer.perspective = true;
                 this._sunLayer.projection = this._field.projection;
@@ -1954,7 +1954,7 @@ namespace DuckGame
             }
             else if (layer == Layer.Foreground)
             {
-                bool drawingSunTarget = RockScoreboard._drawingSunTarget;
+                bool drawingSunTarget = _drawingSunTarget;
             }
             base.PostDrawLayer(layer);
         }

@@ -94,7 +94,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    UIMenu.globalUILock = true;
+                    globalUILock = true;
                     if (Keyboard.keyString.Length > _maxLength)
                         Keyboard.keyString = Keyboard.keyString.Substring(0, _maxLength);
                     if (_numeric)
@@ -129,7 +129,7 @@ namespace DuckGame
                         }
                         if (!flag)
                         {
-                            UIMenu.globalUILock = false;
+                            globalUILock = false;
                             _binding.value = password;
                             _cancelled = false;
                             _backFunction.Activate();
@@ -137,7 +137,7 @@ namespace DuckGame
                     }
                     else if (Keyboard.Pressed(Keys.Escape) || Input.Pressed("CANCEL"))
                     {
-                        UIMenu.globalUILock = false;
+                        globalUILock = false;
                         _cancelled = true;
                         _backFunction.Activate();
                     }

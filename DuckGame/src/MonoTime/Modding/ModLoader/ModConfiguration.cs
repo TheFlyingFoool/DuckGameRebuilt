@@ -27,9 +27,9 @@ namespace DuckGame
         private Assembly _assembly;
 
         /// <summary>The type of mod this is.</summary>
-        public ModConfiguration.Type modType { get; internal set; }
+        public Type modType { get; internal set; }
 
-        public void SetModType(ModConfiguration.Type pType) => modType = pType;
+        public void SetModType(Type pType) => modType = pType;
 
         public MapPack mapPack => _mapPack;
 

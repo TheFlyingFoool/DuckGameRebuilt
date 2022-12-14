@@ -45,9 +45,9 @@ namespace DuckGame
             {
                 stream.child = this;
             }
-            base.alpha = 1f;
+            alpha = 1f;
             _gravMult = 2f;
-            base.depth = -0.5f;
+            depth = -0.5f;
             data = dat;
             _thickMult = thickMult;
             _thickness = Maths.Clamp(data.amount * 600f, 0.2f, 8f) * _thickMult;
@@ -74,7 +74,7 @@ namespace DuckGame
                 FluidPuddle p = null;
                 foreach (FluidPuddle puddle in Level.current.things[typeof(FluidPuddle)])
                 {
-                    if (base.x > puddle.left && base.x < puddle.right && Math.Abs(puddle.y - base.y) < 10f)
+                    if (x > puddle.left && x < puddle.right && Math.Abs(puddle.y - y) < 10f)
                     {
                         p = puddle;
                         break;
@@ -107,7 +107,7 @@ namespace DuckGame
             if (_stream != null)
             {
                 float hDif = Math.Abs(hSpeed - _stream.hSpeed);
-                if (Math.Abs(base.x - _stream.x) * hDif > 40f || Math.Abs(vSpeed - _stream.vSpeed) > 1.9f || hDif > 1.9f)
+                if (Math.Abs(x - _stream.x) * hDif > 40f || Math.Abs(vSpeed - _stream.vSpeed) > 1.9f || hDif > 1.9f)
                 {
                     BreakStream();
                 }
@@ -133,22 +133,22 @@ namespace DuckGame
             if (_stream != null)
             {
                 Graphics.currentDrawIndex++;
-                Graphics.DrawLine(position, _stream.position, new Color(data.color) * base.alpha, _thickness, base.depth);
+                Graphics.DrawLine(position, _stream.position, new Color(data.color) * alpha, _thickness, depth);
                 return;
             }
             if (_child == null)
             {
                 if (_thickness > 4f)
                 {
-                    _glob.depth = base.depth;
+                    _glob.depth = depth;
                     _glob.frame = 2;
-                    _glob.color = new Color(data.color) * base.alpha;
+                    _glob.color = new Color(data.color) * alpha;
                     _glob.CenterOrigin();
-                    _glob.angle = Maths.DegToRad(-Maths.PointDirection(position, position + base.velocity) + 90f);
-                    Graphics.Draw(_glob, base.x, base.y);
+                    _glob.angle = Maths.DegToRad(-Maths.PointDirection(position, position + velocity) + 90f);
+                    Graphics.Draw(_glob, x, y);
                     return;
                 }
-                Graphics.DrawRect(position - new Vec2(_thickness / 2f, _thickness / 2f), position + new Vec2(_thickness / 2f, _thickness / 2f), new Color(data.color) * base.alpha, base.depth, true, 1f);
+                Graphics.DrawRect(position - new Vec2(_thickness / 2f, _thickness / 2f), position + new Vec2(_thickness / 2f, _thickness / 2f), new Color(data.color) * alpha, depth, true, 1f);
             }
         }
 

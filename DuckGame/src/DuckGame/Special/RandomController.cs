@@ -78,7 +78,7 @@ namespace DuckGame
             bool flag1 = false;
             while (_up.Count < max_up.value)
             {
-                List<Thing> list = Level.current.things[typeof(ISequenceItem)].ToList<Thing>();
+                List<Thing> list = Level.current.things[typeof(ISequenceItem)].ToList();
                 list.RemoveAll(v => !v.sequence.isValid);
                 if (_up.Count >= list.Count)
                     break;
@@ -115,9 +115,9 @@ namespace DuckGame
                     if (num2 > num3 && num2 < num3 + num4)
                     {
                         sequenceItem.randomMode = true;
-                        RandomController.isRand = true;
+                        isRand = true;
                         sequenceItem.Activate();
-                        RandomController.isRand = false;
+                        isRand = false;
                         ++_totalUp;
                         _up.Add(sequenceItem);
                         break;

@@ -24,34 +24,34 @@ namespace XnaToFna.StubXDK.Net
         [MonoModHook("System.IAsyncResult Microsoft.Xna.Framework.Net.NetworkSession::BeginJoinInvited(System.Collections.Generic.IEnumerable`1<Microsoft.Xna.Framework.GamerServices.SignedInGamer>,System.AsyncCallback,System.Object)")]
         public static IAsyncResult BeginJoinInvited(object gamers, AsyncCallback cb, object obj)
         {
-            if (__NetworkSession__.t_NetworkNotAvailableException == null)
+            if (t_NetworkNotAvailableException == null)
             {
-                __NetworkSession__.t_NetworkNotAvailableException = StubXDKHelper.GamerServicesAsm.GetType("Microsoft.Xna.Framework.Net.NetworkNotAvailableException");
-                __NetworkSession__.ctor_NetworkNotAvailableException = __NetworkSession__.t_NetworkNotAvailableException.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
+                t_NetworkNotAvailableException = StubXDKHelper.GamerServicesAsm.GetType("Microsoft.Xna.Framework.Net.NetworkNotAvailableException");
+                ctor_NetworkNotAvailableException = t_NetworkNotAvailableException.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
             }
-            throw (Exception)__NetworkSession__.ctor_NetworkNotAvailableException.Invoke(new object[0]);
+            throw (Exception)ctor_NetworkNotAvailableException.Invoke(new object[0]);
         }
 
         [MonoModHook("System.IAsyncResult Microsoft.Xna.Framework.Net.NetworkSession::BeginJoinInvited(System.Int32,System.AsyncCallback,System.Object)")]
         public static IAsyncResult BeginJoinInvited(int a, AsyncCallback cb, object obj)
         {
-            if (__NetworkSession__.t_NetworkNotAvailableException == null)
+            if (t_NetworkNotAvailableException == null)
             {
-                __NetworkSession__.t_NetworkNotAvailableException = StubXDKHelper.GamerServicesAsm.GetType("Microsoft.Xna.Framework.Net.NetworkNotAvailableException");
-                __NetworkSession__.ctor_NetworkNotAvailableException = __NetworkSession__.t_NetworkNotAvailableException.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
+                t_NetworkNotAvailableException = StubXDKHelper.GamerServicesAsm.GetType("Microsoft.Xna.Framework.Net.NetworkNotAvailableException");
+                ctor_NetworkNotAvailableException = t_NetworkNotAvailableException.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
             }
-            throw (Exception)__NetworkSession__.ctor_NetworkNotAvailableException.Invoke(new object[0]);
+            throw (Exception)ctor_NetworkNotAvailableException.Invoke(new object[0]);
         }
 
         [MonoModHook("Microsoft.Xna.Framework.Net.NetworkSession Microsoft.Xna.Framework.Net.NetworkSession::EndJoinInvited(System.IAsyncResult)")]
         public static object EndJoinInvited(IAsyncResult result)
         {
-            if (__NetworkSession__.t_NetworkNotAvailableException == null)
+            if (t_NetworkNotAvailableException == null)
             {
-                __NetworkSession__.t_NetworkNotAvailableException = StubXDKHelper.GamerServicesAsm.GetType("Microsoft.Xna.Framework.Net.NetworkNotAvailableException");
-                __NetworkSession__.ctor_NetworkNotAvailableException = __NetworkSession__.t_NetworkNotAvailableException.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
+                t_NetworkNotAvailableException = StubXDKHelper.GamerServicesAsm.GetType("Microsoft.Xna.Framework.Net.NetworkNotAvailableException");
+                ctor_NetworkNotAvailableException = t_NetworkNotAvailableException.GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
             }
-            throw (Exception)__NetworkSession__.ctor_NetworkNotAvailableException.Invoke(new object[0]);
+            throw (Exception)ctor_NetworkNotAvailableException.Invoke(new object[0]);
         }
     }
 }

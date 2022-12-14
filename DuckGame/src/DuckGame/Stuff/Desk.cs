@@ -74,7 +74,7 @@ namespace DuckGame
             if (_hitPoints <= 0f)
                 return base.Hit(bullet, hitPos);
             if (bullet.isLocal && owner == null)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier); ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(x - 8f + Rando.Float(16f), y - 8f + Rando.Float(16f));

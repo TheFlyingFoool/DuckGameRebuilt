@@ -43,17 +43,17 @@ namespace Microsoft.Xna.Framework
 		internal static void Initialize()
 		{
 			/* Don't overwrite application log hooks! */
-			if (FNALoggerEXT.LogInfo == null)
+			if (LogInfo == null)
 			{
-				FNALoggerEXT.LogInfo = Console.WriteLine;
+                LogInfo = Console.WriteLine;
 			}
-			if (FNALoggerEXT.LogWarn == null)
+			if (LogWarn == null)
 			{
-				FNALoggerEXT.LogWarn = Console.WriteLine;
+                LogWarn = Console.WriteLine;
 			}
-			if (FNALoggerEXT.LogError == null)
+			if (LogError == null)
 			{
-				FNALoggerEXT.LogError = Console.WriteLine;
+                LogError = Console.WriteLine;
 			}
 		}
 

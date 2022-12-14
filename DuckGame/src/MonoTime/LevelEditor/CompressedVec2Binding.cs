@@ -15,9 +15,9 @@ namespace DuckGame
 
         public override int bits => 32;
 
-        public override System.Type type => typeof(int);
+        public override Type type => typeof(int);
 
-        public override object GetNetValue() => CompressedVec2Binding.GetCompressedVec2(getTyped<Vec2>(), _range);
+        public override object GetNetValue() => GetCompressedVec2(getTyped<Vec2>(), _range);
 
         public static int GetCompressedVec2(Vec2 val, int range = 2147483647)
         {
@@ -34,11 +34,11 @@ namespace DuckGame
             return (int)((long)(ushort)Maths.Clamp((int)Math.Round(val.x), short.MinValue, short.MaxValue) << 16 | (ushort)Maths.Clamp((int)Math.Round(val.y), short.MinValue, short.MaxValue));
         }
 
-        public override int intValue => CompressedVec2Binding.GetCompressedVec2((Vec2)classValue, _range);
+        public override int intValue => GetCompressedVec2((Vec2)classValue, _range);
 
-        public override object ReadNetValue(object val) => CompressedVec2Binding.GetUncompressedVec2((int)val, _range);
+        public override object ReadNetValue(object val) => GetUncompressedVec2((int)val, _range);
 
-        public override object ReadNetValue(BitBuffer pData) => CompressedVec2Binding.GetUncompressedVec2((int)pData.ReadBits(type, bits), _range);
+        public override object ReadNetValue(BitBuffer pData) => GetUncompressedVec2((int)pData.ReadBits(type, bits), _range);
 
         public static Vec2 GetUncompressedVec2(int val, int range = 2147483647)
         {

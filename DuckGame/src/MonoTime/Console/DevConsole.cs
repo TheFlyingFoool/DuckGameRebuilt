@@ -271,7 +271,7 @@ namespace DuckGame
                 };
             }
 
-            if (DevConsole._core.alpha > 0.01f)
+            if (_core.alpha > 0.01f)
             {
                 InitializeFont();
                 if (_tray == null)
@@ -420,7 +420,7 @@ namespace DuckGame
         public static int fontPoints => Options.Data.consoleFontSize;
 
         public static string fontName => Options.Data.consoleFont;
-
+        public static int usedfornonsense = 0;
         public static Profile ProfileByName(string findName)
         {
             foreach (Profile profile in Profiles.all)
@@ -576,8 +576,12 @@ namespace DuckGame
                         {
                             case "crash":
                                 {
-                                    flag1 = true;
-                                    throw new Exception("you threw it idk");
+                                    //flag1 = true;
+                                    //using (StreamReader reader = new StreamReader("demo.txt"))
+                                    //{
+                                    //    reader.ReadToEnd();
+                                    //}
+                                    usedfornonsense = 1 / usedfornonsense;
                                     break;
                                 }
                             case "spawn" when CheckCheats():

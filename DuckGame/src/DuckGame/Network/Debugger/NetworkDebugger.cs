@@ -49,7 +49,7 @@ namespace DuckGame
         private bool logTimes = true;
         private bool logSections = true;
         private int logSwitchIndex;
-        public static Dictionary<GhostObject, NetworkDebugger.GhostDebugData> _ghostDebug = new Dictionary<GhostObject, NetworkDebugger.GhostDebugData>();
+        public static Dictionary<GhostObject, GhostDebugData> _ghostDebug = new Dictionary<GhostObject, GhostDebugData>();
         public bool lefpres;
         public static Dictionary<string, Dictionary<string, float>> _sentPulse = new Dictionary<string, Dictionary<string, float>>();
         public static Dictionary<string, Dictionary<string, float>> _receivedPulse = new Dictionary<string, Dictionary<string, float>>();
@@ -125,9 +125,9 @@ namespace DuckGame
         private static Random oldRando;
         private static List<NetworkInstance.Core> _registeredCores = new List<NetworkInstance.Core>();
 
-        public static int currentIndex => NetworkDebugger._currentIndex;
+        public static int currentIndex => _currentIndex;
 
-        public static bool enabled => NetworkDebugger._enabled;
+        public static bool enabled => _enabled;
 
         public NetworkDebugger(Level level = null, LayerCore startLayer = null, bool pGhostDebugger = false)
         {
@@ -139,14 +139,14 @@ namespace DuckGame
                     profile.team = null;
             }
             for (int index = 0; index < 8; ++index)
-                NetworkDebugger.inputProfiles.Add(new InputProfile());
+                inputProfiles.Add(new InputProfile());
             //this._ghostDebugger = pGhostDebugger;
         }
 
         public static int CurrentServerIndex()
         {
             int num = 0;
-            foreach (NetworkInstance instance in NetworkDebugger._instances)
+            foreach (NetworkInstance instance in _instances)
             {
                 if (instance.network.core.isActive && instance.network.core.isServer)
                     return num;
@@ -158,7 +158,7 @@ namespace DuckGame
         public void RefreshRectSizes()
         {
             for (int index = 0; index < 4; ++index)
-                RefreshRectSize(NetworkDebugger._instances[index], index);
+                RefreshRectSize(_instances[index], index);
         }
 
         public void RefreshRectSize(NetworkInstance host, int index)
@@ -182,12 +182,12 @@ namespace DuckGame
 
         public void CreateInstance(int init, bool isHost)
         {
-            NetworkDebugger._currentIndex = init;
+            _currentIndex = init;
             NetworkInstance networkInstance = new NetworkInstance()
             {
-                network = new Network(NetworkDebugger._currentIndex)
+                network = new Network(_currentIndex)
             };
-            RefreshRectSize(networkInstance, NetworkDebugger._currentIndex);
+            RefreshRectSize(networkInstance, _currentIndex);
             List<Team> teamList = new List<Team>();
             foreach (Team extraTeam in Teams.core.extraTeams)
                 teamList.Add(extraTeam.Clone());
@@ -227,7 +227,7 @@ namespace DuckGame
             networkInstance.matchmakingCore = new MatchmakingBoxCore();
             networkInstance.auCore = new AutoUpdatables.Core();
             networkInstance.rando = new Random();
-            NetworkDebugger.LockInstance(networkInstance);
+            LockInstance(networkInstance);
             networkInstance.duckNetworkCore.RecreateProfiles();
             Teams.core.Initialize();
             if (init == 0 || init == 1)
@@ -239,24 +239,24 @@ namespace DuckGame
             DuckNetwork.Initialize();
             foreach (Team team in Teams.all)
                 team.ClearProfiles();
-            Level.current = new TeamSelect2();
+            current = new TeamSelect2();
             networkInstance.joined = true;
-            if (init >= NetworkDebugger._instances.Count)
-                NetworkDebugger._instances.Add(networkInstance);
+            if (init >= _instances.Count)
+                _instances.Add(networkInstance);
             else
-                NetworkDebugger._instances[init] = networkInstance;
+                _instances[init] = networkInstance;
             base.Initialize();
             switch (init)
             {
                 case 0:
-                    networkInstance.debugInterface = new NetDebugInterface(NetworkDebugger._instances[init]);
-                    NetworkDebugger.UnlockInstance(NetworkDebugger._instances[init]);
-                    using (List<NetworkInstance.Core>.Enumerator enumerator = NetworkDebugger._registeredCores.GetEnumerator())
+                    networkInstance.debugInterface = new NetDebugInterface(_instances[init]);
+                    UnlockInstance(_instances[init]);
+                    using (List<NetworkInstance.Core>.Enumerator enumerator = _registeredCores.GetEnumerator())
                     {
                         while (enumerator.MoveNext())
                         {
                             NetworkInstance.Core current = enumerator.Current;
-                            NetworkDebugger._instances[init].extraCores.Add(new NetworkInstance.Core()
+                            _instances[init].extraCores.Add(new NetworkInstance.Core()
                             {
                                 member = current.member,
                                 originalInstance = current.originalInstance,
@@ -297,32 +297,32 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            NetworkDebugger._enabled = true;
-            NetworkDebugger._currentIndex = 0;
+            _enabled = true;
+            _currentIndex = 0;
             _controlsMapGamepad = InputProfile.DefaultPlayer1.GetControllerMap<GenericController>();
             _controlsMapKeyboard = InputProfile.defaultProfiles[Options.Data.keyboard1PlayerIndex].GetControllerMap<Keyboard>();
             _controlsMapKeyboard2 = InputProfile.defaultProfiles[Options.Data.keyboard2PlayerIndex].GetControllerMap<Keyboard>();
             for (int init = 0; init < 4; ++init)
                 CreateInstance(init, true);
-            Level.activeLevel = this;
+            activeLevel = this;
             base.Initialize();
         }
 
         public static void TerminateThreads()
         {
-            foreach (NetworkInstance instance in NetworkDebugger._instances)
+            foreach (NetworkInstance instance in _instances)
             {
-                NetworkDebugger.LockInstance(instance);
+                LockInstance(instance);
                 instance.network.core.Terminate();
-                NetworkDebugger.UnlockInstance(instance);
+                UnlockInstance(instance);
             }
         }
 
         public override void DoUpdate()
         {
-            NetworkDebugger.instance = this;
+            instance = this;
             if (Keyboard.Down(Keys.LeftShift) && Keyboard.Pressed(Keys.L))
-                NetworkDebugger.showLogs = !NetworkDebugger.showLogs;
+                showLogs = !showLogs;
             MonoMain.instance.IsMouseVisible = true;
             lefpres = Mouse.left == InputState.Pressed;
             List<DCLine> dcLineList = null;
@@ -334,18 +334,18 @@ namespace DuckGame
             //this._defaultInput = InputProfile.DefaultPlayer1;
             for (int index1 = 0; index1 < 4; ++index1)
             {
-                foreach (NetworkInstance instance in NetworkDebugger._instances)
+                foreach (NetworkInstance instance in _instances)
                 {
                     if (instance.inputProfile.DefaultPlayer1.JoinGamePressed())
-                        NetworkDebugger.letJoin = true;
+                        letJoin = true;
                 }
-                NetworkInstance instance1 = NetworkDebugger._instances[index1];
-                NetworkDebugger._currentIndex = index1;
-                NetworkDebugger.LockInstance(instance1);
+                NetworkInstance instance1 = _instances[index1];
+                _currentIndex = index1;
+                LockInstance(instance1);
                 bool flag1 = false;
-                if (NetworkDebugger._lastRect == NetworkDebugger._currentIndex || instance1.rect.Contains(Mouse.mousePos) || Math.Abs(DuckGame.Graphics.width / 2 - Mouse.mousePos.x) < 32.0 && Math.Abs(DuckGame.Graphics.height / 2 - Mouse.mousePos.y) < 32.0)
+                if (_lastRect == _currentIndex || instance1.rect.Contains(Mouse.mousePos) || Math.Abs(Graphics.width / 2 - Mouse.mousePos.x) < 32.0 && Math.Abs(Graphics.height / 2 - Mouse.mousePos.y) < 32.0)
                 {
-                    NetworkDebugger._lastRect = NetworkDebugger._currentIndex;
+                    _lastRect = _currentIndex;
                     InputProfile.active = InputProfile.DefaultPlayer1;
                     InputProfile.DefaultPlayer1.SetGenericControllerMapIndex<GenericController>(0, _controlsMapGamepad);
                     InputProfile.DefaultPlayer2.SetGenericControllerMapIndex<GenericController>(1, _controlsMapGamepad);
@@ -367,7 +367,7 @@ namespace DuckGame
                     InputProfile.Get(InputProfile.MPPlayers[Options.Data.keyboard1PlayerIndex]).SetGenericControllerMapIndex<Keyboard>(0, _controlsMapKeyboard);
                     InputProfile.defaultProfiles[Options.Data.keyboard2PlayerIndex].SetGenericControllerMapIndex<Keyboard>(1, _controlsMapKeyboard2);
                     InputProfile.Get(InputProfile.MPPlayers[Options.Data.keyboard2PlayerIndex]).SetGenericControllerMapIndex<Keyboard>(1, _controlsMapKeyboard2);
-                    NetworkDebugger.hoveringInstance = true;
+                    hoveringInstance = true;
                     flag1 = true;
                 }
                 else
@@ -389,12 +389,12 @@ namespace DuckGame
                     InputProfile.Get(InputProfile.MPPlayer2).SetGenericControllerMapIndex<Keyboard>(1, null);
                     InputProfile.Get(InputProfile.MPPlayer3).SetGenericControllerMapIndex<Keyboard>(2, null);
                     InputProfile.Get(InputProfile.MPPlayer4).SetGenericControllerMapIndex<Keyboard>(3, null);
-                    NetworkDebugger.hoveringInstance = false;
+                    hoveringInstance = false;
                 }
                 InputProfile.Update();
-                if (NetworkDebugger.Recorder.active != null)
+                if (Recorder.active != null)
                 {
-                    if (NetworkDebugger.currentIndex == NetworkDebugger.Recorder.active.activeIndex)
+                    if (currentIndex == Recorder.active.activeIndex)
                     {
                         if (InputProfile.DefaultPlayer1.virtualDevice != null)
                         {
@@ -402,18 +402,18 @@ namespace DuckGame
                             InputProfile.DefaultPlayer1.virtualDevice.SetState(0);
                             InputProfile.DefaultPlayer1.virtualDevice = null;
                         }
-                        NetworkDebugger.Recorder.active.Log(InputProfile.DefaultPlayer1.state);
+                        Recorder.active.Log(InputProfile.DefaultPlayer1.state);
                     }
                     else
                     {
                         if (InputProfile.DefaultPlayer1.virtualDevice == null)
                         {
-                            InputProfile.DefaultPlayer1.virtualDevice = VirtualInput.debuggerInputs[NetworkDebugger.currentIndex];
+                            InputProfile.DefaultPlayer1.virtualDevice = VirtualInput.debuggerInputs[currentIndex];
                             for (int index2 = 0; index2 < Network.synchronizedTriggers.Count; ++index2)
-                                InputProfile.DefaultPlayer1.Map(VirtualInput.debuggerInputs[NetworkDebugger.currentIndex], Network.synchronizedTriggers[index2], index2);
-                            VirtualInput.debuggerInputs[NetworkDebugger.currentIndex].availableTriggers = Network.synchronizedTriggers;
+                                InputProfile.DefaultPlayer1.Map(VirtualInput.debuggerInputs[currentIndex], Network.synchronizedTriggers[index2], index2);
+                            VirtualInput.debuggerInputs[currentIndex].availableTriggers = Network.synchronizedTriggers;
                         }
-                        InputProfile.DefaultPlayer1.virtualDevice.SetState(NetworkDebugger.Recorder.active.Get());
+                        InputProfile.DefaultPlayer1.virtualDevice.SetState(Recorder.active.Get());
                     }
                 }
                 foreach (DCLine dcLine in dcLineList)
@@ -436,23 +436,23 @@ namespace DuckGame
                             engineUpdatable.PreUpdate();
                         AutoUpdatables.Update();
                         FireManager.Update();
-                        Level.UpdateLevelChange();
-                        Level.UpdateCurrentLevel();
+                        UpdateLevelChange();
+                        UpdateCurrentLevel();
                         foreach (IEngineUpdatable engineUpdatable in MonoMain.core.engineUpdatables)
                             engineUpdatable.Update();
                     }
-                    if (!NetworkDebugger.showLogs)
+                    if (!showLogs)
                         instance1.debugInterface.Update();
                     Network.PostUpdate();
                     foreach (IEngineUpdatable engineUpdatable in MonoMain.core.engineUpdatables)
                         engineUpdatable.PostUpdate();
                     instance1.network.core.Thread_Loop();
                 }
-                NetworkDebugger.UnlockInstance(instance1);
+                UnlockInstance(instance1);
             }
-            if (NetworkDebugger.Recorder.active != null)
-                ++NetworkDebugger.Recorder.active.frame;
-            if (NetworkDebugger.showLogs)
+            if (Recorder.active != null)
+                ++Recorder.active.frame;
+            if (showLogs)
             {
                 showFilters = false;
                 if (Keyboard.Down(Keys.LeftControl))
@@ -466,23 +466,23 @@ namespace DuckGame
                             if (Keyboard.Down(Keys.LeftShift))
                             {
                                 for (int index4 = 0; index4 < 8; ++index4)
-                                    logFilters[logFilters.ElementAt<KeyValuePair<DCSection, bool>>(index4).Key] = index4 == index3;
+                                    logFilters[logFilters.ElementAt(index4).Key] = index4 == index3;
                             }
                             else
-                                logFilters[logFilters.ElementAt<KeyValuePair<DCSection, bool>>(index3).Key] = !logFilters.ElementAt<KeyValuePair<DCSection, bool>>(index3).Value;
+                                logFilters[logFilters.ElementAt(index3).Key] = !logFilters.ElementAt(index3).Value;
                         }
                     }
                     if (Keyboard.Pressed(Keys.D9))
                     {
-                        if (logFilters[logFilters.ElementAt<KeyValuePair<DCSection, bool>>(0).Key] && logFilters[logFilters.ElementAt<KeyValuePair<DCSection, bool>>(1).Key] && logFilters[logFilters.ElementAt<KeyValuePair<DCSection, bool>>(2).Key] && logFilters[logFilters.ElementAt<KeyValuePair<DCSection, bool>>(3).Key] && logFilters[logFilters.ElementAt<KeyValuePair<DCSection, bool>>(4).Key] && logFilters[logFilters.ElementAt<KeyValuePair<DCSection, bool>>(5).Key] && logFilters[logFilters.ElementAt<KeyValuePair<DCSection, bool>>(6).Key])
+                        if (logFilters[logFilters.ElementAt(0).Key] && logFilters[logFilters.ElementAt(1).Key] && logFilters[logFilters.ElementAt(2).Key] && logFilters[logFilters.ElementAt(3).Key] && logFilters[logFilters.ElementAt(4).Key] && logFilters[logFilters.ElementAt(5).Key] && logFilters[logFilters.ElementAt(6).Key])
                         {
                             for (int index = 0; index < 8; ++index)
-                                logFilters[logFilters.ElementAt<KeyValuePair<DCSection, bool>>(index).Key] = false;
+                                logFilters[logFilters.ElementAt(index).Key] = false;
                         }
                         else
                         {
                             for (int index = 0; index < 8; ++index)
-                                logFilters[logFilters.ElementAt<KeyValuePair<DCSection, bool>>(index).Key] = true;
+                                logFilters[logFilters.ElementAt(index).Key] = true;
                         }
                     }
                 }
@@ -491,26 +491,26 @@ namespace DuckGame
                     if (Keyboard.Pressed(Keys.D1))
                     {
                         logSwitchIndex = 0;
-                        if (NetworkDebugger.showLogPage[logSwitchIndex] < 0)
-                            NetworkDebugger.showLogPage[logSwitchIndex] = logSwitchIndex;
+                        if (showLogPage[logSwitchIndex] < 0)
+                            showLogPage[logSwitchIndex] = logSwitchIndex;
                     }
                     else if (Keyboard.Pressed(Keys.D2))
                     {
                         logSwitchIndex = 1;
-                        if (NetworkDebugger.showLogPage[logSwitchIndex] < 0)
-                            NetworkDebugger.showLogPage[logSwitchIndex] = logSwitchIndex;
+                        if (showLogPage[logSwitchIndex] < 0)
+                            showLogPage[logSwitchIndex] = logSwitchIndex;
                     }
                     else if (Keyboard.Pressed(Keys.D3))
                     {
                         logSwitchIndex = 2;
-                        if (NetworkDebugger.showLogPage[logSwitchIndex] < 0)
-                            NetworkDebugger.showLogPage[logSwitchIndex] = logSwitchIndex;
+                        if (showLogPage[logSwitchIndex] < 0)
+                            showLogPage[logSwitchIndex] = logSwitchIndex;
                     }
                     else if (Keyboard.Pressed(Keys.D4))
                     {
                         logSwitchIndex = 3;
-                        if (NetworkDebugger.showLogPage[logSwitchIndex] < 0)
-                            NetworkDebugger.showLogPage[logSwitchIndex] = logSwitchIndex;
+                        if (showLogPage[logSwitchIndex] < 0)
+                            showLogPage[logSwitchIndex] = logSwitchIndex;
                     }
                     if (Keyboard.Pressed(Keys.T))
                         logTimes = !logTimes;
@@ -520,78 +520,78 @@ namespace DuckGame
                 else
                 {
                     if (Keyboard.Pressed(Keys.D1))
-                        NetworkDebugger.showLogPage[logSwitchIndex] = 0;
+                        showLogPage[logSwitchIndex] = 0;
                     else if (Keyboard.Pressed(Keys.D2))
-                        NetworkDebugger.showLogPage[logSwitchIndex] = 1;
+                        showLogPage[logSwitchIndex] = 1;
                     else if (Keyboard.Pressed(Keys.D3))
-                        NetworkDebugger.showLogPage[logSwitchIndex] = 2;
+                        showLogPage[logSwitchIndex] = 2;
                     else if (Keyboard.Pressed(Keys.D4))
-                        NetworkDebugger.showLogPage[logSwitchIndex] = 3;
+                        showLogPage[logSwitchIndex] = 3;
                     else if (Keyboard.Pressed(Keys.D0))
-                        NetworkDebugger.showLogPage[logSwitchIndex] = -1;
-                    while (NetworkDebugger.showLogPage[logSwitchIndex] < 0 && logSwitchIndex > 0)
+                        showLogPage[logSwitchIndex] = -1;
+                    while (showLogPage[logSwitchIndex] < 0 && logSwitchIndex > 0)
                         --logSwitchIndex;
                 }
             }
             wheel = Mouse.scroll;
             for (int index = 0; index < 4; ++index)
             {
-                NetworkDebugger.LockInstance(NetworkDebugger._instances[index]);
-                NetworkDebugger._currentIndex = index;
-                NetworkDebugger.UnlockInstance(NetworkDebugger._instances[index]);
+                LockInstance(_instances[index]);
+                _currentIndex = index;
+                UnlockInstance(_instances[index]);
             }
             if (Keyboard.Pressed(Keys.F11))
             {
-                foreach (NetworkInstance instance in NetworkDebugger._instances)
+                foreach (NetworkInstance instance in _instances)
                     instance.network.core.ForcefulTermination();
                 Network.activeNetwork.core.ForcefulTermination();
-                NetworkDebugger._instances.Clear();
-                NetworkDebugger.inputProfiles.Clear();
-                Level.current = new NetworkDebugger();
+                _instances.Clear();
+                inputProfiles.Clear();
+                current = new NetworkDebugger();
             }
             if (Keyboard.shift)
             {
                 if (Keyboard.Pressed(Keys.D0))
-                    NetworkDebugger.fullscreenIndex = 0;
+                    fullscreenIndex = 0;
                 if (Keyboard.Pressed(Keys.D1))
-                    NetworkDebugger.fullscreenIndex = 1;
+                    fullscreenIndex = 1;
                 if (Keyboard.Pressed(Keys.D2))
-                    NetworkDebugger.fullscreenIndex = 2;
+                    fullscreenIndex = 2;
                 if (Keyboard.Pressed(Keys.D3))
-                    NetworkDebugger.fullscreenIndex = 3;
+                    fullscreenIndex = 3;
                 if (Keyboard.Pressed(Keys.D4))
-                    NetworkDebugger.fullscreenIndex = 4;
+                    fullscreenIndex = 4;
                 if (Keyboard.Pressed(Keys.D5))
-                    NetworkDebugger.fullscreenIndex = 5;
+                    fullscreenIndex = 5;
                 if (Keyboard.Pressed(Keys.D6))
-                    NetworkDebugger.fullscreenIndex = 6;
+                    fullscreenIndex = 6;
                 if (Keyboard.Pressed(Keys.D7))
-                    NetworkDebugger.fullscreenIndex = 7;
+                    fullscreenIndex = 7;
                 if (Keyboard.Pressed(Keys.D8))
-                    NetworkDebugger.fullscreenIndex = 8;
+                    fullscreenIndex = 8;
             }
             things.RefreshState();
         }
 
         public override void DoDraw()
         {
-            if (NetworkDebugger._instances.Count == 0)
+            if (_instances.Count == 0)
                 return;
             int num = -1;
-            foreach (NetworkInstance instance in NetworkDebugger._instances)
+            foreach (NetworkInstance instance in _instances)
             {
                 ++num;
                 if (instance.active)
                 {
-                    NetworkDebugger._currentIndex = num;
-                    NetworkDebugger.LockInstance(instance);
-                    Viewport viewport = DuckGame.Graphics.viewport;
-                    DuckGame.Graphics.viewport = NetworkDebugger.fullscreenIndex <= 0 ? new Viewport((int)instance.rect.x, (int)instance.rect.y, (int)instance.rect.width, (int)instance.rect.height) : (num + 1 != NetworkDebugger.fullscreenIndex ? new Viewport(0, 0, 1, 1) : new Viewport(0, 0, viewport.Width, viewport.Height));
-                    Level.current.clearScreen = num == 0;
+                    _currentIndex = num;
+                    LockInstance(instance);
+                    Viewport viewport = Graphics.viewport;
+                    Graphics.viewport = fullscreenIndex <= 0 ? new Viewport((int)instance.rect.x, (int)instance.rect.y, (int)instance.rect.width, (int)instance.rect.height) : (num + 1 != fullscreenIndex ? new Viewport(0, 0, 1, 1) : new Viewport(0, 0, viewport.Width, viewport.Height));
+                    current.clearScreen = num == 0;
                     if (MonoMain.pauseMenu != null)
                     {
-                        if (Level.current.clearScreen)
-                            DuckGame.Graphics.Clear(Level.current.backgroundColor);
+                        if (current.clearScreen)
+                            Graphics.Clear(current.backgroundColor);
                         Layer.HUD.Begin(true);
                         MonoMain.pauseMenu.Draw();
                         foreach (Thing thing in MonoMain.closeMenuUpdate)
@@ -603,49 +603,49 @@ namespace DuckGame
                         Layer.Console.End(true);
                     }
                     else
-                        Level.DrawCurrentLevel();
+                        DrawCurrentLevel();
                     Network.netGraph.Draw();
-                    DuckGame.Graphics.viewport = viewport;
-                    NetworkDebugger.UnlockInstance(instance);
+                    Graphics.viewport = viewport;
+                    UnlockInstance(instance);
                 }
             }
             clearScreen = false;
             base.DoDraw();
         }
 
-        public static NetworkDebugger.GhostDebugData GetGhost(GhostObject pGhost)
+        public static GhostDebugData GetGhost(GhostObject pGhost)
         {
             GhostDebugData ghost;
-            if (!NetworkDebugger._ghostDebug.TryGetValue(pGhost, out ghost))
-                ghost = NetworkDebugger._ghostDebug[pGhost] = new NetworkDebugger.GhostDebugData();
+            if (!_ghostDebug.TryGetValue(pGhost, out ghost))
+                ghost = _ghostDebug[pGhost] = new GhostDebugData();
             return ghost;
         }
 
-        public static void ClearGhostDebug() => NetworkDebugger._ghostDebug.Clear();
+        public static void ClearGhostDebug() => _ghostDebug.Clear();
 
         public static void DrawInstanceGameDebug()
         {
-            foreach (GhostObject ghost1 in NetworkDebugger._instances[NetworkDebugger.currentIndex].network.core.ghostManager._ghosts)
+            foreach (GhostObject ghost1 in _instances[currentIndex].network.core.ghostManager._ghosts)
             {
-                NetworkDebugger.GhostDebugData ghost2 = NetworkDebugger.GetGhost(ghost1);
+                GhostDebugData ghost2 = GetGhost(ghost1);
                 if (ghost1.thing != null)
                 {
                     if (ghost1.thing.connection == DuckNetwork.localConnection || ghost1.thing.connection == null)
-                        DuckGame.Graphics.DrawRect(ghost1.thing.topLeft, ghost1.thing.bottomRight, Color.Red * 0.8f, (Depth)1f, false);
+                        Graphics.DrawRect(ghost1.thing.topLeft, ghost1.thing.bottomRight, Color.Red * 0.8f, (Depth)1f, false);
                     if (ghost1.thing.ghostObject != null && !ghost1.thing.ghostObject.IsInitialized())
-                        DuckGame.Graphics.DrawRect(ghost1.thing.topLeft + new Vec2(-1f, -1f), ghost1.thing.bottomRight + new Vec2(1f, 1f), Color.Orange * 0.8f, (Depth)1f, false);
+                        Graphics.DrawRect(ghost1.thing.topLeft + new Vec2(-1f, -1f), ghost1.thing.bottomRight + new Vec2(1f, 1f), Color.Orange * 0.8f, (Depth)1f, false);
                     foreach (KeyValuePair<DuckPersona, long> dataReceivedFrame in ghost2.dataReceivedFrames)
                     {
-                        if (dataReceivedFrame.Value == DuckGame.Graphics.frame)
+                        if (dataReceivedFrame.Value == Graphics.frame)
                         {
                             if (dataReceivedFrame.Key == Persona.Duck1)
-                                DuckGame.Graphics.DrawRect(ghost1.thing.topLeft + new Vec2(-4f, -4f), ghost1.thing.topLeft + new Vec2(-2f, -2f), dataReceivedFrame.Key.colorUsable, (Depth)1f, false);
+                                Graphics.DrawRect(ghost1.thing.topLeft + new Vec2(-4f, -4f), ghost1.thing.topLeft + new Vec2(-2f, -2f), dataReceivedFrame.Key.colorUsable, (Depth)1f, false);
                             else if (dataReceivedFrame.Key == Persona.Duck2)
-                                DuckGame.Graphics.DrawRect(ghost1.thing.topRight + new Vec2(4f, -4f), ghost1.thing.topRight + new Vec2(2f, -2f), dataReceivedFrame.Key.colorUsable, (Depth)1f, false);
+                                Graphics.DrawRect(ghost1.thing.topRight + new Vec2(4f, -4f), ghost1.thing.topRight + new Vec2(2f, -2f), dataReceivedFrame.Key.colorUsable, (Depth)1f, false);
                             else if (dataReceivedFrame.Key == Persona.Duck3)
-                                DuckGame.Graphics.DrawRect(ghost1.thing.bottomLeft + new Vec2(-4f, 2f), ghost1.thing.bottomLeft + new Vec2(-2f, 4f), dataReceivedFrame.Key.colorUsable, (Depth)1f, false);
+                                Graphics.DrawRect(ghost1.thing.bottomLeft + new Vec2(-4f, 2f), ghost1.thing.bottomLeft + new Vec2(-2f, 4f), dataReceivedFrame.Key.colorUsable, (Depth)1f, false);
                             else if (dataReceivedFrame.Key == Persona.Duck4)
-                                DuckGame.Graphics.DrawRect(ghost1.thing.bottomRight + new Vec2(4f, 2f), ghost1.thing.bottomRight + new Vec2(2f, 4f), dataReceivedFrame.Key.colorUsable, (Depth)1f, false);
+                                Graphics.DrawRect(ghost1.thing.bottomRight + new Vec2(4f, 2f), ghost1.thing.bottomRight + new Vec2(2f, 4f), dataReceivedFrame.Key.colorUsable, (Depth)1f, false);
                         }
                     }
                 }
@@ -654,62 +654,62 @@ namespace DuckGame
 
         public static void StartRecording(string pLevel)
         {
-            NetworkDebugger.Recorder.active = new NetworkDebugger.Recorder
+            Recorder.active = new Recorder
             {
                 level = pLevel
             };
-            NetworkDebugger.StartRecording(0);
+            StartRecording(0);
         }
 
         public static void StartRecording(int pIndex)
         {
-            if (NetworkDebugger.Recorder.active == null)
+            if (Recorder.active == null)
                 return;
-            NetworkDebugger.Recorder.active.activeIndex = pIndex;
-            NetworkDebugger.Recorder.active.frame = 0;
-            DevConsole.RunCommand("level " + NetworkDebugger.Recorder.active.level);
+            Recorder.active.activeIndex = pIndex;
+            Recorder.active.frame = 0;
+            DevConsole.RunCommand("level " + Recorder.active.level);
         }
 
         public static void LogSend(string from, string to)
         {
-            if (!NetworkDebugger._sentPulse.ContainsKey(from))
-                NetworkDebugger._sentPulse[from] = new Dictionary<string, float>();
-            if (!NetworkDebugger._sentPulse[from].ContainsKey(to))
-                NetworkDebugger._sentPulse[from][to] = 0f;
-            ++NetworkDebugger._sentPulse[from][to];
+            if (!_sentPulse.ContainsKey(from))
+                _sentPulse[from] = new Dictionary<string, float>();
+            if (!_sentPulse[from].ContainsKey(to))
+                _sentPulse[from][to] = 0f;
+            ++_sentPulse[from][to];
         }
 
         public static float GetSent(string key, string to)
         {
-            if (!NetworkDebugger._sentPulse.ContainsKey(key) || !NetworkDebugger._sentPulse[key].ContainsKey(to))
+            if (!_sentPulse.ContainsKey(key) || !_sentPulse[key].ContainsKey(to))
                 return 0f;
-            if (NetworkDebugger._sentPulse[key][to] > 1.0)
-                NetworkDebugger._sentPulse[key][to] = 1f;
-            NetworkDebugger._sentPulse[key][to] -= 0.1f;
-            if (NetworkDebugger._sentPulse[key][to] < 0.0)
-                NetworkDebugger._sentPulse[key][to] = 0f;
-            return NetworkDebugger._sentPulse[key][to];
+            if (_sentPulse[key][to] > 1.0)
+                _sentPulse[key][to] = 1f;
+            _sentPulse[key][to] -= 0.1f;
+            if (_sentPulse[key][to] < 0.0)
+                _sentPulse[key][to] = 0f;
+            return _sentPulse[key][to];
         }
 
         public static void LogReceive(string to, string from)
         {
-            if (!NetworkDebugger._receivedPulse.ContainsKey(to))
-                NetworkDebugger._receivedPulse[to] = new Dictionary<string, float>();
-            if (!NetworkDebugger._receivedPulse[to].ContainsKey(from))
-                NetworkDebugger._receivedPulse[to][from] = 0f;
-            ++NetworkDebugger._receivedPulse[to][from];
+            if (!_receivedPulse.ContainsKey(to))
+                _receivedPulse[to] = new Dictionary<string, float>();
+            if (!_receivedPulse[to].ContainsKey(from))
+                _receivedPulse[to][from] = 0f;
+            ++_receivedPulse[to][from];
         }
 
         public static float GetReceived(string key, string from)
         {
-            if (!NetworkDebugger._receivedPulse.ContainsKey(key) || !NetworkDebugger._receivedPulse[key].ContainsKey(from))
+            if (!_receivedPulse.ContainsKey(key) || !_receivedPulse[key].ContainsKey(from))
                 return 0f;
-            if (NetworkDebugger._receivedPulse[key][from] > 1.0)
-                NetworkDebugger._receivedPulse[key][from] = 1f;
-            NetworkDebugger._receivedPulse[key][from] -= 0.1f;
-            if (NetworkDebugger._receivedPulse[key][from] < 0.0)
-                NetworkDebugger._receivedPulse[key][from] = 0f;
-            return NetworkDebugger._receivedPulse[key][from];
+            if (_receivedPulse[key][from] > 1.0)
+                _receivedPulse[key][from] = 1f;
+            _receivedPulse[key][from] -= 0.1f;
+            if (_receivedPulse[key][from] < 0.0)
+                _receivedPulse[key][from] = 0f;
+            return _receivedPulse[key][from];
         }
 
         public static string GetID(int index)
@@ -731,18 +731,18 @@ namespace DuckGame
 
         private void DrawLogWindow(Vec2 pos, Vec2 size, int page, int index)
         {
-            if (NetworkDebugger._instances.Count <= page)
+            if (_instances.Count <= page)
                 return;
             int num1 = 97;
             if (size.y < 300.0)
                 num1 = num1 / 2 - 2;
-            Queue<DCLine> lines = NetworkDebugger._instances[page].consoleCore.lines;
+            Queue<DCLine> lines = _instances[page].consoleCore.lines;
             Vec2 p1_1 = pos;
             Vec2 p2_1 = pos + size;
-            DuckGame.Graphics.DrawRect(p1_1, p2_1, Color.Black, (Depth)0.8f);
+            Graphics.DrawRect(p1_1, p2_1, Color.Black, (Depth)0.8f);
             if (logSwitchIndex == index)
-                DuckGame.Graphics.DrawRect(p1_1, p2_1, Color.White * 0.5f, (Depth)0.88f, false);
-            DuckGame.Graphics.DrawRect(p1_1 + new Vec2(0f, -14f), p1_1 + new Vec2(100f, 0f), Color.Black, (Depth)0.8f);
+                Graphics.DrawRect(p1_1, p2_1, Color.White * 0.5f, (Depth)0.88f, false);
+            Graphics.DrawRect(p1_1 + new Vec2(0f, -14f), p1_1 + new Vec2(100f, 0f), Color.Black, (Depth)0.8f);
             Color color = Colors.Duck1;
             switch (page)
             {
@@ -756,15 +756,15 @@ namespace DuckGame
                     color = Colors.Duck4;
                     break;
             }
-            DuckGame.Graphics.DrawString("Player " + (page + 1).ToString(), p1_1 + new Vec2(4f, -12f), color * (logSwitchIndex == index ? 1f : 0.6f), (Depth)0.81f);
+            Graphics.DrawString("Player " + (page + 1).ToString(), p1_1 + new Vec2(4f, -12f), color * (logSwitchIndex == index ? 1f : 0.6f), (Depth)0.81f);
             int num2 = 0;
             foreach (DCLine dcLine in lines)
             {
                 if (logFilters[dcLine.section] || dcLine.line.Contains("@error"))
                     ++num2;
             }
-            DuckGame.Graphics.DrawRect(new Vec2(p1_1.x + (size.x - 12f), p1_1.y), p2_1, Color.Gray * 0.5f, (Depth)0.81f);
-            float num3 = NetworkDebugger.logsScroll[index] / (float)num2;
+            Graphics.DrawRect(new Vec2(p1_1.x + (size.x - 12f), p1_1.y), p2_1, Color.Gray * 0.5f, (Depth)0.81f);
+            float num3 = logsScroll[index] / (float)num2;
             float num4 = 300f;
             float num5 = Math.Max(num4 - num2, 20f) / num4;
             float num6 = size.y * num5;
@@ -789,37 +789,37 @@ namespace DuckGame
                     vec2_2.y = p1_1.y;
                 if (vec2_2.y > p2_1.y - num6)
                     vec2_2.y = p2_1.y - num6;
-                NetworkDebugger.logsScroll[index] = (int)Math.Round((vec2_2.y - p1_1.y) / (size.y - num6) * num2);
+                logsScroll[index] = (int)Math.Round((vec2_2.y - p1_1.y) / (size.y - num6) * num2);
             }
             if (Mouse.left == InputState.Released)
                 scrollerDrag[index] = false;
-            DuckGame.Graphics.DrawRect(p1_2, p2_2, Color.White * (flag || scrollerDrag[index] ? 0.8f : 0.5f), (Depth)0.82f);
+            Graphics.DrawRect(p1_2, p2_2, Color.White * (flag || scrollerDrag[index] ? 0.8f : 0.5f), (Depth)0.82f);
             if (Mouse.xConsole > p1_1.x && Mouse.xConsole < p2_1.x && Mouse.yConsole > p1_1.y && Mouse.yConsole < p2_1.y)
             {
                 if (Mouse.scroll > 0.0)
-                    NetworkDebugger.logsScroll[index] += 5;
+                    logsScroll[index] += 5;
                 else if (Mouse.scroll < 0.0)
-                    NetworkDebugger.logsScroll[index] -= 5;
+                    logsScroll[index] -= 5;
             }
-            if (NetworkDebugger.logsScroll[index] < 0)
-                NetworkDebugger.logsScroll[index] = 0;
-            if (NetworkDebugger.logsScroll[index] > num2 - 1)
-                NetworkDebugger.logsScroll[index] = num2 - 1;
+            if (logsScroll[index] < 0)
+                logsScroll[index] = 0;
+            if (logsScroll[index] > num2 - 1)
+                logsScroll[index] = num2 - 1;
             if (num2 < num1)
-                NetworkDebugger.logsScroll[index] = 0;
+                logsScroll[index] = 0;
             Vec2 pos1 = p1_1 + new Vec2(8f, 8f);
             int num7 = 0;
             for (int index1 = 0; index1 < num1; ++index1)
             {
-                int num8 = index1 + NetworkDebugger.logsScroll[index];
+                int num8 = index1 + logsScroll[index];
                 if (num8 < num2)
                 {
                     int num9 = 0;
-                    for (; num8 + num7 < lines.Count && !logFilters[lines.ElementAt<DCLine>(num8 + num7).section] && !lines.ElementAt<DCLine>(num8 + num7).line.Contains("@error"); ++num7)
-                        num9 += lines.ElementAt<DCLine>(num8 + num7).frames;
+                    for (; num8 + num7 < lines.Count && !logFilters[lines.ElementAt(num8 + num7).section] && !lines.ElementAt(num8 + num7).line.Contains("@error"); ++num7)
+                        num9 += lines.ElementAt(num8 + num7).frames;
                     if (num8 + num7 < lines.Count)
                     {
-                        DCLine line = lines.ElementAt<DCLine>(num8 + num7);
+                        DCLine line = lines.ElementAt(num8 + num7);
                         DevConsole.DrawLine(pos1, line, logTimes, logSections);
                         Color col = DCLine.ColorForSection(line.section);
                         col.r = (byte)(col.r * 0.1f);
@@ -832,15 +832,15 @@ namespace DuckGame
                             col.g = (byte)(col.g * 0.3f);
                             col.b = (byte)(col.b * 0.3f);
                         }
-                        DuckGame.Graphics.DrawRect(pos1 + new Vec2(-4f, -1f), new Vec2(p2_1.x - 14f, pos1.y + 9f), col, (Depth)0.85f);
+                        Graphics.DrawRect(pos1 + new Vec2(-4f, -1f), new Vec2(p2_1.x - 14f, pos1.y + 9f), col, (Depth)0.85f);
                         if (line.frames + num9 > 0)
                         {
                             ++pos1.y;
-                            DuckGame.Graphics.DrawLine(pos1 + new Vec2(-4f, 10f), new Vec2(p2_1.x - 14f, pos1.y + 10f), Color.White * 0.24f, depth: ((Depth)0.9f));
+                            Graphics.DrawLine(pos1 + new Vec2(-4f, 10f), new Vec2(p2_1.x - 14f, pos1.y + 10f), Color.White * 0.24f, depth: ((Depth)0.9f));
                             pos1.y += 2f;
                             if (line.frames + num9 > 30)
                             {
-                                DuckGame.Graphics.DrawString("~" + (line.frames + num9).ToString() + " frames~", pos1 + new Vec2(80f, 10f), Color.White * 0.2f, (Depth)0.9f);
+                                Graphics.DrawString("~" + (line.frames + num9).ToString() + " frames~", pos1 + new Vec2(80f, 10f), Color.White * 0.2f, (Depth)0.9f);
                                 pos1.y += 10f;
                                 --num1;
                             }
@@ -853,29 +853,29 @@ namespace DuckGame
 
         public override void PostDrawLayer(Layer layer)
         {
-            if (NetworkDebugger._instances.Count == 0 || NetworkDebugger.fullscreenIndex != 0)
+            if (_instances.Count == 0 || fullscreenIndex != 0)
                 return;
             if (layer == Layer.Console)
             {
-                DuckGame.Graphics.fade = 1f;
-                if (NetworkDebugger.showLogs)
+                Graphics.fade = 1f;
+                if (showLogs)
                 {
                     int num = 0;
                     for (int index = 0; index < 4; ++index)
                     {
-                        if (NetworkDebugger.showLogPage[index] >= 0)
+                        if (showLogPage[index] >= 0)
                             ++num;
                     }
                     Vec2[] vec2Array = new Vec2[4];
                     Vec2 vec2 = new Vec2(20f, 80f);
                     if (showFilters)
                     {
-                        DuckGame.Graphics.DrawRect(vec2 + new Vec2(0f, -42f), vec2 + new Vec2(890f, -30f), Color.Black * 0.9f, (Depth)0.8f);
+                        Graphics.DrawRect(vec2 + new Vec2(0f, -42f), vec2 + new Vec2(890f, -30f), Color.Black * 0.9f, (Depth)0.8f);
                         for (int index = 0; index < 9; ++index)
                         {
                             if (index == 8)
                             {
-                                DuckGame.Graphics.DrawString("ALL (9)", vec2 + new Vec2(index * 110, -40f), Color.White, (Depth)0.82f);
+                                Graphics.DrawString("ALL (9)", vec2 + new Vec2(index * 110, -40f), Color.White, (Depth)0.82f);
                             }
                             else
                             {
@@ -883,7 +883,7 @@ namespace DuckGame
                                 string str = DCLine.StringForSection(dcSection, true, false, false);
                                 if (dcSection == DCSection.General)
                                     str = "GENERAL";
-                                DuckGame.Graphics.DrawString(str + " (" + (index + 1).ToString() + ")", vec2 + new Vec2(index * 110, -40f), Color.White * (logFilters[dcSection] ? 1f : 0.5f), (Depth)0.82f);
+                                Graphics.DrawString(str + " (" + (index + 1).ToString() + ")", vec2 + new Vec2(index * 110, -40f), Color.White * (logFilters[dcSection] ? 1f : 0.5f), (Depth)0.82f);
                             }
                         }
                     }
@@ -902,18 +902,18 @@ namespace DuckGame
                     }
                     for (int index = 0; index < 4; ++index)
                     {
-                        if (NetworkDebugger.showLogPage[index] >= 0)
-                            DrawLogWindow(vec2Array[index], size, NetworkDebugger.showLogPage[index], index);
+                        if (showLogPage[index] >= 0)
+                            DrawLogWindow(vec2Array[index], size, showLogPage[index], index);
                     }
                     return;
                 }
-                foreach (NetworkInstance instance in NetworkDebugger._instances.ToList<NetworkInstance>())
+                foreach (NetworkInstance instance in _instances.ToList())
                 {
-                    NetworkDebugger.LockInstance(instance);
+                    LockInstance(instance);
                     instance.debugInterface.Draw();
                     if (instance.debugInterface.visible)
                         Network.netGraph.DrawChart(instance.consoleSize.tl + new Vec2(10f, 300f));
-                    NetworkDebugger.UnlockInstance(instance);
+                    UnlockInstance(instance);
                 }
             }
             base.PostDrawLayer(layer);
@@ -921,39 +921,39 @@ namespace DuckGame
 
         public static void LockInstance(NetworkInstance instance)
         {
-            NetworkDebugger.oldNetwork = Network.activeNetwork;
+            oldNetwork = Network.activeNetwork;
             Network.activeNetwork = instance.network;
-            NetworkDebugger.oldDuckNetworkCore = DuckNetwork.core;
+            oldDuckNetworkCore = DuckNetwork.core;
             DuckNetwork.core = instance.duckNetworkCore;
-            NetworkDebugger.oldVirtualCore = VirtualTransition.core;
+            oldVirtualCore = VirtualTransition.core;
             VirtualTransition.core = instance.virtualCore;
-            NetworkDebugger.oldLevelCore = Level.core;
-            Level.core = instance.levelCore;
-            NetworkDebugger.oldProfileCore = Profiles.core;
+            oldLevelCore = core;
+            core = instance.levelCore;
+            oldProfileCore = Profiles.core;
             Profiles.core = instance.profileCore;
-            NetworkDebugger.oldTeamCore = Teams.core;
+            oldTeamCore = Teams.core;
             Teams.core = instance.teamsCore;
-            NetworkDebugger.oldLayerCore = Layer.core;
+            oldLayerCore = Layer.core;
             Layer.core = instance.layerCore;
-            NetworkDebugger.oldInputCore = InputProfile.core;
+            oldInputCore = InputProfile.core;
             InputProfile.core = instance.inputProfile;
-            NetworkDebugger.oDevCore = DevConsole.core;
+            oDevCore = DevConsole.core;
             DevConsole.core = instance.consoleCore;
-            NetworkDebugger.oldCrowdCore = Crowd.core;
+            oldCrowdCore = Crowd.core;
             Crowd.core = instance.crowdCore;
-            NetworkDebugger.oldGameModeCore = GameMode.core;
+            oldGameModeCore = GameMode.core;
             GameMode.core = instance.gameModeCore;
-            NetworkDebugger.oldConnectionUICore = ConnectionStatusUI.core;
+            oldConnectionUICore = ConnectionStatusUI.core;
             ConnectionStatusUI.core = instance.connectionUICore;
-            NetworkDebugger.oldMonoCore = MonoMain.core;
+            oldMonoCore = MonoMain.core;
             MonoMain.core = instance.monoCore;
-            NetworkDebugger.oldHUDCore = HUD.core;
+            oldHUDCore = HUD.core;
             HUD.core = instance.hudCore;
-            NetworkDebugger.oldMatchmakingCore = UIMatchmakingBox.core;
+            oldMatchmakingCore = UIMatchmakingBox.core;
             UIMatchmakingBox.core = instance.matchmakingCore;
-            NetworkDebugger.oldAUCore = AutoUpdatables.core;
+            oldAUCore = AutoUpdatables.core;
             AutoUpdatables.core = instance.auCore;
-            NetworkDebugger.oldRando = Rando.generator;
+            oldRando = Rando.generator;
             Rando.generator = instance.rando;
             foreach (NetworkInstance.Core extraCore in instance.extraCores)
                 extraCore.Lock();
@@ -961,34 +961,34 @@ namespace DuckGame
 
         public static void UnlockInstance(NetworkInstance instance)
         {
-            Network.activeNetwork = NetworkDebugger.oldNetwork;
-            DuckNetwork.core = NetworkDebugger.oldDuckNetworkCore;
-            Teams.core = NetworkDebugger.oldTeamCore;
-            Layer.core = NetworkDebugger.oldLayerCore;
-            VirtualTransition.core = NetworkDebugger.oldVirtualCore;
-            Level.core = NetworkDebugger.oldLevelCore;
-            Profiles.core = NetworkDebugger.oldProfileCore;
-            InputProfile.core = NetworkDebugger.oldInputCore;
-            DevConsole.core = NetworkDebugger.oDevCore;
-            Crowd.core = NetworkDebugger.oldCrowdCore;
-            GameMode.core = NetworkDebugger.oldGameModeCore;
-            ConnectionStatusUI.core = NetworkDebugger.oldConnectionUICore;
-            MonoMain.core = NetworkDebugger.oldMonoCore;
-            HUD.core = NetworkDebugger.oldHUDCore;
-            UIMatchmakingBox.core = NetworkDebugger.oldMatchmakingCore;
-            AutoUpdatables.core = NetworkDebugger.oldAUCore;
-            Rando.generator = NetworkDebugger.oldRando;
+            Network.activeNetwork = oldNetwork;
+            DuckNetwork.core = oldDuckNetworkCore;
+            Teams.core = oldTeamCore;
+            Layer.core = oldLayerCore;
+            VirtualTransition.core = oldVirtualCore;
+            core = oldLevelCore;
+            Profiles.core = oldProfileCore;
+            InputProfile.core = oldInputCore;
+            DevConsole.core = oDevCore;
+            Crowd.core = oldCrowdCore;
+            GameMode.core = oldGameModeCore;
+            ConnectionStatusUI.core = oldConnectionUICore;
+            MonoMain.core = oldMonoCore;
+            HUD.core = oldHUDCore;
+            UIMatchmakingBox.core = oldMatchmakingCore;
+            AutoUpdatables.core = oldAUCore;
+            Rando.generator = oldRando;
             foreach (NetworkInstance.Core extraCore in instance.extraCores)
                 extraCore.Unlock();
         }
 
         public static NetworkInstance Reboot(NetworkInstance pInstance)
         {
-            NetworkDebugger.UnlockInstance(pInstance);
-            int num = NetworkDebugger._instances.IndexOf(pInstance);
+            UnlockInstance(pInstance);
+            int num = _instances.IndexOf(pInstance);
             NetworkDebugger.instance.CreateInstance(num, false);
-            NetworkInstance instance = NetworkDebugger._instances[num];
-            NetworkDebugger.LockInstance(pInstance);
+            NetworkInstance instance = _instances[num];
+            LockInstance(pInstance);
             return instance;
         }
 
@@ -997,7 +997,7 @@ namespace DuckGame
             FieldInfo field = typeof(T).GetField(pCoreMemberName, BindingFlags.Static | BindingFlags.Public);
             if (!(field != null))
                 return;
-            NetworkDebugger._registeredCores.Add(new NetworkInstance.Core()
+            _registeredCores.Add(new NetworkInstance.Core()
             {
                 member = field,
                 originalInstance = field.GetValue(null),
@@ -1013,7 +1013,7 @@ namespace DuckGame
 
         public class Recorder
         {
-            public static NetworkDebugger.Recorder active;
+            public static Recorder active;
             private Dictionary<int, List<ushort>> inputs = new Dictionary<int, List<ushort>>();
             public int seed = 1337;
             public string level = "";
@@ -1023,15 +1023,15 @@ namespace DuckGame
             public void Log(ushort pInputState)
             {
                 List<ushort> ushortList;
-                if (!inputs.TryGetValue(NetworkDebugger.currentIndex, out ushortList))
-                    inputs[NetworkDebugger.currentIndex] = ushortList = new List<ushort>();
+                if (!inputs.TryGetValue(currentIndex, out ushortList))
+                    inputs[currentIndex] = ushortList = new List<ushort>();
                 ushortList.Add(pInputState);
             }
 
             public ushort Get()
             {
                 List<ushort> ushortList;
-                return inputs.TryGetValue(NetworkDebugger.currentIndex, out ushortList) && frame < ushortList.Count ? ushortList[frame] : (ushort)0;
+                return inputs.TryGetValue(currentIndex, out ushortList) && frame < ushortList.Count ? ushortList[frame] : (ushort)0;
             }
         }
     }

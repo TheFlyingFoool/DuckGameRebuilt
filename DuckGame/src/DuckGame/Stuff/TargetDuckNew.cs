@@ -71,7 +71,7 @@ namespace DuckGame
             Vec2 vec2 = this.holdObject.Offset(new Vec2(num * this.holdObject.angleMul, 0f));
             if (_waitFire <= 0.0)
             {
-                foreach (Duck duck in Level.current.things[typeof(Duck)].Where<Thing>(d => !(d is TargetDuck)))
+                foreach (Duck duck in Level.current.things[typeof(Duck)].Where(d => !(d is TargetDuck)))
                 {
                     if (Collision.Line(this.holdObject.position + new Vec2(0f, -5f), vec2 + new Vec2(0f, -5f), duck.rectangle) || Collision.Line(this.holdObject.position + new Vec2(0f, 5f), vec2 + new Vec2(0f, 5f), duck.rectangle))
                     {

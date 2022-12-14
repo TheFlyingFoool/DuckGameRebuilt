@@ -61,7 +61,7 @@ namespace DuckGame
             _validityTest = validityTest;
             if (Network.isActive)
                 _readyForTransition = false;
-            GameLevel.first = !GameLevel.first;
+            first = !first;
             if (seedVal != 0)
                 seed = seedVal;
             _editorTestMode = editorTestMode;
@@ -88,7 +88,7 @@ namespace DuckGame
             }
             base.Initialize();
             if (Network.isActive)
-                Level.core.gameInProgress = true;
+                core.gameInProgress = true;
             if (_randomLevel != null)
             {
                 GhostManager.context.ResetGhostIndex(networkIndex);
@@ -101,24 +101,24 @@ namespace DuckGame
                 {
                     if (chosenSpawns.Count == 0)
                     {
-                        chosenSpawns.Add(source1.ElementAt<SpawnPoint>(Rando.Int(source1.Count - 1)));
+                        chosenSpawns.Add(source1.ElementAt(Rando.Int(source1.Count - 1)));
                     }
                     else
                     {
-                        IOrderedEnumerable<SpawnPoint> source2 = source1.OrderByDescending<SpawnPoint, int>(x =>
+                        IOrderedEnumerable<SpawnPoint> source2 = source1.OrderByDescending(x =>
                        {
                            int val2 = 9999999;
                            foreach (Transform transform in chosenSpawns)
                                val2 = (int)Math.Min((transform.position - x.position).length, val2);
                            return val2;
                        });
-                        chosenSpawns.Add(source2.First<SpawnPoint>());
+                        chosenSpawns.Add(source2.First());
                     }
                 }
                 foreach (SpawnPoint spawnPoint in source1)
                 {
                     if (!chosenSpawns.Contains(spawnPoint))
-                        Level.Remove(spawnPoint);
+                        Remove(spawnPoint);
                 }
                 foreach (Thing thing in things)
                 {
@@ -132,7 +132,7 @@ namespace DuckGame
                 {
                     visible = false
                 };
-                Level.Add(pyramidBackground);
+                Add(pyramidBackground);
                 base.Initialize();
             }
             things.RefreshState();
@@ -145,7 +145,7 @@ namespace DuckGame
             {
                 prepareSpawn.localSpawnVisible = false;
                 prepareSpawn.immobilized = true;
-                Level.Add(prepareSpawn);
+                Add(prepareSpawn);
             }
         }
 
@@ -153,8 +153,8 @@ namespace DuckGame
 
         public static int NumberOfDucks
         {
-            get => GameLevel._numberOfDucksSpawned < 2 ? 2 : GameLevel._numberOfDucksSpawned;
-            set => GameLevel._numberOfDucksSpawned = value;
+            get => _numberOfDucksSpawned < 2 ? 2 : _numberOfDucksSpawned;
+            set => _numberOfDucksSpawned = value;
         }
 
         public override void Start()
@@ -188,7 +188,7 @@ namespace DuckGame
                     NatureBackground ng = First<NatureBackground>();
                     if (ng != null)
                     {
-                        Level.Remove(ng._parallax);
+                        Remove(ng._parallax);
                         ng.Initialize();
                     }
                     rainSound = new LoopingSound("sizzle", 1, -3);
@@ -272,7 +272,7 @@ namespace DuckGame
 
         protected override void OnTransferComplete(NetworkConnection c)
         {
-            Level.current.things.RefreshState();
+            current.things.RefreshState();
             Vec2 vec2_1 = new Vec2(9999f, -9999f);
             Vec2 zero = Vec2.Zero;
             int num = 0;
@@ -288,8 +288,8 @@ namespace DuckGame
                 duckList.Add(t);
             }
             Vec2 vec2_2 = zero / num;
-            GameLevel._numberOfDucksSpawned = num;
-            if (GameLevel._numberOfDucksSpawned > 4)
+            _numberOfDucksSpawned = num;
+            if (_numberOfDucksSpawned > 4)
                 TeamSelect2.eightPlayersActive = true;
             followCam.Adjust();
             _mode.pendingSpawns = duckList;
@@ -356,7 +356,7 @@ namespace DuckGame
                 if (DGRSettings.S_WeatherLighting > 0 && (int)Math.Round((float)Rando.Int(lightningRNG) / DGRSettings.S_WeatherLighting) == 0)
                 {
                     rainDarken = 1.2f;
-                    Level.Add(new BGLightning(Rando.Float(-30, 270), 0));
+                    Add(new BGLightning(Rando.Float(-30, 270), 0));
                     SFX.Play("balloonPop", 1, Rando.Float(-3, -4));
                 }
                 rainDarken = Lerp.Float(rainDarken, darkenRainer, 0.005f);
@@ -373,7 +373,7 @@ namespace DuckGame
                     for (int i = 0; i < rainTimer; i++)
                     {
                         rainTimer -= 1;
-                        Level.Add(new RainParticel(new Vec2(Rando.Float(topLeft.x - 400, bottomRight.x + 400), topLeft.y - 200), rainwind));
+                        Add(new RainParticel(new Vec2(Rando.Float(topLeft.x - 400, bottomRight.x + 400), topLeft.y - 200), rainwind));
                     }
                 }
             }
@@ -382,7 +382,7 @@ namespace DuckGame
                 rainwind = Lerp.Float(rainwind, rainwindto, 0.1f);
                 if (Rando.Int(100000) == 0 && !acider)
                 {
-                    CityBackground cbg = Level.First<CityBackground>();
+                    CityBackground cbg = First<CityBackground>();
                     if (cbg != null)
                     {
                         acidTimer = 240;
@@ -426,7 +426,7 @@ namespace DuckGame
                 if (DGRSettings.S_WeatherLighting > 0 && (int)Math.Round((float)Rando.Int(lightningRNG) / DGRSettings.S_WeatherLighting) == 0)
                 {
                     rainDarken = 1.2f;
-                    Level.Add(new BGLightning(Rando.Float(-30, 270), 0));
+                    Add(new BGLightning(Rando.Float(-30, 270), 0));
                     SFX.Play("balloonPop", 1, Rando.Float(-3, -4));
                 }
                 rainDarken = Lerp.Float(rainDarken, darkenRainer, 0.005f);
@@ -443,7 +443,7 @@ namespace DuckGame
                     for (int i = 0; i < rainTimer; i++)
                     {
                         rainTimer -= 1;
-                        Level.Add(new RainParticel(new Vec2(Rando.Float(topLeft.x - 400, bottomRight.x + 400), topLeft.y - 200), rainwind));
+                        Add(new RainParticel(new Vec2(Rando.Float(topLeft.x - 400, bottomRight.x + 400), topLeft.y - 200), rainwind));
                     }
                 }
             }
@@ -471,7 +471,7 @@ namespace DuckGame
                         SnowFallParticle sn = new SnowFallParticle(v.x, v.y, new Vec2(0, 1), Rando.Int(2) == 0);
                         //sn.life = Rando.Float(1, 2);
                         //sn._size = Rando.Float(1, 2);
-                        Level.Add(sn);
+                        Add(sn);
                     }
                 }
             }

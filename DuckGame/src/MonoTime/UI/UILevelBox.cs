@@ -340,8 +340,8 @@ namespace DuckGame
                 }
             }
             _newGrowthLevel = Profiles.experienceProfile.littleManLevel;
-            UILevelBox.gachas = 0;
-            UILevelBox.rareGachas = 0;
+            gachas = 0;
+            rareGachas = 0;
             _roundsPlayed = Profiles.experienceProfile.roundsSinceXP;
             _startRoundsPlayed = _roundsPlayed;
             Profiles.experienceProfile.roundsSinceXP = 0;
@@ -356,7 +356,7 @@ namespace DuckGame
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@START@SKIP XP");
         }
 
-        public static bool menuOpen => UILevelBox._confirmMenu != null && UILevelBox._confirmMenu.open;
+        public static bool menuOpen => _confirmMenu != null && _confirmMenu.open;
 
         public override void Close()
         {
@@ -376,8 +376,8 @@ namespace DuckGame
             Graphics.fadeAdd = 0f;
             Graphics.flashAdd = 0f;
             if (Unlockables.HasPendingUnlocks())
-                uiMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-            if (UILevelBox.rareGachas > 0 || UILevelBox.gachas > 0)
+                uiMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+            if (rareGachas > 0 || gachas > 0)
             {
                 UIGachaBoxNew.skipping = skipping;
                 UIGachaBoxNew uiGachaBoxNew = new UIGachaBoxNew(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, rare: true, openOnClose: uiMenu);
@@ -511,10 +511,10 @@ namespace DuckGame
             Keyboard.repeat = false;
             base.UpdateParts();
             this._sound.Update();
-            UILevelBox.currentLevel = this._currentLevel;
-            if (UILevelBox._confirmMenu != null)
+            currentLevel = this._currentLevel;
+            if (_confirmMenu != null)
             {
-                UILevelBox._confirmMenu.DoUpdate();
+                _confirmMenu.DoUpdate();
             }
             while (this.littleEggs.Count < Math.Min(Profiles.experienceProfile.numLittleMen, 8))
             {
@@ -560,13 +560,13 @@ namespace DuckGame
                     {
                         HUD.CloseAllCorners();
                         this._menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("YOYO"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f);
-                        UILevelBox._confirmMenu.depth = 0.98f;
+                        _confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("YOYO"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f);
+                        _confirmMenu.depth = 0.98f;
                         this._attemptingGive = true;
                     }
-                    if (this._attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (this._attemptingGive && _confirmMenu != null && !_confirmMenu.open)
                     {
-                        UILevelBox._confirmMenu = null;
+                        _confirmMenu = null;
                         this._attemptingGive = false;
                         FurniShopScreen.giveYoYo = false;
                     }
@@ -577,13 +577,13 @@ namespace DuckGame
                     {
                         HUD.CloseAllCorners();
                         this._menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("VOODOO VINCENT"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f);
-                        UILevelBox._confirmMenu.depth = 0.98f;
+                        _confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("VOODOO VINCENT"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f);
+                        _confirmMenu.depth = 0.98f;
                         this._attemptingGive = true;
                     }
-                    if (this._attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (this._attemptingGive && _confirmMenu != null && !_confirmMenu.open)
                     {
-                        UILevelBox._confirmMenu = null;
+                        _confirmMenu = null;
                         this._attemptingGive = false;
                         FurniShopScreen.giveVooDoo = false;
                     }
@@ -594,13 +594,13 @@ namespace DuckGame
                     {
                         HUD.CloseAllCorners();
                         this._menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("PERIMETER DEFENCE"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f);
-                        UILevelBox._confirmMenu.depth = 0.98f;
+                        _confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("PERIMETER DEFENCE"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f);
+                        _confirmMenu.depth = 0.98f;
                         this._attemptingGive = true;
                     }
-                    if (this._attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (this._attemptingGive && _confirmMenu != null && !_confirmMenu.open)
                     {
-                        UILevelBox._confirmMenu = null;
+                        _confirmMenu = null;
                         this._attemptingGive = false;
                         FurniShopScreen.givePerimeterDefence = false;
                     }
@@ -610,28 +610,28 @@ namespace DuckGame
                     if (!this._attemptingBuy)
                     {
                         this._menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIMenu((Vincent.type == DayType.PawnDay) ? "SELL TO VINCENT?" : "BUY FROM VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, -1f, (Vincent.type == DayType.PawnDay) ? "@CANCEL@CANCEL @SELECT@SELECT" : "@CANCEL@CANCEL @SELECT@SELECT", null, false);
-                        UILevelBox._confirmMenu.Add(new UIText(FurniShopScreen.attemptBuy.name, Color.Green, UIAlign.Center, 0f, null), true);
-                        UILevelBox._confirmMenu.Add(new UIText(" ", Color.White, UIAlign.Center, 0f, null), true);
-                        UILevelBox._confirmMenu.Add(new UIText(" ", Color.White, UIAlign.Center, 0f, null), true);
-                        UILevelBox._confirmMenu.Add(new UIMenuItem((Vincent.type == DayType.PawnDay) ? ("SELL |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)") : ("BUY |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)"), new UIMenuActionCloseMenuSetBoolean(UILevelBox._confirmMenu, this._menuBool), UIAlign.Center, default(Color), false), true);
-                        UILevelBox._confirmMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(UILevelBox._confirmMenu), UIAlign.Center, Colors.MenuOption, true), true);
-                        UILevelBox._confirmMenu.depth = 0.98f;
-                        UILevelBox._confirmMenu.DoInitialize();
-                        UILevelBox._confirmMenu.Close();
+                        _confirmMenu = new UIMenu((Vincent.type == DayType.PawnDay) ? "SELL TO VINCENT?" : "BUY FROM VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, -1f, (Vincent.type == DayType.PawnDay) ? "@CANCEL@CANCEL @SELECT@SELECT" : "@CANCEL@CANCEL @SELECT@SELECT", null, false);
+                        _confirmMenu.Add(new UIText(FurniShopScreen.attemptBuy.name, Color.Green, UIAlign.Center, 0f, null), true);
+                        _confirmMenu.Add(new UIText(" ", Color.White, UIAlign.Center, 0f, null), true);
+                        _confirmMenu.Add(new UIText(" ", Color.White, UIAlign.Center, 0f, null), true);
+                        _confirmMenu.Add(new UIMenuItem((Vincent.type == DayType.PawnDay) ? ("SELL |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)") : ("BUY |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)"), new UIMenuActionCloseMenuSetBoolean(_confirmMenu, this._menuBool), UIAlign.Center, default(Color), false), true);
+                        _confirmMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(_confirmMenu), UIAlign.Center, Colors.MenuOption, true), true);
+                        _confirmMenu.depth = 0.98f;
+                        _confirmMenu.DoInitialize();
+                        _confirmMenu.Close();
                         for (int i = 0; i < 10; i++)
                         {
-                            UILevelBox._confirmMenu.DoUpdate();
+                            _confirmMenu.DoUpdate();
                         }
-                        UILevelBox._confirmMenu.Open();
+                        _confirmMenu.Open();
                         this._attemptingBuy = true;
                     }
-                    if (this._attemptingBuy && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (this._attemptingBuy && _confirmMenu != null && !_confirmMenu.open)
                     {
                         if (this._menuBool.value)
                         {
                             this._attemptingBuy = false;
-                            UILevelBox._confirmMenu = null;
+                            _confirmMenu = null;
                             SFX.Play("ching", 1f, 0f, 0f, false);
                             if (Vincent.type == DayType.PawnDay)
                             {
@@ -682,7 +682,7 @@ namespace DuckGame
                         else
                         {
                             this._attemptingBuy = false;
-                            UILevelBox._confirmMenu = null;
+                            _confirmMenu = null;
                             if (Vincent.type == DayType.PawnDay)
                             {
                                 Vincent.Clear();
@@ -698,20 +698,20 @@ namespace DuckGame
                     if (!this._attemptingVincentClose && Input.Pressed("CANCEL", "Any") && !Vincent._willGiveVooDoo && !Vincent._willGiveYoYo && !Vincent._willGivePerimeterDefence)
                     {
                         this._menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIMenu("LEAVE VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, -1f, "@SELECT@SELECT", null, false);
-                        UILevelBox._confirmMenu.depth = 0.98f;
-                        UILevelBox._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(UILevelBox._confirmMenu, this._menuBool), UIAlign.Center, default(Color), false), true);
-                        UILevelBox._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(UILevelBox._confirmMenu), UIAlign.Center, default(Color), true), true);
-                        UILevelBox._confirmMenu.DoInitialize();
-                        UILevelBox._confirmMenu.Close();
+                        _confirmMenu = new UIMenu("LEAVE VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, -1f, "@SELECT@SELECT", null, false);
+                        _confirmMenu.depth = 0.98f;
+                        _confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, this._menuBool), UIAlign.Center, default(Color), false), true);
+                        _confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(_confirmMenu), UIAlign.Center, default(Color), true), true);
+                        _confirmMenu.DoInitialize();
+                        _confirmMenu.Close();
                         for (int j = 0; j < 10; j++)
                         {
-                            UILevelBox._confirmMenu.DoUpdate();
+                            _confirmMenu.DoUpdate();
                         }
-                        UILevelBox._confirmMenu.Open();
+                        _confirmMenu.Open();
                         this._attemptingVincentClose = true;
                     }
-                    if (this._attemptingVincentClose && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (this._attemptingVincentClose && _confirmMenu != null && !_confirmMenu.open)
                     {
                         if (this._menuBool.value)
                         {
@@ -723,7 +723,7 @@ namespace DuckGame
                         else
                         {
                             this._attemptingVincentClose = false;
-                            UILevelBox._confirmMenu = null;
+                            _confirmMenu = null;
                         }
                     }
                 }
@@ -733,7 +733,7 @@ namespace DuckGame
                 Vincent.Update();
             }
             this.skipUpdate = false;
-            if ((FurniShopScreen.open && !Vincent.showingDay) || (UILevelBox._confirmMenu != null && UILevelBox._confirmMenu.open))
+            if ((FurniShopScreen.open && !Vincent.showingDay) || (_confirmMenu != null && _confirmMenu.open))
             {
                 return;
             }
@@ -947,7 +947,7 @@ namespace DuckGame
             {
                 this._talking = true;
                 this._talkLine = "";
-                this._feedLine = this.sayQueue.First<string>();
+                this._feedLine = this.sayQueue.First();
                 this.sayQueue.RemoveAt(0);
                 this._startFeedLine = this._feedLine;
             }
@@ -1065,10 +1065,10 @@ namespace DuckGame
                             {
                                 specialGift = UIGachaBox.GetRandomFurniture(Rarity.VeryRare, 1, 0.75f, false, 0, false, false)[0];
                             }
-                            UILevelBox._confirmMenu = new UIPresentBox(specialGift, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f);
-                            UILevelBox._confirmMenu.depth = 0.98f;
-                            UILevelBox._confirmMenu.DoInitialize();
-                            UILevelBox._confirmMenu.Open();
+                            _confirmMenu = new UIPresentBox(specialGift, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f);
+                            _confirmMenu.depth = 0.98f;
+                            _confirmMenu.DoInitialize();
+                            _confirmMenu.Open();
                             this._genericWait = 0.5f;
                             this._driveAway = true;
                         }
@@ -1189,7 +1189,7 @@ namespace DuckGame
                                 this._coinLerp2 = 0f;
                                 this._coin2Wait = 1f;
                                 SFX.Play("ching", 1f, 0.2f, 0f, false);
-                                UILevelBox.rareGachas++;
+                                rareGachas++;
                             }
                             this._coin2Wait -= 0.08f;
                             if (this._coin2Wait <= 0f)
@@ -1205,8 +1205,8 @@ namespace DuckGame
                 return;
             }
             this._showCard = false;
-            Vec2 target = new Vec2(base.x - 80f, base.y - 10f);
-            if (base.open)
+            Vec2 target = new Vec2(x - 80f, y - 10f);
+            if (open)
             {
                 if (this._currentLevel == this._desiredLevel)
                 {
@@ -1250,7 +1250,7 @@ namespace DuckGame
                                 this._feedLine = "I... AM A HUNGRY\nLITTLE MAN.";
                             }
                             DateTime now = MonoMain.GetLocalTime();
-                            if (!UILevelBox.saidSpecial)
+                            if (!saidSpecial)
                             {
                                 if (now.Month == 4 && now.Day == 20)
                                 {
@@ -1276,7 +1276,7 @@ namespace DuckGame
                                 {
                                     this._feedLine = "HAPPY BIRTHDAY!";
                                 }
-                                UILevelBox.saidSpecial = true;
+                                saidSpecial = true;
                             }
                             if (Rando.Int(100000) == 1)
                             {
@@ -1406,7 +1406,7 @@ namespace DuckGame
                             if (!this._gaveToy)
                             {
                                 this._gaveToy = true;
-                                UILevelBox.gachas++;
+                                gachas++;
                                 this._coinLerp = 0f;
                                 SFX.Play("ching", 1f, 0.2f, 0f, false);
                             }
@@ -1547,7 +1547,7 @@ namespace DuckGame
                             {
                                 HUD.AddCornerControl(HUDCorner.TopRight, "@MENU2@TALK", null, false);
                             }
-                            if (Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (UILevelBox.rareGachas > 0 || UILevelBox.gachas > 0))
+                            if (Profiles.experienceProfile.GetNumFurnituresPlaced((int)RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (rareGachas > 0 || gachas > 0))
                             {
                                 HUD.AddCornerControl(HUDCorner.BottomLeft, "@START@AUTO TOYS", null, false);
                             }
@@ -1638,7 +1638,7 @@ namespace DuckGame
                                 {
                                     this._particles.Add(new XPPlus
                                     {
-                                        position = new Vec2(base.x - 72f, base.y - 58f),
+                                        position = new Vec2(x - 72f, y - 58f),
                                         velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
                                         target = target + new Vec2(0f, fullYOffset),
                                         color = Colors.DGGreen
@@ -1648,7 +1648,7 @@ namespace DuckGame
                                 {
                                     this._particles.Add(new XPPlus
                                     {
-                                        position = new Vec2(base.x - 72f, base.y - 58f),
+                                        position = new Vec2(x - 72f, y - 58f),
                                         velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
                                         target = target + new Vec2(0f, 10f + fullYOffset),
                                         color = Colors.DGRed
@@ -1658,7 +1658,7 @@ namespace DuckGame
                                 {
                                     this._particles.Add(new XPPlus
                                     {
-                                        position = new Vec2(base.x - 72f, base.y - 58f),
+                                        position = new Vec2(x - 72f, y - 58f),
                                         velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
                                         target = target + new Vec2(0f, 20f + fullYOffset),
                                         color = Colors.DGBlue
@@ -1737,7 +1737,7 @@ namespace DuckGame
                         this._gachaValue -= this.gachaNeed;
                         this._newGachaValue -= (float)this.gachaNeed;
                         this._oldGachaValue -= (float)this.gachaNeed;
-                        UILevelBox.gachas++;
+                        gachas++;
                         this._coinLerp = 0f;
                         SFX.Play("ching", 1f, 0.2f, 0f, false);
                     }
@@ -2003,7 +2003,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    _littleMan.frame = UILevelBox.LittleManFrame(Profiles.experienceProfile.numLittleMen, curLev);
+                    _littleMan.frame = LittleManFrame(Profiles.experienceProfile.numLittleMen, curLev);
                     _littleMan.depth = (Depth)0.85f;
                     _littleMan.yscale = 1f;
                     littleManPos = new Vec2(x + num8, (float)(y - 29.0 + num3 + 4.0) + num21);
@@ -2078,7 +2078,7 @@ namespace DuckGame
                 {
                     littleEgg.depth = (Depth)0.85f;
                     Graphics.Draw(littleEgg, (float)(vec2_9.x + (num28 * 23) - 3.0), vec2_9.y - 3f);
-                    _littleMan.frame = UILevelBox.LittleManFrame(Math.Max(Profiles.experienceProfile.numLittleMen - 8, 0) + num28, -1, bottomBar: true);
+                    _littleMan.frame = LittleManFrame(Math.Max(Profiles.experienceProfile.numLittleMen - 8, 0) + num28, -1, bottomBar: true);
                     _littleMan.depth = (Depth)0.9f;
                     _littleMan.yscale = 1f;
                     Graphics.Draw(_littleMan, (float)(vec2_9.x + (num28 * 23) + 3.0), vec2_9.y + 1f);
@@ -2167,7 +2167,7 @@ namespace DuckGame
                 }
                 Rando.generator = generator;
             }
-            if (UILevelBox._confirmMenu != null && UILevelBox._confirmMenu.open)
+            if (_confirmMenu != null && _confirmMenu.open)
                 Graphics.DrawRect(new Vec2(-1000f, -1000f), new Vec2(1000f, 1000f), Color.Black * 0.5f, (Depth)(275f * (float)Math.PI / 887f));
             if (FurniShopScreen.open)
             {
@@ -2182,7 +2182,7 @@ namespace DuckGame
                 Graphics.Draw(_taxi, vec2_13.x, vec2_13.y);
                 if (_inTaxi)
                 {
-                    _littleMan.frame = UILevelBox.LittleManFrame(Profiles.experienceProfile.numLittleMen, curLev);
+                    _littleMan.frame = LittleManFrame(Profiles.experienceProfile.numLittleMen, curLev);
                     Graphics.Draw(_littleMan, vec2_13.x - 16f, vec2_13.y - 8f, new Rectangle(0f, 0f, 16f, 6f));
                 }
             }
@@ -2236,9 +2236,9 @@ namespace DuckGame
                 _bigFont.Draw(text6, new Vec2((float)(_intermissionSlide * (320.0 + Layer.HUD.width / 2.0 - _bigFont.GetWidth(text6) / 2.0) - 320.0), num36 + 18f), Color.White, (Depth)0.99f);
             }
             _lastFill = num7;
-            if (UILevelBox._confirmMenu == null)
+            if (_confirmMenu == null)
                 return;
-            UILevelBox._confirmMenu.DoDraw();
+            _confirmMenu.DoDraw();
         }
     }
 }

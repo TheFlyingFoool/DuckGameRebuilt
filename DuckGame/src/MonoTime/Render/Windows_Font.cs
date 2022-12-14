@@ -23,7 +23,7 @@ namespace DuckGame
         public float RelBaseline;
         public float RelBottom;
 
-        public FontInfo(System.Drawing.Graphics gr, System.Drawing.Font the_font)
+        public FontInfo(System.Drawing.Graphics gr, Font the_font)
         {
             float emHeight = the_font.FontFamily.GetEmHeight(the_font.Style);
             EmHeightPixels = ConvertUnits(gr, the_font.Size, the_font.Unit, GraphicsUnit.Pixel);

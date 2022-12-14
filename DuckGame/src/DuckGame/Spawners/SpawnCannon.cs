@@ -41,7 +41,7 @@ namespace DuckGame
             graphic = _sprite;
         }
 
-        public SpawnCannon(float xpos, float ypos, System.Type c = null)
+        public SpawnCannon(float xpos, float ypos, Type c = null)
           : base(xpos, ypos)
         {
             bing = new EditorProperty<int>(0, this, max: 240f, increment: 1f, minSpecial: "none")
@@ -109,12 +109,12 @@ namespace DuckGame
                     return;
                 if (randomSpawn && keepRandom)
                 {
-                    List<System.Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
+                    List<Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
                     contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
                 }
                 else if (possible.Count > 0)
                 {
-                    System.Type type = MysteryGun.PickType(chanceGroup, possible);
+                    Type type = MysteryGun.PickType(chanceGroup, possible);
                     if (type != null)
                         contains = type;
                 }

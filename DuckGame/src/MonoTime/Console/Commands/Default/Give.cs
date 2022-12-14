@@ -45,7 +45,7 @@
 
 
             SFX.Play("hitBox");
-            DuckGame.Level.Add(item);
+            Level.Add(item);
             player.duck.GiveHoldable(item);
         }
     }

@@ -33,7 +33,7 @@ namespace DuckGame
         private static Dictionary<int, Sprite> _triggerImages;
         private static bool _repeat = false;
         private static List<Keys> _repeatList = new List<Keys>();
-        private List<Keyboard.RepeatKey> _repeatingKeys = new List<Keyboard.RepeatKey>();
+        private List<RepeatKey> _repeatingKeys = new List<RepeatKey>();
         public static bool isComposing = false;
         private static int ignoreEnter;
         private static bool ignoreCore = false;
@@ -42,7 +42,7 @@ namespace DuckGame
         private static bool _registerLock = false;
         //private static int _currentNote = 0;
 
-        public static bool NothingPressed() => Keyboard._keyState.GetPressedKeys().Length == 0 && Keyboard._keyStatePrev.GetPressedKeys().Length == 0;
+        public static bool NothingPressed() => _keyState.GetPressedKeys().Length == 0 && _keyStatePrev.GetPressedKeys().Length == 0;
 
         public override bool isConnected => !_fakeDisconnect;
 
@@ -61,7 +61,7 @@ namespace DuckGame
                 _triggerNames = new Dictionary<int, string>();
                 foreach (Keys key in Enum.GetValues(typeof(Keys)).Cast<Keys>())
                 {
-                    char ch = Keyboard.KeyToChar(key);
+                    char ch = KeyToChar(key);
                     if (ch == ' ')
                     {
                         switch (key)
@@ -184,129 +184,129 @@ namespace DuckGame
 
         public static void InitTriggerImages()
         {
-            if (Keyboard._triggerImages != null)
+            if (_triggerImages != null)
                 return;
-            Keyboard._triggerImages = new Dictionary<int, Sprite>();
-            Keyboard._triggerImages[9999] = new Sprite("buttons/keyboard/arrows");
-            Keyboard._triggerImages[9998] = new Sprite("buttons/keyboard/wasd");
-            Keyboard._triggerImages[int.MaxValue] = new Sprite("buttons/keyboard/key");
+            _triggerImages = new Dictionary<int, Sprite>();
+            _triggerImages[9999] = new Sprite("buttons/keyboard/arrows");
+            _triggerImages[9998] = new Sprite("buttons/keyboard/wasd");
+            _triggerImages[int.MaxValue] = new Sprite("buttons/keyboard/key");
             foreach (Keys key1 in Enum.GetValues(typeof(Keys)).Cast<Keys>())
             {
-                char key2 = Keyboard.KeyToChar(key1);
+                char key2 = KeyToChar(key1);
                 if (key2 == ' ')
                 {
                     switch (key1)
                     {
                         case Keys.Back:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/back");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/back");
                             continue;
                         case Keys.Tab:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/tab");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/tab");
                             continue;
                         case Keys.Enter:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/enter");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/enter");
                             continue;
                         case Keys.Escape:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/escape");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/escape");
                             continue;
                         case Keys.Space:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/space");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/space");
                             continue;
                         case Keys.PageUp:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/pgup");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/pgup");
                             continue;
                         case Keys.PageDown:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/pgdown");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/pgdown");
                             continue;
                         case Keys.End:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/end");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/end");
                             continue;
                         case Keys.Home:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/home");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/home");
                             continue;
                         case Keys.Left:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/leftKey");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/leftKey");
                             continue;
                         case Keys.Up:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/upKey");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/upKey");
                             continue;
                         case Keys.Right:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/rightKey");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/rightKey");
                             continue;
                         case Keys.Down:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/downKey");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/downKey");
                             continue;
                         case Keys.Insert:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/insert");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/insert");
                             continue;
                         case Keys.F1:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/f1");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/f1");
                             continue;
                         case Keys.F2:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/f2");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/f2");
                             continue;
                         case Keys.F3:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/f3");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/f3");
                             continue;
                         case Keys.F4:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/f4");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/f4");
                             continue;
                         case Keys.F5:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/f5");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/f5");
                             continue;
                         case Keys.F6:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/f6");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/f6");
                             continue;
                         case Keys.F7:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/f7");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/f7");
                             continue;
                         case Keys.F8:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/f8");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/f8");
                             continue;
                         case Keys.F9:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/f9");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/f9");
                             continue;
                         case Keys.F10:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/f10");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/f10");
                             continue;
                         case Keys.F11:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/f11");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/f11");
                             continue;
                         case Keys.F12:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/f12");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/f12");
                             continue;
                         case Keys.LeftShift:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/shift");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/shift");
                             continue;
                         case Keys.RightShift:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/shift");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/shift");
                             continue;
                         case Keys.LeftControl:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/control");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/control");
                             continue;
                         case Keys.RightControl:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/control");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/control");
                             continue;
                         case Keys.LeftAlt:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/alt");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/alt");
                             continue;
                         case Keys.RightAlt:
-                            Keyboard._triggerImages[(int)key1] = new Sprite("buttons/keyboard/alt");
+                            _triggerImages[(int)key1] = new Sprite("buttons/keyboard/alt");
                             continue;
                         case Keys.MouseLeft:
-                            Keyboard._triggerImages[(int)key1] = new SpriteMap("buttons/mouse", 12, 15)
+                            _triggerImages[(int)key1] = new SpriteMap("buttons/mouse", 12, 15)
                             {
                                 frame = 0
                             };
                             continue;
                         case Keys.MouseMiddle:
-                            Keyboard._triggerImages[(int)key1] = new SpriteMap("buttons/mouse", 12, 15)
+                            _triggerImages[(int)key1] = new SpriteMap("buttons/mouse", 12, 15)
                             {
                                 frame = 1
                             };
                             continue;
                         case Keys.MouseRight:
-                            Keyboard._triggerImages[(int)key1] = new SpriteMap("buttons/mouse", 12, 15)
+                            _triggerImages[(int)key1] = new SpriteMap("buttons/mouse", 12, 15)
                             {
                                 frame = 2
                             };
@@ -316,15 +316,15 @@ namespace DuckGame
                     }
                 }
                 else
-                    Keyboard._triggerImages[(int)key1] = new KeyImage(key2);
+                    _triggerImages[(int)key1] = new KeyImage(key2);
             }
         }
 
         public override Sprite GetMapImage(int map)
         {
             Sprite sprite;
-            Keyboard._triggerImages.TryGetValue(map, out sprite);
-            return sprite ?? Keyboard._triggerImages[int.MaxValue];
+            _triggerImages.TryGetValue(map, out sprite);
+            return sprite ?? _triggerImages[int.MaxValue];
         }
 
         public static char KeyToChar(Keys key, bool caps = true, bool shift = false)
@@ -700,78 +700,78 @@ namespace DuckGame
 
         public static bool repeat
         {
-            get => Keyboard._repeat;
-            set => Keyboard._repeat = value;
+            get => _repeat;
+            set => _repeat = value;
         }
 
         public object KeyInterop { get; private set; }
 
         public override void Update()
         {
-            if (Keyboard._usingVoiceRegister > 0)
-                --Keyboard._usingVoiceRegister;
-            --Keyboard.ignoreEnter;
-            if (Keyboard.ignoreEnter < 0)
-                Keyboard.ignoreEnter = 0;
+            if (_usingVoiceRegister > 0)
+                --_usingVoiceRegister;
+            --ignoreEnter;
+            if (ignoreEnter < 0)
+                ignoreEnter = 0;
             if (!Graphics.inFocus)
                 return;
-            if (Keyboard._usingVoiceRegister == 0)
+            if (_usingVoiceRegister == 0)
             {
-                if (Keyboard.Pressed(Keys.D8) && index == 0)
+                if (Pressed(Keys.D8) && index == 0)
                     _fakeDisconnect = !_fakeDisconnect;
-                if (Keyboard.Pressed(Keys.D9) && index == 1)
+                if (Pressed(Keys.D9) && index == 1)
                     _fakeDisconnect = !_fakeDisconnect;
             }
-            if (Keyboard._flipper == 0)
+            if (_flipper == 0)
             {
-                Keyboard._keyStatePrev = Keyboard._keyState;
-                Keyboard._keyState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
-                Keyboard._keyboardPress = false;
-                int num = Keyboard._keyState.GetPressedKeys().Count<Microsoft.Xna.Framework.Input.Keys>();
-                if (num != Keyboard._lastKeyCount && num != 0)
-                    Keyboard._keyboardPress = true;
-                Keyboard._lastKeyCount = num;
+                _keyStatePrev = _keyState;
+                _keyState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+                _keyboardPress = false;
+                int num = _keyState.GetPressedKeys().Count();
+                if (num != _lastKeyCount && num != 0)
+                    _keyboardPress = true;
+                _lastKeyCount = num;
                 updateKeyboardString();
-                Keyboard._flipper = 1;
-                if (Keyboard._registerLock && (Keyboard._registerSetThing == null || Keyboard._registerSetThing.removeFromLevel || Keyboard._registerSetThing.owner == null || DevConsole.open || DuckNetwork.core.enteringText))
+                _flipper = 1;
+                if (_registerLock && (_registerSetThing == null || _registerSetThing.removeFromLevel || _registerSetThing.owner == null || DevConsole.open || DuckNetwork.core.enteringText))
                 {
-                    Keyboard._registerLock = false;
+                    _registerLock = false;
                     //Keyboard._currentNote = 0;
                 }
             }
             else
-                --Keyboard._flipper;
+                --_flipper;
             if (index == 0)
-                Keyboard._repeatList.Clear();
-            Keyboard.ignoreCore = true;
-            if (Keyboard._repeat)
+                _repeatList.Clear();
+            ignoreCore = true;
+            if (_repeat)
             {
                 foreach (Keys keys in Enum.GetValues(typeof(Keys)).Cast<Keys>())
                 {
                     Keys k = keys;
-                    if (MapPressed((int)k, false) && (k < Keys.F1 || k > Keys.F12) && _repeatingKeys.FirstOrDefault<Keyboard.RepeatKey>(x => x.key == k) == null)
-                        _repeatingKeys.Add(new Keyboard.RepeatKey()
+                    if (MapPressed((int)k, false) && (k < Keys.F1 || k > Keys.F12) && _repeatingKeys.FirstOrDefault(x => x.key == k) == null)
+                        _repeatingKeys.Add(new RepeatKey()
                         {
                             key = k,
                             repeatTime = 2f
                         });
                 }
-                List<Keyboard.RepeatKey> repeatKeyList = new List<Keyboard.RepeatKey>();
-                foreach (Keyboard.RepeatKey repeatingKey in _repeatingKeys)
+                List<RepeatKey> repeatKeyList = new List<RepeatKey>();
+                foreach (RepeatKey repeatingKey in _repeatingKeys)
                 {
                     repeatingKey.repeatTime -= 0.1f;
                     bool flag = MapDown((int)repeatingKey.key, false);
                     if (flag && repeatingKey.repeatTime < 0.0)
-                        Keyboard._repeatList.Add(repeatingKey.key);
+                        _repeatList.Add(repeatingKey.key);
                     if (repeatingKey.repeatTime <= 0.0 & flag)
                         repeatingKey.repeatTime = 0.25f;
                     if (!flag)
                         repeatKeyList.Add(repeatingKey);
                 }
-                foreach (Keyboard.RepeatKey repeatKey in repeatKeyList)
+                foreach (RepeatKey repeatKey in repeatKeyList)
                     _repeatingKeys.Remove(repeatKey);
             }
-            Keyboard.ignoreCore = false;
+            ignoreCore = false;
         }
 
         [DllImport("user32.dll")]
@@ -787,7 +787,7 @@ namespace DuckGame
         public static extern bool GetKeyboardState(byte[] lpKeyState);
 
         [DllImport("user32.dll")]
-        public static extern uint MapVirtualKey(uint uCode, Keyboard.MapType uMapType);
+        public static extern uint MapVirtualKey(uint uCode, MapType uMapType);
         public static Dictionary<int, char> DicVirtualChar = new Dictionary<int, char>() { { 8, (char)8 },
         { 9, (char)9},
         { 3, (char)13 },
@@ -872,10 +872,10 @@ namespace DuckGame
             }
             char charFromKey = ' ';
             byte[] lpKeyState = new byte[256];
-            Keyboard.GetKeyboardState(lpKeyState);
-            uint wScanCode = Keyboard.MapVirtualKey((uint)num, Keyboard.MapType.MAPVK_VK_TO_VSC);
+            GetKeyboardState(lpKeyState);
+            uint wScanCode = MapVirtualKey((uint)num, MapType.MAPVK_VK_TO_VSC);
             StringBuilder pwszBuff = new StringBuilder(2);
-            int unicode = Keyboard.ToUnicode((uint)num, wScanCode, lpKeyState, pwszBuff, pwszBuff.Capacity, 0U);
+            int unicode = ToUnicode((uint)num, wScanCode, lpKeyState, pwszBuff, pwszBuff.Capacity, 0U);
             if (pwszBuff.Length < 1)
                 return ' ';
             switch (unicode)
@@ -905,8 +905,8 @@ namespace DuckGame
 
         public static void IMECharEnteredHandler(object sender, CharacterEventArgs e)
         {
-            Keyboard.keyString = e.Character != '　' ? Keyboard.keyString + e.Character.ToString() : Keyboard.keyString + " ";
-            Keyboard.ignoreEnter = 4;
+            keyString = e.Character != '　' ? keyString + e.Character.ToString() : keyString + " ";
+            ignoreEnter = 4;
         }
 
         public static void ALTCharEnteredHandler(object sender, CharacterEventArgs e)
@@ -914,9 +914,9 @@ namespace DuckGame
             if (!e.ExtendedKey)
                 return;
             if (e.Character == '　')
-                Keyboard.keyString += " ";
+                keyString += " ";
             else
-                Keyboard.keyString += e.Character.ToString();
+                keyString += e.Character.ToString();
         }
         public static List<char> TextInputCharacters = new List<char>(FNAPlatform.TextInputCharacters);
         public static void FNACharEnteredHandler(char c) // FNA SDL call back for key char pressed sht
@@ -925,14 +925,14 @@ namespace DuckGame
             {
                 if (c == '\b') // Keys.Back
                 {
-                    if (Keyboard.keyString.Length > 0)
+                    if (keyString.Length > 0)
                     {
-                        Keyboard.keyString = Keyboard.keyString.Remove(Keyboard.keyString.Length - 1, 1);
+                        keyString = keyString.Remove(keyString.Length - 1, 1);
                     }
                 }
                 return;
             }
-            Keyboard.keyString += c.ToString();
+            keyString += c.ToString();
         }
 
         private void updateKeyboardString() // old way to get keyboard inputs, idk maby implementing it optionally? idk man
@@ -983,65 +983,65 @@ namespace DuckGame
 
         private static int KeyNote()
         {
-            Keyboard._usingVoiceRegister = 0;
+            _usingVoiceRegister = 0;
             int num = -1;
-            if (Keyboard._registerLock)
+            if (_registerLock)
             {
-                if (Keyboard.Down(Keys.D1))
+                if (Down(Keys.D1))
                     num = 0;
-                if (Keyboard.Down(Keys.D2))
+                if (Down(Keys.D2))
                     num = 1;
-                if (Keyboard.Down(Keys.D3))
+                if (Down(Keys.D3))
                     num = 2;
-                if (Keyboard.Down(Keys.D4))
+                if (Down(Keys.D4))
                     num = 3;
-                if (Keyboard.Down(Keys.D5))
+                if (Down(Keys.D5))
                     num = 4;
-                if (Keyboard.Down(Keys.D6))
+                if (Down(Keys.D6))
                     num = 5;
-                if (Keyboard.Down(Keys.D7))
+                if (Down(Keys.D7))
                     num = 6;
-                if (Keyboard.Down(Keys.D8))
+                if (Down(Keys.D8))
                     num = 7;
-                if (Keyboard.Down(Keys.D9))
+                if (Down(Keys.D9))
                     num = 8;
-                if (Keyboard.Down(Keys.D0))
+                if (Down(Keys.D0))
                     num = 9;
-                if (Keyboard.Down(Keys.OemMinus))
+                if (Down(Keys.OemMinus))
                     num = 10;
-                if (Keyboard.Down(Keys.OemPlus))
+                if (Down(Keys.OemPlus))
                     num = 11;
-                if (Keyboard.Down(Keys.Back))
+                if (Down(Keys.Back))
                     num = 12;
-                Keyboard._usingVoiceRegister = 3;
+                _usingVoiceRegister = 3;
             }
             return num;
         }
 
         public static int CurrentNote(InputProfile pProfile, Thing pInstrument)
         {
-            Keyboard._registerSetThing = pInstrument;
-            Keyboard._usingVoiceRegister = 0;
-            if (DuckGame.Input.Pressed("VOICEREG"))
-                Keyboard._registerLock = !Keyboard._registerLock;
-            return Keyboard.KeyNote();
+            _registerSetThing = pInstrument;
+            _usingVoiceRegister = 0;
+            if (Input.Pressed("VOICEREG"))
+                _registerLock = !_registerLock;
+            return KeyNote();
         }
 
         public override bool MapPressed(int mapping, bool any = false)
         {
-            if (!Keyboard.ignoreCore && (DevConsole.open || DuckNetwork.enteringText || Editor.enteringText))
+            if (!ignoreCore && (DevConsole.open || DuckNetwork.enteringText || Editor.enteringText))
                 return false;
             Keys key = (Keys)mapping;
-            return Keyboard.Pressed(key, any) || Keyboard._repeatList.Contains(key);
+            return Pressed(key, any) || _repeatList.Contains(key);
         }
 
         public static bool Pressed(Keys key, bool any = false)
         {
-            if (Keyboard._usingVoiceRegister > 0 && Keyboard.IsKeyNote(key) || DuckGame.Input.ignoreInput)
+            if (_usingVoiceRegister > 0 && IsKeyNote(key) || Input.ignoreInput)
                 return false;
-            if (any && Keyboard._keyboardPress)
+            if (any && _keyboardPress)
                 return true;
-            if (key == Keys.Enter && Keyboard.ignoreEnter > 0)
+            if (key == Keys.Enter && ignoreEnter > 0)
                 return false;
             if (key >= Keys.MouseKeys)
             {
@@ -1051,14 +1051,14 @@ namespace DuckGame
                     return Mouse.middle == InputState.Pressed;
                 return key == Keys.MouseRight && Mouse.right == InputState.Pressed;
             }
-            return Keyboard._keyState.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key) && !Keyboard._keyStatePrev.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key) || Keyboard._repeatList.Contains(key);
+            return _keyState.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key) && !_keyStatePrev.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key) || _repeatList.Contains(key);
         }
 
-        public override bool MapReleased(int mapping) => (Keyboard.ignoreCore || !DevConsole.open && !DuckNetwork.enteringText && !Editor.enteringText) && Keyboard.Released((Keys)mapping);
+        public override bool MapReleased(int mapping) => (ignoreCore || !DevConsole.open && !DuckNetwork.enteringText && !Editor.enteringText) && Released((Keys)mapping);
 
         public static bool Released(Keys key)
         {
-            if (Keyboard._usingVoiceRegister > 0 && Keyboard.IsKeyNote(key) || DuckGame.Input.ignoreInput || key == Keys.Enter && Keyboard.ignoreEnter > 0)
+            if (_usingVoiceRegister > 0 && IsKeyNote(key) || Input.ignoreInput || key == Keys.Enter && ignoreEnter > 0)
                 return false;
             if (key >= Keys.MouseKeys)
             {
@@ -1068,20 +1068,20 @@ namespace DuckGame
                     return Mouse.middle == InputState.Released;
                 return key == Keys.MouseRight && Mouse.right == InputState.Released;
             }
-            return !Keyboard._keyState.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key) && Keyboard._keyStatePrev.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key);
+            return !_keyState.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key) && _keyStatePrev.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key);
         }
 
-        public override bool MapDown(int mapping, bool any = false) => (Keyboard.ignoreCore || !DevConsole.open && !DuckNetwork.enteringText && !Editor.enteringText) && Keyboard.Down((Keys)mapping);
+        public override bool MapDown(int mapping, bool any = false) => (ignoreCore || !DevConsole.open && !DuckNetwork.enteringText && !Editor.enteringText) && Down((Keys)mapping);
 
-        public static bool control => Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl);
+        public static bool control => Down(Keys.LeftControl) || Down(Keys.RightControl);
 
-        public static bool alt => Keyboard.Down(Keys.LeftAlt) || Keyboard.Down(Keys.RightAlt);
+        public static bool alt => Down(Keys.LeftAlt) || Down(Keys.RightAlt);
 
-        public static bool shift => Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift);
+        public static bool shift => Down(Keys.LeftShift) || Down(Keys.RightShift);
 
         public static bool Down(Keys key)
         {
-            if (Keyboard._usingVoiceRegister > 0 && Keyboard.IsKeyNote(key) || DuckGame.Input.ignoreInput || key == Keys.Enter && Keyboard.ignoreEnter > 0)
+            if (_usingVoiceRegister > 0 && IsKeyNote(key) || Input.ignoreInput || key == Keys.Enter && ignoreEnter > 0)
                 return false;
             if (key >= Keys.MouseKeys)
             {
@@ -1093,7 +1093,7 @@ namespace DuckGame
                     return false;
                 return Mouse.right == InputState.Down || Mouse.right == InputState.Pressed;
             }
-            return Keyboard._keyState.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key);
+            return _keyState.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key);
         }
 
         public class RepeatKey

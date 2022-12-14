@@ -64,31 +64,31 @@ namespace DuckGame
             },
             {
                 "DGBLUE",
-                Colors.DGBlue
+                DGBlue
             },
             {
                 "DGRED",
-                Colors.DGRed
+                DGRed
             },
             {
                 "DGREDDD",
-                Colors.DGRed
+                DGRed
             },
             {
                 "DGGREEN",
-                Colors.DGGreen
+                DGGreen
             },
             {
                 "DGGREENN",
-                Colors.DGGreen
+                DGGreen
             },
             {
                 "DGYELLOW",
-                Colors.DGYellow
+                DGYellow
             },
             {
                 "DGYELLO",
-                Colors.DGYellow
+                DGYellow
             },
             {
                 "DGORANGE",
@@ -100,7 +100,7 @@ namespace DuckGame
             },
             {
                 "MENUORANGE",
-                Colors.MenuOption
+                MenuOption
             },
             {
                 "YELLOW",
@@ -132,7 +132,7 @@ namespace DuckGame
             },
             {
                 "BLUEGRAY",
-                Colors.BlueGray
+                BlueGray
             },
             {
                 "PINK",
@@ -148,39 +148,39 @@ namespace DuckGame
             },
             {
                 "CBRONZE",
-                Colors.Bronze
+                Bronze
             },
             {
                 "CSILVER",
-                Colors.Silver
+                Silver
             },
             {
                 "CGOLD",
-                Colors.Gold
+                Gold
             },
             {
                 "CPLATINUM",
-                Colors.Platinum
+                Platinum
             },
             {
                 "CDEV",
-                Colors.Developer
+                Developer
             },
             {
                 "DUCKCOLOR1",
-                Colors.Duck1
+                Duck1
             },
             {
                 "DUCKCOLOR2",
-                Colors.Duck2
+                Duck2
             },
             {
                 "DUCKCOLOR3",
-                Colors.Duck3
+                Duck3
             },
             {
                 "DUCKCOLOR4",
-                Colors.Duck4
+                Duck4
             },
             {
                 "RBOW_1",

@@ -45,7 +45,7 @@ namespace DuckGame
         public bool inPipe;
         private static ushort _staticGlobalIndex = 0;
         private static ushort _staticPhysicsIndex = 0;
-        private ushort _globalIndex = Thing.GetGlobalIndex();
+        private ushort _globalIndex = GetGlobalIndex();
         protected ushort _physicsIndex;
         private Vec2 _lerpPosition = Vec2.Zero;
         private Vec2 _lerpVector = Vec2.Zero;
@@ -71,7 +71,7 @@ namespace DuckGame
         private Material _material;
         protected bool _enablePhysics = true;
         protected Profile _responsibleProfile;
-        private System.Type _killThingType;
+        private Type _killThingType;
         public float _hSpeed;
         public float _vSpeed;
         protected bool _active = true;
@@ -96,7 +96,7 @@ namespace DuckGame
         protected bool _editorImageCenter;
         public static LevelData loadingLevel = null;
         private bool _isAccessible = true;
-        public System.Type editorCycleType;
+        public Type editorCycleType;
         protected bool _flipHorizontal;
         protected bool _flipVertical;
         private int _chanceGroup = -1;
@@ -108,7 +108,7 @@ namespace DuckGame
         protected HashSet<string> _contextMenuFilter = new HashSet<string>();
         public static Effect _alphaTestEffect;
         private bool _skipPositioning;
-        private static Dictionary<System.Type, Sprite> _editorIcons = new Dictionary<System.Type, Sprite>();
+        private static Dictionary<Type, Sprite> _editorIcons = new Dictionary<Type, Sprite>();
         protected Sprite _editorIcon;
         protected bool _solid = true;
         protected Vec2 _collisionOffset;
@@ -308,9 +308,9 @@ namespace DuckGame
             }
         }
 
-        public bool isServerForObject => !Network.isActive || connection == null || connection == DuckNetwork.localConnection || Thing.loadingLevel != null;
+        public bool isServerForObject => !Network.isActive || connection == null || connection == DuckNetwork.localConnection || loadingLevel != null;
 
-        public bool isClientWhoCreatedObject => _ghostObject == null || Thing.loadingLevel != null || _ghostObject.ghostObjectIndex._index / GhostManager.kGhostIndexMax == DuckNetwork.localProfile.fixedGhostIndex;
+        public bool isClientWhoCreatedObject => _ghostObject == null || loadingLevel != null || _ghostObject.ghostObjectIndex._index / GhostManager.kGhostIndexMax == DuckNetwork.localProfile.fixedGhostIndex;
 
         public virtual void SetTranslation(Vec2 translation)
         {
@@ -322,18 +322,18 @@ namespace DuckGame
 
         public static ushort GetGlobalIndex()
         {
-            Thing._staticGlobalIndex = (ushort)((_staticGlobalIndex + 1) % ushort.MaxValue);
-            if (Thing._staticGlobalIndex == 0)
-                ++Thing._staticGlobalIndex;
-            return Thing._staticGlobalIndex;
+            _staticGlobalIndex = (ushort)((_staticGlobalIndex + 1) % ushort.MaxValue);
+            if (_staticGlobalIndex == 0)
+                ++_staticGlobalIndex;
+            return _staticGlobalIndex;
         }
 
         public static ushort GetPhysicsIndex()
         {
-            Thing._staticPhysicsIndex = (ushort)((_staticPhysicsIndex + 1) % ushort.MaxValue);
-            if (Thing._staticPhysicsIndex == 0)
-                ++Thing._staticPhysicsIndex;
-            return Thing._staticPhysicsIndex;
+            _staticPhysicsIndex = (ushort)((_staticPhysicsIndex + 1) % ushort.MaxValue);
+            if (_staticPhysicsIndex == 0)
+                ++_staticPhysicsIndex;
+            return _staticPhysicsIndex;
         }
 
         public ushort globalIndex
@@ -534,7 +534,7 @@ namespace DuckGame
             }
         }
 
-        public System.Type killThingType
+        public Type killThingType
         {
             get
             {
@@ -653,15 +653,15 @@ namespace DuckGame
 
         public bool isInitialized => _initialized;
 
-        public List<System.Type> GetAllTypes() => Editor.AllBaseTypes[GetType()];
+        public List<Type> GetAllTypes() => Editor.AllBaseTypes[GetType()];
 
-        public List<System.Type> GetAllTypesFiltered(System.Type stopAt) => Thing.GetAllTypes(GetType(), stopAt);
+        public List<Type> GetAllTypesFiltered(Type stopAt) => GetAllTypes(GetType(), stopAt);
 
-        public static List<System.Type> GetAllTypes(System.Type t, System.Type stopAt = null)
+        public static List<Type> GetAllTypes(Type t, Type stopAt = null)
         {
-            List<System.Type> allTypes = new List<System.Type>(t.GetInterfaces());
+            List<Type> allTypes = new List<Type>(t.GetInterfaces());
             allTypes.Add(t);
-            for (System.Type baseType = t.BaseType; baseType != null && !(baseType == typeof(Thing)) && !(baseType == typeof(object)) && !(baseType == stopAt); baseType = baseType.BaseType)
+            for (Type baseType = t.BaseType; baseType != null && !(baseType == typeof(Thing)) && !(baseType == typeof(object)) && !(baseType == stopAt); baseType = baseType.BaseType)
                 allTypes.Add(baseType);
             return allTypes;
         }
@@ -735,7 +735,7 @@ namespace DuckGame
             set => _hugWalls = value;
         }
 
-        public static Thing Instantiate(System.Type t) => Editor.CreateThing(t);
+        public static Thing Instantiate(Type t) => Editor.CreateThing(t);
 
         public static bool CheckForBozoData(Thing pThing)
         {
@@ -756,7 +756,7 @@ namespace DuckGame
 
         public static Thing LoadThing(BinaryClassChunk node, bool chance = true)
         {
-            System.Type type = Editor.GetType(node.GetProperty<string>("type"));
+            Type type = Editor.GetType(node.GetProperty<string>("type"));
             if (!(type != null))
                 return null;
             Thing thing = Editor.CreateThing(type);
@@ -772,7 +772,7 @@ namespace DuckGame
         public virtual BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = new BinaryClassChunk();
-            System.Type type = GetType();
+            Type type = GetType();
             binaryClassChunk.AddProperty("type", ModLoader.SmallTypeName(type));
             binaryClassChunk.AddProperty("x", x);
             binaryClassChunk.AddProperty("y", y);
@@ -814,12 +814,12 @@ namespace DuckGame
                 sequence.order = node.GetPrimitive<int>("popUpOrder");
                 sequence.waitTillOrder = node.GetPrimitive<bool>("waitTillOrder");
             }
-            System.Type type = GetType();
+            Type type = GetType();
             foreach (FieldInfo fieldInfo in Editor.EditorFieldsForType[type])
             {
                 if (node.HasProperty(fieldInfo.Name))
                 {
-                    System.Type genericArgument = fieldInfo.FieldType.GetGenericArguments()[0];
+                    Type genericArgument = fieldInfo.FieldType.GetGenericArguments()[0];
                     object obj = fieldInfo.GetValue(this);
                     obj.GetType().GetProperty("value").SetValue(obj, node.GetProperty(fieldInfo.Name), null);
                 }
@@ -829,7 +829,7 @@ namespace DuckGame
 
         public static Thing LegacyLoadThing(DXMLNode node, bool chance = true)
         {
-            System.Type type = Editor.GetType(node.Element("type").Value);
+            Type type = Editor.GetType(node.Element("type").Value);
             if (!(type != null))
                 return null;
             Thing thing = Editor.CreateThing(type);
@@ -847,7 +847,7 @@ namespace DuckGame
         public virtual DXMLNode LegacySerialize()
         {
             DXMLNode dxmlNode = new DXMLNode("Object");
-            System.Type type = GetType();
+            Type type = GetType();
             dxmlNode.Add(new DXMLNode("type", type.AssemblyQualifiedName));
             dxmlNode.Add(new DXMLNode("x", x));
             dxmlNode.Add(new DXMLNode("y", y));
@@ -863,7 +863,7 @@ namespace DuckGame
                 dxmlNode.Add(new DXMLNode("popUpOrder", sequence.order));
                 dxmlNode.Add(new DXMLNode("waitTillOrder", sequence.waitTillOrder));
             }
-            foreach (System.Type key in Editor.AllBaseTypes[type])
+            foreach (Type key in Editor.AllBaseTypes[type])
             {
                 if (!key.IsInterface)
                 {
@@ -916,7 +916,7 @@ namespace DuckGame
                 if (dxmlNode10 != null)
                     sequence.waitTillOrder = Convert.ToBoolean(dxmlNode10.Value);
             }
-            foreach (System.Type key in Editor.AllBaseTypes[GetType()])
+            foreach (Type key in Editor.AllBaseTypes[GetType()])
             {
                 if (!key.IsInterface)
                 {
@@ -925,7 +925,7 @@ namespace DuckGame
                         DXMLNode dxmlNode11 = node.Element(fieldInfo.Name);
                         if (dxmlNode11 != null)
                         {
-                            System.Type genericArgument = fieldInfo.FieldType.GetGenericArguments()[0];
+                            Type genericArgument = fieldInfo.FieldType.GetGenericArguments()[0];
                             object obj = fieldInfo.GetValue(this);
                             PropertyInfo property = obj.GetType().GetProperty("value");
                             if (genericArgument == typeof(int))
@@ -1035,7 +1035,7 @@ namespace DuckGame
                     editorGroupMenu.AddItem(new ContextCheckBox("Wait", null, new FieldBinding(sequence, "waitTillOrder")));
             }
             List<string> stringList = new List<string>();
-            foreach (System.Type key in Editor.AllBaseTypes[GetType()])
+            foreach (Type key in Editor.AllBaseTypes[GetType()])
             {
                 if (!key.IsInterface)
                 {
@@ -1090,12 +1090,12 @@ namespace DuckGame
           bool pUseCollisionSize)
         {
             Sprite editorImage1;
-            if (Thing._editorIcons.TryGetValue(GetType(), out editorImage1))
+            if (_editorIcons.TryGetValue(GetType(), out editorImage1))
                 return editorImage1;
             if (Thread.CurrentThread != MonoMain.mainThread)
                 return new Sprite("basketBall");
-            if (Thing._alphaTestEffect == null)
-                Thing._alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
+            if (_alphaTestEffect == null)
+                _alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
             if (pUseCollisionSize && collisionSize.x > 0.0)
             {
                 if (wide <= 0)
@@ -1122,8 +1122,8 @@ namespace DuckGame
             };
             if (pUseCollisionSize && collisionSize.x > 0.0)
                 camera.center = new Vec2((int)((left + right) / 2.0), (int)((top + bottom) / 2.0));
-            RenderTarget2D currentRenderTarget = DuckGame.Graphics.currentRenderTarget;
-            DuckGame.Graphics.SetRenderTarget(target);
+            RenderTarget2D currentRenderTarget = Graphics.currentRenderTarget;
+            Graphics.SetRenderTarget(target);
             DepthStencilState depthStencilState = new DepthStencilState()
             {
                 StencilEnable = true,
@@ -1132,18 +1132,18 @@ namespace DuckGame
                 ReferenceStencil = 1,
                 DepthBufferEnable = false
             };
-            DuckGame.Graphics.Clear(transparentBack ? new Color(0, 0, 0, 0) : new Color(15, 4, 16));
-            DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)(effect == null ? Thing._alphaTestEffect : effect), camera.getMatrix());
+            Graphics.Clear(transparentBack ? new Color(0, 0, 0, 0) : new Color(15, 4, 16));
+            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)(effect == null ? _alphaTestEffect : effect), camera.getMatrix());
             Draw();
-            DuckGame.Graphics.screen.End();
+            Graphics.screen.End();
             if (currentRenderTarget == null || currentRenderTarget.IsDisposed)
-                DuckGame.Graphics.SetRenderTarget(null);
+                Graphics.SetRenderTarget(null);
             else
-                DuckGame.Graphics.SetRenderTarget(currentRenderTarget);
-            Texture2D tex = new Texture2D(DuckGame.Graphics.device, target.width, target.height);
-            tex.SetData<Color>(target.GetData());
+                Graphics.SetRenderTarget(currentRenderTarget);
+            Texture2D tex = new Texture2D(Graphics.device, target.width, target.height);
+            tex.SetData(target.GetData());
             Sprite editorImage2 = new Sprite((Tex2D)tex);
-            Thing._editorIcons[GetType()] = editorImage2;
+            _editorIcons[GetType()] = editorImage2;
             return editorImage2;
         }
 
@@ -1159,8 +1159,8 @@ namespace DuckGame
                 return _editorIcon;
             if (Thread.CurrentThread != MonoMain.mainThread)
                 return new Sprite("basketBall");
-            if (Thing._alphaTestEffect == null)
-                Thing._alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
+            if (_alphaTestEffect == null)
+                _alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
             if (graphic != null)
             {
                 if (wide <= 0)
@@ -1176,7 +1176,7 @@ namespace DuckGame
             {
                 position = new Vec2(x - wide / 2, y - high / 2)
             };
-            DuckGame.Graphics.SetRenderTarget(target);
+            Graphics.SetRenderTarget(target);
             DepthStencilState depthStencilState = new DepthStencilState()
             {
                 StencilEnable = true,
@@ -1185,14 +1185,14 @@ namespace DuckGame
                 ReferenceStencil = 1,
                 DepthBufferEnable = false
             };
-            DuckGame.Graphics.Clear(transparentBack ? new Color(0, 0, 0, 0) : new Color(30, 30, 30));
-            DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)(effect == null ? Thing._alphaTestEffect : effect), camera.getMatrix());
+            Graphics.Clear(transparentBack ? new Color(0, 0, 0, 0) : new Color(30, 30, 30));
+            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)(effect == null ? _alphaTestEffect : effect), camera.getMatrix());
             Draw();
-            DuckGame.Graphics.screen.End();
-            DuckGame.Graphics.SetRenderTarget(null);
-            Texture2D tex = new Texture2D(DuckGame.Graphics.device, target.width, target.height);
-            tex.SetData<Color>(target.GetData());
-            List<string> text = DuckGame.Content.RSplit(this.GetType().AssemblyQualifiedName, ',', -1);
+            Graphics.screen.End();
+            Graphics.SetRenderTarget(null);
+            Texture2D tex = new Texture2D(Graphics.device, target.width, target.height);
+            tex.SetData(target.GetData());
+            List<string> text = Content.RSplit(this.GetType().AssemblyQualifiedName, ',', -1);
             string texname = text[0] + text[1] + wide.ToString() + " " + high.ToString();
             tex.Name = texname;
             Content.textures[texname] = tex; //spritea las stuff
@@ -1457,7 +1457,7 @@ namespace DuckGame
         {
             if (_layer == null)
                 _layer = Layer.Game;
-            if (Thing.skipLayerAdding)
+            if (skipLayerAdding)
                 return;
             _layer.Add(this);
         }
@@ -1567,7 +1567,7 @@ namespace DuckGame
                 return;
             if (_netData == null)
                 _netData = new ProfileNetData();
-            _netData.Set<T>(pVariable, pValue);
+            _netData.Set(pVariable, pValue);
         }
         public T NetworkGet<T>(string pVariable, T pDefault = default(T))
         {
@@ -1575,7 +1575,7 @@ namespace DuckGame
             {
                 return default(T);
             }
-            return _netData.Get<T>(pVariable, pDefault);
+            return _netData.Get(pVariable, pDefault);
         }
         public GhostObject ghostObject
         {
@@ -1602,11 +1602,11 @@ namespace DuckGame
         {
             //if (NetworkDebugger.currentIndex >= 0 && NetworkDebugger.currentIndex != _networkDrawIndex)
             //     return;
-            DuckGame.Graphics.material = _material;
+            Graphics.material = _material;
             if (_material != null)
                 _material.Update();
             Draw();
-            DuckGame.Graphics.material = null;
+            Graphics.material = null;
         }
 
         public virtual void Draw()
@@ -1633,11 +1633,11 @@ namespace DuckGame
             {
                 if ((this as PhysicsObject).sleeping)
                 {
-                    DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.LightBlue * 0.8f, (Depth)1f, false, 0.5f);
+                    Graphics.DrawRect(topLeft, bottomRight, Color.LightBlue * 0.8f, (Depth)1f, false, 0.5f);
                 }
                 else
                 {
-                    DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Red * 0.8f, (Depth)1f, false, 0.5f);
+                    Graphics.DrawRect(topLeft, bottomRight, Color.Red * 0.8f, (Depth)1f, false, 0.5f);
                 }
 
             }
@@ -1645,16 +1645,16 @@ namespace DuckGame
             {
                 if ((this as PhysicsParticle)._grounded)
                 {
-                    DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.LightBlue * 0.8f, (Depth)1f, false, 0.5f);
+                    Graphics.DrawRect(topLeft, bottomRight, Color.LightBlue * 0.8f, (Depth)1f, false, 0.5f);
                 }
                 else
                 {
-                    DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Red * 0.8f, (Depth)1f, false, 0.5f);
+                    Graphics.DrawRect(topLeft, bottomRight, Color.Red * 0.8f, (Depth)1f, false, 0.5f);
                 }
             }
             else if (this is FluidPuddle)
             {
-                DuckGame.Graphics.DrawRect(topLeft, bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+                Graphics.DrawRect(topLeft, bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
             }
             //else
             //{
@@ -1680,7 +1680,7 @@ namespace DuckGame
             spr.depth = depth + d;
             spr.scale = scale;
             spr.flipH = offDir < 0;
-            DuckGame.Graphics.Draw(spr, vec2.x, vec2.y);
+            Graphics.Draw(spr, vec2.x, vec2.y);
         }
 
         public void DrawIgnoreAngle(Sprite spr, Vec2 pos, int d = 1)
@@ -1689,7 +1689,7 @@ namespace DuckGame
             spr.alpha = alpha;
             spr.depth = depth + d;
             spr.scale = scale;
-            DuckGame.Graphics.Draw(spr, vec2.x, vec2.y);
+            Graphics.Draw(spr, vec2.x, vec2.y);
         }
 
         public virtual void OnTeleport()

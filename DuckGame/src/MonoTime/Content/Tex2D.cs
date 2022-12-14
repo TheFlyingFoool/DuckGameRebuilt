@@ -53,7 +53,7 @@ namespace DuckGame
         public Tex2D(int width, int height)
           : base("__internal", 0)
         {
-            _base = new Texture2D(DuckGame.Graphics.device, width, height, false, SurfaceFormat.Color);
+            _base = new Texture2D(Graphics.device, width, height, false, SurfaceFormat.Color);
             _frameWidth = width;
             _frameHeight = height;
             Content.AssignTextureIndex(this);
@@ -68,7 +68,7 @@ namespace DuckGame
         {
             if (_base == null)
                 return;
-            _base.GetData<T>(data);
+            _base.GetData(data);
         }
 
         public override Color[] GetData()
@@ -76,7 +76,7 @@ namespace DuckGame
             if (_base == null)
                 return null;
             Color[] data = new Color[_base.Width * _base.Height];
-            _base.GetData<Color>(data);
+            _base.GetData(data);
             return data;
         }
 
@@ -84,24 +84,24 @@ namespace DuckGame
         {
             if (_base == null)
                 return;
-            _base.SetData<T>(colors);
+            _base.SetData(colors);
         }
 
         public override void SetData(Color[] colors)
         {
             if (_base == null)
                 return;
-            _base.SetData<Color>(colors);
+            _base.SetData(colors);
         }
 
         protected override void DisposeNative()
         {
             if (_base == null)
                 return;
-            if (!DuckGame.Graphics.disposingObjects)
+            if (!Graphics.disposingObjects)
             {
-                lock (DuckGame.Graphics.objectsToDispose)
-                    DuckGame.Graphics.objectsToDispose.Add(_base);
+                lock (Graphics.objectsToDispose)
+                    Graphics.objectsToDispose.Add(_base);
             }
             _base = null;
         }

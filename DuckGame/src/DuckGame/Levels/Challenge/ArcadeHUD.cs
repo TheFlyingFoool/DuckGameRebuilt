@@ -62,7 +62,7 @@ namespace DuckGame
             _afterChallenge = false;
         }
 
-        public static float alphaVal => ArcadeHUD._curAlpha;
+        public static float alphaVal => _curAlpha;
 
         public override bool visible
         {
@@ -140,7 +140,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            ArcadeHUD._curAlpha = alpha;
+            _curAlpha = alpha;
             if (launchChallenge)
             {
                 _afterChallenge = true;
@@ -148,7 +148,7 @@ namespace DuckGame
             }
             else
             {
-                ArcadeHUD.open = alpha > 0.95f;
+                open = alpha > 0.95f;
                 if (alpha <= 0.01f)
                     return;
                 if (!_afterChallenge && !_goBack)

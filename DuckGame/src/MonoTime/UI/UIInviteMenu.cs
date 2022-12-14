@@ -60,7 +60,7 @@ namespace DuckGame
             if (!Steam.IsInitialized())
                 return;
             foreach (User friend in Steam.friends)
-                UIInviteMenu.avatars[friend.id] = UIInviteMenu.PrepareSprite(friend);
+                avatars[friend.id] = PrepareSprite(friend);
         }
 
         public static Sprite PrepareSprite(User u)
@@ -69,8 +69,8 @@ namespace DuckGame
             Sprite sprite = null;
             if (avatarMedium != null && avatarMedium.Length == 16384)
             {
-                Texture2D tex = new Texture2D(DuckGame.Graphics.device, 64, 64);
-                tex.SetData<byte>(avatarMedium);
+                Texture2D tex = new Texture2D(Graphics.device, 64, 64);
+                tex.SetData(avatarMedium);
                 sprite = new Sprite((Tex2D)tex);
                 sprite.CenterOrigin();
             }
@@ -80,8 +80,8 @@ namespace DuckGame
         public static Sprite GetAvatar(User u)
         {
             Sprite avatar;
-            if (!UIInviteMenu.avatars.TryGetValue(u.id, out avatar))
-                avatar = UIInviteMenu.PrepareSprite(u);
+            if (!avatars.TryGetValue(u.id, out avatar))
+                avatar = PrepareSprite(u);
             return avatar;
         }
 
@@ -101,7 +101,7 @@ namespace DuckGame
         {
             if (Steam.IsInitialized())
             {
-                int num = Steam.friends.OrderBy<User, int>(u => UIInviteMenu._sortDictionary[(int)u.state]).Count<User>();
+                int num = Steam.friends.OrderBy(u => _sortDictionary[(int)u.state]).Count();
                 if (num > _maxShow)
                     num = _maxShow;
                 _littleFont = new BitmapFont("smallBiosFont", 7, 6);
@@ -123,20 +123,20 @@ namespace DuckGame
             _users.Clear();
             if (Steam.IsInitialized())
             {
-                IOrderedEnumerable<User> source1 = Steam.friends.OrderBy<User, int>(u => UIInviteMenu._sortDictionary[(int)u.state]);
-                int num = source1.Count<User>();
+                IOrderedEnumerable<User> source1 = Steam.friends.OrderBy(u => _sortDictionary[(int)u.state]);
+                int num = source1.Count();
                 for (int index = 0; index < num; ++index)
                 {
-                    User u = source1.ElementAt<User>(index);
+                    User u = source1.ElementAt(index);
                     string source2 = u.name;
-                    if (source2.Count<char>() > 17)
+                    if (source2.Count() > 17)
                         source2 = source2.Substring(0, 16) + ".";
                     UserInfo info = u.info;
                     if (info.relationship == FriendRelationship.Friend)
                         _users.Add(new UIInviteUser()
                         {
                             user = u,
-                            sprite = UIInviteMenu.GetAvatar(u),
+                            sprite = GetAvatar(u),
                             state = info.state,
                             name = source2,
                             inGame = info.inGame,
@@ -144,7 +144,7 @@ namespace DuckGame
                             inMyLobby = info.inLobby
                         });
                 }
-                _users = _users.OrderBy<UIInviteUser, UIInviteUser>(h => h, new CompareUsers()).ToList<UIInviteUser>();
+                _users = _users.OrderBy(h => h, new CompareUsers()).ToList();
             }
             base.Open();
         }
@@ -205,7 +205,7 @@ namespace DuckGame
                 g.depth = depth + 4;
                 g.scale = new Vec2(0.25f);
                 g.alpha = _selection == viewTop ? 1f : 0.3f;
-                DuckGame.Graphics.Draw(g, x + 8f, y + 8f, new Rectangle(6f, 6f, 52f, 52f));
+                Graphics.Draw(g, x + 8f, y + 8f, new Rectangle(6f, 6f, 52f, 52f));
                 _littleFont.Draw(user.name, new Vec2(x + 15f, y), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
                 if (user.triedInvite)
                     _littleFont.Draw("|LIME|@CHECK@INVITED", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
@@ -230,7 +230,7 @@ namespace DuckGame
                     _littleFont.Draw("@USERONLINE@|DGGREEN|WANTS TO PLAY", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
                 else if (user.state == SteamUserState.LookingToTrade)
                     _littleFont.Draw("@USERONLINE@|DGGREEN|WANTS TO TRADE", new Vec2(x + 15f, y + 6f), Color.White * (_selection == viewTop ? 1f : 0.3f), depth + 4);
-                DuckGame.Graphics.DrawRect(new Vec2(x, y), new Vec2(x + 135f, y + 13f), (flag ? Colors.BlueGray : Colors.BlueGray * 0.6f) * (_selection == viewTop ? 1f : 0.3f), depth + 2);
+                Graphics.DrawRect(new Vec2(x, y), new Vec2(x + 135f, y + 13f), (flag ? Colors.BlueGray : Colors.BlueGray * 0.6f) * (_selection == viewTop ? 1f : 0.3f), depth + 2);
                 num3 += 14f;
                 flag = !flag;
             }
@@ -238,13 +238,13 @@ namespace DuckGame
             {
                 _moreArrow.depth = depth + 2;
                 _moreArrow.flipV = false;
-                DuckGame.Graphics.Draw(_moreArrow, x, (float)(y + num2 / 2.0 + 13.0));
+                Graphics.Draw(_moreArrow, x, (float)(y + num2 / 2.0 + 13.0));
             }
             if (_viewTop > 0)
             {
                 _moreArrow.depth = depth + 2;
                 _moreArrow.flipV = true;
-                DuckGame.Graphics.Draw(_moreArrow, x, (float)(y - num2 / 2.0 - 2.0));
+                Graphics.Draw(_moreArrow, x, (float)(y - num2 / 2.0 - 2.0));
             }
             base.Draw();
         }

@@ -14,16 +14,16 @@ namespace DuckGame
     {
         private static double[] kFactorialLookup;
 
-        public static void System_Initialize() => Curve.CreateFactorialTable();
+        public static void System_Initialize() => CreateFactorialTable();
 
         private static double factorial(int n)
         {
             if (n < 0)
                 throw new Exception("n is less than 0");
-            return n <= 32 ? Curve.kFactorialLookup[n] : throw new Exception("n is greater than 32");
+            return n <= 32 ? kFactorialLookup[n] : throw new Exception("n is greater than 32");
         }
 
-        private static void CreateFactorialTable() => Curve.kFactorialLookup = new double[33]
+        private static void CreateFactorialTable() => kFactorialLookup = new double[33]
         {
       1.0,
       1.0,
@@ -60,13 +60,13 @@ namespace DuckGame
       2.63130836933694E+35
         };
 
-        private static double Ni(int n, int i) => Curve.factorial(n) / (Curve.factorial(i) * Curve.factorial(n - i));
+        private static double Ni(int n, int i) => factorial(n) / (factorial(i) * factorial(n - i));
 
         private static double Bernstein(int n, int i, double t)
         {
             double num1 = t != 0.0 || i != 0 ? Math.Pow(t, i) : 1.0;
             double num2 = n != i || t != 1.0 ? Math.Pow(1.0 - t, n - i) : 1.0;
-            return Curve.Ni(n, i) * num1 * num2;
+            return Ni(n, i) * num1 * num2;
         }
 
         public static Vec2 Calculate(Vec2 start, Vec2 end, float lerp, float arcSizeMult = 1f)
@@ -78,7 +78,7 @@ namespace DuckGame
                 arcSizeMult *= 0.2f;
             }
             vec2_1.y = end.y <= start.y ? end.y - 16f * arcSizeMult : start.y - 22f * arcSizeMult;
-            List<Vec2> vec2List = Curve.Bezier(8, start, vec2_1, end);
+            List<Vec2> vec2List = Bezier(8, start, vec2_1, end);
             float num1 = 0f;
             for (int index = 1; index < vec2List.Count; ++index)
                 num1 += (vec2List[index] - vec2List[index - 1]).length;
@@ -106,7 +106,7 @@ namespace DuckGame
                     t = 1.0;
                 for (int i = 0; i != length; ++i)
                 {
-                    float num2 = (float)Curve.Bernstein(length - 1, i, t);
+                    float num2 = (float)Bernstein(length - 1, i, t);
                     vec2.x += num2 * points[i].x;
                     vec2.y += num2 * points[i].y;
                 }

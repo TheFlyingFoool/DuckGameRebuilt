@@ -51,9 +51,9 @@ namespace DuckGame
                     _burstWait = 1f;
                     if (isServerForObject)
                     {
-                        PewPewLaser.inFire = true;
+                        inFire = true;
                         Fire();
-                        PewPewLaser.inFire = false;
+                        inFire = false;
                         if (Network.isActive)
                             Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false, duck != null ? duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
                         firedBullets.Clear();
@@ -76,9 +76,9 @@ namespace DuckGame
         {
             if (receivingPress && hasFireEvents && onlyFireAction)
             {
-                PewPewLaser.inFire = true;
+                inFire = true;
                 Fire();
-                PewPewLaser.inFire = false;
+                inFire = false;
             }
             if (_bursting || _wait != 0.0)
                 return;

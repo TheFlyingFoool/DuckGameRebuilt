@@ -25,7 +25,7 @@ namespace DuckGame
                     if (attribute.Name == name)
                         dxmlAttributeList.Add(attribute);
                 }
-                IEnumerable<DXMLAttribute> collection = dxmlNode.Elements().Attributes<DXMLNode>(name);
+                IEnumerable<DXMLAttribute> collection = dxmlNode.Elements().Attributes(name);
                 dxmlAttributeList.AddRange(collection);
             }
             return dxmlAttributeList;
@@ -38,7 +38,7 @@ namespace DuckGame
             {
                 DXMLNode dxmlNode = obj;
                 dxmlNodeList.Add(dxmlNode);
-                IEnumerable<DXMLNode> collection = dxmlNode.Elements().Elements<DXMLNode>();
+                IEnumerable<DXMLNode> collection = dxmlNode.Elements().Elements();
                 dxmlNodeList.AddRange(collection);
             }
             return dxmlNodeList;
@@ -55,7 +55,7 @@ namespace DuckGame
                 DXMLNode dxmlNode = obj;
                 if (dxmlNode.Name == name)
                     dxmlNodeList.Add(dxmlNode);
-                IEnumerable<DXMLNode> collection = dxmlNode.Elements().Elements<DXMLNode>(name);
+                IEnumerable<DXMLNode> collection = dxmlNode.Elements().Elements(name);
                 dxmlNodeList.AddRange(collection);
             }
             return dxmlNodeList;

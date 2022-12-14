@@ -67,7 +67,7 @@ namespace DuckGame
             if (!(with is IPlatform))
                 return;
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
-                Level.Add(Spark.New(barrelPosition.x + Rando.Float(-6f, 6f), barrelPosition.y + Rando.Float(-3f, 3f), -MaterialThing.ImpactVector(from)));
+                Level.Add(Spark.New(barrelPosition.x + Rando.Float(-6f, 6f), barrelPosition.y + Rando.Float(-3f, 3f), -ImpactVector(from)));
         }
 
         public override void CheckIfHoldObstructed()

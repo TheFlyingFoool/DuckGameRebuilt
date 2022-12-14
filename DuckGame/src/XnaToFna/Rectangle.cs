@@ -17,7 +17,7 @@ namespace XnaToFna.ProxyDrawing
         private int width;
         private int height;
 
-        public bool IsEmpty => this == Rectangle.Empty;
+        public bool IsEmpty => this == Empty;
 
         public int X
         {
@@ -86,7 +86,7 @@ namespace XnaToFna.ProxyDrawing
 
         public bool Contains(int x, int y) => x >= this.Left && x < this.Right && y >= this.Top && y < this.Bottom;
 
-        public bool Contains(Rectangle rect) => rect == Rectangle.Intersect(this, rect);
+        public bool Contains(Rectangle rect) => rect == Intersect(this, rect);
 
         public bool IntersectsWith(Rectangle rect) => this.Left < rect.Right && this.Right > rect.Left && this.Top < rect.Bottom && this.Bottom > rect.Top;
 
@@ -116,7 +116,7 @@ namespace XnaToFna.ProxyDrawing
             return a;
         }
 
-        public static Rectangle Union(Rectangle a, Rectangle b) => Rectangle.FromLTRB(Math.Min(a.Left, b.Left), Math.Min(a.Top, b.Top), Math.Max(a.Right, b.Right), Math.Max(a.Bottom, b.Bottom));
+        public static Rectangle Union(Rectangle a, Rectangle b) => FromLTRB(Math.Min(a.Left, b.Left), Math.Min(a.Top, b.Top), Math.Max(a.Right, b.Right), Math.Max(a.Bottom, b.Bottom));
 
         public static bool operator !=(Rectangle left, Rectangle right) => !(left == right);
 

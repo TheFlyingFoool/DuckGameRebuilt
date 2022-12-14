@@ -328,11 +328,11 @@ namespace Microsoft.Xna.Framework
 			return (Vector3[]) this.corners.Clone();
 		}
 
-		/// <summary>
-		/// Returns a copy of internal corners array.
-		/// </summary>
-		/// <param name="corners">The array which values will be replaced to corner values of this instance. It must have size of <see cref="BoundingFrustum.CornerCount"/>.</param>
-		public void GetCorners(Vector3[] corners)
+        /// <summary>
+        /// Returns a copy of internal corners array.
+        /// </summary>
+        /// <param name="corners">The array which values will be replaced to corner values of this instance. It must have size of <see cref="CornerCount"/>.</param>
+        public void GetCorners(Vector3[] corners)
 		{
 			if (corners == null)
 			{
@@ -644,14 +644,14 @@ namespace Microsoft.Xna.Framework
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public static bool operator ==(BoundingFrustum a, BoundingFrustum b)
 		{
-			if (object.Equals(a, null))
+			if (Equals(a, null))
 			{
-				return (object.Equals(b, null));
+				return (Equals(b, null));
 			}
 
-			if (object.Equals(b, null))
+			if (Equals(b, null))
 			{
-				return (object.Equals(a, null));
+				return (Equals(a, null));
 			}
 
 			return a.matrix == (b.matrix);

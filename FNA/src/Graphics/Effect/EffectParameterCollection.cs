@@ -89,12 +89,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		#region IEnumerator Methods
 
-		IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return elements.GetEnumerator();
 		}
 
-		IEnumerator<EffectParameter> System.Collections.Generic.IEnumerable<EffectParameter>.GetEnumerator()
+		IEnumerator<EffectParameter> IEnumerable<EffectParameter>.GetEnumerator()
 		{
 			return elements.GetEnumerator();
 		}

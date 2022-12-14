@@ -133,20 +133,20 @@ namespace DuckGame
         {
         }
 
-        private static Dictionary<CustomType, Dictionary<string, CustomTileData>> _customTilesetData => !Content.renderingPreview ? Custom._customTilesetDataInternal : Custom._customTilesetDataInternalPreview;
+        private static Dictionary<CustomType, Dictionary<string, CustomTileData>> _customTilesetData => !Content.renderingPreview ? _customTilesetDataInternal : _customTilesetDataInternalPreview;
 
-        public static Dictionary<CustomType, string[]> data => !Content.renderingPreview ? Custom._dataInternal : Custom._dataInternalPreview;
+        public static Dictionary<CustomType, string[]> data => !Content.renderingPreview ? _dataInternal : _dataInternalPreview;
 
-        public static Dictionary<CustomType, CustomTileDataChunk[]> previewData => !Content.renderingPreview ? Custom._previewDataInternal : Custom._previewDataInternalPreview;
+        public static Dictionary<CustomType, CustomTileDataChunk[]> previewData => !Content.renderingPreview ? _previewDataInternal : _previewDataInternalPreview;
 
         public static void ClearCustomData()
         {
-            foreach (KeyValuePair<CustomType, string[]> keyValuePair in Custom.data)
+            foreach (KeyValuePair<CustomType, string[]> keyValuePair in data)
             {
                 for (int index = 0; index < keyValuePair.Value.Length; ++index)
                 {
                     keyValuePair.Value[index] = "";
-                    Custom.previewData[keyValuePair.Key][index] = null;
+                    previewData[keyValuePair.Key][index] = null;
                 }
             }
         }
@@ -162,7 +162,7 @@ namespace DuckGame
                     if (!DuckFile.FileExists(str))
                     {
                         DuckFile.CreatePath(str);
-                        FileStream fileStream = System.IO.File.Create(str);
+                        FileStream fileStream = File.Create(str);
                         tData.texture.SaveAsPng(fileStream, tData.texture.Width, tData.texture.Height);
                         fileStream.Close();
                     }
@@ -175,8 +175,8 @@ namespace DuckGame
             }
             else if (tData.path == null)
                 return "";
-            Custom._customTilesetData[type][key] = tData;
-            Custom.data[type][index] = key;
+            _customTilesetData[type][key] = tData;
+            data[type][index] = key;
             return key;
         }
 
@@ -191,7 +191,7 @@ namespace DuckGame
                 try
                 {
                     Color[] data = new Color[texture2D.Width * texture2D.Height];
-                    texture2D.GetData<Color>(data);
+                    texture2D.GetData(data);
                     for (int index1 = 0; index1 < 5; ++index1)
                     {
                         int num1 = 112;
@@ -261,7 +261,7 @@ namespace DuckGame
                 }
                 customTileData.texture = texture2D;
                 customTileData.path = path;
-                Custom._customTilesetData[type][path] = customTileData;
+                _customTilesetData[type][path] = customTileData;
             }
             return customTileData;
         }
@@ -269,8 +269,8 @@ namespace DuckGame
         public static CustomTileData GetData(int index, CustomType type)
         {
             CustomTileData data;
-            if (!Custom._customTilesetData[type].TryGetValue(Custom.data[type][index], out data))
-                data = Custom.LoadTileData(Custom.data[type][index], type);
+            if (!_customTilesetData[type].TryGetValue(Custom.data[type][index], out data))
+                data = LoadTileData(Custom.data[type][index], type);
             return data;
         }
     }

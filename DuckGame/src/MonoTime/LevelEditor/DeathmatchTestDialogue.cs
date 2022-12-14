@@ -43,7 +43,7 @@ namespace DuckGame
 
         public void Open(string text)
         {
-            DeathmatchTestDialogue.tooSlow = false;
+            tooSlow = false;
             opened = true;
             _text = text;
             _caption = "Deathmatch Validity Test!";

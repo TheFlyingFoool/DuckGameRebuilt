@@ -154,7 +154,7 @@ namespace DuckGame
                 _ruined = true;
             else if (bullet.isLocal && owner == null)
             {
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
                 _ruined = true;
             }
             return base.Hit(bullet, hitPos);
@@ -339,24 +339,24 @@ namespace DuckGame
                     fingerPositionSprite.flipH = offDir <= 0;
                     fingerPositionSprite.angle = angle;
                     Vec2 vec2 = Offset(new Vec2(x, -3f));
-                    DuckGame.Graphics.Draw(fingerPositionSprite, vec2.x, vec2.y);
+                    Graphics.Draw(fingerPositionSprite, vec2.x, vec2.y);
                 }
                 fingerPositionSprite.frame = 19;
                 Vec2 vec2_1 = Offset(new Vec2(-8f, (-bender * 1f)));
-                DuckGame.Graphics.Draw(fingerPositionSprite, vec2_1.x, vec2_1.y);
+                Graphics.Draw(fingerPositionSprite, vec2_1.x, vec2_1.y);
             }
             _keybed.depth = depth + 2;
             _keybed.flipH = offDir <= 0;
             _keybed.angle = angle;
             _keybed.frame = notePitch != 0f ? currentNote + 1 : 0;
             Vec2 vec2_2 = Offset(new Vec2(-5f, -2f));
-            DuckGame.Graphics.Draw(_keybed, vec2_2.x, vec2_2.y);
+            Graphics.Draw(_keybed, vec2_2.x, vec2_2.y);
             _settingStrip.depth = depth + 2;
             _settingStrip.flipH = offDir <= 0;
             _settingStrip.angle = angle;
             _settingStrip.frame = preset;
             Vec2 vec2_3 = Offset(new Vec2(-1f, 3f));
-            DuckGame.Graphics.Draw(_settingStrip, vec2_3.x, vec2_3.y);
+            Graphics.Draw(_settingStrip, vec2_3.x, vec2_3.y);
             base.Draw();
         }
     }

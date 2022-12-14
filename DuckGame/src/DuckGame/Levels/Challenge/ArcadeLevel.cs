@@ -95,7 +95,7 @@ namespace DuckGame
         public ArcadeFrame GetFrame()
         {
             float challengeSkillIndex = Challenges.GetChallengeSkillIndex();
-            foreach (ArcadeFrame frame in (IEnumerable<ArcadeFrame>)_frames.OrderBy<ArcadeFrame, int>(x => x.saveData == null ? Rando.Int(100) : Rando.Int(100) + 200))
+            foreach (ArcadeFrame frame in (IEnumerable<ArcadeFrame>)_frames.OrderBy(x => x.saveData == null ? Rando.Int(100) : Rando.Int(100) + 200))
             {
                 if (challengeSkillIndex >= (float)frame.respect && ChallengeData.CheckRequirement(Profiles.active[0], (string)frame.requirement))
                     return frame;
@@ -103,7 +103,7 @@ namespace DuckGame
             return null;
         }
 
-        public ArcadeFrame GetFrame(string id) => _frames.FirstOrDefault<ArcadeFrame>(x => x._identifier == id);
+        public ArcadeFrame GetFrame(string id) => _frames.FirstOrDefault(x => x._identifier == id);
 
         public void InitializeMachines()
         {
@@ -116,7 +116,7 @@ namespace DuckGame
         {
             if (sign)
             {
-                Level.Add(new VersionSign(-165, 256) { fadeTime = 300 });
+                Add(new VersionSign(-165, 256) { fadeTime = 300 });
             }
             TeamSelect2.DefaultSettings();
             base.Initialize();
@@ -131,7 +131,7 @@ namespace DuckGame
             followCam.Adjust();
             if (genType == LevGenType.CustomArcadeMachine)
             {
-                if (things[typeof(ArcadeMachine)].FirstOrDefault<Thing>() is ArcadeMachine arcadeMachine1)
+                if (things[typeof(ArcadeMachine)].FirstOrDefault() is ArcadeMachine arcadeMachine1)
                 {
                     LevelData levelData = DuckFile.LoadLevel(customMachine);
                     if (levelData != null && levelData.objects != null)
@@ -140,7 +140,7 @@ namespace DuckGame
                         {
                             try
                             {
-                                if (Thing.LoadThing(levelData.objects.objects.FirstOrDefault<BinaryClassChunk>()) is ImportMachine importMachine)
+                                if (Thing.LoadThing(levelData.objects.objects.FirstOrDefault()) is ImportMachine importMachine)
                                 {
                                     importMachine.position = arcadeMachine1.position;
                                     Remove(arcadeMachine1);
@@ -228,8 +228,8 @@ namespace DuckGame
             _pauseGroup.isPauseMenu = true;
             _pauseGroup.Close();
             Add(_pauseGroup);
-            _prizeTable = things[typeof(PrizeTable)].FirstOrDefault<Thing>() as PrizeTable;
-            _plugMachine = things[typeof(PlugMachine)].FirstOrDefault<Thing>() as PlugMachine;
+            _prizeTable = things[typeof(PrizeTable)].FirstOrDefault() as PrizeTable;
+            _plugMachine = things[typeof(PlugMachine)].FirstOrDefault() as PlugMachine;
             if (_prizeTable == null)
                 _prizeTable = new PrizeTable(730f, 124f);
             Chancy.activeChallenge = null;
@@ -321,7 +321,7 @@ namespace DuckGame
                 AddThing(pendingSpawn);
                 _pendingSpawns.RemoveAt(0);
                 _duck = pendingSpawn;
-                _arcade = things[typeof(ArcadeMode)].First<Thing>() as ArcadeMode;
+                _arcade = things[typeof(ArcadeMode)].First() as ArcadeMode;
                 if (!_enteringCameraUpdated)
                 {
                     _enteringCameraUpdated = true;
@@ -439,7 +439,7 @@ namespace DuckGame
                         _duck.alpha = 1f;
                     }
                     if (Unlockables.HasPendingUnlocks())
-                        MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+                        MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
                 }
                 else if (_desiredState == ArcadeState.ViewSpecialChallenge || _desiredState == ArcadeState.ViewChallengeList || _desiredState == ArcadeState.ViewProfileSelector)
                 {
@@ -846,7 +846,7 @@ namespace DuckGame
                             ArcadeMachine arcadeMachine = Nearest<ArcadeMachine>(_duck.x, _duck.y);
                             if (arcadeMachine != null)
                                 position = arcadeMachine.position;
-                            chancyChallenges.OrderBy<ChallengeData, int>(v => v.GetRequirementValue());
+                            chancyChallenges.OrderBy(v => v.GetRequirementValue());
                             Chancy.AddProposition(chancyChallenges[chancyChallenges.Count - 1], position);
                         }
                     }

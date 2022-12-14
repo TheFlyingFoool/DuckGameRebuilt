@@ -16,8 +16,8 @@ namespace XnaToFna.ProxyForms
         public static GameForm Instance;
         private bool _Dirty;
         private bool FakeFullscreenWindow;
-        private Microsoft.Xna.Framework.Rectangle _WindowedBounds;
-        private Microsoft.Xna.Framework.Rectangle _Bounds;
+        private Rectangle _WindowedBounds;
+        private Rectangle _Bounds;
         private FormBorderStyle _FormBorderStyle = FormBorderStyle.FixedDialog;
         private FormWindowState _WindowState;
         private FormStartPosition _StartPosition = FormStartPosition.WindowsDefaultLocation;
@@ -36,13 +36,13 @@ namespace XnaToFna.ProxyForms
             }
         }
 
-        public override XnaToFna.ProxyDrawing.Rectangle Bounds
+        public override ProxyDrawing.Rectangle Bounds
         {
-            get => new XnaToFna.ProxyDrawing.Rectangle(this._Bounds.X, this._Bounds.Y, this._Bounds.Width, this._Bounds.Height);
-            set => this.SDLBounds = this._Bounds = this._WindowedBounds = new Microsoft.Xna.Framework.Rectangle(value.X, value.Y, value.Width, value.Height);
+            get => new ProxyDrawing.Rectangle(this._Bounds.X, this._Bounds.Y, this._Bounds.Width, this._Bounds.Height);
+            set => this.SDLBounds = this._Bounds = this._WindowedBounds = new Rectangle(value.X, value.Y, value.Width, value.Height);
         }
 
-        public Microsoft.Xna.Framework.Rectangle SDLBounds
+        public Rectangle SDLBounds
         {
             get => XnaToFnaHelper.Game.Window.ClientBounds;
             set
@@ -53,23 +53,23 @@ namespace XnaToFna.ProxyForms
             }
         }
 
-        protected override XnaToFna.ProxyDrawing.Rectangle _ClientRectangle
+        protected override ProxyDrawing.Rectangle _ClientRectangle
         {
             get
             {
-                Microsoft.Xna.Framework.Rectangle clientBounds = XnaToFnaHelper.Game.Window.ClientBounds;
-                return new XnaToFna.ProxyDrawing.Rectangle(0, 0, clientBounds.Width, clientBounds.Height);
+                Rectangle clientBounds = XnaToFnaHelper.Game.Window.ClientBounds;
+                return new ProxyDrawing.Rectangle(0, 0, clientBounds.Width, clientBounds.Height);
             }
         }
 
-        public override XnaToFna.ProxyDrawing.Point Location
+        public override ProxyDrawing.Point Location
         {
             get
             {
                 int x;
                 int y;
                 SDL.SDL_GetWindowPosition(XnaToFnaHelper.Game.Window.Handle, out x, out y);
-                return new XnaToFna.ProxyDrawing.Point(x, y);
+                return new ProxyDrawing.Point(x, y);
             }
             set => SDL.SDL_SetWindowPosition(XnaToFnaHelper.Game.Window.Handle, value.X, value.Y);
         }
@@ -139,8 +139,8 @@ namespace XnaToFna.ProxyForms
 
         public void SDLWindowSizeChanged(object sender, EventArgs e)
         {
-            Microsoft.Xna.Framework.Rectangle sdlBounds = this.SDLBounds;
-            this._Bounds = new Microsoft.Xna.Framework.Rectangle(sdlBounds.X, sdlBounds.Y, sdlBounds.Width, sdlBounds.Height);
+            Rectangle sdlBounds = this.SDLBounds;
+            this._Bounds = new Rectangle(sdlBounds.X, sdlBounds.Y, sdlBounds.Width, sdlBounds.Height);
             if (((int)SDL.SDL_GetWindowFlags(XnaToFnaHelper.Game.Window.Handle) & 1) != 0 || this.FakeFullscreenWindow)
                 return;
             this._WindowedBounds = this._Bounds;

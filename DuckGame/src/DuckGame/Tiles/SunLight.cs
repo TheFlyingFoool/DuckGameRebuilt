@@ -20,7 +20,7 @@ namespace DuckGame
         private List<Door> _doorList = new List<Door>();
         private new bool _initialized;
         private int needsRefresh;
-        private List<SunLight.Section> _sections = new List<SunLight.Section>();
+        private List<Section> _sections = new List<Section>();
 
         public SunLight(
           float xpos,
@@ -50,13 +50,13 @@ namespace DuckGame
                 DrawLight();
                 _initialized = true;
             }
-            foreach (SunLight.Section section in _sections)
+            foreach (Section section in _sections)
                 section.RefreshDoors();
             if (needsRefresh <= 0)
                 return;
             if (needsRefresh == 1)
             {
-                foreach (SunLight.Section section in _sections)
+                foreach (Section section in _sections)
                 {
                     if (section.NeedsRefresh())
                         section.Refresh();
@@ -72,7 +72,7 @@ namespace DuckGame
             Vec2 vec2 = Maths.Snap(Level.current.topLeft, 16f, 16f) + new Vec2(-1024f, -256f);
             for (int index = 0; index < 42; ++index)
             {
-                SunLight.Section section = new SunLight.Section()
+                Section section = new Section()
                 {
                     start = vec2,
                     lightColor = _lightColor
@@ -85,7 +85,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            foreach (SunLight.Section section in _sections)
+            foreach (Section section in _sections)
                 Graphics.screen.SubmitGeometry(section.geo);
         }
 

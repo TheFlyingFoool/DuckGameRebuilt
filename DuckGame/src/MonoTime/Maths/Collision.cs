@@ -105,7 +105,7 @@ namespace DuckGame
 
         public static bool CCW(Vec2 A, Vec2 B, Vec2 C) => (C.y - A.y) * (B.x - A.x) > (B.y - A.y) * (C.x - A.x);
 
-        public static bool LineIntersect(Vec2 p1, Vec2 p2, Vec2 p3, Vec2 p4) => Collision.CCW(p1, p3, p4) != Collision.CCW(p2, p3, p4) && Collision.CCW(p1, p2, p3) != Collision.CCW(p1, p2, p4);
+        public static bool LineIntersect(Vec2 p1, Vec2 p2, Vec2 p3, Vec2 p4) => CCW(p1, p3, p4) != CCW(p2, p3, p4) && CCW(p1, p2, p3) != CCW(p1, p2, p4);
 
         public static bool Circle(Vec2 center, float radius, Thing t)
         {

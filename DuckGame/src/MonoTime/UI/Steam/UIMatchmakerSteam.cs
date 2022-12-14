@@ -25,7 +25,7 @@ namespace DuckGame
 
         protected override void Platform_Open()
         {
-            _state = UIMatchmakerMark2.State.GetNumberOfLobbies;
+            _state = State.GetNumberOfLobbies;
             _searchAttempts = 0;
             _resetNetwork = false;
             _desparate = false;
@@ -67,7 +67,7 @@ namespace DuckGame
                     source.Add(searchLobbyAtIndex);
                 }
             }
-            return source.OrderBy<Lobby, int>(x =>
+            return source.OrderBy(x =>
            {
                int orderedLobbyList = 100;
                if (x.GetLobbyData("version") != DG.version)
@@ -75,7 +75,7 @@ namespace DuckGame
                if (UIMatchmakingBox.core != null && UIMatchmakingBox.core.nonPreferredServers.Contains(x.id))
                    orderedLobbyList += 50;
                return orderedLobbyList;
-           }).ToList<Lobby>();
+           }).ToList();
         }
 
         private Lobby TakeLobby()
@@ -89,7 +89,7 @@ namespace DuckGame
 
         private Lobby PeekLobby() => HasLobby() ? lobbies[_takeIndex] : null;
 
-        private bool HasLobby() => lobbies.Count<Lobby>() > 0 && _takeIndex < lobbies.Count;
+        private bool HasLobby() => lobbies.Count() > 0 && _takeIndex < lobbies.Count;
 
         private void GetDesparate()
         {
@@ -109,7 +109,7 @@ namespace DuckGame
 
         public override void Platform_Update()
         {
-            if (_state == UIMatchmakerMark2.State.JoinLobby && _timeInState > 480)
+            if (_state == State.JoinLobby && _timeInState > 480)
                 Reset();
             if (Input.Pressed("GRAB"))
             {
@@ -118,12 +118,12 @@ namespace DuckGame
             }
             if (Network.connections.Count <= 0)
                 return;
-            if (_state != UIMatchmakerMark2.State.JoinLobby)
+            if (_state != State.JoinLobby)
             {
                 messages.Add("|PURPLE|LOBBY |DGGREEN|Connecting...");
                 DevConsole.Log("|PURPLE|LOBBY    |DGGREEN|Network appears to be connecting...", Color.White);
             }
-            ChangeState(UIMatchmakerMark2.State.JoinLobby);
+            ChangeState(State.JoinLobby);
             _wait = 0;
         }
 
@@ -142,20 +142,20 @@ namespace DuckGame
 
         public override void Platform_MatchmakerLogic()
         {
-            if (_state == UIMatchmakerMark2.State.GetNumberOfLobbies)
+            if (_state == State.GetNumberOfLobbies)
             {
                 NCSteam.globalSearch = true;
                 Network.activeNetwork.core.SearchForLobby();
                 Network.activeNetwork.core.RequestGlobalStats();
-                UIMatchmakerMark2.pulseLocal = true;
-                ChangeState(UIMatchmakerMark2.State.WaitForQuery);
+                pulseLocal = true;
+                ChangeState(State.WaitForQuery);
             }
-            else if (_state == UIMatchmakerMark2.State.SearchForLobbies)
+            else if (_state == State.SearchForLobbies)
             {
                 ++_searchAttempts;
-                if (UIMatchmakerMark2.searchMode == 2 && _searchAttempts > 1)
+                if (searchMode == 2 && _searchAttempts > 1)
                     GetDesparate();
-                else if (UIMatchmakerMark2.searchMode != 1 && _searchAttempts > 5)
+                else if (searchMode != 1 && _searchAttempts > 5)
                     GetDesparate();
                 NCSteam.globalSearch = _desparate;
                 Network.activeNetwork.core.ApplyTS2LobbyFilters();
@@ -163,10 +163,10 @@ namespace DuckGame
                 Network.activeNetwork.core.AddLobbyStringFilter("modhash", ModLoader.modHash, LobbyFilterComparison.Equal);
                 Network.activeNetwork.core.AddLobbyStringFilter("password", "false", LobbyFilterComparison.Equal);
                 Network.activeNetwork.core.SearchForLobby();
-                UIMatchmakerMark2.pulseLocal = true;
-                ChangeState(UIMatchmakerMark2.State.WaitForQuery);
+                pulseLocal = true;
+                ChangeState(State.WaitForQuery);
             }
-            else if (_state == UIMatchmakerMark2.State.TryJoiningLobbies)
+            else if (_state == State.TryJoiningLobbies)
             {
                 if (_directConnectLobby != null)
                 {
@@ -176,7 +176,7 @@ namespace DuckGame
                         messages.Clear();
                         messages.Add("|LIME|Trying to join lobby...");
                         DuckNetwork.Join("", _directConnectLobby.lanAddress, _passwordAttempt);
-                        ChangeState(UIMatchmakerMark2.State.JoinLobby);
+                        ChangeState(State.JoinLobby);
                         return;
                     }
                 }
@@ -185,13 +185,13 @@ namespace DuckGame
                 if (_processing == null)
                 {
                     if (_directConnectLobby != null)
-                        ChangeState(UIMatchmakerMark2.State.Failed);
-                    else if (UIMatchmakerMark2.searchMode == 2 && _searchAttempts < 2)
-                        ChangeState(UIMatchmakerMark2.State.SearchForLobbies);
+                        ChangeState(State.Failed);
+                    else if (searchMode == 2 && _searchAttempts < 2)
+                        ChangeState(State.SearchForLobbies);
                     else if (HostLobby())
                     {
                         _wait = 240;
-                        ChangeState(UIMatchmakerMark2.State.SearchForLobbies);
+                        ChangeState(State.SearchForLobbies);
                     }
                     else
                         _wait = 60;
@@ -208,7 +208,7 @@ namespace DuckGame
                                 TakeLobby();
                                 if (_directConnectLobby == null)
                                     return;
-                                ChangeState(UIMatchmakerMark2.State.Failed);
+                                ChangeState(State.Failed);
                                 return;
                             }
                             if (!Reset())
@@ -223,7 +223,7 @@ namespace DuckGame
                                     messages.Add("|LIME|Trying to join lobby...");
                             }
                             DuckNetwork.Join(_processing.id.ToString(), "localhost", _passwordAttempt);
-                            ChangeState(UIMatchmakerMark2.State.JoinLobby);
+                            ChangeState(State.JoinLobby);
                             return;
                         case NMVersionMismatch.Type.Older:
                             messages.Add("|PURPLE|LOBBY |DGRED|Skipped Lobby (Their version's too old)...");
@@ -238,16 +238,16 @@ namespace DuckGame
                     TakeLobby();
                     if (_directConnectLobby == null)
                         return;
-                    ChangeState(UIMatchmakerMark2.State.Failed);
+                    ChangeState(State.Failed);
                 }
             }
-            else if (_state == UIMatchmakerMark2.State.JoinLobby)
+            else if (_state == State.JoinLobby)
             {
                 if (Network.isActive)
                     return;
-                ChangeState(UIMatchmakerMark2.State.SearchForLobbies);
+                ChangeState(State.SearchForLobbies);
             }
-            else if (_state == UIMatchmakerMark2.State.Aborting)
+            else if (_state == State.Aborting)
             {
                 if (Network.isActive)
                     return;
@@ -255,20 +255,20 @@ namespace DuckGame
             }
             else
             {
-                if (_state != UIMatchmakerMark2.State.WaitForQuery || !Network.activeNetwork.core.IsLobbySearchComplete())
+                if (_state != State.WaitForQuery || !Network.activeNetwork.core.IsLobbySearchComplete())
                     return;
-                if (_previousState == UIMatchmakerMark2.State.GetNumberOfLobbies)
+                if (_previousState == State.GetNumberOfLobbies)
                 {
-                    UIMatchmakerMark2.pulseNetwork = true;
+                    pulseNetwork = true;
                     _totalLobbies = Network.activeNetwork.core.NumLobbiesFound();
                     messages.Add("|DGGREEN|Connected to Moon!");
                     messages.Add("");
                     messages.Add("|DGYELLOW|Searching for companions...");
-                    ChangeState(UIMatchmakerMark2.State.SearchForLobbies);
+                    ChangeState(State.SearchForLobbies);
                 }
                 else
                 {
-                    if (_previousState != UIMatchmakerMark2.State.SearchForLobbies)
+                    if (_previousState != State.SearchForLobbies)
                         return;
                     _joinableLobbies = Network.activeNetwork.core.NumLobbiesFound();
                     List<Lobby> lobbyList = new List<Lobby>();
@@ -282,7 +282,7 @@ namespace DuckGame
                     num = lobbies.Count;
                     string str = "Found " + num.ToString() + " potential lobbies...";
                     messages.Add(str);
-                    ChangeState(UIMatchmakerMark2.State.TryJoiningLobbies);
+                    ChangeState(State.TryJoiningLobbies);
                 }
             }
         }

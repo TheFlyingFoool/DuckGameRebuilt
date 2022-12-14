@@ -46,7 +46,7 @@ namespace DuckGame
             Duck d = this.owner as Duck;
             if (d != null)
             {
-                if (base.isServerForObject && d.inputProfile != null)
+                if (isServerForObject && d.inputProfile != null)
                 {
                     this.handPitch = d.inputProfile.leftTrigger;
                     if (d.inputProfile.hasMotionAxis)
@@ -95,7 +95,7 @@ namespace DuckGame
                             this.hitPitch = this.notePitch;
                             Sound snd = SFX.Play("sax" + Change.ToString(note), 1f, 0f, 0f, false);
                             this.noteSound = snd;
-                            Level.Add(new MusicNote(base.barrelPosition.x, base.barrelPosition.y, base.barrelVector));
+                            Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
                         }
                         else
                         {

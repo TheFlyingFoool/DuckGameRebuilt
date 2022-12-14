@@ -21,7 +21,7 @@ namespace DuckGame
         public static bool openAirMode = false;
         public static int complexity = 0;
 
-        public static List<RandomLevelData> tiles => LevelGenerator._tiles;
+        public static List<RandomLevelData> tiles => _tiles;
 
         public static List<RandomLevelData> GetTiles(
           TileConnection requirement,
@@ -39,7 +39,7 @@ namespace DuckGame
             bool flag7 = (filter & TileConnection.Up) != 0;
             bool flag8 = (filter & TileConnection.Down) != 0;
             List<RandomLevelData> tiles = new List<RandomLevelData>();
-            foreach (RandomLevelData tile in LevelGenerator._tiles)
+            foreach (RandomLevelData tile in _tiles)
             {
                 if ((!mirror || tile.isMirrored) && (tile.left || !flag1) && (tile.right || !flag2) && (tile.up || !flag3) && (tile.down || !flag4) && !(tile.left & flag5) && !(tile.right & flag6) && !(tile.up & flag7) && !(tile.down & flag8))
                     tiles.Add(tile);
@@ -58,7 +58,7 @@ namespace DuckGame
           bool mirror = false,
           int numLinksRequired = -1)
         {
-            List<RandomLevelData> tiles = LevelGenerator.GetTiles(requirement, filter, mirror);
+            List<RandomLevelData> tiles = GetTiles(requirement, filter, mirror);
             RandomLevelData tile1 = new RandomLevelData();
             bool flag = false;
             int num1 = 0;
@@ -78,7 +78,7 @@ namespace DuckGame
                 else
                 {
                     int num2;
-                    if (LevelGenerator._used.TryGetValue(tile2.file, out num2) && num2 >= tile2.max)
+                    if (_used.TryGetValue(tile2.file, out num2) && num2 >= tile2.max)
                     {
                         tiles.Remove(tile2);
                     }
@@ -109,10 +109,10 @@ namespace DuckGame
                             }
                             else
                             {
-                                if (LevelGenerator._used.ContainsKey(tile2.file))
-                                    ++LevelGenerator._used[tile2.file];
+                                if (_used.ContainsKey(tile2.file))
+                                    ++_used[tile2.file];
                                 else
-                                    LevelGenerator._used[tile2.file] = 1;
+                                    _used[tile2.file] = 1;
                                 return tile2;
                             }
                         }
@@ -126,10 +126,10 @@ namespace DuckGame
 
         public static void ReInitialize()
         {
-            LevelGenerator._tiles.Clear();
-            LevelGenerator._connections.Clear();
+            _tiles.Clear();
+            _connections.Clear();
             Content.ReloadLevels("pyramid");
-            LevelGenerator.Initialize();
+            Initialize();
         }
 
         public static RandomLevelData LoadInTile(string tile, string realName = null)
@@ -169,31 +169,31 @@ namespace DuckGame
             element.isMirrored = levelData.proceduralData.isMirrored;
             element.data = levelData.objects.objects;
             element.alternateData = levelData.proceduralData.openAirAlternateObjects.objects;
-            LevelGenerator._tiles.Add(element);
+            _tiles.Add(element);
             if (element.up)
-                LevelGenerator._connections.Add(TileConnection.Up, element);
+                _connections.Add(TileConnection.Up, element);
             if (element.down)
-                LevelGenerator._connections.Add(TileConnection.Down, element);
+                _connections.Add(TileConnection.Down, element);
             if (element.left)
             {
-                LevelGenerator._connections.Add(TileConnection.Left, element);
-                LevelGenerator._connections.Add(TileConnection.Right, element.Flipped());
+                _connections.Add(TileConnection.Left, element);
+                _connections.Add(TileConnection.Right, element.Flipped());
             }
             if (element.right)
             {
-                LevelGenerator._connections.Add(TileConnection.Right, element);
-                LevelGenerator._connections.Add(TileConnection.Left, element.Flipped());
+                _connections.Add(TileConnection.Right, element);
+                _connections.Add(TileConnection.Left, element.Flipped());
             }
-            LevelGenerator._tiles.Add(element.Flipped());
+            _tiles.Add(element.Flipped());
             if (element.canMirror)
-                LevelGenerator._tiles.Add(element.Symmetric());
+                _tiles.Add(element.Symmetric());
             return element;
         }
 
         public static void Initialize()
         {
             foreach (string level in Content.GetLevels("pyramid", LevelLocation.Content))
-                LevelGenerator.LoadInTile(level);
+                LoadInTile(level);
         }
 
         public static RandomLevelNode MakeLevel(
@@ -212,9 +212,9 @@ namespace DuckGame
             Rando.generator = new Random(seed);
             varwide = 0;
             varhigh = 0;
-            LevelGenerator.openAirMode = Rando.Float(1f) > 0.75f;
+            openAirMode = Rando.Float(1f) > 0.75f;
             bool flag = false;
-            LevelGenerator._used.Clear();
+            _used.Clear();
             int length1 = varwide;
             int length2 = varhigh;
             if (varwide == 0)
@@ -296,7 +296,7 @@ namespace DuckGame
                 }
             }
             if (tile != null)
-                LevelGenerator._used[tile.file] = 1;
+                _used[tile.file] = 1;
             RandomLevel.currentComplexityDepth = 0;
             randomLevelNodeArray[genX, genY].tilesWide = length1;
             randomLevelNodeArray[genX, genY].tilesHigh = length2;

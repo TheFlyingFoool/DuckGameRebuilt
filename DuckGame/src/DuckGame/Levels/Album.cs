@@ -62,7 +62,7 @@ namespace DuckGame
                 caption = "LIFETIME STATS",
                 statPage = true
             });
-            _images = _images.OrderBy<AlbumPic, DateTime>(x => x.date).ToList<AlbumPic>();
+            _images = _images.OrderBy(x => x.date).ToList();
             AlbumPage albumPage = null;
             int num = 1;
             foreach (AlbumPic image in _images)
@@ -128,7 +128,7 @@ namespace DuckGame
                         {
                             Texture2D texture2D;
                             using (FileStream fileStream = new FileStream(pic.file, FileMode.Open))
-                                texture2D = Texture2D.FromStream(DuckGame.Graphics.device, fileStream);
+                                texture2D = Texture2D.FromStream(Graphics.device, fileStream);
                             _textures.Add(texture2D);
                         }
                         catch (Exception)
@@ -145,7 +145,7 @@ namespace DuckGame
             Graphics.fade = Lerp.Float(Graphics.fade, _quit ? 0f : 1f, 0.05f);
             if (Graphics.fade >= 0.01f || !_quit)
                 return;
-            Level.current = new DoorRoom();
+            current = new DoorRoom();
         }
 
         public override void Draw() => base.Draw();
@@ -155,7 +155,7 @@ namespace DuckGame
             if (layer == Layer.HUD)
             {
                 _album.depth = -0.8f;
-                DuckGame.Graphics.Draw(_album, 0f, 0f);
+                Graphics.Draw(_album, 0f, 0f);
                 //_screen.depth = -0.6f;
                 if (_pages.Count > 0)
                 {
@@ -179,21 +179,21 @@ namespace DuckGame
                             {
                                 if (index1 < _textures.Count)
                                 {
-                                    if (DuckGame.Graphics.width > 1280)
+                                    if (Graphics.width > 1280)
                                     {
                                         Vec2 vec2_1 = new Vec2(52f, 35f);
                                         float num = 0.3f;
                                         Vec2 vec2_2 = new Vec2(vec2_1.x + index3 * 110, vec2_1.y + index2 * 65);
-                                        DuckGame.Graphics.Draw((Tex2D)_textures[index1], vec2_2.x, vec2_2.y, num, num);
-                                        DuckGame.Graphics.DrawRect(vec2_2 + new Vec2(-3f, -3f), vec2_2 + new Vec2((float)(_textures[index1].Width * num + 3f), (float)(_textures[index1].Height * num + 3f)), Color.White, -0.7f);
+                                        Graphics.Draw((Tex2D)_textures[index1], vec2_2.x, vec2_2.y, num, num);
+                                        Graphics.DrawRect(vec2_2 + new Vec2(-3f, -3f), vec2_2 + new Vec2((float)(_textures[index1].Width * num + 3f), (float)(_textures[index1].Height * num + 3f)), Color.White, -0.7f);
                                     }
                                     else
                                     {
                                         Vec2 vec2_3 = new Vec2(65f, 40f);
                                         float num = 0.25f;
                                         Vec2 vec2_4 = new Vec2(vec2_3.x + index3 * 100, vec2_3.y + index2 * 65);
-                                        DuckGame.Graphics.Draw((Tex2D)_textures[index1], vec2_4.x, vec2_4.y, num, num);
-                                        DuckGame.Graphics.DrawRect(vec2_4 + new Vec2(-3f, -3f), vec2_4 + new Vec2((_textures[index1].Width * num + 3f), (_textures[index1].Height * num + 3f)), Color.White, -0.7f);
+                                        Graphics.Draw((Tex2D)_textures[index1], vec2_4.x, vec2_4.y, num, num);
+                                        Graphics.DrawRect(vec2_4 + new Vec2(-3f, -3f), vec2_4 + new Vec2((_textures[index1].Width * num + 3f), (_textures[index1].Height * num + 3f)), Color.White, -0.7f);
                                     }
                                 }
                                 ++index1;

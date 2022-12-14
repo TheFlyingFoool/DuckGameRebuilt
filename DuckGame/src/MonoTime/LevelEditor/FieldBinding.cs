@@ -51,7 +51,7 @@ namespace DuckGame
             Construct();
         }
 
-        public FieldBinding(System.Type thing, string field, float min = 0f, float max = 1f, float increment = 0.1f)
+        public FieldBinding(Type thing, string field, float min = 0f, float max = 1f, float increment = 0.1f)
         {
             _thing = thing;
             _field = thing.GetField(field);

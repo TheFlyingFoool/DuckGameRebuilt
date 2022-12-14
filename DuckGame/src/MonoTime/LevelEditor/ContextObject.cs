@@ -74,11 +74,11 @@ namespace DuckGame
                     if (_thing.forceEditorGrid != 0)
                     {
                         current.cellSize = _thing.forceEditorGrid;
-                        ContextObject.lastForceGrid = (int)current.cellSize;
+                        lastForceGrid = (int)current.cellSize;
                     }
-                    else if (ContextObject.lastForceGrid != 0)
+                    else if (lastForceGrid != 0)
                     {
-                        ContextObject.lastForceGrid = 0;
+                        lastForceGrid = 0;
                         current.cellSize = 16f;
                     }
                     SFX.Play("lowClick", 0.3f);

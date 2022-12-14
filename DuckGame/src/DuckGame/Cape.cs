@@ -12,7 +12,7 @@ namespace DuckGame
             visible = attach.visible;
             //this.killTimer = this.killTime;
             _attach = attach;
-            base.depth = -0.5f;
+            depth = -0.5f;
             _trail = trail;
             _editorCanModify = false;
             if (_trail)
@@ -88,7 +88,7 @@ namespace DuckGame
             offDir = (sbyte)-_attach.offDir;
             Vec2 p = attach.position + attachOffset;
             Vec2 p2 = attach.position + attachOffset;
-            base.depth = (metadata.CapeForeground.value ? (attach.depth + 50) : (attach.depth - 50));
+            depth = (metadata.CapeForeground.value ? (attach.depth + 50) : (attach.depth - 50));
             p.y += yOffset;
             p2.y += yOffset;
             if (!_trail)
@@ -173,7 +173,7 @@ namespace DuckGame
         {
             if (_attach != null)
             {
-                base.depth = (metadata.CapeForeground.value ? (_attach.depth + 50) : (_attach.depth - 50));
+                depth = (metadata.CapeForeground.value ? (_attach.depth + 50) : (_attach.depth - 50));
                 bool hide = !_attach.visible;
                 if (_attach.owner != null)
                 {
@@ -195,7 +195,7 @@ namespace DuckGame
             bool bust = false;
             if (_capeTexture != null)
             {
-                float deep = Graphics.AdjustDepth(base.depth);
+                float deep = Graphics.AdjustDepth(depth);
                 float uvPart = 1f / (capePeices.Count - 1);
                 float uvInc = 0f;
                 for (int i = capePeices.Count - 1; i >= 0; i--)
