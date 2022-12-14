@@ -156,6 +156,8 @@ namespace DuckGame
         {
             if (_data == null || ignoreAlreadyUnlocked && _unlocked)
                 return false;
+            if (FireDebug.Debugging)
+                return true;
             if (_data.required.Count > 0)
             {
                 foreach (string name in _data.required)
