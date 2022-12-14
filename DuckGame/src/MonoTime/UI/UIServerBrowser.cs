@@ -436,7 +436,7 @@ namespace DuckGame
             if (_downloadModsMenu.open)
             {
                 _downloadModsMenu.DoUpdate();
-                if (!globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
+                if (!globalUILock && (Input.Pressed(Triggers.Cancel) || Keyboard.Pressed(Keys.Escape)))
                 {
                     _downloadModsMenu.Close();
                     Open();
@@ -465,12 +465,12 @@ namespace DuckGame
                 }
                 if (_hoverIndex != -1)
                 {
-                    if (Input.Pressed("MENU1"))
+                    if (Input.Pressed(Triggers.Menu1))
                     {
                         RefreshLobbySearch(SearchMode.Near, SearchMode.Global, SearchMode.LAN);
                         SFX.Play("rockHitGround", 0.8f);
                     }
-                    else if (Input.Pressed("MENU2") || enteredPort != "")
+                    else if (Input.Pressed(Triggers.Menu2) || enteredPort != "")
                     {
                         if (enteredPort == "")
                         {
@@ -495,7 +495,7 @@ namespace DuckGame
                     if (_lobbies.Count > 0 && _hoverIndex < _lobbies.Count)
                     {
                         _selectedLobby = _lobbies[_hoverIndex];
-                        if (Input.Pressed("SELECT") && _pressWait == 0 && _gamepadMode || !_gamepadMode && Mouse.left == InputState.Pressed || enteredPassword != "")
+                        if (Input.Pressed(Triggers.Select) && _pressWait == 0 && _gamepadMode || !_gamepadMode && Mouse.left == InputState.Pressed || enteredPassword != "")
                         {
                             if (!_selectedLobby.canJoin)
                             {
@@ -523,13 +523,13 @@ namespace DuckGame
                 if (_gamepadMode)
                 {
                     _draggingScrollbar = false;
-                    if (Input.Pressed("MENUDOWN"))
+                    if (Input.Pressed(Triggers.MenuDown))
                         ++_hoverIndex;
-                    else if (Input.Pressed("MENUUP"))
+                    else if (Input.Pressed(Triggers.MenuUp))
                         --_hoverIndex;
-                    if (Input.Pressed("STRAFE"))
+                    if (Input.Pressed(Triggers.Strafe))
                         _hoverIndex -= 10;
-                    else if (Input.Pressed("RAGDOLL"))
+                    else if (Input.Pressed(Triggers.Ragdoll))
                         _hoverIndex += 10;
                     if (_hoverIndex < 0)
                         _hoverIndex = 0;
@@ -573,7 +573,7 @@ namespace DuckGame
                             scrollBarOffset = 0;
                         _scrollItemOffset = (int)((_lobbies.Count - _maxLobbiesToShow) * (scrollBarOffset / (float)scrollBarScrollableHeight));
                     }
-                    if (Input.Pressed("ANY"))
+                    if (Input.Pressed(Triggers.Any))
                     {
                         _gamepadMode = true;
                         _oldPos = Mouse.positionScreen;
@@ -590,7 +590,7 @@ namespace DuckGame
                 else if (_hoverIndex >= 0 && _hoverIndex < _scrollItemOffset)
                     _scrollItemOffset -= _scrollItemOffset - _hoverIndex;
                 scrollBarOffset = _scrollItemOffset == 0 ? 0 : (int)Lerp.FloatSmooth(0f, scrollBarScrollableHeight, _scrollItemOffset / (float)(_lobbies.Count - _maxLobbiesToShow));
-                if (!Editor.hoverTextBox && !globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
+                if (!Editor.hoverTextBox && !globalUILock && (Input.Pressed(Triggers.Cancel) || Keyboard.Pressed(Keys.Escape)))
                 {
                     new UIMenuActionOpenMenu(this, _openOnClose).Activate();
                     return;

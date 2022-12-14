@@ -26,11 +26,19 @@ namespace DuckGame
         {
             get
             {
-                if (owner == null)
-                    return base.angle;
-                return offDir > 0 ? base.angle + 1.570796f : base.angle - 1.570796f;
+                if (owner != null)
+                {
+                    if (offDir > 0)
+                        return (base.angle + ((float)Math.PI / 2));
+                    else
+                        return (base.angle - ((float)Math.PI / 2));
+                }
+                return base.angle;
             }
-            set => _angle = value;
+            set
+            {
+                _angle = value;
+            }
         }
 
         public Banana(float xval, float yval)
@@ -154,13 +162,13 @@ namespace DuckGame
                 duck.quack = 20;
                 if (offDir > 0)
                 {
-                    handAngle = -1.099557f;
+                    handAngle = -((float)Math.PI / 2) * 0.7f;
                     handOffset = new Vec2(8f, -1f);
                     _holdOffset = new Vec2(-1f, 10f);
                 }
                 else
                 {
-                    handAngle = 1.099557f;
+                    handAngle = ((float)Math.PI / 2) * 0.7f;
                     handOffset = new Vec2(8f, -1f);
                     _holdOffset = new Vec2(-1f, 10f);
                 }

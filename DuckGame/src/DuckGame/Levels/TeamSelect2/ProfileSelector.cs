@@ -25,7 +25,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "{",
-              trigger = "LEFT",
+              trigger = Triggers.Left,
               position = new Vec2(0f, 0f),
               column = 0,
               condition =  x => x.allowDirectionalMapping
@@ -33,7 +33,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "/",
-              trigger = "RIGHT",
+              trigger = Triggers.Right,
               position = new Vec2(35f, 0f),
               column = 0,
               condition =  x => x.allowDirectionalMapping
@@ -41,7 +41,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "}",
-              trigger = "UP",
+              trigger = Triggers.Up,
               position = new Vec2(70f, 0f),
               column = 1,
               condition =  x => x.allowDirectionalMapping
@@ -49,7 +49,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "~",
-              trigger = "DOWN",
+              trigger = Triggers.Down,
               position = new Vec2(105f, 0f),
               column = 1,
               condition =  x => x.allowDirectionalMapping
@@ -57,49 +57,49 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "JUMP  ",
-              trigger = "JUMP",
+              trigger = Triggers.Jump,
               position = new Vec2(0f, 12f),
               column = 0
             },
             new ControlSetting()
             {
               name = "GRAB  ",
-              trigger = "GRAB",
+              trigger = Triggers.Grab,
               position = new Vec2(0f, 24f),
               column = 0
             },
             new ControlSetting()
             {
-              name = "STRAFE",
-              trigger = "STRAFE",
+              name = Triggers.Strafe,
+              trigger = Triggers.Strafe,
               position = new Vec2(0f, 36f),
               column = 0
             },
             new ControlSetting()
             {
               name = "USE   ",
-              trigger = "SHOOT",
+              trigger = Triggers.Shoot,
               position = new Vec2(70f, 12f),
               column = 1
             },
             new ControlSetting()
             {
               name = "QUACK ",
-              trigger = "QUACK",
+              trigger = Triggers.Quack,
               position = new Vec2(70f, 24f),
               column = 1
             },
             new ControlSetting()
             {
               name = "FALL  ",
-              trigger = "RAGDOLL",
+              trigger = Triggers.Ragdoll,
               position = new Vec2(70f, 36f),
               column = 1
             },
             new ControlSetting()
             {
               name = "START ",
-              trigger = "START",
+              trigger = Triggers.Start,
               position = new Vec2(0f, 48f),
               column = 0,
               condition =  x => x.allowStartRemap
@@ -107,7 +107,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "PAGE 2>",
-              trigger = "ANY",
+              trigger = Triggers.Any,
               position = new Vec2(70f, 48f),
               column = 1,
               condition =  x => !(x is Keyboard),
@@ -121,7 +121,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "PAGE 2>",
-              trigger = "ANY",
+              trigger = Triggers.Any,
               position = new Vec2(70f, 48f),
               column = 1,
               condition =  x => x is Keyboard,
@@ -138,7 +138,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "MOVE  ",
-              trigger = "LSTICK",
+              trigger = Triggers.LeftStick,
               position = new Vec2(0f, 12f),
               column = 0,
               condition =  x => x.numSticks > 1
@@ -146,7 +146,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "PITCH ",
-              trigger = "LTRIGGER",
+              trigger = Triggers.LeftTrigger,
               position = new Vec2(0f, 24f),
               column = 0,
               condition =  x => x.numTriggers > 1
@@ -154,7 +154,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "LICK  ",
-              trigger = "RSTICK",
+              trigger = Triggers.RightStick,
               position = new Vec2(70f, 12f),
               column = 1,
               condition =  x => x.numSticks > 1
@@ -162,7 +162,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "ZOOM  ",
-              trigger = "RTRIGGER",
+              trigger = Triggers.RightTrigger,
               position = new Vec2(70f, 24f),
               column = 1,
               condition =  x => x.numTriggers > 1
@@ -170,7 +170,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "<PAGE 1",
-              trigger = "ANY",
+              trigger = Triggers.Any,
               position = new Vec2(0f, 60f),
               column = 0,
               action =  x =>
@@ -183,7 +183,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "PAGE 3>",
-              trigger = "ANY",
+              trigger = Triggers.Any,
               position = new Vec2(70f, 60f),
               column = 1,
               action =  x =>
@@ -199,7 +199,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "UI CONTROLS...",
-              trigger = "ANY",
+              trigger = Triggers.Any,
               position = new Vec2(0f, 0f),
               column = 0,
               caption = true
@@ -207,7 +207,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "{",
-              trigger = "MENULEFT",
+              trigger = Triggers.MenuLeft,
               position = new Vec2(0f, 12f),
               column = 0,
               condition =  x => x.allowDirectionalMapping
@@ -215,7 +215,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "/",
-              trigger = "MENURIGHT",
+              trigger = Triggers.MenuRight,
               position = new Vec2(35f, 12f),
               column = 0,
               condition =  x => x.allowDirectionalMapping
@@ -223,7 +223,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "}",
-              trigger = "MENUUP",
+              trigger = Triggers.MenuUp,
               position = new Vec2(70f, 12f),
               column = 1,
               condition =  x => x.allowDirectionalMapping
@@ -231,43 +231,43 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "~",
-              trigger = "MENUDOWN",
+              trigger = Triggers.MenuDown,
               position = new Vec2(105f, 12f),
               column = 1,
               condition =  x => x.allowDirectionalMapping
             },
             new ControlSetting()
             {
-              name = "SELECT",
-              trigger = "SELECT",
+              name = Triggers.Select,
+              trigger = Triggers.Select,
               position = new Vec2(0f, 24f),
               column = 0
             },
             new ControlSetting()
             {
               name = "MENU 1",
-              trigger = "MENU1",
+              trigger = Triggers.Menu1,
               position = new Vec2(0f, 36f),
               column = 0
             },
             new ControlSetting()
             {
-              name = "CANCEL",
-              trigger = "CANCEL",
+              name = Triggers.Cancel,
+              trigger = Triggers.Cancel,
               position = new Vec2(70f, 24f),
               column = 1
             },
             new ControlSetting()
             {
               name = "MENU 2",
-              trigger = "MENU2",
+              trigger = Triggers.Menu2,
               position = new Vec2(70f, 36f),
               column = 1
             },
             new ControlSetting()
             {
               name = "<PAGE 2",
-              trigger = "ANY",
+              trigger = Triggers.Any,
               position = new Vec2(0f, 48f),
               column = 0,
               condition =  x => !(x is Keyboard),
@@ -281,7 +281,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "<PAGE 1",
-              trigger = "ANY",
+              trigger = Triggers.Any,
               position = new Vec2(0f, 48f),
               column = 0,
               condition =  x => x is Keyboard,
@@ -295,7 +295,7 @@ namespace DuckGame
             new ControlSetting()
             {
               name = "RESET ",
-              trigger = "ANY",
+              trigger = Triggers.Any,
               position = new Vec2(70f, 48f),
               column = 1,
               action =  x =>
@@ -581,21 +581,21 @@ namespace DuckGame
                 }
                 if (_fade > 0.9f && _mode != PSMode.CreateProfile && _mode != PSMode.EditProfile && _mode != PSMode.EditControls && _mode != PSMode.EditControlsConfirm && _desiredSelectorPosition == _selectorPosition)
                 {
-                    if (_inputProfile.Down("MENUUP"))
+                    if (_inputProfile.Down(Triggers.MenuUp))
                     {
                         SelectUp();
                         _wasDown = false;
                         if (_profiles.Count > 0)
                             SFX.Play("consoleTick");
                     }
-                    if (_inputProfile.Down("MENUDOWN"))
+                    if (_inputProfile.Down(Triggers.MenuDown))
                     {
                         SelectDown();
                         _wasDown = true;
                         if (_profiles.Count > 0)
                             SFX.Play("consoleTick");
                     }
-                    if (HoveredProfileIsCustom() && MonoMain.pauseMenu == null && _inputProfile.Pressed("MENU2"))
+                    if (HoveredProfileIsCustom() && MonoMain.pauseMenu == null && _inputProfile.Pressed(Triggers.Menu2))
                     {
                         _deleteContext = _profiles[_selectorPosition];
                         MonoMain.pauseMenu = _confirmMenu;
@@ -614,7 +614,7 @@ namespace DuckGame
                             _deleteContext = null;
                         }
                     }
-                    if (_inputProfile.Pressed("CANCEL"))
+                    if (_inputProfile.Pressed(Triggers.Cancel))
                     {
                         if (Profiles.IsDefault(_starterProfile) || !(Level.current is TeamSelect2))
                             _box.ChangeProfile(_starterProfile);
@@ -625,7 +625,7 @@ namespace DuckGame
                         SFX.Play("consoleCancel", 0.4f);
                         return;
                     }
-                    if (_inputProfile.Pressed("SELECT") || _autoSelect)
+                    if (_inputProfile.Pressed(Triggers.Select) || _autoSelect)
                     {
                         _autoSelect = false;
                         if (_profiles.Count == 0 || _selectorPosition < -1 || _selectorPosition >= _profiles.Count)
@@ -676,25 +676,25 @@ namespace DuckGame
                 }
                 else if (_mode == PSMode.EditControlsConfirm)
                 {
-                    if (_inputProfile.Pressed("MENUUP"))
+                    if (_inputProfile.Pressed(Triggers.MenuUp))
                     {
                         SFX.Play("consoleTick");
                         --_editControlSelection;
                     }
-                    else if (_inputProfile.Pressed("MENUDOWN"))
+                    else if (_inputProfile.Pressed(Triggers.MenuDown))
                     {
                         SFX.Play("consoleTick");
                         ++_editControlSelection;
                     }
                     else
                     {
-                        if (_inputProfile.Pressed("CANCEL"))
+                        if (_inputProfile.Pressed(Triggers.Cancel))
                         {
                             _desiredMode = PSMode.EditControls;
                             SFX.Play("consoleError");
                             return;
                         }
-                        if (_inputProfile.Pressed("SELECT"))
+                        if (_inputProfile.Pressed(Triggers.Select))
                         {
                             SFX.Play("consoleSelect");
                             if (_editControlSelection == 0)
@@ -722,13 +722,13 @@ namespace DuckGame
                         if (_selectedSetting == null)
                             _selectedSetting = _controlSettingPages[_controlPage].Find(x => (x.condition == null || x.condition(d)) && !x.caption);
                         Vec2 zero = Vec2.Zero;
-                        if (_inputProfile.Pressed("MENUUP"))
+                        if (_inputProfile.Pressed(Triggers.MenuUp))
                             zero += new Vec2(0f, -8f);
-                        else if (_inputProfile.Pressed("MENUDOWN"))
+                        else if (_inputProfile.Pressed(Triggers.MenuDown))
                             zero += new Vec2(0f, 8f);
-                        else if (_inputProfile.Pressed("MENULEFT"))
+                        else if (_inputProfile.Pressed(Triggers.MenuLeft))
                             zero += new Vec2(-30f, 0f);
-                        else if (_inputProfile.Pressed("MENURIGHT"))
+                        else if (_inputProfile.Pressed(Triggers.MenuRight))
                             zero += new Vec2(30f, 0f);
                         if (zero != Vec2.Zero)
                         {
@@ -766,7 +766,7 @@ namespace DuckGame
                                 _selectedSetting = controlSetting1;
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("SELECT"))
+                        if (_inputProfile.Pressed(Triggers.Select))
                         {
                             if (_selectedSetting.action != null)
                             {
@@ -780,7 +780,7 @@ namespace DuckGame
                         }
                         else
                         {
-                            if (_inputProfile.Pressed("CANCEL"))
+                            if (_inputProfile.Pressed(Triggers.Cancel))
                             {
                                 if (_madeControlChanges)
                                 {
@@ -793,7 +793,7 @@ namespace DuckGame
                                 SFX.Play("consoleError");
                                 return;
                             }
-                            if (_inputProfile.Pressed("START"))
+                            if (_inputProfile.Pressed(Triggers.Start))
                             {
                                 _pendingMaps.Add(_configInputMapping);
                                 ApplyInputSettings(_profile);
@@ -803,7 +803,7 @@ namespace DuckGame
                             }
                         }
                     }
-                    else if (_inputProfile.Pressed("START"))
+                    else if (_inputProfile.Pressed(Triggers.Start))
                     {
                         _editControl = false;
                         SFX.Play("consoleError");
@@ -813,7 +813,7 @@ namespace DuckGame
                         _configInputMapping.deviceOverride = _inputProfile.lastActiveDevice;
                         if (_configInputMapping.deviceOverride is GenericController)
                             _configInputMapping.deviceOverride = (_configInputMapping.deviceOverride as GenericController).device;
-                        if (_selectedSetting.trigger != "ANY" && _configInputMapping.RunMappingUpdate(_selectedSetting.trigger, false))
+                        if (_selectedSetting.trigger != Triggers.Any && _configInputMapping.RunMappingUpdate(_selectedSetting.trigger, false))
                         {
                             _editControl = false;
                             SFX.Play("consoleSelect");
@@ -828,7 +828,7 @@ namespace DuckGame
                 {
                     if (!_changeName)
                     {
-                        if (_createSelection == PSCreateSelection.Controls && _inputProfile.Pressed("SELECT"))
+                        if (_createSelection == PSCreateSelection.Controls && _inputProfile.Pressed(Triggers.Select))
                         {
                             _desiredMode = PSMode.EditControls;
                             _selectedSetting = null;
@@ -840,12 +840,12 @@ namespace DuckGame
                         }
                         if (_createSelection == PSCreateSelection.Mood)
                         {
-                            if (_inputProfile.Pressed("MENULEFT"))
+                            if (_inputProfile.Pressed(Triggers.MenuLeft))
                             {
                                 _moodVal = Maths.Clamp(_moodVal - 0.25f, 0f, 1f);
                                 SFX.Play("consoleTick");
                             }
-                            if (_inputProfile.Pressed("MENURIGHT"))
+                            if (_inputProfile.Pressed(Triggers.MenuRight))
                             {
                                 _moodVal = Maths.Clamp(_moodVal + 0.25f, 0f, 1f);
                                 SFX.Play("consoleTick");
@@ -853,7 +853,7 @@ namespace DuckGame
                         }
                         if (_createSelection == PSCreateSelection.Color)
                         {
-                            if (_inputProfile.Pressed("MENULEFT"))
+                            if (_inputProfile.Pressed(Triggers.MenuLeft))
                             {
                                 if (_preferredColor == -1)
                                 {
@@ -862,7 +862,7 @@ namespace DuckGame
                                 _preferredColor = Maths.Clamp(_preferredColor - 1, -1, DG.MaxPlayers - 1);
                                 SFX.Play("consoleTick");
                             }
-                            if (_inputProfile.Pressed("MENURIGHT"))
+                            if (_inputProfile.Pressed(Triggers.MenuRight))
                             {
                                 if (_preferredColor == DG.MaxPlayers - 1)
                                 {
@@ -872,17 +872,17 @@ namespace DuckGame
                                 SFX.Play("consoleTick");
                             }
                         }
-                        if (_inputProfile.Pressed("MENUDOWN") && _name != "" && _createSelection < PSCreateSelection.Accept)
+                        if (_inputProfile.Pressed(Triggers.MenuDown) && _name != "" && _createSelection < PSCreateSelection.Accept)
                         {
                             ++_createSelection;
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("MENUUP") && _name != "" && _createSelection > (isEditing ? PSCreateSelection.Mood : PSCreateSelection.ChangeName))
+                        if (_inputProfile.Pressed(Triggers.MenuUp) && _name != "" && _createSelection > (isEditing ? PSCreateSelection.Mood : PSCreateSelection.ChangeName))
                         {
                             --_createSelection;
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("SELECT"))
+                        if (_inputProfile.Pressed(Triggers.Select))
                         {
                             if (_createSelection == PSCreateSelection.ChangeName)
                             {
@@ -902,7 +902,7 @@ namespace DuckGame
                                 SFX.Play("consoleSelect", 0.4f);
                             }
                         }
-                        if (_inputProfile.Pressed("CANCEL"))
+                        if (_inputProfile.Pressed(Triggers.Cancel))
                         {
                             SaveSettings(isEditing, false);
                             if (!isEditing)
@@ -925,7 +925,7 @@ namespace DuckGame
                     {
                         InputProfile.repeat = true;
                         Keyboard.repeat = true;
-                        if (_inputProfile.Pressed("SELECT"))
+                        if (_inputProfile.Pressed(Triggers.Select))
                         {
                             string str = _name.Replace(" ", "");
                             if (str == "")
@@ -953,7 +953,7 @@ namespace DuckGame
                                 _changeName = false;
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("MENULEFT"))
+                        if (_inputProfile.Pressed(Triggers.MenuLeft))
                         {
                             --_currentLetter;
                             if (_currentLetter < 0)
@@ -967,7 +967,7 @@ namespace DuckGame
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("MENURIGHT"))
+                        if (_inputProfile.Pressed(Triggers.MenuRight))
                         {
                             ++_currentLetter;
                             if (_currentLetter > 8)
@@ -982,7 +982,7 @@ namespace DuckGame
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("MENUUP"))
+                        if (_inputProfile.Pressed(Triggers.MenuUp))
                         {
                             int index = GetCharIndex(_name[_currentLetter]) + 1;
                             if (index >= _characters.Count)
@@ -994,7 +994,7 @@ namespace DuckGame
                             _maskName = _maskName.Insert(_currentLetter, character.ToString() ?? "");
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("MENUDOWN"))
+                        if (_inputProfile.Pressed(Triggers.MenuDown))
                         {
                             int index = GetCharIndex(_name[_currentLetter]) - 1;
                             if (index < 0)
@@ -1006,7 +1006,7 @@ namespace DuckGame
                             _maskName = _maskName.Insert(_currentLetter, character.ToString() ?? "");
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("CANCEL"))
+                        if (_inputProfile.Pressed(Triggers.Cancel))
                         {
                             _desiredMode = PSMode.SelectProfile;
                             SFX.Play("consoleCancel", 0.4f);
@@ -1101,7 +1101,7 @@ namespace DuckGame
                                     flag = true;
                                 else if (!flag && (_controlPage != 0 || controlSetting != _controlSettingPages[_controlPage][_controlSettingPages[_controlPage].Count - 1]))
                                     position2.y -= 12f;
-                                if (controlSetting.trigger != "ANY")
+                                if (controlSetting.trigger != Triggers.Any)
                                 {
                                     name += ":|DGBLUE|";
                                     if (!_editControl || _selectedSetting != controlSetting)

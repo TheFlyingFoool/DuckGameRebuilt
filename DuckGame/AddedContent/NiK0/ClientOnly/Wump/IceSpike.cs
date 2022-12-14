@@ -66,7 +66,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(this.hSpeed, this.vSpeed));
+                    angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(hSpeed, vSpeed));
                 }
             }
             base.Update();

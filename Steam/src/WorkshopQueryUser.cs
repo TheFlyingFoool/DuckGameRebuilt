@@ -19,12 +19,12 @@ public class WorkshopQueryUser : WorkshopQueryUGC {
         _sortOrder = eSortOrder;
     }
 
-    internal unsafe override void Create() 
+    internal override unsafe void Create() 
     {
         _handle = SteamUGC.CreateQueryUserUGCRequest(_accountID, _listType, _type, _sortOrder, (AppId_t)312530, (AppId_t)312530, _page);
     }
 
-    internal unsafe override void SetQueryData() {
+    internal override unsafe void SetQueryData() {
         base.SetQueryData();
 
         SteamUGC.SetCloudFileNameFilter(_handle, cloudNameFileFilter);

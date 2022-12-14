@@ -81,45 +81,45 @@ namespace DuckGame
                 return;
             if (_binding.value.GetType() == typeof(float))
             {
-                if (((_focus == null || !_focus.Pressed("MENULEFT") ? (Keyboard.Pressed(Keys.Left) ? 1 : 0) : 1) | (flag2 ? 1 : 0)) != 0)
+                if (((_focus == null || !_focus.Pressed(Triggers.MenuLeft) ? (Keyboard.Pressed(Keys.Left) ? 1 : 0) : 1) | (flag2 ? 1 : 0)) != 0)
                 {
                     _binding.value = Math.Max((float)_binding.value - _binding.inc * num, _binding.min);
                 }
                 else
                 {
-                    if (((_focus == null || !_focus.Pressed("MENURIGHT") ? (Keyboard.Pressed(Keys.Right) ? 1 : 0) : 1) | (flag1 ? 1 : 0)) == 0)
+                    if (((_focus == null || !_focus.Pressed(Triggers.MenuRight) ? (Keyboard.Pressed(Keys.Right) ? 1 : 0) : 1) | (flag1 ? 1 : 0)) == 0)
                         return;
                     _binding.value = Math.Min((float)_binding.value + _binding.inc * num, _binding.max);
                 }
             }
             else if (_binding.value.GetType() == typeof(int))
             {
-                if (((_focus == null || !_focus.Pressed("MENULEFT") ? (Keyboard.Pressed(Keys.Left) ? 1 : 0) : 1) | (flag2 ? 1 : 0)) != 0)
+                if (((_focus == null || !_focus.Pressed(Triggers.MenuLeft) ? (Keyboard.Pressed(Keys.Left) ? 1 : 0) : 1) | (flag2 ? 1 : 0)) != 0)
                 {
                     _binding.value = (int)Math.Max((int)_binding.value - _binding.inc * num, _binding.min);
                 }
                 else
                 {
-                    if (((_focus == null || !_focus.Pressed("MENURIGHT") ? (Keyboard.Pressed(Keys.Right) ? 1 : 0) : 1) | (flag1 ? 1 : 0)) == 0)
+                    if (((_focus == null || !_focus.Pressed(Triggers.MenuRight) ? (Keyboard.Pressed(Keys.Right) ? 1 : 0) : 1) | (flag1 ? 1 : 0)) == 0)
                         return;
                     _binding.value = (int)Math.Min((int)_binding.value + _binding.inc * num, _binding.max);
                 }
             }
             else if (_binding.value.GetType() == typeof(Vec2))
             {
-                if (((_focus == null || !_focus.Pressed("MENULEFT") ? (Keyboard.Pressed(Keys.Left) ? 1 : 0) : 1) | (flag2 ? 1 : 0)) != 0)
+                if (((_focus == null || !_focus.Pressed(Triggers.MenuLeft) ? (Keyboard.Pressed(Keys.Left) ? 1 : 0) : 1) | (flag2 ? 1 : 0)) != 0)
                 {
                     Vec2 vec2 = (Vec2)_binding.value;
                     vec2.x = Math.Max(vec2.x - _binding.inc * num, _binding.min);
                     _binding.value = vec2;
                 }
-                else if (((_focus == null || !_focus.Pressed("MENURIGHT") ? (Keyboard.Pressed(Keys.Right) ? 1 : 0) : 1) | (flag1 ? 1 : 0)) != 0)
+                else if (((_focus == null || !_focus.Pressed(Triggers.MenuRight) ? (Keyboard.Pressed(Keys.Right) ? 1 : 0) : 1) | (flag1 ? 1 : 0)) != 0)
                 {
                     Vec2 vec2 = (Vec2)_binding.value;
                     vec2.x = Math.Min(vec2.x + _binding.inc * num, _binding.max);
                     _binding.value = vec2;
                 }
-                else if (((_focus == null || !_focus.Pressed("MENUUP") ? (Keyboard.Pressed(Keys.Up) ? 1 : 0) : 1) | (flag2 ? 1 : 0)) != 0)
+                else if (((_focus == null || !_focus.Pressed(Triggers.MenuUp) ? (Keyboard.Pressed(Keys.Up) ? 1 : 0) : 1) | (flag2 ? 1 : 0)) != 0)
                 {
                     Vec2 vec2 = (Vec2)_binding.value;
                     vec2.y = Math.Max(vec2.y - _binding.inc * num, _binding.min);
@@ -127,7 +127,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (((_focus == null || !_focus.Pressed("MENUDOWN") ? (Keyboard.Pressed(Keys.Down) ? 1 : 0) : 1) | (flag1 ? 1 : 0)) == 0)
+                    if (((_focus == null || !_focus.Pressed(Triggers.MenuDown) ? (Keyboard.Pressed(Keys.Down) ? 1 : 0) : 1) | (flag1 ? 1 : 0)) == 0)
                         return;
                     Vec2 vec2 = (Vec2)_binding.value;
                     vec2.y = Math.Min(vec2.y + _binding.inc * num, _binding.max);
@@ -136,7 +136,7 @@ namespace DuckGame
             }
             else
             {
-                if (!(_binding.value.GetType() == typeof(bool)) || ((_focus == null || !_focus.Pressed("SELECT") ? (Mouse.left == InputState.Pressed ? 1 : 0) : 1) | (flag1 ? 1 : 0) | (flag2 ? 1 : 0)) == 0)
+                if (!(_binding.value.GetType() == typeof(bool)) || ((_focus == null || !_focus.Pressed(Triggers.Select) ? (Mouse.left == InputState.Pressed ? 1 : 0) : 1) | (flag1 ? 1 : 0) | (flag2 ? 1 : 0)) == 0)
                     return;
                 _binding.value = !(bool)_binding.value;
             }

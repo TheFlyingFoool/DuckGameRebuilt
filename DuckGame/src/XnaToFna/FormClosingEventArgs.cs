@@ -15,7 +15,7 @@ namespace XnaToFna.ProxyForms
         public FormClosingEventArgs(CloseReason closeReason, bool cancel)
           : base(cancel)
         {
-            this.CloseReason = closeReason;
+            CloseReason = closeReason;
         }
     }
 }

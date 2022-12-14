@@ -159,12 +159,12 @@ namespace DuckGame
         {
             if (open)
             {
-                if (Input.Pressed("MENUUP") && _selection > 0)
+                if (Input.Pressed(Triggers.MenuUp) && _selection > 0)
                 {
                     --_selection;
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (Input.Pressed("MENUDOWN") && _selection < _users.Count - 1)
+                if (Input.Pressed(Triggers.MenuDown) && _selection < _users.Count - 1)
                 {
                     ++_selection;
                     SFX.Play("textLetter", 0.7f);
@@ -173,12 +173,12 @@ namespace DuckGame
                     _viewTop = _selection - (_maxShow - 1);
                 if (_selection < _viewTop)
                     _viewTop = _selection;
-                if (Input.Pressed("CANCEL"))
+                if (Input.Pressed(Triggers.Cancel))
                 {
                     _menuAction.Activate();
                     SFX.Play("resume", 0.6f);
                 }
-                if (_users.Count > 0 && Input.Pressed("MENU1") && !_users[_selection].triedInvite)
+                if (_users.Count > 0 && Input.Pressed(Triggers.Menu1) && !_users[_selection].triedInvite)
                 {
                     SFX.Play("rockHitGround", 0.8f);
                     _users[_selection].triedInvite = true;

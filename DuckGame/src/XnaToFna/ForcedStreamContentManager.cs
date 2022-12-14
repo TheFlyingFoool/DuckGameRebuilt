@@ -22,10 +22,10 @@ namespace XnaToFna
         protected override Stream OpenStream(string assetName)
         {
             Stream stream;
-            if (this.Stream != null)
+            if (Stream != null)
             {
-                stream = this.Stream;
-                this.Stream = null;
+                stream = Stream;
+                Stream = null;
             }
             else
                 stream = base.OpenStream(assetName);

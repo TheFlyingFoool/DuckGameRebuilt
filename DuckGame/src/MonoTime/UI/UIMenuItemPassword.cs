@@ -91,7 +91,7 @@ namespace DuckGame
 
         public override void Activate(string trigger)
         {
-            if (!(trigger == "SELECT"))
+            if (!(trigger == Triggers.Select))
                 return;
             _enterStringMenu.SetValue((string)_field.value);
             _activateFunction.Activate();

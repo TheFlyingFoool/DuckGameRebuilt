@@ -267,8 +267,10 @@ namespace DuckGame
                 (Level.current as TeamSelect2).CloseAllDialogs();
             if (Network.isServer)
             {
-                Level.current = new TeamSelect2();
-                Level.current.suppressLevelMessage = true;
+                Level.current = new TeamSelect2
+                {
+                    suppressLevelMessage = true
+                };
             }
             Close();
             DevConsole.Log("|PURPLE|LOBBY    |DGGREEN|Finished! (HOST).", Color.White);
@@ -340,7 +342,7 @@ namespace DuckGame
             else
             {
                 _resetNetwork = false;
-                if (Input.Pressed("CANCEL"))
+                if (Input.Pressed(Triggers.Cancel))
                 {
                     Reset();
                     messages.Add("|DGRED|Aborting...");

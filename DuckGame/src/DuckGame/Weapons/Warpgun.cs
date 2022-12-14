@@ -93,7 +93,7 @@ namespace DuckGame
             {
                 offDir = duck.offDir;
                 CheckIfHoldObstructed();
-                if (!duck._hovering && duck.holdObject != null && (!duck.HasEquipment(typeof(Holster)) || !duck.inputProfile.Down("UP")))
+                if (!duck._hovering && duck.holdObject != null && (!duck.HasEquipment(typeof(Holster)) || !duck.inputProfile.Down(Triggers.Up)))
                 {
                     duck.UpdateHoldLerp(true, true);
                     duck.UpdateHoldPosition();

@@ -14,8 +14,10 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 30;
-            _ammoType = new ATReboundLaser();
-            _ammoType.barrelAngleDegrees = 45f;
+            _ammoType = new ATReboundLaser
+            {
+                barrelAngleDegrees = 45f
+            };
             _type = "gun";
             graphic = new Sprite("laserRifle");
             center = new Vec2(16f, 16f);

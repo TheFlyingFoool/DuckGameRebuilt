@@ -24,8 +24,10 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = _ammoMax;
-            _ammoType = new ATShotgun();
-            _ammoType.range = 140f;
+            _ammoType = new ATShotgun
+            {
+                range = 140f
+            };
             wideBarrel = true;
             _type = "gun";
             graphic = new Sprite("combatShotgun");

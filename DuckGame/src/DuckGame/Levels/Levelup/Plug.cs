@@ -67,7 +67,7 @@ namespace DuckGame
             alpha = !FurniShopScreen.open ? Lerp.Float(alpha, 0f, 0.05f) : Lerp.Float(alpha, 1f, 0.05f);
             bool flag1 = true;
             _chancyLerp = Lerp.FloatSmooth(_chancyLerp, flag1 ? 1f : 0f, 0.2f, 1.05f);
-            bool flag2 = !_allowMovement && Input.Down("SELECT");
+            bool flag2 = !_allowMovement && Input.Down(Triggers.Select);
             if (_lines.Count > 0 && _currentLine == "")
             {
                 int num = _waitAfterLine <= 0.0 ? 1 : 0;
@@ -84,7 +84,7 @@ namespace DuckGame
                 }
                 if (num == 0 && _waitAfterLine <= 0.0)
                     HUD.AddCornerMessage(HUDCorner.BottomRight, "@SELECT@CONTINUE");
-                if (_lineProgress.Count == 0 || Input.Pressed("SELECT"))
+                if (_lineProgress.Count == 0 || Input.Pressed(Triggers.Select))
                 {
                     _lineProgress.Clear();
                     _currentLine = _lines[0];

@@ -82,8 +82,10 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 999999;
-            _ammoType = new ATLaserOrange();
-            _ammoType.affectedByGravity = true;
+            _ammoType = new ATLaserOrange
+            {
+                affectedByGravity = true
+            };
             _type = "gun";
             graphic = new Sprite("positronShooter");
             center = new Vec2(10f, 4f);
@@ -156,13 +158,13 @@ namespace DuckGame
             }
             else
                 _noteIndex = _notes.Count + 1;
-            _winding = duck != null && duck.inputProfile.Down("UP");
+            _winding = duck != null && duck.inputProfile.Down(Triggers.Up);
             base.Update();
         }
 
         public override void CheckIfHoldObstructed()
         {
-            if (duck != null && duck.inputProfile.Down("UP"))
+            if (duck != null && duck.inputProfile.Down(Triggers.Up))
                 duck.holdObstructed = true;
             else
                 base.CheckIfHoldObstructed();

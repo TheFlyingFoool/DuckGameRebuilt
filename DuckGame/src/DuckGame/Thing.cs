@@ -1192,7 +1192,7 @@ namespace DuckGame
             Graphics.SetRenderTarget(null);
             Texture2D tex = new Texture2D(Graphics.device, target.width, target.height);
             tex.SetData(target.GetData());
-            List<string> text = Content.RSplit(this.GetType().AssemblyQualifiedName, ',', -1);
+            List<string> text = Content.RSplit(GetType().AssemblyQualifiedName, ',', -1);
             string texname = text[0] + text[1] + wide.ToString() + " " + high.ToString();
             tex.Name = texname;
             Content.textures[texname] = tex; //spritea las stuff
@@ -1627,7 +1627,7 @@ namespace DuckGame
 
         public void DrawCollision()
         {
-            Graphics.DrawRect(this.topLeft, this.bottomRight, Color.Orange * 0.8f, 1f, false, 0.5f);
+            Graphics.DrawRect(topLeft, bottomRight, Color.Orange * 0.8f, 1f, false, 0.5f);
 
             if (this is PhysicsObject)
             {

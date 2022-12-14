@@ -35,7 +35,7 @@ namespace AddedContent.Hyeve.DebugUI.ReflectionValues
                         Variable.SetValue(FieldOwner, (Vec2)value);
                         break;
                     case VectorType.Vector2:
-                        Variable.SetValue(FieldOwner, (Vector2)value);
+                        Variable.SetValue(FieldOwner, value);
                         break;
                 }
             }

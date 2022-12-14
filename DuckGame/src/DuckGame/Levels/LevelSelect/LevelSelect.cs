@@ -333,7 +333,7 @@ namespace DuckGame
                 else
                 {
                     Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.04f);
-                    if (Input.Pressed("MENUUP"))
+                    if (Input.Pressed(Triggers.MenuUp))
                     {
                         if (_selectedItem > 0)
                             --_selectedItem;
@@ -344,7 +344,7 @@ namespace DuckGame
                         if (_selectedItem >= _topIndex + _maxItems)
                             _topIndex = _selectedItem + 1 - _maxItems;
                     }
-                    else if (Input.Pressed("MENUDOWN"))
+                    else if (Input.Pressed(Triggers.MenuDown))
                     {
                         if (_selectedItem < _items.Count() - 1)
                             ++_selectedItem;
@@ -355,7 +355,7 @@ namespace DuckGame
                         if (_selectedItem >= _topIndex + _maxItems)
                             _topIndex = _selectedItem + 1 - _maxItems;
                     }
-                    else if (Input.Pressed("MENULEFT"))
+                    else if (Input.Pressed(Triggers.MenuLeft))
                     {
                         _selectedItem -= _maxItems - 1;
                         if (_selectedItem < 0)
@@ -363,7 +363,7 @@ namespace DuckGame
                         if (_selectedItem < _topIndex)
                             _topIndex = _selectedItem;
                     }
-                    else if (Input.Pressed("MENURIGHT"))
+                    else if (Input.Pressed(Triggers.MenuRight))
                     {
                         _selectedItem += _maxItems - 1;
                         if (_selectedItem > _items.Count() - 1)
@@ -371,7 +371,7 @@ namespace DuckGame
                         if (_selectedItem >= _topIndex + _maxItems)
                             _topIndex = _selectedItem + 1 - _maxItems;
                     }
-                    else if (Input.Pressed("MENU1"))
+                    else if (Input.Pressed(Triggers.Menu1))
                     {
                         if (_selectedLevel.itemType != LSItemType.UpFolder)
                         {
@@ -397,7 +397,7 @@ namespace DuckGame
                                 Editor.activatedLevels.Add(_selectedLevel.path);
                         }
                     }
-                    else if (Input.Pressed("SELECT"))
+                    else if (Input.Pressed(Triggers.Select))
                     {
                         if (_selectedLevel.itemType == LSItemType.Workshop || _selectedLevel.itemType == LSItemType.Vanilla)
                             SetCurrentFolder(_selectedLevel.path);
@@ -411,19 +411,19 @@ namespace DuckGame
                         else if (_selectedLevel.itemType == LSItemType.UpFolder)
                             FolderUp(_selectedLevel.isModPath);
                     }
-                    else if (Input.Pressed("CANCEL"))
+                    else if (Input.Pressed(Triggers.Cancel))
                     {
                         if (_currentDirectory != _rootDirectory)
                             FolderUp(_selectedLevel.isModPath);
                         else
                             _exiting = true;
                     }
-                    else if (Input.Pressed("RAGDOLL"))
+                    else if (Input.Pressed(Triggers.Ragdoll))
                     {
                         _dialog.Open("New Playlist...");
                         Editor.lockInput = _dialog;
                     }
-                    else if (Input.Pressed("MENU2") && modRoot == null && _currentDirectory != "@VANILLA@" && _selectedLevel.path != "@VANILLA@" && _currentDirectory != "@WORKSHOP@" && mapPack == null && MonoMain.pauseMenu != _confirmMenu && _selectedLevel.itemType != LSItemType.UpFolder && _selectedLevel.itemType != LSItemType.Workshop && _selectedLevel.itemType != LSItemType.MapPack)
+                    else if (Input.Pressed(Triggers.Menu2) && modRoot == null && _currentDirectory != "@VANILLA@" && _selectedLevel.path != "@VANILLA@" && _currentDirectory != "@WORKSHOP@" && mapPack == null && MonoMain.pauseMenu != _confirmMenu && _selectedLevel.itemType != LSItemType.UpFolder && _selectedLevel.itemType != LSItemType.Workshop && _selectedLevel.itemType != LSItemType.MapPack)
                     {
                         _skipCompanionOpening = true;
                         MonoMain.pauseMenu = _confirmMenu;

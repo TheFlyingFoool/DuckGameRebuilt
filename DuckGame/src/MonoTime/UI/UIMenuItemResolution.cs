@@ -83,14 +83,14 @@ namespace DuckGame
 
         public override void Activate(string trigger)
         {
-            if (trigger == "SELECT")
+            if (trigger == Triggers.Select)
             {
                 _field.value = currentValue;
                 if (selectAction == null)
                     return;
                 selectAction();
             }
-            else if (trigger == "MENU2")
+            else if (trigger == Triggers.Menu2)
             {
                 showAll = !showAll;
                 RefreshValueList();
@@ -100,7 +100,7 @@ namespace DuckGame
                     currentIndex = 0;
                 _textItem.text = _values[currentIndex].ToShortString();
             }
-            else if (trigger == "SELECT")
+            else if (trigger == Triggers.Select)
             {
                 if (selectAction != null)
                     selectAction();
@@ -109,9 +109,9 @@ namespace DuckGame
             else
             {
                 int currentIndex1 = currentIndex;
-                if (trigger == "MENULEFT")
+                if (trigger == Triggers.MenuLeft)
                     --currentIndex;
-                else if (trigger == "MENURIGHT")
+                else if (trigger == Triggers.MenuRight)
                     ++currentIndex;
                 if (currentIndex < 0)
                     currentIndex = 0;

@@ -111,7 +111,7 @@ namespace DuckGame
         {
             if (_state == State.JoinLobby && _timeInState > 480)
                 Reset();
-            if (Input.Pressed("GRAB"))
+            if (Input.Pressed(Triggers.Grab))
             {
                 _desparate = false;
                 GetDesparate();

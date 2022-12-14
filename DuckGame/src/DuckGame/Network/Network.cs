@@ -32,19 +32,19 @@ namespace DuckGame
         private static Dictionary<Type, ushort> _allMessageTypesToID = new Dictionary<Type, ushort>();
         private static IEnumerable<NetMessagePriority> _netMessagePriorities;
         public static List<string> synchronizedTriggers = new List<string>()
-    {
-      "LEFT",
-      "RIGHT",
-      "UP",
-      "DOWN",
-      "SHOOT",
-      "JUMP",
-      "GRAB",
-      "QUACK",
-      "START",
-      "RAGDOLL",
-      "STRAFE"
-    };
+        {
+          Triggers.Left,
+          Triggers.Right,
+          Triggers.Up,
+          Triggers.Down,
+          Triggers.Shoot,
+          Triggers.Jump,
+          Triggers.Grab,
+          Triggers.Quack,
+          Triggers.Start,
+          Triggers.Ragdoll,
+          Triggers.Strafe
+        };
         private static int _inputDelayFrames = 0;
         public bool _networkActive;
         public static uint messageTypeHash;

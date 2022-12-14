@@ -16,13 +16,13 @@ namespace XnaToFna.ContentTransformers
 
         protected override ContentType Read(ContentReader input, ContentType existing)
         {
-            if (this.WrappedContentManager == null)
-                this.WrappedContentManager = new ForcedStreamContentManager(input.ContentManager.ServiceProvider);
-            this.WrappedContentManager.RootDirectory = input.ContentManager.RootDirectory;
-            this.WrappedContentManager.Stream = new GZipStream(input.BaseStream, CompressionMode.Decompress, true);
+            if (WrappedContentManager == null)
+                WrappedContentManager = new ForcedStreamContentManager(input.ContentManager.ServiceProvider);
+            WrappedContentManager.RootDirectory = input.ContentManager.RootDirectory;
+            WrappedContentManager.Stream = new GZipStream(input.BaseStream, CompressionMode.Decompress, true);
             bool enabled = FNAHooks.Enabled;
             FNAHooks.Enabled = false;
-            ContentType contentType = this.WrappedContentManager.Load<ContentType>(input.AssetName);
+            ContentType contentType = WrappedContentManager.Load<ContentType>(input.AssetName);
             FNAHooks.Enabled = enabled;
             return contentType;
         }

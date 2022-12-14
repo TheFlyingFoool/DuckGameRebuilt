@@ -191,8 +191,10 @@ namespace DuckGame
                         Remove(ng._parallax);
                         ng.Initialize();
                     }
-                    rainSound = new LoopingSound("sizzle", 1, -3);
-                    rainSound.volume = 0.2f;
+                    rainSound = new LoopingSound("sizzle", 1, -3)
+                    {
+                        volume = 0.2f
+                    };
                     darkenRainer = 0.8f;
                     rainwind = Rando.Float(-2, 2);
                     lightningRNG = Rando.Int(1200, 2400);
@@ -209,8 +211,10 @@ namespace DuckGame
                 }
                 else if (First<OfficeTileset>() != null && (Rando.Int(1) == 1 || DGRSettings.S_RandomWeather > 9.9f))
                 {
-                    rainSound = new LoopingSound("sizzle", 1, -3);
-                    rainSound.volume = 0.2f;
+                    rainSound = new LoopingSound("sizzle", 1, -3)
+                    {
+                        volume = 0.2f
+                    };
                     darkenRainer = 0.8f;
                     Raining = true;
                     rainwind = Rando.Float(-2, 2);
@@ -232,8 +236,10 @@ namespace DuckGame
                     string forecast = "RAINY";
                     if (Rando.Int(1) == 0)
                     {
-                        rainSound = new LoopingSound("sizzle", 1, -3);
-                        rainSound.volume = 0.2f;
+                        rainSound = new LoopingSound("sizzle", 1, -3)
+                        {
+                            volume = 0.2f
+                        };
                         darkenRainer = 0.8f;
                         cityRaining = true;
                         rainwind = Rando.Float(-2, 2);
@@ -353,7 +359,7 @@ namespace DuckGame
 
                 //ignore this mess im just quickly assembling this if you wanna make it better go ahead
                 //-NiK0
-                if (DGRSettings.S_WeatherLighting > 0 && (int)Math.Round((float)Rando.Int(lightningRNG) / DGRSettings.S_WeatherLighting) == 0)
+                if (DGRSettings.S_WeatherLighting > 0 && (int)Math.Round(Rando.Int(lightningRNG) / DGRSettings.S_WeatherLighting) == 0)
                 {
                     rainDarken = 1.2f;
                     Add(new BGLightning(Rando.Float(-30, 270), 0));
@@ -423,7 +429,7 @@ namespace DuckGame
 
                 //ignore this mess im just quickly assembling this if you wanna make it better go ahead
                 //-NiK0
-                if (DGRSettings.S_WeatherLighting > 0 && (int)Math.Round((float)Rando.Int(lightningRNG) / DGRSettings.S_WeatherLighting) == 0)
+                if (DGRSettings.S_WeatherLighting > 0 && (int)Math.Round(Rando.Int(lightningRNG) / DGRSettings.S_WeatherLighting) == 0)
                 {
                     rainDarken = 1.2f;
                     Add(new BGLightning(Rando.Float(-30, 270), 0));

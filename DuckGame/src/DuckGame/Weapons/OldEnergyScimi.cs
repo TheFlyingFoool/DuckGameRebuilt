@@ -426,14 +426,14 @@ namespace DuckGame
         {
             if (isServerForObject && duck != null)
             {
-                if (duck.inputProfile.Down("DOWN"))
+                if (duck.inputProfile.Down(Triggers.Down))
                 {
                     x = duck.x;
                     _thrownDown = true;
                     if (!duck.grounded)
                         duck.vSpeed -= 8f;
                 }
-                else if (duck.inputProfile.Down("UP"))
+                else if (duck.inputProfile.Down(Triggers.Up))
                 {
                     x = duck.x;
                     _thrownUp = true;

@@ -519,7 +519,7 @@ namespace DuckGame
                         _specialSprite.scale = scale;
                         _specialSprite.depth = depth - 10;
                         _specialSprite.angle += 0.02f;
-                        float num = 0.8f + this._wave.normalized * 0.2f;
+                        float num = 0.8f + _wave.normalized * 0.2f;
                         _specialSprite.scale = new Vec2(num, num);
                         Vec2 vec2 = Offset(new Vec2(2f, 4f));
                         Graphics.Draw(_specialSprite, vec2.x, vec2.y);

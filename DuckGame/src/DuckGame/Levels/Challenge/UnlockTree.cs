@@ -56,7 +56,7 @@ namespace DuckGame
                 inputProfile = duck.inputProfile;
             UnlockData selected = _selected;
             List<UnlockData> treeLayer = Unlocks.GetTreeLayer(_selected.layer);
-            if (inputProfile.Pressed("MENULEFT"))
+            if (inputProfile.Pressed(Triggers.MenuLeft))
             {
                 UnlockData unlockData1 = null;
                 foreach (UnlockData unlockData2 in treeLayer)
@@ -73,7 +73,7 @@ namespace DuckGame
                     SFX.Play("menuBlip01");
                 }
             }
-            else if (inputProfile.Pressed("MENURIGHT"))
+            else if (inputProfile.Pressed(Triggers.MenuRight))
             {
                 UnlockData unlockData3 = null;
                 UnlockData unlockData4 = null;
@@ -93,7 +93,7 @@ namespace DuckGame
                     SFX.Play("menuBlip01");
                 }
             }
-            else if (inputProfile.Pressed("MENUUP"))
+            else if (inputProfile.Pressed(Triggers.MenuUp))
             {
                 if (_selected.parent != null)
                 {
@@ -106,7 +106,7 @@ namespace DuckGame
                     }
                 }
             }
-            else if (inputProfile.Pressed("MENUDOWN"))
+            else if (inputProfile.Pressed(Triggers.MenuDown))
             {
                 bool flag = false;
                 if (_selected.children.Count > 0)
@@ -132,7 +132,7 @@ namespace DuckGame
                     SFX.Play("menuBlip01");
                 }
             }
-            else if (inputProfile.Pressed("SELECT") && !_selected.ProfileUnlocked(Profiles.active[0]))
+            else if (inputProfile.Pressed(Triggers.Select) && !_selected.ProfileUnlocked(Profiles.active[0]))
             {
                 bool flag = false;
                 if (_selected.parent != null)

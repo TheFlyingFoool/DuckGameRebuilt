@@ -71,17 +71,17 @@
 //            {
 //                Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.02f);
 //                this._wave += 0.1f;
-//                if (Input.Pressed("MENUUP"))
+//                if (Input.Pressed(Triggers.MenuUp))
 //                {
 //                    this._buy = true;
 //                    SFX.Play("textLetter", 0.9f);
 //                }
-//                if (Input.Pressed("MENUDOWN"))
+//                if (Input.Pressed(Triggers.MenuDown))
 //                {
 //                    this._buy = false;
 //                    SFX.Play("textLetter", 0.9f);
 //                }
-//                if (!Input.Pressed("SELECT"))
+//                if (!Input.Pressed(Triggers.Select))
 //                    return;
 //                if (this._buy)
 //                {

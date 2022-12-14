@@ -62,8 +62,10 @@ namespace DuckGame
                     bitmap = bitmap1;
                 }
             }
-            DirectBitmap DB = new DirectBitmap(bitmap.Width, bitmap.Height);
-            DB.Bitmap = bitmap;
+            DirectBitmap DB = new DirectBitmap(bitmap.Width, bitmap.Height)
+            {
+                Bitmap = bitmap
+            };
             DB.UnPink();
             Texture2D Tex;
             using (MemoryStream ms = new MemoryStream())

@@ -81,13 +81,13 @@ namespace DuckGame
                 return;
             float num1 = 0f;
             float num2 = 0f;
-            if (owner.inputProfile.Down("LEFT"))
+            if (owner.inputProfile.Down(Triggers.Left))
                 num1 -= 2f;
-            if (owner.inputProfile.Down("RIGHT"))
+            if (owner.inputProfile.Down(Triggers.Right))
                 num1 += 2f;
-            if (owner.inputProfile.Down("UP"))
+            if (owner.inputProfile.Down(Triggers.Up))
                 num2 -= 2f;
-            if (owner.inputProfile.Down("DOWN"))
+            if (owner.inputProfile.Down(Triggers.Down))
                 num2 += 2f;
             Firecracker firecracker = new Firecracker(barrelPosition.x, barrelPosition.y);
             if (!owner.crouch)

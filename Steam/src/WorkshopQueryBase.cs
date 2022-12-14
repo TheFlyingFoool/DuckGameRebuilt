@@ -6,7 +6,7 @@ public delegate void WorkshopQueryResultFetched(object sender, WorkshopQueryResu
 
 public abstract class WorkshopQueryBase : IDisposable {
 
-    internal readonly static bool _hasSetReturnOnlyIDs = typeof(SteamUGC).GetMethod("SetReturnOnlyIDs") != null;
+    internal static readonly bool _hasSetReturnOnlyIDs = typeof(SteamUGC).GetMethod("SetReturnOnlyIDs") != null;
 
     internal CallResult<SteamUGCQueryCompleted_t> _completedCallResult;
 
@@ -47,32 +47,32 @@ public abstract class WorkshopQueryBase : IDisposable {
 
     internal abstract void Create();
 
-    internal unsafe virtual void Destroy() 
+    internal virtual unsafe void Destroy() 
     {
         SteamUGC.ReleaseQueryUGCRequest(_handle);
         _handle = new UGCQueryHandle_t();
         _completedCallResult = CallResult<SteamUGCQueryCompleted_t>.Create(OnSteamUGCQueryCompleted);
     }
 
-    internal unsafe virtual void SetQueryData() 
+    internal virtual unsafe void SetQueryData() 
     {
         if (_dataToFetch == WorkshopQueryData.TotalOnly)
             SteamUGC.SetReturnTotalOnly(_handle, true);
         else
         {
-            if ((_dataToFetch & WorkshopQueryData.LongDescription) != (WorkshopQueryData)0)
+            if ((_dataToFetch & WorkshopQueryData.LongDescription) != 0)
                 SteamUGC.SetReturnLongDescription(_handle, true);
             else
                 SteamUGC.SetReturnLongDescription(_handle, false);
-            if ((_dataToFetch & WorkshopQueryData.Metadata) != (WorkshopQueryData)0)
+            if ((_dataToFetch & WorkshopQueryData.Metadata) != 0)
                 SteamUGC.SetReturnMetadata(_handle, true);
             else
                 SteamUGC.SetReturnMetadata(_handle, false);
-            if ((_dataToFetch & WorkshopQueryData.Children) != (WorkshopQueryData)0)
+            if ((_dataToFetch & WorkshopQueryData.Children) != 0)
                 SteamUGC.SetReturnChildren(_handle, true);
             else
                 SteamUGC.SetReturnChildren(_handle, false);
-            if ((_dataToFetch & WorkshopQueryData.AdditionalPreviews) != (WorkshopQueryData)0)
+            if ((_dataToFetch & WorkshopQueryData.AdditionalPreviews) != 0)
                 SteamUGC.SetReturnAdditionalPreviews(_handle, true);
             else
                 SteamUGC.SetReturnAdditionalPreviews(_handle, false);
@@ -117,7 +117,7 @@ public abstract class WorkshopQueryBase : IDisposable {
         }
     }
 
-    protected unsafe virtual void _Request() 
+    protected virtual unsafe void _Request() 
     {
         if (handle == 0)
             Create();

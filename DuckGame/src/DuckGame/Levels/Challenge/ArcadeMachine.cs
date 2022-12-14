@@ -143,7 +143,7 @@ namespace DuckGame
             if (level == null || level.bareInitialize)
                 return;
             _dust = new DustSparkleEffect(x - 28f, y - 40f, false, (bool)lit);
-            _lighting = !(bool)lit ? new ArcadeScreen(this.x, this.y) : new ArcadeLight(this.x - 1f, this.y - 41f);
+            _lighting = !(bool)lit ? new ArcadeScreen(x, y) : new ArcadeLight(x - 1f, y - 41f);
             if (Content.readyToRenderPreview)
                 _dust.y -= 10f;
             else

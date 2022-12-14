@@ -664,7 +664,7 @@ namespace DuckGame
 
         public bool JoinGamePressed()
         {
-            return Pressed("START", false);
+            return Pressed(Triggers.Start, false);
         }
 
         public virtual bool Pressed(string trigger, bool any = false)
@@ -673,7 +673,7 @@ namespace DuckGame
             {
                 return false;
             }
-            if (trigger == "ANY")
+            if (trigger == Triggers.Any)
             {
                 any = true;
             }
@@ -804,7 +804,7 @@ namespace DuckGame
                         if (pad != null)
                         {
                             List<int> mappings;
-                            if (!map.Value.TryGetValue("LTRIGGER", out mappings) || mappings.Count <= 0)
+                            if (!map.Value.TryGetValue(Triggers.LeftTrigger, out mappings) || mappings.Count <= 0)
                             {
                                 return pad.leftTrigger;
                             }
@@ -848,7 +848,7 @@ namespace DuckGame
                         if (pad != null)
                         {
                             List<int> mappings;
-                            if (!map.Value.TryGetValue("RTRIGGER", out mappings) || mappings.Count <= 0)
+                            if (!map.Value.TryGetValue(Triggers.RightTrigger, out mappings) || mappings.Count <= 0)
                             {
                                 return pad.rightTrigger;
                             }
@@ -892,7 +892,7 @@ namespace DuckGame
                         if (pad != null)
                         {
                             List<int> mappings;
-                            if (!map.Value.TryGetValue("LSTICK", out mappings) || mappings.Count <= 0)
+                            if (!map.Value.TryGetValue(Triggers.LeftStick, out mappings) || mappings.Count <= 0)
                             {
                                 if (pad.leftStick != Vec2.Zero)
                                 {
@@ -970,7 +970,7 @@ namespace DuckGame
                         if (pad != null)
                         {
                             List<int> mappings;
-                            if (!map.Value.TryGetValue("RSTICK", out mappings) || mappings.Count <= 0)
+                            if (!map.Value.TryGetValue(Triggers.RightStick, out mappings) || mappings.Count <= 0)
                             {
                                 return pad.rightStick;
                             }
@@ -1077,7 +1077,7 @@ namespace DuckGame
             _repeatList.Clear();
             if (_repeat)
             {
-                if (Pressed("MENULEFT", false) || Pressed("MENURIGHT", false) || Pressed("MENUUP", false) || Pressed("MENUDOWN", false))
+                if (Pressed(Triggers.MenuLeft, false) || Pressed(Triggers.MenuRight, false) || Pressed(Triggers.MenuUp, false) || Pressed(Triggers.MenuDown, false))
                 {
                     if (!_repeating)
                     {
@@ -1093,35 +1093,35 @@ namespace DuckGame
                 {
                     _repeatTime -= 0.1f;
                     bool down = false;
-                    if (Down("MENULEFT"))
+                    if (Down(Triggers.MenuLeft))
                     {
                         if (_repeatTime <= 0f)
                         {
-                            _repeatList.Add("MENULEFT");
+                            _repeatList.Add(Triggers.MenuLeft);
                         }
                         down = true;
                     }
-                    if (Down("MENURIGHT"))
+                    if (Down(Triggers.MenuRight))
                     {
                         if (_repeatTime <= 0f)
                         {
-                            _repeatList.Add("MENURIGHT");
+                            _repeatList.Add(Triggers.MenuRight);
                         }
                         down = true;
                     }
-                    if (Down("MENUUP"))
+                    if (Down(Triggers.MenuUp))
                     {
                         if (_repeatTime <= 0f)
                         {
-                            _repeatList.Add("MENUUP");
+                            _repeatList.Add(Triggers.MenuUp);
                         }
                         down = true;
                     }
-                    if (Down("MENUDOWN"))
+                    if (Down(Triggers.MenuDown))
                     {
                         if (_repeatTime <= 0f)
                         {
-                            _repeatList.Add("MENUDOWN");
+                            _repeatList.Add(Triggers.MenuDown);
                         }
                         down = true;
                     }

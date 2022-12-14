@@ -76,9 +76,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 4;
-            _ammoType = new ATLaser();
-            _ammoType.range = 170f;
-            _ammoType.accuracy = 0.8f;
+            _ammoType = new ATLaser
+            {
+                range = 170f,
+                accuracy = 0.8f
+            };
             _type = "gun";
             _sprite = new SpriteMap("chainsaw", 29, 13);
             graphic = _sprite;
@@ -356,7 +358,7 @@ namespace DuckGame
             _bladeSound.lerpVolume = _throttleWait > 0.96f ? 0.6f : 0f;
             if (_struggling)
                 _bladeSound.lerpVolume = 0f;
-            _bladeSoundLow.lerpVolume = ((this._throttleWait > 0.96f && this._struggling) ? 0.6f : 0f);
+            _bladeSoundLow.lerpVolume = ((_throttleWait > 0.96f && _struggling) ? 0.6f : 0f);
             _bladeSound.pitch = pitch;
             _bladeSoundLow.pitch = pitch;
             if (owner == null)
@@ -608,7 +610,7 @@ namespace DuckGame
                         handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(1f, 0f), 0.25f);
                         _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(1f, 2f), 0.23f);
                     }
-                    else if (duck.inputProfile.Down("UP"))
+                    else if (duck.inputProfile.Down(Triggers.Up))
                     {
                         _animRot = tape == null ? MathHelper.Lerp(_animRot, -0.9f, 0.2f) : (tape.gun1 != this ? MathHelper.Lerp(_animRot, -0.6f, 0.2f) : MathHelper.Lerp(_animRot, -0.4f, 0.2f));
                         handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(1f, 0f), 0.25f);

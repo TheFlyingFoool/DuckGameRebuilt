@@ -70,13 +70,13 @@ namespace RectpackSharp
             hash ^= hash >> 16;
             return hash;
         }
-        private unsafe static uint GenerateGlobalSeed()
+        private static unsafe uint GenerateGlobalSeed()
         {
             uint result;
             GetRandomBytes((byte*)(&result), 4);
             return result;
         }
-        internal unsafe static void GetRandomBytes(byte* buffer, int length)
+        internal static unsafe void GetRandomBytes(byte* buffer, int length)
         {
             if (!UseNonRandomizedHashSeed)
             {

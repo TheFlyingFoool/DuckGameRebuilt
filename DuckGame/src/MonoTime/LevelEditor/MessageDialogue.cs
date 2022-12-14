@@ -81,7 +81,7 @@ namespace DuckGame
                 result = true;
                 CompleteDialogue();
             }
-            if (Keyboard.Pressed(Keys.Escape) || Mouse.right == InputState.Pressed || Input.Pressed("CANCEL"))
+            if (Keyboard.Pressed(Keys.Escape) || Mouse.right == InputState.Pressed || Input.Pressed(Triggers.Cancel))
             {
                 result = false;
                 CompleteDialogue();
@@ -138,9 +138,9 @@ namespace DuckGame
             }
             if (!_hoverOk && !_hoverCancel)
             {
-                if (!Editor.tookInput && Input.Pressed("MENULEFT"))
+                if (!Editor.tookInput && Input.Pressed(Triggers.MenuLeft))
                     --_selectedIndex;
-                else if (!Editor.tookInput && Input.Pressed("MENURIGHT"))
+                else if (!Editor.tookInput && Input.Pressed(Triggers.MenuRight))
                     ++_selectedIndex;
                 if (_selectedIndex < 0)
                     _selectedIndex = 0;
@@ -162,12 +162,12 @@ namespace DuckGame
                     }
                 }
             }
-            if (!Editor.tookInput && _hoverOk && ((Editor.inputMode != EditorInput.Mouse || Mouse.left != InputState.Pressed ? (Input.Pressed("SELECT") ? 1 : 0) : 1) | (flag1 ? 1 : 0)) != 0)
+            if (!Editor.tookInput && _hoverOk && ((Editor.inputMode != EditorInput.Mouse || Mouse.left != InputState.Pressed ? (Input.Pressed(Triggers.Select) ? 1 : 0) : 1) | (flag1 ? 1 : 0)) != 0)
             {
                 result = true;
                 CompleteDialogue();
             }
-            if (Editor.tookInput || !_hoverCancel || ((Editor.inputMode != EditorInput.Mouse || Mouse.left != InputState.Pressed ? (Input.Pressed("SELECT") ? 1 : 0) : 1) | (flag2 ? 1 : 0)) == 0)
+            if (Editor.tookInput || !_hoverCancel || ((Editor.inputMode != EditorInput.Mouse || Mouse.left != InputState.Pressed ? (Input.Pressed(Triggers.Select) ? 1 : 0) : 1) | (flag2 ? 1 : 0)) == 0)
                 return;
             result = false;
             CompleteDialogue();
@@ -237,7 +237,7 @@ namespace DuckGame
                 Vec2 p1_4 = new Vec2(p1_1.x + 160f, p2.y - 50f);
                 Vec2 vec2_2 = new Vec2(120f, 40f);
                 Graphics.DrawRect(p1_4, p1_4 + vec2_2, _hoverCancel ? new Color(80, 80, 80) : new Color(30, 30, 30), depth + 2);
-                _font.Draw("CANCEL", (float)(p1_4.x + vec2_2.x / 2.0 - _font.GetWidth("CANCEL") / 2.0), p1_4.y + 12f, Color.White, depth + 3);
+                _font.Draw(Triggers.Cancel, (float)(p1_4.x + vec2_2.x / 2.0 - _font.GetWidth(Triggers.Cancel) / 2.0), p1_4.y + 12f, Color.White, depth + 3);
             }
             bottomRightPos = p2.y;
         }

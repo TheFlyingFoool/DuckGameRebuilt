@@ -295,7 +295,7 @@ namespace DuckGame
                 if (showingError != null)
                 {
                     _controlString = "@CANCEL@BACK";
-                    if (Input.Pressed("QUACK"))
+                    if (Input.Pressed(Triggers.Quack))
                         showingError = null;
                     base.Update();
                 }
@@ -303,7 +303,7 @@ namespace DuckGame
                 {
                     if (_editModMenu.open)
                     {
-                        if (!globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
+                        if (!globalUILock && (Input.Pressed(Triggers.Cancel) || Keyboard.Pressed(Keys.Escape)))
                         {
                             _editModMenu.Close();
                             Open();
@@ -312,7 +312,7 @@ namespace DuckGame
                     }
                     else if (_modSettingsMenu.open)
                     {
-                        if (!globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
+                        if (!globalUILock && (Input.Pressed(Triggers.Cancel) || Keyboard.Pressed(Keys.Escape)))
                         {
                             _modSettingsMenu.Close();
                             Open();
@@ -445,7 +445,7 @@ namespace DuckGame
                             }
                             else
                                 _controlString = "@WASD@@SELECT@ADJUST @MENU1@TOGGLE @CANCEL@BACK";
-                            if (Input.Pressed("MENU1"))
+                            if (Input.Pressed(Triggers.Menu1))
                             {
                                 if (_selectedMod != null && _selectedMod.configuration != null)
                                 {
@@ -458,7 +458,7 @@ namespace DuckGame
                                     SFX.Play("rockHitGround", 0.8f);
                                 }
                             }
-                            else if (_selectedMod != null && _selectedMod.configuration != null && _selectedMod.configuration.error != null && Input.Pressed("MENU2"))
+                            else if (_selectedMod != null && _selectedMod.configuration != null && _selectedMod.configuration.error != null && Input.Pressed(Triggers.Menu2))
                             {
                                 if (_selectedMod.configuration != null)
                                 {
@@ -470,7 +470,7 @@ namespace DuckGame
                             }
                             else
                             {
-                                if (Input.Pressed("START") && _selectedMod != null && _selectedMod.configuration != null && _selectedMod.configuration.error != null)
+                                if (Input.Pressed(Triggers.Start) && _selectedMod != null && _selectedMod.configuration != null && _selectedMod.configuration.error != null)
                                 {
                                     string str = DuckFile.saveDirectory + "error_info.txt";
                                     File.WriteAllText(str, _selectedMod.configuration.error);
@@ -478,7 +478,7 @@ namespace DuckGame
                                     SFX.Play("rockHitGround", 0.8f);
                                     return;
                                 }
-                                if (Input.Pressed("SELECT") && _pressWait == 0 && _gamepadMode || !_gamepadMode && Mouse.left == InputState.Pressed)
+                                if (Input.Pressed(Triggers.Select) && _pressWait == 0 && _gamepadMode || !_gamepadMode && Mouse.left == InputState.Pressed)
                                 {
                                     if (_selectedMod != null)
                                     {
@@ -525,13 +525,13 @@ namespace DuckGame
                         if (_gamepadMode)
                         {
                             _draggingScrollbar = false;
-                            if (Input.Pressed("MENUDOWN"))
+                            if (Input.Pressed(Triggers.MenuDown))
                                 ++_hoverIndex;
-                            else if (Input.Pressed("MENUUP"))
+                            else if (Input.Pressed(Triggers.MenuUp))
                                 --_hoverIndex;
-                            if (Input.Pressed("STRAFE"))
+                            if (Input.Pressed(Triggers.Strafe))
                                 _hoverIndex -= 10;
-                            else if (Input.Pressed("RAGDOLL"))
+                            else if (Input.Pressed(Triggers.Ragdoll))
                                 _hoverIndex += 10;
                             if (_hoverIndex < 0)
                                 _hoverIndex = 0;
@@ -575,7 +575,7 @@ namespace DuckGame
                                     scrollBarOffset = 0;
                                 _scrollItemOffset = (int)((_mods.Count - _maxModsToShow) * (scrollBarOffset / (float)scrollBarScrollableHeight));
                             }
-                            if (Input.Pressed("ANY"))
+                            if (Input.Pressed(Triggers.Any))
                             {
                                 _gamepadMode = true;
                                 _oldPos = Mouse.positionScreen;
@@ -592,7 +592,7 @@ namespace DuckGame
                         else if (_hoverIndex >= 0 && _hoverIndex < _scrollItemOffset)
                             _scrollItemOffset -= _scrollItemOffset - _hoverIndex;
                         scrollBarOffset = _scrollItemOffset == 0 ? 0 : (int)Lerp.FloatSmooth(0f, scrollBarScrollableHeight, _scrollItemOffset / (float)(_mods.Count - _maxModsToShow));
-                        if (!Editor.hoverTextBox && !globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
+                        if (!Editor.hoverTextBox && !globalUILock && (Input.Pressed(Triggers.Cancel) || Keyboard.Pressed(Keys.Escape)))
                         {
                             if (modsChanged)
                             {

@@ -155,7 +155,7 @@ namespace DuckGame
                 {
                     if (_viewing == null)
                     {
-                        if (Input.Pressed("MENUDOWN"))
+                        if (Input.Pressed(Triggers.MenuDown))
                         {
                             ++_selected;
                             if (_selected >= _cards.Count)
@@ -163,7 +163,7 @@ namespace DuckGame
                             else
                                 SFX.Play("menuBlip01");
                         }
-                        else if (Input.Pressed("MENUUP"))
+                        else if (Input.Pressed(Triggers.MenuUp))
                         {
                             --_selected;
                             if (_selected < 0)
@@ -171,7 +171,7 @@ namespace DuckGame
                             else
                                 SFX.Play("menuBlip01");
                         }
-                        else if (Input.Pressed("SELECT"))
+                        else if (Input.Pressed(Triggers.Select))
                         {
                             int num1 = 0;
                             bool flag = false;
@@ -213,13 +213,13 @@ namespace DuckGame
                             else
                                 SFX.Play("scanFail");
                         }
-                        else if (Input.Pressed("CANCEL"))
+                        else if (Input.Pressed(Triggers.Cancel))
                         {
                             SFX.Play("menu_back");
                             quitOut = true;
                         }
                     }
-                    else if (Input.Pressed("CANCEL"))
+                    else if (Input.Pressed(Triggers.Cancel))
                     {
                         SFX.Play("menu_back");
                         foreach (ChallengeCard card in _cards)
@@ -229,7 +229,7 @@ namespace DuckGame
                         }
                         _goBack = true;
                     }
-                    else if (Input.Pressed("SELECT"))
+                    else if (Input.Pressed(Triggers.Select))
                     {
                         if (!selected.unlocked)
                         {

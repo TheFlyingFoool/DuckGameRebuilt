@@ -5,6 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System;
+
 namespace DuckGame
 {
     [EditorGroup("Stuff|Spikes")]
@@ -28,7 +30,7 @@ namespace DuckGame
             editorTooltip = "Pointy and dangerous.";
             physicsMaterial = PhysicsMaterial.Metal;
             editorCycleType = typeof(Spikes);
-            angle = -1.570796f;
+            angle = -(float)Math.PI / 2.0f;
             up = false;
             editorOffset = new Vec2(6f, 0f);
             hugWalls = WallHug.Right;

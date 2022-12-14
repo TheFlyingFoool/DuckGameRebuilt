@@ -69,13 +69,13 @@ namespace DuckGame
                 return;
             float num1 = 0f;
             float num2 = 0f;
-            if (owner.inputProfile.Down("LEFT"))
+            if (owner.inputProfile.Down(Triggers.Left))
                 num1 -= 3f;
-            if (owner.inputProfile.Down("RIGHT"))
+            if (owner.inputProfile.Down(Triggers.Right))
                 num1 += 3f;
-            if (owner.inputProfile.Down("UP"))
+            if (owner.inputProfile.Down(Triggers.Up))
                 num2 -= 3f;
-            if (owner.inputProfile.Down("DOWN"))
+            if (owner.inputProfile.Down(Triggers.Down))
                 num2 += 3f;
             if (!isServerForObject)
                 return;

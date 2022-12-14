@@ -34,7 +34,7 @@ namespace DuckGame
             _editorImageCenter = true;
             editorCycleType = typeof(SawsRight);
             impactThreshold = 0.01f;
-            this.shouldbeinupdateloop = false;
+            shouldbeinupdateloop = false;
         }
 
         public override void Touch(MaterialThing with)

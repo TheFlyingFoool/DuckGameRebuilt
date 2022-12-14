@@ -36,7 +36,7 @@ namespace DuckGame
 
         public string GenerateBar(int characterCount = 30, char filled = '#', char empty = '-')
         {
-            this.Value = ~this;
+            Value = ~this;
 
             double fillPercentage = NormalizedValue * characterCount;
 
@@ -133,11 +133,13 @@ namespace DuckGame
         }
         public ProgressValue Clone()
         {
-            ProgressValue progressValue = new ProgressValue();
-            progressValue.Value = this.Value;
-            progressValue.MaximumValue = this.MaximumValue;
-            progressValue.MinimumValue = this.MinimumValue;
-            progressValue.IncrementSize = this.IncrementSize;
+            ProgressValue progressValue = new ProgressValue
+            {
+                Value = Value,
+                MaximumValue = MaximumValue,
+                MinimumValue = MinimumValue,
+                IncrementSize = IncrementSize
+            };
             return progressValue;
         }
 

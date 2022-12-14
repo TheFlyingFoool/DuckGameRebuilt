@@ -8,7 +8,7 @@ namespace DuckGame
 		{
 			get
 			{
-				return this._path;
+				return _path;
 			}
 		}
 
@@ -16,53 +16,54 @@ namespace DuckGame
 		{
 			get
 			{
-				if (this._path.target == null)
+				if (_path.target == null)
 				{
 					return Vec2.Zero;
 				}
-				return this._path.target.link.position;
+				return _path.target.link.position;
 			}
 			set
 			{
-				this._path.SetTarget(value);
+				_path.SetTarget(value);
 			}
 		}
 
 		public void RunLeft()
 		{
-			this._ai.Release("RIGHT");
-			this._ai.Press("LEFT");
+			_ai.Release(Triggers.Right);
+			_ai.Press(Triggers.Left);
 		}
 
 		public void RunRight()
 		{
-			this._ai.Press("RIGHT");
-			this._ai.Release("LEFT");
+			_ai.Press(Triggers.Right);
+			_ai.Release(Triggers.Left);
 		}
 
 		public void Jump(int frames)
 		{
-			this._jumpFrames = (float)frames;
-			this._ai.Press("JUMP");
+			_jumpFrames = frames;
+			_ai.Press(Triggers.Jump);
 		}
 
 		public void Quack(int frames)
 		{
-			this._quackFrames = (float)frames;
-			this._ai.Press("QUACK");
+			_quackFrames = frames;
+			_ai.Press(Triggers.Quack);
 		}
 
 		public void Slide(int frames)
 		{
-			this._slideFrames = (float)frames;
-			this._ai.Press("DOWN");
-		}
+			_slideFrames = frames;
+			_ai.Press(Triggers.Down);
+
+        }
 
 		public void TrimLastTarget()
 		{
-			if (this._path.path != null && this._path.path.Count > 0)
+			if (_path.path != null && _path.path.Count > 0)
 			{
-				this._path.path.RemoveAt(this._path.path.Count - 1);
+				_path.path.RemoveAt(_path.path.Count - 1);
 			}
 		}
 
@@ -70,107 +71,107 @@ namespace DuckGame
 		{
 			if (Mouse.right == InputState.Pressed)
 			{
-				this._path.followObject = duck;
-				this._path.SetTarget(Mouse.positionScreen);
-				this._path.Refresh();
+				_path.followObject = duck;
+				_path.SetTarget(Mouse.positionScreen);
+				_path.Refresh();
 			}
-			this._ai = ai;
-			this._path.followObject = duck;
-			if (this._jumpFrames == 1f)
+			_ai = ai;
+			_path.followObject = duck;
+			if (_jumpFrames == 1f)
 			{
-				this._jumpFrames = 0f;
-				this._ai.Release("JUMP");
+				_jumpFrames = 0f;
+				_ai.Release(Triggers.Jump);
 			}
-			else if (this._jumpFrames > 0f)
+			else if (_jumpFrames > 0f)
 			{
-				this._jumpFrames -= 1f;
+				_jumpFrames -= 1f;
 			}
-			if (this._slideFrames == 1f)
+			if (_slideFrames == 1f)
 			{
-				this._slideFrames = 0f;
-				this._ai.Release("DOWN");
+				_slideFrames = 0f;
+				_ai.Release(Triggers.Down);
 			}
-			else if (this._slideFrames > 0f)
+			else if (_slideFrames > 0f)
 			{
-				this._slideFrames -= 1f;
+				_slideFrames -= 1f;
 			}
-			if (this._quackFrames == 1f)
+			if (_quackFrames == 1f)
 			{
-				this._quackFrames = 0f;
-				this._ai.Release("QUACK");
+				_quackFrames = 0f;
+				_ai.Release(Triggers.Quack);
 			}
-			else if (this._quackFrames > 0f)
+			else if (_quackFrames > 0f)
 			{
-				this._quackFrames -= 1f;
+				_quackFrames -= 1f;
 			}
-			ai.Release("LEFT");
-			ai.Release("RIGHT");
-			if (this._path.path == null || this._path.path.Count == 0)
+			ai.Release(Triggers.Left);
+			ai.Release(Triggers.Right);
+			if (_path.path == null || _path.path.Count == 0)
 			{
 				return;
 			}
-			Vec2 nextPoint = this.target;
+			Vec2 nextPoint = target;
 			Vec2 dist = new Vec2(nextPoint.x - duck.x, nextPoint.y - duck.y);
 			if (!PathNode.LineIsClear(duck.position, nextPoint, null))
 			{
-				this._path.Refresh();
-				if (this._path.path == null)
+				_path.Refresh();
+				if (_path.path == null)
 				{
 					return;
 				}
-				nextPoint = this.target;
+				nextPoint = target;
 				dist = new Vec2(nextPoint.x - duck.x, nextPoint.y - duck.y);
 			}
-			if (this._path.path == null)
+			if (_path.path == null)
 			{
 				return;
 			}
-			if (dist.y < duck.y && Math.Abs(dist.y) > 64f && this._path.path.Count > 1)
+			if (dist.y < duck.y && Math.Abs(dist.y) > 64f && _path.path.Count > 1)
 			{
-				this._path.Refresh();
-				if (this._path.path == null)
+				_path.Refresh();
+				if (_path.path == null)
 				{
 					return;
 				}
-				nextPoint = this.target;
+				nextPoint = target;
 				dist = new Vec2(nextPoint.x - duck.x, nextPoint.y - duck.y);
 			}
 			if (!PathNode.LineIsClear(duck.position, nextPoint, null))
 			{
-				this._path.Refresh();
-				if (this._path.path == null)
+				_path.Refresh();
+				if (_path.path == null)
 				{
 					return;
 				}
-				nextPoint = this.target;
+				nextPoint = target;
 				dist = new Vec2(nextPoint.x - duck.x, nextPoint.y - duck.y);
 			}
-			if (this._path.path == null)
+			if (_path.path == null)
 			{
 				return;
 			}
 			bool quickTapJump = false;
-			if (this._tryJump > 0)
+			if (_tryJump > 0)
 			{
-				this._tryJump--;
+				_tryJump--;
 			}
-			if (this._tryJump == 0 && duck.grounded)
+			if (_tryJump == 0 && duck.grounded)
 			{
-				this._path.Refresh();
-				if (this._path.path == null)
+				_path.Refresh();
+				if (_path.path == null)
 				{
 					return;
 				}
-				nextPoint = this.target;
+				nextPoint = target;
 				dist = new Vec2(nextPoint.x - duck.x, nextPoint.y - duck.y);
-				this._tryJump = -1;
+				_tryJump = -1;
 			}
-			if (this._path.path == null)
+			if (_path.path == null)
 			{
 				return;
 			}
 			float speedMul = 1f;
-			if (this._path.target.position.y == this.target.y)
+			if (_path.target.position.y == target.y)
 			{
 				speedMul = 0f;
 			}
@@ -178,40 +179,40 @@ namespace DuckGame
 			{
 				if (duck.grounded && Level.CheckLine<Window>(duck.position, duck.position + new Vec2(-32f, 0f)) != null)
 				{
-					this.Slide(30);
+					Slide(30);
 				}
-				this.RunLeft();
+				RunLeft();
 			}
 			else if (dist.x > (duck.hSpeed * 3f + 2f) * speedMul)
 			{
 				if (duck.grounded && Level.CheckLine<Window>(duck.position, duck.position + new Vec2(32f, 0f)) != null)
 				{
-					this.Slide(30);
+					Slide(30);
 				}
-				this.RunRight();
+				RunRight();
 			}
-			if (this._path.peek.gap && duck.grounded)
+			if (_path.peek.gap && duck.grounded)
 			{
-				this.Jump((int)(Maths.Clamp(Math.Abs(dist.x), 0f, 48f) / 48f * 16f));
-				this._tryJump = 5;
+				Jump((int)(Maths.Clamp(Math.Abs(dist.x), 0f, 48f) / 48f * 16f));
+				_tryJump = 5;
 			}
 			if (dist.y <= -4f && duck.grounded)
 			{
-				this.Jump((int)(Maths.Clamp(Math.Abs(dist.y), 0f, 48f) / 48f * 16f));
-				this._tryJump = 5;
+				Jump((int)(Maths.Clamp(Math.Abs(dist.y), 0f, 48f) / 48f * 16f));
+				_tryJump = 5;
 			}
 			if (quickTapJump)
 			{
-				ai.Release("JUMP");
+				ai.Release(Triggers.Jump);
 			}
 			float minYdist = 8f;
-			if (Math.Abs(this._path.peek.owner.y - nextPoint.y) < 8f)
+			if (Math.Abs(_path.peek.owner.y - nextPoint.y) < 8f)
 			{
 				minYdist = 200f;
 			}
 			if (Math.Abs(dist.x) < 4f && Math.Abs(dist.y) < minYdist && PathNode.LineIsClear(duck.position - new Vec2(0f, 8f), nextPoint, null))
 			{
-				if (this._path.peek.link.position.y < duck.y - 8f && !duck.grounded)
+				if (_path.peek.link.position.y < duck.y - 8f && !duck.grounded)
 				{
 					return;
 				}
@@ -219,9 +220,9 @@ namespace DuckGame
 				{
 					return;
 				}
-				this._path.AtTarget();
-				this._ai.canRefresh = true;
-				this._tryJump = -1;
+				_path.AtTarget();
+				_ai.canRefresh = true;
+				_tryJump = -1;
 			}
 		}
 

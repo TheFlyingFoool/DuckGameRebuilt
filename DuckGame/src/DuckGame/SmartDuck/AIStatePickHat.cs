@@ -25,71 +25,71 @@ namespace DuckGame
 
         public override AIState Update(Duck duck, DuckAI ai)
         {
-            if (this._target == null)
+            if (_target == null)
             {
                 List<Thing> list = Level.current.things[typeof(HatConsole)].ToList();
                 if (!(AI.Nearest(duck.position, list) is HatConsole hatConsole))
                     return new AIStateWait(Rando.Float(0.8f, 1f));
-                this._target = hatConsole;
+                _target = hatConsole;
                 ai.SetTarget(hatConsole.position);
                 return this;
             }
-            if ((this._target.position - duck.position).length < 10f && duck.grounded)
+            if ((_target.position - duck.position).length < 10f && duck.grounded)
             {
-                this._wait -= 0.016f;
+                _wait -= 0.016f;
                 if (_wait <= 0f)
                 {
-                    if (!this._did1 || !(this._target as HatConsole).box._hatSelector.open)
+                    if (!_did1 || !(_target as HatConsole).box._hatSelector.open)
                     {
-                        ai.Press("SHOOT");
-                        this._did1 = true;
+                        ai.Press(Triggers.Shoot);
+                        _did1 = true;
                     }
-                    this._wait2 -= 0.016f;
-                    if (_wait2 <= 0f && (this._target as HatConsole).box._hatSelector.open)
+                    _wait2 -= 0.016f;
+                    if (_wait2 <= 0f && (_target as HatConsole).box._hatSelector.open)
                     {
-                        if (!this._did2)
+                        if (!_did2)
                         {
-                            ai.Press("JUMP");
-                            this._did2 = true;
+                            ai.Press(Triggers.Jump);
+                            _did2 = true;
                         }
-                        this._wait3 -= 0.016f;
+                        _wait3 -= 0.016f;
                         if (_wait3 <= 0f)
                         {
-                            this._wait3 = Rando.Float(0.2f);
+                            _wait3 = Rando.Float(0.2f);
                             if (Rando.Float(1f) > 0.5f)
                             {
-                                if (this._moveLeft > 0)
+                                if (_moveLeft > 0)
                                 {
-                                    ai.Press("LEFT");
-                                    --this._moveLeft;
+                                    ai.Press(Triggers.Left);
+                                    --_moveLeft;
                                 }
-                                else if (this._moveUp > 0)
+                                else if (_moveUp > 0)
                                 {
-                                    ai.Press("UP");
-                                    --this._moveUp;
+                                    ai.Press(Triggers.Up);
+                                    --_moveUp;
                                 }
                             }
-                            else if (this._moveUp > 0)
+                            else if (_moveUp > 0)
                             {
-                                ai.Press("UP");
-                                --this._moveUp;
+                                ai.Press(Triggers.Up);
+                                --_moveUp;
                             }
-                            else if (this._moveLeft > 0)
+                            else if (_moveLeft > 0)
                             {
-                                ai.Press("LEFT");
-                                --this._moveLeft;
+                                ai.Press(Triggers.Left);
+                                --_moveLeft;
                             }
-                            if (this._moveLeft == 0 && this._moveUp == 0)
+                            if (_moveLeft == 0 && _moveUp == 0)
                             {
-                                if (!this._did3)
+                                if (!_did3)
                                 {
-                                    ai.Press("JUMP");
-                                    this._did3 = true;
+                                    ai.Press(Triggers.Jump);
+                                    _did3 = true;
                                 }
-                                this._wait4 -= 0.016f;
+                                _wait4 -= 0.016f;
                                 if (_wait4 <= 0.0)
                                 {
-                                    ai.Press("QUACK");
+                                    ai.Press(Triggers.Quack);
                                     return new AIStateWait(Rando.Float(0.8f, 1f));
                                 }
                             }

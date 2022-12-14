@@ -49,7 +49,7 @@ namespace DuckGame
                 Vec3 vec3 = (Vec3)new Viewport(0, 0, (int)Layer.HUD.width, (int)Layer.HUD.height).Project((Vector3)new Vec3(position.x, z, position.y), (Microsoft.Xna.Framework.Matrix)Layer.Game.projection, (Microsoft.Xna.Framework.Matrix)Layer.Game.view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
                 this.position = new Vec2(vec3.x, vec3.y);
                 float num = z / 200f;
-                Graphics.DrawLine(this.position, this._prevPos, Color.White * 0.8f, 1f, -0.02f + num * 0.1f);
+                Graphics.DrawLine(this.position, _prevPos, Color.White * 0.8f, 1f, -0.02f + num * 0.1f);
                 _prevPos = this.position;
                 this.position = position;
             }

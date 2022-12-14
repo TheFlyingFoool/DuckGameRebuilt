@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			get
 			{
-				return (float) Width / (float) Height;
+				return Width / (float) Height;
 			}
 		}
 

@@ -159,11 +159,13 @@ namespace Microsoft.Xna.Framework.Content
 				{
 					continue;
 				}
-				ModelMesh mesh = new ModelMesh(device, parts);
-				mesh.Tag = meshTag;
-				mesh.Name = name;
-				mesh.ParentBone = bones[parentBoneIndex];
-				mesh.ParentBone.AddMesh(mesh);
+                ModelMesh mesh = new ModelMesh(device, parts)
+                {
+                    Tag = meshTag,
+                    Name = name,
+                    ParentBone = bones[parentBoneIndex]
+                };
+                mesh.ParentBone.AddMesh(mesh);
 				mesh.BoundingSphere = boundingSphere;
 				meshes.Add(mesh);
 			}
@@ -176,11 +178,13 @@ namespace Microsoft.Xna.Framework.Content
 			}
 			// Read the final pieces of model data.
 			int rootBoneIndex = ReadBoneReference(reader, boneCount);
-			Model model = new Model(device, bones, meshes);
-			model.Root = bones[rootBoneIndex];
-			// Tag?
-			model.Tag = reader.ReadObject<object>();
-			return model;
+            Model model = new Model(device, bones, meshes)
+            {
+                Root = bones[rootBoneIndex],
+                // Tag?
+                Tag = reader.ReadObject<object>()
+            };
+            return model;
 		}
 
 		#endregion

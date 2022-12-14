@@ -133,20 +133,20 @@ namespace DuckGame
                 _fade = Lerp.Float(_fade, 1f, 0.06f);
                 if (_screen == LockerScreen.Locker)
                 {
-                    if (InputProfile.active.Pressed("MENULEFT"))
+                    if (InputProfile.active.Pressed(Triggers.MenuLeft))
                     {
                         --num;
                         if (num < 0)
                             num = 1;
                     }
-                    if (InputProfile.active.Pressed("MENURIGHT"))
+                    if (InputProfile.active.Pressed(Triggers.MenuRight))
                     {
                         ++num;
                         if (num >= 2)
                             num = 0;
                     }
                     _selection = (LockerSelection)num;
-                    if (InputProfile.active.Pressed("SELECT"))
+                    if (InputProfile.active.Pressed(Triggers.Select))
                     {
                         if (_selection == LockerSelection.Stats)
                         {
@@ -159,7 +159,7 @@ namespace DuckGame
                             HUD.CloseAllCorners();
                         }
                     }
-                    if (InputProfile.active.Pressed("CANCEL"))
+                    if (InputProfile.active.Pressed(Triggers.Cancel))
                     {
                         _desiredScreen = LockerScreen.Exit;
                         HUD.CloseAllCorners();
@@ -167,19 +167,19 @@ namespace DuckGame
                 }
                 else if (_screen == LockerScreen.Stats)
                 {
-                    if (InputProfile.active.Down("MENUUP"))
+                    if (InputProfile.active.Down(Triggers.MenuUp))
                     {
                         _statScroll -= 0.02f;
                         if (_statScroll < 0f)
                             _statScroll = 0f;
                     }
-                    if (InputProfile.active.Down("MENUDOWN"))
+                    if (InputProfile.active.Down(Triggers.MenuDown))
                     {
                         _statScroll += 0.02f;
                         if (_statScroll > 1f)
                             _statScroll = 1f;
                     }
-                    if (InputProfile.active.Pressed("CANCEL"))
+                    if (InputProfile.active.Pressed(Triggers.Cancel))
                     {
                         _desiredScreen = LockerScreen.Exit;
                         HUD.CloseAllCorners();
@@ -191,14 +191,14 @@ namespace DuckGame
                         Profiles.Save(_profile);
                         current = new LockerRoom(_profile);
                     }
-                    if (InputProfile.active.Pressed("MENU2"))
+                    if (InputProfile.active.Pressed(Triggers.Menu2))
                     {
                         MonoMain.pauseMenu = _confirmGroup;
                         _confirmGroup.Open();
                         _confirmMenu.Open();
                     }
                 }
-                else if (_screen == LockerScreen.Trophies && InputProfile.active.Pressed("CANCEL"))
+                else if (_screen == LockerScreen.Trophies && InputProfile.active.Pressed(Triggers.Cancel))
                 {
                     _desiredScreen = LockerScreen.Locker;
                     HUD.CloseAllCorners();

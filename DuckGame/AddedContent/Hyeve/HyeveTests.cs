@@ -40,8 +40,10 @@ namespace AddedContent.Hyeve
         private static void RegenUI()
         {
             FontDatabase.GenerateFontSize(20);
-            UiTabber ui = new(Vector2.One * 300, Vector2.One * 300, new List<IAmUi>(), "name");
-            ui.Padding = Vector2.Zero;
+            UiTabber ui = new(Vector2.One * 300, Vector2.One * 300, new List<IAmUi>(), "name")
+            {
+                Padding = Vector2.Zero
+            };
             for (int i = 0; i < 3; i++)
             {
                 UiList subUi = new(Vector2.Zero, Vector2.One * 300,new List<IAmUi>(), $"Tab {i}!")
@@ -58,8 +60,10 @@ namespace AddedContent.Hyeve
                 subUi.AddContent(toggle);
                 toggle = new(Vector2.Zero, new Vector2(300, 30), typeof(Duck).GetField("doThrow"), Profiles.active[0].duck);
                 subUi.AddContent(toggle);
-                UiNumberBar sub = new(Vector2.Zero, new Vector2(300, 30), $"Number {i}");
-                sub.Value = 324.89084342143;
+                UiNumberBar sub = new(Vector2.Zero, new Vector2(300, 30), $"Number {i}")
+                {
+                    Value = 324.89084342143
+                };
                 subUi.AddContent(sub);
                 sub = new UiReflectionNumberBar(Vector2.Zero, new Vector2(300, 30),typeof(Duck).GetField("_runMax", BindingFlags.NonPublic | BindingFlags.Instance),  Profiles.active[0].duck);
                 subUi.AddContent(sub);

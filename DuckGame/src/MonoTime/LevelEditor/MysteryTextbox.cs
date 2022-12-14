@@ -195,7 +195,7 @@ namespace DuckGame
                 else if (_cursorPosition > -1 && _cursorPosition < this.text.Length)
                     this.text = this.text.Remove(_cursorPosition, 1);
             }
-            if (Keyboard.Pressed(Keys.Enter) || Input.Pressed("JUMP"))
+            if (Keyboard.Pressed(Keys.Enter) || Input.Pressed(Triggers.Jump))
             {
                 if (enterConfirms)
                 {

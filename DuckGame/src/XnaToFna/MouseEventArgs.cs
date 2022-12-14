@@ -22,11 +22,11 @@ namespace XnaToFna.ProxyForms
 
         public MouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta)
         {
-            this.Button = button;
-            this.Clicks = clicks;
-            this.X = x;
-            this.Y = y;
-            this.Delta = delta;
+            Button = button;
+            Clicks = clicks;
+            X = x;
+            Y = y;
+            Delta = delta;
         }
     }
 }

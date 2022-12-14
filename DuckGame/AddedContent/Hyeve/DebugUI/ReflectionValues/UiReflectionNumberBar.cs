@@ -38,7 +38,7 @@ namespace AddedContent.Hyeve.DebugUI.ReflectionValues
                         Variable.SetValue(FieldOwner, (float)value);
                         break;
                     case NumberType.Double:
-                        Variable.SetValue(FieldOwner, (double)value);
+                        Variable.SetValue(FieldOwner, value);
                         break;
                     case NumberType.Int:
                         Variable.SetValue(FieldOwner, (int)value);

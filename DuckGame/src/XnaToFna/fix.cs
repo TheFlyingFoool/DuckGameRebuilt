@@ -141,7 +141,7 @@ namespace MonoMod.Utils
         {
             set
             {
-                this.EntryPoints = new string[]
+                EntryPoints = new string[]
                 {
                     value
                 };
@@ -150,8 +150,8 @@ namespace MonoMod.Utils
 
         public DynDllImportAttribute(string dll, params string[] entryPoints)
         {
-            this.DLL = dll;
-            this.EntryPoints = entryPoints;
+            DLL = dll;
+            EntryPoints = entryPoints;
         }
 
         public string DLL;

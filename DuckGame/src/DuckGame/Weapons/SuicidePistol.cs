@@ -14,9 +14,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 6;
-            _ammoType = new AT9mm();
-            _ammoType.barrelAngleDegrees = 180f;
-            _ammoType.immediatelyDeadly = true;
+            _ammoType = new AT9mm
+            {
+                barrelAngleDegrees = 180f,
+                immediatelyDeadly = true
+            };
             _type = "gun";
             graphic = new Sprite("suicidePistol");
             center = new Vec2(16f, 16f);

@@ -601,11 +601,11 @@ namespace DuckGame
                         SetDirectory(_currentDirectory);
                     }
                 }
-                if (Keyboard.Pressed(Keys.Escape) || Mouse.right == InputState.Pressed || Input.Pressed("CANCEL"))
+                if (Keyboard.Pressed(Keys.Escape) || Mouse.right == InputState.Pressed || Input.Pressed(Triggers.Cancel))
                     Close();
-                if (Input.Down("STRAFE"))
+                if (Input.Down(Triggers.Strafe))
                 {
-                    if (Input.Pressed("RAGDOLL"))
+                    if (Input.Pressed(Triggers.Ragdoll))
                     {
                         try
                         {
@@ -624,7 +624,7 @@ namespace DuckGame
                         }
                     }
                 }
-                if (Input.Pressed("SHOOT"))
+                if (Input.Pressed(Triggers.Shoot))
                 {
                     ContextMenu cm = _items[_selectedIndex];
                     if (cm.text.Contains("@"))
@@ -656,7 +656,7 @@ namespace DuckGame
                         }
                     }
                 }
-                if (!_selectLevels && Input.Pressed("MENU2"))
+                if (!_selectLevels && Input.Pressed(Triggers.Menu2))
                 {
                     _deleteDialog.Open("CONFIRM DELETE");
                     Editor.lockInput = _deleteDialog;
@@ -665,9 +665,9 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (Input.Pressed("MENULEFT"))
+                    if (Input.Pressed(Triggers.MenuLeft))
                         _selectedIndex -= _maxItems;
-                    else if (Input.Pressed("MENURIGHT"))
+                    else if (Input.Pressed(Triggers.MenuRight))
                         _selectedIndex += _maxItems;
                     _selectedIndex = Maths.Clamp(_selectedIndex, 0, _items.Count - 1);
                     float num1 = 1f / (_items.Count - _maxItems);

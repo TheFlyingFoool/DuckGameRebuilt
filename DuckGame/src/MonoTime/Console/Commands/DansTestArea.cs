@@ -111,8 +111,10 @@ namespace DuckGame
         }
         public static void TextureInit()
         {
-            Tex2D extraButton = new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(HatSelector.ButtonSprite))), "button");
-            extraButton.Namebase = "nikoextraButton";
+            Tex2D extraButton = new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(HatSelector.ButtonSprite))), "button")
+            {
+                Namebase = "nikoextraButton"
+            };
             Content.textures[extraButton.Namebase] = extraButton;
             foreach (Thing thing in Editor.thingMap.Values) // those texures get created on the fly so we just going to make them here to save
             {

@@ -895,7 +895,7 @@ namespace DuckGame
                     HUD.AddCornerMessage(HUDCorner.BottomLeft, "@CANCEL@DITCH");
                 }
             }
-            if (Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !_willGiveVooDoo && !_willGiveYoYo && !_willGivePerimeterDefence)
+            if (Input.Pressed(Triggers.Start) && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !_willGiveVooDoo && !_willGiveYoYo && !_willGivePerimeterDefence)
             {
                 Graphics.fadeAdd = 1f;
                 SFX.skip = false;
@@ -907,7 +907,7 @@ namespace DuckGame
                 int num1;
                 if (_allowMovement)
                 {
-                    if ((Input.Pressed("ANY") || type == DayType.PawnDay && products.Count > 0) && _selectIndex == -1)
+                    if ((Input.Pressed(Triggers.Any) || type == DayType.PawnDay && products.Count > 0) && _selectIndex == -1)
                     {
                         _selectIndex = 0;
                         if (products.Count != 0)
@@ -915,7 +915,7 @@ namespace DuckGame
                         FurniShopScreen.close = true;
                         return;
                     }
-                    if (Input.Pressed("MENULEFT"))
+                    if (Input.Pressed(Triggers.MenuLeft))
                     {
                         switch (_selectIndex)
                         {
@@ -932,7 +932,7 @@ namespace DuckGame
                                 break;
                         }
                     }
-                    if (Input.Pressed("MENURIGHT"))
+                    if (Input.Pressed(Triggers.MenuRight))
                     {
                         switch (_selectIndex)
                         {
@@ -949,7 +949,7 @@ namespace DuckGame
                                 break;
                         }
                     }
-                    if (Input.Pressed("MENUUP"))
+                    if (Input.Pressed(Triggers.MenuUp))
                     {
                         switch (_selectIndex)
                         {
@@ -966,7 +966,7 @@ namespace DuckGame
                                 break;
                         }
                     }
-                    if (Input.Pressed("MENUDOWN"))
+                    if (Input.Pressed(Triggers.MenuDown))
                     {
                         switch (_selectIndex)
                         {
@@ -985,7 +985,7 @@ namespace DuckGame
                     }
                     if (_selectIndex >= products.Count)
                         _selectIndex = products.Count - 1;
-                    if (Input.Pressed("SELECT") && _selectIndex != -1 && !products[_selectIndex].sold && (type == DayType.PawnDay || products[_selectIndex].cost <= Profiles.experienceProfile.littleManBucks))
+                    if (Input.Pressed(Triggers.Select) && _selectIndex != -1 && !products[_selectIndex].sold && (type == DayType.PawnDay || products[_selectIndex].cost <= Profiles.experienceProfile.littleManBucks))
                     {
                         FurniShopScreen.attemptBuy = products[_selectIndex];
                         _selectDescIndex = -1;
@@ -1042,7 +1042,7 @@ namespace DuckGame
                         }
                     }
                 }
-                bool flag4 = !_allowMovement && Input.Down("SELECT");
+                bool flag4 = !_allowMovement && Input.Down(Triggers.Select);
                 if (_lines.Count > 0 && _currentLine == "")
                 {
                     int num3 = _waitAfterLine <= 0.0 ? 1 : 0;
@@ -1059,7 +1059,7 @@ namespace DuckGame
                     }
                     if (num3 == 0 && _waitAfterLine <= 0.0)
                         HUD.AddCornerMessage(HUDCorner.BottomRight, "@SELECT@CONTINUE");
-                    if (_lineProgress.Count == 0 || Input.Pressed("SELECT"))
+                    if (_lineProgress.Count == 0 || Input.Pressed(Triggers.Select))
                     {
                         _lineProgress.Clear();
                         _currentLine = _lines[0];

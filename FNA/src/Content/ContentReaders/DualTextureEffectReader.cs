@@ -21,13 +21,15 @@ namespace Microsoft.Xna.Framework.Content
 			ContentReader input,
 			DualTextureEffect existingInstance
 		) {
-			DualTextureEffect effect = new DualTextureEffect(input.ContentManager.GetGraphicsDevice());
-			effect.Texture = input.ReadExternalReference<Texture>() as Texture2D;
-			effect.Texture2 = input.ReadExternalReference<Texture>() as Texture2D;
-			effect.DiffuseColor = input.ReadVector3();
-			effect.Alpha = input.ReadSingle();
-			effect.VertexColorEnabled = input.ReadBoolean();
-			return effect;
+            DualTextureEffect effect = new DualTextureEffect(input.ContentManager.GetGraphicsDevice())
+            {
+                Texture = input.ReadExternalReference<Texture>() as Texture2D,
+                Texture2 = input.ReadExternalReference<Texture>() as Texture2D,
+                DiffuseColor = input.ReadVector3(),
+                Alpha = input.ReadSingle(),
+                VertexColorEnabled = input.ReadBoolean()
+            };
+            return effect;
 		}
 
 		#endregion

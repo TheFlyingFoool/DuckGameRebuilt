@@ -53,10 +53,12 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 99;
-            _ammoType = new ATLaser();
-            _ammoType.range = 150f;
-            _ammoType.accuracy = 0.8f;
-            _ammoType.penetration = -1f;
+            _ammoType = new ATLaser
+            {
+                range = 150f,
+                accuracy = 0.8f,
+                penetration = -1f
+            };
             _type = "gun";
             graphic = new Sprite("magnetGun");
             center = new Vec2(16f, 16f);

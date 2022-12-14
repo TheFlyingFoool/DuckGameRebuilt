@@ -256,7 +256,7 @@ namespace DuckGame
         {
             if (_hasGlass)
                 SFX.Play("glassBump", 0.7f);
-            _shakeVal = 3.1415927f;
+            _shakeVal = (float)Math.PI;
         }
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
@@ -359,7 +359,7 @@ namespace DuckGame
                         return;
 
                     Color col = new Color((byte)(windowColor.r * 0.5f), (byte)(windowColor.g * 0.5f), (byte)(windowColor.b * 0.8f), (byte)178);
-                    Graphics.DrawLine(this._hits[index] + zero, this._hits[index + 1] + zero, col, 1f, default(Depth));
+                    Graphics.DrawLine(_hits[index] + zero, _hits[index + 1] + zero, col, 1f, default(Depth));
                 }
             }
             position -= zero;

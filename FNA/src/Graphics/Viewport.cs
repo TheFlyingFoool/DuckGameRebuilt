@@ -121,7 +121,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			{
 				if ((viewport.h != 0) && (viewport.w != 0))
 				{
-					return (((float) viewport.w) / ((float) viewport.h));
+					return (viewport.w / ((float) viewport.h));
 				}
 				return 0.0f;
 			}
@@ -257,8 +257,8 @@ namespace Microsoft.Xna.Framework.Graphics
 					projection
 				)
 			);
-			source.X = (((source.X - X) / ((float) Width)) * 2f) - 1f;
-			source.Y = -((((source.Y - Y) / ((float) Height)) * 2f) - 1f);
+			source.X = (((source.X - X) / Width) * 2f) - 1f;
+			source.Y = -((((source.Y - Y) / Height) * 2f) - 1f);
 			source.Z = (source.Z - MinDepth) / (MaxDepth - MinDepth);
 			Vector3 vector = Vector3.Transform(source, matrix);
 

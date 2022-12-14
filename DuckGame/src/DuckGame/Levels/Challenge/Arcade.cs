@@ -230,7 +230,7 @@ namespace DuckGame
             {
                 if (!_quitting)
                 {
-                    if (Input.Pressed("START"))
+                    if (Input.Pressed(Triggers.Start))
                     {
                         _pauseGroup.Open();
                         _pauseMenu.Open();
@@ -444,7 +444,7 @@ namespace DuckGame
                         if (challenge.hover)
                         {
                             obj = challenge;
-                            if (Input.Pressed("SHOOT"))
+                            if (Input.Pressed(Triggers.Shoot))
                             {
                                 _hud.activeChallengeGroup = challenge.data;
                                 _desiredState = ArcadeState.ViewChallenge;
@@ -460,7 +460,7 @@ namespace DuckGame
                         if (_prizeTable.hover)
                         {
                             obj = _prizeTable;
-                            if (Input.Pressed("SHOOT"))
+                            if (Input.Pressed(Triggers.Shoot))
                             {
                                 _desiredState = ArcadeState.UnlockScreen;
                                 _followCam.manualViewSize = _followCam.viewSize;

@@ -15,10 +15,12 @@ namespace DuckGame
         {
             wideBarrel = true;
             ammo = 99;
-            _ammoType = new ATShrapnel();
-            _ammoType.range = 140f;
-            _ammoType.rangeVariation = 40f;
-            _ammoType.accuracy = 0.01f;
+            _ammoType = new ATShrapnel
+            {
+                range = 140f,
+                rangeVariation = 40f,
+                accuracy = 0.01f
+            };
             _numBulletsPerFire = 4;
             _ammoType.penetration = 0.4f;
             _type = "gun";

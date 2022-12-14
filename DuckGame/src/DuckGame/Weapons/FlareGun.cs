@@ -14,8 +14,10 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 2;
-            _ammoType = new AT9mm();
-            _ammoType.combustable = true;
+            _ammoType = new AT9mm
+            {
+                combustable = true
+            };
             wideBarrel = true;
             _type = "gun";
             graphic = new Sprite("flareGun");

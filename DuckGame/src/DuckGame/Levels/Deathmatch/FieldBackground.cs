@@ -7,6 +7,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -46,7 +47,7 @@ namespace DuckGame
         {
             _fx = (Effect)Content.Load<MTEffect>("Shaders/fieldFadeAdd");
             _view = Matrix.CreateLookAt(new Vec3(0f, 0f, -5f), new Vec3(0f, 0f, 0f), Vec3.Up);
-            _proj = Matrix.CreatePerspectiveFieldOfView(0.7853982f, 1.777778f, 0.01f, 100000f);
+            _proj = Matrix.CreatePerspectiveFieldOfView(((float)Math.PI / 4.0f), (float)320 / (float)180, 0.01f, 100000);
         }
 
         public override void Update()

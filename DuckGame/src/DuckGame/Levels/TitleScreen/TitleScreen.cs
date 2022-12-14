@@ -119,7 +119,7 @@ namespace DuckGame
         }
         public static void SpargLogic()
         {
-            if (Input.Pressed("START") || Input.Pressed("SELECT")) current = new TitleScreen();
+            if (Input.Pressed(Triggers.Start) || Input.Pressed(Triggers.Select)) current = new TitleScreen();
         }
         public TitleScreen(bool returnFromArcade, Profile arcadeProfile)
         {
@@ -1010,7 +1010,7 @@ namespace DuckGame
                     }
                 }
             }
-            if (!_enterCredits && !_enterMultiplayer && _duck != null && _duck.inputProfile.Pressed("START"))
+            if (!_enterCredits && !_enterMultiplayer && _duck != null && _duck.inputProfile.Pressed(Triggers.Start))
             {
                 _pauseGroup.Open();
                 _mainPauseMenu.Open();
@@ -1020,7 +1020,7 @@ namespace DuckGame
 
             if ((_multiBeam.entered || !_fadeInFull))
             {
-                if (Input.Pressed("GRAB"))
+                if (Input.Pressed(Triggers.Grab))
                 {
                     if (_enterEditor)
                     {
@@ -1028,7 +1028,7 @@ namespace DuckGame
                     }
                     _enterEditor = true;
                 }
-                if (Input.Pressed("SHOOT"))
+                if (Input.Pressed(Triggers.Shoot))
                 {
                     if (_enterMultiplayer)
                     {
@@ -1162,14 +1162,14 @@ namespace DuckGame
                                     shownPromptF = false;
                                 }
 
-                                if (Input.Down("SHOOT"))
+                                if (Input.Down(Triggers.Shoot))
                                     creditsScroll += 2f;
                                 else
                                     creditsScroll += 0.25f;
                             }
                         }
                     }
-                    if (!_duck.inputProfile.Pressed("CANCEL"))
+                    if (!_duck.inputProfile.Pressed(Triggers.Cancel))
                         return;
                     _enterCredits = false;
                     quittingCredits = true;
@@ -1261,7 +1261,7 @@ namespace DuckGame
                     MonoMain.exit = true;
                     return;
                 }
-                //if (InputProfile.active.Pressed("START") && Main.foundPurchaseInfo && Main.isDemo) free my people no buying here
+                //if (InputProfile.active.Pressed(Triggers.Start) && Main.foundPurchaseInfo && Main.isDemo) free my people no buying here
                 //{
                 //    this._enterBuyScreen = true;
                 //    this._duck.immobilized = true;
@@ -1277,7 +1277,7 @@ namespace DuckGame
             {
                 _selectionTextDesired = "MULTIPLAYER";
                 _desiredSelection = TitleMenuSelection.Play;
-                if (!_enterMultiplayer && _duck.inputProfile.Pressed("SELECT") && MonoMain.pauseMenu == null)
+                if (!_enterMultiplayer && _duck.inputProfile.Pressed(Triggers.Select) && MonoMain.pauseMenu == null)
                 {
                     SFX.Play("plasmaFire");
                     _enterMultiplayer = true;
@@ -1288,7 +1288,7 @@ namespace DuckGame
             {
                 _selectionTextDesired = "OPTIONS";
                 _desiredSelection = TitleMenuSelection.Options;
-                if (!Options.menuOpen && _duck.inputProfile.Pressed("SELECT"))
+                if (!Options.menuOpen && _duck.inputProfile.Pressed(Triggers.Select))
                 {
                     SFX.Play("plasmaFire");
                     _optionsGroup.Open();
@@ -1301,7 +1301,7 @@ namespace DuckGame
             {
                 _selectionTextDesired = "LIBRARY";
                 _desiredSelection = TitleMenuSelection.Stats;
-                if (_duck.inputProfile.Pressed("SELECT") && Profiles.allCustomProfiles.Count > 0 && MonoMain.pauseMenu == null)
+                if (_duck.inputProfile.Pressed(Triggers.Select) && Profiles.allCustomProfiles.Count > 0 && MonoMain.pauseMenu == null)
                 {
                     SFX.Play("plasmaFire");
                     _enterLibrary = true;
@@ -1312,7 +1312,7 @@ namespace DuckGame
             {
                 _selectionTextDesired = "LEVEL EDITOR";
                 _desiredSelection = TitleMenuSelection.Editor;
-                if (_duck.inputProfile.Pressed("SELECT") && MonoMain.pauseMenu == null)
+                if (_duck.inputProfile.Pressed(Triggers.Select) && MonoMain.pauseMenu == null)
                 {
                     SFX.Play("plasmaFire");
                     _enterEditor = true;

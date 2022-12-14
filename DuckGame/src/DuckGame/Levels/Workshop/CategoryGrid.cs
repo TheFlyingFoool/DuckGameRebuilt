@@ -63,9 +63,9 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (InputProfile.active.Pressed("MENUUP"))
+            if (InputProfile.active.Pressed(Triggers.MenuUp))
                 --_selectedStripIndex;
-            else if (InputProfile.active.Pressed("MENUDOWN"))
+            else if (InputProfile.active.Pressed(Triggers.MenuDown))
                 ++_selectedStripIndex;
             if (_selectedStripIndex < 0)
             {

@@ -130,12 +130,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 
                 float scale = 1f / (fogStart - fogEnd);
 
-                Vector4 fogVector = new Vector4();
-
-                fogVector.X = worldView.M13 * scale;
-                fogVector.Y = worldView.M23 * scale;
-                fogVector.Z = worldView.M33 * scale;
-                fogVector.W = (worldView.M43 + fogStart) * scale;
+                Vector4 fogVector = new Vector4
+                {
+                    X = worldView.M13 * scale,
+                    Y = worldView.M23 * scale,
+                    Z = worldView.M33 * scale,
+                    W = (worldView.M43 + fogStart) * scale
+                };
 
                 fogVectorParam.SetValue(fogVector);
             }
@@ -227,12 +228,13 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                Vector4 diffuse = new Vector4();
-                
-                diffuse.X = (diffuseColor.X + emissiveColor.X) * alpha;
-                diffuse.Y = (diffuseColor.Y + emissiveColor.Y) * alpha;
-                diffuse.Z = (diffuseColor.Z + emissiveColor.Z) * alpha;
-                diffuse.W = alpha;
+                Vector4 diffuse = new Vector4
+                {
+                    X = (diffuseColor.X + emissiveColor.X) * alpha,
+                    Y = (diffuseColor.Y + emissiveColor.Y) * alpha,
+                    Z = (diffuseColor.Z + emissiveColor.Z) * alpha,
+                    W = alpha
+                };
 
                 diffuseColorParam.SetValue(diffuse);
             }

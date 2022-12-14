@@ -98,7 +98,7 @@ namespace DuckGame
             if (sprite != null)
                 return sprite;
             if (map == 9999 || map == 9998)
-                map = !deviceInputMapping.map.ContainsKey("LEFT") || deviceInputMapping.map["LEFT"] != 37 ? 9998 : 9999;
+                map = !deviceInputMapping.map.ContainsKey(Triggers.Left) || deviceInputMapping.map[Triggers.Left] != 37 ? 9998 : 9999;
             return GetMapImage(map);
         }
 

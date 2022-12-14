@@ -12,6 +12,6 @@ namespace XnaToFna
     {
         public AssemblyName name;
 
-        internal bool ScanPath(XnaToFnaMapping mappings) => this.name.Name == mappings.Target;
+        internal bool ScanPath(XnaToFnaMapping mappings) => name.Name == mappings.Target;
     }
 }

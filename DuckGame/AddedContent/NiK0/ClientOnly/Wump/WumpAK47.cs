@@ -14,13 +14,17 @@ namespace DuckGame
         public WumpAK47(float xpos, float ypos) : base(xpos, ypos)
         {
             ammo = 30;
-            _ammoType = new ATHighCalMachinegun();
-            _ammoType.bulletColor = new Color(0, 205, 255);
+            _ammoType = new ATHighCalMachinegun
+            {
+                bulletColor = new Color(0, 205, 255)
+            };
             _type = "gun";
 
-            
-            nub = new Sprite("wumpak47snub");
-            nub.center = new Vec2(2, 2.5f);
+
+            nub = new Sprite("wumpak47snub")
+            {
+                center = new Vec2(2, 2.5f)
+            };
 
             graphic = new Sprite("wumpak47");
             center = new Vec2(16f, 4f);
