@@ -253,5 +253,8 @@ namespace DuckGame
         }
         [AutoConfigField]
         public static int S_RebuiltEffect = 1;
+
+        [AutoConfigField]
+        public static bool StickyHats { get; set; }
     }
 }

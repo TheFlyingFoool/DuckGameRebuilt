@@ -2585,12 +2585,12 @@ namespace DuckGame
             ragdoll.part3.connection = connection;
             if (!fancyShoes)
             {
-                Equipment equipment = GetEquipment(typeof(Hat));
-                if (equipment != null && !(equipment as Hat).strappedOn)
+                Hat hatt = (Hat) GetEquipment(typeof(Hat));
+                if (hatt != null && !hatt.strappedOn && !DGRSettings.StickyHats)
                 {
-                    Unequip(equipment);
-                    equipment.hSpeed = hSpeed * 1.2f;
-                    equipment.vSpeed = vSpeed - 2f;
+                    Unequip(hatt);
+                    hatt.hSpeed = hSpeed * 1.2f;
+                    hatt.vSpeed = vSpeed - 2f;
                 }
                 ThrowItem(false);
             }
