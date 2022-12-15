@@ -107,20 +107,25 @@ namespace DuckGame
 
         public void UnlockChallenges(bool animate = false)
         {
-            bool flag1 = true;
-            bool flag2 = false;
+            bool first = true;
+            bool prevWon = false;
             foreach (ChallengeCard card in _cards)
             {
-                if (flag1)
-                    card.unlocked = true;
-                else if (!card.unlocked && flag2)
+                if (FireDebug.Debugging)
                 {
-                    card.unlocked = flag2;
+                    card.unlocked = true;
+                    continue;
+                }
+                if (first)
+                    card.unlocked = true;
+                else if (!card.unlocked && prevWon)
+                {
+                    card.unlocked = prevWon;
                     if (animate)
                         card.UnlockAnimation();
                 }
-                flag2 = Profiles.active[0].GetSaveData(card.challenge.levelID).trophy != 0;
-                flag1 = false;
+                prevWon = Profiles.active[0].GetSaveData(card.challenge.levelID).trophy != 0;
+                first = false;
             }
         }
 

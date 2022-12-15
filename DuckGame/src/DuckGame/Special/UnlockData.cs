@@ -121,7 +121,7 @@ namespace DuckGame
         {
             get
             {
-                if (_unlocked)
+                if (_unlocked || FireDebug.Debugging)
                     return true;
                 foreach (Profile universalProfile in Profiles.universalProfileList)
                 {
@@ -133,7 +133,10 @@ namespace DuckGame
             set => _unlocked = value;
         }
 
-        public bool ProfileUnlocked(Profile p) => p.unlocks.Contains(_id);
+        public bool ProfileUnlocked(Profile p)
+        {
+            return p.unlocks.Contains(_id) || FireDebug.Debugging;
+        }
 
         public List<UnlockData> children => _children;
 

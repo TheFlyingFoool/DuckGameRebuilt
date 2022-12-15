@@ -94,10 +94,10 @@ namespace DuckGame
             {
                 name = "TARGETS",
                 challenges = {
-          "challenge/targets01",
-          "challenge/targets03ouya",
-          "challenge/targets02ouya"
-        },
+                  "challenge/targets01",
+                  "challenge/targets03ouya",
+                  "challenge/targets02ouya"
+                },
                 trophiesRequired = 0
             }, 0)
             {
@@ -110,11 +110,11 @@ namespace DuckGame
             ArcadeMachine arcadeMachine2 = new ArcadeMachine(vec2_3.x, vec2_3.y, new ChallengeGroup()
             {
                 name = "VARIETY ZONE",
-                challenges = {
-          "challenge/obstacle",
-          "challenge/shootout02",
-          "challenge/jetpack02"
-        },
+                        challenges = {
+                  "challenge/obstacle",
+                  "challenge/shootout02",
+                  "challenge/jetpack02"
+                },
                 trophiesRequired = 0
             }, 6)
             {
