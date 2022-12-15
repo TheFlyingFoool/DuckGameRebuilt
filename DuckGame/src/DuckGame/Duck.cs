@@ -2586,7 +2586,7 @@ namespace DuckGame
             if (!fancyShoes)
             {
                 Hat hatt = (Hat) GetEquipment(typeof(Hat));
-                if (hatt != null && !hatt.strappedOn && !DGRSettings.StickyHats)
+                if (hatt != null && !hatt.strappedOn && !(DGRSettings.StickyHats && hatt is TeamHat))
                 {
                     Unequip(hatt);
                     hatt.hSpeed = hSpeed * 1.2f;
