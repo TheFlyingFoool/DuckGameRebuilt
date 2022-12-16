@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace DuckGame
 {
@@ -66,44 +67,49 @@ namespace DuckGame
         private void UpdateName()
         {
             Profile profile = _profile;
-            string str1 = "|" + profile.persona.colorUsable.r.ToString() + "," + profile.persona.colorUsable.g.ToString() + "," + profile.persona.colorUsable.b.ToString() + "|";
+            string colorPrefixString = "|" + profile.persona.colorUsable.r.ToString() + "," + profile.persona.colorUsable.g.ToString() + "," + profile.persona.colorUsable.b.ToString() + "|";
             if (profile.slotType == SlotType.Spectator)
-                str1 = "|DGPURPLE|";
-            string source1 = profile.nameUI;
-            int num1 = source1.Count();
-            bool flag = false;
+                colorPrefixString = "|DGPURPLE|";
+            string profileName = profile.nameUI;
+
+            int colorTagsLength = profileName.Length - Program.RemoveColorTags(profileName).Length;
+            
+            int nameLength = profileName.Length - colorTagsLength;
+            bool isHost = false;
             if (profile.connection != null && profile.connection.isHost)
             {
-                flag = true;
-                ++num1;
+                isHost = true;
+                ++nameLength;
             }
-            int num2 = 17;
-            if (flag)
-                num2 = 16;
-            if (num1 > num2)
+
+            int nameLengthLimit = 17;
+            if (isHost)
+                nameLengthLimit--;
+            if (nameLength > nameLengthLimit)
             {
-                source1 = source1.Substring(0, num2 - 1) + ".";
-                num1 = num2;
+                profileName = profileName.Substring(0, nameLengthLimit - 1 + colorTagsLength) + $"{colorPrefixString}.";
+                nameLength = nameLengthLimit;
             }
-            for (; num1 < num2 + 2; ++num1)
-                source1 += " ";
-            if (flag)
-                source1 = "@HOSTCROWN@" + source1;
+            for (; nameLength < nameLengthLimit + 2; ++nameLength)
+                profileName += " ";
+
+            if (isHost)
+                profileName = "@HOSTCROWN@" + profileName;
             if (profile.slotType == SlotType.Spectator)
-                source1 = "@SPECTATOR@" + source1;
+                profileName = "@SPECTATOR@" + profileName;
             if (_profile.muteChat || _profile.muteHat || _profile.muteName || _profile.muteRoom)
-                source1 = "@MUTEICON@" + source1;
+                profileName = "@MUTEICON@" + profileName;
             if (_profile.blocked)
-                source1 = "@BLOCKICON@" + source1;
-            _nameTextWithoutColor = source1;
-            _nameText = str1 + source1;
+                profileName = "@BLOCKICON@" + profileName;
+            _nameTextWithoutColor = profileName;
+            _nameText = colorPrefixString + profileName;
             int ping = GetPing();
             string source2 = ping.ToString() + "|WHITE|MS";
             int num3 = source2.Count();
             string str2 = ping >= 150 ? (ping >= 250 ? (_profile.connection == null ? "|DGRED|" + source2 + "@SIGNALDEAD@" : "|DGRED|" + source2 + "@SIGNALBAD@") : "|DGYELLOW|" + source2 + "@SIGNALNORMAL@") : "|DGGREEN|" + source2 + "@SIGNALGOOD@";
             for (; num3 < 5; ++num3)
                 str2 = " " + str2;
-            _textElement.text = str1 + source1 + str2;
+            _textElement.text = colorPrefixString + profileName + str2;
             controlString = "";
             if (profile.connection != DuckNetwork.localConnection)
             {
