@@ -307,7 +307,7 @@ namespace DuckGame
                 }
                 if (_isMenu)
                 {
-                    if (DGRSettings.s_dubberspeed && _currentMenuItemSelection != null)
+                    if (DGRSettings.dubberspeed && _currentMenuItemSelection != null)
                     {
                         int c = _currentMenuItemSelection.Count;
                         int dubberOffset = -1;

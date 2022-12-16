@@ -913,7 +913,7 @@ namespace DuckGame
                 DownloadWorkshopItems();
             }
 
-            if (DGRSettings.S_PreloadLevels) AddLoadingAction(DGRSettings.PrreloadLevels, "DGRSettings PrreloadLevels");
+            if (DGRSettings.PreloadLevels) AddLoadingAction(DGRSettings.PrreloadLevels, "DGRSettings PrreloadLevels");
             AddLoadingAction(ManagedContent.InitializeMods, "ManagedContent InitializeMods");
             AddLoadingAction(Network.InitializeMessageTypes, "Network InitializeMessageTypes");
             AddLoadingAction(DeathCrate.InitializeDeathCrateSettings, "DeathCrate InitializeDeathCrateSettings");

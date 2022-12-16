@@ -164,8 +164,8 @@ namespace DuckGame
         [DevConsoleCommand]
         public static void graphiccull()
         {
-            DGRSettings.S_GraphicsCulling = !DGRSettings.S_GraphicsCulling;
-            DevConsole.Log("grahpic culling " + DGRSettings.S_GraphicsCulling.ToString());
+            DGRSettings.GraphicsCulling = !DGRSettings.GraphicsCulling;
+            DevConsole.Log("grahpic culling " + DGRSettings.GraphicsCulling.ToString());
 
         }
         public static bool looking;

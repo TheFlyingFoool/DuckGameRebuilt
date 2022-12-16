@@ -764,7 +764,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (DGRSettings.S_RebuiltEffect == 0 && profile != null && profile.isUsingRebuilt && profile.duck != null)
+            if (DGRSettings.RebuiltEffect == 0 && profile != null && profile.isUsingRebuilt && profile.duck != null)
             {
                 Vec2 v = profile.duck.position;
                 if (profile.duck.ragdoll != null && profile.duck.ragdoll.part2 != null) v = profile.duck.ragdoll.part2.position;
@@ -892,7 +892,7 @@ namespace DuckGame
 
                                 if (profile.muteName)
                                     text2 = "Player " + (profile.networkIndex + 1).ToString();
-                                if (profile.isUsingRebuilt && DGRSettings.S_RebuiltEffect == 1) text2 += "|PINK|♥|WHITE|";
+                                if (profile.isUsingRebuilt && DGRSettings.RebuiltEffect == 1) text2 += "|PINK|♥|WHITE|";
 
                                 if (text2.Length > 16)
                                     text2 = text2.Substring(0, 16);
@@ -1000,7 +1000,7 @@ namespace DuckGame
 
                                     if (profile.muteName)
                                         text4 = "Player " + (profile.networkIndex + 1).ToString();
-                                    if (profile.isUsingRebuilt && DGRSettings.S_RebuiltEffect == 1) text4 += "|PINK|♥|WHITE|";
+                                    if (profile.isUsingRebuilt && DGRSettings.RebuiltEffect == 1) text4 += "|PINK|♥|WHITE|";
                                     if (text4.Length > 16)
                                         text4 = text4.Substring(0, 16);
                                     _fontSmall.Draw(text4, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text4) / 2.0), y + 44f), Color.White, doorLeftBlank.depth + 30);
