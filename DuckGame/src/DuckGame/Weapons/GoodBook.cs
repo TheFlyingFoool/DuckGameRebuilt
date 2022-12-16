@@ -383,6 +383,8 @@ namespace DuckGame
         {
             if (duck != null && !_raised && _raiseArm > 0.0)
             {
+                Material mat = Graphics.material;
+                Graphics.material = null;
                 SpriteMap spriteArms = duck._spriteArms;
                 bool flipH = spriteArms.flipH;
                 float angle = spriteArms.angle;
@@ -392,6 +394,7 @@ namespace DuckGame
                 spriteArms.angle = angle;
                 spriteArms.flipH = flipH;
                 handOffset = new Vec2(9999f, 9999f);
+                Graphics.material = mat;
             }
             else
                 handOffset = new Vec2(1f, 1f);

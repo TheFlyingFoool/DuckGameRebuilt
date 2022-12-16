@@ -201,7 +201,7 @@ namespace DuckGame
                 }
             }
             _font = new BitmapFont("biosFont", 8);
-            if (DGRSettings.S_RPC)
+            if (DGRSettings.RPC)
             {
                 DiscordRichPresence.Initialize();
             }

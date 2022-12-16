@@ -205,7 +205,7 @@ namespace DuckGame
             Vec2 zero = Vec2.Zero;
             _removeList.Clear();
             Vec2? areposition = null;
-            if (DGRSettings.S_CameraUnfollow)
+            if (DGRSettings.CameraUnfollow)
             {
                 foreach (Thing thing1 in _follow)
                 {

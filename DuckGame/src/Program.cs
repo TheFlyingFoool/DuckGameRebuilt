@@ -574,15 +574,15 @@ namespace DuckGame
                 string title = GetDefaultWindowTitle();
                 main.Window.Title = title + " Debugging";
             }
-            if (DGRSettings.S_StartIn == 1)
+            if (DGRSettings.StartIn == 1)
             {
                 MonoMain.startInLobby = true;
             }
-            else if (DGRSettings.S_StartIn == 2)
+            else if (DGRSettings.StartIn == 2)
             {
                 MonoMain.startInEditor = true;
             }
-            else if (DGRSettings.S_StartIn == 3)
+            else if (DGRSettings.StartIn == 3)
             {
                 MonoMain.startInArcade = true;
             }

@@ -323,6 +323,8 @@ namespace DuckGame
             _sprite.frame = (_ruined ? 1 : 0) + colorVariation * 2;
             if (duck != null && !raised)
             {
+                Material mat = Graphics.material;
+                Graphics.material = null;
                 SpriteMap fingerPositionSprite = duck.profile.persona.fingerPositionSprite;
                 if (!duck._hovering)
                 {
@@ -346,6 +348,7 @@ namespace DuckGame
                 fingerPositionSprite.frame = 19;
                 Vec2 vec2_1 = Offset(new Vec2(-8f, (-bender * 1f)));
                 Graphics.Draw(fingerPositionSprite, vec2_1.x, vec2_1.y);
+                Graphics.material = mat;
             }
             _keybed.depth = depth + 2;
             _keybed.flipH = offDir <= 0;

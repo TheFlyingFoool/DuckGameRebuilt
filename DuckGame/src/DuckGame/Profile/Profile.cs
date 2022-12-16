@@ -642,7 +642,7 @@ namespace DuckGame
                 string nameUi = name;
                 if (muteName)
                     nameUi = "Player " + (networkIndex + 1).ToString();
-                if (isUsingRebuilt && DGRSettings.S_RebuiltEffect == 1) nameUi += "@DGR@";
+                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1) nameUi += "@DGR@";
                 return nameUi;
             }
         }
@@ -654,7 +654,7 @@ namespace DuckGame
                 string nameUi = name;
                 if (muteName)
                     nameUi = "Player " + (networkIndex + 1).ToString();
-                if (isUsingRebuilt && DGRSettings.S_RebuiltEffect == 1) nameUi += "@DGRBIG@";
+                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1) nameUi += "@DGRBIG@";
                 return nameUi;
             }
         }

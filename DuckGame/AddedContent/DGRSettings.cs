@@ -29,46 +29,15 @@ namespace DuckGame
         }
         [AutoConfigField]
         public static string PreferredLevel = "";
-        public bool PreloadLevels
-        {
-            get
-            {
-                return S_PreloadLevels;
-            }
-            set
-            {
-                S_PreloadLevels = value;
-            }
-        }
-        [AutoConfigField]
-        public static bool S_PreloadLevels;
-        public bool SpriteAtlas
-        {
-            get
-            {
-                return S_SpriteAtlas;
-            }
-            set
-            {
-                S_SpriteAtlas = value;
-            }
-        }
-        [AutoConfigField]
-        public static bool S_SpriteAtlas = true;
 
-        public bool RPC
-        {
-            get
-            {
-                return S_RPC;
-            }
-            set
-            {
-                S_RPC = value;
-            }
-        }
         [AutoConfigField]
-        public static bool S_RPC = false;
+        public static bool PreloadLevels;
+
+        [AutoConfigField]
+        public static bool SpriteAtlas = true;
+
+        [AutoConfigField]
+        public static bool RPC = false;
         public int ParticleMultiplier
         {
             get
@@ -131,128 +100,32 @@ namespace DuckGame
             }
         }
 
-        public float WeatherMultiplier
-        {
-            get
-            {
-                return S_WeatherMultiplier;
-            }
-            set
-            {
-                S_WeatherMultiplier = value;
-            }
-        }
         [AutoConfigField]
-        public static float S_WeatherMultiplier = 1;
+        public static float WeatherMultiplier = 1;
 
-        public bool GraphicsCulling
-        {
-            get
-            {
-                return S_GraphicsCulling;
-            }
-            set
-            {
-                S_GraphicsCulling = value;
-            }
-        }
         [AutoConfigField]
-        public static bool S_GraphicsCulling = true;
-        public int StartIn
-        {
-            get
-            {
-                return S_StartIn;
-            }
-            set
-            {
-                S_StartIn = value;
-            }
-        }
-        [AutoConfigField]
-        public static int S_StartIn = 0;
-        public float WeatherLighting
-        {
-            get
-            {
-                return S_WeatherLighting;
-            }
-            set
-            {
-                S_WeatherLighting = value;
-            }
-        }
-        [AutoConfigField]
-        public static float S_WeatherLighting = 1;
+        public static bool GraphicsCulling = true;
 
-        public bool CameraUnfollow
-        {
-            get
-            {
-                return S_CameraUnfollow;
-            }
-            set
-            {
-                S_CameraUnfollow = value;
-            }
-        }
         [AutoConfigField]
-        public static bool S_CameraUnfollow = true;
+        public static int StartIn = 0;
 
+        [AutoConfigField]
+        public static float WeatherLighting = 1;
 
-        public bool dubberspeed
-        {
-            get
-            {
-                return s_dubberspeed;
-            }
-            set
-            {
-                s_dubberspeed = value;
-            }
-        }
         [AutoConfigField]
-        public static bool s_dubberspeed = false;
+        public static bool CameraUnfollow = true;
 
-        public float RandomWeather
-        {
-            get
-            {
-                return S_RandomWeather;
-            }
-            set
-            {
-                S_RandomWeather = value;
-            }
-        }
         [AutoConfigField]
-        public static float S_RandomWeather = 0.3f;
-        public bool MenuMouse
-        {
-            get
-            {
-                return S_MenuMouse;
-            }
-            set
-            {
-                S_MenuMouse = value;
-            }
-        }
+        public static bool dubberspeed = false;
+
         [AutoConfigField]
-        public static bool S_MenuMouse = false;
-        public int RebuiltEffect
-        {
-            get
-            {
-                return S_RebuiltEffect;
-            }
-            set
-            {
-                S_RebuiltEffect = value;
-            }
-        }
+        public static float RandomWeather = 0.3f;
+
         [AutoConfigField]
-        public static int S_RebuiltEffect = 1;
+        public static bool MenuMouse = false;
+
+        [AutoConfigField]
+        public static int RebuiltEffect = 1;
 
         [AutoConfigField]
         public static bool StickyHats { get; set; }

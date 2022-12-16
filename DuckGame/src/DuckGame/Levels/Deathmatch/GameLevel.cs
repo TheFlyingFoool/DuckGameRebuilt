@@ -174,7 +174,7 @@ namespace DuckGame
             Vec2 vec2_2 = zero / num;
             followCam.Adjust();
 
-            if (level != "RANDOM" && Rando.Float(1) <= DGRSettings.S_RandomWeather)
+            if (level != "RANDOM" && Rando.Float(1) <= DGRSettings.RandomWeather)
             {
                 RainParticel.c = new Color(0, 112, 168);
                 RainParticel.flud = Fluid.Water;
@@ -209,7 +209,7 @@ namespace DuckGame
                     rainDarken = darkenRainer;
                     rainwindto = rainwind;
                 }
-                else if (First<OfficeTileset>() != null && (Rando.Int(1) == 1 || DGRSettings.S_RandomWeather > 9.9f))
+                else if (First<OfficeTileset>() != null && (Rando.Int(1) == 1 || DGRSettings.RandomWeather > 9.9f))
                 {
                     rainSound = new LoopingSound("sizzle", 1, -3)
                     {
@@ -321,7 +321,7 @@ namespace DuckGame
         {
             if (Raining)
             {
-                if (Rando.Int(60000) == 0 && DGRSettings.S_RandomWeather < 0.49f)
+                if (Rando.Int(60000) == 0 && DGRSettings.RandomWeather < 0.49f)
                 {
                     if (heavyRain && Rando.Int(4) != 4)
                     {
@@ -359,7 +359,7 @@ namespace DuckGame
 
                 //ignore this mess im just quickly assembling this if you wanna make it better go ahead
                 //-NiK0
-                if (DGRSettings.S_WeatherLighting > 0 && (int)Math.Round(Rando.Int(lightningRNG) / DGRSettings.S_WeatherLighting) == 0)
+                if (DGRSettings.WeatherLighting > 0 && (int)Math.Round(Rando.Int(lightningRNG) / DGRSettings.WeatherLighting) == 0)
                 {
                     rainDarken = 1.2f;
                     Add(new BGLightning(Rando.Float(-30, 270), 0));
@@ -373,7 +373,7 @@ namespace DuckGame
                 Layer.Parallax.fade = rainDarken;
                 Layer.Foreground.fade = rainDarken;
                 Layer.Background.fade = rainDarken;
-                rainTimer += DGRSettings.S_WeatherMultiplier / (heavyRain ? 2 : 1.5f);
+                rainTimer += DGRSettings.WeatherMultiplier / (heavyRain ? 2 : 1.5f);
                 if (rainTimer > 1)
                 {
                     for (int i = 0; i < rainTimer; i++)
@@ -429,7 +429,7 @@ namespace DuckGame
 
                 //ignore this mess im just quickly assembling this if you wanna make it better go ahead
                 //-NiK0
-                if (DGRSettings.S_WeatherLighting > 0 && (int)Math.Round(Rando.Int(lightningRNG) / DGRSettings.S_WeatherLighting) == 0)
+                if (DGRSettings.WeatherLighting > 0 && (int)Math.Round(Rando.Int(lightningRNG) / DGRSettings.WeatherLighting) == 0)
                 {
                     rainDarken = 1.2f;
                     Add(new BGLightning(Rando.Float(-30, 270), 0));
@@ -443,7 +443,7 @@ namespace DuckGame
                 Layer.Parallax.fade = rainDarken;
                 Layer.Foreground.fade = rainDarken;
                 Layer.Background.fade = rainDarken;
-                rainTimer += DGRSettings.S_WeatherMultiplier / (heavyRain ? 2 : 1.5f);
+                rainTimer += DGRSettings.WeatherMultiplier / (heavyRain ? 2 : 1.5f);
                 if (rainTimer > 1)
                 {
                     for (int i = 0; i < rainTimer; i++)
@@ -467,7 +467,7 @@ namespace DuckGame
             }
             else if (Snowing)
             {
-                snowTimer += 0.1f * DGRSettings.S_WeatherMultiplier;
+                snowTimer += 0.1f * DGRSettings.WeatherMultiplier;
                 if (snowTimer > 1)//lol
                 {
                     for (int i = 0; i < snowTimer; i++)

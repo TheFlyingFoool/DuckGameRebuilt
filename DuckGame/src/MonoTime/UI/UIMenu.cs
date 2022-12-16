@@ -21,7 +21,7 @@ namespace DuckGame
         {
             get
             {
-                if (!DGRSettings.S_MenuMouse) return false;
+                if (!DGRSettings.MenuMouse) return false;
                 return _domouse;
             }
             set

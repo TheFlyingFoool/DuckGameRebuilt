@@ -535,7 +535,7 @@ namespace DuckGame
                     {
                         if (Network.isActive)
                         {
-                            if (this != Parallax && DGRSettings.S_GraphicsCulling)
+                            if (this != Parallax && DGRSettings.GraphicsCulling)
                             {
                                 Vec2 Topleft = camera.transformInverse(new Vec2(0f, 0f));
                                 Vec2 Bottomright = camera.transformInverse(new Vec2(Graphics.viewport.Width, Graphics.viewport.Height));
@@ -642,7 +642,7 @@ namespace DuckGame
                         }
                         else
                         {
-                            if (this != Parallax && DGRSettings.S_GraphicsCulling)
+                            if (this != Parallax && DGRSettings.GraphicsCulling)
                             {
                                 Vec2 Topleft = camera.transformInverse(new Vec2(0f, 0f));
                                 Vec2 Bottomright = camera.transformInverse(new Vec2(Graphics.viewport.Width, Graphics.viewport.Height));
