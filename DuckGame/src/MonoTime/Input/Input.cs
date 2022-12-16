@@ -69,7 +69,7 @@ namespace DuckGame
         public static Dictionary<Keys, char> keyToChar = new Dictionary<Keys, char>();
         private static Dictionary<string, InputProfile> _profiles = new Dictionary<string, InputProfile>();
         private static List<InputDevice> _devices = new List<InputDevice>();
-        private static Dictionary<string, Sprite> _triggerImageMap = new Dictionary<string, Sprite>();
+        public static Dictionary<string, Sprite> _triggerImageMap = new Dictionary<string, Sprite>();
         private static List<GenericController> _gamePads = new List<GenericController>();
         private static Array _keys = Enum.GetValues(typeof(Keys));
         private static List<DeviceInputMapping> _defaultInputMapping = new List<DeviceInputMapping>();

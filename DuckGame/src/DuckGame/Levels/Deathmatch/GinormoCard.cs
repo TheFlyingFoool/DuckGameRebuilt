@@ -138,12 +138,13 @@ namespace DuckGame
         public override void Draw()
         {
             _font.scale = new Vec2(1f, 1f);
-            string str = _team.currentDisplayName;
+            string name = _team.currentDisplayName;
             float num1 = 0f;
             float num2 = 0f;
-            if (str.Length > 16)
-                str = str.Substring(0, 16);
-            string text1 = "@ICONGRADIENT@" + str;
+            int coloredTagsLength = name.Length - Program.RemoveColorTags(name).Length;
+            if (name.Length - coloredTagsLength > 16)
+                name = name.Substring(0, 16 + coloredTagsLength);
+            string text1 = "@ICONGRADIENT@" + name;
             if (_team != null && _team.activeProfiles != null && _team.activeProfiles.Count > 0)
             {
                 BitmapFont bitmapFont = _team.activeProfiles.Count <= 1 ? _team.activeProfiles[0].font : Profiles.EnvironmentProfile.font;

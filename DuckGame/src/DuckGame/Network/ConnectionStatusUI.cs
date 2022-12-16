@@ -166,9 +166,8 @@ namespace DuckGame
                         else
                             _smallBios.Draw("@ONLINEGOOD@|DGGREEN|READY!", new Vec2(vec2_2.x + 3f, vec2_2.y + 3f), Color.White, (Depth)0.9f);
                         _smallBios.scale = new Vec2(1f, 1f);
-                        string str2 = bar.profile.nameUI;
-                        if (str2.Length > 14)
-                            str2 = str2.Substring(0, 14) + "..";
+                        
+                        string profName = bar.profile.nameUI;
                         string[] strArray = new string[7];
                         strArray[0] = "|";
                         Color colorUsable = bar.profile.persona.colorUsable;
@@ -181,14 +180,18 @@ namespace DuckGame
                         strArray[5] = colorUsable.b.ToString();
                         strArray[6] = "|";
                         string str3 = string.Concat(strArray);
+                        const int lim = 14;
+                        int coloredTagsLength = profName.Length - Program.RemoveColorTags(profName).Length;
+                        if (profName.Length - coloredTagsLength > lim)
+                            profName = profName.Substring(0, lim + coloredTagsLength) + $"{str3}..";
                         if (bar.profile.connection != null && bar.profile.connection.isHost)
-                            str2 = "@HOSTCROWN@" + str2;
+                            profName = "@HOSTCROWN@" + profName;
                         if (bar.profile.slotType == SlotType.Spectator || bar.profile.pendingSpectatorMode == SlotType.Spectator)
                         {
-                            str2 = "@SPECTATOR@" + str2;
+                            profName = "@SPECTATOR@" + profName;
                             str3 = "|DGPURPLE|";
                         }
-                        string text1 = str3 + str2;
+                        string text1 = str3 + profName;
                         _smallBios.Draw(text1, new Vec2((float)(vec2_2.x + _bar.width - 3f - _smallBios.GetWidth(text1) - 60f), vec2_2.y + 3f), Color.White, (Depth)0.9f);
                         int num8 = (int)Math.Round(bar.profile.connection.manager.ping * 1000f);
                         if (bar.profile.connection == DuckNetwork.localConnection)
