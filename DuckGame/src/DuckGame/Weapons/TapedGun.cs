@@ -366,7 +366,7 @@ namespace DuckGame
                         {
                             if (duck.inputProfile != null)
                             {
-                                if (duck.inputProfile.Pressed("SHOOT"))
+                                if (duck.inputProfile.Pressed(Triggers.Shoot))
                                 {
                                     Holdable holdable1 = Level.current.NearestThingFilter<Holdable>(position, t =>
                                    {

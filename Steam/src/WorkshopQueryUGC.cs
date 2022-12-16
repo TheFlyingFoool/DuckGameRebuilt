@@ -12,7 +12,7 @@ public abstract class WorkshopQueryUGC : WorkshopQueryBase {
         excludedTags = new List<string>();
     }
 
-    internal unsafe override void SetQueryData() {
+    internal override unsafe void SetQueryData() {
         base.SetQueryData();
 
         foreach (string tag in requiredTags)

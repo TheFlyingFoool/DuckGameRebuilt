@@ -101,9 +101,9 @@ namespace DuckGame
             //{
             //    base.Draw();
             //}  
-            if (this.removeFromLevel && this.layer != null)
+            if (removeFromLevel && layer != null)
             {
-                this.layer.RemoveSoon(this);
+                layer.RemoveSoon(this);
             }
             if (graphic.position != position)
             {
@@ -115,7 +115,7 @@ namespace DuckGame
             graphic.depth = depth;
             graphic.alpha = alpha;
             graphic.angle = angle;
-            graphic.cheapmaterial = this.material;
+            graphic.cheapmaterial = material;
             (graphic as SpriteMap).UpdateFrame();
             graphic.UltraCheapStaticDraw(flipHorizontal);
             //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 

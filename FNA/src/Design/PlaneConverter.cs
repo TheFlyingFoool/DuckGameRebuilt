@@ -44,10 +44,10 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return (object) new Plane(
-				(Vector3) propertyValues["Normal"],
-				(float) propertyValues["D"]
-			);
+			return new Plane(
+                (Vector3)propertyValues["Normal"],
+                (float)propertyValues["D"]
+            );
 		}
 
 		#endregion

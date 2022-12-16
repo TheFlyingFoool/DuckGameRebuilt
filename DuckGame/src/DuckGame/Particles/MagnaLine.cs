@@ -14,7 +14,7 @@ namespace DuckGame
         private Gun _attach;
         private float _length;
         private float _startLength;
-        private float _move = 1.570796f;
+        private float _move = (float)(Math.PI / 2);
         public bool show;
         public float dist;
         public float _alphaFade;
@@ -25,7 +25,7 @@ namespace DuckGame
             _attach = attach;
             _length = length;
             _startLength = length;
-            _move = 1.570796f * percent;
+            _move = (float)(Math.PI / 2) * percent;
             alpha = 0f;
         }
 
@@ -37,7 +37,7 @@ namespace DuckGame
         {
             _move = Lerp.Float(_move, 0f, 0.04f);
             if (_move <= 0.01f)
-                _move += 1.570796f;
+                _move += (float)(Math.PI / 2);
             if (_length > dist)
                 show = false;
             _alphaFade = Lerp.Float(_alphaFade, show ? 1f : 0f, 0.1f);

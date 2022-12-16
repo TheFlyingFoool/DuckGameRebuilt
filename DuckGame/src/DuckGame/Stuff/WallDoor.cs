@@ -49,7 +49,7 @@ namespace DuckGame
         {
             foreach (Duck duck in Level.CheckRectAll<Duck>(topLeft, bottomRight))
             {
-                if (duck.grounded && duck.inputProfile.Pressed("UP") && !duck.enteringWalldoor && !duck.exitingWalldoor && !_transportingDucks.Contains(duck))
+                if (duck.grounded && duck.inputProfile.Pressed(Triggers.Up) && !duck.enteringWalldoor && !duck.exitingWalldoor && !_transportingDucks.Contains(duck))
                 {
                     _transportingDucks.Add(duck);
                     duck.wallDoorAI = new DuckAI(duck.inputProfile);
@@ -75,13 +75,13 @@ namespace DuckGame
                 if (transportingDuck.wallDoorAI == null && !transportingDuck.autoExitDoor && !transportingDuck.exitingWalldoor)
                 {
                     WallDoor wallDoor = null;
-                    if (transportingDuck.inputProfile.Pressed("LEFT") || transportingDuck.inputProfile.Down("LEFT") && transportingDuck.autoExitDoorFrames > 5)
+                    if (transportingDuck.inputProfile.Pressed(Triggers.Left) || transportingDuck.inputProfile.Down(Triggers.Left) && transportingDuck.autoExitDoorFrames > 5)
                         wallDoor = Level.CheckRay<WallDoor>(position, position + new Vec2(-10000f, 0f), this, out Vec2 _);
-                    if (transportingDuck.inputProfile.Pressed("RIGHT") || transportingDuck.inputProfile.Down("RIGHT") && transportingDuck.autoExitDoorFrames > 5)
+                    if (transportingDuck.inputProfile.Pressed(Triggers.Right) || transportingDuck.inputProfile.Down(Triggers.Right) && transportingDuck.autoExitDoorFrames > 5)
                         wallDoor = Level.CheckRay<WallDoor>(position, position + new Vec2(10000f, 0f), this, out Vec2 _);
-                    if (transportingDuck.inputProfile.Pressed("UP") || transportingDuck.inputProfile.Down("UP") && transportingDuck.autoExitDoorFrames > 10)
+                    if (transportingDuck.inputProfile.Pressed(Triggers.Up) || transportingDuck.inputProfile.Down(Triggers.Up) && transportingDuck.autoExitDoorFrames > 10)
                         wallDoor = Level.CheckRay<WallDoor>(position, position + new Vec2(0f, -10000f), this, out Vec2 _);
-                    if (transportingDuck.inputProfile.Pressed("DOWN") || transportingDuck.inputProfile.Down("DOWN") && transportingDuck.autoExitDoorFrames > 5)
+                    if (transportingDuck.inputProfile.Pressed(Triggers.Down) || transportingDuck.inputProfile.Down(Triggers.Down) && transportingDuck.autoExitDoorFrames > 5)
                         wallDoor = Level.CheckRay<WallDoor>(position, position + new Vec2(0f, 10000f), this, out Vec2 _);
                     if (wallDoor != null)
                     {
@@ -99,9 +99,9 @@ namespace DuckGame
                 else if (transportingDuck.wallDoorAI != null)
                 {
                     if (transportingDuck.x > x + 2.0)
-                        transportingDuck.wallDoorAI.Press("LEFT");
+                        transportingDuck.wallDoorAI.Press(Triggers.Left);
                     if (transportingDuck.x < x - 2.0)
-                        transportingDuck.wallDoorAI.Press("RIGHT");
+                        transportingDuck.wallDoorAI.Press(Triggers.Right);
                 }
                 if (transportingDuck.transportDoor != null)
                     --transportingDuck.autoExitDoorFrames;
@@ -109,7 +109,7 @@ namespace DuckGame
                     --transportingDuck.autoExitDoorFrames;
                 else if (!transportingDuck.autoExitDoor)
                     ++transportingDuck.autoExitDoorFrames;
-                if (transportingDuck.inputProfile.Pressed("JUMP") && !transportingDuck.autoExitDoor || transportingDuck.autoExitDoor && transportingDuck.autoExitDoorFrames == 0)
+                if (transportingDuck.inputProfile.Pressed(Triggers.Jump) && !transportingDuck.autoExitDoor || transportingDuck.autoExitDoor && transportingDuck.autoExitDoorFrames == 0)
                 {
                     transportingDuck.exitingWalldoor = true;
                     transportingDuck.autoExitDoor = false;

@@ -215,22 +215,23 @@ namespace Microsoft.Xna.Framework.Graphics
 			BlendState newBlend;
 			if (!blendCache.TryGetValue(hash, out newBlend))
 			{
-				newBlend = new BlendState();
+                newBlend = new BlendState
+                {
+                    AlphaBlendFunction = AlphaBlendFunction,
+                    AlphaDestinationBlend = AlphaDestinationBlend,
+                    AlphaSourceBlend = AlphaSourceBlend,
+                    ColorBlendFunction = ColorBlendFunction,
+                    ColorDestinationBlend = ColorDestinationBlend,
+                    ColorSourceBlend = ColorSourceBlend,
+                    ColorWriteChannels = ColorWriteChannels,
+                    ColorWriteChannels1 = ColorWriteChannels1,
+                    ColorWriteChannels2 = ColorWriteChannels2,
+                    ColorWriteChannels3 = ColorWriteChannels3,
+                    BlendFactor = BlendFactor,
+                    MultiSampleMask = MultiSampleMask
+                };
 
-				newBlend.AlphaBlendFunction = AlphaBlendFunction;
-				newBlend.AlphaDestinationBlend = AlphaDestinationBlend;
-				newBlend.AlphaSourceBlend = AlphaSourceBlend;
-				newBlend.ColorBlendFunction = ColorBlendFunction;
-				newBlend.ColorDestinationBlend = ColorDestinationBlend;
-				newBlend.ColorSourceBlend = ColorSourceBlend;
-				newBlend.ColorWriteChannels = ColorWriteChannels;
-				newBlend.ColorWriteChannels1 = ColorWriteChannels1;
-				newBlend.ColorWriteChannels2 = ColorWriteChannels2;
-				newBlend.ColorWriteChannels3 = ColorWriteChannels3;
-				newBlend.BlendFactor = BlendFactor;
-				newBlend.MultiSampleMask = MultiSampleMask;
-
-				blendCache.Add(hash, newBlend);
+                blendCache.Add(hash, newBlend);
 #if VERBOSE_PIPELINECACHE
 				FNALoggerEXT.LogInfo(
 					"New BlendState added to pipeline cache with hash:\n" +
@@ -308,10 +309,10 @@ namespace Microsoft.Xna.Framework.Graphics
 			int twoSided = twoSidedStencil ? 1 : 0;
 
 			int packedProperties =
-				  ((int) zEnable		<< 30)
-				| ((int) zWriteEnable		<< 29)
-				| ((int) sEnable		<< 28)
-				| ((int) twoSided		<< 27)
+				  (zEnable << 30)
+				| (zWriteEnable << 29)
+				| (sEnable << 28)
+				| (twoSided << 27)
 				| ((int) depthFunc		<< 24)
 				| ((int) stencilFunc		<< 21)
 				| ((int) ccwStencilFunc		<< 18)
@@ -400,26 +401,27 @@ namespace Microsoft.Xna.Framework.Graphics
 			DepthStencilState newDepthStencil;
 			if (!depthStencilCache.TryGetValue(hash, out newDepthStencil))
 			{
-				newDepthStencil = new DepthStencilState();
+                newDepthStencil = new DepthStencilState
+                {
+                    DepthBufferEnable = DepthBufferEnable,
+                    DepthBufferWriteEnable = DepthBufferWriteEnable,
+                    DepthBufferFunction = DepthBufferFunction,
+                    StencilEnable = StencilEnable,
+                    StencilFunction = StencilFunction,
+                    StencilPass = StencilPass,
+                    StencilFail = StencilFail,
+                    StencilDepthBufferFail = StencilDepthBufferFail,
+                    TwoSidedStencilMode = TwoSidedStencilMode,
+                    CounterClockwiseStencilFunction = CCWStencilFunction,
+                    CounterClockwiseStencilFail = CCWStencilFail,
+                    CounterClockwiseStencilPass = CCWStencilPass,
+                    CounterClockwiseStencilDepthBufferFail = CCWStencilDepthBufferFail,
+                    StencilMask = StencilMask,
+                    StencilWriteMask = StencilWriteMask,
+                    ReferenceStencil = ReferenceStencil
+                };
 
-				newDepthStencil.DepthBufferEnable = DepthBufferEnable;
-				newDepthStencil.DepthBufferWriteEnable = DepthBufferWriteEnable;
-				newDepthStencil.DepthBufferFunction = DepthBufferFunction;
-				newDepthStencil.StencilEnable = StencilEnable;
-				newDepthStencil.StencilFunction = StencilFunction;
-				newDepthStencil.StencilPass = StencilPass;
-				newDepthStencil.StencilFail = StencilFail;
-				newDepthStencil.StencilDepthBufferFail = StencilDepthBufferFail;
-				newDepthStencil.TwoSidedStencilMode = TwoSidedStencilMode;
-				newDepthStencil.CounterClockwiseStencilFunction = CCWStencilFunction;
-				newDepthStencil.CounterClockwiseStencilFail = CCWStencilFail;
-				newDepthStencil.CounterClockwiseStencilPass = CCWStencilPass;
-				newDepthStencil.CounterClockwiseStencilDepthBufferFail = CCWStencilDepthBufferFail;
-				newDepthStencil.StencilMask = StencilMask;
-				newDepthStencil.StencilWriteMask = StencilWriteMask;
-				newDepthStencil.ReferenceStencil = ReferenceStencil;
-
-				depthStencilCache.Add(hash, newDepthStencil);
+                depthStencilCache.Add(hash, newDepthStencil);
 #if VERBOSE_PIPELINECACHE
 				FNALoggerEXT.LogInfo(
 					"New DepthStencilState added to pipeline cache with hash:\n" +
@@ -475,8 +477,8 @@ namespace Microsoft.Xna.Framework.Graphics
 			int scissorTestEnable = (scissor ? 1 : 0);
 
 			int packedProperties =
-				  ((int) multiSampleAntiAlias	<< 4)
-				| ((int) scissorTestEnable	<< 3)
+				  (multiSampleAntiAlias << 4)
+				| (scissorTestEnable << 3)
 				| ((int) cullMode		<< 1)
 				| ((int) fillMode);
 
@@ -528,16 +530,17 @@ namespace Microsoft.Xna.Framework.Graphics
 			RasterizerState newRasterizer;
 			if (!rasterizerCache.TryGetValue(hash, out newRasterizer))
 			{
-				newRasterizer = new RasterizerState();
+                newRasterizer = new RasterizerState
+                {
+                    CullMode = CullMode,
+                    FillMode = FillMode,
+                    DepthBias = DepthBias,
+                    MultiSampleAntiAlias = MultiSampleAntiAlias,
+                    ScissorTestEnable = ScissorTestEnable,
+                    SlopeScaleDepthBias = SlopeScaleDepthBias
+                };
 
-				newRasterizer.CullMode = CullMode;
-				newRasterizer.FillMode = FillMode;
-				newRasterizer.DepthBias = DepthBias;
-				newRasterizer.MultiSampleAntiAlias = MultiSampleAntiAlias;
-				newRasterizer.ScissorTestEnable = ScissorTestEnable;
-				newRasterizer.SlopeScaleDepthBias = SlopeScaleDepthBias;
-
-				rasterizerCache.Add(hash, newRasterizer);
+                rasterizerCache.Add(hash, newRasterizer);
 #if VERBOSE_PIPELINECACHE
 				FNALoggerEXT.LogInfo(
 					"New RasterizerState added to pipeline cache with hash:\n" +
@@ -647,17 +650,18 @@ namespace Microsoft.Xna.Framework.Graphics
 			SamplerState newSampler;
 			if (!samplerCache.TryGetValue(hash, out newSampler))
 			{
-				newSampler = new SamplerState();
+                newSampler = new SamplerState
+                {
+                    Filter = Filter,
+                    AddressU = AddressU,
+                    AddressV = AddressV,
+                    AddressW = AddressW,
+                    MaxAnisotropy = MaxAnisotropy,
+                    MaxMipLevel = MaxMipLevel,
+                    MipMapLevelOfDetailBias = MipMapLODBias
+                };
 
-				newSampler.Filter = Filter;
-				newSampler.AddressU = AddressU;
-				newSampler.AddressV = AddressV;
-				newSampler.AddressW = AddressW;
-				newSampler.MaxAnisotropy = MaxAnisotropy;
-				newSampler.MaxMipLevel = MaxMipLevel;
-				newSampler.MipMapLevelOfDetailBias = MipMapLODBias;
-
-				samplerCache.Add(hash, newSampler);
+                samplerCache.Add(hash, newSampler);
 #if VERBOSE_PIPELINECACHE
 				FNALoggerEXT.LogInfo(
 					"New SamplerState added to pipeline cache with hash:\n" +
@@ -740,7 +744,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		private static unsafe ulong FloatToULong(float f)
 		{
 			uint uintRep = *((uint *) &f);
-			return unchecked((ulong) uintRep);
+			return unchecked(uintRep);
 		}
 
 		#endregion

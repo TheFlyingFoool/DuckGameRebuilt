@@ -79,12 +79,12 @@ namespace DuckGame
                 if (_showWarning)
                 {
                     _selectionChanged = true;
-                    if (Input.Pressed("CANCEL"))
+                    if (Input.Pressed(Triggers.Cancel))
                     {
                         SFX.Play("consoleCancel");
                         _showWarning = false;
                     }
-                    else if (Input.Pressed("MENU2"))
+                    else if (Input.Pressed(Triggers.Menu2))
                     {
                         SFX.Play("death");
                         //this._showedWarning = true;
@@ -96,7 +96,7 @@ namespace DuckGame
                 else
                 {
                     int slot = _slot;
-                    if (Input.Pressed("MENULEFT"))
+                    if (Input.Pressed(Triggers.MenuLeft))
                     {
                         if (_indexX == 2 && _indexY == 2)
                         {
@@ -109,7 +109,7 @@ namespace DuckGame
                                 _indexX = 0;
                         }
                     }
-                    if (Input.Pressed("MENURIGHT"))
+                    if (Input.Pressed(Triggers.MenuRight))
                     {
                         if (_indexX == 0 && _indexY == 2)
                         {
@@ -122,13 +122,13 @@ namespace DuckGame
                                 _indexX = 2;
                         }
                     }
-                    if (Input.Pressed("MENUUP"))
+                    if (Input.Pressed(Triggers.MenuUp))
                     {
                         --_indexY;
                         if (_indexY < 0)
                             _indexY = 0;
                     }
-                    if (Input.Pressed("MENUDOWN"))
+                    if (Input.Pressed(Triggers.MenuDown))
                     {
                         if (_indexX == 1 && _indexY == 1)
                         {
@@ -174,13 +174,13 @@ namespace DuckGame
                                 HUD.CloseCorner(HUDCorner.BottomRight);
                             _selectionChanged = false;
                         }
-                        if (DuckNetwork.profiles[_slot].readyForSpectatorChange && Network.canSetObservers && Input.Pressed("MENU1") && DuckNetwork.profiles[_slot].connection != null)
+                        if (DuckNetwork.profiles[_slot].readyForSpectatorChange && Network.canSetObservers && Input.Pressed(Triggers.Menu1) && DuckNetwork.profiles[_slot].connection != null)
                         {
                             _selectionChanged = true;
                             DuckNetwork.MakeSpectator(DuckNetwork.profiles[_slot]);
                             SFX.Play("menuBlip01");
                         }
-                        else if (Input.Pressed("SELECT") && DuckNetwork.profiles[_slot].connection == null)
+                        else if (Input.Pressed(Triggers.Select) && DuckNetwork.profiles[_slot].connection == null)
                         {
                             int num = (int)(DuckNetwork.profiles[_slot].slotType + 1);
                             if (DuckNetwork.profiles[_slot].reservedUser != null && num == 5)
@@ -191,12 +191,12 @@ namespace DuckGame
                             DuckNetwork.ChangeSlotSettings();
                             SFX.Play("menuBlip01");
                         }
-                        else if (Input.Pressed("MENU2"))
+                        else if (Input.Pressed(Triggers.Menu2))
                             DuckNetwork.Kick(DuckNetwork.profiles[_slot]);
-                        else if (Input.Pressed("RAGDOLL") && DuckNetwork.profiles[_slot].connection != DuckNetwork.localConnection)
+                        else if (Input.Pressed(Triggers.Ragdoll) && DuckNetwork.profiles[_slot].connection != DuckNetwork.localConnection)
                             DuckNetwork.Ban(DuckNetwork.profiles[_slot]);
                     }
-                    if (Input.Pressed("CANCEL"))
+                    if (Input.Pressed(Triggers.Cancel))
                     {
                         SFX.Play("consoleCancel");
                         new UIMenuActionOpenMenu(this, _closeMenu).Activate();

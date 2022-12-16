@@ -364,11 +364,11 @@ namespace Microsoft.Xna.Framework.Media
 			}
 			else
 			{
-				Queue.ActiveSongIndex = (int) MathHelper.Clamp(
-					Queue.ActiveSongIndex + direction,
-					0,
-					Queue.Count - 1
-				);
+				Queue.ActiveSongIndex = MathHelper.Clamp(
+                    Queue.ActiveSongIndex + direction,
+                    0,
+                    Queue.Count - 1
+                );
 			}
 
 			Song nextSong = Queue[Queue.ActiveSongIndex];

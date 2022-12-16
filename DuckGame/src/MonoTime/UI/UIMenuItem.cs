@@ -107,7 +107,7 @@ namespace DuckGame
 
         public virtual void Activate(string trigger)
         {
-            if (_action == null || !(trigger == "SELECT"))
+            if (_action == null || !(trigger == Triggers.Select))
                 return;
             _action.Activate();
         }

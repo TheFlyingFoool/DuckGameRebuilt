@@ -40,7 +40,7 @@
 //                Level.current = !MonoMain.startInEditor ? new TitleScreen() : Main.editor;
 //            }
 //            this._wait -= 3f / 500f;
-//            if (_wait >= 0f && !Input.Pressed("START") && !Input.Pressed("SELECT"))
+//            if (_wait >= 0f && !Input.Pressed(Triggers.Start) && !Input.Pressed(Triggers.Select))
 //                return;
 //            this._fading = true;
 //        }

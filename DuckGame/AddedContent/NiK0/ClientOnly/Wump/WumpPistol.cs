@@ -110,9 +110,11 @@ namespace DuckGame
                 ApplyKick();
                 for (int i = 0; i < _numBulletsPerFire; i++)
                 {
-                    IceSpike ss = new IceSpike(barrelPosition.x, barrelPosition.y);
-                    ss.velocity = barrelVector.Rotate(Rando.Float(-0.1f, 0.1f), Vec2.Zero) * 12;
-                    ss.ignore = duck;
+                    IceSpike ss = new IceSpike(barrelPosition.x, barrelPosition.y)
+                    {
+                        velocity = barrelVector.Rotate(Rando.Float(-0.1f, 0.1f), Vec2.Zero) * 12,
+                        ignore = duck
+                    };
                     if (duck != null) ss.velocity += duck.velocity;
                     Level.Add(ss);
                 }

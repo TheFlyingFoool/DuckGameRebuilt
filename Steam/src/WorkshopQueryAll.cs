@@ -21,11 +21,11 @@ public class WorkshopQueryAll : WorkshopQueryUGC {
         _fileType = eMatchingUGCTypeFileType;
     }
 
-    internal unsafe override void Create() {
+    internal override unsafe void Create() {
         _handle = SteamUGC.CreateQueryAllUGCRequest(_queryType, _fileType, (AppId_t)312530, (AppId_t)312530, _page);
     }
 
-    internal unsafe override void SetQueryData() {
+    internal override unsafe void SetQueryData() {
         base.SetQueryData();
 
         SteamUGC.SetMatchAnyTag(_handle, matchAnyTag);

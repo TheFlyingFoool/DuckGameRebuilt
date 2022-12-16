@@ -177,7 +177,7 @@ namespace DuckGame
             _prevVisible = visible;
             _shakeInc += 0.8f;
             _shakeMult = Lerp.Float(_shakeMult, 0f, 0.05f);
-            if (Network.isActive && _duckOwner._trapped == this && !_duckOwner.isServerForObject && _duckOwner.inputProfile.Pressed("JUMP"))
+            if (Network.isActive && _duckOwner._trapped == this && !_duckOwner.isServerForObject && _duckOwner.inputProfile.Pressed(Triggers.Jump))
                 _shakeMult = 1f;
             if (_duckOwner.isServerForObject && _duckOwner._trapped == this)
             {
@@ -193,13 +193,13 @@ namespace DuckGame
                 if (!infinite)
                 {
                     _duckOwner.profile.stats.timeInNet += Maths.IncFrameTimer();
-                    if (_duckOwner.inputProfile.Pressed("JUMP"))
+                    if (_duckOwner.inputProfile.Pressed(Triggers.Jump))
                     {
                         _shakeMult = 1f;
                         _trapTime -= 0.007f;
                         jumpCountdown = 0.25f;
                     }
-                    if (grounded && _duckOwner.inputProfile.Pressed("JUMP"))
+                    if (grounded && _duckOwner.inputProfile.Pressed(Triggers.Jump))
                     {
                         _shakeMult = 1f;
                         _trapTime -= 0.028f;
@@ -208,15 +208,15 @@ namespace DuckGame
                             if (Math.Abs(hSpeed) < 1.0 && _framesSinceTransfer > 30)
                                 _duckOwner.Fondle(this);
                             vSpeed -= Rando.Float(0.8f, 1.1f);
-                            if (_duckOwner.inputProfile.Down("LEFT") && hSpeed > -1.0)
+                            if (_duckOwner.inputProfile.Down(Triggers.Left) && hSpeed > -1.0)
                                 hSpeed -= Rando.Float(0.6f, 0.8f);
-                            if (_duckOwner.inputProfile.Down("RIGHT") && hSpeed < 1.0)
+                            if (_duckOwner.inputProfile.Down(Triggers.Right) && hSpeed < 1.0)
                                 hSpeed += Rando.Float(0.6f, 0.8f);
                         }
                     }
-                    if (_duckOwner.inputProfile.Pressed("JUMP") && _duckOwner.HasEquipment(typeof(Jetpack)))
+                    if (_duckOwner.inputProfile.Pressed(Triggers.Jump) && _duckOwner.HasEquipment(typeof(Jetpack)))
                         _duckOwner.GetEquipment(typeof(Jetpack)).PressAction();
-                    if (_duckOwner.inputProfile.Released("JUMP") && _duckOwner.HasEquipment(typeof(Jetpack)))
+                    if (_duckOwner.inputProfile.Released(Triggers.Jump) && _duckOwner.HasEquipment(typeof(Jetpack)))
                         _duckOwner.GetEquipment(typeof(Jetpack)).ReleaseAction();
                     _trapTime -= 0.0028f;
                     if ((_trapTime <= 0.0 || _duckOwner.dead) && !inPipe)

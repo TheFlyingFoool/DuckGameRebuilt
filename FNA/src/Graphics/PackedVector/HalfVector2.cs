@@ -116,10 +116,10 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 
 		private static uint PackHelper(float vectorX, float vectorY)
 		{
-			return (uint) (
-				HalfTypeHelper.Convert(vectorX) |
-				((uint) (HalfTypeHelper.Convert(vectorY) << 0x10))
-			);
+			return
+                HalfTypeHelper.Convert(vectorX) |
+                ((uint)(HalfTypeHelper.Convert(vectorY) << 0x10))
+            ;
 		}
 
 		#endregion

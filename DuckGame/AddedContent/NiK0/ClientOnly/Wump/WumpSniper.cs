@@ -11,9 +11,11 @@ namespace DuckGame
         public WumpSniper(float xval, float yval) : base(xval, yval)
         {
             ammo = 3;
-            _ammoType = new ATSniper();
-            _ammoType.range = 500;
-            _ammoType.penetration = 10;
+            _ammoType = new ATSniper
+            {
+                range = 500,
+                penetration = 10
+            };
             _type = "gun";
             graphic = new Sprite("wumpsniper");
             center = new Vec2(16f, 8f);

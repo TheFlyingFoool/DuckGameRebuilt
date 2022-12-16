@@ -18,7 +18,7 @@ namespace XnaToFna.ProxyForms
         internal bool INTERNAL_IsNullCursor;
         private bool _IsDisposed;
 
-        public IntPtr Handle => (IntPtr)this.GlobalIndex;
+        public IntPtr Handle => (IntPtr)GlobalIndex;
 
         public static Cursor Current { get; set; } = new Cursor();
 
@@ -64,9 +64,9 @@ namespace XnaToFna.ProxyForms
 
         private Cursor()
         {
-            this.GlobalIndex = AllCursors.Count + 1;
+            GlobalIndex = AllCursors.Count + 1;
             XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating null cursor, globally #{0}", GlobalIndex));
-            this.INTERNAL_IsNullCursor = true;
+            INTERNAL_IsNullCursor = true;
             AllCursors.Add(new WeakReference<Cursor>(this));
         }
 
@@ -74,26 +74,26 @@ namespace XnaToFna.ProxyForms
 
         public Cursor(IntPtr handle)
         {
-            this.GlobalIndex = AllCursors.Count + 1;
+            GlobalIndex = AllCursors.Count + 1;
             XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating reapplied cursor from #{0}, globally #{1}", handle, GlobalIndex));
-            this._Apply(_FromHandle(handle));
+            _Apply(_FromHandle(handle));
             AllCursors.Add(new WeakReference<Cursor>(this));
         }
 
         public Cursor(string fileName)
         {
-            this.GlobalIndex = AllCursors.Count + 1;
+            GlobalIndex = AllCursors.Count + 1;
             XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating cursor from file, globally #{0}", GlobalIndex));
             using (Stream stream = File.OpenRead(fileName))
-                this._Load(stream);
+                _Load(stream);
             AllCursors.Add(new WeakReference<Cursor>(this));
         }
 
         public Cursor(Stream stream)
         {
-            this.GlobalIndex = AllCursors.Count + 1;
+            GlobalIndex = AllCursors.Count + 1;
             XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating cursor from stream, globally #{0}", GlobalIndex));
-            this._Load(stream);
+            _Load(stream);
             AllCursors.Add(new WeakReference<Cursor>(this));
         }
 
@@ -114,20 +114,20 @@ namespace XnaToFna.ProxyForms
         {
             if (other != null)
                 return;
-            this.INTERNAL_IsNullCursor = true;
+            INTERNAL_IsNullCursor = true;
         }
 
         private void _Load(Stream stream)
         {
         }
 
-        public void Dispose() => this.Dispose(true);
+        public void Dispose() => Dispose(true);
 
         private void Dispose(bool disposing)
         {
-            if (this._IsDisposed)
+            if (_IsDisposed)
                 return;
-            this._IsDisposed = true;
+            _IsDisposed = true;
         }
     }
 }

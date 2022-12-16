@@ -15,15 +15,15 @@ namespace DuckGame
 
         public virtual AIState DoUpdate(Duck duck, DuckAI ai)
         {
-            if (this._state.Count <= 0)
-                return this.Update(duck, ai);
-            AIState aiState = this._state.Peek().DoUpdate(duck, ai);
+            if (_state.Count <= 0)
+                return Update(duck, ai);
+            AIState aiState = _state.Peek().DoUpdate(duck, ai);
             if (aiState == null)
-                this._state.Pop();
-            else if (aiState != this._state.Peek())
+                _state.Pop();
+            else if (aiState != _state.Peek())
             {
-                this._state.Pop();
-                this._state.Push(aiState);
+                _state.Pop();
+                _state.Push(aiState);
             }
             return this;
         }

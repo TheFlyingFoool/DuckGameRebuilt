@@ -94,10 +94,10 @@ namespace DuckGame
             {
                 name = "TARGETS",
                 challenges = {
-          "challenge/targets01",
-          "challenge/targets03ouya",
-          "challenge/targets02ouya"
-        },
+                  "challenge/targets01",
+                  "challenge/targets03ouya",
+                  "challenge/targets02ouya"
+                },
                 trophiesRequired = 0
             }, 0)
             {
@@ -110,11 +110,11 @@ namespace DuckGame
             ArcadeMachine arcadeMachine2 = new ArcadeMachine(vec2_3.x, vec2_3.y, new ChallengeGroup()
             {
                 name = "VARIETY ZONE",
-                challenges = {
-          "challenge/obstacle",
-          "challenge/shootout02",
-          "challenge/jetpack02"
-        },
+                        challenges = {
+                  "challenge/obstacle",
+                  "challenge/shootout02",
+                  "challenge/jetpack02"
+                },
                 trophiesRequired = 0
             }, 6)
             {
@@ -230,7 +230,7 @@ namespace DuckGame
             {
                 if (!_quitting)
                 {
-                    if (Input.Pressed("START"))
+                    if (Input.Pressed(Triggers.Start))
                     {
                         _pauseGroup.Open();
                         _pauseMenu.Open();
@@ -444,7 +444,7 @@ namespace DuckGame
                         if (challenge.hover)
                         {
                             obj = challenge;
-                            if (Input.Pressed("SHOOT"))
+                            if (Input.Pressed(Triggers.Shoot))
                             {
                                 _hud.activeChallengeGroup = challenge.data;
                                 _desiredState = ArcadeState.ViewChallenge;
@@ -460,7 +460,7 @@ namespace DuckGame
                         if (_prizeTable.hover)
                         {
                             obj = _prizeTable;
-                            if (Input.Pressed("SHOOT"))
+                            if (Input.Pressed(Triggers.Shoot))
                             {
                                 _desiredState = ArcadeState.UnlockScreen;
                                 _followCam.manualViewSize = _followCam.viewSize;

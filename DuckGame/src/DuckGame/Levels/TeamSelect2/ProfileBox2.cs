@@ -603,21 +603,21 @@ namespace DuckGame
                     OpenDoor();
                     flag1 = true;
                 }
-                if (_inputProfile.JoinGamePressed() && !_hatSelector.open && (!NetworkDebugger.enabled || NetworkDebugger._instances[NetworkDebugger.currentIndex].hover && (Input.Down("SHOOT") || Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift)) || NetworkDebugger.letJoin))
+                if (_inputProfile.JoinGamePressed() && !_hatSelector.open && (!NetworkDebugger.enabled || NetworkDebugger._instances[NetworkDebugger.currentIndex].hover && (Input.Down(Triggers.Shoot) || Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift)) || NetworkDebugger.letJoin))
                 {
                     if (!_playerActive)
                     {
                         OpenDoor();
                         flag1 = true;
                     }
-                    if (NetworkDebugger.letJoin && !Input.Down("SHOOT") && !Keyboard.Down(Keys.LeftShift) && !Keyboard.Down(Keys.RightShift))
+                    if (NetworkDebugger.letJoin && !Input.Down(Triggers.Shoot) && !Keyboard.Down(Keys.LeftShift) && !Keyboard.Down(Keys.RightShift))
                     {
                         NetworkDebugger.letJoin = false;
                         hostFrames = 2;
                     }
                 }
             }
-            if (_teamSelect != null && !ready && !Network.isActive && _inputProfile.Pressed("START") && !flag1)
+            if (_teamSelect != null && !ready && !Network.isActive && _inputProfile.Pressed(Triggers.Start) && !flag1)
                 _teamSelect.OpenPauseMenu(this);
             if (!Network.isActive && _duck != null && !_duck.immobilized)
                 _playerActive = true;
@@ -647,7 +647,7 @@ namespace DuckGame
                 {
                     _currentMessage = 4;
                     _duck.canFire = false;
-                    if (_duck.isServerForObject && doorIsOpen && _inputProfile.Pressed("SHOOT") && !_hatSelector.open && _hatSelector.fade < 0.01f)
+                    if (_duck.isServerForObject && doorIsOpen && _inputProfile.Pressed(Triggers.Shoot) && !_hatSelector.open && _hatSelector.fade < 0.01f)
                     {
                         _duck.immobilized = true;
                         _hatSelector.Open(_playerProfile);
@@ -833,7 +833,7 @@ namespace DuckGame
                                 _doorIcon.frame = 10;
                                 Graphics.Draw(_doorIcon, (int)x + 57, y + 31f);
                                 _fontSmall.DrawOutline("PRESS", new Vec2(x + 19f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                _fontSmall.DrawOutline("START", new Vec2(x + 85f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _fontSmall.DrawOutline(Triggers.Start, new Vec2(x + 85f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
                             else if (flag2)
                             {
@@ -940,7 +940,7 @@ namespace DuckGame
                                     _doorIcon.frame = 10;
                                     Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
                                     _fontSmall.DrawOutline("PRESS", new Vec2(x + 20f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                    _fontSmall.DrawOutline("START", new Vec2(x + 86f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                    _fontSmall.DrawOutline(Triggers.Start, new Vec2(x + 86f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                                 }
                                 else if (flag2)
                                 {
@@ -1310,7 +1310,7 @@ namespace DuckGame
                             else if (_tutorialMessages.frame == 3)
                             {
                                 _font.Draw("@CANCEL@", new Vec2(x + 45f + num3, y + 17f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
-                                _font.Draw("CANCEL", new Vec2(x + 29f + num3, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw(Triggers.Cancel, new Vec2(x + 29f + num3, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
                             else if (_tutorialMessages.frame == 4)
                             {
@@ -1444,7 +1444,7 @@ namespace DuckGame
                             else if (_tutorialMessages.frame == 3)
                             {
                                 _font.Draw("@CANCEL@", new Vec2(x + 45f + num1, y + 17f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
-                                _font.Draw("CANCEL", new Vec2(x + 29f + num1, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw(Triggers.Cancel, new Vec2(x + 29f + num1, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
                             else if (_tutorialMessages.frame == 4)
                             {

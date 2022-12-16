@@ -420,6 +420,7 @@ namespace DuckGame
                         MonoMain.noIntro = true;
                         break;
                     case "-firebreak":
+                    case "-unlockall":
                         MonoMain.firebreak = true;
                         break;
                     case "-startineditor":

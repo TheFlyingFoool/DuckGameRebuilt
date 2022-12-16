@@ -159,7 +159,7 @@ namespace DuckGame
                     {
                         ChallengeData challenge2 = GetChallenge(challenge1.Value.prevchal);
                         ChallengeSaveData saveData = p.GetSaveData(challenge2.levelID, true);
-                        if (saveData != null && saveData.trophy > TrophyType.Baseline)
+                        if (saveData != null && (FireDebug.Debugging || saveData.trophy > TrophyType.Baseline))
                             chancyChallenges.Add(challenge1.Value);
                     }
                     else

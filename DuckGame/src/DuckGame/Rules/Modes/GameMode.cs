@@ -341,7 +341,7 @@ namespace DuckGame
                     _watch = new Stopwatch();
                 _watch.Start();
             }
-            if (Graphics.fade > 0.9f && Input.Pressed("START") && !Network.isActive)
+            if (Graphics.fade > 0.9f && Input.Pressed(Triggers.Start) && !Network.isActive)
             {
                 if (_watch != null)
                     _watch.Stop();

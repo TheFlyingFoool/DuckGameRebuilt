@@ -184,7 +184,7 @@ namespace DuckGame
 
         public override void UpdateParts()
         {
-            if (!doubleUpdating && Input.Down("SELECT"))
+            if (!doubleUpdating && Input.Down(Triggers.Select))
             {
                 doubleUpdating = true;
                 UpdateParts();
@@ -275,7 +275,7 @@ namespace DuckGame
                     }
                 }
             }
-            if (_swapped && Input.Pressed("SELECT"))
+            if (_swapped && Input.Pressed(Triggers.Select))
             {
                 HUD.CloseAllCorners();
                 SFX.Play("resume", 0.6f);

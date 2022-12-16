@@ -230,7 +230,7 @@ namespace DuckGame
                 else
                     _canGrab = false;
                 _grappleDist = num;
-                if (duck.inputProfile.Pressed("JUMP") && duck._trapped == null)
+                if (duck.inputProfile.Pressed(Triggers.Jump) && duck._trapped == null)
                 {
                     if (_harpoon.inGun)
                     {
@@ -291,9 +291,9 @@ namespace DuckGame
                 }
                 if (_rope.properLength > 0.0)
                 {
-                    if (duck.inputProfile.Down("UP") && _rope.properLength >= 16.0)
+                    if (duck.inputProfile.Down(Triggers.Up) && _rope.properLength >= 16.0)
                         _rope.properLength -= 2f;
-                    if (duck.inputProfile.Down("DOWN") && _rope.properLength <= 256.0)
+                    if (duck.inputProfile.Down(Triggers.Down) && _rope.properLength <= 256.0)
                         _rope.properLength += 2f;
                     _rope.properLength = Maths.Clamp(_rope.properLength, 16f, 256f);
                 }

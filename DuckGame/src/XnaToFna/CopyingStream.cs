@@ -16,18 +16,18 @@ namespace XnaToFna
         public bool LeaveOutputOpen;
         public bool Copy = true;
 
-        public override bool CanRead => this.Input.CanRead;
+        public override bool CanRead => Input.CanRead;
 
-        public override bool CanSeek => this.Input.CanSeek;
+        public override bool CanSeek => Input.CanSeek;
 
-        public override bool CanWrite => this.Input.CanWrite;
+        public override bool CanWrite => Input.CanWrite;
 
-        public override long Length => this.Input.Length;
+        public override long Length => Input.Length;
 
         public override long Position
         {
-            get => this.Input.Position;
-            set => this.Seek(value, SeekOrigin.Begin);
+            get => Input.Position;
+            set => Seek(value, SeekOrigin.Begin);
         }
 
         public CopyingStream(Stream input, Stream output)
@@ -37,32 +37,32 @@ namespace XnaToFna
 
         public CopyingStream(Stream input, bool leaveInputOpen, Stream output, bool leaveOutputOpen)
         {
-            this.Input = input;
-            this.LeaveInputOpen = leaveInputOpen;
-            this.Output = output;
-            this.LeaveOutputOpen = leaveOutputOpen;
+            Input = input;
+            LeaveInputOpen = leaveInputOpen;
+            Output = output;
+            LeaveOutputOpen = leaveOutputOpen;
         }
 
         public override void Flush()
         {
-            this.Input.Flush();
-            if (!this.Copy)
+            Input.Flush();
+            if (!Copy)
                 return;
-            this.Output.Flush();
+            Output.Flush();
         }
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            int count1 = this.Input.Read(buffer, offset, count);
-            if (this.Copy)
-                this.Output.Write(buffer, offset, count1);
+            int count1 = Input.Read(buffer, offset, count);
+            if (Copy)
+                Output.Write(buffer, offset, count1);
             return count1;
         }
 
         public override long Seek(long offset, SeekOrigin origin)
         {
-            if (!this.Copy)
-                return this.Input.Seek(offset, origin);
+            if (!Copy)
+                return Input.Seek(offset, origin);
             long offset1 = 0;
             switch (origin)
             {
@@ -70,43 +70,43 @@ namespace XnaToFna
                     offset1 = offset;
                     break;
                 case SeekOrigin.Current:
-                    offset1 = this.Position + offset;
+                    offset1 = Position + offset;
                     break;
                 case SeekOrigin.End:
-                    offset1 = this.Input.Length - offset;
+                    offset1 = Input.Length - offset;
                     break;
             }
-            if (offset1 == this.Position)
-                return this.Position;
-            if (offset1 < this.Position)
+            if (offset1 == Position)
+                return Position;
+            if (offset1 < Position)
             {
-                this.Output.Seek(offset1, SeekOrigin.Begin);
-                return this.Input.Seek(offset, origin);
+                Output.Seek(offset1, SeekOrigin.Begin);
+                return Input.Seek(offset, origin);
             }
-            byte[] buffer = new byte[offset - this.Position];
+            byte[] buffer = new byte[offset - Position];
             int offset2 = 0;
             while (offset2 < buffer.Length)
-                offset2 += this.Input.Read(buffer, offset2, buffer.Length - offset2);
-            this.Output.Write(buffer, 0, buffer.Length);
-            return this.Position;
+                offset2 += Input.Read(buffer, offset2, buffer.Length - offset2);
+            Output.Write(buffer, 0, buffer.Length);
+            return Position;
         }
 
-        public override void SetLength(long value) => this.Input.SetLength(value);
+        public override void SetLength(long value) => Input.SetLength(value);
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            this.Input.Write(buffer, offset, count);
-            if (!this.Copy)
+            Input.Write(buffer, offset, count);
+            if (!Copy)
                 return;
-            this.Output.Write(buffer, offset, count);
+            Output.Write(buffer, offset, count);
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (!this.LeaveInputOpen)
-                this.Input.Dispose();
-            if (!this.LeaveOutputOpen)
-                this.Output.Dispose();
+            if (!LeaveInputOpen)
+                Input.Dispose();
+            if (!LeaveOutputOpen)
+                Output.Dispose();
             base.Dispose(disposing);
         }
     }

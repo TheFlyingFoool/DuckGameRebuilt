@@ -15,23 +15,23 @@ namespace DuckGame
     public static class MathHelper
     {
         /// <summary>Represents the mathematical constant e(2.71828175).</summary>
-        public const float E = 2.718282f;
+        public const float E = (float)Math.E;
         /// <summary>Represents the log base ten of e(0.4342945).</summary>
         public const float Log10E = 0.4342945f;
         /// <summary>Represents the log base two of e(1.442695).</summary>
         public const float Log2E = 1.442695f;
         /// <summary>Represents the value of pi(3.14159274).</summary>
-        public const float Pi = 3.141593f;
+        public const float Pi = (float)Math.PI;
         /// <summary>
         /// Represents the value of pi divided by two(1.57079637).
         /// </summary>
-        public const float PiOver2 = 1.570796f;
+        public const float PiOver2 = (float)(Math.PI / 2.0);
         /// <summary>
         /// Represents the value of pi divided by four(0.7853982).
         /// </summary>
-        public const float PiOver4 = 0.7853982f;
+        public const float PiOver4 = (float)(Math.PI / 4.0);
         /// <summary>Represents the value of pi times two(6.28318548).</summary>
-        public const float TwoPi = 6.283185f;
+        public const float TwoPi = (float)(Math.PI * 2.0);
 
         /// <summary>
         /// Returns the Cartesian coordinate for one axis of a point that is defined by a given triangle and two normalized barycentric (areal) coordinates.

@@ -170,7 +170,7 @@ namespace DuckGame
                 return;
             if (_profile.connection != null)
             {
-                if (_profile.connection != DuckNetwork.localConnection && trigger == "MENU2")
+                if (_profile.connection != DuckNetwork.localConnection && trigger == Triggers.Menu2)
                 {
                     _additionalOptionIndex = 0;
                     _showKickMenu = true;
@@ -179,7 +179,7 @@ namespace DuckGame
                     HUD.AddCornerControl(HUDCorner.BottomLeft, "@SELECT@SELECT");
                     HUD.AddCornerControl(HUDCorner.BottomRight, "@CANCEL@BACK");
                 }
-                else if (Network.isServer && trigger == "MENU1" && Network.canSetObservers && _profile.readyForSpectatorChange)
+                else if (Network.isServer && trigger == Triggers.Menu1 && Network.canSetObservers && _profile.readyForSpectatorChange)
                 {
                     if (_profile.slotType != SlotType.Spectator)
                     {
@@ -194,7 +194,7 @@ namespace DuckGame
                         UpdateName();
                     }
                 }
-                if (trigger == "SELECT")
+                if (trigger == Triggers.Select)
                 {
                     if (_profile.connection.data is User)
                         Steam.OverlayOpenURL("http://steamcommunity.com/profiles/" + (_profile.connection.data as User).id.ToString());
@@ -222,9 +222,9 @@ namespace DuckGame
         {
             if (_showMuteMenu)
             {
-                if (Input.Pressed("CANCEL"))
+                if (Input.Pressed(Triggers.Cancel))
                     _showMuteMenu = false;
-                else if (Input.Pressed("UP"))
+                else if (Input.Pressed(Triggers.Up))
                 {
                     if (_muteOptionIndex > 0)
                     {
@@ -232,7 +232,7 @@ namespace DuckGame
                         SFX.Play("textLetter", 0.7f);
                     }
                 }
-                else if (Input.Pressed("DOWN"))
+                else if (Input.Pressed(Triggers.Down))
                 {
                     if (_muteOptionIndex < _muteOptions.Count - 1)
                     {
@@ -240,7 +240,7 @@ namespace DuckGame
                         SFX.Play("textLetter", 0.7f);
                     }
                 }
-                else if (Input.Pressed("SELECT"))
+                else if (Input.Pressed(Triggers.Select))
                 {
                     if (_muteOptionIndex == 0)
                         _profile.muteChat = !_profile.muteChat;
@@ -256,14 +256,14 @@ namespace DuckGame
             }
             else if (_showKickMenu)
             {
-                if (Input.Pressed("CANCEL"))
+                if (Input.Pressed(Triggers.Cancel))
                 {
                     HUD.ClearCorners();
                     _showKickMenu = false;
                     UIMenu.globalUILock = false;
                     Options.Save();
                 }
-                else if (Input.Pressed("SELECT"))
+                else if (Input.Pressed(Triggers.Select))
                 {
                     DuckNetwork.core.kickContext = _profile;
                     bool flag = true;
@@ -309,7 +309,7 @@ namespace DuckGame
                         UIMenu.globalUILock = false;
                     }
                 }
-                else if (Input.Pressed("UP"))
+                else if (Input.Pressed(Triggers.Up))
                 {
                     if (_additionalOptionIndex > 0)
                     {
@@ -317,7 +317,7 @@ namespace DuckGame
                         SFX.Play("textLetter", 0.7f);
                     }
                 }
-                else if (Input.Pressed("DOWN") && _additionalOptionIndex < _additionalOptions.Count - 1)
+                else if (Input.Pressed(Triggers.Down) && _additionalOptionIndex < _additionalOptions.Count - 1)
                 {
                     ++_additionalOptionIndex;
                     SFX.Play("textLetter", 0.7f);

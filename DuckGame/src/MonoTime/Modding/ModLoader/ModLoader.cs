@@ -210,8 +210,10 @@ namespace DuckGame
             xnaToFnaUtil.RelinkAll();
 
 
-            really really = new really();
-            really.name = AssemblyName.GetAssemblyName(path);
+            really really = new really
+            {
+                name = AssemblyName.GetAssemblyName(path)
+            };
             ReaderParameters rp = xnaToFnaUtil.Modder.GenReaderParameters(false);
             (xnaToFnaUtil.Modder.AssemblyResolver as DefaultAssemblyResolver).AddSearchDirectory(folderpath);
             rp.ReadWrite = path != XnaToFnaUtil.ThisAssembly.Location && !xnaToFnaUtil.Mappings.Exists(new Predicate<XnaToFnaMapping>(really.ScanPath));

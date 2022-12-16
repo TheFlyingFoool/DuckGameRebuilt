@@ -174,7 +174,7 @@ namespace DuckGame
                 previewThing = Editor.GetThing(contains);
                 if (previewThing != null)
                 {
-                    this.previewSprite = this.previewThing.GeneratePreview(32, 32, true);
+                    previewSprite = previewThing.GeneratePreview(32, 32, true);
                 }
             }
             collisionSize = new Vec2(14f, 8f);

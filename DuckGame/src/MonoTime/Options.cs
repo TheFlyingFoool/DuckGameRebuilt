@@ -390,7 +390,7 @@ namespace DuckGame
             {
                 dgrDescription = "Toggles the menu mouse"
             }, true);
-            menu.Add(new UIMenuItemToggle("Dubber speed", field: new FieldBinding(dGRSettings, "dubberspeed"))
+            menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(dGRSettings, "dubberspeed"))
             {
                 dgrDescription = "For true vim users, adds keybinds from 1-9\n       for faster menu browsing"
             }, true);
@@ -403,6 +403,10 @@ namespace DuckGame
             })
             {
                 dgrDescription = "When starting up the game you'll\n  spawn into the selected level"
+            }, true);
+            menu.Add(new UIMenuItemToggle("Sticky Hats", field: new FieldBinding(dGRSettings, "StickyHats"))
+            {
+                dgrDescription = "Vanity hats no longer fall off when ragdolling"
             }, true);
 
 

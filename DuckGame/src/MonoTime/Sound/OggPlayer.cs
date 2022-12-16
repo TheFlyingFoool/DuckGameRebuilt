@@ -73,46 +73,46 @@ namespace DuckGame
 
         private void ApplyPitch() //dan
         {
-            if (!this._valid || this._instance == null || this._instance.State != SoundState.Playing)
+            if (!_valid || _instance == null || _instance.State != SoundState.Playing)
                 return;
-            this._instance.Pitch = _pitch;
+            _instance.Pitch = _pitch;
         }
         private void ApplyPan() //dan
         {
-            if (!this._valid || this._instance == null || this._instance.State != SoundState.Playing)
+            if (!_valid || _instance == null || _instance.State != SoundState.Playing)
                 return;
-            this._instance.Pan = _pan;
+            _instance.Pan = _pan;
         }
         public float pitch //dan
         {
-            get => this._pitch;
+            get => _pitch;
             set
             {
-                bool changed = this._pitch != value;
-                this._pitch = value;
-                if (this._instance == null)
+                bool changed = _pitch != value;
+                _pitch = value;
+                if (_instance == null)
                     return;
                 if (changed)
                 {
-                    lock (this._instance)
-                        this.ApplyPitch();
+                    lock (_instance)
+                        ApplyPitch();
                 }
 
             }
         }
         public float pan //dan
         {
-            get => this._pan;
+            get => _pan;
             set
             {
-                bool changed = this._pan != value;
-                this._pan = value;
-                if (this._instance == null)
+                bool changed = _pan != value;
+                _pan = value;
+                if (_instance == null)
                     return;
                 if (changed)
                 {
-                    lock (this._instance)
-                        this.ApplyPan();
+                    lock (_instance)
+                        ApplyPan();
                 }
             }
         }

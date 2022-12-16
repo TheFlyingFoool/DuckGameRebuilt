@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		static ProfileCapabilities()
 		{
-			/* This data mostly came from Shawn Hargreaves...
+            /* This data mostly came from Shawn Hargreaves...
 			 * https://www.shawnhargreaves.com/blog/reach-vs-hidef.html
 			 * ... but the rest came from just getting the variables
 			 * from XNA and printing their contents. As far as I
@@ -104,216 +104,220 @@ namespace Microsoft.Xna.Framework.Graphics
 			 * -flibit
 			 */
 
-			Reach = new ProfileCapabilities();
-			Reach.Profile = GraphicsProfile.Reach;
-			Reach.VertexShaderVersion =	0x200;
-			Reach.PixelShaderVersion =	0x200;
-			Reach.OcclusionQuery =		false;
-			Reach.GetBackBufferData =	false;
-			Reach.SeparateAlphaBlend =	false;
-			Reach.DestBlendSrcAlphaSat =	false;
-			Reach.MinMaxSrcDestBlend =	false;
-			Reach.MaxPrimitiveCount =	65535;
-			Reach.IndexElementSize32 =	false;
-			Reach.MaxVertexStreams =	16;
-			Reach.MaxStreamStride =		255;
-			Reach.MaxVertexBufferSize =	0x3FFFFFF;
-			Reach.MaxIndexBufferSize =	0x3FFFFFF;
-			Reach.MaxTextureSize =		2048;
-			Reach.MaxCubeSize =		512;
-			Reach.MaxVolumeExtent =		0;
-			Reach.MaxTextureAspectRatio =	2048;
-			Reach.MaxSamplers =		16;
-			Reach.MaxVertexSamplers =	0;
-			Reach.MaxRenderTargets =	1;
-			Reach.NonPow2Unconditional =	false;
-			Reach.NonPow2Cube =		false;
-			Reach.NonPow2Volume =		false;
-			Reach.ValidTextureFormats = new List<SurfaceFormat>()
-			{
-				SurfaceFormat.Color,
-				SurfaceFormat.Bgr565,
-				SurfaceFormat.Bgra5551,
-				SurfaceFormat.Bgra4444,
-				SurfaceFormat.Dxt1,
-				SurfaceFormat.Dxt3,
-				SurfaceFormat.Dxt5,
-				SurfaceFormat.NormalizedByte2,
-				SurfaceFormat.NormalizedByte4
-			};
-			Reach.ValidCubeFormats = new List<SurfaceFormat>()
-			{
-				SurfaceFormat.Color,
-				SurfaceFormat.Bgr565,
-				SurfaceFormat.Bgra5551,
-				SurfaceFormat.Bgra4444,
-				SurfaceFormat.Dxt1,
-				SurfaceFormat.Dxt3,
-				SurfaceFormat.Dxt5
-			};
-			Reach.ValidVolumeFormats = new List<SurfaceFormat>();
-			Reach.ValidVertexTextureFormats = new List<SurfaceFormat>();
-			Reach.InvalidFilterFormats = new List<SurfaceFormat>();
-			Reach.InvalidBlendFormats = new List<SurfaceFormat>();
-			Reach.ValidDepthFormats = new List<DepthFormat>()
-			{
-				DepthFormat.Depth16,
-				DepthFormat.Depth24,
-				DepthFormat.Depth24Stencil8
-			};
-			Reach.ValidVertexFormats = new List<VertexElementFormat>()
-			{
-				VertexElementFormat.Color,
-				VertexElementFormat.Single,
-				VertexElementFormat.Vector2,
-				VertexElementFormat.Vector3,
-				VertexElementFormat.Vector4,
-				VertexElementFormat.Byte4,
-				VertexElementFormat.Short2,
-				VertexElementFormat.Short4,
-				VertexElementFormat.NormalizedShort2,
-				VertexElementFormat.NormalizedShort4
-			};
+            Reach = new ProfileCapabilities
+            {
+                Profile = GraphicsProfile.Reach,
+                VertexShaderVersion = 0x200,
+                PixelShaderVersion = 0x200,
+                OcclusionQuery = false,
+                GetBackBufferData = false,
+                SeparateAlphaBlend = false,
+                DestBlendSrcAlphaSat = false,
+                MinMaxSrcDestBlend = false,
+                MaxPrimitiveCount = 65535,
+                IndexElementSize32 = false,
+                MaxVertexStreams = 16,
+                MaxStreamStride = 255,
+                MaxVertexBufferSize = 0x3FFFFFF,
+                MaxIndexBufferSize = 0x3FFFFFF,
+                MaxTextureSize = 2048,
+                MaxCubeSize = 512,
+                MaxVolumeExtent = 0,
+                MaxTextureAspectRatio = 2048,
+                MaxSamplers = 16,
+                MaxVertexSamplers = 0,
+                MaxRenderTargets = 1,
+                NonPow2Unconditional = false,
+                NonPow2Cube = false,
+                NonPow2Volume = false,
+                ValidTextureFormats = new List<SurfaceFormat>()
+            {
+                SurfaceFormat.Color,
+                SurfaceFormat.Bgr565,
+                SurfaceFormat.Bgra5551,
+                SurfaceFormat.Bgra4444,
+                SurfaceFormat.Dxt1,
+                SurfaceFormat.Dxt3,
+                SurfaceFormat.Dxt5,
+                SurfaceFormat.NormalizedByte2,
+                SurfaceFormat.NormalizedByte4
+            },
+                ValidCubeFormats = new List<SurfaceFormat>()
+            {
+                SurfaceFormat.Color,
+                SurfaceFormat.Bgr565,
+                SurfaceFormat.Bgra5551,
+                SurfaceFormat.Bgra4444,
+                SurfaceFormat.Dxt1,
+                SurfaceFormat.Dxt3,
+                SurfaceFormat.Dxt5
+            },
+                ValidVolumeFormats = new List<SurfaceFormat>(),
+                ValidVertexTextureFormats = new List<SurfaceFormat>(),
+                InvalidFilterFormats = new List<SurfaceFormat>(),
+                InvalidBlendFormats = new List<SurfaceFormat>(),
+                ValidDepthFormats = new List<DepthFormat>()
+            {
+                DepthFormat.Depth16,
+                DepthFormat.Depth24,
+                DepthFormat.Depth24Stencil8
+            },
+                ValidVertexFormats = new List<VertexElementFormat>()
+            {
+                VertexElementFormat.Color,
+                VertexElementFormat.Single,
+                VertexElementFormat.Vector2,
+                VertexElementFormat.Vector3,
+                VertexElementFormat.Vector4,
+                VertexElementFormat.Byte4,
+                VertexElementFormat.Short2,
+                VertexElementFormat.Short4,
+                VertexElementFormat.NormalizedShort2,
+                VertexElementFormat.NormalizedShort4
+            }
+            };
 
-			HiDef = new ProfileCapabilities();
-			HiDef.Profile = GraphicsProfile.HiDef;
-			HiDef.VertexShaderVersion =	0x300;
-			HiDef.PixelShaderVersion =	0x300;
-			HiDef.OcclusionQuery =		true;
-			HiDef.GetBackBufferData =	true;
-			HiDef.SeparateAlphaBlend =	true;
-			HiDef.DestBlendSrcAlphaSat =	true;
-			HiDef.MinMaxSrcDestBlend =	true;
-			HiDef.MaxPrimitiveCount =	1048575;
-			HiDef.IndexElementSize32 =	true;
-			HiDef.MaxVertexStreams =	16;
-			HiDef.MaxStreamStride =		255;
-			HiDef.MaxVertexBufferSize =	0x3FFFFFF;
-			HiDef.MaxIndexBufferSize =	0x3FFFFFF;
-			HiDef.MaxTextureSize =		8192; /* DX10 min spec */
-			HiDef.MaxCubeSize =		8192; /* DX10 min spec */
-			HiDef.MaxVolumeExtent =		2048; /* DX10 min spec */
-			HiDef.MaxTextureAspectRatio =	2048;
-			HiDef.MaxSamplers =		16;
-			HiDef.MaxVertexSamplers =	4;
-			HiDef.MaxRenderTargets =	4;
-			HiDef.NonPow2Unconditional =	true;
-			HiDef.NonPow2Cube =		true;
-			HiDef.NonPow2Volume =		true;
-			HiDef.ValidTextureFormats = new List<SurfaceFormat>()
-			{
-				SurfaceFormat.Color,
-				SurfaceFormat.Bgr565,
-				SurfaceFormat.Bgra5551,
-				SurfaceFormat.Bgra4444,
-				SurfaceFormat.Dxt1,
-				SurfaceFormat.Dxt3,
-				SurfaceFormat.Dxt5,
-				SurfaceFormat.NormalizedByte2,
-				SurfaceFormat.NormalizedByte4,
-				SurfaceFormat.Rgba1010102,
-				SurfaceFormat.Rg32,
-				SurfaceFormat.Rgba64,
-				SurfaceFormat.Alpha8,
-				SurfaceFormat.Single,
-				SurfaceFormat.Vector2,
-				SurfaceFormat.Vector4,
-				SurfaceFormat.HalfSingle,
-				SurfaceFormat.HalfVector2,
-				SurfaceFormat.HalfVector4,
-				SurfaceFormat.HdrBlendable
-			};
-			HiDef.ValidCubeFormats = new List<SurfaceFormat>()
-			{
-				SurfaceFormat.Color,
-				SurfaceFormat.Bgr565,
-				SurfaceFormat.Bgra5551,
-				SurfaceFormat.Bgra4444,
-				SurfaceFormat.Dxt1,
-				SurfaceFormat.Dxt3,
-				SurfaceFormat.Dxt5,
-				SurfaceFormat.Rgba1010102,
-				SurfaceFormat.Rg32,
-				SurfaceFormat.Rgba64,
-				SurfaceFormat.Alpha8,
-				SurfaceFormat.Single,
-				SurfaceFormat.Vector2,
-				SurfaceFormat.Vector4,
-				SurfaceFormat.HalfSingle,
-				SurfaceFormat.HalfVector2,
-				SurfaceFormat.HalfVector4,
-				SurfaceFormat.HdrBlendable
-			};
-			HiDef.ValidVolumeFormats = new List<SurfaceFormat>()
-			{
-				SurfaceFormat.Color,
-				SurfaceFormat.Bgr565,
-				SurfaceFormat.Bgra5551,
-				SurfaceFormat.Bgra4444,
-				SurfaceFormat.Rgba1010102,
-				SurfaceFormat.Rg32,
-				SurfaceFormat.Rgba64,
-				SurfaceFormat.Alpha8,
-				SurfaceFormat.Single,
-				SurfaceFormat.Vector2,
-				SurfaceFormat.Vector4,
-				SurfaceFormat.HalfSingle,
-				SurfaceFormat.HalfVector2,
-				SurfaceFormat.HalfVector4,
-				SurfaceFormat.HdrBlendable
-			};
-			HiDef.ValidVertexTextureFormats = new List<SurfaceFormat>()
-			{
-				SurfaceFormat.Single,
-				SurfaceFormat.Vector2,
-				SurfaceFormat.Vector4,
-				SurfaceFormat.HalfSingle,
-				SurfaceFormat.HalfVector2,
-				SurfaceFormat.HalfVector4,
-				SurfaceFormat.HdrBlendable
-			};
-			HiDef.InvalidFilterFormats = new List<SurfaceFormat>()
-			{
-				SurfaceFormat.Single,
-				SurfaceFormat.Vector2,
-				SurfaceFormat.Vector4,
-				SurfaceFormat.HalfSingle,
-				SurfaceFormat.HalfVector2,
-				SurfaceFormat.HalfVector4,
-				SurfaceFormat.HdrBlendable
-			};
-			HiDef.InvalidBlendFormats = new List<SurfaceFormat>()
-			{
-				SurfaceFormat.Single,
-				SurfaceFormat.Vector2,
-				SurfaceFormat.Vector4,
-				SurfaceFormat.HalfSingle,
-				SurfaceFormat.HalfVector2,
-				SurfaceFormat.HalfVector4,
-				SurfaceFormat.HdrBlendable
-			};
-			HiDef.ValidDepthFormats = new List<DepthFormat>()
-			{
-				DepthFormat.Depth16,
-				DepthFormat.Depth24,
-				DepthFormat.Depth24Stencil8
-			};
-			HiDef.ValidVertexFormats = new List<VertexElementFormat>()
-			{
-				VertexElementFormat.Color,
-				VertexElementFormat.Single,
-				VertexElementFormat.Vector2,
-				VertexElementFormat.Vector3,
-				VertexElementFormat.Vector4,
-				VertexElementFormat.Byte4,
-				VertexElementFormat.Short2,
-				VertexElementFormat.Short4,
-				VertexElementFormat.NormalizedShort2,
-				VertexElementFormat.NormalizedShort4,
-				VertexElementFormat.HalfVector2,
-				VertexElementFormat.HalfVector4
-			};
-		}
+            HiDef = new ProfileCapabilities
+            {
+                Profile = GraphicsProfile.HiDef,
+                VertexShaderVersion = 0x300,
+                PixelShaderVersion = 0x300,
+                OcclusionQuery = true,
+                GetBackBufferData = true,
+                SeparateAlphaBlend = true,
+                DestBlendSrcAlphaSat = true,
+                MinMaxSrcDestBlend = true,
+                MaxPrimitiveCount = 1048575,
+                IndexElementSize32 = true,
+                MaxVertexStreams = 16,
+                MaxStreamStride = 255,
+                MaxVertexBufferSize = 0x3FFFFFF,
+                MaxIndexBufferSize = 0x3FFFFFF,
+                MaxTextureSize = 8192, /* DX10 min spec */
+                MaxCubeSize = 8192, /* DX10 min spec */
+                MaxVolumeExtent = 2048, /* DX10 min spec */
+                MaxTextureAspectRatio = 2048,
+                MaxSamplers = 16,
+                MaxVertexSamplers = 4,
+                MaxRenderTargets = 4,
+                NonPow2Unconditional = true,
+                NonPow2Cube = true,
+                NonPow2Volume = true,
+                ValidTextureFormats = new List<SurfaceFormat>()
+            {
+                SurfaceFormat.Color,
+                SurfaceFormat.Bgr565,
+                SurfaceFormat.Bgra5551,
+                SurfaceFormat.Bgra4444,
+                SurfaceFormat.Dxt1,
+                SurfaceFormat.Dxt3,
+                SurfaceFormat.Dxt5,
+                SurfaceFormat.NormalizedByte2,
+                SurfaceFormat.NormalizedByte4,
+                SurfaceFormat.Rgba1010102,
+                SurfaceFormat.Rg32,
+                SurfaceFormat.Rgba64,
+                SurfaceFormat.Alpha8,
+                SurfaceFormat.Single,
+                SurfaceFormat.Vector2,
+                SurfaceFormat.Vector4,
+                SurfaceFormat.HalfSingle,
+                SurfaceFormat.HalfVector2,
+                SurfaceFormat.HalfVector4,
+                SurfaceFormat.HdrBlendable
+            },
+                ValidCubeFormats = new List<SurfaceFormat>()
+            {
+                SurfaceFormat.Color,
+                SurfaceFormat.Bgr565,
+                SurfaceFormat.Bgra5551,
+                SurfaceFormat.Bgra4444,
+                SurfaceFormat.Dxt1,
+                SurfaceFormat.Dxt3,
+                SurfaceFormat.Dxt5,
+                SurfaceFormat.Rgba1010102,
+                SurfaceFormat.Rg32,
+                SurfaceFormat.Rgba64,
+                SurfaceFormat.Alpha8,
+                SurfaceFormat.Single,
+                SurfaceFormat.Vector2,
+                SurfaceFormat.Vector4,
+                SurfaceFormat.HalfSingle,
+                SurfaceFormat.HalfVector2,
+                SurfaceFormat.HalfVector4,
+                SurfaceFormat.HdrBlendable
+            },
+                ValidVolumeFormats = new List<SurfaceFormat>()
+            {
+                SurfaceFormat.Color,
+                SurfaceFormat.Bgr565,
+                SurfaceFormat.Bgra5551,
+                SurfaceFormat.Bgra4444,
+                SurfaceFormat.Rgba1010102,
+                SurfaceFormat.Rg32,
+                SurfaceFormat.Rgba64,
+                SurfaceFormat.Alpha8,
+                SurfaceFormat.Single,
+                SurfaceFormat.Vector2,
+                SurfaceFormat.Vector4,
+                SurfaceFormat.HalfSingle,
+                SurfaceFormat.HalfVector2,
+                SurfaceFormat.HalfVector4,
+                SurfaceFormat.HdrBlendable
+            },
+                ValidVertexTextureFormats = new List<SurfaceFormat>()
+            {
+                SurfaceFormat.Single,
+                SurfaceFormat.Vector2,
+                SurfaceFormat.Vector4,
+                SurfaceFormat.HalfSingle,
+                SurfaceFormat.HalfVector2,
+                SurfaceFormat.HalfVector4,
+                SurfaceFormat.HdrBlendable
+            },
+                InvalidFilterFormats = new List<SurfaceFormat>()
+            {
+                SurfaceFormat.Single,
+                SurfaceFormat.Vector2,
+                SurfaceFormat.Vector4,
+                SurfaceFormat.HalfSingle,
+                SurfaceFormat.HalfVector2,
+                SurfaceFormat.HalfVector4,
+                SurfaceFormat.HdrBlendable
+            },
+                InvalidBlendFormats = new List<SurfaceFormat>()
+            {
+                SurfaceFormat.Single,
+                SurfaceFormat.Vector2,
+                SurfaceFormat.Vector4,
+                SurfaceFormat.HalfSingle,
+                SurfaceFormat.HalfVector2,
+                SurfaceFormat.HalfVector4,
+                SurfaceFormat.HdrBlendable
+            },
+                ValidDepthFormats = new List<DepthFormat>()
+            {
+                DepthFormat.Depth16,
+                DepthFormat.Depth24,
+                DepthFormat.Depth24Stencil8
+            },
+                ValidVertexFormats = new List<VertexElementFormat>()
+            {
+                VertexElementFormat.Color,
+                VertexElementFormat.Single,
+                VertexElementFormat.Vector2,
+                VertexElementFormat.Vector3,
+                VertexElementFormat.Vector4,
+                VertexElementFormat.Byte4,
+                VertexElementFormat.Short2,
+                VertexElementFormat.Short4,
+                VertexElementFormat.NormalizedShort2,
+                VertexElementFormat.NormalizedShort4,
+                VertexElementFormat.HalfVector2,
+                VertexElementFormat.HalfVector4
+            }
+            };
+        }
 
 		#endregion
 

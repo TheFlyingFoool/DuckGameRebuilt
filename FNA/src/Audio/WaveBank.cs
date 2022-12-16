@@ -128,9 +128,11 @@ namespace Microsoft.Xna.Framework.Audio
 			}
 			bankData = FAudio.FAudio_fopen(safeName);
 
-			FAudio.FACTStreamingParameters settings = new FAudio.FACTStreamingParameters();
-			settings.file = bankData;
-			FAudio.FACTAudioEngine_CreateStreamingWaveBank(
+            FAudio.FACTStreamingParameters settings = new FAudio.FACTStreamingParameters
+            {
+                file = bankData
+            };
+            FAudio.FACTAudioEngine_CreateStreamingWaveBank(
 				audioEngine.handle,
 				ref settings,
 				out handle

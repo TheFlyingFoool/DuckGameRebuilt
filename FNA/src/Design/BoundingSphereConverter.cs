@@ -53,10 +53,10 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return (object) new BoundingSphere(
-				(Vector3) propertyValues["Center"],
-				(float) propertyValues["Radius"]
-			);
+			return new BoundingSphere(
+                (Vector3)propertyValues["Center"],
+                (float)propertyValues["Radius"]
+            );
 		}
 
 		#endregion

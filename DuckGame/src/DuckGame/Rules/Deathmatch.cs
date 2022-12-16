@@ -335,7 +335,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (Graphics.fade > 0.9f && Input.Pressed("START") && !NetworkDebugger.enabled)
+            if (Graphics.fade > 0.9f && Input.Pressed(Triggers.Start) && !NetworkDebugger.enabled)
             {
                 _pauseGroup.Open();
                 _pauseMenu.Open();

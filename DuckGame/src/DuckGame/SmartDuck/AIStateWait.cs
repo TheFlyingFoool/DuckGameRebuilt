@@ -11,11 +11,11 @@ namespace DuckGame
     {
         private float _wait;
 
-        public AIStateWait(float wait) => this._wait = wait;
+        public AIStateWait(float wait) => _wait = wait;
 
         public override AIState Update(Duck duck, DuckAI ai)
         {
-            this._wait -= 0.016f;
+            _wait -= 0.016f;
             return _wait <= 0.0 ? null : (AIState)this;
         }
     }

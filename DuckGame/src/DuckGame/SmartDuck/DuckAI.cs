@@ -9,111 +9,111 @@ namespace DuckGame
 		{
 			get
 			{
-				return this._locomotion;
+				return _locomotion;
 			}
 		}
 
 		public void Press(string trigger)
 		{
-			this._inputState[trigger] = InputState.Pressed;
+			_inputState[trigger] = InputState.Pressed;
 		}
 
 		public void HoldDown(string trigger)
 		{
-			this._inputState[trigger] = InputState.Down;
+			_inputState[trigger] = InputState.Down;
 		}
 
 		public void Release(string trigger)
 		{
-			this._inputState[trigger] = InputState.Released;
+			_inputState[trigger] = InputState.Released;
 		}
 
 		public override bool Pressed(string trigger, bool any = false)
 		{
 			InputState outVal;
-			return this._inputState.TryGetValue(trigger, out outVal) && outVal == InputState.Pressed;
+			return _inputState.TryGetValue(trigger, out outVal) && outVal == InputState.Pressed;
 		}
 
 		public override bool Released(string trigger)
 		{
 			InputState outVal;
-			return this._inputState.TryGetValue(trigger, out outVal) && outVal == InputState.Released;
+			return _inputState.TryGetValue(trigger, out outVal) && outVal == InputState.Released;
 		}
 
 		public override bool Down(string trigger)
 		{
 			InputState outVal;
-			return this._inputState.TryGetValue(trigger, out outVal) && (outVal == InputState.Pressed || outVal == InputState.Down);
+			return _inputState.TryGetValue(trigger, out outVal) && (outVal == InputState.Pressed || outVal == InputState.Down);
 		}
 
 		public bool SetTarget(Vec2 t)
 		{
-			this._locomotion.target = t;
-			return this._locomotion.target == Vec2.Zero;
+			_locomotion.target = t;
+			return _locomotion.target == Vec2.Zero;
 		}
 
 		public void TrimLastTarget()
 		{
-			this._locomotion.TrimLastTarget();
+			_locomotion.TrimLastTarget();
 		}
 
 		public DuckAI(InputProfile manualQuacker = null) : base("")
 		{
-			this._state.Push(new AIStateDeathmatchBot());
-			this._manualQuack = manualQuacker;
+			_state.Push(new AIStateDeathmatchBot());
+			_manualQuack = manualQuacker;
 		}
 
 		public virtual void Update(Duck duck)
 		{
-			this.Release("GRAB");
-			this.Release("SHOOT");
-			this._locomotion.Update(this, duck);
-			if (this.jumpWait > 0)
+			Release(Triggers.Grab);
+			Release(Triggers.Shoot);
+			_locomotion.Update(this, duck);
+			if (jumpWait > 0)
 			{
-				this.jumpWait--;
+				jumpWait--;
 			}
 			else
 			{
-				this.jumpWait = 10;
-				this._locomotion.Jump(5);
+				jumpWait = 10;
+				_locomotion.Jump(5);
 			}
-			if (this.quackWait > 0)
+			if (quackWait > 0)
 			{
-				this.quackWait--;
+				quackWait--;
 				return;
 			}
-			this.quackWait = 4;
-			this._locomotion.Quack(2);
+			quackWait = 4;
+			_locomotion.Quack(2);
 		}
 
 		public override void UpdateExtraInput()
 		{
-			if (this._inputState.ContainsKey("QUACK") && this._inputState["QUACK"] == InputState.Pressed)
+			if (_inputState.ContainsKey(Triggers.Quack) && _inputState[Triggers.Quack] == InputState.Pressed)
 			{
-				this._inputState["QUACK"] = InputState.Down;
+				_inputState[Triggers.Quack] = InputState.Down;
 			}
-			if (this._inputState.ContainsKey("STRAFE") && this._inputState["STRAFE"] == InputState.Pressed)
+			if (_inputState.ContainsKey(Triggers.Strafe) && _inputState[Triggers.Strafe] == InputState.Pressed)
 			{
-				this._inputState["STRAFE"] = InputState.Down;
+				_inputState[Triggers.Strafe] = InputState.Down;
 			}
-			if (this._manualQuack != null)
+			if (_manualQuack != null)
 			{
-				if (this._manualQuack.Pressed("QUACK", false))
+				if (_manualQuack.Pressed(Triggers.Quack, false))
 				{
-					this.Press("QUACK");
+					Press(Triggers.Quack);
 				}
-				else if (this._manualQuack.Released("QUACK"))
+				else if (_manualQuack.Released(Triggers.Quack))
 				{
-					this.Release("QUACK");
+					Release(Triggers.Quack);
 				}
-				if (this._manualQuack.Pressed("STRAFE", false))
+				if (_manualQuack.Pressed(Triggers.Strafe, false))
 				{
-					this.Press("STRAFE");
+					Press(Triggers.Strafe);
 					return;
 				}
-				if (this._manualQuack.Released("STRAFE"))
+				if (_manualQuack.Released(Triggers.Strafe))
 				{
-					this.Release("STRAFE");
+					Release(Triggers.Strafe);
 				}
 			}
 		}
@@ -122,13 +122,13 @@ namespace DuckGame
 		{
 			get
 			{
-				if (this.virtualQuack)
+				if (virtualQuack)
 				{
 					return virtualDevice.leftTrigger;
 				}
-				if (this._manualQuack != null)
+				if (_manualQuack != null)
 				{
-					return this._manualQuack.leftTrigger;
+					return _manualQuack.leftTrigger;
 				}
 				return 0f;
 			}
@@ -136,10 +136,10 @@ namespace DuckGame
 
 		public void Draw()
 		{
-			if (this._locomotion.pathFinder.path != null)
+			if (_locomotion.pathFinder.path != null)
 			{
 				Vec2 lastNode = Vec2.Zero;
-				foreach (PathNodeLink i in this._locomotion.pathFinder.path)
+				foreach (PathNodeLink i in _locomotion.pathFinder.path)
 				{
 					if (lastNode != Vec2.Zero)
 					{

@@ -21,9 +21,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 12;
-            _ammoType = new ATLaser();
-            _ammoType.range = 170f;
-            _ammoType.accuracy = 0.8f;
+            _ammoType = new ATLaser
+            {
+                range = 170f,
+                accuracy = 0.8f
+            };
             wideBarrel = true;
             barrelInsertOffset = new Vec2(-3f, -1f);
             _type = "gun";

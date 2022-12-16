@@ -17,8 +17,10 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 12;
-            _ammoType = new ATMag();
-            _ammoType.penetration = 0.4f;
+            _ammoType = new ATMag
+            {
+                penetration = 0.4f
+            };
             wideBarrel = true;
             barrelInsertOffset = new Vec2(3f, 1f);
             _type = "gun";

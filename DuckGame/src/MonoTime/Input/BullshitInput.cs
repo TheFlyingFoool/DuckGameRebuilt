@@ -17,74 +17,74 @@ namespace DuckGame
         private Dictionary<string, CountdownPair> _bullshitTriggerStates = new Dictionary<string, CountdownPair>()
     {
       {
-        "LEFT",
+        Triggers.Left,
         new CountdownPair()
       },
       {
-        "RIGHT",
+        Triggers.Right,
         new CountdownPair()
       },
       {
-        "UP",
+        Triggers.Up,
         new CountdownPair()
       },
       {
-        "DOWN",
+        Triggers.Down,
         new CountdownPair()
       },
       {
-        "JUMP",
+        Triggers.Jump,
         new CountdownPair()
       },
       {
-        "QUACK",
+        Triggers.Quack,
         new CountdownPair()
       },
       {
-        "SHOOT",
+        Triggers.Shoot,
         new CountdownPair()
       },
       {
-        "GRAB",
+        Triggers.Grab,
         new CountdownPair()
       },
       {
-        "RAGDOLL",
+        Triggers.Ragdoll,
         new CountdownPair()
       },
       {
-        "STRAFE",
+        Triggers.Strafe,
         new CountdownPair()
       },
       {
-        "SELECT",
+        Triggers.Select,
         new CountdownPair()
       },
       {
-        "LTRIGGER",
+        Triggers.LeftTrigger,
         new CountdownPair()
       },
       {
-        "RTRIGGER",
+        Triggers.RightTrigger,
         new CountdownPair()
       },
       {
-        "LSTICK",
+        Triggers.LeftStick,
         new CountdownPair()
       },
       {
-        "RSTICK",
+        Triggers.RightStick,
         new CountdownPair()
       }
     };
 
-        public AILocomotion locomotion => this._locomotion;
+        public AILocomotion locomotion => _locomotion;
 
-        public override bool Pressed(string trigger, bool any = false) => this._bullshitTriggerStates.ContainsKey(trigger) && _bullshitTriggerStates[trigger].current > this._bullshitTriggerStates[trigger].previous;
+        public override bool Pressed(string trigger, bool any = false) => _bullshitTriggerStates.ContainsKey(trigger) && _bullshitTriggerStates[trigger].current > _bullshitTriggerStates[trigger].previous;
 
-        public override bool Released(string trigger) => this._bullshitTriggerStates.ContainsKey(trigger) && _bullshitTriggerStates[trigger].current <= 0f && _bullshitTriggerStates[trigger].previous > 0f;
+        public override bool Released(string trigger) => _bullshitTriggerStates.ContainsKey(trigger) && _bullshitTriggerStates[trigger].current <= 0f && _bullshitTriggerStates[trigger].previous > 0f;
 
-        public override bool Down(string trigger) => this._bullshitTriggerStates.ContainsKey(trigger) && _bullshitTriggerStates[trigger].current > 0f;
+        public override bool Down(string trigger) => _bullshitTriggerStates.ContainsKey(trigger) && _bullshitTriggerStates[trigger].current > 0f;
 
         public BullshitInput()
           : base()
@@ -93,12 +93,12 @@ namespace DuckGame
 
         public override void UpdateExtraInput()
         {
-            foreach (KeyValuePair<string, CountdownPair> bullshitTriggerState in this._bullshitTriggerStates)
+            foreach (KeyValuePair<string, CountdownPair> bullshitTriggerState in _bullshitTriggerStates)
             {
                 bullshitTriggerState.Value.previous = bullshitTriggerState.Value.current;
                 if (Rando.Int(100) == 0)
-                    this._bullshitTriggerStates[bullshitTriggerState.Key].current = Rando.Float(2f);
-                this._bullshitTriggerStates[bullshitTriggerState.Key].current -= Maths.IncFrameTimer();
+                    _bullshitTriggerStates[bullshitTriggerState.Key].current = Rando.Float(2f);
+                _bullshitTriggerStates[bullshitTriggerState.Key].current -= Maths.IncFrameTimer();
             }
         }
 

@@ -22,7 +22,7 @@ namespace DuckGame
             menu.Add(new UIMenuItemNumber("ROUNDS PER SET", field: new FieldBinding(this, "roundsPerSet", max: 50f)), true);
             menu.Add(new UIMenuItemNumber("SETS PER GAME", field: new FieldBinding(this, "setsPerGame", max: 50f)), true);
             menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItem("START", new UIMenuActionChangeLevel(menu, new TeamSelect2())), true);
+            menu.Add(new UIMenuItem(Triggers.Start, new UIMenuActionChangeLevel(menu, new TeamSelect2())), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionChangeLevel(menu, new TitleScreen())), true);
             Add(menu);
             base.Initialize();

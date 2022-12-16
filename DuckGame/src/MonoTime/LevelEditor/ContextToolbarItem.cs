@@ -55,7 +55,7 @@ namespace DuckGame
             }
             else
             {
-                if (item.text == "CANCEL")
+                if (item.text == Triggers.Cancel)
                     (Level.current as Editor).CloseMenu();
                 if (item.text == "NEW")
                 {
@@ -238,7 +238,7 @@ namespace DuckGame
             {
                 if (menuOpen)
                     return;
-                if (Input.Pressed("MENUUP"))
+                if (Input.Pressed(Triggers.MenuUp))
                 {
                     opened = false;
                     if (this.owner is ContextMenu owner)
@@ -250,7 +250,7 @@ namespace DuckGame
                         return;
                     }
                 }
-                if (Input.Pressed("MENUDOWN"))
+                if (Input.Pressed(Triggers.MenuDown))
                 {
                     opened = false;
                     if (this.owner is ContextMenu owner)
@@ -262,13 +262,13 @@ namespace DuckGame
                         return;
                     }
                 }
-                if (Input.Pressed("MENULEFT"))
+                if (Input.Pressed(Triggers.MenuLeft))
                 {
                     --_selectedIndex;
                     if (_selectedIndex < 0)
                         _selectedIndex = _buttons.Count - 1;
                 }
-                else if (Input.Pressed("MENURIGHT"))
+                else if (Input.Pressed(Triggers.MenuRight))
                 {
                     ++_selectedIndex;
                     if (_selectedIndex > _buttons.Count - 1)
@@ -281,7 +281,7 @@ namespace DuckGame
                     {
                         button.hover = true;
                         toolBarToolTip = button.hoverText;
-                        if (Input.Pressed("SELECT"))
+                        if (Input.Pressed(Triggers.Select))
                             ButtonPressed(button);
                     }
                     else
@@ -371,7 +371,7 @@ namespace DuckGame
                     itemSize = {
             x = 60f
           },
-                    text = "CANCEL"
+                    text = Triggers.Cancel
                 });
                 Level.Add(_newMenu);
                 _newMenu.opened = true;
@@ -481,7 +481,7 @@ namespace DuckGame
                     itemSize = {
             x = 60f
           },
-                    text = "CANCEL"
+                    text = Triggers.Cancel
                 });
                 Level.Add(_quitMenu);
                 _quitMenu.opened = true;

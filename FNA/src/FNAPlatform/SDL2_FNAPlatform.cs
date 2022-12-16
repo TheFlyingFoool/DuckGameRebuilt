@@ -559,13 +559,13 @@ namespace Microsoft.Xna.Framework
 			{
 				if (invert)
 				{
-					w = (int) (w * ((float) dw / (float) ww));
-					h = (int) (h * ((float) dh / (float) wh));
+					w = (int) (w * (dw / (float) ww));
+					h = (int) (h * (dh / (float) wh));
 				}
 				else
 				{
-					w = (int) (w / ((float) dw / (float) ww));
-					h = (int) (h / ((float) dh / (float) wh));
+					w = (int) (w / (dw / (float) ww));
+					h = (int) (h / (dh / (float) wh));
 				}
 			}
 		}
@@ -752,12 +752,14 @@ namespace Microsoft.Xna.Framework
 
 		public static void SetTextInputRectangle(Rectangle rectangle)
 		{
-			SDL.SDL_Rect rect = new SDL.SDL_Rect();
-			rect.x = rectangle.X;
-			rect.y = rectangle.Y;
-			rect.w = rectangle.Width;
-			rect.h = rectangle.Height;
-			SDL.SDL_SetTextInputRect(ref rect);
+            SDL.SDL_Rect rect = new SDL.SDL_Rect
+            {
+                x = rectangle.X,
+                y = rectangle.Y,
+                w = rectangle.Width,
+                h = rectangle.Height
+            };
+            SDL.SDL_SetTextInputRect(ref rect);
 		}
 
 		#endregion
@@ -1148,7 +1150,7 @@ namespace Microsoft.Xna.Framework
 			}
 		}
 
-		private unsafe static int MeasureStringLength(byte* ptr)
+		private static unsafe int MeasureStringLength(byte* ptr)
 		{
 			int bytes;
 			for (bytes = 0; *ptr != 0; ptr += 1, bytes += 1);
@@ -1577,14 +1579,16 @@ namespace Microsoft.Xna.Framework
 
 			// Default input format
 			SDL.SDL_AudioSpec have;
-			SDL.SDL_AudioSpec want = new SDL.SDL_AudioSpec();
-			want.freq = Microphone.SAMPLERATE;
-			want.format = SDL.AUDIO_S16;
-			want.channels = 1;
-			want.samples = 4096; /* FIXME: Anything specific? */
+            SDL.SDL_AudioSpec want = new SDL.SDL_AudioSpec
+            {
+                freq = Microphone.SAMPLERATE,
+                format = SDL.AUDIO_S16,
+                channels = 1,
+                samples = 4096 /* FIXME: Anything specific? */
+            };
 
-			// First mic is always OS default
-			result[0] = new Microphone(
+            // First mic is always OS default
+            result[0] = new Microphone(
 				SDL.SDL_OpenAudioDevice(
 					null,
 					1,
@@ -1687,38 +1691,38 @@ namespace Microsoft.Xna.Framework
 
 			// Sticks
 			Vector2 stickLeft = new Vector2(
-				(float) SDL.SDL_GameControllerGetAxis(
-					device,
-					SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX
-				) / 32767.0f,
-				(float) SDL.SDL_GameControllerGetAxis(
-					device,
-					SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTY
-				) / -32767.0f
+                 SDL.SDL_GameControllerGetAxis(
+                    device,
+                    SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX
+                ) / 32767.0f,
+                 SDL.SDL_GameControllerGetAxis(
+                    device,
+                    SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTY
+                ) / -32767.0f
 			);
 			Vector2 stickRight = new Vector2(
-				(float) SDL.SDL_GameControllerGetAxis(
-					device,
-					SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTX
-				) / 32767.0f,
-				(float) SDL.SDL_GameControllerGetAxis(
-					device,
-					SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTY
-				) / -32767.0f
+                 SDL.SDL_GameControllerGetAxis(
+                    device,
+                    SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTX
+                ) / 32767.0f,
+                 SDL.SDL_GameControllerGetAxis(
+                    device,
+                    SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTY
+                ) / -32767.0f
 			);
 
 			// Triggers
-			float triggerLeft = (float) SDL.SDL_GameControllerGetAxis(
-				device,
-				SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERLEFT
-			) / 32767.0f;
-			float triggerRight = (float) SDL.SDL_GameControllerGetAxis(
-				device,
-				SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERRIGHT
-			) / 32767.0f;
+			float triggerLeft = SDL.SDL_GameControllerGetAxis(
+                device,
+                SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERLEFT
+            ) / 32767.0f;
+			float triggerRight = SDL.SDL_GameControllerGetAxis(
+                device,
+                SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERRIGHT
+            ) / 32767.0f;
 
 			// Buttons
-			Buttons gc_buttonState = (Buttons) 0;
+			Buttons gc_buttonState = 0;
 			if (SDL.SDL_GameControllerGetButton(device, SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A) != 0)
 			{
 				gc_buttonState |= Buttons.A;
@@ -1816,16 +1820,18 @@ namespace Microsoft.Xna.Framework
 				gc_buttonState |= Buttons.TouchPadEXT;
 			}
 
-			// Build the GamePadState, increment PacketNumber if state changed.
-			GamePadState gc_builtState = new GamePadState(
-				new GamePadThumbSticks(stickLeft, stickRight, deadZoneMode),
-				new GamePadTriggers(triggerLeft, triggerRight, deadZoneMode),
-				new GamePadButtons(gc_buttonState),
-				new GamePadDPad(dpadUp, dpadDown, dpadLeft, dpadRight)
-			);
-			gc_builtState.IsConnected = true;
-			gc_builtState.PacketNumber = INTERNAL_states[index].PacketNumber;
-			if (gc_builtState != INTERNAL_states[index])
+            // Build the GamePadState, increment PacketNumber if state changed.
+            GamePadState gc_builtState = new GamePadState(
+                new GamePadThumbSticks(stickLeft, stickRight, deadZoneMode),
+                new GamePadTriggers(triggerLeft, triggerRight, deadZoneMode),
+                new GamePadButtons(gc_buttonState),
+                new GamePadDPad(dpadUp, dpadDown, dpadLeft, dpadRight)
+            )
+            {
+                IsConnected = true,
+                PacketNumber = INTERNAL_states[index].PacketNumber
+            };
+            if (gc_builtState != INTERNAL_states[index])
 			{
 				gc_builtState.PacketNumber += 1;
 				INTERNAL_states[index] = gc_builtState;
@@ -2001,12 +2007,14 @@ namespace Microsoft.Xna.Framework
 			}
 			INTERNAL_instanceList.Add(thisInstance, which);
 
-			// Start with a fresh state.
-			INTERNAL_states[which] = new GamePadState();
-			INTERNAL_states[which].IsConnected = true;
+            // Start with a fresh state.
+            INTERNAL_states[which] = new GamePadState
+            {
+                IsConnected = true
+            };
 
-			// Initialize the haptics for the joystick, if applicable.
-			bool hasRumble = SDL.SDL_GameControllerRumble(
+            // Initialize the haptics for the joystick, if applicable.
+            bool hasRumble = SDL.SDL_GameControllerRumble(
 				INTERNAL_devices[which],
 				0,
 				0,
@@ -2019,134 +2027,136 @@ namespace Microsoft.Xna.Framework
 				0
 			) == 0;
 
-			// An SDL_GameController _should_ always be complete...
-			GamePadCapabilities caps = new GamePadCapabilities();
-			caps.IsConnected = true;
-			caps.GamePadType = INTERNAL_gamepadType[(int) SDL.SDL_JoystickGetType(thisJoystick)];
-			caps.HasAButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasBButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasXButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasYButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasBackButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_BACK
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasBigButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_GUIDE
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasStartButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_START
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasLeftStickButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSTICK
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasRightStickButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSTICK
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasLeftShoulderButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSHOULDER
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasRightShoulderButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasDPadUpButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_DPAD_UP
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasDPadDownButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_DPAD_DOWN
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasDPadLeftButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_DPAD_LEFT
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasDPadRightButton = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_DPAD_RIGHT
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasLeftXThumbStick = SDL.SDL_GameControllerGetBindForAxis(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasLeftYThumbStick = SDL.SDL_GameControllerGetBindForAxis(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTY
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasRightXThumbStick = SDL.SDL_GameControllerGetBindForAxis(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTX
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasRightYThumbStick = SDL.SDL_GameControllerGetBindForAxis(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTY
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasLeftTrigger = SDL.SDL_GameControllerGetBindForAxis(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERLEFT
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasRightTrigger = SDL.SDL_GameControllerGetBindForAxis(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERRIGHT
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasLeftVibrationMotor = hasRumble;
-			caps.HasRightVibrationMotor = hasRumble;
-			caps.HasVoiceSupport = false;
-			caps.HasLightBarEXT = SDL.SDL_GameControllerHasLED(
-				INTERNAL_devices[which]
-			) == SDL.SDL_bool.SDL_TRUE;
-			caps.HasTriggerVibrationMotorsEXT = hasTriggerRumble;
-			caps.HasMisc1EXT = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_MISC1
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasPaddle1EXT = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_PADDLE1
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasPaddle2EXT = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_PADDLE2
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasPaddle3EXT = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_PADDLE3
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasPaddle4EXT = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_PADDLE4
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasTouchPadEXT = SDL.SDL_GameControllerGetBindForButton(
-				INTERNAL_devices[which],
-				SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_TOUCHPAD
-			).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE;
-			caps.HasGyroEXT = SDL.SDL_GameControllerHasSensor(
-				INTERNAL_devices[which],
-				SDL.SDL_SensorType.SDL_SENSOR_GYRO
-			) == SDL.SDL_bool.SDL_TRUE;
-			caps.HasAccelerometerEXT = SDL.SDL_GameControllerHasSensor(
-				INTERNAL_devices[which],
-				SDL.SDL_SensorType.SDL_SENSOR_ACCEL
-			) == SDL.SDL_bool.SDL_TRUE;
-			INTERNAL_capabilities[which] = caps;
+            // An SDL_GameController _should_ always be complete...
+            GamePadCapabilities caps = new GamePadCapabilities
+            {
+                IsConnected = true,
+                GamePadType = INTERNAL_gamepadType[(int)SDL.SDL_JoystickGetType(thisJoystick)],
+                HasAButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasBButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasXButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasYButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasBackButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_BACK
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasBigButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_GUIDE
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasStartButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_START
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasLeftStickButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSTICK
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasRightStickButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSTICK
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasLeftShoulderButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSHOULDER
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasRightShoulderButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasDPadUpButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_DPAD_UP
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasDPadDownButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_DPAD_DOWN
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasDPadLeftButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_DPAD_LEFT
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasDPadRightButton = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_DPAD_RIGHT
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasLeftXThumbStick = SDL.SDL_GameControllerGetBindForAxis(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasLeftYThumbStick = SDL.SDL_GameControllerGetBindForAxis(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTY
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasRightXThumbStick = SDL.SDL_GameControllerGetBindForAxis(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTX
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasRightYThumbStick = SDL.SDL_GameControllerGetBindForAxis(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTY
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasLeftTrigger = SDL.SDL_GameControllerGetBindForAxis(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERLEFT
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasRightTrigger = SDL.SDL_GameControllerGetBindForAxis(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERRIGHT
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasLeftVibrationMotor = hasRumble,
+                HasRightVibrationMotor = hasRumble,
+                HasVoiceSupport = false,
+                HasLightBarEXT = SDL.SDL_GameControllerHasLED(
+                INTERNAL_devices[which]
+            ) == SDL.SDL_bool.SDL_TRUE,
+                HasTriggerVibrationMotorsEXT = hasTriggerRumble,
+                HasMisc1EXT = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_MISC1
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasPaddle1EXT = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_PADDLE1
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasPaddle2EXT = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_PADDLE2
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasPaddle3EXT = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_PADDLE3
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasPaddle4EXT = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_PADDLE4
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasTouchPadEXT = SDL.SDL_GameControllerGetBindForButton(
+                INTERNAL_devices[which],
+                SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_TOUCHPAD
+            ).bindType != SDL.SDL_GameControllerBindType.SDL_CONTROLLER_BINDTYPE_NONE,
+                HasGyroEXT = SDL.SDL_GameControllerHasSensor(
+                INTERNAL_devices[which],
+                SDL.SDL_SensorType.SDL_SENSOR_GYRO
+            ) == SDL.SDL_bool.SDL_TRUE,
+                HasAccelerometerEXT = SDL.SDL_GameControllerHasSensor(
+                INTERNAL_devices[which],
+                SDL.SDL_SensorType.SDL_SENSOR_ACCEL
+            ) == SDL.SDL_bool.SDL_TRUE
+            };
+            INTERNAL_capabilities[which] = caps;
 
 			/* Store the GUID string for this device
 			 * FIXME: Replace GetGUIDEXT string with 3 short values -flibit

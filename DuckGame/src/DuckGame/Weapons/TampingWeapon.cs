@@ -51,7 +51,7 @@ namespace DuckGame
             if (this.owner is Duck owner && owner.inputProfile != null && duck != null && duck.profile != null)
             {
                 _prevDuckOwner = owner;
-                if (owner.inputProfile.Pressed("SHOOT"))
+                if (owner.inputProfile.Pressed(Triggers.Shoot))
                     _tampBoost += 0.14f;
                 if (duck.immobilized)
                     duck.profile.stats.timeSpentReloadingOldTimeyWeapons += Maths.IncFrameTimer();

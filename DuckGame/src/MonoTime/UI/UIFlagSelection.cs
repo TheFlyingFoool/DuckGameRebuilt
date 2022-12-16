@@ -94,37 +94,37 @@ namespace DuckGame
         {
             if (open && open && !animating)
             {
-                if (Input.Pressed("LEFT"))
+                if (Input.Pressed(Triggers.Left))
                 {
                     --_flagSelection;
                     if (_flagSelection <= 0)
                         _flagSelection = 0;
                 }
-                if (Input.Pressed("RIGHT"))
+                if (Input.Pressed(Triggers.Right))
                 {
                     ++_flagSelection;
                     if (_flagSelection >= numFlags)
                         _flagSelection = numFlags - 1;
                 }
-                if (Input.Pressed("UP"))
+                if (Input.Pressed(Triggers.Up))
                 {
                     _flagSelection -= _numFlagsPerRow;
                     if (_flagSelection <= 0)
                         _flagSelection = 0;
                 }
-                if (Input.Pressed("DOWN"))
+                if (Input.Pressed(Triggers.Down))
                 {
                     _flagSelection += _numFlagsPerRow;
                     if (_flagSelection >= numFlags)
                         _flagSelection = numFlags - 1;
                 }
-                if (Input.Pressed("SELECT"))
+                if (Input.Pressed(Triggers.Select))
                 {
                     Global.data.flag = _flagSelection;
                     Close();
                     _openOnClose.Open();
                 }
-                if (Input.Pressed("CANCEL"))
+                if (Input.Pressed(Triggers.Cancel))
                 {
                     Close();
                     _openOnClose.Open();

@@ -12,6 +12,6 @@ namespace XnaToFna
     {
         public ModuleDefinition mod;
 
-        public bool Relinkthing(XnaToFnaMapping mappings) => this.mod.Assembly.Name.Name == mappings.Target;
+        public bool Relinkthing(XnaToFnaMapping mappings) => mod.Assembly.Name.Name == mappings.Target;
     }
 }

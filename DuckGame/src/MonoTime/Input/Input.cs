@@ -20,46 +20,46 @@ namespace DuckGame
     {
         public static InputCode konamiCode = new InputCode()
         {
-            triggers = new List<string>()
-          {
-            "UP",
-            "UP",
-            "DOWN",
-            "DOWN",
-            "LEFT",
-            "RIGHT",
-            "LEFT",
-            "RIGHT",
-            "QUACK",
-            "JUMP"
-          }
+              triggers = new List<string>()
+              {
+                Triggers.Up,
+                Triggers.Up,
+                Triggers.Down,
+                Triggers.Down,
+                Triggers.Left,
+                Triggers.Right,
+                Triggers.Left,
+                Triggers.Right,
+                Triggers.Quack,
+                Triggers.Jump
+              }
         };
         public static InputCode konamiCodeAlternate = new InputCode()
         {
             triggers = new List<string>()
-      {
-        "UP|JUMP",
-        "UP|JUMP",
-        "DOWN",
-        "DOWN",
-        "LEFT",
-        "RIGHT",
-        "LEFT",
-        "RIGHT",
-        "QUACK",
-        "UP|JUMP"
-      }
+            {
+                 Triggers.Up + "|" + Triggers.Jump,
+                Triggers.Up + "|" + Triggers.Jump,
+                Triggers.Down,
+                Triggers.Down,
+                Triggers.Left,
+                Triggers.Right,
+                Triggers.Left,
+                Triggers.Right,
+                Triggers.Quack,
+                Triggers.Up + "|" + Triggers.Jump,
+            }
         };
         public static InputCode hookCode = new InputCode()
         {
             triggers = new List<string>()
-      {
-        "JUMP",
-        "QUACK",
-        "RAGDOLL",
-        "RAGDOLL",
-        "GRAB"
-      },
+            {
+                Triggers.Jump,
+                Triggers.Quack,
+                Triggers.Ragdoll,
+                Triggers.Ragdoll,
+                Triggers.Grab
+            },
             breakSpeed = 0.06f
         };
         private static bool _ignoreInput;
@@ -74,539 +74,186 @@ namespace DuckGame
         private static Array _keys = Enum.GetValues(typeof(Keys));
         private static List<DeviceInputMapping> _defaultInputMapping = new List<DeviceInputMapping>();
         private static List<DeviceInputMapping> _oldInputDefaults = new List<DeviceInputMapping>()
-    {
-      new DeviceInputMapping()
-      {
-        deviceName = "KEYBOARD P1",
-        deviceGUID = "",
-        map = new Dictionary<string, int>()
         {
-          {
-            "LEFT",
-            65
-          },
-          {
-            "RIGHT",
-            68
-          },
-          {
-            "UP",
-            87
-          },
-          {
-            "DOWN",
-            83
-          },
-          {
-            "JUMP",
-            87
-          },
-          {
-            "SHOOT",
-            86
-          },
-          {
-            "GRAB",
-            67
-          },
-          {
-            "START",
-            27
-          },
-          {
-            "RAGDOLL",
-            81
-          },
-          {
-            "STRAFE",
-            66
-          },
-          {
-            "QUACK",
-            69
-          },
-          {
-            "SELECT",
-            32
-          },
-          {
-            "CHAT",
-            13
-          }
-        }
-      },
-      new DeviceInputMapping()
-      {
-        deviceName = "KEYBOARD P2",
-        deviceGUID = "",
-        map = new Dictionary<string, int>()
-        {
-          {
-            "LEFT",
-            37
-          },
-          {
-            "RIGHT",
-            39
-          },
-          {
-            "UP",
-            38
-          },
-          {
-            "DOWN",
-            40
-          },
-          {
-            "JUMP",
-            38
-          },
-          {
-            "SHOOT",
-            186
-          },
-          {
-            "GRAB",
-            76
-          },
-          {
-            "START",
-            187
-          },
-          {
-            "RAGDOLL",
-            73
-          },
-          {
-            "STRAFE",
-            75
-          },
-          {
-            "QUACK",
-            79
-          },
-          {
-            "SELECT",
-            161
-          }
-        }
-      }
-    };
+            new DeviceInputMapping()
+            {
+                deviceName = "KEYBOARD P1",
+                deviceGUID = "",
+                map = new Dictionary<string,int>()
+                {
+                    {Triggers.Left, (int)Keys.A},
+                    {Triggers.Right, (int)Keys.D},
+                    {Triggers.Up, (int)Keys.W},
+                    {Triggers.Down, (int)Keys.S},
+                    {Triggers.Jump, (int)Keys.W},
+                    {Triggers.Shoot, (int)Keys.V},
+                    {Triggers.Grab, (int)Keys.C},
+                    {Triggers.Start, (int)Keys.Escape},
+                    {Triggers.Ragdoll, (int)Keys.Q},
+                    {Triggers.Strafe, (int)Keys.B},
+                    {Triggers.Quack, (int)Keys.E},
+                    {Triggers.Select, (int)Keys.Space},
+                    {Triggers.Chat, (int)Keys.Enter}
+                }
+            },
+            new DeviceInputMapping()
+            {
+                deviceName = "KEYBOARD P2",
+                deviceGUID = "",
+                map = new Dictionary<string,int>()
+                {
+                    {Triggers.Left, (int)Keys.Left},
+                    {Triggers.Right, (int)Keys.Right},
+                    {Triggers.Up, (int)Keys.Up},
+                    {Triggers.Down, (int)Keys.Down},
+                    {Triggers.Jump, (int)Keys.Up},
+                    {Triggers.Shoot, (int)Keys.OemSemicolon},
+                    {Triggers.Grab, (int)Keys.L},
+                    {Triggers.Start, (int)Keys.OemPlus},
+                    {Triggers.Ragdoll, (int)Keys.I},
+                    {Triggers.Strafe, (int)Keys.K},
+                    {Triggers.Quack, (int)Keys.O},
+                    {Triggers.Select, (int)Keys.RightShift},
+                }
+            }
+        };
+
+
+
+
         public static List<DeviceInputMapping> _defaultInputMappingPresets = new List<DeviceInputMapping>()
-    {
-      new DeviceInputMapping()
-      {
-        deviceName = "KEYBOARD P1",
-        deviceGUID = "",
-        map = new Dictionary<string, int>()
         {
-          {
-            "LEFT",
-            65
-          },
-          {
-            "RIGHT",
-            68
-          },
-          {
-            "UP",
-            87
-          },
-          {
-            "DOWN",
-            83
-          },
-          {
-            "JUMP",
-            32
-          },
-          {
-            "SHOOT",
-            72
-          },
-          {
-            "GRAB",
-            71
-          },
-          {
-            "START",
-            27
-          },
-          {
-            "RAGDOLL",
-            70
-          },
-          {
-            "STRAFE",
-            160
-          },
-          {
-            "QUACK",
-            69
-          },
-          {
-            "SELECT",
-            32
-          },
-          {
-            "CHAT",
-            13
-          },
-          {
-            "CANCEL",
-            69
-          },
-          {
-            "MENU1",
-            72
-          },
-          {
-            "MENU2",
-            81
-          },
-          {
-            "MENULEFT",
-            65
-          },
-          {
-            "MENURIGHT",
-            68
-          },
-          {
-            "MENUUP",
-            87
-          },
-          {
-            "MENUDOWN",
-            83
-          },
-          {
-            "RSTICK",
-            9
-          },
-          {
-            "VOICEREG",
-            36
-          },
-          {
-            "KBDF",
-            70
-          }
-        }
-      },
-      new DeviceInputMapping()
-      {
-        deviceName = "KEYBOARD P2",
-        deviceGUID = "",
-        map = new Dictionary<string, int>()
-        {
-          {
-            "LEFT",
-            37
-          },
-          {
-            "RIGHT",
-            39
-          },
-          {
-            "UP",
-            38
-          },
-          {
-            "DOWN",
-            40
-          },
-          {
-            "JUMP",
-            163
-          },
-          {
-            "SHOOT",
-            222
-          },
-          {
-            "GRAB",
-            186
-          },
-          {
-            "START",
-            187
-          },
-          {
-            "RAGDOLL",
-            79
-          },
-          {
-            "STRAFE",
-            76
-          },
-          {
-            "QUACK",
-            80
-          },
-          {
-            "SELECT",
-            161
-          },
-          {
-            "CANCEL",
-            80
-          },
-          {
-            "MENU1",
-            222
-          },
-          {
-            "MENU2",
-            186
-          },
-          {
-            "MENULEFT",
-            37
-          },
-          {
-            "MENURIGHT",
-            39
-          },
-          {
-            "MENUUP",
-            38
-          },
-          {
-            "MENUDOWN",
-            40
-          },
-          {
-            "RSTICK",
-            9
-          }
-        }
-      },
-      new DeviceInputMapping()
-      {
-        deviceName = "XBOX GAMEPAD",
-        deviceGUID = "",
-        map = new Dictionary<string, int>()
-        {
-          {
-            "LEFT",
-            4
-          },
-          {
-            "RIGHT",
-            8
-          },
-          {
-            "UP",
-            1
-          },
-          {
-            "DOWN",
-            2
-          },
-          {
-            "JUMP",
-            4096
-          },
-          {
-            "SHOOT",
-            16384
-          },
-          {
-            "GRAB",
-            32768
-          },
-          {
-            "START",
-            16
-          },
-          {
-            "RAGDOLL",
-            512
-          },
-          {
-            "STRAFE",
-            256
-          },
-          {
-            "QUACK",
-            8192
-          },
-          {
-            "SELECT",
-            4096
-          },
-          {
-            "LTRIGGER",
-            8388608
-          },
-          {
-            "RTRIGGER",
-            4194304
-          },
-          {
-            "LBUMPER",
-            256
-          },
-          {
-            "RBUMPER",
-            512
-          },
-          {
-            "LSTICK",
-            64
-          },
-          {
-            "RSTICK",
-            128
-          },
-          {
-            "CANCEL",
-            8192
-          },
-          {
-            "LOPTION",
-            32
-          },
-          {
-            "MENU1",
-            16384
-          },
-          {
-            "MENU2",
-            32768
-          },
-          {
-            "MENULEFT",
-            4
-          },
-          {
-            "MENURIGHT",
-            8
-          },
-          {
-            "MENUUP",
-            1
-          },
-          {
-            "MENUDOWN",
-            2
-          }
-        }
-      },
-      new DeviceInputMapping()
-      {
-        deviceName = "GENERIC GAMEPAD",
-        deviceGUID = "",
-        map = new Dictionary<string, int>()
-        {
-          {
-            "LEFT",
-            4
-          },
-          {
-            "RIGHT",
-            8
-          },
-          {
-            "UP",
-            1
-          },
-          {
-            "DOWN",
-            2
-          },
-          {
-            "JUMP",
-            4096
-          },
-          {
-            "SHOOT",
-            16384
-          },
-          {
-            "GRAB",
-            32768
-          },
-          {
-            "START",
-            16
-          },
-          {
-            "RAGDOLL",
-            512
-          },
-          {
-            "STRAFE",
-            256
-          },
-          {
-            "QUACK",
-            8192
-          },
-          {
-            "SELECT",
-            4096
-          },
-          {
-            "LTRIGGER",
-            8388608
-          },
-          {
-            "RTRIGGER",
-            4194304
-          },
-          {
-            "LBUMPER",
-            256
-          },
-          {
-            "RBUMPER",
-            512
-          },
-          {
-            "LSTICK",
-            64
-          },
-          {
-            "RSTICK",
-            128
-          },
-          {
-            "CANCEL",
-            8192
-          },
-          {
-            "LOPTION",
-            32
-          },
-          {
-            "MENU1",
-            16384
-          },
-          {
-            "MENU2",
-            32768
-          },
-          {
-            "MENULEFT",
-            4
-          },
-          {
-            "MENURIGHT",
-            8
-          },
-          {
-            "MENUUP",
-            1
-          },
-          {
-            "MENUDOWN",
-            2
-          }
-        }
-      }
-    };
+            new DeviceInputMapping() 
+            {
+                deviceName = "KEYBOARD P1",
+                deviceGUID = "",
+                map = new Dictionary<string,int>()
+                {
+                    {Triggers.Left, (int)Keys.A},
+                    {Triggers.Right, (int)Keys.D},
+                    {Triggers.Up, (int)Keys.W},
+                    {Triggers.Down, (int)Keys.S},
+                    {Triggers.Jump, (int)Keys.Space},
+                    {Triggers.Shoot, (int)Keys.H},
+                    {Triggers.Grab, (int)Keys.G},
+                    {Triggers.Start, (int)Keys.Escape},
+                    {Triggers.Ragdoll, (int)Keys.F},          
+                    {Triggers.Strafe, (int)Keys.LeftShift},
+                    {Triggers.Quack, (int)Keys.E},
+                    {Triggers.Select, (int)Keys.Space},           
+                    {Triggers.Chat, (int)Keys.Enter},
+                    {Triggers.Cancel, (int)Keys.E},
+                    {Triggers.Menu1, (int)Keys.H},
+                    {Triggers.Menu2, (int)Keys.Q},
+                    {Triggers.MenuLeft, (int)Keys.A},
+                    {Triggers.MenuRight, (int)Keys.D},
+                    {Triggers.MenuUp, (int)Keys.W},
+                    {Triggers.MenuDown, (int)Keys.S},
+                    {Triggers.RightStick, (int)Keys.Tab},
+                    {Triggers.VoiceRegister, (int)Keys.Home},
+                    {Triggers.KeyboardF, (int)Keys.F},
+                }
+            },
+            new DeviceInputMapping() 
+            {
+                deviceName = "KEYBOARD P2",
+                deviceGUID = "",
+                map = new Dictionary<string,int>()
+                {
+                    {Triggers.Left, (int)Keys.Left},
+                    {Triggers.Right, (int)Keys.Right},
+                    {Triggers.Up, (int)Keys.Up},
+                    {Triggers.Down, (int)Keys.Down},
+                    {Triggers.Jump, (int)Keys.RightControl},
+                    {Triggers.Shoot, (int)Keys.OemQuotes},
+                    {Triggers.Grab, (int)Keys.OemSemicolon},
+                    {Triggers.Start, (int)Keys.OemPlus},
+                    {Triggers.Ragdoll, (int)Keys.O},
+                    {Triggers.Strafe, (int)Keys.L},
+                    {Triggers.Quack, (int)Keys.P},
+                    {Triggers.Select, (int)Keys.RightShift},
+                    {Triggers.Cancel, (int)Keys.P},
+                    {Triggers.Menu1, (int)Keys.OemQuotes},
+                    {Triggers.Menu2, (int)Keys.OemSemicolon},
+                    {Triggers.MenuLeft, (int)Keys.Left},
+                    {Triggers.MenuRight, (int)Keys.Right},
+                    {Triggers.MenuUp, (int)Keys.Up},
+                    {Triggers.MenuDown, (int)Keys.Down},
+                    {Triggers.RightStick, (int)Keys.Tab}, 
+                }
+            },
+            new DeviceInputMapping()
+            {
+                deviceName = "XBOX GAMEPAD",
+                deviceGUID = "",
+                map = new Dictionary<string,int>()
+                {
+                    {Triggers.Left, (int)PadButton.DPadLeft},
+                    {Triggers.Right, (int)PadButton.DPadRight},
+                    {Triggers.Up, (int)PadButton.DPadUp},
+                    {Triggers.Down, (int)PadButton.DPadDown},
+                    {Triggers.Jump, (int)PadButton.A},
+                    {Triggers.Shoot, (int)PadButton.X},
+                    {Triggers.Grab, (int)PadButton.Y},
+                    {Triggers.Start, (int)PadButton.Start},
+                    {Triggers.Ragdoll, (int)PadButton.RightShoulder},
+                    {Triggers.Strafe, (int)PadButton.LeftShoulder},
+                    {Triggers.Quack, (int)PadButton.B},
+                    {Triggers.Select, (int)PadButton.A},
+
+                    {Triggers.LeftTrigger, (int)PadButton.LeftTrigger},
+                    {Triggers.RightTrigger, (int)PadButton.RightTrigger},
+                    {Triggers.LeftBumper, (int)PadButton.LeftShoulder},
+                    {Triggers.RightBumper, (int)PadButton.RightShoulder},
+                    {Triggers.LeftStick, (int)PadButton.LeftStick},
+                    {Triggers.RightStick, (int)PadButton.RightStick},
+                    {Triggers.Cancel, (int)PadButton.B},
+                    {Triggers.LeftOptionButton,       (int)PadButton.Back },
+                    {Triggers.Menu1,       (int)PadButton.X },
+                    {Triggers.Menu2,       (int)PadButton.Y },
+                    {Triggers.MenuLeft, (int)PadButton.DPadLeft},
+                    {Triggers.MenuRight, (int)PadButton.DPadRight},
+                    {Triggers.MenuUp, (int)PadButton.DPadUp},
+                    {Triggers.MenuDown, (int)PadButton.DPadDown},
+                }
+            },
+            new DeviceInputMapping()
+            {
+                deviceName = "GENERIC GAMEPAD",
+                deviceGUID = "",
+                map = new Dictionary<string,int>()
+                {
+                    {Triggers.Left, (int)PadButton.DPadLeft},
+                    {Triggers.Right, (int)PadButton.DPadRight},
+                    {Triggers.Up, (int)(int)PadButton.DPadUp},
+                    {Triggers.Down, (int)PadButton.DPadDown},
+                    {Triggers.Jump, (int)PadButton.A},
+                    {Triggers.Shoot, (int)PadButton.X},
+                    {Triggers.Grab, (int)PadButton.Y},
+                    {Triggers.Start, (int)PadButton.Start},
+                    {Triggers.Ragdoll, (int)PadButton.RightShoulder},
+                    {Triggers.Strafe, (int)PadButton.LeftShoulder},
+                    {Triggers.Quack, (int)PadButton.B},
+                    {Triggers.Select, (int)PadButton.A},
+
+                    {Triggers.LeftTrigger, (int)PadButton.LeftTrigger},
+                    {Triggers.RightTrigger, (int)PadButton.RightTrigger},
+                    {Triggers.LeftBumper, (int)PadButton.LeftShoulder},
+                    {Triggers.RightBumper, (int)PadButton.RightShoulder},
+                    {Triggers.LeftStick, (int)PadButton.LeftStick},
+                    {Triggers.RightStick, (int)PadButton.RightStick},
+                    {Triggers.Cancel, (int)PadButton.B},
+                    {Triggers.LeftOptionButton, (int)PadButton.Back},
+                    {Triggers.Menu1, (int)PadButton.X},
+                    {Triggers.Menu2, (int)PadButton.Y},
+
+                    {Triggers.MenuLeft, (int)PadButton.DPadLeft},
+                    {Triggers.MenuRight, (int)PadButton.DPadRight},
+                    {Triggers.MenuUp, (int)PadButton.DPadUp},
+                    {Triggers.MenuDown, (int)PadButton.DPadDown},
+                }
+            },
+        };
         public static bool _imeAllowed = false;
         public static bool _prevImeAllowed = false;
         public static bool _dinputEnabled = false;
@@ -728,13 +375,13 @@ namespace DuckGame
         {
             if (overrideProfile != null && MappingIsDefault(mapping))
                 return;
-            TryFallback("MENULEFT", "LEFT", mapping);
-            TryFallback("MENURIGHT", "RIGHT", mapping);
-            TryFallback("MENUUP", "UP", mapping);
-            TryFallback("MENUDOWN", "DOWN", mapping);
-            TryFallback("MENU1", "SHOOT", mapping);
-            TryFallback("MENU2", "GRAB", mapping);
-            TryFallback("CANCEL", "QUACK", mapping);
+            TryFallback(Triggers.MenuLeft, Triggers.Left, mapping);
+            TryFallback(Triggers.MenuRight, Triggers.Right, mapping);
+            TryFallback(Triggers.MenuUp, Triggers.Up, mapping);
+            TryFallback(Triggers.MenuDown, Triggers.Down, mapping);
+            TryFallback(Triggers.Menu1, Triggers.Shoot, mapping);
+            TryFallback(Triggers.Menu2, Triggers.Grab, mapping);
+            TryFallback(Triggers.Cancel, Triggers.Quack, mapping);
             DeviceInputMapping defaultMapping = GetDefaultMapping(mapping.deviceName, mapping.deviceGUID);
             if (defaultMapping != null)
             {
@@ -1420,21 +1067,21 @@ namespace DuckGame
             {
                 InputProfile inputProfile = InputProfile.Add("MPPlayer" + (index + 1).ToString());
                 inputProfile.mpIndex = index;
-                inputProfile.Map(GetDevice<GenericController>(index), "LEFT", 4);
-                inputProfile.Map(GetDevice<GenericController>(index), "RIGHT", 8);
-                inputProfile.Map(GetDevice<GenericController>(index), "UP", 1);
-                inputProfile.Map(GetDevice<GenericController>(index), "DOWN", 2);
-                inputProfile.Map(GetDevice<GenericController>(index), "JUMP", 4096);
-                inputProfile.Map(GetDevice<GenericController>(index), "SHOOT", 16384);
-                inputProfile.Map(GetDevice<GenericController>(index), "GRAB", 32768);
-                inputProfile.Map(GetDevice<GenericController>(index), "QUACK", 8192);
-                inputProfile.Map(GetDevice<GenericController>(index), "START", 16);
-                inputProfile.Map(GetDevice<GenericController>(index), "STRAFE", 256);
-                inputProfile.Map(GetDevice<GenericController>(index), "RAGDOLL", 512);
-                inputProfile.Map(GetDevice<GenericController>(index), "LTRIGGER", 8388608);
-                inputProfile.Map(GetDevice<GenericController>(index), "RTRIGGER", 4194304);
-                inputProfile.Map(GetDevice<GenericController>(index), "SELECT", 4096);
-                inputProfile.Map(GetDevice<GenericController>(index), "CANCEL", 8192);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Left, 4);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Right, 8);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Up, 1);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Down, 2);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Jump, 4096);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Shoot, 16384);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Grab, 32768);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Quack, 8192);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Start, 16);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Strafe, 256);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Ragdoll, 512);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.LeftTrigger, 8388608);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.RightTrigger, 4194304);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Select, 4096);
+                inputProfile.Map(GetDevice<GenericController>(index), Triggers.Cancel, 8192);
                 if (index == 0)
                     InputProfile.active = inputProfile;
             }
@@ -1487,14 +1134,14 @@ namespace DuckGame
             _devices.Add(genericController6);
             _devices.Add(genericController7);
             _devices.Add(genericController8);
-            InputProfile.Default.Map(device, "LEFT", 37);
-            InputProfile.Default.Map(device, "RIGHT", 39);
-            InputProfile.Default.Map(device, "UP", 38);
-            InputProfile.Default.Map(device, "DOWN", 40);
-            InputProfile.Default.Map(GetDevice<XInputPad>(), "LEFT", 4);
-            InputProfile.Default.Map(GetDevice<XInputPad>(), "RIGHT", 8);
-            InputProfile.Default.Map(GetDevice<XInputPad>(), "UP", 1);
-            InputProfile.Default.Map(GetDevice<XInputPad>(), "DOWN", 2);
+            InputProfile.Default.Map(device, Triggers.Left, 37);
+            InputProfile.Default.Map(device, Triggers.Right, 39);
+            InputProfile.Default.Map(device, Triggers.Up, 38);
+            InputProfile.Default.Map(device, Triggers.Down, 40);
+            InputProfile.Default.Map(GetDevice<XInputPad>(), Triggers.Left, 4);
+            InputProfile.Default.Map(GetDevice<XInputPad>(), Triggers.Right, 8);
+            InputProfile.Default.Map(GetDevice<XInputPad>(), Triggers.Up, 1);
+            InputProfile.Default.Map(GetDevice<XInputPad>(), Triggers.Down, 2);
             _profiles[InputProfile.Default.name] = InputProfile.Default;
             EnumerateGamepads();
             InitDefaultProfiles();

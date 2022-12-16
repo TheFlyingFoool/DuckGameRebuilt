@@ -28,7 +28,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (Input.Pressed("START"))
+            if (Input.Pressed(Triggers.Start))
                 current = new TitleScreen();
             base.Update();
         }

@@ -57,7 +57,7 @@ namespace CrashWindow// this is a replacement for the class DG used to use insid
             data = data + "&comment=" + pCommentB64;
             byte[] byteArray = Encoding.UTF8.GetBytes(data);
             httpWebRequest.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
-            httpWebRequest.ContentLength = (long)byteArray.Length;
+            httpWebRequest.ContentLength = byteArray.Length;
             Stream requestStream = httpWebRequest.GetRequestStream();
             requestStream.Write(byteArray, 0, byteArray.Length);
             requestStream.Close();

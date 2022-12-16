@@ -538,7 +538,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				unsafe
 				{
 					float *dstPtr = (float*) values;
-					*dstPtr = (float) value;
+					*dstPtr = value;
 				}
 			}
 			else

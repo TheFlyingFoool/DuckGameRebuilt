@@ -28,9 +28,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 99;
-            _ammoType = new ATLaser();
-            _ammoType.range = 170f;
-            _ammoType.accuracy = 0.8f;
+            _ammoType = new ATLaser
+            {
+                range = 170f,
+                accuracy = 0.8f
+            };
             _type = "gun";
             _sprite = new SpriteMap("mindControlGun", 16, 16)
             {
@@ -99,7 +101,7 @@ namespace DuckGame
                         owner.Fondle(_controlledDuck._trappedInstance);
                         owner.Fondle(_controlledDuck._cookedInstance);
                     }
-                    if (owner.inputProfile.Pressed("QUACK") || _controlledDuck.dead || _controlledDuck.HasEquipment(typeof(TinfoilHat)))
+                    if (owner.inputProfile.Pressed(Triggers.Quack) || _controlledDuck.dead || _controlledDuck.HasEquipment(typeof(TinfoilHat)))
                     {
                         _beamTime = 0f;
                         _triggerHeld = false;

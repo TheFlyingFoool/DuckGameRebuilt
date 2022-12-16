@@ -113,7 +113,7 @@ namespace DuckGame
                     duck.duck.vSpeed = 0f;
                     duck.duck.hSpeed = 0f;
                 }
-                if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed("RIGHT"))
+                if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed(Triggers.Right))
                 {
                     duck.leaving = true;
                     _leaveLeft = false;

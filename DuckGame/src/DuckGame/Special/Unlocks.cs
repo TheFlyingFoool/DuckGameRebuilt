@@ -24,66 +24,71 @@ namespace DuckGame
         {
             ArcadeLevel arcadeLevel = new ArcadeLevel(Content.GetLevelID("arcade"));
             arcadeLevel.InitializeMachines();
-            int num1 = 0;
+            int numChallenges = 0;
             foreach (ArcadeMachine challenge in arcadeLevel._challenges)
-                num1 += challenge.data.challenges.Count;
-            int num2 = num1 + Challenges.GetAllChancyChallenges().Count;
-            int num3 = num2 * Challenges.valueBronze;
-            int num4 = num2 * Challenges.valueSilver;
-            int num5 = num2 * Challenges.valueGold;
-            int num6 = num2 * Challenges.valuePlatinum;
-            int num7 = num3;
-            int num8 = num3 + num4;
-            int num9 = num3 + num4 + num5;
-            int num10 = num3 + num4 + num5 + num6;
-            bronzeTotalTickets = num7;
-            silverTotalTickets = num8;
-            goldTotalTickets = num9;
-            platinumTotalTickets = num10;
-            int num11 = 0;
-            int num12 = 0;
-            int num13 = 0;
-            int num14 = 0;
+                numChallenges += challenge.data.challenges.Count;
+            numChallenges = numChallenges + Challenges.GetAllChancyChallenges().Count;
+            int bronzeValue = numChallenges * Challenges.valueBronze;
+            int silverValue = numChallenges * Challenges.valueSilver;
+            int goldValue = numChallenges * Challenges.valueGold;
+            int platinumValue = numChallenges * Challenges.valuePlatinum;
+            int bronzeTotal = bronzeValue;
+            int silverTotal = bronzeValue + silverValue;
+            int goldTotal = bronzeValue + silverValue + goldValue;
+            int platinumTotal = bronzeValue + silverValue + goldValue + platinumValue;
+            bronzeTotalTickets = bronzeTotal;
+            silverTotalTickets = silverTotal;
+            goldTotalTickets = goldTotal;
+            platinumTotalTickets = platinumTotal;
+            int numCheap = 0;
+            int numNormal = 0;
+            int numHigh = 0;
+            int numRidiculous = 0;
             foreach (UnlockData unlock in GetUnlocks(UnlockType.Any))
             {
                 if (unlock.priceTier == UnlockPrice.Cheap)
-                    ++num11;
+                    ++numCheap;
                 else if (unlock.priceTier == UnlockPrice.Normal)
-                    ++num12;
+                    ++numNormal;
                 else if (unlock.priceTier == UnlockPrice.High)
-                    ++num13;
+                    ++numHigh;
                 else if (unlock.priceTier == UnlockPrice.Ridiculous)
-                    ++num14;
+                    ++numRidiculous;
             }
-            int num15 = (int)Math.Round((double)(num9 * 0.1f));
-            int num16 = (int)Math.Round((double)(num9 * 0.3f));
-            int num17 = (int)Math.Round((double)(num9 * 0.4f));
-            int num18 = (int)Math.Round((double)(num9 * 0.2f));
-            int num19 = (int)Math.Round((double)(num15 / num11));
-            int num20 = (int)Math.Round((double)(num16 / num12));
-            int num21 = (int)Math.Round((double)(num17 / num13));
-            int num22 = (int)Math.Round((double)(num18 / num14));
-            while (num19 * num11 + num20 * num12 + num21 * num13 + num22 * num14 > num9)
-                --num22;
-            while (num19 * num11 + num20 * num12 + num21 * num13 + num22 * num14 < num9)
-                ++num22;
+            int cheapTickets = (int)Math.Round(goldTotal * 0.1f);
+            int normalTickets = (int)Math.Round(goldTotal * 0.3f);
+            int highTickets = (int)Math.Round(goldTotal * 0.4f);
+            int ridiculousTickets = (int)Math.Round(goldTotal * 0.20f);
+
+            int costPerCheap = (int)Math.Round(cheapTickets / (float)numCheap);
+            int costPerNormal = (int)Math.Round(normalTickets / (float)numNormal);
+            int costPerHigh = (int)Math.Round(highTickets / (float)numHigh);
+            int costPerRidiculous = (int)Math.Round(ridiculousTickets / (float)numRidiculous);
+            while (costPerCheap * numCheap + costPerNormal * numNormal + costPerHigh * numHigh + costPerRidiculous * numRidiculous > goldTotal)
+                --costPerRidiculous;
+            while (costPerCheap * numCheap + costPerNormal * numNormal + costPerHigh * numHigh + costPerRidiculous * numRidiculous < goldTotal)
+                ++costPerRidiculous;
             foreach (UnlockData unlock in GetUnlocks(UnlockType.Any))
             {
                 if (unlock.priceTier == UnlockPrice.Cheap)
-                    unlock.cost = num19;
+                    unlock.cost = costPerCheap;
                 else if (unlock.priceTier == UnlockPrice.Normal)
-                    unlock.cost = num20;
+                    unlock.cost = costPerNormal;
                 else if (unlock.priceTier == UnlockPrice.High)
-                    unlock.cost = num21;
+                    unlock.cost = costPerHigh;
                 else if (unlock.priceTier == UnlockPrice.Ridiculous)
-                    unlock.cost = num22;
+                    unlock.cost = costPerRidiculous;
                 else if (unlock.priceTier == UnlockPrice.Chancy)
-                    unlock.cost = num6;
+                    unlock.cost = platinumValue;
             }
         }
 
         public static bool IsUnlocked(string unlock, Profile pro = null)
         {
+            if (FireDebug.Debugging)
+            {
+                return true;
+            }
             foreach (Profile profile in Profiles.all)
             {
                 if ((pro == null || profile == pro) && profile.unlocks.Contains(unlock))

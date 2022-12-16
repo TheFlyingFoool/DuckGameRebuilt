@@ -692,7 +692,7 @@ namespace DuckGame
 
         public void PauseLogic()
         {
-            if (Input.Pressed("START"))
+            if (Input.Pressed(Triggers.Start))
             {
                 _pauseGroup.Open();
                 _pauseMenu.Open();

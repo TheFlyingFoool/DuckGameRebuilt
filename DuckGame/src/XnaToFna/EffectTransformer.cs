@@ -18,7 +18,7 @@ namespace XnaToFna.ContentTransformers
         protected override Effect Read(ContentReader input, Effect existing)
         {
             input.ReadBytes(input.ReadInt32());
-            return (Effect)FormatterServices.GetUninitializedObject(this.t_Effect);
+            return (Effect)FormatterServices.GetUninitializedObject(t_Effect);
         }
     }
 }

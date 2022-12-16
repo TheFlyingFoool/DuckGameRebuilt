@@ -37,9 +37,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 100;
-            _ammoType = new ATDart();
-            _ammoType.range = 170f;
-            _ammoType.accuracy = 0.5f;
+            _ammoType = new ATDart
+            {
+                range = 170f,
+                accuracy = 0.5f
+            };
             wideBarrel = true;
             barrelInsertOffset = new Vec2(0f, 0f);
             _type = "gun";

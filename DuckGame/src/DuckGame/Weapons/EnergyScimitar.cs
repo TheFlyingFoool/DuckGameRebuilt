@@ -242,11 +242,11 @@ namespace DuckGame
                 _throwSpin = 0f;
                 _wasLifted = true;
                 _blocking = duck.crouch && Math.Abs(duck.hSpeed) < 2.0;
-                if (duck.inputProfile.Pressed("UP") && !duck.inputProfile.Pressed("JUMP") && (_stance == Stance.Drag || _stance == Stance.Intermediate) && !duck.sliding)
+                if (duck.inputProfile.Pressed(Triggers.Up) && !duck.inputProfile.Pressed(Triggers.Jump) && (_stance == Stance.Drag || _stance == Stance.Intermediate) && !duck.sliding)
                     _stance = Stance.SwingUp;
-                if (duck.crouch && !duck.sliding && duck.inputProfile.Pressed("LEFT"))
+                if (duck.crouch && !duck.sliding && duck.inputProfile.Pressed(Triggers.Left))
                     duck.offDir = -1;
-                else if (duck.crouch && !duck.sliding && duck.inputProfile.Pressed("RIGHT"))
+                else if (duck.crouch && !duck.sliding && duck.inputProfile.Pressed(Triggers.Right))
                     duck.offDir = 1;
                 bool flag = Level.CheckLine<IPlatform>(new Vec2(owner.position.x, owner.bottom) + new Vec2(-offDir * 16, -10f), new Vec2(owner.position.x, owner.bottom) + new Vec2(-offDir * 16, 2f)) == null;
                 _spikeDrag = duck.grounded && !flag && Level.CheckLine<Spikes>(new Vec2(owner.position.x, owner.bottom) + new Vec2(-offDir * 16, -10f), new Vec2(owner.position.x, owner.bottom) + new Vec2(-offDir * 16, 2f)) != null;
@@ -260,7 +260,7 @@ namespace DuckGame
                     if (Rando.Int(30) == 0 && _dragRand > 0.1f)
                         duck.Swear();
                 }
-                if (!duck.grounded && duck.inputProfile.Pressed("DOWN") && _stance != Stance.Drag)
+                if (!duck.grounded && duck.inputProfile.Pressed(Triggers.Down) && _stance != Stance.Drag)
                     _goIntermediate = true;
                 if (_stance == Stance.Drag && duck._hovering)
                 {
@@ -269,7 +269,7 @@ namespace DuckGame
                     duck._hovering = false;
                     _timeSinceDragJump = 100;
                 }
-                if (duck.inputProfile.Pressed("DOWN") && duck.grounded)
+                if (duck.inputProfile.Pressed(Triggers.Down) && duck.grounded)
                     _stance = Stance.Drag;
                 if (Math.Abs(duck.hSpeed) > 1.0)
                 {
@@ -312,7 +312,7 @@ namespace DuckGame
                         }
                     }
                 }
-                if (_stance == Stance.SwingDown && duck.inputProfile.Pressed("JUMP"))
+                if (_stance == Stance.SwingDown && duck.inputProfile.Pressed(Triggers.Jump))
                     _stance = Stance.SwingUp;
                 if (_goIntermediate && _stanceReady)
                 {
@@ -505,19 +505,21 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            if (this.material is MaterialGold)
+            if (material is MaterialGold)
             {
                 // _blade.color = Color.Lerp(properBladeColor, Color.Red, heat);
                 //swordColor = Color.Lerp(properColor, Color.Red, heat);
                 properBladeColor = new Color(255, 216, 0);
                 properColor = new Color(255, 216, 0); //255, 216, 24
             }
-            _platform = new ScimiPlatform(0f, 0f, 20f, 8f, this);
-            _platform.solid = false;
-            _platform.enablePhysics = false;
-            _platform.center = new Vec2(10f, 4f);
-            _platform.collisionOffset = new Vec2(-10f, -2f);
-            _platform.thickness = 0.01f;
+            _platform = new ScimiPlatform(0f, 0f, 20f, 8f, this)
+            {
+                solid = false,
+                enablePhysics = false,
+                center = new Vec2(10f, 4f),
+                collisionOffset = new Vec2(-10f, -2f),
+                thickness = 0.01f
+            };
             Level.Add(_platform);
             _hum = new LoopingSound("scimiHum")
             {
@@ -760,25 +762,25 @@ namespace DuckGame
             if (!isServerForObject || duck == null || duck.destroyed || !_canAirFly || _airFly)
                 return;
             _upFlyTime = 0f;
-            if (!duck.inputProfile.Down("GRAB"))
+            if (!duck.inputProfile.Down(Triggers.Grab))
                 return;
-            if (duck.inputProfile.Down("LEFT") && duck.offDir < 0 || duck.inputProfile.Down("RIGHT") && duck.offDir > 0)
+            if (duck.inputProfile.Down(Triggers.Left) && duck.offDir < 0 || duck.inputProfile.Down(Triggers.Right) && duck.offDir > 0)
             {
                 y = duck.y;
                 if (_stance == Stance.Drag)
                     y += 6f;
                 skipThrowMove = true;
-                TileConnection pDirection = duck.inputProfile.Down("LEFT") ? TileConnection.Left : TileConnection.Right;
+                TileConnection pDirection = duck.inputProfile.Down(Triggers.Left) ? TileConnection.Left : TileConnection.Right;
                 owner = null;
                 StartFlying(pDirection, true);
                 skipThrowMove = false;
             }
             else
             {
-                if (!duck.inputProfile.Down("UP") && !duck.inputProfile.Down("DOWN") || !duck.inputProfile.Down("UP") && duck.grounded)
+                if (!duck.inputProfile.Down(Triggers.Up) && !duck.inputProfile.Down(Triggers.Down) || !duck.inputProfile.Down(Triggers.Up) && duck.grounded)
                     return;
                 int num = 1;
-                if (duck.inputProfile.Down("UP"))
+                if (duck.inputProfile.Down(Triggers.Up))
                     num = -1;
                 x = duck.x + duck.offDir * -2f;
                 if (num == 1 && !duck.grounded)

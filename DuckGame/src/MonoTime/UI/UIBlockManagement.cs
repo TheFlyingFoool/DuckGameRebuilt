@@ -75,7 +75,7 @@ namespace DuckGame
         {
             if (open && !_opening)
             {
-                if (Input.Pressed("MENUUP") && _selection > 0)
+                if (Input.Pressed(Triggers.MenuUp) && _selection > 0)
                 {
                     --_selection;
                     if (items[_selection].Key == 0UL)
@@ -84,7 +84,7 @@ namespace DuckGame
                         _topOffset = _selection;
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (Input.Pressed("MENUDOWN") && _selection < items.Count - 1)
+                if (Input.Pressed(Triggers.MenuDown) && _selection < items.Count - 1)
                 {
                     ++_selection;
                     if (items[_selection].Key == 0UL)
@@ -93,7 +93,7 @@ namespace DuckGame
                         ++_topOffset;
                     SFX.Play("textLetter", 0.7f);
                 }
-                if (_selection >= 0 && _selection < items.Count && Input.Pressed("MENU1"))
+                if (_selection >= 0 && _selection < items.Count && Input.Pressed(Triggers.Menu1))
                 {
                     KeyValuePair<ulong, bool> keyValuePair = items[_selection];
                     if (!keyValuePair.Value)
@@ -115,9 +115,9 @@ namespace DuckGame
                         MakeDirty();
                     }
                 }
-                if (Input.Pressed("SELECT"))
+                if (Input.Pressed(Triggers.Select))
                     Steam.OverlayOpenURL("http://steamcommunity.com/profiles/" + items[_selection].Key.ToString());
-                if (Input.Pressed("CANCEL"))
+                if (Input.Pressed(Triggers.Cancel))
                 {
                     if (_openOnClose != null)
                         new UIMenuActionOpenMenu(this, _openOnClose).Activate();

@@ -380,7 +380,7 @@ namespace DuckGame
             _chancyLerp = Lerp.FloatSmooth(_chancyLerp, flag3 ? 1f : 0f, 0.2f, 1.05f);
             if (lookingAtList)
             {
-                if (Input.Pressed("MENUUP"))
+                if (Input.Pressed(Triggers.MenuUp))
                 {
                     --_challengeSelection;
                     if (_challengeSelection < 0)
@@ -388,7 +388,7 @@ namespace DuckGame
                     else
                         SFX.Play("textLetter", 0.7f);
                 }
-                if (Input.Pressed("MENUDOWN"))
+                if (Input.Pressed(Triggers.MenuDown))
                 {
                     ++_challengeSelection;
                     if (_challengeSelection > _chancyChallenges.Count - 1)

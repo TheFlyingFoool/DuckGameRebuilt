@@ -1472,7 +1472,7 @@ namespace DuckGame
 
         public T CollisionCircle<T>(Vec2 p1, float radius, Thing ignore)
         {
-            foreach (Thing thing in this.things.CollisionCircleAll(p1, radius, typeof(T)))
+            foreach (Thing thing in things.CollisionCircleAll(p1, radius, typeof(T)))
             {
                 if (!thing.removeFromLevel && thing != ignore && Collision.Circle(p1, radius, thing))
                 {
@@ -1494,7 +1494,7 @@ namespace DuckGame
         //}
         public T CollisionCircle<T>(Vec2 p1, float radius)
         {
-            foreach (Thing thing in this.things.CollisionCircleAll(p1, radius, typeof(T)))
+            foreach (Thing thing in things.CollisionCircleAll(p1, radius, typeof(T)))
             {
                 if (!thing.removeFromLevel && Collision.Circle(p1, radius, thing))
                 {
@@ -1506,7 +1506,7 @@ namespace DuckGame
         public IEnumerable<T> CollisionCircleAll<T>(Vec2 p1, float radius) //ban
         {
             List<T> outList1 = new List<T>();
-            foreach (Thing thing in this.things.CollisionCircleAll(p1, radius, typeof(T)))
+            foreach (Thing thing in things.CollisionCircleAll(p1, radius, typeof(T)))
             {
                 if (!thing.removeFromLevel && Collision.Circle(p1, radius, thing))
                 {
@@ -1540,7 +1540,7 @@ namespace DuckGame
             //        return (T)(object)dynamicObject;
             //}
             //return _things.HasStaticObjects(key) ? _things.quadTree.CheckRectangleFilter<T>(p1, p2, filter) : default(T);
-            foreach (Thing thing in this.things.CollisionRectAll(p1, p2, key))
+            foreach (Thing thing in things.CollisionRectAll(p1, p2, key))
             {
                 if (!thing.removeFromLevel && Collision.Rect(p1, p2, thing) && filter((T)(object)thing))
                 {
@@ -1559,7 +1559,7 @@ namespace DuckGame
             //        return (T)(object)dynamicObject;
             //}
             //return _things.HasStaticObjects(key) ? _things.quadTree.CheckRectangle<T>(p1, p2, ignore) : default(T);
-            foreach (Thing thing in this.things.CollisionRectAll(p1, p2, typeof(T)))
+            foreach (Thing thing in things.CollisionRectAll(p1, p2, typeof(T)))
             {
                 if (!thing.removeFromLevel && thing != ignore && Collision.Rect(p1, p2, thing))
                 {
@@ -1571,7 +1571,7 @@ namespace DuckGame
 
         public T CollisionRect<T>(Vec2 p1, Vec2 p2)
         {
-            foreach (Thing thing in this.things.CollisionRectAll(p1, p2, typeof(T)))
+            foreach (Thing thing in things.CollisionRectAll(p1, p2, typeof(T)))
             {
                 if (!thing.removeFromLevel && Collision.Rect(p1, p2, thing))
                 {
@@ -1604,7 +1604,7 @@ namespace DuckGame
         public List<T> CollisionRectAllDan<T>(Vec2 p1, Vec2 p2, List<T> outList)
         {
             List<T> outList1 = outList == null ? new List<T>() : outList;
-            foreach (Thing thing in this.things.CollisionRectAll(p1, p2, typeof(T)))
+            foreach (Thing thing in things.CollisionRectAll(p1, p2, typeof(T)))
             {
                 if (!thing.removeFromLevel && Collision.Rect(p1, p2, thing))
                 {
@@ -1637,7 +1637,7 @@ namespace DuckGame
         public T CollisionLine<T>(Vec2 p1, Vec2 p2)
         {
             Type key = typeof(T);
-            foreach (Thing thing in this.things.CollisionLineAll(p1, p2, key))
+            foreach (Thing thing in things.CollisionLineAll(p1, p2, key))
             {
                 if (!thing.removeFromLevel && Collision.Line(p1, p2, thing))
                     return (T)(object)thing;

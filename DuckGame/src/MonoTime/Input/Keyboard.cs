@@ -94,16 +94,16 @@ namespace DuckGame
                                 _triggerNames[(int)key] = "HOME";
                                 continue;
                             case Keys.Left:
-                                _triggerNames[(int)key] = "LEFT";
+                                _triggerNames[(int)key] = Triggers.Left;
                                 continue;
                             case Keys.Up:
-                                _triggerNames[(int)key] = "UP";
+                                _triggerNames[(int)key] = Triggers.Up;
                                 continue;
                             case Keys.Right:
-                                _triggerNames[(int)key] = "RIGHT";
+                                _triggerNames[(int)key] = Triggers.Right;
                                 continue;
                             case Keys.Down:
-                                _triggerNames[(int)key] = "DOWN";
+                                _triggerNames[(int)key] = Triggers.Down;
                                 continue;
                             case Keys.Insert:
                                 _triggerNames[(int)key] = "INSRT";
@@ -1022,7 +1022,7 @@ namespace DuckGame
         {
             _registerSetThing = pInstrument;
             _usingVoiceRegister = 0;
-            if (Input.Pressed("VOICEREG"))
+            if (Input.Pressed(Triggers.VoiceRegister))
                 _registerLock = !_registerLock;
             return KeyNote();
         }

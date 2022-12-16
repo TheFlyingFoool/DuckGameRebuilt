@@ -21,8 +21,8 @@ namespace XnaToFna.StubXDK.GamerServices
 
         public TitleServiceConnection(int serviceId, TitleServiceDescription description)
         {
-            this.ServiceId = serviceId;
-            this.Description = description;
+            ServiceId = serviceId;
+            Description = description;
         }
 
         public void ConnectAsync()

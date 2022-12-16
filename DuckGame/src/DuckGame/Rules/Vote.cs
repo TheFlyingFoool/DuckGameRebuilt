@@ -112,7 +112,7 @@ namespace DuckGame
             {
                 if (vote.who != null && vote.who.inputProfile != null)
                 {
-                    float wobbleOffset = (float)Math.Sin((double)vote.wobbleInc) * vote.wobble * 3f;
+                    float wobbleOffset = (float)Math.Sin(vote.wobbleInc) * vote.wobble * 3f;
                     Vec2 pos2 = Network.isActive ? vote.leftStick : vote.who.inputProfile.leftStick;
                     vote.who.persona.skipSprite.angle = wobbleOffset * 0.03f + pos2.y * 0.4f;
                     float wingXOffset = 0f;
@@ -129,7 +129,7 @@ namespace DuckGame
                         wingPlus = 68f;
                         vote.who.persona.skipSprite.frame = 1;
                     }
-                    Graphics.Draw(vote.who.persona.skipSprite, Layer.HUD.width + wingPlus - vote.slide * 48f + pos2.x * posMul + wingXOffset, Layer.HUD.height - 28f - (float)(index * 16) - pos2.y * posMul, 0.9f);
+                    Graphics.Draw(vote.who.persona.skipSprite, Layer.HUD.width + wingPlus - vote.slide * 48f + pos2.x * posMul + wingXOffset, Layer.HUD.height - 28f - index * 16 - pos2.y * posMul, 0.9f);
                     vote.who.persona.skipSprite.frame = 1;
                     Vec2 pos3 = Network.isActive ? vote.rightStick : vote.who.inputProfile.rightStick;
                     if (vote.vote == VoteType.None)
@@ -137,7 +137,7 @@ namespace DuckGame
                         wingXOffset = -50f;
                     }
                     vote.who.persona.skipSprite.angle = wobbleOffset * 0.03f + Maths.DegToRad(Maths.PointDirection(Vec2.Zero, pos3) - 180f);
-                    Graphics.Draw(vote.who.persona.skipSprite, Layer.HUD.width + 68f - vote.slide * 48f + pos3.x * 20f + wingXOffset, Layer.HUD.height - 32f - (float)(index * 16) - pos3.y * 20f, 0.9f);
+                    Graphics.Draw(vote.who.persona.skipSprite, Layer.HUD.width + 68f - vote.slide * 48f + pos3.x * 20f + wingXOffset, Layer.HUD.height - 32f - index * 16 - pos3.y * 20f, 0.9f);
                     index++;
                 }
             }

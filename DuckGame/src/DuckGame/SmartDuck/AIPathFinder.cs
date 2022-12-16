@@ -18,77 +18,77 @@ namespace DuckGame
 
         public Thing followObject
         {
-            get => this._followObject;
-            set => this._followObject = value;
+            get => _followObject;
+            set => _followObject = value;
         }
 
-        public AIPathFinder(Thing t = null) => this._followObject = t;
+        public AIPathFinder(Thing t = null) => _followObject = t;
 
         public List<PathNodeLink> path
         {
             get
             {
-                if (this._path == null)
+                if (_path == null)
                     return null;
-                return this._path.Count <= 0 ? null : this._path;
+                return _path.Count <= 0 ? null : _path;
             }
         }
 
-        public PathNodeLink target => this._path == null || this._path.Count == 0 ? null : this._path[0];
+        public PathNodeLink target => _path == null || _path.Count == 0 ? null : _path[0];
 
         public PathNodeLink peek
         {
             get
             {
-                if (this._path == null || this._path.Count == 0)
+                if (_path == null || _path.Count == 0)
                     return null;
-                return this._path.Count > 1 ? this._path[1] : this._path[0];
+                return _path.Count > 1 ? _path[1] : _path[0];
             }
         }
 
-        public bool finished => this._path == null || this._path.Count == 0;
+        public bool finished => _path == null || _path.Count == 0;
 
         public void AtTarget()
         {
-            if (this._path == null || this._path.Count <= 0)
+            if (_path == null || _path.Count <= 0)
                 return;
-            this._revert = this._path[0];
-            this._path.RemoveAt(0);
+            _revert = _path[0];
+            _path.RemoveAt(0);
         }
 
         public void Revert()
         {
-            if (this._path == null || this._revert == null)
+            if (_path == null || _revert == null)
                 return;
-            this._path.Insert(0, this._revert);
+            _path.Insert(0, _revert);
         }
 
         public void Refresh()
         {
-            if (this._path == null)
+            if (_path == null)
                 return;
-            this.SetTarget(this._path.Last());
+            SetTarget(_path.Last());
         }
 
         public void SetTarget(Vec2 target)
         {
-            if (this._followObject != null)
-                this.SetTarget(this._followObject.position, target);
+            if (_followObject != null)
+                SetTarget(_followObject.position, target);
             else
-                this.SetTarget(target, target);
+                SetTarget(target, target);
         }
 
         public void SetTarget(PathNodeLink target)
         {
-            if (this._followObject == null)
+            if (_followObject == null)
                 return;
-            this.SetTarget(this._followObject.position, target.owner.position);
+            SetTarget(_followObject.position, target.owner.position);
         }
 
         public void SetTarget(Vec2 position, Vec2 target)
         {
-            this._revert = null;
-            this._path = null;
+            _revert = null;
+            _path = null;
             List<Thing> list = Level.current.things[typeof(PathNode)].ToList();
             list.Sort((a, b) =>
            {
@@ -134,7 +134,7 @@ namespace DuckGame
             bool flag = false;
             if (path.nodes.Count > 1 && PathNode.LineIsClear(position, path.nodes[1].position))
                 flag = true;
-            this._path = new List<PathNodeLink>();
+            _path = new List<PathNodeLink>();
             PathNode pathNode2 = null;
             foreach (PathNode node in path.nodes)
             {
@@ -148,19 +148,19 @@ namespace DuckGame
                     };
                     pathNode2 = node;
                     flag = true;
-                    this._path.Add(pathNodeLink);
+                    _path.Add(pathNodeLink);
                 }
                 else
                 {
                     if (pathNode2 != null)
-                        this._path.Add(pathNode2.GetLink(node));
+                        _path.Add(pathNode2.GetLink(node));
                     pathNode2 = node;
                 }
             }
             Thing thing1 = null;
-            this._path.Add(new PathNodeLink()
+            _path.Add(new PathNodeLink()
             {
-                owner = this._path.Count <= 0 ? thing1 : this._path.Last().link,
+                owner = _path.Count <= 0 ? thing1 : _path.Last().link,
                 link = thing1
             });
         }

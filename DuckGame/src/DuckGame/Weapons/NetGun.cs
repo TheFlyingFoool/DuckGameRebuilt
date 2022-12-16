@@ -22,10 +22,12 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 4;
-            _ammoType = new ATLaser();
-            _ammoType.range = 170f;
-            _ammoType.accuracy = 0.8f;
-            _ammoType.penetration = -1f;
+            _ammoType = new ATLaser
+            {
+                range = 170f,
+                accuracy = 0.8f,
+                penetration = -1f
+            };
             _type = "gun";
             graphic = new Sprite("netGun");
             center = new Vec2(16f, 16f);

@@ -104,7 +104,7 @@ namespace DuckGame
                     }
                     else
                         Graphics.flashAdd = Lerp.Float(Graphics.flashAdd, 0f, 0.2f);
-                    if (!_wrapped && Input.Pressed("SELECT"))
+                    if (!_wrapped && Input.Pressed(Triggers.Select))
                     {
                         HUD.CloseAllCorners();
                         SFX.Play("resume", 0.6f);

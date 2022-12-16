@@ -80,7 +80,7 @@ namespace DuckGame
                 if (_selectedIndex == 0)
                     _hoverOk = true;
             }
-            if (!Editor.tookInput && _hoverOk && (Mouse.left == InputState.Pressed || Input.Pressed("SELECT")))
+            if (!Editor.tookInput && _hoverOk && (Mouse.left == InputState.Pressed || Input.Pressed(Triggers.Select)))
             {
                 result = true;
                 opened = false;
@@ -88,7 +88,7 @@ namespace DuckGame
             }
             else
             {
-                if (Editor.tookInput || !_hoverCancel || Mouse.left != InputState.Pressed && !Input.Pressed("SELECT"))
+                if (Editor.tookInput || !_hoverCancel || Mouse.left != InputState.Pressed && !Input.Pressed(Triggers.Select))
                     return;
                 result = false;
                 opened = false;

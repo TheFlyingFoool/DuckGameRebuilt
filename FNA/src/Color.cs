@@ -1625,7 +1625,7 @@ namespace Microsoft.Xna.Framework
 			R = (byte) MathHelper.Clamp(r, Byte.MinValue, Byte.MaxValue);
 			G = (byte) MathHelper.Clamp(g, Byte.MinValue, Byte.MaxValue);
 			B = (byte) MathHelper.Clamp(b, Byte.MinValue, Byte.MaxValue);
-			A = (byte)255;
+			A = 255;
 		}
 
 		/// <summary>

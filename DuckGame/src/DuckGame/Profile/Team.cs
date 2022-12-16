@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Security.Cryptography;
 
 namespace DuckGame
 {
+    [DebuggerDisplay("{_name}")]
     public class Team
     {
         //YUH YEAH AYUYH YUH YYUH ELETI GUEWHYUH YUH YUH
@@ -472,6 +474,8 @@ namespace DuckGame
         {
             get
             {
+                if (FireDebug.Debugging && !defaultTeam)
+                    return false;
                 if (!NetworkDebugger.enabled || NetworkDebugger.currentIndex != 1)
                     return _locked;
                 return Teams.all.IndexOf(this) > 15 && Teams.all.IndexOf(this) < 35;

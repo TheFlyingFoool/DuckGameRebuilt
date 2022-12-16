@@ -15,10 +15,12 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 99;
-            _ammoType = new ATShrapnel();
-            _ammoType.range = 470f;
-            _ammoType.rangeVariation = 70f;
-            _ammoType.accuracy = 0.2f;
+            _ammoType = new ATShrapnel
+            {
+                range = 470f,
+                rangeVariation = 70f,
+                accuracy = 0.2f
+            };
             _type = "gun";
             graphic = new Sprite("musket");
             center = new Vec2(19f, 5f);

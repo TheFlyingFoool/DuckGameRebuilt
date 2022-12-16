@@ -578,7 +578,7 @@ namespace DuckGame
                     }
                 }
                 UpdateAdditionalMatchmakingLogic();
-                if (Input.Pressed("CANCEL"))
+                if (Input.Pressed(Triggers.Cancel))
                 {
                     _quit = true;
                     ChangeState(MatchmakingState.Disconnect);

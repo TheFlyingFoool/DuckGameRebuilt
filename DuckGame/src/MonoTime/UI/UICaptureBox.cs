@@ -43,13 +43,13 @@ namespace DuckGame
                 if (_captureTarget == null)
                     _captureTarget = !_resizable ? new RenderTarget2D(152, 152, true) : new RenderTarget2D(1280, 720, true);
                 MonoMain.autoPauseFade = false;
-                if (Input.Down("MENULEFT"))
+                if (Input.Down(Triggers.MenuLeft))
                     --_capturePosition.x;
-                if (Input.Down("MENURIGHT"))
+                if (Input.Down(Triggers.MenuRight))
                     ++_capturePosition.x;
-                if (Input.Down("MENUUP"))
+                if (Input.Down(Triggers.MenuUp))
                     --_capturePosition.y;
-                if (Input.Down("MENUDOWN"))
+                if (Input.Down(Triggers.MenuDown))
                     ++_capturePosition.y;
                 float num = Graphics.width / 320;
                 if (_resizable)
@@ -76,14 +76,14 @@ namespace DuckGame
                 Graphics.screen.End();
                 Graphics.viewport = viewport;
                 Graphics.SetRenderTarget(null);
-                if (Input.Pressed("SELECT"))
+                if (Input.Pressed(Triggers.Select))
                 {
                     SFX.Play("cameraFlash");
                     Editor.previewCapture = (Texture2D)_captureTarget;
                     _captureTarget = null;
                     new UIMenuActionOpenMenu(this, _closeMenu).Activate();
                 }
-                else if (Input.Pressed("CANCEL"))
+                else if (Input.Pressed(Triggers.Cancel))
                 {
                     SFX.Play("consoleCancel");
                     new UIMenuActionOpenMenu(this, _closeMenu).Activate();

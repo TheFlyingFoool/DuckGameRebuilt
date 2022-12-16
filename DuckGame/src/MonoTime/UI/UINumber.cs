@@ -49,7 +49,7 @@ namespace DuckGame
                 {
                     _text = str + Change.ToString((int)_field.value) + _append;
                     if (_filterField != null && !(bool)_filterField.value)
-                        _text = "ANY";
+                        _text = Triggers.Any;
                 }
             }
             base.Draw();

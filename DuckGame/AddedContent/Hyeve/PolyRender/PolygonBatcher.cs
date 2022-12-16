@@ -29,9 +29,11 @@ namespace AddedContent.Hyeve.PolyRender
             _device = _manager?.GraphicsDevice ?? throw new InvalidOperationException("Cannot create a polygon batcher will a null graphics device!!");
             _vertices = new VertexPositionColorTexture[bufferSize];
             _scissorStack = new Stack<Rectangle>();
-            _effect = new BasicEffect(_device);
-            _effect.LightingEnabled = false;
-            _effect.VertexColorEnabled = true;
+            _effect = new BasicEffect(_device)
+            {
+                LightingEnabled = false,
+                VertexColorEnabled = true
+            };
             _manager.ApplyChanges();
             ResetDrawParams();
             UpdateMatricesForCurrentLayer();

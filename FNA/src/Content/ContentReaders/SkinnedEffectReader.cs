@@ -21,15 +21,17 @@ namespace Microsoft.Xna.Framework.Content
 			ContentReader input,
 			SkinnedEffect existingInstance
 		) {
-			SkinnedEffect effect = new SkinnedEffect(input.ContentManager.GetGraphicsDevice());
-			effect.Texture = input.ReadExternalReference<Texture>() as Texture2D;
-			effect.WeightsPerVertex = input.ReadInt32();
-			effect.DiffuseColor = input.ReadVector3();
-			effect.EmissiveColor = input.ReadVector3();
-			effect.SpecularColor = input.ReadVector3();
-			effect.SpecularPower = input.ReadSingle();
-			effect.Alpha = input.ReadSingle();
-			return effect;
+            SkinnedEffect effect = new SkinnedEffect(input.ContentManager.GetGraphicsDevice())
+            {
+                Texture = input.ReadExternalReference<Texture>() as Texture2D,
+                WeightsPerVertex = input.ReadInt32(),
+                DiffuseColor = input.ReadVector3(),
+                EmissiveColor = input.ReadVector3(),
+                SpecularColor = input.ReadVector3(),
+                SpecularPower = input.ReadSingle(),
+                Alpha = input.ReadSingle()
+            };
+            return effect;
 		}
 
 		#endregion

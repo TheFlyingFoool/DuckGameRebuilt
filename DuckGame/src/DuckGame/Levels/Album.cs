@@ -107,9 +107,9 @@ namespace DuckGame
             base.Update();
             if (_pages.Count > 0)
             {
-                if (Input.Pressed("MENURIGHT"))
+                if (Input.Pressed(Triggers.MenuRight))
                     ++_currentPage;
-                if (Input.Pressed("MENULEFT"))
+                if (Input.Pressed(Triggers.MenuLeft))
                     --_currentPage;
                 if (_currentPage < 0)
                     _currentPage = 0;
@@ -137,7 +137,7 @@ namespace DuckGame
                     }
                 }
             }
-            if (Input.Pressed("CANCEL"))
+            if (Input.Pressed(Triggers.Cancel))
             {
                 _quit = true;
                 HUD.CloseAllCorners();
