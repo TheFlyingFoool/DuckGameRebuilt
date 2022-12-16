@@ -176,7 +176,10 @@ namespace DuckGame
                 fingerPositionSprite.flipH = offDir <= 0;
                 fingerPositionSprite.angle = 0f;
                 Vec2 vec2 = Offset(new Vec2(-8f, -2f));
+                Material mat = Graphics.material;
+                Graphics.material = null;
                 Graphics.Draw(fingerPositionSprite, vec2.x, vec2.y);
+                Graphics.material = mat;
             }
             base.Draw();
         }

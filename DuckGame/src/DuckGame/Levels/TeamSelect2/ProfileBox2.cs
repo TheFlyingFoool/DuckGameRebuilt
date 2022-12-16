@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using AddedContent.Hyeve.DebugUI.Basic;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -887,7 +888,12 @@ namespace DuckGame
                                 Graphics.DrawRect(new Vec2(x, y + 35f), new Vec2(x + num, y + 52f), Color.Black, doorLeftBlank.depth + 20);
                                 string text1 = "WAITING FOR";
                                 _fontSmall.Draw(text1, new Vec2((x + num / 2f - _fontSmall.GetWidth(text1) / 2f), y + 36f), Color.White, doorLeftBlank.depth + 30);
-                                string text2 = profile.nameUI;
+                                string text2 = profile.name;
+
+                                if (profile.muteName)
+                                    text2 = "Player " + (profile.networkIndex + 1).ToString();
+                                if (profile.isUsingRebuilt && DGRSettings.S_RebuiltEffect == 1) text2 += "|PINK|♥|WHITE|";
+
                                 if (text2.Length > 16)
                                     text2 = text2.Substring(0, 16);
                                 _fontSmall.Draw(text2, new Vec2((x + num / 2f - _fontSmall.GetWidth(text2) / 2f), y + 44f), Color.White, doorLeftBlank.depth + 30);
@@ -990,7 +996,11 @@ namespace DuckGame
                                     Graphics.DrawRect(new Vec2(x, y + 35f), new Vec2(x + num, y + 52f), Color.Black, doorLeftBlank.depth + 20);
                                     string text3 = "WAITING FOR";
                                     _fontSmall.Draw(text3, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text3) / 2.0), y + 36f), Color.White, doorLeftBlank.depth + 30);
-                                    string text4 = profile.nameUI;
+                                    string text4 = profile.name;
+
+                                    if (profile.muteName)
+                                        text4 = "Player " + (profile.networkIndex + 1).ToString();
+                                    if (profile.isUsingRebuilt && DGRSettings.S_RebuiltEffect == 1) text4 += "|PINK|♥|WHITE|";
                                     if (text4.Length > 16)
                                         text4 = text4.Substring(0, 16);
                                     _fontSmall.Draw(text4, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text4) / 2.0), y + 44f), Color.White, doorLeftBlank.depth + 30);

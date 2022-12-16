@@ -310,10 +310,14 @@ namespace DuckGame
                     if (DGRSettings.s_dubberspeed && _currentMenuItemSelection != null)
                     {
                         int c = _currentMenuItemSelection.Count;
+                        int dubberOffset = -1;
+                        if (Keyboard.Down(Keys.LeftShift)) dubberOffset = 0;
                         for (int i = 0; i < keysOfInterest.Length; i++)
                         {
                             if (Keyboard.Pressed(keysOfInterest[i]) && i < c)
                             {
+                                //optimal -NiK0
+                                if (dubberOffset == -1) dubberOffset = _currentMenuItemSelection.FindAll(ui => ui is UIConnectionInfo).Count();
                                 SFX.Play("rockHitGround");
                                 ((UIMenuItem)_currentMenuItemSelection[i]).Activate(Triggers.Select);
                             }
