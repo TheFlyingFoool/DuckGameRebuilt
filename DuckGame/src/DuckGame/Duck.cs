@@ -132,7 +132,7 @@ namespace DuckGame
         private bool _remoteControl;
         private float _ghostTimer = 1f;
         private int _lives;
-        protected float _runMax = 3.1f;
+        private float _runMax = 3.1f;
         private bool _moveLock;
         private InputProfile _inputProfile = InputProfile.Get("SinglePlayer");
         private InputProfile _virtualInput;
