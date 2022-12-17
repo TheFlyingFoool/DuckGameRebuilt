@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DuckGame
 {
+    [ClientOnly]
     public class BigRagdoll : Ragdoll
     {
         public float size;
