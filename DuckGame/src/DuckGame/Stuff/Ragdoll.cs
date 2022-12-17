@@ -310,7 +310,7 @@ namespace DuckGame
             RunInit();
         }
 
-        public void Organize()
+        public virtual void Organize()
         {
             Vec2 vec = Maths.AngleToVec(angle);
             if (_part1 == null)
@@ -488,7 +488,7 @@ namespace DuckGame
             Level.Remove(_part3);
         }
 
-        public void Solve(PhysicsObject body1, PhysicsObject body2, float dist)
+        public virtual void Solve(PhysicsObject body1, PhysicsObject body2, float dist)
         {
             float num1 = dist;
             Vec2 vec2_1 = body2.position - body1.position;
@@ -528,7 +528,7 @@ namespace DuckGame
         //{
         //}
 
-        public float SpecialSolve(PhysicsObject b1, PhysicsObject b2, float dist)
+        public virtual float SpecialSolve(PhysicsObject b1, PhysicsObject b2, float dist)
         {
             Thing thing1 = b1.owner != null ? b1.owner : b1;
             Thing thing2 = b2.owner != null ? b2.owner : b2;
@@ -581,7 +581,7 @@ namespace DuckGame
             return num8;
         }
 
-        public float SpecialSolve(PhysicsObject b1, Vec2 stuck, float dist)
+        public virtual float SpecialSolve(PhysicsObject b1, Vec2 stuck, float dist)
         {
             Thing thing = b1.owner != null ? b1.owner : b1;
             float num1 = dist;

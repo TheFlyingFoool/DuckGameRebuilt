@@ -270,6 +270,10 @@
     <Compile Include="AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMPush.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigDuck.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigRagdollPart.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigRagdoll.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigTrapped.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATDeathCaliber.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMagnum.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Bubble.cs" />

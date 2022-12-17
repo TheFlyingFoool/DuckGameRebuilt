@@ -19,7 +19,7 @@ namespace DuckGame
         }
         public PinkBox(float xpos, float ypos) : base(xpos, ypos)
         {
-            _sprite = new SpriteMap("pinkbox", 16, 16); // im cool with this box
+            _sprite = new SpriteMap("pinkbox", 16, 16); // im cool with this box, im not
             graphic = _sprite;
             layer = Layer.Foreground;
             center = new Vec2(8f, 8f);

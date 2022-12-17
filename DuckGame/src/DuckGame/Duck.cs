@@ -132,7 +132,7 @@ namespace DuckGame
         private bool _remoteControl;
         private float _ghostTimer = 1f;
         private int _lives;
-        private float _runMax = 3.1f;
+        protected float _runMax = 3.1f;
         private bool _moveLock;
         private InputProfile _inputProfile = InputProfile.Get("SinglePlayer");
         private InputProfile _virtualInput;
@@ -181,8 +181,8 @@ namespace DuckGame
         private TrappedDuck _trappedProp;
         public Profile trappedBy;
         private int breath = -1;
-        private bool _throwFondle = true;
-        private int tryGrabFrames;
+        protected bool _throwFondle = true;
+        protected int tryGrabFrames;
         //private bool _heldLeft;
         //private bool _heldRight;
         private bool _updatedAnimation;
@@ -1797,7 +1797,7 @@ namespace DuckGame
 
         public override float holdWeightMultiplierSmall => holdObject != null ? holdObject.weightMultiplierSmall : 1f;
 
-        public void ThrowItem(bool throwWithForce = true)
+        public virtual void ThrowItem(bool throwWithForce = true)
         {
             if (holdObject == null)
                 return;
@@ -1889,7 +1889,7 @@ namespace DuckGame
             h._sleeping = false;
         }
 
-        private void TryGrab()
+        public virtual void TryGrab()
         {
             foreach (Holdable h in Level.CheckCircleAll<Holdable>(new Vec2(x, y + 4f), 18f).OrderBy(h => h, new CompareHoldablePriorities(this)))
             {
@@ -2540,7 +2540,7 @@ namespace DuckGame
             }
         }
 
-        public void GoRagdoll()
+        public virtual void GoRagdoll()
         {
             if (Network.isActive && (_ragdollInstance == null || _ragdollInstance != null && _ragdollInstance.visible || _cookedInstance != null && _cookedInstance.visible) || ragdoll != null || _cooked != null)
                 return;
@@ -4448,9 +4448,10 @@ namespace DuckGame
             else if (_trapped != null)
                 position = _trapped.position;
             Vec2 p2 = position;
-            float num1 = (float)(Level.current.camera.width / 320.0 * 0.5);
-            float num2 = 0.75f;
-            float num3 = 22f * num2;
+            //why?
+            //float num1 = (float)(Level.current.camera.width / 320.0 * 0.5);
+            //float num2 = 0.75f;
+            float num3 = 16.5f;
             Vec2 vec2_1 = new Vec2(0f, 0f);
             if (position.x < Level.current.camera.left + num3)
             {
@@ -4473,7 +4474,7 @@ namespace DuckGame
                 position.y = Level.current.camera.bottom - num3;
             }
             Vec2 vec2_2 = vec2_1 * (3f / 1000f);
-            float num4 = num2 - Math.Min(vec2_2.length, 1f) * 0.4f;
+            float num4 = 0.75f - Math.Min(vec2_2.length, 1f) * 0.4f;
             Graphics.Draw(persona.iconMap, position, new Rectangle?(_iconRect), Color.White, 0f, new Vec2(48f, 48f), new Vec2(0.5f, 0.5f) * num4, SpriteEffects.None, (Depth)(0.9f + depth.span));
             int imageIndex = _sprite.imageIndex;
             _sprite.imageIndex = 21;
@@ -4529,54 +4530,41 @@ namespace DuckGame
                 if (DevConsole.showCollision)
                     Graphics.DrawRect(_featherVolume.rectangle, Color.LightGreen, (Depth)0.6f, false, 0.5f);
                 int num1 = _renderingDuck ? 1 : 0;
-                bool flag1 = false;
+                bool skipDraw = false;
                 if (Network.isActive)
                 {
                     if (_trappedInstance != null && _trappedInstance.visible)
-                        flag1 = true;
+                        skipDraw = true;
                     if (_ragdollInstance != null && _ragdollInstance.visible)
-                        flag1 = true;
+                        skipDraw = true;
                     if (_cookedInstance != null && _cookedInstance.visible)
-                        flag1 = true;
+                        skipDraw = true;
                 }
                 Depth depth = this.depth;
-                if (!flag1)
+                if (!skipDraw)
                 {
                     if (!_renderingDuck)
                     {
                         if (!_updatedAnimation)
+                        {
                             UpdateAnimation();
+                        }
                         _updatedAnimation = false;
-                        _sprite.UpdateFrame();
+                        _sprite.UpdateFrame(false);
                     }
-                    _sprite.flipH = offDir < 0;
+                    _sprite.flipH = (offDir < 0);
                     if (enteringWalldoor)
-                        this.depth = -0.55f;
-                    _spriteArms.depth = this.depth + 11;
-                    _bionicArm.depth = this.depth + 11;
-                    //this.DrawAIPath();
-                    SpriteMap spriteQuack = _spriteQuack;
-                    SpriteMap spriteControlled = _spriteControlled;
-                    SpriteMap sprite = _sprite;
-                    SpriteMap spriteArms = _spriteArms;
-                    double num2 = _isGhost ? 0.5 : 1.0;
-                    double alpha = this.alpha;
-                    double num3;
-                    float num4 = (float)(num3 = num2 * alpha);
-                    spriteArms.alpha = (float)num3;
-                    double num5;
-                    float num6 = (float)(num5 = num4);
-                    sprite.alpha = (float)num5;
-                    double num7;
-                    float num8 = (float)(num7 = num6);
-                    spriteControlled.alpha = (float)num7;
-                    double num9 = num8;
-                    spriteQuack.alpha = (float)num9;
-                    _spriteQuack.flipH = _spriteControlled.flipH = _sprite.flipH;
-                    _spriteControlled.depth = this.depth;
-                    _sprite.depth = this.depth;
-                    _spriteQuack.depth = this.depth;
-                    _sprite.angle = _spriteQuack.angle = _spriteControlled.angle = angle;
+                    {
+                        base.depth = -0.55f;
+                    }
+                    _spriteArms.depth = base.depth + 11;
+                    _bionicArm.depth = base.depth + 11;
+                    _spriteQuack.alpha = (_spriteControlled.alpha = (_sprite.alpha = (_spriteArms.alpha = (_isGhost ? 0.5f : 1f) * base.alpha)));
+                    _spriteQuack.flipH = (_spriteControlled.flipH = _sprite.flipH);
+                    _spriteControlled.depth = base.depth;
+                    _sprite.depth = base.depth;
+                    _spriteQuack.depth = base.depth;
+                    _sprite.angle = (_spriteQuack.angle = (_spriteControlled.angle = angle));
                     if (ragdoll != null && ragdoll.tongueStuck != Vec2.Zero)
                         quack = 10;
                     if (IsQuacking())
@@ -4653,7 +4641,7 @@ namespace DuckGame
                             if (_graphic != null)
                             {
                                 _spriteQuack.position = position;
-                                _spriteQuack.alpha = this.alpha;
+                                _spriteQuack.alpha = alpha;
                                 _spriteQuack.angle = angle;
                                 _spriteQuack.depth = this.depth + 2;
                                 _spriteQuack.scale = scale;
@@ -4687,7 +4675,7 @@ namespace DuckGame
                     Graphics.Draw(_swirl, x, y - 12f);
                 }
                 DrawHat();
-                if (!flag1)
+                if (!skipDraw)
                 {
                     Grapple equipment = GetEquipment(typeof(Grapple)) as Grapple;
                     bool flag2 = equipment != null;
