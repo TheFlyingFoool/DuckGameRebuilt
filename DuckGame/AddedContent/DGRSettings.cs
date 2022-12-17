@@ -36,8 +36,25 @@ namespace DuckGame
         [AutoConfigField]
         public static bool SpriteAtlas = true;
 
-        [AutoConfigField]
-        public static bool RPC = false;
+        [AutoConfigField] 
+        public static bool S_RPC = false;
+        public static bool RPC
+        {
+            get => S_RPC;
+
+            set
+            {
+                S_RPC = value;
+                if (S_RPC)
+                {
+                    DiscordRichPresence.Initialize();
+                }
+                else
+                {
+                    DiscordRichPresence.Deinitialize();
+                }
+            }
+        }
         public int ParticleMultiplier
         {
             get
