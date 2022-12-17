@@ -3,21 +3,16 @@ using System.Linq;
 using DiscordRPC;
 using System.IO;
 using System.Globalization;
+
 namespace DuckGame
 {
     internal class DiscordRichPresence
     {
-        static DateTime whenGameStarted;
+        public static DateTime whenGameStarted;
 
-        static System.Timers.Timer updatePresence = new System.Timers.Timer(3500)
-        {
-            AutoReset = true,
-        };
+        private static System.Timers.Timer updatePresence;
 
-        static System.Timers.Timer tryReconnect = new System.Timers.Timer(30000)
-        {
-            AutoReset = true,
-        };
+        private static System.Timers.Timer tryReconnect;
 
         public static DiscordRpcClient client;
 
@@ -25,8 +20,17 @@ namespace DuckGame
 
         public static void Initialize()
         {
-            client = new DiscordRpcClient("1006027196613267568"); // App registered under klof44 (for art assets)
+            client = new DiscordRpcClient("1006027196613267568"); // klof44, Dan and Firebreak have access
 
+            tryReconnect = new System.Timers.Timer(30000)
+            {
+                AutoReset = true
+            };
+            updatePresence = new System.Timers.Timer(3500)
+            {
+                AutoReset = true
+            };
+            
             client.OnReady += (sender, e) =>
             {
                 tryReconnect.Enabled = false;
@@ -50,8 +54,6 @@ namespace DuckGame
 
             client.Initialize();
 
-            whenGameStarted = DateTime.UtcNow;
-
             client.SetPresence(new RichPresence()
             {
                 Details = "Main Menu",
@@ -65,6 +67,15 @@ namespace DuckGame
             });
 
             updatePresence.Start();
+        }
+
+        public static void Deinitialize()
+        {
+            updatePresence.Stop();
+            tryReconnect.Stop();
+            client.ClearPresence();
+            client.Deinitialize();
+            client.Dispose();
         }
         public static string ToTitleCase(string str)
         {
@@ -214,7 +225,7 @@ namespace DuckGame
                             assets.SmallImageText = "Is Host";
                         }
                         rpc.Details = $"Online Game";
-                        assets.LargeImageText = $"{DuckNetwork.localProfile.team.score} Points";
+                        assets.LargeImageText = DuckNetwork.localProfile.team.score.ToString() + (DuckNetwork.localProfile.team.score == 1 ? " Point" : " Points");
                     }
                     rpc.Details += playersAndSpecCount;
                     break;

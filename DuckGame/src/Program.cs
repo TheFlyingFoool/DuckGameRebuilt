@@ -1157,7 +1157,8 @@ namespace DuckGame
         {
             Assembly a = exception.GetType().Assembly;
             ResourceManager rm = new ResourceManager(a.GetName().Name, a);
-            List<DictionaryEntry> rsOriginal = rm.GetResourceSet(Thread.CurrentThread.CurrentCulture, true, true).Cast<DictionaryEntry>().ToList();
+            CultureInfo culture = Thread.CurrentThread.CurrentCulture.Equals(CultureInfo.InvariantCulture) ? CultureInfo.CurrentUICulture : CultureInfo.CurrentCulture;
+            ResourceSet rsOriginal = rm.GetResourceSet(culture, true, true);//.Cast<DictionaryEntry>().ToList();
             ResourceSet rsTranslated = rm.GetResourceSet(new CultureInfo("en-US"), true, true);
 
             string msg = exception.Message;
@@ -1198,7 +1199,7 @@ namespace DuckGame
                         {
                             if (newIdx != 0)
                             {
-                                args.Add(testCan.Substring(newIdx, ind));
+                                args.Add(testCan.Substring(newIdx, ind - newIdx));
                             }
                             newIdx = ind + c.Length;
                             continue;
@@ -1220,7 +1221,7 @@ namespace DuckGame
         }
         public static void SendCrashToServer(Exception pException)
         {
-            // switch locale to american english so i can read exception messages
+            // switch later locale to american english so the team can read exception messages
             CultureInfo prevCurrentInfo = Thread.CurrentThread.CurrentUICulture;
             HttpClient httpClient = new HttpClient();
             string output = "";
@@ -1230,7 +1231,6 @@ namespace DuckGame
             }
             try
             {
-                Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); //en-US //_fileName  es-ES
                 string Steamid = "N/A";
                 string Username = "N/A";
 
@@ -1277,6 +1277,7 @@ namespace DuckGame
                 }
                 catch
                 { }
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); //en-US //_fileName  es-ES
                 string str1 = "";
                 try
                 {
