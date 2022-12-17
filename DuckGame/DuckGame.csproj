@@ -358,6 +358,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Default\XpSkip.cs" />
     <Compile Include="src\MonoTime\Console\Commands\DoDraw.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Exit.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Filter.cs" />
     <Compile Include="src\MonoTime\Console\Commands\For.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Help.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
