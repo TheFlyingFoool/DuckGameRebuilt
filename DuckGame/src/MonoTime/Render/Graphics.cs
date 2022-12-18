@@ -358,20 +358,6 @@ namespace DuckGame
             _biosFont.scale = new Vec2(1f);
         }
 
-        public static void DrawStringOutline2(
-          string text,
-          Vec2 position,
-          Color color,
-          Color outline,
-          Depth depth = default(Depth),
-          InputProfile pro = null,
-          float scale = 1f)
-        {
-            _biosFont.scale = new Vec2(scale);
-            _biosFont.DrawOutline2(text, position, color, outline, depth);
-            _biosFont.scale = new Vec2(1f);
-        }
-
         public static float GetStringWidth(string text, bool thinButtons = false, float scale = 1f)
         {
             _biosFont.scale = new Vec2(scale);

@@ -850,7 +850,7 @@ namespace DuckGame
 
                     Rectangle colorBox = new(xOffset + hSpacing, yOffset, nameH, nameH - 0.5f);
                     
-                    Graphics.DrawStringOutline2(prof.name, new Vec2(xOffset + hSpacing * 2 + nameH, yOffset), duckColor, Color.Black, 1.1f, scale: fontSize);
+                    Graphics.DrawStringOutline(prof.name, new Vec2(xOffset + hSpacing * 2 + nameH, yOffset), duckColor, Color.Black, 1.1f, scale: fontSize);
                     Graphics.DrawOutlinedRect(colorBox, duckColor, Color.Black, 1.1f, fontSize);
                     
                     yOffset += addedHeight;
