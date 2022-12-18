@@ -117,7 +117,7 @@ namespace DuckGame
         
         public static void DrawCenteredOutlinedString(string text, Vec2 position, Color color, Color outline, Depth depth = default, InputProfile pro = null, float scale = 1f)
         {
-            Graphics.DrawStringOutline(text, new Vec2(position.x - ((Graphics.GetStringWidth(text) / 2) * scale), position.y), color, outline, depth, pro, scale);
+            Graphics.DrawStringOutline2(text, new Vec2(position.x - ((Graphics.GetStringWidth(text) / 2) * scale), position.y), color, outline, depth, pro, scale);
         }
 
         public static bool Try(Action action)
