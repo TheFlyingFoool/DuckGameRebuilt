@@ -1158,8 +1158,17 @@ namespace DuckGame
             Assembly a = exception.GetType().Assembly;
             ResourceManager rm = new ResourceManager(a.GetName().Name, a);
             CultureInfo culture = Thread.CurrentThread.CurrentCulture.Equals(CultureInfo.InvariantCulture) ? CultureInfo.CurrentUICulture : CultureInfo.CurrentCulture;
-            ResourceSet rsOriginal = rm.GetResourceSet(culture, true, true);//.Cast<DictionaryEntry>().ToList();
-            ResourceSet rsTranslated = rm.GetResourceSet(new CultureInfo("en-US"), true, true);
+            ResourceSet rsOriginal;
+            ResourceSet rsTranslated;
+            try
+            {
+                rsOriginal = rm.GetResourceSet(culture, true, true);//.Cast<DictionaryEntry>().ToList();
+                rsTranslated = rm.GetResourceSet(new CultureInfo("en-US"), true, true);
+            }
+            catch(MissingManifestResourceException) //this bcz some assemblys dont even have Resources
+            {
+                return "";
+            }
 
             string msg = exception.Message;
             string[] splOrig = msg.Replace("\r\n", "\n").Split('\n');
@@ -1276,7 +1285,9 @@ namespace DuckGame
                     }
                 }
                 catch
-                { }
+                {
+                    ExceptionMessage += pException.Message + " [F][" + pException.HResult + "]";
+                }
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); //en-US //_fileName  es-ES
                 string str1 = "";
                 try
