@@ -146,5 +146,11 @@ namespace DuckGame
 
         [AutoConfigField]
         public static bool StickyHats { get; set; }
+
+        [AutoConfigField]
+        public static bool QOLScoreThingButWithoutScore { get; set; }
+
+        [AutoConfigField]
+        public static bool NameTags { get; set; }
     }
 }

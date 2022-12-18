@@ -823,9 +823,79 @@ namespace DuckGame
 
         public virtual void PostDrawLayer(Layer layer)
         {
-            ++frames;
-            if (layer != Layer.HUD)
+            void drawNameDisplay()
+            {
+                const float fontSize = 0.5f;
+                const float vSpacing = 2f;
+                const float hSpacing = 2f;
+                const float borderWidth = 2f;
+                const float opacity = 0.6f;
+                Rectangle drawBox = new(0, 0, borderWidth * 2, borderWidth * 2);
+
+                float xOffset = drawBox.x + borderWidth;
+                float yOffset = drawBox.y + borderWidth;
+                
+                foreach (Profile prof in Profiles.activeNonSpectators)
+                {
+                    (float nameW, float nameH) = Extensions.GetStringSize(prof.name.CleanFormatting(), fontSize);
+                    Color duckColor = prof.persona.colorUsable;
+                    float addedHeight = nameH + vSpacing;
+
+                    float totalprofWidth = nameW + borderWidth * 2 + nameH + hSpacing * 2;
+                    
+                    if (totalprofWidth > drawBox.width)
+                        drawBox.width = totalprofWidth;
+
+                    drawBox.height += addedHeight;
+
+                    Rectangle colorBox = new(xOffset + hSpacing, yOffset, nameH, nameH - 0.5f);
+                    
+                    Graphics.DrawStringOutline2(prof.name, new Vec2(xOffset + hSpacing * 2 + nameH, yOffset), duckColor, Color.Black, 1.1f, scale: fontSize);
+                    Graphics.DrawOutlinedRect(colorBox, duckColor, Color.Black, 1.1f, fontSize);
+                    
+                    yOffset += addedHeight;
+                }
+                
+                // Graphics.DrawRect(drawBox, Color.Black * opacity, 1f);
+            }
+            
+            void drawNameTags()
+            {
+                Profile me = Extensions.GetMe();
+                bool spectating = (Network.isActive && (me.duck.dead || me.spectator)) || matchOver;
+                
+                foreach (Profile prof in Profiles.activeNonSpectators)
+                {
+                    bool doDraw = spectating || (prof.duck.localSpawnVisible && !started);
+                    
+                    if (!doDraw)
+                        continue;
+
+                    Vec2 tagPos = prof.duck.position - new Vec2(0, 24);
+                    float depth = prof.connection == DuckNetwork.localConnection ? 2f : 1.95f;
+                    Color duckColor = prof.persona.colorUsable;
+                    
+                    Extensions.DrawCenteredOutlinedString(prof.name, tagPos, duckColor, Color.Black, depth, null, 0.7f);
+                }
+            }
+
+            frames++;
+            
+            if (layer == Layer.Foreground && DGRSettings.NameTags)
+            {
+                drawNameTags();
                 return;
+            }
+            else if (layer != Layer.HUD)
+            {
+                return;
+            }
+            
+            if (DGRSettings.QOLScoreThingButWithoutScore)
+            {
+                drawNameDisplay();
+            }
+
             if (_waitAfterSpawnDings > 0 && _fontFade > 0.01f)
             {
                 _font.scale = new Vec2(2f, 2f);

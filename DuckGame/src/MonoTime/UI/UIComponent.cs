@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -15,7 +16,33 @@ namespace DuckGame
         public MenuItemMode mode;
         public bool debug;
         public Func<bool> condition;
-        public string dgrDescription = "";
+
+        public string dgrDescription
+        {
+            get
+            {
+                if (_dgrDescription is null or {Length: 0})
+                    return "";
+                
+                string[] lines = _dgrDescription.SplitByLength(40);
+                int longest = lines.Max(x => x.Length);
+                
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    string myLine = lines[i];
+                    int myLength = myLine.Length;
+                    
+                    if (myLength < longest)
+                    {
+                        lines[i] = myLine.Insert(0, new string(' ', (longest - myLength) / 2));
+                    }
+                }
+                
+                return string.Join("\n", lines);
+            }
+            set => _dgrDescription = value;
+        }
+
         protected UIComponent _parent;
         public bool isEnabled = true;
         protected bool _didResize;
@@ -237,6 +264,8 @@ namespace DuckGame
         }
         public long lastframeupdate = -1;
         public long lastframedraw = -1;
+        private string _dgrDescription = "";
+
         public override void Draw()
         {
             if (HUD.hide)

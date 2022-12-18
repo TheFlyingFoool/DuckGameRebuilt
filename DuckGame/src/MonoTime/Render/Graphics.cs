@@ -358,6 +358,20 @@ namespace DuckGame
             _biosFont.scale = new Vec2(1f);
         }
 
+        public static void DrawStringOutline2(
+          string text,
+          Vec2 position,
+          Color color,
+          Color outline,
+          Depth depth = default(Depth),
+          InputProfile pro = null,
+          float scale = 1f)
+        {
+            _biosFont.scale = new Vec2(scale);
+            _biosFont.DrawOutline2(text, position, color, outline, depth);
+            _biosFont.scale = new Vec2(1f);
+        }
+
         public static float GetStringWidth(string text, bool thinButtons = false, float scale = 1f)
         {
             _biosFont.scale = new Vec2(scale);
@@ -705,6 +719,12 @@ namespace DuckGame
                 DrawLine(new Vec2(vec2.x, vec2.y - num), new Vec2(position.x, vec2.y - num), col, borderWidth, depth);
                 DrawLine(new Vec2(vec2.x - num, vec2.y - borderWidth), new Vec2(vec2.x - num, position.y + borderWidth), col, borderWidth, depth);
             }
+        }
+        
+        public static void DrawOutlinedRect(Rectangle rect, Color col, Color outlineCol, Depth depth = default, float borderwidth = 1f)
+        {
+            DrawRect(rect, col, depth, true, 0);
+            DrawRect(rect, outlineCol, depth.value + 0.05f, false, borderwidth);
         }
 
         public static void DrawDottedRect(

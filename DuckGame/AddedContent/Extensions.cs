@@ -114,6 +114,11 @@ namespace DuckGame
             void indentedAppend(string s) =>
                 stringBuilder.Append($"{(doIndent ? new string(' ', indentationLevel * 2) : "")}{s}");
         }
+        
+        public static void DrawCenteredOutlinedString(string text, Vec2 position, Color color, Color outline, Depth depth = default, InputProfile pro = null, float scale = 1f)
+        {
+            Graphics.DrawStringOutline(text, new Vec2(position.x - ((Graphics.GetStringWidth(text) / 2) * scale), position.y), color, outline, depth, pro, scale);
+        }
 
         public static bool Try(Action action)
         {
@@ -337,6 +342,12 @@ namespace DuckGame
             _ => throw new NotImplementedException()
         };
 
-        public static string CleanFormatting(this string String, CleanMethod cleanMethod = CleanMethod.Both) => CleanStringFormatting(String, cleanMethod);
+        public static string CleanFormatting(this string str, CleanMethod cleanMethod = CleanMethod.Both) => CleanStringFormatting(str, cleanMethod);
+
+        public static Vec2 GetStringSize(string text, float fontSize = 1f) => new(0, 0)
+        {
+            x = Graphics.GetStringWidth(text, false, fontSize),
+            y = Graphics.GetStringHeight(text) * fontSize
+        };
     }
 }

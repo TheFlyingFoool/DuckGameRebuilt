@@ -499,6 +499,19 @@ namespace DuckGame
             Draw(text, pos, c, deep + 5);
         }
 
+        public void DrawOutline2(string text, Vec2 pos, Color c, Color outline, Depth deep = default(Depth))
+        {
+            Draw(text, pos + new Vec2(-1f * scale.x, 0f), outline, deep + 2, colorSymbols: false);
+            Draw(text, pos + new Vec2(1f * scale.x, 0f), outline, deep + 2, colorSymbols: false);
+            Draw(text, pos + new Vec2(0f, -1f * scale.y), outline, deep + 2, colorSymbols: false);
+            Draw(text, pos + new Vec2(0f, 1f * scale.y), outline, deep + 2, colorSymbols: false);
+            Draw(text, pos + new Vec2(-1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: false);
+            Draw(text, pos + new Vec2(1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: false);
+            Draw(text, pos + new Vec2(-1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: false);
+            Draw(text, pos + new Vec2(1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: false);
+            Draw(text, pos, c, deep + 5);
+        }
+
         public void Draw(
           string text,
           Vec2 pos,

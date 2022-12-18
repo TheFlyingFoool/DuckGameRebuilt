@@ -35,6 +35,7 @@ namespace DuckGame
         public static UIMenu _lastCreatedControlsMenu;
         public static UIMenu _lastCreatedDGRMenu;
         public static UIMenu _lastCreatedDGRMiscMenu;
+        public static UIMenu _lastCreatedDGRHudMenu;
         public static UIMenu _lastCreatedOptimizationsMenu;
         public static UIMenu _lastCreatedDGRGraphicsMenu;
         public static int flagForSave = 0;
@@ -111,6 +112,7 @@ namespace DuckGame
             to.Add(audioMenu, false);
             to.Add(_lastCreatedDGRMenu, false);
             to.Add(_lastCreatedDGRMiscMenu, false);
+            to.Add(_lastCreatedDGRHudMenu, false);
             to.Add(_lastCreatedDGRGraphicsMenu, false);
             to.Add(_lastCreatedOptimizationsMenu, false);
 
@@ -151,6 +153,7 @@ namespace DuckGame
             _lastCreatedAudioMenu = CreateAudioMenu(optionsMenu);
             _lastCreatedDGRMenu = CreateDGRMenu(optionsMenu);
             _lastCreatedDGRMiscMenu = _DGRMiscMenu;
+            _lastCreatedDGRHudMenu = _DGRHudMenu;
             _lastCreatedDGRGraphicsMenu = _DGRGraphicsMenu;
             _lastCreatedOptimizationsMenu = _DGROptimMenu;
             //DGR OPTIONS GUI HELL BEGINS HERE -NiK0
@@ -179,6 +182,7 @@ namespace DuckGame
             _ttsMenu = _lastCreatedTTSMenu;
             _blockMenu = _lastCreatedBlockMenu;
             _DGRMenu = _lastCreatedDGRMenu;
+            _DGRHudMenu = _lastCreatedDGRMenu;
             _DGRMiscMenu = _lastCreatedDGRMenu;
             _DGROptimMenu = _lastCreatedOptimizationsMenu;
             _DGRGraphicsMenu = _lastCreatedDGRMenu;
@@ -318,6 +322,7 @@ namespace DuckGame
         public static UIMenu _DGRGraphicsMenu;
         public static UIMenu _DGROptimMenu;
         public static UIMenu _DGRMiscMenu;
+        public static UIMenu _DGRHudMenu;
         public static UIMenu CreateDGRGraphicsMenu(UIMenu pPrev)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|GRAPHICS|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -327,7 +332,7 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(dGRSettings, "RandomWeather", 0, 10, 1), step: 1f)
             {
-                dgrDescription = "Chance for random weather to occur in levels\n               from 0% to 100%"
+                dgrDescription = "Chance for random weather to occur in levels from 0% to 100%"
             });
             menu.Add(new UIMenuItemSlider("Weather Particle Level", field: new FieldBinding(dGRSettings, "WeatherMultiplier", 0, 16, 1), step: 1f)
             {
@@ -380,11 +385,11 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemToggle("Camera unfollow", field: new FieldBinding(dGRSettings, "CameraUnfollow"))
             {
-                dgrDescription = "When the camera is big enough it stops\n     following distant players"
+                dgrDescription = "When the camera is big enough it stops following distant players"
             }, true);
             menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC"))
             {
-                dgrDescription = "Toggles discord rich presence showing current level,\n             if you're in the editor, etc\n          (May take a few seconds to connect)"
+                dgrDescription = "Toggles discord rich presence showing current level, if you're in the editor, etc\n(May take a few seconds to connect)"
             }, true);
             menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse"))
             {
@@ -392,7 +397,7 @@ namespace DuckGame
             }, true);
             menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(dGRSettings, "dubberspeed"))
             {
-                dgrDescription = "For true vim users, adds keybinds from 1-9\n       for faster menu browsing"
+                dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing"
             }, true);
             menu.Add(new UIMenuItemNumber("Start in", field: new FieldBinding(dGRSettings, "StartIn", 0, 3), valStrings: new List<string>
             {
@@ -402,11 +407,34 @@ namespace DuckGame
                 "ARCADE"
             })
             {
-                dgrDescription = "When starting up the game you'll\n  spawn into the selected level"
+                dgrDescription = "When starting up the game you'll spawn into the selected level"
             }, true);
             menu.Add(new UIMenuItemToggle("Sticky Hats", field: new FieldBinding(dGRSettings, "StickyHats"))
             {
                 dgrDescription = "Vanity hats no longer fall off when ragdolling"
+            }, true);
+
+
+            menu.Add(new UIText(" ", Color.White), true);
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
+            return menu;
+        }
+
+        public static UIMenu CreateDGRHudMenu(UIMenu pPrev)
+        {
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|HUD|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+
+            menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+
+            menu.Add(new UIMenuItemToggle("GUI Name Display", field: new FieldBinding(dGRSettings, "QOLScoreThingButWithoutScore"))
+            {
+                dgrDescription = "Displays every participating duck in the game's name and color above"
+            }, true);
+
+            menu.Add(new UIMenuItemToggle("Name Tags", field: new FieldBinding(dGRSettings, "NameTags"))
+            {
+                dgrDescription = "Before the round starts or when you're dead/spectating, display the name of every duck above their heads"
             }, true);
 
 
@@ -428,7 +456,7 @@ namespace DuckGame
             }, true);
             menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(dGRSettings, "SpriteAtlas"))
             {
-                dgrDescription = "Lowers render times using an atlas so buffer doesn't\n    constantly switch sprites (Requires restart)"
+                dgrDescription = "Lowers render times using an atlas so buffer doesn't constantly switch sprites\n(Requires restart)"
             }, true);
 
 
@@ -436,7 +464,7 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemToggle("Pre-load levels", field: new FieldBinding(dGRSettings, "PreloadLevels"))
             {
-                dgrDescription = "Loads custom levels on startup instead of when the level\n       folder is opened (Will increase load times)"
+                dgrDescription = "Loads custom levels on startup instead of when the level folder is opened\n(Will increase load times)"
             }, true);
 
             menu.Add(new UIText(" ", Color.White), true);
@@ -456,6 +484,9 @@ namespace DuckGame
 
             _DGRMiscMenu = CreateDGRMiscMenu(menu);
             menu.Add(new UIMenuItem("QOL", new UIMenuActionOpenMenu(menu, _DGRMiscMenu), backButton: true), true);
+
+            _DGRHudMenu = CreateDGRHudMenu(menu);
+            menu.Add(new UIMenuItem("HUD", new UIMenuActionOpenMenu(menu, _DGRHudMenu), backButton: true), true);
 
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true), true);
