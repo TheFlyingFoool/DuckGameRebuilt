@@ -135,8 +135,14 @@ namespace DuckGame
 
         public static void DisableModsAndRestart()
         {
-            foreach (Mod allMod in (IEnumerable<Mod>)allMods)
-                allMod.configuration.Disable();
+            foreach (Mod mod in allMods)
+            {
+                if (mod.clientMod)
+                    continue;
+                
+                mod.configuration.Disable();
+            }
+
             RestartGame();
         }
 
