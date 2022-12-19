@@ -862,6 +862,10 @@ namespace DuckGame
             void drawNameTags()
             {
                 Profile me = Extensions.GetMe();
+
+                if (me is null)
+                    return;
+                
                 bool spectating = (Network.isActive && (me.duck.dead || me.spectator)) || matchOver;
                 
                 foreach (Profile prof in Profiles.activeNonSpectators)
