@@ -576,11 +576,7 @@ namespace DuckGame
                         {
                             case "crash":
                                 {
-                                    //flag1 = true;
-                                    //using (StreamReader reader = new StreamReader("demo.txt"))
-                                    //{
-                                    //    reader.ReadToEnd();
-                                    //}
+                                    Main.SpecialCode = "used `crash` command";
                                     usedfornonsense = 1 / usedfornonsense;
                                     break;
                                 }
