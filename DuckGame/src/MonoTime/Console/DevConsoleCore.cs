@@ -28,6 +28,21 @@ namespace DuckGame
         public FancyBitmapFont fancyFont;
         public float alpha;
         public bool open;
+
+        public string Typing
+        {
+            get
+            {
+                OnConsoleTextChange?.Invoke(typing);
+                return typing;
+            }
+            set
+            {
+                typing = value;
+            }
+        }
+
+        public event Action<string> OnConsoleTextChange;
         public string typing = "";
         public List<string> previousLines = new List<string>();
         public bool splitScreen;

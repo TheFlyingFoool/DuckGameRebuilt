@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using SDL2;
+using System.Threading.Tasks;
 
 namespace DuckGame
 {
@@ -326,18 +327,18 @@ namespace DuckGame
                         new Vec2((float)(82.0 * _tray.scale.x + (num2 - 6) * (16.0 * _tray.scale.x)),
                             num3 + 7f * _tray.scale.y), new Color(62, 114, 122), 0.98f);
                     _core.cursorPosition = Math.Min(Math.Max(_core.cursorPosition, 0),
-                        _core.typing.Length);
+                        _core.Typing.Length);
                     if (_raster != null)
                     {
                         _raster.scale = new Vec2(0.5f);
                         _raster.alpha = _core.alpha;
-                        _raster.Draw(_core.typing, 4f * _tray.scale.x,
+                        _raster.Draw(_core.Typing, 4f * _tray.scale.x,
                             (float)(num3 + _tray.scale.y * 8.0 -
                                      _raster.characterHeight * (double)_raster.scale.y / 2.0), Color.White,
                             0.9f);
                         Vec2 p1 = new(
                             (float)(_raster.GetWidth(
-                                         _core.typing.Substring(0, _core.cursorPosition)) +
+                                         _core.Typing.Substring(0, _core.cursorPosition)) +
                                      4.0 * _tray.scale.x +
                                      1.0), num3 + 6f * _tray.scale.y);
                         Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * _tray.scale.x), Color.White,
@@ -347,11 +348,11 @@ namespace DuckGame
                     {
                         _core.font.scale = new Vec2(_tray.scale.x / 2f);
                         _core.font.alpha = _core.alpha;
-                        _core.font.Draw(_core.typing, 4f * _tray.scale.x,
+                        _core.font.Draw(_core.Typing, 4f * _tray.scale.x,
                             num3 + 6f * _tray.scale.y, Color.White, 0.9f);
                         Vec2 p1 = new(
                             _core.font.GetWidth(
-                                _core.typing.Substring(0, _core.cursorPosition)) +
+                                _core.Typing.Substring(0, _core.cursorPosition)) +
                             4f * _tray.scale.x, num3 + 6f * _tray.scale.y);
                         Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * _tray.scale.x), Color.White, 2f, 1f);
                     }
@@ -1984,6 +1985,9 @@ namespace DuckGame
         }
 
         private static bool WasDownLastFrame;
+        private static bool s_awaitingResponse;
+        private static string s_commandResponse;
+        private static bool s_acceptingSingleKeyPressResponse;
 
         public static void Update()
         {
@@ -2038,7 +2042,7 @@ namespace DuckGame
 
                 _core.open = !_core.open;
                 Keyboard.keyString = "";
-                _core.cursorPosition = _core.typing.Length;
+                _core.cursorPosition = _core.Typing.Length;
                 _core.lastCommandIndex = -1;
                 _core.viewOffset = 0;
             }
@@ -2060,11 +2064,11 @@ namespace DuckGame
             if (_core.open && NetworkDebugger.hoveringInstance)
             {
                 Input._imeAllowed = true;
-                if (_core.cursorPosition > _core.typing.Length)
-                    _core.cursorPosition = _core.typing.Length;
-                _core.typing = _core.typing.Insert(_core.cursorPosition,
+                if (_core.cursorPosition > _core.Typing.Length)
+                    _core.cursorPosition = _core.Typing.Length;
+                _core.Typing = _core.Typing.Insert(_core.cursorPosition,
                     Keyboard.keyString.Replace("`", "")); // added the Replace because the fix to the input makes it possible to do this if holding it down
-                if (_core.typing != "" && _pendingCommandQueue.Count > 0)
+                if (_core.Typing != "" && _pendingCommandQueue.Count > 0)
                 {
                     _pendingCommandQueue.Clear();
                     _core.lines.Enqueue(new DCLine
@@ -2085,9 +2089,9 @@ namespace DuckGame
                 {
                     if (Keyboard.Pressed(Keys.C))
                     {
-                        if (!string.IsNullOrWhiteSpace(_core.typing))
+                        if (!string.IsNullOrWhiteSpace(_core.Typing))
                         {
-                            Thread thread = new(() => SDL.SDL_SetClipboardText(_core.typing));
+                            Thread thread = new(() => SDL.SDL_SetClipboardText(_core.Typing));
                             thread.SetApartmentState(ApartmentState.STA);
                             thread.Start();
                             thread.Join();
@@ -2112,12 +2116,12 @@ namespace DuckGame
                         if (stringList.Count == 1)
                         {
                             string value = stringList[0].Trim();
-                            _core.typing = _core.typing.Insert(Math.Min(_core.typing.Length, _core.cursorPosition), value);
+                            _core.Typing = _core.Typing.Insert(Math.Min(_core.Typing.Length, _core.cursorPosition), value);
                             _core.cursorPosition = _core.cursorPosition + value.Length;
                         }
                         else
                         {
-                            _core.typing = "";
+                            _core.Typing = "";
                             _core.cursorPosition = 0;
                             foreach (string str1 in stringList)
                             {
@@ -2164,20 +2168,33 @@ namespace DuckGame
                     }
                 }
 
-                if (Keyboard.Pressed(Keys.Enter) && !string.IsNullOrWhiteSpace(_core.typing))
+                if (Keyboard.Pressed(Keys.Enter) && !string.IsNullOrWhiteSpace(_core.Typing)/* && !s_acceptingSingleKeyPressResponse*/)
                 {
-                    RunCommand(_core.typing);
-                    _core.previousLines.Add(_core.typing);
-                    _core.typing = "";
+                    if (s_awaitingResponse)
+                    {
+                        _core.lines.Enqueue(new DCLine
+                        {
+                            line = _core.Typing,
+                            color = Color.White
+                        });
+                        s_commandResponse = _core.Typing;
+                    }
+                    else
+                    {
+                        RunCommand(_core.Typing);
+                    }
+                    
+                    _core.previousLines.Add(_core.Typing);
+                    _core.Typing = "";
                     Keyboard.keyString = "";
                     _core.lastCommandIndex = -1;
                     _core.viewOffset = 0;
                 }
                 else if (Keyboard.Pressed(Keys.Back))
                 {
-                    if (_core.typing.Length > 0 && _core.cursorPosition > 0)
+                    if (_core.Typing.Length > 0 && _core.cursorPosition > 0)
                     {
-                        _core.typing = _core.typing.Remove(_core.cursorPosition - 1, 1);
+                        _core.Typing = _core.Typing.Remove(_core.cursorPosition - 1, 1);
                         --_core.cursorPosition;
                     }
 
@@ -2185,14 +2202,14 @@ namespace DuckGame
                 }
                 else if (Keyboard.Pressed(Keys.Delete))
                 {
-                    if (_core.typing.Length > 0 && _core.cursorPosition < _core.typing.Length)
-                        _core.typing = _core.typing.Remove(_core.cursorPosition, 1);
+                    if (_core.Typing.Length > 0 && _core.cursorPosition < _core.Typing.Length)
+                        _core.Typing = _core.Typing.Remove(_core.cursorPosition, 1);
                     _core.lastCommandIndex = -1;
                 }
                 else if (Keyboard.Pressed(Keys.Left))
                     _core.cursorPosition = Math.Max(0, _core.cursorPosition - 1);
                 else if (Keyboard.Pressed(Keys.Right))
-                    _core.cursorPosition = Math.Min(_core.typing.Length,
+                    _core.cursorPosition = Math.Min(_core.Typing.Length,
                         _core.cursorPosition + 1);
                 else if (Keyboard.Pressed(Keys.Home))
                 {
@@ -2206,7 +2223,7 @@ namespace DuckGame
                     if (Keyboard.shift)
                         _core.viewOffset = 0;
                     else
-                        _core.cursorPosition = _core.typing.Length;
+                        _core.cursorPosition = _core.Typing.Length;
                 }
 
                 if (Keyboard.Pressed(Keys.PageUp))
@@ -2235,10 +2252,10 @@ namespace DuckGame
                     ++_core.lastCommandIndex;
                     if (_core.lastCommandIndex >= _core.previousLines.Count)
                         _core.lastCommandIndex = _core.previousLines.Count - 1;
-                    _core.typing =
+                    _core.Typing =
                         _core.previousLines[
                             _core.previousLines.Count - 1 - _core.lastCommandIndex];
-                    _core.cursorPosition = _core.typing.Length;
+                    _core.cursorPosition = _core.Typing.Length;
                 }
 
                 if (!Keyboard.Pressed(Keys.Down))
@@ -2246,23 +2263,23 @@ namespace DuckGame
                 if (_core.previousLines.Count > 0 && _core.lastCommandIndex > 0)
                 {
                     --_core.lastCommandIndex;
-                    _core.typing =
+                    _core.Typing =
                         _core.previousLines[
                             _core.previousLines.Count - 1 - _core.lastCommandIndex];
-                    _core.cursorPosition = _core.typing.Length;
+                    _core.cursorPosition = _core.Typing.Length;
                 }
                 else if (_core.lastCommandIndex == 0)
                 {
                     --_core.lastCommandIndex;
                     _core.cursorPosition = 0;
-                    _core.typing = "";
+                    _core.Typing = "";
                 }
                 else
                 {
                     if (_core.lastCommandIndex != -1)
                         return;
                     _core.cursorPosition = 0;
-                    _core.typing = "";
+                    _core.Typing = "";
                 }
             }
             else
@@ -2274,6 +2291,46 @@ namespace DuckGame
             public Func<bool> waitCommand;
             public string command;
             public int wait;
+        }
+
+        /// <summary>
+        /// Gets a response by the user.
+        /// Disables the normal flow of commands for the DevConsole and instead returns whatever the input was to this function.
+        /// The flow returns to normal after the function returns a value.
+        /// </summary>
+        /// <param name="singleKeyPress">Whether or not to take a single key press as a response</param>
+        /// <typeparam name="T">The return type. Any valid CMD.Argument types are valid for this</typeparam>
+        /// <returns>A response typed by the user at some date after the function has been called</returns>
+        public static async Task<T> GetResponse<T>(/*bool singleKeyPress = false*/)
+        {
+            s_awaitingResponse = true;
+            s_commandResponse = null;
+            s_acceptingSingleKeyPressResponse = true;
+
+            // Action<string> onConsoleTextChange = currentText =>
+            // {
+            //     s_commandResponse = currentText;
+            // };
+            //
+            // if (singleKeyPress)
+            //     _core.OnConsoleTextChange += onConsoleTextChange;
+            
+            string response = await Task.Run(async () =>
+            {
+                while (s_commandResponse is null)
+                {
+                    await Task.Delay(50);
+                }
+                return s_commandResponse;
+            });
+
+            // if (singleKeyPress)
+            //     _core.OnConsoleTextChange -= onConsoleTextChange;
+            
+            s_awaitingResponse = false;
+            
+            CMD.Argument arg = CMD.GetArgument(typeof(T), "", false, true);
+            return (T) arg.Parse(response);
         }
     }
 }

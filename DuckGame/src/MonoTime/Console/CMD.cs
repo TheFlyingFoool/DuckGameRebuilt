@@ -487,5 +487,37 @@ namespace DuckGame
                 return Error($"{typeof(T).Name} of type ({pValue}) was not found.");
             }
         }
+
+        public static Argument GetArgument(Type type, string name, bool optional, bool stringTakesMultispace = false)
+        {
+            Argument arg;
+            
+            if (type == typeof(System.Int32))
+                arg = new Integer(name, optional);
+            else if (type == typeof(System.Single))
+                arg = new Float(name, optional);
+            else if (type == typeof(System.Boolean))
+                arg = new Boolean(name, optional);
+            else if (type == typeof(DuckGame.Vec2))
+                arg = new Vec2(name, optional);
+            else if (type == typeof(System.String))
+                arg = new String(name, optional) { takesMultispaceString = stringTakesMultispace };
+            else if (type == typeof(DuckGame.Duck))
+                arg = new Duck(name, optional);
+            else if (type == typeof(DuckGame.Profile))
+                arg = new Profile(name, optional);
+            else if (typeof(DuckGame.Thing).IsAssignableFrom(type))
+                arg = new Thing<Thing>(name, optional);
+            else if (typeof(DuckGame.Level).IsAssignableFrom(type))
+                arg = new Level(name, optional);
+            else if (typeof(DuckGame.Layer).IsAssignableFrom(type))
+                arg = new Layer(name, optional);
+            else if (typeof(System.Enum).IsAssignableFrom(type))
+                arg = new Enum(name, type, optional);
+            else
+                throw new Exception($"Parameter type of [{type.FullName}] is not supported");
+
+            return arg;
+        }
     }
 }

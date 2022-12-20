@@ -83,9 +83,42 @@ namespace DuckGame
 
         public static string GetFullName(this MemberInfo mi) => $"{mi.DeclaringType}:{mi.Name}";
 
-        public static bool InheritsFrom(this Type t1, Type t2) => t2.IsAssignableFrom(t1);
+        public static bool InheritsFrom(this Type derivedType, Type baseType)
+        {
+            return baseType.IsAssignableFrom(derivedType);
+        }
+
+        /// ChatGPT generated this beauty :D
+        public static bool IsGenericallyApplicableTo(this Type derivedType, Type baseType)
+        {
+            return derivedType.IsGenericType && baseType.IsAssignableFrom(derivedType.GetGenericTypeDefinition());
+        }
+        
         public static bool CaselessEquals(this string str, string str2) =>
             string.Equals(str, str2, StringComparison.CurrentCultureIgnoreCase);
+
+        public static List<T> WhereExcess<T>(
+            this IEnumerable<T> collection, 
+            Predicate<T> comparer,
+            out List<T> excess)
+        {
+            excess = new List<T>();
+            List<T> wanted = new();
+
+            foreach (T item in collection)
+            {
+                if (comparer(item))
+                {
+                    wanted.Add(item);
+                }
+                else
+                {
+                    excess.Add(item);
+                }
+            }
+
+            return wanted;
+        }
 
         public static string ToReadableString(this IEnumerable<object> collection, int indentationLevel = 0, bool doIndent = true)
         {
