@@ -865,12 +865,16 @@ namespace DuckGame
 
                 Profile me = Extensions.GetMe();
 
-                if (me == null || me.duck == null) return;
+                if (me?.duck?.connection == null)
+                    return;
                 
                 bool spectating = (Network.isActive && (me.duck.dead || me.spectator)) || matchOver;
                 
                 foreach (Profile prof in Profiles.activeNonSpectators)
                 {
+                    if (prof?.duck?.connection == null)
+                        continue;
+
                     bool doDraw = spectating || (prof.duck.localSpawnVisible && !started);
                     
                     if (!doDraw)
