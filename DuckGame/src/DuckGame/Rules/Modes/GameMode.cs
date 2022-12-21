@@ -861,10 +861,11 @@ namespace DuckGame
             
             void drawNameTags()
             {
+                if (Level.current is RockScoreboard) return;
+
                 Profile me = Extensions.GetMe();
 
-                if (me is null)
-                    return;
+                if (me == null || me.duck == null) return;
                 
                 bool spectating = (Network.isActive && (me.duck.dead || me.spectator)) || matchOver;
                 
