@@ -1284,9 +1284,9 @@ namespace DuckGame
                         ExceptionMessage += tempMsg;
                     }
                 }
-                catch
+                catch(Exception ex2)
                 {
-                    ExceptionMessage += pException.Message + " [F][" + pException.HResult + "]";
+                    ExceptionMessage += pException.Message + " [F][" + ex2.HResult + "]";
                 }
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); //en-US //_fileName  es-ES
                 string str1 = "";
