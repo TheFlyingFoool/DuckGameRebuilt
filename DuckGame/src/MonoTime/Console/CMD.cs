@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace DuckGame
@@ -411,7 +412,12 @@ namespace DuckGame
                     // case "fb":
                     // return new TestLev();
                     case "dev":
-                        return new DevTestLev();
+                        string devfilepath = Program.GameDirectory + "Content\\levels\\devtestlev.lev";
+                        if (File.Exists(devfilepath))
+                        {
+                            return new DevTestLev();
+                        }
+                        return Error($"dev level was not found.");
                     case "title":
                         return new TitleScreen();
                     case "rockintro":

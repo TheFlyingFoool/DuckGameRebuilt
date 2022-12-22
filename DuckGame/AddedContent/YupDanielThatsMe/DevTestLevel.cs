@@ -47,6 +47,7 @@ namespace DuckGame
             {
                 SpawnPosition = pendingSpawn.position;
                 followCam.Add(pendingSpawn);
+                spawnedducks.Add(pendingSpawn);
             }
             followCam.Adjust();
 
@@ -137,8 +138,8 @@ namespace DuckGame
                     Add(duck);
                     //HUD.AddInputChangeDisplay(" Cmon Now That Was Dumb, Dont You Agree? ");
                 }
-                for (int index = 0; index < 200; ++index)
-                    _followCam.Update();
+                //for (int index = 0; index < 200; ++index)
+                //    _followCam.Update();
             }
             if (_pendingSpawns != null && _pendingSpawns.Count > 0)
             {
