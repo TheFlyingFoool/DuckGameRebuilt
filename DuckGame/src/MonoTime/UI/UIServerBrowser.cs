@@ -217,12 +217,13 @@ namespace DuckGame
             //    depth = (Depth)0.9f,
             //    maxLength = 5000
             //};
-            _downloadModsMenu = new UIMenu("MODS REQUIRED!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 290f, conString: "@SELECT@SELECT");
-            _downloadModsMenu.Add(new UIText("You're missing the mods required", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("to join this game. Would you", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("like to automatically subscribe to", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("all required mods, restart and", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("join the game?", Colors.DGBlue), true);
+            _downloadModsMenu = new UIMenu("MOD LIST INCOMPATIBLE!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 274f, conString: "@SELECT@SELECT");
+            _downloadModsMenu.Add(new UIText("Your mods don't match with", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("this game. Would you like to", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("automatically subscribe to all", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("missing mods, disable all", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("unneeded mods (excl. clients),", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("restart and join the game?", Colors.DGBlue), true);
             _downloadModsMenu.Add(new UIText("", Colors.DGBlue), true);
             _downloadModsMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_downloadModsMenu, this)), true);
             _downloadModsMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, new UIMenuActionCloseMenuCallFunction.Function(SubscribeAndRestart))), true);
