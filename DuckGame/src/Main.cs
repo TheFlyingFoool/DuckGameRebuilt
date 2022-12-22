@@ -206,7 +206,7 @@ namespace DuckGame
         public RainbowConstant rbc = new RainbowConstant();
         protected override void OnUpdate()
         {
-            if (Program.gay)
+            if (Program.nikogay)
             {
                 rbc.Update(0.1f);
                 Color c = rbc.value;

@@ -78,6 +78,7 @@ namespace DuckGame
         public static string gameAssemblyName;
         public static bool doscreentileing; //just a fun showing off thing
         public static bool gay; // sht about to get real colorful
+        public static bool nikogay; // sht about to get real colorful
         /// <summary>The main entry point for the application.</summary>\
         public static Vec2 StartPos = Vec2.Zero;
         public static string gitVersion = "N/A";
@@ -426,6 +427,10 @@ namespace DuckGame
                         break;
                     case "-gay":
                         gay = true;
+                        break;
+                    case "-gay2":
+                        gay = true;
+                        nikogay = true;
                         break;
                     case "-experimental":
                         MonoMain.experimental = true;
