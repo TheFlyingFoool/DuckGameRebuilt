@@ -203,9 +203,24 @@ namespace DuckGame
             }
             ModLoader.Start();
         }
-
+        public RainbowConstant rbc = new RainbowConstant();
         protected override void OnUpdate()
         {
+            if (Program.gay)
+            {
+                rbc.Update(0.1f);
+                Color c = rbc.value;
+                int st = rbc.stage;
+                Colors.Rainbow = new Color[12];
+                for (int i = 0; i < 12; i++)
+                {
+                    Colors.Rainbow[i] = rbc.value;
+                    rbc.Update(0.2f);
+                }
+                rbc.stage = st;
+                rbc.value = c;
+            }
+
             if (DevConsole.startupCommands.Count > 0)
             {
                 DevConsole.RunCommand(DevConsole.startupCommands[0]);

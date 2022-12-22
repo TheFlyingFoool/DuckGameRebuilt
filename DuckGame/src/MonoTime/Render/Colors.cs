@@ -36,7 +36,19 @@ namespace DuckGame
         public static Color Duck4 = new Color(205, 107, 29);
         public static Color SuperDarkBlueGray = new Color(8, 12, 16);
         public static Color SystemGray = new Color(173, 173, 173);
-        public static Color[] Rainbow = new Color[] { new Color(255, 0, 0), new Color(255, 127, 0), new Color(255, 255, 0), new Color(127, 255, 0), new Color(0, 255, 0), new Color(0, 255, 127), new Color(0, 255, 255), new Color(0, 127, 255), new Color(0, 0, 255), new Color(127, 0, 255), new Color(255, 0, 255), new Color(255, 0, 127) };
+        public static Color[] Rainbow = new Color[] { 
+            new Color(255, 0, 0),
+            new Color(255, 127, 0),
+            new Color(255, 255, 0),
+            new Color(127, 255, 0),
+            new Color(0, 255, 0),
+            new Color(0, 255, 127),
+            new Color(0, 255, 255),
+            new Color(0, 127, 255),
+            new Color(0, 0, 255),
+            new Color(127, 0, 255),
+            new Color(255, 0, 255),
+            new Color(255, 0, 127) };
         private static Dictionary<string, Color> _colorMap = new Dictionary<string, Color>()
         {
             {

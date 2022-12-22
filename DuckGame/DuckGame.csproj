@@ -317,6 +317,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpTeleporter.cs" />
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
+    <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
     <Compile Include="AddedContent\NiK0\RoomEditorExtra.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\bat.cs" />
