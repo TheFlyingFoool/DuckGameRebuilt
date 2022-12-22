@@ -8,13 +8,12 @@
 #endregion
 
 #region Using Statements
-using System;
 using System.Runtime.InteropServices;
 #endregion
 
 namespace Microsoft.Xna.Framework.Graphics.PackedVector
 {
-	internal static class HalfTypeHelper
+    internal static class HalfTypeHelper
 	{
 		#region Private Struct uif
 

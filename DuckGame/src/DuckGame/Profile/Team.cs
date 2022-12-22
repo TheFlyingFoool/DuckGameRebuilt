@@ -204,8 +204,8 @@ namespace DuckGame
                 ++totalLoadHats;
                 MonoMain.currentActionQueue.Enqueue(new LoadingAction(() =>
                {
+                   currentLoadHat++;
                    MonoMain.NloadMessage = "Loading Custom Hats (" + currentLoadHat.ToString() + "/" + totalLoadHats.ToString() + ")";
-                   ++currentLoadHat;
                    Team team = !(pExtension == "png") ? Deserialize(f) : DeserializeFromPNG(File.ReadAllBytes(f), Path.GetFileNameWithoutExtension(f), f);
                    if (team == null)
                        return;

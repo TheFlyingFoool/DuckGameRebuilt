@@ -1933,7 +1933,6 @@ namespace DuckGame
         //    }
         //    return new List<Thing>();
         //}
-
         public void CollisionBullet(Vec2 point, List<MaterialThing> output)
         {
             foreach (Thing thing in things.CollisionPointAll(point, typeof(MaterialThing)))
@@ -1942,6 +1941,7 @@ namespace DuckGame
                     output.Add(thing as MaterialThing);
             }
         }
+
 
         public static T CheckRay<T>(Vec2 start, Vec2 end) => current.CollisionRay<T>(start, end);
 

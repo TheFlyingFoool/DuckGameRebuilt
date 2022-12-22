@@ -15,17 +15,16 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 
 using Microsoft.Xna.Framework.Design;
 #endregion
 
 namespace Microsoft.Xna.Framework
 {
-	/// <summary>
-	/// Describes a 2D-vector.
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// Describes a 2D-vector.
+    /// </summary>
+    [Serializable]
 	[TypeConverter(typeof(Vector2Converter))]
 	[DebuggerDisplay("{DebugDisplayString,nq}")]
 	public struct Vector2 : IEquatable<Vector2>

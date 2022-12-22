@@ -5,7 +5,6 @@
 // Assembly location: C:\Users\daniel\Desktop\Release\XnaToFna.exe
 
 using Microsoft.Xna.Framework.Content;
-using System.IO;
 using System.IO.Compression;
 
 namespace XnaToFna.ContentTransformers

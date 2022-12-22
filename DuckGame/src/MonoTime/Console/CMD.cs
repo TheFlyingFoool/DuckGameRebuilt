@@ -410,6 +410,8 @@ namespace DuckGame
                         return new TestLev();
                     // case "fb":
                     // return new TestLev();
+                    case "dev":
+                        return new DevTestLev();
                     case "title":
                         return new TitleScreen();
                     case "rockintro":

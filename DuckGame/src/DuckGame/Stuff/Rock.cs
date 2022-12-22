@@ -89,7 +89,9 @@ namespace DuckGame
         public override void Update()
         {
             if (isGoldRock && !(material is MaterialGold))
+            {
                 material = new MaterialGold(this);
+            }
             if (isServerForObject)
             {
                 if (isGoldRock)

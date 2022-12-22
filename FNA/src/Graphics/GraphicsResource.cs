@@ -9,12 +9,11 @@
 
 #region Using Statements
 using System;
-using System.Collections.Generic;
 #endregion
 
 namespace Microsoft.Xna.Framework.Graphics
-{	
-	public abstract class GraphicsResource : IDisposable
+{
+    public abstract class GraphicsResource : IDisposable
 	{
 		#region Public Properties
 

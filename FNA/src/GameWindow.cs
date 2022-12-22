@@ -10,13 +10,11 @@
 #region Using Statements
 using System;
 using System.ComponentModel;
-
-using Microsoft.Xna.Framework.Input;
 #endregion
 
 namespace Microsoft.Xna.Framework
 {
-	public abstract class GameWindow
+    public abstract class GameWindow
 	{
 		#region Public Properties
 

@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System;
 using System.Linq;
 
 namespace DuckGame
@@ -13,6 +14,9 @@ namespace DuckGame
     {
         private SpriteMap _texture;
         public static SpriteMap _japaneseCharacters;
+        public int charcolorindex;
+        public int startingcoloroverride = -1;
+        public int startingcolorindex = -1;
         private static bool _mapInitialized = false;
         public static char[] _characters = new char[317]
         {
@@ -488,16 +492,51 @@ namespace DuckGame
 
         public void DrawOutline(string text, Vec2 pos, Color c, Color outline, Depth deep = default(Depth))
         {
-            string cleanText = text.CleanFormatting(Extensions.CleanMethod.Color);
-            Draw(cleanText, pos + new Vec2(-1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
-            Draw(cleanText, pos + new Vec2(1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
-            Draw(cleanText, pos + new Vec2(0f, -1f * scale.y), outline, deep + 2, colorSymbols: true);
-            Draw(cleanText, pos + new Vec2(0f, 1f * scale.y), outline, deep + 2, colorSymbols: true);
-            Draw(cleanText, pos + new Vec2(-1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
-            Draw(cleanText, pos + new Vec2(1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
-            Draw(cleanText, pos + new Vec2(-1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
-            Draw(cleanText, pos + new Vec2(1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
-            Draw(text, pos, c, deep + 5);
+            if (Program.gay)
+            {
+                Random t = new Random(text.Length + (int)pos.y + (int)pos.x);
+                startingcolorindex = t.Next(0, Color.RainbowColors.Count);
+                //this.startingcoloroverride = startingcolorindex;
+                //if (startingcolorindex == -1)
+                //{
+                //    startingcolorindex = Rando.Int(Color.RainbowColors.Count - 1);
+                //}
+                startingcoloroverride = (Color.RainbowColors.Count - 1) - startingcolorindex;
+                
+                string cleanText = text.CleanFormatting(Extensions.CleanMethod.Color);
+                Draw(cleanText, pos + new Vec2(-1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(0f, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(0f, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(-1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(-1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+                int newcolor = startingcolorindex;
+                if (newcolor == startingcoloroverride)
+                {
+                    newcolor += 2;
+                    if (newcolor >= Colors.Rainbow.Length)
+                    {
+                        newcolor = 0;
+                    }
+                }
+                startingcoloroverride = newcolor;
+                Draw(text, pos, c, deep + 5);
+            }
+            else
+            {
+                string cleanText = text.CleanFormatting(Extensions.CleanMethod.Color);
+                Draw(cleanText, pos + new Vec2(-1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(0f, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(0f, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(-1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(-1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(text, pos, c, deep + 5);
+            }
         }
 
         public void Draw(
@@ -524,6 +563,23 @@ namespace DuckGame
             //{
             //    LangHandler.drawnstrings.Add(text);
             //}
+            if (Program.gay)
+            {
+                if (startingcoloroverride != -1)
+                {
+                    startingcolorindex = startingcoloroverride;
+                }
+                else
+                {
+                    Random t = new Random(text.Length + (int)ypos + (int)xpos);
+                    startingcolorindex = t.Next(0, Color.RainbowColors.Count);
+                }
+                //if (startingcolorindex == -1)
+                //{
+                //    startingcolorindex = Rando.Int(Color.RainbowColors.Count - 1);
+                //}
+                charcolorindex = startingcolorindex;
+            }
             text = LangHandler.Convert(text);
             if (colorOverride != new Color())
                 c = colorOverride;
@@ -584,8 +640,21 @@ namespace DuckGame
                                         num3 += 3f * this.scale.y;
                                     }
                                 }
-                                if (colorSymbols)
+                                if (Program.gay)
+                                {
+                                    c = Colors.Rainbow[charcolorindex];
+                                    charcolorindex += 1;
+                                    if (charcolorindex >= Colors.Rainbow.Length)
+                                    {
+                                        charcolorindex = 0;
+                                    }
                                     sprite1.color = c;
+                                }
+                                else
+                                {
+                                    if (colorSymbols)
+                                        sprite1.color = c;
+                                }
                                 Graphics.Draw(sprite1, xpos + num2, ypos + num1 + num3, deep);
                                 num2 += (sprite1.width * sprite1.scale.x + 1f);
                                 sprite1.scale = scale;
@@ -646,6 +715,15 @@ namespace DuckGame
                     }
                     else
                     {
+                        if (Program.gay)
+                        {
+                            c = Colors.Rainbow[charcolorindex];
+                            charcolorindex += 1;
+                            if (charcolorindex >= Colors.Rainbow.Length)
+                            {
+                                charcolorindex = 0;
+                            }
+                        }
                         SpriteMap g = _texture;
                         char index = text[_letterIndex];
                         int num4;

@@ -10,13 +10,12 @@
 #region Using Statements
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 #endregion
 
 namespace Microsoft.Xna.Framework.Audio
 {
-	// http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.audio.wavebank.aspx
-	public class WaveBank : IDisposable
+    // http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.audio.wavebank.aspx
+    public class WaveBank : IDisposable
 	{
 		#region Public Properties
 

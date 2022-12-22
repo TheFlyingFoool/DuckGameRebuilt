@@ -8,12 +8,11 @@
 #endregion
 
 #region Using Statements
-using System;
 #endregion
 
 namespace Microsoft.Xna.Framework
 {
-	internal static class TitleLocation
+    internal static class TitleLocation
 	{
 		#region Public Static Properties
 

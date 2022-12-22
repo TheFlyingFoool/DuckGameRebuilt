@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.SymbolStore;
-using System.Security.Cryptography.X509Certificates;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [ClientOnly]
     public class WumpQuadLaserBullet : Thing, ITeleport, IDrawToDifferentLayers

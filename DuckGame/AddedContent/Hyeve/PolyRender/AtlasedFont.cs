@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using AddedContent.Hyeve.Utils;
 using DuckGame;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Blend = Microsoft.Xna.Framework.Graphics.Blend;
 using Color = DuckGame.Color;
 using Graphics = DuckGame.Graphics;

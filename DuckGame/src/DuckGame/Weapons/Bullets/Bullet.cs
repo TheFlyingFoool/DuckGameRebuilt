@@ -8,14 +8,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.UI.WebControls;
-using System.Windows.Controls.Primitives;
-using static DuckGame.CMD;
 
 namespace DuckGame
 {
     public class Bullet : Thing
     {
+        public static int bulletcolorindex;
         private new NetworkConnection _connection;
         protected Teleporter _teleporter;
         public AmmoType ammo;
@@ -194,6 +192,19 @@ namespace DuckGame
             if (PewPewLaser.inFire)
                 return;
             double x = travelDirNormalized.x;
+        }
+        public override void Initialize()
+        {
+            if (Program.gay)
+            {
+                color = Colors.Rainbow[bulletcolorindex];
+                bulletcolorindex += 1;
+                if (bulletcolorindex >= Colors.Rainbow.Length)
+                {
+                    bulletcolorindex = 0;
+                }
+            }
+            base.Initialize();
         }
 
         public Bullet ReverseTravel()

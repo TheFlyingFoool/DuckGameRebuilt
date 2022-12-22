@@ -515,6 +515,8 @@ namespace DuckGame
             float Height = p1.y - p2.y;
             Width = Width > 0 ? Width : -Width;
             Height = Height > 0 ? Height : -Height;
+            Width += cellsize * 2;
+            Height += cellsize * 2;
             Vec2 position = new Vec2(p1.x + (Width / 2), p1.y + (Height / 2));
             return GetThings(position, Width, Height, t);
         }

@@ -7,7 +7,6 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using SDL2;
 using System;
 using System.Collections.Generic;
 using static SDL2.SDL;

@@ -6,11 +6,9 @@ using SDL2;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace DuckGame
@@ -132,33 +130,34 @@ namespace DuckGame
             PackTextures(MTSpriteBatcher.Texidonthave, null, "unsaved"); ;
             PackTextures(Content.textures.Values.ToList(), unneeedtexs, "spriteatlas");
         }
-        public static void drawthething()
+        [DrawingContext(DrawingLayer.Foreground, CustomID = "cells", DoDraw = false)]
+        public static void DrawCells()
         {
             //Buckets.Keys
-            //if (Level.current != null)
-            //{
+            if (Level.current != null)
+            {
 
 
-            //    //Vec2 offset = new Vec2(0f, 0f);
-            //    //for (int x = 0; x < 21; x++)
-            //    //{
-            //    //    for (int y = 0; y < 21; y++)
-            //    //    {
-            //    //        DuckGame.Graphics.DrawRect(new Vec2(bottomright.x * x, bottomright.y * y), new Vec2(bottomright.x * (x + 1), bottomright.y * (y + 1)), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
-            //    //    }
-            //    //}
-            //    float offset = QuadTreeObjectList.offset / QuadTreeObjectList.cellsize;
-            //    float suboffset = QuadTreeObjectList.cellsize / 4;
-            //    foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
-            //    {
-            //        //foreach (Thing t in Level.current.things.Buckets[bucket][typeof(Thing)])
-            //        //{
-            //        //    DuckGame.Graphics.DrawRect(t.topLeft, t.bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
-            //        //}
-            //        Graphics.DrawString(bucket.x.ToString() + " " + bucket.y.ToString(), new Vec2(((bucket.x - offset) * QuadTreeObjectList.cellsize) + suboffset, ((bucket.y - offset) * QuadTreeObjectList.cellsize) + suboffset), Color.Green, default(Depth), null, 0.8f);
-            //        DuckGame.Graphics.DrawRect(new Vec2((bucket.x - offset) * QuadTreeObjectList.cellsize, (bucket.y - offset) * QuadTreeObjectList.cellsize), new Vec2((bucket.x - offset + 1) * QuadTreeObjectList.cellsize, (bucket.y - offset + 1) * QuadTreeObjectList.cellsize), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
-            //    }
-            //}
+                //Vec2 offset = new Vec2(0f, 0f);
+                //for (int x = 0; x < 21; x++)
+                //{
+                //    for (int y = 0; y < 21; y++)
+                //    {
+                //        DuckGame.Graphics.DrawRect(new Vec2(bottomright.x * x, bottomright.y * y), new Vec2(bottomright.x * (x + 1), bottomright.y * (y + 1)), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+                //    }
+                //}
+                float offset = QuadTreeObjectList.offset / QuadTreeObjectList.cellsize;
+                float suboffset = QuadTreeObjectList.cellsize / 4;
+                foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
+                {
+                    //foreach (Thing t in Level.current.things.Buckets[bucket][typeof(Thing)])
+                    //{
+                    //    DuckGame.Graphics.DrawRect(t.topLeft, t.bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+                    //}
+                    Graphics.DrawString(bucket.x.ToString() + " " + bucket.y.ToString(), new Vec2(((bucket.x - offset) * QuadTreeObjectList.cellsize) + suboffset, ((bucket.y - offset) * QuadTreeObjectList.cellsize) + suboffset), Color.Green, (Depth)1f, null, 0.8f);
+                    Graphics.DrawRect(new Vec2((bucket.x - offset) * QuadTreeObjectList.cellsize, (bucket.y - offset) * QuadTreeObjectList.cellsize), new Vec2((bucket.x - offset + 1) * QuadTreeObjectList.cellsize, (bucket.y - offset + 1) * QuadTreeObjectList.cellsize), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+                }
+            }
 
         }
         [DevConsoleCommand]

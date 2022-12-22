@@ -6,7 +6,6 @@ using AddedContent.Hyeve.PolyRender;
 using AddedContent.Hyeve.Utils;
 using DuckGame;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Color = DuckGame.Color;
 using Rectangle = DuckGame.Rectangle;
 

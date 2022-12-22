@@ -11,6 +11,7 @@ namespace DuckGame
 {
     public class BeamParticle : Thing
     {
+        public static int colorindex;
         public float _wave;
         public float _sinVal;
         private bool _inverse;
@@ -20,6 +21,16 @@ namespace DuckGame
         public BeamParticle(float xpos, float ypos, float spd, bool inverse, Color c)
           : base(xpos, ypos)
         {
+            if (Program.gay)
+            {
+                colorindex += 1;
+                c = Colors.Rainbow[colorindex];
+                colorindex += 1;
+                if (colorindex >= Colors.Rainbow.Length)
+                {
+                    colorindex = 0;
+                }
+            }
             depth = (Depth)0.9f;
             vSpeed = Rando.Float(-0.5f, -1.5f);
             y += Rando.Float(10f);

@@ -8,13 +8,12 @@
 #endregion
 
 #region Using Statements
-using System;
 using System.Collections.Generic;
 #endregion
 
 namespace Microsoft.Xna.Framework.Media
 {
-	public sealed class MediaQueue
+    public sealed class MediaQueue
 	{
 		#region Public Properties
 

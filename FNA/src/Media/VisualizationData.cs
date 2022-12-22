@@ -8,13 +8,12 @@
 #endregion
 
 #region Using Statements
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 #endregion
 
 namespace Microsoft.Xna.Framework.Media
 {
-	public class VisualizationData
+    public class VisualizationData
 	{
 		#region Public Properties
 

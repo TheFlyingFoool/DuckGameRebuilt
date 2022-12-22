@@ -6,7 +6,6 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.CSharp;
-using Microsoft.Xna.Framework;
 using Mono.Cecil;
 using MonoMod.Utils;
 using System;
@@ -14,7 +13,6 @@ using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -22,9 +20,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Linq;
 using XnaToFna;
-using static System.Net.WebRequestMethods;
 using File = System.IO.File;
 
 namespace DuckGame
@@ -359,6 +355,12 @@ namespace DuckGame
                             mod = new DisabledMod();
                         }
                         else if (modConfig.workshopID == 2411996803UL)
+                        {
+                            modConfig.Disable();
+                            modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
+                            mod = new DisabledMod();
+                        }
+                        else if (modConfig.workshopID == 2381384850UL)
                         {
                             modConfig.Disable();
                             modConfig.error = "!This is Disabled mod is Disabled when Debugging!";

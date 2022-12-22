@@ -14,7 +14,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 
 namespace DuckGame
 {
@@ -278,16 +277,27 @@ namespace DuckGame
                 AddItem(contextMenu);
             }
             int num3 = 0;
-            foreach (string path3 in files)
+            List<string> _files = new List<string>(files);
+            string devfilepath = Program.GameDirectory + "Content\\levels\\devtestlev.lev";
+            if (File.Exists(devfilepath))
             {
+                _files.Insert(0, devfilepath);
+            }
+            foreach (string path3 in _files)
+            {
+                bool _pIsModPath = pIsModPath;
+                if (path3 == devfilepath)
+                {
+                    _pIsModPath = true;
+                }
                 string path = path3;
                 if (path.StartsWith("|"))
                     path = path.Substring(1, path.Length - 1);
                 string fileName = Path.GetFileName(path);
-                bool heart = false;
+                bool heart33 = false;
                 if (DGRSettings.PreferredLevel != "" && path == DGRSettings.PreferredLevel)
                 {
-                    heart = true;
+                    heart33 = true;
                     DevConsole.Log(fileName);
                     DevConsole.Log(path);
                 }
@@ -296,7 +306,7 @@ namespace DuckGame
                     if (fileName.EndsWith(TypeExtension()))
                     {
                         string TOXT = fileName;
-                        if (heart)
+                        if (heart33)
                         {
                             TOXT = TOXT.Insert(0, "|PINK|♥|WHITE|");
                         }
@@ -307,9 +317,9 @@ namespace DuckGame
                             text = TOXT
                         };
                         contextMenu.text = TOXT.Substring(0, TOXT.Length - 4);
-                        contextMenu.data = !pIsModPath ? fileName : path;
+                        contextMenu.data = !_pIsModPath ? fileName : path;
                         contextMenu.itemSize = new Vec2(x, 16f);
-                        contextMenu.isModPath = pIsModPath;
+                        contextMenu.isModPath = _pIsModPath;
                         AddItem(contextMenu);
                     }
                 }
@@ -728,20 +738,20 @@ namespace DuckGame
             base.Draw();
             float num1 = 350f;
             float num2 = _fdHeight + 22f;
-            Vec2 p1_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0 + hOffset - 1.0), (float)(layer.height / 2.0 - num2 / 2.0 - 15.0));
-            Vec2 p2_1 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0 + hOffset + 1.0), (float)(layer.height / 2.0 + num2 / 2.0 - 12.0));
-            Graphics.DrawRect(p1_1, p2_1, new Color(70, 70, 70), depth, false);
-            Graphics.DrawRect(p1_1, p2_1, new Color(30, 30, 30), depth - 8);
-            Graphics.DrawRect(p1_1 + new Vec2(3f, 23f), p2_1 + new Vec2(-18f, -4f), new Color(10, 10, 10), depth - 4);
-            Vec2 p1_2 = new Vec2(p2_1.x - 16f, p1_1.y + 23f);
-            Vec2 p2_2 = p2_1 + new Vec2(-3f, -4f);
+            Vec2 topLeft = new Vec2((float)(layer.width / 2.0 - num1 / 2.0 + hOffset - 1.0), (float)(layer.height / 2.0 - num2 / 2.0 - 15.0));
+            Vec2 bottomRight = new Vec2((float)(layer.width / 2.0 + num1 / 2.0 + hOffset + 1.0), (float)(layer.height / 2.0 + num2 / 2.0 - 12.0));
+            Graphics.DrawRect(topLeft, bottomRight, new Color(70, 70, 70), depth, false);
+            Graphics.DrawRect(topLeft, bottomRight, new Color(30, 30, 30), depth - 8);
+            Graphics.DrawRect(topLeft + new Vec2(3f, 23f), bottomRight + new Vec2(-18f, -4f), new Color(10, 10, 10), depth - 4);
+            Vec2 p1_2 = new Vec2(bottomRight.x - 16f, topLeft.y + 23f);
+            Vec2 p2_2 = bottomRight + new Vec2(-3f, -4f);
             Graphics.DrawRect(p1_2, p2_2, new Color(10, 10, 10), depth - 4);
-            Graphics.DrawRect(p1_1 + new Vec2(3f, 3f), new Vec2(p2_1.x - 3f, p1_1.y + 19f), new Color(70, 70, 70), depth - 4);
+            Graphics.DrawRect(topLeft + new Vec2(3f, 3f), new Vec2(bottomRight.x - 3f, topLeft.y + 19f), new Color(70, 70, 70), depth - 4);
             if (_scrollBar)
             {
                 _scrollLerp = Lerp.Float(_scrollLerp, _scrollPosition, 0.05f);
-                Vec2 p1_3 = new Vec2(p2_1.x - 14f, (float)(topRight.y + 7.0 + (240.0 * _scrollLerp - 4.0)));
-                Vec2 p2_3 = new Vec2(p2_1.x - 5f, (float)(topRight.y + 11.0 + (240.0 * _scrollLerp + 8.0)));
+                Vec2 p1_3 = new Vec2(bottomRight.x - 14f, (float)(topRight.y + 7.0 + (240.0 * _scrollLerp - 4.0)));
+                Vec2 p2_3 = new Vec2(bottomRight.x - 5f, (float)(topRight.y + 11.0 + (240.0 * _scrollLerp + 8.0)));
                 bool flag = false;
                 if (Mouse.x > p1_3.x && Mouse.x < p2_3.x && Mouse.y > p1_3.y && Mouse.y < p2_3.y)
                 {
@@ -766,28 +776,28 @@ namespace DuckGame
             int startIndex1 = _currentDirectory.IndexOf(_rootFolder);
             if (startIndex1 != -1)
                 str1 = _currentDirectory.Remove(startIndex1, _rootFolder.Length);
-            string str2 = Path.GetFileName(_rootFolder) + str1;
+            string path = Path.GetFileName(_rootFolder) + str1;
             if (isModPath)
-                str2 = _currentDirectory.Replace(DuckFile.modsDirectory, "").Replace(DuckFile.globalModsDirectory, "");
-            if (str2 == "")
-                str2 = _type != ContextFileType.Block ? (_type != ContextFileType.Platform ? (_type != ContextFileType.Background ? (_type != ContextFileType.Parallax ? (_type != ContextFileType.ArcadeStyle ? "LEVELS" : "Custom/Arcade") : "Custom/Parallax") : "Custom/Background") : "Custom/Platform") : "Custom/Blocks";
-            string str3 = !_save ? (!_selectLevels ? (_type != ContextFileType.Block ? (_type != ContextFileType.Platform ? (_type != ContextFileType.Background ? (_type != ContextFileType.Parallax ? (_type != ContextFileType.ArcadeStyle ? "@LOADICON@Load Level" : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "Select Active Levels") : "@SAVEICON@Save Level";
-            string str4 = str2;
+                path = _currentDirectory.Replace(DuckFile.modsDirectory, "").Replace(DuckFile.globalModsDirectory, "");
+            if (path == "")
+                path = _type != ContextFileType.Block ? (_type != ContextFileType.Platform ? (_type != ContextFileType.Background ? (_type != ContextFileType.Parallax ? (_type != ContextFileType.ArcadeStyle ? "LEVELS" : "Custom/Arcade") : "Custom/Parallax") : "Custom/Background") : "Custom/Platform") : "Custom/Blocks";
+            string headingString = !_save ? (!_selectLevels ? (_type != ContextFileType.Block ? (_type != ContextFileType.Platform ? (_type != ContextFileType.Background ? (_type != ContextFileType.Parallax ? (_type != ContextFileType.ArcadeStyle ? "@LOADICON@Load Level" : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "@LOADICON@Custom") : "Select Active Levels") : "@SAVEICON@Save Level";
+            string drawPath = path;
 
-            Graphics.DrawString(str3 + (str4 == "" ? "" : " - " + str4), p1_1 + new Vec2(5f, 7f), Color.White, depth + 8);
-            Vec2 p1_4 = new Vec2(p2_1.x + 2f, p1_1.y);
-            Vec2 p2_4 = p1_4 + new Vec2(164f, 120f);
+            Graphics.DrawString(headingString + (drawPath == "" ? "" : " - " + drawPath), topLeft + new Vec2(5f, 7f), Color.White, depth + 8);
+            Vec2 part2TL = new Vec2(bottomRight.x + 2f, topLeft.y);
+            Vec2 part2BR = part2TL + new Vec2(164f, 120f);
             if (_previewSprite != null && _previewSprite.texture != null && (_type == ContextFileType.Block || _type == ContextFileType.Background || _type == ContextFileType.Platform || _type == ContextFileType.Parallax || _type == ContextFileType.ArcadeStyle || _type == ContextFileType.ArcadeAnimation))
-                p2_4 = _type != ContextFileType.Parallax ? p1_4 + new Vec2(_previewSprite.width + 4, _previewSprite.height + 4) : p1_4 + new Vec2(_previewSprite.width / 2 + 4, _previewSprite.height / 2 + 4);
-            Graphics.DrawRect(p1_4, p2_4, new Color(70, 70, 70), depth, false);
-            Graphics.DrawRect(p1_4, p2_4, new Color(30, 30, 30), depth - 8);
+                part2BR = _type != ContextFileType.Parallax ? part2TL + new Vec2(_previewSprite.width + 4, _previewSprite.height + 4) : part2TL + new Vec2(_previewSprite.width / 2 + 4, _previewSprite.height / 2 + 4);
+            Graphics.DrawRect(part2TL, part2BR, new Color(70, 70, 70), depth, false);
+            Graphics.DrawRect(part2TL, part2BR, new Color(30, 30, 30), depth - 8);
             if (_previewSprite == null || _previewSprite.texture == null)
                 return;
             _previewSprite.depth = (Depth)0.95f;
             _previewSprite.scale = new Vec2(0.5f);
             if (_type == ContextFileType.Block || _type == ContextFileType.Background || _type == ContextFileType.Platform)
                 _previewSprite.scale = new Vec2(1f);
-            Graphics.Draw(_previewSprite, p1_4.x + 2f, p1_4.y + 2f);
+            Graphics.Draw(_previewSprite, part2TL.x + 2f, part2TL.y + 2f);
             if (_previewPair == null)
                 return;
             string str5 = _previewName;
@@ -802,25 +812,25 @@ namespace DuckGame
             string str7 = "";
             if (_previewPair.strange)
             {
-                Graphics.DrawString(str7 + "STRANGE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGPurple, depth + 8);
-                Vec2 p1_5 = p1_4 + new Vec2(0f, 122f);
+                Graphics.DrawString(str7 + "STRANGE LEVEL", part2TL + new Vec2(5f, 107f), Colors.DGPurple, depth + 8);
+                Vec2 p1_5 = part2TL + new Vec2(0f, 122f);
                 Vec2 p2_5 = p1_5 + new Vec2(166f, 36f);
                 Graphics.DrawRect(p1_5, p2_5, new Color(70, 70, 70), depth, false);
                 Graphics.DrawRect(p1_5, p2_5, new Color(30, 30, 30), depth - 8);
                 _fancyFont.Draw("Must place at least one Duck Spawn Point to make a valid level.", p1_5.x + 4f, p1_5.y + 4f, Color.White, depth + 8);
             }
             else if (_previewPair.arcade)
-                Graphics.DrawString(str7 + "ARCADE LAYOUT", p1_4 + new Vec2(5f, 107f), Colors.DGYellow, depth + 8);
+                Graphics.DrawString(str7 + "ARCADE LAYOUT", part2TL + new Vec2(5f, 107f), Colors.DGYellow, depth + 8);
             else if (_previewPair.challenge)
-                Graphics.DrawString(str7 + "CHALLENGE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGRed, depth + 8);
+                Graphics.DrawString(str7 + "CHALLENGE LEVEL", part2TL + new Vec2(5f, 107f), Colors.DGRed, depth + 8);
             else if (_previewPair.invalid == null || _previewPair.invalid.Count == 0)
             {
-                Graphics.DrawString(str7 + "ONLINE LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGGreen, depth + 8);
+                Graphics.DrawString(str7 + "ONLINE LEVEL", part2TL + new Vec2(5f, 107f), Colors.DGGreen, depth + 8);
             }
             else
             {
-                Graphics.DrawString(str7 + "LOCAL LEVEL", p1_4 + new Vec2(5f, 107f), Colors.DGBlue, depth + 8);
-                Vec2 p1_6 = p1_4 + new Vec2(0f, 122f);
+                Graphics.DrawString(str7 + "LOCAL LEVEL", part2TL + new Vec2(5f, 107f), Colors.DGBlue, depth + 8);
+                Vec2 p1_6 = part2TL + new Vec2(0f, 122f);
                 _fancyFont.Draw("Contains the following Local-Only objects:", p1_6.x + 4f, p1_6.y + 4f, Color.White, depth + 8);
                 int num3 = 22;
                 if (_previewPair.invalid != null)

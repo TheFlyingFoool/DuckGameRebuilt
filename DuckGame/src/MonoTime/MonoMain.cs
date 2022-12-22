@@ -22,10 +22,8 @@ using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using AddedContent.Hyeve;
-using static DuckGame.CMD;
 using XnaToFna;
 
 namespace DuckGame
@@ -208,6 +206,7 @@ namespace DuckGame
         private bool takingShot;
         public static bool doPauseFade = true;
         public static bool firebreak = false;
+        public static bool experimental = false;
         public static volatile int loadyBits = 0;
         public static volatile int totalLoadyBits = 365;
         private Timer _timeSinceLastLoadFrame = new Timer();
@@ -1628,7 +1627,20 @@ namespace DuckGame
                 {
                     NloadMessage = NloadMessage;
                 }
-                if (Debugger.IsAttached)
+                if (Program.gay)
+                {
+                    int offset = 0;
+                    for (int i = 0; i < p1.y - p1.y + vec2_1.y; i++)
+                    {
+                        if (i - offset >= Colors.Rainbow.Length)
+                        {
+                            offset += Colors.Rainbow.Length;
+                            // i = 0;
+                        }
+                        Graphics.DrawLine(new Vec2(p1.x, p1.y + i), p1 + new Vec2(vec2_1.x * loaded, vec2_1.y + i - 20), Colors.Rainbow[i - offset]);
+                    }
+                }
+                else if (Debugger.IsAttached)
                 {
                     Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Green, (Depth)0.6f);
                 }

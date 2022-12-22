@@ -4559,7 +4559,7 @@ namespace DuckGame
                     }
                     _spriteArms.depth = base.depth + 11;
                     _bionicArm.depth = base.depth + 11;
-                    _spriteQuack.alpha = (_spriteControlled.alpha = (_sprite.alpha = (_spriteArms.alpha = (_isGhost ? 0.5f : 1f) * base.alpha)));
+                    _spriteQuack.alpha = (_spriteControlled.alpha = (_sprite.alpha = (_spriteArms.alpha = (_isGhost ? 0.5f : 1f) * alpha)));
                     _spriteQuack.flipH = (_spriteControlled.flipH = _sprite.flipH);
                     _spriteControlled.depth = base.depth;
                     _sprite.depth = base.depth;

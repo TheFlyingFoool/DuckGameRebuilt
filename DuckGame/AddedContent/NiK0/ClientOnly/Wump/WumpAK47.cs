@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using Microsoft.Xna.Framework.Graphics;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [ClientOnly]
     [EditorGroup("Rebuilt|Wump|Machine Guns")]

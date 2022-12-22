@@ -575,7 +575,21 @@ namespace DuckGame
             MapLevel(dat.metaData.guid, dat, loc);
             return dat.metaData.guid;
         }
-
+        public static string ReloadAndGetLevelID(string path, LevelLocation loc = LevelLocation.Content)
+        {
+            if (!path.EndsWith(".lev"))
+                path += ".lev";
+            if (_levels.ContainsKey(path))
+            {
+                _levels.Remove(path);
+            }
+            string path1 = Content.path + "/levels/" + path;
+            LevelData dat = DuckFile.LoadLevel(path1);
+            if (dat == null)
+                return "";
+            MapLevel(dat.metaData.guid, dat, loc);
+            return dat.metaData.guid;
+        }
         public static List<string> GetLevels(string dir, LevelLocation location) => GetLevels(dir, location, true, false, false);
 
         public static List<string> GetLevels(

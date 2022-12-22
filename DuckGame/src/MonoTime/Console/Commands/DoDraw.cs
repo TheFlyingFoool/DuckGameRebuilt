@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using AddedContent.Hyeve.PolyRender;
+﻿using AddedContent.Hyeve.PolyRender;
 
 namespace DuckGame
 {

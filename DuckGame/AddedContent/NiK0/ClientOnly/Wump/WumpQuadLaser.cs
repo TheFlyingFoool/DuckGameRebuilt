@@ -1,8 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [ClientOnly]
     [EditorGroup("Rebuilt|Wump|Lasers")]

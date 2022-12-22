@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public static class FireDebug
     {

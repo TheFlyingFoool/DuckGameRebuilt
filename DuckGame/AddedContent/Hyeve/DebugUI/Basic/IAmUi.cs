@@ -1,6 +1,5 @@
 ﻿using System;
 using AddedContent.Hyeve.DebugUI.Components;
-using AddedContent.Hyeve.Utils;
 using DuckGame;
 using Microsoft.Xna.Framework;
 

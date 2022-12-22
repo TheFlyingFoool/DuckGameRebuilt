@@ -5,13 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using Microsoft.Xna.Framework;
 using System;
-using System.Diagnostics;
 using System.Globalization;
-using System.Windows.Forms;
-using XnaToFna;
-using static DuckGame.CMD;
 
 namespace DuckGame
 {

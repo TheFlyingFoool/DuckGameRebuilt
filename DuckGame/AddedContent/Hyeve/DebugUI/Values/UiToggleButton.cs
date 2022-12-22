@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using AddedContent.Hyeve.DebugUI.Basic;
+﻿using AddedContent.Hyeve.DebugUI.Basic;
 using AddedContent.Hyeve.PolyRender;
 using AddedContent.Hyeve.Utils;
 using Microsoft.Xna.Framework;

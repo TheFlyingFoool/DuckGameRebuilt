@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
-using static DuckGame.CMD;
 //using System.Windows.Forms;
 namespace DuckGame
 {

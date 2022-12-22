@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
-	public class DuckAI : InputProfile
+    public class DuckAI : InputProfile
 	{
 		public AILocomotion locomotion
 		{

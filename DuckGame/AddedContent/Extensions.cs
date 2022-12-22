@@ -5,7 +5,6 @@ using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using static DuckGame.CMD;
 
 namespace DuckGame
 {

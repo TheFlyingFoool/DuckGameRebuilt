@@ -8,8 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Profile;
-using static DuckGame.CMD;
 
 namespace DuckGame
 {

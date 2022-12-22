@@ -5,10 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Linq;
-using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -213,7 +211,7 @@ namespace DuckGame
             SFX.Play("textLetter", 0.7f);
         }
         public static Keys[] keysOfInterest =
-                        {
+        {
                             Keys.D1,
                             Keys.D2,
                             Keys.D3,
@@ -224,7 +222,7 @@ namespace DuckGame
                             Keys.D8,
                             Keys.D9,
                             Keys.D0
-                        };
+        };
         public override void Update()
         {
             if (UIParentMenu != null && UIParentMenu.domouse && !UIParentMenu.gamepadMode && _currentMenuItemSelection != null && Mouse.available)

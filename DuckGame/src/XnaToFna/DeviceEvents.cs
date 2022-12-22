@@ -7,7 +7,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Reflection;
 using XnaToFna.ProxyForms;
 
 namespace XnaToFna

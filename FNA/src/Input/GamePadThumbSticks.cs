@@ -8,12 +8,11 @@
 #endregion
 
 #region Using Statements
-using System;
 #endregion
 
 namespace Microsoft.Xna.Framework.Input
 {
-	public struct GamePadThumbSticks
+    public struct GamePadThumbSticks
 	{
 		#region Public Properties
 

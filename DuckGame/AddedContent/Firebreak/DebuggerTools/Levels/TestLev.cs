@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public partial class TestLev : Level
     {
