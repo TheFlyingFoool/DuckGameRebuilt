@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using AddedContent.Firebreak;
 using DbMon.NET;
 using DGWindows;
 using Microsoft.Xna.Framework;
@@ -38,7 +39,19 @@ namespace DuckGame
         public static bool Prestart = DirtyPreStart();
 
         public static bool temptest1;
-        public static string currentversion;
+        
+        // this should be formatted like X.X.X where each X is a number
+        public const string CURRENT_VERSION_ID = "1.0.10";
+        
+        // dont change this unless you know what you're doing -Firebreak
+        public const string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
+        
+        #if AutoUpdater
+        public const bool IS_DEV_BUILD = false;
+        #else
+        public const bool IS_DEV_BUILD = true;
+        #endif
+        
         public static string StartinEditorLevelName;
         public static string GameDirectory;
         public static string FileName;
@@ -82,6 +95,7 @@ namespace DuckGame
         /// <summary>The main entry point for the application.</summary>\
         public static Vec2 StartPos = Vec2.Zero;
         public static string gitVersion = "N/A";
+        public static readonly bool HasInternet = Internet.IsAvailable();
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
@@ -164,10 +178,11 @@ namespace DuckGame
             int tries = 10;
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
-            currentversion = "";
-#if AutoUpdater
-            AutoUpdater();
-#endif
+            
+            #if AutoUpdater
+            AutoUpdaterNew();
+            #endif
+            
             if (fullstop)
             {
                 return false;
@@ -1042,6 +1057,78 @@ namespace DuckGame
             }
             return strings;
         }
+
+        public static void AutoUpdaterNew()
+        {
+            string dgrExePath = Assembly.GetEntryAssembly()!.Location;
+            string parentDirectoryPath = Path.GetDirectoryName(dgrExePath);
+            string zipPath = parentDirectoryPath + "/DuckGameRebuilt.zip";
+
+            string[] filesInUse = {
+                dgrExePath,
+                parentDirectoryPath + "/FNA.dll",
+                parentDirectoryPath + "/DGSteam.dll",
+            };
+
+            const string tempFileExtension = ".tmp";
+            const string tempFilesDeletionArg = "-deletetempfiles";
+
+            if (commandLine.Contains(tempFilesDeletionArg))
+            {
+                // delete temporary files after follow-up DGR run
+                foreach (string filePath in filesInUse)
+                {
+                    string tempFilePath = filePath + tempFileExtension;
+
+                    File.Delete(tempFilePath);
+                }
+                
+                File.Delete(zipPath);
+            }
+
+            if (!HasInternet)
+            {
+                DevConsole.Log("AutoUpdater check failed: No Internet");
+                return;
+            }
+
+            string latestVersionID = GetLatestReleaseVersionID().GetAwaiter().GetResult();
+            if (latestVersionID == CURRENT_VERSION_ID)
+            {
+                DevConsole.Log($"Running latest DGR version: {CURRENT_VERSION_ID}");
+                return;
+            }
+
+            // rename real files to temp files for next DGR run so they get deleted
+            foreach (string filePath in filesInUse)
+            {
+                if (File.Exists(filePath))
+                    File.Move(filePath, filePath + tempFileExtension);
+            }
+
+            const string latestDgrReleaseUrl = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip";
+            FileStream dgrZipStream = DownloadFile(latestDgrReleaseUrl, zipPath);
+            using ZipArchive archive = new(dgrZipStream);
+            archive.ExtractToDirectoryOverride(parentDirectoryPath);
+
+            string newDgrCommandline = $"{commandLine} {tempFilesDeletionArg}";
+            Process.Start(dgrExePath, newDgrCommandline);
+
+            // tells dg to kill itself
+            fullstop = true;
+        }
+
+        /// Fetches the latest DGR release from github and returns it's ID
+        public static async Task<string> GetLatestReleaseVersionID()
+        {
+            const string url = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
+            WebRequest myWebRequest = WebRequest.Create(url);
+            WebResponse myWebResponse = await myWebRequest.GetResponseAsync();
+            
+            string lastestversion = myWebResponse.ResponseUri.OriginalString.Split('/').Last();
+            return lastestversion;
+        }
+        
         public static void AutoUpdater()
         {
             string path = Assembly.GetEntryAssembly().Location;
@@ -1066,7 +1153,7 @@ namespace DuckGame
                 return;
             }
             string lastestversion = myWebResponse.ResponseUri.OriginalString.Split('/').Last();
-            //string currentversion = "";
+            string currentversion = "";
             if (File.Exists("buildversion.txt"))
             {
                 currentversion = File.ReadAllText("buildversion.txt").Replace("\n", "");
@@ -1078,7 +1165,7 @@ namespace DuckGame
             }
             fullstop = true;
             string zippath = DGdirectory + "//DuckGameRebuilt.zip";
-            FileStream saveFileStream = downloadFile("https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip", zippath);
+            FileStream saveFileStream = DownloadFile("https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip", zippath);
             foreach (string filepath in rename_and_delete_tmp)
             {
                 if (File.Exists(path))
@@ -1143,28 +1230,35 @@ namespace DuckGame
             }
             File.SetLastWriteTime(destinationFileName, source.LastWriteTime.DateTime);
         }
-        public static FileStream downloadFile(string sourceURL, string destinationPath)
+        
+        public static FileStream DownloadFile(string sourceURL, string destinationPath)
         {
-            int bufferSize = 1024;
-            bufferSize *= 1000;
-            FileStream saveFileStream;
-            saveFileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
-            HttpWebRequest httpReq;
-            HttpWebResponse httpRes;
-            httpReq = (HttpWebRequest)WebRequest.Create(sourceURL);
-            Stream resStream;
-            httpRes = (HttpWebResponse)httpReq.GetResponse();
-            resStream = httpRes.GetResponseStream();
+            // Set the buffer size to 1MB (1024 * 1000 bytes)
+            const int bufferSize = 1024 * 1000;
+
+            // Create a FileStream to write the file to the specified destination path
+            FileStream saveFileStream = new(destinationPath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+
+            HttpWebRequest httpReq = (HttpWebRequest) WebRequest.Create(sourceURL);
+            HttpWebResponse httpRes = (HttpWebResponse) httpReq.GetResponse();
+            Stream responseStream = httpRes.GetResponseStream();
+
+            if (responseStream is null)
+                throw new Exception("Unable to download file stream");
 
             int byteSize;
-            byte[] downBuffer = new byte[bufferSize];
+            byte[] downloadBuffer = new byte[bufferSize];
 
-            while ((byteSize = resStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
+            // Read data from the stream in chunks of the size of the buffer
+            // and write it to the saveFileStream until there is no more data to read
+            while ((byteSize = responseStream.Read(downloadBuffer, 0, downloadBuffer.Length)) > 0)
             {
-                saveFileStream.Write(downBuffer, 0, byteSize);
+                saveFileStream.Write(downloadBuffer, 0, byteSize);
             }
+
             return saveFileStream;
         }
+
         public static string TranslateMessage(Exception exception)
         {
             Assembly a = exception.GetType().Assembly;
@@ -1405,7 +1499,7 @@ namespace DuckGame
                 StackTrace = Escape(": Below");
                 string Commit = "N/A";
                 gitVersion = Escape(gitVersion.Replace("\n", ""));
-                Commit = Escape(currentversion) + " " + gitVersion + @"``` [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]", "") + ") ";
+                Commit = Escape(CURRENT_VERSION_ID) + " " + gitVersion + @"``` [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]", "") + ") ";
                 string UserInfo = $$"""```ansi\nUsername: {{Green + Username + White}} \nSteam ID: {{Green + Steamid + White}}\n```""";
                 string SystemInfo = $$"""```ansi\nOS: {{Green + OS + White}} \nCommand Line:{{Green + CommandLine + White}}\n```""";
                 string GameInfo = $$"""```ansi\nPlayers In Lobby: [{{Green + PlayersInLobby + White}}]\nCommit: {{Green + Commit}}""";

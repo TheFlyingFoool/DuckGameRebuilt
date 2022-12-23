@@ -226,6 +226,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddedContent\DGRSettings.cs" />
+    <Compile Include="AddedContent\Firebreak\Internet.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiBasic.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiGroup.cs" />

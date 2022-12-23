@@ -45,13 +45,13 @@ namespace DuckGame
         public override void Draw()
         {
             Color c = Color.White;
-            string s = Program.currentversion.Replace("-beta","b");
+            string s = Program.CURRENT_VERSION_ID.Replace("-beta","b");
             if (Debugger.IsAttached)
             {
                 s = "DEBUG";
                 c = Color.Green * Rando.Float(0.3f, 1f);
             }
-            else if (Program.currentversion == "")
+            else if (Program.IS_DEV_BUILD)
             {
                 s = "DEV♥VER";
                 c = Color.DeepPink;
