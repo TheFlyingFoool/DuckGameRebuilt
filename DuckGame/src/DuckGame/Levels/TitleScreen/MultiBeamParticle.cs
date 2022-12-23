@@ -23,7 +23,6 @@ namespace DuckGame
         {
             if (Program.gay)
             {
-                colorindex += 1;
                 c = Colors.Rainbow[colorindex];
                 colorindex += 1;
                 if (colorindex >= Colors.Rainbow.Length)

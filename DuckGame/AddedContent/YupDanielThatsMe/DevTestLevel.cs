@@ -30,8 +30,10 @@ namespace DuckGame
                 lerpMult = 2f,
                 startCentered = false
             };
+            _followCam.zoomMult = 2f;
             camera = _followCam;
         }
+        private List<Vec2> spawnpositions = new List<Vec2>();
         private List<Duck> _pendingSpawns;
         private List<Duck> spawnedducks = new List<Duck>();
         public override void Initialize()
@@ -45,6 +47,7 @@ namespace DuckGame
             _pendingSpawns = new Deathmatch(this).SpawnPlayers(false);
             foreach (Duck pendingSpawn in _pendingSpawns)
             {
+                spawnpositions.Add(pendingSpawn.position);
                 SpawnPosition = pendingSpawn.position;
                 followCam.Add(pendingSpawn);
                 spawnedducks.Add(pendingSpawn);
@@ -129,10 +132,9 @@ namespace DuckGame
                 Duck duck = spawnedducks[i];
                 if (duck != null && duck.dead)
                 {
-                    followCam.Clear();
                     Remove(duck);
                     followCam.Remove(duck);
-                    duck = new Duck(SpawnPosition.x, SpawnPosition.y, _duck.profile);
+                    duck = new Duck(spawnpositions[i].x, spawnpositions[i].y, duck.profile);
                     spawnedducks[i] = duck;
                     followCam.Add(duck);
                     Add(duck);

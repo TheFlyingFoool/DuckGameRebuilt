@@ -25,6 +25,8 @@ namespace DuckGame
         private float _distPulse = Rando.Float(5f);
         private float s1 = 1f;
         private float s2 = 1f;
+        private static int colorindex;
+
         //private float lifeTake = 0.05f;
 
         public static BreathSmoke New(float xpos, float ypos, float depth = 0.8f, float scaleMul = 1f)
@@ -108,6 +110,15 @@ namespace DuckGame
             vSpeed = Rando.Float(-0.1f, -0.05f);
             //this._life += Rando.Float(0.2f);
             _sprite.color = Color.White;
+            if (Program.gay)
+            {
+                _sprite.color = Colors.Rainbow[colorindex];
+                colorindex += 1;
+                if (colorindex >= Colors.Rainbow.Length)
+                {
+                    colorindex = 0;
+                }
+            }
             depth = (Depth)0.8f;
             alpha = 0.15f;
             layer = Layer.Game;

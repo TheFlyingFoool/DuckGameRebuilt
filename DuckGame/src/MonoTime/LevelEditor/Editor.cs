@@ -4724,6 +4724,12 @@ namespace DuckGame
                     _currentLevelData.customData.customPlatform03Data.ignore;
                 saveData.customData.customParallaxData.ignore =
                     _currentLevelData.customData.customParallaxData.ignore;
+
+                if (_saveName == (Program.GameDirectory + "Content\\levels\\devtestlev.lev").Replace("\\", "/") && File.Exists(Program.GameDirectory + "..\\deps\\Content\\levels\\devtestlev.lev")) // to write the devlevel change to deps
+                {
+                    saveData.SetPath(Program.GameDirectory + "..\\deps\\Content\\levels\\devtestlev.lev");
+                    DuckFile.SaveChunk(saveData, Program.GameDirectory + "..\\deps\\Content\\levels\\devtestlev.lev");
+                }
                 saveData.SetPath(_saveName);
                 if (!DuckFile.SaveChunk(saveData, _saveName))
                 {
