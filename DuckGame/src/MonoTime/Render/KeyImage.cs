@@ -30,7 +30,7 @@ namespace DuckGame
             _keySprite.scale = scale;
             _keySprite.Draw();
             _font.scale = scale;
-            _font.Draw(_keyString, position + new Vec2((float)(_keySprite.width * _keySprite.scale.x / 2.0 - _font.GetWidth(_keyString) / 2.0 - 1.0), 2f * _keySprite.scale.y), new Color(20, 32, 34), depth + 2);
+            _font.Draw(_keyString, position + new Vec2((float)(_keySprite.width * _keySprite.scale.x / 2.0 - _font.GetWidth(_keyString) / 2.0 - 0.5f), 2f * _keySprite.scale.y), new Color(20, 32, 34), depth + 2);
         }
     }
 }
