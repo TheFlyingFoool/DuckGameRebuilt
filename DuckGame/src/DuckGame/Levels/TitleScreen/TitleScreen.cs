@@ -1526,9 +1526,9 @@ namespace DuckGame
                         if (profileWithDevice != null && profileWithDevice.lastActiveDevice != null && profileWithDevice.lastActiveDevice is GenericController)
                             Graphics.Draw(_bigUButton, current.camera.PercentW(50f) - 1f, 18f);
                         else
-                            Graphics.DrawString("@START@", new Vec2(current.camera.PercentW(50f) - 7f, 16f), Color.White, (Depth)0.9f, profileWithDevice);
-                        _font.Draw(text2, current.camera.PercentW(50f) - _font.GetWidth(text2) / 2f + 1.5f, 3f, Color.White, (Depth)0.95f, profileWithDevice);
-                        _font.Draw(text3, current.camera.PercentW(50f) - _font.GetWidth(text3) / 2f + 1.5f, 27f, Color.White, (Depth)0.95f, profileWithDevice);
+                            Graphics.DrawString("@START@", new Vec2(current.camera.PercentW(50f) - (_font.GetWidth("@START@", false, profileWithDevice) - 1f) / 2f, 15f), Color.White, (Depth)0.9f, profileWithDevice);
+                        _font.Draw(text2, current.camera.PercentW(50f) - (_font.GetWidth(text2, false, profileWithDevice) - 1f) / 2f, 3f, Color.White, (Depth)0.95f, profileWithDevice);
+                        _font.Draw(text3, current.camera.PercentW(50f) - (_font.GetWidth(text3, false, profileWithDevice) - 1f) / 2f, 27f, Color.White, (Depth)0.95f, profileWithDevice);
                     }
                 }
             }
